@@ -337,7 +337,7 @@ private class PreviewActions(
         sandbox.value = sandbox.value.selectingLayout(id)
     }
     val onPanelChange: (PanelMode) -> Unit = { panel ->
-        sandbox.value = sandbox.value.copy(panel = panel)
+        sandbox.value = sandbox.value.onPanel(panel)
     }
     val onToolTap: (ToolbarTool) -> Unit = { tool ->
         when {

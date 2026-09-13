@@ -117,7 +117,17 @@ data class ThemePreviewSandbox(
 
     /** A toolbar tool, or a key bound to one: the tools that open a panel open it. */
     fun onTool(tool: ToolbarTool): ThemePreviewSandbox =
-        panelForTool(tool)?.let { copy(panel = if (panel == it) PanelMode.NONE else it) } ?: this
+        panelForTool(tool)?.let { onPanel(it) } ?: this
+
+    /**
+     * A panel named by the chrome: the toolbox launcher, the back chevron on
+     * the bar, a panel's own close button. Every one of those names the panel
+     * it is standing in, and the service reads that as "close it" — so this
+     * toggles the way `WMKeyboardService.onPanelChange` does. Setting the
+     * name outright left the toolbox open under its own back arrow.
+     */
+    fun onPanel(panel: PanelMode): ThemePreviewSandbox =
+        copy(panel = if (this.panel == panel) PanelMode.NONE else panel)
 
     /** A word taken from the strip: replaces the word being typed and ends it. */
     fun onSuggestion(word: String, context: SandboxContext): ThemePreviewSandbox {

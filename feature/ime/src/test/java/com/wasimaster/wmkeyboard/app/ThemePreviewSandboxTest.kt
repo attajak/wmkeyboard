@@ -183,6 +183,17 @@ class ThemePreviewSandboxTest {
     }
 
     @Test
+    fun `the chrome closes a panel by naming it, as the service does`() {
+        // The toolbox launcher, the bar's back chevron and a panel's own close
+        // button all hand over the panel that is open; setting it outright
+        // left the toolbox stuck open under its back arrow.
+        val toolbox = ThemePreviewSandbox().onPanel(PanelMode.TOOLBOX)
+        assertEquals(PanelMode.TOOLBOX, toolbox.panel)
+        assertEquals(PanelMode.NONE, toolbox.onPanel(PanelMode.TOOLBOX).panel)
+        assertEquals(PanelMode.EMOJI, toolbox.onPanel(PanelMode.EMOJI).panel)
+    }
+
+    @Test
     fun `the emoji and numpad keys open their panels`() {
         assertEquals(
             PanelMode.EMOJI,
