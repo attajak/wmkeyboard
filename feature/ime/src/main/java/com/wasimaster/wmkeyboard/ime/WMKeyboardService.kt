@@ -396,6 +396,7 @@ import com.wasimaster.wmkeyboard.core.notify.DownloadNotifications
 import com.wasimaster.wmkeyboard.core.otp.NotificationOtp
 import com.wasimaster.wmkeyboard.core.otp.NotificationOtpBus
 import com.wasimaster.wmkeyboard.core.otp.NotificationOtpCapture
+import com.wasimaster.wmkeyboard.core.voice.MicBlockWatcher
 import com.wasimaster.wmkeyboard.core.voice.VoiceInputEngine
 import com.wasimaster.wmkeyboard.core.voice.VoicePunctuation
 import com.wasimaster.wmkeyboard.core.voice.VoiceSpacing
@@ -1754,6 +1755,8 @@ open class WMKeyboardService : InputMethodService() {
     private var lastVoiceCommit: String? = null
     /** Active offline-Whisper capture, when the Whisper engine is in use. */
     private var whisperRecorder: WhisperRecorder? = null
+    /** Ends a session Android is feeding silence (Quick Settings mic tile, #193). */
+    private val micBlockWatcher = MicBlockWatcher(this)
     /**
      * The model and language [whisperRecorder] was started against. Recording
      * can run for up to 30 seconds, during which the user can switch the
@@ -4766,6 +4769,7 @@ open class WMKeyboardService : InputMethodService() {
         emojiUsage.save()
         typingStats.save()
         clipboardStore.save()
+        micBlockWatcher.stop()
         voiceEngine.cancel()
         whisperRecorder?.let { rec -> whisperRecorder = null; runCatching { rec.stop() } }
         mediaController.stop()
@@ -14712,7 +14716,13 @@ open class WMKeyboardService : InputMethodService() {
             // recognizer is asked for no punctuation and no capital letters.
             formatting = !plainVoice(),
             listener = object : VoiceInputEngine.Listener {
-                override fun onListening() {}
+                override fun onListening() {
+                    if (generation != voiceGeneration) return
+                    // The recognizer records in its own process, so there is no
+                    // session id to narrow to. Starting only now, with its
+                    // capture open, keeps a stale capture from being blamed.
+                    micBlockWatcher.start(audioSessionId = null) { onMicBlocked(generation) }
+                }
 
                 override fun onLevel(level: Float) {
                     if (generation != voiceGeneration) return
@@ -14742,6 +14752,7 @@ open class WMKeyboardService : InputMethodService() {
                 override fun onFinal(text: String) {
                     if (generation != voiceGeneration) return
                     voiceGeneration++
+                    micBlockWatcher.stop()
                     commitVoiceUtterance(text, tag)
                     voiceSilentRetries = 0
                     if (voiceChains() && !voiceStopRequested && voiceSessionAlive()) {
@@ -14768,6 +14779,7 @@ open class WMKeyboardService : InputMethodService() {
                 override fun onError(kind: VoiceInputEngine.ErrorKind) {
                     if (generation != voiceGeneration) return
                     voiceGeneration++
+                    micBlockWatcher.stop()
                     // A network drop mid-utterance keeps whatever was heard.
                     // Interactive voice typing owns no composing region, and
                     // the one in the field may be a word the user is typing
@@ -14864,6 +14876,9 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         whisperRecorder = recorder
+        // A blocked mic records zeros, and Whisper turns a silent clip into
+        // confident filler text, so catch it before anything is transcribed.
+        micBlockWatcher.start(recorder.audioSessionId) { onMicBlocked(generation) }
     }
 
     /**
@@ -14875,6 +14890,7 @@ open class WMKeyboardService : InputMethodService() {
     private fun finishWhisper(userStopped: Boolean) {
         val recorder = whisperRecorder ?: return
         whisperRecorder = null
+        micBlockWatcher.stop()
         val capture = whisperCapture
         whisperCapture = null
         val model = capture?.first
@@ -15093,6 +15109,31 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * Android is feeding the session silence: the Microphone access or Sensors
+     * off tile in Quick Settings is on (#193). Ends the session without
+     * transcribing, since there is nothing to hear, and says why. Nothing
+     * chains from MIC_BLOCKED; a mic tap is what tries again.
+     */
+    private fun onMicBlocked(generation: Int) {
+        if (generation != voiceGeneration) return
+        voiceGeneration++
+        whisperCapture = null
+        whisperRecorder?.let { rec ->
+            whisperRecorder = null
+            serviceScope.launch(Dispatchers.IO) { runCatching { rec.stop() } }
+        }
+        voiceEngine.cancel()
+        if (!interactiveVoice()) currentInputConnection?.finishComposingText()
+        _uiState.update {
+            it.copy(
+                voice = it.voice.copy(
+                    status = VoiceStatus.MIC_BLOCKED, partial = "", level = 0f, errorMessage = null,
+                ),
+            )
+        }
+    }
+
+    /**
      * Abandons any running dictation: the mic is released and the partial
      * already on screen stays as committed text (the user said it — losing
      * it on a panel switch would be worse than keeping it).
@@ -15101,6 +15142,7 @@ open class WMKeyboardService : InputMethodService() {
         val status = _uiState.value.voice.status
         // Bumping first invalidates any in-flight Whisper transcription.
         voiceGeneration++
+        micBlockWatcher.stop()
         whisperRecorder?.let { rec ->
             whisperRecorder = null
             serviceScope.launch(Dispatchers.IO) { runCatching { rec.stop() } }

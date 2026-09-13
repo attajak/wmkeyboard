@@ -32,6 +32,9 @@ class WhisperRecorder(
 
     val isRecording: Boolean get() = running
 
+    /** The capture's audio session, for [MicBlockWatcher]; 0 when not recording. */
+    val audioSessionId: Int get() = record?.audioSessionId ?: 0
+
     @SuppressLint("MissingPermission") // caller verifies RECORD_AUDIO
     fun start(): Boolean {
         val minBuf = AudioRecord.getMinBufferSize(

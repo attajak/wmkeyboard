@@ -37,6 +37,9 @@
          directly below it are what name the ways forward. -->
     <string name="ime_voice_status_no_model">Offline voice typing has no model yet</string>
     <string name="ime_voice_status_error">Speech recognition did not work. Try again.</string>
+    <!-- Android gave the microphone only silence. "Microphone access" is the
+         name of the Quick Settings tile on Android 12 and later. -->
+    <string name="ime_voice_status_mic_blocked">The microphone is blocked. Turn on Microphone access in Quick Settings, then try again.</string>
     <string name="ime_voice_download_model_action">Download a voice model</string>
     <!-- Chip that switches the recognition engine back to the one built into the
          phone, which needs no download. "System recognizer" is the same name the
@@ -62,6 +65,7 @@
     <string name="ime_voice_strip_secure_field">Not available in password fields</string>
     <string name="ime_voice_strip_permission">The app needs microphone permission</string>
     <string name="ime_voice_strip_unavailable">Speech recognition is not available</string>
+    <string name="ime_voice_strip_mic_blocked">Microphone blocked in Quick Settings</string>
     <!-- The compact bar fits one short line beside its Settings button, which is
          where both the model downloads and the engine choice are. -->
     <string name="ime_voice_strip_no_model">No offline voice model yet</string>

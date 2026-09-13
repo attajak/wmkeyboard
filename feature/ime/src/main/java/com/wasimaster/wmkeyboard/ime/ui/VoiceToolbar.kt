@@ -674,6 +674,7 @@ private fun VoiceBarStatus(
     val statusKind = when {
         voice.status == VoiceStatus.NEED_PERMISSION || !hasPermission -> 1
         voice.status == VoiceStatus.UNAVAILABLE -> 2
+        voice.status == VoiceStatus.MIC_BLOCKED -> 10
         voice.whisperNeedsModel -> 3
         listening && voice.whisper -> 4
         listening -> 5
@@ -696,6 +697,7 @@ private fun VoiceBarStatus(
     val statusText = when (statusKind) {
         1 -> stringResource(R.string.ime_voice_strip_permission)
         2 -> stringResource(R.string.ime_voice_strip_unavailable)
+        10 -> stringResource(R.string.ime_voice_strip_mic_blocked)
         3 -> stringResource(R.string.ime_voice_strip_no_model)
         4 -> stringResource(R.string.ime_voice_strip_listening_hint)
         5 -> voice.partial.ifEmpty { speakNow }

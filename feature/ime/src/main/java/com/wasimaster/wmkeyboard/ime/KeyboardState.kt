@@ -723,9 +723,10 @@ data class HandwritingUi(
  * Where the voice input panel is in a dictation session. TRANSCRIBING is the
  * offline-Whisper-only state after recording stops while the model turns the
  * captured audio into text (the system recognizer streams instead, so it never
- * enters it).
+ * enters it). MIC_BLOCKED is a session Android fed silence: the Microphone
+ * access or Sensors off tile in Quick Settings is on (see MicBlockWatcher).
  */
-enum class VoiceStatus { IDLE, LISTENING, FINISHING, TRANSCRIBING, NEED_PERMISSION, UNAVAILABLE, ERROR }
+enum class VoiceStatus { IDLE, LISTENING, FINISHING, TRANSCRIBING, NEED_PERMISSION, MIC_BLOCKED, UNAVAILABLE, ERROR }
 
 /**
  * On-device recognition model availability for the active language
@@ -795,6 +796,7 @@ fun KeyboardUiState.voiceChipOnly(): Boolean =
         !secureField &&
         !voice.whisperNeedsModel &&
         voice.status != VoiceStatus.NEED_PERMISSION &&
+        voice.status != VoiceStatus.MIC_BLOCKED &&
         voice.status != VoiceStatus.UNAVAILABLE &&
         voice.status != VoiceStatus.ERROR
 

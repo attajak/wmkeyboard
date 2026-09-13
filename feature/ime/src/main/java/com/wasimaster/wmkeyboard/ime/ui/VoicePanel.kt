@@ -459,6 +459,8 @@ private fun MicContent(
         // Read outside the when: ifEmpty takes a plain lambda, not a composable one.
         val listeningLabel = stringResource(R.string.ime_voice_status_listening)
         val statusText = when {
+            voice.status == VoiceStatus.MIC_BLOCKED ->
+                stringResource(R.string.ime_voice_status_mic_blocked)
             voice.whisperNeedsModel -> stringResource(R.string.ime_voice_status_no_model)
             // Whisper gives no live partials, so guide the user to press when done.
             listening && voice.whisper -> stringResource(R.string.ime_voice_status_listening_hint)
@@ -728,6 +730,8 @@ internal fun VoiceStripBar(
                 stringResource(R.string.ime_voice_strip_permission)
             voice.status == VoiceStatus.UNAVAILABLE ->
                 stringResource(R.string.ime_voice_strip_unavailable)
+            voice.status == VoiceStatus.MIC_BLOCKED ->
+                stringResource(R.string.ime_voice_strip_mic_blocked)
             voice.whisperNeedsModel -> stringResource(R.string.ime_voice_strip_no_model)
             listening && voice.whisper -> stringResource(R.string.ime_voice_strip_listening_hint)
             listening -> voice.partial.ifEmpty { listeningLabel }
