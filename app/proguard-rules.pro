@@ -157,6 +157,25 @@
 }
 -dontwarn androidx.work.impl.**
 
+# --- ML Kit component registrars (full flavor) --------------------------------
+# ML Kit finds its pieces the Firebase way: each library's manifest lists a
+# registrar class by name as <meta-data> on MlKitComponentDiscoveryService, and
+# ComponentDiscovery does Class.forName + getDeclaredConstructor().newInstance()
+# on every one. firebase-components ships `-keep class * implements
+# ComponentRegistrar`, which is enough for ProGuard and for R8 in compat mode,
+# where a kept class keeps its no-arg constructor for free. Full mode keeps only
+# what the rule names, and this rule names no members, so R8 sees a constructor
+# nothing in the dex calls and removes it. Discovery then hits
+# NoSuchMethodException, logs "Could not instantiate ..." and moves on with an
+# empty component list. The first getClient() call — the document scanner in
+# DocScanActivity.onCreate, the barcode scanner and the text recognizer inside
+# their panels' remember {} — then reads SharedPrefManager out of that empty
+# list and dies with a bare NullPointerException from the telemetry logger's
+# constructor. Release only (#146); debug and `fast` never shrink.
+-keep class * implements com.google.firebase.components.ComponentRegistrar {
+    <init>();
+}
+
 
 # --- On-device AI runtime bridge ---------------------------------------------
 # LitertLmRuntime is reached ONLY by reflection (LocalLlmEngine's facade):
