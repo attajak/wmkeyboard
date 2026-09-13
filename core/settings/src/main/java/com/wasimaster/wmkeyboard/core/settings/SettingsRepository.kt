@@ -3866,6 +3866,13 @@ data class AppUiSettings(
      */
     val defaultWordlistSize: DictionaryCatalog.DictionarySize =
         DictionaryCatalog.DictionarySize.LARGE,
+    /**
+     * The personal dictionary screen's order (#194). Remembered for the same
+     * reason as [defaultWordlistSize]: someone cleaning out their newest
+     * words wants the list that way on the next visit too, and nothing in
+     * the keyboard reads it.
+     */
+    val dictionarySort: DictionarySort = DictionarySort.MOST_USED_FIRST,
 )
 
 /** What the symbol row's height slider offers, matching the number row's. */
@@ -5904,6 +5911,7 @@ class SettingsRepository(private val context: Context) {
         private val THEME_GALLERY_STYLE = stringPreferencesKey("theme_gallery_style")
         private val ADVANCED_OPEN = stringSetPreferencesKey("advanced_open")
         private val DEFAULT_WORDLIST_SIZE = stringPreferencesKey("default_wordlist_size")
+        private val DICTIONARY_SORT = stringPreferencesKey("dictionary_sort")
         private val SYMBOL_ROW_HEIGHT = intPreferencesKey("symbol_row_height")
         private val SYMBOL_ROW_LINES = intPreferencesKey("symbol_row_lines")
         private val SYMBOL_ROW_SCROLL = stringPreferencesKey("symbol_row_scroll")
@@ -6910,6 +6918,9 @@ class SettingsRepository(private val context: Context) {
                         runCatching { DictionaryCatalog.DictionarySize.valueOf(it) }.getOrNull()
                     }
                     ?: defaults.appUi.defaultWordlistSize,
+                dictionarySort = p[DICTIONARY_SORT]
+                    ?.let { runCatching { DictionarySort.valueOf(it) }.getOrNull() }
+                    ?: defaults.appUi.dictionarySort,
             ),
             toolLimits = ToolLimitSettings(
                 weatherRefreshMinutes = p[WEATHER_REFRESH_MINUTES]
@@ -11436,6 +11447,10 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setDefaultWordlistSize(value: DictionaryCatalog.DictionarySize) =
         editPrefs { it[DEFAULT_WORDLIST_SIZE] = value.name }
+
+    /** See [AppUiSettings.dictionarySort]. */
+    suspend fun setDictionarySort(value: DictionarySort) =
+        editPrefs { it[DICTIONARY_SORT] = value.name }
 
     suspend fun setWeatherRefreshMinutes(value: Int) =
         editPrefs { it[WEATHER_REFRESH_MINUTES] = value.coerceIn(1, 180) }

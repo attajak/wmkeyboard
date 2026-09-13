@@ -737,7 +737,7 @@ private fun SettingsNavGraph(
                 route = "dictionary",
                 subtitle = stringResource(R.string.backup_dictionary_info),
             ) {
-                DictionarySettings(repository)
+                DictionarySettings(repository, settings)
             }
         }
         composable("backup/auto") {

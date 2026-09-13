@@ -399,5 +399,21 @@
     </plurals>
     <string name="backup_blacklist_clear_confirm">Every word on the blacklist is removed and can be suggested again. Words you have taught the keyboard are not affected.</string>
     <!-- %1$s is what the user typed into the dictionary search field. -->
+    <!-- Personal dictionary order (#194). The label above the three keys,
+         then the keys. -->
+    <string name="backup_dictionary_sort_label">Sort by</string>
+    <string name="backup_dictionary_sort_weight">Weight</string>
+    <string name="backup_dictionary_sort_name">Alphabetical</string>
+    <string name="backup_dictionary_sort_added">Date added</string>
+    <!-- The button under the sort keys. It shows the current direction, and a
+         press reverses it. -->
+    <string name="backup_dictionary_sort_most_used">Highest weight first</string>
+    <string name="backup_dictionary_sort_least_used">Lowest weight first</string>
+    <string name="backup_dictionary_sort_a_to_z">A to Z, capital letters first</string>
+    <string name="backup_dictionary_sort_z_to_a">Z to A, capital letters first</string>
+    <string name="backup_dictionary_sort_newest">Newest first</string>
+    <string name="backup_dictionary_sort_oldest">Oldest first</string>
+    <!-- Screen reader action name of that button. -->
+    <string name="backup_dictionary_sort_reverse">Reverse the order</string>
     <string name="backup_dictionary_no_matches">No learned word matches \"%1$s\".</string>
 </resources>

@@ -42,6 +42,10 @@ class UserLexicon(private val storageFile: File?) {
          * learn chip — as opposed to ones the keyboard picked up (#164).
          * Additive; in old files the 200 boost was the marker. */
         val addedByHand: Set<String> = emptySet(),
+        /** Generation each word first joined the store, for the personal
+         * dictionary screen's newest-first order (#194). Additive; a word with
+         * no entry reads as its [wordGen]. */
+        val wordBorn: Map<String, Long> = emptyMap(),
     )
 
     /** A word's followers plus a lazily cached count-descending order, so the
@@ -92,6 +96,7 @@ class UserLexicon(private val storageFile: File?) {
     private val caseVotes = HashMap<String, Int>()
     private val casePinned = HashSet<String>()
     private val addedByHand = HashSet<String>()
+    private val wordBorn = HashMap<String, Long>()
     private var generation = 0L
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -147,6 +152,7 @@ class UserLexicon(private val storageFile: File?) {
         // past the cap (or overflow) while the word map stays clamped.
         trie.reinforce(key, merged - before)
         wordGen[key] = generation
+        if (key !in wordBorn) wordBorn[key] = generation
         // Most-recent language wins: a word the user types under several
         // languages keeps flipping its tag, which is harmless — the engine
         // only damps a tag that *disagrees* with the active language, and a
@@ -289,6 +295,7 @@ class UserLexicon(private val storageFile: File?) {
         words[key] = merged
         trie.reinforce(key, merged - before)
         wordGen[key] = generation
+        if (key !in wordBorn) wordBorn[key] = generation
         mutations++
         dirty = true
     }
@@ -296,6 +303,15 @@ class UserLexicon(private val storageFile: File?) {
     /** Whether the user put [word] in themselves (#164); see [addWord]. */
     @Synchronized
     fun isAddedByHand(word: String): Boolean = WordKey.of(word) in addedByHand
+
+    /**
+     * When [word] first joined the store, as a save generation: a larger
+     * number is a newer word (#194). It is an order, not a date. Words from
+     * files written before this was kept read as the generation they were
+     * last used in. Null for a word the store does not have.
+     */
+    @Synchronized
+    fun addedGeneration(word: String): Long? = wordBorn[WordKey.of(word)]
 
     /**
      * Respells [word] as [replacement], keeping its count, language tag and
@@ -330,6 +346,10 @@ class UserLexicon(private val storageFile: File?) {
         words[newKey] = (existing.toLong() + count).coerceAtMost(MAX_COUNT.toLong()).toInt()
         val oldGen = wordGen.remove(oldKey) ?: generation
         wordGen[newKey] = maxOf(oldGen, wordGen[newKey] ?: 0L)
+        // The older age survives, so a respelling or a merge does not move
+        // the word to the top of the newest-first order (#194).
+        val oldBorn = wordBorn.remove(oldKey) ?: oldGen
+        wordBorn[newKey] = minOf(oldBorn, wordBorn[newKey] ?: oldBorn)
         val oldLang = wordLangs.remove(oldKey)
         if (oldLang != null && newKey !in wordLangs) wordLangs[newKey] = oldLang
         // The new spelling is the user's own, so it settles the new key's case
@@ -422,6 +442,7 @@ class UserLexicon(private val storageFile: File?) {
         bigrams.clear()
         trigrams.clear()
         wordGen.clear()
+        wordBorn.clear()
         wordLangs.clear()
         wordCase.clear()
         caseVotes.clear()
@@ -562,6 +583,7 @@ class UserLexicon(private val storageFile: File?) {
         for (key in keys) {
             words.remove(key)
             wordGen.remove(key)
+            wordBorn.remove(key)
             wordLangs.remove(key)
             wordCase.remove(key)
             caseVotes.remove(key)
@@ -589,6 +611,7 @@ class UserLexicon(private val storageFile: File?) {
         bigrams.clear()
         trigrams.clear()
         wordGen.clear()
+        wordBorn.clear()
         wordLangs.clear()
         wordCase.clear()
         caseVotes.clear()
@@ -620,6 +643,7 @@ class UserLexicon(private val storageFile: File?) {
             caseVotes = caseVotes,
             casePinned = casePinned,
             addedByHand = addedByHand,
+            wordBorn = wordBorn,
         )
         runCatching {
             file.parentFile?.mkdirs()
@@ -647,6 +671,9 @@ class UserLexicon(private val storageFile: File?) {
             // orphaned entries for words no longer present are dropped.
             for (word in words.keys) {
                 wordGen[word] = snapshot.wordGen[word] ?: snapshot.generation
+                // Files from before #194 kept no join date; the last use is
+                // the closest thing they have.
+                wordBorn[word] = snapshot.wordBorn[word] ?: wordGen.getValue(word)
                 snapshot.wordLang[word]?.let { wordLangs[word] = it }
                 // Dropped if the file disagrees with itself: a spelling that
                 // no longer folds to its own key would be written into text.
@@ -705,6 +732,7 @@ class UserLexicon(private val storageFile: File?) {
             for (word in toEvict) {
                 words.remove(word)
                 wordGen.remove(word)
+                wordBorn.remove(word)
                 wordLangs.remove(word)
                 wordCase.remove(word)
                 caseVotes.remove(word)

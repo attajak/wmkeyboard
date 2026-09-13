@@ -485,4 +485,51 @@ class UserLexiconTest {
         back.forget("zorbeck")
         assertFalse(back.isAddedByHand("zorbeck"))
     }
+
+    @Test
+    fun addedGenerationOrdersWordsByWhenTheyJoined() {
+        val f = file()
+        UserLexicon(f).apply {
+            learnWord("older", 2)
+            save()
+        }
+        UserLexicon(f).apply {
+            addWord("newer")
+            // Typing an old word again does not make it a new one (#194).
+            learnWord("older", 1)
+            save()
+        }
+        val back = UserLexicon(f)
+        assertTrue(back.addedGeneration("newer")!! > back.addedGeneration("older")!!)
+        assertNull(back.addedGeneration("missing"))
+    }
+
+    @Test
+    fun renameKeepsTheOlderAddedGeneration() {
+        val lex = UserLexicon(file())
+        lex.learnWord("teh", 2)
+        lex.save()
+        lex.addWord("fresh")
+        lex.save()
+        val old = lex.addedGeneration("teh")!!
+        assertTrue(lex.addedGeneration("fresh")!! > old)
+        assertTrue(lex.rename("teh", "tea"))
+        assertEquals(old, lex.addedGeneration("tea"))
+        assertNull(lex.addedGeneration("teh"))
+        // A merge keeps the older of the two.
+        assertTrue(lex.rename("fresh", "tea"))
+        assertEquals(old, lex.addedGeneration("tea"))
+        lex.forget("tea")
+        assertNull(lex.addedGeneration("tea"))
+    }
+
+    @Test
+    fun legacyFileReadsAddedGenerationFromLastUse() {
+        val f = file()
+        f.parentFile?.mkdirs()
+        f.writeText("""{"words":{"aa":1,"bb":1},"generation":9,"wordGen":{"bb":4}}""")
+        val lex = UserLexicon(f)
+        assertEquals(4L, lex.addedGeneration("bb"))
+        assertEquals(9L, lex.addedGeneration("aa"))
+    }
 }

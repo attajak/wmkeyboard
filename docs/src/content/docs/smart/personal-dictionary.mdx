@@ -112,7 +112,11 @@ Alongside single words, the same learning pass builds word-to-word pairs, so typ
 
 <SettingsPath path="Typing / Suggestions / Personal dictionary" />
 
-Every word you've typed or added sits in one list, sorted by how often it's been reinforced. Once the list passes a dozen entries, a search field appears above it. Each row reads "Seen N times"; a word you put in yourself reads "You added this word · Seen N times", so it shows its count like any other.
+Every word you've typed or added sits in one list, with the highest weight first until you select another order. Once the list passes a dozen entries, a search field appears above it. Each row reads "Seen N times"; a word you put in yourself reads "You added this word · Seen N times", so it shows its count like any other.
+
+**Sort by** above the list sets the order: **Weight**, **Alphabetical** or **Date added**. The button under it says which way the list runs, and pressing it reverses that: highest or lowest weight first, A to Z or Z to A, newest or oldest first. Both alphabetical orders keep words that start with a capital letter at the top, so names sit together. Words with the same weight or the same date fall back to A to Z. The screen remembers the order for your next visit.
+
+**Date added** is when a word joined your dictionary, not when you last typed it, so a word you type every day stays where it joined. That makes **Newest first** the quick way to review what the keyboard picked up recently. Words saved by a version from before this order existed have no date of their own, so they sort by when you last typed them instead. Words learned in the same typing session share a date and sit A to Z among themselves.
 
 **Add word** opens a dialog with a single field. Confirm and the word goes in at a weight of one, or one more than it already had, marked as added by hand. Adding a word says it is a word, not that it is a frequent one, so it earns weight the way every other word does, by being typed. What the mark buys is that the word is immediately safe from autocorrect whatever the **Learn a word after** threshold says, and that it is the last thing compaction (see below) would ever remove. A trash icon on each row removes that word, and drops it out of any word pairs it was part of.
 
@@ -184,7 +188,7 @@ See [Incognito & secure fields](/privacy/incognito/) for the rest of how incogni
 | Back up with Android | Off | Privacy / Android backup |
 | Include "Dictionary" in export | Off | Backup & restore / Include in export |
 
-The dictionary screen itself has no settings beyond the word list, its two buttons and the per-word edit dialog. Every toggle that controls *whether* something gets learned lives on the Privacy screen rather than here, with two exceptions: pausing learning during incognito is under the Incognito tool's own settings, and the three thresholds that decide when a word gets in and when it's shielded sit with the rest of the suggestion sliders.
+The dictionary screen itself has no settings beyond the word list, its sort order, its two buttons and the per-word edit dialog. Every toggle that controls *whether* something gets learned lives on the Privacy screen rather than here, with two exceptions: pausing learning during incognito is under the Incognito tool's own settings, and the three thresholds that decide when a word gets in and when it's shielded sit with the rest of the suggestion sliders.
 
 ## Details & edge cases
 
@@ -193,6 +197,7 @@ The dictionary screen itself has no settings beyond the word list, its two butto
 - **A blacklisted word can still be learned.** The personal dictionary and the [suggestion blacklist](/smart/blacklist/) are independent stores. The blacklist wins as a *candidate*, so the word is never offered or autocorrected to. Type that exact word yourself and learning it here doesn't fight the blacklist. It's never offered back either way.
 - **Words added before this version keep their old weight.** Earlier versions handed an added word a weight of 200 instead of marking it, so on an upgraded install those words read "Seen 200 times" without the added-by-hand note. Lower the weight from the edit dialog if it crowds the strip.
 - **Editing only the capitals of a word keeps everything else.** The respelling is compared after lowercasing and normalising, so changing only capitalisation is not a rename: the word keeps its weight, its pairs and its age, and only its kept spelling changes.
+- **Respelling a word keeps its date.** A word you respell, or merge into another, keeps the older of the two dates, so fixing a typo does not move it to the top of **Newest first**.
 - **A weight edit resets the word's age.** Compaction (see below) scores a word by its weight and how long ago it was last touched. Editing a weight counts as touching it, so a word you deliberately adjusted starts fresh on that clock.
 - **The list is capped, and stale words go first.** It holds 10,000 words before it starts trimming, and words you added by hand outlast the ones the keyboard picked up on its own. See [Dictionaries & words](/reference/settings/dictionaries/#the-list-is-capped-at-10000-words) for how it chooses.
 - **A word arrives with the count it earned.** A new word that took three sightings to get in reads "Seen 3 times" on the list, not "Seen once", because the sightings it collected on the way in come with it.
