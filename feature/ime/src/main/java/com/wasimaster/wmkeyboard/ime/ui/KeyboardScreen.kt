@@ -2826,9 +2826,18 @@ private fun TopBar(
             // The emoji never joins the dissolve on the way out: it is the one
             // icon that survives the swap, and it has to be solid at the moment
             // it hands its position to the strip's copy.
+            //
+            // Only while the strip has a copy to hand to. With the strip's emoji
+            // button turned off (or the emoji tool disabled) there is no other
+            // node, so nothing slides: the pinned emoji is an ordinary tool, and
+            // exempting it left it popping in solid while every other tool faded,
+            // which read as the handoff still playing for a button that was off.
+            // Same condition the strip's copy is drawn under, below.
+            val stripHasEmoji = state.settings.emojiToolbar &&
+                ToolbarTool.EMOJI in state.settings.enabledTools
             ToolbarRow(
                 state, onPanelChange, onToolTap, drag, toolContentAlpha,
-                fadeEmoji = emojiFadesWithTools && wantToolbar,
+                fadeEmoji = !stripHasEmoji || (emojiFadesWithTools && wantToolbar),
             )
             if (state.settings.emojiBarMode == EmojiBarMode.BUTTON) {
                 IconButton(
