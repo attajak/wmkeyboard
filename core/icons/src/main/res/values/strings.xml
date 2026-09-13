@@ -59,6 +59,7 @@
     <string name="core_icons_slot_search_close_label">Close search</string>
     <!-- The badge that marks the keyboard as incognito, so it learns nothing. -->
     <string name="core_icons_slot_incognito_label">Incognito badge</string>
+    <string name="core_icons_slot_power_saving_label">Power saving badge</string>
 
     <!-- ================================================================== -->
     <!-- Emoji tab icons. One per tab in the emoji panel.                   -->

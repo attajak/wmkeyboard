@@ -7273,6 +7273,20 @@ private fun RowScope.ToolbarRow(
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
+    // Same badge for power saving, whichever source switched it on: the
+    // dropped animations, haptics and sounds otherwise read as the keyboard
+    // being broken, since the trigger (the system's battery saver, a low
+    // battery) is nowhere near the keyboard.
+    if (state.powerSavingOn) {
+        SlotIcon(
+            IconSlots.CHROME_POWER_SAVING,
+            contentDescription = stringResource(R.string.ime_power_saving_on_desc),
+            modifier = Modifier
+                .padding(end = 6.dp)
+                .size(16.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
 }
 
 /**

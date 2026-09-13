@@ -216,6 +216,7 @@
          from the words: lifting now types nothing. -->
     <string name="ime_glide_picker_cancel_hint">Lift to cancel</string>
     <string name="ime_incognito_on_desc">Incognito is on</string>
+    <string name="ime_power_saving_on_desc">Power saving is on</string>
     <string name="ime_panel_back_desc">Back to the keyboard</string>
     <string name="ime_toolbox_desc">Toolbox</string>
 

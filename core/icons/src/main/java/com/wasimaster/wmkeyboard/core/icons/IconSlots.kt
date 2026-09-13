@@ -90,6 +90,7 @@ object IconSlots {
     const val CHROME_EMOJI_SHORTCUT = "chrome.emoji_shortcut"
     const val CHROME_SEARCH_CLOSE = "chrome.search_close"
     const val CHROME_INCOGNITO = "chrome.incognito"
+    const val CHROME_POWER_SAVING = "chrome.power_saving"
 
     // ---- emoji tab slots ----
 
@@ -154,6 +155,7 @@ object IconSlots {
         IconSlot(CHROME_EMOJI_SHORTCUT, IconSlotGroup.CHROME, R.string.core_icons_slot_emoji_shortcut_label),
         IconSlot(CHROME_SEARCH_CLOSE, IconSlotGroup.CHROME, R.string.core_icons_slot_search_close_label),
         IconSlot(CHROME_INCOGNITO, IconSlotGroup.CHROME, R.string.core_icons_slot_incognito_label),
+        IconSlot(CHROME_POWER_SAVING, IconSlotGroup.CHROME, R.string.core_icons_slot_power_saving_label),
     )
 
     private val emojiTabSlots: List<IconSlot> = buildList {

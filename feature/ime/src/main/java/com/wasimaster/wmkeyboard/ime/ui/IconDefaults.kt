@@ -269,6 +269,7 @@ object IconDefaults {
         put(IconSlots.CHROME_EMOJI_SHORTCUT, Icons.Outlined.EmojiEmotions)
         put(IconSlots.CHROME_SEARCH_CLOSE, Icons.Outlined.Close)
         put(IconSlots.CHROME_INCOGNITO, KeyboardIcons.Incognito)
+        put(IconSlots.CHROME_POWER_SAVING, Icons.Outlined.BatterySaver)
 
         put(IconSlots.EMOJI_TAB_SEARCH, Icons.Outlined.Search)
         put(IconSlots.EMOJI_TAB_RECENT, Icons.Outlined.Schedule)
