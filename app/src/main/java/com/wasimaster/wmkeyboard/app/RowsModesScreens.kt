@@ -783,7 +783,12 @@ private fun modeBindingsSummary(mode: KeyboardMode): String {
             },
         )
     }
-    // " + " rather than " · ": with both set, both have to match.
+    if (mode.hints.isNotEmpty()) {
+        parts += resources.getQuantityString(
+            R.plurals.rows_mode_bindings_hints, mode.hints.size, mode.hints.size,
+        )
+    }
+    // " + " rather than " · ": with several set, all have to match.
     return if (parts.isEmpty()) {
         resources.getString(R.string.rows_mode_bindings_manual)
     } else {
@@ -800,6 +805,9 @@ private fun modeFieldLabel(field: ModeField): String = stringResource(
         ModeField.PHONE -> R.string.rows_mode_field_phone_label
         ModeField.TEXT -> R.string.rows_mode_field_text_label
         ModeField.NOTIFICATION_REPLY -> R.string.rows_mode_field_notification_reply_label
+        ModeField.MULTILINE -> R.string.rows_mode_field_multiline_label
+        ModeField.SINGLE_LINE -> R.string.rows_mode_field_single_line_label
+        ModeField.NO_SUGGESTIONS -> R.string.rows_mode_field_no_suggestions_label
     },
 )
 /** The same names, written the way they read inside a sentence. */
@@ -812,6 +820,9 @@ private fun modeFieldLowercaseLabel(field: ModeField): Int = when (field) {
     ModeField.PHONE -> R.string.rows_mode_field_phone_lowercase_label
     ModeField.TEXT -> R.string.rows_mode_field_text_lowercase_label
     ModeField.NOTIFICATION_REPLY -> R.string.rows_mode_field_notification_reply_lowercase_label
+    ModeField.MULTILINE -> R.string.rows_mode_field_multiline_lowercase_label
+    ModeField.SINGLE_LINE -> R.string.rows_mode_field_single_line_lowercase_label
+    ModeField.NO_SUGGESTIONS -> R.string.rows_mode_field_no_suggestions_lowercase_label
 }
 /** Row height inside [ReorderableColumn] — fixed, so drags map to index shifts. */
 private val ReorderRowHeight = 52.dp
@@ -1645,8 +1656,14 @@ internal fun ModeEditor(
             }
         }
     }
-    val bothMatchNote = stringResource(R.string.modes_auto_both_match_body)
-        .takeIf { mode.apps.isNotEmpty() && mode.fieldKinds.isNotEmpty() }
+    // Two of the three conditions set: "both"; all three: "all".
+    val conditions = listOf(mode.apps, mode.fieldKinds, mode.hints).count { it.isNotEmpty() }
+    val bothMatchNote = when {
+        conditions == 2 && mode.hints.isEmpty() ->
+            stringResource(R.string.modes_auto_both_match_body)
+        conditions >= 2 -> stringResource(R.string.modes_auto_all_match_body)
+        else -> null
+    }
     SettingsGroup(
         stringResource(R.string.modes_auto_group_title),
         info = listOfNotNull(stringResource(R.string.modes_matching_body), bothMatchNote)
@@ -1677,6 +1694,52 @@ internal fun ModeEditor(
                         label = { Text(modeFieldLabel(field), maxLines = 1) },
                     )
                 }
+            }
+        }
+        item {
+            Text(
+                stringResource(R.string.modes_field_hints_title),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            )
+            Text(
+                stringResource(R.string.modes_field_hints_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            )
+        }
+        for (hint in mode.hints) {
+            item {
+                WmRow(
+                    title = hint,
+                    trailing = {
+                        IconButton(onClick = { save(mode.copy(hints = mode.hints - hint)) }) {
+                            Icon(
+                                Icons.Outlined.Delete,
+                                contentDescription = stringResource(R.string.modes_hint_remove_desc),
+                            )
+                        }
+                    },
+                )
+            }
+        }
+        item {
+            var editorOpen by remember { mutableStateOf(false) }
+            WmRow(
+                title = stringResource(R.string.modes_add_hint_title),
+                subtitle = stringResource(R.string.modes_add_hint_subtitle),
+                leading = { Icon(Icons.Outlined.Add, contentDescription = null) },
+                onClick = { editorOpen = true },
+            )
+            if (editorOpen) {
+                HintEditorDialog(
+                    onAdd = { hint ->
+                        editorOpen = false
+                        if (hint !in mode.hints) save(mode.copy(hints = mode.hints + hint))
+                    },
+                    onDismiss = { editorOpen = false },
+                )
             }
         }
         for (pkg in mode.apps) {
@@ -1926,4 +1989,36 @@ private fun <T> inheritDetail(): @Composable (T) -> ChoiceDetail? = { value ->
         // A layout id, on the one row of the five whose options are names.
         else -> ChoiceDetail(icon = Icons.Outlined.Keyboard)
     }
+}
+
+/**
+ * Asks for one hint text to bind a mode to. Matching is a case-ignored
+ * "contains", so a word is enough — "extension" catches "Extension" and
+ * "File extension" alike. Whitespace around it is not part of the match.
+ */
+@Composable
+private fun HintEditorDialog(onAdd: (String) -> Unit, onDismiss: () -> Unit) {
+    var text by remember { mutableStateOf("") }
+    val trimmed = text.trim()
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.modes_add_hint_title)) },
+        text = {
+            OutlinedTextField(
+                value = text,
+                onValueChange = { text = it },
+                label = { Text(stringResource(R.string.modes_hint_label)) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = { onAdd(trimmed) }, enabled = trimmed.isNotEmpty()) {
+                Text(stringResource(CommonR.string.common_add))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_cancel)) }
+        },
+    )
 }

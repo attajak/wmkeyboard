@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.settings
 
+import android.text.InputType
 import com.wasimaster.wmkeyboard.core.tools.BuiltInSymbolSets
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -94,8 +95,43 @@ fun barRowsBelowKeys(order: List<BarRow>): List<BarRow> {
  * is hosted by the system UI, so the package the IME sees is the shell's,
  * never the app whose notification it is — which is why this is a field
  * kind and why it matches without an app binding (see [matchesField]).
+ *
+ * The last three describe the *shape* of a text box rather than what goes in
+ * it, and a field reports one of them on top of its kind (see
+ * [textShapeFields]). They exist for apps whose fields all look alike to the
+ * inputType classes above — a file manager's rename box, text editor and code
+ * editor are all plain text (issue #186), but only the editors are
+ * [MULTILINE], and only the code editor asks for [NO_SUGGESTIONS].
+ * [SINGLE_LINE] is every one-line text box: a rename dialog, a title, a search
+ * field. Password boxes are excluded from all three for the reason [TEXT]
+ * excludes them.
  */
-enum class ModeField { PASSWORD, EMAIL, URL, NUMBER, PHONE, TEXT, NOTIFICATION_REPLY }
+enum class ModeField {
+    PASSWORD, EMAIL, URL, NUMBER, PHONE, TEXT, NOTIFICATION_REPLY,
+    MULTILINE, SINGLE_LINE, NO_SUGGESTIONS,
+}
+
+/**
+ * The shape bindings a text field reports: [ModeField.MULTILINE] or
+ * [ModeField.SINGLE_LINE] from the multi-line flag, plus
+ * [ModeField.NO_SUGGESTIONS] when the field asked the IME to keep its
+ * suggestions to itself. Empty for anything that is not a text-class field
+ * (a keypad has no shape worth binding to) and for password boxes.
+ */
+fun textShapeFields(inputType: Int, secure: Boolean): Set<ModeField> {
+    if (secure) return emptySet()
+    if (inputType and InputType.TYPE_MASK_CLASS != InputType.TYPE_CLASS_TEXT) return emptySet()
+    return buildSet {
+        if (inputType and InputType.TYPE_TEXT_FLAG_MULTI_LINE != 0) {
+            add(ModeField.MULTILINE)
+        } else {
+            add(ModeField.SINGLE_LINE)
+        }
+        if (inputType and InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS != 0) {
+            add(ModeField.NO_SUGGESTIONS)
+        }
+    }
+}
 
 /**
  * One keyboard mode: a named bundle of overrides applied while the mode is
@@ -107,7 +143,7 @@ enum class ModeField { PASSWORD, EMAIL, URL, NUMBER, PHONE, TEXT, NOTIFICATION_R
  * Binding both apps and field kinds means *both* have to match (see
  * [matchesField]): the "Chat" mode is bound to the messaging apps **and**
  * [ModeField.TEXT], so it switches on for the message composer but not for
- * the app's contact search.
+ * the app's contact search. [hints] is a third condition of the same kind.
  */
 @Serializable
 data class KeyboardMode(
@@ -204,6 +240,16 @@ data class KeyboardMode(
     val apps: List<String> = emptyList(),
     /** Input-field kinds this mode activates for automatically. */
     val fieldKinds: List<ModeField> = emptyList(),
+    /**
+     * Placeholder texts this mode activates for: the field's hint (the grey
+     * text an empty box shows) has to contain one of them, case ignored. The
+     * hint is the one thing an app writes on a field that names what the
+     * field is *for* — a file manager's rename box says "Enter name" or
+     * "Extension" where its inputType says only "text" (issue #186). It is
+     * also the app's own wording in the app's own language, so a binding
+     * written for one locale is silent in another; that is the trade.
+     */
+    val hints: List<String> = emptyList(),
 ) {
     /**
      * Whether this mode prescribes a tool arrangement of its own. When it
@@ -525,25 +571,41 @@ fun topUpModeFields(
  * off the contact search. Setting only one of the two matches on that one
  * alone; setting neither makes the mode manual-only.
  *
+ * [hints] is a third condition on the same terms: when set, the field's
+ * hint text has to contain one of them (case ignored), on its own or on top
+ * of the other two.
+ *
  * [ModeField.NOTIFICATION_REPLY] is the one exception to the AND: the
  * inline reply box lives in the system UI, whose package is never the app
  * the user is replying to, so a mode bound to that field matches it with
- * the app bindings ignored.
+ * the app bindings ignored. A hint binding still has to hold there.
  */
-private fun KeyboardMode.matchesField(packageName: String?, fields: Set<ModeField>): Boolean {
+private fun KeyboardMode.matchesField(
+    packageName: String?,
+    fields: Set<ModeField>,
+    hint: String?,
+): Boolean {
+    val hintMatch = hints.isEmpty() || matchesHint(hint)
     if (ModeField.NOTIFICATION_REPLY in fields &&
         ModeField.NOTIFICATION_REPLY in fieldKinds
     ) {
-        return true
+        return hintMatch
     }
     val appMatch = packageName != null && packageName in apps
     val fieldMatch = fieldKinds.any { it in fields }
-    return when {
-        apps.isEmpty() && fieldKinds.isEmpty() -> false
+    val bound = when {
+        apps.isEmpty() && fieldKinds.isEmpty() -> hints.isNotEmpty()
         apps.isEmpty() -> fieldMatch
         fieldKinds.isEmpty() -> appMatch
         else -> appMatch && fieldMatch
     }
+    return bound && hintMatch
+}
+
+/** Whether [hint] contains one of this mode's [KeyboardMode.hints], case ignored. */
+private fun KeyboardMode.matchesHint(hint: String?): Boolean {
+    if (hint.isNullOrBlank()) return false
+    return hints.any { it.isNotBlank() && hint.contains(it.trim(), ignoreCase = true) }
 }
 
 /**
@@ -571,19 +633,26 @@ fun KeyboardSettings.withoutModes(): KeyboardSettings =
 
 /**
  * Picks the active mode: a manual pick from the Modes tool wins, then the
- * most specific automatic match. A mode that names field kinds beats one
- * that only names apps, so a password box inside a code editor still gets
- * the password mode; ties break on the order of [modes].
+ * most specific automatic match. A mode that names hint texts beats one that
+ * names field kinds, which beats one that only names apps — so a password
+ * box inside a code editor still gets the password mode, and the "Extension"
+ * box of a rename dialog gets the mode written for it rather than the one
+ * for every single-line field. Ties break on the order of [modes].
+ *
+ * @param hint the focused field's placeholder text, null when it has none.
  */
 fun resolveKeyboardMode(
     modes: List<KeyboardMode>,
     packageName: String?,
     fieldKinds: Set<ModeField>,
     manualModeId: String?,
+    hint: String? = null,
 ): KeyboardMode? {
     manualModeId?.let { id -> modes.firstOrNull { it.id == id }?.let { return it } }
-    val matching = modes.filter { it.matchesField(packageName, fieldKinds) }
-    return matching.firstOrNull { it.fieldKinds.isNotEmpty() } ?: matching.firstOrNull()
+    val matching = modes.filter { it.matchesField(packageName, fieldKinds, hint) }
+    return matching.firstOrNull { it.hints.isNotEmpty() }
+        ?: matching.firstOrNull { it.fieldKinds.isNotEmpty() }
+        ?: matching.firstOrNull()
 }
 
 /**

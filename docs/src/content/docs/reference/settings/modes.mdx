@@ -24,7 +24,7 @@ The first control on this screen is **Use modes**, the master switch for the who
 
 Under it, **A mode you pick by hand** chooses how long a manual pick from the Modes tool lasts: **Until you change app** (the default) or **Until you change it**. It sits above the list because it governs every mode. See [Rearranging tools](#rearranging-tools) below for the other list-level control.
 
-Below those, each mode's row shows its icon, its name, and a one-line summary of what triggers it. A mode with no apps and no field types bound reads **"Manual only, from the Modes tool"**. Everything else reads **"Automatic:"** followed by the app count and/or the field types it's bound to, joined with a `+` because both have to match. The shipped Chat mode reads **"Automatic: 15 apps + text, notification replies fields"**. Tap a row to open that mode's editor. Tap the trailing bin icon and a **"Delete *name*?"** dialog asks first.
+Below those, each mode's row shows its icon, its name, and a one-line summary of what triggers it. A mode with no apps, field types or hints bound reads **"Manual only, from the Modes tool"**. Everything else reads **"Automatic:"** followed by the app count, the field types and/or the hint count it's bound to, joined with a `+` because all of them have to match. The shipped Chat mode reads **"Automatic: 15 apps + text, notification replies fields"**. Tap a row to open that mode's editor. Tap the trailing bin icon and a **"Delete *name*?"** dialog asks first.
 
 **New mode** adds a row and opens a fresh editor. The mode isn't written to disk until you make your first edit inside it; backing out of an untouched new-mode editor leaves nothing behind.
 
@@ -74,19 +74,23 @@ Every override here defaults to **Inherit** (unset, so the mode falls through to
 
 ### Activate automatically for
 
-<PhoneFrame caption="Field-type chips and the bound app list at the bottom of the mode editor.">
+<PhoneFrame caption="Field-type chips, the field-hint list and the bound app list at the bottom of the mode editor.">
   {/* shot: reference/settings/mode-editor-activation */}
 </PhoneFrame>
 
-**Field types** is a row of chips for the seven kinds a mode can match: Password, Email, URL, Number, Phone, Text, Notification replies.
+**Field types** is a row of chips for the ten kinds a mode can match: Password, Email, URL, Number, Phone, Text, Notification replies, Multi-line text, Single-line text, No suggestions.
 
 **Text** means plain free-text only. A password field is excluded from it even though it also reports as text-capable, so a mode bound to Text can never take over a login form.
 
 **Notification replies** is the inline reply box in the notification shade, and it's the one chip that ignores the app list. The system UI draws that box, so the package the keyboard sees there belongs to the shell, never to the app whose notification you're answering. A mode with this chip ticked matches the box whatever its bound apps say. That's how the shipped Chat mode still gets chat treatment in a reply you fire off without opening the app.
 
+**Multi-line text**, **Single-line text** and **No suggestions** describe the shape of a text box rather than what goes in it, and every text field reports one of the first two on top of its kind. They tell apart fields Android otherwise reports identically: a file manager's rename box is single-line, its text editor is multi-line, and its code editor is multi-line with suggestions turned off. Password boxes report no shape, for the reason they're excluded from Text.
+
+**Field hints** is a list of words the field's placeholder text (the grey text of an empty box) has to contain, case ignored. One row per hint, each removable, and an **Add hint** row that opens a one-line dialog. Apps write that placeholder in their own language, so a hint added in English does not match when the app runs in another language.
+
 Below that is the app list. One row per bound app, resolved to its display name and falling back to the raw package name, each removable. An **Add app** row at the end opens a searchable picker of every launcher app on the device.
 
-Set apps and field types together and both have to match, so a mode bound to your chat apps and the Text field type stays off their search boxes. Set only one and it matches on that alone. Set neither and the mode is manual-only, reachable from the Modes tool. Notification replies is the single exception to the AND, as above. When several modes match at once, one that names a field type beats one that only names apps. A mode picked by hand from the Modes tool beats both, for as long as **A mode you pick by hand** says. See [How a mode gets picked](/typing/modes/#how-a-mode-gets-picked) for the full resolution order.
+Set apps, field types and hints together and all of them have to match, so a mode bound to your chat apps and the Text field type stays off their search boxes. Set only one and it matches on that alone. Set none and the mode is manual-only, reachable from the Modes tool. Notification replies is the single exception to the AND, as above, though a hint still has to hold. When several modes match at once, one that names a hint beats one that names a field type, which beats one that only names apps. A mode picked by hand from the Modes tool beats both, for as long as **A mode you pick by hand** says. See [How a mode gets picked](/typing/modes/#how-a-mode-gets-picked) for the full resolution order.
 
 ### Reset and delete
 
@@ -160,6 +164,7 @@ Tool order can differ per app: whichever mode an app resolves to decides the arr
 | Custom toolbox order | Off; all six built-ins define their own toolbox order |
 | Custom symbol sets | Off, except Email/Browser/Writing/Coding |
 | Field types | Mode-specific |
+| Field hints | None on every built-in |
 | Apps | Mode-specific |
 
 ## Details & edge cases
@@ -167,7 +172,7 @@ Tool order can differ per app: whichever mode an app resolves to decides the arr
 - **A brand-new mode isn't saved until its first edit.** Navigating into a freshly created mode's editor and backing out without changing anything leaves the modes list exactly as it was.
 - **Only the six shipped modes offer Reset to default**, matched by ID. Rename a built-in mode and it keeps its reset option. A mode you created from scratch never gets one.
 - **Both delete paths ask first.** The bin icon on a list row and **Delete mode** at the bottom of the editor open the same "Delete *name*?" dialog. Resetting a built-in mode confirms too.
-- **Field types beat apps when modes collide.** If two modes could both apply, the one that names a field type is preferred over one that only names apps: a password field inside a coding app still gets the Passwords mode.
+- **Hints beat field types beat apps when modes collide.** If two modes could both apply, the one that names a hint is preferred over one that names a field type, and that over one that only names apps: a password field inside a coding app still gets the Passwords mode, and a rename box whose hint reads "Extension" gets the mode bound to that word over one bound to every single-line field.
 - **The tool and symbol-set pickers only offer what's currently available.** A tool disabled globally, or unsupported in your build, is missing from a mode's own pinned-tools and toolbox-order chip lists too. A lite build, for instance, has no tools that need ML Kit or the grammar engine.
 - **Legacy installs migrate quietly.** Older Browser and Email modes that still carried hard-coded app lists from before they became field-only are migrated to app-less bindings automatically when their settings are next read.
 

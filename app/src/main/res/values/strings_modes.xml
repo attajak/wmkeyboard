@@ -84,6 +84,14 @@
     <string name="modes_auto_group_title">Turn on automatically for</string>
     <string name="modes_field_types_title">Field types</string>
     <string name="modes_auto_both_match_body">Both conditions must match. This mode turns on only for these field types in the apps in the list below.</string>
+    <string name="modes_auto_all_match_body">All the conditions you set must match: the field type, the hint text and the app.</string>
+    <string name="modes_field_hints_title">Field hints</string>
+    <!-- The "hint" is the grey placeholder text an empty field shows. -->
+    <string name="modes_field_hints_body">The grey placeholder text of the field must contain one of these words. Apps write this text in their own language, so a hint you add in one language does not match in another.</string>
+    <string name="modes_add_hint_title">Add hint</string>
+    <string name="modes_add_hint_subtitle">For example, \"Extension\" for the rename box of a file manager</string>
+    <string name="modes_hint_label">Hint text</string>
+    <string name="modes_hint_remove_desc">Remove this hint from the mode</string>
     <string name="modes_add_app_title">Add app</string>
     <string name="modes_add_app_subtitle_any">This mode turns on when you select a field in the app</string>
     <string name="modes_add_app_subtitle_fields">One of the field types above must also match</string>
@@ -91,7 +99,7 @@
          a mode. It does not uninstall the app. -->
     <string name="modes_app_remove_desc">Remove this app from the mode</string>
     <!-- "Text" here is the name of the Text field type in the list above. -->
-    <string name="modes_matching_body">If you set apps and field types together, both must match. For example, bind a mode to your chat apps and to the Text field type. The mode then stays off the search boxes of those apps. If you set only one of the two, the mode matches on that one alone. If you set neither, you can turn the mode on only by hand. When more than one mode matches, a mode that names field types wins over a mode that names only apps. A password box in a code editor still gets the password mode. A mode that you select by hand from the Modes tool wins until you change apps.</string>
+    <string name="modes_matching_body">If you set apps, field types and hints together, all of them must match. For example, bind a mode to your chat apps and to the Text field type. The mode then stays off the search boxes of those apps. If you set only one condition, the mode matches on that one alone. If you set none, you can turn the mode on only by hand. When more than one mode matches, a mode that names hints wins over a mode that names field types, which wins over a mode that names only apps. A password box in a code editor still gets the password mode. A mode that you select by hand from the Modes tool wins until you change apps.</string>
 
     <!-- ==================================================================
          Mode editor: reset a built-in mode.

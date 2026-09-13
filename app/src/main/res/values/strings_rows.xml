@@ -196,6 +196,11 @@
     </plurals>
     <!-- %1$s is a list of field type names in lower case, separated by commas. -->
     <string name="rows_mode_bindings_fields">%1$s fields</string>
+    <!-- How many hint texts a mode is bound to. %1$d is the count. -->
+    <plurals name="rows_mode_bindings_hints">
+        <item quantity="one">%1$d hint</item>
+        <item quantity="other">%1$d hints</item>
+    </plurals>
     <string name="rows_mode_bindings_manual">Manual only, from the Modes tool</string>
     <!-- %1$s lists what makes the mode switch on, for example "2 apps + email fields". -->
     <string name="rows_mode_bindings_auto">Automatic: %1$s</string>
@@ -207,6 +212,11 @@
     <string name="rows_mode_field_phone_label">Phone</string>
     <string name="rows_mode_field_text_label">Text</string>
     <string name="rows_mode_field_notification_reply_label">Notification replies</string>
+    <string name="rows_mode_field_multiline_label">Multi-line text</string>
+    <string name="rows_mode_field_single_line_label">Single-line text</string>
+    <!-- Fields that asked the keyboard to show no word suggestions, for
+         example a code editor. -->
+    <string name="rows_mode_field_no_suggestions_label">No suggestions</string>
 
     <!-- The same field type names, written the way they read inside a
          sentence such as "Automatic: email, password fields". -->
@@ -217,6 +227,9 @@
     <string name="rows_mode_field_phone_lowercase_label">phone</string>
     <string name="rows_mode_field_text_lowercase_label">text</string>
     <string name="rows_mode_field_notification_reply_lowercase_label">notification replies</string>
+    <string name="rows_mode_field_multiline_lowercase_label">multi-line text</string>
+    <string name="rows_mode_field_single_line_lowercase_label">single-line text</string>
+    <string name="rows_mode_field_no_suggestions_lowercase_label">no-suggestions</string>
 
     <!-- ===================================================================
          Reorder dialog: drag rows into the order the user wants.

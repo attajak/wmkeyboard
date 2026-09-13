@@ -242,6 +242,7 @@ import com.wasimaster.wmkeyboard.core.settings.keywordsEnabledFor
 import com.wasimaster.wmkeyboard.core.settings.isUsableTool
 import com.wasimaster.wmkeyboard.core.settings.usableTools
 import com.wasimaster.wmkeyboard.core.settings.resolveKeyboardMode
+import com.wasimaster.wmkeyboard.core.settings.textShapeFields
 import com.wasimaster.wmkeyboard.core.snippets.Snippet
 import com.wasimaster.wmkeyboard.core.snippets.SnippetCandidate
 import com.wasimaster.wmkeyboard.core.snippets.SnippetMatch
@@ -758,6 +759,13 @@ open class WMKeyboardService : InputMethodService() {
     private var manualModeId: String? = null
     /** Package name of the app the focused field belongs to. */
     private var currentPackage: String? = null
+    /**
+     * Placeholder text of the focused field, for modes bound to a hint
+     * ([KeyboardMode.hints]). Read fresh on every field start — an app that
+     * swaps the hint on the same box (a rename dialog switching from name to
+     * extension) restarts input, so this follows it.
+     */
+    private var currentFieldHint: String? = null
 
     /**
      * The last words committed per app, newest last — an in-memory recency
@@ -2695,6 +2703,7 @@ open class WMKeyboardService : InputMethodService() {
                 baseSettings = settings
                 val mode = resolveKeyboardMode(
                     settings.keyboardModes, currentPackage, currentModeFields, manualModeId,
+                    currentFieldHint,
                 )
                 // A field-scoped override (FORCE_ASCII, hintLocales) outlives
                 // settings emissions — otherwise saving any unrelated setting
@@ -4104,8 +4113,13 @@ open class WMKeyboardService : InputMethodService() {
         if (pkg != null && pkg != currentPackage) pendingLayoutId = null
         if (pkg != null) currentPackage = pkg
         refreshPerAppContext()
+        currentFieldHint = info?.hintText?.toString()?.takeIf { it.isNotBlank() }
         currentModeFields = buildSet {
             if (secure) add(ModeField.PASSWORD)
+            // The shape of a text box (one line, many lines, no suggestions)
+            // on top of its kind — the only thing that tells a file manager's
+            // rename box from its text editor (issue #186).
+            addAll(textShapeFields(info?.inputType ?: 0, secure))
             when (fieldKind) {
                 FieldKind.EMAIL -> add(ModeField.EMAIL)
                 FieldKind.URI -> add(ModeField.URL)
@@ -4136,7 +4150,10 @@ open class WMKeyboardService : InputMethodService() {
         val fieldNoSuggestions =
             info.suppressesSuggestions(fieldSettings.suggestionSources.inAllFields)
         val activeMode = base?.let {
-            resolveKeyboardMode(it.keyboardModes, currentPackage, currentModeFields, manualModeId)
+            resolveKeyboardMode(
+                it.keyboardModes, currentPackage, currentModeFields, manualModeId,
+                currentFieldHint,
+            )
         }
         // Language the field asks for, layered over the base for this app (the
         // per-app remembered layout when that is on, else the global pick).
@@ -16642,6 +16659,7 @@ open class WMKeyboardService : InputMethodService() {
         val base = baseSettings ?: return
         val mode = resolveKeyboardMode(
             base.keyboardModes, currentPackage, currentModeFields, manualModeId,
+            currentFieldHint,
         )
         _uiState.update {
             it.copy(

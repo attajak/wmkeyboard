@@ -108,6 +108,118 @@ class KeyboardModeTest {
     }
 
     @Test
+    fun `hint binding matches on the placeholder text alone`() {
+        val extension = KeyboardMode(
+            id = "ext", name = "Extensions", autocorrect = false,
+            hints = listOf("extension"),
+        )
+        val all = modes + extension
+        // Case-ignored "contains": "File extension" carries "extension".
+        assertEquals(
+            "ext",
+            resolveKeyboardMode(all, "com.mixplorer", setOf(ModeField.TEXT), null, "File Extension")?.id,
+        )
+        // The same box with a different hint is not it.
+        assertNull(
+            resolveKeyboardMode(all, "com.mixplorer", setOf(ModeField.TEXT), null, "Enter name"),
+        )
+        // Nor is a field with no hint at all.
+        assertNull(resolveKeyboardMode(all, "com.mixplorer", setOf(ModeField.TEXT), null, null))
+    }
+
+    @Test
+    fun `hint binding is one more condition on top of app and field`() {
+        val rename = KeyboardMode(
+            id = "rename", name = "Rename",
+            apps = listOf("com.mixplorer"),
+            fieldKinds = listOf(ModeField.SINGLE_LINE),
+            hints = listOf("name"),
+        )
+        val fields = setOf(ModeField.TEXT, ModeField.SINGLE_LINE)
+        assertEquals(
+            "rename",
+            resolveKeyboardMode(listOf(rename), "com.mixplorer", fields, null, "Enter name")?.id,
+        )
+        // Right app and hint, wrong shape: the editor's multi-line box.
+        assertNull(
+            resolveKeyboardMode(
+                listOf(rename), "com.mixplorer",
+                setOf(ModeField.TEXT, ModeField.MULTILINE), null, "Enter name",
+            ),
+        )
+        // Right shape and hint, wrong app.
+        assertNull(resolveKeyboardMode(listOf(rename), "com.example.other", fields, null, "Enter name"))
+        // Right app and shape, no hint.
+        assertNull(resolveKeyboardMode(listOf(rename), "com.mixplorer", fields, null, null))
+    }
+
+    @Test
+    fun `a hint-bound mode beats a field-bound one, which beats an app-bound one`() {
+        val editor = KeyboardMode(id = "editor", name = "Editor", apps = listOf("com.mixplorer"))
+        val oneLine = KeyboardMode(
+            id = "oneline", name = "One line", fieldKinds = listOf(ModeField.SINGLE_LINE),
+        )
+        val ext = KeyboardMode(id = "ext", name = "Extension", hints = listOf("extension"))
+        // Listed least specific first, so order alone would pick the wrong one.
+        val all = listOf(editor, oneLine, ext)
+        val fields = setOf(ModeField.TEXT, ModeField.SINGLE_LINE)
+        assertEquals("ext", resolveKeyboardMode(all, "com.mixplorer", fields, null, "Extension")?.id)
+        assertEquals("oneline", resolveKeyboardMode(all, "com.mixplorer", fields, null, "Enter name")?.id)
+        assertEquals(
+            "editor",
+            resolveKeyboardMode(all, "com.mixplorer", setOf(ModeField.TEXT, ModeField.MULTILINE), null, null)?.id,
+        )
+    }
+
+    @Test
+    fun `notification reply still needs its hint when one is bound`() {
+        val replyChat = chat.copy(
+            fieldKinds = listOf(ModeField.NOTIFICATION_REPLY),
+            hints = listOf("reply"),
+        )
+        val fields = setOf(ModeField.TEXT, ModeField.NOTIFICATION_REPLY)
+        assertEquals(
+            "chat",
+            resolveKeyboardMode(listOf(replyChat), "com.android.systemui", fields, null, "Reply")?.id,
+        )
+        assertNull(resolveKeyboardMode(listOf(replyChat), "com.android.systemui", fields, null, "Type"))
+    }
+
+    @Test
+    fun `text shape fields follow the multi-line and no-suggestions flags`() {
+        val text = android.text.InputType.TYPE_CLASS_TEXT
+        val multi = android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        val noSuggest = android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        // A rename box: plain single-line text.
+        assertEquals(setOf(ModeField.SINGLE_LINE), textShapeFields(text, secure = false))
+        // A text editor.
+        assertEquals(setOf(ModeField.MULTILINE), textShapeFields(text or multi, secure = false))
+        // A code editor asks for no suggestions on top.
+        assertEquals(
+            setOf(ModeField.MULTILINE, ModeField.NO_SUGGESTIONS),
+            textShapeFields(text or multi or noSuggest, secure = false),
+        )
+        // An email box is text-class too, so it has a shape.
+        assertEquals(
+            setOf(ModeField.SINGLE_LINE),
+            textShapeFields(text or android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, secure = false),
+        )
+        // A keypad has none, and neither does a password box — a mode bound
+        // to single-line text must never take over a login form.
+        assertEquals(emptySet<ModeField>(), textShapeFields(android.text.InputType.TYPE_CLASS_NUMBER, secure = false))
+        assertEquals(emptySet<ModeField>(), textShapeFields(text, secure = true))
+    }
+
+    @Test
+    fun `hints survive the codec, and an old mode without them decodes empty`() {
+        val withHints = chat.copy(hints = listOf("extension"))
+        val decoded = KeyboardModeCodec.decodeList(KeyboardModeCodec.encodeList(listOf(withHints)))
+        assertEquals(listOf("extension"), decoded.single().hints)
+        val legacy = KeyboardModeCodec.encodeList(listOf(chat)).replace(",\"hints\":[]", "")
+        assertEquals(emptyList<String>(), KeyboardModeCodec.decodeList(legacy).single().hints)
+    }
+
+    @Test
     fun `topUpModeApps appends only to the named mode`() {
         val additions = mapOf("chat" to listOf("com.facebook.katana"))
         val topped = topUpModeApps(modes, additions)
