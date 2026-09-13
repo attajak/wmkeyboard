@@ -532,4 +532,50 @@ class UserLexiconTest {
         assertEquals(4L, lex.addedGeneration("bb"))
         assertEquals(9L, lex.addedGeneration("aa"))
     }
+
+    // ---- the gate on what is learned unasked (#185) ----
+
+    @Test
+    fun learningRefusesAWordWithASymbolGluedOn() {
+        val lexicon = UserLexicon(null)
+        assertFalse(lexicon.learnWord("manager\""))
+        assertFalse(lexicon.learnWord("man\"ager"))
+        assertFalse(lexicon.contains("manager\""))
+        assertTrue(lexicon.learnWord("manager"))
+        assertTrue(lexicon.contains("manager"))
+    }
+
+    @Test
+    fun addingByHandTakesWhateverTheUserSpelled() {
+        // The deliberate path is not gated: an oddity the user typed into a
+        // dialog is theirs to keep.
+        val lexicon = UserLexicon(null)
+        lexicon.addWord("c++")
+        assertTrue(lexicon.contains("c++"))
+        assertTrue(lexicon.isAddedByHand("c++"))
+    }
+
+    @Test
+    fun loadingDropsJunkThatGotInBeforeTheGateButKeepsHandAddedWords() {
+        val f = file()
+        f.parentFile?.mkdirs()
+        f.writeText(
+            """{"words":{"manager\"":3,"hello":2,"c++":1,"old\"":250},
+               "addedByHand":["c++"],
+               "bigrams":{"hello":{"manager\"":2,"world":1},"manager\"":{"hello":1}},
+               "trigrams":{"hello\u0000world":{"manager\"":1,"again":1}}}"""
+        )
+        val lexicon = UserLexicon(f)
+        assertFalse("learned unasked, dropped", lexicon.contains("manager\""))
+        assertTrue("a plain word stays", lexicon.contains("hello"))
+        assertTrue("added by hand, kept whatever it looks like", lexicon.contains("c++"))
+        assertTrue("the old 200 boost was the by-hand marker, kept too", lexicon.contains("old\""))
+        assertEquals("and its n-grams go with it", listOf("world"), lexicon.nextWords("hello", 3))
+        assertEquals(0, lexicon.bigramCount("manager\"", "hello"))
+        assertEquals(listOf("again"), lexicon.nextWordsAfter("hello", "world", 3))
+        // The cleanup is a change to persist: the next save must write it.
+        lexicon.save()
+        assertFalse(f.readText().contains("manager\\\""))
+        assertTrue(f.readText().contains("c++"))
+    }
 }

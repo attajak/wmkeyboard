@@ -132,6 +132,11 @@ class UserLexicon(private val storageFile: File?) {
      * [count] grades the strength of the signal: a suggestion the user
      * deliberately tapped teaches harder than a word that merely got
      * committed in passing.
+     *
+     * Returns whether the word was taken. The automatic path ends here, so
+     * this is where a word that is not a word is refused (#185) — see
+     * [WordContext.isLearnableWord]; [addWord], the deliberate path, does not
+     * ask, because a word the user typed into a dialog is theirs to spell.
      */
     @Synchronized
     fun learnWord(
@@ -139,9 +144,10 @@ class UserLexicon(private val storageFile: File?) {
         count: Int = 1,
         langId: String = "",
         caseEvidence: Boolean = false,
-    ) {
+    ): Boolean {
         val key = WordKey.of(word)
-        if (key.length < 2 || key.length > MAX_WORD_LENGTH || count <= 0) return
+        if (key.length < 2 || key.length > MAX_WORD_LENGTH || count <= 0) return false
+        if (!WordContext.isLearnableWord(key)) return false
         // Only the caller knows whether the capital it is holding is the
         // user's or the keyboard's, so the vote is cast on its say-so (#44).
         if (caseEvidence) voteCase(key, WordKey.surface(word), weight = 1)
@@ -160,6 +166,7 @@ class UserLexicon(private val storageFile: File?) {
         if (langId.isNotBlank()) wordLangs[key] = langId
         mutations++
         dirty = true
+        return true
     }
 
     /**
@@ -659,11 +666,23 @@ class UserLexicon(private val storageFile: File?) {
         runCatching {
             val snapshot = json.decodeFromString<Snapshot>(file.readText())
             words.putAll(snapshot.words)
+            // What got in before the store had a gate (#185): a word with a
+            // symbol glued on that some path learned unasked. Dropped once,
+            // here, with its n-grams; a word the user put in by hand — the
+            // marker set, or the 200 boost that was the marker before #164 —
+            // is theirs and stays whatever it looks like.
+            fun junk(word: String): Boolean =
+                !WordContext.isLearnableWord(word) &&
+                    word !in snapshot.addedByHand &&
+                    (snapshot.words[word] ?: 0) < STICKY_MIN_COUNT
+            if (words.keys.removeAll(::junk)) dirty = true
             snapshot.bigrams.forEach { (prev, map) ->
-                bigrams[prev] = Followers().also { it.counts.putAll(map) }
+                if (junk(prev)) return@forEach
+                bigrams[prev] = Followers().also { it.counts.putAll(map.filterKeys { !junk(it) }) }
             }
             snapshot.trigrams.forEach { (context, map) ->
-                trigrams[context] = Followers().also { it.counts.putAll(map) }
+                if (context.split(TRIGRAM_SEPARATOR).any(::junk)) return@forEach
+                trigrams[context] = Followers().also { it.counts.putAll(map.filterKeys { !junk(it) }) }
             }
             generation = snapshot.generation
             // Words with no recorded generation (legacy files, settings-app

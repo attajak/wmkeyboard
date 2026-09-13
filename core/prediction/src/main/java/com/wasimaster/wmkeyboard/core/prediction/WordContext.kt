@@ -41,6 +41,41 @@ object WordContext {
     }
 
     /**
+     * Whether [word] is a word the keyboard may learn *on its own* (#185).
+     *
+     * Letters and digits, with at least one letter ("mp3" and "b2b" are words;
+     * "2024" is a number), starting and ending on one of those; inside, single
+     * joiners are allowed too — an apostrophe ("don't"), a hyphen
+     * ("well-known"), or the zero-width joiners Indic scripts spell with —
+     * never two in a row and never anything else. What it refuses is the
+     * class of thing that used to reach the personal dictionary through a
+     * side door: `manager"`, `man"ager`, a token with a symbol glued on.
+     *
+     * Only the automatic paths ask: a word the user adds by hand is theirs to
+     * spell however they like. Length is the caller's business — every store
+     * has its own floor and ceiling already.
+     */
+    fun isLearnableWord(word: String): Boolean {
+        if (word.isEmpty()) return false
+        fun letterOrDigit(c: Char) = isWordChar(c) || c.isDigit()
+        if (!letterOrDigit(word[0]) || !letterOrDigit(word[word.length - 1])) return false
+        var afterJoiner = false
+        var letters = 0
+        for (c in word) {
+            if (isWordChar(c)) letters++
+            afterJoiner = when {
+                letterOrDigit(c) -> false
+                c in WORD_JOINERS && !afterJoiner -> true
+                else -> return false
+            }
+        }
+        return letters > 0
+    }
+
+    /** What may sit between two letters of one word: the apostrophes, the hyphen, ZWNJ and ZWJ. */
+    private const val WORD_JOINERS = "'\u2019-\u200C\u200D"
+
+    /**
      * The completed word ending [text], for next-word context:
      *  - null while still inside a word, and null for null text, which is an
      *    editor saying it cannot answer rather than saying there is nothing;

@@ -136,4 +136,31 @@ class WordContextTest {
         assertEquals("হয়েছে", prev1)
         assertEquals("করা", prev2)
     }
+
+    // ---- what the keyboard may learn on its own (#185) ----
+
+    @Test fun plainWordsAreLearnable() {
+        for (word in listOf("manager", "don't", "don’t", "well-known", "b2b", "mp3", "covid19", "হয়েছে", "I")) {
+            assertTrue(word, WordContext.isLearnableWord(word))
+        }
+    }
+
+    @Test fun indicJoinersInsideAWordAreLearnable() {
+        // ZWJ and ZWNJ spell real Bengali words; each between letters, never doubled.
+        assertTrue(WordContext.isLearnableWord("র\u200D্য"))
+        assertTrue(WordContext.isLearnableWord("কি\u200Cছু"))
+    }
+
+    @Test fun aSymbolGluedOnIsNotAWord() {
+        // The reporter's word, and the shapes one gate has to refuse together.
+        for (word in listOf("manager\"", "\"manager", "man\"ager", "hello!", "(hello", "a--b", "don''t", "-hello", "hello-")) {
+            assertFalse(word, WordContext.isLearnableWord(word))
+        }
+    }
+
+    @Test fun aNumberIsNotAWord() {
+        assertFalse(WordContext.isLearnableWord("2024"))
+        assertFalse(WordContext.isLearnableWord("12-34"))
+        assertFalse(WordContext.isLearnableWord(""))
+    }
 }

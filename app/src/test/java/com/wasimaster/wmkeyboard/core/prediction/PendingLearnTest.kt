@@ -121,4 +121,14 @@ class PendingLearnTest {
             pending.waiting().toMap(),
         )
     }
+
+    /** Issue #185: the waiting room takes only what the lexicon would. */
+    @Test
+    fun aWordWithASymbolGluedOnIsNeverACandidate() {
+        val pending = PendingLearn(file())
+        assertEquals(0, pending.sight("manager\""))
+        assertEquals(0, pending.sight("manager\""))
+        assertEquals(0, pending.sightings("manager\""))
+        assertEquals(1, pending.sight("manager"))
+    }
 }

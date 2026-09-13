@@ -154,6 +154,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Learn-from-typing setting
     - Not incognito, when incognito is set to pause learning
     - Field allows typing intelligence — Password and secure fields never teach
+  - Only a word is learned unasked `RARE` — WordContext.isLearnableWord gates learnWord, PendingLearn.sight, the add chip and the held-menu Add (#185): letters and digits with at least one letter, single interior apostrophe/hyphen/ZWJ/ZWNJ, nothing else; `manager"` never reaches the store or the mirror. addWord (dialog, card, chip yes) is not gated, and UserLexicon.load drops pre-gate junk once, keeping hand-added words
   - Settle before learning — Nothing reaches the dictionary while the text is still moving
     - Every committed word queues — 500-word buffer, one field, memory only, never written out
     - Counted at the flush points — Keyboard closed, message sent, field cleared, another field, buffer full

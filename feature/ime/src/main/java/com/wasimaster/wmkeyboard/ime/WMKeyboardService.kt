@@ -10266,8 +10266,11 @@ open class WMKeyboardService : InputMethodService() {
         for ((index, part) in parts.withIndex()) {
             // Combining marks are part of the word, not a boundary: trimming
             // on isLetter alone learns Bengali হয়েছে as হয়েছ. See WordContext.
+            // Trimming only reaches the ends; what is left still has to be a
+            // word all the way through (#185), or `man"ager` would be counted,
+            // offered on the add chip and, three sightings later, learned.
             val cleaned = part.trim { !WordContext.isWordChar(it) }
-            if (cleaned.isEmpty()) continue
+            if (cleaned.isEmpty() || !WordContext.isLearnableWord(cleaned)) continue
             val last = index == parts.lastIndex
             // Taps only line up with a single word; a split commit has none.
             val single = parts.size == 1
@@ -10520,13 +10523,16 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun learnSettledWord(entry: LearningBuffer.Entry, settings: KeyboardSettings) {
         // Tagged with the language it was typed under so a habit learned under
-        // one language can be damped when it crowds another's strip.
-        userLexicon.learnWord(
+        // one language can be damped when it crowds another's strip. What the
+        // lexicon refuses (#185) is not mirrored either: the platform
+        // dictionary is read back as known words, and would hand it back.
+        val learned = userLexicon.learnWord(
             entry.word,
             entry.weight,
             langId = entry.langId,
             caseEvidence = entry.caseTrusted,
         )
+        if (!learned) return
         // Mirror it into Android's shared personal dictionary when the user
         // has opted in — in a spelling we can stand behind: an
         // auto-capitalized word would otherwise put a bogus proper noun into
@@ -11044,12 +11050,14 @@ open class WMKeyboardService : InputMethodService() {
         caseTrusted: Boolean,
     ) {
         pendingLearn.forget(word)
-        userLexicon.learnWord(
+        val learned = userLexicon.learnWord(
             word,
             count = sightings,
             langId = langId,
             caseEvidence = caseTrusted,
         )
+        // Refused by the lexicon (#185): nothing to mirror, see [learnSettledWord].
+        if (!learned) return
         if (_uiState.value.settings.addWordsToSystemDictionary) {
             val mirrored = if (caseTrusted) word else word.lowercase()
             serviceScope.launch(Dispatchers.IO) {
@@ -21398,8 +21406,11 @@ open class WMKeyboardService : InputMethodService() {
      * construction and the one the user wants in is the one they are typing
      * (#100). Null otherwise.
      */
-    private fun addableTypedWord(): String? =
-        typedWord().takeIf { it.length >= 2 && !userLexicon.contains(WordKey.of(it)) }
+    private fun addableTypedWord(): String? = typedWord().takeIf {
+        // The menu proposes it, so it has to be a word (#185); a spelling the
+        // user types into the card themselves is not held to this.
+        it.length >= 2 && WordContext.isLearnableWord(it) && !userLexicon.contains(WordKey.of(it))
+    }
 
     /**
      * Whether [word] is somewhere the keyboard can take it out of itself —
