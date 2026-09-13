@@ -899,14 +899,10 @@ internal fun VocabPacksScreen(
         )
     }
     confirmMetered?.let { action ->
-        AlertDialog(
-            onDismissRequest = { confirmMetered = null },
-            title = { Text(stringResource(R.string.languages_metered_confirm_title)) },
-            text = { Text(stringResource(R.string.vocab_metered_confirm_body)) },
-            confirmButton = {
-                TextButton(onClick = { confirmMetered = null; action() }) { Text(stringResource(CommonR.string.common_download)) }
-            },
-            dismissButton = { TextButton(onClick = { confirmMetered = null }) { Text(stringResource(CommonR.string.common_cancel)) } },
+        MeteredDownloadDialog(
+            detail = null,
+            onConfirm = { confirmMetered = null; action() },
+            onDismiss = { confirmMetered = null },
         )
     }
     if (blocked) MeteredBlockedDialog { blocked = false }

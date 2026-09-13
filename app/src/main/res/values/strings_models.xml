@@ -12,12 +12,10 @@
 
     <!-- ===== Shared by both model screens ===== -->
 
-    <!-- Dialog asking before a large download starts on a metered connection. -->
-    <string name="models_metered_title">Use mobile data?</string>
-    <!-- %1$s is the name of the model. %2$s is the size of the download. -->
-    <string name="models_metered_body"><xliff:g id="model" example="Whisper Small">%1$s</xliff:g> is a download of <xliff:g id="size" example="248 MB">%2$s</xliff:g>. Your connection is metered.</string>
-    <string name="models_metered_confirm_action">Download anyway</string>
-    <string name="models_metered_dismiss_action">Wait for Wi-Fi</string>
+    <!-- First sentence of the dialog asking before a large download starts on a
+         metered connection. The datasaver_metered_* strings give the rest.
+         %1$s is the name of the model. %2$s is the size of the download. -->
+    <string name="models_metered_body"><xliff:g id="model" example="Whisper Small">%1$s</xliff:g> is a download of <xliff:g id="size" example="248 MB">%2$s</xliff:g>.</string>
 
     <!-- Button that deletes files of models that left the catalogue.
          %1$s is how much space that frees, for example "1.2 GB". -->

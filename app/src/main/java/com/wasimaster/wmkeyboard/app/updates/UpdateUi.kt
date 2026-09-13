@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.app.MeteredBlockedDialog
+import com.wasimaster.wmkeyboard.app.MeteredDownloadDialog
 import com.wasimaster.wmkeyboard.app.NavRow
 import com.wasimaster.wmkeyboard.app.SettingsGroup
 import com.wasimaster.wmkeyboard.app.SettingsRowIcons
@@ -317,25 +318,13 @@ private fun rememberUpdateDownloadRequest(
     if (blocked) MeteredBlockedDialog { blocked = false }
     if (confirming) {
         val size = Formatter.formatShortFileSize(context, sizeBytes)
-        AlertDialog(
-            onDismissRequest = { confirming = false },
-            title = { Text(stringResource(R.string.update_metered_title)) },
-            text = { Text(stringResource(R.string.update_metered_body, size)) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        confirming = false
-                        updater.start()
-                    },
-                ) {
-                    Text(stringResource(R.string.update_action_download))
-                }
+        MeteredDownloadDialog(
+            detail = stringResource(R.string.update_metered_body, size),
+            onConfirm = {
+                confirming = false
+                updater.start()
             },
-            dismissButton = {
-                TextButton(onClick = { confirming = false }) {
-                    Text(stringResource(CommonR.string.common_cancel))
-                }
-            },
+            onDismiss = { confirming = false },
         )
     }
     return {

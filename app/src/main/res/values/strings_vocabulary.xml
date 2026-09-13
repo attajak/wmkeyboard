@@ -28,7 +28,6 @@
     <string name="vocab_packs_loading">Reading your packs…</string>
     <string name="vocab_pack_delete_title">Delete “<xliff:g id="name" example="Word Smart 1">%1$s</xliff:g>”?</string>
     <string name="vocab_pack_delete_body">The pack and its translations are removed. Your learning progress for its words is kept.</string>
-    <string name="vocab_metered_confirm_body">This download uses mobile data.</string>
     <plurals name="vocab_import_done">
         <item quantity="one">Imported %d word.</item>
         <item quantity="other">Imported %d words.</item>

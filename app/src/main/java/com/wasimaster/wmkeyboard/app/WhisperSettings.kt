@@ -1,7 +1,6 @@
 package com.wasimaster.wmkeyboard.app
 
 import android.content.Context
-import android.net.ConnectivityManager
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -132,8 +131,7 @@ internal fun WhisperModelManager(repository: SettingsRepository, settings: Keybo
     }
 
     fun requestDownload(model: WhisperModel) {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val metered = cm.isActiveNetworkMetered
+        val metered = isMeteredNow(context)
         when (downloadDecisionNow(context, settings)) {
             MeteredDecision.BLOCKED -> meteredBlocked = true
             MeteredDecision.ASK -> meteredPending = model
@@ -293,29 +291,17 @@ internal fun WhisperModelManager(repository: SettingsRepository, settings: Keybo
     }
 
     meteredPending?.let { model ->
-        AlertDialog(
-            onDismissRequest = { meteredPending = null },
-            title = { Text(stringResource(R.string.models_metered_title)) },
-            text = {
-                Text(
-                    stringResource(
-                        R.string.models_metered_body,
-                        model.displayName,
-                        formatBytes(model.sizeBytes),
-                    ),
-                )
+        MeteredDownloadDialog(
+            detail = stringResource(
+                R.string.models_metered_body,
+                model.displayName,
+                formatBytes(model.sizeBytes),
+            ),
+            onConfirm = {
+                startDownload(model)
+                meteredPending = null
             },
-            confirmButton = {
-                TextButton(onClick = {
-                    startDownload(model)
-                    meteredPending = null
-                }) { Text(stringResource(R.string.models_metered_confirm_action)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { meteredPending = null }) {
-                    Text(stringResource(R.string.models_metered_dismiss_action))
-                }
-            },
+            onDismiss = { meteredPending = null },
         )
     }
     if (meteredBlocked) MeteredBlockedDialog { meteredBlocked = false }

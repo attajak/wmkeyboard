@@ -53,10 +53,10 @@
     <!-- Download progress. %1$s = bytes so far, %2$s = total size, both with units. -->
     <string name="update_progress_body"><xliff:g id="downloaded" example="12 MB">%1$s</xliff:g> of <xliff:g id="total" example="30 MB">%2$s</xliff:g></string>
 
-    <!-- Asked before a download starts on mobile data. -->
-    <string name="update_metered_title">Download on mobile data?</string>
-    <!-- %1$s is the download size, with units. -->
-    <string name="update_metered_body">The update is <xliff:g id="size" example="45 MB">%1$s</xliff:g>. You are not on Wi-Fi, so it uses your mobile data.</string>
+    <!-- First sentence of the dialog asked before a download starts on a metered
+         connection. The datasaver_metered_* strings give the rest.
+         %1$s is the download size, with units. -->
+    <string name="update_metered_body">The update is <xliff:g id="size" example="45 MB">%1$s</xliff:g>.</string>
 
     <!-- About screen: the Updates group. -->
     <string name="update_section_title">Updates</string>

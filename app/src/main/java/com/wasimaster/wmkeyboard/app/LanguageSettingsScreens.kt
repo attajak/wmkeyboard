@@ -1136,28 +1136,16 @@ internal fun LanguageDetailScreen(
         }
     }
     if (confirmMetered) {
-        AlertDialog(
-            onDismissRequest = { confirmMetered = false },
-            title = { Text(stringResource(R.string.languages_metered_confirm_title)) },
-            text = {
-                Text(
-                    stringResource(
-                        R.string.languages_metered_confirm_body,
-                        formatBytes(downloadable.bytes),
-                    ),
-                )
+        MeteredDownloadDialog(
+            detail = stringResource(
+                R.string.languages_metered_confirm_body,
+                formatBytes(downloadable.bytes),
+            ),
+            onConfirm = {
+                confirmMetered = false
+                startLanguageDataDownload(context, downloadable, notifyDownload)
             },
-            confirmButton = {
-                TextButton(onClick = {
-                    confirmMetered = false
-                    startLanguageDataDownload(context, downloadable, notifyDownload)
-                }) { Text(stringResource(CommonR.string.common_download)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { confirmMetered = false }) {
-                    Text(stringResource(CommonR.string.common_cancel))
-                }
-            },
+            onDismiss = { confirmMetered = false },
         )
     }
     if (blockedMetered) MeteredBlockedDialog { blockedMetered = false }

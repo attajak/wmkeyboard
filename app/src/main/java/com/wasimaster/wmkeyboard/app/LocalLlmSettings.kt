@@ -2,7 +2,6 @@ package com.wasimaster.wmkeyboard.app
 
 import android.app.ActivityManager
 import android.content.Context
-import android.net.ConnectivityManager
 import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,7 +23,6 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -122,8 +120,7 @@ internal fun LocalLlmModelManager(repository: SettingsRepository, settings: Keyb
     }
 
     fun requestDownload(model: LocalLlmModel) {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val metered = cm.isActiveNetworkMetered
+        val metered = isMeteredNow(context)
         when (downloadDecisionNow(context, settings)) {
             MeteredDecision.BLOCKED -> meteredBlocked = true
             MeteredDecision.ASK -> meteredPending = model
@@ -290,29 +287,17 @@ internal fun LocalLlmModelManager(repository: SettingsRepository, settings: Keyb
     }
 
     meteredPending?.let { model ->
-        AlertDialog(
-            onDismissRequest = { meteredPending = null },
-            title = { Text(stringResource(R.string.models_metered_title)) },
-            text = {
-                Text(
-                    stringResource(
-                        R.string.models_metered_body,
-                        model.displayName,
-                        formatBytes(model.sizeBytes),
-                    ),
-                )
+        MeteredDownloadDialog(
+            detail = stringResource(
+                R.string.models_metered_body,
+                model.displayName,
+                formatBytes(model.sizeBytes),
+            ),
+            onConfirm = {
+                startDownload(model)
+                meteredPending = null
             },
-            confirmButton = {
-                TextButton(onClick = {
-                    startDownload(model)
-                    meteredPending = null
-                }) { Text(stringResource(R.string.models_metered_confirm_action)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { meteredPending = null }) {
-                    Text(stringResource(R.string.models_metered_dismiss_action))
-                }
-            },
+            onDismiss = { meteredPending = null },
         )
     }
     if (meteredBlocked) MeteredBlockedDialog { meteredBlocked = false }

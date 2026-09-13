@@ -216,7 +216,7 @@
         <item quantity="other">%1$d apps have a language pinned to them</item>
     </plurals>
     <string name="langemoji_lang_forget_apps_confirm">Every app goes back to following your last used language. The setting that remembers them stays on, so apps will start being remembered again as you switch language inside them.</string>
-    <string name="languages_metered_confirm_title">Download on mobile data?</string>
-    <!-- %1$s is an already formatted size such as "42 MB". -->
-    <string name="languages_metered_confirm_body">This language data is about %1$s. You are not on Wi-Fi, so it will use your mobile data allowance.</string>
+    <!-- First sentence of the metered download dialog. The datasaver_metered_*
+         strings give the rest. %1$s is an already formatted size such as "42 MB". -->
+    <string name="languages_metered_confirm_body">This language data is about %1$s.</string>
 </resources>

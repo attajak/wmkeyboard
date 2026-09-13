@@ -46,8 +46,28 @@
 
     <string name="datasaver_info">Data saving never changes your settings. It hides features while the connection costs money, and everything you chose is back the moment you are on Wi-Fi again.</string>
 
+    <!-- Asked before a download starts on a metered connection. Android also
+         calls some Wi-Fi networks and most VPNs metered, so each kind of
+         connection has its own words. The dialog body is the download's own
+         sentence (name and size) followed by one of the *_body strings. -->
+    <string name="datasaver_metered_mobile_title">Download on mobile data?</string>
+    <string name="datasaver_metered_mobile_body">You are not on Wi-Fi, so the download uses your mobile data allowance.</string>
+    <string name="datasaver_metered_mobile_action">Use mobile data</string>
+    <string name="datasaver_metered_wifi_title">Download on metered Wi-Fi?</string>
+    <string name="datasaver_metered_wifi_body">The download uses your Wi-Fi, not mobile data. Android counts this Wi-Fi network as metered, so the app asks first. To stop this question, set the network as unmetered in the Wi-Fi settings of your device.</string>
+    <string name="datasaver_metered_wifi_action">Download on Wi-Fi</string>
+    <string name="datasaver_metered_vpn_body">A VPN is on, and Android counts the connection as metered. Many VPN apps report a metered connection on Wi-Fi too, so the app asks first.</string>
+    <string name="datasaver_metered_other_title">Download on a metered connection?</string>
+    <string name="datasaver_metered_other_body">Android counts this connection as metered, so the app asks first.</string>
+    <string name="datasaver_metered_other_action">Download anyway</string>
+
     <!-- Shown when a download is pressed and data saving has it turned off. -->
-    <string name="datasaver_blocked_title">Turned off on mobile data</string>
-    <string name="datasaver_blocked_body">Downloads are off while you are on mobile data. Change this in Settings, under Data saver, or connect to Wi-Fi.</string>
+    <string name="datasaver_blocked_mobile_title">Turned off on mobile data</string>
+    <string name="datasaver_blocked_mobile_body">Downloads are off while you are on mobile data. Change this in Settings, under Data saver, or connect to Wi-Fi.</string>
+    <string name="datasaver_blocked_wifi_title">Turned off on metered Wi-Fi</string>
+    <string name="datasaver_blocked_wifi_body">Downloads are off because Android counts this Wi-Fi network as metered. Change this in Settings, under Data saver, or set the network as unmetered in the Wi-Fi settings of your device.</string>
+    <string name="datasaver_blocked_other_title">Turned off on a metered connection</string>
+    <string name="datasaver_blocked_vpn_body">Downloads are off because Android counts the connection as metered. A VPN is on, and many VPN apps report a metered connection. Change this in Settings, under Data saver.</string>
+    <string name="datasaver_blocked_other_body">Downloads are off because Android counts the connection as metered. Change this in Settings, under Data saver.</string>
 
 </resources>
