@@ -13522,13 +13522,22 @@ open class WMKeyboardService : InputMethodService() {
         }
     }
 
-    /** Mid-swipe: show the current best candidates without committing. */
-    fun onGesturePreview(points: List<GesturePoint>, keys: List<KeyCenter>, keyWidthPx: Float) {
+    /**
+     * Mid-swipe: show the current best candidates without committing.
+     * [capitals] is how many times the stroke has crossed the shift key so
+     * far, so the preview is cased the way the lift will case the word (#162).
+     */
+    fun onGesturePreview(
+        points: List<GesturePoint>,
+        keys: List<KeyCenter>,
+        keyWidthPx: Float,
+        capitals: Int = 0,
+    ) {
         val state = _uiState.value
         if (!glideAllowed(state)) return
         if (keys.isEmpty()) return
         gesturePreviews.trySend(
-            GesturePreviewRequest(points, keys, keyWidthPx, gestureGeneration.get()),
+            GesturePreviewRequest(points, keys, keyWidthPx, capitals, gestureGeneration.get()),
         )
     }
 
@@ -13562,6 +13571,13 @@ open class WMKeyboardService : InputMethodService() {
                         suggestions = steadied.words,
                         octopusGlide = floating,
                         glideWord = steadied.words.first(),
+                        // Published raw and cased at the draw sites, through
+                        // the same ladder the commit uses (#162). Casing the
+                        // words here would title-case a picked word twice on
+                        // the way back in, and would leave the pill's own
+                        // board-shift pass to shout a word the stroke only
+                        // asked a capital of.
+                        glideCapitals = request.capitals,
                         // The word a lift would type, published as the promise
                         // it is rather than left as one more bold suggestion
                         // (#121). [KeyboardUiState.autocorrectWord] is already
@@ -13635,6 +13651,7 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update { state ->
             state.copy(
                 glideWord = null,
+                glideCapitals = 0,
                 glideChoices = emptyList(),
                 glideCloseCall = false,
                 // Only the promise this stroke made. A flick short enough to
@@ -13905,21 +13922,6 @@ open class WMKeyboardService : InputMethodService() {
         // has always been under.
         capitals > 1 -> false
         else -> shiftAtGesture == ShiftState.ON && state.shiftPressedByUser
-    }
-
-    /**
-     * The shift a glide commits under.
-     *
-     * The board's own state, unless the stroke drew through the shift key and
-     * answered for itself (#115): once for a capital, twice for a shout, the
-     * same ladder tapping the key walks up. It overrides rather than combines,
-     * so a stroke that says "capital" gets a capital whatever the board was
-     * doing — the user drew the instruction after they saw the board.
-     */
-    private fun shiftForGlide(board: ShiftState, capitals: Int): ShiftState = when {
-        capitals >= 2 -> ShiftState.CAPS_LOCK
-        capitals == 1 -> ShiftState.ON
-        else -> board
     }
 
     /**
@@ -24641,6 +24643,8 @@ private class GesturePreviewRequest(
     val points: List<GesturePoint>,
     val keys: List<KeyCenter>,
     val keyWidthPx: Float,
+    /** Shift crossings so far; see [WMKeyboardService.onGesturePreview]. */
+    val capitals: Int,
     val generation: Int,
 )
 

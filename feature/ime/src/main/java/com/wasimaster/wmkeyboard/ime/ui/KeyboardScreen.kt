@@ -425,6 +425,7 @@ import com.wasimaster.wmkeyboard.core.settings.TextEditAction
 import com.wasimaster.wmkeyboard.core.settings.repeats
 import com.wasimaster.wmkeyboard.ime.ShiftState
 import com.wasimaster.wmkeyboard.ime.displayCaseForShift
+import com.wasimaster.wmkeyboard.ime.shiftForGlide
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.composerType
@@ -866,7 +867,7 @@ fun KeyboardScreen(
     onText: (String) -> Unit = {},
     onGesture: (List<GesturePoint>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
         { _, _, _, _ -> },
-    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float) -> Unit = { _, _, _ -> },
+    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float, Int) -> Unit = { _, _, _, _ -> },
     onGestureWords: (List<List<GesturePoint>>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
         { _, _, _, _ -> },
     onKeyTouch: (Float, Float) -> Unit = { _, _ -> },
@@ -3331,7 +3332,11 @@ private fun TopBar(
                     centerPrimaryEnabled = state.settings.suggestionStrip.suggestionPrimaryCenter,
                     primaryColor = state.settings.suggestionStrip.primaryColor?.let { Color(it.toInt()) },
                     autocorrectWord = state.autocorrectWord,
-                    shiftState = state.shiftState,
+                    // Mid-stroke, the shift the lift will commit under (#162):
+                    // a glide through the shift key previews its capital on
+                    // the strip as well as in the pill. Zero crossings between
+                    // strokes, so this is the board's own shift then.
+                    shiftState = shiftForGlide(state.shiftState, state.glideCapitals),
                     // Only while the live candidates are the ones on screen: the
                     // strip holds the last set behind alpha 0, and a key promised
                     // against a faded word would commit something else.
@@ -8228,7 +8233,7 @@ private fun KeyboardBody(
     onKey: (Key) -> Unit,
     onText: (String) -> Unit,
     onGesture: (List<GesturePoint>, List<KeyCenter>, Float, GlideVerdict) -> Unit,
-    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float) -> Unit,
+    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float, Int) -> Unit,
     onGestureWords: (List<List<GesturePoint>>, List<KeyCenter>, Float, GlideVerdict) -> Unit,
     onKeyTouch: (Float, Float) -> Unit = { _, _ -> },
     onTouchKeys: (List<KeyCenter>) -> Unit = {},
@@ -11035,7 +11040,7 @@ private fun KeyRows(
     onText: (String) -> Unit,
     onGesture: (List<GesturePoint>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
         { _, _, _, _ -> },
-    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float) -> Unit = { _, _, _ -> },
+    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float, Int) -> Unit = { _, _, _, _ -> },
     onCursorMove: (Int) -> Unit = {},
     onLayoutSelect: (String) -> Unit = {},
     onGestureWords: (List<List<GesturePoint>>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
@@ -12119,7 +12124,7 @@ private fun KeyRows(
                                 lastPreviewMs = change.uptimeMillis
                                 keyList?.let { keys ->
                                     previewedSeg = true
-                                    onGesturePreview(seg.toList(), keys, keyWidth.value)
+                                    onGesturePreview(seg.toList(), keys, keyWidth.value, shiftCrossings)
                                 }
                             }
                         }
@@ -12841,15 +12846,13 @@ private fun KeyRows(
         // stands down while the picker is up: it would be answering a question
         // the picker is still asking, and with the same word.
         val glide = state.settings.gesture
+        // Cased through the commit's own ladder, so a stroke drawn through the
+        // shift key previews "That" and not the "that" it used to (#162): the
+        // board's shift never changes for a drawn gesture, and the crossings
+        // ride in on the preview instead.
         val pillWord = state.glideWord
             ?.takeIf { glide.wordPreview && trail.visible && !trail.released && picker.words.isEmpty() }
-            ?.let { word ->
-                when (state.shiftState) {
-                    ShiftState.CAPS_LOCK -> word.uppercase()
-                    ShiftState.ON -> word.replaceFirstChar { it.uppercase() }
-                    ShiftState.OFF -> word
-                }
-            }
+            ?.let { word -> displayCaseForShift(word, shiftForGlide(state.shiftState, state.glideCapitals)) }
         // The pill carries the strip's promise when the user has asked for it
         // there (#121). It is the surface the eye is actually on while a stroke
         // is being drawn, so a colour shown only on the strip is a colour

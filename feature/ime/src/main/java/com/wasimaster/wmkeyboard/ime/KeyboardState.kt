@@ -70,6 +70,25 @@ fun displayCaseForShift(word: String, shift: ShiftState): String {
 }
 
 /**
+ * The shift a glide commits under, and is previewed under.
+ *
+ * The board's own state, unless the stroke drew through the shift key and
+ * answered for itself (#115): once for a capital, twice for a shout, the same
+ * ladder tapping the key walks up. It overrides rather than combines, so a
+ * stroke that says "capital" gets a capital whatever the board was doing — the
+ * user drew the instruction after they saw the board.
+ *
+ * Here, beside [displayCaseForShift], rather than in the service: the pill
+ * and the strip case the mid-stroke preview with it too (#162), and the one
+ * ladder is what keeps the word on screen the word that lands.
+ */
+fun shiftForGlide(board: ShiftState, capitals: Int): ShiftState = when {
+    capitals >= 2 -> ShiftState.CAPS_LOCK
+    capitals == 1 -> ShiftState.ON
+    else -> board
+}
+
+/**
  * A Ctrl/Alt/Meta latch.
  *
  * Mirrors [ShiftState] deliberately — tap arms for one key, a quick second tap
@@ -1819,6 +1838,13 @@ data class KeyboardUiState(
     val smartReplyChips: List<android.view.View> = emptyList(),
     /** Best gesture-typing candidate mid-swipe, shown floating above the finger. */
     val glideWord: String? = null,
+    /**
+     * How many times the stroke behind [glideWord] has crossed the shift key
+     * so far — the capitals the lift will commit under (#115) — so the pill
+     * and the strip can show the word cased the way it will land (#162).
+     * Zero between strokes; see [shiftForGlide].
+     */
+    val glideCapitals: Int = 0,
     /**
      * The words a mid-swipe decode is choosing between, best first, capped at
      * [GestureSettings.pickerChoices]. Populated for every preview while the
