@@ -309,6 +309,7 @@ private fun SearchStrings.typingSuggestionsRows(): List<SettingsSearchEntry> {
         row(R.string.typing_offer_near_miss_title, R.string.typing_offer_near_miss_subtitle),
         row(R.string.typing_suggestions_first_title, R.string.typing_suggestions_first_subtitle),
         row(R.string.typing_primary_center_title, R.string.typing_primary_center_subtitle),
+        row(R.string.typing_suggestion_overflow_title, R.string.typing_suggestion_overflow_subtitle),
         row(R.string.typing_contact_names_title, R.string.typing_contact_names_subtitle),
         row(R.string.typing_contact_emails_title, R.string.typing_contact_emails_subtitle),
         row(R.string.typing_contact_emails_in_email_fields_title, R.string.typing_contact_emails_in_email_fields_subtitle),

@@ -357,6 +357,7 @@ import com.wasimaster.wmkeyboard.core.settings.SpaceSwipeAction
 import com.wasimaster.wmkeyboard.core.settings.SpacebarDisplay
 import com.wasimaster.wmkeyboard.core.settings.TransliterationHintMode
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
+import com.wasimaster.wmkeyboard.core.settings.SuggestionOverflow
 import com.wasimaster.wmkeyboard.core.settings.ToolbarPlacement
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.settings.isOwnRow
@@ -3334,6 +3335,7 @@ private fun TopBar(
                     onSuggestion = onSuggestion,
                     suggestionHold = suggestionHold,
                     menuItems = state.settings.suggestionStrip.wordMenuItems,
+                    overflow = state.settings.suggestionStrip.overflow,
                 )
                 // The word card (#99) is a window over the whole keyboard, so
                 // where it is composed does not matter; it lives beside the
@@ -3554,6 +3556,8 @@ private fun RowScope.LatinSuggestionChips(
     suggestionHold: SuggestionHoldCallbacks = SuggestionHoldCallbacks(),
     /** Which optional items the held-word menu may show (#99). */
     menuItems: Set<WordMenuItem> = emptySet(),
+    /** Where a word still too long after shrinking is cut. */
+    overflow: SuggestionOverflow = SuggestionOverflow.MIDDLE,
 ) {
     // The word a long press is asking about, or null while no menu is up. Held
     // here rather than per slot so the menu survives the strip re-laying itself
@@ -3729,7 +3733,12 @@ private fun RowScope.LatinSuggestionChips(
                         fontWeight = weight,
                         textAlign = TextAlign.Center,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
+                        // Cutting the middle keeps the word's ending, which is
+                        // what tells "international" from "internationally".
+                        overflow = when (overflow) {
+                            SuggestionOverflow.MIDDLE -> TextOverflow.MiddleEllipsis
+                            SuggestionOverflow.END -> TextOverflow.Ellipsis
+                        },
                         style = if (fit.condensed) {
                             baseStyle.copy(
                                 textGeometricTransform =
@@ -8193,6 +8202,7 @@ private fun TypingTestStrip(state: KeyboardUiState, onTypingTestAction: (TypingT
             centerPrimaryEnabled = state.settings.suggestionStrip.suggestionPrimaryCenter,
             shiftState = state.shiftState,
             onSuggestion = { onTypingTestAction(TypingTestAction.Suggestion(it)) },
+            overflow = state.settings.suggestionStrip.overflow,
         )
     }
 }

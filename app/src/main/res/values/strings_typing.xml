@@ -170,6 +170,12 @@
     <string name="typing_primary_center_subtitle">Show the best candidate in the middle slot</string>
     <string name="typing_primary_center_info">The best candidate, the one that autocorrect selects, goes in the middle of the strip. The second candidate goes on its left. Most keyboards use this layout. Turn this off to order the candidates from left to right.</string>
 
+    <string name="typing_suggestion_overflow_title">Shorten long words</string>
+    <string name="typing_suggestion_overflow_subtitle">Where to cut a word that does not fit its slot</string>
+    <string name="typing_suggestion_overflow_info">First, a long word gets smaller to fit its slot. If it is still too long, the keyboard removes some letters and shows an ellipsis (…) in their place. In the middle keeps the start and the end of the word, for example \"Punct…tion\". Most keyboards do this. At the end keeps only the start, for example \"Punctuat…\". This setting has no effect while Scroll the suggestions is on, because each word then keeps its full size.</string>
+    <string name="typing_suggestion_overflow_middle">In the middle</string>
+    <string name="typing_suggestion_overflow_end">At the end</string>
+
     <string name="typing_contact_names_title">Suggest contact names</string>
     <string name="typing_contact_names_subtitle">Complete names from your contacts as you type</string>
     <string name="typing_contact_names_info">The words in your contact names complete in the same way as the words in the word list. Example: \"was\" gives Wasi. The names also chain: after Wasi, the keyboard offers the family name. The keyboard reads the names into memory only. It stores nothing and sends nothing, and autocorrect never changes a name that it knows. This setting needs the Contacts permission.</string>

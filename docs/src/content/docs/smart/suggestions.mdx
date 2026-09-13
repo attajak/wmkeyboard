@@ -112,6 +112,7 @@ There's no long-press gesture on a suggestion chip. Every chip in the strip resp
 | Suggestions in every field | On |
 | Suggestion strip always visible | Off |
 | Best suggestion in the middle | On |
+| Shorten long words | In the middle |
 | Space after a suggestion | On |
 | Block offensive words | On |
 | Context-aware suggestions | On |
@@ -138,7 +139,7 @@ A physical keyboard can also pick a strip candidate by number without touching t
 - **A correction candidate only appears when the typed word isn't already known.** Anything in the active dictionary, a custom or secondary-language dictionary, or your personal dictionary is offered as-is. Edited candidates are thrown away for a word the engine already recognizes, so only plain completions reach the strip.
 - **A dictionary word and a contact name can collide on capitalization.** A contact's name keeps its own capitalization ("Wasi") independent of how a dictionary word would be cased. If the same word would otherwise appear twice, once lowercase and once capitalized, only the better-scored one is shown.
 - **Missing-space splits need a real word on both sides.** "ofthe" only becomes "of the" if both halves are independently known words. An arbitrary split of an unknown word never appears as a candidate.
-- **Shrinking a word has a floor, and past it the ellipsis is back.** The two stages together fit roughly twice the slot width. A word longer than that still ends in "…", and so does a slot squeezed narrow by a long smart reply or a full row of predicted emoji riding the tail.
+- **Shrinking a word has a floor, and past it the ellipsis is back.** The two stages together fit roughly twice the slot width. A word longer than that is cut, and so is one in a slot squeezed narrow by a long smart reply or a full row of predicted emoji riding the tail. The cut goes in the middle of the word by default, as most keyboards do, so its start and its ending both stay readable: "Punct…tion". Set **Shorten long words** to At the end for "Punctuat…" instead.
 - **Only the word candidates scale.** Conversion candidates (Pinyin, kana, jyutping) keep their fixed larger size, since Han and kana need it, and they scroll instead of splitting the bar evenly. Predicted emoji, punctuation chips and the clipboard pill are all fixed-size too.
 - **The strip fades rather than snapping.** The composing buffer or field can empty out completely: you delete back to nothing, clear the field, or back out of a `:` emoji search. The last set of candidates stays visible and fades out over a short animation instead of disappearing instantly.
 - **A contact-email suggestion is never added to your personal dictionary**, since an address isn't a word to learn. Tap it inside a field the keyboard recognizes as an email input and it commits with no trailing space, because the address is usually the whole field. Tap it from an ordinary text field and it gets a trailing space like any other suggestion. [Contact-aware typing](/smart/contacts/) has that behavior in full.

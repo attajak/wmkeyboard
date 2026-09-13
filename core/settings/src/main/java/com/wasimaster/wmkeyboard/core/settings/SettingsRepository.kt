@@ -4987,6 +4987,13 @@ enum class WordMenuItem { NEVER_SUGGEST, ADD, DELETE }
 enum class RankControl { LEARNED_WEIGHT, RANK_OFFSET, BOTH }
 
 /**
+ * Where a suggestion too long for its slot, even after shrinking, is cut.
+ * [MIDDLE] keeps both ends of the word ("Punct…tion"), as Gboard does; [END]
+ * keeps only its start ("Punctuat…").
+ */
+enum class SuggestionOverflow { MIDDLE, END }
+
+/**
  * Suggestion-strip content options, grouped into their own object (see
  * [CameraSettings] for why the top-level class can't take more flat fields).
  * DataStore keys stay flat.
@@ -5169,6 +5176,12 @@ data class SuggestionStripSettings(
     val suggestionsFirst: Boolean = false,
     /** Show the primary candidate in the middle slot (Gboard style) instead of the left. */
     val suggestionPrimaryCenter: Boolean = true,
+    /**
+     * Where a word that still overruns its slot after shrinking is cut (see
+     * [SuggestionOverflow]). Has no effect on a scrolling strip, where every
+     * word keeps its natural width.
+     */
+    val overflow: SuggestionOverflow = SuggestionOverflow.MIDDLE,
     /**
      * Keep potentially-offensive words out of the suggestion strip and never
      * autocorrect a neutral typo into one. On by default (as AOSP ships it); the
@@ -5724,6 +5737,7 @@ class SettingsRepository(private val context: Context) {
             booleanPreferencesKey("show_suggestions_all_fields")
         private val SUGGESTIONS_FIRST = booleanPreferencesKey("suggestions_first")
         private val SUGGESTION_PRIMARY_CENTER = booleanPreferencesKey("suggestion_primary_center")
+        private val SUGGESTION_OVERFLOW = stringPreferencesKey("suggestion_overflow")
         private val BLOCK_OFFENSIVE_WORDS = booleanPreferencesKey("block_offensive_words")
         private val CONTEXT_RERANK = booleanPreferencesKey("context_rerank")
         private val LANGUAGE_DETECTION = booleanPreferencesKey("language_detection")
@@ -7091,6 +7105,9 @@ class SettingsRepository(private val context: Context) {
                 suggestionsFirst = p[SUGGESTIONS_FIRST] ?: defaults.suggestionStrip.suggestionsFirst,
                 suggestionPrimaryCenter = p[SUGGESTION_PRIMARY_CENTER]
                     ?: defaults.suggestionStrip.suggestionPrimaryCenter,
+                overflow = p[SUGGESTION_OVERFLOW]
+                    ?.let { runCatching { SuggestionOverflow.valueOf(it) }.getOrNull() }
+                    ?: defaults.suggestionStrip.overflow,
                 blockOffensiveWords = p[BLOCK_OFFENSIVE_WORDS]
                     ?: defaults.suggestionStrip.blockOffensiveWords,
                 contextRerank = p[CONTEXT_RERANK]
@@ -10710,6 +10727,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSuggestionPrimaryCenter(value: Boolean) =
         editPrefs { it[SUGGESTION_PRIMARY_CENTER] = value }
+
+    suspend fun setSuggestionOverflow(value: SuggestionOverflow) =
+        editPrefs { it[SUGGESTION_OVERFLOW] = value.name }
 
     suspend fun setBlockOffensiveWords(value: Boolean) =
         editPrefs { it[BLOCK_OFFENSIVE_WORDS] = value }

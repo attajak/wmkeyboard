@@ -90,6 +90,7 @@ import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.LetterSwipeAction
 import com.wasimaster.wmkeyboard.core.settings.NumberGrouping
 import com.wasimaster.wmkeyboard.core.settings.RankControl
+import com.wasimaster.wmkeyboard.core.settings.SuggestionOverflow
 import com.wasimaster.wmkeyboard.core.settings.SpaceSwipeAction
 import com.wasimaster.wmkeyboard.core.settings.WordMenuItem
 import com.wasimaster.wmkeyboard.core.settings.LanguagePickerStyle
@@ -784,6 +785,20 @@ internal fun TypingSuggestionsSettings(
                 info = stringResource(R.string.typing_primary_center_info),
                 default = SettingsDefaults.suggestionStrip.suggestionPrimaryCenter,
             ) { scope.launch { repository.setSuggestionPrimaryCenter(it) } }
+        }
+        // A scrolling strip draws every word whole, so there is nothing to cut.
+        if (!settings.suggestionStrip.scrollable) item {
+            ChoiceSetting(
+                R.string.typing_suggestion_overflow_title,
+                subtitle = stringResource(R.string.typing_suggestion_overflow_subtitle),
+                info = stringResource(R.string.typing_suggestion_overflow_info),
+                options = listOf(
+                    SuggestionOverflow.MIDDLE to stringResource(R.string.typing_suggestion_overflow_middle),
+                    SuggestionOverflow.END to stringResource(R.string.typing_suggestion_overflow_end),
+                ),
+                selected = settings.suggestionStrip.overflow,
+                default = SettingsDefaults.suggestionStrip.overflow,
+            ) { scope.launch { repository.setSuggestionOverflow(it) } }
         }
         item {
             val permissionContext = LocalContext.current
