@@ -15636,11 +15636,31 @@ private fun AlternateAction(
     val action = alternate.action
     val tool = (action as? KeyAction.Tool)?.tool
     val editOp = (action as? KeyAction.Edit)?.op
+    // The icon slot an action draws from on the board, so an alternate wears
+    // the same face the key would (#156). `fallbackLabel` returns "" for every
+    // one of these — on the board their icon branches run first — and a popup
+    // entry drawing "" was a blank cell the colour of the popup: a "switch
+    // layout" alternate read as a black square. Text keeps the author's label
+    // when one was written; the slot is only for an unlabelled entry.
+    val slot = when (action) {
+        KeyAction.Shift -> IconSlots.KEY_SHIFT
+        KeyAction.CapsLock -> IconSlots.KEY_SHIFT_LOCK
+        KeyAction.Delete -> IconSlots.KEY_BACKSPACE
+        KeyAction.ForwardDelete -> IconSlots.KEY_FORWARD_DELETE
+        KeyAction.Enter, KeyAction.Newline -> IconSlots.KEY_ENTER
+        KeyAction.LanguageSwitch -> IconSlots.KEY_GLOBE
+        KeyAction.InputMethodPicker -> IconSlots.KEY_INPUT_METHOD_PICKER
+        KeyAction.Emoji -> IconSlots.KEY_EMOJI
+        is KeyAction.Tool -> IconSlots.forTool(action.tool)
+        else -> null
+    }?.takeIf { alternate.label.isBlank() }
     // Named, so both branches below can speak the entry rather than going silent
-    // on an icon: the label the author gave it, else the tool's own name.
+    // on an icon: the label the author gave it, else the tool's own name, else
+    // what the same key on the board would be read out as.
     val spoken = alternate.label.ifBlank {
         tool?.let { toolLabel(it) }
             ?: editOp?.let { stringResource(textEditDescription(it)) }
+            ?: alternateActionSpoken(action)?.let { stringResource(it) }
             .orEmpty()
     }
     // A text-editing alternate (Page Up on a held Home) draws its operation's
@@ -15661,20 +15681,45 @@ private fun AlternateAction(
                 tint = tint,
                 modifier = Modifier.size((20 * fontScale).dp),
             )
-            tool != null -> SlotIcon(
-                IconSlots.forTool(tool),
+            slot != null -> SlotIcon(
+                slot,
                 contentDescription = spoken.ifBlank { null },
                 tint = tint,
                 modifier = Modifier.size((20 * fontScale).dp),
             )
             else -> Text(
-                text = alternate.drawnLabel(),
+                // A space alternate has no icon slot and a label of " ", which
+                // draws as nothing; the open-box glyph is what keycap
+                // legends use for it.
+                text = alternate.drawnLabel().ifBlank { AlternateSpaceGlyph },
                 fontSize = (18 * fontScale).sp,
                 color = tint,
                 maxLines = 1,
             )
         }
     }
+}
+
+/** What an unlabelled space alternate draws: the keycap legend for the space bar. */
+private const val AlternateSpaceGlyph = "␣"
+
+/**
+ * The spoken name of an action alternate that draws from an icon slot — the
+ * same string the key on the board is read out as — or null for an action the
+ * popup draws as text, which speaks for itself.
+ */
+private fun alternateActionSpoken(action: KeyAction): Int? = when (action) {
+    KeyAction.Shift -> R.string.ime_key_shift
+    KeyAction.CapsLock -> R.string.ime_key_caps_lock
+    KeyAction.Delete -> R.string.ime_key_delete
+    KeyAction.ForwardDelete -> R.string.ime_key_forward_delete
+    KeyAction.Enter -> R.string.ime_enter_default
+    KeyAction.Newline -> R.string.ime_key_newline
+    KeyAction.LanguageSwitch -> R.string.ime_key_language_switch
+    KeyAction.InputMethodPicker -> R.string.ime_key_input_method_picker
+    KeyAction.Emoji -> R.string.ime_key_emoji
+    KeyAction.Space -> R.string.ime_key_space
+    else -> null
 }
 
 /**
