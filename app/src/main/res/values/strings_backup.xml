@@ -81,7 +81,7 @@
     <!-- Label of the number field. The weight is the count the row shows as
          "Seen N times". -->
     <string name="backup_word_weight_label">Weight</string>
-    <string name="backup_word_weight_info">A higher weight makes the keyboard suggest this word sooner. A word you add starts at 200.</string>
+    <string name="backup_word_weight_info">A higher weight makes the keyboard suggest this word sooner. A word you add starts at 1. The weight goes up each time you type the word.</string>
     <!-- Shown under the number field when it does not hold a valid weight.
          %1$d is the highest weight allowed. -->
     <string name="backup_word_weight_error">Enter a number from 1 to %1$d.</string>

@@ -171,9 +171,13 @@ internal fun DictionarySettings(repository: SettingsRepository, settings: Keyboa
     // Words seen exactly once. Older versions learned every word the first time
     // it was committed, so for anyone upgrading this is where the swipe
     // misfires and mistyped words are — the clean-out the dictionary needed and
-    // had no way to do short of deleting entries one at a time. Words the user
-    // added by hand carry a boost far above 1 and are never in here.
-    val seenOnce = remember(words) { words.filter { it.second <= 1 }.map { it.first } }
+    // had no way to do short of deleting entries one at a time.
+    // Words the user added by hand are never in here (#164). They start at a
+    // weight of one, so the count cannot tell them apart: they are left out by
+    // name, which is what the dialog promises.
+    val seenOnce = remember(words, added) {
+        words.filter { it.second <= 1 && it.first !in added }.map { it.first }
+    }
     RegisterAddFab(stringResource(R.string.backup_add_word_action)) { showAdd = true }
     Row(
         modifier = Modifier.padding(horizontal = 16.dp),
