@@ -135,6 +135,23 @@ class GlideCommitSpacingTest {
         assertTrue(RAN_SHORT, run.finished)
     }
 
+    /**
+     * Issue #184: a keyboard mode's auto-space override is the one thing that
+     * turns the leading space off too, because it promises that every space
+     * in the field is one the user typed — and with only the trailing space
+     * gated, two swiped words under such a mode still came out spaced.
+     *
+     * Reddens if `commitGestureLeadingSpace` stops reading
+     * `autoSpaceBeforeGlide`. `helloworld` is the point, not a mistake.
+     */
+    @Test
+    fun `a mode that silences every automatic space silences the one in front too`() {
+        val run = glide(before = "hello", autoSpaceAfterGlide = false, autoSpaceBeforeGlide = false)
+
+        assertEquals(WORD, run.typed)
+        assertTrue(RAN_SHORT, run.finished)
+    }
+
     // ---- the capitals ----
     //
     // All three glide into an empty field, so the leading space is out of the
@@ -210,6 +227,7 @@ class GlideCommitSpacingTest {
         after: String = "",
         shift: ShiftState = ShiftState.OFF,
         autoSpaceAfterGlide: Boolean = true,
+        autoSpaceBeforeGlide: Boolean = true,
     ): Stroke {
         val editor = RecordingEditor(initial = before, after = after)
         val (service, _, _) = glideKeyboard(
@@ -217,7 +235,10 @@ class GlideCommitSpacingTest {
                 shiftState = shift,
                 settings = KeyboardSettings(
                     learnFromTyping = false,
-                    gesture = GestureSettings(autoSpaceAfterGlide = autoSpaceAfterGlide),
+                    gesture = GestureSettings(
+                        autoSpaceAfterGlide = autoSpaceAfterGlide,
+                        autoSpaceBeforeGlide = autoSpaceBeforeGlide,
+                    ),
                 ),
             ),
             editor = editor,

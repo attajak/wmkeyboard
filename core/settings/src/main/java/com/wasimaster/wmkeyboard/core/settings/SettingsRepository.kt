@@ -4417,6 +4417,16 @@ data class GestureSettings(
      */
     val autoSpaceAfterGlide: Boolean = true,
     /**
+     * A glided word is spaced off the text in front of it, so two swiped words
+     * do not run together and a word swiped onto the end of typed text does
+     * not either. Not a setting: it has no preference key and no row, and the
+     * global [autoSpaceAfterGlide] switch deliberately leaves it alone — a user
+     * who turned the trailing space off did not ask for `helloworld`. Only a
+     * keyboard mode's auto-space override turns it off (#184), because that
+     * override promises every space in the field is one the user typed.
+     */
+    val autoSpaceBeforeGlide: Boolean = true,
+    /**
      * How far the finger must travel before a press turns into a glide, as a
      * multiple of the system touch slop. Lower is more sensitive (a glide
      * starts sooner); higher needs a more deliberate swipe before it takes over

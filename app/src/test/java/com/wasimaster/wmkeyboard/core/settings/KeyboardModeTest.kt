@@ -413,6 +413,9 @@ class KeyboardModeTest {
         assertFalse(applied.autoText.spaceAfterPunctuation)
         assertFalse(applied.suggestionStrip.autoSpaceAfterSuggestion)
         assertFalse(applied.gesture.autoSpaceAfterGlide)
+        // The space in front of a glided word too (#184): it has no switch of
+        // its own, and the mode is the one thing that may turn it off.
+        assertFalse(applied.gesture.autoSpaceBeforeGlide)
         // A view, not a write: the globals are untouched.
         assertTrue(base.autoText.spaceAfterPunctuation)
     }

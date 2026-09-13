@@ -3095,7 +3095,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Toolbox ordering — Partial list floats named tools to the front; unnamed tools keep their global rank
     - A tool a mode pins is force-enabled — Added to enabledTools so pinning can never silently do nothing
     - Typing switches — Autocorrect, automatic capitals, suggestions and automatic spaces, each Inherit / On / Off
-    - Automatic spaces is one switch over three settings — The space after punctuation, after a strip suggestion and after a glided word; off means every space in the field is one the user typed
+    - Automatic spaces is one switch over three settings — The space after punctuation, after a strip suggestion and before and after a glided word (the leading one is `autoSpaceBeforeGlide`, an applied-view flag with no key or row, #184); off means every space in the field is one the user typed
   - The six seeded modes `RARE` — Stored copies on first run; user can edit or delete any of them
     - Passwords — Emoji off, symbol row off, toolbar replaced with password generator + clipboard + settings
     - Email — Symbol row on with Email and Punctuation sets; bound to email fields only

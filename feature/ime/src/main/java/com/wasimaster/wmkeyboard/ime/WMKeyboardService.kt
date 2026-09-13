@@ -13951,8 +13951,14 @@ open class WMKeyboardService : InputMethodService() {
      * that rule, and reads a line's worth of text rather than one character
      * because the double quote is only an opener or a closer by what came before
      * it.
+     *
+     * Its own gate, not [GestureSettings.autoSpaceAfterGlide]'s: that switch
+     * names the space that follows a glide and only that one. This one is off
+     * only under a keyboard mode whose auto-space override says every space in
+     * the field is the user's (#184).
      */
     private fun commitGestureLeadingSpace(ic: InputConnection, state: KeyboardUiState) {
+        if (!state.settings.gesture.autoSpaceBeforeGlide) return
         val before = ic.getTextBeforeCursor(QUOTE_CONTEXT_CHARS, 0)?.toString().orEmpty()
         if (spacesBeforeGlidedWord(before, state.fieldKind)) ic.commitText(" ", 1)
     }

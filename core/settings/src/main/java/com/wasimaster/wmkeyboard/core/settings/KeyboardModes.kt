@@ -211,7 +211,8 @@ data class KeyboardMode(
      *
      * One switch over the three settings that put a space in without a press:
      * after punctuation, after a suggestion picked from the strip, and after a
-     * glided word. They are one question to the person typing — "does this
+     * glided word — and over the space *before* a glided word, which has no
+     * switch of its own (#184). They are one question to the person typing — "does this
      * field want spaces I did not ask for?" — and the answer is per field, not
      * per source of the space. Off means every space in the field is one the
      * user typed, which is what a filename, a renamed extension or a terminal
@@ -696,12 +697,16 @@ fun KeyboardSettings.applyMode(mode: KeyboardMode?): KeyboardSettings {
             .let { t -> mode.autoCapitalize?.let { t.copy(capitalize = it) } ?: t }
             .let { t -> mode.autoSpace?.let { t.copy(spaceAfterPunctuation = it) } ?: t },
         suggestions = mode.suggestions ?: suggestions,
-        // The other two spaces the keyboard types by itself, under the same
-        // switch: the strip's and the glide's.
+        // The other spaces the keyboard types by itself, under the same
+        // switch: the strip's, and both of the glide's. The space in front of a
+        // glided word has no switch of its own — the global glide toggle names
+        // only the trailing one — but "every space is one you typed" has to
+        // mean it too, or two swiped words under an Off mode still came out
+        // spaced (#184).
         suggestionStrip = mode.autoSpace
             ?.let { suggestionStrip.copy(autoSpaceAfterSuggestion = it) } ?: suggestionStrip,
         gesture = mode.autoSpace
-            ?.let { gesture.copy(autoSpaceAfterGlide = it) } ?: gesture,
+            ?.let { gesture.copy(autoSpaceAfterGlide = it, autoSpaceBeforeGlide = it) } ?: gesture,
         // Only honoured while the layout is actually available. A mode naming a
         // layout the user has since switched off would otherwise pin the
         // keyboard to something that cannot be drawn.
