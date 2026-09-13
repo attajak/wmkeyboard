@@ -367,7 +367,7 @@ class SuggestionEngineTest {
         assertTrue(hello.blacklisted)
         val wasi = e.describe("wasi")
         assertNull(wasi.primary)
-        assertEquals(200, wasi.learned?.count)
+        assertEquals(1, wasi.learned?.count)
         assertEquals("Wasi", wasi.learned?.display)
         assertTrue(wasi.learned?.casePinned == true)
         assertEquals(2, wasi.rankOffset)

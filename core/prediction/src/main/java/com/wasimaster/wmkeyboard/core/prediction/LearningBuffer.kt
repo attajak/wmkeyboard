@@ -143,6 +143,17 @@ class LearningBuffer(private val capacity: Int = DEFAULT_CAPACITY) {
          */
         var glideShape: GlideShapeSample? = null
             internal set
+
+        /**
+         * The caret has been back inside this word since it was committed
+         * (#159, #160). Not a verdict: a caret put on a word is as often a
+         * reader's as an editor's — a spacebar swipe walks through every
+         * word on its way — so the word waits on, and settles if nothing is
+         * done to it. What the keyboard itself deletes ([onDeleted]) or
+         * commits over the same span is what drops it.
+         */
+        var suspended: Boolean = false
+            internal set
     }
 
     /**
@@ -214,6 +225,21 @@ class LearningBuffer(private val capacity: Int = DEFAULT_CAPACITY) {
             replacesOrigin, revised, pushIndex = ++pushes,
         )
         if (anchor >= 0) entry.anchor = anchor
+        // A caller that knows what this word replaced has just watched the
+        // old spelling be rewritten; the copy of it waiting here, the one the
+        // caret went back into, is that spelling and must not settle (#160).
+        if (replaces != null) {
+            val key = WordKey.of(replaces)
+            val iterator = entries.iterator()
+            while (iterator.hasNext()) {
+                val old = iterator.next()
+                if (!old.suspended || WordKey.of(old.word) != key) continue
+                // Dated before this push: the replacement is pushed after
+                // the drop, as [pairWithDropped]'s two-word rule expects.
+                remember(Dropped(old.word, old.anchor, old.origin, old.replaces, pushes - 1))
+                iterator.remove()
+            }
+        }
         entries.addLast(entry)
         if (entries.size <= capacity) return emptyList()
         val overflow = ArrayList<Entry>(entries.size - capacity)
@@ -226,12 +252,21 @@ class LearningBuffer(private val capacity: Int = DEFAULT_CAPACITY) {
      *
      * Anchors every entry still waiting for its commit echo, then judges the
      * ones the caret has moved in front of. The word the caret landed in is
-     * dropped; the words beyond it are settled, because a caret that never
-     * touched them says they were typed and left alone, and their anchors are
-     * about to be invalidated by whatever is typed here. A collapsed caret is
-     * the only kind that anchors: a range selection is a selection, not a
-     * resting place, and anchoring to it would leave entries pointing at text
-     * about to be replaced.
+     * [Entry.suspended] — kept, undecided — and the words beyond it are
+     * settled, because a caret that never touched them says they were typed
+     * and left alone, and their anchors are about to be invalidated by
+     * whatever is typed here. A collapsed caret is the only kind that
+     * anchors: a range selection is a selection, not a resting place, and
+     * anchoring to it would leave entries pointing at text about to be
+     * replaced.
+     *
+     * A word the caret lands in used to be dropped on the spot. That read a
+     * spacebar swipe back through a sentence as an edit of every word it
+     * crossed, and a caret parked on a word when the keyboard closed as a
+     * reason not to learn it (#159, #160). The caret alone decides nothing
+     * now: the edits the keyboard makes are what drop a word ([onDeleted],
+     * and a commit anchored on top of it), and a suspended word nothing
+     * touched settles with the rest.
      */
     fun onCaret(caret: Int): Caret {
         if (caret < 0 || entries.isEmpty()) return Caret.NOTHING
@@ -243,32 +278,74 @@ class LearningBuffer(private val capacity: Int = DEFAULT_CAPACITY) {
         // Judge first, anchor second: an entry pushed but not yet anchored is
         // the word this very update belongs to, and it must not be judged by
         // its own echo.
-        val dropped = ArrayList<Dropped>()
         val settled = ArrayList<Entry>()
         val iterator = entries.iterator()
         while (iterator.hasNext()) {
             val entry = iterator.next()
             if (entry.anchor == UNANCHORED || entry.anchor <= caret) continue
             if (touchedBy(entry, caret)) {
-                val d = Dropped(entry.word, entry.anchor, entry.origin, entry.replaces, pushes)
-                dropped.add(d)
-                remember(d)
-            } else {
-                settled.add(entry)
+                entry.suspended = true
+                continue
             }
+            settled.add(entry)
             iterator.remove()
         }
-        for (entry in entries) {
-            if (entry.anchor == UNANCHORED) {
-                entry.anchor = caret
-                pairWithDropped(entry)
-            }
+        val dropped = ArrayList<Dropped>()
+        val fresh = entries.filter { it.anchor == UNANCHORED }
+        for (entry in fresh) {
+            entry.anchor = caret
+            dropped += dropUnder(entry)
+            pairWithDropped(entry)
         }
         return if (dropped.isEmpty() && settled.isEmpty()) {
             Caret.NOTHING
         } else {
             Caret(dropped, settled)
         }
+    }
+
+    /**
+     * The keyboard removed `[start, end)` of the field. Returns the words
+     * that went with it.
+     *
+     * Told by the keyboard's own delete paths, before the editor's echo: a
+     * backspace, a word delete, a delete swipe or a deleted selection. The
+     * caret echo that follows would otherwise read a stretch deleted in one
+     * go as text the caret jumped clean over, and settle it (#160). A word
+     * the range so much as touches is gone — the trailing space included,
+     * since a user backspacing the space after a word is about to change
+     * the word. Words wholly after the range move up by its length; words
+     * wholly before it are not affected.
+     */
+    fun onDeleted(start: Int, end: Int): List<Dropped> {
+        if (start < 0 || end <= start || entries.isEmpty()) return emptyList()
+        val length = end - start
+        val dropped = ArrayList<Dropped>()
+        val iterator = entries.iterator()
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            if (entry.anchor == UNANCHORED || start >= entry.anchor) continue
+            if (end <= entry.anchor - entry.word.length - ANCHOR_SLACK) {
+                entry.anchor -= length
+                continue
+            }
+            val d = Dropped(entry.word, entry.anchor, entry.origin, entry.replaces, pushes)
+            dropped.add(d)
+            remember(d)
+            iterator.remove()
+        }
+        return dropped
+    }
+
+    /**
+     * How a word the caret went back into got there, for a caller pairing a
+     * rewrite with what it replaced: the suspended copy still waiting here,
+     * else the most recently dropped one of that spelling.
+     */
+    fun originOf(word: String): WordOrigin? {
+        val key = WordKey.of(word)
+        return entries.lastOrNull { it.suspended && WordKey.of(it.word) == key }?.origin
+            ?: recent.lastOrNull { WordKey.of(it.word) == key }?.origin
     }
 
     /**
@@ -281,6 +358,33 @@ class LearningBuffer(private val capacity: Int = DEFAULT_CAPACITY) {
      */
     private fun touchedBy(entry: Entry, caret: Int): Boolean =
         caret >= entry.anchor - entry.word.length - ANCHOR_SLACK
+
+    /**
+     * A freshly anchored [entry] that starts inside a suspended word is that
+     * word rewritten — the one thing that was done to it — so the old copy
+     * is dropped, kept for pairing. Judged by where the words *start*: a
+     * word typed straight after a suspended one starts at its anchor, not
+     * inside it, and is left alone.
+     */
+    private fun dropUnder(entry: Entry): List<Dropped> {
+        val start = entry.anchor - entry.word.length
+        var dropped: ArrayList<Dropped>? = null
+        val iterator = entries.iterator()
+        while (iterator.hasNext()) {
+            val old = iterator.next()
+            if (old === entry || !old.suspended || old.anchor == UNANCHORED) continue
+            val oldStart = old.anchor - old.word.length
+            if (start < oldStart - ANCHOR_SLACK || start >= old.anchor) continue
+            // Dated before the entry that landed on it was pushed, which is
+            // when a drop-on-touch would have happened: the two-word rule in
+            // [pairWithDropped] wants the halves pushed after the drop.
+            val d = Dropped(old.word, old.anchor, old.origin, old.replaces, entry.pushIndex - 1)
+            (dropped ?: ArrayList<Dropped>().also { dropped = it }).add(d)
+            remember(d)
+            iterator.remove()
+        }
+        return dropped.orEmpty()
+    }
 
     /**
      * Ties [sample], the glide that committed [word], to the newest copy of

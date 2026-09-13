@@ -21,8 +21,10 @@
     <string name="backup_dictionary_info">Words learned from your typing, and any you add. They stay on your device.</string>
     <!-- "Learn from typing" is a setting on the Privacy screen. -->
     <string name="backup_dictionary_empty">Nothing here yet. Words appear as you type, if \"Learn from typing\" is on in Privacy. You can also add a word above.</string>
-    <!-- Row subtitle for a word the user typed into the Add word dialog. -->
-    <string name="backup_dictionary_added_subtitle">You added this word</string>
+    <!-- Row subtitle for a word the user added themselves (a dialog, the
+         strip's Add, the learn chip). %1$s is the "Seen N times" count, which
+         every row carries (#165). -->
+    <string name="backup_dictionary_added_subtitle">You added this word · <xliff:g id="seen" example="Seen 3 times">%1$s</xliff:g></string>
     <!-- Appended to a word's row when its capitals are kept as written (#100).
          %1$s is the row's ordinary subtitle. -->
     <string name="backup_dictionary_pinned_subtitle"><xliff:g id="standing" example="You added this word">%1$s</xliff:g> · capitals kept</string>

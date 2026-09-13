@@ -404,7 +404,10 @@ private fun Stepper(
 private fun Actions(card: WordCard, onAction: (WordCardAction) -> Unit, done: () -> Unit) {
     val facts = card.facts
     val deletable = facts != null &&
-        (facts.learned != null || facts.system || facts.pendingSightings > 0 || facts.rankOffset != 0)
+        (
+            facts.learned != null || facts.system || facts.pendingSightings > 0 ||
+                facts.rankOffset != 0 || facts.importedList
+            )
     Column(modifier = Modifier.fillMaxWidth().padding(top = 4.dp)) {
         FlowRow(
             modifier = Modifier.fillMaxWidth(),

@@ -140,6 +140,69 @@ object CustomDictionaries {
     fun remove(file: File): Boolean = file.delete()
 
     /**
+     * Takes [word] out of every imported list for [langId], switched on or
+     * off, and says whether any file changed. The strip's delete action is
+     * the caller (#190): the lists are the user's own text files, so unlike a
+     * downloaded `.wmdict` a word can be unlisted from them for good rather
+     * than blacklisted around.
+     *
+     * Matches the way [DictionaryLoader] reads a line — case-folded and
+     * composition-folded through [WordKey], so "Boston", "boston" and a
+     * decomposed spelling all go. Comments, blank lines and every other entry
+     * are copied through untouched; the file is rewritten beside itself and
+     * swapped in, so a crash mid-way leaves the old list whole. A list the
+     * word is not in is not rewritten at all.
+     */
+    fun removeWord(filesDir: File, langId: String, word: String): Boolean {
+        val key = WordKey.of(word.trim())
+        if (key.isEmpty()) return false
+        var changed = false
+        for (file in allLists(filesDir, langId)) {
+            if (removeWordFrom(file, key)) changed = true
+        }
+        return changed
+    }
+
+    private fun removeWordFrom(file: File, key: String): Boolean {
+        val temp = File(file.parentFile, file.name + ".tmp")
+        var dropped = 0
+        val ok = runCatching {
+            file.bufferedReader().use { reader ->
+                temp.bufferedWriter().use { writer ->
+                    reader.forEachLine { line ->
+                        if (entryOf(line) == key) {
+                            dropped++
+                        } else {
+                            writer.write(line)
+                            writer.newLine()
+                        }
+                    }
+                }
+            }
+        }.isSuccess
+        if (!ok || dropped == 0) {
+            temp.delete()
+            return false
+        }
+        if (temp.renameTo(file)) return true
+        temp.delete()
+        return false
+    }
+
+    /**
+     * The word a line contributes, keyed as the tries key it, or null for a
+     * comment or a blank. Mirrors [DictionaryLoader.loadEntries] exactly: the
+     * text before the last space, or the whole line when there is none.
+     */
+    private fun entryOf(line: String): String? {
+        val trimmed = line.trim()
+        if (trimmed.isEmpty() || trimmed.startsWith("#")) return null
+        val separator = trimmed.lastIndexOf(' ')
+        val word = if (separator <= 0) trimmed else trimmed.substring(0, separator).trim()
+        return WordKey.of(word)
+    }
+
+    /**
      * Renames the pre-registry per-language folders (ENGLISH → en, BANGLA →
      * bn …) to their langId, so lists imported before the rewrite are not
      * orphaned. Idempotent: once renamed the old folders are gone and this is

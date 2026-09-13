@@ -964,6 +964,15 @@ internal fun TypingSuggestionsSettings(
                 },
             ) { scope.launch { repository.setRankControl(it) } }
         }
+        item {
+            ToggleSetting(
+                R.string.typing_delete_edits_lists_title,
+                stringResource(R.string.typing_delete_edits_lists_subtitle),
+                settings.suggestionStrip.deleteEditsImportedLists,
+                info = stringResource(R.string.typing_delete_edits_lists_info),
+                default = SettingsDefaults.suggestionStrip.deleteEditsImportedLists,
+            ) { scope.launch { repository.setDeleteEditsImportedLists(it) } }
+        }
     }
 }
 

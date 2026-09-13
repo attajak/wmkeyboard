@@ -130,7 +130,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Tapped suggestion counts double
     - Typed and committed counts once
     - Autocorrected word earns nothing — Only the word pair around it is learned
-    - Manually added word boosted 200 — Doubles as the deliberately-added marker for eviction
+    - Manually added word starts at one use — Marked as added by hand instead of boosted (#164): shielded from autocorrect at any learn-after threshold, evicted last, and it earns weight by being typed like any other word; the row reads "You added this word · Seen N times" (#165)
   - Store shape and bounds `uncommon` — JSON snapshot in app-private storage
     - 10,000 words, evicting to 9,000 — 10% hysteresis so compaction doesn't churn on every save
     - 5,000 bigram heads, 2,000 trigram contexts, 32 followers each
@@ -157,7 +157,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Settle before learning — Nothing reaches the dictionary while the text is still moving
     - Every committed word queues — 500-word buffer, one field, memory only, never written out
     - Counted at the flush points — Keyboard closed, message sent, field cleared, another field, buffer full
-    - The caret going back drops the word it lands in — Backspacing over the word, tapping in to edit, re-picking a swipe; a glide that read the wrong word never counts
+    - What the keyboard deletes or writes over is dropped — Backspacing over the word, a delete swipe through it, re-picking a swipe, a fix typed on top of it; a glide that read the wrong word never counts (#160)
+    - The caret alone decides nothing — A caret parked on a word, or walked through it by a spacebar swipe, leaves it waiting; it settles with the rest if nothing is done to it (#159)
     - The words it jumped over settle instead — Going back to fix one line says nothing about the rest, so a proofreading pass counts the text it left alone rather than discarding the session
     - A dropped word is remembered for pairing — The word committed in its place, within a slip's distance, carries it as a suspected fix; confirmed against the field at the flush before anything is taught
     - Known words need one settled use, unknown ones three — The unknown count is the "Remember a new word after" setting
@@ -262,7 +263,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 - **Held-word menu and word card** `uncommon` — Press and hold a suggestion for a menu about it (#99)
   - Contextual items with icons — Never suggest / Suggest again; Add "typed" while the word being typed is unlearned; Delete for a word the keyboard can forget; Edit always
   - Add pins the capitals — The typed spelling goes in at full strength and no later vote changes it (#100)
-  - Delete reaches every mutable store — Personal dictionary, waiting room, rank adjustments, Android's dictionary; a word still in a read-only list is blacklisted instead
+  - Delete reaches every mutable store — Personal dictionary, waiting room, rank adjustments, Android's dictionary, and the user's imported word lists, whose files are rewritten without the word (#190); a word still in a downloaded list is blacklisted instead
+    - "Delete edits imported lists" switch — Off leaves imported lists as imported and blacklists the word the old way
   - Word card — In-window modal over the keyboard: every source the word was found in, its "#N of M" place in each list, the word's spelling, its rank controls, and the same actions (#138)
   - Respell from the card — "Change" hands the keys to a bar in the strip's row (the card covers the board, and an IME cannot raise a field for itself); the draft starts from the word, Enter or ✓ applies it, back or ✕ leaves it, and nothing typed there reaches the app behind (#138)
     - A respelling carries the count, language tag and word pairs across, moves the rank adjustment, and drops the swipe shapes, waiting-room sightings and Android's copy of the old spelling; a case-only respelling pins the spelling instead; a word the lexicon does not have is added at the new spelling

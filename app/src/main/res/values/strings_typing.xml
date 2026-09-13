@@ -719,6 +719,9 @@
     <string name="typing_rank_control_offset_desc">Moves the word up or down the strip, whatever list it comes from</string>
     <string name="typing_rank_control_both_label">Both</string>
     <string name="typing_rank_control_both_desc">Shows the two controls one under the other</string>
+    <string name="typing_delete_edits_lists_title">Delete edits imported lists</string>
+    <string name="typing_delete_edits_lists_subtitle">Deleting a word takes it out of your imported word lists</string>
+    <string name="typing_delete_edits_lists_info">Deleting a word from the suggestion strip forgets it from your personal dictionary, the waiting room, your rank adjustments and Android\'s dictionary. With this on, a word that is also in a word list you imported is removed from that list\'s file too, so it is gone for good; a word in a downloaded list, which cannot be edited, goes on the blacklist instead. With this off, imported lists are left as you imported them and the word is blacklisted the same way, so it stays hidden until you choose Suggest again.</string>
 
     <string name="typing_ask_before_learning_info">When a word no dictionary knows is typed, the suggestion strip asks whether to add it. Tap the chip to save the word, or the ✕ to never be asked about it again. Nothing is saved unless you tap. Off by default, because a chip after a word you never think about again gets in the way.</string>
 

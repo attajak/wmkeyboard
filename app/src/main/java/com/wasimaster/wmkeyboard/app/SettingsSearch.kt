@@ -319,6 +319,7 @@ private fun SearchStrings.typingSuggestionsRows(): List<SettingsSearchEntry> {
         row(R.string.typing_group_octopus_title, R.string.typing_group_octopus_subtitle),
         row(R.string.typing_word_menu_title, R.string.typing_word_menu_subtitle),
         row(R.string.typing_rank_control_title, R.string.typing_rank_control_subtitle),
+        row(R.string.typing_delete_edits_lists_title, R.string.typing_delete_edits_lists_subtitle),
     )
 }
 

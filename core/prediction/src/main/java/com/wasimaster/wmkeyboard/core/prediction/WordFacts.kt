@@ -19,6 +19,12 @@ data class WordFacts(
     val secondary: List<PackFact> = emptyList(),
     /** Frequency in an imported list for this language, 0 when absent. */
     val customFrequency: Int = 0,
+    /**
+     * In a word list the user imported and Delete can edit (#190), as opposed
+     * to a downloaded one. Filled in by the service, which is what keeps the
+     * two apart; the engine sees them as one source.
+     */
+    val importedList: Boolean = false,
     /** In Android's personal dictionary. */
     val system: Boolean = false,
     /** In the keyboard's own personal dictionary. */

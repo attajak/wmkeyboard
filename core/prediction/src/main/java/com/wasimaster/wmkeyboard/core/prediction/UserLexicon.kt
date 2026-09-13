@@ -38,6 +38,10 @@ class UserLexicon(private val storageFile: File?) {
         /** Words whose spelling the user settled by hand and that no vote may
          * change (#100). Additive; old files pin nothing. */
         val casePinned: Set<String> = emptySet(),
+        /** Words the user put in themselves — a dialog, the strip's Add, the
+         * learn chip — as opposed to ones the keyboard picked up (#164).
+         * Additive; in old files the 200 boost was the marker. */
+        val addedByHand: Set<String> = emptySet(),
     )
 
     /** A word's followers plus a lazily cached count-descending order, so the
@@ -87,6 +91,7 @@ class UserLexicon(private val storageFile: File?) {
     private val wordCase = HashMap<String, String>()
     private val caseVotes = HashMap<String, Int>()
     private val casePinned = HashSet<String>()
+    private val addedByHand = HashSet<String>()
     private var generation = 0L
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -188,6 +193,16 @@ class UserLexicon(private val storageFile: File?) {
      * A [surface] equal to the key is a vote for "no capital at all", which is
      * why lower-case sightings are what wear a stale spelling down.
      *
+     * Lower case is an incumbent like any other (#154). It used to hold no
+     * votes — a word the user had written in lower case a hundred times had
+     * nothing standing behind that, so one deliberate "Keyboard" flipped it
+     * for good. Now a lower-case word's evidence is its own count, up to the
+     * same ceiling a capital gets, and the challenger has to wear that down
+     * first; a word never seen before still takes its capital on the first
+     * sighting, since there is nothing to wear down. The count stands in
+     * only until a vote is recorded, so the ordinary bookkeeping is one map
+     * entry either way.
+     *
      * A pinned word takes no votes at all: the user said how it is spelled
      * (#100), and a sentence-start capital or a shouted heading is not a
      * counter-argument.
@@ -196,18 +211,12 @@ class UserLexicon(private val storageFile: File?) {
         if (weight <= 0 || WordKey.of(surface) != key || key in casePinned) return
         val shape = surface.takeIf { it != key }
         val current = wordCase[key]
-        if (current == null) {
-            if (shape != null) {
-                wordCase[key] = shape
-                caseVotes[key] = weight.coerceAtMost(MAX_CASE_VOTES)
-            }
-            return
-        }
+        val standing = caseVotes[key] ?: if (current == null) lowerCaseEvidence(key) else 0
         if (shape == current) {
-            caseVotes[key] = ((caseVotes[key] ?: 0) + weight).coerceAtMost(MAX_CASE_VOTES)
+            caseVotes[key] = (standing + weight).coerceAtMost(MAX_CASE_VOTES)
             return
         }
-        val left = (caseVotes[key] ?: 0) - weight
+        val left = standing - weight
         if (left > 0) {
             caseVotes[key] = left
             return
@@ -217,11 +226,18 @@ class UserLexicon(private val storageFile: File?) {
         // Whatever the challenger had left over after unseating the incumbent
         // becomes its own opening balance, so a decisive vote (a word added by
         // hand) does not arrive on one sighting's worth of evidence.
-        if (shape != null) {
-            wordCase[key] = shape
-            caseVotes[key] = (-left).coerceIn(1, MAX_CASE_VOTES)
-        }
+        if (shape != null) wordCase[key] = shape
+        caseVotes[key] = (-left).coerceIn(1, MAX_CASE_VOTES)
     }
+
+    /**
+     * What stands behind a word's lower-case spelling before any vote has
+     * been recorded for it: the times it was learned, capped like a vote.
+     * Called before [learnWord] counts the sighting at hand, so a new word
+     * starts from nothing.
+     */
+    private fun lowerCaseEvidence(key: String): Int =
+        (words[key] ?: 0).coerceAtMost(MAX_CASE_VOTES)
 
     /** Settles [key]'s spelling outright, past whatever the vote held. */
     private fun setCase(key: String, surface: String) {
@@ -236,9 +252,14 @@ class UserLexicon(private val storageFile: File?) {
     }
 
     /**
-     * User-added dictionary entry: weighted like a word typed [boost]
-     * times so it competes with genuinely frequent words immediately and
-     * is never "corrected" away.
+     * User-added dictionary entry. Counted like a word typed [boost] times —
+     * one, by default: adding a word says it is a word, not that it is a
+     * frequent one, and the 200 it used to arrive with put every rare name
+     * ahead of the common word it resembled (#164). It earns weight the
+     * way every other word does, by being typed. What being added by hand
+     * still buys is that the word is never "corrected" away, whatever the
+     * learn-after threshold ([isEstablished]), and that compaction evicts it
+     * last.
      *
      * [pinCase] keeps the spelling past every later vote (#100): a word the
      * user typed into a dialog, or chose off the strip, is spelled the way
@@ -249,19 +270,20 @@ class UserLexicon(private val storageFile: File?) {
     @Synchronized
     fun addWord(
         word: String,
-        boost: Int = 200,
+        boost: Int = 1,
         caseEvidence: Boolean = true,
         pinCase: Boolean = caseEvidence,
     ) {
         val trimmed = word.trim()
         val key = WordKey.of(trimmed)
-        if (key.isEmpty() || key.length > MAX_WORD_LENGTH) return
+        if (key.isEmpty() || key.length > MAX_WORD_LENGTH || boost <= 0) return
         // A word added by hand is spelled the way the user spelled it, so its
         // casing is settled outright rather than voted on.
         if (caseEvidence) {
             setCase(key, WordKey.surface(trimmed))
             if (pinCase) casePinned.add(key)
         }
+        addedByHand.add(key)
         val before = words[key] ?: 0
         val merged = (before.toLong() + boost).coerceAtMost(MAX_COUNT.toLong()).toInt()
         words[key] = merged
@@ -270,6 +292,10 @@ class UserLexicon(private val storageFile: File?) {
         mutations++
         dirty = true
     }
+
+    /** Whether the user put [word] in themselves (#164); see [addWord]. */
+    @Synchronized
+    fun isAddedByHand(word: String): Boolean = WordKey.of(word) in addedByHand
 
     /**
      * Respells [word] as [replacement], keeping its count, language tag and
@@ -313,6 +339,10 @@ class UserLexicon(private val storageFile: File?) {
         casePinned.remove(oldKey)
         setCase(newKey, WordKey.surface(trimmed))
         casePinned.add(newKey)
+        // Respelled by hand is added by hand: the user has vouched for the
+        // new spelling the same way a dialog add would.
+        addedByHand.remove(oldKey)
+        addedByHand.add(newKey)
         // Pairs where the word led: its follower set moves under the new key.
         bigrams.remove(oldKey)?.let { moved ->
             val target = bigrams[newKey]
@@ -396,6 +426,7 @@ class UserLexicon(private val storageFile: File?) {
         wordCase.clear()
         caseVotes.clear()
         casePinned.clear()
+        addedByHand.clear()
         rebuildTrie()
         load()
         mutations++
@@ -485,7 +516,9 @@ class UserLexicon(private val storageFile: File?) {
     fun isEstablished(word: String, minCount: Int): Boolean {
         val key = WordKey.of(word)
         if (!trie.contains(key)) return false
-        return minCount <= 1 || (words[key] ?: 0) >= minCount
+        // The threshold guards against a typo learned in passing; a word the
+        // user added outright was never in passing (#164).
+        return minCount <= 1 || key in addedByHand || (words[key] ?: 0) >= minCount
     }
 
     @Synchronized
@@ -533,6 +566,7 @@ class UserLexicon(private val storageFile: File?) {
             wordCase.remove(key)
             caseVotes.remove(key)
             casePinned.remove(key)
+            addedByHand.remove(key)
             bigrams.remove(key)
         }
         bigrams.values.forEach { followers ->
@@ -559,6 +593,7 @@ class UserLexicon(private val storageFile: File?) {
         wordCase.clear()
         caseVotes.clear()
         casePinned.clear()
+        addedByHand.clear()
         rebuildTrie()
         mutations++
         // The delete is the write, so there is normally nothing left to save.
@@ -584,6 +619,7 @@ class UserLexicon(private val storageFile: File?) {
             wordCase = wordCase,
             caseVotes = caseVotes,
             casePinned = casePinned,
+            addedByHand = addedByHand,
         )
         runCatching {
             file.parentFile?.mkdirs()
@@ -614,16 +650,21 @@ class UserLexicon(private val storageFile: File?) {
                 snapshot.wordLang[word]?.let { wordLangs[word] = it }
                 // Dropped if the file disagrees with itself: a spelling that
                 // no longer folds to its own key would be written into text.
-                snapshot.wordCase[word]
+                val shape = snapshot.wordCase[word]
                     ?.takeIf { WordKey.of(it) == word && it != word }
-                    ?.let {
-                        wordCase[word] = it
-                        caseVotes[word] =
-                            (snapshot.caseVotes[word] ?: 1).coerceIn(1, MAX_CASE_VOTES)
-                    }
+                if (shape != null) {
+                    wordCase[word] = shape
+                    caseVotes[word] =
+                        (snapshot.caseVotes[word] ?: 1).coerceIn(1, MAX_CASE_VOTES)
+                } else {
+                    // Votes recorded for the lower-case spelling itself (#154);
+                    // absent, the word's count stands in for them.
+                    snapshot.caseVotes[word]?.let { caseVotes[word] = it.coerceIn(1, MAX_CASE_VOTES) }
+                }
                 // A pin on a word no longer present is an orphan, dropped
                 // like every other orphaned entry.
                 if (word in snapshot.casePinned) casePinned.add(word)
+                if (word in snapshot.addedByHand) addedByHand.add(word)
             }
             rebuildTrie()
         }
@@ -642,8 +683,9 @@ class UserLexicon(private val storageFile: File?) {
      * are scored with lazy exponential decay — `count * 2^(-age/HALF_LIFE)`
      * with age in save-generations — so a year-old typo-learn finally loses
      * to anything the user still types, while raw counts are never rewritten
-     * on the hot path. Deliberately user-added words ([addWord], count >=
-     * STICKY_MIN_COUNT) are evicted only after every organic word is gone.
+     * on the hot path. Deliberately user-added words ([addWord]; in files
+     * from before #164, a count >= STICKY_MIN_COUNT) are evicted only after
+     * every organic word is gone.
      */
     private fun compactIfNeeded() {
         if (words.size > MAX_WORDS) {
@@ -655,7 +697,7 @@ class UserLexicon(private val storageFile: File?) {
             val evictable = words.keys
                 .sortedWith(
                     compareBy(
-                        { (words[it] ?: 0) >= STICKY_MIN_COUNT },
+                        { it in addedByHand || (words[it] ?: 0) >= STICKY_MIN_COUNT },
                         { score(it) },
                     )
                 )
@@ -667,6 +709,7 @@ class UserLexicon(private val storageFile: File?) {
                 wordCase.remove(word)
                 caseVotes.remove(word)
                 casePinned.remove(word)
+                addedByHand.remove(word)
                 bigrams.remove(word)
                 bigrams.values.forEach {
                     if (it.counts.remove(word) != null) it.sorted = null
@@ -710,8 +753,9 @@ class UserLexicon(private val storageFile: File?) {
         private fun trigramKey(prev2: String, prev1: String): String =
             prev2 + TRIGRAM_SEPARATOR + prev1
         private const val HALF_LIFE_GENERATIONS = 64.0
-        /** addWord's default boost lands at 200; organic words rarely reach
-         * this, so it doubles as the "deliberately added" marker. */
+        /** addWord's boost landed at 200 before #164; organic words rarely
+         * reach this, so it doubled as the "deliberately added" marker and
+         * still reads that way for files written back then. */
         private const val STICKY_MIN_COUNT = 100
 
         /**

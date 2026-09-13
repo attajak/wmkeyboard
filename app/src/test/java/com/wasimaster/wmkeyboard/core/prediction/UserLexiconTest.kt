@@ -411,4 +411,78 @@ class UserLexiconTest {
         reloaded.save()
         assertNull(UserLexicon(f).displayOf("boston"))
     }
+
+    // ---- lower case is an incumbent too (#154) ----
+
+    @Test
+    fun oneShiftedSightingDoesNotFlipAWellWornLowerCaseWord() {
+        val lexicon = UserLexicon(null)
+        repeat(5) { lexicon.learnWord("keyboard", caseEvidence = true) }
+        lexicon.learnWord("Keyboard", caseEvidence = true)
+        assertNull(lexicon.displayOf("keyboard"))
+        // As many capitals as the lower case had, and it turns.
+        repeat(5) { lexicon.learnWord("Keyboard", caseEvidence = true) }
+        assertEquals("Keyboard", lexicon.displayOf("keyboard"))
+    }
+
+    @Test
+    fun aWordLearnedInLowerCaseWithoutVotesStillResistsOneCapital() {
+        val lexicon = UserLexicon(null)
+        // Swipes cast no case vote; the word's count stands in for them.
+        repeat(20) { lexicon.learnWord("keyboard") }
+        lexicon.learnWord("Keyboard", caseEvidence = true)
+        assertNull(lexicon.displayOf("keyboard"))
+        repeat(7) { lexicon.learnWord("Keyboard", caseEvidence = true) }
+        assertEquals("Keyboard", lexicon.displayOf("keyboard"))
+    }
+
+    @Test
+    fun aNewWordStillTakesItsCapitalOnTheFirstSighting() {
+        val lexicon = UserLexicon(null)
+        lexicon.learnWord("Zorbek", caseEvidence = true)
+        assertEquals("Zorbek", lexicon.displayOf("zorbek"))
+    }
+
+    @Test
+    fun lowerCaseVotesSurviveASave() {
+        val f = file()
+        val lexicon = UserLexicon(f)
+        repeat(5) { lexicon.learnWord("keyboard", caseEvidence = true) }
+        lexicon.save()
+        val back = UserLexicon(f)
+        repeat(4) { back.learnWord("Keyboard", caseEvidence = true) }
+        assertNull(back.displayOf("keyboard"))
+    }
+
+    // ---- added by hand (#164) ----
+
+    @Test
+    fun aWordAddedByHandStartsAtOneUseAndIsStillShielded() {
+        val lexicon = UserLexicon(null)
+        lexicon.addWord("zorbek")
+        assertEquals(1, lexicon.frequencyOf("zorbek"))
+        assertTrue(lexicon.isAddedByHand("zorbek"))
+        assertTrue(lexicon.isEstablished("zorbek", minCount = 5))
+        lexicon.learnWord("organic")
+        assertFalse(lexicon.isAddedByHand("organic"))
+        assertFalse(lexicon.isEstablished("organic", minCount = 5))
+        // It earns weight like any other word.
+        lexicon.learnWord("zorbek")
+        assertEquals(2, lexicon.frequencyOf("zorbek"))
+    }
+
+    @Test
+    fun addedByHandSurvivesSaveRenameAndForget() {
+        val f = file()
+        val lexicon = UserLexicon(f)
+        lexicon.addWord("zorbek")
+        lexicon.save()
+        val back = UserLexicon(f)
+        assertTrue(back.isAddedByHand("zorbek"))
+        assertTrue(back.rename("zorbek", "zorbeck"))
+        assertTrue(back.isAddedByHand("zorbeck"))
+        assertFalse(back.isAddedByHand("zorbek"))
+        back.forget("zorbeck")
+        assertFalse(back.isAddedByHand("zorbeck"))
+    }
 }

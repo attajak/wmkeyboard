@@ -5314,6 +5314,15 @@ data class SuggestionStripSettings(
     val wordMenuItems: Set<WordMenuItem> = WordMenuItem.entries.toSet(),
     /** What the word card's rank controls edit; see [RankControl]. */
     val rankControl: RankControl = RankControl.BOTH,
+    /**
+     * Whether the strip's Delete takes a word out of the user's imported word
+     * lists themselves (#190), rewriting the files, or leaves the lists alone
+     * and blacklists the word instead. On by default: the lists are the
+     * user's own, and a deleted word that comes back after "Suggest again"
+     * reads as the delete not having worked. Off keeps a list intact for
+     * someone who curates it elsewhere and re-imports.
+     */
+    val deleteEditsImportedLists: Boolean = true,
 ) {
     /** Whether the fixed-spelling map applies to [langId]. */
     fun spellingMapEnabledFor(langId: String): Boolean = langId !in spellingMapOffLangs
@@ -5703,6 +5712,7 @@ class SettingsRepository(private val context: Context) {
         private val IMPORTED_ONLY_LANGS = stringSetPreferencesKey("imported_only_langs")
         private val WORD_MENU_ITEMS = stringSetPreferencesKey("word_menu_items")
         private val WORD_RANK_CONTROL = stringPreferencesKey("word_rank_control")
+        private val DELETE_EDITS_IMPORTED_LISTS = booleanPreferencesKey("delete_edits_imported_lists")
         private val INLINE_EMOJI_SEARCH = booleanPreferencesKey("inline_emoji_search")
         private val INLINE_AUTOFILL = booleanPreferencesKey("inline_autofill")
         private val GESTURE_TYPING = booleanPreferencesKey("gesture_typing")
@@ -7084,6 +7094,8 @@ class SettingsRepository(private val context: Context) {
                 rankControl = p[WORD_RANK_CONTROL]
                     ?.let { runCatching { RankControl.valueOf(it) }.getOrNull() }
                     ?: defaults.suggestionStrip.rankControl,
+                deleteEditsImportedLists = p[DELETE_EDITS_IMPORTED_LISTS]
+                    ?: defaults.suggestionStrip.deleteEditsImportedLists,
             ),
             longPressDelayMs = p[LONG_PRESS_DELAY] ?: defaults.longPressDelayMs,
             keyRepeat = KeyRepeatSettings(
@@ -10885,6 +10897,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setRankControl(value: RankControl) =
         editPrefs { it[WORD_RANK_CONTROL] = value.name }
+
+    suspend fun setDeleteEditsImportedLists(value: Boolean) =
+        editPrefs { it[DELETE_EDITS_IMPORTED_LISTS] = value }
 
     suspend fun setContactSuggestions(value: Boolean) =
         editPrefs { it[CONTACT_SUGGESTIONS] = value }

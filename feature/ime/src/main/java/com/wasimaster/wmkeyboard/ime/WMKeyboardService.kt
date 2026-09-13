@@ -1401,6 +1401,14 @@ open class WMKeyboardService : InputMethodService() {
     /** Word lists the user imported, one trie per language (empty when none). */
     private var customDictionaries: Map<String, WordSource> = emptyMap()
 
+    /**
+     * The imported half of [customDictionaries] on its own, per language:
+     * the lists the strip's Delete can edit (#190), as opposed to a downloaded
+     * `.wmdict` that is unioned into the same slot. Only ever read for
+     * membership.
+     */
+    private var importedLists: Map<String, WordSource> = emptyMap()
+
     /** Bundled Bengali entries, kept so the phonetic index can be rebuilt. */
     private var bengaliAssetEntries: List<Pair<String, Int>> = emptyList()
 
@@ -4322,7 +4330,7 @@ open class WMKeyboardService : InputMethodService() {
         // edit. No text is read here: this runs on every keystroke, and a read
         // would undo what the expected-selection cache exists to save.
         keymanSession?.onSelectionReported(newSelStart, newSelEnd)
-        noteCaretForLearning(newSelStart, newSelEnd)
+        noteCaretForLearning(oldSelStart, oldSelEnd, newSelStart, newSelEnd)
         noteCaretForRevision(newSelStart, newSelEnd)
         // The undo chip keeps its own anchor, forgiving forwards where
         // [revertAnchor] is not: typing on is precisely what it is built to
@@ -6445,6 +6453,7 @@ open class WMKeyboardService : InputMethodService() {
         // Deleting with an active selection removes the selected text only.
         if (hasSelection(ic)) {
             dropComposingForSelectionEdit(ic)
+            noteDeletedForLearning(expectedSelStart, expectedSelEnd)
             invalidateExpectedSelection()
             ic.commitText("", 1)
             return
@@ -6567,6 +6576,9 @@ open class WMKeyboardService : InputMethodService() {
             // the press a delete, so an unknown answer is one code unit.
             val deleteLength = charDeleteLength(before ?: "").coerceAtLeast(1)
             revision?.expectDelete(deleteLength, 0)
+            if (expectedSelStart >= 0) {
+                noteDeletedForLearning(expectedSelStart - deleteLength, expectedSelStart)
+            }
             ic.deleteSurroundingText(deleteLength, 0)
             // Backspacing through committed text is the one way the word
             // behind the cursor changes without passing through learn(), so
@@ -6705,6 +6717,7 @@ open class WMKeyboardService : InputMethodService() {
         // A selection is what gets deleted, exactly as backspace does.
         if (hasSelection(ic)) {
             dropComposingForSelectionEdit(ic)
+            noteDeletedForLearning(expectedSelStart, expectedSelEnd)
             invalidateExpectedSelection()
             ic.commitText("", 1)
             return
@@ -6714,8 +6727,10 @@ open class WMKeyboardService : InputMethodService() {
         // same way backspace's lookback does.
         val after = ic.getTextAfterCursor(64, 0)
         if (after.isNullOrEmpty()) return
+        val forward = EmojiGraphemes.forwardDeleteLength(after).coerceAtLeast(1)
+        if (expectedSelStart >= 0) noteDeletedForLearning(expectedSelStart, expectedSelStart + forward)
         invalidateExpectedSelection()
-        ic.deleteSurroundingText(0, EmojiGraphemes.forwardDeleteLength(after).coerceAtLeast(1))
+        ic.deleteSurroundingText(0, forward)
         // Nothing before the cursor moved, so the bigram context still holds;
         // only the strip's completion view of the field changed.
         refreshSuggestions()
@@ -7094,6 +7109,7 @@ open class WMKeyboardService : InputMethodService() {
         val length = WordDelete.lengthBefore(before)
         if (length > 0) {
             revision?.expectDelete(length, 0)
+            if (expectedSelStart >= 0) noteDeletedForLearning(expectedSelStart - length, expectedSelStart)
             ic.deleteSurroundingText(length, 0)
             lastGestureWord = null
             lastRevertible = null
@@ -7213,6 +7229,8 @@ open class WMKeyboardService : InputMethodService() {
         recordStat { onBackspace(System.currentTimeMillis(), SystemClock.uptimeMillis()) }
         clearCaretWord()
         dropComposingForSelectionEdit(ic)
+        // The swipe recorded the range it selected (see growDeleteSwipe).
+        noteDeletedForLearning(expectedSelStart, expectedSelEnd)
         invalidateExpectedSelection()
         ic.commitText("", 1)
         lastGestureWord = null
@@ -10555,6 +10573,10 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun revisionOriginOf(word: String): WordOrigin =
         lastDropped.firstOrNull { it.word.equals(word, ignoreCase = true) }?.origin
+            // A word the caret went back into is no longer dropped on the
+            // spot (#159); it waits, suspended, and the buffer still knows
+            // how it was committed.
+            ?: learningBuffer.originOf(word)
             ?: WordOrigin.TYPED
 
     /**
@@ -10845,7 +10867,7 @@ open class WMKeyboardService : InputMethodService() {
      * edit — opposite answers, so the one read is worth it. It only ever runs
      * with words queued *and* the caret at 0, so it is not on the typing path.
      */
-    private fun noteCaretForLearning(selStart: Int, selEnd: Int) {
+    private fun noteCaretForLearning(oldSelStart: Int, oldSelEnd: Int, selStart: Int, selEnd: Int) {
         lastDropped = emptyList()
         if (learningBuffer.isEmpty() && correctionWatch.isEmpty()) return
         // A range selection is a selection, not a resting place: anchoring to
@@ -10854,13 +10876,18 @@ open class WMKeyboardService : InputMethodService() {
         if (selStart == 0 &&
             currentInputConnection?.getTextAfterCursor(1, 0).isNullOrEmpty()
         ) {
+            // An empty field that a moment ago was a selection from the top
+            // was cut or typed over, not sent: nothing in it stands (#160).
+            // The keyboard's own deletes have already been reported to the
+            // buffer; this is the app's or a hardware keyboard's.
+            if (oldSelStart == 0 && oldSelEnd > 0) learningBuffer.clear()
             // Before the caret is handed on, so a send does not read as the
             // user going back in front of every word in the message.
             flushLearningBuffer()
             return
         }
         val moved = learningBuffer.onCaret(selStart)
-        lastDropped = moved.dropped
+        if (moved.dropped.isNotEmpty()) lastDropped = moved.dropped
         // Words the caret jumped clean over on its way back are not being
         // edited: the user has left them and is working somewhere else in the
         // same text, so they count now rather than being thrown away with the
@@ -10869,6 +10896,20 @@ open class WMKeyboardService : InputMethodService() {
         // read of the field here — see [settleLearned].
         settleLearned(moved.settled)
         correctionWatch.onCaret(selStart)
+    }
+
+    /**
+     * The keyboard has removed `[start, end)` of the field: the words that
+     * stood there are gone, not settled (#160). Told before the editor's
+     * echo, which alone would read a stretch deleted in one go as text the
+     * caret jumped clean over — the delete swipe took whole words out and
+     * the personal dictionary counted them. A caller with no idea where the
+     * caret is passes -1 and nothing is judged.
+     */
+    private fun noteDeletedForLearning(start: Int, end: Int) {
+        if (start < 0 || end <= start || learningBuffer.isEmpty()) return
+        val dropped = learningBuffer.onDeleted(start, end)
+        if (dropped.isNotEmpty()) lastDropped = dropped
     }
 
     /**
@@ -21124,9 +21165,19 @@ open class WMKeyboardService : InputMethodService() {
      * space recompute against the engine, which now knows.
      */
     private fun stopSuggesting(word: String) {
+        suggestionEngine?.let { it.blacklist = it.blacklist + word.lowercase() }
+        dropFromPublished(word)
+    }
+
+    /**
+     * Takes [word] out of everything already on screen or queued — the strip,
+     * the autocorrect and join offers, the octopus maps, the pending commit —
+     * without touching the engine, so a word being deleted (#190) is gone at
+     * once while the files it lives in are still being rewritten.
+     */
+    private fun dropFromPublished(word: String) {
         val lower = word.lowercase()
         fun blocked(candidate: String?) = candidate != null && candidate.lowercase() == lower
-        suggestionEngine?.let { it.blacklist = it.blacklist + lower }
         if (blocked(commitResolution?.correction) ||
             blocked(commitResolution?.offer) ||
             blocked(commitResolution?.bengaliTop) ||
@@ -21176,12 +21227,19 @@ open class WMKeyboardService : InputMethodService() {
     private fun addableTypedWord(): String? =
         typedWord().takeIf { it.length >= 2 && !userLexicon.contains(WordKey.of(it)) }
 
-    /** Whether [word] is somewhere the keyboard can take it out of itself. */
+    /**
+     * Whether [word] is somewhere the keyboard can take it out of itself —
+     * including, when the setting allows it, an imported word list (#190).
+     */
     private fun isForgettable(word: String): Boolean {
         val key = WordKey.of(word)
         return userLexicon.contains(key) || pendingLearn.sightings(key) > 0 ||
-            systemDictionaryWords.source.contains(key) || wordRanks.offsetOf(key) != 0
+            systemDictionaryWords.source.contains(key) || wordRanks.offsetOf(key) != 0 ||
+            (deleteEditsImportedLists() && inImportedLists(key))
     }
+
+    private fun deleteEditsImportedLists(): Boolean =
+        _uiState.value.settings.suggestionStrip.deleteEditsImportedLists
 
     /** What the held-word menu needs to pick its items: lookups only, on the main thread. */
     private fun wordMenuFacts(word: String): WordMenuFacts {
@@ -21246,13 +21304,18 @@ open class WMKeyboardService : InputMethodService() {
 
     /**
      * Forgets [word] everywhere the keyboard can — the personal dictionary,
-     * the waiting room, the rank adjustments, Android's dictionary — and
-     * where it cannot, a downloaded or imported list, puts it on the
-     * never-suggest list so it is gone from the strip all the same (#99).
-     * The lists are read-only files; there is no other way to unlist one
-     * word from them.
+     * the waiting room, the rank adjustments, Android's dictionary and, with
+     * the setting on, the user's own imported word lists (#190), whose files
+     * are rewritten without it — and where it cannot, a downloaded list, puts
+     * it on the never-suggest list so it is gone from the strip all the same
+     * (#99). A downloaded list is a read-only file; there is no other way to
+     * unlist one word from it.
+     *
+     * The list rewrite and the trie rebuild behind it run off the main
+     * thread; [onDone] fires on the main thread once the word's fate is
+     * settled either way, for a caller that shows the outcome.
      */
-    private fun deleteWord(word: String) {
+    private fun deleteWord(word: String, onDone: () -> Unit = {}) {
         val trimmed = word.trim()
         if (trimmed.isEmpty()) return
         vibrate()
@@ -21265,23 +21328,52 @@ open class WMKeyboardService : InputMethodService() {
         wordRanks.remove(trimmed)
         glideShapes.forget(trimmed)
         suggestionEngine?.rankOffsets = wordRanks.snapshot()
-        val lower = trimmed.lowercase()
-        val state = _uiState.value
-        val stillListed = suggestionEngine?.inDictionaries(lower, includePlatform = false) == true
-        if (stillListed && lower !in state.settings.suggestionSources.blacklist) {
-            // Before the refresh below, so it rebuilds the strip against an
-            // engine that already knows — the pref write is a round trip and
-            // would otherwise land a keystroke too late (#127).
-            stopSuggesting(trimmed)
-            serviceScope.launch { settingsRepository.addSuggestionBlacklistWord(trimmed) }
-        }
         serviceScope.launch {
             val removed = withContext(Dispatchers.IO) {
                 SystemUserDictionary.remove(applicationContext, trimmed)
             }
             if (removed) reloadSystemDictionary()
         }
-        refreshSuggestions()
+        val lower = trimmed.lowercase()
+        val key = WordKey.of(trimmed)
+        val listLangs = stripListLanguages().filter { lang ->
+            importedLists[lang]?.let { it.contains(key) || it.contains(trimmed) } == true
+        }
+        if (!deleteEditsImportedLists() || listLangs.isEmpty()) {
+            blacklistIfStillListed(trimmed)
+            refreshSuggestions()
+            onDone()
+            return
+        }
+        // Off the strip at once — the files take a moment — and not through
+        // the blacklist, which would hide the word rather than delete it.
+        dropFromPublished(trimmed)
+        serviceScope.launch {
+            val edited = withContext(Dispatchers.IO) {
+                listLangs.filter { CustomDictionaries.removeWord(filesDir, it, trimmed) }
+            }
+            reloadImportedLists(edited)
+            // Whatever the lists could not settle — a downloaded list that
+            // has the word too — the blacklist still finishes (#99).
+            blacklistIfStillListed(trimmed)
+            refreshSuggestions()
+            onDone()
+        }
+    }
+
+    /**
+     * The half of a delete the keyboard cannot do by forgetting: a word still
+     * in a list it cannot edit goes on the never-suggest list (#99). Engine
+     * first, then the pref — the write is a round trip and would otherwise
+     * land a keystroke too late (#127).
+     */
+    private fun blacklistIfStillListed(word: String) {
+        val lower = word.lowercase()
+        val stillListed = suggestionEngine?.inDictionaries(lower, includePlatform = false) == true
+        if (stillListed && lower !in _uiState.value.settings.suggestionSources.blacklist) {
+            stopSuggesting(word)
+            serviceScope.launch { settingsRepository.addSuggestionBlacklistWord(word) }
+        }
     }
 
     private fun openWordCard(word: String) {
@@ -21316,6 +21408,7 @@ open class WMKeyboardService : InputMethodService() {
                 engine.describe(word).copy(
                     pendingSightings = pendingLearn.sightings(word),
                     swipeShapes = glideShapes.countFor(word),
+                    importedList = deleteEditsImportedLists() && inImportedLists(WordKey.of(word)),
                 )
             }
             val labels = packLabels(facts)
@@ -21382,10 +21475,11 @@ open class WMKeyboardService : InputMethodService() {
                 glideShapes.forget(card.word)
                 publishWordCard(card.word)
             }
-            WordCardAction.Delete -> {
-                deleteWord(card.word)
-                // The blacklist write above is asynchronous; the card shows
-                // the outcome rather than waiting for the settings echo.
+            WordCardAction.Delete -> deleteWord(card.word) {
+                // Once the lists are rewritten (#190). The blacklist write is
+                // asynchronous too; the card shows the outcome rather than
+                // waiting for the settings echo.
+                if (_uiState.value.wordCard?.word != card.word) return@deleteWord
                 val listed = suggestionEngine?.inDictionaries(card.word.lowercase(), includePlatform = false) == true
                 publishWordCard(card.word)
                 if (listed) _uiState.update { it.copy(wordCard = it.wordCard?.copy(blacklisted = true)) }
@@ -23173,24 +23267,89 @@ open class WMKeyboardService : InputMethodService() {
         // their credential. The bundled list still loads (see
         // [openLanguageDictionary]), so prediction works — it just knows only
         // the words that shipped with the app.
-        if (!userUnlocked) return emptyMap()
-        CustomDictionaries.migrateLegacyFolders(filesDir)
-        return LanguageRegistry.all.associate { lang ->
-            val imported = CustomDictionaries.trie(filesDir, lang.id)
-            // Dropped for a language set to read imported lists alone (#28) —
-            // that is the whole of the setting for every language but English
-            // and Bengali, whose downloads travel the primary path and are
-            // dropped by [openLanguageDictionary] instead.
-            val downloaded = if (lang.id == "en" || lang.id == "bn" ||
-                !shippedDictionaryEnabled(lang.id)
-            ) {
-                null
-            } else {
-                MappedTrie.open(DictionaryStore.downloadedFile(filesDir, lang.id))
-            }
-            lang.id to CompositeWordSource.of(listOfNotNull(downloaded, imported))
+        if (!userUnlocked) {
+            importedLists = emptyMap()
+            return emptyMap()
         }
+        CustomDictionaries.migrateLegacyFolders(filesDir)
+        val imported = HashMap<String, WordSource>()
+        val sources = LanguageRegistry.all.associate { lang ->
+            lang.id to loadCustomDictionary(lang.id, imported)
+        }
+        importedLists = imported
+        return sources
     }
+
+    /**
+     * One language's slot of [loadCustomDictionaries]: its imported lists
+     * packed into a trie, unioned with its download when it has one. The
+     * imported trie alone is also recorded in [imported], for [importedLists].
+     */
+    private fun loadCustomDictionary(langId: String, imported: MutableMap<String, WordSource>): WordSource {
+        val lists = CustomDictionaries.trie(filesDir, langId)
+        imported[langId] = lists
+        // Dropped for a language set to read imported lists alone (#28) —
+        // that is the whole of the setting for every language but English
+        // and Bengali, whose downloads travel the primary path and are
+        // dropped by [openLanguageDictionary] instead.
+        val downloaded = if (langId == "en" || langId == "bn" || !shippedDictionaryEnabled(langId)) {
+            null
+        } else {
+            MappedTrie.open(DictionaryStore.downloadedFile(filesDir, langId))
+        }
+        return CompositeWordSource.of(listOfNotNull(downloaded, lists))
+    }
+
+    /**
+     * Rebuilds the word sources of [langIds] alone after their imported lists
+     * changed under the running keyboard (a word deleted from the strip,
+     * #190), and rewires the engine's imported and secondary slots. Cheaper
+     * than [loadCustomDictionaries] for a user with lists in many languages,
+     * and the Bengali index — the one other structure built over an imported
+     * list — is rebuilt only when Bengali's changed.
+     */
+    private suspend fun reloadImportedLists(langIds: Collection<String>) {
+        if (langIds.isEmpty() || !userUnlocked) return
+        val engine = suggestionEngine ?: return
+        val rebuilt = withContext(Dispatchers.Default) {
+            val imported = HashMap<String, WordSource>()
+            val sources = langIds.associateWith { loadCustomDictionary(it, imported) }
+            val bengali = if ("bn" in langIds) buildBengaliIndex() else null
+            Triple(sources, imported, bengali)
+        }
+        customDictionaries = customDictionaries + rebuilt.first
+        importedLists = importedLists + rebuilt.second
+        rebuilt.third?.let { engine.bengaliIndex = it }
+        val lang = _uiState.value.language
+        engine.customDictionary = customDictionaries[lang.id] ?: PackedTrie.EMPTY
+        val secondaryIds = _uiState.value.settings.secondaryLanguages[lang.id].orEmpty()
+        engine.secondaryDictionaries = secondaryIds.filter { it != "en" }
+            .mapNotNull { id -> customDictionaries[id]?.let { SecondaryDictionary(id, it) } }
+        if ("bn_rom" in langIds) {
+            romanizedGlide = RomanizedIndex.bengali(
+                spellings = engine.spellingMap,
+                phonetic = engine.bengaliIndex,
+                downloadedRomanized = customDictionaries["bn_rom"] ?: PackedTrie.EMPTY,
+                nativeFrequency = engine.bengaliIndex::frequencyOf,
+            )
+        }
+        glideSourcesEpoch.update { it + 1 }
+    }
+
+    /**
+     * The languages whose imported lists feed the strip right now — the one
+     * on screen and its secondaries — which is where a held word can have
+     * come from, and so where Delete looks for it (#190).
+     */
+    private fun stripListLanguages(): List<String> {
+        val lang = _uiState.value.language
+        val secondaryIds = _uiState.value.settings.secondaryLanguages[lang.id].orEmpty()
+        return listOf(lang.id) + secondaryIds.filter { it != "en" && it != lang.id }
+    }
+
+    /** Whether [key] is in an imported list of a language feeding the strip. */
+    private fun inImportedLists(key: String): Boolean =
+        stripListLanguages().any { importedLists[it]?.contains(key) == true }
 
     /**
      * The primary dictionary for a language with a bundled list: the

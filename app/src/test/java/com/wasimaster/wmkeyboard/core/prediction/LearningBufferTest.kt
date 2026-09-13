@@ -48,7 +48,9 @@ class LearningBufferTest {
         val buffer = LearningBuffer()
         buffer.commit("wibble", 7)
         buffer.commit("wobble", 14)
-        // One backspace lands the caret inside the word it just committed.
+        // The keyboard reports its own backspace before the editor echoes it;
+        // one character off the end of the word it just committed is enough.
+        buffer.onDeleted(13, 14)
         buffer.onCaret(13)
         assertEquals(listOf("wibble"), buffer.words())
     }
@@ -57,19 +59,121 @@ class LearningBufferTest {
      * Issue #115: going back to one word said nothing about the rest of the
      * text, but the whole queue in front of the caret was thrown away — so a
      * session spent reading back what had been written learned nothing at all.
-     * The word the caret landed in is dropped; the ones it jumped over settle.
+     * The words the caret jumped over settle. The one it landed in is kept,
+     * undecided (#159): only an edit the keyboard makes to it drops it.
      */
     @Test
-    fun goingBackToEditDropsOnlyTheWordTheCaretLandedIn() {
+    fun goingBackToEditSettlesTheWordsTheCaretJumpedOver() {
         val buffer = LearningBuffer()
         buffer.commit("wibble", 7)
         buffer.commit("wobble", 14)
         buffer.commit("wubble", 21)
         // A tap back into the first word.
         val moved = buffer.onCaret(3)
-        assertEquals(listOf("wibble"), moved.dropped.map { it.word })
+        assertTrue(moved.dropped.isEmpty())
         assertEquals(listOf("wobble", "wubble"), moved.settled.map { it.word })
-        assertTrue(buffer.isEmpty())
+        val waiting = buffer.drain().single()
+        assertEquals("wibble", waiting.word)
+        assertTrue(waiting.suspended)
+    }
+
+    /**
+     * Issue #159: the caret parked on a word when the keyboard closed was
+     * read as an edit of it, and that one word was the only one not learned.
+     */
+    @Test
+    fun aCaretParkedOnAWordDoesNotUnlearnIt() {
+        val buffer = LearningBuffer()
+        buffer.commit("wibble", 7)
+        buffer.commit("wobble", 14)
+        buffer.onCaret(10)
+        assertEquals(listOf("wibble", "wobble"), buffer.words())
+    }
+
+    /**
+     * Issue #160: a spacebar swipe walks the caret back one character at a
+     * time, through every word on its way. Each was dropped as the caret
+     * entered it, and the personal dictionary got the first two words of a
+     * four-word sentence.
+     */
+    @Test
+    fun aSpacebarWalkBackThroughTheTextLearnsAllOfIt() {
+        val buffer = LearningBuffer()
+        buffer.commit("whatever", 9)
+        buffer.commit("is", 12)
+        buffer.commit("going", 18)
+        buffer.commit("on", 21)
+        val settled = ArrayList<String>()
+        for (caret in 20 downTo 13) settled += buffer.onCaret(caret).settled.map { it.word }
+        // Then a tap into the first word, and the app is left.
+        settled += buffer.onCaret(3).settled.map { it.word }
+        settled += buffer.words()
+        assertEquals(setOf("whatever", "is", "going", "on"), settled.toSet())
+        assertEquals(4, settled.size)
+    }
+
+    /** Issue #160: words a delete swipe took out in one go were settling as "jumped over". */
+    @Test
+    fun aDeleteSwipeTakesItsWordsOutOfTheQueue() {
+        val buffer = LearningBuffer()
+        buffer.commit("wibble", 7)
+        buffer.commit("wobble", 14)
+        buffer.commit("wubble", 21)
+        val dropped = buffer.onDeleted(7, 21)
+        assertEquals(listOf("wobble", "wubble"), dropped.map { it.word })
+        // The editor's echo lands where the deletion started.
+        val moved = buffer.onCaret(7)
+        assertTrue(moved.settled.isEmpty())
+        assertEquals(listOf("wibble"), buffer.words())
+    }
+
+    @Test
+    fun wordsAfterADeletedStretchMoveUp() {
+        val buffer = LearningBuffer()
+        buffer.commit("aa", 3)
+        buffer.commit("bb", 6)
+        buffer.commit("cc", 9)
+        // The range stops short of the next word's slack: a delete that runs
+        // right up against a word counts as touching it (the anchor may or may
+        // not include the trailing space), and that word goes too.
+        assertEquals(listOf("aa"), buffer.onDeleted(0, 2).map { it.word })
+        assertEquals(listOf(4, 7), buffer.drain().map { it.anchor })
+    }
+
+    @Test
+    fun aCommitLandingOnASuspendedWordReplacesIt() {
+        val buffer = LearningBuffer()
+        buffer.commit("going", 6)
+        buffer.onCaret(3)
+        buffer.push("goings", "en", 1, known = true)
+        buffer.onCaret(7)
+        val entry = buffer.drain().single()
+        assertEquals("goings", entry.word)
+        assertEquals("going", entry.replaces)
+        assertTrue(entry.suspect)
+    }
+
+    @Test
+    fun aWordTypedAfterASuspendedOneLeavesItAlone() {
+        val buffer = LearningBuffer()
+        buffer.commit("going", 6)
+        buffer.onCaret(5)
+        buffer.push("on", "en", 1, known = true)
+        buffer.onCaret(9)
+        assertEquals(listOf("going", "on"), buffer.words())
+    }
+
+    @Test
+    fun aReplacesPushDropsTheSuspendedCopy() {
+        val buffer = LearningBuffer()
+        buffer.commit("teh", 4)
+        buffer.onCaret(3)
+        buffer.push("the", "en", 1, known = true, replaces = "teh")
+        buffer.onCaret(4)
+        val entry = buffer.drain().single()
+        assertEquals("the", entry.word)
+        assertEquals("teh", entry.replaces)
+        assertFalse(entry.suspect)
     }
 
     /**
@@ -171,18 +275,20 @@ class LearningBufferTest {
         val buffer = LearningBuffer()
         buffer.push("form", "en", 1, known = true)
         buffer.onCaret(4)
-        // Backspacing the swipe away puts the caret in front of the word.
+        // Backspacing the swipe away: the keyboard reports each character it
+        // takes, and the echo puts the caret in front of where the word was.
+        buffer.onDeleted(3, 4)
+        buffer.onCaret(3)
+        buffer.onDeleted(0, 3)
         buffer.onCaret(0)
         assertTrue(buffer.isEmpty())
     }
 
-    // --- manual fixes: dropped words pairing with what replaced them ---
-
     @Test
-    fun onCaretHandsBackWhatItDropped() {
+    fun onDeletedHandsBackWhatItDropped() {
         val buffer = LearningBuffer()
         buffer.commit("teh", 4)
-        val dropped = buffer.onCaret(3).dropped
+        val dropped = buffer.onDeleted(3, 4)
         assertEquals(listOf("teh"), dropped.map { it.word })
         assertEquals(4, dropped.single().anchor)
         assertTrue(buffer.isEmpty())
@@ -232,14 +338,17 @@ class LearningBufferTest {
     }
 
     @Test
-    fun aWordFarFromTheDroppedOneIsNotItsReplacement() {
+    fun aWordFarFromTheSuspendedOneIsNotItsReplacement() {
         val buffer = LearningBuffer()
         buffer.commit("teh", 4)
         buffer.onCaret(3)
         buffer.push("the", "en", 1, known = true)
-        // Anchored twenty characters away: the user went on writing elsewhere.
+        // Anchored twenty characters away: the user went on writing elsewhere,
+        // and the word they had been looking at stands.
         buffer.onCaret(24)
-        assertNull(buffer.drain().single().replaces)
+        val (old, new) = buffer.drain()
+        assertEquals("teh", old.word)
+        assertNull(new.replaces)
     }
 
     @Test
@@ -318,7 +427,11 @@ class LearningBufferTest {
         val buffer = LearningBuffer()
         buffer.push("hello", "en", 1, known = true, origin = WordOrigin.GLIDE)
         buffer.onCaret(6)
-        val dropped = buffer.onCaret(2).dropped.single()
+        // Still known while the caret merely sits in it, and after a delete.
+        buffer.onCaret(2)
+        assertEquals(WordOrigin.GLIDE, buffer.originOf("Hello"))
+        val dropped = buffer.onDeleted(2, 3).single()
         assertEquals(WordOrigin.GLIDE, dropped.origin)
+        assertEquals(WordOrigin.GLIDE, buffer.originOf("hello"))
     }
 }

@@ -90,6 +90,8 @@ internal fun DictionarySettings(repository: SettingsRepository) {
     var words by remember { mutableStateOf<List<Pair<String, Int>>>(emptyList()) }
     // Words whose capitals are pinned (#100), by the spelling the row shows.
     var pinned by remember { mutableStateOf<Set<String>>(emptySet()) }
+    // Words the user added themselves (#164), the same way.
+    var added by remember { mutableStateOf<Set<String>>(emptySet()) }
     // The rank adjustments made from the keyboard's word card (#99): its own
     // file, read the same way, listed under the words so they can be undone.
     val ranksFile = remember { java.io.File(context.filesDir, "learning/word_ranks.json") }
@@ -102,12 +104,15 @@ internal fun DictionarySettings(repository: SettingsRepository) {
 
     fun pinnedIn(lex: UserLexicon, all: List<Pair<String, Int>>): Set<String> =
         all.mapNotNullTo(HashSet()) { (word, _) -> word.takeIf { lex.isCasePinned(it) } }
+    fun addedIn(lex: UserLexicon, all: List<Pair<String, Int>>): Set<String> =
+        all.mapNotNullTo(HashSet()) { (word, _) -> word.takeIf { lex.isAddedByHand(it) } }
 
     LaunchedEffect(Unit) {
         val lex = withContext(Dispatchers.IO) { UserLexicon(file) }
         val all = lex.allWords()
         words = all.sortedByDescending { it.second }
         pinned = pinnedIn(lex, all)
+        added = addedIn(lex, all)
         lexicon = lex
         val adjustments = withContext(Dispatchers.IO) { WordRanks(ranksFile) }
         rankEntries = adjustments.all()
@@ -147,6 +152,7 @@ internal fun DictionarySettings(repository: SettingsRepository) {
             val all = lex.allWords()
             words = all.sortedByDescending { it.second }
             pinned = pinnedIn(lex, all)
+            added = addedIn(lex, all)
             repository.bumpLexiconVersion()
         }
     }
@@ -213,10 +219,13 @@ internal fun DictionarySettings(repository: SettingsRepository) {
     SettingsGroup {
         for ((word, count) in shown.take(visible)) {
             item {
-                val standing = if (count >= 200) {
-                    stringResource(R.string.backup_dictionary_added_subtitle)
+                // Every row carries its count (#165); a word the user added
+                // says so in front of it rather than instead of it.
+                val seen = pluralStringResource(R.plurals.backup_dictionary_seen_count, count, count)
+                val standing = if (word in added) {
+                    stringResource(R.string.backup_dictionary_added_subtitle, seen)
                 } else {
-                    pluralStringResource(R.plurals.backup_dictionary_seen_count, count, count)
+                    seen
                 }
                 WmRow(
                     title = word,
