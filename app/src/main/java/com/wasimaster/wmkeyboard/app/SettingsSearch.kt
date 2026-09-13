@@ -453,6 +453,7 @@ private fun SearchStrings.typingGesturesRows(): List<SettingsSearchEntry> {
         row(R.string.typing_space_hold_keys_label),
         row(R.string.typing_spacebar_language_arrows_title, R.string.typing_spacebar_language_arrows_subtitle),
         row(R.string.typing_spacebar_display_title, R.string.typing_spacebar_display_subtitle),
+        row(R.string.typing_language_picker_style_title, R.string.typing_language_picker_style_subtitle),
         row(R.string.typing_spacebar_text_label),
     )
 }

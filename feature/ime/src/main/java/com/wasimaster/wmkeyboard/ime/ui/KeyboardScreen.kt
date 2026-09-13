@@ -58,6 +58,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
@@ -97,6 +98,7 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.SwapHoriz
 import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.automirrored.outlined.InsertDriveFile
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.outlined.Undo
@@ -331,6 +333,7 @@ import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
 import com.wasimaster.wmkeyboard.core.settings.sourceChar
 import com.wasimaster.wmkeyboard.core.settings.GrammarDialect
 import com.wasimaster.wmkeyboard.core.settings.KeyboardMode
+import com.wasimaster.wmkeyboard.core.settings.LanguagePickerStyle
 import com.wasimaster.wmkeyboard.core.settings.EmojiBarMode
 import com.wasimaster.wmkeyboard.core.settings.KeyboardAlignment
 import com.wasimaster.wmkeyboard.core.settings.HoldRepeatCursorTools
@@ -459,6 +462,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14645,11 +14649,12 @@ internal fun KeyButton(
     // The flick arm the finger is currently over on a kana-pad key, driving the
     // cross popup's highlight; null when centred (a plain tap) or released.
     val flickDirection = remember { mutableStateOf<FlickDirection?>(null) }
-    // Full tappable language list: opened by a long-press on the globe key or
-    // by holding the spacebar when more than two languages are enabled (a
-    // swipe through a long ring is tedious). Independent of languagePreview.
+    // Full tappable language picker (a list or, by setting, a carousel):
+    // opened by a long-press on the globe key or by holding the spacebar when
+    // more than two languages are enabled (a swipe through a long ring is
+    // tedious). Independent of languagePreview.
     var showLanguagePicker by remember { mutableStateOf(false) }
-    // Row of the open picker the spacebar hold-drag currently has selected;
+    // Entry of the open picker the spacebar hold-drag currently has selected;
     // null until the finger actually moves (a plain hold leaves the popup up
     // for tapping, exactly as before).
     var pickerDragIndex by remember { mutableStateOf<Int?>(null) }
@@ -14928,6 +14933,8 @@ internal fun KeyButton(
                     spaceSwipeDownHide = settings.layoutBehavior.spaceSwipeDownHide,
                     symbolsLongPressNumpad = settings.layoutBehavior.symbolsLongPressNumpad,
                     onLayoutSelect = onLayoutSelect,
+                    pickerIsCarousel =
+                        settings.layoutBehavior.languagePickerStyle == LanguagePickerStyle.CAROUSEL,
                     openLanguagePicker = { pickerDragIndex = null; showLanguagePicker = true },
                     closeLanguagePicker = { showLanguagePicker = false; pickerDragIndex = null },
                     setPickerDragIndex = { pickerDragIndex = it },
@@ -15106,28 +15113,45 @@ internal fun KeyButton(
         }
 
         if (showLanguagePicker) {
-            LanguagePickerPopup(
-                popupPosition = popupPosition,
-                enabledLayoutIds = settings.enabledLayoutIds.ifEmpty { listOf(BuiltInLayouts.DEFAULT_ID) },
-                currentLayoutId = layoutId,
-                customLayouts = settings.customLayouts,
-                displayMode = settings.layoutBehavior.spacebarDisplay,
-                highlightIndex = pickerDragIndex,
-                onPick = {
-                    showLanguagePicker = false
-                    pickerDragIndex = null
-                    if (it != layoutId) onLayoutSelect(it)
-                },
-                // Routed through the key dispatch rather than a callback of its
-                // own: the service already answers this action for a key bound
-                // to it, and KeyboardScreen cannot take another parameter.
-                onOtherKeyboards = {
-                    showLanguagePicker = false
-                    pickerDragIndex = null
-                    onKey(Key(label = "", action = KeyAction.InputMethodPicker))
-                },
-                onDismiss = { showLanguagePicker = false; pickerDragIndex = null },
-            )
+            val pickerIds = settings.enabledLayoutIds.ifEmpty { listOf(BuiltInLayouts.DEFAULT_ID) }
+            val onPick: (String) -> Unit = {
+                showLanguagePicker = false
+                pickerDragIndex = null
+                if (it != layoutId) onLayoutSelect(it)
+            }
+            // Routed through the key dispatch rather than a callback of its
+            // own: the service already answers this action for a key bound
+            // to it, and KeyboardScreen cannot take another parameter.
+            val onOtherKeyboards = {
+                showLanguagePicker = false
+                pickerDragIndex = null
+                onKey(Key(label = "", action = KeyAction.InputMethodPicker))
+            }
+            val onDismiss = { showLanguagePicker = false; pickerDragIndex = null }
+            when (settings.layoutBehavior.languagePickerStyle) {
+                LanguagePickerStyle.LIST -> LanguagePickerPopup(
+                    popupPosition = popupPosition,
+                    enabledLayoutIds = pickerIds,
+                    currentLayoutId = layoutId,
+                    customLayouts = settings.customLayouts,
+                    displayMode = settings.layoutBehavior.spacebarDisplay,
+                    highlightIndex = pickerDragIndex,
+                    onPick = onPick,
+                    onOtherKeyboards = onOtherKeyboards,
+                    onDismiss = onDismiss,
+                )
+                LanguagePickerStyle.CAROUSEL -> LanguageCarouselPopup(
+                    popupPosition = popupPosition,
+                    enabledLayoutIds = pickerIds,
+                    currentLayoutId = layoutId,
+                    customLayouts = settings.customLayouts,
+                    displayMode = settings.layoutBehavior.spacebarDisplay,
+                    highlightIndex = pickerDragIndex,
+                    onPick = onPick,
+                    onOtherKeyboards = onOtherKeyboards,
+                    onDismiss = onDismiss,
+                )
+            }
         }
     }
 }
@@ -15860,6 +15884,129 @@ private fun LanguagePickerPopup(
 }
 
 /**
+ * The language picker turned sideways (issue #150): one strip of chips, the
+ * current layout centred, the rest scrolling off either end. It stands in for
+ * [LanguagePickerPopup] when [LanguagePickerStyle.CAROUSEL] is on, and takes
+ * the same callbacks, so the two are interchangeable at the one call site.
+ *
+ * The point of it is the axis. A spacebar hold-drag through the list walks up
+ * and down, which turns the sideways language swipe into a vertical gesture
+ * the moment the ring is long enough to need the list. Here the hold-drag
+ * keeps its direction — the gesture steps [highlightIndex] by the swipe's own
+ * 44 dp — and the strip re-centres on the highlighted chip, so the finger
+ * never has to chase the viewport. A chip is also tappable, exactly like a
+ * list row.
+ *
+ * "Other keyboards…" is a keyboard glyph past a divider at the strip's end,
+ * outside the scroller for the reason the list keeps it outside its own: the
+ * hold-drag walks by index and must never land on it.
+ */
+@Composable
+private fun LanguageCarouselPopup(
+    popupPosition: PopupPositionProvider,
+    enabledLayoutIds: List<String>,
+    currentLayoutId: String,
+    customLayouts: List<LayoutSpec>,
+    displayMode: SpacebarDisplay,
+    onPick: (String) -> Unit,
+    onOtherKeyboards: () -> Unit,
+    onDismiss: () -> Unit,
+    /**
+     * Chip a spacebar hold-drag has walked to, or null when the popup is in
+     * plain tap mode (globe long-press, or a hold that has not moved yet).
+     */
+    highlightIndex: Int? = null,
+) {
+    val kb = LocalKbTheme.current
+    val scrollState = rememberScrollState()
+    // Where each chip sits in the strip (x, width), reported as it is placed,
+    // so the centring below can aim at a chip whose width depends on its label.
+    val chipBounds = remember(enabledLayoutIds) { mutableStateMapOf<Int, Pair<Int, Int>>() }
+    var viewportWidth by remember { mutableIntStateOf(0) }
+    val currentIndex = enabledLayoutIds.indexOf(currentLayoutId).coerceAtLeast(0)
+    val centreOn = highlightIndex ?: currentIndex
+    // The first centring is a jump — the strip should open already looking at
+    // the current layout — and every one after it slides, following the drag.
+    val opened = remember { mutableStateOf(false) }
+    LaunchedEffect(centreOn) {
+        val (x, width) = snapshotFlow { chipBounds[centreOn] }.filterNotNull().first()
+        val viewport = snapshotFlow { viewportWidth }.first { it > 0 }
+        val target = (x + width / 2 - viewport / 2).coerceIn(0, scrollState.maxValue)
+        if (opened.value) scrollState.animateScrollTo(target) else scrollState.scrollTo(target)
+        opened.value = true
+    }
+    Popup(
+        popupPositionProvider = popupPosition,
+        onDismissRequest = onDismiss,
+    ) {
+        Surface(
+            shape = kb.menuShape(),
+            color = kb.popup,
+            border = kb.popupSurfaceBorder(),
+            shadowElevation = elevationFor(kb.menuShapeKind, 8.dp),
+        ) {
+            Row(
+                modifier = Modifier.height(IntrinsicSize.Min),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Row(
+                    modifier = Modifier
+                        .widthIn(max = CarouselMaxWidthDp.dp)
+                        .onSizeChanged { viewportWidth = it.width }
+                        .horizontalScroll(scrollState)
+                        .padding(horizontal = 6.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    for ((index, layoutId) in enabledLayoutIds.withIndex()) {
+                        val selected = layoutId == currentLayoutId
+                        val dragged = index == highlightIndex
+                        Text(
+                            text = layoutSwitchLabel(layoutId, enabledLayoutIds, customLayouts, displayMode),
+                            color = if (selected) kb.accent else kb.popupText,
+                            fontWeight = if (selected || dragged) FontWeight.Bold else FontWeight.Normal,
+                            fontSize = 15.sp,
+                            maxLines = 1,
+                            modifier = Modifier
+                                .onPlaced {
+                                    chipBounds[index] =
+                                        it.positionInParent().x.roundToInt() to it.size.width
+                                }
+                                .padding(horizontal = 2.dp)
+                                .height(PickerRowHeightDp.dp)
+                                .background(
+                                    if (dragged || (selected && highlightIndex == null)) {
+                                        kb.pressedKey
+                                    } else {
+                                        Color.Transparent
+                                    },
+                                    RoundedCornerShape(kb.popupRadiusDp.dp),
+                                )
+                                .clip(RoundedCornerShape(kb.popupRadiusDp.dp))
+                                .clickable { onPick(layoutId) }
+                                .padding(horizontal = 12.dp)
+                                .wrapContentHeight(Alignment.CenterVertically),
+                        )
+                    }
+                }
+                VerticalDivider(
+                    modifier = Modifier.fillMaxHeight().padding(vertical = 8.dp),
+                    color = kb.popupText.copy(alpha = 0.15f),
+                )
+                Icon(
+                    imageVector = Icons.Outlined.Keyboard,
+                    contentDescription = stringResource(R.string.ime_language_picker_other_keyboards),
+                    tint = kb.popupText,
+                    modifier = Modifier
+                        .clickable { onOtherKeyboards() }
+                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                        .size(22.dp),
+                )
+            }
+        }
+    }
+}
+
+/**
  * Label for an enabled layout in the spacebar language switcher (tooltip and
  * picker). Follows the same rule as the spacebar label: the language name, the
  * layout name, or "Language (Layout)" — and always the combined form when more
@@ -16426,6 +16573,38 @@ private const val SpaceHoldPickerMs = 250
  */
 private const val PickerRowHeightDp = 40
 
+/**
+ * Widest the language carousel's scrolling strip gets before its chips scroll
+ * instead. Narrower than any phone the keyboard runs on, so the strip reads as
+ * a strip with ends rather than a bar across the whole board; the popup's
+ * positioner clamps it to the window on anything narrower still.
+ */
+private const val CarouselMaxWidthDp = 320
+
+/** Where a picker hold-drag has walked to, and the travel it has not spent yet. */
+internal data class PickerWalk(val index: Int, val remainder: Float)
+
+/**
+ * Steps a picker hold-drag's selection by whole steps of finger travel, clamped
+ * to the ends of the ring. Travel is spent in [stepPx] units whether or not a
+ * step was available, so a drag past the last entry banks nothing: coming back
+ * costs one step, not the whole overshoot. The list and the carousel share this
+ * and differ only in the axis they feed it and the size of a step.
+ */
+internal fun walkPicker(index: Int, travel: Float, stepPx: Float, last: Int): PickerWalk {
+    var at = index
+    var left = travel
+    while (left > stepPx) {
+        if (at < last) at++
+        left -= stepPx
+    }
+    while (left < -stepPx) {
+        if (at > 0) at--
+        left += stepPx
+    }
+    return PickerWalk(at, left)
+}
+
 /** The up half of a braille dot press: the same key with its release flag set. */
 private fun brailleRelease(key: Key): Key {
     val action = key.action as KeyAction.BrailleDot
@@ -16557,8 +16736,14 @@ private fun Modifier.pointerInputKey(
     onLayoutSelect: (String) -> Unit,
     openLanguagePicker: () -> Unit,
     closeLanguagePicker: () -> Unit,
-    /** Row of the open picker a hold-drag has reached; null clears the highlight. */
+    /** Entry of the open picker a hold-drag has reached; null clears the highlight. */
     setPickerDragIndex: (Int?) -> Unit,
+    /**
+     * The picker is the sideways carousel (issue #150), so a hold-drag through
+     * it walks left and right by the language swipe's own step, instead of up
+     * and down by the list's row height.
+     */
+    pickerIsCarousel: Boolean = false,
     setLanguagePreview: (String?) -> Unit,
     canDelete: () -> Boolean,
     canForwardDelete: () -> Boolean,
@@ -16580,7 +16765,7 @@ private fun Modifier.pointerInputKey(
         Modifier.pointerInput(
             key, spaceShortSwipe, spaceLongSwipe, enabledLayoutIds, currentLayoutId, longPressDelayMs,
             hapticOnLongPress, hapticOnLongPressRelease, vibrateOnSpace, spaceCursor2d,
-            spaceSwipeDownHide, textEditing, alternates,
+            spaceSwipeDownHide, textEditing, alternates, pickerIsCarousel,
         ) {
             val slopPx = 12.dp.toPx()
             val reachPx = AlternatesReachDp.toPx()
@@ -16633,10 +16818,11 @@ private fun Modifier.pointerInputKey(
                 var holdPreviewShown = false
                 // With more than two languages the swipe ring is long, so a
                 // hold opens the full tappable picker instead of the inline
-                // preview. Once open, a vertical drag walks the list row by
-                // row and release commits the highlighted layout; a hold that
-                // never moves leaves the popup up for tapping, and release
-                // types nothing either way.
+                // preview. Once open, a drag walks it entry by entry — up and
+                // down through the list, sideways along the carousel — and
+                // release commits the highlighted layout; a hold that never
+                // moves leaves the popup up for tapping, and release types
+                // nothing either way.
                 var pickerOpened = false
                 var pickerIndex = langIndex
                 var pickerMoved = false
@@ -16702,30 +16888,36 @@ private fun Modifier.pointerInputKey(
                         change.consume()
                         continue
                     }
-                    // Picker is up: the finger now navigates its list. The
-                    // first event only re-bases the vertical origin — the
-                    // finger may have drifted (below slop) before the hold
-                    // fired, and that drift must not count as a row step.
+                    // Picker is up: the finger now navigates it. The first
+                    // event only re-bases the origin — the finger may have
+                    // drifted (below slop) before the hold fired, and that
+                    // drift must not count as a step.
                     if (pickerOpened) {
                         if (!pickerPrimed) {
                             pickerPrimed = true
+                            lastX = change.position.x
                             lastY = change.position.y
+                            accumulated = 0f
                             accumulatedY = 0f
                             change.consume()
                             continue
                         }
-                        accumulatedY += change.position.y - lastY
-                        lastY = change.position.y
-                        var stepped = false
-                        while (accumulatedY > pickerRowPx) {
-                            if (pickerIndex < enabledLayoutIds.size - 1) { pickerIndex++; stepped = true }
-                            accumulatedY -= pickerRowPx
+                        // The carousel keeps the swipe's own axis (issue
+                        // #150): sideways travel walks it one chip per
+                        // language step. The list walks by its row height.
+                        val walk = if (pickerIsCarousel) {
+                            accumulated += change.position.x - lastX
+                            lastX = change.position.x
+                            walkPicker(pickerIndex, accumulated, langStepPx, enabledLayoutIds.size - 1)
+                                .also { accumulated = it.remainder }
+                        } else {
+                            accumulatedY += change.position.y - lastY
+                            lastY = change.position.y
+                            walkPicker(pickerIndex, accumulatedY, pickerRowPx, enabledLayoutIds.size - 1)
+                                .also { accumulatedY = it.remainder }
                         }
-                        while (accumulatedY < -pickerRowPx) {
-                            if (pickerIndex > 0) { pickerIndex--; stepped = true }
-                            accumulatedY += pickerRowPx
-                        }
-                        if (stepped) {
+                        if (walk.index != pickerIndex) {
+                            pickerIndex = walk.index
                             pickerMoved = true
                             setPickerDragIndex(pickerIndex)
                             onKeyPress()
@@ -16927,9 +17119,9 @@ private fun Modifier.pointerInputKey(
                         alternates?.commit()
                         if (hapticOnLongPressRelease) onKeyPress()
                     }
-                    // The picker is up. A hold-drag that walked the list
-                    // commits the highlighted row; a hold that never moved
-                    // leaves the popup up for tapping. Neither types a space.
+                    // The picker is up. A hold-drag that walked it commits
+                    // the highlighted entry; a hold that never moved leaves
+                    // the popup up for tapping. Neither types a space.
                     action == null && pickerOpened -> {
                         if (pickerMoved) {
                             val selected = enabledLayoutIds[pickerIndex]

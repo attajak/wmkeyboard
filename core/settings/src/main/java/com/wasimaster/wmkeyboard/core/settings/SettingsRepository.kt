@@ -733,6 +733,18 @@ enum class SpaceSwipeAction { NONE, LANGUAGE, CURSOR, NUMPAD }
 enum class SpacebarDisplay { LANGUAGE, LAYOUT, BOTH }
 
 /**
+ * The shape of the language picker: the tappable chooser a spacebar hold or a
+ * 🌐 long press opens once the ring is too long for the inline preview.
+ *
+ *  - [LIST] — a vertical list; a spacebar hold-drag walks it up and down.
+ *  - [CAROUSEL] — a horizontal strip centred on the current layout; the
+ *    hold-drag keeps the swipe's own direction (issue #150). Chips scroll
+ *    and are tappable, and the strip re-centres on whatever is highlighted,
+ *    so a long ring never turns a sideways gesture into a vertical one.
+ */
+enum class LanguagePickerStyle { LIST, CAROUSEL }
+
+/**
  * What the corner hints on a transliterating layout (Avro) show, with the
  * roman `k` pressed after another `k` as the example:
  *
@@ -4593,6 +4605,11 @@ data class LayoutBehaviorSettings(
     /** What the resting spacebar label shows: language, layout, or both. */
     val spacebarDisplay: SpacebarDisplay = SpacebarDisplay.LANGUAGE,
     /**
+     * Whether the language picker is a vertical list or a sideways carousel.
+     * Defaults to the list, which is what shipped; see [LanguagePickerStyle].
+     */
+    val languagePickerStyle: LanguagePickerStyle = LanguagePickerStyle.LIST,
+    /**
      * Size multiplier for the small corner hint character on each key (the
      * first long-press alternate, shown when [KeyboardSettings.longPressHints]
      * is on). 1.0 keeps the default 10sp base.
@@ -5778,6 +5795,7 @@ class SettingsRepository(private val context: Context) {
         private val OCTOPUS_LONG_PRESS_KEYS = booleanPreferencesKey("octopus_long_press_keys")
         private val AUTOPILOT_VISUAL_SCALE = floatPreferencesKey("autopilot_visual_scale")
         private val SPACEBAR_DISPLAY = stringPreferencesKey("spacebar_display")
+        private val LANGUAGE_PICKER_STYLE = stringPreferencesKey("language_picker_style")
         private val NUMERAL_SYSTEM_BY_LANG = stringPreferencesKey("numeral_system_by_lang")
         private val NUMERAL_COMMIT_SCOPE = stringPreferencesKey("numeral_commit_scope")
         private val SHIFT_ENTER_NEWLINE = booleanPreferencesKey("shift_enter_newline")
@@ -7133,6 +7151,9 @@ class SettingsRepository(private val context: Context) {
                 spacebarDisplay = p[SPACEBAR_DISPLAY]
                     ?.let { runCatching { SpacebarDisplay.valueOf(it) }.getOrNull() }
                     ?: defaults.layoutBehavior.spacebarDisplay,
+                languagePickerStyle = p[LANGUAGE_PICKER_STYLE]
+                    ?.let { runCatching { LanguagePickerStyle.valueOf(it) }.getOrNull() }
+                    ?: defaults.layoutBehavior.languagePickerStyle,
                 numeralSystemByLang = p[NUMERAL_SYSTEM_BY_LANG]
                     ?.let { decodeNumeralSystems(it) }
                     ?: defaults.layoutBehavior.numeralSystemByLang,
@@ -11234,6 +11255,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpacebarDisplay(value: SpacebarDisplay) =
         editPrefs { it[SPACEBAR_DISPLAY] = value.name }
+
+    suspend fun setLanguagePickerStyle(value: LanguagePickerStyle) =
+        editPrefs { it[LANGUAGE_PICKER_STYLE] = value.name }
 
     suspend fun setNumeralCommitScope(value: NumeralCommitScope) =
         editPrefs { it[NUMERAL_COMMIT_SCOPE] = value.name }

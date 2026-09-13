@@ -92,6 +92,7 @@ import com.wasimaster.wmkeyboard.core.settings.NumberGrouping
 import com.wasimaster.wmkeyboard.core.settings.RankControl
 import com.wasimaster.wmkeyboard.core.settings.SpaceSwipeAction
 import com.wasimaster.wmkeyboard.core.settings.WordMenuItem
+import com.wasimaster.wmkeyboard.core.settings.LanguagePickerStyle
 import com.wasimaster.wmkeyboard.core.settings.SpacebarDisplay
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import kotlin.math.roundToInt
@@ -1943,6 +1944,22 @@ internal fun TypingGesturesSettings(
                 selected = settings.layoutBehavior.spacebarDisplay,
                 default = SettingsDefaults.layoutBehavior.spacebarDisplay,
             ) { scope.launch { repository.setSpacebarDisplay(it) } }
+        }
+        item {
+            // Issue #150: the picker a long ring opens, as a list or a carousel.
+            ChoiceSetting(
+                R.string.typing_language_picker_style_title,
+                subtitle = stringResource(R.string.typing_language_picker_style_subtitle),
+                info = stringResource(R.string.typing_language_picker_style_info),
+                options = listOf(
+                    LanguagePickerStyle.LIST to
+                        stringResource(R.string.typing_language_picker_style_list_label),
+                    LanguagePickerStyle.CAROUSEL to
+                        stringResource(R.string.typing_language_picker_style_carousel_label),
+                ),
+                selected = settings.layoutBehavior.languagePickerStyle,
+                default = SettingsDefaults.layoutBehavior.languagePickerStyle,
+            ) { scope.launch { repository.setLanguagePickerStyle(it) } }
         }
         item {
             TextFieldSetting(

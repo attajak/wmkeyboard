@@ -393,6 +393,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Only when the hold is free — Skipped when the long-swipe slot names cursor or numpad, since that slot is the setting for what a hold does
     - Two shapes — Inline preview for up to 4 layouts, scrollable tappable list beyond that
     - Hold-drag walk — Vertical drag steps the highlighted row; release commits, a still hold leaves it up for tapping
+    - Carousel picker `RARE` — Language picker shape turns the list sideways: a chip strip centred on the current layout, the hold-drag walking it left and right by the swipe's own 44 dp step, the strip re-centring on the highlight; chips tappable, Other keyboards… a glyph past the divider (#150)
     - Never types a space — Release with the picker or preview up commits a layout instead
   - Spacebar long-press keys `RARE` — Characters typed into one setting become the spacebar's own alternates popup, on every layer
     - Claims the hold outright — Authored keys beat the language picker and the space repeat, because a hold cannot mean two things
@@ -873,6 +874,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Spacebar label modes — Language / Layout / Both, auto-falling back to both when two enabled layouts share a language
   - Hold-drag picker `RARE` — Hold the spacebar and walk a scrollable list without lifting
     - Threshold at four layouts — Inline preview at four or fewer, scrollable list above that
+    - List or carousel — Language picker shape (default List) picks the vertical list or the sideways strip; the threshold and the swipe slots are untouched by it (#150)
     - First movement absorbed as calibration — Drift from before the hold fired cannot select a neighbour
     - Held-but-unmoved leaves the list open — So it can be tapped directly
   - Language-switch key — Tap cycles layouts (not languages); long-press opens the picker

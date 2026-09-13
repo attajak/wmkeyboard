@@ -16,6 +16,8 @@ import androidx.compose.material.icons.outlined.SignalCellularAlt1Bar
 import androidx.compose.material.icons.outlined.SignalCellularAlt2Bar
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.automirrored.outlined.TrendingUp
+import androidx.compose.material.icons.automirrored.outlined.ViewList
+import androidx.compose.material.icons.outlined.ViewCarousel
 import com.wasimaster.wmkeyboard.core.vocab.VocabChipTap
 import com.wasimaster.wmkeyboard.core.vocab.VocabNudgeScope
 import com.wasimaster.wmkeyboard.core.vocab.VocabNudgeLevel
@@ -133,6 +135,7 @@ import com.wasimaster.wmkeyboard.core.settings.PowerSavingTrigger
 import com.wasimaster.wmkeyboard.core.settings.RotationInterval
 import com.wasimaster.wmkeyboard.core.settings.ScreenReaderMode
 import com.wasimaster.wmkeyboard.core.settings.SensitiveClipHandling
+import com.wasimaster.wmkeyboard.core.settings.LanguagePickerStyle
 import com.wasimaster.wmkeyboard.core.settings.SpaceSwipeAction
 import com.wasimaster.wmkeyboard.core.settings.SpacebarDisplay
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
@@ -340,6 +343,9 @@ internal object ChoiceOptionIcons {
         put(SpacebarDisplay.LANGUAGE) { Icons.Outlined.Language }
         put(SpacebarDisplay.LAYOUT) { Icons.Outlined.Keyboard }
         put(SpacebarDisplay.BOTH) { Icons.Outlined.AllInclusive }
+
+        put(LanguagePickerStyle.LIST) { Icons.AutoMirrored.Outlined.ViewList }
+        put(LanguagePickerStyle.CAROUSEL) { Icons.Outlined.ViewCarousel }
 
         put(BackspaceSwipeUnit.WORD) { Icons.AutoMirrored.Outlined.ShortText }
         put(BackspaceSwipeUnit.CHARACTER) { Icons.Outlined.Abc }

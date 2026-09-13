@@ -1,6 +1,6 @@
 ---
 title: "Switching languages"
-description: "Four ways to switch: spacebar swipe, hold-drag picker, globe key, system switcher."
+description: "Four ways to switch: spacebar swipe, hold-drag picker (list or carousel), globe key, system switcher."
 sidebar:
   order: 2
 ---
@@ -50,9 +50,19 @@ With that done, press and hold the spacebar. Shortly before the long-press delay
 
 Once the list is open, drag vertically to walk it one row at a time. The first bit of finger movement after the list appears is absorbed as calibration, so drift from before the hold fired never selects a neighbor by accident. Lift your finger after moving and the highlighted row is selected. Lift without moving at all and the list stays open, so you can tap the row you want.
 
+### Keeping the drag sideways: the carousel
+
+<SettingsPath path="Typing / Gestures / Language picker shape" />
+
+The list has one awkward side. The swipe that switches language moves left and right, but the list walks up and down, so the moment you have enough layouts to need it the same gesture changes direction on you. **Language picker shape** offers a **Carousel** instead of the list. It is the same picker turned sideways: one strip of chips above the spacebar, centred on the layout you are typing in, with the rest scrolling off either end.
+
+With the carousel on, a spacebar hold-drag walks left and right, one chip per 44dp, the same step the plain swipe uses, and the strip slides to keep the highlighted chip in the middle so your finger never has to chase it. Everything else about the hold is unchanged: the first bit of movement is still absorbed as calibration, lifting after a move selects the highlighted chip, and lifting without moving leaves the strip up so you can tap a chip or scroll it by hand. The 🌐 key's long press opens the same carousel.
+
+The setting ships on **List**, so nothing changes until you pick the carousel. It only decides what the picker looks like. The four-layout threshold above, and the quick-swipe slot, still decide whether the picker or the inline preview opens.
+
 A second setting takes this whole gesture away on purpose, the same way the hold + swipe slot does. Put characters into **Spacebar long press keys** under Typing → Gestures and the hold opens [your own popup](/typing/gestures/#your-own-keys-on-the-spacebar-long-press) instead of the picker, which is what you want if you type in one language and would rather have your emoji there. The globe key and the spacebar swipe still switch language. Clear the field to get the picker back.
 
-The last row, **Other keyboards…**, isn't a layout. It opens Android's own "Choose input method" sheet, which is how you hand the field to a different keyboard app entirely. It sits below the scrolling part of the list so it's always in reach however many layouts you have on, and the hold-drag walk skips it: it's a tap-only row.
+The last row, **Other keyboards…**, isn't a layout. It opens Android's own "Choose input method" sheet, which is how you hand the field to a different keyboard app entirely. It sits below the scrolling part of the list so it's always in reach however many layouts you have on, and the hold-drag walk skips it: it's a tap-only row. In the carousel it is the keyboard glyph past the divider at the strip's end, and the same rules apply.
 
 <PhoneFrame caption="More than four layouts enabled: holding the spacebar opens a scrollable list instead of the inline preview.">
   {/* shot: languages/hold-drag-picker-list */}
@@ -69,7 +79,7 @@ A fresh install replaces the bottom-row <KeyCap>🌐</KeyCap> key with an emoji 
 Turn this toggle off in <SettingsPath path="Layout & size / Bottom row keys" /> to get the language key back. With it off, the bottom-row key behaves as a dedicated language switcher:
 
 - **Tap** cycles to the next enabled *layout* (not language) in your switch order, wrapping from the last back to the first. Three layouts of the same language still count as three separate stops.
-- **Long-press** opens the same picker list used by the spacebar hold-drag, regardless of how many languages you have enabled.
+- **Long-press** opens the same picker the spacebar hold-drag uses (the list, or the carousel if you chose it), regardless of how many languages you have enabled.
 
 <PhoneFrame caption="Layout & size → Bottom row keys: turning off Emoji key instead of 🌐 restores the language-switch key.">
   {/* shot: languages/globe-key-toggle */}
@@ -135,6 +145,7 @@ A separate, unrelated toggle, **Remember language per app** (under Per-app langu
 | Press and hold, then swipe | Typing → Gestures | Cursor |
 | Arrows on the spacebar | Typing → Gestures | On |
 | The spacebar shows | Typing → Gestures | Language |
+| Language picker shape | Typing → Gestures | List |
 | Spacebar text | Typing → Gestures | Blank (live name) |
 | Spacebar long press keys | Typing → Gestures | Blank (the hold opens the picker) |
 | Show the 🌐 key | Layout & size → Bottom row keys | On |
@@ -152,7 +163,7 @@ A separate, unrelated toggle, **Remember language per app** (under Per-app langu
 - **A fresh install shows an emoji key where you might expect the globe.** It's the most common point of confusion with switching, and the callout above covers it. Switching itself is never disabled by the setting. Only the dedicated key's icon and behavior change.
 - **The globe key's tap cycles layouts, not languages.** If a language has three enabled layouts, tapping the key visits all three as separate stops rather than skipping straight to the next language.
 - **With exactly two layouts enabled, swiping toggles instead of wrap-cycling.** Piling on more drag distance in the same direction won't toggle a second time. Reverse direction and you start a fresh toggle. (The count that matters is enabled layouts, so two layouts of the same language toggle too.)
-- **A held-but-unmoved spacebar or globe-key long-press leaves the picker list open for a direct tap** rather than dismissing it. There's no need to drag precisely if you'd rather tap the language you want.
+- **A held-but-unmoved spacebar or globe-key long-press leaves the picker open for a direct tap** rather than dismissing it, list and carousel alike. There's no need to drag precisely if you'd rather tap the language you want.
 - **Reordering affects layouts, not languages.** If you've added a second layout for the same language (AZERTY alongside QWERTY, say), Switch order treats them as independent stops, and moving one doesn't move the other.
 - **A subtype that Android hasn't enabled stays invisible.** Registering is ours to do and enabling is Android's, and before Android 14 only you could bridge the gap. If the system sheet lists one language on an older phone, nothing is broken. Those languages just haven't been ticked in system settings yet.
 - **The Android system switcher and per-app memory are independent settings.** You can have Android list every layout as a subtype while per-app memory stays off, or the reverse. Turning one off doesn't touch the other.
