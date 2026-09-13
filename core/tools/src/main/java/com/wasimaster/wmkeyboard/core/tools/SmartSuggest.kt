@@ -61,6 +61,58 @@ object SmartSuggest {
     val narrowKinds: Set<Kind> = setOf(Kind.TOOL, Kind.LOOKUP, Kind.INTENT, Kind.VOCAB)
 
     /**
+     * A switch under Smart chips, as far as the tools behind it go. The
+     * settings screen asks [missingTools] so a switch that is on, with no tool
+     * left to hand off to, says so (#176) instead of reading on while nothing
+     * happens.
+     */
+    enum class Family { CALC, CURRENCY, UNITS, NUMBERS, DATES, WEATHER, LOOKUPS, TRANSLATE, GIFS }
+
+    /**
+     * Whether [family] still raises its chip with every tool it names switched
+     * off. The answer families do: the chip types its answer by itself, and
+     * only the gear button needs the tool. The rest have nothing to offer but
+     * the tool, so their detectors stay silent without it.
+     */
+    fun answersWithoutTool(family: Family): Boolean = when (family) {
+        Family.CALC, Family.CURRENCY, Family.UNITS, Family.NUMBERS -> true
+        Family.DATES, Family.WEATHER, Family.LOOKUPS, Family.TRANSLATE, Family.GIFS -> false
+    }
+
+    /**
+     * The tools [family] hands off to, one list per job it does. A job works
+     * while any tool of its list is on, and the first is the one to turn on:
+     * lookups do two jobs ("define" → Dictionary, "who is" → Wikipedia), and a
+     * celebration falls back from GIFs to stickers. The detectors check the
+     * same tools; `SmartSuggestTest` pins the two together.
+     */
+    fun toolsFor(family: Family): List<List<ToolbarTool>> = when (family) {
+        Family.CALC, Family.NUMBERS -> listOf(listOf(ToolbarTool.CALCULATOR))
+        Family.CURRENCY -> listOf(listOf(ToolbarTool.CURRENCY))
+        Family.UNITS -> listOf(listOf(ToolbarTool.UNIT_CONVERT))
+        Family.DATES -> listOf(listOf(ToolbarTool.CALENDAR))
+        Family.WEATHER -> listOf(listOf(ToolbarTool.WEATHER))
+        Family.LOOKUPS -> listOf(listOf(ToolbarTool.DICTIONARY), listOf(ToolbarTool.WIKIPEDIA))
+        Family.TRANSLATE -> listOf(listOf(ToolbarTool.TRANSLATE))
+        Family.GIFS -> listOf(listOf(ToolbarTool.GIF, ToolbarTool.STICKER))
+    }
+
+    /**
+     * One tool to turn on for each job of [family] that nothing in
+     * [enabledTools] can do: the first of its list that [canTurnOn] allows, so
+     * a build without GIFs points at stickers instead. A job with no such tool
+     * is left out, since there is nothing to offer.
+     */
+    fun missingTools(
+        family: Family,
+        enabledTools: Collection<ToolbarTool>,
+        canTurnOn: (ToolbarTool) -> Boolean = { true },
+    ): List<ToolbarTool> =
+        toolsFor(family)
+            .filter { job -> job.none { it in enabledTools } }
+            .mapNotNull { job -> job.firstOrNull(canTurnOn) }
+
+    /**
      * One way of drawing an answer chip, verbose first. The strip walks the
      * list until one fits its width: "1 thousand Dollar → 120,000.00 Taka",
      * then the result loses its ".00", then it rounds (a "~" marks a rounding

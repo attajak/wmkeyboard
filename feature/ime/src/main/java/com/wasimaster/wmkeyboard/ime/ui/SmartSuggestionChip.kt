@@ -68,6 +68,12 @@ internal fun SmartSuggestionChip(
     onOpen: () -> Unit,
     /** A hold on the face, for a chip with a second door (the vocabulary swap). */
     onLongPress: (() -> Unit)? = null,
+    /**
+     * False while [SmartSuggest.SmartHit.tool] is switched off. An answer chip
+     * still types its answer, but the gear would open nothing, so it is not
+     * drawn (#176).
+     */
+    canOpen: Boolean = true,
 ) {
     val kb = LocalKbTheme.current
     val feedback = LocalKeyPressFeedback.current
@@ -220,7 +226,7 @@ internal fun SmartSuggestionChip(
                 }
             }
         }
-        if (!keyword) {
+        if (!keyword && canOpen) {
             Box(
                 modifier = Modifier
                     .width(1.dp)

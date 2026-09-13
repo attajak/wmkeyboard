@@ -3106,6 +3106,10 @@ private fun TopBar(
                     hit = smart,
                     reduceMotion = state.settings.reduceMotion,
                     icon = toolIcon(smart.tool),
+                    // An answer chip still shows with its tool switched off,
+                    // and onToolTap would drop the gear's press without a word.
+                    canOpen = smart.tool in state.settings.enabledTools &&
+                        isSupportedTool(smart.tool) && isUsableTool(smart.tool, state.settings),
                     modifier = if (keywordChip) {
                         Modifier.padding(start = 4.dp)
                     } else {

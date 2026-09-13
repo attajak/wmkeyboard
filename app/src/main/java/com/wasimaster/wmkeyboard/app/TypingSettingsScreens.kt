@@ -61,6 +61,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.settings.usableTools
+import com.wasimaster.wmkeyboard.core.tools.SmartSuggest
 import com.wasimaster.wmkeyboard.core.tools.leaderLabel
 import androidx.compose.ui.unit.dp
 import android.os.Build
@@ -1238,6 +1240,7 @@ internal fun TypingSmartChipsSettings(
                     default = SettingsDefaults.smartCalc,
                 ) { scope.launch { repository.setSmartCalc(it) } }
             }
+            chipToolsOffItem(SmartSuggest.Family.CALC, settings.smartCalc, settings, repository)
             item {
                 ToggleSetting(
                     R.string.typing_smart_currency_title,
@@ -1246,6 +1249,7 @@ internal fun TypingSmartChipsSettings(
                     default = SettingsDefaults.smartCurrency,
                 ) { scope.launch { repository.setSmartCurrency(it) } }
             }
+            chipToolsOffItem(SmartSuggest.Family.CURRENCY, settings.smartCurrency, settings, repository)
             item {
                 ToggleSetting(
                     R.string.typing_smart_units_title,
@@ -1254,6 +1258,7 @@ internal fun TypingSmartChipsSettings(
                     default = SettingsDefaults.smartUnits,
                 ) { scope.launch { repository.setSmartUnits(it) } }
             }
+            chipToolsOffItem(SmartSuggest.Family.UNITS, settings.smartUnits, settings, repository)
             item {
                 ToggleSetting(
                     R.string.typing_smart_tool_keywords_title,
@@ -1271,6 +1276,7 @@ internal fun TypingSmartChipsSettings(
                     default = SettingsDefaults.smartChips.dates,
                 ) { scope.launch { repository.setSmartChipDates(it) } }
             }
+            chipToolsOffItem(SmartSuggest.Family.DATES, settings.smartChips.dates, settings, repository)
             item {
                 ToggleSetting(
                     R.string.typing_smart_weather_title,
@@ -1279,6 +1285,7 @@ internal fun TypingSmartChipsSettings(
                     default = SettingsDefaults.smartChips.weather,
                 ) { scope.launch { repository.setSmartChipWeather(it) } }
             }
+            chipToolsOffItem(SmartSuggest.Family.WEATHER, settings.smartChips.weather, settings, repository)
             item {
                 ToggleSetting(
                     R.string.typing_smart_lookups_title,
@@ -1287,6 +1294,7 @@ internal fun TypingSmartChipsSettings(
                     default = SettingsDefaults.smartChips.lookups,
                 ) { scope.launch { repository.setSmartChipLookups(it) } }
             }
+            chipToolsOffItem(SmartSuggest.Family.LOOKUPS, settings.smartChips.lookups, settings, repository)
             item {
                 ToggleSetting(
                     R.string.typing_smart_intents_title,
@@ -1295,6 +1303,7 @@ internal fun TypingSmartChipsSettings(
                     default = SettingsDefaults.smartChips.intents,
                 ) { scope.launch { repository.setSmartChipIntents(it) } }
             }
+            chipToolsOffItem(SmartSuggest.Family.TRANSLATE, settings.smartChips.intents, settings, repository)
             item {
                 ToggleSetting(
                     R.string.typing_smart_gifs_title,
@@ -1303,6 +1312,14 @@ internal fun TypingSmartChipsSettings(
                     default = SettingsDefaults.smartChips.gifs,
                 ) { scope.launch { repository.setSmartChipGifs(it) } }
             }
+            // Celebrations are read inside the translate hints (see chips.mdx),
+            // so with those off the GIF switch has no chips to warn about.
+            chipToolsOffItem(
+                SmartSuggest.Family.GIFS,
+                settings.smartChips.gifs && settings.smartChips.intents,
+                settings,
+                repository,
+            )
             item {
                 ToggleSetting(
                     R.string.typing_smart_numbers_title,
@@ -1312,6 +1329,7 @@ internal fun TypingSmartChipsSettings(
                     default = SettingsDefaults.smartChips.numbers,
                 ) { scope.launch { repository.setSmartChipNumbers(it) } }
             }
+            chipToolsOffItem(SmartSuggest.Family.NUMBERS, settings.smartChips.numbers, settings, repository)
             if (settings.smartChips.numbers) {
                 item {
                     ChoiceSetting(
@@ -1338,6 +1356,37 @@ internal fun TypingSmartChipsSettings(
                 }
             }
         }
+    }
+}
+
+/**
+ * Under a chip switch that is on: a banner when the tools its chips hand off
+ * to are switched off, naming them, with the one press that turns them on
+ * (#176). Without it the switch reads on while its chips never show, or show
+ * a gear that is not there, and nothing on either screen says why.
+ */
+private fun SettingsGroupScope.chipToolsOffItem(
+    family: SmartSuggest.Family,
+    switchOn: Boolean,
+    settings: KeyboardSettings,
+    repository: SettingsRepository,
+) {
+    if (!switchOn) return
+    // The keyboard gates on the usable set, so the banner asks the same one.
+    // A tool this build does not ship is no use to offer.
+    val missing = SmartSuggest.missingTools(family, usableTools(settings), canTurnOn = ::isSupportedTool)
+    if (missing.isEmpty()) return
+    item {
+        val scope = rememberCoroutineScope()
+        val names = missing.map { stringResource(toolTitle(it)) }
+        StateBanner(
+            text = when {
+                names.size > 1 -> stringResource(R.string.typing_smart_tools_off_hidden, names[0], names[1])
+                SmartSuggest.answersWithoutTool(family) -> stringResource(R.string.typing_smart_tool_off_gear, names[0])
+                else -> stringResource(R.string.typing_smart_tool_off_hidden, names[0])
+            },
+            action = stringResource(CommonR.string.common_enable),
+        ) { scope.launch { missing.forEach { repository.setToolEnabled(it, true) } } }
     }
 }
 

@@ -8,7 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 
-Smart chips watch the last 48 characters before your cursor. The moment that text looks like something a tool can answer, the answer lands on the suggestion strip in place of word candidates. Tap the chip to type the answer, or its gear button to open the full tool with the same numbers already loaded. A few chips have nothing to type and only ever open a tool. Those carry no gear, and the whole chip is the door.
+Smart chips watch the last 48 characters before your cursor. The moment that text looks like something a tool can answer, the answer lands on the suggestion strip in place of word candidates. Tap the chip to type the answer, or its gear button to open the full tool with the same numbers already loaded. A few chips have nothing to type and only ever open a tool. Those carry no gear, and the whole chip is the door. The gear also stays hidden while its tool is switched off under Tools, since there would be nothing for it to open.
 
 <PhoneFrame caption="Typing 12*8 puts a calc chip on the suggestion strip.">
   {/* shot: smart/calc-chip */}
@@ -78,7 +78,7 @@ Five more families watch for text that isn't a sum or a keyword but still sounds
 - **Translate hints.** `how do you say`, `translate this`, or `in spanish` (sixteen language names are recognised) offers the Translate tool. Narrow, and it leaves your text alone.
 - **GIFs for celebrations.** `happy birthday`, `congrats`, `eid mubarak`, `শুভ জন্মদিন` and a handful more offer a GIF search already pointed at the occasion. It falls back to the sticker panel when the GIF tool is off.
 
-All five only fire when the tool they would open is switched on under Tools. The narrow ones are hints rather than answers, so each gets one shot per field: once you type past a lookup or intent chip, that tool won't hint again until you move to another field. One wiring quirk is worth knowing. **GIFs for celebrations** sits inside **Translate hints** rather than beside it, so turning the translate hints off takes the celebration GIFs with them, while turning the GIFs off leaves translate alone.
+All five only fire when the tool they would open is switched on under Tools. If one of these switches is on while its tool is off, a note under the switch names the tool, with a **Turn on** button that switches it back on. The narrow ones are hints rather than answers, so each gets one shot per field: once you type past a lookup or intent chip, that tool won't hint again until you move to another field. One wiring quirk is worth knowing. **GIFs for celebrations** sits inside **Translate hints** rather than beside it, so turning the translate hints off takes the celebration GIFs with them, while turning the GIFs off leaves translate alone.
 
 ## Pulling fragments out of your clipboard
 

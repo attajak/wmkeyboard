@@ -337,6 +337,11 @@
     <string name="typing_smart_number_grouping_western_desc">Groups of three: 1,234,567</string>
     <string name="typing_smart_number_grouping_south_asian">Lakh and crore</string>
     <string name="typing_smart_number_grouping_south_asian_desc">Three digits, then twos: 12,34,567 and 1,00,000</string>
+    <!-- A banner under a smart chip switch that is on while the tool its chips open is off. -->
+    <string name="typing_smart_tool_off_hidden">The <xliff:g id="tool" example="Calendar">%1$s</xliff:g> tool is off, so its chips do not show</string>
+    <string name="typing_smart_tools_off_hidden">The <xliff:g id="tool" example="Dictionary">%1$s</xliff:g> and <xliff:g id="other_tool" example="Wikipedia">%2$s</xliff:g> tools are off, so their chips do not show</string>
+    <!-- The same banner for a chip that still types its answer, and only loses the button that opens the tool. -->
+    <string name="typing_smart_tool_off_gear">The <xliff:g id="tool" example="Calculator">%1$s</xliff:g> tool is off, so these chips have no button to open it</string>
 
     <!-- ==== Typing settings: one-time codes ==== -->
     <string name="typing_group_otp_title">One-time codes</string>

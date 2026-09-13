@@ -880,6 +880,56 @@ class SmartSuggestTest {
         assertNull(hit("how do you say", noTranslate))
     }
 
+    // ---- the tools behind each family (#176) ----
+
+    /** A trigger per family, with the context its chip shows in while every tool is on. */
+    private fun familyTrigger(family: SmartSuggest.Family): Pair<String, SmartSuggest.Context> = when (family) {
+        SmartSuggest.Family.CALC -> "12*4" to ctx
+        SmartSuggest.Family.CURRENCY -> "150 usd" to ctx
+        SmartSuggest.Family.UNITS -> "1 ft" to ctx
+        SmartSuggest.Family.NUMBERS -> "1234567" to ctx
+        SmartSuggest.Family.DATES -> "free tomorrow" to dateCtx
+        SmartSuggest.Family.WEATHER -> "will it rain" to ctx.copy(weather = weatherInfo())
+        SmartSuggest.Family.LOOKUPS -> "define serendipity" to ctx
+        SmartSuggest.Family.TRANSLATE -> "how do you say" to ctx
+        SmartSuggest.Family.GIFS -> "happy birthday" to ctx
+    }
+
+    @Test
+    fun everyFamilyNamesTheToolsItsDetectorNeeds() {
+        // The settings banner trusts toolsFor; a detector that checks another
+        // tool would make it tell the user to turn on the wrong one.
+        for (family in SmartSuggest.Family.entries) {
+            val (text, on) = familyTrigger(family)
+            assertNotNull("$family: no chip for \"$text\" with every tool on", hit(text, on))
+            val off = on.copy(enabledTools = ToolbarTool.entries - SmartSuggest.toolsFor(family).flatten().toSet())
+            if (SmartSuggest.answersWithoutTool(family)) {
+                assertNotNull("$family: an answer chip types without its tool", hit(text, off))
+            } else {
+                assertNull("$family: chip still shows with its tools off", hit(text, off))
+            }
+        }
+    }
+
+    @Test
+    fun missingToolsNamesOneToolPerJobNothingCanDo() {
+        val all = ToolbarTool.entries
+        assertEquals(emptyList<ToolbarTool>(), SmartSuggest.missingTools(SmartSuggest.Family.LOOKUPS, all))
+        assertEquals(
+            listOf(ToolbarTool.WIKIPEDIA),
+            SmartSuggest.missingTools(SmartSuggest.Family.LOOKUPS, all - ToolbarTool.WIKIPEDIA),
+        )
+        // Stickers still take a celebration, so GIFs off on its own is fine.
+        assertEquals(emptyList<ToolbarTool>(), SmartSuggest.missingTools(SmartSuggest.Family.GIFS, all - ToolbarTool.GIF))
+        val neither = all - ToolbarTool.GIF - ToolbarTool.STICKER
+        assertEquals(listOf(ToolbarTool.GIF), SmartSuggest.missingTools(SmartSuggest.Family.GIFS, neither))
+        // A tool the build cannot turn on gives way to the next one in its job.
+        assertEquals(
+            listOf(ToolbarTool.STICKER),
+            SmartSuggest.missingTools(SmartSuggest.Family.GIFS, neither, canTurnOn = { it != ToolbarTool.GIF }),
+        )
+    }
+
     // ---- number grouping ----
 
     private val bengaliDigits = "\u09E6\u09E7\u09E8\u09E9\u09EA\u09EB\u09EC\u09ED\u09EE\u09EF"
