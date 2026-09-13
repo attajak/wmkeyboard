@@ -54,6 +54,8 @@
     <string name="plugin_ide_version_action">Save a version</string>
     <string name="plugin_ide_version_saved_message">Version saved</string>
     <string name="plugin_ide_version_same_message">The code is the same as the last saved version</string>
+    <!-- Shown after Ctrl+S. The draft also saves itself after a pause in typing. -->
+    <string name="plugin_ide_saved_message">The draft is saved</string>
     <!-- %1$s is the version number of the plugin. -->
     <string name="plugin_ide_published_message">Version %1$s is installed</string>
     <!-- %1$s is the version number of the plugin. -->

@@ -3,13 +3,15 @@ package com.wasimaster.wmkeyboard.app
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.res.Configuration
 import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material.icons.automirrored.outlined.WrapText
 import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.ui.focus.FocusRequester
 import com.wasimaster.wmkeyboard.core.plugins.PluginFile
 import com.wasimaster.wmkeyboard.core.util.requireInputStream
 import com.wasimaster.wmkeyboard.core.util.requireOutputStream
@@ -95,7 +97,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -354,6 +355,8 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
     val suggestionBar = remember { CodeSuggestionBar() }
     var preludeLine by remember { mutableStateOf<Int?>(null) }
     var textSize by rememberSaveable { mutableStateOf(DEFAULT_TEXT_SIZE) }
+    // Wrapped at first: a phone is narrow, and a Lua line reads better whole than scrolled sideways.
+    var wrap by rememberSaveable { mutableStateOf(true) }
     var autoRun by rememberSaveable { mutableStateOf(true) }
     // The text the plugin last ran, typed or pressed, so a pause does not run it again.
     var lastRun by remember { mutableStateOf<String?>(null) }
@@ -476,6 +479,91 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
             )
         }
     }
+    val keyboard = hardwareKeyboardAttached()
+    val editorFocus = remember { FocusRequester() }
+    var findFocusRequests by remember { mutableIntStateOf(0) }
+    val openFind: (Boolean) -> Unit = { replace ->
+        val selection = editor.value.selection
+        val selected = editor.text.substring(selection.min, selection.max)
+        // A selection on one line becomes the query, the way VS Code fills its find widget.
+        if (selected.isNotEmpty() && '\n' !in selected) find.query = selected
+        if (replace) find.replacing = true
+        find.active = firstMatchFrom(findMatches(editor.text, find.query, find.options), selection.min)
+        findOpen = true
+        findFocusRequests++
+    }
+    val runPlugin: () -> Unit = {
+        lastRun = editor.text
+        preview.run(draftId, editor.text, ide.manifest)
+        if (panel == IdePanel.CLOSED) panel = IdePanel.PREVIEW
+    }
+    val goToDefinition: () -> Unit = {
+        val source = editor.text
+        val caret = editor.value.selection.min
+        scope.launch {
+            val span = withContext(Dispatchers.Default) {
+                LuaNavigation.definitionAt(LuaDocuments.of(source), caret)
+            }
+            if (span != null && editor.text == source) {
+                editor.select(TextRange(span.start, span.end))
+            } else {
+                snackbar.showSnackbar(context.getString(R.string.plugin_ide_no_definition_message))
+            }
+        }
+    }
+    val startRename: () -> Unit = {
+        val source = editor.text
+        val caret = editor.value.selection.min
+        scope.launch {
+            val plan = withContext(Dispatchers.Default) { renamePlanAt(source, caret) }
+            if (plan != null && editor.text == source) {
+                renamePlan = plan
+            } else {
+                snackbar.showSnackbar(context.getString(R.string.plugin_ide_no_rename_message))
+            }
+        }
+    }
+    // What a key asks of the screen rather than of the text. The keys are in CodeShortcuts.kt.
+    val onCommand: (CodeCommand) -> Boolean = command@{ command ->
+        when (command) {
+            CodeCommand.FIND -> openFind(false)
+            CodeCommand.REPLACE -> openFind(true)
+            CodeCommand.FIND_NEXT, CodeCommand.FIND_PREVIOUS -> when {
+                !findOpen -> openFind(false)
+                matches.isNotEmpty() -> {
+                    find.active = (find.active + if (command == CodeCommand.FIND_NEXT) 1 else -1).mod(matches.size)
+                    editor.select(matches[find.active])
+                }
+            }
+            CodeCommand.ESCAPE -> findOpen = false
+            CodeCommand.GO_TO_LINE -> lineOpen = true
+            CodeCommand.GO_TO_DEFINITION -> goToDefinition()
+            CodeCommand.RENAME -> startRename()
+            CodeCommand.GO_TO_SYMBOL -> panel = IdePanel.OUTLINE
+            CodeCommand.FORMAT -> editor.replace(LuaCode.format(editor.text))
+            CodeCommand.TOGGLE_WRAP -> wrap = !wrap
+            CodeCommand.ZOOM_IN -> textSize = (textSize + 1).coerceAtMost(MAX_TEXT_SIZE)
+            CodeCommand.ZOOM_OUT -> textSize = (textSize - 1).coerceAtLeast(MIN_TEXT_SIZE)
+            CodeCommand.ZOOM_RESET -> textSize = DEFAULT_TEXT_SIZE
+            // The draft saves itself after a pause; Ctrl+S saves it now and says so.
+            CodeCommand.SAVE -> {
+                val current = editor.text
+                scope.launch {
+                    withContext(Dispatchers.IO) { ide.save(current) }
+                    snackbar.showSnackbar(context.getString(R.string.plugin_ide_saved_message))
+                }
+            }
+            CodeCommand.RUN -> runPlugin()
+            CodeCommand.STOP -> preview.stop()
+            CodeCommand.NEXT_PROBLEM, CodeCommand.PREVIOUS_PROBLEM ->
+                nextProblem(diagnostics.map { it.range }, editor.value.selection.min, command == CodeCommand.NEXT_PROBLEM)?.let(editor::select)
+            CodeCommand.SHOW_PROBLEMS -> panel = if (panel == IdePanel.PROBLEMS) IdePanel.CLOSED else IdePanel.PROBLEMS
+            CodeCommand.SHOW_CONSOLE -> panel = if (panel == IdePanel.CONSOLE) IdePanel.CLOSED else IdePanel.CONSOLE
+            CodeCommand.SHOW_COMMANDS -> menuOpen = true
+            else -> return@command false
+        }
+        true
+    }
     // Back closes the find bar before it leaves the screen. Nothing else waits
     // for Back: the draft is saved, so leaving never loses a character.
     BackHandler(enabled = findOpen) { findOpen = false }
@@ -495,13 +583,7 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                 actions = {
                     val running = previewState.status == PluginPreviewSession.Status.RUNNING
                     IconButton(onClick = {
-                        if (running) {
-                            preview.stop()
-                        } else {
-                            lastRun = editor.text
-                            preview.run(draftId, editor.text, ide.manifest)
-                            if (panel == IdePanel.CLOSED) panel = IdePanel.PREVIEW
-                        }
+                        if (running) preview.stop() else runPlugin()
                     }) {
                         Icon(
                             if (running) Icons.Outlined.Stop else Icons.Outlined.PlayArrow,
@@ -524,15 +606,16 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.plugin_ide_find_action)) },
                                 leadingIcon = { Icon(Icons.Outlined.FindReplace, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.FIND),
                                 onClick = {
                                     menuOpen = false
-                                    find.active = firstMatchFrom(findMatches(editor.text, find.query, find.options), editor.value.selection.min)
-                                    findOpen = true
+                                    openFind(false)
                                 },
                             )
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.plugin_ide_go_to_line_action)) },
                                 leadingIcon = { Icon(Icons.Outlined.FormatListNumbered, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.GO_TO_LINE),
                                 onClick = {
                                     menuOpen = false
                                     lineOpen = true
@@ -541,37 +624,19 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.plugin_ide_definition_action)) },
                                 leadingIcon = { Icon(Icons.Outlined.DataObject, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.GO_TO_DEFINITION),
                                 onClick = {
                                     menuOpen = false
-                                    val source = editor.text
-                                    val caret = editor.value.selection.min
-                                    scope.launch {
-                                        val span = withContext(Dispatchers.Default) {
-                                            LuaNavigation.definitionAt(LuaDocuments.of(source), caret)
-                                        }
-                                        if (span != null && editor.text == source) {
-                                            editor.select(TextRange(span.start, span.end))
-                                        } else {
-                                            snackbar.showSnackbar(context.getString(R.string.plugin_ide_no_definition_message))
-                                        }
-                                    }
+                                    goToDefinition()
                                 },
                             )
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.plugin_ide_rename_action)) },
                                 leadingIcon = { Icon(Icons.Outlined.DriveFileRenameOutline, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.RENAME),
                                 onClick = {
                                     menuOpen = false
-                                    val source = editor.text
-                                    val caret = editor.value.selection.min
-                                    scope.launch {
-                                        val plan = withContext(Dispatchers.Default) { renamePlanAt(source, caret) }
-                                        if (plan != null && editor.text == source) {
-                                            renamePlan = plan
-                                        } else {
-                                            snackbar.showSnackbar(context.getString(R.string.plugin_ide_no_rename_message))
-                                        }
-                                    }
+                                    startRename()
                                 },
                             )
                             DropdownMenuItem(
@@ -603,18 +668,30 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.plugin_ide_text_larger_action)) },
                                 leadingIcon = { Icon(Icons.Outlined.TextIncrease, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.ZOOM_IN),
                                 enabled = textSize < MAX_TEXT_SIZE,
                                 onClick = { textSize = (textSize + 1).coerceAtMost(MAX_TEXT_SIZE) },
                             )
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.plugin_ide_text_smaller_action)) },
                                 leadingIcon = { Icon(Icons.Outlined.TextDecrease, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.ZOOM_OUT),
                                 enabled = textSize > MIN_TEXT_SIZE,
                                 onClick = { textSize = (textSize - 1).coerceAtLeast(MIN_TEXT_SIZE) },
                             )
                             DropdownMenuItem(
+                                text = { Text(stringResource(if (wrap) R.string.code_wrap_off_desc else R.string.code_wrap_on_desc)) },
+                                leadingIcon = { Icon(Icons.AutoMirrored.Outlined.WrapText, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.TOGGLE_WRAP),
+                                onClick = {
+                                    menuOpen = false
+                                    wrap = !wrap
+                                },
+                            )
+                            DropdownMenuItem(
                                 text = { Text(stringResource(R.string.plugin_ide_fold_all_action)) },
                                 leadingIcon = { Icon(Icons.Outlined.UnfoldLess, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.FOLD_ALL),
                                 onClick = {
                                     menuOpen = false
                                     editor.foldAll(LuaCode.foldRegions(editor.text).map { it.min })
@@ -623,6 +700,7 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.plugin_ide_unfold_all_action)) },
                                 leadingIcon = { Icon(Icons.Outlined.UnfoldMore, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.UNFOLD_ALL),
                                 enabled = editor.foldStarts.isNotEmpty(),
                                 onClick = {
                                     menuOpen = false
@@ -640,6 +718,7 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.plugin_ide_format_action)) },
                                 leadingIcon = { Icon(Icons.Outlined.AutoFixHigh, contentDescription = null) },
+                                trailingIcon = shortcutSlot(keyboard, CodeCommand.FORMAT),
                                 onClick = {
                                     menuOpen = false
                                     editor.replace(LuaCode.format(editor.text))
@@ -708,6 +787,12 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                         replaceAllMatches(editor.text, current, find.replacement, find.query, find.options)?.let(editor::applyEdit)
                     },
                     onClose = { findOpen = false },
+                    onEscape = {
+                        findOpen = false
+                        editorFocus.requestFocus()
+                    },
+                    onCommand = onCommand,
+                    focusRequests = findFocusRequests,
                 )
             }
             CodeSurface(
@@ -716,7 +801,7 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                 modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 8.dp, vertical = 4.dp),
                 lineStarts = lineStarts,
                 decorations = decorations,
-                wrap = true,
+                wrap = wrap,
                 fontSize = textSize.sp,
                 lineHeight = (textSize * LINE_HEIGHT_RATIO).sp,
                 completions = true,
@@ -728,6 +813,8 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                 folding = true,
                 suggestionBar = suggestionBar,
                 reduceMotion = reduceMotion,
+                onCommand = onCommand,
+                focusRequester = editorFocus,
             )
             apiHere?.let { ApiDocStrip(it, rememberCodeColors()) }
             IdePanelBar(panel, problems = diagnostics.size) { chosen -> panel = if (panel == chosen) IdePanel.CLOSED else chosen }
@@ -749,10 +836,7 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
             }
             // At the bottom, so it sits against the soft keyboard whether or not the
             // panel is open. A hardware keyboard has its own keys for all of it.
-            val configuration = LocalConfiguration.current
-            val hardwareKeyboard = configuration.keyboard != Configuration.KEYBOARD_NOKEYS &&
-                configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO
-            if (!hardwareKeyboard && showKeys) {
+            if (!keyboard && showKeys) {
                 CodeAccessoryRow(
                     state = editor,
                     colors = rememberCodeColors(),

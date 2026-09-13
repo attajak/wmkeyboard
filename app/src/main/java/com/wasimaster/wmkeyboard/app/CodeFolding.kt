@@ -147,3 +147,23 @@ internal fun foldableStarts(text: String, regions: List<TextRange>, lineStarts: 
     }
     return lines
 }
+
+/**
+ * The block Ctrl+Shift+[ folds: the innermost open one that starts on the caret's
+ * line or holds the caret, and has a whole line to hide.
+ */
+internal fun foldToClose(text: String, regions: List<TextRange>, folded: Set<Int>, caret: Int): TextRange? {
+    val line = lineRangeAt(text, caret)
+    return regions
+        .filter { it.min !in folded && (it.min in line.min..line.max || caret in it.min..it.max) && hiddenRangeOf(text, it) != null }
+        .minByOrNull { it.length }
+}
+
+/** The start of the fold Ctrl+Shift+] opens: the innermost folded block on the caret's line or round the caret. */
+internal fun foldToOpen(text: String, regions: List<TextRange>, folded: Set<Int>, caret: Int): Int? {
+    val line = lineRangeAt(text, caret)
+    return regions
+        .filter { it.min in folded && (it.min in line.min..line.max || caret in it.min..it.max) }
+        .minByOrNull { it.length }
+        ?.min
+}

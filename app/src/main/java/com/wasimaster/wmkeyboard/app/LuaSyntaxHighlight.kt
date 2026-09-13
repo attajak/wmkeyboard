@@ -45,6 +45,8 @@ internal object LuaCode : CodeLanguage {
 
     override val lineComment: String get() = "--"
 
+    override val blockComment: Pair<String, String> get() = "--[[" to "]]"
+
     override val smartRules: CodeSmartRules get() = LuaSmartRules
 
     /**

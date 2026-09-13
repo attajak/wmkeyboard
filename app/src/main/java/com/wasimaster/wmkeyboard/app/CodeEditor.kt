@@ -69,6 +69,10 @@ internal interface CodeLanguage {
     val lineComment: String?
         get() = null
 
+    /** What opens and closes a block comment, or null for a language that has none. */
+    val blockComment: Pair<String, String>?
+        get() = null
+
     /** How a typed bracket, quote or line break behaves. */
     val smartRules: CodeSmartRules
         get() = CodeSmartRules.Json
@@ -287,7 +291,7 @@ internal fun rememberCodeColors(): CodeColors {
 
 private const val UNDO_DEPTH = 100
 private const val COALESCE_MS = 700L
-private const val INDENT = "  "
+private val INDENT = " ".repeat(CODE_TAB_STOP)
 
 /**
  * What the editor holds: the text, where the caret is, and enough history to
@@ -414,12 +418,13 @@ internal class CodeEditorState(
 
     /**
      * Tab and Shift+Tab. With no selection, Tab is two spaces. With one, it
-     * moves every line the selection touches in or out by one step.
+     * moves every line the selection touches in or out by one step, and so
+     * does [wholeLines] with none, as Ctrl+] does.
      */
-    fun shiftLines(levels: Int) {
+    fun shiftLines(levels: Int, wholeLines: Boolean = false) {
         val current = value
         val selection = current.selection
-        if (levels > 0 && selection.collapsed) {
+        if (levels > 0 && selection.collapsed && !wholeLines) {
             edit(
                 TextFieldValue(
                     text = current.text.substring(0, selection.end) + INDENT + current.text.substring(selection.end),

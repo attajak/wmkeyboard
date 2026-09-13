@@ -38,6 +38,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
@@ -45,6 +46,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -58,6 +61,7 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isAltPressed
 import androidx.compose.ui.input.key.isCtrlPressed
 import androidx.compose.ui.input.key.isMetaPressed
 import androidx.compose.ui.input.key.isShiftPressed
@@ -67,6 +71,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.InterceptPlatformTextInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.PlatformTextInputInterceptor
 import androidx.compose.ui.platform.PlatformTextInputMethodRequest
@@ -191,7 +196,13 @@ internal fun CodeSurface(
     fontSize: TextUnit = 13.sp,
     lineHeight: TextUnit = 20.sp,
     bottomPad: Dp = CONTENT_PAD,
-    extraKeys: (KeyEvent) -> Boolean = { false },
+    /**
+     * Runs a screen command a key asked for, such as Ctrl+F or F5, and says whether
+     * the screen has one. The field runs the editing commands itself.
+     */
+    onCommand: (CodeCommand) -> Boolean = { false },
+    /** Lets the screen give the keys back to the field, as closing the find bar with Esc does. */
+    focusRequester: FocusRequester? = null,
     /** Whether to ask [language] for suggestions as the author types, and list them at the caret. */
     completions: Boolean = false,
     /** Raised by one to ask for suggestions at the caret even with no word typed, as Ctrl+Space does. */
@@ -332,31 +343,6 @@ internal fun CodeSurface(
         suggestions = withContext(Dispatchers.Default) { language.completions(source, at, explicit = true) }
         chosen = 0
     }
-    val keys: (KeyEvent) -> Boolean = remember(extraKeys, language, completions, state) {
-        keys@{ event ->
-            val shown = suggestions
-            if (event.type == KeyEventType.KeyDown && shown != null && shown.items.isNotEmpty()) {
-                val size = shown.items.size
-                when (event.key) {
-                    Key.DirectionDown -> { chosen = (chosen + 1) % size; return@keys true }
-                    Key.DirectionUp -> { chosen = (chosen - 1 + size) % size; return@keys true }
-                    Key.Enter, Key.Tab -> { shown.items.getOrNull(chosen)?.let(choose); return@keys true }
-                    Key.Escape -> { suggestions = null; return@keys true }
-                }
-            }
-            if (completions && event.type == KeyEventType.KeyDown && event.key == Key.Spacebar && event.isCtrlPressed) {
-                val source = state.text
-                val at = state.value.selection.end
-                scope.launch {
-                    suggestions = withContext(Dispatchers.Default) { language.completions(source, at, explicit = true) }
-                    chosen = 0
-                }
-                return@keys true
-            }
-            extraKeys(event)
-        }
-    }
-
     // Wrapped text has nothing to the right, so a stale sideways scroll would
     // only hide the left margin.
     LaunchedEffect(wrap) { if (wrap) horizontal.scrollTo(0) }
@@ -402,6 +388,157 @@ internal fun CodeSurface(
     }
     LaunchedEffect(caret, text, revealAgain) { revealCaret() }
     LaunchedEffect(frame.height) { if (focused) revealCaret() }
+
+    // Keys. The handler is made once and reads the newest of everything through
+    // these, so the field is not handed a new one on every change of the text.
+    val latestRegions by rememberUpdatedState(regions)
+    val latestBrackets by rememberUpdatedState(brackets)
+    val latestFoldMap by rememberUpdatedState(foldMap)
+    val latestOnCommand by rememberUpdatedState(onCommand)
+    val latestLineHeight by rememberUpdatedState(with(density) { lineHeight.toPx() })
+    val context = LocalContext.current
+    val keys: (KeyEvent) -> Boolean = remember(language, completions, state) {
+        val chords = CodeKeyChords()
+        // The line cut or copy took with nothing selected, so paste can put it back as a line.
+        var lineClip: String? = null
+        // The selections Shift+Alt+Right grew from, and the one it grew to last, for Shift+Alt+Left.
+        val grownFrom = ArrayList<TextRange>()
+        var grownTo: TextRange? = null
+
+        fun moveCaret(to: Int, select: Boolean) {
+            val selection = state.value.selection
+            state.select(if (select) TextRange(selection.start, to) else TextRange(to))
+        }
+
+        // The field is as tall as the document, so its own Page Up and Page Down go
+        // to the ends. A page here is the frame the code is seen through.
+        fun page(down: Boolean, select: Boolean): Boolean {
+            val result = layout.value ?: return false
+            val map = latestFoldMap
+            val at = state.value.selection.end.coerceIn(0, state.text.length)
+            val box = result.getCursorRect((map?.originalToTransformed(at) ?: at).coerceIn(0, result.layoutInput.text.length))
+            val step = (frame.height - latestLineHeight).coerceAtLeast(latestLineHeight) * if (down) 1 else -1
+            val y = (box.center.y + step).coerceIn(0f, (result.size.height - 1).coerceAtLeast(0).toFloat())
+            val landed = result.getOffsetForPosition(Offset(box.left, y))
+            moveCaret(map?.transformedToOriginal(landed) ?: landed, select)
+            vertical.dispatchRawDelta(step)
+            return true
+        }
+
+        fun runCommand(command: CodeCommand): Boolean {
+            val text = state.text
+            val selection = state.value.selection
+            val caret = selection.end.coerceIn(0, text.length)
+            when (command) {
+                CodeCommand.INDENT ->
+                    if (tabShiftsLines(text, selection)) state.shiftLines(1) else state.applyEdit(insertIndent(text, selection))
+                CodeCommand.OUTDENT, CodeCommand.OUTDENT_LINES -> state.shiftLines(-1)
+                CodeCommand.INDENT_LINES -> state.shiftLines(1, wholeLines = true)
+                CodeCommand.UNDO -> state.undo()
+                CodeCommand.REDO -> state.redo()
+                CodeCommand.TOGGLE_LINE_COMMENT -> {
+                    val marker = language.lineComment ?: return false
+                    state.applyEdit(toggleLineComment(text, selection, marker))
+                }
+                CodeCommand.TOGGLE_BLOCK_COMMENT -> {
+                    val (open, close) = language.blockComment ?: return false
+                    state.applyEdit(toggleBlockComment(text, selection, open, close))
+                }
+                CodeCommand.MOVE_LINES_UP -> moveLines(text, selection, -1)?.let(state::applyEdit)
+                CodeCommand.MOVE_LINES_DOWN -> moveLines(text, selection, 1)?.let(state::applyEdit)
+                CodeCommand.COPY_LINES_UP -> state.applyEdit(copyLines(text, selection, up = true))
+                CodeCommand.COPY_LINES_DOWN -> state.applyEdit(copyLines(text, selection, up = false))
+                CodeCommand.DELETE_LINES -> state.applyEdit(deleteLines(text, selection))
+                CodeCommand.INSERT_LINE_BELOW -> state.applyEdit(insertLine(text, selection, above = false))
+                CodeCommand.INSERT_LINE_ABOVE -> state.applyEdit(insertLine(text, selection, above = true))
+                CodeCommand.CUT, CodeCommand.COPY -> {
+                    if (!selection.collapsed) {
+                        lineClip = null
+                        return false
+                    }
+                    val clip = lineText(text, caret)
+                    copyCode(context, clip)
+                    lineClip = clip
+                    if (command == CodeCommand.CUT) state.applyEdit(deleteLines(text, selection))
+                }
+                CodeCommand.PASTE -> {
+                    val clip = lineClip
+                    if (clip == null || !selection.collapsed || pasteCode(context) != clip) return false
+                    state.applyEdit(pasteLines(text, caret, clip))
+                }
+                CodeCommand.HOME, CodeCommand.SELECT_HOME -> moveCaret(smartHome(text, caret), command == CodeCommand.SELECT_HOME)
+                CodeCommand.DOCUMENT_START, CodeCommand.SELECT_DOCUMENT_START ->
+                    moveCaret(0, command == CodeCommand.SELECT_DOCUMENT_START)
+                CodeCommand.DOCUMENT_END, CodeCommand.SELECT_DOCUMENT_END ->
+                    moveCaret(text.length, command == CodeCommand.SELECT_DOCUMENT_END)
+                CodeCommand.PAGE_UP, CodeCommand.SELECT_PAGE_UP -> return page(down = false, select = command == CodeCommand.SELECT_PAGE_UP)
+                CodeCommand.PAGE_DOWN, CodeCommand.SELECT_PAGE_DOWN -> return page(down = true, select = command == CodeCommand.SELECT_PAGE_DOWN)
+                CodeCommand.SCROLL_LINE_UP -> vertical.dispatchRawDelta(-latestLineHeight)
+                CodeCommand.SCROLL_LINE_DOWN -> vertical.dispatchRawDelta(latestLineHeight)
+                CodeCommand.SELECT_LINE -> state.select(expandLineSelection(text, selection))
+                CodeCommand.EXPAND_SELECTION -> expandSelection(text, selection, latestRegions)?.let { next ->
+                    if (grownTo != selection) grownFrom.clear()
+                    grownFrom += selection
+                    grownTo = next
+                    state.select(next)
+                }
+                CodeCommand.SHRINK_SELECTION -> if (grownTo == selection && grownFrom.isNotEmpty()) {
+                    val back = grownFrom.removeAt(grownFrom.lastIndex)
+                    grownTo = back
+                    state.select(back)
+                }
+                CodeCommand.JUMP_TO_BRACKET -> {
+                    val brackets = latestBrackets
+                    val to = bracketJump(text, brackets, caret) { at -> language.matchingBracket(text, brackets, at) } ?: return false
+                    state.moveTo(to)
+                }
+                CodeCommand.FOLD -> foldToClose(text, latestRegions, state.foldStarts, caret)?.let { region ->
+                    // The caret leaves the lines the fold hides, or the fold would open again round it.
+                    val hidden = hiddenRangeOf(text, region)
+                    if (hidden != null && selection.max > hidden.min && selection.min < hidden.max) state.moveTo(hidden.min)
+                    state.toggleFold(region.min)
+                }
+                CodeCommand.UNFOLD -> foldToOpen(text, latestRegions, state.foldStarts, caret)?.let(state::unfold)
+                CodeCommand.FOLD_ALL -> state.foldAll(latestRegions.map { it.min })
+                CodeCommand.UNFOLD_ALL -> state.unfoldAll()
+                CodeCommand.SUGGEST -> {
+                    if (!completions) return false
+                    scope.launch {
+                        suggestions = withContext(Dispatchers.Default) { language.completions(text, caret, explicit = true) }
+                        chosen = 0
+                    }
+                }
+                else -> return false
+            }
+            return true
+        }
+
+        keys@{ event ->
+            val shown = suggestions
+            if (event.type == KeyEventType.KeyDown && shown != null && shown.items.isNotEmpty()) {
+                val size = shown.items.size
+                when (event.key) {
+                    Key.DirectionDown -> { chosen = (chosen + 1) % size; return@keys true }
+                    Key.DirectionUp -> { chosen = (chosen - 1 + size) % size; return@keys true }
+                    Key.Enter, Key.Tab -> { shown.items.getOrNull(chosen)?.let(choose); return@keys true }
+                    Key.Escape -> { suggestions = null; return@keys true }
+                }
+            }
+            // Esc is taken on its way up as well: one let through would come back from
+            // the system as Back and close the editor.
+            if (event.type != KeyEventType.KeyDown) return@keys event.key == Key.Escape
+            val ctrl = event.isCtrlPressed || event.isMetaPressed
+            when (val command = chords.map(event.key, ctrl, event.isShiftPressed, event.isAltPressed)) {
+                null -> false
+                CodeCommand.CHORD -> true
+                CodeCommand.ESCAPE -> {
+                    latestOnCommand(command)
+                    true
+                }
+                else -> if (command.scope == CodeCommand.Scope.SCREEN) latestOnCommand(command) else runCommand(command)
+            }
+        }
+    }
     Box(
         modifier
             .clip(shape)
@@ -494,7 +631,7 @@ internal fun CodeSurface(
                 // longest line has nothing to wrap, and one as wide as the
                 // viewport wraps everything. The legacy field has no
                 // softWrap of its own.
-                CodeField(state, style, colors, painter, if (wrap) room else contentWidth, keys, onFocus = { focused = it }) {
+                CodeField(state, style, colors, painter, if (wrap) room else contentWidth, keys, focusRequester, onFocus = { focused = it }) {
                     layout.value = it
                 }
             }
@@ -586,7 +723,8 @@ private fun CodeField(
     colors: CodeColors,
     painter: VisualTransformation,
     width: Dp,
-    extraKeys: (KeyEvent) -> Boolean,
+    onKey: (KeyEvent) -> Boolean,
+    focusRequester: FocusRequester?,
     onFocus: (Boolean) -> Unit,
     onLayout: (TextLayoutResult) -> Unit,
 ) {
@@ -605,23 +743,11 @@ private fun CodeField(
                 keyboardOptions = CodeKeyboardOptions,
                 modifier = Modifier
                     .width(width)
+                    .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
                     .onFocusChanged { onFocus(it.isFocused) }
-                    .onPreviewKeyEvent { event -> extraKeys(event) || handleEditorKey(event, state) },
+                    .onPreviewKeyEvent(onKey),
             )
         }
-    }
-}
-
-/** Tab, Shift+Tab and the undo pair, for a device with a hardware keyboard. */
-private fun handleEditorKey(event: KeyEvent, state: CodeEditorState): Boolean {
-    if (event.type != KeyEventType.KeyDown) return false
-    val command = event.isCtrlPressed || event.isMetaPressed
-    return when {
-        event.key == Key.Tab -> { state.shiftLines(if (event.isShiftPressed) -1 else 1); true }
-        command && event.key == Key.Z && event.isShiftPressed -> { state.redo(); true }
-        command && event.key == Key.Z -> { state.undo(); true }
-        command && event.key == Key.Y -> { state.redo(); true }
-        else -> false
     }
 }
 

@@ -207,3 +207,176 @@ private fun leading(line: String): Int {
 private fun isWordChar(character: Char): Boolean = character.isLetterOrDigit() || character == '_'
 
 private fun isBlank(character: Char): Boolean = character == ' ' || character == '\t'
+
+// ---------------------------------------------------------------------------
+// The edits behind the keys. See CodeShortcuts.kt for which key runs which.
+// ---------------------------------------------------------------------------
+
+/** How many columns apart the indent stops are: the width of one step of [CodeEditorState.shiftLines]. */
+internal const val CODE_TAB_STOP = 2
+
+/**
+ * Whether Tab moves whole lines in rather than typing indentation: when the
+ * selection crosses a line break or covers one whole line, as VS Code decides it.
+ * A caret, or part of one line, gets spaces typed over it instead.
+ */
+internal fun tabShiftsLines(text: String, selection: TextRange): Boolean {
+    if (selection.collapsed) return false
+    val line = lineRangeAt(text, selection.min)
+    return selection.max > line.max || (selection.min == line.min && selection.max == line.max)
+}
+
+/** Spaces from the caret to the next indent stop, typed over [selection]. */
+internal fun insertIndent(text: String, selection: TextRange): CodeTextEdit {
+    val column = selection.min - lineRangeAt(text, selection.min).min
+    val spaces = " ".repeat(CODE_TAB_STOP - column % CODE_TAB_STOP)
+    return CodeTextEdit(TextRange(selection.min, selection.max), spaces, TextRange(selection.min + spaces.length))
+}
+
+/**
+ * Removes every line [selection] touches with its line break, the one after it
+ * or, for the last line, the one before. The caret keeps its column on the line
+ * that takes their place.
+ */
+internal fun deleteLines(text: String, selection: TextRange): CodeTextEdit {
+    val block = blockOf(text, selection)
+    val column = selection.end - lineRangeAt(text, selection.end).min
+    val range = when {
+        block.max < text.length -> TextRange(block.min, block.max + 1)
+        block.min > 0 -> TextRange(block.min - 1, block.max)
+        else -> TextRange(0, text.length)
+    }
+    val next = text.substring(0, range.min) + text.substring(range.max)
+    val line = lineRangeAt(next, range.min.coerceAtMost(next.length))
+    return CodeTextEdit(range, "", TextRange(line.min + column.coerceAtMost(line.length)))
+}
+
+/** An empty line below the caret's line, or above it, indented like it, with the caret on it. */
+internal fun insertLine(text: String, selection: TextRange, above: Boolean): CodeTextEdit {
+    val line = lineRangeAt(text, selection.end)
+    val indent = text.substring(line.min, line.min + leading(text.substring(line.min, line.max)))
+    return if (above) {
+        CodeTextEdit(TextRange(line.min), indent + "\n", TextRange(line.min + indent.length))
+    } else {
+        CodeTextEdit(TextRange(line.max), "\n" + indent, TextRange(line.max + 1 + indent.length))
+    }
+}
+
+/**
+ * Copies every line [selection] touches in beside itself. Going [up], the caret
+ * stays on the upper copy; going down it moves to the lower one.
+ */
+internal fun copyLines(text: String, selection: TextRange, up: Boolean): CodeTextEdit {
+    if (!up) return duplicateLines(text, selection)
+    val block = blockOf(text, selection)
+    return CodeTextEdit(TextRange(block.max), "\n" + text.substring(block.min, block.max), selection)
+}
+
+/** Ctrl+L: the lines [selection] touches with the break after them, so each press takes one more line. */
+internal fun expandLineSelection(text: String, selection: TextRange): TextRange {
+    val start = lineRangeAt(text, selection.min).min
+    val end = lineRangeAt(text, selection.max).max
+    return TextRange(start, if (end < text.length) end + 1 else end)
+}
+
+/** Home: the first character of the line that is not indentation, or the start of the line when the caret is on it. */
+internal fun smartHome(text: String, offset: Int): Int {
+    val line = lineRangeAt(text, offset)
+    val written = line.min + leading(text.substring(line.min, line.max))
+    return if (offset == written) line.min else written
+}
+
+/** What cut or copy takes with nothing selected: the caret's whole line, ending in a line break. */
+internal fun lineText(text: String, offset: Int): String {
+    val line = lineRangeAt(text, offset)
+    return text.substring(line.min, line.max) + "\n"
+}
+
+/** A whole line copied with nothing selected goes in above the caret's line, and the caret stays on its text. */
+internal fun pasteLines(text: String, offset: Int, clip: String): CodeTextEdit {
+    val line = lineRangeAt(text, offset)
+    return CodeTextEdit(TextRange(line.min), clip, TextRange(offset + clip.length))
+}
+
+/**
+ * Puts [open] and [close] round [selection], or takes them off when the selection
+ * holds them or sits just inside them. With nothing selected they go in round the
+ * caret, which is left between them.
+ */
+internal fun toggleBlockComment(text: String, selection: TextRange, open: String, close: String): CodeTextEdit {
+    val inner = text.substring(selection.min, selection.max)
+    val trimmed = inner.trim()
+    if (trimmed.length >= open.length + close.length && trimmed.startsWith(open) && trimmed.endsWith(close)) {
+        val lead = inner.indexOf(open)
+        val trail = inner.lastIndexOf(close)
+        val body = inner.substring(lead + open.length, trail).removePrefix(" ").removeSuffix(" ")
+        val replaced = inner.substring(0, lead) + body + inner.substring(trail + close.length)
+        return CodeTextEdit(TextRange(selection.min, selection.max), replaced, TextRange(selection.min, selection.min + replaced.length))
+    }
+    val before = text.substring(0, selection.min).trimEnd()
+    val after = text.substring(selection.max)
+    val afterTrimmed = after.trimStart()
+    if (before.endsWith(open) && afterTrimmed.startsWith(close)) {
+        val start = before.length - open.length
+        val end = selection.max + (after.length - afterTrimmed.length) + close.length
+        return CodeTextEdit(TextRange(start, end), inner, TextRange(start, start + inner.length))
+    }
+    val at = selection.min + open.length + 1
+    return CodeTextEdit(TextRange(selection.min, selection.max), "$open $inner $close", TextRange(at, at + inner.length))
+}
+
+/**
+ * The next size up from [selection], for Shift+Alt+Right: the word, the line's
+ * written text, the whole line, each of [regions] around it, and the document.
+ * Null when the whole document is selected already.
+ */
+internal fun expandSelection(text: String, selection: TextRange, regions: List<TextRange>): TextRange? {
+    val line = lineRangeAt(text, selection.min)
+    val content = text.substring(line.min, line.max)
+    val writtenEnd = line.min + content.trimEnd().length
+    val steps = ArrayList<TextRange>(regions.size + 4)
+    steps += wordRangeAt(text, selection.min)
+    steps += TextRange(minOf(line.min + leading(content), writtenEnd), writtenEnd)
+    steps += line
+    steps += regions
+    steps += TextRange(0, text.length)
+    return steps
+        .filter { it.min <= selection.min && it.max >= selection.max && it.length > selection.length }
+        .minByOrNull { it.length }
+}
+
+/** Where F8 goes, or Shift+F8 when not [forward]: the next of [problems] past [from], round the document's end. */
+internal fun nextProblem(problems: List<TextRange>, from: Int, forward: Boolean): TextRange? {
+    if (problems.isEmpty()) return null
+    val sorted = problems.sortedBy { it.min }
+    return if (forward) {
+        sorted.firstOrNull { it.min > from } ?: sorted.first()
+    } else {
+        sorted.lastOrNull { it.min < from } ?: sorted.last()
+    }
+}
+
+/**
+ * Where Ctrl+Shift+\ puts the caret: from one bracket of a pair to just past the
+ * other, or from inside a pair to just past the bracket that closes it. Just past,
+ * because [pair], the language's own matching, reads the bracket behind the caret
+ * first, so a second press goes straight back. Null when the caret is in no pair.
+ */
+internal fun bracketJump(text: String, brackets: List<Int>, caret: Int, pair: (Int) -> Pair<Int, Int>?): Int? {
+    pair(caret)?.let { (open, close) ->
+        return if (caret == open || caret == open + 1) close + 1 else open + 1
+    }
+    var depth = 0
+    for (index in brackets.indices.reversed()) {
+        val at = brackets[index]
+        if (at >= caret) continue
+        when (text[at]) {
+            in CLOSING_BRACKETS -> depth++
+            in OPENING_BRACKETS -> if (depth == 0) return pair(at + 1)?.let { it.second + 1 } else depth--
+        }
+    }
+    return null
+}
+
+private const val OPENING_BRACKETS = "([{"
+private const val CLOSING_BRACKETS = ")]}"

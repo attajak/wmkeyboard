@@ -30,10 +30,21 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isAltPressed
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.isMetaPressed
+import androidx.compose.ui.input.key.isShiftPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -76,15 +87,60 @@ internal fun CodeFindBar(
     onReplaceAll: () -> Unit,
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
+    /** Esc from inside the bar. The screen closes it and gives the keys back to the code. */
+    onEscape: () -> Unit = onClose,
+    /** Screen commands pressed while the bar has the keys, such as Ctrl+G or Ctrl+S. */
+    onCommand: (CodeCommand) -> Boolean = { false },
+    /** Raised by one to put the caret back in the query, as Ctrl+F does while the bar is open. */
+    focusRequests: Int = 0,
 ) {
     val invalid = find.options.regex && find.query.isNotEmpty() && findPattern(find.query, find.options) == null
     // The bar opens to be typed into, so the query takes the caret and the keyboard.
     val queryFocus = remember { FocusRequester() }
-    LaunchedEffect(Unit) { queryFocus.requestFocus() }
+    val replaceFocus = remember { FocusRequester() }
+    var inReplace by remember { mutableStateOf(false) }
+    var replaceRequests by remember { mutableIntStateOf(0) }
+    LaunchedEffect(focusRequests) { queryFocus.requestFocus() }
+    LaunchedEffect(replaceRequests) {
+        if (replaceRequests == 0) return@LaunchedEffect
+        // A frame, so a replace field shown by this same press is there to take the caret.
+        withFrameNanos { }
+        runCatching { replaceFocus.requestFocus() }
+    }
     Column(
         modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceContainer)
+            // The find widget's own keys, as VS Code has them. Anything else the key table
+            // gives to the screen is passed on, so Ctrl+G still works from in here.
+            .onPreviewKeyEvent { event ->
+                if (event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent event.key == Key.Escape
+                val ctrl = event.isCtrlPressed || event.isMetaPressed
+                val shift = event.isShiftPressed
+                val alt = event.isAltPressed
+                val enter = event.key == Key.Enter || event.key == Key.NumPadEnter
+                val option = alt && !ctrl && !shift
+                when {
+                    event.key == Key.Escape -> onEscape()
+                    enter && ctrl && alt -> onReplaceAll()
+                    enter && !ctrl && !alt -> if (inReplace && !shift) onReplace() else onStep(if (shift) -1 else 1)
+                    option && event.key == Key.C -> find.options = find.options.copy(caseSensitive = !find.options.caseSensitive)
+                    option && event.key == Key.W -> find.options = find.options.copy(wholeWord = !find.options.wholeWord)
+                    option && event.key == Key.R -> find.options = find.options.copy(regex = !find.options.regex)
+                    else -> when (val command = codeCommandFor(event.key, ctrl, shift, alt)) {
+                        CodeCommand.FIND -> queryFocus.requestFocus()
+                        CodeCommand.REPLACE -> {
+                            find.replacing = true
+                            replaceRequests++
+                        }
+                        CodeCommand.FIND_NEXT -> onStep(1)
+                        CodeCommand.FIND_PREVIOUS -> onStep(-1)
+                        null -> return@onPreviewKeyEvent false
+                        else -> return@onPreviewKeyEvent command.scope == CodeCommand.Scope.SCREEN && onCommand(command)
+                    }
+                }
+                true
+            }
             .padding(horizontal = 8.dp, vertical = 4.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -159,7 +215,7 @@ internal fun CodeFindBar(
                     placeholder = { Text(stringResource(R.string.code_replace_label)) },
                     textStyle = MaterialTheme.typography.bodyMedium,
                     keyboardOptions = PlainTextKeys.copy(imeAction = ImeAction.Done),
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).focusRequester(replaceFocus).onFocusChanged { inReplace = it.isFocused },
                 )
                 TextButton(onClick = onReplace, enabled = matches.isNotEmpty()) { Text(stringResource(R.string.code_replace_one)) }
                 TextButton(onClick = onReplaceAll, enabled = matches.isNotEmpty()) { Text(stringResource(R.string.code_replace_all)) }

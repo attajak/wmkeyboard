@@ -1,6 +1,5 @@
 package com.wasimaster.wmkeyboard.app
 
-import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.snap
@@ -64,7 +63,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -232,6 +231,48 @@ internal fun LayoutJsonEditorScreen(
             }
         }
     }
+    val keyboard = hardwareKeyboardAttached()
+    val editorFocus = remember { FocusRequester() }
+    var findFocusRequests by remember { mutableIntStateOf(0) }
+    val openFind: (Boolean) -> Unit = { replace ->
+        val selection = editor.value.selection
+        val selected = editor.text.substring(selection.min, selection.max)
+        // A selection on one line becomes the query, the way VS Code fills its find widget.
+        if (selected.isNotEmpty() && '\n' !in selected) find.query = selected
+        if (replace) find.replacing = true
+        find.active = firstMatchFrom(findMatches(editor.text, find.query, find.options), selection.min)
+        findOpen = true
+        findFocusRequests++
+    }
+    // What a key asks of the screen rather than of the text. The keys are in CodeShortcuts.kt.
+    val onCommand: (CodeCommand) -> Boolean = command@{ command ->
+        when (command) {
+            CodeCommand.FIND -> openFind(false)
+            CodeCommand.REPLACE -> openFind(true)
+            CodeCommand.FIND_NEXT, CodeCommand.FIND_PREVIOUS -> when {
+                !findOpen -> openFind(false)
+                matches.isNotEmpty() -> {
+                    find.active = (find.active + if (command == CodeCommand.FIND_NEXT) 1 else -1).mod(matches.size)
+                    editor.select(matches[find.active])
+                }
+            }
+            CodeCommand.ESCAPE -> findOpen = false
+            CodeCommand.GO_TO_LINE -> lineOpen = true
+            CodeCommand.FORMAT -> format()
+            CodeCommand.TOGGLE_WRAP -> wrap = !wrap
+            CodeCommand.ZOOM_IN -> textSize = (textSize + 1).coerceAtMost(MAX_TEXT)
+            CodeCommand.ZOOM_OUT -> textSize = (textSize - 1).coerceAtLeast(MIN_TEXT)
+            CodeCommand.ZOOM_RESET -> textSize = TEXT_SIZE
+            // Apply is how this screen saves.
+            CodeCommand.SAVE -> if (editor.text.isNotBlank()) apply()
+            CodeCommand.NEXT_PROBLEM, CodeCommand.PREVIOUS_PROBLEM ->
+                nextProblem(diagnostics.map { it.range }, editor.value.selection.min, command == CodeCommand.NEXT_PROBLEM)?.let(editor::select)
+            CodeCommand.SHOW_PROBLEMS -> problemsOpen = !problemsOpen
+            CodeCommand.SHOW_COMMANDS -> menuOpen = true
+            else -> return@command false
+        }
+        true
+    }
     // Back closes the find bar before it leaves the screen.
     BackHandler(enabled = findOpen) { findOpen = false }
     RegisterSettingsCrumb(title)
@@ -260,25 +301,24 @@ internal fun LayoutJsonEditorScreen(
                             Icon(Icons.Outlined.MoreVert, contentDescription = stringResource(R.string.plugin_ide_more_desc))
                         }
                         DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
-                            MenuItem(R.string.plugin_ide_find_action, Icons.Outlined.FindReplace) {
+                            MenuItem(R.string.plugin_ide_find_action, Icons.Outlined.FindReplace, shortcut = shortcutSlot(keyboard, CodeCommand.FIND)) {
                                 menuOpen = false
-                                find.active = firstMatchFrom(findMatches(editor.text, find.query, find.options), editor.value.selection.min)
-                                findOpen = true
+                                openFind(false)
                             }
-                            MenuItem(R.string.plugin_ide_go_to_line_action, Icons.Outlined.FormatListNumbered) {
+                            MenuItem(R.string.plugin_ide_go_to_line_action, Icons.Outlined.FormatListNumbered, shortcut = shortcutSlot(keyboard, CodeCommand.GO_TO_LINE)) {
                                 menuOpen = false
                                 lineOpen = true
                             }
-                            MenuItem(R.string.plugin_ide_format_action, Icons.Outlined.AutoFixHigh) {
+                            MenuItem(R.string.plugin_ide_format_action, Icons.Outlined.AutoFixHigh, shortcut = shortcutSlot(keyboard, CodeCommand.FORMAT)) {
                                 menuOpen = false
                                 format()
                             }
                             val wrapLabel = if (wrap) R.string.code_wrap_off_desc else R.string.code_wrap_on_desc
-                            MenuItem(wrapLabel, Icons.AutoMirrored.Outlined.WrapText) {
+                            MenuItem(wrapLabel, Icons.AutoMirrored.Outlined.WrapText, shortcut = shortcutSlot(keyboard, CodeCommand.TOGGLE_WRAP)) {
                                 menuOpen = false
                                 wrap = !wrap
                             }
-                            MenuItem(R.string.plugin_ide_fold_all_action, Icons.Outlined.UnfoldLess) {
+                            MenuItem(R.string.plugin_ide_fold_all_action, Icons.Outlined.UnfoldLess, shortcut = shortcutSlot(keyboard, CodeCommand.FOLD_ALL)) {
                                 menuOpen = false
                                 editor.foldAll(language.foldRegions(editor.text).map { it.min })
                             }
@@ -286,14 +326,15 @@ internal fun LayoutJsonEditorScreen(
                                 R.string.plugin_ide_unfold_all_action,
                                 Icons.Outlined.UnfoldMore,
                                 enabled = editor.foldStarts.isNotEmpty(),
+                                shortcut = shortcutSlot(keyboard, CodeCommand.UNFOLD_ALL),
                             ) {
                                 menuOpen = false
                                 editor.unfoldAll()
                             }
-                            MenuItem(R.string.plugin_ide_text_larger_action, Icons.Outlined.TextIncrease, enabled = textSize < MAX_TEXT) {
+                            MenuItem(R.string.plugin_ide_text_larger_action, Icons.Outlined.TextIncrease, enabled = textSize < MAX_TEXT, shortcut = shortcutSlot(keyboard, CodeCommand.ZOOM_IN)) {
                                 textSize = (textSize + 1).coerceAtMost(MAX_TEXT)
                             }
-                            MenuItem(R.string.plugin_ide_text_smaller_action, Icons.Outlined.TextDecrease, enabled = textSize > MIN_TEXT) {
+                            MenuItem(R.string.plugin_ide_text_smaller_action, Icons.Outlined.TextDecrease, enabled = textSize > MIN_TEXT, shortcut = shortcutSlot(keyboard, CodeCommand.ZOOM_OUT)) {
                                 textSize = (textSize - 1).coerceAtLeast(MIN_TEXT)
                             }
                             MenuItem(R.string.plugin_ide_code_keys_action, Icons.Outlined.Keyboard) {
@@ -343,6 +384,12 @@ internal fun LayoutJsonEditorScreen(
                         replaceAllMatches(editor.text, current, find.replacement, find.query, find.options)?.let(editor::applyEdit)
                     },
                     onClose = { findOpen = false },
+                    onEscape = {
+                        findOpen = false
+                        editorFocus.requestFocus()
+                    },
+                    onCommand = onCommand,
+                    focusRequests = findFocusRequests,
                 )
             }
             CodeSurface(
@@ -364,6 +411,8 @@ internal fun LayoutJsonEditorScreen(
                 folding = true,
                 suggestionBar = suggestionBar,
                 reduceMotion = settings.reduceMotion,
+                onCommand = onCommand,
+                focusRequester = editorFocus,
             )
             doc?.let { CodeDocStrip(it.path, it.signature, it.body, colors) }
             JsonStatusRow(
@@ -380,10 +429,7 @@ internal fun LayoutJsonEditorScreen(
                 }
             }
             // At the bottom, so it sits on the soft keyboard. A hardware keyboard has its own keys.
-            val configuration = LocalConfiguration.current
-            val hardwareKeyboard = configuration.keyboard != Configuration.KEYBOARD_NOKEYS &&
-                configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO
-            if (!hardwareKeyboard && showKeys) {
+            if (!keyboard && showKeys) {
                 CodeAccessoryRow(
                     state = editor,
                     colors = colors,
@@ -460,10 +506,17 @@ internal fun LayoutJsonEditorScreen(
 }
 
 @Composable
-private fun MenuItem(label: Int, icon: androidx.compose.ui.graphics.vector.ImageVector, enabled: Boolean = true, onClick: () -> Unit) {
+private fun MenuItem(
+    label: Int,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    enabled: Boolean = true,
+    shortcut: (@Composable () -> Unit)? = null,
+    onClick: () -> Unit,
+) {
     DropdownMenuItem(
         text = { Text(stringResource(label)) },
         leadingIcon = { Icon(icon, contentDescription = null) },
+        trailingIcon = shortcut,
         enabled = enabled,
         onClick = onClick,
     )
