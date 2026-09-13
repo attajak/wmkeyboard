@@ -127,7 +127,7 @@ This screen works differently from the grid editor. It's a draft with an explici
 
 "Edit as JSON" opens a full-screen code editor, the same one the plugin editor uses, and it knows the layout format. It's monospaced, on a code background, with the standard editor colors, numbered lines, the cursor's line lit and bracket pairs boxed. Long lines scroll sideways rather than wrapping, which keeps one number against one line; **Wrap** in the menu turns that off. Undo, redo and **Apply** sit in the top bar.
 
-It suggests as you type, from the format itself. Type `"` inside a key and the list shows the key's properties, the required `label` first, each with its type and default. Choosing one writes the property, its colon and a blank of the right kind (`""`, `[]`, `{}`, or `true` for a switch that is off by default) with the cursor in the blank, and when that blank has values of its own the list opens again. Pick `action`, then `tool`, then a tool, and you have written a tool key without typing a word. The values come from your device: tools, editing operations and panel components by their names in your language, icon names, your themes and fonts, your secondary layouts, and every language, found by its name as well as its id. In a row, a word like `shift` offers a whole shift key, and inside `layers` the list offers each layer you have not written yet, with a row ready to fill. Matching forgives shorthand, so `lp` finds `longPress`. **Suggest** on the code keys, or Ctrl+Space, opens the list anywhere.
+It suggests as you type, from the format itself. Type `"` inside a key and the list shows the key's properties, the required `label` first, each with its type and default. Choosing one writes the property, its colon and a blank of the right kind (`""`, `[]`, `{}`, or `true` for a switch that is off by default) with the cursor in the blank, and when that blank has values of its own the list opens again. Pick `action`, then `tool`, then a tool, and you have written a tool key without typing a word. The values come from your device: tools, editing operations and panel components by their names in your language, icon names, your themes and fonts, your secondary layouts, and every language, found by its name as well as its id. In a row, a word like `shift` offers a whole shift key, and inside `layers` the list offers each layer you have not written yet, with a row ready to fill. Matching forgives shorthand, so `lp` finds `longPress`. **Suggest** on the code keys, Ctrl+Space or Ctrl+I opens the list anywhere.
 
 It checks as you type, too. A problem gets a squiggle and a colored line number, and **Problems** under the code lists them all; tap one to jump there. The checks follow what Apply does. An error is something Apply can't read, like a missing `label`, a number in quote marks, or an `op` this version does not have. A warning is something Apply survives by ignoring or changing it, like a misspelt property (named with the one it's close to), an action type it does not know, or a width past what the keyboard allows. Once the text parses, the grid editor's own checks run as well, so a letters layer with no delete key is flagged here the same as it is there.
 
@@ -135,9 +135,53 @@ A strip under the code explains whatever the cursor is on: the property, with it
 
 On a soft keyboard, a row of code keys sits on top of it: `"`, `:`, `,`, both kinds of bracket, `true`, `false` and `null`, a second page of commands (duplicate or move a line, select, jump to a block's start or end, find, format), and two cursor keys you can slide like a trackpad. Arrange the row from **Code keys** in the menu. The menu also has **Find** (with replace, regular expressions, and case and whole-word matching), **Go to line**, **Fold all** and **Unfold all** (every object and list folds from a chevron in the margin), text size, **Copy** and **Paste**.
 
-**Format** re-indents the whole document with two spaces per level, and keeps an object or a list on one line while that line stays under 100 characters. A three-item list of long-press alternates stays a three-item list rather than becoming five lines, and a key is one line rather than six. The screen already opens that way, so Format is only for text you've pasted or hand-edited. QWERTY reads as 252 lines here where one field per line made it 1,142. On a hardware keyboard, Ctrl+Z and Ctrl+Shift+Z undo and redo, and Tab indents (Shift+Tab moves it back out); with a selection, Tab moves every line it touches.
+**Format** re-indents the whole document with two spaces per level, and keeps an object or a list on one line while that line stays under 100 characters. A three-item list of long-press alternates stays a three-item list rather than becoming five lines, and a key is one line rather than six. The screen already opens that way, so Format is only for text you've pasted or hand-edited. QWERTY reads as 252 lines here where one field per line made it 1,142. On a hardware keyboard, the editor takes the keys Visual Studio Code uses, listed below.
 
 Typing gets a few editor habits too. A newline keeps the indentation of the line above and goes one step deeper after `{` or `[`. Typing `{`, `[` or `"` brings its closing half, typing a closing half where one already sits steps over it instead of doubling it, and backspacing over an empty pair takes both halves. None of this rewrites your text: what you typed stays exactly where you typed it until you press Format or Apply.
+
+#### Keyboard shortcuts
+
+With a physical keyboard, this editor and the plugin editor take the keys that Visual Studio Code uses on Windows and Linux, and <KeyCap>⌘</KeyCap> works as <KeyCap>Ctrl</KeyCap>. While the keyboard is attached, the menu shows the keys of each command beside it, and the row of code keys steps aside.
+
+| Keys | What they do |
+| --- | --- |
+| `Ctrl+F`, `Ctrl+H` | Find, or find and replace. A selection on one line becomes the search. |
+| `Enter`, `Shift+Enter`, `F3`, `Shift+F3` | The next or the previous result. In the replace field, `Enter` replaces the result that shows and `Ctrl+Alt+Enter` replaces them all. |
+| `Alt+C`, `Alt+W`, `Alt+R` | In the find bar: match case, whole words, regular expression. |
+| `Esc` | Closes the suggestion list or the find bar. In the code, `Esc` does not leave the editor. |
+| `Ctrl+G` | Go to line. |
+| `Ctrl+Space`, `Ctrl+I` | Suggest at the cursor. |
+| `Tab`, `Shift+Tab` | Indent at the cursor, or move whole selected lines in. `Shift+Tab` moves them back out. |
+| `Ctrl+]`, `Ctrl+[` | Move the lines at the cursor in or out. |
+| `Alt+Up`, `Alt+Down` | Move the lines up or down. |
+| `Shift+Alt+Up`, `Shift+Alt+Down` | Copy the lines up or down. |
+| `Ctrl+Shift+K` | Delete the lines. |
+| `Ctrl+Enter`, `Ctrl+Shift+Enter` | A new line below or above, with the same indent. |
+| `Ctrl+X`, `Ctrl+C`, `Ctrl+V` | With nothing selected, cut or copy the whole line, and paste it back in above the line of the cursor. |
+| `Ctrl+L` | Select the line. Each press adds the next line. |
+| `Shift+Alt+Right`, `Shift+Alt+Left` | Grow the selection to the word, the line, the block and the document, and shrink it back. |
+| `Home` | The first character of the line that is not a space, then the start of the line. |
+| `Ctrl+Home`, `Ctrl+End`, `Page Up`, `Page Down` | The start, the end, one screen up or one screen down. Add `Shift` to select. |
+| `Ctrl+Up`, `Ctrl+Down` | Scroll one line, and leave the cursor where it is. |
+| `Ctrl+Shift+\` | Go to the matching bracket. |
+| `Ctrl+Shift+[`, `Ctrl+Shift+]` | Fold or unfold the block at the cursor. |
+| `Ctrl+K Ctrl+0`, `Ctrl+K Ctrl+J` | Fold every block, unfold every block. |
+| `Ctrl+Z`, `Ctrl+Y`, `Ctrl+Shift+Z` | Undo, redo. |
+| `Shift+Alt+F` | Format. |
+| `Alt+Z` | Wrap long lines, or stop wrapping them. |
+| `Ctrl+=`, `Ctrl+-`, `Ctrl+0` | Larger text, smaller text, the usual size. |
+| `F8`, `Shift+F8` | The next or the previous problem. |
+| `Ctrl+Shift+M` | Show or hide **Problems**. |
+| `F1`, `Ctrl+Shift+P` | Open the menu. |
+| `Ctrl+S` | Here, **Apply**. In the plugin editor, save the draft now. |
+| `Ctrl+/`, `Shift+Alt+A` | Plugin editor: a line comment, a block comment. JSON has no comments. |
+| `F5`, `Shift+F5` | Plugin editor: run or stop the plugin. |
+| `F12`, `F2` | Plugin editor: go to the definition, rename. |
+| `Ctrl+Shift+O`, `Ctrl+Shift+Y` | Plugin editor: **Outline**, **Console**. |
+
+The keys that the text field knows already keep working: `Ctrl+A`, the arrow keys with `Ctrl` and `Shift`, and `Ctrl+Backspace` to delete a word. The editor has one cursor, so the VS Code keys for more cursors, such as `Ctrl+D`, do nothing here.
+
+When WM Keyboard is your keyboard, it takes `Ctrl+Space` to change the language before the editor gets the key (see [Switching language](/typing/hardware-keyboard/#switching-language)). Use `Ctrl+I` for suggestions, or turn that setting off.
 
 ## Secondary layouts
 
