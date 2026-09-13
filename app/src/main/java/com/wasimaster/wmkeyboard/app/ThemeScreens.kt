@@ -2,7 +2,17 @@ package com.wasimaster.wmkeyboard.app
 
 import android.graphics.BitmapFactory
 import androidx.annotation.StringRes
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
@@ -51,6 +61,7 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -196,6 +207,7 @@ import androidx.compose.material.icons.outlined.CropSquare
 import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material.icons.outlined.Shuffle
 import androidx.compose.material.icons.outlined.Keyboard
+import androidx.compose.material.icons.outlined.KeyboardHide
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Tune
 
@@ -1831,10 +1843,67 @@ fun ThemeEditorScreen(
     }
 
     // Live preview, pinned under the bar so it stays put while the sections
-    // below scroll (#43).
+    // below scroll (#43). The keyboard itself, not a mock-up (#148): a
+    // miniature at real proportions here, and at actual size docked along the
+    // bottom of the window when the floating button asks for it, where the
+    // sections scroll above it the way an app does over the keyboard. One
+    // typed buffer serves both, so switching between them loses nothing.
+    val previewSandbox = remember(family.id) { mutableStateOf(ThemePreviewSandbox()) }
+    var keyboardDocked by rememberSaveable(family.id) { mutableStateOf(false) }
+    // Back takes the docked keyboard down first, as it would a real one.
+    BackHandler(enabled = keyboardDocked) { keyboardDocked = false }
+    val reduceMotion = settings.reduceMotion
     RegisterPinned {
-        Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-            ThemePreview(theme)
+        AnimatedVisibility(
+            visible = !keyboardDocked,
+            enter = if (reduceMotion) EnterTransition.None else expandVertically() + fadeIn(),
+            exit = if (reduceMotion) ExitTransition.None else shrinkVertically() + fadeOut(),
+        ) {
+            Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                ThemeKeyboardPreview(
+                    settings = settings,
+                    theme = theme,
+                    sandbox = previewSandbox,
+                    miniature = true,
+                )
+            }
+        }
+    }
+    RegisterDock {
+        AnimatedVisibility(
+            visible = keyboardDocked,
+            enter = if (reduceMotion) {
+                EnterTransition.None
+            } else {
+                slideInVertically { it } + expandVertically(expandFrom = Alignment.Top)
+            },
+            exit = if (reduceMotion) {
+                ExitTransition.None
+            } else {
+                slideOutVertically { it } + shrinkVertically(shrinkTowards = Alignment.Top)
+            },
+        ) {
+            ThemeKeyboardPreview(
+                settings = settings,
+                theme = theme,
+                sandbox = previewSandbox,
+                miniature = false,
+                onHide = { keyboardDocked = false },
+            )
+        }
+    }
+    RegisterFab {
+        FloatingActionButton(onClick = { keyboardDocked = !keyboardDocked }) {
+            Icon(
+                if (keyboardDocked) Icons.Outlined.KeyboardHide else Icons.Outlined.Keyboard,
+                contentDescription = stringResource(
+                    if (keyboardDocked) {
+                        R.string.theme_preview_keyboard_hide_desc
+                    } else {
+                        R.string.theme_preview_keyboard_show_desc
+                    },
+                ),
+            )
         }
     }
 

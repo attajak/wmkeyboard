@@ -142,6 +142,10 @@
     <!-- %1$s is the name of the theme. -->
     <string name="theme_delete_message">The app deletes “<xliff:g id="theme_name" example="Midnight">%1$s</xliff:g>” permanently.</string>
 
+    <!-- Theme editor: the floating button that opens the keyboard at full size. -->
+    <string name="theme_preview_keyboard_show_desc">Show the keyboard at full size</string>
+    <string name="theme_preview_keyboard_hide_desc">Hide the keyboard</string>
+
     <!-- Theme editor: name and seed colour. -->
     <string name="theme_editor_missing_body">This theme does not exist any more.</string>
     <string name="theme_name_label">Theme name</string>

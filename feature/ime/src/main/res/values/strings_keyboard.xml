@@ -571,6 +571,10 @@
     <string name="ime_theme_animated_badge">Animated</string>
     <string name="ime_theme_animated_desc">This theme is animated</string>
 
+    <!-- The theme editor's live keyboard: the line it types into, above the keys. -->
+    <string name="ime_theme_preview_field_hint">Tap the keys to try the theme</string>
+    <string name="ime_theme_preview_clear_desc">Clear the text</string>
+
     <!-- Selection macros: the bar of one-tap actions for what is selected.
          The chip faces themselves live in :core:content, beside the engine
          that picks them; only the bar's own furniture is here. -->
