@@ -822,6 +822,14 @@ class SuggestionEngine(
         val kept = shiftGlideScores(words.filterNot { suppressed(it.word) })
         if (kept.isEmpty()) return kept
         return rerankGlide(kept, previousWord, previousWord2, recentWords)
+            // One word per spelling, whatever source it came from (#172). The
+            // decoder keys its results on each trie's own spelling, and the
+            // platform dictionary stores "boston" where a word list may store
+            // "Boston"; both walk the same stroke, and `displayForm` below
+            // would then put the platform capital back on the lower one — two
+            // identical chips. Folded here, before the slice, so the strip is
+            // not left a word short; first wins, which is the better score.
+            .distinctBy { WordKey.of(it.word) }
             .take(limit)
             // The whole complaint behind #44: a swipe knew the word but not
             // the capital, so every proper noun had to be re-picked off the
@@ -1649,9 +1657,12 @@ class SuggestionEngine(
 
         // Contact words carry their own capitalization ("Wasi"), so the
         // same word can arrive in two cases; keep the better-scored one.
+        // Folded through [WordKey] rather than a bare lowercase: a word list
+        // and the platform dictionary can spell the same Bengali word with
+        // and without the nukta composed, and those render as one word (#172).
         val byLower = HashMap<String, Pair<String, Double>>()
         for ((word, score) in merged) {
-            val key = word.lowercase()
+            val key = WordKey.of(word)
             val current = byLower[key]
             if (current == null || score > current.second) byLower[key] = word to score
         }
@@ -2052,8 +2063,11 @@ class SuggestionEngine(
             result = result.sortedByDescending { rankOffsets[it.lowercase()] ?: 0 }
         }
         // Last, so nothing above has to reason about case: the ordering, the
-        // sentinel filter and the blacklist all work on keys.
-        return result.map(::displayForm)
+        // sentinel filter and the blacklist all work on keys. The set above
+        // holds keys from the lexicon beside surface spellings from the
+        // contacts ("boston" and "Boston"), and restoring the capital makes
+        // them one word — so the fold comes after the restore (#172).
+        return result.map(::displayForm).distinctBy(WordKey::of)
     }
 
     /**
