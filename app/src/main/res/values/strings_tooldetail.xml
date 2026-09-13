@@ -590,6 +590,7 @@
     <string name="tooldetail_hold_repeats_subtitle">Press and hold repeats the move, so it cannot do a second action</string>
     <string name="tooldetail_hold_selects_subtitle">Press and hold turns selection mode on, so it cannot do a second action</string>
     <string name="tooldetail_hold_trackpad_subtitle">Press and hold opens the trackpad, so it cannot do a second action</string>
+    <string name="tooldetail_hold_voice_modes_subtitle">Press and hold picks a voice typing mode, so it cannot do a second action. Turn that off under Voice typing to bind one.</string>
     <!-- %1$s is the name of a tool, for example "Undo". -->
     <string name="tooldetail_hold_pick_title">Press and hold <xliff:g id="tool" example="Undo">%1$s</xliff:g></string>
 

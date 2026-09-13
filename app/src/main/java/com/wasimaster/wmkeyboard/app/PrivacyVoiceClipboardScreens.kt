@@ -293,6 +293,15 @@ internal fun VoiceSettings(repository: SettingsRepository, settings: KeyboardSet
                 },
             ) { scope.launch { repository.setVoiceTypingMode(it) } }
         }
+        item {
+            ToggleSetting(
+                R.string.voice_hold_picks_title,
+                stringResource(R.string.voice_hold_picks_subtitle),
+                settings.voiceBar.holdPicksTypingMode,
+                info = stringResource(R.string.voice_hold_picks_info),
+                default = SettingsDefaults.voiceBar.holdPicksTypingMode,
+            ) { scope.launch { repository.setVoiceHoldPicksTypingMode(it) } }
+        }
         // Only the panel's mic reads a hold: the strip and collapsed-bar mics
         // are plain taps, and the panel is never opened in those modes.
         if (settings.voiceBar.mode == com.wasimaster.wmkeyboard.core.settings.VoiceBarSettings.MODE_PANEL) item {

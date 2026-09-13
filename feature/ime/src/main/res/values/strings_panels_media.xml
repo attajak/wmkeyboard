@@ -93,6 +93,15 @@
     <string name="ime_voice_bar_expand_panel_desc">Open the voice panel</string>
     <string name="ime_voice_bar_expand_strip_desc">Open the bar over the keys</string>
 
+    <!-- Menu that a press and hold on the toolbar's Voice tool opens: pick
+         how voice typing shares the field, and dictation starts in that mode
+         at once. The three options match the "Voice typing mode" choices in
+         settings; keep the wording the same as there. -->
+    <string name="ime_voice_mode_menu_title">Voice typing mode</string>
+    <string name="ime_voice_mode_block">One block at a time</string>
+    <string name="ime_voice_mode_interactive">Type while you speak</string>
+    <string name="ime_voice_mode_plain">Type while you speak, plain text</string>
+
     <!-- Handwriting panel. -->
     <string name="ime_handwriting_checking_progress">Checking the handwriting model…</string>
     <!-- %1$s is the name of a language, for example "English". -->

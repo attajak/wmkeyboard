@@ -3520,6 +3520,15 @@ data class VoiceBarSettings(
      */
     val holdToTalkMs: Int = 600,
     /**
+     * A press and hold on the Voice tool while it is pinned to the toolbar
+     * opens a menu of the three [typingMode]s, and picking one starts
+     * dictation in it at once (#173). On by default; off gives the hold back
+     * to the toolbar's own hold gesture (a bound tool, else the settings
+     * page). The trackpad's `holdToOpen` shape: the toolbar's hold map can
+     * only name another tool, so a hold that opens a menu is its own flag.
+     */
+    val holdPicksTypingMode: Boolean = true,
+    /**
      * The surface the bar's expand button goes back to — whichever of
      * [MODE_PANEL] or [MODE_STRIP] the user collapsed from, defaulting to the
      * panel when the bar was chosen in settings instead.
@@ -6177,6 +6186,7 @@ class SettingsRepository(private val context: Context) {
         private val VOICE_BAR_Y_BIAS = floatPreferencesKey("voice_bar_y_bias")
         private val VOICE_BAR_DOCK_BIAS = floatPreferencesKey("voice_bar_dock_bias")
         private val VOICE_HOLD_TO_TALK_MS = intPreferencesKey("voice_hold_to_talk_ms")
+        private val VOICE_HOLD_PICKS_MODE = booleanPreferencesKey("voice_hold_picks_mode")
         private val VOICE_UI_RETURN_MODE = stringPreferencesKey("voice_ui_return_mode")
         private val VOICE_BAR_INLINE = booleanPreferencesKey("voice_bar_inline")
         private val VOICE_CONTINUOUS = booleanPreferencesKey("voice_continuous")
@@ -7421,6 +7431,7 @@ class SettingsRepository(private val context: Context) {
                 yBias = p[VOICE_BAR_Y_BIAS] ?: defaults.voiceBar.yBias,
                 dockBias = p[VOICE_BAR_DOCK_BIAS] ?: defaults.voiceBar.dockBias,
                 holdToTalkMs = p[VOICE_HOLD_TO_TALK_MS] ?: defaults.voiceBar.holdToTalkMs,
+                holdPicksTypingMode = p[VOICE_HOLD_PICKS_MODE] ?: defaults.voiceBar.holdPicksTypingMode,
                 returnMode = p[VOICE_UI_RETURN_MODE] ?: defaults.voiceBar.returnMode,
                 inline = p[VOICE_BAR_INLINE] ?: defaults.voiceBar.inline,
             ),
@@ -8161,6 +8172,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setVoiceTypingMode(value: String) =
         editPrefs { it[VOICE_TYPING_MODE] = value }
+
+    suspend fun setVoiceHoldPicksTypingMode(value: Boolean) =
+        editPrefs { it[VOICE_HOLD_PICKS_MODE] = value }
 
     suspend fun setVoiceBarActive(value: Boolean) =
         editPrefs { it[VOICE_BAR_ACTIVE] = value }

@@ -151,8 +151,9 @@ private fun ToolHoldRow(
     val repeats = tool in HoldRepeatCursorTools && settings.textEditing.cursorToolsRepeatOnHold
     val selects = tool == ToolbarTool.SELECT_MODE && settings.textEditing.selectionModeHold
     val tracks = tool == ToolbarTool.TRACKPAD && settings.trackpad.holdToOpen
+    val picksVoiceMode = tool == ToolbarTool.VOICE && settings.voiceBar.holdPicksTypingMode
     val bound = settings.toolbarBehavior.holdActions[tool]
-    if (repeats || selects || tracks) {
+    if (repeats || selects || tracks || picksVoiceMode) {
         // Reads rather than opens: this tool's hold has none to give.
         WmRow(
             title = stringResource(R.string.tooldetail_hold_title),
@@ -160,7 +161,8 @@ private fun ToolHoldRow(
                 when {
                     repeats -> R.string.tooldetail_hold_repeats_subtitle
                     selects -> R.string.tooldetail_hold_selects_subtitle
-                    else -> R.string.tooldetail_hold_trackpad_subtitle
+                    tracks -> R.string.tooldetail_hold_trackpad_subtitle
+                    else -> R.string.tooldetail_hold_voice_modes_subtitle
                 },
             ),
             icon = SettingsRowIcons[R.string.tooldetail_hold_title],

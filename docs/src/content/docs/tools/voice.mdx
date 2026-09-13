@@ -26,7 +26,7 @@ Open **Voice typing** from the toolbar (or the toolbox if you haven't pinned it)
 
 You aren't locked into the one you picked. The panel and the compact bar each carry a collapse button down to the pill, and the pill carries a button back up, so switching is one tap from wherever you are.
 
-Tap the mic to start listening. Tap it again to finish. The full panel adds **walkie-talkie dictation** on a long press: holding the mic past the **Hold to talk** threshold (200 to 1500&nbsp;ms, default 600) starts listening only while your finger stays down, and releasing stops it immediately. A quick tap-and-release still toggles listening on, same as before. Neither bar has the gesture. Both bar mics are plain tap-to-toggle buttons.
+Tap the mic to start listening. Tap it again to finish. With the Voice tool pinned to the toolbar, **press and hold it** instead of tapping and a small menu lists the three [voice typing modes](#typing-while-you-dictate), with the one in force ticked. Pick one and dictation starts in it at once, and that mode stays the mode until you pick another. It is the quick way to switch between one block at a time and typing while you speak without a trip through settings; **Hold the tool to pick a mode** on the Voice typing screen gives the hold back to the toolbar if you would rather bind it to another tool. The full panel adds **walkie-talkie dictation** on a long press: holding the mic past the **Hold to talk** threshold (200 to 1500&nbsp;ms, default 600) starts listening only while your finger stays down, and releasing stops it immediately. A quick tap-and-release still toggles listening on, same as before. Neither bar has the gesture. Both bar mics are plain tap-to-toggle buttons.
 
 <GestureDemo type="long-press" caption="Hold the mic in the full panel to dictate walkie-talkie style." />
 
@@ -143,11 +143,12 @@ Everything below lives on the Voice typing screen, under Features on the setting
 |---|---|---|
 | Voice typing view | Full panel | A choice of three, not a switch: which surface the mic button opens. **Full panel**, **Compact bar over the keys**, or **Collapsed bar, keyboard hidden**. |
 | Voice typing mode | One block at a time | Another choice of three: whether the keys work while the mic is open. **One block at a time**, **Type while you speak**, or **Type while you speak, plain text**. See [Typing while you dictate](#typing-while-you-dictate). |
+| Hold the tool to pick a mode | On | A press and hold on the toolbar's Voice tool opens a menu of the three modes; picking one makes it the mode and starts dictation. Off gives the hold back to the toolbar's own press-and-hold action. |
 | Hold to talk | 600&nbsp;ms | How long you hold the microphone before a tap becomes a press-and-hold, from 200 to 1500&nbsp;ms. Raise it if a slow press keeps stopping your dictation. Lower it if you mean to hold and it keeps latching on. |
 | Keep listening | On | Starts the next sentence automatically after each one commits. |
 | Spoken punctuation | On | Saying "comma", "question mark" or "দাঁড়ি" types the mark. |
 
-All five sit in a group headed **Dictation**. An edition with the offline engine built in adds an **Engine** group above it, holding the **Recognition engine** choice (see [Offline voice (Whisper)](/tools/whisper/) for what that adds). With the system recognizer in use, the screen ends with this note about what it sends:
+All six sit in a group headed **Dictation**. An edition with the offline engine built in adds an **Engine** group above it, holding the **Recognition engine** choice (see [Offline voice (Whisper)](/tools/whisper/) for what that adds). With the system recognizer in use, the screen ends with this note about what it sends:
 
 > Recognition uses the speech recognizer of your device. On Android 12 and later it runs on your device when the language model is installed. If it is not, the audio goes to the recognizer service while you speak. Press and hold the microphone to speak in walkie-talkie style. It stops when you let go.
 

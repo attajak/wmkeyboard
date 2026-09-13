@@ -14674,6 +14674,36 @@ open class WMKeyboardService : InputMethodService() {
         }
     }
 
+    /**
+     * A voice typing mode picked off the Voice tool's hold menu (#173): it
+     * becomes the mode, and dictation starts in it at once.
+     *
+     * The state is updated ahead of the DataStore write, the way
+     * [toggleVoiceBar] does for the bar: every reader of the mode
+     * ([interactiveVoice], [plainVoice], the strip's chip-or-bar choice) goes
+     * through `_uiState.value.settings`, and the first result of the session
+     * about to start must not be judged under the mode the user just left.
+     * The collector then lands the same value a frame or two later.
+     *
+     * A session already up restarts under the new mode — [startVoice] cancels
+     * first — and otherwise the tool opens the way a tap opens it, so the
+     * strip and bar reroutes still apply.
+     */
+    fun onVoiceModePick(mode: String) {
+        if (mode !in VoiceTypingModes) return
+        vibrate()
+        _uiState.update {
+            it.copy(settings = it.settings.copy(voiceBar = it.settings.voiceBar.copy(typingMode = mode)))
+        }
+        serviceScope.launch { settingsRepository.setVoiceTypingMode(mode) }
+        if (voiceSessionAlive()) {
+            voiceSilentRetries = 0
+            startVoice()
+        } else {
+            runTool(ToolbarTool.VOICE)
+        }
+    }
+
     /** IMEs cannot show permission dialogs; bounce through the trampoline. */
     fun onVoicePermissionRequest() {
         startActivity(
@@ -20099,6 +20129,7 @@ open class WMKeyboardService : InputMethodService() {
             onHoldAction = ::runToolFromHold,
             onSelectionHold = ::onSelectionHold,
             onTrackpadHold = ::onTrackpadHold,
+            onVoiceModePick = ::onVoiceModePick,
             dictionaryBar = com.wasimaster.wmkeyboard.ime.ui.DictionaryBarCallbacks(
                 onToggle = ::onDictionaryChipToggle,
                 onFilter = ::onDictionaryFilterSelect,
@@ -24274,6 +24305,13 @@ open class WMKeyboardService : InputMethodService() {
          */
         private const val VOICE_SILENT_RETRIES = 2
         private const val VOICE_SILENT_RETRIES_INTERACTIVE = 12
+
+        /** The [VoiceBarSettings.typingMode] tokens the Voice tool's hold menu may hand back (#173). */
+        private val VoiceTypingModes = setOf(
+            VoiceBarSettings.TYPING_BLOCK,
+            VoiceBarSettings.TYPING_INTERACTIVE,
+            VoiceBarSettings.TYPING_PLAIN,
+        )
 
         /** Inline emoji search is a local index lookup — no network wait. */
         private const val EMOJI_SEARCH_DEBOUNCE_MS = 24L

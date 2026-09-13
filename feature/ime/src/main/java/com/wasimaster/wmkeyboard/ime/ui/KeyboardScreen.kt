@@ -3826,6 +3826,56 @@ private fun WordMenuRow(label: String, icon: ImageVector, onClick: () -> Unit) {
     )
 }
 
+/**
+ * The voice typing modes, hung off the Voice tool's cell on a press and hold
+ * (#173): the one in force is ticked, and picking any of them starts dictation
+ * in it straight away, so changing how the mic shares the field is one hold
+ * rather than a trip through settings. The same shape as the held-word menu —
+ * non-focusable (see [MenuPopupProperties]) and drawn over a [StripMenuScrim],
+ * which the caller raises first so the dismissing tap types nothing.
+ */
+@Composable
+private fun VoiceModeMenu(
+    current: String,
+    onDismiss: () -> Unit,
+    onPick: (String) -> Unit,
+) {
+    DropdownMenu(
+        expanded = true,
+        onDismissRequest = onDismiss,
+        properties = MenuPopupProperties,
+    ) {
+        Text(
+            text = stringResource(R.string.ime_voice_mode_menu_title),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        )
+        for ((mode, label) in VoiceModeMenuEntries) {
+            DropdownMenuItem(
+                text = { Text(stringResource(label)) },
+                leadingIcon = {
+                    // A tick beside the mode in force, and the same width of
+                    // nothing beside the others, so the labels line up.
+                    if (mode == current) {
+                        Icon(Icons.Outlined.Check, contentDescription = null, modifier = Modifier.size(18.dp))
+                    } else {
+                        Box(Modifier.size(18.dp))
+                    }
+                },
+                onClick = { onPick(mode) },
+            )
+        }
+    }
+}
+
+/** The three [VoiceBarSettings.typingMode]s in the order the settings screen lists them. */
+private val VoiceModeMenuEntries = listOf(
+    VoiceBarSettings.TYPING_BLOCK to R.string.ime_voice_mode_block,
+    VoiceBarSettings.TYPING_INTERACTIVE to R.string.ime_voice_mode_interactive,
+    VoiceBarSettings.TYPING_PLAIN to R.string.ime_voice_mode_plain,
+)
+
 /** Divider thickness between suggestion slots; subtracted from the usable slot width. */
 private val SuggestionDividerWidth = 1.dp
 
@@ -5958,6 +6008,12 @@ private class ToolDragController {
      */
     var onTrackpadHold: (Boolean) -> Unit = {}
 
+    /**
+     * A voice typing mode picked off the Voice tool's hold menu (#173): the
+     * mode's token. On the controller for the reason [onHoldAction] is.
+     */
+    var onVoiceModePick: (String) -> Unit = {}
+
     // Toolbox geometry and data, registered by ToolboxPanel while it is
     // open (a drag can only happen with the toolbox open). The viewport is
     // the visible panel box; content coords are the scrolling grid column,
@@ -6145,12 +6201,28 @@ private fun holdActionFor(
     state: KeyboardUiState,
 ): ToolbarTool? = if (
     !fromToolbar || holdRepeatMs(tool, state) != null ||
-    holdArmsSelection(tool, fromToolbar, state) || holdOpensTrackpad(tool, fromToolbar, state)
+    holdArmsSelection(tool, fromToolbar, state) || holdOpensTrackpad(tool, fromToolbar, state) ||
+    holdPicksVoiceMode(tool, fromToolbar, state)
 ) {
     null
 } else {
     state.settings.toolbarBehavior.holdActions[tool]
 }
+
+/**
+ * Whether a press and hold on [tool] opens the voice typing mode menu: the
+ * Voice tool on the toolbar, unless the user has given that hold back (#173).
+ * The fifth thing a stationary hold can be, exclusive with the other four the
+ * way they are with each other, and toolbar only for the reason
+ * [holdArmsSelection] is.
+ */
+private fun holdPicksVoiceMode(
+    tool: ToolbarTool,
+    fromToolbar: Boolean,
+    state: KeyboardUiState,
+): Boolean = fromToolbar &&
+    tool == ToolbarTool.VOICE &&
+    state.settings.voiceBar.holdPicksTypingMode
 
 /**
  * Whether a press and hold on [tool] opens the trackpad panel for as long as the
@@ -6229,6 +6301,14 @@ private fun DraggableTool(
     holdArms: Boolean = false,
     /** Whether a stationary hold opens the trackpad panel for as long as it lasts. */
     holdPanel: Boolean = false,
+    /**
+     * Whether a stationary hold opens a menu on its release — the Voice tool's
+     * typing modes (#173) — through [onHoldMenu]. Dispatched like the settings
+     * page and a bound action, on the lift, not like [holdArms]: the menu is
+     * what the hold was for, and it stands after the finger is gone.
+     */
+    holdMenu: Boolean = false,
+    onHoldMenu: () -> Unit = {},
     content: @Composable (Modifier) -> Unit,
 ) {
     var origin by remember { mutableStateOf(Offset.Zero) }
@@ -6238,13 +6318,14 @@ private fun DraggableTool(
     // a fresh lambda every recomposition would restart the handler, and the
     // drop preview recomposes this row on every frame of a drag.
     val tapAction by rememberUpdatedState(onTap)
+    val menuAction by rememberUpdatedState(onHoldMenu)
     content(
         Modifier
             .onGloballyPositioned { origin = it.positionInRoot() }
             // Keyed on the interval too: it comes from a setting, so the handler
             // has to be rebuilt when it changes. A Long changes far more rarely
             // than the lambda above, which is why that one goes through a holder.
-            .pointerInput(enabled, tool, holdRepeatMs, holdArms, holdPanel) {
+            .pointerInput(enabled, tool, holdRepeatMs, holdArms, holdPanel, holdMenu) {
                 if (!enabled) return@pointerInput
                 // Raw press-and-hold, mirroring the key rows' handler, instead
                 // of detectDragGesturesAfterLongPress: its long-press never
@@ -6381,6 +6462,14 @@ private fun DraggableTool(
                             // Same for a repeating hold. Its settings page is a
                             // hold away in the toolbox, which never repeats.
                             holdRepeatMs != null -> drag.cancel()
+                            // A hold that opens a menu opens it on the lift,
+                            // like the settings page below: a menu under a
+                            // finger that is still down would be dismissed by
+                            // the release that was meant to read it.
+                            holdMenu -> {
+                                drag.cancel()
+                                menuAction()
+                            }
                             // A hold that never travelled past the slop is a
                             // distinct gesture: the action the user bound to it,
                             // or the tool's settings page when they bound none.
@@ -7156,6 +7245,10 @@ private fun RowScope.ToolbarRow(
                 // the cell ended. On the icon's own node the buffer travels
                 // with it and there is nothing to clip.
                 val fadeThis = tool != ToolbarTool.EMOJI || fadeEmoji
+                // The Voice tool's hold menu (#173). Cell-local: it is about
+                // this one cell, opens on the hold's lift and closes on a
+                // pick or a tap outside, and nothing else needs to know.
+                var voiceMenuOpen by remember { mutableStateOf(false) }
                 Box(cell, contentAlignment = Alignment.Center) {
                     // Drag is always live: hold-and-drag reorders the bar
                     // (or unpins into an open toolbox); a hold that never
@@ -7174,6 +7267,8 @@ private fun RowScope.ToolbarRow(
                         holdAction = holdActionFor(tool, fromToolbar = true, state = state),
                         holdArms = holdArmsSelection(tool, fromToolbar = true, state = state),
                         holdPanel = holdOpensTrackpad(tool, fromToolbar = true, state = state),
+                        holdMenu = holdPicksVoiceMode(tool, fromToolbar = true, state = state),
+                        onHoldMenu = { voiceMenuOpen = true },
                     ) { dragModifier ->
                         ToolCircle(
                             slot = IconSlots.forTool(tool),
@@ -7223,6 +7318,17 @@ private fun RowScope.ToolbarRow(
                                 ),
                             interactive = false,
                         ) {}
+                    }
+                    if (voiceMenuOpen) {
+                        StripMenuScrim(onDismiss = { voiceMenuOpen = false })
+                        VoiceModeMenu(
+                            current = state.settings.voiceBar.typingMode,
+                            onDismiss = { voiceMenuOpen = false },
+                            onPick = { mode ->
+                                voiceMenuOpen = false
+                                drag.onVoiceModePick(mode)
+                            },
+                        )
                     }
                 }
             }
@@ -8378,6 +8484,7 @@ private fun KeyboardBody(
     drag.onOpenSettings = toolHold.onSettings
     drag.onSelectionHold = toolHold.onSelectionHold
     drag.onTrackpadHold = toolHold.onTrackpadHold
+    drag.onVoiceModePick = toolHold.onVoiceModePick
     // A remapped hold runs the bound tool through the service's own dispatcher
     // rather than [onToolTap]: that one refuses any tool the toolbar does not
     // list, and the tool the user bound a hold to is very often one they never
@@ -18692,6 +18799,12 @@ data class ToolHoldCallbacks(
      * for as long as the hold lasts. Paired like [onSelectionHold].
      */
     val onTrackpadHold: (Boolean) -> Unit = {},
+    /**
+     * A voice typing mode picked off the Voice tool's hold menu (#173):
+     * one of the `VoiceBarSettings.TYPING_*` tokens. Persisted and started
+     * by the service in one move.
+     */
+    val onVoiceModePick: (String) -> Unit = {},
     /**
      * The dictionary bar's two callbacks (issue #51). Not a hold at all; they
      * ride this bundle because it is the nearest one already on the call and
