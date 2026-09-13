@@ -36,9 +36,12 @@ import org.robolectric.Shadows.shadowOf
  *    `onSuggestionTapped` precisely so a word taken off the *keys* is not
  *    caught by it (discussion #102). Glide "hello", flick `w` for "world", and
  *    the detour would leave "world" standing where "hello " was.
- *  - the same method then arms `lastGestureWord` with its own word, so the
- *    branch is right about *it* — one backspace takes the pick back whole, and
- *    a strip tap straight afterwards replaces it.
+ *  - the same method then arms `lastGestureWord` with its own word — one
+ *    backspace takes the pick back whole — but *not* `stripReplacesGestureWord`:
+ *    the pick ends with an ordinary refresh, so the strip holds what may follow
+ *    the word rather than what it might have been, and a tap there lands after
+ *    the pick (#175). Only a glide, which puts the stroke's own alternates on
+ *    the strip, arms both.
  *  - `onCursorMove` clears the flag, because once the caret has moved the strip
  *    is no longer talking about the word behind it.
  *
@@ -156,14 +159,17 @@ class ServiceStateWiringTest {
     }
 
     /**
-     * The other half of the octopus pick: it takes no word from the field, but
-     * it does hand its own over, so the word it just wrote is the one a strip
-     * tap replaces.
+     * The other half of the octopus pick (#175): it hands its word over for
+     * the backspace, but the strip it leaves behind holds next-word
+     * predictions, not alternates, so a tap there follows the pick rather
+     * than replacing it. Pick "hello" off a key, tap "world" on the strip:
+     * "hello world", not "world".
      *
-     * Reddens if `lastGestureWord = word` is dropped from `onOctopusPick`.
+     * Reddens if `onOctopusPick` arms `stripReplacesGestureWord`, or if the
+     * `onSuggestionTapped` branch stops reading it.
      */
     @Test
-    fun `a word taken off the keys is itself replaceable from the strip`() {
+    fun `a word taken off the keys is followed by the next strip pick, not replaced by it`() {
         val (service, editor, _) = glideKeyboard()
 
         service.onOctopusPick(glided, OctopusSource.TAP)
@@ -171,7 +177,7 @@ class ServiceStateWiringTest {
 
         service.onSuggestionTapped(picked)
 
-        assertEquals(picked, editor.text.toString().trim())
+        assertEquals("$glided $picked", editor.text.toString().trim())
     }
 
     private companion object {

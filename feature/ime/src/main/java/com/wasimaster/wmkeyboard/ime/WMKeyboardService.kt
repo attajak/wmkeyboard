@@ -1535,6 +1535,22 @@ open class WMKeyboardService : InputMethodService() {
     private var lastGestureWord: String? = null
 
     /**
+     * Whether the strip is showing [lastGestureWord]'s own alternates, so a
+     * tap on it *replaces* that word rather than following it.
+     *
+     * [lastGestureWord] carries two meanings, and only one of them is always
+     * true. Every commit that arms it wants a single backspace to take the
+     * whole commit back, word and space together, and wants the commit's own
+     * selection echo kept from re-composing the word. Only a glide (and the
+     * handwriting panel) also puts the *stroke's* alternates on the strip; a
+     * word taken off the keys ends with an ordinary refresh, so its strip
+     * holds the next-word predictions, and a tap on one of those means "and
+     * then this", not "no, this instead" (#175). False by default so a new
+     * arming site that forgets it gets the append, never the eaten word.
+     */
+    private var stripReplacesGestureWord = false
+
+    /**
      * How many words have been taken off the keys this session, by gesture
      * (#102). Read by nothing yet: it is the number that answers whether the
      * feature is used or merely admired, and — split this way — whether the
@@ -12459,9 +12475,11 @@ open class WMKeyboardService : InputMethodService() {
         }
         // After a swipe, the alternates replace the committed gesture word —
         // together with the space the swipe typed after it, so the trailing
-        // space below lands in the same place rather than after a gap.
+        // space below lands in the same place rather than after a gap. Only
+        // when the strip really is showing that word's alternates: a word
+        // picked off the keys leaves next-word predictions there (#175).
         val gestureWord = lastGestureWord
-        if (composing.isEmpty() && gestureWord != null) {
+        if (composing.isEmpty() && gestureWord != null && stripReplacesGestureWord) {
             val len = glideCommitLength(ic, gestureWord)
             if (len > 0) {
                 ic.deleteSurroundingText(len, 0)
@@ -12667,10 +12685,12 @@ open class WMKeyboardService : InputMethodService() {
         // One backspace takes the whole pick back, word and space together,
         // through the machinery a glide's own commit already uses. With no
         // stroke attached, the parts of that path which re-decode a swipe sit
-        // out, which is right: there is no swipe to re-read. This is also why a
-        // strip tap straight afterwards *replaces* the picked word rather than
-        // landing after it, which is the behaviour that branch is for.
+        // out, which is right: there is no swipe to re-read. The strip is
+        // *not* told to replace the pick on a tap: the refresh below fills it
+        // with what may follow the word, not with what it might have been, so
+        // a tap there lands after the pick (#175).
         lastGestureWord = word
+        stripReplacesGestureWord = false
         lastGestureStroke = null
         composing = StringBuilder()
         _uiState.update {
@@ -13775,6 +13795,7 @@ open class WMKeyboardService : InputMethodService() {
             // learning hop below, so the guard that exists for exactly this
             // could not win the race it was written for.
             lastGestureWord = word
+            stripReplacesGestureWord = true
             commitGestureSpace(ic, state)
             armRevertGuard()
             recordStat { onWordsCommitted(1, System.currentTimeMillis()) }
@@ -14057,6 +14078,7 @@ open class WMKeyboardService : InputMethodService() {
                 // the last stroke reads as a real caret move and disarms the
                 // very flag that was just set.
                 lastGestureWord = word
+                stripReplacesGestureWord = true
                 armRevertGuard()
                 recordStat { onWordsCommitted(1, System.currentTimeMillis()) }
                 learn(
@@ -15890,6 +15912,9 @@ open class WMKeyboardService : InputMethodService() {
         connection.commitText(if (needsSpace) " $word" else word, 1)
         learn(word)
         lastGestureWord = word
+        // The recogniser's other readings go on the strip below, so a tap
+        // there is a correction of this word, as after a glide.
+        stripReplacesGestureWord = true
         // Ink, not a swipe: there is no stroke a deep retry could re-decode,
         // and nothing the hand model learned that an undo should take back.
         lastGestureStroke = null
