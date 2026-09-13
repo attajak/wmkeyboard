@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -288,14 +290,19 @@ internal fun AiChatScreen(
             )
         },
     ) { padding ->
-        // No imePadding/navigationBarsPadding here: the activity is not
-        // edge-to-edge, so the window itself already resizes for the keyboard
-        // and insets the navigation bar — adding them again doubles the
-        // bottom padding by a whole keyboard and shoves the composer to the
-        // top of the screen.
+        // The app targets SDK 36, so from Android 15 the window is drawn edge to
+        // edge and no longer resizes for the keyboard. Without imePadding nothing
+        // makes room, and the system pans the whole window up until the focused
+        // composer clears the keyboard — the top bar and the newest messages go
+        // off the top of the screen (#143). Stopping the column at the keyboard
+        // instead shrinks the reverseLayout transcript from its top, so the
+        // newest message stays on screen. The Scaffold's bottom inset is
+        // consumed first so the navigation bar is not counted twice.
         Column(
             modifier = Modifier
                 .padding(padding)
+                .consumeWindowInsets(padding)
+                .imePadding()
                 .fillMaxSize(),
         ) {
             if (localModels.isEmpty() && remoteProviders.isEmpty()) {
