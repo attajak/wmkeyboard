@@ -47,6 +47,12 @@ internal data class CodeCompletion(
     val caret: Int = insert.length,
     /** How it is called, or what it holds. */
     val detail: String? = null,
+    /**
+     * Whether choosing it leaves a blank that has suggestions of its own, such as
+     * the empty value of a JSON property with a fixed set of values, so the list
+     * opens again at the new caret.
+     */
+    val reopen: Boolean = false,
 )
 
 /** Suggestions for one caret, and the text a chosen one replaces. */

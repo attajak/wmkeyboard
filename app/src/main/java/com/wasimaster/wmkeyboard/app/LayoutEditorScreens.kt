@@ -38,7 +38,6 @@ import com.wasimaster.wmkeyboard.core.ui.WmSlider
 import com.wasimaster.wmkeyboard.core.util.requireInputStream
 import com.wasimaster.wmkeyboard.core.util.requireOutputStream
 import com.wasimaster.wmkeyboard.core.util.runCancellable
-import androidx.compose.material3.Button
 import com.wasimaster.wmkeyboard.core.layout.LayoutCodec
 import com.wasimaster.wmkeyboard.core.layout.repair
 import com.wasimaster.wmkeyboard.core.layout.repairAsLayer
@@ -103,7 +102,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
@@ -149,6 +147,7 @@ import com.wasimaster.wmkeyboard.core.layout.resolvePanelLayout
 import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
+import com.wasimaster.wmkeyboard.core.layout.json.LayoutJsonRoot
 import com.wasimaster.wmkeyboard.core.layout.language
 import com.wasimaster.wmkeyboard.core.layout.ModifierKey
 import com.wasimaster.wmkeyboard.core.layout.LayoutSeverity
@@ -4848,79 +4847,34 @@ internal fun KeyLayoutJsonScreen(
     layoutId: String,
     onDone: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
+    val title = stringResource(R.string.home_screen_layout_json_title)
     val layout = resolveLayouts(settings.customLayouts).firstOrNull { it.id == layoutId }
     if (layout == null) {
-        Text(
-            stringResource(R.string.layout_editor_missing_layout_message),
-            modifier = Modifier.padding(16.dp),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        MissingJsonDocument(title, stringResource(R.string.layout_editor_missing_layout_message), onDone)
         return
     }
-
-    val editor = rememberCodeEditorState(layoutId) { LayoutCodec.encodeForEditing(layout) }
-    var error by remember { mutableStateOf<String?>(null) }
-    var repairs by remember { mutableStateOf<List<LayoutMessage>>(emptyList()) }
-    // The Apply button is a plain lambda, so the message it may set is read here.
-    val invalidJsonMessage = stringResource(R.string.layout_editor_json_invalid_error)
-
-    // The message belongs to the text it was printed for. Any edit retires it.
-    val text = editor.text
-    LaunchedEffect(text) { error = null }
-
-    // Capped, and scrolling inside itself. Uncapped the field grew to the
-    // height of the whole document, which put Apply, and the repair notes it
-    // prints, dozens of screens below the fold on any real layout.
-    CodeEditor(
-        state = editor,
-        language = JsonCode,
-        title = stringResource(R.string.layout_editor_json_field_label),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-    )
-    error?.let { CaptionText(it, error = true) }
-
-    if (repairs.isNotEmpty()) {
-        SettingsGroup(
-            stringResource(R.string.layout_editor_json_applied_title),
-            info = stringResource(R.string.layout_editor_json_caption),
-        ) {
-            for (note in repairs) {
-                item {
-                    WmRow(
-                        title = note.format(context.resources),
-                    )
-                }
-            }
-        }
-    }
-
-    Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Spacer(Modifier.weight(1f))
-        Button(
-            enabled = text.isNotBlank(),
-            onClick = {
-                // The bare layout this screen prints, or the exported file
-                // that wraps the same layout in its envelope: both are the
-                // user's layout, and both are accepted.
-                val parsed = LayoutCodec.decode(text) ?: LayoutFile.unwrap(text)
-                if (parsed == null) {
-                    error = invalidJsonMessage
-                    return@Button
-                }
+    LayoutJsonEditorScreen(
+        title = title,
+        documentKey = layoutId,
+        root = LayoutJsonRoot.LAYOUT,
+        settings = settings,
+        initialText = { LayoutCodec.encodeForEditing(layout) },
+        onApply = { text ->
+            // The bare layout this screen prints, or the exported file that
+            // wraps the same layout in its envelope: both are the user's
+            // layout, and both are accepted.
+            val parsed = LayoutCodec.decode(text) ?: LayoutFile.unwrap(text)
+            if (parsed == null) {
+                JsonApplyOutcome.Invalid
+            } else {
                 // The id in the text is ignored: this screen edits one layout,
                 // and honouring a pasted id would silently overwrite a different
-                // one — or create a second layout the user never asked for.
+                // one, or create a second layout the user never asked for.
                 val repaired = parsed.copy(id = layoutId).repair()
-                repairs = repaired.repairNotes
-                scope.launch {
-                    repository.upsertCustomLayout(repaired.spec)
-                    if (repaired.repairNotes.isEmpty()) onDone()
-                }
-            },
-        ) { Text(stringResource(R.string.layout_editor_apply_action)) }
-    }
+                repository.upsertCustomLayout(repaired.spec)
+                JsonApplyOutcome.Applied(repaired.repairNotes)
+            }
+        },
+        onBack = onDone,
+    )
 }

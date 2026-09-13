@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The layout JSON editor's checks. Each string is one problem the checks can
+  find, named after its code. Words in quote marks inside a sentence, and the
+  names of properties, values and layers put in by an argument, are parts of a
+  file format: keep them exactly as they are.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="json_diag_unclosed_string">This text has no closing quote mark.</string>
+    <!-- %1$s is what was written, such as \q. -->
+    <string name="json_diag_bad_escape">JSON has no escape <xliff:g id="escape" example="\\q">%1$s</xliff:g>.</string>
+    <!-- %1$s is the character. -->
+    <string name="json_diag_unknown_character">JSON has no place for <xliff:g id="character" example="@">%1$s</xliff:g> here.</string>
+    <!-- %1$s is the word. true, false and null are JSON words: do not translate them. -->
+    <string name="json_diag_unquoted_word">Put <xliff:g id="word" example="label">%1$s</xliff:g> in quote marks, or write true, false or null.</string>
+    <string name="json_diag_expected_value">A value is missing here.</string>
+    <string name="json_diag_expected_key">A property name in quote marks goes here.</string>
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_expected_colon">Put a colon after <xliff:g id="name" example="width">%1$s</xliff:g>.</string>
+    <string name="json_diag_expected_comma">Put a comma before this.</string>
+    <string name="json_diag_trailing_comma">Delete this comma. Nothing comes after it.</string>
+    <string name="json_diag_unclosed_object">This object has no closing brace.</string>
+    <string name="json_diag_unclosed_array">This list has no closing bracket.</string>
+    <!-- %1$s is the bracket or brace, ] or }. -->
+    <string name="json_diag_stray_closer"><xliff:g id="closer" example="}">%1$s</xliff:g> closes nothing.</string>
+    <string name="json_diag_trailing_content">Apply ignores the text after the end of the JSON.</string>
+
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_unknown_property">There is no property <xliff:g id="name" example="colour">%1$s</xliff:g> here, so Apply ignores it.</string>
+    <!-- %1$s is the property name as written, %2$s the one it is close to. -->
+    <string name="json_diag_property_typo">There is no property <xliff:g id="name" example="lable">%1$s</xliff:g>. Did you mean <xliff:g id="near" example="label">%2$s</xliff:g>?</string>
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_duplicate_property"><xliff:g id="name" example="width">%1$s</xliff:g> is written twice. Apply keeps the last one.</string>
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_missing_property">This object needs <xliff:g id="name" example="label">%1$s</xliff:g>.</string>
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_expected_text"><xliff:g id="name" example="label">%1$s</xliff:g> takes text in quote marks.</string>
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_expected_number"><xliff:g id="name" example="width">%1$s</xliff:g> takes a number.</string>
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_expected_whole_number"><xliff:g id="name" example="rowSpan">%1$s</xliff:g> takes a whole number.</string>
+    <!-- %1$s is the property name. true and false are JSON words: do not translate them. -->
+    <string name="json_diag_expected_boolean"><xliff:g id="name" example="hideHint">%1$s</xliff:g> takes true or false.</string>
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_expected_list"><xliff:g id="name" example="longPress">%1$s</xliff:g> takes a list in square brackets.</string>
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_expected_object"><xliff:g id="name" example="action">%1$s</xliff:g> takes an object in braces.</string>
+    <!-- %1$s is the property name. null is a JSON word: do not translate it. -->
+    <string name="json_diag_null_not_allowed"><xliff:g id="name" example="label">%1$s</xliff:g> cannot be null.</string>
+    <!-- %1$s is the property name. null is a JSON word: do not translate it. -->
+    <string name="json_diag_null_becomes_default">Apply uses the default for <xliff:g id="name" example="width">%1$s</xliff:g> in place of null.</string>
+    <!-- %1$s is the value as written, %2$s the property name. -->
+    <string name="json_diag_unknown_value"><xliff:g id="name" example="role">%2$s</xliff:g> has no value <xliff:g id="value" example="Dot">%1$s</xliff:g>, so Apply uses the default.</string>
+    <!-- %1$s is the value as written, %2$s the value it is close to. -->
+    <string name="json_diag_value_typo">There is no value <xliff:g id="value" example="Perod">%1$s</xliff:g>. Did you mean <xliff:g id="near" example="Period">%2$s</xliff:g>?</string>
+    <!-- %1$s is the value as written, %2$s the property name. -->
+    <string name="json_diag_unknown_value_required"><xliff:g id="name" example="op">%2$s</xliff:g> has no value <xliff:g id="value" example="LEFTT">%1$s</xliff:g>, and Apply cannot read the layout without one it knows.</string>
+    <!-- %1$s is the action type. -->
+    <string name="json_diag_unknown_action">This version has no action <xliff:g id="type" example="teleport">%1$s</xliff:g>. Apply deletes the key.</string>
+    <!-- %1$s is the action type as written, %2$s the one it is close to. -->
+    <string name="json_diag_action_typo">There is no action <xliff:g id="type" example="shfit">%1$s</xliff:g>. Did you mean <xliff:g id="near" example="shift">%2$s</xliff:g>?</string>
+    <!-- %1$s is the direction as written. left, up, right and down are JSON words: do not translate them. -->
+    <string name="json_diag_unknown_map_key"><xliff:g id="key" example="upp">%1$s</xliff:g> is not a direction. Use left, up, right or down.</string>
+    <!-- %1$s is the layer name. -->
+    <string name="json_diag_unknown_layer">There is no layer <xliff:g id="layer" example="emojis">%1$s</xliff:g>, so Apply ignores it.</string>
+    <!-- %1$s is the layer name as written, %2$s the one it is close to. -->
+    <string name="json_diag_layer_typo">There is no layer <xliff:g id="layer" example="lettres">%1$s</xliff:g>. Did you mean <xliff:g id="near" example="letters">%2$s</xliff:g>?</string>
+    <!-- %1$s is the property name, %2$s the range it takes, written as 0.5..2. -->
+    <string name="json_diag_out_of_range"><xliff:g id="name" example="width">%1$s</xliff:g> is outside <xliff:g id="range" example="0.1..12">%2$s</xliff:g>, so the keyboard changes it.</string>
+    <!-- %1$s is the language id. -->
+    <string name="json_diag_unknown_language">No language has the id <xliff:g id="id" example="xx">%1$s</xliff:g>.</string>
+    <!-- %1$s is the icon name. -->
+    <string name="json_diag_unknown_icon">There is no icon <xliff:g id="icon" example="rocket">%1$s</xliff:g>. The key draws its label.</string>
+    <!-- %1$s is the theme id. -->
+    <string name="json_diag_unknown_theme">This device has no theme <xliff:g id="id" example="ocean">%1$s</xliff:g>. The layout keeps the id for when the theme arrives.</string>
+    <!-- %1$s is the layout id. -->
+    <string name="json_diag_unknown_secondary_layout">You have no secondary layout with the id <xliff:g id="id" example="custom_1700000000">%1$s</xliff:g>, so the key does nothing.</string>
+    <string name="json_diag_field_outside_panel">Only a panel can hold a component cell. Apply deletes this key.</string>
+    <!-- %1$s is the property name. -->
+    <string name="json_diag_set_by_keyboard">The keyboard sets <xliff:g id="name" example="actionAlternatesFirst">%1$s</xliff:g> itself, so there is no need to write it.</string>
+
+</resources>

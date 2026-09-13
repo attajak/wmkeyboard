@@ -8,8 +8,6 @@
 
     <!-- Content description of the redo button. Undo, copy and paste use the common words. -->
     <string name="code_redo_desc">Redo</string>
-    <!-- Content description of the button that indents the text again. -->
-    <string name="code_format_desc">Format the text</string>
     <!-- Content description of the wrap button while long lines run off the screen. -->
     <string name="code_wrap_on_desc">Wrap long lines</string>
     <!-- Content description of the wrap button while long lines wrap. -->
@@ -17,15 +15,6 @@
 
     <!-- Where the caret is. %1$d is the line number, %2$d the column number. -->
     <string name="code_position_label">Line %1$d, column %2$d</string>
-    <!-- How long the text is. %1$d is the number of characters. -->
-    <plurals name="code_character_count">
-        <item quantity="one">%1$d character</item>
-        <item quantity="other">%1$d characters</item>
-    </plurals>
-    <!-- Shown while the text parses. -->
-    <string name="code_status_ok">No problems</string>
-    <!-- Shown while the text does not parse. %1$d is the line number. Press it to go there. -->
-    <string name="code_status_problem">Problem on line %1$d</string>
 
     <!-- Placeholder of the find field. -->
     <string name="code_find_label">Find</string>

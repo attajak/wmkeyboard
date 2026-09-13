@@ -170,8 +170,8 @@ private val NoSuggestions = object : PlatformTextInputInterceptor {
  * The editor field on its own: a monospaced field on a code background, with
  * numbered lines, the caret's line lit, matching brackets boxed, and whatever
  * [decorations] asks for drawn underneath. No toolbar, no status line and no
- * height of its own: [CodeEditor] caps it inside a scrolling screen, and the
- * plugin editor gives it the whole window.
+ * height of its own: the plugin editor and the layout JSON editor each give it
+ * the whole window, and draw their own bars around it.
  *
  * Long lines run off to the right and scroll rather than wrap, which is what
  * keeps one number against one line. [wrap] turns that off for a narrow screen,
@@ -303,14 +303,26 @@ internal fun CodeSurface(
             CompletionStep.CLOSE -> suggestions = null
         }
     }
+    // Raised by a chosen suggestion whose blank has suggestions of its own.
+    var reopenRequests by remember { mutableIntStateOf(0) }
     val choose: (CodeCompletion) -> Unit = remember(state) {
         { item ->
             suggestions?.let { shown ->
                 suggestions = null
                 justChose[0] = true
                 state.applyEdit(shown.editFor(item))
+                if (item.reopen) reopenRequests++
             }
         }
+    }
+    LaunchedEffect(reopenRequests) {
+        if (!completions || reopenRequests == 0) return@LaunchedEffect
+        // One frame, so the effect above has seen the chosen text and let it pass.
+        withFrameNanos { }
+        val source = state.text
+        val at = state.value.selection.end
+        suggestions = withContext(Dispatchers.Default) { language.completions(source, at, explicit = true) }
+        chosen = 0
     }
     val scope = rememberCoroutineScope()
     LaunchedEffect(suggestRequests) {

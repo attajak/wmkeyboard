@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -22,7 +21,6 @@ import androidx.compose.material.icons.automirrored.outlined.Undo
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +28,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,7 +55,6 @@ import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.LayerSpec
 import com.wasimaster.wmkeyboard.core.layout.LayoutAppearance
-import com.wasimaster.wmkeyboard.core.layout.LayoutMessage
 import com.wasimaster.wmkeyboard.core.layout.LayoutSeverity
 import com.wasimaster.wmkeyboard.core.layout.MaxRowHeightScale
 import com.wasimaster.wmkeyboard.core.layout.MinRowHeightScale
@@ -67,6 +63,7 @@ import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutCodec
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.fitRowToGrid
+import com.wasimaster.wmkeyboard.core.layout.json.LayoutJsonRoot
 import com.wasimaster.wmkeyboard.core.layout.gridWeightOf
 import com.wasimaster.wmkeyboard.core.layout.isAllowedOnPanel
 import com.wasimaster.wmkeyboard.core.layout.panelFlexRows
@@ -821,63 +818,30 @@ internal fun FieldKindPickerDialog(
 @Composable
 internal fun PanelLayoutJsonScreen(
     repository: SettingsRepository,
+    settings: KeyboardSettings,
     kind: PanelKind,
     onDone: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
     val custom by repository.customPanelLayouts.collectAsStateWithLifecycle(null)
     val stored = custom ?: return
-    val editor = rememberCodeEditorState(kind) {
-        PanelLayoutCodec.encodeForEditing(resolvePanelLayout(kind, stored))
-    }
-    var error by remember { mutableStateOf<String?>(null) }
-    var repairs by remember { mutableStateOf<List<LayoutMessage>>(emptyList()) }
-    val invalidJsonMessage = stringResource(R.string.layout_editor_json_invalid_error)
-
-    // The message belongs to the text it was printed for. Any edit retires it.
-    val text = editor.text
-    LaunchedEffect(text) { error = null }
-
-    CaptionText(stringResource(R.string.layout_editor_json_caption))
-
-    CodeEditor(
-        state = editor,
-        language = JsonCode,
-        title = stringResource(R.string.layout_editor_json_field_label),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-    )
-    error?.let { CaptionText(it, error = true) }
-
-    if (repairs.isNotEmpty()) {
-        SettingsGroup(stringResource(R.string.layout_editor_json_applied_title)) {
-            for (note in repairs) {
-                item { WmRow(title = note.format(context.resources)) }
-            }
-        }
-    }
-
-    Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Spacer(Modifier.weight(1f))
-        Button(
-            enabled = text.isNotBlank(),
-            onClick = {
-                val parsed = PanelLayoutCodec.decode(text)
-                if (parsed == null) {
-                    error = invalidJsonMessage
-                    return@Button
-                }
+    LayoutJsonEditorScreen(
+        title = stringResource(R.string.panel_layout_json_title),
+        documentKey = "panel:${kind.name}",
+        root = LayoutJsonRoot.PANEL,
+        settings = settings,
+        initialText = { PanelLayoutCodec.encodeForEditing(resolvePanelLayout(kind, stored)) },
+        onApply = { text ->
+            val parsed = PanelLayoutCodec.decode(text)
+            if (parsed == null) {
+                JsonApplyOutcome.Invalid
+            } else {
                 // The panel named in the text is ignored: this screen edits one
                 // panel, and honouring a pasted one would overwrite another.
                 val repaired = parsed.copy(panel = kind).repair()
-                repairs = repaired.repairNotes
-                scope.launch {
-                    repository.upsertPanelLayout(repaired.spec)
-                    if (repaired.repairNotes.isEmpty()) onDone()
-                }
-            },
-        ) { Text(stringResource(R.string.layout_editor_apply_action)) }
-    }
+                repository.upsertPanelLayout(repaired.spec)
+                JsonApplyOutcome.Applied(repaired.repairNotes)
+            }
+        },
+        onBack = onDone,
+    )
 }

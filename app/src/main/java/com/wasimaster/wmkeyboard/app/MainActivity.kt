@@ -1219,11 +1219,11 @@ private fun SettingsNavGraph(
                 }
             }
         }
+        // Its own Scaffold rather than SettingsScreen, like the plugin editor:
+        // the code needs the window's height, and brings its own top bar.
         composable("keymap_json/{layoutId}") { backStackEntry ->
             val layoutId = backStackEntry.arguments?.getString("layoutId").orEmpty()
-            SettingsScreen(stringResource(R.string.home_screen_layout_json_title), { navController.popBackStack() }) {
-                KeyLayoutJsonScreen(repository, settings, layoutId) { navController.popBackStack() }
-            }
+            KeyLayoutJsonScreen(repository, settings, layoutId) { navController.popBackStack() }
         }
         // The panel layouts (issue #63): the emoji, clipboard and text-editing
         // panels in the layout editor's own controls. The argument is the
@@ -1239,9 +1239,7 @@ private fun SettingsNavGraph(
         composable("panel_json/{panel}") { backStackEntry ->
             val kind = PanelKind.entries.firstOrNull { it.name == backStackEntry.arguments?.getString("panel") }
                 ?: PanelKind.EMOJI
-            SettingsScreen(stringResource(R.string.panel_layout_json_title), { navController.popBackStack() }) {
-                PanelLayoutJsonScreen(repository, kind) { navController.popBackStack() }
-            }
+            PanelLayoutJsonScreen(repository, settings, kind) { navController.popBackStack() }
         }
         composable("languages") {
             SettingsScreen(

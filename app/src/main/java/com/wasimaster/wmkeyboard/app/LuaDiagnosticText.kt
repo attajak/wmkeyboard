@@ -81,6 +81,7 @@ internal fun LuaDiagnostic.toCodeDiagnostic(): CodeDiagnostic = CodeDiagnostic(
  * never asked for.
  */
 internal fun CodeDiagnostic.message(context: Context): String = when {
+    note != null -> note.format(context.resources)
     messageRes == 0 -> ""
     arg1 == null && arg2 == null -> context.getString(messageRes)
     else -> context.getString(messageRes, arg1.orEmpty(), arg2.orEmpty())

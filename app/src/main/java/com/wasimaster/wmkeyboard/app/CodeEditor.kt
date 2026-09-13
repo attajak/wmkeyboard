@@ -5,61 +5,27 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Typeface
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Redo
-import androidx.compose.material.icons.automirrored.outlined.Undo
-import androidx.compose.material.icons.automirrored.outlined.WrapText
-import androidx.compose.material.icons.outlined.AutoFixHigh
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.ContentPaste
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.wasimaster.wmkeyboard.R
-import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.layout.LayoutMessage
 import java.io.File
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 
 // ---------------------------------------------------------------------------
 // A small code editor
@@ -69,8 +35,9 @@ import kotlinx.coroutines.withContext
  * The parts of a source language this editor needs: how to colour it, how to
  * tidy it, where its brackets pair up, and what is wrong with it right now.
  *
- * Two implementations ship: [JsonCode] for the layout screens and [LuaCode] for
- * the plugin editor. The editor itself knows about neither.
+ * [JsonCode] colours and prints JSON; [LayoutJsonLanguage] adds the layout
+ * schema's suggestions and checks on top of it for the two JSON screens; [LuaCode]
+ * serves the plugin editor. The editor itself knows about none of them.
  */
 @Immutable
 internal interface CodeLanguage {
@@ -95,8 +62,8 @@ internal interface CodeLanguage {
     fun matchingBracket(source: String, brackets: List<Int>, caret: Int): Pair<Int, Int>?
 
     // Everything below has a default, so a language with nothing to say about it
-    // says nothing and the editor draws nothing. JsonCode overrides none of them,
-    // which is how the two JSON screens stay exactly as they were.
+    // says nothing and the editor draws nothing. JsonCode overrides none of them;
+    // LayoutJsonLanguage and LuaCode fill them in.
 
     /** What starts a line comment, or null for a language that has none. */
     val lineComment: String?
@@ -145,6 +112,8 @@ internal data class CodeDiagnostic(
     @StringRes val messageRes: Int = 0,
     val arg1: String? = null,
     val arg2: String? = null,
+    /** A layout check's own message, which carries its resource and arguments itself. Wins over [messageRes]. */
+    val note: LayoutMessage? = null,
 )
 
 /**
@@ -577,165 +546,6 @@ internal fun rememberCodeEditorState(
 }
 
 // ---------------------------------------------------------------------------
-// The editor
-// ---------------------------------------------------------------------------
-
-private const val PROBLEM_DELAY_MS = 250L
-
-/**
- * A monospaced field on a code background, with numbered lines, the caret's
- * line lit, matching brackets boxed, a toolbar above and a status line below.
- *
- * The field itself is [CodeSurface]; this adds the toolbar, the status line and
- * a height cap, for a screen that scrolls around the editor rather than giving
- * it the whole window.
- */
-@Composable
-internal fun CodeEditor(
-    state: CodeEditorState,
-    language: CodeLanguage,
-    modifier: Modifier = Modifier,
-    title: String? = null,
-    minHeight: Dp = 240.dp,
-    maxHeight: Dp = 420.dp,
-) {
-    val colors = rememberCodeColors()
-    var wrap by rememberSaveable { mutableStateOf(false) }
-    val text = state.text
-    val caret = state.value.selection.end.coerceIn(0, text.length)
-    val lineStarts = remember(text) { lineStartOffsets(text) }
-    val caretLine = lineOf(lineStarts, caret)
-
-    // A parse on every keystroke is wasted work while the user is mid-word, so
-    // the status line waits for a pause, and then parses off the main thread.
-    // Nothing else waits on it.
-    val problem by produceState<CodeProblem?>(null, text, language) {
-        delay(PROBLEM_DELAY_MS)
-        value = withContext(Dispatchers.Default) { language.problem(text) }
-    }
-    val problemLine = problem?.offset?.let { lineOf(lineStarts, it.coerceIn(0, text.length)) }
-    val decorations = remember(problemLine) {
-        if (problemLine == null) {
-            CodeDecorations.None
-        } else {
-            CodeDecorations(gutterMarks = mapOf(problemLine to CodeSeverity.ERROR))
-        }
-    }
-
-    Column(modifier) {
-        CodeToolbar(state, language, colors, title, wrap) { wrap = it }
-        CodeSurface(
-            state = state,
-            language = language,
-            modifier = Modifier.fillMaxWidth().heightIn(min = minHeight, max = maxHeight),
-            colors = colors,
-            lineStarts = lineStarts,
-            decorations = decorations,
-            wrap = wrap,
-        )
-        CodeStatus(caretLine, caret - lineStarts[caretLine], text.length, problemLine, colors) {
-            problem?.offset?.let { state.moveTo(it) }
-        }
-    }
-}
-
-/** Undo, redo, format, wrap, copy and paste. */
-@Composable
-private fun CodeToolbar(
-    state: CodeEditorState,
-    language: CodeLanguage,
-    colors: CodeColors,
-    title: String?,
-    wrap: Boolean,
-    onWrapChange: (Boolean) -> Unit,
-) {
-    val context = LocalContext.current
-    Row(Modifier.fillMaxWidth().padding(bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-        // The title takes whatever the six buttons leave, and cuts itself
-        // short rather than pushing one of them off a narrow screen.
-        Text(
-            text = title.orEmpty(),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f).padding(start = 4.dp),
-        )
-        CodeAction(Icons.AutoMirrored.Outlined.Undo, stringResource(CommonR.string.common_undo), state.canUndo) {
-            state.undo()
-        }
-        CodeAction(Icons.AutoMirrored.Outlined.Redo, stringResource(R.string.code_redo_desc), state.canRedo) {
-            state.redo()
-        }
-        CodeAction(Icons.Outlined.AutoFixHigh, stringResource(R.string.code_format_desc), true) {
-            language.format(state.text)?.let { state.replace(it) }
-        }
-        CodeAction(
-            icon = Icons.AutoMirrored.Outlined.WrapText,
-            description = stringResource(if (wrap) R.string.code_wrap_off_desc else R.string.code_wrap_on_desc),
-            enabled = true,
-            tint = if (wrap) colors.caret else null,
-        ) { onWrapChange(!wrap) }
-        CodeAction(Icons.Outlined.ContentCopy, stringResource(CommonR.string.common_copy), true) {
-            copyCode(context, state.text)
-        }
-        CodeAction(Icons.Outlined.ContentPaste, stringResource(CommonR.string.common_paste), true) {
-            pasteCode(context)?.let { state.replace(it) }
-        }
-    }
-}
-
-@Composable
-private fun CodeAction(
-    icon: ImageVector,
-    description: String,
-    enabled: Boolean,
-    tint: Color? = null,
-    onClick: () -> Unit,
-) {
-    IconButton(onClick = onClick, enabled = enabled, modifier = Modifier.size(36.dp)) {
-        Icon(icon, contentDescription = description, modifier = Modifier.size(19.dp), tint = tint ?: LocalContentColor.current)
-    }
-}
-
-/** Where the caret is, how long the document is, and whether it parses. */
-@Composable
-private fun CodeStatus(
-    line: Int,
-    column: Int,
-    characters: Int,
-    problemLine: Int?,
-    colors: CodeColors,
-    onProblemClick: () -> Unit,
-) {
-    val muted = MaterialTheme.colorScheme.onSurfaceVariant
-    val small = MaterialTheme.typography.labelSmall
-    Row(
-        Modifier.fillMaxWidth().padding(top = 6.dp, start = 4.dp, end = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(stringResource(R.string.code_position_label, line + 1, column + 1), style = small, color = muted)
-        Spacer(Modifier.width(12.dp))
-        Text(
-            pluralStringResource(R.plurals.code_character_count, characters, characters),
-            style = small,
-            color = muted,
-        )
-        Spacer(Modifier.weight(1f))
-        if (problemLine == null) {
-            Text(stringResource(R.string.code_status_ok), style = small, color = muted)
-        } else {
-            Text(
-                stringResource(R.string.code_status_problem, problemLine + 1),
-                style = small,
-                color = colors.problem,
-                modifier = Modifier.clickable(onClick = onProblemClick).padding(2.dp),
-            )
-        }
-    }
-}
-
-// ---------------------------------------------------------------------------
 // Smart editing
 // ---------------------------------------------------------------------------
 
@@ -893,14 +703,14 @@ internal fun lineOf(starts: List<Int>, offset: Int): Int {
 private fun lineStartAt(text: String, at: Int): Int =
     text.lastIndexOf('\n', (at - 1).coerceAtLeast(0)).let { if (it < 0) 0 else it + 1 }
 
-private fun copyCode(context: Context, text: String) {
+internal fun copyCode(context: Context, text: String) {
     runCatching {
         val manager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         manager.setPrimaryClip(ClipData.newPlainText("code", text))
     }
 }
 
-private fun pasteCode(context: Context): String? = runCatching {
+internal fun pasteCode(context: Context): String? = runCatching {
     val manager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = manager.primaryClip ?: return null
     (0 until clip.itemCount)

@@ -28,20 +28,36 @@ import com.wasimaster.wmkeyboard.core.plugins.lua.LuaApiEntry
  */
 @Composable
 internal fun ApiDocStrip(entry: LuaApiEntry, colors: CodeColors) {
-    var open by rememberSaveable(entry.path) { mutableStateOf(false) }
     val call = entry.signature?.let { if (entry.parent.isEmpty()) it else "${entry.parent}.$it" } ?: entry.path
+    CodeDocStrip(entry.path, call, LuaApiDocs.of(entry.path).orEmpty(), colors)
+}
+
+/**
+ * A strip under the code that explains the name at the caret: [signature] on
+ * one line in code colours, and [body] under it, one line until pressed.
+ * [key] names the entry, so a strip opened for one name closes for the next.
+ */
+@Composable
+internal fun CodeDocStrip(key: String, signature: String, body: String, colors: CodeColors) {
+    var open by rememberSaveable(key) { mutableStateOf(false) }
+    val toggleLabel = stringResource(if (open) R.string.plugin_ide_doc_less_action else R.string.plugin_ide_doc_more_action)
     Column(
         Modifier
             .fillMaxWidth()
             .background(colors.gutter)
-            .clickable(onClickLabel = stringResource(if (open) R.string.plugin_ide_doc_less_action else R.string.plugin_ide_doc_more_action)) {
-                open = !open
-            }
+            .clickable(onClickLabel = toggleLabel) { open = !open }
             .padding(horizontal = 12.dp, vertical = 4.dp),
     ) {
-        Text(call, fontFamily = CodeFontFamily, fontSize = 12.sp, color = colors.function, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Text(
-            LuaApiDocs.of(entry.path).orEmpty(),
+            signature,
+            fontFamily = CodeFontFamily,
+            fontSize = 12.sp,
+            color = colors.function,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            body,
             fontSize = 12.sp,
             color = colors.text,
             maxLines = if (open) Int.MAX_VALUE else 1,

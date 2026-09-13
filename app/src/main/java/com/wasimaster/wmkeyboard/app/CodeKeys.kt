@@ -54,9 +54,9 @@ internal class CodeSuggestionBar {
  * keys, and the keys hidden. Its own preferences file, like `EggPrefs`: nothing
  * here shapes typing, so none of it belongs in `KeyboardSettings`.
  */
-internal class CodeKeyPrefs(context: Context) {
+internal class CodeKeyPrefs(context: Context, fileName: String = DEFAULT_FILE) {
 
-    private val prefs = context.applicationContext.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+    private val prefs = context.applicationContext.getSharedPreferences(fileName, Context.MODE_PRIVATE)
 
     var showRow: Boolean
         get() = prefs.getBoolean(KEY_SHOW_ROW, true)
@@ -73,14 +73,15 @@ internal class CodeKeyPrefs(context: Context) {
 
     fun reset() = prefs.edit { clear() }
 
-    private companion object {
-        const val FILE_NAME = "code_keys"
-        const val KEY_SHOW_ROW = "show_row"
-        const val KEY_ORDER = "order"
-        const val KEY_HIDDEN = "hidden"
+    companion object {
+        /** The plugin editor's file. Another editor names its own, so arranging one row leaves the other alone. */
+        const val DEFAULT_FILE = "code_keys"
+        private const val KEY_SHOW_ROW = "show_row"
+        private const val KEY_ORDER = "order"
+        private const val KEY_HIDDEN = "hidden"
 
         /** A line break, which no key label contains, where a comma would. */
-        const val SEPARATOR = "\n"
+        private const val SEPARATOR = "\n"
     }
 }
 
@@ -107,8 +108,9 @@ internal fun CodeKeysDialog(
     onHidden: (Set<String>) -> Unit,
     onReset: () -> Unit,
     onDismiss: () -> Unit,
+    keys: List<AccessoryKey> = LuaAccessoryKeys,
 ) {
-    val labels = arrangeKeys(LuaAccessoryKeys, order, emptySet()).map { it.label }
+    val labels = arrangeKeys(keys, order, emptySet()).map { it.label }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.code_keys_title)) },
