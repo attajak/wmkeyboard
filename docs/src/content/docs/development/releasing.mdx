@@ -21,7 +21,7 @@ of it, so nothing here needs a branch or a patched source tree.
 | `wmkb.enableGms` | `true` | `false` | `true` |
 | `wmkb.enableFdroid` | `false` | `true` | `false` |
 | `wmkb.splitApks` | `true` | not used | ignored by `bundle*` |
-| Artifact | one APK per ABI, for both flavors, plus `SHA256SUMS.txt` | one APK, built by F-Droid | one AAB |
+| Artifact | one APK per ABI, for both flavors, plus R8 mappings, native symbols and `SHA256SUMS.txt` | one APK, built by F-Droid | one AAB, with its R8 mapping and native symbols inside |
 | ML Kit | bundled in the APK | absent | unbundled, fetched from Play services |
 | Local LLM | bundled | absent | on-demand `:feature:llm` module |
 | In-app updates | GitHub releases, downloads and installs | checks F-Droid, links out | Play In-App Updates |
@@ -103,6 +103,22 @@ does the build. It runs on any tag starting with `v` and refuses to run if the
 tag disagrees with `wmkb.versionName`. It signs with your release key, then
 attaches one APK per ABI for each flavor, plus a `SHA256SUMS.txt`, to the
 release.
+
+The release also carries the files you need to read a crash report from those
+APKs. `*-full-mapping.txt.gz` and `*-lite-mapping.txt.gz` are the R8 mappings,
+one per flavor, and `*-full-native-symbols.zip` holds the native debug
+symbols. Retrace a stack trace with the mapping from the same flavor and
+version:
+
+```sh
+gunzip -k wmkeyboard-0.5.7-vc15-full-mapping.txt.gz
+retrace wmkeyboard-0.5.7-vc15-full-mapping.txt stacktrace.txt
+```
+
+Do not use these files for a crash from Play. The Play build uses different
+channel flags, so R8 renames the code differently. Play needs no upload for
+this: the AAB carries its own mapping and symbols, and Play Console reads them
+from the bundle.
 
 ### One-time setup
 

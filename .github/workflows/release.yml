@@ -108,7 +108,29 @@ jobs:
             name=${name%-release}
             cp "$apk" "dist/wmkeyboard-${version}-vc${code}-${name}.apk"
           done
-          cd dist && sha256sum *.apk > SHA256SUMS.txt && cat SHA256SUMS.txt
+          # R8 mappings, one per flavour (ABI splits share one). Taken from this
+          # job's build, not the bundle job's: the Play flags change what R8
+          # renames, so the AAB's map does not retrace these APKs. The AAB
+          # carries its own map in BUNDLE-METADATA, which Play reads by itself.
+          for flavor in full lite; do
+            map="app/build/outputs/mapping/${flavor}Release/mapping.txt"
+            if [ ! -f "$map" ]; then
+              echo "::error::No R8 mapping at $map"
+              exit 1
+            fi
+            gzip -9c "$map" > "dist/wmkeyboard-${version}-vc${code}-${flavor}-mapping.txt.gz"
+          done
+          # Native symbols, full only: lite sets debugSymbolLevel NONE.
+          syms=app/build/outputs/native-debug-symbols/fullRelease/native-debug-symbols.zip
+          if [ -f "$syms" ]; then
+            cp "$syms" "dist/wmkeyboard-${version}-vc${code}-full-native-symbols.zip"
+          else
+            echo "::warning::No native debug symbols at $syms"
+          fi
+          # nullglob: with no symbols zip, a literal `*.zip` would reach
+          # sha256sum and fail the step under the runner's `bash -e`.
+          shopt -s nullglob
+          cd dist && sha256sum *.apk *.gz *.zip > SHA256SUMS.txt && cat SHA256SUMS.txt
 
       - name: Wipe keystore
         if: always()
@@ -241,6 +263,8 @@ jobs:
           generate_release_notes: true
           files: |
             dist/*.apk
+            dist/*-mapping.txt.gz
+            dist/*-native-symbols.zip
             dist/SHA256SUMS.txt
           body: |
             Install the APK that matches your phone's CPU. `arm64-v8a` is
