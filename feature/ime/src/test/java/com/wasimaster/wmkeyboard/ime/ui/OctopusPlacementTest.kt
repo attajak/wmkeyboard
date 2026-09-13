@@ -91,12 +91,24 @@ class OctopusPlacementTest {
 
     // ---- the top row ----
 
+    /**
+     * Issue #171: a band hanging over the strip is a band the strip gets the
+     * tap for, so the top row's word is held inside the board and sits a
+     * little lower than the rows below it.
+     */
     @Test
-    fun `a top-row word straddles the grid and is tapped on the half that is on it`() {
+    fun `a top-row word is held inside the board and is tapped on the whole of it`() {
         val slot = slots(word('w', "hello")).single()
-        assertTrue("drawn above the board, over the strip", slot.area.top < 0f)
-        assertEquals("but only tapped from the board's own edge down", 0f, slot.hit.top, 0f)
-        assertTrue("and there is still something to tap", slot.hit.height > 0f)
+        assertEquals("pulled down to the board's own edge", 0f, slot.area.top, 0f)
+        assertEquals("and the band keeps its height", band, slot.area.height, 0f)
+        assertEquals("so the whole word can be tapped", slot.area, slot.hit)
+    }
+
+    @Test
+    fun `a lower row's word still straddles its key`() {
+        val slot = slots(word('s', "hello")).single()
+        assertEquals("unmoved by the top row's clamp", 100f - band * straddle, slot.area.top, 0f)
+        assertEquals(slot.area, slot.hit)
     }
 
     // ---- fitting ----

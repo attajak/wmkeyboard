@@ -70,8 +70,9 @@ internal fun octopusSlots(
     /**
      * How much of the band sits above the key's top edge, 0..1. Not 1: the word
      * straddles its key rather than clearing it, which is what both the Z10 and
-     * the Octopus tweak drew, and what leaves the top row something a finger can
-     * still reach — a band wholly above the grid is outside every touch it gets.
+     * the Octopus tweak drew. On the top row the band is pulled down to the
+     * board's edge whatever this says (#171) — a band above the grid is
+     * outside every touch the grid gets.
      */
     straddle: Float,
     gapVPx: Float,
@@ -103,8 +104,16 @@ internal fun octopusSlots(
         val top = when (placement) {
             // STRIP shares FLOAT's arithmetic exactly: the reserved lane moved
             // the cell down, so "the band above the cell" is already the lane.
+            //
+            // Held inside the board (#171). On the top row the straddle would
+            // put the upper part of the band over the suggestion strip, and
+            // the strip is a sibling of the grid, not something drawn over it:
+            // a finger landing there is the strip's, and the strip commits its
+            // own word. Hanging the band there looked like the reference
+            // boards and lost the tap that is the whole point of the word, so
+            // the top row's words sit a little lower than the rest instead.
             OctopusPlacement.FLOAT, OctopusPlacement.STRIP ->
-                cell.top - bandHeightPx * straddle.coerceIn(0f, 1f)
+                (cell.top - bandHeightPx * straddle.coerceIn(0f, 1f)).coerceAtLeast(0f)
             OctopusPlacement.IN_KEY -> cell.top + gapVPx
         }
         val centre = cell.center.x
@@ -136,8 +145,10 @@ internal fun octopusSlots(
                     word = word,
                     scale = scale,
                     area = area,
-                    // Only the part still over the board can be tapped; on the
-                    // top row that is the lower half of the word.
+                    // Only the part still over the board can be tapped. Since
+                    // the band is held inside the board above, that is the
+                    // whole word on every row; the clamp stays as the last
+                    // word on what a grid-space touch can reach.
                     hit = if (hitBottom > hitTop) {
                         Rect(area.left, hitTop, area.right, hitBottom)
                     } else {
