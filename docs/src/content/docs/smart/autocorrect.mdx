@@ -151,6 +151,12 @@ The straight double quote is the one mark that has to look at what came before i
 
 Getting to the mark does not spend the space. A colon and a slash live on the symbols page, so reaching either one means pressing `?123` first, and that press changes only what is drawn. The same goes for shift, the Fn and number pages, and the globe key. Any key that puts text in the field does spend it, panels included, because what comes out of a panel is text like any other.
 
+### A mark takes your own space back, if you ask
+
+The rule above never touches a space you typed. **Remove a space before punctuation** is the opt-in that does: with it on, `Hey .` lands as `Hey.` and `yes , no` as `yes, no`, the moment the mark is typed. It is narrow on purpose. The mark has to come after a word, a number or something that closes one (a bracket, a quote), so a mark at the start of a line or after another mark keeps its space, and a line break is never treated as a slip. A space in a password, an address or a number pad is left alone, same as every other rule here. One backspace straight after puts the space back.
+
+Which marks do this is yours to set. The list under the switch takes one character per mark with nothing between them, and starts out as the sentence and clause marks: `.,?!;:` and the Bengali `।`. It is off by default because some languages want that space. French sets a space in front of `?`, `!`, `:` and `;`, and a rule that eats it unasked is wrong there rather than helpful. Take those four off the list, or leave the switch off.
+
 ### A glided word joins an opening bracket
 
 Glide typing types a space in front of each word as well as after it, so two swiped words do not run together. That space is skipped when the character in front of it is one the word belongs against: an opening bracket, an opening quote, or the start of the line. `he said "` then a glided "hello" gives `he said "hello`. The double quote is read the same way as above, by counting the quotes on the line, so a closing quote still gets its space. In a web address field there is no leading space at all, since an address has no spaces in it.
@@ -195,10 +201,12 @@ Autopilot nudges which key a *borderline* tap resolves to, biasing toward whiche
 | Double space | Full stop (Two spaces / Full stop / Tab) | always |
 | Double space speed | 400 ms (range 200&ndash;800 ms) | Double space is Full stop or Tab |
 | Automatic space after punctuation | Off | always |
+| Remove a space before punctuation | Off | always |
+| Marks that pull the space out | `.,?!;:।` | Remove a space before punctuation on |
 
 The table covers the rows this page is about. The same group also carries **Adapt to app tone** and **Space after a suggestion** (both described on [Suggestions & prediction](/smart/suggestions/)), **Automatic capital letters**, and the two selection rules, wrap-with-a-pair and shift-re-cases-the-selection.
 
-The **Autocorrect** toggle is the master switch for the seventeen rows marked "Autocorrect on" above, from the confidence slider down to Fix number row slips. It is *not* a switch for the whole group. The apostrophe fix, both double-space rules and the auto-space after punctuation carry on working with autocorrect off, which is the point of them having their own toggles. Autocorrect is also reachable as a one-tap toolbar tool that flips the same switch without leaving the keyboard, showing a brief "Autocorrect on"/"Autocorrect off" confirmation.
+The **Autocorrect** toggle is the master switch for the seventeen rows marked "Autocorrect on" above, from the confidence slider down to Fix number row slips. It is *not* a switch for the whole group. The apostrophe fix, both double-space rules, the auto-space after punctuation and the space-before-punctuation fix carry on working with autocorrect off, which is the point of them having their own toggles. Autocorrect is also reachable as a one-tap toolbar tool that flips the same switch without leaving the keyboard, showing a brief "Autocorrect on"/"Autocorrect off" confirmation.
 
 **Autocorrect confidence** is the ratio the top candidate must beat the runner-up by. It's a continuous slider from 1.5&times; to 10&times;, labeled with the exact multiplier (for example "&times;4.0"). Lower makes autocorrect fire more eagerly, on less-certain calls. Higher restricts it to only the most unambiguous typos. Two-source agreement (see [How a correction is chosen](#how-a-correction-is-chosen)) always bypasses this slider, whatever it's set to.
 

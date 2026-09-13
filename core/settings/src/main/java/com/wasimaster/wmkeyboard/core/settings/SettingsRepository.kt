@@ -1693,7 +1693,31 @@ data class AutoTextSettings(
      * right after one is inserted does not double it up.
      */
     val spaceAfterPunctuation: Boolean = false,
-)
+    /**
+     * Take back a space typed in front of a punctuation mark, so "Hey ." lands
+     * as "Hey." and "yes , no" as "yes, no".
+     *
+     * Off by default for the same reason as [spaceAfterPunctuation]: it
+     * removes something the user typed. French typography puts a space in
+     * front of `?`, `!`, `:` and `;` on purpose, and a rule that eats it
+     * unasked is wrong there, not helpful. One backspace right after puts the
+     * space back.
+     */
+    val hugPunctuation: Boolean = false,
+    /**
+     * The marks [hugPunctuation] pulls a space out from in front of, one
+     * character each with no separators. Defaults to the sentence and clause
+     * marks, danda included.
+     */
+    val hugPunctuationMarks: String = HUG_PUNCTUATION_MARKS_DEFAULT,
+) {
+    companion object {
+        const val HUG_PUNCTUATION_MARKS_DEFAULT = ".,?!;:।"
+
+        /** Longest mark list the app stores. */
+        const val HUG_PUNCTUATION_MARKS_MAX = 24
+    }
+}
 
 /**
  * Where the suggestion strip's contents come from, and which fields it is
@@ -5675,6 +5699,8 @@ class SettingsRepository(private val context: Context) {
         private val DOUBLE_SPACE_TAB = booleanPreferencesKey("double_space_tab")
         private val AUTO_SPACE_AFTER_PUNCTUATION =
             booleanPreferencesKey("auto_space_after_punctuation")
+        private val HUG_PUNCTUATION = booleanPreferencesKey("hug_punctuation")
+        private val HUG_PUNCTUATION_MARKS = stringPreferencesKey("hug_punctuation_marks")
         private val WRAP_SELECTION_WITH_PAIR = booleanPreferencesKey("wrap_selection_with_pair")
         /**
          * Read only: the text-editing pad's grid from before panel layouts. Folded
@@ -6731,6 +6757,9 @@ class SettingsRepository(private val context: Context) {
                 doubleSpaceTab = p[DOUBLE_SPACE_TAB] ?: defaults.autoText.doubleSpaceTab,
                 spaceAfterPunctuation = p[AUTO_SPACE_AFTER_PUNCTUATION]
                     ?: defaults.autoText.spaceAfterPunctuation,
+                hugPunctuation = p[HUG_PUNCTUATION] ?: defaults.autoText.hugPunctuation,
+                hugPunctuationMarks = p[HUG_PUNCTUATION_MARKS]?.takeIf { it.isNotBlank() }
+                    ?: defaults.autoText.hugPunctuationMarks,
             ),
             suggestions = p[SUGGESTIONS] ?: defaults.suggestions,
             suggestionSources = SuggestionSourceSettings(
@@ -10642,6 +10671,16 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAutoSpaceAfterPunctuation(value: Boolean) =
         editPrefs { it[AUTO_SPACE_AFTER_PUNCTUATION] = value }
+
+    suspend fun setHugPunctuation(value: Boolean) =
+        editPrefs { it[HUG_PUNCTUATION] = value }
+
+    /** Whitespace can never be a mark, and a very long list is a typo. */
+    suspend fun setHugPunctuationMarks(value: String) = editPrefs {
+        it[HUG_PUNCTUATION_MARKS] = value
+            .filterNot { c -> c.isWhitespace() }
+            .take(AutoTextSettings.HUG_PUNCTUATION_MARKS_MAX)
+    }
 
     suspend fun setWrapSelectionWithPair(value: Boolean) =
         editPrefs { it[WRAP_SELECTION_WITH_PAIR] = value }

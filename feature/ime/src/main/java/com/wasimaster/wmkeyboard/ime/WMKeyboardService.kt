@@ -1090,6 +1090,14 @@ open class WMKeyboardService : InputMethodService() {
      */
     private var swallowTerminatorAfterCommit = false
 
+    /**
+     * True when the commit that just ran fired a pattern snippet. A mark that
+     * ends a word runs patterns twice, once over the word and once more with
+     * the mark in the field; the second run is skipped after the first has
+     * rewritten anything, or a pattern could fire again over its own output.
+     */
+    private var patternFiredAtCommit = false
+
     /** The snippets file, watched for edits made by the settings app. */
     private var snippetsFile: File? = null
 
@@ -5924,6 +5932,10 @@ open class WMKeyboardService : InputMethodService() {
                 consumeShift()
                 return
             }
+            // The user's own space in front of a mark, under the rule that asks
+            // for it: "Hey ." is a slip, and the mark lands on the word. The
+            // keyboard's own auto-space was already taken back above.
+            val hugged = takeBackStraySpace(ic, text, state)
             val autoSpace = shouldAutoSpaceAfterPunctuation(state, text)
             if (autoSpace) {
                 // A run of marks ("...", "?!") must not be pulled apart by the
@@ -5935,6 +5947,29 @@ open class WMKeyboardService : InputMethodService() {
                 }
             }
             commitTypedCharacter(ic, text)
+            if (hugged != null) {
+                // One backspace puts the space back, the same as any other
+                // correction: the rule removed something the user typed.
+                lastRevertible = RevertibleCommit(
+                    RevertibleCommit.Kind.JOIN, original = hugged + text, committed = text,
+                )
+                armRevertGuard()
+            }
+            // Second look, now that the mark is in the field. The commit above
+            // matched over the word alone, and a pattern about the mark itself
+            // ("hi ." to "hi.") has nothing to match until the mark has landed.
+            // Only when the first look changed nothing: after an expansion the
+            // field holds the snippet's output, not the user's words, and a
+            // pattern must not get to eat its own result.
+            if (endsWord && !patternFiredAtCommit && tryPatternExpansion(ic, "", state)) {
+                if (swallowTerminatorAfterCommit) {
+                    // The caret was parked inside the expansion; a space typed
+                    // there would split it, the same as on the commit path.
+                    swallowTerminatorAfterCommit = false
+                    consumeShift()
+                    return
+                }
+            }
             if (autoSpace) insertPunctuationSpace(ic)
             // Consume one-shot shift before evaluating auto-capitalize, so a
             // sentence ender can turn shift back on for the next sentence.
@@ -6029,6 +6064,30 @@ open class WMKeyboardService : InputMethodService() {
         if (ic.getTextBeforeCursor(1, 0)?.toString() != " ") return false
         ic.deleteSurroundingText(1, 0)
         return true
+    }
+
+    /**
+     * Takes back the spaces the user typed in front of the caret when [text]
+     * is a mark on the [AutoTextSettings.hugPunctuationMarks] list, and says
+     * what it removed (so a backspace can put it back), or null.
+     *
+     * The decision is [straySpacesBefore]'s; this only reads the field and
+     * edits it. Structured fields are out for the same reason they are out of
+     * [shouldAutoSpaceAfterPunctuation]: a space in an address or a password
+     * is the user's business.
+     */
+    private fun takeBackStraySpace(ic: InputConnection, text: String, state: KeyboardUiState): String? {
+        val autoText = state.settings.autoText
+        if (!autoText.hugPunctuation || !state.allowsTypingIntelligence || state.composer.isConversion) {
+            return null
+        }
+        val mark = text.singleOrNull() ?: return null
+        val before = ic.getTextBeforeCursor(HUG_LOOKBACK, 0) ?: return null
+        val spaces = straySpacesBefore(before, mark, autoText.hugPunctuationMarks)
+        if (spaces == 0) return null
+        ic.deleteSurroundingText(spaces, 0)
+        invalidateExpectedSelection()
+        return " ".repeat(spaces)
     }
 
     /**
@@ -6536,6 +6595,20 @@ open class WMKeyboardService : InputMethodService() {
                     ic.beginBatchEdit()
                     ic.deleteSurroundingText(probe.length, 0)
                     ic.commitText(revert.original + tail, 1)
+                    ic.endBatchEdit()
+                    revertCommitted(ic, revert, state)
+                    return
+                }
+                // Nothing followed the commit after all — a mark that hugged
+                // the word in front of it with no auto-space behind — so the
+                // extra character read is the one *before* it. Tried second,
+                // because when something does follow and happens to spell the
+                // commit's own tail ("hi.." after "hi ."), the read above is
+                // the right one.
+                if (probe != null && probe.endsWith(revert.committed)) {
+                    ic.beginBatchEdit()
+                    ic.deleteSurroundingText(revert.committed.length, 0)
+                    ic.commitText(revert.original, 1)
                     ic.endBatchEdit()
                     revertCommitted(ic, revert, state)
                     return
@@ -8384,6 +8457,7 @@ open class WMKeyboardService : InputMethodService() {
         // Spent by whichever key ended this word; a commit that does not park
         // the caret must not leave a stale one behind for the next.
         swallowTerminatorAfterCommit = false
+        patternFiredAtCommit = false
         if (composing.isEmpty()) return false
         // A strip refresh still debounced for this word must not land after
         // the commit and repaint candidates for text that is no longer being
@@ -8754,6 +8828,12 @@ open class WMKeyboardService : InputMethodService() {
      * on the field, so a dead connection, an editor that answers null, or a
      * window that turns out not to match all fall through to the ordinary
      * literal commit.
+     *
+     * [typed] may be empty: a mark that ends a word calls this a second time
+     * once the mark is in the field, with nothing composing, so a pattern
+     * about the mark itself (`\s+([.,?!:;])`, which pulls a stray space back
+     * out from in front of a full stop) gets to see it. The window then is
+     * simply the text behind the caret.
      */
     private fun tryPatternExpansion(ic: InputConnection, typed: String, state: KeyboardUiState): Boolean {
         // Only the patterns that expand on their own are this path's business.
@@ -8813,6 +8893,7 @@ open class WMKeyboardService : InputMethodService() {
             original = hit.consumedText,
             match = hit,
         )
+        patternFiredAtCommit = true
         return true
     }
 

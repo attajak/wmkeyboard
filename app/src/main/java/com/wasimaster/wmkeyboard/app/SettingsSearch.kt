@@ -283,6 +283,8 @@ private fun SearchStrings.typingCorrectionsRows(): List<SettingsSearchEntry> {
         row(R.string.typing_double_space_title, R.string.typing_double_space_subtitle, weight = EntryWeight.PRIMARY),
         row(R.string.typing_double_space_window_title, R.string.typing_double_space_window_subtitle),
         row(R.string.typing_auto_space_punctuation_title, R.string.typing_auto_space_punctuation_subtitle),
+        row(R.string.typing_hug_punctuation_title, R.string.typing_hug_punctuation_subtitle),
+        row(R.string.typing_hug_punctuation_marks_title, R.string.typing_hug_punctuation_marks_hint),
         row(R.string.typing_space_after_suggestion_title, R.string.typing_space_after_suggestion_subtitle),
         row(R.string.typing_wrap_selection_title, R.string.typing_wrap_selection_subtitle),
         row(R.string.typing_shift_recase_title, R.string.typing_shift_recase_subtitle),

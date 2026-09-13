@@ -607,6 +607,12 @@ class SnippetIndex private constructor(
      * to err toward consuming less; it also stops one careless `^(.+)$` from
      * eating every commit's whole window.
      *
+     * A span starts at a word, or at the run of spaces in front of one. The
+     * second kind exists for patterns about spacing: `\s+([.,?!:;])` can only
+     * ever match a span that begins with the space it wants to remove, and a
+     * word-only start would never hand it one. The space run counts as part of
+     * the word it precedes for the word budget, and is tried right after it.
+     *
      * [atFieldStart] says whether [window] reached the beginning of the field.
      * When it did not, a span is never anchored at the very first character:
      * the read may have cut a word in half, and a pattern matching that half
@@ -649,37 +655,51 @@ class SnippetIndex private constructor(
         // says about the field.
         val cutAtCap = trimmed.length < line.length
         val anchored = !cutAtCap && (atFieldStart || line.length < whole.length)
-        return search(w, wordStarts(w), anchored, now, context, confirm)
+        return search(w, spanStarts(w), anchored, now, context, confirm)
     }
 
-    /** Word start offsets in [w], nearest to the cursor first. */
-    private fun wordStarts(w: String): IntArray {
-        val starts = IntArray(SnippetMatcher.MAX_WORDS)
-        var found = 0
+    /**
+     * Where a candidate span may start in [w], nearest to the cursor first:
+     * each word's first character, then the first space of the run in front
+     * of it (when there is one). [SpanStart.back] is how many words the span
+     * reaches past the nearest one, the number the word budget is checked
+     * against; a space run shares it with the word it precedes.
+     */
+    private fun spanStarts(w: String): List<SpanStart> {
+        val starts = ArrayList<SpanStart>(SnippetMatcher.MAX_WORDS * 2)
+        var back = 0
         var i = w.length
-        while (i > 0 && found < starts.size) {
+        while (i > 0 && back < SnippetMatcher.MAX_WORDS) {
             var j = i - 1
             while (j >= 0 && w[j].isWhitespace()) j--
             if (j < 0) break
             while (j >= 0 && !w[j].isWhitespace()) j--
-            val start = j + 1
-            starts[found++] = start
-            i = start
+            val word = j + 1
+            starts += SpanStart(word, back)
+            while (j >= 0 && w[j].isWhitespace()) j--
+            val gap = j + 1
+            if (gap < word) starts += SpanStart(gap, back)
+            back++
+            i = word
         }
-        return starts.copyOf(found)
+        return starts
     }
+
+    /** One place a span may begin, and how many words back from the cursor it is. */
+    private class SpanStart(val offset: Int, val back: Int)
 
     private fun search(
         w: String,
-        starts: IntArray,
+        starts: List<SpanStart>,
         anchored: Boolean,
         now: Long,
         context: SnippetStore.Companion.Context,
         confirm: Boolean,
     ): SnippetMatch? {
         var attempts = 0
-        for (back in starts.indices) {
-            val start = starts[back]
+        for (candidate in starts) {
+            val start = candidate.offset
+            val back = candidate.back
             if (start == 0 && !anchored) continue
             val span = w.substring(start)
             val gated = byHead[span[0].lowercaseChar()].orEmpty()

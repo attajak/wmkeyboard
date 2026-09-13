@@ -119,6 +119,40 @@ class SnippetMatcherTest {
     }
 
     @Test
+    fun `a span may start at the spaces in front of a word`() {
+        // The regression behind this: a "space before punctuation" fixer can
+        // only ever match a span that begins with the space it removes, and
+        // word-only starts never handed it one.
+        val hit = index(snip("\\s+([.,?!:;])", "\$1")).matchPattern("hi .", atFieldStart = true)
+        assertNotNull(hit)
+        assertEquals(".", hit?.text)
+        assertEquals(2, hit?.consumedChars)
+        assertEquals(" .", hit?.consumedText)
+    }
+
+    @Test
+    fun `a word is tried before the spaces in front of it`() {
+        val hit = index(snip("(.*)\\.", "[\$1]")).matchPattern("hi .", atFieldStart = true)
+        assertEquals("[]", hit?.text)
+        assertEquals(1, hit?.consumedChars)
+    }
+
+    @Test
+    fun `the spaces in front of a word share its word budget`() {
+        val one = index(snip("\\s+b x", "!", words = 1))
+        assertNull(one.matchPattern("a b x", atFieldStart = true))
+        val two = index(snip("\\s+b x", "!", words = 2))
+        assertEquals(4, two.matchPattern("a b x", atFieldStart = true)?.consumedChars)
+    }
+
+    @Test
+    fun `spaces at the start of a cut window never anchor a match`() {
+        val idx = index(snip("\\s+x", "!"))
+        assertNull(idx.matchPattern(" x", atFieldStart = false))
+        assertEquals("!", idx.matchPattern(" x", atFieldStart = true)?.text)
+    }
+
+    @Test
     fun `a pattern never reaches across a line`() {
         assertNull(
             index(snip("^hello (.+)$", "Hi \$1"))

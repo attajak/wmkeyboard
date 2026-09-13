@@ -603,6 +603,25 @@ internal fun TypingCorrectionsSettings(
         }
         item {
             ToggleSetting(
+                R.string.typing_hug_punctuation_title,
+                stringResource(R.string.typing_hug_punctuation_subtitle),
+                settings.autoText.hugPunctuation,
+                info = stringResource(R.string.typing_hug_punctuation_info),
+                default = SettingsDefaults.autoText.hugPunctuation,
+            ) { scope.launch { repository.setHugPunctuation(it) } }
+        }
+        if (settings.autoText.hugPunctuation) {
+            item {
+                TextFieldSetting(
+                    label = stringResource(R.string.typing_hug_punctuation_marks_title),
+                    value = settings.autoText.hugPunctuationMarks,
+                    hint = stringResource(R.string.typing_hug_punctuation_marks_hint),
+                    default = SettingsDefaults.autoText.hugPunctuationMarks,
+                ) { repository.setHugPunctuationMarks(it) }
+            }
+        }
+        item {
+            ToggleSetting(
                 R.string.typing_space_after_suggestion_title,
                 stringResource(R.string.typing_space_after_suggestion_subtitle),
                 settings.suggestionStrip.autoSpaceAfterSuggestion,
