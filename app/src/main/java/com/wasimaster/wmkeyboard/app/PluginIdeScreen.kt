@@ -8,8 +8,11 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material.icons.automirrored.outlined.Redo
+import androidx.compose.material.icons.automirrored.outlined.Undo
 import androidx.compose.material.icons.automirrored.outlined.WrapText
 import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.focus.FocusRequester
 import com.wasimaster.wmkeyboard.core.plugins.PluginFile
@@ -426,6 +429,8 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
 
     val lineStarts = remember(text) { lineStartOffsets(text) }
     val caretNow = editor.value.selection.end
+    val positionLine = lineOf(lineStarts, caretNow.coerceIn(0, text.length))
+    val positionColumn = caretNow.coerceIn(0, text.length) - lineStarts[positionLine]
     val apiHere by produceState<LuaApiEntry?>(null, text, caretNow) {
         value = withContext(Dispatchers.Default) { LuaCode.apiAt(text, caretNow) }
     }
@@ -581,6 +586,12 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                     }
                 },
                 actions = {
+                    IconButton(onClick = { editor.undo() }, enabled = editor.canUndo) {
+                        Icon(Icons.AutoMirrored.Outlined.Undo, contentDescription = stringResource(CommonR.string.common_undo))
+                    }
+                    IconButton(onClick = { editor.redo() }, enabled = editor.canRedo) {
+                        Icon(Icons.AutoMirrored.Outlined.Redo, contentDescription = stringResource(R.string.code_redo_desc))
+                    }
                     val running = previewState.status == PluginPreviewSession.Status.RUNNING
                     IconButton(onClick = {
                         if (running) preview.stop() else runPlugin()
@@ -747,6 +758,23 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                                     }
                                 },
                             )
+                            // The whole draft, as the JSON editor's Copy and Paste take the whole document.
+                            DropdownMenuItem(
+                                text = { Text(stringResource(CommonR.string.common_copy)) },
+                                leadingIcon = { Icon(Icons.Outlined.ContentCopy, contentDescription = null) },
+                                onClick = {
+                                    menuOpen = false
+                                    copyCode(context, editor.text)
+                                },
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(CommonR.string.common_paste)) },
+                                leadingIcon = { Icon(Icons.Outlined.ContentPaste, contentDescription = null) },
+                                onClick = {
+                                    menuOpen = false
+                                    pasteCode(context)?.let(editor::replace)
+                                },
+                            )
                         }
                     }
                 },
@@ -817,7 +845,18 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
                 focusRequester = editorFocus,
             )
             apiHere?.let { ApiDocStrip(it, rememberCodeColors()) }
-            IdePanelBar(panel, problems = diagnostics.size) { chosen -> panel = if (panel == chosen) IdePanel.CLOSED else chosen }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(Modifier.weight(1f)) {
+                    IdePanelBar(panel, problems = diagnostics.size) { chosen -> panel = if (panel == chosen) IdePanel.CLOSED else chosen }
+                }
+                // Where the caret is, at the end of the tabs, as the JSON editor shows it.
+                Text(
+                    stringResource(R.string.code_position_label, positionLine + 1, positionColumn + 1),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(end = 12.dp),
+                )
+            }
             if (panel != IdePanel.CLOSED) {
                 HorizontalDivider()
                 Box(Modifier.fillMaxWidth().fillMaxHeight(PANEL_FRACTION)) {
