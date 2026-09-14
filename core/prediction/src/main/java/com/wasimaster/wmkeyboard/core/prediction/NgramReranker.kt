@@ -5,9 +5,10 @@ import kotlin.math.ln
 /**
  * The context reranker: a deterministic interpolated n-gram rescorer over the
  * engine's top candidates, built entirely from data the keyboard already has
- * — the user's learned bigrams and trigrams, the bundled seed-pair counts
- * (which the strip's own ranking never read), and the last few committed
- * words as a topical recency bag. No network, no native code, no model file.
+ * — the user's learned bigrams, trigrams and distance-2 skip-grams, the
+ * bundled seed-pair counts (which the strip's own ranking never read), and
+ * the last few committed words as a topical recency bag. No network, no
+ * native code, no model file.
  *
  * Where the engine's in-strip context boost is deliberately capped (a habit
  * may re-rank but never bury a frequent exact match), this pass — opt-in per
@@ -45,9 +46,11 @@ class NgramReranker(
         // Skip-gram backoff: when the immediate previous word is one no store
         // has ever seen (a name, a typo — the common reason context suddenly
         // goes silent), treat it as transparent and let the word before it
-        // vouch through its own bigrams: "met Priya at" still knows "at"
-        // follows "met". Only ever consulted for an OOV prev — a known prev's
-        // direct evidence must never be diluted by the gappy kind.
+        // vouch through its own ADJACENT bigrams: "met Priya at" still knows
+        // "at" follows "met". A proxy, so only ever consulted for an OOV prev
+        // — a known prev's direct evidence is never diluted by it. The stored
+        // distance-2 store below is the gappy evidence proper and is read
+        // whenever there is a word two back (#195).
         val skipContext = if (
             prev2 != null && dictionaryFrequency(prev) == 0 && !userLexicon.contains(prev)
         ) {
@@ -60,6 +63,7 @@ class NgramReranker(
             val w = word.lowercase()
             val user3 = if (prev2 != null) userLexicon.trigramCount(prev2, prev, w) else 0
             val user2 = userLexicon.bigramCount(prev, w)
+            val userSkip2 = if (prev2 != null) userLexicon.skip2gramCount(prev2, w) else 0
             val pack3 = if (prev2 != null) pack.trigramCount(prev2, prev, w) else 0
             val pack2 = pack.bigramCount(prev, w)
             val seed = seedBigrams.count(prev, w)
@@ -68,6 +72,7 @@ class NgramReranker(
             val skipPack = if (skipContext != null) pack.bigramCount(skipContext, w) else 0
             val evidence = term(WEIGHT_USER_TRIGRAM, user3, CAP_USER_TRIGRAM) +
                 term(WEIGHT_USER_BIGRAM, user2, CAP_USER_BIGRAM) +
+                term(WEIGHT_USER_SKIP2, userSkip2, CAP_USER_SKIP2) +
                 term(WEIGHT_PACK_TRIGRAM, pack3 / PACK_COUNT_SCALE, CAP_PACK_TRIGRAM) +
                 term(WEIGHT_PACK_BIGRAM, pack2 / PACK_COUNT_SCALE, CAP_PACK_BIGRAM) +
                 term(WEIGHT_SEED_BIGRAM, seed, CAP_SEED) +
@@ -107,6 +112,19 @@ class NgramReranker(
         const val CAP_USER_TRIGRAM = 2.5
         const val WEIGHT_USER_BIGRAM = 0.8
         const val CAP_USER_BIGRAM = 2.0
+
+        /**
+         * The stored distance-2 skip-gram (#195): the word two back vouching
+         * for this one across whatever stood between. Pools what the trigram
+         * splits across every middle word, and is the one store that still
+         * speaks when the middle word is unknown. Consulted whenever there is
+         * a word two back — unlike the OOV backoff further down, which is
+         * only a proxy. Weighted under the direct bigram and capped above one
+         * rank: alone it may lift a candidate one slot when the direct
+         * stores are silent, and can never vault two.
+         */
+        const val WEIGHT_USER_SKIP2 = 0.5
+        const val CAP_USER_SKIP2 = 1.2
         const val WEIGHT_PACK_TRIGRAM = 0.6
         const val CAP_PACK_TRIGRAM = 1.5
         const val WEIGHT_PACK_BIGRAM = 0.45

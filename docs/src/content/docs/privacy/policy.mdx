@@ -52,7 +52,7 @@ The keyboard writes several things to its own private app storage. None of it
 is transmitted anywhere by the app.
 
 - **Learned words and word pairs.** Words you use that were not already in a
-  dictionary, plus the bigrams and trigrams used to predict the next word.
+  dictionary, plus the bigrams, trigrams and skip-grams (the word two back paired with the one that followed) used to predict and rank the next word.
 - **Clipboard history**, if you have the clipboard tool enabled, along with
   anything you pinned.
 - **Typing statistics**, such as counts of keystrokes and words, if you have

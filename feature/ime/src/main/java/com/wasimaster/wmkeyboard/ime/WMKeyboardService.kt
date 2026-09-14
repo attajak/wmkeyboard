@@ -10391,7 +10391,10 @@ open class WMKeyboardService : InputMethodService() {
         // keyboard actually knows. An n-gram with an unrecognised word at
         // either end is a habit built out of a possible typo, and it surfaces
         // in the strip as a next-word suggestion — exactly the rubbish this
-        // gate exists to keep out.
+        // gate exists to keep out. The skip-gram (word two back -> this one)
+        // only asks about its own two ends: the middle word may be anything,
+        // since an unknown one is exactly where that store earns its keep
+        // and it is read by the reranker alone, never offered as a next word.
         var previousKnown = previous == null || isKnownWord(previous)
         var beforePreviousKnown = beforePrevious == null || isKnownWord(beforePrevious)
         for ((index, part) in parts.withIndex()) {
@@ -10442,6 +10445,9 @@ open class WMKeyboardService : InputMethodService() {
                             beforePrevious?.let { userLexicon.learnTrigram(it, prev, cleaned) }
                         }
                     }
+                }
+                if (beforePreviousKnown) {
+                    beforePrevious?.let { userLexicon.learnSkip2gram(it, cleaned) }
                 }
             } else if (!byHand && !blacklisted && state.composer.isPlausibleWord(cleaned)) {
                 // Nothing recognises this word. It goes into the waiting room

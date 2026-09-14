@@ -125,7 +125,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Four memory levels `RARE` — Off keeps no pair memory, Light never retires a pair, Normal is the shipped balance, Strict retires on the first undo however it was read
     - Penalties age out — A pair untouched for 180 saves loses a count; 500-pair cap
     - Stored outside the lexicon — A rejection persists even with learning off or in incognito
-- **Personal learning** — On-device lexicon of words, bigrams and trigrams; nothing leaves the device
+- **Personal learning** — On-device lexicon of words, bigrams, trigrams and distance-2 skip-grams; nothing leaves the device
   - Graded reinforcement `RARE` — How deliberately a word was typed decides how hard it teaches
     - Tapped suggestion counts double
     - Typed and committed counts once
@@ -133,7 +133,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Manually added word starts at one use — Marked as added by hand instead of boosted (#164): shielded from autocorrect at any learn-after threshold, evicted last, and it earns weight by being typed like any other word; the row reads "You added this word · Seen N times" (#165)
   - Store shape and bounds `uncommon` — JSON snapshot in app-private storage
     - 10,000 words, evicting to 9,000 — 10% hysteresis so compaction doesn't churn on every save
-    - 5,000 bigram heads, 2,000 trigram contexts, 32 followers each
+    - 5,000 bigram heads, 2,000 trigram contexts, 2,000 skip-gram heads, 32 followers each
     - Exponential decay at compaction — count x 2^(-age/64 save-generations); user-added words evicted last
     - Dirty-flag save on dismissal — A dismissal with nothing new re-encodes nothing
     - Word length 32, count capped at 1,000,000
@@ -176,7 +176,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Bundled seed pairs at ln(1.5) — English modes only
   - NgramReranker `RARE` — Interpolated rescorer over the top 8 candidates, on-device only
     - Base is the engine's rank, not raw frequency — Preserves edit costs and touch likelihood already encoded in the incoming order
-    - Seven weighted, capped terms — User trigram/bigram, pack trigram/bigram, seed bigram, two skip-gram terms, plus recency
+    - Eight weighted, capped terms — User trigram/bigram/skip-gram, pack trigram/bigram, seed bigram, two OOV backoff terms, plus recency
+    - Stored distance-2 skip-gram, always consulted (#195) — The word two back vouches across any middle word; pools what the trigram splits, still speaks when the middle word is unknown; lifts one rank alone, never two
     - Returns null with no evidence — A reorder can only ever be evidence-driven
     - Skip-gram backoff behind an OOV previous word — Weaker than the direct bigram it stands in for
     - Never read by autocorrect — shouldAutocorrect reads the raw walk ranking, so a rerank can't become a silent replacement
@@ -2470,7 +2471,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Code fields are the one exception — A copied OTP is still offered as a chip, only in digit-asking fields.
   - Hide toolbar & clipboard on lock screen `uncommon` — Drops the whole top strip and blocks the clipboard panel while the keyguard shows; off by default.
 - **On-device learning controls** — Privacy screen group governing what the keyboard is allowed to remember.
-  - Learn from typing — Master switch for the personal lexicon, bigrams and trigrams; on by default.
+  - Learn from typing — Master switch for the personal lexicon, bigrams, trigrams and skip-grams; on by default.
   - Add words to system dictionary `uncommon` — Mirrors typed words into Android's shared personal dictionary; off by default.
     - Only genuinely typed words — Reinforcement 0 (autocorrect targets) is skipped; they are already dictionary words.
   - Expand dictionary shortcuts `RARE` — Reads shortcuts back out of Android's system dictionary and offers the expansion.

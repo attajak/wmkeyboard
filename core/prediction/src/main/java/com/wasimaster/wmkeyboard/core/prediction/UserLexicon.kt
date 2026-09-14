@@ -5,8 +5,9 @@ import kotlinx.serialization.json.Json
 import java.io.File
 
 /**
- * The user's personal vocabulary: words they have typed and the bigrams
- * between them, used for personalized completion and next-word prediction.
+ * The user's personal vocabulary: words they have typed and the bigrams,
+ * trigrams and distance-2 skip-grams between them, used for personalized
+ * completion, next-word prediction and the context reranker.
  *
  * Persisted as JSON in app-private storage. All typing data stays on
  * device; [clear] wipes it for the privacy setting.
@@ -24,6 +25,9 @@ class UserLexicon(private val storageFile: File?) {
         /** Trigram contexts, keyed "prev2<NUL>prev1". Additive; old files
          * simply have none. */
         val trigrams: Map<String, Map<String, Int>> = emptyMap(),
+        /** Distance-2 skip-grams: the word two back -> the word that followed,
+         * whatever stood between them (#195). Additive; old files have none. */
+        val skip2grams: Map<String, Map<String, Int>> = emptyMap(),
         /** Language id each word was last learned under. Additive; words
          * with no entry (legacy files, settings-app adds) are untagged and
          * treated as belonging to every language. */
@@ -90,6 +94,7 @@ class UserLexicon(private val storageFile: File?) {
     private val words = HashMap<String, Int>()
     private val bigrams = HashMap<String, Followers>()
     private val trigrams = HashMap<String, Followers>()
+    private val skip2grams = HashMap<String, Followers>()
     private val wordGen = HashMap<String, Long>()
     private val wordLangs = HashMap<String, String>()
     private val wordCase = HashMap<String, String>()
@@ -390,6 +395,12 @@ class UserLexicon(private val storageFile: File?) {
             if (target == null) trigrams[rewritten] = moved else target.absorb(moved)
         }
         trigrams.values.forEach { it.rename(oldKey, newKey) }
+        // Gappy pairs: the same two moves as the bigrams.
+        skip2grams.remove(oldKey)?.let { moved ->
+            val target = skip2grams[newKey]
+            if (target == null) skip2grams[newKey] = moved else target.absorb(moved)
+        }
+        skip2grams.values.forEach { it.rename(oldKey, newKey) }
         rebuildTrie()
         mutations++
         dirty = true
@@ -448,6 +459,7 @@ class UserLexicon(private val storageFile: File?) {
         words.clear()
         bigrams.clear()
         trigrams.clear()
+        skip2grams.clear()
         wordGen.clear()
         wordBorn.clear()
         wordLangs.clear()
@@ -505,6 +517,29 @@ class UserLexicon(private val storageFile: File?) {
     fun trigramCount(prev2: String, prev1: String, next: String): Int =
         trigrams[trigramKey(WordKey.of(prev2), WordKey.of(prev1))]
             ?.counts?.get(WordKey.of(next)) ?: 0
+
+    /**
+     * Learns the gappy pair (prev2 -> next): [prev2] stood two words before
+     * [next], with anything at all in between (#195). Where a trigram splits
+     * its counts across every middle word ("deploy the/a/my service"), this
+     * pools them, and it is the only store that still speaks when the middle
+     * word is one nothing recognises. Read by the context reranker alone,
+     * never offered as a next word, so it carries no known-word gate of its own.
+     */
+    @Synchronized
+    fun learnSkip2gram(prev2: String, next: String) {
+        val prev = WordKey.of(prev2)
+        val nxt = WordKey.of(next)
+        if (prev.isEmpty() || nxt.isEmpty()) return
+        if (prev.length > MAX_WORD_LENGTH || nxt.length > MAX_WORD_LENGTH) return
+        skip2grams.getOrPut(prev) { Followers() }.bump(nxt)
+        dirty = true
+    }
+
+    /** Learned count of the gappy pair (prev2 -> next), 0 when never seen. */
+    @Synchronized
+    fun skip2gramCount(prev2: String, next: String): Int =
+        skip2grams[WordKey.of(prev2)]?.counts?.get(WordKey.of(next)) ?: 0
 
     /** Learned count of the pair (previous -> next), 0 when never seen. */
     @Synchronized
@@ -597,8 +632,12 @@ class UserLexicon(private val storageFile: File?) {
             casePinned.remove(key)
             addedByHand.remove(key)
             bigrams.remove(key)
+            skip2grams.remove(key)
         }
         bigrams.values.forEach { followers ->
+            if (followers.counts.keys.removeAll(keys)) followers.sorted = null
+        }
+        skip2grams.values.forEach { followers ->
             if (followers.counts.keys.removeAll(keys)) followers.sorted = null
         }
         trigrams.keys.removeAll { context ->
@@ -617,6 +656,7 @@ class UserLexicon(private val storageFile: File?) {
         words.clear()
         bigrams.clear()
         trigrams.clear()
+        skip2grams.clear()
         wordGen.clear()
         wordBorn.clear()
         wordLangs.clear()
@@ -645,6 +685,7 @@ class UserLexicon(private val storageFile: File?) {
             generation = generation,
             wordGen = wordGen,
             trigrams = trigrams.mapValues { it.value.counts.toMap() },
+            skip2grams = skip2grams.mapValues { it.value.counts.toMap() },
             wordLang = wordLangs,
             wordCase = wordCase,
             caseVotes = caseVotes,
@@ -683,6 +724,10 @@ class UserLexicon(private val storageFile: File?) {
             snapshot.trigrams.forEach { (context, map) ->
                 if (context.split(TRIGRAM_SEPARATOR).any(::junk)) return@forEach
                 trigrams[context] = Followers().also { it.counts.putAll(map.filterKeys { !junk(it) }) }
+            }
+            snapshot.skip2grams.forEach { (prev, map) ->
+                if (junk(prev)) return@forEach
+                skip2grams[prev] = Followers().also { it.counts.putAll(map.filterKeys { !junk(it) }) }
             }
             generation = snapshot.generation
             // Words with no recorded generation (legacy files, settings-app
@@ -761,6 +806,10 @@ class UserLexicon(private val storageFile: File?) {
                 bigrams.values.forEach {
                     if (it.counts.remove(word) != null) it.sorted = null
                 }
+                skip2grams.remove(word)
+                skip2grams.values.forEach {
+                    if (it.counts.remove(word) != null) it.sorted = null
+                }
             }
             rebuildTrie()
             mutations++
@@ -775,6 +824,12 @@ class UserLexicon(private val storageFile: File?) {
             val evictable = trigrams.entries.sortedBy { it.value.total() }
             for (entry in evictable.take(trigrams.size - MAX_TRIGRAM_CONTEXTS)) {
                 trigrams.remove(entry.key)
+            }
+        }
+        if (skip2grams.size > MAX_SKIP2_HEADS) {
+            val evictable = skip2grams.entries.sortedBy { it.value.total() }
+            for (entry in evictable.take(skip2grams.size - MAX_SKIP2_HEADS)) {
+                skip2grams.remove(entry.key)
             }
         }
     }
@@ -792,6 +847,8 @@ class UserLexicon(private val storageFile: File?) {
         private const val EVICT_TO = 9_000
         private const val MAX_BIGRAM_PREVS = 5_000
         private const val MAX_TRIGRAM_CONTEXTS = 2_000
+        /** Heads of the gappy (prev2 -> next) store (#195). */
+        private const val MAX_SKIP2_HEADS = 2_000
         private const val MAX_FOLLOWERS = 32
 
         /** NUL, built rather than written literally. */

@@ -102,7 +102,7 @@ deliberately, rather than inside the transliterator.
 ### Prediction
 
 `Trie` is frequency-weighted and serves prefix completions. `UserLexicon`
-overlays the user's learned words, heavily boosted, plus bigrams and trigrams
+overlays the user's learned words, heavily boosted, plus bigrams, trigrams and skip-grams
 for next-word prediction. `SuggestionEngine` merges, ranks and case-matches
 those sources. Corrections come from `FuzzyBeamSearch`, one best-first walk
 down the tries themselves rather than Norvig generate-and-test: only strings
