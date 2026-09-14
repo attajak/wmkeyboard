@@ -66,30 +66,31 @@ Turning incognito on does eight things:
    record nothing while incognito is on, and the paused stretch is kept out
    of the active-time sums rather than counted as idle. Same **Pause
    learning** switch again.
-5. **Blocks inline chips, both kinds.** The saved-login chips a password
-   manager can draw above the keyboard don't appear, and neither do the
-   system's [smart replies](/smart/autofill/). A proposed reply means the
-   system read the conversation, which is what incognito is there to stop.
+5. **Blocks smart replies.** The system's [smart replies](/smart/autofill/)
+   don't appear. A proposed reply means the system read the conversation,
+   which is what incognito is there to stop. The saved-login chips a
+   password manager draws above the keyboard are *not* blocked: they record
+   nothing, the keyboard never sees what is in them, and a private tab is
+   where you log in.
 6. **Pauses AI history.** If you've turned [AI history](/tools/ai/#history)
    on, nothing is recorded while incognito is: not the text you send, not
    the answer. This one has no switch of its own, because a record of what
    you wrote in incognito is the exact thing incognito exists to prevent.
-7. **Holds back the code chips.** Neither the
-   [one-time-code chip](/smart/one-time-codes/) read out of a notification
-   nor the "you just copied a code" chip is offered while incognito is on.
-   Both put a code on screen without being asked for it.
-8. **Shows a badge.** A small icon appears next to the toolbar, and the
+7. **Shows a badge.** A small icon appears next to the toolbar, and the
    Incognito tool itself lights up as active, so you can tell at a glance
    that it's on.
 
-The first four of those eight answer to switches of their own, tucked away
+The first four of those seven answer to switches of their own, tucked away
 from the Privacy screen under <SettingsPath path="Tools / Incognito" />.
 **Pause learning** covers the lexicon, the emoji history and the typing
 counters together, and **Pause clipboard capture** covers the clipboard. Both
 are on by default. Turn both off there and flipping "Incognito mode" on
-Privacy still blocks inline chips, still pauses AI history, still holds back
-the code chips, and still shows the badge. Those four are the effects neither
-switch can reach, because they follow incognito unconditionally.
+Privacy still blocks smart replies, still pauses AI history, and still shows
+the badge. Those three are the effects neither switch can reach, because they
+follow incognito unconditionally. The [one-time-code chip](/smart/one-time-codes/)
+and the "you just copied a code" chip keep working in incognito: reading a
+code out of a notification or offering back what you just copied records
+nothing, and a login in a private tab is where a code is wanted.
 
 :::note[What incognito leaves alone]
 Incognito never turns off the suggestion strip, autocorrect or gesture
@@ -253,10 +254,10 @@ For every other clipboard and tool setting, see the
 
 - **Incognito and secure fields stack independently.** A password field is
   already secure on its own account, and its detection doesn't depend on
-  incognito being on. Learning is off there either way. Autofill chips are a
-  different story: the secure-field check doesn't gate them at all, only
-  incognito does, so turning incognito on inside a password field is what
-  blocks them. It isn't redundant the way it is for learning.
+  incognito being on. Learning is off there either way. Autofill chips are
+  gated by neither: a password field is where a password manager has
+  something to offer, and incognito is where you're most likely to be
+  logging in, so the chips stay in both.
 - **Existing learned words are never touched.** Turning on incognito, or
   turning off "Learn from typing" entirely, only stops *new* words and
   patterns from being recorded. Nothing already learned is deleted. Wiping

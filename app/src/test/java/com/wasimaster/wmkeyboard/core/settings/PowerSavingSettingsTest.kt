@@ -102,14 +102,16 @@ class PowerSavingSettingsTest {
         assertFalse(saving.haptics.enabled)
         assertTrue(saving.reduceMotion)
         assertEquals(0f, saving.gesture.trailOpacity, 0f)
-        assertFalse(saving.emojiPrediction)
-        assertFalse(saving.smartSuggestions)
         assertFalse(saving.clipboard.linkPreviews)
         assertFalse(saving.clipboard.userScreenshots)
         assertEquals("system", saving.whisper.engine)
         // Off by default, so these survive.
         assertTrue(saving.gestureTyping)
         assertTrue(saving.popup.enabled)
+        // The cheap typing helpers too: pattern matches on the current word
+        // cost nothing worth a feature that looks broken when it goes.
+        assertTrue(saving.emojiPrediction)
+        assertTrue(saving.smartSuggestions)
     }
 
     @Test

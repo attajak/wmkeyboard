@@ -198,7 +198,7 @@
 
     <string name="typing_inline_autofill_title">Password manager suggestions</string>
     <string name="typing_inline_autofill_subtitle">Show saved logins from your autofill service in the suggestion strip</string>
-    <string name="typing_inline_autofill_info">When you select a login field, your password manager can offer saved entries as chips in the suggestion strip, instead of a separate popup. The password manager draws the chips itself. The keyboard gets only their size, and never sees the user name or the password inside them. Incognito mode turns this off by itself. This setting needs Android 11 or newer, and a password manager set as your system autofill service.</string>
+    <string name="typing_inline_autofill_info">When you select a login field, your password manager can offer saved entries as chips in the suggestion strip, instead of a separate popup. The password manager draws the chips itself. The keyboard gets only their size, and never sees the user name or the password inside them. The chips stay available in incognito mode, because they record nothing. This setting needs Android 11 or newer, and a password manager set as your system autofill service.</string>
 
     <string name="typing_smart_replies_title">Smart replies</string>
     <string name="typing_smart_replies_subtitle">Let the system offer replies to the message you answer</string>

@@ -61,6 +61,16 @@ class DataSaverSettingsTest {
     }
 
     @Test
+    fun `what you tap for is allowed by default, and only real data asks`() {
+        val stock = DataSaverStatus(active = true, settings = DataSaverSettings())
+        assertEquals(MeteredDecision.ALLOWED, stock.decide(MeteredFeature.MEDIA_SEARCH))
+        assertEquals(MeteredDecision.ALLOWED, stock.decide(MeteredFeature.WEB_SEARCH))
+        assertEquals(MeteredDecision.ALLOWED, stock.decide(MeteredFeature.CLOUD_AI))
+        assertEquals(MeteredDecision.ASK, stock.decide(MeteredFeature.DOWNLOADS))
+        assertEquals(MeteredDecision.ASK, stock.decide(MeteredFeature.ANIMATED_EMOJI))
+    }
+
+    @Test
     fun `the defaults hold something back`() {
         assertTrue(DataSaverSettings().restrictsAnything)
         assertFalse(
@@ -99,7 +109,11 @@ class DataSaverSettingsTest {
 
     @Test
     fun `a grant lasts for the session`() {
-        val status = DataSaverStatus(active = true, settings = DataSaverSettings())
+        // Asked for explicitly: the stock answer for a search is allow now.
+        val status = DataSaverStatus(
+            active = true,
+            settings = DataSaverSettings(mediaSearch = MeteredPolicy.ASK),
+        )
         assertEquals(MeteredDecision.ASK, status.decide(MeteredFeature.MEDIA_SEARCH))
         val granted = status.granting(MeteredFeature.MEDIA_SEARCH)
         assertTrue(granted.allows(MeteredFeature.MEDIA_SEARCH))

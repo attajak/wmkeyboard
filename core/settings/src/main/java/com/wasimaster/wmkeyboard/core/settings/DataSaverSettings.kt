@@ -99,9 +99,13 @@ data class DeviceNetworkState(
  * The split between the first block and the second is the whole design: the
  * background fetches are things the keyboard does on its own, so they are off
  * by default and get no [MeteredPolicy.ASK] (nobody is there to answer). The
- * rest are things the user opened a panel or pressed a button to start, so
- * they default to asking rather than to silently not working — a GIF grid that
- * comes up empty with no explanation reads as a bug.
+ * rest are things the user opened a panel or pressed a button to start, and
+ * they are allowed by default — the same rule as Android's own Data Saver,
+ * which restricts background data and lets the foreground through. The two
+ * exceptions ask: a download, which can run to hundreds of megabytes, and an
+ * animated emoji, whose preview plays before anything was sent. A GIF grid
+ * that comes up empty, or a search that needs a second tap, read as bugs on a
+ * mode most people turn on once and forget.
  */
 data class DataSaverSettings(
     /**
@@ -129,10 +133,10 @@ data class DataSaverSettings(
     val weatherChip: MeteredPolicy = MeteredPolicy.BLOCK,
     /**
      * The Wiktionary recording behind the vocabulary card's speaker button.
-     * Blocked by default rather than asked: a spoken word has a free fallback
-     * (the platform synthesiser), so a notice over a 30 KB clip would be noise.
+     * Allowed by default: one tap, a 30 KB clip. Blocking it falls back to the
+     * platform synthesiser, which is the cheap answer for anyone who sets it.
      */
-    val vocabAudio: MeteredPolicy = MeteredPolicy.BLOCK,
+    val vocabAudio: MeteredPolicy = MeteredPolicy.ALLOW,
     /**
      * Exchange-rate tables for the currency chip and converter. Allowed by
      * default: a few hundred bytes, cached for hours, and a converter showing
@@ -143,9 +147,9 @@ data class DataSaverSettings(
     val addonRefresh: MeteredPolicy = MeteredPolicy.BLOCK,
 
     /** GIF and sticker search, including the trending grid a panel opens on. */
-    val mediaSearch: MeteredPolicy = MeteredPolicy.ASK,
+    val mediaSearch: MeteredPolicy = MeteredPolicy.ALLOW,
     /** Web and image search results, and the thumbnails an image grid loads. */
-    val webSearch: MeteredPolicy = MeteredPolicy.ASK,
+    val webSearch: MeteredPolicy = MeteredPolicy.ALLOW,
     /** Fetching the animated version of a held emoji to send as a GIF. */
     val animatedEmoji: MeteredPolicy = MeteredPolicy.ASK,
     /**
@@ -158,9 +162,9 @@ data class DataSaverSettings(
     /**
      * Cloud AI: chat, the AI actions, and translation through a paid API.
      * Small payloads, so this is about the bill and about roaming rather than
-     * about bytes.
+     * about bytes — and the roaming trigger is the place to say so.
      */
-    val cloudAi: MeteredPolicy = MeteredPolicy.ASK,
+    val cloudAi: MeteredPolicy = MeteredPolicy.ALLOW,
 ) {
     /** Whether data saving should be in force given the device's [state]. */
     fun appliesTo(state: DeviceNetworkState): Boolean {

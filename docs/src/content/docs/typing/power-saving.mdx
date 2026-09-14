@@ -60,8 +60,8 @@ Power saving is thirteen independent switches rather than one bundle of "reduce 
 | Glide trail | On | Only the comet trail drawn behind a swipe. The swipe itself keeps decoding: see [Glide typing](/typing/glide-typing/). |
 | Key popup | Off | The character bubble over a pressed key. Off by default, since it's cheap to draw. |
 | Glide typing | Off | Swipe-to-type entirely. Left off by default: decoding a swipe is the most expensive thing the keyboard does, but it's also why many people installed it, so only the trail is dropped unless you opt into this too. |
-| Emoji suggestions | On | Scanning what you type for emoji to suggest. |
-| Smart chips | On | The calc, currency, unit and keyword chip family: see [Smart chips](/smart/chips/). Clipboard's own entity detection (pulling codes, numbers and links out of what you copy) isn't affected. |
+| Emoji suggestions | Off | Scanning what you type for emoji to suggest. Off by default: it's a dictionary look-up on a word you've already typed, and a strip that stops offering emoji reads as broken rather than as saving power. |
+| Smart chips | Off | The calc, currency, unit and keyword chip family: see [Smart chips](/smart/chips/). Off by default for the same reason as emoji suggestions: a few pattern matches on the current word aren't where a battery goes. Clipboard's own entity detection (pulling codes, numbers and links out of what you copy) isn't affected either way. |
 | Background network | On | Unrequested fetches only: link previews for copied URLs and scanned QR codes, and the dictionary's look-up-on-selection. Tools you open by hand (translate, search, GIFs) still work. |
 | Screenshot watching | On | Watching the screenshot folder for new images to offer in the clipboard. |
 | On-device models | On | Whisper dictation falls back to the system recognizer, and the letter-swipe action falls back to gesture typing if it was set to handwriting. See [Offline voice](/tools/whisper/) and [Handwriting](/tools/handwriting/). |

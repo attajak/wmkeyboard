@@ -100,13 +100,20 @@ data class PowerSavingSettings(
      * this is off by default and [dropGlideTrail] carries the cheap half.
      */
     val dropGestureTyping: Boolean = false,
-    /** Stop scanning what you type for emoji to suggest. */
-    val dropEmojiPrediction: Boolean = true,
+    /**
+     * Stop scanning what you type for emoji to suggest. Off by default: the
+     * scan is a dictionary look-up on a word already in hand, and a strip
+     * that stops offering emoji reads as broken rather than as saving power.
+     */
+    val dropEmojiPrediction: Boolean = false,
     /**
      * Stop the smart chips — the sums, unit and currency conversions and tool
-     * keywords matched against every word you type.
+     * keywords matched against every word you type. Off by default for the
+     * same reason as [dropEmojiPrediction]: a handful of pattern matches on
+     * the current word is not where a battery goes, and the chips vanishing
+     * is what users reported as a bug.
      */
-    val dropSmartChips: Boolean = true,
+    val dropSmartChips: Boolean = false,
     /**
      * Stop the optional network fetches that happen without being asked: link
      * previews for copied URLs and for scanned QR codes, and the dictionary's

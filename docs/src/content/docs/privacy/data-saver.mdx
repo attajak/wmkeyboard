@@ -63,15 +63,15 @@ free.
 | Exchange rates | the rate table for the currency chip and converter. Allowed by default: a few hundred bytes, cached for hours |
 | Add-on updates | re-reading add-on repositories to find new versions |
 
-**Started by you** (all three answers, all set to ask by default):
+**Started by you** (all three answers; allowed by default, the same rule as Android's own Data Saver, which restricts background data and lets what you tap for through; only the two that can move real data ask):
 
 | Feature | What it asks about |
 |---|---|
-| GIFs and stickers | searching and loading the GIF and sticker grids. Your own sticker packs are files on the phone, so they always work |
-| Web and image search | search results, and the thumbnails an image grid loads |
-| Animated emoji | fetching the animated version of an emoji. The looping preview in the long-press popup waits for a yes; pressing **Send** is the yes |
-| Downloads | language data, dictionaries, emoji keyword packs, add-ons and the on-device speech and language models |
-| Cloud AI | chat and AI actions that run on a provider's servers. On-device models are never held, because reaching them costs nothing |
+| GIFs and stickers | searching and loading the GIF and sticker grids. Allowed by default. Your own sticker packs are files on the phone, so they always work |
+| Web and image search | search results, and the thumbnails an image grid loads. Allowed by default |
+| Animated emoji | fetching the animated version of an emoji. Asks by default: the looping preview in the long-press popup waits for a yes, and pressing **Send** is the yes |
+| Downloads | language data, dictionaries, emoji keyword packs, add-ons and the on-device speech and language models. Asks by default, since these run to hundreds of megabytes |
+| Cloud AI | chat and AI actions that run on a provider's servers. Allowed by default: small payloads, and the roaming trigger is the place to say no. On-device models are never held, because reaching them costs nothing |
 
 ## Where the old switches went
 

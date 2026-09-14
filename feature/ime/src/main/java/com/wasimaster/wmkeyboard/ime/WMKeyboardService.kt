@@ -4604,10 +4604,13 @@ open class WMKeyboardService : InputMethodService() {
      * Tells the system autofill service how much room the strip has, which
      * is what makes password-manager chips appear there at all.
      *
-     * Declining (returning null) is the documented way to opt out, and the
-     * cases that decline are the ones where showing saved credentials would
-     * be wrong: the feature switched off, or an incognito session, where the
-     * user has asked for this typing not to be remembered or surfaced.
+     * Declining (returning null) is the documented way to opt out, and it
+     * declines only when both lanes are switched off. Incognito is not a
+     * reason: it promises that nothing typed is remembered, and a chip the
+     * password manager draws remembers nothing — the keyboard never even
+     * sees what is in it. Declining under incognito was how a login form in
+     * a private tab, or under the Incognito tool, lost its saved-login chips
+     * altogether (issue #151).
      */
     /**
      * Same question as [KeyboardUiState.incognitoOn], asked before the state
@@ -4615,7 +4618,7 @@ open class WMKeyboardService : InputMethodService() {
      * ahead of onStartInputView, so the field flag has to come straight off
      * [currentInputEditorInfo] rather than the cached UI state.
      */
-    private fun autofillBlockedByIncognito(): Boolean {
+    private fun incognitoForAutofillRequest(): Boolean {
         val settings = _uiState.value.settings
         return settings.incognito ||
             (settings.autoIncognito && currentInputEditorInfo.requestsNoPersonalizedLearning())
@@ -4626,17 +4629,21 @@ open class WMKeyboardService : InputMethodService() {
      * autofill service first, platform smart replies second. Zero means the
      * lane is switched off, and (0, 0) means nothing may be requested at all.
      *
-     * Incognito closes both lanes. The autofill one because credentials for a
-     * private session should not be offered; the reply one because a smart
-     * reply is the system reading the conversation on screen, which is the
-     * same thing incognito exists to stop everywhere else.
+     * Incognito closes the reply lane only. A smart reply is the system
+     * reading the conversation on screen, which is the same thing incognito
+     * exists to stop everywhere else. A saved-login chip is the opposite
+     * case: the manager offers what it already holds, the keyboard learns
+     * nothing from it, and a private session is exactly where the user is
+     * logging in (#151).
      */
     private fun inlineChipBudgets(): Pair<Int, Int> {
         val settings = _uiState.value.settings
-        if (autofillBlockedByIncognito()) return 0 to 0
         val autofill = if (settings.suggestionSources.inlineAutofill) InlineAutofill.MAX_AUTOFILL_CHIPS else 0
-        val platform =
-            if (settings.suggestionStrip.systemSmartReplies) InlineAutofill.MAX_PLATFORM_CHIPS else 0
+        val platform = if (settings.suggestionStrip.systemSmartReplies && !incognitoForAutofillRequest()) {
+            InlineAutofill.MAX_PLATFORM_CHIPS
+        } else {
+            0
+        }
         return autofill to platform
     }
 
@@ -22940,7 +22947,9 @@ open class WMKeyboardService : InputMethodService() {
         // user just pressed climbs back onto the strip between digits, and
         // again over the finished code.
         if (codeEntryJob?.isActive == true) return
-        if (settings.incognito || state.fieldIncognito) return
+        // Not held back by incognito: the chip shows a code the user copied
+        // a moment ago, and offering it back records nothing. A login in a
+        // private tab is where a code is most often wanted (#151 follow-up).
         if (!isClipboardAccessible()) return
         val clip = clipboardStore.items()
             .filter { it.kind.isTextual }
@@ -23002,9 +23011,10 @@ open class WMKeyboardService : InputMethodService() {
             clearOtpSuggestion()
             return
         }
-        val hidden =
-            (settings.otp.numberFieldsOnly && state.fieldKind != FieldKind.NUMBER) ||
-                settings.incognito || state.fieldIncognito
+        // Incognito no longer hides the chip: reading a code out of a
+        // notification records nothing about what is typed, and a private
+        // browsing tab is where the code is wanted (#151 follow-up).
+        val hidden = settings.otp.numberFieldsOnly && state.fieldKind != FieldKind.NUMBER
         if (hidden) {
             clearOtpSuggestion()
             return
