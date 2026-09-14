@@ -127,7 +127,7 @@ A couple of shape quirks are worth knowing. Double letters only need one pass ov
 
 Putting the cursor back on a swiped word puts **that stroke's other readings** on the strip, ahead of the strip's own answer. This matters more than it sounds. The strip normally reads the letters standing in the field, so a stroke misread as "form" offers "forms" and "fort" — respellings of the wrong word, never the word you drew. The readings the stroke actually produced *do* contain it, so those go first, and taking one is both the fix and a lesson: it counts as a correction of that stroke, the same as re-picking straight after the swipe.
 
-The readings are kept for the last dozen swiped words in the field and go when the field does.
+The readings are kept for the last 500 swiped words in the field and go when the field does. Each set is tied to the spot its word sits in, so the same word typed somewhere else in the text never picks up that stroke's readings.
 
 Autocorrect never runs a second pass over a glided word. The decoder only ever returns real dictionary words in the first place, so there's no typo to fix. What glide typing does share with normal typing is learning: every word a glide commits goes through the same learning path a tapped-out word does. It's reinforced in your personal dictionary and recorded as following whatever word came before, which is what powers next-word prediction later. It works the other direction too. A word you've recently typed or had autocorrected becomes swipeable right away, since learning a word immediately refreshes the list glide typing decodes against.
 

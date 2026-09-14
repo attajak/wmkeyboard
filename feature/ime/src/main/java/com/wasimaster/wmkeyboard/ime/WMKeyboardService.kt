@@ -182,6 +182,7 @@ import com.wasimaster.wmkeyboard.core.prediction.WordRevision
 import com.wasimaster.wmkeyboard.core.prediction.KeySets
 import com.wasimaster.wmkeyboard.core.prediction.TouchPoint
 import com.wasimaster.wmkeyboard.core.prediction.LanguageMixConfidence
+import com.wasimaster.wmkeyboard.core.prediction.GlideReadings
 import com.wasimaster.wmkeyboard.core.prediction.LearningBuffer
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
 import com.wasimaster.wmkeyboard.core.prediction.topWords
@@ -632,18 +633,19 @@ open class WMKeyboardService : InputMethodService() {
 
     /**
      * The words each recent glide *also* read, kept against the word it
-     * committed and folded with [WordKey.of].
+     * committed and where that word stands.
      *
      * Proofreading a swiped word is the one place the strip has nothing useful
      * to say: it re-reads the word standing in the field and offers spellings
      * of *that*, so a stroke read as "form" offers "forms" and "fort" when what
      * the user drew was "from". The readings are what the finger actually said,
      * and they are already computed, so they are kept here and put back in
-     * front when the caret returns to the word (#115). Insertion-ordered and
-     * capped at [GLIDE_RECALL_WORDS]; per field, since the words are about text
-     * in this one.
+     * front when the caret returns to the word (#115). Found by place as well as
+     * spelling, so the same word typed somewhere else is not handed another
+     * stroke's readings (#199); per field, since the words are about text in
+     * this one.
      */
-    private val glideReadings = LinkedHashMap<String, List<String>>()
+    private val glideReadings = GlideReadings()
 
     /**
      * The word the caret was put back into and re-armed as the composing
@@ -656,6 +658,9 @@ open class WMKeyboardService : InputMethodService() {
      * ends it and so does the commit that empties the buffer.
      */
     private var resumedWord: String? = null
+
+    /** Where [resumedWord] starts in the field, to find its glide's readings by. */
+    private var resumedWordStart = -1
 
     /**
      * The word the "add to dictionary?" chip is currently asking about, when
@@ -1640,7 +1645,7 @@ open class WMKeyboardService : InputMethodService() {
      * as it was when the caret settled; the splice re-reads the field anyway
      * and stands down if the text has moved on under it.
      */
-    private class CaretWord(val head: String, val tail: String) {
+    private class CaretWord(val head: String, val tail: String, val start: Int) {
         val word: String get() = head + tail
     }
 
@@ -4415,6 +4420,7 @@ open class WMKeyboardService : InputMethodService() {
         // edit. No text is read here: this runs on every keystroke, and a read
         // would undo what the expected-selection cache exists to save.
         keymanSession?.onSelectionReported(newSelStart, newSelEnd)
+        glideReadings.onCaret(newSelStart, newSelEnd)
         noteCaretForLearning(oldSelStart, oldSelEnd, newSelStart, newSelEnd)
         noteCaretForRevision(newSelStart, newSelEnd)
         // The undo chip keeps its own anchor, forgiving forwards where
@@ -7232,6 +7238,7 @@ open class WMKeyboardService : InputMethodService() {
                     // Went back to this word: if a glide wrote it, the strip
                     // offers that stroke's other readings (#115).
                     resumedWord = word
+                    resumedWordStart = newSelStart - word.length
                     armComposingRevision(word, newSelStart)
                     val ahead = before.subSequence(0, before.length - word.length)
                     setContextFrom(ahead)
@@ -7254,7 +7261,7 @@ open class WMKeyboardService : InputMethodService() {
                 val ahead = before?.let { it.subSequence(0, it.length - head.length) }
                 setContextFrom(ahead)
                 rebuildRecentWords(ahead)
-                caretWord = CaretWord(head, tail)
+                caretWord = CaretWord(head, tail, newSelStart - head.length)
                 armFieldRevision(head, tail, newSelStart)
                 refreshSuggestions()
                 return
@@ -11168,7 +11175,10 @@ open class WMKeyboardService : InputMethodService() {
      * caret is passes -1 and nothing is judged.
      */
     private fun noteDeletedForLearning(start: Int, end: Int) {
-        if (start < 0 || end <= start || learningBuffer.isEmpty()) return
+        if (start < 0 || end <= start) return
+        // The glide readings behind the span move up with the text (#199).
+        glideReadings.onDeleted(start, end)
+        if (learningBuffer.isEmpty()) return
         val dropped = learningBuffer.onDeleted(start, end)
         if (dropped.isNotEmpty()) lastDropped = dropped
     }
@@ -12342,7 +12352,7 @@ open class WMKeyboardService : InputMethodService() {
                         ?.takeIf { it.startsWith(typed, ignoreCase = true) }
                     val strip = dropTyped(words)
                     SuggestionFrame(
-                        resumed?.let { withGlideReadings(it, strip) } ?: strip,
+                        resumed?.let { withGlideReadings(it, resumedWordStart, strip) } ?: strip,
                         emojis, bias,
                         octopusFor(state, typed, keyFrame, pool = pool),
                     )
@@ -12478,7 +12488,7 @@ open class WMKeyboardService : InputMethodService() {
             // A caret dropped on a swiped word is the user reading it back, and
             // what they want there is the swipe's other readings rather than
             // respellings of the one it picked (#115).
-            val results = withGlideReadings(word, suggested)
+            val results = withGlideReadings(word, caret.start, suggested)
             _uiState.update {
                 it.copy(
                     suggestions = results,
@@ -12614,10 +12624,12 @@ open class WMKeyboardService : InputMethodService() {
             // One of the glide's own rejected readings, taken while reading
             // the text back: the same preference a pick right after the swipe
             // teaches (#115).
-            if (suggestion in glideReadingsFor(caret.word)) {
+            if (suggestion in glideReadings.readingsAt(caret.word, caret.start)) {
                 noteGlidePreference(rejected = caret.word, chosen = suggestion)
-                glideReadings.remove(WordKey.of(caret.word))
+                glideReadings.forget(caret.word, caret.start)
             }
+            // The words behind this one moved by the difference in length.
+            glideReadings.onReplaced(wordStart, wordStart + caret.word.length, replacement.length)
             val fix = Revision(caret.word, suggestion, wordStart + suggestion.length)
             learn(
                 suggestion,
@@ -12735,9 +12747,9 @@ open class WMKeyboardService : InputMethodService() {
         // and it is the same preference a pick straight after the swipe teaches
         // (issue #52) — only made while proofreading instead (#115).
         resumedWord?.let { came ->
-            if (suggestion in glideReadingsFor(came)) {
+            if (suggestion in glideReadings.readingsAt(came, resumedWordStart)) {
                 noteGlidePreference(rejected = came, chosen = suggestion)
-                glideReadings.remove(WordKey.of(came))
+                glideReadings.forget(came, resumedWordStart)
             }
         }
         // Deliberately picked from the strip — a stronger signal than a
@@ -13984,7 +13996,7 @@ open class WMKeyboardService : InputMethodService() {
             // What the stroke could have been, kept against the word it
             // became, so coming back to this word offers the swipe's own
             // readings instead of spellings of the word standing there (#115).
-            rememberGlideReading(word, strip)
+            glideReadings.remember(word, strip)
             // The stroke's shape rides with the word in the learning buffer
             // and reaches the shape store only when the word settles; the
             // hand model learns on the spot and retracts on undo instead.
@@ -14004,36 +14016,8 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
-     * Keeps [readings] — what the stroke that committed [word] also had to
-     * offer — for as long as the user might come back to that word.
-     *
-     * A single reading teaches nothing (there was no other answer), so it is
-     * not kept.
-     */
-    private fun rememberGlideReading(word: String, readings: List<String>) {
-        if (readings.size < 2) return
-        val key = WordKey.of(word)
-        if (key.isEmpty()) return
-        // Re-inserted rather than overwritten so the newest reading is also the
-        // youngest entry, which is what the cap below evicts by.
-        glideReadings.remove(key)
-        glideReadings[key] = readings
-        while (glideReadings.size > GLIDE_RECALL_WORDS) {
-            val oldest = glideReadings.keys.firstOrNull() ?: break
-            glideReadings.remove(oldest)
-        }
-    }
-
-    /**
-     * The other words the glide that wrote [word] read, or empty when [word]
-     * was not glided (or was glided too long ago to still be here).
-     */
-    private fun glideReadingsFor(word: String): List<String> =
-        glideReadings[WordKey.of(word)].orEmpty().filterNot { it.equals(word, ignoreCase = true) }
-
-    /**
-     * [suggested] with the readings of the glide that wrote [word] in front of
-     * it.
+     * [suggested] with the readings of the glide that wrote the [word] starting
+     * at [start] in front of it.
      *
      * This is what makes proofreading a swipe *correcting* rather than
      * retyping. The strip's own answer is about the letters standing in the
@@ -14043,8 +14027,8 @@ open class WMKeyboardService : InputMethodService() {
      * already wired to teach the pair (see `noteGlidePreference`), so the
      * keyboard learns the stroke as well as fixing the word (#115).
      */
-    private fun withGlideReadings(word: String, suggested: List<String>): List<String> {
-        val readings = glideReadingsFor(word)
+    private fun withGlideReadings(word: String, start: Int, suggested: List<String>): List<String> {
+        val readings = glideReadings.readingsAt(word, start)
         if (readings.isEmpty()) return suggested
         val seen = HashSet<String>(readings.map { it.lowercase() })
         return readings + suggested.filterNot { it.lowercase() in seen }
@@ -14263,7 +14247,7 @@ open class WMKeyboardService : InputMethodService() {
                 // Only the last word of a chained stroke keeps its readings:
                 // it is the one whose alternates are on the strip, and the
                 // one a proofreading pass comes back to (#115).
-                rememberGlideReading(word, lastWords)
+                glideReadings.remember(word, lastWords)
                 committedAny = true
             }
             if (committedAny) {
@@ -25098,16 +25082,6 @@ open class WMKeyboardService : InputMethodService() {
          * enough to cover the corrections the watch is still holding.
          */
         private const val CORRECTION_JUDGEMENT_WINDOW = 512
-
-        /**
-         * How many glided words keep the readings their stroke rejected, for
-         * the strip to offer when the caret comes back to one (#115).
-         *
-         * A sentence's worth. Long enough that reading a message back finds the
-         * stroke that wrote each word, short enough that it is a handful of
-         * short string lists and not a transcript.
-         */
-        private const val GLIDE_RECALL_WORDS = 12
 
         /**
          * How much non-word text may sit between the caret and the word the
