@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.ContentCut
 import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Highlight
@@ -97,6 +98,8 @@ object KeyIcons {
         "copy" to Icons.Outlined.ContentCopy,
         "cut" to Icons.Outlined.ContentCut,
         "paste" to Icons.Outlined.ContentPaste,
+        // Its bundled name, Delete, is taken: `delete` has always meant backspace.
+        "trash" to Icons.Outlined.Delete,
         // Content / tools.
         "emoji" to Icons.Outlined.EmojiEmotions,
         "language" to Icons.Outlined.Language,
@@ -152,8 +155,43 @@ object KeyIcons {
         )
     }
 
-    /** Every icon name a layout can use, canonical names plus aliases. */
-    val names: List<String> by lazy { catalog.keys.toList() + aliases.keys }
+    /**
+     * The app's own bundled glyphs ([BuiltinIcons]) by lowercased name, so a key
+     * can wear any icon the settings already draw — `EmojiEmotions`, `Translate`
+     * — at no size cost (issue #187). Looked up after [catalog] and [aliases],
+     * which keep their short names.
+     */
+    private val builtinByLowerName: Map<String, ImageVector> by lazy {
+        BuiltinIcons.catalog.mapKeys { it.key.lowercase() }
+    }
+
+    /**
+     * Every icon name a layout can use: canonical names, aliases, then the
+     * bundled app icons that are not already one of those under the same name.
+     */
+    val names: List<String> by lazy {
+        catalog.keys.toList() + aliases.keys +
+            BuiltinIcons.names.filter { it.lowercase() !in catalog && it.lowercase() !in aliases }
+    }
+
+    /**
+     * What the layout editor's icon picker offers, in order: the key glyphs under
+     * their short names first, then each bundled app icon that is not the same
+     * drawing under another name. One entry per drawing, so the grid never shows
+     * the same glyph twice.
+     *
+     * A bundled name that is also an alias is left out: `Delete` already means
+     * backspace and `Done` already means check to every layout written so far,
+     * so offering them would store a name that draws something else. The trash
+     * glyph stays reachable as `trash`.
+     */
+    val pickerEntries: List<Pair<String, ImageVector>> by lazy {
+        val drawn = catalog.values.toHashSet()
+        catalog.toList() + BuiltinIcons.catalog.filter { (name, vector) ->
+            val key = name.lowercase()
+            vector !in drawn && key !in catalog && key !in aliases
+        }.toList()
+    }
 
     /**
      * The vector for [name], or null if the name is blank or unrecognised (the
@@ -171,6 +209,6 @@ object KeyIcons {
         val key = name.trim().lowercase()
         catalog[key]?.let { return it }
         aliases[key]?.let { alias -> return catalog[alias] }
-        return null
+        return builtinByLowerName[key]
     }
 }

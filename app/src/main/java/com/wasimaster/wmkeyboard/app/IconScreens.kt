@@ -3,9 +3,7 @@ package com.wasimaster.wmkeyboard.app
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +15,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Delete
@@ -28,9 +25,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -41,7 +36,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
@@ -487,7 +481,8 @@ private fun PackRow(
  *
  * The grid is the bundled Material set rather than the whole
  * `material-icons-extended` library — see [BuiltinIcons] for why — with a
- * search box, because 180 icons is well past what anyone scans by eye.
+ * search box, because 180 icons is well past what anyone scans by eye. Each
+ * glyph carries its name, which is what the search matches.
  */
 @Composable
 private fun IconPickerDialog(
@@ -504,7 +499,9 @@ private fun IconPickerDialog(
     val shown = remember(query) {
         val needle = query.trim()
         if (needle.isEmpty()) BuiltinIcons.names
-        else BuiltinIcons.names.filter { BuiltinIcons.label(it).contains(needle, ignoreCase = true) }
+        else BuiltinIcons.names.filter {
+            it.contains(needle, ignoreCase = true) || BuiltinIcons.label(it).contains(needle, ignoreCase = true)
+        }
     }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -538,34 +535,18 @@ private fun IconPickerDialog(
                     }
                     LazyVerticalGrid(
                         state = gridState,
-                        columns = GridCells.Adaptive(52.dp),
-                        modifier = Modifier.heightIn(max = 280.dp),
+                        columns = GridCells.Adaptive(IconGridCellMinWidth),
+                        modifier = Modifier.heightIn(max = 320.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
                         items(shown, key = { it }) { name ->
-                            val vector = BuiltinIcons.catalog.getValue(name)
-                            Surface(
-                                shape = RoundedCornerShape(10.dp),
-                                color = if (name == selected) {
-                                    MaterialTheme.colorScheme.secondaryContainer
-                                } else {
-                                    MaterialTheme.colorScheme.surfaceVariant
-                                },
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clickable { onPickBuiltin(name) },
-                            ) {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Icon(
-                                        vector,
-                                        contentDescription = BuiltinIcons.label(name),
-                                        modifier = Modifier.size(22.dp),
-                                    )
-                                }
-                            }
+                            IconGridCell(
+                                vector = BuiltinIcons.catalog.getValue(name),
+                                name = name,
+                                selected = name == selected,
+                                onClick = { onPickBuiltin(name) },
+                            )
                         }
                     }
                 }

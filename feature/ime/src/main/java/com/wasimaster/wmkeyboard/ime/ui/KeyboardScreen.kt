@@ -16237,6 +16237,26 @@ internal fun layoutSwitchLabel(
     }
 }
 
+/**
+ * The glyph an action key draws: the icon its layout named, when it named one
+ * (issue #187), otherwise its slot's, which is what an icon pack redresses. A
+ * named icon is the author choosing for this one key, so it stands over the pack
+ * the same way a label typed on a tool key stands over the tool's icon.
+ */
+@Composable
+private fun ActionKeyIcon(
+    named: ImageVector?,
+    slot: String,
+    contentDescription: String?,
+    tint: Color,
+) {
+    if (named != null) {
+        Icon(named, contentDescription = contentDescription, tint = tint)
+    } else {
+        SlotIcon(slot, contentDescription = contentDescription, tint = tint)
+    }
+}
+
 @Composable
 private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentColor: Color) {
     val key = visual.key
@@ -16244,25 +16264,32 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
     // a layout asking for smaller labels still leaves a larger accessibility
     // font size in force underneath it instead of silently discarding it.
     val fontScale = settings.fontScale * visual.fontScale
+    // An icon the layout named for this key (issue #187). Every branch below
+    // honours it, so a space bar or a shift key can wear one as well as a letter.
+    val namedIcon = KeyIcons.byName(key.icon)
     when (key.action) {
         // The shift slot and its spoken name both track the live shift state, and
         // [spokenLabel] already words it the way this key wants read out.
-        KeyAction.Shift -> SlotIcon(
+        KeyAction.Shift -> ActionKeyIcon(
+            namedIcon,
             visual.iconSlot ?: IconSlots.KEY_SHIFT,
             contentDescription = visual.spoken.resolved(),
             tint = if (visual.iconActive) MaterialTheme.colorScheme.primary else contentColor,
         )
-        KeyAction.CapsLock -> SlotIcon(
+        KeyAction.CapsLock -> ActionKeyIcon(
+            namedIcon,
             visual.iconSlot ?: IconSlots.KEY_SHIFT_LOCK,
             contentDescription = visual.spoken.resolved(),
             tint = if (visual.iconActive) MaterialTheme.colorScheme.primary else contentColor,
         )
-        KeyAction.Delete -> SlotIcon(
+        KeyAction.Delete -> ActionKeyIcon(
+            namedIcon,
             IconSlots.KEY_BACKSPACE,
             contentDescription = stringResource(R.string.ime_key_delete),
             tint = contentColor,
         )
-        KeyAction.ForwardDelete -> SlotIcon(
+        KeyAction.ForwardDelete -> ActionKeyIcon(
+            namedIcon,
             IconSlots.KEY_FORWARD_DELETE,
             contentDescription = stringResource(R.string.ime_key_forward_delete),
             tint = contentColor,
@@ -16283,7 +16310,8 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                 modifier = Modifier.padding(horizontal = 4.dp),
             )
         } else {
-            SlotIcon(
+            ActionKeyIcon(
+                namedIcon,
                 visual.iconSlot ?: IconSlots.KEY_ENTER,
                 contentDescription = stringResource(R.string.ime_enter_default),
                 tint = contentColor,
@@ -16292,22 +16320,26 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
         // The enter glyph, never one of the action icons: this key types a line
         // break whatever the field declares, and drawing a paper plane on it
         // would promise the Send it exists to avoid.
-        KeyAction.Newline -> SlotIcon(
+        KeyAction.Newline -> ActionKeyIcon(
+            namedIcon,
             IconSlots.KEY_ENTER,
             contentDescription = stringResource(R.string.ime_key_newline),
             tint = contentColor,
         )
-        KeyAction.LanguageSwitch -> SlotIcon(
+        KeyAction.LanguageSwitch -> ActionKeyIcon(
+            namedIcon,
             IconSlots.KEY_GLOBE,
             contentDescription = stringResource(R.string.ime_key_language_switch),
             tint = contentColor,
         )
-        KeyAction.InputMethodPicker -> SlotIcon(
+        KeyAction.InputMethodPicker -> ActionKeyIcon(
+            namedIcon,
             IconSlots.KEY_INPUT_METHOD_PICKER,
             contentDescription = stringResource(R.string.ime_key_input_method_picker),
             tint = contentColor,
         )
-        KeyAction.Emoji -> SlotIcon(
+        KeyAction.Emoji -> ActionKeyIcon(
+            namedIcon,
             IconSlots.KEY_EMOJI,
             contentDescription = stringResource(R.string.ime_key_emoji),
             tint = contentColor,
@@ -16317,7 +16349,7 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
         // Copy, Paste). An icon the author named still wins, like any key.
         is KeyAction.Edit -> {
             val op = (key.action as KeyAction.Edit).op
-            val mainIcon = KeyIcons.byName(key.icon) ?: textEditIcon(op)
+            val mainIcon = namedIcon ?: textEditIcon(op)
             if (mainIcon != null && key.label.isBlank()) {
                 Icon(
                     mainIcon,
@@ -16345,7 +16377,10 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
             contentAlignment = Alignment.Center,
         ) {
             // Split-spacebar left halves carry an empty label: no language name.
-            if (key.label.isNotEmpty()) {
+            // A named icon takes the name's place, or sits before it when the
+            // key asks for both (issue #187).
+            val showText = key.label.isNotEmpty() && (namedIcon == null || key.iconBesideLabel)
+            if (showText || namedIcon != null) {
                 val showArrows = visual.spaceArrows
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -16356,9 +16391,19 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                         fontSize = (8 * fontScale).sp,
                         color = contentColor.copy(alpha = 0.35f),
                     )
+                    if (namedIcon != null) {
+                        // Beside the name it is read at the name's weight; alone
+                        // it is the key's face, like an icon on any other key.
+                        Icon(
+                            namedIcon,
+                            contentDescription = if (showText) null else visual.spoken.resolved(),
+                            tint = if (showText) contentColor.copy(alpha = 0.5f) else contentColor,
+                            modifier = Modifier.size(((if (showText) 16f else 22f) * fontScale).dp),
+                        )
+                    }
                     // A custom label replaces the language name; %s inside it
                     // puts the name back, so "— %s —" keeps tracking the mode.
-                    Text(
+                    if (showText) Text(
                         text = visual.spaceText,
                         fontSize = (11 * fontScale).sp,
                         color = contentColor.copy(alpha = 0.5f),
@@ -16377,7 +16422,7 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
         else -> Box(modifier = Modifier.fillMaxSize()) {
             // A key may draw a named icon in place of its glyph; an unknown name
             // resolves to null and falls through to the text label below.
-            val mainIcon = KeyIcons.byName(key.icon)
+            val mainIcon = namedIcon
             // A tool key with no label and no icon of its own wears the icon the
             // tool wears on the toolbar — through the slot registry, so an icon
             // pack redresses the key with the tool. A label the author typed wins:

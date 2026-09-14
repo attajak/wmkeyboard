@@ -82,6 +82,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.items as gridItems
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
@@ -3446,6 +3449,9 @@ internal fun KeyEditSheet(
     // Which operation an edit key runs, and which component a field cell hosts.
     var pickingEdit by remember { mutableStateOf(false) }
     var pickingField by remember { mutableStateOf(false) }
+    // Which icon the picker is choosing: null while it is shut, false for the
+    // key's own icon, true for its corner hint.
+    var pickingIcon by remember { mutableStateOf<Boolean?>(null) }
     // A component's cell has a size and a kind and nothing else to edit.
     val isField = key.action is KeyAction.Field
     // Held as text so a half-typed entry survives; parsed on every change.
@@ -3595,20 +3601,22 @@ internal fun KeyEditSheet(
 
             if (!isField) KeyLabelScaleRow(key) { scale -> onChange { it.copy(labelScale = scale) } }
 
+            // Every key but a component's cell can wear an icon (issue #187). The
+            // space bar and the action keys used to have no field for one, and the
+            // letters' field wanted a name typed from memory; a picker shows the
+            // icons and says what each is called.
+            if (!isField) {
+                IconPickRow(R.string.layout_editor_icon_field_label, key.icon) { pickingIcon = false }
+                if (key.action == KeyAction.Space && KeyIcons.byName(key.icon) != null) {
+                    ToggleSetting(
+                        R.string.layout_editor_icon_beside_label_title,
+                        stringResource(R.string.layout_editor_icon_beside_label_subtitle),
+                        key.iconBesideLabel,
+                    ) { beside -> onChange { it.copy(iconBesideLabel = beside) } }
+                }
+            }
             if (key.action == KeyAction.Text) {
-                SheetField(
-                    label = stringResource(R.string.layout_editor_icon_field_label),
-                    value = key.icon.orEmpty(),
-                    supporting = iconFieldSupport(key.icon),
-                    resetKey = ref,
-                ) { text -> onChange { it.copy(icon = text.ifBlank { null }) } }
-
-                SheetField(
-                    label = stringResource(R.string.layout_editor_icon_hint_field_label),
-                    value = key.iconHint.orEmpty(),
-                    supporting = iconFieldSupport(key.iconHint),
-                    resetKey = ref,
-                ) { text -> onChange { it.copy(iconHint = text.ifBlank { null }) } }
+                IconPickRow(R.string.layout_editor_icon_hint_field_label, key.iconHint) { pickingIcon = true }
             }
 
             // Not only text keys: every key whose press and hold is free can
@@ -3793,6 +3801,20 @@ internal fun KeyEditSheet(
         )
     }
 
+    pickingIcon?.let { hint ->
+        KeyIconPickerDialog(
+            title = stringResource(
+                if (hint) R.string.layout_editor_icon_hint_field_label else R.string.layout_editor_icon_field_label,
+            ),
+            selected = if (hint) key.iconHint else key.icon,
+            onDismiss = { pickingIcon = null },
+            onPick = { name ->
+                pickingIcon = null
+                onChange { if (hint) it.copy(iconHint = name) else it.copy(icon = name) }
+            },
+        )
+    }
+
     if (pickingTool) {
         ToolPickerDialog(
             title = stringResource(R.string.layout_editor_tool_picker_title),
@@ -3919,6 +3941,90 @@ private fun LettersField(
 }
 
 /** Inline validity feedback for the icon / icon-hint name fields. */
+/**
+ * The key sheet's icon row: the icon the key wears and its name, opening
+ * [KeyIconPickerDialog]. The support line still names a name the registry does
+ * not know, which is how a typo made in the JSON editor shows up here.
+ */
+@Composable
+private fun IconPickRow(@StringRes title: Int, name: String?, onClick: () -> Unit) {
+    NavRow(
+        title = title,
+        subtitle = iconFieldSupport(name),
+        value = name ?: stringResource(R.string.layout_editor_icon_none_label),
+        icon = KeyIcons.byName(name) ?: SettingsRowIcons[title],
+        onClick = onClick,
+    )
+}
+
+/**
+ * Picks a key icon from [KeyIcons.pickerEntries]: the key glyphs, then the app's
+ * own icons. Searchable by name, and each glyph wears the name a layout file
+ * stores, so the picker doubles as the list of names (issue #187).
+ */
+@Composable
+private fun KeyIconPickerDialog(
+    title: String,
+    selected: String?,
+    onPick: (String?) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var query by remember { mutableStateOf("") }
+    // Compared as drawings: a file may name the icon by an alias or in another
+    // case ("Delete", "SEARCH"), and the cell should still light up.
+    val selectedVector = KeyIcons.byName(selected)
+    val shown = remember(query) {
+        val needle = query.trim()
+        if (needle.isEmpty()) {
+            KeyIcons.pickerEntries
+        } else {
+            KeyIcons.pickerEntries.filter { (name, _) -> name.contains(needle, ignoreCase = true) }
+        }
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                OutlinedTextField(
+                    value = query,
+                    onValueChange = { query = it },
+                    label = { Text(stringResource(CommonR.string.common_search)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                if (shown.isEmpty()) {
+                    Text(stringResource(R.string.plugins_icons_picker_no_match, query.trim()))
+                } else {
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(IconGridCellMinWidth),
+                        modifier = Modifier.heightIn(max = 320.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        gridItems(shown, key = { it.first }) { (name, vector) ->
+                            IconGridCell(
+                                vector = vector,
+                                name = name,
+                                selected = vector == selectedVector,
+                                onClick = { onPick(name) },
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onPick(null) }) {
+                Text(stringResource(R.string.layout_editor_icon_picker_clear_action))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_cancel)) }
+        },
+    )
+}
+
 @Composable
 private fun iconFieldSupport(name: String?): String = when {
     name.isNullOrBlank() -> stringResource(R.string.layout_editor_icon_field_hint)

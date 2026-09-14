@@ -44,6 +44,9 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -1884,14 +1887,13 @@ internal fun ModeEditor(
     }
 }
 /**
- * Picks an icon from [ModeIcons.catalog]. Chips rather than a grid of
- * bare icons: the selected state comes styled and the touch targets land on
- * the same size the rest of the settings use.
+ * Picks an icon from [ModeIcons.catalog], as a grid of named cells — the
+ * same cell every icon picker in the app draws, so a glyph always says what
+ * it is called.
  *
  * Shared with the snippet folders, which wear the same catalogue — hence
  * [title], the one thing the two callers disagree about.
  */
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun ModeIconPickerDialog(
     selected: String?,
@@ -1904,12 +1906,7 @@ internal fun ModeIconPickerDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            FlowRow(
-                modifier = Modifier
-                    .heightIn(max = 380.dp)
-                    .verticalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-            ) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 // The way back out, for the callers that have a drawing of
                 // their own to fall back to — a snippet folder draws a folder.
                 // A mode has no such thing, so it passes no label and the chip
@@ -1921,14 +1918,20 @@ internal fun ModeIconPickerDialog(
                         label = { Text(clearLabel) },
                     )
                 }
-                for ((id, vector) in ModeIcons.catalog) {
-                    FilterChip(
-                        selected = id == selected,
-                        onClick = { onPick(id) },
-                        label = {
-                            Icon(vector, contentDescription = id, modifier = Modifier.size(22.dp))
-                        },
-                    )
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(IconGridCellMinWidth),
+                    modifier = Modifier.heightIn(max = 380.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    items(ModeIcons.catalog, key = { it.first }) { (id, vector) ->
+                        IconGridCell(
+                            vector = vector,
+                            name = id,
+                            selected = id == selected,
+                            onClick = { onPick(id) },
+                        )
+                    }
                 }
             }
         },

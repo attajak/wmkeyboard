@@ -200,6 +200,13 @@ data class Key(
      * Additive and defaulted, so no format-version bump.
      */
     val letters: String? = null,
+    /**
+     * On the space bar, draws [icon] before the language name instead of in its
+     * place (issue #187). False, the default, lets the icon replace the text, the
+     * same as an icon does on every other key. Nothing on a key with no icon, and
+     * nothing on any key but the space bar.
+     */
+    val iconBesideLabel: Boolean = false,
 )
 
 /**

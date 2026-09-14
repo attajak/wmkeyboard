@@ -254,8 +254,14 @@
 
     <string name="layout_editor_icon_field_label">Icon</string>
     <string name="layout_editor_icon_hint_field_label">Icon hint</string>
-    <!-- search, mic, arrow_up and emoji are icon names. Do not translate them. -->
-    <string name="layout_editor_icon_field_hint">The name of a built-in icon, for example search, mic, arrow_up or emoji. Blank draws the label</string>
+    <string name="layout_editor_icon_field_hint">Pick an icon to draw in place of the label</string>
+    <!-- Value of the icon row when the key has no icon. -->
+    <string name="layout_editor_icon_none_label">None</string>
+    <!-- Button in the icon picker that takes the icon off the key. -->
+    <string name="layout_editor_icon_picker_clear_action">No icon</string>
+    <!-- Switch on the space bar's key sheet. Off: the icon replaces the language name. On: both are drawn. -->
+    <string name="layout_editor_icon_beside_label_title">Keep the language name</string>
+    <string name="layout_editor_icon_beside_label_subtitle">Draws the icon before the language name instead of in its place</string>
     <!-- %1$s is an icon name the user typed, for example "mic". -->
     <string name="layout_editor_icon_found_hint">Shows the \"<xliff:g id="icon_name" example="mic">%1$s</xliff:g>\" icon</string>
     <string name="layout_editor_icon_missing_hint">There is no icon with the name \"<xliff:g id="icon_name" example="mik">%1$s</xliff:g>\". The app draws the label instead</string>

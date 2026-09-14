@@ -90,6 +90,7 @@ object LayoutJsonDocs {
         "Key.role" to "Which punctuation slot this key fills, so an email or web address field can change it to @ or /.",
         "Key.icon" to "The name of an icon to draw in place of the label. The label still names the key for a screen reader.",
         "Key.iconHint" to "The name of an icon to draw as the corner hint, in place of the first alternate.",
+        "Key.iconBesideLabel" to "On the space bar, draws the icon before the language name instead of in its place.",
         "Key.hideHint" to "Draws no corner hint on this key, even when it has alternates.",
         "Key.forceHint" to "Draws this key's corner hint even when hints are off in the settings. hideHint wins when both are on.",
         "Key.flick" to "What a flick in each direction types, for a 12-key kana pad.",
