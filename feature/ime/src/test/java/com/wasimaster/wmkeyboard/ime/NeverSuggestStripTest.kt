@@ -142,14 +142,17 @@ class NeverSuggestStripTest {
         val kept = floating.copy(keyCodePoint = LAST.first().code, word = LAST)
         val service = keyboardShowing(
             KeyboardUiState(
-                octopus = mapOf(floating.keyCodePoint to floating, kept.keyCodePoint to kept),
+                octopus = mapOf(
+                    floating.keyCodePoint to listOf(floating),
+                    kept.keyCodePoint to listOf(kept),
+                ),
                 settings = KeyboardSettings(learnFromTyping = false),
             ),
         )
 
         service.onSuggestionHeld(BANNED)
 
-        assertEquals(mapOf(kept.keyCodePoint to kept), service.uiState.value.octopus)
+        assertEquals(mapOf(kept.keyCodePoint to listOf(kept)), service.uiState.value.octopus)
     }
 
     /**

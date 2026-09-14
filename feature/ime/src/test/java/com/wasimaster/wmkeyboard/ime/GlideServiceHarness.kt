@@ -223,13 +223,15 @@ internal fun octopusSentinel(
     word: String = "STALE",
     key: Char = 'q',
     kind: OctopusKind = OctopusKind.NEXT_WORD,
-): Map<Int, OctopusWord> = mapOf(
-    key.code to OctopusWord(
-        keyCodePoint = key.code,
-        word = word,
-        typedChars = 0,
-        kind = kind,
-        rank = 0,
+): OctopusBoard = mapOf(
+    key.code to listOf(
+        OctopusWord(
+            keyCodePoint = key.code,
+            word = word,
+            typedChars = 0,
+            kind = kind,
+            rank = 0,
+        ),
     ),
 )
 
@@ -261,8 +263,8 @@ internal fun glideReadyState(
     secureField: Boolean = false,
     fieldKind: FieldKind = FieldKind.TEXT,
     fieldNoSuggestions: Boolean = true,
-    octopus: Map<Int, OctopusWord> = emptyMap(),
-    octopusGlide: Map<Int, OctopusWord> = emptyMap(),
+    octopus: OctopusBoard = emptyMap(),
+    octopusGlide: OctopusBoard = emptyMap(),
 ): KeyboardUiState = KeyboardUiState(
     glideReady = glideReady,
     settings = settings,

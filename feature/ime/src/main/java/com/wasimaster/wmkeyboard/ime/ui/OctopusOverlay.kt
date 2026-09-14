@@ -30,6 +30,8 @@ import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
 import com.wasimaster.wmkeyboard.core.prediction.OctopusWord
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.OctopusPlacement
+import com.wasimaster.wmkeyboard.ime.OctopusBoard
+import com.wasimaster.wmkeyboard.ime.allWords
 import kotlin.math.roundToInt
 
 /**
@@ -101,6 +103,11 @@ internal fun octopusSlots(
         val scale = (allowed / full).coerceAtMost(1f)
         if (scale < minScale) continue
         val text = full * scale
+        // A stacked word (#136) sits one band further from the key per tier,
+        // away from the key: upward for the bands above it, downward for the
+        // words drawn inside it, so a stack never grows into the key's own
+        // letter.
+        val lift = bandHeightPx * word.tier.coerceAtLeast(0)
         val top = when (placement) {
             // STRIP shares FLOAT's arithmetic exactly: the reserved lane moved
             // the cell down, so "the band above the cell" is already the lane.
@@ -113,8 +120,8 @@ internal fun octopusSlots(
             // boards and lost the tap that is the whole point of the word, so
             // the top row's words sit a little lower than the rest instead.
             OctopusPlacement.FLOAT, OctopusPlacement.STRIP ->
-                (cell.top - bandHeightPx * straddle.coerceIn(0f, 1f)).coerceAtLeast(0f)
-            OctopusPlacement.IN_KEY -> cell.top + gapVPx
+                (cell.top - bandHeightPx * straddle.coerceIn(0f, 1f) - lift).coerceAtLeast(0f)
+            OctopusPlacement.IN_KEY -> cell.top + gapVPx + lift
         }
         val centre = cell.center.x
         var left = centre - text / 2
@@ -184,7 +191,7 @@ internal fun octopusSlots(
  */
 @Composable
 internal fun BoxScope.OctopusOverlay(
-    words: Map<Int, OctopusWord>,
+    words: OctopusBoard,
     bounds: Map<Int, Rect>,
     /** One key's width, the unit a word's allowed overhang is measured in. */
     keyWidth: Float,
@@ -228,7 +235,7 @@ internal fun BoxScope.OctopusOverlay(
     val gapVPx = with(density) { keyGapV(settings).toPx() }
     val maxOverhangPx = keyWidth * OctopusOverhangWidths
     val slots = octopusSlots(
-        words = words.values,
+        words = words.allWords(),
         bounds = bounds,
         placement = octopus.placement,
         bandHeightPx = bandHeightPx,

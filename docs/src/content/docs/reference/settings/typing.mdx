@@ -1,6 +1,6 @@
 ---
 title: "Typing"
-description: "Every setting on the Typing screen: autocorrect, suggestions, smart chips, one-time codes, gestures, backspace, Enter, volume keys, and physical keyboards."
+description: "Every setting on the Typing screen: autocorrect, suggestions, smart chips, one-time codes, gestures, Enter, volume keys, and physical keyboards."
 sidebar:
   order: 2
 ---
@@ -10,7 +10,7 @@ import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 import Flavor from '@components/Flavor.astro';
 
-The Typing screen is a hub. Six of its groups are pages of their own (Automatic corrections, Suggestions, Smart chips, One-time codes, Gestures, Physical keyboard) and three short groups stay on the hub: Backspace, Enter key and Volume keys. The tool-shortcuts letter list is one tap deeper still. Most of what's here has its own task-focused guide too, linked from each group below. This page is the field-by-field reference, for checking a default or finding a setting by name.
+The Typing screen is a hub. Six of its groups are pages of their own (Automatic corrections, Suggestions, Smart chips, One-time codes, Gestures, Physical keyboard) and two short groups stay on the hub: Enter key and Volume keys. The Backspace group used to sit here too; it lives on [Key press](/reference/settings/keypress/#backspace) now, with the rest of what a key does under your finger. The tool-shortcuts letter list is one tap deeper still. Most of what's here has its own task-focused guide too, linked from each group below. This page is the field-by-field reference, for checking a default or finding a setting by name.
 
 <PhoneFrame caption="The Typing settings screen, scrolled to the Automatic corrections group.">
   ![The Typing settings screen, scrolled to the Automatic corrections group.](@assets/screens/reference/settings/typing-overview.webp)
@@ -243,20 +243,6 @@ Full writeup: [One-time codes](/smart/one-time-codes/), and [Permissions](/priva
 </PhoneFrame>
 
 Full writeup: [Gestures](/typing/gestures/) for the spacebar/backspace/volume-key drags, [Glide typing](/typing/glide-typing/) for the glide sub-settings, and [Handwriting](/tools/handwriting/#handwriting-without-opening-the-panel) for handwrite mode.
-
-## Backspace
-
-<SettingsPath path="Typing / Backspace" />
-
-| Setting | Type | Default | Shown when |
-| --- | --- | --- | --- |
-| Swipe to delete | Toggle | On | always |
-| Swipe deletes | Words / Characters | Words | Swipe to delete on |
-| Show what you will delete | Toggle | On | Swipe to delete on |
-| Word delete distance | Slider, 32–120 dp | 72 dp | Swipe deletes = Words |
-| Character delete distance | Slider, 8–48 dp | 20 dp | Swipe deletes = Characters |
-
-A leftward drag on <KeyCap>⌫</KeyCap> deletes more than the one character a press does, and **Swipe deletes** sets what one step of it takes off. **Word delete distance** is how far you drag before the first word goes, with later words coming off faster on a fixed curve, so that one number tunes the whole gesture; **Character delete distance** is the flat cost of one character, with no curve. **Show what you will delete** makes the swipe select the text and delete it when you lift your finger, so a swipe that went too far can be dragged back. Full writeup: [Gestures](/typing/gestures/#deleting-more-than-a-character-with-backspace).
 
 ## Enter key
 

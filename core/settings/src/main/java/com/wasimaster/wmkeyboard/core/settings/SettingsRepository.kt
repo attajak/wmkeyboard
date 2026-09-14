@@ -1205,6 +1205,15 @@ data class ToolbarBehavior(
      */
     val swipeDownHide: Boolean = false,
     /**
+     * Whether a press-and-hold that travels picks a pinned tool up and drops it
+     * elsewhere on the bar. On by default, which is how the toolbar has always
+     * been rearranged. Off, a hold that drifts stays a hold — the bound action
+     * or the settings page on the lift — and the toolbox is where the bar gets
+     * rearranged instead (#136). The toolbox's own drag is untouched: it is the
+     * only way to pin a tool.
+     */
+    val dragToRearrange: Boolean = true,
+    /**
      * With a physical keyboard attached, drop the on-screen keys and keep only
      * the toolbar strip, so the tools stay one tap away while typing on the
      * hardware keyboard. Off by default (the platform's usual behaviour stands).
@@ -1274,9 +1283,26 @@ data class ToolbarBehavior(
      * Only the toolbar reads this. The toolbox is where every tool's settings
      * page stays reachable by hold, so remapping it there would leave some
      * pages with no way in.
+     *
+     * A tool may also be bound to [ToolHoldAction.None] (#136): the hold then
+     * does nothing at all, for someone whose hold keeps landing on a page they
+     * never asked for.
      */
-    val holdActions: Map<ToolbarTool, ToolbarTool> = emptyMap(),
+    val holdActions: Map<ToolbarTool, ToolHoldAction> = emptyMap(),
 )
+
+/**
+ * What a press and hold on a pinned tool does once the user has changed it
+ * from the default. Absent from [ToolbarBehavior.holdActions] means the
+ * default: the tool's settings page opens.
+ */
+sealed interface ToolHoldAction {
+    /** The hold does nothing: no page, no action, only the buzz (#136). */
+    data object None : ToolHoldAction
+
+    /** The hold runs [tool]'s tap. */
+    data class Run(val tool: ToolbarTool) : ToolHoldAction
+}
 
 /**
  * Where the pinned tools are drawn.
@@ -1306,19 +1332,34 @@ val ToolbarPlacement.isOwnRow: Boolean get() = this != ToolbarPlacement.STRIP
  */
 object ToolHoldActions {
 
-    fun decode(csv: String?): Map<ToolbarTool, ToolbarTool> =
+    /**
+     * The action token for [ToolHoldAction.None]. Not a tool name, and never
+     * can be: [ToolbarTool] has no such constant, so the two vocabularies stay
+     * apart in the stored string.
+     */
+    const val NONE_TOKEN = "NONE"
+
+    fun decode(csv: String?): Map<ToolbarTool, ToolHoldAction> =
         csv?.split(',')?.mapNotNull { entry ->
             val separator = entry.indexOf('=')
             if (separator <= 0) return@mapNotNull null
             val tool = toolOrNull(entry.substring(0, separator)) ?: return@mapNotNull null
-            val action = toolOrNull(entry.substring(separator + 1)) ?: return@mapNotNull null
+            val token = entry.substring(separator + 1)
+            if (token == NONE_TOKEN) return@mapNotNull tool to ToolHoldAction.None
+            val action = toolOrNull(token) ?: return@mapNotNull null
             // A tool holding to itself is a tap done slowly; drop it rather than
             // firing the same action twice for one gesture.
-            if (tool == action) null else tool to action
+            if (tool == action) null else tool to ToolHoldAction.Run(action)
         }?.toMap().orEmpty()
 
-    fun encode(map: Map<ToolbarTool, ToolbarTool>): String =
-        map.entries.joinToString(",") { (tool, action) -> "${tool.name}=${action.name}" }
+    fun encode(map: Map<ToolbarTool, ToolHoldAction>): String =
+        map.entries.joinToString(",") { (tool, action) ->
+            val token = when (action) {
+                ToolHoldAction.None -> NONE_TOKEN
+                is ToolHoldAction.Run -> action.tool.name
+            }
+            "${tool.name}=$token"
+        }
 
     private fun toolOrNull(name: String): ToolbarTool? =
         runCatching { ToolbarTool.valueOf(name) }.getOrNull()
@@ -1773,6 +1814,20 @@ data class SuggestionSourceSettings(
      * only kept out of the suggestion strip. Empty by default.
      */
     val blacklist: Set<String> = emptySet(),
+    /**
+     * Words blocked in one language only, keyed by language id (#136). A word
+     * here is kept out of the strip while that language is being typed and
+     * offered as usual in every other; [blacklist] is the list that applies
+     * everywhere. Stored lowercased like [blacklist].
+     */
+    val blacklistByLanguage: Map<String, Set<String>> = emptyMap(),
+    /**
+     * Which list a word blocked from the keyboard itself — "Never suggest" on
+     * a held word, or a deleted word that only a downloaded list still knows —
+     * lands on. The settings editor lets the user pick per word; the keyboard
+     * has no room to ask, so it reads this.
+     */
+    val blacklistScope: BlacklistScope = BlacklistScope.ALL_LANGUAGES,
     /** Typing ":" then a word searches emoji in the suggestion strip (:smi → 😄). */
     val inlineEmojiSearch: Boolean = true,
     /**
@@ -1783,7 +1838,47 @@ data class SuggestionSourceSettings(
      * toggle, [SuggestionStripSettings.systemSmartReplies].
      */
     val inlineAutofill: Boolean = true,
-)
+) {
+    /**
+     * Every word blocked while [languageId] is being typed: the global list
+     * plus that language's own. The global set itself when no language has a
+     * list, so the common case allocates nothing per keystroke.
+     */
+    fun blacklistFor(languageId: String): Set<String> {
+        val own = blacklistByLanguage[languageId]
+        return if (own.isNullOrEmpty()) blacklist else blacklist + own
+    }
+
+    /** True when [word] is blocked while [languageId] is being typed (case-insensitive). */
+    fun blacklisted(word: String, languageId: String): Boolean {
+        val lower = word.lowercase()
+        return lower in blacklist || blacklistByLanguage[languageId]?.contains(lower) == true
+    }
+
+    /** True when [word] is blocked anywhere — globally or in any one language. */
+    fun blacklistedAnywhere(word: String): Boolean {
+        val lower = word.lowercase()
+        return lower in blacklist || blacklistByLanguage.values.any { lower in it }
+    }
+
+    /** How many entries the blacklist holds in all, counting a word once per list it is on. */
+    val blacklistCount: Int
+        get() = blacklist.size + blacklistByLanguage.values.sumOf { it.size }
+}
+
+/**
+ * Which list a word blocked from the keyboard's own menu goes on (#136).
+ *
+ * The keyboard cannot ask per word — the menu is a hold on a chip — so the
+ * choice is made once here. The settings editor asks every time.
+ */
+enum class BlacklistScope {
+    /** The word is blocked whatever language is being typed. The default, and the old behaviour. */
+    ALL_LANGUAGES,
+
+    /** The word is blocked only in the language it was blocked from. */
+    CURRENT_LANGUAGE,
+}
 
 /**
  * The weather tool: the units it reports in and the place it reports for.
@@ -5867,6 +5962,33 @@ class SettingsRepository(private val context: Context) {
             booleanPreferencesKey("contact_email_suggestions_in_email_fields")
         private val APP_NAME_SUGGESTIONS = booleanPreferencesKey("app_name_suggestions")
         private val SUGGESTION_BLACKLIST = stringSetPreferencesKey("suggestion_blacklist")
+        private val SUGGESTION_BLACKLIST_SCOPE = stringPreferencesKey("suggestion_blacklist_scope")
+
+        /**
+         * One string set per language with its own blocked words (#136), the
+         * language id after the prefix. Dynamic keys rather than one encoded
+         * string: a set per key is what the backup already knows how to copy,
+         * and a word with a separator in it can never corrupt another language.
+         */
+        private const val SUGGESTION_BLACKLIST_LANG_PREFIX = "suggestion_blacklist_lang_"
+
+        private fun blacklistLanguageKey(languageId: String) =
+            stringSetPreferencesKey(SUGGESTION_BLACKLIST_LANG_PREFIX + languageId)
+
+        /** Every per-language blacklist in [p], keyed by language id. */
+        private fun blacklistsByLanguage(p: Preferences): Map<String, Set<String>> {
+            var out: MutableMap<String, Set<String>>? = null
+            for ((key, value) in p.asMap()) {
+                val name = key.name
+                if (!name.startsWith(SUGGESTION_BLACKLIST_LANG_PREFIX)) continue
+                val words = value as? Set<*> ?: continue
+                if (words.isEmpty()) continue
+                val map = out ?: LinkedHashMap<String, Set<String>>().also { out = it }
+                map[name.removePrefix(SUGGESTION_BLACKLIST_LANG_PREFIX)] =
+                    words.mapNotNullTo(LinkedHashSet()) { it as? String }
+            }
+            return out ?: emptyMap()
+        }
         private val SPELLING_MAP_OFF_LANGS = stringSetPreferencesKey("spelling_map_off_langs")
         private val IMPORTED_ONLY_LANGS = stringSetPreferencesKey("imported_only_langs")
         private val WORD_MENU_ITEMS = stringSetPreferencesKey("word_menu_items")
@@ -5966,6 +6088,7 @@ class SettingsRepository(private val context: Context) {
         private val OCTOPUS_FONT_SCALE = floatPreferencesKey("octopus_font_scale")
         private val OCTOPUS_SUPPRESS_HINTS = booleanPreferencesKey("octopus_suppress_hints")
         private val OCTOPUS_LONG_PRESS_KEYS = booleanPreferencesKey("octopus_long_press_keys")
+        private val OCTOPUS_WORDS_PER_KEY = intPreferencesKey("octopus_words_per_key")
         private val AUTOPILOT_VISUAL_SCALE = floatPreferencesKey("autopilot_visual_scale")
         private val SPACEBAR_DISPLAY = stringPreferencesKey("spacebar_display")
         private val LANGUAGE_PICKER_STYLE = stringPreferencesKey("language_picker_style")
@@ -6210,6 +6333,7 @@ class SettingsRepository(private val context: Context) {
         private val TOOLBAR_TOOL_WIDTH = intPreferencesKey("toolbar_tool_width")
         private val TOOLBAR_PLACEMENT = stringPreferencesKey("toolbar_placement")
         private val TOOLBAR_HOLD_ACTIONS = stringPreferencesKey("toolbar_hold_actions")
+        private val TOOLBAR_DRAG_REARRANGE = booleanPreferencesKey("toolbar_drag_rearrange")
         private val THEMES_PANEL_BUILTINS = stringSetPreferencesKey("themes_panel_builtins")
         private val COMMA_AS_EMOJI = booleanPreferencesKey("comma_as_emoji")
         private val SWAP_COMMA_GLOBE = booleanPreferencesKey("swap_comma_globe")
@@ -6936,6 +7060,10 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.suggestionSources.contactEmailsInEmailFields,
                 appNames = p[APP_NAME_SUGGESTIONS] ?: defaults.suggestionSources.appNames,
                 blacklist = p[SUGGESTION_BLACKLIST] ?: defaults.suggestionSources.blacklist,
+                blacklistByLanguage = blacklistsByLanguage(p),
+                blacklistScope = p[SUGGESTION_BLACKLIST_SCOPE]
+                    ?.let { runCatching { BlacklistScope.valueOf(it) }.getOrNull() }
+                    ?: defaults.suggestionSources.blacklistScope,
                 inlineEmojiSearch = p[INLINE_EMOJI_SEARCH]
                     ?: defaults.suggestionSources.inlineEmojiSearch,
                 inlineAutofill = p[INLINE_AUTOFILL] ?: defaults.suggestionSources.inlineAutofill,
@@ -7327,6 +7455,9 @@ class SettingsRepository(private val context: Context) {
                 fontScale = p[OCTOPUS_FONT_SCALE] ?: defaults.octopus.fontScale,
                 suppressHints = p[OCTOPUS_SUPPRESS_HINTS] ?: defaults.octopus.suppressHints,
                 longPressKeys = p[OCTOPUS_LONG_PRESS_KEYS] ?: defaults.octopus.longPressKeys,
+                wordsPerKey = p[OCTOPUS_WORDS_PER_KEY]
+                    ?.coerceIn(OctopusSettings.WORDS_PER_KEY_RANGE)
+                    ?: defaults.octopus.wordsPerKey,
             ),
             layoutBehavior = LayoutBehaviorSettings(
                 symbolsLongPressNumpad =
@@ -7439,6 +7570,7 @@ class SettingsRepository(private val context: Context) {
             toolbarBehavior = ToolbarBehavior(
                 enabled = p[TOOLBAR_ENABLED] ?: defaults.toolbarBehavior.enabled,
                 swipeDownHide = p[TOOLBAR_SWIPE_DOWN_HIDE] ?: defaults.toolbarBehavior.swipeDownHide,
+                dragToRearrange = p[TOOLBAR_DRAG_REARRANGE] ?: defaults.toolbarBehavior.dragToRearrange,
                 onlyWithHardwareKeyboard =
                     p[TOOLBAR_ONLY_HW_KEYBOARD] ?: defaults.toolbarBehavior.onlyWithHardwareKeyboard,
                 reverseForRtl = p[REVERSE_TOOLBAR_RTL] ?: defaults.toolbarBehavior.reverseForRtl,
@@ -8731,6 +8863,9 @@ class SettingsRepository(private val context: Context) {
     suspend fun setToolbarSwipeDownHide(value: Boolean) =
         editPrefs { it[TOOLBAR_SWIPE_DOWN_HIDE] = value }
 
+    suspend fun setToolbarDragToRearrange(value: Boolean) =
+        editPrefs { it[TOOLBAR_DRAG_REARRANGE] = value }
+
     suspend fun setToolbarOnlyWithHardwareKeyboard(value: Boolean) =
         editPrefs { it[TOOLBAR_ONLY_HW_KEYBOARD] = value }
 
@@ -8766,12 +8901,14 @@ class SettingsRepository(private val context: Context) {
 
     /**
      * Sets or clears one tool's press-and-hold action. Null puts that tool back
-     * to opening its own settings page.
+     * to opening its own settings page; [ToolHoldAction.None] makes the hold do
+     * nothing at all.
      */
-    suspend fun setToolHoldAction(tool: ToolbarTool, action: ToolbarTool?) =
+    suspend fun setToolHoldAction(tool: ToolbarTool, action: ToolHoldAction?) =
         editPrefs { prefs ->
             val current = ToolHoldActions.decode(prefs[TOOLBAR_HOLD_ACTIONS]).toMutableMap()
-            if (action == null || action == tool) current.remove(tool) else current[tool] = action
+            val selfBound = action is ToolHoldAction.Run && action.tool == tool
+            if (action == null || selfBound) current.remove(tool) else current[tool] = action
             prefs[TOOLBAR_HOLD_ACTIONS] = ToolHoldActions.encode(current)
         }
 
@@ -11185,26 +11322,60 @@ class SettingsRepository(private val context: Context) {
     suspend fun setAppNameSuggestions(value: Boolean) =
         editPrefs { it[APP_NAME_SUGGESTIONS] = value }
 
-    /** Adds a word to the never-suggest blacklist (lowercased, trimmed). */
-    suspend fun addSuggestionBlacklistWord(word: String) {
+    /**
+     * Adds a word to the never-suggest blacklist (lowercased, trimmed): the
+     * global list, or [languageId]'s own list when one is named (#136).
+     */
+    suspend fun addSuggestionBlacklistWord(word: String, languageId: String? = null) {
         val normalized = word.trim().lowercase()
         if (normalized.isEmpty()) return
-        editPrefs {
-            it[SUGGESTION_BLACKLIST] = (it[SUGGESTION_BLACKLIST].orEmpty() + normalized)
-        }
+        val key = languageId?.let(::blacklistLanguageKey) ?: SUGGESTION_BLACKLIST
+        editPrefs { it[key] = (it[key].orEmpty() + normalized) }
     }
 
-    /** Removes a word from the never-suggest blacklist. */
-    suspend fun removeSuggestionBlacklistWord(word: String) {
+    /**
+     * Removes a word from the never-suggest blacklist: from the global list, or
+     * from [languageId]'s own list when one is named.
+     */
+    suspend fun removeSuggestionBlacklistWord(word: String, languageId: String? = null) {
         val normalized = word.trim().lowercase()
-        editPrefs {
-            it[SUGGESTION_BLACKLIST] = (it[SUGGESTION_BLACKLIST].orEmpty() - normalized)
+        val key = languageId?.let(::blacklistLanguageKey) ?: SUGGESTION_BLACKLIST
+        editPrefs { prefs ->
+            val next = prefs[key].orEmpty() - normalized
+            if (next.isEmpty()) prefs.remove(key) else prefs[key] = next
         }
     }
 
-    /** Empties the blacklist in one edit; per-word removal is the only other way out. */
-    suspend fun clearSuggestionBlacklist() =
-        editPrefs { it.remove(SUGGESTION_BLACKLIST) }
+    /**
+     * Removes a word from every blacklist it is on, global and per-language
+     * alike — what "Suggest again" and adding the word by hand mean, whichever
+     * list the block came from.
+     */
+    suspend fun removeSuggestionBlacklistWordEverywhere(word: String) {
+        val normalized = word.trim().lowercase()
+        editPrefs { prefs ->
+            val keys = prefs.asMap().keys.filter {
+                it == SUGGESTION_BLACKLIST || it.name.startsWith(SUGGESTION_BLACKLIST_LANG_PREFIX)
+            }
+            for (key in keys) {
+                @Suppress("UNCHECKED_CAST")
+                val set = key as Preferences.Key<Set<String>>
+                val next = prefs[set].orEmpty() - normalized
+                if (next.isEmpty()) prefs.remove(set) else prefs[set] = next
+            }
+        }
+    }
+
+    /** Empties every blacklist in one edit; per-word removal is the only other way out. */
+    suspend fun clearSuggestionBlacklist() = editPrefs { prefs ->
+        val keys = prefs.asMap().keys.filter {
+            it == SUGGESTION_BLACKLIST || it.name.startsWith(SUGGESTION_BLACKLIST_LANG_PREFIX)
+        }
+        for (key in keys) prefs.remove(key)
+    }
+
+    suspend fun setSuggestionBlacklistScope(value: BlacklistScope) =
+        editPrefs { it[SUGGESTION_BLACKLIST_SCOPE] = value.name }
 
     suspend fun setInlineEmojiSearch(value: Boolean) =
         editPrefs { it[INLINE_EMOJI_SEARCH] = value }
@@ -11414,6 +11585,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setOctopusLongPressKeys(value: Boolean) =
         editPrefs { it[OCTOPUS_LONG_PRESS_KEYS] = value }
+
+    suspend fun setOctopusWordsPerKey(value: Int) =
+        editPrefs { it[OCTOPUS_WORDS_PER_KEY] = value.coerceIn(OctopusSettings.WORDS_PER_KEY_RANGE) }
 
     suspend fun setAutopilotStrength(value: Int) =
         editPrefs { it[AUTOPILOT_STRENGTH] = value.coerceIn(1, 10) }

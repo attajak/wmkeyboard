@@ -1,6 +1,6 @@
 ---
 title: "Emoji"
-description: "Every row on the Emoji settings screen: access, suggestions, skin tones, the panel, the emoji row, fonts, and keyword packs."
+description: "Every row on the Emoji settings screen: access, suggestions, the emoji row, skin tones, fonts, the panel page, and keyword packs."
 sidebar:
   order: 14
 ---
@@ -27,10 +27,14 @@ The Emoji screen collects every setting behind emoji access, suggestions, the pa
 |---|---|---|---|
 | Emoji button in toolbar | Toggle | On / Off | On |
 | Full-screen emoji panel | Toggle | On / Off | On |
+| Panel layout | Nav row | n/a | opens the emoji panel's layout editor |
+| Emoji panel | Nav row | n/a | opens the [Emoji panel](#emoji-panel) page |
 
 **Emoji button in toolbar** keeps a one-tap emoji launcher in the top bar even while suggestions are showing.
 
 **Full-screen emoji panel** makes the panel take over the whole keyboard: the toolbar, emoji row, and symbol row step aside, and the category tabs move into the row they leave behind, next to a back button. Turn it off to keep the toolbar within reach while picking emoji.
+
+**Panel layout** and **Emoji panel** are the two doors to the panel itself, side by side: the first edits the panel's grid of tabs, search and rows, the second holds every other panel setting. They sit together in this group so that everything about the panel starts from one place.
 
 Two more emoji-access toggles live on a different screen. See [Details & edge cases](#details--edge-cases) below.
 
@@ -51,24 +55,11 @@ Two more emoji-access toggles live on a different screen. See [Details & edge ca
 Typing `:cat:` to search or auto-commit an emoji from the suggestion strip is a separate toggle on the [Typing](/reference/settings/typing/) screen, not this one. See [Details & edge cases](#details--edge-cases).
 :::
 
-### Skin tone
-
-<SettingsPath path="Emoji / Skin tone" />
-
-| Setting | Control | Options / range | Default |
-|---|---|---|---|
-| Default skin tone | Choice | ✋ / ✋🏻 / ✋🏼 / ✋🏽 / ✋🏾 / ✋🏿 | ✋ (None) |
-| Override with last used | Toggle | On / Off | On |
-
-**Default skin tone** sets the Fitzpatrick tone applied to toned emoji (👍, 🙏, 🧑…) wherever they're drawn: the emoji panel's grid, the suggestion strip and emoji search results.
-
-**Override with last used**, on by default, keeps a tone you picked yourself from an emoji's long-press popup ahead of that default, for that emoji only. Turn it off and the default tone wins everywhere.
-
 ### Emoji panel
 
 <SettingsPath path="Emoji / Emoji panel" />
 
-This group is a page of its own, opened from the Emoji panel row on the Emoji screen.
+This group is a page of its own, opened from the Emoji panel row in the Access group of the Emoji screen. On the screen itself the Emoji row and Skin tone groups come next, in that order; they are documented below.
 
 | Setting | Control | Options / range | Default |
 |---|---|---|---|
@@ -135,6 +126,19 @@ When Emoji row is set to **Own row**, a caption on this screen points to **Rows 
 <PhoneFrame caption="The Emoji row group with Own row selected.">
   {/* shot: reference/settings/emoji-row-group */}
 </PhoneFrame>
+
+### Skin tone
+
+<SettingsPath path="Emoji / Skin tone" />
+
+| Setting | Control | Options / range | Default |
+|---|---|---|---|
+| Default skin tone | Choice | ✋ / ✋🏻 / ✋🏼 / ✋🏽 / ✋🏾 / ✋🏿 | ✋ (None) |
+| Override with last used | Toggle | On / Off | On |
+
+**Default skin tone** sets the Fitzpatrick tone applied to toned emoji (👍, 🙏, 🧑…) wherever they're drawn: the emoji panel's grid, the suggestion strip and emoji search results.
+
+**Override with last used**, on by default, keeps a tone you picked yourself from an emoji's long-press popup ahead of that default, for that emoji only. Turn it off and the default tone wins everywhere.
 
 ### Emoji style
 

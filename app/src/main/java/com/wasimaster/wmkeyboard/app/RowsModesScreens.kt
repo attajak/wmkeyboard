@@ -425,13 +425,43 @@ internal fun RowsSettings(
             ) { scope.launch { repository.setDictionaryBarEnabled(it) } }
         }
     }
+    // The switch stays here, beside the other rows' switches; everything else
+    // about the symbol row is a page of its own behind it (#136).
     SettingsGroup(stringResource(R.string.rows_symbol_row_title)) {
+        item {
+            ToggleNavRow(
+                R.string.rows_symbol_row_title,
+                stringResource(R.string.rows_symbol_row_subtitle),
+                settings.symbolRowEnabled,
+                route = "rows/symbol",
+                info = stringResource(R.string.rows_symbol_row_info),
+                default = SettingsDefaults.symbolRowEnabled,
+                onChange = { scope.launch { repository.setSymbolRowEnabled(it) } },
+            ) { onNavigate("rows/symbol") }
+        }
+    }
+}
+
+/**
+ * The symbol row's own page (#136): its switch again, so the page can be used
+ * without going back, then the row's shape and the sets it offers. Reached
+ * from the switch row on Rows & bars, whose switch flies into this one.
+ */
+@Composable
+internal fun SymbolRowSettings(
+    repository: SettingsRepository,
+    settings: KeyboardSettings,
+    onNavigate: (String) -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    SettingsGroup {
         item {
             ToggleSetting(
                 R.string.rows_symbol_row_title,
                 stringResource(R.string.rows_symbol_row_subtitle),
                 settings.symbolRowEnabled,
                 info = stringResource(R.string.rows_symbol_row_info),
+                switchKey = landingKey("switch"),
                 default = SettingsDefaults.symbolRowEnabled,
             ) { scope.launch { repository.setSymbolRowEnabled(it) } }
         }

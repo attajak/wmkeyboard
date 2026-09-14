@@ -1548,6 +1548,15 @@ private fun SettingsNavGraph(
                 RowsSettings(repository, settings) { navController.navigate(it) }
             }
         }
+        composable("rows/symbol") {
+            SettingsScreen(
+                stringResource(R.string.rows_symbol_row_title),
+                { navController.popBackStack() },
+                route = "rows/symbol",
+            ) {
+                SymbolRowSettings(repository, settings) { navController.navigate(it) }
+            }
+        }
         composable("ai_actions") {
             SettingsScreen(
                 stringResource(R.string.home_screen_ai_actions_title),
@@ -2868,7 +2877,7 @@ internal fun ToggleSetting(
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (info != null) InfoButton(title, info)
-                    ResetSetting(title, default != null && checked != default) {
+                    ResetSetting(title, default != null && checked != default, possible = default != null) {
                         onChange(default == true)
                     }
                     Switch(
@@ -2882,6 +2891,57 @@ internal fun ToggleSetting(
                     )
                 }
             },
+        )
+    }
+}
+
+/**
+ * A row that is both a switch and a door (#136): the switch turns the feature
+ * on or off in place, and the rest of the row opens [route], the page holding
+ * everything else the feature has. The tools list is the same shape, and like
+ * it the switch flies into the destination's own enable row when that row
+ * takes `switchKey = landingKey("switch")`.
+ *
+ * [default] is what [ToggleSetting] takes it for: the per-setting reset.
+ */
+@Composable
+internal fun ToggleNavRow(
+    @StringRes title: Int,
+    subtitle: String?,
+    checked: Boolean,
+    route: String,
+    info: String? = null,
+    default: Boolean? = null,
+    onChange: (Boolean) -> Unit,
+    onOpen: () -> Unit,
+) {
+    val name = stringResource(title)
+    HighlightableRow(name, title) {
+        WmRow(
+            title = name,
+            subtitle = subtitle,
+            icon = SettingsRowIcons[title],
+            flightTo = route,
+            trailing = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (info != null) InfoButton(name, info)
+                    ResetSetting(name, default != null && checked != default, possible = default != null) {
+                        onChange(default == true)
+                    }
+                    Switch(
+                        checked = checked,
+                        onCheckedChange = onChange,
+                        modifier = Modifier.wmSharedElement(takeOffKey("switch", route)),
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Icon(
+                        Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            },
+            onClick = onOpen,
         )
     }
 }
@@ -3074,7 +3134,9 @@ internal fun SliderSetting(
                     style = MaterialTheme.typography.labelLarge,
                     maxLines = 1,
                 )
-                ResetSetting(title, default != null && value != default) { onChange(default ?: 0f) }
+                ResetSetting(title, default != null && value != default, possible = default != null) {
+                    onChange(default ?: 0f)
+                }
             },
         ) {
             WmSlider(
@@ -3155,7 +3217,9 @@ internal fun StepperSetting(
                     Text(title, style = MaterialTheme.typography.bodyLarge)
                     if (info != null) InfoButton(title, info)
                 }
-                ResetSetting(title, default != null && value != default) { onChange(default ?: 0) }
+                ResetSetting(title, default != null && value != default, possible = default != null) {
+                    onChange(default ?: 0)
+                }
             },
         ) {
             Row(
@@ -3379,7 +3443,7 @@ internal fun <T> ChoiceSetting(
                         // The same `default != null` that draws the control at all is what
                         // makes the let non-empty; there is no fallback option to reset to
                         // on a row that shipped without a default.
-                        ResetSetting(title, default != null && selected != default) {
+                        ResetSetting(title, default != null && selected != default, possible = default != null) {
                             default?.let(onChange)
                         }
                     },
@@ -3433,7 +3497,7 @@ internal fun <T> ChoiceSetting(
                 trailing = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         if (info != null) InfoButton(title, info)
-                        ResetSetting(title, default != null && selected != default) {
+                        ResetSetting(title, default != null && selected != default, possible = default != null) {
                             default?.let(onChange)
                         }
                         // The same glyph the sheet puts on this option, small
@@ -3805,7 +3869,7 @@ internal fun <T> MultiChoiceSetting(
                 Text(name, style = MaterialTheme.typography.bodyLarge)
                 if (info != null) InfoButton(name, info)
                 Spacer(Modifier.weight(1f))
-                ResetSetting(name, default != null && selected != default) {
+                ResetSetting(name, default != null && selected != default, possible = default != null) {
                     default?.let(onChange)
                 }
             },

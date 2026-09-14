@@ -30,7 +30,34 @@ class OctopusAssignmentTest {
         keyOf: (Int) -> Int = everyLetter,
         limit: Int = 8,
         spread: Double = Double.POSITIVE_INFINITY,
-    ) = assignOctopus(typed, candidates, keys, keyOf, limit, spread)
+        perKey: Int = 1,
+    ) = assignOctopus(typed, candidates, keys, keyOf, limit, spread, perKey)
+
+    // ---- a key carrying more than one word (#136) ----
+
+    @Test
+    fun `a key honours as many claims as the stack allows, in rank order`() {
+        // "the", "they" and "there" all continue "th" with an e.
+        val floated = assign(
+            "th",
+            listOf(candidate("the", 3.0), candidate("they", 2.0), candidate("there", 1.0), candidate("this", 0.5)),
+            perKey = 2,
+        )
+        assertEquals(listOf("the", "they", "this"), floated.map { it.word })
+        assertEquals(listOf(0, 1, 0), floated.map { it.tier })
+        assertEquals(listOf('e'.code, 'e'.code, 'i'.code), floated.map { it.keyCodePoint })
+    }
+
+    @Test
+    fun `one word per key is still the rule when the stack is one`() {
+        val floated = assign(
+            "th",
+            listOf(candidate("the", 3.0), candidate("they", 2.0)),
+            perKey = 1,
+        )
+        assertEquals(listOf("the"), floated.map { it.word })
+        assertEquals(0, floated.single().tier)
+    }
 
     private fun only(typed: String, word: String, edits: Int = 0): OctopusWord? =
         assign(typed, listOf(candidate(word, 1.0, edits))).firstOrNull()

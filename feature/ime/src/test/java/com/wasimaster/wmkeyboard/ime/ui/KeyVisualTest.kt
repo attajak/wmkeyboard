@@ -72,7 +72,7 @@ class KeyVisualTest {
             glideWord = "hello",
             expandedCandidates = listOf("hello"),
             octopus = mapOf(
-                'l'.code to OctopusWord('l'.code, "hello", 3, OctopusKind.COMPLETION, 0),
+                'l'.code to listOf(OctopusWord('l'.code, "hello", 3, OctopusKind.COMPLETION, 0)),
             ),
         )
         assertNotEquals(before, after)

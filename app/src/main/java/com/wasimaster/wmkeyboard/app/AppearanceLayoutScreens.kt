@@ -339,6 +339,18 @@ internal fun AppearanceToolbarSettings(
                     default = SettingsDefaults.toolbarBehavior.swipeDownHide,
                 ) { scope.launch { repository.setToolbarSwipeDownHide(it) } }
             }
+            // A hold that drifts into a drag is the one gesture the bar cannot
+            // tell from a hold meant to stay put, so the drag can be given up
+            // altogether (#136); the toolbox still rearranges the bar.
+            item {
+                ToggleSetting(
+                    R.string.appearance_toolbar_drag_title,
+                    stringResource(R.string.appearance_toolbar_drag_subtitle),
+                    settings.toolbarBehavior.dragToRearrange,
+                    info = stringResource(R.string.appearance_toolbar_drag_info),
+                    default = SettingsDefaults.toolbarBehavior.dragToRearrange,
+                ) { scope.launch { repository.setToolbarDragToRearrange(it) } }
+            }
         }
         item {
             ToggleSetting(

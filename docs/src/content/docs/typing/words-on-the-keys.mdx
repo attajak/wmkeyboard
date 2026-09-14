@@ -41,11 +41,19 @@ The **How many words** slider runs from 3 to 26, and starts at 6.
 
 The words come from the same ranked list the suggestion strip draws from, in the same order, so what the strip offers is what the keys offer: one flick away instead of one look away. The keys just see further down the list, because they have room for more words than the strip does.
 
-Two words that carry on with the same letter cannot both appear, since a key can only say one word. `the`, `they` and `there` all continue with an `e`, and the list's order decides which one gets it.
+Two words that carry on with the same letter cannot both appear, since a key normally says one word. `the`, `they` and `there` all continue with an `e`, and the list's order decides which one gets it. **Words per key**, below, is the way around that.
 
 The number is a cap, not a quota. If only three words are worth showing, three appear and the rest of the board stays bare. Nothing is invented to fill a free key, because the words that would fill it are the ones the ranking already turned down.
 
 A word too wide for its key is left out rather than shortened, so a busy board never becomes a row of `…`.
+
+## Words per key
+
+The **Words per key** stepper runs from 1 to 3, and starts at 1.
+
+One word per key is what both of the keyboards this copies drew, and it is all a phone-sized key has room for. On a tablet the keys are tall enough for more, so a key may carry a stack: the likeliest word sits nearest the key, the next one band further away, and the third beyond that. Floating and lane placements stack upward; inside the key, the stack grows downward so it never covers the key's own letter. `the`, `they` and `there` can then all hang off the `e`.
+
+A flick up takes the word nearest the key, the one a single-word board would have shown. A tap takes the word you touch, wherever it sits in the stack. **How many words** still caps the whole board, so a stack of three on one key is three of that total. Where a stack would reach into a word on the row above, the better-ranked word keeps its place and the other is dropped, the same rule as for two words leaning into each other on one row.
 
 ## Taking a word
 

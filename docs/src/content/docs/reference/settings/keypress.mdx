@@ -1,6 +1,6 @@
 ---
 title: "Key press"
-description: "Every row on the Key press screen (control type, range, and default) for haptics, sound, popup, timing, and press-and-hold shortcuts."
+description: "Every row on the Key press screen (control type, range, and default) for haptics, sound, the backspace swipe, popup, timing, and press-and-hold shortcuts."
 sidebar:
   order: 3
 ---
@@ -9,7 +9,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 
-The Key press screen collects everything about the physical act of pressing a key: vibration, sound, the preview bubble, timing, and press-and-hold shortcuts. This page lists them in the order they appear on screen. It's the field reference. For the reasoning behind each option, read [Sound & vibration](/typing/feedback/) and [Typing basics](/typing/basics/) instead.
+The Key press screen collects everything about the physical act of pressing a key: vibration, sound, the backspace swipe, the preview bubble, timing, and press-and-hold shortcuts. This page lists them in the order they appear on screen. It's the field reference. For the reasoning behind each option, read [Sound & vibration](/typing/feedback/) and [Typing basics](/typing/basics/) instead.
 
 <PhoneFrame caption="The top of the Key press screen: the Haptic feedback group with its style chips.">
   {/* shot: reference/settings/keypress-overview */}
@@ -104,6 +104,20 @@ Installing a [Sound addon](/addons/overview/) highlights this **Sound style** ro
 <PhoneFrame caption="Key popup and Timing groups, mid-screen.">
   {/* shot: reference/settings/keypress-popup-timing */}
 </PhoneFrame>
+
+### Backspace
+
+<SettingsPath path="Key press / Backspace" />
+
+| Setting | Type | Default | Shown when |
+| --- | --- | --- | --- |
+| Swipe to delete | Toggle | On | always |
+| Swipe deletes | Words / Characters | Words | Swipe to delete on |
+| Show what you will delete | Toggle | On | Swipe to delete on |
+| Word delete distance | Slider, 32–120 dp | 72 dp | Swipe deletes = Words |
+| Character delete distance | Slider, 8–48 dp | 20 dp | Swipe deletes = Characters |
+
+A leftward drag on <KeyCap>⌫</KeyCap> deletes more than the one character a press does, and **Swipe deletes** sets what one step of it takes off. **Word delete distance** is how far you drag before the first word goes, with later words coming off faster on a fixed curve, so that one number tunes the whole gesture; **Character delete distance** is the flat cost of one character, with no curve. **Show what you will delete** makes the swipe select the text and delete it when you lift your finger, so a swipe that went too far can be dragged back. Full writeup: [Gestures](/typing/gestures/#deleting-more-than-a-character-with-backspace). This group moved here from the [Typing](/reference/settings/typing/) screen: what a key does under a swipe is a key-press matter.
 
 ### Alternate keys
 

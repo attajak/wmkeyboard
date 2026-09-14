@@ -547,7 +547,14 @@ private fun macroIcon(macro: SelectionMacro): ImageVector? = when (macro) {
  *
  * Read by both hosts and by the strip, which has to know before it decides
  * which surface owns the row. The offer is only ever published while the
- * feature is on and something is selected, so this is the whole question.
+ * feature is on and something is selected, so that is most of the question.
+ *
+ * The rest is the Selection mode tool's hold (#136): while a finger is holding
+ * that tool down to select, the bar stays away. It would otherwise arrive the
+ * moment the selection did — a row pushing the toolbar under the held finger,
+ * or the strip placement swapping the toolbar out from under it — and the
+ * finger came up over a different button than it went down on. The selection
+ * outlives the hold, so the bar appears on the lift, where it can be used.
  */
 internal fun selectionMacroBarVisible(state: KeyboardUiState): Boolean =
-    state.selectionMacros != null
+    state.selectionMacros != null && !state.selectionHold

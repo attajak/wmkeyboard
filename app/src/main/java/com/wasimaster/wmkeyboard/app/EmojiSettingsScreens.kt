@@ -98,6 +98,18 @@ internal fun EmojiSettings(
                 subtitle = stringResource(R.string.panel_layout_row_subtitle),
             ) { onNavigate("panel_edit/${PanelKind.EMOJI.name}") }
         }
+        // Beside the panel's layout rather than in a group of its own further
+        // down (#136): both rows are about the panel, and one door next to
+        // the other is where the eye looks for it.
+        item {
+            NavRow(
+                R.string.langemoji_emoji_panel_title,
+                stringResource(R.string.langemoji_emoji_panel_subtitle),
+                route = "emoji/panel",
+            ) {
+                onNavigate("emoji/panel")
+            }
+        }
     }
     SettingsGroup(stringResource(R.string.langemoji_emoji_suggestions_title)) {
         item {
@@ -125,45 +137,6 @@ internal fun EmojiSettings(
                     default = SettingsDefaults.emojiInsertMode,
                     detail = { mode -> ChoiceDetail(stringResource(emojiInsertDescRes(mode))) },
                 ) { scope.launch { repository.setEmojiInsertMode(it) } }
-            }
-        }
-    }
-    SettingsGroup(stringResource(R.string.langemoji_emoji_skin_tone_group_title)) {
-        item {
-            ChoiceSetting(
-                title = R.string.langemoji_emoji_skin_tone_title,
-                subtitle = stringResource(R.string.langemoji_emoji_skin_tone_subtitle),
-                info = stringResource(R.string.langemoji_emoji_skin_tone_info),
-                options = listOf(
-                    EmojiSkinTone.NONE to "✋",
-                    EmojiSkinTone.LIGHT to "✋🏻",
-                    EmojiSkinTone.MEDIUM_LIGHT to "✋🏼",
-                    EmojiSkinTone.MEDIUM to "✋🏽",
-                    EmojiSkinTone.MEDIUM_DARK to "✋🏾",
-                    EmojiSkinTone.DARK to "✋🏿",
-                ),
-                selected = settings.emoji.defaultSkinTone,
-                default = SettingsDefaults.emoji.defaultSkinTone,
-            ) { scope.launch { repository.setEmojiDefaultSkinTone(it) } }
-        }
-        item {
-            ToggleSetting(
-                R.string.langemoji_emoji_tone_override_title,
-                stringResource(R.string.langemoji_emoji_tone_override_subtitle),
-                settings.emoji.toneOverrideByLastUsed,
-                info = stringResource(R.string.langemoji_emoji_tone_override_info),
-                default = SettingsDefaults.emoji.toneOverrideByLastUsed,
-            ) { scope.launch { repository.setEmojiToneOverrideByLastUsed(it) } }
-        }
-    }
-    SettingsGroup {
-        item {
-            NavRow(
-                R.string.langemoji_emoji_panel_title,
-                stringResource(R.string.langemoji_emoji_panel_subtitle),
-                route = "emoji/panel",
-            ) {
-                onNavigate("emoji/panel")
             }
         }
     }
@@ -236,6 +209,36 @@ internal fun EmojiSettings(
                     route = "rows",
                 ) { onNavigate("rows") }
             }
+        }
+    }
+    // After the row and before the style (#136): the order the screen reads
+    // in is access, suggestions, the row, the tone, the font.
+    SettingsGroup(stringResource(R.string.langemoji_emoji_skin_tone_group_title)) {
+        item {
+            ChoiceSetting(
+                title = R.string.langemoji_emoji_skin_tone_title,
+                subtitle = stringResource(R.string.langemoji_emoji_skin_tone_subtitle),
+                info = stringResource(R.string.langemoji_emoji_skin_tone_info),
+                options = listOf(
+                    EmojiSkinTone.NONE to "✋",
+                    EmojiSkinTone.LIGHT to "✋🏻",
+                    EmojiSkinTone.MEDIUM_LIGHT to "✋🏼",
+                    EmojiSkinTone.MEDIUM to "✋🏽",
+                    EmojiSkinTone.MEDIUM_DARK to "✋🏾",
+                    EmojiSkinTone.DARK to "✋🏿",
+                ),
+                selected = settings.emoji.defaultSkinTone,
+                default = SettingsDefaults.emoji.defaultSkinTone,
+            ) { scope.launch { repository.setEmojiDefaultSkinTone(it) } }
+        }
+        item {
+            ToggleSetting(
+                R.string.langemoji_emoji_tone_override_title,
+                stringResource(R.string.langemoji_emoji_tone_override_subtitle),
+                settings.emoji.toneOverrideByLastUsed,
+                info = stringResource(R.string.langemoji_emoji_tone_override_info),
+                default = SettingsDefaults.emoji.toneOverrideByLastUsed,
+            ) { scope.launch { repository.setEmojiToneOverrideByLastUsed(it) } }
         }
     }
     SettingsGroup(stringResource(R.string.langemoji_emoji_style_title)) {

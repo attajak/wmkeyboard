@@ -38,8 +38,29 @@ class OctopusPlacementTest {
         'd'.code to Rect(200f, 100f, 300f, 200f),
     )
 
-    private fun word(key: Char, text: String, rank: Int = 0, typed: Int = 0) =
-        OctopusWord(key.code, text, typed, OctopusKind.COMPLETION, rank)
+    private fun word(key: Char, text: String, rank: Int = 0, typed: Int = 0, tier: Int = 0) =
+        OctopusWord(key.code, text, typed, OctopusKind.COMPLETION, rank, tier)
+
+    // ---- a stacked key (#136) ----
+
+    @Test
+    fun `a second-tier word floats one band further from its key`() {
+        val stacked = slots(word('s', "hello"), word('s', "help", rank = 1, tier = 1))
+        assertEquals(2, stacked.size)
+        val (near, far) = stacked
+        assertEquals(near.area.top - band, far.area.top, 0f)
+        assertEquals("both centred on the key", near.area.center.x, far.area.center.x, 0f)
+    }
+
+    @Test
+    fun `inside the key the stack grows downward, away from the letter`() {
+        val stacked = slots(
+            word('s', "hello"), word('s', "help", rank = 1, tier = 1),
+            placement = OctopusPlacement.IN_KEY,
+        )
+        val (near, far) = stacked
+        assertEquals(near.area.top + band, far.area.top, 0f)
+    }
 
     private fun slots(
         vararg words: OctopusWord,

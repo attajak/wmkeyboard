@@ -276,6 +276,8 @@ import androidx.compose.ui.semantics.semantics
 import coil3.compose.AsyncImage
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.ime.R
+import com.wasimaster.wmkeyboard.ime.OctopusBoard
+import com.wasimaster.wmkeyboard.ime.top
 import com.wasimaster.wmkeyboard.ime.glideAnchor
 import com.wasimaster.wmkeyboard.ime.HINT_FLICK_MIN_TRAVEL_HEIGHTS
 import com.wasimaster.wmkeyboard.ime.hintFlick
@@ -365,6 +367,7 @@ import com.wasimaster.wmkeyboard.core.settings.TransliterationHintMode
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
 import com.wasimaster.wmkeyboard.core.settings.SuggestionOverflow
 import com.wasimaster.wmkeyboard.core.settings.ToolbarPlacement
+import com.wasimaster.wmkeyboard.core.settings.ToolHoldAction
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.settings.isOwnRow
 import com.wasimaster.wmkeyboard.core.settings.VoiceBarSettings
@@ -585,7 +588,7 @@ internal val LocalPossessiveFlick = staticCompositionLocalOf<() -> Boolean> { { 
  * `typeAction` already makes, and the reason this cannot ride [KeyVisual].
  */
 internal val LocalOctopusWords =
-    staticCompositionLocalOf<State<Map<Int, OctopusWord>>> { mutableStateOf(emptyMap()) }
+    staticCompositionLocalOf<State<OctopusBoard>> { mutableStateOf(emptyMap()) }
 
 /**
  * A Select key in a panel layout held down (true) and let go (false) — the
@@ -6247,7 +6250,7 @@ private fun holdActionFor(
     tool: ToolbarTool,
     fromToolbar: Boolean,
     state: KeyboardUiState,
-): ToolbarTool? = if (
+): ToolHoldAction? = if (
     !fromToolbar || holdRepeatMs(tool, state) != null ||
     holdArmsSelection(tool, fromToolbar, state) || holdOpensTrackpad(tool, fromToolbar, state) ||
     holdPicksVoiceMode(tool, fromToolbar, state)
@@ -6343,8 +6346,17 @@ private fun DraggableTool(
     drag: ToolDragController,
     onTap: () -> Unit,
     holdRepeatMs: Long? = null,
-    /** What a stationary hold runs, or null to open the tool's settings page. */
-    holdAction: ToolbarTool? = null,
+    /**
+     * What a stationary hold does — another tool's tap, or nothing at all —
+     * or null to open the tool's settings page.
+     */
+    holdAction: ToolHoldAction? = null,
+    /**
+     * Whether a hold that travels picks the tool up. Off (#136), travel is
+     * ignored: the hold stays a hold and ends as whatever a stationary one
+     * would have, so the bar is rearranged from the toolbox instead.
+     */
+    dragEnabled: Boolean = true,
     /** Whether a stationary hold arms selection mode for as long as it lasts. */
     holdArms: Boolean = false,
     /** Whether a stationary hold opens the trackpad panel for as long as it lasts. */
@@ -6373,7 +6385,7 @@ private fun DraggableTool(
             // Keyed on the interval too: it comes from a setting, so the handler
             // has to be rebuilt when it changes. A Long changes far more rarely
             // than the lambda above, which is why that one goes through a holder.
-            .pointerInput(enabled, tool, holdRepeatMs, holdArms, holdPanel, holdMenu) {
+            .pointerInput(enabled, tool, holdRepeatMs, holdArms, holdPanel, holdMenu, dragEnabled) {
                 if (!enabled) return@pointerInput
                 // Raw press-and-hold, mirroring the key rows' handler, instead
                 // of detectDragGesturesAfterLongPress: its long-press never
@@ -6455,7 +6467,7 @@ private fun DraggableTool(
                                 }
                             } else {
                                 change.consume()
-                                if (travel > dragSlop && !dragged) {
+                                if (travel > dragSlop && !dragged && dragEnabled) {
                                     dragged = true
                                     // Travel means this was a reorder all along,
                                     // so the tool picks itself up from here. A
@@ -6520,11 +6532,15 @@ private fun DraggableTool(
                             }
                             // A hold that never travelled past the slop is a
                             // distinct gesture: the action the user bound to it,
+                            // nothing at all if that is what they bound (#136),
                             // or the tool's settings page when they bound none.
                             else -> {
                                 drag.cancel()
-                                val bound = holdAction
-                                if (bound != null) drag.onHoldAction(bound) else drag.onOpenSettings(tool)
+                                when (val bound = holdAction) {
+                                    null -> drag.onOpenSettings(tool)
+                                    ToolHoldAction.None -> Unit
+                                    is ToolHoldAction.Run -> drag.onHoldAction(bound.tool)
+                                }
                             }
                         }
                     }
@@ -7313,6 +7329,7 @@ private fun RowScope.ToolbarRow(
                         onTap = { onToolTap(tool) },
                         holdRepeatMs = holdRepeatMs(tool, state),
                         holdAction = holdActionFor(tool, fromToolbar = true, state = state),
+                        dragEnabled = state.settings.toolbarBehavior.dragToRearrange,
                         holdArms = holdArmsSelection(tool, fromToolbar = true, state = state),
                         holdPanel = holdOpensTrackpad(tool, fromToolbar = true, state = state),
                         holdMenu = holdPicksVoiceMode(tool, fromToolbar = true, state = state),
@@ -9614,7 +9631,14 @@ private val DragScopeDodgeMargin = 32.dp
  * pinned, and in what order. So the row it names is the one row it never
  * covers. Below that it also dodges the finger: a drag working the top of the
  * toolbox grid would otherwise be dragging straight under the pill, so it
- * swaps to the bottom of the keyboard until the finger leaves.
+ * swaps to the far end of the keyboard until the finger leaves.
+ *
+ * "Below" is not always possible (#136): the row order can put the toolbar
+ * under the keys, and there the spot below it is off the keyboard, so the
+ * clamp to the keyboard's floor put the pill straight back over the bar. A
+ * toolbar with no room under it gets the pill parked *above* it instead, and
+ * the finger dodge then goes to the top of the keyboard rather than the
+ * bottom — whichever end is not the toolbar's.
  */
 @Composable
 private fun DragScopeLabel(
@@ -9633,18 +9657,23 @@ private fun DragScopeLabel(
     val density = LocalDensity.current
     val gapPx = with(density) { DragScopeGap.roundToPx() }
     val dodgePx = with(density) { DragScopeDodgeMargin.toPx() }
-    // Resting spot: just clear of the toolbar's bottom edge. Measured rather
-    // than assumed — the toolbar is not always the top row (see barOrder), and
-    // its height is a theme setting.
-    val restY = drag.toolbarBounds
-        ?.let { (it.bottom - bodyOrigin.y).roundToInt() + gapPx }
-        ?.coerceAtLeast(0)
-        ?: 0
+    // Resting spot: just clear of the toolbar's bottom edge, or of its top edge
+    // when there is no keyboard left under it. Measured rather than assumed —
+    // the toolbar is not always the top row (see barOrder), and its height is
+    // a theme setting.
     val floorY = (bodyHeightPx - labelHeightPx - gapPx).coerceAtLeast(0)
+    val bar = drag.toolbarBounds
+    val below = bar?.let { (it.bottom - bodyOrigin.y).roundToInt() + gapPx }?.coerceAtLeast(0) ?: 0
+    val above = bar?.let { (it.top - bodyOrigin.y).roundToInt() - gapPx - labelHeightPx }
+    // Room under the bar for the whole pill; otherwise it goes over the bar,
+    // and the dodge swaps ends with it.
+    val fitsBelow = above == null || labelHeightPx == 0 || below <= floorY
+    val restY = if (fitsBelow) below.coerceAtMost(floorY) else above.coerceAtLeast(0)
+    val awayY = if (fitsBelow) floorY else 0
     val fingerY = drag.position.y - bodyOrigin.y
     val crowded = labelHeightPx > 0 &&
         fingerY > restY - dodgePx && fingerY < restY + labelHeightPx + dodgePx
-    val targetY = if (crowded) floorY else restY.coerceAtMost(floorY)
+    val targetY = if (crowded) awayY else restY
     // Which end the pill belongs at depends on its own height, and it cannot be
     // measured before it is laid out — so the first pass computes a spot with a
     // height of zero, and if the finger is up by the toolbar the pass after that
@@ -11981,7 +12010,9 @@ private fun KeyRows(
                     if (!octopusFlickHere) return@awaitEachGesture
                     val startKey = nearestOctopusCentre(keyCenters, floating.keys, down.position)
                         ?: return@awaitEachGesture
-                    val word = floating[startKey.first] ?: return@awaitEachGesture
+                    // The nearest word of a stacked key (#136): a flick is aimed
+                    // at the key, and the stack's best sits closest to it.
+                    val word = floating.top(startKey.first) ?: return@awaitEachGesture
                     val points = ArrayList<GesturePoint>()
                     points.add(
                         GesturePoint(down.position.x, down.position.y, down.uptimeMillis),
@@ -15193,7 +15224,7 @@ internal fun KeyButton(
     // word cannot come through [KeyVisual]: it changes on every keystroke, and
     // a key that read it there would cost the whole board its skip.
     val octopusWord = if (screenReaderKeys) {
-        LocalOctopusWords.current.value[key.glideAnchor() ?: -1]?.word
+        LocalOctopusWords.current.value.top(key.glideAnchor() ?: -1)?.word
     } else {
         null
     }

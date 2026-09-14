@@ -767,4 +767,6 @@
     <string name="tooldetail_media_wiki_info">GIFs come from Wikimedia Commons, whose collection is largely educational rather than reactive. Leave this empty for Commons, or point it at another MediaWiki.</string>
     <string name="tooldetail_media_wiki_label">MediaWiki address</string>
     <string name="tooldetail_media_wiki_hint">https://commons.wikimedia.org</string>
+    <string name="tooldetail_hold_nothing_value">Does nothing</string>
+    <string name="tooldetail_hold_nothing_subtitle">The hold only vibrates. Nothing opens and nothing runs.</string>
 </resources>

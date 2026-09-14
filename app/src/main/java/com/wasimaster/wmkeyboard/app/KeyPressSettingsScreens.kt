@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import com.wasimaster.wmkeyboard.core.addons.AddonType
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
+import com.wasimaster.wmkeyboard.core.settings.BackspaceSwipeUnit
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.AlertDialog
@@ -608,6 +609,83 @@ internal fun KeyPressSettings(
     }
 
 
+
+    // Moved here from Typing (#136): a swipe on the backspace key is a thing a
+    // key does, and this is the screen for what keys do. The string names
+    // keep their typing_ prefix so nothing that links to them by name breaks.
+    SettingsGroup(stringResource(R.string.typing_group_backspace_title)) {
+        item {
+            ToggleSetting(
+                R.string.typing_backspace_swipe_title,
+                stringResource(R.string.typing_backspace_swipe_subtitle),
+                settings.backspaceSwipeDelete,
+                info = stringResource(R.string.typing_backspace_swipe_info),
+                default = SettingsDefaults.backspaceSwipeDelete,
+            ) { scope.launch { repository.setBackspaceSwipeDelete(it) } }
+        }
+        if (settings.backspaceSwipeDelete) {
+            item {
+                ChoiceSetting(
+                    R.string.typing_backspace_unit_title,
+                    subtitle = stringResource(R.string.typing_backspace_unit_subtitle),
+                    info = stringResource(R.string.typing_backspace_unit_info),
+                    options = listOf(
+                        BackspaceSwipeUnit.WORD to
+                            stringResource(R.string.typing_backspace_unit_word),
+                        BackspaceSwipeUnit.CHARACTER to
+                            stringResource(R.string.typing_backspace_unit_character),
+                    ),
+                    selected = settings.textEditing.backspaceSwipeUnit,
+                    default = SettingsDefaults.textEditing.backspaceSwipeUnit,
+                    detail = { unit ->
+                        ChoiceDetail(
+                            stringResource(
+                                if (unit == BackspaceSwipeUnit.WORD) {
+                                    R.string.typing_backspace_unit_word_desc
+                                } else {
+                                    R.string.typing_backspace_unit_character_desc
+                                },
+                            ),
+                        )
+                    },
+                ) { scope.launch { repository.setBackspaceSwipeUnit(it) } }
+            }
+            item {
+                ToggleSetting(
+                    R.string.typing_backspace_preview_title,
+                    stringResource(R.string.typing_backspace_preview_subtitle),
+                    settings.textEditing.backspaceSwipePreview,
+                    info = stringResource(R.string.typing_backspace_preview_info),
+                    default = SettingsDefaults.textEditing.backspaceSwipePreview,
+                ) { scope.launch { repository.setBackspaceSwipePreview(it) } }
+            }
+            if (settings.textEditing.backspaceSwipeUnit == BackspaceSwipeUnit.WORD) {
+                item {
+                    SliderSetting(
+                        R.string.typing_backspace_step_title,
+                        subtitle = stringResource(R.string.typing_backspace_step_subtitle),
+                        value = settings.textEditing.backspaceWordStepDp.toFloat(),
+                        range = 32f..120f,
+                        display = { context.getString(R.string.typing_value_dp, it.toInt()) },
+                        info = stringResource(R.string.typing_backspace_step_info),
+                        default = SettingsDefaults.textEditing.backspaceWordStepDp.toFloat(),
+                    ) { scope.launch { repository.setBackspaceWordStepDp(it.toInt()) } }
+                }
+            } else {
+                item {
+                    SliderSetting(
+                        R.string.typing_backspace_char_step_title,
+                        subtitle = stringResource(R.string.typing_backspace_char_step_subtitle),
+                        value = settings.textEditing.backspaceCharStepDp.toFloat(),
+                        range = 8f..48f,
+                        display = { context.getString(R.string.typing_value_dp, it.toInt()) },
+                        info = stringResource(R.string.typing_backspace_char_step_info),
+                        default = SettingsDefaults.textEditing.backspaceCharStepDp.toFloat(),
+                    ) { scope.launch { repository.setBackspaceCharStepDp(it.toInt()) } }
+                }
+            }
+        }
+    }
 
     // The alternates ("more keys") get their own group rather than joining the
     // bubble's: they are a different popup, sized against a grid instead of a

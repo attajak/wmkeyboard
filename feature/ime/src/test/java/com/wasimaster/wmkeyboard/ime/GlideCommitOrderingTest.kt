@@ -9,7 +9,6 @@ import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
 import com.wasimaster.wmkeyboard.core.gesture.KeyCenter
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
-import com.wasimaster.wmkeyboard.core.prediction.OctopusWord
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.ime.ui.GlideVerdict
 import org.junit.Assert.assertEquals
@@ -80,8 +79,8 @@ class GlideCommitOrderingTest {
     /** A service, a field that models the echo, and the board planted on it. */
     private fun keyboard(
         initial: String = "",
-        octopus: Map<Int, OctopusWord> = octopusSentinel(),
-    ): Triple<WMKeyboardService, RecordingEditor, Map<Int, OctopusWord>> {
+        octopus: OctopusBoard = octopusSentinel(),
+    ): Triple<WMKeyboardService, RecordingEditor, OctopusBoard> {
         val editor = RecordingEditor(initial = initial)
         // The strictest editor there is, one with no guard of its own, which is
         // what leaves the *ordering* of the two commits as the only thing under

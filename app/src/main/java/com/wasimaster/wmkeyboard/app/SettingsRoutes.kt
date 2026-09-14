@@ -146,6 +146,7 @@ internal object SettingsRoutes {
         "selection_macros/zones",
         "advanced",
         "rows",
+        "rows/symbol",
         "ai_actions",
         "ai_history",
         "ai_chat",

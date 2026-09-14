@@ -229,11 +229,8 @@ private fun SearchStrings.typingRows(): List<SettingsSearchEntry> {
         // "Extra time for a dot or a cross" is left out on purpose: it is drawn
         // only while the letter swipe writes by hand, which is neither the
         // default nor a state a search result can put the screen into.
-        row(R.string.typing_backspace_swipe_title, R.string.typing_backspace_swipe_subtitle, weight = EntryWeight.PRIMARY),
-        row(R.string.typing_backspace_unit_title, R.string.typing_backspace_unit_subtitle),
-        row(R.string.typing_backspace_preview_title, R.string.typing_backspace_preview_subtitle),
-        row(R.string.typing_backspace_step_title, R.string.typing_backspace_step_subtitle),
-        row(R.string.typing_backspace_char_step_title, R.string.typing_backspace_char_step_subtitle),
+        // The Backspace group moved to Key press (#136); its rows are indexed
+        // there.
         row(R.string.typing_shift_enter_title, R.string.typing_shift_enter_subtitle),
         row(R.string.typing_volume_cursor_title, R.string.typing_volume_cursor_subtitle),
         row(R.string.typing_volume_cursor_media_title, R.string.typing_volume_cursor_media_subtitle),
@@ -359,8 +356,18 @@ private fun SearchStrings.typingOctopusRows(): List<SettingsSearchEntry> {
         row(R.string.typing_octopus_size_title, R.string.typing_octopus_size_subtitle),
         row(R.string.typing_octopus_hints_title, R.string.typing_octopus_hints_subtitle),
         row(R.string.typing_octopus_long_press_title, R.string.typing_octopus_long_press_subtitle),
+        row(R.string.typing_octopus_stack_title, R.string.typing_octopus_stack_subtitle),
     )
 }
+
+/** Rows on the Suggestion blacklist screen, in screen order. */
+private fun SearchStrings.blacklistRows(): List<SettingsSearchEntry> = listOf(
+    entry(
+        R.string.backup_blacklist_scope_title, R.string.backup_blacklist_scope_subtitle,
+        R.string.typing_blacklist_title, "blacklist",
+        screenParent = R.string.typing_group_suggestions_title, screenRoot = R.string.home_typing_title,
+    ),
+)
 
 /** Rows on the typing/chips page, in screen order. */
 private fun SearchStrings.typingChipsRows(): List<SettingsSearchEntry> {
@@ -492,6 +499,13 @@ private fun SearchStrings.keyPressRows(): List<SettingsSearchEntry> {
     fun row(@StringRes title: Int, @StringRes subtitle: Int = 0, weight: EntryWeight = EntryWeight.NORMAL) =
         entry(title, subtitle, R.string.home_keypress_title, "keypress", weight = weight)
     return listOf(
+        // The Backspace group, moved here from Typing (#136): a key's
+        // gestures are a key-press matter, not a typing-engine one.
+        row(R.string.typing_backspace_swipe_title, R.string.typing_backspace_swipe_subtitle, weight = EntryWeight.PRIMARY),
+        row(R.string.typing_backspace_unit_title, R.string.typing_backspace_unit_subtitle),
+        row(R.string.typing_backspace_preview_title, R.string.typing_backspace_preview_subtitle),
+        row(R.string.typing_backspace_step_title, R.string.typing_backspace_step_subtitle),
+        row(R.string.typing_backspace_char_step_title, R.string.typing_backspace_char_step_subtitle),
         row(R.string.keypress_alternates_size_title, R.string.keypress_alternates_size_subtitle),
         row(
             R.string.keypress_alternates_padding_title,
@@ -662,6 +676,7 @@ private fun SearchStrings.appearanceToolbarRows(): List<SettingsSearchEntry> {
         row(R.string.appearance_toolbar_show_title, R.string.appearance_toolbar_show_subtitle),
         row(R.string.appearance_toolbar_placement_title, R.string.appearance_toolbar_placement_subtitle),
         row(R.string.appearance_toolbar_swipe_down_title, R.string.appearance_toolbar_swipe_down_subtitle),
+        row(R.string.appearance_toolbar_drag_title, R.string.appearance_toolbar_drag_subtitle),
         row(R.string.appearance_toolbar_hardware_only_title, R.string.appearance_toolbar_hardware_only_subtitle),
         row(R.string.appearance_toolbar_rtl_title, R.string.appearance_toolbar_rtl_subtitle),
         row(R.string.appearance_toolbar_fit_title, R.string.appearance_toolbar_fit_subtitle),
@@ -1505,8 +1520,20 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         permission(R.string.privacy_permissions_vibrate_title, R.string.privacy_permissions_vibrate_subtitle),
         permission(R.string.privacy_permissions_biometric_title, R.string.privacy_permissions_biometric_subtitle),
         entry(R.string.rows_symbol_row_title, R.string.rows_symbol_row_subtitle, R.string.home_rows_title, "rows"),
-        entry(R.string.rows_symbol_row_lines_title, R.string.rows_symbol_row_lines_subtitle, R.string.home_rows_title, "rows"),
-        entry(R.string.rows_symbol_row_scroll_title, R.string.rows_symbol_row_scroll_subtitle, R.string.home_rows_title, "rows"),
+        // The symbol row's own page (#136): the toggle stays on Rows & bars,
+        // everything under it lives here.
+        entry(
+            R.string.rows_symbol_row_height_title, R.string.rows_symbol_row_height_subtitle,
+            R.string.rows_symbol_row_title, "rows/symbol", screenParent = R.string.home_rows_title,
+        ),
+        entry(
+            R.string.rows_symbol_row_lines_title, R.string.rows_symbol_row_lines_subtitle,
+            R.string.rows_symbol_row_title, "rows/symbol", screenParent = R.string.home_rows_title,
+        ),
+        entry(
+            R.string.rows_symbol_row_scroll_title, R.string.rows_symbol_row_scroll_subtitle,
+            R.string.rows_symbol_row_title, "rows/symbol", screenParent = R.string.home_rows_title,
+        ),
         entry(R.string.rows_fancy_title, R.string.rows_fancy_subtitle, R.string.home_rows_title, "rows"),
         entry(R.string.rows_dictionary_bar_title, R.string.rows_dictionary_bar_subtitle, R.string.home_rows_title, "rows"),
         entry(R.string.modes_enabled_title, R.string.modes_enabled_subtitle, R.string.home_modes_title, "modes"),
@@ -1652,6 +1679,10 @@ private fun SearchStrings.sectionRows(): List<SettingsSearchEntry> {
         under(
             R.string.keypress_haptics_page_title, R.string.keypress_haptics_group_subtitle,
             R.string.home_keypress_title, "keypress/haptics",
+        ),
+        under(
+            R.string.rows_symbol_row_title, R.string.rows_symbol_row_subtitle,
+            R.string.home_rows_title, "rows/symbol",
         ),
         under(
             R.string.keypress_popup_group_title, R.string.keypress_popup_group_subtitle,
@@ -1912,6 +1943,7 @@ internal fun settingsSearchIndex(strings: SearchStrings): List<SettingsSearchEnt
         typingSuggestionsRows() +
         typingAutopilotRows() +
         typingOctopusRows() +
+        blacklistRows() +
         typingChipsRows() +
         typingCodesRows() +
         typingGesturesRows() +

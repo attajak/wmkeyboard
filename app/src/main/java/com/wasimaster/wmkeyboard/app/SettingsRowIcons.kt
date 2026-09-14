@@ -366,6 +366,7 @@ internal object SettingsRowIcons {
         put(R.string.appearance_key_hint_size_title) { Icons.Outlined.FormatSize }
         put(R.string.appearance_toolbar_show_title) { Icons.Outlined.Visibility }
         put(R.string.appearance_toolbar_swipe_down_title) { Icons.Outlined.SwipeDown }
+        put(R.string.appearance_toolbar_drag_title) { Icons.Outlined.DragIndicator }
         put(R.string.appearance_toolbar_hardware_only_title) { Icons.Outlined.KeyboardAlt }
         put(R.string.appearance_toolbar_lock_title) { Icons.Outlined.Lock }
         put(R.string.appearance_toolbar_rtl_title) { Icons.AutoMirrored.Outlined.FormatTextdirectionRToL }
@@ -716,6 +717,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_personal_dictionary_title) { Icons.AutoMirrored.Outlined.MenuBook }
         put(R.string.typing_custom_dictionaries_title) { Icons.AutoMirrored.Outlined.MenuBook }
         put(R.string.typing_blacklist_title) { Icons.Outlined.VisibilityOff }
+        put(R.string.backup_blacklist_scope_title) { Icons.Outlined.Translate }
         put(R.string.typing_word_menu_title) { Icons.Outlined.Tune }
         put(R.string.typing_rank_control_title) { Icons.Outlined.SwapVert }
         put(R.string.typing_delete_edits_lists_title) { Icons.Outlined.Description }
@@ -741,6 +743,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_octopus_size_title) { Icons.Outlined.FormatSize }
         put(R.string.typing_octopus_hints_title) { Icons.Outlined.VisibilityOff }
         put(R.string.typing_octopus_long_press_title) { Icons.Outlined.Abc }
+        put(R.string.typing_octopus_stack_title) { Icons.Outlined.Layers }
         put(R.string.typing_smart_dates_title) { Icons.Outlined.CalendarMonth }
         put(R.string.typing_smart_weather_title) { Icons.Outlined.WbSunny }
         put(R.string.typing_smart_lookups_title) { Icons.Outlined.Search }
