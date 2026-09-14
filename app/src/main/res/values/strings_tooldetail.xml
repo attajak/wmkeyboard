@@ -258,6 +258,12 @@
     <string name="tooldetail_typing_nav_title">All typing settings</string>
     <string name="tooldetail_typing_nav_subtitle">Suggestions, autocorrect, capital letters and more</string>
 
+    <!-- Selection actions tool. -->
+    <string name="tooldetail_selection_actions_title">Selection actions</string>
+    <string name="tooldetail_selection_actions_subtitle">The tool uses this same switch. You can also find it under Advanced</string>
+    <string name="tooldetail_selection_actions_nav_title">All selection action settings</string>
+    <string name="tooldetail_selection_actions_nav_subtitle">Where the bar appears, which actions it offers, and their order</string>
+
     <!-- Fancy text tool. -->
     <string name="tooldetail_fancy_style_title">Style to start with</string>
     <string name="tooldetail_fancy_style_subtitle">The style the tool turns on. The strip over the keys still changes it</string>

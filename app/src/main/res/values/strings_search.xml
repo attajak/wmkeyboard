@@ -83,6 +83,7 @@
     <string name="search_kw_ime_tool_gif">tenor animated meme reaction</string>
     <string name="search_kw_ime_tool_numpad">keypad tenkey dialer</string>
     <string name="search_kw_ime_tool_persistent">pin always visible dock</string>
+    <string name="search_kw_ime_tool_selection_actions">selection macros highlight bar toggle</string>
     <string name="search_kw_ime_tool_resize">taller shorter bigger</string>
     <string name="search_kw_ime_tool_snippets">replacement autotext auto replace canned responses</string>
     <string name="search_kw_ime_tool_sticker">whatsapp telegram bitmoji memoji</string>

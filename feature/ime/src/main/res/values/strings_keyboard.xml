@@ -327,6 +327,7 @@
          rather than for the theme grid it opened with. -->
     <string name="ime_tool_themes">Appearance</string>
     <string name="ime_tool_autocorrect">Autocorrect</string>
+    <string name="ime_tool_selection_actions">Selection actions</string>
     <string name="ime_tool_sound_haptics">Sound &amp; haptics</string>
     <string name="ime_tool_numpad">Numpad</string>
     <string name="ime_tool_handwriting">Handwriting</string>

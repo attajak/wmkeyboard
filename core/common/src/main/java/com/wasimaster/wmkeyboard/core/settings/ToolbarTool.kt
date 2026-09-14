@@ -67,6 +67,9 @@ enum class ToolbarTool {
     // same setting as the Layout screen's row. Declared last: nothing stores
     // ordinals, but the toolbox ranks by name and this stays out of its way.
     PERSISTENT,
+    // Turns the selection actions bar on and off (issue #177). The same
+    // setting as Advanced → Selection actions, one tap from the keys.
+    SELECTION_ACTIONS,
 }
 
 /** The cursor tools, in the order they read on the toolbar. */
@@ -133,6 +136,9 @@ fun isDirectBootSafeTool(tool: ToolbarTool): Boolean = when (tool) {
     // Custom layouts are settings, and settings are mirrored into the
     // pre-unlock store.
     ToolbarTool.CUSTOM_LAYOUT,
+    // A switch over a setting, and settings are mirrored into the pre-unlock
+    // store. The bar it controls already drops every action that leaves the app.
+    ToolbarTool.SELECTION_ACTIONS,
     ToolbarTool.CALCULATOR, ToolbarTool.UNIT_CONVERT, ToolbarTool.PASSWORD_GEN, ToolbarTool.QR_GEN,
     ToolbarTool.FLASHLIGHT, ToolbarTool.COMPASS, ToolbarTool.LEVEL, ToolbarTool.MOON_PHASE,
     // Copy and cut only touch the field the user is already typing in. Paste is
@@ -163,6 +169,7 @@ fun toolOpensScreen(tool: ToolbarTool): Boolean = when (tool) {
     ToolbarTool.FLASHLIGHT, ToolbarTool.UNDO, ToolbarTool.REDO,
     ToolbarTool.INCOGNITO, ToolbarTool.POWER_SAVING, ToolbarTool.AUTOCORRECT,
     ToolbarTool.FANCY, ToolbarTool.CUSTOM_LAYOUT, ToolbarTool.HIDE_KEYBOARD,
+    ToolbarTool.SELECTION_ACTIONS,
     -> false
     // The cursor moves nudge the caret and nothing else, and the clipboard trio
     // acts on the selection in place.
@@ -245,7 +252,7 @@ private val RestOfToolOrder: List<ToolbarTool> = listOf(
     ToolbarTool.WEB_SEARCH, ToolbarTool.IMAGE_SEARCH,
     ToolbarTool.TYPING_TEST, ToolbarTool.PLUGINS, ToolbarTool.CUSTOM_LAYOUT,
     ToolbarTool.FLOATING, ToolbarTool.PERSISTENT, ToolbarTool.RESIZE, ToolbarTool.INCOGNITO,
-    ToolbarTool.SOUND_HAPTICS,
+    ToolbarTool.SELECTION_ACTIONS, ToolbarTool.SOUND_HAPTICS,
     ToolbarTool.QR_SCAN, ToolbarTool.QR_GEN, ToolbarTool.DOC_SCAN, ToolbarTool.CAMERA,
     ToolbarTool.FLASHLIGHT, ToolbarTool.COMPASS, ToolbarTool.LEVEL, ToolbarTool.MOON_PHASE,
     // The one-tap cursor moves last: useful, but they would otherwise push

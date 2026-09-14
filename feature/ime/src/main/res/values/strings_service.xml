@@ -139,6 +139,8 @@
     <string name="ime_service_power_saving_off_toast">Power saving is off</string>
     <string name="ime_service_autocorrect_on_toast">Autocorrect is on</string>
     <string name="ime_service_autocorrect_off_toast">Autocorrect is off</string>
+    <string name="ime_service_selection_actions_on_toast">Selection actions are on</string>
+    <string name="ime_service_selection_actions_off_toast">Selection actions are off</string>
     <!-- Shown when the Fancy text tool turns the fancy keyboard on. %1$s is the style name, such as Bold. -->
     <string name="ime_service_fancy_on_style_toast">Fancy text is on: %1$s</string>
     <string name="ime_service_fancy_on_toast">Fancy text is on</string>

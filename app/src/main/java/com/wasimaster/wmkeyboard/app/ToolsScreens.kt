@@ -114,6 +114,7 @@ internal fun toolTitle(tool: ToolbarTool): Int = when (tool) {
     ToolbarTool.POWER_SAVING -> ImeR.string.ime_tool_power_saving
     ToolbarTool.THEMES -> ImeR.string.ime_tool_themes
     ToolbarTool.AUTOCORRECT -> ImeR.string.ime_tool_autocorrect
+    ToolbarTool.SELECTION_ACTIONS -> ImeR.string.ime_tool_selection_actions
     ToolbarTool.SOUND_HAPTICS -> ImeR.string.ime_tool_sound_haptics
     ToolbarTool.NUMPAD -> ImeR.string.ime_tool_numpad
     ToolbarTool.HANDWRITING -> ImeR.string.ime_tool_handwriting
@@ -189,6 +190,7 @@ internal fun toolDescription(tool: ToolbarTool): Int = when (tool) {
     ToolbarTool.POWER_SAVING -> R.string.fonts_tool_power_saving_desc
     ToolbarTool.THEMES -> R.string.fonts_tool_themes_desc
     ToolbarTool.AUTOCORRECT -> R.string.fonts_tool_autocorrect_desc
+    ToolbarTool.SELECTION_ACTIONS -> R.string.fonts_tool_selection_actions_desc
     ToolbarTool.SOUND_HAPTICS -> R.string.fonts_tool_sound_haptics_desc
     ToolbarTool.NUMPAD -> R.string.fonts_tool_numpad_desc
     ToolbarTool.HANDWRITING -> R.string.fonts_tool_handwriting_desc
@@ -559,7 +561,7 @@ internal val ToolGroups: List<Pair<Int, List<ToolbarTool>>> = buildList {
         R.string.tools_group_quick_actions_title to listOf(
             ToolbarTool.UNDO, ToolbarTool.REDO,
             ToolbarTool.COPY, ToolbarTool.CUT, ToolbarTool.PASTE,
-            ToolbarTool.AUTOCORRECT,
+            ToolbarTool.AUTOCORRECT, ToolbarTool.SELECTION_ACTIONS,
             ToolbarTool.FANCY, ToolbarTool.CUSTOM_LAYOUT, ToolbarTool.INCOGNITO, ToolbarTool.SOUND_HAPTICS,
             ToolbarTool.THEMES, ToolbarTool.POWER_SAVING, ToolbarTool.SETTINGS,
         ),

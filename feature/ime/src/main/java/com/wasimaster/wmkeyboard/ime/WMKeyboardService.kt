@@ -2491,6 +2491,7 @@ open class WMKeyboardService : InputMethodService() {
             var appNamesEnabled: Boolean? = null
             var linkPreviewsEnabled: Boolean? = null
             var pinnedLastEnabled: Boolean? = null
+            var selectionMacrosEnabled: Boolean? = null
             var userScreenshotsEnabled: Boolean? = null
             var otpCaptureEnabled: Boolean? = null
             var keyboardControlsPinned: Boolean? = null
@@ -2606,6 +2607,16 @@ open class WMKeyboardService : InputMethodService() {
                                 ?.let { selectionMacroOffer(it.text, settings, it.wholeField, it) },
                         )
                     }
+                }
+                // The rebuild above cannot see the switch itself (the offer
+                // does not read it), and switching it back on leaves nothing
+                // on screen to rebuild. A selection that never moves sends no
+                // onUpdateSelection, so read it again on every flip: off clears
+                // the bar, on offers one for text that is already selected.
+                if (selectionMacrosEnabled != settings.selectionMacros.enabled) {
+                    val flipped = selectionMacrosEnabled != null
+                    selectionMacrosEnabled = settings.selectionMacros.enabled
+                    if (flipped) refreshSelectionMacros(settings = settings)
                 }
                 // Mirror the code-chip switch to the notification listener's
                 // device-protected flag — the listener cannot read settings,
@@ -14359,6 +14370,7 @@ open class WMKeyboardService : InputMethodService() {
             ToolbarTool.POWER_SAVING -> onPowerSavingToggle()
             ToolbarTool.THEMES -> onPanelChange(PanelMode.THEMES)
             ToolbarTool.AUTOCORRECT -> onAutocorrectToggle()
+            ToolbarTool.SELECTION_ACTIONS -> onSelectionActionsToggle()
             ToolbarTool.FANCY -> onFancyToggle()
             ToolbarTool.CUSTOM_LAYOUT -> onCustomLayoutToggle()
             ToolbarTool.SOUND_HAPTICS -> onPanelChange(PanelMode.SOUND_HAPTICS)
@@ -16373,6 +16385,27 @@ open class WMKeyboardService : InputMethodService() {
             Toast.LENGTH_SHORT,
         ).show()
         serviceScope.launch { settingsRepository.setAutocorrect(next) }
+    }
+
+    /**
+     * The toolbar's Selection actions switch (issue #177). The same setting as
+     * Advanced → Selection actions, so the bar can be kept for the moments it
+     * is wanted without a trip to the settings app. The settings collector
+     * clears or offers the bar once the write lands.
+     */
+    fun onSelectionActionsToggle() {
+        vibrate()
+        val next = !_uiState.value.settings.selectionMacros.enabled
+        Toast.makeText(
+            this,
+            if (next) {
+                getString(R.string.ime_service_selection_actions_on_toast)
+            } else {
+                getString(R.string.ime_service_selection_actions_off_toast)
+            },
+            Toast.LENGTH_SHORT,
+        ).show()
+        serviceScope.launch { settingsRepository.setSelectionMacrosEnabled(next) }
     }
 
     /**
@@ -20432,14 +20465,18 @@ open class WMKeyboardService : InputMethodService() {
      *
      * Called from the two places a selection can change under the keyboard:
      * every [onUpdateSelection], and each fresh input view (where the field the
-     * user came back to may already have one). Every gate that can be answered
+     * user came back to may already have one), and the settings collector when the
+     * feature is switched on or off. Every gate that can be answered
      * without reading the field is asked first — the feature off, a password
      * field, no range selected, a range longer than the cap — because
      * `getSelectedText` is an IPC to the target app and this runs on every
      * caret move.
      */
-    private fun refreshSelectionMacros(selStart: Int = expectedSelStart, selEnd: Int = expectedSelEnd) {
-        val settings = _uiState.value.settings
+    private fun refreshSelectionMacros(
+        selStart: Int = expectedSelStart,
+        selEnd: Int = expectedSelEnd,
+        settings: KeyboardSettings = _uiState.value.settings,
+    ) {
         fun clear() {
             if (_uiState.value.selectionMacros != null) {
                 _uiState.update { it.copy(selectionMacros = null) }

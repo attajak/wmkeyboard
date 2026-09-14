@@ -81,6 +81,7 @@ import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material.icons.outlined.Speed
+import androidx.compose.material.icons.outlined.SmartButton
 import androidx.compose.material.icons.outlined.Spellcheck
 import androidx.compose.material.icons.outlined.SportsSoccer
 import androidx.compose.material.icons.outlined.Straighten
@@ -137,6 +138,7 @@ object IconDefaults {
         ToolbarTool.WEATHER -> Icons.Outlined.WbSunny
         ToolbarTool.CALENDAR -> Icons.Outlined.CalendarMonth
         ToolbarTool.INCOGNITO -> Icons.Outlined.VisibilityOff
+        ToolbarTool.SELECTION_ACTIONS -> Icons.Outlined.SmartButton
         ToolbarTool.POWER_SAVING -> Icons.Outlined.BatterySaver
         ToolbarTool.THEMES -> Icons.Outlined.Palette
         ToolbarTool.AUTOCORRECT -> Icons.Outlined.Spellcheck

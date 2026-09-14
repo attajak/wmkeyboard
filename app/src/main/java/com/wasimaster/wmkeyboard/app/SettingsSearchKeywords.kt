@@ -84,6 +84,7 @@ internal val SettingsSearchKeywords: Map<Int, Int> = buildMap {
     put(ImeR.string.ime_tool_gif, R.string.search_kw_ime_tool_gif)
     put(ImeR.string.ime_tool_numpad, R.string.search_kw_ime_tool_numpad)
     put(ImeR.string.ime_tool_persistent, R.string.search_kw_ime_tool_persistent)
+    put(ImeR.string.ime_tool_selection_actions, R.string.search_kw_ime_tool_selection_actions)
     put(ImeR.string.ime_tool_resize, R.string.search_kw_ime_tool_resize)
     put(ImeR.string.ime_tool_snippets, R.string.search_kw_ime_tool_snippets)
     put(ImeR.string.ime_tool_sticker, R.string.search_kw_ime_tool_sticker)

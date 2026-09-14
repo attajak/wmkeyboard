@@ -5791,6 +5791,7 @@ internal fun toolLabelRes(tool: ToolbarTool): Int = when (tool) {
     ToolbarTool.WEATHER -> R.string.ime_tool_weather
     ToolbarTool.CALENDAR -> R.string.ime_tool_calendar
     ToolbarTool.INCOGNITO -> R.string.ime_tool_incognito
+    ToolbarTool.SELECTION_ACTIONS -> R.string.ime_tool_selection_actions
     ToolbarTool.POWER_SAVING -> R.string.ime_tool_power_saving
     ToolbarTool.THEMES -> R.string.ime_tool_themes
     ToolbarTool.AUTOCORRECT -> R.string.ime_tool_autocorrect
@@ -5869,6 +5870,7 @@ private fun toolActive(tool: ToolbarTool, state: KeyboardUiState): Boolean = whe
     ToolbarTool.WEATHER -> state.panel == PanelMode.WEATHER
     ToolbarTool.CALENDAR -> state.panel == PanelMode.CALENDAR
     ToolbarTool.INCOGNITO -> state.incognitoOn
+    ToolbarTool.SELECTION_ACTIONS -> state.settings.selectionMacros.enabled
     ToolbarTool.POWER_SAVING -> state.powerSavingOn
     ToolbarTool.THEMES -> state.panel == PanelMode.THEMES
     ToolbarTool.AUTOCORRECT -> state.settings.correction.enabled

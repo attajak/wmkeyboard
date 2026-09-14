@@ -979,6 +979,8 @@ internal object SettingsRowIcons {
         put(R.string.statistics_toggle_title) { Icons.Outlined.QueryStats }
         put(R.string.tooldetail_power_drop_popup_title) { Icons.Outlined.Notifications }
         put(R.string.tooldetail_autocorrect_title) { Icons.Outlined.Spellcheck }
+        put(R.string.tooldetail_selection_actions_title) { Icons.Outlined.HighlightAlt }
+        put(R.string.tooldetail_selection_actions_nav_title) { Icons.Outlined.Checklist }
         put(R.string.tooldetail_fancy_style_title) { Icons.Outlined.TextFormat }
         put(R.string.tooldetail_fancy_keep_title) { Icons.Outlined.PushPin }
         put(R.string.tooldetail_fancy_auto_off_title) { Icons.Outlined.Timer }

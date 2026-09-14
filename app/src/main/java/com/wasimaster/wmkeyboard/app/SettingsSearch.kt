@@ -1140,6 +1140,13 @@ private fun SearchStrings.toolPageRowsA(): List<SettingsSearchEntry> = listOf(
         R.string.tooldetail_typing_nav_subtitle,
         weight = EntryWeight.MIRROR,
     ),
+    // Same for the Selection actions tool's own switch.
+    toolEntry(
+        ToolbarTool.SELECTION_ACTIONS,
+        R.string.tooldetail_selection_actions_nav_title,
+        R.string.tooldetail_selection_actions_nav_subtitle,
+        weight = EntryWeight.MIRROR,
+    ),
     toolEntry(
         ToolbarTool.SOUND_HAPTICS,
         R.string.tooldetail_keypress_nav_title,

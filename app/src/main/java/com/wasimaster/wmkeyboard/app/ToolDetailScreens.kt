@@ -1281,6 +1281,24 @@ internal fun ToolDetailSettings(
                 )
             }
         }
+        ToolbarTool.SELECTION_ACTIONS -> SettingsGroup(stringResource(R.string.tooldetail_options_group)) {
+            item {
+                ToggleSetting(
+                    R.string.tooldetail_selection_actions_title,
+                    stringResource(R.string.tooldetail_selection_actions_subtitle),
+                    settings.selectionMacros.enabled,
+                    default = SettingsDefaults.selectionMacros.enabled,
+                ) { scope.launch { repository.setSelectionMacrosEnabled(it) } }
+            }
+            item {
+                NavRow(
+                    R.string.tooldetail_selection_actions_nav_title,
+                    stringResource(R.string.tooldetail_selection_actions_nav_subtitle),
+                    route = SelectionMacroRoute,
+                    onClick = { onNavigate(SelectionMacroRoute) },
+                )
+            }
+        }
         ToolbarTool.FANCY -> {
             val behavior = settings.layoutBehavior
             SettingsGroup(
