@@ -901,6 +901,7 @@ open class WMKeyboardService : InputMethodService() {
             // keys they came off and the decode falls back to reading them
             // literally — which is exactly right for text already in the field.
             composingKeys.clear()
+            composingHints.clear()
             ambiguousReading = null
             // Same boundary for the typing-rhythm signal: a fresh (or
             // re-armed) word starts with no rhythm history.
@@ -940,6 +941,18 @@ open class WMKeyboardService : InputMethodService() {
 
     /** The letters of the key being pressed, consumed by the next append. */
     private var pendingKeyLetters: String? = null
+
+    /**
+     * The corner hint of the key behind each character of [composing], null
+     * where there was none or the character did not come off a key — a third
+     * twin of [composingTouch], kept under the same size check. What the
+     * number prediction reads (#181): a word typed entirely on digit-hinted
+     * keys also spells a number.
+     */
+    private val composingHints = ArrayList<String?>()
+
+    /** The corner hint of the key being pressed, consumed by the next append. */
+    private var pendingKeyHint: String? = null
 
     /**
      * The reading last shown for the ambiguous buffer it is paired with.
@@ -990,6 +1003,25 @@ open class WMKeyboardService : InputMethodService() {
     private fun composingKeyFrame(): KeySets? =
         if (composingKeys.size == composing.length) KeySets.of(composingKeys) else null
 
+    /**
+     * The number the composing word spells through its keys' corner hints
+     * (#181), or null: the setting is off, a character came off a key with no
+     * digit hint, the frame fell out of step with the buffer, or the word is
+     * too short to be worth a slot. Grouped like the number chip when that
+     * chip is on, so a long run looks the same whichever way it arrived.
+     */
+    private fun predictedNumber(state: KeyboardUiState): String? {
+        if (!state.settings.suggestionStrip.numberPrediction) return null
+        if (composingHints.size != composing.length) return null
+        return NumberPrediction.predict(
+            composing,
+            ArrayList(composingHints),
+            group = state.settings.smartChips.numbers,
+            grouping = state.settings.smartChips.numberGrouping,
+            localeTag = state.language.localeTag,
+        )
+    }
+
     /** KeyboardScreen: the down position of the tap committing a letter. */
     private fun onKeyTouch(x: Float, y: Float) {
         pendingTouch = TouchPoint(x, y)
@@ -1038,11 +1070,19 @@ open class WMKeyboardService : InputMethodService() {
                 for (ch in text) composingKeys.add(ch.toString())
             }
         }
+        if (composingHints.size == composing.length - text.length) {
+            if (text.length == 1) {
+                composingHints.add(pendingKeyHint)
+            } else {
+                repeat(text.length) { composingHints.add(null) }
+            }
+        }
         // Only single characters carry rhythm; a multi-char insert (dead
         // keys, pasted fragments) is not a keystroke.
         if (text.length == 1) keystrokeTiming.onKeystroke(SystemClock.uptimeMillis())
         pendingTouch = null
         pendingKeyLetters = null
+        pendingKeyHint = null
     }
 
     /** KeyboardScreen: letter-key centres of the live layout, normalised. */
@@ -5487,6 +5527,10 @@ open class WMKeyboardService : InputMethodService() {
         // one-character key), so a long press spells a letter outright on a
         // board that otherwise guesses.
         pendingKeyLetters = key.letterSet().takeIf { it.length > 1 }
+        // Its corner hint too, for the number prediction (#181) — read off the
+        // key as the layout rewrote it, so a number row that is showing has
+        // already taken the digits away and there is nothing to read.
+        pendingKeyHint = key.longPress.firstOrNull()
         // A converted Keyman layout owns its own dead keys, in its own context,
         // where its rules can match them. Running ours as well would apply an
         // accent twice.
@@ -6786,6 +6830,7 @@ open class WMKeyboardService : InputMethodService() {
             composing.setLength(composing.length - length)
             repeat(length) { composingTouch.removeLastOrNull() }
             repeat(length) { composingKeys.removeLastOrNull() }
+            repeat(length) { composingHints.removeLastOrNull() }
             ambiguousReading = null
             updateComposingText(ic)
             refreshSuggestions()
@@ -7346,6 +7391,7 @@ open class WMKeyboardService : InputMethodService() {
             composing.setLength(0)
             composingTouch.clear()
             composingKeys.clear()
+            composingHints.clear()
             ambiguousReading = null
             keystrokeTiming.reset()
             updateComposingText(ic)
@@ -12243,6 +12289,9 @@ open class WMKeyboardService : InputMethodService() {
             // as typed now, not to whatever the buffer holds when the async
             // precompute actually runs.
             val timingMultiplier = timingMultiplier()
+            // And the number the keys spelled (#181), read here with the other
+            // per-keystroke frames while they still describe this word.
+            val number = predictedNumber(state)
             val recentSnapshot = recentWords.toList()
             // The strip shows a handful; the keys have room for far more, and
             // several ranked words often want the same key ("the", "they" and
@@ -12371,7 +12420,11 @@ open class WMKeyboardService : InputMethodService() {
                         ?.takeIf { it.startsWith(typed, ignoreCase = true) }
                     val strip = dropTyped(words)
                     SuggestionFrame(
-                        resumed?.let { withGlideReadings(it, resumedWordStart, strip) } ?: strip,
+                        NumberPrediction.place(
+                            resumed?.let { withGlideReadings(it, resumedWordStart, strip) } ?: strip,
+                            number,
+                            state.settings.suggestionStrip.slotCount,
+                        ),
                         emojis, bias,
                         octopusFor(state, typed, keyFrame, pool = pool),
                     )
