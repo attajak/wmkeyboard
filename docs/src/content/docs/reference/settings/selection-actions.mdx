@@ -1,16 +1,13 @@
 ---
 title: "Selection actions"
-description: "Every row on the Selection actions screen: the switch, where the bar draws, and the allow list of actions it may offer."
+description: "Every row on the Selection actions screen and its three sub-screens: the switch, where the bar draws, the list of actions and their order, the AI buttons and the time zones."
 sidebar:
   order: 18.8
 ---
 
 import SettingsPath from '@components/SettingsPath.astro';
 
-The Selection actions screen is two groups: whether the bar exists and where
-it draws, then which actions it may put on itself. This page is the field
-reference. For what the feature is and how each action behaves, start at
-[Selection actions](/smart/selection-actions/).
+The Selection actions screen is the switch and two choices, then three doors: the Actions list, the AI buttons and the Time zones. This page is the field reference. For what the feature is and how each action behaves, start at [Selection actions](/smart/selection-actions/).
 
 ## Options
 
@@ -20,68 +17,84 @@ reference. For what the feature is and how each action behaves, start at
 |---|---|---|
 | Selection actions | Toggle | Off |
 | Where it appears | Choice of 2 | **Own row** |
+| Read what is selected | Toggle | On |
+| Actions | Screen | 28 of 45 on |
+| AI buttons | Screen | None |
+| Time zones | Screen | UTC and the device's zone |
 
-**Selection actions** is the whole feature. Nothing below it is read while it
-is off, and no selection raises anything.
+**Selection actions** is the whole feature. Nothing below it is read while it is off, and no selection raises anything.
 
-**Where it appears** is either *Own row* or *Suggestion strip*. Own row gives
-the bar a row of its own above the keys, which arrives with the selection and
-leaves with it, so the keyboard is one row taller while it is there. That row
-is called **Selection actions** in the row list on
-[Rows & bars](/reference/settings/rows/#row-order), where you can move it above
-or below the suggestion strip. Suggestion strip draws the actions over the
-strip instead and costs no height, since there are no word suggestions to show
-while text is selected. Under that choice the strip goes back to the toolbar
-whenever a panel is open, because the arrow on that row is the way out of the
-panel.
+**Where it appears** is either *Own row* or *Suggestion strip*. Own row gives the bar a row of its own above the keys, which arrives with the selection and leaves with it, so the keyboard is one row taller while it is there. That row is called **Selection actions** in the row list on [Rows & bars](/reference/settings/rows/#row-order), where you can move it above or below the suggestion strip. Suggestion strip draws the actions over the strip instead and costs no height, since there are no word suggestions to show while text is selected. Under that choice the strip goes back to the toolbar whenever a panel is open, because the arrow on that row is the way out of the panel.
 
-### Actions
+**Read what is selected** decides whether a selection is read as a phone number, an address or a link, or only ever as plain text. With it off you keep every action that works on any text and lose Call, Message, WhatsApp, Email, Open, QR and Contact, because none of those mean anything without the reading. Phone shapes come from the formats you saved under [Phone number formats](/reference/settings/phone-formats/).
+
+## Actions
 
 <SettingsPath path="Advanced / Selection actions / Actions" />
 
-| Setting | Control | Default |
-|---|---|---|
-| Read what is selected | Toggle | On |
-| Which actions | Chips, 13 of them | 11 on |
+A field at the top searches the actions by name and description. Below it, **Order on the bar** shows the actions that are on in the order the bar draws them; its pencil turns them into a draggable list. Undo is always first and is not in the list. Under that, seven folded groups hold every action with a switch each; an action with settings of its own (AI, Zones) has an arrow to them.
 
-**Read what is selected** decides whether a selection is read as a phone
-number, an address or a link, or only ever as plain text. With it off you keep
-Select all, Copy, Share and the case options, and lose Call, Message,
-WhatsApp, Email, Open and QR, because none of those mean anything without the
-reading. Phone shapes come from the formats you saved under
-[Phone number formats](/reference/settings/phone-formats/).
+The list is an allow list, not a guarantee: an action that is on is drawn only where it applies, and a few need a tool or an app as well.
 
-**Which actions** is an allow list, not an ordering. An action missing from it
-is never drawn, whatever you select; an action in it is drawn only where it
-applies.
+| Action | Group | Shipped | Where it appears |
+|---|---|---|---|
+| Undo | Editing | On | Anything, after the bar changed it |
+| Select all | Editing | On | Anything not already the whole field |
+| Copy | Editing | On | Every selection |
+| Cut | Editing | On | Every selection |
+| Paste | Editing | On | While the clipboard holds text |
+| Delete | Editing | On | Every selection |
+| Find | Editing | On | One line of text, not the whole field |
+| Replace | Editing | On | Every selection |
+| Sort | Lines | On | Two or more lines |
+| Unique | Lines | On | Two or more lines |
+| Number | Lines | On | Two or more lines |
+| Bullets | Lines | On | Two or more lines |
+| Format | Format | On | Every selection, when the rewrite would change something |
+| Fancy | Format | On | Plain text |
+| Bold, Italic, Strike, Mono | Format | Off | Plain text, in a chat app the keyboard knows |
+| camelCase, snake_case, kebab-case, CONSTANT_CASE | Format | Off | Inside Format's case options |
+| Digits | Convert | On | Digits in another script |
+| Colour | Convert | On | A colour code |
+| JSON | Convert | Off | A JSON object or array |
+| Base64 | Convert | Off | Base64 text |
+| Decode | Convert | Off | A percent-encoded link |
+| Translate | Language | Off | Plain text, with the Translate tool on |
+| Grammar | Language | On | Plain text, with the Grammar tool on |
+| AI | Language | On | Plain text, with the AI tool on and set up |
+| Bangla | Language | On | Latin text, with Bengali among your languages |
+| Banglish | Language | On | Bengali text |
+| Search | Look up | Off | Plain text, with the Web search tool on |
+| Speak | Look up | Off | Every selection |
+| Zones | Look up | Off | A time |
+| Share | Open in | On | Every selection |
+| Call | Open in | On | Phone numbers |
+| Message | Open in | On | Phone numbers |
+| WhatsApp | Open in | On | Phone numbers, and only with WhatsApp installed |
+| Email | Open in | On | Addresses |
+| Open | Open in | On | Links and addresses |
+| QR | Open in | On | Links, with the QR generator on |
+| Contact | Open in | On | Phone numbers and addresses |
+| Map | Open in | Off | Coordinates or an address |
+| Calendar | Open in | Off | A date or time |
 
-| Action | In the shipped set | Where it appears |
-|---|---|---|
-| Select all | Yes | Every selection, unless the whole field is already selected |
-| Copy | Yes | Every selection |
-| Share | Yes | Every selection |
-| Format | Yes | Every selection, when the rewrite would change something |
-| Search | No | Plain text |
-| Translate | No | Plain text |
-| Call | Yes | Phone numbers |
-| Message | Yes | Phone numbers |
-| WhatsApp | Yes | Phone numbers, and only with WhatsApp installed |
-| Email | Yes | Addresses |
-| Open | Yes | Links and addresses |
-| QR | Yes | Links |
-| Fancy | Yes | Plain text |
+Search and Translate are off to start with, because both are a round trip to a network service and neither is what a selection usually means. The chat markers, the programmer's cases, Speak, Zones, Map, Calendar and the decoders are off because each is a taste rather than a need, and the row is long enough already.
 
-**Search** and **Translate** are off to start with, because both are a round
-trip to a network service and neither is what a selection usually means.
+## AI buttons
+
+<SettingsPath path="Advanced / Selection actions / AI buttons" />
+
+A checkbox per AI action, in the AI tool's own order. Each picked action gets a chip beside the AI chip that runs it on the selection at once, with the result landing in the AI panel ready to apply. An action that asks for its prompt each run (Custom) is not offered, since it cannot be a one-tap button. **Manage AI actions** opens the [AI actions](/tools/ai/#your-own-actions) list itself. The chips only appear while the AI tool is switched on and a provider is set up.
+
+## Time zones
+
+<SettingsPath path="Advanced / Selection actions / Time zones" />
+
+The zones the Zones action renders a selected time in, reorderable, with a delete handle each. Below the list, a field searches every zone the device knows by city and by offset; tap a result to add it. With nothing picked the list is UTC and the device's own zone, and deleting everything returns to that.
 
 ## Details
 
-- **Search, Translate and QR follow their tools.** Each is hidden when its tool
-  is switched off on the [Tools](/reference/settings/tools/) screen, which
-  includes tools that [power saving](/typing/power-saving/) or the lock screen
-  have already taken away.
-- **The screen is reachable by link** at `wmkeyboard://settings/selection_macros`.
-  See [Deep links](/reference/deep-links/).
-- **Nothing here is read before your first unlock**, beyond the actions that
-  only touch the field you are typing in. See
-  [Selection actions](/smart/selection-actions/#details-and-edge-cases).
+- **Search, Translate, QR, Grammar and AI follow their tools.** Each is hidden when its tool is switched off on the [Tools](/reference/settings/tools/) screen, which includes tools that [power saving](/typing/power-saving/) or the lock screen have already taken away.
+- **The screens are reachable by link** at `wmkeyboard://settings/selection_macros`, `selection_macros/actions`, `selection_macros/ai` and `selection_macros/zones`. See [Deep links](/reference/deep-links/).
+- **The list resets once on this version.** The list of actions and its order are stored with a version. A list saved by an older version reads as the shipped list, so everyone gets the new actions; the same happens to a backup restored from an older version. Every change you make after that is kept.
+- **Nothing here is read before your first unlock**, beyond the actions that only touch the field you are typing in. See [Selection actions](/smart/selection-actions/#details-and-edge-cases).

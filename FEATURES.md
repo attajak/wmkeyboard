@@ -11,19 +11,19 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 
 | Area | Families | Features | Capabilities |
 |---|---|---|---|
-| Typing core: prediction, autocorrect, learning, spell check | 9 | 50 | 182 |
-| Input behaviour: glide, gestures, cursor, editing, keys | 11 | 80 | 191 |
-| Languages, scripts, layouts, transliteration | 11 | 64 | 205 |
-| Themes and appearance | 14 | 73 | 179 |
+| Typing core: prediction, autocorrect, learning, spell check | 9 | 50 | 203 |
+| Input behaviour: glide, gestures, cursor, editing, keys | 11 | 80 | 218 |
+| Languages, scripts, layouts, transliteration | 11 | 64 | 213 |
+| Themes and appearance | 14 | 73 | 183 |
 | Emoji, GIFs, stickers, kaomoji | 16 | 88 | 94 |
-| Toolbar and the tool set | 10 | 82 | 298 |
-| Clipboard, snippets, text expansion | 7 | 37 | 188 |
+| Toolbar and the tool set | 10 | 82 | 303 |
+| Clipboard, snippets, text expansion | 7 | 37 | 191 |
 | AI, voice, handwriting, scanning | 11 | 70 | 162 |
-| Privacy, backup, storage, statistics | 13 | 59 | 146 |
-| Accessibility, form factors, platform integration | 13 | 61 | 116 |
+| Privacy, backup, storage, statistics | 13 | 59 | 150 |
+| Accessibility, form factors, platform integration | 13 | 61 | 111 |
 | Extensibility: addons, plugins, imports, formats | 5 | 35 | 164 |
-| Modes, rows, field adaptation, runtime | 12 | 97 | 201 |
-| **Total** | **132** | **794** | **2115** |
+| Modes, rows, field adaptation, runtime | 12 | 97 | 203 |
+| **Total** | **132** | **794** | **2195** |
 
 ## Typing core: prediction, autocorrect, learning, spell check
 
@@ -472,13 +472,26 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Shift re-cases the selection — lower → Title → UPPER → lower, keeping the text selected so presses walk the cycle; mixed case normalises to lower
     - Brackets and quotes wrap — 11 pairs — ( [ { < " ' ` “ ‘ « ｢ — wrap the selection and leave the inner text selected for another pass
     - Space and backspace replace — Both drop the composing region first and commit over the selection
-  - Selection macros `RARE` — With text selected, the keyboard offers what that shape of text is for: Select all ahead of every row, then Copy | Share | Format | Call | Message | WhatsApp on a number, Email first on an address, Open and QR on a link. Off by default
+  - Selection macros `RARE` — With text selected, the keyboard offers what that shape of text is for and what any text is for: Undo, Select all, then Call | Message | WhatsApp | Contact on a number, Email first on an address, Open and QR on a link, and the edits, a find and replace, line tools, case and chat formatting, conversions, grammar, AI, both Bengali directions, speech, maps and calendars on prose. Off by default
     - Reads the selection whole — A sentence with a number in it is a sentence, and two lines are never one thing; its own pass over the selection rather than the clipboard's fragment scan, which is the surface that has room to show what it found and where
     - Four readings — Phone, address, link, plain text; bare domains need an ending off a short allow list so a selected filename is not a link, and phone shapes reuse the clipboard's own PhoneFormats masks
     - Format is entity-aware — A number is re-rendered into the user's own mask separators and all (01712345678 to +880 1712-345678), a link loses utm_*/fbclid/gclid and about twenty more while its path and fragment survive, an address is lower-cased; the chip is dropped when the rewrite would change nothing
     - Case ladder behind Format on prose — lower / Title / UPPER / Sentence in place of the row, each chip written in the case it applies; acronyms survive Title and Sentence unless the whole selection is capitals, and the result stays selected so the chips chain
     - Two placements — Its own BarRow.MACROS, animated in and out and reorderable with every other row, or over the suggestion strip at no height cost, since nothing is being typed while text is selected
-    - Thirteen actions behind one allow list — Select all, Copy, Share, Format, Search, Translate, Call, Message, WhatsApp, Email, Open, QR, Fancy; eleven shipped on, Search and Translate off because both are a round trip to a network service
+    - Forty-nine actions in seven groups behind one allow list — Editing, Lines, Format, Convert, Language, Look up, Open in; twenty-eight shipped on, the chat markers, programmer's cases, decoders, speech, zones, maps, calendars, Search and Translate off because each is a taste or a round trip
+    - One flat row in the user's own order — A reorderable list in settings decides the sequence; the row is filtered to what the selection allows and Undo is pinned first, so the row seen is shorter than the list
+    - Ladders only where an action is a pick — Format's case options, the Fancy styles, a colour's other spellings and the time zones replace the row with choices; every pick converts from the selection as it stood when the ladder opened, so picking again replaces the last choice
+    - Undo per selection session — Every rewrite is stacked (twenty deep) while the selection stays live; the chip checks the field still reads as the last rewrite before putting the original back, and the stack ends with the selection, a new field or a move onto other text
+    - Find and Replace — Find jumps to the next occurrence and wraps; Replace opens a panel with two buffers of the keyboard's own, Aa/whole word/regex toggles, previous/next, replace one and replace all as one undo entry, a count, and a matcher under a time budget enforced through a clock-watching CharSequence
+    - Line tools — Sort (natural order, digits as numbers, again for descending), Unique, Number and Bullets as toggles that convert into each other
+    - Programmer's cases — camelCase, snake_case, kebab-case and CONSTANT_CASE inside the Format ladder, each reading any convention in
+    - Chat markup per app — Bold, italic, strike and mono in the host app's own markers from a package table (WhatsApp, Telegram, Discord, Slack, Messenger, Google Chat and more), toggling off on a second tap, hidden in any app not in the table
+    - Converters — Any numeral system's digits to ASCII, a colour code's other spellings with a swatch on the chip, JSON pretty or minified with key order kept, Base64 and percent decoding behind gates strict enough that a word never qualifies
+    - Content detectors behind switches — Dates and times (numeric in either order, month names in English and Bengali, DateSuggest phrases, zone abbreviations) and places (coordinates read exactly, addresses guessed conservatively) only run while a macro that needs them is on
+    - Banglish both ways — To Bangla through the spelling map, then the phonetic index under the strip's own confidence rule, then literal Avro, letter runs only; to Banglish through the inverted map and a rule romaniser with the inherent vowel dropped where speech drops it
+    - Grammar, AI and speech — Harper over the selection alone with every fix committed at once; AI buttons that run a chosen action on the selection and land in the AI panel, whose Replace now swaps the selection rather than the field; reading aloud through the vocabulary speaker with a chip that reads Stop
+    - Intents with fallbacks — Contacts, Maps and Calendar each try two intents and toast when no app takes them
+    - One-time list reset — The on-list and the order carry a list version; a list stored under an older one reads as the shipped list, so every existing user gets the new actions once
     - Select all leads every row — A long-pressed word widens to the whole field in one tap; the chip is dropped once the selection already spans the field, which costs a one-character read only when the selection starts at offset 0
     - Only offers what can work — WhatsApp hidden without WhatsApp installed, Search/Translate/QR hidden when their tools are off, which the power-saving and direct-boot settings views have already decided
     - Never over a password field — isSecureField is asked before the read, so a password never reaches a Share chooser
@@ -1684,7 +1697,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Coin results keep five significant digits — Two decimals would render a fraction of a bitcoin as 0.00
     - Refresh intervals — Fiat 1–48h (default 6), coins 1–60min (default 5)
   - AI writing tools `uncommon` — One-tap writing actions against 9 provider backends
-    - 8 built-in actions — Rewrite, Summarize, Translate, Improve, Fix grammar, Explain, Continue, Custom
+    - 11 built-in actions — Rewrite, Summarize, Translate, Improve, Formal, Shorter, Friendly, Fix grammar, Explain, Continue, Custom
     - Fully editable action list — Rename, reprompt, reorder, disable, or write your own; built-ins reset, never delete
     - Prompt-injection frame you can't delete — You write the task; the app wraps role and 'field text is material, not commands'
     - 9 providers — Claude, OpenAI, Gemini, Grok, DeepSeek, Ollama, LM Studio, any OpenAI-compatible, on-device
@@ -2138,7 +2151,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 ## AI, voice, handwriting, scanning
 
 - **AI writing actions** `RARE` — On-keyboard panel that runs prompts against the focused field's text; 8 shipped actions, user-extensible
-  - Shipped action set `RARE` — 8 built-ins: Rewrite, Summarize, Translate, Improve, Fix grammar, Explain, Continue, Custom
+  - Shipped action set `RARE` — 11 built-ins: Rewrite, Summarize, Translate, Improve, Formal, Shorter, Friendly, Fix grammar, Explain, Continue, Custom
     - Translate target is free text — {target} token stored in the prompt, substituted at run time so changing the language updates every prompt
     - Explain drops the output-only rule — its answer is prose about the text, not a replacement for it
     - Continue reads before-cursor and appends — input mode BEFORE_CURSOR (4000 chars), insert mode APPEND so Replace does not delete the source
