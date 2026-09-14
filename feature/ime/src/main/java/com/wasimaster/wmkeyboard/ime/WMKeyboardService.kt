@@ -82,6 +82,7 @@ import com.wasimaster.wmkeyboard.core.selection.DetectOptions
 import com.wasimaster.wmkeyboard.core.selection.DigitScripts
 import com.wasimaster.wmkeyboard.core.selection.FindOptions
 import com.wasimaster.wmkeyboard.core.selection.FindReplace
+import com.wasimaster.wmkeyboard.core.selection.FindResult
 import com.wasimaster.wmkeyboard.core.selection.JsonReformat
 import com.wasimaster.wmkeyboard.core.selection.LineEdits
 import com.wasimaster.wmkeyboard.core.selection.MacroGates
@@ -3962,6 +3963,11 @@ open class WMKeyboardService : InputMethodService() {
             macroUndo.clear()
             macroJob?.cancel()
             macroSeq++
+            // And so were the find panel's matches.
+            if (_uiState.value.panel == PanelMode.FIND_REPLACE) {
+                findJob?.cancel()
+                _uiState.update { it.copy(panel = PanelMode.NONE, findReplace = null, panelFocus = null) }
+            }
         }
         if (restarting) {
             // Same field, new connection: the composing span went with the old
@@ -4537,6 +4543,8 @@ open class WMKeyboardService : InputMethodService() {
         // Translate deliberately does NOT — it translates its own typed
         // query, never the field.
         if (_uiState.value.panel == PanelMode.GRAMMAR) scheduleGrammarCheck()
+        // The find panel's matches follow the field the same way.
+        if (_uiState.value.panel == PanelMode.FIND_REPLACE) refreshFindMatches(reselect = false, immediate = false)
         // The AI panel's action chips are enabled by there being text to act
         // on, so they follow the field the same way.
         if (_uiState.value.panel == PanelMode.AI) refreshAiHasText()
@@ -5740,6 +5748,7 @@ open class WMKeyboardService : InputMethodService() {
             state.typingTestActive -> { typingTestType(text); true }
             state.aiCustomInputActive -> { aiCustomInputEdit { it + text }; true }
             state.pluginTypingActive -> { pluginInputEdit { it + text }; true }
+            state.findReplaceTypingActive -> { findReplaceEdit { it + text }; true }
             // The calculator's display is a buffer too: a physical keyboard
             // types the expression instead of arrow-driving the keypad.
             state.calcTypingActive -> { calcEdit { it + mapCalcChars(text) }; true }
@@ -6488,6 +6497,10 @@ open class WMKeyboardService : InputMethodService() {
             pluginInputEdit { it.dropLast(1) }
             return
         }
+        if (state.findReplaceTypingActive) {
+            findReplaceEdit { it.dropLast(1) }
+            return
+        }
         if (state.calcTypingActive) {
             calcEdit { it.dropLast(1) }
             return
@@ -6825,6 +6838,7 @@ open class WMKeyboardService : InputMethodService() {
     private fun onForwardDelete() {
         val state = _uiState.value
         if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive ||
+            state.findReplaceTypingActive ||
             state.calcTypingActive || state.converterTypingActive || state.wordSpellActive ||
             state.emojiSearchActive || state.dictionarySearchActive ||
             state.clipboardSearchActive ||
@@ -6878,6 +6892,7 @@ open class WMKeyboardService : InputMethodService() {
     fun canForwardDelete(): Boolean {
         val state = _uiState.value
         if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive ||
+            state.findReplaceTypingActive ||
             state.calcTypingActive || state.converterTypingActive || state.wordSpellActive ||
             state.emojiSearchActive || state.dictionarySearchActive ||
             state.clipboardSearchActive ||
@@ -7103,6 +7118,7 @@ open class WMKeyboardService : InputMethodService() {
             !state.typingTestActive && !state.emojiSearchActive &&
             !state.dictionarySearchActive && !state.mediaSearchActive &&
             !state.clipboardSearchActive && !state.pluginTypingActive &&
+            !state.findReplaceTypingActive &&
             !voiceBlocksResume &&
             // Last, so the one term that asks the engine anything is only
             // reached once the screen and the field have already said yes.
@@ -7272,6 +7288,7 @@ open class WMKeyboardService : InputMethodService() {
         val state = _uiState.value
         return state.emojiSearchActive || state.dictionarySearchActive ||
             state.clipboardSearchActive || state.pluginTypingActive ||
+            state.findReplaceTypingActive ||
             state.aiCustomInputActive || state.typingTestActive ||
             state.calcTypingActive || state.converterTypingActive ||
             state.wordSpellActive ||
@@ -7464,6 +7481,10 @@ open class WMKeyboardService : InputMethodService() {
         // in a window with no field focused at all.
         if (_uiState.value.pluginTypingActive) {
             pluginInputEdit { it + " " }
+            return
+        }
+        if (_uiState.value.findReplaceTypingActive) {
+            findReplaceEdit { it + " " }
             return
         }
         // The calculator's `mod ` operator is spelled with a space; the
@@ -7677,6 +7698,12 @@ open class WMKeyboardService : InputMethodService() {
         // the field rather than putting a newline in the app behind the panel.
         if (state.pluginTypingActive) {
             onPluginInputFocus(null)
+            return
+        }
+        // Enter in the find field walks to the next match; in the replace
+        // field it replaces the current one.
+        if (state.findReplaceTypingActive) {
+            onFindReplaceEnter()
             return
         }
         if (state.dictionarySearchActive) {
@@ -14388,6 +14415,9 @@ open class WMKeyboardService : InputMethodService() {
                 panelFocus = null,
                 // Arming is spent the moment a tool opens, however it opened.
                 toolPicker = null,
+                // The find fields exist exactly while their panel does (see
+                // findReplaceTypingActive); a fresh open starts them empty.
+                findReplace = if (next == PanelMode.FIND_REPLACE) FindReplaceUi() else null,
                 textEditSelecting = false,
                 emojiSearchActive = false,
                 emojiQuery = "",
@@ -14525,6 +14555,9 @@ open class WMKeyboardService : InputMethodService() {
                 // but from here the user edits it freely — the QR no longer
                 // tracks the field.
                 _uiState.update { it.copy(mediaQuery = extractFieldText().trim()) }
+            }
+            PanelMode.FIND_REPLACE -> {
+                currentInputConnection?.let { commitComposing(it, autocorrect = false) }
             }
             PanelMode.AI -> {
                 // A half-typed word is part of what the actions would run on,
@@ -20230,6 +20263,15 @@ open class WMKeyboardService : InputMethodService() {
                 onPick = ::onSelectionPick,
                 onAiAction = ::onSelectionAiAction,
             ),
+            findReplace = com.wasimaster.wmkeyboard.ime.ui.FindReplaceCallbacks(
+                onFocusField = ::onFindReplaceFocus,
+                onToggle = ::onFindReplaceToggle,
+                onPrevious = ::onFindPrevious,
+                onNext = ::onFindNext,
+                onReplace = ::onFindReplaceOne,
+                onReplaceAll = ::onFindReplaceAll,
+                onUndo = ::onFindReplaceUndo,
+            ),
         )
     }
 
@@ -20316,8 +20358,9 @@ open class WMKeyboardService : InputMethodService() {
                 _uiState.update { it.copy(selectionMacros = null) }
             }
             // With the selection gone, so is everything the undo stack
-            // described, and there is nothing left to read aloud.
-            macroUndo.clear()
+            // described, and there is nothing left to read aloud. The find
+            // panel keeps its session: it moves the selection itself.
+            if (_uiState.value.panel != PanelMode.FIND_REPLACE) macroUndo.clear()
             stopReadAloud()
         }
         if (!settings.selectionMacros.enabled) return clear()
@@ -20343,7 +20386,9 @@ open class WMKeyboardService : InputMethodService() {
         // A selection moved onto other text is a new session: the rewrites
         // remembered were about the old one. Our own rewrite's echo passes,
         // because what is selected is exactly what was committed.
-        macroUndo.peek()?.let { if (!MacroUndo.stillHolds(it, selected)) macroUndo.clear() }
+        if (_uiState.value.panel != PanelMode.FIND_REPLACE) {
+            macroUndo.peek()?.let { if (!MacroUndo.stillHolds(it, selected)) macroUndo.clear() }
+        }
         val offer = selectionMacroOffer(text, settings, selectionSpansField(ic, selStart, selEnd), _uiState.value.selectionMacros)
         if (offer == _uiState.value.selectionMacros) return
         _uiState.update { it.copy(selectionMacros = offer) }
@@ -20601,7 +20646,17 @@ open class WMKeyboardService : InputMethodService() {
         val ic = currentInputConnection ?: return
         when (entry) {
             is MacroUndoEntry.Selection -> {
-                val now = runCatching { ic.getSelectedText(0)?.toString() }.getOrNull()
+                var now = runCatching { ic.getSelectedText(0)?.toString() }.getOrNull()
+                // The find panel walks on to the next match after each
+                // replace, so the rewrite to undo is usually behind the
+                // selection: go back to where it was made and look there.
+                if (now != entry.replacement && entry.start >= 0) {
+                    ic.finishComposingText()
+                    ic.setSelection(entry.start, entry.start + entry.replacement.length)
+                    expectedSelStart = entry.start
+                    expectedSelEnd = entry.start + entry.replacement.length
+                    now = runCatching { ic.getSelectedText(0)?.toString() }.getOrNull()
+                }
                 if (now != entry.replacement) {
                     macroUndo.clear()
                     republishSelectionMacros(now)
@@ -20700,9 +20755,222 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update { it.copy(selectionMacros = offer) }
     }
 
-    /** Opens the Find and replace panel on the selection. */
+    // ---- find and replace ----
+
+    /** The field as last extracted for the panel, and where its offset 0 sits in the editor. */
+    private var findText: String = ""
+    private var findOrigin: Int? = null
+    private var findJob: Job? = null
+    private var findSeq = 0
+
+    /** Opens the panel with the selection as the query and its first match selected. */
     private fun openFindReplace(offer: SelectionMacroOffer) {
-        // Filled in with the panel.
+        onPanelChange(PanelMode.FIND_REPLACE, haptic = false)
+        if (_uiState.value.panel != PanelMode.FIND_REPLACE) return
+        _uiState.update { it.copy(findReplace = FindReplaceUi(query = offer.text, undoDepth = macroUndo.size)) }
+        refreshFindMatches(reselect = true)
+    }
+
+    /** Backspace and character edits to whichever field is focused. */
+    private fun findReplaceEdit(transform: (String) -> String) {
+        val fr = _uiState.value.findReplace ?: return
+        val next = if (fr.focused == FindReplaceField.FIND) {
+            fr.copy(query = transform(fr.query).take(FIND_MAX_QUERY))
+        } else {
+            fr.copy(replacement = transform(fr.replacement).take(FIND_MAX_QUERY))
+        }
+        _uiState.update { it.copy(findReplace = next) }
+        // A pattern is matched after a pause, since every keystroke of one
+        // is a compile; plain text is cheap enough to follow the keys.
+        if (fr.focused == FindReplaceField.FIND) refreshFindMatches(reselect = true, immediate = !next.regex)
+    }
+
+    fun onFindReplaceFocus(field: FindReplaceField) {
+        _uiState.update { it.copy(findReplace = it.findReplace?.copy(focused = field)) }
+    }
+
+    fun onFindReplaceToggle(option: FindOption) {
+        vibrate()
+        _uiState.update { state ->
+            val fr = state.findReplace ?: return@update state
+            state.copy(
+                findReplace = when (option) {
+                    FindOption.CASE -> fr.copy(caseSensitive = !fr.caseSensitive)
+                    FindOption.WHOLE_WORD -> fr.copy(wholeWord = !fr.wholeWord)
+                    FindOption.REGEX -> fr.copy(regex = !fr.regex)
+                },
+            )
+        }
+        refreshFindMatches(reselect = true)
+    }
+
+    private fun onFindReplaceEnter() {
+        val fr = _uiState.value.findReplace ?: return
+        if (fr.focused == FindReplaceField.FIND) onFindNext() else onFindReplaceOne()
+    }
+
+    fun onFindNext() = stepMatch(+1)
+
+    fun onFindPrevious() = stepMatch(-1)
+
+    private fun stepMatch(delta: Int) {
+        val fr = _uiState.value.findReplace ?: return
+        val origin = findOrigin ?: return
+        if (fr.matches.isEmpty()) return
+        vibrate()
+        val selStart = if (expectedSelStart < 0 || expectedSelEnd < 0) 0 else minOf(expectedSelStart, expectedSelEnd) - origin
+        selectMatch(FindReplaceGlue.stepIndex(fr.matches, fr.current, selStart, delta))
+    }
+
+    /**
+     * Re-extracts the field and matches the query over it, off the main
+     * thread and under the matcher's time budget. [reselect] selects the
+     * first match when none is the selection already; a refresh after the
+     * user's own caret move must not.
+     */
+    private fun refreshFindMatches(reselect: Boolean, immediate: Boolean = true) {
+        findJob?.cancel()
+        val seq = ++findSeq
+        findJob = serviceScope.launch {
+            if (!immediate) delay(FIND_DEBOUNCE_MS)
+            if (_uiState.value.panel != PanelMode.FIND_REPLACE) return@launch
+            val fr = _uiState.value.findReplace ?: return@launch
+            val text = extractFieldText()
+            findText = text
+            findOrigin = fieldTextOrigin
+            val origin = findOrigin
+            if (fr.query.isEmpty()) {
+                _uiState.update {
+                    it.copy(
+                        findReplace = it.findReplace?.copy(
+                            matches = emptyList(), current = -1, truncated = false, error = null,
+                            addressable = origin != null, searching = false, undoDepth = macroUndo.size,
+                        ),
+                    )
+                }
+                return@launch
+            }
+            _uiState.update { it.copy(findReplace = it.findReplace?.copy(searching = true)) }
+            val result = withContext(Dispatchers.Default) {
+                FindReplace.find(text, fr.query, fr.options(), FIND_BUDGET_MS)
+            }
+            if (seq != findSeq || _uiState.value.panel != PanelMode.FIND_REPLACE) return@launch
+            val matches = (result as? FindResult.Matches)?.ranges.orEmpty()
+            val error = when (result) {
+                is FindResult.BadPattern -> getString(R.string.ime_find_regex_error, result.reason.lineSequence().first())
+                FindResult.TimedOut -> getString(R.string.ime_find_timeout)
+                is FindResult.Matches -> if (origin == null) getString(R.string.ime_find_not_addressable) else null
+            }
+            val current = if (origin == null || expectedSelStart < 0 || expectedSelEnd < 0) {
+                -1
+            } else {
+                FindReplaceGlue.currentMatchIndex(
+                    matches, minOf(expectedSelStart, expectedSelEnd) - origin, maxOf(expectedSelStart, expectedSelEnd) - origin,
+                )
+            }
+            _uiState.update {
+                it.copy(
+                    findReplace = it.findReplace?.copy(
+                        matches = matches, current = current, truncated = (result as? FindResult.Matches)?.truncated == true,
+                        error = error, addressable = origin != null, searching = false, undoDepth = macroUndo.size,
+                    ),
+                )
+            }
+            if (reselect && current < 0 && matches.isNotEmpty() && origin != null) selectMatch(0)
+        }
+    }
+
+    /** Selects match [index] in the field and remembers it as the current one. */
+    private fun selectMatch(index: Int) {
+        val fr = _uiState.value.findReplace ?: return
+        val origin = findOrigin ?: return
+        val range = fr.matches.getOrNull(index) ?: return
+        val ic = currentInputConnection ?: return
+        ic.finishComposingText()
+        ic.setSelection(origin + range.first, origin + range.last + 1)
+        expectedSelStart = origin + range.first
+        expectedSelEnd = origin + range.last + 1
+        _uiState.update { it.copy(findReplace = it.findReplace?.copy(current = index)) }
+    }
+
+    /**
+     * Replaces the current match and walks on to the next. The field is
+     * checked first: the match must still be where the last extraction put
+     * it, or the panel re-reads instead of splicing blind.
+     */
+    fun onFindReplaceOne() {
+        val fr = _uiState.value.findReplace ?: return
+        val origin = findOrigin ?: return toast(R.string.ime_find_not_addressable)
+        val index = fr.current
+        val range = fr.matches.getOrNull(index) ?: return
+        val ic = currentInputConnection ?: return
+        val selected = runCatching { ic.getSelectedText(0)?.toString() }.getOrNull()
+        if (selected != findText.substring(range.first, range.last + 1)) {
+            refreshFindMatches(reselect = true)
+            return
+        }
+        vibrate()
+        val edit = FindReplace.replaceOne(findText, range, fr.replacement, fr.query, fr.options())
+        rewriteSelection(edit.text, raw = true)
+        findText = findText.replaceRange(edit.start, edit.end, edit.text)
+        val remaining = FindReplaceGlue.shiftMatches(fr.matches, index, edit.text.length - (edit.end - edit.start))
+        _uiState.update {
+            it.copy(findReplace = it.findReplace?.copy(matches = remaining, current = -1, undoDepth = macroUndo.size))
+        }
+        // The match that followed now sits where the replaced one was.
+        if (remaining.isNotEmpty()) selectMatch(index.coerceAtMost(remaining.lastIndex))
+        // The origin is unchanged by a splice; a re-extract only confirms it.
+        if (origin < 0) refreshFindMatches(reselect = false)
+    }
+
+    /**
+     * Replaces every match in one batch, back to front, as one undo entry.
+     * The replacement at the current match stays selected so the bar and its
+     * Undo are there when the panel closes.
+     */
+    fun onFindReplaceAll() {
+        val fr = _uiState.value.findReplace ?: return
+        if (fr.matches.isEmpty() || fr.truncated) return
+        val ic = currentInputConnection ?: return
+        val origin = findOrigin
+        val before = findText
+        val edits = FindReplace.replaceAll(before, fr.matches, fr.replacement, fr.query, fr.options())
+        val after = FindReplace.apply(before, edits)
+        val anchor = fr.matches.getOrNull(fr.current) ?: fr.matches.first()
+        vibrate()
+        if (origin != null) {
+            if (!replaceFieldSpans(edits.map { GrammarEdit(it.start, it.end, it.text) })) return
+        } else if (fieldTextComplete) {
+            replaceFieldText(after)
+        } else {
+            toast(R.string.ime_find_not_addressable)
+            return
+        }
+        macroUndo.push(MacroUndoEntry.WholeField(before, after, edits, anchor.first, anchor.last + 1))
+        findText = after
+        val newStart = FindReplaceGlue.afterOffset(edits, anchor.first)
+        val newEnd = newStart + edits.first { it.start == anchor.first }.text.length
+        if (origin != null && newEnd > newStart) {
+            ic.setSelection(origin + newStart, origin + newEnd)
+            expectedSelStart = origin + newStart
+            expectedSelEnd = origin + newEnd
+            republishSelectionMacros(after.substring(newStart, newEnd))
+        } else {
+            republishSelectionMacros(null)
+        }
+        _uiState.update {
+            it.copy(findReplace = it.findReplace?.copy(matches = emptyList(), current = -1, undoDepth = macroUndo.size))
+        }
+        // A replacement that contains the query matches again; count it.
+        refreshFindMatches(reselect = false)
+    }
+
+    /** The panel's Undo: the bar's, then the matches read again. */
+    fun onFindReplaceUndo() {
+        if (macroUndo.isEmpty) return
+        vibrate()
+        onSelectionUndo()
+        refreshFindMatches(reselect = false)
     }
 
     /** Removes the selected text, the way a backspace over a selection does. */
@@ -21773,6 +22041,7 @@ open class WMKeyboardService : InputMethodService() {
             state.mediaSearchActive && state.panel.hasMediaSearch -> state.mediaQuery.isNotEmpty()
             state.pluginTypingActive ->
                 state.pluginInputs[state.pluginFocusedInput].orEmpty().isNotEmpty()
+            state.findReplaceTypingActive -> state.findReplace?.focusedText?.isNotEmpty() == true
             else -> canDeleteField()
         }
     }
@@ -23884,6 +24153,7 @@ open class WMKeyboardService : InputMethodService() {
             (state.mediaSearchActive && state.panel.hasMediaSearch) ||
             state.dictionarySearchActive || state.clipboardSearchActive ||
             state.typingTestActive || state.pluginTypingActive ||
+            state.findReplaceTypingActive ||
             state.aiCustomInputActive || state.wordSpellActive ||
             state.calcTypingActive || state.converterTypingActive
     }
@@ -25184,6 +25454,11 @@ private const val MAX_MACRO_SELECTION = 4000
 
 /** A selection longer than this is not a calendar event title anybody wants. */
 private const val MAX_EVENT_TITLE = 100
+
+/** The find and replace fields' length caps and the matcher's pacing. */
+private const val FIND_MAX_QUERY = 500
+private const val FIND_BUDGET_MS = 50L
+private const val FIND_DEBOUNCE_MS = 200L
 
 /** WhatsApp, and the business build that registers its own package. */
 private val WHATSAPP_PACKAGES = listOf("com.whatsapp", "com.whatsapp.w4b")

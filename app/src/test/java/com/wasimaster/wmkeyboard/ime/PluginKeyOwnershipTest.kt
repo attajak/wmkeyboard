@@ -108,7 +108,7 @@ class PluginKeyOwnershipTest {
         val owners = listOf(
             "emojiSearchActive", "dictionarySearchActive", "clipboardSearchActive",
             "typingTestActive", "pluginTypingActive", "aiCustomInputActive",
-            "calcTypingActive", "converterTypingActive",
+            "calcTypingActive", "converterTypingActive", "findReplaceTypingActive",
         )
         assertEquals(
             "buffers the soft keys feed but a physical keyboard cannot reach",
@@ -133,6 +133,27 @@ class PluginKeyOwnershipTest {
             "service conditions that hand the keys to the clipboard search but not to the calculator",
             emptyList<String>(),
             missing,
+        )
+    }
+
+    /**
+     * The find and replace fields are the newest buffers on the same lists,
+     * with the same way to drift.
+     */
+    @Test
+    fun `the service treats the find fields as owning the keys too`() {
+        val conditions = ownerConditions(serviceSource)
+        assertTrue("no keystroke-owner conditions found in the service", conditions.size >= 3)
+        assertEquals(
+            "service conditions that hand the keys to the clipboard search but not to the find fields",
+            emptyList<String>(),
+            conditions.filterNot { it.contains("findReplaceTypingActive") },
+        )
+        val pad = screenSource.substringAfter("private fun numericPadActive(").substringBefore("\n\n")
+        assertTrue("a numeric field would give the find fields a digits-only pad", pad.contains("findReplaceTypingActive"))
+        assertTrue(
+            "no KeyRows are drawn for findReplaceTypingActive",
+            Regex("""if \(state\.findReplaceTypingActive\) \{\s*KeyRows\(""").containsMatchIn(screenSource),
         )
     }
 

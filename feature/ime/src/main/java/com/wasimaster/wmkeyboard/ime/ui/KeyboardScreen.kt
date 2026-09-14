@@ -8558,6 +8558,9 @@ private fun KeyboardBody(
             // anything to draw is the animated half, below.
             val macroRowHost = state.settings.selectionMacros.enabled &&
                 state.settings.selectionMacros.placement == SelectionMacroPlacement.OWN_ROW &&
+                // The panel carries Undo and the stepping itself; two rows
+                // moving the same selection would fight over it.
+                state.panel != PanelMode.FIND_REPLACE &&
                 !fullBleed && !emojiSearching && !clipboardSearching && !lockHidden
             // Disabling the toolbar drops the whole strip — suggestions and
             // tools alike — so the keys claim its height.
@@ -9249,6 +9252,7 @@ private fun KeyboardBody(
                     )
                 }
                 PanelMode.QR_GEN -> QrGeneratorPanel(state, onQrSend)
+                PanelMode.FIND_REPLACE -> FindReplacePanel(state, toolHold.findReplace)
                 PanelMode.PASSWORD_GEN -> FullBleedTool(
                     state, title = "",
                     onClose = { onPanelChange(PanelMode.PASSWORD_GEN) },
@@ -9448,6 +9452,10 @@ private fun KeyboardBody(
             // every keystroke is routed into the box, so leaving the rows out
             // left a focused field with nothing on screen to type into it.
             if (state.pluginTypingActive) {
+                KeyRows(state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect)
+            }
+            // And for the Find and replace fields, the same trap a third time.
+            if (state.findReplaceTypingActive) {
                 KeyRows(state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect)
             }
             // Same for a media panel's search box (translate is one now —
@@ -14108,6 +14116,7 @@ private fun numericPadActive(state: KeyboardUiState): Boolean =
         !state.clipboardSearchActive &&
         !(state.mediaSearchActive && state.panel.hasMediaSearch) &&
         !state.pluginTypingActive &&
+        !state.findReplaceTypingActive &&
         !state.typingTestActive
 
 
@@ -18810,6 +18819,8 @@ data class ToolHoldCallbacks(
      * one already on the call, and the caller cannot afford another parameter.
      */
     val selection: SelectionMacroCallbacks = SelectionMacroCallbacks(),
+    /** The Find and replace panel's callbacks; here for the same reason as [dictionaryBar]. */
+    val findReplace: FindReplaceCallbacks = FindReplaceCallbacks(),
 )
 
 // ---- snippets panel ----

@@ -506,6 +506,13 @@ enum class PanelMode {
      * #62). A tap opens that layout and closes this.
      */
     CUSTOM_LAYOUTS,
+
+    /**
+     * Find and replace over the field, opened from the selection bar's Replace
+     * chip. Two buffers of its own (see [FindReplaceUi]); the key rows stay up
+     * to type into them.
+     */
+    FIND_REPLACE,
 }
 
 /**
@@ -657,6 +664,8 @@ fun panelFocusRegions(panel: PanelMode): List<FocusRegion> = when (panel) {
     // screen's Restart — during a run the keys are the test.
     PanelMode.MEDIA_CONTROL, PanelMode.PLUGINS -> listOf(FocusRegion.RESULTS)
     PanelMode.QR_GEN, PanelMode.TYPING_TEST -> listOf(FocusRegion.ACTIONS)
+    // The two fields, the three toggles, then the buttons.
+    PanelMode.FIND_REPLACE -> listOf(FocusRegion.SEARCH, FocusRegion.CHIPS, FocusRegion.ACTIONS)
     PanelMode.PASSWORD_GEN ->
         listOf(FocusRegion.CHIPS, FocusRegion.ACTIONS, FocusRegion.RESULTS)
     // The dialect and Fix-all chips, then the lint cards. Seed-only (see
@@ -2246,6 +2255,8 @@ data class KeyboardUiState(
     val pluginInputs: Map<String, String> = emptyMap(),
     /** Which plugin input the keys are typing into, or null when they go to the field. */
     val pluginFocusedInput: String? = null,
+    /** The Find and replace panel's fields and matches; null while it is closed. */
+    val findReplace: FindReplaceUi? = null,
     val webSearch: WebSearchUi = WebSearchUi.Idle,
     val imageSearch: ImageSearchUi = ImageSearchUi.Idle,
     val translate: TranslateUi = TranslateUi(),
@@ -2455,6 +2466,14 @@ data class KeyboardUiState(
         get() = panel == PanelMode.PLUGINS && pluginFocusedInput != null
 
     /**
+     * Whether keystrokes belong to the Find and replace panel's fields. The
+     * same contract as [pluginTypingActive]: panel *and* state, so neither
+     * alone can leak a keystroke into the app behind the keyboard.
+     */
+    val findReplaceTypingActive: Boolean
+        get() = panel == PanelMode.FIND_REPLACE && findReplace != null
+
+    /**
      * Whether keystrokes belong to the word card's spelling editor rather
      * than to the text field (#138) — true while the spelling bar is up, so
      * respelling a suggestion never writes into the app behind the keyboard.
@@ -2475,7 +2494,7 @@ data class KeyboardUiState(
     val keysTakenByKeyboard: Boolean
         get() = typingTestActive || calcTypingActive || converterTypingActive ||
             aiCustomInputActive || pluginTypingActive || emojiSearchActive ||
-            wordSpellActive
+            wordSpellActive || findReplaceTypingActive
 
     /**
      * The item a panel should ring in [region], or null when the ring is

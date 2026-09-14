@@ -593,5 +593,27 @@
     <string name="ime_selection_macro_bengali_unavailable_toast">Bengali is not loaded</string>
     <string name="ime_selection_macro_no_app_toast">No app can open this</string>
     <string name="ime_find_not_addressable">This field cannot be searched</string>
+    <!-- The Find and replace panel. -->
+    <string name="ime_find_hint">Find</string>
+    <string name="ime_replace_hint">Replace with</string>
+    <string name="ime_find_case_label" translatable="false">Aa</string>
+    <string name="ime_find_case_desc">Match case</string>
+    <string name="ime_find_whole_word_label" translatable="false">[ab]</string>
+    <string name="ime_find_whole_word_desc">Whole word</string>
+    <string name="ime_find_regex_label" translatable="false">.*</string>
+    <string name="ime_find_regex_desc">Regular expression</string>
+    <string name="ime_find_prev_desc">Previous match</string>
+    <string name="ime_find_next_desc">Next match</string>
+    <string name="ime_find_replace_action">Replace</string>
+    <string name="ime_find_replace_all_action">All</string>
+    <!-- %1$d the match selected, %2$d how many there are -->
+    <string name="ime_find_count">%1$d of %2$d</string>
+    <!-- %1$d how many matches there are, none of them selected -->
+    <string name="ime_find_count_none_selected">%1$d found</string>
+    <string name="ime_find_no_matches">No matches</string>
+    <string name="ime_find_too_many">Showing the first %1$d</string>
+    <string name="ime_find_regex_error">Pattern: %1$s</string>
+    <string name="ime_find_timeout">The pattern takes too long on this text</string>
+    <string name="ime_find_searching">Searching</string>
 
 </resources>
