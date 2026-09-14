@@ -229,6 +229,14 @@ data class LayoutSet(
      * shipped one — see `KeyboardUiState.panelLayout`.
      */
     val panels: Map<PanelKind, PanelLayoutSpec> = emptyMap(),
+    /**
+     * The layout's own theme (`LayoutSpec.themeId`), before any layer lays its
+     * own over it. The compiled grids carry the merged answer, which is right
+     * for drawing the grid and wrong for a panel opened over it: a panel with
+     * no theme of its own inherits the *layout's*, as the editor shows it, not
+     * the letters layer's (issue #196).
+     */
+    val themeId: String? = null,
 ) {
     /**
      * Rows the key grid reserves.

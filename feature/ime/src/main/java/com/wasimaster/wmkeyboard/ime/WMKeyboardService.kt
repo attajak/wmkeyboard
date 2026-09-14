@@ -8062,6 +8062,7 @@ open class WMKeyboardService : InputMethodService() {
             },
             gridWidth = gridWidth,
             secondaries = secondaries,
+            themeId = safe.themeId,
         )
         layoutSetCache[key] = spec to set
         return set

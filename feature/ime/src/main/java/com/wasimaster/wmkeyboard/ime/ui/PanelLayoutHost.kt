@@ -92,15 +92,19 @@ internal fun KeyboardUiState.panelLayout(kind: PanelKind): PanelLayoutSpec {
 }
 
 /**
- * The theme the grid on screen asks for (issue #61, and #63's panels): an
- * open panel layout's own theme first, then the typing grid's — a layer's,
- * else its layout's — else null for whatever the settings say. A panel with
- * no theme of its own draws in its layout's, so a themed layout's panels
- * match it unless told otherwise.
+ * The theme the grid on screen asks for (issue #61, and #63's panels): with
+ * no panel open, the typing grid's — a layer's, else its layout's — else
+ * null for whatever the settings say. With a panel open, the panel layout's
+ * own theme, else the *layout's*, never the typing layer's: a panel with no
+ * theme of its own draws in its layout's, so a themed layout's panels match
+ * it unless told otherwise, but a theme given to the letters layer alone is
+ * that layer's and stops at its edge (issue #196). That is the rule the
+ * editor's panel tab previews with, and the keyboard has to agree with it.
  */
-internal fun screenThemeId(state: KeyboardUiState): String? =
-    state.panel.layoutKind?.let { state.panelLayout(it).grid.themeId }
-        ?: currentLayout(state).themeId
+internal fun screenThemeId(state: KeyboardUiState): String? {
+    val panelKind = state.panel.layoutKind ?: return currentLayout(state).themeId
+    return state.panelLayout(panelKind).grid.themeId ?: state.layouts.themeId
+}
 
 /**
  * The first row of an emoji layout when it is nothing but the tab strip and

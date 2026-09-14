@@ -382,6 +382,7 @@ private fun previewLayoutSet(
             safe.numberRowFor(LayoutLayer.FN)?.let { put(LayoutMode.FN, it) }
         },
         gridWidth = gridWidth,
+        themeId = safe.themeId,
         secondaries = secondaryLayouts(customs).associate { secondary ->
             secondary.id to secondary.repair().spec.compile(LayoutLayer.LETTERS).unthemed()
         },
