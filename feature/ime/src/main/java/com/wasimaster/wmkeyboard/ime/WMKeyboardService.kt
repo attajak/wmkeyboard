@@ -419,6 +419,7 @@ import com.wasimaster.wmkeyboard.core.otp.NotificationOtpCapture
 import com.wasimaster.wmkeyboard.core.voice.MicBlockWatcher
 import com.wasimaster.wmkeyboard.core.voice.VoiceInputEngine
 import com.wasimaster.wmkeyboard.core.voice.VoicePunctuation
+import com.wasimaster.wmkeyboard.core.voice.VoiceCasing
 import com.wasimaster.wmkeyboard.core.voice.VoiceSpacing
 import com.wasimaster.wmkeyboard.core.voice.WhisperRecorder
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperEngine
@@ -1790,6 +1791,12 @@ open class WMKeyboardService : InputMethodService() {
     private var voiceNeedsLeadingSpace = false
     /** Trailing space needed when dictation begins before a word. */
     private var voiceNeedsTrailingSpace = false
+    /**
+     * Whether the caret sits where a sentence begins, by the same rule the keys
+     * shift for one. The recognizer capitalizes every utterance as if it did;
+     * this says whether to let that stand (issue #182).
+     */
+    private var voiceSentenceStart = false
     /** User tapped stop: the pending final must not chain another utterance. */
     private var voiceStopRequested = false
     /** Consecutive empty utterances in continuous mode; give up after a few. */
@@ -14855,7 +14862,7 @@ open class WMKeyboardService : InputMethodService() {
         val ic = currentInputConnection ?: return
         // Flush the half-typed word so dictation appends after it.
         commitComposing(ic, autocorrect = false)
-        refreshVoiceSpacing()
+        refreshVoiceContext()
         val generation = ++voiceGeneration
         // Offline-model chip: check once per language, not per utterance
         // (continuous mode restarts sessions constantly).
@@ -14911,7 +14918,8 @@ open class WMKeyboardService : InputMethodService() {
                     // The phrase lands whole at the next pause; until then it
                     // is only in the status line.
                     if (!interactiveVoice()) {
-                        currentInputConnection?.setComposingText(spacedVoiceText(text), 1)
+                        currentInputConnection
+                            ?.setComposingText(spacedVoiceText(casedVoiceText(text)), 1)
                     }
                     _uiState.update { it.copy(voice = it.voice.copy(partial = text)) }
                 }
@@ -15175,11 +15183,13 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * Puts one finished utterance into the field, however it was recognised.
      *
-     * Interactive voice typing reads the spacing here instead of at the start
-     * of the session: the cursor has been moving under the open microphone the
-     * whole time, so where the words go is only known now. Plain voice typing
-     * takes neither the spoken-punctuation pass nor the spacing, because there
-     * the point is the words exactly as they were said.
+     * Interactive voice typing reads the spacing and the capital here instead
+     * of at the start of the session: the cursor has been moving under the
+     * open microphone the whole time, so where the words go is only known now.
+     * Plain voice typing takes neither the spoken-punctuation pass nor the
+     * spacing, because there the point is the words exactly as they were said
+     * — and no capital at all, since the one the recognizer puts on is not one
+     * that was said.
      */
     private fun commitVoiceUtterance(text: String, tag: String) {
         val settings = _uiState.value.settings
@@ -15194,11 +15204,16 @@ open class WMKeyboardService : InputMethodService() {
         // by a caret tap while a transcription was in flight — has to commit
         // first, or the dictated text replaces it.
         commitComposing(ic, autocorrect = false)
-        if (settings.voiceBar.interactiveTyping()) refreshVoiceSpacing()
-        val spaced = if (plain) processed else spacedVoiceText(processed)
+        if (settings.voiceBar.interactiveTyping()) refreshVoiceContext()
+        val cased = casedVoiceText(processed)
+        val spaced = if (plain) cased else spacedVoiceText(cased)
         ic.commitText(spaced, 1)
-        learn(processed)
+        learn(cased)
         lastVoiceCommit = spaced
+        // A chained session's next utterance lands after this one, so what it
+        // needs in front of it — a space, a capital — is read now that the
+        // field holds it, not from wherever the session began (#182).
+        refreshVoiceContext()
     }
 
     /** Intelligent leading and trailing spaces when dictation starts mid-text or replaces selection. */
@@ -15206,17 +15221,27 @@ open class WMKeyboardService : InputMethodService() {
         VoiceSpacing.format(text, voiceNeedsLeadingSpace, voiceNeedsTrailingSpace)
 
     /**
-     * Reads the characters around the cursor to decide whether dictated text
-     * needs a space in front of it or behind it. Run at the start of a session,
-     * and again after an edit made from the panel's own rail — a space typed
-     * there must not turn into two once the transcription lands.
+     * The recognizer's automatic capital kept only where the keys would shift
+     * for one; never in plain voice typing, which wants the words as said.
      */
-    private fun refreshVoiceSpacing() {
+    private fun casedVoiceText(text: String): String =
+        VoiceCasing.apply(text, sentenceStart = !plainVoice() && voiceSentenceStart)
+
+    /**
+     * Reads the characters around the cursor to decide whether dictated text
+     * needs a space in front of it or behind it, and whether it opens a
+     * sentence. Run at the start of a session, after every utterance lands,
+     * and again after an edit made from the panel's own rail — a space typed
+     * there must not turn into two once the transcription lands, and a full
+     * stop typed there means the next phrase does start a sentence.
+     */
+    private fun refreshVoiceContext() {
         val ic = currentInputConnection ?: return
         val beforeChar = ic.getTextBeforeCursor(1, 0)?.lastOrNull()
         val afterChar = ic.getTextAfterCursor(1, 0)?.firstOrNull()
         voiceNeedsLeadingSpace = VoiceSpacing.needsLeadingSpace(beforeChar, afterChar)
         voiceNeedsTrailingSpace = VoiceSpacing.needsTrailingSpace(beforeChar, afterChar)
+        voiceSentenceStart = shouldAutoCapitalize()
     }
 
     /**
@@ -15266,7 +15291,7 @@ open class WMKeyboardService : InputMethodService() {
         } finally {
             voiceRailKeyInFlight = false
         }
-        if (voiceActive()) refreshVoiceSpacing()
+        if (voiceActive()) refreshVoiceContext()
     }
 
     /** A dictation session is mid-flight: recording, finishing, or transcribing. */
