@@ -1079,6 +1079,7 @@ class SuggestionEngine(
             FuzzyBeamSearch.ScoredCandidate(
                 c.word, c.score - LANG_MISMATCH_DAMP, c.editCost, c.edits,
                 c.completedChars, c.tier, c.dictScore, c.userScore - LANG_MISMATCH_DAMP,
+                c.accents,
             )
         }
         if (!changed) return ranked
@@ -1394,6 +1395,15 @@ class SuggestionEngine(
          * confidence, while a lone two-edit hit on a rare word does not.
          */
         private const val SOLO_RUNNER_UP_SCORE = 1.0
+
+        /**
+         * How many times commoner an accented twin must be before the
+         * accentless spelling stops counting as a word of its own; see
+         * [accentShadowed]. The Polish stand-ins sit at 50 to 90 times (`juz`,
+         * `sie`, `moze`). The real pairs sit well under 20: `ze`/`że` at 7,
+         * Spanish `mas`/`más` at 15.
+         */
+        private const val ACCENT_SHADOW_RATIO = 20.0
 
         /**
          * Share of the silent-replacement margin a candidate has to clear to
@@ -2306,6 +2316,60 @@ class SuggestionEngine(
     }
 
     /**
+     * Whether the word lists hold [lower] only as the accentless spelling of a
+     * far commoner word (#200).
+     *
+     * Frequency lists come from real text, and real text is full of Polish
+     * typed without its accents. The Polish list holds `juz` 12,683 times
+     * beside `już` 690,940 times, and `sie` beside `się`. As known words those
+     * spellings stopped the fix from ever firing. A spelling that its accented
+     * twin outnumbers [ACCENT_SHADOW_RATIO] times over is that twin typed
+     * without the long-press. Under the ratio both spellings are words people
+     * mean: Polish `ze` and `że`, Spanish `mas` and `más`.
+     *
+     * A word in a custom list or in Android's personal dictionary was put
+     * there by the user, and is never shadowed.
+     */
+    private fun accentShadowed(lower: String, touch: List<TouchPoint?>?): Boolean {
+        if (customDictionary.contains(lower) || systemDictionary.contains(lower)) return false
+        // The same walk decideOrdinary ranks, so this reads the memoised result.
+        val ranked = rankedFor(lower, FuzzyBeamSearch.AUTOCORRECT_K / 2, touch)
+        val twin = ranked
+            .filter { it.edits == 0 && it.completedChars == 0 && it.accents > 0 }
+            // The accent price given back, so the ratio is between the two
+            // frequencies alone.
+            .maxOfOrNull { it.dictScore + it.accents * FuzzyBeamSearch.COST_ACCENT }
+            ?: return false
+        // Read from the lists directly. A stand-in is rare next to its twin,
+        // and the walk's top ranks fill with the twin's own inflections long
+        // before they reach it: `mowie` never makes the top 32 for `mówię`.
+        val typed = dictionaryScore(lower)
+        if (typed == Double.NEGATIVE_INFINITY) return false
+        return twin - typed >= ln(ACCENT_SHADOW_RATIO)
+    }
+
+    /**
+     * [lower]'s best score in the dictionary-tier walk sources, on the walk's
+     * own scale; NEGATIVE_INFINITY when no list holds it.
+     */
+    private fun dictionaryScore(lower: String): Double {
+        var best = Double.NEGATIVE_INFINITY
+        for (src in walkSources()) {
+            if (src.tier != FuzzyBeamSearch.Tier.DICTIONARY) continue
+            val walker = src.walker
+            var node = walker.root
+            for (ch in lower) {
+                node = walker.child(node, ch)
+                if (node < 0) break
+            }
+            if (node >= 0 && walker.isWord(node)) {
+                best = maxOf(best, src.logWeight + ln(1.0 + walker.frequency(node)))
+            }
+        }
+        return best
+    }
+
+    /**
      * The engine's own verdict on [word], from the dictionaries and the walk
      * alone; see [decideCorrection] for the contract.
      */
@@ -2315,7 +2379,11 @@ class SuggestionEngine(
         touch: List<TouchPoint?>?,
         timingMultiplier: Double,
     ): CorrectionDecision {
-        if (inDictionaries(lower) || userLexicon.isEstablished(lower, learnedWordMinCount)) {
+        // A shadowed spelling is protected by neither the lists nor the
+        // lexicon. The lexicon learned it only because a list vouched for it.
+        if (!accentShadowed(lower, touch) &&
+            (inDictionaries(lower) || userLexicon.isEstablished(lower, learnedWordMinCount))
+        ) {
             return NO_CORRECTION
         }
         // Contact and app names are known words too — never "corrected" away.
@@ -2330,7 +2398,7 @@ class SuggestionEngine(
         // silent-replacement decision stays on the same top-8 it has always
         // judged: a rank-20 word must never fire as a correction, nor may it
         // appear as the runner-up that tightens (or loosens) the gate.
-        val candidates = rankedFor(
+        val shaped = rankedFor(
             lower, FuzzyBeamSearch.AUTOCORRECT_K / 2, touch,
         ).take(FuzzyBeamSearch.AUTOCORRECT_K).filter { c ->
             // Silent replacement only trusts classic one-edit shapes: a single
@@ -2345,7 +2413,13 @@ class SuggestionEngine(
             // inflection ("questiom" -> "questions") must be neither a target
             // nor the runner-up that blocks the real fix.
             val correctionShaped = when (c.edits) {
-                0 -> c.completedChars == 1 && c.word != lower
+                // The typed word with its accents put back is a fix in place:
+                // same letters, same length.
+                0 -> if (c.accents > 0) {
+                    c.completedChars == 0
+                } else {
+                    c.completedChars == 1 && c.word != lower
+                }
                 1 -> c.completedChars == 0
                 else -> false
             }
@@ -2360,7 +2434,7 @@ class SuggestionEngine(
             // as a *correction* it is the old insert-at-end edit and must
             // carry that edit's weight — both as a target and as the
             // runner-up that gates someone else's correction.
-            if (c.edits == 0) {
+            if (c.edits == 0 && c.accents == 0) {
                 FuzzyBeamSearch.ScoredCandidate(
                     c.word, c.score - FuzzyBeamSearch.COST_INSERT_ADJACENT,
                     FuzzyBeamSearch.COST_INSERT_ADJACENT, 1, 0, c.tier,
@@ -2380,7 +2454,7 @@ class SuggestionEngine(
                 CorrectionStats.Penalty.PENALIZED -> FuzzyBeamSearch.ScoredCandidate(
                     c.word, c.score - PAIR_PENALTY, c.editCost, c.edits,
                     c.completedChars, c.tier,
-                    Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY,
+                    Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, c.accents,
                 )
                 // A pair on probation keeps its honest score, because the only
                 // thing it is here to do is clear the offer margin, and a
@@ -2391,13 +2465,20 @@ class SuggestionEngine(
                 CorrectionStats.Penalty.PROBATION -> FuzzyBeamSearch.ScoredCandidate(
                     c.word, c.score, c.editCost, c.edits,
                     c.completedChars, c.tier,
-                    Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY,
+                    Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, c.accents,
                 )
                 CorrectionStats.Penalty.NONE -> c
             }
         }.sortedWith(
             compareByDescending<FuzzyBeamSearch.ScoredCandidate> { it.score }.thenBy { it.word }
         )
+        // A reading that spends every keystroke as pressed and only puts
+        // accents back explains the word completely, and one that calls a key
+        // mistyped does not. So an edited reading is no rival to it, however
+        // common: `sie` is `się`, not a slip for `nie`, and `zona` is `żona`,
+        // not `ona` with a stray letter (#200). Accent readings still compete
+        // among themselves, so `zle` stays open between `źle` and `żle`.
+        val candidates = shaped.filter { it.edits == 0 && it.accents > 0 }.ifEmpty { shaped }
 
         // Two independent sources naming the same word is confidence enough
         // on its own.

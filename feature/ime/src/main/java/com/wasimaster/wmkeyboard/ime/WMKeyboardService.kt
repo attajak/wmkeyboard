@@ -7875,9 +7875,16 @@ open class WMKeyboardService : InputMethodService() {
         }
         val ic = currentInputConnection ?: return
         // Whether this ends up a newline or an editor action, it ends the
-        // word the same way a space does.
+        // word the same way a space does, autocorrect included. A word ended
+        // by Enter was typed exactly like one ended by space, and committing
+        // it as typed sent `juz` where the strip already showed `już` (#200).
         recordStat { onSeparator(System.currentTimeMillis(), SystemClock.uptimeMillis()) }
-        commitComposing(ic, autocorrect = false, expandPatterns = true)
+        commitComposing(
+            ic,
+            autocorrect = state.settings.correction.enabled,
+            fixApostrophes = state.settings.autoText.apostrophe,
+            expandPatterns = true,
+        )
         // Same as the spacebar: a newline typed at a caret parked inside an
         // expansion would break the text the snippet just inserted.
         if (swallowTerminatorAfterCommit) {
@@ -7946,7 +7953,13 @@ open class WMKeyboardService : InputMethodService() {
     private fun onNewline() {
         val ic = currentInputConnection ?: return
         recordStat { onSeparator(System.currentTimeMillis(), SystemClock.uptimeMillis()) }
-        commitComposing(ic, autocorrect = false, expandPatterns = true)
+        val settings = _uiState.value.settings
+        commitComposing(
+            ic,
+            autocorrect = settings.correction.enabled,
+            fixApostrophes = settings.autoText.apostrophe,
+            expandPatterns = true,
+        )
         if (swallowTerminatorAfterCommit) {
             swallowTerminatorAfterCommit = false
             return

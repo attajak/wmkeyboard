@@ -52,6 +52,12 @@ class FuzzyBeamSearch {
         val dictScore: Double = Double.NEGATIVE_INFINITY,
         /** Best score contributed by USER-tier sources (NEGATIVE_INFINITY if none). */
         val userScore: Double = Double.NEGATIVE_INFINITY,
+        /**
+         * Letters read as their accented form ([Accents]): `juz` reaching `już`
+         * carries 1. These are not edits, so neither [edits] nor [editCost]
+         * counts them.
+         */
+        val accents: Int = 0,
     )
 
     fun search(
@@ -112,7 +118,7 @@ class FuzzyBeamSearch {
         val n = typed.length
         ws.reset()
         ws.pushState(
-            node = walker.root, pos = 0, cost = 0.0, editSpend = 0.0, edits = 0, comp = 0,
+            node = walker.root, pos = 0, cost = 0.0, editSpend = 0.0, edits = 0, comp = 0, accents = 0,
             parent = -1, viaLabel = BeamWorkspace.NO_LABEL,
             bound = src.logWeight + ln1p(walker.maxSubtree(walker.root)),
         )
@@ -127,12 +133,13 @@ class FuzzyBeamSearch {
             val editSpend = ws.editCost[s]
             val edits = ws.edits[s].toInt()
             val comp = ws.comp[s].toInt()
+            val accents = ws.accents[s].toInt()
 
             if (pos == n) {
                 if (walker.isWord(node)) {
                     val score = src.logWeight + ln1p(walker.frequency(node)) - cost
                     if (score > floor - EPS || results.size < k) {
-                        emit(ws.materialize(s), score, editSpend, edits, comp, src.tier, results)
+                        emit(ws.materialize(s), score, editSpend, edits, comp, accents, src.tier, results)
                         if (results.size >= k) floor = kthBest(results, k)
                     }
                 }
@@ -149,7 +156,7 @@ class FuzzyBeamSearch {
                     pushIfViable(
                         ws, src, walker, floor,
                         node = child, pos = n, cost = cost + step, editSpend = editSpend,
-                        edits = edits, comp = comp + 1, parent = s,
+                        edits = edits, comp = comp + 1, accents = accents, parent = s,
                         viaLabel = ws.children.labels[i],
                     )
                 }
@@ -160,6 +167,9 @@ class FuzzyBeamSearch {
             // The letters this keystroke could have meant, on a keyboard that
             // puts several on a key; null on every ordinary board.
             val keySet = keys?.at(pos)
+            // One read of the node's edges serves every branch below: the
+            // accent step, the letters on an ambiguous key, and the edits.
+            val count = walker.childrenInto(node, ws.children)
             if (keySet == null) {
                 // Exact match of the next typed char. With touch evidence, an
                 // off-center tap makes even the "match" slightly expensive —
@@ -171,7 +181,24 @@ class FuzzyBeamSearch {
                         node = matched, pos = pos + 1,
                         cost = cost + matchCost(touch, pos, expected),
                         editSpend = editSpend,
-                        edits = edits, comp = comp, parent = s, viaLabel = expected,
+                        edits = edits, comp = comp, accents = accents, parent = s,
+                        viaLabel = expected,
+                    )
+                }
+                // The same key with its accent left off: `z` standing for `ż`
+                // (#200). Not an edit, because nothing was mistyped. It still
+                // has a price, so that at equal frequency the word spelled
+                // exactly as typed leads its accented twin.
+                for (i in 0 until count) {
+                    val label = ws.children.labels[i]
+                    if (!Accents.isAccentOf(label, expected)) continue
+                    pushIfViable(
+                        ws, src, walker, floor,
+                        node = ws.children.nodes[i], pos = pos + 1,
+                        cost = cost + matchCost(touch, pos, expected) + COST_ACCENT,
+                        editSpend = editSpend,
+                        edits = edits, comp = comp, accents = accents + 1, parent = s,
+                        viaLabel = label,
                     )
                 }
             } else {
@@ -183,7 +210,6 @@ class FuzzyBeamSearch {
                 // context, the personal lexicon — which is exactly how a T9
                 // phone ranked them, and why "good" beats "gone" beats "hood"
                 // for one and the same run of keys.
-                val count = walker.childrenInto(node, ws.children)
                 for (i in 0 until count) {
                     val label = ws.children.labels[i]
                     if (!keySet.contains(label)) continue
@@ -192,7 +218,8 @@ class FuzzyBeamSearch {
                         node = ws.children.nodes[i], pos = pos + 1,
                         cost = cost + matchCost(touch, pos, label),
                         editSpend = editSpend,
-                        edits = edits, comp = comp, parent = s, viaLabel = label,
+                        edits = edits, comp = comp, accents = accents, parent = s,
+                        viaLabel = label,
                     )
                 }
             }
@@ -221,13 +248,12 @@ class FuzzyBeamSearch {
                         ws, src, walker, floor,
                         node = node, pos = pos + 1, cost = cost + delCost + surcharge,
                         editSpend = editSpend + delCost,
-                        edits = edits + 1, comp = comp, parent = s,
+                        edits = edits + 1, comp = comp, accents = accents, parent = s,
                         viaLabel = BeamWorkspace.NO_LABEL,
                     )
                 }
                 // Substitution and insertion candidates come from the node's
                 // actual children — any script the dictionary holds.
-                val count = walker.childrenInto(node, ws.children)
                 for (i in 0 until count) {
                     val label = ws.children.labels[i]
                     val child = ws.children.nodes[i]
@@ -237,7 +263,10 @@ class FuzzyBeamSearch {
                     // never travelled — and the edited copy would be the one
                     // the "known word suppresses corrections" gate throws away.
                     val onKey = keySet != null && keySet.contains(label)
-                    if (label != expected && !onKey) {
+                    // Likewise a letter already taken as the typed one with its
+                    // accent left off.
+                    val accented = keySet == null && Accents.isAccentOf(label, expected)
+                    if (label != expected && !onKey && !accented) {
                         val subCost = discounted(
                             substitutionCost(touch, pos, expected, label, proximity),
                             habits.substitution(expected, label),
@@ -247,7 +276,8 @@ class FuzzyBeamSearch {
                                 ws, src, walker, floor,
                                 node = child, pos = pos + 1, cost = cost + subCost + surcharge,
                                 editSpend = editSpend + subCost,
-                                edits = edits + 1, comp = comp, parent = s, viaLabel = label,
+                                edits = edits + 1, comp = comp, accents = accents, parent = s,
+                                viaLabel = label,
                             )
                         }
                     }
@@ -268,7 +298,8 @@ class FuzzyBeamSearch {
                             ws, src, walker, floor,
                             node = child, pos = pos, cost = cost + insCost + surcharge,
                             editSpend = editSpend + insCost,
-                            edits = edits + 1, comp = comp, parent = s, viaLabel = label,
+                            edits = edits + 1, comp = comp, accents = accents, parent = s,
+                            viaLabel = label,
                         )
                     }
                 }
@@ -306,14 +337,14 @@ class FuzzyBeamSearch {
                             val link = ws.pushRecord(
                                 node = first, pos = pos + 1, cost = cost,
                                 editSpend = editSpend, edits = edits, comp = comp,
-                                parent = s, viaLabel = typed[pos + 1],
+                                accents = accents, parent = s, viaLabel = typed[pos + 1],
                             )
                             pushIfViable(
                                 ws, src, walker, floor,
                                 node = second, pos = pos + 2,
                                 cost = cost + transposeCost + surcharge,
                                 editSpend = editSpend + transposeCost,
-                                edits = edits + 1, comp = comp, parent = link,
+                                edits = edits + 1, comp = comp, accents = accents, parent = link,
                                 viaLabel = typed[pos],
                             )
                         }
@@ -336,12 +367,13 @@ class FuzzyBeamSearch {
         editSpend: Double,
         edits: Int,
         comp: Int,
+        accents: Int,
         parent: Int,
         viaLabel: Char,
     ) {
         val bound = src.logWeight + ln1p(walker.maxSubtree(node)) - cost
         if (bound < floor - EPS) return
-        ws.pushState(node, pos, cost, editSpend, edits, comp, parent, viaLabel, bound)
+        ws.pushState(node, pos, cost, editSpend, edits, comp, accents, parent, viaLabel, bound)
     }
 
     /**
@@ -391,6 +423,7 @@ class FuzzyBeamSearch {
         editCost: Double,
         edits: Int,
         completedChars: Int,
+        accents: Int,
         tier: Tier,
         results: HashMap<String, ScoredCandidate>,
     ) {
@@ -404,11 +437,13 @@ class FuzzyBeamSearch {
             if (tier == Tier.USER) score else Double.NEGATIVE_INFINITY,
         )
         results[word] = if (existing == null || score > existing.score) {
-            ScoredCandidate(word, score, editCost, edits, completedChars, tier, dictScore, userScore)
+            ScoredCandidate(
+                word, score, editCost, edits, completedChars, tier, dictScore, userScore, accents,
+            )
         } else {
             ScoredCandidate(
                 word, existing.score, existing.editCost, existing.edits,
-                existing.completedChars, existing.tier, dictScore, userScore,
+                existing.completedChars, existing.tier, dictScore, userScore, existing.accents,
             )
         }
     }
@@ -446,6 +481,14 @@ class FuzzyBeamSearch {
         val COST_INSERT_ADJACENT = -ln(0.7)
         val COST_INSERT_FAR = -ln(0.25)
         val COST_SUB_FAR = -ln(0.2)
+
+        /**
+         * A letter typed without its accent ([Accents]). Priced with the
+         * adjacent slip, which is the cheapest edit, but outside the edit
+         * budget: `zolw` for `żółw` leaves off three accents and is still one
+         * word, not three mistakes.
+         */
+        val COST_ACCENT = -ln(0.9)
         const val COMPLETION_STEP = 0.0
 
         /** Per-character completion cost once the path holds an edit. As
@@ -540,6 +583,7 @@ class BeamWorkspace(initialCapacity: Int = 256) {
     var editCost = DoubleArray(initialCapacity); private set
     var edits = ByteArray(initialCapacity); private set
     var comp = ByteArray(initialCapacity); private set
+    var accents = ByteArray(initialCapacity); private set
     var parent = IntArray(initialCapacity); private set
     var viaLabel = CharArray(initialCapacity); private set
     var bound = DoubleArray(initialCapacity); private set
@@ -565,6 +609,7 @@ class BeamWorkspace(initialCapacity: Int = 256) {
         editSpend: Double,
         edits: Int,
         comp: Int,
+        accents: Int,
         parent: Int,
         viaLabel: Char,
     ): Int {
@@ -576,6 +621,7 @@ class BeamWorkspace(initialCapacity: Int = 256) {
         this.editCost[id] = editSpend
         this.edits[id] = edits.toByte()
         this.comp[id] = comp.toByte()
+        this.accents[id] = accents.toByte()
         this.parent[id] = parent
         this.viaLabel[id] = viaLabel
         this.bound[id] = 0.0
@@ -590,11 +636,12 @@ class BeamWorkspace(initialCapacity: Int = 256) {
         editSpend: Double,
         edits: Int,
         comp: Int,
+        accents: Int,
         parent: Int,
         viaLabel: Char,
         bound: Double,
     ): Int {
-        val id = pushRecord(node, pos, cost, editSpend, edits, comp, parent, viaLabel)
+        val id = pushRecord(node, pos, cost, editSpend, edits, comp, accents, parent, viaLabel)
         this.bound[id] = bound
         heapPush(id)
         return id
@@ -644,6 +691,7 @@ class BeamWorkspace(initialCapacity: Int = 256) {
         editCost = editCost.copyOf(capacity)
         edits = edits.copyOf(capacity)
         comp = comp.copyOf(capacity)
+        accents = accents.copyOf(capacity)
         parent = parent.copyOf(capacity)
         viaLabel = viaLabel.copyOf(capacity)
         bound = bound.copyOf(capacity)
