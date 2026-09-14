@@ -1896,6 +1896,13 @@ data class KeyboardUiState(
      * is a measurement over the dictionary, not a property of the layout.
      */
     val glideReady: Boolean = false,
+    /**
+     * The caret sits collapsed at the very start of the field, as last reported
+     * by the editor. Nothing has been typed in front of it, so any word on the
+     * strip is a sentence opener predicted before the first keystroke, and the
+     * bar only rests on those when "Suggestion strip always visible" is on.
+     */
+    val caretAtFieldStart: Boolean = false,
     val composingPreview: String = "",
     /**
      * The roman buffer [composingPreview] was transliterated from, mirrored

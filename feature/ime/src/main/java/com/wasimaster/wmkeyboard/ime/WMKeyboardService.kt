@@ -3961,6 +3961,7 @@ open class WMKeyboardService : InputMethodService() {
         // liberally and dropping it there would chop words mid-typing.
         expectedSelStart = attribute?.initialSelStart ?: -1
         expectedSelEnd = attribute?.initialSelEnd ?: -1
+        trackCaretAtFieldStart(expectedSelStart, expectedSelEnd)
         // Whatever word was being followed, its field is gone or its text has
         // changed under it; nothing about it can be trusted from here.
         revision = null
@@ -4056,6 +4057,7 @@ open class WMKeyboardService : InputMethodService() {
         refreshDndState()
         expectedSelStart = info?.initialSelStart ?: -1
         expectedSelEnd = info?.initialSelEnd ?: -1
+        trackCaretAtFieldStart(expectedSelStart, expectedSelEnd)
         // A job debounced against the previous field must not land its strip
         // (or commit resolution) on this one — the secure-field gates in
         // refreshSuggestions return before they ever cancel.
@@ -4408,6 +4410,7 @@ open class WMKeyboardService : InputMethodService() {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
         expectedSelStart = newSelStart
         expectedSelEnd = newSelEnd
+        trackCaretAtFieldStart(newSelStart, newSelEnd)
         // Marks the engine's context stale unless this is the echo of its own
         // edit. No text is read here: this runs on every keystroke, and a read
         // would undo what the expected-selection cache exists to save.
@@ -7085,6 +7088,20 @@ open class WMKeyboardService : InputMethodService() {
         val (prev1, prev2) = WordContext.lastTwoWords(text, SENTENCE_ENDERS)
         previousWord = prev1
         previousWord2 = prev2
+    }
+
+    /**
+     * Mirrors whether the caret sits collapsed at the start of the field into
+     * [KeyboardUiState.caretAtFieldStart]. Taken from the editor's own reports
+     * rather than from where the strip's words came from: some thirty paths
+     * write the strip, and a flag each of them had to clear would go stale.
+     * An unknown selection (-1) is not the start.
+     */
+    private fun trackCaretAtFieldStart(selStart: Int, selEnd: Int) {
+        val atStart = selStart == 0 && selEnd == 0
+        if (_uiState.value.caretAtFieldStart != atStart) {
+            _uiState.update { it.copy(caretAtFieldStart = atStart) }
+        }
     }
 
     /**

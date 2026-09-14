@@ -2338,8 +2338,21 @@ private fun TopBar(
     // to what was just typed with it. The recently-copied paste chip counts
     // the same way, so an idle strip holds it instead of flipping to the tools.
     val recentClipChip = state.settings.clipboard.suggestRecent && state.clipboardSuggestion != null
-    val hasSuggestions = state.suggestions.isNotEmpty() ||
-        state.emojiSuggestions.isNotEmpty() || state.smart != null || recentClipChip ||
+    // Suggestions-first mode keeps the strip as the resting state (an empty
+    // strip plus the chevron into the toolbar); the override then survives
+    // idle gaps and instead resets when fresh candidates arrive.
+    val suggestionsFirst = state.settings.suggestionStrip.suggestionsFirst && state.settings.suggestions
+    // An empty field predicts its first word (#119), so the strip always had
+    // words at rest and turning "Suggestion strip always visible" off did
+    // nothing. With it off those openers wait behind the chevron instead: the
+    // toolbar rests, and the first key moves the caret off the start, at which
+    // point the candidates take the row as they always did.
+    val openersAtRest = !suggestionsFirst && state.caretAtFieldStart &&
+        state.composingPreview.isEmpty() &&
+        (state.suggestions.isNotEmpty() || state.emojiSuggestions.isNotEmpty())
+    val hasSuggestions =
+        (!openersAtRest && (state.suggestions.isNotEmpty() || state.emojiSuggestions.isNotEmpty())) ||
+        state.smart != null || recentClipChip ||
         // The one-time-code chip counts as strip content for the same reason
         // the paste chip does: it lands exactly when nothing is being typed.
         state.otpSuggestion != null ||
@@ -2365,10 +2378,10 @@ private fun TopBar(
         // only ever be seen by someone who had turned the suggestion bar on
         // permanently.
         state.autofillChips.isNotEmpty() || state.smartReplyChips.isNotEmpty()
-    // Suggestions-first mode keeps the strip as the resting state (an empty
-    // strip plus the chevron into the toolbar); the override then survives
-    // idle gaps and instead resets when fresh candidates arrive.
-    val suggestionsFirst = state.settings.suggestionStrip.suggestionsFirst && state.settings.suggestions
+    // The chevron's way to those resting openers. Keyed on them, so it is shut
+    // again on the same frame they stop being the resting content rather than
+    // carrying a stale "open" into the next empty field.
+    var openersShown by remember(openersAtRest) { mutableStateOf(false) }
     // The emoji panel is already all emojis — showing the row too would be
     // redundant, so opening the panel folds the row away.
     //
@@ -2441,7 +2454,7 @@ private fun TopBar(
     val wantToolbar = !toolsOwnRow &&
         (
             state.panel != PanelMode.NONE || toolbarOverride ||
-                (!hasSuggestions && emptySettled && !suggestionsFirst)
+                (!hasSuggestions && emptySettled && !suggestionsFirst && !openersShown)
             )
 
     // The surface the bar is actually drawing, which lags [wantToolbar] by one
@@ -2789,7 +2802,7 @@ private fun TopBar(
                 ToolbarPlacement.STRIP -> !showToolbar ||
                     (
                         wantToolbar && state.panel == PanelMode.NONE &&
-                            (hasSuggestions || suggestionsFirst)
+                            (hasSuggestions || suggestionsFirst || openersAtRest)
                         )
             },
             enter = fadeIn(tween(motionMs)),
@@ -2798,7 +2811,14 @@ private fun TopBar(
             IconButton(
                 onClick = {
                     feedback()
-                    if (toolsOwnRow) onToolsRowToggle() else toolbarOverride = !toolbarOverride
+                    when {
+                        toolsOwnRow -> onToolsRowToggle()
+                        // Resting openers have their own flag: the override
+                        // means "away from the candidates", and at rest the
+                        // toolbar is already where the bar is.
+                        openersAtRest && !toolbarOverride -> openersShown = !openersShown
+                        else -> toolbarOverride = !toolbarOverride
+                    }
                 },
                 modifier = Modifier.size(36.dp),
             ) {
