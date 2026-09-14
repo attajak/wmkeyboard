@@ -550,7 +550,27 @@
 
     <string name="tooldetail_launcher_recents_count_title">How many recent apps</string>
     <string name="tooldetail_launcher_recents_count_subtitle">Length of the recent apps row</string>
-    <string name="tooldetail_launcher_recents_count_info">The grid is three to six apps wide, so a number that divides by your grid width fills whole rows and leaves no gap at the end.</string>
+    <string name="tooldetail_launcher_recents_count_info">A number that divides by the apps per row of your grid fills whole rows and leaves no gap at the end.</string>
+
+    <string name="tooldetail_launcher_columns_title">Apps per row</string>
+    <string name="tooldetail_launcher_columns_subtitle">How many apps sit side by side in the grid</string>
+    <string name="tooldetail_launcher_columns_auto_label">Auto</string>
+    <string name="tooldetail_launcher_columns_info">Auto fits as many apps as the keyboard width holds, three to six on most phones. Set a number to get larger targets or more apps on the screen. If the icons do not fit in a row, they become smaller.</string>
+    <string name="tooldetail_launcher_icon_size_title">Icon size</string>
+    <string name="tooldetail_launcher_icon_size_subtitle">How large each app icon is in the grid</string>
+    <string name="tooldetail_launcher_icon_size_info">With apps per row on Auto, larger icons also make each cell wider, so fewer apps fit in a row. The pinned and recent row keeps its own size.</string>
+    <string name="tooldetail_launcher_icon_shape_title">Icon shape</string>
+    <string name="tooldetail_launcher_icon_shape_subtitle">The outline of each app icon</string>
+    <string name="tooldetail_launcher_icon_shape_circle_label">Circle</string>
+    <string name="tooldetail_launcher_icon_shape_rounded_label">Rounded square</string>
+    <string name="tooldetail_launcher_icon_shape_system_label">As on the phone</string>
+    <string name="tooldetail_launcher_icon_shape_info">As on the phone shows each icon with the shape your home screen gives it. Old apps without an adaptive icon keep their own outline.</string>
+    <string name="tooldetail_launcher_hidden_title">Hidden apps</string>
+    <string name="tooldetail_launcher_hidden_none_subtitle">No apps are hidden. Hide an app from its page in the panel.</string>
+    <plurals name="tooldetail_launcher_hidden_count">
+        <item quantity="one">%1$d app hidden. Tap to show it again.</item>
+        <item quantity="other">%1$d apps hidden. Tap to show all of them again.</item>
+    </plurals>
 
     <string name="tooldetail_camera_timer_title">Self-timer</string>
     <string name="tooldetail_camera_timer_subtitle">The timer the camera opens on</string>

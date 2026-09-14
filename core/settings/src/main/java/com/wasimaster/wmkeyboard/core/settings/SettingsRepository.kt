@@ -3208,6 +3208,13 @@ data class ToolLimitSettings(
 enum class AppSortOrder { ALPHABETICAL, RECENT_FIRST }
 
 /**
+ * The outline the app-launcher panel cuts each icon to. [SYSTEM] draws the
+ * icon as the device renders it: an adaptive icon already carries the
+ * launcher mask of the phone, so a second cut on top only rounds it again.
+ */
+enum class LauncherIconShape { CIRCLE, ROUNDED, SYSTEM }
+
+/**
  * App-launcher tool settings, grouped like [AiSettings] (same 255-slot
  * rationale). The keys stay flat (`launcher_*`), so backup and locked-settings
  * handling need no change.
@@ -3237,10 +3244,29 @@ data class LauncherToolSettings(
      * who wants the row out of the way could say so.
      */
     val maxRecents: Int = MAX_RECENTS,
+    /**
+     * Apps per grid row; [AUTO_COLUMNS] fits as many 68 dp cells as the width
+     * holds. A fixed count lets a tablet keep big targets or a phone pack more
+     * apps in (#198).
+     */
+    val gridColumns: Int = AUTO_COLUMNS,
+    /** Grid icon diameter in dp; labels and cell height follow it. */
+    val iconSizeDp: Int = ICON_SIZE_DP,
+    val iconShape: LauncherIconShape = LauncherIconShape.CIRCLE,
+    /**
+     * Packages left out of the grid and the pinned/recent row. Search still
+     * finds them, which is also the way back: its page, opened from the
+     * results, shows it again.
+     */
+    val hidden: List<String> = emptyList(),
 ) {
     companion object {
         const val MAX_RECENTS = 10
         val RECENTS_RANGE = 4..20
+        const val AUTO_COLUMNS = 0
+        val COLUMNS_RANGE = 3..8
+        const val ICON_SIZE_DP = 42
+        val ICON_SIZE_RANGE = 30..60
     }
 }
 
@@ -6346,6 +6372,10 @@ class SettingsRepository(private val context: Context) {
         // Tab-separated package names (package names never contain tabs).
         private val LAUNCHER_PINNED = stringPreferencesKey("launcher_pinned")
         private val LAUNCHER_RECENTS = stringPreferencesKey("launcher_recents")
+        private val LAUNCHER_GRID_COLUMNS = intPreferencesKey("launcher_grid_columns")
+        private val LAUNCHER_ICON_SIZE = intPreferencesKey("launcher_icon_size")
+        private val LAUNCHER_ICON_SHAPE = stringPreferencesKey("launcher_icon_shape")
+        private val LAUNCHER_HIDDEN = stringPreferencesKey("launcher_hidden")
         private val MEDIA_PIN_WHILE_PLAYING = booleanPreferencesKey("media_pin_while_playing")
         private val SELF_HOSTED_LIBRETRANSLATE_URL = stringPreferencesKey("self_hosted_libretranslate_url")
         private val SELF_HOSTED_LIBRETRANSLATE_KEY = stringPreferencesKey("self_hosted_libretranslate_key")
@@ -7797,6 +7827,12 @@ class SettingsRepository(private val context: Context) {
                 // on the next launch that happens to rewrite the list.
                 recents = p[LAUNCHER_RECENTS]?.split('\t')?.filter { it.isNotEmpty() }.orEmpty()
                     .take(p[LAUNCHER_MAX_RECENTS] ?: defaults.launcher.maxRecents),
+                gridColumns = p[LAUNCHER_GRID_COLUMNS] ?: defaults.launcher.gridColumns,
+                iconSizeDp = p[LAUNCHER_ICON_SIZE] ?: defaults.launcher.iconSizeDp,
+                iconShape = p[LAUNCHER_ICON_SHAPE]
+                    ?.let { runCatching { LauncherIconShape.valueOf(it) }.getOrNull() }
+                    ?: defaults.launcher.iconShape,
+                hidden = p[LAUNCHER_HIDDEN]?.split('\t')?.filter { it.isNotEmpty() }.orEmpty(),
             ),
             mediaControl = MediaControlSettings(
                 pinWhilePlaying = p[MEDIA_PIN_WHILE_PLAYING]
@@ -7959,6 +7995,39 @@ class SettingsRepository(private val context: Context) {
             else current + packageName
             prefs[LAUNCHER_PINNED] = next.joinToString("\t")
         }
+
+    /** [LauncherToolSettings.AUTO_COLUMNS] or a count inside the range. */
+    suspend fun setLauncherGridColumns(value: Int) = editPrefs {
+        it[LAUNCHER_GRID_COLUMNS] = if (value == LauncherToolSettings.AUTO_COLUMNS) {
+            value
+        } else {
+            value.coerceIn(
+                LauncherToolSettings.COLUMNS_RANGE.first,
+                LauncherToolSettings.COLUMNS_RANGE.last,
+            )
+        }
+    }
+
+    suspend fun setLauncherIconSize(value: Int) = editPrefs {
+        it[LAUNCHER_ICON_SIZE] = value.coerceIn(
+            LauncherToolSettings.ICON_SIZE_RANGE.first,
+            LauncherToolSettings.ICON_SIZE_RANGE.last,
+        )
+    }
+
+    suspend fun setLauncherIconShape(value: LauncherIconShape) =
+        editPrefs { it[LAUNCHER_ICON_SHAPE] = value.name }
+
+    suspend fun toggleLauncherHidden(packageName: String) =
+        editPrefs { prefs ->
+            val current = prefs[LAUNCHER_HIDDEN]?.split('\t')?.filter { it.isNotEmpty() }
+                .orEmpty()
+            val next = if (packageName in current) current - packageName
+            else current + packageName
+            prefs[LAUNCHER_HIDDEN] = next.joinToString("\t")
+        }
+
+    suspend fun clearLauncherHidden() = editPrefs { it.remove(LAUNCHER_HIDDEN) }
 
     suspend fun setMediaPinWhilePlaying(value: Boolean) =
         editPrefs { it[MEDIA_PIN_WHILE_PLAYING] = value }

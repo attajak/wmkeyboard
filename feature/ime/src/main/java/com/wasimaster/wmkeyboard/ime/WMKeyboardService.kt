@@ -11282,9 +11282,10 @@ open class WMKeyboardService : InputMethodService() {
 
     /**
      * Decoded app icons, keyed by flattened component. Bounded: an adaptive
-     * icon decodes to a fixed 48dp square, so the whole cache stays around a
-     * megabyte and lives for the process — a panel close is not a reason to
-     * re-decode a hundred icons.
+     * icon decodes to a fixed square at the largest icon-size setting, so the
+     * whole cache stays under two megabytes and lives for the process — a
+     * panel close is not a reason to re-decode a hundred icons, and a size
+     * change only scales what is already decoded.
      */
     private val launcherIconCache = android.util.LruCache<String, ImageBitmap>(128)
 
@@ -11299,6 +11300,7 @@ open class WMKeyboardService : InputMethodService() {
             onPinToggle = ::onLauncherPinToggle,
             onAppInfo = ::onLauncherAppInfo,
             onDetailClose = ::onLauncherDetailClose,
+            onHideToggle = ::onLauncherHideToggle,
             iconFor = ::launcherIconFor,
         )
     }
@@ -11350,7 +11352,9 @@ open class WMKeyboardService : InputMethodService() {
         launcherIconCache.get(key)?.let { return it }
         val bitmap = withContext(Dispatchers.IO) {
             runCatching {
-                val px = (48 * resources.displayMetrics.density).toInt().coerceAtLeast(1)
+                val dp = com.wasimaster.wmkeyboard.core.settings.LauncherToolSettings
+                    .ICON_SIZE_RANGE.last
+                val px = (dp * resources.displayMetrics.density).toInt().coerceAtLeast(1)
                 packageManager.getActivityIcon(app.component)
                     .toBitmap(px, px)
                     .asImageBitmap()
@@ -11412,6 +11416,17 @@ open class WMKeyboardService : InputMethodService() {
 
     fun onLauncherPinToggle(packageName: String) {
         serviceScope.launch { settingsRepository.toggleLauncherPin(packageName) }
+    }
+
+    /**
+     * Hiding closes the detail view: the app just left the grid, so staying
+     * on its page would leave the user looking at something they asked to
+     * put away. Showing it again keeps the page open.
+     */
+    fun onLauncherHideToggle(packageName: String) {
+        val hiding = packageName !in _uiState.value.settings.launcher.hidden
+        serviceScope.launch { settingsRepository.toggleLauncherHidden(packageName) }
+        if (hiding) onLauncherDetailClose()
     }
 
     fun onLauncherAppInfo(packageName: String) {

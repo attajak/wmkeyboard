@@ -425,6 +425,10 @@
     <string name="ime_launcher_app_info_action">App info</string>
     <string name="ime_launcher_pin_action">Pin app</string>
     <string name="ime_launcher_unpin_action">Unpin app</string>
+    <string name="ime_launcher_hide_action">Hide app from the grid</string>
+    <string name="ime_launcher_unhide_action">Show app in the grid again</string>
+    <!-- Marks a search result the user hid from the grid. -->
+    <string name="ime_launcher_hidden_label">Hidden from the grid</string>
     <!-- Marks a screen inside an app that only the app itself may open. -->
     <string name="ime_launcher_not_exported_label">Not openable from outside the app</string>
 

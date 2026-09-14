@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -28,6 +30,8 @@ import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.PushPin
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -39,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -46,6 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wasimaster.wmkeyboard.core.settings.LauncherIconShape
 import com.wasimaster.wmkeyboard.ime.AppCatalog
 import com.wasimaster.wmkeyboard.ime.FocusRegion
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
@@ -68,6 +74,7 @@ class LauncherPanelCallbacks(
     val onPinToggle: (String) -> Unit = {},
     val onAppInfo: (String) -> Unit = {},
     val onDetailClose: () -> Unit = {},
+    val onHideToggle: (String) -> Unit = {},
     /** Resolves an app's icon through the service's LRU cache, off-main. */
     val iconFor: suspend (LauncherApp) -> ImageBitmap? = { null },
 )
@@ -94,6 +101,7 @@ internal fun AppLauncherPanel(
         LauncherDetail(
             state, detail.app, callbacks.iconFor,
             callbacks.onActivityTap, callbacks.onPinToggle, callbacks.onAppInfo,
+            callbacks.onHideToggle,
         )
         return
     }
@@ -115,7 +123,12 @@ private fun LauncherGrid(
     val kb = LocalKbTheme.current
     val launcher = state.settings.launcher
     val query = state.mediaQuery
+    val hidden = launcher.hidden.toSet()
+    val iconShape = launcherIconShape(launcher.iconShape)
+    // Hidden apps drop out of the browsing grid only. A search still finds
+    // them, dimmed, so hiding never makes an app unreachable from here.
     val apps = AppCatalog.filterApps(state.launcherApps, query)
+        .let { found -> if (query.isEmpty()) found.filter { it.packageName !in hidden } else found }
     val sorted = AppCatalog.sortApps(
         apps,
         recentFirst = launcher.sortOrder ==
@@ -129,6 +142,7 @@ private fun LauncherGrid(
         val byPackage = state.launcherApps.associateBy { it.packageName }
         (launcher.pinned + if (launcher.recentsEnabled) launcher.recents else emptyList())
             .distinct()
+            .filter { it !in hidden }
             .mapNotNull { byPackage[it] }
     } else {
         emptyList()
@@ -138,9 +152,12 @@ private fun LauncherGrid(
     PanelFocusTarget(PanelMode.APP_LAUNCHER, shortcuts.size, shortcuts.size, FocusRegion.CHIPS) {
         shortcuts.getOrNull(it)?.let(onAppTap)
     }
-    // The grid is Adaptive, so the true column count is a layout fact; six is
-    // close enough for arrow-key math on every phone width this ships on.
-    PanelFocusTarget(PanelMode.APP_LAUNCHER, sorted.size, 6) {
+    // An Adaptive grid's true column count is a layout fact; six is close
+    // enough for arrow-key math on every phone width this ships on. A fixed
+    // count is exact.
+    val fixedColumns = launcher.gridColumns
+        .takeIf { it != com.wasimaster.wmkeyboard.core.settings.LauncherToolSettings.AUTO_COLUMNS }
+    PanelFocusTarget(PanelMode.APP_LAUNCHER, sorted.size, fixedColumns ?: 6) {
         sorted.getOrNull(it)?.let(onAppTap)
     }
 
@@ -196,6 +213,7 @@ private fun LauncherGrid(
                         ShortcutCell(
                             app = app,
                             pinned = app.packageName in launcher.pinned,
+                            shape = iconShape,
                             iconFor = iconFor,
                             onTap = { onAppTap(app) },
                             onLongPress = { onPinToggle(app.packageName) },
@@ -204,7 +222,13 @@ private fun LauncherGrid(
                 }
             }
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 68.dp),
+                // Auto keeps the 68 dp cell of the default 42 dp icon and
+                // widens it with a bigger icon, so labels keep their room.
+                columns = if (fixedColumns != null) {
+                    GridCells.Fixed(fixedColumns)
+                } else {
+                    GridCells.Adaptive(minSize = maxOf(68, launcher.iconSizeDp + 26).dp)
+                },
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 6.dp),
@@ -214,6 +238,9 @@ private fun LauncherGrid(
                         app = app,
                         showLabel = launcher.showLabels,
                         pinned = app.packageName in launcher.pinned,
+                        hidden = app.packageName in hidden,
+                        iconSizeDp = launcher.iconSizeDp,
+                        shape = iconShape,
                         iconFor = iconFor,
                         onTap = { onAppTap(app) },
                         onLongPress = {
@@ -227,32 +254,47 @@ private fun LauncherGrid(
     }
 }
 
+private val RoundedIconShape = RoundedCornerShape(percent = 24)
+
+/** The clip for [LauncherIconShape.SYSTEM] is none: the icon keeps its own mask. */
+private fun launcherIconShape(shape: LauncherIconShape): Shape? = when (shape) {
+    LauncherIconShape.CIRCLE -> CircleShape
+    LauncherIconShape.ROUNDED -> RoundedIconShape
+    LauncherIconShape.SYSTEM -> null
+}
+
 /** One app's icon, resolved through the service cache, placeholder first. */
 @Composable
 private fun AppIcon(
     app: LauncherApp,
     sizeDp: Int,
+    shape: Shape?,
     iconFor: suspend (LauncherApp) -> ImageBitmap?,
 ) {
     val kb = LocalKbTheme.current
     val icon by produceState<ImageBitmap?>(null, app.packageName, app.activityName) {
         value = iconFor(app)
     }
+    // Capped at the size but square at any smaller width: eight columns of a
+    // big icon on a narrow phone shrink the icon rather than stretching it
+    // into an oval.
+    val box = Modifier
+        .sizeIn(maxWidth = sizeDp.dp, maxHeight = sizeDp.dp)
+        .fillMaxWidth()
+        .aspectRatio(1f)
     val bitmap = icon
     if (bitmap != null) {
         Image(
             bitmap,
             contentDescription = null,
-            modifier = Modifier
-                .size(sizeDp.dp)
-                .clip(CircleShape),
+            modifier = if (shape != null) box.clip(shape) else box,
         )
     } else {
+        val placeholder = shape ?: RoundedIconShape
         Box(
-            modifier = Modifier
-                .size(sizeDp.dp)
-                .clip(CircleShape)
-                .background(kb.chip, CircleShape),
+            modifier = box
+                .clip(placeholder)
+                .background(kb.chip, placeholder),
         )
     }
 }
@@ -263,6 +305,9 @@ private fun AppCell(
     app: LauncherApp,
     showLabel: Boolean,
     pinned: Boolean,
+    hidden: Boolean,
+    iconSizeDp: Int,
+    shape: Shape?,
     iconFor: suspend (LauncherApp) -> ImageBitmap?,
     onTap: () -> Unit,
     onLongPress: () -> Unit,
@@ -271,6 +316,7 @@ private fun AppCell(
     val feedback = LocalKeyPressFeedback.current
     Column(
         modifier = Modifier
+            .alpha(if (hidden) 0.45f else 1f)
             .clip(RoundedCornerShape(10.dp))
             .combinedClickable(
                 onClick = onTap,
@@ -282,8 +328,8 @@ private fun AppCell(
             .padding(vertical = 5.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box {
-            AppIcon(app, sizeDp = 42, iconFor = iconFor)
+        Box(Modifier.padding(horizontal = 4.dp)) {
+            AppIcon(app, sizeDp = iconSizeDp, shape = shape, iconFor = iconFor)
             if (pinned) {
                 Icon(
                     Icons.Outlined.PushPin,
@@ -292,6 +338,16 @@ private fun AppCell(
                         .size(13.dp)
                         .align(Alignment.TopEnd),
                     tint = kb.toolCircleActiveIcon,
+                )
+            }
+            if (hidden) {
+                Icon(
+                    Icons.Outlined.VisibilityOff,
+                    contentDescription = stringResource(R.string.ime_launcher_hidden_label),
+                    modifier = Modifier
+                        .size(13.dp)
+                        .align(Alignment.BottomEnd),
+                    tint = kb.secondaryText,
                 )
             }
         }
@@ -316,6 +372,7 @@ private fun AppCell(
 private fun ShortcutCell(
     app: LauncherApp,
     pinned: Boolean,
+    shape: Shape?,
     iconFor: suspend (LauncherApp) -> ImageBitmap?,
     onTap: () -> Unit,
     onLongPress: () -> Unit,
@@ -336,7 +393,7 @@ private fun ShortcutCell(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box {
-            AppIcon(app, sizeDp = 36, iconFor = iconFor)
+            AppIcon(app, sizeDp = 36, shape = shape, iconFor = iconFor)
             if (pinned) {
                 Icon(
                     Icons.Outlined.PushPin,
@@ -373,6 +430,7 @@ private fun LauncherDetail(
     onActivityTap: (LauncherActivity) -> Unit,
     onPinToggle: (String) -> Unit,
     onAppInfo: (String) -> Unit,
+    onHideToggle: (String) -> Unit,
 ) {
     val kb = LocalKbTheme.current
     val detail = state.launcherDetail ?: return
@@ -390,7 +448,9 @@ private fun LauncherDetail(
                 .padding(horizontal = 14.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            AppIcon(app, sizeDp = 40, iconFor = iconFor)
+            AppIcon(
+                app, sizeDp = 40, shape = launcherIconShape(launcher.iconShape), iconFor = iconFor,
+            )
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -426,6 +486,20 @@ private fun LauncherDetail(
                     .clickable { onPinToggle(app.packageName) }
                     .padding(8.dp),
                 tint = if (pinned) kb.toolCircleActiveIcon else kb.toolbarIcon,
+            )
+            val hidden = app.packageName in launcher.hidden
+            Icon(
+                if (hidden) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                contentDescription = stringResource(
+                    if (hidden) R.string.ime_launcher_unhide_action
+                    else R.string.ime_launcher_hide_action,
+                ),
+                modifier = Modifier
+                    .size(34.dp)
+                    .clip(CircleShape)
+                    .clickable { onHideToggle(app.packageName) }
+                    .padding(8.dp),
+                tint = kb.toolbarIcon,
             )
             Icon(
                 Icons.Outlined.Info,

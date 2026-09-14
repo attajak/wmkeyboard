@@ -27,6 +27,7 @@ import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.media.hasNotificationAccess
 import com.wasimaster.wmkeyboard.core.notify.DownloadKeys
 import com.wasimaster.wmkeyboard.core.settings.AppSortOrder
+import com.wasimaster.wmkeyboard.core.settings.LauncherIconShape
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.tools.CryptoCatalog
 import com.wasimaster.wmkeyboard.core.tools.CurrencyClient
@@ -390,6 +391,50 @@ internal fun ToolDetailSettings(
                     ) { scope.launch { repository.setLauncherShowLabels(it) } }
                 }
                 item {
+                    val columnsFormat = stringResource(R.string.values_number)
+                    ChoiceSetting(
+                        R.string.tooldetail_launcher_columns_title,
+                        subtitle = stringResource(R.string.tooldetail_launcher_columns_subtitle),
+                        info = stringResource(R.string.tooldetail_launcher_columns_info),
+                        options = listOf(
+                            LauncherToolSettings.AUTO_COLUMNS to
+                                stringResource(R.string.tooldetail_launcher_columns_auto_label),
+                        ) + LauncherToolSettings.COLUMNS_RANGE.map { it to columnsFormat.format(it) },
+                        selected = settings.launcher.gridColumns,
+                        default = SettingsDefaults.launcher.gridColumns,
+                    ) { scope.launch { repository.setLauncherGridColumns(it) } }
+                }
+                item {
+                    val dpFormat = stringResource(R.string.typing_value_dp)
+                    SliderSetting(
+                        R.string.tooldetail_launcher_icon_size_title,
+                        subtitle = stringResource(R.string.tooldetail_launcher_icon_size_subtitle),
+                        value = settings.launcher.iconSizeDp.toFloat(),
+                        range = LauncherToolSettings.ICON_SIZE_RANGE.first.toFloat()..
+                            LauncherToolSettings.ICON_SIZE_RANGE.last.toFloat(),
+                        display = { dpFormat.format(it.roundToInt()) },
+                        info = stringResource(R.string.tooldetail_launcher_icon_size_info),
+                        default = SettingsDefaults.launcher.iconSizeDp.toFloat(),
+                    ) { scope.launch { repository.setLauncherIconSize(it.roundToInt()) } }
+                }
+                item {
+                    ChoiceSetting(
+                        R.string.tooldetail_launcher_icon_shape_title,
+                        subtitle = stringResource(R.string.tooldetail_launcher_icon_shape_subtitle),
+                        info = stringResource(R.string.tooldetail_launcher_icon_shape_info),
+                        options = listOf(
+                            LauncherIconShape.CIRCLE to
+                                stringResource(R.string.tooldetail_launcher_icon_shape_circle_label),
+                            LauncherIconShape.ROUNDED to
+                                stringResource(R.string.tooldetail_launcher_icon_shape_rounded_label),
+                            LauncherIconShape.SYSTEM to
+                                stringResource(R.string.tooldetail_launcher_icon_shape_system_label),
+                        ),
+                        selected = settings.launcher.iconShape,
+                        default = SettingsDefaults.launcher.iconShape,
+                    ) { scope.launch { repository.setLauncherIconShape(it) } }
+                }
+                item {
                     ToggleSetting(
                         R.string.tooldetail_launcher_recents_title,
                         stringResource(R.string.tooldetail_launcher_recents_subtitle),
@@ -435,6 +480,28 @@ internal fun ToolDetailSettings(
                         info = stringResource(R.string.tooldetail_launcher_non_exported_info),
                         default = SettingsDefaults.launcher.showNonExported,
                     ) { scope.launch { repository.setLauncherShowNonExported(it) } }
+                }
+                item {
+                    // A reset rather than a list: each hidden app is one
+                    // search away in the panel and unhides from its own page,
+                    // so this row is only the way back for all of them at once.
+                    val hiddenCount = settings.launcher.hidden.size
+                    WmRow(
+                        title = stringResource(R.string.tooldetail_launcher_hidden_title),
+                        subtitle = if (hiddenCount == 0) {
+                            stringResource(R.string.tooldetail_launcher_hidden_none_subtitle)
+                        } else {
+                            pluralStringResource(
+                                R.plurals.tooldetail_launcher_hidden_count,
+                                hiddenCount,
+                                hiddenCount,
+                            )
+                        },
+                        icon = SettingsRowIcons[R.string.tooldetail_launcher_hidden_title],
+                        enabled = hiddenCount > 0,
+                        highlightKey = R.string.tooldetail_launcher_hidden_title,
+                        onClick = { scope.launch { repository.clearLauncherHidden() } },
+                    )
                 }
             }
         ToolbarTool.PLUGINS -> SettingsGroup(stringResource(R.string.tooldetail_plugins_group)) {

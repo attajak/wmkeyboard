@@ -876,6 +876,10 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_camera_resolution_title) { Icons.Outlined.PhotoSizeSelectLarge }
         put(R.string.tooldetail_launcher_sort_title) { Icons.AutoMirrored.Outlined.Sort }
         put(R.string.tooldetail_launcher_labels_title) { Icons.AutoMirrored.Outlined.Label }
+        put(R.string.tooldetail_launcher_columns_title) { Icons.Outlined.GridView }
+        put(R.string.tooldetail_launcher_icon_size_title) { Icons.Outlined.PhotoSizeSelectLarge }
+        put(R.string.tooldetail_launcher_icon_shape_title) { Icons.Outlined.RoundedCorner }
+        put(R.string.tooldetail_launcher_hidden_title) { Icons.Outlined.VisibilityOff }
         put(R.string.tooldetail_launcher_recents_title) { Icons.Outlined.History }
         put(R.string.tooldetail_launcher_recents_count_title) { Icons.Outlined.Numbers }
         put(R.string.tooldetail_launcher_drilldown_title) { Icons.Outlined.AppShortcut }
