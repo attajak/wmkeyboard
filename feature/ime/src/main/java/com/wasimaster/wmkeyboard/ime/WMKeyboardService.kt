@@ -8628,10 +8628,18 @@ open class WMKeyboardService : InputMethodService() {
         // Correcting the fragment corrupts the word it hangs off — "i" typed
         // onto "hind" must not become "I" — and a suffix is neither a typo to
         // guess at nor a word worth learning.
+        //
+        // Measured against what the field holds for this buffer, not the
+        // buffer itself. They are the same text on an ordinary board; on an
+        // ambiguous one the field shows the reading, and a reading longer
+        // than its anchors ("this" for the three keys t-g-u) would otherwise
+        // look like a word glued to the buffer and the space would commit the
+        // anchors in its place (issue #145).
+        val fieldText = composedPreview(state, typed)
         val gluedToWord = (fixApostrophes || autocorrect) &&
             state.allowsTypingIntelligence && !state.composer.isTransliterating &&
-            ic.getTextBeforeCursor(typed.length + 1, 0)
-                ?.takeIf { it.length > typed.length }
+            ic.getTextBeforeCursor(fieldText.length + 1, 0)
+                ?.takeIf { it.length > fieldText.length }
                 ?.let { isComposingWordChar(it[0]) } == true
         // Apostrophe restoration outranks autocorrect: "dont" is a known
         // contraction slip, not a typo for "font"/"done" to be guessed at.
