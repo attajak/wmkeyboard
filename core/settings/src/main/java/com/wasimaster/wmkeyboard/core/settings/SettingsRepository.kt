@@ -2070,13 +2070,12 @@ data class KeyboardSettings(
      */
     val autoDownloadLanguageData: Boolean = !BuildConfig.ENABLE_FDROID,
     /**
-     * Re-link romanized languages with the languages of their own script
-     * every time a language is added (see [RomanizedPairing]).
+     * Link a language you add with the romanized languages of its own script
+     * (see [RomanizedPairing]).
      *
-     * On by default, which is the long-standing behaviour and right for
-     * almost everyone. Off matters for the user who deliberately unlinks a
-     * pair: the auto-pairing runs on every add, so their removed link came
-     * back the next time they touched the language list.
+     * Only the added language's own pairs are wired, so a link the user
+     * removed by hand between two other languages stays removed. Off stops
+     * even that, for someone who wants every link made by hand.
      */
     val autoPairRomanized: Boolean = true,
     /**
@@ -8762,8 +8761,14 @@ class SettingsRepository(private val context: Context) {
      * happened while onboarding stays silent. Only ever adds links; callers
      * run it at the moments auto-pairing is documented to apply (a language
      * was just added, or the one-shot upgrade reconcile).
+     *
+     * [addedLanguageId] limits it to that language's pairs, so a link the user
+     * removed between two languages already on the list is not brought back.
+     * Null wires every pair, which only the upgrade reconcile wants.
      */
-    suspend fun autoPairRomanizedSecondaries(): List<Pair<String, String>> {
+    suspend fun autoPairRomanizedSecondaries(
+        addedLanguageId: String? = null,
+    ): List<Pair<String, String>> {
         val current = settings.first()
         // Off means a link the user removed by hand stays removed, instead of
         // coming back the next time any language is added.
@@ -8771,6 +8776,7 @@ class SettingsRepository(private val context: Context) {
         val result = RomanizedPairing.autoPair(
             current.enabledLanguages,
             current.secondaryLanguages,
+            involving = addedLanguageId?.let(::setOf),
         )
         if (result.added.isEmpty()) return emptyList()
         setSecondaryLanguages(result.secondaries)

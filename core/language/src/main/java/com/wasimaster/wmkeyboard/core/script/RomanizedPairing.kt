@@ -48,13 +48,17 @@ object RomanizedPairing {
     /**
      * Ensures every (romanized, same-script) pair among [enabled] languages
      * suggests from each other, in both directions. Existing entries are only
-     * ever added to — a secondary the user removed by hand stays removed
-     * unless this runs again after they re-add a language, which is the
-     * documented moment auto-pairing applies.
+     * ever added to.
+     *
+     * [involving] limits the pass to pairs with at least one side in it: the
+     * language that was just added. Without it, adding French re-ran every
+     * pair and brought back the English and Banglish link the user had
+     * removed by hand. Null wires every pair, for the one-shot upgrade.
      */
     fun autoPair(
         enabled: List<LanguageDef>,
         secondaries: Map<String, List<String>>,
+        involving: Set<String>? = null,
     ): Result {
         val languages = enabled.distinctBy { it.id }
         val updated = HashMap(secondaries)
@@ -69,6 +73,7 @@ object RomanizedPairing {
             if (!romanized.isRomanized) continue
             for (other in languages) {
                 if (other.id == romanized.id || other.script != romanized.script) continue
+                if (involving != null && romanized.id !in involving && other.id !in involving) continue
                 link(romanized.id, other.id)
                 link(other.id, romanized.id)
             }

@@ -691,7 +691,8 @@ private fun LanguageDataDeleteDialog(
  * is where every caller sends the user next.
  *
  * Adding is also the moment romanized languages get cross-wired with their
- * same-script company (see [RomanizedPairing]): [onPaired] fires with the new
+ * same-script company (see [RomanizedPairing]), limited to [language]'s own
+ * pairs so a link removed by hand elsewhere stays removed: [onPaired] fires with the new
  * links so the Languages screen can toast them, while onboarding leaves it at
  * its silent default.
  */
@@ -705,7 +706,7 @@ internal fun addLanguage(
     val first = language.layoutIds.firstOrNull() ?: return
     scope.launch {
         repository.setEnabledLayoutIds((settings.enabledLayoutIds + first).distinct())
-        val paired = repository.autoPairRomanizedSecondaries()
+        val paired = repository.autoPairRomanizedSecondaries(language.id)
         if (paired.isNotEmpty()) onPaired(paired)
     }
 }

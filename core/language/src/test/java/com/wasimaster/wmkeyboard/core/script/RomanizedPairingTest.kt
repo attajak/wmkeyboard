@@ -50,6 +50,30 @@ class RomanizedPairingTest {
         assertFalse(result.added.contains("en" to "bn_rom"))
     }
 
+    @Test fun `adding an unrelated language keeps a removed link removed`() {
+        // The user unlinked English and Banglish by hand, then added French.
+        val result = RomanizedPairing.autoPair(
+            listOf(lang("en"), lang("bn_rom"), lang("fr")),
+            mapOf("en" to emptyList(), "bn_rom" to emptyList()),
+            involving = setOf("fr"),
+        )
+        assertFalse(result.secondaries["en"].orEmpty().contains("bn_rom"))
+        assertFalse(result.secondaries["bn_rom"].orEmpty().contains("en"))
+        // French itself is new, so its own Banglish pair is still wired.
+        assertEquals(listOf("fr"), result.secondaries["bn_rom"])
+        assertEquals(listOf("bn_rom"), result.secondaries["fr"])
+    }
+
+    @Test fun `re-adding the romanized language links it again`() {
+        val result = RomanizedPairing.autoPair(
+            listOf(lang("en"), lang("bn_rom")),
+            emptyMap(),
+            involving = setOf("bn_rom"),
+        )
+        assertEquals(listOf("bn_rom"), result.secondaries["en"])
+        assertEquals(listOf("en"), result.secondaries["bn_rom"])
+    }
+
     @Test fun `plain same-script languages do not auto-pair`() {
         val result = RomanizedPairing.autoPair(
             listOf(lang("en"), lang("fr"), lang("crh")),
