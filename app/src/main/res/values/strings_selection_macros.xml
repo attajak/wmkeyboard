@@ -25,8 +25,79 @@
     <string name="selection_macros_detect_subtitle">Offer Call for a phone number, Open for a link, Email for an address</string>
     <string name="selection_macros_detect_info">The keyboard reads the selection as a whole. A sentence with a phone number in it is text, not a number: you selected the sentence.\n\nSwitch this off and every selection is read as plain text. You keep Select all, Copy, Share and the case options, and lose the actions that are about a phone number, an address or a link.\n\nPhone numbers use the same formats as the clipboard, under Privacy > Clipboard.</string>
 
-    <string name="selection_macros_actions_title">Which actions</string>
-    <string name="selection_macros_actions_subtitle">Only these are offered, and only where they apply</string>
-    <string name="selection_macros_actions_info">An action is only shown when it makes sense for the selection: Call for a phone number, QR for a link. WhatsApp is hidden when WhatsApp is not installed, and Search, Translate and QR are hidden when their tools are switched off.\n\nFormat rewrites a phone number in your own format and takes the tracking parameters out of a link. On ordinary text it opens the case options instead.</string>
+    <string name="selection_macros_actions_title">Actions</string>
+    <string name="selection_macros_actions_subtitle">Which actions the bar offers, and in what order</string>
+    <!-- %1$d actions on, %2$d actions there are -->
+    <string name="selection_macros_actions_count">%1$d of %2$d on</string>
+    <string name="selection_macros_actions_search_hint">Search actions</string>
+    <string name="selection_macros_actions_search_empty">No action matches %1$s</string>
+    <string name="selection_macros_actions_results_title">Results</string>
+    <string name="selection_macros_options_desc">Options</string>
+    <string name="selection_macros_reorder_title">Order on the bar</string>
+    <string name="selection_macros_reorder_info">Undo is always first. An action is only drawn where it applies, so the row you see is usually shorter than this.</string>
+    <string name="selection_macros_reorder_desc">Reorder</string>
+
+    <string name="selection_macros_group_editing_title">Editing</string>
+    <string name="selection_macros_group_lines_title">Lines</string>
+    <string name="selection_macros_group_format_title">Format</string>
+    <string name="selection_macros_group_convert_title">Convert</string>
+    <string name="selection_macros_group_language_title">Language</string>
+    <string name="selection_macros_group_lookup_title">Look up</string>
+    <string name="selection_macros_group_open_in_title">Open in</string>
+
+    <string name="selection_macros_desc_undo">Put back the last change the bar made</string>
+    <string name="selection_macros_desc_select_all">Select the whole field</string>
+    <string name="selection_macros_desc_copy">Copy the selection</string>
+    <string name="selection_macros_desc_cut">Cut the selection to the clipboard</string>
+    <string name="selection_macros_desc_paste">Paste over the selection, while the clipboard holds text</string>
+    <string name="selection_macros_desc_delete">Remove the selection</string>
+    <string name="selection_macros_desc_share">Send the selection to another app</string>
+    <string name="selection_macros_desc_format">Tidy a number, link or address; the case options on text</string>
+    <string name="selection_macros_desc_find">Jump to the next place the selection appears</string>
+    <string name="selection_macros_desc_replace">Find and replace across the field</string>
+    <string name="selection_macros_desc_lines_sort">Sort the selected lines, again for the other direction</string>
+    <string name="selection_macros_desc_lines_dedupe">Drop repeated lines</string>
+    <string name="selection_macros_desc_lines_number">Number the lines, or take the numbers off</string>
+    <string name="selection_macros_desc_lines_bullet">Bullet the lines, or take the bullets off</string>
+    <string name="selection_macros_desc_search">Look the selection up with the web search tool</string>
+    <string name="selection_macros_desc_translate">Send the selection to the translate tool</string>
+    <string name="selection_macros_desc_grammar">Correct the selection with the grammar checker</string>
+    <string name="selection_macros_desc_ai">Open the AI tool on the selection</string>
+    <string name="selection_macros_desc_to_bangla">Banglish to Bangla, when Bengali is one of your languages</string>
+    <string name="selection_macros_desc_to_banglish">Bangla back to Banglish</string>
+    <string name="selection_macros_desc_digits_latin">Bengali or other digits to 0 to 9</string>
+    <string name="selection_macros_desc_colour">A colour code: a swatch, and its other spellings</string>
+    <string name="selection_macros_desc_json">Pretty-print or minify JSON</string>
+    <string name="selection_macros_desc_base64">Decode Base64 text</string>
+    <string name="selection_macros_desc_url_decode">Decode a percent-encoded link</string>
+    <string name="selection_macros_desc_chat_bold">Bold, in the chat app\'s own syntax. Only in apps the keyboard knows</string>
+    <string name="selection_macros_desc_chat_italic">Italic, in the chat app\'s own syntax</string>
+    <string name="selection_macros_desc_chat_strike">Strikethrough, in the chat app\'s own syntax</string>
+    <string name="selection_macros_desc_chat_mono">Monospace, in the chat app\'s own syntax</string>
+    <string name="selection_macros_desc_read_aloud">Read the selection aloud</string>
+    <string name="selection_macros_desc_time_zones">The selected time in your other zones</string>
+    <string name="selection_macros_desc_call">Dial the selected number</string>
+    <string name="selection_macros_desc_sms">Message the selected number</string>
+    <string name="selection_macros_desc_whatsapp">Open a WhatsApp chat with the selected number</string>
+    <string name="selection_macros_desc_email">Write to the selected address</string>
+    <string name="selection_macros_desc_open">Open a link in the browser, an address in mail</string>
+    <string name="selection_macros_desc_qr">Turn a link into a QR code</string>
+    <string name="selection_macros_desc_add_contact">Add the number or address to your contacts</string>
+    <string name="selection_macros_desc_map">Open an address or coordinates in your maps app</string>
+    <string name="selection_macros_desc_calendar">Add a date or time to your calendar</string>
+    <string name="selection_macros_desc_fancy">Restyle the selection in a Fancy Text style</string>
+    <string name="selection_macros_desc_case">Inside the Format case options</string>
+
+    <string name="selection_macros_ai_title">AI buttons</string>
+    <string name="selection_macros_ai_subtitle">AI actions with a chip of their own on the bar</string>
+    <string name="selection_macros_ai_info">Each picked action gets a chip beside the AI chip that runs it on the selection at once. The result lands in the AI tool, ready to apply. The chips only appear while the AI tool is switched on and set up.</string>
+    <string name="selection_macros_ai_manage_title">Manage AI actions</string>
+
+    <string name="selection_macros_zones_title">Time zones</string>
+    <string name="selection_macros_zones_subtitle">The zones a selected time is shown in</string>
+    <string name="selection_macros_zones_info">Select a time and the Zones action shows it in each of these. Tap one to write it in place of the selection.</string>
+    <string name="selection_macros_zones_default_caption">Nothing picked yet, so the list is UTC and this device\'s zone.</string>
+    <string name="selection_macros_zones_search_hint">Add a zone</string>
+    <string name="selection_macros_zones_add_desc">Add</string>
 
 </resources>

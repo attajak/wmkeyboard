@@ -127,6 +127,7 @@
     <string name="search_kw_privacy_learn_typing">personalization adapt remember habits</string>
     <string name="search_kw_privacy_lock">biometric face unlock applock</string>
     <string name="search_kw_selection_macros">highlight context menu share</string>
+    <string name="search_kw_selection_macros_actions">cut paste sort json base64 camelcase markdown undo</string>
     <string name="search_kw_statistics">heatmap keystrokes streak counter</string>
     <string name="search_kw_theme_auto">automatic schedule sunset system</string>
     <string name="search_kw_theme_shuffle_interval">shuffle rotate cycle</string>

@@ -954,6 +954,8 @@ internal object SettingsRowIcons {
         put(R.string.selection_macros_placement_title) { Icons.Outlined.ViewStream }
         put(R.string.selection_macros_detect_title) { Icons.Outlined.Sensors }
         put(R.string.selection_macros_actions_title) { Icons.Outlined.Checklist }
+        put(R.string.selection_macros_ai_title) { Icons.Outlined.AutoAwesome }
+        put(R.string.selection_macros_zones_title) { Icons.Outlined.Public }
 
         // ---- Data saver ----
         put(R.string.datasaver_manual_title) { Icons.Outlined.DataSaverOn }

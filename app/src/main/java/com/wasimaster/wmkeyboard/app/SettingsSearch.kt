@@ -1466,7 +1466,6 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         // above; these are the three switches on it.
         selectionMacro(R.string.selection_macros_placement_title, R.string.selection_macros_placement_subtitle),
         selectionMacro(R.string.selection_macros_detect_title, R.string.selection_macros_detect_subtitle),
-        selectionMacro(R.string.selection_macros_actions_title, R.string.selection_macros_actions_subtitle),
         // The Permissions screen's rows. The version-gated Storage row is left
         // out: on most devices a result would land on a screen without it.
         permission(R.string.privacy_permissions_mic_title, R.string.privacy_permissions_mic_subtitle),
@@ -1688,6 +1687,24 @@ private fun SearchStrings.sectionRows(): List<SettingsSearchEntry> {
         under(
             R.string.selection_macros_title, R.string.selection_macros_subtitle,
             R.string.home_advanced_title, "selection_macros", R.string.search_kw_selection_macros,
+        ),
+        // The actions list is indexed as a screen and never row by row: a row
+        // called "Delete" or "Translate" would outrank the tools of those
+        // names, which the ranking test pins.
+        under(
+            R.string.selection_macros_actions_title, R.string.selection_macros_actions_subtitle,
+            R.string.selection_macros_title, "selection_macros/actions", R.string.search_kw_selection_macros_actions,
+            parent = R.string.home_advanced_title,
+        ),
+        under(
+            R.string.selection_macros_ai_title, R.string.selection_macros_ai_subtitle,
+            R.string.selection_macros_title, "selection_macros/ai",
+            parent = R.string.home_advanced_title,
+        ),
+        under(
+            R.string.selection_macros_zones_title, R.string.selection_macros_zones_subtitle,
+            R.string.selection_macros_title, "selection_macros/zones",
+            parent = R.string.home_advanced_title,
         ),
         under(
             R.string.photo_rotation_title, R.string.photo_rotation_subtitle,

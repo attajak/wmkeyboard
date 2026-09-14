@@ -9,6 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.core.selection.SelectionMacros
+import com.wasimaster.wmkeyboard.core.settings.effectiveTimeZones
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.SelectionMacroPlacement
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
@@ -31,6 +32,7 @@ internal const val SelectionMacroRoute = "selection_macros"
 internal fun SelectionMacroSettingsScreen(
     repository: SettingsRepository,
     settings: KeyboardSettings,
+    onNavigate: (String) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val macros = settings.selectionMacros
@@ -85,15 +87,34 @@ internal fun SelectionMacroSettingsScreen(
                 default = SettingsDefaults.selectionMacros.detectEntities,
             ) { scope.launch { repository.setSelectionMacroDetectEntities(it) } }
         }
+        // Forty-odd actions are a screen, not a row of chips.
         item {
-            MultiChoiceSetting(
+            NavRow(
                 R.string.selection_macros_actions_title,
                 subtitle = stringResource(R.string.selection_macros_actions_subtitle),
-                info = stringResource(R.string.selection_macros_actions_info),
-                options = SelectionMacros.configurable.map { it to stringResource(it.labelRes) },
-                selected = macros.macros,
-                default = SettingsDefaults.selectionMacros.macros,
-            ) { scope.launch { repository.setSelectionMacros(it) } }
+                value = stringResource(
+                    R.string.selection_macros_actions_count,
+                    macros.macros.count { it in SelectionMacros.configurable },
+                    SelectionMacros.configurable.size,
+                ),
+                route = SelectionMacroActionsRoute,
+            ) { onNavigate(SelectionMacroActionsRoute) }
+        }
+        item {
+            NavRow(
+                R.string.selection_macros_ai_title,
+                subtitle = stringResource(R.string.selection_macros_ai_subtitle),
+                value = macros.aiDirectActions.size.toString(),
+                route = SelectionMacroAiRoute,
+            ) { onNavigate(SelectionMacroAiRoute) }
+        }
+        item {
+            NavRow(
+                R.string.selection_macros_zones_title,
+                subtitle = stringResource(R.string.selection_macros_zones_subtitle),
+                value = macros.effectiveTimeZones(java.util.TimeZone.getDefault().id).size.toString(),
+                route = SelectionMacroZonesRoute,
+            ) { onNavigate(SelectionMacroZonesRoute) }
         }
     }
 }

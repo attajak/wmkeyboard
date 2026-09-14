@@ -559,7 +559,7 @@ internal fun AiActionsSettings(
 }
 /** A shipped action's translated name, or the name the user gave it. */
 @Composable
-private fun aiActionName(spec: AiActionSpec): String =
+internal fun aiActionName(spec: AiActionSpec): String =
     BuiltInAiActions.labelRes(spec)?.let { stringResource(it) } ?: spec.name
 /** The one-line recap under an action's name on the list screen. */
 @Composable

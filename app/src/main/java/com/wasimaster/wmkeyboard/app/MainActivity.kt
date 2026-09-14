@@ -1500,7 +1500,34 @@ private fun SettingsNavGraph(
                 { navController.popBackStack() },
                 route = SelectionMacroRoute,
             ) {
-                SelectionMacroSettingsScreen(repository, settings)
+                SelectionMacroSettingsScreen(repository, settings) { navController.navigate(it) }
+            }
+        }
+        composable(SelectionMacroActionsRoute) {
+            SettingsScreen(
+                stringResource(R.string.selection_macros_actions_title),
+                { navController.popBackStack() },
+                route = SelectionMacroActionsRoute,
+            ) {
+                SelectionMacroActionsScreen(repository, settings) { navController.navigate(it) }
+            }
+        }
+        composable(SelectionMacroAiRoute) {
+            SettingsScreen(
+                stringResource(R.string.selection_macros_ai_title),
+                { navController.popBackStack() },
+                route = SelectionMacroAiRoute,
+            ) {
+                SelectionMacroAiScreen(repository, settings) { navController.navigate(it) }
+            }
+        }
+        composable(SelectionMacroZonesRoute) {
+            SettingsScreen(
+                stringResource(R.string.selection_macros_zones_title),
+                { navController.popBackStack() },
+                route = SelectionMacroZonesRoute,
+            ) {
+                SelectionMacroZonesScreen(repository, settings)
             }
         }
         composable("advanced") {

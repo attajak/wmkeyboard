@@ -57,6 +57,7 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.DataSaverOn
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.Checklist
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Fingerprint
@@ -501,6 +502,9 @@ internal object SettingsRouteIcons {
         "servers" to { Icons.Outlined.Dns },
         "notifications" to { Icons.Outlined.Notifications },
         "selection_macros" to { Icons.Outlined.HighlightAlt },
+        "selection_macros/actions" to { Icons.Outlined.Checklist },
+        "selection_macros/ai" to { Icons.Outlined.AutoAwesome },
+        "selection_macros/zones" to { Icons.Outlined.Public },
         "advanced" to { Icons.Outlined.Tune },
         "backup" to { Icons.Outlined.Save },
         "backup/auto" to { Icons.Outlined.Schedule },
