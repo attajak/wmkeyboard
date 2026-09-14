@@ -71,6 +71,7 @@ import com.wasimaster.wmkeyboard.core.layout.panelRowTops
 import com.wasimaster.wmkeyboard.core.layout.repair
 import com.wasimaster.wmkeyboard.core.layout.resolvePanelLayout
 import com.wasimaster.wmkeyboard.core.layout.rowScaledKeyHeight
+import com.wasimaster.wmkeyboard.core.layout.secondaryLayouts
 import com.wasimaster.wmkeyboard.core.layout.spanRowWidths
 import com.wasimaster.wmkeyboard.core.layout.validatePanelLayout
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
@@ -148,8 +149,8 @@ internal fun fieldKindsFor(kind: PanelKind): List<PanelFieldKind> =
 
 /**
  * The actions a panel key may take: the panel's own component first, then
- * every typing action the panel repair accepts. Shift, caps lock, Fn and the
- * chorded keys are left out because `repair` would drop them anyway.
+ * every typing action the panel repair accepts — which since issue #183 is
+ * every action of the key catalog but the two `isAllowedOnPanel` names.
  */
 internal fun panelKeyActionCatalog(kind: PanelKind): List<KeyActionOption> {
     val kinds = fieldKindsFor(kind)
@@ -694,6 +695,9 @@ internal fun PanelEditorBody(
             onDismiss = { onSheetOpenChange(false) },
             catalog = panelKeyActionCatalog(kind),
             fieldKinds = fieldKindsFor(kind).takeIf { it.isNotEmpty() },
+            // An "open a layout" key on a panel names a secondary layout the
+            // same way one on a typing grid does.
+            secondaryLayouts = secondaryLayouts(settings.customLayouts),
         )
     }
 }

@@ -51,6 +51,36 @@ class PanelLayoutTest {
         assertEquals(listOf(space, delete, edit), sent)
     }
 
+    /**
+     * Issue #183: the layer keys leave the panel and then switch, so the
+     * layer lands on screen; shift and the chorded keys are plain keys.
+     */
+    @Test
+    fun `layer keys close the panel before they switch, and shift and chords go straight through`() {
+        val sent = mutableListOf<Key>()
+        val log = mutableListOf<String>()
+        val route = { key: Key ->
+            routePanelKey(key, { sent += it; log += "key" }, { log += "close" })
+        }
+        val symbols = Key("?123", action = KeyAction.Symbols)
+        val fn = Key("Fn", action = KeyAction.Fn)
+        val layout = Key("L", action = KeyAction.Layout("my_layout"))
+        for (key in listOf(symbols, fn, layout)) {
+            log.clear()
+            route(key)
+            assertEquals(listOf("close", "key"), log)
+        }
+        assertEquals(listOf(symbols, fn, layout), sent)
+        sent.clear(); log.clear()
+        val shift = Key("⇧", action = KeyAction.Shift)
+        val caps = Key("⇪", action = KeyAction.CapsLock)
+        val dot = Key("·", action = KeyAction.MorseDot)
+        val braille = Key("1", action = KeyAction.BrailleDot(1, release = true))
+        route(shift); route(caps); route(dot); route(braille)
+        assertEquals(listOf(shift, caps, dot, braille), sent)
+        assertFalse("close" in log)
+    }
+
     @Test
     fun `the select key lights with selection mode and a text key does not`() {
         val select = Key("", action = KeyAction.Edit(TextEditAction.SELECT))

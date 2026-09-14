@@ -202,11 +202,18 @@ private class PanelSlot(
  * — that is what it has always meant on the emoji panel's bottom row — rather
  * than reaching the service, whose Letters handler switches the typing grid's
  * layer and must keep doing exactly that under an emoji *search*, where the
- * real key rows sit below the panel. A component's cell never dispatches.
+ * real key rows sit below the panel. The other layer keys — ?123, Fn, "open a
+ * layout" — leave the panel too and *then* reach the service, so the layer
+ * they switch to is the one on screen rather than one hidden under a panel
+ * that stayed up (issue #183). A component's cell never dispatches.
  */
 internal fun routePanelKey(key: Key, onKey: (Key) -> Unit, onClose: () -> Unit) {
     when (key.action) {
         KeyAction.Letters -> onClose()
+        KeyAction.Symbols, KeyAction.Fn, is KeyAction.Layout -> {
+            onClose()
+            onKey(key)
+        }
         is KeyAction.Field -> Unit
         else -> onKey(key)
     }

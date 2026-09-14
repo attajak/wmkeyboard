@@ -105,15 +105,35 @@ class PanelLayoutRepairTest {
     }
 
     @Test
-    fun `a shift key on a panel blocks and is dropped`() {
-        val spec = emoji(listOf(field(PanelFieldKind.EMOJI_GRID, 9f), Key("⇧", action = KeyAction.Shift)))
+    fun `a kana variant or Keyman key on a panel blocks and is dropped`() {
+        val spec = emoji(listOf(field(PanelFieldKind.EMOJI_GRID, 8f), Key("小", action = KeyAction.KanaVariant)))
         assertTrue(
             validatePanelLayout(spec).blocking()
                 .any { it.text.pluralsRes == R.plurals.core_lang_panel_key_not_allowed_error },
         )
         val repaired = spec.repair()
         assertTrue(repaired.repairNotes.names(R.string.core_lang_panel_repair_key_dropped))
-        assertTrue(repaired.spec.grid.rows.flatten().none { it.action == KeyAction.Shift })
+        assertTrue(repaired.spec.grid.rows.flatten().none { it.action == KeyAction.KanaVariant })
+    }
+
+    /** Issue #183: the keys a panel used to refuse are ordinary keys now. */
+    @Test
+    fun `shift, caps lock, Fn, a layout key and the chorded keys are allowed on a panel`() {
+        val keys = listOf(
+            Key("⇧", action = KeyAction.Shift),
+            Key("⇪", action = KeyAction.CapsLock),
+            Key("Fn", action = KeyAction.Fn),
+            Key("L", action = KeyAction.Layout("my_layout")),
+            Key("1", action = KeyAction.BrailleDot(1)),
+            Key("·", action = KeyAction.MorseDot),
+            Key("−", action = KeyAction.MorseDash),
+        )
+        for (key in keys) assertTrue("$key", key.action.isAllowedOnPanel())
+        val spec = emoji(listOf(field(PanelFieldKind.EMOJI_GRID, 3f)) + keys)
+        assertEquals(emptyList<LayoutFinding>(), validatePanelLayout(spec).blocking())
+        val repaired = spec.repair()
+        assertEquals(keys, repaired.spec.grid.rows.flatten().drop(1))
+        assertTrue(repaired.repairNotes.isEmpty())
     }
 
     @Test
@@ -142,7 +162,7 @@ class PanelLayoutRepairTest {
         val broken = listOf(
             emoji(listOf(field(PanelFieldKind.EMOJI_TABS))),
             emoji(listOf(field(PanelFieldKind.EMOJI_GRID, 5f), field(PanelFieldKind.EMOJI_GRID, 5f))),
-            emoji(listOf(field(PanelFieldKind.EMOJI_GRID), Key("x", action = KeyAction.Fn))),
+            emoji(listOf(field(PanelFieldKind.EMOJI_GRID), Key("x", action = KeyAction.KanaVariant))),
             emoji(listOf(field(PanelFieldKind.EMOJI_GRID), Key("", action = KeyAction.Unknown("zap")))),
             emoji(listOf(field(PanelFieldKind.EMOJI_GRID), Key("w", width = -1f))),
             emoji(listOf(field(PanelFieldKind.EMOJI_GRID), Key("s", rowSpan = 99))),
