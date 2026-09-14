@@ -4680,6 +4680,21 @@ data class LayoutBehaviorSettings(
      */
     val spaceSwipeDownHide: Boolean = false,
     /**
+     * A short, quick swipe down on a key types its corner hint — the first of
+     * its long-press characters — without waiting out the hold (issue #178).
+     * The `1` on `q`, the `!` on the exclamation-mark key's shifted twin,
+     * whatever the layout put there. Any key with long-press characters, on
+     * any layer; the spacebar, backspace and the modifier keys keep their own
+     * drags.
+     *
+     * Off by default. A glide that opens straight down off a key — a fast
+     * "ed" — can read as a flick, and a board with glide typing on is a board
+     * whose owner may glide short words. Duration, direction, length and
+     * straightness all have to agree before a stroke is taken from the
+     * decoder, and the setting's own text says what it costs.
+     */
+    val hintFlick: Boolean = false,
+    /**
      * Turn the spacebar cursor slide into a 2-D touchpad: a vertical drag moves
      * the caret up and down as well as left and right. Only applies while a
      * spacebar swipe slot is set to cursor control; when on it also claims the
@@ -5869,6 +5884,7 @@ class SettingsRepository(private val context: Context) {
         private val SPACEBAR_LABEL = stringPreferencesKey("spacebar_label")
         private val SYMBOLS_LONGPRESS_NUMPAD = booleanPreferencesKey("symbols_longpress_numpad")
         private val SPACE_SWIPE_DOWN_HIDE = booleanPreferencesKey("space_swipe_down_hide")
+        private val HINT_FLICK = booleanPreferencesKey("hint_flick")
         private val SPACE_CURSOR_2D = booleanPreferencesKey("space_cursor_2d")
         private val HINT_FONT_SCALE = floatPreferencesKey("hint_font_scale")
         private val TRANSLITERATION_HINTS = stringPreferencesKey("transliteration_hints")
@@ -7260,6 +7276,7 @@ class SettingsRepository(private val context: Context) {
                     p[SYMBOLS_LONGPRESS_NUMPAD] ?: defaults.layoutBehavior.symbolsLongPressNumpad,
                 spaceSwipeDownHide =
                     p[SPACE_SWIPE_DOWN_HIDE] ?: defaults.layoutBehavior.spaceSwipeDownHide,
+                hintFlick = p[HINT_FLICK] ?: defaults.layoutBehavior.hintFlick,
                 spaceCursor2d = p[SPACE_CURSOR_2D] ?: defaults.layoutBehavior.spaceCursor2d,
                 spaceHoldKeys = p[SPACE_HOLD_KEYS]
                     ?.split('\n')?.filter { it.isNotEmpty() }
@@ -11275,6 +11292,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpaceSwipeDownHide(value: Boolean) =
         editPrefs { it[SPACE_SWIPE_DOWN_HIDE] = value }
+
+    suspend fun setHintFlick(value: Boolean) =
+        editPrefs { it[HINT_FLICK] = value }
 
     suspend fun setSpaceCursor2d(value: Boolean) =
         editPrefs { it[SPACE_CURSOR_2D] = value }

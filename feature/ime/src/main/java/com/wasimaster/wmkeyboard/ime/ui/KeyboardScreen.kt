@@ -277,6 +277,8 @@ import coil3.compose.AsyncImage
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.glideAnchor
+import com.wasimaster.wmkeyboard.ime.HINT_FLICK_MIN_TRAVEL_HEIGHTS
+import com.wasimaster.wmkeyboard.ime.hintFlick
 import com.wasimaster.wmkeyboard.ime.OCTOPUS_MIN_TRAVEL_WIDTHS
 import com.wasimaster.wmkeyboard.ime.OCTOPUS_SLOP_CLEARANCE
 import com.wasimaster.wmkeyboard.ime.OCTOPUS_START_REACH_WIDTHS
@@ -10308,6 +10310,36 @@ internal fun Key?.startsLayerDrag(): Boolean =
 internal fun Key?.ownsDrag(): Boolean = startsChordDrag() || startsLayerDrag()
 
 /**
+ * Whether a short flick down off this key types its corner hint (issue #178).
+ *
+ * Any key whose hold opens the popup and whose first entry is a character —
+ * which is what the corner shows. The keys left out already own a drag of
+ * their own: the spacebar's swipes, backspace's delete swipe (its hold is
+ * spoken for, so [opensAlternatesPopup] refuses it), a kana key's four arms,
+ * and the modifier and mode keys whose drags chord and peek.
+ */
+internal fun Key.takesHintFlick(): Boolean =
+    longPress.isNotEmpty() && opensAlternatesPopup() && flick.isEmpty() &&
+        action != KeyAction.Space && !ownsDrag()
+
+/**
+ * The key a hint flick beginning at [point] would type from, with its cell, or
+ * null when nothing there takes one. Root space, like [KeyRects.keyAt].
+ */
+internal fun KeyRects.hintFlickTarget(point: Offset): Pair<Key, Rect>? {
+    val key = keyAt(point)?.takeIf { it.takesHintFlick() } ?: return null
+    val cell = cellAt(point) ?: return null
+    return key to cell
+}
+
+/**
+ * The least a hint flick may travel, as a multiple of the system touch slop:
+ * the floor under [HINT_FLICK_MIN_TRAVEL_HEIGHTS] on a key too short for half
+ * its height to mean anything.
+ */
+private const val HINT_FLICK_SLOP_FLOOR = 1.5f
+
+/**
  * Whether lifting on this key during a layer peek types it (issue #108).
  *
  * A whitelist rather than a list of exceptions. The peek exists to reach one
@@ -11383,6 +11415,12 @@ private fun KeyRows(
     // Whether the glide loop should hand short strokes on rather than dropping
     // them: true whenever a flick could be what is happening, glide or no.
     val octopusFlickWanted = octopusSettings.enabled && octopusSettings.flickCommits
+    // Issue #178: a short flick down off a key types its corner hint. Asked at
+    // the lift, like the octopus flick, and in two places for the same reason:
+    // a stroke the glide loop claimed is judged inside it, and every stroke it
+    // never claimed — glide off, a symbol layer, a punctuation key — by the
+    // loop of its own further down.
+    val hintFlickOn = state.settings.layoutBehavior.hintFlick
     // Read live rather than captured: the words change on every keystroke, and
     // a pointer loop restarted that often would be a loop that misses touches.
     val octopusLive = rememberUpdatedState(state.octopus)
@@ -11957,6 +11995,14 @@ private fun KeyRows(
                     if (liveRects.value.keyAt(down.position + boxOrigin).ownsDrag()) {
                         return@awaitEachGesture
                     }
+                    // The key a flick down would type the hint of (#178), fixed
+                    // at the down the way the octopus anchor is: the stroke is
+                    // judged at the lift, but the key it began on cannot change.
+                    val hintTarget = if (hintFlickOn) {
+                        liveRects.value.hintFlickTarget(down.position + boxOrigin)
+                    } else {
+                        null
+                    }
                     val slop = viewConfiguration.touchSlop
                     // Post-typing cooldown: right after a tap, hold the glide back
                     // by requiring more travel, fading out across the window. A
@@ -12236,6 +12282,30 @@ private fun KeyRows(
                         }
                     }
                     if (isGesture) {
+                        // A short flick down off the key it began on is its hint,
+                        // not a word (#178). Asked before the picker's verdict and
+                        // the decoder alike: a stroke this quick never froze the
+                        // picker and crossed no spacebar, and there is nothing to
+                        // decode. A preview it managed to send is retired the way
+                        // a cancelled stroke's is, and the hint is typed as a
+                        // popup's pick would be.
+                        if (hintTarget != null && segments.isEmpty() && !picker.isOpen &&
+                            hintFlick(
+                                points = seg,
+                                keyHeightPx = hintTarget.second.height,
+                                minTravelPx = maxOf(
+                                    hintTarget.second.height * HINT_FLICK_MIN_TRAVEL_HEIGHTS,
+                                    slop * effectiveSlop * OCTOPUS_SLOP_CLEARANCE,
+                                ),
+                            )
+                        ) {
+                            trail.release()
+                            if (previewedSeg) {
+                                keyList?.let { onGesture(seg, it, keyWidth.value, GlideVerdict.Cancel) }
+                            }
+                            stampedOnText(hintTarget.first.longPress.first())
+                            return@awaitEachGesture
+                        }
                         // Lifting on a target takes that word; lifting in the
                         // cancel zone takes nothing; lifting anywhere else takes
                         // the decoder's own first choice, so an ignored picker
@@ -12342,6 +12412,48 @@ private fun KeyRows(
                         if (moved) lastHwStrokeTime.longValue = SystemClock.uptimeMillis()
                     }
                     hwActiveStroke = emptyList()
+                }
+            }
+            // Issue #178: a short flick down off a key types its corner hint.
+            // Below the glide and handwriting loops on purpose, and on the same
+            // Initial pass: a stroke either of them took arrives here consumed
+            // and is theirs — the glide loop asks this same question at its own
+            // lift. What reaches this loop unconsumed is every stroke they never
+            // claimed: a board with glide typing off, a symbol layer, a
+            // punctuation key. Judged at the lift and consuming only the lift,
+            // exactly as the octopus flick does, so a stroke that turns out not
+            // to be a flick still lands on the key it began on; a consumed lift
+            // is what tells that key to drop the press it would have typed.
+            .pointerInput(hintFlickOn) {
+                if (!hintFlickOn) return@pointerInput
+                awaitEachGesture {
+                    val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                    val (key, cell) = liveRects.value.hintFlickTarget(down.position + boxOrigin)
+                        ?: return@awaitEachGesture
+                    // Floored at the system slop with room to spare, so a tiny
+                    // key cannot turn a sloppy tap into a flick.
+                    val minTravel = maxOf(
+                        cell.height * HINT_FLICK_MIN_TRAVEL_HEIGHTS,
+                        viewConfiguration.touchSlop * HINT_FLICK_SLOP_FLOOR,
+                    )
+                    val points = ArrayList<GesturePoint>()
+                    points.add(GesturePoint(down.position.x, down.position.y, down.uptimeMillis))
+                    while (true) {
+                        val event = awaitPointerEvent(PointerEventPass.Initial)
+                        val change = event.changes.firstOrNull { it.id == down.id }
+                            ?: return@awaitEachGesture
+                        // Another loop took the stroke, or the hold opened the
+                        // key's popup and the finger is choosing in it.
+                        if (change.isConsumed || alternatesGate.open) return@awaitEachGesture
+                        points.add(GesturePoint(change.position.x, change.position.y, change.uptimeMillis))
+                        if (!change.pressed) {
+                            if (hintFlick(points, cell.height, minTravel)) {
+                                change.consume()
+                                stampedOnText(key.longPress.first())
+                            }
+                            return@awaitEachGesture
+                        }
+                    }
                 }
             }
             // Smart key-hit detection: watch every pointer-down on the Initial

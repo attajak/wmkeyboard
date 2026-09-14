@@ -1996,6 +1996,16 @@ internal fun TypingGesturesSettings(
             ) { scope.launch { repository.setSpaceSwipeDownHide(it) } }
         }
         item {
+            // Issue #178: a quick flick down on a key types its corner hint.
+            ToggleSetting(
+                R.string.typing_hint_flick_title,
+                stringResource(R.string.typing_hint_flick_subtitle),
+                settings.layoutBehavior.hintFlick,
+                info = stringResource(R.string.typing_hint_flick_info),
+                default = SettingsDefaults.layoutBehavior.hintFlick,
+            ) { scope.launch { repository.setHintFlick(it) } }
+        }
+        item {
             // Issue #57: the characters the spacebar's long press offers, space
             // separated. Blank gives the hold back to the language picker.
             TextFieldSetting(

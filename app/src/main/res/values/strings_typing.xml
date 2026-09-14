@@ -551,6 +551,10 @@
     <string name="typing_space_swipe_down_hide_subtitle">A swipe down on the spacebar closes the keyboard</string>
     <string name="typing_space_swipe_down_hide_info">Swipe straight down on the spacebar to close the keyboard. This setting is off by default, so an accidental swipe down never closes the keyboard. When the 2-D cursor touchpad is on, a swipe down moves the cursor instead. The touchpad has priority.</string>
 
+    <string name="typing_hint_flick_title">Swipe down to type the hint</string>
+    <string name="typing_hint_flick_subtitle">A quick swipe down on a key types its small corner character</string>
+    <string name="typing_hint_flick_info">Each key shows its first press-and-hold character in the corner, such as 1 on q. A short, quick swipe straight down on the key types that character with no hold. This works on any key that has press-and-hold characters, on every layer. The spacebar, backspace and the shift and modifier keys keep their own swipes. The swipe must be short, straight down and fast. A longer or slower drag is a glide, as before. With glide typing on, a very fast glide of a short word that goes straight down, such as \"ed\", can type the hint instead. This setting is off by default.</string>
+
     <string name="typing_space_hold_keys_label">Spacebar long press keys</string>
     <string name="typing_space_hold_keys_hint">Type the characters you want on the spacebar long press, with a space between each one. Example: 🙂 ❤️ 👍. The keyboard then shows them in a popup when you press and hold the spacebar. Leave this blank to keep the normal long press, which opens the language picker or repeats spaces.</string>
 

@@ -148,6 +148,7 @@ internal val SettingsSearchKeywords: Map<Int, Int> = buildMap {
     put(R.string.typing_group_hardware_title, R.string.search_kw_typing_group_hardware)
     put(R.string.typing_group_octopus_title, R.string.search_kw_octopus)
     put(R.string.typing_group_otp_title, R.string.search_kw_typing_group_otp)
+    put(R.string.typing_hint_flick_title, R.string.search_kw_typing_hint_flick)
     put(R.string.typing_hw_mac_title, R.string.search_kw_typing_hw_mac)
     put(R.string.typing_inline_autofill_title, R.string.search_kw_typing_inline_autofill)
     put(R.string.typing_inline_emoji_search_title, R.string.search_kw_typing_inline_emoji_search)

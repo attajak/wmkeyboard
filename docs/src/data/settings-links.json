@@ -259,6 +259,7 @@
   {"title":"Cursor speed","name":"typing_space_cursor_step_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"2-D cursor touchpad","name":"typing_space_cursor_2d_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Swipe down to hide the keyboard","name":"typing_space_swipe_down_hide_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
+  {"title":"Swipe down to type the hint","name":"typing_hint_flick_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Spacebar long press keys","name":"typing_space_hold_keys_label","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Arrows on the spacebar","name":"typing_spacebar_language_arrows_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"The spacebar shows","name":"typing_spacebar_display_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},

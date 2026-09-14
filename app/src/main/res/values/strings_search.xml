@@ -152,6 +152,7 @@
     <string name="search_kw_typing_letter_swipe_action">graffiti unistroke scribble</string>
     <string name="search_kw_typing_personal_dictionary">user saved remembered</string>
     <string name="search_kw_typing_shift_enter">newline linebreak carriage return</string>
+    <string name="search_kw_typing_hint_flick">flick gesture alternate long press number symbol gboard</string>
     <string name="search_kw_typing_smart_currency">exchange rate forex dollar euro</string>
     <string name="search_kw_typing_smart_hit_detection">hit detection hitbox proximity targeting</string>
     <string name="search_kw_typing_smart_numbers">thousands separator comma</string>

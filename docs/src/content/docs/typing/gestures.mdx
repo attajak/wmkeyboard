@@ -1,6 +1,6 @@
 ---
 title: "Gestures"
-description: "Spacebar cursor and numpad swipes, swipe-down-to-hide, backspace word-delete, and volume-key cursor control."
+description: "Spacebar cursor and numpad swipes, swipe-down-to-hide, the hint flick, backspace word-delete, and volume-key cursor control."
 sidebar:
   order: 2
 ---
@@ -49,6 +49,16 @@ The 2-D cursor touchpad, when it's on, claims the vertical axis ahead of this on
 :::note
 There's a second, separate **Swipe down to hide** toggle for the toolbar strip, under Appearance → Toolbar. Two words shorter in the settings list, and a different element it acts on: a downward swipe on the toolbar, not on the spacebar. The two are independent switches, and both ship off.
 :::
+
+## Swiping down on a key for its hint
+
+<SettingsPath path="Typing / Gestures / Swipe down to type the hint" />
+
+Every key with press-and-hold characters shows the first of them in its corner: the <KeyCap>1</KeyCap> on <KeyCap>q</KeyCap>, the accents on a vowel, the currency signs on <KeyCap>$</KeyCap>. With this on, a short, quick swipe straight down on the key types that corner character outright, with no hold to wait out. It's the same character the popup would put first, on any key that has one, on every layer. Off by default.
+
+The swipe has to be all four things at once: **down** (within about 30° of straight down), **short** (between half a key's height and two of them), **straight**, and **quick** (under a quarter of a second from touch to lift). A drag that misses any of those is whatever it always was, so a slow pull down is still a glide and a tap that drifts is still a tap. The keys with a drag of their own keep it: the spacebar's swipes, backspace's delete swipe, the modifier and <KeyCap>?123</KeyCap> drags, and a kana key's four flick arms.
+
+The one real cost is with [glide typing](/typing/glide-typing/). A very fast glide of a short word whose stroke runs straight down between neighbouring rows, "ed" for instance, can read as a flick and type the hint instead. The timing rule is what keeps that rare, since even a short glide usually takes longer than a flick, but it's why the setting ships off.
 
 ## Opening the numpad with a swipe
 
@@ -173,6 +183,7 @@ A printable table of every gesture on one page lives at [Gesture cheat sheet](/r
 | 2-D cursor touchpad | Off |
 | Cursor speed | 16&nbsp;dp (8–32&nbsp;dp) |
 | Swipe down to hide the keyboard | Off |
+| Swipe down to type the hint | Off |
 | Arrows on the spacebar | On |
 | The spacebar shows | Language |
 | Spacebar text | Blank (live language name) |
@@ -189,6 +200,7 @@ Open the **Typing** tile in settings, or search "Gestures", "Backspace" or "Volu
 ## Details & edge cases
 
 - **Numpad is a discrete action, not a distance-based one.** Cursor keeps stepping for as long as you keep dragging. A swipe assigned to Numpad only needs to clear the initial slop once: the panel opens immediately and the rest of the drag does nothing.
+- **A hint flick is judged when the finger lifts, never while it's moving.** Nothing is claimed early, so a downward stroke that turns out to be longer, slower or bendier than a flick is decoded as the glide or read as the tap it always was. The one stroke it does take from glide typing is a fast, straight, short one, and the duration cap is what stops most short glided words from qualifying.
 - **Two settings hide the keyboard on a downward swipe, two words apart.** "Swipe down to hide the keyboard" lives here under Typing → Gestures and applies to the spacebar. "Swipe down to hide" under Appearance → Toolbar applies to the toolbar strip. They don't affect each other, and both are off out of the box.
 - **The 2-D cursor touchpad only takes precedence over swipe-down-to-hide once a drag has resolved to Cursor.** Hold time decides which slot governs a drag. With the defaults (quick swipe = Language, press and hold then swipe = Cursor), a fast downward flick inside the long-press delay belongs to the quick-swipe slot and dismisses the keyboard instead of moving the cursor down through lines.
 - **Backspace's word-delete acceleration resets on a reversal, not on release.** Dragging right mid-swipe doesn't bring back a deleted word. It only means the *next* leftward word costs full travel again instead of the shrunk amount.
