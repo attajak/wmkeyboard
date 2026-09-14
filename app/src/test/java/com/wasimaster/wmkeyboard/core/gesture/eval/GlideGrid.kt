@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.core.gesture.eval
 
 import com.wasimaster.wmkeyboard.core.gesture.GlideCoverage
 import com.wasimaster.wmkeyboard.core.gesture.KeyCenter
+import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.compile
@@ -31,7 +32,16 @@ class GlideGrid private constructor(
     val name: String,
     /** Every character the grid can produce, at its key's centre. */
     val keys: List<KeyCenter>,
+    /** The shift key's cell, in key widths, or null when the letters layer has none. */
+    val shift: Cell? = null,
 ) {
+
+    /** A key's rectangle, in key widths; rows are one key width tall. */
+    class Cell(val left: Float, val top: Float, val right: Float, val bottom: Float) {
+        val centerX: Float get() = (left + right) / 2f
+        val centerY: Float get() = (top + bottom) / 2f
+        fun contains(x: Float, y: Float): Boolean = x >= left && x < right && y >= top && y < bottom
+    }
 
     private val byCodePoint: Map<Int, KeyCenter> = keys.associateBy { it.codePoint }
 
@@ -72,10 +82,14 @@ class GlideGrid private constructor(
             val rowWidths = layer.rows.map { row -> row.sumOf { it.width.toDouble() }.toFloat() }
             val widest = rowWidths.maxOrNull() ?: 0f
             val centres = HashMap<Int, Pair<Float, Float>>()
+            var shift: Cell? = null
             for ((index, row) in layer.rows.withIndex()) {
                 var x = (widest - rowWidths[index]) / 2f
                 for (key in row) {
                     val centre = x + key.width / 2f
+                    if (key.action == KeyAction.Shift && shift == null) {
+                        shift = Cell(x, index - 0.5f, x + key.width, index + 0.5f)
+                    }
                     x += key.width
                     // Anchored by the first character the key writes, matching
                     // what the renderer reports — a Bengali nukta key writes
@@ -89,7 +103,7 @@ class GlideGrid private constructor(
             // in. Two grids that disagree about that would make every number
             // here a measurement of the disagreement.
             val set = LayoutSet(layer, layer, layer)
-            return GlideGrid(spec.name, set.glideKeys { centres[it] })
+            return GlideGrid(spec.name, set.glideKeys { centres[it] }, shift)
         }
     }
 }

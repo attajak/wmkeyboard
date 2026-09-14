@@ -70,6 +70,7 @@ import com.wasimaster.wmkeyboard.core.settings.PickerTimeoutRange
 import com.wasimaster.wmkeyboard.core.icons.IconSlots
 import com.wasimaster.wmkeyboard.ime.ui.SlotIcon
 import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
+import com.wasimaster.wmkeyboard.core.settings.ShiftGlideMode
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerChoicesRange
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerDwellMsRange
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerSensitivity
@@ -1618,6 +1619,25 @@ internal fun TypingGesturesSettings(
                         info = stringResource(R.string.typing_shift_glide_capitals_info),
                         default = SettingsDefaults.gesture.shiftGlideCapitals,
                     ) { scope.launch { repository.setGestureShiftCapitals(it) } }
+                }
+                // How a crossing reads, only while crossings mean anything.
+                if (settings.gesture.shiftGlideCapitals) {
+                    item {
+                        ChoiceSetting(
+                            title = R.string.typing_shift_glide_mode_title,
+                            subtitle = stringResource(R.string.typing_shift_glide_mode_subtitle),
+                            info = stringResource(R.string.typing_shift_glide_mode_info),
+                            options = listOf(
+                                ShiftGlideMode.WORD to
+                                    stringResource(R.string.typing_shift_glide_mode_word_label),
+                                ShiftGlideMode.LETTER to
+                                    stringResource(R.string.typing_shift_glide_mode_letter_label),
+                            ),
+                            selected = settings.gesture.shiftGlideMode,
+                            onChange = { scope.launch { repository.setGestureShiftGlideMode(it) } },
+                            default = SettingsDefaults.gesture.shiftGlideMode,
+                        )
+                    }
                 }
                 item {
                     ToggleSetting(

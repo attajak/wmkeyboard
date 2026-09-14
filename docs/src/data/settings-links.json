@@ -240,6 +240,7 @@
   {"title":"Forget my swipe style","name":"typing_glide_swipe_style_forget","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Glide across the spacebar","name":"typing_space_glide_multiword_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Glide over Shift to capitalize","name":"typing_shift_glide_capitals_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
+  {"title":"What a pass over Shift capitalizes","name":"typing_shift_glide_mode_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Space after a glided word","name":"typing_space_after_glide_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Apostrophe in a glide","name":"typing_glide_apostrophe_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Swipe to add 's","name":"typing_possessive_swipe_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},

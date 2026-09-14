@@ -346,8 +346,19 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
      * Where a word's keys were visited along a stroke: the key index of each
      * visit (consecutive repeats collapsed) and the resampled stroke position
      * it was placed on, in key widths.
+     *
+     * [samples] is the resampled index each visit was placed on, `0` until
+     * [GlideWorkspace.SAMPLE_POINTS], and [chars] the offset in the word at
+     * which each visit's characters begin — together, what maps a place along
+     * the stroke back to the letters written there (see `GlideCase.Letters`).
      */
-    class Alignment(val keys: IntArray, val x: FloatArray, val y: FloatArray) {
+    class Alignment(
+        val keys: IntArray,
+        val x: FloatArray,
+        val y: FloatArray,
+        val samples: IntArray = IntArray(keys.size),
+        val chars: IntArray = IntArray(keys.size),
+    ) {
         val size: Int get() = keys.size
     }
 
@@ -480,17 +491,21 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
     ): Alignment? {
         if (path.size < MIN_SAMPLES || keyWidth <= 0f || keys.keyCount == 0) return null
         val visits = IntArray(GlideWorkspace.MAX_IDEAL_POINTS)
+        val starts = IntArray(GlideWorkspace.MAX_IDEAL_POINTS)
         var count = 0
         var previous = -1
         var at = 0
         while (at < word.length) {
             val codePoint = word.codePointAt(at)
+            val start = at
             at += Character.charCount(codePoint)
             val key = keys.keyIndex(codePoint)
             if (key < 0) return null
             if (key == previous) continue
             if (count >= GlideWorkspace.MAX_IDEAL_POINTS) return null
-            visits[count++] = key
+            visits[count] = key
+            starts[count] = start
+            count++
             previous = key
         }
         if (count < 2) return null
@@ -546,13 +561,15 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
 
         val x = FloatArray(count)
         val y = FloatArray(count)
+        val samples = IntArray(count)
         var j = n - 1
         for (m in count - 1 downTo 0) {
             x[m] = ws.pathX[j]
             y[m] = ws.pathY[j]
+            samples[m] = j
             if (m > 0) j = back[m * n + j]
         }
-        return Alignment(visits.copyOf(count), x, y)
+        return Alignment(visits.copyOf(count), x, y, samples, starts.copyOf(count))
     }
 
     // ---- the walk ----

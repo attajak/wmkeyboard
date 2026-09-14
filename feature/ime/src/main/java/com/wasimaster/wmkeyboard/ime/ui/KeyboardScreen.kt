@@ -290,6 +290,7 @@ import com.wasimaster.wmkeyboard.ime.octopusFlickShape
 import com.wasimaster.wmkeyboard.ime.Modifiers
 import com.wasimaster.wmkeyboard.core.accessibility.KeyboardPassthrough
 import com.wasimaster.wmkeyboard.core.settings.ScreenReaderMode
+import com.wasimaster.wmkeyboard.core.settings.ShiftGlideMode
 import kotlinx.coroutines.delay
 import com.wasimaster.wmkeyboard.core.icons.IconSlots
 import com.wasimaster.wmkeyboard.core.clipboard.ClipEntities
@@ -304,6 +305,8 @@ import com.wasimaster.wmkeyboard.core.emoji.EmojiVariantIndex
 import com.wasimaster.wmkeyboard.core.emoji.TextArt
 import com.wasimaster.wmkeyboard.core.text.EmojiGraphemes
 import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
+import com.wasimaster.wmkeyboard.core.gesture.GlideCase
+import com.wasimaster.wmkeyboard.core.gesture.GlideShiftDetour
 import androidx.compose.ui.graphics.lerp
 import com.wasimaster.wmkeyboard.core.theme.KeyOverride
 import com.wasimaster.wmkeyboard.core.theme.brush
@@ -878,7 +881,7 @@ fun KeyboardScreen(
     onText: (String) -> Unit = {},
     onGesture: (List<GesturePoint>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
         { _, _, _, _ -> },
-    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float, Int) -> Unit = { _, _, _, _ -> },
+    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float, GlideCase) -> Unit = { _, _, _, _ -> },
     onGestureWords: (List<List<GesturePoint>>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
         { _, _, _, _ -> },
     onKeyTouch: (Float, Float) -> Unit = { _, _ -> },
@@ -3370,7 +3373,10 @@ private fun TopBar(
                     // a glide through the shift key previews its capital on
                     // the strip as well as in the pill. Zero crossings between
                     // strokes, so this is the board's own shift then.
-                    shiftState = shiftForGlide(state.shiftState, state.glideCapitals),
+                    shiftState = shiftForGlide(state.shiftState, state.glideCase),
+                    // Per-letter capitals a stroke drew (#163), which no one
+                    // shift state can say; empty under the whole-word reading.
+                    casedWords = state.glideCased,
                     // Only while the live candidates are the ones on screen: the
                     // strip holds the last set behind alpha 0, and a key promised
                     // against a faded word would commit something else.
@@ -3592,6 +3598,12 @@ private fun RowScope.LatinSuggestionChips(
     /** The word autocorrect has decided a space will put in, or null (#90). */
     autocorrectWord: String? = null,
     shiftState: ShiftState,
+    /**
+     * Words shown in a casing of their own, keyed by the raw word: a glide's
+     * per-letter capitals (#163). Wins over [shiftState] for the words it
+     * names; the raw word is still what a tap commits.
+     */
+    casedWords: Map<String, String> = emptyMap(),
     /** The hotkey badges, or null when no physical keyboard is asking for them. */
     hints: HintPlan? = null,
     onSuggestion: (String) -> Unit,
@@ -3718,7 +3730,7 @@ private fun RowScope.LatinSuggestionChips(
                     val display = if (isEmoji) {
                         shaper.shape(suggestion)
                     } else {
-                        displayCaseForShift(suggestion, shiftState)
+                        casedWords[suggestion] ?: displayCaseForShift(suggestion, shiftState)
                     }
                     val family = if (isEmoji) emojiFamilyFor(suggestion) else null
                     val weight =
@@ -8375,7 +8387,7 @@ private fun KeyboardBody(
     onKey: (Key) -> Unit,
     onText: (String) -> Unit,
     onGesture: (List<GesturePoint>, List<KeyCenter>, Float, GlideVerdict) -> Unit,
-    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float, Int) -> Unit,
+    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float, GlideCase) -> Unit,
     onGestureWords: (List<List<GesturePoint>>, List<KeyCenter>, Float, GlideVerdict) -> Unit,
     onKeyTouch: (Float, Float) -> Unit = { _, _ -> },
     onTouchKeys: (List<KeyCenter>) -> Unit = {},
@@ -11213,7 +11225,7 @@ private fun KeyRows(
     onText: (String) -> Unit,
     onGesture: (List<GesturePoint>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
         { _, _, _, _ -> },
-    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float, Int) -> Unit = { _, _, _, _ -> },
+    onGesturePreview: (List<GesturePoint>, List<KeyCenter>, Float, GlideCase) -> Unit = { _, _, _, _ -> },
     onCursorMove: (Int) -> Unit = {},
     onLayoutSelect: (String) -> Unit = {},
     onGestureWords: (List<List<GesturePoint>>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
@@ -11528,6 +11540,8 @@ private fun KeyRows(
     // (#115). Read live for the same reason the apostrophe key is: the stroke's
     // loop outlives this composition.
     val capitalGlide = rememberUpdatedState(gesture.shiftGlideCapitals)
+    // Whether each crossing names one letter rather than the word (#163).
+    val letterGlide = rememberUpdatedState(gesture.shiftGlideMode == ShiftGlideMode.LETTER)
     // Stamp of the last tap-typed key (uptime ms). A glide starting within
     // [cooldownMs] of it has to travel further before it takes over, so a stray
     // slide off a key during fast tapping is not misread as a swipe-word. Held
@@ -12060,6 +12074,9 @@ private fun KeyRows(
                     // being drawn now. With spaceGlide off there is only ever
                     // one segment — the whole stroke, spacebar points included.
                     val segments = ArrayList<List<GesturePoint>>()
+                    // What each closed segment's shift crossings asked for,
+                    // parallel to [segments].
+                    val segCases = ArrayList<GlideCase>()
                     // Reassigned wholesale whenever a word segment closes, so it
                     // is a `var` holding a mutable buffer on purpose.
                     @Suppress("DoubleMutabilityForCollection")
@@ -12069,10 +12086,18 @@ private fun KeyRows(
                     // whether the finger is inside it now. Drawing through it
                     // capitalizes the word (#115): one crossing for a capital,
                     // two for a shout, counted on the way in so a slow drag
-                    // across the key is still one crossing.
+                    // across the key is still one crossing. Each crossing is
+                    // also remembered as the index in `seg` the finger left
+                    // for the key at, so the walk out and back can be cut from
+                    // the word and, per letter, so the crossing can name the
+                    // letter it followed (#163).
                     var shiftRect: Rect? = null
+                    // Its centre in the stroke's own space, for the cut.
+                    var shiftCenter: GesturePoint? = null
                     var wasOverShift = false
                     var shiftCrossings = 0
+                    @Suppress("DoubleMutabilityForCollection")
+                    var shiftCuts = ArrayList<Int>()
                     // The key whose word a flick off this stroke would take,
                     // and its centre. Null when nothing is floating there.
                     var flickAnchor: Pair<Int, Offset>? = null
@@ -12211,6 +12236,9 @@ private fun KeyRows(
                             } else {
                                 null
                             }
+                            shiftCenter = shiftRect?.let {
+                                GesturePoint(it.center.x - boxOrigin.x, it.center.y - boxOrigin.y)
+                            }
                             // Built once per stroke, from the layout rather than
                             // the measured map alone: a key's shifted and
                             // long-pressed characters have no centre of their
@@ -12252,11 +12280,20 @@ private fun KeyRows(
                             // spell whatever lies between the word and the key.
                             val overShift =
                                 shiftRect?.contains(change.position + boxOrigin) == true
-                            if (overShift && !wasOverShift) shiftCrossings++
+                            if (overShift && !wasOverShift) {
+                                shiftCrossings++
+                                shiftCuts.add(seg.size)
+                            }
                             wasOverShift = overShift
                             if (overSpace) {
                                 if (!wasOverSpace && seg.size >= 3) {
-                                    segments.add(seg)
+                                    val (points, case) = glideSegment(
+                                        seg, shiftCuts, shiftCenter, keyWidth.value, letterGlide.value,
+                                        endedOnShift = false,
+                                    )
+                                    segments.add(points)
+                                    segCases.add(case)
+                                    shiftCuts = ArrayList()
                                     seg = ArrayList()
                                     previewedSeg = false
                                 }
@@ -12313,7 +12350,14 @@ private fun KeyRows(
                                 lastPreviewMs = change.uptimeMillis
                                 keyList?.let { keys ->
                                     previewedSeg = true
-                                    onGesturePreview(seg.toList(), keys, keyWidth.value, shiftCrossings)
+                                    val (points, case) = glideSegment(
+                                        seg, shiftCuts, shiftCenter, keyWidth.value, letterGlide.value,
+                                        endedOnShift = wasOverShift,
+                                    )
+                                    onGesturePreview(
+                                        points, keys, keyWidth.value,
+                                        wordCaseOr(case, letterGlide.value, shiftCrossings),
+                                    )
                                 }
                             }
                         }
@@ -12353,7 +12397,7 @@ private fun KeyRows(
                         // one more thing to say about the word, and
                         // ServiceKeyboardContent has no room for another
                         // parameter (see [GlideVerdict]).
-                        val verdict = picker.verdict().withCapitals(shiftCrossings)
+                        val answer = picker.verdict()
                         picker.close()
                         // A picker opens on a preview, and a preview needs only
                         // three points, so a frozen last segment is committed
@@ -12374,8 +12418,29 @@ private fun KeyRows(
                             wasOpen -> PREVIEW_MIN_POINTS
                             else -> COMMIT_MIN_POINTS
                         }
-                        if (seg.size >= floor) segments.add(seg)
-                        val words = segments.filter { it.size >= floor }
+                        if (seg.size >= floor) {
+                            val (points, case) = glideSegment(
+                                seg, shiftCuts, shiftCenter, keyWidth.value, letterGlide.value,
+                                endedOnShift = wasOverShift,
+                            )
+                            segments.add(points)
+                            segCases.add(case)
+                        }
+                        val words = ArrayList<List<GesturePoint>>(segments.size)
+                        val cases = ArrayList<GlideCase>(segments.size)
+                        segments.forEachIndexed { index, segment ->
+                            if (segment.size >= floor) {
+                                words.add(segment)
+                                cases.add(segCases[index])
+                            }
+                        }
+                        // Under the whole-word reading the stroke's crossings
+                        // are counted together and land on its first word,
+                        // the only one a held shift reaches either.
+                        if (cases.isNotEmpty()) {
+                            cases[0] = wordCaseOr(cases[0], letterGlide.value, shiftCrossings)
+                        }
+                        val verdict = answer.withCases(cases)
                         val keys = keyList
                         if (words.isNotEmpty() && keys != null) {
                             if (words.size > 1) {
@@ -13152,7 +13217,10 @@ private fun KeyRows(
         // ride in on the preview instead.
         val pillWord = state.glideWord
             ?.takeIf { glide.wordPreview && trail.visible && !trail.released && picker.words.isEmpty() }
-            ?.let { word -> displayCaseForShift(word, shiftForGlide(state.shiftState, state.glideCapitals)) }
+            ?.let { word ->
+                state.glideCased[word]
+                    ?: displayCaseForShift(word, shiftForGlide(state.shiftState, state.glideCase))
+            }
         // The pill carries the strip's promise when the user has asked for it
         // there (#121). It is the surface the eye is actually on while a stroke
         // is being drawn, so a colour shown only on the strip is a colour
@@ -20294,3 +20362,32 @@ private const val THUMBNAIL_TARGET_PX = 256
 /** Widest and tallest an image card may get before it crops instead. */
 private const val MIN_THUMBNAIL_RATIO = 0.62f
 private const val MAX_THUMBNAIL_RATIO = 2.2f
+
+/**
+ * A word segment as the decoder should see it: the walks out to the shift
+ * key and back cut out (#163), copied so the stroke's own buffer can keep
+ * growing under an asynchronous decode. With it, what the segment's crossings
+ * asked for under the per-letter reading — [GlideCase.None] under the
+ * whole-word one, whose count is settled for the stroke as a whole by
+ * [wordCaseOr].
+ */
+private fun glideSegment(
+    seg: List<GesturePoint>,
+    cuts: List<Int>,
+    shiftCenter: GesturePoint?,
+    keyWidth: Float,
+    letters: Boolean,
+    endedOnShift: Boolean,
+): Pair<List<GesturePoint>, GlideCase> {
+    if (cuts.isEmpty()) return seg.toList() to GlideCase.None
+    val trimmed = GlideShiftDetour.trim(seg, cuts.toIntArray(), keyWidth, key = shiftCenter)
+    val case = if (letters) GlideCase.Letters(trimmed.cuts, endedOnShift) else GlideCase.None
+    return trimmed.points to case
+}
+
+/** [case], or the whole-word count of [crossings] when that is the reading in force. */
+private fun wordCaseOr(case: GlideCase, letters: Boolean, crossings: Int): GlideCase = when {
+    letters -> case
+    crossings > 0 -> GlideCase.Word(crossings)
+    else -> GlideCase.None
+}

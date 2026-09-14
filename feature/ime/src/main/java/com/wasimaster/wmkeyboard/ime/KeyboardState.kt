@@ -4,6 +4,7 @@ import android.view.KeyEvent
 import com.wasimaster.wmkeyboard.core.clipboard.ClipItem
 import com.wasimaster.wmkeyboard.core.otp.NotificationOtp
 import com.wasimaster.wmkeyboard.core.emoji.AnimatedEmoji
+import com.wasimaster.wmkeyboard.core.gesture.GlideCase
 import com.wasimaster.wmkeyboard.core.gesture.KeyCenter
 import com.wasimaster.wmkeyboard.core.emoji.EmojiEntry
 import com.wasimaster.wmkeyboard.core.emoji.EmojiVariantIndex
@@ -78,14 +79,24 @@ fun displayCaseForShift(word: String, shift: ShiftState): String {
  * stroke that says "capital" gets a capital whatever the board was doing — the
  * user drew the instruction after they saw the board.
  *
+ * Under the per-letter reading (#163) the crossings name letters rather than
+ * a shift state, and those are applied after this — see
+ * [com.wasimaster.wmkeyboard.core.gesture.GlideCase.Letters.caseWord] — so
+ * the board's own shift still stands; only a stroke that *ended* on the key
+ * speaks here, as a shout.
+ *
  * Here, beside [displayCaseForShift], rather than in the service: the pill
  * and the strip case the mid-stroke preview with it too (#162), and the one
  * ladder is what keeps the word on screen the word that lands.
  */
-fun shiftForGlide(board: ShiftState, capitals: Int): ShiftState = when {
-    capitals >= 2 -> ShiftState.CAPS_LOCK
-    capitals == 1 -> ShiftState.ON
-    else -> board
+fun shiftForGlide(board: ShiftState, case: GlideCase): ShiftState = when (case) {
+    is GlideCase.Word -> when {
+        case.times >= 2 -> ShiftState.CAPS_LOCK
+        case.times == 1 -> ShiftState.ON
+        else -> board
+    }
+    is GlideCase.Letters -> if (case.shout) ShiftState.CAPS_LOCK else board
+    GlideCase.None -> board
 }
 
 /**
@@ -1863,12 +1874,21 @@ data class KeyboardUiState(
     /** Best gesture-typing candidate mid-swipe, shown floating above the finger. */
     val glideWord: String? = null,
     /**
-     * How many times the stroke behind [glideWord] has crossed the shift key
-     * so far — the capitals the lift will commit under (#115) — so the pill
-     * and the strip can show the word cased the way it will land (#162).
-     * Zero between strokes; see [shiftForGlide].
+     * What the stroke behind [glideWord] has asked of the shift key so far —
+     * the capitals the lift will commit under (#115) — so the pill and the
+     * strip can show the word cased the way it will land (#162).
+     * [GlideCase.None] between strokes; see [shiftForGlide].
      */
-    val glideCapitals: Int = 0,
+    val glideCase: GlideCase = GlideCase.None,
+    /**
+     * The stroke's candidates as the per-letter reading of its shift crossings
+     * cases them (#163), keyed by the raw word: `hello` to `HeLLo`. Only the
+     * draw sites read it — the candidates themselves stay raw, because a
+     * picked word is compared against the decoder's list on the way back in.
+     * Empty under the whole-word reading, whose casing is one [ShiftState]
+     * every surface can apply itself.
+     */
+    val glideCased: Map<String, String> = emptyMap(),
     /**
      * The words a mid-swipe decode is choosing between, best first, capped at
      * [GestureSettings.pickerChoices]. Populated for every preview while the

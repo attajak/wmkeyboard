@@ -787,6 +787,17 @@ enum class LetterSwipeAction { TYPE_WORDS, HANDWRITE }
  */
 enum class GlideApostropheKey { OFF, COMMA, PERIOD, SPACE, APOSTROPHE }
 
+/**
+ * What a glide drawn through the shift key asks for (#163).
+ *
+ * [WORD] is the ladder tapping shift walks up: one crossing capitalizes the
+ * word, two shout it. [LETTER] reads each crossing as a capital for the
+ * letter the stroke just left, so `HeLLo` and `LeanType` can be drawn, and a
+ * stroke that ends on the shift key shouts the word — one trip rather than
+ * two. See [GestureSettings.shiftGlideMode].
+ */
+enum class ShiftGlideMode { WORD, LETTER }
+
 /** The character each [GlideApostropheKey] borrows, or null for [GlideApostropheKey.OFF]/SPACE. */
 val GlideApostropheKey.sourceChar: Char?
     get() = when (this) {
@@ -4393,6 +4404,12 @@ data class GestureSettings(
      */
     val shiftGlideCapitals: Boolean = true,
     /**
+     * How a crossing of the shift key is read while [shiftGlideCapitals] is
+     * on: the whole word, or one letter per crossing (#163). See
+     * [ShiftGlideMode].
+     */
+    val shiftGlideMode: ShiftGlideMode = ShiftGlideMode.WORD,
+    /**
      * When a swipe is genuinely ambiguous, ask instead of committing.
      *
      * Some strokes have no right answer: on a fixed Bengali layout ক and খ share
@@ -5861,6 +5878,7 @@ class SettingsRepository(private val context: Context) {
         private val LETTER_SWIPE_ACTION = stringPreferencesKey("letter_swipe_action")
         private val GESTURE_SPACE_MULTI_WORD = booleanPreferencesKey("gesture_space_multi_word")
         private val GESTURE_SHIFT_CAPITALS = booleanPreferencesKey("gesture_shift_capitals")
+        private val GESTURE_SHIFT_MODE = stringPreferencesKey("gesture_shift_glide_mode")
         private val GESTURE_AMBIGUITY_PICKER = booleanPreferencesKey("gesture_ambiguity_picker")
         private val GESTURE_PICKER_DWELL_MS = intPreferencesKey("gesture_picker_dwell_ms")
         private val GESTURE_PICKER_SENSITIVITY = stringPreferencesKey("gesture_picker_sensitivity")
@@ -6929,6 +6947,9 @@ class SettingsRepository(private val context: Context) {
             gesture = GestureSettings(
                 spaceGlideMultiWord = p[GESTURE_SPACE_MULTI_WORD] ?: defaults.gesture.spaceGlideMultiWord,
                 shiftGlideCapitals = p[GESTURE_SHIFT_CAPITALS] ?: defaults.gesture.shiftGlideCapitals,
+                shiftGlideMode = p[GESTURE_SHIFT_MODE]
+                    ?.let { runCatching { ShiftGlideMode.valueOf(it) }.getOrNull() }
+                    ?: defaults.gesture.shiftGlideMode,
                 ambiguityPicker = p[GESTURE_AMBIGUITY_PICKER] ?: defaults.gesture.ambiguityPicker,
                 // Coerced on the way in as well as on the way out: a value
                 // restored from an edited backup must never index past the
@@ -11202,6 +11223,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setGestureShiftCapitals(value: Boolean) =
         editPrefs { it[GESTURE_SHIFT_CAPITALS] = value }
+
+    suspend fun setGestureShiftGlideMode(value: ShiftGlideMode) =
+        editPrefs { it[GESTURE_SHIFT_MODE] = value.name }
 
     suspend fun setGestureAmbiguityPicker(value: Boolean) =
         editPrefs { it[GESTURE_AMBIGUITY_PICKER] = value }

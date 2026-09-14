@@ -131,6 +131,7 @@ import com.wasimaster.wmkeyboard.core.gesture.GlideShapeSource
 import com.wasimaster.wmkeyboard.core.gesture.GlideShapeStore
 import com.wasimaster.wmkeyboard.core.gesture.KeyOffsets
 import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
+import com.wasimaster.wmkeyboard.core.gesture.GlideCase
 import com.wasimaster.wmkeyboard.core.gesture.KeyCenter
 import com.wasimaster.wmkeyboard.core.handwriting.HandwritingDownloadProgress
 import com.wasimaster.wmkeyboard.core.handwriting.HandwritingModelSizes
@@ -482,6 +483,7 @@ import com.wasimaster.wmkeyboard.ime.ui.panelLayout
 import com.wasimaster.wmkeyboard.core.layout.panelLayers
 import com.wasimaster.wmkeyboard.ime.ui.currentLayout
 import com.wasimaster.wmkeyboard.ime.ui.GlideVerdict
+import com.wasimaster.wmkeyboard.ime.ui.caseAt
 import com.wasimaster.wmkeyboard.ime.ui.IconDefaults
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardFonts
 import com.wasimaster.wmkeyboard.ime.ui.emojiStickerJobId
@@ -13807,14 +13809,14 @@ open class WMKeyboardService : InputMethodService() {
         points: List<GesturePoint>,
         keys: List<KeyCenter>,
         keyWidthPx: Float,
-        capitals: Int = 0,
+        case: GlideCase = GlideCase.None,
     ) {
         val state = _uiState.value
         if (!glideAllowed(state)) return
         if (keys.isEmpty()) return
         syncGlideTriggers(state)
         gesturePreviews.trySend(
-            GesturePreviewRequest(points, keys, keyWidthPx, capitals, gestureGeneration.get()),
+            GesturePreviewRequest(points, keys, keyWidthPx, case, gestureGeneration.get()),
         )
     }
 
@@ -13843,6 +13845,17 @@ open class WMKeyboardService : InputMethodService() {
                 // built from this one list.
                 val steadied = steadyPreview(reading, gesture.previewSteadiness)
                 val floating = octopusForGlide(_uiState.value, steadied.words)
+                // Per-letter capitals need the decoder's placement of each
+                // word along the stroke, which is one small alignment a word
+                // — off the main thread with the decode, not on it.
+                val cased = if (request.case is GlideCase.Letters) {
+                    withContext(Dispatchers.Default) {
+                        glideLetterCases(request.case, steadied.words, request.points, request.keys, request.keyWidthPx)
+                    }
+                } else {
+                    emptyMap()
+                }
+                if (request.generation != gestureGeneration.get()) continue
                 _uiState.update {
                     it.copy(
                         suggestions = steadied.words,
@@ -13854,7 +13867,8 @@ open class WMKeyboardService : InputMethodService() {
                         // the way back in, and would leave the pill's own
                         // board-shift pass to shout a word the stroke only
                         // asked a capital of.
-                        glideCapitals = request.capitals,
+                        glideCase = request.case,
+                        glideCased = cased,
                         // The word a lift would type, published as the promise
                         // it is rather than left as one more bold suggestion
                         // (#121). [KeyboardUiState.autocorrectWord] is already
@@ -13915,6 +13929,45 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * [word] cased the way its stroke asked: [shift] first — the board's own,
+     * or the whole-word ladder a crossing walked up (#115) — and then the
+     * per-letter capitals a [GlideCase.Letters] named (#163), laid onto the
+     * word where the decoder places its keys along [points]. The same call
+     * cases the preview and the commit, so the word on screen is the word
+     * that lands.
+     */
+    private fun glideCased(
+        word: String,
+        shift: ShiftState,
+        case: GlideCase,
+        points: List<GesturePoint>,
+        keys: List<KeyCenter>,
+        keyWidthPx: Float,
+    ): String {
+        val based = when (shift) {
+            ShiftState.CAPS_LOCK -> word.uppercase()
+            ShiftState.ON -> word.replaceFirstChar { it.uppercase() }
+            ShiftState.OFF -> word
+        }
+        // A shout already went through [shift] as caps lock.
+        if (case !is GlideCase.Letters || case.shout || case.cuts.isEmpty()) return based
+        val alignment = suggestionEngine?.alignGlide(word, points, keyMapFor(keys, keyWidthPx), keyWidthPx)
+        return case.caseWord(based, alignment)
+    }
+
+    /** Each of [words] as [case] cases it, keyed by the raw word, for the pill and the strip (#163). */
+    private fun glideLetterCases(
+        case: GlideCase.Letters,
+        words: List<String>,
+        points: List<GesturePoint>,
+        keys: List<KeyCenter>,
+        keyWidthPx: Float,
+    ): Map<String, String> {
+        val shift = shiftForGlide(_uiState.value.shiftState, case)
+        return words.associateWith { glideCased(it, shift, case, points, keys, keyWidthPx) }
+    }
+
+    /**
      * Retires the previews a stroke published — the floating word, the
      * picker's choices and its close-call flag — the way a commit does. The
      * strip's suggestions are left to the caller: a commit replaces them, a
@@ -13928,7 +13981,8 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update { state ->
             state.copy(
                 glideWord = null,
-                glideCapitals = 0,
+                glideCase = GlideCase.None,
+                glideCased = emptyMap(),
                 glideChoices = emptyList(),
                 glideCloseCall = false,
                 // Only the promise this stroke made. A flick short enough to
@@ -13996,7 +14050,7 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
 
-        val shiftAtGesture = shiftForGlide(state.shiftState, verdict.capitals)
+        val shiftAtGesture = shiftForGlide(state.shiftState, verdict.caseAt(0))
         // Retires every preview from this stroke, in flight or queued.
         gestureGeneration.incrementAndGet()
         suggestionJob?.cancel()
@@ -14057,11 +14111,7 @@ open class WMKeyboardService : InputMethodService() {
                 chosen != null -> glideStripOrder(candidates, chosen)
                 else -> candidates
             }
-            val word = when (shiftAtGesture) {
-                ShiftState.CAPS_LOCK -> picked.uppercase()
-                ShiftState.ON -> picked.replaceFirstChar { it.uppercase() }
-                ShiftState.OFF -> picked
-            }
+            val word = glideCased(picked, shiftAtGesture, verdict.caseAt(0), points, keys, keyWidthPx)
             commitGestureLeadingSpace(ic, state)
             // A stroke that read a text-expansion trigger types what the
             // trigger stands for, as a space after the typed trigger would.
@@ -14095,7 +14145,7 @@ open class WMKeyboardService : InputMethodService() {
             recordStat { onWordsCommitted(1, System.currentTimeMillis()) }
             learn(
                 word,
-                caseTrusted = glideCaseTrusted(shiftAtGesture, state, verdict.capitals),
+                caseTrusted = glideCaseTrusted(shiftAtGesture, state, verdict.caseAt(0)),
                 origin = WordOrigin.GLIDE,
             )
             // What the stroke could have been, kept against the word it
@@ -14189,15 +14239,18 @@ open class WMKeyboardService : InputMethodService() {
     private fun glideCaseTrusted(
         shiftAtGesture: ShiftState,
         state: KeyboardUiState,
-        capitals: Int,
-    ): Boolean = when {
+        case: GlideCase,
+    ): Boolean = when (case) {
         // Drawn through the shift key on the way: as deliberate as pressing it,
         // and the whole point of the gesture is to say "this word is a name".
-        capitals == 1 -> true
         // Twice is a shout, and a shout is not a spelling — the rule caps lock
         // has always been under.
-        capitals > 1 -> false
-        else -> shiftAtGesture == ShiftState.ON && state.shiftPressedByUser
+        is GlideCase.Word -> case.times == 1
+        // Letters drawn one by one are a spelling — `LeanType` is exactly the
+        // kind of word this vote exists for (#163) — and a stroke that ended
+        // on the key is the shout again.
+        is GlideCase.Letters -> !case.shout && case.cuts.isNotEmpty()
+        GlideCase.None -> shiftAtGesture == ShiftState.ON && state.shiftPressedByUser
     }
 
     /**
@@ -14399,7 +14452,7 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
 
-        val shiftAtGesture = shiftForGlide(state.shiftState, verdict.capitals)
+        val shiftAtGesture = shiftForGlide(state.shiftState, verdict.caseAt(0))
         // Retires every preview from this stroke, in flight or queued.
         gestureGeneration.incrementAndGet()
         suggestionJob?.cancel()
@@ -14434,15 +14487,14 @@ open class WMKeyboardService : InputMethodService() {
                     noteGlidePreference(rejected = candidates.first(), chosen = picked)
                 }
                 val leader = picked ?: candidates.first()
-                val word = if (index == 0) {
-                    when (shiftAtGesture) {
-                        ShiftState.CAPS_LOCK -> leader.uppercase()
-                        ShiftState.ON -> leader.replaceFirstChar { it.uppercase() }
-                        ShiftState.OFF -> leader
-                    }
-                } else {
-                    leader
-                }
+                // Only the first word honours the board's shift; a later
+                // word's own crossings still reach it (#163).
+                val case = verdict.caseAt(index)
+                val word = glideCased(
+                    leader,
+                    if (index == 0) shiftAtGesture else shiftForGlide(ShiftState.OFF, case),
+                    case, segment, keys, keyWidthPx,
+                )
                 commitGestureLeadingSpace(ic, state)
                 val expanded = glidedExpansion(ic, state, word)
                 if (expanded != null) {
@@ -14474,7 +14526,7 @@ open class WMKeyboardService : InputMethodService() {
                     // at all; the rest carry whatever capitals the dictionary
                     // gave them, which is not evidence — see [glideCaseTrusted].
                     caseTrusted = index == 0 &&
-                        glideCaseTrusted(shiftAtGesture, state, verdict.capitals),
+                        glideCaseTrusted(shiftAtGesture, state, verdict.caseAt(index)),
                     origin = WordOrigin.GLIDE,
                 )
                 val (hand, shape) = withContext(Dispatchers.Default) {
@@ -25807,8 +25859,8 @@ private class GesturePreviewRequest(
     val points: List<GesturePoint>,
     val keys: List<KeyCenter>,
     val keyWidthPx: Float,
-    /** Shift crossings so far; see [WMKeyboardService.onGesturePreview]. */
-    val capitals: Int,
+    /** What the shift crossings so far asked for; see [WMKeyboardService.onGesturePreview]. */
+    val case: GlideCase,
     val generation: Int,
 )
 
