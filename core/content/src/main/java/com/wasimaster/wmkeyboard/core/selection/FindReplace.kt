@@ -56,6 +56,9 @@ object FindReplace {
         }
     }
 
+    /** The user's own replacement, when the engine has no expansion for it. */
+    private fun literal(replacement: String): String = replacement
+
     fun find(
         text: String,
         query: String,
@@ -74,9 +77,11 @@ object FindReplace {
                 if (found.size >= MAX_MATCHES) return FindResult.Matches(found, truncated = true)
             }
             FindResult.Matches(found, truncated = false)
-        } catch (timeout: BudgetExceeded) {
+        } catch (ignored: BudgetExceeded) {
+            // The budget itself is the result.
             FindResult.TimedOut
-        } catch (blown: StackOverflowError) {
+        } catch (ignored: StackOverflowError) {
+            // A pattern deep enough to blow the stack is as good as one that hangs.
             FindResult.TimedOut
         }
     }
@@ -154,10 +159,11 @@ object FindReplace {
             val buffer = StringBuffer()
             matcher.appendReplacement(buffer, replacement)
             buffer.substring(range.first)
-        } catch (invalid: IllegalArgumentException) {
-            replacement
-        } catch (invalid: IndexOutOfBoundsException) {
-            replacement
+        } catch (ignored: IllegalArgumentException) {
+            // A group reference the pattern lacks: the replacement is used as typed.
+            literal(replacement)
+        } catch (ignored: IndexOutOfBoundsException) {
+            literal(replacement)
         }
     }
 

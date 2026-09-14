@@ -23,8 +23,10 @@ object Places {
     const val MAX_ADDRESS_LENGTH = 120
 
     private const val NUMBER = """[-+]?\d{1,3}(?:\.\d+)?"""
+    private const val LAT_LABEL = """(?:lat(?:itude)?[:\s]*)?"""
+    private const val LNG_LABEL = """(?:l(?:ng|on|ong)(?:gitude)?[:\s]*)?"""
     private val DECIMAL = Regex(
-        """\(?\s*(?:lat(?:itude)?[:\s]*)?($NUMBER)\s*°?\s*([nsew])?\s*[,;\s]\s*(?:l(?:ng|on|ong)(?:gitude)?[:\s]*)?($NUMBER)\s*°?\s*([nsew])?\s*\)?""",
+        """\(?\s*$LAT_LABEL($NUMBER)\s*°?\s*([nsew])?\s*[,;\s]\s*$LNG_LABEL($NUMBER)\s*°?\s*([nsew])?\s*\)?""",
         RegexOption.IGNORE_CASE,
     )
     private const val DMS_ONE = """(\d{1,3})°\s*(\d{1,2})['′]\s*(?:(\d{1,2}(?:\.\d+)?)["″])?\s*([nsew])"""

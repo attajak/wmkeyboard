@@ -46,22 +46,25 @@ object ColourCodes {
         HEX.matchEntire(t)?.let { return hex(it.groupValues[1]) }
         HEX_0X.matchEntire(t)?.let { return hex0x(it.groupValues[1]) }
         val call = FUNCTION.matchEntire(t) ?: return null
-        val name = call.groupValues[1].lowercase(Locale.ROOT)
         val parts = call.groupValues[2].trim().split(SPLIT).filter { it.isNotEmpty() }
         if (parts.size !in 3..4) return null
         val alpha = if (parts.size == 4) alpha(parts[3]) ?: return null else 1f
-        return if (name.startsWith("rgb")) {
-            val r = channel(parts[0]) ?: return null
-            val g = channel(parts[1]) ?: return null
-            val b = channel(parts[2]) ?: return null
-            Colour(r, g, b, alpha, if (parts.size == 4) ColourForm.RGBA else ColourForm.RGB)
-        } else {
-            val h = parts[0].removeSuffix("deg").toFloatOrNull() ?: return null
-            val s = percent(parts[1]) ?: return null
-            val l = percent(parts[2]) ?: return null
-            val rgb = hslToRgb(((h % 360f) + 360f) % 360f, s, l)
-            Colour(rgb[0], rgb[1], rgb[2], alpha, if (parts.size == 4) ColourForm.HSLA else ColourForm.HSL)
-        }
+        return if (call.groupValues[1].lowercase(Locale.ROOT).startsWith("rgb")) rgb(parts, alpha) else hsl(parts, alpha)
+    }
+
+    private fun rgb(parts: List<String>, alpha: Float): Colour? {
+        val r = channel(parts[0]) ?: return null
+        val g = channel(parts[1]) ?: return null
+        val b = channel(parts[2]) ?: return null
+        return Colour(r, g, b, alpha, if (parts.size == 4) ColourForm.RGBA else ColourForm.RGB)
+    }
+
+    private fun hsl(parts: List<String>, alpha: Float): Colour? {
+        val h = parts[0].removeSuffix("deg").toFloatOrNull() ?: return null
+        val s = percent(parts[1]) ?: return null
+        val l = percent(parts[2]) ?: return null
+        val rgb = hslToRgb(((h % 360f) + 360f) % 360f, s, l)
+        return Colour(rgb[0], rgb[1], rgb[2], alpha, if (parts.size == 4) ColourForm.HSLA else ColourForm.HSL)
     }
 
     /** [colour] written as [form]. */
@@ -135,7 +138,10 @@ object ColourCodes {
         }
         val value = full.toLongOrNull(16) ?: return null
         return if (full.length == 6) {
-            Colour(((value shr 16) and 0xFF).toInt(), ((value shr 8) and 0xFF).toInt(), (value and 0xFF).toInt(), 1f, ColourForm.HEX)
+            Colour(
+                ((value shr 16) and 0xFF).toInt(), ((value shr 8) and 0xFF).toInt(), (value and 0xFF).toInt(),
+                1f, ColourForm.HEX,
+            )
         } else {
             Colour(
                 ((value shr 24) and 0xFF).toInt(), ((value shr 16) and 0xFF).toInt(), ((value shr 8) and 0xFF).toInt(),
@@ -147,7 +153,10 @@ object ColourCodes {
     private fun hex0x(digits: String): Colour? {
         val value = digits.toLongOrNull(16) ?: return null
         val alpha = if (digits.length == 8) ((value shr 24) and 0xFF).toInt() / 255f else 1f
-        return Colour(((value shr 16) and 0xFF).toInt(), ((value shr 8) and 0xFF).toInt(), (value and 0xFF).toInt(), alpha, ColourForm.HEX_0X)
+        return Colour(
+            ((value shr 16) and 0xFF).toInt(), ((value shr 8) and 0xFF).toInt(), (value and 0xFF).toInt(),
+            alpha, ColourForm.HEX_0X,
+        )
     }
 
     private fun channel(part: String): Int? {

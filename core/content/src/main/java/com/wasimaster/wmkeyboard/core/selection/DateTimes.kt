@@ -148,18 +148,13 @@ object DateTimes {
         }
         if (t.isEmpty()) return null
 
-        var time: Time? = null
-        for ((regex, atEnd, bengali) in listOf(
-            Quad(TIME_END, true, false), Quad(BN_TIME_END, true, true),
-            Quad(TIME_START, false, false), Quad(BN_TIME_START, false, true),
-        )) {
-            val match = regex.find(t) ?: continue
-            val parsed = if (bengali) bengaliTime(match) else time(match) ?: continue
-            time = parsed
-            t = if (atEnd) t.substring(0, match.range.first) else t.substring(match.range.last + 1)
-            t = t.trim(' ', ',')
-            break
+        val found = TIME_SHAPES.firstNotNullOfOrNull { shape ->
+            val match = shape.regex.find(t) ?: return@firstNotNullOfOrNull null
+            val parsed = (if (shape.bengali) bengaliTime(match) else time(match)) ?: return@firstNotNullOfOrNull null
+            parsed to (if (shape.atEnd) t.substring(0, match.range.first) else t.substring(match.range.last + 1))
         }
+        val time: Time? = found?.first
+        if (found != null) t = found.second.trim(' ', ',')
         t = t.removePrefix("at ").removePrefix("on ").trim()
 
         val today = Calendar.getInstance(interpretation).apply { timeInMillis = nowMillis }
@@ -256,7 +251,15 @@ object DateTimes {
         return prefix + time + " " + zoneLabel(zoneId, millis)
     }
 
-    private data class Quad(val regex: Regex, val atEnd: Boolean, val bengali: Boolean)
+    /** Where a clock time may sit in the text, and which grammar reads it. Tried in this order. */
+    private class TimeShape(val regex: Regex, val atEnd: Boolean, val bengali: Boolean)
+
+    private val TIME_SHAPES = listOf(
+        TimeShape(TIME_END, atEnd = true, bengali = false),
+        TimeShape(BN_TIME_END, atEnd = true, bengali = true),
+        TimeShape(TIME_START, atEnd = false, bengali = false),
+        TimeShape(BN_TIME_START, atEnd = false, bengali = true),
+    )
 
     private fun normalise(text: String): String =
         decomposeNukta(DigitScripts.toAsciiDigits(text) ?: text)

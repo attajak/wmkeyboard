@@ -95,7 +95,8 @@ object TextCodecs {
     }
 
     private fun readable(text: String): Boolean =
-        text.any { it.isLetterOrDigit() } &&
-            text.none { it.code < 0x20 && it != '\n' && it != '\r' && it != '\t' } &&
-            text.none { it.code == 0x7F || it == '�' }
+        text.any { it.isLetterOrDigit() } && text.all { printable(it) }
+
+    private fun printable(c: Char): Boolean =
+        (c.code >= 0x20 || c == '\n' || c == '\r' || c == '\t') && c.code != 0x7F && c != '\uFFFD'
 }

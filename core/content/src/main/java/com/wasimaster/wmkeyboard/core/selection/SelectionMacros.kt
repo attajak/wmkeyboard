@@ -705,20 +705,24 @@ object SelectionMacros {
             }
         }
         if (lineHasContent) lines++
-        val single = lines <= 1 && !text.trim().contains('\n')
         val trimmed = text.trim()
+        val single = lines <= 1 && !trimmed.contains('\n')
         val colour = if (single && trimmed.length <= ColourCodes.MAX_LENGTH) ColourCodes.parse(trimmed) else null
-        val jsonShape = if (trimmed.length >= 2 && JsonReformat.looksStructured(trimmed)) JsonReformat.shape(trimmed) else JsonReformat.Shape.NONE
+        val jsonShape = if (JsonReformat.looksStructured(trimmed)) JsonReformat.shape(trimmed) else JsonReformat.Shape.NONE
         val base64 = single && trimmed.length >= 8 && TextCodecs.looksBase64(trimmed)
         val urlEncoded = TextCodecs.isUrlEncoded(trimmed)
-        val dateTime = if (options.dateTime && single && trimmed.length <= DateTimes.MAX_LENGTH && (hasDigit || trimmed.firstOrNull()?.isLetter() == true)) {
+        val couldBeMoment = single && trimmed.length <= DateTimes.MAX_LENGTH &&
+            (hasDigit || trimmed.firstOrNull()?.isLetter() == true)
+        val dateTime = if (options.dateTime && couldBeMoment) {
             DateTimes.parse(trimmed, options.nowMillis, options.zone, options.locale)
         } else {
             null
         }
-        val place = if (options.place && single && trimmed.length <= Places.MAX_ADDRESS_LENGTH && hasDigit) {
+        val couldBePlace = single && trimmed.length <= Places.MAX_ADDRESS_LENGTH && hasDigit
+        val place = if (options.place && couldBePlace) {
             Places.detect(trimmed) { candidate ->
-                dateTime != null || (!options.dateTime && DateTimes.parse(candidate, options.nowMillis, options.zone, options.locale) != null)
+                dateTime != null ||
+                    (!options.dateTime && DateTimes.parse(candidate, options.nowMillis, options.zone, options.locale) != null)
             }
         } else {
             null
