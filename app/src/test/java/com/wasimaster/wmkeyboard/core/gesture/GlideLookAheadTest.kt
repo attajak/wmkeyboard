@@ -5,6 +5,7 @@ import com.wasimaster.wmkeyboard.core.gesture.eval.SwipeCorpus
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.prediction.FuzzyBeamSearch
 import com.wasimaster.wmkeyboard.core.prediction.Trie
+import kotlin.math.ln1p
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -177,5 +178,45 @@ class GlideLookAheadTest {
         )
         assertEquals("free guesses should lead", "dictionary", cheap.first().word)
         assertEquals("expensive guesses should not", "dict", dear.first().word)
+    }
+
+    /**
+     * Issue #167: a word the stroke has spelled out and the longer word it
+     * starts are read off the same letters, so they have to pay the same
+     * shape charge.
+     *
+     * They did not. The shape channel rescored the readings and skipped the
+     * guesses, on the reasoning that a guess's whole path runs through
+     * letters not yet drawn — true, but its *prefix* is exactly what was
+     * drawn, and it is the prefix that competes. On a real finger the charge
+     * is worth several nats, all of which the guess kept, so "thing" glided
+     * to its last letter lost to "things" on a gap that had nothing to do
+     * with either word.
+     */
+    @Test
+    fun aGuessPaysTheShapeChargeTheWordItExtendsPays() {
+        // The plural a shade commoner, or there is nothing to guess: a
+        // prefix that is already the commonest word under itself is never
+        // extended.
+        val sources = sourcesFor("thing" to 2_208, "things" to 2_480)
+        val tuning = GlideBeam.Tuning()
+        val path = corpus.swipe("thing", SwipeCorpus.Noise.TYPICAL.profile)
+            ?: error("the corpus cannot draw thing")
+        val decoded = GlideBeam(tuning).decode(
+            path = path,
+            keys = keys,
+            keyWidth = SwipeCorpus.KEY_WIDTH,
+            sources = sources,
+            ws = GlideWorkspace(),
+            limit = 8,
+            lookAhead = 4,
+        )
+        val read = decoded.first { it.word == "thing" && it.ahead == 0 }
+        val guess = decoded.first { it.word == "things" && it.ahead == 1 }
+        // Same prefix, same alignment, same shape: all that stands between
+        // the two is one guessed letter and the frequency gap.
+        val expected = ln1p(2_480.0) - ln1p(2_208.0) - tuning.lookAheadCost
+        assertEquals(expected, guess.score - read.score, 1e-6)
+        assertEquals("the word drawn in full leads", "thing", decoded.first().word)
     }
 }

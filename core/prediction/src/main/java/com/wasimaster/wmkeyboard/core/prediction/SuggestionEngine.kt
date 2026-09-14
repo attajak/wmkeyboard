@@ -875,6 +875,52 @@ class SuggestionEngine(
     }
 
     /**
+     * The words that start with [drawn], nearest in spelling to [word] first —
+     * what the strip offers beside a word a lift finished early (issue #168).
+     *
+     * A finger that lifts part way through a word, on the strength of a
+     * guess, has done the same thing as a tap on a suggestion: it took the
+     * word it was shown. The stroke's other readings are then no use to it —
+     * they are words that end where the finger stopped, and the finger did
+     * not stop at the end of anything — while what it may still want is a
+     * neighbour of the word it took: the plural, the possessive, the verb
+     * form, the word one letter shorter that the guess ran past. All of
+     * those share the letters the stroke drew, and the longer the run of
+     * letters they share with the word itself, the nearer they are to it, so
+     * that is the order: shared prefix with [word] first, then the same
+     * weight the decoder gives a word. [word] itself is left out.
+     *
+     * Empty on a phonetic layout, where a guess is never made.
+     */
+    fun glideKin(drawn: String, word: String, limit: Int): List<String> {
+        if (drawn.isEmpty() || limit <= 0 || !glideRomanization.isEmpty) return emptyList()
+        val self = WordKey.of(word)
+        val best = HashMap<String, Double>()
+        val spelling = HashMap<String, String>()
+        for (src in walkSources()) {
+            for (s in TrieCompleter.complete(src.walker, drawn, GLIDE_KIN_SCAN)) {
+                val key = WordKey.of(s.word)
+                if (key.isEmpty() || key == self || suppressed(s.word)) continue
+                val score = src.logWeight + ln(1.0 + s.frequency) + rankOffset(s.word)
+                val prior = best[key]
+                if (prior == null || score > prior) {
+                    best[key] = score
+                    spelling[key] = s.word
+                }
+            }
+        }
+        val lower = word.lowercase()
+        return best.entries
+            .sortedWith(
+                compareByDescending<Map.Entry<String, Double>> {
+                    spelling.getValue(it.key).lowercase().commonPrefixWith(lower).length
+                }.thenByDescending { it.value }.thenBy { it.key }
+            )
+            .take(limit)
+            .map { displayForm(spelling.getValue(it.key)) }
+    }
+
+    /**
      * Lays [word] over [path] the way the decoder would and says where along
      * the stroke each of its keys was visited — what the hand model learns
      * from (issue #52). Against [keys] as handed in, which the caller makes
@@ -1413,6 +1459,15 @@ class SuggestionEngine(
          * guess, which is exactly the case a context model is there to fix.
          */
         private const val GLIDE_RERANK_POOL = 8
+
+        /**
+         * Completions read per source when a lift finishes a word early
+         * ([glideKin]). The commonest words under a prefix, of which the
+         * strip then shows the few nearest the word taken; wide enough that
+         * a plural or possessive ranked well below the word itself is still
+         * in the pool, narrow enough to stay a bounded walk.
+         */
+        private const val GLIDE_KIN_SCAN = 32
 
         /**
          * The pool a deep search keeps. Twice the ordinary one: the decoder's

@@ -431,8 +431,15 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         // Merged into one ranked list so a caller sees the decoder's whole
         // opinion in score order; `Candidate.ahead` is what tells the two
         // apart, and every caller that cares checks it.
-        val completions = ahead.values
-            .sortedWith(compareByDescending<Candidate> { it.score }.thenBy { it.word })
+        //
+        // The completions go through the shape channel too (issue #167).
+        // They used to skip it, and every caller compares a guess's score
+        // against the best ordinary reading's — so a reading paid the
+        // channel's charge, up to several nats on a real finger, and the
+        // guess extending it paid nothing. "thing" drawn to its last letter
+        // lost to "things" on that gap alone, and a word the stroke had
+        // spelled out could be beaten by any longer word it started.
+        val completions = rescoreShape(ahead.values.toList(), keys, ws, shapes)
             .take(lookAhead)
         return (read + completions).sortedWith(
             compareByDescending<Candidate> { it.score }.thenBy { it.word }
@@ -1371,7 +1378,11 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         shapes: GlideShapeSource?,
     ): List<Candidate> {
         val weight = tuning.shapeChannel
-        if (weight <= 0.0 || ranked.size < 2) return ranked
+        // A lone candidate is rescored too, not merely reordered: its score
+        // still gets compared, to the completions decoded beside it, and a
+        // reading that skipped the charge because it had no rival would be
+        // measured against guesses that paid it.
+        if (weight <= 0.0 || ranked.isEmpty()) return ranked
         normalise(ws.pathX, ws.pathY, ws.drawnShapeX, ws.drawnShapeY)
         val learned = shapes?.takeIf { tuning.learnedShapeGain > 0.0 }
         if (learned != null) quantise(ws.drawnShapeX, ws.drawnShapeY, ws.drawnShape8)
@@ -1380,14 +1391,19 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         for (candidate in ranked) {
             // A look-ahead candidate's ideal path runs through letters the
             // finger has not drawn, so comparing the whole shape against the
-            // whole word asks it to account for a stroke that does not exist
-            // yet. The channel has nothing to say about a prefix.
+            // whole word would ask it to account for a stroke that does not
+            // exist yet. What the finger *has* drawn is the prefix, and the
+            // prefix's ideal path is exactly what an ordinary reading of the
+            // same letters would be measured against — so a guess pays what
+            // the word it extends pays, and the two compare on the letters
+            // ahead alone. The learned shapes are of whole words and have
+            // nothing to say about a prefix.
             val distance = if (candidate.ahead > 0) {
-                null
+                shapeDistance(candidate.word.dropLast(candidate.ahead), keys, ws)
             } else {
                 shapeDistance(candidate.word, keys, ws)
+                    ?.let { ideal -> learnedDistance(candidate.word, ideal, learned, ws) }
             }
-                ?.let { ideal -> learnedDistance(candidate.word, ideal, learned, ws) }
 
             rescored.add(
                 if (distance == null) {

@@ -13110,10 +13110,12 @@ open class WMKeyboardService : InputMethodService() {
          * The words here that carry letters the stroke has not drawn: the
          * decoder guessing where the finger was going, kept apart from the
          * readings that spell themselves out (see [GlideBeam.Candidate.ahead]).
-         * Empty whenever the user has the feature off, since nothing then
-         * survives [admitLookAhead].
+         * Each maps to the letters the stroke *did* draw, in the decoder's
+         * spelling, which is what the strip fills from when a lift takes the
+         * guess (#168). Empty whenever the user has the feature off, since
+         * nothing then survives [admitLookAhead].
          */
-        val guesses: Set<String> = emptySet(),
+        val guesses: Map<String, String> = emptyMap(),
         /**
          * The guesses the decoder is *sure* of: those beating the best
          * ordinary reading by [GlideLookAhead.CONFIDENT]'s margin, whichever
@@ -13272,7 +13274,7 @@ open class WMKeyboardService : InputMethodService() {
         } else {
             0
         }
-        fun decode(tiers: Set<FuzzyBeamSearch.Tier>?) = engine.glide(
+        fun decode(tiers: Set<FuzzyBeamSearch.Tier>?, guessing: Int = lookAhead) = engine.glide(
             path = points,
             keys = keyMapFor(keys, keyWidthPx),
             keyWidth = keyWidthPx,
@@ -13282,7 +13284,7 @@ open class WMKeyboardService : InputMethodService() {
             recentWords = recentWords.toList(),
             shapes = shapeSourceFor(keys, keyWidthPx),
             tiers = tiers,
-            lookAhead = lookAhead,
+            lookAhead = guessing,
         )
 
         // Under LEARNED_ONLY the learned words are the whole search; under
@@ -13297,7 +13299,15 @@ open class WMKeyboardService : InputMethodService() {
             GlideSandboxPolicy.LEARNED_ONLY -> learned
             GlideSandboxPolicy.OFF -> decode(null)
             GlideSandboxPolicy.PREFER_LEARNED -> {
-                val full = decode(null)
+                // The dictionary reads a stroke; it does not finish one. A
+                // guess is only ever one of the learned words here, because
+                // that is where guessing is worth anything — about twice as
+                // accurate out of one person's vocabulary as out of a
+                // dictionary (`GlideLookAheadEvalTest`) — and because the
+                // dictionary's guesses were how a stroke that missed the
+                // last letter of a learned word came back as some rare word
+                // that happened to start where the finger stopped (#167).
+                val full = decode(null, guessing = 0)
                 // Cost, not score: the two searches weight their sources
                 // differently and only the geometry means the same thing in
                 // both (see GlideSandboxLadder.SANDBOX_MARGIN).
@@ -13331,11 +13341,14 @@ open class WMKeyboardService : InputMethodService() {
         // as words rather than positions because the steadiness gate reorders
         // the list before anything draws it.
         val bestRead = kept.firstOrNull { it.ahead == 0 }?.score
-        val guesses = HashSet<String>()
+        val guesses = HashMap<String, String>()
         val sure = HashSet<String>()
         words.forEachIndexed { i, word ->
             if (kept[i].ahead == 0) return@forEachIndexed
-            guesses += word
+            // The drawn letters come off the decoder's own spelling, before
+            // any apostrophe was put back: that is the spelling the tries
+            // are walked in.
+            guesses[word] = kept[i].word.dropLast(kept[i].ahead)
             if (bestRead == null ||
                 kept[i].score - bestRead >= GlideLookAhead.CONFIDENT.margin
             ) {
@@ -13970,7 +13983,12 @@ open class WMKeyboardService : InputMethodService() {
                     candidates, reading.scores, state.settings.gesture.previewSteadiness,
                 )
                 ?: candidates.first()
-            val strip = if (chosen != null) glideStripOrder(candidates, chosen) else candidates
+            val drawn = reading.guesses[picked]
+            val strip = when {
+                drawn != null -> glideEarlyLiftStrip(picked, drawn, candidates)
+                chosen != null -> glideStripOrder(candidates, chosen)
+                else -> candidates
+            }
             val word = when (shiftAtGesture) {
                 ShiftState.CAPS_LOCK -> picked.uppercase()
                 ShiftState.ON -> picked.replaceFirstChar { it.uppercase() }
@@ -14024,6 +14042,33 @@ open class WMKeyboardService : InputMethodService() {
                 it.copy(suggestions = strip, octopus = floating, emojiSuggestions = chips)
             }
         }
+    }
+
+    /**
+     * The strip after a lift that took [word] on the strength of a guess,
+     * the stroke having drawn only [drawn] of it (issue #168).
+     *
+     * Lifting early is a choice, the same one a tap on a suggestion makes:
+     * the user took the word they were shown. The stroke's other readings —
+     * [candidates], words that end where the finger stopped — are then
+     * beside the point, because the finger did not stop at the end of
+     * anything. What the user may still want is a neighbour of the word:
+     * "dictionaries" beside "dictionary", "functional" beside
+     * "functionality". Those go first, and the readings fill whatever
+     * slots are left, so a lift that was not a choice after all still has
+     * them.
+     */
+    private suspend fun glideEarlyLiftStrip(
+        word: String,
+        drawn: String,
+        candidates: List<String>,
+    ): List<String> {
+        val engine = suggestionEngine ?: return glideStripOrder(candidates, word)
+        val kin = withContext(Dispatchers.Default) {
+            engine.glideKin(drawn, word, glideCandidateLimit() - 1)
+        }
+        val seen = HashSet<String>(kin.map { it.lowercase() }).apply { add(word.lowercase()) }
+        return listOf(word) + kin + candidates.filterNot { it.lowercase() in seen }
     }
 
     /**

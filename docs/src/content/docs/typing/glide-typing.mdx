@@ -60,6 +60,17 @@ You don't have to wait until you lift your finger to see what WM Keyboard thinks
 
 Watching four candidates reshuffle under your finger isn't for everyone. **One word on the strip** (<SettingsPath path="Typing / Gestures" />, off by default) holds the strip to a single word for as long as the stroke is down: the same word the floating preview shows, and the same word a lift commits. The emoji, punctuation and rewrite chips left over from the word before the stroke stand down with the extra candidates, so the row carries one thing. Lift your finger and the alternates fill the strip as they always have, and the [ambiguity picker](#when-a-swipe-is-a-genuine-toss-up) still offers them mid-stroke if you hold still.
 
+## Finishing a long word early
+
+A swipe is normally read from end to end: the first letter goes where you started and the last where you stopped, so "dictionary" can't be offered until you have glided all ten letters. **Finish long words early** (<SettingsPath path="Typing / Gestures" />, off by default) lets the keyboard offer a word your stroke has only started, the way tapping four letters of it would. The guess shows in the floating preview and on the strip like any other reading, and lifting your finger types it. It's colored rather than only bolded when the keyboard is sure of it, under **Color the word a lift will type**.
+
+Two rules keep it from running ahead of you:
+
+- **A word you have drawn in full keeps its place.** Gliding "thing" all the way to the g reads "thing", not "things", and "that" stays "that" even when "that's" is a word you use a lot. A longer word only takes over when it's clearly the likelier one, letter for letter, over what you have actually spelled. "When sure" asks for a wide lead; "Eager" offers the longer word as soon as it's ahead at all.
+- **Under "Prefer my words" and "Only my words", a guess is always one of your own words.** The dictionary still reads a stroke you finish, but it never finishes one for you, so a rare dictionary word can't jump in ahead of a word you have written a hundred times. Guessing the rest of a word is about twice as accurate out of one person's vocabulary as out of a dictionary, which is why the two settings belong together.
+
+Lifting early on a guessed word is a choice, much like tapping a suggestion, so the strip treats it as one. Instead of the stroke's other readings (words that end where your finger stopped, which is nowhere useful), it fills with the word's neighbours: the plural, the possessive, the verb form, the shorter word the guess ran past. Lift on "dictionary" and "dictionary's" and "dictionaries" sit beside it; lift on "functionality" and "functional" is one tap away. Not available on phonetic layouts such as Avro, where a stroke spells a romanization rather than the word itself.
+
 ## Alternates, and fixing a wrong guess
 
 The moment you lift your finger, the best-scoring word commits to the field. The decoder hands back up to four candidates, and the suggestion strip fills its slots from that list. The word that just committed is bolded in the center slot by default, following the same "best suggestion in the middle" layout that autocorrect and normal typing use, with its next-best rival to the left and a third option to the right. Tap any of them to swap it in for the word that just landed. Widen the strip (<SettingsPath path="Typing / Suggestions" />, **Number of suggestions**, three by default and up to six) and the fourth candidate gets a slot too.
@@ -181,6 +192,9 @@ This is also the one way a swipe can teach a capital. A capital the *keyboard* c
 | Preview text size | 18 sp | Size of the floating word. Range 12–32 sp. |
 | Preview color / Preview text color | Automatic | Background and text of the floating word. Automatic follows the keyboard theme's popup colour. |
 | One word on the strip | Off | Only shown while glide typing is the active swipe mode. While the stroke is down, the suggestion strip carries only the word the keyboard reads at that moment instead of the whole candidate list. The alternates come back when you lift. |
+| Whose words a glide can produce | Every word | Every word, Prefer my words, Only my words or Automatic. Only my words answers a swipe out of the words the keyboard has learned from you and nothing else; Automatic starts at Every word and asks before moving up. Backspacing a glided word always searches the whole dictionary. |
+| Finish long words early | Off | Off, When sure or Eager. Lets a swipe be read as a word it has only started, and lifting types it. A word you have drawn in full is never overtaken by a longer one unless the longer one is clearly likelier; under Prefer my words and Only my words the guess is always one of your own words. See [Finishing a long word early](#finishing-a-long-word-early). |
+| Color the word a lift will type | When sure | Never, When sure, Any early word or Always. Which word on the strip and in the preview gets the strip's own colour, meaning "this is what a lift types", not just bold. |
 
 **Handwrite with swipes** lives in this same settings group but belongs to a different feature. It's a two-option picker (Type words or Handwrite) rather than a toggle, and it decides what a letter-area swipe means in the first place: see [Handwriting](/tools/handwriting/#handwriting-without-opening-the-panel).
 
