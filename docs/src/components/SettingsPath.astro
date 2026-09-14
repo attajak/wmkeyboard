@@ -3,15 +3,29 @@
  * Breadcrumb chip showing where a setting lives in the app.
  * Usage: <SettingsPath path="Typing / Autocorrect / Confidence" />
  * Always renders the app name as the first crumb.
+ *
+ * On an Android phone the chip is also a link: the path is resolved against
+ * the app's settings index (src/lib/settings-links.mjs) into a `wmkeyboard://`
+ * address, and a small script sets it as the href once it knows the page is
+ * being read on Android. Anywhere else the chip stays plain text, since only
+ * a phone with WM Keyboard installed can open the address.
  */
+import { resolveSettingsLink } from '../lib/settings-links.mjs';
+
 interface Props {
 	path: string;
 }
 const { path } = Astro.props;
 const crumbs = ['WM Keyboard', ...path.split('/').map((c) => c.trim())];
+const link = resolveSettingsLink(path);
 ---
 
-<span class="settings-path" title={`Settings location: ${crumbs.join(' → ')}`}>
+<a
+	class="settings-path"
+	title={`Settings location: ${crumbs.join(' → ')}`}
+	data-href={link?.href}
+	data-exact={link ? String(link.exact) : undefined}
+>
 	<svg
 		aria-hidden="true"
 		width="14"
@@ -36,7 +50,44 @@ const crumbs = ['WM Keyboard', ...path.split('/').map((c) => c.trim())];
 			</>
 		))
 	}
-</span>
+	<svg
+		class="open"
+		aria-hidden="true"
+		width="13"
+		height="13"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2.2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	>
+		<path d="M7 17 17 7"></path>
+		<path d="M9 7h8v8"></path>
+	</svg>
+</a>
+
+<script>
+	// Only Android can open a wmkeyboard:// address, so the chip becomes a
+	// link there and stays plain text on a desktop, where it would dead-end.
+	const ua = navigator.userAgent;
+	const onAndroid =
+		/\bAndroid\b/i.test(ua) ||
+		(navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ===
+			'Android';
+	if (onAndroid) {
+		for (const chip of document.querySelectorAll<HTMLAnchorElement>('a.settings-path[data-href]')) {
+			const href = chip.dataset.href;
+			if (!href) continue;
+			chip.href = href;
+			chip.classList.add('is-link');
+			chip.title =
+				chip.dataset.exact === 'false'
+					? 'Open the screen that holds this setting in WM Keyboard'
+					: 'Open this setting in WM Keyboard';
+		}
+	}
+</script>
 
 <style>
 	.settings-path {
@@ -52,6 +103,10 @@ const crumbs = ['WM Keyboard', ...path.split('/').map((c) => c.trim())];
 		color: var(--sl-color-gray-2);
 		font-size: var(--sl-text-sm);
 		line-height: 1.4;
+		text-decoration: none;
+	}
+	.settings-path:hover {
+		color: var(--sl-color-gray-2);
 	}
 	.settings-path svg {
 		color: var(--sl-color-accent);
@@ -60,8 +115,28 @@ const crumbs = ['WM Keyboard', ...path.split('/').map((c) => c.trim())];
 	.sep {
 		color: var(--sl-color-gray-4);
 	}
-	.crumb:last-child {
+	.crumb:last-of-type {
 		color: var(--sl-color-white);
 		font-weight: 600;
+	}
+	/* The open-in-app arrow only exists once the script has made a link. */
+	.open {
+		display: none;
+	}
+	.settings-path.is-link {
+		border-color: var(--sl-color-accent);
+		cursor: pointer;
+	}
+	.settings-path.is-link .open {
+		display: inline;
+		margin-inline-start: 0.1em;
+	}
+	.settings-path.is-link .crumb:last-of-type {
+		text-decoration: underline;
+		text-decoration-color: var(--sl-color-accent);
+		text-underline-offset: 0.2em;
+	}
+	.settings-path.is-link:active {
+		background: var(--sl-color-accent-low);
 	}
 </style>

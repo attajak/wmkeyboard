@@ -11,7 +11,7 @@ import khmer from '../../../../../app/src/main/assets/layouts/kmn_khmer_angkor.w
 
 862 of the layouts in WM Keyboard started life as [Keyman](https://keyman.com/) keyboards. That's where most of the language catalogue's long tail comes from: Adyghe, Hatran, Osage, Cypro-Minoan, and several hundred more that no other Android keyboard ships a layout for.
 
-They behave like any other layout once enabled. They appear under their language in <SettingsPath path="Settings > Languages" />, they're editable in the layout editor, and you can export one as a file like any other.
+They behave like any other layout once enabled. They appear under their language in <SettingsPath path="Languages & layouts" />, they're editable in the layout editor, and you can export one as a file like any other.
 
 <LayoutExplorer layout={khmer} />
 
@@ -19,7 +19,7 @@ That's Khmer Angkor, rendered from the same layout data the app ships.
 
 ## Where they come from
 
-[Keyman](https://github.com/keymanapp/keyboards) is an SIL Global project. Its repository holds around 930 keyboards, most of them for minority and historical languages, and the release-quality ones are MIT licensed. Every keyboard used here is credited by name and copyright holder in <SettingsPath path="Settings > About > Open-source licences > Keyman keyboard layouts" />.
+[Keyman](https://github.com/keymanapp/keyboards) is an SIL Global project. Its repository holds around 930 keyboards, most of them for minority and historical languages, and the release-quality ones are MIT licensed. Every keyboard used here is credited by name and copyright holder in <SettingsPath path="About / Open-source licences / Keyman keyboard layouts" />.
 
 WM Keyboard isn't affiliated with SIL Global or the Keyman project. We converted the key grids with our own code; these aren't the upstream files.
 
@@ -50,7 +50,7 @@ On a **mnemonic** keyboard, the printed key caps and the typed output are delibe
 
 The grids ship with WM Keyboard; the rules are downloaded per keyboard, from keyman.com, when you ask for them.
 
-<SettingsPath path="Settings > Languages > (a language)" />
+<SettingsPath path="Languages & layouts / (a language)" />
 
 **When you switch a layout on, the app asks.** If that layout needs rules and doesn't have them yet, a prompt offers to fetch them there and then, which is the moment you're deciding to type in the language rather than the moment you notice the output looks wrong. Choose Not now and nothing is lost: the row is still there.
 

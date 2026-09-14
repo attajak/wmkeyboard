@@ -71,7 +71,7 @@ All in `src/components/`, importable via the `@components/*` alias
 | Component | Use for | Example |
 |---|---|---|
 | `<KeyCap>` | Any key name inline | `<KeyCap>Shift</KeyCap>`, `<KeyCap>?123</KeyCap>` |
-| `<SettingsPath path="…" />` | Where a setting lives; put one at the top of every "Options" section | `<SettingsPath path="Typing / Autocorrect" />` |
+| `<SettingsPath path="…" />` | Where a setting lives; put one at the top of every "Options" section. On Android it is also a `wmkeyboard://` link that opens that screen or row (resolved from `src/data/settings-links.json`; run `node scripts/check-settings-links.mjs` to find a path that lands one screen too high) | `<SettingsPath path="Typing / Autocorrect" />` |
 | `<Flavor edition="full" />` | Feature gated to an edition; place next to the H1 lead or section heading | also `lite`, `both` |
 | `<Since v="1.4" />` | Version a feature landed (start using once versions are documented) | |
 | `<PhoneFrame caption="…">` | Every screenshot. An empty `<PhoneFrame />` renders a "screenshot pending" placeholder, which no finished page should show | |
