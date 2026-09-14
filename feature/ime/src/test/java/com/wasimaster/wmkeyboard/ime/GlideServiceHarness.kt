@@ -12,6 +12,7 @@ import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
 import com.wasimaster.wmkeyboard.core.prediction.OctopusWord
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
+import com.wasimaster.wmkeyboard.core.snippets.SnippetStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
@@ -299,7 +300,26 @@ internal fun glideKeyboard(
     editor: RecordingEditor = RecordingEditor(),
 ): Triple<GlideKeyboard, RecordingEditor, KeyboardUiState> {
     val service = GlideKeyboard(editor)
+    plantPersonalStores(service)
     return Triple(service, editor, seedState(service, state))
+}
+
+/**
+ * The stores `onCreate` attaches before a key can be typed, planted the way
+ * the lock screen attaches them: in memory, backed by no file.
+ *
+ * Only the snippet store so far. A mark that ends a word takes a second look
+ * for a pattern snippet about the mark itself, and that look asks the store
+ * before anything else, so without it every test that types punctuation after
+ * a word died on a `lateinit` (the second look came after those tests did).
+ * The service needs no guard for this: `attachPersonalStores` runs inside
+ * `onCreate`, so on a device the store always exists, with a null file while
+ * the phone is locked.
+ */
+internal fun plantPersonalStores(service: WMKeyboardService) {
+    val field = WMKeyboardService::class.java.getDeclaredField("snippetStore")
+    field.isAccessible = true
+    field.set(service, SnippetStore(null))
 }
 
 /**
