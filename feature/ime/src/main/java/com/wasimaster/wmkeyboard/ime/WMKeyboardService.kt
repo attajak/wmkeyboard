@@ -4470,7 +4470,21 @@ open class WMKeyboardService : InputMethodService() {
             newSelStart == newSelEnd &&
             newSelStart >= candidatesStart && newSelStart < candidatesEnd
 
-        val composingDropped = wasComposing && (cursorOutsideCandidates || cursorInsideCandidates)
+        // The editor can also throw the composition away wholesale: a search
+        // box's clear button, or an app replacing its own text, empties the
+        // field with setText and reports a caret at 0 with no candidates. The
+        // rule above lets that through — there is no region to have left — and
+        // the buffer then outlives an empty field, so the next keystroke's
+        // setComposingText puts the whole old word back in front of whatever
+        // is typed or pasted next (issue #192, SeriesGuide's movie search).
+        // A caret the composed text cannot fit in front of is that case.
+        val composedText = if (wasComposing) composedPreview(_uiState.value, composing.toString()) else ""
+        val compositionVanished = wasComposing && !_uiState.value.composer.isConversion &&
+            compositionCannotPrecedeCaret(
+                oldSelStart, newSelStart, newSelEnd, candidatesStart, composedText.length,
+            )
+        val composingDropped = wasComposing &&
+            (cursorOutsideCandidates || cursorInsideCandidates || compositionVanished)
         if (composingDropped) {
             composing = StringBuilder()
             currentInputConnection?.finishComposingText()
@@ -4496,16 +4510,39 @@ open class WMKeyboardService : InputMethodService() {
         // candidates re-set the identical region, a no-op. Same readback guard
         // as [reattachComposing]; conversion composers are excluded because
         // their prefix commits manage the region themselves.
+        var composingReplaced = false
         if (!composingDropped && composing.isNotEmpty() && candidatesStart < 0 &&
             newSelStart == newSelEnd && !_uiState.value.composer.isConversion
         ) {
             val ic = currentInputConnection
-            val text = composedPreview(_uiState.value, composing.toString())
+            val text = composedText
             if (ic != null && text.isNotEmpty() && newSelStart >= text.length &&
-                caretStillAt(ic, newSelStart) &&
-                ic.getTextBeforeCursor(text.length, 0)?.toString() == text
+                caretStillAt(ic, newSelStart)
             ) {
-                ic.setComposingRegion(newSelStart - text.length, newSelStart)
+                if (ic.getTextBeforeCursor(text.length, 0)?.toString() == text) {
+                    ic.setComposingRegion(newSelStart - text.length, newSelStart)
+                } else {
+                    // The caret is settled and what sits in front of it is not
+                    // the buffer: the editor put other text there (a search
+                    // box filling in a picked suggestion, say). The word being
+                    // composed is gone from the field, and a buffer kept past
+                    // that would be inserted again by the next keystroke, the
+                    // same way as above (#192). Dropping it costs the strip
+                    // the word's prefix and never touches the field.
+                    composingReplaced = true
+                }
+            }
+        }
+        if (composingReplaced) {
+            composing = StringBuilder()
+            suggestionJob?.cancel()
+            _uiState.update {
+                it.copy(
+                    composingPreview = "",
+                    suggestions = emptyList(),
+                    emojiSuggestions = emptyList(),
+                    octopus = emptyMap(),
+                )
             }
         }
         // Partial dictation results are cumulative per utterance, so they
@@ -4532,7 +4569,9 @@ open class WMKeyboardService : InputMethodService() {
         // — via restartSuggestionsAtCursor (which folds in the chip refresh). An
         // active word still being composed in place, or a range selection being
         // dragged out, only refreshes the chips.
-        if ((!wasComposing || composingDropped) && composing.isEmpty() && newSelStart == newSelEnd) {
+        if ((!wasComposing || composingDropped || composingReplaced) && composing.isEmpty() &&
+            newSelStart == newSelEnd
+        ) {
             currentInputConnection?.let { restartSuggestionsAtCursor(it, newSelStart) }
         } else {
             // The mid-word strip goes the same way for the same reason: a
@@ -25446,6 +25485,30 @@ fun cursorLeftComposingRegion(
     candidatesEnd: Int,
 ): Boolean = candidatesStart >= 0 && candidatesEnd >= candidatesStart &&
     (newSelStart < candidatesStart || newSelEnd > candidatesEnd)
+
+/**
+ * Whether a selection update that reports no composing region has put the
+ * collapsed caret somewhere the composed text — [composedLength] characters
+ * that the keyboard believes end at the caret — cannot fit in front of, so
+ * the composition is gone from the field whatever the editor says (#192).
+ *
+ * That is an editor emptying or replacing its text under a live composition
+ * — a search box's clear button lands the caret at 0 — and it is the one
+ * case [cursorLeftComposingRegion] cannot see, since a field with no text
+ * has no region to report. The caret must not have moved forward: selection
+ * echoes queue behind fast keystrokes, so an echo can describe a caret that
+ * is short of a buffer which has since grown, but only ever *ahead* of the
+ * caret it replaces. A backspace's echo moves the caret back by exactly the
+ * character the buffer lost, so it never lands short of the buffer either.
+ */
+fun compositionCannotPrecedeCaret(
+    oldSelStart: Int,
+    newSelStart: Int,
+    newSelEnd: Int,
+    candidatesStart: Int,
+    composedLength: Int,
+): Boolean = candidatesStart < 0 && newSelStart == newSelEnd &&
+    newSelStart <= oldSelStart && newSelStart < composedLength
 
 /**
  * One live-preview ask from a glide in progress. [generation] is the stroke it
