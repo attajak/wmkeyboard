@@ -68,14 +68,33 @@ const link = resolveSettingsLink(path);
 </a>
 
 <script>
-	// Only Android can open a wmkeyboard:// address, so the chip becomes a
-	// link there and stays plain text on a desktop, where it would dead-end.
-	const ua = navigator.userAgent;
-	const onAndroid =
-		/\bAndroid\b/i.test(ua) ||
-		(navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ===
-			'Android';
-	if (onAndroid) {
+	// Only Android can open a wmkeyboard:// address. Chromium browsers there
+	// can also say whether the app is installed (the site's web manifest names
+	// the package, the app's asset statement names the site), and then the
+	// chip is a link only when it is. A browser without that API, Firefox for
+	// one, has no way to know, so the chip links anyway rather than never.
+	const PACKAGE = 'com.wasimaster.wmkeyboard';
+	type RelatedApp = { id?: string; platform?: string };
+	type Nav = Navigator & {
+		userAgentData?: { platform?: string };
+		getInstalledRelatedApps?: () => Promise<RelatedApp[]>;
+	};
+	const nav = navigator as Nav;
+	const onAndroid = /\bAndroid\b/i.test(nav.userAgent) || nav.userAgentData?.platform === 'Android';
+
+	/** true or false when the browser can tell, null when it cannot. */
+	async function appInstalled(): Promise<boolean | null> {
+		if (typeof nav.getInstalledRelatedApps !== 'function') return null;
+		try {
+			const apps = await nav.getInstalledRelatedApps();
+			return apps.some((app) => app.id === PACKAGE);
+		} catch {
+			// Not a top-level secure context, or the manifest did not load.
+			return null;
+		}
+	}
+
+	function linkChips() {
 		for (const chip of document.querySelectorAll<HTMLAnchorElement>('a.settings-path[data-href]')) {
 			const href = chip.dataset.href;
 			if (!href) continue;
@@ -87,7 +106,16 @@ const link = resolveSettingsLink(path);
 					: 'Open this setting in WM Keyboard';
 		}
 	}
+
+	if (onAndroid) {
+		appInstalled().then((installed) => {
+			document.documentElement.dataset.wmApp =
+				installed === null ? 'unknown' : installed ? 'installed' : 'absent';
+			if (installed !== false) linkChips();
+		});
+	}
 </script>
+
 
 <style>
 	.settings-path {

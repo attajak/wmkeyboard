@@ -1,0 +1,11 @@
+{
+  "name": "WM Keyboard docs",
+  "short_name": "WM Keyboard",
+  "start_url": "/",
+  "display": "browser",
+  "icons": [{ "src": "/favicon.png", "sizes": "64x64", "type": "image/png" }],
+  "related_applications": [
+    { "platform": "play", "id": "com.wasimaster.wmkeyboard" }
+  ],
+  "prefer_related_applications": false
+}

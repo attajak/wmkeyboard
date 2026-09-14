@@ -160,6 +160,19 @@
             android:value="ocr,barcode" />
 
         <!--
+             Lets the documentation site ask Chrome whether this app is
+             installed (navigator.getInstalledRelatedApps), so its settings
+             chips only become wmkeyboard:// links on a phone that can open
+             them. The statement names the site; the site's
+             /.well-known/assetlinks.json names this package and its signing
+             certificates. Nothing here claims https URLs: no autoVerify
+             filter, so it grants no App Links.
+        -->
+        <meta-data
+            android:name="asset_statements"
+            android:resource="@string/asset_statements" />
+
+        <!--
              singleTop so a second deep link reaches the running instance
              through onNewIntent instead of stacking another copy of the
              settings app on top of the first.

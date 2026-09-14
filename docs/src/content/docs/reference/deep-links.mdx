@@ -44,9 +44,12 @@ Tap one anywhere on the device and WM Keyboard opens on that screen. A bare
 carries one of these links, and so does every route in the table further down.
 
 So does every settings-location chip on this site, when you read it on an
-Android phone. Tap <SettingsPath path="Typing / Automatic corrections" /> and
-the app opens on that screen, or scrolls to the row the chip names. On a
-desktop the chip is plain text, since nothing there can open the address.
+Android phone that has WM Keyboard installed. Tap
+<SettingsPath path="Typing / Automatic corrections" /> and the app opens on
+that screen, or scrolls to the row the chip names. Chrome checks that the app
+is there before the chip becomes a link; a browser that cannot check, such as
+Firefox, links it anyway. On a desktop the chip is plain text, since nothing
+there can open the address.
 
 You can send the same link yourself, for example from `adb`:
 

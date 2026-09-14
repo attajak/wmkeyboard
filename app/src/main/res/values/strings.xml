@@ -3,6 +3,10 @@
     <!-- The launcher label when About › Short app name is on (#140). A name,
          not a word, so no language translates it. -->
     <string name="app_name_short" translatable="false">WMK</string>
+    <!-- Digital Asset Links statement read by Chrome for
+         navigator.getInstalledRelatedApps() on the docs site. The site is
+         DOCS_URL in AboutScreens.kt; change both together. -->
+    <string name="asset_statements" translatable="false">[{\"include\": \"https://wmkeyboard.pages.dev/.well-known/assetlinks.json\"}]</string>
     <string name="ime_name">WM Keyboard</string>
     <!-- Play's name for the on-demand AI-runtime module (:feature:llm);
          surfaces in Play's download UI and settings. Lives here because a

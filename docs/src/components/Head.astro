@@ -50,6 +50,11 @@ const title = entry.data.title;
 <Font cssVariable="--font-geist" preload />
 <Font cssVariable="--font-geist-mono" preload />
 
+{/* Names the Android app as related to this site so Chrome can answer
+    navigator.getInstalledRelatedApps() on the settings chips. The app's
+    side of the handshake is public/.well-known/assetlinks.json. */}
+<link rel="manifest" href="/manifest.webmanifest" />
+
 <SEO
 	canonical={canonical}
 	robotsExtras="max-image-preview:large, max-snippet:-1"
