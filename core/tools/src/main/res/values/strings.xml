@@ -57,6 +57,9 @@
     <string name="core_tools_ai_action_summarize_label">Summarize</string>
     <string name="core_tools_ai_action_translate_label">Translate</string>
     <string name="core_tools_ai_action_improve_label">Improve</string>
+    <string name="core_tools_ai_action_formal_label">Formal</string>
+    <string name="core_tools_ai_action_shorter_label">Shorter</string>
+    <string name="core_tools_ai_action_friendly_label">Friendly</string>
     <string name="core_tools_ai_action_fix_grammar_label">Fix grammar</string>
     <string name="core_tools_ai_action_explain_label">Explain</string>
     <!-- Write more text that carries on from what is already in the field. -->

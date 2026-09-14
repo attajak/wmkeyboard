@@ -1134,6 +1134,13 @@ sealed interface AiUi {
         /** The panel is showing the comparison, not the plain result. */
         val showDiff: Boolean = false,
         /**
+         * [sourceText] was the selection, not the whole field, so Replace
+         * swaps the selection alone. Without it, running an action on a
+         * selected sentence and pressing Replace overwrote the whole field
+         * with one rewritten sentence.
+         */
+        val sourceFromSelection: Boolean = false,
+        /**
          * A comparison against [sourceText] means something for this run.
          *
          * False for an action that adds to the text rather than replacing it

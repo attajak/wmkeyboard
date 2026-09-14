@@ -313,9 +313,5 @@
     <string name="core_content_selection_macro_add_contact">Contact</string>
     <string name="core_content_selection_macro_map">Map</string>
     <string name="core_content_selection_macro_calendar">Calendar</string>
-    <!-- The colour ladder: each spelling of a colour, untranslatable notation. -->
-    <string name="core_content_selection_macro_colour_hex" translatable="false">HEX</string>
-    <string name="core_content_selection_macro_colour_rgb" translatable="false">RGB</string>
-    <string name="core_content_selection_macro_colour_hsl" translatable="false">HSL</string>
 
 </resources>

@@ -321,7 +321,6 @@ import com.wasimaster.wmkeyboard.core.settings.BackspaceSwipeUnit
 import com.wasimaster.wmkeyboard.core.settings.BarRow
 import com.wasimaster.wmkeyboard.core.settings.barRowsAboveKeys
 import com.wasimaster.wmkeyboard.core.settings.barRowsBelowKeys
-import com.wasimaster.wmkeyboard.core.selection.SelectionMacro
 import com.wasimaster.wmkeyboard.core.settings.SelectionMacroPlacement
 import com.wasimaster.wmkeyboard.core.settings.LatinAccents
 import com.wasimaster.wmkeyboard.core.settings.EmojiBarContent
@@ -8604,11 +8603,7 @@ private fun KeyboardBody(
                             // the toolbar is one tap away under the macros' own gesture.
                             // Only with no panel open, because there the chevron on this
                             // row is the way back out of the panel.
-                            stripMacros -> SelectionMacroBar(
-                                state,
-                                toolHold.onSelectionMacro,
-                                toolHold.onSelectionFancyStyle,
-                            )
+                            stripMacros -> SelectionMacroBar(state, toolHold.selection)
                             else -> TopBar(
                                 state,
                                 toolsRowOpen = toolsRowOpen,
@@ -8700,11 +8695,7 @@ private fun KeyboardBody(
                                     ExitTransition.None
                                 },
                             ) {
-                                SelectionMacroBar(
-                                    state,
-                                    toolHold.onSelectionMacro,
-                                    toolHold.onSelectionFancyStyle,
-                                )
+                                SelectionMacroBar(state, toolHold.selection)
                             }
                         }
                         // The chevron's open/close grows and shrinks the row over
@@ -18814,17 +18805,11 @@ data class ToolHoldCallbacks(
     /** The vocabulary panel's and chips' callbacks; here for the same reason as [dictionaryBar]. */
     val vocab: VocabCallbacks = VocabCallbacks(),
     /**
-     * A selection macro chip was tapped. Rides this bundle for the reason
-     * [dictionaryBar] does: it is the nearest one already on the call, and the
-     * caller cannot afford another parameter.
+     * The selection bar's callbacks (a chip, a ladder pick, an AI button).
+     * Ride this bundle for the reason [dictionaryBar] does: it is the nearest
+     * one already on the call, and the caller cannot afford another parameter.
      */
-    val onSelectionMacro: (SelectionMacro) -> Unit = {},
-    /**
-     * A style chip on the Fancy ladder: the style's id, and the selection as
-     * it stood before the ladder started rewriting it. Not a [SelectionMacro],
-     * because there are thirty-odd styles and they are data, not actions.
-     */
-    val onSelectionFancyStyle: (String, String) -> Unit = { _, _ -> },
+    val selection: SelectionMacroCallbacks = SelectionMacroCallbacks(),
 )
 
 // ---- snippets panel ----

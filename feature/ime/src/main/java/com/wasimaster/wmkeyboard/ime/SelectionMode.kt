@@ -1,7 +1,9 @@
 package com.wasimaster.wmkeyboard.ime
 
+import com.wasimaster.wmkeyboard.core.selection.ContentFlags
 import com.wasimaster.wmkeyboard.core.selection.SelectionKind
 import com.wasimaster.wmkeyboard.core.selection.SelectionMacro
+import com.wasimaster.wmkeyboard.core.tools.AiActionSpec
 
 /**
  * What one press of the toolbar's Selection mode tool means, pulled out of
@@ -96,4 +98,16 @@ data class SelectionMacroOffer(
      * without reading the field again.
      */
     val wholeField: Boolean = false,
+    /** What the text holds: the colour, the moment, the place the ladders and intents act on. */
+    val content: ContentFlags = ContentFlags.NONE,
+    /** AI actions drawn as chips of their own right after the AI chip. */
+    val aiDirect: List<AiActionSpec> = emptyList(),
+    /** The case ladder Format opens: the four fixed cases plus the programmer's ones that are on. */
+    val caseLadder: List<SelectionMacro> = emptyList(),
+    /** How many rewrites Undo can put back; the chip is drawn while this is above zero. */
+    val undoDepth: Int = 0,
+    /** The chip whose work is still running; it shows a spinner and ignores taps. */
+    val busy: SelectionMacro? = null,
+    /** The selection is being read aloud, so that chip reads Stop. */
+    val speaking: Boolean = false,
 )

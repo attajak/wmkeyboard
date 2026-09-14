@@ -80,6 +80,10 @@ object DateTimes {
     private val DAY_MONTH = Regex("""(\d{1,2})(?:st|nd|rd|th|ই|শে|লা|রা|ঠা)?\s*(?:of\s+)?($MONTH_NAMES)(?:,?\s+(\d{4}))?""")
     private val MONTH_DAY = Regex("""($MONTH_NAMES)\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s+(\d{4}))?""")
     private val TODAY = setOf("today", "tonight", "আজ", "আজকে")
+    /** `Mon 14 Sep`: the weekday is decoration on a date that names its day. */
+    private val WEEKDAY_PREFIX = Regex(
+        """^(?:sun|sunday|mon|monday|tue|tues|tuesday|wed|wednesday|thu|thur|thurs|thursday|fri|friday|sat|saturday)[,\s]+(?=\d)""",
+    )
 
     private class Time(val hour: Int, val minute: Int, val second: Int)
     private class Day(val year: Int, val month: Int, val day: Int, val ambiguous: Boolean)
@@ -327,6 +331,7 @@ object DateTimes {
     }
 
     private fun day(text: String, today: Calendar, locale: Locale): Day? {
+        WEEKDAY_PREFIX.find(text)?.let { m -> return day(text.substring(m.range.last + 1), today, locale) }
         if (text in TODAY) {
             return Day(today.get(Calendar.YEAR), today.get(Calendar.MONTH) + 1, today.get(Calendar.DAY_OF_MONTH), false)
         }

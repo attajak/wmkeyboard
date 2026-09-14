@@ -126,6 +126,9 @@ object BuiltInAiActions {
     const val SUMMARIZE_ID = "builtin_summarize"
     const val TRANSLATE_ID = "builtin_translate"
     const val IMPROVE_ID = "builtin_improve"
+    const val FORMAL_ID = "builtin_formal"
+    const val SHORTER_ID = "builtin_shorter"
+    const val FRIENDLY_ID = "builtin_friendly"
     const val FIX_GRAMMAR_ID = "builtin_fix_grammar"
     const val EXPLAIN_ID = "builtin_explain"
     const val CONTINUE_ID = "builtin_continue"
@@ -158,6 +161,24 @@ object BuiltInAiActions {
             name = "Improve",
             task = "improve the input text's writing — stronger word choice, better " +
                 "structure — keeping the same voice, meaning and language.",
+        ),
+        AiActionSpec(
+            id = FORMAL_ID,
+            name = "Formal",
+            task = "rewrite the input text in a formal, professional register, with no " +
+                "slang and no contractions, keeping its meaning, length and language.",
+        ),
+        AiActionSpec(
+            id = SHORTER_ID,
+            name = "Shorter",
+            task = "shorten the input text to about half its length, keeping every " +
+                "essential point, its tone and its language.",
+        ),
+        AiActionSpec(
+            id = FRIENDLY_ID,
+            name = "Friendly",
+            task = "rewrite the input text in a warm, friendly, conversational tone, " +
+                "keeping its meaning and language.",
         ),
         AiActionSpec(
             id = FIX_GRAMMAR_ID,
@@ -208,6 +229,9 @@ object BuiltInAiActions {
         spec.id == SUMMARIZE_ID -> R.string.core_tools_ai_action_summarize_label
         spec.id == TRANSLATE_ID -> R.string.core_tools_ai_action_translate_label
         spec.id == IMPROVE_ID -> R.string.core_tools_ai_action_improve_label
+        spec.id == FORMAL_ID -> R.string.core_tools_ai_action_formal_label
+        spec.id == SHORTER_ID -> R.string.core_tools_ai_action_shorter_label
+        spec.id == FRIENDLY_ID -> R.string.core_tools_ai_action_friendly_label
         spec.id == FIX_GRAMMAR_ID -> R.string.core_tools_ai_action_fix_grammar_label
         spec.id == EXPLAIN_ID -> R.string.core_tools_ai_action_explain_label
         spec.id == CONTINUE_ID -> R.string.core_tools_ai_action_continue_label

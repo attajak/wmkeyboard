@@ -73,8 +73,22 @@ import android.provider.DocumentsContract
 import android.provider.Settings
 import com.wasimaster.wmkeyboard.core.clipboard.ClipEntityKind
 import com.wasimaster.wmkeyboard.core.selection.SelectionKind
+import com.wasimaster.wmkeyboard.core.selection.ChatStyle
+import com.wasimaster.wmkeyboard.core.selection.ChatSyntax
+import com.wasimaster.wmkeyboard.core.selection.ColourCodes
+import com.wasimaster.wmkeyboard.core.selection.ColourForm
+import com.wasimaster.wmkeyboard.core.selection.DateTimes
+import com.wasimaster.wmkeyboard.core.selection.DetectOptions
+import com.wasimaster.wmkeyboard.core.selection.DigitScripts
+import com.wasimaster.wmkeyboard.core.selection.FindOptions
+import com.wasimaster.wmkeyboard.core.selection.FindReplace
+import com.wasimaster.wmkeyboard.core.selection.JsonReformat
+import com.wasimaster.wmkeyboard.core.selection.LineEdits
 import com.wasimaster.wmkeyboard.core.selection.MacroGates
+import com.wasimaster.wmkeyboard.core.selection.Place
+import com.wasimaster.wmkeyboard.core.selection.Places
 import com.wasimaster.wmkeyboard.core.selection.SelectionMacro
+import com.wasimaster.wmkeyboard.core.selection.TextCodecs
 import com.wasimaster.wmkeyboard.core.selection.SelectionMacros
 import com.wasimaster.wmkeyboard.core.clipboard.ClipKind
 import com.wasimaster.wmkeyboard.core.clipboard.ClipLinks
@@ -124,6 +138,7 @@ import com.wasimaster.wmkeyboard.core.handwriting.HandwritingRecognizerCache
 import com.wasimaster.wmkeyboard.core.handwriting.HwStroke
 import android.Manifest
 import android.content.pm.PackageManager
+import android.provider.CalendarContract
 import android.provider.ContactsContract
 import com.wasimaster.wmkeyboard.core.prediction.Apostrophes
 import com.wasimaster.wmkeyboard.core.prediction.AppLanguageMix
@@ -140,6 +155,7 @@ import com.wasimaster.wmkeyboard.core.prediction.CompositeWordSource
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
 import com.wasimaster.wmkeyboard.core.prediction.MappedNgramPack
 import com.wasimaster.wmkeyboard.core.prediction.MappedTrie
+import com.wasimaster.wmkeyboard.core.prediction.BanglishConverter
 import com.wasimaster.wmkeyboard.core.prediction.BengaliSpellingMap
 import com.wasimaster.wmkeyboard.core.prediction.KeyProximity
 import com.wasimaster.wmkeyboard.core.prediction.OctopusCandidate
@@ -326,6 +342,7 @@ import com.wasimaster.wmkeyboard.core.aihistory.AiHistoryGuard
 import com.wasimaster.wmkeyboard.core.aihistory.AiHistoryStore
 import com.wasimaster.wmkeyboard.core.settings.AiProvider
 import com.wasimaster.wmkeyboard.core.tools.AiActionSpec
+import com.wasimaster.wmkeyboard.core.tools.visibleAiActions
 import com.wasimaster.wmkeyboard.core.tools.AiInputMode
 import com.wasimaster.wmkeyboard.core.tools.AiInsertMode
 import com.wasimaster.wmkeyboard.core.tools.BuiltInAiActions
@@ -2573,7 +2590,7 @@ open class WMKeyboardService : InputMethodService() {
                         val offer = state.selectionMacros
                         state.copy(
                             selectionMacros = offer
-                                ?.let { selectionMacroOffer(it.text, settings, it.wholeField) },
+                                ?.let { selectionMacroOffer(it.text, settings, it.wholeField, it) },
                         )
                     }
                 }
@@ -3939,6 +3956,13 @@ open class WMKeyboardService : InputMethodService() {
         // Whatever word was being followed, its field is gone or its text has
         // changed under it; nothing about it can be trusted from here.
         revision = null
+        if (!restarting) {
+            // The rewrites the bar remembered were about the old field, and a
+            // conversion still running was for it too.
+            macroUndo.clear()
+            macroJob?.cancel()
+            macroSeq++
+        }
         if (restarting) {
             // Same field, new connection: the composing span went with the old
             // one. See [reattachComposing] — and note this runs on its own when
@@ -4655,7 +4679,7 @@ open class WMKeyboardService : InputMethodService() {
         // can miss, and a stale carve-out would keep a slab of the screen from
         // reaching TalkBack.
         KeyboardPassthrough.publishRegion(null)
-        vocabSpeaker?.stop()
+        stopReadAloud()
         vocabProgress.save()
         // The word card is about a word on a strip that is going away — and
         // its spelling editor owns the keys, so it goes with it (#138).
@@ -17841,15 +17865,35 @@ open class WMKeyboardService : InputMethodService() {
     private fun weatherCacheMs(): Long =
         _uiState.value.settings.toolLimits.weatherRefreshMinutes * 60_000L
 
-    private fun aiInputText(spec: AiActionSpec): String {
-        val ic = currentInputConnection ?: return ""
-        ic.getSelectedText(0)?.toString()?.takeIf { it.isNotBlank() }?.let { return it }
-        return if (spec.inputMode == AiInputMode.BEFORE_CURSOR) {
+    /** What an action runs on, and whether that was the selection rather than the field. */
+    private class AiInput(val text: String, val fromSelection: Boolean)
+
+    private fun aiInputText(spec: AiActionSpec): AiInput {
+        val ic = currentInputConnection ?: return AiInput("", fromSelection = false)
+        ic.getSelectedText(0)?.toString()?.takeIf { it.isNotBlank() }?.let { return AiInput(it, fromSelection = true) }
+        val text = if (spec.inputMode == AiInputMode.BEFORE_CURSOR) {
             ic.getTextBeforeCursor(_uiState.value.settings.ai.beforeCursorChars, 0)
                 ?.toString().orEmpty()
         } else {
             extractFieldText()
         }
+        return AiInput(text, fromSelection = false)
+    }
+
+    /**
+     * One of the selection bar's AI buttons: [actionId] run on the selection
+     * at once, with the result landing in the AI panel ready to apply. The
+     * panel opens first, so a provider that is not set up shows its own
+     * screen instead of a silent nothing.
+     */
+    fun onSelectionAiAction(actionId: String) {
+        val offer = _uiState.value.selectionMacros ?: return
+        val spec = offer.aiDirect.firstOrNull { it.id == actionId } ?: return
+        vibrate()
+        if (_uiState.value.panel != PanelMode.AI) onPanelChange(PanelMode.AI, haptic = false)
+        if (_uiState.value.panel != PanelMode.AI || _uiState.value.ai !is AiUi.Idle) return
+        currentInputConnection?.let { commitComposing(it, autocorrect = false) }
+        runAi(spec, offer.text, fromSelection = true)
     }
 
     fun onAiAction(spec: AiActionSpec) {
@@ -17871,9 +17915,10 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         currentInputConnection?.let { commitComposing(it, autocorrect = false) }
-        val source = aiInputText(spec).trim()
+        val input = aiInputText(spec)
+        val source = input.text.trim()
         if (source.isNotEmpty()) {
-            runAi(spec, source)
+            runAi(spec, source, fromSelection = input.fromSelection)
             return
         }
         if (!spec.worksWithoutText) {
@@ -17912,10 +17957,11 @@ open class WMKeyboardService : InputMethodService() {
         if (instruction.isEmpty()) return
         vibrate()
         currentInputConnection?.let { commitComposing(it, autocorrect = false) }
-        val source = aiInputText(ai.action).trim()
+        val input = aiInputText(ai.action)
+        val source = input.text.trim()
         aiLastInstruction[ai.action.id] = instruction
         if (source.isNotEmpty()) {
-            runAi(ai.action, source, instruction)
+            runAi(ai.action, source, instruction, fromSelection = input.fromSelection)
             return
         }
         if (!ai.action.worksWithoutText) {
@@ -17936,6 +17982,7 @@ open class WMKeyboardService : InputMethodService() {
         source: String,
         instruction: String = "",
         generated: Boolean = false,
+        fromSelection: Boolean = false,
     ) {
         aiJob?.cancel()
         // Data saving, for the providers that are a request over the network.
@@ -17981,9 +18028,9 @@ open class WMKeyboardService : InputMethodService() {
             val result = withContext(Dispatchers.IO) {
                 runCatching {
                     if (config.provider == AiProvider.ON_DEVICE) {
-                        runAiOnDevice(seq, action, source, system, settings, generated)
+                        runAiOnDevice(seq, action, source, system, settings, generated, fromSelection)
                     } else {
-                        runAiRemote(seq, action, source, system, settings, config, startedAt, generated)
+                        runAiRemote(seq, action, source, system, settings, config, startedAt, generated, fromSelection)
                     }
                 }
             }
@@ -18001,6 +18048,7 @@ open class WMKeyboardService : InputMethodService() {
                             action, text, source,
                             instruction = instruction,
                             generated = generated,
+                            sourceFromSelection = fromSelection,
                             stripMarkdown = aiStripMarkdownDefault(),
                             truncated = completion.truncated,
                             showDiff = settings.ai.diffView &&
@@ -18128,6 +18176,7 @@ open class WMKeyboardService : InputMethodService() {
         system: String,
         settings: KeyboardSettings,
         generated: Boolean,
+        fromSelection: Boolean = false,
     ): AiClient.Completion {
         val modelId = effectiveLocalModelId(settings)
         val modelFile = effectiveLocalModelFile(settings)
@@ -18146,7 +18195,7 @@ open class WMKeyboardService : InputMethodService() {
             val now = SystemClock.uptimeMillis()
             if (seq != aiRunSeq || now - lastPartialAt < AI_PARTIAL_INTERVAL_MS) return@generate
             lastPartialAt = now
-            applyAiPartial(seq, action, source, raw, settings, implicitThink, startedAt, generated)
+            applyAiPartial(seq, action, source, raw, settings, implicitThink, startedAt, generated, fromSelection)
         }
         // The on-device engine reports no stop reason, so an answer that ran out
         // of context window looks the same as one that finished. Never claim it
@@ -18168,6 +18217,7 @@ open class WMKeyboardService : InputMethodService() {
         config: AiClient.Config,
         startedAt: Long,
         generated: Boolean,
+        fromSelection: Boolean = false,
     ): AiClient.Completion {
         var lastPartialAt = 0L
         return AiClient.completeStreaming(
@@ -18194,7 +18244,7 @@ open class WMKeyboardService : InputMethodService() {
                     // AiClient, so it never needs the implicit-think fallback.
                     applyAiPartial(
                         seq, action, source, raw, settings,
-                        implicitThink = false, startedAt, generated,
+                        implicitThink = false, startedAt, generated, fromSelection,
                     )
                 }
             },
@@ -18218,6 +18268,7 @@ open class WMKeyboardService : InputMethodService() {
         implicitThink: Boolean,
         startedAt: Long,
         generated: Boolean,
+        fromSelection: Boolean = false,
     ) {
         // Reasoning models: keep the progress view (marked "thinking") until
         // real output starts, unless the user wants the raw stream.
@@ -18243,6 +18294,7 @@ open class WMKeyboardService : InputMethodService() {
                     else -> AiUi.Ready(
                         action, shown.output, source,
                         generating = true,
+                        sourceFromSelection = fromSelection,
                         stripMarkdown = (it.ai as? AiUi.Ready)?.stripMarkdown ?: true,
                         diffable = aiDiffable(action, generated),
                     )
@@ -18258,7 +18310,7 @@ open class WMKeyboardService : InputMethodService() {
             // retry rebuilds exactly the same request.
             is AiUi.Ready -> {
                 vibrate()
-                runAi(ai.action, ai.sourceText, ai.instruction, ai.generated)
+                runAi(ai.action, ai.sourceText, ai.instruction, ai.generated, ai.sourceFromSelection)
             }
             // A failed ask-each-run action reopens its input prefilled so the
             // user can adjust the instruction; onAiAction does exactly that.
@@ -18286,6 +18338,18 @@ open class WMKeyboardService : InputMethodService() {
         noteAiCommitted(AiHistoryEntry.COMMITTED_REPLACE)
         if (ai.action.insertMode == AiInsertMode.APPEND) {
             commitToField(aiInsertableText(ai))
+            return
+        }
+        // A run on a selection replaces that selection, never the field
+        // around it, and only while the selection is still what it ran on;
+        // once it is gone the result goes in at the caret instead.
+        if (ai.sourceFromSelection) {
+            val now = currentInputConnection?.getSelectedText(0)?.toString()
+            if (now != null && now.trim() == ai.sourceText.trim()) {
+                rewriteSelection(aiInsertableText(ai))
+            } else {
+                commitToField(aiInsertableText(ai))
+            }
             return
         }
         replaceFieldText(aiInsertableText(ai))
@@ -19642,6 +19706,14 @@ open class WMKeyboardService : InputMethodService() {
      */
     private var fieldTextOrigin: Int? = null
 
+    /**
+     * Whether the last [extractFieldText] saw the whole field. The stitched
+     * fallback reads a window either side of the cursor, and a field longer
+     * than the window must never be rewritten from that window: the part
+     * outside it would be lost.
+     */
+    private var fieldTextComplete: Boolean = true
+
     /** Everything in the focused field, for the grammar strip. */
     private fun extractFieldText(): String {
         val ic = currentInputConnection ?: return ""
@@ -19653,12 +19725,14 @@ open class WMKeyboardService : InputMethodService() {
             // every editor that hands over the whole field, and -1 from the
             // ones that don't track it — which is a "don't know", not a 0.
             fieldTextOrigin = extracted.startOffset.takeIf { it >= 0 }
+            fieldTextComplete = true
             return extracted.text.toString()
         }
         // Some editors don't implement extraction; stitch around the cursor.
         val before = ic.getTextBeforeCursor(TranslateClient.MAX_CHARS, 0)?.toString().orEmpty()
         val after = ic.getTextAfterCursor(TranslateClient.MAX_CHARS, 0)?.toString().orEmpty()
         fieldTextOrigin = null
+        fieldTextComplete = before.length < TranslateClient.MAX_CHARS && after.length < TranslateClient.MAX_CHARS
         return before + after
     }
 
@@ -20151,8 +20225,11 @@ open class WMKeyboardService : InputMethodService() {
                 onFilter = ::onDictionaryFilterSelect,
             ),
             vocab = vocabCallbacks(),
-            onSelectionMacro = ::onSelectionMacro,
-            onSelectionFancyStyle = ::onSelectionFancyStyle,
+            selection = com.wasimaster.wmkeyboard.ime.ui.SelectionMacroCallbacks(
+                onMacro = ::onSelectionMacro,
+                onPick = ::onSelectionPick,
+                onAiAction = ::onSelectionAiAction,
+            ),
         )
     }
 
@@ -20238,6 +20315,10 @@ open class WMKeyboardService : InputMethodService() {
             if (_uiState.value.selectionMacros != null) {
                 _uiState.update { it.copy(selectionMacros = null) }
             }
+            // With the selection gone, so is everything the undo stack
+            // described, and there is nothing left to read aloud.
+            macroUndo.clear()
+            stopReadAloud()
         }
         if (!settings.selectionMacros.enabled) return clear()
         // A password is never a number to dial or text to share, and putting a
@@ -20259,7 +20340,11 @@ open class WMKeyboardService : InputMethodService() {
         val text = selected.trim()
         // The same cap again, for the path that could not check it up front.
         if (text.isEmpty() || selected.length > MAX_MACRO_SELECTION) return clear()
-        val offer = selectionMacroOffer(text, settings, selectionSpansField(ic, selStart, selEnd))
+        // A selection moved onto other text is a new session: the rewrites
+        // remembered were about the old one. Our own rewrite's echo passes,
+        // because what is selected is exactly what was committed.
+        macroUndo.peek()?.let { if (!MacroUndo.stillHolds(it, selected)) macroUndo.clear() }
+        val offer = selectionMacroOffer(text, settings, selectionSpansField(ic, selStart, selEnd), _uiState.value.selectionMacros)
         if (offer == _uiState.value.selectionMacros) return
         _uiState.update { it.copy(selectionMacros = offer) }
     }
@@ -20287,12 +20372,14 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * The offer for [text], or null when nothing survives the user's switches.
      * [wholeField] is whether the selection already spans the field (see
-     * [selectionSpansField]).
+     * [selectionSpansField]); [carry] is the offer being replaced, whose
+     * running work and speech state outlive one rebuild.
      */
     private fun selectionMacroOffer(
         text: String,
         settings: KeyboardSettings,
         wholeField: Boolean,
+        carry: SelectionMacroOffer?,
     ): SelectionMacroOffer? {
         val prefs = settings.selectionMacros
         val masks = settings.clipboard.phoneFormats.toList()
@@ -20304,20 +20391,55 @@ open class WMKeyboardService : InputMethodService() {
         // Plain text always has the case ladder behind Format; an entity offers
         // it only when the rewrite would actually change something.
         val formattable = kind == SelectionKind.TEXT || SelectionMacros.format(text, kind, masks) != null
-        val macros = SelectionMacros.offer(
-            kind = kind,
-            // A macro that opens a tool is only offered while that tool exists:
-            // the same enabled-tools list power saving and direct boot have
-            // already taken their entries out of.
-            allowed = prefs.macros.filterTo(mutableSetOf()) { macroToolAvailable(it, settings) },
-            gates = MacroGates(
-                whatsAppInstalled = hasWhatsApp(),
-                qrAvailable = ToolbarTool.QR_GEN in settings.enabledTools,
-                formattable = formattable,
-                wholeField = wholeField,
+        // A macro that opens a tool is only offered while that tool exists:
+        // the same enabled-tools list power saving and direct boot have
+        // already taken their entries out of.
+        val allowed = prefs.macros.filterTo(mutableSetOf()) { macroToolAvailable(it, settings) }
+        // The dearer detectors run only while a macro that needs them is on.
+        val content = SelectionMacros.detectContent(
+            text,
+            DetectOptions(
+                dateTime = SelectionMacro.CALENDAR in allowed || SelectionMacro.TIME_ZONES in allowed,
+                place = SelectionMacro.MAP in allowed,
+                nowMillis = System.currentTimeMillis(),
             ),
         )
-        return if (macros.isEmpty()) null else SelectionMacroOffer(text, kind, macros, wholeField)
+        val aiReady = ToolbarTool.AI in settings.enabledTools && aiInitialState(settings) == AiUi.Idle
+        val gates = MacroGates(
+            whatsAppInstalled = hasWhatsApp(),
+            qrAvailable = ToolbarTool.QR_GEN in settings.enabledTools,
+            formattable = formattable,
+            wholeField = wholeField,
+            clipboardHasText = clipboardHasText(),
+            undoAvailable = !macroUndo.isEmpty,
+            grammarAvailable = BuildConfig.ENABLE_GRAMMAR && ToolbarTool.GRAMMAR in settings.enabledTools &&
+                (grammarAvailable || grammarProbePending()),
+            aiAvailable = aiReady,
+            bengaliLoaded = suggestionEngine != null && bengaliAssetEntries.isNotEmpty(),
+            chatSyntax = ChatSyntax.forPackage(currentPackage),
+            content = content,
+        )
+        val macros = SelectionMacros.offer(kind, allowed, gates, prefs.order)
+        if (macros.isEmpty()) return null
+        // The direct buttons ride the AI chip: one switch hides both.
+        val aiDirect = if (SelectionMacro.AI in macros) {
+            val visible = visibleAiActions(settings.ai.customActions, settings.ai.actionOrder, settings.ai.hiddenActions)
+            prefs.aiDirectActions.mapNotNull { id -> visible.firstOrNull { it.id == id && !it.askEachRun } }
+        } else {
+            emptyList()
+        }
+        return SelectionMacroOffer(
+            text = text,
+            kind = kind,
+            macros = macros,
+            wholeField = wholeField,
+            content = content,
+            aiDirect = aiDirect,
+            caseLadder = SelectionMacros.caseLadder(allowed),
+            undoDepth = macroUndo.size,
+            busy = carry?.busy,
+            speaking = carry?.speaking ?: false,
+        )
     }
 
     /**
@@ -20328,8 +20450,38 @@ open class WMKeyboardService : InputMethodService() {
     private fun macroToolAvailable(macro: SelectionMacro, settings: KeyboardSettings): Boolean = when (macro) {
         SelectionMacro.SEARCH -> ToolbarTool.WEB_SEARCH in settings.enabledTools
         SelectionMacro.TRANSLATE -> ToolbarTool.TRANSLATE in settings.enabledTools
+        SelectionMacro.GRAMMAR_FIX -> ToolbarTool.GRAMMAR in settings.enabledTools
+        SelectionMacro.AI -> ToolbarTool.AI in settings.enabledTools
         else -> true
     }
+
+    /**
+     * Whether the clipboard holds text to paste over the selection. Asked of
+     * the clip's description only: reading the clip itself is what makes
+     * Android 12 announce a clipboard read, and this runs on every caret move.
+     */
+    private fun clipboardHasText(): Boolean {
+        if (!isClipboardAccessible()) return false
+        val manager = getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager ?: return false
+        return runCatching {
+            manager.hasPrimaryClip() && manager.primaryClipDescription?.let {
+                it.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) || it.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)
+            } == true
+        }.getOrDefault(false)
+    }
+
+    // ---- selection macros: the undo session and the async work ----
+
+    /** The rewrites made to the live selection, newest last. */
+    private val macroUndo = MacroUndoStack()
+
+    /** Bumped whenever the selection the async macros were started for is gone. */
+    private var macroSeq = 0
+    private var macroJob: Job? = null
+
+    /** The Banglish converter, rebuilt when the engine or its Bengali sources change. */
+    private var banglish: BanglishConverter? = null
+    private var banglishSources: Pair<Any, Any>? = null
 
     /**
      * A macro chip was tapped.
@@ -20337,8 +20489,7 @@ open class WMKeyboardService : InputMethodService() {
      * The text acted on is the offer's own, not a fresh read: the chips were
      * drawn for that text, and re-reading here would act on whatever the field
      * holds by the time the finger lands. A macro whose target app is missing
-     * fails silently and leaves the bar up, which is the same thing every other
-     * activity start in this service does.
+     * says so in a toast and leaves the bar up.
      */
     fun onSelectionMacro(macro: SelectionMacro) {
         val offer = _uiState.value.selectionMacros ?: return
@@ -20347,16 +20498,42 @@ open class WMKeyboardService : InputMethodService() {
         val masks = settings.clipboard.phoneFormats.toList()
         val text = offer.text
         when (macro) {
+            SelectionMacro.UNDO -> onSelectionUndo()
             // The field answers with a selection update, and the offer that
             // brings is for the whole text, without this chip on it.
             SelectionMacro.SELECT_ALL -> onTextEdit(TextEditAction.SELECT_ALL, haptic = false)
             SelectionMacro.COPY -> onTextEdit(TextEditAction.COPY, haptic = false)
+            SelectionMacro.CUT -> onTextEdit(TextEditAction.CUT, haptic = false)
+            // The editor's own paste replaces a selection; the clipboard gates
+            // and the password purge ride along.
+            SelectionMacro.PASTE -> onTextEdit(TextEditAction.PASTE, haptic = false)
+            SelectionMacro.DELETE -> deleteSelection()
             SelectionMacro.SHARE -> startMacroActivity(
                 Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text),
                 chooser = true,
             )
-            SelectionMacro.FORMAT -> SelectionMacros.format(text, offer.kind, masks)?.let(::replaceSelection)
-            in SelectionMacros.fixedCaseMacros -> SelectionMacros.applyCase(text, macro)?.let(::replaceSelection)
+            SelectionMacro.FORMAT -> SelectionMacros.format(text, offer.kind, masks)?.let(::rewriteSelection)
+            SelectionMacro.CASE_LOWER, SelectionMacro.CASE_TITLE, SelectionMacro.CASE_UPPER, SelectionMacro.CASE_SENTENCE,
+            SelectionMacro.CASE_CAMEL, SelectionMacro.CASE_SNAKE, SelectionMacro.CASE_KEBAB, SelectionMacro.CASE_CONSTANT ->
+                SelectionMacros.applyCase(text, macro)?.let(::rewriteSelection)
+            SelectionMacro.FIND -> findNextOccurrence(offer)
+            SelectionMacro.REPLACE -> openFindReplace(offer)
+            SelectionMacro.LINES_SORT -> LineEdits.sort(text)?.let(::rewriteSelection)
+            SelectionMacro.LINES_DEDUPE -> LineEdits.dedupe(text)?.let(::rewriteSelection)
+            SelectionMacro.LINES_NUMBER -> LineEdits.number(text)?.let(::rewriteSelection)
+            SelectionMacro.LINES_BULLET -> LineEdits.bullet(text)?.let(::rewriteSelection)
+            SelectionMacro.DIGITS_LATIN -> DigitScripts.toAsciiDigits(text)?.let(::rewriteSelection)
+            SelectionMacro.JSON_FORMAT -> JsonReformat.toggle(text)?.let(::rewriteSelection)
+            SelectionMacro.BASE64_DECODE -> TextCodecs.base64Decode(text)?.let(::rewriteSelection)
+            SelectionMacro.URL_DECODE -> TextCodecs.urlDecode(text)?.let(::rewriteSelection)
+            SelectionMacro.CHAT_BOLD -> chatToggle(text, ChatStyle.BOLD)
+            SelectionMacro.CHAT_ITALIC -> chatToggle(text, ChatStyle.ITALIC)
+            SelectionMacro.CHAT_STRIKE -> chatToggle(text, ChatStyle.STRIKE)
+            SelectionMacro.CHAT_MONO -> chatToggle(text, ChatStyle.MONO)
+            SelectionMacro.GRAMMAR_FIX -> fixGrammarInSelection(offer)
+            SelectionMacro.AI -> onPanelChange(PanelMode.AI)
+            SelectionMacro.READ_ALOUD -> toggleReadAloud(offer)
+            SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH -> convertBengali(offer, macro)
             SelectionMacro.SEARCH -> openMacroSearch(PanelMode.WEB_SEARCH, text)
             SelectionMacro.TRANSLATE -> openMacroSearch(PanelMode.TRANSLATE, text)
             SelectionMacro.QR -> onPanelChange(PanelMode.QR_GEN)
@@ -20380,25 +20557,318 @@ open class WMKeyboardService : InputMethodService() {
             } else {
                 startMacroActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SelectionMacros.openableUrl(text))))
             }
-            else -> {}
+            SelectionMacro.ADD_CONTACT -> addContact(offer)
+            SelectionMacro.MAP -> openMap(offer)
+            SelectionMacro.CALENDAR -> addCalendarEvent(offer)
+            // Doors to ladders: the bar opens them and never sends the tap.
+            SelectionMacro.FANCY, SelectionMacro.COLOUR, SelectionMacro.TIME_ZONES -> {}
         }
     }
 
     /**
-     * A style chip on the Fancy ladder (see `SelectionMacroBar`).
+     * A pick on one of the bar's ladders (see `SelectionMacroBar`).
      *
-     * [source] is the selection as it stood before the ladder started
-     * rewriting it, not what is selected now — the previous chip's rewrite
-     * republished the offer with its own output, and restyling that would do
-     * nothing, the style tables being keyed by plain letters. Every pick
-     * therefore replaces the last one rather than stacking on it.
-     *
-     * The one macro-bar action that does not read the offer, for that reason.
+     * [source] is the selection as it stood when the ladder opened, not what
+     * is selected now: the previous pick's rewrite republished the offer with
+     * its own output, and converting that again would do nothing (the fancy
+     * tables are keyed by plain letters) or drift. Every pick therefore
+     * replaces the last one rather than stacking on it, and each converter
+     * reads [source] afresh rather than the live offer.
      */
-    fun onSelectionFancyStyle(styleId: String, source: String) {
-        val style = FancyStyles.byId(styleId) ?: return
+    fun onSelectionPick(macro: SelectionMacro, arg: String, source: String) {
+        if (_uiState.value.selectionMacros == null) return
+        val out = when (macro) {
+            SelectionMacro.FANCY -> FancyStyles.byId(arg)?.let { FancyStyles.transform(source, it) }
+            SelectionMacro.COLOUR -> ColourCodes.parse(source)?.let { colour ->
+                ColourForm.entries.firstOrNull { it.name == arg }?.let { ColourCodes.render(colour, it) }
+            }
+            SelectionMacro.TIME_ZONES -> DateTimes.parse(source, System.currentTimeMillis(), TimeZone.getDefault(), Locale.getDefault())
+                ?.let { hit ->
+                    DateTimes.renderInZone(
+                        hit.startMillis, arg, hit.zoneId, hit.hasDate,
+                        android.text.format.DateFormat.is24HourFormat(this), System.currentTimeMillis(),
+                    )
+                }
+            else -> null
+        } ?: return
         vibrate()
-        replaceSelection(FancyStyles.transform(source, style))
+        rewriteSelection(out)
+    }
+
+    /** Put back the last rewrite, when the field still holds it. */
+    private fun onSelectionUndo() {
+        val entry = macroUndo.peek() ?: return
+        val ic = currentInputConnection ?: return
+        when (entry) {
+            is MacroUndoEntry.Selection -> {
+                val now = runCatching { ic.getSelectedText(0)?.toString() }.getOrNull()
+                if (now != entry.replacement) {
+                    macroUndo.clear()
+                    republishSelectionMacros(now)
+                    toast(R.string.ime_selection_macro_nothing_to_undo_toast)
+                    return
+                }
+                macroUndo.pop()
+                rewriteSelection(entry.original, record = false, raw = true)
+            }
+            is MacroUndoEntry.WholeField -> {
+                val field = extractFieldText()
+                if (field != entry.after) {
+                    macroUndo.clear()
+                    republishSelectionMacros(runCatching { ic.getSelectedText(0)?.toString() }.getOrNull())
+                    toast(R.string.ime_selection_macro_nothing_to_undo_toast)
+                    return
+                }
+                macroUndo.pop()
+                val inverse = MacroUndo.invert(entry.before, entry.edits).map { GrammarEdit(it.start, it.end, it.text) }
+                if (!replaceFieldSpans(inverse)) {
+                    if (!fieldTextComplete) return
+                    replaceFieldText(entry.before)
+                }
+                val origin = fieldTextOrigin ?: 0
+                ic.setSelection(origin + entry.selStart, origin + entry.selEnd)
+                expectedSelStart = origin + entry.selStart
+                expectedSelEnd = origin + entry.selEnd
+                republishSelectionMacros(entry.before.substring(entry.selStart, entry.selEnd))
+            }
+        }
+    }
+
+    /**
+     * Swaps the selection for [core] and selects the result.
+     *
+     * Keeping it selected is what lets the case chips chain: lower, then Title,
+     * then back, without reselecting between taps. It also keeps the bar itself
+     * on screen, which would otherwise vanish under the user's finger the
+     * moment the first chip did its job.
+     *
+     * The chips act on the trimmed text, so the raw selection's own leading
+     * and trailing whitespace is put back around the result rather than
+     * eaten; [raw] commits [core] exactly as given, which is what undo needs.
+     * The rewrite is remembered for Undo unless [record] says otherwise, and
+     * the offer is republished for the new text at once rather than waiting
+     * for the editor's echo, which some editors never send.
+     */
+    private fun rewriteSelection(core: String, record: Boolean = true, raw: Boolean = false) {
+        val ic = currentInputConnection ?: return
+        // A selection dragged right to left is reported with its ends the other
+        // way round by some editors, and the commit always lands at the lower
+        // offset whichever way it was made.
+        val start = if (expectedSelStart < 0 || expectedSelEnd < 0) {
+            -1
+        } else {
+            minOf(expectedSelStart, expectedSelEnd)
+        }
+        val original = runCatching { ic.getSelectedText(0)?.toString() }.getOrNull()
+            ?: _uiState.value.selectionMacros?.text
+            ?: return
+        val replacement = if (raw) {
+            core
+        } else {
+            val lead = original.takeWhile { it.isWhitespace() }
+            val trail = if (lead.length == original.length) "" else original.takeLastWhile { it.isWhitespace() }
+            lead + core + trail
+        }
+        ic.beginBatchEdit()
+        // A live composing region would take the commit instead of the
+        // selection, splicing the replacement over one word.
+        ic.finishComposingText()
+        revision = null
+        composing = StringBuilder()
+        ic.commitText(replacement, 1)
+        if (start >= 0) {
+            ic.setSelection(start, start + replacement.length)
+            // Mirror it, or a backspace before the editor echoes the new
+            // selection targets the old range.
+            expectedSelStart = start
+            expectedSelEnd = start + replacement.length
+        }
+        ic.endBatchEdit()
+        if (record && replacement != original) macroUndo.push(MacroUndoEntry.Selection(original, replacement, start))
+        republishSelectionMacros(replacement)
+    }
+
+    /** The offer for [selected] as it now stands, without another read of the field. */
+    private fun republishSelectionMacros(selected: String?) {
+        val text = selected?.trim().orEmpty()
+        val previous = _uiState.value.selectionMacros
+        val offer = if (text.isEmpty()) {
+            null
+        } else {
+            selectionMacroOffer(text, _uiState.value.settings, previous?.wholeField == true, previous)
+        }
+        _uiState.update { it.copy(selectionMacros = offer) }
+    }
+
+    /** Opens the Find and replace panel on the selection. */
+    private fun openFindReplace(offer: SelectionMacroOffer) {
+        // Filled in with the panel.
+    }
+
+    /** Removes the selected text, the way a backspace over a selection does. */
+    private fun deleteSelection() {
+        val ic = currentInputConnection ?: return
+        dropComposingForSelectionEdit(ic)
+        noteDeletedForLearning(expectedSelStart, expectedSelEnd)
+        invalidateExpectedSelection()
+        ic.commitText("", 1)
+    }
+
+    private fun chatToggle(text: String, style: ChatStyle) {
+        val markup = ChatSyntax.forPackage(currentPackage) ?: return
+        ChatSyntax.toggle(text, markup, style)?.let(::rewriteSelection)
+    }
+
+    /**
+     * Selects the next occurrence of the selection in the field, wrapping to
+     * the top. The echo republishes an offer for the same text, so the bar
+     * stays as it is and a second tap walks on.
+     */
+    private fun findNextOccurrence(offer: SelectionMacroOffer) {
+        val ic = currentInputConnection ?: return
+        val field = extractFieldText()
+        val origin = fieldTextOrigin ?: return toast(R.string.ime_find_not_addressable)
+        if (expectedSelStart < 0 || expectedSelEnd < 0) return toast(R.string.ime_selection_macro_find_none_toast)
+        val selStart = minOf(expectedSelStart, expectedSelEnd)
+        val selEnd = maxOf(expectedSelStart, expectedSelEnd)
+        val range = FindReplace.next(field, offer.text, FindOptions(), from = selEnd - origin)
+            ?: return toast(R.string.ime_selection_macro_find_none_toast)
+        if (origin + range.first == selStart) return toast(R.string.ime_selection_macro_find_none_toast)
+        ic.finishComposingText()
+        ic.setSelection(origin + range.first, origin + range.last + 1)
+        expectedSelStart = origin + range.first
+        expectedSelEnd = origin + range.last + 1
+    }
+
+    /** Runs the grammar checker over the selection alone and commits every first suggestion. */
+    private fun fixGrammarInSelection(offer: SelectionMacroOffer) {
+        if (!BuildConfig.ENABLE_GRAMMAR) return
+        if (!GrammarChecker.available) {
+            if (!grammarProbePending()) toast(R.string.ime_selection_macro_grammar_unavailable_toast)
+            return
+        }
+        if (offer.busy != null) return
+        val seq = ++macroSeq
+        setMacroBusy(SelectionMacro.GRAMMAR_FIX)
+        macroJob?.cancel()
+        macroJob = serviceScope.launch {
+            val lints = runCatching {
+                GrammarChecker.check(offer.text, _uiState.value.settings.grammarDialect.ordinal)
+            }.getOrDefault(emptyList())
+            if (!offerStillLive(offer, seq)) return@launch
+            setMacroBusy(null)
+            val fixed = GrammarChecker.applyAll(offer.text, lints)
+            if (fixed == offer.text) toast(R.string.ime_selection_macro_grammar_clean_toast) else rewriteSelection(fixed)
+        }
+    }
+
+    /** Reads the selection aloud, or stops a reading in progress. */
+    private fun toggleReadAloud(offer: SelectionMacroOffer) {
+        if (offer.speaking) {
+            stopReadAloud()
+            return
+        }
+        val speaker = vocabSpeaker ?: VocabSpeaker(this).also { vocabSpeaker = it }
+        val locale = if (offer.content.hasBengali) Locale("bn", "BD") else Locale.getDefault()
+        val vocab = _uiState.value.settings.vocabulary
+        setSpeaking(true)
+        speaker.speak(offer.text, null, vocab.ttsRate, vocab.ttsPitch, locale) {
+            // The engine calls back on its own thread.
+            serviceScope.launch { setSpeaking(false) }
+        }
+    }
+
+    private fun stopReadAloud() {
+        vocabSpeaker?.stop()
+        if (_uiState.value.selectionMacros?.speaking == true) setSpeaking(false)
+    }
+
+    /** The converter for the engine's current Bengali sources, built when they change. */
+    private fun banglishConverter(): BanglishConverter? {
+        val engine = suggestionEngine ?: return null
+        if (bengaliAssetEntries.isEmpty()) return null
+        val sources = engine.spellingMap to engine.bengaliIndex
+        if (banglishSources !== null && banglishSources!!.first === sources.first && banglishSources!!.second === sources.second) {
+            return banglish
+        }
+        banglishSources = sources
+        return BanglishConverter(engine.spellingMap, engine.bengaliIndex).also { banglish = it }
+    }
+
+    private fun convertBengali(offer: SelectionMacroOffer, macro: SelectionMacro) {
+        val converter = banglishConverter() ?: return toast(R.string.ime_selection_macro_bengali_unavailable_toast)
+        if (offer.busy != null) return
+        val seq = ++macroSeq
+        setMacroBusy(macro)
+        macroJob?.cancel()
+        macroJob = serviceScope.launch {
+            val out = withContext(Dispatchers.Default) {
+                if (macro == SelectionMacro.TO_BANGLA) converter.toBengali(offer.text) else converter.toBanglish(offer.text)
+            }
+            if (!offerStillLive(offer, seq)) return@launch
+            setMacroBusy(null)
+            if (out != null) rewriteSelection(out)
+        }
+    }
+
+    private fun addContact(offer: SelectionMacroOffer) {
+        val extra = if (offer.kind == SelectionKind.PHONE) ContactsContract.Intents.Insert.PHONE else ContactsContract.Intents.Insert.EMAIL
+        val started = startMacroActivity(
+            Intent(ContactsContract.Intents.Insert.ACTION)
+                .setType(ContactsContract.RawContacts.CONTENT_TYPE)
+                .putExtra(extra, offer.text),
+            Intent(Intent.ACTION_INSERT_OR_EDIT)
+                .setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE)
+                .putExtra(extra, offer.text),
+        )
+        if (!started) toast(R.string.ime_selection_macro_no_app_toast)
+    }
+
+    private fun openMap(offer: SelectionMacroOffer) {
+        val place = offer.content.place ?: Place.Address(offer.text)
+        val query = when (place) {
+            is Place.Coordinates -> "${place.point.lat},${place.point.lng}"
+            is Place.Address -> place.text
+        }
+        val started = startMacroActivity(
+            Intent(Intent.ACTION_VIEW, Uri.parse(Places.geoUri(place))),
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(query))),
+        )
+        if (!started) toast(R.string.ime_selection_macro_no_app_toast)
+    }
+
+    private fun addCalendarEvent(offer: SelectionMacroOffer) {
+        val hit = offer.content.dateTime ?: return
+        val intent = Intent(Intent.ACTION_INSERT)
+            .setData(CalendarContract.Events.CONTENT_URI)
+            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, hit.startMillis)
+            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, hit.endMillis)
+            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, hit.allDay)
+            .putExtra(CalendarContract.Events.TITLE, offer.text.take(MAX_EVENT_TITLE))
+        // The zone the text named is the zone the event is in; otherwise the
+        // calendar's own default is the right one.
+        if (hit.zoneNamed) intent.putExtra(CalendarContract.Events.EVENT_TIMEZONE, hit.zoneId)
+        if (!startMacroActivity(intent)) toast(R.string.ime_selection_macro_no_app_toast)
+    }
+
+    private fun setMacroBusy(macro: SelectionMacro?) {
+        _uiState.update { state ->
+            state.selectionMacros?.takeIf { it.busy != macro }?.let { state.copy(selectionMacros = it.copy(busy = macro)) } ?: state
+        }
+    }
+
+    private fun setSpeaking(on: Boolean) {
+        _uiState.update { state ->
+            state.selectionMacros?.takeIf { it.speaking != on }?.let { state.copy(selectionMacros = it.copy(speaking = on)) } ?: state
+        }
+    }
+
+    /** Whether an async macro's result still describes what is selected. */
+    private fun offerStillLive(offer: SelectionMacroOffer, seq: Int): Boolean =
+        seq == macroSeq && _uiState.value.selectionMacros?.let { it.text == offer.text && it.kind == offer.kind } == true
+
+    private fun toast(@StringRes id: Int) {
+        Toast.makeText(this, getString(id), Toast.LENGTH_SHORT).show()
     }
 
     /** Opens a search-style panel already carrying [query], and runs it. */
@@ -20412,50 +20882,22 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * Starts the first of [intents] that any app will take, wrapped in a
      * chooser when the macro is a share (which is what a share is: the user
-     * picking who gets it).
+     * picking who gets it). True when one of them started.
      *
      * Several intents because one action does not always reach the app that
      * handles a scheme: a mail client may claim `mailto:` for SENDTO and not
      * for VIEW. Nothing starting at all leaves the bar up and the field
      * untouched, which is what every other activity start here does.
      */
-    private fun startMacroActivity(vararg intents: Intent, chooser: Boolean = false) {
+    private fun startMacroActivity(vararg intents: Intent, chooser: Boolean = false): Boolean {
         for (intent in intents) {
             val target = if (chooser) Intent.createChooser(intent, null) else intent
             val started = runCatching {
                 startActivity(target.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             }.isSuccess
-            if (started) return
+            if (started) return true
         }
-    }
-
-    /**
-     * Swaps the selection for [replacement] and selects the result.
-     *
-     * Keeping it selected is what lets the case chips chain: lower, then Title,
-     * then back, without reselecting between taps. It also keeps the bar itself
-     * on screen, which would otherwise vanish under the user's finger the
-     * moment the first chip did its job.
-     */
-    private fun replaceSelection(replacement: String) {
-        val ic = currentInputConnection ?: return
-        // A selection dragged right to left is reported with its ends the other
-        // way round by some editors, and the commit always lands at the lower
-        // offset whichever way it was made.
-        val start = if (expectedSelStart < 0 || expectedSelEnd < 0) {
-            -1
-        } else {
-            minOf(expectedSelStart, expectedSelEnd)
-        }
-        ic.beginBatchEdit()
-        // A live composing region would take the commit instead of the
-        // selection, splicing the replacement over one word.
-        ic.finishComposingText()
-        revision = null
-        composing = StringBuilder()
-        ic.commitText(replacement, 1)
-        if (start >= 0) ic.setSelection(start, start + replacement.length)
-        ic.endBatchEdit()
+        return false
     }
 
     /**
@@ -24739,6 +25181,9 @@ private class GlideRetryOffer(val rejected: String, val offered: List<String>)
  * Copy is what somebody selecting that much text is reaching for anyway.
  */
 private const val MAX_MACRO_SELECTION = 4000
+
+/** A selection longer than this is not a calendar event title anybody wants. */
+private const val MAX_EVENT_TITLE = 100
 
 /** WhatsApp, and the business build that registers its own package. */
 private val WHATSAPP_PACKAGES = listOf("com.whatsapp", "com.whatsapp.w4b")
