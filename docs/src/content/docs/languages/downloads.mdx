@@ -47,8 +47,9 @@ Pressing the button is the consent, and nothing here starts on its own. Some of 
 
 The **Downloads** row in [Data saver](/privacy/data-saver/)
 (<SettingsPath path="Advanced / Data saver / Downloads" />, default **Ask each time**)
-puts a size-naming confirmation in front of **Download all data** whenever
-you're not on Wi-Fi. That's the one tap that fetches a word list, emoji
+puts a size-naming confirmation in front of **Download all data** while data
+saver is on. Data saver never turns on by itself unless you pick a trigger
+for it, such as **On mobile data or a metered network**. That's the one tap that fetches a word list, emoji
 keywords and word-pair data together, so it's the one most likely to
 surprise you. Set the row to **Allow** and the button goes straight out on
 whatever connection is up; set it to **Turn off** and it says so instead of
@@ -75,7 +76,7 @@ Three downloads outside the language screens treat a metered connection differen
 | On-device AI models <Flavor edition="full" /> | Metered connection **and** the model is 500 MB or larger | The same dialog |
 | Rotating photo backgrounds | Never asks. It's a setting instead: **Use mobile data**, off by default, in a theme's Online photos group | A rotation waits for Wi-Fi rather than prompting |
 
-Models under those thresholds go through without a word, as long as Data saver is set to allow downloads. The smallest Whisper model is about 42&nbsp;MB and the smallest on-device AI model about 143&nbsp;MB. One setting overrides the size line for both: the **Downloads** row in [Data saver](/privacy/data-saver/), which is **Ask each time** by default, so on a metered connection every model raises the same dialog whatever its size. Set it to **Turn off** and no model downloads on mobile data at all. Full detail on those two is on [Offline voice (Whisper)](/tools/whisper/) and [AI writing tools](/tools/ai/).
+Models under those thresholds go through without a word, as long as Data saver is set to allow downloads. The smallest Whisper model is about 42&nbsp;MB and the smallest on-device AI model about 143&nbsp;MB. One setting overrides the size line for both: the **Downloads** row in [Data saver](/privacy/data-saver/), which is **Ask each time** by default, so while data saver is on every model raises the same dialog whatever its size. Set it to **Turn off** and no model downloads while data saver is on. Full detail on those two is on [Offline voice (Whisper)](/tools/whisper/) and [AI writing tools](/tools/ai/).
 
 ## Options
 

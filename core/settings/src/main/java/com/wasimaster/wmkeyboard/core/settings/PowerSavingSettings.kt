@@ -6,10 +6,10 @@ import com.wasimaster.wmkeyboard.settings.R
 /**
  * What arms power saving by itself, on top of the manual switch.
  *
- * The default is [SYSTEM_SAVER] rather than a battery percentage: it only ever
- * fires because the user already asked the *system* to save power, so the
- * keyboard changing its feel is an answer to something they did, not a surprise
- * at some threshold they never set.
+ * The default is [OFF]: power saving changes how the keyboard feels (no
+ * vibration, no sounds, no animations), and that must never happen unless the
+ * user opted in here. Even following the system battery saver surprised people
+ * who turned that on for the phone, not for their keyboard.
  */
 enum class PowerSavingTrigger(@StringRes val labelRes: Int) {
     /** Nothing but the manual switch. */
@@ -64,7 +64,7 @@ data class PowerSavingSettings(
      */
     val manual: Boolean = false,
     /** What switches it on by itself. */
-    val trigger: PowerSavingTrigger = PowerSavingTrigger.SYSTEM_SAVER,
+    val trigger: PowerSavingTrigger = PowerSavingTrigger.OFF,
     /** The level [PowerSavingTrigger.LOW_BATTERY] fires at or below, in percent. */
     val batteryPercent: Int = 20,
     /**

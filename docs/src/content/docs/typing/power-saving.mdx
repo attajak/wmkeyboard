@@ -9,7 +9,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 
-Power saving drops the parts of WM Keyboard that cost the most battery: vibration, key sounds, animations, the glide trail, background network fetches. It goes on with one tap, or by itself once Android's own battery saver kicks in or your battery gets low. It's a view laid over your settings rather than a rewrite of them. Turn it off and everything comes back exactly as you had it, because nothing was ever changed.
+Power saving drops the parts of WM Keyboard that cost the most battery: vibration, key sounds, animations, the glide trail, background network fetches. It goes on with one tap. It never turns on by itself unless you ask it to follow Android's battery saver or a low battery. It's a view laid over your settings rather than a rewrite of them. Turn it off and everything comes back exactly as you had it, because nothing was ever changed.
 
 <PhoneFrame caption="Tapping the Power saving toolbar tile: the toast confirms it switched on.">
   {/* shot: typing/power-saving-toolbar-toggle */}
@@ -27,8 +27,8 @@ However you flip it, the manual switch is sticky. It survives the keyboard being
 
 Beyond the manual switch, **Turn on by itself** decides whether power saving also arms automatically:
 
-- **Only when I turn it on.** The manual switch is the only way in.
-- **Android's battery saver is on**, the default. Power saving follows the system's own Battery Saver toggle in lockstep, because by the time that's on, you've already told the phone to economize.
+- **Only when I turn it on**, the default. The manual switch is the only way in, so the keyboard never changes how it feels on its own.
+- **Android's battery saver is on.** Power saving follows the system's own Battery Saver toggle in lockstep.
 - **The battery is low.** It arms once the battery drops to or below **Low battery is**, a slider from 5% to 50% (default 20%). The slider only appears on this trigger and the next.
 - **Battery saver or a low battery.** Either condition arms it.
 
@@ -81,7 +81,7 @@ The **Power saving** group holds the four controls above:
 | Setting | Default |
 |---|---|
 | Power saving now | Off |
-| Turn on by itself | Android's battery saver is on |
+| Turn on by itself | Only when I turn it on |
 | Low battery is | 20% (5%–50% range) |
 | Off while charging | On |
 

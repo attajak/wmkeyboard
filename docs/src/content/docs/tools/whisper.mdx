@@ -117,7 +117,7 @@ Nine of the 10 multilingual models support translation. Turbo doesn't, because l
 
 **Full edition only.** Offline Whisper is unavailable on the lite edition: the "Recognition engine" section doesn't render at all, so dictation always uses the system recognizer there. See [Full vs Lite](/start/editions/) if you're not sure which one you have.
 
-**Power saving can silently override your choice.** Its "On-device models" option is on by default, and power saving arms itself whenever Android's own battery saver turns on. While both of those are true, dictation falls back to the system recognizer even with Whisper selected and a model downloaded. If dictation seems to have switched engines on its own, check your power-saving settings first.
+**Power saving can silently override your choice.** Its "On-device models" option is on by default. Power saving never turns on by itself unless you set **Turn on by itself**, but once it's on, by hand or by a trigger you chose, dictation falls back to the system recognizer even with Whisper selected and a model downloaded. If dictation seems to have switched engines on its own, check your power-saving settings first.
 
 **No mic opens without a model.** With Whisper selected and nothing downloaded, the panel says so and offers both ways forward rather than opening the microphone. One chip opens this screen so you can download a model. The other switches back to the system recognizer and starts listening right away, and that switch is saved, the same as changing the engine in settings. The compact bar has room for one line, so it points you at settings, where both choices live.
 

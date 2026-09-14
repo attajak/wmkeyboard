@@ -6,11 +6,11 @@ import com.wasimaster.wmkeyboard.settings.R
 /**
  * What arms data saving by itself, on top of the manual switch.
  *
- * The default is [METERED] rather than the system's own Data Saver, unlike
- * power saving's [PowerSavingTrigger.SYSTEM_SAVER]: a metered connection is a
- * fact about the network the user is on, not a preference they have to have
- * expressed somewhere else first, and the whole point of the feature is to
- * stop the keyboard spending a mobile allowance nobody offered it.
+ * The default is [OFF], like [PowerSavingTrigger.OFF]: data saving holds
+ * features back, and a keyboard that stops working on its own reads as broken.
+ * Android also reports plenty of Wi-Fi and every VPN as metered (#142), so a
+ * metered default fired for people who never were on mobile data. Those who
+ * pay by the megabyte pick a trigger here.
  */
 enum class DataSaverTrigger(@StringRes val labelRes: Int) {
     /** Nothing but the manual switch. */
@@ -111,7 +111,7 @@ data class DataSaverSettings(
      */
     val manual: Boolean = false,
     /** What switches it on by itself. */
-    val trigger: DataSaverTrigger = DataSaverTrigger.METERED,
+    val trigger: DataSaverTrigger = DataSaverTrigger.OFF,
 
     /**
      * Link previews: the page title and thumbnail fetched for a copied URL and

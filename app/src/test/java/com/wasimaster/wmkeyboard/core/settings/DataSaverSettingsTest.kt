@@ -19,9 +19,17 @@ class DataSaverSettingsTest {
     }
 
     @Test
-    fun `the default follows the meter`() {
+    fun `the default never turns on by itself`() {
         val config = DataSaverSettings()
-        assertEquals(DataSaverTrigger.METERED, config.trigger)
+        assertEquals(DataSaverTrigger.OFF, config.trigger)
+        assertFalse(config.appliesTo(wifi))
+        assertFalse(config.appliesTo(abroad))
+        assertFalse(config.appliesTo(abroad.copy(systemDataSaver = true)))
+    }
+
+    @Test
+    fun `the metered trigger follows the meter`() {
+        val config = DataSaverSettings(trigger = DataSaverTrigger.METERED)
         assertFalse(config.appliesTo(wifi))
         assertTrue(config.appliesTo(mobile))
         assertFalse(
