@@ -108,6 +108,9 @@ class EmojiGlideRefreshTest {
         field.isAccessible = true
         @Suppress("UNCHECKED_CAST")
         val flow = field.get(service) as kotlinx.coroutines.flow.MutableStateFlow<KeyboardUiState>
+        // A glide's commit asks the snippet store whether the word is a trigger
+        // (#170), and only onCreate attaches the store.
+        plantPersonalStores(service)
         flow.value = KeyboardUiState(
             glideReady = true,
             // Not a gate a glide reads — allowsGestureTyping deliberately

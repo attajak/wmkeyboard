@@ -185,6 +185,27 @@ class SuggestionEngine(
     var systemWordCases: Map<String, String> = emptyMap()
 
     /**
+     * Text-expansion triggers — snippet triggers and the platform dictionary's
+     * shortcuts — that a glide may decode to (#170). Build with
+     * [triggerSource].
+     *
+     * Walked by [glide] only. A trigger is not a word: typing "omw" must not
+     * complete to it or keep it from being corrected, and the typed path
+     * already reaches the trigger through the composing buffer. A stroke has
+     * no buffer, so without this the decoder could never read "omw" at all.
+     * Rides the user tier at the lexicon's weight, like [systemDictionary], so
+     * a learned-words-only glide still finds it.
+     */
+    @Volatile
+    private var glideTriggersField: WordSource = PackedTrie.EMPTY
+    var glideTriggers: WordSource
+        get() = glideTriggersField
+        set(value) {
+            glideTriggersField = value
+            generation.incrementAndGet()
+        }
+
+    /**
      * Dictionaries for the user's secondary languages, consulted alongside the
      * primary so a bilingual typist gets both without switching. These are the
      * freq-1 imported lists, weighted below every primary source; a word valid
@@ -795,7 +816,8 @@ class SuggestionEngine(
     ): List<GlideBeam.Candidate> {
         val romanization = glideRomanization
         val sources = if (romanization.isEmpty) {
-            walkSources().let { all -> if (tiers == null) all else all.filter { it.tier in tiers } }
+            (walkSources() + glideTriggerSources())
+                .let { all -> if (tiers == null) all else all.filter { it.tier in tiers } }
         } else {
             romanization.walkSources()
         }
@@ -1108,6 +1130,12 @@ class SuggestionEngine(
         return sources
     }
 
+    /** [glideTriggers] as walk sources, at the user tier. */
+    private fun glideTriggerSources(): List<FuzzyBeamSearch.WalkSource> =
+        glideTriggers.walkers().map {
+            FuzzyBeamSearch.WalkSource(it, LOG_USER_WORD_WEIGHT, FuzzyBeamSearch.Tier.USER)
+        }
+
     /**
      * Whether anything at all could complete a word in the language now being
      * typed: a bundled list that participates, an imported one, a secondary
@@ -1261,6 +1289,17 @@ class SuggestionEngine(
          * from the rarest word in a downloaded list to its commonest.
          */
         private const val RANK_OFFSET_STEP = 1.0
+        /**
+         * [triggers] as a [glideTriggers] source: lowercased the way
+         * snippet triggers are matched, flat frequency 1 like every user-tier
+         * entry, and nothing shorter than two characters, which a stroke
+         * cannot tell from a tap.
+         */
+        fun triggerSource(triggers: Iterable<String>): WordSource {
+            val keys = triggers.map { it.trim().lowercase() }.filter { it.length >= 2 }.distinct()
+            return if (keys.isEmpty()) PackedTrie.EMPTY else PackedTrie.of(keys.map { it to 1 })
+        }
+
         /** Learned words get a large boost so personalization wins quickly. */
         /** Completions scanned per source when building the next-letter map. */
         private const val NEXT_LETTER_SCAN = 24

@@ -846,6 +846,9 @@ class SnippetStore(private val storageFile: File?) {
     /** The snippet whose trigger matches [word] exactly (case-insensitive), if any. */
     fun matchTrigger(word: String): Snippet? = index().matchTrigger(word)
 
+    /** Plain triggers that expand without asking. See [SnippetIndex.expandingTriggers]. */
+    fun expandingTriggers(): Set<String> = index().expandingTriggers
+
     /** True when any trigger reaches back past its last word, the prefix path's gate. */
     fun hasPrefixTriggers(): Boolean = index().hasPrefixTriggers
 

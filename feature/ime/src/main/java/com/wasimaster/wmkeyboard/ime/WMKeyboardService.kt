@@ -1145,6 +1145,13 @@ open class WMKeyboardService : InputMethodService() {
      */
     @Volatile private var userDictShortcuts: Map<String, String> = emptyMap()
     /**
+     * What [syncGlideTriggers] last built [SuggestionEngine.glideTriggers]
+     * from, compared by identity. Main thread only.
+     */
+    private var glideTriggersEngine: SuggestionEngine? = null
+    private var glideTriggerSnippets: Set<String>? = null
+    private var glideTriggerShortcuts: Map<String, String>? = null
+    /**
      * Every word in Android's personal dictionary, for
      * [SuggestionStripSettings.useSystemDictionary] (#45). Handed to
      * [SuggestionEngine.systemDictionary]; loaded with [userDictShortcuts] and
@@ -13732,6 +13739,7 @@ open class WMKeyboardService : InputMethodService() {
         val state = _uiState.value
         if (!glideAllowed(state)) return
         if (keys.isEmpty()) return
+        syncGlideTriggers(state)
         gesturePreviews.trySend(
             GesturePreviewRequest(points, keys, keyWidthPx, capitals, gestureGeneration.get()),
         )
@@ -13904,6 +13912,7 @@ open class WMKeyboardService : InputMethodService() {
         val state = _uiState.value
         if (!glideAllowed(state)) return
         if (keys.isEmpty()) return
+        syncGlideTriggers(state)
         if (verdict is GlideVerdict.Cancel) {
             cancelGlide()
             return
@@ -13995,6 +14004,14 @@ open class WMKeyboardService : InputMethodService() {
                 ShiftState.OFF -> picked
             }
             commitGestureLeadingSpace(ic, state)
+            // A stroke that read a text-expansion trigger types what the
+            // trigger stands for, as a space after the typed trigger would.
+            glidedExpansion(ic, state, word)?.let { expanded ->
+                if (expanded.cursorOffset >= expanded.text.length) commitGestureSpace(ic, state)
+                armRevertGuard()
+                consumeShift()
+                return@launch
+            }
             ic.commitText(word, 1)
             // The word and the space that finishes it are one edit, and
             // nothing may suspend between them. `commitText` replaces the
@@ -14146,6 +14163,101 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * Keeps [SuggestionEngine.glideTriggers] in step with the snippets and the
+     * personal dictionary's shortcuts, so a stroke can read a trigger (#170).
+     *
+     * Asked before every stroke on the main thread, where the snippet store is
+     * read. Both inputs come back as the same objects until they change, so the
+     * usual answer is three identity checks and nothing rebuilt.
+     */
+    private fun syncGlideTriggers(state: KeyboardUiState) {
+        val engine = suggestionEngine ?: return
+        val snippets = snippetStore.expandingTriggers()
+        val shortcuts = if (state.settings.suggestionStrip.expandUserDictShortcuts) {
+            userDictShortcuts
+        } else {
+            emptyMap()
+        }
+        if (engine === glideTriggersEngine && snippets === glideTriggerSnippets &&
+            shortcuts === glideTriggerShortcuts
+        ) {
+            return
+        }
+        glideTriggersEngine = engine
+        glideTriggerSnippets = snippets
+        glideTriggerShortcuts = shortcuts
+        engine.glideTriggers = SuggestionEngine.triggerSource(snippets + shortcuts.keys)
+    }
+
+    /**
+     * Types the expansion of a glided [word] that is a text-expansion trigger —
+     * a snippet's trigger or a shortcut from Android's personal dictionary — in
+     * place of the word, and returns it. Null, having typed nothing, when
+     * [word] is not a trigger (#170).
+     *
+     * A typed trigger expands on the space that ends it. A glide has no such
+     * key: it commits the moment the finger lifts, so the expansion happens
+     * here instead. A dictionary shortcut, which a typed one only offers as a
+     * chip, expands outright for the same reason: a stroke's reading is
+     * committed, not offered, and the shortcut is what the stroke read.
+     *
+     * Revertible to [word] with one backspace, which the typed plain trigger
+     * is not. A stroke is a guess in a way a typed word is not, and "I meant
+     * the word" has to be one key away.
+     */
+    private fun glidedExpansion(
+        ic: InputConnection,
+        state: KeyboardUiState,
+        word: String,
+    ): SnippetStore.Companion.Expanded? {
+        if (state.composer.isTransliterating || state.composer.isConversion) return null
+        val snippet = snippetStore.matchTrigger(word)?.takeIf { !snippetStore.offers(it) }
+        val shortcut = if (snippet == null && state.settings.suggestionStrip.expandUserDictShortcuts) {
+            userDictShortcuts[word.lowercase()]
+        } else {
+            null
+        }
+        val expanded = when {
+            snippet != null -> SnippetStore.expandWithCursor(
+                snippet.text,
+                context = snippetContext(ic),
+                casing = SnippetStore.casingFor(snippet, word),
+            )
+            shortcut != null -> casedLikeTrigger(shortcut, word)
+                .let { SnippetStore.Companion.Expanded(it, it.length) }
+            else -> return null
+        }
+        commitSplitAtCaret(ic, expanded.text, expanded.cursorOffset)
+        // Never arms the terminator swallow: that exists for the space that
+        // fired a typed trigger, and a glide pressed no space to swallow.
+        afterSnippetExpansion(inserted = expanded.text, original = word, caretParked = false)
+        if (snippet != null) {
+            publishSwapSet(
+                snippet = snippet,
+                typed = word,
+                inserted = expanded.text,
+                insertedCaret = expanded.cursorOffset,
+                original = word,
+            )
+        }
+        return expanded
+    }
+
+    /**
+     * [phrase] with the capitals the glide put on [trigger]: a shouted trigger
+     * shouts its phrase, and a capital from shift or a sentence start lands on
+     * the phrase's first letter.
+     */
+    private fun casedLikeTrigger(phrase: String, trigger: String): String {
+        val letters = trigger.filter(Char::isLetter)
+        return when {
+            letters.length > 1 && letters.all(Char::isUpperCase) -> phrase.uppercase()
+            letters.firstOrNull()?.isUpperCase() == true -> phrase.replaceFirstChar { it.uppercase() }
+            else -> phrase
+        }
+    }
+
+    /**
      * Types the space that follows a glided word, so the next word — glided or
      * tapped — does not run into it. Skipped when the text already continues
      * with one: a word glided back into the middle of a sentence has a space
@@ -14217,6 +14329,7 @@ open class WMKeyboardService : InputMethodService() {
         val state = _uiState.value
         if (!glideAllowed(state)) return
         if (keys.isEmpty() || segments.isEmpty()) return
+        syncGlideTriggers(state)
         if (verdict is GlideVerdict.Cancel) {
             cancelGlide()
             return
@@ -14241,6 +14354,9 @@ open class WMKeyboardService : InputMethodService() {
             commitComposing(ic, autocorrect = false, fixApostrophes = state.settings.autoText.apostrophe)
             var lastWords: List<String> = emptyList()
             var committedAny = false
+            // Whether the last thing typed was a snippet that left the caret
+            // inside itself, where a trailing space does not belong.
+            var caretParked = false
             segments.forEachIndexed { index, segment ->
                 // Decoded inside the loop, not before it: each word is committed
                 // and learned as it lands, so the next segment is decoded with
@@ -14269,6 +14385,16 @@ open class WMKeyboardService : InputMethodService() {
                     leader
                 }
                 commitGestureLeadingSpace(ic, state)
+                val expanded = glidedExpansion(ic, state, word)
+                if (expanded != null) {
+                    caretParked = expanded.cursorOffset < expanded.text.length
+                    // An expansion is not a reading: nothing to learn, and no
+                    // alternates for the strip to offer in its place.
+                    lastWords = emptyList()
+                    committedAny = true
+                    return@forEachIndexed
+                }
+                caretParked = false
                 ic.commitText(word, 1)
                 // Both before the learning hop below, for the reason spelled
                 // out in [onGesture]: this is what stops the commit's own echo
@@ -14309,7 +14435,7 @@ open class WMKeyboardService : InputMethodService() {
             if (committedAny) {
                 // Only the last word earns one: the words before it were spaced
                 // by the leading rule above as each new segment landed.
-                commitGestureSpace(ic, state)
+                if (!caretParked) commitGestureSpace(ic, state)
                 armRevertGuard()
                 consumeShift()
                 val floating = nextWordOctopus()

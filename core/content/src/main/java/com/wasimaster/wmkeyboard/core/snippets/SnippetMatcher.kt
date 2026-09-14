@@ -536,6 +536,18 @@ class SnippetIndex private constructor(
     /** The snippet whose plain trigger is [word], ignoring case. */
     fun matchTrigger(word: String): Snippet? = plain[word.lowercase(Locale.ROOT)]
 
+    /**
+     * Every plain trigger that expands on its own, lowercased.
+     *
+     * What a glide may decode to (#170). A trigger like "omw" is in no word
+     * list, so a stroke could never spell it; handed to the decoder, it can.
+     * The asking ones are left out because a glide has nowhere to ask: it
+     * commits its word the moment the finger lifts. Built once per index, so
+     * the same set comes back until the snippets change — which is what lets
+     * the keyboard tell by identity whether to rebuild anything.
+     */
+    val expandingTriggers: Set<String> = plain.filterValues { it.id !in asking }.keys
+
     /** True when some trigger reaches back past its last word, so the keyboard need not look. */
     val hasPrefixTriggers: Boolean = prefixed.isNotEmpty()
 
