@@ -106,9 +106,19 @@ class AccentFoldingTest {
         assertNull(e.shouldAutocorrect("mas"))
     }
 
-    @Test fun aWordTheUserAddedIsNeverShadowed() {
+    @Test fun aDownloadedListIsShadowedToo() {
+        // Every language but English and Bengali reaches the engine through
+        // customDictionary, the union of its downloaded and imported lists.
+        // Exempting that source exempted the whole downloaded Polish list, so
+        // `juz` stayed uncorrected on the device while every test passed.
+        val e = SuggestionEngine(PackedTrie.EMPTY, BengaliPhoneticIndex(emptyList()), UserLexicon(null))
+        e.customDictionary = PackedTrie.of(listOf("już" to 690_940, "juz" to 12_683))
+        assertEquals("już", e.shouldAutocorrect("juz"))
+    }
+
+    @Test fun aWordInAndroidsPersonalDictionaryIsNeverShadowed() {
         val e = engine("już" to 690_940, "juz" to 12_683)
-        e.customDictionary = PackedTrie.of(listOf("juz" to 1))
+        e.systemDictionary = PackedTrie.of(listOf("juz" to 1))
         assertNull(e.shouldAutocorrect("juz"))
     }
 }

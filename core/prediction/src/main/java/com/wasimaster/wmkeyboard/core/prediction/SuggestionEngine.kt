@@ -2327,11 +2327,14 @@ class SuggestionEngine(
      * without the long-press. Under the ratio both spellings are words people
      * mean: Polish `ze` and `że`, Spanish `mas` and `más`.
      *
-     * A word in a custom list or in Android's personal dictionary was put
-     * there by the user, and is never shadowed.
+     * A word in Android's personal dictionary was put there by the user, and
+     * is never shadowed. [customDictionary] earns no such exemption: for every
+     * language but English and Bengali it is where the *downloaded* list
+     * lives, beside anything imported, so exempting it exempted the very list
+     * that holds `juz`.
      */
     private fun accentShadowed(lower: String, touch: List<TouchPoint?>?): Boolean {
-        if (customDictionary.contains(lower) || systemDictionary.contains(lower)) return false
+        if (systemDictionary.contains(lower)) return false
         // The same walk decideOrdinary ranks, so this reads the memoised result.
         val ranked = rankedFor(lower, FuzzyBeamSearch.AUTOCORRECT_K / 2, touch)
         val twin = ranked
