@@ -35,7 +35,7 @@
         <item quantity="other">The <xliff:g id="layer" example="symbols">%1$s</xliff:g> layer has %2$d rows. Only %3$d rows fit.</item>
     </plurals>
 
-    <string name="core_lang_layout_secondary_no_way_out_warning">This layout has no key that leaves it. Make sure you have a way to exit this layout: an ABC key, a symbols key, or the Custom layout tool on the toolbar.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">This layout has no key that leaves it. Make sure you have a way to exit this layout: an ABC key, a symbols key, or the Secondary layout tool on the toolbar.</string>
     <!-- %1$s is the layer name. -->
     <string name="core_lang_layout_persistent_warning">The <xliff:g id="layer" example="symbols">%1$s</xliff:g> layer stays open when the keyboard closes. Make sure you have a way to exit this layout.</string>
 

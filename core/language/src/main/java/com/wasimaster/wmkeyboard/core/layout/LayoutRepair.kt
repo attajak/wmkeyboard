@@ -162,7 +162,7 @@ fun validateLayout(spec: LayoutSpec): List<LayoutFinding> {
         // keyboard for typing prose: a macro pad has no business being told it
         // needs a space bar. The one thing worth saying is how to get out —
         // and only as a warning (issue #60 asked for exactly that wording),
-        // because the Custom layout tool and a fresh field both leave it too.
+        // because the Secondary layout tool and a fresh field both leave it too.
         val keys = letters.rows.flatten()
         if (keys.none { it.leavesSecondaryLayout() }) {
             findings += LayoutFinding(
@@ -557,7 +557,7 @@ fun LayoutSpec.repair(): RepairedLayout {
 /**
  * Whether pressing this key can take the user off a secondary layout: back to
  * the letters, to the symbol page, or to another layout. A tool key counts too
- * — the Custom layout tool toggles the grid off, and a panel tool covers it.
+ * — the Secondary layout tool toggles the grid off, and a panel tool covers it.
  */
 private fun Key.leavesSecondaryLayout(): Boolean = when (action) {
     KeyAction.Letters, KeyAction.Symbols, KeyAction.LanguageSwitch -> true

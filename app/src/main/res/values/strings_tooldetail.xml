@@ -273,7 +273,7 @@
     <string name="tooldetail_fancy_language_nav_subtitle">The saved style, and the layout switch</string>
     <string name="tooldetail_fancy_info">The tool types with Unicode letters, not with a font. The letters stay fancy in every app, but a screen reader cannot read them and a search cannot find them.</string>
 
-    <!-- Custom layout tool. -->
+    <!-- Secondary layout tool. -->
     <string name="tooldetail_custom_layout_layout_title">Layout to show</string>
     <string name="tooldetail_custom_layout_layout_subtitle">The secondary layout the tool puts on screen, or a list to select from</string>
     <string name="tooldetail_custom_layout_layout_info">With no layout selected here, the tool opens a list of all your secondary layouts, or the only one you have. Select a layout and the tool shows that one directly. A press while a secondary layout is on screen always takes it off again. A key on any layout can also open a secondary layout.</string>

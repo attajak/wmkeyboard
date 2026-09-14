@@ -254,7 +254,7 @@ data class LayoutSpec(
      * [LayoutLayer.LETTERS] grid is used; the other layers are ignored.
      *
      * Reached from a [KeyAction.Layout] key naming its [id], or from the
-     * Custom layout toolbar tool. Left by a [KeyAction.Letters] key, a
+     * Secondary layout toolbar tool. Left by a [KeyAction.Letters] key, a
      * [KeyAction.Symbols] key, the same tool, or a second press of the key
      * that opened it.
      *

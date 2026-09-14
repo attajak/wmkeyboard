@@ -501,7 +501,7 @@ enum class PanelMode {
     CANDIDATES,
 
     /**
-     * The Custom layout tool's picker: one button per secondary layout, shown
+     * The Secondary layout tool's picker: one button per secondary layout, shown
      * when the user has several and has not pinned one to the tool (issue
      * #62). A tap opens that layout and closes this.
      */

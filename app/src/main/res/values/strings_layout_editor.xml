@@ -443,17 +443,17 @@
     <string name="layout_editor_secondary_title">Secondary layouts</string>
     <string name="layout_editor_new_secondary_title">Start a secondary layout</string>
     <string name="layout_editor_new_secondary_name">My secondary layout</string>
-    <string name="layout_editor_secondary_group_caption">A secondary layout is not a language. It shows over the letters of the layout you type with, and it keeps that layout\'s dictionary. Open it with a key set to the Open a layout action, or with the Custom layout tool.</string>
+    <string name="layout_editor_secondary_group_caption">A secondary layout is not a language. It shows over the letters of the layout you type with, and it keeps that layout\'s dictionary. Open it with a key set to the Open a layout action, or with the Secondary layout tool.</string>
     <string name="layout_editor_secondary_summary_label">Secondary layout</string>
     <string name="layout_editor_persistent_summary_label">Stays open</string>
-    <string name="layout_editor_secondary_caption">This layout is live as soon as a key or the Custom layout tool opens it. It does not appear under Languages.</string>
+    <string name="layout_editor_secondary_caption">This layout is live as soon as a key or the Secondary layout tool opens it. It does not appear under Languages.</string>
 
     <!-- Keep a layer open across a close and reopen of the keyboard (issue #60). -->
     <string name="layout_editor_persist_title">Keep this layer open</string>
     <string name="layout_editor_persist_subtitle">The layer stays on screen when the keyboard closes or the field changes. Make sure you have a way to exit this layout.</string>
     <string name="panel_layout_persist_subtitle">The panel stays open when the keyboard closes or the field changes. Make sure you have a way to exit this panel.</string>
     <string name="panel_layout_persist_info">Normally a panel closes each time the keyboard opens on a new field. With this on, the panel stays until you press a key or a tool that goes somewhere else, or the Back button. The keyboard cannot close it by itself.</string>
-    <string name="layout_editor_persist_info">Normally the keyboard goes back to the letters each time it opens. With this on, the layer stays until you press a key or a tool that goes somewhere else. The keyboard cannot take you off it by itself, so the layer needs an ABC key, a symbols key, or the Custom layout tool on the toolbar.</string>
+    <string name="layout_editor_persist_info">Normally the keyboard goes back to the letters each time it opens. With this on, the layer stays until you press a key or a tool that goes somewhere else. The keyboard cannot take you off it by itself, so the layer needs an ABC key, a symbols key, or the Secondary layout tool on the toolbar.</string>
 
     <string name="layout_editor_name_title">Name</string>
 

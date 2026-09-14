@@ -687,7 +687,7 @@ internal fun LayoutSettings(
     // JSON asset — is an edit of that layout, not a layout of their own, and
     // listing it here would show the same name twice. Secondary layouts are
     // left out too: they cannot be switched on, and are reached from a key or
-    // the Custom layout tool.
+    // the Secondary layout tool.
     val customs = settings.customLayouts
         .filter {
             !it.secondary &&

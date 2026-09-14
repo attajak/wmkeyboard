@@ -12,7 +12,7 @@ import org.junit.Test
 
 /**
  * Why a tool is unusable is a typed reason, not a boolean the screens
- * re-interpret. The Custom layout tool was the first one gated on something
+ * re-interpret. The Secondary layout tool was the first one gated on something
  * other than a search key, and every settings screen offered it an API key.
  */
 class ToolAvailabilityTest {
@@ -25,7 +25,7 @@ class ToolAvailabilityTest {
     )
 
     @Test
-    fun `the custom layout tool is blocked by the lack of a secondary layout, not a key`() {
+    fun `the secondary layout tool is blocked by the lack of a secondary layout, not a key`() {
         val settings = KeyboardSettings()
         assertEquals(ToolBlocker.NEEDS_SECONDARY_LAYOUT, toolBlocker(ToolbarTool.CUSTOM_LAYOUT, settings))
         assertFalse(isUsableTool(ToolbarTool.CUSTOM_LAYOUT, settings))

@@ -4869,7 +4869,7 @@ data class LayoutBehaviorSettings(
      */
     val fancyToolAutoOff: Boolean = true,
     /**
-     * The secondary layout the Custom layout tool shows (a `LayoutSpec.id`),
+     * The secondary layout the Secondary layout tool shows (a `LayoutSpec.id`),
      * or null for the first one the user has. Null rather than a required pick
      * so the tool works the moment a first secondary layout exists; the page
      * only has to be visited once there are several.
@@ -12122,7 +12122,7 @@ class SettingsRepository(private val context: Context) {
     suspend fun setFancyToolAutoOff(value: Boolean) =
         editPrefs { it[FANCY_TOOL_AUTO_OFF] = value }
 
-    /** The secondary layout the Custom layout tool shows; null (stored empty) is the first one. */
+    /** The secondary layout the Secondary layout tool shows; null (stored empty) is the first one. */
     suspend fun setCustomLayoutToolLayout(id: String?) =
         editPrefs { it[CUSTOM_LAYOUT_TOOL] = id.orEmpty() }
 

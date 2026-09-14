@@ -7827,7 +7827,7 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
-     * The Custom layout tool. A secondary layout up, however it got there, is
+     * The Secondary layout tool. A secondary layout up, however it got there, is
      * taken down: the tool is lit whenever one is showing, and a lit toggle has
      * to be the way down. Otherwise it shows the layout pinned on the tool's
      * page, or the only one there is — and with several and nothing pinned it

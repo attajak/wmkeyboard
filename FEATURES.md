@@ -723,10 +723,10 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Commits the reading, not the buffer — No confidence gate: the anchors are not a word, so "leave it as typed" would be the wrong answer rather than the safe one
     - Glide came free — GlideKeyMap has resolved several characters to one key since Probhat's ক/খ, so a swipe across T9 or the compact grid decodes with no decoder change at all
     - Proximity and the touch model follow — Neighbours derive between keys rather than letters, and every letter of a key reports that key's measured centre
-  - Secondary layouts `RARE` — Grids of your own reached by a key or the Custom layout tool, never by picking a language (#62)
+  - Secondary layouts `RARE` — Grids of your own reached by a key or the Secondary layout tool, never by picking a language (#62)
     - LayoutSpec.secondary — Stored beside the other custom layouts; excluded from the language cycle, the OS subtype list and the Languages screen
     - KeyAction.Layout(id) — Shows the named layout over the letters; a second press, ABC, or ?123 leaves it; also works as a press-and-hold alternate
-    - Custom layout tool — Toolbar toggle lit while any secondary layout is up; which one it shows is a setting on its page, the first by default
+    - Secondary layout tool — Toolbar toggle lit while any secondary layout is up; which one it shows is a setting on its page, the first by default
     - From scratch — A new one is three rows of blank keys plus an ABC key; validate and repair skip the delete/space/enter guarantees for it
   - Persistent layers `RARE` — LayerSpec.persistent keeps a symbols, Fn or secondary grid up across a close and reopen of the keyboard and across fields (#60)
     - One switch per layer — No global "persist if…" settings; the editor's toggle carries the "make sure you have a way to exit" warning and the Problems list repeats it
@@ -1791,7 +1791,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - 22 Unicode styles — Bold, italic, script, fraktur, double-struck, monospace, fullwidth, circled, squared, small caps and more
     - Enables the fancy layout on demand — Adds AssetLayouts.FANCY_ID to enabled layouts and remembers the return layout
     - Pinned style applies to the session only — Never overwrites the style the strip last chose
-  - Custom layout `RARE` — Shows one of your secondary layouts over the letters and takes it off again
+  - Secondary layout `RARE` — Shows one of your secondary layouts over the letters and takes it off again
     - Picker when there are several — PanelMode.CUSTOM_LAYOUTS lists them by name; "Layout to show" pins one to skip it; the tool is hidden until one exists
   - Incognito `uncommon` — Pauses learning and clipboard capture with one tap
     - Field-requested incognito is explained — Toast instead of a switch that looks stuck on

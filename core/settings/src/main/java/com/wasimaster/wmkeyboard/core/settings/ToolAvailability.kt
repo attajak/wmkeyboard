@@ -56,7 +56,7 @@ enum class ToolBlocker {
      */
     NEEDS_SEARCH_INSTANCE,
 
-    /** The Custom layout tool: the user has not made a secondary layout yet. */
+    /** The Secondary layout tool: the user has not made a secondary layout yet. */
     NEEDS_SECONDARY_LAYOUT,
 }
 

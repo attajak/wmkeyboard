@@ -622,7 +622,7 @@ internal fun LevelPanel(state: KeyboardUiState) {
 // ---- custom layouts ----
 
 /**
- * The Custom layout tool's picker (issue #62): one button per secondary
+ * The Secondary layout tool's picker (issue #62): one button per secondary
  * layout, by name. A tap goes through the ordinary key dispatch as an "open a
  * layout" key — the service opens the grid and closes this panel — so the
  * panel needs no callback of its own.

@@ -52,7 +52,7 @@ object LayoutJsonDocs {
         "LayoutSpec.keyman" to "The Keyman keyboard whose rules decide what the keys type. Only a converted Keyman layout has one.",
         "LayoutSpec.appearance" to "This layout's own label font and size, over the theme and the settings.",
         "LayoutSpec.secondary" to
-            "A grid that a key or the Custom layout tool opens, not a language: a symbols page of your own, or a macro pad. Only its " +
+            "A grid that a key or the Secondary layout tool opens, not a language: a symbols page of your own, or a macro pad. Only its " +
             "letters layer is used.",
         "LayoutSpec.themeId" to "A theme of this layout's own, used while the layout is on screen. A layer's themeId beats it.",
         "LayoutSpec.version" to "The revision of the layout format. The app brings an older one up to date when it reads it.",
