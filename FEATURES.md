@@ -2747,7 +2747,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 - **Notifications** `uncommon` — Four kinds, four switches, and nothing else: the app posts no tips, suggestions or advertising.
   - Downloads report themselves `uncommon` — Dictionaries, emoji names, voice and AI models, CJK packs and the emoji font each get a progress row, a "ready to use" line, and the failure sentence the settings row would have shown.
     - Progress notifications expire by themselves — The app does no background work, so a download whose process is killed takes its notification with it rather than freezing at 43%.
-  - Update notifications `uncommon` — Downloading, ready to install, and "Updated to 0.5.7" after the fact, the last of which fires on every channel through MY_PACKAGE_REPLACED.
+  - Update notifications `uncommon` — Downloading, ready to install, and "Updated to 0.5.8" after the fact, the last of which fires on every channel through MY_PACKAGE_REPLACED.
     - No Install button in the shade `RARE` — Installing restarts the process the keyboard runs in, so the shade tap opens the app where the warning is; only Cancel is safe to press from a notification.
   - Automatic backup failures `RARE` — The one failure with nowhere else to appear: the job runs with no screen, and a revoked folder grant otherwise stops every backup silently.
   - Keyboard controls in the shade `RARE` — Hacker's Keyboard's answer to a pinned keyboard that has gone down over a window with no text field: Show, Unpin and Switch keyboard, off by default.
