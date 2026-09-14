@@ -55,6 +55,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -78,6 +79,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.zIndex
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.wasimaster.wmkeyboard.core.settings.EmojiBarMode
 import com.wasimaster.wmkeyboard.ime.ui.ModeIcons
 import com.wasimaster.wmkeyboard.core.settings.BarRow
@@ -1223,15 +1226,36 @@ internal fun ModesSettings(
     SettingsGroup(stringResource(R.string.modes_group_title)) {
         for (mode in settings.keyboardModes) {
             item {
+                // The switch is the mode's own on/off (#152): off, it stays in
+                // the list with everything it holds, and the keyboard simply
+                // never sees it. Deleting used to be the only way to silence
+                // one, and a mode is too much setup to throw away for a week
+                // without it.
+                val useModeDesc = stringResource(R.string.modes_use_action, mode.name)
                 WmRow(
                     title = mode.name,
-                    subtitle = modeBindingsSummary(mode),
+                    subtitle = if (mode.enabled) {
+                        modeBindingsSummary(mode)
+                    } else {
+                        stringResource(R.string.modes_row_off_subtitle)
+                    },
                     leading = {
                         Icon(ModeIcons.icon(mode.icon), contentDescription = null)
                     },
                     trailing = {
-                        IconButton(onClick = { confirmDelete = mode }) {
-                            Icon(Icons.Outlined.Delete, contentDescription = deleteModeDesc)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Switch(
+                                checked = mode.enabled,
+                                onCheckedChange = { on ->
+                                    scope.launch {
+                                        repository.upsertKeyboardMode(mode.copy(enabled = on))
+                                    }
+                                },
+                                modifier = Modifier.semantics { contentDescription = useModeDesc },
+                            )
+                            IconButton(onClick = { confirmDelete = mode }) {
+                                Icon(Icons.Outlined.Delete, contentDescription = deleteModeDesc)
+                            }
                         }
                     },
                     onClick = { onNavigate("mode_edit/${mode.id}") },
@@ -1302,6 +1326,14 @@ internal fun ModeEditor(
     var confirmDelete by remember { mutableStateOf(false) }
 
     SettingsGroup {
+        item {
+            ToggleSetting(
+                R.string.modes_use_title,
+                stringResource(R.string.modes_use_subtitle),
+                mode.enabled,
+                info = stringResource(R.string.modes_use_info),
+            ) { save(mode.copy(enabled = it)) }
+        }
         item {
             TextFieldSetting(
                 label = stringResource(R.string.modes_name_label),

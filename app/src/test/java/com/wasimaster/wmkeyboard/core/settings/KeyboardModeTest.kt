@@ -278,6 +278,37 @@ class KeyboardModeTest {
     }
 
     @Test
+    fun `a mode switched off leaves the keyboard's view and takes its bindings with it`() {
+        // The feature is on; only the browser mode is off (#152).
+        val settings = KeyboardSettings(
+            keyboardModes = listOf(password, email, browser.copy(enabled = false), chat),
+        )
+        val seen = settings.withoutModes()
+        assertEquals(listOf("password", "email", "chat"), seen.keyboardModes.map { it.id })
+        // The tool stays: modes are still on, one of them is merely off.
+        assertEquals(settings.toolbarTools, seen.toolbarTools)
+        // What the keyboard resolves from is what it sees, so the browser app
+        // no longer matches anything, and a manual pick of it goes nowhere.
+        assertNull(resolveKeyboardMode(seen.keyboardModes, "com.android.chrome", emptySet(), null))
+        assertNull(resolveKeyboardMode(seen.keyboardModes, "com.android.chrome", emptySet(), "browser"))
+    }
+
+    @Test
+    fun `with every mode on the view is the settings themselves`() {
+        val settings = KeyboardSettings(keyboardModes = modes)
+        assertTrue(settings.withoutModes() === settings)
+    }
+
+    @Test
+    fun `a stored mode from before the switch decodes as on, and off survives the codec`() {
+        val json = KeyboardModeCodec.encodeList(listOf(browser.copy(enabled = false)))
+        assertFalse(KeyboardModeCodec.decodeList(json).single().enabled)
+        val legacy = json.replace("\"enabled\":false,", "").replace(",\"enabled\":false", "")
+        assertFalse(legacy.contains("enabled"))
+        assertTrue(KeyboardModeCodec.decodeList(legacy).single().enabled)
+    }
+
+    @Test
     fun `manual pick beats everything`() {
         assertEquals(
             "email",

@@ -251,6 +251,15 @@ data class KeyboardMode(
      * written for one locale is silent in another; that is the trade.
      */
     val hints: List<String> = emptyList(),
+    /**
+     * Whether the keyboard may use this mode at all. Off, the mode never
+     * activates on its own and the Modes tool does not offer it, but every
+     * binding and override it holds is kept, so it can be switched back on as
+     * it was. Deleting was the only way to silence a mode before, and a mode
+     * is a screenful of setup nobody wants to rebuild for a week without it
+     * (issue #152). Stored modes from before the switch decode as on.
+     */
+    val enabled: Boolean = true,
 ) {
     /**
      * Whether this mode prescribes a tool arrangement of its own. When it
@@ -610,20 +619,24 @@ private fun KeyboardMode.matchesHint(hint: String?): Boolean {
 }
 
 /**
- * The settings with the modes feature taken out of the picture, applied on the
- * way out of the repository exactly as `underPowerSaving` and
- * `restrictedToDirectBoot` are: a view, never a write (issue #41).
+ * The settings with the modes the keyboard must not use taken out of the
+ * picture, applied on the way out of the repository exactly as
+ * `underPowerSaving` and `restrictedToDirectBoot` are: a view, never a write
+ * (issue #41).
  *
- * Emptying [KeyboardSettings.keyboardModes] is the whole gate. Every reader of
+ * Trimming [KeyboardSettings.keyboardModes] is the whole gate. Every reader of
  * modes — [resolveKeyboardMode], the tool's panel, the per-mode theme lookup —
- * goes through that list, so none of them needs to learn the switch exists. The
- * tool goes with them: a Modes button that opens an empty panel is worse than
- * no button. The user's modes stay stored, so switching the feature back on
- * brings every one of them back.
+ * goes through that list, so none of them needs to learn that either switch
+ * exists. With the feature off the list is emptied and the tool goes with it:
+ * a Modes button that opens an empty panel is worse than no button. With the
+ * feature on, a mode switched off by itself ([KeyboardMode.enabled], #152) is
+ * simply not in the list. The user's modes stay stored either way, so
+ * switching back on brings every one of them back.
  */
 fun KeyboardSettings.withoutModes(): KeyboardSettings =
     if (modesEnabled) {
-        this
+        if (keyboardModes.all { it.enabled }) this
+        else copy(keyboardModes = keyboardModes.filter { it.enabled })
     } else {
         copy(
             keyboardModes = emptyList(),

@@ -20,6 +20,15 @@
     <!-- Content description of the button that deletes a mode, and the label
          of the delete button at the end of the mode editor. -->
     <string name="modes_delete_action">Delete mode</string>
+    <!-- The switch on a mode's row and at the top of its editor: the mode's
+         own on/off, kept apart from deleting it (#152). -->
+    <string name="modes_use_title">Use this mode</string>
+    <string name="modes_use_subtitle">Off, the mode never turns on and the Modes tool does not show it</string>
+    <string name="modes_use_info">Turn this off to stop a mode without deleting it. Its apps, field types, hints and overrides are kept, and the mode comes back as it was when you turn it on again.</string>
+    <!-- Content description of the switch on a mode's row. %1$s is the mode's name. -->
+    <string name="modes_use_action">Use %1$s</string>
+    <!-- Subtitle of a mode's row while its switch is off. -->
+    <string name="modes_row_off_subtitle">Off. Its setup is kept</string>
 
     <!-- ==================================================================
          Mode editor: the name and the icon of one mode.

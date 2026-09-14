@@ -24,7 +24,7 @@ The first control on this screen is **Use modes**, the master switch for the who
 
 Under it, **A mode you pick by hand** chooses how long a manual pick from the Modes tool lasts: **Until you change app** (the default) or **Until you change it**. It sits above the list because it governs every mode. See [Rearranging tools](#rearranging-tools) below for the other list-level control.
 
-Below those, each mode's row shows its icon, its name, and a one-line summary of what triggers it. A mode with no apps, field types or hints bound reads **"Manual only, from the Modes tool"**. Everything else reads **"Automatic:"** followed by the app count, the field types and/or the hint count it's bound to, joined with a `+` because all of them have to match. The shipped Chat mode reads **"Automatic: 15 apps + text, notification replies fields"**. Tap a row to open that mode's editor. Tap the trailing bin icon and a **"Delete *name*?"** dialog asks first.
+Below those, each mode's row shows its icon, its name, and a one-line summary of what triggers it. A mode with no apps, field types or hints bound reads **"Manual only, from the Modes tool"**. Everything else reads **"Automatic:"** followed by the app count, the field types and/or the hint count it's bound to, joined with a `+` because all of them have to match. The shipped Chat mode reads **"Automatic: 15 apps + text, notification replies fields"**. Tap a row to open that mode's editor. The switch at the end of the row is the mode's own on/off: turn it off and the mode never activates, the Modes tool stops listing it, and its row reads **"Off. Its setup is kept"** in place of the summary. Everything inside it stays as it was, so it comes back whole when you turn it on again. Next to the switch, the bin icon opens a **"Delete *name*?"** dialog that asks first.
 
 **New mode** adds a row and opens a fresh editor. The mode isn't written to disk until you make your first edit inside it; backing out of an untouched new-mode editor leaves nothing behind.
 
@@ -91,6 +91,10 @@ Every override here defaults to **Inherit** (unset, so the mode falls through to
 Below that is the app list. One row per bound app, resolved to its display name and falling back to the raw package name, each removable. An **Add app** row at the end opens a searchable picker of every launcher app on the device.
 
 Set apps, field types and hints together and all of them have to match, so a mode bound to your chat apps and the Text field type stays off their search boxes. Set only one and it matches on that alone. Set none and the mode is manual-only, reachable from the Modes tool. Notification replies is the single exception to the AND, as above, though a hint still has to hold. When several modes match at once, one that names a hint beats one that names a field type, which beats one that only names apps. A mode picked by hand from the Modes tool beats both, for as long as **A mode you pick by hand** says. See [How a mode gets picked](/typing/modes/#how-a-mode-gets-picked) for the full resolution order.
+
+### Use this mode
+
+The first row of the editor is **Use this mode**, the same switch the list row carries. It's the answer to "how do I stop this mode without losing it": off, the mode is invisible to the keyboard and untouched in settings. The shipped Passwords mode is the usual reason to want it, since it replaces the pinned tools on every password box whether or not you pinned the Password Generator yourself.
 
 ### Reset and delete
 
@@ -171,6 +175,7 @@ Tool order can differ per app: whichever mode an app resolves to decides the arr
 
 - **A brand-new mode isn't saved until its first edit.** Navigating into a freshly created mode's editor and backing out without changing anything leaves the modes list exactly as it was.
 - **Only the six shipped modes offer Reset to default**, matched by ID. Rename a built-in mode and it keeps its reset option. A mode you created from scratch never gets one.
+- **Off is not deleted.** A mode whose **Use this mode** switch is off keeps every binding and override and simply never reaches the keyboard. Resetting a built-in mode turns it back on, since the shipped copy is on.
 - **Both delete paths ask first.** The bin icon on a list row and **Delete mode** at the bottom of the editor open the same "Delete *name*?" dialog. Resetting a built-in mode confirms too.
 - **Hints beat field types beat apps when modes collide.** If two modes could both apply, the one that names a hint is preferred over one that names a field type, and that over one that only names apps: a password field inside a coding app still gets the Passwords mode, and a rename box whose hint reads "Extension" gets the mode bound to that word over one bound to every single-line field.
 - **The tool and symbol-set pickers only offer what's currently available.** A tool disabled globally, or unsupported in your build, is missing from a mode's own pinned-tools and toolbox-order chip lists too. A lite build, for instance, has no tools that need ML Kit or the grammar engine.
