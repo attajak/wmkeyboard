@@ -1,0 +1,69 @@
+package com.wasimaster.wmkeyboard.core.selection
+
+import java.util.Locale
+import java.util.TimeZone
+
+/** The settings screen's groups. Headings are the screen's words, not the engine's. */
+enum class MacroCategory { EDITING, LINES, FORMAT, CONVERT, LANGUAGE, LOOKUP, OPEN_IN }
+
+/**
+ * What the selected text turned out to hold, read once per selection change
+ * by [SelectionMacros.detectContent]. Pure text facts only; what the device
+ * can do with them is [MacroGates]' business.
+ */
+data class ContentFlags(
+    /** Two or more lines with something on them. */
+    val multiLine: Boolean = false,
+    val hasLatin: Boolean = false,
+    val hasBengali: Boolean = false,
+    val hasForeignDigits: Boolean = false,
+    val colour: Colour? = null,
+    val dateTime: DateTimeHit? = null,
+    val place: Place? = null,
+    val jsonShape: JsonReformat.Shape = JsonReformat.Shape.NONE,
+    val base64: Boolean = false,
+    val urlEncoded: Boolean = false,
+) {
+    companion object {
+        val NONE = ContentFlags()
+    }
+}
+
+/**
+ * Which of the costlier detectors to run. Dates and places are only looked
+ * for when a macro that needs them is switched on, because both are several
+ * regexes over text that changes on every caret drag.
+ */
+data class DetectOptions(
+    val dateTime: Boolean = false,
+    val place: Boolean = false,
+    val nowMillis: Long = 0L,
+    val zone: TimeZone = TimeZone.getDefault(),
+    val locale: Locale = Locale.getDefault(),
+)
+
+/**
+ * Everything [SelectionMacros.offer] needs to know beyond the user's switches:
+ * what the device has (an app, a tool, a clipboard, a loaded dictionary) and
+ * what the text holds ([content]). Facts the engine cannot read itself are
+ * asked rather than assumed, because a chip that opens nothing is worse than
+ * no chip.
+ */
+data class MacroGates(
+    val whatsAppInstalled: Boolean = true,
+    val qrAvailable: Boolean = true,
+    /** Whether [SelectionMacro.FORMAT] would change anything. */
+    val formattable: Boolean = true,
+    /** The selection already spans the field, so Select all has nothing left to take. */
+    val wholeField: Boolean = false,
+    val clipboardHasText: Boolean = false,
+    val undoAvailable: Boolean = false,
+    val grammarAvailable: Boolean = false,
+    val aiAvailable: Boolean = false,
+    /** The Bengali dictionary and spelling map are loaded. */
+    val bengaliLoaded: Boolean = false,
+    /** The host app is in [ChatSyntax]'s table. */
+    val chatSyntax: ChatMarkup? = null,
+    val ttsAvailable: Boolean = true,
+    val content: ContentFlags = ContentFlags.NONE,
+)

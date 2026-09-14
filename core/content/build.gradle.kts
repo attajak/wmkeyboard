@@ -41,6 +41,8 @@ kotlin {
 dependencies {
     api(project(":core:tools"))
     api(project(":core:common"))
+    // Numeral tables, FancyStyles and the Avro rules for the selection macros.
+    api(project(":core:language"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)

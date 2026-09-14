@@ -73,6 +73,7 @@ import android.provider.DocumentsContract
 import android.provider.Settings
 import com.wasimaster.wmkeyboard.core.clipboard.ClipEntityKind
 import com.wasimaster.wmkeyboard.core.selection.SelectionKind
+import com.wasimaster.wmkeyboard.core.selection.MacroGates
 import com.wasimaster.wmkeyboard.core.selection.SelectionMacro
 import com.wasimaster.wmkeyboard.core.selection.SelectionMacros
 import com.wasimaster.wmkeyboard.core.clipboard.ClipKind
@@ -20309,10 +20310,12 @@ open class WMKeyboardService : InputMethodService() {
             // the same enabled-tools list power saving and direct boot have
             // already taken their entries out of.
             allowed = prefs.macros.filterTo(mutableSetOf()) { macroToolAvailable(it, settings) },
-            whatsAppInstalled = hasWhatsApp(),
-            qrAvailable = ToolbarTool.QR_GEN in settings.enabledTools,
-            formattable = formattable,
-            wholeField = wholeField,
+            gates = MacroGates(
+                whatsAppInstalled = hasWhatsApp(),
+                qrAvailable = ToolbarTool.QR_GEN in settings.enabledTools,
+                formattable = formattable,
+                wholeField = wholeField,
+            ),
         )
         return if (macros.isEmpty()) null else SelectionMacroOffer(text, kind, macros, wholeField)
     }
@@ -20353,7 +20356,7 @@ open class WMKeyboardService : InputMethodService() {
                 chooser = true,
             )
             SelectionMacro.FORMAT -> SelectionMacros.format(text, offer.kind, masks)?.let(::replaceSelection)
-            in SelectionMacros.caseMacros -> SelectionMacros.applyCase(text, macro)?.let(::replaceSelection)
+            in SelectionMacros.fixedCaseMacros -> SelectionMacros.applyCase(text, macro)?.let(::replaceSelection)
             SelectionMacro.SEARCH -> openMacroSearch(PanelMode.WEB_SEARCH, text)
             SelectionMacro.TRANSLATE -> openMacroSearch(PanelMode.TRANSLATE, text)
             SelectionMacro.QR -> onPanelChange(PanelMode.QR_GEN)

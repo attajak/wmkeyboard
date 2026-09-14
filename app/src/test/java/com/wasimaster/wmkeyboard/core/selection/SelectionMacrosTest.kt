@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.core.selection
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -85,32 +86,151 @@ class SelectionMacrosTest {
         val phone = SelectionMacros.offer(SelectionKind.PHONE, all)
         assertTrue(SelectionMacro.CALL in phone)
         assertTrue(SelectionMacro.WHATSAPP in phone)
+        assertTrue(SelectionMacro.ADD_CONTACT in phone)
         assertTrue(SelectionMacro.QR !in phone)
+        assertTrue(SelectionMacro.FANCY !in phone)
 
         // Select all leads every row, and each kind's own lead comes next.
         val url = SelectionMacros.offer(SelectionKind.URL, all)
         assertEquals(listOf(SelectionMacro.SELECT_ALL, SelectionMacro.OPEN), url.take(2))
         assertTrue(SelectionMacro.QR in url)
         assertTrue(SelectionMacro.CALL !in url)
+        assertTrue(SelectionMacro.ADD_CONTACT !in url)
 
         val email = SelectionMacros.offer(SelectionKind.EMAIL, all)
         assertEquals(listOf(SelectionMacro.SELECT_ALL, SelectionMacro.EMAIL), email.take(2))
+        assertTrue(SelectionMacro.ADD_CONTACT in email)
 
         val text = SelectionMacros.offer(SelectionKind.TEXT, all)
         assertEquals(
-            listOf(SelectionMacro.SELECT_ALL, SelectionMacro.COPY, SelectionMacro.SHARE),
+            listOf(SelectionMacro.SELECT_ALL, SelectionMacro.COPY, SelectionMacro.CUT),
             text.take(3),
         )
         assertTrue(SelectionMacro.CALL !in text)
     }
 
     @Test
-    fun `select all leads every row and ships on`() {
-        for (kind in SelectionKind.entries) {
-            assertEquals(kind.name, SelectionMacro.SELECT_ALL, SelectionMacros.macrosFor(kind).first())
+    fun `undo is first whenever there is one, and absent otherwise`() {
+        val all = SelectionMacros.configurable.toSet()
+        assertTrue(SelectionMacro.UNDO !in SelectionMacros.offer(SelectionKind.TEXT, all))
+        val order = listOf(SelectionMacro.COPY, SelectionMacro.UNDO, SelectionMacro.SELECT_ALL)
+        val row = SelectionMacros.offer(SelectionKind.TEXT, all, MacroGates(undoAvailable = true), order)
+        assertEquals(SelectionMacro.UNDO, row.first())
+        assertEquals(SelectionMacro.COPY, row[1])
+    }
+
+    @Test
+    fun `the user's order is followed, the rest appended, stale and ladder members ignored`() {
+        val all = SelectionMacros.configurable.toSet()
+        val order = listOf(SelectionMacro.SHARE, SelectionMacro.CASE_CAMEL, SelectionMacro.COPY)
+        val row = SelectionMacros.offer(SelectionKind.TEXT, all, MacroGates(), order)
+        assertEquals(listOf(SelectionMacro.SHARE, SelectionMacro.COPY, SelectionMacro.SELECT_ALL), row.take(3))
+        assertTrue(SelectionMacro.CASE_CAMEL !in row)
+        assertTrue(SelectionMacro.CUT in row)
+    }
+
+    @Test
+    fun `gates take their chips away`() {
+        val all = SelectionMacros.configurable.toSet()
+        val plain = SelectionMacros.offer(SelectionKind.TEXT, all)
+        for (gated in listOf(
+            SelectionMacro.PASTE, SelectionMacro.LINES_SORT, SelectionMacro.GRAMMAR_FIX, SelectionMacro.AI,
+            SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH, SelectionMacro.DIGITS_LATIN, SelectionMacro.COLOUR,
+            SelectionMacro.MAP, SelectionMacro.CALENDAR, SelectionMacro.TIME_ZONES, SelectionMacro.CHAT_BOLD,
+            SelectionMacro.JSON_FORMAT, SelectionMacro.BASE64_DECODE, SelectionMacro.URL_DECODE,
+        )) {
+            assertTrue(gated.name, gated !in plain)
         }
-        assertEquals(SelectionMacro.SELECT_ALL, SelectionMacros.configurable.first())
+        val open = MacroGates(
+            clipboardHasText = true, grammarAvailable = true, aiAvailable = true, bengaliLoaded = true,
+            chatSyntax = ChatSyntax.forPackage("com.whatsapp"),
+            content = ContentFlags(multiLine = true, hasLatin = true, hasForeignDigits = true, base64 = true, urlEncoded = true),
+        )
+        val row = SelectionMacros.offer(SelectionKind.TEXT, all, open)
+        for (on in listOf(
+            SelectionMacro.PASTE, SelectionMacro.LINES_SORT, SelectionMacro.LINES_BULLET, SelectionMacro.GRAMMAR_FIX,
+            SelectionMacro.AI, SelectionMacro.TO_BANGLA, SelectionMacro.DIGITS_LATIN, SelectionMacro.CHAT_BOLD,
+            SelectionMacro.CHAT_MONO, SelectionMacro.BASE64_DECODE, SelectionMacro.URL_DECODE,
+        )) {
+            assertTrue(on.name, on in row)
+        }
+        // A multi-line selection has no "next" and nothing Bengali to romanise.
+        assertTrue(SelectionMacro.FIND !in row)
+        assertTrue(SelectionMacro.TO_BANGLISH !in row)
+        // Threema has no monospace, so that chip alone stays off.
+        val threema = open.copy(chatSyntax = ChatSyntax.forPackage("ch.threema.app"))
+        assertTrue(SelectionMacro.CHAT_MONO !in SelectionMacros.offer(SelectionKind.TEXT, all, threema))
+        assertTrue(SelectionMacro.CHAT_BOLD in SelectionMacros.offer(SelectionKind.TEXT, all, threema))
+    }
+
+    @Test
+    fun `to bangla needs latin without bengali, to banglish needs bengali`() {
+        val all = SelectionMacros.configurable.toSet()
+        val latin = ContentFlags(hasLatin = true)
+        val mixed = ContentFlags(hasLatin = true, hasBengali = true)
+        assertTrue(SelectionMacro.TO_BANGLA in SelectionMacros.offer(SelectionKind.TEXT, all, MacroGates(bengaliLoaded = true, content = latin)))
+        assertTrue(SelectionMacro.TO_BANGLA !in SelectionMacros.offer(SelectionKind.TEXT, all, MacroGates(bengaliLoaded = false, content = latin)))
+        assertTrue(SelectionMacro.TO_BANGLA !in SelectionMacros.offer(SelectionKind.TEXT, all, MacroGates(bengaliLoaded = true, content = mixed)))
+        assertTrue(SelectionMacro.TO_BANGLISH in SelectionMacros.offer(SelectionKind.TEXT, all, MacroGates(content = mixed)))
+    }
+
+    @Test
+    fun `the lists agree with each other`() {
+        assertEquals(SelectionMacros.configurable.toSet() - SelectionMacros.ladderOnly, SelectionMacros.defaultOrder.toSet())
+        assertEquals(SelectionMacros.defaultOrder.size, SelectionMacros.defaultOrder.distinct().size)
+        assertEquals(SelectionMacro.entries.toSet() - SelectionMacros.fixedCaseMacros.toSet(), SelectionMacros.configurable.toSet())
+        assertTrue(SelectionMacros.defaultMacros.all { it in SelectionMacros.configurable })
+        val unsafe = SelectionMacro.entries.filter { !it.directBootSafe }.toSet()
+        assertEquals(
+            SelectionMacro.entries.filter { it.leavesApp }.toSet() + SelectionMacro.PASTE + SelectionMacro.READ_ALOUD,
+            unsafe,
+        )
+        assertEquals(
+            SelectionMacros.fixedCaseMacros + SelectionMacro.CASE_CAMEL,
+            SelectionMacros.caseLadder(setOf(SelectionMacro.CASE_CAMEL, SelectionMacro.COPY)),
+        )
+    }
+
+    @Test
+    fun `ordinary text raises no content flags`() {
+        for (text in listOf("Hello there", "12/04/2025", "report.txt", "Password", "50% off", "the meeting is at 3")) {
+            val latin = text.any { it in 'a'..'z' || it in 'A'..'Z' }
+            assertEquals(text, ContentFlags(hasLatin = latin), SelectionMacros.detectContent(text))
+        }
+    }
+
+    @Test
+    fun `content flags read what is there`() {
+        assertTrue(SelectionMacros.detectContent("ami valo asi").hasLatin)
+        assertTrue(SelectionMacros.detectContent("আমি ভালো").hasBengali)
+        assertTrue(SelectionMacros.detectContent("০১৭").hasForeignDigits)
+        assertTrue(SelectionMacros.detectContent("a\nb").multiLine)
+        assertFalse(SelectionMacros.detectContent("a\n\n").multiLine)
+        assertEquals(ColourForm.HEX, SelectionMacros.detectContent("#336699").colour?.form)
+        assertEquals(JsonReformat.Shape.MINIFIED, SelectionMacros.detectContent("""{"a":1}""").jsonShape)
+        assertTrue(SelectionMacros.detectContent("SGVsbG8gd29ybGQ=").base64)
+        assertTrue(SelectionMacros.detectContent("a%20b").urlEncoded)
+        // Dates and places only when asked for.
+        assertNull(SelectionMacros.detectContent("14 Sep 2026").dateTime)
+        assertNull(SelectionMacros.detectContent("12 Baker Street").place)
+        val options = DetectOptions(dateTime = true, place = true, nowMillis = 0L)
+        assertTrue(SelectionMacros.detectContent("14 Sep 2026", options).dateTime?.hasDate == true)
+        assertTrue(SelectionMacros.detectContent("12 Baker Street", options).place is Place.Address)
+        assertNull(SelectionMacros.detectContent("14 Sep 2026", options).place)
+        // A long paragraph with everything on stays cheap and quiet.
+        val paragraph = "lorem ipsum dolor sit amet ".repeat(150)
+        val flags = SelectionMacros.detectContent(paragraph, options)
+        assertEquals(ContentFlags(hasLatin = true), flags)
+    }
+
+    @Test
+    fun `select all leads every row after undo, and ships on`() {
+        for (kind in SelectionKind.entries) {
+            assertEquals(kind.name, listOf(SelectionMacro.UNDO, SelectionMacro.SELECT_ALL), SelectionMacros.macrosFor(kind).take(2))
+        }
+        assertEquals(listOf(SelectionMacro.UNDO, SelectionMacro.SELECT_ALL), SelectionMacros.configurable.take(2))
         assertTrue(SelectionMacro.SELECT_ALL in SelectionMacros.defaultMacros)
+        assertTrue(SelectionMacro.UNDO in SelectionMacros.defaultMacros)
     }
 
     @Test
@@ -119,7 +239,7 @@ class SelectionMacrosTest {
         for (kind in SelectionKind.entries) {
             val partial = SelectionMacros.offer(kind, all)
             // Nothing else on the row moves: only the chip with nothing to take.
-            assertEquals(kind.name, partial - SelectionMacro.SELECT_ALL, SelectionMacros.offer(kind, all, wholeField = true))
+            assertEquals(kind.name, partial - SelectionMacro.SELECT_ALL - SelectionMacro.FIND, SelectionMacros.offer(kind, all, MacroGates(wholeField = true)))
         }
     }
 
@@ -136,16 +256,16 @@ class SelectionMacrosTest {
     @Test
     fun `missing apps and tools take their chips away`() {
         val all = SelectionMacros.configurable.toSet()
-        val phone = SelectionMacros.offer(SelectionKind.PHONE, all, whatsAppInstalled = false)
+        val phone = SelectionMacros.offer(SelectionKind.PHONE, all, MacroGates(whatsAppInstalled = false))
         assertTrue(SelectionMacro.WHATSAPP !in phone)
-        val url = SelectionMacros.offer(SelectionKind.URL, all, qrAvailable = false)
+        val url = SelectionMacros.offer(SelectionKind.URL, all, MacroGates(qrAvailable = false))
         assertTrue(SelectionMacro.QR !in url)
     }
 
     @Test
     fun `format is dropped when it would do nothing`() {
         val all = SelectionMacros.configurable.toSet()
-        assertTrue(SelectionMacro.FORMAT !in SelectionMacros.offer(SelectionKind.URL, all, formattable = false))
+        assertTrue(SelectionMacro.FORMAT !in SelectionMacros.offer(SelectionKind.URL, all, MacroGates(formattable = false)))
         assertTrue(SelectionMacro.FORMAT in SelectionMacros.offer(SelectionKind.URL, all))
     }
 
@@ -161,12 +281,25 @@ class SelectionMacrosTest {
 
     @Test
     fun `the case ladder is never on the bar itself`() {
-        for (macro in SelectionMacros.caseMacros) {
+        for (macro in SelectionMacros.fixedCaseMacros) {
             assertTrue(macro !in SelectionMacros.configurable)
             for (kind in SelectionKind.entries) {
                 assertTrue(macro !in SelectionMacros.macrosFor(kind))
             }
         }
+        for (macro in SelectionMacros.ladderOnly) {
+            assertTrue(macro in SelectionMacros.configurable)
+            for (kind in SelectionKind.entries) {
+                assertTrue(macro !in SelectionMacros.macrosFor(kind))
+            }
+        }
+    }
+
+    @Test
+    fun `the code cases ride the case ladder`() {
+        assertEquals("helloWorld", SelectionMacros.applyCase("Hello World", SelectionMacro.CASE_CAMEL))
+        assertEquals("HELLO_WORLD", SelectionMacros.applyCase("hello world", SelectionMacro.CASE_CONSTANT))
+        assertNull(SelectionMacros.applyCase("helloWorld", SelectionMacro.CASE_CAMEL))
     }
 
     // ---- formatting ----

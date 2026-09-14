@@ -118,7 +118,7 @@ internal fun SelectionMacroBar(
             )
             return@Row
         }
-        val macros = if (caseOpen) SelectionMacros.caseMacros else offer.macros
+        val macros = if (caseOpen) SelectionMacros.fixedCaseMacros else offer.macros
         LazyRow(
             modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically,

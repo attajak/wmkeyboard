@@ -68,7 +68,8 @@ object BengaliGraphemes {
         }
     }
 
-    private fun isBengali(c: Char) = c.code in 0x0980..0x09FF
+    /** Anything in the Bengali block: letters, signs, digits and punctuation. */
+    fun isBengali(c: Char): Boolean = c.code in 0x0980..0x09FF
 
     private fun isConsonant(c: Char) =
         c.code in 0x0995..0x09B9 || c.code in 0x09DC..0x09DF || c == 'ৎ' || c == 'ৰ' || c == 'ৱ'

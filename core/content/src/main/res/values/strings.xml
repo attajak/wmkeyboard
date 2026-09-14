@@ -284,5 +284,38 @@
     <string name="core_content_selection_macro_case_title">Title Case</string>
     <string name="core_content_selection_macro_case_upper">UPPER CASE</string>
     <string name="core_content_selection_macro_case_sentence">Sentence case</string>
+    <!-- The programmer's cases, off by default, each written in itself. -->
+    <string name="core_content_selection_macro_case_camel" translatable="false">camelCase</string>
+    <string name="core_content_selection_macro_case_snake" translatable="false">snake_case</string>
+    <string name="core_content_selection_macro_case_kebab" translatable="false">kebab-case</string>
+    <string name="core_content_selection_macro_case_constant" translatable="false">CONSTANT_CASE</string>
+    <string name="core_content_selection_macro_find">Find</string>
+    <string name="core_content_selection_macro_replace">Replace</string>
+    <string name="core_content_selection_macro_lines_sort">Sort</string>
+    <string name="core_content_selection_macro_lines_dedupe">Unique</string>
+    <string name="core_content_selection_macro_lines_number">Number</string>
+    <string name="core_content_selection_macro_lines_bullet">Bullets</string>
+    <string name="core_content_selection_macro_grammar">Grammar</string>
+    <string name="core_content_selection_macro_ai" translatable="false">AI</string>
+    <string name="core_content_selection_macro_to_bangla">Bangla</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_digits_latin">Digits</string>
+    <string name="core_content_selection_macro_colour">Colour</string>
+    <string name="core_content_selection_macro_json" translatable="false">JSON</string>
+    <string name="core_content_selection_macro_base64" translatable="false">Base64</string>
+    <string name="core_content_selection_macro_url_decode">Decode</string>
+    <string name="core_content_selection_macro_chat_bold">Bold</string>
+    <string name="core_content_selection_macro_chat_italic">Italic</string>
+    <string name="core_content_selection_macro_chat_strike">Strike</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_read_aloud">Speak</string>
+    <string name="core_content_selection_macro_time_zones">Zones</string>
+    <string name="core_content_selection_macro_add_contact">Contact</string>
+    <string name="core_content_selection_macro_map">Map</string>
+    <string name="core_content_selection_macro_calendar">Calendar</string>
+    <!-- The colour ladder: each spelling of a colour, untranslatable notation. -->
+    <string name="core_content_selection_macro_colour_hex" translatable="false">HEX</string>
+    <string name="core_content_selection_macro_colour_rgb" translatable="false">RGB</string>
+    <string name="core_content_selection_macro_colour_hsl" translatable="false">HSL</string>
 
 </resources>

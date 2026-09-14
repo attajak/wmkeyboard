@@ -26,14 +26,23 @@ enum class SelectionKind { PHONE, EMAIL, URL, TEXT }
  */
 enum class SelectionMacro {
     /**
+     * Put back the last rewrite made to this selection. Pinned first on the
+     * row whenever there is one; listed so it can be switched off.
+     */
+    UNDO,
+    /**
      * Widen the selection to the whole field.
      *
-     * First on every row: a long press picks one word, and somebody selecting
-     * in order to copy or share usually meant all of it. Left off once the
-     * whole field is selected, where it has nothing left to take.
+     * A long press picks one word, and somebody selecting in order to copy or
+     * share usually meant all of it. Left off once the whole field is
+     * selected, where it has nothing left to take.
      */
     SELECT_ALL,
     COPY,
+    CUT,
+    /** Paste over the selection. Only offered while the clipboard holds text. */
+    PASTE,
+    DELETE,
     SHARE,
     /**
      * Rewrite the selection in place. What that means follows the kind: a phone
@@ -41,8 +50,36 @@ enum class SelectionMacro {
      * address is lower-cased, and plain text opens the case ladder below.
      */
     FORMAT,
+    /** Jump to the next occurrence of the selection in the field. */
+    FIND,
+    /** Open the Find and replace panel with the selection as the query. */
+    REPLACE,
+    LINES_SORT,
+    LINES_DEDUPE,
+    LINES_NUMBER,
+    LINES_BULLET,
     SEARCH,
     TRANSLATE,
+    /** Correct the selection with the grammar checker, in place. */
+    GRAMMAR_FIX,
+    /** Open the AI tool on the selection. Direct buttons for single actions ride beside it. */
+    AI,
+    TO_BANGLA,
+    TO_BANGLISH,
+    /** Digits of another script rewritten as `0-9`. */
+    DIGITS_LATIN,
+    /** A colour code: a swatch on the chip, and a ladder of its other spellings. */
+    COLOUR,
+    JSON_FORMAT,
+    BASE64_DECODE,
+    URL_DECODE,
+    CHAT_BOLD,
+    CHAT_ITALIC,
+    CHAT_STRIKE,
+    CHAT_MONO,
+    READ_ALOUD,
+    /** The selected time shown in the user's own zones, each a chip that replaces it. */
+    TIME_ZONES,
     CALL,
     SMS,
     WHATSAPP,
@@ -52,6 +89,9 @@ enum class SelectionMacro {
     OPEN,
     /** Turn the link into a QR code with the generator tool. */
     QR,
+    ADD_CONTACT,
+    MAP,
+    CALENDAR,
     /**
      * Open the Fancy Text styles for the selection, and rewrite it in the one
      * picked.
@@ -67,35 +107,98 @@ enum class SelectionMacro {
     CASE_TITLE,
     CASE_UPPER,
     CASE_SENTENCE,
+    /** The programmer's cases: inside the Format ladder, each with a switch of its own. */
+    CASE_CAMEL,
+    CASE_SNAKE,
+    CASE_KEBAB,
+    CASE_CONSTANT,
     ;
 
     /** The chip's own word, and its accessibility label. */
     @get:StringRes
     val labelRes: Int
         get() = when (this) {
+            UNDO -> CommonR.string.common_undo
             SELECT_ALL -> CommonR.string.common_select_all
             COPY -> R.string.core_content_selection_macro_copy
+            CUT -> CommonR.string.common_cut
+            PASTE -> CommonR.string.common_paste
+            DELETE -> CommonR.string.common_delete
             SHARE -> R.string.core_content_selection_macro_share
             FORMAT -> R.string.core_content_selection_macro_format
+            FIND -> R.string.core_content_selection_macro_find
+            REPLACE -> R.string.core_content_selection_macro_replace
+            LINES_SORT -> R.string.core_content_selection_macro_lines_sort
+            LINES_DEDUPE -> R.string.core_content_selection_macro_lines_dedupe
+            LINES_NUMBER -> R.string.core_content_selection_macro_lines_number
+            LINES_BULLET -> R.string.core_content_selection_macro_lines_bullet
             SEARCH -> R.string.core_content_selection_macro_search
             TRANSLATE -> R.string.core_content_selection_macro_translate
+            GRAMMAR_FIX -> R.string.core_content_selection_macro_grammar
+            AI -> R.string.core_content_selection_macro_ai
+            TO_BANGLA -> R.string.core_content_selection_macro_to_bangla
+            TO_BANGLISH -> R.string.core_content_selection_macro_to_banglish
+            DIGITS_LATIN -> R.string.core_content_selection_macro_digits_latin
+            COLOUR -> R.string.core_content_selection_macro_colour
+            JSON_FORMAT -> R.string.core_content_selection_macro_json
+            BASE64_DECODE -> R.string.core_content_selection_macro_base64
+            URL_DECODE -> R.string.core_content_selection_macro_url_decode
+            CHAT_BOLD -> R.string.core_content_selection_macro_chat_bold
+            CHAT_ITALIC -> R.string.core_content_selection_macro_chat_italic
+            CHAT_STRIKE -> R.string.core_content_selection_macro_chat_strike
+            CHAT_MONO -> R.string.core_content_selection_macro_chat_mono
+            READ_ALOUD -> R.string.core_content_selection_macro_read_aloud
+            TIME_ZONES -> R.string.core_content_selection_macro_time_zones
             CALL -> R.string.core_content_selection_macro_call
             SMS -> R.string.core_content_selection_macro_sms
             WHATSAPP -> R.string.core_content_selection_macro_whatsapp
             EMAIL -> R.string.core_content_selection_macro_email
             OPEN -> R.string.core_content_selection_macro_open
             QR -> R.string.core_content_selection_macro_qr
+            ADD_CONTACT -> R.string.core_content_selection_macro_add_contact
+            MAP -> R.string.core_content_selection_macro_map
+            CALENDAR -> R.string.core_content_selection_macro_calendar
             FANCY -> R.string.core_content_selection_macro_fancy
             CASE_LOWER -> R.string.core_content_selection_macro_case_lower
             CASE_TITLE -> R.string.core_content_selection_macro_case_title
             CASE_UPPER -> R.string.core_content_selection_macro_case_upper
             CASE_SENTENCE -> R.string.core_content_selection_macro_case_sentence
+            CASE_CAMEL -> R.string.core_content_selection_macro_case_camel
+            CASE_SNAKE -> R.string.core_content_selection_macro_case_snake
+            CASE_KEBAB -> R.string.core_content_selection_macro_case_kebab
+            CASE_CONSTANT -> R.string.core_content_selection_macro_case_constant
+        }
+
+    /** The group the settings screen lists the macro under. */
+    val category: MacroCategory
+        get() = when (this) {
+            UNDO, SELECT_ALL, COPY, CUT, PASTE, DELETE, FIND, REPLACE -> MacroCategory.EDITING
+            LINES_SORT, LINES_DEDUPE, LINES_NUMBER, LINES_BULLET -> MacroCategory.LINES
+            FORMAT, FANCY, CHAT_BOLD, CHAT_ITALIC, CHAT_STRIKE, CHAT_MONO,
+            CASE_LOWER, CASE_TITLE, CASE_UPPER, CASE_SENTENCE,
+            CASE_CAMEL, CASE_SNAKE, CASE_KEBAB, CASE_CONSTANT -> MacroCategory.FORMAT
+            DIGITS_LATIN, COLOUR, JSON_FORMAT, BASE64_DECODE, URL_DECODE -> MacroCategory.CONVERT
+            TRANSLATE, GRAMMAR_FIX, AI, TO_BANGLA, TO_BANGLISH -> MacroCategory.LANGUAGE
+            SEARCH, READ_ALOUD, TIME_ZONES -> MacroCategory.LOOKUP
+            SHARE, CALL, SMS, WHATSAPP, EMAIL, OPEN, QR, ADD_CONTACT, MAP, CALENDAR -> MacroCategory.OPEN_IN
         }
 
     /** Whether the macro leaves the keyboard for another app. */
     val leavesApp: Boolean
         get() = this == SHARE || this == CALL || this == SMS || this == WHATSAPP ||
-            this == EMAIL || this == OPEN
+            this == EMAIL || this == OPEN || this == ADD_CONTACT || this == MAP || this == CALENDAR
+
+    /**
+     * Whether the macro can run before the first unlock. Anything that starts
+     * an activity cannot; nor can a paste (the clipboard is behind the lock)
+     * or reading aloud (a speech engine is another app to bind).
+     */
+    val directBootSafe: Boolean
+        get() = !leavesApp && this != PASTE && this != READ_ALOUD
+
+    /** A door rather than an action: the bar opens a ladder for it and the service never sees the tap. */
+    val opensLadder: Boolean
+        get() = this == FORMAT || this == FANCY || this == COLOUR || this == TIME_ZONES
 }
 
 /**
@@ -191,50 +294,73 @@ object SelectionMacros {
 
     private const val TRACKING_PREFIX = "utm_"
 
-    /** The macros a settings screen can switch, in the order that screen lists them. */
-    val configurable: List<SelectionMacro> = listOf(
-        SelectionMacro.SELECT_ALL,
-        SelectionMacro.COPY,
-        SelectionMacro.SHARE,
-        SelectionMacro.FORMAT,
-        SelectionMacro.SEARCH,
-        SelectionMacro.TRANSLATE,
-        SelectionMacro.CALL,
-        SelectionMacro.SMS,
-        SelectionMacro.WHATSAPP,
-        SelectionMacro.EMAIL,
-        SelectionMacro.OPEN,
-        SelectionMacro.QR,
-        SelectionMacro.FANCY,
-    )
-
-    /**
-     * The shipped set: everything the screenshot in the request names, plus the
-     * message half of a selected phone number and Select all. Search and
-     * translate are off until they are asked for, because both are a round trip
-     * to a network service and neither is what a selection usually means.
-     */
-    val defaultMacros: Set<SelectionMacro> = setOf(
-        SelectionMacro.SELECT_ALL,
-        SelectionMacro.COPY,
-        SelectionMacro.SHARE,
-        SelectionMacro.FORMAT,
-        SelectionMacro.CALL,
-        SelectionMacro.SMS,
-        SelectionMacro.WHATSAPP,
-        SelectionMacro.EMAIL,
-        SelectionMacro.OPEN,
-        SelectionMacro.QR,
-        SelectionMacro.FANCY,
-    )
-
-    /** The case ladder [SelectionMacro.FORMAT] opens on a plain-text selection. */
-    val caseMacros: List<SelectionMacro> = listOf(
+    /** The four fixed cases: never configurable, always inside the Format ladder. */
+    val fixedCaseMacros: List<SelectionMacro> = listOf(
         SelectionMacro.CASE_LOWER,
         SelectionMacro.CASE_TITLE,
         SelectionMacro.CASE_UPPER,
         SelectionMacro.CASE_SENTENCE,
     )
+
+    /** Configurable, but never on the row: they live inside the Format ladder. */
+    val ladderOnly: Set<SelectionMacro> = setOf(
+        SelectionMacro.CASE_CAMEL,
+        SelectionMacro.CASE_SNAKE,
+        SelectionMacro.CASE_KEBAB,
+        SelectionMacro.CASE_CONSTANT,
+    )
+
+    /** The macros a settings screen can switch. */
+    val configurable: List<SelectionMacro> = SelectionMacro.entries - fixedCaseMacros.toSet()
+
+    /**
+     * The row as shipped. Only bar-capable macros, in the order they read
+     * when the user has not moved anything: Undo, Select all, then what the
+     * entity is for (absent on plain text, so they cost it nothing), then the
+     * generic edits and everything content-gated after them.
+     */
+    val defaultOrder: List<SelectionMacro> = listOf(
+        SelectionMacro.UNDO, SelectionMacro.SELECT_ALL,
+        SelectionMacro.CALL, SelectionMacro.SMS, SelectionMacro.WHATSAPP, SelectionMacro.EMAIL,
+        SelectionMacro.OPEN, SelectionMacro.QR, SelectionMacro.ADD_CONTACT,
+        SelectionMacro.COPY, SelectionMacro.CUT, SelectionMacro.PASTE, SelectionMacro.DELETE, SelectionMacro.SHARE,
+        SelectionMacro.FORMAT, SelectionMacro.FIND, SelectionMacro.REPLACE,
+        SelectionMacro.LINES_SORT, SelectionMacro.LINES_DEDUPE, SelectionMacro.LINES_NUMBER, SelectionMacro.LINES_BULLET,
+        SelectionMacro.GRAMMAR_FIX, SelectionMacro.AI, SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
+        SelectionMacro.DIGITS_LATIN, SelectionMacro.COLOUR, SelectionMacro.FANCY,
+        SelectionMacro.CHAT_BOLD, SelectionMacro.CHAT_ITALIC, SelectionMacro.CHAT_STRIKE, SelectionMacro.CHAT_MONO,
+        SelectionMacro.JSON_FORMAT, SelectionMacro.BASE64_DECODE, SelectionMacro.URL_DECODE,
+        SelectionMacro.TIME_ZONES, SelectionMacro.CALENDAR, SelectionMacro.MAP, SelectionMacro.READ_ALOUD,
+        SelectionMacro.SEARCH, SelectionMacro.TRANSLATE,
+    )
+
+    /**
+     * The shipped set. Search and Translate are off because both are a round
+     * trip to a network service; the programmer's cases, chat markup, speech,
+     * maps, calendars and the decoders are off because each is a taste rather
+     * than a need, and the row is long enough already.
+     */
+    val defaultMacros: Set<SelectionMacro> = setOf(
+        SelectionMacro.UNDO, SelectionMacro.SELECT_ALL, SelectionMacro.COPY, SelectionMacro.CUT,
+        SelectionMacro.PASTE, SelectionMacro.DELETE, SelectionMacro.SHARE, SelectionMacro.FORMAT,
+        SelectionMacro.FIND, SelectionMacro.REPLACE,
+        SelectionMacro.LINES_SORT, SelectionMacro.LINES_DEDUPE, SelectionMacro.LINES_NUMBER, SelectionMacro.LINES_BULLET,
+        SelectionMacro.GRAMMAR_FIX, SelectionMacro.AI, SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
+        SelectionMacro.DIGITS_LATIN, SelectionMacro.COLOUR,
+        SelectionMacro.CALL, SelectionMacro.SMS, SelectionMacro.WHATSAPP, SelectionMacro.EMAIL,
+        SelectionMacro.OPEN, SelectionMacro.QR, SelectionMacro.ADD_CONTACT, SelectionMacro.FANCY,
+    )
+
+    /**
+     * Bumped when [defaultMacros] or [defaultOrder] change in a way every
+     * existing user should receive. A stored list under an older version is
+     * read as unset, which is the shipped list.
+     */
+    const val LIST_VERSION = 2
+
+    /** The case ladder [SelectionMacro.FORMAT] opens on a plain-text selection. */
+    fun caseLadder(allowed: Set<SelectionMacro>): List<SelectionMacro> =
+        fixedCaseMacros + ladderOnly.filter { it in allowed }
 
     /**
      * What [selection] is, as a whole.
@@ -278,69 +404,72 @@ object SelectionMacros {
     private const val MAX_PHONE_DIGITS = 15
 
     /**
-     * The row for [kind], filtered to what [allowed] turns on and to the tools
-     * that are actually available.
-     *
-     * [whatsAppInstalled] and [qrAvailable] are asked rather than assumed: a
-     * chip that opens nothing is worse than no chip, and both answers live
-     * outside this file (the package manager, the build flavour).
-     *
-     * [formattable] is whether [SelectionMacro.FORMAT] would change anything.
-     * Plain text always answers yes, because the case ladder always has
-     * somewhere to go; an entity answers no when it is already in its tidy
-     * form, and the chip is then left off rather than drawn as a no-op.
-     *
-     * [wholeField] is whether the selection already runs from the field's first
-     * character to its last. [SelectionMacro.SELECT_ALL] is left off then, for
-     * the same reason: there is nothing left for it to take.
+     * The row for [kind]: the user's [order] (anything it does not name comes
+     * after it in shipped order, so a new macro appears instead of vanishing)
+     * filtered to what [allowed] turns on, what the kind can carry and what
+     * [gates] say the device and the text allow. Undo, when there is one, is
+     * first whatever the order says.
      */
     fun offer(
         kind: SelectionKind,
         allowed: Set<SelectionMacro>,
-        whatsAppInstalled: Boolean = true,
-        qrAvailable: Boolean = true,
-        formattable: Boolean = true,
-        wholeField: Boolean = false,
-    ): List<SelectionMacro> = macrosFor(kind).filter { macro ->
-        macro in allowed &&
-            (macro != SelectionMacro.WHATSAPP || whatsAppInstalled) &&
-            (macro != SelectionMacro.QR || qrAvailable) &&
-            (macro != SelectionMacro.FORMAT || formattable) &&
-            (macro != SelectionMacro.SELECT_ALL || !wholeField)
+        gates: MacroGates = MacroGates(),
+        order: List<SelectionMacro> = defaultOrder,
+    ): List<SelectionMacro> {
+        val sequence = order.filter { it !in ladderOnly } + defaultOrder.filter { it !in order }
+        val row = sequence.filter { it in allowed && eligible(it, kind) && passes(it, gates) }
+        return if (SelectionMacro.UNDO in row) listOf(SelectionMacro.UNDO) + (row - SelectionMacro.UNDO) else row
     }
 
+    /** Every macro [kind] can carry, in shipped order: the eligibility, not the gates. */
+    fun macrosFor(kind: SelectionKind): List<SelectionMacro> = defaultOrder.filter { eligible(it, kind) }
+
     /**
-     * Every macro [kind] can offer, in the order it reads on the bar.
-     *
-     * Select all leads every row. It is the one action about how far the
-     * selection reaches rather than what it holds, and a long press lands on
-     * one word far more often than on everything somebody meant to act on.
-     *
-     * After it, the generic pair leads on plain text and on a number, where
-     * copying is the likeliest thing anybody wants; on a link or an address the
-     * action that *uses* it leads instead, because a selection of one is nearly
-     * always about going there.
+     * Which kinds a macro belongs to. The entity actions follow their entity;
+     * the edits and the doors follow every selection; everything else is for
+     * prose, where a styled link is not a link and a numbered phone number is
+     * nonsense.
      */
-    fun macrosFor(kind: SelectionKind): List<SelectionMacro> = listOf(SelectionMacro.SELECT_ALL) + when (kind) {
-        SelectionKind.PHONE -> listOf(
-            SelectionMacro.COPY, SelectionMacro.SHARE, SelectionMacro.FORMAT,
-            SelectionMacro.CALL, SelectionMacro.SMS, SelectionMacro.WHATSAPP,
-        )
-        SelectionKind.EMAIL -> listOf(
-            SelectionMacro.EMAIL, SelectionMacro.COPY, SelectionMacro.OPEN,
-            SelectionMacro.FORMAT, SelectionMacro.SHARE,
-        )
-        SelectionKind.URL -> listOf(
-            SelectionMacro.OPEN, SelectionMacro.COPY, SelectionMacro.QR,
-            SelectionMacro.FORMAT, SelectionMacro.SHARE,
-        )
-        // Fancy is plain text only. A styled link is not a link and a styled
-        // number cannot be dialled, so the three entity rows never offer it
-        // however the setting is left.
-        SelectionKind.TEXT -> listOf(
-            SelectionMacro.COPY, SelectionMacro.SHARE, SelectionMacro.FORMAT,
-            SelectionMacro.SEARCH, SelectionMacro.TRANSLATE, SelectionMacro.FANCY,
-        )
+    private fun eligible(macro: SelectionMacro, kind: SelectionKind): Boolean = when (macro) {
+        SelectionMacro.CALL, SelectionMacro.SMS, SelectionMacro.WHATSAPP -> kind == SelectionKind.PHONE
+        SelectionMacro.EMAIL -> kind == SelectionKind.EMAIL
+        SelectionMacro.QR -> kind == SelectionKind.URL
+        SelectionMacro.OPEN -> kind == SelectionKind.URL || kind == SelectionKind.EMAIL
+        SelectionMacro.ADD_CONTACT -> kind == SelectionKind.PHONE || kind == SelectionKind.EMAIL
+        SelectionMacro.URL_DECODE -> kind == SelectionKind.URL || kind == SelectionKind.TEXT
+        SelectionMacro.UNDO, SelectionMacro.SELECT_ALL, SelectionMacro.COPY, SelectionMacro.CUT,
+        SelectionMacro.PASTE, SelectionMacro.DELETE, SelectionMacro.SHARE, SelectionMacro.FORMAT,
+        SelectionMacro.FIND, SelectionMacro.REPLACE, SelectionMacro.READ_ALOUD -> true
+        else -> kind == SelectionKind.TEXT
+    }
+
+    private fun passes(macro: SelectionMacro, gates: MacroGates): Boolean = when (macro) {
+        SelectionMacro.WHATSAPP -> gates.whatsAppInstalled
+        SelectionMacro.QR -> gates.qrAvailable
+        SelectionMacro.FORMAT -> gates.formattable
+        SelectionMacro.SELECT_ALL -> !gates.wholeField
+        // A whole-field or multi-line selection has no "next" worth jumping to.
+        SelectionMacro.FIND -> !gates.wholeField && !gates.content.multiLine
+        SelectionMacro.PASTE -> gates.clipboardHasText
+        SelectionMacro.UNDO -> gates.undoAvailable
+        SelectionMacro.LINES_SORT, SelectionMacro.LINES_DEDUPE,
+        SelectionMacro.LINES_NUMBER, SelectionMacro.LINES_BULLET -> gates.content.multiLine
+        SelectionMacro.GRAMMAR_FIX -> gates.grammarAvailable
+        SelectionMacro.AI -> gates.aiAvailable
+        SelectionMacro.TO_BANGLA -> gates.bengaliLoaded && gates.content.hasLatin && !gates.content.hasBengali
+        SelectionMacro.TO_BANGLISH -> gates.content.hasBengali
+        SelectionMacro.DIGITS_LATIN -> gates.content.hasForeignDigits
+        SelectionMacro.COLOUR -> gates.content.colour != null
+        SelectionMacro.MAP -> gates.content.place != null
+        SelectionMacro.CALENDAR -> gates.content.dateTime != null
+        SelectionMacro.TIME_ZONES -> gates.content.dateTime?.hasTime == true
+        SelectionMacro.CHAT_BOLD, SelectionMacro.CHAT_ITALIC, SelectionMacro.CHAT_STRIKE -> gates.chatSyntax != null
+        SelectionMacro.CHAT_MONO -> gates.chatSyntax?.mono != null
+        SelectionMacro.JSON_FORMAT -> gates.content.jsonShape != JsonReformat.Shape.NONE
+        SelectionMacro.BASE64_DECODE -> gates.content.base64
+        SelectionMacro.URL_DECODE -> gates.content.urlEncoded
+        SelectionMacro.READ_ALOUD -> gates.ttsAvailable
+        else -> true
     }
 
     /**
@@ -461,6 +590,10 @@ object SelectionMacros {
             SelectionMacro.CASE_UPPER -> selection.uppercase()
             SelectionMacro.CASE_TITLE -> recase(selection, everyWord = true, keepAcronyms = !allCaps)
             SelectionMacro.CASE_SENTENCE -> recase(selection, everyWord = false, keepAcronyms = !allCaps)
+            SelectionMacro.CASE_CAMEL -> CodeCases.camel(selection) ?: return null
+            SelectionMacro.CASE_SNAKE -> CodeCases.snake(selection) ?: return null
+            SelectionMacro.CASE_KEBAB -> CodeCases.kebab(selection) ?: return null
+            SelectionMacro.CASE_CONSTANT -> CodeCases.constant(selection) ?: return null
             else -> return null
         }
         return result.takeIf { it != selection }
@@ -526,4 +659,81 @@ object SelectionMacros {
     /** The link as something a browser will take: a bare domain gains `https://`. */
     fun openableUrl(url: String): String =
         if (url.contains("://")) url else "https://${url.removePrefix("//")}"
+
+    /**
+     * What [text] holds, for the content-gated macros.
+     *
+     * Runs on every selection change over up to 4,000 characters, so the
+     * order is cost: one pass over the characters answers the script and
+     * line questions, and every detector after it is behind a cheap shape
+     * check (a colour starts with `#`, JSON with a brace) or behind
+     * [options], which only asks for dates and places while a macro that
+     * needs them is switched on.
+     */
+    fun detectContent(text: String, options: DetectOptions = DetectOptions()): ContentFlags {
+        var hasLatin = false
+        var hasBengali = false
+        var hasForeignDigits = false
+        var hasDigit = false
+        var lines = 0
+        var lineHasContent = false
+        for (c in text) {
+            when {
+                c == '\n' -> {
+                    if (lineHasContent) lines++
+                    lineHasContent = false
+                }
+                c.isWhitespace() -> {}
+                else -> {
+                    lineHasContent = true
+                    when {
+                        c in 'a'..'z' || c in 'A'..'Z' -> hasLatin = true
+                        c in '0'..'9' -> hasDigit = true
+                        c.code in 0x0980..0x09FF -> {
+                            hasBengali = true
+                            if (c in '০'..'৯') {
+                                hasForeignDigits = true
+                                hasDigit = true
+                            }
+                        }
+                        !hasForeignDigits && DigitScripts.digitValue(c) >= 0 -> {
+                            hasForeignDigits = true
+                            hasDigit = true
+                        }
+                    }
+                }
+            }
+        }
+        if (lineHasContent) lines++
+        val single = lines <= 1 && !text.trim().contains('\n')
+        val trimmed = text.trim()
+        val colour = if (single && trimmed.length <= ColourCodes.MAX_LENGTH) ColourCodes.parse(trimmed) else null
+        val jsonShape = if (trimmed.length >= 2 && JsonReformat.looksStructured(trimmed)) JsonReformat.shape(trimmed) else JsonReformat.Shape.NONE
+        val base64 = single && trimmed.length >= 8 && TextCodecs.looksBase64(trimmed)
+        val urlEncoded = TextCodecs.isUrlEncoded(trimmed)
+        val dateTime = if (options.dateTime && single && trimmed.length <= DateTimes.MAX_LENGTH && (hasDigit || trimmed.firstOrNull()?.isLetter() == true)) {
+            DateTimes.parse(trimmed, options.nowMillis, options.zone, options.locale)
+        } else {
+            null
+        }
+        val place = if (options.place && single && trimmed.length <= Places.MAX_ADDRESS_LENGTH && hasDigit) {
+            Places.detect(trimmed) { candidate ->
+                dateTime != null || (!options.dateTime && DateTimes.parse(candidate, options.nowMillis, options.zone, options.locale) != null)
+            }
+        } else {
+            null
+        }
+        return ContentFlags(
+            multiLine = lines >= 2,
+            hasLatin = hasLatin,
+            hasBengali = hasBengali,
+            hasForeignDigits = hasForeignDigits,
+            colour = colour,
+            dateTime = dateTime,
+            place = place,
+            jsonShape = jsonShape,
+            base64 = base64,
+            urlEncoded = urlEncoded,
+        )
+    }
 }
