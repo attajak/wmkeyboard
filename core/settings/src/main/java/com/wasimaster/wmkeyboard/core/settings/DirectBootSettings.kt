@@ -86,11 +86,13 @@ fun KeyboardSettings.restrictedToDirectBoot(): KeyboardSettings {
         // keyboard exactly what the shade is redacting.
         otp = otp.copy(enabled = false),
         // Every selection macro that hands the text to another app starts an
-        // activity, and nothing can be started before the first unlock. The row
-        // itself stays: copying and the case ladder only touch the field the
-        // user is already typing in, which is exactly what still works here.
+        // activity, and nothing can be started before the first unlock; a
+        // paste reads a clipboard that is behind the lock, and reading aloud
+        // binds a speech engine, which is another app. The row itself stays:
+        // copying, the case ladder and the rest only touch the field the user
+        // is already typing in, which is exactly what still works here.
         selectionMacros = selectionMacros.copy(
-            macros = selectionMacros.macros.filterNotTo(mutableSetOf()) { it.leavesApp },
+            macros = selectionMacros.macros.filterTo(mutableSetOf()) { it.directBootSafe },
         ),
     )
 }

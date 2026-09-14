@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.core.settings
 
 import androidx.datastore.preferences.core.mutablePreferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.wasimaster.wmkeyboard.core.selection.SelectionMacro
 import com.wasimaster.wmkeyboard.core.theme.PhotoAttribution
 import com.wasimaster.wmkeyboard.core.theme.ThemeSpec
 import org.junit.Assert.assertEquals
@@ -36,6 +37,23 @@ class DirectBootSettingsTest {
 
         assertEquals(listOf(ToolbarTool.EMOJI), settings.toolbarTools)
         assertEquals(listOf(ToolbarTool.LEVEL), settings.toolboxOrder)
+    }
+
+    @Test
+    fun `selection macros that need the unlocked half are dropped`() {
+        val settings = KeyboardSettings(
+            selectionMacros = SelectionMacroSettings(
+                macros = setOf(
+                    SelectionMacro.UNDO, SelectionMacro.CUT, SelectionMacro.PASTE, SelectionMacro.READ_ALOUD,
+                    SelectionMacro.ADD_CONTACT, SelectionMacro.MAP, SelectionMacro.CALENDAR, SelectionMacro.SHARE,
+                ),
+                order = listOf(SelectionMacro.SHARE, SelectionMacro.CUT),
+            ),
+        ).restrictedToDirectBoot()
+
+        assertEquals(setOf(SelectionMacro.UNDO, SelectionMacro.CUT), settings.selectionMacros.macros)
+        // The order only orders; it is left as the user made it.
+        assertEquals(listOf(SelectionMacro.SHARE, SelectionMacro.CUT), settings.selectionMacros.order)
     }
 
     @Test

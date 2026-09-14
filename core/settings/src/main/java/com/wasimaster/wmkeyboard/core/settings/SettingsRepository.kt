@@ -27,6 +27,7 @@ import com.wasimaster.wmkeyboard.core.addons.AddonStore
 import com.wasimaster.wmkeyboard.core.clipboard.ClipboardStore
 import com.wasimaster.wmkeyboard.core.clipboard.PhoneFormats
 import com.wasimaster.wmkeyboard.core.selection.SelectionMacro
+import com.wasimaster.wmkeyboard.core.selection.SelectionMacroCodec
 import com.wasimaster.wmkeyboard.core.selection.SelectionMacros
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
 import com.wasimaster.wmkeyboard.core.icons.IconOverrides
@@ -3407,6 +3408,22 @@ data class SelectionMacroSettings(
      */
     val macros: Set<SelectionMacro> = SelectionMacros.defaultMacros,
     /**
+     * The row's order, over every bar-capable macro. Filtered by [macros] and
+     * by what the selection allows at offer time; Undo is pinned first
+     * whatever this says.
+     */
+    val order: List<SelectionMacro> = SelectionMacros.defaultOrder,
+    /**
+     * AI action ids drawn as direct buttons after the AI chip. Empty as
+     * shipped: the AI chip alone is on, and these are the user's picks.
+     */
+    val aiDirectActions: List<String> = emptyList(),
+    /**
+     * Zone ids for the Zones ladder. Empty means UTC plus the device's zone,
+     * resolved by [effectiveTimeZones] so the default follows the device.
+     */
+    val timeZones: List<String> = emptyList(),
+    /**
      * Read a selected phone number, address or link as that thing, rather than
      * treating every selection as plain text.
      *
@@ -3417,6 +3434,10 @@ data class SelectionMacroSettings(
      */
     val detectEntities: Boolean = true,
 )
+
+/** The zones the ladder shows: the picked ones, or UTC and the device's own. */
+fun SelectionMacroSettings.effectiveTimeZones(deviceZoneId: String): List<String> =
+    timeZones.ifEmpty { listOf("UTC", deviceZoneId).distinct() }
 
 data class RateSourceSettings(
     /** Best first. The default depends on the channel; see [CurrencyClient.Provider.fiatDefaults]. */
@@ -6408,11 +6429,17 @@ class SettingsRepository(private val context: Context) {
          *
          * A set and not a flag apiece because the list is expected to grow, and
          * because "which of these are on" is one preference to the person
-         * setting it. An unset key means the shipped set, so a build that adds
-         * a macro turns it on for everybody who never touched the list, and
-         * leaves a hand-picked list alone.
+         * setting it. Read together with [SELECTION_MACROS_LIST_VERSION]: an
+         * unset key, or one stored under an older list version, means the
+         * shipped set, so a build whose defaults changed hands every user the
+         * new list once (see `SelectionMacroCodec`).
          */
         private val SELECTION_MACROS_ON = stringSetPreferencesKey("selection_macros_on")
+        private val SELECTION_MACROS_LIST_VERSION = intPreferencesKey("selection_macros_list_version")
+        /** The row's order, tab-joined names; same version rule as the on-list. */
+        private val SELECTION_MACROS_ORDER = stringPreferencesKey("selection_macros_order")
+        private val SELECTION_MACROS_AI_ACTIONS = stringPreferencesKey("selection_macros_ai_actions")
+        private val SELECTION_MACROS_TIME_ZONES = stringPreferencesKey("selection_macros_time_zones")
         private val TOOL_KEYWORDS = stringPreferencesKey("tool_keywords")
         private val TOOL_KEYWORD_CASE = stringPreferencesKey("tool_keyword_case")
         private val CALC_DEGREES = booleanPreferencesKey("calc_degrees")
@@ -7711,13 +7738,12 @@ class SettingsRepository(private val context: Context) {
                 placement = p[SELECTION_MACROS_PLACEMENT]
                     ?.let { name -> runCatching { SelectionMacroPlacement.valueOf(name) }.getOrNull() }
                     ?: defaults.selectionMacros.placement,
-                // A name this build does not know is a macro from a newer one;
-                // dropping it keeps the rest of the user's list.
-                macros = p[SELECTION_MACROS_ON]
-                    ?.mapNotNullTo(mutableSetOf()) { name ->
-                        runCatching { SelectionMacro.valueOf(name) }.getOrNull()
-                    }
-                    ?: defaults.selectionMacros.macros,
+                macros = SelectionMacroCodec.decodeMacros(p[SELECTION_MACROS_LIST_VERSION], p[SELECTION_MACROS_ON]),
+                order = SelectionMacroCodec.decodeOrder(p[SELECTION_MACROS_LIST_VERSION], p[SELECTION_MACROS_ORDER]),
+                aiDirectActions = p[SELECTION_MACROS_AI_ACTIONS]?.let(AiActionCodec::decodeIds)
+                    ?: defaults.selectionMacros.aiDirectActions,
+                timeZones = p[SELECTION_MACROS_TIME_ZONES]?.let(AiActionCodec::decodeIds)
+                    ?: defaults.selectionMacros.timeZones,
                 detectEntities = p[SELECTION_MACROS_DETECT] ?: defaults.selectionMacros.detectEntities,
             ),
             toolKeywords = p[TOOL_KEYWORDS] ?: defaults.toolKeywords,
@@ -12415,13 +12441,48 @@ class SettingsRepository(private val context: Context) {
     suspend fun setSelectionMacroDetectEntities(value: Boolean) =
         editPrefs { it[SELECTION_MACROS_DETECT] = value }
 
+    /**
+     * Stamps the current list version, writing the shipped lists first when
+     * the stored ones predate it.
+     *
+     * Every list setter runs this before its own write. Without it, a user
+     * whose first touch after an update is a reorder would stamp the version
+     * and thereby bring their pre-update on-list back to life, which the
+     * version rule exists to prevent.
+     */
+    private fun MutablePreferences.adoptMacroListVersion() {
+        if (this[SELECTION_MACROS_LIST_VERSION] == SelectionMacros.LIST_VERSION) return
+        this[SELECTION_MACROS_ON] = SelectionMacroCodec.encodeMacros(SelectionMacros.defaultMacros)
+        this[SELECTION_MACROS_ORDER] = SelectionMacroCodec.encodeOrder(SelectionMacros.defaultOrder)
+        this[SELECTION_MACROS_LIST_VERSION] = SelectionMacros.LIST_VERSION
+    }
+
     /** Replaces the whole on-list; only [SelectionMacros.configurable] is kept. */
     suspend fun setSelectionMacros(value: Set<SelectionMacro>) =
         editPrefs {
-            it[SELECTION_MACROS_ON] = value
-                .filter { macro -> macro in SelectionMacros.configurable }
-                .mapTo(mutableSetOf()) { macro -> macro.name }
+            it.adoptMacroListVersion()
+            it[SELECTION_MACROS_ON] = SelectionMacroCodec.encodeMacros(value)
         }
+
+    /** One macro's switch, for the row that draws it. */
+    suspend fun setSelectionMacroEnabled(macro: SelectionMacro, on: Boolean) =
+        editPrefs {
+            it.adoptMacroListVersion()
+            val current = SelectionMacroCodec.decodeMacros(it[SELECTION_MACROS_LIST_VERSION], it[SELECTION_MACROS_ON])
+            it[SELECTION_MACROS_ON] = SelectionMacroCodec.encodeMacros(if (on) current + macro else current - macro)
+        }
+
+    suspend fun setSelectionMacroOrder(value: List<SelectionMacro>) =
+        editPrefs {
+            it.adoptMacroListVersion()
+            it[SELECTION_MACROS_ORDER] = SelectionMacroCodec.encodeOrder(value)
+        }
+
+    suspend fun setSelectionMacroAiActions(ids: List<String>) =
+        editPrefs { it[SELECTION_MACROS_AI_ACTIONS] = AiActionCodec.encodeIds(ids) }
+
+    suspend fun setSelectionMacroTimeZones(ids: List<String>) =
+        editPrefs { it[SELECTION_MACROS_TIME_ZONES] = AiActionCodec.encodeIds(ids) }
 
     /** Replaces one tool's trigger words; an empty list silences that tool. */
     suspend fun setToolKeywords(tool: ToolbarTool, words: List<String>) =
