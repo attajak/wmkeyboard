@@ -384,7 +384,12 @@
     <string name="typing_space_glide_multiword_info">Keep your finger down. Glide a word, swipe across the spacebar, then glide the next word. Each crossing types the word and a space, so one stroke gives a full phrase. When this setting is off, a swipe across the spacebar makes one word.</string>
     <string name="typing_shift_glide_capitals_title">Glide over Shift to capitalize</string>
     <string name="typing_shift_glide_capitals_subtitle">Draw through the Shift key mid-swipe for a capital letter</string>
-    <string name="typing_shift_glide_capitals_info">Gliding a name meant stopping to tap Shift first, which breaks the stroke. With this on, draw through the Shift key on your way and the word comes out capitalized; cross it twice and the whole word is in capitals. The key has to actually be crossed, and its part of the path is ignored when the word is read, so the detour never adds a letter.</string>
+    <string name="typing_shift_glide_capitals_info">Gliding a name meant stopping to tap Shift first, which breaks the stroke. With this on, draw through the Shift key on your way and the word comes out capitalized; cross it twice and the whole word is in capitals. The key has to actually be crossed, and the walk out to it and back is cut from the path before the word is read, so the detour never adds a letter.</string>
+    <string name="typing_shift_glide_mode_title">What a pass over Shift capitalizes</string>
+    <string name="typing_shift_glide_mode_subtitle">The whole word, or the letter you just left</string>
+    <string name="typing_shift_glide_mode_info">Whole word: one pass capitalizes the word and a second pass makes it all capitals. One letter: each pass over Shift capitalizes the letter your finger came from, so a stroke can write HeLLo or LeanType, and ending the stroke on the Shift key makes the whole word capitals in one trip.</string>
+    <string name="typing_shift_glide_mode_word_label">Whole word</string>
+    <string name="typing_shift_glide_mode_letter_label">One letter</string>
 
     <string name="typing_glide_picker_title">Ask when a glide is unclear</string>
     <string name="typing_glide_picker_subtitle">Hold your finger still to choose between the closest words</string>
@@ -475,10 +480,16 @@
     <string name="typing_glide_apostrophe_space_desc">Glide through the spacebar. \"Glide across the spacebar\" stops</string>
     <string name="typing_glide_apostrophe_key_desc">Glide through the apostrophe key, where the layout has one</string>
 
-    <!-- The 's is the English possessive ending, as in "the developer's keyboard". -->
-    <string name="typing_glide_apostrophe_s_title">Swipe to add \'s</string>
-    <string name="typing_glide_apostrophe_s_subtitle">Swipe from the apostrophe key to s to make the last word possessive</string>
-    <string name="typing_glide_apostrophe_s_info">Glide a word, then swipe from the apostrophe key to the s key. The keyboard adds \'s to that word, so \"developer\" becomes \"developer\'s\". Do this immediately after the glide. The keyboard adds nothing when you type or move the cursor first. Backspace deletes the whole word again in one press. This works with English only, and it needs a key for the apostrophe above. The spacebar cannot start this swipe.</string>
+    <!-- The 's is the English possessive ending, as in "the developer's keyboard".
+         One-of-four choice: which punctuation key the swipe starts from. -->
+    <string name="typing_possessive_swipe_title">Swipe to add \'s</string>
+    <string name="typing_possessive_swipe_subtitle">Swipe from a punctuation key to s to add \'s to the last word</string>
+    <string name="typing_possessive_swipe_info">Select a key here. A short, straight swipe from that key to the s key adds \'s to the word before the cursor, so \"developer\" becomes \"developer\'s\". This works after you type a word and after you glide one, with glide typing on or off. A space after the word moves behind the \'s. The key still types its own character when you press it. The swipe must be short and straight. A longer path from the same key to s is a glide, as before. This works with English only. The spacebar cannot start this swipe.</string>
+    <!-- One line under each option in the swipe to add 's picker. -->
+    <string name="typing_possessive_swipe_off_desc">No swipe adds \'s</string>
+    <string name="typing_possessive_swipe_comma_desc">Swipe from the comma key to s. A press still types a comma</string>
+    <string name="typing_possessive_swipe_period_desc">Swipe from the full stop key to s. A press still types a full stop</string>
+    <string name="typing_possessive_swipe_key_desc">Swipe from the apostrophe key to s, where the layout has one</string>
 
 
 

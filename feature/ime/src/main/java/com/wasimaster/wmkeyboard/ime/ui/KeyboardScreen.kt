@@ -279,6 +279,8 @@ import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.glideAnchor
 import com.wasimaster.wmkeyboard.ime.HINT_FLICK_MIN_TRAVEL_HEIGHTS
 import com.wasimaster.wmkeyboard.ime.hintFlick
+import com.wasimaster.wmkeyboard.ime.POSSESSIVE_REACH_WIDTHS
+import com.wasimaster.wmkeyboard.ime.possessiveFlick
 import com.wasimaster.wmkeyboard.ime.OCTOPUS_MIN_TRAVEL_WIDTHS
 import com.wasimaster.wmkeyboard.ime.OCTOPUS_SLOP_CLEARANCE
 import com.wasimaster.wmkeyboard.ime.OCTOPUS_START_REACH_WIDTHS
@@ -561,6 +563,14 @@ internal val LocalAlternatesGate = staticCompositionLocalOf { AlternatesGate() }
  */
 internal val LocalOctopusPick =
     staticCompositionLocalOf<(String, OctopusSource) -> Unit> { { _, _ -> } }
+
+/**
+ * The possessive swipe's edit (issue #169): append `'s` to the word behind the
+ * caret. Answers whether it did, so the grid consumes the lift only for a
+ * swipe that changed the field and lets any other land as the tap it was. A
+ * composition local for the reason [LocalOctopusPick] is one.
+ */
+internal val LocalPossessiveFlick = staticCompositionLocalOf<() -> Boolean> { { false } }
 
 /**
  * The floating words, for the keys' *semantics* alone (discussion #102).
@@ -888,6 +898,8 @@ fun KeyboardScreen(
      * resolved here, in the grid, and only the word travels.
      */
     onOctopusPick: (String, OctopusSource) -> Unit = { _, _ -> },
+    /** A possessive swipe lifted on `s`: append `'s` and say whether it did (#169). */
+    onPossessiveFlick: () -> Boolean = { false },
     onSuggestion: (String) -> Unit,
     /**
      * A word on the strip was held rather than tapped (#28, #99). One bundle
@@ -1218,6 +1230,7 @@ fun KeyboardScreen(
             LocalClipboardKeyAction provides onClipboardKey,
             LocalAlternatesGate provides remember { AlternatesGate() },
             LocalOctopusPick provides onOctopusPick,
+            LocalPossessiveFlick provides onPossessiveFlick,
             LocalOctopusWords provides rememberUpdatedState(state.octopus),
             LocalOctopusOccupancy provides remember { OctopusOccupancy() },
             LocalSelectionHold provides toolHold.onSelectionHold,
@@ -11428,6 +11441,11 @@ private fun KeyRows(
     val octopusSettings = state.settings.octopus
     val octopusPick = LocalOctopusPick.current
     val octopusTapHere = octopusSettings.enabled && octopusSettings.tapCommits
+    // Issue #169: a short straight swipe from a punctuation key to `s` appends
+    // `'s` to the word behind the caret. The key is read here, as a value, so
+    // the loop below restarts when the choice changes and never otherwise.
+    val possessiveFlickTaken = LocalPossessiveFlick.current
+    val possessiveChar = state.settings.gesture.possessiveKey.sourceChar
     // With glide typing on, the stroke belongs to the glide loop, which asks
     // the same question at its own lift and calls the same function to answer
     // it. Only a board without glide needs its own flick detector.
@@ -12168,9 +12186,6 @@ private fun KeyRows(
                                 down.position,
                                 liveCenters.value,
                                 keyWidth.value,
-                                // The apostrophe key starts a stroke too, once it
-                                // has that job: the possessive flick begins there.
-                                allow = setOfNotNull(apostropheKey.value.sourceChar?.code),
                             )
                         ) {
                             isGesture = true
@@ -12473,6 +12488,51 @@ private fun KeyRows(
                                 change.consume()
                                 stampedOnText(key.longPress.first())
                             }
+                            return@awaitEachGesture
+                        }
+                    }
+                }
+            }
+            // Issue #169: a short straight swipe from the chosen punctuation
+            // key to `s` appends `'s` to the word behind the caret. On the same
+            // footing as the hint flick above, and for the same reason: the
+            // glide loop never claims a stroke that begins on a punctuation
+            // key, so every one of them — glide typing on or off, after a
+            // glided word or a tapped one — arrives here unconsumed. Judged at
+            // the lift and consuming only the lift, so a stroke that is not the
+            // swipe still lands on the key it began on, and so does a swipe
+            // with no word to attach to; a consumed lift is what tells that key
+            // to drop the press it would have typed.
+            .pointerInput(possessiveChar) {
+                if (possessiveChar == null) return@pointerInput
+                awaitEachGesture {
+                    val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                    val width = keyWidth.value
+                    if (width <= 0f) return@awaitEachGesture
+                    val centers = liveCenters.value
+                    val from = centers[possessiveChar.code] ?: return@awaitEachGesture
+                    val to = centers['s'.code] ?: return@awaitEachGesture
+                    // Only a stroke that begins on the chosen key is worth
+                    // following; every other one is some other loop's.
+                    if ((down.position - from).getDistance() > width * POSSESSIVE_REACH_WIDTHS) {
+                        return@awaitEachGesture
+                    }
+                    val points = ArrayList<GesturePoint>()
+                    points.add(GesturePoint(down.position.x, down.position.y, down.uptimeMillis))
+                    while (true) {
+                        val event = awaitPointerEvent(PointerEventPass.Initial)
+                        val change = event.changes.firstOrNull { it.id == down.id }
+                            ?: return@awaitEachGesture
+                        if (change.isConsumed || alternatesGate.open) return@awaitEachGesture
+                        points.add(GesturePoint(change.position.x, change.position.y, change.uptimeMillis))
+                        if (!change.pressed) {
+                            val flick = possessiveFlick(
+                                points,
+                                from = KeyCenter(possessiveChar, from.x, from.y),
+                                to = KeyCenter('s', to.x, to.y),
+                                keyWidthPx = width,
+                            )
+                            if (flick && possessiveFlickTaken()) change.consume()
                             return@awaitEachGesture
                         }
                     }
@@ -13733,19 +13793,17 @@ private fun Key.glidePunctuationCodePoint(): Int? =
  *
  * Letters only, which is why the punctuation keys the centres map also holds are
  * skipped: they are tracked for the apostrophe setting to find, and a slide off
- * the comma key must keep meaning exactly what it meant before.
- *
- * [allow] adds specific ones back. That is how the apostrophe key gets to start a
- * stroke once the user has given it that job, which the possessive flick needs
- * because it begins there rather than on a letter.
+ * the comma key must keep meaning exactly what it meant before. That is also
+ * what hands the possessive swipe (#169) to its own loop: a stroke that begins
+ * on a punctuation key is never a glide, so it reaches the loops below this one
+ * unconsumed whether glide typing is on or off.
  */
 private fun nearLetterKey(
     position: Offset,
     centers: Map<Int, Offset>,
     keyWidth: Float,
-    allow: Set<Int> = emptySet(),
 ): Boolean = centers.any { (codePoint, center) ->
-    (codePoint !in GlidePunctuationCodePoints || codePoint in allow) &&
+    codePoint !in GlidePunctuationCodePoints &&
         (center - position).getDistance() < keyWidth
 }
 

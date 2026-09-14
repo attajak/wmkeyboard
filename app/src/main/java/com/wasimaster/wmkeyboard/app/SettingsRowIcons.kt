@@ -779,7 +779,7 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_icon_colour_start_title) { Icons.Outlined.Colorize }
         put(R.string.tooldetail_icon_colour_end_title) { Icons.Outlined.Gradient }
         put(R.string.typing_glide_apostrophe_title) { Icons.Outlined.FormatQuote }
-        put(R.string.typing_glide_apostrophe_s_title) { Icons.Outlined.FormatQuote }
+        put(R.string.typing_possessive_swipe_title) { Icons.Outlined.FormatQuote }
         put(R.string.typing_swipe_start_distance_title) { Icons.Outlined.Straighten }
         put(R.string.typing_trail_width_title) { Icons.Outlined.LineWeight }
         put(R.string.typing_trail_length_title) { Icons.Outlined.Timeline }

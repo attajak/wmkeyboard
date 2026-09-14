@@ -201,7 +201,7 @@ internal fun glideCommitLength(textBefore: String, word: String): Int = when {
 }
 
 /** How near its two keys the possessive flick starts and ends, in key widths. */
-private const val POSSESSIVE_REACH_WIDTHS = 0.7f
+internal const val POSSESSIVE_REACH_WIDTHS = 0.7f
 
 /** How much longer than the straight line between those keys the flick may be. */
 private const val POSSESSIVE_MAX_DETOUR = 1.6f

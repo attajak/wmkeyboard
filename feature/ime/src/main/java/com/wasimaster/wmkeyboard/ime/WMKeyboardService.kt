@@ -3506,6 +3506,7 @@ open class WMKeyboardService : InputMethodService() {
                 onHaptic = ::vibrateOnly,
                 onKeySound = { role, phase -> playKeySound(role = role, phase = phase) },
                 onText = ::onText,
+                onPossessiveFlick = ::onPossessiveFlick,
                 onGesture = ::onGesture,
                 onGesturePreview = ::onGesturePreview,
                 onGestureWords = ::onGestureWords,
@@ -13517,21 +13518,6 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
-     * `'s` on the end of the word just glided, drawn as a flick from the
-     * apostrophe key to `s`. True when this stroke was that flick and the
-     * possessive has been committed, so the caller skips the decode entirely.
-     *
-     * Nothing else in the gesture path can express this: a possessive is not a
-     * word a stroke can spell (the finger would have to draw the whole stem
-     * again), and the apostrophe key on its own puts an apostrophe *inside* a
-     * word rather than after one.
-     *
-     * Requires a word from the immediately preceding glide. [lastGestureWord] is
-     * exactly that flag — every manual edit, caret move and typed key clears it —
-     * so a flick with nothing behind it falls through and decodes as the two-key
-     * stroke it is.
-     */
-    /**
      * A quick flick up off a key that is carrying a word: commit that word and
      * tell the caller the stroke is spoken for.
      *
@@ -13594,59 +13580,80 @@ open class WMKeyboardService : InputMethodService() {
         return best
     }
 
-    private fun appendPossessive(
-        state: KeyboardUiState,
-        points: List<GesturePoint>,
-        keys: List<KeyCenter>,
-        keyWidthPx: Float,
-    ): Boolean {
-        val gesture = state.settings.gesture
-        if (!gesture.apostropheS) return false
-        // The spacebar is not a starting point: a stroke off it is how a glide is
-        // split, and OFF has no apostrophe key at all.
-        if (gesture.apostropheKey == GlideApostropheKey.OFF ||
-            gesture.apostropheKey == GlideApostropheKey.SPACE
-        ) {
-            return false
-        }
-        // `'s` is English. Every other language forms its possessive elsewhere.
+    /**
+     * `'s` on the end of the word behind the caret, drawn as a short straight
+     * swipe from the punctuation key [GestureSettings.possessiveKey] names to
+     * `s` (issue #169). The grid judged the shape ([possessiveFlick]); this is
+     * the edit. True when the possessive went in, which is what tells the grid
+     * to keep the lift from the key the swipe began on.
+     *
+     * A gesture of its own rather than a glide's tail. The word may be one the
+     * last glide committed, one tapped out and finished with a space, or the
+     * one still being typed. A space after a finished word is taken back first
+     * and put back after the possessive, whoever typed it, so the field reads
+     * "developer's " and never "developer 's" — the request in one line. The
+     * space put back is then the keyboard's, the way a glide's is: punctuation
+     * typed straight after takes it back. A word still in the composing buffer
+     * takes `'s` the way a popup pick would, so the suggestion machinery sees
+     * exactly the word it would have seen typed.
+     *
+     * English only, like [Apostrophes]: every other language forms its
+     * possessive elsewhere.
+     */
+    fun onPossessiveFlick(): Boolean {
+        val state = _uiState.value
+        val key = state.settings.gesture.possessiveKey
+        if (key == GlideApostropheKey.OFF || key == GlideApostropheKey.SPACE) return false
         if (!state.language.isEnglish) return false
-        val word = lastGestureWord ?: return false
-        if (word.endsWith("'s") || word.endsWith("’s")) return false
-        if (!isPossessiveFlick(points, keys, keyWidthPx)) return false
-        val ic = currentInputConnection ?: return false
-
-        // The glide's own trailing space belongs to the finished word, and the
-        // possessive goes inside it. Only the keyboard's own space is taken back:
-        // one the user typed is theirs.
-        if (pendingWordSpace) {
-            val before = ic.getTextBeforeCursor(1, 0)?.toString().orEmpty()
-            if (before == " ") ic.deleteSurroundingText(1, 0)
-            pendingWordSpace = false
+        if (composing.isNotEmpty()) {
+            if (!composing.last().isLetter() || endsPossessive(composing)) return false
+            onText(POSSESSIVE)
+            return true
         }
+        // The keyboard's own buffers take a typed character before the field
+        // sees it; a possessive has nothing to attach to in any of them.
+        if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive) return false
+        val ic = currentInputConnection ?: return false
+        val before = ic.getTextBeforeCursor(POSSESSIVE_CONTEXT_CHARS, 0)?.toString() ?: return false
+        val spaces = before.takeLastWhile { it == ' ' }.length
+        val stem = before.dropLast(spaces)
+        val word = stem.takeLastWhile(::isComposingWordChar)
+        if (word.isEmpty() || !word.last().isLetter() || endsPossessive(word)) return false
+        val gestureWord = lastGestureWord?.takeIf { stem.endsWith(it) }
+
+        vibrate()
+        ic.beginBatchEdit()
+        if (spaces > 0) ic.deleteSurroundingText(spaces, 0)
         ic.commitText(POSSESSIVE, 1)
+        if (spaces > 0) ic.commitText(" ", 1)
+        ic.endBatchEdit()
+        pendingWordSpace = spaces > 0
         val possessive = word + POSSESSIVE
-        // Backspace still takes the whole thing back in one press, stem included,
-        // which is what the flick built. The stroke on record drew the stem,
-        // not the possessive, so it is not offered a second look.
-        lastGestureWord = possessive
+        // After a glide, backspace still takes the whole thing back in one
+        // press, stem included, which is what the swipe built. The stroke on
+        // record drew the stem, not the possessive, so it is not offered a
+        // second look. After anything else there is no stroke to keep.
+        lastGestureWord = if (gestureWord != null) possessive else null
         lastGestureStroke = null
         lastHandAdjustment = null
+        lastRevertible = null
+        clearSwapOffer()
         learn(possessive)
-        commitGestureSpace(ic, state)
         armRevertGuard()
+        // It rewrote the word behind the caret, so the keys and the emoji chips
+        // are answering about a word that is no longer there.
+        gestureJob?.cancel()
+        gestureJob = serviceScope.launch {
+            val floating = nextWordOctopus()
+            val chips = nextWordEmoji()
+            _uiState.update { it.copy(octopus = floating, emojiSuggestions = chips) }
+        }
         return true
     }
 
-    private fun isPossessiveFlick(
-        points: List<GesturePoint>,
-        keys: List<KeyCenter>,
-        keyWidthPx: Float,
-    ): Boolean {
-        val from = keys.firstOrNull { it.codePoint == '\''.code } ?: return false
-        val to = keys.firstOrNull { it.codePoint == 's'.code } ?: return false
-        return possessiveFlick(points, from, to, keyWidthPx)
-    }
+    /** Whether [word] already carries the possessive, straight or curly. */
+    private fun endsPossessive(word: CharSequence): Boolean =
+        word.endsWith(POSSESSIVE) || word.endsWith("\u2019s")
 
     /**
      * Whether a glide may run right now. During a typing test the test's own
@@ -13929,22 +13936,8 @@ open class WMKeyboardService : InputMethodService() {
         suggestionJob?.cancel()
         gestureJob?.cancel()
         clearGlidePreview()
-        // A flick from the apostrophe key to s is not a word: it is `'s` for the
-        // word already committed. Answered before the decode rather than after,
-        // because there is nothing to decode and no candidate to override.
-        if (appendPossessive(state, points, keys, keyWidthPx)) {
-            // It rewrote the word behind the caret, so the keys and the emoji
-            // chips are answering about a word that is no longer there.
-            gestureJob = serviceScope.launch {
-                val floating = nextWordOctopus()
-                val chips = nextWordEmoji()
-                _uiState.update { it.copy(octopus = floating, emojiSuggestions = chips) }
-            }
-            return
-        }
         // A quick flick straight up off a key carrying a word takes that word.
-        // Asked here, at the lift, and after the possessive so that one keeps
-        // the behaviour it had: a flick is over in a tenth of a second, so
+        // Asked here, at the lift: a flick is over in a tenth of a second, so
         // there is nothing to win by claiming the pointer on the way down, and
         // claiming it there would mean fighting this loop for every upward
         // stroke instead of letting it decode the ones that are glides.
@@ -25388,8 +25381,11 @@ open class WMKeyboardService : InputMethodService() {
          */
         private const val APOSTROPHE_CROSS_WIDTHS = 0.5f
 
-        /** What the apostrophe-to-s flick appends. The shape test is in GlideSpace. */
+        /** What the possessive swipe appends (#169). The shape test is in GlideSpace. */
         private const val POSSESSIVE = "'s"
+
+        /** How far behind the caret the possessive swipe looks for its word. */
+        private const val POSSESSIVE_CONTEXT_CHARS = 64
 
         /**
          * Longest snippet expansion that arms backspace-to-restore.

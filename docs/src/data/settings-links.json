@@ -242,7 +242,7 @@
   {"title":"Glide over Shift to capitalize","name":"typing_shift_glide_capitals_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Space after a glided word","name":"typing_space_after_glide_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Apostrophe in a glide","name":"typing_glide_apostrophe_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
-  {"title":"Swipe to add 's","name":"typing_glide_apostrophe_s_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
+  {"title":"Swipe to add 's","name":"typing_possessive_swipe_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Swipe start distance","name":"typing_swipe_start_distance_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Delay after typing","name":"typing_gesture_cooldown_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Trail width","name":"typing_trail_width_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},

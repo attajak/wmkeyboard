@@ -14,7 +14,9 @@ import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.ime.ui.GlideVerdict
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -22,15 +24,16 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 
 /**
- * The two glide commits that are not one stroke, one word: [WMKeyboardService.onGestureWords],
- * which lands a stroke that crossed the spacebar, and the possessive flick, which
- * extends the word a stroke has already landed.
+ * The two commits that are not one stroke, one word: [WMKeyboardService.onGestureWords],
+ * which lands a stroke that crossed the spacebar, and the possessive swipe
+ * ([WMKeyboardService.onPossessiveFlick], #169), which extends the word behind
+ * the caret — glided or typed.
  *
  * Both are wired to rules that are tested as pure functions elsewhere —
  * `PossessiveFlickTest` owns the flick's geometry, `GlideSpaceTest` the spacing —
  * so nothing here re-asks a shape question. What is asked here is whether the
  * service is wired to those answers: which segment a held shift and a picked word
- * reach, whether the flick edits the field before the decoder is ever asked, and
+ * reach, whether the swipe edits the field it was told to, and
  * whether either path leaves the words on the keys behind (#118).
  *
  * Every test asserts what reached the [InputConnection] before it asserts state.
@@ -65,11 +68,7 @@ class GlideMultiWordAndPossessiveTest {
     /** The default QWERTY set. Declared first: the centres below are read off it. */
     private val layouts = KeyboardUiState().layouts
 
-    /**
-     * Every text key's centre, punctuation included — the same map the keyboard
-     * builds. The comma is in it because the possessive flick starts from
-     * whichever punctuation key the apostrophe setting names.
-     */
+    /** Every text key's centre, punctuation included — the same map the keyboard builds. */
     private val centers: Map<Int, Pair<Float, Float>> = buildMap {
         for ((rowIndex, row) in layouts.letters.rows.withIndex()) {
             var column = 0
@@ -87,14 +86,8 @@ class GlideMultiWordAndPossessiveTest {
         }
     }
 
-    /**
-     * The glide grid, straight off the default QWERTY — no Compose, no measure
-     * pass. [apostropheAt] puts `'` on one key, which is the only way punctuation
-     * reaches the grid: `keySpelling` admits letters and marks alone, so without
-     * it the flick has no key to start from.
-     */
-    private fun glideGrid(apostropheAt: Pair<Float, Float>? = null): List<KeyCenter> =
-        layouts.glideKeys(apostropheCenter = apostropheAt) { centers[it] }
+    /** The glide grid, straight off the default QWERTY — no Compose, no measure pass. */
+    private fun glideGrid(): List<KeyCenter> = layouts.glideKeys { centers[it] }
 
     /**
      * A plain left-to-right stroke along [row]. Its shape is irrelevant — nothing
@@ -104,22 +97,6 @@ class GlideMultiWordAndPossessiveTest {
     private fun stroke(row: Int): List<GesturePoint> = (0..STROKE_STEPS).map {
         GesturePoint(x = it * KEY_WIDTH, y = row * KEY_WIDTH, t = it * STROKE_STEP_MS)
     }
-
-    /**
-     * The `'s` flick: a straight line between the two key centres. Straight is
-     * what makes it one — the travelled length has to agree with the direct
-     * distance, which is the test that keeps a real word drawn between the same
-     * two keys from being eaten (see `PossessiveFlickTest`).
-     */
-    private fun possessiveStroke(from: Pair<Float, Float>, to: Pair<Float, Float>): List<GesturePoint> =
-        (0..STROKE_STEPS).map { step ->
-            val fraction = step.toFloat() / STROKE_STEPS
-            GesturePoint(
-                x = from.first + (to.first - from.first) * fraction,
-                y = from.second + (to.second - from.second) * fraction,
-                t = step * STROKE_STEP_MS,
-            )
-        }
 
     /** A service, a field, and the board planted on it before the stroke. */
     private fun keyboard(
@@ -258,98 +235,114 @@ class GlideMultiWordAndPossessiveTest {
     }
 
     /**
-     * The flick appends `'s` to the word behind it, and the glide's own trailing
-     * space is taken back first so the possessive goes inside it rather than after
-     * it: "hello " becomes "hello's ", never "hello 's".
+     * The swipe appends `'s` to the word behind the caret, and the glide's own
+     * trailing space is taken back first so the possessive goes inside it rather
+     * than after it: "hello " becomes "hello's ", never "hello 's" (#169).
      *
-     * Asserted with no settle, and that is itself part of the claim: the flick is
-     * answered on the caller's thread, ahead of the decode, because there is
-     * nothing to decode and no candidate to override.
+     * Asserted with no settle, and that is itself part of the claim: the swipe is
+     * answered on the caller's thread, because there is nothing to decode.
      *
-     * Reddens if the take-back goes — `if (before == " ") ic.deleteSurroundingText(1, 0)`
-     * deleted from `appendPossessive` leaves the field reading "hello 's ".
+     * Reddens if the take-back goes — `ic.deleteSurroundingText(spaces, 0)`
+     * deleted from `onPossessiveFlick` leaves the field reading "hello 's ".
      */
     @Test
-    fun `the possessive flick takes back the space the glide typed`() {
+    fun `the possessive swipe puts the glide's space behind the 's`() {
         val (service, editor, _) = keyboard(
-            gesture = GestureSettings(apostropheKey = GlideApostropheKey.COMMA),
+            gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
             initial = glidedField,
         )
         armGlideTail(service, word, keyboardTypedSpace = true)
-        val apostrophe = centers.getValue(','.code)
 
-        service.onGesture(
-            possessiveStroke(apostrophe, centers.getValue('s'.code)),
-            glideGrid(apostropheAt = apostrophe),
-            KEY_WIDTH,
-        )
+        assertTrue(service.onPossessiveFlick())
 
         assertEquals("${word}'s ", editor.text.toString())
     }
 
     /**
-     * Only the keyboard's own space is the keyboard's to take: a space that is
-     * already there when the glide did not type one belongs to the user, and the
-     * possessive lands after it.
+     * Issue #169's own case: the word was tapped out and the user typed the space
+     * after it themselves. The swipe is a gesture in its own right, not a glide's
+     * tail, so the word behind the caret is enough — no glide has to have
+     * happened — and the space moves behind the possessive all the same. The
+     * request was explicit that a space after the word must not split it off.
      *
-     * The flag and the word behind it are armed directly, because what is under
-     * test is which of the two signals the code believes — the flag it set when it
-     * typed a space, or the space it can see in the field. Reaching the same pair
-     * through the keyboard would take a longer sequence of presses than the
-     * assertion is worth.
-     *
-     * Reddens if the flag stops guarding the take-back: dropping the
-     * `if (pendingWordSpace)` wrapper in `appendPossessive` eats the user's space
-     * and the field reads "hello's ".
+     * Reddens if the swipe goes back to asking for `lastGestureWord` first: the
+     * field is left at "hello " and the call answers false.
      */
     @Test
-    fun `the possessive flick leaves a space it did not type alone`() {
+    fun `the possessive swipe extends a typed word and moves its space`() {
         val (service, editor, _) = keyboard(
-            gesture = GestureSettings(apostropheKey = GlideApostropheKey.COMMA),
+            gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
             initial = glidedField,
         )
-        armGlideTail(service, word, keyboardTypedSpace = false)
-        val apostrophe = centers.getValue(','.code)
 
-        service.onGesture(
-            possessiveStroke(apostrophe, centers.getValue('s'.code)),
-            glideGrid(apostropheAt = apostrophe),
-            KEY_WIDTH,
+        assertTrue(service.onPossessiveFlick())
+
+        assertEquals("${word}'s ", editor.text.toString())
+    }
+
+    /** A word with nothing after it takes the possessive straight on the end. */
+    @Test
+    fun `the possessive swipe extends a word with no space after it`() {
+        val (service, editor, _) = keyboard(
+            gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
+            initial = word,
         )
 
-        assertEquals("${word} 's ", editor.text.toString())
+        assertTrue(service.onPossessiveFlick())
+
+        assertEquals("${word}'s", editor.text.toString())
     }
 
     /**
-     * Issue #118 on the possessive path. The flick rewrote the word behind the
+     * With no word behind the caret the swipe answers false and touches nothing,
+     * which is what lets the grid hand the lift back to the key it began on.
+     */
+    @Test
+    fun `the possessive swipe declines an empty field`() {
+        val (service, editor, _) = keyboard(
+            gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
+            initial = "",
+        )
+
+        assertFalse(service.onPossessiveFlick())
+
+        assertEquals("", editor.text.toString())
+    }
+
+    /** Off is off: the default key adds nothing, whatever is behind the caret. */
+    @Test
+    fun `the possessive swipe is inert while no key is chosen`() {
+        val (service, editor, _) = keyboard(initial = glidedField)
+
+        assertFalse(service.onPossessiveFlick())
+
+        assertEquals(glidedField, editor.text.toString())
+    }
+
+    /**
+     * Issue #118 on the possessive path. The swipe rewrote the word behind the
      * caret, so the keys are answering about a word that is no longer there — the
      * one case where the board is stale without any decode having happened at all.
      *
-     * Reddens if the `nextWordOctopus` publish is dropped from the possessive
-     * branch of `onGesture`.
+     * Reddens if the `nextWordOctopus` publish is dropped from `onPossessiveFlick`.
      */
     @Test
-    fun `the possessive flick refreshes the words on the keys`() {
+    fun `the possessive swipe refreshes the words on the keys`() {
         val (service, editor, stale) = keyboard(
             octopus = octopusSentinel(),
-            gesture = GestureSettings(apostropheKey = GlideApostropheKey.COMMA),
+            gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
             initial = glidedField,
         )
         armGlideTail(service, word, keyboardTypedSpace = true)
-        val apostrophe = centers.getValue(','.code)
 
-        service.onGesture(
-            possessiveStroke(apostrophe, centers.getValue('s'.code)),
-            glideGrid(apostropheAt = apostrophe),
-            KEY_WIDTH,
-        )
+        assertTrue(service.onPossessiveFlick())
         settle { service.uiState.value.octopus != stale }
 
-        // The flick's own edit first: without it the stroke was never taken as a
+        // The swipe's own edit first: without it the stroke was never taken as a
         // possessive at all, and the board would be untouched for that reason.
         assertEquals("${word}'s ", editor.text.toString())
         assertNotEquals(
-            "the possessive flick left the words on the keys behind (#118)",
+            "the possessive swipe left the words on the keys behind (#118)",
             stale,
             service.uiState.value.octopus,
         )

@@ -4453,16 +4453,18 @@ data class GestureSettings(
      */
     val apostropheKey: GlideApostropheKey = GlideApostropheKey.OFF,
     /**
-     * A short swipe from the apostrophe key to `s`, drawn straight after a glided
-     * word, appends `'s` to it: "developer" becomes "developer's" without a trip
-     * to the symbols layer.
+     * Which punctuation key a short straight swipe to `s` starts from to append
+     * `'s` to the word behind the caret (issue #169): "developer" becomes
+     * "developer's" without a trip to the long press. A gesture of its own, not
+     * part of glide typing: it works on a tapped word as well as a glided one,
+     * with glide typing off as well as on, and it takes back the space that
+     * follows the word before putting the possessive there.
      *
-     * On by default and does nothing until [apostropheKey] names a key. Never the
-     * spacebar, whichever key is chosen for the apostrophe itself: a stroke that
-     * starts on the spacebar is how a glide is separated, so it cannot also be
-     * how one is extended.
+     * Off by default. [GlideApostropheKey.SPACE] is never honoured — a stroke
+     * off the spacebar is a spacebar swipe — so the choice is one of the three
+     * punctuation keys, independent of [apostropheKey].
      */
-    val apostropheS: Boolean = true,
+    val possessiveKey: GlideApostropheKey = GlideApostropheKey.OFF,
     /**
      * A glided word is followed by a space, so the next word — glided or tapped
      * — starts clean instead of running into it. On by default. The space is
@@ -5865,6 +5867,8 @@ class SettingsRepository(private val context: Context) {
         private val GESTURE_PICKER_HOLD_TO_ASK = booleanPreferencesKey("gesture_picker_hold_to_ask")
         private val GESTURE_PICKER_CHOICES = intPreferencesKey("gesture_picker_choices")
         private val GESTURE_APOSTROPHE_KEY = stringPreferencesKey("gesture_apostrophe_key")
+        private val GESTURE_POSSESSIVE_KEY = stringPreferencesKey("gesture_possessive_key")
+        /** The toggle the possessive swipe shipped as, read only to migrate it. */
         private val GESTURE_APOSTROPHE_S = booleanPreferencesKey("gesture_apostrophe_s")
         private val GESTURE_AUTO_SPACE = booleanPreferencesKey("gesture_auto_space")
         private val GESTURE_START_THRESHOLD_SLOP = floatPreferencesKey("gesture_start_threshold_slop")
@@ -6672,6 +6676,21 @@ class SettingsRepository(private val context: Context) {
         locked.clear()
     }
 
+    /**
+     * The possessive swipe before it had a key of its own (#169): a toggle, on
+     * by default, that borrowed the glide's apostrophe key. Read only while
+     * the new key is unset. A user who had the swipe working keeps it on the
+     * same key — an unwritten toggle was an on one — and everyone else starts
+     * from the default, which is off.
+     */
+    private fun legacyPossessiveKey(p: Preferences, defaults: KeyboardSettings): GlideApostropheKey {
+        if (p[GESTURE_APOSTROPHE_S] == false) return defaults.gesture.possessiveKey
+        val borrowed = p[GESTURE_APOSTROPHE_KEY]
+            ?.let { runCatching { GlideApostropheKey.valueOf(it) }.getOrNull() }
+            ?: return defaults.gesture.possessiveKey
+        return if (borrowed.sourceChar != null) borrowed else defaults.gesture.possessiveKey
+    }
+
     private fun mapPreferences(p: Preferences): KeyboardSettings {
         val defaults = storedDefaults
         // Layouts resolve first: the input mode is read off the active layout,
@@ -6925,7 +6944,9 @@ class SettingsRepository(private val context: Context) {
                 apostropheKey = p[GESTURE_APOSTROPHE_KEY]
                     ?.let { runCatching { GlideApostropheKey.valueOf(it) }.getOrNull() }
                     ?: defaults.gesture.apostropheKey,
-                apostropheS = p[GESTURE_APOSTROPHE_S] ?: defaults.gesture.apostropheS,
+                possessiveKey = p[GESTURE_POSSESSIVE_KEY]
+                    ?.let { runCatching { GlideApostropheKey.valueOf(it) }.getOrNull() }
+                    ?: legacyPossessiveKey(p, defaults),
                 autoSpaceAfterGlide = p[GESTURE_AUTO_SPACE] ?: defaults.gesture.autoSpaceAfterGlide,
                 startThresholdSlop = p[GESTURE_START_THRESHOLD_SLOP] ?: defaults.gesture.startThresholdSlop,
                 postTypeCooldownMs = p[GESTURE_POST_TYPE_COOLDOWN_MS] ?: defaults.gesture.postTypeCooldownMs,
@@ -11200,8 +11221,8 @@ class SettingsRepository(private val context: Context) {
     suspend fun setGestureApostropheKey(value: GlideApostropheKey) =
         editPrefs { it[GESTURE_APOSTROPHE_KEY] = value.name }
 
-    suspend fun setGestureApostropheS(value: Boolean) =
-        editPrefs { it[GESTURE_APOSTROPHE_S] = value }
+    suspend fun setGesturePossessiveKey(value: GlideApostropheKey) =
+        editPrefs { it[GESTURE_POSSESSIVE_KEY] = value.name }
 
     suspend fun setGestureLearnSwipeStyle(value: Boolean) =
         editPrefs { it[GESTURE_LEARN_SWIPE_STYLE] = value }

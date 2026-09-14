@@ -1756,22 +1756,6 @@ internal fun TypingGesturesSettings(
                         detail = { key -> ChoiceDetail(stringResource(glideApostropheDescRes(key))) },
                     )
                 }
-                // The possessive flick hangs off that key, and the spacebar
-                // cannot be its starting point, so the row appears only for the
-                // three choices it can actually work from.
-                if (settings.gesture.apostropheKey != GlideApostropheKey.OFF &&
-                    settings.gesture.apostropheKey != GlideApostropheKey.SPACE
-                ) {
-                    item {
-                        ToggleSetting(
-                            R.string.typing_glide_apostrophe_s_title,
-                            stringResource(R.string.typing_glide_apostrophe_s_subtitle),
-                            settings.gesture.apostropheS,
-                            info = stringResource(R.string.typing_glide_apostrophe_s_info),
-                            default = SettingsDefaults.gesture.apostropheS,
-                        ) { scope.launch { repository.setGestureApostropheS(it) } }
-                    }
-                }
             }
             item {
                 val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
@@ -2014,6 +1998,30 @@ internal fun TypingGesturesSettings(
                 info = stringResource(R.string.typing_hint_flick_info),
                 default = SettingsDefaults.layoutBehavior.hintFlick,
             ) { scope.launch { repository.setHintFlick(it) } }
+        }
+        item {
+            // Issue #169: a short straight swipe from a punctuation key to s
+            // appends 's to the last word. Its own key, its own row, outside
+            // the glide block: it works on tapped words with glide typing off.
+            ChoiceSetting(
+                title = R.string.typing_possessive_swipe_title,
+                subtitle = stringResource(R.string.typing_possessive_swipe_subtitle),
+                info = stringResource(R.string.typing_possessive_swipe_info),
+                options = listOf(
+                    GlideApostropheKey.OFF to
+                        stringResource(R.string.typing_glide_apostrophe_off_label),
+                    GlideApostropheKey.COMMA to
+                        stringResource(R.string.typing_glide_apostrophe_comma_label),
+                    GlideApostropheKey.PERIOD to
+                        stringResource(R.string.typing_glide_apostrophe_period_label),
+                    GlideApostropheKey.APOSTROPHE to
+                        stringResource(R.string.typing_glide_apostrophe_key_label),
+                ),
+                selected = settings.gesture.possessiveKey,
+                onChange = { scope.launch { repository.setGesturePossessiveKey(it) } },
+                default = SettingsDefaults.gesture.possessiveKey,
+                detail = { key -> ChoiceDetail(stringResource(possessiveSwipeDescRes(key))) },
+            )
         }
         item {
             // Issue #57: the characters the spacebar's long press offers, space
@@ -2642,6 +2650,14 @@ private fun numberGroupingDescRes(style: NumberGrouping): Int = when (style) {
     NumberGrouping.AUTO -> R.string.typing_smart_number_grouping_auto_desc
     NumberGrouping.WESTERN -> R.string.typing_smart_number_grouping_western_desc
     NumberGrouping.SOUTH_ASIAN -> R.string.typing_smart_number_grouping_south_asian_desc
+}
+
+/** Where the possessive swipe starts, for its sheet (#169). */
+private fun possessiveSwipeDescRes(key: GlideApostropheKey): Int = when (key) {
+    GlideApostropheKey.COMMA -> R.string.typing_possessive_swipe_comma_desc
+    GlideApostropheKey.PERIOD -> R.string.typing_possessive_swipe_period_desc
+    GlideApostropheKey.APOSTROPHE -> R.string.typing_possessive_swipe_key_desc
+    GlideApostropheKey.OFF, GlideApostropheKey.SPACE -> R.string.typing_possessive_swipe_off_desc
 }
 
 /** Which key carries the apostrophe in a glide, and what it costs, for the sheet. */
