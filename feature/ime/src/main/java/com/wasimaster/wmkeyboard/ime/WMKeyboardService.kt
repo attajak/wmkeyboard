@@ -21793,13 +21793,22 @@ open class WMKeyboardService : InputMethodService() {
         // The preview is the part nobody asked for — most long presses are
         // after a skin tone — so data saving holds it unless it is outright
         // allowed. The send button still works: pressing it is the answer.
-        if (!dataSaverStatus.allows(MeteredFeature.ANIMATED_EMOJI)) return
-        val url = animatedEmoji.webpUrl(key)
         animatedEmojiJob?.cancel()
-        _uiState.update { it.copy(animatedEmojiFile = null, animatedEmojiLoading = true) }
+        if (!dataSaverStatus.allows(MeteredFeature.ANIMATED_EMOJI)) {
+            _uiState.update {
+                it.copy(animatedEmojiFile = null, animatedEmojiLoading = false, animatedEmojiNoPreview = true)
+            }
+            return
+        }
+        val url = animatedEmoji.webpUrl(key)
+        _uiState.update {
+            it.copy(animatedEmojiFile = null, animatedEmojiLoading = true, animatedEmojiNoPreview = false)
+        }
         animatedEmojiJob = serviceScope.launch {
             val file = withContext(Dispatchers.IO) { downloadMediaFile(url, MediaMime.WEBP) }
-            _uiState.update { it.copy(animatedEmojiFile = file, animatedEmojiLoading = false) }
+            _uiState.update {
+                it.copy(animatedEmojiFile = file, animatedEmojiLoading = false, animatedEmojiNoPreview = file == null)
+            }
         }
     }
 
@@ -21807,7 +21816,9 @@ open class WMKeyboardService : InputMethodService() {
     fun onEmojiLongPressDismissed() {
         animatedEmojiJob?.cancel()
         animatedEmojiJob = null
-        _uiState.update { it.copy(animatedEmojiFile = null, animatedEmojiLoading = false) }
+        _uiState.update {
+            it.copy(animatedEmojiFile = null, animatedEmojiLoading = false, animatedEmojiNoPreview = false)
+        }
     }
 
     /**

@@ -18179,7 +18179,21 @@ internal data class AnimatedEmojiOffer(
     val sending: Boolean,
     /** How far the GIF has come down, or null while that isn't known yet. */
     val progress: Float? = null,
-)
+    /** No preview is coming: data saving held it back, or its fetch failed. */
+    val noPreview: Boolean = false,
+) {
+    /**
+     * Whether the Send row is drawn. Normally only once the preview is on
+     * screen, so nobody is offered an animation they haven't seen. But when no
+     * preview is coming, waiting for one hid Send for good and left an empty
+     * box: on a metered connection that took the feature away entirely, since
+     * pressing Send is the only way to answer data saving's "ask".
+     */
+    val canSend: Boolean get() = file != null || noPreview
+
+    /** Whether the preview slot is drawn: something is in it, or on its way. */
+    val showsPreview: Boolean get() = file != null || !noPreview
+}
 
 /**
  * The animated version on offer for [emoji], or null when there is none to
@@ -18200,6 +18214,7 @@ internal fun KeyboardUiState.animatedEmojiOffer(emoji: String): AnimatedEmojiOff
         loading = animatedEmojiLoading,
         sending = sending,
         progress = mediaDownloadProgress.takeIf { sending },
+        noPreview = animatedEmojiNoPreview,
     )
 }
 
@@ -18222,34 +18237,37 @@ internal fun emojiStickerJobId(emoji: String): String = "emoji_sticker:$emoji"
  * The animated-emoji block of the long-press popup: the animation itself,
  * looping, over a button that sends it as a GIF.
  *
- * The button only appears once the preview has, so there is never a control
- * that says it will send an animation nobody has seen yet. The credit line is
- * not decoration: the assets are Noto Animated Emoji, and CC BY 4.0 asks for
- * attribution wherever they are used.
+ * The button waits for the preview, so there is never a control that says it
+ * will send an animation nobody has seen yet, unless no preview is coming at
+ * all (see [AnimatedEmojiOffer.canSend]). The credit line is not decoration:
+ * the assets are Noto Animated Emoji, and CC BY 4.0 asks for attribution
+ * wherever they are used.
  */
 @Composable
 private fun ColumnScope.AnimatedEmojiOffer(offer: AnimatedEmojiOffer, onSend: () -> Unit) {
-    val loader = rememberMediaImageLoader()
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 12.dp, vertical = 4.dp)
-            .size(96.dp)
-            .align(Alignment.CenterHorizontally),
-        contentAlignment = Alignment.Center,
-    ) {
-        if (offer.file != null) {
-            AsyncImage(
-                model = offer.file,
-                contentDescription = null,
-                imageLoader = loader,
-                modifier = Modifier.matchParentSize(),
-                contentScale = ContentScale.Fit,
-            )
-        } else if (offer.loading) {
-            CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.5.dp)
+    if (offer.showsPreview) {
+        val loader = rememberMediaImageLoader()
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 12.dp, vertical = 4.dp)
+                .size(96.dp)
+                .align(Alignment.CenterHorizontally),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (offer.file != null) {
+                AsyncImage(
+                    model = offer.file,
+                    contentDescription = null,
+                    imageLoader = loader,
+                    modifier = Modifier.matchParentSize(),
+                    contentScale = ContentScale.Fit,
+                )
+            } else if (offer.loading) {
+                CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.5.dp)
+            }
         }
     }
-    if (offer.file == null) return
+    if (!offer.canSend) return
     PopupAction(
         icon = Icons.Outlined.PlayCircleOutline,
         label = stringResource(R.string.ime_emoji_send_animated),

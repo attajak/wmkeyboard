@@ -1985,6 +1985,13 @@ data class KeyboardUiState(
     val animatedEmojiFile: File? = null,
     /** True while [animatedEmojiFile] is on its way down. */
     val animatedEmojiLoading: Boolean = false,
+    /**
+     * True when no preview is coming for the open popup: data saving held it
+     * back, or the fetch failed. The popup offers Send anyway then, since
+     * pressing it is the answer data saving waits for, and a failed preview
+     * is no reason to refuse a GIF that may well come down on a second try.
+     */
+    val animatedEmojiNoPreview: Boolean = false,
     /** Emoji candidates for the suggestion strip (word being typed). */
     val emojiSuggestions: List<String> = emptyList(),
     /**
