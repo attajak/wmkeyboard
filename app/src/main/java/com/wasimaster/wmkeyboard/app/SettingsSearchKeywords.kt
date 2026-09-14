@@ -161,6 +161,7 @@ internal val SettingsSearchKeywords: Map<Int, Int> = buildMap {
     put(R.string.typing_smart_currency_title, R.string.search_kw_typing_smart_currency)
     put(R.string.typing_smart_hit_detection_title, R.string.search_kw_typing_smart_hit_detection)
     put(R.string.typing_smart_numbers_title, R.string.search_kw_typing_smart_numbers)
+    put(R.string.typing_number_prediction_title, R.string.search_kw_typing_number_prediction)
     put(R.string.typing_smart_replies_title, R.string.search_kw_typing_smart_replies)
     put(R.string.typing_smart_units_title, R.string.search_kw_typing_smart_units)
     put(R.string.typing_space_swipe_down_hide_title, R.string.search_kw_typing_space_swipe_down_hide)

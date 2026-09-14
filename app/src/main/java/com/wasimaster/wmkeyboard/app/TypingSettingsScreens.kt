@@ -896,6 +896,16 @@ internal fun TypingSuggestionsSettings(
                 default = SettingsDefaults.suggestionStrip.skipTypedWord,
             ) { scope.launch { repository.setSkipTypedWord(it) } }
         }
+        item {
+            // Issue #181: a word typed on digit-hinted keys also offers the number.
+            ToggleSetting(
+                R.string.typing_number_prediction_title,
+                stringResource(R.string.typing_number_prediction_subtitle),
+                settings.suggestionStrip.numberPrediction,
+                info = stringResource(R.string.typing_number_prediction_info),
+                default = SettingsDefaults.suggestionStrip.numberPrediction,
+            ) { scope.launch { repository.setNumberPrediction(it) } }
+        }
             item {
                 ToggleSetting(
                     R.string.typing_smart_replies_title,

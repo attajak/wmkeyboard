@@ -5366,6 +5366,18 @@ data class SuggestionStripSettings(
      */
     val numberRowCorrections: Boolean = true,
     /**
+     * The inverse, for a board with the number row off (#181): a word typed
+     * entirely on keys whose corner hint is a digit ("qwe" on QWERTY) also
+     * offers the number those hints spell ("123") as a strip candidate, in
+     * the last slot, never the primary one and never autocorrected to. Long
+     * runs are grouped the way the number chip groups them, under its style
+     * setting, when that chip is on. Off by default: a single-letter word
+     * is left alone either way, but "we", "it" and "up" all spell numbers,
+     * and a slot is a slot. Nothing to offer while the number row is shown,
+     * since its digits replace the hints. Same ceiling note as above.
+     */
+    val numberPrediction: Boolean = false,
+    /**
      * Let autocorrect insert a missed space: "kortehobe" → "korte hobe" when
      * both halves are known words and no single-word fix is anywhere near,
      * including the fat-fingered-space reading ("amibtomake" → "ami tomake").
@@ -5825,6 +5837,7 @@ class SettingsRepository(private val context: Context) {
         private val LANGUAGE_DETECTION_STRENGTH =
             stringPreferencesKey("language_detection_strength")
         private val NUMBER_ROW_CORRECTIONS = booleanPreferencesKey("number_row_corrections")
+        private val NUMBER_PREDICTION = booleanPreferencesKey("number_prediction")
         private val AUTOCORRECT_SPLITS = booleanPreferencesKey("autocorrect_splits")
         private val REGISTER_PRIORS = booleanPreferencesKey("register_priors")
         private val TIMING_SIGNAL_STRENGTH = floatPreferencesKey("timing_signal_strength")
@@ -7222,6 +7235,8 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.suggestionStrip.timingSignalStrength,
                 numberRowCorrections = p[NUMBER_ROW_CORRECTIONS]
                     ?: defaults.suggestionStrip.numberRowCorrections,
+                numberPrediction = p[NUMBER_PREDICTION]
+                    ?: defaults.suggestionStrip.numberPrediction,
                 autocorrectSplits = p[AUTOCORRECT_SPLITS]
                     ?: defaults.suggestionStrip.autocorrectSplits,
                 spellingMapOffLangs = p[SPELLING_MAP_OFF_LANGS]
@@ -10890,6 +10905,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setNumberRowCorrections(value: Boolean) =
         editPrefs { it[NUMBER_ROW_CORRECTIONS] = value }
+
+    suspend fun setNumberPrediction(value: Boolean) =
+        editPrefs { it[NUMBER_PREDICTION] = value }
 
     suspend fun setAutocorrectSplits(value: Boolean) =
         editPrefs { it[AUTOCORRECT_SPLITS] = value }

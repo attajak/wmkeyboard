@@ -49,6 +49,10 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Corpus pack then bundled seed pairs — 827 bundled English pairs cold-start a fresh install
     - Skip-gram rescue on an unknown previous word — Treats an OOV prev as transparent and backfills from the word before it
     - Sentence-start sentinel — U+0001 pseudo-word learned as context only; never offered, never a follower
+  - Numbers from the letter keys `RARE` — A word typed entirely on digit-hinted keys also offers the number those hints spell (#181); off by default
+    - Read off the pressed keys, not the letters — AZERTY's 1 is on a, Dvorak's on the apostrophe, German has none; a number row that is showing has already stripped the hints, so it is quiet then
+    - Last slot, never the primary — Never what a space commits and never autocorrected to; two letters at least, so a lone I is not an 8
+    - Grouped like the number chip — Five to fifteen digits, no leading zero, under the chip's grouping style, when that chip is on
   - Next-letter distribution `uncommon` — nextLetterWeights feeds autopilot
     - Weighted across three sources — Dictionary x1, lexicon x500, custom list x100; 24 completions scanned per source
     - Boundary-tap remap at pointer-down — Distance divided by (1 + strength x bias); capped reach; the touch is never consumed

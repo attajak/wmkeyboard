@@ -192,6 +192,7 @@
   {"title":"Smart replies","name":"typing_smart_replies_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Autopilot","name":"typing_group_autopilot_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Only offer new words","name":"typing_skip_typed_word_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
+  {"title":"Numbers from the letter keys","name":"typing_number_prediction_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Words on the keys","name":"typing_group_octopus_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Word menu","name":"typing_word_menu_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Adjust rank changes","name":"typing_rank_control_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},

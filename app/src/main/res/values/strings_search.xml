@@ -158,6 +158,7 @@
     <string name="search_kw_typing_smart_hit_detection">hit detection hitbox proximity targeting</string>
     <string name="search_kw_typing_smart_numbers">thousands separator comma</string>
     <string name="search_kw_typing_smart_replies">canned responses</string>
+    <string name="search_kw_typing_number_prediction">digits hints swype predict</string>
     <string name="search_kw_typing_smart_units">metric imperial celsius fahrenheit inches</string>
     <string name="search_kw_typing_space_swipe_down_hide">dismiss minimise collapse</string>
     <string name="search_kw_typing_suggestions">candidates wordbar</string>

@@ -113,6 +113,7 @@ There's no long-press gesture on a suggestion chip. Every chip in the strip resp
 | Suggestion strip always visible | Off |
 | Best suggestion in the middle | On |
 | Shorten long words | In the middle |
+| Numbers from the letter keys | Off |
 | Space after a suggestion | On |
 | Block offensive words | On |
 | Context-aware suggestions | On |
@@ -120,6 +121,8 @@ There's no long-press gesture on a suggestion chip. Every chip in the strip resp
 | Suggestion blacklist | Empty |
 
 **Suggestions** is the master switch for the whole strip described on this page. Turn it off and completions, corrections and next-word prediction all stop. On an ordinary Latin layout it takes [autocorrect](/smart/autocorrect/) with it: with suggestions off the keyboard stops composing the word you're typing, so there's nothing for autocorrect to inspect when you press space. Autocorrect still has its own toggle, but leave Suggestions on if you want autocorrect to fire. **Number of suggestions** is how many word slots the strip splits itself into. Three suits a phone; a tablet or a landscape screen has the room for more, at the cost of each candidate getting narrower. **Scroll the suggestions** drops the fixed slots for a row that scrolls sideways, so more candidates cost nothing in legibility (see [What's on the strip](#whats-on-the-strip)). **Suggestions in every field** overrides the handful of apps that ask the keyboard to hide suggestions on an ordinary text field. It also covers a browser's address bar: with it on, the words you type there are completed on the strip, though never autocorrected. Password fields and structured keypads (number, phone, and similar) never show suggestions whatever this is set to. **Space after a suggestion** adds a trailing space when you tap a candidate, the same as finishing a word yourself would.
+
+**Numbers from the letter keys** (off) is for boards with the number row hidden, where each top-row letter carries a small digit in its corner. When every letter of the word you're typing sits on one of those keys, the strip's last slot also offers the number those digits spell: `qwe` on QWERTY offers `123` beside the words, and one tap types it. It reads the keys you pressed rather than the letters, so AZERTY's `azerty` spells `123456` and a layout with no digit hints offers nothing. The number is never the first slot, never what a space commits and never an autocorrect target. Two letters at least, so a lone `I` stays a word rather than an 8. Five digits or more are grouped the way the [number chip](/smart/chips/) groups them, under its **Grouping style**, as long as **Group long numbers** is on. With the number row shown the digits have keys of their own and nothing is offered.
 
 Four of the rows above aren't in the Suggestions group at all. They live under <SettingsPath path="Typing / Automatic corrections" />, and they're listed here because what they actually do is change the strip:
 

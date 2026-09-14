@@ -209,6 +209,9 @@
 
     <string name="typing_skip_typed_word_title">Only offer new words</string>
     <string name="typing_skip_typed_word_subtitle">Leave out the word you have already typed</string>
+    <string name="typing_number_prediction_title">Numbers from the letter keys</string>
+    <string name="typing_number_prediction_subtitle">Type qwe with the number row off and the strip also offers 123</string>
+    <string name="typing_number_prediction_info">With the number row off, the top row of letters shows a small digit in each corner. When every letter of the word you are typing sits on one of those keys, the strip offers the number those digits spell in its last slot, beside the words, and one press types it. The word itself is never replaced without a press. Two or more letters are needed, so a single I or a single A stays a word. A number of five digits or more is grouped with separators when Group long numbers is on, using its grouping style. Nothing is offered while the number row is shown, since the digits are then on their own keys. This setting is off by default.</string>
     <string name="typing_skip_typed_word_info">The suggestion strip normally keeps one slot for the word exactly as you typed it, which is how you keep a spelling the dictionary does not know. Turn this on and that slot is given to another suggestion instead, so all three offer something new. The cost is that a word the keyboard does not recognise has one fewer way to survive a correction, and the strip no longer shows you which candidate is the literal thing you wrote.</string>
 
     <string name="typing_group_octopus_title">Words on the keys</string>
