@@ -11,13 +11,19 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 /**
  * When the long-press popup draws its preview slot and its Send row. The Send
  * row used to wait for the preview unconditionally, so on a metered connection,
  * where data saving holds the preview back, the popup showed an empty box and
  * no way to send at all.
+ *
+ * Robolectric because the offer asks whether the field takes images, and that
+ * goes through `ClipDescription.compareMimeTypes`, which the plain JVM stubs.
  */
+@RunWith(RobolectricTestRunner::class)
 class AnimatedEmojiOfferTest {
 
     private val grinning = "😆"
