@@ -1,6 +1,6 @@
 ---
 title: "What are addons?"
-description: "Twelve kinds of installable content, published by anyone with a static file host, installed with nothing more than a URL."
+description: "Fourteen kinds of installable content, published by anyone with a static file host, installed with nothing more than a URL."
 sidebar:
   label: "Overview"
   order: 1
@@ -17,7 +17,7 @@ Addons are how the keyboard grows past what ships in the app. Themes, layouts, d
 
 ## What you can install
 
-There are thirteen addon types, and every one of them maps onto something the app already knows how to produce or import on its own:
+There are fourteen addon types, and every one of them maps onto something the app already knows how to produce or import on its own:
 
 | Type | Max download | Live preview before installing |
 |---|---|---|
@@ -34,8 +34,9 @@ There are thirteen addon types, and every one of them maps onto something the ap
 | Key sound | 4 MB | Yes |
 | Sound pack | 16 MB | Yes |
 | Plugin | 1 MB | Yes |
+| Vocabulary pack | 8 MB | Yes |
 
-Some types you judge by wearing rather than by looking at in isolation. A theme or a font only makes sense on the keyboard itself, so its detail page has no content preview to offer, just whatever screenshots the publisher chose to include. Dictionaries, emoji keyword packs, sticker packs, snippet packs, key sounds, sound packs and plugins preview their actual content, because the content is the thing you're deciding on.
+Some types you judge by wearing rather than by looking at in isolation. A theme or a font only makes sense on the keyboard itself, so its detail page has no content preview to offer, just whatever screenshots the publisher chose to include. Dictionaries, emoji keyword packs, sticker packs, snippet packs, Espanso packs, key sounds, sound packs, vocabulary packs and plugins preview their actual content, because the content is the thing you're deciding on.
 
 For the type-by-type walkthrough of what each one looks like once installed, see [Installing addons](/addons/installing/) and [Managing addons](/addons/managing/).
 
@@ -43,7 +44,7 @@ For the type-by-type walkthrough of what each one looks like once installed, see
 
 A repository is an index over files the app already knows how to read, and nothing more. The theme, layout, dictionary or plugin you install from one arrives in exactly the file format the app writes when you export the same thing yourself. Opening a `.wmtheme.json` you found on a forum and installing a theme from a repository both end up running the same import code. Publishers do no packaging, no signing and no building.
 
-Installing and applying are two separate steps. Downloading an addon only puts the file on your device. It doesn't repaint your keyboard, swap your icon pack, or start a plugin running. For addon types with an obvious "slot" to fill (theme, icon pack, emoji font, key sound, sound pack, layout, plugin), the app asks you afterward whether to switch to what you just installed. Fonts, dictionaries, emoji keyword packs, snippet packs and sticker packs skip that prompt, because installing already is the whole effect: a font waits for you in a picker, and the rest are live the moment they land.
+Installing and applying are two separate steps. Downloading an addon only puts the file on your device. It doesn't repaint your keyboard, swap your icon pack, or start a plugin running. For addon types with an obvious "slot" to fill (theme, icon pack, emoji font, key sound, sound pack, layout, plugin), the app asks you afterward whether to switch to what you just installed. Fonts, dictionaries, emoji keyword packs, snippet packs, Espanso packs, sticker packs and vocabulary packs skip that prompt, because installing already is the whole effect: a font waits for you in a picker, and the rest are live the moment they land.
 
 :::note
 Browsing a repository, or even opening a `wmkeyboard://` link from someone else's page, can never change what your keyboard does on its own. Every install still ends on a screen where you tap Install yourself.
@@ -66,7 +67,7 @@ A few rules keep that trust model intact even before an addon reaches your devic
 
 Plugins are the sole exception: they carry Lua that actually runs. That code is sandboxed with no way to read what you type and no access to the text field, the clipboard, or the network. The sandbox has no such API to withhold in the first place. A plugin can ask for local on-device storage and nothing else, and because nothing in the sandbox can reach the network, whatever it stores can't leave the device either.
 
-Because a plugin runs code, it's held to stricter rules than the other eleven types:
+Because a plugin runs code, it's held to stricter rules than the other thirteen types:
 
 - A plugin **must** publish a checksum. Installing one with no `sha256` is refused before any network call happens at all, unlike every other type where a checksum is optional.
 - A plugin you install from a repository always lands switched off. Installing never doubles as "run this," so it doesn't even appear where plugins run until you turn it on yourself.

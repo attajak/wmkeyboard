@@ -36,11 +36,11 @@ The Key press screen is a hub. Haptics and sound, Key popup and Press and hold s
 | Vibrate on space *(shown only while Key press haptics is on)* | Toggle | On / Off | On |
 | Vibrate on delete swipe *(same)* | Toggle | On / Off | On |
 | Vibrate on key repeat *(same)* | Toggle | On / Off | On |
-| Click on key repeat *(same)* | Toggle | On / Off | On |
 | Follow the system touch feedback setting *(same)* | Toggle | On / Off | Off |
 | Mute haptics in Do Not Disturb *(same)* | Toggle | On / Off | Off |
+| Click on key repeat *(shown only while Key sound is on)* | Toggle | On / Off | On |
 
-**Key press haptics** is the master switch. Turn it off and the six per-event rows below it disappear rather than grey out.
+**Key press haptics** is the master switch. Turn it off and the five per-event rows below it disappear rather than grey out.
 
 **Haptic style** picks how the buzz is produced. Tap and Key hand it to the platform's own haptic call, which is what stock keyboards use, so it follows the vendor's tuning and the system haptic-intensity setting. Tap asks for the keyboard-specific waveform most vendors tune, and it's the default. Key asks for the general button press. Click and Heavy use a hardware-tuned effect (Android 10+). Sharp plays a hardware click primitive whose strength follows the intensity slider (Android 11+). Custom drives the vibration motor straight from the strength and intensity sliders. A style a device can't produce falls back to a hardware Click, then to Custom.
 
@@ -81,15 +81,15 @@ Installing a [Sound addon](/addons/overview/) highlights this **Sound style** ro
 | Popup on number pads *(shown only while Key popup is on)* | Toggle | On / Off | Off |
 | Minimum popup duration *(same)* | Slider | 0–300 ms | 140 ms |
 | Maximum popup duration *(same)* | Slider | 400–2000 ms | 750 ms |
-| Popup on key | Toggle | On / Off | On |
+| Popup on key *(shown only while Key popup is on)* | Toggle | On / Off | On |
 | Popup font size | Slider | ×0.70–×1.60 | ×1.00 |
-| Popup height | Slider | 32–160 dp | 110 dp on-key, 65 dp floating |
-| Popup distance above key *(shown only while Popup on key is off)* | Slider | 0–96 dp | 10 dp |
+| Popup height *(shown only while Key popup is on)* | Slider | 32–160 dp | 110 dp on-key, 65 dp floating |
+| Popup distance above key *(shown only while Key popup is on and Popup on key is off)* | Slider | 0–96 dp | 10 dp |
 | Popup sideways shift *(same)* | Slider | −64–64 dp | 0 dp |
 | Popup shape | Nav row (shape picker) | the twelve key shapes | Rounded |
 | Popup corner radius | Slider | 0–40 dp | 12 dp |
-| Popup color | Color picker | any color, or Automatic | Automatic |
-| Popup text color | Color picker | any color, or Automatic | Automatic |
+| Popup color *(shown only while Key popup is on)* | Color picker | any color, or Automatic | Automatic |
+| Popup text color *(same)* | Color picker | any color, or Automatic | Automatic |
 
 **Minimum popup duration** keeps the bubble visible for at least that long after release, so a fast tap doesn't flash it for a single frame. **Maximum popup duration** is a safety cap rather than a comfort setting. It force-hides a bubble stranded on screen when the release event is dropped under UI lag. It's measured from the press, not from the release, and there's normally no reason to lower it. **Popup on key** switches between two looks: the bubble growing up out of the pressed key (the stock-keyboard look), or a compact bubble floating above your fingertip with a gap.
 
@@ -137,7 +137,7 @@ This one is the keyboard-wide default. A single key can carry a count of its own
 
 | Setting | Control | Options / range | Default |
 |---|---|---|---|
-| Press and hold delay | Slider | 150–700 ms | 300 ms |
+| Press and hold delay | Slider | 150–800 ms (drag past 700 ms and it snaps back to 700 on release) | 300 ms |
 | Time before a key repeats | Slider | 150–800 ms | 300 ms |
 | Delete repeat interval | Slider | 20–200 ms | 50 ms |
 | Space repeat interval | Slider | 20–200 ms | 100 ms |
@@ -162,7 +162,8 @@ The repeat interval is two sliders, because delete and space are held for opposi
 | Currency keys | Free-text field, space-separated | Any characters | ৳ € £ ¥ ₹ ₿ |
 | Ctrl shortcuts as raw key events | Toggle | On / Off | Off |
 | Hold shortcuts | Filter chips, any number | Select all, Copy, Cut, Paste, Undo, Redo | All six on |
-| Shortcut keys *(shown once at least one hold shortcut is on)* | Nav row → dialog | one letter per action | a c v x z y |
+| Action first *(shown once at least one hold shortcut is on)* | Toggle | On / Off | Off |
+| Shortcut keys *(same)* | Nav row → dialog | one letter per action | a c v x z y |
 
 **Press and hold hints** puts a small corner label on each key, previewing its first press-and-hold character.
 
@@ -178,6 +179,8 @@ The repeat interval is two sliders, because delete and space are held for opposi
 
 **Hold shortcuts** is one row of six chips, all on by default: Select all, Copy, Cut, Paste, Undo and Redo. Each one goes into that letter's press-and-hold popup, after the accents the key already has, so holding C still offers `çć` and copy sits at the end of the row. Copy and cut both fall back to select-all when nothing is selected, so one hold copies or cuts the whole field. Turn a chip off and only its own entry goes.
 
+**Action first** sits next to Hold shortcuts and starts off. Off, holding a shortcut letter still opens on its first accent, the same as a letter with no shortcuts. Copy or cut still sits at the end of that popup. Turn it on and the shortcut moves to the front instead, so a plain hold on <KeyCap>C</KeyCap> runs Copy right away. Keep your finger down and slide on to reach `çć` instead of releasing. It needs **Choose without lifting**, under Alternate keys, turned on, since a popup that just sits open has nothing to run on release.
+
 **Shortcut keys** is one row for all six bindings rather than six rows, and it appears whenever at least one of them is on. The shipped `a c v x z y` is a QWERTY answer, so a layout without those letters (Bangla, Russian) needs the whole set moved onto keys it actually draws. The row's subtitle lists the keys currently bound. Tap it to open a dialog with one field per switched-on action, saved in one go.
 
 <PhoneFrame caption="Press and hold shortcuts: the currency keys field and the hold-letter toggles.">
@@ -186,8 +189,8 @@ The repeat interval is two sliders, because delete and space are held for opposi
 
 ## Details & edge cases
 
-- **The six per-event toggles fold away rather than grey out.** With Key press haptics off, Vibrate on space, Vibrate on delete swipe, Vibrate on key repeat, Click on key repeat, Follow the system touch feedback setting and Mute haptics in Do Not Disturb all leave the screen.
-- **Press and hold delay lives here only.** The Timing slider runs 150–800 ms. Accessibility → Touch shows the current value and links back to this screen.
+- **The five per-event toggles fold away rather than grey out.** With Key press haptics off, Vibrate on space, Vibrate on delete swipe, Vibrate on key repeat, Follow the system touch feedback setting and Mute haptics in Do Not Disturb all leave the screen. Click on key repeat follows Key sound instead, not Key press haptics, so it disappears only when Key sound is off.
+- **Press and hold delay lives here only.** The Timing slider shows a 150–800 ms range, but the stored value still clamps to 150–700 ms. Drag past 700 ms and it snaps back to 700 on release. Accessibility → Touch shows the current value and links back to this screen.
 - **A few rows on this screen aren't reachable from in-app settings search.** Haptic style, Click on key repeat, Follow the system touch feedback setting, Sound style, Key release sound, Time before a key repeats and Shortcut keys are all real, rendered rows here. They're just missing from the search index. Everything else is indexed, Key sound, Sound volume, Maximum popup duration, Popup shape, Popup corner radius and Press and hold ?123 among them.
 - **Most rows here grow a restore button once you move them, but four never do.** Change a toggle, a slider or the Shortcut keys row and a small restore control appears beside it, putting just that setting back. The two chip rows (Haptic style, Sound style), the Popup shape picker and the Currency keys field are hand-built controls with no restore of their own. Clearing Currency keys back to blank is how you get its built-in set again. See [Putting one setting back](/reference/settings/#putting-one-setting-back).
 - **The "Sound & haptics" toolbar tool isn't a separate settings surface.** Its page carries the Key sound switch, plus a nav row into the Haptics and sound page, so a change on either surface writes to the same settings. See [Sound & vibration](/typing/feedback/#a-toolbar-shortcut).

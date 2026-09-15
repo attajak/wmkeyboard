@@ -12,7 +12,7 @@ import KeyCap from '@components/KeyCap.astro';
 **Key layouts** is where you manage the key grids themselves for every layout you've switched on: which key sits where, what it types, what its long-press alternates are. This page is the field reference for its three screens. For the reasoning behind any of it, and a worked example, see [Custom layouts & the layout editor](/languages/custom-layouts/) instead.
 
 :::note
-Don't confuse this with [Layout & size](/reference/settings/layout/), a different screen (key/row height sliders, number row, split & floating) that shares part of its name but none of its screens.
+Don't confuse this with [Layout & size](/reference/settings/layout/), a different screen (key/row height sliders, number row, split & floating) whose **Your layouts** group is where you open this one from.
 :::
 
 <PhoneFrame caption="The Key layouts screen: your own layouts, the two import rows, and the enabled built-ins.">
@@ -21,9 +21,9 @@ Don't confuse this with [Layout & size](/reference/settings/layout/), a differen
 
 ## Managing your layouts
 
-<SettingsPath path="Languages & layouts / Key layouts" />
+<SettingsPath path="Layout & size / Key layouts" />
 
-Reach it from Settings home's Keyboard group, from the **Key layouts** row at the foot of <SettingsPath path="Languages & layouts / Your layouts" />, or by searching "Key layouts" in settings search. The screen opens with a one-line caption: a layout types the language it's based on, so a rearranged Bangla grid still uses the Bangla dictionary. Below that sit two named groups, with a pair of import rows between them:
+Reach it from Settings home's Keyboard group, from the **Key layouts** row in <SettingsPath path="Layout & size / Your layouts" />, or by searching "Key layouts" in settings search. The screen opens with a one-line caption: a layout types the language it's based on, so a rearranged Bangla grid still uses the Bangla dictionary. Below that sit two named groups, with a pair of import rows between them:
 
 - **Your layouts**: leads with a **Start a new layout** row ("Begin from an empty grid with the usual rows"), which makes a layout called "My layout" from the default letters grid with every character key blanked out, then opens it. Enter, shift, space and delete are left in place, since re-adding them is nobody's idea of a start. Below that row sits every layout you've made or edited yourself, on or off. Addon-installed layouts stay out of this group even when enabled. They're grids you installed rather than grids you built here, so they live under [Languages](/languages/switching/) instead. With nothing of your own yet, one row reads "No layouts of your own yet," with "Copy a layout below to start from a grid that already works" underneath.
 - **Secondary layouts**: leads with a **Start a secondary layout** row ("A grid of your own that a key or the Secondary layout tool opens, such as a symbols page or a macro pad"), which makes a layout called "My secondary layout" from three rows of blank keys plus an <KeyCap>ABC</KeyCap> key, then opens it. Below that sits every secondary layout you've made, with the same three trailing buttons. A caption under the group explains that a secondary layout isn't a language and is reached from an "Open a layout" key or the Secondary layout tool. See [Secondary layouts](/languages/custom-layouts/#secondary-layouts).
@@ -56,7 +56,7 @@ Tapping the row itself (not a button) opens the visual editor.
   {/* shot: reference/settings/key-layouts-delete-confirm */}
 </PhoneFrame>
 
-WM Keyboard ships **1,277 layouts** in total: 18 compiled built-ins and 1,259 JSON asset layouts, 862 of which are [converted Keyman keyboards](/languages/keyman/) covering the long tail of languages and scripts. The built-ins are QWERTY plus its English alternates like Dvorak and Colemak, Avro/Probhat/Jatiya for Bangla, and one-off grids for languages like French, Korean, Russian, Arabic, Greek, Hebrew and Hindi. Only a handful show up here at once, so see [Options](#options) for which ones a fresh install enables.
+WM Keyboard ships **1,279 layouts** in total: 20 compiled built-ins and 1,259 JSON asset layouts, 862 of which are [converted Keyman keyboards](/languages/keyman/) covering the long tail of languages and scripts. The built-ins are QWERTY plus its English alternates like Dvorak and Colemak, Avro/Probhat/Jatiya for Bangla, and one-off grids for languages like French, Korean, Russian, Arabic, Greek, Hebrew and Hindi. Only a handful show up here at once, so see [Options](#options) for which ones a fresh install enables.
 
 ## Editing a layout
 
@@ -122,7 +122,7 @@ Tapping a key opens a bottom sheet headed "Row *N*, key *M*", with, in order:
   - The slider stretches if it has to. A key already stored wider than 5.0, which the JSON editor and the import paths can write, keeps its real value on the slider rather than being pinned at 5.0 and quietly cut down the next time you touch it. The typed field reaches all the way to the 12.0 cap that repair enforces.
 - For every key except a panel component: **Icon**, **default None**. It opens a searchable grid of icons with each icon's name under it, and **No icon** takes it off again. An icon on an action key such as Shift, Enter or Delete replaces that key's usual glyph. On the space bar it replaces the language name, and a **Keep the language name** switch (**default off**) appears that draws the icon before the name instead.
 - For keys whose action is "Types text" only: **Icon hint** (**default None**, the same picker), **Alternates for press and hold** (space-separated, with a live preview strip that badges the first entry "hint", since that's the one the keyboard draws in the key's corner), and **Field adaptation**, a choice of **None / Comma slot / Full stop slot** (**default None**). Comma slot swaps this key for `@` in an email field or `/` in a web address field. Full stop slot keeps its own character and gains extra long-press alternates for domain endings in those same two field kinds.
-- **Hide the corner hint**: a switch, **default off**, that stops this one key drawing its corner hint. It covers both kinds of hint, the icon hint and the first long-press alternate, and it changes nothing else: press and hold still opens the alternates. The row appears only when the key actually has a hint to hide, which means an icon hint on any key, or alternates on a text key whose press and hold isn't taken by a clipboard action. A key already set to hide its hint keeps the switch regardless, so turning it on is never a one-way trip. Stored as `hideHint` on the key, and the app-wide **Long-press hints** toggle still wins when it's off.
+- **Corner hint**: a three-way choice, **default From settings**, for what this one key does about the app-wide **Press and hold hints** toggle under [Key press](/reference/settings/keypress/#press-and-hold-shortcuts). From settings follows it, Always forces the hint on, Never forces it off. It covers both kinds of hint, the icon hint and the first long-press alternate, and it changes nothing else: press and hold still opens the alternates either way. The row appears only when the key actually has a hint to show, or already carries an override. That means an icon hint on any key, or alternates on a text key whose press and hold isn't taken by a clipboard action. Stored as `hideHint` and `forceHint` on the key, and `hideHint` wins if a file sets both.
 - **Columns in the popup**: a minus / value / plus stepper, **default "From settings"**, then **3 to 11**. It fixes how many alternates this one key puts on a row. "From settings" defers to the keyboard-wide **Alternate key columns** row under [Key press](/reference/settings/keypress/#alternate-keys); a number overrides it for this key and leaves every other key alone. The row appears only on a key that actually opens an alternates popup, so a key with nothing to arrange doesn't carry the control. Stored as `alternateColumns`, where **0** is "from settings"; a file that writes something outside 3–11 is clamped into it on import, or dropped back to 0 if it's negative.
 - A bottom row: **Delete key**, move left/right (disabled at the row's edges), and duplicate key.
 
@@ -152,7 +152,7 @@ A secondary layout skips the three Letters key checks (delete, enter, space) ent
 
 Of the four keys the Letters layer is checked for, shift is the one that only warns, since a symbols-forward layout may not want one, and its alternates still reach capitals through long-press.
 
-This list is also the gate. Turning a layout on under Languages runs the same check, and a layout with any blocking finding refuses. You get a "Cannot turn on *name*" dialog, headed "Fix these problems in the layout editor first:" and listing every blocking reason, and the switch stays off. It's the same list the editor shows, so the two can never disagree. Turning a layout *off* is never gated.
+This list is also the gate. Turning a layout on under Layout & size runs the same check, and a layout with any blocking finding refuses. You get a "Cannot turn on *name*" dialog, headed "Fix these problems in the layout editor first:" and listing every blocking reason, and the switch stays off. It's the same list the editor shows, so the two can never disagree. Turning a layout *off* is never gated.
 
 Behind that sits a second, separate pass that repairs rather than reports. It force-adds a delete, space or enter key and drops keys this build doesn't recognise. It runs on import, on activation, and again when the keyboard draws the grid, so even a layout you're mid-edit on stays typeable. See [Details & edge cases](/languages/custom-layouts/#details--edge-cases) on the guide page for how the two relate.
 
@@ -182,7 +182,7 @@ Separately from the envelope version, the layout's own internal spec carries a v
 
 ## Options
 
-<SettingsPath path="Languages & layouts / Key layouts" />
+<SettingsPath path="Layout & size / Key layouts" />
 
 The list screen itself holds no toggles: it manages a layout registry, not preferences. The one real default worth knowing is which layouts a fresh install starts with:
 
@@ -191,7 +191,7 @@ The list screen itself holds no toggles: it manages a layout registry, not prefe
 | Enabled layouts | Seeded on first run from your phone's language list, plus QWERTY, at most four (see [Languages overview](/languages/overview/#what-ships)) |
 | Your own layouts | None |
 
-<SettingsPath path="Languages & layouts / Key layouts / Edit layout" />
+<SettingsPath path="Layout & size / Key layouts / Edit layout" />
 
 | Setting | Control | Default |
 |---|---|---|
@@ -208,7 +208,7 @@ The list screen itself holds no toggles: it manages a layout registry, not prefe
 | Field adaptation (text keys) | Choice: None / Comma slot / Full stop slot | None |
 | Braille dot number | 1–6 | 1 |
 
-<SettingsPath path="Languages & layouts / Key layouts / Edit layout / Layout JSON" />
+<SettingsPath path="Layout & size / Key layouts / Edit layout / Layout JSON" />
 
 No separate settings: it edits the same stored layout the visual editor does, just as text.
 

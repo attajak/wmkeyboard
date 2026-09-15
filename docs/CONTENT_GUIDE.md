@@ -153,12 +153,15 @@ widget needs a framework, question it first.
   up to 25 words a sentence.
 - Numbers are features. Write "843 languages" and "29 Whisper models", and
   verify the number in code before you write it. Headline counts were
-  code-verified on 2026-08-12: 843 registered languages (358 hand-written +
-  485 generated from Keyman), 1,279 layouts (20 built-in + 1,259 asset, of
-  which 862 are converted Keyman grids), 333 wordlists (332 languages), 125
-  emoji keyword packs, 29 Whisper models, 8 local LLMs, 63 toolbar tools, 12
-  addon types, 8 alternative calendars, 22 fancy-text styles, 18 snippet
-  variables, Emoji 17.0 catalog (1,914 catalog rows; 1,717 base grid entries).
+  code-verified on 2026-09-15: 843 registered languages (359 hand-written +
+  484 generated from Keyman), 1,279 layouts (20 built-in + 1,259 asset, of
+  which 862 are converted Keyman grids), 333 wordlists, 72 toolbar tools (67
+  on Lite), 14 addon types, 107 replaceable icon slots, 12 registered file
+  extensions, 31 fancy-text styles plus Normal. Verified on 2026-08-12 and not
+  rechecked since: 125 emoji keyword packs, 29 Whisper models, 8 local LLMs,
+  8 alternative calendars, 18 snippet variables, Emoji 17.0 catalog (1,914
+  catalog rows; 1,717 base grid entries). `app/src/test/.../ShippedCountsTest.kt`
+  pins the language and layout counts.
   Re-verify before reuse. Several of these drift with every feature release.
   The language and wordlist counts come from `src/data/*.json`, which
   `scripts/extract_data.py` regenerates from the Kotlin registries; rerun it
@@ -179,6 +182,27 @@ npm run check   # build + validate all internal links (CHECK_LINKS=1). CI runs t
 
 Run `npm run check` before you open a content PR. It catches the dead links a
 renamed page leaves behind, and it must pass before the PR merges.
+
+## Keeping the docs current
+
+The docs drift when a commit changes what a user sees and no page changes with
+it. The rule is simple: a `feat`, `fix` or `perf` commit that changes shipped
+code carries the doc edits it makes necessary, in the same commit.
+
+1. Before you commit, list each change a user can notice. That covers
+   behaviour, defaults, settings that are new, removed, renamed or moved,
+   gestures, limits and UI text.
+2. Search `src/content/docs` for those terms.
+3. Read the guide page and its reference pages: `reference/settings/`,
+   `reference/gestures.mdx`, `reference/shortcuts.mdx` and `start/faq.mdx`.
+4. Correct each claim the change makes false. Add coverage for new behaviour.
+5. After a registry change, run `python3 scripts/extract_data.py`. After a
+   settings title change, run `scripts/extract_settings_links.sh`.
+
+The maintainer's Claude Code setup enforces this with a `PreToolUse` hook
+(`~/.claude/hooks/docs-drift-guard.mjs`). It refuses such a commit when no file
+under `src/content/` or `src/data/` is part of it. When the docs truly need no
+change, prefix the commit command with `DOCS_CHECKED=1`.
 
 ## Current state / handoff notes
 

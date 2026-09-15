@@ -9,7 +9,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 
-This page covers four separate tools, each with its own panel and its own settings screen: **Web search** and **Image search** (both backed by Brave), a three-tab **Wikipedia** reader, and an **English dictionary**. Web search, Image search, and Wikipedia never read what's already in your field. You type a query into the panel's own search bar, and nothing out of the field you're typing in is sent anywhere. Dictionary is the one exception. With its auto-lookup setting on, which is the default, opening the tool reads your current selection or the word at the cursor and looks that up. See [Looking up definitions](#looking-up-definitions) below.
+This page covers four separate tools, each with its own panel and its own settings screen: **Web search** and **Image search** (backed by Brave, or by a SearXNG server you name on the F-Droid build), a three-tab **Wikipedia** reader, and an **English dictionary**. Web search, Image search, and Wikipedia never read what's already in your field. You type a query into the panel's own search bar, and nothing out of the field you're typing in is sent anywhere. Dictionary is the one exception. With its auto-lookup setting on, which is the default, opening the tool reads your current selection or the word at the cursor and looks that up. See [Looking up definitions](#looking-up-definitions) below.
 
 <PhoneFrame caption="Web search results. Tap a row to insert its link, or tap the open icon to launch it in your browser.">
 {/* shot: tools/web-search-results */}
@@ -19,7 +19,7 @@ This page covers four separate tools, each with its own panel and its own settin
 
 Open **Web search** or **Image search** from the toolbar, or from the toolbox if you haven't pinned them. Neither is pinned by default. On a hardware keyboard, double-tap <KeyCap>Ctrl</KeyCap> for the [leader key](/reference/shortcuts/), then press <KeyCap>W</KeyCap> for web search or <KeyCap>I</KeyCap> for image search.
 
-Both tools run on the Brave Search API. Typing routes into the panel's own header search bar rather than your field, the same key-rerouting trick the GIF, sticker, and Wikipedia panels use. Unlike GIFs and stickers, neither search runs live as you type. Both wait for you to press the search action before firing a request.
+Both tools run on the Brave Search API by default, or on a SearXNG instance you name on the F-Droid build. Typing routes into the panel's own header search bar rather than your field, the same key-rerouting trick the GIF, sticker, and Wikipedia panels use. Unlike GIFs and stickers, neither search runs live as you type. Both wait for you to press the search action before firing a request.
 
 - **Web search**: tap a result to insert its URL at the cursor. A separate open-in-browser icon on each row launches the link in your browser instead, which leaves the keyboard entirely. They're two distinct actions. Each row shows the title, host, and an HTML-stripped snippet.
 - **Image search**: tap a thumbnail to download the full image and insert it directly, on the same `commitContent` path the clipboard and GIF tools use. Long-press a thumbnail to insert its URL as plain text instead. The grid dedupes results by image URL before drawing them, since Brave can return the same full-size image for more than one widely-reposted result.
@@ -28,7 +28,7 @@ Both tools run on the Brave Search API. Typing routes into the panel's own heade
 {/* shot: tools/image-search-grid */}
 </PhoneFrame>
 
-Without a usable key, neither tool appears on the keyboard at all. There's no button that opens a panel with nothing behind it. With no key the two tools are off the toolbar, out of the toolbox, and out of the smart chips, and a hardware shortcut bound to either one does nothing. On the **Tools** screen they're still listed, with their switch greyed out and "Needs an API key. Press this row to add one." in place of the usual description. Paste a key on that screen and both come straight back.
+Without something to search with, neither tool appears on the keyboard at all. There's no button that opens a panel with nothing behind it. Until then the two tools are off the toolbar, out of the toolbox, and out of the smart chips, and a hardware shortcut bound to either one does nothing. On the **Tools** screen they're still listed, with their switch greyed out and a reason in place of the usual description. Everywhere except the F-Droid build, that reads "Needs an API key. Press this row to add one." The F-Droid build reads "Needs a SearXNG instance" instead, since it offers a self-hosted server as another way in. Fill in whichever the screen is asking for and both tools come straight back.
 
 <PhoneFrame caption="The Tools screen before a Brave API key is configured: the switch is greyed out.">
 {/* shot: tools/search-needs-key */}
@@ -40,8 +40,9 @@ Without a usable key, neither tool appears on the keyboard at all. There's no bu
 
 Web search and image search are two separate tool screens, reached from **Tools / Web search** and **Tools / Image search**. They share almost the same settings block:
 
-- **Turn on**: already on, like every tool. Switching it off removes that tool from both the toolbar and the toolbox. The switch can't be pressed while there's no key. With nothing to search with, there's nothing to turn on.
+- **Turn on**: already on, like every tool. Switching it off removes that tool from both the toolbar and the toolbox. The switch can't be pressed while there's nothing to search with, since there's nothing to turn on.
 - **Icon colour**: only shown if [colorful tool icons](/reference/settings/tools/) are turned on globally.
+- **SearXNG instance**: F-Droid build only, blank by default. Paste the address of a SearXNG server, your own or one you trust, and both tools search it instead of Brave, even if a Brave key is also set. See [Servers](/reference/settings/servers/) for the same field shared across tools.
 - **Brave API key**: blank by default. Paste a key from `api-dashboard.search.brave.com` to use your own quota. Leave it blank and the app falls back to a key baked into the build, if this build ships one. The field saves as you type, with no separate save button. Under it you'll read "The app uses your key", "This field is blank. The app uses the key that is built into the app.", or "From api-dashboard.search.brave.com, with a free monthly credit", depending on which applies.
 - **SafeSearch**: on by default. It filters explicit results. Web search maps it to Brave's "moderate" filter. Image search only offers strict or off, so the same toggle maps to "strict" there.
 - **Results for each search**: a slider from 1 to 10, defaulting to **8**. ("Each search uses one API request either way," the app notes.) The Brave API itself allows up to 20 results per request. The app's slider stops lower, at 10.
@@ -103,7 +104,7 @@ The settings page's caption: "Definitions come from the Free Dictionary API (dic
 
 ## Details & edge cases
 
-- **Only two of the four need a key.** Web search and image search need a Brave key (yours, or the one baked into this build) before they show up anywhere. Wikipedia and Dictionary work out of the box against free, keyless public APIs.
+- **Only two of the four need to be unlocked.** Web search and image search need a Brave key, yours or the one baked into this build. On the F-Droid build, a SearXNG instance address unlocks them instead. Wikipedia and Dictionary work out of the box against free, keyless public APIs.
 - **Default hardware letters:** <KeyCap>W</KeyCap> for web search, <KeyCap>I</KeyCap> for image search, <KeyCap>D</KeyCap> for dictionary. Wikipedia has no letter of its own out of the box, so reach it through the toolbox (<KeyCap>T</KeyCap>), or [rebind a letter to it yourself](/reference/shortcuts/).
 - **Discoverable by typing.** Typing "search", "images", "wiki"/"wikipedia", or "define"/"dict" as the last word before your cursor offers a [smart chip](/smart/chips/) that opens the matching tool. The keyword list is editable per tool, and only shows while that tool is enabled.
 - **None of these four are edition-gated.** Full and lite behave identically across all four tools here.

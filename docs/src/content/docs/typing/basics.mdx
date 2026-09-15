@@ -145,7 +145,7 @@ Backspace also has a drag-to-delete-whole-words gesture, on by default, separate
 | Popup distance above key | 10&nbsp;dp (0–96&nbsp;dp) |
 | Popup sideways shift | 0&nbsp;dp (−64–64&nbsp;dp) |
 | Popup color / Popup text color | Automatic |
-| Press and hold delay | 300&nbsp;ms (150–700&nbsp;ms) |
+| Press and hold delay | 300&nbsp;ms (150–800&nbsp;ms) |
 | Time before a key repeats | 300&nbsp;ms (150–800&nbsp;ms) |
 | Delete repeat interval | 50&nbsp;ms (20–200&nbsp;ms) |
 | Space repeat interval | 100&nbsp;ms (20–200&nbsp;ms) |
@@ -155,7 +155,7 @@ Backspace also has a drag-to-delete-whole-words gesture, on by default, separate
 | Shifted letter on press and hold | Off |
 | Press and hold ?123 for the number pad | On |
 | Currency keys | ৳ € £ ¥ ₹ ₿ |
-| Press and hold A/C/X/V/Z/Y for select all/copy/cut/paste/undo/redo | Off (each) |
+| Press and hold A/C/X/V/Z/Y for select all/copy/cut/paste/undo/redo | On (each) |
 
 Open the **Key press** tile on the settings home grid, or search "Key press" in settings search. This table covers the Key popup, Alternate keys, Timing and Press and hold shortcuts groups. The same screen's Haptic feedback and Key press sound groups are covered on [Sound & vibration](/typing/feedback/). For the field-by-field breakdown see [Key press settings](/reference/settings/keypress/).
 
@@ -170,7 +170,7 @@ A handful of related settings live elsewhere:
 
 ## Details & edge cases
 
-- **A hold-shortcut on A/C/X/V/Z/Y replaces that letter's accent popup rather than adding to it.** With the Copy hold shortcut on, `c` no longer offers `'çć` on long-press at all.
+- **A hold-shortcut on A/C/X/V/Z/Y is appended to the end of that letter's accent popup, not swapped in for it.** With the Copy hold shortcut on, `c` still offers `'çć` first, then Copy. Turn on **Action first** to move the shortcut to the front instead.
 - **Exiting Caps Lock only takes one tap.** The double-tap window matters only on the way *into* Caps Lock. Any single tap while Shift or Caps Lock is already active turns it off.
 - **The Enter key never lies about what it's about to do.** With Shift + Enter's newline override active, the key visibly redraws to the newline symbol first. It doesn't swap behavior behind an unchanged icon.
 - **A line break from the popup is a real one, even in apps that read Enter themselves.** Some chat apps watch for the Enter key press and send on it regardless of what the keyboard meant. The popup entry types the character straight into the field instead of pressing a key, so there's nothing for the app to catch. Shift + Enter works the same way.

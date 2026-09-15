@@ -8,9 +8,12 @@ sidebar:
 import SettingsPath from '@components/SettingsPath.astro';
 
 The Data saver screen is three groups: what turns data saving on, the
-fetches the keyboard makes on its own, and the ones you start yourself. This
-page is the field reference. For what it's for and how the ask-first answer
-behaves in practice, start at [Data saver](/privacy/data-saver/).
+fetches the keyboard makes on its own, and the ones you start yourself. The
+last two only appear once something has turned data saving on. With **Save
+data now** off and **Turn on by itself** left at **Only when I turn it on**,
+the screen shows just the first group. This page is the field reference. For
+what it's for and how the ask-first answer behaves in practice, start at
+[Data saver](/privacy/data-saver/).
 
 Every row in the last two groups is a choice, not a switch. The full set of
 answers is **Allow**, **Ask each time** and **Turn off**. The middle one is
@@ -97,7 +100,7 @@ holds an on-device model, which costs nothing to reach.
   **Allow**, a Whisper model at about 150 MB or an on-device AI model at
   about 500 MB still confirms on a metered connection. That prompt is older
   than this screen and independent of it.
-- **Add-ons keep a switch of their own.** **Refresh on Wi-Fi only**, on the
+- **Add-ons keep a switch of their own.** **Only on Wi-Fi**, on the
   Add-ons screen, is separate from the **Add-on updates** row here. Either
   one holding is enough to skip the automatic refresh a visit would make.
 - **Nothing here is a permission.** Data saving decides whether a fetch is

@@ -174,11 +174,11 @@ The Key shape row opens a dialog rather than filling a segmented row. Twelve nam
 | Enter key | Same | None | Always |
 | Space bar | Same | None | Always |
 | Pressed keys | Same | None | Always |
-| Key preview popup | Same | None | Always |
-| Crop / Stretch / Tile | Segmented row | Crop | Any of the six slots has an image |
+| Key preview popup | Same | None | While Key popup is on |
+| Crop / Stretch / Tile | Segmented row | Crop | Any slot has an image |
 | Texture opacity | Slider, 10–100% | 100% | Same |
 
-Six slots, one image each, drawn over the key colour and clipped to the key shape. One picture in **Letter keys** is enough to theme the board: the other slots fall back to it or to plain colour rather than sitting empty. Each image is stored downscaled to 512px. A row with one set shows it as a thumbnail, with a bin icon to clear it. Textures travel inside an exported theme.
+Six slots when Key popup (under Key press) is on, five without it, one image each, drawn over the key colour and clipped to the key shape. One picture in **Letter keys** is enough to theme the board: the other slots fall back to it or to plain colour rather than sitting empty. Each image is stored downscaled to 512px. A row with one set shows it as a thumbnail, with a bin icon to clear it. Textures travel inside an exported theme.
 
 ### Single-key styles
 
@@ -297,6 +297,8 @@ Popup height is the height of the key-preview bubble. The global slider keeps on
 
 ### Animation
 
+This whole section, heading included, is hidden while **Reduce motion** (under Accessibility) is on, since neither control could change anything the board draws.
+
 | Setting | Control | Options | Default |
 |---|---|---|---|
 | Animation | Segmented row | None / Flow / Hue cycle | None |
@@ -305,6 +307,8 @@ Popup height is the height of the key-preview bubble. The global slider keeps on
 Flow drifts the board gradient along its own axis, or orbits the center for a radial gradient. Hue cycle slowly rotates the hue of the board gradient, or of the solid board color if no gradient is set. Animation only runs while the keyboard is on screen. Three built-ins ship with it on: Sunset drift and Cyberpunk use Flow, and Aurora uses Hue cycle. Every other built-in, and every fresh custom theme, starts on None.
 
 ### Key press effect
+
+This whole section is also hidden while **Reduce motion** is on, for the same reason.
 
 | Setting | Control | Range | Default |
 |---|---|---|---|
@@ -346,7 +350,7 @@ Pinch to zoom, up to 6×. Drag to pan. The image always scales to fill the frame
 
 ### The color picker
 
-Tapping any color row opens the same dialog. At the top is a hex field, labelled "Hex (AARRGGBB)", taking 6 or 8 hex characters (a 6-character value counts as fully opaque). Below that sit 21 preset swatches: the 15 seed colors plus 6 grayscale steps from white to black. Then Hue, Saturation, and Brightness sliders, plus an Opacity slider on fields that support alpha. **Apply** confirms and **Cancel** discards. An **Auto** button appears only on fields that have a fallback and are currently overridden, and it clears the override back to Auto.
+Tapping any color row opens the same dialog. A split preview strip sits at the top: the color you opened with on the left, the color you have now on the right, and pressing the left half reverts. Below it is a hue and saturation wheel, plus a Brightness bar and, on fields that support alpha, an Opacity bar; a button in the title bar swaps the wheel for separate Hue and Saturation bars, which TalkBack can also read and set. Then a hex field, taking 3, 6, or 8 hex characters (a 6-character value keeps whatever opacity was already set, rather than forcing it opaque), and 21 preset swatches: the 15 seed colors plus 6 grayscale steps from white to black. **Apply** confirms and **Cancel** discards. An **Auto** button appears only on fields that have a fallback and are currently overridden, and it clears the override back to Auto.
 
 ## Details & edge cases
 

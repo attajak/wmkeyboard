@@ -115,7 +115,7 @@ alongside it the screen still opens, and on its own the link goes nowhere.
 
 ### Every route
 
-87 screens. Three more exist and are deliberately not addressable, because they
+104 screens. Three more exist and are deliberately not addressable, because they
 have nowhere to land: the first-run wizard (`onboarding`), the sticker editor
 (`sticker_editor`), and a single photo's page (`photo_detail`). Each of those
 three draws from something the screen before it handed over, so opened cold it
@@ -136,6 +136,7 @@ would show nothing.
 | `typing/corrections` | Automatic corrections. |
 | `typing/suggestions` | Suggestions. |
 | `typing/autopilot` | Autopilot. |
+| `typing/octopus` | Words on the keys. |
 | `typing/chips` | Smart chips. |
 | `typing/codes` | One-time codes. |
 | `typing/gestures` | Gestures. |
@@ -144,6 +145,7 @@ would show nothing.
 | `dictionary` | Personal dictionary. |
 | `customdictionaries` | Custom dictionaries. |
 | `blacklist` | Suggestion blacklist. |
+| `learnedcorrections` | Learned corrections. |
 
 #### Key press
 
@@ -212,8 +214,16 @@ would show nothing.
 |---|---|
 | `tools` | Tools. |
 | `tool/{toolName}` | One tool's page. The name is the tool's own, in capitals: `tool/CLIPBOARD`, `tool/TRANSLATE`. |
+| `vocab/packs` | Vocabulary packs. |
+| `vocab/lists` | My lists. |
+| `vocab/list/{packId}` | One of your vocabulary lists. |
+| `vocab/review` | Review. |
+| `vocab/browse` | Browse words. |
+| `vocab/word/{packId}/{word}` | One word's page in the vocabulary browser. |
 | `voice` | Voice typing. |
 | `expander` | Text expansion. |
+| `expander/folder/{folderId}` | One snippet folder. |
+| `expander/folder/{folderId}/new` | A new snippet inside that folder. |
 | `expander/edit/{snippetId}` | One snippet. `expander/edit/0` opens an empty new one. |
 | `musicapps` | Music players. |
 | `ai_actions` | AI actions. |
@@ -235,8 +245,11 @@ would show nothing.
 | `addon/{repoUrl}/{addonId}` | One addon. Same caveat: prefer `wmkeyboard://addon?repo=&id=` below. |
 | `plugins` | Plugins. |
 | `plugin/{pluginId}` | One installed plugin. |
+| `plugin_ide` | Plugin editor. |
+| `plugin_ide/{draftId}` | One plugin project in the editor. |
 | `datasaver` | Data saver. |
 | `servers` | Servers: every service's address, read by the F-Droid edition only. |
+| `notifications` | Notifications. |
 | `selection_macros` | Selection actions. |
 | `selection_macros/actions` | Selection actions: the list of actions and their order. |
 | `selection_macros/ai` | Selection actions: the AI buttons. |
@@ -334,17 +347,19 @@ happens after that.
 
 ## Opening files WM Keyboard made
 
-WM Keyboard registers a file association for ten extensions. Most are things
-it exports itself, plus three it only ever reads: a plugin file is built by
+WM Keyboard registers a file association for twelve extensions. Most are things
+it exports itself, plus four it only ever reads: a plugin file is built by
 its author rather than the app, the settings-only backup has no export button
-left, and a `.flex` belongs to FlorisBoard. Tapping any of these in a file
-manager offers to import the file instead of opening it as plain text.
+left, a `.flex` belongs to FlorisBoard, and a `.kmp` belongs to Keyman.
+Tapping any of these in a file manager offers to import the file instead of
+opening it as plain text.
 
 | Extension | What it holds |
 |---|---|
 | `.wmtheme.json` | A theme |
 | `.wmlayout.json` | A keyboard layout |
 | `.wmsnippets.json` | A snippet pack |
+| `.wmvocab.json` | A vocabulary pack |
 | `.wmstickers` | A sticker pack (ZIP) |
 | `.wmicons` | An icon pack (ZIP) |
 | `.wmplugin` | A Lua plugin package (ZIP) |
@@ -352,6 +367,7 @@ manager offers to import the file instead of opening it as plain text.
 | `.wmconfig.enc` | The same backup, passphrase-encrypted |
 | `.wmsettings.json` | An older, settings-only backup format |
 | `.flex` | A FlorisBoard theme extension, converted rather than installed. Not WM Keyboard's own format at all, and claiming it is the point: someone moving over opens the file they already have |
+| `.kmp` | A Keyman keyboard package, converted to a layout rather than installed |
 
 This opens a separate, minimal activity, not the settings app itself, since
 tapping a theme in a file manager shouldn't drop you into full settings. It
@@ -365,6 +381,8 @@ dialog tells you what happens next:
 - **Snippets.** Added alongside what you already have, with fresh IDs, so
   importing the same pack twice creates two independent copies rather than
   overwriting.
+- **Vocabulary pack.** Added to your vocabulary packs. Its words get cards,
+  nudges and flashcards.
 - **Stickers.** Added to your own sticker packs, images copied onto the
   device. Capped at 50 packs. Past that, the dialog tells you to delete one
   first.
@@ -390,6 +408,9 @@ dialog tells you what happens next:
   themes are saved but not switched to, which is the opposite of a native
   theme import. A FlorisBoard extension that is a language pack rather than a
   theme, or that uses the older Snygg v1 syntax, is refused with a reason.
+- **Keyman keyboard** (`.kmp`). Its key grid becomes a layout, and its typing
+  rules install with it when the package has any. A package with no
+  on-screen keyboard has nothing to add.
 - **Plugin** (`.wmplugin`). This one has an extra gate. See below.
 
 <PhoneFrame caption="The one-time confirm dialog shown before any file import goes through.">

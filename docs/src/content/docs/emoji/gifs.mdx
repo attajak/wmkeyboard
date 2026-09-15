@@ -8,7 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 
-The GIF tool searches Klipy and GIPHY from a panel inside the keyboard, then sends the result straight into the field you're typing in. No switching apps, no copy-paste. It needs a free API key from at least one provider before it can search anything.
+The GIF tool searches Klipy and GIPHY from a panel inside the keyboard, then sends the result straight into the field you're typing in. No switching apps, no copy-paste. On the F-Droid build it also searches Wikimedia Commons without any key at all, an educational corpus rather than reaction GIFs. Every other build needs a Klipy or GIPHY key before the tool can search anything.
 
 <PhoneFrame caption="The GIF panel, showing trending results on open.">
   {/* shot: emoji/gif-panel-trending */}
@@ -22,7 +22,7 @@ Results are laid out as justified rows of animated previews rather than a fixed 
 
 Before you've typed anything, a scrollable row of **category chips** sits above the grid: Trending first, then Reactions, Love, Happy, Sad and so on. Tap one to run it as a search, which is a way to browse without thinking of a word. Tap the active chip, or Trending, to go back. The chips come from the provider itself when it publishes categories, and from a built-in list when it doesn't, so the row is there offline too. It belongs to the default view only. Type anything and it steps aside for the results. With the full-screen picker turned off it also needs a certain amount of key height to be worth drawing, so a short three-row layout with the number row off loses it rather than losing the last row of the grid.
 
-If neither provider has a key configured, the panel shows a "needs an API key" notice with a shortcut into settings instead of a grid.
+If neither provider has a key configured, the panel shows a "needs an API key" notice with a shortcut into settings instead of a grid. The F-Droid build never hits that notice, since Commons is already searching.
 
 ## Sending a GIF
 
@@ -67,7 +67,7 @@ Saving to a pack is sticker-only, since a GIF can't become one. That row shows o
 | Content filter | Medium | Four levels (Off, Low, Medium, High) mapped to each provider's own content rating (High maps to G-rated results, Off to R). Shared with the sticker tool. |
 | Results for each search | 24 | A slider from 6 to 48. How many GIFs one search or the trending view loads. Shared with the sticker tool. |
 
-You only need one working key, Klipy or GIPHY, for the tool to work. Configuring both adds a second source to search. **Send GIFs as** is only shown here, and the sticker tool's **Send stickers as** only on its own page. Each governs the panel it sits under, so neither page offers the other's setting. See [Stickers](/emoji/stickers/) for that one.
+You only need one working key, Klipy or GIPHY, for the tool to work, except on the F-Droid build, which already has Commons. Configuring both Klipy and GIPHY adds a second source to search. **Send GIFs as** is only shown here, and the sticker tool's **Send stickers as** only on its own page. Each governs the panel it sits under, so neither page offers the other's setting. See [Stickers](/emoji/stickers/) for that one.
 
 ## Details & edge cases
 

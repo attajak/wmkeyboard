@@ -70,7 +70,7 @@ Each row locks one settings screen. The keyboard asks for a check before the scr
 | AI history | **Yes** |
 | AI chats | **Yes** |
 | Privacy | No |
-| Typing statistics | No |
+| Statistics | No |
 | Suggestion blacklist | No |
 | Diagnostics | No |
 
@@ -93,6 +93,7 @@ Each row locks one button that throws data away. The keyboard asks for a check a
 | Storage | Screen, in this group | No |
 | Clear emoji history | Emoji | No |
 | Clear the blacklist | Suggestion blacklist | No |
+| Forget all learned corrections | Personal dictionary | No |
 | Forget per-app languages | Languages | No |
 
 ### Data that leaves the app
@@ -112,10 +113,10 @@ The export button is the one control in the settings app that copies your data i
 
 | Setting | Control | Default |
 |---|---|---|
-| Ask again | Five choices | **When you leave the app** |
+| Ask again *(shown only while Use the fingerprint lock is on)* | Five choices | **When you leave the app** |
 | Allow the screen lock instead | Toggle | **On** |
 
-**Ask again** sets how long one check lasts:
+**Ask again** sets how long one check lasts. The row is hidden while the master switch is off, since nothing is asking yet:
 
 | Choice | One check opens the locked screens |
 |---|---|

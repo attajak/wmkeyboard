@@ -50,7 +50,7 @@ turn off, so you get a toast instead: `This field is always incognito`.
 
 ## What incognito pauses
 
-Turning incognito on does eight things:
+Turning incognito on does seven things:
 
 1. **Pauses clipboard capture.** Nothing you copy joins clipboard history
    while it's on.
@@ -169,9 +169,9 @@ clipboard behind it. Nothing is left sitting there for every other app on
 the device to read. This only fires for pastes the keyboard itself makes, so
 a paste through the field's own long-press menu isn't covered. It's
 controlled by **Forget after you paste a password**, on by default, under
-<SettingsPath path="Clipboard / History" />. That switch sits with
-the rest of clipboard history rather than beside the sensitive-clip options
-below.
+<SettingsPath path="Clipboard / Passwords and codes" />. That switch sits
+beside the sensitive-clip options below rather than with the rest of
+clipboard history.
 
 <PhoneFrame caption="Sensitive-clip handling under Passwords & codes, both on by default.">
   ![Passwords & codes: sensitive-clip handling and the paste-time purge, both on by default.](@assets/screens/privacy/clipboard-settings-passwords.webp)
@@ -231,6 +231,9 @@ incognito or secure fields at all.
 
 <SettingsPath path="Clipboard / Passwords and codes" />
 
+- **Forget after you paste a password** (default **on**). Deletes a clip from
+  history and from the system clipboard the moment it's pasted into a
+  password field.
 - **Sensitive clips** (default **Hide it and delete it quickly**). The other
   options are "Keep it like any other clip" and "Never save it".
 - **Let the keyboard find them** (default **on**). Only shown once Sensitive
@@ -239,12 +242,6 @@ incognito or secure fields at all.
 - **Forget sensitive clips after** (default **5 minutes**, adjustable from 1
   to 120). Only shown while Sensitive clips is "Hide it and delete it
   quickly". Independent of the ordinary clipboard history expiry.
-
-<SettingsPath path="Clipboard / History" />
-
-- **Forget after you paste a password** (default **on**). Deletes a clip from
-  history and from the system clipboard the moment it's pasted into a
-  password field.
 
 For every other clipboard and tool setting, see the
 [tool settings reference](/reference/settings/tools/) and

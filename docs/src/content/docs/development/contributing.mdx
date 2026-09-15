@@ -15,11 +15,11 @@ possible.
 
 ## Finding your way around the modules
 
-The repository is a single Gradle build of 19 Android library modules plus
-`:app`: 16 under `:core:*` (`config`, `common`, `language`, `input`,
-`prediction`, `emoji`, `theme`, `icons`, `tools`, `content`, `addons`,
-`voice`, `settings`, `feedback`, `plugins`, `intelligence`) and 3 under
-`:feature:*` (`tools`, `addons`, `ime`). Two more sit outside that count:
+The repository is a single Gradle build of 20 Android library modules plus
+`:app`: 17 under `:core:*` (`config`, `common`, `language`, `input`,
+`keyman`, `prediction`, `emoji`, `theme`, `icons`, `tools`, `content`,
+`addons`, `voice`, `settings`, `feedback`, `plugins`, `intelligence`) and 3
+under `:feature:*` (`tools`, `addons`, `ime`). Two more sit outside that count:
 the host-side `:tools:dictc` (see below), and `:feature:llm`, a dynamic
 feature module `settings.gradle.kts` only includes when the Play channel flag
 is on. A class's module is visible from its file path, not its package.
@@ -39,9 +39,9 @@ than a convention people remember to follow:
   `:core:settings` and `:core:common`.
 - `:feature:*` sits above `:core:settings`, since the feature modules read
   the settings repository. `:feature:ime` (the keyboard runtime itself)
-  depends on all 16 `:core:*` modules plus `:feature:tools`.
+  depends on all 17 `:core:*` modules plus `:feature:tools`.
 - `:app` sits on top of everything: the settings activity, manifest, and
-  assets, wired to all 19 library modules.
+  assets, wired to all 20 library modules.
 
 No module declares a dependency on anything above it in that list. There's no
 dedicated boundary-checking task either, because the Gradle project graph is
@@ -51,10 +51,11 @@ the constraint. If a dependency direction ever looks surprising, read
 One module breaks the pattern deliberately. `:tools:dictc`, the host-side
 dictionary compiler (pure JVM, no Android), doesn't depend on
 `:core:prediction` as a project. Its `build.gradle.kts` adds that module's
-source directory as an extra Kotlin source directory and filters it to the six
-files it needs (`Trie.kt`, `TrieWalker.kt`, `TrieCompleter.kt`,
-`PackedTrie.kt`, `PackedTrieCodec.kt`, `DictionaryLoader.kt`), alongside its
-own `Main.kt`. The compiler and the reader share one literal implementation,
+source directory as an extra Kotlin source directory and filters it to the
+seven files it needs (`Trie.kt`, `TrieWalker.kt`, `TrieCompleter.kt`,
+`PackedTrie.kt`, `PackedTrieCodec.kt`, `RankFloorCache.kt`,
+`DictionaryLoader.kt`), alongside its own `Main.kt`. The compiler and the
+reader share one literal implementation,
 so they can never drift apart.
 
 <LinkCard
@@ -96,7 +97,7 @@ One task runs everything:
 
 That runs Android Lint against the app module's full flavor, detekt with full
 type resolution against both the full and lite flavors of the app module plus
-its unit tests, and per-module detekt across 18 of the 19 library modules.
+its unit tests, and per-module detekt across 19 of the 20 library modules.
 (`:core:config` has no Kotlin sources to check, and `:tools:dictc` is skipped
 deliberately. See below.) CI doesn't run this task, so run it yourself before
 you ask for review.
@@ -141,10 +142,11 @@ A few things worth knowing before you start on any of these:
 - **Built-in themes are Kotlin, not data files.** There are eleven built-in
   theme families, 28 themes once the colour variants nested inside them are
   counted. Most are `themeFromSeed(...).copy(...)` calls in the
-  `BuiltInThemes` list in `core/theme/.../ThemeSpec.kt`, and the six ports of
-  well-known editor palettes (Dracula, Nord, Solarized, Catppuccin, Tokyo
-  Night, Cyberpunk) sit in `core/theme/.../PaletteThemes.kt` because they
-  carry their own attribution rules. Either way, contributing one means a
+  `BuiltInThemes` list in `core/theme/.../ThemeSpec.kt`. Six more sit in
+  `core/theme/.../PaletteThemes.kt`. Five are ports of well-known editor
+  palettes (Dracula, Nord, Solarized, Catppuccin, Tokyo Night) that carry
+  their own attribution rules. The sixth is the original Cyberpunk palette,
+  which has no upstream to attribute. Either way, contributing one means a
   Kotlin change to `:core:theme`. The
   `.wmtheme.json` format you may have seen is the *export* format a user gets
   from sharing a theme they built in the app, and it requires no change to this
@@ -203,8 +205,8 @@ instead, per the "Picking a first contribution" section above.
   them would repeat the first.
 - **`:tools:dictc` is excluded from `staticAnalysis` on purpose.** Its source
   set adds `:core:prediction`'s source directory, so analyzing it would report
-  those same six files a second time under a different module name.
-- **A stricter local pass exists, but it's Kotlin-only.** `:app` and all 19
+  those same seven files a second time under a different module name.
+- **A stricter local pass exists, but it's Kotlin-only.** `:app` and all 20
   `:core:*`/`:feature:*` library modules gate `allWarningsAsErrors` in their
   `build.gradle.kts` on a `warningsAsErrors` Gradle project property
   (`./gradlew build -PwarningsAsErrors=true`), off by default. The two modules

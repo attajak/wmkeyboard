@@ -11,7 +11,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import LayoutExplorer from '@components/LayoutExplorer.astro';
 import fancy from '../../../../../app/src/main/assets/layouts/fancy.wmlayout.json';
 
-Fancy Text isn't a language. It's 22 Unicode "font" styles on a single keyboard, plus a Normal style that types plain letters. Add it once, pick a style from the strip above the keys, and every letter key immediately shows the styled glyph. What you type is already 𝓯𝓪𝓷𝓬𝔂: there's no separate conversion step afterward.
+Fancy Text isn't a language. It's 31 Unicode "font" styles on a single keyboard, plus a Normal style that types plain letters. Add it once, pick a style from the strip above the keys, and every letter key immediately shows the styled glyph. What you type is already 𝓯𝓪𝓷𝓬𝔂: there's no separate conversion step afterward.
 
 <PhoneFrame caption="The Bold style active in a text field: typing hello commits 𝐡𝐞𝐥𝐥𝐨 directly, and the style strip sits above the keys.">
   {/* shot: languages/fancy-text-bold-field */}
@@ -39,7 +39,7 @@ The same switch also lives in Settings as the **Fancy text** toggle on <Settings
 
 ## Picking a style
 
-While the fancy keyboard is active, a strip appears above the keys with every style written in itself: Normal, 𝐁𝐨𝐥𝐝, 𝘐𝘵𝘢𝘭𝘪𝘤, 𝔉𝔯𝔞𝔨𝔱𝔲𝔯, 🅒🅘🅡🅒🅛🅔🅓 and so on. Tap a chip and the keys restyle instantly. Normal, first in the strip, puts the plain letters back without leaving the fancy keyboard. The strip sits nearest the keys by default; <SettingsPath path="Rows & bars / Row order" /> moves it above the other rows. The pick is remembered until you change it. The plain-text dropdown on the strip's left edge lists the same styles by name, which helps when a sample doesn't render on your device (see the font notes below).
+While the fancy keyboard is active, a strip appears above the keys with every style written in itself: Normal, 𝐁𝐨𝐥𝐝, 𝘐𝘵𝘢𝘭𝘪𝘤, 𝔉𝔯𝔞𝔨𝔱𝔲𝔯, 🅒🅘🅡🅒🅛🅔🅓 and so on. Tap a chip and the keys restyle instantly. Normal, first in the strip, puts the plain letters back without leaving the fancy keyboard. The strip sits nearest the keys by default; <SettingsPath path="Rows & bars / Row order" /> moves it above the other rows. The pick is remembered until you change it. The dropdown on the strip's left edge names the current style. Open it and every style appears written in itself, exactly like the chips above; a screen reader still gets the plain name for each one.
 
 The same choice also lives in Settings, on the Fancy Text language screen, as a **Style** row.
 
@@ -53,7 +53,11 @@ The full set, with the name each one shows:
 | Script | Sans Bold Italic | Squared (Filled) |
 | Bold Script | Monospace | Small Caps |
 | Fraktur | Fullwidth | Superscript |
-| Bold Fraktur | Double-struck | Strikethrough, Underline |
+| Bold Fraktur | Double-struck | Strikethrough |
+| Underline | Regional Indicator | Parenthesized |
+| Double Underline | Overline | Slashthrough |
+| Wavy Underline | Dotted | Upside Down |
+| Bypass | | |
 
 ## The keyboard itself
 

@@ -21,7 +21,7 @@ An addon's version is compared to what the repository's manifest currently lists
 There's no background check and no push notification for updates. Status is only ever recomputed when you're actually looking:
 
 - **Opening the Addons screen** refreshes every added repository's manifest, once per visit, as long as **Check when you open this screen** is on (it is by default). **Only on Wi-Fi** under it, off by default, skips that check on a metered connection.
-- **Tapping Refresh**, the button next to Add repository on the Addons screen, refreshes all repositories at once. A single repository's overflow menu (⋮) has its own **Refresh** that fetches just that one. Refresh ignores both of those settings, because pressing it is the request.
+- **Pulling the repository list down** refreshes all repositories at once, on demand rather than waiting for your next visit. A single repository's overflow menu (⋮) has its own **Refresh** that fetches just that one. Both ignore the two settings above, because making the request is the point.
 - **Opening a repository's catalogue or an addon's detail page** recomputes status against whatever manifest is already cached, with no network round trip. The one exception is a deep link into a repository you haven't added: there's nothing cached to read, so that page fetches the manifest to have anything to show.
 
 If a manifest fetch fails, the previously cached copy is kept rather than cleared, so a repository that's briefly offline doesn't make its addons look uninstalled.
@@ -49,9 +49,9 @@ Three different things can put an installed addon out of sync with what you last
 **You delete the installed thing from its own screen.** Deleting a theme from the theme gallery, a font from the font picker, or a pack from the Icons screen doesn't go anywhere near the Addons screen, so nothing there would otherwise notice. Every time an Addons screen, repository catalogue, or addon detail page opens, it first sweeps every installed record and asks the subsystem that actually owns it whether the thing still exists:
 
 - **Theme, Layout**: still in your custom themes or layouts
-- **Dictionary, Emoji keyword pack**: the file is still on disk
+- **Dictionary, Emoji keyword pack, Vocabulary pack**: the file is still on disk
 - **Sticker pack, Icon pack, Font, Emoji font, Key sound, Sound pack, Plugin**: still present in that content type's own store
-- **Snippets**: survives as long as *any one* of the pack's snippets still exists, so deleting one of five by hand doesn't drop the record for the other four
+- **Snippets, Espanso**: survives as long as *any one* of the pack's snippets still exists, so deleting one of five by hand doesn't drop the record for the other four
 
 A record that fails this check is dropped, and the sweep always runs before status is recomputed, so a theme you deleted by hand from the gallery goes back to showing as available to install, rather than incorrectly claiming to still be installed.
 
@@ -64,7 +64,8 @@ Uninstalling is best-effort and different per type. The end state is always the 
 | Theme | Removed from your custom themes, falling back to the default theme if it was active | Background images copied into app storage when the theme was installed stay on disk. A housekeeping pass clears the ones nothing points at any more, once they have gone a day unreferenced |
 | Layout | Removed from your custom layouts, turned off in your enabled layouts, and unset as the active layout if it was active | None |
 | Dictionary, Emoji keyword pack | The word list or keyword file is deleted directly | The running keyboard is told to reload, so it stops using it right away |
-| Snippets | Every snippet the pack installed is removed from your snippet list | If you'd already deleted one snippet from the pack by hand, only the remaining ones are removed now |
+| Vocabulary pack | The pack file and its translation sidecar files are deleted | Your review progress for its words is kept |
+| Snippets, Espanso | Every snippet the pack installed is removed from your snippet list | If you'd already deleted one snippet from the pack by hand, only the remaining ones are removed now |
 | Sticker pack | Removed from your sticker packs | None |
 | Icon pack | Removed from your icon packs | Any per-icon override sourced from this pack is cleared, and the active icon pack falls back if this was it |
 | Font | Removed from your installed fonts | Every slot that named it (the English face, the Bengali face, any per-script override) goes back to its automatic default |
@@ -81,7 +82,7 @@ The Addons screen holds the addon subsystem's own settings, and they live in its
 
 - **Add repository** adds a repository by URL, up to a limit of 30 in your list at once.
 - **Check when you open this screen** (on by default) refreshes every repository's manifest each visit. **Only on Wi-Fi** under it (off by default) skips that check on a metered connection.
-- **Refresh** re-fetches every added repository's manifest, regardless of those two settings.
+- **Pulling the list down** re-fetches every added repository's manifest, regardless of those two settings.
 - Two repositories are added automatically the first time you open this screen: a sample one, and one carrying typing sounds. Removing either is permanent. It won't come back on a later visit.
 
 Two related settings live elsewhere:
@@ -96,8 +97,8 @@ Every addon type has a maximum payload size, enforced while it downloads. If the
 | Limit | Types |
 |---|---|
 | 1 MB | Plugin |
-| 4 MB | Layout, Snippets, Key sound |
-| 8 MB | Emoji keyword pack, Icon pack |
+| 4 MB | Layout, Snippets, Espanso, Key sound |
+| 8 MB | Emoji keyword pack, Icon pack, Vocabulary pack |
 | 16 MB | Theme, Sound pack |
 | 32 MB | Dictionary, Font, Emoji font |
 | 64 MB | Sticker pack |
@@ -106,7 +107,7 @@ Before any download starts, WM Keyboard also checks that your device has enough 
 
 ## Details and edge cases
 
-- **Previews don't require installing.** Seven addon types can be previewed straight from the catalogue before you commit to installing: snippets, dictionaries, emoji keyword packs, key sounds, sound packs, sticker packs, and plugins. A plugin's preview exists for a different reason than the rest. It isn't there to help you judge the content. It's there so you can read what the thing is allowed to do before its code runs anywhere near your keyboard.
+- **Previews don't require installing.** Nine addon types can be previewed straight from the catalogue before you commit to installing: snippets, Espanso packs, dictionaries, emoji keyword packs, key sounds, sound packs, sticker packs, plugins, and vocabulary packs. A plugin's preview exists for a different reason than the rest. It isn't there to help you judge the content. It's there so you can read what the thing is allowed to do before its code runs anywhere near your keyboard.
 - **Count caps are shared with locally-added content, not addon-specific.** The ceiling on how many fonts, icon packs, sticker packs, sounds, or plugins you can have applies to everything you've added, whether it came from an addon repository or was imported by hand. A plugin additionally has its own small cap on how much it can persist through its own storage, separate from the size of the plugin file itself.
 - **Repository files carry no executable code, with one exception.** Everything a repository publishes is read as data: a theme's colors, a dictionary's words, a sticker's image. The exception is a plugin, which is a script the [plugin sandbox](/plugins/security/) runs. Installing a non-plugin addon never runs anything.
 - **A killed download can resume.** The transfer asks the server for a byte range, so a partial file left behind when the app was killed mid-download is continued rather than refetched. It's the same range-request-and-partial-file approach the on-device AI model downloads use elsewhere in the app. An attempt that ends inside the app (finished, failed, or cancelled) deletes its partial file on the way out, so retrying after an error starts over. [Downloadable wordlists](/languages/dictionaries/) never resume at all: a dictionary download restarts from the top, since it's a capped stream that's deliberately cut off early and can't be resumed midway.

@@ -119,7 +119,7 @@ This separate toggle is **off by default**. It opts the keyboard into Android's 
 
 ## Details & edge cases
 
-- There's no in-app auto-updater in the release APKs or in a build you make yourself. Each new version is a manual install, like the first one. The updater only compiles into builds made for the Play Store channel, which isn't a channel you can install from yet.
+- The release APKs, and a build you make yourself with the default flags, both carry a GitHub-releases updater. It checks this project's releases in the background and shows an "Update available" card on the Home screen. It downloads the APK itself and asks you to confirm before installing. Only a build made for the Play Store channel skips it, and that isn't a channel you can install from yet.
 - Installing over a release APK works only if both were signed with the same key. A release APK replaces an earlier release APK cleanly. It will not install over a build you made yourself, and vice versa. Uninstall first, and export a backup before you do.
 - Build release APKs on more than one machine without sharing a signing keystore and they carry different signatures. Android then refuses to install one over the other. You have to uninstall first, which loses your data unless you exported a backup.
 - The Backup & restore export has a separate "include API keys" switch, off by default. It covers the translate, GIF, search and AI tool keys you may have entered. An export made with it on is worth treating like a password, because anyone holding the file gets those keys.

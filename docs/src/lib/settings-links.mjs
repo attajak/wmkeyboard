@@ -40,8 +40,8 @@ export function normalizeCrumb(text) {
  * under one; a chip written from the other door is rewritten to it.
  */
 const ALSO_UNDER = new Map([
-	// Languages has a "Key layouts" row of its own, at the end of Your layouts.
-	['languages and layouts / key layouts', 'layout and size / key layouts'],
+	// None today. Key layouts had a second door on Languages until Your
+	// layouts moved whole to Layout & size (6ae3c9cd).
 ]);
 
 const screensByTitle = new Map();

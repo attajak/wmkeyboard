@@ -62,7 +62,7 @@ The full field-by-field list (haptics, sound, popup timing, and every long-press
 | --- | --- | --- | --- |
 | Long-press a letter key | Letter keys | Opens its accent/alternate-character popup | Press and hold hints (On) · All accents on press and hold (Off) |
 | Long-press <KeyCap>?123</KeyCap> | <KeyCap>?123</KeyCap> | Opens the numeric keypad panel (a tap still switches symbol layers as usual) | Press and hold ?123 for the number pad (On) |
-| Long-press <KeyCap>A</KeyCap>/<KeyCap>C</KeyCap>/<KeyCap>X</KeyCap>/<KeyCap>V</KeyCap>/<KeyCap>Z</KeyCap>/<KeyCap>Y</KeyCap> | Those letter keys, or whichever six you rebind them to | Runs select-all / copy / cut / paste / undo / redo instead of that letter's accents | Press and hold A to select all, and its five siblings (all Off) |
+| Long-press <KeyCap>A</KeyCap>/<KeyCap>C</KeyCap>/<KeyCap>X</KeyCap>/<KeyCap>V</KeyCap>/<KeyCap>Z</KeyCap>/<KeyCap>Y</KeyCap> | Those letter keys, or whichever six you rebind them to | Adds select-all / copy / cut / paste / undo / redo as an extra entry in that letter's accent popup | Press and hold A to select all, and its five siblings (all On) |
 | Double-tap <KeyCap>Shift</KeyCap> within the window | Shift key | Turns on caps lock | Caps lock double press (350 ms) |
 | Hold any key still | Any key | Shows the key preview bubble | Key popup (On) |
 
@@ -144,7 +144,7 @@ Every default on this page, gathered in one place. "Where" is the settings scree
 | Show what you will delete | Typing → Backspace | On |
 | Volume keys move the cursor | Typing → Volume keys | Off |
 | Release the keys while audio plays | Typing → Volume keys | On |
-| Press and hold delay | Key press → Timing | 300 ms (150–700 ms) |
+| Press and hold delay | Key press → Timing | 300 ms (150–800 ms) |
 | Time before a key repeats | Key press → Timing | 300 ms (150–800 ms) |
 | Delete repeat interval | Key press → Timing | 50 ms (20–200 ms) |
 | Space repeat interval | Key press → Timing | 100 ms (20–200 ms) |
@@ -167,7 +167,7 @@ Every default on this page, gathered in one place. "Where" is the settings scree
 - **The 2-D cursor touchpad only claims the vertical axis once a drag has actually resolved to Cursor.** With the defaults (quick swipe = Language, press-and-hold swipe = Cursor), a fast downward flick within the press-and-hold delay is still governed by the quick-swipe slot and dismisses the keyboard rather than scrolling through lines.
 - **Backspace's word-delete acceleration resets on a reversal, not on release.** Dragging right mid-swipe doesn't bring back a deleted word. It only means the next leftward word costs full travel (72&nbsp;dp) again instead of the shrunk amount.
 - **Volume-key cursor control re-checks "is audio playing" on every key press**, not once at the start, so Release the keys while audio plays hands control back and forth live as playback starts and stops mid-typing.
-- **Two press-and-hold delay sliders share one value.** The Key press → Timing slider ranges 150–700&nbsp;ms. The Accessibility → Touch slider for the same setting shows a wider 150–800&nbsp;ms range, but the stored value still clamps to 700&nbsp;ms, so dragging that slider to 800 silently snaps back once you let go.
+- **The Key press → Timing slider silently clamps past 700&nbsp;ms.** It shows a 150–800&nbsp;ms range, but the stored value still coerces to 150–700&nbsp;ms. Drag it past 700 and it snaps back once you let go. Accessibility → Touch no longer has its own copy of this slider: it links straight to Key press → Timing instead.
 - **The backspace repeat has its own wait, not the press-and-hold delay.** Holding <KeyCap>⌫</KeyCap> starts repeating after Time before a key repeats (300&nbsp;ms), which is a separate slider. Lengthening the press-and-hold delay for accent popups no longer slows backspace down with it.
 - **A very wide screen can let the floating panel's resize grip briefly exceed its 500&nbsp;dp maximum mid-drag.** It snaps back the moment you release.
 - **With TalkBack or another screen reader running, most drags above stop working unless you turn on gesture pass-through.** Set **TalkBack support** to **Gestures** under Accessibility → Screen reader. Then grant the "WM Keyboard gestures" accessibility service. Those two steps keep the spacebar cursor slide, the backspace word-swipe, glide typing, and handwriting alive underneath TalkBack's own touch exploration. Without that service granted, all four fall back to Explore-by-touch and don't respond to a drag. See [Accessibility overview](/accessibility/overview/#the-gesture-pass-through-service).

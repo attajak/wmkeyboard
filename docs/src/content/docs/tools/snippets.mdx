@@ -95,7 +95,7 @@ A pattern either expands on its own or asks first, never both. Which one it is d
 
 ### Ask before it expands
 
-Every snippet has an **Ask before it expands** switch in its add/edit dialog. Turn it on and the trigger stops rewriting your text. Instead, the moment it matches, the snippet appears as a chip on the suggestion bar showing the text it would insert, and nothing goes into the field until you tap it. Keep typing and the chip goes away, leaving what you typed exactly as you typed it.
+Every snippet has an **Ask before it expands** switch on its editor screen. Turn it on and the trigger stops rewriting your text. Instead, the moment it matches, the snippet appears as a chip on the suggestion bar showing the text it would insert, and nothing goes into the field until you tap it. Keep typing and the chip goes away, leaving what you typed exactly as you typed it.
 
 The chip arrives as soon as the trigger is typed. There's no need to press space first, and that goes for both kinds of trigger:
 
@@ -116,7 +116,7 @@ A snippet doesn't have to say one thing. Add a second expansion and typing its t
 
 The **Expansions** section on the editor screen is a list. The first row is the default, marked with a star: it's what a tap in the snippets panel inserts, and what any export that has no way to say "several" carries. The arrows move a row up or down, so promoting an expansion to the top is how you change the default. There's no separate button for it.
 
-What happens when the trigger fires is up to you, in **Settings → Text Expander → When a snippet has several expansions**:
+What happens when the trigger fires is up to you, in **Settings → Text expansion → When a snippet has several expansions**:
 
 - **Chips only** (the default) inserts nothing. Every expansion sits on the suggestion bar and the text stays exactly as you typed it until you press one. Your word candidates keep working beside them, so ignoring the offer costs nothing.
 - **Insert first** puts the default in straight away, the way a one-expansion snippet always has, and offers the rest as chips. Pressing one swaps what was just inserted for it, and you can keep swapping. Backspace still takes the whole thing back to the trigger you typed.
@@ -173,7 +173,7 @@ A snippet's text can include any of these tokens. They're substituted the moment
 
 ## Managing snippets
 
-Find the list under Settings → Text Expander (see [Options](#options) below for the exact path). The Snippets tool page has one row that opens the same screen.
+Find the list under Settings → Text expansion (see [Options](#options) below for the exact path). The Snippets tool page has one row that opens the same screen.
 
 <PhoneFrame caption="Snippets settings: the variable reference card, saved snippets with live insert previews, and Add / Import / Export.">
   ![Snippets settings: the variable reference card, saved snippets with live insert previews, and Add / Import / Export.](@assets/screens/tools/snippets-settings.webp)
@@ -199,7 +199,7 @@ Snippets have a stored order. New ones append to the end, and the pencil button 
 
 Folders group snippets that belong together: a set of work replies, a pack you installed, the handful of things you only use for one project. They're one level deep, and a snippet is in at most one of them.
 
-The **Folders** section on the Text Expander screen is where you make them, and **New folder** asks for a name. Pressing a folder opens it, the same way the keyboard's snippet panel does, and inside you get the folder's own page: its name, its icon, its switch, and the snippets filed in it. So the main screen lists folders and then whatever is in no folder at all under "Not in a folder", instead of repeating every folder's contents down the page.
+The **Folders** section on the Text expansion screen is where you make them, and **New folder** asks for a name. Pressing a folder opens it, the same way the keyboard's snippet panel does, and inside you get the folder's own page: its name, its icon, its switch, and the snippets filed in it. So the main screen lists folders and then whatever is in no folder at all under "Not in a folder", instead of repeating every folder's contents down the page.
 
 A folder can wear an icon of its own, picked from the same set a [keyboard mode](/typing/modes/) picks from. It's on the folder's page under **Icon**, and it shows up on the folder row in Settings and on the folder tile in the snippets panel. **Plain folder** in that picker puts the ordinary folder drawing back.
 
@@ -237,7 +237,7 @@ The tool page carries only what belongs to the button:
 - **Icon colour**: only shown if [colorful tool icons](/tools/overview/) is turned on globally. Overrides just this tool's icon color.
 - **Keyword shortcut**: the words that make the [Smart chips](/smart/chips/) suggestion offer to open this panel. "Snippet" and "snippets" out of the box, editable or clearable here. This only controls opening the panel, and it's unrelated to a snippet's own trigger word (above).
 
-Beyond that, there's nothing global to configure about expansion. There's no on/off switch separate from the tool. How matching works is set per snippet instead, in the add/edit dialog: word or pattern, how far back a pattern may reach, and whether it expands on its own or asks first. The nearest thing to a group switch is a [folder](#folders), which arms and disarms everything filed in it together. Having no pattern snippets at all is what keeps the matching machinery out of the typing path entirely.
+Beyond that, there's nothing global to configure about expansion. There's no on/off switch separate from the tool. How matching works is set per snippet instead, on the editor screen: word or pattern, how far back a pattern may reach, and whether it expands on its own or asks first. The nearest thing to a group switch is a [folder](#folders), which arms and disarms everything filed in it together. Having no pattern snippets at all is what keeps the matching machinery out of the typing path entirely.
 
 ## Snippet packs and backups
 
@@ -251,7 +251,7 @@ That's a different mechanism from the whole-app [config backup](/privacy/backup/
 
 - Snippets aren't available before you've unlocked your device once after a restart. The snippet file lives in credential-encrypted storage, so this tool sits out any lock-screen or pre-unlock typing until then.
 - Ships the same way in both the full and lite editions: there's no edition gating on this tool.
-- The 500-snippet and 20,000-character limits above are enforced only on import. Adding snippets one at a time from the dialog has no equivalent cap.
+- The 500-snippet and 20,000-character limits above are enforced only on import. Adding snippets one at a time from the editor screen has no equivalent cap.
 - Because the panel re-reads the snippet file only when you open it, a snippet you just added in Settings won't appear if you already had the panel open. Close and reopen the panel (or switch to another panel and back) to pick it up. Triggers themselves are refreshed whenever you tap into a text field, so a snippet you just saved starts expanding straight away even if you never open the panel.
 - `{uuid}` generates a new value on every insertion, including inserting the same snippet twice in a row. It isn't fixed per snippet.
 - A tap in the snippets panel always inserts the default expansion, never a picker: one tile, one insertion. Hold it if you want the choice.

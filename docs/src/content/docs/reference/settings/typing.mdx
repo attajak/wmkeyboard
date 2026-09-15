@@ -74,16 +74,16 @@ Full writeup: [Autocorrect](/smart/autocorrect/) covers the confidence math, wha
 | Setting | Type | Default | Shown when |
 | --- | --- | --- | --- |
 | Suggestions | Toggle | On | always |
-| Punctuation suggestions | Toggle | Off | always |
+| Punctuation suggestions | Toggle | Off | Suggestions on |
 | Punctuation marks | Text field | `.,?!'` | Punctuation suggestions on |
 | Number of suggestions | Slider, 2–6 | 3 | always |
 | Scroll the suggestions | Toggle | Off | always |
 | Learn a word after | Slider, 1–5 ("Once" at 1) | Once | always |
-| Offer corrections it isn't sure about | Toggle | On | always |
+| Offer corrections it isn't sure about | Toggle | On | Autocorrect on |
 | Ask before saving new words | Toggle | Off | always |
 | Remember a new word after | Slider, 1–10 ("Straight away" at 1) | 3 | Ask before saving new words off |
 | Suggestions in every field | Toggle | On | always |
-| Suggestion strip always visible | Toggle | Off | always |
+| Suggestion strip always visible | Toggle | Off | Suggestions on |
 | Best suggestion in the middle | Toggle | On | always |
 | Shorten long words | In the middle / At the end | In the middle | Scroll the suggestions off |
 | Suggest contact names | Toggle | Off | always (requests Contacts permission) |
@@ -96,11 +96,13 @@ Full writeup: [Autocorrect](/smart/autocorrect/) covers the confidence math, wha
 | Only offer new words | Toggle | Off | always |
 | Numbers from the letter keys | Toggle | Off | always |
 | Autopilot | Nav row | n/a | always (opens the Autopilot screen below) |
+| Words on the keys | Nav row | n/a | always (opens the Words on the keys screen below) |
 | Personal dictionary | Nav row | n/a | always (opens the [Personal dictionary](/smart/personal-dictionary/) screen) |
 | Custom dictionaries | Nav row | n/a | always (opens the Custom dictionaries screen) |
 | Suggestion blacklist | Nav row | n/a | always (opens the [Suggestion blacklist](/smart/blacklist/) screen) |
 | Word menu | Chips | Never suggest, Add, Delete | always |
 | Adjust rank changes | Choice | Both | always |
+| Delete edits imported lists | Toggle | On | always |
 
 **Suggestions** is the master switch for the whole strip: word completions, typo corrections offered as candidates, and next-word prediction. **Punctuation marks** sets which marks the punctuation chips offer, one per character, in the order you want them. Leave it blank and it falls back to the shipped `.,?!'`. **Number of suggestions** splits the strip evenly, so raising it on a narrow screen buys candidates at the cost of reading each one. **Scroll the suggestions** lifts that trade: each word keeps its natural size and the strip scrolls sideways when they overrun it, so five or six candidates read fine on a narrow phone. Short words still fill the strip exactly as before. **Shorten long words** picks where a word that still overruns its slot is cut: in the middle, so both its start and its ending stay readable (`Punct…tion`), or at the end (`Punctuat…`). The color the strip paints a correction in lives with the rest of its looks, under [Look & feel / Toolbar](/reference/settings/appearance/).
 
@@ -114,6 +116,8 @@ All three are covered in full on [Personal dictionary](/smart/personal-dictionar
 
 **Word menu** picks which of the three optional items the press-and-hold menu on a suggested word offers; **Edit** is always on it. **Adjust rank changes** decides which rank controls the word card shows: the learned weight (the personal dictionary's own count), a separate rank adjustment that can move any word up or down, or both. Both settings are covered on [Personal dictionary](/smart/personal-dictionary/#from-the-suggestion-strip).
 
+**Delete edits imported lists** governs what happens when you delete one of your own imported words from the strip. On, the word is removed from that list's file for good. Off, the list stays untouched and the word is blacklisted instead, the same as a word from a downloaded list, which can't be edited.
+
 **Offer corrections it isn't sure about** puts a fix that came close to firing on the strip as a chip rather than dropping it. It never applies anything on its own, and a correction you have already undone once is never offered. See [Autocorrect](/smart/autocorrect/#corrections-it-offers-instead-of-applying).
 
 The three navigation rows at the bottom open their own screens rather than an inline setting. The subtitle on **Suggestion blacklist** starts as "Words to never suggest or autocorrect to" and becomes a running count ("3 words never suggested") once you've added something. All three are documented in full on [Dictionaries & words](/reference/settings/dictionaries/).
@@ -122,7 +126,7 @@ The three navigation rows at the bottom open their own screens rather than an in
   ![The Suggestions group, including the three dictionary and blacklist navigation rows.](@assets/screens/reference/settings/typing-suggestions-group.webp)
 </PhoneFrame>
 
-Full writeup: [Suggestions & prediction](/smart/suggestions/) for the strip itself, [Contact-aware typing](/smart/contacts/) for the three permission-gated toggles, [Password manager chips & smart replies](/smart/autofill/) for the two Android-11 toggles, and [Autocorrect](/smart/autocorrect/#reducing-typos-before-they-happen) for autopilot.
+Full writeup: [Suggestions & prediction](/smart/suggestions/) for the strip itself, [Contact-aware typing](/smart/contacts/) for the three permission-gated toggles, [Password manager chips & smart replies](/smart/autofill/) for the two Android-11 toggles, [Autocorrect](/smart/autocorrect/#reducing-typos-before-they-happen) for autopilot, and [Words on the keys](/typing/words-on-the-keys/) for the octopus screen.
 
 ### The Autopilot screen
 
@@ -144,6 +148,29 @@ The drawing follows your typing and nothing else. It disappears for the length o
 
 **Size of the effect** is how big the drawing gets, and nothing else: your presses land in the same places at every value. ×1.0 draws each area at its true size. Above that it is the *growth* that multiplies, not the whole key, so a letter that claimed no extra space still draws at the size of its key and only the difference gets larger. Raise it to see a gentle strength setting at a glance, or leave it at ×1.0 for the honest picture. The outline follows the same size, so the two always agree.
 
+### The Words on the keys screen
+
+<SettingsPath path="Typing / Suggestions / Words on the keys" />
+
+| Setting | Type | Default | Shown when |
+| --- | --- | --- | --- |
+| Words on the keys | Toggle | Off | always |
+| Where the words sit | Choice: Above the key / Own lane / Inside the key | Above the key | Words on the keys on |
+| How many words | Slider, 3–26 | 6 | Words on the keys on |
+| What may appear | Multi-choice: Completions / Corrections / Next words | All three | Words on the keys on |
+| Flick up to pick | Toggle | On | Words on the keys on |
+| Flick sensitivity | Choice: Strict / Balanced / Relaxed | Balanced | Flick up to pick on |
+| Tap the word to pick | Toggle | On | Words on the keys on |
+| Word size | Slider, ×0.6–×1.6 | ×1.0 | Words on the keys on |
+| Hide the corner hint | Toggle | Off | Words on the keys on |
+| Long-press characters too | Toggle | Off | Words on the keys on |
+
+**Words on the keys** floats a predicted word over the key that would type it next: with `hel` typed, `hello` sits over <KeyCap>L</KeyCap> and `help` over <KeyCap>P</KeyCap>. It only adds to the suggestion strip, never replaces it, and ships off. **Where the words sit** chooses the geometry: above the key without growing the keyboard, in a lane of its own with more room and a taller board, or inside the key sharing its small box with the letter. **How many words** trades quiet for coverage. Low values show only the words the keyboard is confident about and often leave the board empty; high values fill nearly every key that can carry one, and a key too narrow for its word stays bare rather than showing it cramped. **What may appear** limits the kinds of guess allowed on the keys: completions continue the word you're typing, corrections fix it and draw in a different color where the match breaks down, and next words appear over their first letters after a space, before you've typed anything.
+
+Two gestures take a floating word. **Flick up to pick** reads a straight, mostly vertical stroke off a key as picking its word rather than starting a glide, and **Flick sensitivity** sets how far off straight up, and how curved, that stroke may still be and count. **Tap the word to pick** writes it with a direct tap on the small floating text, though on the top row only the half hanging over the key can be tapped.
+
+**Hide the corner hint** clears a key's long-press hint while it's carrying a word, since the two sit close enough to read as one thing; a key with nothing to say keeps its hint either way. **Long-press characters too**, off by default, also floats words that need a long press to reach their next letter, at the cost of a key promising a word a plain press won't finish.
+
 ## Smart chips
 
 <SettingsPath path="Typing / Smart chips" />
@@ -160,8 +187,10 @@ The drawing follows your typing and nothing else. It disappears for the length o
 | Offer lookups | Toggle | On | Smart chips on |
 | Translate hints | Toggle | On | Smart chips on |
 | GIFs for celebrations | Toggle | On | Smart chips on |
+| Group long numbers | Toggle | On | Smart chips on |
+| Grouping style | Choice: Automatic / Thousands / Lakh and crore | Automatic | Group long numbers on |
 
-**Convert currencies**' own subtitle ends with your live target currency code instead of describing the setting, so out of the box it reads "…offers the amount in BDT". It updates the moment you change that currency inside the Currency converter tool. The same three calculate/currency/unit toggles are mirrored inside each tool's own Options screen. See [Smart chips](/smart/chips/#options) for where. The bottom five rows are the phrase-triggered chips: "next friday" offers a date, "will it rain" the forecast, "define serendipity" a dictionary lookup, "in spanish" the translator, and "happy birthday" a GIF search.
+**Convert currencies**' own subtitle ends with your live target currency code instead of describing the setting, so out of the box it reads "…offers the amount in BDT". It updates the moment you change that currency inside the Currency converter tool. The same three calculate/currency/unit toggles are mirrored inside each tool's own Options screen. See [Smart chips](/smart/chips/#options) for where. Five of the rows above are the phrase-triggered chips: "next friday" offers a date, "will it rain" the forecast, "define serendipity" a dictionary lookup, "in spanish" the translator, and "happy birthday" a GIF search. **Group long numbers** offers a typed run of digits back grouped, so `1234567` gets a chip reading `1,234,567`, and one press types the grouped form; **Grouping style** picks where the separators fall, following the language you're typing in when it's Automatic.
 
 <PhoneFrame caption="The Smart chips group: the master switch and its per-family toggles.">
   ![The Smart chips group: the master switch and its per-family toggles.](@assets/screens/reference/settings/typing-smart-chips-group.webp)
@@ -197,13 +226,21 @@ Full writeup: [One-time codes](/smart/one-time-codes/), and [Permissions](/priva
 | Glide typing | Toggle | On | always |
 | Handwrite with swipes | Choice: Type words / Handwrite | Type words | <Flavor edition="full" /> and Glide typing on |
 | Glide across the spacebar | Toggle | On | Glide typing on and swipe mode is Type words |
+| Glide over Shift to capitalize | Toggle | On | Glide typing on and swipe mode is Type words |
+| What a pass over Shift capitalizes | Choice: Whole word / One letter | Whole word | Glide over Shift to capitalize on |
 | Ask when a glide is unclear | Toggle | On | Glide typing on and swipe mode is Type words |
 | When to ask | Choice: Near ties / Close calls / Any doubt / Every pause | Close calls | Ask when a glide is unclear on |
 | Time to hold still | Slider, 150–1000 ms | 350 ms | Ask when a glide is unclear on |
 | Hold longer to always ask | Toggle | On | Ask when a glide is unclear on, and When to ask is not Every pause |
 | Words to choose from | Slider, 2–5 | 3 | Ask when a glide is unclear on |
-| Learn my swipe style | Toggle | On | Glide typing on |
-| Forget my swipe style | Action, with a confirm | | Glide typing on |
+| Learn my swipe style | Toggle | On | Glide typing on and swipe mode is Type words |
+| Forget my swipe style | Action, with a confirm | | Glide typing on and swipe mode is Type words |
+| Words a glide can produce | Choice: Everything / Large / Medium / Small | Large | Glide typing on and swipe mode is Type words |
+| Whose words a glide can produce | Choice: Every word / Prefer my words / Only my words / Automatic | Every word | Glide typing on and swipe mode is Type words |
+| Steadiness of the word while you glide | Choice: Off / Light / Steady / Very steady | Light | Glide typing on and swipe mode is Type words |
+| Finish long words early | Choice: Off / When sure / Eager | Off | Glide typing on and swipe mode is Type words |
+| Color the word a lift will type | Choice: Never / When sure / Any early word / Always | When sure | Glide typing on and swipe mode is Type words |
+| Where the color shows | Choice: Strip / Strip and pill / Strip, pill and keys | Strip and pill | Glide typing on and swipe mode is Type words |
 | Space after a glided word | Toggle | On | Glide typing on and swipe mode is Type words |
 | Apostrophe in a glide | Choice: Off / Comma / Full stop / Spacebar / Apostrophe key | Off | Glide typing on and swipe mode is Type words |
 | Swipe start distance | Slider, 0.5×–4× | 2.0× | Glide typing on |
@@ -229,6 +266,7 @@ Full writeup: [One-time codes](/smart/one-time-codes/), and [Permissions](/priva
 | Spacebar long press keys | Text field | Blank (the hold opens the language picker) | always |
 | Arrows on the spacebar | Toggle | On | either swipe slot above is Language |
 | The spacebar shows | Choice: Language / Layout / Both | Language | always |
+| Language picker shape | Choice: List / Carousel | List | always |
 | Spacebar text | Text field | Blank (falls back to the live spacebar label) | always |
 
 :::note

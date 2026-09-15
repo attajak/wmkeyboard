@@ -14,13 +14,13 @@ import cherokee from '../../../../../app/src/main/assets/layouts/chr_cherokee.wm
 
 WM Keyboard's language catalogue holds 843 entries. Alongside the languages you'd expect are InScript variants, minority Cyrillic alphabets, and a dozen constructed languages. Every one you enable becomes a full input mode with its own layout, dictionary, and settings, and you move between them without leaving the keyboard.
 
-<PhoneFrame caption="The Languages screen: your enabled languages, a device-derived Suggested for you group, and Add language to search the full catalogue.">
+<PhoneFrame caption="The Languages screen: your enabled languages and Add language to search the full catalogue.">
   {/* shot: languages/list-overview */}
 </PhoneFrame>
 
 ## Suggested languages
 
-Both the Languages screen and the Add language screen open with a short **Suggested for you** group, so the language you came for is usually already on screen. Each row says why it's there: "One of the languages on your device", or "Many people type this language in Bangladesh". Tapping one adds it exactly like tapping a search result does.
+The Add language screen opens with a short **Suggested for you** group, so the language you came for is usually already on screen. Each row says why it's there: "One of the languages on your device", or "Many people type this language in Bangladesh". Tapping one adds it exactly like tapping a search result does.
 
 Two things on the device feed that list, in this order:
 
@@ -37,7 +37,7 @@ Suggestions stay suggestions: nothing is enabled until you tap it. A brand-new i
 
 ## Adding a language
 
-Below the suggestions, tap **Add language** to search the whole registry. The search box matches on endonym, English name, id, locale tag, and the names and ids of the layouts the language ships, so "german", "Deutsch", "de", "de-DE" and "QWERTZ" all find the same entry. Tap an unadded language and it's enabled immediately on its first layout, then that language's own screen opens so you can pick a different layout or turn on suggestions from another enabled language.
+Tap **Add language** to search the whole registry. The screen that opens leads with the suggestions above the search results. The search box matches on endonym, English name, id, locale tag, and the names and ids of the layouts the language ships, so "german", "Deutsch", "de", "de-DE" and "QWERTZ" all find the same entry. Tap an unadded language and it's enabled immediately on its first layout, then that language's own screen opens so you can pick a different layout or turn on suggestions from another enabled language.
 
 If the language has data to download (a word list, emoji keywords, an n-gram pack of word pairs, or any mix of the three) you're asked once, right there, with the rough size for the lot on the dialog. **Download** starts all of them in the background. **Not now** adds the language without them. **Cancel** backs out of the whole thing, for the tap that landed on the wrong row. Nothing is enabled until you answer, so Cancel really does leave your language list as it was. You can start any of them by hand later from the language's own screen. Emoji keywords also have an automatic download of their own, covered in [Emoji search in your language](/emoji/customization/#emoji-search-in-your-language), but the prompt is the one chance to get the word list at the same time.
 
@@ -63,7 +63,7 @@ Tap any enabled language to reach its screen. **Layouts**, **Dictionary** and **
 - **Dictionary**, **Emoji**, and, for Chinese, Japanese, and Cantonese, a conversion-dictionary group. Between them they cover downloadable word lists, emoji keyword packs, and for those three languages a larger conversion dictionary plus script and input-scheme options. [Downloadable dictionaries](/languages/dictionaries/) covers all three in full, and [Chinese, Japanese & Korean](/languages/cjk/) covers Chinese and Japanese input specifically.
 - **Language data**, a single button that fetches everything the language has to download at once, with the size for the lot printed on it. It's there for any language that has something to download, and the download managers skip whatever is already on disk.
 
-Three more groups turn up on the languages that have them: **Clusters** on a conjunct script (see the note below), **Spellings** on Bangla, whose "Use known spellings" switch turns "tmr" into তোমার and "table" into টেবিল, and **Style** on the Fancy Text entry, which is where its 22 styles are listed.
+Three more groups turn up on the languages that have them: **Clusters** on a conjunct script (see the note below), **Spellings** on Bangla, whose "Use known spellings" switch turns "tmr" into তোমার and "table" into টেবিল, and **Style** on the Fancy Text entry, which is where its 31 styles are listed.
 
 <PhoneFrame caption="A language's own screen: layout toggles, numeral system, and other enabled languages to suggest from.">
   {/* shot: languages/language-detail-screen */}
@@ -99,9 +99,9 @@ A language on a script that forms conjunct clusters (Bengali, Devanagari, Tamil,
 
 WM Keyboard ships 1,279 layouts in total, in three groups.
 
-20 are built into the app: QWERTY, AZERTY, Dvorak, Colemak, Workman, Halmak, Avro, Probhat, Jatiya, plus dedicated layouts for French, German, Spanish, Korean, Russian, Arabic, Greek, Hebrew, and Hindi — and two boards that put more than one letter on a key, T9 and Compact QWERTY. See [Ambiguous layouts](/languages/ambiguous/) for how those two work.
+20 are built into the app: QWERTY, AZERTY, Dvorak, Colemak, Workman, Halmak, Avro, Probhat, Jatiya, and dedicated layouts for French, German, Spanish, Korean, Russian, Arabic, Greek, Hebrew, and Hindi. Two more boards put more than one letter on a key: T9 and Compact QWERTY. See [Ambiguous layouts](/languages/ambiguous/) for how those two work.
 
-394 more are bundled as individual layout files, one per language or variant that isn't among those 20.
+397 more are bundled as individual layout files, one per language or variant that isn't among those 20.
 
 The remaining 862 are key grids converted from the [Keyman keyboards repository](https://github.com/keymanapp/keyboards), which is where most of the long tail comes from. They're what takes the language count past 800. See [Keyman layouts](/languages/keyman/) for what they are and what they can and can't do yet.
 
@@ -123,7 +123,7 @@ Past the languages most keyboards cover, the catalogue reaches into territory mo
   <LayoutExplorer layout={cherokee} />
 </PhoneFrame>
 
-The registry also carries a handful of entries that aren't spoken languages at all but behave like one in every setting on this page: IPA, musical notation, chorded Braille, and Morse code, plus a Unicode "fancy text" keyboard with 22 switchable styles. These get their own pages, [Music, braille & Morse](/languages/notation/) and [Fancy text](/languages/fancy-text/), because typing on them works differently enough to need separate walkthroughs.
+The registry also carries a handful of entries that aren't spoken languages at all but behave like one in every setting on this page: IPA, musical notation, chorded Braille, and Morse code, plus a Unicode "fancy text" keyboard with 31 switchable styles. These get their own pages, [Music, braille & Morse](/languages/notation/) and [Fancy text](/languages/fancy-text/), because typing on them works differently enough to need separate walkthroughs.
 
 ## Options
 
@@ -133,7 +133,7 @@ Everything on this page is reachable from the app's **Languages** screen, and th
 
 - **Emoji keyword downloads** sit under <SettingsPath path="Emoji / Emoji keywords" /> and are covered on [Emoji customization](/emoji/customization/).
 - **Word-list downloads and custom dictionaries** sit under <SettingsPath path="Languages & layouts / (a language) / Dictionary" /> and are covered on [Downloadable dictionaries](/languages/dictionaries/).
-- **Your own layouts**, including edits of a shipped layout, live under <SettingsPath path="Languages & layouts / Key layouts" /> and are covered on [Custom layouts & the layout editor](/languages/custom-layouts/).
+- **Your own layouts**, including edits of a shipped layout, live under <SettingsPath path="Layout & size / Key layouts" /> and are covered on [Custom layouts & the layout editor](/languages/custom-layouts/).
 
 ## Details & edge cases
 

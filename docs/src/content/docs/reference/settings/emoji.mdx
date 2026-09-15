@@ -78,7 +78,7 @@ This group is a page of its own, opened from the Emoji panel row on the Emoji sc
 | Clear emoji history | Button (confirms first) | n/a | n/a |
 | Return to the keyboard after you insert | Toggle | On / Off | Off |
 | History tab | Choice | Recent / Most used | Recent |
-| Clear recents button | Toggle | On / Off | Off |
+| Clear recents button *(shown only when History tab is Recent)* | Toggle | On / Off | Off |
 | Kaomoji and Emoticons | Toggle | On / Off | Off |
 | Emoji descriptions | Toggle | On / Off | On |
 | Animated emoji | Toggle | On / Off | On |
@@ -205,6 +205,7 @@ Each enabled language's own settings screen also carries a matching **Emoji** gr
 - **Two more emoji-access shortcuts live on a different screen.** **Emoji key instead of 🌐** (on by default) turns the <KeyCap>🌐</KeyCap> key into an emoji-panel launcher. **Comma key opens emoji** (off by default) does the same to the comma key. Both are under <SettingsPath path="Layout & size / Bottom row keys" />, not here. Turning on the comma-key version also removes the emoji tool from the toolbar, per its own info text.
 - **Inline `:word:` emoji search is a Typing setting, not an Emoji one.** <SettingsPath path="Typing / Suggestions / Inline emoji search" /> (on by default) turns a colon at a word boundary into a live emoji search in the suggestion strip, and auto-commits exact shortcode matches like `:tada:`. It's unrelated to the **Emoji suggestions** toggle above.
 - **Press an emoji suggestion only appears while Emoji suggestions is on.** Turning suggestions off hides the choice entirely rather than disabling it.
+- **Clear recents button only appears while History tab is Recent.** The Most used tab is a computed ranking rather than a remembered list, so there's nothing on it to clear.
 - **Emoji row content, count, and scrolling only appear while Emoji row is not Off.**
 - **Installed and Custom emoji fonts each reveal their own extra controls.** A font list pulled from Addons for Installed, an import button for Custom, shows only while that choice is selected.
 - **Kaomoji and emoticons insert as plain text.** Tapping one from those two tabs types it directly. It never joins your emoji recents or most-used history.

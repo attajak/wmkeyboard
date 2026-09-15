@@ -40,7 +40,7 @@ The auto-provisioned JDK 21 toolchain is not the project's bytecode target. Ever
 
 ## Building full vs. lite
 
-WM Keyboard ships as two build flavors on the same `capabilities` flavor dimension, declared identically in `:app` and all 19 `:core:*`/`:feature:*` modules. The standalone `:tools:dictc` compiler is a plain JVM module and carries no flavors at all.
+WM Keyboard ships as two build flavors on the same `capabilities` flavor dimension, declared identically in `:app` and all 20 `:core:*`/`:feature:*` modules. A 21st, `:feature:llm`, declares the same dimension but only joins the build for Play-channel releases. The standalone `:tools:dictc` compiler is a plain JVM module and carries no flavors at all.
 
 - **`assembleFullDebug`** builds every feature: ML Kit handwriting recognition, ML Kit OCR/QR/document scanning, the Harper grammar checker (and the Harper spell-checker service it registers with Android), the local LLM tool, offline Whisper dictation, and one-tap background removal in the sticker editor.
 - **`assembleLiteDebug`** switches all of those off. That drops roughly 100 MB of ML Kit models and the Harper native library from the install, which is what makes it useful on a low-storage device.
@@ -77,7 +77,7 @@ The same command is in `native/harper-jni/README.md`, along with the JNI contrac
 ./gradlew staticAnalysis
 ```
 
-That one task chains every analyzer the project uses: Android Lint (`lintFullDebug`), plus type-resolved detekt for `:app` (both flavors and its unit tests) and for eighteen library modules across `core/*` and `feature/*`. `core/config` is skipped because it has no Kotlin sources. `tools:dictc` is skipped because its build adds `:core:prediction`'s source directory as an extra Kotlin source directory, so analyzing it would report those same files a second time. Detekt also runs a separate `lite` pass for `core/voice`, `core/intelligence` and `feature/ime`, since a bug in a lite-only stub is invisible to the full-flavor run. `core/content` has a lite stub too and no lite pass, so add one there if that file grows.
+That one task chains every analyzer the project uses: Android Lint (`lintFullDebug`), plus type-resolved detekt for `:app` (both flavors and its unit tests) and for nineteen library modules across `core/*` and `feature/*`. `core/config` is skipped because it has no Kotlin sources. `tools:dictc` is skipped because its build adds `:core:prediction`'s source directory as an extra Kotlin source directory, so analyzing it would report those same files a second time. Detekt also runs a separate `lite` pass for `core/voice`, `core/intelligence` and `feature/ime`, since a bug in a lite-only stub is invisible to the full-flavor run. `core/content` has a lite stub too and no lite pass, so add one there if that file grows.
 
 detekt 1.23's Android integration doesn't register `detekt<Variant>` tasks under AGP 9. A convention plugin (`wmkeyboard.detekt`) hand-registers them instead. Each module gets its own `detektFullDebug`/`detektLiteDebug` task that analyzes only its own sources against its own compile classpath, which avoids the false positives you get from analyzing one module's code against another's classpath.
 

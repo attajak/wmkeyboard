@@ -63,6 +63,8 @@ Accept a pasted string and normalise to the raw manifest URL (§4 of the format 
 - `github.com/USER/REPO` → `raw.githubusercontent.com/USER/REPO/HEAD/wmkeyboard-repo.json`
 - `github.com/USER/REPO/tree/BRANCH` (or `/blob/BRANCH`) → same on `BRANCH`
 - any other `https` URL ending in `.json` → as-is
+- a repository page on another forge (Codeberg, a GitLab, SourceHut, Bitbucket, a self-hosted
+  Forgejo) → that forge's raw `wmkeyboard-repo.json`, via `GitForge` / `RepoLocation`
 - any other `https` URL → read as a directory, with `wmkeyboard-repo.json` appended
 - a pasted address with no scheme at all → assumed `https`, then the rules above
 
@@ -73,10 +75,16 @@ Keep the resolved **manifest URL's directory** as the base for resolving relativ
 
 `filesDir/addons/`, following the same contract as `IconPackStore` / `StickerPackStore`:
 
-- `repos.json` holds `[{ url, manifestUrl, addedAt, cachedManifest, fetchedAt, seeded }]`.
-- `installed.json` holds `{ "<repoId>/<addonId>": { version, type, localRef, installedAt } }`,
-  where `localRef` is the created custom-theme/layout id, dictionary file path, pack id, font id
-  or sound id. Drives the Installed / Update-available / Uninstall states.
+- `repos.json` holds `{ version, repos: [{ url, manifestUrl, addedAt, cachedManifest, fetchedAt,
+  seeded }], autoRefresh, refreshUnmeteredOnly }`. The last two are the repo-refresh settings.
+  Both default to what a file written before they existed already did: fetch on every visit,
+  over any connection.
+- `installed.json` holds `{ version, installed: { "<repoId>/<addonId>": { version, type, localRef,
+  installedAt, name, repoName, manifestUrl, description, author } } }`, where `localRef` is the
+  created custom-theme/layout id, dictionary file path, pack id, font id or sound id. `name`,
+  `repoName`, `description` and `author` let the Installed list and the offline page render
+  without the manifest; `manifestUrl` lets the Installed list reopen the addon's own page. Drives
+  the Installed / Update-available / Uninstall states.
 
 The store's directory getter returns **null** when `!DirectBoot.isUserUnlocked`, so it reads as
 empty before first unlock; `attach(context)` re-points it afterwards. A `reconcile()` sweep drops
@@ -96,10 +104,12 @@ entries whose local target the user has since deleted by hand.
 - Dictionaries can be large: stream to a temp file with a **32 MiB cap** (matches
   `CustomDictionaries.MAX_BYTES`), following the resumable pattern in
   `core/localllm/LocalLlmDownloadManager.kt`. Accept optional `.txt.gz`.
-- `sha256` is **optional**. When present, hash the bytes as they stream in and verify **before**
-  install, aborting on mismatch. When absent, install proceeds and the UI marks the addon
-  unverified. A beginner hand-writing a manifest must not be blocked on computing hashes.
-  `sizeBytes` is likewise a pre-download guard only. The mid-stream cap does the real work.
+- `sha256` is **optional**. When present, verify it in a separate pass over the finished
+  `.part` file, after the transfer completes and before install, aborting on mismatch. Hashing
+  the download only once it has landed avoids re-hashing an already-verified prefix on a resumed
+  transfer. When absent, install proceeds and the UI marks the addon unverified. A beginner
+  hand-writing a manifest must not be blocked on computing hashes. `sizeBytes` is likewise a
+  pre-download guard only. The mid-stream cap does the real work.
 - If `minAppVersion > BuildConfig.VERSION_CODE`, disable install with an "update the app" note.
 
 ## 5. Install dispatch
@@ -114,6 +124,7 @@ as part of this work. Those rows are marked **new**.
 | `dictionary` | `CustomDictionaries.import(filesDir, langId, name, stream)`. Validates ≥1 word, 32 MiB cap. Guard: `langId` must exist in `LanguageRegistry` (else surface a clear "unsupported language" error). |
 | `emoji_keywords` | `EmojiKeywordPacks.import(filesDir, langId, name, stream)`. Per-language TSV of emoji keywords, validated to ≥1 emoji, 8 MiB cap, gzip tolerated. Same `langId`-must-exist-in-`LanguageRegistry` guard as `dictionary`. Merged into the bundled catalogue by `EmojiKeywordPack.merge` at load, so the pack feeds emoji search, the inline `:name:` search, emoji prediction and the long-press description in one step. |
 | `snippets` | **new** `SnippetFile.decode` (the `.wmsnippets.json` codec was specified but never written) → for each entry `SnippetStore.add(snippet)`, ids reassigned (the whole snippet, so a field added to the format later cannot be silently dropped on the way in). The same codec gives the app snippet export/import, so anything a repo can ship the app can also produce. |
+| `espanso` | `SnippetPayload.read(payload, name)` filtered to `isEspanso`, converted to snippets, then stored through the same `storeSnippets` path `snippets` uses. Uninstalls by the same rule too. |
 | `stickers` | `StickerPackFile.import(input, store)`. Extracts the `*.wmstickers` ZIP archive, validates the `wmkeyboard-stickers` envelope in `pack.json`, normalizes images to app-private sticker storage, and registers the pack in `StickerPackStore`. |
 | `icon_pack` | `IconPackFile.import(input, store)`. Extracts `*.wmicons`, validates the `wmkeyboard-icons` envelope in `pack.json`, keeps every entry naming a slot `IconSlots` knows (parsing each SVG to prove it renders), and registers the pack in `IconPackStore`. |
 | `font` | **new subsystem.** The app had three fixed custom-font slots, each overwritten on import, so a *library* of installed fonts had to be built first: `FontStore` (`filesDir/fonts/installed/`, `fonts.json` index, 50-font cap) + `FontFile.import(stream, store, name)` validating the sfnt magic and proving the face actually loads. `KeyboardFonts` resolves an `installed:<id>` font id through the store, so installed faces appear in the font picker beside the Google Fonts. |
@@ -121,6 +132,7 @@ as part of this work. Those rows are marked **new**.
 | `sound` | **new subsystem.** Key sounds were five synthesised waveforms behind a `KeySoundStyle` enum with no import path at all. Adds a `CUSTOM` style, `SoundStore` (`filesDir/keysounds/`, `sounds.json`, 30-sound cap) and `SoundFile.import(stream, store, name)` sniffing the header for MP3, OGG or WAV; `KeySoundPlayer` loads the chosen file into its `SoundPool` instead of a synthesised buffer. |
 | `sound_pack` | `SoundPackFile.import(input, store)`. Extracts the `*.wmsoundpack` ZIP, validates the `wmkeyboard-sound-pack` envelope in `pack.json`, sniffs every recording's header, rewrites the manifest onto file names it chose itself, and registers the pack in `SoundPackStore` under a `PACK` style beside `CUSTOM`. |
 | `plugin` | `PluginFile.import(input, store)` into `PluginStore`, refused outright when the plugin subsystem is off. Then `setEnabled(id, false)`: a `.wmplugin` opened from a file lands enabled, one that arrived from a repository lands switched off and is offered. See §7a. |
+| `vocabulary` | `VocabPacks.import(filesDir, langId, name, stream)`. Per-language pack of words to nudge toward, validated to ≥1 word, 8 MiB cap. Same `langId`-must-exist-in-`LanguageRegistry` guard as `dictionary`. |
 
 Record the result in `installed_addons`. Uninstall reverses the local action
 (`deleteCustomTheme` / `deleteCustomLayout` / delete the dict or keyword-pack file / remove snippets / delete sticker pack / etc.).
@@ -130,17 +142,19 @@ turned on: browsing a repository and tapping the download arrow on three themes 
 the user wearing the third one. `AddonApply` asks instead. The types with one obvious slot
 (`theme`, `icon_pack`, `emoji_font`, `sound`, `sound_pack`, `layout`, `plugin`) raise a one-question
 dialog the moment the install lands. The rest have nothing to ask about: they are either live already
-(`dictionary`, `emoji_keywords`, `snippets`, `stickers`) or bound for a picker with several slots (`font`).
+(`dictionary`, `emoji_keywords`, `snippets`, `espanso`, `stickers`, `vocabulary`) or bound for a picker with
+several slots (`font`).
 
 Updating is the exception: an addon that *was* the active theme, sound or layout is re-selected
 under its new local id without asking, because every importer mints a fresh id and the user never
 revoked the choice.
 
 Separately, the detail page offers **Use**, which navigates to whichever settings screen owns
-that type (`themes`, `languages`, `customdictionaries`, `emojikeywords`, `expander`,
-`sticker_packs`, `icons`, `fonts`, `emoji`, `keypress`, `plugins`). Layouts go to Languages rather than Key
-layouts: an installed layout arrives switched off, and the switch that turns it on is under
-Languages → Your layouts, while Key layouts lists only layouts that are already on.
+that type (`themes`, `layout`, `customdictionaries`, `emojikeywords`, `expander`,
+`sticker_packs`, `icons`, `fonts`, `emoji`, `keypress`, `plugins`, `vocab/packs`). Layouts go to
+Layout & size rather than Key layouts: an installed layout arrives switched off, and the switch
+that turns it on is under Layout & size → Your layouts, while Key layouts lists only layouts that
+are already on.
 
 ### Reconciliation
 
@@ -154,13 +168,14 @@ recompute, so a deleted theme reads as available again rather than installed.
 
 ## 5b. Previewing without installing
 
-Six types have *content* that is itself the choice: `snippets`, `dictionary`, `emoji_keywords`,
-`sound`, `sound_pack` and `stickers`. Their detail pages offer **Preview**. It downloads the
-payload to `cacheDir` (a 12 MiB ceiling, under every install cap) and reads it into a summary:
-the snippets in the pack, a sample of the word list with a count, two dozen emoji beside their
-keywords, a play button, up to eight play rows per half of a sound pack, the first two dozen
-sticker images. Nothing is installed and no setting changes. The path touches neither the status
-map nor the single-install lock, so a preview can't interfere with a download in flight.
+Eight types have *content* that is itself the choice: `snippets`, `dictionary`, `emoji_keywords`,
+`sound`, `sound_pack`, `stickers`, `espanso` and `vocabulary`. Their detail pages offer **Preview**. It
+downloads the payload to `cacheDir` (a 12 MiB ceiling, under every install cap) and reads it into
+a summary: the snippets in the pack, a sample of the word list with a count, two dozen emoji
+beside their keywords, a play button, up to eight play rows per half of a sound pack, the first
+two dozen sticker images, a sample of the vocabulary pack's words. Nothing is installed and no
+setting changes. The path touches neither the status map nor the single-install lock, so a
+preview can't interfere with a download in flight.
 
 `plugin` previews too, for the opposite reason: not to judge the content but to read what the
 thing would be allowed to do before any of its code lands. That one is built from the manifest

@@ -13,7 +13,7 @@ import { FileTree, Steps } from '@astrojs/starlight/components';
 
 Version 1 · status: **implemented** and shipping in WM Keyboard
 
-WM Keyboard can install extra **themes, layouts, dictionaries, emoji keyword packs, snippet packs, sticker packs, icon packs, fonts, emoji fonts, key sounds, sound packs and plugins** from the web. Anyone can publish these by putting a small **manifest** and the addon files in a public Git repository (GitHub, GitLab, a raw host, or anything else that serves files over `https`). Users add a repository by pasting its URL into the app.
+WM Keyboard can install extra **themes, layouts, dictionaries, emoji keyword packs, snippet packs, sticker packs, icon packs, fonts, emoji fonts, key sounds, sound packs, vocabulary packs and plugins** from the web. Anyone can publish these by putting a small **manifest** and the addon files in a public Git repository (GitHub, GitLab, a raw host, or anything else that serves files over `https`). Users add a repository by pasting its URL into the app.
 
 A repository is nothing more than an **index over files the app already knows how to import**. The addon files are the same formats the app produces when you export a theme or a layout from the app itself. There is no packaging, signing or build step.
 
@@ -89,7 +89,7 @@ Must sit at the repository root and validate against
 Unknown fields are ignored, so future versions can add fields without breaking old clients.
 
 :::caution[The published schema lags the format]
-The schema's `type` enum does not list `sound_pack` yet, so a schema validator
+The schema's `type` enum does not list `vocabulary` yet, so a schema validator
 rejects an entry that uses it. `requires` is not described either, though it
 passes because the schema allows extra keys. The app accepts both. Fix the
 schema upstream before reading a validator failure on those two as a real
@@ -132,7 +132,7 @@ problem with your manifest.
 | `sizeBytes` | | Payload size, for the UI and a pre-download guard. Optional; the client caps every download regardless. |
 | `previews` | | Screenshot images (relative or absolute). |
 | `minAppVersion` | | App `versionCode` floor. An older app still lists the addon and refuses the install with a note saying to update the app. |
-| `langId` | *dict* | **Required for `dictionary` and `emoji_keywords`**, since both install into a per-language folder. An optional hint for `layout`. Must be a registered language id (§5). |
+| `langId` | *dict* | **Required for `dictionary`, `emoji_keywords` and `vocabulary`**, since all three install into a per-language folder. An optional hint for `layout`. Must be a registered language id (§5). |
 | `langIds` | | Languages this addon covers, when one id isn't enough. See [Language coverage](#language-coverage). |
 | `license` | | Licence identifier. Use SPDX where one fits (`MIT`, `OFL-1.1`, `CC0-1.0`, `CC-BY-4.0`), otherwise any short name. Shown on the addon's page. |
 | `licenseText` | | Full licence text, inline. |
@@ -196,6 +196,7 @@ The app derives the raw manifest URL from what the user pastes:
 | `https://github.com/USER/REPO/tree/BRANCH` | …/`BRANCH`/wmkeyboard-repo.json |
 | a direct `raw.githubusercontent.com/.../wmkeyboard-repo.json` | used as-is |
 | any other `https` URL ending in `.json` | used as-is |
+| a repository page on another forge (Codeberg, a GitLab, SourceHut, Bitbucket, a self-hosted Forgejo or GitHub Enterprise) | that forge's own raw-file address, for example GitLab's `.../-/raw/REF/wmkeyboard-repo.json` or SourceHut's `.../blob/REF/wmkeyboard-repo.json` |
 | any other `https` URL | read as a directory, with `wmkeyboard-repo.json` appended |
 
 A pasted address with no scheme is assumed to be `https`, because that is how
@@ -229,6 +230,7 @@ into your repo.
 | `sound_pack` | `*.wmsoundpack` | ZIP archive containing a `pack.json` envelope (`"format":"wmkeyboard-sound-pack"`, `"version":1`) and the recordings under `sounds/`. Many recordings of one keyboard, one picked per key press and optionally another when the finger lifts, with an optional separate set for the spacebar and the other key roles. Set `minAppVersion`: older builds have no way to install this type. See [Sound packs](/development/addon-repos/sound-packs/). |
 | `vocabulary` | `*.wmvocab.json`, `*.wmvocab.json.gz` | A vocabulary pack (`"format":"wmkeyboard-vocab"`) for the Vocabulary tool: lemmas with parts of speech, senses, examples and pronunciation, up to 5 000 words. `langId` is required. Gzip is detected by magic bytes on every import path. The same file the app exports from Settings › Vocabulary. |
 | `plugin` | `*.wmplugin` | ZIP archive containing a `plugin.json` manifest (`"format":"wmkeyboard-plugin"`) and a Lua script. **The only payload that is code rather than data**. See [Plugins](#plugins). |
+| `vocabulary` | `*.wmvocab.json` | `{ "format":"wmkeyboard-vocab", "version":1, "pack":{ "id":"…", "name":"…", "langId":"…" }, "words":[ { "word":"…", "pos":["…"], "senses":[ { "pos":"…", "definition":"…" } ] } ] }`. Requires `langId`, one language per pack. May be gzipped for transport, since the reader inflates it automatically. At most 5,000 words and 8 MB inflated. |
 
 ### Plugins
 
@@ -362,13 +364,15 @@ informational and import ignores them. Both are optional in a hand-built pack.
 
 | Group | Ids | Count |
 |---|---|---|
-| Tools | `tool.<toolbar tool>`, for example `tool.clipboard`, `tool.gif`, `tool.sticker`, `tool.voice` | 63 |
-| Keys | `key.shift`, `key.shift_on`, `key.shift_lock`, `key.backspace`, `key.forward_delete`, `key.globe`, `key.emoji`, and `key.enter` plus `key.enter_{search,send,go,next,previous,done}` | 14 |
-| Toolbar chrome | `chrome.toolbox`, `chrome.panel_back`, `chrome.suggestions_expand`, `chrome.emoji_shortcut`, `chrome.search_close`, `chrome.incognito` | 6 |
+| Tools | `tool.<toolbar tool>`, for example `tool.clipboard`, `tool.gif`, `tool.sticker`, `tool.voice` | 72 |
+| Keys | `key.shift`, `key.shift_on`, `key.shift_lock`, `key.backspace`, `key.forward_delete`, `key.globe`, `key.input_method_picker`, `key.emoji`, and `key.enter` plus `key.enter_{search,send,go,next,previous,done}` | 15 |
+| Toolbar chrome | `chrome.toolbox`, `chrome.panel_back`, `chrome.suggestions_expand`, `chrome.emoji_shortcut`, `chrome.search_close`, `chrome.incognito`, `chrome.power_saving` | 7 |
 | Emoji tabs | `emoji_tab.search`, `emoji_tab.recent`, `emoji_tab.most_used`, and one per category (`smileys`, `people`, `animals`, `nature`, `food`, `travel`, `activities`, `objects`, `symbols`, `flags`) | 13 |
 
 The Tools row is derived from the app's tool list, so its count grows with
-every new tool. The other three groups are fixed lists in the app.
+every new tool. The other three groups are hand-maintained lists in the app.
+Two of them have grown too: a new key and a new piece of toolbar chrome each
+picked up a replaceable icon. The Emoji tabs group has not changed.
 
 A pack does **not** have to be complete: any slot it leaves out keeps the app's
 built-in icon. The `slots` list is advisory. The app walks the archive's

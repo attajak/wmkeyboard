@@ -171,7 +171,7 @@ Want a hard guarantee that audio never leaves the device, whichever model is ins
 
 ## Details & edge cases
 
-**Errors show specific messages.** A network problem says "No connection. Check your network and try again." A busy recognizer, or another app holding the mic, says "The microphone is busy. Close the other apps that use it and try again." A language the device can't recognise at all says "Speech recognition does not support this language on your device." A network hiccup mid-utterance keeps whatever was already heard instead of throwing it away.
+**Errors show specific messages.** A network problem says "No connection. Check your network and try again." A busy recognizer, or another app holding the mic, says "The microphone is busy. Close the other apps that use it and try again." A language the device can't recognise at all says "Speech recognition does not support this language on your device." A network hiccup mid-utterance keeps whatever was already heard instead of throwing it away. The Microphone access tile in Quick Settings, or the developer Sensors off toggle, can let a session start and then hand it silence. The panel notices and says "The microphone is blocked. Turn on Microphone access in Quick Settings, then try again." Either bar says "Microphone blocked in Quick Settings". Tap the mic again once you've turned access back on.
 
 **Switching tools closes dictation.** Opening any other panel (Handwriting, Clipboard, Emoji, and so on) ends the current dictation session first.
 

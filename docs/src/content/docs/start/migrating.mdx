@@ -28,7 +28,7 @@ If a term below doesn't match what your old keyboard called it, this is where to
 | Voice typing / dictation | The Voice tool: a full-screen panel by default, or a compact bar over the keys | Full panel; continuous listening and spoken punctuation both on |
 | Autocorrect strength | A confidence multiplier you can tune, rather than a plain on/off switch | On, ×4 (adjustable ×1.5–×10) |
 | Emoji suggestions replacing the typed word | Emoji insert mode set to replace the word, with a long press on the suggestion keeping the word instead | On |
-| "Virtual key" haptic feel | A Haptic style picker. **Tap**, the default, asks the platform for its keyboard-tap effect, which is the one an OEM tunes for its own keyboard. **Key** is the generic virtual-key buzz | On, style Tap |
+| "Virtual key" haptic feel | A Haptic style picker. **Tap** asks the platform for its keyboard-tap effect, the one an OEM tunes for its own keyboard, but setup skips past it. **Key**, the generic virtual-key buzz, is what setup actually picks on most phones, falling back to **Heavy** where the platform effects aren't supported | On, style Key or Heavy, picked by setup |
 
 Voice typing, glide typing, and several tools are covered in their own pages: [Voice typing](/tools/voice/), [Glide typing](/typing/glide-typing/), [Clipboard](/tools/clipboard/), and [Themes](/themes/overview/). Autocorrect and gesture settings live under [Typing settings](/reference/settings/typing/). Tune the confidence multiplier there if the default feels too eager or too quiet.
 
@@ -66,7 +66,7 @@ Android's own system dictionary (the one some keyboards share words through) isn
 The first-run wizard covers most of this already (see [Enable the keyboard](/start/setup/) for the full walkthrough). If you skipped or rushed past its pages, these four are worth doing by hand:
 
 - **Add every language you actually type in.** A fresh install enables only what your phone's own language list told it to, plus English. Add the rest from Settings → Languages, where a **Suggested for you** group offers the likely ones first.
-- **Trim the toolbox.** Every tool ships switched on by default, 63 of them on a <Flavor edition="full" /> build. Setup narrows that for you, and the persona quiz's "how much do you want" answer is what picks the size: "Keep it simple" lands 8 tools, "A good middle" 21, "Show me everything" 35. Answering applies the set on the spot, before the Tools page shows up, and that page's **Recommended** button puts the same set back if you've been toggling. On the Settings → Tools screen there's no bulk switch at all, so flip off the ones you don't want one at a time. To get the buttons back, replay the wizard from **About / Run setup again**.
+- **Trim the toolbox.** Every tool ships switched on by default, 72 of them on a <Flavor edition="full" /> build. Setup narrows that for you, and the persona quiz's "how much do you want" answer is what picks the size: "Keep it simple" lands 8 tools, "A good middle" 22, "Show me everything" 37. Answering applies the set on the spot, before the Tools page shows up, and that page's **Recommended** button puts the same set back if you've been toggling. On the Settings → Tools screen there's no bulk switch at all, so flip off the ones you don't want one at a time. To get the buttons back, replay the wizard from **About / Run setup again**.
 - **Check your spacebar swipe directions**, if cursor-on-a-quick-swipe is what you're used to. Untouched, a quick swipe switches language and a hold-and-swipe moves the cursor. The wizard's gesture page offers four pairings and puts a "Recommended" badge on whichever one matches your persona answer: say you type several languages and it marks Language on both slots, say you type one and it marks Cursor on both. That answer has already written the pairing by the time you reach the page, so the badge is a description rather than an offer. Set it to what your thumbs expect. See [Gestures](/typing/gestures/).
 - **Revisit autocorrect strength** if your old keyboard's felt looser or tighter. WM Keyboard's confidence multiplier defaults to ×4 out of a ×1.5–×10 range. That sits nearer the eager end than the conservative one, but well short of the most aggressive setting.
 
@@ -87,7 +87,7 @@ Two more things migrating users tend to look for:
 
 ## Options
 
-<SettingsPath path="Typing / Personal dictionary" />
+<SettingsPath path="Typing / Suggestions / Personal dictionary" />
 <SettingsPath path="Typing / Suggestions / Custom dictionaries" />
 
 - Personal dictionary lists every word the keyboard has learned, with a button to add one manually and a way to remove any entry.

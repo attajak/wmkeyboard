@@ -116,10 +116,11 @@ one-tap clearing.
 
 The catalog is a TSV asset (`emoji/catalog.tsv`) with English and Bangla
 keywords merged into a single token index, so multilingual search falls out for
-free. Query scoring: exact token (100) > curated synonym expansion (60) >
-prefix (40) > Damerau-Levenshtein distance-1 (30), summed across query tokens.
-The search field lives inside the keyboard: while it is active, letter keys
-feed the query instead of the app.
+free. Query scoring: exact shortcode (1,000) > shortcode prefix (500 minus
+rank) > exact token (100) > curated synonym expansion (60) > keyword prefix
+(40) > Damerau-Levenshtein distance-1 fuzzy match (30), summed across query
+tokens. The search field lives inside the keyboard: while it is active, letter
+keys feed the query instead of the app.
 
 ### Persistence
 

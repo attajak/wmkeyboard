@@ -35,7 +35,7 @@ This page writes the same bundle as the export button on the Backup screen, on a
 | Only while charging | Toggle | On | Back up automatically on and destination usable |
 | Only on Wi-Fi | Toggle | On | Same, and only for a destination that needs a connection (everything except Folder) |
 | Protect with a passphrase | Toggle | Off | always |
-| Passphrase | Password field | empty | Protect with a passphrase on |
+| Passphrase | Password field | empty | Protect with a passphrase on and destination usable |
 
 Three of the seven only appear when the build can actually reach them, and all three conditions are decided when the APK is built rather than on your phone. Google Drive needs the Google Play services library compiled in, which the F-Droid build leaves out. Dropbox and OneDrive each need a client id compiled in. A choice with nothing behind it is left off the list rather than shown and then refused, so a build without those pieces shows a shorter list.
 
@@ -65,7 +65,7 @@ That status line says one of four things: the last error if there was one ("The 
 
 <SettingsPath path="Data / Backup & restore / Include in export" />
 
-The **Include in export** page is twelve toggles, top to bottom. Eleven are independent; the twelfth, **Include API keys**, only exists while **Settings** is on:
+The **Include in export** page is thirteen toggles, top to bottom. Twelve are independent; the thirteenth, **Include API keys**, only exists while **Settings** is on:
 
 | Setting | Subtitle | Default |
 |---|---|---|
@@ -81,6 +81,7 @@ The **Include in export** page is twelve toggles, top to bottom. Eleven are inde
 | Add-on repositories | The add-on sources you added, so you can install from them again | On |
 | Emoji history | Your recent emoji, your favourites and the skin tone of each one | On |
 | Typing statistics | Your daily typing counts and your all-time speed | On |
+| Vocabulary | Your word lists, imported packs and learning progress. Downloaded packs are left out; they can be downloaded again. | On |
 
 :::note[These switches are saved]
 They used to be local to the screen, and they're stored settings now, because the automatic backup has to know what to put in a file when you aren't there to tell it. One list drives both: what you tick here is what a hand-made export contains and what an automatic backup contains.
@@ -126,6 +127,7 @@ Confirming a current-format import applies each section independently and merges
 | Add-on repositories | **Merges**. Incoming repository addresses join your existing list, and a duplicate address is skipped rather than overwritten |
 | Emoji history | **Replaces**. Recents, use counts, favourites and per-emoji skin tones all come from the file |
 | Typing statistics | **Replaces**. The day-by-day counts and the all-time totals both come from the file |
+| Vocabulary | **Replaces**, but only your own word lists and packs. A downloaded catalogue pack stays put, since the bundle never carried it, and the learning-progress record is written whole |
 
 Settings import is rollback-safe. After writing, the keyboard re-reads its own settings to confirm they still parse, and it undoes the write if they don't. The other sections in the same file still apply even when settings roll back. After a confirmed import you see either "The app restored `<sections>`.", a lowercase comma-separated list of what changed, or "The file has nothing to restore." A rolled-back settings portion appends "The app could not apply the settings. Your settings did not change." A confirmed legacy import instead reports how many settings it restored, or says "The app could not apply that backup. Your settings did not change."
 

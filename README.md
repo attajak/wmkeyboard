@@ -60,7 +60,7 @@ It is written in Kotlin with Jetpack Compose, keyboard surface included. The cod
 | **The toolbox** | Clipboard with history and pinning, snippets, translate, calculator, unit and currency conversion, camera, OCR and QR scanning, media controls, an app launcher, text editing, and more. |
 | **Themes** | A real theme editor: palettes, fonts, key shapes, textures, decals, particles, photo backgrounds, plus Material You and AMOLED. Themes export and import as files. |
 | **AI, voice, handwriting** | Speech recognition with a continuous mode, offline Whisper dictation, ML Kit handwriting, Harper grammar checking through a Rust JNI bridge, and an optional local LLM. |
-| **Extensibility** | Addon repositories serve 12 kinds of addon. Lua plugins run sandboxed. Layouts and themes import from other keyboards, including Florisboard and HeliBoard. |
+| **Extensibility** | Addon repositories serve 14 kinds of addon. Lua plugins run sandboxed. Layouts and themes import from other keyboards, including Florisboard and HeliBoard. |
 
 <details>
 <summary><b>The full inventory, if you want numbers</b></summary>

@@ -76,6 +76,10 @@ Three choices under **Where the words sit**:
 - **Own lane** gives every row a strip of its own, so nothing ever overlaps anything. The keyboard grows a little taller.
 - **Inside the key** writes the word over the letter. Nothing can collide, but the word and the letter share a very small box.
 
+## Word size
+
+**Word size** scales how large the floating words are drawn, from 0.6× to 1.6× the corner hint's own size, default 1.0×. A larger word is easier to read but crowds its neighbours sooner.
+
 ## The corner hints
 
 On most boards the word sits clear of the corner hint and the two do not collide, so **Hide the corner hint** is off by default. Turn it on if your key size or word size brings them close enough to read as one thing; a key showing a word then hides its hint for as long as the word is there, and keys with nothing to say keep theirs.
@@ -93,4 +97,4 @@ Hovering a key speaks its letter and then what it is offering: "L, suggests hell
 
 ## Power saving
 
-Power saving turns this off. It predicts and redraws across the whole board on every keystroke, which is the kind of work a low battery wants back, and the suggestion strip is still saying the same thing while it is gone. You can opt out under <SettingsPath path="Tools / Power saving" />.
+Power saving turns this off. It predicts and redraws across the whole board on every keystroke, which is the kind of work a low battery wants back, and the suggestion strip is still saying the same thing while it is gone. Unlike power saving's other switches, this one has no toggle of its own: whenever power saving is in force, the floating words stay off. See [Power saving](/typing/power-saving/#what-gets-dropped).

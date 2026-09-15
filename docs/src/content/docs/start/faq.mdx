@@ -39,7 +39,7 @@ Nothing runs in the background out of the box. The keyboard is a normal Android 
 If you're on a storage- or RAM-constrained device, two things help further:
 
 - **Lite edition** drops the ML Kit, Harper, and LiteRT native libraries behind handwriting, OCR/document scanning, grammar checking, offline Whisper, and the local LLM. See [Full vs Lite](/start/editions/) for the full comparison.
-- **Power saving** is a dedicated mode that trims the costliest per-keystroke work: vibration, key sounds, animations, the glide trail, emoji prediction, smart chips, background network look-ups, screenshot watching, and the on-device voice/handwriting models, either by hand or automatically.
+- **Power saving** is a dedicated mode that trims the costliest per-keystroke work: vibration, key sounds, animations, the glide trail, Words on the keys, background network look-ups, screenshot watching, and the on-device voice/handwriting models, either by hand or automatically.
 
 <SettingsPath path="Tools / Power saving" />
 
@@ -47,7 +47,7 @@ By default, power saving never switches on by itself: only the toolbar tile or t
 
 ## Where are my learned words stored, and how do I wipe them?
 
-In a plain JSON file in the app's private storage, and nowhere else. It's `user_lexicon.json`, alongside four similar files: emoji usage, the corrections you undid, CJK picks, and language‑mix confidence. Before the phone's first unlock there's no file to write to at all. Anything typed in that window stays in memory for the session and is thrown away once the device unlocks, never queued up to save later.
+In a plain JSON file in the app's private storage, and nowhere else. It's `user_lexicon.json`, alongside a dozen more files that quietly track things like emoji usage, undone corrections, CJK picks and language‑mix confidence, listed in full below. Before the phone's first unlock there's no file to write to at all. Anything typed in that window stays in memory for the session and is thrown away once the device unlocks, never queued up to save later.
 
 Two different screens manage it, depending on whether you want to edit individual words or wipe everything:
 
@@ -55,13 +55,23 @@ Two different screens manage it, depending on whether you want to edit individua
   ![Personal dictionary: every learned word, with per-word delete and an Add word button.](@assets/screens/start/faq-personal-dictionary.webp)
 </PhoneFrame>
 
-<SettingsPath path="Typing / Personal dictionary" />
+<SettingsPath path="Typing / Suggestions / Personal dictionary" />
 
 Lists every word the keyboard has learned, with a per‑word delete and a button to add your own. Words you add here read "You added this word." Words picked up from typing read "Seen 4 times" instead. Changes take effect immediately, even if the keyboard is already open.
 
 <SettingsPath path="Privacy / Your data / Learned words" />
 
-The bulk wipe. **Delete the learned words** takes out all six files in a single pass: the learned words, the new words still waiting to be counted, your emoji usage, the corrections you undid, your CJK picks, and language‑mix confidence. Nothing personal is left behind for the keyboard to keep guessing from. Words you added by hand go with them, because the Personal dictionary screen above writes into that same learned-words file rather than a list of its own. Snippets and imported word lists are separate files and stay put.
+The bulk wipe. **Delete the learned words** takes out all 13 learning files in a single pass:
+
+- the learned words, and the new words still waiting to be counted
+- your hand and tap-position models
+- your per-app and overall language‑mix confidence
+- the two glide-typing learning stores
+- your emoji usage
+- the corrections you undid, and the separate autocorrect-fix memory
+- your CJK picks, and the dictionary's word ranking
+
+Nothing personal is left behind for the keyboard to keep guessing from. Words you added by hand go with them, because the Personal dictionary screen above writes into that same learned-words file rather than a list of its own. Snippets and imported word lists are separate files and stay put.
 
 A running keyboard follows along rather than needing to be restarted. The settings app bumps a version number the keyboard service watches, and the service drops its in‑memory copies the moment it sees the change, so the words it was holding can't be written straight back over the emptied files.
 

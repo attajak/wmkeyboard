@@ -2464,6 +2464,13 @@
   "keyman": false
  },
  {
+  "id": "hoc-Wara",
+  "name": "𑢹𑣉𑣉 · Ho",
+  "english": "Ho (Warang Citi)",
+  "script": "Warang Citi",
+  "keyman": false
+ },
+ {
   "id": "bem",
   "name": "Ichibemba · Bemba",
   "english": "Bemba",
@@ -3846,13 +3853,6 @@
   "id": "hoc-Latn",
   "name": "Ho (Latin)",
   "english": "Ho (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "hoc-Wara",
-  "name": "Ho (Warang Citi)",
-  "english": "Ho (Warang Citi)",
   "script": "Latin",
   "keyman": true
  },

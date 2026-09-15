@@ -8,7 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 
-The Rows & bars screen controls the strip of rows that can stack above the key grid. You turn the symbol row and fancy text on here, reorder the rows, and edit which characters each symbol set offers. This page is the field reference. For the reasoning behind each option, read [Modes & the symbol row](/typing/modes/) instead.
+The Rows & bars screen controls the strip of rows that stack above and below the key grid. You turn the symbol row and fancy text on here, reorder the rows, and edit which characters each symbol set offers. This page is the field reference. For the reasoning behind each option, read [Modes & the symbol row](/typing/modes/) instead.
 
 <PhoneFrame caption="The Rows & bars screen: Symbol row, Row order, and Symbol sets groups.">
   {/* shot: reference/settings/rows-overview */}
@@ -18,7 +18,7 @@ The Rows & bars screen controls the strip of rows that can stack above the key g
 
 <SettingsPath path="Rows & bars" />
 
-The screen has five groups, top to bottom: Row order, Fancy text, Dictionary bar, Symbol row, and Symbol sets. Row order is a list you drag; the bars above and below the keys are rows in it, with the top bar pinned in place.
+The screen has five groups, top to bottom: Row order, Fancy text, Dictionary bar, Symbol row, and Symbol sets. Row order is a list you drag, and the keys themselves are one of the rows in it: drag a row above **Keyboard** to draw it over the keys, or below **Keyboard** to draw it under them.
 
 ### Fancy text
 
@@ -50,10 +50,14 @@ The switches behind the chips are the same ones on each language's own screen (*
 |---|---|---|
 | Symbol row | Toggle | Off |
 | Symbol row height *(shown only while Symbol row is on)* | Slider, 28–64 dp | 40 dp |
+| Lines of symbols *(same)* | Stepper, 1–4 | 1 |
+| Scrolling *(shown only while Lines of symbols is more than 1)* | Segmented row, Together / Each line alone | Together |
 
 **Symbol row** is off out of the box. Its info button explains what the row does: it shows one symbol set at a time, and a chip at the row's left edge switches between whichever sets you've enabled. A keyboard mode can pick a set automatically per app as well. See [The symbol row](/typing/modes/#the-symbol-row) for how the row behaves once it's on.
 
 **Symbol row height** appears under the toggle once the row is on. It ships at 40 dp and runs 28–64 dp. The number row's own **Number row height** slider on [Layout & size](/reference/settings/layout/) covers a wider 32–100 dp, so the two rows can be brought to the same height, or the symbol row shortened to give the keys below it more room.
+
+**Lines of symbols** stacks the row up to four lines tall, each one a full symbol-row height showing the next entries of the set, so more of a set is on screen without a scroll. Past one line, **Scrolling** appears: **Together** moves every line as one grid, and **Each line alone** lets each line scroll on its own, so one line can sit at its start while another sits at its end.
 
 One thing about the row has no setting behind it, so it's worth saying here rather than leaving you to look for a control that isn't there. **The row takes itself off screen while the Symbols panel is open**, and while any panel running full-bleed has claimed the strip above the keys. A row of symbols on top of a panel of symbols is just noise. The height it gives up goes to the panel rather than shrinking the window, so nothing jumps as the panel opens or closes, and the row comes straight back when you close the panel.
 
@@ -64,14 +68,15 @@ One thing about the row has no setting behind it, so it's worth saying here rath
 | Row | Reorderable | Live status shown here |
 |---|---|---|
 | Emoji row | Yes | Off (enable it in Emoji settings) / Behind a toolbar button / Own row, depending on Emoji settings' **Emoji row** |
-| Suggestions & toolbar | No (always shown) | Always shown |
+| Suggestions & toolbar | Yes | Off, depending on **Show the toolbar** under Appearance → Toolbar |
 | Symbol row | Yes | On / Off, depending on the Symbol row toggle above |
 | Fancy text styles | Yes | On / Shown while Fancy text is on, depending on the Fancy text toggle above |
 | Tools row | Yes | Off (the tools share the strip) / Behind the arrow button / Own row, depending on **Where the tools go** under Appearance |
 | Dictionary bar | Yes | On / Off, depending on the Dictionary bar toggle above |
 | Selection actions | Yes | Off / On the suggestion strip / On, depending on [Selection actions](/reference/settings/selection-actions/) under Advanced |
+| Keyboard | Yes | Always shown |
 
-**Default order: Emoji row, Tools row, Selection actions, Suggestions & toolbar, Symbol row, Dictionary bar, Fancy text styles.** Each row's status line is read-only here. The emoji row's line is driven by the **Emoji row** setting on the [Emoji](/reference/settings/emoji/) screen, and the symbol row's and fancy text row's by the toggles above. This list controls the stacking order and nothing else. The toolbar is pinned at the top of the list, since it's always on; drag the other rows into any order under it. A hidden row keeps its slot empty rather than collapsing the stack, so turning it back on doesn't change where it lands. An order saved before the fancy text row existed gets it appended at the bottom, nearest the keys; one saved before the tools row existed gets that row just above the suggestion strip, where it always drew. An order saved before the selection actions row existed gets that row just above the suggestion strip too, which is where it draws by default.
+**Default order: Emoji row, Tools row, Selection actions, Suggestions & toolbar, Symbol row, Dictionary bar, Fancy text styles, Keyboard.** Each row's status line is read-only here. The emoji row's line is driven by the **Emoji row** setting on the [Emoji](/reference/settings/emoji/) screen, and the symbol row's and fancy text row's by the toggles above. This list controls the stacking order and nothing else. **Keyboard** stands for the key grid itself, and every row moves, the keys included: drag a row above it to have that row draw over the keys, or below it to have that row draw under them. A hidden row keeps its slot empty rather than collapsing the stack, so turning it back on doesn't change where it lands. An order saved before the fancy text row existed gets it appended at the bottom, nearest the keys; one saved before the tools row existed gets that row just above the suggestion strip, where it always drew. An order saved before the selection actions row existed gets that row just above the suggestion strip too, which is where it draws by default. An order saved before the keys had their own slot keeps every row above them, exactly where it drew before.
 
 The selection actions row is the one row here whose slot can sit empty for a reason that isn't a setting: it only draws while text is selected, and it takes no height the rest of the time. It disappears from screen entirely when [Selection actions](/smart/selection-actions/) is off, or when that feature is set to draw over the suggestion strip instead.
 
@@ -99,7 +104,7 @@ All five ship enabled, and Punctuation is the set the row's picker opens on the 
 
 #### Editing a symbol set
 
-Tapping a set's edit icon opens **Edit symbol set**, with two fields:
+Tapping a set's edit icon opens **Edit symbol set**, with two text fields and a **Press and hold** section below them:
 
 | Field | Control |
 |---|---|
@@ -108,12 +113,14 @@ Tapping a set's edit icon opens **Edit symbol set**, with two fields:
 
 Save splits the characters field on whitespace, so a multi-character snippet like `https://` counts as one entry, the same as a single character. **Save** stays disabled until that field has something in it.
 
+**Press and hold** shows one chip per entry already in the characters field. Select a chip, then type the characters and snippets it should offer on a long-press; an entry that already has a popup shows a count on its chip, and an entry removed from the field above drops its chip too.
+
 Editing a built-in set doesn't overwrite the shipped version. Your edit is stored as a custom entry under the same ID, so anything already pointing at that set keeps working: a keyboard mode's pinned sets, the row's own picker. The button in the bottom-left corner then reads **Reset set** rather than **Delete set**, and it restores the shipped characters. A set you created from scratch shows **Delete set** in that spot instead, which removes it outright, drops it from the row's enabled sets, and clears it from any keyboard mode that had it pinned. A built-in set you've never edited shows no button there at all, since there's nothing yet to reset.
 
 ## Details & edge cases
 
 - **Row order only orders: it doesn't enable.** The emoji row's line in Row order is a live read-out of the [Emoji](/reference/settings/emoji/) screen's own setting, not something you can flip from here. The symbol row's line mirrors the toggle at the top of this screen the same way.
-- **Reordering is adjacent-swap, not drag.** Unlike the reorderable lists elsewhere in settings, the up/down arrows here trade the tapped row with whichever row currently sits next to it. There's no drag handle on this screen.
+- **Reordering is drag, with a handle.** Press and drag the handle on a row's right edge; it settles into the slot you drop it in, and every row it passes along the way shifts to make room.
 - **A hidden row keeps its slot.** Turning the emoji or symbol row back on after hiding it drops it back into the same position in the stack, not the top or bottom.
 - **You can't uncheck the last enabled symbol set.** The checkbox for the only remaining checked set silently does nothing when tapped: there's no error message, it just won't go to zero.
 - **Editing a built-in set is non-destructive.** The edit is stored as an override under the built-in's own ID, so nothing else needs to be told about it, and Reset set removes the override cleanly.

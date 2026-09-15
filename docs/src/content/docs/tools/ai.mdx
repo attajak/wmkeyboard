@@ -20,7 +20,7 @@ The AI tool runs a fixed set of one-tap writing actions against whatever text is
 
 Open **AI** from the [toolbar or the toolbox](/tools/overview/). It isn't pinned by default, so the first time you'll probably reach it through the toolbox. Typing its `ai` keyword on the suggestion strip works too. On a hardware keyboard, use the [leader key](/reference/shortcuts/): double-tap <KeyCap>Ctrl</KeyCap>, then press <KeyCap>A</KeyCap>.
 
-The panel opens on a row of action chips. Eight ship with the keyboard, and the list is yours to change: rename them, rewrite their prompts, turn off the ones you never use, reorder them, or add your own. See [Your own actions](#your-own-actions) below.
+The panel opens on a row of action chips. Eleven ship with the keyboard, and the list is yours to change: rename them, rewrite their prompts, turn off the ones you never use, reorder them, or add your own. See [Your own actions](#your-own-actions) below.
 
 - **Rewrite**, **Summarize**, **Translate**, **Improve**, **Formal**, **Shorter**, **Friendly**, **Fix grammar**, **Explain**, **Continue**: each needs text to work on and is greyed out on an empty field.
 - **Custom**: the one chip that stays live on an empty field. Tapping it opens an instruction box on the keyboard itself. Whatever you type there is the prompt for that run, so Custom can write brand-new text from nothing instead of transforming what's already in the field.
@@ -166,7 +166,7 @@ The editor holds a name, the prompt, and a handful of behaviour switches:
 - **Works with an empty field**: with nothing in the field, the action writes new text instead of changing text.
 - **Read the text before the cursor**: the action reads only what's in front of the cursor rather than the whole field. A selection always wins over this.
 - **Add the result to the end**: Replace appends rather than overwriting. Pair it with the switch above and you have **Continue**. Keeping them separate is what makes "append but read the whole field" something you can build.
-- **Answer with the text only**: on for everything except **Explain**, whose answer is prose about your text rather than a replacement for it.
+- **Answer with the text only**: on for everything except **Explain**, whose answer is prose about your text rather than a replacement for it. Hidden once **Write the whole prompt** is on, since a raw prompt has nothing left for the switch to act on.
 
 ### About the prompt field
 

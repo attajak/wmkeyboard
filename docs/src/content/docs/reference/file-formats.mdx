@@ -22,8 +22,8 @@ WM Keyboard writes several file formats: themes, layouts, snippet packs, sticker
 | `.wmlayout.json` | One custom keyboard layout | Layout editor → export |
 | `.wmsnippets.json` | A pack of text snippets | Snippets screen → export |
 | `.wmvocab.json` | A vocabulary pack: words with senses, pronunciation, synonyms and triggers | **Vocabulary → My lists** → export; also hosted gzipped in the data repository |
-| `.yml` / `.yaml` | An Espanso match file | **Text Expander** → export → Espanso match file |
-| `.zip` | An Espanso package | **Text Expander** → export → Espanso package |
+| `.yml` / `.yaml` | An Espanso match file | **Text expansion** → export → Espanso match file |
+| `.zip` | An Espanso package | **Text expansion** → export → Espanso package |
 | `.wmstickers` | A sticker pack (ZIP) | Stickers screen → export |
 | `.wmicons` | An icon pack (ZIP) | Icons screen → export |
 | `.wmplugin` | A Lua tool plugin (ZIP) | Not produced by the app; built by plugin authors |
@@ -33,10 +33,11 @@ WM Keyboard writes several file formats: themes, layouts, snippet packs, sticker
 | `.wmdict` | A compiled binary dictionary | Never exported; internal to the app, see [below](#wmdict-the-one-format-you-never-touch) |
 | `.txt` word lists, `.tsv` emoji keywords | Custom dictionaries and keyword packs | Import-only; not produced by the app |
 | `.flex` | A FlorisBoard theme extension | Another keyboard's format, read and converted. See [Importing from other keyboards](/reference/importing-other-keyboards/) |
+| `.kmp` | A Keyman keyboard package: a custom layout and its typing rules | Another keyboard's format, read and converted. See [Importing from other keyboards](/reference/importing-other-keyboards/) |
 
-The two Espanso formats are another app's, read and converted. Neither is registered as a file association: `.yml` and `.zip` are far too generic to claim, so they are imported from the Text Expander screen rather than by tapping them in a file manager. See [Importing from Espanso](/reference/importing-from-espanso/).
+The two Espanso formats are another app's, read and converted. Neither is registered as a file association: `.yml` and `.zip` are far too generic to claim, so they are imported from the Text expansion screen rather than by tapping them in a file manager. See [Importing from Espanso](/reference/importing-from-espanso/).
 
-Eleven extensions are registered as file associations, so tapping one in a file manager, downloads app, or chat attachment opens WM Keyboard's import dialog directly: everything in the table above except `.wmdict`, `.txt` and `.tsv`. Those three are reached from inside the app instead. `.wmdict` never faces you at all, and word lists and keyword packs are picked from their own import buttons. See [Opening a file](#opening-a-file).
+Twelve extensions are registered as file associations, so tapping one in a file manager, downloads app, or chat attachment opens WM Keyboard's import dialog directly: everything in the table above except `.wmdict`, `.txt` and `.tsv`. Those three are reached from inside the app instead. `.wmdict` never faces you at all, and word lists and keyword packs are picked from their own import buttons. See [Opening a file](#opening-a-file).
 
 ## Opening a file
 
@@ -44,9 +45,9 @@ A tap on any recognized file (from a file manager, a browser download, or a chat
 
 Behind that dialog, the app has to figure out what kind of file it's looking at:
 
-- If the file starts with a ZIP signature, the app opens it as an archive and scans up to 400 entries (capped at 64 KB of manifest content) for a `pack.json`, `plugin.json`, or `extension.json`. The `format` tag inside tells sticker packs, icon packs, and plugins apart. File structure alone can't do it, since sticker and icon packs both use a `pack.json` manifest. An `extension.json` tagged as a FlorisBoard theme is converted rather than installed. See [Importing from other keyboards](/reference/importing-other-keyboards/).
+- If the file starts with a ZIP signature, the app opens it as an archive and scans up to 400 entries (capped at 64 KB of manifest content) for a `pack.json`, `plugin.json`, `extension.json`, or `kmp.json`. The `format` tag inside tells sticker packs, icon packs, and plugins apart. File structure alone can't do it, since sticker and icon packs both use a `pack.json` manifest. An `extension.json` tagged as a FlorisBoard theme is converted rather than installed. A `kmp.json` carries no format tag at all, and is recognized instead by the two fields every Keyman package carries. See [Importing from other keyboards](/reference/importing-other-keyboards/).
 - If it isn't a ZIP but its first bytes are an encrypted-backup header, the app stops there and asks for a passphrase. Nothing can be said about the contents until it opens, and decoding megabytes of ciphertext as text to find that out would be wasted work.
-- Otherwise, the app reads the file as text and tries each tagged format's decoder in order: full config backup, then legacy settings backup, then layout, then snippets, stopping at the first one whose `format` field matches.
+- Otherwise, the app reads the file as text and tries each tagged format's decoder in order: full config backup, then legacy settings backup, then layout, then snippets, then a vocabulary pack, stopping at the first one whose `format` field matches.
 - A theme file has no `format` tag at all (every `ThemeSpec` field has a default, so *any* JSON object decodes successfully as an all-defaults theme). The `.wmtheme.json` extension on the file name is the only signal that a file was meant to be a theme, so it's checked last and only by name.
 
 Layout files are deliberately tolerant past their format tag. A hand-edited `.wmlayout.json` with a typo doesn't get refused, it gets repaired, and the confirm dialog lists what changed under "The app changed these items during the import". Plugins take the opposite approach. Nothing about a plugin is auto-repaired, and any problem is a refusal with a reason, because a plugin is code running on assumptions nobody checked.
@@ -89,7 +90,7 @@ One distinction is worth knowing. An addon repository's index requires a `sha256
 
 WM Keyboard has two backup formats, and only one of them is still current:
 
-- **`.wmconfig.json`** is the format the app writes today. It bundles eleven independent, opt-in sections (settings, themes, the learned dictionary, clipboard history, snippets, sticker packs, icon packs, imported word lists, emoji history, your list of addon repositories, and your typing statistics), each one embedded as the same JSON its own store already produces. A section you leave unchecked isn't in the file at all. The default export file name is timestamped, like `wmkeyboard-backup-20260728-143012.wmconfig.json`.
+- **`.wmconfig.json`** is the format the app writes today. It bundles twelve independent, opt-in sections (settings, themes, the learned dictionary, clipboard history, snippets, sticker packs, icon packs, imported word lists, emoji history, your list of addon repositories, your typing statistics, and your vocabulary packs with their learning record), each one embedded as the same JSON its own store already produces. A section you leave unchecked isn't in the file at all. The default export file name is timestamped, like `wmkeyboard-backup-20260728-143012.wmconfig.json`.
 - **`.wmconfig.enc`** is that same bundle sealed under a passphrase. Only the [automatic backup](/privacy/backup/) writes it, and only when you switch encryption on, so the manual export button always produces plain `.wmconfig.json`. Automatic backups carry their own `wmkeyboard-auto-` prefix rather than `wmkeyboard-backup-`, which is what keeps rotation from ever deleting a file you made by hand.
 - **`.wmsettings.json`** is the older, settings-only format it replaced: a generic dump of every stored preference, with no dedicated export button left in the app. It's still accepted on import, so an old file keeps working, but new backups are always `.wmconfig.json`.
 
@@ -112,7 +113,7 @@ Two plain-text formats exist purely to be imported, never produced by the app:
 
 ## Addon repository manifest
 
-An addon repository is a `wmkeyboard-repo.json` manifest plus the addon files it indexes, served from any `https://` host, no build step or signing required. It can point at 13 addon types in all. Nine are formats already on this page: themes, layouts, dictionaries, emoji keywords, snippets, Espanso packs, sticker packs, icon packs, and plugins. The other four are sound packs, fonts, emoji fonts, and key sounds. A sound pack is a `.wmsoundpack` ZIP, documented at [Sound packs](/development/addon-repos/sound-packs/). Fonts, emoji fonts, and key sounds use standard file types (`.ttf`/`.otf`, `.mp3`) rather than a WM Keyboard-specific format. A repository is an index over files the app already knows how to use, so the same exports the app produces work as repo payloads with no separate packaging step. The full manifest schema, versioning rules, and a JSON Schema for validation live at [Addon repository format](/development/addon-repos/repo-format/). See [Installing addons](/addons/installing/) for adding a repository from the app.
+An addon repository is a `wmkeyboard-repo.json` manifest plus the addon files it indexes, served from any `https://` host, no build step or signing required. It can point at 14 addon types in all. Ten are formats already on this page: themes, layouts, dictionaries, emoji keywords, snippets, Espanso packs, sticker packs, icon packs, plugins, and vocabulary packs. The other four are sound packs, fonts, emoji fonts, and key sounds. A sound pack is a `.wmsoundpack` ZIP, documented at [Sound packs](/development/addon-repos/sound-packs/). Fonts, emoji fonts, and key sounds use standard file types (`.ttf`/`.otf`, `.mp3`) rather than a WM Keyboard-specific format. A repository is an index over files the app already knows how to use, so the same exports the app produces work as repo payloads with no separate packaging step. The full manifest schema, versioning rules, and a JSON Schema for validation live at [Addon repository format](/development/addon-repos/repo-format/). See [Installing addons](/addons/installing/) for adding a repository from the app.
 
 ## Details & edge cases
 

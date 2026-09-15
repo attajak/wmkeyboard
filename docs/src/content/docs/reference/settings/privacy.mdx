@@ -49,7 +49,7 @@ Worth knowing before you turn it on: the lock hides screens inside the settings 
 | Setting | Control | Default |
 |---|---|---|
 | Learn from typing | Toggle | **On** |
-| Add words to the system dictionary | Toggle | Off |
+| Add words to the system dictionary | Toggle, shown only while Learn from typing is on | Off |
 | Use the Android dictionary | Toggle | **On** |
 | Expand Android dictionary shortcuts | Toggle | On |
 | Incognito mode | Toggle | Off |
@@ -57,7 +57,7 @@ Worth knowing before you turn it on: the lock hides screens inside the settings 
 
 **Learn from typing** is the master switch for the on-device word and word-pair lexicon. Turning it off stops new learning without deleting anything already learned.
 
-**Add words to the system dictionary** also writes learned words to Android's own personal dictionary (System Settings → Languages & input → Dictionary), so other keyboards and the platform spell checker see them too. It's the one setting in this group that writes outside the app, which is why it defaults off even though the keyboard's own learning already covers the same ground.
+**Add words to the system dictionary** also writes learned words to Android's own personal dictionary (System Settings → Languages & input → Dictionary), so other keyboards and the platform spell checker see them too. It's the one setting in this group that writes outside the app, which is why it defaults off even though the keyboard's own learning already covers the same ground. The row only appears while **Learn from typing** is on, since words reach the system dictionary through that same learning path.
 
 **Use the Android dictionary** reads that same system dictionary the other way. Every word in it is a known word: it's suggested, autocorrect leaves it alone, and typing or gliding it never raises the "add to dictionary?" chip. The list is re-read whenever it changes, so a word added in System Settings works at once.
 
@@ -85,7 +85,7 @@ This is a different screen from the sibling **Backup & restore** item on the Set
 
 <SettingsPath path="Privacy / Your data" />
 
-A single row, **Learned words**, with a **Delete the learned words** button that asks to confirm first. Confirming deletes six files: your word and word-pair lexicon, the new words still waiting to be counted, your emoji-usage history, autocorrect's revert memory (which corrections you undid), your Chinese/Japanese/Cantonese pick history, and the language-mix tracker that remembers which language you tend to reach for. The dialog names the first four, warns that your personal dictionary goes with them, and promises that your snippets and your imported word lists stay.
+A single row, **Learned words**, with a **Delete the learned words** button that asks to confirm first. Confirming deletes thirteen files: your word and word-pair lexicon, the new words still waiting to be counted, your emoji-usage history, autocorrect's revert memory (which corrections you undid), your Chinese/Japanese/Cantonese pick history, and the language-mix tracker that remembers which language you tend to reach for. It also takes the hand and tap key-offset models that learn where your fingers land, and what your own manual fixes taught autocorrect. It also takes your per-app language habit and the glide-outcome store that remembers which word you picked or undid. It also takes the glide-shape store that learns how you draw each word, and the word-rank file. The dialog names the first four, warns that your personal dictionary goes with them, and promises that your snippets and your imported word lists stay.
 
 Your personal dictionary really does go. The [Personal dictionary](/reference/settings/dictionaries/) screen edits the same word and word-pair lexicon file the keyboard learns into, so a word you added by hand and a word the keyboard picked up sit side by side, and this button takes both.
 
@@ -97,7 +97,7 @@ This is the only bulk clear on this screen. Personal dictionary entries, clipboa
 
 ## Details & edge cases
 
-- **"Delete the learned words" is one bulk action, not a per-category picker.** No dialog lets you choose which of the six files to wipe. Confirming deletes all six at once, with no undo.
+- **"Delete the learned words" is one bulk action, not a per-category picker.** No dialog lets you choose which of the thirteen files to wipe. Confirming deletes all thirteen at once, with no undo.
 - **"Follow private browsing" isn't two settings.** The row here and the row of the same name under <SettingsPath path="Tools / Incognito" /> both read and write `autoIncognito`; flip it in either place and the other reflects the change.
 - **Saved API keys are included in an Android backup**, not excluded the way large downloads are. If that matters to you, use [Backup & restore](/privacy/backup/)'s manual export instead, which never leaves the device.
 - **A cloud backup needs an encryptable screen lock.** On a device without one, turning "Back up with Android" on has nothing to actually back up into: Android's own backup system requires it.

@@ -22,16 +22,18 @@ Almost all of it lives in one place:
 
 | Module | JVM test files |
 |---|---|
-| `app` | 205 |
-| `feature/ime` | 16 |
-| `feature/tools` | 9 |
-| `core/language` | 7 |
-| `core/tools` | 5 |
-| `core/theme` | 3 |
+| `app` | 345 |
+| `feature/ime` | 74 |
+| `feature/tools` | 12 |
+| `core/language` | 18 |
+| `core/tools` | 18 |
+| `core/theme` | 4 |
 | `core/emoji` | 2 |
+| `core/keyman` | 7 |
+| `core/common` | 1 |
 | `core/intelligence` | 1 (in `src/testFull/`, full-flavor only) |
 
-205 of 248 test files (about 8 in 10) sit in `app/src/test/`, and 13 of the 20 `core/*`/`feature/*` modules have no test source set at all. That's a leftover of how the codebase was split into modules rather than a rule anyone enforces. Tests mostly stayed where they were written. It also means `./gradlew testFullDebugUnitTest` is the command you want almost all the time, since scoping to a single module rarely saves you much.
+345 of 482 test files (about 7 in 10) sit in `app/src/test/`, and 12 of the 21 `core/*`/`feature/*` modules have no test source set at all. That's a leftover of how the codebase was split into modules rather than a rule anyone enforces. Tests mostly stayed where they were written. It also means `./gradlew testFullDebugUnitTest` is the command you want almost all the time, since scoping to a single module rarely saves you much.
 
 ## Instrumented and Compose UI tests
 
@@ -42,7 +44,7 @@ Ten of the fourteen are CJK input method end-to-end tests: Pinyin, stroke input,
 - **`app/src/androidTest/.../ime/ui/KeyRowsVisibilityTest.kt`** composes the real keyboard screen with `createComposeRule()` and asserts that the key grid is on screen while a plugin panel is open. It's the enforcement half of a pair. A companion JVM test reads the source for the same bug pattern, a panel that shrinks to make room for its own UI but forgets to draw the keys underneath. That source check is cheap, and it would keep passing if the call site were reworded instead of fixed. `KeyRowsVisibilityTest` composes the actual screen, so it only passes when the keys really render.
 - **`app/src/androidTest/.../core/icons/SvgParserAndroidTest.kt`** exists because of a bug the JVM suite structurally cannot see. The SVG parser asks `SAXParserFactory` to disable a Xerces-specific parser feature. Desktop Java accepts the call, but Android's SAX implementation throws for anything other than the two `namespaces` features. The call sat inside `runCatching`, so on a real phone every icon silently failed to parse and every icon pack import was broken, while the JVM suite stayed green. Anything that leans on Android's own implementation of a standard API needs a test running on the platform.
 
-There's no Robolectric dependency anywhere in the project, so a JVM unit test never gets a simulated `Context` or `View`. If a test needs one, it has to be an instrumented test.
+Robolectric now gives a JVM unit test a simulated `Context` or `View` when it needs one. `GlideServiceHarness.kt` uses it to drive `WMKeyboardService` itself, right on the JVM. Reach for an instrumented test only when the code leans on the platform's own implementation of an API, not Robolectric's simulation of it.
 
 ## Native tests
 
@@ -57,11 +59,11 @@ Two tests today. One asserts that a sentence with obvious errors ("He go to the 
 
 ## Why the engine logic is JVM-testable at all
 
-It would be easy to assume "core modules don't touch Android," but that isn't quite right. Every one of them is an Android module: the 16 `core/*` and three of the four `feature/*` apply `com.android.library`, the Play-only `feature/llm` applies `com.android.dynamic-feature`, and all of them declare a `minSdk`. Most mix framework-coupled code with framework-free logic in the same module. What makes a class testable on the JVM is that *it specifically* avoids `android.*`/`androidx.*` imports, not that its module does.
+It would be easy to assume "core modules don't touch Android," but that isn't quite right. Every one of them is an Android module: the 17 `core/*` and three of the four `feature/*` apply `com.android.library`, the Play-only `feature/llm` applies `com.android.dynamic-feature`, and all of them declare a `minSdk`. Most mix framework-coupled code with framework-free logic in the same module. What makes a class testable on the JVM is that *it specifically* avoids `android.*`/`androidx.*` imports, not that its module does.
 
 Even the modules that look closest to framework-free aren't. `core/icons`, `core/addons` and `core/plugins` (the Lua sandbox) are light on `android.*`/`androidx.*` references, but each has one file (`IconPackStore.kt`, `AddonStore.kt` and `PluginStore.kt`) whose companion object takes an `android.content.Context` to resolve its on-disk storage directory, and a few more that reach for `androidx.annotation.StringRes` or a `Context` to resolve a label. Everything else in those three modules is plain Kotlin, which is why the parsers and the sandbox are JVM-testable while the stores are not.
 
-`core/tools` shows the same split at a different ratio: 19 of its 41 source files import `android.*` or `androidx.*`, mostly for things like the calendar provider, and the five classes with unit tests sit on both sides of the line. `DictionaryClient.kt` has no Android imports at all; `WeatherClient.kt` and `CalendarDefaults.kt` pull in `androidx.annotation.StringRes` and the module's own `R` for their user-facing strings, which the JVM suite is happy with because neither touches a `Context`. The [dictionary compiler](/development/dictionaries/) is the clean case: `tools/dictc` is the one genuinely pure-JVM module in the tree (plain `kotlin("jvm")`, no Android plugin). It works because it reuses `core/prediction`'s trie and codec source files directly. Those were already framework-free, so the same `.kt` files compile standalone into the offline tool that builds `.wmdict` files.
+`core/tools` shows the same split at a different ratio: 22 of its 59 source files import `android.*` or `androidx.*`, mostly for things like the calendar provider, and the 18 classes with unit tests sit on both sides of the line. `DictionaryClient.kt` has no Android imports at all; `WeatherClient.kt` and `CalendarDefaults.kt` pull in `androidx.annotation.StringRes` and the module's own `R` for their user-facing strings, which the JVM suite is happy with because neither touches a `Context`. The [dictionary compiler](/development/dictionaries/) is the clean case: `tools/dictc` is the one genuinely pure-JVM module in the tree (plain `kotlin("jvm")`, no Android plugin). It works because it reuses `core/prediction`'s trie and codec source files directly. Those were already framework-free, so the same `.kt` files compile standalone into the offline tool that builds `.wmdict` files.
 
 ## Testing on a device
 
@@ -79,7 +81,7 @@ The screen's own intro line is exact about what's in it: "The keyboard never rec
 
 - **The unit-test task name is flavor-specific, not module-specific.** `testFullDebugUnitTest` runs against the `full` flavor's dependency set (ML Kit, Whisper, and the rest). If you're chasing a bug that only reproduces in the `lite` build, you need `testLiteDebugUnitTest`, not a different module scope.
 - **A green JVM suite doesn't mean the feature works on a phone.** The `SvgParserAndroidTest` story above is the concrete example: the JVM's XML stack silently tolerated a call Android's SAX parser rejects outright. If a class calls into an Android or platform API rather than pure Kotlin, treat JVM-green as provisional until it has also run on a device.
-- **`app` is where almost everything lives, tests included.** If you're adding tests for new logic and the surrounding code is in `app/src/main`, its test belongs in `app/src/test` alongside the rest. That isn't an oversight. It matches where 83% of the existing suite already sits.
+- **`app` is where almost everything lives, tests included.** If you're adding tests for new logic and the surrounding code is in `app/src/main`, its test belongs in `app/src/test` alongside the rest. That isn't an oversight. It matches where about 72% of the existing suite already sits.
 - Static analysis (`./gradlew staticAnalysis`, lint plus detekt) is a separate gate from either test suite. It's covered on the [building from source](/development/building/) page, not here.
 
 Found a bug while testing and want to file it well? Pull the report from <SettingsPath path="About / Diagnostics" /> rather than describing what you saw from memory. See [privacy at a glance](/privacy/overview/) for what else the app does and doesn't record about you.

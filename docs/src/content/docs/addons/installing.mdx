@@ -28,6 +28,7 @@ see where the data comes from before anything is fetched:
 | `github.com/user/repo` (with or without `.git`, with or without a scheme) | `raw.githubusercontent.com/user/repo/HEAD/wmkeyboard-repo.json` |
 | `github.com/user/repo/tree/branch` or `.../blob/branch` | the same, from `branch` instead of the default |
 | a direct link ending in `.json` | used as-is |
+| a repository page on Codeberg, GitLab, SourceHut, Bitbucket or a self-hosted Forgejo | that forge's own raw `wmkeyboard-repo.json` address |
 | any other `https://` address | treated as a folder; `wmkeyboard-repo.json` is appended |
 | a bare `host/path` with no scheme | assumed to be `https://` |
 
@@ -126,10 +127,10 @@ Downloads end up identical:
 | Type | Lands as | Opened from |
 |---|---|---|
 | Theme | A new custom theme in your gallery | Themes |
-| Layout | A new custom layout, off until you enable it | Languages → Your layouts |
+| Layout | A new custom layout, off until you enable it | Layout & size → Your layouts |
 | Dictionary | Extra words for one language (needs the manifest to say which) | Custom dictionaries |
 | Emoji keywords | Extra search terms for one language's emoji | Emoji keywords |
-| Snippets | Added to your snippet list under fresh ids | Snippets |
+| Snippets, Espanso | Added to your snippet list under fresh ids | Snippets |
 | Stickers | A new local sticker pack | Sticker packs → Your packs |
 | Icon pack | Added to your icon library | Icons → Icon pack |
 | Font | Added to your font library | Fonts → Installed fonts |
@@ -137,16 +138,17 @@ Downloads end up identical:
 | Key sound | Added to your sound library | Key press → Sound style |
 | Sound pack | Added to your sound library as a whole pack | Key press → Sound pack |
 | Plugin | Lands on disk switched off | Plugins → Allow plugins |
+| Vocabulary | Extra words for one language's downloadable list (needs the manifest to say which) | Vocabulary packs → Installed packs |
 
-A dictionary or emoji keyword pack that doesn't say which language it's for
-gets rejected rather than guessed at, and each type has its own size cap on
-what it will download:
+A dictionary, emoji keyword pack or vocabulary pack that doesn't say which
+language it's for gets rejected rather than guessed at, and each type has its
+own size cap on what it will download:
 
 | Cap | Types |
 |---|---|
 | 1 MB | Plugin |
-| 4 MB | Layout, Snippets, Key sound |
-| 8 MB | Emoji keywords, Icon pack |
+| 4 MB | Layout, Snippets, Espanso, Key sound |
+| 8 MB | Emoji keywords, Icon pack, Vocabulary |
 | 16 MB | Theme, Sound pack |
 | 32 MB | Dictionary, Font, Emoji font |
 | 64 MB | Stickers |
@@ -183,10 +185,10 @@ and it won't come back.
 
 Repositories refresh every time you open the Addons screen, as long as **Check
 when you open this screen** is on (it is by default). **Only on Wi-Fi**, under
-it and off by default, skips that check on a metered connection. **Refresh**
-ignores both of those switches, because pressing it is the request. A
-repository that's briefly unreachable keeps showing what it last had rather
-than emptying out.
+it and off by default, skips that check on a metered connection. Pulling the
+list down ignores both of those switches, because making the request is the
+point. A repository that's briefly unreachable keeps showing what it last had
+rather than emptying out.
 
 ## Options
 
@@ -207,10 +209,10 @@ for the repository cap and what backup covers.
 - **Repository files are plain data, never code.** Adding a repository or
   installing a theme, dictionary, sticker pack or any other type never
   executes anything (the one exception, a plugin, still only lands as an
-  inert file until you separately turn it on). There are thirteen addon types
-  in total: themes, layouts, dictionaries, emoji keyword packs, snippets,
-  Espanso packs, sticker packs, icon packs, fonts, emoji fonts, key sounds,
-  sound packs and plugins.
+  inert file until you separately turn it on). There are fourteen addon types
+  in total. That's themes, layouts, dictionaries, emoji keyword packs,
+  snippets, Espanso packs, sticker packs, icon packs, fonts, emoji fonts, key
+  sounds, sound packs, plugins and vocabulary packs.
 - **Updating replaces rather than duplicates.** When a newer version of an
   installed addon comes in, the old copy is removed only after the new one
   verifies successfully, so you never end up with two copies of the same

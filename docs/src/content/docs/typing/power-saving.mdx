@@ -46,7 +46,7 @@ The keyboard watches a handful of coarse system broadcasts (battery low, battery
 
 ## What gets dropped
 
-Power saving is thirteen independent switches rather than one bundle of "reduce everything". Each defaults to whatever gives up the least for the most battery back. Turn any of them back on individually if that trade-off doesn't suit you.
+Power saving is thirteen independent switches rather than one bundle of "reduce everything", plus a fourteenth drop with no switch of its own. Each switch defaults to whatever gives up the least for the most battery back. Turn any of the thirteen back on individually if that trade-off doesn't suit you.
 
 <PhoneFrame caption="The three drop cards: effects, typing helpers and background work.">
   ![The three drop cards: effects, typing helpers and background work.](@assets/screens/typing/power-saving-what-to-drop.webp)
@@ -67,6 +67,8 @@ Power saving is thirteen independent switches rather than one bundle of "reduce 
 | On-device models | On | Whisper dictation falls back to the system recognizer, and the letter-swipe action falls back to gesture typing if it was set to handwriting. See [Offline voice](/tools/whisper/) and [Handwriting](/tools/handwriting/). |
 | Typing statistics | Off | Counting your keystrokes, words and speed. Off by default: the counters are a few integer bumps per keystroke, so the saving is speculative. Days spent saving power record nothing, and they never drag your speed averages down. |
 | Media tool pin | On | Putting [Media controls](/tools/media/) on the toolbar by itself while music plays. The pin itself costs nothing to draw, but keeping it right means watching the media session for as long as the keyboard is up. The tool stays reachable from the toolbox. |
+
+Power saving also always turns off [Words on the keys](/typing/words-on-the-keys/), the predicted words that float over the keys. Unlike the switches above, this one has no settings row of its own. Whenever power saving is in force, the floating words are off, full stop.
 
 Power saving only does anything *useful* if at least one of these is on. Turn every switch off and the tile's toast admits it plainly: "Power saving is on. No feature is set to stop yet."
 

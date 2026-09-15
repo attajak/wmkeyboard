@@ -24,11 +24,17 @@ Everything below lives under the app's private storage. No other app can read th
 | Words and word-pairs you type, in any script | `learning/user_lexicon.json` | Learned automatically while [Learn from typing](#options) is on, and the same file your [personal dictionary](/smart/personal-dictionary/) writes into |
 | Autocorrections you undid | `learning/correction_stats.json` | Recorded whenever you revert a correction, including with learning off or in incognito: undoing a correction is you telling the keyboard it got that word wrong |
 | Chinese, Japanese and Cantonese picks | `learning/cjk_history.json` | Learned automatically |
-| Which language you tend to reach for when mixing languages | `learning/language_mix.json` | Tracked automatically |
+| Which language you tend to reach for when mixing languages, overall and per app | `learning/language_mix.json` and `learning/app_language_mix.json` | Tracked automatically |
 | Emoji you've used | `learning/emoji_usage.json` | Learned automatically |
+| New words still waiting to be typed enough times to be learned | `learning/pending_learn.json` | Held automatically |
+| Where your finger lands on keys, and when tapping | `learning/key_offsets.json` and `learning/tap_offsets.json` | Learned automatically, to fit key hit-testing to your hand |
+| Fixes you've taught autocorrect | `learning/learned_corrections.json` | Learned automatically, separate from the revert memory above |
+| Swipe shapes, and the readings you corrected | `learning/glide_outcomes.json` and `learning/glide_shapes.json` | Learned automatically while gesture typing |
+| Words you've ranked higher or lower from the word card | `learning/word_ranks.json` | Adjusted automatically as you rank a word |
 | Clipboard history, including copied images | `clipboard/history.json` and `clipboard/images/` | Captured automatically while clipboard history is on |
 | Snippets you've saved | `snippets/snippets.json` | You write these yourself |
 | What you sent the AI tool and what it answered | `ai/history.json` | Only if you turn [AI history](/tools/ai/#history) on; it's off by default |
+| Your saved AI chat conversations | `ai/chats.json` | Kept automatically while [Keep your conversations](/tools/ai-chat/#whats-kept-and-where) is on; unlike the row above, it's on by default |
 | Every keyboard setting | A DataStore file, `keyboard_settings.preferences_pb` | You choose these yourself |
 | Downloaded wordlists, CJK dictionaries and emoji-keyword packs | `dict/`, `cjk_dicts/`, `emoji_dict/` | You download these yourself, per language |
 | Downloaded offline AI and speech models <Flavor edition="full" /> | `models/`, `whisper/` | You download these yourself |
@@ -60,7 +66,7 @@ Deleting the learned words cannot be undone.
 
 Open **Privacy**. Tap **Delete the learned words**. A dialog lists what goes and asks you to confirm.
 
-Confirming deletes six files: your word and word-pair history, the new words still waiting to be counted, your emoji-usage history, your autocorrect revert memory, your Chinese/Japanese/Cantonese pick history, and the language-mix tracker. Your personal dictionary goes with the first of those, because words you add by hand live in the same file, and the dialog says so. Your snippets and your imported word lists stay.
+Confirming deletes 13 files: your word and word-pair history, the new words still waiting to be counted, and your emoji-usage history. It also takes your autocorrect revert memory and your Chinese/Japanese/Cantonese pick history, plus the language-mix tracker and its per-app twin. Finally, it clears the fixes you've taught autocorrect, both of your finger's key-position models, your swipe-typing outcomes and shapes, and your personal-dictionary word rankings. Your personal dictionary goes with the first of those, because words you add by hand live in the same file, and the dialog says so. Your snippets and your imported word lists stay.
 
 <PhoneFrame caption="Learned words, under Privacy → Your data.">
   ![The Learned words row, under Privacy → Your data.](@assets/screens/privacy/clear-learned-words-button.webp)

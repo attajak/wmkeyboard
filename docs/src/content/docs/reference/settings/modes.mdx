@@ -20,7 +20,7 @@ You reach this screen three ways: Home → **Keyboard modes**, the settings sear
 
 <SettingsPath path="Advanced / Keyboard modes" />
 
-The first control on this screen is **Use modes**, the master switch for the whole feature, on by default. Turn it off and the keyboard uses one setup everywhere: no mode ever activates, the Modes tool disappears from the toolbar and the toolbox, and per-mode themes and tool sets stop applying. Your modes are kept, not deleted. The list below stays on screen and stays editable, and turning the switch back on restores every one of them exactly as it was. Turn it off if you found your emoji row or pinned tools different in another app and would rather they never moved.
+The first control on this screen is **Use modes**, the master switch for the whole feature, on by default. Turn it off and the keyboard uses one setup everywhere: no mode ever activates, the Modes tool disappears from the toolbar and the toolbox, and per-mode themes and tool sets stop applying. Your modes are kept, not deleted. The list below stays on screen and stays editable, and turning the switch back on restores every one of them exactly as it was. Turn it off if you found your emoji row or pinned tools different in another app and would rather they never moved. Turning it off also hides **A mode you pick by hand** just below and the whole **Rearrange tools** group at the foot of the screen. Neither controls anything while no mode can activate.
 
 Under it, **A mode you pick by hand** chooses how long a manual pick from the Modes tool lasts: **Until you change app** (the default) or **Until you change it**. It sits above the list because it governs every mode. See [Rearranging tools](#rearranging-tools) below for the other list-level control.
 
@@ -110,8 +110,8 @@ Six modes are seeded on first run. You can edit or delete any of them freely.
 | **Email** | Inherit | On (Email, Punctuation) | Inherit | Clipboard, snippets, text edit, voice, symbols | None | Email |
 | **Browser** | Inherit | On (Web) | Inherit | Clipboard, web search, snippets, QR scan, voice, incognito | None | URL |
 | **Chat** | Always on | Inherit | Added: emoji, GIF, sticker, voice | Grammar, translate, camera, image search, clipboard, snippets, then the pinned four | 15: Messenger, Instagram, Telegram, WhatsApp, Signal, Discord, Facebook, Facebook Lite, TikTok, Snapchat, Viber, LINE, KakaoTalk, WeChat, Beeper | Text, Notification replies |
-| **Writing** | Inherit | On (Punctuation) | Replaced: AI, text edit, voice, clipboard, emoji | Grammar, dictionary, OCR, doc scan, calendar, clipboard, snippets, translate, undo, redo, then AI, text edit, voice and emoji (clipboard is already in the list) | Keep, Google Docs, Samsung Notes, Word, OneNote, Obsidian, Notion, Evernote, Joplin, Gmail, Outlook, Yahoo Mail, ProtonMail, K-9 Mail | Text |
-| **Coding** | Inherit | On (Coding, Math) | Inherit | Snippets, clipboard, text edit, symbols, calculator, numpad, undo, redo, cursor keys | Termux, Acode, RK Editor, Spck | None |
+| **Writing** | Inherit | On (Punctuation) | Replaced: AI, text edit, voice, clipboard, emoji | Grammar, dictionary, vocabulary, OCR, doc scan, calendar, clipboard, snippets, translate, undo, redo, then AI, text edit, voice, emoji and trackpad (clipboard is already in the list) | Keep, Google Docs, Samsung Notes, Word, OneNote, Obsidian, Notion, Evernote, Joplin, Gmail, Outlook, Yahoo Mail, ProtonMail, K-9 Mail | Text |
+| **Coding** | Inherit | On (Coding, Math) | Inherit | Snippets, clipboard, text edit, trackpad, symbols, calculator, numpad, undo, redo, cursor keys | Termux, Acode, RK Editor, Spck | None |
 
 Passwords and Writing replace the toolbar outright rather than adding to it. Chat appends its four tools to whatever you already have pinned.
 
@@ -126,7 +126,7 @@ Both rounds run once and leave your edits alone. A mode you've deleted isn't re-
 
 <SettingsPath path="Advanced / Keyboard modes / A mode you pick by hand" />
 
-This choice sits at the top of the modes list screen and covers every mode at once. It only applies to a mode you pick yourself from the Modes tool, never to one that switches on for an app on its own.
+This choice sits at the top of the modes list screen and covers every mode at once. It only applies to a mode you pick yourself from the Modes tool, never to one that switches on for an app on its own. The row itself is absent from the screen while **Use modes** is off, since there's no mode left to pick by hand.
 
 **Until you change app** is the default and the keyboard's older behaviour. It suits a mode you reach for once, then leave. **Until you change it** keeps the mode on until you pick another one or turn it off, which suits a mode you meant to stay in.
 
@@ -134,7 +134,7 @@ This choice sits at the top of the modes list screen and covers every mode at on
 
 <SettingsPath path="Advanced / Keyboard modes / Rearrange tools / Drags edit the active mode" />
 
-This toggle sits in the **Rearrange tools** group at the foot of the modes list screen rather than inside an editor. It governs what happens when you drag a tool on the keyboard itself while a mode with its own pinned tools or toolbox order is active.
+This toggle sits in the **Rearrange tools** group at the foot of the modes list screen rather than inside an editor. It governs what happens when you drag a tool on the keyboard itself while a mode with its own pinned tools or toolbox order is active. The whole group is absent from the screen while **Use modes** is off, since no mode is active to receive the drag.
 
 **Drags edit the active mode** is on by default. It sends that drag into the currently active mode, so the rearrangement sticks for apps that resolve to that mode, and every other app keeps its own arrangement. Turn it off and drags edit the global tool order instead. If the active mode still prescribes its own list, that list keeps winning on screen, since a mode's fixed list applies on every redraw. A mode with no pinned tools or toolbox order of its own is unaffected either way, because there's nothing for it to own.
 

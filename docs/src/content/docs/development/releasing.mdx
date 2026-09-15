@@ -192,7 +192,8 @@ The build recipe is staged in the repo at `fdroid/com.wasimaster.wmkeyboard.yml`
 F-Droid never reads it from there; it is versioned next to the code so the
 recipe and the build stay in step. It carries no comments, because fdroiddata's
 CI runs `fdroid rewritemeta` on every changed file and fails if the result
-differs by a byte — and `rewritemeta` strips comments. Field-by-field reasoning
+differs by a byte. `rewritemeta` strips comments, so any it found would trip
+that check. Field-by-field reasoning
 lives in [`fdroid/README.md`](https://github.com/wasi-master/wmkeyboard/blob/main/fdroid/README.md)
 instead.
 
@@ -220,7 +221,7 @@ instead.
    The recipe deletes the foojay resolver, because the scanner rejects anything
    that could fetch a JDK over the network. Their builders also have
    auto-provisioning switched off. Together that makes any `jvmToolchain(n)` in
-   the tree fatal unless `n` is a JDK their image already carries —
+   the tree fatal unless `n` is a JDK their image already carries.
    `:tools:dictc` asked for 17 and failed the build outright with
    `Cannot find a Java installation ... matching {languageVersion=17}`. Set a **jvmTarget**
    instead: it fixes the bytecode level without demanding a particular JDK be
@@ -229,7 +230,7 @@ instead.
 
 3. **Run the three checks their CI runs.** `fdroid lint` must exit 0, and
    `fdroid rewritemeta` and `fdroid checkupdates --auto` must both leave the
-   file byte-identical — a pipeline job diffs the file after each. `lint` needs
+   file byte-identical, since a pipeline job diffs the file after each. `lint` needs
    fdroiddata's own `config/` directory to know the valid category and
    anti-feature names; [`fdroid/README.md`](https://github.com/wasi-master/wmkeyboard/blob/main/fdroid/README.md)
    has the copy-paste block that fetches it and runs all three.
@@ -245,16 +246,16 @@ instead.
    fork), then **open a merge request** titled `New app: WM Keyboard` and fill
    in their template. Expect review comments and a wait measured in weeks
    rather than days. The two questions that come up most are whether every
-   network service is optional — it is, and since 0.5.6 each one can also be
+   network service is optional, and whether anything prebuilt ends up in the
+   APK. Every service is optional, and since 0.5.6 each one can also be
    pointed at a server the user runs, which is why the recipe carries no
-   `AntiFeatures` block — and whether anything prebuilt ends up in the APK
-   (nothing does).
+   `AntiFeatures` block. Nothing prebuilt ends up in the APK either.
 
 6. **After it is accepted**, releases look after themselves. `UpdateCheckMode:
    Tags` walks the newest tags, and `UpdateCheckData` points it at
    `gradle.properties` as checked out at each one, so it reads the version a
    tag actually carries. `AutoUpdateMode: Version` then adds the next `Builds:`
-   entry and pins it to that tag's full commit hash — F-Droid wants hashes, not
+   entry and pins it to that tag's full commit hash. F-Droid wants hashes, not
    tags, because a tag can be moved after a build is accepted. What that costs
    you is a promise: a release whose build needs something the recipe does not
    do has to be caught before the tag is pushed, because nobody reviews the

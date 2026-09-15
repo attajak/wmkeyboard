@@ -168,10 +168,19 @@ For plugins alone, a **SHA-256 is mandatory**. For every other addon type a
 missing checksum only means "unverified". The app will not install code it
 cannot verify.
 
-The whole subsystem is **off until the user turns it on**, and while it is off
-nothing installs and nothing runs. Before any install, the user is shown what the
-plugin says it is and what it would be allowed to do. Only the manifest is read
-to build that screen, never the script.
+The whole subsystem is **off until the user turns it on**. While it is off,
+installing from a file or the addon catalogue is refused outright.
+
+The in-app plugin editor is the exception. Its live preview runs a script as
+you write it. Its Install button writes the plugin straight to disk the same
+way a catalogue install would, both before you ever turn the switch on. Since
+you already wrote the manifest yourself, Install skips the confirmation screen
+described below. Both still go through the same sandbox as an installed
+plugin, so every invariant above still holds.
+
+Before installing from a file or the catalogue, the user sees what the plugin
+says it is and what it would be allowed to do. Only the manifest is read to
+build that screen, never the script.
 
 ## What this does not protect against
 
