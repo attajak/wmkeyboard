@@ -228,6 +228,7 @@ import androidx.compose.material.icons.outlined.Toll
 import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.icons.outlined.VerticalAlignBottom
 import androidx.compose.material.icons.outlined.VerticalAlignTop
 import androidx.compose.material.icons.outlined.VerticalSplit
 import androidx.compose.material.icons.outlined.Vibration
@@ -364,13 +365,15 @@ internal object SettingsRowIcons {
         put(R.string.appearance_key_corner_radius_title) { Icons.Outlined.RoundedCorner }
         put(R.string.appearance_key_label_size_title) { Icons.Outlined.FormatSize }
         put(R.string.appearance_key_hint_size_title) { Icons.Outlined.FormatSize }
+        put(R.string.appearance_key_hint_offset_title) { Icons.Outlined.SwapVert }
         put(R.string.appearance_toolbar_show_title) { Icons.Outlined.Visibility }
         put(R.string.appearance_toolbar_swipe_down_title) { Icons.Outlined.SwipeDown }
         put(R.string.appearance_toolbar_hardware_only_title) { Icons.Outlined.KeyboardAlt }
         put(R.string.appearance_toolbar_lock_title) { Icons.Outlined.Lock }
         put(R.string.appearance_toolbar_rtl_title) { Icons.AutoMirrored.Outlined.FormatTextdirectionRToL }
         put(R.string.appearance_toolbar_fit_title) { Icons.Outlined.SpaceBar }
-        put(R.string.appearance_toolbar_height_title) { Icons.Outlined.Height }
+        put(R.string.appearance_toolbar_padding_top_title) { Icons.Outlined.VerticalAlignTop }
+        put(R.string.appearance_toolbar_padding_bottom_title) { Icons.Outlined.VerticalAlignBottom }
         put(R.string.appearance_toolbar_labels_title) { Icons.AutoMirrored.Outlined.Label }
         put(R.string.appearance_toolbar_label_size_title) { Icons.Outlined.FormatSize }
         put(R.string.appearance_tool_circle_title) { Icons.Outlined.Circle }

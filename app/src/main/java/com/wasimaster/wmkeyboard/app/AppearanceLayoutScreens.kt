@@ -209,13 +209,25 @@ internal fun AppearanceSettings(
                 default = SettingsDefaults.layoutBehavior.hintFontScale,
             ) { scope.launch { repository.setHintFontScale(it) } }
         }
+        item {
+            SliderSetting(
+                R.string.appearance_key_hint_offset_title,
+                subtitle = stringResource(R.string.appearance_key_hint_offset_subtitle),
+                value = settings.layoutBehavior.hintOffsetDp.toFloat(),
+                range = 0f..16f,
+                display = { dpFormat.format(it.roundToInt()) },
+                info = stringResource(R.string.appearance_key_hint_offset_info),
+                default = SettingsDefaults.layoutBehavior.hintOffsetDp.toFloat(),
+            ) { scope.launch { repository.setHintOffsetDp(it.roundToInt()) } }
+        }
         // Drawn only once something has actually moved. Theme, font and icons
         // are excluded: they lead to their own screens and are not what "reset
         // the sliders" means. The toolbar and toolbox pages reset themselves.
         val d = SettingsDefaults
         val appearanceMoved = settings.keyCornerRadiusDp != d.keyCornerRadiusDp ||
             settings.fontScale != d.fontScale ||
-            settings.layoutBehavior.hintFontScale != d.layoutBehavior.hintFontScale
+            settings.layoutBehavior.hintFontScale != d.layoutBehavior.hintFontScale ||
+            settings.layoutBehavior.hintOffsetDp != d.layoutBehavior.hintOffsetDp
         if (appearanceMoved) {
             item {
                 ActionRow(
@@ -381,18 +393,31 @@ internal fun AppearanceToolbarSettings(
                 }
             }
         }
+        // The two paddings replaced the height slider (#208): the height made the
+        // tools float in the middle of a taller strip, and the complaint was
+        // about the gap on one side of it. A height set before then still
+        // counts, and the toolbar reset below clears it.
         item {
-            val pinned = themePinSubtitle(settings) { it.toolbarHeightDp }
             SliderSetting(
-                R.string.appearance_toolbar_height_title,
-                subtitle = pinned ?: stringResource(R.string.appearance_toolbar_height_subtitle),
-                value = settings.toolbarHeightDp.toFloat(),
-                range = 32f..80f,
+                R.string.appearance_toolbar_padding_top_title,
+                subtitle = stringResource(R.string.appearance_toolbar_padding_top_subtitle),
+                value = settings.toolbarBehavior.paddingTopDp.toFloat(),
+                range = 0f..24f,
                 display = { dpFormat.format(it.roundToInt()) },
-                info = stringResource(R.string.appearance_toolbar_height_info),
-                enabled = pinned == null,
-                default = SettingsDefaults.toolbarHeightDp.toFloat(),
-            ) { scope.launch { repository.setToolbarHeightDp(it.roundToInt()) } }
+                info = stringResource(R.string.appearance_toolbar_padding_top_info),
+                default = SettingsDefaults.toolbarBehavior.paddingTopDp.toFloat(),
+            ) { scope.launch { repository.setToolbarPaddingTopDp(it.roundToInt()) } }
+        }
+        item {
+            SliderSetting(
+                R.string.appearance_toolbar_padding_bottom_title,
+                subtitle = stringResource(R.string.appearance_toolbar_padding_bottom_subtitle),
+                value = settings.toolbarBehavior.paddingBottomDp.toFloat(),
+                range = 0f..24f,
+                display = { dpFormat.format(it.roundToInt()) },
+                info = stringResource(R.string.appearance_toolbar_padding_bottom_info),
+                default = SettingsDefaults.toolbarBehavior.paddingBottomDp.toFloat(),
+            ) { scope.launch { repository.setToolbarPaddingBottomDp(it.roundToInt()) } }
         }
         item {
             ToggleSetting(

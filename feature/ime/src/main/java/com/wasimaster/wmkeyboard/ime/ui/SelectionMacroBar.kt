@@ -175,7 +175,8 @@ internal fun SelectionMacroBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(topBarHeight(state.settings)),
+            .height(topBarHeight(state.settings))
+            .toolbarPadding(state.settings),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val open = ladder

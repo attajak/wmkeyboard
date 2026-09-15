@@ -32,6 +32,10 @@
     <string name="appearance_key_hint_size_subtitle">Scale of the small hint character in the corner of each key</string>
     <!-- "Press and hold hints" is the name of a setting on the Key press
          screen. Translate it as it is translated there. -->
+    <string name="appearance_key_hint_offset_title">Key hint position</string>
+    <string name="appearance_key_hint_offset_subtitle">Distance of the corner hint from the top edge of the key</string>
+    <!-- dp is the Android unit for screen size. Keep the two letters. -->
+    <string name="appearance_key_hint_offset_info">At 0 dp the hint touches the top edge of the key. Larger values move the hint down, nearer to the label. The default is 1 dp.</string>
     <string name="appearance_key_hint_size_info">This changes the size of the small hint that the keyboard prints in the corner of a key. The keyboard shows the hint when \"Press and hold hints\" is on. Larger values make the hints easier to read. The default is ×1.00.</string>
 
     <!-- Appearance screen, Toolbar group: the strip above the keys. -->
@@ -71,10 +75,14 @@
     <string name="appearance_toolbar_fit_fixed_desc">The tools keep one size, packed to the left</string>
     <string name="appearance_toolbar_fit_spread_desc">The tools share the full width of the toolbar</string>
     <string name="appearance_toolbar_fit_scroll_desc">Each tool keeps a comfortable size and the bar scrolls sideways</string>
-    <string name="appearance_toolbar_height_title">Toolbar height</string>
-    <string name="appearance_toolbar_height_subtitle">Height of the toolbar and the suggestion strip</string>
+    <string name="appearance_toolbar_padding_top_title">Toolbar top padding</string>
+    <string name="appearance_toolbar_padding_top_subtitle">Space above the tools and the suggestions</string>
     <!-- dp is the Android unit for screen size. Keep the two letters. -->
-    <string name="appearance_toolbar_height_info">The default is 44 dp. A taller toolbar gives larger targets for your finger and space for the tool labels. A shorter toolbar gives more height back to the screen. This strip shows both the word suggestions and the toolbar.</string>
+    <string name="appearance_toolbar_padding_top_info">This adds space between the top edge of the keyboard and the toolbar. The default is 4 dp. The toolbar and the keyboard get taller by the same amount.</string>
+    <string name="appearance_toolbar_padding_bottom_title">Toolbar bottom padding</string>
+    <string name="appearance_toolbar_padding_bottom_subtitle">Space between the toolbar and the keys</string>
+    <!-- dp is the Android unit for screen size. Keep the two letters. -->
+    <string name="appearance_toolbar_padding_bottom_info">This adds space between the toolbar and the first row of keys. The default is 0 dp. The toolbar and the keyboard get taller by the same amount.</string>
     <string name="appearance_toolbar_lock_title">Hide the toolbar and the clipboard on the lock screen</string>
     <string name="appearance_toolbar_lock_subtitle">Hide the top strip and block the clipboard while your device is locked</string>
     <string name="appearance_toolbar_lock_info">The keyboard opens over your lock screen when you answer a notification or use a search box there. This setting then hides the full top strip and blocks the clipboard panel. The strip holds the word suggestions and every pinned tool, so the clipboard tool and its paste chip also go. Copied text such as one-time codes and passwords stays off a screen that anyone can wake. This setting is off by default. When your device is unlocked, the keyboard does not change.</string>
@@ -151,7 +159,7 @@
 
     <string name="appearance_reset_title">Reset appearance</string>
     <string name="appearance_reset_subtitle">Put every setting on this screen back to its default</string>
-    <string name="appearance_reset_confirm">The key corner radius and the label and hint sizes go back to their defaults. Your theme, your font and your icon pack are not affected: they have their own screens. The toolbar and the toolbox have resets of their own.</string>
+    <string name="appearance_reset_confirm">The key corner radius, the label and hint sizes and the hint position go back to their defaults. Your theme, your font and your icon pack are not affected: they have their own screens. The toolbar and the toolbox have resets of their own.</string>
     <string name="appearance_toolbar_reset_title">Reset toolbar</string>
     <string name="appearance_toolbar_reset_subtitle">Put every setting on this screen back to its default</string>
     <string name="appearance_toolbar_reset_confirm">The toolbar, its labels, the suggestion strip and the tool shape go back to their defaults. Which tools are pinned is not affected.</string>

@@ -37,12 +37,15 @@ Three sliders that apply to every key, whatever layout is active. All three are 
 | Key corner radius | 0–28 dp | 8 dp |
 | Key label font size | ×0.7–×2.0 | ×1.00 |
 | Key hint font size | ×0.5–×2.0 | ×1.00 |
+| Key hint position | 0–16 dp | 1 dp |
 
 **Key corner radius** goes from square keys at 0 to fully pill-shaped keys at 28. Turn on "Corner radii for this theme" in the theme editor and it seeds that theme's own key-radius slider from this value. See [Themes](/themes/overview/) for how a theme can override it.
 
 **Key label font size** scales every printed letter on the keys themselves. It's separate from the popup bubble that appears on a key press, which has its own size under [Key press](/reference/settings/keypress/) → Key popup.
 
 **Key hint font size** scales the small corner hint on a key: the character or symbol a long-press on that key types. This slider only controls their size once they're showing. The "Press and hold hints" toggle that turns the hints on or off in the first place lives on the [Key press](/reference/settings/keypress/) screen, not here. See [Key basics](/typing/basics/) for how long-press hints work.
+
+**Key hint position** moves that corner hint up or down. At 0 the hint touches the top edge of the key. Raise it to bring the hint down toward the letter.
 
 <PhoneFrame caption="The Keys sliders: corner radius, label size, and hint size.">
 {/* shot: reference/settings/appearance-keys */}
@@ -62,9 +65,10 @@ The toolbar is the strip above the keys that carries word suggestions while you 
 | Only the toolbar with a hardware keyboard | Toggle | Off | With a physical keyboard attached, drops the on-screen keys and keeps just the toolbar strip. |
 | Reverse the order for right-to-left languages | Toggle | Off | Mirrors the whole toolbar, toolbox button included, when the active layout's script runs right-to-left. |
 | Tool layout | Fixed size / Spread out / Scroll | Spread out | Fixed size packs the pinned tools to the left at one size. Spread out splits the width evenly. Scroll keeps each tool at a comfortable size and lets the bar scroll sideways; change the order from the toolbox while it is on. |
-| Toolbar height | Slider, 32–80 dp | 44 dp | The strip carries both suggestions and the toolbar, so this also sets the suggestion row's height. |
+| Toolbar top padding | Slider, 0–24 dp | 4 dp | Space between the top edge of the keyboard and the toolbar. The strip carries both suggestions and the toolbar, so the suggestions move with it, and the keyboard gets taller by the same amount. |
+| Toolbar bottom padding | Slider, 0–24 dp | 0 dp | Space between the toolbar and the first row of keys. The keyboard gets taller by the same amount. |
 | Hide the toolbar and the clipboard on the lock screen | Toggle | Off | Hides the whole top strip and blocks the clipboard panel while the phone is locked, so nothing like a copied one-time code sits on a screen anyone can wake. See [Tools](/tools/overview/#which-tools-work-before-you-unlock-your-phone) for how this differs from the tools that work before first unlock. |
-| Tool labels | Toggle | Off | Draws a caption under each pinned tool's icon; you'll likely want to raise the toolbar height to fit it. |
+| Tool labels | Toggle | Off | Draws a caption under each pinned tool's icon. |
 | Label text size | Slider, 7–14 sp | 10 sp | Only shown once Tool labels is on. |
 | Suggestion text size | Slider, 80%–160% | 100% | Scales the words in the suggestion strip without touching the strip's own height. |
 | Suggestion spacing | Slider, 0–24 dp | 6 dp | The gap either side of each word inside its slot. Lower it to fit more of a long word before it shrinks, or to pack more words onto a narrow screen. Raise it to keep neighbouring words apart once [Scroll the suggestions](/reference/settings/typing/) is on. |
@@ -102,9 +106,9 @@ The toolbox is the grid of every tool behind the toolbar's grid button. It is a 
 ## Details & edge cases
 
 - The **Keyboard themes**, **Keyboard font**, and **Icons** rows are shortcuts, not inline settings. Each opens its own full screen, so this page only covers what their trailing value means and where the real controls live.
-- **Key label font size** and **key hint font size** are the global values, and a theme can override both. `ThemeSpec` carries its own nullable `fontScale`, `hintFontScale` and `boldKeyLabels`, so a theme that sets any of them wins over these sliders until you switch to one that doesn't. Key corner radius, toolbar height, tool circle radius, tool background width and tool background shape all work the same way. A row the active theme's **Layout for this theme** group replaces says so under its name and greys out, so a slider that no longer reaches the keyboard is never mistaken for a broken one. The global value is kept and comes back the moment the theme stops setting it. See [Themes](/themes/overview/) for what a theme does and doesn't control.
+- **Key label font size** and **key hint font size** are the global values, and a theme can override both. `ThemeSpec` carries its own nullable `fontScale`, `hintFontScale` and `boldKeyLabels`, so a theme that sets any of them wins over these sliders until you switch to one that doesn't. Key corner radius, tool circle radius, tool background width and tool background shape all work the same way. A theme can also set the toolbar's height, which has no global slider; the toolbar top and bottom padding add to it either way. A row the active theme's **Layout for this theme** group replaces says so under its name and greys out, so a slider that no longer reaches the keyboard is never mistaken for a broken one. The global value is kept and comes back the moment the theme stops setting it. See [Themes](/themes/overview/) for what a theme does and doesn't control.
 - **Press and hold a tool** used to live here as its own screen. It moved onto each tool's own page under [Tools](/reference/settings/tools/), where the row is called **Press and hold on the toolbar**. See [Tools](/tools/overview/#hold-a-tool-for-a-second-action).
 - Turning **Show the toolbar** off is the one *toggle* that asks you to confirm. Every other switch and slider here applies immediately, and turning the toolbar back on is instant with no confirmation. The reset buttons confirm too, since each one throws away an arrangement.
 - **Tool layout** is one choice. Scroll used to be a second switch that silently overrode the spread one; the three options now say which layout you get.
-- **Reset appearance** sits at the end of the Keys group and covers only the corner radius and the two label sizes. The Toolbar and Toolbox pages each have their own reset.
+- **Reset appearance** sits at the end of the Keys group and covers only the corner radius, the two label sizes and the hint position. The Toolbar and Toolbox pages each have their own reset.
 - **Reset pinned tools** only touches the global toolbar row. A keyboard [mode](/typing/modes/) that carries its own pinned toolbar keeps it. You reset that from the mode's own editor instead.

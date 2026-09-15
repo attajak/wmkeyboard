@@ -648,6 +648,7 @@ private fun SearchStrings.appearanceRows(): List<SettingsSearchEntry> {
         row(R.string.appearance_key_corner_radius_title, R.string.appearance_key_corner_radius_subtitle),
         row(R.string.appearance_key_label_size_title, R.string.appearance_key_label_size_subtitle),
         row(R.string.appearance_key_hint_size_title, R.string.appearance_key_hint_size_subtitle),
+        row(R.string.appearance_key_hint_offset_title, R.string.appearance_key_hint_offset_subtitle),
         row(R.string.home_reset_pinned_tools_title, R.string.home_reset_pinned_tools_subtitle),
     )
 }
@@ -665,7 +666,8 @@ private fun SearchStrings.appearanceToolbarRows(): List<SettingsSearchEntry> {
         row(R.string.appearance_toolbar_hardware_only_title, R.string.appearance_toolbar_hardware_only_subtitle),
         row(R.string.appearance_toolbar_rtl_title, R.string.appearance_toolbar_rtl_subtitle),
         row(R.string.appearance_toolbar_fit_title, R.string.appearance_toolbar_fit_subtitle),
-        row(R.string.appearance_toolbar_height_title, R.string.appearance_toolbar_height_subtitle),
+        row(R.string.appearance_toolbar_padding_top_title, R.string.appearance_toolbar_padding_top_subtitle),
+        row(R.string.appearance_toolbar_padding_bottom_title, R.string.appearance_toolbar_padding_bottom_subtitle),
         row(R.string.appearance_toolbar_lock_title, R.string.appearance_toolbar_lock_subtitle),
         row(R.string.appearance_toolbar_labels_title, R.string.appearance_toolbar_labels_subtitle),
         row(R.string.appearance_toolbar_label_size_title, R.string.appearance_toolbar_label_size_subtitle),

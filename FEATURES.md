@@ -1512,7 +1512,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - RTL mirroring of pinned order — reverseForRtl on by default; toolbox grid unaffected
     - Spread vs packed vs scrollable bar — greedy on by default; scrollable forces packed
     - Hide toolbar & clipboard on lock screen — hideWhenLocked, distinct from direct-boot filtering
-    - Toolbar height 32–80dp — toolbarHeightDp default 44
+    - Toolbar top/bottom padding 0–24dp — toolbarBehavior.paddingTopDp default 4, paddingBottomDp default 0, added around the 44dp toolbarHeightDp (#208); the height itself is only a theme override now
     - Tool labels under icons — toolbarLabels off; toolbarLabelSize default 10sp
     - Tool background radius and shape — toolCircleRadiusDp default 20, toolShape shares the key shapes; 0 removes it
     - Tool button width 38dp default — toolWidthDp stretches the circle into a pill

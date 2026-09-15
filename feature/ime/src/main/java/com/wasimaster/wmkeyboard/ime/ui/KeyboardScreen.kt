@@ -2777,7 +2777,9 @@ private fun TopBar(
                 } else {
                     Modifier
                 },
-            ),
+            )
+            // Inside the flick detector, so the padding still hides the keyboard.
+            .toolbarPadding(state.settings),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val feedback = LocalKeyPressFeedback.current
@@ -5230,12 +5232,12 @@ private fun SymbolCell(
                     text = labels.first(),
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(top = HintTopPadding, end = 3.dp),
+                        .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = 3.dp),
                     fontSize = (HintLabelSp * settings.layoutBehavior.hintFontScale).sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     softWrap = false,
-                    style = hintTextStyle(),
+                    style = keyHintTextStyle(),
                 )
             }
             if (showPopup) {
@@ -7190,7 +7192,8 @@ private fun ToolsRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(topBarHeight(state.settings)),
+                .height(topBarHeight(state.settings))
+                .toolbarPadding(state.settings),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             ToolbarRow(state, onPanelChange, onToolTap, drag)
@@ -14803,7 +14806,26 @@ private fun toolbarReadsRtl(state: KeyboardUiState): Boolean =
  * caller (full-bleed absorption, emoji-search sizing) drops the strip with it.
  */
 internal fun topBarHeight(settings: KeyboardSettings): Dp =
-    if (settings.toolbarBehavior.enabled) settings.toolbarHeightDp.dp else 0.dp
+    if (settings.toolbarBehavior.enabled) {
+        (settings.toolbarHeightDp + settings.toolbarBehavior.paddingTopDp + settings.toolbarBehavior.paddingBottomDp).dp
+    } else {
+        0.dp
+    }
+
+/**
+ * The user's toolbar top and bottom padding (#208), for a row sized with
+ * [topBarHeight]. Applied inside that height, so the row's content keeps
+ * `toolbarHeightDp` and every height-accounting caller still sees one number.
+ */
+internal fun Modifier.toolbarPadding(settings: KeyboardSettings): Modifier =
+    if (settings.toolbarBehavior.enabled) {
+        padding(
+            top = settings.toolbarBehavior.paddingTopDp.dp,
+            bottom = settings.toolbarBehavior.paddingBottomDp.dp,
+        )
+    } else {
+        this
+    }
 
 /**
  * Exact height of [KeyRows]: [LayoutSet.rowSpan] key rows (each key height plus
@@ -16941,12 +16963,12 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                     text = translit,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(top = HintTopPadding, end = HintEndPadding),
+                        .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding),
                     fontSize = (TranslitHintSp * fontScale * settings.layoutBehavior.hintFontScale).sp,
                     color = hintColor,
                     maxLines = 1,
                     softWrap = false,
-                    style = hintTextStyle(),
+                    style = keyHintTextStyle(),
                 )
                 showHints && hintIcon != null -> Icon(
                     hintIcon,
@@ -16954,19 +16976,19 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                     tint = hintColor,
                     modifier = hintMask
                         .align(Alignment.TopEnd)
-                        .padding(top = HintTopPadding, end = HintEndPadding)
+                        .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding)
                         .size((HintIconDp * fontScale * settings.layoutBehavior.hintFontScale).dp),
                 )
                 showHints && key.opensAlternatesPopup() && hint != null -> Text(
                     text = hint,
                     modifier = hintMask
                         .align(Alignment.TopEnd)
-                        .padding(top = HintTopPadding, end = HintEndPadding),
+                        .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding),
                     fontSize = (HintLabelSp * fontScale * settings.layoutBehavior.hintFontScale).sp,
                     color = hintColor,
                     maxLines = 1,
                     softWrap = false,
-                    style = hintTextStyle(),
+                    style = keyHintTextStyle(),
                 )
             }
         }
@@ -17004,9 +17026,6 @@ private const val TranslitHintSp = 10.5f
 /** An icon hint's box, matched to the text hints' height. */
 private const val HintIconDp = 9.5f
 
-/** How far the hint lane sits from the key's top edge. */
-private val HintTopPadding = 0.5.dp
-
 /** How far the hint lane sits from the key's trailing edge. */
 private val HintEndPadding = 4.dp
 
@@ -17023,6 +17042,20 @@ private val HintEndPadding = 4.dp
 internal fun hintTextStyle(): TextStyle {
     val base = LocalTextStyle.current
     return remember(base) { base.merge(NoFontPadding) }
+}
+
+/**
+ * [hintTextStyle] with the line box shrunk to the font, for the hints drawn in a
+ * key's corner (#208). The ambient style is Material's bodyLarge, whose 24 sp
+ * line height centred an 8.5 sp hint in a box nearly three times its size: the
+ * glyph landed about ten dp down the key, on top of the label, whatever the top
+ * padding said. The octopus overlay keeps the plain style, because its word band
+ * is measured from it.
+ */
+@Composable
+private fun keyHintTextStyle(): TextStyle {
+    val base = hintTextStyle()
+    return remember(base) { base.copy(lineHeight = TextUnit.Unspecified) }
 }
 
 private val NoFontPadding = TextStyle(

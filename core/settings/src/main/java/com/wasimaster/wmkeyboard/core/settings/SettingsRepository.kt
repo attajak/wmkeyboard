@@ -1247,6 +1247,14 @@ data class ToolbarBehavior(
      */
     val toolWidthDp: Int = 38,
     /**
+     * Space above the toolbar's content, in dp, added to the strip's height.
+     * 4 by default (#208): with none, the tool pills sat almost against the
+     * keyboard's top edge, closer than any two key rows sit to each other.
+     */
+    val paddingTopDp: Int = 4,
+    /** Space between the toolbar's content and the keys, in dp, added to the strip's height. */
+    val paddingBottomDp: Int = 0,
+    /**
      * Which built-in themes the keyboard's Themes tool offers, by id — a
      * quick-switch shortlist for changing looks mid-typing, while the full
      * gallery stays in Settings. Custom and downloaded themes always show.
@@ -2315,7 +2323,12 @@ data class KeyboardSettings(
     val toolbarTools: List<ToolbarTool> = DefaultToolbarTools,
     /** Toolbar enable/behaviour/layout switches (see [ToolbarBehavior]). */
     val toolbarBehavior: ToolbarBehavior = ToolbarBehavior(),
-    /** Height of the top toolbar/suggestion strip, in dp. */
+    /**
+     * Height of the top toolbar/suggestion strip's content, in dp, before
+     * [ToolbarBehavior.paddingTopDp] and [ToolbarBehavior.paddingBottomDp] are
+     * added around it. Settings no longer offers a slider for it (#208): the
+     * two paddings replaced it, and a theme's own toolbar height still sets it.
+     */
     val toolbarHeightDp: Int = 44,
     /** Draw each tool's name under its icon on the toolbar. */
     val toolbarLabels: Boolean = false,
@@ -4746,6 +4759,12 @@ data class LayoutBehaviorSettings(
      */
     val hintFontScale: Float = 1.0f,
     /**
+     * How far the corner hint sits below the key's top edge, in dp (#208). 0
+     * puts the glyph against the edge; larger values move it down toward the
+     * label.
+     */
+    val hintOffsetDp: Int = 1,
+    /**
      * On a transliterating layout (Avro), each key's corner hint shows the
      * script it is about to type rather than its long-press alternate: ক on
      * the `k`, কা on the `a` once a consonant is composing, ক্ক on the `k`
@@ -5922,6 +5941,7 @@ class SettingsRepository(private val context: Context) {
         private val HINT_FLICK = booleanPreferencesKey("hint_flick")
         private val SPACE_CURSOR_2D = booleanPreferencesKey("space_cursor_2d")
         private val HINT_FONT_SCALE = floatPreferencesKey("hint_font_scale")
+        private val HINT_OFFSET = intPreferencesKey("hint_offset_dp")
         private val TRANSLITERATION_HINTS = stringPreferencesKey("transliteration_hints")
         private val FANCY_STYLE = stringPreferencesKey("fancy_style")
         private val FANCY_TOOL_STYLE = stringPreferencesKey("fancy_tool_style")
@@ -6208,6 +6228,8 @@ class SettingsRepository(private val context: Context) {
         private val TOOL_CIRCLE_RADIUS = intPreferencesKey("tool_circle_radius")
         private val TOOL_SHAPE = stringPreferencesKey("tool_circle_shape")
         private val TOOLBAR_TOOL_WIDTH = intPreferencesKey("toolbar_tool_width")
+        private val TOOLBAR_PADDING_TOP = intPreferencesKey("toolbar_padding_top")
+        private val TOOLBAR_PADDING_BOTTOM = intPreferencesKey("toolbar_padding_bottom")
         private val TOOLBAR_PLACEMENT = stringPreferencesKey("toolbar_placement")
         private val TOOLBAR_HOLD_ACTIONS = stringPreferencesKey("toolbar_hold_actions")
         private val THEMES_PANEL_BUILTINS = stringSetPreferencesKey("themes_panel_builtins")
@@ -7339,6 +7361,7 @@ class SettingsRepository(private val context: Context) {
                     ?.split('\n')?.filter { it.isNotEmpty() }
                     ?: defaults.layoutBehavior.spaceHoldKeys,
                 hintFontScale = p[HINT_FONT_SCALE] ?: defaults.layoutBehavior.hintFontScale,
+                hintOffsetDp = p[HINT_OFFSET] ?: defaults.layoutBehavior.hintOffsetDp,
                 transliterationHints = p[TRANSLITERATION_HINTS]
                     ?.let { runCatching { TransliterationHintMode.valueOf(it) }.getOrNull() }
                     ?: defaults.layoutBehavior.transliterationHints,
@@ -7446,6 +7469,8 @@ class SettingsRepository(private val context: Context) {
                 scrollable = p[TOOLBAR_SCROLLABLE] ?: defaults.toolbarBehavior.scrollable,
                 hideWhenLocked = p[TOOLBAR_HIDE_WHEN_LOCKED] ?: defaults.toolbarBehavior.hideWhenLocked,
                 toolWidthDp = p[TOOLBAR_TOOL_WIDTH] ?: defaults.toolbarBehavior.toolWidthDp,
+                paddingTopDp = p[TOOLBAR_PADDING_TOP] ?: defaults.toolbarBehavior.paddingTopDp,
+                paddingBottomDp = p[TOOLBAR_PADDING_BOTTOM] ?: defaults.toolbarBehavior.paddingBottomDp,
                 themesPanelBuiltIns = p[THEMES_PANEL_BUILTINS],
                 placement = p[TOOLBAR_PLACEMENT]
                     ?.let { runCatching { ToolbarPlacement.valueOf(it) }.getOrNull() }
@@ -8760,6 +8785,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setToolbarToolWidthDp(value: Int) =
         editPrefs { it[TOOLBAR_TOOL_WIDTH] = value.coerceIn(38, 64) }
+
+    suspend fun setToolbarPaddingTopDp(value: Int) =
+        editPrefs { it[TOOLBAR_PADDING_TOP] = value.coerceIn(0, 24) }
+
+    suspend fun setToolbarPaddingBottomDp(value: Int) =
+        editPrefs { it[TOOLBAR_PADDING_BOTTOM] = value.coerceIn(0, 24) }
 
     suspend fun setToolbarPlacement(value: ToolbarPlacement) =
         editPrefs { it[TOOLBAR_PLACEMENT] = value.name }
@@ -11050,6 +11081,7 @@ class SettingsRepository(private val context: Context) {
         it.remove(KEY_CORNER_RADIUS)
         it.remove(FONT_SCALE)
         it.remove(HINT_FONT_SCALE)
+        it.remove(HINT_OFFSET)
     }
 
     /** The Toolbar page's reset: the bar, its labels, the suggestion strip and the tool shape. */
@@ -11070,6 +11102,8 @@ class SettingsRepository(private val context: Context) {
         it.remove(TOOL_CIRCLE_RADIUS)
         it.remove(TOOL_SHAPE)
         it.remove(TOOLBAR_TOOL_WIDTH)
+        it.remove(TOOLBAR_PADDING_TOP)
+        it.remove(TOOLBAR_PADDING_BOTTOM)
     }
 
     /** The Toolbox page's reset: the tool grid's layout, columns, paging and labels. */
@@ -11364,6 +11398,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setHintFontScale(value: Float) =
         editPrefs { it[HINT_FONT_SCALE] = value.coerceIn(0.5f, 2.0f) }
+
+    suspend fun setHintOffsetDp(value: Int) =
+        editPrefs { it[HINT_OFFSET] = value.coerceIn(0, 16) }
 
     suspend fun setTransliterationHints(value: TransliterationHintMode) =
         editPrefs { it[TRANSLITERATION_HINTS] = value.name }
