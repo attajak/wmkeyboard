@@ -117,9 +117,9 @@ object WordlistDownloadManager {
             try {
                 // Clamped here, not inside: ALL's cap is Int.MAX_VALUE, which
                 // would ask the free-space check for 137 GB.
-                val entries = fetchEntries(entry, DictionaryCatalog.wordCap(entry, size), part)
+                val list = fetchEntries(entry, DictionaryCatalog.wordCap(entry, size), part)
                 set(entry.id, DownloadStatus.Processing)
-                val trie = PackedTrie.of(entries)
+                val trie = PackedTrie.of(list.words, list.frequencies, list.count)
                 part.outputStream().use { PackedTrieCodec.write(trie, it) }
                 val final = DictionaryStore.downloadedFile(filesDir, entry.languageId)
                 if (!part.renameTo(final)) {
@@ -201,6 +201,14 @@ object WordlistDownloadManager {
     }
 
     /**
+     * The first [count] slots of two parallel arrays: word `i` and its
+     * frequency. Arrays rather than a `List<Pair>` because an "everything"
+     * list runs to millions of entries, where a `Pair` and a boxed `Integer`
+     * apiece is tens of MB the trie build then has to squeeze in beside (#203).
+     */
+    private class Wordlist(val words: Array<String?>, val frequencies: IntArray, val count: Int)
+
+    /**
      * Streams the remote gzip list and returns its first [wordCap] usable
      * entries, aborting the transfer once the cap is hit.
      */
@@ -208,7 +216,7 @@ object WordlistDownloadManager {
         entry: DictionaryEntry,
         wordCap: Int,
         part: File,
-    ): List<Pair<String, Int>> {
+    ): Wordlist {
         part.parentFile?.mkdirs()
         val free = StatFs(part.parentFile!!.path).availableBytes
         if (free < wordCap * BYTES_PER_WORD + SPACE_MARGIN_BYTES) {
@@ -232,7 +240,11 @@ object WordlistDownloadManager {
             }
             val total = connection.contentLengthLong.takeIf { it > 0 } ?: entry.approxGzBytes
 
-            val entries = ArrayList<Pair<String, Int>>(minOf(wordCap, entry.totalWordCount))
+            // wordCap is already clamped to the list's length, and the loop
+            // stops at it, so the arrays never need to grow.
+            val words = arrayOfNulls<String>(wordCap)
+            val frequencies = IntArray(wordCap)
+            var count = 0
             val counting = CountingInputStream(connection.inputStream)
             var lastUpdate = 0L
             // Whether the noise cut below applies at all, decided by the first
@@ -256,8 +268,10 @@ object WordlistDownloadManager {
                     // Sorted desc, so on a ranked list only noise follows.
                     if (ranked == true && frequency < MIN_FREQUENCY) break
                     if (word.length > MAX_WORD_LENGTH || ' ' in word) continue
-                    entries.add(word to frequency)
-                    if (entries.size >= wordCap) break
+                    words[count] = word
+                    frequencies[count] = frequency
+                    count++
+                    if (count >= wordCap) break
                     val now = System.currentTimeMillis()
                     if (now - lastUpdate >= PROGRESS_INTERVAL_MS) {
                         lastUpdate = now
@@ -265,10 +279,10 @@ object WordlistDownloadManager {
                     }
                 }
             }
-            if (entries.isEmpty()) {
+            if (count == 0) {
                 throw FailedException(FailReason.MALFORMED, R.string.core_pred_wordlist_malformed_error)
             }
-            return entries
+            return Wordlist(words, frequencies, count)
         } finally {
             connection.disconnect()
         }

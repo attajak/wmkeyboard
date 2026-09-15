@@ -114,6 +114,54 @@ class PackedTrieTest {
     }
 
     @Test
+    fun randomWordsWithDuplicatesMatchNodeTrie() {
+        // A small alphabet forces deep shared prefixes, words that are prefixes
+        // of other words, and repeats with differing frequencies. The surrogate
+        // pair and Thai letters sort above ASCII by code unit, like childEdge.
+        val alphabet = listOf("a", "b", "c", "ก", "😀")
+        val random = java.util.Random(203)
+        val entries = List(20_000) {
+            val word = buildString { repeat(random.nextInt(7)) { append(alphabet[random.nextInt(alphabet.size)]) } }
+            word to random.nextInt(5_000)
+        }
+        val (trie, packed) = buildBoth(entries)
+        for ((word, _) in entries) {
+            assertEquals("frequencyOf(\"$word\")", trie.frequencyOf(word), packed.frequencyOf(word))
+        }
+        val full = entries.size + 1
+        for (a in alphabet) for (b in alphabet) {
+            for (p in listOf(a, a + b)) {
+                assertEquals("completions for \"$p\"", canonical(trie.complete(p, full)), canonical(packed.complete(p, full)))
+            }
+        }
+        assertEquals(0, packed.frequencyOf(""))
+    }
+
+    @Test
+    fun inputOrderDoesNotChangeTheBuiltFile() {
+        val entries = realEntries()
+        val shuffled = entries.shuffled(java.util.Random(7))
+        val sorted = entries.sortedBy { it.first }
+        val expected = encode(PackedTrie.of(shuffled))
+        assertTrue(expected.contentEquals(encode(PackedTrie.of(sorted))))
+        assertTrue(expected.contentEquals(encode(PackedTrie.of(sorted.asReversed()))))
+    }
+
+    @Test
+    fun arrayOverloadReadsOnlyCountSlots() {
+        val words = arrayOf<String?>("dog", "", "cat", "dog", null, null)
+        val frequencies = intArrayOf(5, 99, 7, 9, 0, 0)
+        val packed = PackedTrie.of(words, frequencies, 4)
+        assertEquals(2, packed.wordCount)
+        assertEquals(9, packed.frequencyOf("dog"))
+        assertEquals(7, packed.frequencyOf("cat"))
+        assertEquals(0, packed.frequencyOf(""))
+    }
+
+    private fun encode(trie: PackedTrie): ByteArray =
+        java.io.ByteArrayOutputStream().also { PackedTrieCodec.write(trie, it) }.toByteArray()
+
+    @Test
     fun emptyTrieIsWellBehaved() {
         val empty = PackedTrie.EMPTY
         assertEquals(emptyList<Suggestion>(), empty.complete("a", 5))

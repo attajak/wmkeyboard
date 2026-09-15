@@ -109,29 +109,58 @@ class PackedTrie internal constructor(
 
         /**
          * Builds a packed trie from `word to frequency` entries. Duplicate
-         * words keep their highest frequency, matching [Trie.insert]. The
-         * transient node tree used to lay out the arrays is discarded, so its
-         * HashMap cost is paid only during construction (off the main thread).
+         * words keep their highest frequency, matching [Trie.insert].
          */
         fun of(entries: Iterable<Pair<String, Int>>): PackedTrie {
-            val root = BuildNode()
+            val list = entries as? Collection<Pair<String, Int>> ?: entries.toList()
+            val words = arrayOfNulls<String>(list.size)
+            val frequencies = IntArray(list.size)
+            var count = 0
+            for ((word, frequency) in list) {
+                words[count] = word
+                frequencies[count] = frequency
+                count++
+            }
+            return of(words, frequencies, count)
+        }
+
+        /**
+         * Builds a packed trie from the first [count] slots of two parallel
+         * arrays, **sorting both in place** — the caller's arrays come back in
+         * word order. Same semantics as the `Iterable` overload.
+         *
+         * This is the overload for big lists. A downloaded "everything"
+         * wordlist is millions of words (English 1.6M, Thai 4M), and the
+         * keyboard's heap is capped at a few hundred MB: a `Pair` per entry
+         * is already ~60 MB of English before the trie exists, and the old
+         * HashMap-per-node build tree ran out of heap outright (#203).
+         *
+         * Nothing here allocates per word or per node. Sorting makes every
+         * trie node a contiguous run of words sharing its prefix, so the
+         * breadth-first layout below only needs each node's `[lo, hi)` word
+         * range — two transient int arrays — and the node count is known
+         * before anything is allocated (one pass summing, per word, the
+         * characters it does not share with its sorted predecessor).
+         */
+        fun of(words: Array<String?>, frequencies: IntArray, count: Int): PackedTrie {
+            require(count in 0..minOf(words.size, frequencies.size)) {
+                "count $count exceeds arrays of ${words.size} and ${frequencies.size}"
+            }
+            // Slots below count are non-null by contract; the ones above are
+            // never read.
+            @Suppress("UNCHECKED_CAST")
+            val sorted = words as Array<String>
+            sortByWord(sorted, frequencies, 0, count)
+
+            // Empty strings sort first; they are not words.
+            var first = 0
+            while (first < count && sorted[first].isEmpty()) first++
+
             var nodeCount = 1
-            for ((word, frequency) in entries) {
-                if (word.isEmpty()) continue
-                var node = root
-                for (ch in word) {
-                    node = node.children.getOrPut(ch) {
-                        nodeCount++
-                        BuildNode()
-                    }
-                }
-                node.isWord = true
-                // Snapped here rather than in the codec so that this trie and
-                // the .wmdict written from it hold identical numbers, and so
-                // that the eval harnesses — which build straight from of(),
-                // never through a file — measure the frequencies the keyboard
-                // will really see.
-                node.freq = maxOf(node.freq, FrequencyCodec.round(frequency))
+            for (i in first until count) {
+                val word = sorted[i]
+                val shared = if (i == first) 0 else commonPrefixLength(sorted[i - 1], word)
+                nodeCount += word.length - shared
             }
 
             val childStart = IntArray(nodeCount + 1)
@@ -140,29 +169,54 @@ class PackedTrie internal constructor(
             val freq = IntArray(nodeCount)
             val isWord = BooleanArray(nodeCount)
             val maxSubtree = IntArray(nodeCount)
+            // Node id -> the run of sorted words under it. Transient.
+            val rangeStart = IntArray(nodeCount)
+            val rangeEnd = IntArray(nodeCount)
 
             // Breadth-first id assignment + CSR layout in one pass. Ids are
             // handed out in BFS order (root = 0), so a parent always has a
             // smaller id than its children — which lets maxSubtree fold up in
-            // a single reverse sweep below. Children are sorted by label so
-            // childEdge can binary-search their edge slice.
-            val queue = ArrayDeque<BuildNode>()
-            root.id = 0
-            queue.add(root)
+            // a single reverse sweep below. Children come out sorted by label
+            // (the words are sorted) so childEdge can binary-search their edge
+            // slice. Every word under a node at depth d is at least d long and
+            // shares the node's prefix, so its character at d picks the child.
+            rangeStart[0] = first
+            rangeEnd[0] = count
             var nextId = 1
             var edgeCursor = 0
-            while (queue.isNotEmpty()) {
-                val node = queue.removeFirst()
-                val id = node.id
-                freq[id] = node.freq
-                isWord[id] = node.isWord
+            var depth = 0
+            var depthEnd = 1 // ids below this sit at `depth`
+            for (id in 0 until nodeCount) {
+                if (id == depthEnd) {
+                    depth++
+                    depthEnd = nextId
+                }
+                var i = rangeStart[id]
+                val end = rangeEnd[id]
+                // A word ending here sorts before every longer word in the
+                // run; duplicates of it sit side by side.
+                while (i < end && sorted[i].length == depth) {
+                    isWord[id] = true
+                    // Snapped here rather than in the codec so that this trie
+                    // and the .wmdict written from it hold identical numbers,
+                    // and so that the eval harnesses — which build straight
+                    // from of(), never through a file — measure the
+                    // frequencies the keyboard will really see.
+                    freq[id] = maxOf(freq[id], FrequencyCodec.round(frequencies[i]))
+                    i++
+                }
                 childStart[id] = edgeCursor
-                for ((ch, child) in node.children.entries.sortedBy { it.key }) {
-                    child.id = nextId++
+                while (i < end) {
+                    val ch = sorted[i][depth]
+                    var j = i + 1
+                    while (j < end && sorted[j][depth] == ch) j++
+                    val child = nextId++
+                    rangeStart[child] = i
+                    rangeEnd[child] = j
                     edgeLabel[edgeCursor] = ch
-                    edgeChild[edgeCursor] = child.id
+                    edgeChild[edgeCursor] = child
                     edgeCursor++
-                    queue.add(child)
+                    i = j
                 }
             }
             childStart[nodeCount] = edgeCursor
@@ -183,13 +237,69 @@ class PackedTrie internal constructor(
 
             return PackedTrie(childStart, edgeLabel, edgeChild, freq, isWord, maxSubtree)
         }
-    }
 
-    /** Transient build node; exists only while [of] lays out the arrays. */
-    private class BuildNode {
-        val children = HashMap<Char, BuildNode>()
-        var isWord = false
-        var freq = 0
-        var id = 0
+        private const val INSERTION_SORT_MAX = 12
+
+        private fun commonPrefixLength(a: String, b: String): Int {
+            val limit = minOf(a.length, b.length)
+            var i = 0
+            while (i < limit && a[i] == b[i]) i++
+            return i
+        }
+
+        /**
+         * Sorts `words[from, to)` by UTF-16 code unit — the order [childEdge]
+         * searches in — carrying [frequencies] along. Three-way quicksort, so
+         * duplicate words cost nothing extra; the middle pivot keeps an
+         * already-alphabetical list (a user's imported dictionary) at n log n,
+         * and recursing into the smaller side bounds the stack at log n.
+         */
+        private fun sortByWord(words: Array<String>, frequencies: IntArray, from: Int, to: Int) {
+            var lo = from
+            var hi = to
+            while (hi - lo > INSERTION_SORT_MAX) {
+                val pivot = words[(lo + hi) ushr 1]
+                var lt = lo
+                var gt = hi
+                var i = lo
+                // [lo, lt) < pivot, [lt, i) == pivot, [gt, hi) > pivot
+                while (i < gt) {
+                    val cmp = words[i].compareTo(pivot)
+                    when {
+                        cmp < 0 -> swap(words, frequencies, lt++, i++)
+                        cmp > 0 -> swap(words, frequencies, i, --gt)
+                        else -> i++
+                    }
+                }
+                if (lt - lo < hi - gt) {
+                    sortByWord(words, frequencies, lo, lt)
+                    lo = gt
+                } else {
+                    sortByWord(words, frequencies, gt, hi)
+                    hi = lt
+                }
+            }
+            for (i in lo + 1 until hi) {
+                val word = words[i]
+                val frequency = frequencies[i]
+                var j = i - 1
+                while (j >= lo && words[j] > word) {
+                    words[j + 1] = words[j]
+                    frequencies[j + 1] = frequencies[j]
+                    j--
+                }
+                words[j + 1] = word
+                frequencies[j + 1] = frequency
+            }
+        }
+
+        private fun swap(words: Array<String>, frequencies: IntArray, a: Int, b: Int) {
+            val word = words[a]
+            words[a] = words[b]
+            words[b] = word
+            val frequency = frequencies[a]
+            frequencies[a] = frequencies[b]
+            frequencies[b] = frequency
+        }
     }
 }
