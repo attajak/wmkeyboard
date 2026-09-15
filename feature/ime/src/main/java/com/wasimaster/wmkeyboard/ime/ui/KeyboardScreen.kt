@@ -5920,6 +5920,7 @@ internal fun toolLabelRes(tool: ToolbarTool): Int = when (tool) {
     ToolbarTool.CAMERA -> R.string.ime_tool_camera
     ToolbarTool.DICTIONARY -> R.string.ime_tool_dictionary
     ToolbarTool.VOCABULARY -> R.string.ime_tool_vocabulary
+    ToolbarTool.LEARN_FROM_TEXT -> R.string.ime_tool_learn_from_text
     ToolbarTool.TRANSLATE -> R.string.ime_tool_translate
     ToolbarTool.GIF -> R.string.ime_tool_gif
     ToolbarTool.STICKER -> R.string.ime_tool_sticker
@@ -5999,6 +6000,7 @@ private fun toolActive(tool: ToolbarTool, state: KeyboardUiState): Boolean = whe
     ToolbarTool.CAMERA -> state.panel == PanelMode.CAMERA
     ToolbarTool.DICTIONARY -> state.panel == PanelMode.DICTIONARY
     ToolbarTool.VOCABULARY -> state.panel == PanelMode.VOCABULARY
+    ToolbarTool.LEARN_FROM_TEXT -> state.panel == PanelMode.LEARN_FROM_TEXT
     ToolbarTool.TRANSLATE -> state.panel == PanelMode.TRANSLATE
     ToolbarTool.GIF -> state.panel == PanelMode.GIF
     ToolbarTool.STICKER -> state.panel == PanelMode.STICKER
@@ -8292,7 +8294,7 @@ private val FullBleedPanels = setOf(
     PanelMode.UNIT_CONVERT, PanelMode.CALENDAR, PanelMode.AI,
     PanelMode.TRANSLATE, PanelMode.WEB_SEARCH, PanelMode.IMAGE_SEARCH,
     PanelMode.DICTIONARY, PanelMode.SYMBOLS, PanelMode.MEDIA_CONTROL,
-    PanelMode.VOCABULARY,
+    PanelMode.VOCABULARY, PanelMode.LEARN_FROM_TEXT,
     PanelMode.APP_LAUNCHER, PanelMode.THEMES, PanelMode.SNIPPETS,
 )
 
@@ -9397,6 +9399,11 @@ private fun KeyboardBody(
                 }
                 PanelMode.QR_GEN -> QrGeneratorPanel(state, onQrSend)
                 PanelMode.FIND_REPLACE -> FindReplacePanel(state, toolHold.findReplace)
+                PanelMode.LEARN_FROM_TEXT -> LearnFromTextPanel(
+                    state = state,
+                    callbacks = toolHold.learnFromText,
+                    onClose = { onPanelChange(PanelMode.LEARN_FROM_TEXT) },
+                )
                 PanelMode.PASSWORD_GEN -> FullBleedTool(
                     state, title = "",
                     onClose = { onPanelChange(PanelMode.PASSWORD_GEN) },
@@ -9600,6 +9607,10 @@ private fun KeyboardBody(
             }
             // And for the Find and replace fields, the same trap a third time.
             if (state.findReplaceTypingActive) {
+                KeyRows(state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect)
+            }
+            // And for Learn from text's spelling editor.
+            if (state.learnEditActive) {
                 KeyRows(state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect)
             }
             // Same for a media panel's search box (translate is one now —
@@ -19312,6 +19323,8 @@ data class ToolHoldCallbacks(
     val selection: SelectionMacroCallbacks = SelectionMacroCallbacks(),
     /** The Find and replace panel's callbacks; here for the same reason as [dictionaryBar]. */
     val findReplace: FindReplaceCallbacks = FindReplaceCallbacks(),
+    /** The Learn from text panel's callbacks (#174); here for the same reason as [dictionaryBar]. */
+    val learnFromText: LearnFromTextCallbacks = LearnFromTextCallbacks(),
 )
 
 // ---- snippets panel ----

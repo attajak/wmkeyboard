@@ -121,6 +121,7 @@ internal fun toolTitle(tool: ToolbarTool): Int = when (tool) {
     ToolbarTool.CAMERA -> ImeR.string.ime_tool_camera
     ToolbarTool.DICTIONARY -> ImeR.string.ime_tool_dictionary
     ToolbarTool.VOCABULARY -> ImeR.string.ime_tool_vocabulary
+    ToolbarTool.LEARN_FROM_TEXT -> ImeR.string.ime_tool_learn_from_text
     ToolbarTool.TRANSLATE -> ImeR.string.ime_tool_translate
     ToolbarTool.GIF -> ImeR.string.ime_tool_gif
     ToolbarTool.STICKER -> ImeR.string.ime_tool_sticker
@@ -197,6 +198,7 @@ internal fun toolDescription(tool: ToolbarTool): Int = when (tool) {
     ToolbarTool.CAMERA -> R.string.fonts_tool_camera_desc
     ToolbarTool.DICTIONARY -> R.string.fonts_tool_dictionary_desc
     ToolbarTool.VOCABULARY -> R.string.fonts_tool_vocabulary_desc
+    ToolbarTool.LEARN_FROM_TEXT -> R.string.fonts_tool_learn_from_text_desc
     ToolbarTool.TRANSLATE -> R.string.fonts_tool_translate_desc
     ToolbarTool.GIF -> R.string.fonts_tool_gif_desc
     ToolbarTool.STICKER -> R.string.fonts_tool_sticker_desc
@@ -529,7 +531,7 @@ internal val ToolGroups: List<Pair<Int, List<ToolbarTool>>> = buildList {
             ToolbarTool.EMOJI, ToolbarTool.CLIPBOARD, ToolbarTool.SNIPPETS,
             ToolbarTool.TEXT_EDIT, ToolbarTool.TRACKPAD, ToolbarTool.NUMPAD, ToolbarTool.HANDWRITING,
             ToolbarTool.VOICE, ToolbarTool.CAMERA, ToolbarTool.DICTIONARY, ToolbarTool.VOCABULARY,
-            ToolbarTool.GRAMMAR, ToolbarTool.APP_LAUNCHER, ToolbarTool.MEDIA_CONTROL,
+            ToolbarTool.LEARN_FROM_TEXT, ToolbarTool.GRAMMAR, ToolbarTool.APP_LAUNCHER, ToolbarTool.MEDIA_CONTROL,
         ),
     )
     add(

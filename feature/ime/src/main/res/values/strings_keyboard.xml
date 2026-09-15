@@ -334,6 +334,45 @@
     <string name="ime_tool_camera">Camera</string>
     <string name="ime_tool_dictionary">Dictionary</string>
     <string name="ime_tool_vocabulary">Vocabulary</string>
+    <string name="ime_tool_learn_from_text">Learn from text</string>
+    <!-- Learn from text (#174): the panel that lists words the keyboard does not know yet. -->
+    <string name="ime_learn_select_all_action">Select all</string>
+    <string name="ime_learn_select_none_action">Select none</string>
+    <string name="ime_learn_add_action">Add %1$d</string>
+    <string name="ime_learn_pairs_label">Word pairs</string>
+    <string name="ime_learn_pairs_desc">Also learn the word pairs in this text</string>
+    <string name="ime_learn_sort_frequent_label">Most used</string>
+    <string name="ime_learn_sort_text_label">Text order</string>
+    <string name="ime_learn_sort_alpha_label">A to Z</string>
+    <string name="ime_learn_sort_desc">Change the order</string>
+    <plurals name="ime_learn_found_count">
+        <item quantity="one">%d new word</item>
+        <item quantity="other">%d new words</item>
+    </plurals>
+    <string name="ime_learn_scanning_progress">Reading the text…</string>
+    <string name="ime_learn_empty">No new words here. The keyboard knows every word in this text.</string>
+    <string name="ime_learn_blocked_info">This is a password field, so nothing was read.</string>
+    <string name="ime_learn_partial_info">Only part of this field could be read.</string>
+    <string name="ime_learn_capped_info">Showing the first %1$d new words.</string>
+    <plurals name="ime_learn_result_words">
+        <item quantity="one">Added %d word</item>
+        <item quantity="other">Added %d words</item>
+    </plurals>
+    <plurals name="ime_learn_result_pairs">
+        <item quantity="one">%d word pair</item>
+        <item quantity="other">%d word pairs</item>
+    </plurals>
+    <string name="ime_learn_result_both">%1$s · %2$s</string>
+    <string name="ime_learn_count_label">×%1$d</string>
+    <string name="ime_learn_seen_label">seen %1$d</string>
+    <string name="ime_learn_edited_label">%1$s → %2$s</string>
+    <string name="ime_learn_more_desc">More for %1$s</string>
+    <string name="ime_learn_edit_action">Edit</string>
+    <string name="ime_learn_show_action">Show in text</string>
+    <string name="ime_learn_never_action">Never suggest</string>
+    <string name="ime_learn_ignore_action">Ignore</string>
+    <string name="ime_learn_edit_hint">Spelling to add</string>
+    <string name="ime_learn_edit_done_action">Done</string>
     <string name="ime_tool_translate">Translate</string>
     <string name="ime_tool_gif">GIFs</string>
     <string name="ime_tool_sticker">Stickers</string>

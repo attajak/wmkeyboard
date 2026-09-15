@@ -70,6 +70,9 @@ enum class ToolbarTool {
     // Turns the selection actions bar on and off (issue #177). The same
     // setting as Advanced → Selection actions, one tap from the keys.
     SELECTION_ACTIONS,
+    // Reads the field (or the selection) and lists the words the keyboard does
+    // not know yet, to add to the personal dictionary in one go (#174).
+    LEARN_FROM_TEXT,
 }
 
 /** The cursor tools, in the order they read on the toolbar. */
@@ -250,7 +253,7 @@ val ToolTopUps: Set<ToolbarTool> = setOf(ToolbarTool.WIKIPEDIA, ToolbarTool.POWE
  */
 private val RestOfToolOrder: List<ToolbarTool> = listOf(
     ToolbarTool.WEB_SEARCH, ToolbarTool.IMAGE_SEARCH,
-    ToolbarTool.TYPING_TEST, ToolbarTool.PLUGINS, ToolbarTool.CUSTOM_LAYOUT,
+    ToolbarTool.LEARN_FROM_TEXT, ToolbarTool.TYPING_TEST, ToolbarTool.PLUGINS, ToolbarTool.CUSTOM_LAYOUT,
     ToolbarTool.FLOATING, ToolbarTool.PERSISTENT, ToolbarTool.RESIZE, ToolbarTool.INCOGNITO,
     ToolbarTool.SELECTION_ACTIONS, ToolbarTool.SOUND_HAPTICS,
     ToolbarTool.QR_SCAN, ToolbarTool.QR_GEN, ToolbarTool.DOC_SCAN, ToolbarTool.CAMERA,

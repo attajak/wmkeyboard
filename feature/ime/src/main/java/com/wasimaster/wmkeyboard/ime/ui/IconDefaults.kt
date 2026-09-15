@@ -76,6 +76,7 @@ import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material.icons.outlined.QrCode2
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material.icons.outlined.Settings
@@ -148,6 +149,7 @@ object IconDefaults {
         ToolbarTool.CAMERA -> Icons.Outlined.PhotoCamera
         ToolbarTool.DICTIONARY -> Icons.AutoMirrored.Outlined.MenuBook
         ToolbarTool.VOCABULARY -> Icons.Outlined.AutoStories
+        ToolbarTool.LEARN_FROM_TEXT -> Icons.Outlined.School
         ToolbarTool.TRANSLATE -> Icons.Outlined.Translate
         ToolbarTool.GIF -> Icons.Outlined.GifBox
         ToolbarTool.STICKER -> Icons.AutoMirrored.Outlined.StickyNote2

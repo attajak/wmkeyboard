@@ -153,5 +153,6 @@
     <string name="fonts_tool_hide_keyboard_desc">Hide the keyboard with one press</string>
 
     <string name="fonts_tool_vocabulary_desc">Word cards, nudges and flashcards from downloadable vocabulary packs</string>
+    <string name="fonts_tool_learn_from_text_desc">List the words in what you have written that the keyboard does not know yet, and add them to your personal dictionary</string>
 
 </resources>

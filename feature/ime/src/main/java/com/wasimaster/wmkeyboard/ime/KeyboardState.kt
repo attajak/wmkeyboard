@@ -532,6 +532,12 @@ enum class PanelMode {
      * to type into them.
      */
     FIND_REPLACE,
+
+    /**
+     * Learn from text (#174): the words in the field, or the selection, that the
+     * keyboard does not know yet, to add in one go. See [LearnFromTextUi].
+     */
+    LEARN_FROM_TEXT,
 }
 
 /**
@@ -685,6 +691,8 @@ fun panelFocusRegions(panel: PanelMode): List<FocusRegion> = when (panel) {
     PanelMode.QR_GEN, PanelMode.TYPING_TEST -> listOf(FocusRegion.ACTIONS)
     // The two fields, the three toggles, then the buttons.
     PanelMode.FIND_REPLACE -> listOf(FocusRegion.SEARCH, FocusRegion.CHIPS, FocusRegion.ACTIONS)
+    // The header chips, then the word rows.
+    PanelMode.LEARN_FROM_TEXT -> listOf(FocusRegion.CHIPS, FocusRegion.RESULTS)
     PanelMode.PASSWORD_GEN ->
         listOf(FocusRegion.CHIPS, FocusRegion.ACTIONS, FocusRegion.RESULTS)
     // The dialect and Fix-all chips, then the lint cards. Seed-only (see
@@ -2415,6 +2423,8 @@ data class KeyboardUiState(
     val pluginFocusedInput: String? = null,
     /** The Find and replace panel's fields and matches; null while it is closed. */
     val findReplace: FindReplaceUi? = null,
+    /** The Learn from text panel's rows and editor (#174); null while it is closed. */
+    val learnFromText: LearnFromTextUi? = null,
     val webSearch: WebSearchUi = WebSearchUi.Idle,
     val imageSearch: ImageSearchUi = ImageSearchUi.Idle,
     val translate: TranslateUi = TranslateUi(),
@@ -2632,6 +2642,13 @@ data class KeyboardUiState(
         get() = panel == PanelMode.FIND_REPLACE && findReplace != null
 
     /**
+     * Whether keystrokes belong to the Learn from text panel's spelling editor
+     * (#174). Panel *and* an open editor, like [findReplaceTypingActive].
+     */
+    val learnEditActive: Boolean
+        get() = panel == PanelMode.LEARN_FROM_TEXT && learnFromText?.editing != null
+
+    /**
      * Whether keystrokes belong to the word card's spelling editor rather
      * than to the text field (#138) — true while the spelling bar is up, so
      * respelling a suggestion never writes into the app behind the keyboard.
@@ -2652,7 +2669,7 @@ data class KeyboardUiState(
     val keysTakenByKeyboard: Boolean
         get() = typingTestActive || calcTypingActive || converterTypingActive ||
             aiCustomInputActive || pluginTypingActive || emojiSearchActive ||
-            wordSpellActive || findReplaceTypingActive
+            wordSpellActive || findReplaceTypingActive || learnEditActive
 
     /**
      * The item a panel should ring in [region], or null when the ring is

@@ -5105,6 +5105,9 @@ enum class WordMenuItem { NEVER_SUGGEST, ADD, DELETE }
  */
 enum class RankControl { LEARNED_WEIGHT, RANK_OFFSET, BOTH }
 
+/** The order the Learn from text panel lists unknown words in (#174). */
+enum class LearnFromTextSort { MOST_FREQUENT, TEXT_ORDER, ALPHABETICAL }
+
 /**
  * Where a suggestion too long for its slot, even after shrinking, is cut.
  * [MIDDLE] keeps both ends of the word ("Punct…tion"), as Gboard does; [END]
@@ -5498,6 +5501,17 @@ data class SuggestionStripSettings(
      * someone who curates it elsewhere and re-imports.
      */
     val deleteEditsImportedLists: Boolean = true,
+    /**
+     * The order the Learn from text panel lists the words it found (#174),
+     * picked from the panel itself and remembered for the next scan.
+     */
+    val learnFromTextSort: LearnFromTextSort = LearnFromTextSort.MOST_FREQUENT,
+    /**
+     * Whether Add in the Learn from text panel also teaches the word pairs
+     * the text holds, the way typing them would have. The panel's Word pairs
+     * chip; on by default.
+     */
+    val learnFromTextPairs: Boolean = true,
 ) {
     /** Whether the fixed-spelling map applies to [langId]. */
     fun spellingMapEnabledFor(langId: String): Boolean = langId !in spellingMapOffLangs
@@ -5892,6 +5906,8 @@ class SettingsRepository(private val context: Context) {
         private val WORD_MENU_ITEMS = stringSetPreferencesKey("word_menu_items")
         private val WORD_RANK_CONTROL = stringPreferencesKey("word_rank_control")
         private val DELETE_EDITS_IMPORTED_LISTS = booleanPreferencesKey("delete_edits_imported_lists")
+        private val LEARN_FROM_TEXT_SORT = stringPreferencesKey("learn_from_text_sort")
+        private val LEARN_FROM_TEXT_PAIRS = booleanPreferencesKey("learn_from_text_pairs")
         private val INLINE_EMOJI_SEARCH = booleanPreferencesKey("inline_emoji_search")
         private val INLINE_AUTOFILL = booleanPreferencesKey("inline_autofill")
         private val GESTURE_TYPING = booleanPreferencesKey("gesture_typing")
@@ -7325,6 +7341,11 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.suggestionStrip.rankControl,
                 deleteEditsImportedLists = p[DELETE_EDITS_IMPORTED_LISTS]
                     ?: defaults.suggestionStrip.deleteEditsImportedLists,
+                learnFromTextSort = p[LEARN_FROM_TEXT_SORT]
+                    ?.let { runCatching { LearnFromTextSort.valueOf(it) }.getOrNull() }
+                    ?: defaults.suggestionStrip.learnFromTextSort,
+                learnFromTextPairs = p[LEARN_FROM_TEXT_PAIRS]
+                    ?: defaults.suggestionStrip.learnFromTextPairs,
             ),
             longPressDelayMs = p[LONG_PRESS_DELAY] ?: defaults.longPressDelayMs,
             keyRepeat = KeyRepeatSettings(
@@ -11207,6 +11228,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setDeleteEditsImportedLists(value: Boolean) =
         editPrefs { it[DELETE_EDITS_IMPORTED_LISTS] = value }
+
+    suspend fun setLearnFromTextSort(value: LearnFromTextSort) =
+        editPrefs { it[LEARN_FROM_TEXT_SORT] = value.name }
+
+    suspend fun setLearnFromTextPairs(value: Boolean) =
+        editPrefs { it[LEARN_FROM_TEXT_PAIRS] = value }
 
     suspend fun setContactSuggestions(value: Boolean) =
         editPrefs { it[CONTACT_SUGGESTIONS] = value }

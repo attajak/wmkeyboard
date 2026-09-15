@@ -177,6 +177,7 @@ import com.wasimaster.wmkeyboard.core.dictionaries.NgramPackDownloadManager
 import com.wasimaster.wmkeyboard.core.prediction.NgramPack
 import com.wasimaster.wmkeyboard.core.prediction.NgramReranker
 import com.wasimaster.wmkeyboard.core.prediction.KeyTouchModel
+import com.wasimaster.wmkeyboard.core.prediction.TextWordScan
 import com.wasimaster.wmkeyboard.core.prediction.WordContext
 import com.wasimaster.wmkeyboard.core.prediction.WordOrigin
 import com.wasimaster.wmkeyboard.core.prediction.WordRevision
@@ -4070,6 +4071,11 @@ open class WMKeyboardService : InputMethodService() {
             macroUndo.clear()
             macroJob?.cancel()
             macroSeq++
+            // And the words Learn from text read: they were this field's.
+            if (_uiState.value.panel == PanelMode.LEARN_FROM_TEXT) {
+                learnJob?.cancel()
+                _uiState.update { it.copy(panel = PanelMode.NONE, learnFromText = null, panelFocus = null) }
+            }
             // And so were the find panel's matches.
             if (_uiState.value.panel == PanelMode.FIND_REPLACE) {
                 findJob?.cancel()
@@ -5909,6 +5915,7 @@ open class WMKeyboardService : InputMethodService() {
             state.aiCustomInputActive -> { aiCustomInputEdit { it + text }; true }
             state.pluginTypingActive -> { pluginInputEdit { it + text }; true }
             state.findReplaceTypingActive -> { findReplaceEdit { it + text }; true }
+            state.learnEditActive -> { learnEdit { it + text }; true }
             // The calculator's display is a buffer too: a physical keyboard
             // types the expression instead of arrow-driving the keypad.
             state.calcTypingActive -> { calcEdit { it + mapCalcChars(text) }; true }
@@ -6678,6 +6685,10 @@ open class WMKeyboardService : InputMethodService() {
             findReplaceEdit { it.dropLast(1) }
             return
         }
+        if (state.learnEditActive) {
+            learnEdit { it.dropLast(1) }
+            return
+        }
         if (state.calcTypingActive) {
             calcEdit { it.dropLast(1) }
             return
@@ -7022,7 +7033,7 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive ||
-            state.findReplaceTypingActive ||
+            state.findReplaceTypingActive || state.learnEditActive ||
             state.calcTypingActive || state.converterTypingActive ||
             state.emojiSearchActive || state.dictionarySearchActive ||
             state.clipboardSearchActive ||
@@ -7077,7 +7088,7 @@ open class WMKeyboardService : InputMethodService() {
         val state = _uiState.value
         state.wordSpell?.let { return it.hasSelection || it.cursor < it.draft.length }
         if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive ||
-            state.findReplaceTypingActive ||
+            state.findReplaceTypingActive || state.learnEditActive ||
             state.calcTypingActive || state.converterTypingActive ||
             state.emojiSearchActive || state.dictionarySearchActive ||
             state.clipboardSearchActive ||
@@ -7317,7 +7328,7 @@ open class WMKeyboardService : InputMethodService() {
             !state.typingTestActive && !state.emojiSearchActive &&
             !state.dictionarySearchActive && !state.mediaSearchActive &&
             !state.clipboardSearchActive && !state.pluginTypingActive &&
-            !state.findReplaceTypingActive &&
+            !state.findReplaceTypingActive && !state.learnEditActive &&
             !voiceBlocksResume &&
             // Last, so the one term that asks the engine anything is only
             // reached once the screen and the field have already said yes.
@@ -7489,7 +7500,7 @@ open class WMKeyboardService : InputMethodService() {
         val state = _uiState.value
         return state.emojiSearchActive || state.dictionarySearchActive ||
             state.clipboardSearchActive || state.pluginTypingActive ||
-            state.findReplaceTypingActive ||
+            state.findReplaceTypingActive || state.learnEditActive ||
             state.aiCustomInputActive || state.typingTestActive ||
             state.calcTypingActive || state.converterTypingActive ||
             state.wordSpellActive ||
@@ -7688,6 +7699,8 @@ open class WMKeyboardService : InputMethodService() {
             findReplaceEdit { it + " " }
             return
         }
+        // A word has no spaces: the press is spent, never sent to the field.
+        if (_uiState.value.learnEditActive) return
         // The calculator's `mod ` operator is spelled with a space; the
         // converters' amount has no use for one, so the press is just spent.
         if (_uiState.value.calcTypingActive) {
@@ -7905,6 +7918,11 @@ open class WMKeyboardService : InputMethodService() {
         // field it replaces the current one.
         if (state.findReplaceTypingActive) {
             onFindReplaceEnter()
+            return
+        }
+        // Enter in the spelling editor keeps the spelling.
+        if (state.learnEditActive) {
+            onLearnEditDone()
             return
         }
         if (state.dictionarySearchActive) {
@@ -13817,6 +13835,9 @@ open class WMKeyboardService : InputMethodService() {
         // The word card's spelling bar takes a stroke into its own draft
         // (#204), so, as in a test, the field's say does not apply.
         state.wordSpellActive -> state.settings.gestureTyping
+        // Learn from text's spelling editor takes typed letters only: a stroke
+        // would otherwise commit into the field behind the panel (#174).
+        state.learnEditActive -> false
         else -> state.settings.gestureTyping && state.allowsGestureTyping
     }
 
@@ -14828,6 +14849,7 @@ open class WMKeyboardService : InputMethodService() {
             ToolbarTool.QR_GEN -> onPanelChange(PanelMode.QR_GEN)
             ToolbarTool.PASSWORD_GEN -> onPanelChange(PanelMode.PASSWORD_GEN)
             ToolbarTool.TYPING_TEST -> onPanelChange(PanelMode.TYPING_TEST)
+            ToolbarTool.LEARN_FROM_TEXT -> onPanelChange(PanelMode.LEARN_FROM_TEXT)
             ToolbarTool.MEDIA_CONTROL -> onPanelChange(PanelMode.MEDIA_CONTROL)
             ToolbarTool.PLUGINS -> onPanelChange(PanelMode.PLUGINS)
             ToolbarTool.APP_LAUNCHER -> onPanelChange(PanelMode.APP_LAUNCHER)
@@ -14929,6 +14951,8 @@ open class WMKeyboardService : InputMethodService() {
                 // The find fields exist exactly while their panel does (see
                 // findReplaceTypingActive); a fresh open starts them empty.
                 findReplace = if (next == PanelMode.FIND_REPLACE) FindReplaceUi() else null,
+                // A fresh open reads the text again (see [scanForLearning]).
+                learnFromText = if (next == PanelMode.LEARN_FROM_TEXT) LearnFromTextUi() else null,
                 textEditSelecting = false,
                 emojiSearchActive = false,
                 emojiQuery = "",
@@ -15016,6 +15040,7 @@ open class WMKeyboardService : InputMethodService() {
         publishEmojiHistory()
         translateJob?.cancel()
         grammarJob?.cancel()
+        learnJob?.cancel()
         mediaFetchJob?.cancel()
         mediaLiveSearchJob?.cancel()
         mediaCategoryJob?.cancel()
@@ -15069,6 +15094,11 @@ open class WMKeyboardService : InputMethodService() {
             }
             PanelMode.FIND_REPLACE -> {
                 currentInputConnection?.let { commitComposing(it, autocorrect = false) }
+            }
+            PanelMode.LEARN_FROM_TEXT -> {
+                // The half-typed word is part of the text being read.
+                currentInputConnection?.let { commitComposing(it, autocorrect = false) }
+                scanForLearning()
             }
             PanelMode.AI -> {
                 // A half-typed word is part of what the actions would run on,
@@ -20822,8 +20852,220 @@ open class WMKeyboardService : InputMethodService() {
                 onReplaceAll = ::onFindReplaceAll,
                 onUndo = ::onFindReplaceUndo,
             ),
+            learnFromText = com.wasimaster.wmkeyboard.ime.ui.LearnFromTextCallbacks(
+                onToggle = ::onLearnToggle,
+                onToggleAll = ::onLearnToggleAll,
+                onAdd = ::onLearnAdd,
+                onPairs = ::onLearnPairs,
+                onSort = ::onLearnSort,
+                onEdit = ::onLearnEdit,
+                onEditDone = ::onLearnEditDone,
+                onEditCancel = ::onLearnEditCancel,
+                onIgnore = ::onLearnIgnore,
+                onNeverSuggest = ::onLearnNeverSuggest,
+                onShow = ::onLearnShow,
+            ),
         )
     }
+
+    // ---- Learn from text (#174) ----
+
+    /** The last scan behind the Learn from text panel: every word and pair in the text it read. */
+    private var learnScan: TextWordScan.Result = TextWordScan.Result.EMPTY
+    private var learnJob: Job? = null
+    private var learnSeq = 0
+
+    /**
+     * Reads the selection, or the whole field when nothing is selected, and
+     * lists the words in it the keyboard does not know. Nothing is read from a
+     * password field. The scan runs off the main thread; the known-word check
+     * runs back on it, where the engine lives.
+     */
+    private fun scanForLearning() {
+        learnJob?.cancel()
+        val seq = ++learnSeq
+        if (_uiState.value.secureField) {
+            updateLearnFromText { it.copy(scanning = false, blocked = true) }
+            return
+        }
+        val ic = currentInputConnection
+        val hasSelection = expectedSelStart >= 0 && expectedSelEnd >= 0 && expectedSelStart != expectedSelEnd
+        // A selection too big for the binder comes back null: read the field instead.
+        val selected = if (ic != null && hasSelection) {
+            runCatching { ic.getSelectedText(0)?.toString() }.getOrNull()
+        } else {
+            null
+        }
+        val text: String
+        val origin: Int?
+        val partial: Boolean
+        if (!selected.isNullOrEmpty()) {
+            text = selected
+            origin = minOf(expectedSelStart, expectedSelEnd)
+            partial = false
+        } else {
+            text = extractFieldText()
+            origin = fieldTextOrigin
+            partial = !fieldTextComplete
+        }
+        learnJob = serviceScope.launch {
+            val scan = withContext(Dispatchers.Default) { TextWordScan.scan(text, SENTENCE_ENDERS) }
+            if (seq != learnSeq || _uiState.value.panel != PanelMode.LEARN_FROM_TEXT) return@launch
+            learnScan = scan
+            val settings = _uiState.value.settings
+            val found = LearnFromText.sorted(
+                LearnFromText.rowsFor(
+                    scan,
+                    isKnown = ::isKnownWord,
+                    blacklist = settings.suggestionSources.blacklist,
+                    sightings = pendingLearn::sightings,
+                ),
+                settings.suggestionStrip.learnFromTextSort,
+            )
+            updateLearnFromText {
+                it.copy(
+                    scanning = false,
+                    rows = found.take(LearnFromText.MAX_ROWS),
+                    capped = found.size > LearnFromText.MAX_ROWS,
+                    origin = origin,
+                    partial = partial,
+                )
+            }
+        }
+    }
+
+    private fun updateLearnFromText(transform: (LearnFromTextUi) -> LearnFromTextUi) {
+        _uiState.update { state -> state.learnFromText?.let { state.copy(learnFromText = transform(it)) } ?: state }
+    }
+
+    private fun onLearnToggle(key: String) = updateLearnFromText { ui ->
+        ui.copy(rows = ui.rows.map { if (it.key == key) it.copy(checked = !it.checked) else it }, result = null)
+    }
+
+    private fun onLearnToggleAll() = updateLearnFromText { ui ->
+        val all = ui.rows.all { it.checked }
+        ui.copy(rows = ui.rows.map { it.copy(checked = !all) }, result = null)
+    }
+
+    private fun onLearnSort(sort: com.wasimaster.wmkeyboard.core.settings.LearnFromTextSort) {
+        updateLearnFromText { it.copy(rows = LearnFromText.sorted(it.rows, sort)) }
+        serviceScope.launch { settingsRepository.setLearnFromTextSort(sort) }
+    }
+
+    private fun onLearnPairs(on: Boolean) {
+        serviceScope.launch { settingsRepository.setLearnFromTextPairs(on) }
+    }
+
+    /** Hides a row for this scan only; the next scan lists the word again. */
+    private fun onLearnIgnore(key: String) = updateLearnFromText { ui ->
+        ui.copy(rows = ui.rows.filterNot { it.key == key }, result = null)
+    }
+
+    private fun onLearnNeverSuggest(key: String) {
+        val row = _uiState.value.learnFromText?.rows?.firstOrNull { it.key == key } ?: return
+        onLearnIgnore(key)
+        serviceScope.launch { settingsRepository.addSuggestionBlacklistWord(row.finalSpelling) }
+    }
+
+    /** Selects the word's first occurrence in the field, so the user sees it in context. */
+    private fun onLearnShow(key: String) {
+        val ui = _uiState.value.learnFromText ?: return
+        val row = ui.rows.firstOrNull { it.key == key } ?: return
+        val origin = ui.origin ?: return
+        val ic = currentInputConnection ?: return
+        ic.finishComposingText()
+        ic.setSelection(origin + row.start, origin + row.start + row.length)
+        expectedSelStart = origin + row.start
+        expectedSelEnd = origin + row.start + row.length
+    }
+
+    private fun onLearnEdit(key: String) = updateLearnFromText { ui ->
+        val row = ui.rows.firstOrNull { it.key == key }
+        if (row == null) ui else ui.copy(editing = key, editText = row.finalSpelling, result = null)
+    }
+
+    /** The spelling editor's buffer; the keys type here while [KeyboardUiState.learnEditActive]. */
+    private fun learnEdit(transform: (String) -> String) = updateLearnFromText { ui ->
+        if (ui.editing == null) ui else ui.copy(editText = transform(ui.editText).take(UserLexicon.MAX_WORD_LENGTH))
+    }
+
+    private fun onLearnEditDone() = updateLearnFromText { ui ->
+        val key = ui.editing
+        if (key == null || !ui.editValid) {
+            ui
+        } else {
+            val spelling = ui.editText.trim()
+            ui.copy(
+                editing = null,
+                editText = "",
+                rows = ui.rows.map {
+                    if (it.key == key) it.copy(edited = spelling.takeUnless { s -> s == it.spelling }, checked = true) else it
+                },
+            )
+        }
+    }
+
+    private fun onLearnEditCancel() = updateLearnFromText { it.copy(editing = null, editText = "") }
+
+    /**
+     * Adds every checked word to the personal dictionary as a word the user
+     * vouched for, then, with the Word pairs chip on, teaches the pairs the
+     * text holds between words the keyboard now knows. Pairs follow the
+     * learning switches typing does: off with learning off or paused.
+     */
+    private fun onLearnAdd() {
+        val ui = _uiState.value.learnFromText ?: return
+        val chosen = ui.rows.filter { it.checked }
+        if (chosen.isEmpty()) return
+        vibrate()
+        val settings = _uiState.value.settings
+        addWordsByHand(chosen.map { it.finalSpelling.trim() to (it.edited != null || it.caseEvidence) })
+        var pairs = 0
+        if (settings.suggestionStrip.learnFromTextPairs && learningAllowed) {
+            val plan = LearnFromText.plan(
+                learnScan,
+                renames = LearnFromText.renamesOf(chosen),
+                isKnown = ::isKnownWord,
+                blacklist = settings.suggestionSources.blacklist,
+            )
+            for ((previous, next) in plan.pairs) userLexicon.learnBigram(previous, next)
+            for ((prev2, prev1, next) in plan.triples) userLexicon.learnTrigram(prev2, prev1, next)
+            for ((prev2, next) in plan.skips) userLexicon.learnSkip2gram(prev2, next)
+            pairs = plan.pairs.size
+        }
+        val added = chosen.mapTo(HashSet()) { it.key }
+        updateLearnFromText {
+            it.copy(rows = it.rows.filterNot { row -> row.key in added }, result = LearnResult(chosen.size, pairs))
+        }
+        refreshSuggestions()
+    }
+
+    /**
+     * [addTypedWord] for a batch: each word is the user's own answer, so it
+     * leaves the waiting room and the settle queue, goes in marked as added by
+     * hand, comes off the never-suggest list, and is mirrored to Android's
+     * dictionary when that is on — in one pass of provider writes.
+     */
+    private fun addWordsByHand(words: List<Pair<String, Boolean>>) {
+        val settings = _uiState.value.settings
+        val mirrored = ArrayList<String>()
+        for ((word, caseEvidence) in words) {
+            if (word.isEmpty()) continue
+            pendingLearn.forget(word)
+            learningBuffer.drop(word)
+            userLexicon.addWord(word, caseEvidence = caseEvidence)
+            if (word.lowercase() in settings.suggestionSources.blacklist) {
+                serviceScope.launch { settingsRepository.removeSuggestionBlacklistWord(word) }
+            }
+            mirrored.add(word)
+        }
+        if (settings.addWordsToSystemDictionary && mirrored.isNotEmpty()) {
+            serviceScope.launch(Dispatchers.IO) {
+                for (word in mirrored) SystemUserDictionary.add(applicationContext, word)
+            }
+        }
+    }
+
 
     /**
      * Whether the trackpad panel is open because the toolbar's Trackpad tool is
@@ -22607,6 +22849,7 @@ open class WMKeyboardService : InputMethodService() {
             state.pluginTypingActive ->
                 state.pluginInputs[state.pluginFocusedInput].orEmpty().isNotEmpty()
             state.findReplaceTypingActive -> state.findReplace?.focusedText?.isNotEmpty() == true
+            state.learnEditActive -> state.learnFromText?.editText?.isNotEmpty() == true
             else -> canDeleteField()
         }
     }
@@ -23905,6 +24148,11 @@ open class WMKeyboardService : InputMethodService() {
                 onSnippetFolderOpen(null)
                 true
             }
+            // The spelling editor closes before the Learn from text panel under it.
+            state.learnEditActive -> {
+                onLearnEditCancel()
+                true
+            }
             state.panel != PanelMode.NONE -> {
                 onPanelChange(state.panel)
                 true
@@ -24776,7 +25024,7 @@ open class WMKeyboardService : InputMethodService() {
             (state.mediaSearchActive && state.panel.hasMediaSearch) ||
             state.dictionarySearchActive || state.clipboardSearchActive ||
             state.typingTestActive || state.pluginTypingActive ||
-            state.findReplaceTypingActive ||
+            state.findReplaceTypingActive || state.learnEditActive ||
             state.aiCustomInputActive || state.wordSpellActive ||
             state.calcTypingActive || state.converterTypingActive
     }
