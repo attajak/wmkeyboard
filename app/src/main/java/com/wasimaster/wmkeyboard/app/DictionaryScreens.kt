@@ -7,7 +7,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,6 +28,7 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +47,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -56,6 +64,8 @@ import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.sortDictionaryWords
 import com.wasimaster.wmkeyboard.core.prediction.CorrectionMemory
 import com.wasimaster.wmkeyboard.core.prediction.PendingLearn
+import com.wasimaster.wmkeyboard.core.prediction.SystemUserDictionary
+import com.wasimaster.wmkeyboard.core.prediction.WordKey
 import com.wasimaster.wmkeyboard.core.prediction.UserLexicon
 import com.wasimaster.wmkeyboard.core.prediction.WordRanks
 import kotlinx.coroutines.launch
@@ -108,6 +118,7 @@ internal fun DictionarySettings(repository: SettingsRepository, settings: Keyboa
     var showTidy by remember { mutableStateOf(false) }
     // The row being edited (#47): its spelling and weight, as they are now.
     var editing by remember { mutableStateOf<Pair<String, Int>?>(null) }
+    var androidPicker by remember { mutableStateOf<AndroidWordPicker?>(null) }
 
     fun pinnedIn(lex: UserLexicon, all: List<Pair<String, Int>>): Set<String> =
         all.mapNotNullTo(HashSet()) { (word, _) -> word.takeIf { lex.isCasePinned(it) } }
@@ -168,6 +179,31 @@ internal fun DictionarySettings(repository: SettingsRepository, settings: Keyboa
         }
     }
 
+    // Import from and export to Android's personal dictionary (#174): the
+    // words missing on the other side, offered as a checklist first. Android
+    // splits nothing, so a multi-word row ("on my way") offers its parts, the
+    // way the keyboard already reads it.
+    fun openAndroidPicker(export: Boolean) {
+        val lex = lexicon ?: return
+        scope.launch {
+            val offered = withContext(Dispatchers.IO) {
+                if (!SystemUserDictionary.available(context)) return@withContext null
+                val android = SystemUserDictionary.spellings(context)
+                    .flatMap { it.split(WHITESPACE_RUN) }
+                    .map { it.trim() }
+                    .filter { it.length >= 2 }
+                if (export) {
+                    val theirs = android.mapTo(HashSet()) { WordKey.of(it) }
+                    lex.allWords().sortedByDescending { it.second }.map { it.first }.filter { WordKey.of(it) !in theirs }
+                } else {
+                    val mine = lex.allWords().mapTo(HashSet()) { WordKey.of(it.first) }
+                    android.filter { WordKey.of(it) !in mine }.distinctBy { WordKey.of(it) }
+                }
+            }
+            androidPicker = AndroidWordPicker(export, offered)
+        }
+    }
+
     // Words seen exactly once. Older versions learned every word the first time
     // it was committed, so for anyone upgrading this is where the swipe
     // misfires and mistyped words are — the clean-out the dictionary needed and
@@ -187,6 +223,25 @@ internal fun DictionarySettings(repository: SettingsRepository, settings: Keyboa
             OutlinedButton(onClick = { showTidy = true }) {
                 Text(stringResource(R.string.backup_tidy_words_action))
             }
+        }
+    }
+    Spacer(Modifier.height(12.dp))
+    SettingsGroup {
+        item {
+            WmRow(
+                title = stringResource(R.string.backup_android_import_title),
+                subtitle = stringResource(R.string.backup_android_import_subtitle),
+                icon = Icons.Outlined.Download,
+                onClick = { openAndroidPicker(export = false) },
+            )
+        }
+        item {
+            WmRow(
+                title = stringResource(R.string.backup_android_export_title),
+                subtitle = stringResource(R.string.backup_android_export_subtitle),
+                icon = Icons.Outlined.Upload,
+                onClick = { openAndroidPicker(export = true) },
+            )
         }
     }
     Spacer(Modifier.height(12.dp))
@@ -378,6 +433,29 @@ internal fun DictionarySettings(repository: SettingsRepository, settings: Keyboa
         )
     }
 
+    androidPicker?.let { picker ->
+        AndroidWordPickerDialog(
+            picker = picker,
+            onDismiss = { androidPicker = null },
+            onConfirm = { chosen ->
+                androidPicker = null
+                if (picker.export) {
+                    scope.launch {
+                        val written = withContext(Dispatchers.IO) { SystemUserDictionary.addAll(context, chosen) }
+                        Toast.makeText(
+                            context,
+                            context.resources.getQuantityString(R.plurals.backup_android_exported_toast, written, written),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+                } else {
+                    // A capital the user wrote into Android's list is kept (#44).
+                    persist { lex -> for (word in chosen) lex.addWord(word, caseEvidence = word != word.lowercase()) }
+                }
+            },
+        )
+    }
+
     if (showTidy) {
         AlertDialog(
             onDismissRequest = { showTidy = false },
@@ -406,6 +484,96 @@ internal fun DictionarySettings(repository: SettingsRepository, settings: Keyboa
             },
         )
     }
+}
+/** Regex for the gaps inside a multi-word Android dictionary row. */
+private val WHITESPACE_RUN = Regex("\\s+")
+
+/**
+ * The words the Android import or export would move (#174); [words] is null
+ * when Android would not share its dictionary with the app.
+ */
+private data class AndroidWordPicker(val export: Boolean, val words: List<String>?)
+
+/** A checklist of [AndroidWordPicker.words], all checked; confirming hands back the checked ones. */
+@Composable
+private fun AndroidWordPickerDialog(
+    picker: AndroidWordPicker,
+    onDismiss: () -> Unit,
+    onConfirm: (List<String>) -> Unit,
+) {
+    val words = picker.words
+    val title = stringResource(
+        when {
+            words == null -> R.string.backup_android_unavailable_title
+            picker.export -> R.string.backup_android_export_dialog_title
+            else -> R.string.backup_android_import_dialog_title
+        },
+    )
+    if (words.isNullOrEmpty()) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text(title) },
+            text = {
+                Text(
+                    stringResource(
+                        when {
+                            words == null -> R.string.backup_android_unavailable_body
+                            picker.export -> R.string.backup_android_nothing_to_export_body
+                            else -> R.string.backup_android_nothing_to_import_body
+                        },
+                    ),
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_ok)) }
+            },
+        )
+        return
+    }
+    var unchecked by remember(words) { mutableStateOf(emptySet<String>()) }
+    val count = words.size - unchecked.size
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column {
+                TextButton(onClick = { unchecked = if (unchecked.isEmpty()) words.toSet() else emptySet() }) {
+                    Text(
+                        stringResource(
+                            if (unchecked.isEmpty()) R.string.backup_android_select_none_action else R.string.backup_android_select_all_action,
+                        ),
+                    )
+                }
+                LazyColumn(modifier = Modifier.heightIn(max = 360.dp)) {
+                    items(words) { word ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { unchecked = if (word in unchecked) unchecked - word else unchecked + word },
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Checkbox(checked = word !in unchecked, onCheckedChange = null)
+                            Spacer(Modifier.width(12.dp))
+                            Text(word)
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(enabled = count > 0, onClick = { onConfirm(words.filter { it !in unchecked }) }) {
+                Text(
+                    stringResource(
+                        if (picker.export) R.string.backup_android_export_action else R.string.backup_android_import_action,
+                        count,
+                    ),
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_cancel)) }
+        },
+    )
 }
 /** The words on the personal dictionary's direction button (#194). */
 private fun sortDirectionLabel(sort: DictionarySort): Int = when (sort) {

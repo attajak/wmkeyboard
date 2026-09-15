@@ -1,7 +1,10 @@
 package com.wasimaster.wmkeyboard.core.prediction
 
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
+import android.os.Build
+import android.provider.Settings
 import android.provider.UserDictionary
 
 /**
@@ -131,7 +134,10 @@ object SystemUserDictionary {
      * field; a word the user went out of their way to add is a word in any
      * language they type.
      */
-    fun words(context: Context): Entries {
+    fun words(context: Context): Entries = index(spellings(context))
+
+    /** The rows [words] indexes, each as it was written. Empty when the provider will not answer. */
+    fun spellings(context: Context): List<String> {
         val out = ArrayList<String>()
         runCatching {
             context.contentResolver.query(
@@ -149,7 +155,7 @@ object SystemUserDictionary {
                 }
             }
         }
-        return index(out)
+        return out
     }
 
     /**
@@ -219,6 +225,54 @@ object SystemUserDictionary {
             }
         }
         return out
+    }
+
+    /**
+     * Whether Android will share its dictionary with this app right now, for
+     * the settings app's import and export (#174). Since Android 10 the
+     * provider serves only the current keyboard or spell checker, and it
+     * answers anyone else with an *empty* list rather than an error, so an
+     * empty read cannot tell "nothing there" from "not allowed". Asking which
+     * keyboard is current can.
+     */
+    fun available(context: Context): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return true
+        val current = runCatching {
+            Settings.Secure.getString(context.contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD)
+        }.getOrNull() ?: return false
+        return current.substringBefore('/') == context.packageName
+    }
+
+    /**
+     * Adds each of [words] not already in the dictionary and returns how many
+     * rows were really written, for the settings app's export (#174). The same
+     * de-duplication as [add]; a row the provider refuses is not counted, and
+     * is not remembered as added either, so a later try can still write it.
+     * Content-provider I/O; call it off the main thread.
+     */
+    fun addAll(context: Context, words: Collection<String>): Int {
+        var written = 0
+        for (word in words) {
+            val cleaned = word.trim()
+            if (cleaned.length < 2) continue
+            val key = cleaned.lowercase()
+            val fresh = synchronized(this) {
+                seed(context)
+                added.add(key)
+            }
+            if (!fresh) continue
+            val ok = runCatching {
+                val values = ContentValues().apply {
+                    put(UserDictionary.Words.WORD, cleaned)
+                    put(UserDictionary.Words.FREQUENCY, FREQUENCY)
+                    putNull(UserDictionary.Words.LOCALE)
+                    put(UserDictionary.Words.APP_ID, 0)
+                }
+                context.contentResolver.insert(UserDictionary.Words.CONTENT_URI, values) != null
+            }.getOrDefault(false)
+            if (ok) written++ else synchronized(this) { added.remove(key) }
+        }
+        return written
     }
 
     /** Loads the words already in the dictionary once, so we don't re-add them. */

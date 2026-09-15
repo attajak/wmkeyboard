@@ -143,6 +143,17 @@ Every add, edit or remove here updates a version marker the running keyboard wat
 
 Two related screens are easy to confuse with this one but do something different. The [suggestion blacklist](/smart/blacklist/) is a separate never-suggest list. Blacklisting a word does purge it from this one, though neither screen offers a shortcut to push a word the other way. **Custom dictionaries** is for importing a bulk word list per language rather than words you've typed (see [Downloadable dictionaries](/languages/dictionaries/) for that).
 
+## Android's dictionary
+
+<SettingsPath path="Typing / Suggestions / Personal dictionary" />
+
+Android keeps a personal dictionary of its own, shared by every keyboard and the spell checker. Two rows above the word list move words between it and yours, whenever you ask:
+
+- **Import from Android's dictionary** lists the words in Android's dictionary that aren't in yours yet, all checked. Uncheck any you don't want and tap **Add**. They go in as words you added by hand, and a word written there with capitals keeps them. An entry with spaces in it, like "on my way", comes in as separate words, the same way the keyboard already reads it.
+- **Export to Android's dictionary** lists your words that Android's dictionary doesn't have yet, most used first, and **Copy** writes the checked ones there. A message says how many went.
+
+Words match whatever their capitals, so "Boston" and "boston" count as one word and are never offered twice. Android only lets the keyboard currently in use touch its dictionary, so both rows need WM Keyboard to be your current keyboard. Otherwise they say so and do nothing. Neither runs by itself: to copy each new word as the keyboard learns it, turn on **Add words to the system dictionary** under Privacy.
+
 ## Clearing everything at once
 
 <SettingsPath path="Privacy / Your data / Learned words" />
@@ -166,7 +177,7 @@ The learned-word file this screen deletes *is* your personal dictionary, so this
 Your personal dictionary is a single JSON file in the app's private storage, never uploaded anywhere on its own. Two things are true by default, and two are opt-in:
 
 - **It's inert during direct boot.** Between a restart and your first unlock, the file is unreachable, since it lives in credential-encrypted storage. The keyboard runs with an empty, in-memory-only vocabulary: nothing is read, and nothing you type in that state is written anywhere. Once you unlock, the real file is reattached and the temporary in-memory copy is discarded rather than merged in.
-- **Nothing mirrors outside the app by default.** An opt-in toggle can additionally copy newly-learned words (not autocorrect targets) into Android's own shared personal dictionary, so other keyboards and spell checkers can see them too. It's off by default, one-directional, and forced off automatically during direct boot however you've set it, since nothing typed on a lock screen should be learned anywhere. A separate toggle, on by default, does the reverse for a different field of that same system list. It reads back any shortcut entries you've defined there (like "omw" → "on my way") and offers the full phrase as you type the shortcut. Glide the shortcut instead and the full phrase is typed straight away; while you swipe, the floating word, the suggestion strip and the words offered when you hold still show it as `omw = on my way`, and one backspace puts the shortcut back.
+- **Nothing mirrors outside the app by default.** An opt-in toggle can additionally copy newly-learned words (not autocorrect targets) into Android's own shared personal dictionary, so other keyboards and spell checkers can see them too. It's off by default, one-directional, and forced off automatically during direct boot however you've set it, since nothing typed on a lock screen should be learned anywhere. A separate toggle, on by default, does the reverse for a different field of that same system list. It reads back any shortcut entries you've defined there (like "omw" → "on my way") and offers the full phrase as you type the shortcut. Glide the shortcut instead and the full phrase is typed straight away; while you swipe, the floating word, the suggestion strip and the words offered when you hold still show it as `omw = on my way`, and one backspace puts the shortcut back. To move words across by hand in either direction, see [Android's dictionary](#androids-dictionary).
 - **Android's own backup is opt-in.** Turning on "Back up with Android" includes your whole keyboard, learned words included, in Android's standard app-data backup and phone-to-phone transfer.
 - **A manual export leaves it out by default.** The Backup & restore screen's "Dictionary" section covers your personal vocabulary, next-word patterns, rank adjustments, the fixes you have taught autocorrect and where your taps land, and it starts unchecked. A settings file you export and share out of habit carries no typing data along unless you deliberately opt in. Restoring that section does signal a running keyboard to reload, the same as adding or removing a word does.
 
@@ -197,7 +208,7 @@ See [Incognito & secure fields](/privacy/incognito/) for the rest of how incogni
 | Back up with Android | Off | Privacy / Android backup |
 | Include "Dictionary" in export | Off | Backup & restore / Include in export |
 
-The dictionary screen itself has no settings beyond the word list, its sort order, its two buttons and the per-word edit dialog. Every toggle that controls *whether* something gets learned lives on the Privacy screen rather than here, with two exceptions: pausing learning during incognito is under the Incognito tool's own settings, and the three thresholds that decide when a word gets in and when it's shielded sit with the rest of the suggestion sliders.
+The dictionary screen itself has no settings beyond the word list, its sort order, its two buttons, the two Android rows and the per-word edit dialog. Every toggle that controls *whether* something gets learned lives on the Privacy screen rather than here, with two exceptions: pausing learning during incognito is under the Incognito tool's own settings, and the three thresholds that decide when a word gets in and when it's shielded sit with the rest of the suggestion sliders.
 
 ## Details & edge cases
 

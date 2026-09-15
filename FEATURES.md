@@ -154,6 +154,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Android personal dictionary interop `uncommon` — Two independent opt-ins against the platform UserDictionary provider
     - Mirror learned words out — So other keyboards and spell checkers know them; a session dedupe set avoids duplicate rows
     - Expand shortcuts stored there — An entry with a shortcut ("omw" to "on my way") offers the phrase as the top chip
+    - Import from Android's dictionary — Personal dictionary screen lists the platform words missing here as a checklist; added by hand, capitals kept, multi-word rows split (#174)
+    - Export to Android's dictionary — Checklist of personal-dictionary words the platform lacks, most used first; counts only rows the provider accepted; needs WM Keyboard to be the current keyboard (#174)
   - Learning gates — Three conditions must all hold before anything is remembered
     - Learn-from-typing setting
     - Not incognito, when incognito is set to pause learning

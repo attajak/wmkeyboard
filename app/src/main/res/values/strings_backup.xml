@@ -46,6 +46,25 @@
     <!-- Bulk clean-up of words the keyboard saw only once, which is where
          typos and stray swipes end up. -->
     <string name="backup_tidy_words_action">Remove one-off words</string>
+    <!-- Personal dictionary: moving words to and from Android's own personal dictionary (#174). -->
+    <string name="backup_android_import_title">Import from Android\'s dictionary</string>
+    <string name="backup_android_import_subtitle">Add the words saved in Android\'s personal dictionary</string>
+    <string name="backup_android_export_title">Export to Android\'s dictionary</string>
+    <string name="backup_android_export_subtitle">Copy your words to Android\'s personal dictionary, for other keyboards and the spell checker</string>
+    <string name="backup_android_import_dialog_title">Words from Android</string>
+    <string name="backup_android_export_dialog_title">Words to copy to Android</string>
+    <string name="backup_android_nothing_to_import_body">Every word in Android\'s dictionary is already in your personal dictionary.</string>
+    <string name="backup_android_nothing_to_export_body">Every word in your personal dictionary is already in Android\'s.</string>
+    <string name="backup_android_unavailable_title">Android\'s dictionary is not available</string>
+    <string name="backup_android_unavailable_body">Android only shares its personal dictionary with the keyboard in use. Make WM Keyboard your current keyboard, then try again.</string>
+    <string name="backup_android_select_all_action">Select all</string>
+    <string name="backup_android_select_none_action">Select none</string>
+    <string name="backup_android_import_action">Add %1$d</string>
+    <string name="backup_android_export_action">Copy %1$d</string>
+    <plurals name="backup_android_exported_toast">
+        <item quantity="one">Copied %d word to Android</item>
+        <item quantity="other">Copied %d words to Android</item>
+    </plurals>
     <string name="backup_tidy_words_title">Remove one-off words?</string>
     <!-- %1$d is how many words were seen exactly once. -->
     <plurals name="backup_tidy_words_body">
