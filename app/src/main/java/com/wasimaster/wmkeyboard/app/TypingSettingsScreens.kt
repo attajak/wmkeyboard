@@ -888,6 +888,16 @@ internal fun TypingSuggestionsSettings(
                     default = SettingsDefaults.suggestionSources.inlineAutofill,
                 ) { scope.launch { repository.setInlineAutofill(it) } }
             }
+            item {
+                ToggleSetting(
+                    R.string.typing_smart_replies_title,
+                    stringResource(R.string.typing_smart_replies_subtitle),
+                    settings.suggestionStrip.systemSmartReplies,
+                    info = stringResource(R.string.typing_smart_replies_info),
+                    default = SettingsDefaults.suggestionStrip.systemSmartReplies,
+                ) { scope.launch { repository.setSystemSmartReplies(it) } }
+            }
+        }
         item {
             ToggleSetting(
                 R.string.typing_skip_typed_word_title,
@@ -906,16 +916,6 @@ internal fun TypingSuggestionsSettings(
                 info = stringResource(R.string.typing_number_prediction_info),
                 default = SettingsDefaults.suggestionStrip.numberPrediction,
             ) { scope.launch { repository.setNumberPrediction(it) } }
-        }
-            item {
-                ToggleSetting(
-                    R.string.typing_smart_replies_title,
-                    stringResource(R.string.typing_smart_replies_subtitle),
-                    settings.suggestionStrip.systemSmartReplies,
-                    info = stringResource(R.string.typing_smart_replies_info),
-                    default = SettingsDefaults.suggestionStrip.systemSmartReplies,
-                ) { scope.launch { repository.setSystemSmartReplies(it) } }
-            }
         }
         item {
             NavRow(
