@@ -15858,10 +15858,15 @@ internal fun KeyButton(
             val previewScroll = rememberScrollState()
             val previewChipBounds = remember { mutableStateMapOf<String, Pair<Int, Int>>() }
             var previewViewportWidth by remember { mutableIntStateOf(0) }
+            // Opens already centred; every switch after that slides. A jump of a
+            // whole chip per switch read as the strip jittering under the finger.
+            val previewCentred = remember { mutableStateOf(false) }
             LaunchedEffect(previewMode) {
                 val (x, width) = snapshotFlow { previewChipBounds[previewMode] }.filterNotNull().first()
                 val viewport = snapshotFlow { previewViewportWidth }.first { it > 0 }
-                previewScroll.scrollTo((x + width / 2 - viewport / 2).coerceIn(0, previewScroll.maxValue))
+                val target = (x + width / 2 - viewport / 2).coerceIn(0, previewScroll.maxValue)
+                if (previewCentred.value) previewScroll.animateScrollTo(target) else previewScroll.scrollTo(target)
+                previewCentred.value = true
             }
             Popup(
                 popupPositionProvider = popupPosition,
@@ -15882,15 +15887,15 @@ internal fun KeyButton(
                     ) {
                         for (chipLayoutId in previewWindow) {
                             val selected = chipLayoutId == previewMode
-                            Text(
-                                text = layoutSwitchLabel(
-                                    chipLayoutId,
-                                    enabledLayoutIds,
-                                    settings.customLayouts,
-                                    settings.layoutBehavior.spacebarDisplay,
-                                ),
-                                maxLines = 1,
-                                softWrap = false,
+                            val label = layoutSwitchLabel(
+                                chipLayoutId,
+                                enabledLayoutIds,
+                                settings.customLayouts,
+                                settings.layoutBehavior.spacebarDisplay,
+                            )
+                            val chipFontSize = (14 * settings.popup.fontScale).sp
+                            Box(
+                                contentAlignment = Alignment.Center,
                                 modifier = Modifier
                                     .onPlaced {
                                         previewChipBounds[chipLayoutId] =
@@ -15902,10 +15907,27 @@ internal fun KeyButton(
                                         RoundedCornerShape(kb.popupRadiusDp.dp),
                                     )
                                     .padding(horizontal = 10.dp, vertical = 8.dp),
-                                fontSize = (14 * settings.popup.fontScale).sp,
-                                fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
-                                color = if (selected) kb.popupText else kb.popupText.copy(alpha = 0.45f),
-                            )
+                            ) {
+                                // Every chip holds its semibold width, so the
+                                // selection's weight change never reflows the
+                                // strip and nudges the chips beside it.
+                                Text(
+                                    text = label,
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    fontSize = chipFontSize,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.Transparent,
+                                )
+                                Text(
+                                    text = label,
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    fontSize = chipFontSize,
+                                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                                    color = if (selected) kb.popupText else kb.popupText.copy(alpha = 0.45f),
+                                )
+                            }
                         }
                     }
                 }
