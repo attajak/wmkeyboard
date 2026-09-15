@@ -1,14 +1,17 @@
 /** One addon: gallery, description, actions, details, licence, and the live payload preview. */
 import { useEffect, useState } from 'preact/hooks';
 import { addRepo, allRepos, appVersion, findAddon, inCollection, navigate, noveltyOf, repos, showToast, toggleCollection, onAndroid } from '../state';
-import { fetchText, fmtBytes, MAX_TEXT_BYTES, NetError } from '../lib/net';
+import { fetchBytes, fetchText, fmtBytes, MAX_TEXT_BYTES, MB, NetError } from '../lib/net';
 import { describeManifestUrl, resolveAsset } from '../lib/resolve';
 import { typeInfo, type AddonEntry, type LoadedRepo } from '../lib/types';
-import { absoluteUrl, appLinkAddon, canWebShare, payloadFileName, payloadUrl, previewUrls } from '../lib/util';
+import { absoluteUrl, appLinkAddon, canWebShare, downloadBlob, payloadFileName, payloadUrl, previewUrls } from '../lib/util';
 import { languageName } from '../lib/languages';
 import { CopyButton, Dialog, Empty, Link, Notice, Qr, Spinner } from './common';
 import { IconBack, IconCopy, IconDownload, IconExternal, IconPhone, IconPlus, IconQr, IconShare, IconStar, IconWarn, TypeIcon } from './icons';
 import { Preview } from './previews/Preview';
+
+/** Holds the file in memory while saving; far past every type's install cap. */
+const MAX_DOWNLOAD_BYTES = 512 * MB;
 
 export function AddonPage({ repoUrl, addonId }: { repoUrl: string; addonId: string }) {
 	const repo = allRepos.value.find((r) => r.ref.url === repoUrl) ?? null;
@@ -172,11 +175,7 @@ function AddonDetail({ repo, entry }: { repo: LoadedRepo; entry: AddonEntry }) {
 									<IconShare /> Share
 								</button>
 							</div>
-							{payload && (
-								<a class="st-btn" href={payload} download={payloadFileName(entry)} target="_blank" rel="noopener">
-									<IconDownload /> Download {info.payload.split(' ')[0]}
-								</a>
-							)}
+							{payload && <DownloadButton url={payload} entry={entry} label={`Download ${info.payload.split(' ')[0]}`} />}
 							<details class="st-small">
 								<summary class="st-muted" style="cursor:pointer">Links</summary>
 								<div class="st-row" style="margin-top:0.5rem;gap:0.35rem">
@@ -289,6 +288,59 @@ function LicenseDialog({ repo, entry, onClose }: { repo: LoadedRepo; entry: Addo
 			{text ? <Linkified text={text} /> : !err && (fileUrl ? <Spinner label="Fetching licence…" /> : <p class="st-muted">No licence text was published{entry.license ? `; the identifier is ${entry.license}.` : '.'}</p>)}
 			{text && <div class="st-row" style="margin-top:0.6rem"><CopyButton text={text} label="Copy" /></div>}
 		</Dialog>
+	);
+}
+
+/**
+ * A plain `<a download>` is ignored for cross-origin files (raw.githubusercontent
+ * and every other repository host), so the browser just opened the file in a
+ * tab. Fetch it into the page and save it as a blob instead; a host that
+ * doesn't allow browser reads still gets the file opened, with a hint to save it.
+ */
+function DownloadButton({ url, entry, label }: { url: string; entry: AddonEntry; label: string }) {
+	const [progress, setProgress] = useState<number | null>(null);
+	const [ctrl, setCtrl] = useState<AbortController | null>(null);
+	const name = payloadFileName(entry);
+
+	const start = async (e: MouseEvent) => {
+		if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+		e.preventDefault();
+		if (ctrl) {
+			ctrl.abort();
+			return;
+		}
+		const c = new AbortController();
+		setCtrl(c);
+		setProgress(0);
+		try {
+			const bytes = await fetchBytes(url, {
+				maxBytes: MAX_DOWNLOAD_BYTES,
+				signal: c.signal,
+				onProgress: (got, total) => {
+					const whole = total ?? entry.sizeBytes;
+					setProgress(whole ? Math.min(99, Math.floor((got / whole) * 100)) : 0);
+				},
+			});
+			downloadBlob(name, new Blob([bytes as BlobPart], { type: 'application/octet-stream' }));
+		} catch (err) {
+			if (err instanceof NetError && err.kind === 'aborted') {
+				showToast('Download cancelled.');
+			} else if (err instanceof NetError && err.kind === 'cors') {
+				window.open(url, '_blank', 'noopener');
+				showToast('This host only lets the file open in a tab. Save it from there.');
+			} else {
+				showToast(err instanceof NetError ? err.message : String(err));
+			}
+		} finally {
+			setCtrl(null);
+			setProgress(null);
+		}
+	};
+
+	return (
+		<a class="st-btn" href={url} download={name} rel="noopener" onClick={start} aria-busy={progress !== null}>
+			<IconDownload /> {progress === null ? label : `Downloading ${progress}% · cancel`}
+		</a>
 	);
 }
 
