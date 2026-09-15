@@ -86,6 +86,8 @@ Only one model downloads at a time. Before it starts, WM Keyboard checks that yo
 
 Downloaded models live in the app's private storage, not shared storage: the screen shows total space used and lets you delete a model to reclaim it. Deleting a model also clears any per-language pin that pointed at it, and clears the app's own fallback if that was the deleted model. If an app update ever drops a model from the catalog, leftover files show up as reclaimable space with a one-tap "Free up" button.
 
+If you downloaded **Tiny (English)** in version 0.5.8 or earlier and dictation with it came back empty most of the time, that was the model file, not your microphone. Its source has since changed to a conversion that works, and the old file is recognised and discarded, so the model shows as not downloaded until you download it again.
+
 When exactly one model is on disk, the app quietly adopts it as that fallback, so dictation works right after your first download with no setup step in between. It does the same again if you delete whichever model was holding the job.
 
 ## Options

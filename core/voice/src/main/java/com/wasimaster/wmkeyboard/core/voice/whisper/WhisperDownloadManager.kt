@@ -83,6 +83,9 @@ object WhisperDownloadManager {
 
     /** Seeds [states] from disk; call when the model manager UI appears. */
     fun refresh(filesDir: File) {
+        // A retired graph still on disk would otherwise read as a finished
+        // download of the current one (#207).
+        WhisperCatalog.models.forEach { if (it.id != activeId) WhisperStore.purgeStale(filesDir, it) }
         _states.update { current ->
             WhisperCatalog.models.associate { model ->
                 val active = current[model.id]
@@ -162,6 +165,9 @@ object WhisperDownloadManager {
 
     private suspend fun downloadModel(filesDir: File, model: WhisperModel) {
         val dir = WhisperStore.modelDir(filesDir, model).apply { mkdirs() }
+        // The loop below skips a file already in place, so a retired graph has
+        // to go first or it would never be replaced.
+        WhisperStore.purgeStale(filesDir, model)
         val parts = listOf(
             // Vocab first — tiny, so a bad connection fails fast before the big file.
             Part(

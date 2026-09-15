@@ -68,6 +68,17 @@ class WhisperCatalogTest {
     }
 
     @Test
+    fun `tiny-en downloads the English graph that forces the English prompt`() {
+        // DocWolle's graph of the same name forces the multilingual prompt onto
+        // the English tokenizer and transcribes almost nothing (#207).
+        val m = WhisperCatalog.byId("tiny-en")!!
+        assertEquals("nyadla-sys/whisper-tiny.en.tflite", m.repo)
+        assertEquals(41_507_968L, m.modelBytes)
+        assertEquals(setOf(41_486_616L), m.retiredModelBytes)
+        assertTrue(m.modelBytes !in m.retiredModelBytes)
+    }
+
+    @Test
     fun `the 128-band vocab is fetched from the one repo that publishes it`() {
         for (id in listOf("turbo-multi", "large-v3-multi")) {
             val m = WhisperCatalog.byId(id)!!

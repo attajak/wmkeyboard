@@ -29,7 +29,26 @@ object WhisperStore {
         listOf(modelFile(filesDir, model), vocabFile(filesDir, model))
 
     fun isDownloaded(filesDir: File, model: WhisperModel): Boolean =
-        requiredFiles(filesDir, model).all { it.isFile }
+        requiredFiles(filesDir, model).all { it.isFile } && !isStale(filesDir, model)
+
+    /**
+     * The model file on disk is a graph this entry no longer uses — one of its
+     * [WhisperModel.retiredModelBytes] — so it must be fetched again rather
+     * than run.
+     */
+    fun isStale(filesDir: File, model: WhisperModel): Boolean {
+        if (model.retiredModelBytes.isEmpty()) return false
+        val file = modelFile(filesDir, model)
+        return file.isFile && file.length() in model.retiredModelBytes
+    }
+
+    /**
+     * Deletes a [isStale] model file. The vocab beside it is kept: it did not
+     * change, and the download skips a file that is already in place.
+     */
+    fun purgeStale(filesDir: File, model: WhisperModel) {
+        if (isStale(filesDir, model)) modelFile(filesDir, model).delete()
+    }
 
     /** True while a partial download for either file is on disk. */
     fun hasPartial(filesDir: File, model: WhisperModel): Boolean =

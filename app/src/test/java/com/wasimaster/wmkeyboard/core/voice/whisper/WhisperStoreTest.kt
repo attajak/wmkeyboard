@@ -144,6 +144,28 @@ class WhisperStoreTest {
     }
 
     @Test
+    fun `a retired graph left on disk is not a download and is purged`() {
+        val d = tmp.root
+        val tinyEn = WhisperCatalog.byId("tiny-en")!!
+        val retired = tinyEn.retiredModelBytes.single()
+        java.io.RandomAccessFile(WhisperStore.modelFile(d, tinyEn).apply { parentFile?.mkdirs() }, "rw")
+            .use { it.setLength(retired) }
+        materialize(WhisperStore.vocabFile(d, tinyEn))
+        assertTrue(WhisperStore.isStale(d, tinyEn))
+        assertFalse(WhisperStore.isDownloaded(d, tinyEn))
+        assertTrue(WhisperStore.downloadedModels(d).none { it.id == "tiny-en" })
+
+        WhisperStore.purgeStale(d, tinyEn)
+        assertFalse(WhisperStore.modelFile(d, tinyEn).exists())
+        assertTrue(WhisperStore.vocabFile(d, tinyEn).isFile)
+
+        // The current graph, at any other size, counts as downloaded.
+        materialize(WhisperStore.modelFile(d, tinyEn))
+        assertFalse(WhisperStore.isStale(d, tinyEn))
+        assertTrue(WhisperStore.isDownloaded(d, tinyEn))
+    }
+
+    @Test
     fun `orphan dir is detected and cleanable`() {
         val d = tmp.root
         materialize(File(WhisperStore.rootDir(d), "ghost-model/some.tflite"))

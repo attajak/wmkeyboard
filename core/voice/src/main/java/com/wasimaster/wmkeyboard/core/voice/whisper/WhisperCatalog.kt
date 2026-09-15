@@ -98,6 +98,14 @@ data class WhisperModel(
      * `else stringResource(descriptionRes, descriptionArg)`.
      */
     val descriptionArg: String = "",
+    /**
+     * Byte sizes of model files this entry used to download and must not run.
+     * A file of one of these exact sizes is an earlier, broken graph left on
+     * disk from before the entry changed source: [WhisperStore] reports the
+     * model as not downloaded and deletes the file, so it comes down again
+     * from the current [repo] instead of silently transcribing nothing.
+     */
+    val retiredModelBytes: Set<Long> = emptySet(),
 ) {
     /** Total download/footprint — used for the space preflight and progress fallback. */
     val sizeBytes: Long get() = modelBytes + vocabBytes
@@ -174,8 +182,14 @@ data class WhisperModel(
  * count from whichever filterbank came down with the model.
  *
  * Not included on purpose: `whisper-small.tflite` forces no task and duplicates
- * `small-multi`; `whisper-tiny-en.tflite` duplicates `tiny-en`; and the
- * `-with-timestamp-` graphs emit timestamp tokens this decoder has no use for.
+ * `small-multi`; `whisper-tiny-en.tflite` takes decoder token ids, not a
+ * spectrogram; DocWolle's `whisper-tiny.en.tflite` forces the multilingual
+ * prompt (`<|en|>` `<|transcribe|>` as ids 50259/50359) onto the English-only
+ * tokenizer, where those ids mean something else, so it answers most clips with
+ * an immediate end-of-text and dictation comes back empty (#207) — `tiny-en`
+ * takes nyadla's conversion of the same name, which forces the right prompt;
+ * and the `-with-timestamp-` graphs emit timestamp tokens this decoder has no
+ * use for.
  *
  * Order is a suggested-pick ranking, not a size ranking — the settings list
  * renders in catalog order, so the balanced default sits first.
@@ -383,7 +397,12 @@ object WhisperCatalog {
         // ---- Single-language graphs: one language each, no detection step.
         addAll(
             singleLanguage(
-                Single("tiny-en", WhisperSize.TINY, "whisper-tiny.en.tflite", "en", REPO, 41_486_616L),
+                Single(
+                    "tiny-en", WhisperSize.TINY, "whisper-tiny.en.tflite", "en", REPO_NYADLA, 41_507_968L,
+                    // DocWolle's graph of the same name, which tiny-en downloaded
+                    // before #207 and which transcribes almost nothing.
+                    retired = setOf(41_486_616L),
+                ),
                 Single("base-en", WhisperSize.BASE, "whisper-base.en.tflite", "en", REPO_NYADLA, 77_642_600L),
                 Single("small-en", WhisperSize.SMALL, "whisper-small.en.tflite", "en", REPO_NYADLA, 247_048_280L),
                 Single("medium-en", WhisperSize.MEDIUM, "whisper-medium.en.tflite", "en", REPO_NYADLA, 772_442_720L),
@@ -417,6 +436,7 @@ object WhisperCatalog {
         val code: String,
         val repo: String,
         val bytes: Long,
+        val retired: Set<Long> = emptySet(),
     )
 
     /** Single-language graphs share one shape — spell out only what differs. */
@@ -440,6 +460,7 @@ object WhisperCatalog {
                 tier = WhisperTier.STANDARD,
                 descriptionRes = R.string.core_voice_model_single_language_body,
                 descriptionArg = name,
+                retiredModelBytes = entry.retired,
             )
         }
 
