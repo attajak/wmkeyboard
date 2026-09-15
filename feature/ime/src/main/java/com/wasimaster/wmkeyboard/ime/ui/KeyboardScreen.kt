@@ -11776,8 +11776,15 @@ private fun KeyRows(
     // A trail outlives the thing that drew it otherwise: switching the feature
     // off or changing the layout leaves the last stroke painted over the new
     // grid, because the pointer loop that would have released it is gone.
+    //
+    // A layer peek (#108) is the exception, on both of its edges. Its drag
+    // draws the same band a chord does, and the peek *is* a layout change:
+    // clearing on the way in wiped the band the moment the symbols appeared,
+    // and clearing on the way out would cut its fade short at the lift. The
+    // peek's own gesture releases the trail, so nothing is left behind.
     DisposableEffect(gestureEnabled, layout) {
-        onDispose { trail.clear() }
+        val drawnForPeek = peeked != null
+        onDispose { if (!drawnForPeek && layerPeek == null) trail.clear() }
     }
 
     Box(
