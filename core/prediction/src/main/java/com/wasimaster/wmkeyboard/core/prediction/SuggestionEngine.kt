@@ -1208,6 +1208,19 @@ class SuggestionEngine(
     }
 
     /**
+     * Whether a loaded wordlist spells [word] in lower case, which is what
+     * lets the case vote treat it as a known lower-case word rather than a new
+     * one waiting for its first capital (#154). A platform dictionary entry
+     * the user typed with a capital ("Boston") says the opposite, so it does
+     * not count; contacts and app labels are left out for the same reason
+     * [displayForm] leaves them out.
+     */
+    fun spellsInLowerCase(word: String): Boolean {
+        val lower = word.lowercase()
+        return lower !in systemWordCases && inDictionaries(lower)
+    }
+
+    /**
      * Where [word] comes from, for the word card (#99). Reads every source
      * once and ranks the word in each frequency list it is in; the first rank
      * query on a list builds that list's histogram (see [RankFloorCache]), so

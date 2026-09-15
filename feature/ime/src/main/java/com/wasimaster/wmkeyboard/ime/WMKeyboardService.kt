@@ -10792,6 +10792,14 @@ open class WMKeyboardService : InputMethodService() {
         return kept
     }
 
+    /**
+     * Whether a loaded wordlist already spells [word] in lower case, so one
+     * shifted sighting of a word like "the" does not become its spelling just
+     * because the personal dictionary had not counted it yet (#154).
+     */
+    private fun listedInLowerCase(word: String): Boolean =
+        suggestionEngine?.spellsInLowerCase(word) == true
+
     /** Whether two queued words are the same word in the same place. */
     private fun sameInstance(a: LearningBuffer.Entry, b: LearningBuffer.Entry): Boolean =
         a.anchor >= 0 && b.anchor >= 0 &&
@@ -10812,6 +10820,7 @@ open class WMKeyboardService : InputMethodService() {
             entry.weight,
             langId = entry.langId,
             caseEvidence = entry.caseTrusted,
+            listedInLowerCase = entry.caseTrusted && listedInLowerCase(entry.word),
         )
         if (!learned) return
         // Mirror it into Android's shared personal dictionary when the user
@@ -11339,6 +11348,7 @@ open class WMKeyboardService : InputMethodService() {
             count = sightings,
             langId = langId,
             caseEvidence = caseTrusted,
+            listedInLowerCase = caseTrusted && listedInLowerCase(word),
         )
         // Refused by the lexicon (#185): nothing to mirror, see [learnSettledWord].
         if (!learned) return

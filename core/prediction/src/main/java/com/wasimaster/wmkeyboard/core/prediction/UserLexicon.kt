@@ -149,13 +149,14 @@ class UserLexicon(private val storageFile: File?) {
         count: Int = 1,
         langId: String = "",
         caseEvidence: Boolean = false,
+        listedInLowerCase: Boolean = false,
     ): Boolean {
         val key = WordKey.of(word)
         if (key.length < 2 || key.length > MAX_WORD_LENGTH || count <= 0) return false
         if (!WordContext.isLearnableWord(key)) return false
         // Only the caller knows whether the capital it is holding is the
         // user's or the keyboard's, so the vote is cast on its say-so (#44).
-        if (caseEvidence) voteCase(key, WordKey.surface(word), weight = 1)
+        if (caseEvidence) voteCase(key, WordKey.surface(word), weight = 1, listedInLowerCase)
         val before = words[key] ?: 0
         val merged = (before.toLong() + count).coerceAtMost(MAX_COUNT.toLong()).toInt()
         words[key] = merged
@@ -221,15 +222,31 @@ class UserLexicon(private val storageFile: File?) {
      * only until a vote is recorded, so the ordinary bookkeeping is one map
      * entry either way.
      *
+     * "Never seen before" means never seen anywhere. A word a loaded wordlist
+     * already spells in lower case ([listedInLowerCase]: "the", "keyboard")
+     * is not new just because the personal dictionary has not counted it yet,
+     * so its lower case starts with the full ceiling behind it; otherwise one
+     * shifted "The" would be the first thing learned about "the" and every
+     * later suggestion would carry the capital.
+     *
      * A pinned word takes no votes at all: the user said how it is spelled
      * (#100), and a sentence-start capital or a shouted heading is not a
      * counter-argument.
      */
-    private fun voteCase(key: String, surface: String, weight: Int) {
+    private fun voteCase(
+        key: String,
+        surface: String,
+        weight: Int,
+        listedInLowerCase: Boolean = false,
+    ) {
         if (weight <= 0 || WordKey.of(surface) != key || key in casePinned) return
         val shape = surface.takeIf { it != key }
         val current = wordCase[key]
-        val standing = caseVotes[key] ?: if (current == null) lowerCaseEvidence(key) else 0
+        val standing = caseVotes[key] ?: when {
+            current != null -> 0
+            listedInLowerCase -> MAX_CASE_VOTES
+            else -> lowerCaseEvidence(key)
+        }
         if (shape == current) {
             caseVotes[key] = (standing + weight).coerceAtMost(MAX_CASE_VOTES)
             return

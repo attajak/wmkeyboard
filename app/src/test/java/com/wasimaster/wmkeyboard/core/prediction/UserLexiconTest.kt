@@ -499,6 +499,19 @@ class UserLexiconTest {
     }
 
     @Test
+    fun aWordlistWordIsNotNewJustBecauseItWasNeverLearned() {
+        val lexicon = UserLexicon(null)
+        // "the" is in every English list: one shifted glide learns the word,
+        // not the capital.
+        lexicon.learnWord("The", caseEvidence = true, listedInLowerCase = true)
+        assertTrue(lexicon.contains("the"))
+        assertNull(lexicon.displayOf("the"))
+        // It is still a vote, and enough of them turn it like any other word.
+        repeat(7) { lexicon.learnWord("The", caseEvidence = true, listedInLowerCase = true) }
+        assertEquals("The", lexicon.displayOf("the"))
+    }
+
+    @Test
     fun lowerCaseVotesSurviveASave() {
         val f = file()
         val lexicon = UserLexicon(f)
