@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.input.pointer.PointerInputScope
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.view.KeyEvent
@@ -10517,6 +10519,399 @@ internal fun Key.commitsFromLayerDrag(): Boolean = when (action) {
 }
 
 /**
+ * The layer a drag off [source] shows from a *panel* (issue #210), or null when
+ * that key is not one a drag can look through.
+ *
+ * `?123` takes the step a tap would take, exactly as it does on the typing grid.
+ * `ABC` always shows the letters: a panel is not a layer of the grid, so the
+ * letters are somewhere else to look even while the board underneath is on
+ * them — the case [layerDragMode] refuses.
+ */
+internal fun panelLayerDragMode(source: Key?, current: LayoutMode): LayoutMode? =
+    when (source?.action) {
+        KeyAction.Letters -> LayoutMode.LETTERS
+        else -> layerDragMode(source, current)
+    }
+
+/**
+ * The state a panel's peek (issue #210) resolves its layer from. A numeric
+ * field draws its keypad in place of every layer, and the peek is for the
+ * symbols or letters the panel's key names, so the field kind is set aside for
+ * the look — as is the panel itself, which is not part of the typing grid.
+ */
+internal fun KeyboardUiState.peekedFromPanel(mode: LayoutMode): KeyboardUiState = copy(
+    layoutMode = mode,
+    fieldKind = if (fieldKind.isNumericPad) FieldKind.TEXT else fieldKind,
+    panel = PanelMode.NONE,
+)
+
+/**
+ * What a layer peek (issue #108) has on screen while its finger is down: the
+ * layer showing through, the key a lift would type, and the alternates a still
+ * finger opened. One per grid, written by [detectLayerPeek] and drawn by
+ * [LayerPeekHighlight] and [LayerPeekPopup], so the typing grid and a panel
+ * (issue #210) run the one gesture rather than two copies of it.
+ */
+internal class LayerPeek(
+    /** The board-wide popup flag: a popup with a finger in it owns that finger. */
+    val gate: AlternatesGate,
+) {
+    /** The layer the grid draws instead of its own, or null when no peek is up. */
+    var mode by mutableStateOf<LayoutMode?>(null)
+
+    /**
+     * The key whose alternates the peek has open, and that key's cell in the
+     * grid's own space for the popup to hang from. The grid owns the finger
+     * throughout a peek, so the key under it never runs the press that would
+     * have opened a popup of its own.
+     */
+    var popupKey by mutableStateOf<Key?>(null)
+    var popupRect by mutableStateOf(Rect.Zero)
+
+    /**
+     * The cell the finger is over and would type, in the grid's space, or null
+     * for none. Held as the state object and read in a draw lambda alone, the
+     * way a key's own press is: crossing a key then repaints one overlay
+     * instead of recomposing the whole grid under the finger.
+     */
+    val pressRect = mutableStateOf<Rect?>(null)
+
+    /**
+     * The finger steering the popup. One for the whole grid rather than one per
+     * key, because the popup belongs to the gesture rather than to the key it
+     * happens to be over — and unlike the keys' own holds it is never null: the
+     * popup can only be chosen from by the finger holding it, since lifting is
+     * what ends the peek, so [KeyPopupSettings.alternatesHoldToSelect] has no
+     * say here.
+     */
+    val hold = AlternatesHold(gate)
+}
+
+@Composable
+internal fun rememberLayerPeek(): LayerPeek {
+    val gate = LocalAlternatesGate.current
+    return remember(gate) { LayerPeek(gate) }
+}
+
+/**
+ * The layer drag of issue #108, for any grid that can say which key is under a
+ * point: a drag off `?123` or `ABC` shows that layer while the finger is down
+ * and types the key it lifts on, and holding still over a key opens its
+ * alternates.
+ *
+ * [rects] is read live, and must hand back a *new* table once the peeked layer
+ * is laid out — see `rectsBefore`. Its cells are in the space [origin] is added
+ * to; [window] is the grid's origin in the window, where the popup's entries
+ * are. [peekFor] names the layer a key looks through to, or null for none;
+ * [onPopupOpen] is the haptic, when the user has one.
+ */
+@Suppress("LongParameterList")
+internal suspend fun PointerInputScope.detectLayerPeek(
+    peek: LayerPeek,
+    rects: () -> KeyRects,
+    origin: () -> Offset,
+    window: () -> Offset,
+    peekFor: (Key?) -> LayoutMode?,
+    trail: GlideTrail,
+    trailMs: Long,
+    dwellMs: Long,
+    onPopupOpen: () -> Unit,
+    onKey: (Key) -> Unit,
+) {
+    val reachPx = AlternatesReachDp.toPx()
+    val steerPx = AlternatesSteerDp.toPx()
+    val stillPx = LayerDragStillDp.toPx()
+    awaitEachGesture {
+        val down = awaitFirstDown(
+            requireUnconsumed = false,
+            pass = PointerEventPass.Initial,
+        )
+        val source = rects().keyAt(down.position + origin())
+        if (!source.startsLayerDrag()) return@awaitEachGesture
+        // Resolved at the down against the layer the board is really
+        // on. A key with nowhere to look — `ABC` on the letters —
+        // leaves the stroke alone rather than owning a gesture that
+        // would show the same grid back.
+        val layer = peekFor(source) ?: return@awaitEachGesture
+        val anchor = rects().cellAt(down.position + origin())
+            ?.let { it.center - origin() }
+            ?: down.position
+        val slop = viewConfiguration.touchSlop
+        // The rect table as it is *before* the peek. A new layer
+        // gets a new table (both are remembered on the layout), so
+        // this is how the loop knows the grid under the finger is
+        // still the one the finger left: reading a key out of the
+        // old table would type one that is no longer on screen.
+        val rectsBefore = rects()
+        var dragging = false
+        // The key under the finger now, and the popup it opened by
+        // being held still on it. Read per sample, like the chord
+        // drag's: the key that matters is the one it lifts on.
+        var over: Key? = null
+        var popupKey: Key? = null
+        // Where the finger stopped and when, so a hold that never
+        // moves still opens a popup — a finger genuinely still
+        // sends no events at all, which is why this is a timer and
+        // not a test run on the next move (#96 learned it the hard
+        // way).
+        val dwell = GlideDwell()
+        // Everything the peek changes is undone in the `finally`,
+        // and only there. A pointer loop can be cancelled outright
+        // — the modifier restarting under it, the board recomposed
+        // away — and a peek that leaked out of one would leave the
+        // keyboard showing a layer with no finger on it and no way
+        // back to the one the user was typing on.
+        try {
+            while (true) {
+                val due = if (dragging && popupKey == null &&
+                    over?.opensAlternatesPopup() == true
+                ) {
+                    dwell.stillSince + dwellMs
+                } else {
+                    null
+                }
+                val event = if (due == null) {
+                    awaitPointerEvent(PointerEventPass.Initial)
+                } else {
+                    this.withTimeoutOrNull(
+                        (due - SystemClock.uptimeMillis()).coerceAtLeast(0L),
+                    ) { awaitPointerEvent(PointerEventPass.Initial) }
+                }
+                if (event == null) {
+                    // Held long enough: the key under the finger opens
+                    // its alternates, anchored on the cell rather than
+                    // on the fingertip so the popup sits over the key
+                    // the way a long press puts it there.
+                    popupKey = over
+                    peek.popupKey = over
+                    val still = Offset(dwell.stillX, dwell.stillY)
+                    rects().cellAt(still + origin())?.let {
+                        peek.popupRect = it.translate(-origin())
+                    }
+                    peek.hold.open()
+                    // The popup is what the finger is choosing in
+                    // now; the key under it is not about to be
+                    // typed.
+                    peek.pressRect.value = null
+                    // The trail's head stops following the finger: it is
+                    // choosing in the popup now, and a stroke drawn
+                    // across the entries is drawn over what it is
+                    // reading.
+                    trail.release()
+                    onPopupOpen()
+                    continue
+                }
+                val change = event.changes.firstOrNull { it.id == down.id } ?: break
+                if (!change.pressed) {
+                    if (dragging) change.consume()
+                    break
+                }
+                if (!dragging &&
+                    (change.position - down.position).getDistance() > slop
+                ) {
+                    // The key's own press and hold got there first and
+                    // has its alternates open: that popup owns this
+                    // finger, and the peek would be a second gesture
+                    // reading the same travel.
+                    if (peek.gate.open) return@awaitEachGesture
+                    dragging = true
+                    peek.mode = layer
+                    trail.beginLine(anchor.x, anchor.y)
+                    dwell.reset(change.position.x, change.position.y, change.uptimeMillis)
+                }
+                if (!dragging) continue
+                change.consume()
+                if (popupKey != null) {
+                    // The popup owns the finger from here: its entries
+                    // are laid out in the *window*, so the pointer has
+                    // to arrive there too.
+                    peek.hold.moveTo(
+                        change.position + window() - peek.hold.cell.topLeft,
+                        reachPx,
+                        steerPx,
+                    )
+                    continue
+                }
+                trail.add(
+                    change.position.x,
+                    change.position.y,
+                    change.uptimeMillis,
+                    trailMs,
+                )
+                val rects = rects()
+                // Nothing to read yet: the peeked layer has not been
+                // laid out, and the table under the finger is still
+                // the one it left.
+                if (rects === rectsBefore) continue
+                val now = rects.keyAt(change.position + origin())
+                if (now !== over) {
+                    over = now
+                    // Lit only where a lift would type something,
+                    // so the mode key the drag came off — which is
+                    // now an `ABC` key under the same finger — reads
+                    // as the way out that it is.
+                    peek.pressRect.value = now
+                        ?.takeIf { it.commitsFromLayerDrag() }
+                        ?.let { rects.cellAt(change.position + origin()) }
+                        ?.translate(-origin())
+                    dwell.reset(change.position.x, change.position.y, change.uptimeMillis)
+                } else {
+                    dwell.sample(
+                        change.position.x,
+                        change.position.y,
+                        change.uptimeMillis,
+                        stillPx,
+                    )
+                }
+            }
+            // Never travelled: an ordinary press the mode key owns, and
+            // it switches layer exactly as it always has.
+            if (!dragging) return@awaitEachGesture
+            trail.release()
+            val target = over
+            when {
+                // The popup commits what it has highlighted, and never
+                // the key underneath it. Before the `finally` clears the
+                // key: [AlternatesHold.onCommit] reads it.
+                popupKey != null -> peek.hold.commit()
+                // Lifted off the grid, or on a key that only moves the
+                // board (the `ABC` key now sitting where the drag began,
+                // most often): the slide-away cancel every other key
+                // has, and nothing is typed.
+                target == null || !target.commitsFromLayerDrag() -> Unit
+                else -> onKey(target)
+            }
+        } finally {
+            peek.mode = null
+            peek.popupKey = null
+            peek.pressRect.value = null
+            // Only a popup this gesture opened: the gate is the
+            // board's, and a second finger may be holding one of the
+            // keys' own popups open on it.
+            if (popupKey != null) peek.hold.cancel()
+        }
+    }
+}
+
+/**
+ * The key a layer peek is over, lit the way a press lights a key (issue #108).
+ * The grid owns that finger, so the key itself never runs the press that would
+ * have drawn it, and without this nothing on screen says which symbol the lift
+ * is about to type. Composed only while a peek is up — the rect inside it is
+ * read in the draw lambda, so the finger crossing keys repaints and never
+ * recomposes.
+ */
+@Composable
+internal fun BoxScope.LayerPeekHighlight(peek: LayerPeek, settings: KeyboardSettings) {
+    if (peek.mode == null) return
+    val kbTheme = LocalKbTheme.current
+    val gapH = keyGapH(settings)
+    val gapV = keyGapV(settings)
+    val faceShape = kbTheme.keyShape(bleedDp = gapH.value)
+    Canvas(modifier = Modifier.matchParentSize()) {
+        val cell = peek.pressRect.value ?: return@Canvas
+        // The drawn face rather than the touch cell: the gap is padding
+        // inside the cell, so lighting the whole of it would spill into
+        // the keys either side.
+        val face = Size(
+            cell.width - gapH.toPx() * 2,
+            cell.height - gapV.toPx() * 2,
+        )
+        if (face.width <= 0f || face.height <= 0f) return@Canvas
+        val outline = faceShape.createOutline(face, layoutDirection, this)
+        translate(cell.left + gapH.toPx(), cell.top + gapV.toPx()) {
+            drawOutline(outline, kbTheme.pressedKey)
+        }
+    }
+}
+
+/**
+ * The alternates a layer peek is holding open (issue #108). Hung off a
+ * stand-in the size of the key's own cell rather than off the key itself: the
+ * grid owns this finger, so the key under it never ran the press that opens a
+ * popup, and a popup places itself against whatever it is put inside. Same
+ * position provider, same surface, same entries as a long press gets — only
+ * the finger steering it is different.
+ */
+@Composable
+internal fun LayerPeekPopup(
+    peek: LayerPeek,
+    popup: KeyPopupSettings,
+    onKey: (Key) -> Unit,
+    onText: (String) -> Unit,
+) {
+    // Assigned each composition, the way a key assigns its own: it closes over
+    // the popup's key and the commit paths as they are now. Read at the lift,
+    // so the peek must commit before it clears the key.
+    peek.hold.onCommit = { index ->
+        when (val entry = peek.popupKey?.alternateEntries()?.getOrNull(index)) {
+            is AlternateEntry.Character -> onText(entry.text)
+            is AlternateEntry.Action -> onKey(
+                Key(label = entry.alternate.label, action = entry.alternate.action),
+            )
+            null -> Unit
+        }
+    }
+    val key = peek.popupKey ?: return
+    val density = LocalDensity.current
+    val cell = peek.popupRect
+    Box(
+        modifier = Modifier
+            .offset { IntOffset(cell.left.roundToInt(), cell.top.roundToInt()) }
+            .size(
+                with(density) { cell.width.toDp() },
+                with(density) { cell.height.toDp() },
+            )
+            .onGloballyPositioned {
+                peek.hold.cell = Rect(it.positionInWindow(), it.size.toSize())
+            },
+    ) {
+        AlternatesPopup(
+            key = key,
+            popupPosition = rememberAboveAnchorPopup(),
+            popup = popup,
+            hold = peek.hold,
+            onDismiss = { peek.popupKey = null },
+            onText = { text ->
+                peek.popupKey = null
+                onText(text)
+            },
+            onAction = { alternateKey ->
+                peek.popupKey = null
+                onKey(alternateKey)
+            },
+        )
+    }
+}
+
+/**
+ * A trail drawn as one even line rather than a comet: a chord (issue #67) or a
+ * layer peek (issue #108) runs from the key it started on to the fingertip, and
+ * a flick (discussion #102) runs straight up from where the finger landed.
+ */
+internal fun DrawScope.drawTrailBand(
+    trail: GlideTrail,
+    color: Color,
+    opacity: Float,
+    widthPx: Float,
+    keepMs: Long,
+) {
+    val life = trail.lineLife(trail.revision, keepMs)
+    if (life <= 0f) return
+    drawLine(
+        color = color.copy(alpha = opacity * life),
+        start = Offset(trail.startX, trail.startY),
+        end = if (trail.straight) {
+            Offset(trail.headX, trail.headY)
+        } else {
+            Offset(trail.startX, trail.headY)
+        },
+        strokeWidth = widthPx,
+        cap = StrokeCap.Round,
+    )
+}
+
+/**
  * Takes the place of the `?123` layer's own digit row when the number row is
  * on and already supplies those digits one row above. Carries the symbols
  * that layer has nowhere else to put.
@@ -11384,8 +11779,8 @@ private fun KeyRows(
     // the board's own [KeyboardUiState.layoutMode] is untouched — so the number
     // row, the reserved row span and every height derived from them stay exactly
     // as they were, and nothing under the finger moves except the key faces.
-    var layerPeek by remember { mutableStateOf<LayoutMode?>(null) }
-    val peeked = layerPeek
+    val layerPeek = rememberLayerPeek()
+    val peeked = layerPeek.mode
     val layout = rememberCurrentLayout(
         if (peeked == null) state else state.copy(layoutMode = peeked),
     )
@@ -11454,17 +11849,6 @@ private fun KeyRows(
     // be compared with it — the two must not be measured from different roots.
     var boxWindow by remember { mutableStateOf(Offset.Zero) }
     var boxSize by remember { mutableStateOf(IntSize.Zero) }
-    // The alternates a layer peek has open: the key whose popup is up, and that
-    // key's cell in this Box's own space for the popup to hang from. The grid
-    // owns the finger throughout a peek, so the key under it never runs the
-    // press that would have opened a popup of its own (issue #108).
-    var layerPopupKey by remember { mutableStateOf<Key?>(null) }
-    var layerPopupRect by remember { mutableStateOf(Rect.Zero) }
-    // The cell a peeking finger is over and would type, in this Box's space, or
-    // null for none. Held as the state object and read in a draw lambda alone,
-    // the way a key's own press is: crossing a key then repaints one overlay
-    // instead of recomposing the whole grid under the finger.
-    val layerPressRect = remember { mutableStateOf<Rect?>(null) }
     // Rows narrower than the grid (e.g. the 9-key QWERTY home row) keep the
     // standard key width and are centred with side gaps, instead of stretching
     // their keys to fill the full width.
@@ -11698,25 +12082,6 @@ private fun KeyRows(
     val stampedOnText = remember(onText) {
         { t: String -> lastKeyPressTime.longValue = SystemClock.uptimeMillis(); onText(t) }
     }
-    // The finger steering a layer peek's alternates popup (issue #108). One for
-    // the whole grid rather than one per key, because the peek's popup belongs
-    // to the gesture rather than to the key it happens to be over — and unlike
-    // the keys' own holds it is never null: the popup can only be chosen from
-    // by the finger holding it, since lifting is what ends the peek, so
-    // [KeyPopupSettings.alternatesHoldToSelect] has no say here.
-    val layerHold = remember(alternatesGate) { AlternatesHold(alternatesGate) }
-    // Assigned each composition, the way a key assigns its own: it closes over
-    // the popup's key and the commit paths as they are now. Read at the lift,
-    // so the peek must commit before it clears the key.
-    layerHold.onCommit = { index ->
-        when (val entry = layerPopupKey?.alternateEntries()?.getOrNull(index)) {
-            is AlternateEntry.Character -> stampedOnText(entry.text)
-            is AlternateEntry.Action -> stampedOnKey(
-                Key(label = entry.alternate.label, action = entry.alternate.action),
-            )
-            null -> Unit
-        }
-    }
     val dotCooldownMs = gesture.handwriteDotCooldownMs
     // Uptime of the last *drawn* handwriting stroke. For [dotCooldownMs] after
     // it, a tap over the letters is grabbed as an ink dot (the mark on an i/j/t)
@@ -11784,7 +12149,7 @@ private fun KeyRows(
     // peek's own gesture releases the trail, so nothing is left behind.
     DisposableEffect(gestureEnabled, layout) {
         val drawnForPeek = peeked != null
-        onDispose { if (!drawnForPeek && layerPeek == null) trail.clear() }
+        onDispose { if (!drawnForPeek && layerPeek.mode == null) trail.clear() }
     }
 
     Box(
@@ -11898,181 +12263,19 @@ private fun KeyRows(
             // finger steers them whether or not "choose without lifting" is on:
             // lifting is what ends the peek, so a popup that waited for a lift
             // to choose could never be chosen from at all.
-            .pointerInput(stampedOnKey, stampedOnText, trailMs, state.settings.longPressDelayMs) {
-                val reachPx = AlternatesReachDp.toPx()
-                val steerPx = AlternatesSteerDp.toPx()
-                val stillPx = LayerDragStillDp.toPx()
-                val dwellMs = state.settings.longPressDelayMs.toLong()
-                awaitEachGesture {
-                    val down = awaitFirstDown(
-                        requireUnconsumed = false,
-                        pass = PointerEventPass.Initial,
-                    )
-                    val source = liveRects.value.keyAt(down.position + boxOrigin)
-                    if (!source.startsLayerDrag()) return@awaitEachGesture
-                    // Resolved at the down against the layer the board is really
-                    // on. A key with nowhere to look — `ABC` on the letters —
-                    // leaves the stroke alone rather than owning a gesture that
-                    // would show the same grid back.
-                    val peek = layerDragMode(source, liveMode.value) ?: return@awaitEachGesture
-                    val anchor = liveRects.value.cellAt(down.position + boxOrigin)
-                        ?.let { it.center - boxOrigin }
-                        ?: down.position
-                    val slop = viewConfiguration.touchSlop
-                    // The rect table as it is *before* the peek. A new layer
-                    // gets a new table (both are remembered on the layout), so
-                    // this is how the loop knows the grid under the finger is
-                    // still the one the finger left: reading a key out of the
-                    // old table would type one that is no longer on screen.
-                    val rectsBefore = liveRects.value
-                    var dragging = false
-                    // The key under the finger now, and the popup it opened by
-                    // being held still on it. Read per sample, like the chord
-                    // drag's: the key that matters is the one it lifts on.
-                    var over: Key? = null
-                    var popupKey: Key? = null
-                    // Where the finger stopped and when, so a hold that never
-                    // moves still opens a popup — a finger genuinely still
-                    // sends no events at all, which is why this is a timer and
-                    // not a test run on the next move (#96 learned it the hard
-                    // way).
-                    val dwell = GlideDwell()
-                    // Everything the peek changes is undone in the `finally`,
-                    // and only there. A pointer loop can be cancelled outright
-                    // — the modifier restarting under it, the board recomposed
-                    // away — and a peek that leaked out of one would leave the
-                    // keyboard showing a layer with no finger on it and no way
-                    // back to the one the user was typing on.
-                    try {
-                        while (true) {
-                            val due = if (dragging && popupKey == null &&
-                                over?.opensAlternatesPopup() == true
-                            ) {
-                                dwell.stillSince + dwellMs
-                            } else {
-                                null
-                            }
-                            val event = if (due == null) {
-                                awaitPointerEvent(PointerEventPass.Initial)
-                            } else {
-                                this.withTimeoutOrNull(
-                                    (due - SystemClock.uptimeMillis()).coerceAtLeast(0L),
-                                ) { awaitPointerEvent(PointerEventPass.Initial) }
-                            }
-                            if (event == null) {
-                                // Held long enough: the key under the finger opens
-                                // its alternates, anchored on the cell rather than
-                                // on the fingertip so the popup sits over the key
-                                // the way a long press puts it there.
-                                popupKey = over
-                                layerPopupKey = over
-                                val still = Offset(dwell.stillX, dwell.stillY)
-                                liveRects.value.cellAt(still + boxOrigin)?.let {
-                                    layerPopupRect = it.translate(-boxOrigin)
-                                }
-                                layerHold.open()
-                                // The popup is what the finger is choosing in
-                                // now; the key under it is not about to be
-                                // typed.
-                                layerPressRect.value = null
-                                // The trail's head stops following the finger: it is
-                                // choosing in the popup now, and a stroke drawn
-                                // across the entries is drawn over what it is
-                                // reading.
-                                trail.release()
-                                if (hapticOn.value) pickerHaptic()
-                                continue
-                            }
-                            val change = event.changes.firstOrNull { it.id == down.id } ?: break
-                            if (!change.pressed) {
-                                if (dragging) change.consume()
-                                break
-                            }
-                            if (!dragging &&
-                                (change.position - down.position).getDistance() > slop
-                            ) {
-                                // The key's own press and hold got there first and
-                                // has its alternates open: that popup owns this
-                                // finger, and the peek would be a second gesture
-                                // reading the same travel.
-                                if (alternatesGate.open) return@awaitEachGesture
-                                dragging = true
-                                layerPeek = peek
-                                trail.beginLine(anchor.x, anchor.y)
-                                dwell.reset(change.position.x, change.position.y, change.uptimeMillis)
-                            }
-                            if (!dragging) continue
-                            change.consume()
-                            if (popupKey != null) {
-                                // The popup owns the finger from here: its entries
-                                // are laid out in the *window*, so the pointer has
-                                // to arrive there too.
-                                layerHold.moveTo(
-                                    change.position + boxWindow - layerHold.cell.topLeft,
-                                    reachPx,
-                                    steerPx,
-                                )
-                                continue
-                            }
-                            trail.add(
-                                change.position.x,
-                                change.position.y,
-                                change.uptimeMillis,
-                                trailMs,
-                            )
-                            val rects = liveRects.value
-                            // Nothing to read yet: the peeked layer has not been
-                            // laid out, and the table under the finger is still
-                            // the one it left.
-                            if (rects === rectsBefore) continue
-                            val now = rects.keyAt(change.position + boxOrigin)
-                            if (now !== over) {
-                                over = now
-                                // Lit only where a lift would type something,
-                                // so the mode key the drag came off — which is
-                                // now an `ABC` key under the same finger — reads
-                                // as the way out that it is.
-                                layerPressRect.value = now
-                                    ?.takeIf { it.commitsFromLayerDrag() }
-                                    ?.let { rects.cellAt(change.position + boxOrigin) }
-                                    ?.translate(-boxOrigin)
-                                dwell.reset(change.position.x, change.position.y, change.uptimeMillis)
-                            } else {
-                                dwell.sample(
-                                    change.position.x,
-                                    change.position.y,
-                                    change.uptimeMillis,
-                                    stillPx,
-                                )
-                            }
-                        }
-                        // Never travelled: an ordinary press the mode key owns, and
-                        // it switches layer exactly as it always has.
-                        if (!dragging) return@awaitEachGesture
-                        trail.release()
-                        val target = over
-                        when {
-                            // The popup commits what it has highlighted, and never
-                            // the key underneath it. Before the `finally` clears the
-                            // key: [AlternatesHold.onCommit] reads it.
-                            popupKey != null -> layerHold.commit()
-                            // Lifted off the grid, or on a key that only moves the
-                            // board (the `ABC` key now sitting where the drag began,
-                            // most often): the slide-away cancel every other key
-                            // has, and nothing is typed.
-                            target == null || !target.commitsFromLayerDrag() -> Unit
-                            else -> stampedOnKey(target)
-                        }
-                    } finally {
-                        layerPeek = null
-                        layerPopupKey = null
-                        layerPressRect.value = null
-                        // Only a popup this gesture opened: the gate is the
-                        // board's, and a second finger may be holding one of the
-                        // keys' own popups open on it.
-                        if (popupKey != null) layerHold.cancel()
-                    }
-                }
+            .pointerInput(stampedOnKey, trailMs, state.settings.longPressDelayMs) {
+                detectLayerPeek(
+                    peek = layerPeek,
+                    rects = { liveRects.value },
+                    origin = { boxOrigin },
+                    window = { boxWindow },
+                    peekFor = { source -> layerDragMode(source, liveMode.value) },
+                    trail = trail,
+                    trailMs = trailMs,
+                    dwellMs = state.settings.longPressDelayMs.toLong(),
+                    onPopupOpen = { if (hapticOn.value) pickerHaptic() },
+                    onKey = stampedOnKey,
+                )
             }
             // The octopus (discussion #102). Two gestures, one loop, sitting
             // above the glide loop because both of them have to answer before
@@ -12839,7 +13042,7 @@ private fun KeyRows(
             // and the board's own state does not follow. Everything else here
             // reads [KeyboardUiState.layoutMode] directly, so the row keeps its
             // digits and the board keeps its height while a peek is up.
-            val mode = layerPeek ?: state.layoutMode
+            val mode = layerPeek.mode ?: state.layoutMode
             // The digits keep the same slot on every layer, so switching
             // layers moves neither the row nor the pad below it. The `?123`
             // layer leads with its own digit row, which would be a second
@@ -13089,26 +13292,7 @@ private fun KeyRows(
         // screen says which symbol the lift is about to type. Composed only
         // while a peek is up — the rect inside it is read in the draw lambda,
         // so the finger crossing keys repaints and never recomposes.
-        if (layerPeek != null) {
-            val gapH = keyGapH(state.settings)
-            val gapV = keyGapV(state.settings)
-            val faceShape = kbTheme.keyShape(bleedDp = gapH.value)
-            Canvas(modifier = Modifier.matchParentSize()) {
-                val cell = layerPressRect.value ?: return@Canvas
-                // The drawn face rather than the touch cell: the gap is padding
-                // inside the cell, so lighting the whole of it would spill into
-                // the keys either side.
-                val face = Size(
-                    cell.width - gapH.toPx() * 2,
-                    cell.height - gapV.toPx() * 2,
-                )
-                if (face.width <= 0f || face.height <= 0f) return@Canvas
-                val outline = faceShape.createOutline(face, layoutDirection, this)
-                translate(cell.left + gapH.toPx(), cell.top + gapV.toPx()) {
-                    drawOutline(outline, kbTheme.pressedKey)
-                }
-            }
-        }
+        LayerPeekHighlight(layerPeek, state.settings)
 
         // Autopilot, made visible: the letters the dictionary expects next drawn
         // at the size their touch area has grown to, and the boundary each one
@@ -13220,20 +13404,7 @@ private fun KeyRows(
                 // cone and a line that leaned with the finger would promise a
                 // precision the test never asks for (discussion #102).
                 if (trail.straight || trail.flick) {
-                    val life = trail.lineLife(trail.revision, trailMs)
-                    if (life > 0f) {
-                        drawLine(
-                            color = trailColor.copy(alpha = trailOpacity * life),
-                            start = Offset(trail.startX, trail.startY),
-                            end = if (trail.straight) {
-                                Offset(trail.headX, trail.headY)
-                            } else {
-                                Offset(trail.startX, trail.headY)
-                            },
-                            strokeWidth = headWidth,
-                            cap = StrokeCap.Round,
-                        )
-                    }
+                    drawTrailBand(trail, trailColor, trailOpacity, headWidth, trailMs)
                     return@Canvas
                 }
                 // The comet is *filled* as a ribbon rather than stroked as a
@@ -13403,38 +13574,7 @@ private fun KeyRows(
         // press that opens a popup, and a popup places itself against whatever
         // it is put inside. Same position provider, same surface, same entries
         // as a long press gets — only the finger steering it is different.
-        val peekPopupKey = layerPopupKey
-        if (peekPopupKey != null) {
-            val density = LocalDensity.current
-            val cell = layerPopupRect
-            Box(
-                modifier = Modifier
-                    .offset { IntOffset(cell.left.roundToInt(), cell.top.roundToInt()) }
-                    .size(
-                        with(density) { cell.width.toDp() },
-                        with(density) { cell.height.toDp() },
-                    )
-                    .onGloballyPositioned {
-                        layerHold.cell = Rect(it.positionInWindow(), it.size.toSize())
-                    },
-            ) {
-                AlternatesPopup(
-                    key = peekPopupKey,
-                    popupPosition = rememberAboveAnchorPopup(),
-                    popup = state.settings.popup,
-                    hold = layerHold,
-                    onDismiss = { layerPopupKey = null },
-                    onText = { text ->
-                        layerPopupKey = null
-                        stampedOnText(text)
-                    },
-                    onAction = { alternateKey ->
-                        layerPopupKey = null
-                        stampedOnKey(alternateKey)
-                    },
-                )
-            }
-        }
+        LayerPeekPopup(layerPeek, state.settings.popup, stampedOnKey, stampedOnText)
     }
 }
 

@@ -1,17 +1,25 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
@@ -19,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.layout.KeySlot
+import com.wasimaster.wmkeyboard.core.layout.LayerSpec
 import com.wasimaster.wmkeyboard.core.layout.LayoutAppearance
 import com.wasimaster.wmkeyboard.core.layout.MaxRowHeightScale
 import com.wasimaster.wmkeyboard.core.layout.MinRowHeightScale
@@ -44,9 +53,11 @@ import kotlin.math.roundToInt
  * the grid fills exactly the height its host gives it and the keyboard window
  * never moves when a panel opens. The host must give it a bounded height.
  *
- * Deliberately none of the key grid's board-level pointer handlers: no glide,
- * no smart hit remap, no handwriting, no modifier chord. Each key owns its
- * cell, and a component owns every gesture inside its own.
+ * None of the key grid's word gestures: no glide, no smart hit remap, no
+ * handwriting, no modifier chord. Each key owns its cell, and a component owns
+ * every gesture inside its own. The one board-level gesture a panel does run is
+ * the layer drag off `?123` or `ABC` (issue #210), since a key that names a
+ * layer means the same thing wherever the layout put it.
  */
 @Composable
 internal fun PanelLayoutGrid(
@@ -67,6 +78,123 @@ internal fun PanelLayoutGrid(
     collapsedFields: Set<PanelFieldKind> = emptySet(),
 ) {
     val settings = state.settings
+    if (spec.grid.rows.isEmpty()) return
+
+    // One lambda for the grid's life, so every key sees the same value and a
+    // recomposition of the grid does not restart every key's pointer input.
+    val onPanelKey = remember(callbacks, onClose) {
+        { key: Key -> routePanelKey(key, callbacks.onKey, onClose) }
+    }
+
+    // Issue #210: a drag off a `?123` or `ABC` key on a panel looks through to
+    // that layer the way the same key does on the typing grid (#108), and the
+    // panel is back at the lift. The peeked layer is drawn *over* the panel's
+    // own cells, which stay composed underneath with nothing painted: taking
+    // them out would reset the emoji grid's scroll and the clipboard list with
+    // it, and it would cancel the pointer loop that is running the peek.
+    val peek = rememberLayerPeek()
+    val peekLayout = peek.mode?.let { rememberCurrentLayout(state.peekedFromPanel(it)) }
+    // The peeked layer as a panel grid of keys alone, so its rows share the
+    // panel's height by their row heights and the keyboard never moves.
+    val peekSpec = remember(peekLayout, spec.panel) {
+        peekLayout?.let { PanelLayoutSpec(spec.panel, LayerSpec(rows = it.rows, rowHeights = it.rowHeights)) }
+    }
+    // Every key's cell in the grid's own space, one table per grid drawn. The
+    // peek loop reads the one on screen, and a new table appearing is how it
+    // knows the peeked layer has been laid out.
+    val panelRects = remember(spec) { KeyRects() }
+    val peekRects = remember(peekSpec) { KeyRects() }
+    val liveRects = rememberUpdatedState(if (peekSpec != null) peekRects else panelRects)
+    val liveMode = rememberUpdatedState(state.layoutMode)
+    val hapticOn = rememberUpdatedState(settings.haptics.enabled)
+    val pickerHaptic = LocalHapticFeedback.current
+    val gesture = settings.gesture
+    val trailMs = gesture.trailDurationMs.toLong()
+    val trail = remember { GlideTrail() }
+    // The band's fade after the lift, as on the typing grid.
+    LaunchedEffect(trail.visible) {
+        while (trail.visible) {
+            withFrameMillis { now -> trail.tick(now, trailMs) }
+        }
+    }
+
+    // The screen's bubbles when a frame is drawing them, this grid's own
+    // otherwise — see [LocalKeyPreviewState].
+    val hoistedPreview = LocalKeyPreviewState.current
+    val ownPreview = remember { KeyPreviewState() }
+    val keyPreview = hoistedPreview ?: ownPreview
+    var boxOrigin by remember { mutableStateOf(Offset.Zero) }
+    var boxWindow by remember { mutableStateOf(Offset.Zero) }
+    var boxSize by remember { mutableStateOf(IntSize.Zero) }
+    Box(
+        modifier = modifier
+            .padding(horizontal = KeyRowsPadHorizontal, vertical = KeyRowsPadVertical)
+            .onGloballyPositioned {
+                boxOrigin = it.positionInRoot()
+                boxWindow = it.positionInWindow()
+                boxSize = it.size
+            }
+            // After the padding, so a pointer arrives in the same space the
+            // grids below record their cells in.
+            .pointerInput(onPanelKey, trailMs, settings.longPressDelayMs) {
+                detectLayerPeek(
+                    peek = peek,
+                    rects = { liveRects.value },
+                    origin = { Offset.Zero },
+                    window = { boxWindow },
+                    peekFor = { source -> panelLayerDragMode(source, liveMode.value) },
+                    trail = trail,
+                    trailMs = trailMs,
+                    dwellMs = settings.longPressDelayMs.toLong(),
+                    onPopupOpen = { if (hapticOn.value) pickerHaptic() },
+                    onKey = onPanelKey,
+                )
+            },
+    ) {
+        PanelKeyGrid(
+            state, spec, callbacks, onPanelKey, fields, keyPreview, panelRects, collapsedFields,
+            // Read in the layer block, so a peek starting and ending repaints
+            // and never recomposes the panel.
+            Modifier.graphicsLayer { alpha = if (peek.mode != null) 0f else 1f },
+        )
+        if (peekSpec != null) {
+            PanelKeyGrid(state, peekSpec, callbacks, onPanelKey, { _ -> }, keyPreview, peekRects)
+        }
+        LayerPeekHighlight(peek, settings)
+        if (trail.visible) {
+            val kb = LocalKbTheme.current
+            Canvas(modifier = Modifier.matchParentSize()) {
+                drawTrailBand(trail, kb.gestureTrail, gesture.trailOpacity, gesture.trailWidthDp.dp.toPx(), trailMs)
+            }
+        }
+        if (hoistedPreview == null) {
+            KeyPreviewOverlay(
+                keyPreview, settings, boxOrigin, boxSize,
+                modifier = Modifier.matchParentSize(),
+                virtualHeadroom = true,
+            )
+        }
+        LayerPeekPopup(peek, settings.popup, onPanelKey, callbacks.onText)
+    }
+}
+
+/**
+ * One panel grid's cells: its keys and components laid out by [panelRowTops],
+ * with every key's cell filed in [rects] for the layer drag.
+ */
+@Composable
+private fun PanelKeyGrid(
+    state: KeyboardUiState,
+    spec: PanelLayoutSpec,
+    callbacks: PanelLayoutCallbacks,
+    onPanelKey: (Key) -> Unit,
+    fields: @Composable (PanelFieldKind) -> Unit,
+    keyPreview: KeyPreviewState,
+    rects: KeyRects,
+    collapsedFields: Set<PanelFieldKind> = emptySet(),
+    modifier: Modifier = Modifier,
+) {
+    val settings = state.settings
     val kb = LocalKbTheme.current
     val palette = remember(kb) { kb.keyPalette() }
     val rows = spec.grid.rows
@@ -78,12 +206,6 @@ internal fun PanelLayoutGrid(
         fontId = spec.appearance?.fontId,
         fontScale = spec.grid.fontScale ?: spec.appearance?.fontScale,
     ).drawnFontScale()
-
-    // One lambda for the grid's life, so every key sees the same value and a
-    // recomposition of the grid does not restart every key's pointer input.
-    val onPanelKey = remember(callbacks, onClose) {
-        { key: Key -> routePanelKey(key, callbacks.onKey, onClose) }
-    }
 
     // Everything a key's face reads, as `rememberKeyGrid` lists it: a keystroke
     // that changes none of these leaves every key identical and skipped.
@@ -125,77 +247,65 @@ internal fun PanelLayoutGrid(
         }
     }
 
-    // The screen's bubbles when a frame is drawing them, this grid's own
-    // otherwise — see [LocalKeyPreviewState].
-    val hoistedPreview = LocalKeyPreviewState.current
-    val ownPreview = remember { KeyPreviewState() }
-    val keyPreview = hoistedPreview ?: ownPreview
-    var boxOrigin by remember { mutableStateOf(Offset.Zero) }
-    var boxSize by remember { mutableStateOf(IntSize.Zero) }
-    Box(
-        modifier = modifier
-            .padding(horizontal = KeyRowsPadHorizontal, vertical = KeyRowsPadVertical)
-            .onGloballyPositioned {
-                boxOrigin = it.positionInRoot()
-                boxSize = it.size
-            },
-    ) {
-        Layout(
-            content = {
-                for (panelSlot in slots) {
-                    val field = panelSlot.field
-                    if (field != null) {
-                        // Inset by the key gaps so the component's edges line up
-                        // with the faces of the keys beside it.
-                        Box(Modifier.padding(horizontal = gapH, vertical = gapV)) { fields(field) }
-                    } else {
-                        KeyButton(
-                            visual = panelSlot.visual!!,
-                            settings = settings,
-                            onKey = onPanelKey,
-                            onText = callbacks.onText,
-                            onCursorMove = callbacks.onCursorMove,
-                            onLayoutSelect = callbacks.onLayoutSelect,
-                            // What this key would be on a row of its own; the
-                            // measure policy below hands it the real height.
-                            heightDp = rowHeightsDp[panelSlot.slot.row],
-                            layoutId = state.layoutId,
-                            keyPreview = keyPreview,
-                        )
-                    }
+    Layout(
+        modifier = modifier,
+        content = {
+            for (panelSlot in slots) {
+                val field = panelSlot.field
+                if (field != null) {
+                    // Inset by the key gaps so the component's edges line up
+                    // with the faces of the keys beside it.
+                    Box(Modifier.padding(horizontal = gapH, vertical = gapV)) { fields(field) }
+                } else {
+                    KeyButton(
+                        visual = panelSlot.visual!!,
+                        settings = settings,
+                        onKey = onPanelKey,
+                        onText = callbacks.onText,
+                        onCursorMove = callbacks.onCursorMove,
+                        onLayoutSelect = callbacks.onLayoutSelect,
+                        // What this key would be on a row of its own; the
+                        // measure policy below hands it the real height.
+                        heightDp = rowHeightsDp[panelSlot.slot.row],
+                        layoutId = state.layoutId,
+                        keyPreview = keyPreview,
+                    )
                 }
-            },
-        ) { measurables, constraints ->
-            val width = constraints.maxWidth
-            val tops = panelRowTops(fixedPx, weights, flex, constraints.maxHeight)
-            val unit = if (gridWeight > 0f) width / gridWeight else 0f
-            val lefts = IntArray(measurables.size)
-            val placeables = measurables.mapIndexed { index, measurable ->
-                val slot = slots[index].slot
-                // Each edge rounded on its own, so neighbours stay flush.
-                val left = (unit * slot.x).roundToInt()
-                val right = (unit * slot.end).roundToInt()
-                lefts[index] = left
-                val last = (slot.row + slot.span).coerceAtMost(rows.size)
-                measurable.measure(
-                    Constraints.fixed(
-                        width = (right - left).coerceIn(0, width),
-                        height = (tops[last] - tops[slot.row]).coerceAtLeast(0),
-                    ),
+            }
+        },
+    ) { measurables, constraints ->
+        val width = constraints.maxWidth
+        val tops = panelRowTops(fixedPx, weights, flex, constraints.maxHeight)
+        val unit = if (gridWeight > 0f) width / gridWeight else 0f
+        val lefts = IntArray(measurables.size)
+        // A fresh token per pass: the first cell filed under it wipes the cells
+        // a previous size left behind.
+        val generation = Any()
+        val placeables = measurables.mapIndexed { index, measurable ->
+            val slot = slots[index].slot
+            // Each edge rounded on its own, so neighbours stay flush.
+            val left = (unit * slot.x).roundToInt()
+            val right = (unit * slot.end).roundToInt()
+            lefts[index] = left
+            val last = (slot.row + slot.span).coerceAtMost(rows.size)
+            if (slots[index].field == null) {
+                rects.record(
+                    generation,
+                    slot.key,
+                    Rect(left.toFloat(), tops[slot.row].toFloat(), right.toFloat(), tops[last].toFloat()),
                 )
             }
-            layout(width, tops.last()) {
-                placeables.forEachIndexed { index, placeable ->
-                    placeable.placeRelative(lefts[index], tops[slots[index].slot.row])
-                }
-            }
-        }
-        if (hoistedPreview == null) {
-            KeyPreviewOverlay(
-                keyPreview, settings, boxOrigin, boxSize,
-                modifier = Modifier.matchParentSize(),
-                virtualHeadroom = true,
+            measurable.measure(
+                Constraints.fixed(
+                    width = (right - left).coerceIn(0, width),
+                    height = (tops[last] - tops[slot.row]).coerceAtLeast(0),
+                ),
             )
+        }
+        layout(width, tops.last()) {
+            placeables.forEachIndexed { index, placeable ->
+                placeable.placeRelative(lefts[index], tops[slots[index].slot.row])
+            }
         }
     }
 }

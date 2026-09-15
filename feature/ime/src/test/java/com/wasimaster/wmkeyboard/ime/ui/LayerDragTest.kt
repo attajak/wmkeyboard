@@ -64,6 +64,29 @@ class LayerDragTest {
         assertNull(layerDragMode(null, LayoutMode.LETTERS))
     }
 
+    // ---- panelLayerDragMode (issue #210) ------------------------------------
+
+    /** A panel's `?123` takes the same step a tap on it would. */
+    @Test
+    fun `a panel's symbols key shows the layer a tap would reach`() {
+        assertEquals(LayoutMode.SYMBOLS, panelLayerDragMode(symbols, LayoutMode.LETTERS))
+        assertEquals(LayoutMode.SYMBOLS_SHIFTED, panelLayerDragMode(symbols, LayoutMode.SYMBOLS))
+    }
+
+    /** A panel is not a layer of the grid, so the letters are always somewhere to look. */
+    @Test
+    fun `a panel's ABC key shows the letters even over the letters`() {
+        assertEquals(LayoutMode.LETTERS, panelLayerDragMode(letters, LayoutMode.LETTERS))
+        assertEquals(LayoutMode.LETTERS, panelLayerDragMode(letters, LayoutMode.SYMBOLS))
+    }
+
+    @Test
+    fun `every other panel key starts nothing`() {
+        assertNull(panelLayerDragMode(Key("a"), LayoutMode.LETTERS))
+        assertNull(panelLayerDragMode(Key("", action = KeyAction.Shift), LayoutMode.LETTERS))
+        assertNull(panelLayerDragMode(null, LayoutMode.LETTERS))
+    }
+
     // ---- startsLayerDrag and ownsDrag ---------------------------------------
 
     @Test
