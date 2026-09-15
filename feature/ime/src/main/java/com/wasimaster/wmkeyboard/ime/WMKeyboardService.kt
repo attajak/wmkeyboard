@@ -1194,6 +1194,12 @@ open class WMKeyboardService : InputMethodService() {
     private var glideTriggerSnippets: Set<String>? = null
     private var glideTriggerShortcuts: Map<String, String>? = null
     /**
+     * [glideExpansionOf] for the words the current stroke has read, misses
+     * included, so a snippet with choices is rolled once a stroke rather than
+     * once a preview frame. Cleared in [clearGlidePreview]. Main thread only.
+     */
+    private val glideExpansionCache = HashMap<String, GlideExpansion?>()
+    /**
      * Every word in Android's personal dictionary, for
      * [SuggestionStripSettings.useSystemDictionary] (#45). Handed to
      * [SuggestionEngine.systemDictionary]; loaded with [userDictShortcuts] and
@@ -13890,6 +13896,7 @@ open class WMKeyboardService : InputMethodService() {
                     emptyMap()
                 }
                 if (request.generation != gestureGeneration.get()) continue
+                val expansions = glideExpansionsFor(_uiState.value, steadied.words)
                 _uiState.update {
                     it.copy(
                         suggestions = steadied.words,
@@ -13903,6 +13910,7 @@ open class WMKeyboardService : InputMethodService() {
                         // asked a capital of.
                         glideCase = request.case,
                         glideCased = cased,
+                        glideExpansions = expansions,
                         // The word a lift would type, published as the promise
                         // it is rather than left as one more bold suggestion
                         // (#121). [KeyboardUiState.autocorrectWord] is already
@@ -14012,11 +14020,13 @@ open class WMKeyboardService : InputMethodService() {
         // is reset here too: a new stroke must never inherit the last one's
         // word, or its first reading would be judged against a stranger.
         previewGate.reset()
+        glideExpansionCache.clear()
         _uiState.update { state ->
             state.copy(
                 glideWord = null,
                 glideCase = GlideCase.None,
                 glideCased = emptyMap(),
+                glideExpansions = emptyMap(),
                 glideChoices = emptyList(),
                 glideCloseCall = false,
                 // Only the promise this stroke made. A flick short enough to
@@ -14335,6 +14345,69 @@ open class WMKeyboardService : InputMethodService() {
         engine.glideTriggers = SuggestionEngine.triggerSource(snippets + shortcuts.keys)
     }
 
+    /** Whether a glided trigger expands at all: not under a transliterating or converting composer. */
+    private fun glideExpands(state: KeyboardUiState): Boolean =
+        !state.composer.isTransliterating && !state.composer.isConversion
+
+    /** The snippet a glided [word] fires, or null. A snippet that asks first never fires on a glide. */
+    private fun glidedSnippet(word: String): Snippet? =
+        snippetStore.matchTrigger(word)?.takeIf { !snippetStore.offers(it) }
+
+    /** The personal-dictionary phrase a glided [word] expands to, or null. */
+    private fun glidedShortcut(state: KeyboardUiState, word: String): String? =
+        userDictShortcuts[word.lowercase()]
+            ?.takeIf { state.settings.suggestionStrip.expandUserDictShortcuts }
+
+    /**
+     * What a lift would type for each of [words] that is a trigger, keyed by
+     * the raw word, so the pill and the strip can show the expansion rather
+     * than a trigger that never lands (#205). Read through
+     * [glideExpansionCache], so a snippet with choices is not re-rolled on
+     * every preview frame.
+     */
+    private fun glideExpansionsFor(
+        state: KeyboardUiState,
+        words: List<String>,
+    ): Map<String, GlideExpansion> {
+        if (!glideExpands(state)) return emptyMap()
+        return buildMap {
+            for (word in words) {
+                val expansion = if (glideExpansionCache.containsKey(word)) {
+                    glideExpansionCache[word]
+                } else {
+                    glideExpansionOf(state, word).also { glideExpansionCache[word] = it }
+                }
+                if (expansion != null) put(word, expansion)
+            }
+        }
+    }
+
+    /**
+     * [word]'s expansion in each casing a stroke can ask for, cased the way
+     * [glidedExpansion] would type it, or null when [word] is not a trigger.
+     * Types nothing. The selection is left out of a snippet's context: reading
+     * it is a round trip to the app for every new word a stroke reads.
+     */
+    private fun glideExpansionOf(state: KeyboardUiState, word: String): GlideExpansion? {
+        glidedSnippet(word)?.let { snippet ->
+            val text = SnippetStore.expandWithCursor(
+                snippet.text,
+                context = snippetContext(currentInputConnection, withSelection = false),
+            ).text
+            return GlideExpansion(
+                plain = text,
+                capitalized = SnippetStore.casingFor(snippet, word.replaceFirstChar { it.uppercase() }).apply(text),
+                shouted = SnippetStore.casingFor(snippet, word.uppercase()).apply(text),
+            )
+        }
+        val phrase = glidedShortcut(state, word) ?: return null
+        return GlideExpansion(
+            plain = phrase,
+            capitalized = casedLikeTrigger(phrase, word.replaceFirstChar { it.uppercase() }),
+            shouted = casedLikeTrigger(phrase, word.uppercase()),
+        )
+    }
+
     /**
      * Types the expansion of a glided [word] that is a text-expansion trigger —
      * a snippet's trigger or a shortcut from Android's personal dictionary — in
@@ -14356,13 +14429,9 @@ open class WMKeyboardService : InputMethodService() {
         state: KeyboardUiState,
         word: String,
     ): SnippetStore.Companion.Expanded? {
-        if (state.composer.isTransliterating || state.composer.isConversion) return null
-        val snippet = snippetStore.matchTrigger(word)?.takeIf { !snippetStore.offers(it) }
-        val shortcut = if (snippet == null && state.settings.suggestionStrip.expandUserDictShortcuts) {
-            userDictShortcuts[word.lowercase()]
-        } else {
-            null
-        }
+        if (!glideExpands(state)) return null
+        val snippet = glidedSnippet(word)
+        val shortcut = if (snippet == null) glidedShortcut(state, word) else null
         val expanded = when {
             snippet != null -> SnippetStore.expandWithCursor(
                 snippet.text,

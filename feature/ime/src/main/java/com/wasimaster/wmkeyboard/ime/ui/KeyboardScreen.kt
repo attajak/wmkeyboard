@@ -407,6 +407,7 @@ import com.wasimaster.wmkeyboard.ime.FocusRegion
 import com.wasimaster.wmkeyboard.core.plugins.PluginEvent
 import com.wasimaster.wmkeyboard.ime.DictionaryChip
 import com.wasimaster.wmkeyboard.ime.DictionaryKind
+import com.wasimaster.wmkeyboard.ime.GlideExpansion
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.SnippetChip
 import com.wasimaster.wmkeyboard.ime.transliterationHintsShown
@@ -3457,6 +3458,8 @@ private fun TopBar(
                     // Per-letter capitals a stroke drew (#163), which no one
                     // shift state can say; empty under the whole-word reading.
                     casedWords = state.glideCased,
+                    // A glided trigger shows what the lift types for it (#205).
+                    expansions = state.glideExpansions,
                     // Only while the live candidates are the ones on screen: the
                     // strip holds the last set behind alpha 0, and a key promised
                     // against a faded word would commit something else.
@@ -3684,6 +3687,11 @@ private fun RowScope.LatinSuggestionChips(
      * names; the raw word is still what a tap commits.
      */
     casedWords: Map<String, String> = emptyMap(),
+    /**
+     * Words that are text-expansion triggers a glide will expand, keyed by the
+     * raw word (#205): drawn as "fk = FUTO Keyboard" with the trigger dimmed.
+     */
+    expansions: Map<String, GlideExpansion> = emptyMap(),
     /** The hotkey badges, or null when no physical keyboard is asking for them. */
     hints: HintPlan? = null,
     onSuggestion: (String) -> Unit,
@@ -3812,6 +3820,19 @@ private fun RowScope.LatinSuggestionChips(
                     } else {
                         casedWords[suggestion] ?: displayCaseForShift(suggestion, shiftState)
                     }
+                    // See the colour note on the Text below.
+                    val textColor = if (
+                        primaryColor != null &&
+                            suggestion.equals(autocorrectWord, ignoreCase = true)
+                    ) {
+                        primaryColor
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    }
+                    val label = expansions[suggestion]
+                        ?.takeIf { !isEmoji }
+                        ?.let { glideExpansionLabel(display, it.previewFor(display), textColor) }
+                        ?: AnnotatedString(display)
                     val family = if (isEmoji) emojiFamilyFor(suggestion) else null
                     val weight =
                         if (index == primaryIndex) FontWeight.SemiBold else FontWeight.Normal
@@ -3821,9 +3842,9 @@ private fun RowScope.LatinSuggestionChips(
                     val fit = if (scrollable) {
                         // Natural width: nothing to fit, the row scrolls instead.
                         SuggestionTextFit(1f, 1f)
-                    } else remember(display, family, weight, textWidth, baseSize, baseStyle) {
+                    } else remember(label, family, weight, textWidth, baseSize, baseStyle) {
                         val measured = measurer.measure(
-                            text = AnnotatedString(display),
+                            text = label,
                             style = baseStyle.merge(
                                 TextStyle(
                                     fontSize = baseSize,
@@ -3840,7 +3861,7 @@ private fun RowScope.LatinSuggestionChips(
                         )
                     }
                     Text(
-                        text = display,
+                        text = label,
                         modifier = Modifier.padding(horizontal = textPadding),
                         // The user's own colour on the word the commit will
                         // really put in, and on no other: the primary is only
@@ -3851,14 +3872,7 @@ private fun RowScope.LatinSuggestionChips(
                         // reads the same whether it is a space or a fingertip
                         // about to keep it. The bold stays on the primary
                         // either way.
-                        color = if (
-                            primaryColor != null &&
-                                suggestion.equals(autocorrectWord, ignoreCase = true)
-                        ) {
-                            primaryColor
-                        } else {
-                            MaterialTheme.colorScheme.onSurface
-                        },
+                        color = textColor,
                         fontSize = baseSize * fit.fontScale,
                         softWrap = false,
                         // The default 0.5sp tracking is dead width once a word is
@@ -13357,8 +13371,12 @@ private fun KeyRows(
                     state.glideWord.equals(state.autocorrectWord, ignoreCase = true)
             }
             ?.let { Color(it.toInt()) }
+        // A trigger the lift will expand shows what it expands to (#205).
+        val pillExpansion = pillWord?.let { shown ->
+            state.glideWord?.let(state.glideExpansions::get)?.previewFor(shown)
+        }
         if (pillWord != null || picker.words.isNotEmpty()) {
-            GlideOverlay(trail, picker, pillWord, glide, boxSize, pillPromise)
+            GlideOverlay(trail, picker, pillWord, glide, boxSize, pillPromise, pillExpansion)
         }
 
         // The alternates a layer peek is holding open (issue #108). Hung off a
@@ -13441,6 +13459,7 @@ private fun GlideOverlay(
     glide: GestureSettings,
     gridSize: IntSize,
     promise: Color? = null,
+    expansion: String? = null,
 ) {
     val theme = LocalKbTheme.current
     val density = LocalDensity.current
@@ -13482,7 +13501,7 @@ private fun GlideOverlay(
         Layout(
             content = {
                 if (word != null) {
-                    GlideWordPill(word, glide, theme, promise, Modifier.layoutId(GlidePillId))
+                    GlideWordPill(word, glide, theme, promise, Modifier.layoutId(GlidePillId), expansion)
                 }
                 words.forEachIndexed { index, target ->
                     GlidePickerTarget(
@@ -13642,6 +13661,22 @@ private fun GlideHintPill(text: String, theme: KbTheme, modifier: Modifier) {
 }
 
 /**
+ * "fk = FUTO Keyboard": a glided [trigger] dimmed ahead of the [expansion] a
+ * lift types in its place (#205), so the eye lands on the text that will land.
+ */
+private fun glideExpansionLabel(trigger: String, expansion: String, color: Color): AnnotatedString =
+    buildAnnotatedString {
+        withStyle(SpanStyle(color = color.copy(alpha = color.alpha * GlideTriggerAlpha))) {
+            append(trigger)
+        }
+        append(" = ")
+        append(expansion)
+    }
+
+/** How much of its colour a glided trigger keeps beside its expansion. */
+private const val GlideTriggerAlpha = 0.5f
+
+/**
  * The floating word: what the stroke decodes to so far, hovering above the
  * finger like a key popup.
  */
@@ -13652,21 +13687,28 @@ private fun GlideWordPill(
     theme: KbTheme,
     promise: Color?,
     modifier: Modifier,
+    /** What [word] expands to when it is a trigger (#205), drawn after it. */
+    expansion: String? = null,
 ) {
+    // The promise wins the text: it is the whole reason it was passed, and
+    // a pill drawn in the user's chosen preview colour would say nothing
+    // the bold on the strip does not already say.
+    val textColor = promise
+        ?: glide.wordPreviewTextColor?.let { Color(it.toInt()) }
+        ?: theme.popupText
     Surface(
         modifier = modifier,
         color = glide.wordPreviewBackground?.let { Color(it.toInt()) } ?: theme.popup,
-        // The promise wins the text: it is the whole reason it was passed, and
-        // a pill drawn in the user's chosen preview colour would say nothing
-        // the bold on the strip does not already say.
-        contentColor = promise
-            ?: glide.wordPreviewTextColor?.let { Color(it.toInt()) }
-            ?: theme.popupText,
+        contentColor = textColor,
         shape = theme.popupShape(),
         shadowElevation = elevationFor(theme.popupShapeKind, 4.dp),
     ) {
         Text(
-            text = word,
+            text = if (expansion == null) {
+                AnnotatedString(word)
+            } else {
+                glideExpansionLabel(word, expansion, textColor)
+            },
             modifier = Modifier.padding(horizontal = 12.dp, vertical = GlidePillPaddingV),
             fontSize = glide.wordPreviewFontSp.sp,
             fontWeight = FontWeight.Medium,
