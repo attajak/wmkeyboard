@@ -6,7 +6,8 @@ import { Spinner } from './common';
 export function lazyView<P>(load: () => Promise<ComponentType<P>>): ComponentType<P> {
 	let cached: ComponentType<P> | null = null;
 	return function LazyView(props: P) {
-		const [C, setC] = useState<ComponentType<P> | null>(cached);
+		// Wrapped: handed a function, useState would call the component as an initializer.
+		const [C, setC] = useState<ComponentType<P> | null>(() => cached);
 		useEffect(() => {
 			if (C) return;
 			let live = true;

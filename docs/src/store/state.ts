@@ -137,8 +137,13 @@ export function hydrate() {
 	onAndroid.value = /android/i.test(navigator.userAgent);
 	// The static pages are built without their query string (?repo=, ?type=,
 	// ?items=); the URL in the browser is the authority once we're here.
+	// /addons/?repo= is served by the home page, so the parsed view can differ
+	// from the static one; this runs after hydration, so switching is safe.
 	const parsed = parseLocation(location.pathname, location.search);
-	if (parsed && parsed.view === route.value.view) route.value = parsed;
+	if (parsed) {
+		route.value = parsed;
+		if ('repo' in parsed && parsed.repo) activeRepo.value = parsed.repo;
+	}
 	const state = loadRepoState();
 	const preloadedByUrl = new Map(repos.value.map((r) => [r.ref.url, r]));
 	batch(() => {
@@ -438,7 +443,8 @@ export function navigate(r: Route, replace = false) {
 	}
 	if (typeof history !== 'undefined') {
 		const href = hrefFor(r);
-		if (replace) history.replaceState({ route: r }, '', href);
+		// Re-clicking the page you're on shouldn't stack a history entry.
+		if (replace || href === location.pathname + location.search) history.replaceState({ route: r }, '', href);
 		else history.pushState({ route: r }, '', href);
 		window.scrollTo({ top: 0 });
 	}

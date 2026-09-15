@@ -20,7 +20,7 @@ import { resolveManifestUrl, describeManifestUrl } from '../lib/resolve';
 import { MAX_REPOS } from '../lib/storage';
 import type { LoadedRepo } from '../lib/types';
 import { Dialog, Link, RepoIcon } from './common';
-import { IconChevron, IconCompare, IconHeart, IconLayers, IconPlus, IconPulse, IconRefresh, IconShield, IconSparkle, IconWand } from './icons';
+import { IconChevron, IconCompare, IconHeart, IconHome, IconLayers, IconPlus, IconPulse, IconRefresh, IconShield, IconSparkle, IconWand } from './icons';
 
 function repoTitle(r: LoadedRepo): string {
 	return r.manifest?.repo.name ?? describeManifestUrl(r.ref.url).label;
@@ -112,6 +112,9 @@ export function TopBar() {
 			</div>
 			<div class="st-topbar-spacer" />
 			<nav class="st-nav" aria-label="Store">
+				<Link to={{ view: 'home' }} aria-current={isCur('home')} title="Store home">
+					<IconHome /> <span class="st-nav-label">Home</span>
+				</Link>
 				<Link to={{ view: 'whatsnew' }} aria-current={isCur('whatsnew')} title="What's new">
 					<IconSparkle /> <span class="st-nav-label">What's new</span>
 					{unseen > 0 && <span class="st-badge-dot">{unseen}</span>}

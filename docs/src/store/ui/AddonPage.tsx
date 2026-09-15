@@ -59,10 +59,6 @@ function AddonDetail({ repo, entry }: { repo: LoadedRepo; entry: AddonEntry }) {
 	const requires = entry.requires.map((id) => repo.manifest?.addons.find((a) => a.id === id) ?? null);
 	const langs = [entry.langId, ...entry.langIds].filter((x): x is string => !!x);
 
-	useEffect(() => {
-		document.title = `${entry.name} · ${info.singular} · WM Keyboard addons`;
-	}, [entry, info]);
-
 	const share = async () => {
 		if (canWebShare()) {
 			try {
