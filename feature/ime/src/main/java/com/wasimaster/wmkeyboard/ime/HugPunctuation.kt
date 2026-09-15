@@ -26,6 +26,15 @@ fun straySpacesBefore(before: CharSequence, mark: Char, marks: String): Int {
     return if (prev.isLetterOrDigit() || prev in HUG_CLOSERS) spaces else 0
 }
 
+/**
+ * Whether a mark landing with [before] behind the caret belongs to a number,
+ * so the automatic space after punctuation (`AutoTextSettings.spaceAfterPunctuation`)
+ * holds off (#206). "5,000", "3.14" and "5:00" carry on past the mark, and a
+ * space typed for the user splits the number in two. Any script's digits
+ * count, so "৫,০০০" is kept whole too.
+ */
+fun markContinuesNumber(before: CharSequence): Boolean = before.lastOrNull()?.isDigit() == true
+
 /** What may stand in front of a hugged mark besides a word: things that close one. */
 private const val HUG_CLOSERS = ")]}\"'”’"
 

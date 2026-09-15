@@ -1717,13 +1717,14 @@ data class AutoTextSettings(
      * Take back a space typed in front of a punctuation mark, so "Hey ." lands
      * as "Hey." and "yes , no" as "yes, no".
      *
-     * Off by default for the same reason as [spaceAfterPunctuation]: it
-     * removes something the user typed. French typography puts a space in
-     * front of `?`, `!`, `:` and `;` on purpose, and a rule that eats it
-     * unasked is wrong there, not helpful. One backspace right after puts the
-     * space back.
+     * On by default (#206): a space in front of a mark is a slip far more often
+     * than a choice, the rule is narrow (only after a word, a number or a
+     * closing bracket), and one backspace right after puts the space back.
+     * French typography puts a space in front of `?`, `!`, `:` and `;` on
+     * purpose; those writers take the four off [hugPunctuationMarks] or turn
+     * the rule off.
      */
-    val hugPunctuation: Boolean = false,
+    val hugPunctuation: Boolean = true,
     /**
      * The marks [hugPunctuation] pulls a space out from in front of, one
      * character each with no separators. Defaults to the sentence and clause

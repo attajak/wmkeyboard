@@ -1,11 +1,23 @@
 package com.wasimaster.wmkeyboard.ime
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class HugPunctuationTest {
 
     private val marks = ".,?!;:"
+
+    @Test
+    fun `a mark after a digit belongs to the number`() {
+        assertTrue(markContinuesNumber("5"))
+        assertTrue(markContinuesNumber("costs 3"))
+        assertTrue(markContinuesNumber("৫"))
+        assertFalse(markContinuesNumber("hello"))
+        assertFalse(markContinuesNumber("5 "))
+        assertFalse(markContinuesNumber(""))
+    }
 
     @Test
     fun `a space between a word and a mark is taken back`() {

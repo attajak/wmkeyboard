@@ -6161,7 +6161,7 @@ open class WMKeyboardService : InputMethodService() {
             // for it: "Hey ." is a slip, and the mark lands on the word. The
             // keyboard's own auto-space was already taken back above.
             val hugged = takeBackStraySpace(ic, text, state)
-            val autoSpace = shouldAutoSpaceAfterPunctuation(state, text)
+            val autoSpace = shouldAutoSpaceAfterPunctuation(ic, state, text)
             if (autoSpace) {
                 // A run of marks ("...", "?!") must not be pulled apart by the
                 // spaces this rule types, so the one from the previous mark is
@@ -6223,13 +6223,20 @@ open class WMKeyboardService : InputMethodService() {
      * into an address or a password is a typo, not a courtesy. Scripts that
      * write without spaces (Chinese, Japanese, Thai…) are excluded too — their
      * punctuation is followed by nothing, and the wide forms (。、！) are not in
-     * [AUTO_SPACE_PUNCTUATION] for the same reason.
+     * [AUTO_SPACE_PUNCTUATION] for the same reason. A mark typed straight after
+     * a digit is part of the number ("5,000", "5:00") and gets no space
+     * (#206, [markContinuesNumber]); the field is read last, and only for a mark.
      */
-    private fun shouldAutoSpaceAfterPunctuation(state: KeyboardUiState, text: String): Boolean =
+    private fun shouldAutoSpaceAfterPunctuation(
+        ic: InputConnection,
+        state: KeyboardUiState,
+        text: String,
+    ): Boolean =
         state.settings.autoText.spaceAfterPunctuation &&
             state.allowsTypingIntelligence &&
             !state.composer.isConversion &&
-            text.length == 1 && text[0] in AUTO_SPACE_PUNCTUATION
+            text.length == 1 && text[0] in AUTO_SPACE_PUNCTUATION &&
+            !markContinuesNumber(ic.getTextBeforeCursor(1, 0) ?: "")
 
     /**
      * Types the space that follows an auto-spaced punctuation mark, unless the
