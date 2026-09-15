@@ -157,7 +157,7 @@ class NgramRerankerTest {
         // back vouches on its own and lifts "world" one slot, past the
         // runner-up but never past a candidate the walk ranked two clear.
         val lexicon = UserLexicon(null)
-        repeat(50) { lexicon.learnSkip2gram("go", "world") }
+        repeat(50) { lexicon.learnSkip1gram("go", "world") }
         val r = reranker(lexicon)
         val out = r.rerank(context(prev = "the", prev2 = "go"), listOf("words", "work", "world"))
         assertEquals(listOf("words", "world", "work"), out)
@@ -176,7 +176,7 @@ class NgramRerankerTest {
         val r = reranker(lexicon)
         val direct = r.rerank(context(prev = "my", prev2 = "deploy"), listOf("servers", "service"))
         assertEquals(listOf("servers", "service"), direct)
-        repeat(3) { lexicon.learnSkip2gram("deploy", "service") }
+        repeat(3) { lexicon.learnSkip1gram("deploy", "service") }
         val pooled = r.rerank(context(prev = "my", prev2 = "deploy"), listOf("servers", "service"))
         assertEquals(listOf("service", "servers"), pooled)
     }
@@ -191,9 +191,9 @@ class NgramRerankerTest {
         val lexicon = UserLexicon(null)
         val r = reranker(lexicon)
         val ctx = context(prev = "the", prev2 = "so", prev3 = "gotten")
-        repeat(5) { lexicon.learnSkip3gram("gotten", "world") }
+        repeat(5) { lexicon.learnSkip2gram("gotten", "world") }
         assertEquals(listOf("words", "work", "world"), r.rerank(ctx, listOf("words", "work", "world")))
-        repeat(20) { lexicon.learnSkip3gram("gotten", "world") }
+        repeat(20) { lexicon.learnSkip2gram("gotten", "world") }
         assertEquals(listOf("words", "world", "work"), r.rerank(ctx, listOf("words", "work", "world")))
         // Without a word three back there is nothing to read.
         assertNull(r.rerank(context(prev = "the", prev2 = "so"), listOf("words", "world")))

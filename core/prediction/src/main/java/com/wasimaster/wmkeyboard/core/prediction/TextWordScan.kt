@@ -54,7 +54,7 @@ object TextWordScan {
         /** Word, any word, word: the two ends, as keys, each once. */
         val skips: Set<Pair<String, String>>,
         /** Word, any two words, word: the two ends, as keys, each once (#195). */
-        val skips3: Set<Pair<String, String>> = emptySet(),
+        val skips2: Set<Pair<String, String>> = emptySet(),
     ) {
         companion object {
             val EMPTY = Result(emptyList(), emptySet(), emptySet(), emptySet())
@@ -73,7 +73,7 @@ object TextWordScan {
         val pairs = LinkedHashSet<Pair<String, String>>()
         val triples = LinkedHashSet<Triple<String, String, String>>()
         val skips = LinkedHashSet<Pair<String, String>>()
-        val skips3 = LinkedHashSet<Pair<String, String>>()
+        val skips2 = LinkedHashSet<Pair<String, String>>()
         var prev1: String? = null
         var prev2: String? = null
         var prev3: String? = null
@@ -149,7 +149,7 @@ object TextWordScan {
                     if (p2 != null) {
                         triples.add(Triple(p2, p1, key))
                         skips.add(p2 to key)
-                        if (p3 != null) skips3.add(p3 to key)
+                        if (p3 != null) skips2.add(p3 to key)
                     }
                 }
                 prev3 = p2
@@ -178,7 +178,7 @@ object TextWordScan {
                 caseEvidence = spelling != tally.key,
             )
         }
-        return Result(words, pairs, triples, skips, skips3)
+        return Result(words, pairs, triples, skips, skips2)
     }
 
     private fun letterOrDigit(c: Char): Boolean = WordContext.isWordChar(c) || c.isDigit()

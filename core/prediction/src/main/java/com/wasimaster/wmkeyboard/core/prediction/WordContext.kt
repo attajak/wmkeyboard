@@ -134,7 +134,7 @@ object WordContext {
      * The last three completed words before the caret, most recent first:
      * `(prev1, prev2, prev3)`. Same contract as [lastTwoWords] one word
      * further back: prev3 is null when unknown or when any boundary lies
-     * between it and the caret, so the distance-3 skip-gram (#195) reads
+     * between it and the caret, so the 2-skip bigrams (#195) reads
      * nothing across a sentence end.
      */
     fun lastThreeWords(text: CharSequence?, enders: CharArray): Triple<String?, String?, String?> {

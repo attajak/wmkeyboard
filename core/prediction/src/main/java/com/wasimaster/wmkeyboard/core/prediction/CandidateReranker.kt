@@ -9,7 +9,7 @@ class RerankContext(
      * sentence boundary — same contract as the engine's trigram context. */
     val previousWord2: String? = null,
     /** The word before [previousWord2], under the same contract, for the
-     * distance-3 skip-gram (#195). */
+     * 2-skip bigrams (#195). */
     val previousWord3: String? = null,
 )
 

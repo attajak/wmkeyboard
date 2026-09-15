@@ -163,8 +163,8 @@ class SuggestionEngineTest {
         // "help" has followed "can" one word later and "how" two words later.
         val lexicon = UserLexicon(null)
         lexicon.learnBigram("someone", "else")
-        repeat(2) { lexicon.learnSkip2gram("can", "help") }
-        repeat(3) { lexicon.learnSkip3gram("how", "please") }
+        repeat(2) { lexicon.learnSkip1gram("can", "help") }
+        repeat(3) { lexicon.learnSkip2gram("how", "please") }
         val e = SuggestionEngine(Trie(), BengaliPhoneticIndex(emptyList()), lexicon)
         val next = e.suggest("", previousWord = "someone", previousWord2 = "can", previousWord3 = "how")
         // Direct follower first, then the gappy ones, nearer first.

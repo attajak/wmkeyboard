@@ -130,7 +130,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Four memory levels `RARE` — Off keeps no pair memory, Light never retires a pair, Normal is the shipped balance, Strict retires on the first undo however it was read
     - Penalties age out — A pair untouched for 180 saves loses a count; 500-pair cap
     - Stored outside the lexicon — A rejection persists even with learning off or in incognito
-- **Personal learning** — On-device lexicon of words, bigrams, trigrams and distance-2 and distance-3 skip-grams; nothing leaves the device
+- **Personal learning** — On-device lexicon of words, bigrams, trigrams and 1-skip and 2-skip bigrams (named by words skipped); nothing leaves the device
   - Graded reinforcement `RARE` — How deliberately a word was typed decides how hard it teaches
     - Tapped suggestion counts double
     - Typed and committed counts once
@@ -138,7 +138,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Manually added word starts at one use — Marked as added by hand instead of boosted (#164): shielded from autocorrect at any learn-after threshold, evicted last, and it earns weight by being typed like any other word; the row reads "You added this word · Seen N times" (#165)
   - Store shape and bounds `uncommon` — JSON snapshot in app-private storage
     - 10,000 words, evicting to 9,000 — 10% hysteresis so compaction doesn't churn on every save
-    - 5,000 bigram heads, 2,000 trigram contexts, 2,000 distance-2 and 1,000 distance-3 skip-gram heads, 32 followers each
+    - 5,000 bigram heads, 2,000 trigram contexts, 2,000 1-skip and 1,000 2-skip bigram heads, 32 followers each
     - Exponential decay at compaction — count x 2^(-age/64 save-generations); user-added words evicted last
     - Dirty-flag save on dismissal — A dismissal with nothing new re-encodes nothing
     - Word length 32, count capped at 1,000,000
@@ -184,8 +184,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - NgramReranker `RARE` — Interpolated rescorer over the top 8 candidates, on-device only
     - Base is the engine's rank, not raw frequency — Preserves edit costs and touch likelihood already encoded in the incoming order
     - Nine weighted, capped terms — User trigram/bigram/two skip-grams, pack trigram/bigram, seed bigram, two OOV backoff terms, plus recency
-    - Stored distance-2 skip-gram, always consulted (#195) — The word two back vouches across any middle word; pools what the trigram splits, still speaks when the middle word is unknown; lifts one rank alone, never two
-    - Stored distance-3 skip-gram (#195) — The word three back vouches across two middle words ("gotten so that you've"); weaker, lifts one rank alone only once seen a dozen times
+    - Stored 1-skip bigram, always consulted (#195) — The word two back vouches across any middle word; pools what the trigram splits, still speaks when the middle word is unknown; lifts one rank alone, never two
+    - Stored 2-skip bigram (#195) — The word three back vouches across two middle words ("gotten so that you've"); weaker, lifts one rank alone only once seen a dozen times
     - Returns null with no evidence — A reorder can only ever be evidence-driven
     - Skip-gram backoff behind an OOV previous word — Weaker than the direct bigram it stands in for
     - Never read by autocorrect — shouldAutocorrect reads the raw walk ranking, so a rerank can't become a silent replacement

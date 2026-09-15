@@ -1651,7 +1651,7 @@ class SuggestionEngine(
      * @param keys which letters each keystroke could have meant, on a keyboard
      *        that puts several on a key (null on every 1:1 board)
      * @param previousWord3 the word before [previousWord2], for the reranker's
-     *        distance-3 skip-gram (#195)
+     *        2-skip bigrams (#195)
      */
     fun suggest(
         composing: String,
@@ -2205,10 +2205,10 @@ class SuggestionEngine(
         // "how can someone" still offers "help". Personal, so above the
         // corpus and the seeds; gappy, so below every direct follower.
         previousWord2?.lowercase()?.let { prev2 ->
-            ordered.addAll(userLexicon.skip2Followers(prev2, limit))
+            ordered.addAll(userLexicon.skip1Followers(prev2, limit))
         }
         previousWord3?.lowercase()?.let { prev3 ->
-            ordered.addAll(userLexicon.skip3Followers(prev3, limit))
+            ordered.addAll(userLexicon.skip2Followers(prev3, limit))
         }
         // Corpus n-grams (downloaded pack): below everything personal, above
         // the bundled seeds they supersede. The trigram context first.

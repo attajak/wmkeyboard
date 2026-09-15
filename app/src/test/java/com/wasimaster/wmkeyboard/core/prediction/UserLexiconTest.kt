@@ -25,7 +25,33 @@ class UserLexiconTest {
         assertEquals(5, lexicon.frequencyOf("hello"))
         assertEquals(listOf("world"), lexicon.nextWords("hello", 3))
         assertEquals(2, lexicon.bigramCount("hello", "world"))
-        assertEquals(0, lexicon.skip2gramCount("hello", "world"))
+        assertEquals(0, lexicon.skip1gramCount("hello", "world"))
+    }
+
+    @Test
+    fun skipStoresWrittenByPositionsBackLoadUnderTheSkippedWordsNaming() {
+        // The first shipped naming counted positions back: "skip2grams" was
+        // the word two back (one word skipped) and "skip3grams" the word
+        // three back. Read into the 1-skip and 2-skip stores, and rewritten
+        // under the current naming by the next save.
+        val f = file()
+        f.parentFile?.mkdirs()
+        f.writeText(
+            """{"words":{"gotten":3},"skip2grams":{"gotten":{"that":4}},"skip3grams":{"gotten":{"you've":2}}}"""
+        )
+        val lexicon = UserLexicon(f)
+        assertEquals(4, lexicon.skip1gramCount("gotten", "that"))
+        assertEquals(2, lexicon.skip2gramCount("gotten", "you've"))
+        assertEquals(0, lexicon.skip2gramCount("gotten", "that"))
+        lexicon.save()
+        val text = f.readText()
+        assertTrue("\"skipSchema\":1" in text)
+        assertTrue("\"skip1grams\":{\"gotten\":{\"that\":4}}" in text)
+        assertTrue("\"skip2grams\":{\"gotten\":{\"you've\":2}}" in text)
+        assertFalse("skip3grams" in text)
+        val back = UserLexicon(f)
+        assertEquals(4, back.skip1gramCount("gotten", "that"))
+        assertEquals(2, back.skip2gramCount("gotten", "you've"))
     }
 
     @Test
@@ -151,69 +177,69 @@ class UserLexiconTest {
     }
 
     @Test
-    fun skip2gramsServeRoundTripAndCap() {
+    fun skip1gramsServeRoundTripAndCap() {
         val f = file()
         val lexicon = UserLexicon(f)
         // "deploy the service", "deploy a service", "deploy my server": the
         // gappy store pools the first two across their middle words.
-        lexicon.learnSkip2gram("deploy", "service")
-        lexicon.learnSkip2gram("deploy", "service")
-        lexicon.learnSkip2gram("deploy", "server")
-        assertEquals(2, lexicon.skip2gramCount("deploy", "service"))
-        assertEquals(1, lexicon.skip2gramCount("deploy", "server"))
+        lexicon.learnSkip1gram("deploy", "service")
+        lexicon.learnSkip1gram("deploy", "service")
+        lexicon.learnSkip1gram("deploy", "server")
+        assertEquals(2, lexicon.skip1gramCount("deploy", "service"))
+        assertEquals(1, lexicon.skip1gramCount("deploy", "server"))
         // A different head is a different table, and the gappy store never
         // leaks into the adjacent one.
-        assertEquals(0, lexicon.skip2gramCount("restart", "service"))
+        assertEquals(0, lexicon.skip1gramCount("restart", "service"))
         assertEquals(0, lexicon.bigramCount("deploy", "service"))
         lexicon.save()
         val back = UserLexicon(f)
-        assertEquals(2, back.skip2gramCount("deploy", "service"))
+        assertEquals(2, back.skip1gramCount("deploy", "service"))
         // Follower cap applies here too.
-        for (i in 0 until 40) back.learnSkip2gram("a", "w$i")
-        assertTrue((0 until 40).count { back.skip2gramCount("a", "w$it") > 0 } <= 32)
+        for (i in 0 until 40) back.learnSkip1gram("a", "w$i")
+        assertTrue((0 until 40).count { back.skip1gramCount("a", "w$it") > 0 } <= 32)
         // forget() scrubs heads and followers that mention the word.
-        back.learnSkip2gram("target", "y")
-        back.learnSkip2gram("p", "target")
+        back.learnSkip1gram("target", "y")
+        back.learnSkip1gram("p", "target")
         back.forget("target")
-        assertEquals(0, back.skip2gramCount("target", "y"))
-        assertEquals(0, back.skip2gramCount("p", "target"))
+        assertEquals(0, back.skip1gramCount("target", "y"))
+        assertEquals(0, back.skip1gramCount("p", "target"))
     }
 
     @Test
-    fun skip3gramsServeRoundTripAndForget() {
+    fun skip2gramsServeRoundTripAndForget() {
         val f = file()
         val lexicon = UserLexicon(f)
         // "gotten so that you've" (#195): the word three back, across two.
         lexicon.learnWord("gotten", 1)
-        lexicon.learnSkip3gram("gotten", "you've")
-        lexicon.learnSkip3gram("gotten", "you've")
-        assertEquals(2, lexicon.skip3gramCount("gotten", "you've"))
-        // Its own table: neither the adjacent nor the distance-2 store sees it.
-        assertEquals(0, lexicon.skip2gramCount("gotten", "you've"))
+        lexicon.learnSkip2gram("gotten", "you've")
+        lexicon.learnSkip2gram("gotten", "you've")
+        assertEquals(2, lexicon.skip2gramCount("gotten", "you've"))
+        // Its own table: neither the adjacent nor the 1-skip store sees it.
+        assertEquals(0, lexicon.skip1gramCount("gotten", "you've"))
         assertEquals(0, lexicon.bigramCount("gotten", "you've"))
         lexicon.save()
         val back = UserLexicon(f)
-        assertEquals(2, back.skip3gramCount("gotten", "you've"))
+        assertEquals(2, back.skip2gramCount("gotten", "you've"))
         assertTrue(back.rename("gotten", "got"))
-        assertEquals(2, back.skip3gramCount("got", "you've"))
-        assertEquals(0, back.skip3gramCount("gotten", "you've"))
-        back.learnSkip3gram("p", "target")
+        assertEquals(2, back.skip2gramCount("got", "you've"))
+        assertEquals(0, back.skip2gramCount("gotten", "you've"))
+        back.learnSkip2gram("p", "target")
         back.forget("target")
-        assertEquals(0, back.skip3gramCount("p", "target"))
+        assertEquals(0, back.skip2gramCount("p", "target"))
     }
 
     @Test
-    fun skip2gramHeadsAreCappedAtSave() {
+    fun skip1gramHeadsAreCappedAtSave() {
         val f = file()
         val lexicon = UserLexicon(f)
         // 2,100 heads; the hundred weakest go, the strongest stay.
         for (i in 0 until 2_100) {
-            repeat(if (i < 100) 1 else 3) { lexicon.learnSkip2gram("h$i", "w") }
+            repeat(if (i < 100) 1 else 3) { lexicon.learnSkip1gram("h$i", "w") }
         }
         lexicon.save()
         val back = UserLexicon(f)
-        assertEquals(0, back.skip2gramCount("h0", "w"))
-        assertEquals(3, back.skip2gramCount("h2099", "w"))
+        assertEquals(0, back.skip1gramCount("h0", "w"))
+        assertEquals(3, back.skip1gramCount("h2099", "w"))
     }
 
     @Test
@@ -232,14 +258,14 @@ class UserLexiconTest {
         lexicon.learnWord("target", 5)
         lexicon.learnBigram("target", "next")
         lexicon.learnBigram("other", "target")
-        lexicon.learnSkip2gram("target", "next")
-        lexicon.learnSkip2gram("other", "target")
+        lexicon.learnSkip1gram("target", "next")
+        lexicon.learnSkip1gram("other", "target")
         lexicon.forget("target")
         assertFalse(lexicon.contains("target"))
         assertTrue(lexicon.nextWords("target", 5).isEmpty())
         assertFalse("target" in lexicon.followerCounts("other"))
-        assertEquals(0, lexicon.skip2gramCount("target", "next"))
-        assertEquals(0, lexicon.skip2gramCount("other", "target"))
+        assertEquals(0, lexicon.skip1gramCount("target", "next"))
+        assertEquals(0, lexicon.skip1gramCount("other", "target"))
     }
 
     @Test
@@ -266,8 +292,8 @@ class UserLexiconTest {
             learnBigram("hello", "teh")
             learnBigram("teh", "world")
             learnTrigram("hello", "teh", "world")
-            learnSkip2gram("teh", "world")
-            learnSkip2gram("hello", "teh")
+            learnSkip1gram("teh", "world")
+            learnSkip1gram("hello", "teh")
             assertTrue(rename("teh", "the"))
             save()
         }
@@ -283,10 +309,10 @@ class UserLexiconTest {
         assertEquals(1, back.trigramCount("hello", "the", "world"))
         assertEquals(0, back.trigramCount("hello", "teh", "world"))
         // Gappy pairs where it led and where it followed both moved.
-        assertEquals(1, back.skip2gramCount("the", "world"))
-        assertEquals(0, back.skip2gramCount("teh", "world"))
-        assertEquals(1, back.skip2gramCount("hello", "the"))
-        assertEquals(0, back.skip2gramCount("hello", "teh"))
+        assertEquals(1, back.skip1gramCount("the", "world"))
+        assertEquals(0, back.skip1gramCount("teh", "world"))
+        assertEquals(1, back.skip1gramCount("hello", "the"))
+        assertEquals(0, back.skip1gramCount("hello", "teh"))
     }
 
     @Test

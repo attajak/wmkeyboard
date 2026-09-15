@@ -72,8 +72,8 @@ class LearnFromTextTest {
         // word between them is where that store earns its keep.
         assertTrue(("and" to "now") in plan.skips)
         // Three back, across two, under the same rule.
-        assertTrue(("cat" to "now") in plan.skips3)
-        assertFalse(plan.skips3.any { "zorblax" in it.toList() })
+        assertTrue(("cat" to "now") in plan.skips2)
+        assertFalse(plan.skips2.any { "zorblax" in it.toList() })
         // A blacklisted end is refused like an unknown one.
         assertFalse(("the" to "end") in plan.pairs)
         assertFalse(plan.pairs.any { "teh" in it.toList() })

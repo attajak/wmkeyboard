@@ -919,7 +919,7 @@ open class WMKeyboardService : InputMethodService() {
     private var previousWord2: String? = null
 
     /** The word before [previousWord2], under the same contract, for the
-     * reranker's distance-3 skip-gram (#195). */
+     * reranker's 2-skip bigrams (#195). */
     private var previousWord3: String? = null
 
     /**
@@ -10623,10 +10623,10 @@ open class WMKeyboardService : InputMethodService() {
                     }
                 }
                 if (beforePreviousKnown) {
-                    beforePrevious?.let { userLexicon.learnSkip2gram(it, cleaned) }
+                    beforePrevious?.let { userLexicon.learnSkip1gram(it, cleaned) }
                 }
                 if (threeBackKnown) {
-                    threeBack?.let { userLexicon.learnSkip3gram(it, cleaned) }
+                    threeBack?.let { userLexicon.learnSkip2gram(it, cleaned) }
                 }
             } else if (!byHand && !blacklisted && state.composer.isPlausibleWord(cleaned)) {
                 // Nothing recognises this word. It goes into the waiting room
@@ -21057,8 +21057,8 @@ open class WMKeyboardService : InputMethodService() {
             )
             for ((previous, next) in plan.pairs) userLexicon.learnBigram(previous, next)
             for ((prev2, prev1, next) in plan.triples) userLexicon.learnTrigram(prev2, prev1, next)
-            for ((prev2, next) in plan.skips) userLexicon.learnSkip2gram(prev2, next)
-            for ((prev3, next) in plan.skips3) userLexicon.learnSkip3gram(prev3, next)
+            for ((prev2, next) in plan.skips) userLexicon.learnSkip1gram(prev2, next)
+            for ((prev3, next) in plan.skips2) userLexicon.learnSkip2gram(prev3, next)
             pairs = plan.pairs.size
         }
         val added = chosen.mapTo(HashSet()) { it.key }
