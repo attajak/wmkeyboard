@@ -1666,7 +1666,7 @@ class SuggestionEngine(
         previousWord3: String? = null,
     ): List<String> {
         if (composing.isEmpty()) {
-            return nextWords(previousWord, previousWord2, limit)
+            return nextWords(previousWord, previousWord2, limit, previousWord3)
         }
         if (avroMode) {
             return bengaliSuggestions(composing, limit)
@@ -2182,7 +2182,12 @@ class SuggestionEngine(
         return ordered.asSequence().filterNot(::suppressed).take(limit).toList()
     }
 
-    private fun nextWords(previousWord: String?, previousWord2: String?, limit: Int): List<String> {
+    private fun nextWords(
+        previousWord: String?,
+        previousWord2: String?,
+        limit: Int,
+        previousWord3: String? = null,
+    ): List<String> {
         val prev = previousWord?.lowercase() ?: return emptyList()
         val ordered = LinkedHashSet<String>()
         // Most specific first: the two-word context, when known, beats the
@@ -2195,6 +2200,16 @@ class SuggestionEngine(
         ordered.addAll(userLexicon.nextWords(prev, limit))
         // A contact's name chains through the strip: "Wasi" offers "Mollik".
         ordered.addAll(contacts.nextWords(prev))
+        // The user's own gappy habits (#195): what has followed the word two
+        // back one word later, then the word three back two words later —
+        // "how can someone" still offers "help". Personal, so above the
+        // corpus and the seeds; gappy, so below every direct follower.
+        previousWord2?.lowercase()?.let { prev2 ->
+            ordered.addAll(userLexicon.skip2Followers(prev2, limit))
+        }
+        previousWord3?.lowercase()?.let { prev3 ->
+            ordered.addAll(userLexicon.skip3Followers(prev3, limit))
+        }
         // Corpus n-grams (downloaded pack): below everything personal, above
         // the bundled seeds they supersede. The trigram context first.
         if (!ngramPack.isEmpty) {

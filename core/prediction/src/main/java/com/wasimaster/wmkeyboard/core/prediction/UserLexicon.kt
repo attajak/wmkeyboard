@@ -568,6 +568,16 @@ class UserLexicon(private val storageFile: File?) {
     fun skip2gramCount(prev2: String, next: String): Int =
         skip2grams[WordKey.of(prev2)]?.counts?.get(WordKey.of(next)) ?: 0
 
+    /** Words that have followed [prev2] one word later, best first. */
+    @Synchronized
+    fun skip2Followers(prev2: String, limit: Int): List<String> =
+        skip2grams[WordKey.of(prev2)]?.ordered()?.take(limit).orEmpty()
+
+    /** Words that have followed [prev3] two words later, best first. */
+    @Synchronized
+    fun skip3Followers(prev3: String, limit: Int): List<String> =
+        skip3grams[WordKey.of(prev3)]?.ordered()?.take(limit).orEmpty()
+
     /** Learns the pair (prev3 -> next), [prev3] three words before [next]
      * with any two words between — the long-range twin of [learnSkip2gram]. */
     @Synchronized

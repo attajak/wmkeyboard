@@ -47,6 +47,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Trigram context beats bigram — Learned (prev2, prev1) followers consulted before followers of prev1 alone
     - Contact name chaining — "Wasi" offers "Mollik" from the indexed name
     - Corpus pack then bundled seed pairs — 827 bundled English pairs cold-start a fresh install
+    - Learned skip-gram followers (#195) — What has followed the word two back one word later, then the word three back two words later; personal, so above the corpus, gappy, so below every direct follower
     - Skip-gram rescue on an unknown previous word — Treats an OOV prev as transparent and backfills from the word before it
     - Sentence-start sentinel — U+0001 pseudo-word learned as context only; never offered, never a follower
   - Numbers from the letter keys `RARE` — A word typed entirely on digit-hinted keys also offers the number those hints spell (#181); off by default

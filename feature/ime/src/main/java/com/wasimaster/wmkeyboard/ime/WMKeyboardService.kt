@@ -10434,7 +10434,10 @@ open class WMKeyboardService : InputMethodService() {
             return emptyList<String>() to emptyList()
         }
         val (emojis, words) = engine
-            .suggest(composing = "", previousWord = previousWord, previousWord2 = previousWord2)
+            .suggest(
+                composing = "", previousWord = previousWord, previousWord2 = previousWord2,
+                previousWord3 = previousWord3,
+            )
             .partition { isEmojiCandidate(it) }
         return words to if (state.settings.emojiPrediction) {
             (emojis + triggerEmojiForPreviousWord()).distinct()
@@ -12289,7 +12292,10 @@ open class WMKeyboardService : InputMethodService() {
         val engine = suggestionEngine ?: return emptyList()
         val predicted = withContext(Dispatchers.Default) {
             engine
-                .suggest(composing = "", previousWord = previousWord, previousWord2 = previousWord2)
+                .suggest(
+                composing = "", previousWord = previousWord, previousWord2 = previousWord2,
+                previousWord3 = previousWord3,
+            )
                 .filter { isEmojiCandidate(it) }
         }
         // Same tail as [refreshSuggestions]: drop what the font cannot draw,

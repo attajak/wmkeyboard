@@ -158,6 +158,21 @@ class SuggestionEngineTest {
         assertTrue("yesterday" in rescued)
     }
 
+    @Test fun learnedSkipGramsFeedNextWordsBehindTheDirectFollowers() {
+        // "how can someone" (#195): nothing learned follows "someone", but
+        // "help" has followed "can" one word later and "how" two words later.
+        val lexicon = UserLexicon(null)
+        lexicon.learnBigram("someone", "else")
+        repeat(2) { lexicon.learnSkip2gram("can", "help") }
+        repeat(3) { lexicon.learnSkip3gram("how", "please") }
+        val e = SuggestionEngine(Trie(), BengaliPhoneticIndex(emptyList()), lexicon)
+        val next = e.suggest("", previousWord = "someone", previousWord2 = "can", previousWord3 = "how")
+        // Direct follower first, then the gappy ones, nearer first.
+        assertEquals(listOf("else", "help", "please"), next)
+        // Without the context words there is nothing gappy to read.
+        assertEquals(listOf("else"), e.suggest("", previousWord = "someone"))
+    }
+
     @Test fun dictionarySwapTakesEffectImmediately() {
         // The shared-walk cache must invalidate the moment a source changes.
         val e = engine()
