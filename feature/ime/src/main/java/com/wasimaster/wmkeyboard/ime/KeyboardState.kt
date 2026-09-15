@@ -2000,8 +2000,8 @@ data class KeyboardUiState(
     val glideCased: Map<String, String> = emptyMap(),
     /**
      * The stroke's candidates that are text-expansion triggers, keyed by the
-     * raw word, with what a lift would type in their place (#205). The pill
-     * and the strip draw "fk = FUTO Keyboard" for these, since the trigger
+     * raw word, with what a lift would type in their place (#205). The pill,
+     * the strip and the picker's targets draw "fk = FUTO Keyboard" for these, since the trigger
      * itself is not what lands. Empty between strokes.
      */
     val glideExpansions: Map<String, GlideExpansion> = emptyMap(),

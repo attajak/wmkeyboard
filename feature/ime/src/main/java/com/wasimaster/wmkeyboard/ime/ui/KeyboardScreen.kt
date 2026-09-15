@@ -13376,7 +13376,7 @@ private fun KeyRows(
             state.glideWord?.let(state.glideExpansions::get)?.previewFor(shown)
         }
         if (pillWord != null || picker.words.isNotEmpty()) {
-            GlideOverlay(trail, picker, pillWord, glide, boxSize, pillPromise, pillExpansion)
+            GlideOverlay(trail, picker, pillWord, glide, boxSize, pillPromise, pillExpansion, state.glideExpansions)
         }
 
         // The alternates a layer peek is holding open (issue #108). Hung off a
@@ -13460,6 +13460,8 @@ private fun GlideOverlay(
     gridSize: IntSize,
     promise: Color? = null,
     expansion: String? = null,
+    /** The stroke's triggers and what they expand to, for the picker's targets (#205). */
+    expansions: Map<String, GlideExpansion> = emptyMap(),
 ) {
     val theme = LocalKbTheme.current
     val density = LocalDensity.current
@@ -13506,6 +13508,7 @@ private fun GlideOverlay(
                 words.forEachIndexed { index, target ->
                     GlidePickerTarget(
                         word = target,
+                        expansion = expansions[target]?.previewFor(target),
                         hovered = picker.hover == index,
                         leader = index == 0,
                         dimmed = cancelling,
@@ -13736,6 +13739,8 @@ private fun GlidePickerTarget(
     dimmed: Boolean,
     theme: KbTheme,
     modifier: Modifier,
+    /** What [word] expands to when it is a trigger (#205), drawn after it. */
+    expansion: String? = null,
 ) {
     Surface(
         modifier = modifier
@@ -13753,7 +13758,11 @@ private fun GlidePickerTarget(
     ) {
         Box(contentAlignment = Alignment.Center) {
             Text(
-                text = word,
+                text = if (expansion == null) {
+                    AnnotatedString(word)
+                } else {
+                    glideExpansionLabel(word, expansion, theme.popupText)
+                },
                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
                 fontSize = 18.sp,
                 fontWeight = if (hovered) FontWeight.Bold else FontWeight.Medium,
