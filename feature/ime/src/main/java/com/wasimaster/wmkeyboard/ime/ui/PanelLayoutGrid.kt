@@ -125,7 +125,11 @@ internal fun PanelLayoutGrid(
         }
     }
 
-    val keyPreview = remember { KeyPreviewState() }
+    // The screen's bubbles when a frame is drawing them, this grid's own
+    // otherwise — see [LocalKeyPreviewState].
+    val hoistedPreview = LocalKeyPreviewState.current
+    val ownPreview = remember { KeyPreviewState() }
+    val keyPreview = hoistedPreview ?: ownPreview
     var boxOrigin by remember { mutableStateOf(Offset.Zero) }
     var boxSize by remember { mutableStateOf(IntSize.Zero) }
     Box(
@@ -186,7 +190,13 @@ internal fun PanelLayoutGrid(
                 }
             }
         }
-        KeyPreviewOverlay(keyPreview, settings, boxOrigin, boxSize)
+        if (hoistedPreview == null) {
+            KeyPreviewOverlay(
+                keyPreview, settings, boxOrigin, boxSize,
+                modifier = Modifier.matchParentSize(),
+                virtualHeadroom = true,
+            )
+        }
     }
 }
 

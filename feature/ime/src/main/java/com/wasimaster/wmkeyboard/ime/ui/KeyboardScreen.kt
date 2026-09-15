@@ -206,6 +206,7 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.PointerEventPass
@@ -253,6 +254,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.constrain
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.sp
@@ -273,6 +276,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import coil3.compose.AsyncImage
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.ime.R
@@ -974,6 +978,12 @@ fun KeyboardScreen(
     onFloatingMoved: (Float, Float) -> Unit = { _, _ -> },
     onSizingAction: (SizingAction) -> Unit = {},
     onFloatingBounds: (IntRect) -> Unit = {},
+    /**
+     * The band the docked frame keeps above the board for the key preview
+     * bubbles, in px, whenever it changes. The service keeps it out of the
+     * app's insets — see [keyPreviewHeadroomPx].
+     */
+    onPreviewHeadroom: (Int) -> Unit = {},
     onToolbarToolsChange: (List<ToolbarTool>) -> Unit = {},
     onToolboxOrderChange: (List<ToolbarTool>) -> Unit = {},
     toolHold: ToolHoldCallbacks = ToolHoldCallbacks(),
@@ -1217,10 +1227,14 @@ fun KeyboardScreen(
     // Resolved off the main thread, so the first frame or two after a cold
     // start draw the built-in icons and a pack swaps in behind them.
     val iconSet by rememberIconSet(state.settings.icons)
+    // The bubbles, owned here so the frame can draw them over everything it
+    // holds while the keys deep inside the body publish to them.
+    val keyPreview = remember { KeyPreviewState() }
 
     val body: @Composable ColumnScope.(KeyboardUiState) -> Unit = { bodyState ->
         CompositionLocalProvider(
             LocalIconSet provides iconSet,
+            LocalKeyPreviewState provides keyPreview,
             LocalKeyPressFeedback provides remember(onKeyPressed) {
                 { onKeyPressed(KeySoundRole.DEFAULT) }
             },
@@ -1490,6 +1504,7 @@ fun KeyboardScreen(
                                 onSizingAction(SizingAction.Floating(widthDp, heightScale))
                             },
                             onBounds = onFloatingBounds,
+                            keyPreview = keyPreview,
                             content = { heightScale ->
                                 // Key height carries the whole layout (panels
                                 // included), so scaling it scales the
@@ -1513,6 +1528,8 @@ fun KeyboardScreen(
                             onOneHanded = onOneHanded,
                             onOneHandedSide = onOneHandedSide,
                             resize = resizeSession,
+                            keyPreview = keyPreview,
+                            onPreviewHeadroom = onPreviewHeadroom,
                             body = movableBody,
                         )
                     }
@@ -1546,6 +1563,8 @@ private fun DockedKeyboardFrame(
     onOneHanded: (OneHandedMode) -> Unit,
     onOneHandedSide: (Boolean, OneHandedSide) -> Unit,
     resize: ResizeSession? = null,
+    keyPreview: KeyPreviewState,
+    onPreviewHeadroom: (Int) -> Unit = {},
     body: @Composable ColumnScope.(KeyboardUiState) -> Unit,
 ) {
     // In resize mode the outer frame reserves the session's headroom and the
@@ -1553,6 +1572,12 @@ private fun DockedKeyboardFrame(
     // entry and the keyboard's own box is the only thing that changes size
     // frame to frame — the drag never moves its own origin.
     val density = LocalDensity.current
+    // The empty band above the board where a top-row bubble goes. Reported
+    // to the service, which keeps it out of the app's insets.
+    val previewHeadroomPx = keyPreviewHeadroomPx(state.settings)
+    LaunchedEffect(previewHeadroomPx) { onPreviewHeadroom(previewHeadroomPx) }
+    var frameOrigin by remember { mutableStateOf(Offset.Zero) }
+    var frameSize by remember { mutableStateOf(IntSize.Zero) }
     val configuration = LocalConfiguration.current
     val headroomPx = resize?.let { with(density) { it.headroomDp.dp.roundToPx() } } ?: 0
     val maxReservedPx = with(density) {
@@ -1567,113 +1592,154 @@ private fun DockedKeyboardFrame(
     val revealingBody: @Composable ColumnScope.(KeyboardUiState) -> Unit = { bodyState ->
         CompositionLocalProvider(LocalRowRevealHeadroom provides revealHeadroom) { body(bodyState) }
     }
+    // Two boxes: the frame proper under its band, and the bubbles over the
+    // lot. The band is on the inner one so the outer one's size, which the
+    // overlay matches, takes it in; the position is read on the outer one,
+    // which is always here, rather than on an overlay that is only in the
+    // tree while a key is down.
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .then(
-                if (resize == null) {
-                    Modifier.rowRevealHeadroom(revealHeadroom)
-                } else {
-                    Modifier.resizeHeadroom(resize)
-                },
-            ),
+            .onGloballyPositioned {
+                frameOrigin = it.positionInRoot()
+                frameSize = it.size
+            },
     ) {
-        if (resize != null) ResizeHeadroomScrim()
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)
+                .keyPreviewHeadroom(previewHeadroomPx)
                 .then(
-                    if (resize == null) Modifier else Modifier.onSizeChanged {
-                        resize.latchReserved(it.height, headroomPx, maxReservedPx)
+                    if (resize == null) {
+                        Modifier.rowRevealHeadroom(revealHeadroom)
+                    } else {
+                        Modifier.resizeHeadroom(resize)
                     },
                 ),
         ) {
-            BoardBackground(LocalKbTheme.current)
-            // Under the keys and over the board, so a theme that gives the
-            // gesture bar a colour of its own paints only that band (#109).
-            NavigationBarBackground(LocalKbTheme.current)
-            // navigationBarsPadding keeps the bottom key row clear of the
-            // gesture-navigation bar on edge-to-edge (SDK 35+) IME windows.
-            val oneHanded = state.settings.oneHandedMode
-            val ohProfile = state.settings.oneHanded.forLandscape(landscape)
-            Row(
+            if (resize != null) ResizeHeadroomScrim()
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .navigationBarsPadding()
-                    // Extra breathing room above the gesture bar, adjustable
-                    // in Settings → Appearance.
-                    .padding(bottom = state.settings.bottomPaddingDp.dp),
-                verticalAlignment = Alignment.Bottom,
+                    .align(Alignment.BottomCenter)
+                    .then(
+                        if (resize == null) Modifier else Modifier.onSizeChanged {
+                            resize.latchReserved(it.height, headroomPx, maxReservedPx)
+                        },
+                    ),
             ) {
-                // Flip to the other side: update the live mode and remember the
-                // new side as this orientation's default.
-                val flipSide: () -> Unit = {
-                    val next =
-                        if (oneHanded == OneHandedMode.LEFT) OneHandedSide.RIGHT
-                        else OneHandedSide.LEFT
-                    onOneHandedSide(landscape, next)
-                    onOneHanded(next.toMode())
-                }
-                if (oneHanded == OneHandedMode.OFF) {
-                    // Resizable width: below 100% the keyboard shrinks and sits
-                    // at the chosen edge (or centered).
-                    // Side-padding (A50) shaves an equal fraction off each side
-                    // on top of the width setting, narrowing the keys toward the
-                    // centre for thumb reach; it rides on the same slack/centering
-                    // machinery below.
-                    val arrangement = dockedWidthArrangement(state.settings)
-                    if (arrangement.leftSlack > 0.001f) {
-                        Spacer(modifier = Modifier.weight(arrangement.leftSlack))
+                BoardBackground(LocalKbTheme.current)
+                // Under the keys and over the board, so a theme that gives the
+                // gesture bar a colour of its own paints only that band (#109).
+                NavigationBarBackground(LocalKbTheme.current)
+                // navigationBarsPadding keeps the bottom key row clear of the
+                // gesture-navigation bar on edge-to-edge (SDK 35+) IME windows.
+                val oneHanded = state.settings.oneHandedMode
+                val ohProfile = state.settings.oneHanded.forLandscape(landscape)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                        // Extra breathing room above the gesture bar, adjustable
+                        // in Settings → Appearance.
+                        .padding(bottom = state.settings.bottomPaddingDp.dp),
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    // Flip to the other side: update the live mode and remember the
+                    // new side as this orientation's default.
+                    val flipSide: () -> Unit = {
+                        val next =
+                            if (oneHanded == OneHandedMode.LEFT) OneHandedSide.RIGHT
+                            else OneHandedSide.LEFT
+                        onOneHandedSide(landscape, next)
+                        onOneHanded(next.toMode())
                     }
-                    Column(modifier = Modifier.weight(arrangement.widthFraction)) { revealingBody(state) }
-                    if (arrangement.rightSlack > 0.001f) {
-                        Spacer(modifier = Modifier.weight(arrangement.rightSlack))
-                    }
-                } else {
-                    // One-handed: dock to the live side with this orientation's
-                    // width and height scale. The weights sum to 1 so the body
-                    // is exactly `widthFraction` of the screen and any leftover
-                    // beyond the rail becomes centre-ward slack.
-                    val widthFraction = (ohProfile.widthPercent / 100f).coerceIn(0.30f, 0.90f)
-                    val leftover = 1f - widthFraction
-                    val railWeight = ONE_HANDED_RAIL_WEIGHT.coerceAtMost(leftover)
-                    val slack = (leftover - railWeight).coerceAtLeast(0f)
-                    val ohState = if (ohProfile.heightScale >= 100) state else state.copy(
-                        settings = state.settings.copy(
-                            keyHeightDp =
-                                (state.settings.keyHeightDp * ohProfile.heightScale / 100).coerceAtLeast(1),
-                            numberRowHeightDp =
-                                (state.settings.numberRowHeightDp * ohProfile.heightScale / 100).coerceAtLeast(1),
-                        ),
-                    )
-                    val rail = @Composable {
-                        OneHandedRail(
-                            current = oneHanded,
-                            onFlip = flipSide,
-                            onExit = { onOneHanded(OneHandedMode.OFF) },
-                            modifier = Modifier.weight(railWeight),
-                        )
-                    }
-                    if (oneHanded == OneHandedMode.RIGHT) {
-                        if (slack > 0.001f) Spacer(modifier = Modifier.weight(slack))
-                        rail()
-                        Column(modifier = Modifier.weight(widthFraction)) { revealingBody(ohState) }
+                    if (oneHanded == OneHandedMode.OFF) {
+                        // Resizable width: below 100% the keyboard shrinks and sits
+                        // at the chosen edge (or centered).
+                        // Side-padding (A50) shaves an equal fraction off each side
+                        // on top of the width setting, narrowing the keys toward the
+                        // centre for thumb reach; it rides on the same slack/centering
+                        // machinery below.
+                        val arrangement = dockedWidthArrangement(state.settings)
+                        if (arrangement.leftSlack > 0.001f) {
+                            Spacer(modifier = Modifier.weight(arrangement.leftSlack))
+                        }
+                        Column(modifier = Modifier.weight(arrangement.widthFraction)) { revealingBody(state) }
+                        if (arrangement.rightSlack > 0.001f) {
+                            Spacer(modifier = Modifier.weight(arrangement.rightSlack))
+                        }
                     } else {
-                        Column(modifier = Modifier.weight(widthFraction)) { revealingBody(ohState) }
-                        rail()
-                        if (slack > 0.001f) Spacer(modifier = Modifier.weight(slack))
+                        // One-handed: dock to the live side with this orientation's
+                        // width and height scale. The weights sum to 1 so the body
+                        // is exactly `widthFraction` of the screen and any leftover
+                        // beyond the rail becomes centre-ward slack.
+                        val widthFraction = (ohProfile.widthPercent / 100f).coerceIn(0.30f, 0.90f)
+                        val leftover = 1f - widthFraction
+                        val railWeight = ONE_HANDED_RAIL_WEIGHT.coerceAtMost(leftover)
+                        val slack = (leftover - railWeight).coerceAtLeast(0f)
+                        val ohState = if (ohProfile.heightScale >= 100) state else state.copy(
+                            settings = state.settings.copy(
+                                keyHeightDp =
+                                    (state.settings.keyHeightDp * ohProfile.heightScale / 100).coerceAtLeast(1),
+                                numberRowHeightDp =
+                                    (state.settings.numberRowHeightDp * ohProfile.heightScale / 100).coerceAtLeast(1),
+                            ),
+                        )
+                        val rail = @Composable {
+                            OneHandedRail(
+                                current = oneHanded,
+                                onFlip = flipSide,
+                                onExit = { onOneHanded(OneHandedMode.OFF) },
+                                modifier = Modifier.weight(railWeight),
+                            )
+                        }
+                        if (oneHanded == OneHandedMode.RIGHT) {
+                            if (slack > 0.001f) Spacer(modifier = Modifier.weight(slack))
+                            rail()
+                            Column(modifier = Modifier.weight(widthFraction)) { revealingBody(ohState) }
+                        } else {
+                            Column(modifier = Modifier.weight(widthFraction)) { revealingBody(ohState) }
+                            rail()
+                            if (slack > 0.001f) Spacer(modifier = Modifier.weight(slack))
+                        }
                     }
                 }
+                // Last in the keyboard box, so the chrome floats over the dimmed
+                // keyboard. The service turns one-handed mode off before entering the
+                // resize mode, so the overlay only ever mirrors the plain docked
+                // arrangement.
+                if (resize != null) ResizeOverlay(session = resize, state = state)
             }
-            // Last in the keyboard box, so the chrome floats over the dimmed
-            // keyboard. The service turns one-handed mode off before entering the
-            // resize mode, so the overlay only ever mirrors the plain docked
-            // arrangement.
-            if (resize != null) ResizeOverlay(session = resize, state = state)
         }
+        KeyPreviewOverlay(
+            keyPreview,
+            state.settings,
+            frameOrigin,
+            frameSize,
+            modifier = Modifier.matchParentSize(),
+        )
     }
 }
+
+/**
+ * Holds [px] of empty space above the frame's content: the band a top-row
+ * bubble is drawn in. Window height, not keyboard height — the service
+ * subtracts it from the app's insets (see [keyPreviewHeadroomPx]).
+ */
+private fun Modifier.keyPreviewHeadroom(px: Int): Modifier =
+    if (px <= 0) this else layout { measurable, constraints ->
+        val inner = constraints.copy(
+            minHeight = (constraints.minHeight - px).coerceAtLeast(0),
+            maxHeight = if (constraints.hasBoundedHeight) {
+                (constraints.maxHeight - px).coerceAtLeast(0)
+            } else {
+                Constraints.Infinity
+            },
+        )
+        val placeable = measurable.measure(inner)
+        layout(placeable.width, placeable.height + px) { placeable.place(0, px) }
+    }
 
 /**
  * The most of the screen the resize mode's reserved frame may take: a tall
@@ -1734,9 +1800,21 @@ private fun FloatingKeyboardFrame(
     onMoved: (Float, Float) -> Unit,
     onResized: (Int, Float) -> Unit,
     onBounds: (IntRect) -> Unit,
+    keyPreview: KeyPreviewState,
     content: @Composable ColumnScope.(Float) -> Unit,
 ) {
-    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+    // Where the bubbles' overlay sits in the root, read here since the
+    // overlay itself is only in the tree while a key is down.
+    var frameOrigin by remember { mutableStateOf(Offset.Zero) }
+    var frameSize by remember { mutableStateOf(IntSize.Zero) }
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .onGloballyPositioned {
+                frameOrigin = it.positionInRoot()
+                frameSize = it.size
+            },
+    ) {
         val density = LocalDensity.current
         val boxWidthPx = constraints.maxWidth
         val boxHeightPx = constraints.maxHeight
@@ -10906,8 +10984,8 @@ internal data class KeyPreview(
  * Every key used to raise its own [Popup] on press, and a Popup is a real
  * window: typing a word added and removed one through WindowManager per letter,
  * with two timers per press to run it. The keys now only publish what they want
- * shown, and a single overlay draws all of it inside one window that never
- * moves — see [KeyPreviewOverlay] for why that matters.
+ * shown, and a single overlay draws all of it in the keyboard's own window —
+ * see [KeyPreviewOverlay] for why that matters.
  *
  * Timing is held here rather than in the keys so one coroutine can run every
  * bubble: [expire] does the arithmetic, the overlay does the waiting.
@@ -10984,6 +11062,13 @@ internal class KeyPreviewState(
 }
 
 /**
+ * The board's bubbles, hoisted to the screen so the frame can draw them over
+ * everything it holds. Null where no frame is composed — a grid on its own,
+ * as in a test — and the grid then draws its own.
+ */
+internal val LocalKeyPreviewState = staticCompositionLocalOf<KeyPreviewState?> { null }
+
+/**
  * Pins the overlay window over the key grid, [headroomPx] above it.
  *
  * Deliberately ignores everything it is passed except the anchor: the window
@@ -11001,23 +11086,67 @@ private class GridOverlayPositionProvider(private val headroomPx: Int) : PopupPo
 }
 
 /**
+ * The band the docked frame keeps empty above the board for the bubbles: a
+ * bubble over the top row plus the distance it keeps from its key. The
+ * service keeps the band out of the host app's insets, so it is window, not
+ * keyboard — the app is laid out to the board and a tap in the band reaches
+ * it. Zero while previews are off, since the band is only worth having when
+ * a bubble can appear in it.
+ */
+@Composable
+internal fun keyPreviewHeadroomPx(settings: KeyboardSettings): Int {
+    val popup = settings.popup
+    if (!popup.enabled) return 0
+    val kbTheme = LocalKbTheme.current
+    val onKeyStyle = kbTheme.popupOnKey ?: popup.onKey
+    val floatGap = if (onKeyStyle) KeyPopupGap else popup.floatingOffsetYDp.dp
+    return with(LocalDensity.current) {
+        // A floored on-key bubble rises past its key by at most the lane,
+        // hence the second term; see [onKeyBubbleHeightPx].
+        maxOf(kbTheme.popupHeightDp.dp.roundToPx(), if (onKeyStyle) onKeyLabelLanePx(popup) else 0) +
+            floatGap.roundToPx() + KeyPopupGap.roundToPx()
+    }
+}
+
+/**
+ * The room an on-key label needs above the finger: its padding and its line.
+ * An on-key bubble is floored at its key plus this ([onKeyBubbleHeightPx]), so
+ * no height setting can sink it under the key.
+ */
+private fun Density.onKeyLabelLanePx(popup: KeyPopupSettings): Int =
+    (OnKeyLabelTopPadding + OnKeyLabelBottomPadding).roundToPx() +
+        (OnKeyLabelSp * popup.fontScale * LabelLineHeightRatio).sp.roundToPx()
+
+/**
  * Draws every live key preview, and runs the one timer they share.
  *
- * One window for the keyboard's lifetime, fixed over the grid and extending
- * [headroom] above it so the floating style has room for the top row's bubble.
- * The bubbles are placed within it by the same two providers the per-key popup
- * used, handed the key's rectangle in the overlay's own space — so both styles
- * land where they always did, without the window itself ever moving.
+ * A layout node in the keyboard's own window, not a window of its own. The
+ * overlay was a [Popup] raised on the first press and torn down with the last
+ * bubble, and a Popup is a real window: WindowManager gives it a surface and
+ * a first frame of its own, so every burst of typing opened with a lit key
+ * and no bubble for two frames (33–37 ms after the highlight on a 60 Hz
+ * board, where Gboard's bubble lands in the touch's own frame), and the
+ * bubble outlived the finger by the same lag. Kept alive instead, the window
+ * sat over the host app, which is what Android 12 drops taps for. Drawn here
+ * it is one more node in the frame's draw pass, up in the frame that lights
+ * the key.
  *
- * [gridOrigin] and [gridSize] are the grid's place and size in the compose root,
- * which turn the keys' root-space rectangles into offsets inside this window.
+ * [origin] and [size] are the overlay's own place and extent in the compose
+ * root, which turn the keys' root-space rectangles into offsets inside it.
+ * The frame gives the overlay its headroom — see [keyPreviewHeadroomPx] —
+ * so a top-row bubble has somewhere to be. A host with no such band (a grid
+ * composed on its own, as a test does) sets [virtualHeadroom]: the anchors
+ * are lifted by the headroom and the bubbles dropped back, so the top row's
+ * bubble lands above the grid rather than being pushed down into it.
  */
 @Composable
 internal fun KeyPreviewOverlay(
     state: KeyPreviewState,
     settings: KeyboardSettings,
-    gridOrigin: Offset,
-    gridSize: IntSize,
+    origin: Offset,
+    size: IntSize,
+    modifier: Modifier = Modifier,
+    virtualHeadroom: Boolean = false,
 ) {
     val popup = settings.popup
     // The height and the placement come off the theme rather than the
@@ -11055,81 +11184,60 @@ internal fun KeyPreviewOverlay(
     val gapPx = with(density) { floatGap.roundToPx() }
     val offsetXPx = with(density) { popup.floatingOffsetXDp.dp.roundToPx() }
     val bubbleHeightPx = with(density) { bubbleHeightDp.dp.roundToPx() }
-    // The room an on-key label needs above the finger: its padding and its
-    // line. An on-key bubble is floored at its key plus this
-    // ([onKeyBubbleHeightPx]), so no height setting can sink it under the key.
-    val onKeyLabelLanePx = with(density) {
-        (OnKeyLabelTopPadding + OnKeyLabelBottomPadding).roundToPx() +
-            (OnKeyLabelSp * popup.fontScale * LabelLineHeightRatio).sp.roundToPx()
-    }
-    // Room above the grid for a bubble over the top row: its own height plus
-    // the distance it keeps from the key. Reads the same distance the bubble
-    // is placed by, or a bubble pushed further up would be clipped by the
-    // window that is meant to contain it. A floored on-key bubble rises past
-    // its key by at most the lane, hence the second term.
-    val headroomPx = maxOf(bubbleHeightPx, if (onKeyStyle) onKeyLabelLanePx else 0) +
-        gapPx + with(density) { KeyPopupGap.roundToPx() }
+    val onKeyLabelLanePx = with(density) { onKeyLabelLanePx(popup) }
+    val headroomPx = if (virtualHeadroom) keyPreviewHeadroomPx(settings) else 0
     val bubbles = state.shown.toList()
-    // No window at all while nothing is previewing. An overlay that is always
-    // there costs a surface for the whole life of the keyboard, and on 12/13 it
-    // is the thing that ate taps meant for the app behind it — an empty window
-    // made see-through is still a window. Composition tears it down with the
-    // last bubble and puts it back on the next press.
+    // Nothing in the tree while nothing is previewing: a press adds the node
+    // in the same composition that lights the key, and idle costs nothing.
     if (bubbles.isEmpty()) return
-    Popup(
-        popupPositionProvider = remember(headroomPx) { GridOverlayPositionProvider(headroomPx) },
-        properties = PreviewPopupProperties,
-    ) {
-        // Still asked for by name: the window survives a frame or two past the
-        // last bubble, and must not occlude anything in them — see
-        // [PassThroughWindowOpacity].
-        PassThroughWindowOpacity(true)
-        Layout(
-            // Keyed by the pressing key, so a bubble expiring under a finger that
-            // is still down removes that bubble rather than shuffling the rest up
-            // into its slot.
-            content = {
-                for (preview in bubbles) {
-                    key(preview.token) {
-                        val heightPx = if (onKeyStyle) {
-                            onKeyBubbleHeightPx(bubbleHeightPx, preview.size.height, onKeyLabelLanePx)
-                        } else {
-                            bubbleHeightPx
-                        }
-                        KeyPreviewBubble(preview, popup, onKeyStyle, heightPx)
-                    }
-                }
-            },
-        ) { measurables, constraints ->
-            val width = if (gridSize.width > 0) gridSize.width else constraints.maxWidth
-            val height = gridSize.height + headroomPx
-            val placeables = measurables.map { it.measure(Constraints()) }
-            layout(width, height) {
-                placeables.forEachIndexed { index, placeable ->
-                    val preview = bubbles[index]
-                    // The key, in this window's space: its offset inside the grid,
-                    // pushed down by the headroom the window adds on top.
-                    val keyBounds = IntRect(
-                        IntOffset(
-                            (preview.position.x - gridOrigin.x).roundToInt(),
-                            (preview.position.y - gridOrigin.y).roundToInt() + headroomPx,
-                        ),
-                        preview.size,
-                    )
-                    val provider = if (onKeyStyle) {
-                        OnKeyPopupPositionProvider
+    Layout(
+        // Transient, and already spoken by the key: a screen reader has no
+        // use for a bubble that is gone before the description finishes.
+        modifier = modifier.clearAndSetSemantics { },
+        // Keyed by the pressing key, so a bubble expiring under a finger that
+        // is still down removes that bubble rather than shuffling the rest up
+        // into its slot.
+        content = {
+            for (preview in bubbles) {
+                key(preview.token) {
+                    val heightPx = if (onKeyStyle) {
+                        onKeyBubbleHeightPx(bubbleHeightPx, preview.size.height, onKeyLabelLanePx)
                     } else {
-                        AboveAnchorPopupPositionProvider(gapPx, offsetXPx)
+                        bubbleHeightPx
                     }
-                    placeable.place(
-                        provider.calculatePosition(
-                            keyBounds,
-                            IntSize(width, height),
-                            layoutDirection,
-                            IntSize(placeable.width, placeable.height),
-                        ),
-                    )
+                    KeyPreviewBubble(preview, popup, onKeyStyle, heightPx)
                 }
+            }
+        },
+    ) { measurables, constraints ->
+        val laidOut = constraints.constrain(size)
+        // The space the providers clamp into: the overlay, plus the band a
+        // host without one is pretending to have above it.
+        val room = IntSize(laidOut.width, laidOut.height + headroomPx)
+        val placeables = measurables.map { it.measure(Constraints()) }
+        layout(laidOut.width, laidOut.height) {
+            placeables.forEachIndexed { index, placeable ->
+                val preview = bubbles[index]
+                // The key in the overlay's space, pushed down by the band.
+                val keyBounds = IntRect(
+                    IntOffset(
+                        (preview.position.x - origin.x).roundToInt(),
+                        (preview.position.y - origin.y).roundToInt() + headroomPx,
+                    ),
+                    preview.size,
+                )
+                val provider = if (onKeyStyle) {
+                    OnKeyPopupPositionProvider
+                } else {
+                    AboveAnchorPopupPositionProvider(gapPx, offsetXPx)
+                }
+                val at = provider.calculatePosition(
+                    keyBounds,
+                    room,
+                    layoutDirection,
+                    IntSize(placeable.width, placeable.height),
+                )
+                placeable.place(at.x, at.y - headroomPx)
             }
         }
     }
@@ -11151,33 +11259,38 @@ private fun KeyPreviewBubble(
     val kb = LocalKbTheme.current
     val density = LocalDensity.current
     val shape = kb.popupShape()
-    Surface(
-        shape = shape,
-        // A per-key style first, then the user's own bubble colour, then the
-        // theme: narrowest wins, and the theme is the one nobody picked by hand.
-        color = preview.popupBackground ?: popup.backgroundColor?.let { Color(it.toInt()) } ?: kb.popup,
-        border = kb.popupSurfaceBorder(),
-        shadowElevation = elevationFor(kb.popupShapeKind, 6.dp),
-    ) {
-        Box(
-            modifier = Modifier
-                .height(with(density) { heightPx.toDp() })
-                .widthIn(
-                    min = if (onKeyStyle) with(density) { preview.size.width.toDp() } + 8.dp else 0.dp,
-                )
-                .popupTexture(LocalKeyTextures.current, shape)
-                .padding(horizontal = 14.dp),
-            contentAlignment = if (onKeyStyle) Alignment.TopCenter else Alignment.Center,
-        ) {
-            Text(
-                text = preview.label,
-                modifier = if (onKeyStyle) Modifier.padding(top = OnKeyLabelTopPadding) else Modifier,
-                fontSize = ((if (onKeyStyle) OnKeyLabelSp else FloatingLabelSp) * popup.fontScale).sp,
-                color = preview.popupText
-                    ?: popup.textColor?.let { Color(it.toInt()) }
-                    ?: kb.popupText,
+    val border = kb.popupSurfaceBorder()
+    // A Box wearing a Surface's chain (shadow, border, fill, clip) rather than
+    // a Surface: a Surface swallows the touches under it, and the bubble is
+    // drawn in the keyboard's own window now, over the row above its key.
+    // The next tap has to reach that row through it.
+    Box(
+        modifier = Modifier
+            .shadow(elevationFor(kb.popupShapeKind, 6.dp), shape, clip = false)
+            .then(if (border != null) Modifier.border(border, shape) else Modifier)
+            // A per-key style first, then the user's own bubble colour, then the
+            // theme: narrowest wins, and the theme is the one nobody picked by hand.
+            .background(
+                preview.popupBackground ?: popup.backgroundColor?.let { Color(it.toInt()) } ?: kb.popup,
+                shape,
             )
-        }
+            .clip(shape)
+            .height(with(density) { heightPx.toDp() })
+            .widthIn(
+                min = if (onKeyStyle) with(density) { preview.size.width.toDp() } + 8.dp else 0.dp,
+            )
+            .popupTexture(LocalKeyTextures.current, shape)
+            .padding(horizontal = 14.dp),
+        contentAlignment = if (onKeyStyle) Alignment.TopCenter else Alignment.Center,
+    ) {
+        Text(
+            text = preview.label,
+            modifier = if (onKeyStyle) Modifier.padding(top = OnKeyLabelTopPadding) else Modifier,
+            fontSize = ((if (onKeyStyle) OnKeyLabelSp else FloatingLabelSp) * popup.fontScale).sp,
+            color = preview.popupText
+                ?: popup.textColor?.let { Color(it.toInt()) }
+                ?: kb.popupText,
+        )
     }
 }
 
@@ -11490,9 +11603,12 @@ private fun KeyRows(
     val hapticOn = rememberUpdatedState(state.settings.haptics.enabled)
     val kbTheme = LocalKbTheme.current
     val trailColor = kbTheme.gestureTrail
-    // The board's one preview bubble. Hoisted here so pressing a key publishes to
-    // it instead of raising a window of the key's own.
-    val keyPreview = remember { KeyPreviewState() }
+    // The board's preview bubbles: the screen's, drawn by the frame over
+    // everything it holds; or this grid's own when no frame is composed (a
+    // grid on its own in a test), drawn here and lifted over the top row.
+    val hoistedPreview = LocalKeyPreviewState.current
+    val ownPreview = remember { KeyPreviewState() }
+    val keyPreview = hoistedPreview ?: ownPreview
     // The eight colours the keys themselves are painted with. Remembered so the
     // resolved rows below compare it by identity rather than by value.
     val palette = remember(kbTheme) { kbTheme.keyPalette() }
@@ -13035,9 +13151,15 @@ private fun KeyRows(
         // while particles live; the frame loop dies with them.
         KeyPressEffectsOverlay(particleField, particleGlyphs)
 
-        // Anchored on the grid rather than on a key, and composed whether or not
-        // anything is held — see [KeyPreviewOverlay].
-        KeyPreviewOverlay(keyPreview, state.settings, boxOrigin, boxSize)
+        // Only a grid with no frame above it draws its own bubbles — see
+        // [KeyPreviewOverlay] and [LocalKeyPreviewState].
+        if (hoistedPreview == null) {
+            KeyPreviewOverlay(
+                keyPreview, state.settings, boxOrigin, boxSize,
+                modifier = Modifier.matchParentSize(),
+                virtualHeadroom = true,
+            )
+        }
 
         // `visible` flips twice a stroke, so this composes and decomposes once
         // per glide. Everything that changes per sample is read inside the draw
@@ -13288,7 +13410,7 @@ private fun KeyRows(
  * plus [headroomPx] above it — pinned and sized the way [KeyPreviewOverlay]'s
  * is, so grid-space geometry places things in it with one added offset — and
  * it exists only while there is something to draw: a window with nothing in it
- * would still sit over the host app (see [PassThroughWindowOpacity]), and this
+ * would still sit over the host app, whose taps Android 12 then drops, and this
  * one is only ever up while the finger is on the keyboard.
  *
  * The one [Layout] reports the full window size and places everything itself.
@@ -17017,44 +17139,6 @@ private val PreviewPopupProperties = PopupProperties(
     flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
 )
-
-/**
- * Holds a pass-through popup's *window* transparent while it has nothing to
- * draw.
- *
- * A [Popup] is a real window, and [PreviewPopupProperties] marks this one
- * untouchable so taps fall through it. Since Android 12 a touch falling
- * through a window owned by another app is dropped instead of delivered, and
- * the preview overlay is one window for the whole life of the board, reaching
- * its bubble's headroom above the grid — which, on a board whose grid starts
- * near the top of the keyboard, is above the keyboard window and over the host
- * app's own bottom row. Drawing nothing is not enough there: the empty window
- * still occludes, and the app loses every tap under it (the system blames the
- * keyboard in a toast about touches not being recognised). A window with
- * `alpha` 0 is invisible to that rule, so the overlay only turns opaque while
- * a bubble is actually up — by which time the finger is on the keyboard, whose
- * touches are ours to begin with.
- */
-@Composable
-private fun PassThroughWindowOpacity(opaque: Boolean) {
-    val view = LocalView.current
-    SideEffect {
-        var root: View? = view
-        while (root != null && root.layoutParams !is WindowManager.LayoutParams) {
-            root = root.parent as? View
-        }
-        val window = root ?: return@SideEffect
-        val params = window.layoutParams as WindowManager.LayoutParams
-        val wanted = if (opaque) 1f else 0f
-        if (params.alpha == wanted) return@SideEffect
-        params.alpha = wanted
-        // The popup owns this window: updating it as it detaches throws.
-        runCatching {
-            window.context.getSystemService(WindowManager::class.java)
-                ?.updateViewLayout(window, params)
-        }
-    }
-}
 
 /**
  * Hold time after which a spacebar press (with language switching on the

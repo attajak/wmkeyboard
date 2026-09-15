@@ -3702,7 +3702,23 @@ open class WMKeyboardService : InputMethodService() {
                 onStripOfferAction = ::onStripOfferAction,
                 onToolPrefillConsumed = ::onToolPrefillConsumed,
                 onHideKeyboard = ::onHideKeyboard,
+                onPreviewHeadroom = ::onPreviewHeadroom,
             )
+    }
+
+    /**
+     * The empty band the docked frame holds above the board for the key
+     * preview bubbles, in px. Window, not keyboard: [onComputeInsets] keeps
+     * it out of the app's content and visible insets, so the app is laid out
+     * to the board and a tap in the band is the app's.
+     */
+    private var previewHeadroomPx = 0
+
+    fun onPreviewHeadroom(px: Int) {
+        if (px == previewHeadroomPx) return
+        previewHeadroomPx = px
+        // Insets are only re-queried on a window layout pass; force one.
+        window?.window?.decorView?.requestLayout()
     }
 
     // ---- floating mode ----
@@ -3802,7 +3818,18 @@ open class WMKeyboardService : InputMethodService() {
             }
             return
         }
-        if (!_uiState.value.settings.floatingKeyboard) return
+        if (!_uiState.value.settings.floatingKeyboard) {
+            // Docked: the frame's preview band is transparent window over the
+            // app, not keyboard. Both insets, so the app resizes to the board
+            // and a tap in the band reaches it — the touchable inset follows
+            // the visible one by default.
+            val headroom = previewHeadroomPx
+            if (headroom > 0) {
+                outInsets.contentTopInsets += headroom
+                outInsets.visibleTopInsets += headroom
+            }
+            return
+        }
         val decorHeight = window?.window?.decorView?.height ?: return
         outInsets.contentTopInsets = decorHeight
         outInsets.visibleTopInsets = decorHeight
