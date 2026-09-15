@@ -16,7 +16,7 @@ Repo: https://github.com/wasi-master/wmkeyboard.git
 Builds:
   - versionName: 0.5.8
     versionCode: 19
-    commit: 146515f75c7753e61719bd9fbec32d722acd62da
+    commit: db4b8b9dcded0cf219f9f8cbf6999546db59864d
     subdir: app
     gradle:
       - lite
