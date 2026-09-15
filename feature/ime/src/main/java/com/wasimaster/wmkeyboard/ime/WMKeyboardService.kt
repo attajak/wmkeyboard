@@ -5915,7 +5915,7 @@ open class WMKeyboardService : InputMethodService() {
             state.converterTypingActive -> { converterEdit { appendConverterDigits(it, text) }; true }
             // The word card is respelling one of its own words; the app
             // behind the keyboard must not see a letter of it (#138).
-            state.wordSpellActive -> { wordSpellEdit { it + text }; true }
+            state.wordSpellActive -> { wordSpellEdit { it.typed(text, UserLexicon.MAX_WORD_LENGTH) }; true }
             else -> false
         }
         if (takenByKeyboardBuffer) {
@@ -6499,8 +6499,18 @@ open class WMKeyboardService : InputMethodService() {
         if (_uiState.value.settings.textEditing.recapitalizeSelectionWithShift &&
             !_uiState.value.shiftSelectsText
         ) {
-            val ic = currentInputConnection
-            if (ic != null && hasSelection(ic) && recapitalizeSelection(ic)) return
+            val spell = _uiState.value.wordSpell
+            if (spell != null) {
+                // The spelling bar's own selection, never one standing in the
+                // app behind it (#204).
+                spell.recased(::nextCaseForm)?.let { next ->
+                    _uiState.update { it.copy(wordSpell = next) }
+                    return
+                }
+            } else {
+                val ic = currentInputConnection
+                if (ic != null && hasSelection(ic) && recapitalizeSelection(ic)) return
+            }
         }
         // Cancel a just-inserted auto-space after punctuation — the ". " from a
         // double space, or the space the auto-space-after-punctuation rule
@@ -6677,7 +6687,7 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         if (state.wordSpellActive) {
-            wordSpellEdit { it.dropLast(1) }
+            wordSpellEdit { it.deletedBackward() }
             return
         }
         if (state.emojiSearchActive) {
@@ -7005,9 +7015,15 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun onForwardDelete() {
         val state = _uiState.value
+        // The spelling bar's draft has a caret of its own (#204), so it does
+        // have an "after the cursor".
+        if (state.wordSpellActive) {
+            wordSpellEdit { it.deletedForward() }
+            return
+        }
         if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive ||
             state.findReplaceTypingActive ||
-            state.calcTypingActive || state.converterTypingActive || state.wordSpellActive ||
+            state.calcTypingActive || state.converterTypingActive ||
             state.emojiSearchActive || state.dictionarySearchActive ||
             state.clipboardSearchActive ||
             (state.mediaSearchActive && state.panel.hasMediaSearch)
@@ -7059,9 +7075,10 @@ open class WMKeyboardService : InputMethodService() {
      */
     fun canForwardDelete(): Boolean {
         val state = _uiState.value
+        state.wordSpell?.let { return it.hasSelection || it.cursor < it.draft.length }
         if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive ||
             state.findReplaceTypingActive ||
-            state.calcTypingActive || state.converterTypingActive || state.wordSpellActive ||
+            state.calcTypingActive || state.converterTypingActive ||
             state.emojiSearchActive || state.dictionarySearchActive ||
             state.clipboardSearchActive ||
             (state.mediaSearchActive && state.panel.hasMediaSearch)
@@ -13014,6 +13031,13 @@ open class WMKeyboardService : InputMethodService() {
      * on) and the other scrubs the spacebar.
      */
     fun onCursorMove(delta: Int) {
+        // The spelling bar's caret, asked before the field is: a scrub meant
+        // for the draft used to walk the app's caret behind the keyboard (#204).
+        if (_uiState.value.wordSpellActive) {
+            vibrate()
+            wordSpellEdit { it.caretMoved(delta, extend = _uiState.value.caretExtendsSelection) }
+            return
+        }
         val ic = currentInputConnection ?: return
         vibrate()
         // Mark the scrub so the caret's landing spot doesn't resume-compose the
@@ -13033,6 +13057,13 @@ open class WMKeyboardService : InputMethodService() {
      * shift included.
      */
     fun onCursorMoveVertical(delta: Int) {
+        // A one-line draft: up is its start, down its end.
+        if (_uiState.value.wordSpellActive) {
+            vibrate()
+            val extend = _uiState.value.caretExtendsSelection
+            wordSpellEdit { it.caretAt(if (delta < 0) 0 else it.draft.length, extend) }
+            return
+        }
         val ic = currentInputConnection ?: return
         vibrate()
         lastCaretScrubMs = SystemClock.uptimeMillis()
@@ -13773,10 +13804,9 @@ open class WMKeyboardService : InputMethodService() {
     private fun glideAllowed(state: KeyboardUiState): Boolean = when {
         !state.glideReady -> false
         state.typingTestActive -> state.settings.typingTest.glide
-        // The word card's spelling bar leaves the whole key grid on screen and
-        // takes every keystroke itself; a stroke over those keys must not be
-        // the one thing that still writes into the app behind (#138).
-        state.wordSpellActive -> false
+        // The word card's spelling bar takes a stroke into its own draft
+        // (#204), so, as in a test, the field's say does not apply.
+        state.wordSpellActive -> state.settings.gestureTyping
         else -> state.settings.gestureTyping && state.allowsGestureTyping
     }
 
@@ -14091,6 +14121,11 @@ open class WMKeyboardService : InputMethodService() {
         // A test run takes the word: the field behind the panel never sees it.
         if (state.typingTestActive) {
             typingTestGlide(listOf(points), keys, keyWidthPx, verdict)
+            return
+        }
+        // The word card's spelling bar takes the word, at its own caret (#204).
+        if (state.wordSpellActive) {
+            wordSpellGlide(points, keys, keyWidthPx, verdict, shiftForGlide(state.shiftState, verdict.caseAt(0)))
             return
         }
 
@@ -22554,7 +22589,7 @@ open class WMKeyboardService : InputMethodService() {
                 (state.ai as? AiUi.CustomInput)?.instruction?.isNotEmpty() == true
             state.calcTypingActive -> state.calcExpression.isNotEmpty()
             state.converterTypingActive -> state.converterValue.isNotEmpty()
-            state.wordSpellActive -> state.wordSpell?.draft?.isNotEmpty() == true
+            state.wordSpellActive -> state.wordSpell?.let { it.hasSelection || it.cursor > 0 } == true
             state.emojiSearchActive -> state.emojiQuery.isNotEmpty()
             state.dictionarySearchActive -> state.dictionaryQuery.isNotEmpty()
             state.clipboardSearchActive -> state.clipboardQuery.isNotEmpty()
@@ -22932,6 +22967,7 @@ open class WMKeyboardService : InputMethodService() {
             }
             WordCardAction.CommitSpelling -> commitWordSpell()
             WordCardAction.CancelSpelling -> cancelWordSpell()
+            is WordCardAction.SelectSpelling -> wordSpellEdit { it.selected(action.start, action.end) }
             WordCardAction.Add -> {
                 card.typed?.let(::addTypedWord)
                 publishWordCard(card.word)
@@ -22982,10 +23018,63 @@ open class WMKeyboardService : InputMethodService() {
      * query: while it is up, [KeyboardUiState.keysTakenByKeyboard] is true and
      * nothing typed reaches the app behind the keyboard.
      */
-    private fun wordSpellEdit(transform: (String) -> String) {
+    private fun wordSpellEdit(transform: (WordSpell) -> WordSpell) {
         val spell = _uiState.value.wordSpell ?: return
-        val draft = transform(spell.draft).take(UserLexicon.MAX_WORD_LENGTH)
-        _uiState.update { it.copy(wordSpell = it.wordSpell?.copy(draft = draft)) }
+        val next = transform(spell)
+        if (next != spell) _uiState.update { it.copy(wordSpell = next) }
+    }
+
+    /**
+     * A glide drawn over the keys while the spelling bar is up (#204): decoded
+     * the way a field glide is, then typed into the draft at the caret, over
+     * any selection. No space follows it and nothing is learned from it; the
+     * word is a spelling still being chosen, and applying it is what teaches
+     * the keyboard.
+     */
+    private fun wordSpellGlide(
+        points: List<GesturePoint>,
+        keys: List<KeyCenter>,
+        keyWidthPx: Float,
+        verdict: GlideVerdict,
+        shift: ShiftState,
+    ) {
+        // Retires every preview from this stroke, in flight or queued.
+        gestureGeneration.incrementAndGet()
+        gestureJob?.cancel()
+        clearGlidePreview()
+        val steadiness = _uiState.value.settings.gesture.previewSteadiness
+        gestureJob = serviceScope.launch {
+            val reading = withContext(Dispatchers.Default) { glideDecode(points, keys, keyWidthPx) }
+            val picked = (verdict as? GlideVerdict.Word)?.word
+                ?: previewGate.commit(reading.words, reading.scores, steadiness)
+                ?: reading.words.firstOrNull()
+                ?: return@launch
+            val word = glideCased(picked, shift, verdict.caseAt(0), points, keys, keyWidthPx)
+            wordSpellEdit { it.typed(word, UserLexicon.MAX_WORD_LENGTH) }
+            consumeShift()
+            // The previews wrote the stroke's readings onto the strip hidden
+            // under the bar; put back what the field itself would show.
+            refreshSuggestions()
+        }
+    }
+
+    /**
+     * A hardware arrow, Home or End while the spelling bar is up: the draft's
+     * caret moves, not the app's (#204). Shift extends, as it does in a field.
+     */
+    private fun wordSpellCaretKey(event: KeyEvent): Boolean {
+        val spell = _uiState.value.wordSpell ?: return false
+        val extend = event.isShiftPressed
+        val next = when (event.keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT -> spell.caretMoved(-1, extend)
+            KeyEvent.KEYCODE_DPAD_RIGHT -> spell.caretMoved(1, extend)
+            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_MOVE_HOME -> spell.caretAt(0, extend)
+            KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_MOVE_END -> spell.caretAt(spell.draft.length, extend)
+            else -> return false
+        }
+        _uiState.update { it.copy(wordSpell = next) }
+        consumeHardwareKey(event.keyCode)
+        return true
     }
 
     /**
@@ -23837,6 +23926,7 @@ open class WMKeyboardService : InputMethodService() {
         // before [handleHardwareKeyDown], whose composing gate and input-connection
         // check must not apply to opening a tool.
         if (handleHardwareNav(event)) return true
+        if (wordSpellCaretKey(event)) return true
         if (volumeCursorDelta(keyCode) != 0) {
             // Auto-repeat rides along for free: holding the key repeats DOWN.
             onCursorMove(volumeCursorDelta(keyCode))

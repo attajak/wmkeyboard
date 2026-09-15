@@ -1552,6 +1552,12 @@ sealed interface WordCardAction {
     /** Leave the spelling bar without respelling anything (#138). */
     data object CancelSpelling : WordCardAction
 
+    /**
+     * Put the spelling bar's selection from [start] to [end] — a tap is a
+     * caret, a drag a selection (#204). [end] is the end that moves.
+     */
+    data class SelectSpelling(val start: Int, val end: Int) : WordCardAction
+
     /** Add the typed word the card names, like [WordMenuAction.Add]. */
     data object Add : WordCardAction
 
@@ -1624,13 +1630,116 @@ data class WordCard(
  * same trick the AI Custom instruction plays with its panel. [draft] is a
  * buffer the service owns, exactly like the emoji query: while it exists the
  * keys never reach the app behind the keyboard.
+ *
+ * The draft has its own caret and selection (#204), because the keys that
+ * normally edit a field's text — the spacebar scrub, shift over a selection,
+ * a glide — would otherwise have nothing to act on but the app behind. The
+ * selection runs from [anchor] to [cursor]; the two are equal when nothing is
+ * selected, and [cursor] is the end that moves.
  */
 data class WordSpell(
     /** The spelling the card was opened on, restored on cancel. */
     val word: String,
     /** What the keys have typed so far. */
     val draft: String,
-)
+    /** Where the caret stands in [draft], in UTF-16 units. */
+    val cursor: Int = draft.length,
+    /** The fixed end of the selection; [cursor] when nothing is selected. */
+    val anchor: Int = cursor,
+) {
+    val selectionStart: Int get() = minOf(cursor, anchor).coerceIn(0, draft.length)
+    val selectionEnd: Int get() = maxOf(cursor, anchor).coerceIn(0, draft.length)
+    val hasSelection: Boolean get() = selectionStart != selectionEnd
+
+    /**
+     * [text] typed at the caret, over the selection if there is one. What
+     * would push the draft past [maxLength] is cut from [text], never from
+     * the letters already there.
+     */
+    fun typed(text: String, maxLength: Int): WordSpell {
+        val kept = draft.length - (selectionEnd - selectionStart)
+        val room = (maxLength - kept).coerceAtLeast(0)
+        val insert = if (text.length <= room) text else text.take(safeCut(text, room))
+        val next = draft.substring(0, selectionStart) + insert + draft.substring(selectionEnd)
+        return collapsedAt(next, selectionStart + insert.length)
+    }
+
+    /** Backspace: the selection, else the character before the caret. */
+    fun deletedBackward(): WordSpell = when {
+        hasSelection -> typed("", Int.MAX_VALUE)
+        cursor <= 0 -> this
+        else -> {
+            val from = stepBack(draft, cursor)
+            collapsedAt(draft.substring(0, from) + draft.substring(cursor), from)
+        }
+    }
+
+    /** Forward delete: the selection, else the character after the caret. */
+    fun deletedForward(): WordSpell = when {
+        hasSelection -> typed("", Int.MAX_VALUE)
+        cursor >= draft.length -> this
+        else -> collapsedAt(draft.substring(0, cursor) + draft.substring(stepForward(draft, cursor)), cursor)
+    }
+
+    /**
+     * The caret moved [delta] characters. With [extend] the selection grows
+     * or shrinks from its anchor, shift+arrow style; without, a selection
+     * collapses to the side the move points at before any step is taken.
+     */
+    fun caretMoved(delta: Int, extend: Boolean): WordSpell {
+        if (!extend && hasSelection) {
+            return copy(cursor = if (delta < 0) selectionStart else selectionEnd).let { it.copy(anchor = it.cursor) }
+        }
+        var at = cursor.coerceIn(0, draft.length)
+        repeat(kotlin.math.abs(delta)) {
+            at = if (delta < 0) stepBack(draft, at) else stepForward(draft, at)
+        }
+        return copy(cursor = at, anchor = if (extend) anchor else at)
+    }
+
+    /** The caret put at [index], the start or end of the draft for the vertical moves. */
+    fun caretAt(index: Int, extend: Boolean): WordSpell {
+        val at = index.coerceIn(0, draft.length)
+        return copy(cursor = at, anchor = if (extend) anchor else at)
+    }
+
+    /** A selection from [start] to [end], as a touch on the bar drew it. */
+    fun selected(start: Int, end: Int): WordSpell =
+        copy(anchor = start.coerceIn(0, draft.length), cursor = end.coerceIn(0, draft.length))
+
+    /**
+     * The selection run through [recase], still selected so another press
+     * takes the next step; null when there is no selection or nothing about
+     * it changes (a caseless script).
+     */
+    fun recased(recase: (String) -> String): WordSpell? {
+        if (!hasSelection) return null
+        val selected = draft.substring(selectionStart, selectionEnd)
+        val next = recase(selected)
+        if (next == selected) return null
+        return copy(
+            draft = draft.substring(0, selectionStart) + next + draft.substring(selectionEnd),
+            anchor = selectionStart,
+            cursor = selectionStart + next.length,
+        )
+    }
+
+    private fun collapsedAt(text: String, at: Int) = copy(draft = text, cursor = at, anchor = at)
+
+    private companion object {
+        fun stepBack(s: String, at: Int): Int =
+            if (at >= 2 && Character.isLowSurrogate(s[at - 1]) && Character.isHighSurrogate(s[at - 2])) at - 2
+            else (at - 1).coerceAtLeast(0)
+
+        fun stepForward(s: String, at: Int): Int =
+            if (at + 1 < s.length && Character.isHighSurrogate(s[at]) && Character.isLowSurrogate(s[at + 1])) at + 2
+            else (at + 1).coerceAtMost(s.length)
+
+        /** [length], moved back one if it would split a surrogate pair. */
+        fun safeCut(s: String, length: Int): Int =
+            if (length in 1 until s.length && Character.isHighSurrogate(s[length - 1])) length - 1 else length
+    }
+}
 
 
 /**

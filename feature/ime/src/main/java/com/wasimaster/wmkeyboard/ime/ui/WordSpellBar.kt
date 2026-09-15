@@ -1,6 +1,8 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
@@ -17,12 +20,23 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -41,9 +55,13 @@ import com.wasimaster.wmkeyboard.ime.WordCardAction
  * keyboard — see `keysTakenByKeyboard`.
  *
  * Tick applies the respelling and brings the card back on the new word; cross
- * leaves the spelling as it was. There is no caret to move: a word is short,
- * and backspace plus retyping is the whole editing model, which is what keeps
- * this a strip row rather than a text field the IME cannot host.
+ * leaves the spelling as it was.
+ *
+ * The draft has a caret and a selection of its own (#204), drawn here and kept
+ * by the service: a tap puts the caret, a drag selects, a hold selects the
+ * whole word. The spacebar scrub, shift over a selection and a glide all act
+ * on them, which is what makes this edit like a text field without being one
+ * the IME would have to raise.
  */
 @Composable
 internal fun WordSpellBar(
@@ -81,13 +99,14 @@ internal fun WordSpellBar(
                     overflow = TextOverflow.Ellipsis,
                 )
             } else {
-                Text(
-                    text = spell.draft,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
-                    color = kb.suggestionText,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+                SpellDraft(
+                    draft = spell.draft,
+                    cursor = spell.cursor,
+                    selectionStart = spell.selectionStart,
+                    selectionEnd = spell.selectionEnd,
+                    textColor = kb.suggestionText,
+                    accent = kb.accent,
+                    onSelect = { start, end -> onAction(WordCardAction.SelectSpelling(start, end)) },
                 )
             }
         }
@@ -112,6 +131,80 @@ internal fun WordSpellBar(
             onAction(WordCardAction.CommitSpelling)
         }
     }
+}
+
+/**
+ * The draft with its selection shaded and, when nothing is selected, its
+ * caret drawn. Touches answer in draft offsets through [onSelect], anchor
+ * first; the service owns the result, so what is drawn is always what the
+ * next key will edit.
+ */
+@Composable
+private fun SpellDraft(
+    draft: String,
+    cursor: Int,
+    selectionStart: Int,
+    selectionEnd: Int,
+    textColor: Color,
+    accent: Color,
+    onSelect: (start: Int, end: Int) -> Unit,
+) {
+    val layout = remember { mutableStateOf<TextLayoutResult?>(null) }
+    val select by rememberUpdatedState(onSelect)
+    val length by rememberUpdatedState(draft.length)
+    val shade = accent.copy(alpha = 0.32f)
+    val text = remember(draft, selectionStart, selectionEnd, shade) {
+        buildAnnotatedString {
+            append(draft)
+            if (selectionStart != selectionEnd) {
+                addStyle(SpanStyle(background = shade), selectionStart, selectionEnd)
+            }
+        }
+    }
+    fun offsetAt(position: Offset): Int =
+        layout.value?.getOffsetForPosition(position)?.coerceIn(0, length) ?: length
+    BasicText(
+        text = text,
+        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium, color = textColor),
+        maxLines = 1,
+        softWrap = false,
+        overflow = TextOverflow.Clip,
+        onTextLayout = { layout.value = it },
+        modifier = Modifier
+            // The whole box width, so a tap past the last letter lands the
+            // caret at the end instead of missing the text.
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = { offsetAt(it).let { at -> select(at, at) } },
+                    // Holding is the quick way to the one thing a word bar
+                    // is ever selected for: all of it, ready for shift.
+                    onLongPress = { select(0, length) },
+                )
+            }
+            .pointerInput(Unit) {
+                var anchor = 0
+                detectDragGestures(
+                    onDragStart = { anchor = offsetAt(it); select(anchor, anchor) },
+                    onDrag = { change, _ ->
+                        change.consume()
+                        select(anchor, offsetAt(change.position))
+                    },
+                )
+            }
+            .drawWithContent {
+                drawContent()
+                if (selectionStart != selectionEnd) return@drawWithContent
+                val laid = layout.value ?: return@drawWithContent
+                val at = cursor.coerceIn(0, laid.layoutInput.text.length)
+                val rect = laid.getCursorRect(at)
+                drawRect(
+                    color = accent,
+                    topLeft = Offset(rect.left, rect.top),
+                    size = Size(CARET_WIDTH.toPx(), rect.height),
+                )
+            },
+    )
 }
 
 /** One of the bar's two round buttons. */
@@ -139,3 +232,5 @@ private fun SpellBarButton(
  * has to be readable wherever the card can be opened from.
  */
 private val SPELL_BAR_MIN_HEIGHT = 40.dp
+
+private val CARET_WIDTH = 2.dp

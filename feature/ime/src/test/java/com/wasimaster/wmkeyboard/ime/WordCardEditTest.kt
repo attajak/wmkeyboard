@@ -82,6 +82,7 @@ class WordCardEditTest {
     }
 
     private val backspace = Key(label = "⌫", action = KeyAction.Delete)
+    private val shift = Key(label = "⇧", action = KeyAction.Shift)
 
     @Test
     fun `the card opens knowing whether the capitals are pinned`() {
@@ -185,6 +186,49 @@ class WordCardEditTest {
         service.onWordCardAction(WordCardAction.SetCasePinned(false))
         assertFalse(lexicon.isCasePinned(PINNED))
         assertFalse(service.uiState.value.wordCard?.casePinned == true)
+    }
+
+    @Test
+    fun `a spacebar scrub moves the bar's caret and never the field's`() {
+        val (service, editor, _) = cardOn(TYPO)
+        service.onWordCardAction(WordCardAction.EditSpelling)
+        service.onCursorMove(-1)
+        service.onText("x")
+        assertEquals("texh", service.uiState.value.wordSpell?.draft)
+        assertEquals("", editor.text.toString())
+        assertTrue(editor.keys.isEmpty())
+    }
+
+    @Test
+    fun `backspace deletes at the bar's caret`() {
+        val (service, _, _) = cardOn(TYPO)
+        service.onWordCardAction(WordCardAction.EditSpelling)
+        service.onCursorMove(-1)
+        service.onKey(backspace)
+        assertEquals("th", service.uiState.value.wordSpell?.draft)
+    }
+
+    @Test
+    fun `shift re-cases a selection drawn on the bar`() {
+        val (service, editor, _) = cardOn(TYPO)
+        service.onWordCardAction(WordCardAction.EditSpelling)
+        service.onWordCardAction(WordCardAction.SelectSpelling(0, TYPO.length))
+        service.onKey(shift)
+        assertEquals("Teh", service.uiState.value.wordSpell?.draft)
+        service.onKey(shift)
+        assertEquals("TEH", service.uiState.value.wordSpell?.draft)
+        // Spent on the selection, not armed for the next letter.
+        assertEquals(ShiftState.OFF, service.uiState.value.shiftState)
+        assertEquals("", editor.text.toString())
+    }
+
+    @Test
+    fun `typing over a selection on the bar replaces it`() {
+        val (service, _, _) = cardOn(TYPO)
+        service.onWordCardAction(WordCardAction.EditSpelling)
+        service.onWordCardAction(WordCardAction.SelectSpelling(1, 3))
+        service.onText("he")
+        assertEquals("the", service.uiState.value.wordSpell?.draft)
     }
 
     @Test
