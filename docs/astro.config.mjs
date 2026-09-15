@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import preact from '@astrojs/preact';
 import starlight from '@astrojs/starlight';
 import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
@@ -23,6 +24,7 @@ plugins.push(
 	starlightThemeBlack({
 		navLinks: [
 			{ label: 'Get started', link: '/start/installation/' },
+			{ label: 'Addons', link: '/addons/' },
 			{ label: 'Reference', link: '/reference/settings/' },
 			{ label: 'Development', link: '/development/building/' },
 		],
@@ -44,6 +46,8 @@ export default defineConfig({
 		server: { fs: { allow: ['..'] } },
 	},
 	integrations: [
+		// The addon store (/addons/) is a Preact island; nothing else uses it.
+		preact(),
 		starlight({
 			title: SITE_TITLE,
 			description: SITE_DESCRIPTION,

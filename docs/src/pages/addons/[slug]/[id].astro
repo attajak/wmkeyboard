@@ -1,0 +1,44 @@
+---
+import StoreShell from '../../../layouts/StoreShell.astro';
+import { loadAllSeeds } from '../../../lib/seed-repos.mjs';
+
+/** One prerendered page per addon in the seeded repositories: real title, description and social image. */
+export async function getStaticPaths() {
+	const seeds = await loadAllSeeds();
+	return Object.values(seeds).flatMap((s) =>
+		s.manifest.addons.map((addon: any) => ({ params: { slug: s.seed.slug, id: addon.id }, props: { seeds, addon } }))
+	);
+}
+
+const { slug } = Astro.params;
+type SeedMap = Awaited<ReturnType<typeof loadAllSeeds>>;
+const { seeds, addon } = Astro.props as { seeds: SeedMap; addon: any };
+const me = seeds[slug!]!;
+const preloaded = Object.fromEntries(Object.values(seeds).map((s) => [s.seed.url, s.manifest]));
+const source = Object.values(seeds).some((s) => s.source === 'snapshot') ? 'snapshot' : 'live';
+
+const TYPE_LABEL: Record<string, string> = {
+	theme: 'Theme', layout: 'Layout', dictionary: 'Dictionary', emoji_keywords: 'Emoji keyword pack', snippets: 'Snippet pack',
+	espanso: 'Espanso pack', stickers: 'Sticker pack', icon_pack: 'Icon pack', font: 'Font', emoji_font: 'Emoji font',
+	sound: 'Key sound', sound_pack: 'Sound pack', plugin: 'Plugin', vocabulary: 'Vocabulary pack',
+};
+const kind = TYPE_LABEL[addon.type] ?? 'Addon';
+// First preview, resolved the way the app resolves assets (relative to the manifest, https only).
+const firstPreview = addon.previews?.[0];
+let image;
+if (firstPreview) {
+	try {
+		const u = new URL(firstPreview, me.seed.url);
+		if (u.protocol === 'https:') image = u.href;
+	} catch {}
+}
+---
+
+<StoreShell
+	title={`${addon.name} · ${kind}`}
+	description={addon.description ?? `${addon.name}, a ${kind.toLowerCase()} for WM Keyboard from ${me.manifest.repo.name}.`}
+	image={image}
+	route={{ view: 'addon', repo: me.seed.url, id: addon.id }}
+	preloaded={preloaded}
+	preloadedSource={source}
+/>

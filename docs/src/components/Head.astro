@@ -26,6 +26,7 @@ type HeadTag = (typeof head)[number];
 /** Tags astro-seo emits below, dropped here so nothing is declared twice. */
 const isOwnedBySeo = (tag: HeadTag) => {
 	if (tag.tag === 'link') return tag.attrs?.rel === 'canonical';
+	if (tag.tag === 'meta' && tag.attrs?.name === 'wm:og-image') return true;
 	if (tag.tag === 'meta') {
 		return /^(og|twitter):/.test(String(tag.attrs?.property ?? tag.attrs?.name ?? ''));
 	}
@@ -38,7 +39,10 @@ const starlightCanonical = head.find(
 
 const site = Astro.site ?? new URL(SITE_URL);
 const canonical = String(starlightCanonical ?? new URL(Astro.url.pathname, site).href);
-const imageUrl = new URL(OG_IMAGE, site).href;
+// The addon store hands over a per-page social image through a private meta
+// tag (StoreShell.astro); it never reaches the output, only the og: tags do.
+const ownImage = head.find((tag) => tag.tag === 'meta' && tag.attrs?.name === 'wm:og-image')?.attrs?.content;
+const imageUrl = ownImage ? String(ownImage) : new URL(OG_IMAGE, site).href;
 const description = entry.data.description ?? SITE_DESCRIPTION;
 const title = entry.data.title;
 ---

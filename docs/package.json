@@ -14,17 +14,25 @@
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.1",
+    "@astrojs/preact": "^6.0.5",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/starlight": "^0.41.4",
     "@fontsource-variable/inter": "^5.3.0",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource/roboto": "^5.3.0",
+    "@preact/signals": "^2.11.2",
     "astro": "^7.1.4",
     "astro-breadcrumbs": "^3.4.2",
     "astro-seo": "^1.1.0",
+    "fflate": "^0.8.3",
+    "preact": "^10.29.8",
+    "qrcode": "^1.5.4",
     "sharp": "^0.35.3",
     "starlight-image-zoom": "^0.15.0",
     "starlight-links-validator": "^0.25.2",
     "starlight-theme-black": "^0.7.1"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.6"
   }
 }

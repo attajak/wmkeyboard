@@ -1,0 +1,9 @@
+---
+import StoreShell from '../../layouts/StoreShell.astro';
+import { loadAllSeeds } from '../../lib/seed-repos.mjs';
+
+const seeds = await loadAllSeeds();
+const preloaded = Object.fromEntries(Object.values(seeds).map((s) => [s.seed.url, s.manifest]));
+---
+
+<StoreShell title="What's new · Addon store" description="New and updated addons since your last visit." route={{ view: 'whatsnew' }} preloaded={preloaded} noindex />

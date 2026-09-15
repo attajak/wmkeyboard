@@ -1,0 +1,52 @@
+---
+/**
+ * The page frame every /addons/* route uses: a Starlight splash page (site
+ * header, fonts, palette and the dark/light toggle come for free) with the
+ * store island filling the width below it.
+ *
+ * `init` is the store's starting state: the route this URL names and the
+ * manifests the build already fetched, so a prerendered addon page renders
+ * its content on the server and the client only hydrates.
+ */
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import StoreApp from '../store/ui/StoreApp';
+import type { Route } from '../store/state';
+import '../store/store.css';
+import { appVersion } from '../lib/app-version.mjs';
+import { SITE_URL } from '../site.mjs';
+
+interface Props {
+	title: string;
+	description: string;
+	/** Absolute or site-relative image for the social card; defaults to the site card. */
+	image?: string;
+	route: Route;
+	preloaded?: Record<string, unknown>;
+	preloadedSource?: 'live' | 'snapshot';
+	/** Keep crawlers off pages that only make sense with client state. */
+	noindex?: boolean;
+}
+
+const { title, description, image, route, preloaded, preloadedSource, noindex } = Astro.props;
+const { versionCode, versionName } = appVersion();
+const init = {
+	route,
+	preloaded,
+	preloadedSource,
+	appVersionCode: versionCode,
+	appVersionName: versionName,
+	builtAt: new Date().toISOString(),
+};
+const head: { tag: 'meta'; attrs: Record<string, string> }[] = [];
+if (image) head.push({ tag: 'meta', attrs: { name: 'wm:og-image', content: new URL(image, SITE_URL).href } });
+if (noindex) head.push({ tag: 'meta', attrs: { name: 'robots', content: 'noindex' } });
+---
+
+<StarlightPage frontmatter={{ title, description, template: 'splash', tableOfContents: false, pagefind: false, head }} hasSidebar={false}>
+	<StoreApp client:load init={init} />
+</StarlightPage>
+
+<script is:inline>
+	// Before hydration: the store owns the page width and hides the splash title.
+	document.documentElement.setAttribute('data-wm-store', '');
+</script>

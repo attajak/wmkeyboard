@@ -1,0 +1,16 @@
+---
+import StoreShell from '../../layouts/StoreShell.astro';
+import { loadAllSeeds } from '../../lib/seed-repos.mjs';
+
+const seeds = await loadAllSeeds();
+const preloaded = Object.fromEntries(Object.values(seeds).map((s) => [s.seed.url, s.manifest]));
+const source = Object.values(seeds).some((s) => s.source === 'snapshot') ? 'snapshot' : 'live';
+---
+
+<StoreShell
+	title="Addon store"
+	description="Browse themes, layouts, dictionaries, fonts, sounds, sticker packs, icon packs and plugins for WM Keyboard, from the official repository or any you add."
+	route={{ view: 'home' }}
+	preloaded={preloaded}
+	preloadedSource={source}
+/>

@@ -1,0 +1,9 @@
+---
+import StoreShell from '../../layouts/StoreShell.astro';
+import { loadAllSeeds } from '../../lib/seed-repos.mjs';
+
+const seeds = await loadAllSeeds();
+const preloaded = Object.fromEntries(Object.values(seeds).map((s) => [s.seed.url, s.manifest]));
+---
+
+<StoreShell title="Compare · Addon store" description="Compare fonts, themes and sounds side by side." route={{ view: 'compare' }} preloaded={preloaded} noindex />

@@ -1,0 +1,1120 @@
+{
+  "$schema": "https://raw.githubusercontent.com/wasi-master/wmkeyboard-addon-repository/main/docs/addons/wmkeyboard-repo.schema.json",
+  "format": "wmkeyboard-repo",
+  "version": 1,
+  "repo": {
+    "id": "com.wasimaster.wmkeyboard.official",
+    "name": "WM Keyboard Official Addons",
+    "description": "Example addon repository: one payload of every type — theme, layout, dictionary, snippets, stickers, icon packs, fonts and key sounds. Fork it to make your own.",
+    "author": "Wasi Master",
+    "homepage": "https://github.com/wasi-master/wmkeyboard-addon-repository",
+    "icon": "icon.png",
+    "updatedAt": "2026-09-15"
+  },
+  "addons": [
+    {
+      "id": "arcade-cabinet",
+      "type": "theme",
+      "name": "Arcade Cabinet",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "A CRT arcade board: pixel-grid key textures, a slow neon hue sweep, WASD picked out in cyan, and pixel coins, stars and hearts bursting under every press. Designed around the Press Start 2P font and the Blip key sound.",
+      "tags": [
+        "retro",
+        "arcade",
+        "pixel",
+        "neon",
+        "dark",
+        "effects"
+      ],
+      "path": "themes/arcade-cabinet.wmtheme.json",
+      "sha256": "e7bbbe55e564e90d6e99da6177b75f1e215ec22a5557b189d2e2f0ac3c91639e",
+      "sizeBytes": 3389,
+      "previews": [
+        "previews/arcade-cabinet.jpg"
+      ],
+      "minAppVersion": 3,
+      "license": "CC0-1.0",
+      "requires": [
+        "press-start-2p",
+        "blip"
+      ]
+    },
+    {
+      "id": "sakura-breeze",
+      "type": "theme",
+      "name": "Sakura Breeze",
+      "version": "1.1.0",
+      "author": "Wasi Master",
+      "description": "A light spring theme: scalloped white keys over a flowing pink sky, a blossom branch leaning across the board, drifting petal stickers and blossom emoji bursting on each press. Designed around the Caveat font and the Marimba key sound.",
+      "tags": [
+        "light",
+        "pink",
+        "flowers",
+        "stickers",
+        "effects"
+      ],
+      "path": "themes/sakura-breeze.wmtheme.json",
+      "sha256": "d860e4fe27eb603eb84b9f79c843c0b1be606795d2440475adb51b41a7015944",
+      "sizeBytes": 61853,
+      "previews": [
+        "previews/sakura-breeze.jpg"
+      ],
+      "minAppVersion": 3,
+      "license": "CC0-1.0",
+      "requires": [
+        "caveat",
+        "marimba"
+      ]
+    },
+    {
+      "id": "synthwave-highway",
+      "type": "theme",
+      "name": "Synthwave Highway",
+      "version": "1.1.0",
+      "author": "Wasi Master",
+      "description": "An animated sunset grid rolling behind slanted, translucent neon keys and a cyan glide trail. The background is a real looping GIF, and the key-preview bubble is a slanted neon key of its own, floating above the finger.",
+      "tags": [
+        "dark",
+        "neon",
+        "animated",
+        "retro",
+        "effects"
+      ],
+      "path": "themes/synthwave-highway.wmtheme.json",
+      "sha256": "f1dffd7941bcf423dbe4f8d94a6218f72d3391ddaa5f15ac6ea2bdde90b4c6ed",
+      "sizeBytes": 37464,
+      "previews": [
+        "previews/synthwave-highway.jpg"
+      ],
+      "minAppVersion": 3,
+      "license": "CC0-1.0"
+    },
+    {
+      "id": "blockland",
+      "type": "theme",
+      "name": "Blockland",
+      "version": "1.3.0",
+      "author": "Wasi Master",
+      "description": "A blocky sandbox look: tiled dirt letter keys, stone modifiers, a grass enter and a plank space bar under a drifting pixel-cloud sky — a real looping GIF — with a thock key sound. The E key is cut from emerald, and the key popup is a dead-square plank block with a chunky rim. On a Bengali board the keys are cut from Pixelborno, a pixel face with the conjuncts intact.",
+      "tags": [
+        "blocks",
+        "pixel",
+        "light",
+        "textures",
+        "animated"
+      ],
+      "path": "themes/blockland.wmtheme.json",
+      "sha256": "0228158bf4a6031fe1a28c23abcd373c034fe6b7bcba55da34fb4fea3cd0d70c",
+      "sizeBytes": 89215,
+      "previews": [
+        "previews/blockland.jpg"
+      ],
+      "minAppVersion": 3,
+      "license": "CC0-1.0",
+      "requires": [
+        "pixelborno"
+      ]
+    },
+    {
+      "id": "typewriter-noir",
+      "type": "theme",
+      "name": "Typewriter Noir",
+      "version": "1.1.0",
+      "author": "Wasi Master",
+      "description": "Paper keys on a dark desk — round typewriter caps rimmed in metal — a red carriage-return enter, and grain in the paper. The key popup is a round cap too. Designed around the JetBrains Mono font and the Typewriter key sound.",
+      "tags": [
+        "dark",
+        "retro",
+        "mono",
+        "paper"
+      ],
+      "path": "themes/typewriter-noir.wmtheme.json",
+      "sha256": "e2f7e124351d0772a0d9f08a195662332283e7799433bc321059e31bc0613189",
+      "sizeBytes": 5928,
+      "previews": [
+        "previews/typewriter-noir.jpg"
+      ],
+      "minAppVersion": 4,
+      "license": "CC0-1.0",
+      "requires": [
+        "jetbrains-mono",
+        "typewriter"
+      ]
+    },
+    {
+      "id": "deep-orbit",
+      "type": "theme",
+      "name": "Deep Orbit",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "A nebula photo behind translucent pill keys, a ringed planet resting on the corner of the board, a galaxy strip across the space bar and star bursts under your fingers. Key popups float free above the keys like ringed bubbles. Designed around the Droplet key sound.",
+      "tags": [
+        "dark",
+        "space",
+        "stickers",
+        "photo",
+        "effects"
+      ],
+      "path": "themes/deep-orbit.wmtheme.json",
+      "sha256": "d4e7daaa5fe2d3bd8b05e2c67c500f30867c897584c28288b58d1c6d33c7bfdd",
+      "sizeBytes": 77264,
+      "previews": [
+        "previews/deep-orbit.jpg"
+      ],
+      "minAppVersion": 3,
+      "license": "CC0-1.0",
+      "requires": [
+        "droplet"
+      ]
+    },
+    {
+      "id": "michil",
+      "type": "theme",
+      "name": "Michil",
+      "version": "1.1.0",
+      "author": "Wasi Master",
+      "description": "The Michil community's dashboard as a keyboard, in its exact palette: parchment card keys edged in brown on the site's flat cream background, a deep-green quest-button enter outlined in light green, a gold Michilcoin on the M key, a warning-gold press flash, and coins, stars and trophies bursting from every press. Designed around the Bloxat font and the Blip key sound, with Pixelborno carrying the Bengali board.",
+      "tags": [
+        "pixel",
+        "retro",
+        "light",
+        "green",
+        "effects"
+      ],
+      "path": "themes/michil.wmtheme.json",
+      "sha256": "02c34883ee79987f0301748560c4a2efd541375850e0bf78a1cef62f0097ceb8",
+      "sizeBytes": 8939,
+      "previews": [
+        "previews/michil.jpg"
+      ],
+      "minAppVersion": 4,
+      "license": "CC0-1.0",
+      "requires": [
+        "bloxat",
+        "blip",
+        "pixelborno"
+      ]
+    },
+    {
+      "id": "braille",
+      "type": "layout",
+      "name": "Braille (Unicode)",
+      "version": "1.0.0",
+      "author": "WM Keyboard",
+      "description": "Types Unicode braille cells (⠁⠃⠉⠙) from QWERTY key positions, with the Latin letter on long-press and shown as the corner hint. Includes the capital and number signs. For writing braille as text — it is not a six-key chorded braille input.",
+      "tags": [
+        "braille",
+        "accessibility",
+        "unicode"
+      ],
+      "path": "layouts/braille.wmlayout.json",
+      "sha256": "2f857c5863a412328b07f932462a0947720b89ddd4afc4322f1e18c4d81a0535",
+      "sizeBytes": 7307,
+      "previews": [
+        "previews/braille-grid.jpg",
+        "previews/braille.jpg"
+      ],
+      "langId": "en",
+      "license": "CC0-1.0"
+    },
+    {
+      "id": "clearflow",
+      "type": "layout",
+      "name": "ClearFlow",
+      "version": "1.0.0",
+      "author": "ClearFlow Authors (Xiaojun Bi et al.), ported by cinnabar777",
+      "description": "A layout built for glide typing: letters placed so common swipe paths stay apart, with shift and delete as tall keys down the sides and space on both edges for either thumb. Public domain, designed by the ClearFlow authors; ported to WM Keyboard by cinnabar777 from FUTO Keyboard's version.",
+      "tags": [
+        "glide",
+        "swipe",
+        "alternative",
+        "english"
+      ],
+      "path": "layouts/clearflow.wmlayout.json",
+      "sha256": "d9cdd4a7b7986333a0deac9c7928b3e0cadc0d278c5c894eb8ad46bc3317619b",
+      "sizeBytes": 17195,
+      "previews": [
+        "previews/clearflow.jpg",
+        "previews/clearflow-symbols.jpg"
+      ],
+      "minAppVersion": 18,
+      "langId": "en",
+      "license": "Public domain",
+      "licenseFile": "layouts/CLEARFLOW-LICENSE.txt"
+    },
+    {
+      "id": "kasroz",
+      "type": "layout",
+      "name": "KASROZ",
+      "version": "1.0.0",
+      "author": "FUTO, ported by cinnabar777",
+      "description": "FUTO Keyboard's swipe-optimised layout, named for its second row. Same frame as ClearFlow (tall shift and delete at the sides, space on both edges) with a different letter arrangement tuned for glide accuracy. Apache-2.0, by FUTO; ported to WM Keyboard by cinnabar777.",
+      "tags": [
+        "glide",
+        "swipe",
+        "alternative",
+        "english"
+      ],
+      "path": "layouts/kasroz.wmlayout.json",
+      "sha256": "b8a9171d949e551b9c5be69ae8a37f32122f37422191fc0e4be108f86d09d729",
+      "sizeBytes": 19196,
+      "previews": [
+        "previews/kasroz.jpg",
+        "previews/kasroz-symbols.jpg"
+      ],
+      "minAppVersion": 18,
+      "langId": "en",
+      "license": "Apache-2.0",
+      "licenseFile": "layouts/KASROZ-LICENSE.txt"
+    },
+    {
+      "id": "vowel-vortex-clarity",
+      "type": "layout",
+      "name": "Vowel Vortex Clarity",
+      "version": "1.0.0",
+      "author": "cinnabar777",
+      "description": "A QWERTY-like layout for glide typing that pulls the vowels A E U I O into a row of their own, with comma, !, ? and period as narrow keys between them. Numbers and symbols sit on long-press of the letters. Designed by cinnabar777; free for personal, non-commercial use (see the licence).",
+      "tags": [
+        "glide",
+        "swipe",
+        "qwerty",
+        "vowels",
+        "english"
+      ],
+      "path": "layouts/vowel-vortex-clarity.wmlayout.json",
+      "sha256": "499d64c2ee3e3a60c24b7bdfb052eaf1ba0afb871f8d13d0328ff8addb0accb3",
+      "sizeBytes": 28396,
+      "previews": [
+        "previews/vowel-vortex-clarity.jpg",
+        "previews/vowel-vortex-clarity-symbols.jpg"
+      ],
+      "minAppVersion": 18,
+      "langId": "en",
+      "license": "Vowel Vortex License",
+      "licenseText": "Copyright & License\n\nI retain my right to hold a common law copyright on the Vowel Vortex Keyboard Layouts, this applies to all variations though they are not posted here, as my intellectual property. This applies to the specific idea of using the vowels in their own row while maintaining similarity with the QWERTY layout, such minor changes such as moving a constant is infringing. \n\nUse is hereby granted, free to use, to the following open source Keyboard projects: HeliBoard and forks of it, FUTO Keyboard and forks of it, FlorisBoard and forks of it. Any other open source Keyboard projects that want to use these layouts please contact me. \n\nProhibited from using: any publicly traded company must gain written permission prior to use, anyone using these layouts for a commercial product must gain written permission prior to use. \n\nFree use: anyone using it for personal private non-commercial use is free to use the layouts. \n\nGeneral Prohibitions: no person may charge for any of these layouts, except the creator of these layouts. \n\nMay 17, 2026\n\nSource: https://github.com/cinnabar777/Vowel-Vortex-Keyboard-Layouts"
+    },
+    {
+      "id": "en-developer",
+      "type": "dictionary",
+      "name": "Developer Dictionary",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "An exhaustive developer dictionary containing top programming terms, syntax keywords, libraries, DevOps tools, databases, and methodologies.",
+      "tags": [
+        "developer",
+        "english"
+      ],
+      "path": "dictionaries/en-developer.txt",
+      "sha256": "353edbd2a56a205c9a3da12eebc15a113b4e0c65965493ee84c7e267a5df067d",
+      "sizeBytes": 17126,
+      "previews": [
+        "previews/en-developer.png"
+      ],
+      "langId": "en",
+      "license": "CC0-1.0"
+    },
+    {
+      "id": "en-slang",
+      "type": "dictionary",
+      "name": "Internet Slang & Urban Dictionary",
+      "version": "1.1.0",
+      "author": "Wasi Master",
+      "description": "An exhaustive internet slang dictionary covering Gen Z, Gen Alpha, brainrot, Twitch emotes, TikTok trends, AI tech slang, anime/K-Pop culture, gaming terminology, and Urban Dictionary acronyms.",
+      "tags": [
+        "slang",
+        "genz",
+        "genalpha",
+        "brainrot",
+        "twitch",
+        "english"
+      ],
+      "path": "dictionaries/en-slang.txt",
+      "sha256": "03b8cb2035c65d47b9e3af735529a271697eee4486b88f15bd0527572f71d8d3",
+      "sizeBytes": 6572,
+      "previews": [
+        "previews/en-slang.png"
+      ],
+      "langId": "en",
+      "license": "CC0-1.0"
+    },
+    {
+      "id": "en-medical",
+      "type": "dictionary",
+      "name": "Medical & Clinical Dictionary",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "An exhaustive medical and clinical dictionary covering drug generic and chemical compound names, brand pharmaceuticals, diseases, rare syndromes, surgical procedures, diagnostic equipment, and medical terminology.",
+      "tags": [
+        "medical",
+        "clinical",
+        "pharma",
+        "medicine",
+        "anatomy",
+        "english"
+      ],
+      "path": "dictionaries/en-medical.txt",
+      "sha256": "312455b44ad703cae5b983edb3ce77c99549773b3bff7ebf45fb235378165c92",
+      "sizeBytes": 15426,
+      "previews": [
+        "previews/en-medical.png"
+      ],
+      "langId": "en",
+      "license": "CC0-1.0"
+    },
+    {
+      "id": "en-legal",
+      "type": "dictionary",
+      "name": "Legal & Jurisprudence Dictionary",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "An exhaustive legal and jurisprudence dictionary covering Latin legal maxims, constitutional law, contract terminology, torts, civil procedure, criminal law, corporate law, intellectual property, and courtroom terminology.",
+      "tags": [
+        "legal",
+        "jurisprudence",
+        "law",
+        "court",
+        "contracts",
+        "english"
+      ],
+      "path": "dictionaries/en-legal.txt",
+      "sha256": "f92259fbbe51f9fbe51b7c82d60f5139f2924bbd44947620705bc8d47be291dc",
+      "sizeBytes": 7684,
+      "previews": [
+        "previews/en-legal.png"
+      ],
+      "langId": "en",
+      "license": "CC0-1.0"
+    },
+    {
+      "id": "texting-shortcuts",
+      "type": "snippets",
+      "name": "Texting Shortcuts",
+      "version": "1.1.0",
+      "author": "Wasi Master",
+      "description": "A comprehensive collection of must-have texting shortcuts: quick conversational replies, common acronyms, and chat expansions.",
+      "tags": [
+        "chat",
+        "texting",
+        "abbreviations",
+        "productivity"
+      ],
+      "path": "snippets/texting-shortcuts.wmsnippets.json",
+      "sha256": "1c4b32a8a7997b318a3167876c467d6e36b033c544cffd88d6e841d61e2cda9c",
+      "sizeBytes": 4850,
+      "previews": [
+        "previews/texting-shortcuts.png"
+      ],
+      "license": "CC0-1.0"
+    },
+    {
+      "id": "pattern-replies",
+      "type": "snippets",
+      "name": "Pattern Replies",
+      "version": "1.1.0",
+      "author": "Wasi Master",
+      "description": "Snippets that expand around a name or a time: type \"hello John\" and get a full greeting, \"thanks Sarah\" and get a whole thank-you letter. Uses pattern triggers, so one snippet covers every name. Each one waits on the suggestion bar for a tap, so nothing rewrites what you typed on its own.",
+      "tags": [
+        "patterns",
+        "replies",
+        "email",
+        "greetings",
+        "productivity"
+      ],
+      "path": "snippets/pattern-replies.wmsnippets.json",
+      "sha256": "682de666d93395b4d9097f8ebff8e11599b13fce91dc9bf7beff79b8decbed20",
+      "sizeBytes": 2736,
+      "previews": [
+        "previews/pattern-replies.png"
+      ],
+      "license": "CC0-1.0"
+    },
+    {
+      "id": "pattern-formatters",
+      "type": "snippets",
+      "name": "Pattern Formatters",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "Slash commands that reshape what you just typed: /up SHOUTS, /bold wraps for Markdown, /link makes a link out of two words, /gh turns a name into a GitHub URL. Every trigger starts with a slash, so none of them fire inside ordinary writing.",
+      "tags": [
+        "patterns",
+        "markdown",
+        "formatting",
+        "commands",
+        "productivity"
+      ],
+      "path": "snippets/pattern-formatters.wmsnippets.json",
+      "sha256": "331d79d4b8cbc6e2eb865013bec796ccae0ef4c748b9eaa58d5e17661e20a588",
+      "sizeBytes": 2590,
+      "previews": [
+        "previews/pattern-formatters.png"
+      ],
+      "license": "CC0-1.0"
+    },
+    {
+      "id": "lucide",
+      "type": "icon_pack",
+      "name": "Lucide",
+      "version": "1.29.0",
+      "author": "Lucide Icons and Contributors",
+      "description": "The complete keyboard icon set drawn in Lucide's 24px outline style: all 62 tools, every key glyph, the toolbar chrome and the emoji category tabs. Stroke-only and uncoloured, so it follows your theme and the per-tool accent colours. ISC licensed — see icons/LUCIDE-LICENSE.txt.",
+      "tags": [
+        "outline",
+        "minimal",
+        "lucide",
+        "complete"
+      ],
+      "path": "icons/lucide.wmicons",
+      "sha256": "1de5f29d86cd3e1cf6c05faab5467cbc79455ffdc8aa0733b086c585736a4a35",
+      "sizeBytes": 37067,
+      "previews": [
+        "previews/lucide-grid.jpg",
+        "previews/lucide.jpg"
+      ],
+      "license": "ISC",
+      "licenseFile": "icons/LUCIDE-LICENSE.txt"
+    },
+    {
+      "id": "bootstrap-icons",
+      "type": "icon_pack",
+      "name": "Bootstrap Icons",
+      "version": "1.15.0",
+      "author": "The Bootstrap Authors",
+      "description": "The complete keyboard icon set drawn in Bootstrap Icons style: all 62 tools, every key glyph, the toolbar chrome and the emoji category tabs. Uncoloured fill/stroke SVG icons that follow your theme and per-tool accent colours. MIT licensed — see icons/BOOTSTRAP-LICENSE.txt.",
+      "tags": [
+        "bootstrap",
+        "icons",
+        "complete"
+      ],
+      "path": "icons/bootstrap-icons.wmicons",
+      "sha256": "588fa3dd30ecc216895c00f8b896162f501a67363ecb8deb0d9f5faad385d9f2",
+      "sizeBytes": 47205,
+      "previews": [
+        "previews/bootstrap-icons-grid.jpg",
+        "previews/bootstrap-icons.jpg"
+      ],
+      "license": "MIT",
+      "licenseFile": "icons/BOOTSTRAP-LICENSE.txt"
+    },
+    {
+      "id": "boxicons",
+      "type": "icon_pack",
+      "name": "Boxicons",
+      "version": "2.3.0",
+      "author": "Aniket Suvarna and Contributors",
+      "description": "The complete keyboard icon set drawn in Boxicons' 24px clean vector style: all 62 tools, every key glyph, the toolbar chrome and the emoji category tabs. Uncoloured and adaptive, so it follows your theme and per-tool accent colours. MIT licensed — see icons/BOXICONS-LICENSE.txt.",
+      "tags": [
+        "boxicons",
+        "clean",
+        "vector",
+        "complete"
+      ],
+      "path": "icons/boxicons.wmicons",
+      "sha256": "c139f93880ecc5cad6e0ab46f1141f7a4728339b1fab12aa6a2953ce87f697cf",
+      "sizeBytes": 38678,
+      "previews": [
+        "previews/boxicons-grid.jpg",
+        "previews/boxicons.jpg"
+      ],
+      "license": "MIT",
+      "licenseFile": "icons/BOXICONS-LICENSE.txt"
+    },
+    {
+      "id": "fontawesome",
+      "type": "icon_pack",
+      "name": "Font Awesome",
+      "version": "6.8.0",
+      "author": "Fonticons, Inc. and Font Awesome Contributors",
+      "description": "The complete keyboard icon set drawn in Font Awesome's iconic solid style: all 62 tools, every key glyph, toolbar chrome and emoji category tabs. Theme-following SVG icons. CC BY 4.0 licensed — see icons/FONTAWESOME-LICENSE.txt.",
+      "tags": [
+        "fontawesome",
+        "solid",
+        "icons",
+        "complete"
+      ],
+      "path": "icons/fontawesome.wmicons",
+      "sha256": "94d1686cf605b3d7472f2f257a2fdca0a142c01f2fac3c4063228bed76292e32",
+      "sizeBytes": 44907,
+      "previews": [
+        "previews/fontawesome-grid.jpg",
+        "previews/fontawesome.jpg"
+      ],
+      "license": "CC-BY-4.0",
+      "licenseFile": "icons/FONTAWESOME-LICENSE.txt"
+    },
+    {
+      "id": "inter",
+      "type": "font",
+      "name": "Inter",
+      "version": "4.1.0",
+      "author": "Rasmus Andersson",
+      "description": "A clean, highly legible variable sans-serif font family optimized for computer screens and mobile UI.",
+      "tags": [
+        "sans-serif",
+        "modern",
+        "clean",
+        "ui",
+        "font"
+      ],
+      "path": "fonts/inter.ttf",
+      "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+      "sizeBytes": 876576,
+      "previews": [
+        "previews/inter-grid.jpg",
+        "previews/inter.jpg"
+      ],
+      "langIds": [
+        "en",
+        "ru",
+        "el"
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "fonts/OFL-LICENSE.txt"
+    },
+    {
+      "id": "jetbrains-mono",
+      "type": "font",
+      "name": "JetBrains Mono",
+      "version": "2.304.0",
+      "author": "JetBrains",
+      "description": "A monospaced font family created for developers and code editing.",
+      "tags": [
+        "monospace",
+        "developer",
+        "code",
+        "font"
+      ],
+      "path": "fonts/jetbrains-mono.ttf",
+      "sha256": "48715a42ec242c21e9f02692891e147d022299a52e48d5e413e1a942193ffeda",
+      "sizeBytes": 187208,
+      "previews": [
+        "previews/jetbrains-mono-grid.jpg",
+        "previews/jetbrains-mono.jpg"
+      ],
+      "langIds": [
+        "en",
+        "ru",
+        "el"
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "fonts/OFL-LICENSE.txt"
+    },
+    {
+      "id": "caveat",
+      "type": "font",
+      "name": "Caveat",
+      "version": "1.0.0",
+      "author": "Pablo Impallari",
+      "description": "A casual and expressive handwriting script font with a natural aesthetic.",
+      "tags": [
+        "handwriting",
+        "script",
+        "casual",
+        "font"
+      ],
+      "path": "fonts/caveat.ttf",
+      "sha256": "0bdb6b660482d31531b3945849fba5916b3ef8695da7024a9e6b9ee3c4157988",
+      "sizeBytes": 403648,
+      "previews": [
+        "previews/caveat-grid.jpg",
+        "previews/caveat.jpg"
+      ],
+      "langIds": [
+        "en"
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "fonts/OFL-LICENSE.txt"
+    },
+    {
+      "id": "press-start-2p",
+      "type": "font",
+      "name": "Press Start 2P",
+      "version": "1.0.0",
+      "author": "CodeMan38",
+      "description": "A retro 8-bit arcade game bitmap font inspired by 1980s computer graphics.",
+      "tags": [
+        "retro",
+        "arcade",
+        "pixel",
+        "8-bit",
+        "font"
+      ],
+      "path": "fonts/press-start-2p.ttf",
+      "sha256": "034c77f1f05ec89421e4a63f0e3a4ca1ecf852cc6d2bf611f126f275728e017d",
+      "sizeBytes": 118204,
+      "previews": [
+        "previews/press-start-2p-grid.jpg",
+        "previews/press-start-2p.jpg"
+      ],
+      "langIds": [
+        "en"
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "fonts/OFL-LICENSE.txt"
+    },
+    {
+      "id": "wm-font",
+      "type": "font",
+      "name": "WM Font",
+      "version": "1.1.0",
+      "author": "Wasi Master",
+      "description": "A casual and expressive handwriting script font with Latin, Greek letters, math symbols, fractions, and blackboard bold characters.",
+      "tags": [
+        "handwriting",
+        "script",
+        "casual",
+        "font"
+      ],
+      "path": "fonts/wm-font.ttf",
+      "sha256": "d7d9fe19785190e288f73ecf4e5cbdf9287a4a19b927d5892f1146f9f5d8d148",
+      "sizeBytes": 58688,
+      "previews": [
+        "previews/wm_font-grid.jpg",
+        "previews/wm_font.jpg"
+      ],
+      "langIds": [
+        "en",
+        "el"
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "fonts/WM-FONT-LICENSE.txt"
+    },
+    {
+      "id": "bloxat",
+      "type": "font",
+      "name": "Bloxat",
+      "version": "1.0.0",
+      "author": "ghoss85",
+      "description": "A chunky pixel display face in the classic block-game style — the Michil theme's key font. Covers upper and lower case letters and digits; punctuation falls back to the system font. Free for personal use only — see fonts/BLOXAT-LICENSE.txt.",
+      "tags": [
+        "pixel",
+        "retro",
+        "display",
+        "blocky",
+        "font"
+      ],
+      "path": "fonts/bloxat.ttf",
+      "sha256": "9f4134717d357568aee8042abea87137abf7f0ff5953a926483bd228bf4f0dee",
+      "sizeBytes": 12908,
+      "previews": [
+        "previews/bloxat-grid.jpg"
+      ],
+      "langIds": [
+        "en"
+      ],
+      "license": "Freeware (personal use only)",
+      "licenseFile": "fonts/BLOXAT-LICENSE.txt"
+    },
+    {
+      "id": "pixelborno",
+      "type": "font",
+      "name": "Pixelborno",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "A pixel face that can actually write Bengali. Redrawn on a 20-pixel grid from Noto Sans Bengali and Inter, and it keeps Noto's shaping tables, so conjuncts, vowel signs and reph all still come out right — ক্ষ is one glyph, not three. Covers the Bengali block, both digit sets, ৳, । and Latin, so a Banglish line stays in one face. The key font for Blockland and Michil on a Bengali board.",
+      "tags": [
+        "pixel",
+        "retro",
+        "bengali",
+        "bangla",
+        "blocky",
+        "font"
+      ],
+      "path": "fonts/pixelborno.ttf",
+      "sha256": "4cc74dc76bc2e5b0fe5a581b787736b70e9591a1c175088fc59bb423caeac301",
+      "sizeBytes": 198612,
+      "previews": [
+        "previews/pixelborno-grid.jpg"
+      ],
+      "langIds": [
+        "bn",
+        "en"
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "fonts/OFL-LICENSE.txt"
+    },
+    {
+      "id": "noto-color-emoji",
+      "type": "emoji_font",
+      "name": "Noto Color Emoji",
+      "version": "2.051",
+      "author": "Google",
+      "description": "The standard Android emoji set, current release. Newer than the copy most devices ship, so the emoji a device draws as an empty box appear properly.",
+      "tags": [
+        "emoji",
+        "color",
+        "google",
+        "noto",
+        "standard"
+      ],
+      "path": "fonts/noto-color-emoji.ttf",
+      "sha256": "72a635cb3d2f3524c51620cdde406b217204e8a6a06c6a096ff8ed4b5fd6e27b",
+      "sizeBytes": 10673480,
+      "minAppVersion": 3,
+      "license": "OFL-1.1",
+      "licenseFile": "fonts/NOTO-COLOR-EMOJI-LICENSE.txt"
+    },
+    {
+      "id": "twemoji",
+      "type": "emoji_font",
+      "name": "Twemoji",
+      "version": "17.0.2",
+      "author": "Twitter, Inc and other contributors",
+      "description": "Twitter's emoji set as a colour font — the flat, friendly look used across the web. A COLRv0 build of Twemoji 17.0.2, so it draws in colour on Android 8 and newer and covers the whole emoji catalogue.",
+      "tags": [
+        "emoji",
+        "colour",
+        "twemoji"
+      ],
+      "path": "fonts/twemoji.ttf",
+      "sha256": "0a75e5744aba8ba9692bf814522d24f85b4846e9619d26bbacebc2af386d385a",
+      "sizeBytes": 2064468,
+      "previews": [
+        "previews/twemoji-grid.jpg",
+        "previews/twemoji.jpg"
+      ],
+      "license": "CC-BY-4.0",
+      "licenseFile": "fonts/TWEMOJI-LICENSE.txt"
+    },
+    {
+      "id": "openmoji-color",
+      "type": "emoji_font",
+      "name": "OpenMoji Color",
+      "version": "17.0.0",
+      "author": "OpenMoji",
+      "description": "The full-colour open-source OpenMoji set with hand-crafted illustrations, distinct outlines and vibrant palette.",
+      "tags": [
+        "emoji",
+        "colour",
+        "vector",
+        "openmoji"
+      ],
+      "path": "fonts/openmoji-color.ttf",
+      "sha256": "a3cf6c344bcc87bcd91c4228512e1d417121239c071768c1e4781033430706ad",
+      "sizeBytes": 11155208,
+      "previews": [
+        "previews/openmoji-grid.jpg",
+        "previews/openmoji.jpg"
+      ],
+      "license": "CC-BY-SA-4.0",
+      "licenseFile": "fonts/OPENMOJI-LICENSE.txt"
+    },
+    {
+      "id": "emojitwo",
+      "type": "emoji_font",
+      "name": "Emojitwo",
+      "version": "2.3.0",
+      "author": "Emojitwo contributors and Ranks.com",
+      "description": "The open-source Emojitwo emoji set (fork of EmojiOne 2.2) as a COLRv0 colour font — flat, friendly vector emojis. The project stopped at Unicode 9, so emoji added since (and every ZWJ sequence) are drawn in your phone's own emoji font instead.",
+      "tags": [
+        "emoji",
+        "colour",
+        "emojitwo",
+        "emojione"
+      ],
+      "path": "fonts/emojitwo.ttf",
+      "sha256": "b5ba9f3a70f5d674f85d12f3f32e846f396965753aaed5b3d1e2ffee3fe94ef4",
+      "sizeBytes": 1349544,
+      "previews": [
+        "previews/emojitwo-grid.jpg",
+        "previews/emojitwo.jpg"
+      ],
+      "license": "CC-BY-4.0",
+      "licenseFile": "fonts/EMOJITWO-LICENSE.txt"
+    },
+    {
+      "id": "blobmoji",
+      "type": "emoji_font",
+      "name": "Blobmoji",
+      "version": "17.0.0",
+      "author": "Google LLC, C1710, David Berdik, and contributors",
+      "description": "Google's classic blob emojis updated for modern Unicode standard. Based on Noto Emoji and C1710's Blobmoji.",
+      "tags": [
+        "emoji",
+        "colour",
+        "blobmoji",
+        "blob",
+        "google"
+      ],
+      "path": "fonts/blobmoji.ttf",
+      "sha256": "ffc75f156f65027d61ea976b7ef6327641403913c89812371a3d064fd15c67f2",
+      "sizeBytes": 9751052,
+      "previews": [
+        "previews/blobmoji.jpg"
+      ],
+      "license": "Apache-2.0",
+      "licenseFile": "fonts/BLOBMOJI-LICENSE.txt"
+    },
+    {
+      "id": "fluent-emoji",
+      "type": "emoji_font",
+      "name": "Fluent Emoji",
+      "version": "1.0.0",
+      "author": "Microsoft Corporation and tetunori",
+      "description": "Microsoft's modern, friendly 3D emoji collection as a colour font.",
+      "tags": [
+        "emoji",
+        "colour",
+        "fluent",
+        "microsoft",
+        "3d"
+      ],
+      "path": "fonts/fluent-emoji.ttf",
+      "sha256": "6292f3ff969d800d55486e01b293248ccd9ee71a17e4f9770b4abea13d9cad25",
+      "sizeBytes": 87758820,
+      "previews": [
+        "previews/fluent-emoji.jpg"
+      ],
+      "license": "MIT",
+      "licenseFile": "fonts/FLUENT-EMOJI-LICENSE.txt"
+    },
+    {
+      "id": "undraw-illustrations",
+      "type": "stickers",
+      "name": "unDraw Everyday Moments",
+      "version": "1.1.0",
+      "author": "Katerina Limpitsouni (unDraw)",
+      "description": "40 expressive open-source vector illustrations from unDraw covering work, study, coding, space, sports, and everyday moods.",
+      "tags": [
+        "undraw",
+        "stickers",
+        "vector",
+        "illustrations",
+        "reactions"
+      ],
+      "path": "stickers/undraw-illustrations.wmstickers",
+      "sha256": "2faa0b5537d726c47593b65a11cfca94eaedaa523332450b84ccdc8fb6ce817e",
+      "sizeBytes": 1710640,
+      "previews": [
+        "previews/undraw-illustrations.png"
+      ],
+      "license": "unDraw License",
+      "licenseFile": "stickers/UNDRAW-LICENSE.txt"
+    },
+    {
+      "id": "typewriter",
+      "type": "sound",
+      "name": "Typewriter",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "Mechanical typebar strike: a hard noise transient over a short woody thunk. CC0 — see sounds/SOUNDS-LICENSE.txt.",
+      "tags": [
+        "mechanical",
+        "retro",
+        "sound"
+      ],
+      "path": "sounds/typewriter.mp3",
+      "sha256": "52c4934097378c4f72f3c84b75fe2931696ed03b2428be18a51eeb08b9795307",
+      "sizeBytes": 1506,
+      "previews": [
+        "previews/typewriter.png"
+      ],
+      "license": "CC0-1.0",
+      "licenseFile": "sounds/SOUNDS-LICENSE.txt"
+    },
+    {
+      "id": "marimba",
+      "type": "sound",
+      "name": "Marimba",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "Soft wooden mallet: a warm fundamental with its ringing fourth harmonic. CC0 — see sounds/SOUNDS-LICENSE.txt.",
+      "tags": [
+        "soft",
+        "warm",
+        "sound"
+      ],
+      "path": "sounds/marimba.mp3",
+      "sha256": "34b369d877bb320a6766c62f326b2f60ba427fea93ceb60e826c22361dbdaa24",
+      "sizeBytes": 2342,
+      "previews": [
+        "previews/marimba.png"
+      ],
+      "license": "CC0-1.0",
+      "licenseFile": "sounds/SOUNDS-LICENSE.txt"
+    },
+    {
+      "id": "droplet",
+      "type": "sound",
+      "name": "Droplet",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "Water drop: a fast upward pitch bend, no transient at all. CC0 — see sounds/SOUNDS-LICENSE.txt.",
+      "tags": [
+        "water",
+        "subtle",
+        "sound"
+      ],
+      "path": "sounds/droplet.mp3",
+      "sha256": "59bcd9f72ea33a7680630129ed8a34cbe24595775d651f64135c86df031ebb5f",
+      "sizeBytes": 1506,
+      "previews": [
+        "previews/droplet.png"
+      ],
+      "license": "CC0-1.0",
+      "licenseFile": "sounds/SOUNDS-LICENSE.txt"
+    },
+    {
+      "id": "blip",
+      "type": "sound",
+      "name": "Blip",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "Retro square-wave blip with an 8-bit handheld flavour. CC0 — see sounds/SOUNDS-LICENSE.txt.",
+      "tags": [
+        "retro",
+        "8-bit",
+        "arcade",
+        "sound"
+      ],
+      "path": "sounds/blip.mp3",
+      "sha256": "5afde141024b75e4bd3146e20a717cf8ccb8eced9e5e8a79df3c6507c269c7d4",
+      "sizeBytes": 1088,
+      "previews": [
+        "previews/blip.png"
+      ],
+      "license": "CC0-1.0",
+      "licenseFile": "sounds/SOUNDS-LICENSE.txt"
+    },
+    {
+      "id": "cipher-tool",
+      "type": "plugin",
+      "name": "Cipher Tool",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "Caesar and Vigenere ciphers, encode and decode. The plugin the getting-started guide builds.",
+      "tags": [
+        "cipher",
+        "text",
+        "demo",
+        "plugin"
+      ],
+      "path": "plugins/cipher-tool.wmplugin",
+      "sha256": "81770a40147992c88df1a2260589367038270b6c5602386d71bd8843715b02e0",
+      "sizeBytes": 1693,
+      "previews": [
+        "previews/cipher-tool-grid.jpg",
+        "previews/cipher-tool.jpg"
+      ],
+      "license": "MIT",
+      "licenseFile": "plugins/LICENSE.txt"
+    },
+    {
+      "id": "ui-kitchen-sink",
+      "type": "plugin",
+      "name": "UI Kitchen Sink",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "Every plugin widget and event in one place, to look at and copy from.",
+      "tags": [
+        "demo",
+        "reference",
+        "plugin"
+      ],
+      "path": "plugins/ui-kitchen-sink.wmplugin",
+      "sha256": "73ee31df75cab7c7f0e6891b91cb85d300c63e8d822c3d375e3620a523ba8a0e",
+      "sizeBytes": 1739,
+      "previews": [
+        "previews/ui-kitchen-sink-grid.jpg"
+      ],
+      "license": "MIT",
+      "licenseFile": "plugins/LICENSE.txt"
+    },
+    {
+      "id": "todo-list",
+      "type": "plugin",
+      "name": "Todo List",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "A checklist that remembers itself. Shows how plugin storage works.",
+      "tags": [
+        "todo",
+        "storage",
+        "demo",
+        "plugin"
+      ],
+      "path": "plugins/todo-list.wmplugin",
+      "sha256": "0912fefddc9e732043a4d5d4bbfd812f0fdba5294fea4ae09da575694896927f",
+      "sizeBytes": 1612,
+      "previews": [
+        "previews/todo-list-grid.jpg",
+        "previews/todo-list-1.jpg",
+        "previews/todo-list-2.jpg"
+      ],
+      "license": "MIT",
+      "licenseFile": "plugins/LICENSE.txt"
+    },
+    {
+      "id": "text-tools",
+      "type": "plugin",
+      "name": "Text Tools",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "Change case, encode as base64/hex/URL, and count words.",
+      "tags": [
+        "text",
+        "encode",
+        "demo",
+        "plugin"
+      ],
+      "path": "plugins/text-tools.wmplugin",
+      "sha256": "10953cc6b7a618079f17c2cc42697fe4178d21c64e832814c397c92b0319c9d7",
+      "sizeBytes": 2209,
+      "previews": [
+        "previews/text-tools-grid.jpg",
+        "previews/text-tools-1.jpg",
+        "previews/text-tools-2.jpg",
+        "previews/text-tools-3.jpg",
+        "previews/text-tools-4.jpg",
+        "previews/text-tools-5.jpg",
+        "previews/text-tools-6.jpg",
+        "previews/text-tools-7.jpg"
+      ],
+      "license": "MIT",
+      "licenseFile": "plugins/LICENSE.txt"
+    },
+    {
+      "id": "magoosh-1000",
+      "type": "vocabulary",
+      "name": "Magoosh GRE 1000",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "The Magoosh GRE word list, 1000 words, as a full vocabulary pack: each word with its part of speech, pronunciation in both accents, senses with examples and quotations, synonyms and antonyms, the word family, etymology and a mnemonic, plus the plainer words that make the keyboard offer it while you type. Translations into your keyboard's languages download beside it.",
+      "tags": [
+        "vocabulary",
+        "gre",
+        "english",
+        "study"
+      ],
+      "path": "https://raw.githubusercontent.com/wasi-master/wmkeyboard-data/HEAD/vocab/en/mg1000.wmvocab.json.gz",
+      "sha256": "c9d398665c9291ac301923e06c9a871ab4c5fd3ed2f1770717391eadff5d5fbd",
+      "sizeBytes": 705666,
+      "minAppVersion": 15,
+      "langId": "en",
+      "license": "CC-BY-SA-3.0",
+      "licenseText": "Definitions, pronunciations, examples and quotations are Wiktionary's (CC BY-SA 3.0, via kaikki.org), with WordNet 3.0 filling gaps. The word list names the study guide it was compiled from; only the words themselves are taken."
+    },
+    {
+      "id": "math-mode",
+      "type": "plugin",
+      "name": "Math Mode",
+      "version": "1.0.0",
+      "author": "Wasi Master",
+      "description": "Type math the way you say it and get real Unicode: x^2 → x², sqrt(2) → √2, pi → π, int_0^1 → ∫₀¹. Symbol palette, fractions, Greek, calculus, sets, chemistry and LaTeX.",
+      "tags": [
+        "math",
+        "unicode",
+        "students",
+        "plugin"
+      ],
+      "path": "plugins/math-mode.wmplugin",
+      "sha256": "5b8e77a6c91041bff494754c45caca40eaa397b6744b70167ad528da117c103c",
+      "sizeBytes": 18360,
+      "previews": [
+        "previews/math-mode-grid.jpg"
+      ],
+      "license": "MIT",
+      "licenseFile": "plugins/LICENSE.txt"
+    }
+  ]
+}

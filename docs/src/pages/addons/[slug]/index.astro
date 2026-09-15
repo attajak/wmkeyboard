@@ -1,0 +1,27 @@
+---
+import StoreShell from '../../../layouts/StoreShell.astro';
+import { loadAllSeeds } from '../../../lib/seed-repos.mjs';
+
+export async function getStaticPaths() {
+	const seeds = await loadAllSeeds();
+	return Object.values(seeds).map((s) => ({ params: { slug: s.seed.slug }, props: { seeds } }));
+}
+
+const { slug } = Astro.params;
+type SeedMap = Awaited<ReturnType<typeof loadAllSeeds>>;
+const { seeds } = Astro.props as { seeds: SeedMap };
+const me = seeds[slug!]!;
+const preloaded = Object.fromEntries(Object.values(seeds).map((s) => [s.seed.url, s.manifest]));
+const source = Object.values(seeds).some((s) => s.source === 'snapshot') ? 'snapshot' : 'live';
+const repo = me.manifest.repo;
+const n = me.manifest.addons.length;
+---
+
+<StoreShell
+	title={`${repo.name} · Addon store`}
+	description={repo.description ?? `${n} addons for WM Keyboard.`}
+	image={repo.icon && /^https:\/\//.test(repo.icon) ? repo.icon : undefined}
+	route={{ view: 'repo', repo: me.seed.url }}
+	preloaded={preloaded}
+	preloadedSource={source}
+/>
