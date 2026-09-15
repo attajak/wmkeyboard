@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx8g -Dorg.gradle.daemon=false
 
 jobs:
   verify:
