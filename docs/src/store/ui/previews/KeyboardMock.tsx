@@ -7,6 +7,7 @@
 import { useMemo, useState } from 'preact/hooks';
 import type { JSX } from 'preact';
 import { isModifierAction, keyFallbackLabel, LAYER_LABELS, type LayoutKey, type LayoutReadResult, type LayoutSpec, type ThemeReadResult, type ThemeSpec } from '../../lib/payloads';
+import { gridWeightOf, hasRowSpans, spanBands, spanSlots } from '../../lib/row-span';
 import { Problems } from './Preview';
 
 /* ---------- colour helpers ---------- */
@@ -145,7 +146,7 @@ const QWERTY: LayoutSpec = {
 				[['q', '1'], ['w', '2'], ['e', '3'], ['r', '4'], ['t', '5'], ['y', '6'], ['u', '7'], ['i', '8'], ['o', '9'], ['p', '0']].map(([l, h]) => ({ label: l!, longPress: [h!] })),
 				[['a', '@'], ['s', '#'], ['d', '$'], ['f', '%'], ['g', '&'], ['h', '-'], ['j', '+'], ['k', '('], ['l', ')']].map(([l, h]) => ({ label: l!, longPress: [h!] })),
 				[{ label: '', action: { type: 'shift' }, width: 1.5 }, ...[['z', '*'], ['x', '"'], ['c', "'"], ['v', ':'], ['b', ';'], ['n', '!'], ['m', '?']].map(([l, h]) => ({ label: l!, longPress: [h!] })), { label: '', action: { type: 'delete' }, width: 1.5 }],
-				[{ label: '', action: { type: 'symbols' }, width: 1.5 }, { label: ',', longPress: ['!'] }, { label: '', action: { type: 'space' }, width: 4.2 }, { label: '.', longPress: ['…'] }, { label: '', action: { type: 'enter' }, width: 1.5 }],
+				[{ label: '', action: { type: 'symbols' }, width: 1.5 }, { label: ',', longPress: ['!'] }, { label: '', action: { type: 'space' }, width: 5 }, { label: '.', longPress: ['…'] }, { label: '', action: { type: 'enter' }, width: 1.5 }],
 			],
 		},
 	},
@@ -154,7 +155,8 @@ const QWERTY: LayoutSpec = {
 /* ---------- key rendering ---------- */
 
 const KEY_ICONS: Record<string, JSX.Element> = {
-	shift: <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 4 4 13h5v7h6v-7h5z" /></svg>,
+	shift: <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 4 4 13h5v7h6v-7h5z" /></svg>,
+	tool: <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="4" r="1.9" /><circle cx="12" cy="4" r="1.9" /><circle cx="18" cy="4" r="1.9" /><circle cx="6" cy="10" r="1.9" /><circle cx="12" cy="10" r="1.9" /><circle cx="18" cy="10" r="1.9" /><circle cx="6" cy="16" r="1.9" /><circle cx="12" cy="16" r="1.9" /><circle cx="18" cy="16" r="1.9" /><circle cx="12" cy="22" r="1.9" /></svg>,
 	caps_lock: <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 4 12h5v5h6v-5h5zM9 19h6v2H9z" /></svg>,
 	delete: <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 6H9L3 12l6 6h12z" /><path d="m12 9 6 6M18 9l-6 6" stroke-linecap="round" /></svg>,
 	forward_delete: <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 6h12l6 6-6 6H3z" /><path d="m7 9 6 6M13 9l-6 6" stroke-linecap="round" /></svg>,
@@ -164,9 +166,24 @@ const KEY_ICONS: Record<string, JSX.Element> = {
 	input_method_picker: <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="12" rx="2" /><path d="M7 10h2M11 10h2M15 10h2M7 14h10" stroke-linecap="round" /></svg>,
 };
 
+/** Labels that only name the action; the app draws its icon over them. */
+const ICON_GLYPHS: Record<string, string[]> = {
+	shift: ['⇧'],
+	caps_lock: ['⇪'],
+	delete: ['⌫'],
+	forward_delete: ['⌦'],
+	enter: ['⏎', '↵'],
+	language_switch: ['🌐'],
+	emoji: ['☺', '😊', '🙂'],
+	input_method_picker: ['⌨'],
+	tool: ['🛠'],
+};
+
 function keyLabel(k: LayoutKey, shifted: boolean): { text: string; icon: JSX.Element | null } {
 	const t = k.action?.type ?? 'text';
-	if (KEY_ICONS[t] && !k.label) return { text: '', icon: KEY_ICONS[t]! };
+	// A tool key naming a tool shows that tool; the bare one opens the tool grid.
+	const iconKey = t === 'tool' && k.action?.tool ? '' : t;
+	if (KEY_ICONS[iconKey] && (!k.label || ICON_GLYPHS[iconKey]?.includes(k.label))) return { text: '', icon: KEY_ICONS[iconKey]! };
 	if (t === 'space') return { text: k.label || 'space', icon: null };
 	if (k.label) return { text: shifted && k.shiftLabel ? k.shiftLabel : shifted && t === 'text' && k.label.length === 1 ? k.label.toUpperCase() : k.label, icon: null };
 	return { text: keyFallbackLabel(k.action), icon: KEY_ICONS[t] ?? null };
@@ -216,6 +233,10 @@ export function KeyboardMock({ spec, layout, layer = 'letters', interactive = tr
 	const decals = spec?.decals ?? [];
 	const assets = spec?.assets ?? {};
 	const numberRow = ls?.numberRow ?? null;
+	const heightOf = (r: number) => heights[r] ?? 1;
+	const gridWeight = useMemo(() => gridWeightOf(rows) || 10, [rows]);
+	const bands = useMemo(() => spanBands(rows), [rows]);
+	const slots = useMemo(() => (hasRowSpans(rows) ? spanSlots(rows, gridWeight) : []), [rows, gridWeight]);
 	return (
 		<div class="st-kb" style={vars} data-anim={anim} onMouseLeave={() => setPressed(null)}>
 			<div class="st-kb-bgimg" />
@@ -243,37 +264,56 @@ export function KeyboardMock({ spec, layout, layer = 'letters', interactive = tr
 						{numberRow.map((k, ki) => <Key key={ki} k={k} spec={spec} shifted={!!shifted} />)}
 					</div>
 				)}
-				{rows.map((row, ri) => (
-					<div class="st-kb-row" key={ri} style={{ '--h': String(heights[ri] ?? 1) }}>
-						{row.map((k, ki) => (
-							<Key
-								key={ki}
-								k={k}
-								spec={spec}
-								shifted={!!shifted}
-								pressed={pressed?.[0] === ri && pressed[1] === ki}
-								selected={selected?.[0] === ri && selected[1] === ki}
-								onDown={interactive ? () => setPressed([ri, ki]) : undefined}
-								onUp={interactive ? () => setPressed(null) : undefined}
-								onClick={onKeyClick ? () => onKeyClick(ri, ki) : undefined}
-							/>
-						))}
-					</div>
-				))}
+				{bands.map(([from, to]) => {
+					const keyProps = (ri: number, ki: number) => ({
+						spec,
+						shifted: !!shifted,
+						pressed: pressed?.[0] === ri && pressed[1] === ki,
+						selected: selected?.[0] === ri && selected[1] === ki,
+						onDown: interactive ? () => setPressed([ri, ki]) : undefined,
+						onUp: interactive ? () => setPressed(null) : undefined,
+						onClick: onKeyClick ? () => onKeyClick(ri, ki) : undefined,
+					});
+					if (from === to) {
+						// An ordinary row: keys share it by weight, centred against the grid.
+						const row = rows[from]!;
+						const pad = (gridWeight - row.reduce((n, k) => n + (k.width ?? 1), 0)) / 2;
+						return (
+							<div class="st-kb-row" key={from} style={{ '--h': String(heightOf(from)), '--pad': String(pad > 0.001 ? pad : 0), '--G': String(gridWeight) }}>
+								{row.map((k, ki) => <Key key={ki} k={k} {...keyProps(from, ki)} />)}
+							</div>
+						);
+					}
+					// Rows joined by a tall key are placed as one block, the way the app does.
+					const sum = (a: number, b: number) => { let n = 0; for (let r = a; r < b; r++) n += heightOf(r); return n; };
+					return (
+						<div class="st-kb-band" key={from} style={{ '--band-h': String(sum(from, to + 1)), '--rows': String(to - from), '--G': String(gridWeight) }}>
+							{slots.filter((s) => s.row >= from && s.row <= to).map((s) => (
+								<Key
+									key={`${s.row}:${s.col}`}
+									k={s.key}
+									{...keyProps(s.row, s.col)}
+									slot={{ '--x': String(s.x), '--top': String(sum(from, s.row)), '--ri': String(s.row - from), '--hs': String(sum(s.row, s.row + s.span)), '--span': String(s.span) }}
+								/>
+							))}
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);
 }
 
-function Key({ k, spec, shifted, pressed, selected, onDown, onUp, onClick }: { k: LayoutKey; spec: ThemeSpec | null; shifted: boolean; pressed?: boolean; selected?: boolean; onDown?: () => void; onUp?: () => void; onClick?: () => void }) {
+function Key({ k, spec, shifted, pressed, selected, onDown, onUp, onClick, slot }: { k: LayoutKey; spec: ThemeSpec | null; shifted: boolean; pressed?: boolean; selected?: boolean; onDown?: () => void; onUp?: () => void; onClick?: () => void; slot?: Record<string, string> }) {
 	const { text, icon } = keyLabel(k, shifted);
 	const hint = k.hideHint ? null : k.iconHint ? null : k.longPress?.[0] ?? (k.actionAlternates?.[0]?.label || null);
 	const t = k.action?.type ?? 'text';
 	const showPopup = pressed && t === 'text' && !!text;
+	const ls = typeof k.labelScale === 'number' && Number.isFinite(k.labelScale) ? Math.min(Math.max(k.labelScale, 0.3), 2) : null;
 	return (
 		<span
-			class={`${keyClass(k)} ${pressed ? 'pressed' : ''} ${selected ? 'sel' : ''}`}
-			style={{ '--w': String(k.width ?? 1), '--ls': String(k.labelScale ?? 1), ...(k.rowSpan && k.rowSpan > 1 ? { '--h': String(k.rowSpan) } : {}), ...overrideFor(spec, k) }}
+			class={`${keyClass(k)}${ls != null ? ' ls' : ''} ${pressed ? 'pressed' : ''} ${selected ? 'sel' : ''}`}
+			style={{ '--w': String(k.width ?? 1), '--ls': String(ls ?? 1), ...slot, ...overrideFor(spec, k) }}
 			onMouseDown={onDown}
 			onMouseUp={onUp}
 			onTouchStart={onDown}

@@ -1596,6 +1596,20 @@ html[data-wm-store] .main-frame {
 	justify-content: center;
 	gap: calc(5px * var(--kb-gap, 1));
 	min-height: 0;
+	/* A row narrower than the grid is centred, like the app's side spacers. */
+	padding-inline: calc(var(--pad, 0) / var(--G, 10) * (100% + 5px * var(--kb-gap, 1)));
+}
+/* Rows joined by a rowSpan key: every key placed from RowSpan.kt's slots. */
+.st-kb-band {
+	position: relative;
+	height: calc(var(--band-h) * 2.55rem * var(--kb-key-h, 1) + var(--rows) * 6px * var(--kb-gap, 1));
+}
+.st-kb-band > .st-kb-key {
+	position: absolute;
+	left: calc(var(--x) / var(--G) * (100% + 5px * var(--kb-gap, 1)));
+	width: calc(var(--w) / var(--G) * (100% + 5px * var(--kb-gap, 1)) - 5px * var(--kb-gap, 1));
+	top: calc(var(--top) * 2.55rem * var(--kb-key-h, 1) + var(--ri) * 6px * var(--kb-gap, 1));
+	height: calc(var(--hs) * 2.55rem * var(--kb-key-h, 1) + (var(--span) - 1) * 6px * var(--kb-gap, 1));
 }
 .st-kb-key {
 	position: relative;
@@ -1630,6 +1644,11 @@ html[data-wm-store] .main-frame {
 .st-kb-key.mod.text-key {
 	font-size: calc(0.72rem * var(--kb-font, 1));
 	font-weight: 500;
+}
+/* A key's own labelScale replaces the automatic mode-label size, as in the app. */
+.st-kb-key.mod.ls,
+.st-kb-key.mod.text-key.ls {
+	font-size: calc(1.3rem * var(--kb-font, 1) * var(--ls, 1));
 }
 .st-kb-key.enter {
 	background-color: var(--kb-enter, #4c8df6);
