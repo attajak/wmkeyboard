@@ -91,7 +91,10 @@ jobs:
           WMKB_UNSPLASH_API_KEY: ${{ secrets.WMKB_UNSPLASH_API_KEY }}
           WMKB_PEXELS_API_KEY: ${{ secrets.WMKB_PEXELS_API_KEY }}
           WMKB_DROPBOX_APP_KEY: ${{ secrets.WMKB_DROPBOX_APP_KEY }}
-        run: ./gradlew assembleFullRelease assembleLiteRelease --stacktrace
+        # Both flavors compile at once and share one Kotlin daemon, whose 2 GB
+        # heap (gradle.properties) is sized for a 16 GB laptop next to an IDE.
+        # The runner has nothing else on it, so give the daemon room.
+        run: ./gradlew assembleFullRelease assembleLiteRelease -Pkotlin.daemon.jvmargs=-Xmx4g --stacktrace
 
       # Versioned filenames (wmkeyboard-0.3.0-vc7-full-arm64-v8a.apk) so APKs
       # from different releases can sit in the same Downloads folder without
