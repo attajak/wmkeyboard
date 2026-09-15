@@ -15849,6 +15849,20 @@ internal fun KeyButton(
                 val start = (sel - 2).coerceIn(0, enabledLayoutIds.size - 5)
                 enabledLayoutIds.subList(start, start + 5)
             }
+            // Five chips still overflow a phone once the labels are long — two
+            // layouts of one language both read "Language (Layout)". Squeezed
+            // into the window, the Row starved the last chips to no width, the
+            // selection vanished into them and a one-glyph-per-line label grew
+            // the popup over the whole screen. So the strip scrolls instead,
+            // one line per chip, and follows the selection.
+            val previewScroll = rememberScrollState()
+            val previewChipBounds = remember { mutableStateMapOf<String, Pair<Int, Int>>() }
+            var previewViewportWidth by remember { mutableIntStateOf(0) }
+            LaunchedEffect(previewMode) {
+                val (x, width) = snapshotFlow { previewChipBounds[previewMode] }.filterNotNull().first()
+                val viewport = snapshotFlow { previewViewportWidth }.first { it > 0 }
+                previewScroll.scrollTo((x + width / 2 - viewport / 2).coerceIn(0, previewScroll.maxValue))
+            }
             Popup(
                 popupPositionProvider = popupPosition,
                 properties = PreviewPopupProperties,
@@ -15860,7 +15874,10 @@ internal fun KeyButton(
                     shadowElevation = elevationFor(kb.popupShapeKind, 8.dp),
                 ) {
                     Row(
-                        modifier = Modifier.padding(6.dp),
+                        modifier = Modifier
+                            .onSizeChanged { previewViewportWidth = it.width }
+                            .horizontalScroll(previewScroll)
+                            .padding(6.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         for (chipLayoutId in previewWindow) {
@@ -15872,7 +15889,13 @@ internal fun KeyButton(
                                     settings.customLayouts,
                                     settings.layoutBehavior.spacebarDisplay,
                                 ),
+                                maxLines = 1,
+                                softWrap = false,
                                 modifier = Modifier
+                                    .onPlaced {
+                                        previewChipBounds[chipLayoutId] =
+                                            it.positionInParent().x.roundToInt() to it.size.width
+                                    }
                                     .padding(horizontal = 2.dp)
                                     .background(
                                         if (selected) kb.pressedKey else Color.Transparent,
