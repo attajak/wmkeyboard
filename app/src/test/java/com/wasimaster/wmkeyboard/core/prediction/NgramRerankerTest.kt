@@ -22,7 +22,8 @@ class NgramRerankerTest {
         prev: String?,
         prev2: String? = null,
         recent: List<String> = emptyList(),
-    ) = RerankContext("wor", prev, recent, prev2)
+        prev3: String? = null,
+    ) = RerankContext("wor", prev, recent, prev2, prev3)
 
     @Test
     fun noContextOrNoEvidenceMeansNoOpinion() {
@@ -178,6 +179,24 @@ class NgramRerankerTest {
         repeat(3) { lexicon.learnSkip2gram("deploy", "service") }
         val pooled = r.rerank(context(prev = "my", prev2 = "deploy"), listOf("servers", "service"))
         assertEquals(listOf("service", "servers"), pooled)
+    }
+
+    @Test
+    fun theWordThreeBackLiftsOneRankOnlyOnceWellWorn() {
+        // The reporter's own sentence (#195): "gotten so that you've", typed
+        // often, then "that" and two other words in between. The word three
+        // back is weak evidence — two words of anything lie between — so a
+        // handful of sightings moves nothing, a dozen lifts one slot, and no
+        // number of them lifts two.
+        val lexicon = UserLexicon(null)
+        val r = reranker(lexicon)
+        val ctx = context(prev = "the", prev2 = "so", prev3 = "gotten")
+        repeat(5) { lexicon.learnSkip3gram("gotten", "world") }
+        assertEquals(listOf("words", "work", "world"), r.rerank(ctx, listOf("words", "work", "world")))
+        repeat(20) { lexicon.learnSkip3gram("gotten", "world") }
+        assertEquals(listOf("words", "world", "work"), r.rerank(ctx, listOf("words", "work", "world")))
+        // Without a word three back there is nothing to read.
+        assertNull(r.rerank(context(prev = "the", prev2 = "so"), listOf("words", "world")))
     }
 
     @Test

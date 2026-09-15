@@ -28,6 +28,9 @@ class UserLexicon(private val storageFile: File?) {
         /** Distance-2 skip-grams: the word two back -> the word that followed,
          * whatever stood between them (#195). Additive; old files have none. */
         val skip2grams: Map<String, Map<String, Int>> = emptyMap(),
+        /** Distance-3 skip-grams: the word three back -> the word that
+         * followed, across two middle words (#195). Additive. */
+        val skip3grams: Map<String, Map<String, Int>> = emptyMap(),
         /** Language id each word was last learned under. Additive; words
          * with no entry (legacy files, settings-app adds) are untagged and
          * treated as belonging to every language. */
@@ -95,6 +98,7 @@ class UserLexicon(private val storageFile: File?) {
     private val bigrams = HashMap<String, Followers>()
     private val trigrams = HashMap<String, Followers>()
     private val skip2grams = HashMap<String, Followers>()
+    private val skip3grams = HashMap<String, Followers>()
     private val wordGen = HashMap<String, Long>()
     private val wordLangs = HashMap<String, String>()
     private val wordCase = HashMap<String, String>()
@@ -418,6 +422,11 @@ class UserLexicon(private val storageFile: File?) {
             if (target == null) skip2grams[newKey] = moved else target.absorb(moved)
         }
         skip2grams.values.forEach { it.rename(oldKey, newKey) }
+        skip3grams.remove(oldKey)?.let { moved ->
+            val target = skip3grams[newKey]
+            if (target == null) skip3grams[newKey] = moved else target.absorb(moved)
+        }
+        skip3grams.values.forEach { it.rename(oldKey, newKey) }
         rebuildTrie()
         mutations++
         dirty = true
@@ -477,6 +486,7 @@ class UserLexicon(private val storageFile: File?) {
         bigrams.clear()
         trigrams.clear()
         skip2grams.clear()
+        skip3grams.clear()
         wordGen.clear()
         wordBorn.clear()
         wordLangs.clear()
@@ -557,6 +567,23 @@ class UserLexicon(private val storageFile: File?) {
     @Synchronized
     fun skip2gramCount(prev2: String, next: String): Int =
         skip2grams[WordKey.of(prev2)]?.counts?.get(WordKey.of(next)) ?: 0
+
+    /** Learns the pair (prev3 -> next), [prev3] three words before [next]
+     * with any two words between — the long-range twin of [learnSkip2gram]. */
+    @Synchronized
+    fun learnSkip3gram(prev3: String, next: String) {
+        val prev = WordKey.of(prev3)
+        val nxt = WordKey.of(next)
+        if (prev.isEmpty() || nxt.isEmpty()) return
+        if (prev.length > MAX_WORD_LENGTH || nxt.length > MAX_WORD_LENGTH) return
+        skip3grams.getOrPut(prev) { Followers() }.bump(nxt)
+        dirty = true
+    }
+
+    /** Learned count of the pair (prev3 -> next), 0 when never seen. */
+    @Synchronized
+    fun skip3gramCount(prev3: String, next: String): Int =
+        skip3grams[WordKey.of(prev3)]?.counts?.get(WordKey.of(next)) ?: 0
 
     /** Learned count of the pair (previous -> next), 0 when never seen. */
     @Synchronized
@@ -650,11 +677,15 @@ class UserLexicon(private val storageFile: File?) {
             addedByHand.remove(key)
             bigrams.remove(key)
             skip2grams.remove(key)
+            skip3grams.remove(key)
         }
         bigrams.values.forEach { followers ->
             if (followers.counts.keys.removeAll(keys)) followers.sorted = null
         }
         skip2grams.values.forEach { followers ->
+            if (followers.counts.keys.removeAll(keys)) followers.sorted = null
+        }
+        skip3grams.values.forEach { followers ->
             if (followers.counts.keys.removeAll(keys)) followers.sorted = null
         }
         trigrams.keys.removeAll { context ->
@@ -674,6 +705,7 @@ class UserLexicon(private val storageFile: File?) {
         bigrams.clear()
         trigrams.clear()
         skip2grams.clear()
+        skip3grams.clear()
         wordGen.clear()
         wordBorn.clear()
         wordLangs.clear()
@@ -703,6 +735,7 @@ class UserLexicon(private val storageFile: File?) {
             wordGen = wordGen,
             trigrams = trigrams.mapValues { it.value.counts.toMap() },
             skip2grams = skip2grams.mapValues { it.value.counts.toMap() },
+            skip3grams = skip3grams.mapValues { it.value.counts.toMap() },
             wordLang = wordLangs,
             wordCase = wordCase,
             caseVotes = caseVotes,
@@ -745,6 +778,10 @@ class UserLexicon(private val storageFile: File?) {
             snapshot.skip2grams.forEach { (prev, map) ->
                 if (junk(prev)) return@forEach
                 skip2grams[prev] = Followers().also { it.counts.putAll(map.filterKeys { !junk(it) }) }
+            }
+            snapshot.skip3grams.forEach { (prev, map) ->
+                if (junk(prev)) return@forEach
+                skip3grams[prev] = Followers().also { it.counts.putAll(map.filterKeys { !junk(it) }) }
             }
             generation = snapshot.generation
             // Words with no recorded generation (legacy files, settings-app
@@ -827,6 +864,10 @@ class UserLexicon(private val storageFile: File?) {
                 skip2grams.values.forEach {
                     if (it.counts.remove(word) != null) it.sorted = null
                 }
+                skip3grams.remove(word)
+                skip3grams.values.forEach {
+                    if (it.counts.remove(word) != null) it.sorted = null
+                }
             }
             rebuildTrie()
             mutations++
@@ -849,6 +890,12 @@ class UserLexicon(private val storageFile: File?) {
                 skip2grams.remove(entry.key)
             }
         }
+        if (skip3grams.size > MAX_SKIP3_HEADS) {
+            val evictable = skip3grams.entries.sortedBy { it.value.total() }
+            for (entry in evictable.take(skip3grams.size - MAX_SKIP3_HEADS)) {
+                skip3grams.remove(entry.key)
+            }
+        }
     }
 
     companion object {
@@ -866,6 +913,8 @@ class UserLexicon(private val storageFile: File?) {
         private const val MAX_TRIGRAM_CONTEXTS = 2_000
         /** Heads of the gappy (prev2 -> next) store (#195). */
         private const val MAX_SKIP2_HEADS = 2_000
+        /** Heads of the (prev3 -> next) store; the issue's own budget for it. */
+        private const val MAX_SKIP3_HEADS = 1_000
         private const val MAX_FOLLOWERS = 32
 
         /** NUL, built rather than written literally. */

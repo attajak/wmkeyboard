@@ -69,8 +69,10 @@ data class LearnPlan(
     val pairs: Set<Pair<String, String>>,
     val triples: Set<Triple<String, String, String>>,
     val skips: Set<Pair<String, String>>,
+    /** The distance-3 skip-grams, the word three back and the word (#195). */
+    val skips3: Set<Pair<String, String>> = emptySet(),
 ) {
-    val size: Int get() = pairs.size + triples.size + skips.size
+    val size: Int get() = pairs.size + triples.size + skips.size + skips3.size
 }
 
 /** The panel's rules, apart from the service so they are unit-tested. */
@@ -151,7 +153,13 @@ object LearnFromText {
             val y = map(b)
             if (ok(x) && ok(y)) skips.add(x to y)
         }
-        return LearnPlan(pairs, triples, skips)
+        val skips3 = LinkedHashSet<Pair<String, String>>()
+        for ((a, b) in scan.skips3) {
+            val x = map(a)
+            val y = map(b)
+            if (ok(x) && ok(y)) skips3.add(x to y)
+        }
+        return LearnPlan(pairs, triples, skips, skips3)
     }
 
     /** The key an edited row is renamed to, for [plan]. */

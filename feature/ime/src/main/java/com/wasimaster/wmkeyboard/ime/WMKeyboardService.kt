@@ -918,6 +918,10 @@ open class WMKeyboardService : InputMethodService() {
      * silently degrades to bigram. */
     private var previousWord2: String? = null
 
+    /** The word before [previousWord2], under the same contract, for the
+     * reranker's distance-3 skip-gram (#195). */
+    private var previousWord3: String? = null
+
     /**
      * Tap position (key-width units, keyboard space) for each character in
      * [composing], null where unknown — hardware keys, dead-key output,
@@ -6026,6 +6030,7 @@ open class WMKeyboardService : InputMethodService() {
             if (text.length == 1 && text[0] in SENTENCE_ENDERS) {
                 previousWord = WordContext.SENTENCE_START
                 previousWord2 = null
+                previousWord3 = null
                 // The undo chip is scoped to the sentence it corrected: past
                 // the full stop the user has moved on, and a chip still
                 // offering to rewrite a word two sentences back is a trap.
@@ -6217,6 +6222,7 @@ open class WMKeyboardService : InputMethodService() {
                 // sentinel, not the word before the full stop.
                 previousWord = WordContext.SENTENCE_START
                 previousWord2 = null
+                previousWord3 = null
                 // ...and the undo chip belongs to the sentence just closed.
                 clearUndoChip()
                 maybeAutoCapitalize()
@@ -7223,11 +7229,12 @@ open class WMKeyboardService : InputMethodService() {
     private fun completedWordBefore(text: CharSequence?): String? =
         WordContext.completedWordBefore(text, SENTENCE_ENDERS)
 
-    /** Sets both context words from the text before the caret. */
+    /** Sets the context words from the text before the caret. */
     private fun setContextFrom(text: CharSequence?) {
-        val (prev1, prev2) = WordContext.lastTwoWords(text, SENTENCE_ENDERS)
+        val (prev1, prev2, prev3) = WordContext.lastThreeWords(text, SENTENCE_ENDERS)
         previousWord = prev1
         previousWord2 = prev2
+        previousWord3 = prev3
     }
 
     /**
@@ -10541,6 +10548,7 @@ open class WMKeyboardService : InputMethodService() {
         // the gate below so it never outlives the word it was about.
         if (learnOfferWord != null) clearLearnOffer()
         if (!learningAllowed) {
+            previousWord3 = previousWord2
             previousWord2 = previousWord
             previousWord = word
             return
@@ -10548,17 +10556,20 @@ open class WMKeyboardService : InputMethodService() {
         val state = _uiState.value
         var previous = previousWord
         var beforePrevious = previousWord2
+        var threeBack = previousWord3
         var lastLearned: String? = null
         // Whether the two words a bigram/trigram would hang off are ones the
         // keyboard actually knows. An n-gram with an unrecognised word at
         // either end is a habit built out of a possible typo, and it surfaces
         // in the strip as a next-word suggestion — exactly the rubbish this
-        // gate exists to keep out. The skip-gram (word two back -> this one)
-        // only asks about its own two ends: the middle word may be anything,
-        // since an unknown one is exactly where that store earns its keep
-        // and it is read by the reranker alone, never offered as a next word.
+        // gate exists to keep out. The skip-grams (the word two or three back
+        // -> this one) only ask about their own two ends: the words between
+        // may be anything, since an unknown one is exactly where those stores
+        // earn their keep, and they are read by the reranker alone, never
+        // offered as a next word.
         var previousKnown = previous == null || isKnownWord(previous)
         var beforePreviousKnown = beforePrevious == null || isKnownWord(beforePrevious)
+        var threeBackKnown = threeBack == null || isKnownWord(threeBack)
         for ((index, part) in parts.withIndex()) {
             // Combining marks are part of the word, not a boundary: trimming
             // on isLetter alone learns Bengali হয়েছে as হয়েছ. See WordContext.
@@ -10611,6 +10622,9 @@ open class WMKeyboardService : InputMethodService() {
                 if (beforePreviousKnown) {
                     beforePrevious?.let { userLexicon.learnSkip2gram(it, cleaned) }
                 }
+                if (threeBackKnown) {
+                    threeBack?.let { userLexicon.learnSkip3gram(it, cleaned) }
+                }
             } else if (!byHand && !blacklisted && state.composer.isPlausibleWord(cleaned)) {
                 // Nothing recognises this word. It goes into the waiting room
                 // instead of the dictionary, and only earns its way in once
@@ -10631,12 +10645,15 @@ open class WMKeyboardService : InputMethodService() {
                     keys = keys,
                 )
             }
+            threeBack = beforePrevious
+            threeBackKnown = beforePreviousKnown
             beforePrevious = previous
             beforePreviousKnown = previousKnown
             previous = cleaned
             previousKnown = known
             lastLearned = cleaned
         }
+        previousWord3 = threeBack
         previousWord2 = beforePrevious
         previousWord = lastLearned
     }
@@ -12418,6 +12435,7 @@ open class WMKeyboardService : InputMethodService() {
                     recentWords = recentSnapshot,
                     allowRerank = true,
                     keys = keyFrame,
+                    previousWord3 = previousWord3,
                 )
                 val suggested = deep.take(SUGGEST_LIMIT)
                 // A28: a personal-dictionary shortcut typed in full offers its
@@ -12655,6 +12673,7 @@ open class WMKeyboardService : InputMethodService() {
                     previousWord2 = previousWord2,
                     recentWords = recentSnapshot,
                     allowRerank = true,
+                    previousWord3 = previousWord3,
                 ).filterNot { it.equals(word, ignoreCase = true) }
             }
             // A caret dropped on a swiped word is the user reading it back, and
@@ -13456,6 +13475,7 @@ open class WMKeyboardService : InputMethodService() {
             limit = glideCandidateLimit(),
             previousWord = previousWord,
             previousWord2 = previousWord2,
+            previousWord3 = previousWord3,
             recentWords = recentWords.toList(),
             shapes = shapeSourceFor(keys, keyWidthPx),
             tiers = tiers,
@@ -13593,6 +13613,7 @@ open class WMKeyboardService : InputMethodService() {
                     limit = slots + 1,
                     previousWord = previousWord,
                     previousWord2 = previousWord2,
+                    previousWord3 = previousWord3,
                     recentWords = recentWords.toList(),
                     deep = true,
                     shapes = shapeSourceFor(stroke.keys, stroke.keyWidthPx),
@@ -21031,6 +21052,7 @@ open class WMKeyboardService : InputMethodService() {
             for ((previous, next) in plan.pairs) userLexicon.learnBigram(previous, next)
             for ((prev2, prev1, next) in plan.triples) userLexicon.learnTrigram(prev2, prev1, next)
             for ((prev2, next) in plan.skips) userLexicon.learnSkip2gram(prev2, next)
+            for ((prev3, next) in plan.skips3) userLexicon.learnSkip3gram(prev3, next)
             pairs = plan.pairs.size
         }
         val added = chosen.mapTo(HashSet()) { it.key }

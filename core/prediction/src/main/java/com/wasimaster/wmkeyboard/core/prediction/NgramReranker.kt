@@ -36,6 +36,7 @@ class NgramReranker(
         val prev = context.previousWord?.lowercase() ?: return null
         if (WordContext.isSentinel(prev) || candidates.isEmpty()) return null
         val prev2 = context.previousWord2?.lowercase()
+        val prev3 = context.previousWord3?.lowercase()
         val recent = if (context.recentWords.isEmpty()) {
             emptySet()
         } else {
@@ -64,6 +65,7 @@ class NgramReranker(
             val user3 = if (prev2 != null) userLexicon.trigramCount(prev2, prev, w) else 0
             val user2 = userLexicon.bigramCount(prev, w)
             val userSkip2 = if (prev2 != null) userLexicon.skip2gramCount(prev2, w) else 0
+            val userSkip3 = if (prev3 != null) userLexicon.skip3gramCount(prev3, w) else 0
             val pack3 = if (prev2 != null) pack.trigramCount(prev2, prev, w) else 0
             val pack2 = pack.bigramCount(prev, w)
             val seed = seedBigrams.count(prev, w)
@@ -73,6 +75,7 @@ class NgramReranker(
             val evidence = term(WEIGHT_USER_TRIGRAM, user3, CAP_USER_TRIGRAM) +
                 term(WEIGHT_USER_BIGRAM, user2, CAP_USER_BIGRAM) +
                 term(WEIGHT_USER_SKIP2, userSkip2, CAP_USER_SKIP2) +
+                term(WEIGHT_USER_SKIP3, userSkip3, CAP_USER_SKIP3) +
                 term(WEIGHT_PACK_TRIGRAM, pack3 / PACK_COUNT_SCALE, CAP_PACK_TRIGRAM) +
                 term(WEIGHT_PACK_BIGRAM, pack2 / PACK_COUNT_SCALE, CAP_PACK_BIGRAM) +
                 term(WEIGHT_SEED_BIGRAM, seed, CAP_SEED) +
@@ -125,6 +128,16 @@ class NgramReranker(
          */
         const val WEIGHT_USER_SKIP2 = 0.5
         const val CAP_USER_SKIP2 = 1.2
+
+        /**
+         * The word three back vouching across two middle words — the
+         * long-range half of #195 ("gotten so that you've": gotten -> you've).
+         * Weaker than distance two, since two words of anything lie between,
+         * and it clears one rank on its own only once the pair has been seen
+         * a dozen times; the cap keeps it to that one rank.
+         */
+        const val WEIGHT_USER_SKIP3 = 0.4
+        const val CAP_USER_SKIP3 = 1.1
         const val WEIGHT_PACK_TRIGRAM = 0.6
         const val CAP_PACK_TRIGRAM = 1.5
         const val WEIGHT_PACK_BIGRAM = 0.45

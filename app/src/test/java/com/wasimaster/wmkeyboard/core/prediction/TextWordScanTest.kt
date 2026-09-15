@@ -79,6 +79,9 @@ class TextWordScanTest {
         val result = scan("have a good day, have a good day")
         assertTrue(Triple("have", "a", "good") in result.triples)
         assertTrue(("have" to "good") in result.skips)
+        // And the word three back, across two (#195).
+        assertTrue(("have" to "day") in result.skips3)
+        assertFalse(("have" to "have") in result.skips3)
         // The comma does not end a sentence, so the run carries across it.
         assertTrue(("day" to "have") in result.pairs)
         assertEquals(result.pairs.size, result.pairs.toSet().size)

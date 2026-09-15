@@ -810,6 +810,7 @@ class SuggestionEngine(
         previousWord2: String? = null,
         recentWords: List<String> = emptyList(),
         deep: Boolean = false,
+        previousWord3: String? = null,
         shapes: GlideShapeSource? = null,
         tiers: Set<FuzzyBeamSearch.Tier>? = null,
         lookAhead: Int = 0,
@@ -843,7 +844,7 @@ class SuggestionEngine(
         val words = if (romanization.isEmpty) decoded else romanization.resolve(decoded)
         val kept = shiftGlideScores(words.filterNot { suppressed(it.word) })
         if (kept.isEmpty()) return kept
-        return rerankGlide(kept, previousWord, previousWord2, recentWords)
+        return rerankGlide(kept, previousWord, previousWord2, previousWord3, recentWords)
             // One word per spelling, whatever source it came from (#172). The
             // decoder keys its results on each trie's own spelling, and the
             // platform dictionary stores "boston" where a word list may store
@@ -981,12 +982,13 @@ class SuggestionEngine(
         decoded: List<GlideBeam.Candidate>,
         previousWord: String?,
         previousWord2: String?,
+        previousWord3: String?,
         recentWords: List<String>,
     ): List<GlideBeam.Candidate> {
         if (reranker === CandidateReranker.NONE || decoded.size < 2) return decoded
         val pool = decoded.map { it.word }
         val reordered = reranker.rerank(
-            RerankContext(composing = "", previousWord, recentWords, previousWord2), pool,
+            RerankContext(composing = "", previousWord, recentWords, previousWord2, previousWord3), pool,
         ) ?: return decoded
         val byWord = decoded.associateBy { it.word }
         val moved = reordered.mapNotNull(byWord::get)
@@ -1648,6 +1650,8 @@ class SuggestionEngine(
      *        (never set on the synchronous main-thread call sites)
      * @param keys which letters each keystroke could have meant, on a keyboard
      *        that puts several on a key (null on every 1:1 board)
+     * @param previousWord3 the word before [previousWord2], for the reranker's
+     *        distance-3 skip-gram (#195)
      */
     fun suggest(
         composing: String,
@@ -1659,6 +1663,7 @@ class SuggestionEngine(
         recentWords: List<String> = emptyList(),
         allowRerank: Boolean = false,
         keys: KeySets? = null,
+        previousWord3: String? = null,
     ): List<String> {
         if (composing.isEmpty()) {
             return nextWords(previousWord, previousWord2, limit)
@@ -1806,7 +1811,7 @@ class SuggestionEngine(
         val reordered = if (allowRerank && reranker !== CandidateReranker.NONE) {
             val pool = ranked.take(RERANK_POOL)
             reranker.rerank(
-                RerankContext(composing, previousWord, recentWords, previousWord2), pool,
+                RerankContext(composing, previousWord, recentWords, previousWord2, previousWord3), pool,
             )
                 ?.filter { it in pool }
                 ?.let { it + ranked.filterNot(it::contains) }

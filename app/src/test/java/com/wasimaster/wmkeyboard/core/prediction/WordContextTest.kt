@@ -131,6 +131,18 @@ class WordContextTest {
         assertEquals(before("$decomposed "), before("$precomposed "))
     }
 
+    @Test fun lastThreeWordsRecoversAllOrDegrades() {
+        fun three(text: String?) = WordContext.lastThreeWords(text, enders)
+        assertEquals(Triple("that", "so", "gotten"), three("It has gotten so that "))
+        assertEquals(Triple("that", "so", "gotten"), three("gotten, so that, "))
+        // A boundary anywhere behind prev2 kills prev3 alone; behind prev1, both.
+        assertEquals(Triple("that", "so", null), three("Stop. So that "))
+        assertEquals(Triple("that", null, null), three("Stop. That "))
+        assertEquals(Triple("was", "i", null), three("I was "))
+        assertEquals(Triple(WordContext.SENTENCE_START, null, null), three("I was. "))
+        assertEquals(Triple(null, null, null), three(null))
+    }
+
     @Test fun bothContextWordsSurviveCombiningMarks() {
         val (prev1, prev2) = WordContext.lastTwoWords("করা হয়েছে ", enders)
         assertEquals("হয়েছে", prev1)

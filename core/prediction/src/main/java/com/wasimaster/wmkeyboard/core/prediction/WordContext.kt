@@ -129,4 +129,24 @@ object WordContext {
         val prev2 = completedWordBefore(s.substring(0, end), enders)
         return prev1 to prev2?.takeUnless { isSentinel(it) }
     }
+
+    /**
+     * The last three completed words before the caret, most recent first:
+     * `(prev1, prev2, prev3)`. Same contract as [lastTwoWords] one word
+     * further back: prev3 is null when unknown or when any boundary lies
+     * between it and the caret, so the distance-3 skip-gram (#195) reads
+     * nothing across a sentence end.
+     */
+    fun lastThreeWords(text: CharSequence?, enders: CharArray): Triple<String?, String?, String?> {
+        val (prev1, prev2) = lastTwoWords(text, enders)
+        if (prev2 == null) return Triple(prev1, null, null)
+        val s = text.toString()
+        var end = s.length
+        repeat(2) {
+            while (end > 0 && !isWordChar(s[end - 1])) end--
+            while (end > 0 && isWordChar(s[end - 1])) end--
+        }
+        val prev3 = completedWordBefore(s.substring(0, end), enders)
+        return Triple(prev1, prev2, prev3?.takeUnless { isSentinel(it) })
+    }
 }

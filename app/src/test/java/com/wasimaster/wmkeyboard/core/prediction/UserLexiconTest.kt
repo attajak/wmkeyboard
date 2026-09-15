@@ -180,6 +180,29 @@ class UserLexiconTest {
     }
 
     @Test
+    fun skip3gramsServeRoundTripAndForget() {
+        val f = file()
+        val lexicon = UserLexicon(f)
+        // "gotten so that you've" (#195): the word three back, across two.
+        lexicon.learnWord("gotten", 1)
+        lexicon.learnSkip3gram("gotten", "you've")
+        lexicon.learnSkip3gram("gotten", "you've")
+        assertEquals(2, lexicon.skip3gramCount("gotten", "you've"))
+        // Its own table: neither the adjacent nor the distance-2 store sees it.
+        assertEquals(0, lexicon.skip2gramCount("gotten", "you've"))
+        assertEquals(0, lexicon.bigramCount("gotten", "you've"))
+        lexicon.save()
+        val back = UserLexicon(f)
+        assertEquals(2, back.skip3gramCount("gotten", "you've"))
+        assertTrue(back.rename("gotten", "got"))
+        assertEquals(2, back.skip3gramCount("got", "you've"))
+        assertEquals(0, back.skip3gramCount("gotten", "you've"))
+        back.learnSkip3gram("p", "target")
+        back.forget("target")
+        assertEquals(0, back.skip3gramCount("p", "target"))
+    }
+
+    @Test
     fun skip2gramHeadsAreCappedAtSave() {
         val f = file()
         val lexicon = UserLexicon(f)
