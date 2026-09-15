@@ -411,6 +411,8 @@ import com.wasimaster.wmkeyboard.ime.DictionaryChip
 import com.wasimaster.wmkeyboard.ime.DictionaryKind
 import com.wasimaster.wmkeyboard.ime.GlideExpansion
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
+import com.wasimaster.wmkeyboard.ime.shiftCased
+import com.wasimaster.wmkeyboard.ime.shiftCasesText
 import com.wasimaster.wmkeyboard.ime.SnippetChip
 import com.wasimaster.wmkeyboard.ime.transliterationHintsShown
 import com.wasimaster.wmkeyboard.ime.SnippetOfferKind
@@ -10839,6 +10841,8 @@ internal fun LayerPeekPopup(
     popup: KeyPopupSettings,
     onKey: (Key) -> Unit,
     onText: (String) -> Unit,
+    /** [shiftCasesText] for the board the peek is typing on. */
+    shifted: Boolean,
 ) {
     // Assigned each composition, the way a key assigns its own: it closes over
     // the popup's key and the commit paths as they are now. Read at the lift,
@@ -10871,6 +10875,7 @@ internal fun LayerPeekPopup(
             popupPosition = rememberAboveAnchorPopup(),
             popup = popup,
             hold = peek.hold,
+            shifted = shifted,
             onDismiss = { peek.popupKey = null },
             onText = { text ->
                 peek.popupKey = null
@@ -11045,6 +11050,13 @@ internal data class KeyVisual(
      */
     val transliteration: String? = null,
     /**
+     * Shift is capitalising what this key's alternates type ([shiftCasesText]),
+     * so its popup and corner hint draw the capitals (issue #211). False on a
+     * key with no alternates whatever shift is doing, so a shift press leaves
+     * those keys' parameters alone.
+     */
+    val alternatesShifted: Boolean = false,
+    /**
      * The label-size multiplier the grid this key belongs to asked for: the
      * layer's own, or the layout's where the layer sets none. 1.0 for every
      * shipped grid.
@@ -11195,6 +11207,7 @@ internal fun keyVisual(
             if (action == KeyAction.Enter) palette.modifierKeyText else contentColor,
         hintColor = palette.hintText,
         transliteration = transliterationHint(key, state),
+        alternatesShifted = key.longPress.isNotEmpty() && state.shiftCasesText(),
         iconSlot = when {
             action == KeyAction.Shift -> when (state.shiftState) {
                 ShiftState.CAPS_LOCK -> IconSlots.KEY_SHIFT_LOCK
@@ -13574,7 +13587,10 @@ private fun KeyRows(
         // press that opens a popup, and a popup places itself against whatever
         // it is put inside. Same position provider, same surface, same entries
         // as a long press gets — only the finger steering it is different.
-        LayerPeekPopup(layerPeek, state.settings.popup, stampedOnKey, stampedOnText)
+        LayerPeekPopup(
+            layerPeek, state.settings.popup, stampedOnKey, stampedOnText,
+            shifted = state.shiftCasesText(),
+        )
     }
 }
 
@@ -15799,6 +15815,7 @@ internal fun KeyButton(
                 popupPosition = popupPosition,
                 popup = settings.popup,
                 hold = alternatesHold.takeIf { holdToSelect },
+                shifted = visual.alternatesShifted,
                 onDismiss = { showAlternates = false },
                 onText = { text ->
                     showAlternates = false
@@ -16110,6 +16127,13 @@ private fun AlternatesPopup(
     onAction: (Key) -> Unit,
     /** The finger still steering this popup, or null when hold-to-select is off. */
     hold: AlternatesHold?,
+    /**
+     * Shift will capitalise whatever is picked ([shiftCasesText]), so the
+     * characters draw as the capitals they type. Only the drawing: the entry
+     * still hands back its own text and the key output applies the case, the
+     * way it does for every key.
+     */
+    shifted: Boolean = false,
 ) {
     val kb = LocalKbTheme.current
     val configuration = LocalConfiguration.current
@@ -16174,7 +16198,7 @@ private fun AlternatesPopup(
                 key.alternateEntries().forEachIndexed { index, entry ->
                     when (entry) {
                         is AlternateEntry.Character -> Text(
-                            text = entry.text,
+                            text = shiftCased(entry.text, shifted),
                             modifier = Modifier
                                 .clickable { onText(entry.text) }
                                 .alternateHighlight(
@@ -17130,7 +17154,12 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
             // is the mirror (issue #33) — this one key keeps its hint on a board
             // whose global toggle is off. hideHint wins if a file sets both.
             val hintIcon = if (key.hideHint) null else KeyIcons.byName(key.iconHint)
-            val hint = if (key.hideHint) null else key.longPress.firstOrNull()
+            // Cased with the popup it previews: under shift a hold types the capital.
+            val hint = if (key.hideHint) {
+                null
+            } else {
+                key.longPress.firstOrNull()?.let { shiftCased(it, visual.alternatesShifted) }
+            }
             val showHints = settings.longPressHints || key.forceHint
             // A theme may name the hint colour outright (issue #72); otherwise
             // it is the label colour faded, so it follows a per-key override

@@ -14,6 +14,7 @@ import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.LayoutSet
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.ShiftState
+import com.wasimaster.wmkeyboard.ime.shiftCased
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
 import com.wasimaster.wmkeyboard.core.prediction.OctopusWord
 import org.junit.Assert.assertEquals
@@ -173,5 +174,28 @@ class KeyVisualTest {
 
         val letter = keyLabelled(state(), "q")
         assertEquals(letter.contentColor, letter.pressedContentColor)
+    }
+
+    @Test
+    fun `shift capitalises a key's alternates, and only on a key that has some`() {
+        val accents = Key("e", longPress = listOf("3", "é", "è"))
+        assertEquals(false, keyVisual(accents, state(), palette).alternatesShifted)
+        assertEquals(
+            true,
+            keyVisual(accents, state().copy(shiftState = ShiftState.ON), palette).alternatesShifted,
+        )
+        assertEquals(
+            true,
+            keyVisual(accents, state().copy(shiftState = ShiftState.CAPS_LOCK), palette).alternatesShifted,
+        )
+        // A bare key must not change under shift, or a shift press recomposes it.
+        val plain = Key(",")
+        assertEquals(
+            keyVisual(plain, state(), palette).alternatesShifted,
+            keyVisual(plain, state().copy(shiftState = ShiftState.ON), palette).alternatesShifted,
+        )
+        assertEquals("É", shiftCased("é", shifted = true))
+        assertEquals("3", shiftCased("3", shifted = true))
+        assertEquals("é", shiftCased("é", shifted = false))
     }
 }

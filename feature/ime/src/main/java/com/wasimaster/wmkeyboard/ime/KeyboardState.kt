@@ -55,6 +55,22 @@ import java.io.File
 enum class ShiftState { OFF, ON, CAPS_LOCK }
 
 /**
+ * Whether shift turns what a key types into its capital right now: shift on or
+ * locked, on a board that does not shape clusters (a Bengali fixed layout reads
+ * shift as a different letter, never as case).
+ *
+ * The one rule the service's key output and the long-press popup both read
+ * (issue #211). An alternate picked out of a popup is typed as a plain key, so
+ * shift has always capitalised it on the way out; the popup drew it lowercase
+ * all the same, and on a board full of accents that hid the capitals.
+ */
+fun KeyboardUiState.shiftCasesText(): Boolean =
+    shiftState != ShiftState.OFF && !composer.isClusterShaping
+
+/** [text] as a key with no shift label of its own types it: see [shiftCasesText]. */
+fun shiftCased(text: String, shifted: Boolean): String = if (shifted) text.uppercase() else text
+
+/**
  * Re-cases a suggestion for display/commit to follow the live [shift] state, so
  * pressing shift while a word is composing walks the strip through
  * lower → Title → UPPER the way the keys themselves do. [ShiftState.OFF] leaves

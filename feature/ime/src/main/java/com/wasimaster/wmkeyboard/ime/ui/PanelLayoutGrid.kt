@@ -40,6 +40,7 @@ import com.wasimaster.wmkeyboard.core.layout.panelRowTops
 import com.wasimaster.wmkeyboard.core.layout.rowScaledKeyHeight
 import com.wasimaster.wmkeyboard.core.layout.spanSlots
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
+import com.wasimaster.wmkeyboard.ime.shiftCasesText
 import kotlin.math.roundToInt
 
 /**
@@ -174,7 +175,10 @@ internal fun PanelLayoutGrid(
                 virtualHeadroom = true,
             )
         }
-        LayerPeekPopup(peek, settings.popup, onPanelKey, callbacks.onText)
+        LayerPeekPopup(
+            peek, settings.popup, onPanelKey, callbacks.onText,
+            shifted = state.shiftCasesText(),
+        )
     }
 }
 

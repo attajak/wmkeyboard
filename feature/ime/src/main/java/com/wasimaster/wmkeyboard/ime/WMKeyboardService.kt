@@ -6443,9 +6443,7 @@ open class WMKeyboardService : InputMethodService() {
         val shiftLabel = key.shiftLabel
         val out = when {
             state.shiftState != ShiftState.OFF && shiftLabel != null -> shiftLabel
-            state.shiftState != ShiftState.OFF && !state.composer.isClusterShaping ->
-                base.uppercase()
-            else -> base
+            else -> shiftCased(base, state.shiftCasesText())
         }
         return applyNumerals(out, state)
     }
