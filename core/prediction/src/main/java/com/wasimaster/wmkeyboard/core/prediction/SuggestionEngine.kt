@@ -1355,6 +1355,13 @@ class SuggestionEngine(
         /** Letters that flank the spacebar on a QWERTY-family bottom row. */
         const val SPACE_ADJACENT_DEFAULT = "cvbnm"
 
+        /** How far below its key's centre, in key widths, a tap must land
+         * before the letter it typed may be read as a spacebar miss. A quarter
+         * key: the lower third of a phone row, where a finger reaching for the
+         * spacebar catches the row above, and outside the scatter of a tap
+         * aimed at the letter itself. */
+        const val SPACE_SLIP_MIN_DROP = 0.25f
+
         /** Shortest typed run a split autocorrect may rewrite: two 2-letter
          * halves plus margin — below this, splits stay strip suggestions. */
         private const val SPLIT_AUTOCORRECT_MIN_LENGTH = 5
@@ -1685,8 +1692,8 @@ class SuggestionEngine(
                 merged.merge(s.word, flatScore(s.frequency, APP_WEIGHT), ::maxOf)
             }
             if (!known) {
-                for ((split, score) in splitCandidates(lower)) {
-                    merged.merge(split, score, ::maxOf)
+                for (split in splitCandidates(lower, touch)) {
+                    merged.merge(split.text, split.score, ::maxOf)
                 }
             }
         }
@@ -2028,24 +2035,42 @@ class SuggestionEngine(
         return joined
     }
 
+    /** One reading of a typed run as two words; [dropped] when a boundary
+     * letter had to go to get there. */
+    private class SplitReading(val text: String, val score: Double, val dropped: Boolean)
+
     /**
      * Missing-space fixes: "ofthe" → "of the", scored by the rarer half so
      * two genuinely common words outrank a coincidental split.
      *
      * Also covers the fat-fingered spacebar: a stray [spaceAdjacentKeys]
-     * letter between two known words ("amibtomake") was probably a space
+     * letter between two known words ("amibtomake") may have been a space
      * press that landed on the bottom row, so the split that drops it is
      * offered too — at a discount that mirrors the walk's deletion cost, so
      * an exact split of the same material always outranks a dropped-letter
-     * reading of it.
+     * reading of it. That reading is a claim about where a finger landed,
+     * and it is only made when the tap says so ([leansToSpacebar]): the word
+     * lists have gaps ("config", "inbox"), and with no tap to consult the
+     * reading fired on every unlisted word that happened to break into two
+     * listed ones around a bottom-row letter ("co fig", "in ox"). A letter
+     * with no tap behind it — a glide, a hardware key, pasted text — was not
+     * fat-fingered onto the bottom row either.
+     *
+     * A learned word anchors a half only once it is established: a spelling
+     * seen once is not evidence that the user meant it here.
      */
-    private fun splitCandidates(word: String): List<Pair<String, Double>> {
+    private fun splitCandidates(word: String, touch: List<TouchPoint?>?): List<SplitReading> {
         if (word.length < 4 || !word.all { it.isLetter() }) return emptyList()
-        val results = ArrayList<Pair<String, Double>>()
-        fun freqOf(part: String) = maxOf(
-            dictionaryFrequencyOf(part),
-            userLexicon.frequencyOf(part) * USER_WORD_WEIGHT,
-        )
+        val results = ArrayList<SplitReading>()
+        val taps = touch?.takeIf { it.size == word.length }
+        fun freqOf(part: String): Int {
+            val learned = if (userLexicon.isEstablished(part, learnedWordMinCount)) {
+                userLexicon.frequencyOf(part) * USER_WORD_WEIGHT
+            } else {
+                0
+            }
+            return maxOf(dictionaryFrequencyOf(part), learned)
+        }
         for (i in 1 until word.length) {
             val left = word.substring(0, i)
             val leftFreq = freqOf(left)
@@ -2054,12 +2079,14 @@ class SuggestionEngine(
             val rightFreq = freqOf(right)
             if (rightFreq > 0) {
                 val score = ln(1.0 + minOf(leftFreq, rightFreq) * WEIGHT_SPLIT)
-                results.add("$left $right" to score)
+                results.add(SplitReading("$left $right", score, dropped = false))
             }
             // Boundary char dropped: both halves must be real words of some
             // substance — single-letter halves ("a", "i") explain nearly any
             // string and would fire on every stumble.
-            if (i + 1 < word.length - 1 && word[i] in spaceAdjacentKeys && left.length >= 2) {
+            if (i + 1 < word.length - 1 && word[i] in spaceAdjacentKeys && left.length >= 2 &&
+                leansToSpacebar(word[i], taps?.get(i))
+            ) {
                 val tail = word.substring(i + 1)
                 if (tail.length >= 2) {
                     val tailFreq = freqOf(tail)
@@ -2069,13 +2096,35 @@ class SuggestionEngine(
                         val slip = editHabitsField.spaceSlip(word[i]) / EditHabits.MAX_SHRINK
                         val weight = WEIGHT_SPLIT_DROPPED + (WEIGHT_SPLIT - WEIGHT_SPLIT_DROPPED) * slip
                         val score = ln(1.0 + minOf(leftFreq, tailFreq) * weight)
-                        results.add("$left $tail" to score)
+                        results.add(SplitReading("$left $tail", score, dropped = true))
                     }
                 }
             }
         }
         return results
     }
+
+    /**
+     * Whether the tap that typed [ch] landed low on its key, toward the
+     * spacebar, by at least [SPACE_SLIP_MIN_DROP] key widths. A finger aimed
+     * at the spacebar that caught the row above lands near that row's bottom
+     * edge; one aimed at the letter lands around its centre. Centres are the
+     * touch model's, so a hand whose taps sit low on every key (adapt to
+     * taps) is measured against where it actually types. False with no
+     * model, no tap for this letter, or a letter the model does not know.
+     */
+    private fun leansToSpacebar(ch: Char, tap: TouchPoint?): Boolean {
+        if (tap == null) return false
+        val center = touchModelField?.center(ch) ?: return false
+        return tap.y - center.y >= SPACE_SLIP_MIN_DROP
+    }
+
+    /**
+     * Whether [left] followed by [right] is a pair the keyboard has seen —
+     * in the user's own typing or the language's n-gram pack.
+     */
+    private fun knownPhrase(left: String, right: String): Boolean =
+        userLexicon.bigramCount(left, right) > 0 || ngramPack.bigramCount(left, right) > 0
 
     /**
      * The fixed-spelling map's answer for exactly [composing], or null.
@@ -2558,7 +2607,7 @@ class SuggestionEngine(
             )
         }
         // No single word explains the typed string; a missing space might.
-        splitCorrection(lower, top?.score, effectiveConfidence)?.let {
+        splitCorrection(lower, top?.score, effectiveConfidence, touch)?.let {
             return CorrectionDecision(
                 apply = matchCase(word, it),
                 // A split held to the same margin as any other correction, so
@@ -2638,32 +2687,40 @@ class SuggestionEngine(
      * candidate, the runner-up split, and the solo floor by the gate margin,
      * with halves of at least two letters. The committed text becomes two
      * words — the IME's learn/revert paths already handle multi-word commits.
+     *
+     * A dropped-letter reading is applied only when its halves are a phrase
+     * the keyboard has seen together ([knownPhrase]). It deletes a letter the
+     * user typed and changes the sentence's word count on the strength of
+     * one low tap, and an unlisted word that happens to break into two listed
+     * ones is far commoner than a spacebar miss that lands between exactly
+     * those two. Until the pair is known it stays a strip suggestion.
      */
     private fun splitCorrection(
         lower: String,
         bestWordScore: Double?,
         effectiveConfidence: Double,
+        touch: List<TouchPoint?>?,
     ): String? {
         if (!autocorrectSplits) return null
         if (lower.length < SPLIT_AUTOCORRECT_MIN_LENGTH) return null
-        val splits = splitCandidates(lower)
-            .filter { (candidate, _) ->
-                candidate.split(' ').all { it.length >= 2 && !suppressed(it) }
+        val splits = splitCandidates(lower, touch)
+            .filter { reading ->
+                val halves = reading.text.split(' ')
+                halves.all { it.length >= 2 && !suppressed(it) } &&
+                    (!reading.dropped || knownPhrase(halves[0], halves[1]))
             }
-            .sortedWith(
-                compareByDescending<Pair<String, Double>> { it.second }.thenBy { it.first }
-            )
-        val (best, bestScore) = splits.firstOrNull() ?: return null
+            .sortedWith(compareByDescending<SplitReading> { it.score }.thenBy { it.text })
+        val best = splits.firstOrNull() ?: return null
         // The same pair memory word corrections use: a split the user
         // reverted is never forced on them again.
-        if (correctionStats.penalty(lower, best) != CorrectionStats.Penalty.NONE) return null
+        if (correctionStats.penalty(lower, best.text) != CorrectionStats.Penalty.NONE) return null
         val rival = maxOf(
             bestWordScore ?: Double.NEGATIVE_INFINITY,
-            splits.getOrNull(1)?.second ?: Double.NEGATIVE_INFINITY,
+            splits.getOrNull(1)?.score ?: Double.NEGATIVE_INFINITY,
             SOLO_RUNNER_UP_SCORE,
         )
-        if (bestScore - rival < ln(effectiveConfidence)) return null
-        return best
+        if (best.score - rival < ln(effectiveConfidence)) return null
+        return best.text
     }
 
     /** True when [candidate] is [typed] with its single digit swapped for a

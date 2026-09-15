@@ -54,7 +54,7 @@
 
     <string name="typing_autocorrect_splits_title">Add missing spaces</string>
     <string name="typing_autocorrect_splits_subtitle">Split two words typed together when you press space</string>
-    <string name="typing_autocorrect_splits_info">When the word you typed is unknown, but it divides into two words the keyboard knows, the keyboard can commit the two words with a space between them: "ofthe" becomes "of the". A letter next to the spacebar can also stand in for the space itself, so "amibtomake" becomes "ami tomake". The split applies only when no single word explains the typed text and both halves are clear words. Backspace right after the split puts your text back, like any other correction.</string>
+    <string name="typing_autocorrect_splits_info">When the word you typed is unknown, but it divides into two words the keyboard knows, the keyboard can commit the two words with a space between them: "ofthe" becomes "of the". A letter next to the spacebar can also stand in for the space itself, so "amibtomake" becomes "ami tomake", when that tap landed low on its key, toward the spacebar, and the two words are a pair you have typed before. The split applies only when no single word explains the typed text and both halves are clear words. Backspace right after the split puts your text back, like any other correction.</string>
 
     <string name="typing_language_detection_title">Detect the language you type</string>
     <string name="typing_language_detection_subtitle">Follow the language of the current message</string>

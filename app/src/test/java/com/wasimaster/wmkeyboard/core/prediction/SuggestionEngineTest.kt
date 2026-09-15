@@ -10,7 +10,7 @@ import org.junit.Test
 
 class SuggestionEngineTest {
 
-    private fun engine(): SuggestionEngine {
+    private fun engine(lexicon: UserLexicon = UserLexicon(null)): SuggestionEngine {
         val dictionary = Trie().apply {
             insert("the", 100)
             insert("they", 90)
@@ -27,7 +27,7 @@ class SuggestionEngineTest {
                 "আমি" to 9000,
             )
         )
-        return SuggestionEngine(dictionary, bengali, UserLexicon(null))
+        return SuggestionEngine(dictionary, bengali, lexicon)
     }
 
     @Test fun anIndirectUndoOfANonWordIsNotBelieved() {
@@ -846,12 +846,16 @@ class SuggestionEngineTest {
     // ---- missing-space splits ----
 
     @Test fun `stray spacebar-neighbour letter offers the split in the strip`() {
-        val out = engine().suggest("thebworld", previousWord = null)
+        val e = engine().apply { touchModel = KeyTouchModel(mapOf('b' to TouchPoint(5f, 3f))) }
+        val low = List(9) { i -> if (i == 3) TouchPoint(5f, 3.4f) else null }
+        val out = e.suggest("thebworld", previousWord = null, touch = low)
         assertTrue("expected 'the world' in $out", "the world" in out)
     }
 
     @Test fun `boundary letter far from the spacebar never reads as a space`() {
-        val out = engine().suggest("thexworld", previousWord = null)
+        val e = engine().apply { touchModel = KeyTouchModel(mapOf('x' to TouchPoint(2f, 3f))) }
+        val low = List(9) { i -> if (i == 3) TouchPoint(2f, 3.4f) else null }
+        val out = e.suggest("thexworld", previousWord = null, touch = low)
         assertTrue("unexpected split in $out", "the world" !in out)
     }
 
@@ -866,9 +870,61 @@ class SuggestionEngineTest {
         assertEquals("The world", e.shouldAutocorrect("Theworld"))
     }
 
+    // ---- the fat-fingered spacebar ----
+
+    /** A bottom-row model: `b` sits at y = 3, the spacebar a row below it. */
+    private fun bottomRowEngine(lexicon: UserLexicon = UserLexicon(null)): SuggestionEngine =
+        engine(lexicon).apply {
+            autocorrectSplits = true
+            touchModel = KeyTouchModel(mapOf('b' to TouchPoint(5f, 3f)))
+        }
+
+    /** Taps for "thebworld" with the `b` landing [bDrop] key widths below its centre. */
+    private fun thebworldTaps(bDrop: Float): List<TouchPoint?> =
+        List(9) { i -> if (i == 3) TouchPoint(5f, 3f + bDrop) else null }
+
     @Test fun `split autocorrect drops a fat-fingered space letter`() {
-        val e = engine().apply { autocorrectSplits = true }
-        assertEquals("the world", e.shouldAutocorrect("thebworld"))
+        val lexicon = UserLexicon(null).apply { learnBigram("the", "world") }
+        val e = bottomRowEngine(lexicon)
+        val low = thebworldTaps(bDrop = 0.4f)
+        assertEquals("the world", e.decideCorrection("thebworld", touch = low).apply)
+        assertTrue("the world" in e.suggest("thebworld", null, touch = low))
+    }
+
+    @Test fun `a letter tapped square on its key is never a space slip`() {
+        // "config" is not in the list, "co" and "fig" are, and `n` flanks the
+        // spacebar: with no tap to say the finger reached for the spacebar,
+        // the word the user typed stands (the "config" -> "co fig" report).
+        val lexicon = UserLexicon(null).apply { learnBigram("the", "world") }
+        val e = bottomRowEngine(lexicon)
+        assertNull(e.decideCorrection("thebworld").apply)
+        assertNull(e.decideCorrection("thebworld", touch = thebworldTaps(bDrop = 0f)).apply)
+        assertNull(e.decideCorrection("thebworld", touch = thebworldTaps(bDrop = -0.3f)).apply)
+        assertTrue("the world" !in e.suggest("thebworld", null))
+        assertTrue("the world" !in e.suggest("thebworld", null, touch = thebworldTaps(bDrop = 0f)))
+    }
+
+    @Test fun `a dropped-letter split needs a phrase the keyboard has seen`() {
+        val lexicon = UserLexicon(null)
+        val e = bottomRowEngine(lexicon)
+        val low = thebworldTaps(bDrop = 0.4f)
+        // Never typed "the world": the strip may offer it, the field is not rewritten.
+        assertNull(e.decideCorrection("thebworld", touch = low).apply)
+        assertTrue("the world" in e.suggest("thebworld", null, touch = low))
+        lexicon.learnBigram("the", "world")
+        assertEquals("the world", e.decideCorrection("thebworld", touch = low).apply)
+    }
+
+    @Test fun `a word learned once does not anchor a split`() {
+        val lexicon = UserLexicon(null).apply {
+            learnBigram("the", "wprld")
+            learnWord("wprld")
+        }
+        val e = bottomRowEngine(lexicon).apply { learnedWordMinCount = 3 }
+        val low = thebworldTaps(bDrop = 0.4f)
+        assertNull(e.decideCorrection("thebwprld", touch = low).apply)
+        lexicon.learnWord("wprld", count = 2)
+        assertEquals("the wprld", e.decideCorrection("thebwprld", touch = low).apply)
     }
 
     @Test fun `single-word fix always outranks a split`() {
