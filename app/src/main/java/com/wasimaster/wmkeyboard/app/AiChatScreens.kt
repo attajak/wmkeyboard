@@ -62,6 +62,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.core.aichat.AiChatConversation
 import com.wasimaster.wmkeyboard.core.aichat.AiChatMessage
@@ -423,9 +424,10 @@ private fun retryFor(
  * in the user's mail app, quoting the prompt and the answer, which the user
  * reads and can edit or abandon before it goes anywhere.
  *
- * Null for anything that is not a finished answer: the user's own messages are
- * not generated content, and a failed turn has an error where the answer would
- * be.
+ * Null outside Play Store builds, since the button exists for Play's policy and
+ * the GitHub and F-Droid builds have no such requirement. Null too for anything
+ * that is not a finished answer: the user's own messages are not generated
+ * content, and a failed turn has an error where the answer would be.
  */
 private fun reportFor(
     context: Context,
@@ -433,6 +435,7 @@ private fun reportFor(
     messages: List<AiChatMessage>,
     index: Int,
 ): (() -> Unit)? {
+    if (!BuildConfig.ENABLE_PLAY_STORE) return null
     if (message.role != AiChatMessage.ROLE_ASSISTANT) return null
     if (message.failed || message.content.isBlank()) return null
     return {
@@ -569,8 +572,8 @@ private fun MessageBubble(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-                    // Only ever on an answer; reportFor returns null for the
-                    // user's own messages, which are not generated content.
+                    // Only ever on an answer in a Play Store build; reportFor
+                    // returns null for everything else.
                     onReport?.let {
                         TextButton(onClick = it, modifier = Modifier.align(Alignment.End)) {
                             Text(
