@@ -1,4 +1,5 @@
 // @ts-check
+import { readdirSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import preact from '@astrojs/preact';
 import starlight from '@astrojs/starlight';
@@ -14,7 +15,23 @@ import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from './src/site.mjs';
 // block the dev loop. CI should run `npm run check`.
 const plugins = [starlightImageZoom()];
 if (process.env.CHECK_LINKS) {
-	plugins.push(starlightLinksValidator({ errorOnRelativeLinks: true }));
+	// The addon store under /addons/ is custom Astro pages (src/pages/addons),
+	// which the validator cannot check. The Starlight guides sharing that
+	// prefix (src/content/docs/addons) stay validated, so a glob won't do.
+	const addonGuides = new Set(
+		readdirSync(new URL('./src/content/docs/addons/', import.meta.url)).map((file) =>
+			file.replace(/\.mdx?$/, ''),
+		),
+	);
+	plugins.push(
+		starlightLinksValidator({
+			errorOnRelativeLinks: true,
+			exclude: ({ link }) => {
+				const match = /^\/addons(?:\/([^/?#]*)|(?=[?#]|$))/.exec(link);
+				return match !== null && !addonGuides.has(match[1] ?? '');
+			},
+		}),
+	);
 }
 
 // starlight-theme-black appends its stylesheets after `customCss`, so it owns
