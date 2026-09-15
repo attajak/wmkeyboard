@@ -1,10 +1,10 @@
 /** One addon: gallery, description, actions, details, licence, and the live payload preview. */
 import { useEffect, useState } from 'preact/hooks';
-import { addRepo, allRepos, appVersion, findAddon, inCollection, navigate, noveltyOf, repos, showToast, toggleCollection } from '../state';
+import { addRepo, allRepos, appVersion, findAddon, inCollection, navigate, noveltyOf, repos, showToast, toggleCollection, onAndroid } from '../state';
 import { fetchText, fmtBytes, MAX_TEXT_BYTES, NetError } from '../lib/net';
 import { describeManifestUrl, resolveAsset } from '../lib/resolve';
 import { typeInfo, type AddonEntry, type LoadedRepo } from '../lib/types';
-import { absoluteUrl, appLinkAddon, canWebShare, isAndroid, payloadFileName, payloadUrl, previewUrls } from '../lib/util';
+import { absoluteUrl, appLinkAddon, canWebShare, payloadFileName, payloadUrl, previewUrls } from '../lib/util';
 import { languageName } from '../lib/languages';
 import { CopyButton, Dialog, Empty, Link, Notice, Qr, Spinner } from './common';
 import { IconBack, IconCopy, IconDownload, IconExternal, IconPhone, IconPlus, IconQr, IconShare, IconStar, IconWarn, TypeIcon } from './icons';
@@ -158,7 +158,7 @@ function AddonDetail({ repo, entry }: { repo: LoadedRepo; entry: AddonEntry }) {
 				<aside class="st-detail-side">
 					<div class="st-panel">
 						<div class="st-actions">
-							{isAndroid() ? (
+							{onAndroid.value ? (
 								<a class="st-btn st-btn-primary st-btn-block" href={appLink}>
 									<IconPhone /> Open in WM Keyboard
 								</a>
@@ -167,7 +167,7 @@ function AddonDetail({ repo, entry }: { repo: LoadedRepo; entry: AddonEntry }) {
 									<IconQr /> {qr ? 'Hide QR code' : 'Send to phone'}
 								</button>
 							)}
-							{qr && !isAndroid() && <Qr text={appLink} caption="Scan with the phone WM Keyboard is on. The app opens this addon's page; nothing installs until you tap Install there." />}
+							{qr && !onAndroid.value && <Qr text={appLink} caption="Scan with the phone WM Keyboard is on. The app opens this addon's page; nothing installs until you tap Install there." />}
 							<div class="st-actions-row">
 								<button class="st-btn" aria-pressed={starred} onClick={() => { toggleCollection(key); showToast(starred ? 'Removed from collection.' : 'Added to collection.'); }}>
 									<IconStar filled={starred} style={starred ? 'color:var(--st-warn)' : ''} /> {starred ? 'Starred' : 'Star'}
@@ -253,7 +253,7 @@ function AddonDetail({ repo, entry }: { repo: LoadedRepo; entry: AddonEntry }) {
 			</div>
 
 			<div class="st-sticky-actions">
-				{isAndroid() ? (
+				{onAndroid.value ? (
 					<a class="st-btn st-btn-primary" href={appLink}><IconPhone /> Open in app</a>
 				) : (
 					<button class="st-btn st-btn-primary" onClick={() => { setQr(true); document.querySelector('.st-detail-side')?.scrollIntoView({ behavior: 'smooth' }); }}><IconQr /> Send to phone</button>

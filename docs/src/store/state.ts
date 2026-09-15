@@ -72,6 +72,8 @@ export const builtAt = signal('');
 /** A repository opened from a link that isn't in the list: shown, not saved. */
 export const transientRepo = signal<LoadedRepo | null>(null);
 export const toast = signal<{ text: string; kind?: 'ok' | 'err'; id: number } | null>(null);
+/** True on Android, set after mount so the first client render matches the server's. */
+export const onAndroid = signal(false);
 
 export const allRepos = computed<LoadedRepo[]>(() => {
 	const t = transientRepo.value;
@@ -132,6 +134,7 @@ export function hydrate() {
 	if (hydrateStarted || typeof window === 'undefined') return;
 	hydrateStarted = true;
 	storageOk.value = storageAvailable();
+	onAndroid.value = /android/i.test(navigator.userAgent);
 	// The static pages are built without their query string (?repo=, ?type=,
 	// ?items=); the URL in the browser is the authority once we're here.
 	const parsed = parseLocation(location.pathname, location.search);

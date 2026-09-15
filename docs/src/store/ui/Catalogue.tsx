@@ -1,10 +1,10 @@
 /** One repository: hero, filters, and the grid. Also used for "All repositories" with `all`. */
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { addRepo, allRepos, everyAddon, markSeen, navigate, prefs, refreshRepo, refreshAll, repoByUrl, repos, seedSeen, setPrefs, showToast, sortAddons, unseenCount } from '../state';
+import { addRepo, allRepos, everyAddon, markSeen, navigate, prefs, refreshRepo, refreshAll, repoByUrl, repos, seedSeen, setPrefs, showToast, sortAddons, unseenCount, onAndroid } from '../state';
 import { describeManifestUrl } from '../lib/resolve';
 import { fmtBytes } from '../lib/net';
 import { ADDON_TYPES, typeInfo, type AddonEntry, type LoadedRepo } from '../lib/types';
-import { appLinkRepo, fmtDate, isAndroid, matchesQuery, relTime } from '../lib/util';
+import { appLinkRepo, fmtDate, matchesQuery, relTime } from '../lib/util';
 import { AddonCard } from './AddonCard';
 import { Empty, Link, Notice, RepoIcon, Spinner } from './common';
 import { IconExternal, IconGrid, IconList, IconPhone, IconPlus, IconRefresh, IconSearch, IconShield, IconWarn, TypeIcon } from './icons';
@@ -139,7 +139,7 @@ export function RepoHero({ repo }: { repo: LoadedRepo }) {
 						<IconPlus /> Add to my repositories
 					</button>
 				)}
-				{isAndroid() && (
+				{onAndroid.value && (
 					<a class="st-btn st-btn-sm" href={appLinkRepo(repo.ref.input)}>
 						<IconPhone /> Open in app
 					</a>

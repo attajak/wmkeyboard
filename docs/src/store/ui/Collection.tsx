@@ -1,9 +1,9 @@
 /** Starred addons across repositories: a batch of app links, one QR, a shareable URL. */
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { addRepo, clearCollection, collection, findAddon, hydrated, openTransient, repoByUrl, showToast, toggleCollection } from '../state';
+import { addRepo, clearCollection, collection, findAddon, hydrated, openTransient, repoByUrl, showToast, toggleCollection, onAndroid } from '../state';
 import { resolveManifestUrl, describeManifestUrl } from '../lib/resolve';
 import { typeInfo } from '../lib/types';
-import { absoluteUrl, appLinkAddon, isAndroid } from '../lib/util';
+import { absoluteUrl, appLinkAddon, } from '../lib/util';
 import { AddonCard } from './AddonCard';
 import { CopyButton, Empty, Notice, Qr } from './common';
 import { IconHeart, IconInfo, IconPhone, IconQr, IconShare, IconTrash } from './icons';
@@ -86,7 +86,7 @@ export function Collection() {
 							</div>
 						</div>
 					)}
-					{isAndroid() && links.length > 0 && !shared && (
+					{onAndroid.value && links.length > 0 && !shared && (
 						<Notice icon={<IconPhone />}>
 							Open each in the app: {resolved.filter((r) => r.found).map((r, i) => (
 								<span key={i}>{i > 0 && ' · '}<a href={appLinkAddon(r.found!.repo.ref.input, r.found!.entry.id)}>{r.found!.entry.name}</a></span>

@@ -2,13 +2,20 @@
 import { navigate } from '../../state';
 import { Link } from '../common';
 import { IconLayers, IconWand, TypeIcon } from '../icons';
-import { RepoBuilder } from './RepoBuilder';
-import { SnippetsBuilder } from './SnippetsBuilder';
-import { StickersBuilder } from './StickersBuilder';
-import { SoundPackBuilder } from './SoundPackBuilder';
-import { IconPackBuilder } from './IconPackBuilder';
-import { ThemeEditor } from './ThemeEditor';
-import { LayoutEditor } from './LayoutEditor';
+import { lazyView } from '../lazy';
+const RepoBuilder = lazyView(() => import('./RepoBuilder').then((m) => m.RepoBuilder));
+const SnippetsBuilder = lazyView(() => import('./SnippetsBuilder').then((m) => m.SnippetsBuilder));
+const StickersBuilder = lazyView(() => import('./StickersBuilder').then((m) => m.StickersBuilder));
+const SoundPackBuilder = lazyView(() => import('./SoundPackBuilder').then((m) => m.SoundPackBuilder));
+const IconPackBuilder = lazyView(() => import('./IconPackBuilder').then((m) => m.IconPackBuilder));
+const ThemeEditor = lazyView(() => import('./ThemeEditor').then((m) => m.ThemeEditor));
+const LayoutEditor = lazyView(() => import('./LayoutEditor').then((m) => m.LayoutEditor));
+const DictionaryBuilder = lazyView(() => import('./DictionaryBuilder').then((m) => m.DictionaryBuilder));
+const EmojiKeywordsBuilder = lazyView(() => import('./EmojiKeywordsBuilder').then((m) => m.EmojiKeywordsBuilder));
+const VocabBuilder = lazyView(() => import('./VocabBuilder').then((m) => m.VocabBuilder));
+const FontBuilder = lazyView(() => import('./FontBuilder').then((m) => m.FontBuilder));
+const SoundBuilder = lazyView(() => import('./SoundBuilder').then((m) => m.SoundBuilder));
+const PluginBuilder = lazyView(() => import('./PluginBuilder').then((m) => m.PluginBuilder));
 
 const BUILDERS: { type: string; title: string; blurb: string; hue: string; icon: string }[] = [
 	{ type: 'repo', title: 'Repository', blurb: 'Index your addons into a wmkeyboard-repo.json with checksums and sizes filled in, ready to host.', hue: '4C8DF6', icon: 'repo' },
@@ -18,6 +25,12 @@ const BUILDERS: { type: string; title: string; blurb: string; hue: string; icon:
 	{ type: 'stickers', title: 'Sticker pack', blurb: 'Drop images, name them, get a .wmstickers.', hue: 'EC4899', icon: 'stickers' },
 	{ type: 'sound_pack', title: 'Sound pack', blurb: 'Press and release samples per key role.', hue: 'F97316', icon: 'sound_pack' },
 	{ type: 'icon_pack', title: 'Icon pack', blurb: 'One SVG per slot, every tool and key the app draws.', hue: '22A559', icon: 'icon_pack' },
+	{ type: 'plugin', title: 'Plugin', blurb: 'Lua with a live sandbox of the Plugins panel, checks, and a signed archive.', hue: '06B6D4', icon: 'plugin' },
+	{ type: 'font', title: 'Font', blurb: 'Convert, trim tables, rename, subset, and read off the language ids.', hue: '6366F1', icon: 'font' },
+	{ type: 'sound', title: 'Key sound', blurb: 'Record, trim on a waveform, normalise, or synthesise a click.', hue: 'EF4444', icon: 'sound' },
+	{ type: 'dictionary', title: 'Dictionary', blurb: 'A word list with frequencies, cleaned and deduplicated.', hue: '14B8A6', icon: 'dictionary' },
+	{ type: 'emoji_keywords', title: 'Emoji keywords', blurb: 'Words that find emoji, in any language, from the built-in catalog.', hue: '0EA5E9', icon: 'emoji_keywords' },
+	{ type: 'vocabulary', title: 'Vocabulary pack', blurb: 'Lemmas, senses, examples and mnemonics for the Vocabulary tool.', hue: '8E24AA', icon: 'vocabulary' },
 ];
 
 export function Creator({ type }: { type?: string }) {
@@ -38,6 +51,12 @@ export function Creator({ type }: { type?: string }) {
 				{type === 'stickers' && <StickersBuilder />}
 				{type === 'sound_pack' && <SoundPackBuilder />}
 				{type === 'icon_pack' && <IconPackBuilder />}
+				{type === 'plugin' && <PluginBuilder />}
+				{type === 'font' && <FontBuilder />}
+				{type === 'sound' && <SoundBuilder />}
+				{type === 'dictionary' && <DictionaryBuilder />}
+				{type === 'emoji_keywords' && <EmojiKeywordsBuilder />}
+				{type === 'vocabulary' && <VocabBuilder />}
 				{!b && <p class="st-muted">No builder for "{type}".</p>}
 			</div>
 		);
@@ -64,11 +83,6 @@ export function Creator({ type }: { type?: string }) {
 							</span>
 						</Link>
 					))}
-				</div>
-			</section>
-			<section class="st-section">
-				<div class="st-panel st-small st-muted">
-					Dictionaries, emoji keyword packs, fonts, single key sounds and vocabulary packs need no builder: they are plain files (a word list, a TSV, a .ttf, an .mp3, a .wmvocab.json) you list in a repository as-is. Plugins are written in Lua; see the <a href="/plugins/">plugin docs</a>.
 				</div>
 			</section>
 		</div>
