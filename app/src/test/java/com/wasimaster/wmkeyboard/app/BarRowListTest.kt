@@ -1,0 +1,65 @@
+package com.wasimaster.wmkeyboard.app
+
+import com.wasimaster.wmkeyboard.core.settings.BarRow
+import com.wasimaster.wmkeyboard.core.settings.DefaultBarOrder
+import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
+import com.wasimaster.wmkeyboard.core.settings.ToolbarBehavior
+import com.wasimaster.wmkeyboard.core.settings.ToolbarPlacement
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
+/**
+ * Which rows the Row order list offers, and what a drag on a filtered list
+ * saves.
+ *
+ * The tools row is only a row of its own under the "A button" and "Always"
+ * choices of Where the tools go; with the tools on the strip it is part of the
+ * strip's own entry, and an entry for it is a slot the user can drag around to
+ * no effect. Hiding it must not cost it its place: it comes back where it was
+ * the moment the tools get a row again.
+ */
+class BarRowListTest {
+
+    private fun settings(placement: ToolbarPlacement) = KeyboardSettings(
+        toolbarBehavior = ToolbarBehavior(placement = placement),
+    )
+
+    @Test
+    fun `tools row is listed only when the tools have a row of their own`() {
+        for (placement in listOf(ToolbarPlacement.ALWAYS_ROW, ToolbarPlacement.ON_DEMAND_ROW)) {
+            assertEquals(
+                DefaultBarOrder,
+                barRowsListed(DefaultBarOrder, settings(placement)),
+            )
+        }
+        assertEquals(
+            DefaultBarOrder - BarRow.TOOLS,
+            barRowsListed(DefaultBarOrder, settings(ToolbarPlacement.STRIP)),
+        )
+    }
+
+    @Test
+    fun `a reorder of the filtered list keeps the hidden row where it was`() {
+        val stored = DefaultBarOrder
+        val listed = barRowsListed(stored, settings(ToolbarPlacement.STRIP))
+        // The user drags nothing: the same list back must be the same order.
+        assertEquals(stored, barOrderMerged(listed, stored))
+        // Now they move the symbol row to the top. The tools row still sits
+        // directly after the emoji row, which is where it was stored.
+        val moved = listOf(BarRow.SYMBOL) + listed.filter { it != BarRow.SYMBOL }
+        val merged = barOrderMerged(moved, stored)
+        assertEquals(stored.toSet(), merged.toSet())
+        assertEquals(BarRow.SYMBOL, merged.first())
+        assertEquals(merged.indexOf(BarRow.EMOJI) + 1, merged.indexOf(BarRow.TOOLS))
+    }
+
+    @Test
+    fun `a hidden first row comes back at the front`() {
+        val stored = listOf(BarRow.TOOLS, BarRow.EMOJI, BarRow.TOPBAR, BarRow.KEYBOARD)
+        val listed = listOf(BarRow.TOPBAR, BarRow.EMOJI, BarRow.KEYBOARD)
+        assertEquals(
+            listOf(BarRow.TOOLS, BarRow.TOPBAR, BarRow.EMOJI, BarRow.KEYBOARD),
+            barOrderMerged(listed, stored),
+        )
+    }
+}

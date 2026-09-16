@@ -128,9 +128,23 @@ private val SymbolRowLinesSteps: List<Int> = SymbolRowLinesRange.toList()
 
 // ---- rows & bars ----
 
+/**
+ * The row's name in the order list.
+ *
+ * The strip's own name depends on what is in it: with the tools sharing it
+ * there is one row and one entry for both, and with the tools on a row of
+ * their own ("Where the tools go" set to Always or Button) the strip is
+ * suggestions and nothing else, so it says so and the tools row is the entry
+ * next to it — see [barRowsListed], which is what drops the tools entry back
+ * out again when they return to the strip.
+ */
 @StringRes
-private fun barRowTitle(row: BarRow): Int = when (row) {
-    BarRow.TOPBAR -> R.string.rows_bar_topbar_title
+private fun barRowTitle(row: BarRow, settings: KeyboardSettings): Int = when (row) {
+    BarRow.TOPBAR -> if (settings.toolbarBehavior.placement.isOwnRow) {
+        R.string.rows_bar_topbar_suggestions_title
+    } else {
+        R.string.rows_bar_topbar_title
+    }
     BarRow.EMOJI -> R.string.rows_bar_emoji_title
     BarRow.SYMBOL -> R.string.rows_symbol_row_title
     BarRow.FANCY -> R.string.rows_bar_fancy_title
@@ -155,9 +169,10 @@ private fun barRowStatus(row: BarRow, settings: KeyboardSettings): Int? = when (
     }
     BarRow.SYMBOL -> CommonR.string.common_off.takeUnless { settings.symbolRowEnabled }
     BarRow.FANCY -> R.string.rows_bar_fancy_off_subtitle.takeUnless { fancyTextOn(settings) }
+    // Never listed with the tools on the strip ([barRowsListed]), so the only
+    // things left to say are "the toolbar is off" and "the row is a tap away".
     BarRow.TOOLS -> when {
         !settings.toolbarBehavior.enabled -> CommonR.string.common_off
-        settings.toolbarBehavior.placement == ToolbarPlacement.STRIP -> R.string.rows_bar_tools_strip_subtitle
         settings.toolbarBehavior.placement == ToolbarPlacement.ON_DEMAND_ROW ->
             R.string.rows_bar_tools_button_subtitle
         else -> null
@@ -190,6 +205,36 @@ private fun barRowShown(row: BarRow, settings: KeyboardSettings): Boolean = when
     BarRow.MACROS -> settings.selectionMacros.enabled &&
         settings.selectionMacros.placement == SelectionMacroPlacement.OWN_ROW
     BarRow.KEYBOARD -> true
+}
+
+/**
+ * The rows the order list offers, out of the stored order.
+ *
+ * Everything but the tools row, always; the tools row only while the tools
+ * have a row of their own. On the strip they are part of the strip entry
+ * above, and a second entry for a row that cannot be drawn is a slot the user
+ * can drag around to no effect.
+ */
+internal fun barRowsListed(order: List<BarRow>, settings: KeyboardSettings): List<BarRow> =
+    if (settings.toolbarBehavior.placement.isOwnRow) {
+        order
+    } else {
+        order.filter { it != BarRow.TOOLS }
+    }
+
+/**
+ * [listed], reordered by the user, merged back into the complete [stored]
+ * order — so a row the list is not showing keeps the place it had rather than
+ * being dropped or shuffled to an end. It goes back after the nearest row that
+ * preceded it in storage and is still present, which is where it was.
+ */
+internal fun barOrderMerged(listed: List<BarRow>, stored: List<BarRow>): List<BarRow> {
+    val out = listed.toMutableList()
+    for (row in stored.filter { it !in listed }) {
+        val before = stored.take(stored.indexOf(row)).lastOrNull { it in out }
+        out.add(before?.let { out.indexOf(it) + 1 } ?: 0, row)
+    }
+    return out
 }
 
 /** Height of a bar-order row: a title, an optional status line and the preview strip. */
@@ -374,8 +419,8 @@ internal fun RowsSettings(
     val scope = rememberCoroutineScope()
     // Resolved before the group: its builder is a plain lambda, and the drag
     // list takes a plain (T) -> String.
-    val order = settings.barOrder
-    val rowNames = order.associateWith { stringResource(barRowTitle(it)) }
+    val order = barRowsListed(settings.barOrder, settings)
+    val rowNames = order.associateWith { stringResource(barRowTitle(it, settings)) }
     val rowStatus = order.associateWith { row -> barRowStatus(row, settings)?.let { stringResource(it) } }
     // Every entry moves, the keys included (issue #83): a row dragged above
     // the Keyboard entry sits over the keys, one dragged below it sits under.
@@ -383,7 +428,7 @@ internal fun RowsSettings(
         stringResource(R.string.rows_row_order_title),
         info = stringResource(R.string.rows_row_order_caption),
         action = {
-            if (order != DefaultBarOrder) {
+            if (settings.barOrder != DefaultBarOrder) {
                 TextButton(onClick = { scope.launch { repository.setBarOrder(DefaultBarOrder) } }) {
                     Text(stringResource(CommonR.string.common_reset))
                 }
@@ -394,7 +439,11 @@ internal fun RowsSettings(
             ReorderableColumn(
                 order,
                 label = { rowNames[it].orEmpty() },
-                onReorder = { next -> scope.launch { repository.setBarOrder(next) } },
+                onReorder = { next ->
+                    scope.launch {
+                        repository.setBarOrder(barOrderMerged(next, settings.barOrder))
+                    }
+                },
                 modifier = Modifier.padding(horizontal = 16.dp),
                 rowHeight = BarOrderRowHeight,
             ) { row ->
