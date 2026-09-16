@@ -8,7 +8,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.ScaleToBounds
+import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.scaleToBounds
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -785,7 +785,7 @@ internal fun Modifier.wmSharedBounds(key: Any): Modifier {
             rememberSharedContentState(key),
             anim,
             boundsTransform = NavBoundsTransform,
-            resizeMode = ScaleToBounds(ContentScale.FillWidth, Alignment.CenterStart),
+            resizeMode = scaleToBounds(ContentScale.FillWidth, Alignment.CenterStart),
             zIndexInOverlay = 1f,
         )
     }

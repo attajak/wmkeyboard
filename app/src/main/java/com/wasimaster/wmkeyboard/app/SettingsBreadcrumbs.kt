@@ -6,7 +6,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.RemeasureToBounds
-import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.ScaleToBounds
+import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.scaleToBounds
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
@@ -658,7 +658,7 @@ private fun Modifier.crumbFlight(key: String): Modifier {
                 enter = EnterTransition.None,
                 exit = ExitTransition.None,
                 boundsTransform = CrumbBounds,
-                resizeMode = ScaleToBounds(ContentScale.FillWidth, Alignment.CenterStart),
+                resizeMode = scaleToBounds(ContentScale.FillWidth, Alignment.CenterStart),
                 zIndexInOverlay = CrumbPillZ,
             )
             .renderInSharedTransitionScopeOverlay(
