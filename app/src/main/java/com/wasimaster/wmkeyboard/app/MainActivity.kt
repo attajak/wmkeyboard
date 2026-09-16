@@ -2414,7 +2414,12 @@ internal fun SettingsGroup(
     if (scope.items.isEmpty()) return
     // Below the fold while the screen is still animating in: come back for
     // the rows once the entrance can spare them — see [rememberGroupRevealed].
-    if (!rememberGroupRevealed(scope.items.size)) return
+    // Until then the group holds its place as slabs the size of its rows, so
+    // the screen opens at its full height instead of growing under the reader.
+    if (!rememberGroupRevealed(scope.items.size)) {
+        GroupSkeleton(scope.items.size, hasTitle = title != null)
+        return
+    }
     val folds = LocalAdvancedFolds.current
     val foldId = foldKey?.let { "${LocalScreenRoute.current.orEmpty()}/$it" }
     val highlighted = SettingsHighlight.target != 0 || SettingsHighlight.targetItems.isNotEmpty()

@@ -93,6 +93,12 @@ The settings app is a flat list of screens, one per section, grouped into six cl
 
 Most screens are just a title and a back button, with one exception. **Advanced** bundles five screens few people open day to day: Keyboard modes, Add-ons, Data saver, Notifications and Selection actions. Key layouts lives inside Layout & size instead of its own home-screen row. Every section here has a matching reference page under [Reference → Settings](/reference/settings/) with the exact options and defaults. This tour only covers where things live, not every switch.
 
+### While a screen opens
+
+A settings screen composes its rows as it opens, so the ones below the fold arrive a frame or two after the ones at the top. While they are on their way the screen holds their place with blank rows the size of the real ones, which is why a long screen opens at its full height and fills in rather than growing under you.
+
+Settings search does the same. Its index is built the first time you open the search screen, so if you type immediately you get placeholder rows for a moment. Search only tells you that nothing matched once it has something to match against.
+
 ### On a tablet
 
 On a screen wider than about 840 dp — a tablet either way up, a foldable opened out, or a large free-form window — the settings app splits in two. The home list stays down the left side and the section you open fills the rest of the window, so you can move between sections without going back first. The row you opened is marked in the list, and Back closes the section and leaves the list where it is. Until you open something, the right side shows the app icon and a line telling you to pick a section.

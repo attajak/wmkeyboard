@@ -68,6 +68,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.withFrameNanos
 import kotlinx.coroutines.flow.first
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -502,6 +504,105 @@ internal class ScreenReveal {
     /** How many queued groups have been let in, advanced one per frame. */
     var wave by mutableIntStateOf(0)
 }
+
+/**
+ * What a group that has not been let in yet draws in the meantime.
+ *
+ * [rememberGroupRevealed] used to answer "not yet" by drawing nothing at all,
+ * which is the one thing worse than the wait it was added to spread out: the
+ * screen opened at a third of its height and then grew under the reader, group
+ * by group, and an empty page for three frames reads as jank rather than as
+ * something arriving. The slabs below are the shape the rows will be, so the
+ * screen opens at its real height and fills in.
+ *
+ * One node and one draw pass for a whole group, not a placeholder row per row —
+ * this stands in for work that was deferred *because* composing rows is what
+ * costs, so a skeleton that composed anything per row would spend the budget it
+ * exists to save. Everything is drawn, nothing is laid out.
+ *
+ * Deliberately not animated. A shimmer is an infinite transition, which means a
+ * recomposition or a redraw every frame of exactly the entrance this is keeping
+ * clear.
+ */
+@Composable
+internal fun GroupSkeleton(rowCount: Int, hasTitle: Boolean, modifier: Modifier = Modifier) {
+    val slab = MaterialTheme.colorScheme.surfaceContainer
+    val ink = MaterialTheme.colorScheme.onSurface.copy(alpha = SkeletonInkAlpha)
+    val density = LocalDensity.current
+    val headingLane = if (hasTitle) SkeletonHeadingLane else 0.dp
+    val height = headingLane + SkeletonRowHeight * rowCount + SkeletonRowGap * (rowCount - 1)
+    Spacer(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height + GroupTailSpace)
+            .drawBehind {
+                with(density) {
+                    if (hasTitle) {
+                        drawRoundRect(
+                            color = ink,
+                            topLeft = Offset(32.dp.toPx(), 6.dp.toPx()),
+                            size = Size(110.dp.toPx(), 12.dp.toPx()),
+                            cornerRadius = CornerRadius(6.dp.toPx()),
+                        )
+                    }
+                    val left = 16.dp.toPx()
+                    val right = size.width - 16.dp.toPx()
+                    val rowHeight = SkeletonRowHeight.toPx()
+                    val gap = SkeletonRowGap.toPx()
+                    var top = headingLane.toPx()
+                    repeat(rowCount) { index ->
+                        // The run's own corners: round on the outside, nearly
+                        // square where two rows meet — the same slab shape
+                        // [SettingsGroup] builds its cards out of.
+                        val first = index == 0
+                        val last = index == rowCount - 1
+                        drawRoundRect(
+                            color = slab,
+                            topLeft = Offset(left, top),
+                            size = Size(right - left, rowHeight),
+                            cornerRadius = CornerRadius(
+                                if (first || last) 24.dp.toPx() else 6.dp.toPx(),
+                            ),
+                        )
+                        drawRoundRect(
+                            color = ink,
+                            topLeft = Offset(left + 16.dp.toPx(), top + 16.dp.toPx()),
+                            size = Size(WmIconTileSize.toPx(), WmIconTileSize.toPx()),
+                            cornerRadius = CornerRadius(13.dp.toPx()),
+                        )
+                        drawRoundRect(
+                            color = ink,
+                            topLeft = Offset(left + 72.dp.toPx(), top + 20.dp.toPx()),
+                            size = Size((right - left) * 0.42f, 12.dp.toPx()),
+                            cornerRadius = CornerRadius(6.dp.toPx()),
+                        )
+                        drawRoundRect(
+                            color = ink,
+                            topLeft = Offset(left + 72.dp.toPx(), top + 40.dp.toPx()),
+                            size = Size((right - left) * 0.62f, 10.dp.toPx()),
+                            cornerRadius = CornerRadius(5.dp.toPx()),
+                        )
+                        top += rowHeight + gap
+                    }
+                }
+            },
+    )
+}
+
+/** How much of the text colour a placeholder bar carries. */
+private const val SkeletonInkAlpha = 0.08f
+
+/** A placeholder row's height: a name, a subtitle and the air around them. */
+private val SkeletonRowHeight = 72.dp
+
+/** The gap [SettingsGroup] leaves between two cards in a run. */
+private val SkeletonRowGap = 3.dp
+
+/** A heading's line plus the air above and below it. */
+private val SkeletonHeadingLane = 32.dp
+
+/** What a group leaves under its last card, matched to `GroupTail`. */
+private val GroupTailSpace = 16.dp
 
 /** Published by [WmScreen] around its column; null anywhere else. */
 internal val LocalScreenReveal = compositionLocalOf<ScreenReveal?> { null }

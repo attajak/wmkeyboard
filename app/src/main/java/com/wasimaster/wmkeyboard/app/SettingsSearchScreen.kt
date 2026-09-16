@@ -655,6 +655,16 @@ internal fun SettingsSearchScreen(
                 },
                 modifier = Modifier.padding(padding),
             )
+            // The corpus is built off the main thread (a thousand resource
+            // reads), so for a frame or two after the screen opens there is
+            // nothing to match a query against — which is not the same thing
+            // as nothing matching it. Placeholders until it lands, rather than
+            // telling the user their words found nothing.
+            corpus == null -> GroupSkeleton(
+                rowCount = SEARCH_SKELETON_ROWS,
+                hasTitle = false,
+                modifier = Modifier.padding(padding),
+            )
             results.isEmpty -> EmptyResults(query, Modifier.padding(padding))
             else -> LazyColumn(
                 modifier = Modifier
@@ -678,6 +688,9 @@ internal fun SettingsSearchScreen(
         }
     }
 }
+
+/** How many placeholder rows stand in for results while the corpus loads. */
+private const val SEARCH_SKELETON_ROWS = 6
 
 /**
  * The empty field's screen: how to search, and under it the rows this person
