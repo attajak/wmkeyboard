@@ -128,6 +128,10 @@ import androidx.compose.material.icons.outlined.PanTool
 import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Apps
+import androidx.compose.foundation.lazy.rememberLazyListState
+import com.wasimaster.wmkeyboard.core.ui.RailBucket
+import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
  * The setting the user picked out of search, remembered just long enough for
@@ -666,22 +670,52 @@ internal fun SettingsSearchScreen(
                 modifier = Modifier.padding(padding),
             )
             results.isEmpty -> EmptyResults(query, Modifier.padding(padding))
-            else -> LazyColumn(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(3.dp),
-            ) {
-                items(results.hits, key = { it.key }) { result ->
-                    ResultRow(result, settings, tokens) { open(result) }
-                }
-                if (results.mentions.isNotEmpty()) {
-                    item(key = "mentions") {
-                        ResultsHeading(stringResource(R.string.shell_search_mentions_title))
+            else -> {
+                val list = rememberLazyListState()
+                val rail = rememberScrollRailState(list)
+                // Two stops rather than an alphabet: the hits are ranked, and
+                // what a long result list hides is that a second, weaker set
+                // of matches starts somewhere below.
+                val mentionsTitle = stringResource(R.string.shell_search_mentions_title)
+                // Short enough for the bubble the rail draws beside a finger.
+                val hitsStop = stringResource(R.string.shell_search_results_stop)
+                val mentionsStop = stringResource(R.string.shell_search_mentions_stop)
+                val buckets = remember(results, hitsStop, mentionsStop) {
+                    if (results.mentions.isEmpty()) {
+                        emptyList()
+                    } else {
+                        listOf(
+                            RailBucket(hitsStop, 0),
+                            RailBucket(mentionsStop, results.hits.size),
+                        )
                     }
-                    items(results.mentions, key = { it.key }) { result ->
-                        ResultRow(result, settings, tokens) { open(result) }
+                }
+                ScrollRailBox(
+                    state = rail,
+                    modifier = Modifier.padding(padding).fillMaxSize(),
+                    fadeColor = MaterialTheme.colorScheme.background,
+                    buckets = buckets,
+                    // The reader typed to get here. A list that jumps on its
+                    // own while they are still typing reads as a glitch.
+                    peek = false,
+                ) { rows ->
+                    LazyColumn(
+                        state = list,
+                        modifier = rows.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(3.dp),
+                    ) {
+                        items(results.hits, key = { it.key }) { result ->
+                            ResultRow(result, settings, tokens) { open(result) }
+                        }
+                        if (results.mentions.isNotEmpty()) {
+                            item(key = "mentions") {
+                                ResultsHeading(mentionsTitle)
+                            }
+                            items(results.mentions, key = { it.key }) { result ->
+                                ResultRow(result, settings, tokens) { open(result) }
+                            }
+                        }
                     }
                 }
             }

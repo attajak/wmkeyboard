@@ -105,13 +105,15 @@ fun ScrollRail(
     /** What the edges fade into. The dialog container, where this is used. */
     fadeColor: Color = AlertDialogDefaults.containerColor,
     colors: ScrollRailColors = scrollRailColors(),
+    /** See [ScrollRailBox]: off for a list that is not newly in front of you. */
+    peek: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val scroll = requireNotNull(state.scroll.plain) {
         "ScrollRail owns the scroll, so its state comes from rememberScrollRailState() " +
             "with no lazy state. A lazy list keeps its own and uses ScrollRailBox."
     }
-    ScrollRailBox(state, modifier, fadeColor, colors) { listModifier ->
+    ScrollRailBox(state, modifier, fadeColor, colors, peek = peek) { listModifier ->
         Column(modifier = listModifier.verticalScroll(scroll), content = content)
     }
 }
@@ -128,9 +130,23 @@ fun ScrollRailBox(
     modifier: Modifier = Modifier,
     fadeColor: Color = AlertDialogDefaults.containerColor,
     colors: ScrollRailColors = scrollRailColors(),
+    /**
+     * The index down the rail: one segment per bucket, named, for a list too
+     * long to read through. A word list passes [alphabetBuckets]; a list with
+     * headings passes a bucket per heading. Buckets are item positions rather
+     * than measured pixels, because the rows they name are mostly not laid
+     * out. They win over anything [railSection] measured.
+     */
+    buckets: List<RailBucket> = emptyList(),
+    /**
+     * The opening run down the list and back. On a dialog or a menu it is the
+     * thing that says the list moves. On a screen the reader has already
+     * scrolled something to get here, so it is noise: pass false.
+     */
+    peek: Boolean = true,
     content: @Composable (Modifier) -> Unit,
 ) {
-    ScrollRailPeek(state)
+    if (peek) ScrollRailPeek(state)
     val sections by remember(state) {
         derivedStateOf {
             state.sectionTops.entries.sortedBy { it.value }.map { RailSection(it.key, it.value) }
@@ -176,7 +192,7 @@ fun ScrollRailBox(
                 }
                 .onGloballyPositioned { state.viewportCoords = it },
         )
-        if (state.scrollable) ScrollRailTrack(state, sections, colors)
+        if (state.scrollable) ScrollRailTrack(state, sections, buckets, colors)
     }
 }
 
@@ -237,10 +253,53 @@ class ScrollRailState internal constructor(internal val scroll: RailScroll) {
     internal var peeked = false
 
     internal val scrollable: Boolean get() = scroll.scrollable
+
+    /**
+     * The rail's stops: the index if it has one, otherwise whatever the
+     * headings measured. An index wins because it knows about the rows that
+     * are not laid out, and those are most of them.
+     */
+    internal fun sections(
+        measured: List<RailSection>,
+        buckets: List<RailBucket>,
+    ): List<RailSection> = when {
+        buckets.isEmpty() -> measured
+        else -> buckets.map { RailSection(it.label, scroll.pxForIndex(it.index).toInt()) }
+            .filter { it.topPx >= 0 }
+    }
 }
 
 /** One group of the list, as the rail draws it. */
 internal data class RailSection(val label: String, val topPx: Int)
+
+/**
+ * One stop on an index rail: the name a reader scrubs to, and the item it
+ * starts at. "M" and the first word beginning with M.
+ */
+@Immutable
+data class RailBucket(val label: String, val index: Int)
+
+/**
+ * The letters of a sorted list of words, as rail stops: one per initial
+ * letter, in the order the list already has. Anything not starting with a
+ * letter goes under "#", which is where a sorted list puts it anyway.
+ *
+ * [key] pulls the word out of a row. The list has to be sorted by that word
+ * already, or the stops come out in an order no reader can use.
+ */
+fun <T> alphabetBuckets(items: List<T>, key: (T) -> String): List<RailBucket> {
+    val stops = mutableListOf<RailBucket>()
+    var last: String? = null
+    items.forEachIndexed { index, item ->
+        val first = key(item).firstOrNull() ?: return@forEachIndexed
+        val label = if (first.isLetter()) first.uppercaseChar().toString() else "#"
+        if (label != last) {
+            stops += RailBucket(label, index)
+            last = label
+        }
+    }
+    return stops
+}
 
 /** The colours the rail draws with. Keyboard popups pass their own. */
 @Immutable
@@ -288,6 +347,12 @@ internal interface RailScroll {
     /** The scroll state itself, when it is a plain one the rail may own. */
     val plain: ScrollState? get() = null
 
+    /**
+     * Where an item sits in the list, in pixels, or -1 when this kind of
+     * scroll cannot say. A plain column cannot: it has rows, not items.
+     */
+    fun pxForIndex(index: Int): Float = -1f
+
     val scrollable: Boolean get() = totalPx - extentPx > 1f
 }
 
@@ -314,6 +379,8 @@ private class LazyListRailScroll(private val list: LazyListState) : RailScroll {
     override val scrollable: Boolean
         get() = list.canScrollForward || list.canScrollBackward
 
+    override fun pxForIndex(index: Int): Float = index * itemPx
+
     /** One row, averaged over the rows on screen, spacing included. */
     private val itemPx: Float
         get() {
@@ -338,6 +405,8 @@ private class LazyGridRailScroll(private val grid: LazyGridState) : RailScroll {
 
     override val scrollable: Boolean
         get() = grid.canScrollForward || grid.canScrollBackward
+
+    override fun pxForIndex(index: Int): Float = (index / columns) * rowPx
 
     /** Cells across, read off the row the grid has actually laid out. */
     private val columns: Int
@@ -408,7 +477,8 @@ private fun ScrollRailPeek(state: ScrollRailState) {
 @Composable
 private fun BoxScope.ScrollRailTrack(
     state: ScrollRailState,
-    sections: List<RailSection>,
+    measured: List<RailSection>,
+    buckets: List<RailBucket>,
     colors: ScrollRailColors,
 ) {
     val scope = rememberCoroutineScope()
@@ -449,6 +519,10 @@ private fun BoxScope.ScrollRailTrack(
         val trackWidth = RailWidth.toPx()
         val gap = SegmentGap.toPx()
         val scrolled = state.scroll.offsetPx
+        // Buckets are item positions, and what an item is worth in pixels is
+        // only known once the list has laid some rows out — so they are turned
+        // into offsets here, in the draw, rather than held as state.
+        val sections = state.sections(measured, buckets)
         // The group the top of the window is in. It is the one the reader is
         // reading, so it is the one the rail lights up.
         val liveAt = sections.indexOfLast { it.topPx <= scrolled + 1f }
@@ -496,9 +570,11 @@ private fun BoxScope.ScrollRailTrack(
         capsule(thumbTop, thumbTop + thumbHeight, thumbColor, thumbWidth.toPx())
     }
 
-    val label by remember(state, sections) {
+    val label by remember(state, measured, buckets) {
         derivedStateOf {
-            sections.lastOrNull { it.topPx <= state.scroll.offsetPx + 1f }?.label
+            state.sections(measured, buckets)
+                .lastOrNull { it.topPx <= state.scroll.offsetPx + 1f }
+                ?.label
         }
     }
     val density = LocalDensity.current
