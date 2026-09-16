@@ -44,6 +44,15 @@ import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.ime.R as ImeR
 
 /**
+ * One plugin's page, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`plugin/{pluginId}`) is the same string for every
+ * plugin and would hang one key on all of them.
+ */
+internal fun pluginRoute(pluginId: String): String = "plugin/$pluginId"
+
+/**
  * Managing plugins: the master switch, what is installed, and what each one is
  * allowed to do.
  *

@@ -904,7 +904,7 @@ internal fun ToolDetailSettings(
                             R.string.panel_layout_value_custom
                         },
                     ),
-                ) { onNavigate("panel_edit/${PanelKind.TEXT_EDIT.name}") }
+                ) { onNavigate(panelEditRoute(PanelKind.TEXT_EDIT)) }
             }
         }
         ToolbarTool.TRACKPAD -> {
@@ -979,7 +979,7 @@ internal fun ToolDetailSettings(
                                 R.string.panel_layout_value_custom
                             },
                         ),
-                    ) { onNavigate("panel_edit/${PanelKind.TRACKPAD.name}") }
+                    ) { onNavigate(panelEditRoute(PanelKind.TRACKPAD)) }
                 }
             }
         }
@@ -1076,7 +1076,7 @@ internal fun ToolDetailSettings(
                             R.string.panel_layout_value_custom
                         },
                     ),
-                ) { onNavigate("panel_edit/${PanelKind.NUMPAD.name}") }
+                ) { onNavigate(panelEditRoute(PanelKind.NUMPAD)) }
             }
         }
         ToolbarTool.INCOGNITO -> {

@@ -74,6 +74,15 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
+ * One sticker pack's page, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`sticker_pack/{packId}`) is the same string for every
+ * pack and would hang one key on all of them.
+ */
+internal fun stickerPackRoute(packId: String): String = "sticker_pack/$packId"
+
+/**
  * The sticker packs the user owns, and everything that edits them.
  *
  * The keyboard can only view, send, and save-a-search-result into a pack —
@@ -204,7 +213,7 @@ internal fun StickerPacksScreen(onNavigate: (String) -> Unit) {
                     StickerPackRow(
                         pack = pack,
                         fileFor = { store.fileFor(pack.id, it) },
-                        onOpen = { onNavigate("sticker_pack/${pack.id}") },
+                        onOpen = { onNavigate(stickerPackRoute(pack.id)) },
                         onExport = {
                             pendingExport = pack
                             exportLauncher.launch(StickerPackFile.fileName(pack))
@@ -247,7 +256,7 @@ internal fun StickerPacksScreen(onNavigate: (String) -> Unit) {
                         StickerPackStore.MAX_PACKS,
                     )
                 } else {
-                    onNavigate("sticker_pack/${created.id}")
+                    onNavigate(stickerPackRoute(created.id))
                 }
             },
         )
@@ -303,6 +312,11 @@ private fun StickerPackRow(
     onDelete: () -> Unit,
 ) {
     val loader = rememberMediaImageLoader()
+    // No `flightTo`: the row's title is the pack's name and the page it opens
+    // is headed "Sticker pack", so a title flight would stretch one word into
+    // a different one. The page would have to wear the pack's name for this to
+    // read as one thing opening, and the name lives in a file-backed store the
+    // nav graph cannot follow a rename in.
     WmRow(
         title = pack.name,
         onClick = onOpen,

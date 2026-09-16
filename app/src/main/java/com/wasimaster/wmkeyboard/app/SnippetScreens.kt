@@ -113,6 +113,24 @@ import androidx.compose.material.icons.outlined.Block
 import com.wasimaster.wmkeyboard.core.ui.ScrollRail
 import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
+/**
+ * One snippet folder's page, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`expander/folder/{folderId}`) is the same string for every
+ * folder and would hang one key on all of them.
+ */
+internal fun snippetFolderRoute(folderId: Long): String = "expander/folder/$folderId"
+
+/**
+ * One snippet's editor, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`expander/edit/{snippetId}`) is the same string for every
+ * snippet and would hang one key on all of them.
+ */
+internal fun snippetEditRoute(snippetId: Long): String = "expander/edit/$snippetId"
+
 // ---- text expander ----
 
 /**

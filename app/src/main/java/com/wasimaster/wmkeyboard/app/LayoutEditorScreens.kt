@@ -217,6 +217,16 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import com.wasimaster.wmkeyboard.core.ui.ScrollRail
 import com.wasimaster.wmkeyboard.core.ui.railSection
 
+/**
+ * One key layout's editor, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`keymap_edit/{layoutId}`) is the same string for every
+ * layout and would hang one key on all of them.
+ */
+internal fun keyLayoutEditRoute(layoutId: String, layer: String? = null): String =
+    if (layer.isNullOrEmpty()) "keymap_edit/$layoutId" else "keymap_edit/$layoutId?layer=$layer"
+
 // ---------------------------------------------------------------------------
 // Gallery
 // ---------------------------------------------------------------------------

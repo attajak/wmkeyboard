@@ -879,6 +879,32 @@ private fun TimeOfDayPickerDialog(
     )
 }
 
+/**
+ * One theme's editor, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`theme_edit/{themeId}`) is the same string for every
+ * theme and would hang one key on all of them.
+ */
+internal fun themeEditRoute(themeId: String): String = "theme_edit/$themeId"
+
+/**
+ * The name the theme editor's heading wears: the look the route names, as the
+ * user typed it.
+ *
+ * Read by the nav graph rather than by the editor, because the heading belongs
+ * to the frame around it. Null for a theme that is not there — a stale link, or
+ * one deleted from under the back stack — and the frame then falls back to the
+ * generic title.
+ */
+@Composable
+internal fun themeEditTitle(settings: KeyboardSettings, themeId: String): String? =
+    settings.customThemes.findThemeFamily(themeId)
+        ?.selfAndVariants()
+        ?.find { it.id == themeId }
+        ?.let { themeName(it) }
+        ?.takeIf { it.isNotBlank() }
+
 // ---- theme gallery ----
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -1283,6 +1309,7 @@ fun ThemesScreen(
                             selected = members.any { it.id == settings.keyboardThemeId },
                             onSelect = { scope.launch { repository.setKeyboardThemeId(shown.id) } },
                             onEdit = { onEditTheme(shown.id) },
+                            editRoute = themeEditRoute(shown.id),
                             onExport = {
                                 // A family card exports the family; a flat card
                                 // exports the one look it shows.
@@ -1550,11 +1577,26 @@ private fun ThemeCard(
     title: String? = null,
     /** A family card's dot row, under the preview; null on single-look cards. */
     swatches: (@Composable () -> Unit)? = null,
+    /**
+     * The editor this card's pencil opens, when it opens one directly. The
+     * preview and the name then fly into that screen's own preview and
+     * heading, so the card reads as the thing being opened.
+     *
+     * Null on the cards whose pencil does something else first — a built-in is
+     * copied before it is edited, and the copy has an id this card never sees.
+     */
+    editRoute: String? = null,
 ) {
     var confirmDelete by remember { mutableStateOf(false) }
     // A built-in theme draws its translated name; a theme the user made keeps
     // the name the user typed.
     val displayName = title ?: themeName(theme)
+    // The editor is headed with the *look's* name. On a plain card that is the
+    // headline; on a family card the headline is the family's label and the
+    // look's name is the line under it. The flight has to leave from whichever
+    // of the two says the same word the heading will.
+    val nameTag = if (editRoute == null) Modifier
+    else Modifier.wmSharedBounds(takeOffKey("title", editRoute))
     Column(
         modifier = Modifier
             .padding(4.dp)
@@ -1569,7 +1611,11 @@ private fun ThemeCard(
             .clickable(onClick = onSelect)
             .padding(6.dp),
     ) {
-        ThemePreview(theme)
+        ThemePreview(
+            theme,
+            modifier = if (editRoute == null) Modifier
+            else Modifier.wmSharedBounds(takeOffKey("preview", editRoute)),
+        )
         swatches?.invoke()
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
@@ -1578,7 +1624,9 @@ private fun ThemeCard(
                     style = MaterialTheme.typography.labelLarge,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 4.dp, top = 4.dp),
+                    modifier = Modifier
+                        .padding(start = 4.dp, top = 4.dp)
+                        .then(if (title == null) nameTag else Modifier),
                 )
                 if (subtitle != null) {
                     Text(
@@ -1587,7 +1635,9 @@ private fun ThemeCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(start = 4.dp),
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .then(if (title != null) nameTag else Modifier),
                     )
                 }
             }
@@ -1603,7 +1653,11 @@ private fun ThemeCard(
         if (onEdit != null || onExport != null || onDelete != null) {
             Row {
                 if (onEdit != null) {
-                    IconButton(onClick = onEdit, modifier = Modifier.size(34.dp)) {
+                    // Wrapped even with no route: a card that opens a copy
+                    // still has to say which screen the next one was opened
+                    // from, or the flight that lands there is keyed on nothing.
+                    val edit = takeOffClick(onEdit)
+                    IconButton(onClick = edit, modifier = Modifier.size(34.dp)) {
                         Icon(
                             Icons.Outlined.Edit,
                             contentDescription = stringResource(R.string.theme_edit_desc, displayName),
@@ -1865,6 +1919,11 @@ fun ThemeEditorScreen(
                     theme = theme,
                     sandbox = previewSandbox,
                     miniature = true,
+                    // The gallery card's miniature grows into this one. Both
+                    // draw the same theme at two sizes, which is what
+                    // [wmSharedBounds] is for — the keys scale rather than
+                    // being laid out again mid-flight.
+                    modifier = Modifier.wmSharedBounds(landingKey("preview")),
                 )
             }
         }

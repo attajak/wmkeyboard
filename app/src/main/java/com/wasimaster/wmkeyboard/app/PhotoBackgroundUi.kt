@@ -108,6 +108,14 @@ internal fun PhotoTile(
     saved: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    /**
+     * Applied to the image itself rather than to the tile around it, which is
+     * where a flight has to be tagged: the tile fixes its own aspect ratio and
+     * a shared element is re-measured at the animated bounds, so a box
+     * insisting on its ratio mid-flight would fight them. Empty on a grid that
+     * opens nothing.
+     */
+    imageModifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val description = remember(photo.key) {
@@ -130,7 +138,7 @@ internal fun PhotoTile(
             model = photo.thumbUrl,
             contentDescription = description,
             imageLoader = rememberMediaImageLoader(),
-            modifier = Modifier.matchParentSize(),
+            modifier = Modifier.matchParentSize().then(imageModifier),
             contentScale = ContentScale.Crop,
         )
         KeyboardBandGuide(Modifier.matchParentSize())

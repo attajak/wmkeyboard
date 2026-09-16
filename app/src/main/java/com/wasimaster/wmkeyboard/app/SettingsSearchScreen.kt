@@ -780,6 +780,11 @@ private fun ResultRow(
     onClick: () -> Unit,
 ) {
     val title = remember(entry.title, tokens) { highlightTitle(entry.title, tokens) }
+    // The result's glyph is the glyph of the screen it opens — the same tile,
+    // the same accent — so it flies into that screen's heading instead of the
+    // page appearing from nowhere. The row's own title is a setting's name and
+    // stays where it is: the heading is the screen's name, not the setting's.
+    val open = takeOffClick(onClick)
     androidx.compose.material3.Surface(
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceContainer,
@@ -788,7 +793,13 @@ private fun ResultRow(
         WmRow(
             title = entry.title,
             titleContent = { Text(title) },
-            leading = { ResultIcon(entry, settings) },
+            leading = {
+                ResultIcon(
+                    entry,
+                    settings,
+                    modifier = Modifier.wmSharedElement(takeOffKey("icon", entry.route)),
+                )
+            },
             supporting = {
                 Column {
                     if (entry.subtitle.isNotBlank()) Text(entry.subtitle)
@@ -799,7 +810,7 @@ private fun ResultRow(
                     )
                 }
             },
-            onClick = onClick,
+            onClick = open,
         )
     }
 }
@@ -849,7 +860,11 @@ private const val HIGHLIGHT_MIN_LENGTH = 3
  * magnifier is the fallback for a route with no icon of its own.
  */
 @Composable
-private fun ResultIcon(entry: SettingsSearchEntry, settings: KeyboardSettings) {
+private fun ResultIcon(
+    entry: SettingsSearchEntry,
+    settings: KeyboardSettings,
+    modifier: Modifier = Modifier,
+) {
     val tool = entry.tool
     if (tool != null) {
         // The tile's own wash keeps the raw accent; only the glyph inside is
@@ -859,6 +874,7 @@ private fun ResultIcon(entry: SettingsSearchEntry, settings: KeyboardSettings) {
         WmIconTile(
             accent = paint?.color ?: MaterialTheme.colorScheme.primary,
             brush = paint?.brush,
+            modifier = modifier,
         ) {
             SlotIcon(
                 IconSlots.forTool(tool),
@@ -872,6 +888,7 @@ private fun ResultIcon(entry: SettingsSearchEntry, settings: KeyboardSettings) {
     WmIconTile(
         SettingsRouteIcons[entry.route] ?: Icons.Outlined.Search,
         accent = routeAccent(entry.route),
+        modifier = modifier,
     )
 }
 

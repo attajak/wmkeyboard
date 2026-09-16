@@ -419,11 +419,28 @@ internal fun RegisterPullRefresh(refreshing: Boolean, onRefresh: () -> Unit) {
 @Composable
 internal fun RegisterAddFab(label: String, onClick: () -> Unit) {
     RegisterFab {
-        FloatingActionButton(onClick = onClick) {
+        FloatingActionButton(
+            onClick = onClick,
+            // Every screen draws its own button, so without this the add
+            // button of the screen being left is destroyed on the same frame
+            // the next one's is created — it blinks out and back in half a
+            // screen away. One key for all of them: two screens that both have
+            // one are showing the same button, and it slides between them.
+            modifier = Modifier.wmSharedElement(AddFabKey),
+        ) {
             Icon(Icons.Outlined.Add, contentDescription = label)
         }
     }
 }
+
+/**
+ * The add button's flight key.
+ *
+ * Deliberately not keyed on the route: the point is that the button is the
+ * same object on every screen that has one, so it travels rather than being
+ * thrown away and rebuilt.
+ */
+private const val AddFabKey = "wm.fab.add"
 
 /** Pins [content] under the bar, above the scrolling body, while the caller is composed. */
 @Composable

@@ -96,7 +96,7 @@ internal fun EmojiSettings(
             NavRow(
                 title = R.string.panel_layout_row_title,
                 subtitle = stringResource(R.string.panel_layout_row_subtitle),
-            ) { onNavigate("panel_edit/${PanelKind.EMOJI.name}") }
+            ) { onNavigate(panelEditRoute(PanelKind.EMOJI)) }
         }
     }
     SettingsGroup(stringResource(R.string.langemoji_emoji_suggestions_title)) {

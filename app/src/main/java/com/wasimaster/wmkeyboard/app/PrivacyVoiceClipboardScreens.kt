@@ -586,7 +586,7 @@ internal fun ClipboardSettings(
             NavRow(
                 title = R.string.panel_layout_row_title,
                 subtitle = stringResource(R.string.panel_layout_row_subtitle),
-            ) { onNavigate("panel_edit/${PanelKind.CLIPBOARD.name}") }
+            ) { onNavigate(panelEditRoute(PanelKind.CLIPBOARD)) }
         }
         item {
             ToggleSetting(

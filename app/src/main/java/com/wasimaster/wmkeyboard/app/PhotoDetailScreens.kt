@@ -119,10 +119,13 @@ fun PhotoDetailScreen(
         anim = anim,
         title = stringResource(R.string.photo_detail_title),
         onBack = onBack,
+        route = PHOTO_DETAIL_ROUTE,
         subtitle = theme?.name,
         subtitleInBar = true,
     ) {
-        // The photo as the service serves it, hotlinked.
+        // The photo as the service serves it, hotlinked. The grid tile that
+        // opened this page grows into it: the same image at the same crop, so
+        // the flight is one picture moving rather than two pictures swapping.
         Box(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -134,7 +137,9 @@ fun PhotoDetailScreen(
                 model = photo.thumbUrl,
                 contentDescription = photo.altText.ifBlank { null },
                 imageLoader = rememberMediaImageLoader(),
-                modifier = Modifier.matchParentSize(),
+                modifier = Modifier
+                    .matchParentSize()
+                    .wmSharedElement(landingKey("photo")),
                 contentScale = ContentScale.Crop,
             )
         }

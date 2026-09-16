@@ -462,6 +462,15 @@ private fun TokenPresetSetting(
         }
     }
 }
+/**
+ * One AI action's editor, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`ai_action_edit/{actionId}`) is the same string for every
+ * action and would hang one key on all of them.
+ */
+internal fun aiActionEditRoute(actionId: String): String = "ai_action_edit/$actionId"
+
 // ---- AI actions ----
 
 /**

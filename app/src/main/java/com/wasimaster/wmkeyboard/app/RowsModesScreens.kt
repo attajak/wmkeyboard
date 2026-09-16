@@ -541,7 +541,7 @@ internal fun RowsSettings(
                     // one stores an override under the same id, so modes that
                     // reference it keep working and "Reset" brings it back.
                     trailing = {
-                        IconButton(onClick = { onNavigate("symbol_set_edit/${set.id}") }) {
+                        IconButton(onClick = { onNavigate(symbolSetEditRoute(set.id)) }) {
                             Icon(
                                 Icons.Outlined.Edit,
                                 contentDescription = stringResource(
@@ -559,7 +559,7 @@ internal fun RowsSettings(
         }
     }
     RegisterAddFab(stringResource(R.string.rows_symbol_set_new_title)) {
-        onNavigate("symbol_set_edit/custom_${System.currentTimeMillis()}")
+        onNavigate(symbolSetEditRoute("custom_${System.currentTimeMillis()}"))
     }
 }
 /**
@@ -765,6 +765,44 @@ private fun SymbolPopupsEditor(
             }
         }
     }
+}
+
+/**
+ * One symbol set's editor, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`symbol_set_edit/{setId}`) is the same string for every
+ * set and would hang one key on all of them.
+ */
+internal fun symbolSetEditRoute(setId: String): String = "symbol_set_edit/$setId"
+
+/**
+ * One mode's editor, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`mode_edit/{modeId}`) is the same string for every
+ * mode and would hang one key on all of them.
+ */
+internal fun modeEditRoute(modeId: String): String = "mode_edit/$modeId"
+
+/**
+ * The name the mode editor's heading wears: the mode as the user named it.
+ *
+ * Read by the nav graph, which owns the heading. Null for a mode that is not
+ * there yet — the Add button navigates to an id nothing has saved — and the
+ * frame falls back to the generic title.
+ */
+internal fun modeEditTitle(settings: KeyboardSettings, modeId: String): String? =
+    settings.keyboardModes.find { it.id == modeId }?.name?.takeIf { it.isNotBlank() }
+
+/**
+ * The mode's glyph at heading size, or null for a mode that is not saved yet.
+ * The list row draws the same one, so the two ends of the flight match.
+ */
+@Composable
+internal fun modeEditIcon(settings: KeyboardSettings, modeId: String): (@Composable () -> Unit)? {
+    val mode = settings.keyboardModes.find { it.id == modeId } ?: return null
+    return { Icon(ModeIcons.icon(mode.icon), contentDescription = null) }
 }
 
 // ---- keyboard modes ----
@@ -1247,7 +1285,16 @@ internal fun ModesSettings(
                         stringResource(R.string.modes_row_off_subtitle)
                     },
                     leading = {
-                        Icon(ModeIcons.icon(mode.icon), contentDescription = null)
+                        // The mode's glyph, which is also the glyph its editor
+                        // wears in the heading — so it flies rather than being
+                        // drawn twice.
+                        Icon(
+                            ModeIcons.icon(mode.icon),
+                            contentDescription = null,
+                            modifier = Modifier.wmSharedElement(
+                                takeOffKey("icon", modeEditRoute(mode.id)),
+                            ),
+                        )
                     },
                     trailing = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -1265,13 +1312,14 @@ internal fun ModesSettings(
                             }
                         }
                     },
-                    onClick = { onNavigate("mode_edit/${mode.id}") },
+                    flightTo = modeEditRoute(mode.id),
+                    onClick = { onNavigate(modeEditRoute(mode.id)) },
                 )
             }
         }
     }
     RegisterAddFab(stringResource(R.string.modes_new_title)) {
-        onNavigate("mode_edit/mode_custom_${System.currentTimeMillis()}")
+        onNavigate(modeEditRoute("mode_custom_${System.currentTimeMillis()}"))
     }
     SettingsGroup(stringResource(R.string.modes_rearrange_group_title)) {
         if (!settings.modesEnabled) return@SettingsGroup

@@ -217,7 +217,16 @@ fun PhotoBrowseScreen(
             }
             if (items.isNotEmpty()) {
                 items(items, key = { it.key }) { photo ->
-                    PhotoTile(photo = photo, saved = false, onClick = { onOpenPhoto(photo) })
+                    // The tile is the photo, and so is the hero on the page it
+                    // opens: same image, same crop, two sizes. It flies.
+                    PhotoTile(
+                        photo = photo,
+                        saved = false,
+                        imageModifier = Modifier.wmSharedElement(
+                            takeOffKey("photo", PHOTO_DETAIL_ROUTE),
+                        ),
+                        onClick = takeOffClick { onOpenPhoto(photo) },
+                    )
                 }
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     PhotoGridFooter(

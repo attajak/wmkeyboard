@@ -82,6 +82,15 @@ import com.wasimaster.wmkeyboard.core.ui.ScrollRail
 import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
+ * One panel's layout editor, as flights name it.
+ *
+ * The navigation route with its argument filled in, which is what a flight is
+ * keyed on: the pattern (`panel_edit/{panel}`) is the same string for every
+ * panel and would hang one key on all of them.
+ */
+internal fun panelEditRoute(kind: PanelKind): String = "panel_edit/${kind.name}"
+
+/**
  * The panel layouts (issue #63): the emoji, clipboard and text-editing panels
  * as grids the user rearranges in the key layout editor's own controls.
  *
@@ -184,7 +193,8 @@ internal fun PanelLayoutsGroup(custom: List<PanelLayoutSpec>, onNavigate: (Strin
                     subtitle = stringResource(
                         if (isCustom) R.string.panel_layout_value_custom else R.string.panel_layout_value_default,
                     ),
-                    onClick = { onNavigate("panel_edit/${kind.name}") },
+                    flightTo = panelEditRoute(kind),
+                    onClick = { onNavigate(panelEditRoute(kind)) },
                 )
             }
         }

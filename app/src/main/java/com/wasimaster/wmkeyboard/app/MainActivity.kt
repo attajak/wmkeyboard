@@ -697,19 +697,29 @@ private fun SettingsNavGraph(
             }
         }
         composable("search") {
-            SettingsSearchScreen(
-                settings = settings,
-                onBack = { navController.popBackStack() },
-                onOpen = { result ->
-                    // Arm the flash before navigating: the destination's rows
-                    // read it during their first composition.
-                    SettingsHighlight.request(result.titleRes)
-                    // The search screen stays on the back stack, so backing
-                    // out of a setting that was not the one lands on the same
-                    // results rather than on the home list (#92).
-                    navController.navigate(result.route)
-                },
-            )
+            // The search screen brings its own scaffold rather than going
+            // through SettingsScreen, so the two locals a flight needs are
+            // published here by hand. Without them a result's glyph is drawn
+            // twice — once in the list, once in the heading it opens — with
+            // nothing in between.
+            CompositionLocalProvider(
+                LocalNavAnimatedScope provides this,
+                LocalScreenRoute provides "search",
+            ) {
+                SettingsSearchScreen(
+                    settings = settings,
+                    onBack = { navController.popBackStack() },
+                    onOpen = { result ->
+                        // Arm the flash before navigating: the destination's
+                        // rows read it during their first composition.
+                        SettingsHighlight.request(result.titleRes)
+                        // The search screen stays on the back stack, so backing
+                        // out of a setting that was not the one lands on the
+                        // same results rather than on the home list (#92).
+                        navController.navigate(result.route)
+                    },
+                )
+            }
         }
         composable("typing") {
             SettingsScreen(
@@ -1069,7 +1079,16 @@ private fun SettingsNavGraph(
         }
         composable("theme_edit/{themeId}") { backStackEntry ->
             val themeId = backStackEntry.arguments?.getString("themeId").orEmpty()
-            SettingsScreen(stringResource(R.string.home_screen_theme_edit_title), { navController.popBackStack() }) {
+            // The look's own name, not "Edit theme": it is what the gallery
+            // card said, and the card's name flies up into it. A theme that is
+            // no longer there keeps the generic heading, which is all the
+            // screen under it can say anyway.
+            SettingsScreen(
+                themeEditTitle(settings, themeId)
+                    ?: stringResource(R.string.home_screen_theme_edit_title),
+                { navController.popBackStack() },
+                route = themeEditRoute(themeId),
+            ) {
                 ThemeEditorScreen(repository, settings, themeId) { route ->
                     navController.navigate(route)
                 }
@@ -1169,7 +1188,11 @@ private fun SettingsNavGraph(
         }
         composable("vocab/list/{packId}") { backStackEntry ->
             val packId = backStackEntry.arguments?.getString("packId").orEmpty()
-            SettingsScreen(stringResource(R.string.vocab_list_edit_title), { navController.popBackStack() }) {
+            SettingsScreen(
+                stringResource(R.string.vocab_list_edit_title),
+                { navController.popBackStack() },
+                route = vocabListRoute(packId),
+            ) {
                 VocabListEditorScreen(packId, repository, settings) { route ->
                     if (route == "vocab/lists") navController.popBackStack() else navController.navigate(route)
                 }
@@ -1189,7 +1212,7 @@ private fun SettingsNavGraph(
         composable("vocab/word/{packId}/{word}") { backStackEntry ->
             val packId = backStackEntry.arguments?.getString("packId").orEmpty()
             val word = android.net.Uri.decode(backStackEntry.arguments?.getString("word").orEmpty())
-            SettingsScreen(word, { navController.popBackStack() }) {
+            SettingsScreen(word, { navController.popBackStack() }, route = vocabWordRoute(packId, word)) {
                 VocabWordScreen(packId, word, settings) { route -> navController.navigate(route) }
             }
         }
@@ -1213,14 +1236,22 @@ private fun SettingsNavGraph(
         }
         composable("plugin/{pluginId}") { entry ->
             val pluginId = entry.arguments?.getString("pluginId").orEmpty()
-            SettingsScreen(stringResource(R.string.home_screen_plugin_title), { navController.popBackStack() }) {
+            SettingsScreen(
+                stringResource(R.string.home_screen_plugin_title),
+                { navController.popBackStack() },
+                route = pluginRoute(pluginId),
+            ) {
                 PluginDetailScreen(pluginId, onNavigate = { route -> navController.navigate(route) }) {
                     navController.popBackStack()
                 }
             }
         }
         composable("plugin_ide") {
-            SettingsScreen(stringResource(R.string.plugin_ide_projects_title), { navController.popBackStack() }) {
+            SettingsScreen(
+                stringResource(R.string.plugin_ide_projects_title),
+                { navController.popBackStack() },
+                route = "plugin_ide",
+            ) {
                 PluginIdeProjectsScreen { route -> navController.navigate(route) }
             }
         }
@@ -1306,7 +1337,11 @@ private fun SettingsNavGraph(
         }
         composable("sticker_pack/{packId}") { backStackEntry ->
             val packId = backStackEntry.arguments?.getString("packId").orEmpty()
-            SettingsScreen(stringResource(R.string.home_screen_sticker_pack_edit_title), { navController.popBackStack() }) {
+            SettingsScreen(
+                stringResource(R.string.home_screen_sticker_pack_edit_title),
+                { navController.popBackStack() },
+                route = stickerPackRoute(packId),
+            ) {
                 StickerPackScreen(packId) { route -> navController.navigate(route) }
             }
         }
@@ -1336,7 +1371,11 @@ private fun SettingsNavGraph(
             val layoutId = backStackEntry.arguments?.getString("layoutId").orEmpty()
             // The tab to open on, from a row of the gallery's layer list.
             val layer = backStackEntry.arguments?.getString("layer")?.takeIf { it.isNotEmpty() }
-            SettingsScreen(stringResource(R.string.home_screen_layout_edit_title), { navController.popBackStack() }) {
+            SettingsScreen(
+                stringResource(R.string.home_screen_layout_edit_title),
+                { navController.popBackStack() },
+                route = keyLayoutEditRoute(layoutId, layer),
+            ) {
                 KeyLayoutEditorScreen(repository, settings, layoutId, initialLayer = layer) { route ->
                     navController.navigate(route)
                 }
@@ -1355,7 +1394,13 @@ private fun SettingsNavGraph(
         composable("panel_edit/{panel}") { backStackEntry ->
             val kind = PanelKind.entries.firstOrNull { it.name == backStackEntry.arguments?.getString("panel") }
                 ?: PanelKind.EMOJI
-            SettingsScreen(stringResource(R.string.panel_layout_row_title), { navController.popBackStack() }) {
+            // Named after the panel rather than "Panel layout": the gallery
+            // row said "Emoji", and its name flies up into this heading.
+            SettingsScreen(
+                stringResource(panelTitleRes(kind)),
+                { navController.popBackStack() },
+                route = panelEditRoute(kind),
+            ) {
                 PanelLayoutEditorScreen(repository, settings, kind) { route -> navController.navigate(route) }
             }
         }
@@ -1467,6 +1512,7 @@ private fun SettingsNavGraph(
             SettingsScreen(
                 stringResource(R.string.expander_folder_title),
                 { navController.popBackStack() },
+                route = snippetFolderRoute(folderId),
             ) {
                 SnippetFolderScreen(
                     folderId,
@@ -1496,6 +1542,7 @@ private fun SettingsNavGraph(
                     if (snippetId == 0L) R.string.rows_snippet_new_title else R.string.rows_snippet_edit_title,
                 ),
                 { navController.popBackStack() },
+                route = snippetEditRoute(snippetId),
             ) {
                 SnippetEditor(settings, snippetId) { navController.popBackStack() }
             }
@@ -1727,13 +1774,18 @@ private fun SettingsNavGraph(
             SettingsScreen(
                 stringResource(R.string.home_screen_ai_action_edit_title),
                 { navController.popBackStack() },
+                route = aiActionEditRoute(actionId),
             ) {
                 AiActionEditor(repository, settings, actionId) { navController.popBackStack() }
             }
         }
         composable("symbol_set_edit/{setId}") { backStackEntry ->
             val setId = backStackEntry.arguments?.getString("setId").orEmpty()
-            SettingsScreen(stringResource(R.string.home_screen_symbol_set_edit_title), { navController.popBackStack() }) {
+            SettingsScreen(
+                stringResource(R.string.home_screen_symbol_set_edit_title),
+                { navController.popBackStack() },
+                route = symbolSetEditRoute(setId),
+            ) {
                 SymbolSetEditor(repository, settings, setId) { navController.popBackStack() }
             }
         }
@@ -1748,7 +1800,17 @@ private fun SettingsNavGraph(
         }
         composable("mode_edit/{modeId}") { backStackEntry ->
             val modeId = backStackEntry.arguments?.getString("modeId").orEmpty()
-            SettingsScreen(stringResource(R.string.home_screen_mode_edit_title), { navController.popBackStack() }) {
+            // The mode's own name and glyph, both flown up from its row. A
+            // mode the Add button has not saved yet has neither, and keeps the
+            // generic heading.
+            SettingsScreen(
+                modeEditTitle(settings, modeId)
+                    ?: stringResource(R.string.home_screen_mode_edit_title),
+                { navController.popBackStack() },
+                route = modeEditRoute(modeId),
+                icon = modeEditIcon(settings, modeId),
+                iconTile = false,
+            ) {
                 ModeEditor(repository, settings, modeId) { navController.popBackStack() }
             }
         }

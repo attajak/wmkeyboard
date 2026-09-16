@@ -1739,6 +1739,7 @@ internal fun VocabBrowseScreen(
                     } else {
                         null
                     },
+                    flightTo = vocabWordRoute(index.packOf(word.word)?.id ?: "all", word.word),
                     onClick = { onNavigate(vocabWordRoute(index.packOf(word.word)?.id ?: "all", word.word)) },
                 )
             }
