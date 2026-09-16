@@ -15119,6 +15119,7 @@ open class WMKeyboardService : InputMethodService() {
             ToolbarTool.PAGE_DOWN -> onCursorTool(TextEditAction.PAGE_DOWN)
             ToolbarTool.SELECT_WORD -> onTextEdit(TextEditAction.SELECT_WORD)
             ToolbarTool.SELECT_LINE -> onTextEdit(TextEditAction.SELECT_LINE)
+            ToolbarTool.SELECT_ALL -> onTextEdit(TextEditAction.SELECT_ALL)
             ToolbarTool.SELECT_MODE -> onSelectModeTap()
             // The same three operations the text-edit panel's keys run, so the
             // selection bookkeeping (copy and cut end select mode, paste checks

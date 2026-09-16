@@ -16,14 +16,14 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 | Languages, scripts, layouts, transliteration | 11 | 64 | 213 |
 | Themes and appearance | 14 | 73 | 183 |
 | Emoji, GIFs, stickers, kaomoji | 16 | 88 | 94 |
-| Toolbar and the tool set | 10 | 84 | 310 |
+| Toolbar and the tool set | 10 | 85 | 311 |
 | Clipboard, snippets, text expansion | 7 | 37 | 191 |
 | AI, voice, handwriting, scanning | 11 | 70 | 162 |
 | Privacy, backup, storage, statistics | 13 | 59 | 150 |
 | Accessibility, form factors, platform integration | 13 | 61 | 111 |
 | Extensibility: addons, plugins, imports, formats | 5 | 35 | 164 |
 | Modes, rows, field adaptation, runtime | 12 | 97 | 203 |
-| **Total** | **132** | **796** | **2205** |
+| **Total** | **132** | **797** | **2206** |
 
 ## Typing core: prediction, autocorrect, learning, spell check
 
@@ -449,7 +449,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Same geometry as a key layout — Drawn by PanelLayoutGrid with real KeyButtons, so the tall left/right arrows are just a key three rows deep and the middle rows flow around them
     - Alternates on press and hold — Edit keys whose operation does not repeat open the alternates popup; Home and End ship holding to the start and end of the text
     - Repair on read, never reject — The panel repair drops components, shift and chorded keys, clamps widths and spans, and falls back to the shipped grid; an old TextEditLayout preference migrates key for key
-  - 13 one-tap cursor tools `RARE` — CursorTools list: left/right, word left/right, up/down, home/end, page up/down, select word, select line, selection mode — placeable on the toolbar
+  - 14 one-tap cursor tools `RARE` — CursorTools list: left/right, word left/right, up/down, home/end, page up/down, select word, select line, select all, selection mode — placeable on the toolbar
     - Shift extends the selection `RARE` — A shift the user pressed turns every toolbar cursor move into shift+arrow; auto-capitalise's own shift is excluded, and is held off the state while the selection is live
     - Hold to repeat `RARE` — The eight non-idempotent moves repeat on hold at the text-edit interval; one switch for the toolbar, defaulted on
     - Per-tool toolbox opt-in — A second switch, one tool at a time and off by default, since a repeating tool spends the toolbox hold that opens its settings page
@@ -1479,7 +1479,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 
 ## Toolbar and the tool set
 
-- **Toolbar & toolbox mechanics** `uncommon` — 73 tools in ToolbarTool enum; 3 pinned by default (Emoji, Clipboard, Settings)
+- **Toolbar & toolbox mechanics** `uncommon` — 74 tools in ToolbarTool enum; 3 pinned by default (Emoji, Clipboard, Settings)
   - Pinned bar vs toolbox — A tool is on the bar or in the toolbox grid, never both
     - Default pinned row — Emoji, Clipboard, Settings (DefaultToolbarTools)
     - Tablet-aware default pin set — 5 pinned on small tablets, 7 on large, applied only if user never rearranged
@@ -1530,9 +1530,9 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Per-tool colour override — toolColorOverrides map, reset-all button when any override exists
     - Two-colour gradient icons — toolIconGradients off by default, with its own end-colour override map
     - Icon-pack glyph substitution — IconSlots.forTool resolves an installed icon pack's glyph
-  - Direct-boot tool filter `RARE` — 45 of 71 tools work before the first unlock after reboot
+  - Direct-boot tool filter `RARE` — 46 of 74 tools work before the first unlock after reboot
     - Rule is what the tool reads — Arithmetic, sensors and keyboard-own state stay; disk, credentials, providers, activities go
-    - All 13 cursor tools stay usable — They only touch the input connection
+    - All 14 cursor tools stay usable — They only touch the input connection
     - Not a user toggle — isDirectBootSafeTool is automatic and only applies pre-first-unlock
   - Hardware leader-key tool access `RARE` — Double-tap Ctrl (default) then a letter
     - 25 default tool letters — DefaultToolLetters maps E/C/S/X/G/K/V/R/D/W/I/A/N/Y/L/U/M/P/Q/H/O/Z/B/J/F
@@ -1794,7 +1794,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Only changed fields written — Unchanged values go as null, so a padding-only session keeps tablet height defaults
     - Handles turn red at a limit — Both heights keep their ratio from one clean drag-start baseline
     - Scrim eats every touch — Accent outline hugs the keyboard rectangle while resizing
-- **Cursor & selection tools** `RARE` — 13 one-tap toolbar tools; all direct-boot safe
+- **Cursor & selection tools** `RARE` — 14 one-tap toolbar tools; all direct-boot safe
   - Cursor left `uncommon` — Moves the caret one character left
   - Cursor right `uncommon` — Moves the caret one character right
   - Word left `uncommon` — Ctrl+Arrow word jump backwards
@@ -1809,6 +1809,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Boundaries computed, not Ctrl+Shift+Arrow — Sets the selection directly; no-ops on whitespace or punctuation
   - Select line `RARE` — Selects the whole line at the cursor
     - Turns selection mode on afterwards — No-op on an empty line
+  - Select all `RARE` — Selects the whole field in one tap (issue #228)
+    - Same action as the panel's key — performContextMenuAction(selectAll); leaves selection mode where it found it
   - Selection mode `RARE` — Every caret move extends the selection while it is on
     - Three gestures on one button — Tap to toggle, press and hold for a temporary mode, two or three quick presses to select the word or the line
   - Hide keyboard `uncommon` — One tap dismisses the keyboard
@@ -1911,8 +1913,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 | Clipboard source-app attribution | needs Usage Access; best-effort foreground-app guess |
 | Voice typing | needs microphone permission; audio may reach the OS recognizer service unless the on-device language model is installed |
 | Clipboard link previews and QR link details and dictionary auto-lookup | network, and force-disabled by power saving's background-network toggle |
-| 26 tools of 71 are unavailable before the first unlock after reboot | direct-boot filter; the other 45 (arithmetic, sensors, keyboard-own state, all 13 cursor tools) stay usable |
-| Lite edition tool count | 66 of 71 tools; the 5 ML Kit / Harper tools are compiled out, not just hidden |
+| 28 tools of 74 are unavailable before the first unlock after reboot | direct-boot filter; the other 46 (arithmetic, sensors, keyboard-own state, all 14 cursor tools) stay usable |
+| Lite edition tool count | 69 of 74 tools; the 5 ML Kit / Harper tools are compiled out, not just hidden |
 
 ## Clipboard, snippets, text expansion
 

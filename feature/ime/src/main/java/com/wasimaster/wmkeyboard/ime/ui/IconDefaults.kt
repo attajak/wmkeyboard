@@ -37,6 +37,7 @@ import androidx.compose.material.icons.outlined.DirectionsCar
 import androidx.compose.material.icons.outlined.DocumentScanner
 import androidx.compose.material.icons.outlined.Draw
 import androidx.compose.material.icons.outlined.EditNote
+import androidx.compose.material.icons.outlined.FormatShapes
 import androidx.compose.material.icons.outlined.OpenWith
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Extension
@@ -188,6 +189,10 @@ object IconDefaults {
         ToolbarTool.PAGE_DOWN -> Icons.Outlined.KeyboardDoubleArrowDown
         ToolbarTool.SELECT_WORD -> Icons.Outlined.HighlightAlt
         ToolbarTool.SELECT_LINE -> Icons.Outlined.ViewHeadline
+        // Not Outlined.SelectAll, which Selection mode already draws: the two
+        // sit side by side in the same toolbox group, so they cannot share a
+        // glyph. This is the text box with handles.
+        ToolbarTool.SELECT_ALL -> Icons.Outlined.FormatShapes
         ToolbarTool.SELECT_MODE -> Icons.Outlined.SelectAll
         ToolbarTool.COPY -> Icons.Outlined.ContentCopy
         ToolbarTool.CUT -> Icons.Outlined.ContentCut

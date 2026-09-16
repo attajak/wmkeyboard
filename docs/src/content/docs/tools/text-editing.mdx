@@ -33,7 +33,7 @@ Holding <KeyCap>◀</KeyCap>, <KeyCap>▶</KeyCap>, <KeyCap>▲</KeyCap>, <KeyCa
 
 The panel's second column holds <KeyCap>Select all</KeyCap>, <KeyCap>Copy</KeyCap>, and <KeyCap>Paste</KeyCap>. There's no Cut button in the panel: cutting lives elsewhere, as a press-and-hold letter shortcut (see [below](#press-and-hold-shortcuts)).
 
-- **Select all** selects the whole field and doesn't touch selection mode either way, so a follow-up arrow key moves the caret unless selection mode was already on for some other reason.
+- **Select all** selects the whole field and doesn't touch selection mode either way, so a follow-up arrow key moves the caret unless selection mode was already on for some other reason. It's also a toolbar tool of its own (see [below](#one-tap-cursor-tools-for-the-toolbar)), so it needn't cost a panel.
 - **Copy** copies the current selection and turns selection mode back off.
 - **Paste** inserts the clipboard content at the cursor (replacing any selection) and doesn't touch selection mode either way.
 
@@ -56,9 +56,10 @@ The panel above costs one tap to open and another to act. If you reach for the s
 | Page up / Page down | Scroll the cursor a page |
 | Select word | Select the word at the cursor |
 | Select line | Select the entire line at the cursor |
+| Select all | Select the whole field |
 | Selection mode | Every cursor move selects text until you turn it back off |
 
-**Select word** and **Select line** don't send Ctrl+Shift+Arrow. The keyboard works out the word or line boundaries around the cursor itself and sets the selection directly. Both turn selection mode on afterward. Both do nothing if the cursor sits on whitespace or punctuation with no word to grab, or on an empty line.
+**Select all** is the panel's <KeyCap>Select all</KeyCap> key on the toolbar: it selects the whole field and leaves selection mode where it found it. **Select word** and **Select line** don't send Ctrl+Shift+Arrow. The keyboard works out the word or line boundaries around the cursor itself and sets the selection directly. Both turn selection mode on afterward. Both do nothing if the cursor sits on whitespace or punctuation with no word to grab, or on an empty line.
 
 ### Hold Shift to select
 
@@ -97,7 +98,7 @@ Selection mode ends by itself when you move to a different text field, and a pre
 
 Holding a cursor tool on the toolbar keeps the move going for as long as your finger is down, at the same repeat interval the panel uses. It saves a tap per character when you're crossing a paragraph.
 
-Eight tools repeat: **Cursor left**, **Cursor right**, **Word left**, **Word right**, **Cursor up**, **Cursor down**, **Page up** and **Page down**. **Line start**, **Line end**, **Select word** and **Select line** don't, because a second press of any of those lands exactly where the first one did. **Selection mode** doesn't either: its hold is the temporary mode described above.
+Eight tools repeat: **Cursor left**, **Cursor right**, **Word left**, **Word right**, **Cursor up**, **Cursor down**, **Page up** and **Page down**. **Line start**, **Line end**, **Select word**, **Select line** and **Select all** don't, because a second press of any of those lands exactly where the first one did. **Selection mode** doesn't either: its hold is the temporary mode described above.
 
 The toolbox grid can do it too, but that one is off until you ask for it, one tool at a time. See [Options](#options) for why.
 

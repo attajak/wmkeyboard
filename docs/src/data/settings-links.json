@@ -125,6 +125,7 @@
   {"title":"Word right","name":"ime_tool_cursor_word_right","route":"tool/CURSOR_WORD_RIGHT","screens":["Tools"],"screen":true},
   {"title":"Select word","name":"ime_tool_select_word","route":"tool/SELECT_WORD","screens":["Tools"],"screen":true},
   {"title":"Select line","name":"ime_tool_select_line","route":"tool/SELECT_LINE","screens":["Tools"],"screen":true},
+  {"title":"Select all","name":"common_select_all","route":"tool/SELECT_ALL","screens":["Tools"],"screen":true},
   {"title":"Selection mode","name":"ime_tool_select_mode","route":"tool/SELECT_MODE","screens":["Tools"],"screen":true},
   {"title":"Copy","name":"ime_tool_copy","route":"tool/COPY","screens":["Tools"],"screen":true},
   {"title":"Cut","name":"ime_tool_cut","route":"tool/CUT","screens":["Tools"],"screen":true},

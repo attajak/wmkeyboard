@@ -52,6 +52,10 @@ enum class ToolbarTool {
     CURSOR_HOME, CURSOR_END, PAGE_UP, PAGE_DOWN,
     // Move by whole words (Ctrl+Arrow), and select the word or line at the cursor.
     CURSOR_WORD_LEFT, CURSOR_WORD_RIGHT, SELECT_WORD, SELECT_LINE,
+    // The whole field in one tap (issue #228). The text-edit panel's Select all
+    // key and the selection bar's first chip run the same action; on the
+    // toolbar it costs no panel and no selection to start from.
+    SELECT_ALL,
     // Selection mode: while it is on, every caret move extends the selection
     // instead of collapsing it, the way a held shift does on a physical keyboard.
     SELECT_MODE,
@@ -82,7 +86,8 @@ val CursorTools: List<ToolbarTool> = listOf(
     ToolbarTool.CURSOR_UP, ToolbarTool.CURSOR_DOWN,
     ToolbarTool.CURSOR_HOME, ToolbarTool.CURSOR_END,
     ToolbarTool.PAGE_UP, ToolbarTool.PAGE_DOWN,
-    ToolbarTool.SELECT_WORD, ToolbarTool.SELECT_LINE, ToolbarTool.SELECT_MODE,
+    ToolbarTool.SELECT_WORD, ToolbarTool.SELECT_LINE, ToolbarTool.SELECT_ALL,
+    ToolbarTool.SELECT_MODE,
 )
 
 /**
@@ -264,7 +269,8 @@ private val RestOfToolOrder: List<ToolbarTool> = listOf(
     ToolbarTool.CURSOR_WORD_LEFT, ToolbarTool.CURSOR_WORD_RIGHT,
     ToolbarTool.CURSOR_UP, ToolbarTool.CURSOR_DOWN,
     ToolbarTool.CURSOR_HOME, ToolbarTool.CURSOR_END, ToolbarTool.PAGE_UP, ToolbarTool.PAGE_DOWN,
-    ToolbarTool.SELECT_WORD, ToolbarTool.SELECT_LINE, ToolbarTool.SELECT_MODE,
+    ToolbarTool.SELECT_WORD, ToolbarTool.SELECT_LINE, ToolbarTool.SELECT_ALL,
+    ToolbarTool.SELECT_MODE,
     ToolbarTool.COPY, ToolbarTool.CUT, ToolbarTool.PASTE,
 )
 
