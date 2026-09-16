@@ -88,10 +88,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -409,14 +407,14 @@ internal fun AppTheme(settings: KeyboardSettings, content: @Composable () -> Uni
         val base = when {
             supportsDynamic && dark -> dynamicDarkColorScheme(context)
             supportsDynamic -> dynamicLightColorScheme(context)
-            dark -> darkColorScheme()
-            else -> lightColorScheme()
+            dark -> WmDarkColors
+            else -> WmLightColors
         }
-        if (settings.themeMode == ThemeMode.AMOLED) {
-            base.copy(background = Color.Black, surface = Color.Black)
-        } else {
-            base
-        }
+        // Every surface role, not the page alone — see [amoled]. Applied to a
+        // Monet scheme too: the tones it swaps in are dark enough that their
+        // hue is below the threshold the eye resolves, so a wallpaper-coloured
+        // scheme keeps its character everywhere the user can actually see it.
+        if (settings.themeMode == ThemeMode.AMOLED) base.amoled() else base
     }
     // Every settings surface draws tool icons, so the user's icon set is
     // provided here rather than per screen — the Tools list and the keyboard
@@ -425,7 +423,7 @@ internal fun AppTheme(settings: KeyboardSettings, content: @Composable () -> Uni
     // The type scale is the app's, not Material's — see [WmTypography]. It is
     // scoped to this theme, so it dresses the settings app and the screens the
     // core modules contribute to it, and leaves the keyboard itself alone.
-    MaterialTheme(colorScheme = scheme, typography = WmTypography) {
+    MaterialTheme(colorScheme = scheme, typography = WmTypography, shapes = WmShapes) {
         CompositionLocalProvider(LocalIconSet provides iconSet, content = content)
     }
 }
@@ -2861,6 +2859,13 @@ internal fun ToggleSetting(
     default: Boolean? = null,
     onChange: (Boolean) -> Unit,
 ) {
+    // Every switch in the app latches through here, so this is the one place
+    // the latch has to be given a feel — see [SettingsHaptics].
+    val haptics = rememberSettingsHaptics()
+    val change: (Boolean) -> Unit = { on ->
+        haptics.toggle(on)
+        onChange(on)
+    }
     HighlightableRow(title, highlightKey) {
         WmRow(
             title = title,
@@ -2870,11 +2875,11 @@ internal fun ToggleSetting(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (info != null) InfoButton(title, info)
                     ResetSetting(title, default != null && checked != default) {
-                        onChange(default == true)
+                        change(default == true)
                     }
                     Switch(
                         checked = checked,
-                        onCheckedChange = onChange,
+                        onCheckedChange = change,
                         enabled = enabled,
                         // The same switch the row that opened this screen was
                         // showing, when the caller says so.
@@ -3053,6 +3058,15 @@ internal fun SliderSetting(
     onChange: (Float) -> Unit,
 ) {
     val slider = rememberLiveSlider(value, onChange)
+    // The readout is the slider's detent: this row's values are continuous, so
+    // the steps the user is actually aiming at are the ones the number they can
+    // read changes on. Keyed on the string rather than the float, so a drag
+    // across a range that formats to whole percent ticks a hundred times and
+    // not once per touch event. Silent when the value moved without a finger on
+    // it — a reset, or another screen writing the same setting.
+    val haptics = rememberSettingsHaptics()
+    val readout = display(slider.value)
+    LaunchedEffect(readout) { if (slider.dragging) haptics.tick() }
     HighlightableRow(title, highlightKey) {
         IconedRow(
             icon = icon,
@@ -3071,7 +3085,7 @@ internal fun SliderSetting(
                     if (info != null) InfoButton(title, info)
                 }
                 Text(
-                    display(slider.value),
+                    readout,
                     style = MaterialTheme.typography.labelLarge,
                     maxLines = 1,
                 )
@@ -3144,6 +3158,12 @@ internal fun StepperSetting(
     // clamps every write onto it, so this is a guard against a hand-edited
     // preference rather than a path the settings screen can take.
     val index = range.indexOf(value).coerceAtLeast(0)
+    // One step of the ladder, which is exactly what a tick means.
+    val haptics = rememberSettingsHaptics()
+    val step: (Int) -> Unit = { next ->
+        haptics.tick()
+        onChange(next)
+    }
     HighlightableRow(title, highlightKey) {
         IconedRow(
             icon = icon,
@@ -3165,7 +3185,7 @@ internal fun StepperSetting(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(
-                    onClick = { onChange(range[index - 1]) },
+                    onClick = { step(range[index - 1]) },
                     enabled = index > 0,
                 ) {
                     Icon(
@@ -3184,7 +3204,7 @@ internal fun StepperSetting(
                     modifier = Modifier.widthIn(min = 88.dp),
                 )
                 IconButton(
-                    onClick = { onChange(range[index + 1]) },
+                    onClick = { step(range[index + 1]) },
                     enabled = index < range.lastIndex,
                 ) {
                     Icon(
@@ -3668,6 +3688,14 @@ internal fun <T> ChoiceControl(
 ) {
     val measurer = rememberTextMeasurer()
     val tiers = segmentTypeTiers()
+    // A segment taking the selection is a step along a row of them, so it gets
+    // the same tick a stepper's arrow does. Silent when the press lands on the
+    // option that is already selected: nothing moved.
+    val haptics = rememberSettingsHaptics()
+    val pick: (T) -> Unit = { option ->
+        if (option != selected) haptics.tick()
+        onChange(option)
+    }
     Column(modifier = modifier.fillMaxWidth()) {
         if (label != null) {
             // Not the muted colour a subtitle gets: this is the name of the
@@ -3690,7 +3718,7 @@ internal fun <T> ChoiceControl(
                     options.forEachIndexed { index, (option, name) ->
                         SegmentedButton(
                             selected = selected == option,
-                            onClick = { onChange(option) },
+                            onClick = { pick(option) },
                             shape = SegmentedButtonDefaults.itemShape(index, options.size),
                         ) {
                             // The size the labels were measured at, which is
@@ -3703,7 +3731,7 @@ internal fun <T> ChoiceControl(
             }
             // The sheet gets the same question the control is drawn under, so
             // the compact form does not lose it on the way to the options.
-            ChoiceValueButton(title ?: label, options, selected, detail, onChange)
+            ChoiceValueButton(title ?: label, options, selected, detail, pick)
         }
     }
 }

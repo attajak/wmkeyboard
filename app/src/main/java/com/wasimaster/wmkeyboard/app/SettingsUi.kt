@@ -1,5 +1,8 @@
 package com.wasimaster.wmkeyboard.app
 
+import android.os.Build
+import android.view.HapticFeedbackConstants
+import android.view.View
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.BoundsTransform
@@ -83,6 +86,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -804,6 +808,56 @@ internal fun WmRow(
  * read off a row anyway.
  */
 internal val RowTrailingTextMaxWidth = 132.dp
+
+// ---- haptics ----
+
+/**
+ * The settings app's touch feedback.
+ *
+ * A keyboard is the one app on the phone whose whole job is how a press feels,
+ * and until this existed its own settings were the only surface in it that
+ * answered a press with nothing at all. These are the two feelings a settings
+ * screen has to give: something latched, and something stepped.
+ *
+ * Constants rather than Compose's [androidx.compose.ui.hapticfeedback.HapticFeedbackType],
+ * because the types that mean *these* two things — `TOGGLE_ON`/`TOGGLE_OFF` and
+ * `SEGMENT_TICK` — only exist on API 34 and up, and `minSdk` here is 24. The
+ * fallbacks are the nearest thing each older platform actually has: a context
+ * click for a latch, a clock tick for a step. Every one of them is routed
+ * through [View.performHapticFeedback], which already declines when the user
+ * has haptics off system-wide, so nothing here needs to read a setting.
+ */
+internal class SettingsHaptics(private val view: View) {
+    /** A switch latching. The two directions feel different on API 34+. */
+    fun toggle(on: Boolean) {
+        val effect = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE ->
+                if (on) HapticFeedbackConstants.TOGGLE_ON else HapticFeedbackConstants.TOGGLE_OFF
+            else -> HapticFeedbackConstants.CONTEXT_CLICK
+        }
+        view.performHapticFeedback(effect)
+    }
+
+    /**
+     * One step passing under the finger: a slider's readout changing, a
+     * stepper's arrow, a new option taking the selection.
+     */
+    fun tick() {
+        val effect = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE ->
+                HapticFeedbackConstants.SEGMENT_TICK
+            else -> HapticFeedbackConstants.CLOCK_TICK
+        }
+        view.performHapticFeedback(effect)
+    }
+}
+
+/** The [SettingsHaptics] for the window this composable is drawn in. */
+@Composable
+internal fun rememberSettingsHaptics(): SettingsHaptics {
+    val view = LocalView.current
+    return remember(view) { SettingsHaptics(view) }
+}
 
 // ---- reset to default ----
 

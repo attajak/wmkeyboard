@@ -1976,7 +1976,17 @@ data class KeyboardSettings(
     /** The script [language] writes in — direction, letter-case, composer, font. */
     val script: ScriptDef = ScriptRegistry[ScriptId.LATIN],
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
-    val dynamicColor: Boolean = true,
+    /**
+     * Whether the Default theme and the settings app take their palette from
+     * the wallpaper (Material You) instead of the app's own.
+     *
+     * Off since the settings app got a scheme of its own — see `WmLightColors`.
+     * A dynamic scheme repaints both surfaces in whatever hue the wallpaper
+     * happens to be, which is a fine option to offer and a poor thing to ship
+     * as the app's face: on a dynamic default the app has no colour identity at
+     * all, and no two phones agree on what it looks like.
+     */
+    val dynamicColor: Boolean = false,
     /** Selected keyboard theme: [DEFAULT_THEME_ID], a built-in id, or a custom id. */
     val keyboardThemeId: String = DEFAULT_THEME_ID,
     /** User-created themes; built-ins live in code (BuiltInThemes). */

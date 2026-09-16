@@ -34,11 +34,11 @@ None of the built-in themes are editable in place. Tapping the pencil on one mak
 
 ## Matching your wallpaper
 
-Turn on **Material You colors** and the **Default (system)** theme pulls its palette from your phone's wallpaper, the same way Android's own system UI does. It's on by default, and it only takes effect on Android 12 and up. The switch still shows on older versions, where it has nothing to do. Wallpaper color only ever applies to the Default theme, because every built-in and custom theme carries its own fixed palette regardless of this switch. The same toggle recolors the settings app as well as the keyboard.
+Turn on **Material You colors** and the **Default (system)** theme pulls its palette from your phone's wallpaper, the same way Android's own system UI does. It's off by default, because the app and the Default theme ship with a palette of their own — the deep indigo and violet the launcher icon is built from — and wallpaper color replaces it. It only takes effect on Android 12 and up. The switch still shows on older versions, where it has nothing to do. Wallpaper color only ever applies to the Default theme, because every built-in and custom theme carries its own fixed palette regardless of this switch. The same toggle recolors the settings app as well as the keyboard.
 
 ## Dark mode and AMOLED
 
-**Mode** is a four-way switch: System, Light, Dark, or AMOLED. Like Material You colors, it controls both the settings app and the Default theme. AMOLED always renders dark, and unlike System it doesn't wait on the phone's own light/dark setting. It forces the Default theme's board to pure black. Keys and other surfaces stay near-black blended tones rather than literal black, so key edges are still visible against that board. Built-in and custom themes ignore Mode entirely. If you want an AMOLED look on a fixed palette, the built-in **Pitch black** theme gets you there with its own true-black board.
+**Mode** is a four-way switch: System, Light, Dark, or AMOLED. Like Material You colors, it controls both the settings app and the Default theme. AMOLED always renders dark, and unlike System it doesn't wait on the phone's own light/dark setting. It forces the Default theme's board to pure black, and blacks out the settings app the same way — page, rows, bars, dialogs and sheets, not just the page behind them. Keys and other surfaces stay near-black blended tones rather than literal black, so key edges and the edges of settings rows are still visible against the black behind them. Built-in and custom themes ignore Mode entirely. If you want an AMOLED look on a fixed palette, the built-in **Pitch black** theme gets you there with its own true-black board.
 
 <PhoneFrame caption="Mode set to AMOLED: a true-black board under the Default theme.">
   ![Mode set to AMOLED: a true-black board under the Default theme.](@assets/screens/themes/amoled-default-theme.webp)
@@ -73,7 +73,7 @@ A **Change the theme** row appears once either half is random, and it decides ho
 
 <SettingsPath path="Appearance / Keyboard themes" />
 
-- **Material You colors** (default on). Wallpaper-based dynamic color for the Default theme. It does nothing below Android 12, and nothing to built-in or custom themes.
+- **Material You colors** (default off). Wallpaper-based dynamic color for the Default theme and the settings app, in place of the app's own indigo palette. It does nothing below Android 12, and nothing to built-in or custom themes.
 - **Mode** (default System). System, Light, Dark, or AMOLED, applied to the settings app and the Default theme.
 - **Auto theme** (default off). Once on, pick a light theme, a dark theme, and a trigger (System light or dark, Time of day, or Sunrise and sunset). The time-of-day picker starts at 7:00 AM for the light theme and 7:00 PM for the dark theme.
 - **Light theme** and **Dark theme** (default One theme, Default (system) in both). Each row opens a picker that holds one theme or a set to select from at random.
