@@ -87,6 +87,50 @@ fun displayCaseForShift(word: String, shift: ShiftState): String {
 }
 
 /**
+ * [word] wearing the capitals of [replaced] — the word already standing in the
+ * field that a strip pick is about to overwrite (issue #212).
+ *
+ * [displayCaseForShift] cannot answer for these picks. It reads the live shift
+ * state, and by the time the strip is showing a committed word's alternates
+ * that shift is spent: the commit that wrote the word consumed it. Auto-
+ * capitalize is where it shows, because there the capital is never a keystroke
+ * the user could still be holding — glide "van" at the start of a sentence,
+ * take "can" off the strip, and the sentence used to restart in lower case.
+ *
+ * Only the shape of the capitals carries over, never the spelling: a shout
+ * ("VAN") shouts the replacement, a leading capital capitalizes it, and
+ * anything else leaves the word as the engine offered it. A null or empty
+ * [replaced] means the pick is not replacing anything, so it says nothing.
+ *
+ * Letters are counted by code point, or a cased script outside the BMP reads
+ * as "no letters at all" and every replacement for it would be shouted — the
+ * same trap `WordCase.kt` in :core:prediction was written for, mirrored here
+ * because those helpers are internal to that module.
+ */
+fun caseLike(word: String, replaced: String?): String {
+    if (word.isEmpty() || replaced.isNullOrEmpty() || '@' in word) return word
+    var at = 0
+    var letters = 0
+    var allUpper = true
+    while (at < replaced.length) {
+        val cp = replaced.codePointAt(at)
+        if (Character.isLetter(cp)) {
+            letters++
+            if (!Character.isUpperCase(cp)) allUpper = false
+        }
+        at += Character.charCount(cp)
+    }
+    // No letters at all ("42", "--") says nothing about capitals.
+    if (letters == 0) return word
+    if (letters > 1 && allUpper) return word.uppercase()
+    if (!Character.isUpperCase(replaced.codePointAt(0))) return word
+    val first = word.codePointAt(0)
+    val upper = Character.toUpperCase(first)
+    if (upper == first) return word
+    return String(Character.toChars(upper)) + word.substring(Character.charCount(first))
+}
+
+/**
  * The shift a glide commits under, and is previewed under.
  *
  * The board's own state, unless the stroke drew through the shift key and

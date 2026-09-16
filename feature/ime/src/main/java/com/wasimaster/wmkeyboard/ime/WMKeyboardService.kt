@@ -12850,8 +12850,11 @@ open class WMKeyboardService : InputMethodService() {
                 return
             }
             // Cased like the chip the user is looking at, the same as a pick
-            // that lands at the caret.
-            val replacement = displayCaseForShift(suggestion, _uiState.value.shiftState)
+            // that lands at the caret — and, under it, like the word being
+            // replaced, whose capital the live shift state can no longer
+            // account for (#212).
+            val replacement =
+                displayCaseForShift(caseLike(suggestion, caret.word), _uiState.value.shiftState)
             ic.beginBatchEdit()
             ic.deleteSurroundingText(head.length, tail.length)
             ic.commitText(replacement, 1)
@@ -12896,9 +12899,13 @@ open class WMKeyboardService : InputMethodService() {
         // when the strip really is showing that word's alternates: a word
         // picked off the keys leaves next-word predictions there (#175).
         val gestureWord = lastGestureWord
+        // The word this pick is overwriting, if it is overwriting one. Kept for
+        // the commit below, which inherits its capitals (#212).
+        var replacedWord: String? = null
         if (composing.isEmpty() && gestureWord != null && stripReplacesGestureWord) {
             val len = glideCommitLength(ic, gestureWord)
             if (len > 0) {
+                replacedWord = gestureWord
                 ic.deleteSurroundingText(len, 0)
                 // The bigram for the pick below must chain off the word
                 // *before* the replaced one, not off the word being replaced.
@@ -12971,7 +12978,12 @@ open class WMKeyboardService : InputMethodService() {
         val tail = if (autoSpace && !spacedAfterCaret(ic.getTextAfterCursor(1, 0))) " " else ""
         // Commit in the case the strip is showing: a shift held over the strip
         // capitalizes the word the user is about to pick, matching the chip.
-        val committed = displayCaseForShift(suggestion, _uiState.value.shiftState)
+        // Under that, the capitals of the word being replaced: a pick that
+        // overwrites a committed word lands in a place whose case was decided
+        // when that word was written, and the shift that decided it is long
+        // since spent — auto-capitalize's above all (#212).
+        val committed =
+            displayCaseForShift(caseLike(suggestion, replacedWord), _uiState.value.shiftState)
         ic.commitText(committed + tail, 1)
         // That space is the keyboard's, so a mark typed next takes it back and
         // hugs the word — "word:" and not "word :" (issue #34). Same one-shot a
