@@ -20487,38 +20487,51 @@ internal fun SwipeToDeleteCard(
     val offset = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
     var width by remember { mutableIntStateOf(0) }
+    // A dismissed card stays off-screen and invisible until the grid drops it.
+    // The delete only reaches the list a frame or two later, and the grid then
+    // plays its fade-out on the card still in place — so putting the card back
+    // in the middle first made the deleted clip flash back into its slot.
+    var dismissed by remember { mutableStateOf(false) }
     Box(
         modifier = modifier
             .onGloballyPositioned { width = it.size.width }
             .graphicsLayer {
                 translationX = offset.value
-                alpha = if (width == 0) 1f
-                else (1f - abs(offset.value) / width).coerceIn(0.2f, 1f)
+                alpha = when {
+                    dismissed -> 0f
+                    width == 0 -> 1f
+                    // Gone by the time it has travelled its own width, so the
+                    // card never ghosts over its neighbour on the way out.
+                    else -> (1f - abs(offset.value) / width).coerceIn(0f, 1f)
+                }
             }
             .pointerInput(Unit) {
                 detectHorizontalDragGestures(
                     onHorizontalDrag = { change, delta ->
-                        change.consume()
-                        scope.launch { offset.snapTo(offset.value + delta) }
+                        if (!dismissed) {
+                            change.consume()
+                            scope.launch { offset.snapTo(offset.value + delta) }
+                        }
                     },
                     onDragEnd = {
-                        scope.launch {
+                        if (!dismissed) scope.launch {
                             val threshold = width * 0.4f
                             if (width > 0 && abs(offset.value) > threshold) {
-                                // Finish the slide off-screen, then delete.
+                                // Finish the slide off-screen, then delete, and
+                                // leave the card where it landed.
                                 offset.animateTo(
                                     if (offset.value > 0) width.toFloat() else -width.toFloat(),
                                     tween(120),
                                 )
+                                dismissed = true
                                 onDelete()
-                                offset.snapTo(0f)
                             } else {
                                 offset.animateTo(0f, spring(stiffness = Spring.StiffnessMediumLow))
                             }
                         }
                     },
                     onDragCancel = {
-                        scope.launch { offset.animateTo(0f) }
+                        if (!dismissed) scope.launch { offset.animateTo(0f) }
                     },
                 )
             },
