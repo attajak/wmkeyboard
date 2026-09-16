@@ -4854,15 +4854,12 @@ private fun SecondaryLayoutPickerDialog(
     onDismiss: () -> Unit,
     onPick: (LayoutSpec) -> Unit,
 ) {
+    val rail = rememberScrollRailState()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.layout_editor_layout_picker_title)) },
         text = {
-            Column(
-                modifier = Modifier
-                    .heightIn(max = 380.dp)
-                    .verticalScroll(rememberScrollState()),
-            ) {
+            ScrollRail(state = rail, modifier = Modifier.heightIn(max = 380.dp)) {
                 if (options.isEmpty()) {
                     Text(stringResource(R.string.layout_editor_layout_picker_empty))
                 }
@@ -4898,19 +4895,21 @@ internal fun KeyActionPickerDialog(
     /** Narrowed by the popup-alternates picker, which cannot use them all. */
     options: List<KeyActionOption> = KeyActionCatalog,
 ) {
+    val rail = rememberScrollRailState()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.layout_editor_action_picker_title)) },
         text = {
-            Column(
-                modifier = Modifier
-                    .heightIn(max = 380.dp)
-                    .verticalScroll(rememberScrollState()),
-            ) {
+            ScrollRail(state = rail, modifier = Modifier.heightIn(max = 380.dp)) {
                 var lastGroup: Int? = null
                 for (option in options) {
                     if (option.groupRes != lastGroup) {
-                        SectionHeaderPublic(stringResource(option.groupRes))
+                        val group = stringResource(option.groupRes)
+                        // The heading is what the rail measures a segment from,
+                        // so the strip beside the list reads as its groups.
+                        Box(modifier = Modifier.fillMaxWidth().railSection(rail, group)) {
+                            SectionHeaderPublic(group)
+                        }
                         lastGroup = option.groupRes
                     }
                     WmRow(
