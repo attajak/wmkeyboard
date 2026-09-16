@@ -58,6 +58,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -157,6 +158,28 @@ internal fun SnippetSettings(
             }
             snippets = s.items()
             folders = s.folders()
+        }
+    }
+
+    val snackbar = LocalSettingsSnackbar.current
+    val undoLabel = stringResource(CommonR.string.common_undo)
+
+    /**
+     * Removes [snippet] at once and offers the way back for a few seconds.
+     *
+     * Undo restores the list the delete was made against rather than adding the
+     * snippet back: [SnippetStore.remove] also unlinks it from every snippet
+     * that pointed at it, and an add would hand it a new id those links would
+     * not find — see [SnippetStore.replaceAll].
+     */
+    fun deleteWithUndo(snippet: Snippet) {
+        val before = store?.items() ?: return
+        mutate { it.remove(snippet.id) }
+        snackbar?.undo(
+            message = context.getString(R.string.expander_deleted_snackbar, snippet.label),
+            undoLabel = undoLabel,
+        ) {
+            mutate { it.replaceAll(before) }
         }
     }
 
@@ -524,7 +547,7 @@ internal fun SnippetSettings(
             if (folders.isEmpty()) R.string.expander_snippets_empty else R.string.expander_no_folder_empty,
         ),
         onOpen = { snippet -> onNavigate("expander/edit/${snippet.id}") },
-        onDelete = { snippet -> mutate { it.remove(snippet.id) } },
+        onDelete = ::deleteWithUndo,
         onReorder = { ordered -> mutate { s -> s.reorder(regrouped(snippets, ordered)) } },
     )
 
@@ -705,6 +728,28 @@ internal fun SnippetFolderScreen(
         }
     }
 
+    val snackbar = LocalSettingsSnackbar.current
+    val undoLabel = stringResource(CommonR.string.common_undo)
+
+    /**
+     * Removes [snippet] at once and offers the way back for a few seconds.
+     *
+     * Undo restores the list the delete was made against rather than adding the
+     * snippet back: [SnippetStore.remove] also unlinks it from every snippet
+     * that pointed at it, and an add would hand it a new id those links would
+     * not find — see [SnippetStore.replaceAll].
+     */
+    fun deleteWithUndo(snippet: Snippet) {
+        val before = store?.items() ?: return
+        mutate { it.remove(snippet.id) }
+        snackbar?.undo(
+            message = context.getString(R.string.expander_deleted_snackbar, snippet.label),
+            undoLabel = undoLabel,
+        ) {
+            mutate { it.replaceAll(before) }
+        }
+    }
+
     val here = folder
     LaunchedEffect(loaded, here) { if (loaded && here == null) onGone() }
     if (here == null) return
@@ -743,7 +788,7 @@ internal fun SnippetFolderScreen(
         snippets = snippets.filter { it.folderId == folderId },
         empty = stringResource(R.string.expander_folder_empty),
         onOpen = { snippet -> onNavigate("expander/edit/${snippet.id}") },
-        onDelete = { snippet -> mutate { it.remove(snippet.id) } },
+        onDelete = ::deleteWithUndo,
         // The whole store's order, with only this folder's part of it rewritten
         // — see [regrouped].
         onReorder = { ordered -> mutate { s -> s.reorder(regrouped(snippets, ordered)) } },
@@ -1097,11 +1142,19 @@ private fun SnippetGroup(
         }
         for (snippet in snippets) {
             item {
-                SnippetRow(
-                    snippet,
-                    onEdit = { onOpen(snippet) },
-                    onDelete = { onDelete(snippet) },
-                )
+                // Keyed on the snippet, not on its place in the list: the swipe
+                // state below is remembered per composition slot, and without
+                // this the row that slides up into a deleted row's place would
+                // inherit its dismissed state and disappear as well.
+                key(snippet.id) {
+                    SwipeToDelete(onDelete = { onDelete(snippet) }) {
+                        SnippetRow(
+                            snippet,
+                            onEdit = { onOpen(snippet) },
+                            onDelete = { onDelete(snippet) },
+                        )
+                    }
+                }
             }
         }
     }

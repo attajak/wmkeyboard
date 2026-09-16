@@ -22,6 +22,8 @@
          folders at all and so nothing to tell them apart from. -->
     <string name="expander_snippets_title">Snippets</string>
     <string name="expander_snippets_empty">You have no snippets yet. Press the + button to write one.</string>
+    <!-- Bar shown after a snippet is deleted, naming it. %1$s is the snippet's name. -->
+    <string name="expander_deleted_snackbar">Deleted %1$s</string>
 
     <!-- Folders: named groups of snippets. A folder that is switched off keeps
          its snippets, but they no longer appear by themselves while you type. -->

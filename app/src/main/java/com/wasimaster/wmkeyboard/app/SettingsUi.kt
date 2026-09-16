@@ -47,6 +47,15 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
+import androidx.compose.material.icons.outlined.Delete
+import kotlinx.coroutines.CoroutineScope
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -950,6 +959,109 @@ internal class SettingsHaptics(private val view: View) {
             else -> HapticFeedbackConstants.CLOCK_TICK
         }
         view.performHapticFeedback(effect)
+    }
+}
+
+// ---- undo ----
+
+/**
+ * The bar at the foot of a settings screen that says what just happened and
+ * offers to put it back.
+ *
+ * The app's lists — snippets, learnt words, blacklists, themes — were deleted
+ * from with a trash button and nothing else: the row went, and that was the
+ * whole of it. A confirmation dialog in front of every one of those is the
+ * usual answer and the wrong one for a list somebody is tidying, because it
+ * puts a modal between the user and each of the twenty rows they came to
+ * remove. Deleting at once and offering the way back for a few seconds costs
+ * nothing per row and still cannot lose anything.
+ *
+ * A screen reaches this through [LocalSettingsSnackbar]; the host itself lives
+ * in `WmScreenFrame`, so every settings screen has one without asking.
+ */
+internal class SettingsSnackbar(
+    private val host: SnackbarHostState,
+    private val scope: CoroutineScope,
+) {
+    /**
+     * Says [message] and offers [undoLabel]; [onUndo] runs if it is pressed.
+     *
+     * A second call replaces the first rather than queueing behind it. Someone
+     * clearing several rows should be offered the way back from the one they
+     * just removed, not made to watch the last four announcements go by — and
+     * the earlier deletes standing is exactly what dismissing those says.
+     */
+    fun undo(message: String, undoLabel: String, onUndo: () -> Unit) {
+        scope.launch {
+            host.currentSnackbarData?.dismiss()
+            val result = host.showSnackbar(
+                message = message,
+                actionLabel = undoLabel,
+                withDismissAction = false,
+                duration = SnackbarDuration.Short,
+            )
+            if (result == SnackbarResult.ActionPerformed) onUndo()
+        }
+    }
+}
+
+/** The screen's undo bar. Null outside a settings screen's frame. */
+internal val LocalSettingsSnackbar = compositionLocalOf<SettingsSnackbar?> { null }
+
+/**
+ * A row that is deleted by swiping it aside, either way.
+ *
+ * Pairs with [SettingsSnackbar]: the swipe is the fast way to remove a row and
+ * the bar is what makes removing it that easily safe. The trash button on the
+ * row stays — a swipe is a shortcut for people who know it is there, never the
+ * only way to reach something.
+ *
+ * Callers in a plain `Column` (which is what a settings group is) must wrap the
+ * call in `key(id) { }`. Without it the state remembered here belongs to a
+ * *position* in the list, and the row that slides up into a deleted row's place
+ * inherits its dismissed state and vanishes too.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun SwipeToDelete(onDelete: () -> Unit, content: @Composable () -> Unit) {
+    val haptics = rememberSettingsHaptics()
+    val state = rememberSwipeToDismissBoxState(
+        confirmValueChange = { value ->
+            if (value == SwipeToDismissBoxValue.Settled) return@rememberSwipeToDismissBoxState false
+            haptics.toggle(on = false)
+            onDelete()
+            true
+        },
+    )
+    SwipeToDismissBox(
+        state = state,
+        backgroundContent = { SwipeToDeleteBackground(state.dismissDirection) },
+        content = { content() },
+    )
+}
+
+/** What shows under a row being swiped away: the error colour and a bin. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SwipeToDeleteBackground(direction: SwipeToDismissBoxValue) {
+    // Settled means the row is at rest and the background is not being looked
+    // at; painting it anyway leaves a red edge under every row in the list.
+    if (direction == SwipeToDismissBoxValue.Settled) return
+    val alignment =
+        if (direction == SwipeToDismissBoxValue.StartToEnd) Alignment.CenterStart
+        else Alignment.CenterEnd
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.errorContainer)
+            .padding(horizontal = 24.dp),
+        contentAlignment = alignment,
+    ) {
+        Icon(
+            Icons.Outlined.Delete,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onErrorContainer,
+        )
     }
 }
 
@@ -1908,6 +2020,9 @@ private fun WmScreenFrame(
     RegisterSettingsCrumb(crumbTitle ?: title, route)
     val slots = remember { ScreenSlots() }
     val scope = rememberCoroutineScope()
+    // One per screen, published for everything it draws — see [SettingsSnackbar].
+    val snackbarHost = remember { SnackbarHostState() }
+    val snackbar = remember(snackbarHost, scope) { SettingsSnackbar(snackbarHost, scope) }
     // The path strip's last pill: the body scrolls to its top, and the bar
     // opens back up. The scroll alone would leave the bar collapsed when the
     // body is shorter than the distance the bar folds over, so the bar is
@@ -1927,6 +2042,7 @@ private fun WmScreenFrame(
         LocalScreenRoute provides route,
         LocalFlightOrigin provides origin,
         LocalScreenSlots provides slots,
+        LocalSettingsSnackbar provides snackbar,
     ) {
         // A settings row is a name on the left and a control on the right, and
         // on a window wider than a phone the two end up a hand's width apart
@@ -1997,6 +2113,7 @@ private fun WmScreenFrame(
                     }
                 },
                 floatingActionButton = { (fab ?: slots.fab)?.invoke() },
+                snackbarHost = { SnackbarHost(snackbarHost) },
                 bottomBar = { slots.dock?.invoke() },
                 content = { padding ->
                     // Always wrapped, whether or not the screen has a refresh: the

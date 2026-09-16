@@ -495,6 +495,25 @@ class SnippetStore(private val storageFile: File?) {
         lookup = null
     }
 
+    /**
+     * Replaces the whole list with [items], exactly as given.
+     *
+     * The undo behind a delete. Putting one snippet back is not enough on its
+     * own: [remove] also strips the removed id out of every other snippet's
+     * [Snippet.children], and [add] would hand the snippet a fresh id that
+     * those links would not point at anyway. Restoring the list the delete was
+     * made against puts the ids, the order and the links back together.
+     *
+     * `nextId` is deliberately left where it is. Winding it back would hand the
+     * next new snippet an id a restored one already has.
+     */
+    @Synchronized
+    fun replaceAll(items: List<Snippet>) {
+        snippets.clear()
+        snippets.addAll(items)
+        lookup = null
+    }
+
     @Synchronized
     fun remove(id: Long) {
         if (!snippets.removeAll { it.id == id }) return
