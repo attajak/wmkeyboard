@@ -14,6 +14,8 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.snap
@@ -6231,6 +6233,14 @@ private class ToolDragController {
     var toolboxOrder: List<ToolbarTool> = emptyList()
     var onOrderCommit: (List<ToolbarTool>) -> Unit = {}
 
+    /**
+     * The order a drop just committed, handed to the grid so it can draw it
+     * before the settings come back with it. Separate from [onOrderCommit]
+     * because they go different ways: the commit goes out to storage and takes
+     * a coroutine hop to return, and this one stays here.
+     */
+    var onOrderPreview: (List<ToolbarTool>) -> Unit = {}
+
     fun start(tool: ToolbarTool, fromBar: Boolean, at: Offset) {
         dragging = tool
         fromToolbar = fromBar
@@ -6267,7 +6277,11 @@ private class ToolDragController {
             // Dropped on the grid: place it at that spot in the toolbox
             // order — and off the bar first, when that's where it came from.
             if (fromToolbar) onCommit(currentTools - tool)
-            onOrderCommit(orderWith(tool, box))
+            val next = orderWith(tool, box)
+            // Shown first, saved second. Both from the same list, so the grid
+            // never draws an arrangement the storage will not agree with.
+            onOrderPreview(next)
+            onOrderCommit(next)
         } else if (fromToolbar && toolboxViewport != null) {
             // Off-bar drops unpin only while the toolbox is open (its
             // viewport is registered) — a reorder drag that wanders off the
@@ -7395,6 +7409,12 @@ private fun RowScope.ToolbarRow(
                 slot = IconSlots.CHROME_TOOLBOX,
                 description = stringResource(R.string.ime_toolbox_desc),
                 active = customizing,
+                // The launcher wears its name alongside the tools it sits with:
+                // with labels on, one bare icon at the head of a row of named
+                // buttons reads as a button that forgot its own label, and it
+                // sits a few pixels off the others' baseline as well.
+                label = stringResource(R.string.ime_toolbox_desc).takeIf { labels },
+                labelSizeSp = labelSize,
                 modifier = Modifier
                     // The width a pinned button actually gets, published for the
                     // strip's emoji shortcut to match (see [pinnedToolWidthPx]).
@@ -7404,7 +7424,9 @@ private fun RowScope.ToolbarRow(
                     // and clips to its own node, so a stationary fade around a
                     // displaced icon cuts a slice off it. See the tool cells.
                     .graphicsLayer { alpha = contentAlpha() },
-                longPressLabel = stringResource(R.string.ime_toolbox_desc),
+                // The tooltip is what the labels setting replaces; the labelled
+                // variant never draws it anyway.
+                longPressLabel = stringResource(R.string.ime_toolbox_desc).takeUnless { labels },
                 wide = true,
                 hint = hints?.label(HintSurface.TOOLBAR, 0),
             ) { onPanelChange(PanelMode.TOOLBOX) }
@@ -7612,6 +7634,22 @@ private fun RowScope.ToolbarRow(
 }
 
 /**
+ * A committed toolbox order the grid draws before storage has echoed it back.
+ *
+ * [before] is the visible list as it stood when the drop happened: the preview
+ * is dropped the moment that list changes, which is the settings arriving —
+ * with this order, or with another one that has better claim to the screen.
+ */
+private data class ToolboxOrderPreview(
+    val order: List<ToolbarTool>,
+    val before: List<ToolbarTool>,
+) {
+    /** Where [tool] sits in the committed order; unranked tools keep the tail. */
+    fun rank(tool: ToolbarTool): Int =
+        order.indexOf(tool).takeIf { it >= 0 } ?: Int.MAX_VALUE
+}
+
+/**
  * Gboard-style toolbox: every tool that is not on the toolbar, shown in a
  * labeled grid ordered by [KeyboardSettings.toolboxOrder] (most-used-first
  * until the user rearranges it). Tap to use a tool in place; hold and drag
@@ -7701,7 +7739,29 @@ private fun ToolboxPanel(
         }
         // Toolbox order is a complete ranking over every tool; the grid
         // shows the available subset in that order.
-        val available = visibleToolboxTools(state)
+        val settledTools = visibleToolboxTools(state)
+        // The order the last drop committed, drawn until the settings flow
+        // comes back with it.
+        //
+        // The commit is a suspend hop through DataStore, so for a frame or two
+        // after the finger lifts the only order this composable can see is the
+        // PRE-drag one: the tool snapped back to where it started, and then the
+        // arriving settings moved it again. Two moves for one drop, the first
+        // of them backwards, and the second landing as a rebuild of every cell
+        // (see [ToolboxGrid]'s keys) — which is the jerk at the end of a drag.
+        // Drawing the committed order at once makes the drop the only move.
+        var preview by remember { mutableStateOf<ToolboxOrderPreview?>(null) }
+        drag.onOrderPreview = { order -> preview = ToolboxOrderPreview(order, settledTools) }
+        val available = preview
+            ?.let { held -> settledTools.sortedBy { tool -> held.rank(tool) } }
+            ?: settledTools
+        // Let go of it the moment the settings say anything new, whether that
+        // is this drop arriving or something else entirely (a mode switch, a
+        // reset from the settings app) — the preview must never outlive the
+        // list it was an early look at.
+        LaunchedEffect(settledTools) {
+            if (preview?.before != settledTools) preview = null
+        }
         val toolbox = state.settings.toolbox
         val pills = toolbox.layout == ToolboxLayout.PILLS
         // The two layouts count their columns separately: a pill needs room for
@@ -7735,6 +7795,11 @@ private fun ToolboxPanel(
         // grid below. The cells are pure visuals now.
         val dragTool = drag.dragging
         val boxSlot = drag.boxSlot
+        // Identifies the settled order, and changes only when it does — never
+        // during a drag, where the settings are untouched and `available` is
+        // the same list frame after frame. See [ToolboxGrid]'s cell keys for
+        // what it is for.
+        val orderKey = available.hashCode()
         val display: List<ToolbarTool?> = if (dragTool != null && boxSlot != null) {
             // `available - dragTool` is a no-op when the drag came from the
             // toolbar, so both origins land on one ghost and one hole.
@@ -7778,6 +7843,7 @@ private fun ToolboxPanel(
                 columns = columns,
                 pills = pills,
                 dragTool = dragTool,
+                orderKey = orderKey,
                 focusedSlot = focusedTool,
                 registerGeometry = true,
                 onToolTap = onToolTap,
@@ -7814,6 +7880,7 @@ private fun ToolboxPanel(
                 columns = columns,
                 pills = pills,
                 dragTool = dragTool,
+                orderKey = orderKey,
                 focusedSlot = focusedTool.takeIf { current },
                 registerGeometry = current,
                 onToolTap = onToolTap,
@@ -7852,6 +7919,8 @@ private fun ToolboxGrid(
     columns: Int,
     pills: Boolean,
     dragTool: ToolbarTool?,
+    /** Identifies the settled toolbox order; see the cell keys below. */
+    orderKey: Int,
     /** Absolute slot the hardware focus ring is on, or null. */
     focusedSlot: Int?,
     /** Whether this grid is the one a drop should be measured against. */
@@ -8025,7 +8094,19 @@ private fun ToolboxGrid(
             // icons never made room. Re-keying per slot forces the reflow on
             // every step. (The toolbar is a Row, which re-places on reorder,
             // so its ghost keeps one stable key.)
-            key(tool ?: "box-ghost-${pageStart + slot}") {
+            // The saved order rides in the key ([orderKey]) for the same reason
+            // the ghost's slot does: FlowRow re-measures and re-places on a
+            // structural change and does neither on a pure keyed reorder, and
+            // the order arrives from settings a frame or two AFTER the drop —
+            // by which time the ghost is gone and the list is nothing but a
+            // reorder. So the drop saved, and the grid went on drawing the old
+            // arrangement until the panel was closed and opened again. Re-keying
+            // makes that arrival structural. Stable through the drag itself
+            // (settings do not change mid-gesture), so the cells still slide
+            // around the ghost; a settled reorder costs one rebuild of a cell
+            // each, and lands with no animation, which is right — the drag has
+            // already shown the move.
+            key(tool?.let { "$it@$orderKey" } ?: "box-ghost-${pageStart + slot}") {
                 Box(
                     modifier = Modifier
                         .toolboxCellWidth(columns)
@@ -8173,6 +8254,20 @@ private fun toolboxLabelSize(state: KeyboardUiState): TextUnit {
 
 /** How tall a toolbox pill is. Half of it is the radius that makes the ends round. */
 private val PillHeight = 44.dp
+
+/**
+ * The tool in flight under a dragging finger: [PillHeight] tall whichever shape
+ * it is wearing, and that is the point — the circle it becomes over the toolbar
+ * and the pill it becomes over a pill toolbox differ in width and corner only,
+ * so one box can morph between them without ever changing height.
+ */
+private val GhostSize = PillHeight
+
+/** The spring the drag ghost changes shape on; one tuning for every property. */
+private fun <T> ghostMorphSpring() = spring<T>(
+    dampingRatio = Spring.DampingRatioNoBouncy,
+    stiffness = Spring.StiffnessMedium,
+)
 
 /**
  * A pill's corner radius, from the same "Tool circle radius" setting the round
@@ -9706,19 +9801,90 @@ private fun KeyboardBody(
         drag.dragging?.let { tool ->
             val kb = LocalKbTheme.current
             val ghost = drag.position - bodyOrigin
+            // The thing under the finger is the thing that will land, in the
+            // shape it will land in. Over a pill toolbox that is a full-width
+            // pill; over the toolbar it is the bar's circle, because the bar
+            // draws circles whatever the toolbox does. Between the two it
+            // MORPHS — width, corner and name together — rather than swapping
+            // shapes on the frame the finger crosses the bar's edge, which
+            // read as the tool blinking into something else halfway through
+            // one gesture.
+            val pillToolbox = state.panel == PanelMode.TOOLBOX &&
+                state.settings.toolbox.layout == ToolboxLayout.PILLS
+            val asPill = pillToolbox && drag.barSlot == null
+            // As wide as the cell it is heading for, so the preview is the real
+            // footprint; the cell size is whatever the grid last measured, and
+            // a fallback covers the frame before it has.
+            val cellWidth = drag.toolboxCellSize.width
+            val pillWidth = with(LocalDensity.current) {
+                if (cellWidth > 0f) cellWidth.toDp() else 160.dp
+            }
+            val reduced = state.settings.reduceMotion
+            val morphDp: AnimationSpec<Dp> = if (reduced) snap() else ghostMorphSpring()
+            val morphFloat: AnimationSpec<Float> = if (reduced) snap() else ghostMorphSpring()
+            // One box, two looks. The height never changes (the circle and the
+            // pill are both [GhostSize] tall), so the whole morph is the width,
+            // the corner radius and the name fading out as the room for it goes.
+            val width by animateDpAsState(
+                if (asPill) pillWidth else GhostSize,
+                animationSpec = morphDp,
+                label = "ghostWidth",
+            )
+            val corner by animateDpAsState(
+                if (asPill) pillRadius() else GhostSize / 2,
+                animationSpec = morphDp,
+                label = "ghostCorner",
+            )
+            // The name goes first and comes back last, so it is never caught
+            // half-clipped by a box that is still narrowing around it.
+            val labelAlpha by animateFloatAsState(
+                if (asPill) 1f else 0f,
+                animationSpec = morphFloat,
+                label = "ghostLabel",
+            )
             Box(
                 modifier = Modifier
-                    .offset { IntOffset((ghost.x - 22.dp.toPx()).roundToInt(), (ghost.y - 22.dp.toPx()).roundToInt()) }
-                    .size(44.dp)
-                    .background(kb.toolCircleActive, CircleShape),
-                contentAlignment = Alignment.Center,
+                    .offset {
+                        IntOffset(
+                            (ghost.x - width.toPx() / 2f).roundToInt(),
+                            (ghost.y - GhostSize.toPx() / 2f).roundToInt(),
+                        )
+                    }
+                    .size(width = width, height = GhostSize)
+                    .clip(RoundedCornerShape(corner))
+                    .background(kb.toolCircleActive, RoundedCornerShape(corner)),
+                contentAlignment = Alignment.CenterStart,
             ) {
-                SlotIcon(
-                    IconSlots.forTool(tool),
-                    contentDescription = null,
-                    modifier = Modifier.size(22.dp),
-                    tint = kb.toolCircleActiveIcon,
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        // The icon sits (GhostSize - ToolIconSize) / 2 from the
+                        // start, which is dead centre once the box is a circle —
+                        // so the icon holds still and the pill grows out from
+                        // behind it rather than sliding under the finger.
+                        .padding(start = (GhostSize - ToolIconSize) / 2),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    SlotIcon(
+                        IconSlots.forTool(tool),
+                        contentDescription = null,
+                        modifier = Modifier.size(ToolIconSize),
+                        tint = kb.toolCircleActiveIcon,
+                    )
+                    if (labelAlpha > 0.01f) {
+                        Text(
+                            toolLabel(tool),
+                            fontSize = toolboxLabelSize(state),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = kb.toolCircleActiveIcon,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 8.dp, end = 10.dp)
+                                .graphicsLayer { alpha = labelAlpha },
+                        )
+                    }
+                }
             }
         }
         // Names the scope a tool drag lands in — a mode's own arrangement or
