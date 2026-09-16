@@ -335,6 +335,26 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
          * order loses nothing that would have won.
          */
         val lookAheadBudget: Int = 48,
+        /**
+         * Alignment charged for each [GlideJoiners] character the reading stepped
+         * over — a hyphen, a dot, an at sign, anything a word is spelled with and
+         * a finger cannot draw (issue #230).
+         *
+         * The skip has to cost *something*. `e-mail` and `email` are the same
+         * stroke, and so are `co-op` and `coop`; with the skip free the two
+         * readings are separated by frequency alone, and a list that holds the
+         * hyphenated spelling at a higher count would take the strip's top slot
+         * for a word most people write plain. A charge in the same currency as
+         * [repeatCost] — a flat alignment penalty, so ×[shapeWeight] nats —
+         * breaks that tie toward the unpunctuated spelling while leaving the
+         * punctuated one on the strip, which is the direction a user can fix in
+         * one tap either way.
+         *
+         * Small on purpose: 0.5 nats is about a factor of 1.6 in frequency, so
+         * it settles ties and nothing more. It is not a filter, and a word the
+         * user added by hand still wins the moment nothing plain competes.
+         */
+        val joinerCost: Float = 0.2f,
     ) {
         val invTwoSigmaSq: Float get() = 1f / (2f * sigma * sigma)
         val startRadiusSq: Float get() = startRadius * startRadius
@@ -500,7 +520,16 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
             val start = at
             at += Character.charCount(codePoint)
             val key = keys.keyIndex(codePoint)
-            if (key < 0) return null
+            // A joiner is not a visit: the walk stepped over it, so the
+            // alignment it is read back against has to step over it too, or
+            // every hyphenated word would report "cannot be drawn" and take
+            // its shape lesson and its casing with it (#230). The next letter
+            // keeps its own offset, so [Alignment.chars] still points past the
+            // hyphen and not at it.
+            if (key < 0) {
+                if (GlideJoiners.isJoiner(codePoint)) continue
+                return null
+            }
             if (key == previous) continue
             if (count >= GlideWorkspace.MAX_IDEAL_POINTS) return null
             visits[count] = key
@@ -674,25 +703,29 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
                     if (!label.isLowSurrogate()) continue
                     codePoint = Character.toCodePoint(pendingHigh, label)
                 } else if (label.isHighSurrogate()) {
-                    // Half a letter: descend without spending any of the stroke
-                    // — the alignment, the letter count and the last key all
-                    // carry over untouched — and let the low half decide.
-                    val bound = src.logWeight + ln1p(subtree) -
-                        tuning.shapeWeight * (ws.floorCost[s] + extra)
-                    if (bound < floor - EPS) continue
-                    val id = ws.push(
-                        node = child, parent = s, viaLabel = label, lastKey = lastKey,
-                        length = length, extra = extra, floorCost = ws.floorCost[s],
-                        bound = bound, letterCp = ws.letterCp[s],
-                    )
-                    if (id < 0) break
-                    ws.copyColumn(s, id)
+                    // Half a letter: let the low half decide, and until it does
+                    // spend none of the stroke on it.
+                    if (!descendSilent(src, subtree, s, child, label, extra, floor, ws)) break
                     continue
                 } else {
                     codePoint = label.code
                 }
 
                 val key = keys.keyIndex(codePoint)
+                // A hyphen, a dot, an at sign: spelled in the word, absent from
+                // the grid, and never drawn. Step over it for the price of
+                // `joinerCost` rather than losing the word with it (#230). Only
+                // between letters — a word cannot be *started* on a character
+                // the stroke's first sample has nothing to anchor to — and
+                // never twice running, which bounds the detour a malformed
+                // entry can send the walk on.
+                if (key < 0 && length > 0 && GlideJoiners.isJoiner(codePoint) &&
+                    !GlideJoiners.isJoiner(ws.viaLabel[s].code)
+                ) {
+                    val cost = extra + tuning.joinerCost
+                    if (!descendSilent(src, subtree, s, child, label, cost, floor, ws)) break
+                    continue
+                }
                 // A character the grid cannot produce makes its whole subtree
                 // unreachable; so does one the stroke never went near.
                 if (key < 0 || key >= keyCount || !ws.nearKey[key]) continue
@@ -736,6 +769,44 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
             }
         }
         return floor
+    }
+
+    /**
+     * Descends the edge [label] into [child] without spending any of the stroke:
+     * the alignment column, the letter count, the last key and the last letter
+     * all carry over untouched, and only [extra] may differ from the parent's.
+     *
+     * Two edges are walked this way and they are the same case — a character in
+     * the word that the stroke has nothing to say about. The high half of a
+     * surrogate pair is half a letter and waits for the low half to name a key;
+     * a [GlideJoiners] character is a whole character with no key at all, and
+     * pays [Tuning.joinerCost] for the privilege.
+     *
+     * False when the state pool saturated, which best-first says the caller
+     * should take as "the rest of these children are worse" and stop.
+     */
+    @Suppress("LongParameterList")
+    private fun descendSilent(
+        src: FuzzyBeamSearch.WalkSource,
+        subtree: Int,
+        s: Int,
+        child: Int,
+        label: Char,
+        extra: Float,
+        floor: Double,
+        ws: GlideWorkspace,
+    ): Boolean {
+        val bound = src.logWeight + ln1p(subtree) -
+            tuning.shapeWeight * (ws.floorCost[s] + extra)
+        if (bound < floor - EPS) return true
+        val id = ws.push(
+            node = child, parent = s, viaLabel = label, lastKey = ws.lastKey[s],
+            length = ws.length[s].toInt(), extra = extra, floorCost = ws.floorCost[s],
+            bound = bound, letterCp = ws.letterCp[s],
+        )
+        if (id < 0) return false
+        ws.copyColumn(s, id)
+        return true
     }
 
     /**
@@ -1453,7 +1524,14 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
             val codePoint = word.codePointAt(at)
             at += Character.charCount(codePoint)
             val key = keys.keyIndex(codePoint)
-            if (key < 0) return null
+            // A joiner has no point on the ideal path — the same skip the walk
+            // made. Answering null instead would let a hyphenated reading out
+            // of the shape channel entirely, so it would pay none of the charge
+            // its rivals pay and win on that alone (#230).
+            if (key < 0) {
+                if (GlideJoiners.isJoiner(codePoint)) continue
+                return null
+            }
             // Consecutive letters on one key are one point of the path: the
             // finger visited it once, however many letters it stood for.
             if (key == previous) continue

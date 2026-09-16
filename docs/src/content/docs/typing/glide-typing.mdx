@@ -132,6 +132,10 @@ None of those three looks at the word that came *before*. The stroke decoder is 
 
 A couple of shape quirks are worth knowing. Double letters only need one pass over the key, so "good" traces g-o-d, because drawing a letter twice in a row adds nothing a shape comparison can see. If you want to say the letter is doubled, pause on the key for a moment, or draw a small circle on it the way Swype taught: a loop on the o reads as "good" rather than "god", and the loop itself costs the word nothing. And a word needing a character with no key on your current layout, an accented letter your layout doesn't have, say, is quietly left out of the running rather than causing an error.
 
+Punctuation inside a word is the exception to that last rule. Hyphens, dots, at signs, underscores, ampersands, plus signs and slashes aren't on the keyboard's letter grid, so you can't draw them, and words are spelled with them all the time. Swipe the letters and leave the punctuation out: `fdroid` for "f-droid", `coop` for "co-op", `wasime` for "wasi.me". The word comes back punctuated the way your dictionary spells it. Where both spellings exist, the unpunctuated one goes first on the strip and the punctuated one sits right beside it, so "email" wins over "e-mail" on a tie and loses to it when your dictionary says "e-mail" is much the commoner of the two.
+
+The apostrophe is the one piece of punctuation left out of this, because contractions are exactly where guessing goes wrong. "its" against "it's", "were" against "we're" and "shed" against "she'd" are all one stroke each, and picking between them on word frequency alone would be a coin toss. It has its own answer instead: set **Apostrophe in a glide** to a key and swipe through that key.
+
 ## Autocorrect and learning
 
 ### Going back to a misread swipe
