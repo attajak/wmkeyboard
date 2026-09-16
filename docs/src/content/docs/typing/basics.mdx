@@ -121,13 +121,13 @@ This screen's **Type native digits in** setting answers a different question: wh
 
 Every finger on the keyboard is tracked on its own, so pressing a second key before you release the first works correctly. Both register, whether that's rollover typing across the letters or two fast taps on the very same key.
 
-On the default layout, <KeyCap>⌫</KeyCap> and <KeyCap>Space</KeyCap> are the two keys that auto-repeat on a hold. Repeating has its own wait, **Time before a key repeats** (300&nbsp;ms by default, adjustable 150–800&nbsp;ms), separate from the long-press delay above. The two used to be one number, which meant lengthening the wait before accent popups also slowed backspace down. Past that wait each key fires again on its own cadence, **Delete repeat interval** and **Space repeat interval** (50&nbsp;ms and 100&nbsp;ms by default, both adjustable 20–200&nbsp;ms), because a runaway row of spaces costs more to undo than a fast delete does. A held backspace stops on its own once there's nothing left to delete. A forward-delete key (<KeyCap>⌦</KeyCap>) repeats the same way if you add one to a [custom layout](/languages/custom-layouts/). No built-in layout places one, and a physical keyboard's Delete-forward key goes straight to the system rather than through this engine. Every other key long-presses into its popup or shortcut instead of repeating.
+On the default layout, <KeyCap>⌫</KeyCap> and <KeyCap>Space</KeyCap> are the two keys that auto-repeat on a hold. Repeating has its own wait, **Time before a key repeats** (300&nbsp;ms by default, adjustable 150–800&nbsp;ms), separate from the long-press delay above. The two used to be one number, which meant lengthening the wait before accent popups also slowed backspace down. Past that wait each key fires again on its own cadence, **Delete repeat interval** and **Space repeat interval** (50&nbsp;ms and 100&nbsp;ms by default, both adjustable 20–200&nbsp;ms), because a runaway row of spaces costs more to undo than a fast delete does. A held backspace stops on its own once there's nothing left to delete. **Holding delete clears words** (off by default, on the same Timing group) turns that repeat into one whole word per tick, at its own slower **Word delete interval** (140&nbsp;ms, adjustable 60–500&nbsp;ms); a single press still deletes one character either way. A forward-delete key (<KeyCap>⌦</KeyCap>) repeats the same way if you add one to a [custom layout](/languages/custom-layouts/), and clears words the same way too. No built-in layout places one, and a physical keyboard's Delete-forward key goes straight to the system rather than through this engine. Every other key long-presses into its popup or shortcut instead of repeating.
 
 <SettingsPath path="Accessibility / Touch" />
 
 **Ignore repeated presses** (off by default) filters out the accidental double-taps a hand tremor causes. Auto-repeat deliberately bypasses that filter: the software repeat is already deterministic, so filtering it would only cap how fast delete or space can go.
 
-Backspace also has a drag-to-delete-whole-words gesture, on by default, separate from this hold-and-repeat. [Gestures](/typing/gestures/) covers it.
+Both delete keys also have a drag-to-delete-whole-words gesture, on by default, separate from this hold-and-repeat: leftward on <KeyCap>⌫</KeyCap>, rightward on <KeyCap>⌦</KeyCap>. [Gestures](/typing/gestures/) covers them.
 
 ## Options
 
@@ -167,7 +167,7 @@ A handful of related settings live elsewhere:
 
 - **Automatic capital letters** is on by default, under <SettingsPath path="Typing / Automatic corrections" />.
 - **Autopilot** (<SettingsPath path="Typing / Suggestions / Autopilot" />) and **Shift and Enter type a new line** (<SettingsPath path="Typing / Enter key" />) are both on by default.
-- **Swipe to delete** is on by default, under <SettingsPath path="Typing / Backspace" />, and starts out deleting a word per step of the swipe.
+- **Swipe to delete** is on by default, under <SettingsPath path="Typing / Delete keys" />, and starts out deleting a word per step of the swipe.
 - **Number row** (<SettingsPath path="Layout & size / Number row" />) is on, and the numeral commit scope (<SettingsPath path="Layout & size / Numerals" />) starts on "Text fields". Full breakdown at [Layout & size settings](/reference/settings/layout/).
 - **Numeral system per language** starts on Auto, under <SettingsPath path="Languages & layouts / (a language) / Numerals" />. See [Languages](/languages/overview/).
 - **Ignore repeated presses** is off by default, under <SettingsPath path="Accessibility / Touch" />. See also [Accessibility](/accessibility/overview/).

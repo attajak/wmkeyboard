@@ -39,4 +39,48 @@ class WordDeleteTest {
         // Leading whitespace only: take it and stop.
         assertEquals(3, len("   "))
     }
+
+    // ---- forward, for the forward delete key (issue #226) ----
+
+    private fun after(text: String) = WordDelete.lengthAfter(text)
+
+    @Test
+    fun `word directly after the cursor`() {
+        assertEquals("hello".length, after("hello world"))
+    }
+
+    @Test
+    fun `leading space goes with the word after it`() {
+        assertEquals(" world".length, after(" world"))
+        assertEquals("   world".length, after("   world"))
+        assertEquals("world".length, after("world"))
+    }
+
+    @Test
+    fun `punctuation after the cursor is its own step`() {
+        assertEquals("...".length, after("...wait"))
+        assertEquals("wait".length, after("wait"))
+        // Contractions split the same way going forward.
+        assertEquals("don".length, after("don't"))
+    }
+
+    @Test
+    fun `newlines count as whitespace going forward`() {
+        assertEquals("\nlast".length, after("\nlast line"))
+    }
+
+    @Test
+    fun `nothing to delete forward`() {
+        assertEquals(0, after(""))
+        assertEquals(3, after("   "))
+    }
+
+    @Test
+    fun `the two directions are mirrors`() {
+        // The same field read from either side: a cursor at the very start
+        // takes " hello" going forward, and a cursor at the very end takes
+        // "world " going back. Both carry the whitespace they touch.
+        assertEquals(" hello".length, after(" hello world "))
+        assertEquals("world ".length, len(" hello world "))
+    }
 }

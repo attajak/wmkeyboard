@@ -131,6 +131,7 @@ import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.KeyboardAlt
 import androidx.compose.material.icons.outlined.KeyboardCapslock
 import androidx.compose.material.icons.outlined.KeyboardCommandKey
+import androidx.compose.material.icons.outlined.KeyboardTab
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LibraryAdd
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -460,6 +461,8 @@ internal object SettingsRowIcons {
         put(R.string.keypress_long_press_delay_title) { Icons.Outlined.Timer }
         put(R.string.keypress_repeat_start_title) { Icons.Outlined.Timer }
         put(R.string.keypress_delete_repeat_title) { Icons.Outlined.Repeat }
+        put(R.string.keypress_hold_words_title) { Icons.AutoMirrored.Outlined.Backspace }
+        put(R.string.keypress_word_delete_repeat_title) { Icons.Outlined.Repeat }
         put(R.string.keypress_space_repeat_title) { Icons.Outlined.Repeat }
         put(R.string.keypress_caps_lock_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.keypress_long_press_hints_title) { Icons.Outlined.Lightbulb }
@@ -806,6 +809,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_backspace_swipe_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.typing_backspace_unit_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.typing_backspace_preview_title) { Icons.Outlined.Visibility }
+        put(R.string.typing_forward_delete_swipe_title) { Icons.Outlined.KeyboardTab }
         put(R.string.typing_backspace_step_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.typing_backspace_char_step_title) { Icons.Outlined.Speed }
         put(R.string.typing_shift_enter_title) { Icons.AutoMirrored.Outlined.KeyboardReturn }

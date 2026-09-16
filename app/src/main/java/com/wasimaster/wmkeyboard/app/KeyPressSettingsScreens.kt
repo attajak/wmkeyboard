@@ -710,6 +710,28 @@ internal fun KeyPressSettings(
             ) { scope.launch { repository.setDeleteRepeatIntervalMs(it.toInt()) } }
         }
         item {
+            ToggleSetting(
+                R.string.keypress_hold_words_title,
+                stringResource(R.string.keypress_hold_words_subtitle),
+                settings.textEditing.deleteHoldDeletesWords,
+                info = stringResource(R.string.keypress_hold_words_info),
+                default = SettingsDefaults.textEditing.deleteHoldDeletesWords,
+            ) { scope.launch { repository.setDeleteHoldDeletesWords(it) } }
+        }
+        if (settings.textEditing.deleteHoldDeletesWords) {
+            item {
+                SliderSetting(
+                    R.string.keypress_word_delete_repeat_title,
+                    subtitle = stringResource(R.string.keypress_word_delete_repeat_subtitle),
+                    value = settings.keyRepeat.wordDeleteMs.toFloat(),
+                    range = 60f..500f,
+                    display = { context.getString(R.string.keypress_value_ms, it.toInt()) },
+                    info = stringResource(R.string.keypress_word_delete_repeat_info),
+                    default = SettingsDefaults.keyRepeat.wordDeleteMs.toFloat(),
+                ) { scope.launch { repository.setWordDeleteRepeatIntervalMs(it.toInt()) } }
+            }
+        }
+        item {
             SliderSetting(
                 R.string.keypress_space_repeat_title,
                 subtitle = stringResource(R.string.keypress_space_repeat_subtitle),

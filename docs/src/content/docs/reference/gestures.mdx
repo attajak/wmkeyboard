@@ -37,9 +37,9 @@ Which action a spacebar swipe runs depends on *when* the drag starts relative to
 | Press and hold (~250&nbsp;ms, or your press-and-hold delay if shorter), with two or more layouts enabled | Spacebar | Opens the inline language preview or a scrollable picker list | None |
 | Drag once the preview or picker is open | Spacebar | Always switches language, regardless of which slot is configured | None |
 
-## Dragging backspace to delete words
+## Dragging a delete key to delete words
 
-<SettingsPath path="Typing / Backspace" />
+<SettingsPath path="Typing / Delete keys" />
 
 Tap, hold-to-repeat, and the delete swipe are one state machine on <KeyCap>⌫</KeyCap>, so a drag can take over from the repeat loop mid-press. In Words mode each word costs less to delete than the last: 72&nbsp;dp for the first, 56&nbsp;dp for the second, then 6&nbsp;dp less per word down to a 28&nbsp;dp floor. In Characters mode every character costs a flat 20&nbsp;dp. Full breakdown, including the character-run and selection rules, on [Gestures](/typing/gestures/#deleting-more-than-a-character-with-backspace).
 
@@ -51,6 +51,11 @@ Tap, hold-to-repeat, and the delete swipe are one state machine on <KeyCap>⌫</
 | Drag right mid-swipe | Backspace | Gives back one step of the highlight per step of travel | Show what you will delete (On) |
 | Lift after dragging left | Backspace | Deletes everything the swipe highlighted | (same) |
 | Drag right mid-swipe | Backspace | Re-anchors instead of undeleting, so the next leftward word costs full travel again | Show what you will delete (Off) |
+| Hold still | Either delete key | Repeats a whole word per tick instead of a character, at the word interval | Holding delete clears words · Word delete interval (Off · 140 ms) |
+| Tap | Forward delete | Deletes one character after the cursor | None |
+| Drag right past a small slop | Forward delete | Cancels the repeat and takes a word or a character after the cursor per step | Swipe on forward delete · Swipe deletes (On · Words) |
+| Drag left mid-swipe | Forward delete | Gives back one step of the highlight per step of travel | Show what you will delete (On) |
+| Lift after dragging right | Forward delete | Deletes everything the swipe highlighted | (same) |
 
 ## Long-pressing a key
 
@@ -139,9 +144,12 @@ Every default on this page, gathered in one place. "Where" is the settings scree
 | 2-D cursor touchpad | Typing → Gestures | Off |
 | Swipe down to hide the keyboard | Typing → Gestures | Off |
 | Glide typing | Typing → Gestures | On |
-| Swipe to delete | Typing → Backspace | On |
-| Swipe deletes | Typing → Backspace | Words |
-| Show what you will delete | Typing → Backspace | On |
+| Swipe to delete | Typing → Delete keys | On |
+| Swipe deletes | Typing → Delete keys | Words |
+| Show what you will delete | Typing → Delete keys | On |
+| Swipe on forward delete | Typing → Delete keys | On |
+| Holding delete clears words | Key press → Timing | Off |
+| Word delete interval | Key press → Timing | 140 ms (60–500 ms) |
 | Volume keys move the cursor | Typing → Volume keys | Off |
 | Release the keys while audio plays | Typing → Volume keys | On |
 | Press and hold delay | Key press → Timing | 300 ms (150–800 ms) |
@@ -165,6 +173,7 @@ Every default on this page, gathered in one place. "Where" is the settings scree
 - **Numpad is a discrete action.** Unlike Cursor or Language, which keep responding for as long as you drag, a slot set to Numpad only needs the initial slop crossed once; everything after that is inert.
 - **Two settings hide the keyboard on a downward swipe, two words apart.** "Swipe down to hide the keyboard" under Typing → Gestures applies to the spacebar. A separate "Swipe down to hide" under Appearance → Toolbar applies to the toolbar strip. Turning one on doesn't touch the other, and both ship off.
 - **The 2-D cursor touchpad only claims the vertical axis once a drag has actually resolved to Cursor.** With the defaults (quick swipe = Language, press-and-hold swipe = Cursor), a fast downward flick within the press-and-hold delay is still governed by the quick-swipe slot and dismisses the keyboard rather than scrolling through lines.
+- **<KeyCap>⌦</KeyCap> is the same gesture pointed the other way, and shares every setting but its own on/off switch.** Swipe deletes, Show what you will delete and the two step distances govern both keys. No built-in layout carries a forward delete key; add one in the [layout editor](/languages/custom-layouts/).
 - **Backspace's word-delete acceleration resets on a reversal, not on release.** Dragging right mid-swipe doesn't bring back a deleted word. It only means the next leftward word costs full travel (72&nbsp;dp) again instead of the shrunk amount.
 - **Volume-key cursor control re-checks "is audio playing" on every key press**, not once at the start, so Release the keys while audio plays hands control back and forth live as playback starts and stops mid-typing.
 - **The Key press → Timing slider silently clamps past 700&nbsp;ms.** It shows a 150–800&nbsp;ms range, but the stored value still coerces to 150–700&nbsp;ms. Drag it past 700 and it snaps back once you let go. Accessibility → Touch no longer has its own copy of this slider: it links straight to Key press → Timing instead.

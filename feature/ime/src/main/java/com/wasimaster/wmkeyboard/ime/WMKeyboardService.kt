@@ -7054,15 +7054,7 @@ open class WMKeyboardService : InputMethodService() {
             wordSpellEdit { it.deletedForward() }
             return
         }
-        if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive ||
-            state.findReplaceTypingActive || state.learnEditActive ||
-            state.calcTypingActive || state.converterTypingActive ||
-            state.emojiSearchActive || state.dictionarySearchActive ||
-            state.clipboardSearchActive ||
-            (state.mediaSearchActive && state.panel.hasMediaSearch)
-        ) {
-            return
-        }
+        if (!forwardDeleteOwnsBuffer()) return
         deleteForwardFromField()
     }
 
@@ -7094,6 +7086,10 @@ open class WMKeyboardService : InputMethodService() {
         val after = ic.getTextAfterCursor(64, 0)
         if (after.isNullOrEmpty()) return
         val forward = EmojiGraphemes.forwardDeleteLength(after).coerceAtLeast(1)
+        // Mirrored for the same reason backspace mirrors its own deletions:
+        // a caret parked inside a word is being followed, and an edit the
+        // mirror never heard about leaves it a character behind the field.
+        revision?.expectDelete(0, forward)
         if (expectedSelStart >= 0) noteDeletedForLearning(expectedSelStart, expectedSelStart + forward)
         invalidateExpectedSelection()
         ic.deleteSurroundingText(0, forward)
@@ -7103,21 +7099,73 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * Deletes the word after the cursor: one step of a forward delete swipe,
+     * and one tick of a held ⌦ that clears words (issues #226 and #216).
+     *
+     * The mirror of [onDeleteWord], including taking the whitespace the cursor
+     * sits on along with the word past it, so holding ⌦ chews forward through
+     * a sentence the way ctrl+delete does on a desktop.
+     */
+    private fun onForwardDeleteWord() {
+        // Every box that eats keystrokes has no "after the cursor" of its own,
+        // which is the whole reason [onForwardDelete] stands down in one; a
+        // word step has no more business reaching past it than a character one.
+        if (!forwardDeleteOwnsBuffer()) {
+            onForwardDelete()
+            return
+        }
+        val ic = currentInputConnection ?: return
+        clearCaretWord()
+        if (hasSelection(ic)) {
+            dropComposingForSelectionEdit(ic)
+            noteDeletedForLearning(expectedSelStart, expectedSelEnd)
+            invalidateExpectedSelection()
+            ic.commitText("", 1)
+            return
+        }
+        // Composing text sits before the caret, so it is never what a forward
+        // delete takes — but editing around a live region strands its
+        // underline. Committed as it stands, never autocorrected: the user did
+        // not signal the word was finished.
+        if (composing.isNotEmpty()) commitComposing(ic, autocorrect = false)
+        val after = ic.getTextAfterCursor(96, 0) ?: return
+        val length = WordDelete.lengthAfter(after)
+        if (length <= 0) return
+        revision?.expectDelete(0, length)
+        if (expectedSelStart >= 0) noteDeletedForLearning(expectedSelStart, expectedSelStart + length)
+        invalidateExpectedSelection()
+        ic.deleteSurroundingText(0, length)
+        refreshSuggestions()
+    }
+
+    /**
+     * Whether ⌦ is acting on the real text field rather than standing down in
+     * favour of one of the keyboard's own text boxes.
+     *
+     * The opposite shape to [backspaceEditsBuffer], and deliberately not the
+     * same list: the spelling draft (#204) has a caret of its own, so ⌦ works
+     * in it, while every other buffer is a plain string with nothing after a
+     * cursor to delete.
+     */
+    private fun forwardDeleteOwnsBuffer(): Boolean {
+        val state = _uiState.value
+        return !state.wordSpellActive &&
+            !state.typingTestActive && !state.aiCustomInputActive && !state.pluginTypingActive &&
+            !state.findReplaceTypingActive && !state.learnEditActive &&
+            !state.calcTypingActive && !state.converterTypingActive &&
+            !state.emojiSearchActive && !state.dictionarySearchActive &&
+            !state.clipboardSearchActive &&
+            !(state.mediaSearchActive && state.panel.hasMediaSearch)
+    }
+
+    /**
      * Whether a forward delete would still remove anything, so the held-repeat
      * loop stops at the end of the text instead of buzzing against nothing.
      */
     fun canForwardDelete(): Boolean {
         val state = _uiState.value
         state.wordSpell?.let { return it.hasSelection || it.cursor < it.draft.length }
-        if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive ||
-            state.findReplaceTypingActive || state.learnEditActive ||
-            state.calcTypingActive || state.converterTypingActive ||
-            state.emojiSearchActive || state.dictionarySearchActive ||
-            state.clipboardSearchActive ||
-            (state.mediaSearchActive && state.panel.hasMediaSearch)
-        ) {
-            return false
-        }
+        if (!forwardDeleteOwnsBuffer()) return false
         val ic = currentInputConnection ?: return false
         if (hasSelection(ic)) return true
         // A null answer means the editor can't say — keep deleting rather than
@@ -7535,17 +7583,29 @@ open class WMKeyboardService : InputMethodService() {
     // ---- backspace swipe with preview (issue #36) ----
 
     /**
-     * How much text behind the cursor a backspace swipe reads when it starts.
+     * How much text either side of the cursor a delete swipe reads when it
+     * starts.
      *
-     * Read once and kept, so dragging back to the right costs nothing and the
-     * editor is not asked the same question on every pointer event. It is also
-     * the swipe's reach: at the shipped step sizes even the character mode
-     * would need metres of dragging to walk past it.
+     * Read once and kept, so dragging back costs nothing and the editor is not
+     * asked the same question on every pointer event. It is also the swipe's
+     * reach: at the shipped step sizes even the character mode would need
+     * metres of dragging to walk past it.
      */
     private val deleteSwipeLookback = 1024
 
-    /** True once a backspace swipe has taken the field's selection over. */
+    /** True once a delete swipe has taken the field's selection over. */
     private var deleteSwipeActive = false
+
+    /**
+     * Which way the live swipe eats: ⌦ grows the selection past the cursor,
+     * backspace grows it behind (issue #226).
+     *
+     * Part of the swipe's state rather than an argument to the commit and
+     * cancel calls, because by then the gesture has nothing left to say: both
+     * of those only have to undo or keep what [onDeleteSwipeSelect] already
+     * put on the screen.
+     */
+    private var deleteSwipeForward = false
 
     /** Right edge of the preview: where the selection ended when the swipe began. */
     private var deleteSwipeEnd = -1
@@ -7556,17 +7616,26 @@ open class WMKeyboardService : InputMethodService() {
     /** Units the preview currently covers, so a repeat of the same step is free. */
     private var deleteSwipeUnits = 0
 
-    /** The text behind [deleteSwipeBase], read once when the swipe started. */
-    private var deleteSwipeBefore: CharSequence = ""
+    /**
+     * The text the swipe walks through, read once when it started: behind
+     * [deleteSwipeBase] for a backspace swipe, past [deleteSwipeEnd] for a
+     * forward one.
+     */
+    private var deleteSwipeText: CharSequence = ""
 
-    /** How far behind [deleteSwipeBase] 1, 2, 3... units reach, in UTF-16 units. */
+    /** How far into [deleteSwipeText] 1, 2, 3... units reach, in UTF-16 units. */
     private val deleteSwipeSteps = ArrayList<Int>()
 
     /**
-     * One step of a backspace swipe that deletes as it goes (the preview
-     * turned off, or an editor that could not show one).
+     * One step of a delete swipe that deletes as it goes (the preview turned
+     * off, or an editor that could not show one), and one tick of a hold that
+     * clears words (issue #216).
      */
-    fun onDeleteSwipeUnit(byWord: Boolean) {
+    fun onDeleteSwipeUnit(byWord: Boolean, forward: Boolean) {
+        if (forward) {
+            if (byWord) onForwardDeleteWord() else onForwardDelete()
+            return
+        }
         if (byWord) {
             onDeleteWord()
             return
@@ -7585,22 +7654,29 @@ open class WMKeyboardService : InputMethodService() {
      * what a release would delete. See [DeleteSwipeCallbacks.onSelect] for the
      * return value.
      */
-    fun onDeleteSwipeSelect(units: Int, byWord: Boolean): Int {
+    fun onDeleteSwipeSelect(units: Int, byWord: Boolean, forward: Boolean): Int {
         // Nothing to preview against a buffer the keyboard draws itself: it
         // has no selection, so the gesture falls back to deleting as it goes.
-        if (backspaceEditsBuffer()) return -1
+        // ⌦ asks its own question, since it stands down in a few places
+        // backspace still works in, and works in one (the spelling draft)
+        // backspace calls a buffer.
+        if (if (forward) forwardDeleteOwnsBuffer() else backspaceEditsBuffer()) return -1
         val ic = currentInputConnection ?: return -1
-        if (!deleteSwipeActive && !beginDeleteSwipe(ic)) return -1
+        if (deleteSwipeActive && deleteSwipeForward != forward) resetDeleteSwipe()
+        if (!deleteSwipeActive && !beginDeleteSwipe(ic, forward)) return -1
         val covered = minOf(units.coerceAtLeast(0), growDeleteSwipeSteps(units, byWord))
         if (covered == deleteSwipeUnits) return covered
         val length = if (covered <= 0) 0 else deleteSwipeSteps[covered - 1]
-        val start = (deleteSwipeBase - length).coerceAtLeast(0)
-        ic.setSelection(start, deleteSwipeEnd)
+        // The swipe only ever moves the edge it eats from; the other one is
+        // where the cursor (or the selection that was already there) left it.
+        val start = if (forward) deleteSwipeBase else (deleteSwipeBase - length).coerceAtLeast(0)
+        val end = if (forward) deleteSwipeEnd + length else deleteSwipeEnd
+        ic.setSelection(start, end)
         // Recorded directly for the reason selectWordAtCursor does it: the
         // editor's echo is behind, and until it lands a backspace would go by
         // the stale collapsed caret instead of the range now selected.
         expectedSelStart = start
-        expectedSelEnd = deleteSwipeEnd
+        expectedSelEnd = end
         deleteSwipeUnits = covered
         return covered
     }
@@ -7612,8 +7688,12 @@ open class WMKeyboardService : InputMethodService() {
             resetDeleteSwipe()
             return
         }
+        val forward = deleteSwipeForward
         // One swipe, one event — however many characters it takes with it.
-        recordStat { onBackspace(System.currentTimeMillis(), SystemClock.uptimeMillis()) }
+        // Counted as a backspace only when it was one: a ⌦ swipe eats text the
+        // typist has not written yet, which is not what the corrections figure
+        // is about.
+        if (!forward) recordStat { onBackspace(System.currentTimeMillis(), SystemClock.uptimeMillis()) }
         clearCaretWord()
         dropComposingForSelectionEdit(ic)
         // The swipe recorded the range it selected (see growDeleteSwipe).
@@ -7623,6 +7703,14 @@ open class WMKeyboardService : InputMethodService() {
         lastGestureWord = null
         lastRevertible = null
         clearSwapOffer()
+        if (forward) {
+            // Nothing before the cursor moved, so the bigram context still
+            // holds and only the strip's view of the tail changed — the same
+            // reasoning [deleteForwardFromField] works by.
+            resetDeleteSwipe()
+            refreshSuggestions()
+            return
+        }
         // What was deleted is gone as context; whatever now sits behind the
         // cursor is the real previous word. Same reasoning as [onDeleteWord].
         syncPreviousWordFromField(ic)
@@ -7648,7 +7736,7 @@ open class WMKeyboardService : InputMethodService() {
      * say where its cursor is, which is the one case the preview cannot work
      * in at all.
      */
-    private fun beginDeleteSwipe(ic: InputConnection): Boolean {
+    private fun beginDeleteSwipe(ic: InputConnection, forward: Boolean): Boolean {
         // A word in progress has to become ordinary text before a selection
         // can cover it: a selection inside a composing region is honored
         // differently by every editor, and the preview has to show exactly
@@ -7661,9 +7749,18 @@ open class WMKeyboardService : InputMethodService() {
         deleteSwipeBase = extracted.startOffset + minOf(start, end)
         deleteSwipeEnd = extracted.startOffset + maxOf(start, end)
         if (deleteSwipeBase < 0 || deleteSwipeEnd < deleteSwipeBase) return false
-        // Reads the text before the selection, which is exactly the text
-        // before [deleteSwipeBase] — the edge the swipe walks left from.
-        deleteSwipeBefore = ic.getTextBeforeCursor(deleteSwipeLookback, 0) ?: ""
+        // The text on the side the swipe eats into: before [deleteSwipeBase]
+        // going left, past [deleteSwipeEnd] going right. Either call reads from
+        // the live selection edge, which is the edge that matters, because
+        // nothing has moved the selection yet.
+        deleteSwipeText = (
+            if (forward) {
+                ic.getTextAfterCursor(deleteSwipeLookback, 0)
+            } else {
+                ic.getTextBeforeCursor(deleteSwipeLookback, 0)
+            }
+            ) ?: ""
+        deleteSwipeForward = forward
         deleteSwipeSteps.clear()
         deleteSwipeUnits = 0
         deleteSwipeActive = true
@@ -7676,12 +7773,24 @@ open class WMKeyboardService : InputMethodService() {
      * swipe has reached the start of what it read.
      */
     private fun growDeleteSwipeSteps(units: Int, byWord: Boolean): Int {
-        val text = deleteSwipeBefore
+        val text = deleteSwipeText
         while (deleteSwipeSteps.size < units) {
             val taken = deleteSwipeSteps.lastOrNull() ?: 0
             if (taken >= text.length) break
-            val head = text.subSequence(0, text.length - taken)
-            val step = if (byWord) WordDelete.lengthBefore(head) else charDeleteLength(head)
+            // What is left to eat, with the part already covered trimmed off
+            // the near end — the tail of the text going left, the head of it
+            // going right.
+            val rest = if (deleteSwipeForward) {
+                text.subSequence(taken, text.length)
+            } else {
+                text.subSequence(0, text.length - taken)
+            }
+            val step = when {
+                deleteSwipeForward && byWord -> WordDelete.lengthAfter(rest)
+                deleteSwipeForward -> EmojiGraphemes.forwardDeleteLength(rest).coerceAtLeast(1)
+                byWord -> WordDelete.lengthBefore(rest)
+                else -> charDeleteLength(rest)
+            }
             if (step <= 0) break
             deleteSwipeSteps.add(taken + step)
         }
@@ -7694,7 +7803,8 @@ open class WMKeyboardService : InputMethodService() {
         deleteSwipeUnits = 0
         deleteSwipeBase = -1
         deleteSwipeEnd = -1
-        deleteSwipeBefore = ""
+        deleteSwipeForward = false
+        deleteSwipeText = ""
         deleteSwipeSteps.clear()
     }
 

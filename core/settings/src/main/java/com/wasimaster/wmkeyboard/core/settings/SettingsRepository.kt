@@ -433,6 +433,17 @@ data class KeyRepeatSettings(
     /** Backspace and forward-delete, including the panel backspaces. */
     val deleteMs: Int = 50,
     /**
+     * The same hold when [TextEditingSettings.deleteHoldDeletesWords] turns it
+     * into a word clear (issue #216).
+     *
+     * Slower than [deleteMs], and its own number rather than a multiple of it,
+     * because the two are held for different lengths of time: 50 ms a
+     * character is a second per line, while 50 ms a *word* empties a paragraph
+     * before a finger can lift. The default is roughly a word every seventh of
+     * a second — fast enough to be worth holding, slow enough to watch.
+     */
+    val wordDeleteMs: Int = 140,
+    /**
      * The spacebar, at half the cadence of backspace. A held space overshoots
      * in a way a held backspace does not: the extra spaces are invisible until
      * the word after them lands in the wrong place.
@@ -3831,6 +3842,35 @@ data class TextEditingSettings(
      * every character costs the same pull.
      */
     val backspaceCharStepDp: Int = 20,
+    /**
+     * A held delete key clears whole words instead of characters, once the
+     * repeat starts (issue #216).
+     *
+     * The tap is untouched either way — one press is still one character, so
+     * the precise thing a delete key is for stays where it was. Only the
+     * repeat changes, which is the part nobody holds down for one letter.
+     *
+     * Off by default: the character repeat is what every keyboard does, and
+     * word-at-a-time under a finger is fast enough to be startling for anyone
+     * who did not ask for it. [KeyRepeatSettings.wordDeleteMs] is how fast it
+     * goes when it is on.
+     *
+     * Covers ⌦ as well as backspace (issue #226), each clearing the way its
+     * own key points.
+     */
+    val deleteHoldDeletesWords: Boolean = false,
+    /**
+     * Dragging sideways on the ⌦ key deletes forward, the way the same drag on
+     * backspace deletes behind (issue #226).
+     *
+     * The finger travels the way the deletion travels, so the gesture is a
+     * rightward drag here and a leftward one on backspace. Everything else
+     * about it — [backspaceSwipeUnit], [backspaceSwipePreview] and the two
+     * step distances — is shared with backspace rather than doubled: the two
+     * keys are one gesture pointed two ways, and a user who tunes the pull on
+     * one has said what they want from the other.
+     */
+    val forwardDeleteSwipe: Boolean = true,
 )
 
 /**
@@ -6221,6 +6261,7 @@ class SettingsRepository(private val context: Context) {
         // keys below, so a cadence tuned before the split survives the upgrade.
         private val KEY_REPEAT_INTERVAL = intPreferencesKey("key_repeat_interval")
         private val KEY_REPEAT_DELETE = intPreferencesKey("key_repeat_delete")
+        private val KEY_REPEAT_WORD_DELETE = intPreferencesKey("key_repeat_word_delete")
         private val KEY_REPEAT_SPACE = intPreferencesKey("key_repeat_space")
         private val KEY_REPEAT_START_DELAY = intPreferencesKey("key_repeat_start_delay")
         private val LONG_PRESS_HINTS = booleanPreferencesKey("long_press_hints")
@@ -6394,6 +6435,8 @@ class SettingsRepository(private val context: Context) {
         private val BACKSPACE_SWIPE_UNIT = stringPreferencesKey("backspace_swipe_unit")
         private val BACKSPACE_SWIPE_PREVIEW = booleanPreferencesKey("backspace_swipe_preview")
         private val BACKSPACE_CHAR_STEP_DP = intPreferencesKey("backspace_char_step_dp")
+        private val DELETE_HOLD_DELETES_WORDS = booleanPreferencesKey("delete_hold_deletes_words")
+        private val FORWARD_DELETE_SWIPE = booleanPreferencesKey("forward_delete_swipe")
         private val PUNCTUATION_CHIPS = stringPreferencesKey("punctuation_chips")
         private val SUGGESTION_SLOT_COUNT = intPreferencesKey("suggestion_slot_count")
         private val SUGGESTION_SCROLLABLE = booleanPreferencesKey("suggestion_scrollable")
@@ -7361,6 +7404,7 @@ class SettingsRepository(private val context: Context) {
             keyRepeat = KeyRepeatSettings(
                 deleteMs = p[KEY_REPEAT_DELETE] ?: p[KEY_REPEAT_INTERVAL]
                     ?: defaults.keyRepeat.deleteMs,
+                wordDeleteMs = p[KEY_REPEAT_WORD_DELETE] ?: defaults.keyRepeat.wordDeleteMs,
                 spaceMs = p[KEY_REPEAT_SPACE] ?: p[KEY_REPEAT_INTERVAL]
                     ?: defaults.keyRepeat.spaceMs,
                 startDelayMs = p[KEY_REPEAT_START_DELAY] ?: defaults.keyRepeat.startDelayMs,
@@ -7708,6 +7752,10 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.textEditing.backspaceSwipePreview,
                 backspaceCharStepDp = p[BACKSPACE_CHAR_STEP_DP]
                     ?: defaults.textEditing.backspaceCharStepDp,
+                deleteHoldDeletesWords = p[DELETE_HOLD_DELETES_WORDS]
+                    ?: defaults.textEditing.deleteHoldDeletesWords,
+                forwardDeleteSwipe = p[FORWARD_DELETE_SWIPE]
+                    ?: defaults.textEditing.forwardDeleteSwipe,
             ),
             trackpad = TrackpadSettings(
                 stepXDp = p[TRACKPAD_STEP_X_DP] ?: defaults.trackpad.stepXDp,
@@ -8538,6 +8586,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setBackspaceSwipePreview(value: Boolean) =
         editPrefs { it[BACKSPACE_SWIPE_PREVIEW] = value }
+
+    suspend fun setDeleteHoldDeletesWords(value: Boolean) =
+        editPrefs { it[DELETE_HOLD_DELETES_WORDS] = value }
+
+    suspend fun setForwardDeleteSwipe(value: Boolean) =
+        editPrefs { it[FORWARD_DELETE_SWIPE] = value }
 
     suspend fun setBackspaceCharStepDp(value: Int) =
         editPrefs { it[BACKSPACE_CHAR_STEP_DP] = value.coerceIn(8, 48) }
@@ -12140,6 +12194,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setDeleteRepeatIntervalMs(value: Int) =
         editPrefs { it[KEY_REPEAT_DELETE] = value.coerceIn(20, 200) }
+
+    suspend fun setWordDeleteRepeatIntervalMs(value: Int) =
+        editPrefs { it[KEY_REPEAT_WORD_DELETE] = value.coerceIn(60, 500) }
 
     suspend fun setSpaceRepeatIntervalMs(value: Int) =
         editPrefs { it[KEY_REPEAT_SPACE] = value.coerceIn(20, 200) }

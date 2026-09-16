@@ -282,6 +282,15 @@ internal fun TypingSettings(
                 }
             }
         }
+        item {
+            ToggleSetting(
+                R.string.typing_forward_delete_swipe_title,
+                stringResource(R.string.typing_forward_delete_swipe_subtitle),
+                settings.textEditing.forwardDeleteSwipe,
+                info = stringResource(R.string.typing_forward_delete_swipe_info),
+                default = SettingsDefaults.textEditing.forwardDeleteSwipe,
+            ) { scope.launch { repository.setForwardDeleteSwipe(it) } }
+        }
     }
 
     SettingsGroup(stringResource(R.string.typing_group_enter_title)) {

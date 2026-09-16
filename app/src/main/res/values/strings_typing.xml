@@ -10,7 +10,7 @@
     <string name="typing_group_glide_title">Glide typing</string>
     <string name="typing_group_glide_trail_title">Glide trail and preview</string>
     <string name="typing_group_spacebar_title">Spacebar gestures</string>
-    <string name="typing_group_backspace_title">Backspace</string>
+    <string name="typing_group_backspace_title">Delete keys</string>
     <string name="typing_group_enter_title">Enter key</string>
     <string name="typing_group_volume_title">Volume keys</string>
     <string name="typing_group_hardware_title">Physical keyboard</string>
@@ -609,6 +609,10 @@
     <string name="typing_backspace_preview_title">Show what you will delete</string>
     <string name="typing_backspace_preview_subtitle">Select the text as you swipe, and delete it when you lift your finger</string>
     <string name="typing_backspace_preview_info">The swipe highlights the text it is about to delete instead of deleting as it goes, so you can see how far you have got. Swipe back to the right to give text back, and lift your finger to delete what is left highlighted. Turn this off to delete each word or character the moment you swipe past it.</string>
+
+    <string name="typing_forward_delete_swipe_title">Swipe on forward delete</string>
+    <string name="typing_forward_delete_swipe_subtitle">Swipe right on the forward delete key to clear the text ahead</string>
+    <string name="typing_forward_delete_swipe_info">Press the forward delete key and swipe right. Each step of the swipe deletes one more word, or one more character, ahead of the cursor. It is the backspace swipe pointed the other way, and it follows the same three settings above: what one step takes off, whether you see it first, and how far you drag for one step.\n\nThe forward delete key is not on the standard keyboard. Add it to a row, or to a key you press and hold, in the layout editor.</string>
 
     <!-- ==== Typing settings: enter key ==== -->
     <string name="typing_shift_enter_title">Shift and Enter type a new line</string>

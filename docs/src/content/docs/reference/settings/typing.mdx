@@ -283,9 +283,9 @@ Full writeup: [One-time codes](/smart/one-time-codes/), and [Permissions](/priva
 
 Full writeup: [Gestures](/typing/gestures/) for the spacebar/backspace/volume-key drags, [Glide typing](/typing/glide-typing/) for the glide sub-settings, and [Handwriting](/tools/handwriting/#handwriting-without-opening-the-panel) for handwrite mode.
 
-## Backspace
+## Delete keys
 
-<SettingsPath path="Typing / Backspace" />
+<SettingsPath path="Typing / Delete keys" />
 
 | Setting | Type | Default | Shown when |
 | --- | --- | --- | --- |
@@ -294,8 +294,11 @@ Full writeup: [Gestures](/typing/gestures/) for the spacebar/backspace/volume-ke
 | Show what you will delete | Toggle | On | Swipe to delete on |
 | Word delete distance | Slider, 32–120 dp | 72 dp | Swipe deletes = Words |
 | Character delete distance | Slider, 8–48 dp | 20 dp | Swipe deletes = Characters |
+| Swipe on forward delete | Toggle | On | always |
 
-A leftward drag on <KeyCap>⌫</KeyCap> deletes more than the one character a press does, and **Swipe deletes** sets what one step of it takes off. **Word delete distance** is how far you drag before the first word goes, with later words coming off faster on a fixed curve, so that one number tunes the whole gesture; **Character delete distance** is the flat cost of one character, with no curve. **Show what you will delete** makes the swipe select the text and delete it when you lift your finger, so a swipe that went too far can be dragged back. Full writeup: [Gestures](/typing/gestures/#deleting-more-than-a-character-with-backspace).
+A leftward drag on <KeyCap>⌫</KeyCap> deletes more than the one character a press does, and **Swipe deletes** sets what one step of it takes off. **Word delete distance** is how far you drag before the first word goes, with later words coming off faster on a fixed curve, so that one number tunes the whole gesture; **Character delete distance** is the flat cost of one character, with no curve. **Show what you will delete** makes the swipe select the text and delete it when you lift your finger, so a swipe that went too far can be dragged back.
+
+**Swipe on forward delete** gives <KeyCap>⌦</KeyCap> the same drag pointed the other way: rightward, over the text after the cursor. It has its own on/off switch and then borrows every other row above, so the two delete keys cannot end up tuned differently. No built-in layout carries a <KeyCap>⌦</KeyCap> key; add one in the [layout editor](/languages/custom-layouts/). Holding either delete key to clear whole words is a Key press setting instead, under [Timing](/reference/settings/keypress/#timing). Full writeup: [Gestures](/typing/gestures/#deleting-more-than-a-character-with-backspace).
 
 ## Enter key
 

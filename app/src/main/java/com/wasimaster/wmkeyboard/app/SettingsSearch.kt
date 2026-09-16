@@ -234,6 +234,7 @@ private fun SearchStrings.typingRows(): List<SettingsSearchEntry> {
         row(R.string.typing_backspace_preview_title, R.string.typing_backspace_preview_subtitle),
         row(R.string.typing_backspace_step_title, R.string.typing_backspace_step_subtitle),
         row(R.string.typing_backspace_char_step_title, R.string.typing_backspace_char_step_subtitle),
+        row(R.string.typing_forward_delete_swipe_title, R.string.typing_forward_delete_swipe_subtitle),
         row(R.string.typing_shift_enter_title, R.string.typing_shift_enter_subtitle),
         row(R.string.typing_volume_cursor_title, R.string.typing_volume_cursor_subtitle),
         row(R.string.typing_volume_cursor_media_title, R.string.typing_volume_cursor_media_subtitle),
@@ -507,6 +508,8 @@ private fun SearchStrings.keyPressRows(): List<SettingsSearchEntry> {
         ),
         row(R.string.keypress_long_press_delay_title, R.string.keypress_long_press_delay_subtitle, weight = EntryWeight.PRIMARY),
         row(R.string.keypress_delete_repeat_title, R.string.keypress_delete_repeat_subtitle),
+        row(R.string.keypress_hold_words_title, R.string.keypress_hold_words_subtitle),
+        row(R.string.keypress_word_delete_repeat_title, R.string.keypress_word_delete_repeat_subtitle),
         row(R.string.keypress_space_repeat_title, R.string.keypress_space_repeat_subtitle),
         row(R.string.keypress_caps_lock_title, R.string.keypress_caps_lock_subtitle, weight = EntryWeight.PRIMARY),
     )

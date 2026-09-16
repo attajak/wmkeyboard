@@ -18074,8 +18074,11 @@ private fun Modifier.pointerInputKey(
                 }
             }
         }
-    } else if (key.action == KeyAction.Delete && backspaceSwipeDelete) {
-        // Backspace owns its whole gesture rather than bolting a drag onto
+    } else if (
+        (key.action == KeyAction.Delete && backspaceSwipeDelete) ||
+        (key.action == KeyAction.ForwardDelete && textEditing.forwardDeleteSwipe)
+    ) {
+        // A delete key owns its whole gesture rather than bolting a drag onto
         // the shared press handler: tap, hold-to-repeat and the delete swipe
         // are one state machine, so a drag can cleanly take over from the
         // repeat loop mid-press and the move events are consumed while it does.
@@ -18083,6 +18086,18 @@ private fun Modifier.pointerInputKey(
             hapticOnLongPressRelease, vibrateOnRepeat, soundOnRepeat, vibrateOnDeleteSwipe) {
             val slopPx = 10.dp.toPx()
             val byWord = textEditing.backspaceSwipeUnit == BackspaceSwipeUnit.WORD
+            // ⌦ runs the identical machine pointed the other way (issue #226):
+            // the finger travels the way the deletion travels, so every step is
+            // measured along [dir] and nothing else about the gesture forks.
+            val forward = key.action == KeyAction.ForwardDelete
+            val dir = if (forward) 1f else -1f
+            fun canDeleteHere(): Boolean = if (forward) canForwardDelete() else canDelete()
+            // The repeat clears whole words instead of characters (issue #216),
+            // at its own slower cadence — a word every 50 ms empties a
+            // paragraph before a finger can lift.
+            val holdWords = textEditing.deleteHoldDeletesWords
+            val repeatMs =
+                (if (holdWords) keyRepeat.wordDeleteMs else keyRepeat.deleteMs).toLong()
             // Words accelerate: the first costs a deliberate drag; later ones
             // get cheaper, down to a floor, so clearing a sentence is one long
             // pull but a flick can never take more than a word or two.
@@ -18128,10 +18143,13 @@ private fun Modifier.pointerInputKey(
                 val repeat = scope.launch {
                     delay(keyRepeat.startDelayMs.toLong())
                     longPressFired = true
-                    while (canDelete()) {
+                    while (canDeleteHere()) {
                         repeatFeedback(vibrateOnRepeat, soundOnRepeat, onKeyPress, onKeySound, onKeyHaptic)
-                        onKeyRepeat(key)
-                        delay(keyRepeat.deleteMs.toLong())
+                        // Through the swipe's own delete rather than the key's:
+                        // a word clear is the swipe's one-step call, and going
+                        // by the key would repeat a single character.
+                        if (holdWords) deleteSwipe.onDeleteUnit(true, forward) else onKeyRepeat(key)
+                        delay(repeatMs)
                     }
                 }
                 while (true) {
@@ -18149,7 +18167,10 @@ private fun Modifier.pointerInputKey(
                     if (swiping) {
                         // Claim the drag so nothing upstream reinterprets it.
                         change.consume()
-                        while (anchorX - change.position.x >= stepPx(taken)) {
+                        // How far the finger has gone *the way the deletion
+                        // goes* since the anchor; negative is a drag back.
+                        fun travelled(): Float = (change.position.x - anchorX) * dir
+                        while (travelled() >= stepPx(taken)) {
                             // Held over the whole iteration: the anchor only
                             // walks for a step that was actually taken, so a
                             // swipe stopped by the start of the text does not
@@ -18157,13 +18178,13 @@ private fun Modifier.pointerInputKey(
                             // the preview starts shrinking again.
                             val step = stepPx(taken)
                             if (previewing) {
-                                val covered = deleteSwipe.onSelect(taken + 1, byWord)
+                                val covered = deleteSwipe.onSelect(taken + 1, byWord, forward)
                                 if (covered >= 0) {
                                     // A preview that stops growing has reached
                                     // the start of the text: no buzz, and no
                                     // step, for a drag that deletes nothing.
                                     if (covered <= taken) break
-                                    anchorX -= step
+                                    anchorX += step * dir
                                     taken = covered
                                     stepFeedback()
                                     continue
@@ -18176,24 +18197,24 @@ private fun Modifier.pointerInputKey(
                                 previewing = false
                                 taken = 0
                             }
-                            if (!canDelete()) break
-                            anchorX -= step
+                            if (!canDeleteHere()) break
+                            anchorX += step * dir
                             taken++
                             stepFeedback()
-                            deleteSwipe.onDeleteUnit(byWord)
+                            deleteSwipe.onDeleteUnit(byWord, forward)
                         }
                         if (previewing) {
                             // Dragging back gives the text back a unit at a
                             // time — the whole point of selecting first. The
                             // step returned is the one that was spent to take
                             // the unit, so the gesture retraces its own path.
-                            while (taken > 0 && change.position.x - anchorX >= stepPx(taken - 1)) {
-                                anchorX += stepPx(taken - 1)
+                            while (taken > 0 && -travelled() >= stepPx(taken - 1)) {
+                                anchorX -= stepPx(taken - 1) * dir
                                 taken--
                                 stepFeedback()
-                                deleteSwipe.onSelect(taken, byWord)
+                                deleteSwipe.onSelect(taken, byWord, forward)
                             }
-                        } else if (change.position.x > anchorX) {
+                        } else if (travelled() < 0f) {
                             // Nothing to give back once the text is gone, so a
                             // reversal only re-anchors and resets the
                             // acceleration: it stops the run, never replays it.
@@ -18385,9 +18406,21 @@ private fun Modifier.pointerInputKey(
                                         // Space and the two deletes each hold to
                                         // a different purpose, so each has its
                                         // own cadence.
+                                        // A held delete key can clear whole
+                                        // words (issue #216), which is slower
+                                        // on purpose and so keeps its own
+                                        // number. The text-edit pad's own
+                                        // backspace is left out: it belongs to
+                                        // that tool's cadence.
+                                        val holdWords = textEditing.deleteHoldDeletesWords &&
+                                            (
+                                                key.action == KeyAction.Delete ||
+                                                    key.action == KeyAction.ForwardDelete
+                                                )
                                         val intervalMs = when {
                                             key.action == KeyAction.Space -> keyRepeat.spaceMs
                                             editOp != null -> textEditing.repeatMs
+                                            holdWords -> keyRepeat.wordDeleteMs
                                             else -> keyRepeat.deleteMs
                                         }.toLong()
                                         // Held backspace stops once there is
@@ -18407,7 +18440,18 @@ private fun Modifier.pointerInputKey(
                                                 vibrateOnRepeat, soundOnRepeat,
                                                 onKeyPress, onKeySound, onKeyHaptic,
                                             )
-                                            onKeyRepeat(key)
+                                            // The swipe's one-step call is what
+                                            // knows how to take a word; the key
+                                            // itself only ever takes one
+                                            // character.
+                                            if (holdWords) {
+                                                deleteSwipe.onDeleteUnit(
+                                                    true,
+                                                    key.action == KeyAction.ForwardDelete,
+                                                )
+                                            } else {
+                                                onKeyRepeat(key)
+                                            }
                                             delay(intervalMs)
                                         }
                                     } else if (key.clipboardAction != null) {
