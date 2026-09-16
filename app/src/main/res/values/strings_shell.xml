@@ -2,11 +2,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- Settings search screen: the search field and its two empty states. -->
+    <!-- Settings search screen: the search field and the line shown when it finds nothing. -->
     <!-- Placeholder inside the search field at the top of the search screen. -->
     <string name="shell_search_hint">Search settings</string>
-    <!-- Shown while the search field is still empty. The three quoted words are examples of what to type. -->
-    <string name="shell_search_help_body">Search every setting by name, for example \"haptic\", \"number row\" or \"incognito\". You can also search by the tool that the setting belongs to.</string>
     <!-- Shown when a search finds nothing. %1$s = the text the user typed. -->
     <string name="shell_search_empty">No setting matches \"<xliff:g id="query" example="haptic">%1$s</xliff:g>\".</string>
     <!-- Heading over the settings opened from search before, shown while the field is empty. -->

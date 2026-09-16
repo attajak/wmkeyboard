@@ -64,7 +64,7 @@ That's 30 screens in total: the 16 Home rows, plus fourteen sub-screens (Diction
 
 ## Searching instead of browsing
 
-Tap the magnifier on Home. A full-screen search field opens and takes focus, so you can type straight away. Before you type, the field shows a hint: search every setting by name (like "haptic", "number row" or "incognito"), or by the tool it belongs to.
+Tap the magnifier on Home. A full-screen search field opens and takes focus, so you can type straight away. There is nothing to read first: under an empty field sit the settings you last opened from search, newest first, and nothing at all until you have opened one. Type a setting's name ("haptic", "number row", "incognito"), or the name of the tool it belongs to.
 
 <PhoneFrame caption="Typing a query in Settings search. Each result carries a breadcrumb to the screen it lives on.">
   ![Typing a query in Settings search. Each result carries a breadcrumb to the screen it lives on.](@assets/screens/reference/settings/search-results.webp)
@@ -78,6 +78,10 @@ Weaker matches sit under a **Mentioned in the description** heading below the ra
 Tap a result and the owning screen opens, scrolled to that row, with a brief highlight on it. You never have to hunt for the setting you searched for. Toolbar tools are searchable too: every tool this build ships gets an entry automatically, whether or not you've turned it on, so a newly shipped tool is findable straight away, with no docs or search-index update behind it.
 
 A search can also succeed on a name another keyboard uses for the same feature. "Octopus" or "z10" finds Words on the keys, and "swype" or "flow" finds Glide typing. Neither word appears in the row's own title, and a row's own name still wins when it also matches.
+
+The list moves while you type, and the movement is the answer telling you what it did. The first letter puts a list on screen: the rows rise into place one after another from the top, so you can see how far down the list goes before you have read a word of it. Every letter after that edits the list you are already looking at. Rows that no longer match fade out, the rows that survive slide to their new places rather than blinking there, and the rows the new letter brought in fade in once the sliding has finished. A row that was fourth and is now first is visibly the same row that travelled, which is what lets you keep your eye on one result while you narrow the query around it. Deleting a letter runs the same thing backwards. Clearing the field, or typing a query nothing matches, cross-fades the whole page instead, because that is a different answer rather than the same answer rearranged.
+
+None of that runs when [Reduce motion](/reference/settings/accessibility/) is on. The rows simply appear in their new order.
 
 ## Putting one setting back
 
