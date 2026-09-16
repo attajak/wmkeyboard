@@ -168,13 +168,22 @@ object SystemUserDictionary {
      * vocabulary by orders of magnitude. Multi-word entries index as their
      * parts: "on my way" is not a word anyone types as one token, but each
      * part is. Pure, so it is unit-testable off the device.
+     *
+     * Only a row that *is* one word hands over a spelling, though. The
+     * capitals in "User Dictionary Manager" belong to the phrase — that is how
+     * a title is written — and say nothing about how the user spells "user" on
+     * its own, so lifting them onto the parts would capitalize three ordinary
+     * words everywhere the keyboard writes them and make the case vote read
+     * them as words that are never lower case (#221). The phrase itself is
+     * still reachable as written: it is what the row's shortcut expands to.
      */
     fun index(words: Iterable<String>): Entries {
         val keys = LinkedHashSet<String>()
         val cases = HashMap<String, String>()
         for (raw in words) {
-            for (part in raw.split(WHITESPACE)) {
-                val trimmed = part.trim()
+            val parts = raw.split(WHITESPACE).map { it.trim() }.filter { it.isNotEmpty() }
+            val singleWord = parts.size == 1
+            for (trimmed in parts) {
                 val key = WordKey.of(trimmed)
                 if (key.length < 2) continue
                 keys.add(key)
@@ -184,7 +193,9 @@ object SystemUserDictionary {
                 // anything the keyboard offers (#44). First spelling wins: two
                 // rows differing only in case are one word, and re-deciding it
                 // per row would make the answer depend on cursor order.
-                if (trimmed != key) cases.putIfAbsent(key, WordKey.surface(trimmed))
+                if (singleWord && trimmed != key) {
+                    cases.putIfAbsent(key, WordKey.surface(trimmed))
+                }
             }
         }
         if (keys.isEmpty()) return Entries.EMPTY

@@ -1222,6 +1222,37 @@ class SuggestionEngineTest {
         assertTrue("AOSP" in e.suggest("aos", previousWord = null))
     }
 
+    @Test fun aCapitalisedPhraseDoesNotCapitaliseItsWords() {
+        val entries = SystemUserDictionary.index(listOf("User Dictionary Manager"))
+        // The parts are known words, as any platform entry's parts are (#45)...
+        assertTrue(entries.source.contains("user"))
+        assertTrue(entries.source.contains("manager"))
+        // ...but the phrase's title case is the phrase's, not each word's (#221).
+        assertFalse("user" in entries.shapes)
+        assertFalse("dictionary" in entries.shapes)
+        assertFalse("manager" in entries.shapes)
+
+        val dictionary = Trie().apply { insert("user", 100) }
+        val e = SuggestionEngine(dictionary, BengaliPhoneticIndex(emptyList()), UserLexicon(null))
+        e.systemDictionary = entries.source
+        e.systemWordCases = entries.shapes
+        // Typing or gliding the word gets the word back, lower case.
+        assertTrue("user" in e.suggest("use", previousWord = null))
+        assertFalse("User" in e.suggest("use", previousWord = null))
+        // And the case vote still reads it as a word that is spelled lower case.
+        assertTrue(e.spellsInLowerCase("user"))
+    }
+
+    @Test fun aSingleWordRowStillCapitalisesWhenAPhraseMentionsIt() {
+        // Row order must not decide the answer either way round.
+        val phraseFirst = SystemUserDictionary.index(listOf("Boston Red Sox", "Boston"))
+        val wordFirst = SystemUserDictionary.index(listOf("Boston", "Boston Red Sox"))
+        assertEquals("Boston", phraseFirst.shapes["boston"])
+        assertEquals("Boston", wordFirst.shapes["boston"])
+        assertFalse("red" in phraseFirst.shapes)
+        assertFalse("red" in wordFirst.shapes)
+    }
+
     @Test fun aLearnedCapitalIsPutBackOnCompletionsAndNextWords() {
         val lexicon = UserLexicon(null)
         val e = SuggestionEngine(Trie(), BengaliPhoneticIndex(emptyList()), lexicon)
