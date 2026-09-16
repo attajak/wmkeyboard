@@ -1,0 +1,159 @@
+---
+title: "Link builder"
+description: "Build a wmkeyboard:// link to any settings screen, any single setting, or any addon, and read what an existing link will do. Copy it as a plain link, an intent:// URL, an adb command, Markdown, HTML or a QR code."
+sidebar:
+  order: 4
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import LinkBuilder from '@components/LinkBuilder.tsx';
+
+Every settings screen, every single setting and every addon has a
+`wmkeyboard://` address. This page writes one for you. Pick what the link
+should open, and the builder shows the address, says exactly what the app
+will do with it, and hands you the same link in every spelling you might
+need: the plain link, Chrome's `intent://` form with a fallback page, an
+`adb` command, Markdown, HTML and a QR code.
+
+<LinkBuilder client:load />
+
+## Using it
+
+<Steps>
+
+1. Choose a tab. **A settings screen** opens one screen. **One setting** opens
+   whichever screen holds a row and scrolls to it. **The addon store** opens
+   the Add-ons screen, a repository ready to add, or one addon's page.
+   **By hand** lets you type any host, path and query. **Read a link** does
+   the reverse and explains a link you already have.
+
+2. Fill in the fields. A screen that names one of your own things, such as
+   a theme or a snippet, asks for its id. A screen with a fixed set of
+   values, such as a tool or a panel, gives you a list.
+
+3. Read the line under the link. It says what the app does on arrival, in
+   the same words the app's own checks use. A green line is a link that
+   lands somewhere. A red one is a link the app refuses or opens nothing
+   for.
+
+4. Press **Copy**, or open **Other spellings** for the `intent://`, `adb`,
+   Markdown and HTML forms. On an Android phone with WM Keyboard installed,
+   **Open in app** follows the link right away.
+
+</Steps>
+
+The builder checks a link against the same rules the app applies. The screen
+list is the app's own route allowlist, the setting search runs over the same
+index as settings search in the app, and a repository address resolves the
+way the Add dialog resolves it. If the builder says a link goes nowhere, the
+app agrees.
+
+## Where a wmkeyboard:// link is not allowed to be a link
+
+Plenty of places refuse a custom scheme. Most chat apps only make `http` and
+`https` addresses tappable, many Markdown renderers drop anything else, and a
+QR reader usually hands the code to a browser rather than to Android. For
+those, the builder offers a **Web address (https)** spelling, which is this
+page's sibling at `/open/`:
+
+```
+https://wmkeyboard.pages.dev/open/#wmkeyboard://settings/themes
+```
+
+That address is an ordinary web page, so everything treats it as a link. Open
+it on an Android phone and it says what the link opens, then offers a button
+to open it. The page checks whether WM Keyboard is installed first, using the
+same check as the settings chips on this site, and draws what fits:
+
+| What the page can tell | What you get |
+|---|---|
+| The app is installed | One **Open in WM Keyboard** button. |
+| The app is missing | Where to install it, and a **Try to open anyway** button, because a copy installed before this check existed also reads as missing. |
+| The browser cannot tell, as in Firefox | The **Open in WM Keyboard** button, with the install list one press away. |
+| You are not on Android | A QR code to scan with your phone, since nothing on a desktop can open the address. |
+
+The page never opens the link by itself. You press the button. It also reads
+the address the same way this builder does, so a link that goes nowhere says
+so on arrival instead of opening the app to an empty screen. It names what it
+found in the app's own words, so a link to one setting says which setting
+rather than showing you its internal name. The raw address is folded away at
+the bottom of the card, for when you want to see it.
+
+Shorthands work too, for when you write the address by hand:
+
+```
+https://wmkeyboard.pages.dev/open/?route=themes
+https://wmkeyboard.pages.dev/open/?setting=typing_autocorrect_title
+https://wmkeyboard.pages.dev/open/?repo=github.com/wasi-master/wmkeyboard-addon-repository&id=blockland
+```
+
+Prefer the `#` form when you can. What follows a `#` never leaves the browser,
+so the address you are opening stays out of server logs.
+
+## Which spelling to use
+
+| You are putting the link in | Use |
+|---|---|
+| A chat message, an email, a note | The plain link. Android turns it into a tap target and opens the app. |
+| A chat app, a README, a forum post, a QR code | The web address at `/open/`, described above. It is the only form everything treats as a link. |
+| A web page or a README read in Chrome on Android | The `intent://` form. It names the package, so Chrome never asks which app should open it, and it opens the fallback page when the app is not installed. Other browsers do not understand it, so give them the plain link as well. |
+| A terminal with a phone on USB | The `adb` command. |
+| Another app on the same device | The intent extras form, shown for settings links. It is what an explicit intent to the settings activity would carry. |
+| A poster or a screen | The QR code. Scanning it on Android offers to open the app. |
+
+The plain link and the opaque form (`wmkeyboard:settings/themes`, no slashes)
+are the same address to the app. Prefer the one with slashes. More things
+recognize it as a link.
+
+## What a link can and cannot do
+
+A link only ever navigates. It cannot flip a switch, press a button or change
+a value. A link to one setting scrolls the row into view and pulses it, and
+you are the one who then touches it. An addon link opens a page with an
+Install button on it and never presses it, and a repository link pre-fills
+the Add dialog and never confirms it. The screens that show what the keyboard
+has learned stay behind the [fingerprint lock](/reference/settings/app-lock/)
+when it is on, since the lock gates by screen and treats a link exactly as it
+treats a tap.
+
+A link the app cannot place opens nothing. It does not fall back to the home
+screen, because landing you somewhere else would read as the link having
+worked.
+
+## Details & edge cases
+
+- **Screen names are matched case-insensitively.** `settings/Themes` and
+  `settings/themes` land on the same screen. Ids after them are matched
+  exactly, since they are your data and not a word the app chose.
+- **A setting is named by the resource name of its title**, such as
+  `typing_autocorrect_title`. Lowercase letters, digits and underscores,
+  starting with a letter, at most 128 characters. Anything else is ignored:
+  with a screen named alongside it the screen still opens, and on its own
+  the link goes nowhere.
+- **One name can live on several screens.** The backup screen carries a
+  toggle for nearly every feature. On its own, `wmkeyboard://setting/<name>`
+  goes to the screen with the strongest claim, which is the order settings
+  search already ranks them in. Tick **Name the screen too** to pin the row
+  to one screen.
+- **Values are percent-encoded for you.** A slash inside an id becomes
+  `%2F`, a space becomes `%20`. The app decodes them on arrival. A raw space
+  breaks the whole address, and the reader tab will tell you so.
+- **A repository address resolves before the link is built.** A GitHub,
+  Codeberg, GitLab, sourcehut or Bitbucket page becomes the raw manifest URL,
+  a folder gets `wmkeyboard-repo.json` appended, and a plain `.json` URL
+  is taken as is. Only https is accepted. See
+  [Installing addons](/addons/installing/) for the full table.
+- **The addon id list comes from this site's snapshot** of the two seeded
+  repositories. A repository you add by hand asks for the id as text, and
+  the builder cannot check it, since it does not fetch anything.
+- **Route and value lists are checked against the app's source.**
+  `node scripts/check-deep-link-routes.mjs` in `docs/` fails when a screen,
+  tool, panel, script, storage category or licence file is added to the app
+  and not here.
+- **The `/open/` page is not indexed** and carries no link of its own. It is
+  a doorway, so it only does anything with an address after its `#`.
+- **`?link=` and `#wmkeyboard:…` pre-fill the reader.** Open
+  `/reference/link-builder/?link=wmkeyboard://settings/themes` and the page
+  starts on the **Read a link** tab with that address explained.
+- The full route table, the launcher shortcuts and the file associations are
+  on [Deep links & launcher shortcuts](/reference/deep-links/).

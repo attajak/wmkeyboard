@@ -1,0 +1,341 @@
+/* The wmkeyboard:// link builder (LinkBuilder.tsx). Scoped under .lb; the
+   root also carries .not-content so Starlight's sibling margins stay out. */
+
+.lb {
+	--lb-border: var(--sl-color-gray-5);
+	--lb-bg: var(--sl-color-gray-6);
+	--lb-field-bg: var(--sl-color-gray-7, var(--sl-color-black));
+	--lb-ok: #3aa76d;
+	--lb-warn: #d99a2b;
+	--lb-bad: #e5484d;
+	margin-block: 1.5rem;
+	border: 1px solid var(--lb-border);
+	border-radius: 12px;
+	background: var(--lb-bg);
+	font-size: var(--sl-text-sm);
+	line-height: 1.5;
+}
+:root[data-theme='light'] .lb {
+	--lb-field-bg: #fff;
+}
+
+.lb-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+	padding: 0.5rem 0.5rem 0;
+	border-bottom: 1px solid var(--lb-border);
+}
+.lb-tab {
+	padding: 0.5rem 0.85rem;
+	border: 1px solid transparent;
+	border-bottom: none;
+	border-radius: 8px 8px 0 0;
+	background: none;
+	color: var(--sl-color-gray-2);
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+	margin-bottom: -1px;
+}
+.lb-tab:hover {
+	color: var(--sl-color-white);
+}
+.lb-tab.is-active {
+	background: var(--lb-bg);
+	border-color: var(--lb-border);
+	border-bottom-color: var(--lb-bg);
+	color: var(--sl-color-accent-high);
+}
+
+.lb-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem;
+}
+@media (min-width: 50rem) {
+	.lb-panel {
+		padding: 1.25rem;
+	}
+}
+
+.lb-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+.lb-label {
+	font-weight: 600;
+	color: var(--sl-color-white);
+}
+.lb-hint {
+	color: var(--sl-color-gray-3);
+	font-size: var(--sl-text-xs);
+}
+.lb-hint code,
+.lb-picked code,
+.lb-results code,
+.lb-explain code {
+	font-size: 0.9em;
+}
+
+.lb-input,
+.lb-select {
+	width: 100%;
+	padding: 0.5rem 0.7rem;
+	border: 1px solid var(--lb-border);
+	border-radius: 8px;
+	background: var(--lb-field-bg);
+	color: var(--sl-color-white);
+	font: inherit;
+	line-height: 1.4;
+}
+.lb-input:focus,
+.lb-select:focus {
+	outline: none;
+	border-color: var(--sl-color-accent);
+	box-shadow: 0 0 0 3px var(--sl-color-accent-low);
+}
+.lb-input[aria-invalid='true'] {
+	border-color: var(--lb-bad);
+}
+.lb-mono {
+	font-family: var(--__sl-font-mono);
+	font-size: 0.9em;
+}
+.lb-textarea {
+	min-height: 4.5rem;
+	resize: vertical;
+}
+.lb-row {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+.lb-row > .lb-input,
+.lb-row > .lb-select {
+	flex: 1 1 8rem;
+	min-width: 0;
+}
+.lb-check {
+	display: flex;
+	gap: 0.5rem;
+	align-items: flex-start;
+}
+.lb-check input {
+	margin-top: 0.25rem;
+	accent-color: var(--sl-color-accent);
+}
+
+.lb-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.45rem 0.9rem;
+	border: 1px solid var(--lb-border);
+	border-radius: 999px;
+	background: var(--lb-field-bg);
+	color: var(--sl-color-white);
+	font: inherit;
+	font-weight: 600;
+	text-decoration: none;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.lb-btn:hover {
+	border-color: var(--sl-color-accent);
+}
+.lb-btn:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+.lb-btn-sm {
+	padding: 0.3rem 0.7rem;
+	font-size: var(--sl-text-xs);
+}
+.lb-btn-primary {
+	background: var(--sl-color-accent);
+	border-color: var(--sl-color-accent);
+	color: var(--sl-color-black);
+}
+.lb-btn-ok {
+	border-color: var(--lb-ok);
+	color: var(--lb-ok);
+}
+.lb-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+
+/* search results */
+.lb-picker {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+.lb-picked {
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem 0.5rem;
+	align-items: baseline;
+}
+.lb-results {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-height: 18rem;
+	overflow-y: auto;
+	border: 1px solid var(--lb-border);
+	border-radius: 8px;
+	background: var(--lb-field-bg);
+}
+.lb-results li {
+	margin: 0;
+	padding: 0;
+}
+.lb-results li.lb-hint {
+	padding: 0.6rem 0.75rem;
+}
+.lb-results button {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 0 0.75rem;
+	width: 100%;
+	padding: 0.45rem 0.75rem;
+	border: 0;
+	border-bottom: 1px solid var(--lb-border);
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+.lb-results li:last-child button {
+	border-bottom: 0;
+}
+.lb-results button:hover,
+.lb-results button[aria-selected='true'] {
+	background: var(--sl-color-accent-low);
+}
+.lb-result-title {
+	color: var(--sl-color-white);
+	font-weight: 600;
+}
+.lb-result-path {
+	grid-column: 1;
+	color: var(--sl-color-gray-3);
+	font-size: var(--sl-text-xs);
+}
+.lb-results button code {
+	grid-column: 2;
+	grid-row: 1 / span 2;
+	align-self: center;
+	color: var(--sl-color-gray-3);
+}
+@media (max-width: 40rem) {
+	.lb-results button {
+		grid-template-columns: 1fr;
+	}
+	.lb-results button code {
+		grid-column: 1;
+		grid-row: auto;
+	}
+}
+
+/* output */
+.lb-output {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	margin-top: 0.25rem;
+	padding: 1rem;
+	border: 1px solid var(--sl-color-accent-low);
+	border-radius: 10px;
+	background: var(--lb-field-bg);
+}
+.lb-output-head {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+}
+.lb pre {
+	margin: 0;
+	padding: 0.6rem 0.75rem;
+	border: 1px solid var(--lb-border);
+	border-radius: 8px;
+	background: var(--lb-bg);
+	font-size: 0.9em;
+	white-space: pre-wrap;
+	word-break: break-all;
+	overflow-x: auto;
+}
+.lb-link {
+	font-size: 1em;
+}
+.lb-link code {
+	color: var(--sl-color-accent-high);
+}
+.lb-explain {
+	margin: 0;
+	padding-left: 0.75rem;
+	border-left: 3px solid var(--lb-border);
+}
+.lb-ok {
+	border-left-color: var(--lb-ok);
+}
+.lb-warn {
+	border-left-color: var(--lb-warn);
+}
+.lb-bad {
+	border-left-color: var(--lb-bad);
+}
+.lb-qr {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.75rem;
+	border-radius: 8px;
+	background: #fff;
+	align-self: flex-start;
+}
+.lb-qr canvas {
+	display: block;
+	width: 200px;
+	height: 200px;
+}
+.lb-disclosure {
+	align-self: flex-start;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--sl-color-accent-high);
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+.lb-more {
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+	padding-top: 0.5rem;
+	border-top: 1px dashed var(--lb-border);
+}
+.lb-spelling {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+.lb-spelling-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+}

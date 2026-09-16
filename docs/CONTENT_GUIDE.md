@@ -197,7 +197,11 @@ code carries the doc edits it makes necessary, in the same commit.
    `reference/gestures.mdx`, `reference/shortcuts.mdx` and `start/faq.mdx`.
 4. Correct each claim the change makes false. Add coverage for new behaviour.
 5. After a registry change, run `python3 scripts/extract_data.py`. After a
-   settings title change, run `scripts/extract_settings_links.sh`.
+   settings title change, run `scripts/extract_settings_links.sh`. After a
+   new settings screen, tool, panel, script, storage category or licence
+   file, run `node scripts/check-deep-link-routes.mjs` and fix
+   `src/lib/deep-link-routes.ts` until it passes; the link builder on
+   `reference/link-builder.mdx` draws its lists from that file.
 
 The maintainer's Claude Code setup enforces this with a `PreToolUse` hook
 (`~/.claude/hooks/docs-drift-guard.mjs`). It refuses such a commit when no file

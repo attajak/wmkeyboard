@@ -1,0 +1,766 @@
+---
+/**
+ * /open/ — an https doorway to a wmkeyboard:// link.
+ *
+ * Some places refuse a custom scheme outright: most chat apps only make http
+ * and https tappable, many Markdown renderers drop anything else, and a QR
+ * reader hands the code to a browser rather than to Android. Put the
+ * wmkeyboard:// address after this page's `#` and the page becomes the link.
+ * It reads the address, says in plain words what it opens, checks whether the
+ * app is installed the way the settings chips do
+ * (`navigator.getInstalledRelatedApps` against the site's web manifest), and
+ * draws the one thing that fits:
+ *
+ *   installed → Open in WM Keyboard
+ *   absent    → where to install it, and "try to open anyway"
+ *   unknown   → Open in WM Keyboard (Firefox and other browsers without the
+ *               API cannot tell), with the install list one press away
+ *   not Android → a QR code, since nothing here can open the address
+ *
+ * The page is one card and nothing else: the splash title and the page footer
+ * are hidden, because a doorway with a page around it reads as a page.
+ *
+ * The hash keeps the address out of server logs and out of anything a crawler
+ * would index; `?link=` works too, for the places that strip a fragment, and
+ * `?route=`, `?setting=`, `?repo=` and `?id=` are shorthands so a hand-written
+ * address stays readable.
+ *
+ * The page never navigates on its own. A custom-scheme navigation needs a user
+ * gesture in every browser that matters, and a page that jumps away as it
+ * loads is what a phishing page does.
+ */
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { Image } from 'astro:assets';
+import logoMark from '../../assets/logo-mark.png';
+import { INSTALL_SOURCES } from '../../lib/install-links.mjs';
+import { BRAND_PATHS } from '../../lib/brand-icons.mjs';
+
+const head: { tag: 'meta'; attrs: Record<string, string> }[] = [{ tag: 'meta', attrs: { name: 'robots', content: 'noindex' } }];
+---
+
+<StarlightPage
+	frontmatter={{
+		title: 'Open in WM Keyboard',
+		description: 'A web address that opens a screen, a setting or an addon in WM Keyboard on your phone.',
+		template: 'splash',
+		tableOfContents: false,
+		pagefind: false,
+		head,
+	}}
+	hasSidebar={false}
+>
+	<div class="op-page not-content">
+		<div class="op-card" data-state="loading">
+			<Image class="op-logo" src={logoMark} alt="" width={120} height={120} loading="eager" />
+
+			<p class="op-kicker" id="op-kicker"></p>
+			<h1 class="op-title" id="op-title">Open in WM Keyboard</h1>
+			<p class="op-detail" id="op-detail" aria-live="polite"></p>
+
+			<!-- while the installed check is in flight -->
+			<div class="op-act" data-for="checking">
+				<p class="op-note"><span class="op-spin" aria-hidden="true"></span> Checking for the app…</p>
+			</div>
+
+			<!-- the app is here, or the browser cannot say -->
+			<div class="op-act" data-for="installed unknown">
+				<a class="op-cta" id="op-open" href="#">Open in WM Keyboard</a>
+				<button type="button" class="op-quiet" id="op-get-btn" data-for="unknown" aria-expanded="false" aria-controls="op-get">
+					Don't have it yet?
+				</button>
+			</div>
+
+			<!-- the app is not here -->
+			<div class="op-act" data-for="absent">
+				<p class="op-note">WM Keyboard is not installed on this phone.</p>
+			</div>
+
+			<div class="op-get" id="op-get" hidden>
+				{INSTALL_SOURCES.map((s) => {
+					const Tag = s.listed ? 'a' : 'span';
+					const attrs = s.listed ? { href: s.url, rel: 'noopener' } : { 'aria-disabled': 'true' };
+					return (
+						<Tag class:list={['op-store', { 'is-disabled': !s.listed }]} {...attrs}>
+							<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+								<path d={BRAND_PATHS[s.icon]} />
+							</svg>
+							<span class="op-store-text">
+								<span class="op-store-label">{s.label}</span>
+								<small>{s.note}</small>
+							</span>
+						</Tag>
+					);
+				})}
+			</div>
+
+			<div class="op-act" data-for="absent">
+				<a class="op-quiet" id="op-open-anyway" href="#">Already have it? Try to open anyway</a>
+			</div>
+
+			<!-- not Android -->
+			<div class="op-act" data-for="desktop">
+				<p class="op-note">Only an Android phone can open this. Scan the code to carry it across.</p>
+				<div class="op-qr"><canvas id="op-qr" width="200" height="200" aria-label="QR code of this page"></canvas></div>
+				<p class="op-note op-qr-fallback" id="op-qr-fallback" hidden></p>
+				<div class="op-row">
+					<button type="button" class="op-btn" id="op-copy-page">Copy this page</button>
+					<button type="button" class="op-btn" id="op-copy-link">Copy the link</button>
+				</div>
+			</div>
+
+			<!-- no address to open -->
+			<div class="op-act" data-for="empty">
+				<form class="op-row" id="op-form">
+					<input class="op-input" id="op-input" placeholder="wmkeyboard://settings/themes" aria-label="A wmkeyboard:// address" />
+					<button type="submit" class="op-btn op-btn-go">Go</button>
+				</form>
+				<p class="op-note">
+					Write one with the <a href="/reference/link-builder/">link builder</a>, which offers this form under "Other spellings".
+				</p>
+			</div>
+
+			<!-- an address the app does nothing with -->
+			<div class="op-act" data-for="bad">
+				<p class="op-note">
+					Check it with the <a href="/reference/link-builder/" id="op-check">link builder</a>.
+				</p>
+			</div>
+
+			<div class="op-reveal" id="op-reveal" hidden>
+				<button type="button" class="op-quiet" id="op-reveal-btn" aria-expanded="false" aria-controls="op-link-box">
+					Show the address
+				</button>
+				<pre class="op-link" id="op-link-box" hidden><code id="op-link"></code></pre>
+			</div>
+		</div>
+
+		<p class="op-foot">
+			A link only opens a screen. It never changes a setting, adds a repository or installs anything.{' '}
+			<a href="/reference/deep-links/">What links can point at</a>
+		</p>
+	</div>
+</StarlightPage>
+
+<script is:inline>
+	// Before paint: this page is a card, not an article. Hides the splash title
+	// and the page footer, the same way the addon store does.
+	document.documentElement.setAttribute('data-wm-open', '');
+</script>
+
+<script>
+	import { explain, settingsLink, settingLink, repoLink, addonLink, addonsLink } from '../../lib/deep-links';
+	import { describeManifestUrl } from '../../store/lib/resolve';
+	import { PACKAGE } from '../../lib/install-links.mjs';
+
+	const card = document.querySelector<HTMLElement>('.op-card')!;
+	const kicker = document.getElementById('op-kicker')!;
+	const title = document.getElementById('op-title')!;
+	const detail = document.getElementById('op-detail')!;
+	const linkBox = document.getElementById('op-link-box')!;
+	const linkCode = document.getElementById('op-link')!;
+	const reveal = document.getElementById('op-reveal')!;
+	const revealBtn = document.getElementById('op-reveal-btn')!;
+	const getList = document.getElementById('op-get')!;
+	const getBtn = document.getElementById('op-get-btn')!;
+	const qrFallback = document.getElementById('op-qr-fallback')!;
+
+	/**
+	 * The address this page was asked to open, from the hash, ?link= or the
+	 * shorthands. Anything non-empty is returned even when it is plainly not
+	 * ours, so a mistyped address gets explained instead of landing silently on
+	 * the "paste an address" form.
+	 */
+	function requestedLink(): string {
+		const hash = decodeURIComponent(location.hash.slice(1)).trim();
+		if (hash) return hash;
+		const q = new URLSearchParams(location.search);
+		const link = q.get('link');
+		if (link) return link.trim();
+		const route = q.get('route');
+		const setting = q.get('setting');
+		if (route !== null || setting) {
+			if (!route && setting) return settingLink(setting);
+			return settingsLink({ route: route ?? '', setting: setting || undefined });
+		}
+		const repo = q.get('repo');
+		const id = q.get('id');
+		if (repo && id) return addonLink(repo, id);
+		if (repo) return repoLink(repo);
+		if (q.has('addons')) return addonsLink();
+		return '';
+	}
+
+	/* ---------- naming what a link opens ---------- */
+
+	interface SettingRow {
+		title: string;
+		name: string;
+		route: string;
+		screens: string[];
+		screen: boolean;
+	}
+	let settingsIndex: Promise<SettingRow[]> | null = null;
+	/** The same index the settings chips resolve against. Only fetched when a link names a row. */
+	function loadSettings(): Promise<SettingRow[]> {
+		settingsIndex ??= import('../../data/settings-links.json').then((m) => m.default as SettingRow[]);
+		return settingsIndex;
+	}
+
+	interface Headline {
+		kicker: string;
+		title: string;
+		detail: string;
+		/** Filled in from the settings index afterwards, when a row can be named properly. */
+		settingName?: string;
+	}
+
+	function headlineFor(x: ReturnType<typeof explain>): Headline {
+		switch (x.kind) {
+			case 'settings':
+				return {
+					kicker: 'Opens in WM Keyboard',
+					title: x.label,
+					detail: x.setting ? 'And scrolls to one setting on it.' : '',
+					settingName: x.setting || undefined,
+				};
+			case 'setting':
+				return { kicker: 'Opens a setting in WM Keyboard', title: x.setting, detail: '', settingName: x.setting };
+			case 'addons':
+				return { kicker: 'Opens in WM Keyboard', title: 'Add-ons', detail: 'Themes, layouts, dictionaries, fonts and more.' };
+			case 'repo':
+				return {
+					kicker: 'Adds a repository to WM Keyboard',
+					title: describeManifestUrl(x.manifest).label,
+					detail: 'Nothing is fetched until you press Add.',
+				};
+			case 'addon':
+				return {
+					kicker: 'Opens an addon in WM Keyboard',
+					title: x.id,
+					detail: `From ${describeManifestUrl(x.manifest).label}. Nothing installs until you press Install.`,
+				};
+			case 'oauth':
+				return {
+					kicker: 'Sign-in redirect',
+					title: 'Cloud backup',
+					detail: 'This address carries a sign-in code and does nothing when opened by hand.',
+				};
+			case 'nowhere':
+				return { kicker: 'Nothing to open', title: 'This link goes nowhere', detail: x.reason };
+			case 'invalid':
+				return { kicker: 'Not a WM Keyboard link', title: 'This link goes nowhere', detail: x.reason };
+		}
+	}
+
+	/** Swaps a row's resource name for the words the app puts on it. */
+	async function nameTheSetting(head: Headline, x: ReturnType<typeof explain>, token: number) {
+		if (!head.settingName) return;
+		const rows = await loadSettings();
+		if (token !== runToken) return;
+		const row = rows.find((r) => r.name === head.settingName && !r.screen);
+		if (!row) return;
+		if (x.kind === 'setting') {
+			title.textContent = row.title;
+			detail.textContent = row.screens.length ? `On ${row.screens.join(' › ')}.` : '';
+		} else {
+			detail.textContent = `And scrolls to “${row.title}”.`;
+		}
+	}
+
+	/* ---------- is the app here ---------- */
+
+	type RelatedApp = { id?: string; platform?: string };
+	type Nav = Navigator & {
+		userAgentData?: { platform?: string };
+		getInstalledRelatedApps?: () => Promise<RelatedApp[]>;
+	};
+	const nav = navigator as Nav;
+	/** Read per run, not once at load: nothing should depend on when this module happened to evaluate. */
+	function onAndroid(): boolean {
+		return /\bAndroid\b/i.test(nav.userAgent) || nav.userAgentData?.platform === 'Android';
+	}
+
+	/**
+	 * true or false when the browser can tell, null when it cannot. Same
+	 * handshake as the settings chips: the site's web manifest names the
+	 * package, the app's asset statement names the site.
+	 *
+	 * The first call on a page load fetches and verifies the manifest, which is
+	 * slow enough to see, and later calls are cached. A browser that never
+	 * settles the promise would leave this card on its spinner, so the check is
+	 * raced against a deadline and a slow answer counts as "cannot tell", which
+	 * still draws the Open button.
+	 */
+	const CHECK_DEADLINE_MS = 2500;
+	async function appInstalled(): Promise<boolean | null> {
+		if (typeof nav.getInstalledRelatedApps !== 'function') return null;
+		const check = nav
+			.getInstalledRelatedApps()
+			.then((apps) => apps.some((app) => app.id === PACKAGE))
+			.catch(() => null);
+		const deadline = new Promise<null>((resolve) => setTimeout(() => resolve(null), CHECK_DEADLINE_MS));
+		return Promise.race([check, deadline]);
+	}
+
+	/* ---------- drawing ---------- */
+
+	function setState(state: string) {
+		card.dataset.state = state;
+		for (const panel of card.querySelectorAll<HTMLElement>('[data-for]')) {
+			panel.hidden = !panel.dataset.for!.split(' ').includes(state);
+		}
+		// The install list belongs to "absent" outright, and sits one press away
+		// from "unknown" rather than crowding a card that may not need it.
+		getList.hidden = state !== 'absent';
+		getBtn.setAttribute('aria-expanded', 'false');
+	}
+
+	function showAddress(show: boolean) {
+		linkBox.hidden = !show;
+		revealBtn.setAttribute('aria-expanded', String(show));
+		revealBtn.textContent = show ? 'Hide the address' : 'Show the address';
+	}
+
+	function copy(text: string, button: HTMLElement) {
+		const label = button.textContent;
+		navigator.clipboard?.writeText(text).then(
+			() => {
+				button.textContent = 'Copied';
+				setTimeout(() => (button.textContent = label), 1400);
+			},
+			() => {
+				button.textContent = 'Copy failed';
+				setTimeout(() => (button.textContent = label), 1400);
+			}
+		);
+	}
+
+	/** Guards against two addresses being drawn at once; the later one wins. */
+	let runToken = 0;
+
+	async function run() {
+		const token = ++runToken;
+		const link = requestedLink();
+
+		if (!link) {
+			kicker.textContent = '';
+			title.textContent = 'Open in WM Keyboard';
+			detail.textContent = 'Put a wmkeyboard:// address after the # in this page’s address, or paste one here.';
+			reveal.hidden = true;
+			setState('empty');
+			return;
+		}
+
+		const x = explain(link);
+		const head = headlineFor(x);
+		kicker.textContent = head.kicker;
+		title.textContent = head.title;
+		detail.textContent = head.detail;
+		document.title = x.kind === 'invalid' || x.kind === 'nowhere' ? 'Open in WM Keyboard' : `Open ${head.title} · WM Keyboard`;
+
+		// The address itself is small print. Most people want the button, not a
+		// scheme they have never seen, so it sits at the bottom, folded away.
+		linkCode.textContent = link;
+		reveal.hidden = false;
+		showAddress(false);
+
+		if (x.kind === 'invalid' || x.kind === 'nowhere') {
+			(document.getElementById('op-check') as HTMLAnchorElement).href = `/reference/link-builder/?link=${encodeURIComponent(link)}`;
+			setState('bad');
+			return;
+		}
+
+		(document.getElementById('op-open') as HTMLAnchorElement).href = link;
+		(document.getElementById('op-open-anyway') as HTMLAnchorElement).href = link;
+		void nameTheSetting(head, x, token);
+
+		if (!onAndroid()) {
+			setState('desktop');
+			const canvas = document.getElementById('op-qr') as HTMLCanvasElement | null;
+			const here = location.href;
+			if (canvas) {
+				import('qrcode')
+					.then((QR) => {
+						// A third address may have arrived while the library loaded.
+						if (token !== runToken) return;
+						return QR.toCanvas(canvas, here, {
+							margin: 1,
+							width: 200,
+							errorCorrectionLevel: 'M',
+							color: { dark: '#111111', light: '#ffffff' },
+						});
+					})
+					.catch(() => {
+						// The address is still readable without a code to scan.
+						canvas.hidden = true;
+						qrFallback.textContent = here;
+						qrFallback.hidden = false;
+					});
+			}
+			return;
+		}
+
+		// The check is not instant on its first call, and whatever the last
+		// address left on screen would otherwise stand in for the answer.
+		setState('checking');
+		const installed = await appInstalled();
+		if (token !== runToken) return;
+		const state = installed === null ? 'unknown' : installed ? 'installed' : 'absent';
+		document.documentElement.dataset.wmApp = state;
+		setState(state);
+	}
+
+	revealBtn.addEventListener('click', () => showAddress(linkBox.hidden));
+	getBtn.addEventListener('click', () => {
+		getList.hidden = !getList.hidden;
+		getBtn.setAttribute('aria-expanded', String(!getList.hidden));
+	});
+	document.getElementById('op-copy-page')?.addEventListener('click', (e) => copy(location.href, e.currentTarget as HTMLElement));
+	document.getElementById('op-copy-link')?.addEventListener('click', (e) => copy(linkCode.textContent ?? '', e.currentTarget as HTMLElement));
+	document.getElementById('op-form')?.addEventListener('submit', (e) => {
+		e.preventDefault();
+		const value = (document.getElementById('op-input') as HTMLInputElement).value.trim();
+		if (value) location.hash = value;
+	});
+	window.addEventListener('hashchange', run);
+	run();
+</script>
+
+<style is:global>
+	/* The splash template puts a title block and a footer around the content.
+	   A doorway with a page around it reads as a page, so both go. */
+	html[data-wm-open] .main-pane > main > .content-panel:first-child {
+		display: none;
+	}
+	html[data-wm-open] .main-pane > main > .content-panel {
+		padding: 0;
+		border: 0;
+	}
+	html[data-wm-open] footer.sl-flex,
+	html[data-wm-open] .pagination-links {
+		display: none;
+	}
+</style>
+
+<style>
+	.op-page {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 1.25rem;
+		min-height: calc(100vh - var(--sl-nav-height) - 2rem);
+		padding: 2rem 1rem 3rem;
+		text-align: center;
+	}
+
+	.op-card {
+		position: relative;
+		width: min(100%, 27rem);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 2rem 1.5rem 1.25rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 20px;
+		background: var(--sl-color-gray-6);
+		box-shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
+		overflow: hidden;
+	}
+	:root[data-theme='light'] .op-card {
+		background: #fff;
+		border-color: var(--sl-color-gray-6);
+		box-shadow: 0 18px 50px rgba(20, 24, 60, 0.12);
+	}
+	/* A wash of the brand gradient behind the mark, so the card has a top. */
+	.op-card::before {
+		content: '';
+		position: absolute;
+		top: -7rem;
+		left: 50%;
+		width: 24rem;
+		height: 16rem;
+		transform: translateX(-50%);
+		background: radial-gradient(circle, color-mix(in oklab, var(--wm-violet) 30%, transparent), transparent 65%);
+		pointer-events: none;
+	}
+	:root[data-theme='light'] .op-card::before {
+		background: radial-gradient(circle, color-mix(in oklab, var(--wm-violet) 16%, transparent), transparent 65%);
+	}
+	.op-card > * {
+		position: relative;
+		z-index: 1;
+	}
+	.op-card[data-state='loading'] > :not(.op-logo) {
+		visibility: hidden;
+	}
+
+	.op-logo {
+		width: 60px;
+		height: 60px;
+		border-radius: 22%;
+	}
+
+	.op-kicker {
+		margin: 0.35rem 0 0;
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--sl-color-gray-3);
+	}
+	.op-kicker:empty {
+		display: none;
+	}
+	.op-title {
+		margin: 0;
+		font-size: clamp(1.35rem, 5vw, 1.7rem);
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: -0.015em;
+		color: var(--sl-color-white);
+		overflow-wrap: anywhere;
+		border: 0;
+	}
+	.op-detail {
+		margin: 0;
+		max-width: 22rem;
+		font-size: var(--sl-text-sm);
+		line-height: 1.5;
+		color: var(--sl-color-gray-2);
+	}
+	.op-detail:empty {
+		display: none;
+	}
+
+	/* One action area at a time. */
+	.op-act {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.6rem;
+		width: 100%;
+		margin-top: 0.4rem;
+	}
+	.op-act[hidden],
+	.op-quiet[hidden] {
+		display: none;
+	}
+
+	.op-cta {
+		display: block;
+		width: 100%;
+		padding: 0.9rem 1.25rem;
+		border-radius: 12px;
+		background: var(--wm-gradient);
+		color: #fff;
+		font-size: 1rem;
+		font-weight: 650;
+		text-decoration: none;
+		box-shadow: 0 6px 18px color-mix(in oklab, var(--wm-violet) 35%, transparent);
+		transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+	}
+	.op-cta:hover {
+		color: #fff;
+		transform: translateY(-1px);
+		filter: brightness(1.06);
+	}
+	.op-cta:active {
+		transform: translateY(0);
+	}
+
+	.op-quiet {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: var(--sl-color-gray-3);
+		font: inherit;
+		font-size: var(--sl-text-sm);
+		text-decoration: underline;
+		text-decoration-style: dotted;
+		text-underline-offset: 0.3em;
+		cursor: pointer;
+	}
+	.op-quiet:hover {
+		color: var(--sl-color-white);
+	}
+
+	.op-note {
+		margin: 0;
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+		line-height: 1.5;
+	}
+
+	/* install sources */
+	.op-get {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		width: 100%;
+		margin-top: 0.25rem;
+	}
+	.op-get[hidden] {
+		display: none;
+	}
+	.op-store {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.7rem 0.9rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 12px;
+		color: var(--sl-color-white);
+		text-align: left;
+		text-decoration: none;
+		transition: border-color 120ms ease, background 120ms ease;
+	}
+	.op-store svg {
+		flex: none;
+	}
+	.op-store-text {
+		display: flex;
+		flex-direction: column;
+		line-height: 1.25;
+	}
+	.op-store-label {
+		font-size: 0.95rem;
+		font-weight: 600;
+	}
+	.op-store small {
+		font-size: var(--sl-text-xs);
+		color: var(--sl-color-gray-3);
+	}
+	.op-store:not(.is-disabled):hover {
+		border-color: var(--sl-color-accent);
+		background: var(--sl-color-accent-low);
+		color: var(--sl-color-white);
+	}
+	.op-store.is-disabled {
+		opacity: 0.45;
+	}
+
+	/* QR */
+	.op-qr {
+		padding: 0.7rem;
+		border-radius: 14px;
+		background: #fff;
+		line-height: 0;
+	}
+	.op-qr canvas {
+		display: block;
+		width: 200px;
+		height: 200px;
+	}
+	.op-qr:has(canvas[hidden]) {
+		display: none;
+	}
+	.op-qr-fallback {
+		overflow-wrap: anywhere;
+	}
+
+	.op-row {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5rem;
+		width: 100%;
+	}
+	.op-btn {
+		padding: 0.55rem 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 999px;
+		background: none;
+		color: var(--sl-color-white);
+		font: inherit;
+		font-size: var(--sl-text-sm);
+		font-weight: 600;
+		cursor: pointer;
+	}
+	.op-btn:hover {
+		border-color: var(--sl-color-accent);
+	}
+	.op-btn-go {
+		border-color: var(--sl-color-accent);
+		background: var(--sl-color-accent-low);
+	}
+	.op-input {
+		flex: 1 1 12rem;
+		min-width: 0;
+		padding: 0.55rem 0.8rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 999px;
+		background: var(--sl-color-gray-7, var(--sl-color-black));
+		color: var(--sl-color-white);
+		font: inherit;
+		font-size: var(--sl-text-sm);
+		text-align: center;
+	}
+	.op-input:focus {
+		outline: none;
+		border-color: var(--sl-color-accent);
+		box-shadow: 0 0 0 3px var(--sl-color-accent-low);
+	}
+
+	/* the address, folded away at the bottom */
+	.op-reveal {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		margin-top: 0.75rem;
+		padding-top: 0.9rem;
+		border-top: 1px solid var(--sl-color-gray-5);
+	}
+	.op-reveal[hidden] {
+		display: none;
+	}
+	.op-link {
+		width: 100%;
+		margin: 0;
+		padding: 0.55rem 0.7rem;
+		border-radius: 10px;
+		background: var(--sl-color-gray-7, var(--sl-color-black));
+		color: var(--sl-color-accent-high);
+		font-size: 0.78rem;
+		line-height: 1.45;
+		text-align: left;
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+	}
+
+	.op-foot {
+		margin: 0;
+		max-width: 27rem;
+		font-size: var(--sl-text-xs);
+		line-height: 1.6;
+		color: var(--sl-color-gray-3);
+	}
+
+	.op-spin {
+		display: inline-block;
+		width: 0.8em;
+		height: 0.8em;
+		vertical-align: -0.05em;
+		margin-right: 0.15em;
+		border: 2px solid var(--sl-color-gray-5);
+		border-top-color: var(--sl-color-accent);
+		border-radius: 50%;
+		animation: op-spin 0.7s linear infinite;
+	}
+	@keyframes op-spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.op-spin {
+			animation-duration: 2.4s;
+		}
+		.op-cta {
+			transition: none;
+		}
+	}
+</style>

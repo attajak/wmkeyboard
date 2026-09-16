@@ -15,9 +15,10 @@ import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from './src/site.mjs';
 // block the dev loop. CI should run `npm run check`.
 const plugins = [starlightImageZoom()];
 if (process.env.CHECK_LINKS) {
-	// The addon store under /addons/ is custom Astro pages (src/pages/addons),
-	// which the validator cannot check. The Starlight guides sharing that
-	// prefix (src/content/docs/addons) stay validated, so a glob won't do.
+	// The addon store under /addons/ and the /open/ doorway are custom Astro
+	// pages (src/pages/), which the validator cannot check. The Starlight
+	// guides sharing the /addons/ prefix (src/content/docs/addons) stay
+	// validated, so a glob won't do.
 	const addonGuides = new Set(
 		readdirSync(new URL('./src/content/docs/addons/', import.meta.url)).map((file) =>
 			file.replace(/\.mdx?$/, ''),
@@ -27,6 +28,8 @@ if (process.env.CHECK_LINKS) {
 		starlightLinksValidator({
 			errorOnRelativeLinks: true,
 			exclude: ({ link }) => {
+				// The /open/ doorway is a custom Astro page too.
+				if (/^\/open(?:[/?#]|$)/.test(link)) return true;
 				const match = /^\/addons(?:\/([^/?#]*)|(?=[?#]|$))/.exec(link);
 				return match !== null && !addonGuides.has(match[1] ?? '');
 			},
