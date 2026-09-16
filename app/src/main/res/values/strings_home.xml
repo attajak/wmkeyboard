@@ -19,6 +19,10 @@
     <string name="home_active_subtitle">Your active keyboard</string>
     <!-- Screen reader name of the button that opens the settings search. -->
     <string name="home_search_desc">Search settings</string>
+    <!-- Heading of the empty panel beside the list on a wide screen, before a section is opened. -->
+    <string name="home_welcome_title">WM Keyboard settings</string>
+    <!-- Line under that heading, telling the user where to start. -->
+    <string name="home_welcome_body">Select a section on the left to open it here.</string>
 
     <!-- Names of the groups of rows on the home list. -->
     <string name="home_group_typing_title">Typing</string>

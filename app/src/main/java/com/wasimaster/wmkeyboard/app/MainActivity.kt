@@ -22,6 +22,7 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -85,6 +86,11 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.layout.AnimatedPane
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -103,6 +109,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -134,8 +141,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.window.core.layout.WindowWidthSizeClass
 import android.os.Build
 import com.wasimaster.wmkeyboard.core.util.PlayServices
 import com.wasimaster.wmkeyboard.ime.ui.LocalIconSet
@@ -473,18 +482,125 @@ private fun SettingsNavHost(
     // as a list and an unrelated page. Published for the whole graph here;
     // each destination adds its own scope, and the rows and headings pick both
     // up without being handed anything.
+    // Wide enough for the home list and a screen out of it to sit side by side,
+    // and past onboarding, which owns the whole window while it runs.
+    val twoPane = rememberWideWindow() && settings.onboardingDone
+    // Which home row the screen in the detail pane came from, so the list can
+    // show where the user is. Held rather than derived from the back stack: the
+    // stack's top is the *current* screen, which three steps into Tools is a
+    // tool's own page and not the row that opened it.
+    var openedFrom by rememberSaveable { mutableStateOf<String?>(null) }
+    val topRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     SharedTransitionLayout(modifier = Modifier.fillMaxSize()) {
         CompositionLocalProvider(
             // A shared element is a motion and has no still version, so
-            // reduced motion switches it off at the source.
-            LocalSharedTransition provides if (settings.reduceMotion) null else this,
+            // reduced motion switches it off at the source. Two panes switch it
+            // off as well, and for a different reason: a flight needs one end
+            // visible and the other not, and here the home row a screen flew
+            // from is still on screen beside it.
+            LocalSharedTransition provides
+                if (settings.reduceMotion || twoPane) null else this,
             LocalSettingsCrumbTrail provides crumbs,
             LocalAdvancedFolds provides folds,
+            LocalTwoPane provides twoPane,
         ) {
-            SettingsNavGraph(navController, repository, settings, pending, onPendingHandled)
+            if (twoPane) {
+                SettingsTwoPane(
+                    list = {
+                        HomeScreen(
+                            settings = settings,
+                            selectedRoute = if (topRoute == HomeRoute) null else openedFrom,
+                            onNavigate = { route ->
+                                openedFrom = route
+                                // From the list pane the detail always replaces
+                                // what is in it rather than stacking on top:
+                                // the pane beside it *is* the step back, so a
+                                // stack of home rows would be one the user
+                                // never took.
+                                navController.navigate(route) {
+                                    popUpTo(HomeRoute)
+                                    launchSingleTop = true
+                                }
+                            },
+                        )
+                    },
+                    detail = {
+                        SettingsNavGraph(
+                            navController,
+                            repository,
+                            settings,
+                            pending,
+                            onPendingHandled,
+                        )
+                    },
+                )
+            } else {
+                SettingsNavGraph(navController, repository, settings, pending, onPendingHandled)
+            }
         }
     }
 }
+
+/**
+ * Whether this window is wide enough to hold two settings screens at once.
+ *
+ * Expanded in Material's own terms — 840 dp and up, which is a tablet either
+ * way up, a foldable opened, or a free-form window dragged out. Medium windows
+ * (a 7" tablet, a phone on its side) stay one screen and lean on the width cap
+ * in `WmScreenFrame` instead: 600 dp split in two is two columns too narrow to
+ * put a settings row in.
+ */
+@Composable
+private fun rememberWideWindow(): Boolean =
+    currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass ==
+        WindowWidthSizeClass.EXPANDED
+
+/**
+ * Whether the settings app is currently drawn as two panes.
+ *
+ * Read by the home destination, which has to draw something other than the home
+ * list when the list is already on screen in the pane beside it.
+ */
+internal val LocalTwoPane = compositionLocalOf { false }
+
+/**
+ * The home list and the screen opened from it, side by side.
+ *
+ * The navigation graph is unchanged and still owns every route, the back stack
+ * and the deep links — it simply draws into the detail pane, and the home
+ * destination inside it becomes a welcome panel (see [HomeWelcome]) because the
+ * list it would otherwise draw is in the pane to its left. That is what keeps
+ * this to a layout: `popUpTo(HomeRoute)`, the path strip, search and every
+ * `wmkeyboard://` link go on working without knowing there are two panes.
+ */
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@Composable
+private fun SettingsTwoPane(
+    list: @Composable () -> Unit,
+    detail: @Composable () -> Unit,
+) {
+    // The scaffold is used for its arrangement, not its navigation: at this
+    // width both panes are always up, and moving between screens is the graph's
+    // job. The navigator is here because it is what computes the directive and
+    // the value the scaffold needs.
+    val navigator = rememberListDetailPaneScaffoldNavigator<Unit>()
+    ListDetailPaneScaffold(
+        directive = navigator.scaffoldDirective,
+        value = navigator.scaffoldValue,
+        listPane = {
+            AnimatedPane(modifier = Modifier.preferredWidth(ListPaneWidth)) { list() }
+        },
+        detailPane = { AnimatedPane { detail() } },
+    )
+}
+
+/**
+ * How much of a wide window the home list takes.
+ *
+ * A phone's worth, so the rows in it keep the proportions they were written
+ * for, and everything past it goes to the screen the user is actually reading.
+ */
+private val ListPaneWidth = 360.dp
 
 @Composable
 private fun SettingsNavGraph(
@@ -567,10 +683,18 @@ private fun SettingsNavGraph(
             )
         }
         composable("home") {
-            HomeScreen(
-                settings = settings,
-                onNavigate = { route -> navController.navigate(route) },
-            )
+            // Beside the list, "home" is the pane the user has not chosen
+            // anything for yet; the list itself is already on screen to the
+            // left. On a phone it is the list.
+            if (LocalTwoPane.current) {
+                HomeWelcome()
+            } else {
+                HomeScreen(
+                    settings = settings,
+                    onNavigate = { route -> navController.navigate(route) },
+                    anim = this,
+                )
+            }
         }
         composable("search") {
             SettingsSearchScreen(
@@ -1727,9 +1851,21 @@ private fun SettingsNavGraph(
 // ---- home / setup ----
 
 @Composable
-private fun AnimatedVisibilityScope.HomeScreen(
+private fun HomeScreen(
     settings: KeyboardSettings,
     onNavigate: (String) -> Unit,
+    /**
+     * The destination's own animation scope, or null in the list pane of the
+     * two-pane layout, where the home list is not a destination being pushed
+     * and has no entrance to stay out of the way of.
+     */
+    anim: AnimatedVisibilityScope? = null,
+    /**
+     * The home row whose screen is showing in the pane beside this one. Null on
+     * a phone, where nothing is beside it, and on a wide window sitting on the
+     * welcome panel.
+     */
+    selectedRoute: String? = null,
 ) {
     val context = LocalContext.current
     val setup = rememberKeyboardSetup(context)
@@ -1763,7 +1899,7 @@ private fun AnimatedVisibilityScope.HomeScreen(
             // The heading here is the app's name; in the path strip of the
             // screens below, this one is where the settings start.
             crumbTitle = stringResource(R.string.shell_breadcrumb_home),
-            anim = this@HomeScreen,
+            anim = anim,
             actions = {
                 IconButton(onClick = { onNavigate("search") }) {
                     Icon(
@@ -1821,6 +1957,7 @@ private fun AnimatedVisibilityScope.HomeScreen(
                                 if (row.route == "languages") enabledLanguagesSummary(settings)
                                 else stringResource(row.subtitle),
                                 onNavigate,
+                                selected = row.route == selectedRoute,
                             )
                         }
                     }
@@ -1849,6 +1986,41 @@ internal val ActiveGreen = Color(0xFF43A047)
  * oversized by that ratio and masked back down — the same arithmetic the
  * launcher does.
  */
+/**
+ * What the detail pane holds before the user has opened anything.
+ *
+ * No bar of its own: a heading here would be the second one on screen saying
+ * the same thing, under the list's. What it needs to do is say that the panel
+ * is waiting rather than broken, which is the icon and one line.
+ */
+@Composable
+private fun HomeWelcome() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(32.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            AppIconBadge()
+            Spacer(Modifier.height(20.dp))
+            Text(
+                stringResource(R.string.home_welcome_title),
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                stringResource(R.string.home_welcome_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
 @Composable
 private fun AppIconBadge() {
     val layer = HeaderBadgeSize * 108f / 72f
@@ -2094,6 +2266,12 @@ private fun HomeItem(
     title: String,
     subtitle: String,
     onNavigate: (String) -> Unit,
+    /**
+     * Whether this row's screen is the one showing in the detail pane. Only
+     * ever true in the two-pane layout: on a phone the screen the row opens is
+     * the whole window, and there is nothing to say "you are here" about.
+     */
+    selected: Boolean = false,
 ) {
     WmRow(
         title = title,
@@ -2101,9 +2279,26 @@ private fun HomeItem(
         icon = icon,
         accent = routeAccent(route),
         flightTo = route,
+        // The row's own accent at container strength rather than the theme's
+        // one selection colour, so the marked row and the heading of the screen
+        // it opened are visibly the same section. The group's card clips it to
+        // the run's corners, so a selected row at either end of a group keeps
+        // the rounding of the slab it is part of.
+        modifier = if (!selected) Modifier
+        else Modifier.background(routeAccent(route).copy(alpha = SelectedRowTint)),
         onClick = { onNavigate(route) },
     )
 }
+
+/**
+ * How much of a home row's accent the selected row is washed with.
+ *
+ * Enough to find without looking for it, and light enough that the row's name
+ * keeps `onSurface`'s contrast on top of it in both themes — the accents are
+ * mid-tone colours, so anything heavier needs its own foreground colour and a
+ * per-accent check that it passes.
+ */
+private const val SelectedRowTint = 0.18f
 
 // ---- shared scaffold & group card system ----
 

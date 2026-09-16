@@ -1827,83 +1827,113 @@ private fun WmScreenFrame(
         LocalFlightOrigin provides origin,
         LocalScreenSlots provides slots,
     ) {
-        Scaffold(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                Column {
-                    WmCollapsingTopBar(
-                        title = title,
-                        scrollBehavior = scrollBehavior,
-                        onBack = onBack,
-                        route = route,
-                        icon = icon,
-                        accent = accent,
-                        iconTile = iconTile,
-                        iconInBar = iconInBar,
-                        barTint = barTint,
-                        centerTitle = centerTitle,
-                        subtitle = subtitle,
-                        subtitleIcon = subtitleIcon,
-                        subtitleIconTint = subtitleIconTint,
-                        subtitleInBar = subtitleInBar,
-                        subtitleMaxLines = subtitleMaxLines,
-                        badge = badge,
-                        badgeInBar = badgeInBar,
-                        actions = actions,
-                    )
-                    // Below the bar rather than inside it: the bar measures
-                    // itself to the collapse, and a second line in there would
-                    // have to be written into that arithmetic. The strip draws
-                    // nothing on the home list, which pays an empty layout
-                    // node for it and no height.
-                    if (trail != null && entry != null) {
-                        SettingsBreadcrumbBar(
-                            trail = trail,
-                            entryId = entry.id,
-                            currentTitle = crumbTitle ?: title,
-                            currentRoute = route,
-                            onCurrent = toTop,
-                            // The heading's own colour, so the pill and the
-                            // tile above it are visibly the same section.
-                            accent = accent ?: routeAccent(route.orEmpty()),
-                            tint = barTints(route, barTint).collapsed,
+        // A settings row is a name on the left and a control on the right, and
+        // on a window wider than a phone the two end up a hand's width apart
+        // with nothing in between — the eye loses the line between the setting
+        // and the switch that belongs to it. The whole frame is capped rather
+        // than the body alone, so the heading, the path strip and the rows stay
+        // on one left edge instead of the title hanging off the window while
+        // the rows sit in the middle. The margins are painted in the same
+        // colour the Scaffold paints itself, so there is no seam to see.
+        //
+        // Inert in the two-pane layout, where the detail pane is already
+        // narrower than this — see [SettingsTwoPane].
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            Scaffold(
+                modifier = Modifier
+                    .widthIn(max = ScreenContentMaxWidth)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                topBar = {
+                    Column {
+                        WmCollapsingTopBar(
+                            title = title,
+                            scrollBehavior = scrollBehavior,
+                            onBack = onBack,
+                            route = route,
+                            icon = icon,
+                            accent = accent,
+                            iconTile = iconTile,
+                            iconInBar = iconInBar,
+                            barTint = barTint,
+                            centerTitle = centerTitle,
+                            subtitle = subtitle,
+                            subtitleIcon = subtitleIcon,
+                            subtitleIconTint = subtitleIconTint,
+                            subtitleInBar = subtitleInBar,
+                            subtitleMaxLines = subtitleMaxLines,
+                            badge = badge,
+                            badgeInBar = badgeInBar,
+                            actions = actions,
+                        )
+                        // Below the bar rather than inside it: the bar measures
+                        // itself to the collapse, and a second line in there would
+                        // have to be written into that arithmetic. The strip draws
+                        // nothing on the home list, which pays an empty layout
+                        // node for it and no height.
+                        if (trail != null && entry != null) {
+                            SettingsBreadcrumbBar(
+                                trail = trail,
+                                entryId = entry.id,
+                                currentTitle = crumbTitle ?: title,
+                                currentRoute = route,
+                                onCurrent = toTop,
+                                // The heading's own colour, so the pill and the
+                                // tile above it are visibly the same section.
+                                accent = accent ?: routeAccent(route.orEmpty()),
+                                tint = barTints(route, barTint).collapsed,
+                            )
+                        }
+                        // Inside the bar's column rather than the body: the bar is
+                        // what Scaffold measures for its content padding, so a
+                        // pinned block costs no arithmetic here and stays put
+                        // while the collapsing title above it does its thing.
+                        (pinned ?: slots.pinned)?.invoke()
+                    }
+                },
+                floatingActionButton = { (fab ?: slots.fab)?.invoke() },
+                bottomBar = { slots.dock?.invoke() },
+                content = { padding ->
+                    // Always wrapped, whether or not the screen has a refresh: the
+                    // slot is filled by the content composing, so branching on it
+                    // here would rebuild the whole screen one frame in.
+                    val refresh = slots.refresh
+                    val pullState = rememberPullToRefreshState()
+                    Box(
+                        modifier = Modifier.pullToRefresh(
+                            isRefreshing = refresh?.refreshing == true,
+                            state = pullState,
+                            enabled = refresh != null,
+                            onRefresh = { slots.refresh?.onRefresh?.invoke() },
+                        ),
+                    ) {
+                        content(padding)
+                        // Under the bar rather than at the top of the window, or a
+                        // collapsing title lands on top of the spinner.
+                        PullToRefreshDefaults.Indicator(
+                            state = pullState,
+                            isRefreshing = refresh?.refreshing == true,
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(top = padding.calculateTopPadding()),
                         )
                     }
-                    // Inside the bar's column rather than the body: the bar is
-                    // what Scaffold measures for its content padding, so a
-                    // pinned block costs no arithmetic here and stays put
-                    // while the collapsing title above it does its thing.
-                    (pinned ?: slots.pinned)?.invoke()
-                }
-            },
-            floatingActionButton = { (fab ?: slots.fab)?.invoke() },
-            bottomBar = { slots.dock?.invoke() },
-            content = { padding ->
-                // Always wrapped, whether or not the screen has a refresh: the
-                // slot is filled by the content composing, so branching on it
-                // here would rebuild the whole screen one frame in.
-                val refresh = slots.refresh
-                val pullState = rememberPullToRefreshState()
-                Box(
-                    modifier = Modifier.pullToRefresh(
-                        isRefreshing = refresh?.refreshing == true,
-                        state = pullState,
-                        enabled = refresh != null,
-                        onRefresh = { slots.refresh?.onRefresh?.invoke() },
-                    ),
-                ) {
-                    content(padding)
-                    // Under the bar rather than at the top of the window, or a
-                    // collapsing title lands on top of the spinner.
-                    PullToRefreshDefaults.Indicator(
-                        state = pullState,
-                        isRefreshing = refresh?.refreshing == true,
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(top = padding.calculateTopPadding()),
-                    )
-                }
-            },
-        )
+                },
+            )
+        }
     }
 }
+
+/**
+ * How wide a settings screen's own column is allowed to get.
+ *
+ * Roughly two phones side by side. Past that a row's name and its control stop
+ * reading as one thing, and a paragraph of subtitle stops being a line and
+ * starts being a column of text. Windows wider than this get the two-pane
+ * layout instead, which fills them with a second screen rather than with air.
+ */
+private val ScreenContentMaxWidth = 720.dp
