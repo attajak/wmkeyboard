@@ -41,8 +41,8 @@
     <string name="tooldetail_launcher_recents_subtitle">Show the apps you opened last in a row above the grid</string>
     <string name="tooldetail_launcher_recents_info">The keyboard keeps the last 10 apps you opened from this tool, on your device only. Turn this off to stop the tracking and delete the list.</string>
     <string name="tooldetail_launcher_drilldown_title">Open screens inside apps</string>
-    <string name="tooldetail_launcher_drilldown_subtitle">Press and hold an app to list its screens</string>
-    <string name="tooldetail_launcher_drilldown_info">With this off, press and hold pins the app instead.</string>
+    <string name="tooldetail_launcher_drilldown_subtitle">List an app’s screens on its page</string>
+    <string name="tooldetail_launcher_drilldown_info">Press and hold an app to open its page. With this off the page keeps its pin, hide and App info actions and leaves the screens out.</string>
     <string name="tooldetail_launcher_non_exported_title">Show private screens</string>
     <string name="tooldetail_launcher_non_exported_subtitle">Also list screens that only the app itself may open</string>
     <string name="tooldetail_launcher_non_exported_info">Android does not let other apps open these screens. They show dimmed, and a press on one does nothing. Useful to explore what an app contains.</string>
@@ -572,7 +572,7 @@
     <string name="tooldetail_launcher_icon_shape_system_label">As on the phone</string>
     <string name="tooldetail_launcher_icon_shape_info">As on the phone shows each icon with the shape your home screen gives it. Old apps without an adaptive icon keep their own outline.</string>
     <string name="tooldetail_launcher_hidden_title">Hidden apps</string>
-    <string name="tooldetail_launcher_hidden_none_subtitle">No apps are hidden. Hide an app from its page in the panel.</string>
+    <string name="tooldetail_launcher_hidden_none_subtitle">No apps are hidden. Press and hold an app in the panel, then tap the eye on its page.</string>
     <plurals name="tooldetail_launcher_hidden_count">
         <item quantity="one">%1$d app hidden. Tap to show it again.</item>
         <item quantity="other">%1$d apps hidden. Tap to show all of them again.</item>

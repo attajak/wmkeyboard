@@ -11881,9 +11881,18 @@ open class WMKeyboardService : InputMethodService() {
         }
     }
 
+    /**
+     * Opens the app's page. With **Open screens inside apps** off the page is
+     * the pin/hide/App-info actions alone, so the activity query — a package
+     * manager round trip — never runs.
+     */
     fun onLauncherOpenDetail(app: LauncherApp) {
-        _uiState.update { it.copy(launcherDetail = LauncherDetailUi(app)) }
         launcherDetailJob?.cancel()
+        if (!_uiState.value.settings.launcher.activityDrilldown) {
+            _uiState.update { it.copy(launcherDetail = LauncherDetailUi(app, loading = false)) }
+            return
+        }
+        _uiState.update { it.copy(launcherDetail = LauncherDetailUi(app)) }
         launcherDetailJob = serviceScope.launch {
             val activities = AppCatalog.loadActivities(packageManager, app.packageName)
             _uiState.update { state ->

@@ -81,9 +81,10 @@ class LauncherPanelCallbacks(
 
 /**
  * The app-launcher tool: a searchable grid of every launchable app, a
- * pinned/recents row, and (long-press) a per-app drill-down listing the
- * activities inside it. The service owns the catalog and the launches; this
- * panel renders [KeyboardUiState.launcherApps]/[KeyboardUiState.launcherDetail]
+ * pinned/recents row, and (long-press, from either) a per-app page carrying
+ * the pin, hide and App-info actions plus the activities inside the app. The
+ * service owns the catalog and the launches; this panel renders
+ * [KeyboardUiState.launcherApps]/[KeyboardUiState.launcherDetail]
  * and reports taps.
  *
  * [iconFor] resolves one app's icon off the main thread through the service's
@@ -107,7 +108,7 @@ internal fun AppLauncherPanel(
     }
     LauncherGrid(
         state, callbacks.iconFor, callbacks.onAppTap,
-        callbacks.onOpenDetail, callbacks.onPinToggle, onQueryTap,
+        callbacks.onOpenDetail, onQueryTap,
     )
 }
 
@@ -117,7 +118,6 @@ private fun LauncherGrid(
     iconFor: suspend (LauncherApp) -> ImageBitmap?,
     onAppTap: (LauncherApp) -> Unit,
     onOpenDetail: (LauncherApp) -> Unit,
-    onPinToggle: (String) -> Unit,
     onQueryTap: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
@@ -216,7 +216,7 @@ private fun LauncherGrid(
                             shape = iconShape,
                             iconFor = iconFor,
                             onTap = { onAppTap(app) },
-                            onLongPress = { onPinToggle(app.packageName) },
+                            onLongPress = { onOpenDetail(app) },
                         )
                     }
                 }
@@ -243,10 +243,10 @@ private fun LauncherGrid(
                         shape = iconShape,
                         iconFor = iconFor,
                         onTap = { onAppTap(app) },
-                        onLongPress = {
-                            if (launcher.activityDrilldown) onOpenDetail(app)
-                            else onPinToggle(app.packageName)
-                        },
+                        // One meaning for a hold everywhere in this panel: the
+                        // app's page. Pinning and hiding both live there, and a
+                        // hold that pinned instead left hiding with no door.
+                        onLongPress = { onOpenDetail(app) },
                     )
                 }
             }
@@ -418,9 +418,12 @@ private fun ShortcutCell(
 }
 
 /**
- * The drill-down: the app's header card (icon, label, package), an action
- * row, and every activity it declares — exported first, the rest dimmed with
- * a lock, shown only behind the setting.
+ * The app's page: its header card (icon, label, package) with the pin, hide
+ * and App-info actions, and — behind **Open screens inside apps** — every
+ * activity it declares, exported first, the rest dimmed with a lock and shown
+ * only behind a second setting. With the screens switch off the page is the
+ * actions alone; it stays reachable either way, because hiding an app has no
+ * other door.
  */
 @Composable
 private fun LauncherDetail(
@@ -435,7 +438,11 @@ private fun LauncherDetail(
     val kb = LocalKbTheme.current
     val detail = state.launcherDetail ?: return
     val launcher = state.settings.launcher
-    val shown = detail.activities.filter { it.exported || launcher.showNonExported }
+    val shown = if (launcher.activityDrilldown) {
+        detail.activities.filter { it.exported || launcher.showNonExported }
+    } else {
+        emptyList()
+    }
 
     PanelFocusTarget(PanelMode.APP_LAUNCHER, shown.size, 1) {
         shown.getOrNull(it)?.let(onActivityTap)
@@ -512,6 +519,7 @@ private fun LauncherDetail(
                 tint = kb.toolbarIcon,
             )
         }
+        if (!launcher.activityDrilldown) return@Column
         Text(
             stringResource(R.string.ime_launcher_activities_label),
             color = kb.secondaryText,
