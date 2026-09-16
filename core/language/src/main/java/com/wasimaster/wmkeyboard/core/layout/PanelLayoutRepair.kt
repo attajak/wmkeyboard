@@ -114,7 +114,8 @@ fun validatePanelLayout(spec: PanelLayoutSpec): List<LayoutFinding> {
         )
     }
     // Issue #60 on a panel: a panel that outlives the keyboard closing is left
-    // only by a key, a tool or Back, so say so for as long as the flag is on.
+    // only by a key or a tool — not by Back any more, which hides the keyboard
+    // over such a panel (#227) — so say so for as long as the flag is on.
     if (spec.grid.persistent) {
         findings += LayoutFinding(
             LayoutSeverity.WARNING,

@@ -3083,12 +3083,22 @@ open class WMKeyboardService : InputMethodService() {
                 .map { it.panel != PanelMode.NONE || it.voice.strip }
                 .distinctUntilChanged()
                 .collect { open ->
-                    updatePanelBackCallback(open)
-                    // The same signal restores the input view a shortcut forced
-                    // open. One collector, one definition of "something is open",
-                    // and it already accounts for the dictation strip.
+                    // Restores the input view a shortcut forced open, once
+                    // whatever it was forced open for has been put away. The
+                    // dictation strip counts, which is why this is not simply
+                    // the panel.
                     if (!open) releaseForcedInputView()
                 }
+        }
+
+        // Kept apart from the signal above because the two disagree by design:
+        // a panel marked "Keep this layer open" is open, and back still belongs
+        // to the system while it is (issue #227).
+        serviceScope.launch {
+            uiState
+                .map { backClosesLayer(it) }
+                .distinctUntilChanged()
+                .collect { updatePanelBackCallback(it) }
         }
 
         // Mirror the torch state so the flashlight tool lights up even when
@@ -4465,6 +4475,18 @@ open class WMKeyboardService : InputMethodService() {
         // Chord and morse state belongs to the field it was typed over.
         resetChordInputs()
         refreshKarContext()
+        // The first field this process shows the keyboard for is where a layer
+        // the user asked to keep comes back (issue #227). Deferred until the
+        // stored settings land, because the flag is re-read off the layouts as
+        // they are then; the flag is set here so the wait runs once, not once
+        // per field.
+        if (!persistentSurfaceRestored) {
+            persistentSurfaceRestored = true
+            serviceScope.launch {
+                storedSettingsApplied.await()
+                restorePersistentSurface()
+            }
+        }
         // Register follows the field: a chat composer and an email body want
         // differently-ranked strips (no-op unless the setting is on).
         pushRegister(_uiState.value.settings)
@@ -4940,6 +4962,18 @@ open class WMKeyboardService : InputMethodService() {
         clearCorrectionOffer()
         finishRevisionOnLeave()
         flushLearningBuffer()
+        // Where the user was, for the keyboard that comes back — which is
+        // usually a new process, this one having been stopped in the meantime
+        // (issue #227). Read after the closes above, so nothing that did not
+        // survive this hide is put back by the next show.
+        _uiState.value.let { state ->
+            persistentSurface.save(
+                panel = state.panel.name.takeIf { panelLayoutPersists(state) },
+                layer = state.layoutMode.name.takeIf { currentLayout(state).persistent },
+                secondaryLayoutId = state.secondaryLayoutId
+                    ?.takeIf { state.layoutMode == LayoutMode.SECONDARY },
+            )
+        }
         userLexicon.save()
         pendingLearn.save()
         wordRanks.save()
@@ -8256,6 +8290,50 @@ open class WMKeyboardService : InputMethodService() {
     private fun panelLayoutPersists(state: KeyboardUiState): Boolean {
         val kind = state.panel.layoutKind ?: return false
         return state.panelLayout(kind).grid.persistent
+    }
+
+    /** Where the user was when the keyboard last went away — see the class. */
+    private val persistentSurface by lazy { PersistentSurfacePrefs(this) }
+
+    /** Whether [restorePersistentSurface] has already been asked for, this process. */
+    private var persistentSurfaceRestored = false
+
+    /**
+     * Puts back the panel or key layer the keyboard was showing when it last
+     * left the screen, for a grid whose author switched "Keep this layer open"
+     * on (issue #60). Runs once per process, on the first field to show the
+     * view, and only once the stored settings have landed.
+     *
+     * The flag is re-read off the layouts as they are *now* rather than trusted
+     * from the recording: a switch turned off in the editor since, a layout
+     * deleted, a secondary grid renamed — none of them may resurrect a layer.
+     * That check is the same one the change-of-field path makes, run against a
+     * candidate state rather than the live one.
+     */
+    private fun restorePersistentSurface() {
+        val panelName = persistentSurface.panel
+        val layerName = persistentSurface.layer
+        if (panelName == null && layerName == null) return
+        _uiState.update { state ->
+            val panel = PanelMode.entries.firstOrNull { it.name == panelName }
+                ?.takeIf { mode ->
+                    mode.layoutKind?.let { state.panelLayout(it).grid.persistent } == true
+                }
+            val layered = LayoutMode.entries.firstOrNull { it.name == layerName }
+                ?.let { mode ->
+                    state.copy(
+                        layoutMode = mode,
+                        secondaryLayoutId = if (mode == LayoutMode.SECONDARY) {
+                            persistentSurface.secondaryLayoutId ?: state.secondaryLayoutId
+                        } else {
+                            state.secondaryLayoutId
+                        },
+                    )
+                }
+                ?.takeIf { currentLayout(it).persistent }
+            val restored = layered ?: state
+            if (panel != null) restored.copy(panel = panel) else restored
+        }
     }
 
     /**
@@ -24322,22 +24400,24 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * On Android 13+ the IME's back handling goes through the
      * OnBackInvokedDispatcher, never [onKeyDown] — register a callback while
-     * a panel is open so back closes the panel; unregister when none is,
-     * letting the system's default callback hide the keyboard as usual.
+     * there is a layer for back to close; unregister when there is not,
+     * letting the system's default callback hide the keyboard as usual. Driven
+     * by [backClosesLayer], so a panel marked "Keep this layer open" leaves the
+     * key to the system rather than swallowing it (issue #227).
      */
     private var panelBackCallback: android.window.OnBackInvokedCallback? = null
 
-    private fun updatePanelBackCallback(panelOpen: Boolean) {
+    private fun updatePanelBackCallback(backHasLayer: Boolean) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
         val dispatcher = window?.window?.onBackInvokedDispatcher ?: return
-        if (panelOpen && panelBackCallback == null) {
-            val callback = android.window.OnBackInvokedCallback { dismissTopLayer() }
+        if (backHasLayer && panelBackCallback == null) {
+            val callback = android.window.OnBackInvokedCallback { dismissTopLayer(fromBack = true) }
             dispatcher.registerOnBackInvokedCallback(
                 android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT,
                 callback,
             )
             panelBackCallback = callback
-        } else if (!panelOpen && panelBackCallback != null) {
+        } else if (!backHasLayer && panelBackCallback != null) {
             panelBackCallback?.let { dispatcher.unregisterOnBackInvokedCallback(it) }
             panelBackCallback = null
         }
@@ -24345,69 +24425,80 @@ open class WMKeyboardService : InputMethodService() {
 
     /**
      * Closes the topmost thing the keyboard is showing, innermost first, and
-     * reports whether there was anything to close.
+     * reports whether there was anything to close. [fromBack] marks the two
+     * routes that are really the Back key, as opposed to Escape.
      *
      * The one definition of "go back" for all three routes into it: the pre-T
      * [onKeyUp] path, the Android 13+ back callback, and Escape on a physical
      * keyboard. It used to be written out twice, and the two copies had already
      * drifted on which layer they checked first.
      */
-    private fun dismissTopLayer(): Boolean {
-        val state = _uiState.value
+    private fun dismissTopLayer(fromBack: Boolean = false): Boolean {
+        val close = topLayerDismissal(_uiState.value, fromBack) ?: return false
+        close()
+        return true
+    }
+
+    /**
+     * Whether Back closes a layer of the keyboard's rather than hiding it. All
+     * three places that consume the key ask this first, so the one press is
+     * never half-eaten (the DOWN swallowed for an UP that does nothing) and
+     * never eaten for nothing.
+     *
+     * The outer test is what Back has always claimed — something is open below
+     * it — and the inner one is whether [dismissTopLayer] would find anything
+     * to do with it. They differ over exactly one thing: a panel marked "Keep
+     * this layer open", where there is something open and Back is nonetheless
+     * the system's (issue #227).
+     */
+    private fun backClosesLayer(state: KeyboardUiState = _uiState.value): Boolean =
+        (state.panel != PanelMode.NONE || state.voice.strip) &&
+            topLayerDismissal(state, fromBack = true) != null
+
+    /**
+     * How to close the topmost layer showing, or null when Back has nothing of
+     * its own to close and should hide the keyboard instead.
+     *
+     * Separate from [dismissTopLayer] so both Back routes can ask the question
+     * without answering it: [onKeyDown] has to swallow the DOWN of exactly the
+     * presses [onKeyUp] will act on, and the Android 13+ callback is only
+     * registered while there is something for it to do.
+     */
+    private fun topLayerDismissal(state: KeyboardUiState, fromBack: Boolean): (() -> Unit)? {
         return when {
             // The picker is armed over everything else and costs nothing to drop.
-            state.toolPicker != null -> {
-                disarmToolPicker()
-                true
-            }
+            state.toolPicker != null -> ::disarmToolPicker
             // The GIF/sticker action sheet is a layer above the panel, so back
             // closes it first rather than the panel underneath it.
-            state.mediaAction != null -> {
-                onMediaActionDismiss()
-                true
-            }
-            state.voice.strip -> {
-                closeVoiceStrip()
-                true
-            }
+            state.mediaAction != null -> ::onMediaActionDismiss
+            state.voice.strip -> ::closeVoiceStrip
             // The spelling bar is the innermost layer of all: back leaves the
             // respelling and puts the word card that opened it up again.
-            state.wordSpellActive -> {
-                cancelWordSpell()
-                true
-            }
+            state.wordSpellActive -> ({ cancelWordSpell() })
             // Inner layers close before their panel, like the media sheet: a
             // half-typed AI instruction backs out to the action list, and a
             // focused plugin box gives the keys back, both leaving the panel up.
-            state.aiCustomInputActive -> {
-                dismissAiCustomInput()
-                true
-            }
-            state.pluginTypingActive -> {
-                onPluginInputFocus(null)
-                true
-            }
+            state.aiCustomInputActive -> ::dismissAiCustomInput
+            state.pluginTypingActive -> ({ onPluginInputFocus(null) })
             // Same shape one level down, twice: back leaves a snippet's own
             // list of expansions, then the folder that snippet sits in, then
             // the panel both are drawn in.
-            state.panel == PanelMode.SNIPPETS && state.snippetPicker != null -> {
-                onSnippetPickerBack()
-                true
-            }
-            state.panel == PanelMode.SNIPPETS && state.snippetFolderOpen != null -> {
-                onSnippetFolderOpen(null)
-                true
-            }
+            state.panel == PanelMode.SNIPPETS && state.snippetPicker != null ->
+                ::onSnippetPickerBack
+            state.panel == PanelMode.SNIPPETS && state.snippetFolderOpen != null ->
+                ({ onSnippetFolderOpen(null) })
             // The spelling editor closes before the Learn from text panel under it.
-            state.learnEditActive -> {
-                onLearnEditCancel()
-                true
-            }
-            state.panel != PanelMode.NONE -> {
-                onPanelChange(state.panel)
-                true
-            }
-            else -> false
+            state.learnEditActive -> ::onLearnEditCancel
+            // The one layer Back leaves alone: a panel layout whose author
+            // switched "Keep this layer open" on. The nav bar's chevron is how
+            // people put a keyboard away, and eating it to close the very panel
+            // they asked to keep meant the switch could never be seen surviving
+            // anything (issue #227). Escape still closes it — a physical
+            // keyboard has no chevron of its own, and a key, a tool and the
+            // panel's own close button are all still ways out.
+            state.panel != PanelMode.NONE && !(fromBack && panelLayoutPersists(state)) ->
+                ({ onPanelChange(state.panel) })
+            else -> null
         }
     }
 
@@ -24425,9 +24516,7 @@ open class WMKeyboardService : InputMethodService() {
      * stream.
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && isInputViewShown &&
-            (_uiState.value.panel != PanelMode.NONE || _uiState.value.voice.strip)
-        ) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && isInputViewShown && backClosesLayer()) {
             return true
         }
         // Before the volume keys, so a leader remapped onto one still wins, and
@@ -24466,10 +24555,8 @@ open class WMKeyboardService : InputMethodService() {
         ) {
             armToolPicker()
         }
-        if (keyCode == KeyEvent.KEYCODE_BACK && isInputViewShown &&
-            (_uiState.value.panel != PanelMode.NONE || _uiState.value.voice.strip)
-        ) {
-            dismissTopLayer()
+        if (keyCode == KeyEvent.KEYCODE_BACK && isInputViewShown && backClosesLayer()) {
+            dismissTopLayer(fromBack = true)
             return true
         }
         // Swallow the UP too, so the system never sees half a volume event.
