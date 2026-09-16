@@ -84,6 +84,20 @@ Don't confuse this with the standalone **Numpad** tool in the toolbox, which is 
 <SettingsPath path="Typing / Suggestions / Password manager suggestions" /> shows your system autofill service's saved-login chips inline in the suggestion strip. It isn't gated by `secureField`, since it's tied to a login field rather than a secure one, and your password manager draws the chips itself: the keyboard is only told their size and never sees the username or password inside them. It needs Android 11+ and a password manager set as your system autofill service, and it turns itself off automatically while incognito mode is on. The system's [smart replies](/smart/autofill/#smart-replies) come down the same channel but have their own toggle, and aren't tied to field type at all.
 :::
 
+## Typing in a terminal
+
+A terminal emulator like Termux isn't an ordinary text box. It reports its field with no type at all, and its connection to the keyboard carries only *finished* text: whatever the keyboard is still working on stays invisible to the terminal until something finishes it.
+
+That matters because plain English composing works by holding the word you're typing as an unfinished draft, so autocorrect and the suggestion strip have something to read, and only finishing it at the end of the word. In a terminal that draft went nowhere visible. Typing `echo` showed an empty prompt until the space after it, which then dumped the whole word in at once.
+
+So the keyboard doesn't compose in a field like that. Every key you press is finished text immediately, and the terminal shows it as you type. Glide typing still works, since a swiped word arrives finished in one piece.
+
+The rest of the prose rules stand down in a terminal for the same reason a password field doesn't get them: autocorrect, on-device learning, the double-space period and the space typed after punctuation are all rules about writing sentences, and a shell prompt isn't one. A space the keyboard adds after a comma is a different command.
+
+Phonetic (Avro) composing is the exception here as it is everywhere else, and it keeps the old behavior: Bangla typed at a terminal prompt still only appears once the word ends.
+
+The same field description, a field with no type, is also what a window with no text box at all reports, which is where a keyboard you've kept open spends most of its time. It's treated identically.
+
 ## When an app gets its own field wrong
 
 There's no manual override for field detection. No setting forces a field to be treated as a password or an email box. Detection reads only the field's real `inputType`, every time it's focused, and there's nothing else to configure.
@@ -113,6 +127,7 @@ Two related things exist, but neither is a correction for a misreporting app:
 
 - **A password field's `FieldKind` is `TEXT`, not a dedicated kind.** If you're reading behavior off the field kind alone, remember that password status is the separate `secureField` flag layered on top. A numeric PIN field carries both `FieldKind.NUMBER` and `secureField = true` at once.
 - **The typing-intelligence cutoff is broader than "passwords only."** Autocorrect and learning turn off for every field kind except plain, non-secure `TEXT`, which takes in email and URL fields as well as passwords and numeric pads. Two things reach one step further, into URL fields: glide typing, and word completion on the strip while **Suggestions in every field** is on. Neither autocorrects or learns there. Phonetic (Avro) composing is the one true exception. It keeps running in every field, secure or structured, since it exists to transliterate roman keys into Bangla rather than to feed suggestions.
+- **A field with no type at all is a third cutoff**, alongside secure fields and structured kinds. A terminal emulator and a window with no text box both report one, and neither can show an unfinished word, so nothing composes there and none of the prose rules run. See [Typing in a terminal](#typing-in-a-terminal).
 - **The suggestion strip is force-emptied a second time**, independent of the strip-hiding check above, as a backstop specifically for secure fields.
 - **The email/URL key swap has no toggle.** It's derived purely from field kind and layout mode (letters layer only), so there's nothing to turn off short of the field itself not being an email or URL field.
 - **A custom layout can override any of the five numeric keypads** by defining its own `NUMBER`/`PHONE`/`DATE`/`TIME`/`DATETIME` layer. Anything it doesn't define falls back to the shared ones described above.

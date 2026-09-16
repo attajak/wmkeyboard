@@ -3876,9 +3876,7 @@ open class WMKeyboardService : InputMethodService() {
      * fallback connection whose buffer no app reads, so only key events reach
      * it. Where a pinned keyboard (issue #58) sits most of the time.
      */
-    private fun isNullField(): Boolean =
-        (currentInputEditorInfo?.inputType ?: InputType.TYPE_NULL) and
-            InputType.TYPE_MASK_CLASS == InputType.TYPE_NULL
+    private fun isNullField(): Boolean = currentInputEditorInfo.isNullClass()
 
     /** A physical keyboard is attached and not folded away. */
     private fun hasHardwareKeyboard(): Boolean {
@@ -4263,6 +4261,7 @@ open class WMKeyboardService : InputMethodService() {
         hwGeneration++
         val secure = info.isSecureField()
         val fieldKind = info.fieldKind()
+        val nullField = info.isNullClass()
         // Keyboard-mode resolution: a manual pick from the Modes tool lives as
         // long as the user stays in the same app, unless they asked for it to
         // last until they change it. Clearing on the next app was right for a
@@ -4404,6 +4403,7 @@ open class WMKeyboardService : InputMethodService() {
                 // between sessions, not during a hold.
                 selectionHold = false,
                 fieldKind = fieldKind,
+                nullField = nullField,
                 fieldNoSuggestions = fieldNoSuggestions,
                 fieldIncognito = fieldIncognito,
                 emojiSearchActive = false,
@@ -26174,6 +26174,19 @@ open class WMKeyboardService : InputMethodService() {
             }
             return null
         }
+
+        /**
+         * The editor declares the TYPE_NULL class. Two very different things
+         * report it and both want the same treatment: a terminal emulator
+         * (Termux, issue #220), whose connection only reaches the terminal on
+         * a commit, and the framework's fallback connection for a window with
+         * no editor at all, which is where a pinned keyboard (issue #58) spends
+         * most of its time. Neither can show a composing region — see
+         * [KeyboardUiState.nullField].
+         */
+        internal fun EditorInfo?.isNullClass(): Boolean =
+            (this?.inputType ?: InputType.TYPE_NULL) and
+                InputType.TYPE_MASK_CLASS == InputType.TYPE_NULL
 
         private fun EditorInfo?.fieldKind(): FieldKind {
             val inputType = this?.inputType ?: return FieldKind.TEXT

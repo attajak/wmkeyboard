@@ -2308,6 +2308,26 @@ data class KeyboardUiState(
     /** Field class/variation of the focused editor, from EditorInfo. */
     val fieldKind: FieldKind = FieldKind.TEXT,
     /**
+     * The focused editor declares the TYPE_NULL class: a terminal emulator
+     * (Termux, issue #220) or the framework's fallback connection for a window
+     * with no editor at all, which is what a pinned keyboard (issue #58) sits
+     * over. Such an editor takes *committed* text and nothing else — Termux
+     * only flushes its buffer to the terminal on commitText/finishComposingText,
+     * and the fallback connection's buffer is read by nobody — so a composing
+     * region put there is invisible until something ends it. Typing "echo"
+     * showed nothing until the space after it, which then dumped the whole word
+     * at once. Nothing composes in such a field
+     * ([composesForSuggestions]) and none of the prose rules run in it
+     * ([allowsTypingIntelligence]): a shell prompt is not prose, and a space
+     * the keyboard types after a comma is a changed command line.
+     *
+     * Deliberately *not* extended to a transliterating composer (Avro): its
+     * roman keys have to buffer somewhere to become Bengali, and committing
+     * each intermediate form would need a delete-and-recommit that a terminal's
+     * connection cannot answer either. Avro in a terminal stays as it was.
+     */
+    val nullField: Boolean = false,
+    /**
      * The field asked the keyboard to hide the *suggestion strip*
      * (TYPE_TEXT_FLAG_NO_SUGGESTIONS, or an email/URI/filter/password
      * variation). Strip visibility only — autocorrect, phonetic composing
@@ -2552,12 +2572,14 @@ data class KeyboardUiState(
      * belong to prose entry, so they apply to plain text fields only and are
      * deliberately independent of [fieldNoSuggestions]: an app that hides the
      * suggestion strip (Instagram, Google Keep) must not also lose autocorrect
-     * or the ability to type Bengali. Password fields ([secureField]) and
-     * structured fields (email, URI, number, phone, date) opt out — a keypad
-     * has no words to correct and an address should not be second-guessed.
+     * or the ability to type Bengali. Password fields ([secureField]),
+     * structured fields (email, URI, number, phone, date) and editors that
+     * take committed text only ([nullField] — a terminal) opt out — a keypad
+     * has no words to correct, an address should not be second-guessed, and a
+     * shell prompt is not prose.
      */
     val allowsTypingIntelligence: Boolean
-        get() = !secureField && fieldKind == FieldKind.TEXT
+        get() = !secureField && !nullField && fieldKind == FieldKind.TEXT
 
     /**
      * Whether a glide may be decoded and committed here. Wider than
@@ -2585,10 +2607,13 @@ data class KeyboardUiState(
      * structured kinds: an address has no dictionary words to complete. With
      * the strip hidden ([fieldNoSuggestions]) a URL bar does not compose at
      * all, since composing there would have nothing to show; a text field
-     * still does, because autocorrect reads the same buffer.
+     * still does, because autocorrect reads the same buffer. An editor that
+     * cannot show a composing region at all ([nullField]) stays out whatever
+     * the strip is doing: there the buffer is not merely unhelpful, it is
+     * text the user typed and cannot see (issue #220).
      */
     val composesForSuggestions: Boolean
-        get() = settings.suggestions && !secureField && (
+        get() = settings.suggestions && !secureField && !nullField && (
             fieldKind == FieldKind.TEXT ||
                 (fieldKind == FieldKind.URI && !fieldNoSuggestions)
             )
