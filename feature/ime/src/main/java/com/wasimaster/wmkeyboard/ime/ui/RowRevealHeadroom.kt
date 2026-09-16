@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layout
 
 /**
@@ -33,6 +34,13 @@ import androidx.compose.ui.layout.layout
  * ([resizeHeadroom]), sized frame by frame instead of latched. Nothing is drawn
  * in the held space, so the top of the board still travels with the row.
  *
+ * A row may go further and keep its height held for as long as it is out
+ * (`reserveWhenOutPx`), which costs the window that band all the time and buys
+ * a toggle that resizes nothing at all. Worth it for the chevron's tools row:
+ * on some devices the single remaining resize dropped the keyboard's surface
+ * for two frames and served one stale, top-aligned buffer after it, which read
+ * as the keyboard blinking (issue #217).
+ *
  * Every row keeps its own [RowReveal] and the frame holds their sum, so rows
  * moving at the same time are all held. A selection landing while the tools
  * row folds away steps the window up by the arriving row on the first frame and
@@ -42,9 +50,20 @@ import androidx.compose.ui.layout.layout
 internal class RowRevealHeadroom {
     private val rows = mutableStateListOf<RowReveal>()
 
-    /** What the frame holds back: every row's shortfall, added up. */
+    /** What the frame holds back: every row's shortfall and every band, added up. */
     val pendingPx: Int
-        get() = rows.sumOf { it.shortfallPx }
+        get() = rows.sumOf { it.shortfallPx + it.reservedPx }
+
+    /**
+     * The part of [pendingPx] that is window rather than keyboard: the bands
+     * held open for rows that are out.
+     *
+     * The service keeps this out of the app's insets, so the app is laid out
+     * to the board and a tap in the band is the app's — the key preview band's
+     * bargain ([keyPreviewHeadroomPx]), struck for the same reason.
+     */
+    val reservedPx: Int
+        get() = rows.sumOf { it.reservedPx }
 
     fun track(row: RowReveal) {
         rows += row
@@ -58,10 +77,10 @@ internal class RowRevealHeadroom {
 /**
  * One row's share of [RowRevealHeadroom].
  *
- * [shortfallPx] is state because the frame reads it, and a row cut from the
- * stack mid-move has to reach a frame that nothing else re-measures. [fullPx]
- * is a plain field: the reveal writes it while measuring its content, and the
- * row reads it back in that same measure a moment later.
+ * [shortfallPx] and [reservedPx] are state because the frame reads them, and a
+ * row cut from the stack mid-move has to reach a frame that nothing else
+ * re-measures. [fullPx] is a plain field: the reveal writes it while measuring
+ * its content, and the row reads it back in that same measure a moment later.
  */
 internal class RowReveal {
     /**
@@ -79,6 +98,17 @@ internal class RowReveal {
 
     /** How far the row is from [fullPx] right now; 0 once it has finished leaving. */
     var shortfallPx by mutableIntStateOf(0)
+
+    /**
+     * The band held for this row while it is out, for a row that asked for one
+     * ([RevealingBarRow]'s `reserveWhenOutPx`); 0 whenever the row is in the
+     * stack, moving or settled.
+     *
+     * A row's band and its shortfall are written in the same measure, and the
+     * two add up to the row's full height whatever it is doing, so the frame a
+     * reserving row sits in is the same height open, closed and mid-move.
+     */
+    var reservedPx by mutableIntStateOf(0)
 }
 
 /**
@@ -108,12 +138,22 @@ internal fun Modifier.rowRevealHeadroom(headroom: RowRevealHeadroom): Modifier =
  * A row that is leaving and has reached zero is done, and its hold goes on that
  * frame: the window shrinks with the exit's last frame rather than whenever the
  * reveal gets round to dropping content that nothing will measure again.
+ *
+ * [reserveWhenOutPx] keeps the row's height held even once it is gone, so the
+ * frame never changes at all — the one resize each way becomes none. Only worth
+ * asking for where the row is the user's own toggle and the height is known
+ * before it is ever measured; the frame reports the band to the service, which
+ * keeps it out of the app's insets, so the app is laid out to the board exactly
+ * as it is today and the window simply stops resizing under it. The row still
+ * has to be composed while out — a row taken out of the stack takes its band
+ * with it, which is right: a full-bleed panel is a real resize either way.
  */
 @Composable
 internal fun ColumnScope.RevealingBarRow(
     visible: Boolean,
     enter: EnterTransition,
     exit: ExitTransition,
+    reserveWhenOutPx: Int = 0,
     content: @Composable () -> Unit,
 ) {
     val headroom = LocalRowRevealHeadroom.current
@@ -128,28 +168,38 @@ internal fun ColumnScope.RevealingBarRow(
         headroom.track(reveal)
         onDispose { headroom.untrack(reveal) }
     }
-    AnimatedVisibility(
-        visible = visible,
-        modifier = Modifier.layout { measurable, constraints ->
-            val placeable = measurable.measure(constraints)
-            reveal.shortfallPx = if (!visible && placeable.height == 0) {
-                0
-            } else {
-                (reveal.fullPx - placeable.height).coerceAtLeast(0)
+    // The reveal is wrapped rather than measured through its own modifier,
+    // because an [AnimatedVisibility] that has never been visible puts no node
+    // in the tree at all: a modifier on it would not run until the first time
+    // the row opened, and a band that only appears after the first open is no
+    // band at all. This wrapper is always here, and reads the row's height as
+    // zero when there is nothing inside it to measure.
+    Layout(
+        content = {
+            AnimatedVisibility(visible = visible, enter = enter, exit = exit) {
+                Box(
+                    modifier = Modifier.layout { measurable, constraints ->
+                        val placeable = measurable.measure(constraints)
+                        if (visible) reveal.fullPx = placeable.height
+                        layout(placeable.width, placeable.height) { placeable.place(0, 0) }
+                    },
+                ) {
+                    content()
+                }
             }
-            layout(placeable.width, placeable.height) { placeable.place(0, 0) }
         },
-        enter = enter,
-        exit = exit,
-    ) {
-        Box(
-            modifier = Modifier.layout { measurable, constraints ->
-                val placeable = measurable.measure(constraints)
-                if (visible) reveal.fullPx = placeable.height
-                layout(placeable.width, placeable.height) { placeable.place(0, 0) }
-            },
-        ) {
-            content()
-        }
+    ) { measurables, constraints ->
+        val placeable = measurables.firstOrNull()?.measure(constraints)
+        val shown = placeable?.height ?: 0
+        val out = !visible && shown == 0
+        // Pinned while the row is out, so the first frame of an entrance is
+        // short of the band rather than of a height nothing has measured yet:
+        // a row opened for the first time in a session would otherwise drop
+        // the band, then grow back into it, which is the resize this is here
+        // to avoid.
+        if (out && reserveWhenOutPx > 0) reveal.fullPx = reserveWhenOutPx
+        reveal.shortfallPx = if (out) 0 else (reveal.fullPx - shown).coerceAtLeast(0)
+        reveal.reservedPx = if (out) reserveWhenOutPx else 0
+        layout(placeable?.width ?: constraints.minWidth, shown) { placeable?.place(0, 0) }
     }
 }

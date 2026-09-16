@@ -63,6 +63,13 @@ class RowRevealHeadroomTest {
     private var macros by mutableStateOf(false)
     private var macrosInStack by mutableStateOf(true)
 
+    /** The reserving row: the chevron's on-demand tools row (issue #217). */
+    private var onDemand by mutableStateOf(false)
+    private var onDemandInStack by mutableStateOf(false)
+
+    /** The frame's own headroom, for what it says is window rather than keyboard. */
+    private lateinit var headroom: RowRevealHeadroom
+
     /** The macro bar with its offer gone: the row's content draws nothing. */
     private var macrosEmpty by mutableStateOf(false)
 
@@ -159,10 +166,57 @@ class RowRevealHeadroomTest {
         assertEquals(listOf(boardPx + rowPx, boardPx), heights())
     }
 
+    @Test
+    fun `a reserving row opens and closes without resizing the frame at all`() {
+        onDemandInStack = true
+        start()
+        assertEquals("the band is held while the row is out", rowPx, headroom.reservedPx)
+
+        change { onDemand = true }
+        assertEquals("the frame never moved", emptyList<Int>(), heights())
+        assertTrue("while the row really grew", stack.distinct().size > 2)
+        assertEquals("and the band is the row's own now", 0, headroom.reservedPx)
+
+        forget()
+        change { onDemand = false }
+        assertEquals("nor on the way back", emptyList<Int>(), heights())
+        assertTrue("while the row really shrank", stack.distinct().size > 2)
+        assertEquals("the band is held again", rowPx, headroom.reservedPx)
+    }
+
+    @Test
+    fun `a reserving row cut from the stack gives the band back`() {
+        onDemandInStack = true
+        start()
+
+        change { onDemandInStack = false }
+        assertEquals("the frame drops the band with the row", listOf(boardPx), heights())
+        assertEquals(0, headroom.reservedPx)
+    }
+
+    @Test
+    fun `a reserving row holds its own height beside a moving neighbour`() {
+        onDemandInStack = true
+        start()
+        change { onDemand = true }
+
+        forget()
+        // The macro bar arrives while the tools row folds away: the arriving
+        // row is the only thing the frame has to find room for, because the
+        // leaving one hands its height straight back to its band.
+        change {
+            onDemand = false
+            macros = true
+        }
+        assertEquals(listOf(boardPx + 2 * rowPx), heights())
+        assertEquals(rowPx, headroom.reservedPx)
+    }
+
     private fun start() {
         compose.mainClock.autoAdvance = false
         compose.setContent {
             val headroom = remember { RowRevealHeadroom() }
+            this.headroom = headroom
             Box(
                 Modifier
                     .onSizeChanged { frame += compose.mainClock.currentTime to it.height }
@@ -180,6 +234,16 @@ class RowRevealHeadroomTest {
                         if (macrosInStack) {
                             RevealingBarRow(macros, expandVertically(tween(MOVE_MS)), shrinkVertically(tween(MOVE_MS))) {
                                 if (!macrosEmpty) Box(Modifier.fillMaxWidth().height(ROW_DP.dp))
+                            }
+                        }
+                        if (onDemandInStack) {
+                            RevealingBarRow(
+                                onDemand,
+                                expandVertically(tween(MOVE_MS)),
+                                shrinkVertically(tween(MOVE_MS)),
+                                reserveWhenOutPx = rowPx,
+                            ) {
+                                Box(Modifier.fillMaxWidth().height(ROW_DP.dp))
                             }
                         }
                         Box(Modifier.fillMaxWidth().height(BOARD_DP.dp))

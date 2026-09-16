@@ -987,11 +987,13 @@ fun KeyboardScreen(
     onSizingAction: (SizingAction) -> Unit = {},
     onFloatingBounds: (IntRect) -> Unit = {},
     /**
-     * The band the docked frame keeps above the board for the key preview
-     * bubbles, in px, whenever it changes. The service keeps it out of the
-     * app's insets — see [keyPreviewHeadroomPx].
+     * The empty band the docked frame keeps above the board, in px, whenever it
+     * changes: room for the key preview bubbles ([keyPreviewHeadroomPx]) plus
+     * whatever a bar row holds open while it is out ([RowRevealHeadroom]). The
+     * service keeps the lot out of the app's insets, so it is window height and
+     * not keyboard height.
      */
-    onPreviewHeadroom: (Int) -> Unit = {},
+    onWindowHeadroom: (Int) -> Unit = {},
     onToolbarToolsChange: (List<ToolbarTool>) -> Unit = {},
     onToolboxOrderChange: (List<ToolbarTool>) -> Unit = {},
     toolHold: ToolHoldCallbacks = ToolHoldCallbacks(),
@@ -1537,7 +1539,7 @@ fun KeyboardScreen(
                             onOneHandedSide = onOneHandedSide,
                             resize = resizeSession,
                             keyPreview = keyPreview,
-                            onPreviewHeadroom = onPreviewHeadroom,
+                            onWindowHeadroom = onWindowHeadroom,
                             body = movableBody,
                         )
                     }
@@ -1572,7 +1574,7 @@ private fun DockedKeyboardFrame(
     onOneHandedSide: (Boolean, OneHandedSide) -> Unit,
     resize: ResizeSession? = null,
     keyPreview: KeyPreviewState,
-    onPreviewHeadroom: (Int) -> Unit = {},
+    onWindowHeadroom: (Int) -> Unit = {},
     body: @Composable ColumnScope.(KeyboardUiState) -> Unit,
 ) {
     // In resize mode the outer frame reserves the session's headroom and the
@@ -1580,10 +1582,8 @@ private fun DockedKeyboardFrame(
     // entry and the keyboard's own box is the only thing that changes size
     // frame to frame — the drag never moves its own origin.
     val density = LocalDensity.current
-    // The empty band above the board where a top-row bubble goes. Reported
-    // to the service, which keeps it out of the app's insets.
+    // The empty band above the board where a top-row bubble goes.
     val previewHeadroomPx = keyPreviewHeadroomPx(state.settings)
-    LaunchedEffect(previewHeadroomPx) { onPreviewHeadroom(previewHeadroomPx) }
     var frameOrigin by remember { mutableStateOf(Offset.Zero) }
     var frameSize by remember { mutableStateOf(IntSize.Zero) }
     val configuration = LocalConfiguration.current
@@ -1599,6 +1599,16 @@ private fun DockedKeyboardFrame(
     val revealHeadroom = remember { RowRevealHeadroom() }
     val revealingBody: @Composable ColumnScope.(KeyboardUiState) -> Unit = { bodyState ->
         CompositionLocalProvider(LocalRowRevealHeadroom provides revealHeadroom) { body(bodyState) }
+    }
+    // Both empty bands, reported to the service, which keeps them out of the
+    // app's insets. Watched rather than read here: the reserved band changes as
+    // a row opens and closes, and reading it in the composition would recompose
+    // the whole frame on the very frame the row starts moving. A snapshot flow
+    // sees the write from the layout pass that made it and delivers after the
+    // frame, which is also where the service's requestLayout belongs.
+    LaunchedEffect(revealHeadroom, previewHeadroomPx, onWindowHeadroom) {
+        snapshotFlow { previewHeadroomPx + revealHeadroom.reservedPx }
+            .collect { onWindowHeadroom(it) }
     }
     // Two boxes: the frame proper under its band, and the bubbles over the
     // lot. The band is on the inner one so the outer one's size, which the
@@ -8733,6 +8743,12 @@ private fun KeyboardBody(
             val toolsRowHost = placement.isOwnRow &&
                 state.settings.toolbarBehavior.enabled &&
                 !fullBleed && !emojiSearching && !clipboardSearching && !lockHidden
+            // What the row measures to, from the settings alone: [ToolsRow] is
+            // a [topBarHeight] Row and nothing else. The frame holds this much
+            // open while the row is closed, so it has to be the row's height
+            // exactly — a band that is short resizes the window on the way in,
+            // one that is long leaves a gap over the board.
+            val toolsRowPx = with(LocalDensity.current) { topBarHeight(state.settings).roundToPx() }
             // The macro row's own hard cut: the same panel and lock-screen
             // gates as every other row, plus the placement. Whether there is
             // anything to draw is the animated half, below.
@@ -8893,6 +8909,19 @@ private fun KeyboardBody(
                             val motion = !state.settings.reduceMotion
                             RevealingBarRow(
                                 visible = placement == ToolbarPlacement.ALWAYS_ROW || toolsRowOpen,
+                                // On demand, the frame holds the row's height
+                                // even while it is closed, so the chevron
+                                // resizes the IME window neither way (#217):
+                                // the one resize left after the per-frame ones
+                                // went was enough to blink the keyboard on some
+                                // devices. The height is the row's own, known
+                                // from the settings before it is ever measured.
+                                // Not for ALWAYS_ROW, whose row is never out.
+                                reserveWhenOutPx = if (placement == ToolbarPlacement.ON_DEMAND_ROW) {
+                                    toolsRowPx
+                                } else {
+                                    0
+                                },
                                 enter = if (motion) {
                                     expandVertically(tween(ToolbarMotionMs)) + fadeIn(tween(ToolbarMotionMs))
                                 } else {

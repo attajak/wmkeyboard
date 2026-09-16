@@ -3733,21 +3733,23 @@ open class WMKeyboardService : InputMethodService() {
                 onStripOfferAction = ::onStripOfferAction,
                 onToolPrefillConsumed = ::onToolPrefillConsumed,
                 onHideKeyboard = ::onHideKeyboard,
-                onPreviewHeadroom = ::onPreviewHeadroom,
+                onWindowHeadroom = ::onWindowHeadroom,
             )
     }
 
     /**
-     * The empty band the docked frame holds above the board for the key
-     * preview bubbles, in px. Window, not keyboard: [onComputeInsets] keeps
-     * it out of the app's content and visible insets, so the app is laid out
-     * to the board and a tap in the band is the app's.
+     * The empty band the docked frame holds above the board, in px: room for
+     * the key preview bubbles, plus whatever a bar row keeps held open while
+     * it is out (the on-demand tools row, see RowRevealHeadroom). Window, not
+     * keyboard: [onComputeInsets] keeps it out of the app's content and visible
+     * insets, so the app is laid out to the board and a tap in the band is the
+     * app's.
      */
-    private var previewHeadroomPx = 0
+    private var windowHeadroomPx = 0
 
-    fun onPreviewHeadroom(px: Int) {
-        if (px == previewHeadroomPx) return
-        previewHeadroomPx = px
+    fun onWindowHeadroom(px: Int) {
+        if (px == windowHeadroomPx) return
+        windowHeadroomPx = px
         // Insets are only re-queried on a window layout pass; force one.
         window?.window?.decorView?.requestLayout()
     }
@@ -3850,11 +3852,11 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         if (!_uiState.value.settings.floatingKeyboard) {
-            // Docked: the frame's preview band is transparent window over the
+            // Docked: the frame's held bands are transparent window over the
             // app, not keyboard. Both insets, so the app resizes to the board
-            // and a tap in the band reaches it — the touchable inset follows
+            // and a tap in a band reaches it — the touchable inset follows
             // the visible one by default.
-            val headroom = previewHeadroomPx
+            val headroom = windowHeadroomPx
             if (headroom > 0) {
                 outInsets.contentTopInsets += headroom
                 outInsets.visibleTopInsets += headroom
