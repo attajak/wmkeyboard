@@ -2252,6 +2252,15 @@ data class KeyboardUiState(
      * policy picked by hand is the user's answer already.
      */
     val sandboxOffer: GlideSandboxPolicy? = null,
+    /**
+     * The language glide typing has no word list for, while the strip is
+     * saying so (#219), or null. A swipe on such a language goes nowhere, and
+     * with nothing on screen to explain it the keyboard looked broken. Put up
+     * by the readiness watcher, once per language per process; taken down by
+     * the next keystroke or its own ✕. Tapping it opens the language's page,
+     * where the list downloads.
+     */
+    val glideWordListOffer: LanguageDef? = null,
     /** The word card a held suggestion opened, or null while none is up (#99). */
     val wordCard: WordCard? = null,
     /** The card's spelling editor while it is up; see [WordSpell] (#138). */

@@ -96,6 +96,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material.icons.outlined.AudioFile
 import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.SwapHoriz
@@ -2467,6 +2468,9 @@ private fun TopBar(
         // As does the sandbox ladder's chip, which arrives at the same moment
         // and in the same place.
         state.sandboxOffer != null ||
+        // And the chip pointing at a word list glide typing is missing, which
+        // is up while nothing is being typed.
+        state.glideWordListOffer != null ||
         // A morse sequence being tapped out counts as strip content: the
         // toolbar taking the row would hide the one live view of the chord.
         // Its SOS easter-egg note counts the same way, or the toolbar would
@@ -3207,6 +3211,29 @@ private fun TopBar(
                     },
                 )
                 if (!sandboxShares) return@Row
+            }
+            // A language with no word list cannot glide, and a swipe going
+            // nowhere looks like a broken keyboard (#219). Behind the other
+            // chips for the sandbox chip's reason: it is about a download,
+            // not about the text on screen. Tapping it opens the language's
+            // page, where the list downloads.
+            val wordListOffer = state.glideWordListOffer
+            if (snippetOffer == null && learnOffer == null && sandboxOffer == null && wordListOffer != null) {
+                val wordListShares = suggestionsShowing || state.smart != null
+                OfferChip(
+                    label = stringResource(R.string.ime_glide_word_list_offer, wordListOffer.englishName),
+                    icon = Icons.Outlined.Download,
+                    declineDescription = stringResource(R.string.ime_glide_word_list_offer_dismiss_desc),
+                    onAccept = { onStripOfferAction(StripOfferAction.Accept()) },
+                    onDecline = { onStripOfferAction(StripOfferAction.Decline) },
+                    stretch = !wordListShares,
+                    modifier = if (wordListShares) {
+                        Modifier.widthIn(max = 260.dp).padding(horizontal = 4.dp)
+                    } else {
+                        Modifier.weight(1f).padding(horizontal = 4.dp)
+                    },
+                )
+                if (!wordListShares) return@Row
             }
             // A recognised sum/conversion answers the text directly, so it
             // takes the whole strip the way autofill chips do. A keyword

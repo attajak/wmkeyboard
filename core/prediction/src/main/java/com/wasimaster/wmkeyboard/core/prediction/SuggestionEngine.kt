@@ -755,6 +755,17 @@ class SuggestionEngine(
      * letting it vote would have a handful of leftover English words decide
      * whether Bengali is glidable.
      */
+    /**
+     * Whether the language being typed has a word list at all — bundled or
+     * downloaded and imported — as opposed to enough of one for a layout. A
+     * language without one cannot glide whatever the grid, and the keyboard
+     * says so rather than staying silent (#219). Secondary languages and the
+     * personal lexicon do not count: a French keyboard with no French list is
+     * the case being asked about, however many English words are loaded.
+     */
+    fun hasLanguageWords(): Boolean =
+        (activeDictionary.walkers() + customDictionary.walkers()).any { it.maxSubtree(it.root) > 0 }
+
     fun glideCoverage(alphabet: Set<Int>): Float {
         val romanization = glideRomanization
         // Through the romanization when there is one: on Avro the question is

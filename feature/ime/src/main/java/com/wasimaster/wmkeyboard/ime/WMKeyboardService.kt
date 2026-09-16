@@ -1053,6 +1053,8 @@ open class WMKeyboardService : InputMethodService() {
     /** Appends to the composing buffer, pairing the pending tap position with
      * a single appended character (multi-char inserts get null slots). */
     private fun appendComposing(text: String) {
+        // Typing on is the answer to a chip about a download (#219).
+        if (_uiState.value.glideWordListOffer != null) clearGlideWordListOffer()
         if (composing.isEmpty()) {
             val state = _uiState.value
             composingCaseTrusted = state.shiftState == ShiftState.OFF ||
@@ -1680,6 +1682,13 @@ open class WMKeyboardService : InputMethodService() {
 
     /** A sandbox rung earned and not yet answered, while its chip is up. */
     private var sandboxOfferPolicy: GlideSandboxPolicy? = null
+
+    /**
+     * Languages already told, this process, that glide typing wants a word
+     * list they do not have (#219). Once each: the chip is a pointer to a
+     * download, not a nag, and a language kept without one is a choice.
+     */
+    private val glideWordListNoticed = HashSet<String>()
 
     /** Keeps the mid-stroke word from changing under the finger (see [GlidePreviewGate]). */
     private val previewGate = GlidePreviewGate()
@@ -9582,8 +9591,8 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * An ask-first chip on the strip was answered.
      *
-     * One entry point for all of them — the snippet offer, the add-word offer
-     * and the sandbox offer — picked apart by state here rather than by more
+     * One entry point for all of them — the snippet offer, the add-word offer,
+     * the sandbox offer and the missing-word-list chip — picked apart by state here rather than by more
      * parameters on [ui.KeyboardScreen], whose argument list already compiles
      * to a method at the JVM's 64K ceiling. They never share the strip: the
      * chip that is up is the one this answers, and the UI renders them in this
@@ -9604,6 +9613,15 @@ open class WMKeyboardService : InputMethodService() {
                 is StripOfferAction.Accept -> acceptSandboxOffer()
                 StripOfferAction.Decline -> declineSandboxOffer()
                 // Nor has the sandbox chip.
+                else -> Unit
+            }
+            return
+        }
+        // Behind the snippet offer, which the strip shows in its place.
+        if (_uiState.value.snippetOffers == null && _uiState.value.glideWordListOffer != null) {
+            when (action) {
+                is StripOfferAction.Accept -> acceptGlideWordListOffer()
+                StripOfferAction.Decline -> clearGlideWordListOffer()
                 else -> Unit
             }
             return
@@ -13414,6 +13432,30 @@ open class WMKeyboardService : InputMethodService() {
         if (_uiState.value.sandboxOffer != null) _uiState.update { it.copy(sandboxOffer = null) }
     }
 
+    /**
+     * The language to put the missing-word-list chip up for, or null: glide
+     * typing is off, so nobody is swiping; the state has moved on to another
+     * language; or [languageId] has been told once already (#219).
+     */
+    private fun glideWordListOffer(languageId: String): LanguageDef? {
+        val state = _uiState.value
+        if (!state.settings.gestureTyping || state.language.id != languageId) return null
+        if (!glideWordListNoticed.add(languageId)) return null
+        return state.language
+    }
+
+    /** The chip was tapped: the language's own page, where its list downloads. */
+    private fun acceptGlideWordListOffer() {
+        val language = _uiState.value.glideWordListOffer ?: return
+        clearGlideWordListOffer()
+        openRoute("language/${language.id}")
+    }
+
+    /** Takes the missing-word-list chip down, answered or overtaken by typing. */
+    private fun clearGlideWordListOffer() {
+        if (_uiState.value.glideWordListOffer != null) _uiState.update { it.copy(glideWordListOffer = null) }
+    }
+
     /** "Yes": the ladder climbs, and the next stroke decodes under the new rung. */
     private fun acceptSandboxOffer() {
         val policy = sandboxOfferPolicy ?: return
@@ -13936,7 +13978,24 @@ open class WMKeyboardService : InputMethodService() {
                     val ready = allowed && engine != null && withContext(Dispatchers.Default) {
                         engine.glideCoverage(gate.alphabet) >= GlideCoverage.THRESHOLD
                     }
-                    _uiState.update { if (it.glideReady == ready) it else it.copy(glideReady = ready) }
+                    // Nothing of the language's own to decode against — its
+                    // word list was never downloaded — so a swipe either
+                    // fails or, with a secondary language's list loaded, comes
+                    // back in that language (#219). Asked whatever the gate
+                    // said: readiness can be earned on the secondary's words,
+                    // and that is exactly when the chip is needed. A list that
+                    // does not cover the layout is the other silent case, and
+                    // the docs are what explain that one.
+                    val missingList = allowed && !gate.phonetic &&
+                        engine != null && !engine.hasLanguageWords()
+                    val offer = if (missingList) glideWordListOffer(gate.languageId) else null
+                    _uiState.update {
+                        if (it.glideReady == ready && it.glideWordListOffer == offer) {
+                            it
+                        } else {
+                            it.copy(glideReady = ready, glideWordListOffer = offer)
+                        }
+                    }
                 }
         }
     }

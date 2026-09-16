@@ -255,6 +255,12 @@
     <string name="ime_sandbox_offer_only">Swipe using only your words?</string>
     <!-- The ✕ on the sandbox chip: screen reader text. -->
     <string name="ime_sandbox_offer_never_desc">Don\'t ask about this again</string>
+    <!-- The chip shown when glide typing is on but the active language has no
+         word list to decode a swipe against. %1$s is the language's English
+         name. Tapping the chip opens that language's page, where a list downloads. -->
+    <string name="ime_glide_word_list_offer">Glide typing needs a %1$s word list</string>
+    <!-- The ✕ on that chip: screen reader text. -->
+    <string name="ime_glide_word_list_offer_dismiss_desc">Dismiss</string>
     <!-- Easter egg: shown in the strip when S, O and S are keyed in a row on the
          morse layout. The dots and dashes at the start are morse for SOS. -->
     <string name="ime_morse_sos_egg_info">··· −−− ··· received. Help is not on the way.</string>
