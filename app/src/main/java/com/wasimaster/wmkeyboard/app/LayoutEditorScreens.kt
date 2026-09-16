@@ -210,6 +210,12 @@ import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.FiberManualRecord
 import androidx.compose.material.icons.outlined.MoreHoriz
+import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.railSection
 
 // ---------------------------------------------------------------------------
 // Gallery
@@ -360,6 +366,8 @@ private fun ForeignLanguageDialog(
     // re-running the filter over the whole registry per keystroke is what makes
     // a search field feel heavy.
     val results = remember(query) { searchLanguages(query.trim().lowercase()) }
+    val list = rememberLazyListState()
+    val rail = rememberScrollRailState(list)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.layout_editor_foreign_language_title)) },
@@ -373,17 +381,19 @@ private fun ForeignLanguageDialog(
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(Modifier.height(8.dp))
-                LazyColumn(modifier = Modifier.heightIn(max = 320.dp)) {
-                    items(results, key = { it.id }) { language ->
-                        WmRow(
-                            title = language.displayName,
-                            trailing = if (language.id == selected) {
-                                { Icon(Icons.Outlined.Check, contentDescription = null) }
-                            } else {
-                                null
-                            },
-                            onClick = { onPick(language.id) },
-                        )
+                ScrollRailBox(state = rail, modifier = Modifier.heightIn(max = 320.dp)) { rows ->
+                    LazyColumn(state = list, modifier = rows) {
+                        items(results, key = { it.id }) { language ->
+                            WmRow(
+                                title = language.displayName,
+                                trailing = if (language.id == selected) {
+                                    { Icon(Icons.Outlined.Check, contentDescription = null) }
+                                } else {
+                                    null
+                                },
+                                onClick = { onPick(language.id) },
+                            )
+                        }
                     }
                 }
             }
@@ -3973,6 +3983,8 @@ private fun KeyIconPickerDialog(
     // Compared as drawings: a file may name the icon by an alias or in another
     // case ("Delete", "SEARCH"), and the cell should still light up.
     val selectedVector = KeyIcons.byName(selected)
+    val iconGrid = rememberLazyGridState()
+    val iconRail = rememberScrollRailState(iconGrid)
     val shown = remember(query) {
         val needle = query.trim()
         if (needle.isEmpty()) {
@@ -3996,19 +4008,25 @@ private fun KeyIconPickerDialog(
                 if (shown.isEmpty()) {
                     Text(stringResource(R.string.plugins_icons_picker_no_match, query.trim()))
                 } else {
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(IconGridCellMinWidth),
+                    ScrollRailBox(
+                        state = iconRail,
                         modifier = Modifier.heightIn(max = 320.dp),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        gridItems(shown, key = { it.first }) { (name, vector) ->
-                            IconGridCell(
-                                vector = vector,
-                                name = name,
-                                selected = vector == selectedVector,
-                                onClick = { onPick(name) },
-                            )
+                    ) { cells ->
+                        LazyVerticalGrid(
+                            state = iconGrid,
+                            columns = GridCells.Adaptive(IconGridCellMinWidth),
+                            modifier = cells,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            gridItems(shown, key = { it.first }) { (name, vector) ->
+                                IconGridCell(
+                                    vector = vector,
+                                    name = name,
+                                    selected = vector == selectedVector,
+                                    onClick = { onPick(name) },
+                                )
+                            }
                         }
                     }
                 }

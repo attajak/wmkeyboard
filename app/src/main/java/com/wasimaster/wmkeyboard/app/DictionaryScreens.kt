@@ -69,6 +69,9 @@ import com.wasimaster.wmkeyboard.core.prediction.WordKey
 import com.wasimaster.wmkeyboard.core.prediction.UserLexicon
 import com.wasimaster.wmkeyboard.core.prediction.WordRanks
 import kotlinx.coroutines.launch
+import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
+import androidx.compose.foundation.lazy.rememberLazyListState
 
 // ---- personal dictionary ----
 
@@ -532,6 +535,8 @@ private fun AndroidWordPickerDialog(
     }
     var unchecked by remember(words) { mutableStateOf(emptySet<String>()) }
     val count = words.size - unchecked.size
+    val list = rememberLazyListState()
+    val rail = rememberScrollRailState(list)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
@@ -544,17 +549,22 @@ private fun AndroidWordPickerDialog(
                         ),
                     )
                 }
-                LazyColumn(modifier = Modifier.heightIn(max = 360.dp)) {
-                    items(words) { word ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { unchecked = if (word in unchecked) unchecked - word else unchecked + word },
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Checkbox(checked = word !in unchecked, onCheckedChange = null)
-                            Spacer(Modifier.width(12.dp))
-                            Text(word)
+                ScrollRailBox(state = rail, modifier = Modifier.heightIn(max = 360.dp)) { rows ->
+                    LazyColumn(state = list, modifier = rows) {
+                        items(words) { word ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        unchecked =
+                                            if (word in unchecked) unchecked - word else unchecked + word
+                                    },
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Checkbox(checked = word !in unchecked, onCheckedChange = null)
+                                Spacer(Modifier.width(12.dp))
+                                Text(word)
+                            }
                         }
                     }
                 }

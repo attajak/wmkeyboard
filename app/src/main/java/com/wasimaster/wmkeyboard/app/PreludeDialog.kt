@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.sp
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.plugins.PluginPrelude
+import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /** How many lines above the one that failed stay in view when the prelude opens. */
 private const val LINES_ABOVE = 3
@@ -40,6 +42,7 @@ internal fun PreludeDialog(line: Int, onDismiss: () -> Unit) {
     val lines = remember { PluginPrelude.SOURCE.split('\n') }
     val colors = rememberCodeColors()
     val list = rememberLazyListState()
+    val rail = rememberScrollRailState(list)
     LaunchedEffect(line) { list.scrollToItem((line - 1 - LINES_ABOVE).coerceIn(0, maxOf(0, lines.lastIndex))) }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -51,21 +54,38 @@ internal fun PreludeDialog(line: Int, onDismiss: () -> Unit) {
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(bottom = 8.dp),
                 )
-                LazyColumn(
-                    state = list,
-                    modifier = Modifier.heightIn(max = 420.dp).fillMaxWidth().background(colors.background).padding(vertical = 6.dp),
-                ) {
-                    itemsIndexed(lines) { index, text ->
-                        val number = index + 1
-                        Row(Modifier.fillMaxWidth().background(if (number == line) colors.activeLine else Color.Transparent)) {
-                            Text(
-                                number.toString(),
-                                fontFamily = CodeFontFamily,
-                                fontSize = 11.sp,
-                                color = if (number == line) colors.problem else colors.gutterText,
-                                modifier = Modifier.width(32.dp).padding(end = 6.dp),
-                            )
-                            Text(text, fontFamily = CodeFontFamily, fontSize = 12.sp, color = colors.text)
+                ScrollRailBox(
+                    state = rail,
+                    modifier = Modifier
+                        .heightIn(max = 420.dp)
+                        .fillMaxWidth()
+                        .background(colors.background),
+                    // The code's own background, not the dialog's: the fade has
+                    // to disappear into what it sits on.
+                    fadeColor = colors.background,
+                ) { code ->
+                    LazyColumn(state = list, modifier = code.padding(vertical = 6.dp)) {
+                        itemsIndexed(lines) { index, text ->
+                            val number = index + 1
+                            Row(
+                                Modifier.fillMaxWidth().background(
+                                    if (number == line) colors.activeLine else Color.Transparent,
+                                ),
+                            ) {
+                                Text(
+                                    number.toString(),
+                                    fontFamily = CodeFontFamily,
+                                    fontSize = 11.sp,
+                                    color = if (number == line) colors.problem else colors.gutterText,
+                                    modifier = Modifier.width(32.dp).padding(end = 6.dp),
+                                )
+                                Text(
+                                    text,
+                                    fontFamily = CodeFontFamily,
+                                    fontSize = 12.sp,
+                                    color = colors.text,
+                                )
+                            }
                         }
                     }
                 }

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Icon
@@ -31,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.R
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
  * The list a physical keyboard's language switch shows: every enabled layout,
@@ -57,6 +58,7 @@ internal fun LanguageSwitchOverlay(
         val shown = session ?: return@AnimatedVisibility
         val kb = LocalKbTheme.current
         val scroll = rememberScrollState()
+        val rail = rememberScrollRailState(scroll)
         Column(
             modifier = Modifier
                 .padding(6.dp)
@@ -91,10 +93,11 @@ internal fun LanguageSwitchOverlay(
                         .size(16.dp),
                 )
             }
-            Column(
-                modifier = Modifier
-                    .heightIn(max = 180.dp)
-                    .verticalScroll(scroll),
+            ScrollRail(
+                state = rail,
+                modifier = Modifier.heightIn(max = 180.dp),
+                fadeColor = kb.popup,
+                colors = kbRailColors(kb),
             ) {
                 shown.layoutIds.forEachIndexed { index, layoutId ->
                     val highlighted = index == shown.candidate

@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.foundation.text.KeyboardActions
@@ -111,6 +109,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Block
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 // ---- text expander ----
 
@@ -635,16 +635,16 @@ internal fun SnippetSettings(
         )
     }
 
+    val exportNotesRail = rememberScrollRailState()
     if (pendingExport.isNotEmpty()) {
         val lines = pendingExport
         AlertDialog(
             onDismissRequest = { pendingExport = emptyList() },
             title = { Text(stringResource(R.string.expander_export_notes_title)) },
             text = {
-                Column(
-                    modifier = Modifier
-                        .heightIn(max = DialogScrollMaxHeight)
-                        .verticalScroll(rememberScrollState()),
+                ScrollRail(
+                    state = exportNotesRail,
+                    modifier = Modifier.heightIn(max = DialogScrollMaxHeight),
                 ) {
                     for (line in lines) Text("• ${line.resolve(context)}")
                 }
@@ -878,6 +878,7 @@ private fun SnippetEspansoImportDialog(
 ) {
     val context = LocalContext.current
     var folderName by remember { mutableStateOf(parsed.suggestedName) }
+    val rail = rememberScrollRailState()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -890,10 +891,9 @@ private fun SnippetEspansoImportDialog(
             )
         },
         text = {
-            Column(
-                modifier = Modifier
-                    .heightIn(max = DialogScrollMaxHeight)
-                    .verticalScroll(rememberScrollState()),
+            ScrollRail(
+                state = rail,
+                modifier = Modifier.heightIn(max = DialogScrollMaxHeight),
             ) {
                 OutlinedTextField(
                     value = folderName,
@@ -931,14 +931,14 @@ private fun SnippetPackageDialog(onDismiss: () -> Unit, onExport: (EspansoManife
     var author by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     val cleaned = remember(name) { EspansoManifest.sanitizeName(name) }
+    val rail = rememberScrollRailState()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.expander_package_title)) },
         text = {
-            Column(
-                modifier = Modifier
-                    .heightIn(max = DialogScrollMaxHeight)
-                    .verticalScroll(rememberScrollState()),
+            ScrollRail(
+                state = rail,
+                modifier = Modifier.heightIn(max = DialogScrollMaxHeight),
             ) {
                 OutlinedTextField(
                     value = name,

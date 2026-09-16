@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
@@ -136,6 +135,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
  * The addon store: repositories the user added, what each one offers, and what
@@ -2079,6 +2080,7 @@ private fun LicenseRow(manifestUrl: String, entry: AddonEntry) {
         onClick = { showing = true },
     )
 
+    val licenceRail = rememberScrollRailState()
     if (showing) {
         AlertDialog(
             onDismissRequest = { showing = false },
@@ -2090,11 +2092,11 @@ private fun LicenseRow(manifestUrl: String, entry: AddonEntry) {
             },
             text = {
                 // A licence runs to hundreds of lines; the dialog body scrolls
-                // rather than pushing its own buttons off the screen.
-                Column(
-                    modifier = Modifier
-                        .heightIn(max = 400.dp)
-                        .verticalScroll(rememberScrollState()),
+                // rather than pushing its own buttons off the screen, and the
+                // rail says how much of it is left.
+                ScrollRail(
+                    state = licenceRail,
+                    modifier = Modifier.heightIn(max = 400.dp),
                 ) {
                     val body = when {
                         loading -> stringResource(CommonR.string.common_loading)
@@ -2551,6 +2553,7 @@ private fun DictionaryPreview(shown: AddonPreviewContent.Dictionary) {
         }
     }
 
+    val previewRail = rememberScrollRailState()
     if (!listing) return
     AlertDialog(
         onDismissRequest = { listing = false },
@@ -2589,10 +2592,9 @@ private fun DictionaryPreview(shown: AddonPreviewContent.Dictionary) {
                 // maximum height and then will not scroll — it showed the
                 // first fifteen words and ate every drag. This is also cheaper:
                 // one composable instead of up to ten thousand.
-                Column(
-                    modifier = Modifier
-                        .heightIn(max = 420.dp)
-                        .verticalScroll(rememberScrollState()),
+                ScrollRail(
+                    state = previewRail,
+                    modifier = Modifier.heightIn(max = 420.dp),
                 ) {
                     Text(
                         shown.words.joinToString("\n"),

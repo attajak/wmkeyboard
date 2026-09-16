@@ -118,6 +118,10 @@ import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.FindReplace
 import androidx.compose.material.icons.outlined.Keyboard
+import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 
 /** The line counts the symbol row stepper walks, one press per line. */
 private val SymbolRowLinesSteps: List<Int> = SymbolRowLinesRange.toList()
@@ -1902,6 +1906,8 @@ internal fun ModeIconPickerDialog(
     title: String = stringResource(R.string.modes_icon_picker_title),
     clearLabel: String? = null,
 ) {
+    val iconGrid = rememberLazyGridState()
+    val iconRail = rememberScrollRailState(iconGrid)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
@@ -1918,19 +1924,25 @@ internal fun ModeIconPickerDialog(
                         label = { Text(clearLabel) },
                     )
                 }
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(IconGridCellMinWidth),
+                ScrollRailBox(
+                    state = iconRail,
                     modifier = Modifier.heightIn(max = 380.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    items(ModeIcons.catalog, key = { it.first }) { (id, vector) ->
-                        IconGridCell(
-                            vector = vector,
-                            name = id,
-                            selected = id == selected,
-                            onClick = { onPick(id) },
-                        )
+                ) { cells ->
+                    LazyVerticalGrid(
+                        state = iconGrid,
+                        columns = GridCells.Adaptive(IconGridCellMinWidth),
+                        modifier = cells,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        items(ModeIcons.catalog, key = { it.first }) { (id, vector) ->
+                            IconGridCell(
+                                vector = vector,
+                                name = id,
+                                selected = id == selected,
+                                onClick = { onPick(id) },
+                            )
+                        }
                     }
                 }
             }
@@ -1963,6 +1975,8 @@ private fun AppPickerDialog(
             (query.isBlank() || label.contains(query, ignoreCase = true) ||
                 pkg.contains(query, ignoreCase = true))
     }
+    val appList = rememberLazyListState()
+    val appRail = rememberScrollRailState(appList)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.modes_app_picker_title)) },
@@ -1976,15 +1990,17 @@ private fun AppPickerDialog(
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(Modifier.height(8.dp))
-                LazyColumn(modifier = Modifier.heightIn(max = 380.dp)) {
-                    items(shown, key = { it.first }) { (pkg, label) ->
-                        ListItem(
-                            headlineContent = { Text(label) },
-                            supportingContent = { Text(pkg) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onPick(pkg) },
-                        )
+                ScrollRailBox(state = appRail, modifier = Modifier.heightIn(max = 380.dp)) { rows ->
+                    LazyColumn(state = appList, modifier = rows) {
+                        items(shown, key = { it.first }) { (pkg, label) ->
+                            ListItem(
+                                headlineContent = { Text(label) },
+                                supportingContent = { Text(pkg) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onPick(pkg) },
+                            )
+                        }
                     }
                 }
             }

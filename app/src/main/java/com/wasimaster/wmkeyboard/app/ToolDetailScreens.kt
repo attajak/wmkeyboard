@@ -125,6 +125,9 @@ import androidx.compose.material.icons.outlined.TimerOff
 import androidx.compose.material.icons.outlined.PhotoSizeSelectActual
 import androidx.compose.material.icons.outlined.PhotoSizeSelectLarge
 import androidx.compose.material.icons.outlined.PhotoSizeSelectSmall
+import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
+import androidx.compose.foundation.lazy.rememberLazyListState
 
 /**
  * What a press and hold on this tool does while it is pinned to the toolbar.
@@ -211,26 +214,34 @@ internal fun ToolPickerDialog(
     onPick: (ToolbarTool?) -> Unit,
     noneSubtitle: String? = null,
 ) {
+    val list = rememberLazyListState()
+    val rail = rememberScrollRailState(list)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            LazyColumn(modifier = Modifier.heightIn(max = 420.dp)) {
-                if (noneSubtitle != null) item {
-                    WmRow(
-                        title = stringResource(CommonR.string.common_none),
-                        supporting = { CaptionText(noneSubtitle) },
-                        trailing = { RadioButton(selected = current == null, onClick = { onPick(null) }) },
-                        onClick = { onPick(null) },
-                    )
-                }
-                items(options, key = { it.name }) { tool ->
-                    WmRow(
-                        title = stringResource(toolTitle(tool)),
-                        leading = { SlotIcon(IconSlots.forTool(tool), contentDescription = null) },
-                        trailing = { RadioButton(selected = current == tool, onClick = { onPick(tool) }) },
-                        onClick = { onPick(tool) },
-                    )
+            ScrollRailBox(state = rail, modifier = Modifier.heightIn(max = 420.dp)) { rows ->
+                LazyColumn(state = list, modifier = rows) {
+                    if (noneSubtitle != null) item {
+                        WmRow(
+                            title = stringResource(CommonR.string.common_none),
+                            supporting = { CaptionText(noneSubtitle) },
+                            trailing = {
+                                RadioButton(selected = current == null, onClick = { onPick(null) })
+                            },
+                            onClick = { onPick(null) },
+                        )
+                    }
+                    items(options, key = { it.name }) { tool ->
+                        WmRow(
+                            title = stringResource(toolTitle(tool)),
+                            leading = { SlotIcon(IconSlots.forTool(tool), contentDescription = null) },
+                            trailing = {
+                                RadioButton(selected = current == tool, onClick = { onPick(tool) })
+                            },
+                            onClick = { onPick(tool) },
+                        )
+                    }
                 }
             }
         },

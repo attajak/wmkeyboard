@@ -18,9 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
@@ -74,6 +72,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.Memory
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /** Downloads above this size ask before using mobile data. */
 private const val WHISPER_METERED_CONFIRM_BYTES = 150_000_000L
@@ -424,6 +424,7 @@ private fun WhisperRoutingDialog(
     val ordered = WhisperCatalog.rankedFor(code, downloaded) +
         downloaded.filterNot { it.covers(code) }
 
+    val rail = rememberScrollRailState()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -440,11 +441,7 @@ private fun WhisperRoutingDialog(
             } else {
                 stringResource(R.string.models_whisper_routing_current, resolved.displayName)
             }
-            Column(
-                modifier = Modifier
-                    .heightIn(max = 420.dp)
-                    .verticalScroll(rememberScrollState()),
-            ) {
+            ScrollRail(state = rail, modifier = Modifier.heightIn(max = 420.dp)) {
                 WhisperRoutingOption(
                     title = stringResource(CommonR.string.common_auto),
                     detail = currentDetail,

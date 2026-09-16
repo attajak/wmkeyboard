@@ -1,4 +1,4 @@
-package com.wasimaster.wmkeyboard.app
+package com.wasimaster.wmkeyboard.core.ui
 
 import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibility
@@ -10,9 +10,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -22,6 +24,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -30,17 +34,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -59,6 +63,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 // ---------------------------------------------------------------------------
@@ -79,23 +84,51 @@ import kotlin.math.roundToInt
  * of contents: 7 segments say "7 groups" before a finger touches anything.
  * The segment under the viewport is lit, the thumb rides over it, and dragging
  * the thumb scrubs the list with the group name beside it. The bottom edge of
- * the list fades into the dialog while there is more below, which is the part
- * you see without looking for it.
+ * the list fades into whatever holds it while there is more below, which is
+ * the part you see without looking for it.
  *
  * On open the list also runs down a few dp and back, once. A still rail is
  * furniture; a list that moves is an invitation. The peek is skipped when the
  * device has its animations turned off.
  *
+ * This overload owns the scroll: give it rows, it puts them in a scrolling
+ * column. A list that has to stay lazy keeps its own [LazyListState] or
+ * [LazyGridState] and uses [ScrollRailBox] instead.
+ *
  * Use it for a list that is capped, not for a screen: a screen already scrolls
  * a whole page, and the top bar collapsing says so.
  */
 @Composable
-internal fun ScrollRail(
+fun ScrollRail(
     state: ScrollRailState,
     modifier: Modifier = Modifier,
     /** What the edges fade into. The dialog container, where this is used. */
     fadeColor: Color = AlertDialogDefaults.containerColor,
+    colors: ScrollRailColors = scrollRailColors(),
     content: @Composable ColumnScope.() -> Unit,
+) {
+    val scroll = requireNotNull(state.scroll.plain) {
+        "ScrollRail owns the scroll, so its state comes from rememberScrollRailState() " +
+            "with no lazy state. A lazy list keeps its own and uses ScrollRailBox."
+    }
+    ScrollRailBox(state, modifier, fadeColor, colors) { listModifier ->
+        Column(modifier = listModifier.verticalScroll(scroll), content = content)
+    }
+}
+
+/**
+ * The rail around a list that scrolls itself: a `LazyColumn`, a
+ * `LazyVerticalGrid`, or anything else holding the state the rail was made
+ * with. The modifier handed to [content] carries the fade, the gutter the rail
+ * sits in, and the measurement the rail needs, so it goes on the list itself.
+ */
+@Composable
+fun ScrollRailBox(
+    state: ScrollRailState,
+    modifier: Modifier = Modifier,
+    fadeColor: Color = AlertDialogDefaults.containerColor,
+    colors: ScrollRailColors = scrollRailColors(),
+    content: @Composable (Modifier) -> Unit,
 ) {
     ScrollRailPeek(state)
     val sections by remember(state) {
@@ -104,20 +137,21 @@ internal fun ScrollRail(
         }
     }
     Box(modifier) {
-        Column(
-            modifier = Modifier
+        content(
+            Modifier
                 .fillMaxWidth()
                 .padding(end = RailGutter)
-                // Drawn here, outside the scroll, so the gradient sits over the
-                // viewport rather than travelling with the content. Reading the
+                // Drawn outside the scroll, so the gradient sits over the
+                // window rather than travelling with the content. Reading the
                 // scroll position in the draw phase and not in composition
                 // keeps a long list off the recomposer while it moves.
                 .drawWithContent {
                     drawContent()
                     val fade = FadeHeight.toPx()
-                    val above = (state.scroll.value / fade).coerceIn(0f, 1f)
-                    val below =
-                        ((state.scroll.maxValue - state.scroll.value) / fade).coerceIn(0f, 1f)
+                    val travelled = state.scroll.offsetPx
+                    val left = state.scroll.totalPx - state.scroll.extentPx - travelled
+                    val above = (travelled / fade).coerceIn(0f, 1f)
+                    val below = (left / fade).coerceIn(0f, 1f)
                     if (above > 0f) {
                         drawRect(
                             brush = Brush.verticalGradient(
@@ -140,12 +174,9 @@ internal fun ScrollRail(
                         )
                     }
                 }
-                .onSizeChanged { state.viewportPx = it.height }
-                .onGloballyPositioned { state.viewportCoords = it }
-                .verticalScroll(state.scroll),
-            content = content,
+                .onGloballyPositioned { state.viewportCoords = it },
         )
-        if (state.scrollable) ScrollRailTrack(state, sections)
+        if (state.scrollable) ScrollRailTrack(state, sections, colors)
     }
 }
 
@@ -157,28 +188,41 @@ internal fun ScrollRail(
  * Labels are the segment's identity, so two groups with the same name in one
  * list collapse into one segment.
  */
-internal fun Modifier.railSection(state: ScrollRailState, label: String): Modifier =
+fun Modifier.railSection(state: ScrollRailState, label: String): Modifier =
     this.onGloballyPositioned { coords ->
         val viewport = state.viewportCoords ?: return@onGloballyPositioned
         if (!coords.isAttached || !viewport.isAttached) return@onGloballyPositioned
         // Where the heading sits in the window, plus how far the window has
         // travelled: the offset from the top of the list, whatever the scroll.
-        val top = viewport.localPositionOf(coords, Offset.Zero).y + state.scroll.value
+        val top = viewport.localPositionOf(coords, Offset.Zero).y + state.scroll.offsetPx
         state.sectionTops[label] = top.roundToInt().coerceAtLeast(0)
     }
 
+/** A rail over a plain scrolling column. */
 @Composable
-internal fun rememberScrollRailState(): ScrollRailState {
+fun rememberScrollRailState(): ScrollRailState {
     val scroll = rememberScrollState()
-    return remember(scroll) { ScrollRailState(scroll) }
+    return remember(scroll) { ScrollRailState(PlainRailScroll(scroll)) }
 }
+
+/** A rail over a column that already has its scroll state, and drives it. */
+@Composable
+fun rememberScrollRailState(scroll: ScrollState): ScrollRailState =
+    remember(scroll) { ScrollRailState(PlainRailScroll(scroll)) }
+
+/** A rail over a `LazyColumn`. */
+@Composable
+fun rememberScrollRailState(list: LazyListState): ScrollRailState =
+    remember(list) { ScrollRailState(LazyListRailScroll(list)) }
+
+/** A rail over a `LazyVerticalGrid`. */
+@Composable
+fun rememberScrollRailState(grid: LazyGridState): ScrollRailState =
+    remember(grid) { ScrollRailState(LazyGridRailScroll(grid)) }
 
 /** What a [ScrollRail] knows about the list it is drawn beside. */
 @Stable
-internal class ScrollRailState(val scroll: ScrollState) {
-    /** The window the list is read through, in pixels. */
-    internal var viewportPx by mutableIntStateOf(0)
-
+class ScrollRailState internal constructor(internal val scroll: RailScroll) {
     /** The window's own node, which [railSection] measures headings against. */
     internal var viewportCoords: LayoutCoordinates? = null
 
@@ -192,14 +236,127 @@ internal class ScrollRailState(val scroll: ScrollState) {
      */
     internal var peeked = false
 
-    /** The whole list, viewport plus everything below it. */
-    internal val contentPx: Int get() = viewportPx + scroll.maxValue
-
-    internal val scrollable: Boolean get() = scroll.maxValue > 0
+    internal val scrollable: Boolean get() = scroll.scrollable
 }
 
 /** One group of the list, as the rail draws it. */
 internal data class RailSection(val label: String, val topPx: Int)
+
+/** The colours the rail draws with. Keyboard popups pass their own. */
+@Immutable
+data class ScrollRailColors(
+    val track: Color,
+    val live: Color,
+    val thumb: Color,
+    val pill: Color,
+    val onPill: Color,
+)
+
+@Composable
+fun scrollRailColors(
+    track: Color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.20f),
+    live: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.32f),
+    thumb: Color = MaterialTheme.colorScheme.primary,
+    pill: Color = MaterialTheme.colorScheme.secondaryContainer,
+    onPill: Color = MaterialTheme.colorScheme.onSecondaryContainer,
+): ScrollRailColors = ScrollRailColors(track, live, thumb, pill, onPill)
+
+// ---------------------------------------------------------------------------
+// What the rail measures
+// ---------------------------------------------------------------------------
+
+/**
+ * The list under the rail, in pixels, whoever is keeping them.
+ *
+ * A plain `ScrollState` knows all three numbers outright. A lazy list knows
+ * only the items it has laid out, so its rail works from the average of those,
+ * which is exact for rows of one height and close enough for the rest. The
+ * alternative is measuring ten thousand rows to draw a thumb.
+ */
+internal interface RailScroll {
+    val state: ScrollableState
+
+    /** The window the list is read through. */
+    val extentPx: Float
+
+    /** The whole list, window included. */
+    val totalPx: Float
+
+    /** How far down the list the window has travelled. */
+    val offsetPx: Float
+
+    /** The scroll state itself, when it is a plain one the rail may own. */
+    val plain: ScrollState? get() = null
+
+    val scrollable: Boolean get() = totalPx - extentPx > 1f
+}
+
+private class PlainRailScroll(private val scroll: ScrollState) : RailScroll {
+    override val state: ScrollableState get() = scroll
+    override val plain: ScrollState get() = scroll
+    override val extentPx: Float get() = scroll.viewportSize.toFloat()
+    override val totalPx: Float get() = (scroll.viewportSize + scroll.maxValue).toFloat()
+    override val offsetPx: Float get() = scroll.value.toFloat()
+    override val scrollable: Boolean get() = scroll.maxValue > 0
+}
+
+private class LazyListRailScroll(private val list: LazyListState) : RailScroll {
+    override val state: ScrollableState get() = list
+
+    override val extentPx: Float
+        get() = with(list.layoutInfo) { (viewportEndOffset - viewportStartOffset).toFloat() }
+
+    override val totalPx: Float get() = itemPx * list.layoutInfo.totalItemsCount
+
+    override val offsetPx: Float
+        get() = list.firstVisibleItemIndex * itemPx + list.firstVisibleItemScrollOffset
+
+    override val scrollable: Boolean
+        get() = list.canScrollForward || list.canScrollBackward
+
+    /** One row, averaged over the rows on screen, spacing included. */
+    private val itemPx: Float
+        get() {
+            val visible = list.layoutInfo.visibleItemsInfo
+            if (visible.isEmpty()) return 1f
+            val spread = visible.last().offset + visible.last().size - visible.first().offset
+            return (spread.toFloat() / visible.size).coerceAtLeast(1f)
+        }
+}
+
+private class LazyGridRailScroll(private val grid: LazyGridState) : RailScroll {
+    override val state: ScrollableState get() = grid
+
+    override val extentPx: Float
+        get() = with(grid.layoutInfo) { (viewportEndOffset - viewportStartOffset).toFloat() }
+
+    override val totalPx: Float
+        get() = ceil(grid.layoutInfo.totalItemsCount / columns.toFloat()) * rowPx
+
+    override val offsetPx: Float
+        get() = (grid.firstVisibleItemIndex / columns) * rowPx + grid.firstVisibleItemScrollOffset
+
+    override val scrollable: Boolean
+        get() = grid.canScrollForward || grid.canScrollBackward
+
+    /** Cells across, read off the row the grid has actually laid out. */
+    private val columns: Int
+        get() = (grid.layoutInfo.visibleItemsInfo.maxOfOrNull { it.column } ?: 0) + 1
+
+    private val rowPx: Float
+        get() {
+            val visible = grid.layoutInfo.visibleItemsInfo
+            if (visible.isEmpty()) return 1f
+            val rows = (visible.last().row - visible.first().row + 1).coerceAtLeast(1)
+            val spread =
+                visible.last().offset.y + visible.last().size.height - visible.first().offset.y
+            return (spread.toFloat() / rows).coerceAtLeast(1f)
+        }
+}
+
+// ---------------------------------------------------------------------------
+// Drawing it
+// ---------------------------------------------------------------------------
 
 /**
  * The one-time peek: the list runs down a little and comes back, so that the
@@ -224,11 +381,20 @@ private fun ScrollRailPeek(state: ScrollRailState) {
         if (state.peeked || !animated || !state.scrollable) return@LaunchedEffect
         state.peeked = true
         delay(PeekDelayMs)
-        if (state.scroll.value != 0 || state.scroll.isScrollInProgress) return@LaunchedEffect
-        val distance = peekPx.roundToInt().coerceAtMost(state.scroll.maxValue)
-        state.scroll.animateScrollTo(distance, tween(PeekOutMs, easing = FastOutSlowInEasing))
+        if (state.scroll.offsetPx != 0f || state.scroll.state.isScrollInProgress) {
+            return@LaunchedEffect
+        }
+        val room = state.scroll.totalPx - state.scroll.extentPx
+        val distance = peekPx.coerceAtMost(room)
+        state.scroll.state.animateScrollBy(
+            distance,
+            tween(PeekOutMs, easing = FastOutSlowInEasing),
+        )
         delay(PeekHoldMs)
-        state.scroll.animateScrollTo(0, tween(PeekBackMs, easing = FastOutSlowInEasing))
+        state.scroll.state.animateScrollBy(
+            -distance,
+            tween(PeekBackMs, easing = FastOutSlowInEasing),
+        )
     }
 }
 
@@ -240,18 +406,19 @@ private fun ScrollRailPeek(state: ScrollRailState) {
  * under the drag changes and the name has to be reworded.
  */
 @Composable
-private fun BoxScope.ScrollRailTrack(state: ScrollRailState, sections: List<RailSection>) {
+private fun BoxScope.ScrollRailTrack(
+    state: ScrollRailState,
+    sections: List<RailSection>,
+    colors: ScrollRailColors,
+) {
     val scope = rememberCoroutineScope()
-    val scheme = MaterialTheme.colorScheme
     var dragging by remember { mutableStateOf(false) }
     var trackPx by remember { mutableFloatStateOf(0f) }
     val thumbWidth by animateDpAsState(
         if (dragging) ThumbWidthHeld else ThumbWidth,
         label = "railThumbWidth",
     )
-    val trackColor = scheme.onSurfaceVariant.copy(alpha = 0.20f)
-    val liveColor = scheme.primary.copy(alpha = 0.32f)
-    val thumbColor = scheme.primary.copy(alpha = if (dragging) 0.95f else 0.60f)
+    val thumbColor = colors.thumb.copy(alpha = if (dragging) 0.95f else 0.60f)
 
     Canvas(
         modifier = Modifier
@@ -263,11 +430,11 @@ private fun BoxScope.ScrollRailTrack(state: ScrollRailState, sections: List<Rail
                 orientation = Orientation.Vertical,
                 state = rememberDraggableState { delta ->
                     val track = trackPx
-                    val content = state.contentPx
-                    if (track <= 0f || content <= 0) return@rememberDraggableState
+                    val content = state.scroll.totalPx
+                    if (track <= 0f || content <= 0f) return@rememberDraggableState
                     // A pixel of rail is a whole list's worth of pixels: the
                     // thumb keeps up with the finger rather than the list.
-                    scope.launch { state.scroll.scrollBy(delta * content / track) }
+                    scope.launch { state.scroll.state.scrollBy(delta * content / track) }
                 },
                 onDragStarted = { dragging = true },
                 onDragStopped = { dragging = false },
@@ -276,12 +443,12 @@ private fun BoxScope.ScrollRailTrack(state: ScrollRailState, sections: List<Rail
             // a second one that reads "unlabelled" helps nobody.
             .clearAndSetSemantics {},
     ) {
-        val content = state.contentPx.toFloat()
+        val content = state.scroll.totalPx
         if (content <= 0f || size.height <= 0f) return@Canvas
         val x = size.width - RailInset.toPx() - (thumbWidth.toPx() / 2f)
         val trackWidth = RailWidth.toPx()
         val gap = SegmentGap.toPx()
-        val scrolled = state.scroll.value.toFloat()
+        val scrolled = state.scroll.offsetPx
         // The group the top of the window is in. It is the one the reader is
         // reading, so it is the one the rail lights up.
         val liveAt = sections.indexOfLast { it.topPx <= scrolled + 1f }
@@ -306,7 +473,7 @@ private fun BoxScope.ScrollRailTrack(state: ScrollRailState, sections: List<Rail
         }
 
         if (sections.isEmpty()) {
-            capsule(0f, size.height, trackColor, trackWidth)
+            capsule(0f, size.height, colors.track, trackWidth)
         } else {
             sections.forEachIndexed { index, section ->
                 val nextTop = sections.getOrNull(index + 1)?.topPx?.toFloat() ?: content
@@ -315,22 +482,24 @@ private fun BoxScope.ScrollRailTrack(state: ScrollRailState, sections: List<Rail
                 capsule(
                     fromY = top + gap / 2f,
                     toY = bottom - gap / 2f,
-                    color = if (index == liveAt) liveColor else trackColor,
+                    color = if (index == liveAt) colors.live else colors.track,
                     width = trackWidth,
                 )
             }
         }
 
-        val span = (state.viewportPx / content).coerceIn(ThumbMinSpan, 1f)
+        val span = (state.scroll.extentPx / content).coerceIn(ThumbMinSpan, 1f)
         val thumbHeight = span * size.height
-        val travel = size.height - thumbHeight
-        val at = if (state.scroll.maxValue > 0) scrolled / state.scroll.maxValue else 0f
-        val thumbTop = at.coerceIn(0f, 1f) * travel
+        val room = content - state.scroll.extentPx
+        val at = if (room > 0f) scrolled / room else 0f
+        val thumbTop = at.coerceIn(0f, 1f) * (size.height - thumbHeight)
         capsule(thumbTop, thumbTop + thumbHeight, thumbColor, thumbWidth.toPx())
     }
 
     val label by remember(state, sections) {
-        derivedStateOf { sections.lastOrNull { it.topPx <= state.scroll.value + 1 }?.label }
+        derivedStateOf {
+            sections.lastOrNull { it.topPx <= state.scroll.offsetPx + 1f }?.label
+        }
     }
     val density = LocalDensity.current
     AnimatedVisibility(
@@ -342,27 +511,25 @@ private fun BoxScope.ScrollRailTrack(state: ScrollRailState, sections: List<Rail
             .offset {
                 // Beside the thumb, and read in the layout phase so that a drag
                 // moves the name without recomposing it.
-                val content = state.contentPx.toFloat()
+                val content = state.scroll.totalPx
                 val track = trackPx
                 if (content <= 0f || track <= 0f) return@offset IntOffset.Zero
-                val span = (state.viewportPx / content).coerceIn(ThumbMinSpan, 1f)
+                val span = (state.scroll.extentPx / content).coerceIn(ThumbMinSpan, 1f)
                 val thumbHeight = span * track
-                val at = if (state.scroll.maxValue > 0) {
-                    state.scroll.value.toFloat() / state.scroll.maxValue
-                } else {
-                    0f
-                }
+                val room = content - state.scroll.extentPx
+                val at = if (room > 0f) state.scroll.offsetPx / room else 0f
                 val centre = at.coerceIn(0f, 1f) * (track - thumbHeight) + thumbHeight / 2f
                 val pill = with(density) { PillHeight.toPx() }
                 IntOffset(
                     x = -with(density) { RailTouchWidth.toPx() }.roundToInt(),
-                    y = (centre - pill / 2f).roundToInt().coerceIn(0, (track - pill).roundToInt()),
+                    y = (centre - pill / 2f).roundToInt()
+                        .coerceIn(0, (track - pill).roundToInt().coerceAtLeast(0)),
                 )
             },
     ) {
         Surface(
-            color = scheme.secondaryContainer,
-            contentColor = scheme.onSecondaryContainer,
+            color = colors.pill,
+            contentColor = colors.onPill,
             shape = RoundedCornerShape(PillCorner),
             shadowElevation = PillElevation,
         ) {

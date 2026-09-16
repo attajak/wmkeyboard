@@ -64,6 +64,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.icons.R as IconsR
+import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
  * Icon customisation: which pack is active, and per-slot replacements.
@@ -533,20 +535,26 @@ private fun IconPickerDialog(
                         val index = shown.indexOf(selected)
                         if (index >= 0) gridState.scrollToItem(index)
                     }
-                    LazyVerticalGrid(
-                        state = gridState,
-                        columns = GridCells.Adaptive(IconGridCellMinWidth),
+                    val rail = rememberScrollRailState(gridState)
+                    ScrollRailBox(
+                        state = rail,
                         modifier = Modifier.heightIn(max = 320.dp),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        items(shown, key = { it }) { name ->
-                            IconGridCell(
-                                vector = BuiltinIcons.catalog.getValue(name),
-                                name = name,
-                                selected = name == selected,
-                                onClick = { onPickBuiltin(name) },
-                            )
+                    ) { cells ->
+                        LazyVerticalGrid(
+                            state = gridState,
+                            columns = GridCells.Adaptive(IconGridCellMinWidth),
+                            modifier = cells,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            items(shown, key = { it }) { name ->
+                                IconGridCell(
+                                    vector = BuiltinIcons.catalog.getValue(name),
+                                    name = name,
+                                    selected = name == selected,
+                                    onClick = { onPickBuiltin(name) },
+                                )
+                            }
                         }
                     }
                 }

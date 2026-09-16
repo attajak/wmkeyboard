@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -80,6 +78,8 @@ import com.wasimaster.wmkeyboard.core.settings.TextEditAction
 import com.wasimaster.wmkeyboard.ime.ui.KbTheme
 import com.wasimaster.wmkeyboard.ime.ui.keyShape
 import kotlinx.coroutines.launch
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
  * The panel layouts (issue #63): the emoji, clipboard and text-editing panels
@@ -766,12 +766,16 @@ internal fun TextEditActionPickerDialog(
     onDismiss: () -> Unit,
     onPick: (TextEditAction) -> Unit,
 ) {
+    val rail = rememberScrollRailState()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.layout_editor_edit_picker_title)) },
         text = {
-            LazyColumn(modifier = Modifier.heightIn(max = 420.dp)) {
-                items(TextEditAction.entries, key = { it.name }) { op ->
+            // Twenty operations behind a 420 dp window, and the same complaint
+            // the action picker got (issue #202): a plain column with a rail
+            // beside it, since twenty rows are not worth a lazy list.
+            ScrollRail(state = rail, modifier = Modifier.heightIn(max = 420.dp)) {
+                for (op in TextEditAction.entries) {
                     WmRow(
                         title = stringResource(textEditActionTitle(op)),
                         leading = { RadioButton(selected = current == op, onClick = { onPick(op) }) },

@@ -95,6 +95,8 @@ import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.TypingTestAction
 import com.wasimaster.wmkeyboard.ime.TypingTestUi
 import kotlin.math.roundToInt
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
  * The typing-speed tool. Two faces sharing one panel: the run itself —
@@ -920,16 +922,19 @@ private fun TypingLanguageChip(state: KeyboardUiState, onAction: (TypingTestActi
         ) { open = true }
         if (open) {
             val shape = kb.menuShape()
+            val rail = rememberScrollRailState()
             Popup(onDismissRequest = { open = false }) {
-                Column(
+                ScrollRail(
+                    state = rail,
                     modifier = Modifier
                         .widthIn(min = 160.dp, max = 240.dp)
                         .heightIn(max = 220.dp)
                         .clip(shape)
                         .background(kb.popup)
                         .popupBorder(kb, shape)
-                        .padding(vertical = 4.dp)
-                        .verticalScroll(rememberScrollState()),
+                        .padding(vertical = 4.dp),
+                    fadeColor = kb.popup,
+                    colors = kbRailColors(kb),
                 ) {
                     for ((language, layoutId) in choices) {
                         val current = language.id == state.language.id

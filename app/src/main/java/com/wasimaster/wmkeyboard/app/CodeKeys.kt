@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
  * Suggestions handed from the code field to the key row, for an editor too short
@@ -111,6 +111,7 @@ internal fun CodeKeysDialog(
     keys: List<AccessoryKey> = LuaAccessoryKeys,
 ) {
     val labels = arrangeKeys(keys, order, emptySet()).map { it.label }
+    val rail = rememberScrollRailState()
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.code_keys_title)) },
@@ -121,7 +122,7 @@ internal fun CodeKeysDialog(
                     Switch(checked = showRow, onCheckedChange = onShowRow)
                 }
                 Text(stringResource(R.string.code_keys_caption), style = MaterialTheme.typography.bodySmall)
-                Column(Modifier.heightIn(max = 380.dp).verticalScroll(rememberScrollState())) {
+                ScrollRail(state = rail, modifier = Modifier.heightIn(max = 380.dp)) {
                     ReorderableColumn(
                         items = labels,
                         label = { it },

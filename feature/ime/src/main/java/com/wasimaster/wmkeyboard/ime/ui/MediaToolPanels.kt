@@ -98,6 +98,8 @@ import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.MediaUi
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.WebSearchUi
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 // ---- shared bits ----
 
@@ -1561,16 +1563,21 @@ private fun TranslateLanguagePicker(
 ) {
     val kb = LocalKbTheme.current
     val scroll = rememberScrollState()
+    // A hundred languages behind a 260 dp window: the rail is the only thing
+    // saying the list runs past the third one.
+    val rail = rememberScrollRailState(scroll)
     Popup(onDismissRequest = onDismiss) {
-        Column(
+        ScrollRail(
+            state = rail,
             modifier = Modifier
                 .widthIn(min = 180.dp, max = 240.dp)
                 .heightIn(max = 260.dp)
                 .clip(kb.menuShape())
                 .background(kb.popup)
                 .popupBorder(kb, kb.menuShape())
-                .padding(vertical = 4.dp)
-                .verticalScroll(scroll),
+                .padding(vertical = 4.dp),
+            fadeColor = kb.popup,
+            colors = kbRailColors(kb),
         ) {
             for ((index, entry) in TranslateClient.languages.withIndex()) {
                 val (code, name) = entry

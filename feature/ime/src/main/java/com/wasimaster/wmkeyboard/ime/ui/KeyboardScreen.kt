@@ -491,6 +491,8 @@ import kotlin.math.roundToInt
 import kotlin.math.sqrt
 import kotlin.random.Random
 import java.io.File
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
  * Fired at pointer-down on any key so feedback (haptics) lands on press,
@@ -16689,6 +16691,7 @@ private fun LanguagePickerPopup(
 ) {
     val kb = LocalKbTheme.current
     val scrollState = rememberScrollState()
+    val layoutRail = rememberScrollRailState(scrollState)
     val density = LocalDensity.current
     LaunchedEffect(highlightIndex) {
         if (highlightIndex != null) {
@@ -16710,11 +16713,13 @@ private fun LanguagePickerPopup(
             shadowElevation = elevationFor(kb.menuShapeKind, 8.dp),
         ) {
             Column(modifier = Modifier.widthIn(min = 160.dp, max = 240.dp)) {
-                Column(
+                ScrollRail(
+                    state = layoutRail,
                     modifier = Modifier
                         .heightIn(max = 240.dp)
-                        .verticalScroll(scrollState)
                         .padding(vertical = 4.dp),
+                    fadeColor = kb.popup,
+                    colors = kbRailColors(kb),
                 ) {
                     for ((index, layoutId) in enabledLayoutIds.withIndex()) {
                         val selected = layoutId == currentLayoutId
@@ -19222,10 +19227,12 @@ private fun EmojiVariantPopup(
                     // A lone cell is the emoji itself — already shown in the
                     // name header, and a grid of one is just a second way to
                     // commit what a plain tap commits.
-                    if (cells.size > 1 || name == null) Column(
-                        modifier = Modifier
-                            .heightIn(max = 260.dp)
-                            .verticalScroll(rememberScrollState()),
+                    val variantRail = rememberScrollRailState()
+                    if (cells.size > 1 || name == null) ScrollRail(
+                        state = variantRail,
+                        modifier = Modifier.heightIn(max = 260.dp),
+                        fadeColor = kb.popup,
+                        colors = kbRailColors(kb),
                     ) {
                         for (row in cells.chunked(6)) {
                             Row {

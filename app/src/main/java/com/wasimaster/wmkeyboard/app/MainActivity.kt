@@ -169,8 +169,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material3.RadioButton
@@ -178,6 +176,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.rotate
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material.icons.outlined.Warning
+import androidx.compose.material3.BottomSheetDefaults
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 /**
  * Settings app: setup wizard plus every keyboard option, Material 3 +
@@ -3581,15 +3582,14 @@ internal fun <T> ChoiceSheet(
     // three rows is a list whose fourth option the user has no reason to think
     // exists: the handle says "there is more here" only to someone who already
     // suspects it. The column below scrolls, so a long list still fits.
+    val rail = rememberScrollRailState()
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 32.dp),
-        ) {
+        // The rail is the other half of opening at full height: the sheet says
+        // the list is long, and the rail says where in it you are.
+        ScrollRail(state = rail, fadeColor = BottomSheetDefaults.ContainerColor) {
             if (title != null) {
                 Text(
                     title,
@@ -3629,6 +3629,7 @@ internal fun <T> ChoiceSheet(
                     },
                 )
             }
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

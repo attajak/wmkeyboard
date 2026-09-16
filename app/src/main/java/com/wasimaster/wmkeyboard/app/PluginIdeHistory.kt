@@ -26,12 +26,17 @@ import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.plugins.PluginSnapshot
 import com.wasimaster.wmkeyboard.core.plugins.SnapshotReason
+import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
+import androidx.compose.foundation.lazy.rememberLazyListState
 
 /** The draft's kept versions, newest first. A tap compares one with the code now. */
 @Composable
 internal fun VersionsDialog(versions: List<PluginSnapshot>, onOpen: (PluginSnapshot) -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val now = System.currentTimeMillis()
+    val list = rememberLazyListState()
+    val rail = rememberScrollRailState(list)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.plugin_ide_versions_title)) },
@@ -39,26 +44,28 @@ internal fun VersionsDialog(versions: List<PluginSnapshot>, onOpen: (PluginSnaps
             if (versions.isEmpty()) {
                 Text(stringResource(R.string.plugin_ide_versions_empty))
             } else {
-                LazyColumn(Modifier.heightIn(max = 380.dp)) {
-                    items(versions, key = { it.snapshotId }) { version ->
-                        Column(
-                            Modifier
-                                .fillMaxWidth()
-                                .clickable { onOpen(version) }
-                                .padding(vertical = 8.dp),
-                        ) {
-                            Text(
-                                DateUtils.getRelativeTimeSpanString(version.at, now, DateUtils.MINUTE_IN_MILLIS).toString(),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                            Text(
-                                stringResource(reasonLabel(version.reason)) + "\n" +
-                                    context.resources.getQuantityString(R.plurals.plugin_ide_version_lines, version.lines, version.lines),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                            if (version.note.isNotBlank()) {
-                                Text(version.note, style = MaterialTheme.typography.bodySmall)
+                ScrollRailBox(state = rail, modifier = Modifier.heightIn(max = 380.dp)) { rows ->
+                    LazyColumn(modifier = rows, state = list) {
+                        items(versions, key = { it.snapshotId }) { version ->
+                            Column(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onOpen(version) }
+                                    .padding(vertical = 8.dp),
+                            ) {
+                                Text(
+                                    DateUtils.getRelativeTimeSpanString(version.at, now, DateUtils.MINUTE_IN_MILLIS).toString(),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                                Text(
+                                    stringResource(reasonLabel(version.reason)) + "\n" +
+                                        context.resources.getQuantityString(R.plurals.plugin_ide_version_lines, version.lines, version.lines),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                                if (version.note.isNotBlank()) {
+                                    Text(version.note, style = MaterialTheme.typography.bodySmall)
+                                }
                             }
                         }
                     }
@@ -79,6 +86,8 @@ internal fun VersionDiffDialog(version: PluginSnapshot, rows: List<DiffRow>?, on
     val context = LocalContext.current
     val colors = rememberCodeColors()
     val changed = rows?.any { it is DiffRow.Line && it.line.kind != DiffKind.SAME } == true
+    val diffList = rememberLazyListState()
+    val diffRail = rememberScrollRailState(diffList)
     val when_ = DateUtils.getRelativeTimeSpanString(version.at, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS).toString()
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -94,36 +103,41 @@ internal fun VersionDiffDialog(version: PluginSnapshot, rows: List<DiffRow>?, on
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(bottom = 8.dp),
                         )
-                        LazyColumn(
-                            Modifier
+                        ScrollRailBox(
+                            state = diffRail,
+                            modifier = Modifier
                                 .heightIn(max = 420.dp)
                                 .fillMaxWidth()
-                                .background(colors.background)
-                                .padding(8.dp),
-                        ) {
-                            items(rows) { row ->
-                                when (row) {
-                                    is DiffRow.Unchanged -> Text(
-                                        context.resources.getQuantityString(R.plurals.plugin_ide_version_unchanged_lines, row.count, row.count),
-                                        fontSize = 11.sp,
-                                        fontStyle = FontStyle.Italic,
-                                        color = colors.gutterText,
-                                        modifier = Modifier.padding(vertical = 4.dp),
-                                    )
-                                    is DiffRow.Line -> Text(
-                                        when (row.line.kind) {
-                                            DiffKind.SAME -> "  "
-                                            DiffKind.ADDED -> "+ "
-                                            DiffKind.REMOVED -> "- "
-                                        } + row.line.text,
-                                        fontFamily = CodeFontFamily,
-                                        fontSize = 12.sp,
-                                        color = when (row.line.kind) {
-                                            DiffKind.SAME -> colors.text
-                                            DiffKind.ADDED -> colors.function
-                                            DiffKind.REMOVED -> colors.problem
-                                        },
-                                    )
+                                .background(colors.background),
+                            // The code's own background, not the dialog's: the
+                            // fade has to disappear into what it sits on.
+                            fadeColor = colors.background,
+                        ) { lines ->
+                            LazyColumn(modifier = lines.padding(8.dp), state = diffList) {
+                                items(rows) { row ->
+                                    when (row) {
+                                        is DiffRow.Unchanged -> Text(
+                                            context.resources.getQuantityString(R.plurals.plugin_ide_version_unchanged_lines, row.count, row.count),
+                                            fontSize = 11.sp,
+                                            fontStyle = FontStyle.Italic,
+                                            color = colors.gutterText,
+                                            modifier = Modifier.padding(vertical = 4.dp),
+                                        )
+                                        is DiffRow.Line -> Text(
+                                            when (row.line.kind) {
+                                                DiffKind.SAME -> "  "
+                                                DiffKind.ADDED -> "+ "
+                                                DiffKind.REMOVED -> "- "
+                                            } + row.line.text,
+                                            fontFamily = CodeFontFamily,
+                                            fontSize = 12.sp,
+                                            color = when (row.line.kind) {
+                                                DiffKind.SAME -> colors.text
+                                                DiffKind.ADDED -> colors.function
+                                                DiffKind.REMOVED -> colors.problem
+                                            },
+                                        )
+                                    }
                                 }
                             }
                         }
