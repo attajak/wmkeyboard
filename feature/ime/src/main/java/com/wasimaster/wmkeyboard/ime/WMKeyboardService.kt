@@ -151,6 +151,7 @@ import com.wasimaster.wmkeyboard.core.input.MorseInput
 import com.wasimaster.wmkeyboard.core.prediction.AppNames
 import com.wasimaster.wmkeyboard.core.prediction.ContactEmails
 import com.wasimaster.wmkeyboard.core.prediction.ContactNames
+import com.wasimaster.wmkeyboard.core.prediction.Elisions
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryStore
 import com.wasimaster.wmkeyboard.core.prediction.CompositeWordSource
@@ -6166,7 +6167,15 @@ open class WMKeyboardService : InputMethodService() {
             }
         }
 
-        if (isWordChar && composingMode) {
+        // An apostrophe after a prefix that elides ends the prefix instead of
+        // joining the word: "l'" commits and "alp…" composes on its own, so its
+        // completion is "alphabet" and lands as "l'alphabet" rather than in
+        // place of the "l'" (#215). English keeps the apostrophe in the
+        // buffer, where it is a letter inside "don't".
+        val elisionBreak = composing.isNotEmpty() && text.length == 1 &&
+            (text[0] == Elisions.APOSTROPHE || text[0] == Elisions.CURLY_APOSTROPHE) &&
+            Elisions.rulesFor(state.language.id)?.isPrefix(composing) == true
+        if (isWordChar && composingMode && !elisionBreak) {
             appendComposing(text)
             updateComposingText(ic)
             refreshSuggestions()
@@ -8899,16 +8908,24 @@ open class WMKeyboardService : InputMethodService() {
         val fieldText = composedPreview(state, typed)
         val gluedToWord = (fixApostrophes || autocorrect) &&
             state.allowsTypingIntelligence && !state.composer.isTransliterating &&
-            ic.getTextBeforeCursor(fieldText.length + 1, 0)
+            ic.getTextBeforeCursor(fieldText.length + ELISION_LOOKBACK, 0)
                 ?.takeIf { it.length > fieldText.length }
-                ?.let { isComposingWordChar(it[0]) } == true
+                ?.let { before ->
+                    val ahead = before.subSequence(0, before.length - fieldText.length)
+                    // An elided prefix and its apostrophe ("l'", "qu'") end a
+                    // word rather than start one: the buffer after them is a
+                    // word of its own, corrected and learned as one (#215).
+                    isComposingWordChar(ahead[ahead.length - 1]) &&
+                        Elisions.rulesFor(state.language.id)?.endsWithElidedPrefix(ahead) != true
+                } == true
         // Apostrophe restoration outranks autocorrect: "dont" is a known
         // contraction slip, not a typo for "font"/"done" to be guessed at.
+        // English reads a table of contractions; a language that elides
+        // (French: "cest" is c'est) reads its own word lists, through the
+        // engine (#215).
         val apostrophized =
-            if (fixApostrophes && state.allowsTypingIntelligence &&
-                state.language.isEnglish && !gluedToWord
-            ) {
-                Apostrophes.fix(typed)
+            if (fixApostrophes && state.allowsTypingIntelligence && !gluedToWord) {
+                if (state.language.isEnglish) Apostrophes.fix(typed) else suggestionEngine?.elide(typed)
             } else {
                 null
             }
@@ -13762,8 +13779,9 @@ open class WMKeyboardService : InputMethodService() {
     private fun restoreApostrophe(word: String): String? {
         val state = _uiState.value
         if (!state.settings.autoText.apostrophe || !state.allowsTypingIntelligence) return null
-        if (!state.language.isEnglish) return null
-        return Apostrophes.fix(word)
+        if (state.language.isEnglish) return Apostrophes.fix(word)
+        // A language that elides: "cest" drawn is c'est, from the lists (#215).
+        return suggestionEngine?.elide(word)
     }
 
     /**
@@ -25960,6 +25978,13 @@ open class WMKeyboardService : InputMethodService() {
          * means the user has typed on and the chip is stale.
          */
         private const val CORRECTION_OFFER_TAIL = 3
+
+        /**
+         * How far behind a composing buffer [commitComposing] reads to see
+         * whether an elided prefix ("aujourd'", the longest, plus its
+         * apostrophe) rather than a word sits in front of it (#215).
+         */
+        private const val ELISION_LOOKBACK = 9
 
         /** Height offered to autofill chips, matching the suggestion strip. */
         private const val INLINE_CHIP_HEIGHT_DP = 44

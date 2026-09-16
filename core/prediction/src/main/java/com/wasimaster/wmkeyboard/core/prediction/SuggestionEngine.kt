@@ -1439,6 +1439,29 @@ class SuggestionEngine(
         private const val ACCENT_SHADOW_RATIO = 20.0
 
         /**
+         * How many times commoner the word after an elided prefix must be
+         * than the fused spelling before that spelling stops counting as a
+         * word of its own and reads as the elision (#215); see
+         * [elisionReading]. The French list's fused stand-ins sit far above
+         * it — `cest` against `est` at 5,000, `jai` against `ai` at 1,400,
+         * `quil` against `il` at 15,000 — while the real words that happen to
+         * split sit well under: `lune` against `une` at 136, `mont` against
+         * `ont` at 181, `tas` against `as` at 48. Also the price a known
+         * fused spelling's elided reading pays in the strip, so that `tas`
+         * leads `t'as` and `cest` trails `c'est` by the same margin.
+         */
+        private const val ELISION_SHADOW_RATIO = 200.0
+
+        /**
+         * How many times commoner than the word after its prefix a fused
+         * spelling may be and still have the elision offered on the strip.
+         * `lune` at 20,000 keeps *l'une* (`une` at 2.7 million) and `deux`
+         * at 300,000 keeps *d'eux* (`eux` at 92,000); `quand` at a million
+         * loses *qu'and* (an English `and` at a few thousand).
+         */
+        private const val ELISION_OFFER_FLOOR = 10.0
+
+        /**
          * Share of the silent-replacement margin a candidate has to clear to
          * be *offered* instead.
          *
@@ -1700,6 +1723,13 @@ class SuggestionEngine(
         for (c in rankedFor(lower, limit, touch, keys)) {
             if (c.edits > 0 && known) continue
             merged.merge(c.word, c.score, ::maxOf)
+        }
+        // An elision typed without its apostrophe reads as its two halves —
+        // "cest" as c'est, "jai" as j'ai (#215). The lists cannot offer it
+        // themselves: they were tokenised at the apostrophe, so they hold the
+        // fused misspelling as a word and the elision hardly at all.
+        if (!ambiguous) {
+            elisionReading(lower)?.let { merged.merge(it.spelling, it.score, ::maxOf) }
         }
         // The prefix sources read the buffer literally, so they sit out an
         // ambiguous decode: `adg` is not the start of anybody's name, and
@@ -2463,6 +2493,116 @@ class SuggestionEngine(
             }
         }
         return best
+    }
+
+    /**
+     * [lower]'s best reading in the dictionary tier with any accents the
+     * typist left off put back, and its score on the walk's scale: "etait"
+     * finds "était" as readily as "était" does. Null when no list holds
+     * either. A direct descent rather than a walk: it is asked once per
+     * keystroke for the word after an elided prefix, and the only branching
+     * is a letter's accented twins.
+     */
+    private fun accentedLookup(lower: String): Pair<String, Double>? {
+        var bestWord: String? = null
+        var best = Double.NEGATIVE_INFINITY
+        val children = ChildBuffer()
+        val spelled = StringBuilder(lower.length)
+        for (src in walkSources()) {
+            if (src.tier != FuzzyBeamSearch.Tier.DICTIONARY) continue
+            val walker = src.walker
+            fun descend(node: Int, pos: Int) {
+                if (pos == lower.length) {
+                    if (!walker.isWord(node)) return
+                    val score = src.logWeight + ln(1.0 + walker.frequency(node))
+                    if (score > best) {
+                        best = score
+                        bestWord = spelled.toString()
+                    }
+                    return
+                }
+                val expected = lower[pos]
+                // The matching edges are gathered before any descent, since
+                // the child buffer is shared down the recursion.
+                val count = walker.childrenInto(node, children)
+                var next: ArrayList<Pair<Char, Int>>? = null
+                for (i in 0 until count) {
+                    val label = children.labels[i]
+                    if (label != expected && !Accents.isAccentOf(label, expected)) continue
+                    (next ?: ArrayList<Pair<Char, Int>>(2).also { next = it }).add(label to children.nodes[i])
+                }
+                for ((label, child) in next ?: return) {
+                    spelled.append(label)
+                    descend(child, pos + 1)
+                    spelled.setLength(pos)
+                }
+            }
+            spelled.setLength(0)
+            descend(walker.root, 0)
+        }
+        return bestWord?.let { it to best }
+    }
+
+    /**
+     * [lower] read as an elision typed without its apostrophe (#215): the
+     * spelling with the apostrophe, its score for the strip, and whether it
+     * is the reading to *commit* — the fused spelling is unknown to every
+     * list, or known only as a stand-in the word after the prefix outnumbers
+     * [ELISION_SHADOW_RATIO] times over, the way an accentless stand-in is
+     * judged. Null where the language does not elide, or the grammar
+     * ([Elisions]) admits no split, or the lists hold no word for the rest.
+     *
+     * The score is the rest's own when the fused spelling is unknown — an
+     * elision explains every key pressed, and an edit that drops the prefix
+     * does not — and that minus the ratio's log when it is a word, so a real
+     * word that happens to split (`tas`, `lune`) leads its elided reading in
+     * the strip by the same margin that keeps it from being corrected.
+     */
+    private fun elisionReading(lower: String): ElisionReading? {
+        val rules = Elisions.rulesFor(primaryLanguageId) ?: return null
+        val splits = rules.splits(lower)
+        if (splits.isEmpty()) return null
+        val typed = dictionaryScore(lower)
+        val price = ln(ELISION_SHADOW_RATIO)
+        var best: ElisionReading? = null
+        for (split in splits) {
+            val (word, score) = rules.respelled(split)
+                ?.let { spelled -> dictionaryScore(spelled).takeIf { it > Double.NEGATIVE_INFINITY }?.let { spelled to it } }
+                ?: accentedLookup(split.rest)
+                ?: continue
+            if (suppressed(word)) continue
+            // A spelling no word begins with is an elision whatever a list
+            // has counted: `aujourdhui` is never a word, and `hui` is never
+            // anything else, so the ratio between them says nothing.
+            val known = typed != Double.NEGATIVE_INFINITY && !rules.alwaysElides(split.prefix)
+            // A word far commoner than what follows it is not offered the
+            // split at all: `quand` is not shown *qu'and* because a list has
+            // an English "and" in it somewhere.
+            if (known && typed - score > ln(ELISION_OFFER_FLOOR)) continue
+            val reading = ElisionReading(
+                spelling = split.spell(word),
+                score = if (known) score - price else score,
+                shadowed = !known || score - typed >= price,
+            )
+            if (best == null || reading.score > best.score) best = reading
+        }
+        return best
+    }
+
+    private class ElisionReading(val spelling: String, val score: Double, val shadowed: Boolean)
+
+    /**
+     * The apostrophe [word] was typed without, or null when it needs none:
+     * "cest" → "c'est", "Jai" → "J'ai", "quil" → "qu'il" (#215). The
+     * language's counterpart to [Apostrophes.fix], read from the word lists
+     * rather than a table, and applied where that is: at commit, ahead of
+     * autocorrect, and to a glide's readings. Only a spelling the lists do
+     * not vouch for as a word of its own is rewritten; see [elisionReading].
+     */
+    fun elide(word: String): String? {
+        val reading = elisionReading(word.lowercase()) ?: return null
+        if (!reading.shadowed) return null
+        return matchCase(word, reading.spelling)
     }
 
     /**
