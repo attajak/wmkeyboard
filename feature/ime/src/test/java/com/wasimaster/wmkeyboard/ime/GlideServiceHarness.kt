@@ -89,6 +89,9 @@ internal open class RecordingEditor(
     /** Key codes the service sent, downs and ups alike. */
     val keys = mutableListOf<Int>()
 
+    /** Editor actions the service fired, in order — Send, Done, an app's own id. */
+    val editorActions = mutableListOf<Int>()
+
     /** Whether the echo may arm a region; null leaves the editor unmodelled. */
     var mayArmRegion: (() -> Boolean)? = null
 
@@ -135,6 +138,11 @@ internal open class RecordingEditor(
 
     override fun sendKeyEvent(event: KeyEvent?): Boolean {
         event?.let { keys += it.keyCode }
+        return true
+    }
+
+    override fun performEditorAction(editorAction: Int): Boolean {
+        editorActions += editorAction
         return true
     }
 

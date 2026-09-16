@@ -8001,6 +8001,21 @@ open class WMKeyboardService : InputMethodService() {
             // puts it down. maybeAutoCapitalize only arms an OFF shift, so it
             // leaves this one alone.
             maybeAutoCapitalize()
+        } else if (hardwareShift == null && currentInputEditorInfo.refusesEnterKeyEvent()) {
+            // A multi-line box that also flew IME_FLAG_NO_ENTER_ACTION: it
+            // asked for a line break in as many words as EditorInfo has, so
+            // the break is committed rather than sent as a key event. Discord's
+            // message box is one (#214), and its edit text — React Native's —
+            // submits on a KEYCODE_ENTER it sees, which sent the message the
+            // flag had just said not to send.
+            //
+            // Soft presses only (hardwareShift is null for one). A physical
+            // Enter *is* a key event, and an app that reads one as "send" while
+            // the on-screen key breaks the line — which is what Discord and
+            // every desktop chat client do — is entitled to keep telling them
+            // apart.
+            typeNewline(ic)
+            maybeAutoCapitalize()
         } else {
             // No action declared at all: a genuinely multi-line field, a web
             // page, a terminal. These want the key event — a committed "\n"
@@ -26148,6 +26163,34 @@ open class WMKeyboardService : InputMethodService() {
                 return null
             }
             return action
+        }
+
+        /**
+         * Whether a newline here must be *committed* rather than sent as a
+         * KEYCODE_ENTER event — asked only once [editorActionId] has already
+         * said this field takes a newline at all.
+         *
+         * The field qualifies by flying IME_FLAG_NO_ENTER_ACTION on a
+         * multi-line box. That pair is an app saying, as plainly as EditorInfo
+         * lets it, "Enter is a line break here, whatever action I declared" —
+         * Discord's message box declares actionDone and then flies the flag
+         * (#214). Sending it the key event anyway loses that argument twice
+         * over: TextView fires the editor action on KEYCODE_ENTER, and an edit
+         * text with its own key handling — React Native's, which is Discord's —
+         * treats the event as a submit. Either way the half-written message
+         * went out. commitText has nothing to intercept it, which is the same
+         * reason Shift+Enter's override commits (see [typeNewline]).
+         *
+         * Everything else keeps the key event, and the flag is what keeps the
+         * set small: a WebView's textarea declares IME_ACTION_NONE without it
+         * (Chromium's ImeUtils), a terminal declares nothing at all, and both
+         * have handlers that need a real Enter to see.
+         */
+        private fun EditorInfo?.refusesEnterKeyEvent(): Boolean {
+            val info = this ?: return false
+            if (info.imeOptions and EditorInfo.IME_FLAG_NO_ENTER_ACTION == 0) return false
+            return info.inputType and InputType.TYPE_MASK_CLASS == InputType.TYPE_CLASS_TEXT &&
+                info.inputType and InputType.TYPE_TEXT_FLAG_MULTI_LINE != 0
         }
 
         /**
