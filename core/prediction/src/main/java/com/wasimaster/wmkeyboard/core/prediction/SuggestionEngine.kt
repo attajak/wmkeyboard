@@ -371,6 +371,19 @@ class SuggestionEngine(
     var digitSlipCorrections: Boolean = false
 
     /**
+     * Whether a word typed without its apostrophe may be read as the word
+     * that has one — "Fix missing apostrophes", from the settings.
+     *
+     * Read here rather than only at the call that commits, because the strip
+     * has to agree with the space bar: with the setting off the reading is
+     * not offered either, and with it on it leads. Defaults to on, which is
+     * the setting's own default and the right answer for the spell checker,
+     * which never reaches the IME's settings at all.
+     */
+    @Volatile
+    var apostropheFixes: Boolean = true
+
+    /**
      * Letters flanking the spacebar on the active layout's bottom row: a
      * stray one of these between two known words is read as a fat-fingered
      * space by [splitCandidates]. Defaults to the QWERTY family's set.
@@ -1462,6 +1475,21 @@ class SuggestionEngine(
         private const val ELISION_OFFER_FLOOR = 10.0
 
         /**
+         * How far an English contraction leads the spelling it repairs in
+         * the strip; see [contractionReading].
+         *
+         * A margin rather than a ranking, because there is nothing to rank:
+         * [Apostrophes] answers from a table that already refuses every form
+         * with a second reading, and the space bar is going to commit that
+         * answer whatever the lists think of it. The number only has to be
+         * bigger than the gap a frequency list can open between the two
+         * spellings — the downloadable English list has `thats` at 3,866 and
+         * `that's` at 2,116 — and it is `ln` of a factor, so this is a
+         * thousandfold.
+         */
+        private const val CONTRACTION_LEAD = 7.0
+
+        /**
          * Share of the silent-replacement margin a candidate has to clear to
          * be *offered* instead.
          *
@@ -1724,12 +1752,13 @@ class SuggestionEngine(
             if (c.edits > 0 && known) continue
             merged.merge(c.word, c.score, ::maxOf)
         }
-        // An elision typed without its apostrophe reads as its two halves —
-        // "cest" as c'est, "jai" as j'ai (#215). The lists cannot offer it
-        // themselves: they were tokenised at the apostrophe, so they hold the
-        // fused misspelling as a word and the elision hardly at all.
+        // A word typed without its apostrophe — "thats" for that's, "cest"
+        // for c'est — reads as the spelling that has one. The lists cannot
+        // offer it themselves: they were tokenised at the apostrophe, so they
+        // hold the fused misspelling as a word and the real spelling hardly
+        // at all (#215, #240).
         if (!ambiguous) {
-            elisionReading(lower)?.let { merged.merge(it.spelling, it.score, ::maxOf) }
+            apostropheReading(lower)?.let { merged.merge(it.spelling, it.score, ::maxOf) }
         }
         // The prefix sources read the buffer literally, so they sit out an
         // ambiguous decode: `adg` is not the start of anybody's name, and
@@ -2139,7 +2168,17 @@ class SuggestionEngine(
             val leftFreq = freqOf(left)
             if (leftFreq <= 0) continue
             val right = word.substring(i)
-            val rightFreq = freqOf(right)
+            // A one-letter second half is not a word the user meant to
+            // separate, it is what a corpus tokenised at the apostrophe left
+            // behind. The downloadable English list has `'s` as its sixth
+            // commonest token and a bare `s` at 110,000, `t` at 72,000 and
+            // `don` at four million; the Italian one has `s` at 28,000. With
+            // any of them loaded, "thats" reads as `that` + `s` and comes
+            // back as "that s" — which is what #240 reported after adding
+            // the contraction to their dictionary by hand. No split in any
+            // language ends on a single letter, while the left half must
+            // stay open to one ("alot" is *a lot*), so the rule goes here.
+            val rightFreq = if (right.length >= 2) freqOf(right) else 0
             if (rightFreq > 0) {
                 val score = ln(1.0 + minOf(leftFreq, rightFreq) * WEIGHT_SPLIT)
                 results.add(SplitReading("$left $right", score, dropped = false))
@@ -2548,6 +2587,48 @@ class SuggestionEngine(
     }
 
     /**
+     * [lower] read as a word whose apostrophe was left out, whichever way
+     * this language forms one: an English contraction from [Apostrophes]'
+     * table, an elision from the word lists and [Elisions]' grammar (#215).
+     * Null when the language has neither route, or neither route fires.
+     *
+     * One entry point for both, because both answer the same question and
+     * both have to be asked in the same places. They were not: the table was
+     * read at commit and nowhere else, so the strip went on showing `thats`
+     * while the space bar was about to type `that's`, and the user — who
+     * watches the strip — read that as the fix not working at all (#240).
+     */
+    private fun apostropheReading(lower: String): ElisionReading? {
+        if (!apostropheFixes) return null
+        return contractionReading(lower) ?: elisionReading(lower)
+    }
+
+    /**
+     * [lower] read as an English contraction typed without its apostrophe:
+     * `thats` is *that's*, `dont` is *don't* (#128, #240).
+     *
+     * A table rather than the lists, because the lists cannot answer it —
+     * they are tokenised at the apostrophe like every other corpus, so they
+     * hold `thats` as a word and `that's` as a rarer one, and the commoner
+     * spelling is the wrong one. [Apostrophes] already refuses every form
+     * that is a word in its own right (*its*, *were*, *well*), so a hit here
+     * is certain in a way an elision reading never is: it leads the typed
+     * spelling in the strip, by [CONTRACTION_LEAD], exactly as it overrides
+     * it at commit. A strip that disagreed with the space bar would be the
+     * bug this fixes.
+     */
+    private fun contractionReading(lower: String): ElisionReading? {
+        if (!Apostrophes.servesLanguage(primaryLanguageId)) return null
+        val fixed = Apostrophes.fix(lower) ?: return null
+        val scored = maxOf(finiteScore(fixed.lowercase()), finiteScore(lower))
+        return ElisionReading(fixed, scored + CONTRACTION_LEAD, shadowed = true)
+    }
+
+    /** [dictionaryScore] with an unknown word's negative infinity read as zero. */
+    private fun finiteScore(word: String): Double =
+        dictionaryScore(word).takeIf { it > Double.NEGATIVE_INFINITY } ?: 0.0
+
+    /**
      * [lower] read as an elision typed without its apostrophe (#215): the
      * spelling with the apostrophe, its score for the strip, and whether it
      * is the reading to *commit* — the fused spelling is unknown to every
@@ -2597,16 +2678,18 @@ class SuggestionEngine(
 
     /**
      * The apostrophe [word] was typed without, or null when it needs none:
-     * "cest" → "c'est", "Jai" → "J'ai", "quil" → "qu'il" (#215). The
-     * language's counterpart to [Apostrophes.fix], read from the word lists
-     * rather than a table, and applied where that is: at commit, ahead of
-     * autocorrect, and to a glide's readings. Only a spelling the lists do
-     * not vouch for as a word of its own is rewritten; see [elisionReading].
+     * "thats" → "that's", "cest" → "c'est", "quil" → "qu'il" (#215, #240).
+     *
+     * Every language's route in one call — the English table, an elision
+     * language's word lists — so its callers do not have to know which one
+     * the keyboard is on. Applied at commit, ahead of autocorrect, and to a
+     * glide's readings. Only a spelling that is not vouched for as a word of
+     * its own is rewritten; see [apostropheReading].
      */
     fun elide(word: String): String? {
-        val reading = elisionReading(word.lowercase()) ?: return null
+        val reading = apostropheReading(word.lowercase()) ?: return null
         if (!reading.shadowed) return null
-        return matchCase(word, reading.spelling)
+        return matchCase(word, reading.spelling).takeIf { it != word }
     }
 
     /**

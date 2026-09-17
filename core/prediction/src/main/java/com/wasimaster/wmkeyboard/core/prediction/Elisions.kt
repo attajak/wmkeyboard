@@ -39,6 +39,7 @@ object Elisions {
     fun rulesFor(languageId: String): Rules? =
         when (languageId.substringBefore('-').substringBefore('_')) {
             "fr" -> FRENCH
+            "it" -> ITALIAN
             else -> null
         }
 
@@ -227,6 +228,141 @@ object Elisions {
             "a" to mapOf("qu" to "à", "jusqu" to "à", "lorsqu" to "à", "puisqu" to "à", "quoiqu" to "à"),
             "ou" to mapOf("d" to "où", "jusqu" to "où"),
             "ile" to mapOf("l" to "île", "presqu" to "île"),
+        ),
+    )
+
+    /** The prefixes that elide before anything: Italian's articles and prepositions. */
+    private val ITALIAN_OPEN =
+        setOf("l", "d", "un", "dell", "nell", "dall", "sull", "all", "quell")
+
+    /** The prefixes that elide in a fixed handful of phrases; see [ITALIAN]. */
+    private val ADJECTIVE_PREFIXES =
+        setOf("quest", "grand", "sant", "bell", "buon", "mezz")
+
+    /** Those phrases: `quest'anno`, `mezz'ora`, `buon'anima`, `grand'uomo`. */
+    private val ADJECTIVE_COLLOCATIONS = listOf(
+        "anno", "anni", "ora", "uomo", "uomini", "estate", "inverno", "idea",
+        "aria", "opera", "epoca", "occasione", "immagine", "amore", "anima",
+        "isola", "età",
+    )
+
+    /**
+     * The prefixes each of those takes: the adjectives it is listed for, and
+     * the open ones it would have had anyway.
+     *
+     * Both halves are needed. A word in the function table is *only* matched
+     * against that table — that is what keeps `jet` from being *j'et* — so
+     * listing `idea` for `quest'` alone would have taken `un'idea` and
+     * `l'idea` away from prefixes that never needed listing.
+     *
+     * `d'` before *uomo* is the one subtraction: `d'uomo` is a real phrase,
+     * but *duomo* is a cathedral and 1,300 times rarer than *uomo*, which is
+     * exactly the shape the ratio reads as a stand-in.
+     */
+    private fun adjectivePrefixesFor(word: String): Set<String> = when (word) {
+        "uomo", "uomini" -> ADJECTIVE_PREFIXES + ITALIAN_OPEN - "d"
+        else -> ADJECTIVE_PREFIXES + ITALIAN_OPEN
+    }
+
+    /**
+     * Italian elides as constantly as French — *lo albero* is `l'albero`,
+     * *una amica* is `un'amica`, *ci è* is `c'è` — and the reporter of #240
+     * types it the same way a French typist types *cest*: without the
+     * apostrophe.
+     *
+     * The list behind it is tokenised differently, and it matters. The French
+     * corpus cut at the apostrophe and kept both halves, so `l'` never
+     * survived as a token and only the fused misspelling did. The Italian one
+     * cut *after* it: `l'` is the 16th commonest token in the language,
+     * `un'` and `dell'` and `all'` are all in the first 200, and the word
+     * after the prefix is an ordinary token of its own. So the fused spelling
+     * is usually a word nothing has ever seen — `lalbero` is in no list at
+     * all — and the reading is applied outright rather than shadow-priced.
+     *
+     * Where the fused spelling *is* a word, the ratio decides, exactly as in
+     * French. Measured over the real 184k list: `cera` (wax, 1,793) against
+     * *era* (657,610) clears 200 and is corrected to `c'era`; `allora`
+     * (394,873) against *ora* (559,590) does not and merely offers
+     * `all'ora`; `dove` (344,643) keeps itself and offers `dov'è`; `lira`
+     * keeps itself over `l'ira`.
+     *
+     * Two departures from the French table, both forced by the language:
+     *
+     *  - [verbsOnly] is empty. French can ask whether the rest looks like a
+     *    verb because French verbs end distinctively; Italian words nearly
+     *    all end in a vowel, so the same test admits everything. The pronoun
+     *    prefixes (`c'`, `m'`, `t'`) are therefore given a function-word
+     *    table and nothing else — `c'è` and `m'ha`, never `c'` plus a noun.
+     *  - [open] holds the articles and prepositions only. The adjective
+     *    prefixes (`quest'`, `mezz'`, `buon'`) elide in a short list of
+     *    collocations instead, because *questione* and *tuttora* are real
+     *    words that an open prefix rule reads straight through.
+     *
+     * Swept over the whole list, 123 of its 184,631 words come back with a
+     * spelling to apply and about 1,350 with one to offer. Fifteen of the
+     * eighteen applied spellings whose fused form is at all common are the
+     * repair the typist wanted (`lho`, `cè`, `dacqua`, `mezzora`); the three
+     * that are not — `lore`, `lecco`, `lallà` — are all `l'` before a word
+     * that happens to follow, which is the rule that also produces
+     * `l'albero`. That is the same trade French makes for `cest`.
+     */
+    private val ITALIAN = Rules(
+        // Longest first, so `dell` is read before its `d`.
+        prefixes = listOf(
+            "quell", "quest", "nient", "grand", "dell", "nell", "dall", "sull",
+            "anch", "tutt", "sant", "bell", "buon", "mezz", "all", "dov", "com",
+            "un", "c", "d", "l", "m", "t",
+        ),
+        functionWords = buildMap {
+            // *è*, which [respelled] spells back: asked plainly, the lists
+            // answer "e" — the conjunction, and the commonest token in
+            // Italian — for both spellings.
+            put("e", setOf("c", "dov", "com"))
+            put("era", setOf("c", "dov", "com"))
+            put("erano", setOf("c", "dov", "com"))
+            put("eravamo", setOf("c"))
+            put("eravate", setOf("c"))
+            put("ero", setOf("c"))
+            put("eri", setOf("c"))
+            // *avere* after a pronoun: `l'ho`, `m'ha`, `t'hanno`. None of the
+            // fused spellings is an Italian word, so all of them are safe.
+            put("ho", setOf("l", "c", "m", "t"))
+            put("ha", setOf("l", "c", "m", "t"))
+            put("hanno", setOf("l", "c", "m", "t"))
+            // Not t': `thai` is a word people type and *t'hai* is not
+            // standard anyway.
+            put("hai", setOf("l", "c", "m"))
+            put("abbiamo", setOf("c"))
+            put("avete", setOf("c"))
+            put("io", setOf("anch"))
+            for (w in listOf("esso", "essa", "essi", "esse")) put(w, setOf("anch"))
+            // The adjective prefixes are not [open]: they elide in a short
+            // list of collocations and nothing else. Left open, `quest` read
+            // *questore* — a police chief — as `quest'ore`.
+            for (w in ADJECTIVE_COLLOCATIONS) put(w, adjectivePrefixesFor(w))
+            for (w in listOf("altro", "altra", "altri", "altre")) {
+                put(w, setOf("tutt", "nient", "quest", "un", "l", "d", "dell", "quell", "all"))
+            }
+            put("uno", setOf("tutt", "l"))
+            put("una", setOf("tutt", "l"))
+        },
+        // Nothing: every Italian prefix above can also open an ordinary word,
+        // so the fused spelling's own count always gets a say. French needs
+        // this for `aujourdhui` and `jusqua`, which are never words; the
+        // Italian fused spellings that matter — `lalbero`, `unamica` — are
+        // simply absent from the lists, which the ratio already handles.
+        alwaysElide = emptySet(),
+        // The articles and prepositions, which elide before anything.
+        open = ITALIAN_OPEN,
+        // Italian words nearly all end in a vowel, so "does the rest look
+        // like a verb" cannot be asked the way French asks it: the test would
+        // admit everything. The pronoun prefixes take a listed function word
+        // and nothing else.
+        verbsOnly = emptySet(),
+        verbEndings = emptyList(),
+        vowels = "aeiouàèéìíòóùúh".toSet(),
+        respelled = mapOf(
+            "e" to mapOf("c" to "è", "dov" to "è", "com" to "è"),
         ),
     )
 }

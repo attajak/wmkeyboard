@@ -116,6 +116,30 @@ class WordContextTest {
         assertNull(before("किया"))
     }
 
+    @Test fun aContractionIsOneContextWord() {
+        // The apostrophe is a letter inside the word, not the end of it: this
+        // used to hand the next suggestion "s" as the word before it, and the
+        // pair the keyboard learned was `s` followed by whatever came next
+        // (#240). Both apostrophes, since another keyboard may have typed the
+        // typographic one into the field.
+        assertEquals("that's", before("that's "))
+        assertEquals("don't", before("I don't "))
+        assertEquals("that\u2019s", before("that\u2019s "))
+        assertEquals("l'albero", before("l'albero "))
+        // Only medial. A quote around a word, and the one a possessive ends
+        // on, are punctuation and still end it.
+        assertEquals("hello", before("'hello' "))
+        assertEquals("developers", before("the developers' "))
+    }
+
+    @Test fun bothContextWordsSurviveAnApostrophe() {
+        fun two(text: String?) = WordContext.lastTwoWords(text, enders)
+        assertEquals("don't" to "i", two("I don't "))
+        assertEquals("s" to "that's", two("that's s "))
+        val (p1, p2, p3) = WordContext.lastThreeWords("I don't think ", enders)
+        assertEquals(Triple("think", "don't", "i"), Triple(p1, p2, p3))
+    }
+
     @Test fun contextIsReadInTheStoresOwnSpelling() {
         // Field text is whatever some keyboard or paste left there, so both
         // spellings of য় turn up. They must key the same word — see WordKey.

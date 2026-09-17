@@ -4,6 +4,7 @@ import com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -872,6 +873,27 @@ class SuggestionEngineTest {
         val low = List(9) { i -> if (i == 3) TouchPoint(2f, 3.4f) else null }
         val out = e.suggest("thexworld", previousWord = null, touch = low)
         assertTrue("unexpected split in $out", "the world" !in out)
+    }
+
+    @Test fun `a split never ends on a single letter`() {
+        // What a corpus tokenised at the apostrophe leaves behind: the
+        // downloadable English list carries a bare `s` at 110,000 and `don`
+        // at four million, so "thats" read as `that` + `s` and came back as
+        // "that s" (#240). The left half stays open to one letter, since
+        // "alot" really is *a lot*.
+        val e = SuggestionEngine(
+            PackedTrie.of(listOf("that" to 10_203_742, "s" to 110_199, "a" to 14_484_562, "lot" to 200_000)),
+            BengaliPhoneticIndex(emptyList()),
+            UserLexicon(null),
+        ).apply { autocorrectSplits = true }
+        assertFalse("that s" in e.suggest("thats", previousWord = null))
+        // Ordinary autocorrect still has its say — "thats" is one deletion
+        // from "that" — but the split is not what it says.
+        assertNotEquals("that s", e.shouldAutocorrect("thats"))
+        // ...while a one-letter *first* half still reads: "alot" is "a lot".
+        // On the strip rather than applied, because in a list this small a
+        // plain deletion reaches "lot" and outranks any split.
+        assertTrue("a lot" in e.suggest("alot", previousWord = null))
     }
 
     @Test fun `split autocorrect is off unless the IME enables it`() {
