@@ -4,6 +4,7 @@ import com.wasimaster.wmkeyboard.core.prediction.WordKey
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 /**
@@ -150,6 +151,14 @@ class GlideShapeStore(private val storageFile: File?) {
             nearest.accepted++
         } else {
             if (entry.shapes.size >= MAX_SHAPES_PER_WORD) {
+                // A new way of drawing a word always arrives at one acceptance,
+                // so a plain count leaves an established shape unbeatable: it
+                // evicts each newcomer in turn, and a hand that has changed can
+                // never say so (issue #213). Every sighting of something new
+                // ages what is already here instead. A shape still in use keeps
+                // its lead by being accepted again; one the user has stopped
+                // drawing halves away and gives up the slot in a few sightings.
+                for (shape in entry.shapes) shape.accepted = (shape.accepted + 1) / 2
                 entry.shapes.remove(entry.shapes.minByOrNull { it.accepted - it.rejected })
             }
             entry.shapes.add(Shape(sample.shape.copyOf(), 1, 0))
@@ -258,12 +267,33 @@ class GlideShapeStore(private val storageFile: File?) {
         return best
     }
 
-    /** Running mean in the quantised space, the shape's acceptances deep. */
+    /**
+     * Running mean in the quantised space, the shape's acceptances deep — but
+     * never deeper than [BLEND_DEPTH], and rounded rather than truncated.
+     *
+     * Two things were wrong with the plain mean (issue #213). It freezes: at
+     * fifty acceptances a new stroke moves the stored shape by a fiftieth, so a
+     * word drawn often enough stops following the hand this store exists to
+     * follow. And `toInt()` truncates *toward zero*, so every coordinate that
+     * failed to move a whole quantised unit fell back toward the origin instead
+     * of staying put — a slow pull on every stored shape, in the one direction
+     * the normalisation has already centred them on.
+     *
+     * Capping the depth turns the tail into an exponential mean, which keeps
+     * converging while a habit holds and still comes across when it changes.
+     * The cap has to be shallow because the mean is kept in whole quantised
+     * units: a step of half the weight or less rounds away to nothing, so a
+     * depth of `n` cannot track a drift finer than about `n / 2` units. At four
+     * that floor is an eighth of a key width, comfortably inside
+     * [MERGE_RADIUS], which is the resolution the merge decision works at
+     * anyway.
+     */
     private fun blend(shape: Shape, drawn: ByteArray) {
-        val weight = shape.accepted + 1
+        val depth = minOf(shape.accepted, BLEND_DEPTH)
+        val weight = depth + 1
         for (i in 0 until POINTS) {
-            val mixed = (shape.points[i] * shape.accepted + drawn[i]).toFloat() / weight
-            shape.points[i] = mixed.toInt().coerceIn(-QUANT_LIMIT, QUANT_LIMIT).toByte()
+            val mixed = (shape.points[i] * depth + drawn[i]).toFloat() / weight
+            shape.points[i] = mixed.roundToInt().coerceIn(-QUANT_LIMIT, QUANT_LIMIT).toByte()
         }
     }
 
@@ -359,6 +389,13 @@ class GlideShapeStore(private val storageFile: File?) {
 
         /** Ways of drawing one word that are kept apart. */
         const val MAX_SHAPES_PER_WORD = 3
+
+        /**
+         * Deepest the running mean behind a stored shape ever gets: past this
+         * many acceptances a shape keeps following the hand at a fixed rate
+         * rather than settling for good. See [blend].
+         */
+        const val BLEND_DEPTH = 4
 
         /** A settled shape this close to a stored one is the same way of drawing the word, and blends in. */
         const val MERGE_RADIUS = 0.12f

@@ -1699,6 +1699,34 @@ open class WMKeyboardService : InputMethodService() {
     private var replacedGlideShape: GlideShapeSample? = null
 
     /**
+     * A glide the user backspaced away, waiting to find out what they meant
+     * (issue #213).
+     *
+     * Undoing a swipe says the reading was wrong; it does not say what was
+     * right, and until this the stroke was thrown away at that point, so
+     * whatever the user did next taught the swipe learners nothing. A
+     * correction made by backspacing and trying again — which is what most
+     * people do, and what #213 reported doing — could therefore be repeated
+     * forever without moving the reading, while the same correction made by
+     * tapping the strip without backspacing first taught all three.
+     *
+     * So the stroke waits here instead, and the next word committed claims it,
+     * however it was produced — drawn again, tapped out, or taken off the retry
+     * strip. Exactly one word gets it, and only inside
+     * [UNDONE_GLIDE_WINDOW_MS]; it is dropped with the rest of this text's
+     * learning when the field settles ([flushLearningBuffer]), and when the
+     * swipe style is forgotten or the stores are rebuilt.
+     *
+     * Deliberately not tied to the caret: the caret this service has on record
+     * is the last one the editor reported, and the delete that takes the word
+     * off does not report one, so a position check here would be reading a
+     * stale number. The window and the one-word budget are what bound it
+     * instead, and a word that has nothing to do with the stroke largely falls
+     * to `KeyOffsets.MAX_OBSERVED` even if it does claim it.
+     */
+    private var undoneGlide: UndoneGlide? = null
+
+    /**
      * The word the caret is sitting *inside* — [head] behind it, [tail] ahead
      * — when it is not parked at that word's end. Null the rest of the time.
      *
@@ -2805,6 +2833,7 @@ open class WMKeyboardService : InputMethodService() {
                     glideOutcomes.reload()
                     glideSandbox.reload()
                     glideRetryOffer = null
+                    undoneGlide = null
                     glideShapes.reload()
                 }
                 // The Learned-corrections screen's deletes, and "forget" for
@@ -3155,6 +3184,7 @@ open class WMKeyboardService : InputMethodService() {
             it.applied = _uiState.value.settings.gesture.learnSwipeStyle
         }
         glideRetryOffer = null
+        undoneGlide = null
         suggestionEngine?.glideOutcomes = glideOutcomes
         glideShapes = GlideShapeStore(store(GLIDE_SHAPES_FILE))
         glideSandbox = GlideSandboxLadder(store(GLIDE_SANDBOX_FILE))
@@ -6972,6 +7002,14 @@ open class WMKeyboardService : InputMethodService() {
                     // way, if one of the user's own did, is marked against.
                     unlearnHand()
                     stroke?.shape?.let { glideShapes.reject(it.layoutKey, word, it.shape) }
+                    // The stroke waits for the word the user meant instead of
+                    // being thrown away here (issue #213): whatever they commit
+                    // in its place claims it, and teaches the hand model and the
+                    // shape store the way a strip pick over an un-backspaced
+                    // glide already does.
+                    undoneGlide = stroke?.let {
+                        UndoneGlide(it, word, SystemClock.uptimeMillis())
+                    }
                     // The undone word is gone as bigram context; whatever now
                     // precedes the caret is the real one.
                     syncPreviousWordFromField(ic)
@@ -11097,12 +11135,15 @@ open class WMKeyboardService : InputMethodService() {
             offerToLearn(word, caseTrusted)
             return
         }
-        settleLearned(
-            learningBuffer.push(
-                word, state.language.id, reinforcement, caseTrusted,
-                origin = origin, replaces = replaces, typed = typed, taps = taps, keys = keys,
-            ),
+        val queued = learningBuffer.push(
+            word, state.language.id, reinforcement, caseTrusted,
+            origin = origin, replaces = replaces, typed = typed, taps = taps, keys = keys,
         )
+        // Between the push and the settle: the stroke a backspaced glide left
+        // waiting needs this word's entry to exist before it can ride it, and
+        // needs to be attached before the entry can settle (issue #213).
+        claimUndoneGlide(word)
+        settleLearned(queued)
     }
 
     /**
@@ -11266,6 +11307,9 @@ open class WMKeyboardService : InputMethodService() {
         // The readings are about words in this text, and this text is finished.
         glideReadings.clear()
         resumedWord = null
+        // So is any stroke still waiting to be told what it meant: the answer
+        // would have to have been in this text (issue #213).
+        undoneGlide = null
     }
 
     /**
@@ -13253,6 +13297,15 @@ open class WMKeyboardService : InputMethodService() {
             glideRetryOffer = null
             if (offer.offered === _uiState.value.suggestions && suggestion in offer.offered) {
                 noteGlidePreference(rejected = offer.rejected, chosen = suggestion)
+                // The same correction as a pick off the ordinary strip, made a
+                // backspace later, so it teaches the same three things (issue
+                // #213). No [unlearnHand] first: the undo already retracted
+                // what the rejected word taught, so this is a fresh
+                // observation rather than a correction of a standing one.
+                learnHand(offer.stroke.points, offer.stroke.keys, offer.stroke.keyWidthPx, suggestion)
+                // Rides to the pick's settle the way a strip replacement's
+                // does; [replacedGlideShape] is consumed after [learn] below.
+                replacedGlideShape = offer.stroke.shape
             }
         }
         lastGestureStroke = null
@@ -13589,6 +13642,34 @@ open class WMKeyboardService : InputMethodService() {
     /** The user backspaced [word] the moment a glide committed it. */
     private fun noteGlideUndone(word: String) {
         if (swipeStyleLearning) glideOutcomes.observeImmediateUndo(word)
+    }
+
+    /**
+     * [word] was just committed over a glide the user had backspaced away, so
+     * the stroke waiting in [undoneGlide] has found its answer (issue #213):
+     * the hand model learns where the finger went for this word's letters, the
+     * stroke's shape rides [word] to its settle, and the pair is remembered.
+     *
+     * Exactly what a strip pick over an un-backspaced glide does, arriving by
+     * the other route. Consumed at most once and only inside
+     * [UNDONE_GLIDE_WINDOW_MS] of the undo: past that the user has moved on and
+     * the next word they type is their next word, not this one retried.
+     *
+     * The same word again is not an answer — it is the reading they rejected —
+     * and neither is a word the stroke cannot be laid on, which [learnHand]
+     * refuses. A word that has nothing to do with the stroke mostly falls to
+     * `KeyOffsets.MAX_OBSERVED`, which drops any letter the finger came nowhere
+     * near.
+     */
+    private fun claimUndoneGlide(word: String) {
+        val undone = undoneGlide ?: return
+        undoneGlide = null
+        if (SystemClock.uptimeMillis() - undone.atMs > UNDONE_GLIDE_WINDOW_MS) return
+        if (WordKey.of(word) == WordKey.of(undone.rejected)) return
+        val stroke = undone.stroke
+        lastHandAdjustment = learnHand(stroke.points, stroke.keys, stroke.keyWidthPx, word)
+        stroke.shape?.let { learningBuffer.attachGlide(word, it) }
+        noteGlidePreference(rejected = undone.rejected, chosen = word)
     }
 
     private var cachedShapeKeyKeys: List<KeyCenter>? = null
@@ -14027,7 +14108,7 @@ open class WMKeyboardService : InputMethodService() {
             if (composing.isNotEmpty()) return@launch
             val offered = words.filterNot { it.equals(rejected, ignoreCase = true) }.take(slots)
             if (offered.isEmpty()) return@launch
-            glideRetryOffer = GlideRetryOffer(rejected, offered)
+            glideRetryOffer = GlideRetryOffer(rejected, offered, stroke)
             _uiState.update { it.copy(suggestions = offered) }
         }
     }
@@ -26301,6 +26382,15 @@ open class WMKeyboardService : InputMethodService() {
         private const val REVERT_SIGHTINGS = 2
 
         /**
+         * How long a backspaced glide waits to find out what the user meant
+         * (see [undoneGlide]). Generous, because the answer can take a moment
+         * to type out letter by letter, and cheap to be wrong about: past it
+         * the stroke is simply dropped, which is what used to happen the
+         * instant the word came off.
+         */
+        private const val UNDONE_GLIDE_WINDOW_MS = 10_000L
+
+        /**
          * Characters read either side of the caret when settling autocorrect
          * verdicts. One read at a flush, never on the typing path, and wide
          * enough to cover the corrections the watch is still holding.
@@ -26829,8 +26919,31 @@ private class GlideStroke(
     val shape: GlideShapeSample? = null,
 )
 
-/** The strip a deep retry filled after an undo, and the word it replaced: a pick off it prefers the pair. */
-private class GlideRetryOffer(val rejected: String, val offered: List<String>)
+/**
+ * A backspaced glide waiting for the word the user actually meant: the stroke,
+ * the reading they took back, and the uptime they took it back at. See
+ * [WMKeyboardService.undoneGlide].
+ */
+private class UndoneGlide(
+    val stroke: GlideStroke,
+    val rejected: String,
+    val atMs: Long,
+)
+
+/**
+ * The strip a deep retry filled after an undo, and the word it replaced: a pick
+ * off it prefers the pair.
+ *
+ * Carries the stroke as well, because a pick here is the same correction a pick
+ * off the ordinary strip is and has to teach the same three things (issue
+ * #213). It used to teach only the pair, so a user who backspaced before
+ * correcting taught the hand model and the shape store nothing at all.
+ */
+private class GlideRetryOffer(
+    val rejected: String,
+    val offered: List<String>,
+    val stroke: GlideStroke,
+)
 
 /**
  * Longest selection the macro bar reads out of the field.

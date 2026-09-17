@@ -125,6 +125,59 @@ class GlideShapeStoreTest {
     }
 
     @Test
+    fun `a hand that keeps moving away displaces the shape it used to draw`() {
+        val store = GlideShapeStore(null)
+        // One way of drawing the word, drawn until it is thoroughly established.
+        val settled = flat(0)
+        repeat(20) { store.learn(GlideShapeSample(layout, settled), "can") }
+        assertEquals(1, store.countFor("can"))
+
+        // The hand walks away from it, far enough each time that no two steps
+        // merge, so every one arrives as a way of drawing the word in its own
+        // right at a single acceptance. Before issue #213 that was unwinnable:
+        // each step evicted the step before it while the twenty-deep shape sat
+        // in its slot untouched, so the store could never be told the habit had
+        // changed however long the user kept drawing the new way.
+        for (step in 1..10) store.learn(GlideShapeSample(layout, flat(step * 8)), "can")
+
+        val source = store.forLayout(layout) ?: error("no source")
+        assertEquals(GlideShapeStore.MAX_SHAPES_PER_WORD, store.countFor("can"))
+        assertTrue(
+            "the way the hand stopped drawing must have given up its slot",
+            source.minDistance("can", settled) > 0f,
+        )
+        assertEquals("where the hand ended up must be stored", 0f, source.minDistance("can", flat(80)), 1e-6f)
+    }
+
+    @Test
+    fun `a long-established shape still follows the hand that draws it`() {
+        val drifted = flat(3)
+        fun settledThenDrifted(depthCapped: Boolean): Float {
+            val store = GlideShapeStore(null)
+            // Sixty draws one way, then eight of a drift small enough to merge
+            // rather than be kept apart.
+            repeat(if (depthCapped) 60 else GlideShapeStore.BLEND_DEPTH, {
+                store.learn(GlideShapeSample(layout, flat(0)), "can")
+            })
+            repeat(8) { store.learn(GlideShapeSample(layout, drifted), "can") }
+            return (store.forLayout(layout) ?: error("no source")).minDistance("can", drifted)
+        }
+        // The point of the cap: how deep the shape already is must stop mattering
+        // (issue #213). A mean sixty deep moves by a sixtieth, which is less than
+        // the quantised unit the mean is kept in, so it never moves at all.
+        assertEquals(
+            "a shape drawn sixty times must follow the hand as readily as a new one",
+            settledThenDrifted(depthCapped = false),
+            settledThenDrifted(depthCapped = true),
+            1e-6f,
+        )
+        assertTrue("and must actually have moved toward it", settledThenDrifted(true) < flatDistance(3))
+    }
+
+    /** How far [away] quantised units on every coordinate is, in the store's units. */
+    private fun flatDistance(away: Int): Float = GlideShapeStore.distance(flat(0), flat(away))
+
+    @Test
     fun `distance is the shape channel's mean point distance`() {
         val a = flat(0)
         val b = near(a, 40)
