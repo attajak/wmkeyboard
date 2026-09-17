@@ -297,13 +297,37 @@ jobs:
           echo "--- release body ---"
           cat release-body.md
 
+      # Done with the gh CLI rather than softprops/action-gh-release, which
+      # failed the 0.5.9 publish with "Error creating asset temp dir" and left
+      # a draft carrying three of its twelve files. Uploading one file at a
+      # time is slower and does not fall over.
+      #
+      # The release is made as a draft, filled, and only then published, so it
+      # never appears to a watcher with half its APKs attached. The whole step
+      # is idempotent: a re-run edits and re-uploads over whatever the last
+      # attempt managed.
       - name: Create release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: WM Keyboard ${{ needs.verify.outputs.version }}
-          body_path: release-body.md
-          files: |
-            dist/*.apk
-            dist/*-mapping.txt.gz
-            dist/*-native-symbols.zip
-            dist/SHA256SUMS.txt
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+          TITLE: WM Keyboard ${{ needs.verify.outputs.version }}
+        run: |
+          shopt -s nullglob
+          files=(dist/*.apk dist/*-mapping.txt.gz dist/*-native-symbols.zip dist/SHA256SUMS.txt)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "::error::Nothing in dist/ to attach"
+            exit 1
+          fi
+          if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+            gh release edit "$TAG" --repo "$REPO" \
+              --title "$TITLE" --notes-file release-body.md
+          else
+            gh release create "$TAG" --repo "$REPO" --draft \
+              --title "$TITLE" --notes-file release-body.md
+          fi
+          for f in "${files[@]}"; do
+            echo "uploading $(basename "$f")"
+            gh release upload "$TAG" --repo "$REPO" --clobber "$f"
+          done
+          gh release edit "$TAG" --repo "$REPO" --draft=false --latest

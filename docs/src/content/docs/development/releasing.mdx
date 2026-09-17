@@ -202,6 +202,22 @@ APKs have been downloaded back from the `apks` job. Three parts:
 3. **One line** giving the commit count since the previous tag, linking the
    compare view.
 
+The `publish` job then makes the release as a draft, uploads the files one at a
+time, and only publishes it once they are all attached, so a watcher never sees
+a release with half its APKs on it. It uses the `gh` CLI rather than
+`softprops/action-gh-release`, which failed the 0.5.9 publish with `Error
+creating asset temp dir` after attaching three of twelve files. The whole step
+is idempotent, so re-running it after a failure edits and re-uploads over
+whatever the last attempt managed.
+
+:::caution[A re-run replays the workflow from the tag]
+Actions runs the workflow file as it was at the ref that triggered it, so
+fixing `release.yml` on `main` does nothing for a re-run of a tag cut before
+the fix. Attach the files by hand in that case: `gh run download <run-id>
+--name release-apks`, then `gh release upload <tag> --clobber <files>` and
+`gh release edit <tag> --draft=false --latest`.
+:::
+
 There is deliberately no generated list of commit subjects. The prose in
 `release-notes/` is the changelog; the compare view is a better place to read
 every commit than a wall of subjects in the release body.
