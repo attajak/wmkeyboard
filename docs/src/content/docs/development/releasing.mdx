@@ -156,16 +156,23 @@ from the bundle.
    `gradle.properties`. The code must increase; the name is what the tag has
    to match.
 
-2. **Write the changelog.** `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
+2. **Write the store changelog.** `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
    F-Droid and Play both read this file, so it is the only place you write it.
+   Play caps it at 500 characters.
 
-3. **Tag and push.**
+3. **Write the release notes.** `release-notes/<versionName>.md`, in the repo
+   root. This is the prose at the top of the GitHub release: what changed, in
+   sections, with issue links. Leave it out and the release falls back to the
+   store changelog, which is a paragraph — fine for a bug-fix release, thin for
+   anything else.
+
+4. **Tag and push.**
 
    ```sh
    git tag v0.3.1 && git push origin v0.3.1
    ```
 
-4. **Watch the run.** It builds the APKs, builds the Play AAB as a separate
+5. **Watch the run.** It builds the APKs, builds the Play AAB as a separate
    artifact, and publishes the release. The AAB is not attached to the public
    release, because an AAB is not installable. The `play` job uploads it to
    the Play *internal* track through fastlane instead, or skips itself with a
@@ -173,6 +180,33 @@ from the bundle.
    production stays a decision you make by hand.
 
 </Steps>
+
+### What the release body looks like
+
+`.github/scripts/release-notes.sh` builds it in the `publish` job, after the
+APKs have been downloaded back from the `apks` job. Three parts:
+
+1. **What's new** — `release-notes/<versionName>.md` verbatim, inside a
+   `<details open>` so it can be folded away, or the store changelog if that
+   file is absent.
+2. **Download** — a grid of architecture against flavour, starred on
+   `arm64-v8a`, every cell carrying the file's real size. The sizes are measured
+   from the artifacts that were actually built, so a cell whose file is missing
+   shows an em dash rather than a link to a 404. Checksums, R8 mappings and
+   native symbols sit in a collapsed block under it.
+3. **One line** giving the commit count since the previous tag, linking the
+   compare view.
+
+There is deliberately no generated list of commit subjects. The prose in
+`release-notes/` is the changelog; the compare view is a better place to read
+every commit than a wall of subjects in the release body.
+
+Preview the whole body without cutting a release, against artifacts you already
+have in `dist/`:
+
+```sh
+.github/scripts/release-notes.sh 0.5.9 20 v0.5.9 dist wasi-master/wmkeyboard
+```
 
 :::tip[Rehearse without publishing]
 Run the workflow from the Actions tab with **dry run** left on. Everything

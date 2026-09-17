@@ -254,27 +254,40 @@ jobs:
     if: github.ref_type == 'tag' && !inputs.dry_run
     runs-on: ubuntu-latest
     steps:
+      # Full history: the notes script finds the previous tag and walks the
+      # commits between it and this one.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/download-artifact@v4
         with:
           name: release-apks
           path: dist
 
+      # The body is built from the artifacts that were actually produced, so
+      # the download grid carries real file sizes and never links a file the
+      # build did not make.
+      - name: Build release notes
+        id: notes
+        run: |
+          code=$(grep '^wmkb.versionCode=' gradle.properties | cut -d= -f2)
+          .github/scripts/release-notes.sh \
+            '${{ needs.verify.outputs.version }}' \
+            "$code" \
+            '${{ github.ref_name }}' \
+            dist \
+            '${{ github.repository }}' > release-body.md
+          echo "--- release body ---"
+          cat release-body.md
+
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           name: WM Keyboard ${{ needs.verify.outputs.version }}
-          generate_release_notes: true
+          body_path: release-body.md
           files: |
             dist/*.apk
             dist/*-mapping.txt.gz
             dist/*-native-symbols.zip
             dist/SHA256SUMS.txt
-          body: |
-            Install the APK that matches your phone's CPU. `arm64-v8a` is
-            right for essentially every phone sold since 2017.
-
-            **full** is the complete build. **lite** drops the ML Kit and
-            on-device model features (handwriting, OCR, document scanning,
-            Whisper, the local LLM) for a much smaller download.
-
-            Verify what you downloaded against `SHA256SUMS.txt`.
