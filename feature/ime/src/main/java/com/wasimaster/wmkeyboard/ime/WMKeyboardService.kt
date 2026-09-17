@@ -255,6 +255,8 @@ import com.wasimaster.wmkeyboard.core.net.NetworkWatcher
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
 import com.wasimaster.wmkeyboard.core.layout.expandForTablet
+import com.wasimaster.wmkeyboard.core.layout.gridForTelevision
+import com.wasimaster.wmkeyboard.core.layout.televisionGridColumns
 import com.wasimaster.wmkeyboard.core.layout.tabletGridWidth
 import com.wasimaster.wmkeyboard.core.settings.DeviceForm
 import com.wasimaster.wmkeyboard.core.settings.applyDeviceForm
@@ -8906,13 +8908,20 @@ open class WMKeyboardService : InputMethodService() {
         // key and so decline on their own, and the numeric keypads must never be
         // stretched to twelve columns — a four-column PIN pad at that width is
         // not a keypad any more.
-        val expand = form.isTablet && safe.tabletExpand
+        // A television takes the grid transform instead of the tablet one, even
+        // though its screen reports as a large tablet's: the two want opposite
+        // things. A tablet widens the board so two hands can reach more keys at
+        // once; a remote wants the *fewest* presses between keys, which is an
+        // even rectangle. `tabletExpand` gates both — a layout whose geometry is
+        // authored (T9, the kana pads) says no to being rebuilt at all.
+        val reflow = television && safe.tabletExpand && televisionGridColumns(letters) != null
+        val expand = !reflow && form.isTablet && safe.tabletExpand
         val gridWidth = if (expand) tabletGridWidth(letters, form) else null
         val set = LayoutSet(
-            letters = if (gridWidth != null) {
-                letters.expandForTablet(form, numberRowShown)
-            } else {
-                letters
+            letters = when {
+                reflow -> letters.gridForTelevision()
+                gridWidth != null -> letters.expandForTablet(form, numberRowShown)
+                else -> letters
             },
             symbols = safe.compile(LayoutLayer.SYMBOLS),
             symbolsShifted = safe.compile(LayoutLayer.SYMBOLS_SHIFTED),
@@ -25100,6 +25109,12 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        // Before the swallow below, which would eat it: this is where a ring
+        // press types, and the key it releases is one the DOWN consumed.
+        if (handleKeyGridNavKeyUp(event)) {
+            consumedHardwareKeys.remove(keyCode)
+            return true
+        }
         // Swallow the UP of any DOWN this IME consumed, so the focused app
         // never sees half a physical keypress. Checked before the BACK/volume
         // handling, which never registers its keys here.
@@ -25348,14 +25363,31 @@ open class WMKeyboardService : InputMethodService() {
      * left to fall through to the app half-way through a hold.
      */
     private fun handleRingPress(focus: KeyGridFocus, event: KeyEvent): Boolean = when {
+        // A popup is open: this press is the one that takes the highlighted
+        // entry, and the release after it has nothing left to do.
         focus.alternatesOpen -> focus.commitAlternates()
-        event.repeatCount == 0 -> focus.press()
-        // Repeating keys spend the hold on repeating, exactly as a finger does;
-        // they have no popup to open (`holdRepeats` and `opensAlternatesPopup`
-        // are exclusive on the same key).
-        focus.repeatsOnHold() -> focus.press()
-        event.repeatCount == 1 -> focus.openAlternates() || focus.showing
-        else -> focus.showing
+        // Nothing is typed on the way down — see [KeyGridFocus.armPress].
+        event.repeatCount == 0 -> focus.armPress()
+        event.repeatCount == 1 -> focus.holdPress()
+        else -> focus.repeatPress()
+    }
+
+    /**
+     * The centre button coming up: where a press that neither repeated nor
+     * opened a popup finally types, the way a finger lifting off a key does.
+     *
+     * Runs before [onKeyUp]'s blanket swallow of consumed keys, which would
+     * otherwise eat the release this is waiting for.
+     */
+    private fun handleKeyGridNavKeyUp(event: KeyEvent): Boolean {
+        if (!_uiState.value.settings.hardwareKeyboard.dpadKeyNavigation) return false
+        return when (event.keyCode) {
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_NUMPAD_ENTER,
+            -> panelFocus.keyGrid.releasePress()
+
+            else -> false
+        }
     }
 
     /** Arrow, Enter and Tab inside an open panel: move, activate, change region. */

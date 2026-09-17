@@ -63,6 +63,10 @@ internal class KeyGridFocus {
     /** The key under the ring, or null when it is on a chip or a tool button. */
     private var focusedKey: Key? = null
 
+    /** A centre button is down over the ring, and whether the hold already spent it. */
+    private var pressArmed = false
+    private var pressSpent = false
+
     /**
      * The key whose alternates a held centre button has opened, with the cell
      * to hang the popup off; null when no popup is up. Snapshot state: the
@@ -160,12 +164,72 @@ internal class KeyGridFocus {
         return true
     }
 
+    /**
+     * The centre button going down, with nothing open yet.
+     *
+     * Types nothing: a key on a touch keyboard commits on the *release*, and it
+     * has to be that way here too — otherwise every long press types the letter
+     * before opening the alternates the hold was for, which is what the first
+     * cut of this did (a remote pressing and holding `e` typed "e" and then
+     * offered "è é ê ë").
+     */
+    fun armPress(): Boolean {
+        if (!showing) return false
+        pressArmed = true
+        pressSpent = false
+        return true
+    }
+
+    /**
+     * The hold has reached the platform's long-press threshold: the ringed key
+     * either repeats (backspace and the arrows, #231) or opens its alternates.
+     * Either way the press is spent, so the release that follows types nothing.
+     */
+    fun holdPress(): Boolean {
+        if (!pressArmed) return false
+        if (repeatsOnHold()) {
+            press()
+            pressSpent = true
+            return true
+        }
+        if (openAlternates()) {
+            pressSpent = true
+            return true
+        }
+        // Nothing to open, so the hold is still an ordinary press waiting for
+        // its release — but it is this ring's press, and the app must not see
+        // half of it.
+        return true
+    }
+
+    /** A further auto-repeat of a held centre button: only a repeating key acts. */
+    fun repeatPress(): Boolean {
+        if (!pressArmed) return false
+        if (repeatsOnHold()) press()
+        return true
+    }
+
+    /**
+     * The centre button coming up. A press that neither repeated nor opened a
+     * popup types here — the release, exactly like a finger lifting off a key.
+     */
+    fun releasePress(): Boolean {
+        if (!pressArmed) return false
+        val types = !pressSpent && !alternatesOpen
+        pressArmed = false
+        pressSpent = false
+        if (types) press()
+        return true
+    }
+
     /** Takes the ring down: the board is going away, or a finger has taken over. */
     fun clear() {
         cancelAlternates()
         cell.value = null
         focused = null
         focusedKey = null
+        pressArmed = false
+        pressSpent = false
     }
 
     /** Forgets the screen as well — a new input session gets a fresh ring. */
@@ -223,11 +287,12 @@ internal class KeyGridFocus {
         }
         val next = nextKeyCell(rects, rects[index], dx, dy)
         if (next == null) {
-            if (dy > 0) {
-                cancelAlternates()
-                return true
-            }
-            return false
+            // Down with nothing below is the cancel; every other dead end is
+            // simply a press that goes nowhere. Consumed either way — an arrow
+            // key that leaked to the app while a popup was open would move the
+            // app's own focus behind it.
+            if (dy > 0) cancelAlternates()
+            return true
         }
         hold.selected.intValue = rects.indexOf(next)
         return true

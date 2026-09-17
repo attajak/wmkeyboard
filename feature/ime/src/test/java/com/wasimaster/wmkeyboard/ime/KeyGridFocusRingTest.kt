@@ -58,6 +58,47 @@ class KeyGridFocusRingTest {
     }
 
     @Test
+    fun `a press types on the release, the way a finger does`() {
+        val focus = focus()
+        focus.move(0, 1)
+        assertTrue(focus.armPress())
+        assertEquals("nothing on the way down", emptyList<String>(), typed)
+        assertTrue(focus.releasePress())
+        assertEquals(1, typed.size)
+    }
+
+    @Test
+    fun `a hold that opens alternates types nothing when it is released`() {
+        val focus = focus()
+        focus.move(0, 1)
+        while (focus.cell.value?.left != 0f) focus.move(-1, 0)
+        focus.armPress()
+        assertTrue(focus.holdPress())
+        assertTrue(focus.alternatesOpen)
+        assertTrue(focus.releasePress())
+        assertEquals("the hold was the point, not the letter", emptyList<String>(), typed)
+    }
+
+    @Test
+    fun `a hold on a repeating key repeats, and the release adds nothing`() {
+        val focus = focus()
+        focus.move(0, 1)
+        while (focus.cell.value?.left != 200f) focus.move(1, 0)
+        focus.armPress()
+        focus.holdPress()
+        focus.repeatPress()
+        focus.repeatPress()
+        assertEquals(3, typed.size)
+        focus.releasePress()
+        assertEquals(3, typed.size)
+    }
+
+    @Test
+    fun `a release with no press behind it does nothing`() {
+        assertFalse(focus().releasePress())
+    }
+
+    @Test
     fun `holding the centre button opens the ringed key's alternates`() {
         val focus = focus()
         focus.move(0, 1)
@@ -103,6 +144,28 @@ class KeyGridFocusRingTest {
         assertTrue(focus.moveAlternates(0, 1))
         assertFalse(focus.alternatesOpen)
         assertEquals(emptyList<String>(), typed)
+    }
+
+    @Test
+    fun `the popup's row wraps, like the board's rows do`() {
+        val focus = openedPopup()
+        assertTrue(focus.moveAlternates(-1, 0))
+        assertEquals("left from the first entry reaches the last", 2, focus.hold.selected.intValue)
+        assertTrue(focus.alternatesOpen)
+    }
+
+    @Test
+    fun `an arrow with nowhere to go inside the popup is still swallowed`() {
+        val focus = focus()
+        focus.move(0, 1)
+        while (focus.cell.value?.left != 0f) focus.move(-1, 0)
+        focus.openAlternates()
+        // One entry, laid out: there is nowhere to go, and the app behind must
+        // not see the key either.
+        focus.hold.rects = listOf(Rect(0f, 0f, 40f, 40f))
+        assertTrue(focus.moveAlternates(1, 0))
+        assertTrue(focus.alternatesOpen)
+        assertEquals(0, focus.hold.selected.intValue)
     }
 
     @Test

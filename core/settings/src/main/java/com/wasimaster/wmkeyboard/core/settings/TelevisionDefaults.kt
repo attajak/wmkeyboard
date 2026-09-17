@@ -25,8 +25,12 @@ package com.wasimaster.wmkeyboard.core.settings
  * Key height, board width and the digit row are ordinary preferences with a bad
  * phone-shaped default on a 16:9 screen you sit three metres from, so they
  * follow `DeviceFormDefaults`' rule instead: applied only where the user has
- * never chosen for themselves, evidenced by the absence of the DataStore key.
- * A TV user who sizes the board by hand keeps their number.
+ * never chosen for themselves, evidenced by the absence of its DataStore key. A
+ * TV user who sizes the board by hand keeps their number.
+ *
+ * The layout is not chosen here at all: whichever one the user is on is reflowed
+ * into an even grid at resolve time, the way a tablet's is widened. See
+ * `gridForTelevision`.
  *
  * Every value returns the receiver unchanged off a television, so phones and
  * tablets pay one boolean for this file's existence.
