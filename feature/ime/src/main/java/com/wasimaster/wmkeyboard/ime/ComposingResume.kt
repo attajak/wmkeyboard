@@ -59,14 +59,16 @@ internal fun composingResumable(composer: Composer, hasWordSources: Boolean): Bo
  * accept it hands back only the tail past the last mark. Devanagari matras,
  * Tamil and Thai vowel signs, Arabic harakat and Hebrew niqqud spell words the
  * same way. Same rule the prediction stores already use for the same reason
- * ([WordContext.isWordChar]), plus the apostrophe that lives inside English
- * contractions.
+ * ([WordContext.isWordChar]), plus the apostrophe that lives inside a word —
+ * every character that spells one, not the ASCII one alone, since the field
+ * is read back from whatever put text in it ([WordContext.isApostrophe]).
  *
  * Digits are deliberately absent. They can *enter* a buffer as a number-row slip
  * ("as3" → "ase"), but a word span read back out of the field must not swallow
  * the "2" of "level 2".
  */
-internal fun isComposingWordChar(c: Char): Boolean = WordContext.isWordChar(c) || c == '\''
+internal fun isComposingWordChar(c: Char): Boolean =
+    WordContext.isWordChar(c) || WordContext.isApostrophe(c)
 
 /**
  * Whether the character *after* the caret continues the word behind it — the

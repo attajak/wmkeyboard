@@ -190,7 +190,7 @@ object TextWordScan {
     }
 
     /** What may sit between two letters of one word, as [WordContext.isLearnableWord] allows. */
-    private const val WORD_JOINERS = "'’-‌‍"
+    private const val WORD_JOINERS = WordContext.WORD_JOINERS
 
     /** Whether [c] belongs to a script written without spaces between words. */
     private fun isSpaceless(c: Char): Boolean {

@@ -6706,7 +6706,7 @@ open class WMKeyboardService : InputMethodService() {
         // place of the "l'" (#215). English keeps the apostrophe in the
         // buffer, where it is a letter inside "don't".
         val elisionBreak = composing.isNotEmpty() && text.length == 1 &&
-            (text[0] == Elisions.APOSTROPHE || text[0] == Elisions.CURLY_APOSTROPHE) &&
+            WordContext.isApostrophe(text[0]) &&
             Elisions.rulesFor(state.language.id)?.isPrefix(composing) == true
         if (isWordChar && composingMode && !elisionBreak) {
             appendComposing(text)
