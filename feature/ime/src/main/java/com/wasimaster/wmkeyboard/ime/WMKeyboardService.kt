@@ -130,6 +130,7 @@ import com.wasimaster.wmkeyboard.core.gesture.GlideCoverage
 import com.wasimaster.wmkeyboard.core.gesture.RomanizedIndex
 import com.wasimaster.wmkeyboard.core.gesture.GlideKeyMap
 import com.wasimaster.wmkeyboard.core.gesture.GlideShapeSample
+import com.wasimaster.wmkeyboard.core.gesture.GlideStroke
 import com.wasimaster.wmkeyboard.core.gesture.GlideShapeSource
 import com.wasimaster.wmkeyboard.core.gesture.GlideShapeStore
 import com.wasimaster.wmkeyboard.core.gesture.KeyOffsets
@@ -1740,6 +1741,13 @@ open class WMKeyboardService : InputMethodService() {
     /** The deep retry's strip after an undo, and the word it replaced; inert once the strip is any other list. */
     private var glideRetryOffer: GlideRetryOffer? = null
 
+    /**
+     * The full search a caret-word asked for, waiting for the word to be taken
+     * off it (#135). Read by the pick so the stroke can be taught the answer,
+     * and dropped with the caret word it is about.
+     */
+    private var glideSearchOffer: GlideSearchOffer? = null
+
     /** How the user draws each word, from the glides they keep (issue #52). */
     private var glideShapes = GlideShapeStore(null)
 
@@ -1825,6 +1833,11 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun clearCaretWord() {
         caretWord = null
+        // Both are about that word in that place: a caret anywhere else is a
+        // different question, and a stale offer would teach a stroke the
+        // answer to one it never asked (#135).
+        glideSearchOffer = null
+        if (_uiState.value.glideSearchChip != null) _uiState.update { it.copy(glideSearchChip = null) }
     }
 
     /**
@@ -10445,6 +10458,18 @@ open class WMKeyboardService : InputMethodService() {
             }
             return
         }
+        // Last of the chips: it is about a word already in the field, so
+        // anything asking about what is being typed right now comes first.
+        _uiState.value.glideSearchChip?.let { word ->
+            _uiState.update { it.copy(glideSearchChip = null) }
+            when (action) {
+                // Down on the tap, not when the search lands: the deep decode
+                // takes long enough to look ignored.
+                is StripOfferAction.Accept -> searchAllWordsForCaretWord(word)
+                else -> Unit
+            }
+            return
+        }
         when (action) {
             is StripOfferAction.Accept -> onSnippetOfferPick(action.index)
             is StripOfferAction.Drill -> onSnippetOfferDrill(action.index)
@@ -11552,12 +11577,17 @@ open class WMKeyboardService : InputMethodService() {
         // lexicon: [UserLexicon.learnWord] would refuse the count anyway, and
         // queuing it would only take a slot from a word that means something.
         if (reinforcement <= 0) return
-        settleLearned(
-            learningBuffer.push(
-                word, state.language.id, reinforcement, caseTrusted, known = true,
-                origin = origin, replaces = replaces, typed = typed, taps = taps, keys = keys,
-            ),
+        val queued = learningBuffer.push(
+            word, state.language.id, reinforcement, caseTrusted, known = true,
+            origin = origin, replaces = replaces, typed = typed, taps = taps, keys = keys,
         )
+        // Between the push and the settle, for the reason [noteUnknownWord]
+        // spells out. Here too because the word a misread swipe is corrected
+        // to is usually one the dictionary already has — it is the *stroke*
+        // that is new, not the word — and claiming only on the unknown path
+        // left exactly that case teaching nothing (#213, #135).
+        claimUndoneGlide(word)
+        settleLearned(queued)
     }
 
     /**
@@ -13632,8 +13662,16 @@ open class WMKeyboardService : InputMethodService() {
             // what they want there is the swipe's other readings rather than
             // respellings of the one it picked (#115).
             val results = withGlideReadings(word, caret.start, suggested)
+            // And when the readings were not enough — the sandbox had one
+            // answer and it was wrong — the chip offers the stroke to the
+            // whole dictionary. Only where the user asked for the chip; the
+            // held-word menu reaches the same search without a slot (#135).
+            val searchChip = word.takeIf {
+                _uiState.value.settings.gesture.searchAllChip && caretStrokeWord() != null
+            }
             _uiState.update {
                 it.copy(
+                    glideSearchChip = searchChip,
                     suggestions = results,
                     emojiSuggestions = emptyList(),
                     punctuationSuggestions = emptyList(),
@@ -13736,6 +13774,9 @@ open class WMKeyboardService : InputMethodService() {
         // about text that is no longer there, and committing the word at the
         // caret instead would be a worse guess than none.
         caretWord?.let { caret ->
+            // Read before [clearCaretWord] takes it down with the word it is
+            // about (#135).
+            val search = glideSearchOffer
             clearCaretWord()
             val head = caret.head
             val tail = caret.tail
@@ -13772,6 +13813,16 @@ open class WMKeyboardService : InputMethodService() {
             // teaches (#115).
             if (suggestion in glideReadings.readingsAt(caret.word, caret.start)) {
                 noteGlidePreference(rejected = caret.word, chosen = suggestion)
+                glideReadings.forget(caret.word, caret.start)
+            } else if (search != null && search.start == caret.start &&
+                WordKey.of(search.word) == WordKey.of(caret.word) && suggestion in search.offered
+            ) {
+                // The full search's own answer (#135). Parked where a
+                // backspaced glide's stroke waits, so [learn] below runs the
+                // same three learners on it: the hand model, the shape store
+                // and the pair. The word was never swiped as this spelling, so
+                // this is the only chance the stroke gets to be taught it.
+                undoneGlide = UndoneGlide(search.stroke, caret.word, SystemClock.uptimeMillis())
                 glideReadings.forget(caret.word, caret.start)
             }
             // The words behind this one moved by the difference in length.
@@ -14628,28 +14679,100 @@ open class WMKeyboardService : InputMethodService() {
         val slots = _uiState.value.settings.suggestionStrip.slotCount
         suggestionJob?.cancel()
         suggestionJob = serviceScope.launch {
-            val words = withContext(Dispatchers.Default) {
-                engine.glide(
-                    path = stroke.points,
-                    keys = keyMapFor(stroke.keys, stroke.keyWidthPx),
-                    keyWidth = stroke.keyWidthPx,
-                    // One over the strip, since the rejected word is in the list
-                    // it comes back with and leaves a slot when it goes.
-                    limit = slots + 1,
-                    previousWord = previousWord,
-                    previousWord2 = previousWord2,
-                    previousWord3 = previousWord3,
-                    recentWords = recentWords.toList(),
-                    deep = true,
-                    shapes = shapeSourceFor(stroke.keys, stroke.keyWidthPx),
-                ).map { restoreApostrophe(it.word) ?: it.word }
-            }
+            val offered = deepGlideWords(engine, stroke, rejected, slots)
             if (generation != gestureGeneration.get()) return@launch
             if (composing.isNotEmpty()) return@launch
-            val offered = words.filterNot { it.equals(rejected, ignoreCase = true) }.take(slots)
             if (offered.isEmpty()) return@launch
             glideRetryOffer = GlideRetryOffer(rejected, offered, stroke)
             _uiState.update { it.copy(suggestions = offered) }
+        }
+    }
+
+    /**
+     * [stroke] read against everything: the vocabulary cap off, the sandbox's
+     * word-source gate off with it, and the deep pool instead of the ordinary
+     * one. [rejected] — the word the stroke was read as — is dropped, and the
+     * rest are the strip, longest odds included.
+     *
+     * The one decode both doors to a full search go through: the undo right
+     * after a swipe ([glideDeepRetry]) and the caret coming back to the word
+     * later ([searchAllWordsForCaretWord]).
+     */
+    private suspend fun deepGlideWords(
+        engine: SuggestionEngine,
+        stroke: GlideStroke,
+        rejected: String,
+        slots: Int,
+    ): List<String> = withContext(Dispatchers.Default) {
+        engine.glide(
+            path = stroke.points,
+            keys = keyMapFor(stroke.keys, stroke.keyWidthPx),
+            keyWidth = stroke.keyWidthPx,
+            // One over the strip, since the rejected word is in the list
+            // it comes back with and leaves a slot when it goes.
+            limit = slots + 1,
+            previousWord = previousWord,
+            previousWord2 = previousWord2,
+            previousWord3 = previousWord3,
+            recentWords = recentWords.toList(),
+            deep = true,
+            shapes = shapeSourceFor(stroke.keys, stroke.keyWidthPx),
+        ).map { restoreApostrophe(it.word) ?: it.word }
+            .filterNot { it.equals(rejected, ignoreCase = true) }
+            .take(slots)
+    }
+
+    /**
+     * The word the caret is inside, when a swipe wrote it and that swipe's
+     * path is still kept; null when the word was tapped, or was swiped too
+     * long ago to still be in [glideReadings].
+     *
+     * The path is the only part of a swipe the text cannot answer for: the
+     * letters standing in the field are the ones the decoder chose, not the
+     * ones the finger drew (#135).
+     */
+    private fun caretStrokeWord(): String? {
+        val caret = caretWord ?: return null
+        return caret.word.takeIf { glideReadings.strokeAt(caret.word, caret.start) != null }
+    }
+
+    /**
+     * Read the swipe that wrote the word under the caret again, against every
+     * word list there is (#135).
+     *
+     * This is the manual search behind "only my words". A sandbox that cannot
+     * see a word cannot offer it, so a swipe for a word the user has never
+     * written comes out as the nearest word they have — and by the time they
+     * notice, the strip is answering about the letters standing in the field,
+     * which are not the ones they drew. Asking here puts the stroke back in
+     * front of the whole dictionary, once, for the one word being proofread.
+     *
+     * Deliberately asked for rather than automatic: the deep decode is the
+     * slow, noisy one the cap and the sandbox exist to avoid, and running it
+     * on every swiped word the caret touched would undo the setting it is
+     * meant to rescue.
+     */
+    private fun searchAllWordsForCaretWord(word: String) {
+        val engine = suggestionEngine ?: return
+        val caret = caretWord ?: return
+        // The menu can outlive the word it was opened over.
+        if (WordKey.of(caret.word) != WordKey.of(word)) return
+        val stroke = glideReadings.strokeAt(caret.word, caret.start) ?: return
+        val rejected = caret.word
+        val start = caret.start
+        val generation = gestureGeneration.get()
+        val slots = _uiState.value.settings.suggestionStrip.slotCount
+        suggestionJob?.cancel()
+        suggestionJob = serviceScope.launch {
+            val offered = deepGlideWords(engine, stroke, rejected, slots)
+            if (generation != gestureGeneration.get()) return@launch
+            if (composing.isNotEmpty()) return@launch
+            // The caret left the word while the search ran: its answer is
+            // about text nobody is reading any more.
+            if (caretWord?.start != start) return@launch
+            if (offered.isEmpty()) return@launch
+            glideSearchOffer = GlideSearchOffer(rejected, start, stroke, offered)
+            _uiState.update { it.copy(suggestions = offered, glideSearchChip = null) }
         }
     }
 
@@ -15347,7 +15470,12 @@ open class WMKeyboardService : InputMethodService() {
                 learnHand(points, keys, keyWidthPx, word) to sampleGlideShape(points, keys, keyWidthPx, word)
             }
             if (shape != null) learningBuffer.attachGlide(word, shape)
-            lastGestureStroke = GlideStroke(points, keys, keyWidthPx, shape)
+            val stroke = GlideStroke(points, keys, keyWidthPx, shape)
+            lastGestureStroke = stroke
+            // The path itself rides the same entry the readings went into, so
+            // coming back to this word can search it against every list, not
+            // only the one the decode was allowed to see (#135).
+            glideReadings.attach(word, stroke)
             lastHandAdjustment = hand
             consumeShift()
             val floating = nextWordOctopus()
@@ -15789,7 +15917,8 @@ open class WMKeyboardService : InputMethodService() {
                     learnHand(segment, keys, keyWidthPx, word) to sampleGlideShape(segment, keys, keyWidthPx, word)
                 }
                 if (shape != null) learningBuffer.attachGlide(word, shape)
-                lastGestureStroke = GlideStroke(segment, keys, keyWidthPx, shape)
+                val stroke = GlideStroke(segment, keys, keyWidthPx, shape)
+                lastGestureStroke = stroke
                 // Each word teaches; only the last is on the undo's reach.
                 lastHandAdjustment = hand
                 lastWords = if (picked != null) glideStripOrder(candidates, picked) else candidates
@@ -15797,6 +15926,8 @@ open class WMKeyboardService : InputMethodService() {
                 // it is the one whose alternates are on the strip, and the
                 // one a proofreading pass comes back to (#115).
                 glideReadings.remember(word, lastWords)
+                // And its own segment of the path, for a later full search (#135).
+                glideReadings.attach(word, stroke)
                 committedAny = true
             }
             if (committedAny) {
@@ -24145,6 +24276,7 @@ open class WMKeyboardService : InputMethodService() {
         val trimmed = word.trim()
         return WordMenuFacts(
             typedAddable = addableTypedWord(),
+            searchableStroke = caretStrokeWord(),
             deletable = isForgettable(trimmed),
             blacklisted = _uiState.value.let { it.settings.suggestionSources.blacklisted(trimmed, it.language.id) },
         )
@@ -24157,6 +24289,7 @@ open class WMKeyboardService : InputMethodService() {
             is WordMenuAction.Add -> addTypedWord(action.typed)
             is WordMenuAction.Delete -> deleteWord(action.word)
             is WordMenuAction.Open -> openWordCard(action.word)
+            is WordMenuAction.SearchAllWords -> searchAllWordsForCaretWord(action.word)
         }
     }
 
@@ -27646,13 +27779,6 @@ private class GesturePreviewRequest(
  * undo, with its shape as the store keeps one so an undo or a strip pick can
  * mark the shape that read it wrongly.
  */
-private class GlideStroke(
-    val points: List<GesturePoint>,
-    val keys: List<KeyCenter>,
-    val keyWidthPx: Float,
-    val shape: GlideShapeSample? = null,
-)
-
 /**
  * A backspaced glide waiting for the word the user actually meant: the stroke,
  * the reading they took back, and the uptime they took it back at. See
@@ -27673,6 +27799,18 @@ private class UndoneGlide(
  * #213). It used to teach only the pair, so a user who backspaced before
  * correcting taught the hand model and the shape store nothing at all.
  */
+/**
+ * A full search asked for while proofreading (#135): the word the caret was
+ * in, where it stands, the swipe that wrote it, and what searching every word
+ * list came back with. A pick off [offered] teaches the stroke that word.
+ */
+private class GlideSearchOffer(
+    val word: String,
+    val start: Int,
+    val stroke: GlideStroke,
+    val offered: List<String>,
+)
+
 private class GlideRetryOffer(
     val rejected: String,
     val offered: List<String>,

@@ -1608,6 +1608,13 @@ sealed interface WordMenuAction {
 
     /** Open the word card for [word]. */
     data class Open(val word: String) : WordMenuAction
+
+    /**
+     * Decode the swipe that wrote the word the caret is in again, against
+     * every word list this time (#135). [word] is that word, for the service
+     * to check the caret has not moved on under the menu.
+     */
+    data class SearchAllWords(val word: String) : WordMenuAction
 }
 
 /** What the word card can ask of the service, once open (#99). */
@@ -1673,6 +1680,15 @@ data class WordMenuFacts(
     val deletable: Boolean = false,
     /** Whether the held word is on the never-suggest list. */
     val blacklisted: Boolean = false,
+    /**
+     * The word the caret is inside, when a swipe wrote it and its path is
+     * still kept, so the menu can offer to search that path against every
+     * word list (#135); null when there is no such word. Deliberately not
+     * about the *held* word: the search is about the text being read back,
+     * which is what the caret is in, exactly like [typedAddable] is about the
+     * word being typed rather than the chip.
+     */
+    val searchableStroke: String? = null,
 )
 
 /**
@@ -2328,6 +2344,15 @@ data class KeyboardUiState(
      * where the list downloads.
      */
     val glideWordListOffer: LanguageDef? = null,
+    /**
+     * The word the caret is sitting in that a swipe wrote, while the strip is
+     * offering to search that swipe's path against every word list (#135), or
+     * null. Only ever set with `GestureSettings.searchAllChip` on: without it
+     * the same search is reached from the held-word menu and nothing claims a
+     * strip slot. Taken down by the caret leaving the word, and by the search
+     * itself once it has answered.
+     */
+    val glideSearchChip: String? = null,
     /** The word card a held suggestion opened, or null while none is up (#99). */
     val wordCard: WordCard? = null,
     /** The card's spelling editor while it is up; see [WordSpell] (#138). */

@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.prediction
 
+import com.wasimaster.wmkeyboard.core.gesture.GlideStroke
 import kotlin.math.abs
 
 /**
@@ -35,12 +36,26 @@ import kotlin.math.abs
  * text the app itself rewrites. Both fail towards an ordinary strip, never
  * towards another stroke's readings.
  *
+ * Each entry also carries the stroke itself ([attach]), which is what lets a
+ * word be searched for again later against every list — the manual full
+ * search (#135). The path is the only part of a swipe that cannot be
+ * reconstructed from the text: the letters standing in the field are the ones
+ * the decode chose, not the ones the finger drew.
+ *
  * Purely in-memory and per-field, like the buffer it mirrors.
  */
 class GlideReadings(private val capacity: Int = DEFAULT_CAPACITY) {
 
     private class Entry(val key: String, val readings: List<String>) {
         var anchor: Int = UNANCHORED
+
+        /**
+         * The finger path that wrote the word, once it is known ([attach]),
+         * so the stroke can be searched again against every word list the
+         * ordinary decode was not allowed to see (#135). Null for a word that
+         * was tapped, or swiped before swipe recall existed in this field.
+         */
+        var stroke: GlideStroke? = null
 
         /** How far [anchor] may have drifted, from caret moves in front of it. */
         var drift: Int = 0
@@ -62,15 +77,63 @@ class GlideReadings(private val capacity: Int = DEFAULT_CAPACITY) {
 
     /**
      * Keeps [readings], what the stroke that committed [word] also had to
-     * offer. Anchored by the next caret report. A single reading teaches
-     * nothing (there was no other answer), so it is not kept.
+     * offer. Anchored by the next caret report.
+     *
+     * A single reading offers nothing to put on the strip, and used not to be
+     * kept at all. It is now, because the entry is also where the stroke
+     * itself waits ([attach]) — and a stroke with one reading is exactly the
+     * case a full search is for: the small list the decode was allowed to see
+     * had only one answer in it, and it was the wrong one (#135).
      */
     fun remember(word: String, readings: List<String>) {
-        if (readings.size < 2) return
         val key = WordKey.of(word)
         if (key.isEmpty()) return
         entries.addLast(Entry(key, readings))
         while (entries.size > capacity) entries.removeFirst()
+    }
+
+    /**
+     * Hangs [stroke] on the newest entry for [word] — the one [remember] just
+     * made, before any caret report has anchored it.
+     *
+     * Two calls rather than a parameter because the shape sample the stroke
+     * carries is computed off the main thread, a hop after the word is
+     * committed, and the readings must not wait for it: a cancelled hop would
+     * cost the strip its recall (#115) to buy a search (#135) nobody asked
+     * for yet.
+     */
+    fun attach(word: String, stroke: GlideStroke) {
+        val key = WordKey.of(word)
+        if (key.isEmpty()) return
+        for (i in entries.indices.reversed()) {
+            val entry = entries[i]
+            if (entry.key != key) continue
+            if (entry.stroke == null) {
+                entry.stroke = stroke
+                dropOldStrokes()
+            }
+            return
+        }
+    }
+
+    /**
+     * Keeps the newest [STROKE_CAPACITY] paths and lets the rest go, leaving
+     * their readings behind.
+     *
+     * A reading is a handful of words; a path is every sample of a finger
+     * moving, and the grid it moved over. Five hundred of those is megabytes
+     * inside a keyboard, for words nobody is going to walk back to — where
+     * five hundred readings cost nothing. So the two windows are different
+     * lengths on purpose.
+     */
+    private fun dropOldStrokes() {
+        var kept = 0
+        for (i in entries.indices.reversed()) {
+            val entry = entries[i]
+            if (entry.stroke == null) continue
+            kept++
+            if (kept > STROKE_CAPACITY) entry.stroke = null
+        }
     }
 
     /**
@@ -138,6 +201,13 @@ class GlideReadings(private val capacity: Int = DEFAULT_CAPACITY) {
     fun readingsAt(word: String, start: Int): List<String> =
         find(word, start)?.readings?.filterNot { it.equals(word, ignoreCase = true) }.orEmpty()
 
+    /**
+     * The finger path that wrote the [word] starting at [start], or null when
+     * that word was not swiped, was swiped too long ago, or was swiped before
+     * the shape hop that attaches it had finished.
+     */
+    fun strokeAt(word: String, start: Int): GlideStroke? = find(word, start)?.stroke
+
     /** Forgets the readings of the [word] starting at [start]: one was taken. */
     fun forget(word: String, start: Int) {
         find(word, start)?.let { entries.remove(it) }
@@ -192,6 +262,13 @@ class GlideReadings(private val capacity: Int = DEFAULT_CAPACITY) {
          * can still be fixed from its stroke (#199).
          */
         const val DEFAULT_CAPACITY = LearningBuffer.DEFAULT_CAPACITY
+
+        /**
+         * How many of those words keep the path that wrote them, for a full
+         * search later (#135). Far shorter than the readings' own window; see
+         * [dropOldStrokes].
+         */
+        const val STROKE_CAPACITY = 24
 
         /**
          * How far an anchor may sit from the word it belongs to. The echo

@@ -2591,6 +2591,9 @@ private fun TopBar(
         // And the chip pointing at a word list glide typing is missing, which
         // is up while nothing is being typed.
         state.glideWordListOffer != null ||
+        // And the one offering a swiped word's path to the whole dictionary,
+        // which is up while the caret rests inside that word (#135).
+        state.glideSearchChip != null ||
         // A morse sequence being tapped out counts as strip content: the
         // toolbar taking the row would hide the one live view of the chord.
         // Its SOS easter-egg note counts the same way, or the toolbar would
@@ -3355,6 +3358,33 @@ private fun TopBar(
                 )
                 if (!wordListShares) return@Row
             }
+            // A word a swipe wrote, being read back: the chip hands that
+            // stroke to every word list at once, which is what the sandbox
+            // and the vocabulary cap keep the ordinary decode away from
+            // (#135). Last of the chips — it is about text already in the
+            // field, where the others are about what is being typed now — and
+            // narrow, because the words it shares the strip with are the ones
+            // it is offering to improve on.
+            val searchChip = state.glideSearchChip
+            if (snippetOffer == null && learnOffer == null && sandboxOffer == null &&
+                wordListOffer == null && searchChip != null
+            ) {
+                val searchShares = suggestionsShowing || state.smart != null
+                OfferChip(
+                    label = stringResource(R.string.ime_glide_search_all_offer),
+                    icon = Icons.Outlined.Search,
+                    declineDescription = stringResource(R.string.ime_glide_search_all_dismiss_desc),
+                    onAccept = { onStripOfferAction(StripOfferAction.Accept()) },
+                    onDecline = { onStripOfferAction(StripOfferAction.Decline) },
+                    stretch = !searchShares,
+                    modifier = if (searchShares) {
+                        Modifier.widthIn(max = 200.dp).padding(horizontal = 4.dp)
+                    } else {
+                        Modifier.weight(1f).padding(horizontal = 4.dp)
+                    },
+                )
+                if (!searchShares) return@Row
+            }
             // A recognised sum/conversion answers the text directly, so it
             // takes the whole strip the way autofill chips do. A keyword
             // chip ("wiki" → open Wikipedia) only claims the space it needs,
@@ -4110,6 +4140,18 @@ private fun RowScope.LatinSuggestionChips(
                         label = stringResource(R.string.ime_word_menu_delete, held),
                         icon = Icons.Outlined.Delete,
                     ) { act(WordMenuAction.Delete(held)) }
+                }
+                // About the word the caret is in, not the chip being held —
+                // like "Add" above, which is about the word being typed. The
+                // swipe that wrote it is decoded again against every word
+                // list, which is the only way back to a word the sandbox was
+                // never allowed to offer (#135).
+                val searchable = heldFacts.searchableStroke
+                if (searchable != null) {
+                    WordMenuRow(
+                        label = stringResource(R.string.ime_word_menu_search_all, searchable),
+                        icon = Icons.Outlined.Search,
+                    ) { act(WordMenuAction.SearchAllWords(searchable)) }
                 }
                 // Always offered: the card carries every action above too, so
                 // a menu trimmed to this one item still reaches all of them —

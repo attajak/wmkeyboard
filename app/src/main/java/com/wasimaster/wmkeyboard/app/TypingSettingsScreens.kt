@@ -2709,6 +2709,19 @@ private fun SettingsGroupScope.glideVocabularyRows(
             default = SettingsDefaults.gesture.sandbox,
         )
     }
+    // The way back out of the sandbox, one word at a time: the stroke that
+    // wrote a word, handed to every list there is (#135). Always reachable
+    // from a held word on the strip; this is only whether it also offers
+    // itself, which costs a strip slot each time a swiped word is read back.
+    item {
+        ToggleSetting(
+            R.string.typing_glide_search_all_chip_title,
+            stringResource(R.string.typing_glide_search_all_chip_subtitle),
+            settings.gesture.searchAllChip,
+            info = stringResource(R.string.typing_glide_search_all_chip_info),
+            default = SettingsDefaults.gesture.searchAllChip,
+        ) { scope.launch { repository.setGestureSearchAllChip(it) } }
+    }
     // How hard the word shown mid-stroke resists being replaced.
     item {
         ChoiceSetting(

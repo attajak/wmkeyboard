@@ -1,10 +1,22 @@
 package com.wasimaster.wmkeyboard.core.prediction
 
+import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
+import com.wasimaster.wmkeyboard.core.gesture.GlideStroke
+import com.wasimaster.wmkeyboard.core.gesture.KeyCenter
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GlideReadingsTest {
+
+    /** A path; nothing in this class reads what is in it. */
+    private fun stroke() = GlideStroke(
+        points = listOf(GesturePoint(0f, 0f), GesturePoint(1f, 1f)),
+        keys = listOf(KeyCenter('f'.code, 0f, 0f)),
+        keyWidthPx = 10f,
+    )
 
     /**
      * Glides [word] (with [others] as the stroke's runners-up) at the end of
@@ -57,12 +69,80 @@ class GlideReadingsTest {
         assertEquals(listOf("x1"), readings.readingsAt("w1", 3))
     }
 
+    /**
+     * One reading is nothing to put on the strip — the word itself is already
+     * standing there — but the entry is still kept, because it is what the
+     * stroke hangs on (#135).
+     */
     @Test
-    fun aSingleReadingIsNotKept() {
+    fun aSingleReadingOffersNothingButIsStillKept() {
         val readings = GlideReadings()
         readings.remember("form", listOf("form"))
         readings.onCaret(5)
-        assertEquals(0, readings.size)
+        assertEquals(1, readings.size)
+        assertTrue(readings.readingsAt("form", 0).isEmpty())
+    }
+
+    @Test
+    fun aStrokeIsFoundWhereItsWordStands() {
+        val readings = GlideReadings()
+        val stroke = stroke()
+        readings.remember("form", listOf("form", "from"))
+        readings.attach("form", stroke)
+        readings.onCaret(5)
+        assertSame(stroke, readings.strokeAt("form", 0))
+        // Same spelling, a paragraph away: not this word, and not its stroke.
+        readings.onCaret(300)
+        assertNull(readings.strokeAt("form", 295))
+    }
+
+    /** A tapped word has no stroke to search, however familiar it looks. */
+    @Test
+    fun aWordWithNoStrokeHasNone() {
+        val readings = GlideReadings()
+        readings.glide("form", 0, "from")
+        assertNull(readings.strokeAt("form", 0))
+    }
+
+    /**
+     * The shape hop can land after a second glide of the same word has been
+     * remembered; the path belongs to the entry it was drawn for, which is the
+     * newest one still waiting for a stroke.
+     */
+    @Test
+    fun aStrokeLandsOnTheGlideItWasDrawnFor() {
+        val readings = GlideReadings()
+        val first = stroke()
+        val second = stroke()
+        readings.remember("form", listOf("form", "from"))
+        readings.attach("form", first)
+        readings.onCaret(5)
+        readings.remember("form", listOf("form", "fork"))
+        readings.attach("form", second)
+        readings.onCaret(11)
+        assertSame(first, readings.strokeAt("form", 0))
+        assertSame(second, readings.strokeAt("form", 6))
+    }
+
+    /**
+     * Paths are megabytes where readings are bytes, so only the newest two
+     * dozen keep theirs (#135).
+     */
+    @Test
+    fun onlyTheNewestWordsKeepTheirStroke() {
+        val readings = GlideReadings()
+        val oldest = stroke()
+        readings.remember("w0", listOf("w0", "x0"))
+        readings.attach("w0", oldest)
+        readings.onCaret(3)
+        repeat(GlideReadings.STROKE_CAPACITY) { i ->
+            val word = "n$i"
+            readings.remember(word, listOf(word, "y$i"))
+            readings.attach(word, stroke())
+            readings.onCaret(3 * (i + 2))
+        }
+        assertNull("the path went", readings.strokeAt("w0", 0))
+        assertEquals("the readings stayed", listOf("x0"), readings.readingsAt("w0", 0))
     }
 
     @Test

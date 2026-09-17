@@ -779,6 +779,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_glide_swipe_style_title) { Icons.Outlined.School }
         put(R.string.typing_glide_vocabulary_title) { Icons.AutoMirrored.Outlined.MenuBook }
         put(R.string.typing_glide_sandbox_title) { Icons.Outlined.Person }
+        put(R.string.typing_glide_search_all_chip_title) { Icons.Outlined.Search }
         put(R.string.typing_glide_steadiness_title) { Icons.Outlined.Anchor }
         put(R.string.typing_glide_lookahead_title) { Icons.Outlined.FastForward }
         put(R.string.typing_glide_commit_color_title) { Icons.Outlined.Palette }

@@ -353,7 +353,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Toggleable — Off makes a spacebar-crossing stroke decode as one word
   - Capitalize by gliding over Shift `uncommon` — Drawing through the Shift key mid-stroke capitalizes the word, twice shouts it; the key's points are dropped from the word the way the spacebar's are, so the detour spells nothing
     - The one capital a swipe can teach — A capital the decoder chose is never case evidence; a capital the finger drew is
-  - Readings kept for proofreading — The last dozen swiped words keep their stroke's other readings; putting the caret back on one puts them in front of the strip, and taking one counts as a correction of that stroke
+  - Readings kept for proofreading — The last 500 swiped words in the field keep their stroke's other readings; putting the caret back on one puts them in front of the strip, and taking one counts as a correction of that stroke
+  - Manual full search — The newest 24 of those also keep the stroke itself, so "Search all words" on a held strip word decodes it again against every list, past the sandbox and the vocabulary cap; a pick teaches the hand model, the shape and the pair, and an optional strip chip offers it without the hold (#135)
   - Swipe style learning `RARE` — Everything a kept swipe teaches apart from the word itself, behind one switch and one Forget; off freezes it, Forget deletes it without touching learned words
     - Hand adaptation — Kept swipes teach where the finger really lands on each key; later swipes decode against a grid moved to match (KeyOffsets)
     - Keyed by position, not letter — Half-key cells, so layouts with the same geometry share what either learned; a barely-swiped key follows the whole hand's mean

@@ -5026,6 +5026,16 @@ data class GestureSettings(
      */
     val learnSwipeStyle: Boolean = true,
     /**
+     * Offer the full search as a chip on the suggestion strip whenever the
+     * caret lands inside a word a swipe wrote and whose path is still kept
+     * (#135).
+     *
+     * The search itself is always available, from the held-word menu. This is
+     * only whether it also comes forward by itself, which costs a strip slot
+     * every time a swiped word is read back — so it is off until asked for.
+     */
+    val searchAllChip: Boolean = false,
+    /**
      * Bumped by the gestures screen's "forget" so a running keyboard drops
      * its in-memory copies of the swipe-style stores — the contract of
      * [KeyboardSettings.lexiconVersion], on a counter of its own so
@@ -6378,6 +6388,7 @@ class SettingsRepository(private val context: Context) {
         private val GESTURE_COMMIT_COLOR_SCOPE =
             stringPreferencesKey("gesture_commit_color_scope")
         private val GESTURE_LEARN_SWIPE_STYLE = booleanPreferencesKey("gesture_learn_swipe_style")
+        private val GESTURE_SEARCH_ALL_CHIP = booleanPreferencesKey("gesture_search_all_chip")
         private val GESTURE_SWIPE_STYLE_VERSION = intPreferencesKey("gesture_swipe_style_version")
         // Legacy boolean, read only to migrate into SPACE_LONG_SWIPE.
         private val SPACEBAR_CURSOR = booleanPreferencesKey("spacebar_cursor")
@@ -7506,6 +7517,7 @@ class SettingsRepository(private val context: Context) {
                 endRadius = p[GESTURE_END_RADIUS] ?: defaults.gesture.endRadius,
                 nearRadius = p[GESTURE_NEAR_RADIUS] ?: defaults.gesture.nearRadius,
                 learnSwipeStyle = p[GESTURE_LEARN_SWIPE_STYLE] ?: defaults.gesture.learnSwipeStyle,
+                searchAllChip = p[GESTURE_SEARCH_ALL_CHIP] ?: defaults.gesture.searchAllChip,
                 swipeStyleVersion = p[GESTURE_SWIPE_STYLE_VERSION] ?: defaults.gesture.swipeStyleVersion,
             ),
             spaceShortSwipe = p[SPACE_SHORT_SWIPE]
@@ -11975,6 +11987,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setGestureLearnSwipeStyle(value: Boolean) =
         editPrefs { it[GESTURE_LEARN_SWIPE_STYLE] = value }
+
+    suspend fun setGestureSearchAllChip(value: Boolean) =
+        editPrefs { it[GESTURE_SEARCH_ALL_CHIP] = value }
 
     /**
      * Deletes everything a swipe style is made of — where the finger lands,
