@@ -16,7 +16,8 @@ import com.wasimaster.wmkeyboard.core.settings.CopiedCodeChip
  * mid-entry code both silence the strip outright.
  *
  * @param mode the setting gating which fields may show the chip.
- * @param fieldKind the field currently focused.
+ * @param codeField whether the focused field reads as a code box — see
+ * [looksLikeCodeField].
  * @param clipTimestamp when the candidate clip was copied.
  * @param showingTimestamp when the chip currently on the strip was copied, or
  * null when the strip has none.
@@ -25,7 +26,7 @@ import com.wasimaster.wmkeyboard.core.settings.CopiedCodeChip
  */
 internal fun offersCopiedCode(
     mode: CopiedCodeChip,
-    fieldKind: FieldKind,
+    codeField: Boolean,
     clipTimestamp: Long,
     showingTimestamp: Long?,
     now: Long,
@@ -33,11 +34,10 @@ internal fun offersCopiedCode(
 ): Boolean {
     when (mode) {
         CopiedCodeChip.OFF -> return false
-        // The same field shape the notification chip reads as a code box, and
-        // deliberately no wider: a phone or date field asks for digits too, and
-        // neither is a reason to put a code on the strip when the user asked
-        // for code boxes only.
-        CopiedCodeChip.CODE_FIELDS -> if (fieldKind != FieldKind.NUMBER) return false
+        // The same test the notification chip uses, and deliberately no wider:
+        // a phone or date field asks for digits too, and neither is a reason to
+        // put a code on the strip when the user asked for code boxes only.
+        CopiedCodeChip.CODE_FIELDS -> if (!codeField) return false
         CopiedCodeChip.ANY_FIELD -> Unit
     }
     // A code goes stale fast, and one copied yesterday resurfacing on a login

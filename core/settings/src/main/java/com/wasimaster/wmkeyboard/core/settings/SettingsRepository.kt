@@ -2790,11 +2790,19 @@ data class OtpSettings(
     /** Master switch. Mirrored to the notification listener's own flag. */
     val enabled: Boolean = false,
     /**
-     * Only raise the chip when the focused field asks for digits — the shape
-     * every code box has. Off shows the chip in any ordinary field, for the
-     * apps that put their code box behind a plain text input.
+     * Only raise the chip when the focused field reads as a code box — it
+     * asks for digits, or its hint, label or resource id names it a code.
+     *
+     * Off by default, and that is the point: a code box that the app built
+     * out of a plain text input with no telling name is invisible to any
+     * test, and the chip not appearing where the code was wanted is a worse
+     * failure than a chip appearing where it was not. On is for people who
+     * would rather never see a code offered mid-sentence.
+     *
+     * Was `numberFieldsOnly`, when the test was the input class alone; the
+     * stored key keeps the old name so nobody's choice is lost.
      */
-    val numberFieldsOnly: Boolean = true,
+    val codeFieldsOnly: Boolean = false,
     /**
      * How long a captured code stays on offer. Codes outlive their welcome
      * fast: a chip still showing last hour's code is worse than no chip.
@@ -4291,7 +4299,7 @@ enum class CopiedCodeChip {
     /** Never offered; a code-shaped clip is reachable only from the panel. */
     OFF,
 
-    /** Only in a field that asks for digits, where the code is all you type. */
+    /** Only in a box that asks for a code, where the code is all you type. */
     CODE_FIELDS,
 
     /** In any field, like any other copied text. */
@@ -6388,7 +6396,10 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_PHONE_FORMATS = stringSetPreferencesKey("clipboard_phone_formats")
         private val CLIPBOARD_FULL_BLEED = booleanPreferencesKey("clipboard_full_bleed")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
-        private val OTP_NUMBER_FIELDS_ONLY = booleanPreferencesKey("otp_number_fields_only")
+        // Stored under its old name: the test behind it grew from "number
+        // field" to "code box", but a user who turned it on meant the same
+        // thing either way and must not be silently reset.
+        private val OTP_CODE_FIELDS_ONLY = booleanPreferencesKey("otp_number_fields_only")
         private val OTP_EXPIRY_MINUTES = intPreferencesKey("otp_expiry_minutes")
         private val OTP_DISMISS_NOTIFICATION = booleanPreferencesKey("otp_dismiss_notification")
         private val OTP_PER_DIGIT_ENTRY = booleanPreferencesKey("otp_per_digit_entry")
@@ -7447,7 +7458,7 @@ class SettingsRepository(private val context: Context) {
             ),
             otp = OtpSettings(
                 enabled = p[OTP_CHIP_ENABLED] ?: defaults.otp.enabled,
-                numberFieldsOnly = p[OTP_NUMBER_FIELDS_ONLY] ?: defaults.otp.numberFieldsOnly,
+                codeFieldsOnly = p[OTP_CODE_FIELDS_ONLY] ?: defaults.otp.codeFieldsOnly,
                 expiryMinutes = p[OTP_EXPIRY_MINUTES] ?: defaults.otp.expiryMinutes,
                 dismissNotification = p[OTP_DISMISS_NOTIFICATION]
                     ?: defaults.otp.dismissNotification,
@@ -12393,8 +12404,8 @@ class SettingsRepository(private val context: Context) {
     suspend fun setOtpChipEnabled(value: Boolean) =
         editPrefs { it[OTP_CHIP_ENABLED] = value }
 
-    suspend fun setOtpNumberFieldsOnly(value: Boolean) =
-        editPrefs { it[OTP_NUMBER_FIELDS_ONLY] = value }
+    suspend fun setOtpCodeFieldsOnly(value: Boolean) =
+        editPrefs { it[OTP_CODE_FIELDS_ONLY] = value }
 
     suspend fun setOtpExpiryMinutes(value: Int) =
         editPrefs { it[OTP_EXPIRY_MINUTES] = value.coerceIn(1, 10) }

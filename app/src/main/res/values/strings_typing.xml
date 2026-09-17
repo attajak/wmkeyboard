@@ -356,9 +356,9 @@
     <string name="typing_otp_chip_info">The keyboard watches incoming notifications for a one-time code. When it finds one, a chip with the code and the name of the app that sent it appears above the keys. Press the chip to type the code. This needs notification access. The keyboard reads notifications on your device only, keeps the code in memory only, and sends nothing anywhere. Turn this off and the keyboard stops reading notifications at once.</string>
     <string name="typing_otp_access_title">Allow notification access</string>
     <string name="typing_otp_access_subtitle">The chip cannot see codes arrive yet. Press to open the system switch</string>
-    <string name="typing_otp_number_fields_title">Only in number fields</string>
-    <string name="typing_otp_number_fields_subtitle">Show the chip only where the app asks for digits, which is the shape of most code boxes</string>
-    <string name="typing_otp_number_fields_info">Code boxes usually ask for a number keypad, so the chip shows there and nowhere else. Some apps use a plain text box for their code. If your code chip does not appear in an app, turn this off to offer codes in text fields too.</string>
+    <string name="typing_otp_code_fields_title">Only in code boxes</string>
+    <string name="typing_otp_code_fields_subtitle">Show the chip only where the app asks for a code, rather than in every field</string>
+    <string name="typing_otp_code_fields_info">A code box usually asks for a number keypad, or names itself \"OTP\", \"PIN\" or \"verification code\". With this on, the chip shows there and nowhere else. Some apps give their code box neither, and the chip cannot find it — leave this off and a code is offered in any field while it is still valid.</string>
     <string name="typing_otp_expiry_title">Offer a code for</string>
     <string name="typing_otp_expiry_subtitle">A code older than this stops being offered</string>
     <string name="typing_otp_dismiss_title">Clear the notification</string>

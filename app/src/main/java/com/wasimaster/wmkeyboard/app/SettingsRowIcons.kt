@@ -759,7 +759,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_smart_number_grouping_title) { Icons.AutoMirrored.Outlined.Segment }
         put(R.string.typing_otp_chip_title) { Icons.Outlined.Password }
         put(R.string.typing_otp_access_title) { Icons.Outlined.Notifications }
-        put(R.string.typing_otp_number_fields_title) { Icons.Outlined.Dialpad }
+        put(R.string.typing_otp_code_fields_title) { Icons.Outlined.Dialpad }
         put(R.string.typing_otp_expiry_title) { Icons.Outlined.Timer }
         put(R.string.typing_otp_dismiss_title) { Icons.Outlined.NotificationsOff }
         put(R.string.typing_otp_per_digit_title) { Icons.Outlined.Pin }

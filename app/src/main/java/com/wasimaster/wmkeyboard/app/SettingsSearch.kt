@@ -401,7 +401,7 @@ private fun SearchStrings.typingCodesRows(): List<SettingsSearchEntry> {
     return listOf(
         row(R.string.typing_otp_chip_title, R.string.typing_otp_chip_subtitle, weight = EntryWeight.PRIMARY),
         row(R.string.typing_otp_access_title, R.string.typing_otp_access_subtitle),
-        row(R.string.typing_otp_number_fields_title, R.string.typing_otp_number_fields_subtitle),
+        row(R.string.typing_otp_code_fields_title, R.string.typing_otp_code_fields_subtitle),
         row(R.string.typing_otp_expiry_title, R.string.typing_otp_expiry_subtitle),
         row(R.string.typing_otp_dismiss_title, R.string.typing_otp_dismiss_subtitle),
         row(R.string.typing_otp_per_digit_title, R.string.typing_otp_per_digit_subtitle),

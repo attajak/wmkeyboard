@@ -231,7 +231,7 @@
   {"title":"Grouping style","name":"typing_smart_number_grouping_title","route":"typing/chips","screens":["Typing","Smart chips"],"screen":false},
   {"title":"Codes from notifications","name":"typing_otp_chip_title","route":"typing/codes","screens":["Typing","One-time codes"],"screen":false},
   {"title":"Allow notification access","name":"typing_otp_access_title","route":"typing/codes","screens":["Typing","One-time codes"],"screen":false},
-  {"title":"Only in number fields","name":"typing_otp_number_fields_title","route":"typing/codes","screens":["Typing","One-time codes"],"screen":false},
+  {"title":"Only in code boxes","name":"typing_otp_code_fields_title","route":"typing/codes","screens":["Typing","One-time codes"],"screen":false},
   {"title":"Offer a code for","name":"typing_otp_expiry_title","route":"typing/codes","screens":["Typing","One-time codes"],"screen":false},
   {"title":"Clear the notification","name":"typing_otp_dismiss_title","route":"typing/codes","screens":["Typing","One-time codes"],"screen":false},
   {"title":"Type codes one character at a time","name":"typing_otp_per_digit_title","route":"typing/codes","screens":["Typing","One-time codes"],"screen":false},

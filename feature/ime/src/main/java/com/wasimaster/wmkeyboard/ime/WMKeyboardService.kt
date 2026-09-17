@@ -4328,6 +4328,16 @@ open class WMKeyboardService : InputMethodService() {
         if (pkg != null) currentPackage = pkg
         refreshPerAppContext()
         currentFieldHint = info?.hintText?.toString()?.takeIf { it.isNotBlank() }
+        // Whether a code chip may show here, when the user has asked for code
+        // boxes only. The field's own words go in alongside its input class,
+        // because a code box built out of a text input says what it is even
+        // when its input type does not (see [looksLikeCodeField]).
+        val codeField = looksLikeCodeField(
+            fieldKind,
+            currentFieldHint,
+            info?.label?.toString(),
+            info?.fieldName,
+        )
         currentModeFields = buildSet {
             if (secure) add(ModeField.PASSWORD)
             // The shape of a text box (one line, many lines, no suggestions)
@@ -4453,6 +4463,7 @@ open class WMKeyboardService : InputMethodService() {
                 // between sessions, not during a hold.
                 selectionHold = false,
                 fieldKind = fieldKind,
+                codeField = codeField,
                 nullField = nullField,
                 fieldNoSuggestions = fieldNoSuggestions,
                 fieldIncognito = fieldIncognito,
@@ -24616,7 +24627,7 @@ open class WMKeyboardService : InputMethodService() {
         if (!ClipSensitivity.isBareCode(clip.text.trim())) return
         val allowed = offersCopiedCode(
             mode = settings.clipboard.copiedCodeChip,
-            fieldKind = state.fieldKind,
+            codeField = state.codeField,
             clipTimestamp = clip.timestamp,
             showingTimestamp = state.clipboardSuggestion?.timestamp,
             now = System.currentTimeMillis(),
@@ -24672,7 +24683,7 @@ open class WMKeyboardService : InputMethodService() {
         // Incognito no longer hides the chip: reading a code out of a
         // notification records nothing about what is typed, and a private
         // browsing tab is where the code is wanted (#151 follow-up).
-        val hidden = settings.otp.numberFieldsOnly && state.fieldKind != FieldKind.NUMBER
+        val hidden = settings.otp.codeFieldsOnly && !state.codeField
         if (hidden) {
             clearOtpSuggestion()
             return

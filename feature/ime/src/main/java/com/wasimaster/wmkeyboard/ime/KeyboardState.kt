@@ -2294,6 +2294,13 @@ data class KeyboardUiState(
      */
     val otpSuggestion: NotificationOtp? = null,
     /**
+     * Whether the focused field reads as a box a verification code goes into
+     * — by its input class or by the words the app gave it. Gates both code
+     * chips when the user has narrowed them to code boxes; see
+     * [looksLikeCodeField].
+     */
+    val codeField: Boolean = false,
+    /**
      * The snippet chips on the strip: a match waiting to be chosen from, or the
      * alternatives to one that has already been inserted. Null whenever no
      * trigger has anything to offer — see [SnippetOfferSet].

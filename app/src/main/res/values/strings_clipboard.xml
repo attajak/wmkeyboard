@@ -19,7 +19,7 @@
     <string name="clipboard_suggest_codes_info">A code on its own is treated as a secret, and a secret is normally kept off the suggestion strip, because the chip stays in view while you type. A code you copied by hand is the case that rule was never aimed at: you copied it to paste it, and it is one tap away in the clipboard panel either way. "Any field" offers a code copied in the last few minutes wherever you are typing. "Code boxes only" limits that to fields that ask for digits, so a code never appears over the keys of a message. Either way this covers codes only. A copied password is never offered.</string>
     <!-- One line under each option in the copied codes picker. -->
     <string name="clipboard_suggest_codes_off_desc">A copied code stays in the clipboard panel only</string>
-    <string name="clipboard_suggest_codes_fields_desc">Only in a field that asks for digits</string>
+    <string name="clipboard_suggest_codes_fields_desc">Only in a box that asks for a code</string>
     <string name="clipboard_suggest_codes_any_desc">In any field, like other copied text</string>
     <string name="clipboard_toast_title">Pop-up when you copy</string>
     <string name="clipboard_toast_subtitle">Show a short \"Copied\" pop-up when you copy or cut text from the keyboard</string>

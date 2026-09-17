@@ -1458,12 +1458,12 @@ internal fun TypingCodesSettings(
             }
             item {
                 ToggleSetting(
-                    R.string.typing_otp_number_fields_title,
-                    stringResource(R.string.typing_otp_number_fields_subtitle),
-                    settings.otp.numberFieldsOnly,
-                    info = stringResource(R.string.typing_otp_number_fields_info),
-                    default = SettingsDefaults.otp.numberFieldsOnly,
-                ) { scope.launch { repository.setOtpNumberFieldsOnly(it) } }
+                    R.string.typing_otp_code_fields_title,
+                    stringResource(R.string.typing_otp_code_fields_subtitle),
+                    settings.otp.codeFieldsOnly,
+                    info = stringResource(R.string.typing_otp_code_fields_info),
+                    default = SettingsDefaults.otp.codeFieldsOnly,
+                ) { scope.launch { repository.setOtpCodeFieldsOnly(it) } }
             }
             item {
                 SliderSetting(
