@@ -49,21 +49,36 @@ class KeyTextures(
     val popup: ImageBitmap?,
     val scale: KeyTextureScale,
     val opacity: Float,
+    /**
+     * Single-key textures, keyed as `ThemeSpec.keyOverrides` is (issue #107).
+     * Empty for every theme that gives no one key a texture of its own, which
+     * is what keeps [forKey] a map miss away from the class slots below.
+     */
+    val perKey: Map<String, ImageBitmap> = emptyMap(),
 ) {
     val isEmpty: Boolean
         get() = normal == null && modifier == null && enter == null &&
-            space == null && pressed == null && popup == null
+            space == null && pressed == null && popup == null && perKey.isEmpty()
 
     /**
-     * The texture a key of this action draws, with the same fallbacks the
-     * colour picks in `keyVisual` use: enter falls to modifier falls to
-     * normal, space falls to normal. Null means "colour only".
+     * The texture a key draws: its own, when the theme gave this one key one,
+     * and otherwise its class's, with the same fallbacks the colour picks in
+     * `keyVisual` use — enter falls to modifier falls to normal, space falls
+     * to normal. Null means "colour only".
+     *
+     * [overrideId] is the key's `keyOverrideId`; null asks for the class
+     * answer outright, which is what a key with no override has.
      */
-    fun forKey(action: KeyAction): ImageBitmap? = when {
-        action == KeyAction.Enter -> enter ?: modifier ?: normal
-        action == KeyAction.Space -> space ?: normal
-        action != KeyAction.Text -> modifier ?: normal
-        else -> normal
+    fun forKey(action: KeyAction, overrideId: String? = null): ImageBitmap? {
+        if (overrideId != null && perKey.isNotEmpty()) {
+            perKey[overrideId]?.let { return it }
+        }
+        return when {
+            action == KeyAction.Enter -> enter ?: modifier ?: normal
+            action == KeyAction.Space -> space ?: normal
+            action != KeyAction.Text -> modifier ?: normal
+            else -> normal
+        }
     }
 
     companion object {
@@ -168,9 +183,13 @@ private const val POPUP_TEXTURE_H = 256
  */
 @Composable
 fun rememberKeyTextures(kb: KbTheme): KeyTextures {
+    // The single-key textures, pulled out first so the "nothing to decode"
+    // shortcut below sees them: a theme may dress one key and no class at all.
+    val perKeyPaths = kb.keyOverrideTexturePaths()
     val hasAny = kb.keyTexture != null || kb.keyTextureModifier != null ||
         kb.keyTextureEnter != null || kb.keyTextureSpace != null ||
-        kb.keyTexturePressed != null || kb.popupTexture != null
+        kb.keyTexturePressed != null || kb.popupTexture != null ||
+        perKeyPaths.isNotEmpty()
     if (!hasAny) return KeyTextures.EMPTY
     val textures by produceState(
         initialValue = KeyTextures.EMPTY,
@@ -182,6 +201,7 @@ fun rememberKeyTextures(kb: KbTheme): KeyTextures {
         kb.popupTexture,
         kb.keyTextureScale,
         kb.keyTextureOpacity,
+        perKeyPaths,
     ) {
         suspend fun load(path: String?, w: Int = KEY_TEXTURE_PX, h: Int = KEY_TEXTURE_PX) =
             path?.let { BackgroundBitmapCache.load(it, 0f, w, h)?.asImageBitmap() }
@@ -194,7 +214,37 @@ fun rememberKeyTextures(kb: KbTheme): KeyTextures {
             popup = load(kb.popupTexture, POPUP_TEXTURE_W, POPUP_TEXTURE_H),
             scale = kb.keyTextureScale,
             opacity = kb.keyTextureOpacity,
+            perKey = buildMap {
+                for ((id, path) in perKeyPaths) {
+                    // The space bar is the one wide key, here as in the class
+                    // slots: a square decode on it reads as a smear.
+                    val wide = id == SPACE_OVERRIDE_ID
+                    val bitmap = if (wide) {
+                        load(path, SPACE_TEXTURE_W, SPACE_TEXTURE_H)
+                    } else {
+                        load(path)
+                    }
+                    bitmap?.let { put(id, it) }
+                }
+            },
         )
     }
     return textures
 }
+
+/**
+ * The theme's single-key texture paths, keyed by override id — a plain map so
+ * `produceState` re-decodes on a value change rather than on every recomposed
+ * theme instance.
+ */
+private fun KbTheme.keyOverrideTexturePaths(): Map<String, String> =
+    if (keyOverrides.isEmpty()) {
+        emptyMap()
+    } else {
+        buildMap {
+            for ((id, override) in keyOverrides) override.texture?.let { put(id, it) }
+        }
+    }
+
+/** The override id of the space bar; `keyOverrideId` spells it this way. */
+private const val SPACE_OVERRIDE_ID = "SPACE"

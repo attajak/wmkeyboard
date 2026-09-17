@@ -6,6 +6,7 @@ import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -102,10 +103,17 @@ internal class ParticleField {
     var nowMs by mutableLongStateOf(0L)
         private set
 
+    /**
+     * Throws one burst. [glyphStart] and [glyphCount] name the slice of the
+     * bank's bitmaps this burst may pick from, which is how one field serves a
+     * board whose keys throw different things (issue #107): the theme's own
+     * glyphs are one slice, and each single-key effect is another.
+     */
     fun spawn(
         cx: Float,
         cy: Float,
         count: Int,
+        glyphStart: Int = 0,
         glyphCount: Int,
         now: Long,
         physics: EffectPhysics = EffectPhysics(),
@@ -129,7 +137,7 @@ internal class ParticleField {
             lifeMs[i] = physics.durationMs
             tint[i] = if (physics.randomTint) randomTint() else physics.tint
             bornAt[i] = now
-            glyphIndex[i] = Random.nextInt(glyphCount)
+            glyphIndex[i] = glyphStart + Random.nextInt(glyphCount)
         }
         nowMs = now
         revision++
@@ -177,13 +185,27 @@ internal val LocalParticleField = staticCompositionLocalOf<ParticleField?> { nul
 /** How many particles one press throws, before the theme's intensity. */
 private const val BASE_BURST = 5
 
-/** Burst size for the active theme; 0 disables spawning entirely. */
+/**
+ * Burst size for the active theme; 0 disables spawning entirely.
+ *
+ * A theme with no effect of its own still bursts when it gave one key an
+ * effect (issue #107) — the count is the board's, since the intensity slider
+ * is the theme's and a single-key style only picks what is thrown.
+ */
 internal fun burstCount(kb: KbTheme): Int =
-    if (kb.keyEffect == null || kb.reduceMotion) {
+    if (kb.reduceMotion || (kb.keyEffect == null && !kb.hasKeyOverrideEffect)) {
         0
     } else {
         (BASE_BURST * kb.keyEffectIntensity).roundToInt().coerceIn(1, 12)
     }
+
+/**
+ * Whether any one key carries a burst of its own — the other half of the
+ * question [burstCount] asks, and the reason a theme with no effect can still
+ * need a particle field.
+ */
+private val KbTheme.hasKeyOverrideEffect: Boolean
+    get() = keyOverrides.values.any { it.effectKind != null }
 
 /**
  * The theme's physics as the field wants it. Built in composition, once per
@@ -240,28 +262,101 @@ internal fun effectGlyphs(kind: KeyEffectKind, param: String): List<String> = wh
 }
 
 /**
+ * Every particle bitmap the board can throw, and which slice of them belongs
+ * to which key.
+ *
+ * One bank rather than one list per key: the field stores a single index per
+ * particle, so a burst names the slice it drew from and the draw stays the
+ * flat array lookup it has always been. The theme's own glyphs are the base
+ * slice, and a key the theme gave its own effect gets a slice of its own
+ * (issue #107).
+ */
+@Immutable
+internal class EffectGlyphs(
+    val bitmaps: List<ImageBitmap>,
+    private val base: IntRange,
+    private val perKey: Map<String, IntRange>,
+) {
+    val isEmpty: Boolean get() = bitmaps.isEmpty()
+
+    /**
+     * Where this key's particles live in [bitmaps]: its own slice when the
+     * theme dressed it, otherwise the theme's. Empty when neither has glyphs
+     * — a key whose own effect is still decoding throws nothing rather than
+     * falling back to the board's, which would flicker the wrong particles in.
+     */
+    fun sliceFor(overrideId: String?): IntRange {
+        if (overrideId != null && perKey.isNotEmpty()) {
+            perKey[overrideId]?.let { return it }
+        }
+        return base
+    }
+
+    companion object {
+        val EMPTY = EffectGlyphs(emptyList(), IntRange.EMPTY, emptyMap())
+    }
+}
+
+/**
  * The particle bitmaps: pre-rasterized emoji glyphs for the text-based kinds
  * (text layout per frame would be the whole frame budget), or the theme's own
  * image files for CUSTOM_IMAGE, decoded off the main thread through the same
  * cache every other theme image uses. Empty while a decode is landing — the
  * spawn lambda upstream stays null and presses simply throw nothing yet.
+ *
+ * Single-key effects are rasterized here too, appended after the theme's own
+ * glyphs; they are text kinds only (see `KeyOverride.effect`), so they never
+ * wait on a decode.
  */
 @Composable
-internal fun rememberEffectGlyphs(kb: KbTheme): List<ImageBitmap> {
-    val kind = kb.keyEffect ?: return emptyList()
-    if (kind == KeyEffectKind.CUSTOM_IMAGE) {
-        val images by produceState(emptyList<ImageBitmap>(), kb.keyEffectImages) {
-            value = kb.keyEffectImages.mapNotNull { path ->
-                BackgroundBitmapCache.load(path, 0f, EFFECT_IMAGE_PX, EFFECT_IMAGE_PX)
-                    ?.asImageBitmap()
+internal fun rememberEffectGlyphs(kb: KbTheme): EffectGlyphs {
+    val kind = kb.keyEffect
+    // Which key throws what, as plain values, so the rasterize below re-runs on
+    // a changed emoji rather than on every recomposed theme instance.
+    val perKeyEffects = kb.keyOverrideEffects()
+    val customImages = if (kind == KeyEffectKind.CUSTOM_IMAGE) kb.keyEffectImages else emptyList()
+    val decoded by produceState(emptyList<ImageBitmap>(), customImages) {
+        value = customImages.mapNotNull { path ->
+            BackgroundBitmapCache.load(path, 0f, EFFECT_IMAGE_PX, EFFECT_IMAGE_PX)
+                ?.asImageBitmap()
+        }
+    }
+    return remember(kind, kb.keyEffectParam, perKeyEffects, decoded) {
+        if (kind == null && perKeyEffects.isEmpty()) return@remember EffectGlyphs.EMPTY
+        val bitmaps = mutableListOf<ImageBitmap>()
+        val baseGlyphs = when (kind) {
+            null -> emptyList()
+            KeyEffectKind.CUSTOM_IMAGE -> decoded
+            else -> effectGlyphs(kind, kb.keyEffectParam).map { rasterizeGlyph(it) }
+        }
+        bitmaps += baseGlyphs
+        val base = baseGlyphs.indices
+        val perKey = buildMap {
+            for ((id, effect) in perKeyEffects) {
+                val start = bitmaps.size
+                bitmaps += effectGlyphs(effect.first, effect.second).map { rasterizeGlyph(it) }
+                if (bitmaps.size > start) put(id, start until bitmaps.size)
             }
         }
-        return images
-    }
-    return remember(kind, kb.keyEffectParam) {
-        effectGlyphs(kind, kb.keyEffectParam).map { rasterizeGlyph(it) }
+        EffectGlyphs(bitmaps, base, perKey)
     }
 }
+
+/**
+ * The keys the theme gave their own burst, as id → (kind, emoji). A map of
+ * values rather than the overrides themselves, so the glyph bank is rebuilt
+ * when the effect changes and not when some other colour on the same key does.
+ */
+private fun KbTheme.keyOverrideEffects(): Map<String, Pair<KeyEffectKind, String>> =
+    if (keyOverrides.isEmpty()) {
+        emptyMap()
+    } else {
+        buildMap {
+            for ((id, override) in keyOverrides) {
+                override.effectKind?.let { put(id, it to override.effectParam.orEmpty()) }
+            }
+        }
+    }
 
 /** Decode edge for a custom particle image; a particle is a few dozen dp. */
 private const val EFFECT_IMAGE_PX = 96
@@ -286,8 +381,9 @@ private fun rasterizeGlyph(glyph: String): ImageBitmap {
  * keys and the decals, below the popup windows.
  */
 @Composable
-internal fun BoxScope.KeyPressEffectsOverlay(field: ParticleField, glyphs: List<ImageBitmap>) {
-    if (!field.active || glyphs.isEmpty()) return
+internal fun BoxScope.KeyPressEffectsOverlay(field: ParticleField, glyphs: EffectGlyphs) {
+    if (!field.active || glyphs.isEmpty) return
+    val bitmaps = glyphs.bitmaps
     LaunchedEffect(field) {
         while (field.active) {
             withFrameMillis { field.frame(it) }
@@ -306,7 +402,7 @@ internal fun BoxScope.KeyPressEffectsOverlay(field: ParticleField, glyphs: List<
             val px = field.x[i] + field.vx[i] * t
             val py = field.y[i] + field.vy[i] * t + 0.5f * field.gravityPxS2[i] * t * t
             val remaining = 1f - age / life.toFloat()
-            val bitmap = glyphs[field.glyphIndex[i] % glyphs.size]
+            val bitmap = bitmaps[field.glyphIndex[i] % bitmaps.size]
             // Height is the particle's size; width follows the bitmap so a
             // custom PNG keeps its proportions (emoji glyphs are square).
             val edgeH = (GLYPH_PX * field.sizePx[i] * density / 2.5f).roundToInt()

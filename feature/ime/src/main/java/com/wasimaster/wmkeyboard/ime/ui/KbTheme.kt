@@ -767,6 +767,24 @@ private fun Color.argbLong(): Long = toArgb().toLong() and 0xFFFFFFFFL
 private fun GradientSpec.mapColors(f: (Color) -> Color): GradientSpec =
     copy(colors = colors.map { f(Color(it.toInt())).argbLong() })
 
+/**
+ * A single-key style's own colours put through [f]. Without this a
+ * colour-vision filter corrected the whole board except the keys the theme
+ * had picked out by hand — which are the keys picked out *because* they have
+ * to be told apart.
+ */
+private fun KeyOverride.mapColors(f: (Color) -> Color): KeyOverride {
+    fun map(value: Long?): Long? = value?.let { f(Color(it.toInt())).argbLong() }
+    return copy(
+        background = map(background),
+        text = map(text),
+        border = map(border),
+        popupBackground = map(popupBackground),
+        popupText = map(popupText),
+        hint = map(hint),
+    )
+}
+
 /** Every colour in the theme put through [f]; non-colour fields untouched. */
 private fun KbTheme.mapColors(f: (Color) -> Color): KbTheme = copy(
     board = f(board),
@@ -800,6 +818,11 @@ private fun KbTheme.mapColors(f: (Color) -> Color): KbTheme = copy(
     suggestionText = f(suggestionText),
     secondaryText = f(secondaryText),
     divider = f(divider),
+    keyOverrides = if (keyOverrides.isEmpty()) {
+        keyOverrides
+    } else {
+        keyOverrides.mapValues { (_, override) -> override.mapColors(f) }
+    },
 )
 
 /** Near-black or near-white, whichever reads on [background]. */

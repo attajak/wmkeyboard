@@ -153,6 +153,7 @@ import com.wasimaster.wmkeyboard.core.theme.GradientType
 import com.wasimaster.wmkeyboard.core.settings.DefaultThemesPanelBuiltIns
 import com.wasimaster.wmkeyboard.core.theme.DecalSpec
 import com.wasimaster.wmkeyboard.core.theme.KeyEffectKind
+import com.wasimaster.wmkeyboard.core.theme.KEY_OVERRIDE_LABEL_SCALE_RANGE
 import com.wasimaster.wmkeyboard.core.theme.KeyOverride
 import com.wasimaster.wmkeyboard.core.theme.popupOnKeyOrNull
 import com.wasimaster.wmkeyboard.core.theme.EFFECT_DURATION_RANGE
@@ -2754,6 +2755,9 @@ fun ThemeEditorScreen(
             override = theme.keyOverrides[id] ?: KeyOverride(),
             theme = theme,
             popupsShown = settings.popup.enabled,
+            // The theme's own effect group hides itself under reduce motion,
+            // and a per-key burst is the same burst.
+            effectsShown = !settings.reduceMotion,
             onChange = { changed ->
                 update { t -> t.copy(keyOverrides = t.keyOverrides + (id to changed)) }
             },
@@ -4173,7 +4177,15 @@ private fun AddKeyOverrideDialog(onAdd: (String) -> Unit, onDismiss: () -> Unit)
     )
 }
 
-/** One key's own colours: face, label, border, and its preview bubble. */
+/**
+ * One key's own style: its colours, its texture, the burst it throws and how
+ * its label is drawn (issue #107).
+ *
+ * Every row is nullable and reads "Automatic" until it is set, because the
+ * whole point of the sheet is that a key says what it does *differently* — a
+ * dialog of filled-in values would be a second theme editor, and a key that
+ * silently pinned the theme's current colour would stop following it.
+ */
 @Composable
 private fun KeyOverrideDialog(
     id: String,
@@ -4181,9 +4193,28 @@ private fun KeyOverrideDialog(
     theme: ThemeSpec,
     /** Off while key popups are, which is what hides the two popup colours. */
     popupsShown: Boolean,
+    /** Off under reduce motion, which is what hides the press effect. */
+    effectsShown: Boolean,
     onChange: (KeyOverride) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val texturePicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            scope.launch(Dispatchers.IO) {
+                runCancellable {
+                    val path = importKeyOverrideTexture(context, theme.id, id, uri)
+                    if (path != null) {
+                        override.texture?.let { File(it).delete() }
+                        onChange(override.copy(texture = path))
+                    }
+                }
+            }
+        }
+    }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(keyOverrideDisplayName(id)) },
@@ -4199,6 +4230,11 @@ private fun KeyOverrideDialog(
                     stringResource(R.string.theme_key_text_title),
                     override.text, fallback = theme.keyText,
                     onChange = { onChange(override.copy(text = it)) },
+                )
+                NullableColorRow(
+                    stringResource(R.string.theme_hint_text_title),
+                    override.hint, fallback = theme.hintText ?: theme.keyText,
+                    onChange = { onChange(override.copy(hint = it)) },
                 )
                 NullableColorRow(
                     stringResource(R.string.theme_key_border_title),
@@ -4218,12 +4254,150 @@ private fun KeyOverrideDialog(
                         onChange = { onChange(override.copy(popupText = it)) },
                     )
                 }
+                ListItem(
+                    headlineContent = {
+                        Text(stringResource(R.string.theme_key_override_texture_title))
+                    },
+                    supportingContent = {
+                        Text(
+                            stringResource(
+                                if (override.texture != null) {
+                                    R.string.theme_texture_set_label
+                                } else {
+                                    R.string.theme_key_override_texture_unset
+                                },
+                            ),
+                        )
+                    },
+                    leadingContent = { ImageThumb(override.texture) },
+                    trailingContent = {
+                        if (override.texture != null) {
+                            IconButton(
+                                onClick = {
+                                    override.texture?.let { File(it).delete() }
+                                    onChange(override.copy(texture = null))
+                                },
+                            ) {
+                                Icon(
+                                    Icons.Outlined.Delete,
+                                    contentDescription =
+                                        stringResource(CommonR.string.common_remove),
+                                )
+                            }
+                        }
+                    },
+                    colors = transparentListColors(),
+                    modifier = Modifier.clickable {
+                        texturePicker.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly,
+                            ),
+                        )
+                    },
+                )
+                if (effectsShown) {
+                    // Only the drawn kinds: a per-key image set would be a
+                    // transport and memory cost out of proportion to the
+                    // feature. See KeyOverride.effect.
+                    val kinds = KeyEffectKind.entries.filter { it != KeyEffectKind.CUSTOM_IMAGE }
+                    ChoiceControl(
+                        options = listOf<KeyEffectKind?>(null).plus(kinds).map { kind ->
+                            kind to when (kind) {
+                                null -> stringResource(CommonR.string.common_auto)
+                                KeyEffectKind.STARS ->
+                                    stringResource(R.string.theme_effect_stars_label)
+                                KeyEffectKind.HEARTS ->
+                                    stringResource(R.string.theme_effect_hearts_label)
+                                KeyEffectKind.SPARKLE ->
+                                    stringResource(R.string.theme_effect_sparkle_label)
+                                KeyEffectKind.CONFETTI ->
+                                    stringResource(R.string.theme_effect_confetti_label)
+                                else -> stringResource(R.string.theme_effect_emoji_label)
+                            }
+                        },
+                        selected = override.effectKind,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        label = stringResource(R.string.theme_key_override_effect_label),
+                    ) { kind -> onChange(override.copy(effect = kind?.name)) }
+                    if (override.effectKind == KeyEffectKind.EMOJI) {
+                        // Local state while typing, for the reason the theme's
+                        // own emoji field keeps it: the DataStore echo would
+                        // scramble the caret mid-edit.
+                        var emoji by remember(id) { mutableStateOf(override.effectParam.orEmpty()) }
+                        OutlinedTextField(
+                            value = emoji,
+                            onValueChange = { text ->
+                                val clipped = text.take(16)
+                                emoji = clipped
+                                onChange(override.copy(effectParam = clipped))
+                            },
+                            singleLine = true,
+                            label = {
+                                Text(stringResource(R.string.theme_effect_emoji_field_label))
+                            },
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                        )
+                    }
+                }
+                ChoiceControl(
+                    options = listOf(
+                        null to stringResource(CommonR.string.common_auto),
+                        false to stringResource(CommonR.string.common_off),
+                        true to stringResource(CommonR.string.common_on),
+                    ),
+                    selected = override.bold,
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    label = stringResource(R.string.theme_key_override_bold_label),
+                ) { bold -> onChange(override.copy(bold = bold)) }
+                ListItem(
+                    headlineContent = {
+                        Text(stringResource(R.string.theme_key_override_label_size_title))
+                    },
+                    supportingContent = {
+                        Text(
+                            override.labelScale?.let { "${(it * 100).toInt()}%" }
+                                ?: stringResource(CommonR.string.common_auto),
+                        )
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = override.labelScale != null,
+                            onCheckedChange = { on ->
+                                onChange(override.copy(labelScale = if (on) 1f else null))
+                            },
+                        )
+                    },
+                    colors = transparentListColors(),
+                )
+                override.labelScale?.let { scale ->
+                    SliderRow(
+                        stringResource(R.string.theme_key_override_label_size_title),
+                        value = scale,
+                        range = KEY_OVERRIDE_LABEL_SCALE_RANGE,
+                        display = { "${(it * 100).toInt()}%" },
+                    ) { onChange(override.copy(labelScale = (it * 20).toInt() / 20f)) }
+                }
             }
         },
         confirmButton = {
             TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_done)) }
         },
     )
+}
+
+/**
+ * Copies a picked image into the theme-images folder as one key's texture.
+ * The same downscale the class textures get — a key is a few dozen dp either
+ * way — with the override's id in the filename so two keys never collide.
+ */
+private fun importKeyOverrideTexture(
+    context: android.content.Context,
+    themeId: String,
+    overrideId: String,
+    uri: android.net.Uri,
+): String? {
+    val tag = "keytex_" + overrideId.filter { it.isLetterOrDigit() }.ifEmpty { "k" }
+    return importThemeImage(context, "${themeId}_$tag", uri)
 }
 
 /**
@@ -4367,6 +4541,18 @@ private fun importKeyTexture(
     themeId: String,
     slot: KeyTextureSlot,
     uri: android.net.Uri,
+): String? = importThemeImage(context, "${themeId}_${slot.fileTag}", uri)
+
+/**
+ * Copies a picked image into the theme-images folder, downscaled to
+ * [KEY_TEXTURE_IMPORT_PX] on its longest edge and kept as PNG so transparency
+ * survives. [namePrefix] names the file; the timestamp after it is what keeps
+ * a replacement from being read out of the bitmap cache.
+ */
+private fun importThemeImage(
+    context: android.content.Context,
+    namePrefix: String,
+    uri: android.net.Uri,
 ): String? = runCatching {
     val source = context.contentResolver.requireInputStream(uri).use { input ->
         android.graphics.BitmapFactory.decodeStream(input)
@@ -4385,7 +4571,7 @@ private fun importKeyTexture(
     }
     val file = File(
         themeImagesDir(context),
-        "${themeId}_${slot.fileTag}_${System.currentTimeMillis()}.img",
+        "${namePrefix}_${System.currentTimeMillis()}.img",
     )
     file.outputStream().use { out ->
         scaled.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out)

@@ -319,6 +319,7 @@ import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
 import com.wasimaster.wmkeyboard.core.gesture.GlideCase
 import com.wasimaster.wmkeyboard.core.gesture.GlideShiftDetour
 import androidx.compose.ui.graphics.lerp
+import com.wasimaster.wmkeyboard.core.theme.KEY_OVERRIDE_LABEL_SCALE_RANGE
 import com.wasimaster.wmkeyboard.core.theme.KeyOverride
 import com.wasimaster.wmkeyboard.core.theme.brush
 import com.wasimaster.wmkeyboard.core.ui.ToolPaint
@@ -11585,8 +11586,24 @@ internal data class KeyVisual(
     /** A per-key style's own bubble colours; null follows the theme. */
     val popupBackground: Color? = null,
     val popupText: Color? = null,
-    /** The theme's own corner-hint colour; null draws [contentColor] at 55%. */
+    /** The corner-hint colour — the key's own, or the theme's; null draws [contentColor] at 55%. */
     val hintColor: Color? = null,
+    /**
+     * This key's entry in the theme's single-key styles (`keyOverrideId`), or
+     * null when it has none. Carried so the texture draw and the press burst
+     * can ask for this key's own answer without recomputing the id per press.
+     *
+     * Derived from [key] alone, so it changes exactly when the layout does and
+     * costs `rememberKeyGrid` no new dependency.
+     */
+    val overrideId: String? = null,
+    /**
+     * The label size the theme gave this one key, as a multiple of a letter's
+     * size; null leaves [Key.labelScale] and the automatic rule to decide.
+     */
+    val labelScale: Float? = null,
+    /** Whether the theme made this one key's label bold; null follows the board. */
+    val bold: Boolean? = null,
     /**
      * What this key is about to write in the target script, on a layout that
      * transliterates ([transliterationHint]). Null on every other board, and
@@ -11697,11 +11714,8 @@ internal fun keyVisual(
     // The theme's own style for this one key, if it carries one. Applied over
     // the class colours below, but never over a latch — an armed modifier has
     // to look armed whatever colour its face was given.
-    val override = if (palette.overrides.isEmpty()) {
-        null
-    } else {
-        keyOverrideId(key)?.let { palette.overrides[it] }
-    }
+    val overrideId = if (palette.overrides.isEmpty()) null else keyOverrideId(key)
+    val override = overrideId?.let { palette.overrides[it] }
     val overrideBackground = override?.background
         ?.takeIf { latch == null || latch == ModifierState.OFF }
         ?.let { Color(it.toInt()) }
@@ -11749,7 +11763,15 @@ internal fun keyVisual(
         // is picked for its own accented face, which the press paints over.
         pressedContentColor =
             if (action == KeyAction.Enter) palette.modifierKeyText else contentColor,
-        hintColor = palette.hintText,
+        hintColor = override?.hint?.let { Color(it.toInt()) } ?: palette.hintText,
+        overrideId = overrideId,
+        // Clamped here rather than at the draw, the way every other value out
+        // of a file is: the precedence against the layout's own scale lives in
+        // `drawnLabelScale`, which is the one place both label paths read.
+        labelScale = override?.labelScale
+            ?.takeIf { it.isFinite() }
+            ?.coerceIn(KEY_OVERRIDE_LABEL_SCALE_RANGE),
+        bold = override?.bold,
         transliteration = transliterationHint(key, state),
         alternatesShifted = key.longPress.isNotEmpty() && state.shiftCasesText(),
         iconSlot = when {
@@ -11784,6 +11806,17 @@ internal fun keyVisual(
         fontScale = fontScale,
     )
 }
+
+/**
+ * The label-size multiplier this key draws at, before the grid's own scale: the
+ * layout's authored [Key.labelScale] where it has one, and otherwise the size
+ * the theme gave this single key (issue #107). Null leaves the automatic rule
+ * — a letter's size for a letter, a smaller one for a mode label — in charge.
+ *
+ * Resolved on [KeyVisual] rather than at each draw so the two label paths (the
+ * text-editing word and the ordinary label) cannot answer differently.
+ */
+internal fun KeyVisual.drawnLabelScale(): Float? = key.drawnLabelScale() ?: labelScale
 
 /**
  * The name a [ThemeSpec.keyOverrides] entry uses for this key: the lowercase
@@ -12619,15 +12652,19 @@ private fun KeyRows(
     val particleGlyphs = rememberEffectGlyphs(kbTheme)
     val particleBurst = burstCount(kbTheme)
     val particlePhysics = rememberEffectPhysics(kbTheme)
-    val onBurst: ((Rect) -> Unit)? =
-        if (particleBurst > 0 && particleGlyphs.isNotEmpty()) {
+    val onBurst: ((Rect, String?) -> Unit)? =
+        if (particleBurst > 0 && !particleGlyphs.isEmpty) {
             remember(particleField, particleBurst, particleGlyphs, particlePhysics) {
-                { bounds ->
+                { bounds, overrideId ->
+                    // The key's own particles when the theme gave it some, and
+                    // the board's otherwise; an empty slice throws nothing.
+                    val slice = particleGlyphs.sliceFor(overrideId)
                     particleField.spawn(
                         bounds.center.x - boxOrigin.x,
                         bounds.center.y - boxOrigin.y,
                         particleBurst,
-                        particleGlyphs.size,
+                        slice.first,
+                        slice.count(),
                         SystemClock.uptimeMillis(),
                         particlePhysics,
                     )
@@ -14572,7 +14609,7 @@ private fun KeyRow(
     onSpacePositioned: (LayoutCoordinates) -> Unit = {},
     smartResolve: (Key, PointerId) -> Key = { k, _ -> k },
     /** Spawns the theme's press burst at the key's bounds; null when off. */
-    onBurst: ((Rect) -> Unit)? = null,
+    onBurst: ((Rect, String?) -> Unit)? = null,
 ) {
     Row {
         if (row.sidePad > 0.01f) Spacer(modifier = Modifier.weight(row.sidePad))
@@ -14650,7 +14687,7 @@ private fun KeyBand(
     onKeyPositioned: (Key, LayoutCoordinates) -> Unit,
     onSpacePositioned: (LayoutCoordinates) -> Unit = {},
     smartResolve: (Key, PointerId) -> Key = { k, _ -> k },
-    onBurst: ((Rect) -> Unit)? = null,
+    onBurst: ((Rect, String?) -> Unit)? = null,
 ) {
     // Row pitch in px: the key height the row was given, plus the gap above and
     // below it, exactly as an ordinary KeyCell measures itself.
@@ -14733,7 +14770,7 @@ private fun KeyCell(
     onKeyPositioned: (Key, LayoutCoordinates) -> Unit,
     onSpacePositioned: (LayoutCoordinates) -> Unit = {},
     smartResolve: (Key, PointerId) -> Key = { k, _ -> k },
-    onBurst: ((Rect) -> Unit)? = null,
+    onBurst: ((Rect, String?) -> Unit)? = null,
 ) {
     val key = visual.key
     KeyButton(
@@ -15991,7 +16028,7 @@ internal fun KeyButton(
     keyPreview: KeyPreviewState,
     smartResolve: (Key, PointerId) -> Key = { k, _ -> k },
     /** Spawns the theme's press burst at this key; null when the effect is off. */
-    onBurst: ((Rect) -> Unit)? = null,
+    onBurst: ((Rect, String?) -> Unit)? = null,
 ) {
     val key = visual.key
     // Held as the state object, never read through a `by` delegate: every read of
@@ -16255,7 +16292,7 @@ internal fun KeyButton(
                         // debounce as the sound: a dropped contact throws no
                         // confetti either.
                         if (down && gate.accepted) {
-                            burst.value?.invoke(keyBounds.value)
+                            burst.value?.invoke(keyBounds.value, visual.overrideId)
                         }
                         if (down && previewWanted.value) {
                             val bounds = keyBounds.value
@@ -16347,7 +16384,7 @@ internal fun KeyButton(
                 // press-path draw below only picks between ready-made values.
                 // The clip path and tile brush depend on size/shape alone —
                 // the cache block's own invalidation keys.
-                val texture = if (faces) textures.forKey(key.action) else null
+                val texture = if (faces) textures.forKey(key.action, visual.overrideId) else null
                 val texturePaint = texture?.let {
                     KeyTexturePaint.of(it, textures, outline, size)
                 }
@@ -17676,7 +17713,8 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
             } else {
                 Text(
                     text = key.label.ifBlank { textEditLabel(op) },
-                    fontSize = (ModeLabelSp * (key.drawnLabelScale() ?: 1f) * fontScale).sp,
+                    fontSize =
+                        (ModeLabelSp * (visual.drawnLabelScale() ?: 1f) * fontScale).sp,
                     fontWeight = FontWeight.Medium,
                     color = contentColor,
                     maxLines = 1,
@@ -17781,7 +17819,7 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                 // to say what the automatic answer got wrong on this one key, and
                 // it is what carries a HeliBoard label flag across (issue #18).
                 val isModeLabel = key.action != KeyAction.Text && text.length > 1
-                val keyScale = key.drawnLabelScale()
+                val keyScale = visual.drawnLabelScale()
                 val baseSize = when {
                     keyScale != null -> LetterLabelSp * keyScale
                     isModeLabel -> ModeLabelSp
@@ -17802,7 +17840,11 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                     text = text,
                     modifier = Modifier.align(Alignment.Center),
                     fontSize = (baseSize * fontScale * scale).sp,
-                    fontWeight = if (settings.accessibility.boldLabels) FontWeight.Bold else FontWeight.Medium,
+                    fontWeight = if (visual.bold ?: settings.accessibility.boldLabels) {
+                        FontWeight.Bold
+                    } else {
+                        FontWeight.Medium
+                    },
                     color = contentColor,
                     maxLines = 1,
                     softWrap = false,

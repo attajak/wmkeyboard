@@ -1050,10 +1050,13 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - 3 gradient types — Linear, radial and sweep; angle slider on linear and sweep
     - 2–4 colour stops — Add/remove stops, each with its own alpha
     - Live strip preview — The row draws the actual shader brush the keyboard will use
-  - Per-key style overrides `RARE` — A named key gets its own face, label, border and popup colours
+  - Per-key style overrides `RARE` — A named key gets its own colours, image, press burst and label weight
     - Letter keys by label — Override follows the lowercase letter across layouts and languages
     - 7 special keys — Enter, Space, Shift, Delete, Symbols, Emoji, Language switch
-    - 5 colours each — Background, text, border, popup background, popup text — all nullable
+    - 6 colours each — Background, text, hint, border, popup background, popup text — all nullable
+    - Per-key image — One key's own texture, drawn at the board's texture fit and opacity; beats the class texture, works with no class texture at all
+    - Per-key press burst — Stars, hearts, sparkle, confetti or the key's own emoji; the board's intensity and physics still shape it, and one key's burst is enough to give a board with no effect a particle field
+    - Per-key label weight and size — Bold as a three-way answer (follow the board, on, off), and a label size that replaces the automatic rule; a size the layout authored wins over the theme's
 - **Key shapes and geometry** `RARE` — 12 shapes, applied independently to 6 surfaces
   - 12 key shapes `RARE` — Picker draws each one rather than naming it
     - No shape — Keys only: labels on the bare board, a rounded flash on press, latched modifiers and single-key faces still lit

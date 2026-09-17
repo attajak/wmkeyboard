@@ -564,13 +564,17 @@ fun ThemeSpec.withSidePad(left: Float? = null, right: Float? = null): ThemeSpec 
 }
 
 /**
- * One key's own style, overriding the class-level colours. Everything is
+ * One key's own style, overriding the class-level look. Everything is
  * nullable: a key that only recolours its popup carries exactly that.
  *
  * The map key naming these (see [ThemeSpec.keyOverrides]) is the key's
  * lowercase label for letter keys — so the override follows the letter across
  * layouts and languages — and the action's name (`ENTER`, `SHIFT`, `SPACE`,
  * `DELETE`, `SYMBOLS`, …) for the special keys.
+ *
+ * Every field here is a *replacement*, never a scaling of the theme's answer:
+ * the point of a single-key style is to say what this one key does instead of
+ * what the rest of the board does (issue #107).
  */
 @Serializable
 data class KeyOverride(
@@ -579,11 +583,66 @@ data class KeyOverride(
     val border: Long? = null,
     val popupBackground: Long? = null,
     val popupText: Long? = null,
+    /**
+     * The corner hint's colour on this one key; null follows
+     * [ThemeSpec.hintText], which itself falls back to the faded label.
+     */
+    val hint: Long? = null,
+    /**
+     * This key's own texture, as a local image path — the per-key twin of
+     * [ThemeSpec.keyTexture], drawn with the theme's own fit and opacity so a
+     * board's textures still read as one set. Never set in exports; the bytes
+     * travel in [ThemeSpec.assets] under `keyOverrideTexture:<id>`.
+     */
+    val texture: String? = null,
+    /**
+     * The particle burst *this* key throws, as a [KeyEffectKind] name; null
+     * follows the theme's own effect. A string for the usual forward-compat
+     * reason; read through [keyEffectKindOrNull].
+     *
+     * `CUSTOM_IMAGE` is not offered per key: its particles are image files,
+     * and a per-key image set is a transport and memory cost out of all
+     * proportion to "the enter key throws hearts". An override naming it is
+     * read as no effect of its own.
+     */
+    val effect: String? = null,
+    /** The emoji this key's `EMOJI` effect throws; see [ThemeSpec.keyEffectParam]. */
+    val effectParam: String? = null,
+    /**
+     * How big this key's label draws, as a multiple of an ordinary letter's
+     * size — the theme-side twin of `Key.labelScale`, which a layout may set
+     * for the same key. The key's own authored scale wins: the layout is the
+     * more specific answer, and a theme is worn by every layout.
+     */
+    val labelScale: Float? = null,
+    /**
+     * Whether this key's label draws bold; null follows the board (the theme's
+     * [ThemeSpec.boldKeyLabels] and the accessibility switch under it).
+     */
+    val bold: Boolean? = null,
 ) {
     val isEmpty: Boolean
         get() = background == null && text == null && border == null &&
-            popupBackground == null && popupText == null
+            popupBackground == null && popupText == null && hint == null &&
+            texture == null && effect == null && effectParam == null &&
+            labelScale == null && bold == null
+
+    /**
+     * The kind of burst this key throws on its own, or null when it follows
+     * the theme. `CUSTOM_IMAGE` is filtered here rather than at each reader,
+     * so a hand-written theme naming it cannot reach the glyph loader.
+     */
+    val effectKind: KeyEffectKind?
+        get() = keyEffectKindOrNull(effect)?.takeIf { it != KeyEffectKind.CUSTOM_IMAGE }
 }
+
+/**
+ * Bounds a per-key label scale is held to. The same numbers `KeyLabelScaleRange`
+ * holds an authored `Key.labelScale` to — the two cannot be one constant
+ * because `:core:theme` does not see the layout module, so they are pinned
+ * together by `KeyOverrideLabelScaleRangeTest` instead.
+ */
+val KEY_OVERRIDE_LABEL_SCALE_RANGE = 0.3f..2f
 
 /**
  * One decorative sticker laid over the key grid — a character leaning on the
@@ -745,6 +804,9 @@ fun ThemeSpec.withEmbeddedImages(): ThemeSpec {
         keyEffectImages.forEachIndexed { index, path ->
             encode(path)?.let { put("$ASSET_EFFECT_IMAGE_PREFIX$index", it) }
         }
+        for ((key, override) in keyOverrides) {
+            encode(override.texture)?.let { put("$ASSET_KEY_OVERRIDE_TEXTURE_PREFIX$key", it) }
+        }
     }
     return copy(
         backgroundImage = null,
@@ -765,6 +827,7 @@ fun ThemeSpec.withEmbeddedImages(): ThemeSpec {
         popupTexture = null,
         decals = decals.map { it.copy(image = null) },
         keyEffectImages = emptyList(),
+        keyOverrides = keyOverrides.mapValues { (_, override) -> override.copy(texture = null) },
         assets = embedded,
         // Each variant embeds its own images; the nested-variant strip keeps
         // the one-level contract even for hand-edited files.
@@ -794,6 +857,12 @@ const val ASSET_DECAL_PREFIX = "decal:"
 
 /** Prefix of a press-effect image's transport slot; its list index follows. */
 const val ASSET_EFFECT_IMAGE_PREFIX = "effectImage:"
+
+/**
+ * Prefix of a single-key texture's transport slot; the override's own map key
+ * follows it (`keyOverrideTexture:a`, `keyOverrideTexture:ENTER`).
+ */
+const val ASSET_KEY_OVERRIDE_TEXTURE_PREFIX = "keyOverrideTexture:"
 
 /**
  * Inverse of [withEmbeddedImages]: writes any embedded base64 image(s) into
@@ -838,6 +907,18 @@ fun ThemeSpec.withExtractedImages(dir: File): ThemeSpec {
                 write("${id}_fx_$index.img", assets["$ASSET_EFFECT_IMAGE_PREFIX$index"])
             }
             extracted.ifEmpty { keyEffectImages }
+        },
+        keyOverrides = keyOverrides.mapValues { (key, override) ->
+            // The map key is a letter or an action name, so it is safe in a
+            // filename once the non-word characters are out of it — the only
+            // ids that carry any are hand-written ones.
+            val tag = key.filter { it.isLetterOrDigit() }.ifEmpty { "k" }
+            override.copy(
+                texture = write(
+                    "${id}_keytex_$tag.img",
+                    assets["$ASSET_KEY_OVERRIDE_TEXTURE_PREFIX$key"],
+                ) ?: override.texture,
+            )
         },
         assets = emptyMap(),
         // Variant filenames key off each variant's own id, which is globally

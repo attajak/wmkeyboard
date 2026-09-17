@@ -51,6 +51,9 @@ fun themePhotoSweepPlan(
                 decal.image?.let { add(it.substringAfterLast('/')) }
             }
             theme.keyEffectImages.forEach { add(it.substringAfterLast('/')) }
+            theme.keyOverrides.values.forEach { override ->
+                override.texture?.let { add(it.substringAfterLast('/')) }
+            }
         }
         rotationStates.values.forEach { state ->
             state.imagePath?.let { add(it.substringAfterLast('/')) }

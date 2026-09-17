@@ -9,11 +9,13 @@ import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
 import com.wasimaster.wmkeyboard.core.layout.ModifierKey
 import com.wasimaster.wmkeyboard.core.layout.compile
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
+import com.wasimaster.wmkeyboard.core.theme.KEY_OVERRIDE_LABEL_SCALE_RANGE
 import com.wasimaster.wmkeyboard.core.theme.KeyOverride
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.LayoutSet
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -98,5 +100,81 @@ class KeyOverrideVisualTest {
         val palette = palette(mapOf("a" to KeyOverride(background = red)))
         val upper = keyVisual(Key("A"), state(), palette)
         assertEquals(Color(red.toInt()), upper.background)
+    }
+
+    @Test
+    fun `a key's own hint colour beats the theme's`() {
+        val themed = palette(mapOf("a" to KeyOverride(hint = red)))
+            .copy(hintText = Color.Green)
+        assertEquals(Color(red.toInt()), keyVisual(Key("a"), state(), themed).hintColor)
+        // Every other key still takes the theme's hint, not the default fade.
+        assertEquals(Color.Green, keyVisual(Key("b"), state(), themed).hintColor)
+    }
+
+    @Test
+    fun `bold is a three-state answer`() {
+        val palette = palette(
+            mapOf("a" to KeyOverride(bold = true), "b" to KeyOverride(bold = false)),
+        )
+        assertEquals(true, keyVisual(Key("a"), state(), palette).bold)
+        assertEquals(false, keyVisual(Key("b"), state(), palette).bold)
+        // Null is the third answer, and it is what "follow the board" is.
+        assertNull(keyVisual(Key("c"), state(), palette).bold)
+    }
+
+    @Test
+    fun `a label scale out of a file is clamped, and the layout's own wins`() {
+        val palette = palette(mapOf("a" to KeyOverride(labelScale = 9f)))
+        val visual = keyVisual(Key("a"), state(), palette)
+        assertEquals(KEY_OVERRIDE_LABEL_SCALE_RANGE.endInclusive, visual.labelScale)
+        assertEquals(KEY_OVERRIDE_LABEL_SCALE_RANGE.endInclusive, visual.drawnLabelScale())
+        // A key the layout sized itself keeps that size: the layout is the one
+        // board, the theme is worn by all of them.
+        val authored = keyVisual(Key("a", labelScale = 1.4f), state(), palette)
+        assertEquals(1.4f, authored.drawnLabelScale())
+    }
+
+    @Test
+    fun `a nonsense label scale is dropped rather than drawn`() {
+        val palette = palette(mapOf("a" to KeyOverride(labelScale = Float.NaN)))
+        assertNull(keyVisual(Key("a"), state(), palette).labelScale)
+    }
+
+    @Test
+    fun `the override id rides the visual for the texture and the burst`() {
+        val palette = palette(mapOf("a" to KeyOverride(background = red)))
+        assertEquals("a", keyVisual(Key("a"), state(), palette).overrideId)
+        // Keys the theme never named carry an id too, so one override does not
+        // make every other key look one up.
+        assertEquals("b", keyVisual(Key("b"), state(), palette).overrideId)
+        // A theme with no single-key styles at all asks nothing of any key.
+        assertNull(keyVisual(Key("a"), state(), palette()).overrideId)
+    }
+
+    @Test
+    fun `an effect slice belongs to the key that asked for it`() {
+        val glyphs = EffectGlyphs(
+            // The slice is an index range; the bitmaps behind it are the
+            // rasterizer's business and need a device to make.
+            bitmaps = emptyList(),
+            base = 0..1,
+            perKey = mapOf("a" to 2..4),
+        )
+        assertEquals(2..4, glyphs.sliceFor("a"))
+        assertEquals(0..1, glyphs.sliceFor("b"))
+        assertEquals(0..1, glyphs.sliceFor(null))
+    }
+
+    @Test
+    fun `a board whose only effect is one key's still throws that key's`() {
+        val glyphs = EffectGlyphs(
+            bitmaps = emptyList(),
+            base = IntRange.EMPTY,
+            perKey = mapOf("ENTER" to 0..1),
+        )
+        assertEquals(0..1, glyphs.sliceFor("ENTER"))
+        // And a key with no effect of its own throws nothing rather than
+        // borrowing the one the enter key was given.
+        assertTrue(glyphs.sliceFor("a").isEmpty())
     }
 }

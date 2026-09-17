@@ -335,10 +335,15 @@
 
     <!-- Theme editor: per-key styles. -->
     <string name="theme_key_override_section_title">Single-key styles</string>
-    <string name="theme_key_override_section_body">Give one key its own colors: its face, its label, its border, and its popup. A letter keeps its style on every layout that has it.</string>
+    <string name="theme_key_override_section_body">Give one key a style of its own: its colors, a texture, the burst it throws, and how its label is drawn. A letter keeps its style on every layout that has it.</string>
     <string name="theme_key_override_add_action">Add a key</string>
     <string name="theme_key_override_add_body">Type a letter, or choose one of the special keys.</string>
     <string name="theme_key_override_letter_label">Letter</string>
+    <string name="theme_key_override_texture_title">Key image</string>
+    <string name="theme_key_override_texture_unset">No image, tap to choose one</string>
+    <string name="theme_key_override_effect_label">Press effect</string>
+    <string name="theme_key_override_bold_label">Bold label</string>
+    <string name="theme_key_override_label_size_title">Label size</string>
     <string name="theme_key_background_title">Key background</string>
 
     <!-- Theme editor: stickers over the keyboard. -->
