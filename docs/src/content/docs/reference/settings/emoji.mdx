@@ -83,6 +83,7 @@ This group is a page of its own, opened from the Emoji panel row on the Emoji sc
 | Emoji descriptions | Toggle | On / Off | On |
 | Animated emoji | Toggle | On / Off | On |
 | Send emoji as image | Toggle | On / Off | On |
+| Emoji categories | Opens **Emoji categories** | n/a | n/a |
 | Emoji keywords | Opens **Emoji keywords** | n/a | n/a |
 
 **Grid size** is the least each cell of the emoji grid may be. A smaller size fits more columns. When **Emoji size** needs more room than that, the cells grow to fit it.
@@ -104,6 +105,8 @@ This group is a page of its own, opened from the Emoji panel row on the Emoji sc
 **Animated emoji** adds a looping preview and a **Send animated emoji** button to that same long-press popup, for the roughly 880 emoji Google publishes an animation of. Full coverage: [Animated emoji](/emoji/picker/#animated-emoji).
 
 **Send emoji as image** adds a **Send image as sticker** button to the popup for *every* emoji. It draws the emoji at 512×512 in your chosen emoji font and sends it as a WebP image. Full coverage: [Sending an emoji as a picture](/emoji/picker/#sending-an-emoji-as-a-picture).
+
+**Emoji categories** is a navigation row, not a setting stored here: it opens the sub-screen documented below, where you reorder the panel's category tabs, hide the ones you never open, and arrange the emoji inside each one.
 
 **Emoji keywords** is a navigation row, not a setting stored here: it opens the sub-screen documented below.
 
@@ -168,6 +171,34 @@ While the download runs the button becomes a progress bar, and a failure leaves 
 </PhoneFrame>
 
 Long-pressing any emoji in the panel opens its favourite and skin-tone controls: two-person emoji like 🤝 let you set each person's tone independently.
+
+## Emoji categories
+
+<SettingsPath path="Emoji / Emoji panel / Emoji categories" />
+
+The emoji panel ships its categories in the order Unicode defines them, which is rarely the order you reach for them in. This screen is where that changes. Nothing here touches the emoji themselves: it is an arrangement laid over the catalogue, and resetting it puts everything back.
+
+| Control | What it does |
+|---|---|
+| Drag handle | Moves a category's tab in the panel's tab strip |
+| Eye | Hides a category's tab, or brings it back |
+| The row itself | Opens that category's emoji, to arrange them |
+| Reset every order | Puts the tabs, the hidden ones and every category's emoji back the way they shipped |
+
+**Reordering a tab.** Drag a row by its handle. The order you leave it in is the order the tabs appear in the panel, left to right.
+
+**Hiding a tab.** Press the eye on a category you never open and its tab leaves the panel. The emoji are still found by [emoji search](/emoji/picker/#searching), and they still appear in the suggestion strip — only the tab goes. The last visible category cannot be hidden: the panel pages by category, so a panel with none would have nothing to page.
+
+**Arranging the emoji inside a category.** Press a category to open its grid, then press and hold an emoji and drag it where you want it. Dragging to the top or bottom edge scrolls. The order you leave is the order that category's page shows. **Reset** in the top bar puts one category back on its own.
+
+Three tabs are deliberately not listed here:
+
+- **Recent** (or **Most used**) orders itself by what you use, with your favourites pinned to the front. Reorder those from any favourited emoji's long-press popup.
+- **Kaomoji** and **Emoticons** are switched on and off by the **Kaomoji and Emoticons** toggle above, and always sit at the end of the strip.
+
+<PhoneFrame caption="The Emoji categories screen: drag to reorder a tab, press the eye to hide one.">
+  {/* shot: reference/settings/emoji-categories-screen */}
+</PhoneFrame>
 
 ## Emoji keywords
 

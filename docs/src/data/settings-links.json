@@ -50,6 +50,7 @@
   {"title":"Personal dictionary","name":"typing_personal_dictionary_title","route":"dictionary","screens":["Typing","Suggestions"],"screen":true},
   {"title":"Custom dictionaries","name":"typing_custom_dictionaries_title","route":"customdictionaries","screens":["Typing","Suggestions"],"screen":true},
   {"title":"Emoji keywords","name":"langemoji_emoji_keywords_title","route":"emojikeywords","screens":["Emoji"],"screen":true},
+  {"title":"Emoji categories","name":"langemoji_emoji_categories_title","route":"emojicategories","screens":["Emoji"],"screen":true},
   {"title":"Suggestion blacklist","name":"typing_blacklist_title","route":"blacklist","screens":["Typing","Suggestions"],"screen":true},
   {"title":"Learned corrections","name":"typing_learned_corrections_title","route":"learnedcorrections","screens":["Typing","Automatic corrections"],"screen":true},
   {"title":"Music players","name":"musicapps_title","route":"musicapps","screens":["Tools","Media controls"],"screen":false},

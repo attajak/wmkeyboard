@@ -1801,6 +1801,13 @@ private fun SearchStrings.sectionRows(): List<SettingsSearchEntry> {
             R.string.search_kw_emojikeywords,
         ),
         under(
+            R.string.langemoji_emoji_categories_title,
+            R.string.langemoji_emoji_categories_subtitle,
+            R.string.home_emoji_title,
+            "emojicategories",
+            R.string.search_kw_emojicategories,
+        ),
+        under(
             R.string.typing_blacklist_title, R.string.typing_blacklist_subtitle,
             R.string.typing_group_suggestions_title, "blacklist", R.string.search_kw_blacklist,
             parent = R.string.home_typing_title,

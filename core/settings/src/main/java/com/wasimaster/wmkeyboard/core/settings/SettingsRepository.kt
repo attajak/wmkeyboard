@@ -115,6 +115,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
@@ -4548,6 +4549,32 @@ data class EmojiSettings(
      * device — but it only appears on a field that accepts images.
      */
     val sendAsSticker: Boolean = true,
+    /**
+     * The order of the panel's category tabs, as catalog category ids. Empty
+     * — the default — leaves them in the catalog's own Unicode order.
+     *
+     * A partial list is honoured rather than rejected: whatever it names is
+     * placed in that order, and the rest of the catalog falls in around it.
+     * See `EmojiOrder.merge`, which is where the two are reconciled for both
+     * the panel and the screen that edits this.
+     */
+    val categoryOrder: List<String> = emptyList(),
+    /**
+     * Category ids whose tab the panel does not draw. Hiding every category is
+     * refused at both ends — the editor keeps the last one switched on, and
+     * `EmojiOrder.categories` ignores a hidden set that would empty the panel.
+     */
+    val hiddenCategories: Set<String> = emptySet(),
+    /**
+     * Per category, the order its emoji are laid out in — catalog order where
+     * a category is absent, which is every category until someone drags one.
+     *
+     * Stored whole for a category the user has touched, not as a list of
+     * moves: 270 emoji is the largest category there is, so the honest
+     * representation costs a couple of kilobytes and cannot drift the way a
+     * replayed move list does.
+     */
+    val categoryEmojiOrder: Map<String, List<String>> = emptyMap(),
 )
 
 /** Bounds for [EmojiSettings.barCount]; the settings slider shares them. */
@@ -5804,6 +5831,27 @@ private fun decodeRepoMap(raw: String): Map<String, RepoLocation> =
         .mapNotNull { (id, fields) -> repoLocationFromFields(fields)?.let { id to it } }
         .toMap()
 
+private val emojiOrderSerializer =
+    MapSerializer(String.serializer(), ListSerializer(String.serializer()))
+
+/** The per-category emoji order as a JSON object of category id to emoji list. */
+private fun encodeEmojiOrder(map: Map<String, List<String>>): String =
+    endpointJson.encodeToString(emojiOrderSerializer, map)
+
+/**
+ * A malformed blob reads as "no custom order", which puts every category back
+ * in catalog order. That is the right failure: the orders here are a
+ * preference laid over a catalog that is itself intact, so losing one costs
+ * an arrangement, never an emoji.
+ */
+private fun decodeEmojiOrder(raw: String?): Map<String, List<String>> {
+    if (raw.isNullOrBlank()) return emptyMap()
+    return runCatching { endpointJson.decodeFromString(emojiOrderSerializer, raw) }
+        .getOrDefault(emptyMap())
+        .mapValues { (_, order) -> order.filter { it.isNotEmpty() }.distinct() }
+        .filterValues { it.isNotEmpty() }
+}
+
 /** Serializes the per-script font map to a compact `SCRIPT=fontId;...` string. */
 private fun encodeScriptFontIds(map: Map<String, String>): String =
     map.entries
@@ -6458,6 +6506,13 @@ class SettingsRepository(private val context: Context) {
         private val MEDIA_GRID_COLUMNS = intPreferencesKey("media_grid_columns")
         private val EMOJI_ANIMATED = booleanPreferencesKey("emoji_animated")
         private val EMOJI_SEND_AS_STICKER = booleanPreferencesKey("emoji_send_as_sticker")
+        private val EMOJI_CATEGORY_ORDER = stringPreferencesKey("emoji_category_order")
+        private val EMOJI_HIDDEN_CATEGORIES = stringSetPreferencesKey("emoji_hidden_categories")
+        // JSON rather than the comma-joined form its neighbours use: the values
+        // are emoji sequences, and a ZWJ sequence is a string whose parts must
+        // stay glued. JSON is the encoding already trusted with layout specs.
+        private val EMOJI_CATEGORY_EMOJI_ORDER =
+            stringPreferencesKey("emoji_category_emoji_order")
         private val EMOJI_AUTO_DOWNLOAD_KEYWORDS =
             booleanPreferencesKey("emoji_auto_download_keywords")
         // Stored as the DISABLED set so tools added in future versions
@@ -7741,6 +7796,15 @@ class SettingsRepository(private val context: Context) {
                 usageVersion = p[EMOJI_USAGE_VERSION] ?: defaults.emoji.usageVersion,
                 animated = p[EMOJI_ANIMATED] ?: defaults.emoji.animated,
                 sendAsSticker = p[EMOJI_SEND_AS_STICKER] ?: defaults.emoji.sendAsSticker,
+                categoryOrder = p[EMOJI_CATEGORY_ORDER]
+                    ?.split(',')
+                    ?.map { it.trim() }
+                    ?.filter { it.isNotEmpty() }
+                    ?.distinct()
+                    ?: defaults.emoji.categoryOrder,
+                hiddenCategories = p[EMOJI_HIDDEN_CATEGORIES] ?: defaults.emoji.hiddenCategories,
+                categoryEmojiOrder = decodeEmojiOrder(p[EMOJI_CATEGORY_EMOJI_ORDER])
+                    .ifEmpty { defaults.emoji.categoryEmojiOrder },
             ),
             enabledTools = ToolbarTool.entries - decodeDisabledTools(p[DISABLED_TOOLS]),
             toolboxOrder = decodeToolOrder(p[TOOLBOX_ORDER]),
@@ -10933,6 +10997,52 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSendEmojiAsSticker(value: Boolean) =
         editPrefs { it[EMOJI_SEND_AS_STICKER] = value }
+
+    /**
+     * Rewrites the category tab order; see [EmojiSettings.categoryOrder]. The
+     * ids are stored as given, including categories this build's catalog does
+     * not have — a keyword pack may add one back, and dropping it here would
+     * lose the place the user put it.
+     */
+    suspend fun setEmojiCategoryOrder(order: List<String>) =
+        editPrefs {
+            val clean = order.map(String::trim).filter(String::isNotEmpty).distinct()
+            if (clean.isEmpty()) it.remove(EMOJI_CATEGORY_ORDER)
+            else it[EMOJI_CATEGORY_ORDER] = clean.joinToString(",")
+        }
+
+    suspend fun resetEmojiCategoryOrder() = editPrefs { it.remove(EMOJI_CATEGORY_ORDER) }
+
+    /** Shows or hides one category's tab; see [EmojiSettings.hiddenCategories]. */
+    suspend fun setEmojiCategoryVisible(category: String, visible: Boolean) =
+        editPrefs {
+            val hidden = it[EMOJI_HIDDEN_CATEGORIES].orEmpty()
+            val next = if (visible) hidden - category else hidden + category
+            if (next.isEmpty()) it.remove(EMOJI_HIDDEN_CATEGORIES)
+            else it[EMOJI_HIDDEN_CATEGORIES] = next
+        }
+
+    /**
+     * Rewrites one category's emoji order; see [EmojiSettings.categoryEmojiOrder].
+     * An empty [order] drops the entry, which is how a category goes back to
+     * catalog order — storing an empty list would mean the same thing but
+     * leave a growing map of nothing behind.
+     */
+    suspend fun setEmojiCategoryEmojiOrder(category: String, order: List<String>) =
+        editPrefs { prefs ->
+            val current = decodeEmojiOrder(prefs[EMOJI_CATEGORY_EMOJI_ORDER])
+            val clean = order.filter { it.isNotEmpty() }.distinct()
+            val next = if (clean.isEmpty()) current - category else current + (category to clean)
+            if (next.isEmpty()) prefs.remove(EMOJI_CATEGORY_EMOJI_ORDER)
+            else prefs[EMOJI_CATEGORY_EMOJI_ORDER] = encodeEmojiOrder(next)
+        }
+
+    /** Puts every category's emoji, and the tabs themselves, back in catalog order. */
+    suspend fun resetEmojiOrder() = editPrefs {
+        it.remove(EMOJI_CATEGORY_ORDER)
+        it.remove(EMOJI_HIDDEN_CATEGORIES)
+        it.remove(EMOJI_CATEGORY_EMOJI_ORDER)
+    }
 
     suspend fun bumpEmojiKeywordPackVersion() =
         editPrefs {

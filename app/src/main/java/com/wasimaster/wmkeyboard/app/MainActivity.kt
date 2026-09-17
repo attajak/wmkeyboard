@@ -923,6 +923,29 @@ private fun SettingsNavGraph(
                 CustomDictionarySettings(repository, settings) { route -> navController.navigate(route) }
             }
         }
+        composable("emojicategories") {
+            SettingsScreen(
+                stringResource(R.string.langemoji_emoji_categories_title),
+                { navController.popBackStack() },
+                route = "emojicategories",
+                subtitle = stringResource(R.string.langemoji_emoji_categories_subtitle),
+                subtitleMaxLines = 2,
+            ) {
+                EmojiCategorySettings(repository, settings) { route -> navController.navigate(route) }
+            }
+        }
+        composable(
+            route = "$EMOJI_ORDER_ROUTE/{category}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType }),
+        ) { entry ->
+            EmojiOrderScreen(
+                anim = this,
+                repository = repository,
+                settings = settings,
+                category = entry.arguments?.getString("category").orEmpty(),
+                onBack = { navController.popBackStack() },
+            )
+        }
         composable("emojikeywords") {
             SettingsScreen(
                 stringResource(R.string.home_screen_emoji_keywords_title),

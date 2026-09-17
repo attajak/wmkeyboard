@@ -78,6 +78,8 @@ internal object SettingsRoutes {
         "backup/auto",
         "backup/contents",
         "customdictionaries",
+        "emojicategories",
+        "emojiorder/{category}",
         "emojikeywords",
         "blacklist",
         "learnedcorrections",

@@ -120,6 +120,7 @@ import kotlinx.coroutines.withContext
 import androidx.compose.material.icons.outlined.Gesture
 import androidx.compose.material.icons.outlined.Password
 import androidx.compose.material.icons.outlined.Lightbulb
+import androidx.compose.material.icons.outlined.Sort
 import androidx.compose.material.icons.outlined.Spellcheck
 import androidx.compose.material.icons.outlined.Shortcut
 import androidx.compose.material.icons.outlined.Preview
@@ -487,6 +488,7 @@ internal object SettingsRouteIcons {
         "modes" to { Icons.Outlined.Tune },
         "emoji" to { Icons.Outlined.EmojiEmotions },
         "emoji/panel" to { Icons.Outlined.GridView },
+        "emojicategories" to { Icons.Outlined.Sort },
         "emojikeywords" to { Icons.Outlined.EmojiEmotions },
         "clipboard" to { Icons.Outlined.ContentPaste },
         "voice" to { Icons.Outlined.Mic },
