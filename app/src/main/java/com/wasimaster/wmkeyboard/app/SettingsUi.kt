@@ -646,17 +646,46 @@ internal val LocalScreenReveal = compositionLocalOf<ScreenReveal?> { null }
 @Composable
 internal fun rememberGroupRevealed(rowCount: Int): Boolean {
     val reveal = LocalScreenReveal.current ?: return true
-    val queuePlace = remember {
-        when {
-            reveal.isSettled -> null
-            reveal.claimedRows < EagerRowBudget -> {
-                reveal.claimedRows += rowCount
-                null
-            }
-            else -> reveal.deferredCount++
-        }
-    }
+    val queuePlace = remember { reveal.claimGroup(rowCount) }
     return queuePlace == null || reveal.wave > queuePlace
+}
+
+/**
+ * Whether a group of [rowCount] rows joins the entrance or the queue, moving
+ * the ledger on for it: null to compose now, otherwise the place in the queue
+ * to wait in.
+ *
+ * Three rules, in this order:
+ *
+ * - **The first group always composes**, however big it is. A screen whose
+ *   first group is larger than the whole budget would otherwise open as
+ *   nothing but skeletons, which is the failure the budget exists to prevent.
+ * - **Once one group has queued, every later group queues too**, however
+ *   small. Letting a small group in behind a deferred one fills the page
+ *   around the gap the deferred one left rather than top to bottom.
+ * - Otherwise a group composes only if it **fits** in what is left of the
+ *   budget.
+ *
+ * That last rule is the whole point of the split. Testing the running total on
+ * its own — `claimedRows < EagerRowBudget` — admitted a group *whole* whenever
+ * everything before it was under the line, so one group bigger than the budget
+ * sailed straight through and the budget never bit. The mode editor's second
+ * group is eighteen rows of choice controls, reorderable lists and a flow row;
+ * it was composing in the very frame the entrance had to draw in, and measured
+ * 250-350 ms of main-thread work on a mid-range phone. That swallowed the
+ * entrance whole, and every shared-element flight riding on it with it.
+ *
+ * Pure, and public to its module, so [ScreenRevealTest] can pin the rules
+ * without a composition.
+ */
+internal fun ScreenReveal.claimGroup(rowCount: Int): Int? = when {
+    isSettled -> null
+    deferredCount > 0 -> deferredCount++
+    claimedRows == 0 || claimedRows + rowCount <= EagerRowBudget -> {
+        claimedRows += rowCount
+        null
+    }
+    else -> deferredCount++
 }
 
 /**

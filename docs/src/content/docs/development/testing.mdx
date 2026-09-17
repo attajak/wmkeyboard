@@ -77,6 +77,14 @@ When something breaks while you're testing by hand, check <SettingsPath path="Ab
 
 The screen's own intro line is exact about what's in it: "The keyboard never records what you type." Call sites pass what happened, never what you typed, which is what makes the report safe to paste into an issue without reading it line by line first. There's also an opt-in **Include the system log** toggle, off by default, that adds this process's own logcat output, meaning everything the app's libraries printed rather than only what the keyboard chose to record. Turn it on for a hard-to-reproduce bug. Leave it off otherwise, since the keyboard doesn't control what ends up in it.
 
+## Profiling a slow frame
+
+Release builds carry `<profileable android:shell="true" />`, so `adb shell am profile` and `simpleperf` attach to whatever build is actually on the phone. Without it the shell refuses with *"not debuggable, and not profileable by shell"*, and the only way to see inside a frame is a debug build — which is not the build anyone is running, and whose timings are not the ones to trust. It grants the shell user nothing else: no debugger, no `run-as`, no access to app data.
+
+For the cheaper question of *whether* a frame was late, `adb shell dumpsys gfxinfo com.wasimaster.wmkeyboard framestats` prints the last 120 frames as CSV. Subtract `IntendedVsync` from `FrameCompleted` for the frame's own cost, and compare consecutive `IntendedVsync` values: a gap much wider than one refresh interval is dropped frames, which is what a stutter actually is. `reset` before the interaction and read it straight after.
+
+To see where a long frame went, `adb shell atrace --async_start view gfx sched`, do the thing, then `--async_stop`. Compose runs its measure and layout pass from `AndroidComposeView.dispatchDraw`, so a screen that is slow to compose shows up as one enormous `Record View#draw()` rather than under measure or layout, which is the opposite of where you would look first.
+
 ## Details & edge cases
 
 - **The unit-test task name is flavor-specific, not module-specific.** `testFullDebugUnitTest` runs against the `full` flavor's dependency set (ML Kit, Whisper, and the rest). If you're chasing a bug that only reproduces in the `lite` build, you need `testLiteDebugUnitTest`, not a different module scope.

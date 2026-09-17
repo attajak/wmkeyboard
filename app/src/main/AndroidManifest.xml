@@ -147,6 +147,18 @@
         android:theme="@style/Theme.WMKeyboard">
 
         <!--
+             Lets `adb shell am profile` and simpleperf attach to a release
+             build. Without it the shell refuses ("not debuggable, and not
+             profileable by shell"), so the only way to find out where a slow
+             frame goes is to build a debug APK — which is not the thing the
+             user is running, and whose timings are not the ones to trust.
+             Grants the shell user nothing else: no debugger, no run-as, no
+             access to app data. Ignored below API 29.
+        -->
+        <profileable
+            android:shell="true" />
+
+        <!--
              Play-channel builds use the unbundled ML Kit artifacts (see
              :feature:ime), whose models Play services downloads on demand.
              This line asks Play to fetch the OCR and barcode models at
