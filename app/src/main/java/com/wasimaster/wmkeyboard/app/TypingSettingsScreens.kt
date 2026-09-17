@@ -79,6 +79,7 @@ import com.wasimaster.wmkeyboard.core.settings.GlideLookAhead
 import com.wasimaster.wmkeyboard.core.settings.GlidePreviewSteadiness
 import com.wasimaster.wmkeyboard.core.settings.GlideSandbox
 import com.wasimaster.wmkeyboard.core.settings.GlideVocabulary
+import com.wasimaster.wmkeyboard.core.settings.OctopusDuringGlide
 import com.wasimaster.wmkeyboard.core.settings.OctopusFlickSensitivity
 import com.wasimaster.wmkeyboard.core.settings.OctopusPlacement
 import com.wasimaster.wmkeyboard.core.settings.OctopusSettings
@@ -1096,6 +1097,22 @@ internal fun TypingOctopusSettings(
                     selected = octopus.kinds,
                     default = SettingsDefaults.octopus.kinds,
                 ) { scope.launch { repository.setOctopusKinds(it) } }
+            }
+            // Hidden on a board that does not glide: it is a question about a
+            // surface that never appears there.
+            if (settings.gestureTyping) {
+                item {
+                    ChoiceSetting(
+                        R.string.typing_octopus_glide_title,
+                        subtitle = stringResource(R.string.typing_octopus_glide_subtitle),
+                        info = stringResource(R.string.typing_octopus_glide_info),
+                        options = OctopusDuringGlide.entries.map {
+                            it to stringResource(it.labelRes)
+                        },
+                        selected = octopus.duringGlide,
+                        default = SettingsDefaults.octopus.duringGlide,
+                    ) { scope.launch { repository.setOctopusDuringGlide(it) } }
+                }
             }
             item {
                 ToggleSetting(

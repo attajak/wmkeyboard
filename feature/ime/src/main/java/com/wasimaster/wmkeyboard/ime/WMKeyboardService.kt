@@ -221,6 +221,7 @@ import com.wasimaster.wmkeyboard.core.tools.PhotoBackgroundManager
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.theme.BackgroundBitmapCache
 import com.wasimaster.wmkeyboard.core.settings.ModeField
+import com.wasimaster.wmkeyboard.core.settings.OctopusDuringGlide
 import com.wasimaster.wmkeyboard.core.settings.OneHandedMode
 import com.wasimaster.wmkeyboard.core.settings.OneHandedSide
 import com.wasimaster.wmkeyboard.core.plugins.PluginEvent
@@ -1268,6 +1269,13 @@ open class WMKeyboardService : InputMethodService() {
      * once a preview frame. Cleared in [clearGlidePreview]. Main thread only.
      */
     private val glideExpansionCache = HashMap<String, GlideExpansion?>()
+    /**
+     * The stroke's next-word board and the reading it was built for, under
+     * [OctopusDuringGlide.NEXT_WORD] (#166). One engine query per reading
+     * rather than one per preview frame; cleared in [clearGlidePreview], so it
+     * never outlives the stroke that filled it. Main thread only.
+     */
+    private var glideNextWordBoard: Pair<String, OctopusBoard>? = null
     /**
      * Every word in Android's personal dictionary, for
      * [SuggestionStripSettings.useSystemDictionary] (#45). Handed to
@@ -13020,9 +13028,33 @@ open class WMKeyboardService : InputMethodService() {
      * completion source before it can join in.
      */
     /**
-     * The words to float over the keys while a stroke is still being drawn —
-     * Mokhyy's idea on discussion #102, that the keys should update live the
-     * way the strip already does.
+     * The words to float over the keys while a stroke is still being drawn, or
+     * nothing, as [OctopusSettings.duringGlide] says (#166).
+     *
+     * The stroke's board and the buffer's board answer different questions and
+     * now have different levers. This one picks between three answers; the
+     * board published at the *lift* is not its business and never changes.
+     */
+    // Internal rather than private for `OctopusGlideKindsTest`: the gates below
+    // are settings the stroke has to read, and the decode that would reach them
+    // through `onGesturePreview` needs a loaded engine this module cannot build.
+    internal suspend fun octopusForGlide(
+        state: KeyboardUiState,
+        words: List<String>,
+    ): OctopusBoard {
+        val octopus = state.settings.octopus
+        if (!octopus.enabled || words.isEmpty()) return emptyMap()
+        if (!state.allowsTypingIntelligence) return emptyMap()
+        return when (octopus.duringGlide) {
+            OctopusDuringGlide.NOTHING -> emptyMap()
+            OctopusDuringGlide.ALTERNATES -> glideAlternateOctopus(state, words)
+            OctopusDuringGlide.NEXT_WORD -> glideNextWordOctopus(state, words.first())
+        }
+    }
+
+    /**
+     * The alternates the decoder is still holding — Mokhyy's idea on discussion
+     * #102, that the keys should update live the way the strip already does.
      *
      * The rule stays the one sentence it is when idle: the word over a key is
      * the one you reach by going there next. Mid-stroke the buffer is the
@@ -13036,16 +13068,14 @@ open class WMKeyboardService : InputMethodService() {
      * as it shares the leader's spelling — which is what makes this exact
      * rather than an approximation of a number the beam does not report.
      */
-    // Internal rather than private for `OctopusGlideKindsTest`: the gates below
-    // are settings the stroke has to read, and the decode that would reach them
-    // through `onGesturePreview` needs a loaded engine this module cannot build.
-    internal fun octopusForGlide(
+    private fun glideAlternateOctopus(
         state: KeyboardUiState,
         words: List<String>,
     ): OctopusBoard {
         val octopus = state.settings.octopus
-        if (!octopus.enabled || words.size < 2) return emptyMap()
-        if (!state.allowsTypingIntelligence) return emptyMap()
+        // One reading is no alternates, and the leader itself is the word the
+        // lift would type — the strip and the pill are already saying so.
+        if (words.size < 2) return emptyMap()
         // What may appear applies to the stroke too (#209). Every alternate
         // here carries on the word the finger is drawing, so they are
         // completions by the same definition the idle board uses — and a user
@@ -13074,11 +13104,57 @@ open class WMKeyboardService : InputMethodService() {
         ).toOctopusBoard()
     }
 
+    /**
+     * The next-word board for a stroke still being drawn: what would follow
+     * [leader], hung off the key that starts it (#166).
+     *
+     * The leading reading is handed in as the previous word, which is the whole
+     * idea — the offer for the word *after* this one arrives while the finger
+     * is still drawing this one, so it can be flicked without the look and the
+     * reach the strip's own next-word offer costs. At the lift the same
+     * prediction is what [nextWordOctopus] publishes, so the board does not
+     * flicker or change its mind on a successful stroke: it simply stops being
+     * a guess.
+     *
+     * Memoised on the leader for the life of the stroke. A preview arrives
+     * every few samples and the leader changes a handful of times across a
+     * word, so without this the engine would be asked the same question thirty
+     * times a stroke; with it, once per reading. [clearGlidePreview] drops the
+     * cache, which is every exit from a stroke.
+     */
+    private suspend fun glideNextWordOctopus(
+        state: KeyboardUiState,
+        leader: String,
+    ): OctopusBoard {
+        // Asked before the cache, because the answer is empty either way and a
+        // board that forbids next words must not be handed a stale one after
+        // the setting is changed mid-stroke.
+        if (OctopusKind.NEXT_WORD !in state.settings.octopus.kinds) return emptyMap()
+        glideNextWordBoard?.let { (word, board) -> if (word == leader) return board }
+        val board = withContext(Dispatchers.Default) {
+            octopusFor(
+                state,
+                typed = "",
+                keys = null,
+                pool = emptyList(),
+                // The stroke's own word takes the place of the last committed
+                // one, and the real previous word slides back a place, so the
+                // trigram context is the one the lift will have.
+                previous = leader,
+                previous2 = previousWord,
+            )
+        }
+        glideNextWordBoard = leader to board
+        return board
+    }
+
     private fun octopusFor(
         state: KeyboardUiState,
         typed: String,
         keys: KeySets?,
         pool: List<String>,
+        previous: String? = previousWord,
+        previous2: String? = previousWord2,
     ): OctopusBoard {
         val octopus = state.settings.octopus
         if (!octopus.enabled || !state.allowsTypingIntelligence) return emptyMap()
@@ -13089,8 +13165,8 @@ open class WMKeyboardService : InputMethodService() {
         if (anchors.isEmpty()) return emptyMap()
         return engine.octopusWords(
             composing = typed,
-            previousWord = previousWord,
-            previousWord2 = previousWord2,
+            previousWord = previous,
+            previousWord2 = previous2,
             keys = keys,
             limit = octopus.density,
             kinds = octopus.kinds,
@@ -15060,6 +15136,7 @@ open class WMKeyboardService : InputMethodService() {
         // word, or its first reading would be judged against a stranger.
         previewGate.reset()
         glideExpansionCache.clear()
+        glideNextWordBoard = null
         _uiState.update { state ->
             state.copy(
                 glideWord = null,

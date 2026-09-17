@@ -66,6 +66,57 @@ enum class OctopusFlickSensitivity(
 }
 
 /**
+ * What the keys carry while a glide stroke is being drawn (issue #166).
+ *
+ * The board answers a different question under a moving finger than it does
+ * under a still one, and until now it had no way to be told so: silencing the
+ * stroke meant switching completions off in [OctopusSettings.kinds], which also
+ * emptied the keys while tap typing. Two surfaces, one lever. This is the
+ * stroke's own lever, and [OctopusSettings.kinds] is left to say what a *typed*
+ * buffer may offer.
+ *
+ * Whatever is chosen here, the board at the lift is unchanged: a finished glide
+ * publishes the next-word offer, because the word it was reading has landed.
+ */
+enum class OctopusDuringGlide(@StringRes val labelRes: Int) {
+    /**
+     * Nothing floats until the finger lifts. The default, and what the glide
+     * typer who asked for this wanted: mid-stroke a completion cannot be taken
+     * and a correction cannot be judged, so the words are movement under a
+     * moving finger and nothing else.
+     */
+    NOTHING(R.string.core_settings_octopus_glide_nothing_label),
+
+    /**
+     * The readings the decoder is still holding, each above the key that
+     * reaches it: carry on to the P and `hello` becomes `help`. The one thing
+     * on the keyboard that can *show the way* to an alternate rather than list
+     * it, and what the board did before this setting existed.
+     *
+     * Still subject to [OctopusSettings.kinds]: these carry on the word being
+     * drawn, so they are completions, and a board that forbids completions
+     * stays bare (#209).
+     */
+    ALTERNATES(R.string.core_settings_octopus_glide_alternates_label),
+
+    /**
+     * What would follow the word the stroke is reading, above the key that
+     * starts it — the next word, offered before the current one has landed.
+     *
+     * For a glide typer this is the point of the whole feature: a next-word
+     * offer that arrives while the finger is still moving can be flicked
+     * without breaking rhythm, where the strip's own next-word offer costs a
+     * look and a reach. The prediction is conditioned on the stroke's leading
+     * reading, so it moves as that reading moves and then becomes, unchanged,
+     * the board the lift publishes.
+     *
+     * Subject to [OctopusSettings.kinds] the same way: a board that forbids
+     * next words stays bare.
+     */
+    NEXT_WORD(R.string.core_settings_octopus_glide_next_word_label),
+}
+
+/**
  * The octopus: a predicted word drawn over the key you would press next to
  * reach it, picked by flicking up on that key (discussion #102).
  *
@@ -89,6 +140,14 @@ data class OctopusSettings(
     val density: Int = SPARSE_DENSITY,
     /** Which kinds of prediction the user allows onto the keys. */
     val kinds: Set<OctopusKind> = OctopusKind.entries.toSet(),
+    /**
+     * What the keys carry while a glide is being drawn, which is a separate
+     * question from [kinds] (#166). [OctopusDuringGlide.NOTHING] by default:
+     * the stroke's own board is the one a glide typer reported as clutter, and
+     * the board that matters to them is the next-word one at the lift, which
+     * this setting does not touch.
+     */
+    val duringGlide: OctopusDuringGlide = OctopusDuringGlide.NOTHING,
     /** A flick up off a key commits its word. */
     val flickCommits: Boolean = true,
     /** Tapping the floating word itself commits it. */

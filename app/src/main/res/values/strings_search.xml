@@ -45,6 +45,7 @@
     -->
     <!-- Hidden search keywords. Never drawn; see SettingsSearchKeywords.kt. -->
     <string name="search_kw_octopus">octopus blackberry z10 bb10 inletter</string>
+    <string name="search_kw_octopus_glide">octopus glide gesture next word during</string>
     <string name="search_kw_about_diagnostics">log logcat debug troubleshoot</string>
     <string name="search_kw_about_launcher_name">launcher label rename drawer</string>
     <string name="search_kw_about_licences">credits attribution third party</string>

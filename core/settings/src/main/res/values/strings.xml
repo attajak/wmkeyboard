@@ -217,6 +217,10 @@
     <string name="core_settings_octopus_placement_float_label">Above the key</string>
     <string name="core_settings_octopus_placement_strip_label">Own lane</string>
     <string name="core_settings_octopus_placement_in_key_label">Inside the key</string>
+    <!-- Octopus: what the keys carry while a glide is being drawn (#166). -->
+    <string name="core_settings_octopus_glide_nothing_label">Nothing</string>
+    <string name="core_settings_octopus_glide_alternates_label">Other readings</string>
+    <string name="core_settings_octopus_glide_next_word_label">The next word</string>
     <!-- Octopus: how readily an up-flick picks a word rather than starting a glide. -->
     <string name="core_settings_octopus_flick_strict_label">Strict</string>
     <string name="core_settings_octopus_flick_balanced_label">Balanced</string>

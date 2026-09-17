@@ -157,6 +157,7 @@ internal val SettingsSearchKeywords: Map<Int, Int> = buildMap {
     put(R.string.typing_language_detection_title, R.string.search_kw_typing_language_detection)
     put(R.string.typing_letter_swipe_action_title, R.string.search_kw_typing_letter_swipe_action)
     put(R.string.typing_octopus_enabled_title, R.string.search_kw_octopus)
+    put(R.string.typing_octopus_glide_title, R.string.search_kw_octopus_glide)
     put(R.string.typing_personal_dictionary_title, R.string.search_kw_typing_personal_dictionary)
     put(R.string.typing_shift_enter_title, R.string.search_kw_typing_shift_enter)
     put(R.string.typing_smart_currency_title, R.string.search_kw_typing_smart_currency)
