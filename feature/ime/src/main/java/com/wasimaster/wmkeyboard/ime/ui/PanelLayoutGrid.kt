@@ -216,6 +216,7 @@ private fun PanelKeyGrid(
     val slots = remember(
         spec, palette, settings, fontScale,
         state.shiftState, state.modifiers, state.effectiveEnterAction,
+        state.enterAction,
         state.enterActionLabel, state.language, state.script,
         state.composer.isClusterShaping, state.vowelForm, state.layoutId,
         state.activeFancyStyleId, state.selectingText,

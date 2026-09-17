@@ -91,6 +91,8 @@ A message box that asks for a line break gets one, even when the app also watche
 
 **Shift and Enter type a new line** (on by default) lets you press <KeyCap>Shift</KeyCap> then <KeyCap>Enter</KeyCap>, or hold Shift on a physical keyboard, to force a line break in a field that would otherwise send or search. The key itself changes to the newline symbol while Shift is armed, so it never promises a Send it isn't about to do. Only a Shift you pressed yourself counts. The one-shot Shift that auto-capitalize arms at the start of a message is ignored, so the first line of a chat still sends normally, and Caps Lock is ignored too.
 
+While that setting is on, the key carries both things at once: whichever one it's about to do fills the key, and the other sits small in the top right corner, the way a letter's alternate does. So a Send field shows the paper plane with a newline symbol in the corner, and arming Shift swaps the two over — the newline fills the key and the paper plane moves to the corner. Send never leaves the keyboard; it just changes places.
+
 There's a second way in that doesn't need the setting at all: in any field where Enter has taken on the app's own action, press and hold the key. The popup that opens carries a newline entry, the same as Gboard's. Tap it and you get a line break, whatever the app declared. This one is always available and it never sends.
 
 ## Number row and numerals
@@ -176,7 +178,7 @@ A handful of related settings live elsewhere:
 
 - **A hold-shortcut on A/C/X/V/Z/Y is appended to the end of that letter's accent popup, not swapped in for it.** With the Copy hold shortcut on, `c` still offers `'çć` first, then Copy. Turn on **Action first** to move the shortcut to the front instead.
 - **Exiting Caps Lock only takes one tap.** The double-tap window matters only on the way *into* Caps Lock. Any single tap while Shift or Caps Lock is already active turns it off.
-- **The Enter key never lies about what it's about to do.** With Shift + Enter's newline override active, the key visibly redraws to the newline symbol first. It doesn't swap behavior behind an unchanged icon.
+- **The Enter key never lies about what it's about to do.** With Shift + Enter's newline override active, the key visibly redraws to the newline symbol first. It doesn't swap behavior behind an unchanged icon. The action it stepped off doesn't vanish either — it moves to the key's corner, so you can see both what Enter does now and what letting the Shift go gives you back.
 - **A line break from the popup is a real one, even in apps that read Enter themselves.** Some chat apps watch for the Enter key press and send on it regardless of what the keyboard meant. The popup entry types the character straight into the field instead of pressing a key, so there's nothing for the app to catch. Shift + Enter works the same way, and so does plain Enter in a message box that asked for a line break.
 - **The long-press delay has one home.** It's the Key press → Timing slider (100–800&nbsp;ms). Accessibility → Touch shows the current value and links to it.
 - **Number row height is independent of key height.** Shrinking the digit row doesn't touch the letter keys below it, so you can get quick number access without paying for a full extra row of keyboard height.

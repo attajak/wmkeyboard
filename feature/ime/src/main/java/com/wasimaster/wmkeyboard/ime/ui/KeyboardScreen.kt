@@ -718,6 +718,38 @@ private fun rememberTouchExploration(): Boolean {
 internal fun enterActionIcon(action: EnterAction): ImageVector = IconDefaults.forEnterAction(action)
 
 /**
+ * The icon slot for the Enter key's corner hint: the one thing the key can do
+ * that its face is *not* showing, so the swap a shift makes is visible before
+ * the user makes it.
+ *
+ * With [LayoutBehaviorSettings.shiftEnterNewline] on, a shift the user put up
+ * turns a Send (or Search, Go, Done…) key into a line break — which is honest,
+ * and was also the whole of the answer: the action the field asked for simply
+ * vanished off the board while the shift was up, and people read that as the
+ * keyboard failing to offer Send at all (issue #107). So the two trade places
+ * instead of one replacing the other: the face draws what Enter does now, the
+ * corner keeps the other one in view.
+ *
+ * Null wherever there is no second thing to draw — the setting is off, the
+ * field declared no action of its own, or the action is [EnterAction.CUSTOM]
+ * and the shift has the key (an app's own wording is text, and the corner lane
+ * is a glyph lane; unshifted the pair still works, since the face is the
+ * wording and the corner the break).
+ */
+private fun enterHintSlot(state: KeyboardUiState): String? {
+    if (!state.settings.layoutBehavior.shiftEnterNewline) return null
+    val field = state.enterAction
+    if (field == EnterAction.DEFAULT) return null
+    return if (state.effectiveEnterAction == EnterAction.DEFAULT) {
+        // The shift has the key: keep the field's own action in the corner.
+        IconDefaults.enterActionSlot(field)
+    } else {
+        // The key is doing the field's action, so the corner offers the break.
+        IconSlots.KEY_ENTER
+    }
+}
+
+/**
  * What a screen reader says for one key, before it is worded.
  *
  * Held as a resource id rather than as finished text so that [keyVisual] stays
@@ -11537,6 +11569,14 @@ internal data class KeyVisual(
     val iconActive: Boolean,
     /** Enter with an app-supplied actionLabel draws that wording, not an icon. */
     val enterLabel: String?,
+    /**
+     * The corner glyph on the Enter key: the *other* thing it can do right now
+     * — the line break a shift would commit, or, once that shift is up and the
+     * key has become the line break, the field's own action. Null on every
+     * other key, and on Enter wherever there is no second thing to show.
+     * See [enterHintSlot].
+     */
+    val enterHint: String? = null,
     /** Spacebar: its label, and whether the language-cycle arrows flank it. */
     val spaceText: String,
     val spaceArrows: Boolean,
@@ -11735,6 +11775,7 @@ internal fun keyVisual(
         enterLabel = state.enterActionLabel?.takeIf {
             action == KeyAction.Enter && state.effectiveEnterAction == EnterAction.CUSTOM
         },
+        enterHint = if (action == KeyAction.Enter) enterHintSlot(state) else null,
         spaceText = if (action == KeyAction.Space) spacebarText(state) else "",
         spaceArrows = action == KeyAction.Space && spacebarArrowsShown(state),
         borderColor = override?.border?.let { Color(it.toInt()) },
@@ -11804,6 +11845,11 @@ private fun rememberKeyGrid(
     return remember(
         bodyRows, extraRow, layout, palette, settings, gridWeight,
         state.shiftState, state.modifiers, state.effectiveEnterAction,
+        // The field's own action as well as the live one: the Enter key's
+        // corner draws whichever of the two its face is not (see
+        // [enterHintSlot]), so a board keyed on the live one alone kept a
+        // stale corner through the shift press that swapped them.
+        state.enterAction,
         state.enterActionLabel, state.language, state.script,
         state.composer.isClusterShaping, state.vowelForm, state.layoutId,
         // The fancy style rewrites every letter label via displayLabel. The
@@ -17539,23 +17585,53 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
         // It is clipped to one line so a long label cannot blow up the row.
         // CUSTOM is also the one enter action with no icon slot, for the same
         // reason: there is nothing to replace.
-        KeyAction.Enter -> if (visual.enterLabel != null) {
-            Text(
-                text = visual.enterLabel,
-                fontSize = (13 * fontScale).sp,
-                color = contentColor,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 4.dp),
-            )
-        } else {
-            ActionKeyIcon(
-                namedIcon,
-                visual.iconSlot ?: IconSlots.KEY_ENTER,
-                contentDescription = stringResource(R.string.ime_enter_default),
-                tint = contentColor,
-            )
+        KeyAction.Enter -> Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (visual.enterLabel != null) {
+                Text(
+                    text = visual.enterLabel,
+                    fontSize = (13 * fontScale).sp,
+                    color = contentColor,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                )
+            } else {
+                ActionKeyIcon(
+                    namedIcon,
+                    visual.iconSlot ?: IconSlots.KEY_ENTER,
+                    contentDescription = stringResource(R.string.ime_enter_default),
+                    tint = contentColor,
+                )
+            }
+            // The other thing this key does right now, drawn small in the same
+            // corner lane a letter puts its alternate in (see [enterHintSlot]).
+            // It answers to no hint switch: it is not an annotation of a hold
+            // but half of a pair with the face below it, and the pair is the
+            // whole point — a shift swaps them over rather than making the
+            // field's action disappear (issue #107). `hideHint` still silences
+            // it, since that is an author asking for a clean corner, and the
+            // face still names whatever Enter does.
+            val hint = if (key.hideHint) null else visual.enterHint
+            if (hint != null) {
+                SlotIcon(
+                    hint,
+                    contentDescription = null,
+                    tint = visual.hintColor ?: contentColor.copy(alpha = 0.55f),
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(
+                            top = settings.layoutBehavior.hintOffsetDp.dp,
+                            end = HintEndPadding,
+                        )
+                        .size(
+                            (HintIconDp * fontScale * settings.layoutBehavior.hintFontScale).dp,
+                        ),
+                )
+            }
         }
         // The enter glyph, never one of the action icons: this key types a line
         // break whatever the field declares, and drawing a paper plane on it
