@@ -82,12 +82,13 @@ The **Include in export** page is thirteen toggles, top to bottom. Twelve are in
 | Emoji history | Your recent emoji, your favourites and the skin tone of each one | On |
 | Typing statistics | Your daily typing counts and your all-time speed | On |
 | Vocabulary | Your word lists, imported packs and learning progress. Downloaded packs are left out; they can be downloaded again. | On |
+| Swipe style | How you swipe: where your finger lands, the readings you corrected, and the shape you draw each word in | Off |
 
 :::note[These switches are saved]
 They used to be local to the screen, and they're stored settings now, because the automatic backup has to know what to put in a file when you aren't there to tell it. One list drives both: what you tick here is what a hand-made export contains and what an automatic backup contains.
 :::
 
-Sticker packs and icon packs default off because their images make the file larger, not out of any privacy concern. Dictionary and Clipboard default off because they're your personal typing history rather than configuration. Emoji history is personal too, but it defaults on: it's a few hundred bytes, and unlike a word list or a model there's nowhere to download it back from. Add-on repositories carries only the repository addresses you've added, not the addons installed from them. An installed theme already travels inside Themes, and an installed icon pack inside Icon packs.
+Sticker packs and icon packs default off because their images make the file larger, not out of any privacy concern. Dictionary, Clipboard and Swipe style default off because they're your personal typing history rather than configuration; the swipe shapes are filed under the words you drew them for. Emoji history is personal too, but it defaults on: it's a few hundred bytes, and unlike a word list or a model there's nowhere to download it back from. Add-on repositories carries only the repository addresses you've added, not the addons installed from them. An installed theme already travels inside Themes, and an installed icon pack inside Icon packs.
 
 **Export backup** stays disabled until at least one toggle above is on. Tap it to open Android's save dialog. The name takes the form `wmkeyboard-backup-<date>-<time>.wmconfig.json`, timestamped down to the second so repeated exports don't overwrite each other. The file goes wherever you choose, and nothing is uploaded anywhere. Afterward you see one of:
 
@@ -128,6 +129,7 @@ Confirming a current-format import applies each section independently and merges
 | Emoji history | **Replaces**. Recents, use counts, favourites and per-emoji skin tones all come from the file |
 | Typing statistics | **Replaces**. The day-by-day counts and the all-time totals both come from the file |
 | Vocabulary | **Replaces**, but only your own word lists and packs. A downloaded catalogue pack stays put, since the bundle never carried it, and the learning-progress record is written whole |
+| Swipe style | **Replaces**. The finger-position model, the corrected readings and the learned shapes all come from the file |
 
 Settings import is rollback-safe. After writing, the keyboard re-reads its own settings to confirm they still parse, and it undoes the write if they don't. The other sections in the same file still apply even when settings roll back. After a confirmed import you see either "The app restored `<sections>`.", a lowercase comma-separated list of what changed, or "The file has nothing to restore." A rolled-back settings portion appends "The app could not apply the settings. Your settings did not change." A confirmed legacy import instead reports how many settings it restored, or says "The app could not apply that backup. Your settings did not change."
 

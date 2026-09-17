@@ -37,12 +37,13 @@ its own switch:
 | Emoji history | On | Your recent emoji, your favourites and the skin tone you last picked for each |
 | Typing statistics | On | Your daily typing counts and your all-time speed |
 | Vocabulary | On | Your word lists, imported packs and learning progress. Downloaded packs are left out; they can be downloaded again |
+| Swipe style | Off | Where your finger lands when you swipe, the readings you corrected, and the shape you draw each word in |
 
 Sticker packs and icon packs default off because their images make the file
 large, not because there's anything private about them. Turn them on and a
 restore on another phone gets working packs rather than empty shells. The
-personal ones, dictionary and clipboard, default off because they're your
-typing history rather than configuration. Emoji history and typing statistics
+personal ones, dictionary, clipboard and swipe style, default off because
+they're your typing history rather than configuration. Emoji history and typing statistics
 are personal too but default on, since both are small and neither can be
 downloaded again if you lose it. The statistics are counts only, never
 anything you typed.
@@ -86,6 +87,7 @@ more than the in-app dialog's one-line summary suggests:
 | Addon repositories | **Merges.** Incoming addresses are added to your existing list rather than replacing it (duplicates are skipped). |
 | Emoji history, typing statistics | **Replaces.** The counts in the file overwrite the ones on the device. |
 | Vocabulary | **Replaces.** Your own word lists and progress are rebuilt from the file; packs downloaded from the catalogue are untouched, since the bundle never carried them. |
+| Swipe style | **Replaces.** All three files come from the bundle, and a keyboard already running picks them up rather than saving its own copies back over them. |
 
 If the file includes API keys, the dialog warns you before you confirm; see
 [Secrets stay out by default](#secrets-stay-out-by-default) below.

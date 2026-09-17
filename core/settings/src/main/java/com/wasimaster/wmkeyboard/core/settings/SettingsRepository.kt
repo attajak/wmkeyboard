@@ -10067,6 +10067,21 @@ class SettingsRepository(private val context: Context) {
     private val LEARNED_CORRECTIONS_KEY = "learnedCorrections"
     private val TAP_MODEL_KEY = "tapOffsets"
 
+    /**
+     * The three files of the swipe-style section, under the keys they take
+     * inside it. Named rather than pathed so the section survives a file being
+     * renamed or moved, and so a bundle written by a build that had one more of
+     * them still restores the ones this build knows.
+     */
+    private val SWIPE_SECTION_KEYS: Map<String, String> = linkedMapOf(
+        "hand" to HAND_MODEL_FILE,
+        "outcomes" to GLIDE_OUTCOMES_FILE,
+        "shapes" to GLIDE_SHAPES_FILE,
+    )
+
+    /** The key the learned shapes take inside the swipe-style section. */
+    private val SWIPE_SHAPES_KEY = "shapes"
+
     private fun storeFile(relativePath: String) = File(context.filesDir, relativePath)
 
     /** A store's JSON file as an element, or null when it's missing or empty. */
@@ -10381,6 +10396,55 @@ class SettingsRepository(private val context: Context) {
     }.getOrDefault(false)
 
     /**
+     * The swipe-style section: the three stores behind [forgetSwipeStyle], each
+     * under its own key, and none of them when the user has never swiped.
+     *
+     * Embedded verbatim the way every other file-backed section is, so this
+     * repository never has to model a shape store's internals. Bounded without
+     * a cap of its own: the shapes file is the big one, and it holds at most
+     * `GlideShapeStore.MAX_WORDS` words of a few hundred bytes each.
+     */
+    private fun swipeSection(): JsonElement? {
+        val parts = SWIPE_SECTION_KEYS.mapNotNull { (key, path) ->
+            readStore(path)?.let { key to it }
+        }
+        if (parts.isEmpty()) return null
+        return JsonObject(parts.toMap())
+    }
+
+    /**
+     * How many words the swipe-style section has a learned shape for, counted
+     * once across every grid they were drawn on: the same word in portrait and
+     * landscape is one word the user has taught, not two.
+     */
+    private fun swipeSectionWordCount(section: JsonElement): Int {
+        val layouts = (section as? JsonObject)
+            ?.get(SWIPE_SHAPES_KEY)?.jsonObject
+            ?.get("layouts")?.jsonObject
+            ?: return 0
+        val words = HashSet<String>()
+        for (layout in layouts.values) {
+            (layout as? JsonObject)?.let { words.addAll(it.keys) }
+        }
+        return words.size
+    }
+
+    /**
+     * Restores the swipe-style section, writing each store's file whole. The
+     * caller signals with the swipe-style version rather than the lexicon's:
+     * the lexicon signal also empties the keyboard's learning buffer, and how
+     * the user draws says nothing about the words waiting there.
+     */
+    private fun restoreSwipeStyle(section: JsonObject): Boolean = runCatching {
+        var any = false
+        for ((key, path) in SWIPE_SECTION_KEYS) {
+            val element = section[key] as? JsonObject ?: continue
+            if (writeStore(path, element)) any = true
+        }
+        any
+    }.getOrDefault(false)
+
+    /**
      * Restores the addon repository list, merging rather than replacing.
      *
      * Merging because the two sides are both just bookmarks: a repository the
@@ -10545,6 +10609,9 @@ class SettingsRepository(private val context: Context) {
             // on another device.
             readStore("addons/repos.json")?.let { out[ConfigBackup.Section.ADDONS] = it }
         }
+        if (ConfigBackup.Section.SWIPE in sections) {
+            swipeSection()?.let { out[ConfigBackup.Section.SWIPE] = it }
+        }
         return ConfigBackup.encode(appVersion, appVersionName, out)
     }
 
@@ -10572,6 +10639,11 @@ class SettingsRepository(private val context: Context) {
                     // Words with a learning record; the packs ride along uncounted.
                     ConfigBackup.Section.VOCAB ->
                         element.jsonObject["progress"]?.jsonObject?.get("words")?.jsonObject?.size ?: 0
+                    // Words with a learned shape, counted once however many
+                    // grids they were drawn on. The hand model and the
+                    // corrected readings ride along uncounted: neither is a
+                    // number a user would recognise.
+                    ConfigBackup.Section.SWIPE -> swipeSectionWordCount(element)
                 }
             }.getOrDefault(0)
             counts[section] = count
@@ -10695,6 +10767,12 @@ class SettingsRepository(private val context: Context) {
 
         (parsed.sections[ConfigBackup.Section.VOCAB] as? JsonObject)?.let { obj ->
             if (restoreVocab(obj)) restored.add(ConfigBackup.Section.VOCAB)
+        }
+        (parsed.sections[ConfigBackup.Section.SWIPE] as? JsonObject)?.let { obj ->
+            if (restoreSwipeStyle(obj)) {
+                restored.add(ConfigBackup.Section.SWIPE)
+                bumpSwipeStyleVersion()
+            }
         }
         return ConfigImportResult.Applied(restored, settingsFailed)
     }
@@ -11418,8 +11496,17 @@ class SettingsRepository(private val context: Context) {
      */
     suspend fun forgetSwipeStyle() {
         for (path in SWIPE_STYLE_FILES) runCatching { File(context.filesDir, path).delete() }
-        editPrefs { it[GESTURE_SWIPE_STYLE_VERSION] = (it[GESTURE_SWIPE_STYLE_VERSION] ?: 0) + 1 }
+        bumpSwipeStyleVersion()
     }
+
+    /**
+     * Says the swipe-style files were written from outside the keyboard, so a
+     * running one re-reads them. Without it a restore lands under live
+     * in-memory copies that write themselves back over it at the end of the
+     * next field, exactly as [bumpEmojiUsageVersion] exists to stop.
+     */
+    suspend fun bumpSwipeStyleVersion() =
+        editPrefs { it[GESTURE_SWIPE_STYLE_VERSION] = (it[GESTURE_SWIPE_STYLE_VERSION] ?: 0) + 1 }
 
     suspend fun setGestureAutoSpace(value: Boolean) =
         editPrefs { it[GESTURE_AUTO_SPACE] = value }
