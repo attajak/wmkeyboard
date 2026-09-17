@@ -26,13 +26,16 @@ import androidx.compose.material.icons.outlined.Accessibility
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Air
 import androidx.compose.material.icons.outlined.AlternateEmail
+import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.ArrowDownward
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.ArrowUpward
 import androidx.compose.material.icons.outlined.AspectRatio
 import androidx.compose.material.icons.outlined.AudioFile
 import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.BatterySaver
 import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material.icons.outlined.Calculate
 import androidx.compose.material.icons.outlined.CalendarMonth
@@ -71,6 +74,7 @@ import androidx.compose.material.icons.outlined.EmojiObjects
 import androidx.compose.material.icons.outlined.EmojiPeople
 import androidx.compose.material.icons.outlined.EmojiSymbols
 import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.Extension
 import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.FileDownload
@@ -84,6 +88,7 @@ import androidx.compose.material.icons.outlined.FlashOn
 import androidx.compose.material.icons.outlined.FlashlightOn
 import androidx.compose.material.icons.outlined.Flight
 import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.FormatShapes
 import androidx.compose.material.icons.outlined.Forum
 import androidx.compose.material.icons.outlined.Fullscreen
 import androidx.compose.material.icons.outlined.Functions
@@ -117,6 +122,7 @@ import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Numbers
+import androidx.compose.material.icons.outlined.OpenWith
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Password
 import androidx.compose.material.icons.outlined.Pause
@@ -147,6 +153,7 @@ import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.SkipNext
 import androidx.compose.material.icons.outlined.SkipPrevious
+import androidx.compose.material.icons.outlined.SmartButton
 import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material.icons.outlined.SpaceBar
 import androidx.compose.material.icons.outlined.Speed
@@ -161,6 +168,7 @@ import androidx.compose.material.icons.outlined.SwapHoriz
 import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material.icons.outlined.Terminal
 import androidx.compose.material.icons.outlined.TextFields
+import androidx.compose.material.icons.outlined.TextFormat
 import androidx.compose.material.icons.outlined.Thermostat
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.TimerOff
@@ -204,6 +212,7 @@ object BuiltinIcons {
         "Add" to Icons.Outlined.Add,
         "Air" to Icons.Outlined.Air,
         "AlternateEmail" to Icons.Outlined.AlternateEmail,
+        "Apps" to Icons.Outlined.Apps,
         "ArrowBack" to Icons.AutoMirrored.Outlined.ArrowBack,
         "ArrowDownward" to Icons.Outlined.ArrowDownward,
         "ArrowDropDown" to Icons.Outlined.ArrowDropDown,
@@ -213,8 +222,10 @@ object BuiltinIcons {
         "AspectRatio" to Icons.Outlined.AspectRatio,
         "AudioFile" to Icons.Outlined.AudioFile,
         "AutoAwesome" to Icons.Outlined.AutoAwesome,
+        "AutoStories" to Icons.Outlined.AutoStories,
         "Backspace" to Icons.AutoMirrored.Outlined.Backspace,
         "BarChart" to Icons.Outlined.BarChart,
+        "BatterySaver" to Icons.Outlined.BatterySaver,
         "Bolt" to Icons.Outlined.Bolt,
         "Calculate" to Icons.Outlined.Calculate,
         "CalendarMonth" to Icons.Outlined.CalendarMonth,
@@ -253,6 +264,7 @@ object BuiltinIcons {
         "EmojiPeople" to Icons.Outlined.EmojiPeople,
         "EmojiSymbols" to Icons.Outlined.EmojiSymbols,
         "Explore" to Icons.Outlined.Explore,
+        "Extension" to Icons.Outlined.Extension,
         "FactCheck" to Icons.AutoMirrored.Outlined.FactCheck,
         "Fastfood" to Icons.Outlined.Fastfood,
         "FavoriteBorder" to Icons.Outlined.FavoriteBorder,
@@ -267,6 +279,7 @@ object BuiltinIcons {
         "FlashOn" to Icons.Outlined.FlashOn,
         "Flight" to Icons.Outlined.Flight,
         "Folder" to Icons.Outlined.Folder,
+        "FormatShapes" to Icons.Outlined.FormatShapes,
         "Forum" to Icons.Outlined.Forum,
         "Fullscreen" to Icons.Outlined.Fullscreen,
         "Functions" to Icons.Outlined.Functions,
@@ -309,6 +322,7 @@ object BuiltinIcons {
         "Notifications" to Icons.Outlined.Notifications,
         "Numbers" to Icons.Outlined.Numbers,
         "OpenInNew" to Icons.AutoMirrored.Outlined.OpenInNew,
+        "OpenWith" to Icons.Outlined.OpenWith,
         "Palette" to Icons.Outlined.Palette,
         "Password" to Icons.Outlined.Password,
         "Pause" to Icons.Outlined.Pause,
@@ -341,6 +355,7 @@ object BuiltinIcons {
         "ShoppingCart" to Icons.Outlined.ShoppingCart,
         "SkipNext" to Icons.Outlined.SkipNext,
         "SkipPrevious" to Icons.Outlined.SkipPrevious,
+        "SmartButton" to Icons.Outlined.SmartButton,
         "Smartphone" to Icons.Outlined.Smartphone,
         "SpaceBar" to Icons.Outlined.SpaceBar,
         "Speed" to Icons.Outlined.Speed,
@@ -356,6 +371,7 @@ object BuiltinIcons {
         "SwapVert" to Icons.Outlined.SwapVert,
         "Terminal" to Icons.Outlined.Terminal,
         "TextFields" to Icons.Outlined.TextFields,
+        "TextFormat" to Icons.Outlined.TextFormat,
         "TextSnippet" to Icons.AutoMirrored.Outlined.TextSnippet,
         "Thermostat" to Icons.Outlined.Thermostat,
         "Timer" to Icons.Outlined.Timer,

@@ -76,6 +76,7 @@ object KeyIcons {
         "tab" to Icons.AutoMirrored.Outlined.KeyboardTab,
         "space" to Icons.Outlined.SpaceBar,
         "shift" to KeyboardIcons.Shift,
+        "shift_on" to KeyboardIcons.ShiftFilled,
         "shift_lock" to KeyboardIcons.ShiftLock,
         "undo" to Icons.AutoMirrored.Outlined.Undo,
         "redo" to Icons.AutoMirrored.Outlined.Redo,
@@ -122,6 +123,7 @@ object KeyIcons {
         "light_mode" to Icons.Outlined.LightMode,
         "dark_mode" to Icons.Outlined.DarkMode,
         "highlight" to Icons.Outlined.Highlight,
+        "incognito" to KeyboardIcons.Incognito,
         )
     }
 
@@ -133,6 +135,7 @@ object KeyIcons {
         "caps" to "shift_lock",
         "capslock" to "shift_lock",
         "caps_lock" to "shift_lock",
+        "shift_filled" to "shift_on",
         "up" to "arrow_up",
         "down" to "arrow_down",
         "left" to "arrow_left",
@@ -154,6 +157,20 @@ object KeyIcons {
         "bulb" to "highlight",
         )
     }
+
+    /**
+     * Canonical name → the [aliases] that resolve to it, so the icon picker can
+     * match a search against what a drawing is usually called and not only
+     * against the short name a layout file stores: "clipboard" finds `paste`,
+     * "globe" finds `language` (issue #223).
+     */
+    private val aliasesByCanonical: Map<String, List<String>> by lazy {
+        aliases.entries.groupBy({ it.value }, { it.key })
+    }
+
+    /** The alias names that draw [name], for the picker's search. */
+    fun aliasesFor(name: String): List<String> =
+        aliasesByCanonical[name.trim().lowercase()].orEmpty()
 
     /**
      * The app's own bundled glyphs ([BuiltinIcons]) by lowercased name, so a key

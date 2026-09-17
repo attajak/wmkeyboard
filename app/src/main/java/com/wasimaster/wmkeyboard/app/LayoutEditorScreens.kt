@@ -119,6 +119,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
@@ -155,6 +156,8 @@ import com.wasimaster.wmkeyboard.core.layout.language
 import com.wasimaster.wmkeyboard.core.layout.ModifierKey
 import com.wasimaster.wmkeyboard.core.layout.LayoutSeverity
 import com.wasimaster.wmkeyboard.core.layout.compile
+import com.wasimaster.wmkeyboard.ime.ui.BuiltinIcons
+import com.wasimaster.wmkeyboard.ime.ui.IconDefaults
 import com.wasimaster.wmkeyboard.ime.ui.KeyIcons
 import com.wasimaster.wmkeyboard.ime.ui.textEditIcon
 import com.wasimaster.wmkeyboard.core.layout.GridUnitStep
@@ -4003,7 +4006,9 @@ private fun IconPickRow(@StringRes title: Int, name: String?, onClick: () -> Uni
 /**
  * Picks a key icon from [KeyIcons.pickerEntries]: the key glyphs, then the app's
  * own icons. Searchable by name, and each glyph wears the name a layout file
- * stores, so the picker doubles as the list of names (issue #187).
+ * stores, so the picker doubles as the list of names (issue #187) — searching
+ * also answers to an alias and to the name of the tool that wears the glyph,
+ * which is how anyone looks for one (issue #223).
  */
 @Composable
 private fun KeyIconPickerDialog(
@@ -4018,12 +4023,37 @@ private fun KeyIconPickerDialog(
     val selectedVector = KeyIcons.byName(selected)
     val iconGrid = rememberLazyGridState()
     val iconRail = rememberScrollRailState(iconGrid)
-    val shown = remember(query) {
+    val context = LocalContext.current
+    // What a search matches, beyond the name the layout file stores: the
+    // spaced-out form of a bundled name ("SelectAll" → "Select all"), the
+    // aliases that draw the same glyph, and the names of the tools that wear
+    // it. A key glyph is stored under a short name — the clipboard drawing is
+    // `paste`, selection mode's is `SelectAll` — so searching for the tool was
+    // answered with "no match" and the icon read as missing (issue #223).
+    val searchTerms = remember(context) {
+        val byTool = HashMap<ImageVector, MutableList<String>>()
+        for (tool in ToolbarTool.entries) {
+            byTool.getOrPut(IconDefaults.forTool(tool)) { mutableListOf() }
+                .add(context.getString(toolTitle(tool)))
+        }
+        KeyIcons.pickerEntries.associate { (name, vector) ->
+            name to buildList {
+                add(name)
+                add(name.replace('_', ' '))
+                add(BuiltinIcons.label(name))
+                addAll(KeyIcons.aliasesFor(name))
+                byTool[vector]?.let { addAll(it) }
+            }
+        }
+    }
+    val shown = remember(query, searchTerms) {
         val needle = query.trim()
         if (needle.isEmpty()) {
             KeyIcons.pickerEntries
         } else {
-            KeyIcons.pickerEntries.filter { (name, _) -> name.contains(needle, ignoreCase = true) }
+            KeyIcons.pickerEntries.filter { (name, _) ->
+                searchTerms[name].orEmpty().any { it.contains(needle, ignoreCase = true) }
+            }
         }
     }
     AlertDialog(

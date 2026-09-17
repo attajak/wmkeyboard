@@ -6,6 +6,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 
 /** Issue #187: a key can wear any bundled app icon, and the picker lists each drawing once. */
 class KeyIconsTest {
@@ -49,5 +50,29 @@ class KeyIconsTest {
     @Test
     fun `every advertised name resolves`() {
         for (name in KeyIcons.names) assertNotNull(name, KeyIcons.byName(name))
+    }
+
+    @Test
+    fun `an alias is searchable from the name the picker shows`() {
+        assertTrue(KeyIcons.aliasesFor("paste").contains("clipboard"))
+        assertTrue(KeyIcons.aliasesFor("language").contains("globe"))
+        assertTrue(KeyIcons.aliasesFor("PASTE ").contains("clipboard"))
+        assertTrue(KeyIcons.aliasesFor("SelectAll").isEmpty())
+    }
+
+    /**
+     * Issue #223: a glyph the app draws somewhere but the picker never offers
+     * reads as a missing icon. Every built-in drawing — tool, key, chrome,
+     * emoji tab — has to be reachable from the picker.
+     */
+    @Test
+    fun `every icon the app draws is offered by the picker`() {
+        val offered = KeyIcons.pickerEntries.map { it.second }.toHashSet()
+        for (tool in ToolbarTool.entries) {
+            assertTrue(tool.name, IconDefaults.forTool(tool) in offered)
+        }
+        for ((slot, vector) in IconDefaults.bySlot) {
+            assertTrue(slot, vector in offered)
+        }
     }
 }
