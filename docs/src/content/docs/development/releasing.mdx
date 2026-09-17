@@ -101,8 +101,8 @@ That has to print `0` for a Play build and `1` for a GitHub one.
 The [`Release` workflow](https://github.com/wasi-master/wmkeyboard/blob/main/.github/workflows/release.yml)
 does the build. It runs on any tag starting with `v` and refuses to run if the
 tag disagrees with `wmkb.versionName`. A tag with no `wmkb.versionName` at all
-predates the property — `v0.1.0` and `v0.2.0` kept the version in
-`app/build.gradle.kts` — so the run stands down with a notice instead of
+predates the property (`v0.1.0` and `v0.2.0` kept the version in
+`app/build.gradle.kts`), so the run stands down with a notice instead of
 comparing the tag against an empty string, and that release is written by hand.
 Neither of those two tags carries this workflow, so pushing them starts no run
 at all; the guard is for a tag that does reach it without a version to check. It signs with your release key, then
@@ -168,8 +168,8 @@ from the bundle.
 3. **Write the release notes.** `release-notes/<versionName>.md`, in the repo
    root. This is the prose at the top of the GitHub release: what changed, in
    sections, with issue links. Leave it out and the release falls back to the
-   store changelog, which is a paragraph — fine for a bug-fix release, thin for
-   anything else.
+   store changelog, which is a paragraph. That is fine for a bug-fix release
+   and thin for anything else.
 
 4. **Tag and push.**
 
@@ -191,10 +191,10 @@ from the bundle.
 `.github/scripts/release-notes.sh` builds it in the `publish` job, after the
 APKs have been downloaded back from the `apks` job. Three parts:
 
-1. **What's new** — `release-notes/<versionName>.md` verbatim, inside a
+1. **What's new**: `release-notes/<versionName>.md` verbatim, inside a
    `<details open>` so it can be folded away, or the store changelog if that
    file is absent.
-2. **Download** — a grid of architecture against flavour, starred on
+2. **Download**: a grid of architecture against flavour, starred on
    `arm64-v8a`, every cell carrying the file's real size. The sizes are measured
    from the artifacts that were actually built, so a cell whose file is missing
    shows an em dash rather than a link to a 404. Checksums, R8 mappings and

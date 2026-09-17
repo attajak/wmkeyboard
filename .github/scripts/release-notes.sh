@@ -19,11 +19,11 @@ prefix="wmkeyboard-${version}-vc${code}"
 
 # ---------------------------------------------------------------- helpers
 
-# Human size for a file in dist/, or an em dash when the build did not
+# Human size for a file in dist/, or "not built" when the build did not
 # produce it (lite has no native symbols, for one).
 size_of() {
   local f="$dist/$1"
-  [ -f "$f" ] || { printf '—'; return; }
+  [ -f "$f" ] || { printf 'not built'; return; }
   # stat's flags differ between BSD and GNU; wc -c is the same everywhere.
   local bytes
   bytes=$(wc -c < "$f" | tr -d ' ')
@@ -35,12 +35,12 @@ size_of() {
   }'
 }
 
-# A download cell: a linked size, or a plain em dash when the file is absent,
-# so a missing artifact shows as a hole instead of a broken link.
+# A download cell: a linked size, or plain "not built" when the file is
+# absent, so a missing artifact says so instead of offering a broken link.
 cell() {
   local file="$1" emphasis="${2:-}" sz
   sz=$(size_of "$file")
-  if [ "$sz" = '—' ]; then printf '—'; return; fi
+  if [ "$sz" = 'not built' ]; then printf 'not built'; return; fi
   printf '%s[%s](%s/%s)%s' "$emphasis" "$sz" "$base" "$file" "$emphasis"
 }
 
@@ -72,8 +72,8 @@ echo
 
 # ---------------------------------------------------------------- downloads
 
-# A release with no APKs attached — a tag cut before the build pipeline, say —
-# gets notes and nothing else rather than a grid of em dashes.
+# A release with no APKs attached, such as a tag cut before the build
+# pipeline existed, gets notes and nothing else rather than an empty grid.
 have_apk=false
 for f in "$dist"/*.apk; do
   [ -e "$f" ] && have_apk=true && break
@@ -84,7 +84,7 @@ cat <<EOF
 ## Download
 
 Pick the row that matches your phone, then the build you want. **⭐ arm64-v8a is
-the right answer for essentially every phone sold since 2017** — take that row
+the right answer for essentially every phone sold since 2017.** Take that row
 unless you know you need another.
 
 | Architecture | full | lite |
@@ -92,11 +92,11 @@ unless you know you need another.
 | **⭐ arm64-v8a**<br><sub>Essentially every phone since 2017</sub> | **$(cell "${prefix}-full-arm64-v8a.apk")** | **$(cell "${prefix}-lite-arm64-v8a.apk")** |
 | armeabi-v7a<br><sub>Older 32-bit phones and watches</sub> | $(cell "${prefix}-full-armeabi-v7a.apk") | $(cell "${prefix}-lite-armeabi-v7a.apk") |
 | x86_64<br><sub>Emulators, ChromeOS, x86 tablets</sub> | $(cell "${prefix}-full-x86_64.apk") | $(cell "${prefix}-lite-x86_64.apk") |
-| universal<br><sub>All three in one file — only if the others refuse to install</sub> | $(cell "${prefix}-full-universal.apk") | $(cell "${prefix}-lite-universal.apk") |
+| universal<br><sub>All three in one file. Only if the others refuse to install</sub> | $(cell "${prefix}-full-universal.apk") | $(cell "${prefix}-lite-universal.apk") |
 
 **full** is the whole keyboard. **lite** leaves out ML Kit and the on-device
-models — handwriting, OCR, document scanning, Whisper voice input and the local
-LLM — for a far smaller download. Everything else is the same build.
+models (handwriting, OCR, document scanning, Whisper voice input and the local
+LLM) for a far smaller download. Everything else is the same build.
 
 EOF
 
@@ -110,7 +110,7 @@ row() { # <file> <what it is>
 "
 }
 row SHA256SUMS.txt 'Checksums for everything above'
-row "${prefix}-full-mapping.txt.gz" 'R8 mapping, **full** — retraces a stack trace'
+row "${prefix}-full-mapping.txt.gz" 'R8 mapping, **full**. Retraces a stack trace'
 row "${prefix}-lite-mapping.txt.gz" 'R8 mapping, **lite**'
 row "${prefix}-full-native-symbols.zip" 'Native debug symbols, **full**'
 
@@ -171,5 +171,5 @@ fi
 prev=$(git describe --tags --abbrev=0 "${tag}^" 2>/dev/null || true)
 if [ -n "$prev" ]; then
   count=$(git log --no-merges --oneline "${prev}..${tag}" | wc -l | tr -d ' ')
-  echo "${count} commits since [${prev#v}](https://github.com/${repo}/releases/tag/${prev}) — [see every one](https://github.com/${repo}/compare/${prev}...${tag})."
+  echo "${count} commits since [${prev#v}](https://github.com/${repo}/releases/tag/${prev}). [See every one](https://github.com/${repo}/compare/${prev}...${tag})."
 fi
