@@ -6429,6 +6429,7 @@ class SettingsRepository(private val context: Context) {
         private val OCTOPUS_PLACEMENT = stringPreferencesKey("octopus_placement")
         private val OCTOPUS_DENSITY = intPreferencesKey("octopus_density")
         private val OCTOPUS_KINDS = stringPreferencesKey("octopus_kinds")
+        private val OCTOPUS_DURING_GLIDE = stringPreferencesKey("octopus_during_glide")
         private val OCTOPUS_FLICK_COMMITS = booleanPreferencesKey("octopus_flick_commits")
         private val OCTOPUS_TAP_COMMITS = booleanPreferencesKey("octopus_tap_commits")
         private val OCTOPUS_FLICK_SENSITIVITY = stringPreferencesKey("octopus_flick_sensitivity")
@@ -7827,6 +7828,9 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.octopus.placement,
                 density = p[OCTOPUS_DENSITY] ?: defaults.octopus.density,
                 kinds = p[OCTOPUS_KINDS]?.let(::decodeOctopusKinds) ?: defaults.octopus.kinds,
+                duringGlide = p[OCTOPUS_DURING_GLIDE]
+                    ?.let { runCatching { OctopusDuringGlide.valueOf(it) }.getOrNull() }
+                    ?: defaults.octopus.duringGlide,
                 flickCommits = p[OCTOPUS_FLICK_COMMITS] ?: defaults.octopus.flickCommits,
                 tapCommits = p[OCTOPUS_TAP_COMMITS] ?: defaults.octopus.tapCommits,
                 flickSensitivity = p[OCTOPUS_FLICK_SENSITIVITY]
@@ -12138,6 +12142,10 @@ class SettingsRepository(private val context: Context) {
         // board should stay bare, not asking for the defaults back.
         it[OCTOPUS_KINDS] = value.joinToString("\n") { kind -> kind.name }
     }
+
+    /** @see OctopusSettings.duringGlide */
+    suspend fun setOctopusDuringGlide(value: OctopusDuringGlide) =
+        editPrefs { it[OCTOPUS_DURING_GLIDE] = value.name }
 
     suspend fun setOctopusFlickCommits(value: Boolean) =
         editPrefs { it[OCTOPUS_FLICK_COMMITS] = value }

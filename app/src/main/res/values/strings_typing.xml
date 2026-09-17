@@ -236,6 +236,10 @@
     <string name="typing_octopus_kinds_subtitle">Which kinds of guess are allowed onto the keys</string>
     <string name="typing_octopus_kinds_info">Completions carry on the word you are typing. Corrections fix it, and sit over the key where the word stops matching what you typed, so they are drawn in a different colour. Next words appear after a space, above their first letters, before you have typed anything. Turning all three off leaves the keys bare, the same as turning the whole feature off.</string>
 
+    <string name="typing_octopus_glide_title">While gliding</string>
+    <string name="typing_octopus_glide_subtitle">What the keys carry while a swipe is being drawn</string>
+    <string name="typing_octopus_glide_info">A stroke and a still finger want different things from the keys, so a glide has its own answer here and What may appear is left to say what a typed word may offer. Nothing keeps the board bare until you lift, which is what most glide typists want: mid-swipe a completion cannot be taken and a correction cannot be judged. Other readings floats the alternatives the keyboard is still holding, each above the key that reaches it, so you can steer to one. The next word offers what would follow the word you are drawing, above the key it starts with, so it can be flicked the moment the swipe ends. Whichever you choose, lifting your finger puts the next word on the keys as usual.</string>
+
     <string name="typing_octopus_kind_completion">Completions</string>
     <string name="typing_octopus_kind_correction">Corrections</string>
     <string name="typing_octopus_kind_next_word">Next words</string>

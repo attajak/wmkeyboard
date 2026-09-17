@@ -749,6 +749,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_octopus_placement_title) { Icons.Outlined.PictureInPicture }
         put(R.string.typing_octopus_density_title) { Icons.Outlined.Numbers }
         put(R.string.typing_octopus_kinds_title) { Icons.Outlined.Category }
+        put(R.string.typing_octopus_glide_title) { Icons.Outlined.Gesture }
         put(R.string.typing_octopus_flick_title) { Icons.Outlined.SwipeUp }
         put(R.string.typing_octopus_sensitivity_title) { Icons.Outlined.Tune }
         put(R.string.typing_octopus_tap_title) { Icons.Outlined.TouchApp }

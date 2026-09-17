@@ -354,6 +354,7 @@ private fun SearchStrings.typingOctopusRows(): List<SettingsSearchEntry> {
         row(R.string.typing_octopus_placement_title, R.string.typing_octopus_placement_subtitle),
         row(R.string.typing_octopus_density_title, R.string.typing_octopus_density_subtitle),
         row(R.string.typing_octopus_kinds_title, R.string.typing_octopus_kinds_subtitle),
+        row(R.string.typing_octopus_glide_title, R.string.typing_octopus_glide_subtitle),
         row(R.string.typing_octopus_flick_title, R.string.typing_octopus_flick_subtitle),
         row(R.string.typing_octopus_sensitivity_title, R.string.typing_octopus_sensitivity_subtitle),
         row(R.string.typing_octopus_tap_title, R.string.typing_octopus_tap_subtitle),

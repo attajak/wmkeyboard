@@ -161,6 +161,7 @@ The drawing follows your typing and nothing else. It disappears for the length o
 | Where the words sit | Choice: Above the key / Own lane / Inside the key | Above the key | Words on the keys on |
 | How many words | Slider, 3–26 | 6 | Words on the keys on |
 | What may appear | Multi-choice: Completions / Corrections / Next words | All three | Words on the keys on |
+| While gliding | Choice: Nothing / Other readings / The next word | Nothing | Words on the keys on, glide typing on |
 | Flick up to pick | Toggle | On | Words on the keys on |
 | Flick sensitivity | Choice: Strict / Balanced / Relaxed | Balanced | Flick up to pick on |
 | Tap the word to pick | Toggle | On | Words on the keys on |
@@ -169,6 +170,8 @@ The drawing follows your typing and nothing else. It disappears for the length o
 | Long-press characters too | Toggle | Off | Words on the keys on |
 
 **Words on the keys** floats a predicted word over the key that would type it next: with `hel` typed, `hello` sits over <KeyCap>L</KeyCap> and `help` over <KeyCap>P</KeyCap>. It only adds to the suggestion strip, never replaces it, and ships off. **Where the words sit** chooses the geometry: above the key without growing the keyboard, in a lane of its own with more room and a taller board, or inside the key sharing its small box with the letter. **How many words** trades quiet for coverage. Low values show only the words the keyboard is confident about and often leave the board empty; high values fill nearly every key that can carry one, and a key too narrow for its word stays bare rather than showing it cramped. **What may appear** limits the kinds of guess allowed on the keys: completions continue the word you're typing, corrections fix it and draw in a different color where the match breaks down, and next words appear over their first letters after a space, before you've typed anything.
+
+**While gliding** asks the same question about a stroke, and it has its own answer because the two surfaces want different things. **Nothing**, the default, leaves the keys bare until you lift. **Other readings** floats the alternatives the decoder is still holding, each over the key that reaches it, so you can steer mid-swipe. **The next word** offers what would follow the word you're drawing, over the key it starts with, so a glide typist can flick it the moment the swipe ends. None of the three changes what appears at the lift: a finished glide always puts the next-word offer on the keys. See [Words on the keys](/typing/words-on-the-keys/#during-a-glide).
 
 Two gestures take a floating word. **Flick up to pick** reads a straight, mostly vertical stroke off a key as picking its word rather than starting a glide, and **Flick sensitivity** sets how far off straight up, and how curved, that stroke may still be and count. **Tap the word to pick** writes it with a direct tap on the small floating text, though on the top row only the half hanging over the key can be tapped.
 
