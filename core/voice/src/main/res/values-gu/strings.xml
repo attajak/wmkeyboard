@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face સર્વરે ફાઇલ મોકલી નથી. એરર કોડ HTTP %1$s છે.</string>
+    <string name="core_voice_download_interrupted_error">ડાઉનલોડ દરમિયાન કનેક્શન અટકી ગયું હતું. જ્યાંથી અટક્યું હતું ત્યાંથી ચાલુ રાખવા માટે ફરી પ્રયાસ કરો.</string>
+    <string name="core_voice_download_space_error">તમારા ઉપકરણ પર પૂરતી સ્ટોરેજ નથી. તમારે પહેલા લગભગ %1$s MB ખાલી કરવી પડશે.</string>
+    <string name="core_voice_model_base_eu_body">આ મોડેલ તમે જે ભાષામાં ટાઈપ કરો છો તેનો ઉપયોગ કરે છે, જે 40 ભાષાના મોડેલ જેવું જ છે. તે ફક્ત યુરોપિયન ભાષાઓને આવરી લે છે, તેથી ડાઉનલોડ નાનું છે.</string>
+    <string name="core_voice_model_base_multi_body">આ મોડેલ ચોકસાઈ અને ઝડપને સંતુલિત કરે છે. તે વ્હિસ્પર (Whisper) દ્વારા જાણીતી દરેક ભાષાને આવરી લે છે. જો સ્મોલ મોડેલ ખૂબ ધીમું હોય તો તેને પસંદ કરો.</string>
+    <string name="core_voice_model_base_world_body">આ મોડેલ અનુમાન લગાવવાને બદલે તમે જે ભાષામાં ટાઈપ કરો છો તેનો ઉપયોગ કરે છે. ટૂંકા શબ્દસમૂહો વધુ વિશ્વસનીય બને છે. જ્યારે તેની યાદીમાં તમારી ભાષાઓ હોય ત્યારે તેને પસંદ કરો.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d ભાષા</item>
+        <item quantity="other">%1$d ભાષાઓ</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">આ સૌથી સચોટ વ્હિસ્પર મોડેલોમાંનું એક છે, પરંતુ તે મોટાભાગના ફોન માટે ખૂબ મોટું છે. ડાઉનલોડ 1.5 GB છે. ફક્ત મોટી મેમરી ધરાવતું ઉપકરણ જ તેને લોડ કરી શકે છે.</string>
+    <string name="core_voice_model_large_v3_multi_body">આ સૌથી સચોટ વ્હિસ્પર મોડેલ છે, અને તમે કઈ ભાષા બોલો છો તે ઓળખવામાં શ્રેષ્ઠ છે. ડાઉનલોડ 1.5 GB છે. ફક્ત મોટી મેમરી ધરાવતું ઉપકરણ જ તેને લોડ કરી શકે છે. ટર્બો મોડેલ લગભગ એટલું જ સચોટ છે અને કદમાં અડધું છે.</string>
+    <string name="core_voice_model_medium_multi_body">આ મોડેલ લગભગ ડેસ્કટોપ જેવી ચોકસાઈ આપે છે. દરેક વાક્યમાં થોડી સેકન્ડો લાગે છે. મોડેલ ચાલતી વખતે લગભગ એક ગીગાબાઇટ મેમરીનો ઉપયોગ કરે છે.</string>
+    <string name="core_voice_model_single_language_body">આ મોડલ ફક્ત %1$s ને હેન્ડલ કરે છે. તેમાં કોઈ ભાષા શોધવાનું પગલું નથી. આ તેને સમાન કદના બહુભાષી મોડલ કરતા ઝડપી અને થોડું વધુ સચોટ બનાવે છે.</string>
+    <string name="core_voice_model_small_multi_body">આ મોડેલ શ્રેષ્ઠ સચોટતા આપે છે જે ફોન પર સારી રીતે ચાલે છે. તે બેઝ મોડેલ કરતા ઉચ્ચારો અને બેકગ્રાઉન્ડ નોઈઝને વધુ સારી રીતે હેન્ડલ કરે છે. તે વ્હિસ્પર (Whisper) જાણે છે તેવી દરેક ભાષાને આવરી લે છે.</string>
+    <string name="core_voice_model_small_world_body">આ મોડેલ તમે જે ભાષામાં ટાઈપ કરો છો તેનો ઉપયોગ કરે છે અને તેમાં \'સ્મોલ\' મોડેલની ચોકસાઈ છે. આ સૌથી સચોટ મોડેલ છે જે ફોન પર ફિટ થઈ શકે છે.</string>
+    <string name="core_voice_model_tiny_multi_body">આ સૌથી ઝડપી બહુભાષી મોડેલ છે. તે સ્પષ્ટ વાણી સાથે સારું કામ કરે છે, પરંતુ અવાજ (નોઈઝ) ચોકસાઈ ઘટાડે છે.</string>
+    <string name="core_voice_model_turbo_multi_body">આ મોડેલ તમે જે ભાષા બોલો છો તેને નાના મોડેલો કરતા ઘણી સારી રીતે ઓળખે છે. જો નાનું મોડેલ તમારી વાણીને ખોટી ભાષા તરીકે ટ્રાન્સક્રાઇબ કરે તો તેને પસંદ કરો. આ એક મોટી ડાઉનલોડ ફાઇલ છે, અને દરેક વાક્યમાં ઘણી સેકન્ડ લાગે છે.</string>
+    <string name="core_voice_size_base_label">બેઝ</string>
+    <string name="core_voice_size_large_label">મોટું</string>
+    <string name="core_voice_size_medium_label">મધ્યમ</string>
+    <string name="core_voice_size_small_label">નાનું</string>
+    <string name="core_voice_size_tiny_label">નાનું</string>
+    <string name="core_voice_size_turbo_label">ટર્બો</string>
+    <string name="core_voice_tier_recommended_label">ભલામણ કરેલ</string>
+    <string name="core_voice_whisper_mel_bins_error">આ વૉઇસ મોડેલને %1$s બેન્ડ સ્પેક્ટ્રોગ્રામની જરૂર છે, જે તે ફાઇલ સાથે મેળ ખાતું નથી જેની સાથે તે ડાઉનલોડ થયું હતું. સેટિંગ્સમાં મોડેલને ડિલીટ કરો અને તેને ફરીથી ડાઉનલોડ કરો.</string>
+    <string name="core_voice_whisper_model_load_error">વોઇસ મોડેલ લોડ થયું નથી. ફાઇલ કદાચ ક્ષતિગ્રસ્ત છે. સેટિંગ્સમાં મોડેલ કાઢી નાખો અને તેને ફરીથી ડાઉનલોડ કરો.</string>
+    <string name="core_voice_whisper_transcribe_error">વોઇસ ટાઇપિંગ કામ કરતું નથી. ફરી પ્રયાસ કરો, અથવા નાનું મોડેલ પસંદ કરો.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">Yapay zeka sağlayıcısı yanıtı bir hatayla sonlandırdı</string>
+    <string name="ftools_photo_error_failed">Uygulama fotoğrafları alamadı</string>
+    <string name="ftools_photo_error_offline">Uygulama fotoğraf hizmetine ulaşamıyor. Ağınızı kontrol edin ve tekrar deneyin.</string>
+    <string name="ftools_photo_error_timeout">Fotoğraf hizmetinin yanıt vermesi çok uzun sürdü</string>
+    <string name="ftools_search_error_json_disabled">Bu SearXNG örneği JSON API\'sini etkinleştirmemiş. Ayarlar dosyasındaki (settings.yml) search.formats kısmına &lt;b&gt;json&lt;/b&gt; ekleyin veya başka bir örnek kullanın.</string>
+</resources>

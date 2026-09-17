@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Gói này cần định dạng gói âm thanh %1$s. Hãy cập nhật ứng dụng.</string>
+    <string name="core_feedback_pack_reject_no_samples">Gói này không chứa âm thanh nào mà ứng dụng có thể phát.</string>
+    <string name="core_feedback_pack_reject_too_large">Gói âm thanh phải nhỏ hơn %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Tệp trống.</string>
+    <string name="core_feedback_sound_import_html_error">Đây là tệp HTML hoặc XML, không phải âm thanh.</string>
+    <string name="core_feedback_sound_import_mp4_error">Ứng dụng không phát tệp MP4 và M4A. Hãy sử dụng tệp MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Không có bộ nhớ khả dụng trên thiết bị của bạn.</string>
+    <string name="core_feedback_sound_import_read_error">Ứng dụng không thể đọc âm thanh.</string>
+    <string name="core_feedback_sound_import_save_error">Ứng dụng không thể lưu âm thanh.</string>
+    <string name="core_feedback_sound_import_too_large_error">Âm thanh phím phải nhỏ hơn %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Tệp quá ngắn để có thể là âm thanh.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Tệp này không giống tệp MP3, OGG hoặc WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Đây là tệp lưu trữ zip, không phải tệp âm thanh.</string>
+</resources>

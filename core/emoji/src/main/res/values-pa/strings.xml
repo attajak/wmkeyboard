@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">ਉਹ ਇਮੋਜੀ ਕੀਵਰਡ ਸੂਚੀ ਖਾਲੀ ਹੈ ਜਾਂ ਪੜ੍ਹਨਯੋਗ ਨਹੀਂ ਹੈ।</string>
+    <string name="core_emoji_dict_error_http">ਸਰਵਰ ਨੇ ਫਾਈਲ ਨਹੀਂ ਭੇਜੀ। ਗਲਤੀ ਕੋਡ HTTP %1$s ਹੈ।</string>
+    <string name="core_emoji_dict_error_not_a_list">ਉਹ ਫਾਈਲ ਇਮੋਜੀ ਕੀਵਰਡ ਸੂਚੀ ਨਹੀਂ ਹੈ।</string>
+    <string name="core_emoji_dict_error_save">ਐਪ ਇਮੋਜੀ ਕੀਵਰਡ ਸੂਚੀ ਨੂੰ ਸੁਰੱਖਿਅਤ ਨਹੀਂ ਕਰ ਸਕੀ।</string>
+    <string name="core_emoji_dict_error_too_large">ਉਹ ਇਮੋਜੀ ਕੀਵਰਡ ਸੂਚੀ ਬਹੁਤ ਵੱਡੀ ਹੈ।</string>
+</resources>

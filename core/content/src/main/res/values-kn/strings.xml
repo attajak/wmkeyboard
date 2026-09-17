@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">ಒನ್-ಟೈಮ್ ಕೋಡ್</string>
+    <string name="core_content_clip_entity_otp_tag">ಕೋಡ್</string>
+    <string name="core_content_clip_entity_phone_label">ಫೋನ್ ಸಂಖ್ಯೆ</string>
+    <string name="core_content_clip_entity_phone_tag">ಫೋನ್</string>
+    <string name="core_content_clip_entity_url_label">ಲಿಂಕ್</string>
+    <string name="core_content_clip_entity_url_tag">ಲಿಂಕ್</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಇತರ ವಿಸ್ತರಣೆಗಳನ್ನು ಹೊಂದಿದೆ, ಅದನ್ನು Espanso ಹಿಡಿದಿಟ್ಟುಕೊಳ್ಳಲು ಸಾಧ್ಯವಿಲ್ಲ. ಮೊದಲನೆಯದನ್ನು ಮಾತ್ರ ಬರೆಯಲಾಗಿದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಇತರ ವಿಸ್ತರಣೆಗಳನ್ನು ಹೊಂದಿವೆ, ಅದನ್ನು Espanso ಹಿಡಿದಿಟ್ಟುಕೊಳ್ಳಲು ಸಾಧ್ಯವಿಲ್ಲ. ಪ್ರತಿಯೊಂದರ ಮೊದಲನೆಯದನ್ನು ಮಾತ್ರ ಬರೆಯಲಾಗಿದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಕೆಲವು ಕಂಪ್ಯೂಟರ್ ಪ್ರೋಗ್ರಾಂಗಳಿಗೆ ಸೀಮಿತವಾಗಿದೆ. ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ಇದು ಎಲ್ಲೆಡೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಕೆಲವು ಕಂಪ್ಯೂಟರ್ ಪ್ರೋಗ್ರಾಂಗಳಿಗೆ ಸೀಮಿತವಾಗಿವೆ. ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ಅವು ಎಲ್ಲೆಡೆ ಕೆಲಸ ಮಾಡುತ್ತವೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಪಟ್ಟಿಯಿಂದ ಆಯ್ಕೆ ಮಾಡಲು ನಿಮ್ಮನ್ನು ಕೇಳುತ್ತದೆ. ಆ್ಯಪ್ ಬದಲಿಗೆ ಒಂದನ್ನು ಯಾದೃಚ್ಛಿಕವಾಗಿ ಆಯ್ಕೆ ಮಾಡುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಪಟ್ಟಿಯಿಂದ ಆಯ್ಕೆ ಮಾಡಲು ನಿಮ್ಮನ್ನು ಕೇಳುತ್ತವೆ. ಆ್ಯಪ್ ಬದಲಿಗೆ ಒಂದನ್ನು ಯಾದೃಚ್ಛಿಕವಾಗಿ ಆಯ್ಕೆ ಮಾಡುತ್ತದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ವಿಸ್ತರಿಸುವ ಮೊದಲು ಕೇಳುತ್ತದೆ. Espanso ಅಂತಹ ಯಾವುದೇ ಸೆಟ್ಟಿಂಗ್ ಅನ್ನು ಹೊಂದಿಲ್ಲ, ಆದ್ದರಿಂದ ಅದು ಅಲ್ಲಿ ತನ್ನದೇ ಆದ ಮೇಲೆ ವಿಸ್ತರಿಸುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ವಿಸ್ತರಿಸುವ ಮೊದಲು ಕೇಳುತ್ತವೆ. Espanso ಅಂತಹ ಯಾವುದೇ ಸೆಟ್ಟಿಂಗ್ ಅನ್ನು ಹೊಂದಿಲ್ಲ, ಆದ್ದರಿಂದ ಅವು ಅಲ್ಲಿ ತಮ್ಮದೇ ಆದ ಮೇಲೆ ವಿಸ್ತರಿಸುತ್ತವೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಆ್ಯಪ್ ಸಂಪೂರ್ಣವಾಗಿ ಬರೆಯಲು ಸಾಧ್ಯವಾಗದ ದಿನಾಂಕದ ಸ್ವರೂಪವನ್ನು ಬಳಸುತ್ತದೆ. ಆ್ಯಪ್ ಅದನ್ನು ಬರೆಯಲು ಸಾಧ್ಯವಾಗದ ಭಾಗವನ್ನು ಬಿಟ್ಟುಬಿಟ್ಟಿದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಆ್ಯಪ್ ಸಂಪೂರ್ಣವಾಗಿ ಬರೆಯಲು ಸಾಧ್ಯವಾಗದ ದಿನಾಂಕದ ಸ್ವರೂಪಗಳನ್ನು ಬಳಸುತ್ತವೆ. ಆ್ಯಪ್ ಅದನ್ನು ಬರೆಯಲು ಸಾಧ್ಯವಾಗದ ಭಾಗಗಳನ್ನು ಬಿಟ್ಟುಬಿಟ್ಟಿದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಆಫ್ ಮಾಡಲಾದ ಫೋಲ್ಡರ್‌ನಲ್ಲಿದೆ. Espanso ಯಾವುದೇ ಫೋಲ್ಡರ್ ಸ್ವಿಚ್ ಹೊಂದಿಲ್ಲ, ಆದ್ದರಿಂದ ಅದು ಅಲ್ಲಿ ವಿಸ್ತರಿಸುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಆಫ್ ಮಾಡಲಾದ ಫೋಲ್ಡರ್‌ಗಳಲ್ಲಿವೆ. Espanso ಯಾವುದೇ ಫೋಲ್ಡರ್ ಸ್ವಿಚ್ ಹೊಂದಿಲ್ಲ, ಆದ್ದರಿಂದ ಅವು ಅಲ್ಲಿ ವಿಸ್ತರಿಸುತ್ತವೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">ಆ್ಯಪ್ ಸೇರಿಸಲು ಏನೂ ಇಲ್ಲದ %1$d ಸ್ನಿಪ್ಪೆಟ್ ಅನ್ನು ಬಿಟ್ಟುಬಿಟ್ಟಿದೆ.</item>
+        <item quantity="other">ಆ್ಯಪ್ ಸೇರಿಸಲು ಏನೂ ಇಲ್ಲದ %1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳನ್ನು ಬಿಟ್ಟುಬಿಟ್ಟಿದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಫಾರ್ಮ್ ಅನ್ನು ಭರ್ತಿ ಮಾಡಲು ನಿಮ್ಮನ್ನು ಕೇಳುತ್ತದೆ. ಆ್ಯಪ್ ಫಾರ್ಮ್ ಅನ್ನು ಪಠ್ಯವಾಗಿ ಸೇರಿಸುತ್ತದೆ, ಕರ್ಸರ್ ಮೊದಲ ಖಾಲಿ ಜಾಗದಲ್ಲಿರುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಫಾರ್ಮ್ ಅನ್ನು ಭರ್ತಿ ಮಾಡಲು ನಿಮ್ಮನ್ನು ಕೇಳುತ್ತವೆ. ಆ್ಯಪ್ ಪ್ರತಿ ಫಾರ್ಮ್ ಅನ್ನು ಪಠ್ಯವಾಗಿ ಸೇರಿಸುತ್ತದೆ, ಕರ್ಸರ್ ಮೊದಲ ಖಾಲಿ ಜಾಗದಲ್ಲಿರುತ್ತದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">ಅಪ್ಲಿಕೇಶನ್ ಚಿತ್ರವನ್ನು ಸೇರಿಸುವ %1$d ಸ್ನಿಪ್ಪೆಟ್ ಅನ್ನು ಬಿಟ್ಟುಬಿಟ್ಟಿದೆ.</item>
+        <item quantity="other">ಅಪ್ಲಿಕೇಶನ್ ಚಿತ್ರಗಳನ್ನು ಸೇರಿಸುವ %1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳನ್ನು ಬಿಟ್ಟುಬಿಟ್ಟಿದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">ಫೈಲ್ %1$d ಇತರ ಫೈಲ್ ಅನ್ನು ಓದುತ್ತದೆ. ಒಂದು ಫೈಲ್ ಇತರ ಫೈಲ್‌ಗಳನ್ನು ತನ್ನೊಂದಿಗೆ ತರಲು ಸಾಧ್ಯವಿಲ್ಲ.</item>
+        <item quantity="other">ಫೈಲ್ %1$d ಇತರ ಫೈಲ್‌ಗಳನ್ನು ಓದುತ್ತದೆ. ಒಂದು ಫೈಲ್ ಇತರ ಫೈಲ್‌ಗಳನ್ನು ತನ್ನೊಂದಿಗೆ ತರಲು ಸಾಧ್ಯವಿಲ್ಲ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಇತರ ಸ್ನಿಪ್ಪೆಟ್‌ಗಳನ್ನು ಸೂಚಿಸುತ್ತದೆ. ಎಸ್ಪಾನ್ಸೊಗೆ ಅದನ್ನು ಹೇಳಲು ಯಾವುದೇ ಮಾರ್ಗವಿಲ್ಲ, ಆದ್ದರಿಂದ ಲಿಂಕ್‌ಗಳನ್ನು ಬಿಟ್ಟುಬಿಡಲಾಗಿದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಇತರ ಸ್ನಿಪ್ಪೆಟ್‌ಗಳನ್ನು ಸೂಚಿಸುತ್ತವೆ. ಎಸ್ಪಾನ್ಸೊಗೆ ಅದನ್ನು ಹೇಳಲು ಯಾವುದೇ ಮಾರ್ಗವಿಲ್ಲ, ಆದ್ದರಿಂದ ಲಿಂಕ್‌ಗಳನ್ನು ಬಿಟ್ಟುಬಿಡಲಾಗಿದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d ಟ್ರಿಗರ್ ಪದದ ಒಳಗೆ ಕೆಲಸ ಮಾಡಲು ಉದ್ದೇಶಿಸಲಾಗಿದೆ. ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ಇದು ಕೇವಲ ಸಂಪೂರ್ಣ ಪದವಾಗಿ ಮಾತ್ರ ಕೆಲಸ ಮಾಡುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಟ್ರಿಗರ್‌ಗಳು ಪದದ ಒಳಗೆ ಕೆಲಸ ಮಾಡಲು ಉದ್ದೇಶಿಸಲಾಗಿದೆ. ನಿಮ್ಮ ಫೋನ್‌ನಲ್ಲಿ ಅವು ಕೇವಲ ಸಂಪೂರ್ಣ ಪದಗಳಾಗಿ ಮಾತ್ರ ಕೆಲಸ ಮಾಡುತ್ತವೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ Espanso ಯಾವುದೇ ಸಮಾನತೆಯನ್ನು ಹೊಂದಿರದ ಮೌಲ್ಯವನ್ನು ಬಳಸುತ್ತದೆ. ಅದು ಇರುವಂತೆಯೇ ಬರೆಯಲ್ಪಟ್ಟಿದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು Espanso ಯಾವುದೇ ಸಮಾನತೆಯನ್ನು ಹೊಂದಿರದ ಮೌಲ್ಯಗಳನ್ನು ಬಳಸುತ್ತವೆ. ಅವು ಇರುವಂತೆಯೇ ಬರೆಯಲ್ಪಟ್ಟಿವೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">ಅಪ್ಲಿಕೇಶನ್ %1$d ಸ್ನಿಪ್ಪೆಟ್‌ನಿಂದ ಮಾದರಿಯನ್ನು ತೆಗೆದುಹಾಕಿದೆ. ಅಪ್ಲಿಕೇಶನ್ ಆ ಆಕಾರದ ಮಾದರಿಗಳನ್ನು ಚಲಾಯಿಸುವುದಿಲ್ಲ. ಸ್ನಿಪ್ಪೆಟ್ ಪಟ್ಟಿಯಲ್ಲಿ ಉಳಿಯುತ್ತದೆ.</item>
+        <item quantity="other">ಅಪ್ಲಿಕೇಶನ್ %1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳಿಂದ ಮಾದರಿಯನ್ನು ತೆಗೆದುಹಾಕಿದೆ. ಅಪ್ಲಿಕೇಶನ್ ಆ ಆಕಾರದ ಮಾದರಿಗಳನ್ನು ಚಲಾಯಿಸುವುದಿಲ್ಲ. ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಪಟ್ಟಿಯಲ್ಲಿ ಉಳಿಯುತ್ತವೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಫಾರ್ಮ್ಯಾಟ್ ಮಾಡಿದ ಪಠ್ಯವನ್ನು ಬಳಸುತ್ತದೆ. ಆ್ಯಪ್ ಪದಗಳನ್ನು ಉಳಿಸಿಕೊಳ್ಳುತ್ತದೆ ಮತ್ತು ಫಾರ್ಮ್ಯಾಟಿಂಗ್ ಅನ್ನು ತೆಗೆದುಹಾಕುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಫಾರ್ಮ್ಯಾಟ್ ಮಾಡಿದ ಪಠ್ಯವನ್ನು ಬಳಸುತ್ತವೆ. ಆ್ಯಪ್ ಪದಗಳನ್ನು ಉಳಿಸಿಕೊಳ್ಳುತ್ತದೆ ಮತ್ತು ಫಾರ್ಮ್ಯಾಟಿಂಗ್ ಅನ್ನು ತೆಗೆದುಹಾಕುತ್ತದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್‌ನಲ್ಲಿ ಕಮಾಂಡ್ ಅನ್ನು ರನ್ ಮಾಡುತ್ತದೆ. ಆ್ಯಪ್ ಕಮಾಂಡ್ ಅನ್ನು ಹೊರಗಿಟ್ಟಿದೆ ಮತ್ತು ಅದನ್ನು ಎಂದಿಗೂ ರನ್ ಮಾಡುವುದಿಲ್ಲ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ನಿಮ್ಮ ಕಂಪ್ಯೂಟರ್‌ನಲ್ಲಿ ಕಮಾಂಡ್‌ಗಳನ್ನು ರನ್ ಮಾಡುತ್ತವೆ. ಆ್ಯಪ್ ಕಮಾಂಡ್‌ಗಳನ್ನು ಹೊರಗಿಟ್ಟಿದೆ ಮತ್ತು ಅವುಗಳನ್ನು ಎಂದಿಗೂ ರನ್ ಮಾಡುವುದಿಲ್ಲ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d ಟ್ರಿಗರ್ ಕೇವಲ ಚಿಹ್ನೆಗಳಿಂದ ಮಾಡಲ್ಪಟ್ಟಿದೆ, ಆದ್ದರಿಂದ ಅಪ್ಲಿಕೇಶನ್ ಅದನ್ನು ಗಮನಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಅದರ ಸ್ನಿಪ್ಪೆಟ್ ಪಟ್ಟಿಯಲ್ಲಿ ಉಳಿಯುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಟ್ರಿಗರ್‌ಗಳು ಕೇವಲ ಚಿಹ್ನೆಗಳಿಂದ ಮಾಡಲ್ಪಟ್ಟಿವೆ, ಆದ್ದರಿಂದ ಅಪ್ಲಿಕೇಶನ್ ಅವುಗಳನ್ನು ಗಮನಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಅವುಗಳ ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಪಟ್ಟಿಯಲ್ಲಿ ಉಳಿಯುತ್ತವೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಬ್ರೇಸ್‌ಗಳಲ್ಲಿ ಪಠ್ಯವನ್ನು ಒಳಗೊಂಡಿದೆ, ಅದನ್ನು ಈ ಅಪ್ಲಿಕೇಶನ್ {date} ನಂತಹ ಮಾಹಿತಿಯಿಂದ ತುಂಬುತ್ತದೆ. ಇದು ಬರೆದಂತೆ ಕಾಣಿಸಿಕೊಳ್ಳುವ ಬದಲು ವಿಸ್ತರಿಸುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಬ್ರೇಸ್‌ಗಳಲ್ಲಿ ಪಠ್ಯವನ್ನು ಒಳಗೊಂಡಿವೆ, ಅದನ್ನು ಈ ಅಪ್ಲಿಕೇಶನ್ {date} ನಂತಹ ಮಾಹಿತಿಯಿಂದ ತುಂಬುತ್ತದೆ. ಇದು ಬರೆದಂತೆ ಕಾಣಿಸಿಕೊಳ್ಳುವ ಬದಲು ವಿಸ್ತರಿಸುತ್ತದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಅದರ ಪ್ಯಾಟರ್ನ್ ಸೆರೆಹಿಡಿದದ್ದನ್ನು ದೊಡ್ಡಕ್ಷರಗಳಿಗೆ ಬದಲಾಯಿಸುತ್ತದೆ. Espanso ಅದನ್ನು ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ, ಆದ್ದರಿಂದ ಸೆರೆಹಿಡಿದ ಪಠ್ಯವು ಬದಲಾಗದೆ ಉಳಿಯುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಅವುಗಳ ಪ್ಯಾಟರ್ನ್‌ಗಳು ಸೆರೆಹಿಡಿದದ್ದನ್ನು ದೊಡ್ಡಕ್ಷರಗಳಿಗೆ ಬದಲಾಯಿಸುತ್ತವೆ. Espanso ಅದನ್ನು ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ, ಆದ್ದರಿಂದ ಸೆರೆಹಿಡಿದ ಪಠ್ಯವು ಬದಲಾಗದೆ ಉಳಿಯುತ್ತದೆ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d ಸ್ನಿಪ್ಪೆಟ್ ಅಪ್ಲಿಕೇಶನ್ ಯಾವುದೇ ಸಮಾನತೆಯನ್ನು ಹೊಂದಿರದ ಮೌಲ್ಯವನ್ನು ಬಳಸುತ್ತದೆ. ಆ ಭಾಗವು ಖಾಲಿಯಾಗಿ ಬರುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಅಪ್ಲಿಕೇಶನ್ ಯಾವುದೇ ಸಮಾನತೆಯನ್ನು ಹೊಂದಿರದ ಮೌಲ್ಯಗಳನ್ನು ಬಳಸುತ್ತವೆ. ಆ ಭಾಗಗಳು ಖಾಲಿಯಾಗಿ ಬರುತ್ತವೆ.</item>
+    </plurals>
+    <string name="core_content_font_error_download">ಅಪ್ಲಿಕೇಶನ್ ಫಾಂಟ್ ಅನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ. ನಿಮ್ಮ ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="core_content_font_error_empty">ಫೈಲ್ ಖಾಲಿಯಾಗಿದೆ.</string>
+    <string name="core_content_font_error_load">ಅಪ್ಲಿಕೇಶನ್ ಈ ಫಾಂಟ್ ಫೈಲ್ ಅನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="core_content_font_error_markup">ಈ ಫೈಲ್ HTML ಅಥವಾ XML ಫೈಲ್ ಆಗಿದೆ, ಫಾಂಟ್ ಅಲ್ಲ.</string>
+    <string name="core_content_font_error_no_storage">ಫಾಂಟ್‌ಗಾಗಿ ಯಾವುದೇ ಸಂಗ್ರಹಣೆ ಲಭ್ಯವಿಲ್ಲ.</string>
+    <string name="core_content_font_error_not_a_font">ಈ ಫೈಲ್ .ttf ಅಥವಾ .otf ಫಾಂಟ್‌ನಂತೆ ಕಾಣುತ್ತಿಲ್ಲ.</string>
+    <string name="core_content_font_error_read">ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಫಾಂಟ್ ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="core_content_font_error_save">ಅಪ್ಲಿಕೇಶನ್ ಫಾಂಟ್ ಅನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="core_content_font_error_too_large">ಫಾಂಟ್ %1$d MB ಗಿಂತ ಚಿಕ್ಕದಾಗಿರಬೇಕು.</string>
+    <string name="core_content_font_error_too_many">ಫಾಂಟ್ ಲೈಬ್ರರಿ ತುಂಬಿದೆ. ಫಾಂಟ್ ಅನ್ನು ಅಳಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="core_content_font_error_too_short">ಫೈಲ್ ಫಾಂಟ್ ಆಗಲು ತುಂಬಾ ಚಿಕ್ಕದಾಗಿದೆ.</string>
+    <string name="core_content_font_error_woff">ಅಪ್ಲಿಕೇಶನ್ WOFF ವೆಬ್ ಫಾಂಟ್‌ಗಳನ್ನು ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ. ಫಾಂಟ್‌ನ .ttf ಅಥವಾ .otf ಆವೃತ್ತಿಯನ್ನು ಬಳಸಿ.</string>
+    <string name="core_content_font_error_woff2">ಅಪ್ಲಿಕೇಶನ್ WOFF2 ವೆಬ್ ಫಾಂಟ್‌ಗಳನ್ನು ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ. ಫಾಂಟ್‌ನ .ttf ಅಥವಾ .otf ಆವೃತ್ತಿಯನ್ನು ಬಳಸಿ.</string>
+    <string name="core_content_font_error_zip">ಈ ಫೈಲ್ ಜಿಪ್ ಆರ್ಕೈವ್ ಆಗಿದೆ, ಫಾಂಟ್ ಅಲ್ಲ.</string>
+    <string name="core_content_selection_macro_add_contact">ಸಂಪರ್ಕ</string>
+    <string name="core_content_selection_macro_calendar">ಕ್ಯಾಲೆಂಡರ್</string>
+    <string name="core_content_selection_macro_call">ಕರೆ</string>
+    <string name="core_content_selection_macro_case_lower">ಸಣ್ಣ ಅಕ್ಷರಗಳು</string>
+    <string name="core_content_selection_macro_case_sentence">ವಾಕ್ಯದ ಕೇಸ್</string>
+    <string name="core_content_selection_macro_case_title">ಟೈಟಲ್ ಕೇಸ್</string>
+    <string name="core_content_selection_macro_case_upper">ಅಪ್ಪರ್ ಕೇಸ್</string>
+    <string name="core_content_selection_macro_chat_bold">ಬೋಲ್ಡ್</string>
+    <string name="core_content_selection_macro_chat_italic">ಇಟಾಲಿಕ್</string>
+    <string name="core_content_selection_macro_chat_mono">ಮೋನೋ</string>
+    <string name="core_content_selection_macro_chat_strike">ಸ್ಟ್ರೈಕ್</string>
+    <string name="core_content_selection_macro_colour">ಬಣ್ಣ</string>
+    <string name="core_content_selection_macro_copy">ನಕಲಿಸಿ</string>
+    <string name="core_content_selection_macro_digits_latin">ಅಂಕೆಗಳು</string>
+    <string name="core_content_selection_macro_email">ಇಮೇಲ್</string>
+    <string name="core_content_selection_macro_fancy">ಫ್ಯಾನ್ಸಿ</string>
+    <string name="core_content_selection_macro_find">ಹುಡುಕಿ</string>
+    <string name="core_content_selection_macro_format">ಫಾರ್ಮ್ಯಾಟ್</string>
+    <string name="core_content_selection_macro_grammar">ವ್ಯಾಕರಣ</string>
+    <string name="core_content_selection_macro_lines_bullet">ಬುಲೆಟ್‌ಗಳು</string>
+    <string name="core_content_selection_macro_lines_dedupe">ಅನನ್ಯ</string>
+    <string name="core_content_selection_macro_lines_number">ಸಂಖ್ಯೆ</string>
+    <string name="core_content_selection_macro_lines_sort">ವಿಂಗಡಿಸಿ</string>
+    <string name="core_content_selection_macro_map">ನಕ್ಷೆ</string>
+    <string name="core_content_selection_macro_open">ತೆರೆಯಿರಿ</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">ಮಾತನಾಡಿ</string>
+    <string name="core_content_selection_macro_replace">ಬದಲಾಯಿಸಿ</string>
+    <string name="core_content_selection_macro_search">ಹುಡುಕಿ</string>
+    <string name="core_content_selection_macro_share">ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="core_content_selection_macro_sms">ಸಂದೇಶ</string>
+    <string name="core_content_selection_macro_time_zones">ವಲಯಗಳು</string>
+    <string name="core_content_selection_macro_to_bangla">ಬಾಂಗ್ಲಾ</string>
+    <string name="core_content_selection_macro_to_banglish">ಬಾಂಗ್ಲಿಷ್</string>
+    <string name="core_content_selection_macro_translate">ಅನುವಾದಿಸಿ</string>
+    <string name="core_content_selection_macro_url_decode">ಡಿಕೋಡ್ ಮಾಡಿ</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">ಆ್ಯಪ್ \"%1$s\" ನಿಂದ %2$d ವಿಸ್ತರಣೆಯನ್ನು ಬಿಟ್ಟಿದೆ.</item>
+        <item quantity="other">ಆ್ಯಪ್ \"%1$s\" ನಿಂದ %2$d ವಿಸ್ತರಣೆಗಳನ್ನು ಬಿಟ್ಟಿದೆ.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">ಆ್ಯಪ್ \"%1$s\" ನಿಂದ ಪ್ಯಾಟರ್ನ್ ಅನ್ನು ತೆಗೆದುಹಾಕಿದೆ. ಪ್ಯಾಟರ್ನ್ ಸರಿಯಾಗಿಲ್ಲ. ಸ್ನಿಪ್ಪೆಟ್ ಪಟ್ಟಿಯಲ್ಲಿ ಉಳಿಯುತ್ತದೆ.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">ಆ್ಯಪ್ ಹೆಸರಿಲ್ಲದ ಅಥವಾ ಇನ್ನೊಂದನ್ನು ಪುನರಾವರ್ತಿಸುವ %1$d ಫೋಲ್ಡರ್ ಅನ್ನು ಕೈಬಿಟ್ಟಿದೆ. ಅದರ ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಫೋಲ್ಡರ್ ಇಲ್ಲದೆ ಬಂದಿವೆ.</item>
+        <item quantity="other">ಆ್ಯಪ್ ಹೆಸರಿಲ್ಲದ ಅಥವಾ ಇನ್ನೊಂದನ್ನು ಪುನರಾವರ್ತಿಸುವ %1$d ಫೋಲ್ಡರ್‌ಗಳನ್ನು ಕೈಬಿಟ್ಟಿದೆ. ಅವುಗಳ ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು ಫೋಲ್ಡರ್ ಇಲ್ಲದೆ ಬಂದಿವೆ.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">ಫೈಲ್ ಆ್ಯಪ್ ಇಟ್ಟುಕೊಳ್ಳುವುದಕ್ಕಿಂತ ಹೆಚ್ಚಿನ ಸ್ನಿಪ್ಪೆಟ್‌ಗಳನ್ನು ಹೊಂದಿದೆ. ಆ್ಯಪ್ ಮೊದಲ %1$d ಅನ್ನು ಆಮದು ಮಾಡಿಕೊಂಡಿದೆ.</item>
+        <item quantity="other">ಫೈಲ್ ಆ್ಯಪ್ ಇಟ್ಟುಕೊಳ್ಳುವುದಕ್ಕಿಂತ ಹೆಚ್ಚಿನ ಸ್ನಿಪ್ಪೆಟ್‌ಗಳನ್ನು ಹೊಂದಿದೆ. ಆ್ಯಪ್ ಮೊದಲ %1$d ಅನ್ನು ಆಮದು ಮಾಡಿಕೊಂಡಿದೆ.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">ಸ್ನಿಪ್ಪೆಟ್‌ಗೆ ಹೆಸರಿಲ್ಲ, ಆದ್ದರಿಂದ ಆ್ಯಪ್ ಅದರ ಮೊದಲ ಸಾಲಿನ ಆಧಾರದ ಮೇಲೆ ಹೆಸರಿಸಿದೆ.</string>
+    <string name="core_content_snippet_repair_no_text">ಆ್ಯಪ್ \"%1$s\" ಅನ್ನು ಕೈಬಿಟ್ಟಿದೆ. ಇದು ಯಾವುದೇ ಪಠ್ಯವನ್ನು ಹೊಂದಿಲ್ಲ.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">ಆ್ಯಪ್ \"%1$s\" ನಿಂದ ಪ್ಯಾಟರ್ನ್ ಅನ್ನು ತೆಗೆದುಹಾಕಿದೆ. ಇದು %2$d ಅಕ್ಷರಕ್ಕಿಂತ ಉದ್ದವಾಗಿತ್ತು.</item>
+        <item quantity="other">ಆ್ಯಪ್ \"%1$s\" ನಿಂದ ಪ್ಯಾಟರ್ನ್ ಅನ್ನು ತೆಗೆದುಹಾಕಿದೆ. ಇದು %2$d ಅಕ್ಷರಗಳಿಗಿಂತ ಉದ್ದವಾಗಿತ್ತು.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">ಆ್ಯಪ್ \"%1$s\" ಅನ್ನು ಚಿಕ್ಕದಾಗಿಸಿದೆ. ಇದು %2$d ಅಕ್ಷರಕ್ಕಿಂತ ಉದ್ದವಾಗಿತ್ತು.</item>
+        <item quantity="other">ಆ್ಯಪ್ \"%1$s\" ಅನ್ನು ಚಿಕ್ಕದಾಗಿಸಿದೆ. ಇದು %2$d ಅಕ್ಷರಗಳಿಗಿಂತ ಉದ್ದವಾಗಿತ್ತು.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">ನೀವು ಟೈಪ್ ಮಾಡುವ ಅಪ್ಲಿಕೇಶನ್‌ನ ಹೆಸರು</string>
+    <string name="core_content_snippet_var_clip_info">ಅತ್ಯಂತ ಹೊಸ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ನಮೂದು</string>
+    <string name="core_content_snippet_var_cursor_info">ಕರ್ಸರ್ ಬಂದು ನಿಲ್ಲುವ ಸ್ಥಳ</string>
+    <string name="core_content_snippet_var_date_info">ಇಂದಿನ ದಿನಾಂಕ</string>
+    <string name="core_content_snippet_var_datetime_info">ದಿನಾಂಕ ಮತ್ತು ಸಮಯ</string>
+    <string name="core_content_snippet_var_day_info">ತಿಂಗಳ ದಿನ</string>
+    <string name="core_content_snippet_var_isodate_info">ISO ರೂಪದಲ್ಲಿ ದಿನಾಂಕ, ಉದಾಹರಣೆಗೆ 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">ISO ರೂಪದಲ್ಲಿ ದಿನಾಂಕ ಮತ್ತು ಸಮಯ</string>
+    <string name="core_content_snippet_var_month_info">ತಿಂಗಳ ಹೆಸರು</string>
+    <string name="core_content_snippet_var_package_info">ಆ ಆ್ಯಪ್‌ನ ಪ್ಯಾಕೇಜ್ ಹೆಸರು</string>
+    <string name="core_content_snippet_var_selection_info">ನೀವು ಕ್ಷೇತ್ರದಲ್ಲಿ ಆಯ್ಕೆ ಮಾಡುವ ಪಠ್ಯ</string>
+    <string name="core_content_snippet_var_time12_info">12-ಗಂಟೆಯ ರೂಪದಲ್ಲಿ ಈಗಿನ ಸಮಯ</string>
+    <string name="core_content_snippet_var_time_info">24-ಗಂಟೆಯ ಸ್ವರೂಪದಲ್ಲಿ ಈಗಿನ ಸಮಯ</string>
+    <string name="core_content_snippet_var_timestamp_info">Unix ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಸಮಯ</string>
+    <string name="core_content_snippet_var_timezone_info">ಸಮಯ ವಲಯ, ಉದಾಹರಣೆಗೆ GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">ಹೊಸ ಯಾದೃಚ್ಛಿಕ UUID</string>
+    <string name="core_content_snippet_var_weekday_info">ವಾರದ ದಿನದ ಹೆಸರು, ಉದಾಹರಣೆಗೆ ಭಾನುವಾರ</string>
+    <string name="core_content_snippet_var_year_info">ವರ್ಷ, ನಾಲ್ಕು ಅಂಕೆಗಳೊಂದಿಗೆ</string>
+    <string name="core_content_sticker_pack_imported_label">ಆಮದು ಮಾಡಲಾದ ಸ್ಟಿಕ್ಕರ್‌ಗಳು</string>
+    <string name="core_content_sticker_repair_image_missing">ಆ್ಯಪ್ \"%1$s\" ಅನ್ನು ತೆಗೆದುಹಾಕಿದೆ. ಅದರ ಚಿತ್ರ ಕಾಣೆಯಾಗಿದೆ.</string>
+    <string name="core_content_sticker_repair_image_unreadable">ಆ್ಯಪ್ \"%1$s\" ಅನ್ನು ಕೈಬಿಟ್ಟಿದೆ. ಆ್ಯಪ್‌ಗೆ ಅದರ ಚಿತ್ರವನ್ನು ಓದಲು ಸಾಧ್ಯವಾಗುತ್ತಿಲ್ಲ.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">ಪ್ಯಾಕ್‌ನಲ್ಲಿ %1$d ಸ್ಟಿಕ್ಕರ್ ಇದೆ. ಆ್ಯಪ್ ಮೊದಲ %2$d ಅನ್ನು ಇರಿಸುತ್ತದೆ.</item>
+        <item quantity="other">ಪ್ಯಾಕ್‌ನಲ್ಲಿ %1$d ಸ್ಟಿಕ್ಕರ್‌ಗಳಿವೆ. ಆ್ಯಪ್ ಮೊದಲ %2$d ಅನ್ನು ಇರಿಸುತ್ತದೆ.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">ಆ್ಯಪ್ ಒಂದು ಸ್ಟಿಕ್ಕರ್ ಅನ್ನು ಕೈಬಿಟ್ಟಿದೆ. ಸ್ಟಿಕ್ಕರ್ ಯಾವುದೇ ಇಮೇಜ್ ಫೈಲ್ ಅನ್ನು ಹೆಸರಿಸುತ್ತಿಲ್ಲ.</string>
+    <string name="core_content_sticker_repair_none_listed">ಪ್ಯಾಕ್ ಫೈಲ್ ಯಾವುದೇ ಸ್ಟಿಕ್ಕರ್‌ಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡಿಲ್ಲ.</string>
+    <string name="core_content_sticker_repair_not_saved">ಅಪ್ಲಿಕೇಶನ್ \"%1$s\" ಅನ್ನು ಕೈಬಿಟ್ಟಿದೆ. ಅಪ್ಲಿಕೇಶನ್ ಅದನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+</resources>

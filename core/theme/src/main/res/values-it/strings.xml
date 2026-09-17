@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Bacca</string>
+    <string name="core_theme_builtin_bubble_label">Bolla</string>
+    <string name="core_theme_builtin_crimson_label">Cremisi</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Abisso marino</string>
+    <string name="core_theme_builtin_facet_label">Sfaccettatura</string>
+    <string name="core_theme_builtin_forest_label">Foresta</string>
+    <string name="core_theme_builtin_glacier_label">Ghiacciaio</string>
+    <string name="core_theme_builtin_mint_label">Menta</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Oceano</string>
+    <string name="core_theme_builtin_pitch_label">Nero assoluto</string>
+    <string name="core_theme_builtin_rose_label">Rosa</string>
+    <string name="core_theme_builtin_sand_label">Sabbia</string>
+    <string name="core_theme_builtin_slate_label">Ardesia</string>
+    <string name="core_theme_builtin_snow_label">Neve</string>
+    <string name="core_theme_builtin_sunset_drift_label">Sunset drift</string>
+    <string name="core_theme_builtin_sunset_label">Tramonto</string>
+    <string name="core_theme_family_gradient_label">Sfumature</string>
+    <string name="core_theme_family_ocean_label">Nightfall</string>
+    <string name="core_theme_family_snow_label">Pastello</string>
+</resources>

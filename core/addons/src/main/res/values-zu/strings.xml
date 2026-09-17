@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Izichazamazwi</string>
+    <string name="core_addons_type_dictionary_singular_label">Isichazamazwi</string>
+    <string name="core_addons_type_emoji_font_label">Amafonti e-emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Ifonti ye-emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Amagama angukhiye we-emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Iphakethe lamagama angukhiye we-emoji</string>
+    <string name="core_addons_type_espanso_label">Amaphakethe we-Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Iphakethe le-Espanso</string>
+    <string name="core_addons_type_font_label">Amafonti</string>
+    <string name="core_addons_type_font_singular_label">Ifonti</string>
+    <string name="core_addons_type_icon_pack_label">Amaphakethe wezithonjana</string>
+    <string name="core_addons_type_icon_pack_singular_label">Iphakethe lezithonjana</string>
+    <string name="core_addons_type_layout_label">Izakhiwo</string>
+    <string name="core_addons_type_layout_singular_label">Isakhiwo</string>
+    <string name="core_addons_type_plugin_label">Ama-plugin</string>
+    <string name="core_addons_type_plugin_singular_label">I-plugin</string>
+    <string name="core_addons_type_snippets_label">Izicucu</string>
+    <string name="core_addons_type_snippets_singular_label">Iphakethe leziqeshana</string>
+    <string name="core_addons_type_sound_label">Imisindo</string>
+    <string name="core_addons_type_sound_pack_label">Amaphakethe emisindo</string>
+    <string name="core_addons_type_sound_pack_singular_label">Iphakethe lomsindo</string>
+    <string name="core_addons_type_sound_singular_label">Umsindo wokhiye</string>
+    <string name="core_addons_type_stickers_label">Amaphakethe wezitikha</string>
+    <string name="core_addons_type_stickers_singular_label">Iphakethe lezitikha</string>
+    <string name="core_addons_type_theme_label">Izindikimba</string>
+    <string name="core_addons_type_theme_singular_label">Itimu</string>
+    <string name="core_addons_type_unknown_label">Okunye</string>
+    <string name="core_addons_type_unknown_singular_label">Isengezo</string>
+    <string name="core_addons_type_vocabulary_label">Isilulumagama</string>
+    <string name="core_addons_type_vocabulary_singular_label">Iphakethe lesilulumagama</string>
+</resources>

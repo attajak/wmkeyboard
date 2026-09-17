@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Acest model este restricționat. Adaugă mai întâi token-ul tău Hugging Face.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face a returnat starea HTTP %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Acceptați licența modelului pe pagina sa de Hugging Face. Apoi încercați din nou.</string>
+    <string name="core_intel_llm_download_error_no_space">Nu există suficient spațiu de stocare pe dispozitiv. Eliberați mai întâi aproximativ %1$s GB.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face nu a acceptat jetonul. Verificați jetonul și încercați din nou.</string>
+    <string name="core_intel_llm_download_error_truncated">Conexiunea s-a oprit în timpul descărcării. Apăsați Reluare pentru a continua.</string>
+    <string name="core_intel_llm_engine_error_gpu">Modelul a eșuat pe GPU. Memoria GPU este mult mai mică decât memoria sistemului. Următoarea încercare va folosi CPU-ul. Pentru a folosi mereu CPU-ul, setează Compute pe CPU în setări. Poți, de asemenea, să selectezi un model mai mic.</string>
+    <string name="core_intel_llm_engine_error_load">Modelul nu s-a încărcat. Fișierul este probabil deteriorat. Șterge modelul din setări și descarcă-l din nou.</string>
+    <string name="core_intel_llm_engine_error_memory">Modelul a rămas fără memorie sau a eșuat. Selectează un model mai mic.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Un model Gemma mic din generația anterioară. Are o calitate bună și un context de 4K tokenuri.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Cel mai mic model Gemma de la Google. Este rapid pe toate dispozitivele.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Cea mai nouă generație Gemma. Oferă o calitate superioară pe dispozitivul tău.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Cel mai mare model. Scrie cel mai bine, dar are nevoie de un dispozitiv puternic.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Un model de uz general care încă încape pe un dispozitiv de bază.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Clar mai inteligent decât modelele sub 1B. Are nevoie de un dispozitiv de gamă medie.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Un model mic recent. Calitatea este ridicată pentru dimensiunea sa.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Foarte mic și rapid. Este bun pentru rescrieri rapide, dar raționamentul este limitat.</string>
+    <string name="core_intel_llm_module_downloading">Partea AI a tastaturii se descarcă de pe Google Play. Încercați din nou într-o clipă.</string>
+    <string name="core_intel_llm_module_restart">Componenta AI tocmai s-a instalat. Închide și redeschide tastatura pentru a o folosi.</string>
+    <string name="core_intel_llm_tier_experimental_label">Experimental</string>
+    <string name="core_intel_llm_tier_recommended_label">Recomandat</string>
+    <string name="core_intel_llm_tier_untested_label">Netestat</string>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">此插件没有 render() 函数。</string>
+    <string name="core_plugins_error_not_installed">该插件未安装。</string>
+    <string name="core_plugins_error_script_failed">脚本执行失败。</string>
+    <string name="core_plugins_error_script_missing">该插件的脚本缺失。</string>
+    <string name="core_plugins_error_turned_off">该插件已关闭。</string>
+    <string name="core_plugins_permission_storage_label">在您的设备上保存数据</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s”包含无效的 UTF-8 文本脚本。</string>
+    <string name="core_plugins_reject_bad_id">此插件的 ID 无效。ID 长度应为 3 到 64 个字符。ID 可以包含小写字母、数字、点、连字符和下划线。</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s”包含已编译的 Lua 代码。插件必须使用纯源代码，以便您在运行前可以阅读它。</string>
+    <string name="core_plugins_reject_empty_script">“%1$s”的脚本为空。</string>
+    <string name="core_plugins_reject_missing_script">“%1$s”缺少其脚本文件 (%2$s)。</string>
+    <string name="core_plugins_reject_newer_version">此插件需要更新版本的 WM Keyboard。</string>
+    <string name="core_plugins_reject_no_name">此插件没有名称。</string>
+    <string name="core_plugins_reject_no_version">“%1$s”未说明其版本。</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s”包含的脚本大于 %2$d KB。</string>
+    <string name="core_plugins_reject_unknown_permission">此版本的 WM 键盘无法识别权限“%1$s”。应用无法告知您“%2$s”被允许执行的操作。</string>
+    <string name="core_plugins_stopped_cancelled">应用已停止此插件。</string>
+    <string name="core_plugins_stopped_deadline">此插件运行时间过长，应用已将其停止。</string>
+    <string name="core_plugins_stopped_instructions">此插件同时执行了过多任务，应用已将其停止。</string>
+    <string name="core_plugins_stopped_not_responding">此插件停止响应，应用已将其关闭。</string>
+    <string name="core_plugins_stopped_not_responding_disabled">此插件再次停止响应。应用已将其关闭。</string>
+    <string name="core_plugins_stopped_recursion">此插件调用自身次数过多。应用已将其停止。</string>
+    <string name="core_plugins_stopped_unexpected">此插件意外停止。</string>
+    <string name="core_plugins_ui_insert_action">插入</string>
+    <string name="core_plugins_ui_repair_no_type">某个小部件未说明其类型。</string>
+    <string name="core_plugins_ui_repair_not_a_widget">小部件列表中包含非小部件的内容。</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">标签栏中没有页面。</string>
+    <string name="core_plugins_ui_repair_text_budget">此插件请求绘制的文本过多。应用已省略部分内容。</string>
+    <string name="core_plugins_ui_repair_text_shortened">部分文本过长无法显示，应用已将其缩短。</string>
+    <string name="core_plugins_ui_repair_too_deep">某些小部件嵌套过深，无法绘制。</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">仅显示前 %1$d 个标签页。</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">此插件请求的组件超过了 %1$d 个。应用已丢弃其余部分。</string>
+    <string name="core_plugins_ui_repair_unknown_type">此构建版本无法识别小部件类型“%1$s”。</string>
+    <string name="core_plugins_ui_tab_default_title">标签页 %1$d</string>
+</resources>

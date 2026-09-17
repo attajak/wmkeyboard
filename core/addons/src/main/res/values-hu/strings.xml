@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Szótárak</string>
+    <string name="core_addons_type_dictionary_singular_label">Szótár</string>
+    <string name="core_addons_type_emoji_font_label">Emoji betűtípusok</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emoji betűtípus</string>
+    <string name="core_addons_type_emoji_keywords_label">Emoji kulcsszavak</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Emoji kulcsszócsomag</string>
+    <string name="core_addons_type_espanso_label">Espanso csomagok</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso csomag</string>
+    <string name="core_addons_type_font_label">Betűtípusok</string>
+    <string name="core_addons_type_font_singular_label">Betűtípus</string>
+    <string name="core_addons_type_icon_pack_label">Ikoncsomagok</string>
+    <string name="core_addons_type_icon_pack_singular_label">Ikoncsomag</string>
+    <string name="core_addons_type_layout_label">Elrendezések</string>
+    <string name="core_addons_type_layout_singular_label">Elrendezés</string>
+    <string name="core_addons_type_plugin_label">Bővítmények</string>
+    <string name="core_addons_type_plugin_singular_label">Bővítmény</string>
+    <string name="core_addons_type_snippets_label">Részletek</string>
+    <string name="core_addons_type_snippets_singular_label">Kódrészletcsomag</string>
+    <string name="core_addons_type_sound_label">Hangok</string>
+    <string name="core_addons_type_sound_pack_label">Hangcsomagok</string>
+    <string name="core_addons_type_sound_pack_singular_label">Hangcsomag</string>
+    <string name="core_addons_type_sound_singular_label">Billentyűhang</string>
+    <string name="core_addons_type_stickers_label">Matricacsomagok</string>
+    <string name="core_addons_type_stickers_singular_label">Matricacsomag</string>
+    <string name="core_addons_type_theme_label">Témák</string>
+    <string name="core_addons_type_theme_singular_label">Téma</string>
+    <string name="core_addons_type_unknown_label">Egyéb</string>
+    <string name="core_addons_type_unknown_singular_label">Bővítmény</string>
+    <string name="core_addons_type_vocabulary_label">Szókincs</string>
+    <string name="core_addons_type_vocabulary_singular_label">Szókészletcsomag</string>
+</resources>

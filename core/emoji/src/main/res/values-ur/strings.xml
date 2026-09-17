@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">وہ ایموجی کلیدی الفاظ کی فہرست خالی ہے یا ناقابل مطالعہ ہے۔</string>
+    <string name="core_emoji_dict_error_http">سرور نے فائل نہیں بھیجی۔ ایرر کوڈ HTTP %1$s ہے۔</string>
+    <string name="core_emoji_dict_error_not_a_list">یہ فائل ایموجی کی ورڈ لسٹ نہیں ہے۔</string>
+    <string name="core_emoji_dict_error_save">ایپ ایموجی کی ورڈ لسٹ کو محفوظ نہیں کر سکی۔</string>
+    <string name="core_emoji_dict_error_too_large">وہ ایموجی کی ورڈ لسٹ بہت بڑی ہے۔</string>
+</resources>

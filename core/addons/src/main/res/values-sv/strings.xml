@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Ordböcker</string>
+    <string name="core_addons_type_dictionary_singular_label">Ordbok</string>
+    <string name="core_addons_type_emoji_font_label">Emojitypsnitt</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emojitypsnitt</string>
+    <string name="core_addons_type_emoji_keywords_label">Emoji-nyckelord</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Emoji-nyckelordspaket</string>
+    <string name="core_addons_type_espanso_label">Espanso-paket</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso-paket</string>
+    <string name="core_addons_type_font_label">Typsnitt</string>
+    <string name="core_addons_type_font_singular_label">Typsnitt</string>
+    <string name="core_addons_type_icon_pack_label">Ikonpaket</string>
+    <string name="core_addons_type_icon_pack_singular_label">Ikonpaket</string>
+    <string name="core_addons_type_layout_label">Layouter</string>
+    <string name="core_addons_type_layout_singular_label">Layout</string>
+    <string name="core_addons_type_plugin_label">Insticksprogram</string>
+    <string name="core_addons_type_plugin_singular_label">Insticksprogram</string>
+    <string name="core_addons_type_snippets_label">Textsnuttar</string>
+    <string name="core_addons_type_snippets_singular_label">Snippet-paket</string>
+    <string name="core_addons_type_sound_label">Ljud</string>
+    <string name="core_addons_type_sound_pack_label">Ljudpaket</string>
+    <string name="core_addons_type_sound_pack_singular_label">Ljudpaket</string>
+    <string name="core_addons_type_sound_singular_label">Tangentljud</string>
+    <string name="core_addons_type_stickers_label">Klistermärkepaket</string>
+    <string name="core_addons_type_stickers_singular_label">Klistermärkepaket</string>
+    <string name="core_addons_type_theme_label">Teman</string>
+    <string name="core_addons_type_theme_singular_label">Tema</string>
+    <string name="core_addons_type_unknown_label">Annat</string>
+    <string name="core_addons_type_unknown_singular_label">Tillägg</string>
+    <string name="core_addons_type_vocabulary_label">Ordförråd</string>
+    <string name="core_addons_type_vocabulary_singular_label">Ordförrådspaket</string>
+</resources>

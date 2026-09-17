@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">ڈاؤن لوڈ کردہ فائل خراب ہے۔ اس کا چیک سم مماثل نہیں ہے۔ دوبارہ ڈاؤن لوڈ کرنے کی کوشش کریں۔</string>
+    <string name="core_input_cjk_download_error_http">سرور نے HTTP اسٹیٹس %1$s واپس کیا۔</string>
+    <string name="core_input_cjk_download_error_network">ڈاؤن لوڈ کام نہیں کر سکا۔ اپنے کنکشن کو چیک کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="core_input_cjk_download_error_network_detail">ڈاؤن لوڈ کام نہیں کر سکا: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">آپ کے آلے پر کافی اسٹوریج نہیں ہے۔ پہلے کچھ جگہ خالی کریں۔</string>
+    <string name="core_input_cjk_download_error_truncated">ڈاؤن لوڈ کے دوران کنکشن منقطع ہو گیا۔ جاری رکھنے کے لیے \'Resume\' دبائیں۔</string>
+    <string name="core_input_cjk_download_error_unavailable">یہ پیک ابھی دستیاب نہیں ہے۔</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">ہانزی حروف کے لیے ریڈیکل کوڈز کی ایک جدول، 29,000 حروف۔ کی بورڈ کو Cangjie اور Quick لے آؤٹس کے لیے اس پیک کی ضرورت ہے۔</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) لغت</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">mozc سے کانا ریڈنگز، 1.08 ملین اندراجات، تقریباً 42 MB۔ جاپانی کنورژن کے لیے کی بورڈ کو اس پیک کی ضرورت ہے۔</string>
+    <string name="core_input_cjk_pack_ja_kana_title">جاپانی کانا سے کانجی لغت</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Jyutping ریڈنگز سے ہانزی حروف کی ایک جدول، 163,000 اندراجات۔ کی بورڈ کو کینٹونیز کنورژن کے لیے اس پیک کی ضرورت ہے۔</string>
+    <string name="core_input_cjk_pack_jyutping_title">کینٹونیز جیوتپنگ لغت</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT سے ہانزی حروف اور جملے، 120,000 اندراجات۔ کی بورڈ کو چینی کنورژن کے لیے اس پیک کی ضرورت ہے۔</string>
+    <string name="core_input_cjk_pack_pinyin_title">چینی پینین لغت</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">ہانزی حروف کے لیے اسٹروک آرڈر کی ایک میز۔ کی بورڈ کو اسٹروک لے آؤٹ کے لیے اس پیک کی ضرورت ہے۔</string>
+    <string name="core_input_cjk_pack_stroke_title">چینی اسٹروک (笔画) لغت</string>
+    <string name="core_input_double_pinyin_off_label">آف (مکمل پینین)</string>
+</resources>

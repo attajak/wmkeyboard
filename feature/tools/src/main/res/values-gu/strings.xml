@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">AI પ્રદાતાએ ભૂલ સાથે પ્રતિસાદ સમાપ્ત કર્યો</string>
+    <string name="ftools_photo_error_failed">એપ ફોટા મેળવી શકી નથી</string>
+    <string name="ftools_photo_error_offline">એપ ફોટો સર્વિસ સુધી પહોંચી શકતી નથી. તમારું નેટવર્ક તપાસો અને ફરી પ્રયાસ કરો.</string>
+    <string name="ftools_photo_error_timeout">ફોટો સેવાને જવાબ આપવામાં ઘણો સમય લાગ્યો</string>
+    <string name="ftools_search_error_json_disabled">આ SearXNG ઇન્સ્ટન્સે તેનું JSON API સક્ષમ કર્યું નથી. તેની settings.yml ફાઇલમાં search.formats માં &lt;b&gt;json&lt;/b&gt; ઉમેરો, અથવા અન્ય ઇન્સ્ટન્સનો ઉપયોગ કરો.</string>
+</resources>

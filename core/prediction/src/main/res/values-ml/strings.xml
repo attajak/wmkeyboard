@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">സെർവർ ഫയൽ അയച്ചില്ല. പിശക് കോഡ് HTTP %1$s ആണ്.</string>
+    <string name="core_pred_wordlist_malformed_error">ആ വേഡ് ലിസ്റ്റ് ശൂന്യമാണ് അല്ലെങ്കിൽ വായിക്കാൻ കഴിയില്ല.</string>
+    <string name="core_pred_wordlist_no_space_error">നിങ്ങളുടെ ഉപകരണത്തിൽ മതിയായ സ്റ്റോറേജ് ഇല്ല. ചില ഫയലുകൾ ഇല്ലാതാക്കിയ ശേഷം വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="core_pred_wordlist_save_error">ആപ്പിന് വേഡ് ലിസ്റ്റ് സേവ് ചെയ്യാൻ കഴിയില്ല. വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="core_pred_wordlist_size_all_label">എല്ലാം</string>
+    <string name="core_pred_wordlist_size_large_label">വലുത്</string>
+    <string name="core_pred_wordlist_size_medium_label">മീഡിയം</string>
+    <string name="core_pred_wordlist_size_small_label">ചെറുത്</string>
+    <string name="core_pred_wordlist_variant_brazil_label">ബ്രസീൽ</string>
+    <string name="core_pred_wordlist_variant_europe_label">യൂറോപ്പ്</string>
+</resources>

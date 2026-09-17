@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Emoji-faner</string>
+    <string name="core_icons_group_keys_title">Taster</string>
+    <string name="core_icons_group_toolbar_title">Verktøylinje</string>
+    <string name="core_icons_group_tools_title">Verktøy</string>
+    <string name="core_icons_pack_imported_label">Importerte ikoner</string>
+    <string name="core_icons_pack_mine_label">Mine ikoner</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Appen ignorerte %1$d fil. Denne versjonen har ikke noe ikon for den: %2$s</item>
+        <item quantity="other">Appen ignorerte %1$d filer. Denne versjonen har ikke noe ikon for dem: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Appen forkastet \"%1$s\". Appen kan ikke lagre den.</string>
+    <string name="core_icons_repair_svg_unreadable">Appen mistet \"%1$s\". Appen kan ikke lese SVG-filen.</string>
+    <string name="core_icons_slot_backspace_label">Tilbake</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Aktiviteter</string>
+    <string name="core_icons_slot_emoji_animals_label">Dyr</string>
+    <string name="core_icons_slot_emoji_flags_label">Flagg</string>
+    <string name="core_icons_slot_emoji_food_label">Mat</string>
+    <string name="core_icons_slot_emoji_key_label">Emojitast</string>
+    <string name="core_icons_slot_emoji_most_used_label">Mest brukt</string>
+    <string name="core_icons_slot_emoji_nature_label">Natur</string>
+    <string name="core_icons_slot_emoji_objects_label">Objekter</string>
+    <string name="core_icons_slot_emoji_people_label">Folk</string>
+    <string name="core_icons_slot_emoji_recent_label">Nylige</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Emoji-snarvei</string>
+    <string name="core_icons_slot_emoji_smileys_label">Smilefjes</string>
+    <string name="core_icons_slot_emoji_symbols_label">Symboler</string>
+    <string name="core_icons_slot_emoji_travel_label">Reise</string>
+    <string name="core_icons_slot_enter_done_label">Enter: ferdig</string>
+    <string name="core_icons_slot_enter_go_label">Enter: gå</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: neste</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: forrige</string>
+    <string name="core_icons_slot_enter_search_label">Enter: søk</string>
+    <string name="core_icons_slot_enter_send_label">Enter: send</string>
+    <string name="core_icons_slot_forward_delete_label">Slett fremover</string>
+    <string name="core_icons_slot_globe_label">Bytt språk</string>
+    <string name="core_icons_slot_incognito_label">Inkognito-merke</string>
+    <string name="core_icons_slot_input_method_picker_label">Bytt tastatur</string>
+    <string name="core_icons_slot_panel_back_label">Tilbake til taster</string>
+    <string name="core_icons_slot_power_saving_label">Strømsparingsmerke</string>
+    <string name="core_icons_slot_search_close_label">Lukk søk</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Skift (på)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Vis verktøy</string>
+    <string name="core_icons_slot_toolbox_label">Verktøykasse</string>
+</resources>

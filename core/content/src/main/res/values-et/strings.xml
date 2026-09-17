@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Ühekordne kood</string>
+    <string name="core_content_clip_entity_otp_tag">KOOD</string>
+    <string name="core_content_clip_entity_phone_label">Telefoninumber</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFON</string>
+    <string name="core_content_clip_entity_url_label">Link</string>
+    <string name="core_content_clip_entity_url_tag">LINK</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d tekstilõigul on muid laiendusi, mida Espanso ei saa hoida. Kirjutati ainult esimene.</item>
+        <item quantity="other">%1$d tekstilõigul on muid laiendusi, mida Espanso ei saa hoida. Igaühe puhul kirjutati ainult esimene.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d väljavõte on piiratud teatud arvutiprogrammidega. Sinu telefonis töötab see kõikjal.</item>
+        <item quantity="other">%1$d väljavõtet on piiratud teatud arvutiprogrammidega. Sinu telefonis töötavad need kõikjal.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d väljavõte palub teil valida loendist. Rakendus valib selle asemel juhuslikult ühe.</item>
+        <item quantity="other">%1$d väljavõtet paluvad teil valida loendist. Rakendus valib selle asemel juhuslikult ühe.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d tekstilõik küsib enne laiendamist. Espansol sellist seadet pole, seega laieneb see seal iseenesest.</item>
+        <item quantity="other">%1$d tekstilõiku küsivad enne laiendamist. Espansol sellist seadet pole, seega laienevad need seal iseenesest.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d tekstilõik kasutab kuupäevavormingut, mida rakendus ei saa täielikult kirjutada. Rakendus jättis osa, mida ta ei saa teha, välja.</item>
+        <item quantity="other">%1$d tekstilõiku kasutavad kuupäevavorminguid, mida rakendus ei saa täielikult kirjutada. Rakendus jättis osad, mida ta ei saa teha, välja.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d väljavõte on kaustas, mis on välja lülitatud. Espansol pole kaustalülitit, seega laieneb see seal.</item>
+        <item quantity="other">%1$d väljavõtet on kaustades, mis on välja lülitatud. Espansol pole kaustalülitit, seega laienevad need seal.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Rakendus jättis vahele %1$d väljalõike, millel pole midagi sisestada.</item>
+        <item quantity="other">Rakendus jättis vahele %1$d väljalõiget, millel pole midagi sisestada.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d tekstilõik palub sul vormi täita. Rakendus sisestab vormi tekstina, kursor on esimeses tühikus.</item>
+        <item quantity="other">%1$d tekstilõiku paluvad sul vormi täita. Rakendus sisestab iga vormi tekstina, kursor on esimeses tühikus.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Rakendus jättis vahele %1$d väljavõtte, mis lisab pildi.</item>
+        <item quantity="other">Rakendus jättis vahele %1$d väljavõtet, mis lisavad pilte.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Fail loeb %1$d muud faili. Üks fail ei saa teisi endaga kaasa tuua.</item>
+        <item quantity="other">Fail loeb %1$d muud faili. Üks fail ei saa teisi endaga kaasa tuua.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d tekstilõik viitab teistele tekstilõikudele. Espansol pole võimalust seda väljendada, seega lingid jäeti välja.</item>
+        <item quantity="other">%1$d tekstilõiku viitavad teistele tekstilõikudele. Espansol pole võimalust seda väljendada, seega lingid jäeti välja.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d päästik on mõeldud töötama sõna sees. Sinu telefonis töötab see ainult tervikliku sõnana.</item>
+        <item quantity="other">%1$d päästikut on mõeldud töötama sõna sees. Sinu telefonis töötavad need ainult terviklike sõnadena.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d tekstilõik kasutab väärtust, millele Espansol puudub vaste. See kirjutatakse välja nii, nagu see on.</item>
+        <item quantity="other">%1$d tekstilõiku kasutavad väärtusi, millele Espansol puudub vaste. Need kirjutatakse välja nii, nagu need on.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Rakendus eemaldas mustri %1$d tekstilõigust. Rakendus ei käivita seda tüüpi mustreid. Tekstilõik jääb loendisse.</item>
+        <item quantity="other">Rakendus eemaldas mustri %1$d tekstilõigust. Rakendus ei käivita seda tüüpi mustreid. Tekstilõigud jäävad loendisse.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d väljavõte kasutab vormindatud teksti. Rakendus jätab sõnad alles ja eemaldab vormingu.</item>
+        <item quantity="other">%1$d väljavõtet kasutavad vormindatud teksti. Rakendus jätab sõnad alles ja eemaldab vormingu.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d tekstilõik käivitab arvutis käsu. Rakendus jättis käsu vahele ega käivita seda kunagi.</item>
+        <item quantity="other">%1$d tekstilõiku käivitavad arvutis käske. Rakendus jättis käsud vahele ega käivita neid kunagi.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d päästik ei lõpe sõnaga, seega rakendus ei saa seda jälgida. Selle väljavõte jääb loendisse.</item>
+        <item quantity="other">%1$d päästikut ei lõpe sõnaga, seega rakendus ei saa neid jälgida. Nende väljavõtted jäävad loendisse.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d väljavõte sisaldab sulgudes teksti, mida see rakendus täidab, näiteks {date}. See laieneb kirjutatuna ilmumise asemel.</item>
+        <item quantity="other">%1$d väljavõtet sisaldavad sulgudes teksti, mida see rakendus täidab, näiteks {date}. See laieneb kirjutatuna ilmumise asemel.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d väljavõte muudab selle mustriga püütud teksti suurtähti. Espanso ei saa seda teha, seega jääb püütud tekst muutmata.</item>
+        <item quantity="other">%1$d väljavõtet muudavad nende mustritega püütud teksti suurtähti. Espanso ei saa seda teha, seega jääb püütud tekst muutmata.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d väljavõte kasutab väärtust, millele rakendusel pole vastet. See osa jääb tühjaks.</item>
+        <item quantity="other">%1$d väljavõtet kasutavad väärtusi, millele rakendusel pole vastet. Need osad jäävad tühjaks.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Rakendus ei saa fonti alla laadida. Kontrollige ühendust ja proovige uuesti.</string>
+    <string name="core_content_font_error_empty">Fail on tühi.</string>
+    <string name="core_content_font_error_load">Rakendus ei saa seda fondifaili laadida.</string>
+    <string name="core_content_font_error_markup">See fail on HTML- või XML-fail, mitte font.</string>
+    <string name="core_content_font_error_no_storage">Fondile pole salvestusruumi saadaval.</string>
+    <string name="core_content_font_error_not_a_font">See fail ei paista olevat .ttf või .otf font.</string>
+    <string name="core_content_font_error_read">Rakendus ei suuda fonti lugeda.</string>
+    <string name="core_content_font_error_save">Rakendus ei saa fonti salvestada.</string>
+    <string name="core_content_font_error_too_large">Font peab olema väiksem kui %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Fonditeek on täis. Kustuta font ja proovi uuesti.</string>
+    <string name="core_content_font_error_too_short">Fail on fondiks olemiseks liiga lühike.</string>
+    <string name="core_content_font_error_woff">Rakendus ei saa lugeda WOFF-veebifonte. Kasuta fondi .ttf või .otf versiooni.</string>
+    <string name="core_content_font_error_woff2">Rakendus ei suuda WOFF2-veebifonte lugeda. Kasutage fondi versiooni .ttf või .otf.</string>
+    <string name="core_content_font_error_zip">See fail on zip-arhiiv, mitte font.</string>
+    <string name="core_content_selection_macro_add_contact">Kontakt</string>
+    <string name="core_content_selection_macro_calendar">Kalender</string>
+    <string name="core_content_selection_macro_call">Helista</string>
+    <string name="core_content_selection_macro_case_lower">väiketähed</string>
+    <string name="core_content_selection_macro_case_sentence">Lause algustäht suurega</string>
+    <string name="core_content_selection_macro_case_title">Pealkirja suurtähed</string>
+    <string name="core_content_selection_macro_case_upper">SUURTÄHED</string>
+    <string name="core_content_selection_macro_chat_bold">Paks</string>
+    <string name="core_content_selection_macro_chat_italic">Kursiiv</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Läbikriipsutus</string>
+    <string name="core_content_selection_macro_colour">Värv</string>
+    <string name="core_content_selection_macro_copy">Kopeeri</string>
+    <string name="core_content_selection_macro_digits_latin">Numbrid</string>
+    <string name="core_content_selection_macro_email">E-post</string>
+    <string name="core_content_selection_macro_fancy">Uhke</string>
+    <string name="core_content_selection_macro_find">Otsi</string>
+    <string name="core_content_selection_macro_format">Vorming</string>
+    <string name="core_content_selection_macro_grammar">Grammatika</string>
+    <string name="core_content_selection_macro_lines_bullet">Täpploend</string>
+    <string name="core_content_selection_macro_lines_dedupe">Unikaalne</string>
+    <string name="core_content_selection_macro_lines_number">Number</string>
+    <string name="core_content_selection_macro_lines_sort">Sorteeri</string>
+    <string name="core_content_selection_macro_map">Kaart</string>
+    <string name="core_content_selection_macro_open">Ava</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Räägi</string>
+    <string name="core_content_selection_macro_replace">Asenda</string>
+    <string name="core_content_selection_macro_search">Otsi</string>
+    <string name="core_content_selection_macro_share">Jaga</string>
+    <string name="core_content_selection_macro_sms">Sõnum</string>
+    <string name="core_content_selection_macro_time_zones">Ajavööndid</string>
+    <string name="core_content_selection_macro_to_bangla">Bengali</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Tõlgi</string>
+    <string name="core_content_selection_macro_url_decode">Dekodeeri</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Rakendus jättis \"%1$s\" hulgast välja %2$d laienduse.</item>
+        <item quantity="other">Rakendus jättis \"%1$s\" hulgast välja %2$d laiendust.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Rakendus eemaldas mustri \"%1$s\". Muster ei ole õige. Väljavõte jääb loendisse.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Rakendus eemaldas %1$d kausta, millel puudub nimi või mis kordub. Selle väljavõtted lisati ilma kaustata.</item>
+        <item quantity="other">Rakendus eemaldas %1$d kausta, millel puudub nimi või mis korduvad. Nende väljavõtted lisati ilma kaustata.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Failis on rohkem väljavõtteid, kui rakendus säilitab. Rakendus importis esimesed %1$d.</item>
+        <item quantity="other">Failis on rohkem väljavõtteid, kui rakendus säilitab. Rakendus importis esimesed %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Väljavõttel pole nime, seega nimetas rakendus selle esimese rea järgi.</string>
+    <string name="core_content_snippet_repair_no_text">Rakendus loobus \"%1$s\"-st. Sellel pole teksti.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Rakendus eemaldas mustri \"%1$s\". See oli pikem kui %2$d märk.</item>
+        <item quantity="other">Rakendus eemaldas mustri \"%1$s\". See oli pikem kui %2$d märki.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Rakendus lühendas \"%1$s\". See oli pikem kui %2$d märk.</item>
+        <item quantity="other">Rakendus lühendas \"%1$s\". See oli pikem kui %2$d märki.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Rakenduse nimi, millesse trükite</string>
+    <string name="core_content_snippet_var_clip_info">Uusim lõikelaua kirje</string>
+    <string name="core_content_snippet_var_cursor_info">Koht, kuhu kursor maandub</string>
+    <string name="core_content_snippet_var_date_info">Tänane kuupäev</string>
+    <string name="core_content_snippet_var_datetime_info">Kuupäev ja kellaaeg</string>
+    <string name="core_content_snippet_var_day_info">Kuu päev</string>
+    <string name="core_content_snippet_var_isodate_info">Kuupäev ISO-vormingus, näiteks 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Kuupäev ja kellaaeg ISO-vormingus</string>
+    <string name="core_content_snippet_var_month_info">Kuu nimi</string>
+    <string name="core_content_snippet_var_package_info">Selle rakenduse paketi nimi</string>
+    <string name="core_content_snippet_var_selection_info">Väljalt valitud tekst</string>
+    <string name="core_content_snippet_var_time12_info">Praegune kellaaeg 12-tunnises vormingus</string>
+    <string name="core_content_snippet_var_time_info">Praegune aeg 24-tunnises vormingus</string>
+    <string name="core_content_snippet_var_timestamp_info">Aeg Unixi sekundites</string>
+    <string name="core_content_snippet_var_timezone_info">Ajavöönd, näiteks GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Uus juhuslik UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Päeva nimi, näiteks pühapäev</string>
+    <string name="core_content_snippet_var_year_info">Aasta nelja numbriga</string>
+    <string name="core_content_sticker_pack_imported_label">Imporditud kleebised</string>
+    <string name="core_content_sticker_repair_image_missing">Rakendus eemaldas \"%1$s\". Selle pilt on puudu.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Rakendus loobus \"%1$s\". Rakendus ei suuda selle pilti lugeda.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Pakis on %1$d kleebis. Rakendus jätab alles esimesed %2$d.</item>
+        <item quantity="other">Pakis on %1$d kleebist. Rakendus jätab alles esimesed %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Rakendus eemaldas kleebise. Kleebise nimi ei viita ühelegi pildifailile.</string>
+    <string name="core_content_sticker_repair_none_listed">Paketifailis pole kleebiseid loetletud.</string>
+    <string name="core_content_sticker_repair_not_saved">Rakendus loobus \"%1$s\". Rakendus ei saa seda salvestada.</string>
+</resources>

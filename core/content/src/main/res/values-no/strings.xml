@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Engangskode</string>
+    <string name="core_content_clip_entity_otp_tag">KODE</string>
+    <string name="core_content_clip_entity_phone_label">Telefonnummer</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFON</string>
+    <string name="core_content_clip_entity_url_label">Lenke</string>
+    <string name="core_content_clip_entity_url_tag">LENKE</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d tekstsnutt har andre utvidelser som Espanso ikke kan håndtere. Bare den første ble skrevet.</item>
+        <item quantity="other">%1$d tekstsnutter har andre utvidelser som Espanso ikke kan håndtere. Bare den første av hver ble skrevet.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d tekstsnutt er begrenset til visse dataprogrammer. På telefonen din fungerer den overalt.</item>
+        <item quantity="other">%1$d tekstsnutter er begrenset til visse dataprogrammer. På telefonen din fungerer de overalt.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d tekstsnutt ber deg velge fra en liste. Appen velger en tilfeldig i stedet.</item>
+        <item quantity="other">%1$d tekstsnutter ber deg velge fra en liste. Appen velger en tilfeldig i stedet.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d tekstsnutt spør før den utvides. Espanso har ingen slik innstilling, så den vil utvides av seg selv der.</item>
+        <item quantity="other">%1$d tekstsnutter spør før de utvides. Espanso har ingen slik innstilling, så de vil utvides av seg selv der.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d tekstsnutt bruker et datoformat appen ikke kan skrive fullstendig. Appen utelot delen den ikke kan håndtere.</item>
+        <item quantity="other">%1$d tekstsnutter bruker datoformater appen ikke kan skrive fullstendig. Appen utelot delene den ikke kan håndtere.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d tekstsnutt er i en mappe som er slått av. Espanso har ingen mappebryter, så den vil utvides der.</item>
+        <item quantity="other">%1$d tekstsnutter er i mapper som er slått av. Espanso har ingen mappebryter, så de vil utvides der.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Appen hoppet over %1$d tekstbit som ikke har noe å sette inn.</item>
+        <item quantity="other">Appen hoppet over %1$d tekstbiter som ikke har noe å sette inn.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d tekstsnutt ber deg fylle ut et skjema. Appen setter inn skjemaet som tekst, med markøren i det første feltet.</item>
+        <item quantity="other">%1$d tekstsnutter ber deg fylle ut et skjema. Appen setter inn hvert skjema som tekst, med markøren i det første feltet.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Appen hoppet over %1$d tekstsnutt som setter inn et bilde.</item>
+        <item quantity="other">Appen hoppet over %1$d tekstsnutter som setter inn bilder.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Filen leser %1$d annen fil. Én fil kan ikke ta med seg de andre.</item>
+        <item quantity="other">Filen leser %1$d andre filer. Én fil kan ikke ta med seg de andre.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d tekstsnutt peker på andre tekstsnutter. Espanso har ingen måte å si det på, så koblingene ble utelatt.</item>
+        <item quantity="other">%1$d tekstsnutter peker på andre tekstsnutter. Espanso har ingen måte å si det på, så koblingene ble utelatt.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d utløser er ment å fungere inne i et ord. På telefonen din fungerer den bare som et helt ord.</item>
+        <item quantity="other">%1$d utløsere er ment å fungere inne i et ord. På telefonen din fungerer de bare som hele ord.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d tekstsnutt bruker en verdi Espanso ikke har noen ekvivalent for. Den skrives ut som den står.</item>
+        <item quantity="other">%1$d tekstsnutter bruker verdier Espanso ikke har noen ekvivalent for. De skrives ut som de står.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Appen fjernet mønsteret fra %1$d tekstsnutt. Appen kjører ikke mønstre med den formen. Tekstsnutten forblir i listen.</item>
+        <item quantity="other">Appen fjernet mønsteret fra %1$d tekstsnutter. Appen kjører ikke mønstre med den formen. Tekstsnuttene forblir i listen.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d tekstsnutt bruker formatert tekst. Appen beholder ordene, men fjerner formateringen.</item>
+        <item quantity="other">%1$d tekstsnutter bruker formatert tekst. Appen beholder ordene, men fjerner formateringen.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d tekstsnutt kjører en kommando på datamaskinen din. Appen utelot kommandoen og kjører den aldri.</item>
+        <item quantity="other">%1$d tekstsnutter kjører kommandoer på datamaskinen din. Appen utelot kommandoene og kjører dem aldri.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d utløser ender ikke på et ord, så appen kan ikke overvåke den. Snippeten forblir i listen.</item>
+        <item quantity="other">%1$d utløsere ender ikke på et ord, så appen kan ikke overvåke dem. Snippetene forblir i listen.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d tekstsnutt inneholder tekst i klammeparenteser som denne appen fyller ut, for eksempel {date}. Den vil utvides i stedet for å vises som skrevet.</item>
+        <item quantity="other">%1$d tekstsnutter inneholder tekst i klammeparenteser som denne appen fyller ut, for eksempel {date}. De vil utvides i stedet for å vises som skrevet.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d tekstsnutt endrer store bokstaver i det mønsteret fanget opp. Espanso kan ikke gjøre det, så den fangede teksten settes inn uendret.</item>
+        <item quantity="other">%1$d tekstsnutter endrer store bokstaver i det mønstrene fanget opp. Espanso kan ikke gjøre det, så den fangede teksten settes inn uendret.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d tekstsnutt bruker en verdi appen ikke har noen ekvivalent for. Den delen blir tom.</item>
+        <item quantity="other">%1$d tekstsnutter bruker verdier appen ikke har noen ekvivalent for. De delene blir tomme.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Appen kan ikke laste ned skrifttypen. Sjekk tilkoblingen din og prøv igjen.</string>
+    <string name="core_content_font_error_empty">Filen er tom.</string>
+    <string name="core_content_font_error_load">Appen kan ikke laste inn denne skriftfilen.</string>
+    <string name="core_content_font_error_markup">Denne filen er en HTML- eller XML-fil, ikke en skrift.</string>
+    <string name="core_content_font_error_no_storage">Ingen lagringsplass er tilgjengelig for skrifttypen.</string>
+    <string name="core_content_font_error_not_a_font">Denne filen ser ikke ut som en .ttf- eller .otf-font.</string>
+    <string name="core_content_font_error_read">Appen kan ikke lese skrifttypen.</string>
+    <string name="core_content_font_error_save">Appen kan ikke lagre skrifttypen.</string>
+    <string name="core_content_font_error_too_large">En skrifttype må være mindre enn %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Skriftbiblioteket er fullt. Slett en skrifttype og prøv igjen.</string>
+    <string name="core_content_font_error_too_short">Filen er for kort til å være en skrifttype.</string>
+    <string name="core_content_font_error_woff">Appen kan ikke lese WOFF-nettfonter. Bruk .ttf- eller .otf-versjonen av fonten.</string>
+    <string name="core_content_font_error_woff2">Appen kan ikke lese WOFF2-nettfonter. Bruk .ttf- eller .otf-versjonen av fonten.</string>
+    <string name="core_content_font_error_zip">Denne filen er et zip-arkiv, ikke en skrifttype.</string>
+    <string name="core_content_selection_macro_add_contact">Kontakt</string>
+    <string name="core_content_selection_macro_calendar">Kalender</string>
+    <string name="core_content_selection_macro_call">Ring</string>
+    <string name="core_content_selection_macro_case_lower">små bokstaver</string>
+    <string name="core_content_selection_macro_case_sentence">Setningsstor bokstav</string>
+    <string name="core_content_selection_macro_case_title">Tittel-bokstaver</string>
+    <string name="core_content_selection_macro_case_upper">STORE BOKSTAVER</string>
+    <string name="core_content_selection_macro_chat_bold">Fet</string>
+    <string name="core_content_selection_macro_chat_italic">Kursiv</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Gjennomstreking</string>
+    <string name="core_content_selection_macro_colour">Farge</string>
+    <string name="core_content_selection_macro_copy">Kopier</string>
+    <string name="core_content_selection_macro_digits_latin">Siffer</string>
+    <string name="core_content_selection_macro_email">E-post</string>
+    <string name="core_content_selection_macro_fancy">Fancy</string>
+    <string name="core_content_selection_macro_find">Finn</string>
+    <string name="core_content_selection_macro_format">Format</string>
+    <string name="core_content_selection_macro_grammar">Grammatikk</string>
+    <string name="core_content_selection_macro_lines_bullet">Punktmerking</string>
+    <string name="core_content_selection_macro_lines_dedupe">Unik</string>
+    <string name="core_content_selection_macro_lines_number">Nummer</string>
+    <string name="core_content_selection_macro_lines_sort">Sorter</string>
+    <string name="core_content_selection_macro_map">Kart</string>
+    <string name="core_content_selection_macro_open">Åpne</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Snakk</string>
+    <string name="core_content_selection_macro_replace">Erstatt</string>
+    <string name="core_content_selection_macro_search">Søk</string>
+    <string name="core_content_selection_macro_share">Del</string>
+    <string name="core_content_selection_macro_sms">Melding</string>
+    <string name="core_content_selection_macro_time_zones">Tidssoner</string>
+    <string name="core_content_selection_macro_to_bangla">Bengali</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Oversett</string>
+    <string name="core_content_selection_macro_url_decode">Dekod</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Appen utelot %2$d utvidelse fra \"%1$s\".</item>
+        <item quantity="other">Appen utelot %2$d utvidelser fra \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Appen fjernet mønsteret fra \"%1$s\". Mønsteret er ikke korrekt. Snippet-en forblir i listen.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Appen fjernet %1$d mappe som ikke har noe navn eller som gjentar en annen. Snuttene dens kom inn uten en mappe.</item>
+        <item quantity="other">Appen fjernet %1$d mapper som ikke har noe navn eller som gjentar en annen. Snuttene deres kom inn uten en mappe.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Filen har flere utdrag enn appen beholder. Appen importerte de første %1$d.</item>
+        <item quantity="other">Filen har flere utdrag enn appen beholder. Appen importerte de første %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Et utdrag har ikke noe navn, så appen ga det navn etter den første linjen.</string>
+    <string name="core_content_snippet_repair_no_text">Appen fjernet \"%1$s\". Den har ingen tekst.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Appen fjernet mønsteret fra \"%1$s\". Det var lengre enn %2$d tegn.</item>
+        <item quantity="other">Appen fjernet mønsteret fra \"%1$s\". Det var lengre enn %2$d tegn.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Appen forkortet \"%1$s\". Den var lengre enn %2$d tegn.</item>
+        <item quantity="other">Appen forkortet \"%1$s\". Den var lengre enn %2$d tegn.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Navnet på appen du skriver i</string>
+    <string name="core_content_snippet_var_clip_info">Den nyeste utklippstavleoppføringen</string>
+    <string name="core_content_snippet_var_cursor_info">Stedet der markøren lander</string>
+    <string name="core_content_snippet_var_date_info">Dagens dato</string>
+    <string name="core_content_snippet_var_datetime_info">Dato og klokkeslett</string>
+    <string name="core_content_snippet_var_day_info">Dagen i måneden</string>
+    <string name="core_content_snippet_var_isodate_info">Datoen i ISO-format, for eksempel 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Dato og klokkeslett i ISO-format</string>
+    <string name="core_content_snippet_var_month_info">Navnet på måneden</string>
+    <string name="core_content_snippet_var_package_info">Pakkenavnet til den appen</string>
+    <string name="core_content_snippet_var_selection_info">Teksten du velger i feltet</string>
+    <string name="core_content_snippet_var_time12_info">Tiden nå i 12-timersformat</string>
+    <string name="core_content_snippet_var_time_info">Tiden nå i 24-timersformat</string>
+    <string name="core_content_snippet_var_timestamp_info">Tiden i Unix-sekunder</string>
+    <string name="core_content_snippet_var_timezone_info">Tidssonen, for eksempel GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">En ny tilfeldig UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Navnet på dagen, for eksempel søndag</string>
+    <string name="core_content_snippet_var_year_info">Året, med fire sifre</string>
+    <string name="core_content_sticker_pack_imported_label">Importerte klistremerker</string>
+    <string name="core_content_sticker_repair_image_missing">Appen fjernet \"%1$s\". Bildet mangler.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Appen mistet \"%1$s\". Appen kan ikke lese bildet.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Pakken har %1$d klistremerke. Appen beholder det første %2$d.</item>
+        <item quantity="other">Pakken har %1$d klistremerker. Appen beholder de første %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Appen mistet et klistremerke. Klistremerket navngir ingen bildefil.</string>
+    <string name="core_content_sticker_repair_none_listed">Pakkefilen inneholder ingen klistremerker.</string>
+    <string name="core_content_sticker_repair_not_saved">Appen forkastet \"%1$s\". Appen kan ikke lagre den.</string>
+</resources>

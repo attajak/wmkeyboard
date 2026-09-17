@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">डाउनलोड केलेली फाइल खराब झाली आहे. तिचा चेकसम जुळत नाही. पुन्हा डाउनलोड करण्याचा प्रयत्न करा.</string>
+    <string name="core_input_cjk_download_error_http">सर्व्हरने HTTP स्टेटस %1$s परत केले.</string>
+    <string name="core_input_cjk_download_error_network">डाउनलोड कार्य करत नाही. तुमचे कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.</string>
+    <string name="core_input_cjk_download_error_network_detail">डाउनलोड कार्य करू शकले नाही: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">तुमच्या डिव्हाइसवर पुरेशी स्टोरेज जागा नाही. आधी काही जागा मोकळी करा.</string>
+    <string name="core_input_cjk_download_error_truncated">डाउनलोड दरम्यान कनेक्शन थांबले. सुरू ठेवण्यासाठी \'रिझ्युम\' दाबा.</string>
+    <string name="core_input_cjk_download_error_unavailable">हे पॅक अद्याप उपलब्ध नाही.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">हान्झी अक्षरांसाठी रॅडिकल कोडची एक सारणी, २९,००० अक्षरे. कीबोर्डला कॅन्जी आणि क्विक लेआउटसाठी या पॅकची आवश्यकता आहे.</string>
+    <string name="core_input_cjk_pack_cangjie_title">कॅन्जी (倉頡) शब्दकोश</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">mozc कडून काना वाचन, १.०८ दशलक्ष नोंदी, सुमारे ४२ MB. जपानी रूपांतरणासाठी कीबोर्डला या पॅकची आवश्यकता आहे.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">जपानी काना ते कांजी शब्दकोश</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">कॅन्टोनीज रूपांतरणासाठी कीबोर्डला या पॅकची आवश्यकता आहे, ज्यामध्ये हन्झी वर्णांसाठी ज्युतपिंग वाचनांचा १६३,००० नोंदींचा तक्ता आहे.</string>
+    <string name="core_input_cjk_pack_jyutping_title">कॅन्टोनीज ज्युटपिंग शब्दकोश</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT मधील हन्झी अक्षरे आणि वाक्प्रचार, १,२०,००० नोंदी. चिनी भाषेतील रूपांतरणासाठी कीबोर्डला या पॅकची आवश्यकता आहे.</string>
+    <string name="core_input_cjk_pack_pinyin_title">चीनी पिनयिन शब्दकोश</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">हान्झी कॅरेक्टर्ससाठी स्ट्रोक ऑर्डरचे टेबल. स्ट्रोक लेआउटसाठी कीबोर्डला या पॅकची आवश्यकता आहे.</string>
+    <string name="core_input_cjk_pack_stroke_title">चीनी स्ट्रोक (笔画) शब्दकोश</string>
+    <string name="core_input_double_pinyin_off_label">बंद (पूर्ण पिनयिन)</string>
+</resources>

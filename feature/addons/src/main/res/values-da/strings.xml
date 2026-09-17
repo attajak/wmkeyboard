@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Tegn emoji med den nu?</string>
+    <string name="faddons_apply_icon_pack_question">Brug dens ikoner på tastaturet nu?</string>
+    <string name="faddons_apply_layout_question">Slå det til, så du kan skrive med det?</string>
+    <string name="faddons_apply_plugin_question">Vil du slå det til, så det vises i plugin-panelet?</string>
+    <string name="faddons_apply_sound_pack_question">Vil du bruge denne lydpakke til dine taster nu?</string>
+    <string name="faddons_apply_sound_question">Vil du bruge den som din tastelyd nu?</string>
+    <string name="faddons_apply_switch_action">Skift til det</string>
+    <string name="faddons_apply_theme_question">Vil du bruge det som dit tastaturtema nu?</string>
+    <string name="faddons_download_error_app_too_old">Dette add-on kræver en nyere version af appen.</string>
+    <string name="faddons_download_error_bad_url">Download-linket er ikke en gyldig https-URL.</string>
+    <string name="faddons_download_error_checksum">Den downloadede fil matcher ikke kontrolsummen i manifestet.</string>
+    <string name="faddons_download_error_http_status">Serveren returnerede HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Der er ikke nok ledig plads til at installere dette.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Dette plugin har ingen kontrolsum. Appen kan ikke verificere det.</string>
+    <string name="faddons_download_error_too_large">Denne tilføjelse er større end grænsen på %1$d MB for dens type.</string>
+    <string name="faddons_error_no_words">Appen kunne ikke læse nogen ord fra den fil.</string>
+    <string name="faddons_error_not_a_plugin">Denne fil er ikke et WM Keyboard-plugin.</string>
+    <string name="faddons_install_error_dictionary_no_language">Denne ordbog angiver ikke, hvilket sprog den er til.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Appen kunne ikke gemme ordbogen.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Appen kunne ikke læse ikonpakken.</string>
+    <string name="faddons_install_error_keywords_no_language">Denne pakke angiver ikke, hvilket sprog den er til.</string>
+    <string name="faddons_install_error_keywords_not_saved">Appen kunne ikke gemme nøgleordspakken.</string>
+    <string name="faddons_install_error_keywords_too_large">Den nøgleordspakke er for stor til at importere.</string>
+    <string name="faddons_install_error_no_keywords">Appen kunne ikke læse nogen emoji-nøgleord fra den fil.</string>
+    <string name="faddons_install_error_no_stickers">Appen kunne ikke læse nogen klistermærker fra den pakke. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Denne fil er ikke et WM-tastaturlayout.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Den fil er ikke en WM Keyboard-snippet-pakke.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Denne fil er ikke en lydpakke.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Denne fil er ikke en klistermærkepakke.</string>
+    <string name="faddons_install_error_not_a_theme">Den fil er ikke et WM Keyboard-tema.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Denne fil er ikke en Espanso-pakke eller match-fil.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Denne fil er ikke en ikonpakke.</string>
+    <string name="faddons_install_error_plugin_failed">Appen kunne ikke installere det plugin.</string>
+    <string name="faddons_install_error_plugins_turned_off">Plugins er slået fra. Slå “Tillad plugins” til under Værktøjer › Plugins. Installer derefter dette igen.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Den snippet-pakke er tom.</string>
+    <string name="faddons_install_error_sound_pack_read">Appen kan ikke læse denne lydpakke.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Appen kunne ikke læse klistermærkepakken.</string>
+    <string name="faddons_install_error_too_many_fonts">Du har nået det maksimale antal installerede skrifttyper.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Du har nået det maksimale antal ikonpakker.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Du har allerede det maksimale antal på %1$d plugin.</item>
+        <item quantity="other">Du har allerede det maksimale antal på %1$d plugins.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Du har nået det maksimale antal installerede lydpakker.</string>
+    <string name="faddons_install_error_too_many_sounds">Du har nået det maksimale antal installerede tastelyde.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Du har nået det maksimale antal klistermærkepakker.</string>
+    <string name="faddons_install_error_unknown_language">Denne version af appen understøtter ikke sproget “%1$s”.</string>
+    <string name="faddons_install_error_unknown_type">Denne version af appen understøtter ikke denne type tilføjelse.</string>
+    <string name="faddons_install_error_vocab_no_language">Denne ordforrådspakke angiver ikke, hvilket sprog den er til.</string>
+    <string name="faddons_install_error_vocab_no_words">Appen kunne ikke læse nogen ord fra den pakke.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Den fil er ikke en ordforrådspakke.</string>
+    <string name="faddons_install_error_vocab_too_large">Denne ordforrådspakke er større, end appen accepterer.</string>
+    <string name="faddons_preview_error_no_preview">Appen kan ikke forhåndsvise dette tilføjelsesprogram.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Denne fil er ikke en Espanso-pakke eller match-fil.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Denne fil er ikke en emoji-nøgleordspakke.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Denne fil er ikke en snippet-pakke.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Den fil er ikke en ordforrådspakke.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Appen kunne ikke læse lydene i denne pakke.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Appen kunne ikke læse sticker-billederne.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Tekststump-pakke</string>
+</resources>

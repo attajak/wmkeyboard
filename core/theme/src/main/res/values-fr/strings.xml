@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurore</string>
+    <string name="core_theme_builtin_berry_label">Baie</string>
+    <string name="core_theme_builtin_bubble_label">Bulle</string>
+    <string name="core_theme_builtin_crimson_label">Cramoisi</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Grand fond marin</string>
+    <string name="core_theme_builtin_facet_label">Facet</string>
+    <string name="core_theme_builtin_forest_label">Forêt</string>
+    <string name="core_theme_builtin_glacier_label">Glacier</string>
+    <string name="core_theme_builtin_mint_label">Menthe</string>
+    <string name="core_theme_builtin_nebula_label">Nébuleuse</string>
+    <string name="core_theme_builtin_ocean_label">Océan</string>
+    <string name="core_theme_builtin_pitch_label">Noir profond</string>
+    <string name="core_theme_builtin_rose_label">Rose</string>
+    <string name="core_theme_builtin_sand_label">Sable</string>
+    <string name="core_theme_builtin_slate_label">Ardoise</string>
+    <string name="core_theme_builtin_snow_label">Neige</string>
+    <string name="core_theme_builtin_sunset_drift_label">Dérive du coucher de soleil</string>
+    <string name="core_theme_builtin_sunset_label">Coucher de soleil</string>
+    <string name="core_theme_family_gradient_label">Dégradés</string>
+    <string name="core_theme_family_ocean_label">Crépuscule</string>
+    <string name="core_theme_family_snow_label">Pastel</string>
+</resources>

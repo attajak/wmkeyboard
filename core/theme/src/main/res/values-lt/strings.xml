@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Uoga</string>
+    <string name="core_theme_builtin_bubble_label">Burbulas</string>
+    <string name="core_theme_builtin_crimson_label">Tamsiai raudona</string>
+    <string name="core_theme_builtin_cyberpunk_label">Kiberpankas</string>
+    <string name="core_theme_builtin_deep_sea_label">Gilioji jūra</string>
+    <string name="core_theme_builtin_facet_label">Fasetė</string>
+    <string name="core_theme_builtin_forest_label">Miškas</string>
+    <string name="core_theme_builtin_glacier_label">Ledynas</string>
+    <string name="core_theme_builtin_mint_label">Mėtinė</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Vandenynas</string>
+    <string name="core_theme_builtin_pitch_label">Visiškai juoda</string>
+    <string name="core_theme_builtin_rose_label">Rožinė</string>
+    <string name="core_theme_builtin_sand_label">Smėlio</string>
+    <string name="core_theme_builtin_slate_label">Šiferio</string>
+    <string name="core_theme_builtin_snow_label">Sniegas</string>
+    <string name="core_theme_builtin_sunset_drift_label">Saulėlydžio dreifas</string>
+    <string name="core_theme_builtin_sunset_label">Saulėlydis</string>
+    <string name="core_theme_family_gradient_label">Gradientai</string>
+    <string name="core_theme_family_ocean_label">Sutemos</string>
+    <string name="core_theme_family_snow_label">Pastelė</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Serveris neatsiuntė failo. Klaidos kodas yra HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Tas žodžių sąrašas yra tuščias arba neįskaitomas.</string>
+    <string name="core_pred_wordlist_no_space_error">Jūsų įrenginyje nepakanka vietos. Ištrinkite kelis failus ir bandykite dar kartą.</string>
+    <string name="core_pred_wordlist_save_error">Programai nepavyko išsaugoti žodžių sąrašo. Bandykite dar kartą.</string>
+    <string name="core_pred_wordlist_size_all_label">Viskas</string>
+    <string name="core_pred_wordlist_size_large_label">Didelis</string>
+    <string name="core_pred_wordlist_size_medium_label">Vidutinis</string>
+    <string name="core_pred_wordlist_size_small_label">Mažas</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brazilija</string>
+    <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+</resources>

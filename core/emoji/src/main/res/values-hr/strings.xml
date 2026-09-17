@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Taj popis ključnih riječi za emojije je prazan ili nečitljiv.</string>
+    <string name="core_emoji_dict_error_http">Poslužitelj nije poslao datoteku. Kod pogreške je HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Ta datoteka nije lista ključnih riječi za emojije.</string>
+    <string name="core_emoji_dict_error_save">Aplikacija nije mogla spremiti popis ključnih riječi za emojije.</string>
+    <string name="core_emoji_dict_error_too_large">Taj popis ključnih riječi za emojije je prevelik.</string>
+</resources>

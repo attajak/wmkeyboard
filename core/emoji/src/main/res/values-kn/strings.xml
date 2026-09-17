@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">ಆ ಎಮೋಜಿ ಕೀವರ್ಡ್ ಪಟ್ಟಿ ಖಾಲಿಯಾಗಿದೆ ಅಥವಾ ಓದಲಾಗುವುದಿಲ್ಲ.</string>
+    <string name="core_emoji_dict_error_http">ಸರ್ವರ್ ಫೈಲ್ ಅನ್ನು ಕಳುಹಿಸಿಲ್ಲ. ದೋಷ ಕೋಡ್ HTTP %1$s ಆಗಿದೆ.</string>
+    <string name="core_emoji_dict_error_not_a_list">ಆ ಫೈಲ್ ಎಮೋಜಿ ಕೀವರ್ಡ್ ಪಟ್ಟಿಯಲ್ಲ.</string>
+    <string name="core_emoji_dict_error_save">ಆ್ಯಪ್ ಎಮೋಜಿ ಕೀವರ್ಡ್ ಪಟ್ಟಿಯನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="core_emoji_dict_error_too_large">ಆ ಎಮೋಜಿ ಕೀವರ್ಡ್ ಪಟ್ಟಿ ತುಂಬಾ ದೊಡ್ಡದಾಗಿದೆ.</string>
+</resources>

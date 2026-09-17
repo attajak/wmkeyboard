@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Ez a modell korlátozott. Először adja meg a Hugging Face tokenjét.</string>
+    <string name="core_intel_llm_download_error_http">A Hugging Face %1$s HTTP-állapotkódot adott vissza.</string>
+    <string name="core_intel_llm_download_error_licence">Fogadd el a modell licencét a Hugging Face oldalán, majd próbáld újra.</string>
+    <string name="core_intel_llm_download_error_no_space">Nincs elég tárhely az eszközön. Először szabadíts fel körülbelül %1$s GB-ot.</string>
+    <string name="core_intel_llm_download_error_token_rejected">A Hugging Face nem fogadta el a tokent. Ellenőrizd a tokent, és próbáld újra.</string>
+    <string name="core_intel_llm_download_error_truncated">A kapcsolat megszakadt a letöltés közben. A folytatáshoz nyomd meg a Folytatás gombot.</string>
+    <string name="core_intel_llm_engine_error_gpu">A modell futtatása sikertelen a GPU-n. A GPU memóriája sokkal kisebb, mint a rendszermemória. A következő próbálkozás a CPU-t használja. Ha mindig a CPU-t szeretnéd használni, állítsd a Számítást (Compute) CPU-ra a beállításokban. Választhatsz egy kisebb modellt is.</string>
+    <string name="core_intel_llm_engine_error_load">A modell nem töltődött be. A fájl valószínűleg sérült. Törölje a modellt a beállításokban, és töltse le újra.</string>
+    <string name="core_intel_llm_engine_error_memory">A modell memóriája elfogyott, vagy hiba történt. Válassz egy kisebb modellt.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Egy kis Gemma az előző generációból. Jó minőségű, és 4K tokenes kontextussal rendelkezik.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">A legkisebb Gemma a Google-től. Minden eszközön gyors.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">A legújabb Gemma generáció. Kiváló minőséget biztosít az eszközödön.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">A legnagyobb modell. Ez ír a legjobban, de nagy teljesítményű eszköz szükséges hozzá.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Egy általános célú modell, amely még elfér egy alapvető eszközön.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Egyértelműen okosabb, mint az 1B alatti modellek. Középkategóriás eszköz szükséges hozzá.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Egy új, kisméretű modell. Méretéhez képest kiváló minőségű.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Nagyon kicsi és gyors. Jó gyors átírásokhoz, de a következtetési képessége korlátozott.</string>
+    <string name="core_intel_llm_module_downloading">A billentyűzet AI-összetevőjének letöltése folyamatban a Google Playről. Próbálja meg újra egy pillanat múlva.</string>
+    <string name="core_intel_llm_module_restart">Az AI-modul telepítése befejeződött. Zárja be és nyissa meg újra a billentyűzetet a használatához.</string>
+    <string name="core_intel_llm_tier_experimental_label">Kísérleti</string>
+    <string name="core_intel_llm_tier_recommended_label">Ajánlott</string>
+    <string name="core_intel_llm_tier_untested_label">Nem tesztelt</string>
+</resources>

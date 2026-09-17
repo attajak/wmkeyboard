@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">ਇਮੋਜੀ ਟੈਬਾਂ</string>
+    <string name="core_icons_group_keys_title">ਕੁੰਜੀਆਂ</string>
+    <string name="core_icons_group_toolbar_title">ਟੂਲਬਾਰ</string>
+    <string name="core_icons_group_tools_title">ਟੂਲ</string>
+    <string name="core_icons_pack_imported_label">ਆਯਾਤ ਕੀਤੇ ਆਈਕਨ</string>
+    <string name="core_icons_pack_mine_label">ਮੇਰੇ ਆਈਕਨ</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">ਐਪ ਨੇ %1$d ਫਾਈਲ ਨੂੰ ਨਜ਼ਰਅੰਦਾਜ਼ ਕੀਤਾ। ਇਸ ਸੰਸਕਰਣ ਵਿੱਚ ਇਸਦੇ ਲਈ ਕੋਈ ਆਈਕਨ ਨਹੀਂ ਹੈ: %2$s</item>
+        <item quantity="other">ਐਪ ਨੇ %1$d ਫਾਈਲਾਂ ਨੂੰ ਨਜ਼ਰਅੰਦਾਜ਼ ਕੀਤਾ। ਇਸ ਸੰਸਕਰਣ ਵਿੱਚ ਉਹਨਾਂ ਲਈ ਕੋਈ ਆਈਕਨ ਨਹੀਂ ਹੈ: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">ਐਪ ਨੇ \"%1$s\" ਨੂੰ ਡ੍ਰੌਪ ਕਰ ਦਿੱਤਾ ਹੈ। ਐਪ ਇਸਨੂੰ ਸੇਵ ਨਹੀਂ ਕਰ ਸਕਦੀ।</string>
+    <string name="core_icons_repair_svg_unreadable">ਐਪ ਨੇ \"%1$s\" ਨੂੰ ਹਟਾ ਦਿੱਤਾ ਹੈ। ਐਪ ਇਸਦੀ SVG ਫਾਈਲ ਨੂੰ ਪੜ੍ਹ ਨਹੀਂ ਸਕਦੀ।</string>
+    <string name="core_icons_slot_backspace_label">ਬੈਕਸਪੇਸ</string>
+    <string name="core_icons_slot_caps_lock_label">ਕੈਪਸ ਲੌਕ</string>
+    <string name="core_icons_slot_emoji_activities_label">ਗਤੀਵਿਧੀਆਂ</string>
+    <string name="core_icons_slot_emoji_animals_label">ਜਾਨਵਰ</string>
+    <string name="core_icons_slot_emoji_flags_label">ਝੰਡੇ</string>
+    <string name="core_icons_slot_emoji_food_label">ਭੋਜਨ</string>
+    <string name="core_icons_slot_emoji_key_label">ਇਮੋਜੀ ਕੁੰਜੀ</string>
+    <string name="core_icons_slot_emoji_most_used_label">ਸਭ ਤੋਂ ਵੱਧ ਵਰਤੇ ਗਏ</string>
+    <string name="core_icons_slot_emoji_nature_label">ਕੁਦਰਤ</string>
+    <string name="core_icons_slot_emoji_objects_label">ਵਸਤੂਆਂ</string>
+    <string name="core_icons_slot_emoji_people_label">ਲੋਕ</string>
+    <string name="core_icons_slot_emoji_recent_label">ਹਾਲੀਆ</string>
+    <string name="core_icons_slot_emoji_shortcut_label">ਇਮੋਜੀ ਸ਼ਾਰਟਕੱਟ</string>
+    <string name="core_icons_slot_emoji_smileys_label">ਸਮਾਈਲੀਜ਼</string>
+    <string name="core_icons_slot_emoji_symbols_label">ਚਿੰਨ੍ਹ</string>
+    <string name="core_icons_slot_emoji_travel_label">ਯਾਤਰਾ</string>
+    <string name="core_icons_slot_enter_done_label">ਐਂਟਰ: ਹੋ ਗਿਆ</string>
+    <string name="core_icons_slot_enter_go_label">ਐਂਟਰ: ਜਾਓ</string>
+    <string name="core_icons_slot_enter_label">ਐਂਟਰ</string>
+    <string name="core_icons_slot_enter_next_label">ਐਂਟਰ: ਅੱਗੇ</string>
+    <string name="core_icons_slot_enter_previous_label">ਐਂਟਰ: ਪਿਛਲਾ</string>
+    <string name="core_icons_slot_enter_search_label">ਐਂਟਰ: ਖੋਜ</string>
+    <string name="core_icons_slot_enter_send_label">ਐਂਟਰ: ਭੇਜੋ</string>
+    <string name="core_icons_slot_forward_delete_label">ਅੱਗੇ ਮਿਟਾਓ</string>
+    <string name="core_icons_slot_globe_label">ਭਾਸ਼ਾ ਬਦਲੋ</string>
+    <string name="core_icons_slot_incognito_label">ਇਨਕੋਗਨਿਟੋ ਬੈਜ</string>
+    <string name="core_icons_slot_input_method_picker_label">ਕੀਬੋਰਡ ਬਦਲੋ</string>
+    <string name="core_icons_slot_panel_back_label">ਕੁੰਜੀਆਂ \'ਤੇ ਵਾਪਸ ਜਾਓ</string>
+    <string name="core_icons_slot_power_saving_label">ਪਾਵਰ ਸੇਵਿੰਗ ਬੈਜ</string>
+    <string name="core_icons_slot_search_close_label">ਖੋਜ ਬੰਦ ਕਰੋ</string>
+    <string name="core_icons_slot_shift_label">ਸ਼ਿਫਟ</string>
+    <string name="core_icons_slot_shift_on_label">ਸ਼ਿਫਟ (ਚਾਲੂ)</string>
+    <string name="core_icons_slot_suggestions_expand_label">ਟੂਲ ਦਿਖਾਓ</string>
+    <string name="core_icons_slot_toolbox_label">ਟੂਲਬਾਕਸ</string>
+</resources>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Aplikace změnila %1$d klávesu na nejbližší dostupnou.</item>
+        <item quantity="other">Aplikace změnila %1$d kláves na nejbližší dostupné.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Aplikace odebrala %1$d klávesu. Tato klávesnice nemá žádnou klávesu, která dělá totéž (kód %2$s).</item>
+        <item quantity="other">Aplikace odebrala %1$d kláves. Tato klávesnice nemá žádné klávesy, které dělají totéž (kódy %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Aplikace zachovala velikost popisku %1$d klávesy, ale ne její styl textu. Tato klávesnice vykresluje popisky v jednom stylu.</item>
+        <item quantity="other">Aplikace zachovala velikost popisků %1$d kláves, ale ne jejich styl textu. Tato klávesnice vykresluje popisky v jednom stylu.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Aplikace změnila %1$d písmeno do tvaru, který tato klávesnice používá.</item>
+        <item quantity="other">Aplikace změnila %1$d písmena do tvaru, který tato klávesnice používá.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d klávesa nemá žádná písmena při dlouhém stisknutí. Soubor je uchovává v druhém souboru, který jste neotevřeli.</item>
+        <item quantity="other">%1$d kláves nemá žádná písmena při dlouhém stisknutí. Soubor je uchovává v druhém souboru, který jste neotevřeli.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Ostatní klávesnice měří šířku kláves jinak. Aplikace změnila šířky tak, aby odpovídaly této mřížce.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d klávesa braillova bodu ve vrstvě %2$s má číslo bodu mimo rozsah 1 až 6.</item>
+        <item quantity="other">%1$d kláves braillových bodů ve vrstvě %2$s má číslo bodu mimo rozsah 1 až 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d klávesa ve vrstvě %2$s nemá popisek ani výstup. Nic nepíše a aplikace ji při zapnutí tohoto rozložení odstraní.</item>
+        <item quantity="other">%1$d kláves ve vrstvě %2$s nemá popisek ani výstup. Nic nepíší a aplikace je při zapnutí tohoto rozložení odstraní.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Řádek %1$d vrstvy %2$s je prázdný.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d klávesa ve vrstvě %2$s je komponentou panelu. Komponenty fungují pouze v rozložení panelu.</item>
+        <item quantity="other">%1$d kláves ve vrstvě %2$s jsou komponenty panelu. Komponenty fungují pouze v rozložení panelu.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Řádek %1$d vrstvy %2$s obsahuje klávesu bez definované šířky.</string>
+    <string name="core_lang_layout_key_span_error">Řádek %1$d vrstvy %2$s obsahuje klávesu, která pokrývá méně než 1 nebo více než %3$d řádků.</string>
+    <string name="core_lang_layout_letters_empty_error">Vrstvě písmen chybí klávesy.</string>
+    <string name="core_lang_layout_no_delete_error">Rozvržení nemá klávesu pro smazání. Chybu nelze opravit.</string>
+    <string name="core_lang_layout_no_enter_error">Rozložení nemá klávesu Enter.</string>
+    <string name="core_lang_layout_no_shift_warning">Rozložení nemá klávesu Shift. Chcete-li napsat velké písmeno, stiskněte a podržte klávesu.</string>
+    <string name="core_lang_layout_no_space_error">Rozložení nemá klávesu mezerníku.</string>
+    <string name="core_lang_layout_no_way_back_error">Vrstva %1$s nemá klávesu pro návrat k písmenům. Z této vrstvy nelze odejít.</string>
+    <string name="core_lang_layout_persistent_warning">Vrstva %1$s zůstane otevřená, i když se klávesnice zavře. Ujistěte se, že máte způsob, jak toto rozložení ukončit.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Toto rozvržení nemá žádnou klávesu pro opuštění. Ujistěte se, že máte způsob, jak toto rozvržení opustit: klávesu ABC, klávesu se symboly nebo nástroj Sekundární rozvržení na panelu nástrojů.</string>
+    <string name="core_lang_layout_span_past_end_warning">Řádek %1$d vrstvy %2$s obsahuje klávesu, která pokrývá více řádků, než vrstva má. Klávesnice ji zastaví na posledním řádku.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Řádek %1$d vrstvy %2$s má %3$d klávesu. Pouze %4$d kláves zůstane dostatečně velkých pro stisknutí.</item>
+        <item quantity="other">Řádek %1$d vrstvy %2$s má %3$d kláves. Pouze %4$d kláves zůstane dostatečně velkých pro stisknutí.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Vrstva %1$s má %2$d řádek. Vejde se pouze %3$d řádků.</item>
+        <item quantity="other">Vrstva %1$s má %2$d řádků. Vejde se pouze %3$d řádků.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d klávesa ve vrstvě %2$s používá akci, kterou tato verze aplikace nezná.</item>
+        <item quantity="other">%1$d kláves ve vrstvě %2$s používá akci, kterou tato verze aplikace nezná.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Řádek %1$d vrstvy %2$s je širší než ostatní řádky. Klávesnice vykresluje klávesy tohoto řádku užší.</string>
+    <string name="core_lang_numeral_scope_display_only">Pouze zobrazení</string>
+    <string name="core_lang_numeral_scope_everywhere">Všude</string>
+    <string name="core_lang_numeral_scope_text_fields">Textová pole</string>
+    <string name="core_lang_numeral_system_auto">Automaticky</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponenta se vyskytuje více než jednou. Aplikace ponechá první kopii.</item>
+        <item quantity="other">%1$d komponenty se vyskytují více než jednou. Aplikace ponechá první kopii každé z nich.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Tento panel nemá žádné klávesy. Aplikace místo něj používá standardní panel.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d klávesa má akci, která na panelu nefunguje. Aplikace ji odstraní.</item>
+        <item quantity="other">%1$d kláves má akce, které na panelu nefungují. Aplikace je odstraní.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Tento panel nemá klávesu ABC. Pro návrat ke klávesám použijte panel nástrojů nebo tlačítko Zpět.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Aplikace odstranila druhou kopii komponenty.</string>
+    <string name="core_lang_panel_repair_field_added">Aplikace přidala hlavní komponentu panelu do nového řádku.</string>
+    <string name="core_lang_panel_repair_field_dropped">Aplikace odstranila komponentu, která do tohoto panelu nepatří.</string>
+    <string name="core_lang_panel_repair_key_dropped">Aplikace odstranila klávesu, jejíž akce na panelu nefunguje.</string>
+    <string name="core_lang_panel_repair_reset">Aplikace nahradila prázdný panel standardním.</string>
+    <string name="core_lang_panel_required_field_error">Tomuto panelu chybí hlavní součást. Aplikace ji přidá při vykreslení panelu.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponenta nepatří do tohoto panelu. Aplikace ji odstraní.</item>
+        <item quantity="other">%1$d komponent nepatří do tohoto panelu. Aplikace je odstraní.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Aplikace odstranila prázdný klíč ve vrstvě %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Klávesa ve vrstvě %1$s použila braillský bod %2$d. Aplikace z ní udělala bod %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Vrstva s písmeny neobsahovala klávesu pro odstranění. Aplikace ji přidala.</string>
+    <string name="core_lang_repair_enter_key_added">Vrstva písmen neměla klávesu Enter. Aplikace ji přidala.</string>
+    <string name="core_lang_repair_field_key_deleted">Aplikace smazala komponentu panelu z vrstvy %1$s. Komponenty fungují pouze v rozvržení panelu.</string>
+    <string name="core_lang_repair_key_letters_anchored">Klávesa ve vrstvě %1$s zastupuje %2$s. Aplikace ji nastavila na psaní %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Klávesa ve vrstvě %1$s uváděla %2$s jako písmena, která zastupuje. Nejedná se o písmena, takže aplikace z ní udělala běžnou klávesu.</string>
+    <string name="core_lang_repair_key_span_clamped">Klávesa ve vrstvě %1$s pokrývala %2$d řádků. Aplikace ji nastavila na %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Klávesa ve vrstvě %1$s měla šířku %2$s jednotek. Aplikace ji nastavila na %3$s jednotek.</string>
+    <string name="core_lang_repair_key_width_set">Klávesa ve vrstvě %1$s neměla žádnou šířku. Aplikace nastavila šířku na 1.</string>
+    <string name="core_lang_repair_layer_replaced">Vrstva %1$s neměla žádné funkční klávesy. Nyní používá vestavěnou mřížku.</string>
+    <string name="core_lang_repair_letters_key_added">Vrstvě %1$s chyběla klávesa pro návrat k písmenům. Aplikace přidala klávesu ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Řádek ve vrstvě %1$s obsahoval %2$d klávesu. Aplikace ponechá prvních %3$d.</item>
+        <item quantity="other">Řádek ve vrstvě %1$s obsahoval %2$d kláves. Aplikace ponechá prvních %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Řádek ve vrstvě %1$s byl široký %2$s jednotek. Aplikace zmenšila klávesy, aby se řádek vešel.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Vrstva %1$s měla %2$d řádek. Aplikace ponechá prvních %3$d.</item>
+        <item quantity="other">Vrstva %1$s měla %2$d řádků. Aplikace ponechá prvních %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Vrstvě písmen chyběla klávesa mezerníku. Aplikace ji přidala.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Aplikace smazala klávesu ve vrstvě %1$s. Její akce „%2$s“ není známá.</string>
+</resources>

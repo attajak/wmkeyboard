@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Emoji\'s nu hiermee tekenen?</string>
+    <string name="faddons_apply_icon_pack_question">De iconen nu op het toetsenbord gebruiken?</string>
+    <string name="faddons_apply_layout_question">Inschakelen zodat je ermee kunt typen?</string>
+    <string name="faddons_apply_plugin_question">Inschakelen zodat het wordt weergegeven in het plug-inpaneel?</string>
+    <string name="faddons_apply_sound_pack_question">Dit geluidspakket nu gebruiken voor je toetsen?</string>
+    <string name="faddons_apply_sound_question">Nu gebruiken als toetsgeluid?</string>
+    <string name="faddons_apply_switch_action">Overschakelen naar</string>
+    <string name="faddons_apply_theme_question">Nu gebruiken als je toetsenbordthema?</string>
+    <string name="faddons_download_error_app_too_old">Deze add-on heeft een nieuwere versie van de app nodig.</string>
+    <string name="faddons_download_error_bad_url">De downloadlink is geen geldige https-URL.</string>
+    <string name="faddons_download_error_checksum">Het gedownloade bestand komt niet overeen met de controlesom in het manifest.</string>
+    <string name="faddons_download_error_http_status">De server gaf HTTP %1$d terug.</string>
+    <string name="faddons_download_error_no_space">Er is niet genoeg vrije ruimte om dit te installeren.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Deze plugin heeft geen checksum. De app kan deze niet verifiëren.</string>
+    <string name="faddons_download_error_too_large">Deze add-on is groter dan de limiet van %1$d MB voor dit type.</string>
+    <string name="faddons_error_no_words">De app kon geen woorden uit dat bestand lezen.</string>
+    <string name="faddons_error_not_a_plugin">Dat bestand is geen WM Toetsenbord-plugin.</string>
+    <string name="faddons_install_error_dictionary_no_language">Dit woordenboek geeft niet aan voor welke taal het is.</string>
+    <string name="faddons_install_error_dictionary_not_saved">De app kon het woordenboek niet opslaan.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">De app kon het iconenpakket niet lezen.</string>
+    <string name="faddons_install_error_keywords_no_language">Dit pakket geeft niet aan voor welke taal het is.</string>
+    <string name="faddons_install_error_keywords_not_saved">De app kon het trefwoordenpakket niet opslaan.</string>
+    <string name="faddons_install_error_keywords_too_large">Dat trefwoordenpakket is te groot om te importeren.</string>
+    <string name="faddons_install_error_no_keywords">De app kon geen emojitrefwoorden uit dat bestand lezen.</string>
+    <string name="faddons_install_error_no_stickers">De app kon geen stickers uit dat pakket lezen. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Dat bestand is geen WM-toetsenbordindeling.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Dat bestand is geen WM Keyboard-snippetpakket.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Dit bestand is geen geluidspakket.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Dat bestand is geen stickerpakket.</string>
+    <string name="faddons_install_error_not_a_theme">Dat bestand is geen WM Keyboard-thema.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Dat bestand is geen Espanso-pakket of match-bestand.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Dat bestand is geen iconenpakket.</string>
+    <string name="faddons_install_error_plugin_failed">De app kon die plug-in niet installeren.</string>
+    <string name="faddons_install_error_plugins_turned_off">Plugins zijn uitgeschakeld. Schakel \"Plugins toestaan\" in onder Tools › Plugins. Installeer het daarna opnieuw.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Dat snippet-pakket is leeg.</string>
+    <string name="faddons_install_error_sound_pack_read">De app kan dit geluidspakket niet lezen.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">De app kon het stickerpakket niet lezen.</string>
+    <string name="faddons_install_error_too_many_fonts">Je hebt het maximum aantal geïnstalleerde lettertypes bereikt.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Je hebt het maximale aantal icoonpakketten bereikt.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Je hebt al het maximum van %1$d plug-in.</item>
+        <item quantity="other">Je hebt al het maximum van %1$d plug-ins.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Je hebt het maximale aantal geïnstalleerde geluidspakketten bereikt.</string>
+    <string name="faddons_install_error_too_many_sounds">Je hebt het maximale aantal geïnstalleerde toetsgeluiden bereikt.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Je hebt het maximale aantal stickerpakketten bereikt.</string>
+    <string name="faddons_install_error_unknown_language">Deze versie van de app ondersteunt de taal “%1$s” niet.</string>
+    <string name="faddons_install_error_unknown_type">Deze versie van de app ondersteunt dat type add-on niet.</string>
+    <string name="faddons_install_error_vocab_no_language">Dit vocabulairepakket geeft niet aan voor welke taal het is.</string>
+    <string name="faddons_install_error_vocab_no_words">De app kon geen woorden uit dat pakket lezen.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Dat bestand is geen woordenboekpakket.</string>
+    <string name="faddons_install_error_vocab_too_large">Dit vocabulairepakket is groter dan de app toestaat.</string>
+    <string name="faddons_preview_error_no_preview">De app kan geen voorbeeld van deze add-on tonen.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Dat bestand is geen Espanso-pakket of match-bestand.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Dat bestand is geen emoji-trefwoordenpakket.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Dat bestand is geen fragmentpakket.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Dat bestand is geen vocabulairepakket.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">De app kon de geluiden in dit pakket niet lezen.</string>
+    <string name="faddons_preview_error_stickers_unreadable">De app kon de sticker-afbeeldingen niet lezen.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Snippet-pakket</string>
+</resources>

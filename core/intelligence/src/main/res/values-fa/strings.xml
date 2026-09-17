@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">این مدل محدود شده است. ابتدا توکن Hugging Face خود را اضافه کنید.</string>
+    <string name="core_intel_llm_download_error_http">هاگینگ فیس وضعیت HTTP %1$s را برگرداند.</string>
+    <string name="core_intel_llm_download_error_licence">مجوز مدل را در صفحه Hugging Face آن بپذیرید. سپس دوباره تلاش کنید.</string>
+    <string name="core_intel_llm_download_error_no_space">فضای ذخیره‌سازی کافی در دستگاه شما وجود ندارد. ابتدا حدود %1$s گیگابایت فضا آزاد کنید.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face توکن را نپذیرفت. توکن را بررسی کرده و دوباره تلاش کنید.</string>
+    <string name="core_intel_llm_download_error_truncated">اتصال در حین دانلود قطع شد. برای ادامه، «ازسرگیری» را فشار دهید.</string>
+    <string name="core_intel_llm_engine_error_gpu">مدل در پردازنده گرافیکی (GPU) با خطا مواجه شد. حافظه پردازنده گرافیکی بسیار کمتر از حافظه سیستم است. تلاش بعدی از پردازنده مرکزی (CPU) استفاده می‌کند. برای استفاده همیشگی از پردازنده مرکزی، در تنظیمات، Compute را روی CPU قرار دهید. همچنین می‌توانید مدل کوچک‌تری انتخاب کنید.</string>
+    <string name="core_intel_llm_engine_error_load">مدل بارگذاری نشد. فایل احتمالاً آسیب دیده است. مدل را در تنظیمات حذف کرده و دوباره دانلود کنید.</string>
+    <string name="core_intel_llm_engine_error_memory">حافظه مدل تمام شده یا با خطا مواجه شده است. مدل کوچک‌تری انتخاب کنید.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">یک مدل کوچک Gemma از نسل قبلی. کیفیت خوبی دارد و دارای زمینه ۴ هزار توکن است.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">کوچک‌ترین مدل Gemma از گوگل. این مدل در همه دستگاه‌ها سریع است.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">جدیدترین نسل Gemma. این مدل کیفیت بالایی را روی دستگاه شما ارائه می‌دهد.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">بزرگترین مدل. بهترین عملکرد نوشتاری را دارد، اما به دستگاهی قدرتمند نیاز دارد.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">یک مدل همه‌منظوره که همچنان روی یک دستگاه پایه جا می‌شود.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">به وضوح هوشمندتر از مدل‌های زیر 1 میلیارد پارامتر است. به دستگاهی با قدرت متوسط نیاز دارد.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">یک مدل کوچک جدید. کیفیت آن نسبت به اندازه‌اش بالاست.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">بسیار کوچک و سریع. برای بازنویسی‌های سریع خوب است، اما قدرت استدلال محدودی دارد.</string>
+    <string name="core_intel_llm_module_downloading">بخش هوش مصنوعی صفحه‌کلید در حال دانلود از گوگل پلی است. لحظاتی دیگر دوباره تلاش کنید.</string>
+    <string name="core_intel_llm_module_restart">نصب بخش هوش مصنوعی به پایان رسید. برای استفاده از آن، صفحه‌کلید را ببندید و دوباره باز کنید.</string>
+    <string name="core_intel_llm_tier_experimental_label">آزمایشی</string>
+    <string name="core_intel_llm_tier_recommended_label">پیشنهادی</string>
+    <string name="core_intel_llm_tier_untested_label">آزمایش‌نشده</string>
+</resources>

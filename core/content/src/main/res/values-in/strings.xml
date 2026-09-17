@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Kode sekali pakai</string>
+    <string name="core_content_clip_entity_otp_tag">KODE</string>
+    <string name="core_content_clip_entity_phone_label">Nomor telepon</string>
+    <string name="core_content_clip_entity_phone_tag">TELEPON</string>
+    <string name="core_content_clip_entity_url_label">Tautan</string>
+    <string name="core_content_clip_entity_url_tag">LINK</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d cuplikan memiliki ekspansi lain yang tidak dapat ditampung oleh Espanso. Hanya yang pertama yang ditulis.</item>
+        <item quantity="other">%1$d cuplikan memiliki ekspansi lain yang tidak dapat ditampung oleh Espanso. Hanya yang pertama dari masing-masing yang ditulis.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d cuplikan terbatas pada program komputer tertentu. Di ponsel Anda, cuplikan ini berfungsi di mana saja.</item>
+        <item quantity="other">%1$d cuplikan terbatas pada program komputer tertentu. Di ponsel Anda, cuplikan-cuplikan ini berfungsi di mana saja.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d cuplikan meminta Anda untuk memilih dari daftar. Aplikasi memilih satu secara acak sebagai gantinya.</item>
+        <item quantity="other">%1$d cuplikan meminta Anda untuk memilih dari daftar. Aplikasi memilih satu secara acak sebagai gantinya.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d cuplikan meminta konfirmasi sebelum dikembangkan. Espanso tidak memiliki pengaturan tersebut, jadi cuplikan akan dikembangkan secara otomatis di sana.</item>
+        <item quantity="other">%1$d cuplikan meminta konfirmasi sebelum dikembangkan. Espanso tidak memiliki pengaturan tersebut, jadi cuplikan akan dikembangkan secara otomatis di sana.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d cuplikan menggunakan format tanggal yang tidak dapat ditulis lengkap oleh aplikasi. Aplikasi menghilangkan bagian yang tidak dapat dilakukan.</item>
+        <item quantity="other">%1$d cuplikan menggunakan format tanggal yang tidak dapat ditulis lengkap oleh aplikasi. Aplikasi menghilangkan bagian-bagian yang tidak dapat dilakukan.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d cuplikan berada di folder yang dimatikan. Espanso tidak memiliki sakelar folder, jadi cuplikan tersebut akan berkembang di sana.</item>
+        <item quantity="other">%1$d cuplikan berada di folder yang dimatikan. Espanso tidak memiliki sakelar folder, jadi cuplikan tersebut akan berkembang di sana.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Aplikasi melewatkan %1$d cuplikan yang tidak memiliki apa pun untuk disisipkan.</item>
+        <item quantity="other">Aplikasi melewatkan %1$d cuplikan yang tidak memiliki apa pun untuk disisipkan.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d cuplikan meminta Anda mengisi formulir. Aplikasi akan menyisipkan formulir sebagai teks, dengan kursor di bagian kosong pertama.</item>
+        <item quantity="other">%1$d cuplikan meminta Anda mengisi formulir. Aplikasi akan menyisipkan setiap formulir sebagai teks, dengan kursor di bagian kosong pertama.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Aplikasi melewatkan %1$d cuplikan yang menyisipkan gambar.</item>
+        <item quantity="other">Aplikasi melewatkan %1$d cuplikan yang menyisipkan gambar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">File tersebut membaca %1$d file lainnya. Satu file tidak dapat membawa file lain bersamanya.</item>
+        <item quantity="other">File tersebut membaca %1$d file lainnya. Satu file tidak dapat membawa file lain bersamanya.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d cuplikan mengarah ke cuplikan lain. Espanso tidak memiliki cara untuk menyatakan hal itu, jadi tautan tersebut tidak disertakan.</item>
+        <item quantity="other">%1$d cuplikan mengarah ke cuplikan lain. Espanso tidak memiliki cara untuk menyatakan hal itu, jadi tautan tersebut tidak disertakan.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d pemicu dimaksudkan untuk berfungsi di dalam kata. Di ponsel Anda, pemicu ini hanya berfungsi sebagai kata utuh.</item>
+        <item quantity="other">%1$d pemicu dimaksudkan untuk berfungsi di dalam kata. Di ponsel Anda, pemicu ini hanya berfungsi sebagai kata utuh.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d cuplikan menggunakan nilai yang tidak memiliki padanan di Espanso. Nilai tersebut ditulis apa adanya.</item>
+        <item quantity="other">%1$d cuplikan menggunakan nilai yang tidak memiliki padanan di Espanso. Nilai tersebut ditulis apa adanya.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Aplikasi menghapus pola dari %1$d cuplikan. Aplikasi tidak menjalankan pola dengan bentuk tersebut. Cuplikan tetap ada di daftar.</item>
+        <item quantity="other">Aplikasi menghapus pola dari %1$d cuplikan. Aplikasi tidak menjalankan pola dengan bentuk tersebut. Cuplikan-cuplikan tetap ada di daftar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d cuplikan menggunakan teks berformat. Aplikasi menyimpan kata-katanya dan menghapus pemformatannya.</item>
+        <item quantity="other">%1$d cuplikan menggunakan teks berformat. Aplikasi menyimpan kata-katanya dan menghapus pemformatannya.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d cuplikan menjalankan perintah di komputer Anda. Aplikasi mengabaikan perintah tersebut dan tidak pernah menjalankannya.</item>
+        <item quantity="other">%1$d cuplikan menjalankan perintah di komputer Anda. Aplikasi mengabaikan perintah tersebut dan tidak pernah menjalankannya.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d pemicu hanya terdiri dari simbol, sehingga aplikasi tidak dapat memantaunya. Cuplikannya tetap ada di daftar.</item>
+        <item quantity="other">%1$d pemicu hanya terdiri dari simbol, sehingga aplikasi tidak dapat memantaunya. Cuplikan-cuplikannya tetap ada di daftar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d cuplikan berisi teks dalam kurung yang diisi oleh aplikasi ini, seperti {date}. Teks tersebut akan dikembangkan alih-alih muncul seperti yang tertulis.</item>
+        <item quantity="other">%1$d cuplikan berisi teks dalam kurung yang diisi oleh aplikasi ini, seperti {date}. Teks tersebut akan dikembangkan alih-alih muncul seperti yang tertulis.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d cuplikan mengubah huruf kapital dari apa yang ditangkap polanya. Espanso tidak dapat melakukan itu, jadi teks yang ditangkap dimasukkan tanpa perubahan.</item>
+        <item quantity="other">%1$d cuplikan mengubah huruf kapital dari apa yang ditangkap polanya. Espanso tidak dapat melakukan itu, jadi teks yang ditangkap dimasukkan tanpa perubahan.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d cuplikan menggunakan nilai yang tidak memiliki padanan di aplikasi. Bagian itu akan kosong.</item>
+        <item quantity="other">%1$d cuplikan menggunakan nilai yang tidak memiliki padanan di aplikasi. Bagian-bagian itu akan kosong.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Aplikasi tidak dapat mengunduh font. Periksa koneksi Anda dan coba lagi.</string>
+    <string name="core_content_font_error_empty">File kosong.</string>
+    <string name="core_content_font_error_load">Aplikasi tidak dapat memuat file font ini.</string>
+    <string name="core_content_font_error_markup">File ini adalah file HTML atau XML, bukan font.</string>
+    <string name="core_content_font_error_no_storage">Tidak ada penyimpanan yang tersedia untuk font.</string>
+    <string name="core_content_font_error_not_a_font">File ini tidak terlihat seperti font .ttf atau .otf.</string>
+    <string name="core_content_font_error_read">Aplikasi tidak dapat membaca font.</string>
+    <string name="core_content_font_error_save">Aplikasi tidak dapat menyimpan font.</string>
+    <string name="core_content_font_error_too_large">Font harus lebih kecil dari %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Pustaka font penuh. Hapus font dan coba lagi.</string>
+    <string name="core_content_font_error_too_short">File terlalu pendek untuk menjadi font.</string>
+    <string name="core_content_font_error_woff">Aplikasi tidak dapat membaca font web WOFF. Gunakan versi .ttf atau .otf dari font tersebut.</string>
+    <string name="core_content_font_error_woff2">Aplikasi tidak dapat membaca font web WOFF2. Gunakan versi .ttf atau .otf dari font tersebut.</string>
+    <string name="core_content_font_error_zip">File ini adalah arsip zip, bukan font.</string>
+    <string name="core_content_selection_macro_add_contact">Kontak</string>
+    <string name="core_content_selection_macro_calendar">Kalender</string>
+    <string name="core_content_selection_macro_call">Panggil</string>
+    <string name="core_content_selection_macro_case_lower">huruf kecil</string>
+    <string name="core_content_selection_macro_case_sentence">Huruf kalimat</string>
+    <string name="core_content_selection_macro_case_title">Huruf Kapital Judul</string>
+    <string name="core_content_selection_macro_case_upper">HURUF KAPITAL</string>
+    <string name="core_content_selection_macro_chat_bold">Tebal</string>
+    <string name="core_content_selection_macro_chat_italic">Miring</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Coret</string>
+    <string name="core_content_selection_macro_colour">Warna</string>
+    <string name="core_content_selection_macro_copy">Salin</string>
+    <string name="core_content_selection_macro_digits_latin">Digit</string>
+    <string name="core_content_selection_macro_email">Email</string>
+    <string name="core_content_selection_macro_fancy">Cantik</string>
+    <string name="core_content_selection_macro_find">Cari</string>
+    <string name="core_content_selection_macro_format">Format</string>
+    <string name="core_content_selection_macro_grammar">Tata bahasa</string>
+    <string name="core_content_selection_macro_lines_bullet">Poin</string>
+    <string name="core_content_selection_macro_lines_dedupe">Unik</string>
+    <string name="core_content_selection_macro_lines_number">Angka</string>
+    <string name="core_content_selection_macro_lines_sort">Urutkan</string>
+    <string name="core_content_selection_macro_map">Peta</string>
+    <string name="core_content_selection_macro_open">Buka</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Ucapkan</string>
+    <string name="core_content_selection_macro_replace">Ganti</string>
+    <string name="core_content_selection_macro_search">Cari</string>
+    <string name="core_content_selection_macro_share">Bagikan</string>
+    <string name="core_content_selection_macro_sms">Pesan</string>
+    <string name="core_content_selection_macro_time_zones">Zona</string>
+    <string name="core_content_selection_macro_to_bangla">Bangla</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Terjemahkan</string>
+    <string name="core_content_selection_macro_url_decode">Dekode</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Aplikasi meninggalkan %2$d ekspansi dari \"%1$s\".</item>
+        <item quantity="other">Aplikasi meninggalkan %2$d ekspansi dari \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Aplikasi menghapus pola dari \"%1$s\". Pola tersebut tidak benar. Cuplikan tetap berada di daftar.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Aplikasi membuang %1$d folder yang tidak memiliki nama atau yang menduplikasi folder lain. Cuplikan di dalamnya dipindahkan tanpa folder.</item>
+        <item quantity="other">Aplikasi membuang %1$d folder yang tidak memiliki nama atau yang menduplikasi folder lain. Cuplikan di dalamnya dipindahkan tanpa folder.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">File memiliki lebih banyak cuplikan daripada yang disimpan aplikasi. Aplikasi mengimpor %1$d yang pertama.</item>
+        <item quantity="other">File memiliki lebih banyak cuplikan daripada yang disimpan aplikasi. Aplikasi mengimpor %1$d yang pertama.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Cuplikan tidak memiliki nama, jadi aplikasi menamainya berdasarkan baris pertamanya.</string>
+    <string name="core_content_snippet_repair_no_text">Aplikasi menjatuhkan \"%1$s\". Tidak ada teks di dalamnya.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Aplikasi menghapus pola dari \"%1$s\". Pola tersebut lebih panjang dari %2$d karakter.</item>
+        <item quantity="other">Aplikasi menghapus pola dari \"%1$s\". Pola tersebut lebih panjang dari %2$d karakter.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Aplikasi menyingkat \"%1$s\". Panjangnya lebih dari %2$d karakter.</item>
+        <item quantity="other">Aplikasi menyingkat \"%1$s\". Panjangnya lebih dari %2$d karakter.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Nama aplikasi tempat Anda mengetik</string>
+    <string name="core_content_snippet_var_clip_info">Entri papan klip terbaru</string>
+    <string name="core_content_snippet_var_cursor_info">Tempat kursor mendarat</string>
+    <string name="core_content_snippet_var_date_info">Tanggal hari ini</string>
+    <string name="core_content_snippet_var_datetime_info">Tanggal dan waktu</string>
+    <string name="core_content_snippet_var_day_info">Hari dalam bulan</string>
+    <string name="core_content_snippet_var_isodate_info">Tanggal dalam bentuk ISO, contohnya 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Tanggal dan waktu dalam bentuk ISO</string>
+    <string name="core_content_snippet_var_month_info">Nama bulan</string>
+    <string name="core_content_snippet_var_package_info">Nama paket aplikasi tersebut</string>
+    <string name="core_content_snippet_var_selection_info">Teks yang Anda pilih di kolom</string>
+    <string name="core_content_snippet_var_time12_info">Waktu saat ini dalam format 12 jam</string>
+    <string name="core_content_snippet_var_time_info">Waktu saat ini dalam format 24 jam</string>
+    <string name="core_content_snippet_var_timestamp_info">Waktu dalam detik Unix</string>
+    <string name="core_content_snippet_var_timezone_info">Zona waktu, contohnya GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">UUID acak baru</string>
+    <string name="core_content_snippet_var_weekday_info">Nama hari, misalnya Minggu</string>
+    <string name="core_content_snippet_var_year_info">Tahun, dengan empat digit</string>
+    <string name="core_content_sticker_pack_imported_label">Stiker yang diimpor</string>
+    <string name="core_content_sticker_repair_image_missing">Aplikasi menghapus \"%1$s\". Gambarnya hilang.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Aplikasi menjatuhkan \"%1$s\". Aplikasi tidak dapat membaca gambarnya.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Paket ini memiliki %1$d stiker. Aplikasi menyimpan %2$d yang pertama.</item>
+        <item quantity="other">Paket ini memiliki %1$d stiker. Aplikasi menyimpan %2$d yang pertama.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Aplikasi menjatuhkan stiker. Nama stiker tidak merujuk pada file gambar apa pun.</string>
+    <string name="core_content_sticker_repair_none_listed">File paket tidak mencantumkan stiker apa pun.</string>
+    <string name="core_content_sticker_repair_not_saved">Aplikasi menjatuhkan \"%1$s\". Aplikasi tidak dapat menyimpannya.</string>
+</resources>

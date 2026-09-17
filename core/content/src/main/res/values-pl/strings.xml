@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Kod jednorazowy</string>
+    <string name="core_content_clip_entity_otp_tag">KOD</string>
+    <string name="core_content_clip_entity_phone_label">Numer telefonu</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFON</string>
+    <string name="core_content_clip_entity_url_label">Link</string>
+    <string name="core_content_clip_entity_url_tag">LINK</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d fragment ma inne rozwinięcia, których Espanso nie może obsłużyć. Zapisano tylko pierwsze z nich.</item>
+        <item quantity="other">%1$d fragmentów ma inne rozwinięcia, których Espanso nie może obsłużyć. Zapisano tylko pierwsze z nich.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d fragment jest ograniczony do określonych programów komputerowych. Na telefonie działa wszędzie.</item>
+        <item quantity="other">%1$d fragmentów jest ograniczonych do określonych programów komputerowych. Na telefonie działają wszędzie.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d fragment wymaga wyboru z listy. Aplikacja wybiera jeden losowo.</item>
+        <item quantity="other">%1$d fragmentów wymaga wyboru z listy. Aplikacja wybiera jeden losowo.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d fragment wymaga potwierdzenia przed rozwinięciem. Espanso nie posiada takiego ustawienia, więc tam rozwinie się automatycznie.</item>
+        <item quantity="other">%1$d fragmentów wymaga potwierdzenia przed rozwinięciem. Espanso nie posiada takiego ustawienia, więc tam rozwiną się automatycznie.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d fragment używa formatu daty, którego aplikacja nie może zapisać w całości. Aplikacja pominęła część, której nie może obsłużyć.</item>
+        <item quantity="other">%1$d fragmentów używa formatów daty, których aplikacja nie może zapisać w całości. Aplikacja pominęła części, których nie może obsłużyć.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d snippet znajduje się w folderze, który jest wyłączony. Espanso nie posiada przełącznika folderów, więc będzie się tam rozwijać.</item>
+        <item quantity="other">%1$d snippetów znajduje się w folderach, które są wyłączone. Espanso nie posiada przełącznika folderów, więc będą się tam rozwijać.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Aplikacja pominęła %1$d fragment, który nie ma nic do wstawienia.</item>
+        <item quantity="other">Aplikacja pominęła %1$d fragmentów, które nie mają nic do wstawienia.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d fragment wymaga wypełnienia formularza. Aplikacja wstawi formularz jako tekst, z kursorem w pierwszym polu.</item>
+        <item quantity="other">%1$d fragmentów wymaga wypełnienia formularza. Aplikacja wstawi każdy formularz jako tekst, z kursorem w pierwszym polu.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Aplikacja pominęła %1$d fragment, który wstawia obraz.</item>
+        <item quantity="other">Aplikacja pominęła %1$d fragmentów, które wstawiają obrazy.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Plik odczytuje %1$d inny plik. Jeden plik nie może przenieść pozostałych ze sobą.</item>
+        <item quantity="other">Plik odczytuje %1$d innych plików. Jeden plik nie może przenieść pozostałych ze sobą.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d fragment wskazuje na inne fragmenty. Espanso nie ma sposobu, aby to obsłużyć, więc linki zostały pominięte.</item>
+        <item quantity="other">%1$d fragmentów wskazuje na inne fragmenty. Espanso nie ma sposobu, aby to obsłużyć, więc linki zostały pominięte.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d wyzwalacz ma działać wewnątrz słowa. Na telefonie działa tylko jako całe słowo.</item>
+        <item quantity="other">%1$d wyzwalaczy ma działać wewnątrz słowa. Na telefonie działają tylko jako całe słowa.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d snippet używa wartości, dla której Espanso nie ma odpowiednika. Jest zapisany tak, jak jest.</item>
+        <item quantity="other">%1$d snippetów używa wartości, dla których Espanso nie ma odpowiednika. Są zapisane tak, jak są.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Aplikacja usunęła wzorzec z %1$d fragmentu. Aplikacja nie uruchamia wzorców o takim kształcie. Fragment pozostaje na liście.</item>
+        <item quantity="other">Aplikacja usunęła wzorzec z %1$d fragmentów. Aplikacja nie uruchamia wzorców o takim kształcie. Fragmenty pozostają na liście.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d skrót używa sformatowanego tekstu. Aplikacja zachowa słowa, ale usunie formatowanie.</item>
+        <item quantity="other">%1$d skrótów używa sformatowanego tekstu. Aplikacja zachowa słowa, ale usunie formatowanie.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d fragment uruchamia polecenie na Twoim komputerze. Aplikacja pominęła to polecenie i nigdy go nie uruchamia.</item>
+        <item quantity="other">%1$d fragmentów uruchamia polecenia na Twoim komputerze. Aplikacja pominęła te polecenia i nigdy ich nie uruchamia.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d wyzwalacz nie kończy się słowem, więc aplikacja nie może go monitorować. Jego fragment pozostaje na liście.</item>
+        <item quantity="other">%1$d wyzwalaczy nie kończy się słowem, więc aplikacja nie może ich monitorować. Ich fragmenty pozostają na liście.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d fragment zawiera tekst w klamrach, który ta aplikacja uzupełnia, taki jak {data}. Zostanie on rozwinięty, zamiast pojawić się w zapisanej formie.</item>
+        <item quantity="other">%1$d fragmentów zawiera tekst w klamrach, który ta aplikacja uzupełnia, taki jak {data}. Zostaną one rozwinięte, zamiast pojawić się w zapisanej formie.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d fragment zmienia wielkość liter tego, co przechwycił jego wzorzec. Espanso nie potrafi tego zrobić, więc przechwycony tekst pozostaje bez zmian.</item>
+        <item quantity="other">%1$d fragmentów zmienia wielkość liter tego, co przechwyciły ich wzorce. Espanso nie potrafi tego zrobić, więc przechwycony tekst pozostaje bez zmian.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d fragment używa wartości, dla której aplikacja nie ma odpowiednika. Ta część będzie pusta.</item>
+        <item quantity="other">%1$d fragmentów używa wartości, dla których aplikacja nie ma odpowiedników. Te części będą puste.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Aplikacja nie może pobrać czcionki. Sprawdź połączenie i spróbuj ponownie.</string>
+    <string name="core_content_font_error_empty">Plik jest pusty.</string>
+    <string name="core_content_font_error_load">Aplikacja nie może załadować tego pliku czcionki.</string>
+    <string name="core_content_font_error_markup">Ten plik jest plikiem HTML lub XML, a nie czcionką.</string>
+    <string name="core_content_font_error_no_storage">Brak dostępnego miejsca na czcionkę.</string>
+    <string name="core_content_font_error_not_a_font">Ten plik nie wygląda na czcionkę .ttf lub .otf.</string>
+    <string name="core_content_font_error_read">Aplikacja nie może odczytać czcionki.</string>
+    <string name="core_content_font_error_save">Aplikacja nie może zapisać czcionki.</string>
+    <string name="core_content_font_error_too_large">Czcionka musi być mniejsza niż %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Biblioteka czcionek jest pełna. Usuń czcionkę i spróbuj ponownie.</string>
+    <string name="core_content_font_error_too_short">Plik jest zbyt krótki, aby być czcionką.</string>
+    <string name="core_content_font_error_woff">Aplikacja nie może odczytać czcionek internetowych WOFF. Użyj wersji czcionki .ttf lub .otf.</string>
+    <string name="core_content_font_error_woff2">Aplikacja nie może odczytać czcionek internetowych WOFF2. Użyj wersji czcionki .ttf lub .otf.</string>
+    <string name="core_content_font_error_zip">Ten plik jest archiwum zip, a nie czcionką.</string>
+    <string name="core_content_selection_macro_add_contact">Kontakt</string>
+    <string name="core_content_selection_macro_calendar">Kalendarz</string>
+    <string name="core_content_selection_macro_call">Zadzwoń</string>
+    <string name="core_content_selection_macro_case_lower">małe litery</string>
+    <string name="core_content_selection_macro_case_sentence">Wielkość liter jak w zdaniu</string>
+    <string name="core_content_selection_macro_case_title">Wielkie litery w tytule</string>
+    <string name="core_content_selection_macro_case_upper">WIELKIE LITERY</string>
+    <string name="core_content_selection_macro_chat_bold">Pogrubienie</string>
+    <string name="core_content_selection_macro_chat_italic">Kursywa</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Przekreślenie</string>
+    <string name="core_content_selection_macro_colour">Kolor</string>
+    <string name="core_content_selection_macro_copy">Kopiuj</string>
+    <string name="core_content_selection_macro_digits_latin">Cyfry</string>
+    <string name="core_content_selection_macro_email">E-mail</string>
+    <string name="core_content_selection_macro_fancy">Ozdobne</string>
+    <string name="core_content_selection_macro_find">Znajdź</string>
+    <string name="core_content_selection_macro_format">Format</string>
+    <string name="core_content_selection_macro_grammar">Gramatyka</string>
+    <string name="core_content_selection_macro_lines_bullet">Wypunktowanie</string>
+    <string name="core_content_selection_macro_lines_dedupe">Unikalne</string>
+    <string name="core_content_selection_macro_lines_number">Liczba</string>
+    <string name="core_content_selection_macro_lines_sort">Sortuj</string>
+    <string name="core_content_selection_macro_map">Mapa</string>
+    <string name="core_content_selection_macro_open">Otwórz</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Czytaj na głos</string>
+    <string name="core_content_selection_macro_replace">Zastąp</string>
+    <string name="core_content_selection_macro_search">Szukaj</string>
+    <string name="core_content_selection_macro_share">Udostępnij</string>
+    <string name="core_content_selection_macro_sms">Wiadomość</string>
+    <string name="core_content_selection_macro_time_zones">Strefy</string>
+    <string name="core_content_selection_macro_to_bangla">Bengalski</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Przetłumacz</string>
+    <string name="core_content_selection_macro_url_decode">Dekoduj</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Aplikacja pominęła %2$d rozszerzenie z „%1$s”.</item>
+        <item quantity="other">Aplikacja pominęła %2$d rozszerzeń z „%1$s”.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Aplikacja usunęła wzorzec z \"%1$s\". Wzorzec jest niepoprawny. Fragment pozostaje na liście.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Aplikacja odrzuciła %1$d folder, który nie ma nazwy lub powtarza inny. Jego fragmenty zostały dodane bez folderu.</item>
+        <item quantity="other">Aplikacja odrzuciła %1$d folderów, które nie mają nazwy lub powtarzają inne. Ich fragmenty zostały dodane bez folderu.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Plik zawiera więcej fragmentów niż przechowuje aplikacja. Aplikacja zaimportowała pierwsze %1$d.</item>
+        <item quantity="other">Plik zawiera więcej fragmentów niż przechowuje aplikacja. Aplikacja zaimportowała pierwsze %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Fragment nie ma nazwy, więc aplikacja nazwała go na podstawie jego pierwszej linii.</string>
+    <string name="core_content_snippet_repair_no_text">Aplikacja odrzuciła \"%1$s\". Nie zawiera tekstu.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Aplikacja usunęła wzorzec z „%1$s”. Był dłuższy niż %2$d znak.</item>
+        <item quantity="other">Aplikacja usunęła wzorzec z „%1$s”. Był dłuższy niż %2$d znaków.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Aplikacja skróciła „%1$s”. Był dłuższy niż %2$d znak.</item>
+        <item quantity="other">Aplikacja skróciła „%1$s”. Był dłuższy niż %2$d znaków.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Nazwa aplikacji, w której piszesz</string>
+    <string name="core_content_snippet_var_clip_info">Najnowszy wpis w schowku</string>
+    <string name="core_content_snippet_var_cursor_info">Miejsce, w którym ląduje kursor</string>
+    <string name="core_content_snippet_var_date_info">Dzisiejsza data</string>
+    <string name="core_content_snippet_var_datetime_info">Data i godzina</string>
+    <string name="core_content_snippet_var_day_info">Dzień miesiąca</string>
+    <string name="core_content_snippet_var_isodate_info">Data w formacie ISO, na przykład 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Data i godzina w formacie ISO</string>
+    <string name="core_content_snippet_var_month_info">Nazwa miesiąca</string>
+    <string name="core_content_snippet_var_package_info">Nazwa pakietu tej aplikacji</string>
+    <string name="core_content_snippet_var_selection_info">Tekst zaznaczony w polu</string>
+    <string name="core_content_snippet_var_time12_info">Aktualny czas w formacie 12-godzinnym</string>
+    <string name="core_content_snippet_var_time_info">Aktualny czas w formacie 24-godzinnym</string>
+    <string name="core_content_snippet_var_timestamp_info">Czas w sekundach Unix</string>
+    <string name="core_content_snippet_var_timezone_info">Strefa czasowa, na przykład GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Nowy losowy identyfikator UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Nazwa dnia, na przykład niedziela</string>
+    <string name="core_content_snippet_var_year_info">Rok w formacie czterocyfrowym</string>
+    <string name="core_content_sticker_pack_imported_label">Zaimportowane naklejki</string>
+    <string name="core_content_sticker_repair_image_missing">Aplikacja odrzuciła „%1$s”. Brakuje jej obrazu.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Aplikacja odrzuciła \"%1$s\". Aplikacja nie może odczytać jego obrazu.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Pakiet zawiera %1$d naklejkę. Aplikacja zachowuje pierwszą %2$d.</item>
+        <item quantity="other">Pakiet zawiera %1$d naklejek. Aplikacja zachowuje pierwsze %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Aplikacja porzuciła naklejkę. Naklejka nie wskazuje żadnego pliku obrazu.</string>
+    <string name="core_content_sticker_repair_none_listed">Plik paczki nie zawiera żadnych naklejek.</string>
+    <string name="core_content_sticker_repair_not_saved">Aplikacja odrzuciła „%1$s”. Aplikacja nie może go zapisać.</string>
+</resources>

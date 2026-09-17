@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face ਸਰਵਰ ਨੇ ਫਾਈਲ ਨਹੀਂ ਭੇਜੀ। ਗਲਤੀ ਕੋਡ HTTP %1$s ਹੈ।</string>
+    <string name="core_voice_download_interrupted_error">ਡਾਊਨਲੋਡ ਦੌਰਾਨ ਕਨੈਕਸ਼ਨ ਰੁਕ ਗਿਆ ਸੀ। ਜਿੱਥੋਂ ਰੁਕਿਆ ਸੀ ਉੱਥੋਂ ਜਾਰੀ ਰੱਖਣ ਲਈ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="core_voice_download_space_error">ਤੁਹਾਡੀ ਡਿਵਾਈਸ \'ਤੇ ਲੋੜੀਂਦੀ ਸਟੋਰੇਜ ਨਹੀਂ ਹੈ। ਤੁਹਾਨੂੰ ਪਹਿਲਾਂ ਲਗਭਗ %1$s MB ਖਾਲੀ ਕਰਨੀ ਪਵੇਗੀ।</string>
+    <string name="core_voice_model_base_eu_body">ਇਹ ਮਾਡਲ ਉਸ ਭਾਸ਼ਾ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ ਜਿਸ ਵਿੱਚ ਤੁਸੀਂ ਟਾਈਪ ਕਰਦੇ ਹੋ, 40 ਭਾਸ਼ਾ ਮਾਡਲ ਵਾਂਗ ਹੀ। ਇਹ ਸਿਰਫ਼ ਯੂਰਪੀਅਨ ਭਾਸ਼ਾਵਾਂ ਨੂੰ ਕਵਰ ਕਰਦਾ ਹੈ, ਇਸ ਲਈ ਡਾਊਨਲੋਡ ਛੋਟਾ ਹੈ।</string>
+    <string name="core_voice_model_base_multi_body">ਇਹ ਮਾਡਲ ਸ਼ੁੱਧਤਾ ਅਤੇ ਗਤੀ ਵਿੱਚ ਸੰਤੁਲਨ ਬਣਾਉਂਦਾ ਹੈ। ਇਹ ਹਰ ਉਸ ਭਾਸ਼ਾ ਨੂੰ ਕਵਰ ਕਰਦਾ ਹੈ ਜੋ ਵਿਸਪਰ (Whisper) ਜਾਣਦਾ ਹੈ। ਜੇਕਰ ਛੋਟਾ (Small) ਮਾਡਲ ਬਹੁਤ ਹੌਲੀ ਹੈ ਤਾਂ ਇਸਨੂੰ ਚੁਣੋ।</string>
+    <string name="core_voice_model_base_world_body">ਇਹ ਮਾਡਲ ਅੰਦਾਜ਼ਾ ਲਗਾਉਣ ਦੀ ਬਜਾਏ ਤੁਹਾਡੇ ਦੁਆਰਾ ਟਾਈਪ ਕੀਤੀ ਭਾਸ਼ਾ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ। ਛੋਟੇ ਵਾਕਾਂਸ਼ ਬਹੁਤ ਜ਼ਿਆਦਾ ਭਰੋਸੇਯੋਗ ਬਣ ਜਾਂਦੇ ਹਨ। ਇਸਨੂੰ ਉਦੋਂ ਚੁਣੋ ਜਦੋਂ ਇਸਦੀ ਸੂਚੀ ਵਿੱਚ ਤੁਹਾਡੀਆਂ ਭਾਸ਼ਾਵਾਂ ਹੋਣ।</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d ਭਾਸ਼ਾ</item>
+        <item quantity="other">%1$d ਭਾਸ਼ਾਵਾਂ</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">ਇਹ ਸਭ ਤੋਂ ਸਹੀ ਵਿਸਪਰ ਮਾਡਲਾਂ ਵਿੱਚੋਂ ਇੱਕ ਹੈ, ਪਰ ਇਹ ਜ਼ਿਆਦਾਤਰ ਫੋਨਾਂ ਲਈ ਬਹੁਤ ਵੱਡਾ ਹੈ। ਡਾਊਨਲੋਡ 1.5 GB ਹੈ। ਸਿਰਫ਼ ਵੱਡੀ ਮੈਮੋਰੀ ਵਾਲੀ ਡਿਵਾਈਸ ਹੀ ਇਸਨੂੰ ਲੋਡ ਕਰ ਸਕਦੀ ਹੈ।</string>
+    <string name="core_voice_model_large_v3_multi_body">ਇਹ ਸਭ ਤੋਂ ਸਹੀ ਵਿਸਪਰ ਮਾਡਲ ਹੈ, ਅਤੇ ਇਹ ਪਛਾਣਨ ਵਿੱਚ ਸਭ ਤੋਂ ਵਧੀਆ ਹੈ ਕਿ ਤੁਸੀਂ ਕਿਹੜੀ ਭਾਸ਼ਾ ਬੋਲਦੇ ਹੋ। ਡਾਊਨਲੋਡ 1.5 GB ਹੈ। ਸਿਰਫ਼ ਵੱਡੀ ਮਾਤਰਾ ਵਿੱਚ ਮੈਮੋਰੀ ਵਾਲੀ ਡਿਵਾਈਸ ਹੀ ਇਸਨੂੰ ਲੋਡ ਕਰ ਸਕਦੀ ਹੈ। ਟਰਬੋ ਮਾਡਲ ਲਗਭਗ ਓਨਾ ਹੀ ਸਹੀ ਹੈ ਅਤੇ ਅੱਧੇ ਆਕਾਰ ਦਾ ਹੈ।</string>
+    <string name="core_voice_model_medium_multi_body">ਇਹ ਮਾਡਲ ਲਗਭਗ ਡੈਸਕਟੌਪ ਵਰਗੀ ਸ਼ੁੱਧਤਾ ਦਿੰਦਾ ਹੈ। ਹਰੇਕ ਵਾਕ ਵਿੱਚ ਕਈ ਸਕਿੰਟ ਲੱਗਦੇ ਹਨ। ਇਹ ਮਾਡਲ ਚੱਲਦੇ ਸਮੇਂ ਲਗਭਗ ਇੱਕ ਗੀਗਾਬਾਈਟ ਮੈਮੋਰੀ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ।</string>
+    <string name="core_voice_model_single_language_body">ਇਹ ਮਾਡਲ ਸਿਰਫ਼ %1$s ਨੂੰ ਸੰਭਾਲਦਾ ਹੈ। ਇਸ ਵਿੱਚ ਕੋਈ ਭਾਸ਼ਾ ਖੋਜ ਪੜਾਅ ਨਹੀਂ ਹੈ। ਇਹ ਇਸਨੂੰ ਉਸੇ ਆਕਾਰ ਦੇ ਬਹੁ-ਭਾਸ਼ਾਈ ਮਾਡਲ ਨਾਲੋਂ ਤੇਜ਼ ਅਤੇ ਥੋੜ੍ਹਾ ਵਧੇਰੇ ਸਹੀ ਬਣਾਉਂਦਾ ਹੈ।</string>
+    <string name="core_voice_model_small_multi_body">ਇਹ ਮਾਡਲ ਸਭ ਤੋਂ ਵਧੀਆ ਸ਼ੁੱਧਤਾ ਦਿੰਦਾ ਹੈ ਜੋ ਅਜੇ ਵੀ ਫ਼ੋਨ \'ਤੇ ਵਧੀਆ ਚੱਲਦਾ ਹੈ। ਇਹ ਬੇਸ ਮਾਡਲ ਨਾਲੋਂ ਲਹਿਜ਼ੇ ਅਤੇ ਬੈਕਗ੍ਰਾਉਂਡ ਸ਼ੋਰ ਨੂੰ ਬਿਹਤਰ ਢੰਗ ਨਾਲ ਸੰਭਾਲਦਾ ਹੈ। ਇਹ ਹਰ ਉਸ ਭਾਸ਼ਾ ਨੂੰ ਕਵਰ ਕਰਦਾ ਹੈ ਜੋ ਵਿਸਪਰ (Whisper) ਜਾਣਦਾ ਹੈ।</string>
+    <string name="core_voice_model_small_world_body">ਇਹ ਮਾਡਲ ਉਸ ਭਾਸ਼ਾ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ ਜਿਸ ਵਿੱਚ ਤੁਸੀਂ ਟਾਈਪ ਕਰਦੇ ਹੋ ਅਤੇ ਇਸ ਵਿੱਚ \'ਛੋਟੇ\' (Small) ਮਾਡਲ ਦੀ ਸ਼ੁੱਧਤਾ ਹੈ। ਇਹ ਸਭ ਤੋਂ ਸਹੀ ਮਾਡਲ ਹੈ ਜੋ ਅਜੇ ਵੀ ਫ਼ੋਨ \'ਤੇ ਫਿੱਟ ਬੈਠਦਾ ਹੈ।</string>
+    <string name="core_voice_model_tiny_multi_body">ਇਹ ਸਭ ਤੋਂ ਤੇਜ਼ ਬਹੁ-ਭਾਸ਼ਾਈ ਮਾਡਲ ਹੈ। ਇਹ ਸਪੱਸ਼ਟ ਬੋਲੀ ਨਾਲ ਵਧੀਆ ਕੰਮ ਕਰਦਾ ਹੈ, ਪਰ ਸ਼ੋਰ ਸ਼ੁੱਧਤਾ ਨੂੰ ਘਟਾਉਂਦਾ ਹੈ।</string>
+    <string name="core_voice_model_turbo_multi_body">ਇਹ ਮਾਡਲ ਤੁਹਾਡੇ ਦੁਆਰਾ ਬੋਲੀ ਜਾਣ ਵਾਲੀ ਭਾਸ਼ਾ ਨੂੰ ਛੋਟੇ ਮਾਡਲਾਂ ਨਾਲੋਂ ਬਹੁਤ ਵਧੀਆ ਢੰਗ ਨਾਲ ਪਛਾਣਦਾ ਹੈ। ਇਸਨੂੰ ਚੁਣੋ ਜੇਕਰ ਕੋਈ ਛੋਟਾ ਮਾਡਲ ਤੁਹਾਡੀ ਬੋਲੀ ਨੂੰ ਗਲਤ ਭਾਸ਼ਾ ਵਜੋਂ ਲਿਖਦਾ ਹੈ। ਇਹ ਇੱਕ ਵੱਡਾ ਡਾਊਨਲੋਡ ਹੈ, ਅਤੇ ਹਰੇਕ ਵਾਕਾਂਸ਼ ਵਿੱਚ ਕਈ ਸਕਿੰਟ ਲੱਗਦੇ ਹਨ।</string>
+    <string name="core_voice_size_base_label">ਅਧਾਰ</string>
+    <string name="core_voice_size_large_label">ਵੱਡਾ</string>
+    <string name="core_voice_size_medium_label">ਮੱਧਮ</string>
+    <string name="core_voice_size_small_label">ਛੋਟਾ</string>
+    <string name="core_voice_size_tiny_label">ਬਹੁਤ ਛੋਟਾ</string>
+    <string name="core_voice_size_turbo_label">ਟਰਬੋ</string>
+    <string name="core_voice_tier_recommended_label">ਸਿਫਾਰਸ਼ੀ</string>
+    <string name="core_voice_whisper_mel_bins_error">ਇਸ ਵੌਇਸ ਮਾਡਲ ਨੂੰ %1$s ਬੈਂਡ ਸਪੈਕਟ੍ਰੋਗ੍ਰਾਮ ਦੀ ਲੋੜ ਹੈ, ਜੋ ਉਸ ਫਾਈਲ ਨਾਲ ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ ਜਿਸ ਨਾਲ ਇਹ ਡਾਊਨਲੋਡ ਹੋਇਆ ਸੀ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਮਾਡਲ ਨੂੰ ਮਿਟਾਓ ਅਤੇ ਇਸਨੂੰ ਦੁਬਾਰਾ ਡਾਊਨਲੋਡ ਕਰੋ।</string>
+    <string name="core_voice_whisper_model_load_error">ਵੌਇਸ ਮਾਡਲ ਲੋਡ ਨਹੀਂ ਹੋਇਆ। ਫ਼ਾਈਲ ਸ਼ਾਇਦ ਖਰਾਬ ਹੈ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਮਾਡਲ ਨੂੰ ਮਿਟਾਓ ਅਤੇ ਇਸਨੂੰ ਦੁਬਾਰਾ ਡਾਊਨਲੋਡ ਕਰੋ।</string>
+    <string name="core_voice_whisper_transcribe_error">ਵੌਇਸ ਟਾਈਪਿੰਗ ਨੇ ਕੰਮ ਨਹੀਂ ਕੀਤਾ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ, ਜਾਂ ਇੱਕ ਛੋਟਾ ਮਾਡਲ ਚੁਣੋ।</string>
+</resources>

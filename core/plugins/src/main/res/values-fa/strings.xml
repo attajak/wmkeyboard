@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">این افزونه تابع render() ندارد.</string>
+    <string name="core_plugins_error_not_installed">آن افزونه نصب نشده است.</string>
+    <string name="core_plugins_error_script_failed">اسکریپت با شکست مواجه شد.</string>
+    <string name="core_plugins_error_script_missing">اسکریپت مربوط به آن افزونه موجود نیست.</string>
+    <string name="core_plugins_error_turned_off">این افزونه خاموش است.</string>
+    <string name="core_plugins_permission_storage_label">ذخیره داده‌ها روی دستگاه شما</string>
+    <string name="core_plugins_reject_bad_encoding">«%1$s» دارای اسکریپتی است که متن UTF-8 معتبر نیست.</string>
+    <string name="core_plugins_reject_bad_id">این افزونه دارای شناسه‌ای است که معتبر نیست. شناسه باید بین ۳ تا ۶۴ کاراکتر باشد. شناسه می‌تواند شامل حروف کوچک، اعداد، نقطه، خط تیره و زیرخط باشد.</string>
+    <string name="core_plugins_reject_compiled_lua">«%1$s» حاوی کد Lua کامپایل‌شده است. یک افزونه باید از کد منبع ساده استفاده کند تا بتوانید قبل از اجرا آن را بخوانید.</string>
+    <string name="core_plugins_reject_empty_script">«%1$s» دارای اسکریپت خالی است.</string>
+    <string name="core_plugins_reject_missing_script">«%1$s» فایل اسکریپت خود (%2$s) را ندارد.</string>
+    <string name="core_plugins_reject_newer_version">این افزونه به نسخه جدیدتری از صفحه‌کلید WM نیاز دارد.</string>
+    <string name="core_plugins_reject_no_name">این افزونه نامی ندارد.</string>
+    <string name="core_plugins_reject_no_version">«%1$s» مشخص نمی‌کند که چه نسخه‌ای است.</string>
+    <string name="core_plugins_reject_script_too_large">اسکریپت «%1$s» بزرگتر از %2$d کیلوبایت است.</string>
+    <string name="core_plugins_reject_unknown_permission">این نسخه از صفحه‌کلید WM مجوز «%1$s» را نمی‌شناسد. برنامه نمی‌تواند به شما بگوید که «%2$s» اجازه انجام چه کاری را دارد.</string>
+    <string name="core_plugins_stopped_cancelled">برنامه این افزونه را متوقف کرد.</string>
+    <string name="core_plugins_stopped_deadline">این افزونه بیش از حد طول کشید. برنامه آن را متوقف کرد.</string>
+    <string name="core_plugins_stopped_instructions">این افزونه در یک زمان کار زیادی انجام داد. برنامه آن را متوقف کرد.</string>
+    <string name="core_plugins_stopped_not_responding">این افزونه از پاسخگویی باز ایستاد. برنامه آن را بست.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">این افزونه دوباره پاسخ نداد. برنامه آن را غیرفعال کرد.</string>
+    <string name="core_plugins_stopped_recursion">این افزونه بیش از حد خود را فراخوانی کرد. برنامه آن را متوقف کرد.</string>
+    <string name="core_plugins_stopped_unexpected">این افزونه به طور غیرمنتظره متوقف شد.</string>
+    <string name="core_plugins_ui_insert_action">درج</string>
+    <string name="core_plugins_ui_repair_no_type">یک ویجت نوع خود را مشخص نکرده است.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">یک فهرست ویجت حاوی چیزی بود که ویجت نیست.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">یک نوار برگه هیچ صفحه‌ای نداشت.</string>
+    <string name="core_plugins_ui_repair_text_budget">این افزونه درخواست نمایش متن بیش از حد مجاز را داشت. برنامه بخشی از آن را حذف کرد.</string>
+    <string name="core_plugins_ui_repair_text_shortened">برخی از متن‌ها برای نمایش بیش از حد طولانی بودند. برنامه آن‌ها را کوتاه کرد.</string>
+    <string name="core_plugins_ui_repair_too_deep">برخی از ویجت‌ها برای ترسیم بیش از حد تو در تو بودند.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">فقط %1$d زبانه اول نمایش داده می‌شوند.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">این افزونه بیش از %1$d ویجت درخواست کرده است. برنامه بقیه را حذف کرد.</string>
+    <string name="core_plugins_ui_repair_unknown_type">این نسخه نوع ویجت «%1$s» را نمی‌شناسد.</string>
+    <string name="core_plugins_ui_tab_default_title">زبانه %1$d</string>
+</resources>

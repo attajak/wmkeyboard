@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Þessi viðbót hefur enga render() virkni.</string>
+    <string name="core_plugins_error_not_installed">Sú viðbót er ekki uppsett.</string>
+    <string name="core_plugins_error_script_failed">Skriftan mistókst.</string>
+    <string name="core_plugins_error_script_missing">Skriftan fyrir þá viðbót vantar.</string>
+    <string name="core_plugins_error_turned_off">Þessi viðbót er slökkt.</string>
+    <string name="core_plugins_permission_storage_label">Vista gögn á tækinu þínu</string>
+    <string name="core_plugins_reject_bad_encoding">„%1$s“ er með forskrift sem er ekki gildur UTF-8 texti.</string>
+    <string name="core_plugins_reject_bad_id">Þessi viðbót er með ógilt auðkenni. Auðkenni er 3 til 64 stafir að lengd. Auðkenni getur innihaldið lágstafi, tölustafi, punkta, bandstrik og undirstrik.</string>
+    <string name="core_plugins_reject_compiled_lua">„%1$s“ inniheldur þýddan Lua-kóða. Viðbót verður að nota óþýddan frumkóða svo þú getir lesið hann áður en hann keyrir.</string>
+    <string name="core_plugins_reject_empty_script">„%1$s“ er með tómt skrift.</string>
+    <string name="core_plugins_reject_missing_script">„%1$s“ vantar forskriftarskrána sína (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Þessi viðbót þarf nýrri útgáfu af WM lyklaborðinu.</string>
+    <string name="core_plugins_reject_no_name">Þessi viðbót hefur ekkert nafn.</string>
+    <string name="core_plugins_reject_no_version">„%1$s“ segir ekki til um hvaða útgáfa það er.</string>
+    <string name="core_plugins_reject_script_too_large">„%1$s“ er með forskrift sem er stærri en %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Þessi útgáfa af WM lyklaborðinu þekkir ekki heimildina „%1$s“. Forritið getur ekki sagt þér hvað „%2$s“ hefur leyfi til að gera.</string>
+    <string name="core_plugins_stopped_cancelled">Forritið stöðvaði þessa viðbót.</string>
+    <string name="core_plugins_stopped_deadline">Þessi viðbót tók of langan tíma. Forritið stöðvaði hana.</string>
+    <string name="core_plugins_stopped_instructions">Þessi viðbót vann of mikið í einu. Forritið stöðvaði hana.</string>
+    <string name="core_plugins_stopped_not_responding">Þessi viðbót hætti að svara. Forritið lokaði henni.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Þessi viðbót hætti að svara aftur. Forritið slökkti á henni.</string>
+    <string name="core_plugins_stopped_recursion">Þessi viðbót kallaði á sjálfa sig of oft. Forritið stöðvaði hana.</string>
+    <string name="core_plugins_stopped_unexpected">Þessi viðbót stöðvaðist óvænt.</string>
+    <string name="core_plugins_ui_insert_action">Setja inn</string>
+    <string name="core_plugins_ui_repair_no_type">Græja tilgreindi ekki hvers konar hún er.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Græjulisti innihélt eitthvað sem er ekki græja.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Flipastika hafði engar síður.</string>
+    <string name="core_plugins_ui_repair_text_budget">Þessi viðbót bað um að teikna of mikinn texta. Forritið sleppti einhverju.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Sumur texti var of langur til að teikna. Forritið stytti hann.</string>
+    <string name="core_plugins_ui_repair_too_deep">Sumir smáforritahlutar voru of djúpt innbyggðir til að hægt væri að teikna þá.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Aðeins fyrstu %1$d fliparnir eru sýndir.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Þessi viðbót bað um fleiri en %1$d græjur. Forritið sleppti þeim sem eftir voru.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Þessi útgáfa þekkir ekki græjutegundina „%1$s“.</string>
+    <string name="core_plugins_ui_tab_default_title">Flipi %1$d</string>
+</resources>

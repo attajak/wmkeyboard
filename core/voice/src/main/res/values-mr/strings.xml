@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">हगिंग फेस सर्व्हरने फाईल पाठवली नाही. एरर कोड HTTP %1$s आहे.</string>
+    <string name="core_voice_download_interrupted_error">डाउनलोड दरम्यान कनेक्शन थांबले. जिथून थांबले होते तिथून सुरू ठेवण्यासाठी पुन्हा प्रयत्न करा.</string>
+    <string name="core_voice_download_space_error">तुमच्या डिव्हाइसवर पुरेशी स्टोरेज नाही. तुम्हाला आधी सुमारे %1$s MB मोकळी करावी लागेल.</string>
+    <string name="core_voice_model_base_eu_body">हे मॉडेल तुम्ही ज्या भाषेत टाईप करता तीच भाषा वापरते, ४० भाषांच्या मॉडेलप्रमाणेच. यात फक्त युरोपियन भाषांचा समावेश आहे, त्यामुळे डाउनलोड आकार लहान आहे.</string>
+    <string name="core_voice_model_base_multi_body">हे मॉडेल अचूकता आणि गती यांचा समतोल राखते. हे व्हिस्परला माहित असलेल्या प्रत्येक भाषेला कव्हर करते. जर स्मॉल मॉडेल खूप धीमे असेल तर हे निवडा.</string>
+    <string name="core_voice_model_base_world_body">हे मॉडेल अंदाजाऐवजी तुम्ही टाईप करता ती भाषा वापरते. लहान वाक्ये अधिक विश्वासार्ह होतात. जेव्हा याच्या यादीत तुमची भाषा असेल तेव्हा ती निवडा.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d भाषा</item>
+        <item quantity="other">%1$d भाषा</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">हे सर्वात अचूक व्हिस्पर (Whisper) मॉडेल्सपैकी एक आहे, परंतु बहुतेक फोनसाठी ते खूप मोठे आहे. डाउनलोड 1.5 GB चे आहे. फक्त मोठ्या मेमरी असलेले डिव्हाइसच ते लोड करू शकते.</string>
+    <string name="core_voice_model_large_v3_multi_body">हे सर्वात अचूक व्हिस्पर (Whisper) मॉडेल आहे आणि तुम्ही कोणती भाषा बोलत आहात हे ओळखण्यात सर्वोत्तम आहे. हे डाउनलोड १.५ GB चे आहे. केवळ मोठ्या मेमरी असलेले डिव्हाइसच ते लोड करू शकते. टर्बो मॉडेल जवळजवळ तितकेच अचूक आहे आणि आकाराने अर्धे आहे.</string>
+    <string name="core_voice_model_medium_multi_body">हे मॉडेल जवळजवळ डेस्कटॉपसारखी अचूकता देते. प्रत्येक वाक्यांशासाठी काही सेकंद लागतात. हे मॉडेल चालू असताना जवळजवळ एक गिगाबाइट मेमरी वापरते.</string>
+    <string name="core_voice_model_single_language_body">हे मॉडेल फक्त %1$s हाताळते. यात भाषा ओळखण्याची पायरी नाही. यामुळे हे समान आकाराच्या बहुभाषिक मॉडेलपेक्षा वेगवान आणि थोडे अधिक अचूक बनते.</string>
+    <string name="core_voice_model_small_multi_body">हे मॉडेल सर्वोत्तम अचूकता देते जे फोनवर चांगले चालते. हे बेस मॉडेलपेक्षा उच्चार आणि पार्श्वभूमीतील आवाज अधिक चांगल्या प्रकारे हाताळते. हे व्हिस्परला माहित असलेल्या प्रत्येक भाषेला कव्हर करते.</string>
+    <string name="core_voice_model_small_world_body">हे मॉडेल तुम्ही ज्या भाषेत टाइप करता ती भाषा वापरते आणि त्यात स्मॉल मॉडेलची अचूकता असते. हे सर्वात अचूक मॉडेल आहे जे फोनवर बसते.</string>
+    <string name="core_voice_model_tiny_multi_body">हे सर्वात वेगवान बहुभाषिक मॉडेल आहे. हे स्पष्ट आवाजासह चांगले काम करते, परंतु गोंगाटामुळे अचूकता कमी होते.</string>
+    <string name="core_voice_model_turbo_multi_body">हे मॉडेल तुम्ही बोलत असलेली भाषा लहान मॉडेल्सपेक्षा अधिक चांगल्या प्रकारे ओळखते. जर लहान मॉडेल तुमचे बोलणे चुकीच्या भाषेत लिप्यंतरित करत असेल तर हे निवडा. ही एक मोठी फाईल आहे आणि प्रत्येक वाक्यासाठी काही सेकंद लागतात.</string>
+    <string name="core_voice_size_base_label">बेस</string>
+    <string name="core_voice_size_large_label">मोठे</string>
+    <string name="core_voice_size_medium_label">मध्यम</string>
+    <string name="core_voice_size_small_label">लहान</string>
+    <string name="core_voice_size_tiny_label">लहान</string>
+    <string name="core_voice_size_turbo_label">टर्बो</string>
+    <string name="core_voice_tier_recommended_label">शिफारस केलेले</string>
+    <string name="core_voice_whisper_mel_bins_error">या व्हॉइस मॉडेलला %1$s बँड स्पेक्ट्रोग्रामची आवश्यकता आहे, जे डाउनलोड केलेल्या फाइलशी जुळत नाही. सेटिंग्जमध्ये मॉडेल हटवा आणि ते पुन्हा डाउनलोड करा.</string>
+    <string name="core_voice_whisper_model_load_error">व्हॉइस मॉडेल लोड झाले नाही. फाईल कदाचित खराब झाली असावी. सेटिंग्जमध्ये मॉडेल हटवा आणि पुन्हा डाउनलोड करा.</string>
+    <string name="core_voice_whisper_transcribe_error">व्हॉइस टायपिंग काम करत नाहीये. पुन्हा प्रयत्न करा किंवा लहान मॉडेल निवडा.</string>
+</resources>

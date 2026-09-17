@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Þessi pakki þarf hljóðpakkasnið %1$s. Uppfærðu forritið.</string>
+    <string name="core_feedback_pack_reject_no_samples">Þessi pakki inniheldur engin hljóð sem forritið getur spilað.</string>
+    <string name="core_feedback_pack_reject_too_large">Hljóðpakki verður að vera minni en %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Skráin er tóm.</string>
+    <string name="core_feedback_sound_import_html_error">Þetta er HTML- eða XML-skrá, ekki hljóð.</string>
+    <string name="core_feedback_sound_import_mp4_error">Forritið spilar ekki MP4- og M4A-skrár. Notaðu MP3-skrá.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Ekkert geymslupláss er tiltækt í tækinu þínu.</string>
+    <string name="core_feedback_sound_import_read_error">Forritið getur ekki lesið hljóðið.</string>
+    <string name="core_feedback_sound_import_save_error">Appið getur ekki vistað hljóðið.</string>
+    <string name="core_feedback_sound_import_too_large_error">Hljóðlykill verður að vera minni en %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Skráin er of stutt til að vera hljóð.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Þetta lítur ekki út fyrir að vera MP3, OGG eða WAV skrá.</string>
+    <string name="core_feedback_sound_import_zip_error">Þetta er zip-skrá, ekki hljóðskrá.</string>
+</resources>

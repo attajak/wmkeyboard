@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">هذا النموذج مقيد. أضف رمز Hugging Face الخاص بك أولاً.</string>
+    <string name="core_intel_llm_download_error_http">أرجع Hugging Face حالة HTTP %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">اقبل ترخيص النموذج على صفحته في Hugging Face. ثم حاول مرة أخرى.</string>
+    <string name="core_intel_llm_download_error_no_space">لا توجد مساحة تخزين كافية على جهازك. قم بتفريغ حوالي %1$s جيجابايت أولاً.</string>
+    <string name="core_intel_llm_download_error_token_rejected">لم تقبل Hugging Face الرمز المميز. تحقق من الرمز وحاول مرة أخرى.</string>
+    <string name="core_intel_llm_download_error_truncated">توقف الاتصال أثناء التنزيل. اضغط على استئناف للمتابعة.</string>
+    <string name="core_intel_llm_engine_error_gpu">فشل النموذج على وحدة معالجة الرسومات (GPU). ذاكرة وحدة معالجة الرسومات أصغر بكثير من ذاكرة النظام. المحاولة التالية ستستخدم وحدة المعالجة المركزية (CPU). لاستخدام وحدة المعالجة المركزية دائمًا، اضبط الحساب على CPU في الإعدادات. يمكنك أيضًا اختيار نموذج أصغر.</string>
+    <string name="core_intel_llm_engine_error_load">لم يتم تحميل النموذج. من المحتمل أن الملف تالف. احذف النموذج من الإعدادات وقم بتنزيله مرة أخرى.</string>
+    <string name="core_intel_llm_engine_error_memory">نفدت ذاكرة النموذج، أو حدث خطأ. اختر نموذجاً أصغر.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">نموذج Gemma صغير من الجيل السابق. يتمتع بجودة جيدة وسياق يبلغ 4 آلاف رمز.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">أصغر نموذج Gemma من Google. إنه سريع على جميع الأجهزة.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">أحدث جيل من Gemma. يمنحك جودة عالية على جهازك.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">النموذج الأكبر. يكتب بشكل أفضل، لكنه يحتاج إلى جهاز قوي.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">نموذج متعدد الأغراض يناسب الأجهزة الأساسية.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">أذكى بوضوح من النماذج الأقل من 1 مليار. يتطلب جهازاً متوسط الأداء.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">نموذج صغير حديث. الجودة عالية بالنسبة لحجمه.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">صغير جداً وسريع. إنه جيد لإعادة الصياغة السريعة، لكن قدراته على الاستنتاج محدودة.</string>
+    <string name="core_intel_llm_module_downloading">جاري تنزيل جزء الذكاء الاصطناعي للوحة المفاتيح من متجر Google Play. حاول مجدداً بعد قليل.</string>
+    <string name="core_intel_llm_module_restart">انتهى تثبيت جزء الذكاء الاصطناعي. أغلق لوحة المفاتيح وأعد فتحها لاستخدامها.</string>
+    <string name="core_intel_llm_tier_experimental_label">تجريبي</string>
+    <string name="core_intel_llm_tier_recommended_label">موصى به</string>
+    <string name="core_intel_llm_tier_untested_label">غير مختبر</string>
+</resources>

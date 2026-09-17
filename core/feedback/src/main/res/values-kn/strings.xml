@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">ಈ ಪ್ಯಾಕ್‌ಗೆ ಸೌಂಡ್ ಪ್ಯಾಕ್ ಫಾರ್ಮ್ಯಾಟ್ %1$s ಅಗತ್ಯವಿದೆ. ಆ್ಯಪ್ ಅನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡಿ.</string>
+    <string name="core_feedback_pack_reject_no_samples">ಈ ಪ್ಯಾಕ್‌ನಲ್ಲಿ ಆ್ಯಪ್ ಪ್ಲೇ ಮಾಡಬಹುದಾದ ಯಾವುದೇ ಶಬ್ದಗಳಿಲ್ಲ.</string>
+    <string name="core_feedback_pack_reject_too_large">ಸೌಂಡ್ ಪ್ಯಾಕ್ %1$s MB ಗಿಂತ ಚಿಕ್ಕದಾಗಿರಬೇಕು.</string>
+    <string name="core_feedback_sound_import_empty_error">ಫೈಲ್ ಖಾಲಿಯಾಗಿದೆ.</string>
+    <string name="core_feedback_sound_import_html_error">ಇದು HTML ಅಥವಾ XML ಫೈಲ್ ಆಗಿದೆ, ಧ್ವನಿಯಲ್ಲ.</string>
+    <string name="core_feedback_sound_import_mp4_error">ಈ ಆ್ಯಪ್ MP4 ಮತ್ತು M4A ಫೈಲ್‌ಗಳನ್ನು ಪ್ಲೇ ಮಾಡುವುದಿಲ್ಲ. MP3 ಫೈಲ್ ಬಳಸಿ.</string>
+    <string name="core_feedback_sound_import_no_storage_error">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಯಾವುದೇ ಸಂಗ್ರಹಣೆ ಲಭ್ಯವಿಲ್ಲ.</string>
+    <string name="core_feedback_sound_import_read_error">ಅಪ್ಲಿಕೇಶನ್ ಧ್ವನಿಯನ್ನು ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="core_feedback_sound_import_save_error">ಆ್ಯಪ್ ಧ್ವನಿಯನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="core_feedback_sound_import_too_large_error">ಕೀ ಸೌಂಡ್ ಫೈಲ್ %1$s MB ಗಿಂತ ಚಿಕ್ಕದಾಗಿರಬೇಕು.</string>
+    <string name="core_feedback_sound_import_too_short_error">ಫೈಲ್ ಶಬ್ದವಾಗಿರಲು ತುಂಬಾ ಚಿಕ್ಕದಾಗಿದೆ.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">ಇದು MP3, OGG ಅಥವಾ WAV ಫೈಲ್‌ನಂತೆ ಕಾಣುತ್ತಿಲ್ಲ.</string>
+    <string name="core_feedback_sound_import_zip_error">ಇದು ಜಿಪ್ ಆರ್ಕೈವ್ ಆಗಿದೆ, ಧ್ವನಿ ಫೈಲ್ ಅಲ್ಲ.</string>
+</resources>

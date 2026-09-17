@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Vārdnīcas</string>
+    <string name="core_addons_type_dictionary_singular_label">Vārdnīca</string>
+    <string name="core_addons_type_emoji_font_label">Emoji fonti</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emocijzīmju fonts</string>
+    <string name="core_addons_type_emoji_keywords_label">Emocijzīmju atslēgvārdi</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Emocijzīmju atslēgvārdu pakotne</string>
+    <string name="core_addons_type_espanso_label">Espanso pakotnes</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso pakotne</string>
+    <string name="core_addons_type_font_label">Fonti</string>
+    <string name="core_addons_type_font_singular_label">Fonts</string>
+    <string name="core_addons_type_icon_pack_label">Ikonu pakas</string>
+    <string name="core_addons_type_icon_pack_singular_label">Ikonu pakotne</string>
+    <string name="core_addons_type_layout_label">Izkārtojumi</string>
+    <string name="core_addons_type_layout_singular_label">Izkārtojums</string>
+    <string name="core_addons_type_plugin_label">Spraudņi</string>
+    <string name="core_addons_type_plugin_singular_label">Spraudnis</string>
+    <string name="core_addons_type_snippets_label">Fragmenti</string>
+    <string name="core_addons_type_snippets_singular_label">Fragmentu paka</string>
+    <string name="core_addons_type_sound_label">Skaņas</string>
+    <string name="core_addons_type_sound_pack_label">Skaņu pakotnes</string>
+    <string name="core_addons_type_sound_pack_singular_label">Skaņu pakotne</string>
+    <string name="core_addons_type_sound_singular_label">Taustiņa skaņa</string>
+    <string name="core_addons_type_stickers_label">Uzlīmju pakas</string>
+    <string name="core_addons_type_stickers_singular_label">Uzlīmju komplekts</string>
+    <string name="core_addons_type_theme_label">Motīvi</string>
+    <string name="core_addons_type_theme_singular_label">Motīvs</string>
+    <string name="core_addons_type_unknown_label">Cits</string>
+    <string name="core_addons_type_unknown_singular_label">Papildinājums</string>
+    <string name="core_addons_type_vocabulary_label">Vārdnīca</string>
+    <string name="core_addons_type_vocabulary_singular_label">Vārdnīcas pakotne</string>
+</resources>

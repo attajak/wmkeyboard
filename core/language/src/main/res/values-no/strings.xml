@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Appen endret %1$d tast til den nærmeste tasten den har.</item>
+        <item quantity="other">Appen endret %1$d taster til de nærmeste tastene den har.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Appen fjernet %1$d tast. Dette tastaturet har ingen tast som gjør det samme (kode %2$s).</item>
+        <item quantity="other">Appen fjernet %1$d taster. Dette tastaturet har ingen taster som gjør det samme (koder %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Appen beholdt etikettstørrelsen for %1$d tast, men ikke tekststilen. Dette tastaturet tegner etiketter i én stil.</item>
+        <item quantity="other">Appen beholdt etikettstørrelsen for %1$d taster, men ikke tekststilen deres. Dette tastaturet tegner etiketter i én stil.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Appen endret %1$d bokstav til formen som dette tastaturet skriver.</item>
+        <item quantity="other">Appen endret %1$d bokstaver til formen som dette tastaturet skriver.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tast har ingen trykk-og-hold-bokstaver. Filen beholder dem i en annen fil som du ikke åpnet.</item>
+        <item quantity="other">%1$d taster har ingen trykk-og-hold-bokstaver. Filen beholder dem i en annen fil som du ikke åpnet.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Det andre tastaturet måler tastbredder annerledes. Appen endret breddene for å passe til dette rutenettet.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d punktskrift-tast i %2$s-laget har et punktnummer utenfor 1 til 6.</item>
+        <item quantity="other">%1$d punktskrift-taster i %2$s-laget har et punktnummer utenfor 1 til 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d-tast i %2$s-laget har ingen merkelapp og ingen utgang. Den skriver ingenting, og appen sletter den når du slår på dette oppsettet.</item>
+        <item quantity="other">%1$d-taster i %2$s-laget har ingen merkelapp og ingen utgang. De skriver ingenting, og appen sletter dem når du slår på dette oppsettet.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Rad %1$d i %2$s-laget er tom.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d tast i %2$s-laget er en panelkomponent. Komponenter fungerer bare i et paneloppsett.</item>
+        <item quantity="other">%1$d taster i %2$s-laget er panelkomponenter. Komponenter fungerer bare i et paneloppsett.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Rad %1$d i %2$s-laget har en tast uten bredde.</string>
+    <string name="core_lang_layout_key_span_error">Rad %1$d i %2$s-laget har en tast som dekker færre enn 1 eller flere enn %3$d rader.</string>
+    <string name="core_lang_layout_letters_empty_error">Bokstavlaget har ingen taster.</string>
+    <string name="core_lang_layout_no_delete_error">Oppsettet har ingen slettetast. Du kan ikke rette en feil.</string>
+    <string name="core_lang_layout_no_enter_error">Oppsettet har ingen enter-tast.</string>
+    <string name="core_lang_layout_no_shift_warning">Oppsettet har ingen skift-tast. For å skrive en stor bokstav, trykk og hold inne en tast.</string>
+    <string name="core_lang_layout_no_space_error">Oppsettet har ingen mellomromstast.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s-laget har ingen tast som går tilbake til bokstavene. Du kan ikke forlate dette laget.</string>
+    <string name="core_lang_layout_persistent_warning">%1$s-laget forblir åpent når tastaturet lukkes. Sørg for at du har en måte å avslutte dette oppsettet på.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Dette oppsettet har ingen tast som forlater det. Sørg for at du har en måte å avslutte dette oppsettet på: en ABC-tast, en symboltast eller verktøyet for sekundært oppsett på verktøylinjen.</string>
+    <string name="core_lang_layout_span_past_end_warning">Rad %1$d i %2$s-laget har en tast som dekker flere rader enn laget har. Tastaturet stopper den ved den siste raden.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Rad %1$d i %2$s-laget har %3$d tast. Bare %4$d taster forblir store nok til å trykke på.</item>
+        <item quantity="other">Rad %1$d i %2$s-laget har %3$d taster. Bare %4$d taster forblir store nok til å trykke på.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s-laget har %2$d rad. Kun %3$d rader får plass.</item>
+        <item quantity="other">%1$s-laget har %2$d rader. Kun %3$d rader får plass.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d tast i %2$s-laget bruker en handling som denne versjonen av appen ikke kjenner til.</item>
+        <item quantity="other">%1$d taster i %2$s-laget bruker en handling som denne versjonen av appen ikke kjenner til.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Rad %1$d i %2$s-laget er bredere enn de andre radene. Tastaturet tegner tastene i denne raden smalere.</string>
+    <string name="core_lang_numeral_scope_display_only">Kun visning</string>
+    <string name="core_lang_numeral_scope_everywhere">Overalt</string>
+    <string name="core_lang_numeral_scope_text_fields">Tekstfelt</string>
+    <string name="core_lang_numeral_system_auto">Auto</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponent vises mer enn én gang. Appen beholder den første kopien.</item>
+        <item quantity="other">%1$d komponenter vises mer enn én gang. Appen beholder den første kopien av hver.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Dette panelet har ingen taster. Appen bruker standardpanelet i stedet.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tast har en handling som ikke fungerer på et panel. Appen sletter den.</item>
+        <item quantity="other">%1$d taster har handlinger som ikke fungerer på et panel. Appen sletter dem.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Dette panelet har ingen ABC-tast. Bruk verktøylinjen eller Tilbake-knappen for å gå tilbake til tastene.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Appen slettet en kopi av en komponent.</string>
+    <string name="core_lang_panel_repair_field_added">Appen la til panelets hovedkomponent i en ny rad.</string>
+    <string name="core_lang_panel_repair_field_dropped">Appen slettet en komponent som ikke tilhører dette panelet.</string>
+    <string name="core_lang_panel_repair_key_dropped">Appen slettet en tast hvis handling ikke fungerer på et panel.</string>
+    <string name="core_lang_panel_repair_reset">Appen erstattet det tomme panelet med standardpanelet.</string>
+    <string name="core_lang_panel_required_field_error">Dette panelet mangler hovedkomponenten sin. Appen legger til en når den tegner panelet.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponent tilhører ikke dette panelet. Appen sletter den.</item>
+        <item quantity="other">%1$d komponenter tilhører ikke dette panelet. Appen sletter dem.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Appen slettet en tom tast i %1$s-laget.</string>
+    <string name="core_lang_repair_braille_dot_clamped">En tast i %1$s-laget brukte blindskriftpunkt %2$d. Appen gjorde det til punkt %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Bokstavlaget hadde ingen slettetast. Appen la til en.</string>
+    <string name="core_lang_repair_enter_key_added">Bokstavlaget hadde ingen enter-tast. Appen la til en.</string>
+    <string name="core_lang_repair_field_key_deleted">Appen slettet en panelkomponent fra %1$s-laget. Komponenter fungerer bare i et paneloppsett.</string>
+    <string name="core_lang_repair_key_letters_anchored">En tast i %1$s-laget står for %2$s. Appen fikk den til å skrive %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">En tast i %1$s-laget oppga %2$s som bokstavene den representerer. Dette er ikke bokstaver, så appen gjorde den om til en vanlig tast.</string>
+    <string name="core_lang_repair_key_span_clamped">En tast i %1$s-laget dekket %2$d rader. Appen fikk den til å dekke %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">En tast i %1$s-laget var %2$s enheter bred. Appen gjorde den %3$s enheter bred.</string>
+    <string name="core_lang_repair_key_width_set">En tast i %1$s-laget hadde ingen bredde. Appen satte bredden til 1.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s-laget hadde ingen taster som fungerer. Det bruker nå det innebygde rutenettet.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s-laget hadde ingen tast som går tilbake til bokstavene. Appen la til en ABC-tast.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">En rad i %1$s-laget hadde %2$d tast. Appen beholder den første %3$d.</item>
+        <item quantity="other">En rad i %1$s-laget hadde %2$d taster. Appen beholder de første %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">En rad i %1$s-laget var %2$s enheter bred. Appen gjorde tastene mindre slik at raden får plass.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s-laget hadde %2$d rad. Appen beholder de første %3$d.</item>
+        <item quantity="other">%1$s-laget hadde %2$d rader. Appen beholder de første %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Bokstavlaget hadde ingen mellomromstast. Appen la til en.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Appen slettet en tast i %1$s-laget. Handlingen \"%2$s\" er ukjent.</string>
+</resources>

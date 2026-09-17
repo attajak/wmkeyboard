@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Marja</string>
+    <string name="core_theme_builtin_bubble_label">Kupla</string>
+    <string name="core_theme_builtin_crimson_label">Karmiininpunainen</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Syvänmeri</string>
+    <string name="core_theme_builtin_facet_label">Viiste</string>
+    <string name="core_theme_builtin_forest_label">Metsä</string>
+    <string name="core_theme_builtin_glacier_label">Jäätikkö</string>
+    <string name="core_theme_builtin_mint_label">Minttu</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Ocean</string>
+    <string name="core_theme_builtin_pitch_label">Piki-musta</string>
+    <string name="core_theme_builtin_rose_label">Ruusu</string>
+    <string name="core_theme_builtin_sand_label">Hiekka</string>
+    <string name="core_theme_builtin_slate_label">Liuskekivi</string>
+    <string name="core_theme_builtin_snow_label">Lumi</string>
+    <string name="core_theme_builtin_sunset_drift_label">Auringonlaskun ajelehdinta</string>
+    <string name="core_theme_builtin_sunset_label">Auringonlasku</string>
+    <string name="core_theme_family_gradient_label">Liukuvärit</string>
+    <string name="core_theme_family_ocean_label">Nightfall</string>
+    <string name="core_theme_family_snow_label">Pastelli</string>
+</resources>

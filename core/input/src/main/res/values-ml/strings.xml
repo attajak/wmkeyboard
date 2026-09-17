@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">ഡൗൺലോഡ് ചെയ്ത ഫയൽ കേടായിരിക്കുന്നു. അതിന്റെ ചെക്ക്സം പൊരുത്തപ്പെടുന്നില്ല. ഡൗൺലോഡ് വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="core_input_cjk_download_error_http">സെർവർ HTTP സ്റ്റാറ്റസ് %1$s നൽകി.</string>
+    <string name="core_input_cjk_download_error_network">ഡൗൺലോഡ് പരാജയപ്പെട്ടു. നിങ്ങളുടെ കണക്ഷൻ പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="core_input_cjk_download_error_network_detail">ഡൗൺലോഡ് പ്രവർത്തിച്ചില്ല: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">നിങ്ങളുടെ ഉപകരണത്തിൽ മതിയായ സ്റ്റോറേജ് ഇല്ല. ആദ്യം കുറച്ച് സ്ഥലം ഒഴിഞ്ഞു കൊടുക്കുക.</string>
+    <string name="core_input_cjk_download_error_truncated">ഡൗൺലോഡ് ചെയ്യുന്നതിനിടെ കണക്ഷൻ തടസ്സപ്പെട്ടു. തുടരാൻ \'Resume\' അമർത്തുക.</string>
+    <string name="core_input_cjk_download_error_unavailable">ഈ പാക്ക് ഇതുവരെ ലഭ്യമല്ല.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">ഹാൻസി അക്ഷരങ്ങൾക്കായുള്ള റാഡിക്കൽ കോഡുകളുടെ ഒരു പട്ടിക, 29,000 അക്ഷരങ്ങൾ. കാങ്‌ജി, ക്വിക്ക് ലേഔട്ടുകൾക്കായി കീബോർഡിന് ഈ പാക്ക് ആവശ്യമാണ്.</string>
+    <string name="core_input_cjk_pack_cangjie_title">കാങ്‌ജി (倉頡) നിഘണ്ടു</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">മോസ്ക് (mozc)-ൽ നിന്നുള്ള കാന റീഡിംഗുകൾ, 1.08 ദശലക്ഷം എൻട്രികൾ, ഏകദേശം 42 MB. ജാപ്പനീസ് പരിവർത്തനത്തിന് കീബോർഡിന് ഈ പാക്ക് ആവശ്യമാണ്.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">ജാപ്പനീസ് കാന മുതൽ കാഞ്ചി നിഘണ്ടു വരെ</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">ഹാൻസി അക്ഷരങ്ങളിലേക്കുള്ള ജ്യുത്പിംഗ് വായനകളുടെ ഒരു പട്ടിക, 163,000 എൻട്രികൾ. കാന്റണീസ് പരിവർത്തനത്തിനായി കീബോർഡിന് ഈ പാക്ക് ആവശ്യമാണ്.</string>
+    <string name="core_input_cjk_pack_jyutping_title">കന്റോണീസ് ജ്യുത്പിംഗ് നിഘണ്ടു</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT-ൽ നിന്നുള്ള ഹാൻസി അക്ഷരങ്ങളും ശൈലികളും, 120,000 എൻട്രികൾ. ചൈനീസ് പരിവർത്തനത്തിനായി കീബോർഡിന് ഈ പാക്ക് ആവശ്യമാണ്.</string>
+    <string name="core_input_cjk_pack_pinyin_title">ചൈനീസ് പിൻയിൻ നിഘണ്ടു</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">ഹാൻസി അക്ഷരങ്ങളുടെ സ്ട്രോക്ക് ഓർഡർ പട്ടിക. സ്ട്രോക്ക് ലേഔട്ടിനായി കീബോർഡിന് ഈ പാക്ക് ആവശ്യമാണ്.</string>
+    <string name="core_input_cjk_pack_stroke_title">ചൈനീസ് സ്ട്രോക്ക് (笔画) നിഘണ്ടു</string>
+    <string name="core_input_double_pinyin_off_label">ഓഫ് (ഫുൾ പിൻയിൻ)</string>
+</resources>

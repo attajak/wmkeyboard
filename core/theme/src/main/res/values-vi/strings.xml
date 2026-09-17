@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Quả mọng</string>
+    <string name="core_theme_builtin_bubble_label">Bong bóng</string>
+    <string name="core_theme_builtin_crimson_label">Đỏ thẫm</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Biển sâu</string>
+    <string name="core_theme_builtin_facet_label">Khía cạnh</string>
+    <string name="core_theme_builtin_forest_label">Rừng</string>
+    <string name="core_theme_builtin_glacier_label">Sông băng</string>
+    <string name="core_theme_builtin_mint_label">Bạc hà</string>
+    <string name="core_theme_builtin_nebula_label">Tinh vân</string>
+    <string name="core_theme_builtin_ocean_label">Đại dương</string>
+    <string name="core_theme_builtin_pitch_label">Đen tuyền</string>
+    <string name="core_theme_builtin_rose_label">Hoa hồng</string>
+    <string name="core_theme_builtin_sand_label">Cát</string>
+    <string name="core_theme_builtin_slate_label">Slate</string>
+    <string name="core_theme_builtin_snow_label">Tuyết</string>
+    <string name="core_theme_builtin_sunset_drift_label">Hoàng hôn trôi</string>
+    <string name="core_theme_builtin_sunset_label">Hoàng hôn</string>
+    <string name="core_theme_family_gradient_label">Độ dốc màu</string>
+    <string name="core_theme_family_ocean_label">Nightfall</string>
+    <string name="core_theme_family_snow_label">Pastel</string>
+</resources>

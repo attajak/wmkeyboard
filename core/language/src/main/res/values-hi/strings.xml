@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">ऐप ने %1$d कुंजी को उसके पास मौजूद सबसे करीबी कुंजी में बदल दिया।</item>
+        <item quantity="other">ऐप ने %1$d कुंजियों को उनके पास मौजूद सबसे करीबी कुंजियों में बदल दिया।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">ऐप ने %1$d कुंजी हटा दी। इस कीबोर्ड में ऐसा कोई बटन नहीं है जो वही काम करता हो (कोड %2$s)।</item>
+        <item quantity="other">ऐप ने %1$d कुंजियाँ हटा दीं। इस कीबोर्ड में ऐसी कोई कुंजियाँ नहीं हैं जो वही काम करती हों (कोड %2$s)।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">ऐप ने %1$d कुंजी का लेबल आकार तो रखा लेकिन उसका टेक्स्ट स्टाइल नहीं। यह कीबोर्ड लेबल को एक ही स्टाइल में दिखाता है।</item>
+        <item quantity="other">ऐप ने %1$d कुंजियों का लेबल आकार तो रखा लेकिन उनका टेक्स्ट स्टाइल नहीं। यह कीबोर्ड लेबल को एक ही स्टाइल में दिखाता है।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">ऐप ने %1$d अक्षर को उस रूप में बदल दिया जिसे यह कीबोर्ड लिखता है।</item>
+        <item quantity="other">ऐप ने %1$d अक्षरों को उस रूप में बदल दिया जिसे यह कीबोर्ड लिखता है।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d कुंजी में कोई प्रेस-एंड-होल्ड अक्षर नहीं है। फ़ाइल उन्हें एक दूसरी फ़ाइल में रखती है जिसे आपने नहीं खोला है।</item>
+        <item quantity="other">%1$d कुंजियों में कोई प्रेस-एंड-होल्ड अक्षर नहीं है। फ़ाइल उन्हें एक दूसरी फ़ाइल में रखती है जिसे आपने नहीं खोला है।</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">दूसरा कीबोर्ड कुंजी की चौड़ाई को अलग तरह से मापता है। ऐप ने इस ग्रिड में फिट होने के लिए चौड़ाई बदल दी है।</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s लेयर में %1$d ब्रेल डॉट कुंजी में 1 से 6 के बाहर एक डॉट नंबर है।</item>
+        <item quantity="other">%2$s लेयर में %1$d ब्रेल डॉट कुंजियों में 1 से 6 के बाहर एक डॉट नंबर है।</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s लेयर में %1$d कुंजी का कोई लेबल और कोई आउटपुट नहीं है। यह कुछ भी टाइप नहीं करती है, और जब आप इस लेआउट को चालू करते हैं तो ऐप इसे हटा देता है।</item>
+        <item quantity="other">%2$s लेयर में %1$d कुंजियों का कोई लेबल और कोई आउटपुट नहीं है। वे कुछ भी टाइप नहीं करती हैं, और जब आप इस लेआउट को चालू करते हैं तो ऐप उन्हें हटा देता है।</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s लेयर की पंक्ति %1$d खाली है।</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s लेयर में %1$d कुंजी एक पैनल घटक है। घटक केवल पैनल लेआउट में काम करते हैं।</item>
+        <item quantity="other">%2$s लेयर में %1$d कुंजियाँ पैनल घटक हैं। घटक केवल पैनल लेआउट में काम करते हैं।</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s लेयर की %1$d पंक्ति में एक कुंजी है जिसकी कोई चौड़ाई नहीं है।</string>
+    <string name="core_lang_layout_key_span_error">%2$s लेयर की पंक्ति %1$d में एक कुंजी है जो 1 से कम या %3$d से अधिक पंक्तियों को कवर करती है।</string>
+    <string name="core_lang_layout_letters_empty_error">अक्षरों की परत में कोई कुंजी नहीं है।</string>
+    <string name="core_lang_layout_no_delete_error">लेआउट में डिलीट की नहीं है। आप गलती सुधार नहीं सकते।</string>
+    <string name="core_lang_layout_no_enter_error">लेआउट में कोई एंटर कुंजी नहीं है।</string>
+    <string name="core_lang_layout_no_shift_warning">लेआउट में कोई शिफ्ट की (shift key) नहीं है। बड़े अक्षर टाइप करने के लिए, एक की (key) को दबाकर रखें।</string>
+    <string name="core_lang_layout_no_space_error">लेआउट में कोई स्पेस की (key) नहीं है।</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s लेयर में कोई ऐसी कुंजी नहीं है जो अक्षरों पर वापस ले जाए। आप इस लेयर से बाहर नहीं निकल सकते।</string>
+    <string name="core_lang_layout_persistent_warning">कीबोर्ड बंद होने पर भी %1$s लेयर खुली रहती है। सुनिश्चित करें कि आपके पास इस लेआउट से बाहर निकलने का कोई तरीका है।</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">इस लेआउट में बाहर निकलने के लिए कोई कुंजी नहीं है। सुनिश्चित करें कि आपके पास इस लेआउट से बाहर निकलने का कोई तरीका है: एक ABC कुंजी, एक प्रतीक कुंजी, या टूलबार पर कस्टम लेआउट टूल।</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s लेयर की पंक्ति %1$d में एक कुंजी है जो लेयर की पंक्तियों से अधिक पंक्तियों को कवर करती है। कीबोर्ड इसे अंतिम पंक्ति पर रोक देता है।</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s लेयर की पंक्ति %1$d में %3$d कुंजी है। केवल %4$d कुंजियाँ ही दबाने के लिए पर्याप्त बड़ी रहती हैं।</item>
+        <item quantity="other">%2$s लेयर की पंक्ति %1$d में %3$d कुंजियाँ हैं। केवल %4$d कुंजियाँ ही दबाने के लिए पर्याप्त बड़ी रहती हैं।</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s लेयर में %2$d पंक्ति है। केवल %3$d पंक्तियाँ फिट होती हैं।</item>
+        <item quantity="other">%1$s लेयर में %2$d पंक्तियाँ हैं। केवल %3$d पंक्तियाँ फिट होती हैं।</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s लेयर में %1$d कुंजी एक ऐसी क्रिया का उपयोग करती है जिसे ऐप का यह संस्करण नहीं जानता है।</item>
+        <item quantity="other">%2$s लेयर में %1$d कुंजियाँ एक ऐसी क्रिया का उपयोग करती हैं जिसे ऐप का यह संस्करण नहीं जानता है।</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s परत की पंक्ति %1$d अन्य पंक्तियों से अधिक चौड़ी है। कीबोर्ड इस पंक्ति की कुंजियों को संकरा बनाता है।</string>
+    <string name="core_lang_numeral_scope_display_only">केवल दिखाएं</string>
+    <string name="core_lang_numeral_scope_everywhere">हर जगह</string>
+    <string name="core_lang_numeral_scope_text_fields">टेक्स्ट फ़ील्ड</string>
+    <string name="core_lang_numeral_system_auto">ऑटो</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d घटक एक से अधिक बार दिखाई देता है। ऐप पहली कॉपी रखता है।</item>
+        <item quantity="other">%1$d घटक एक से अधिक बार दिखाई देते हैं। ऐप प्रत्येक की पहली कॉपी रखता है।</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">इस पैनल में कोई कुंजी नहीं है। ऐप इसके बजाय मानक पैनल का उपयोग करता है।</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d कुंजी में एक ऐसा कार्य है जो पैनल पर काम नहीं करता है। ऐप इसे हटा देता है।</item>
+        <item quantity="other">%1$d कुंजियों में ऐसे कार्य हैं जो पैनल पर काम नहीं करते हैं। ऐप उन्हें हटा देता है।</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">इस पैनल में कोई ABC कुंजी नहीं है। कुंजियों पर वापस जाने के लिए टूलबार या बैक बटन का उपयोग करें।</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">ऐप ने किसी घटक की दूसरी प्रति हटा दी है।</string>
+    <string name="core_lang_panel_repair_field_added">ऐप ने पैनल के मुख्य घटक को एक नई पंक्ति में जोड़ा है।</string>
+    <string name="core_lang_panel_repair_field_dropped">ऐप ने एक ऐसा घटक हटा दिया है जो इस पैनल से संबंधित नहीं है।</string>
+    <string name="core_lang_panel_repair_key_dropped">ऐप ने एक ऐसी कुंजी हटा दी है जिसका कार्य पैनल पर काम नहीं करता है।</string>
+    <string name="core_lang_panel_repair_reset">ऐप ने खाली पैनल को मानक वाले से बदल दिया है।</string>
+    <string name="core_lang_panel_required_field_error">इस पैनल में इसका मुख्य घटक गायब है। पैनल बनाते समय ऐप इसे जोड़ देता है।</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d घटक इस पैनल से संबंधित नहीं है। ऐप इसे हटा देता है।</item>
+        <item quantity="other">%1$d घटक इस पैनल से संबंधित नहीं हैं। ऐप उन्हें हटा देता है।</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">ऐप ने %1$s लेयर में एक खाली कुंजी हटा दी है।</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s लेयर की एक कुंजी ने ब्रेल डॉट %2$d का उपयोग किया। ऐप ने इसे डॉट %3$d बना दिया।</string>
+    <string name="core_lang_repair_delete_key_added">अक्षर लेयर में कोई डिलीट कुंजी नहीं थी। ऐप ने एक जोड़ दी है।</string>
+    <string name="core_lang_repair_enter_key_added">अक्षरों वाली लेयर में एंटर की (key) नहीं थी। ऐप ने एक जोड़ दी है।</string>
+    <string name="core_lang_repair_field_key_deleted">ऐप ने %1$s लेयर से एक पैनल घटक हटा दिया है। घटक केवल पैनल लेआउट में काम करते हैं।</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s परत में एक कुंजी %2$s का प्रतिनिधित्व करती है। ऐप ने इसे %3$s प्रकार का बना दिया।</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s लेयर की एक कुंजी में %2$s को उन अक्षरों के रूप में सूचीबद्ध किया गया है जिनके लिए वह है। वे अक्षर नहीं हैं, इसलिए ऐप ने इसे एक सामान्य कुंजी बना दिया है।</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s लेयर की एक कुंजी %2$d पंक्तियों को कवर करती है। ऐप ने इसे %3$d कवर करने के लिए बनाया है।</string>
+    <string name="core_lang_repair_key_width_capped">%1$s लेयर में एक की %2$s यूनिट चौड़ी थी। ऐप ने इसे %3$s यूनिट चौड़ा कर दिया है।</string>
+    <string name="core_lang_repair_key_width_set">%1$s लेयर में एक की (key) की कोई चौड़ाई नहीं थी। ऐप ने चौड़ाई 1 सेट कर दी है।</string>
+    <string name="core_lang_repair_layer_replaced">%1$s लेयर में कोई भी काम करने वाली कुंजियाँ नहीं थीं। अब यह इन-बिल्ट ग्रिड का उपयोग करती है।</string>
+    <string name="core_lang_repair_letters_key_added">%1$s लेयर में अक्षरों पर वापस जाने के लिए कोई कुंजी नहीं थी। ऐप ने एक ABC कुंजी जोड़ी है।</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s लेयर की एक पंक्ति में %2$d कुंजी थी। ऐप पहली %3$d कुंजी रखता है।</item>
+        <item quantity="other">%1$s लेयर की एक पंक्ति में %2$d कुंजियां थीं। ऐप पहली %3$d कुंजियां रखता है।</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s परत में एक पंक्ति %2$s इकाई चौड़ी थी। ऐप ने कुंजियों को छोटा कर दिया ताकि पंक्ति फिट हो सके।</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s लेयर में %2$d पंक्ति थी। ऐप पहली %3$d रखता है।</item>
+        <item quantity="other">%1$s लेयर में %2$d पंक्तियाँ थीं। ऐप पहली %3$d रखता है।</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">अक्षरों वाली लेयर में कोई स्पेस की नहीं थी। ऐप ने एक जोड़ दी है।</string>
+    <string name="core_lang_repair_unknown_key_deleted">ऐप ने %1$s लेयर में एक कुंजी हटा दी है। इसकी क्रिया \"%2$s\" अज्ञात है।</string>
+</resources>

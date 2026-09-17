@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">해당 이모지 키워드 목록이 비어 있거나 읽을 수 없습니다.</string>
+    <string name="core_emoji_dict_error_http">서버가 파일을 보내지 않았습니다. 오류 코드는 HTTP %1$s입니다.</string>
+    <string name="core_emoji_dict_error_not_a_list">해당 파일은 이모지 키워드 목록이 아닙니다.</string>
+    <string name="core_emoji_dict_error_save">앱에서 이모지 키워드 목록을 저장할 수 없습니다.</string>
+    <string name="core_emoji_dict_error_too_large">이모지 키워드 목록이 너무 큽니다.</string>
+</resources>

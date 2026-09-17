@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">Programėlė pašalino %1$d įstrižinį brūkštelėjimą. Ši klaviatūra palaiko tik brūkštelėjimus aukštyn, žemyn, į kairę ir į dešinę.</item>
+        <item quantity="other">Programėlė pašalino %1$d įstrižinių brūkštelėjimų. Ši klaviatūra palaiko tik brūkštelėjimus aukštyn, žemyn, į kairę ir į dešinę.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d klavišas įveda ant jo atspausdintą simbolį. Originali klaviatūra naudojo taisyklę nuspręsti, ką jis įveda.</item>
+        <item quantity="other">%1$d klavišai įveda ant jų atspausdintus simbolius. Originali klaviatūra naudojo taisykles nuspręsti, ką jie įveda.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Ši klaviatūra turi %1$d klavišą, kurį spaudžiate pakartotinai, kad perjungtumėte simbolius. Ši klaviatūros programėlė tokio klavišo neturi, todėl pasiekiamas tik pirmasis simbolis.</item>
+        <item quantity="other">Ši klaviatūra turi %1$d klavišų, kuriuos spaudžiate pakartotinai, kad perjungtumėte simbolius. Ši klaviatūros programėlė tokių klavišų neturi, todėl pasiekiamas tik pirmasis kiekvieno iš jų simbolis.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Ši klaviatūra naudoja taisykles, kad nuspręstų, kokius klavišus spausti. Programėlė neturi šių taisyklių, todėl kiekvienas klavišas įveda ant jo atspausdintą simbolį.</string>
+    <string name="core_keyman_shift_layer_folded">Programėlė sujungė „Shift“ sluoksnį su klavišais. Laikykite „Shift“, kad pasiektumėte tuos simbolius.</string>
+    <string name="core_keyman_shift_layer_separate">„Shift“ sluoksnis yra kitokios formos, todėl programa paliko jį kaip atskirą sluoksnį.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">Programa pašalino %1$d klavišą. Ši klaviatūra neturi klavišo, atliekančio tą patį veiksmą.</item>
+        <item quantity="other">Programa pašalino %1$d klavišų. Ši klaviatūra neturi klavišų, atliekančių tą patį veiksmą.</item>
+    </plurals>
+</resources>

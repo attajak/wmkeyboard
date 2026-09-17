@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Netþjónninn sendi ekki skrána. Villukóðinn er HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Sá orðalisti er tómur eða ólæsilegur.</string>
+    <string name="core_pred_wordlist_no_space_error">Það er ekki nægilegt geymslupláss á tækinu þínu. Eyðtu einhverjum skrám og reyndu aftur.</string>
+    <string name="core_pred_wordlist_save_error">Forritið getur ekki vistað orðalistann. Reyndu aftur.</string>
+    <string name="core_pred_wordlist_size_all_label">Allt</string>
+    <string name="core_pred_wordlist_size_large_label">Stórt</string>
+    <string name="core_pred_wordlist_size_medium_label">Miðlungs</string>
+    <string name="core_pred_wordlist_size_small_label">Lítið</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brasilía</string>
+    <string name="core_pred_wordlist_variant_europe_label">Evrópa</string>
+</resources>

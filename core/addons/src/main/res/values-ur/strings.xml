@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">لغات</string>
+    <string name="core_addons_type_dictionary_singular_label">لغت</string>
+    <string name="core_addons_type_emoji_font_label">ایموجی فونٹس</string>
+    <string name="core_addons_type_emoji_font_singular_label">ایموجی فونٹ</string>
+    <string name="core_addons_type_emoji_keywords_label">ایموجی کی ورڈز</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">ایموجی کی ورڈ پیک</string>
+    <string name="core_addons_type_espanso_label">Espanso پیکس</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso پیک</string>
+    <string name="core_addons_type_font_label">فونٹس</string>
+    <string name="core_addons_type_font_singular_label">فونٹ</string>
+    <string name="core_addons_type_icon_pack_label">آئیکن پیکس</string>
+    <string name="core_addons_type_icon_pack_singular_label">آئیکن پیک</string>
+    <string name="core_addons_type_layout_label">لے آؤٹس</string>
+    <string name="core_addons_type_layout_singular_label">لے آؤٹ</string>
+    <string name="core_addons_type_plugin_label">پلگ انز</string>
+    <string name="core_addons_type_plugin_singular_label">پلگ ان</string>
+    <string name="core_addons_type_snippets_label">سنیپٹس</string>
+    <string name="core_addons_type_snippets_singular_label">سنیپٹ پیک</string>
+    <string name="core_addons_type_sound_label">آوازیں</string>
+    <string name="core_addons_type_sound_pack_label">ساؤنڈ پیکس</string>
+    <string name="core_addons_type_sound_pack_singular_label">ساؤنڈ پیک</string>
+    <string name="core_addons_type_sound_singular_label">کلید کی آواز</string>
+    <string name="core_addons_type_stickers_label">اسٹیکر پیکس</string>
+    <string name="core_addons_type_stickers_singular_label">اسٹیکر پیک</string>
+    <string name="core_addons_type_theme_label">تھیمز</string>
+    <string name="core_addons_type_theme_singular_label">تھیم</string>
+    <string name="core_addons_type_unknown_label">دیگر</string>
+    <string name="core_addons_type_unknown_singular_label">ایڈ آن</string>
+    <string name="core_addons_type_vocabulary_label">ذخیرہ الفاظ</string>
+    <string name="core_addons_type_vocabulary_singular_label">ذخیرہ الفاظ کا پیک</string>
+</resources>

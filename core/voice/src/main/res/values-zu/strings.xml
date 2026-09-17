@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Iseva ye-Hugging Face ayithumelanga ifayela. Ikhodi yephutha ithi HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Uxhumano lumile phakathi nokulanda. Zama futhi ukuze uqhubeke lapho kume khona.</string>
+    <string name="core_voice_download_space_error">Ayikho indawo eyanele kudivayisi yakho. Kufanele ukhulule cishe u-%1$s MB kuqala.</string>
+    <string name="core_voice_model_base_eu_body">Le modeli isebenzisa ulimi oluthayiphayo, olufana nemodeli yezilimi ezingama-40. Ihlanganisa izilimi zaseYurophu kuphela, ngakho ukulanda kuncane.</string>
+    <string name="core_voice_model_base_multi_body">Le modeli ilinganisa ukunemba nesivinini. Ihlanganisa zonke izilimi ezaziwa yi-Whisper. Yikhethe uma imodeli encane ihamba kancane kakhulu.</string>
+    <string name="core_voice_model_base_world_body">Le modeli isebenzisa ulimi oluthayiphayo esikhundleni sokuqagela. Imishwana emifushane iba ethembeke kakhulu. Yikhethe uma uhlu lwayo lunolimi lwakho.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">Ulimi olungu-%1$d</item>
+        <item quantity="other">Izilimi ezingu-%1$d</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Leli ngelinye lamamodeli we-Whisper anembile kakhulu, kodwa likhulu kakhulu kumafoni amaningi. Ukulanda kungu-1.5 GB. Idivayisi enenani elikhulu lenkumbulo kuphela engayilayisha.</string>
+    <string name="core_voice_model_large_v3_multi_body">Leli imodeli ye-Whisper enembile kakhulu, futhi engcono kakhulu ekuboneni ukuthi ukhuluma luphi ulimi. Ukulanda kungu-1.5 GB. Idivayisi enenani elikhulu lenkumbulo kuphela engayilayisha. Imodeli ye-Turbo icishe ibe nembe futhi inguhhafu wosayizi.</string>
+    <string name="core_voice_model_medium_multi_body">Le modeli inikeza ukunemba okucishe kufane nekhompyutha yedeskithophu. Umusho ngamunye uthatha imizuzwana embalwa. Imodeli isebenzisa cishe i-gigabyte eyodwa yememori ngenkathi isebenza.</string>
+    <string name="core_voice_model_single_language_body">Le modeli iphatha u-%1$s kuphela. Ayinaso isinyathelo sokuthola ulimi. Lokhu kuyenza isheshe futhi inembe kancane kunemodeli yezilimi eziningi yobukhulu obufanayo.</string>
+    <string name="core_voice_model_small_multi_body">Le modeli inikeza ukunemba okungcono kakhulu okusasebenza kahle ocingweni. Iphatha izigqoko nomsindo wangemuva kangcono kune-Base model. Ihlanganisa zonke izilimi ezaziwa yi-Whisper.</string>
+    <string name="core_voice_model_small_world_body">Le modeli isebenzisa ulimi obhala ngalo futhi inokunemba kwemodeli encane (Small). Yimodeli enembile kakhulu esangena ocingweni.</string>
+    <string name="core_voice_model_tiny_multi_body">Lena imodeli yezilimi eziningi eshesha kakhulu. Isebenza kahle ngokukhuluma okucacile, kodwa umsindo wephazamiso unciphisa ukunemba.</string>
+    <string name="core_voice_model_turbo_multi_body">Le modeli ibona ulimi olukhulumayo kangcono kakhulu kunezinhlobo ezincane. Yikhethe uma imodeli encane ibhala inkulumo yakho njengolimi olungalungile. Ukuyilanda kuyinto enkulu, futhi umusho ngamunye uthatha imizuzwana eminingana.</string>
+    <string name="core_voice_size_base_label">Isisekelo</string>
+    <string name="core_voice_size_large_label">Okukhulu</string>
+    <string name="core_voice_size_medium_label">Phakathi</string>
+    <string name="core_voice_size_small_label">Ncane</string>
+    <string name="core_voice_size_tiny_label">Encane kakhulu</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Kunconyiwe</string>
+    <string name="core_voice_whisper_mel_bins_error">Le modeli yezwi idinga i-spectrogram yebhendi engu-%1$s, engahambisani nefayela elilandiwe. Susa imodeli kuzilungiselelo bese uyilanda futhi.</string>
+    <string name="core_voice_whisper_model_load_error">Imodeli yezwi ayilayishanga. Ifayela kungenzeka lonakele. Susa imodeli kuzilungiselelo bese uyilanda futhi.</string>
+    <string name="core_voice_whisper_transcribe_error">Ukuthayipha ngezwi akusebenzanga. Zama futhi, noma khetha imodeli encane.</string>
+</resources>

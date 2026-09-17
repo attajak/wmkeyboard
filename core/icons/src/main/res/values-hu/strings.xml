@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Emoji lapok</string>
+    <string name="core_icons_group_keys_title">Billentyűk</string>
+    <string name="core_icons_group_toolbar_title">Eszköztár</string>
+    <string name="core_icons_group_tools_title">Eszközök</string>
+    <string name="core_icons_pack_imported_label">Importált ikonok</string>
+    <string name="core_icons_pack_mine_label">Saját ikonjaim</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Az alkalmazás figyelmen kívül hagyott %1$d fájlt. Ehhez a verzióhoz nincs ikon: %2$s</item>
+        <item quantity="other">Az alkalmazás figyelmen kívül hagyott %1$d fájlt. Ezekhez a verziókhoz nincs ikon: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Az alkalmazás eldobta a következőt: \"%1$s\". Az alkalmazás nem tudja menteni.</string>
+    <string name="core_icons_repair_svg_unreadable">Az alkalmazás eldobta a(z) \"%1$s\" elemet. Az alkalmazás nem tudja olvasni az SVG fájlját.</string>
+    <string name="core_icons_slot_backspace_label">Backspace</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Tevékenységek</string>
+    <string name="core_icons_slot_emoji_animals_label">Állatok</string>
+    <string name="core_icons_slot_emoji_flags_label">Zászlók</string>
+    <string name="core_icons_slot_emoji_food_label">Étel</string>
+    <string name="core_icons_slot_emoji_key_label">Emoji billentyű</string>
+    <string name="core_icons_slot_emoji_most_used_label">Leggyakrabban használt</string>
+    <string name="core_icons_slot_emoji_nature_label">Természet</string>
+    <string name="core_icons_slot_emoji_objects_label">Tárgyak</string>
+    <string name="core_icons_slot_emoji_people_label">Emberek</string>
+    <string name="core_icons_slot_emoji_recent_label">Legutóbbiak</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Emoji parancsikon</string>
+    <string name="core_icons_slot_emoji_smileys_label">Szmájlik</string>
+    <string name="core_icons_slot_emoji_symbols_label">Szimbólumok</string>
+    <string name="core_icons_slot_emoji_travel_label">Utazás</string>
+    <string name="core_icons_slot_enter_done_label">Enter: kész</string>
+    <string name="core_icons_slot_enter_go_label">Enter: mehet</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: következő</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: előző</string>
+    <string name="core_icons_slot_enter_search_label">Enter: keresés</string>
+    <string name="core_icons_slot_enter_send_label">Enter: küldés</string>
+    <string name="core_icons_slot_forward_delete_label">Törlés előre</string>
+    <string name="core_icons_slot_globe_label">Nyelvváltás</string>
+    <string name="core_icons_slot_incognito_label">Inkognitó jelvény</string>
+    <string name="core_icons_slot_input_method_picker_label">Billentyűzet váltása</string>
+    <string name="core_icons_slot_panel_back_label">Vissza a billentyűkhöz</string>
+    <string name="core_icons_slot_power_saving_label">Energiatakarékos jelvény</string>
+    <string name="core_icons_slot_search_close_label">Keresés bezárása</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (be)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Eszközök megjelenítése</string>
+    <string name="core_icons_slot_toolbox_label">Eszköztár</string>
+</resources>

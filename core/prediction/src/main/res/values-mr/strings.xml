@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">सर्व्हरने फाईल पाठवली नाही. एरर कोड HTTP %1$s आहे.</string>
+    <string name="core_pred_wordlist_malformed_error">ती शब्द सूची रिकामी किंवा वाचण्यायोग्य नाही.</string>
+    <string name="core_pred_wordlist_no_space_error">तुमच्या डिव्हाइसवर पुरेशी स्टोरेज जागा नाही. काही फाइल्स हटवा आणि पुन्हा प्रयत्न करा.</string>
+    <string name="core_pred_wordlist_save_error">ॲप शब्दसूची जतन करू शकत नाही. पुन्हा प्रयत्न करा.</string>
+    <string name="core_pred_wordlist_size_all_label">सर्व काही</string>
+    <string name="core_pred_wordlist_size_large_label">मोठे</string>
+    <string name="core_pred_wordlist_size_medium_label">मध्यम</string>
+    <string name="core_pred_wordlist_size_small_label">लहान</string>
+    <string name="core_pred_wordlist_variant_brazil_label">ब्राझील</string>
+    <string name="core_pred_wordlist_variant_europe_label">युरोप</string>
+</resources>

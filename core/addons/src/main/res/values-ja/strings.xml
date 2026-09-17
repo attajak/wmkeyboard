@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">辞書</string>
+    <string name="core_addons_type_dictionary_singular_label">辞書</string>
+    <string name="core_addons_type_emoji_font_label">絵文字フォント</string>
+    <string name="core_addons_type_emoji_font_singular_label">絵文字フォント</string>
+    <string name="core_addons_type_emoji_keywords_label">絵文字キーワード</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">絵文字キーワードパック</string>
+    <string name="core_addons_type_espanso_label">Espansoパック</string>
+    <string name="core_addons_type_espanso_singular_label">Espansoパック</string>
+    <string name="core_addons_type_font_label">フォント</string>
+    <string name="core_addons_type_font_singular_label">フォント</string>
+    <string name="core_addons_type_icon_pack_label">アイコンパック</string>
+    <string name="core_addons_type_icon_pack_singular_label">アイコンパック</string>
+    <string name="core_addons_type_layout_label">レイアウト</string>
+    <string name="core_addons_type_layout_singular_label">レイアウト</string>
+    <string name="core_addons_type_plugin_label">プラグイン</string>
+    <string name="core_addons_type_plugin_singular_label">プラグイン</string>
+    <string name="core_addons_type_snippets_label">スニペット</string>
+    <string name="core_addons_type_snippets_singular_label">スニペットパック</string>
+    <string name="core_addons_type_sound_label">サウンド</string>
+    <string name="core_addons_type_sound_pack_label">サウンドパック</string>
+    <string name="core_addons_type_sound_pack_singular_label">サウンドパック</string>
+    <string name="core_addons_type_sound_singular_label">キー音</string>
+    <string name="core_addons_type_stickers_label">ステッカーパック</string>
+    <string name="core_addons_type_stickers_singular_label">ステッカーパック</string>
+    <string name="core_addons_type_theme_label">テーマ</string>
+    <string name="core_addons_type_theme_singular_label">テーマ</string>
+    <string name="core_addons_type_unknown_label">その他</string>
+    <string name="core_addons_type_unknown_singular_label">アドオン</string>
+    <string name="core_addons_type_vocabulary_label">語彙</string>
+    <string name="core_addons_type_vocabulary_singular_label">語彙パック</string>
+</resources>

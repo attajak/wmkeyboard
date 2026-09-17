@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">הקובץ שהורד פגום. בדיקת היתירות (checksum) אינה תואמת. נסה להוריד שוב.</string>
+    <string name="core_input_cjk_download_error_http">השרת החזיר סטטוס HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">ההורדה נכשלה. בדוק את החיבור שלך ונסה שוב.</string>
+    <string name="core_input_cjk_download_error_network_detail">ההורדה לא עבדה: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">אין מספיק שטח אחסון במכשיר שלך. פנה תחילה מעט מקום.</string>
+    <string name="core_input_cjk_download_error_truncated">החיבור הופסק במהלך ההורדה. לחץ על \'המשך\' כדי להמשיך.</string>
+    <string name="core_input_cjk_download_error_unavailable">חבילה זו אינה זמינה עדיין.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">טבלה של קודי רדיקלים לתווי האנזי, 29,000 תווים. המקלדת זקוקה לחבילה זו עבור פריסות Cangjie ו-Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">מילון Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">קריאות קאנה מ-mozc, 1.08 מיליון ערכים, כ-42 MB. המקלדת זקוקה לחבילה זו עבור המרה ליפנית.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">מילון קאנה ליפנית לקאנג\'י</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">טבלה של קריאות Jyutping לתווי Hanzi, עם 163,000 ערכים. המקלדת זקוקה לחבילה זו עבור המרה לקנטונזית.</string>
+    <string name="core_input_cjk_pack_jyutping_title">מילון קנטונזית Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">תווים וביטויים בסינית (Hanzi) מתוך CC-CEDICT, עם 120,000 ערכים. המקלדת זקוקה לחבילה זו להמרת סינית.</string>
+    <string name="core_input_cjk_pack_pinyin_title">מילון פין-יין סיני</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">טבלה של סדר משיכות עבור תווים סיניים. המקלדת זקוקה לחבילה זו עבור פריסת המשיכות.</string>
+    <string name="core_input_cjk_pack_stroke_title">מילון משיכות סיני (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">כבוי (פין-יין מלא)</string>
+</resources>

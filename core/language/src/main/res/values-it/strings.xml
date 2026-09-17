@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">L\'app ha modificato %1$d tasto con quello più simile disponibile.</item>
+        <item quantity="other">L\'app ha modificato %1$d tasti con quelli più simili disponibili.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">L\'app ha rimosso %1$d tasto. Questa tastiera non ha alcun tasto che esegue la stessa funzione (codice %2$s).</item>
+        <item quantity="other">L\'app ha rimosso %1$d tasti. Questa tastiera non ha alcun tasto che esegue la stessa funzione (codici %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">L\'app ha mantenuto la dimensione dell\'etichetta di %1$d tasto ma non il suo stile di testo. Questa tastiera disegna le etichette con un unico stile.</item>
+        <item quantity="other">L\'app ha mantenuto la dimensione dell\'etichetta di %1$d tasti ma non il loro stile di testo. Questa tastiera disegna le etichette con un unico stile.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">L\'app ha cambiato %1$d lettera nella forma scritta da questa tastiera.</item>
+        <item quantity="other">L\'app ha cambiato %1$d lettere nella forma scritta da questa tastiera.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tasto non ha lettere con pressione prolungata. Il file le conserva in un secondo file che non hai aperto.</item>
+        <item quantity="other">%1$d tasti non hanno lettere con pressione prolungata. Il file le conserva in un secondo file che non hai aperto.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">L\'altra tastiera misura le larghezze dei tasti in modo diverso. L\'app ha modificato le larghezze per adattarle a questa griglia.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d tasto punto braille nel livello %2$s ha un numero di punto al di fuori dell\'intervallo 1-6.</item>
+        <item quantity="other">%1$d tasti punto braille nel livello %2$s hanno un numero di punto al di fuori dell\'intervallo 1-6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d tasto nel livello %2$s non ha etichetta né output. Non scrive nulla e l\'app lo elimina quando attivi questo layout.</item>
+        <item quantity="other">%1$d tasti nel livello %2$s non hanno etichetta né output. Non scrivono nulla e l\'app li elimina quando attivi questo layout.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">La riga %1$d del livello %2$s è vuota.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d tasto nel livello %2$s è un componente del pannello. I componenti funzionano solo in un layout a pannello.</item>
+        <item quantity="other">%1$d tasti nel livello %2$s sono componenti del pannello. I componenti funzionano solo in un layout a pannello.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">La riga %1$d del livello %2$s ha un tasto senza larghezza.</string>
+    <string name="core_lang_layout_key_span_error">La riga %1$d del livello %2$s ha un tasto che copre meno di 1 o più di %3$d righe.</string>
+    <string name="core_lang_layout_letters_empty_error">Il livello delle lettere non contiene tasti.</string>
+    <string name="core_lang_layout_no_delete_error">Il layout non ha un tasto cancella. Non puoi correggere un errore.</string>
+    <string name="core_lang_layout_no_enter_error">Il layout non ha un tasto invio.</string>
+    <string name="core_lang_layout_no_shift_warning">Il layout non ha il tasto Maiusc. Per digitare una lettera maiuscola, tieni premuto un tasto.</string>
+    <string name="core_lang_layout_no_space_error">Il layout non ha un tasto spazio.</string>
+    <string name="core_lang_layout_no_way_back_error">Il livello %1$s non ha alcun tasto che riporti alle lettere. Non puoi uscire da questo livello.</string>
+    <string name="core_lang_layout_persistent_warning">Il livello %1$s rimane aperto quando la tastiera si chiude. Assicurati di avere un modo per uscire da questo layout.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Questo layout non ha alcun tasto per uscirne. Assicurati di avere un modo per uscire da questo layout: un tasto ABC, un tasto simboli o lo strumento Layout personalizzato sulla barra degli strumenti.</string>
+    <string name="core_lang_layout_span_past_end_warning">La riga %1$d del livello %2$s ha un tasto che copre più righe di quante ne abbia il livello. La tastiera lo ferma all\'ultima riga.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">La riga %1$d del livello %2$s ha %3$d tasto. Solo %4$d tasto rimane abbastanza grande da essere premuto.</item>
+        <item quantity="other">La riga %1$d del livello %2$s ha %3$d tasti. Solo %4$d tasti rimangono abbastanza grandi da essere premuti.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Il livello %1$s ha %2$d riga. Solo %3$d righe si adattano.</item>
+        <item quantity="other">Il livello %1$s ha %2$d righe. Solo %3$d righe si adattano.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d tasto nel livello %2$s utilizza un\'azione che questa versione dell\'app non riconosce.</item>
+        <item quantity="other">%1$d tasti nel livello %2$s utilizzano un\'azione che questa versione dell\'app non riconosce.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">La riga %1$d del livello %2$s è più larga delle altre righe. La tastiera disegna i tasti di questa riga più stretti.</string>
+    <string name="core_lang_numeral_scope_display_only">Solo visualizzazione</string>
+    <string name="core_lang_numeral_scope_everywhere">Ovunque</string>
+    <string name="core_lang_numeral_scope_text_fields">Campi di testo</string>
+    <string name="core_lang_numeral_system_auto">Automatico</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d componente appare più di una volta. L\'app mantiene la prima copia.</item>
+        <item quantity="other">%1$d componenti appaiono più di una volta. L\'app mantiene la prima copia di ciascuno.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Questo pannello non ha tasti. L\'app utilizza invece il pannello standard.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tasto ha un\'azione che non funziona su un pannello. L\'app lo elimina.</item>
+        <item quantity="other">%1$d tasti hanno azioni che non funzionano su un pannello. L\'app li elimina.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Questo pannello non ha un tasto ABC. Usa la barra degli strumenti o il pulsante Indietro per tornare ai tasti.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">L\'app ha eliminato una seconda copia di un componente.</string>
+    <string name="core_lang_panel_repair_field_added">L\'app ha aggiunto il componente principale del pannello in una nuova riga.</string>
+    <string name="core_lang_panel_repair_field_dropped">L\'app ha eliminato un componente che non appartiene a questo pannello.</string>
+    <string name="core_lang_panel_repair_key_dropped">L\'app ha eliminato un tasto la cui azione non funziona su un pannello.</string>
+    <string name="core_lang_panel_repair_reset">L\'app ha sostituito il pannello vuoto con quello standard.</string>
+    <string name="core_lang_panel_required_field_error">A questo pannello manca il suo componente principale. L\'app ne aggiunge uno quando disegna il pannello.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d componente non appartiene a questo pannello. L\'app lo eliminerà.</item>
+        <item quantity="other">%1$d componenti non appartengono a questo pannello. L\'app li eliminerà.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">L\'app ha eliminato un tasto vuoto nel livello %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Un tasto nel livello %1$s utilizzava il punto braille %2$d. L\'app lo ha impostato come punto %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Il livello delle lettere non aveva un tasto di eliminazione. L\'app ne ha aggiunto uno.</string>
+    <string name="core_lang_repair_enter_key_added">Il livello delle lettere non aveva un tasto invio. L\'app ne ha aggiunto uno.</string>
+    <string name="core_lang_repair_field_key_deleted">L\'app ha eliminato un componente del pannello dal livello %1$s. I componenti funzionano solo in un layout a pannello.</string>
+    <string name="core_lang_repair_key_letters_anchored">Un tasto nel livello %1$s sta per %2$s. L\'app lo ha reso di tipo %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Un tasto nel livello %1$s elencava %2$s come lettere che rappresenta. Non essendo lettere, l\'app lo ha trasformato in un tasto normale.</string>
+    <string name="core_lang_repair_key_span_clamped">Un tasto nel livello %1$s copriva %2$d righe. L\'app lo ha fatto coprire %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Un tasto nel livello %1$s era largo %2$s unità. L\'app lo ha reso largo %3$s unità.</string>
+    <string name="core_lang_repair_key_width_set">Un tasto nel livello %1$s non aveva larghezza. L\'app ha impostato la larghezza a 1.</string>
+    <string name="core_lang_repair_layer_replaced">Il livello %1$s non aveva tasti funzionanti. Ora utilizza la griglia integrata.</string>
+    <string name="core_lang_repair_letters_key_added">Il livello %1$s non aveva alcun tasto per tornare alle lettere. L\'app ha aggiunto un tasto ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Una riga nel livello %1$s aveva %2$d tasto. L\'app mantiene il primo %3$d.</item>
+        <item quantity="other">Una riga nel livello %1$s aveva %2$d tasti. L\'app mantiene i primi %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Una riga nel livello %1$s era larga %2$s unità. L\'app ha rimpicciolito i tasti affinché la riga si adattasse.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Il livello %1$s aveva %2$d riga. L\'app mantiene la prima %3$d.</item>
+        <item quantity="other">Il livello %1$s aveva %2$d righe. L\'app mantiene le prime %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Il livello delle lettere non aveva il tasto spazio. L\'app ne ha aggiunto uno.</string>
+    <string name="core_lang_repair_unknown_key_deleted">L\'app ha eliminato una chiave nel livello %1$s. La sua azione \"%2$s\" non è nota.</string>
+</resources>

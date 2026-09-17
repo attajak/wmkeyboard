@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Chora emoji nayo sasa?</string>
+    <string name="faddons_apply_icon_pack_question">Tumia aikoni zake kwenye kibodi sasa?</string>
+    <string name="faddons_apply_layout_question">Iwashe ili uweze kuandika nayo?</string>
+    <string name="faddons_apply_plugin_question">Iwashe ili ionekane kwenye paneli ya programu jalizi?</string>
+    <string name="faddons_apply_sound_pack_question">Tumia kifurushi hiki cha sauti kwa funguo zako sasa?</string>
+    <string name="faddons_apply_sound_question">Iitumie kama sauti ya ufunguo wako sasa?</string>
+    <string name="faddons_apply_switch_action">Badilisha kwenda huko</string>
+    <string name="faddons_apply_theme_question">Itumie kama mandhari ya kibodi yako sasa?</string>
+    <string name="faddons_download_error_app_too_old">Ongezeko hili linahitaji toleo jipya zaidi la programu.</string>
+    <string name="faddons_download_error_bad_url">Kiungo cha kupakua si URL halali ya https.</string>
+    <string name="faddons_download_error_checksum">Faili iliyopakuliwa hailingani na checksum iliyo kwenye manifest.</string>
+    <string name="faddons_download_error_http_status">Seva imerejesha HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Hakuna nafasi ya kutosha ya kuhifadhi ili kusakinisha hii.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Programu-jalizi hii haina checksum. Programu haiwezi kuithibitisha.</string>
+    <string name="faddons_download_error_too_large">Add-on hii ni kubwa kuliko kikomo cha %1$d MB kwa aina yake.</string>
+    <string name="faddons_error_no_words">Programu haikuweza kusoma maneno yoyote kutoka kwa faili hiyo.</string>
+    <string name="faddons_error_not_a_plugin">Faili hilo si programu jalizi ya Kibodi ya WM.</string>
+    <string name="faddons_install_error_dictionary_no_language">Kamusi hii haisemi ni ya lugha gani.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Programu haikuweza kuhifadhi kamusi.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Programu haikuweza kusoma kifurushi cha ikoni.</string>
+    <string name="faddons_install_error_keywords_no_language">Kifurushi hiki hakisemi ni lugha gani inayokusudiwa.</string>
+    <string name="faddons_install_error_keywords_not_saved">Programu haikuweza kuhifadhi kifurushi cha maneno muhimu.</string>
+    <string name="faddons_install_error_keywords_too_large">Kifurushi hicho cha maneno muhimu ni kikubwa sana kuingiza.</string>
+    <string name="faddons_install_error_no_keywords">Programu haikuweza kusoma maneno muhimu ya emoji kutoka kwa faili hiyo.</string>
+    <string name="faddons_install_error_no_stickers">Programu haikuweza kusoma vibandiko vyovyote kutoka kwa kifurushi hicho. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Faili hiyo si mpangilio wa WM Keyboard.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Faili hiyo si kifurushi cha vijisehemu vya Kibodi cha WM.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Faili hii si kifurushi cha sauti.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Faili hiyo si kifurushi cha vibandiko.</string>
+    <string name="faddons_install_error_not_a_theme">Faili hiyo si mandhari ya Kibodi ya WM.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Faili hiyo si kifurushi cha Espanso au faili ya kulinganisha.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Faili hilo si kifurushi cha ikoni.</string>
+    <string name="faddons_install_error_plugin_failed">Programu haikuweza kusakinisha programu-jalizi hiyo.</string>
+    <string name="faddons_install_error_plugins_turned_off">Programu jalizi zimezimwa. Washa “Ruhusu programu jalizi” chini ya Zana › Programu jalizi. Kisha sakinisha hii tena.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Kifurushi hicho cha vijisehemu ni kitupu.</string>
+    <string name="faddons_install_error_sound_pack_read">Programu haiwezi kusoma kifurushi hiki cha sauti.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Programu haikuweza kusoma kifurushi cha vibandiko.</string>
+    <string name="faddons_install_error_too_many_fonts">Umevuka idadi ya juu zaidi ya fonti zilizosakinishwa.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Umefikia idadi ya juu zaidi ya vifurushi vya ikoni.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Tayari una kiwango cha juu cha %1$d programu jalizi.</item>
+        <item quantity="other">Tayari una kiwango cha juu cha %1$d programu jalizi.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Umeﬁkia idadi ya juu zaidi ya vifurushi vya sauti vilivyosakinishwa.</string>
+    <string name="faddons_install_error_too_many_sounds">Umefikia idadi ya juu zaidi ya sauti za funguo zilizosakinishwa.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Umefikia idadi ya juu zaidi ya vifurushi vya vibandiko.</string>
+    <string name="faddons_install_error_unknown_language">Toleo hili la programu halitumii lugha “%1$s”.</string>
+    <string name="faddons_install_error_unknown_type">Toleo hili la programu halitumii aina hiyo ya kiongezi.</string>
+    <string name="faddons_install_error_vocab_no_language">Kifurushi hiki cha msamiati hakitaji lugha inayokusudiwa.</string>
+    <string name="faddons_install_error_vocab_no_words">Programu haikuweza kusoma maneno yoyote kutoka kwenye kifurushi hicho.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Faili hiyo si kifurushi cha msamiati.</string>
+    <string name="faddons_install_error_vocab_too_large">Kifurushi hiki cha msamiati ni kikubwa kuliko kinachokubaliwa na programu.</string>
+    <string name="faddons_preview_error_no_preview">Programu haiwezi kuhakiki programu jalizi hii.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Faili hiyo si kifurushi cha Espanso au faili ya kulinganisha.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Faili hiyo si kifurushi cha maneno muhimu ya emoji.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Faili hiyo si kifurushi cha vijisehemu.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Faili hiyo si kifurushi cha msamiati.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Programu haikuweza kusoma sauti katika kifurushi hiki.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Programu haikuweza kusoma picha za vibandiko.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Kifurushi cha vijisehemu</string>
+</resources>

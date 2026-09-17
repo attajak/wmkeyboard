@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Jednorazový kód</string>
+    <string name="core_content_clip_entity_otp_tag">KÓD</string>
+    <string name="core_content_clip_entity_phone_label">Telefónne číslo</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFÓN</string>
+    <string name="core_content_clip_entity_url_label">Odkaz</string>
+    <string name="core_content_clip_entity_url_tag">ODKAZ</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d úryvok má iné rozšírenia, ktoré Espanso nedokáže spracovať. Zapísal sa iba prvý z nich.</item>
+        <item quantity="other">%1$d úryvkov má iné rozšírenia, ktoré Espanso nedokáže spracovať. Zapísal sa iba prvý z každého z nich.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d úryvok je obmedzený na určité počítačové programy. V telefóne funguje všade.</item>
+        <item quantity="other">%1$d úryvkov je obmedzených na určité počítačové programy. V telefóne fungujú všade.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d úryvok vás žiada o výber zo zoznamu. Aplikácia namiesto toho vyberie jeden náhodne.</item>
+        <item quantity="other">%1$d úryvkov vás žiada o výber zo zoznamu. Aplikácia namiesto toho vyberie jeden náhodne.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d úryvok vyžaduje potvrdenie pred vložením. Espanso takéto nastavenie nemá, takže sa tam vloží automaticky.</item>
+        <item quantity="other">%1$d úryvkov vyžaduje potvrdenie pred vložením. Espanso takéto nastavenie nemá, takže sa tam vložia automaticky.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d úryvok používa formát dátumu, ktorý aplikácia nedokáže zapísať v plnom rozsahu. Aplikácia vynechala časť, ktorú nedokáže spracovať.</item>
+        <item quantity="other">%1$d úryvkov používa formáty dátumu, ktoré aplikácia nedokáže zapísať v plnom rozsahu. Aplikácia vynechala časti, ktoré nedokáže spracovať.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d úryvok je v priečinku, ktorý je vypnutý. Espanso nemá prepínač priečinkov, takže sa tam rozšíri.</item>
+        <item quantity="other">%1$d úryvkov je v priečinkoch, ktoré sú vypnuté. Espanso nemá prepínač priečinkov, takže sa tam rozšíria.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Aplikácia preskočila %1$d úryvok, ktorý nemá čo vložiť.</item>
+        <item quantity="other">Aplikácia preskočila %1$d úryvkov, ktoré nemajú čo vložiť.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d úryvok vás žiada o vyplnenie formulára. Aplikácia vloží formulár ako text s kurzorom v prvom prázdnom poli.</item>
+        <item quantity="other">%1$d úryvkov vás žiada o vyplnenie formulára. Aplikácia vloží každý formulár ako text s kurzorom v prvom prázdnom poli.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Aplikácia preskočila %1$d úryvok, ktorý vkladá obrázok.</item>
+        <item quantity="other">Aplikácia preskočila %1$d úryvkov, ktoré vkladajú obrázky.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Súbor číta %1$d iný súbor. Jeden súbor nemôže priniesť ostatné so sebou.</item>
+        <item quantity="other">Súbor číta %1$d iné súbory. Jeden súbor nemôže priniesť ostatné so sebou.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d úryvok odkazuje na iné úryvky. Espanso to nevie spracovať, takže odkazy boli vynechané.</item>
+        <item quantity="other">%1$d úryvkov odkazuje na iné úryvky. Espanso to nevie spracovať, takže odkazy boli vynechané.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d spúšťač má fungovať vnútri slova. V telefóne funguje iba ako celé slovo.</item>
+        <item quantity="other">%1$d spúšťačov má fungovať vnútri slova. V telefóne fungujú iba ako celé slová.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d úryvok používa hodnotu, pre ktorú Espanso nemá ekvivalent. Je napísaný tak, ako je.</item>
+        <item quantity="other">%1$d úryvkov používa hodnoty, pre ktoré Espanso nemá ekvivalent. Sú napísané tak, ako sú.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Aplikácia odstránila vzor z %1$d úryvku. Aplikácia nespúšťa vzory tohto typu. Úryvok zostáva v zozname.</item>
+        <item quantity="other">Aplikácia odstránila vzor z %1$d úryvkov. Aplikácia nespúšťa vzory tohto typu. Úryvky zostávajú v zozname.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d úryvok používa formátovaný text. Aplikácia ponechá slová, ale odstráni formátovanie.</item>
+        <item quantity="other">%1$d úryvkov používa formátovaný text. Aplikácia ponechá slová, ale odstráni formátovanie.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d úryvok spúšťa príkaz vo vašom počítači. Aplikácia príkaz vynechala a nikdy ho nespustí.</item>
+        <item quantity="other">%1$d úryvkov spúšťa príkazy vo vašom počítači. Aplikácia príkazy vynechala a nikdy ich nespustí.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d spúšťač nekončí slovom, takže ho aplikácia nemôže sledovať. Jeho úryvok zostáva v zozname.</item>
+        <item quantity="other">%1$d spúšťačov nekončí slovom, takže ich aplikácia nemôže sledovať. Ich úryvky zostávajú v zozname.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d úryvok obsahuje text v zátvorkách, ktorý táto aplikácia vyplní, napríklad {date}. Namiesto zobrazenia napísaného textu sa rozšíri.</item>
+        <item quantity="other">%1$d úryvkov obsahuje text v zátvorkách, ktorý táto aplikácia vyplní, napríklad {date}. Namiesto zobrazenia napísaného textu sa rozšíri.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d úryvok mení veľké písmená toho, čo zachytil jeho vzor. Espanso to nedokáže, takže zachytený text sa vloží nezmenený.</item>
+        <item quantity="other">%1$d úryvkov mení veľké písmená toho, čo zachytili ich vzory. Espanso to nedokáže, takže zachytený text sa vloží nezmenený.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d úryvok používa hodnotu, pre ktorú aplikácia nemá ekvivalent. Táto časť zostane prázdna.</item>
+        <item quantity="other">%1$d úryvkov používa hodnoty, pre ktoré aplikácia nemá ekvivalent. Tieto časti zostanú prázdne.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Aplikácia nemôže stiahnuť písmo. Skontrolujte pripojenie a skúste to znova.</string>
+    <string name="core_content_font_error_empty">Súbor je prázdny.</string>
+    <string name="core_content_font_error_load">Aplikácia nemôže načítať tento súbor písma.</string>
+    <string name="core_content_font_error_markup">Tento súbor je súbor HTML alebo XML, nie písmo.</string>
+    <string name="core_content_font_error_no_storage">Pre písmo nie je k dispozícii žiadne úložisko.</string>
+    <string name="core_content_font_error_not_a_font">Tento súbor nevyzerá ako písmo typu .ttf alebo .otf.</string>
+    <string name="core_content_font_error_read">Aplikácia nedokáže prečítať písmo.</string>
+    <string name="core_content_font_error_save">Aplikácia nemôže uložiť písmo.</string>
+    <string name="core_content_font_error_too_large">Písmo musí byť menšie ako %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Knižnica písiem je plná. Odstráňte písmo a skúste to znova.</string>
+    <string name="core_content_font_error_too_short">Súbor je príliš krátky na to, aby bol písmom.</string>
+    <string name="core_content_font_error_woff">Aplikácia nedokáže čítať webové fonty WOFF. Použite verziu fontu .ttf alebo .otf.</string>
+    <string name="core_content_font_error_woff2">Aplikácia nedokáže čítať webové písma WOFF2. Použite verziu písma .ttf alebo .otf.</string>
+    <string name="core_content_font_error_zip">Tento súbor je archív zip, nie písmo.</string>
+    <string name="core_content_selection_macro_add_contact">Kontakt</string>
+    <string name="core_content_selection_macro_calendar">Kalendár</string>
+    <string name="core_content_selection_macro_call">Zavolať</string>
+    <string name="core_content_selection_macro_case_lower">malé písmená</string>
+    <string name="core_content_selection_macro_case_sentence">Veľkosť písmen ako vo vete</string>
+    <string name="core_content_selection_macro_case_title">Veľké začiatočné písmená</string>
+    <string name="core_content_selection_macro_case_upper">VEĽKÉ PÍSMENÁ</string>
+    <string name="core_content_selection_macro_chat_bold">Tučné</string>
+    <string name="core_content_selection_macro_chat_italic">Kurzíva</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Prečiarknuté</string>
+    <string name="core_content_selection_macro_colour">Farba</string>
+    <string name="core_content_selection_macro_copy">Kopírovať</string>
+    <string name="core_content_selection_macro_digits_latin">Číslice</string>
+    <string name="core_content_selection_macro_email">E-mail</string>
+    <string name="core_content_selection_macro_fancy">Efektné</string>
+    <string name="core_content_selection_macro_find">Nájsť</string>
+    <string name="core_content_selection_macro_format">Formát</string>
+    <string name="core_content_selection_macro_grammar">Gramatika</string>
+    <string name="core_content_selection_macro_lines_bullet">Odrážky</string>
+    <string name="core_content_selection_macro_lines_dedupe">Unikátne</string>
+    <string name="core_content_selection_macro_lines_number">Číslo</string>
+    <string name="core_content_selection_macro_lines_sort">Zoradiť</string>
+    <string name="core_content_selection_macro_map">Mapa</string>
+    <string name="core_content_selection_macro_open">Otvoriť</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Hovoriť</string>
+    <string name="core_content_selection_macro_replace">Nahradiť</string>
+    <string name="core_content_selection_macro_search">Hľadať</string>
+    <string name="core_content_selection_macro_share">Zdieľať</string>
+    <string name="core_content_selection_macro_sms">Správa</string>
+    <string name="core_content_selection_macro_time_zones">Časové pásma</string>
+    <string name="core_content_selection_macro_to_bangla">Bengálčina</string>
+    <string name="core_content_selection_macro_to_banglish">Bangličtina</string>
+    <string name="core_content_selection_macro_translate">Preložiť</string>
+    <string name="core_content_selection_macro_url_decode">Dekódovať</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Aplikácia vynechala %2$d rozšírenie z \"%1$s\".</item>
+        <item quantity="other">Aplikácia vynechala %2$d rozšírení z \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Aplikácia odstránila vzor z \"%1$s\". Vzor nie je správny. Úryvok zostáva v zozname.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Aplikácia vyradila %1$d priečinok, ktorý nemá názov alebo sa opakuje. Jeho úryvky boli pridané bez priečinka.</item>
+        <item quantity="other">Aplikácia vyradila %1$d priečinkov, ktoré nemajú názov alebo sa opakujú. Ich úryvky boli pridané bez priečinka.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Súbor obsahuje viac úryvkov, než aplikácia uchováva. Aplikácia importovala prvý %1$d.</item>
+        <item quantity="other">Súbor obsahuje viac úryvkov, než aplikácia uchováva. Aplikácia importovala prvých %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Úryvok nemá názov, preto ho aplikácia pomenovala podľa prvého riadku.</string>
+    <string name="core_content_snippet_repair_no_text">Aplikácia zahodila „%1$s“. Nemá žiadny text.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Aplikácia odstránila vzor z „%1$s“. Bol dlhší ako %2$d znak.</item>
+        <item quantity="other">Aplikácia odstránila vzor z „%1$s“. Bol dlhší ako %2$d znakov.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Aplikácia skrátila \"%1$s\". Bolo dlhšie ako %2$d znak.</item>
+        <item quantity="other">Aplikácia skrátila \"%1$s\". Bolo dlhšie ako %2$d znakov.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Názov aplikácie, v ktorej píšete</string>
+    <string name="core_content_snippet_var_clip_info">Najnovší záznam v schránke</string>
+    <string name="core_content_snippet_var_cursor_info">Miesto, kde sa nachádza kurzor</string>
+    <string name="core_content_snippet_var_date_info">Dnešný dátum</string>
+    <string name="core_content_snippet_var_datetime_info">Dátum a čas</string>
+    <string name="core_content_snippet_var_day_info">Deň v mesiaci</string>
+    <string name="core_content_snippet_var_isodate_info">Dátum vo formáte ISO, napríklad 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Dátum a čas vo formáte ISO</string>
+    <string name="core_content_snippet_var_month_info">Názov mesiaca</string>
+    <string name="core_content_snippet_var_package_info">Názov balíka danej aplikácie</string>
+    <string name="core_content_snippet_var_selection_info">Text, ktorý vyberiete v poli</string>
+    <string name="core_content_snippet_var_time12_info">Aktuálny čas v 12-hodinovom formáte</string>
+    <string name="core_content_snippet_var_time_info">Aktuálny čas vo formáte 24 hodín</string>
+    <string name="core_content_snippet_var_timestamp_info">Čas v sekundách Unixu</string>
+    <string name="core_content_snippet_var_timezone_info">Časové pásmo, napríklad GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Nové náhodné UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Názov dňa, napríklad nedeľa</string>
+    <string name="core_content_snippet_var_year_info">Rok, štvormiestny</string>
+    <string name="core_content_sticker_pack_imported_label">Importované nálepky</string>
+    <string name="core_content_sticker_repair_image_missing">Aplikácia vynechala „%1$s“. Chýba jej obrázok.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Aplikácia zahodila \"%1$s\". Aplikácia nedokáže prečítať jej obrázok.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Balík obsahuje %1$d nálepku. Aplikácia ponechá prvú %2$d.</item>
+        <item quantity="other">Balík obsahuje %1$d nálepiek. Aplikácia ponechá prvých %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Aplikácia stratila nálepku. Názov nálepky neobsahuje žiadny súbor obrázka.</string>
+    <string name="core_content_sticker_repair_none_listed">Súbor balíka neuvádza žiadne nálepky.</string>
+    <string name="core_content_sticker_repair_not_saved">Aplikácia zahodila „%1$s“. Aplikácia ho nemôže uložiť.</string>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">У этого плагина нет функции render().</string>
+    <string name="core_plugins_error_not_installed">Этот плагин не установлен.</string>
+    <string name="core_plugins_error_script_failed">Скрипт не выполнен.</string>
+    <string name="core_plugins_error_script_missing">Скрипт для этого плагина отсутствует.</string>
+    <string name="core_plugins_error_turned_off">Этот плагин выключен.</string>
+    <string name="core_plugins_permission_storage_label">Сохранять данные на вашем устройстве</string>
+    <string name="core_plugins_reject_bad_encoding">«%1$s» содержит скрипт, который не является допустимым текстом UTF-8.</string>
+    <string name="core_plugins_reject_bad_id">У этого плагина неверный идентификатор. Идентификатор должен содержать от 3 до 64 символов. Он может состоять из строчных букв, цифр, точек, дефисов и символов подчеркивания.</string>
+    <string name="core_plugins_reject_compiled_lua">«%1$s» содержит скомпилированный код Lua. Плагин должен использовать исходный код в текстовом виде, чтобы вы могли прочитать его перед запуском.</string>
+    <string name="core_plugins_reject_empty_script">Скрипт «%1$s» пуст.</string>
+    <string name="core_plugins_reject_missing_script">«%1$s» не имеет файла скрипта (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Для этого плагина требуется более новая версия WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">У этого плагина нет названия.</string>
+    <string name="core_plugins_reject_no_version">«%1$s» не указывает, какая это версия.</string>
+    <string name="core_plugins_reject_script_too_large">Скрипт «%1$s» превышает %2$d КБ.</string>
+    <string name="core_plugins_reject_unknown_permission">Эта версия WM Keyboard не знает разрешения «%1$s». Приложение не может сказать вам, что разрешено делать «%2$s».</string>
+    <string name="core_plugins_stopped_cancelled">Приложение остановило этот плагин.</string>
+    <string name="core_plugins_stopped_deadline">Этот плагин выполнялся слишком долго. Приложение остановило его.</string>
+    <string name="core_plugins_stopped_instructions">Этот плагин выполнял слишком много работы одновременно. Приложение остановило его.</string>
+    <string name="core_plugins_stopped_not_responding">Этот плагин перестал отвечать. Приложение закрыло его.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Этот плагин снова перестал отвечать. Приложение отключило его.</string>
+    <string name="core_plugins_stopped_recursion">Этот плагин вызывал сам себя слишком много раз. Приложение остановило его.</string>
+    <string name="core_plugins_stopped_unexpected">Этот плагин неожиданно остановился.</string>
+    <string name="core_plugins_ui_insert_action">Вставить</string>
+    <string name="core_plugins_ui_repair_no_type">Виджет не указал свой тип.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Список виджетов содержал элемент, который не является виджетом.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Вкладка не содержала страниц.</string>
+    <string name="core_plugins_ui_repair_text_budget">Этот плагин попытался вывести слишком много текста. Приложение пропустило часть из него.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Некоторый текст был слишком длинным для отображения. Приложение сократило его.</string>
+    <string name="core_plugins_ui_repair_too_deep">Некоторые виджеты были вложены слишком глубоко для отрисовки.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Показаны только первые %1$d вкладок.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Этот плагин запросил более %1$d виджетов. Приложение отбросило остальные.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Эта сборка не распознает тип виджета «%1$s».</string>
+    <string name="core_plugins_ui_tab_default_title">Вкладка %1$d</string>
+</resources>

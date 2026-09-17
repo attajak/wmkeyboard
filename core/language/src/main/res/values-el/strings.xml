@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Η εφαρμογή άλλαξε το %1$d πλήκτρο στο πλησιέστερο που διαθέτει.</item>
+        <item quantity="other">Η εφαρμογή άλλαξε τα %1$d πλήκτρα στα πλησιέστερα που διαθέτει.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Η εφαρμογή αφαίρεσε %1$d πλήκτρο. Αυτό το πληκτρολόγιο δεν διαθέτει πλήκτρο που να κάνει το ίδιο πράγμα (κωδικός %2$s).</item>
+        <item quantity="other">Η εφαρμογή αφαίρεσε %1$d πλήκτρα. Αυτό το πληκτρολόγιο δεν διαθέτει πλήκτρα που να κάνουν το ίδιο πράγμα (κωδικοί %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Η εφαρμογή διατήρησε το μέγεθος ετικέτας του πλήκτρου %1$d αλλά όχι το στυλ κειμένου του. Αυτό το πληκτρολόγιο σχεδιάζει τις ετικέτες με ένα στυλ.</item>
+        <item quantity="other">Η εφαρμογή διατήρησε το μέγεθος ετικέτας των %1$d πλήκτρων αλλά όχι το στυλ κειμένου τους. Αυτό το πληκτρολόγιο σχεδιάζει τις ετικέτες με ένα στυλ.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Η εφαρμογή άλλαξε %1$d γράμμα στη μορφή που γράφει αυτό το πληκτρολόγιο.</item>
+        <item quantity="other">Η εφαρμογή άλλαξε %1$d γράμματα στη μορφή που γράφει αυτό το πληκτρολόγιο.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d πλήκτρο δεν έχει γράμματα με παρατεταμένο πάτημα. Το αρχείο τα διατηρεί σε ένα δεύτερο αρχείο που δεν ανοίξατε.</item>
+        <item quantity="other">%1$d πλήκτρα δεν έχουν γράμματα με παρατεταμένο πάτημα. Το αρχείο τα διατηρεί σε ένα δεύτερο αρχείο που δεν ανοίξατε.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Το άλλο πληκτρολόγιο μετράει τα πλάτη των πλήκτρων διαφορετικά. Η εφαρμογή άλλαξε τα πλάτη για να ταιριάζουν σε αυτό το πλέγμα.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d πλήκτρο κουκκίδας braille στο επίπεδο %2$s έχει αριθμό κουκκίδας εκτός του 1 έως 6.</item>
+        <item quantity="other">%1$d πλήκτρα κουκκίδας braille στο επίπεδο %2$s έχουν αριθμό κουκκίδας εκτός του 1 έως 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d πλήκτρο στο επίπεδο %2$s δεν έχει ετικέτα και δεν έχει έξοδο. Δεν πληκτρολογεί τίποτα και η εφαρμογή το διαγράφει όταν ενεργοποιείτε αυτή τη διάταξη.</item>
+        <item quantity="other">%1$d πλήκτρα στο επίπεδο %2$s δεν έχουν ετικέτα και δεν έχουν έξοδο. Δεν πληκτρολογούν τίποτα και η εφαρμογή τα διαγράφει όταν ενεργοποιείτε αυτή τη διάταξη.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Η σειρά %1$d του επιπέδου %2$s είναι κενή.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d πλήκτρο στο επίπεδο %2$s είναι στοιχείο πίνακα. Τα στοιχεία λειτουργούν μόνο σε διάταξη πίνακα.</item>
+        <item quantity="other">%1$d πλήκτρα στο επίπεδο %2$s είναι στοιχεία πίνακα. Τα στοιχεία λειτουργούν μόνο σε διάταξη πίνακα.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Η σειρά %1$d του επιπέδου %2$s έχει ένα πλήκτρο χωρίς πλάτος.</string>
+    <string name="core_lang_layout_key_span_error">Η σειρά %1$d του επιπέδου %2$s έχει ένα πλήκτρο που καλύπτει λιγότερες από 1 ή περισσότερες από %3$d σειρές.</string>
+    <string name="core_lang_layout_letters_empty_error">Το επίπεδο γραμμάτων δεν έχει πλήκτρα.</string>
+    <string name="core_lang_layout_no_delete_error">Η διάταξη δεν διαθέτει πλήκτρο διαγραφής. Δεν μπορείτε να διορθώσετε ένα λάθος.</string>
+    <string name="core_lang_layout_no_enter_error">Η διάταξη δεν διαθέτει πλήκτρο enter.</string>
+    <string name="core_lang_layout_no_shift_warning">Η διάταξη δεν διαθέτει πλήκτρο shift. Για να πληκτρολογήσετε κεφαλαίο γράμμα, πατήστε και κρατήστε πατημένο ένα πλήκτρο.</string>
+    <string name="core_lang_layout_no_space_error">Η διάταξη δεν διαθέτει πλήκτρο διαστήματος.</string>
+    <string name="core_lang_layout_no_way_back_error">Το επίπεδο %1$s δεν διαθέτει πλήκτρο επιστροφής στα γράμματα. Δεν μπορείτε να βγείτε από αυτό το επίπεδο.</string>
+    <string name="core_lang_layout_persistent_warning">Το επίπεδο %1$s παραμένει ανοιχτό όταν κλείνει το πληκτρολόγιο. Βεβαιωθείτε ότι έχετε τρόπο να βγείτε από αυτή τη διάταξη.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Αυτή η διάταξη δεν έχει κανένα πλήκτρο που να την αφήνει. Βεβαιωθείτε ότι έχετε έναν τρόπο να βγείτε από αυτή τη διάταξη: ένα πλήκτρο ABC, ένα πλήκτρο συμβόλων ή το εργαλείο δευτερεύουσας διάταξης στη γραμμή εργαλείων.</string>
+    <string name="core_lang_layout_span_past_end_warning">Η σειρά %1$d του επιπέδου %2$s έχει ένα πλήκτρο που καλύπτει περισσότερες σειρές από όσες διαθέτει το επίπεδο. Το πληκτρολόγιο το σταματά στην τελευταία σειρά.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Η σειρά %1$d του επιπέδου %2$s έχει %3$d πλήκτρο. Μόνο %4$d πλήκτρα παραμένουν αρκετά μεγάλα για να πατηθούν.</item>
+        <item quantity="other">Η σειρά %1$d του επιπέδου %2$s έχει %3$d πλήκτρα. Μόνο %4$d πλήκτρα παραμένουν αρκετά μεγάλα για να πατηθούν.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Το επίπεδο %1$s έχει %2$d σειρά. Χωράνε μόνο %3$d σειρές.</item>
+        <item quantity="other">Το επίπεδο %1$s έχει %2$d σειρές. Χωράνε μόνο %3$d σειρές.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d πλήκτρο στο επίπεδο %2$s χρησιμοποιεί μια ενέργεια που αυτή η έκδοση της εφαρμογής δεν αναγνωρίζει.</item>
+        <item quantity="other">%1$d πλήκτρα στο επίπεδο %2$s χρησιμοποιούν μια ενέργεια που αυτή η έκδοση της εφαρμογής δεν αναγνωρίζει.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Η σειρά %1$d του επιπέδου %2$s είναι ευρύτερη από τις άλλες σειρές. Το πληκτρολόγιο σχεδιάζει τα πλήκτρα αυτής της σειράς πιο στενά.</string>
+    <string name="core_lang_numeral_scope_display_only">Μόνο εμφάνιση</string>
+    <string name="core_lang_numeral_scope_everywhere">Παντού</string>
+    <string name="core_lang_numeral_scope_text_fields">Πεδία κειμένου</string>
+    <string name="core_lang_numeral_system_auto">Αυτόματο</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">Το στοιχείο %1$d εμφανίζεται περισσότερες από μία φορές. Η εφαρμογή διατηρεί το πρώτο αντίγραφο.</item>
+        <item quantity="other">Τα στοιχεία %1$d εμφανίζονται περισσότερες από μία φορές. Η εφαρμογή διατηρεί το πρώτο αντίγραφο από κάθε ένα.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Αυτό το πλαίσιο δεν έχει πλήκτρα. Η εφαρμογή χρησιμοποιεί το τυπικό πλαίσιο αντ\' αυτού.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d πλήκτρο έχει μια ενέργεια που δεν λειτουργεί σε πίνακα. Η εφαρμογή το διαγράφει.</item>
+        <item quantity="other">%1$d πλήκτρα έχουν ενέργειες που δεν λειτουργούν σε πίνακα. Η εφαρμογή τα διαγράφει.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Αυτός ο πίνακας δεν έχει πλήκτρο ABC. Χρησιμοποιήστε τη γραμμή εργαλείων ή το κουμπί Πίσω για να επιστρέψετε στα πλήκτρα.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Η εφαρμογή διέγραψε ένα δεύτερο αντίγραφο ενός στοιχείου.</string>
+    <string name="core_lang_panel_repair_field_added">Η εφαρμογή πρόσθεσε το κύριο στοιχείο του πίνακα σε μια νέα σειρά.</string>
+    <string name="core_lang_panel_repair_field_dropped">Η εφαρμογή διέγραψε ένα στοιχείο που δεν ανήκει σε αυτόν τον πίνακα.</string>
+    <string name="core_lang_panel_repair_key_dropped">Η εφαρμογή διέγραψε ένα πλήκτρο του οποίου η ενέργεια δεν λειτουργεί σε πίνακα.</string>
+    <string name="core_lang_panel_repair_reset">Η εφαρμογή αντικατέστησε τον κενό πίνακα με τον τυπικό.</string>
+    <string name="core_lang_panel_required_field_error">Αυτό το πλαίσιο στερείται του κύριου στοιχείου του. Η εφαρμογή προσθέτει ένα όταν σχεδιάζει το πλαίσιο.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d στοιχείο δεν ανήκει σε αυτόν τον πίνακα. Η εφαρμογή θα το διαγράψει.</item>
+        <item quantity="other">%1$d στοιχεία δεν ανήκουν σε αυτόν τον πίνακα. Η εφαρμογή θα τα διαγράψει.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Η εφαρμογή διέγραψε ένα κενό κλειδί στο επίπεδο %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Ένα πλήκτρο στο επίπεδο %1$s χρησιμοποιούσε την κουκκίδα braille %2$d. Η εφαρμογή το μετέτρεψε σε κουκκίδα %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Το επίπεδο γραμμάτων δεν είχε πλήκτρο διαγραφής. Η εφαρμογή πρόσθεσε ένα.</string>
+    <string name="core_lang_repair_enter_key_added">Το επίπεδο γραμμάτων δεν είχε πλήκτρο enter. Η εφαρμογή πρόσθεσε ένα.</string>
+    <string name="core_lang_repair_field_key_deleted">Η εφαρμογή διέγραψε ένα στοιχείο πίνακα από το επίπεδο %1$s. Τα στοιχεία λειτουργούν μόνο σε διάταξη πίνακα.</string>
+    <string name="core_lang_repair_key_letters_anchored">Ένα πλήκτρο στο επίπεδο %1$s αντιστοιχεί στο %2$s. Η εφαρμογή το έκανε να πληκτρολογεί %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Ένα πλήκτρο στο επίπεδο %1$s ανέφερε το %2$s ως τα γράμματα που αντιπροσωπεύει. Αυτά δεν είναι γράμματα, οπότε η εφαρμογή το μετέτρεψε σε κανονικό πλήκτρο.</string>
+    <string name="core_lang_repair_key_span_clamped">Ένα πλήκτρο στο επίπεδο %1$s κάλυπτε %2$d σειρές. Η εφαρμογή το έκανε να καλύπτει %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Ένα πλήκτρο στο επίπεδο %1$s είχε πλάτος %2$s μονάδες. Η εφαρμογή το έκανε πλάτους %3$s μονάδων.</string>
+    <string name="core_lang_repair_key_width_set">Ένα πλήκτρο στο επίπεδο %1$s δεν είχε πλάτος. Η εφαρμογή όρισε το πλάτος στο 1.</string>
+    <string name="core_lang_repair_layer_replaced">Το επίπεδο %1$s δεν είχε πλήκτρα που λειτουργούν. Τώρα χρησιμοποιεί το ενσωματωμένο πλέγμα.</string>
+    <string name="core_lang_repair_letters_key_added">Το επίπεδο %1$s δεν είχε πλήκτρο που να επιστρέφει στα γράμματα. Η εφαρμογή πρόσθεσε ένα πλήκτρο ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Μια σειρά στο επίπεδο %1$s είχε %2$d πλήκτρο. Η εφαρμογή διατηρεί τα πρώτα %3$d.</item>
+        <item quantity="other">Μια σειρά στο επίπεδο %1$s είχε %2$d πλήκτρα. Η εφαρμογή διατηρεί τα πρώτα %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Μια σειρά στο επίπεδο %1$s είχε πλάτος %2$s μονάδες. Η εφαρμογή έκανε τα πλήκτρα μικρότερα ώστε να χωράει η σειρά.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Το επίπεδο %1$s είχε %2$d σειρά. Η εφαρμογή διατηρεί την πρώτη %3$d.</item>
+        <item quantity="other">Το επίπεδο %1$s είχε %2$d σειρές. Η εφαρμογή διατηρεί τις πρώτες %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Το επίπεδο γραμμάτων δεν είχε πλήκτρο διαστήματος. Η εφαρμογή πρόσθεσε ένα.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Η εφαρμογή διέγραψε ένα πλήκτρο στο επίπεδο %1$s. Η ενέργειά του \"%2$s\" δεν είναι γνωστή.</string>
+</resources>

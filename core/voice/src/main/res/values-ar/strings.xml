@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">لم يرسل خادم Hugging Face الملف. رمز الخطأ هو HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">توقف الاتصال أثناء التنزيل. حاول مجددًا للمتابعة من حيث توقف.</string>
+    <string name="core_voice_download_space_error">لا توجد مساحة تخزين كافية على جهازك. يجب عليك توفير حوالي %1$s ميجابايت أولاً.</string>
+    <string name="core_voice_model_base_eu_body">يستخدم هذا النموذج اللغة التي تكتب بها، تماماً مثل نموذج الـ 40 لغة. وهو يغطي اللغات الأوروبية فقط، لذا فإن حجم التنزيل أصغر.</string>
+    <string name="core_voice_model_base_multi_body">يوازن هذا النموذج بين الدقة والسرعة. وهو يغطي كل لغة يعرفها Whisper. اختره إذا كان النموذج الصغير بطيئاً جداً.</string>
+    <string name="core_voice_model_base_world_body">يستخدم هذا النموذج اللغة التي تكتب بها بدلاً من التخمين. تصبح العبارات القصيرة أكثر موثوقية بكثير. حدده عندما تحتوي قائمته على لغاتك.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d لغة</item>
+        <item quantity="other">%1$d لغات</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">هذا أحد أكثر نماذج Whisper دقة، لكنه كبير جداً بالنسبة لمعظم الهواتف. حجم التنزيل هو 1.5 جيجابايت. لا يمكن تحميله إلا على جهاز يحتوي على ذاكرة كبيرة.</string>
+    <string name="core_voice_model_large_v3_multi_body">هذا هو نموذج Whisper الأكثر دقة، والأفضل في التعرف على اللغة التي تتحدث بها. حجم التنزيل 1.5 جيجابايت. لا يمكن تحميله إلا على جهاز يحتوي على ذاكرة كبيرة. نموذج Turbo دقيق تقريبًا ونصف الحجم.</string>
+    <string name="core_voice_model_medium_multi_body">يوفر هذا النموذج دقة تقارب دقة سطح المكتب. تستغرق كل عبارة عدة ثوانٍ. يستخدم النموذج ما يقرب من جيجابايت واحد من الذاكرة أثناء تشغيله.</string>
+    <string name="core_voice_model_single_language_body">يتعامل هذا النموذج مع %1$s فقط. لا يحتوي على خطوة اكتشاف اللغة. هذا يجعله أسرع وأكثر دقة قليلاً من النموذج متعدد اللغات بنفس الحجم.</string>
+    <string name="core_voice_model_small_multi_body">يوفر هذا النموذج أفضل دقة تعمل بشكل جيد على الهاتف. وهو يتعامل مع اللهجات وضوضاء الخلفية بشكل أفضل من النموذج الأساسي. ويغطي كل لغة يعرفها Whisper.</string>
+    <string name="core_voice_model_small_world_body">يستخدم هذا النموذج اللغة التي تكتب بها ويتمتع بدقة النموذج الصغير. إنه النموذج الأكثر دقة الذي لا يزال يتناسب مع الهاتف.</string>
+    <string name="core_voice_model_tiny_multi_body">هذا هو أسرع نموذج متعدد اللغات. يعمل بشكل جيد مع الكلام الواضح، لكن الضوضاء تقلل من الدقة.</string>
+    <string name="core_voice_model_turbo_multi_body">يتعرف هذا النموذج على اللغة التي تتحدث بها بشكل أفضل بكثير من النماذج الأصغر. اختره إذا كان النموذج الأصغر ينسخ كلامك بلغة خاطئة. هذا التنزيل كبير الحجم، وتستغرق كل عبارة عدة ثوانٍ.</string>
+    <string name="core_voice_size_base_label">أساسي</string>
+    <string name="core_voice_size_large_label">كبير</string>
+    <string name="core_voice_size_medium_label">متوسط</string>
+    <string name="core_voice_size_small_label">صغير</string>
+    <string name="core_voice_size_tiny_label">صغير جدًا</string>
+    <string name="core_voice_size_turbo_label">توربو</string>
+    <string name="core_voice_tier_recommended_label">موصى به</string>
+    <string name="core_voice_whisper_mel_bins_error">يحتاج نموذج الصوت هذا إلى مخطط طيفي بنطاق %1$s، وهو لا يتطابق مع الملف الذي تم تنزيله معه. احذف النموذج من الإعدادات وقم بتنزيله مرة أخرى.</string>
+    <string name="core_voice_whisper_model_load_error">لم يتم تحميل نموذج الصوت. من المحتمل أن الملف تالف. احذف النموذج من الإعدادات وقم بتنزيله مرة أخرى.</string>
+    <string name="core_voice_whisper_transcribe_error">لم تنجح الكتابة بالصوت. حاول مرة أخرى، أو اختر نموذجًا أصغر.</string>
+</resources>

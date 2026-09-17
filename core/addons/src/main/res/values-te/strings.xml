@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">నిఘంటువులు</string>
+    <string name="core_addons_type_dictionary_singular_label">నిఘంటువు</string>
+    <string name="core_addons_type_emoji_font_label">ఎమోజి ఫాంట్‌లు</string>
+    <string name="core_addons_type_emoji_font_singular_label">ఎమోజి ఫాంట్</string>
+    <string name="core_addons_type_emoji_keywords_label">ఎమోజి కీవర్డ్స్</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">ఎమోజి కీవర్డ్ ప్యాక్</string>
+    <string name="core_addons_type_espanso_label">Espanso ప్యాక్‌లు</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso ప్యాక్</string>
+    <string name="core_addons_type_font_label">ఫాంట్లు</string>
+    <string name="core_addons_type_font_singular_label">ఫాంట్</string>
+    <string name="core_addons_type_icon_pack_label">ఐకాన్ ప్యాక్‌లు</string>
+    <string name="core_addons_type_icon_pack_singular_label">ఐకాన్ ప్యాక్</string>
+    <string name="core_addons_type_layout_label">లేఅవుట్‌లు</string>
+    <string name="core_addons_type_layout_singular_label">లేఅవుట్</string>
+    <string name="core_addons_type_plugin_label">ప్లగిన్‌లు</string>
+    <string name="core_addons_type_plugin_singular_label">ప్లగిన్</string>
+    <string name="core_addons_type_snippets_label">స్నిప్పెట్స్</string>
+    <string name="core_addons_type_snippets_singular_label">స్నిప్పెట్ ప్యాక్</string>
+    <string name="core_addons_type_sound_label">శబ్దాలు</string>
+    <string name="core_addons_type_sound_pack_label">సౌండ్ ప్యాక్‌లు</string>
+    <string name="core_addons_type_sound_pack_singular_label">సౌండ్ ప్యాక్</string>
+    <string name="core_addons_type_sound_singular_label">కీ సౌండ్</string>
+    <string name="core_addons_type_stickers_label">స్టిక్కర్ ప్యాక్‌లు</string>
+    <string name="core_addons_type_stickers_singular_label">స్టిక్కర్ ప్యాక్</string>
+    <string name="core_addons_type_theme_label">థీమ్‌లు</string>
+    <string name="core_addons_type_theme_singular_label">థీమ్</string>
+    <string name="core_addons_type_unknown_label">ఇతర</string>
+    <string name="core_addons_type_unknown_singular_label">యాడ్-ఆన్</string>
+    <string name="core_addons_type_vocabulary_label">పదజాలం</string>
+    <string name="core_addons_type_vocabulary_singular_label">పదజాలం ప్యాక్</string>
+</resources>

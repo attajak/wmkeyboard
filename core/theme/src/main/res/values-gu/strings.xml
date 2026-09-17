@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">ઓરોરા</string>
+    <string name="core_theme_builtin_berry_label">બેરી</string>
+    <string name="core_theme_builtin_bubble_label">બબલ</string>
+    <string name="core_theme_builtin_crimson_label">ક્રિમસન</string>
+    <string name="core_theme_builtin_cyberpunk_label">સાયબરપંક</string>
+    <string name="core_theme_builtin_deep_sea_label">ડીપ સી</string>
+    <string name="core_theme_builtin_facet_label">ફેસેટ</string>
+    <string name="core_theme_builtin_forest_label">ફોરેસ્ટ</string>
+    <string name="core_theme_builtin_glacier_label">ગ્લેશિયર</string>
+    <string name="core_theme_builtin_mint_label">મિન્ટ</string>
+    <string name="core_theme_builtin_nebula_label">નેબ્યુલા</string>
+    <string name="core_theme_builtin_ocean_label">મહાસાગર</string>
+    <string name="core_theme_builtin_pitch_label">પીચ બ્લેક</string>
+    <string name="core_theme_builtin_rose_label">ગુલાબી</string>
+    <string name="core_theme_builtin_sand_label">રેતી</string>
+    <string name="core_theme_builtin_slate_label">સ્લેટ</string>
+    <string name="core_theme_builtin_snow_label">સ્નો</string>
+    <string name="core_theme_builtin_sunset_drift_label">સનસેટ ડ્રિફ્ટ</string>
+    <string name="core_theme_builtin_sunset_label">સૂર્યાસ્ત</string>
+    <string name="core_theme_family_gradient_label">ગ્રેડિયન્ટ્સ</string>
+    <string name="core_theme_family_ocean_label">નાઇટફોલ</string>
+    <string name="core_theme_family_snow_label">પેસ્ટલ</string>
+</resources>

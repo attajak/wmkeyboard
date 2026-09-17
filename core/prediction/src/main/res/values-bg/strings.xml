@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Сървърът не изпрати файла. Кодът на грешката е HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Този списък с думи е празен или нечетлив.</string>
+    <string name="core_pred_wordlist_no_space_error">Няма достатъчно място за съхранение на вашето устройство. Изтрийте някои файлове и опитайте отново.</string>
+    <string name="core_pred_wordlist_save_error">Приложението не може да запише списъка с думи. Опитайте отново.</string>
+    <string name="core_pred_wordlist_size_all_label">Всичко</string>
+    <string name="core_pred_wordlist_size_large_label">Голям</string>
+    <string name="core_pred_wordlist_size_medium_label">Средно</string>
+    <string name="core_pred_wordlist_size_small_label">Малък</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Бразилия</string>
+    <string name="core_pred_wordlist_variant_europe_label">Европа</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">ഈ മോഡൽ ഗേറ്റഡ് ആണ്. ആദ്യം നിങ്ങളുടെ ഹഗ്ഗിംഗ് ഫേസ് ടോക്കൺ ചേർക്കുക.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face HTTP സ്റ്റാറ്റസ് %1$s തിരികെ നൽകി.</string>
+    <string name="core_intel_llm_download_error_licence">മോഡലിന്റെ ഹഗ്ഗിംഗ് ഫേസ് (Hugging Face) പേജിൽ അതിന്റെ ലൈസൻസ് അംഗീകരിക്കുക. ശേഷം വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="core_intel_llm_download_error_no_space">നിങ്ങളുടെ ഉപകരണത്തിൽ മതിയായ സ്റ്റോറേജ് ഇല്ല. ആദ്യം ഏകദേശം %1$s GB ഫ്രീ ആക്കുക.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face ടോക്കൺ സ്വീകരിച്ചില്ല. ടോക്കൺ പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="core_intel_llm_download_error_truncated">ഡൗൺലോഡ് ചെയ്യുന്നതിനിടെ കണക്ഷൻ തടസ്സപ്പെട്ടു. തുടരാൻ \'Resume\' അമർത്തുക.</string>
+    <string name="core_intel_llm_engine_error_gpu">GPU-ൽ മോഡൽ പരാജയപ്പെട്ടു. സിസ്റ്റം മെമ്മറിയേക്കാൾ വളരെ കുറവാണ് GPU മെമ്മറി. അടുത്ത ശ്രമത്തിൽ CPU ഉപയോഗിക്കും. എപ്പോഴും CPU ഉപയോഗിക്കാൻ, ക്രമീകരണങ്ങളിൽ കമ്പ്യൂട്ട് (Compute) CPU-ലേക്ക് മാറ്റുക. നിങ്ങൾക്ക് ചെറിയൊരു മോഡലും തിരഞ്ഞെടുക്കാം.</string>
+    <string name="core_intel_llm_engine_error_load">മോഡൽ ലോഡ് ആയില്ല. ഫയൽ കേടായതാകാൻ സാധ്യതയുണ്ട്. ക്രമീകരണങ്ങളിൽ പോയി മോഡൽ ഇല്ലാതാക്കി വീണ്ടും ഡൗൺലോഡ് ചെയ്യുക.</string>
+    <string name="core_intel_llm_engine_error_memory">മോഡലിന്റെ മെമ്മറി തീർന്നുപോയി, അല്ലെങ്കിൽ അത് പരാജയപ്പെട്ടു. ചെറിയൊരു മോഡൽ തിരഞ്ഞെടുക്കുക.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">മുൻ തലമുറയിൽ നിന്നുള്ള ഒരു ചെറിയ ജെമ്മ (Gemma). ഇതിന് മികച്ച നിലവാരവും 4K ടോക്കണുകളുടെ സന്ദർഭവും ഉണ്ട്.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">ഗൂഗിളിൽ നിന്നുള്ള ഏറ്റവും ചെറിയ ജെമ്മ. എല്ലാ ഉപകരണങ്ങളിലും ഇത് വേഗത്തിൽ പ്രവർത്തിക്കുന്നു.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">ഏറ്റവും പുതിയ ജെമ്മ തലമുറ. ഇത് നിങ്ങളുടെ ഉപകരണത്തിൽ മികച്ച നിലവാരം നൽകുന്നു.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">ഏറ്റവും വലിയ മോഡൽ. ഇത് മികച്ച രീതിയിൽ എഴുതുന്നു, എന്നാൽ ഇതിന് ശക്തമായ ഒരു ഉപകരണം ആവശ്യമാണ്.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">അടിസ്ഥാന ഉപകരണങ്ങളിലും പ്രവർത്തിക്കുന്ന ഒരു പൊതു ആവശ്യത്തിനുള്ള മോഡൽ.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">1B-ൽ താഴെയുള്ള മോഡലുകളേക്കാൾ വ്യക്തമായി മികച്ചതാണ്. ഇതിന് മിഡ്-റേഞ്ച് ഉപകരണം ആവശ്യമാണ്.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">സമീപകാലത്തെ ഒരു ചെറിയ മോഡൽ. അതിന്റെ വലുപ്പത്തിന് അനുസരിച്ച് ഉയർന്ന നിലവാരമുള്ളതാണ്.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">വളരെ ചെറുതും വേഗതയേറിയതും. പെട്ടെന്നുള്ള തിരുത്തിയെഴുത്തുകൾക്ക് ഇത് നല്ലതാണ്, എന്നാൽ ഇതിന്റെ യുക്തി പരിമിതമാണ്.</string>
+    <string name="core_intel_llm_module_downloading">കീബോർഡിന്റെ AI ഭാഗം Google Play-യിൽ നിന്ന് ഡൗൺലോഡ് ചെയ്യുന്നു. അല്പസമയത്തിന് ശേഷം വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="core_intel_llm_module_restart">AI ഭാഗം ഇൻസ്റ്റാൾ ചെയ്തു കഴിഞ്ഞു. അത് ഉപയോഗിക്കാൻ കീബോർഡ് അടച്ച് വീണ്ടും തുറക്കുക.</string>
+    <string name="core_intel_llm_tier_experimental_label">പരീക്ഷണാത്മകം</string>
+    <string name="core_intel_llm_tier_recommended_label">ശുപാർശ ചെയ്യുന്നത്</string>
+    <string name="core_intel_llm_tier_untested_label">പരിശോധിക്കാത്തത്</string>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Den nedlastede filen er skadet. Sjekksummen stemmer ikke. Prøv nedlastingen på nytt.</string>
+    <string name="core_input_cjk_download_error_http">Serveren returnerte HTTP-status %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Nedlastingen fungerte ikke. Sjekk tilkoblingen din og prøv igjen.</string>
+    <string name="core_input_cjk_download_error_network_detail">Nedlastingen fungerte ikke: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Det er ikke nok lagringsplass på enheten din. Frigjør litt plass først.</string>
+    <string name="core_input_cjk_download_error_truncated">Tilkoblingen stoppet under nedlastingen. Trykk på Gjenoppta for å fortsette.</string>
+    <string name="core_input_cjk_download_error_unavailable">Denne pakken er ikke tilgjengelig ennå.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">En tabell med radikalkoder for Hanzi-tegn, 29 000 tegn. Tastaturet trenger denne pakken for Cangjie- og Quick-oppsett.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) ordbok</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana-lesninger fra mozc, 1,08 millioner oppføringer, ca. 42 MB. Tastaturet trenger denne pakken for japansk konvertering.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Japansk kana til kanji-ordbok</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">En tabell med Jyutping-lesninger til Hanzi-tegn, 163 000 oppføringer. Tastaturet trenger denne pakken for kantonesisk konvertering.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantonesisk Jyutping-ordbok</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Hanzi-tegn og fraser fra CC-CEDICT, 120 000 oppføringer. Tastaturet trenger denne pakken for kinesisk konvertering.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Kinesisk Pinyin-ordbok</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">En tabell over strekrekkefølge for Hanzi-tegn. Tastaturet trenger denne pakken for strekoppsettet.</string>
+    <string name="core_input_cjk_pack_stroke_title">Kinesisk strek-ordbok (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Av (full Pinyin)</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Ce pack nécessite le format de pack sonore %1$s. Mettez à jour l\'application.</string>
+    <string name="core_feedback_pack_reject_no_samples">Ce pack ne contient aucun son que l\'application peut lire.</string>
+    <string name="core_feedback_pack_reject_too_large">Un pack de sons doit faire moins de %1$s Mo.</string>
+    <string name="core_feedback_sound_import_empty_error">Le fichier est vide.</string>
+    <string name="core_feedback_sound_import_html_error">Ceci est un fichier HTML ou XML, pas un son.</string>
+    <string name="core_feedback_sound_import_mp4_error">L\'application ne lit pas les fichiers MP4 et M4A. Utilisez un fichier MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Aucun espace de stockage n\'est disponible sur votre appareil.</string>
+    <string name="core_feedback_sound_import_read_error">L\'application ne peut pas lire le son.</string>
+    <string name="core_feedback_sound_import_save_error">L\'application ne peut pas enregistrer le son.</string>
+    <string name="core_feedback_sound_import_too_large_error">Un son de touche doit faire moins de %1$s Mo.</string>
+    <string name="core_feedback_sound_import_too_short_error">Le fichier est trop court pour être un son.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Ceci ne ressemble pas à un fichier MP3, OGG ou WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Il s\'agit d\'une archive zip, pas d\'un fichier audio.</string>
+</resources>

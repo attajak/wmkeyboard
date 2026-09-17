@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">オーロラ</string>
+    <string name="core_theme_builtin_berry_label">ベリー</string>
+    <string name="core_theme_builtin_bubble_label">バブル</string>
+    <string name="core_theme_builtin_crimson_label">クリムゾン</string>
+    <string name="core_theme_builtin_cyberpunk_label">サイバーパンク</string>
+    <string name="core_theme_builtin_deep_sea_label">深海</string>
+    <string name="core_theme_builtin_facet_label">ファセット</string>
+    <string name="core_theme_builtin_forest_label">フォレスト</string>
+    <string name="core_theme_builtin_glacier_label">グレイシャー</string>
+    <string name="core_theme_builtin_mint_label">ミント</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">海</string>
+    <string name="core_theme_builtin_pitch_label">ピッチブラック</string>
+    <string name="core_theme_builtin_rose_label">ローズ</string>
+    <string name="core_theme_builtin_sand_label">サンド</string>
+    <string name="core_theme_builtin_slate_label">スレート</string>
+    <string name="core_theme_builtin_snow_label">スノー</string>
+    <string name="core_theme_builtin_sunset_drift_label">サンセット・ドリフト</string>
+    <string name="core_theme_builtin_sunset_label">サンセット</string>
+    <string name="core_theme_family_gradient_label">グラデーション</string>
+    <string name="core_theme_family_ocean_label">Nightfall</string>
+    <string name="core_theme_family_snow_label">パステル</string>
+</resources>

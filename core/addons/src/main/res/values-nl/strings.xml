@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Woordenboeken</string>
+    <string name="core_addons_type_dictionary_singular_label">Woordenboek</string>
+    <string name="core_addons_type_emoji_font_label">Emoji-lettertypen</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emoji-lettertype</string>
+    <string name="core_addons_type_emoji_keywords_label">Emoji-trefwoorden</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Emoji-trefwoordenpakket</string>
+    <string name="core_addons_type_espanso_label">Espanso-pakketten</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso-pakket</string>
+    <string name="core_addons_type_font_label">Lettertypen</string>
+    <string name="core_addons_type_font_singular_label">Lettertype</string>
+    <string name="core_addons_type_icon_pack_label">Icoonpakketten</string>
+    <string name="core_addons_type_icon_pack_singular_label">Pictogrampakket</string>
+    <string name="core_addons_type_layout_label">Indelingen</string>
+    <string name="core_addons_type_layout_singular_label">Indeling</string>
+    <string name="core_addons_type_plugin_label">Plugins</string>
+    <string name="core_addons_type_plugin_singular_label">Plug-in</string>
+    <string name="core_addons_type_snippets_label">Snippets</string>
+    <string name="core_addons_type_snippets_singular_label">Snippet-pakket</string>
+    <string name="core_addons_type_sound_label">Geluiden</string>
+    <string name="core_addons_type_sound_pack_label">Geluidspakketten</string>
+    <string name="core_addons_type_sound_pack_singular_label">Geluidspakket</string>
+    <string name="core_addons_type_sound_singular_label">Toetsgeluid</string>
+    <string name="core_addons_type_stickers_label">Stickerpakketten</string>
+    <string name="core_addons_type_stickers_singular_label">Stickerpakket</string>
+    <string name="core_addons_type_theme_label">Thema\'s</string>
+    <string name="core_addons_type_theme_singular_label">Thema</string>
+    <string name="core_addons_type_unknown_label">Overig</string>
+    <string name="core_addons_type_unknown_singular_label">Add-on</string>
+    <string name="core_addons_type_vocabulary_label">Woordenschat</string>
+    <string name="core_addons_type_vocabulary_singular_label">Woordenschatpakket</string>
+</resources>

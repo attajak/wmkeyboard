@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">Aplikácia odstránila %1$d diagonálne švihnutie. Táto klávesnica podporuje švihnutia iba nahor, nadol, doľava a doprava.</item>
+        <item quantity="other">Aplikácia odstránila %1$d diagonálnych švihnutí. Táto klávesnica podporuje švihnutia iba nahor, nadol, doľava a doprava.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d kláves píše znak, ktorý je na ňom zobrazený. Pôvodná klávesnica používala pravidlo na rozhodnutie, čo napíše.</item>
+        <item quantity="other">%1$d klávesov píše znaky, ktoré sú na nich zobrazené. Pôvodná klávesnica používala pravidlá na rozhodnutie, čo napíšu.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Táto klávesnica má %1$d kláves, na ktorý opakovane klepete, aby ste cyklovali znaky. Táto aplikácia klávesnice takýto kláves nemá, takže je dostupný iba prvý znak.</item>
+        <item quantity="other">Táto klávesnica má %1$d klávesov, na ktoré opakovane klepete, aby ste cyklovali znaky. Táto aplikácia klávesnice takéto klávesy nemá, takže je dostupný iba prvý znak každého z nich.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Táto klávesnica používa pravidlá na určenie toho, čo jej klávesy píšu. Aplikácia tieto pravidlá nemá, takže každý kláves píše znak, ktorý je na ňom vytlačený.</string>
+    <string name="core_keyman_shift_layer_folded">Aplikácia zlúčila vrstvu Shift do klávesov. Podržte Shift pre prístup k týmto znakom.</string>
+    <string name="core_keyman_shift_layer_separate">Vrstva shift má iný tvar, takže ju aplikácia ponechala ako vlastnú vrstvu.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">Aplikácia odstránila %1$d kláves. Táto klávesnica nemá kláves, ktorý robí to isté.</item>
+        <item quantity="other">Aplikácia odstránila %1$d klávesov. Táto klávesnica nemá klávesy, ktoré robia to isté.</item>
+    </plurals>
+</resources>

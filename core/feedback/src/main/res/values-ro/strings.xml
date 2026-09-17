@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Acest pachet necesită formatul de pachet de sunet %1$s. Actualizează aplicația.</string>
+    <string name="core_feedback_pack_reject_no_samples">Acest pachet nu conține sunete pe care aplicația le poate reda.</string>
+    <string name="core_feedback_pack_reject_too_large">Un pachet de sunete trebuie să fie mai mic de %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Fișierul este gol.</string>
+    <string name="core_feedback_sound_import_html_error">Acesta este un fișier HTML sau XML, nu un sunet.</string>
+    <string name="core_feedback_sound_import_mp4_error">Aplicația nu redă fișiere MP4 și M4A. Folosește un fișier MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Nu există spațiu de stocare disponibil pe dispozitivul tău.</string>
+    <string name="core_feedback_sound_import_read_error">Aplicația nu poate citi sunetul.</string>
+    <string name="core_feedback_sound_import_save_error">Aplicația nu poate salva sunetul.</string>
+    <string name="core_feedback_sound_import_too_large_error">Un sunet de tastă trebuie să fie mai mic de %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Fișierul este prea scurt pentru a fi un sunet.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Acesta nu pare a fi un fișier MP3, OGG sau WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Aceasta este o arhivă zip, nu un fișier de sunet.</string>
+</resources>

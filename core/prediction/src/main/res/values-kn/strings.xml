@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">ಸರ್ವರ್ ಫೈಲ್ ಅನ್ನು ಕಳುಹಿಸಿಲ್ಲ. ದೋಷ ಕೋಡ್ HTTP %1$s ಆಗಿದೆ.</string>
+    <string name="core_pred_wordlist_malformed_error">ಆ ಪದಗಳ ಪಟ್ಟಿ ಖಾಲಿಯಾಗಿದೆ ಅಥವಾ ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="core_pred_wordlist_no_space_error">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಸಾಕಷ್ಟು ಸಂಗ್ರಹಣೆ ಇಲ್ಲ. ಕೆಲವು ಫೈಲ್‌ಗಳನ್ನು ಅಳಿಸಿ, ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="core_pred_wordlist_save_error">ಆ್ಯಪ್ ಪದಗಳ ಪಟ್ಟಿಯನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="core_pred_wordlist_size_all_label">ಎಲ್ಲವೂ</string>
+    <string name="core_pred_wordlist_size_large_label">ದೊಡ್ಡದು</string>
+    <string name="core_pred_wordlist_size_medium_label">ಮಧ್ಯಮ</string>
+    <string name="core_pred_wordlist_size_small_label">ಸಣ್ಣ</string>
+    <string name="core_pred_wordlist_variant_brazil_label">ಬ್ರೆಜಿಲ್</string>
+    <string name="core_pred_wordlist_variant_europe_label">ಯುರೋಪ್</string>
+</resources>

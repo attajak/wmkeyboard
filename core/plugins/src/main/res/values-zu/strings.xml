@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Le plugin ayi ayina umsebenzi we-render().</string>
+    <string name="core_plugins_error_not_installed">Leyo plugin ayifakiwe.</string>
+    <string name="core_plugins_error_script_failed">Umbhalo we-script wehlulekile.</string>
+    <string name="core_plugins_error_script_missing">Umbhalo (script) waleyo plugin awukho.</string>
+    <string name="core_plugins_error_turned_off">Leyo phulagini icishiwe.</string>
+    <string name="core_plugins_permission_storage_label">Londoloza idatha kudivayisi yakho</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” ineskripthi esingeyona umbhalo we-UTF-8 ovumelekile.</string>
+    <string name="core_plugins_reject_bad_id">Le plugin in-id engeyona evumelekile. I-id inobude obungama-3 kuye kwangama-64. I-id ingaqukatha izinhlamvu ezincane, izinombolo, amachashazi, imigqa, kanye nokudwetshelwa.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” iqukethe ikhodi ye-Lua ehlanganisiwe. I-plugin kumele isebenzise ikhodi yomthombo elula, ukuze ukwazi ukuyifunda ngaphambi kokuba isebenze.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” inombhalo ongenalutho.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” ayinayo ifayela layo lesikripthi (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Le plugin idinga inguqulo entsha ye-WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Le plugin ayinalo igama.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” ayisho ukuthi iyiphi inguqulo eyiyo.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” inombhalo omkhulu kune-%2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Le nguqulo ye-WM Keyboard ayikwazi imvume ethi \"%1$s\". Uhlelo lokusebenza alukwazi ukukutshela ukuthi yini evunyelwe ukwenziwa ethi \"%2$s\".</string>
+    <string name="core_plugins_stopped_cancelled">Uhlelo lokusebenza lumise le-plugin.</string>
+    <string name="core_plugins_stopped_deadline">Le plugin ithathe isikhathi eside kakhulu. Uhlelo lokusebenza luyimisiwe.</string>
+    <string name="core_plugins_stopped_instructions">Le plugin yenze umsebenzi omningi kakhulu ngesikhathi esisodwa. Uhlelo lokusebenza luyimisiwe.</string>
+    <string name="core_plugins_stopped_not_responding">Le plugin iyekile ukuphendula. Uhlelo lokusebenza luyivalile.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Le plugin iyekile ukuphendula futhi. Uhlelo lokusebenza luyicimile.</string>
+    <string name="core_plugins_stopped_recursion">Le plugin izibize kaningi kakhulu. Uhlelo lokusebenza luyimise.</string>
+    <string name="core_plugins_stopped_unexpected">Le plugin imile ngokungalindelekile.</string>
+    <string name="core_plugins_ui_insert_action">Faka</string>
+    <string name="core_plugins_ui_repair_no_type">Iwijethi ayishongo ukuthi hlobo luni.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Uhlu lwama-widget luqukethe okuthile okungewona i-widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Umugqa wamathebhu wawungenamakhasi.</string>
+    <string name="core_plugins_ui_repair_text_budget">Le plugin icele ukudweba umbhalo omningi kakhulu. Uhlelo lokusebenza lushiye eminye.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Umbhalo othile ubumude kakhulu ukuba ungadwetshwa. Uhlelo lokusebenza luwufushanisile.</string>
+    <string name="core_plugins_ui_repair_too_deep">Amanye amawijethi abekwe ngokujula kakhulu ukuze adwetshwe.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Amathebhu okuqala angu-%1$d kuphela aboniswayo.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Le plugin icele ama-widget angaphezu kuka-%1$d. Uhlelo lokusebenza lulahle okusele.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Lokhu kwakhiwa akukwazi uhlobo lwe-widget ethi %1$s.</string>
+    <string name="core_plugins_ui_tab_default_title">ithebhu %1$d</string>
+</resources>

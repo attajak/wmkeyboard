@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">Aplikasi menghapus %1$d jentikan diagonal. Papan ketik ini hanya mendukung jentikan ke atas, bawah, kiri, dan kanan.</item>
+        <item quantity="other">Aplikasi menghapus %1$d jentikan diagonal. Papan ketik ini hanya mendukung jentikan ke atas, bawah, kiri, dan kanan.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d tombol mengetik karakter yang tercetak di atasnya. Papan ketik asli menggunakan aturan untuk menentukan apa yang diketiknya.</item>
+        <item quantity="other">%1$d tombol mengetik karakter yang tercetak di atasnya. Papan ketik asli menggunakan aturan untuk menentukan apa yang diketiknya.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Keyboard ini memiliki %1$d tombol yang Anda ketuk berulang kali untuk menelusuri karakter. Aplikasi keyboard ini tidak memiliki tombol tersebut, jadi hanya karakter pertama yang tersedia.</item>
+        <item quantity="other">Keyboard ini memiliki %1$d tombol yang Anda ketuk berulang kali untuk menelusuri karakter. Aplikasi keyboard ini tidak memiliki tombol tersebut, jadi hanya karakter pertama dari masing-masing tombol yang tersedia.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Papan ketik ini menggunakan aturan untuk menentukan apa yang diketik oleh tombolnya. Aplikasi tidak memiliki aturan tersebut, jadi setiap tombol mengetikkan karakter yang tercetak di atasnya.</string>
+    <string name="core_keyman_shift_layer_folded">Aplikasi menggabungkan lapisan shift ke dalam tombol. Tahan Shift untuk mengakses karakter tersebut.</string>
+    <string name="core_keyman_shift_layer_separate">Lapisan shift memiliki bentuk yang berbeda, jadi aplikasi menyimpannya sebagai lapisannya sendiri.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">Aplikasi menghapus %1$d tombol. Papan ketik ini tidak memiliki tombol yang melakukan hal yang sama.</item>
+        <item quantity="other">Aplikasi menghapus %1$d tombol. Papan ketik ini tidak memiliki tombol yang melakukan hal yang sama.</item>
+    </plurals>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">അറോറ</string>
+    <string name="core_theme_builtin_berry_label">ബെറി</string>
+    <string name="core_theme_builtin_bubble_label">ബബിൾ</string>
+    <string name="core_theme_builtin_crimson_label">ക്രിംസൺ</string>
+    <string name="core_theme_builtin_cyberpunk_label">സൈബർപങ്ക്</string>
+    <string name="core_theme_builtin_deep_sea_label">ഡീപ് സീ</string>
+    <string name="core_theme_builtin_facet_label">ഫാസെറ്റ്</string>
+    <string name="core_theme_builtin_forest_label">ഫോറസ്റ്റ്</string>
+    <string name="core_theme_builtin_glacier_label">ഗ്ലേഷ്യർ</string>
+    <string name="core_theme_builtin_mint_label">മിന്റ്</string>
+    <string name="core_theme_builtin_nebula_label">നെബുല</string>
+    <string name="core_theme_builtin_ocean_label">ഓഷ്യൻ</string>
+    <string name="core_theme_builtin_pitch_label">കടും കറുപ്പ്</string>
+    <string name="core_theme_builtin_rose_label">റോസ്</string>
+    <string name="core_theme_builtin_sand_label">സാൻഡ്</string>
+    <string name="core_theme_builtin_slate_label">സ്ലേറ്റ്</string>
+    <string name="core_theme_builtin_snow_label">മഞ്ഞ്</string>
+    <string name="core_theme_builtin_sunset_drift_label">സൺസെറ്റ് ഡ്രിഫ്റ്റ്</string>
+    <string name="core_theme_builtin_sunset_label">സൺസെറ്റ്</string>
+    <string name="core_theme_family_gradient_label">ഗ്രേഡിയന്റുകൾ</string>
+    <string name="core_theme_family_ocean_label">നൈറ്റ്‌ഫോൾ</string>
+    <string name="core_theme_family_snow_label">പാസ്റ്റൽ</string>
+</resources>

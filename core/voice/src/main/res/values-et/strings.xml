@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face\'i server ei saatnud faili. Veakood on HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Ühendus katkes allalaadimise ajal. Proovige uuesti, et jätkata kohast, kus see pooleli jäi.</string>
+    <string name="core_voice_download_space_error">Teie seadmes pole piisavalt salvestusruumi. Peate esmalt vabastama umbes %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">See mudel kasutab keelt, milles kirjutad, täpselt nagu 40 keele mudel. See hõlmab ainult Euroopa keeli, seega on allalaaditav fail väiksem.</string>
+    <string name="core_voice_model_base_multi_body">See mudel tasakaalustab täpsuse ja kiiruse. See hõlmab kõiki keeli, mida Whisper tunneb. Vali see, kui väike mudel on liiga aeglane.</string>
+    <string name="core_voice_model_base_world_body">See mudel kasutab oletamise asemel keelt, milles kirjutad. Lühikesed fraasid muutuvad palju usaldusväärsemaks. Vali see, kui selle loendis on sinu keeled.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d keel</item>
+        <item quantity="other">%1$d keelt</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">See on üks täpsemaid Whisperi mudeleid, kuid see on enamiku telefonide jaoks liiga suur. Allalaaditav fail on 1,5 GB. Seda saab laadida ainult suure mälumahuga seade.</string>
+    <string name="core_voice_model_large_v3_multi_body">See on kõige täpsem Whisperi mudel ja parim tuvastamaks, mis keelt te räägite. Allalaadimine on 1,5 GB. Ainult suure mälumahuga seade suudab seda laadida. Turbo-mudel on peaaegu sama täpne ja poole väiksem.</string>
+    <string name="core_voice_model_medium_multi_body">See mudel annab peaaegu lauaarvuti täpsuse. Iga fraas võtab mitu sekundit. Mudel kasutab töötamise ajal peaaegu ühe gigabaidi mälu.</string>
+    <string name="core_voice_model_single_language_body">See mudel käsitleb ainult %1$s. Sellel puudub keeletuvastuse etapp. See muudab selle kiiremaks ja veidi täpsemaks kui sama suur mitmekeelne mudel.</string>
+    <string name="core_voice_model_small_multi_body">See mudel annab parima täpsuse, mis telefonis hästi töötab. See käsitleb aktsente ja taustamüra paremini kui Base-mudel. See katab iga keele, mida Whisper tunneb.</string>
+    <string name="core_voice_model_small_world_body">See mudel kasutab keelt, milles kirjutate, ja sellel on väikese mudeli täpsus. See on kõige täpsem mudel, mis mahub veel telefoni.</string>
+    <string name="core_voice_model_tiny_multi_body">See on kiireim mitmekeelne mudel. See töötab hästi selge kõne korral, kuid müra vähendab täpsust.</string>
+    <string name="core_voice_model_turbo_multi_body">See mudel tunneb teie räägitavat keelt palju paremini ära kui väiksemad mudelid. Valige see, kui väiksem mudel transkribeerib teie kõne vales keeles. See on suur allalaadimine ja iga fraas võtab mitu sekundit.</string>
+    <string name="core_voice_size_base_label">Baas</string>
+    <string name="core_voice_size_large_label">Suur</string>
+    <string name="core_voice_size_medium_label">Keskmine</string>
+    <string name="core_voice_size_small_label">Väike</string>
+    <string name="core_voice_size_tiny_label">Pisike</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Soovitatav</string>
+    <string name="core_voice_whisper_mel_bins_error">See häälemudel vajab %1$s ribaga spektrogrammi, mis ei vasta failile, millega see alla laaditi. Kustutage mudel seadetes ja laadige see uuesti alla.</string>
+    <string name="core_voice_whisper_model_load_error">Häälemudelit ei laaditud. Fail on tõenäoliselt kahjustatud. Kustutage mudel seadetes ja laadige see uuesti alla.</string>
+    <string name="core_voice_whisper_transcribe_error">Häälsisestus ei töötanud. Proovi uuesti või vali väiksem mudel.</string>
+</resources>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Vienreizējs kods</string>
+    <string name="core_content_clip_entity_otp_tag">KODS</string>
+    <string name="core_content_clip_entity_phone_label">Tālruņa numurs</string>
+    <string name="core_content_clip_entity_phone_tag">TĀLRUNIS</string>
+    <string name="core_content_clip_entity_url_label">Saite</string>
+    <string name="core_content_clip_entity_url_tag">SAITE</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d fragmentam ir citas paplašināšanas, kuras Espanso nevar saglabāt. Tika ierakstīts tikai pirmais.</item>
+        <item quantity="other">%1$d fragmentiem ir citas paplašināšanas, kuras Espanso nevar saglabāt. Tika ierakstīts tikai pirmais no katra.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d fragments ir ierobežots ar noteiktām datorprogrammām. Jūsu tālrunī tas darbojas visur.</item>
+        <item quantity="other">%1$d fragmenti ir ierobežoti ar noteiktām datorprogrammām. Jūsu tālrunī tie darbojas visur.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d fragments liek jums izvēlēties no saraksta. Lietotne tā vietā izvēlas vienu nejauši.</item>
+        <item quantity="other">%1$d fragmenti liek jums izvēlēties no saraksta. Lietotne tā vietā izvēlas vienu nejauši.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d fragments prasa apstiprinājumu pirms izvēršanas. Espanso nav šāda iestatījuma, tāpēc tas tur izvērsīsies automātiski.</item>
+        <item quantity="other">%1$d fragmenti prasa apstiprinājumu pirms izvēršanas. Espanso nav šāda iestatījuma, tāpēc tie tur izvērsīsies automātiski.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d fragments izmanto datuma formātu, kuru lietotne nevar pilnībā uzrakstīt. Lietotne izlaida daļu, ko tā nevar izdarīt.</item>
+        <item quantity="other">%1$d fragmenti izmanto datuma formātus, kurus lietotne nevar pilnībā uzrakstīt. Lietotne izlaida daļas, ko tā nevar izdarīt.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d fragments atrodas mapē, kas ir izslēgta. Espanso nav mapju slēdža, tāpēc tas tur izvērsīsies.</item>
+        <item quantity="other">%1$d fragmenti atrodas mapēs, kas ir izslēgtas. Espanso nav mapju slēdža, tāpēc tie tur izvērsīsies.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Lietotne izlaida %1$d fragmentu, kurā nav ko ievietot.</item>
+        <item quantity="other">Lietotne izlaida %1$d fragmentus, kuros nav ko ievietot.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d fragments lūdz aizpildīt veidlapu. Lietotne ievieto veidlapu kā tekstu ar kursoru pirmajā tukšajā laukā.</item>
+        <item quantity="other">%1$d fragmenti lūdz aizpildīt veidlapu. Lietotne ievieto katru veidlapu kā tekstu ar kursoru pirmajā tukšajā laukā.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Lietotne izlaida %1$d fragmentu, kas ievieto attēlu.</item>
+        <item quantity="other">Lietotne izlaida %1$d fragmentus, kas ievieto attēlus.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Fails nolasa %1$d citu failu. Viens fails nevar paņemt līdzi citus.</item>
+        <item quantity="other">Fails nolasa %1$d citus failus. Viens fails nevar paņemt līdzi citus.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d fragments norāda uz citiem fragmentiem. Espanso to nevar pateikt, tāpēc saites tika izlaistas.</item>
+        <item quantity="other">%1$d fragmenti norāda uz citiem fragmentiem. Espanso to nevar pateikt, tāpēc saites tika izlaistas.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d trigeris ir paredzēts darbam vārda iekšpusē. Tālrunī tas darbojas tikai kā vesels vārds.</item>
+        <item quantity="other">%1$d trigeri ir paredzēti darbam vārda iekšpusē. Tālrunī tie darbojas tikai kā veseli vārdi.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d fragments izmanto vērtību, kurai Espanso nav ekvivalenta. Tas tiek uzrakstīts tā, kā tas ir.</item>
+        <item quantity="other">%1$d fragmenti izmanto vērtības, kurām Espanso nav ekvivalenta. Tie tiek uzrakstīti tā, kā tie ir.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Lietotne noņēma šablonu no %1$d fragmenta. Lietotne neizpilda šāda veida šablonus. Fragments paliek sarakstā.</item>
+        <item quantity="other">Lietotne noņēma šablonu no %1$d fragmentiem. Lietotne neizpilda šāda veida šablonus. Fragmenti paliek sarakstā.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d fragments izmanto formatētu tekstu. Lietotne saglabā vārdus un noņem formatējumu.</item>
+        <item quantity="other">%1$d fragmenti izmanto formatētu tekstu. Lietotne saglabā vārdus un noņem formatējumu.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d fragments izpilda komandu jūsu datorā. Lietotne izlaida komandu un nekad to neizpilda.</item>
+        <item quantity="other">%1$d fragmenti izpilda komandas jūsu datorā. Lietotne izlaida komandas un nekad tās neizpilda.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d aktivizētājs nebeidzas ar vārdu, tāpēc lietotne to nevar uzraudzīt. Tā fragments paliek sarakstā.</item>
+        <item quantity="other">%1$d aktivizētāji nebeidzas ar vārdu, tāpēc lietotne tos nevar uzraudzīt. To fragmenti paliek sarakstā.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d fragments satur tekstu iekavās, ko šī lietotne aizpilda, piemēram, {date}. Tas izvērsīsies, nevis parādīsies tā, kā uzrakstīts.</item>
+        <item quantity="other">%1$d fragmenti satur tekstu iekavās, ko šī lietotne aizpilda, piemēram, {date}. Tas izvērsīsies, nevis parādīsies tā, kā uzrakstīts.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d fragments maina tā modeļa uztverto lielo burtu reģistru. Espanso to nevar izdarīt, tāpēc uztvertais teksts tiek ievietots nemainīts.</item>
+        <item quantity="other">%1$d fragmenti maina to modeļu uztverto lielo burtu reģistru. Espanso to nevar izdarīt, tāpēc uztvertais teksts tiek ievietots nemainīts.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d fragments izmanto vērtību, kurai lietotnē nav ekvivalenta. Šī daļa paliek tukša.</item>
+        <item quantity="other">%1$d fragmenti izmanto vērtības, kurām lietotnē nav ekvivalenta. Šīs daļas paliek tukšas.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Lietotne nevar lejupielādēt fontu. Pārbaudiet savienojumu un mēģiniet vēlreiz.</string>
+    <string name="core_content_font_error_empty">Fails ir tukšs.</string>
+    <string name="core_content_font_error_load">Lietotne nevar ielādēt šo fonta failu.</string>
+    <string name="core_content_font_error_markup">Šis fails ir HTML vai XML fails, nevis fonts.</string>
+    <string name="core_content_font_error_no_storage">Fontam nav pieejama krātuve.</string>
+    <string name="core_content_font_error_not_a_font">Šis fails neizskatās pēc .ttf vai .otf fonta.</string>
+    <string name="core_content_font_error_read">Lietotne nevar nolasīt fontu.</string>
+    <string name="core_content_font_error_save">Lietotne nevar saglabāt fontu.</string>
+    <string name="core_content_font_error_too_large">Fontam jābūt mazākam par %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Fontu bibliotēka ir pilna. Izdzēsiet fontu un mēģiniet vēlreiz.</string>
+    <string name="core_content_font_error_too_short">Fails ir pārāk īss, lai būtu fonts.</string>
+    <string name="core_content_font_error_woff">Lietotne nevar nolasīt WOFF tīmekļa fontus. Izmantojiet fonta .ttf vai .otf versiju.</string>
+    <string name="core_content_font_error_woff2">Lietotne nevar nolasīt WOFF2 tīmekļa fontus. Izmantojiet fonta .ttf vai .otf versiju.</string>
+    <string name="core_content_font_error_zip">Šis fails ir zip arhīvs, nevis fonts.</string>
+    <string name="core_content_selection_macro_add_contact">Kontaktpersona</string>
+    <string name="core_content_selection_macro_calendar">Kalendārs</string>
+    <string name="core_content_selection_macro_call">Zvanīt</string>
+    <string name="core_content_selection_macro_case_lower">mazie burti</string>
+    <string name="core_content_selection_macro_case_sentence">Teikuma sākuma burts</string>
+    <string name="core_content_selection_macro_case_title">Virsraksta formāts</string>
+    <string name="core_content_selection_macro_case_upper">LIELIE BURTI</string>
+    <string name="core_content_selection_macro_chat_bold">Treknraksts</string>
+    <string name="core_content_selection_macro_chat_italic">Slīpraksts</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Pārsvītrot</string>
+    <string name="core_content_selection_macro_colour">Krāsa</string>
+    <string name="core_content_selection_macro_copy">Kopēt</string>
+    <string name="core_content_selection_macro_digits_latin">Cipari</string>
+    <string name="core_content_selection_macro_email">E-pasts</string>
+    <string name="core_content_selection_macro_fancy">Izsmalcināts</string>
+    <string name="core_content_selection_macro_find">Meklēt</string>
+    <string name="core_content_selection_macro_format">Formatēt</string>
+    <string name="core_content_selection_macro_grammar">Gramatika</string>
+    <string name="core_content_selection_macro_lines_bullet">Aizzīmes</string>
+    <string name="core_content_selection_macro_lines_dedupe">Unikāls</string>
+    <string name="core_content_selection_macro_lines_number">Skaits</string>
+    <string name="core_content_selection_macro_lines_sort">Kārtot</string>
+    <string name="core_content_selection_macro_map">Karte</string>
+    <string name="core_content_selection_macro_open">Atvērt</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Izrunāt</string>
+    <string name="core_content_selection_macro_replace">Aizstāt</string>
+    <string name="core_content_selection_macro_search">Meklēt</string>
+    <string name="core_content_selection_macro_share">Kopīgot</string>
+    <string name="core_content_selection_macro_sms">Ziņa</string>
+    <string name="core_content_selection_macro_time_zones">Zonas</string>
+    <string name="core_content_selection_macro_to_bangla">Bengāļu</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Tulkot</string>
+    <string name="core_content_selection_macro_url_decode">Atkodēt</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Lietotne izlaida %2$d paplašinājumu no \"%1$s\".</item>
+        <item quantity="other">Lietotne izlaida %2$d paplašinājumus no \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Lietotne noņēma modeli no \"%1$s\". Modelis nav pareizs. Fragments paliek sarakstā.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Lietotne izlaida %1$d mapi, kurai nav nosaukuma vai kura atkārto citu. Tās fragmenti tika ievietoti bez mapes.</item>
+        <item quantity="other">Lietotne izlaida %1$d mapes, kurām nav nosaukuma vai kuras atkārto citu. To fragmenti tika ievietoti bez mapes.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Failā ir vairāk fragmentu, nekā lietotne saglabā. Lietotne importēja pirmos %1$d.</item>
+        <item quantity="other">Failā ir vairāk fragmentu, nekā lietotne saglabā. Lietotne importēja pirmos %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Fragmentam nav nosaukuma, tāpēc lietotne to nosauca pēc tā pirmās rindas.</string>
+    <string name="core_content_snippet_repair_no_text">Lietotne izlaida \"%1$s\". Tam nav teksta.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Lietotne noņēma šablonu no \"%1$s\". Tas bija garāks par %2$d rakstzīmi.</item>
+        <item quantity="other">Lietotne noņēma šablonu no \"%1$s\". Tas bija garāks par %2$d rakstzīmēm.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Lietotne saīsināja \"%1$s\". Tas bija garāks par %2$d rakstzīmi.</item>
+        <item quantity="other">Lietotne saīsināja \"%1$s\". Tas bija garāks par %2$d rakstzīmēm.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Lietotnes nosaukums, kurā rakstāt</string>
+    <string name="core_content_snippet_var_clip_info">Jaunākais starpliktuves ieraksts</string>
+    <string name="core_content_snippet_var_cursor_info">Vieta, kur kursors apstājas</string>
+    <string name="core_content_snippet_var_date_info">Šodienas datums</string>
+    <string name="core_content_snippet_var_datetime_info">Datums un laiks</string>
+    <string name="core_content_snippet_var_day_info">Mēneša diena</string>
+    <string name="core_content_snippet_var_isodate_info">Datums ISO formātā, piemēram, 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Datums un laiks ISO formātā</string>
+    <string name="core_content_snippet_var_month_info">Mēneša nosaukums</string>
+    <string name="core_content_snippet_var_package_info">Šīs lietotnes pakotnes nosaukums</string>
+    <string name="core_content_snippet_var_selection_info">Teksts, ko atlasāt laukā</string>
+    <string name="core_content_snippet_var_time12_info">Pašreizējais laiks 12 stundu formātā</string>
+    <string name="core_content_snippet_var_time_info">Pašreizējais laiks 24 stundu formātā</string>
+    <string name="core_content_snippet_var_timestamp_info">Laiks Unix sekundēs</string>
+    <string name="core_content_snippet_var_timezone_info">Laika josla, piemēram, GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Jauns nejaušs UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Dienas nosaukums, piemēram, svētdiena</string>
+    <string name="core_content_snippet_var_year_info">Gads ar četriem cipariem</string>
+    <string name="core_content_sticker_pack_imported_label">Importētās uzlīmes</string>
+    <string name="core_content_sticker_repair_image_missing">Lietotne izdzēsa \"%1$s\". Tā attēls trūkst.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Lietotne izlaida \"%1$s\". Lietotne nevar nolasīt tās attēlu.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Pakotnē ir %1$d uzlīme. Lietotne patur pirmo %2$d.</item>
+        <item quantity="other">Pakotnē ir %1$d uzlīmes. Lietotne patur pirmās %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Lietotne pazaudēja uzlīmi. Uzlīmes nosaukums nenorāda uz attēla failu.</string>
+    <string name="core_content_sticker_repair_none_listed">Pakotnes failā nav uzskaitītas uzlīmes.</string>
+    <string name="core_content_sticker_repair_not_saved">Lietotne noraidīja \"%1$s\". Lietotne to nevar saglabāt.</string>
+</resources>

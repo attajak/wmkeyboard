@@ -44,7 +44,10 @@ RES_LINE = re.compile(r"^\s+resource 0x[0-9a-f]+ (string|plurals)/(\S+)")
 VAL_LINE = re.compile(r'^\s+\(([^)]*)\)\s+"(.*)"\s*$')
 PLURAL_HEAD = re.compile(r"^\s+\(([^)]*)\)\s+\(plurals\) size=\d+")
 PLURAL_ITEM = re.compile(r'^\s+(zero|one|two|few|many|other)="(.*)"\s*$')
-PLACEHOLDER = re.compile(r"%(\d+\$)?[sdfxeg]")
+# Captures position and conversion separately: "%1$s" -> ("1", "s").
+PLACEHOLDER = re.compile(r"%(?:(\d+)\$)?([a-zA-Z])")
+# Gemini sometimes emits "% s", which is not a valid conversion and throws.
+MALFORMED = re.compile(r"%[ \t]+[a-zA-Z]")
 DASHES = re.compile(r"[–—]")
 
 
@@ -165,7 +168,8 @@ def main() -> int:
 
     # module -> locale -> [(kind, key, value)]
     buckets: dict = defaultdict(lambda: defaultdict(list))
-    problems: list[str] = []
+    dropped: list[str] = []
+    warnings: list[str] = []
     skipped_untranslatable = 0
 
     for (kind, key), locales in table.items():
@@ -182,12 +186,19 @@ def main() -> int:
                 continue
             if args.locale and locale not in args.locale:
                 continue
+            unsafe = False
             if default is not None:
-                for want, got, label in _compare(default, value):
-                    problems.append(f"{locale}/{key} [{label}]: default {want} vs {got}")
+                for severity, detail in _compare(default, value):
+                    if severity == "error":
+                        unsafe = True
+                        dropped.append(f"{locale}/{key}{detail}")
+                    else:
+                        warnings.append(f"{locale}/{key}{detail}")
+            if unsafe:
+                continue  # fall back to English rather than crash
             flat = " ".join(value.values()) if isinstance(value, dict) else value
             if DASHES.search(flat):
-                problems.append(f"{locale}/{key}: en/em dash, house style forbids it")
+                warnings.append(f"{locale}/{key}: en/em dash, house style forbids it")
             buckets[module][locale].append((kind, key, value))
 
     if skipped_untranslatable:
@@ -209,31 +220,89 @@ def main() -> int:
           f"{len({l for m in buckets for l in buckets[m]})} locales"
           f"{' (dry run, nothing written)' if args.dry_run else ''}")
 
-    if problems:
-        print(f"\n{len(problems)} problems — fix in Play Console, then re-pull:")
-        for line in problems[:60]:
-            print(f"  ! {line}")
-        if len(problems) > 60:
-            print(f"  … and {len(problems) - 60} more")
-        return 1
+    def report(label, items, cap):
+        if not items:
+            return
+        print(f"\n{len(items)} {label}:")
+        for line in items[:cap]:
+            print(f"  {line}")
+        if len(items) > cap:
+            print(f"  … and {len(items) - cap} more")
+
+    report("warnings (kept; the translation is safe but lost an argument)",
+           warnings, 15)
+    report("DROPPED (would crash; these fall back to English)", dropped, 25)
     return 0
 
 
 def _compare(default, value):
-    """Yield (expected, actual, label) for placeholder mismatches."""
+    """Yield (severity, detail) for placeholder drift.
+
+    "error" means the translation would throw at runtime, so it is dropped and
+    the string falls back to English. A missing translation is always better
+    than a crash. "warn" means the translation is safe but lost something.
+
+    Plural quantities are compared like for like, since English "one"
+    legitimately differs from English "other" ("Every day" vs "Every %d days"),
+    and quantities English lacks fall back to its "other".
+    """
     if isinstance(default, dict) != isinstance(value, dict):
-        yield "plurals" if isinstance(default, dict) else "string", "mismatched shape", "shape"
+        yield "error", ": one is a plurals, the other a string"
         return
     if isinstance(default, dict):
-        base = sorted(PLACEHOLDER.findall(default.get("other", "")))
-        for quantity, text in value.items():
-            got = sorted(PLACEHOLDER.findall(text))
-            if got != base:
-                yield base, got, quantity
+        for quantity, text in sorted(value.items()):
+            base = default.get(quantity, default.get("other", ""))
+            yield from _placeholders(base, text, quantity)
         return
-    base, got = sorted(PLACEHOLDER.findall(default)), sorted(PLACEHOLDER.findall(value))
-    if base != got:
-        yield base, got, "string"
+    yield from _placeholders(default, value, None)
+
+
+def _placeholders(base, text, quantity):
+    """Compare one translated string against its English source.
+
+    Three things crash: a conversion the default never supplies, the same
+    position with a different conversion (%1$d against a String argument
+    throws IllegalFormatConversionException), and a malformed conversion.
+    """
+    where = f" [{quantity}]" if quantity else ""
+    # "%%" is an escaped percent sign, not a conversion. Drop those first so
+    # that a literal "50%% done" is not misread as a malformed "% d".
+    base, text = base.replace("%%", ""), text.replace("%%", "")
+
+    # A "%" followed by a space is not a conversion. Several English strings
+    # carry one on purpose ("This setting is 100% by default") and are read
+    # with stringResource(id), never String.format, so they never throw. Only
+    # flag it where the English has none, which means Gemini broke a real
+    # conversion rather than copied a literal percent sign.
+    if MALFORMED.search(text) and not MALFORMED.search(base):
+        bad = MALFORMED.findall(text) or ["%  ?"]
+        yield "error", f"{where} malformed conversion {bad!r}, a space after %"
+        return
+
+    def index(spec):
+        out = {}
+        for position, conversion in PLACEHOLDER.findall(spec):
+            out.setdefault(position or "_", set()).add(conversion)
+        return out
+
+    want, got = index(base), index(text)
+
+    extra = sorted(set(got) - set(want))
+    if extra:
+        yield "error", (f"{where} uses argument(s) {extra} the default never "
+                        f"supplies (has {sorted(want)})")
+        return
+
+    for position in sorted(set(got) & set(want)):
+        if got[position] != want[position]:
+            yield "error", (f"{where} argument {position} is "
+                            f"{sorted(got[position])}, default is "
+                            f"{sorted(want[position])}")
+            return
+
+    missing = sorted(set(want) - set(got))
+    if missing:
+        yield "warn", f"{where} drops argument(s) {missing} of {sorted(want)}"
 
 
 def _render(rows) -> str:

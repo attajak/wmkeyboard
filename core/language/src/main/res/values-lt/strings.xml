@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Programa pakeitė %1$d klavišą į artimiausią turimą.</item>
+        <item quantity="other">Programa pakeitė %1$d klavišų į artimiausius turimus.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Programa pašalino %1$d klavišą. Ši klaviatūra neturi klavišo, atliekančio tą patį veiksmą (kodas %2$s).</item>
+        <item quantity="other">Programa pašalino %1$d klavišų. Ši klaviatūra neturi klavišų, atliekančių tą patį veiksmą (kodai %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Programa išlaikė %1$d klavišo etiketės dydį, bet ne jos teksto stilių. Ši klaviatūra etiketes piešia vienu stiliumi.</item>
+        <item quantity="other">Programa išlaikė %1$d klavišų etiketės dydį, bet ne jų teksto stilių. Ši klaviatūra etiketes piešia vienu stiliumi.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Programa pakeitė %1$d raidę į formą, kurią rašo ši klaviatūra.</item>
+        <item quantity="other">Programa pakeitė %1$d raides į formą, kurią rašo ši klaviatūra.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d klavišas neturi paspaudžiamų ir palaikomų raidžių. Failas jas saugo antrame faile, kurio neatidarėte.</item>
+        <item quantity="other">%1$d klavišai neturi paspaudžiamų ir palaikomų raidžių. Failas jas saugo antrame faile, kurio neatidarėte.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Kita klaviatūra klavišų plotį matuoja kitaip. Programa pakeitė plotį, kad jis atitiktų šį tinklelį.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d Brailio rašto taško klavišas %2$s sluoksnyje turi taško numerį ne nuo 1 iki 6.</item>
+        <item quantity="other">%1$d Brailio rašto taškų klavišai %2$s sluoksnyje turi taško numerį ne nuo 1 iki 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d klavišas %2$s sluoksnyje neturi etiketės ir išvesties. Jis nieko nerašo, todėl programa jį ištrins, kai įjungsite šį išdėstymą.</item>
+        <item quantity="other">%1$d klavišai %2$s sluoksnyje neturi etiketės ir išvesties. Jie nieko nerašo, todėl programa juos ištrins, kai įjungsite šį išdėstymą.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s sluoksnio %1$d eilutė yra tuščia.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d klavišas %2$s sluoksnyje yra skydelio komponentas. Komponentai veikia tik skydelio išdėstyme.</item>
+        <item quantity="other">%1$d klavišai %2$s sluoksnyje yra skydelio komponentai. Komponentai veikia tik skydelio išdėstyme.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s sluoksnio %1$d eilutėje yra klavišas be pločio.</string>
+    <string name="core_lang_layout_key_span_error">%2$s sluoksnio %1$d eilutėje yra klavišas, kuris užima mažiau nei 1 arba daugiau nei %3$d eilučių.</string>
+    <string name="core_lang_layout_letters_empty_error">Raidžių sluoksnyje nėra klavišų.</string>
+    <string name="core_lang_layout_no_delete_error">Išdėstyme nėra trynimo klavišo. Negalite ištaisyti klaidos.</string>
+    <string name="core_lang_layout_no_enter_error">Išdėstyme nėra įvesties klavišo.</string>
+    <string name="core_lang_layout_no_shift_warning">Išdėstyme nėra „Shift“ klavišo. Norėdami įvesti didžiąją raidę, paspauskite ir palaikykite klavišą.</string>
+    <string name="core_lang_layout_no_space_error">Išdėstyme nėra tarpo klavišo.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s sluoksnyje nėra klavišo, grąžinančio į raides. Negalite palikti šio sluoksnio.</string>
+    <string name="core_lang_layout_persistent_warning">%1$s sluoksnis lieka atidarytas uždarius klaviatūrą. Įsitikinkite, kad turite būdą išeiti iš šio išdėstymo.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Šis išdėstymas neturi klavišo, leidžiančio jį palikti. Įsitikinkite, kad turite būdą išeiti iš šio išdėstymo: ABC klavišą, simbolių klavišą arba antrinio išdėstymo įrankį įrankių juostoje.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s sluoksnio %1$d eilutėje yra klavišas, kuris užima daugiau eilučių, nei turi sluoksnis. Klaviatūra jį sustabdo ties paskutine eilute.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s sluoksnio %1$d eilutėje yra %3$d klavišas. Tik %4$d klavišai išlieka pakankamai dideli paspausti.</item>
+        <item quantity="other">%2$s sluoksnio %1$d eilutėje yra %3$d klavišų. Tik %4$d klavišai išlieka pakankamai dideli paspausti.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s sluoksnyje yra %2$d eilutė. Telpa tik %3$d eilutė.</item>
+        <item quantity="other">%1$s sluoksnyje yra %2$d eilutės. Telpa tik %3$d eilutės.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d klavišas %2$s sluoksnyje naudoja veiksmą, kurio ši programos versija neatpažįsta.</item>
+        <item quantity="other">%1$d klavišai %2$s sluoksnyje naudoja veiksmus, kurių ši programos versija neatpažįsta.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s sluoksnio %1$d eilutė yra platesnė nei kitos eilutės. Klaviatūra šios eilutės klavišus piešia siauresnius.</string>
+    <string name="core_lang_numeral_scope_display_only">Tik rodyti</string>
+    <string name="core_lang_numeral_scope_everywhere">Visur</string>
+    <string name="core_lang_numeral_scope_text_fields">Teksto laukai</string>
+    <string name="core_lang_numeral_system_auto">Automatinis</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponentas rodomas daugiau nei vieną kartą. Programa palieka pirmąją kopiją.</item>
+        <item quantity="other">%1$d komponentai rodomi daugiau nei vieną kartą. Programa palieka kiekvieno iš jų pirmąją kopiją.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Šiame skydelyje nėra klavišų. Programėlė naudoja standartinį skydelį.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d klavišas turi veiksmą, kuris neveikia skydelyje. Programa jį ištrina.</item>
+        <item quantity="other">%1$d klavišai turi veiksmus, kurie neveikia skydelyje. Programa juos ištrina.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Šiame skydelyje nėra ABC klavišo. Naudokite įrankių juostą arba mygtuką „Atgal“, kad grįžtumėte prie klavišų.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Programa ištrynė antrąją komponento kopiją.</string>
+    <string name="core_lang_panel_repair_field_added">Programa pridėjo pagrindinį skydelio komponentą naujoje eilutėje.</string>
+    <string name="core_lang_panel_repair_field_dropped">Programa ištrynė komponentą, kuris nepriklauso šiai panelei.</string>
+    <string name="core_lang_panel_repair_key_dropped">Programa ištrynė klavišą, kurio veiksmas skydelyje neveikia.</string>
+    <string name="core_lang_panel_repair_reset">Programėlė pakeitė tuščią skydelį standartiniu.</string>
+    <string name="core_lang_panel_required_field_error">Šiame skydelyje trūksta pagrindinio komponento. Programa jį prideda, kai nubraižo skydelį.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponentas nepriklauso šiai panelei. Programa jį ištrina.</item>
+        <item quantity="other">%1$d komponentai nepriklauso šiai panelei. Programa juos ištrina.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Programa ištrynė tuščią klavišą %1$s sluoksnyje.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Klavišas %1$s sluoksnyje naudojo Brailio rašto tašką %2$d. Programa pakeitė jį į %3$d tašką.</string>
+    <string name="core_lang_repair_delete_key_added">Raidžių sluoksnyje nebuvo trynimo klavišo. Programa jį pridėjo.</string>
+    <string name="core_lang_repair_enter_key_added">Raidžių sluoksnyje nebuvo „Enter“ klavišo. Programa jį pridėjo.</string>
+    <string name="core_lang_repair_field_key_deleted">Programa ištrynė skydelio komponentą iš %1$s sluoksnio. Komponentai veikia tik skydelio išdėstyme.</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s sluoksnio klavišas reiškia %2$s. Programa privertė jį rašyti %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Klavišas %1$s sluoksnyje nurodė %2$s kaip raides, kurias jis atitinka. Tai nėra raidės, todėl programėlė pavertė jį paprastu klavišu.</string>
+    <string name="core_lang_repair_key_span_clamped">Klavišas %1$s sluoksnyje užėmė %2$d eilučių. Programa nustatė, kad jis užimtų %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Klavišas %1$s sluoksnyje buvo %2$s vienetų pločio. Programa nustatė jį %3$s vienetų pločio.</string>
+    <string name="core_lang_repair_key_width_set">Klavišas %1$s sluoksnyje neturėjo pločio. Programa nustatė 1 plotį.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s sluoksnyje nebuvo veikiančių klavišų. Dabar naudojamas įtaisytasis tinklelis.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s sluoksnyje nebuvo klavišo, grąžinančio į raides. Programa pridėjo ABC klavišą.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s sluoksnio eilutėje buvo %2$d klavišas. Programa palieka pirmuosius %3$d.</item>
+        <item quantity="other">%1$s sluoksnio eilutėje buvo %2$d klavišai. Programa palieka pirmuosius %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s sluoksnio eilutė buvo %2$s vienetų pločio. Programėlė sumažino klavišus, kad eilutė tilptų.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s sluoksnyje buvo %2$d eilutė. Programa palieka pirmąsias %3$d.</item>
+        <item quantity="other">%1$s sluoksnyje buvo %2$d eilučių. Programa palieka pirmąsias %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Raidžių sluoksnyje nebuvo tarpo klavišo. Programa jį pridėjo.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Programa ištrynė klavišą %1$s sluoksnyje. Jo veiksmas „%2$s“ nežinomas.</string>
+</resources>

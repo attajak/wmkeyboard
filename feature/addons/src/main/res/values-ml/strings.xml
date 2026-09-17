@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">ഇത് ഉപയോഗിച്ച് ഇപ്പോൾ ഇമോജി വരയ്ക്കണോ?</string>
+    <string name="faddons_apply_icon_pack_question">ഇപ്പോൾ കീബോർഡിൽ അതിന്റെ ഐക്കണുകൾ ഉപയോഗിക്കണോ?</string>
+    <string name="faddons_apply_layout_question">ഇത് ഉപയോഗിച്ച് ടൈപ്പ് ചെയ്യാൻ ഇത് ഓണാക്കണോ?</string>
+    <string name="faddons_apply_plugin_question">പ്ലഗിൻ പാനലിൽ കാണിക്കുന്നതിനായി ഇത് ഓൺ ചെയ്യണോ?</string>
+    <string name="faddons_apply_sound_pack_question">ഈ സൗണ്ട് പാക്ക് ഇപ്പോൾ നിങ്ങളുടെ കീകൾക്കായി ഉപയോഗിക്കണോ?</string>
+    <string name="faddons_apply_sound_question">ഇത് ഇപ്പോൾ നിങ്ങളുടെ കീ സൗണ്ട് ആയി ഉപയോഗിക്കണോ?</string>
+    <string name="faddons_apply_switch_action">അതിലേക്ക് മാറുക</string>
+    <string name="faddons_apply_theme_question">ഇത് ഇപ്പോൾ നിങ്ങളുടെ കീബോർഡ് തീം ആയി ഉപയോഗിക്കണോ?</string>
+    <string name="faddons_download_error_app_too_old">ഈ ആഡ്-ഓണിന് ആപ്പിന്റെ പുതിയ പതിപ്പ് ആവശ്യമാണ്.</string>
+    <string name="faddons_download_error_bad_url">ഡൗൺലോഡ് ലിങ്ക് സാധുവായ ഒരു https URL അല്ല.</string>
+    <string name="faddons_download_error_checksum">ഡൗൺലോഡ് ചെയ്ത ഫയൽ മാനിഫെസ്റ്റിലെ ചെക്ക്സമ്മുമായി പൊരുത്തപ്പെടുന്നില്ല.</string>
+    <string name="faddons_download_error_http_status">സെർവർ HTTP %1$d നൽകി.</string>
+    <string name="faddons_download_error_no_space">ഇത് ഇൻസ്റ്റാൾ ചെയ്യാൻ ആവശ്യമായ ഇടമില്ല.</string>
+    <string name="faddons_download_error_plugin_no_checksum">ഈ പ്ലഗിന്നിന് ചെക്ക്സം ഇല്ല. ആപ്പിന് ഇത് പരിശോധിക്കാൻ കഴിയില്ല.</string>
+    <string name="faddons_download_error_too_large">ഈ ആഡ്-ഓൺ അതിന്റെ തരത്തിനുള്ള %1$d MB എന്ന പരിധിയേക്കാൾ വലുതാണ്.</string>
+    <string name="faddons_error_no_words">ആ ഫയലിൽ നിന്ന് വാക്കുകളൊന്നും വായിക്കാൻ ആപ്പിന് കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_error_not_a_plugin">ആ ഫയൽ ഒരു WM കീബോർഡ് പ്ലഗിൻ അല്ല.</string>
+    <string name="faddons_install_error_dictionary_no_language">ഈ നിഘണ്ടു ഏത് ഭാഷയ്ക്കുള്ളതാണെന്ന് പറയുന്നില്ല.</string>
+    <string name="faddons_install_error_dictionary_not_saved">ആപ്പിന് നിഘണ്ടു സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">ആപ്പിന് ഐക്കൺ പാക്ക് വായിക്കാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_install_error_keywords_no_language">ഈ പാക്ക് ഏത് ഭാഷയ്ക്കുള്ളതാണെന്ന് വ്യക്തമാക്കിയിട്ടില്ല.</string>
+    <string name="faddons_install_error_keywords_not_saved">ആപ്പിന് കീവേഡ് പാക്ക് സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_install_error_keywords_too_large">ആ കീവേഡ് പാക്ക് ഇംപോർട്ട് ചെയ്യാൻ കഴിയാത്തത്ര വലുതാണ്.</string>
+    <string name="faddons_install_error_no_keywords">ആ ഫയലിൽ നിന്ന് ഇമോജി കീവേഡുകളൊന്നും വായിക്കാൻ ആപ്പിന് കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_install_error_no_stickers">ആ പാക്കിൽ നിന്ന് സ്റ്റിക്കറുകളൊന്നും വായിക്കാൻ ആപ്പിന് കഴിഞ്ഞില്ല. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">ആ ഫയൽ ഒരു WM കീബോർഡ് ലേഔട്ട് അല്ല.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">ആ ഫയൽ ഒരു WM കീബോർഡ് സ്നിപ്പറ്റ് പാക്ക് അല്ല.</string>
+    <string name="faddons_install_error_not_a_sound_pack">ഈ ഫയൽ ഒരു സൗണ്ട് പാക്ക് അല്ല.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">ആ ഫയൽ ഒരു സ്റ്റിക്കർ പാക്ക് അല്ല.</string>
+    <string name="faddons_install_error_not_a_theme">ആ ഫയൽ ഒരു WM കീബോർഡ് തീം അല്ല.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">ആ ഫയൽ ഒരു എസ്പാൻസോ പാക്കേജോ മാച്ച് ഫയലോ അല്ല.</string>
+    <string name="faddons_install_error_not_an_icon_pack">ആ ഫയൽ ഒരു ഐക്കൺ പാക്ക് അല്ല.</string>
+    <string name="faddons_install_error_plugin_failed">ആ ആപ്പ് ഇൻസ്റ്റാൾ ചെയ്യാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_install_error_plugins_turned_off">പ്ലഗിനുകൾ ഓഫാണ്. ടൂൾസ് › പ്ലഗിനുകൾ എന്നതിന് കീഴിൽ “പ്ലഗിനുകൾ അനുവദിക്കുക” എന്നത് ഓണാക്കുക. തുടർന്ന് ഇത് വീണ്ടും ഇൻസ്റ്റാൾ ചെയ്യുക.</string>
+    <string name="faddons_install_error_snippet_pack_empty">ആ സ്നിപ്പറ്റ് പാക്ക് ശൂന്യമാണ്.</string>
+    <string name="faddons_install_error_sound_pack_read">ഈ സൗണ്ട് പാക്ക് വായിക്കാൻ ആപ്പിന് കഴിയില്ല.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">ആപ്പിന് സ്റ്റിക്കർ പാക്ക് വായിക്കാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_install_error_too_many_fonts">ഇൻസ്റ്റാൾ ചെയ്യാവുന്ന ഫോണ്ടുകളുടെ പരമാവധി എണ്ണത്തിൽ നിങ്ങൾ എത്തിയിരിക്കുന്നു.</string>
+    <string name="faddons_install_error_too_many_icon_packs">നിങ്ങൾ ഐക്കൺ പാക്കുകളുടെ പരമാവധി എണ്ണത്തിൽ എത്തിയിരിക്കുന്നു.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">നിങ്ങൾക്ക് ഇതിനകം പരമാവധി %1$d പ്ലഗിൻ ഉണ്ട്.</item>
+        <item quantity="other">നിങ്ങൾക്ക് ഇതിനകം പരമാവധി %1$d പ്ലഗിനുകൾ ഉണ്ട്.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">നിങ്ങൾക്ക് ഇൻസ്റ്റാൾ ചെയ്യാവുന്ന സൗണ്ട് പാക്കുകളുടെ പരമാവധി എണ്ണം കഴിഞ്ഞു.</string>
+    <string name="faddons_install_error_too_many_sounds">നിങ്ങൾ ഇൻസ്റ്റാൾ ചെയ്ത കീ സൗണ്ടുകളുടെ പരമാവധി എണ്ണത്തിൽ എത്തിയിരിക്കുന്നു.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">നിങ്ങൾ സ്റ്റിക്കർ പാക്കുകളുടെ പരമാവധി എണ്ണത്തിൽ എത്തിയിരിക്കുന്നു.</string>
+    <string name="faddons_install_error_unknown_language">ഈ ആപ്പിന്റെ പതിപ്പ് “%1$s” എന്ന ഭാഷയെ പിന്തുണയ്ക്കുന്നില്ല.</string>
+    <string name="faddons_install_error_unknown_type">ഈ ആപ്പ് പതിപ്പ് ആ ആഡ്-ഓൺ തരത്തെ പിന്തുണയ്ക്കുന്നില്ല.</string>
+    <string name="faddons_install_error_vocab_no_language">ഈ വൊക്കാബുലറി പാക്ക് ഏത് ഭാഷയ്ക്കുള്ളതാണെന്ന് ഇതിൽ പറയുന്നില്ല.</string>
+    <string name="faddons_install_error_vocab_no_words">ആ പാക്കിൽ നിന്ന് വാക്കുകളൊന്നും വായിക്കാൻ ആപ്പിന് കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">ആ ഫയൽ ഒരു പദാവലി പാക്ക് അല്ല.</string>
+    <string name="faddons_install_error_vocab_too_large">ഈ വൊക്കാബുലറി പാക്ക് ആപ്പ് അനുവദിക്കുന്നതിനേക്കാൾ വലുതാണ്.</string>
+    <string name="faddons_preview_error_no_preview">ഈ ആഡ്-ഓൺ പ്രിവ്യൂ ചെയ്യാൻ ആപ്പിന് കഴിയില്ല.</string>
+    <string name="faddons_preview_error_not_espanso_pack">ആ ഫയൽ ഒരു Espanso പാക്കേജോ മാച്ച് ഫയലോ അല്ല.</string>
+    <string name="faddons_preview_error_not_keyword_pack">ആ ഫയൽ ഒരു ഇമോജി കീവേഡ് പാക്ക് അല്ല.</string>
+    <string name="faddons_preview_error_not_snippet_pack">ആ ഫയൽ ഒരു സ്നിപ്പറ്റ് പാക്ക് അല്ല.</string>
+    <string name="faddons_preview_error_not_vocab_pack">ആ ഫയൽ ഒരു വൊക്കാബുലറി പാക്ക് അല്ല.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">ഈ പാക്കിലെ ശബ്ദങ്ങൾ വായിക്കാൻ ആപ്പിന് കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_preview_error_stickers_unreadable">ആപ്പിന് സ്റ്റിക്കർ ചിത്രങ്ങൾ വായിക്കാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="faddons_snippet_pack_folder_fallback">സ്നിപ്പറ്റ് പാക്ക്</string>
+</resources>

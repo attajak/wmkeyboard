@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Het gedownloade bestand is beschadigd. De checksum komt niet overeen. Probeer de download opnieuw.</string>
+    <string name="core_input_cjk_download_error_http">De server gaf HTTP-status %1$s terug.</string>
+    <string name="core_input_cjk_download_error_network">De download is mislukt. Controleer je verbinding en probeer het opnieuw.</string>
+    <string name="core_input_cjk_download_error_network_detail">De download is mislukt: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Er is onvoldoende opslagruimte op uw apparaat. Maak eerst wat ruimte vrij.</string>
+    <string name="core_input_cjk_download_error_truncated">De verbinding werd verbroken tijdens het downloaden. Druk op Hervatten om door te gaan.</string>
+    <string name="core_input_cjk_download_error_unavailable">Dit pakket is nog niet beschikbaar.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Een tabel met radicale codes voor Hanzi-tekens, 29.000 tekens. Het toetsenbord heeft dit pakket nodig voor de Cangjie- en Quick-indelingen.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡)-woordenboek</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana-lezingen van mozc, 1,08 miljoen items, ongeveer 42 MB. Het toetsenbord heeft dit pakket nodig voor Japanse conversie.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Japans kana-naar-kanji-woordenboek</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Een tabel met Jyutping-lezingen naar Hanzi-tekens, 163.000 vermeldingen. Het toetsenbord heeft dit pakket nodig voor Kantonese conversie.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantonees Jyutping-woordenboek</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Hanzi-tekens en zinnen uit CC-CEDICT, 120.000 vermeldingen. Het toetsenbord heeft dit pakket nodig voor Chinese conversie.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Chinees Pinyin-woordenboek</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Een tabel met streekvolgorde voor Hanzi-tekens. Het toetsenbord heeft dit pakket nodig voor de streekindeling.</string>
+    <string name="core_input_cjk_pack_stroke_title">Chinees streepjes (笔画) woordenboek</string>
+    <string name="core_input_double_pinyin_off_label">Uit (volledige Pinyin)</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Словники</string>
+    <string name="core_addons_type_dictionary_singular_label">Словник</string>
+    <string name="core_addons_type_emoji_font_label">Шрифти емодзі</string>
+    <string name="core_addons_type_emoji_font_singular_label">Шрифт емодзі</string>
+    <string name="core_addons_type_emoji_keywords_label">Ключові слова емодзі</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Пакет ключових слів для емодзі</string>
+    <string name="core_addons_type_espanso_label">Пакети Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Пакет Espanso</string>
+    <string name="core_addons_type_font_label">Шрифти</string>
+    <string name="core_addons_type_font_singular_label">Шрифт</string>
+    <string name="core_addons_type_icon_pack_label">Набори значків</string>
+    <string name="core_addons_type_icon_pack_singular_label">Пакет іконок</string>
+    <string name="core_addons_type_layout_label">Розкладки</string>
+    <string name="core_addons_type_layout_singular_label">Розкладка</string>
+    <string name="core_addons_type_plugin_label">Плагіни</string>
+    <string name="core_addons_type_plugin_singular_label">Плагін</string>
+    <string name="core_addons_type_snippets_label">Фрагменти</string>
+    <string name="core_addons_type_snippets_singular_label">Пакет фрагментів</string>
+    <string name="core_addons_type_sound_label">Звуки</string>
+    <string name="core_addons_type_sound_pack_label">Пакети звуків</string>
+    <string name="core_addons_type_sound_pack_singular_label">Набір звуків</string>
+    <string name="core_addons_type_sound_singular_label">Звук клавіші</string>
+    <string name="core_addons_type_stickers_label">Набори стікерів</string>
+    <string name="core_addons_type_stickers_singular_label">Набір стікерів</string>
+    <string name="core_addons_type_theme_label">Теми</string>
+    <string name="core_addons_type_theme_singular_label">Тема</string>
+    <string name="core_addons_type_unknown_label">Інше</string>
+    <string name="core_addons_type_unknown_singular_label">Додаток</string>
+    <string name="core_addons_type_vocabulary_label">Словниковий запас</string>
+    <string name="core_addons_type_vocabulary_singular_label">Набір словникового запасу</string>
+</resources>

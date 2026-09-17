@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Leli phakethe lidinga ifomethi yephakethe lomsindo %1$s. Buyekeza uhlelo lokusebenza.</string>
+    <string name="core_feedback_pack_reject_no_samples">Leli phakethe alinawo umsindo uhlelo lokusebenza olungawudlala.</string>
+    <string name="core_feedback_pack_reject_too_large">Iphakethe lomsindo kufanele libe ngaphansi kuka-%1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Ifayela alinalutho.</string>
+    <string name="core_feedback_sound_import_html_error">Leli ifayela le-HTML noma le-XML, hhayi umsindo.</string>
+    <string name="core_feedback_sound_import_mp4_error">Uhlelo lokusebenza aludlali amafayela e-MP4 ne-M4A. Sebenzisa ifayela le-MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Ayikho indawo yokugcina etholakalayo kudivayisi yakho.</string>
+    <string name="core_feedback_sound_import_read_error">Uhlelo lokusebenza alukwazi ukufunda umsindo.</string>
+    <string name="core_feedback_sound_import_save_error">Uhlelo lokusebenza alukwazi ukulondoloza umsindo.</string>
+    <string name="core_feedback_sound_import_too_large_error">Umsindo wokhiye kumele ube ngaphansi kuka-%1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Ifayela lifushane kakhulu ukuba lingaba umsindo.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Lokhu akubukeki njengefayela le-MP3, OGG noma le-WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Leli ifayela le-zip, hhayi ifayela lomsindo.</string>
+</resources>

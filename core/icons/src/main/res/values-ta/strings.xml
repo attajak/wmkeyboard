@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">ஈமோஜி தாவல்கள்</string>
+    <string name="core_icons_group_keys_title">விசைகள்</string>
+    <string name="core_icons_group_toolbar_title">கருவிப்பட்டி</string>
+    <string name="core_icons_group_tools_title">கருவிகள்</string>
+    <string name="core_icons_pack_imported_label">இறக்குமதி செய்யப்பட்ட ஐகான்கள்</string>
+    <string name="core_icons_pack_mine_label">எனது சின்னங்கள்</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">ஆப் %1$d கோப்பை புறக்கணித்தது. இந்த பதிப்பில் அதற்கான ஐகான் இல்லை: %2$s</item>
+        <item quantity="other">ஆப் %1$d கோப்புகளை புறக்கணித்தது. இந்த பதிப்பில் அவற்றுக்கான ஐகான் இல்லை: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">ஆப்ஸ் \"%1$s\"-ஐ நீக்கிவிட்டது. ஆப்ஸால் அதைச் சேமிக்க முடியவில்லை.</string>
+    <string name="core_icons_repair_svg_unreadable">ஆப் \"%1$s\"-ஐ நீக்கியது. ஆப்பால் அதன் SVG கோப்பை வாசிக்க முடியவில்லை.</string>
+    <string name="core_icons_slot_backspace_label">பேக்ஸ்பேஸ்</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">செயல்பாடுகள்</string>
+    <string name="core_icons_slot_emoji_animals_label">விலங்குகள்</string>
+    <string name="core_icons_slot_emoji_flags_label">கொடி குறியீடுகள்</string>
+    <string name="core_icons_slot_emoji_food_label">உணவு</string>
+    <string name="core_icons_slot_emoji_key_label">எமோஜி கீ</string>
+    <string name="core_icons_slot_emoji_most_used_label">அதிகம் பயன்படுத்தப்பட்டவை</string>
+    <string name="core_icons_slot_emoji_nature_label">இயற்கை</string>
+    <string name="core_icons_slot_emoji_objects_label">பொருட்கள்</string>
+    <string name="core_icons_slot_emoji_people_label">மக்கள்</string>
+    <string name="core_icons_slot_emoji_recent_label">சமீபத்தியது</string>
+    <string name="core_icons_slot_emoji_shortcut_label">எமோஜி குறுக்குவழி</string>
+    <string name="core_icons_slot_emoji_smileys_label">ஸ்மைலிகள்</string>
+    <string name="core_icons_slot_emoji_symbols_label">குறியீடுகள்</string>
+    <string name="core_icons_slot_emoji_travel_label">பயணம்</string>
+    <string name="core_icons_slot_enter_done_label">Enter: முடிந்தது</string>
+    <string name="core_icons_slot_enter_go_label">Enter: செல்</string>
+    <string name="core_icons_slot_enter_label">உள்ளிடு</string>
+    <string name="core_icons_slot_enter_next_label">Enter: அடுத்தது</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: முந்தையது</string>
+    <string name="core_icons_slot_enter_search_label">Enter: தேடல்</string>
+    <string name="core_icons_slot_enter_send_label">Enter: அனுப்பு</string>
+    <string name="core_icons_slot_forward_delete_label">முன்னோக்கி நீக்கு</string>
+    <string name="core_icons_slot_globe_label">மொழியை மாற்று</string>
+    <string name="core_icons_slot_incognito_label">இன்காக்னிட்டோ பேட்ஜ்</string>
+    <string name="core_icons_slot_input_method_picker_label">விசைப்பலகையை மாற்றவும்</string>
+    <string name="core_icons_slot_panel_back_label">விசைகளுக்குத் திரும்பு</string>
+    <string name="core_icons_slot_power_saving_label">மின் சேமிப்பு பேட்ஜ்</string>
+    <string name="core_icons_slot_search_close_label">தேடலை மூடு</string>
+    <string name="core_icons_slot_shift_label">ஷிப்ட்</string>
+    <string name="core_icons_slot_shift_on_label">ஷிப்ட் (ஆன்)</string>
+    <string name="core_icons_slot_suggestions_expand_label">கருவிகளைக் காட்டு</string>
+    <string name="core_icons_slot_toolbox_label">கருவிப்பெட்டி</string>
+</resources>

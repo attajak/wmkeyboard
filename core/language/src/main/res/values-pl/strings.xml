@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Aplikacja zmieniła %1$d klawisz na najbliższy dostępny.</item>
+        <item quantity="other">Aplikacja zmieniła %1$d klawiszy na najbliższe dostępne.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Aplikacja usunęła %1$d klawisz. Ta klawiatura nie ma klawisza, który wykonuje tę samą funkcję (kod %2$s).</item>
+        <item quantity="other">Aplikacja usunęła %1$d klawiszy. Ta klawiatura nie ma klawiszy, które wykonują tę samą funkcję (kody %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Aplikacja zachowała rozmiar etykiety %1$d klawisza, ale nie jego styl tekstu. Ta klawiatura rysuje etykiety w jednym stylu.</item>
+        <item quantity="other">Aplikacja zachowała rozmiar etykiety %1$d klawiszy, ale nie ich styl tekstu. Ta klawiatura rysuje etykiety w jednym stylu.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Aplikacja zmieniła %1$d literę na formę, którą zapisuje ta klawiatura.</item>
+        <item quantity="other">Aplikacja zmieniła %1$d liter na formę, którą zapisuje ta klawiatura.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d klawisz nie ma liter dostępnych po przytrzymaniu. Plik przechowuje je w drugim pliku, którego nie otworzyłeś.</item>
+        <item quantity="other">%1$d klawiszy nie ma liter dostępnych po przytrzymaniu. Plik przechowuje je w drugim pliku, którego nie otworzyłeś.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Inna klawiatura mierzy szerokość klawiszy inaczej. Aplikacja zmieniła szerokości, aby dopasować je do tej siatki.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d klawisz punktu brajlowskiego w warstwie %2$s ma numer punktu spoza zakresu 1-6.</item>
+        <item quantity="other">%1$d klawiszy punktów brajlowskich w warstwie %2$s ma numery punktów spoza zakresu 1-6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d klawisz w warstwie %2$s nie ma etykiety ani przypisanej funkcji. Nie wpisuje niczego, a aplikacja usunie go po włączeniu tego układu.</item>
+        <item quantity="other">%1$d klawiszy w warstwie %2$s nie ma etykiety ani przypisanej funkcji. Nie wpisują niczego, a aplikacja usunie je po włączeniu tego układu.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Wiersz %1$d warstwy %2$s jest pusty.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d klawisz w warstwie %2$s jest komponentem panelu. Komponenty działają tylko w układzie panelu.</item>
+        <item quantity="other">%1$d klawiszy w warstwie %2$s to komponenty panelu. Komponenty działają tylko w układzie panelu.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Wiersz %1$d warstwy %2$s zawiera klawisz bez określonej szerokości.</string>
+    <string name="core_lang_layout_key_span_error">Wiersz %1$d warstwy %2$s zawiera klawisz, który zajmuje mniej niż 1 lub więcej niż %3$d wierszy.</string>
+    <string name="core_lang_layout_letters_empty_error">Warstwa liter nie ma żadnych klawiszy.</string>
+    <string name="core_lang_layout_no_delete_error">Układ nie posiada klawisza usuwania. Nie możesz poprawić błędu.</string>
+    <string name="core_lang_layout_no_enter_error">Układ nie posiada klawisza Enter.</string>
+    <string name="core_lang_layout_no_shift_warning">Układ nie ma klawisza Shift. Aby wpisać wielką literę, naciśnij i przytrzymaj klawisz.</string>
+    <string name="core_lang_layout_no_space_error">Układ nie posiada klawisza spacji.</string>
+    <string name="core_lang_layout_no_way_back_error">Warstwa %1$s nie ma klawisza powrotu do liter. Nie możesz opuścić tej warstwy.</string>
+    <string name="core_lang_layout_persistent_warning">Warstwa %1$s pozostaje otwarta po zamknięciu klawiatury. Upewnij się, że masz sposób na wyjście z tego układu.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Ten układ nie posiada klawisza, który pozwala go opuścić. Upewnij się, że masz sposób na wyjście z tego układu: klawisz ABC, klawisz symboli lub narzędzie układu pomocniczego na pasku narzędzi.</string>
+    <string name="core_lang_layout_span_past_end_warning">Wiersz %1$d warstwy %2$s ma klawisz, który zajmuje więcej wierszy niż posiada warstwa. Klawiatura zatrzymuje go w ostatnim wierszu.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Wiersz %1$d warstwy %2$s ma %3$d klawisz. Tylko %4$d klawiszy pozostaje wystarczająco dużych, aby je nacisnąć.</item>
+        <item quantity="other">Wiersz %1$d warstwy %2$s ma %3$d klawiszy. Tylko %4$d klawiszy pozostaje wystarczająco dużych, aby je nacisnąć.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Warstwa %1$s ma %2$d wiersz. Mieści się tylko %3$d wiersz.</item>
+        <item quantity="other">Warstwa %1$s ma %2$d wierszy. Mieści się tylko %3$d wierszy.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d klawisz w warstwie %2$s używa akcji, której ta wersja aplikacji nie rozpoznaje.</item>
+        <item quantity="other">%1$d klawiszy w warstwie %2$s używa akcji, których ta wersja aplikacji nie rozpoznaje.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Wiersz %1$d warstwy %2$s jest szerszy niż pozostałe wiersze. Klawiatura rysuje klawisze tego wiersza węższe.</string>
+    <string name="core_lang_numeral_scope_display_only">Tylko wyświetlanie</string>
+    <string name="core_lang_numeral_scope_everywhere">Wszędzie</string>
+    <string name="core_lang_numeral_scope_text_fields">Pola tekstowe</string>
+    <string name="core_lang_numeral_system_auto">Automatyczny</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d składnik występuje więcej niż raz. Aplikacja zachowuje pierwszą kopię.</item>
+        <item quantity="other">%1$d składniki występują więcej niż raz. Aplikacja zachowuje pierwszą kopię każdego z nich.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Ten panel nie zawiera klawiszy. Aplikacja używa zamiast niego panelu standardowego.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d klawisz ma akcję, która nie działa na panelu. Aplikacja go usuwa.</item>
+        <item quantity="other">%1$d klawiszy ma akcje, które nie działają na panelu. Aplikacja je usuwa.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Ten panel nie ma klawisza ABC. Użyj paska narzędzi lub przycisku Wstecz, aby wrócić do klawiszy.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Aplikacja usunęła drugą kopię składnika.</string>
+    <string name="core_lang_panel_repair_field_added">Aplikacja dodała główny komponent panelu w nowym wierszu.</string>
+    <string name="core_lang_panel_repair_field_dropped">Aplikacja usunęła składnik, który nie należy do tego panelu.</string>
+    <string name="core_lang_panel_repair_key_dropped">Aplikacja usunęła klawisz, którego akcja nie działa na panelu.</string>
+    <string name="core_lang_panel_repair_reset">Aplikacja zastąpiła pusty panel standardowym.</string>
+    <string name="core_lang_panel_required_field_error">W tym panelu brakuje głównego komponentu. Aplikacja doda go podczas rysowania panelu.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d składnik nie należy do tego panelu. Aplikacja go usunie.</item>
+        <item quantity="other">%1$d składników nie należy do tego panelu. Aplikacja je usunie.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Aplikacja usunęła pusty klawisz w warstwie %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Klawisz w warstwie %1$s używał punktu brajlowskiego %2$d. Aplikacja zmieniła go na punkt %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Warstwa liter nie miała klawisza usuwania. Aplikacja dodała go.</string>
+    <string name="core_lang_repair_enter_key_added">Warstwa liter nie miała klawisza Enter. Aplikacja dodała go automatycznie.</string>
+    <string name="core_lang_repair_field_key_deleted">Aplikacja usunęła składnik panelu z warstwy %1$s. Składniki działają tylko w układzie panelu.</string>
+    <string name="core_lang_repair_key_letters_anchored">Klawisz w warstwie %1$s odpowiada za %2$s. Aplikacja sprawiła, że wpisuje %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Klawisz w warstwie %1$s zawierał %2$s jako litery, które reprezentuje. Nie są to litery, więc aplikacja zmieniła go na zwykły klawisz.</string>
+    <string name="core_lang_repair_key_span_clamped">Klawisz w warstwie %1$s zajmował %2$d wierszy. Aplikacja ustawiła go na %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Klawisz w warstwie %1$s miał szerokość %2$s jednostek. Aplikacja ustawiła jego szerokość na %3$s jednostek.</string>
+    <string name="core_lang_repair_key_width_set">Klawisz w warstwie %1$s nie miał szerokości. Aplikacja ustawiła szerokość na 1.</string>
+    <string name="core_lang_repair_layer_replaced">Warstwa %1$s nie miała działających klawiszy. Teraz używa wbudowanej siatki.</string>
+    <string name="core_lang_repair_letters_key_added">Warstwa %1$s nie miała klawisza powrotu do liter. Aplikacja dodała klawisz ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Wiersz w warstwie %1$s zawierał %2$d klawisz. Aplikacja zachowuje pierwsze %3$d.</item>
+        <item quantity="other">Wiersz w warstwie %1$s zawierał %2$d klawiszy. Aplikacja zachowuje pierwsze %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Wiersz w warstwie %1$s miał szerokość %2$s jednostek. Aplikacja zmniejszyła klawisze, aby wiersz się zmieścił.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Warstwa %1$s miała %2$d wiersz. Aplikacja zachowuje pierwsze %3$d.</item>
+        <item quantity="other">Warstwa %1$s miała %2$d wierszy. Aplikacja zachowuje pierwsze %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Warstwa liter nie miała klawisza spacji. Aplikacja dodała jeden.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Aplikacja usunęła klawisz w warstwie %1$s. Jego akcja „%2$s” jest nieznana.</string>
+</resources>

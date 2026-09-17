@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">शब्दकोश</string>
+    <string name="core_addons_type_dictionary_singular_label">शब्दकोश</string>
+    <string name="core_addons_type_emoji_font_label">इमोजी फॉन्ट्स</string>
+    <string name="core_addons_type_emoji_font_singular_label">इमोजी फॉन्ट</string>
+    <string name="core_addons_type_emoji_keywords_label">इमोजी कीवर्ड्स</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">इमोजी कीवर्ड पॅक</string>
+    <string name="core_addons_type_espanso_label">Espanso पॅक्स</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso पॅक</string>
+    <string name="core_addons_type_font_label">फॉन्ट्स</string>
+    <string name="core_addons_type_font_singular_label">फॉन्ट</string>
+    <string name="core_addons_type_icon_pack_label">आयकॉन पॅक्स</string>
+    <string name="core_addons_type_icon_pack_singular_label">आयकॉन पॅक</string>
+    <string name="core_addons_type_layout_label">लेआउट्स</string>
+    <string name="core_addons_type_layout_singular_label">लेआउट</string>
+    <string name="core_addons_type_plugin_label">प्लगइन्स</string>
+    <string name="core_addons_type_plugin_singular_label">प्लगइन</string>
+    <string name="core_addons_type_snippets_label">स्निपेट्स</string>
+    <string name="core_addons_type_snippets_singular_label">स्निपेट पॅक</string>
+    <string name="core_addons_type_sound_label">ध्वनी</string>
+    <string name="core_addons_type_sound_pack_label">साउंड पॅक</string>
+    <string name="core_addons_type_sound_pack_singular_label">साउंड पॅक</string>
+    <string name="core_addons_type_sound_singular_label">कीचा आवाज</string>
+    <string name="core_addons_type_stickers_label">स्टिकर पॅक</string>
+    <string name="core_addons_type_stickers_singular_label">स्टिकर पॅक</string>
+    <string name="core_addons_type_theme_label">थीम्स</string>
+    <string name="core_addons_type_theme_singular_label">थीम</string>
+    <string name="core_addons_type_unknown_label">इतर</string>
+    <string name="core_addons_type_unknown_singular_label">ॲड-ऑन</string>
+    <string name="core_addons_type_vocabulary_label">शब्दसंग्रह</string>
+    <string name="core_addons_type_vocabulary_singular_label">शब्दसंग्रह पॅक</string>
+</resources>

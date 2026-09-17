@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Tento doplnok nemá funkciu render().</string>
+    <string name="core_plugins_error_not_installed">Tento doplnok nie je nainštalovaný.</string>
+    <string name="core_plugins_error_script_failed">Skript zlyhal.</string>
+    <string name="core_plugins_error_script_missing">Skript pre tento doplnok chýba.</string>
+    <string name="core_plugins_error_turned_off">Tento doplnok je vypnutý.</string>
+    <string name="core_plugins_permission_storage_label">Uložiť dáta vo vašom zariadení</string>
+    <string name="core_plugins_reject_bad_encoding">„%1$s“ obsahuje skript, ktorý nie je platným textom UTF-8.</string>
+    <string name="core_plugins_reject_bad_id">Tento doplnok má neplatné ID. ID musí mať dĺžku 3 až 64 znakov. ID môže obsahovať malé písmená, číslice, bodky, pomlčky a podčiarkovníky.</string>
+    <string name="core_plugins_reject_compiled_lua">„%1$s“ obsahuje skompilovaný kód Lua. Doplnok musí používať čistý zdrojový kód, aby ste si ho mohli prečítať pred spustením.</string>
+    <string name="core_plugins_reject_empty_script">„%1$s“ má prázdny skript.</string>
+    <string name="core_plugins_reject_missing_script">„%1$s“ nemá svoj súbor skriptu (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Tento doplnok vyžaduje novšiu verziu WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Tento doplnok nemá názov.</string>
+    <string name="core_plugins_reject_no_version">„%1$s“ neuvádza, o akú verziu ide.</string>
+    <string name="core_plugins_reject_script_too_large">„%1$s“ má skript väčší ako %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Táto verzia klávesnice WM Keyboard nepozná povolenie „%1$s“. Aplikácia vám nevie povedať, čo má „%2$s“ povolené robiť.</string>
+    <string name="core_plugins_stopped_cancelled">Aplikácia zastavila tento doplnok.</string>
+    <string name="core_plugins_stopped_deadline">Tento doplnok trval príliš dlho. Aplikácia ho zastavila.</string>
+    <string name="core_plugins_stopped_instructions">Tento doplnok vykonal naraz príliš veľa práce. Aplikácia ho zastavila.</string>
+    <string name="core_plugins_stopped_not_responding">Tento doplnok prestal reagovať. Aplikácia ho ukončila.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Tento doplnok prestal znova reagovať. Aplikácia ho vypla.</string>
+    <string name="core_plugins_stopped_recursion">Tento doplnok sa zavolal príliš veľakrát. Aplikácia ho zastavila.</string>
+    <string name="core_plugins_stopped_unexpected">Tento doplnok neočakávane prestal fungovať.</string>
+    <string name="core_plugins_ui_insert_action">Vložiť</string>
+    <string name="core_plugins_ui_repair_no_type">Widget neuviedol, akého je typu.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Zoznam miniaplikácií obsahoval niečo, čo nie je miniaplikácia.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Pás kariet nemal žiadne stránky.</string>
+    <string name="core_plugins_ui_repair_text_budget">Tento doplnok požiadal o vykreslenie príliš veľkého množstva textu. Aplikácia časť vynechala.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Niektorý text bol príliš dlhý na zobrazenie. Aplikácia ho skrátila.</string>
+    <string name="core_plugins_ui_repair_too_deep">Niektoré widgety boli vnorené príliš hlboko na to, aby sa dali vykresliť.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Zobrazené sú iba prvé %1$d karty.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Tento doplnok požiadal o viac ako %1$d miniaplikácií. Aplikácia zvyšok zahodila.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Toto zostavenie nepozná typ miniaplikácie „%1$s“.</string>
+    <string name="core_plugins_ui_tab_default_title">Karta %1$d</string>
+</resources>

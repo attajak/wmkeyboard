@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">O aplicativo alterou %1$d tecla para a tecla mais próxima que possui.</item>
+        <item quantity="other">O aplicativo alterou %1$d teclas para as teclas mais próximas que possui.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">O aplicativo removeu %1$d tecla. Este teclado não possui nenhuma tecla que faça a mesma coisa (código %2$s).</item>
+        <item quantity="other">O aplicativo removeu %1$d teclas. Este teclado não possui nenhuma tecla que faça a mesma coisa (códigos %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">O aplicativo manteve o tamanho do rótulo de %1$d tecla, mas não seu estilo de texto. Este teclado desenha rótulos em um estilo.</item>
+        <item quantity="other">O aplicativo manteve o tamanho do rótulo de %1$d teclas, mas não seu estilo de texto. Este teclado desenha rótulos em um estilo.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">O aplicativo alterou %1$d letra para a forma que este teclado escreve.</item>
+        <item quantity="other">O aplicativo alterou %1$d letras para a forma que este teclado escreve.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tecla não possui letras de pressão longa. O arquivo as mantém em um segundo arquivo que você não abriu.</item>
+        <item quantity="other">%1$d teclas não possuem letras de pressão longa. O arquivo as mantém em um segundo arquivo que você não abriu.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">O outro teclado mede as larguras das teclas de forma diferente. O aplicativo alterou as larguras para se ajustar a esta grade.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d tecla de ponto braille na camada %2$s tem um número de ponto fora do intervalo de 1 a 6.</item>
+        <item quantity="other">%1$d teclas de ponto braille na camada %2$s têm um número de ponto fora do intervalo de 1 a 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d tecla na camada %2$s não tem rótulo nem saída. Ela não digita nada, e o aplicativo a exclui quando você ativa este layout.</item>
+        <item quantity="other">%1$d teclas na camada %2$s não têm rótulo nem saída. Elas não digitam nada, e o aplicativo as exclui quando você ativa este layout.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">A linha %1$d da camada %2$s está vazia.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d tecla na camada %2$s é um componente de painel. Componentes só funcionam em um layout de painel.</item>
+        <item quantity="other">%1$d teclas na camada %2$s são componentes de painel. Componentes só funcionam em um layout de painel.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">A linha %1$d da camada %2$s tem uma tecla sem largura.</string>
+    <string name="core_lang_layout_key_span_error">A linha %1$d da camada %2$s tem uma tecla que cobre menos de 1 ou mais de %3$d linhas.</string>
+    <string name="core_lang_layout_letters_empty_error">A camada de letras não tem teclas.</string>
+    <string name="core_lang_layout_no_delete_error">O layout não possui tecla de exclusão. Você não pode corrigir um erro.</string>
+    <string name="core_lang_layout_no_enter_error">O layout não possui uma tecla enter.</string>
+    <string name="core_lang_layout_no_shift_warning">O layout não possui tecla shift. Para digitar uma letra maiúscula, pressione e segure uma tecla.</string>
+    <string name="core_lang_layout_no_space_error">O layout não possui uma tecla de espaço.</string>
+    <string name="core_lang_layout_no_way_back_error">A camada %1$s não possui uma tecla que retorne às letras. Você não pode sair desta camada.</string>
+    <string name="core_lang_layout_persistent_warning">A camada %1$s permanece aberta quando o teclado fecha. Certifique-se de ter uma maneira de sair deste layout.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Este layout não tem nenhuma tecla que permita sair dele. Certifique-se de ter uma maneira de sair deste layout: uma tecla ABC, uma tecla de símbolos ou a ferramenta de layout personalizado na barra de ferramentas.</string>
+    <string name="core_lang_layout_span_past_end_warning">A linha %1$d da camada %2$s tem uma tecla que cobre mais linhas do que a camada possui. O teclado a interrompe na última linha.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">A linha %1$d da camada %2$s tem %3$d tecla. Apenas %4$d teclas permanecem grandes o suficiente para pressionar.</item>
+        <item quantity="other">A linha %1$d da camada %2$s tem %3$d teclas. Apenas %4$d teclas permanecem grandes o suficiente para pressionar.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">A camada %1$s tem %2$d linha. Apenas %3$d linhas cabem.</item>
+        <item quantity="other">A camada %1$s tem %2$d linhas. Apenas %3$d linhas cabem.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d tecla na camada %2$s usa uma ação que esta versão do aplicativo não reconhece.</item>
+        <item quantity="other">%1$d teclas na camada %2$s usam uma ação que esta versão do aplicativo não reconhece.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">A linha %1$d da camada %2$s é mais larga que as outras linhas. O teclado desenha as teclas desta linha mais estreitas.</string>
+    <string name="core_lang_numeral_scope_display_only">Apenas exibição</string>
+    <string name="core_lang_numeral_scope_everywhere">Em toda parte</string>
+    <string name="core_lang_numeral_scope_text_fields">Campos de texto</string>
+    <string name="core_lang_numeral_system_auto">Automático</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d componente aparece mais de uma vez. O aplicativo mantém a primeira cópia.</item>
+        <item quantity="other">%1$d componentes aparecem mais de uma vez. O aplicativo mantém a primeira cópia de cada um.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Este painel não tem teclas. O aplicativo usa o painel padrão.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tecla tem uma ação que não funciona em um painel. O aplicativo a exclui.</item>
+        <item quantity="other">%1$d teclas têm ações que não funcionam em um painel. O aplicativo as exclui.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Este painel não tem tecla ABC. Use a barra de ferramentas ou o botão Voltar para retornar às teclas.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">O aplicativo excluiu uma segunda cópia de um componente.</string>
+    <string name="core_lang_panel_repair_field_added">O aplicativo adicionou o componente principal do painel em uma nova linha.</string>
+    <string name="core_lang_panel_repair_field_dropped">O aplicativo excluiu um componente que não pertence a este painel.</string>
+    <string name="core_lang_panel_repair_key_dropped">O aplicativo excluiu uma tecla cuja ação não funciona em um painel.</string>
+    <string name="core_lang_panel_repair_reset">O aplicativo substituiu o painel vazio pelo padrão.</string>
+    <string name="core_lang_panel_required_field_error">Este painel está sem seu componente principal. O aplicativo adiciona um quando desenha o painel.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d componente não pertence a este painel. O aplicativo o exclui.</item>
+        <item quantity="other">%1$d componentes não pertencem a este painel. O aplicativo os exclui.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">O aplicativo excluiu uma tecla vazia na camada %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Uma tecla na camada %1$s usou o ponto braille %2$d. O aplicativo o tornou o ponto %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">A camada de letras não tinha tecla de exclusão. O aplicativo adicionou uma.</string>
+    <string name="core_lang_repair_enter_key_added">A camada de letras não tinha uma tecla Enter. O aplicativo adicionou uma.</string>
+    <string name="core_lang_repair_field_key_deleted">O aplicativo excluiu um componente de painel da camada %1$s. Componentes só funcionam em um layout de painel.</string>
+    <string name="core_lang_repair_key_letters_anchored">Uma tecla na camada %1$s representa %2$s. O aplicativo fez com que ela digitasse %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Uma tecla na camada %1$s listou %2$s como as letras que ela representa. Essas não são letras, então o aplicativo a tornou uma tecla comum.</string>
+    <string name="core_lang_repair_key_span_clamped">Uma tecla na camada %1$s cobria %2$d linhas. O aplicativo a fez cobrir %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Uma tecla na camada %1$s tinha %2$s unidades de largura. O aplicativo definiu-a com %3$s unidades de largura.</string>
+    <string name="core_lang_repair_key_width_set">Uma tecla na camada %1$s não tinha largura. A aplicação definiu a largura para 1.</string>
+    <string name="core_lang_repair_layer_replaced">A camada %1$s não tinha teclas funcionais. Agora ela usa a grade integrada.</string>
+    <string name="core_lang_repair_letters_key_added">A camada %1$s não tinha nenhuma tecla que voltasse para as letras. O aplicativo adicionou uma tecla ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Uma linha na camada %1$s tinha %2$d tecla. O aplicativo mantém a primeira %3$d.</item>
+        <item quantity="other">Uma linha na camada %1$s tinha %2$d teclas. O aplicativo mantém as primeiras %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Uma linha na camada %1$s tinha %2$s unidades de largura. A aplicação tornou as teclas mais pequenas para que a linha caiba.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">A camada %1$s tinha %2$d linha. O aplicativo mantém as primeiras %3$d.</item>
+        <item quantity="other">A camada %1$s tinha %2$d linhas. O aplicativo mantém as primeiras %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">A camada de letras não tinha uma tecla de espaço. O aplicativo adicionou uma.</string>
+    <string name="core_lang_repair_unknown_key_deleted">O aplicativo excluiu uma tecla na camada %1$s. Sua ação \"%2$s\" é desconhecida.</string>
+</resources>

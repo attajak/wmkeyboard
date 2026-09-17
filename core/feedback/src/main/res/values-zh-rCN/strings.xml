@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">此包需要声音包格式 %1$s。请更新应用。</string>
+    <string name="core_feedback_pack_reject_no_samples">此包中不包含应用可播放的声音。</string>
+    <string name="core_feedback_pack_reject_too_large">音效包必须小于 %1$s MB。</string>
+    <string name="core_feedback_sound_import_empty_error">文件为空。</string>
+    <string name="core_feedback_sound_import_html_error">这是一个 HTML 或 XML 文件，不是声音文件。</string>
+    <string name="core_feedback_sound_import_mp4_error">该应用程序无法播放 MP4 和 M4A 文件。请使用 MP3 文件。</string>
+    <string name="core_feedback_sound_import_no_storage_error">您的设备上没有可用存储空间。</string>
+    <string name="core_feedback_sound_import_read_error">应用无法读取该声音文件。</string>
+    <string name="core_feedback_sound_import_save_error">应用程序无法保存该声音。</string>
+    <string name="core_feedback_sound_import_too_large_error">按键音必须小于 %1$s MB。</string>
+    <string name="core_feedback_sound_import_too_short_error">该文件太短，无法作为声音文件。</string>
+    <string name="core_feedback_sound_import_unknown_format_error">这看起来不像 MP3、OGG 或 WAV 文件。</string>
+    <string name="core_feedback_sound_import_zip_error">这是一个 zip 压缩包，而非声音文件。</string>
+</resources>

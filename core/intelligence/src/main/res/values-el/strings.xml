@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Αυτό το μοντέλο είναι περιορισμένο. Προσθέστε πρώτα το διακριτικό (token) του Hugging Face.</string>
+    <string name="core_intel_llm_download_error_http">Το Hugging Face επέστρεψε κατάσταση HTTP %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Αποδεχτείτε την άδεια χρήσης του μοντέλου στη σελίδα του στο Hugging Face. Στη συνέχεια, δοκιμάστε ξανά.</string>
+    <string name="core_intel_llm_download_error_no_space">Δεν υπάρχει αρκετός αποθηκευτικός χώρος στη συσκευή σας. Ελευθερώστε περίπου %1$s GB πρώτα.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Το Hugging Face δεν αποδέχτηκε το διακριτικό. Ελέγξτε το διακριτικό και δοκιμάστε ξανά.</string>
+    <string name="core_intel_llm_download_error_truncated">Η σύνδεση διακόπηκε κατά τη λήψη. Πατήστε Συνέχεια για να συνεχίσετε.</string>
+    <string name="core_intel_llm_engine_error_gpu">Το μοντέλο απέτυχε στην GPU. Η μνήμη της GPU είναι πολύ μικρότερη από τη μνήμη συστήματος. Η επόμενη προσπάθεια θα χρησιμοποιήσει την CPU. Για να χρησιμοποιείτε πάντα την CPU, ορίστε το Compute σε CPU στις ρυθμίσεις. Μπορείτε επίσης να επιλέξετε ένα μικρότερο μοντέλο.</string>
+    <string name="core_intel_llm_engine_error_load">Το μοντέλο δεν φορτώθηκε. Το αρχείο είναι πιθανώς κατεστραμμένο. Διαγράψτε το μοντέλο στις ρυθμίσεις και κατεβάστε το ξανά.</string>
+    <string name="core_intel_llm_engine_error_memory">Το μοντέλο εξαντλήθηκε από μνήμη ή απέτυχε. Επιλέξτε ένα μικρότερο μοντέλο.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Ένα μικρό Gemma από την προηγούμενη γενιά. Έχει καλή ποιότητα και πλαίσιο 4K tokens.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Το μικρότερο Gemma από την Google. Είναι γρήγορο σε όλες τις συσκευές.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Η νεότερη γενιά Gemma. Προσφέρει κορυφαία ποιότητα στη συσκευή σας.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Το μεγαλύτερο μοντέλο. Γράφει καλύτερα, αλλά χρειάζεται μια ισχυρή συσκευή.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Ένα μοντέλο γενικής χρήσης που χωράει ακόμα και σε μια βασική συσκευή.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Σαφώς πιο έξυπνο από τα μοντέλα κάτω του 1B. Απαιτεί μια συσκευή μεσαίας κατηγορίας.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Ένα πρόσφατο μικρό μοντέλο. Η ποιότητα είναι υψηλή για το μέγεθός του.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Πολύ μικρό και γρήγορο. Είναι καλό για γρήγορες αναδιατυπώσεις, αλλά η συλλογιστική του είναι περιορισμένη.</string>
+    <string name="core_intel_llm_module_downloading">Το τμήμα AI του πληκτρολογίου πραγματοποιεί λήψη από το Google Play. Δοκιμάστε ξανά σε λίγο.</string>
+    <string name="core_intel_llm_module_restart">Το τμήμα AI μόλις ολοκλήρωσε την εγκατάσταση. Κλείστε και ανοίξτε ξανά το πληκτρολόγιο για να το χρησιμοποιήσετε.</string>
+    <string name="core_intel_llm_tier_experimental_label">Πειραματικό</string>
+    <string name="core_intel_llm_tier_recommended_label">Προτεινόμενο</string>
+    <string name="core_intel_llm_tier_untested_label">Ανεξέλεγκτο</string>
+</resources>

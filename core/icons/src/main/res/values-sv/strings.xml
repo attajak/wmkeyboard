@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Emoji-flikar</string>
+    <string name="core_icons_group_keys_title">Tangenter</string>
+    <string name="core_icons_group_toolbar_title">Verktygsfält</string>
+    <string name="core_icons_group_tools_title">Verktyg</string>
+    <string name="core_icons_pack_imported_label">Importerade ikoner</string>
+    <string name="core_icons_pack_mine_label">Mina ikoner</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Appen ignorerade %1$d fil. Denna version har ingen ikon för den: %2$s</item>
+        <item quantity="other">Appen ignorerade %1$d filer. Denna version har ingen ikon för dem: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Appen tog bort \"%1$s\". Appen kan inte spara den.</string>
+    <string name="core_icons_repair_svg_unreadable">Appen tappade \"%1$s\". Appen kan inte läsa dess SVG-fil.</string>
+    <string name="core_icons_slot_backspace_label">Backsteg</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Aktiviteter</string>
+    <string name="core_icons_slot_emoji_animals_label">Djur</string>
+    <string name="core_icons_slot_emoji_flags_label">Flaggor</string>
+    <string name="core_icons_slot_emoji_food_label">Mat</string>
+    <string name="core_icons_slot_emoji_key_label">Emojitangent</string>
+    <string name="core_icons_slot_emoji_most_used_label">Mest använda</string>
+    <string name="core_icons_slot_emoji_nature_label">Natur</string>
+    <string name="core_icons_slot_emoji_objects_label">Objekt</string>
+    <string name="core_icons_slot_emoji_people_label">Personer</string>
+    <string name="core_icons_slot_emoji_recent_label">Senaste</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Emoji-genväg</string>
+    <string name="core_icons_slot_emoji_smileys_label">Smileys</string>
+    <string name="core_icons_slot_emoji_symbols_label">Symboler</string>
+    <string name="core_icons_slot_emoji_travel_label">Resor</string>
+    <string name="core_icons_slot_enter_done_label">Retur: klar</string>
+    <string name="core_icons_slot_enter_go_label">Enter: kör</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Retur: nästa</string>
+    <string name="core_icons_slot_enter_previous_label">Retur: föregående</string>
+    <string name="core_icons_slot_enter_search_label">Retur: sök</string>
+    <string name="core_icons_slot_enter_send_label">Enter: skicka</string>
+    <string name="core_icons_slot_forward_delete_label">Framåtradering</string>
+    <string name="core_icons_slot_globe_label">Byt språk</string>
+    <string name="core_icons_slot_incognito_label">Inkognitomärke</string>
+    <string name="core_icons_slot_input_method_picker_label">Byt tangentbord</string>
+    <string name="core_icons_slot_panel_back_label">Tillbaka till tangenter</string>
+    <string name="core_icons_slot_power_saving_label">Energisparmärke</string>
+    <string name="core_icons_slot_search_close_label">Stäng sökning</string>
+    <string name="core_icons_slot_shift_label">Skift</string>
+    <string name="core_icons_slot_shift_on_label">Skift (på)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Visa verktyg</string>
+    <string name="core_icons_slot_toolbox_label">Verktygslåda</string>
+</resources>

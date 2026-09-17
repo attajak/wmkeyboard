@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Lietotne nomainīja %1$d taustiņu uz tuvāko pieejamo taustiņu.</item>
+        <item quantity="other">Lietotne nomainīja %1$d taustiņus uz tuvākajiem pieejamajiem taustiņiem.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Lietotne noņēma %1$d taustiņu. Šajā tastatūrā nav taustiņa, kas veic to pašu darbību (kods %2$s).</item>
+        <item quantity="other">Lietotne noņēma %1$d taustiņus. Šajā tastatūrā nav taustiņu, kas veic to pašu darbību (kodi %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Lietotne saglabāja %1$d taustiņa etiķetes izmēru, bet ne tās teksta stilu. Šī tastatūra zīmē etiķetes vienā stilā.</item>
+        <item quantity="other">Lietotne saglabāja %1$d taustiņu etiķešu izmēru, bet ne to teksta stilu. Šī tastatūra zīmē etiķetes vienā stilā.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Lietotne mainīja %1$d burtu uz formu, kādā raksta šī tastatūra.</item>
+        <item quantity="other">Lietotne mainīja %1$d burtus uz formu, kādā raksta šī tastatūra.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d taustiņam nav nospiežamu un turamu burtu. Fails tos glabā otrajā failā, kuru jūs neatvērāt.</item>
+        <item quantity="other">%1$d taustiņiem nav nospiežamu un turamu burtu. Fails tos glabā otrajā failā, kuru jūs neatvērāt.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Otra tastatūra mēra taustiņu platumu atšķirīgi. Lietotne mainīja platumus, lai tie atbilstu šim režģim.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d Braila raksta punkta taustiņam %2$s slānī ir punkta numurs ārpus diapazona no 1 līdz 6.</item>
+        <item quantity="other">%1$d Braila raksta punkta taustiņiem %2$s slānī ir punkta numurs ārpus diapazona no 1 līdz 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d taustiņam %2$s slānī nav etiķetes un izvades. Tas neko neievada, un lietotne to izdzēš, kad ieslēdzat šo izkārtojumu.</item>
+        <item quantity="other">%1$d taustiņiem %2$s slānī nav etiķetes un izvades. Tie neko neievada, un lietotne tos izdzēš, kad ieslēdzat šo izkārtojumu.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s slāņa %1$d. rinda ir tukša.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d taustiņš %2$s slānī ir paneļa komponents. Komponenti darbojas tikai paneļa izkārtojumā.</item>
+        <item quantity="other">%1$d taustiņi %2$s slānī ir paneļa komponenti. Komponenti darbojas tikai paneļa izkārtojumā.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s slāņa %1$d. rindā ir taustiņš bez platuma.</string>
+    <string name="core_lang_layout_key_span_error">%2$s slāņa %1$d. rindā ir taustiņš, kas aizņem mazāk par 1 vai vairāk par %3$d rindām.</string>
+    <string name="core_lang_layout_letters_empty_error">Burtu slānī nav taustiņu.</string>
+    <string name="core_lang_layout_no_delete_error">Izkārtojumam nav dzēšanas taustiņa. Jūs nevarat izlabot kļūdu.</string>
+    <string name="core_lang_layout_no_enter_error">Izkārtojumam nav ievades taustiņa.</string>
+    <string name="core_lang_layout_no_shift_warning">Izkārtojumam nav Shift taustiņa. Lai ievadītu lielo burtu, nospiediet un turiet taustiņu.</string>
+    <string name="core_lang_layout_no_space_error">Izkārtojumā nav atstarpes taustiņa.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s slānī nav taustiņa, kas atgriežas pie burtiem. Jūs nevarat atstāt šo slāni.</string>
+    <string name="core_lang_layout_persistent_warning">%1$s slānis paliek atvērts, kad tastatūra tiek aizvērta. Pārliecinieties, ka jums ir veids, kā iziet no šī izkārtojuma.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Šim izkārtojumam nav taustiņa, kas ļautu no tā iziet. Pārliecinieties, ka jums ir veids, kā iziet no šī izkārtojuma: ABC taustiņš, simbolu taustiņš vai sekundārā izkārtojuma rīks rīkjoslā.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s slāņa %1$d. rindā ir taustiņš, kas aizņem vairāk rindu, nekā slānī ir pieejams. Tastatūra to aptur pēdējā rindā.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s slāņa %1$d. rindā ir %3$d taustiņš. Tikai %4$d taustiņi paliek pietiekami lieli, lai tos nospiestu.</item>
+        <item quantity="other">%2$s slāņa %1$d. rindā ir %3$d taustiņi. Tikai %4$d taustiņi paliek pietiekami lieli, lai tos nospiestu.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s slānī ir %2$d rinda. Ietilpst tikai %3$d rinda.</item>
+        <item quantity="other">%1$s slānī ir %2$d rindas. Ietilpst tikai %3$d rindas.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d taustiņš %2$s slānī izmanto darbību, kuru šī lietotnes versija neatpazīst.</item>
+        <item quantity="other">%1$d taustiņi %2$s slānī izmanto darbību, kuru šī lietotnes versija neatpazīst.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s slāņa %1$d. rinda ir platāka nekā citas rindas. Tastatūra šīs rindas taustiņus zīmē šaurākus.</string>
+    <string name="core_lang_numeral_scope_display_only">Tikai rādīšanai</string>
+    <string name="core_lang_numeral_scope_everywhere">Visur</string>
+    <string name="core_lang_numeral_scope_text_fields">Teksta lauki</string>
+    <string name="core_lang_numeral_system_auto">Automātiski</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponents parādās vairāk nekā vienu reizi. Lietotne saglabā pirmo kopiju.</item>
+        <item quantity="other">%1$d komponenti parādās vairāk nekā vienu reizi. Lietotne saglabā katra pirmo kopiju.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Šajā panelī nav taustiņu. Lietotne izmanto standarta paneli.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d taustiņam ir darbība, kas nedarbojas panelī. Lietotne to izdzēš.</item>
+        <item quantity="other">%1$d taustiņiem ir darbības, kas nedarbojas panelī. Lietotne tās izdzēš.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Šajā panelī nav ABC taustiņa. Izmantojiet rīkjoslu vai pogu Atpakaļ, lai atgrieztos pie taustiņiem.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Lietotne izdzēsa komponenta otro kopiju.</string>
+    <string name="core_lang_panel_repair_field_added">Lietotne pievienoja paneļa galveno komponentu jaunā rindā.</string>
+    <string name="core_lang_panel_repair_field_dropped">Lietotne izdzēsa komponentu, kas nepieder šim panelim.</string>
+    <string name="core_lang_panel_repair_key_dropped">Lietotne izdzēsa taustiņu, kura darbība nedarbojas panelī.</string>
+    <string name="core_lang_panel_repair_reset">Lietotne aizstāja tukšo paneli ar standarta paneli.</string>
+    <string name="core_lang_panel_required_field_error">Šim panelim trūkst galvenā komponenta. Lietotne to pievieno, kad panelis tiek zīmēts.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponents nepieder šim panelim. Lietotne to izdzēš.</item>
+        <item quantity="other">%1$d komponenti nepieder šim panelim. Lietotne tos izdzēš.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Lietotne izdzēsa tukšu taustiņu %1$s slānī.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Taustiņš %1$s slānī izmantoja Braila raksta punktu %2$d. Lietotne to padarīja par punktu %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Burtu slānī nebija dzēšanas taustiņa. Lietotne to pievienoja.</string>
+    <string name="core_lang_repair_enter_key_added">Burtu slānī nebija ievadīšanas taustiņa. Lietotne to pievienoja.</string>
+    <string name="core_lang_repair_field_key_deleted">Lietotne izdzēsa paneļa komponentu no %1$s slāņa. Komponenti darbojas tikai paneļa izkārtojumā.</string>
+    <string name="core_lang_repair_key_letters_anchored">Taustiņš %1$s slānī apzīmē %2$s. Lietotne to lika ievadīt kā %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Taustiņš %1$s slānī norādīja %2$s kā burtus, ko tas apzīmē. Tie nav burti, tāpēc lietotne to padarīja par parastu taustiņu.</string>
+    <string name="core_lang_repair_key_span_clamped">Taustiņš %1$s slānī aizņēma %2$d rindas. Lietotne lika tam aizņemt %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Taustiņš %1$s slānī bija %2$s vienības plats. Lietotne to padarīja %3$s vienības platu.</string>
+    <string name="core_lang_repair_key_width_set">Taustiņam %1$s slānī nebija platuma. Lietotne iestatīja platumu uz 1.</string>
+    <string name="core_lang_repair_layer_replaced">Slānī %1$s nebija strādājošu taustiņu. Tagad tas izmanto iebūvēto režģi.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s slānī nebija taustiņa, kas atgriežas pie burtiem. Lietotne pievienoja ABC taustiņu.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Rindā %1$s slānī bija %2$d taustiņš. Lietotne patur pirmos %3$d.</item>
+        <item quantity="other">Rindā %1$s slānī bija %2$d taustiņi. Lietotne patur pirmos %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Rinda %1$s slānī bija %2$s vienības plata. Lietotne padarīja taustiņus mazākus, lai rinda ietilptu.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s slānī bija %2$d rinda. Lietotne patur pirmās %3$d.</item>
+        <item quantity="other">%1$s slānī bija %2$d rindas. Lietotne patur pirmās %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Burtu slānī nebija atstarpes taustiņa. Lietotne to pievienoja.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Lietotne izdzēsa taustiņu %1$s slānī. Tā darbība \"%2$s\" nav zināma.</string>
+</resources>

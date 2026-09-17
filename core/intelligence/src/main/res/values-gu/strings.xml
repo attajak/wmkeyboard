@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">આ મોડેલ ગેટ કરેલું છે. પહેલા તમારું Hugging Face ટોકન ઉમેરો.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face એ HTTP સ્ટેટસ %1$s પરત કર્યું.</string>
+    <string name="core_intel_llm_download_error_licence">તેના Hugging Face પેજ પર મોડેલનું લાયસન્સ સ્વીકારો. પછી ફરી પ્રયાસ કરો.</string>
+    <string name="core_intel_llm_download_error_no_space">તમારા ઉપકરણ પર પૂરતી સ્ટોરેજ નથી. પહેલા લગભગ %1$s GB ખાલી કરો.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face એ ટોકન સ્વીકાર્યું નથી. ટોકન તપાસો અને ફરી પ્રયાસ કરો.</string>
+    <string name="core_intel_llm_download_error_truncated">ડાઉનલોડ દરમિયાન કનેક્શન અટકી ગયું હતું. ચાલુ રાખવા માટે ફરી શરૂ કરો દબાવો.</string>
+    <string name="core_intel_llm_engine_error_gpu">મોડેલ GPU પર નિષ્ફળ ગયું. GPU મેમરી સિસ્ટમ મેમરી કરતા ઘણી નાની છે. આગામી પ્રયાસ CPU નો ઉપયોગ કરશે. હંમેશા CPU નો ઉપયોગ કરવા માટે, સેટિંગ્સમાં કમ્પ્યુટને CPU પર સેટ કરો. તમે નાનું મોડેલ પણ પસંદ કરી શકો છો.</string>
+    <string name="core_intel_llm_engine_error_load">મોડેલ લોડ થયું નથી. ફાઇલ કદાચ ક્ષતિગ્રસ્ત છે. સેટિંગ્સમાં મોડેલને ડિલીટ કરો અને તેને ફરીથી ડાઉનલોડ કરો.</string>
+    <string name="core_intel_llm_engine_error_memory">મોડેલની મેમરી સમાપ્ત થઈ ગઈ છે, અથવા તે નિષ્ફળ ગયું છે. નાનું મોડેલ પસંદ કરો.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">અગાઉની પેઢીનું એક નાનું ગેમા. તે સારી ગુણવત્તા અને 4K ટોકન્સના સંદર્ભ સાથે આવે છે.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Google તરફથી સૌથી નાનું Gemma. તે બધા ઉપકરણો પર ઝડપી છે.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">સૌથી નવી ગેમા જનરેશન. તે તમારા ઉપકરણ પર શ્રેષ્ઠ ગુણવત્તા આપે છે.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">સૌથી મોટું મોડેલ. તે શ્રેષ્ઠ રીતે લખે છે, પરંતુ તેને શક્તિશાળી ઉપકરણની જરૂર છે.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">એક સામાન્ય હેતુનું મોડેલ જે હજુ પણ મૂળભૂત ઉપકરણ પર ફિટ થઈ શકે છે.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">1B થી નીચેના મોડેલો કરતા સ્પષ્ટપણે સ્માર્ટ. તેને મિડ-રેન્જ ઉપકરણની જરૂર છે.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">એક તાજેતરનું નાનું મોડેલ. તેના કદ માટે ગુણવત્તા ઉચ્ચ છે.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">ખૂબ નાનું અને ઝડપી. તે ઝડપી પુનઃલેખન માટે સારું છે, પરંતુ તર્ક મર્યાદિત છે.</string>
+    <string name="core_intel_llm_module_downloading">કીબોર્ડનો AI ભાગ Google Play પરથી ડાઉનલોડ થઈ રહ્યો છે. થોડીવારમાં ફરી પ્રયાસ કરો.</string>
+    <string name="core_intel_llm_module_restart">AI ભાગ ઇન્સ્ટોલ થઈ ગયો છે. તેનો ઉપયોગ કરવા માટે કીબોર્ડ બંધ કરીને ફરીથી ખોલો.</string>
+    <string name="core_intel_llm_tier_experimental_label">પ્રાયોગિક</string>
+    <string name="core_intel_llm_tier_recommended_label">ભલામણ કરેલ</string>
+    <string name="core_intel_llm_tier_untested_label">અપરીક્ષિત</string>
+</resources>

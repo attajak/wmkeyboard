@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">今すぐ絵文字フォントを適用しますか？</string>
+    <string name="faddons_apply_icon_pack_question">今すぐキーボードでこのアイコンパックを使用しますか？</string>
+    <string name="faddons_apply_layout_question">有効にして入力に使用しますか？</string>
+    <string name="faddons_apply_plugin_question">プラグインパネルに表示するために有効にしますか？</string>
+    <string name="faddons_apply_sound_pack_question">このサウンドパックを現在のキー音として使用しますか？</string>
+    <string name="faddons_apply_sound_question">今すぐキーの音として使用しますか？</string>
+    <string name="faddons_apply_switch_action">切り替える</string>
+    <string name="faddons_apply_theme_question">今すぐキーボードのテーマとして適用しますか？</string>
+    <string name="faddons_download_error_app_too_old">このアドオンには、より新しいバージョンのアプリが必要です。</string>
+    <string name="faddons_download_error_bad_url">ダウンロードリンクが有効なHTTPS URLではありません。</string>
+    <string name="faddons_download_error_checksum">ダウンロードしたファイルがマニフェストのチェックサムと一致しません。</string>
+    <string name="faddons_download_error_http_status">サーバーがHTTP %1$dを返しました。</string>
+    <string name="faddons_download_error_no_space">インストールするための十分な空き容量がありません。</string>
+    <string name="faddons_download_error_plugin_no_checksum">このプラグインにはチェックサムがありません。アプリは検証できません。</string>
+    <string name="faddons_download_error_too_large">このアドオンは、そのタイプの制限である %1$d MB を超えています。</string>
+    <string name="faddons_error_no_words">そのファイルから単語を読み取ることができませんでした。</string>
+    <string name="faddons_error_not_a_plugin">そのファイルはWMキーボードプラグインではありません。</string>
+    <string name="faddons_install_error_dictionary_no_language">この辞書には、対象となる言語が指定されていません。</string>
+    <string name="faddons_install_error_dictionary_not_saved">辞書を保存できませんでした。</string>
+    <string name="faddons_install_error_icon_pack_unreadable">アプリがアイコンパックを読み取れませんでした。</string>
+    <string name="faddons_install_error_keywords_no_language">このパックには、どの言語用であるかの指定がありません。</string>
+    <string name="faddons_install_error_keywords_not_saved">キーワードパックを保存できませんでした。</string>
+    <string name="faddons_install_error_keywords_too_large">そのキーワードパックはサイズが大きすぎるためインポートできません。</string>
+    <string name="faddons_install_error_no_keywords">そのファイルから絵文字キーワードを読み取ることができませんでした。</string>
+    <string name="faddons_install_error_no_stickers">そのパックからステッカーを読み込めませんでした。%1$s</string>
+    <string name="faddons_install_error_not_a_layout">そのファイルはWMキーボードレイアウトではありません。</string>
+    <string name="faddons_install_error_not_a_snippet_pack">そのファイルはWMキーボードのスニペットパックではありません。</string>
+    <string name="faddons_install_error_not_a_sound_pack">このファイルはサウンドパックではありません。</string>
+    <string name="faddons_install_error_not_a_sticker_pack">そのファイルはステッカーパックではありません。</string>
+    <string name="faddons_install_error_not_a_theme">そのファイルはWMキーボードテーマではありません。</string>
+    <string name="faddons_install_error_not_an_espanso_pack">そのファイルはEspansoパッケージまたはマッチファイルではありません。</string>
+    <string name="faddons_install_error_not_an_icon_pack">そのファイルはアイコンパックではありません。</string>
+    <string name="faddons_install_error_plugin_failed">アプリはそのプラグインをインストールできませんでした。</string>
+    <string name="faddons_install_error_plugins_turned_off">プラグインが無効になっています。「ツール」›「プラグイン」で「プラグインを許可」をオンにしてから、再度インストールしてください。</string>
+    <string name="faddons_install_error_snippet_pack_empty">そのスニペットパックは空です。</string>
+    <string name="faddons_install_error_sound_pack_read">このサウンドパックを読み込めません。</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">アプリがステッカーパックを読み取れませんでした。</string>
+    <string name="faddons_install_error_too_many_fonts">インストール可能なフォント数の上限に達しました。</string>
+    <string name="faddons_install_error_too_many_icon_packs">アイコンパックの最大数に達しました。</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">プラグインは最大%1$d個までです。</item>
+        <item quantity="other">プラグインは最大%1$d個までです。</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">インストールされたサウンドパックの最大数に達しました。</string>
+    <string name="faddons_install_error_too_many_sounds">インストールできるキー音の最大数に達しました。</string>
+    <string name="faddons_install_error_too_many_sticker_packs">インストール可能なステッカーパック数の上限に達しました。</string>
+    <string name="faddons_install_error_unknown_language">このバージョンのアプリは言語「%1$s」をサポートしていません。</string>
+    <string name="faddons_install_error_unknown_type">このバージョンのアプリはそのアドオンタイプをサポートしていません。</string>
+    <string name="faddons_install_error_vocab_no_language">この語彙パックには、対象言語が指定されていません。</string>
+    <string name="faddons_install_error_vocab_no_words">そのパックから単語を読み取ることができませんでした。</string>
+    <string name="faddons_install_error_vocab_not_a_pack">そのファイルは語彙パックではありません。</string>
+    <string name="faddons_install_error_vocab_too_large">この語彙パックは、アプリが許容するサイズを超えています。</string>
+    <string name="faddons_preview_error_no_preview">アプリはこのアドオンをプレビューできません。</string>
+    <string name="faddons_preview_error_not_espanso_pack">そのファイルはEspansoパッケージまたは一致ファイルではありません。</string>
+    <string name="faddons_preview_error_not_keyword_pack">そのファイルは絵文字キーワードパックではありません。</string>
+    <string name="faddons_preview_error_not_snippet_pack">そのファイルはスニペットパックではありません。</string>
+    <string name="faddons_preview_error_not_vocab_pack">そのファイルは語彙パックではありません。</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">アプリはこのパックのサウンドを読み取れませんでした。</string>
+    <string name="faddons_preview_error_stickers_unreadable">アプリがステッカー画像を読み込めませんでした。</string>
+    <string name="faddons_snippet_pack_folder_fallback">スニペットパック</string>
+</resources>

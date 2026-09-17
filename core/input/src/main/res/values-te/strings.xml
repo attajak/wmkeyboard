@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">డౌన్‌లోడ్ చేసిన ఫైల్ పాడైపోయింది. దాని చెక్‌సమ్ సరిపోలడం లేదు. మళ్ళీ డౌన్‌లోడ్ చేయడానికి ప్రయత్నించండి.</string>
+    <string name="core_input_cjk_download_error_http">సర్వర్ HTTP స్థితి %1$sని అందించింది.</string>
+    <string name="core_input_cjk_download_error_network">డౌన్‌లోడ్ పని చేయలేదు. మీ కనెక్షన్‌ని తనిఖీ చేసి మళ్ళీ ప్రయత్నించండి.</string>
+    <string name="core_input_cjk_download_error_network_detail">డౌన్‌లోడ్ పని చేయలేదు: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">మీ పరికరంలో తగినంత నిల్వ లేదు. ముందుగా కొంత స్థలాన్ని ఖాళీ చేయండి.</string>
+    <string name="core_input_cjk_download_error_truncated">డౌన్‌లోడ్ సమయంలో కనెక్షన్ ఆగిపోయింది. కొనసాగించడానికి \'రీజ్యూమ్\' నొక్కండి.</string>
+    <string name="core_input_cjk_download_error_unavailable">ఈ ప్యాక్ ఇంకా అందుబాటులో లేదు.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">హాన్జీ అక్షరాలకు రాడికల్ కోడ్‌ల పట్టిక, 29,000 అక్షరాలు. కాంజీ మరియు క్విక్ లేఅవుట్‌ల కోసం కీబోర్డ్‌కు ఈ ప్యాక్ అవసరం.</string>
+    <string name="core_input_cjk_pack_cangjie_title">కాంగ్‌జీ (倉頡) నిఘంటువు</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">మోజ్క్ నుండి కానా రీడింగ్‌లు, 1.08 మిలియన్ ఎంట్రీలు, సుమారు 42 MB. జపనీస్ మార్పిడి కోసం కీబోర్డ్‌కు ఈ ప్యాక్ అవసరం.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">జపనీస్ కనా నుండి కాంజీ నిఘంటువు</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">హాన్జీ అక్షరాలకు జ్యుట్‌పింగ్ రీడింగ్‌ల పట్టిక, 163,000 ఎంట్రీలు. కాంటోనీస్ మార్పిడి కోసం కీబోర్డ్‌కు ఈ ప్యాక్ అవసరం.</string>
+    <string name="core_input_cjk_pack_jyutping_title">కాంటోనీస్ జ్యుట్‌పింగ్ నిఘంటువు</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT నుండి హంజీ అక్షరాలు మరియు పదబంధాలు, 120,000 ఎంట్రీలు. చైనీస్ మార్పిడి కోసం కీబోర్డ్‌కు ఈ ప్యాక్ అవసరం.</string>
+    <string name="core_input_cjk_pack_pinyin_title">చైనీస్ పిన్యిన్ నిఘంటువు</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">హాంజీ అక్షరాలకు స్ట్రోక్ ఆర్డర్ పట్టిక. స్ట్రోక్ లేఅవుట్ కోసం కీబోర్డ్‌కు ఈ ప్యాక్ అవసరం.</string>
+    <string name="core_input_cjk_pack_stroke_title">చైనీస్ స్ట్రోక్ (笔画) డిక్షనరీ</string>
+    <string name="core_input_double_pinyin_off_label">ఆఫ్ (పూర్తి పిన్యిన్)</string>
+</resources>

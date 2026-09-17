@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face netþjónninn sendi ekki skrána. Villukóðinn er HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Tengingin rofnaði meðan á niðurhali stóð. Reyndu aftur til að halda áfram þar sem frá var horfið.</string>
+    <string name="core_voice_download_space_error">Ekki er nægt geymslupláss á tækinu þínu. Þú verður að losa um u.þ.b. %1$s MB fyrst.</string>
+    <string name="core_voice_model_base_eu_body">Þetta líkan notar tungumálið sem þú skrifar á, sama og 40 tungumála líkanið. Það nær aðeins yfir evrópsk tungumál, svo niðurhalið er minna.</string>
+    <string name="core_voice_model_base_multi_body">Þetta líkan jafnar nákvæmni og hraða. Það nær yfir öll tungumál sem Whisper þekkir. Veldu það ef litla líkanið er of hægt.</string>
+    <string name="core_voice_model_base_world_body">Þetta líkan notar tungumálið sem þú skrifar á í stað þess að giska. Stuttar setningar verða mun áreiðanlegri. Veldu það þegar listinn inniheldur tungumálin þín.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d tungumál</item>
+        <item quantity="other">%1$d tungumál</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Þetta er eitt nákvæmasta Whisper-líkanið, en það er of stórt fyrir flesta síma. Niðurhalið er 1,5 GB. Aðeins tæki með mikið minni getur hlaðið því.</string>
+    <string name="core_voice_model_large_v3_multi_body">Þetta er nákvæmasta Whisper-líkanið og það besta í að þekkja hvaða tungumál þú talar. Niðurhalið er 1,5 GB. Aðeins tæki með mikið vinnsluminni geta hlaðið því inn. Turbo-líkanið er næstum jafn nákvæmt og er helmingi minna.</string>
+    <string name="core_voice_model_medium_multi_body">Þetta líkan gefur næstum borðtölvunákvæmni. Hver setning tekur nokkrar sekúndur. Líkanið notar næstum eitt gígabæt af minni á meðan það keyrir.</string>
+    <string name="core_voice_model_single_language_body">Þetta líkan meðhöndlar aðeins %1$s. Það hefur ekkert skref fyrir tungumálagreiningu. Þetta gerir það hraðvirkara og aðeins nákvæmara en fjöltungumála líkan af sömu stærð.</string>
+    <string name="core_voice_model_small_multi_body">Þetta líkan gefur bestu nákvæmnina sem keyrir samt vel í síma. Það höndlar hreim og bakgrunnshljóð betur en grunnlíkanið. Það nær yfir öll tungumál sem Whisper þekkir.</string>
+    <string name="core_voice_model_small_world_body">Þetta líkan notar tungumálið sem þú skrifar á og hefur nákvæmni Small-líkansins. Þetta er nákvæmasta líkanið sem passar enn í síma.</string>
+    <string name="core_voice_model_tiny_multi_body">Þetta er hraðasta fjöltyngda líkanið. Það virkar vel með skýru tali, en hávaði dregur úr nákvæmni.</string>
+    <string name="core_voice_model_turbo_multi_body">Þetta líkan þekkir tungumálið sem þú talar mun betur en minni líkönin. Veldu það ef minna líkan umritar tal þitt á röngu tungumáli. Þetta er stórt niðurhal og hver setning tekur nokkrar sekúndur.</string>
+    <string name="core_voice_size_base_label">Grunnur</string>
+    <string name="core_voice_size_large_label">Stórt</string>
+    <string name="core_voice_size_medium_label">Miðlungs</string>
+    <string name="core_voice_size_small_label">Lítið</string>
+    <string name="core_voice_size_tiny_label">Örsmátt</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Mælt með</string>
+    <string name="core_voice_whisper_mel_bins_error">Þetta raddlíkan þarf %1$s band-rófrit, sem passar ekki við skrána sem það hlað niður með. Eyddu líkaninu í stillingum og hlað niður aftur.</string>
+    <string name="core_voice_whisper_model_load_error">Raddlíkanið hlaðist ekki inn. Skráin er hugsanlega skemmd. Eyðtu líkaninu í stillingum og halaðu því niður aftur.</string>
+    <string name="core_voice_whisper_transcribe_error">Raddinnsláttur virkaði ekki. Reyndu aftur eða veldu minna líkan.</string>
+</resources>

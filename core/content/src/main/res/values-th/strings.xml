@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">รหัสผ่านใช้ครั้งเดียว</string>
+    <string name="core_content_clip_entity_otp_tag">รหัส</string>
+    <string name="core_content_clip_entity_phone_label">หมายเลขโทรศัพท์</string>
+    <string name="core_content_clip_entity_phone_tag">โทรศัพท์</string>
+    <string name="core_content_clip_entity_url_label">ลิงก์</string>
+    <string name="core_content_clip_entity_url_tag">ลิงก์</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">มี %1$d สนิปเปตที่มีการขยายอื่นที่ Espanso ไม่สามารถรองรับได้ มีการเขียนเฉพาะรายการแรกเท่านั้น</item>
+        <item quantity="other">มี %1$d สนิปเปตที่มีการขยายอื่นที่ Espanso ไม่สามารถรองรับได้ มีการเขียนเฉพาะรายการแรกของแต่ละรายการเท่านั้น</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">สนิปเพ็ต %1$d รายการถูกจำกัดไว้สำหรับโปรแกรมคอมพิวเตอร์บางโปรแกรม บนโทรศัพท์ของคุณมันใช้งานได้ทุกที่</item>
+        <item quantity="other">สนิปเพ็ต %1$d รายการถูกจำกัดไว้สำหรับโปรแกรมคอมพิวเตอร์บางโปรแกรม บนโทรศัพท์ของคุณมันใช้งานได้ทุกที่</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">สนิปเพ็ต %1$d รายการขอให้คุณเลือกจากรายการ แอปจะสุ่มเลือกหนึ่งรายการแทน</item>
+        <item quantity="other">สนิปเพ็ต %1$d รายการขอให้คุณเลือกจากรายการ แอปจะสุ่มเลือกหนึ่งรายการแทน</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">มี %1$d สนิปเป็ตที่ถามก่อนขยาย Espanso ไม่มีการตั้งค่าดังกล่าว ดังนั้นมันจะขยายด้วยตัวเองที่นั่น</item>
+        <item quantity="other">มี %1$d สนิปเป็ตที่ถามก่อนขยาย Espanso ไม่มีการตั้งค่าดังกล่าว ดังนั้นมันจะขยายด้วยตัวเองที่นั่น</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">สนิปเพ็ต %1$d รายการใช้รูปแบบวันที่ที่แอปไม่สามารถเขียนได้เต็มรูปแบบ แอปได้ละส่วนที่ไม่สามารถทำได้ออกไป</item>
+        <item quantity="other">สนิปเพ็ต %1$d รายการใช้รูปแบบวันที่ที่แอปไม่สามารถเขียนได้เต็มรูปแบบ แอปได้ละส่วนที่ไม่สามารถทำได้ออกไป</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">มี %1$d สนิปเป็ตอยู่ในโฟลเดอร์ที่ถูกปิดใช้งาน Espanso ไม่มีสวิตช์โฟลเดอร์ ดังนั้นมันจะขยายที่นั่น</item>
+        <item quantity="other">มี %1$d สนิปเป็ตอยู่ในโฟลเดอร์ที่ถูกปิดใช้งาน Espanso ไม่มีสวิตช์โฟลเดอร์ ดังนั้นมันจะขยายที่นั่น</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">แอปข้ามสนิปเปต %1$d รายการที่ไม่มีอะไรให้แทรก</item>
+        <item quantity="other">แอปข้ามสนิปเปต %1$d รายการที่ไม่มีอะไรให้แทรก</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">สนิปเพ็ต %1$d รายการขอให้คุณกรอกแบบฟอร์ม แอปจะแทรกแบบฟอร์มเป็นข้อความ โดยมีเคอร์เซอร์อยู่ในช่องว่างแรก</item>
+        <item quantity="other">สนิปเพ็ต %1$d รายการขอให้คุณกรอกแบบฟอร์ม แอปจะแทรกแต่ละแบบฟอร์มเป็นข้อความ โดยมีเคอร์เซอร์อยู่ในช่องว่างแรก</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">แอปข้ามสนิปเพ็ต %1$d รายการที่แทรกรูปภาพ</item>
+        <item quantity="other">แอปข้ามสนิปเพ็ต %1$d รายการที่แทรกรูปภาพ</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">ไฟล์อ่านไฟล์อื่น %1$d ไฟล์ ไฟล์เดียวไม่สามารถนำไฟล์อื่นมาด้วยได้</item>
+        <item quantity="other">ไฟล์อ่านไฟล์อื่น %1$d ไฟล์ ไฟล์เดียวไม่สามารถนำไฟล์อื่นมาด้วยได้</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">มี %1$d สนิปเป็ตที่ชี้ไปยังสนิปเป็ตอื่น Espanso ไม่มีวิธีระบุสิ่งนั้น ลิงก์จึงถูกละไว้</item>
+        <item quantity="other">มี %1$d สนิปเป็ตที่ชี้ไปยังสนิปเป็ตอื่น Espanso ไม่มีวิธีระบุสิ่งนั้น ลิงก์จึงถูกละไว้</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">ตัวกระตุ้น %1$d ตัวถูกออกแบบมาให้ทำงานภายในคำ บนโทรศัพท์ของคุณมันจะทำงานเป็นคำเต็มเท่านั้น</item>
+        <item quantity="other">ตัวกระตุ้น %1$d ตัวถูกออกแบบมาให้ทำงานภายในคำ บนโทรศัพท์ของคุณมันจะทำงานเป็นคำเต็มเท่านั้น</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">มีข้อความสั้น %1$d รายการที่ใช้ค่าที่ Espanso ไม่มีค่าเทียบเท่า จึงแสดงผลตามที่เขียนไว้</item>
+        <item quantity="other">มีข้อความสั้น %1$d รายการที่ใช้ค่าที่ Espanso ไม่มีค่าเทียบเท่า จึงแสดงผลตามที่เขียนไว้</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">แอปได้ลบรูปแบบออกจากสนิปเป็ต %1$d รายการ แอปไม่รองรับรูปแบบในลักษณะนี้ สนิปเป็ตจะยังคงอยู่ในรายการ</item>
+        <item quantity="other">แอปได้ลบรูปแบบออกจากสนิปเป็ต %1$d รายการ แอปไม่รองรับรูปแบบในลักษณะนี้ สนิปเป็ตจะยังคงอยู่ในรายการ</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">มี %1$d สนิปเป็ตที่ใช้ข้อความแบบจัดรูปแบบ แอปจะเก็บเฉพาะคำไว้และตัดการจัดรูปแบบออก</item>
+        <item quantity="other">มี %1$d สนิปเป็ตที่ใช้ข้อความแบบจัดรูปแบบ แอปจะเก็บเฉพาะคำไว้และตัดการจัดรูปแบบออก</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">สนิปเป็ต %1$d รายการเรียกใช้คำสั่งบนคอมพิวเตอร์ของคุณ แอปได้ละเว้นคำสั่งนั้นและไม่ได้เรียกใช้</item>
+        <item quantity="other">สนิปเป็ต %1$d รายการเรียกใช้คำสั่งบนคอมพิวเตอร์ของคุณ แอปได้ละเว้นคำสั่งเหล่านั้นและไม่ได้เรียกใช้</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">ตัวกระตุ้น %1$d ตัวประกอบด้วยสัญลักษณ์เท่านั้น แอปจึงไม่สามารถตรวจสอบได้ สนิปเป็ตของมันจะยังคงอยู่ในรายการ</item>
+        <item quantity="other">ตัวกระตุ้น %1$d ตัวประกอบด้วยสัญลักษณ์เท่านั้น แอปจึงไม่สามารถตรวจสอบได้ สนิปเป็ตของพวกมันจะยังคงอยู่ในรายการ</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d สนิปเปตมีข้อความในวงเล็บปีกกาที่แอปนี้จะเติมให้ เช่น {date} มันจะขยายออกแทนที่จะปรากฏตามที่เขียนไว้</item>
+        <item quantity="other">%1$d สนิปเปตมีข้อความในวงเล็บปีกกาที่แอปนี้จะเติมให้ เช่น {date} มันจะขยายออกแทนที่จะปรากฏตามที่เขียนไว้</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d สนิปเปตเปลี่ยนตัวพิมพ์ใหญ่ของสิ่งที่รูปแบบจับไว้ Espanso ไม่สามารถทำเช่นนั้นได้ ดังนั้นข้อความที่ถูกจับไว้จะถูกใส่เข้าไปโดยไม่มีการเปลี่ยนแปลง</item>
+        <item quantity="other">%1$d สนิปเปตเปลี่ยนตัวพิมพ์ใหญ่ของสิ่งที่รูปแบบจับไว้ Espanso ไม่สามารถทำเช่นนั้นได้ ดังนั้นข้อความที่ถูกจับไว้จะถูกใส่เข้าไปโดยไม่มีการเปลี่ยนแปลง</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d สนิปเปตใช้ค่าที่แอปไม่มีค่าเทียบเท่า ส่วนนั้นจะว่างเปล่า</item>
+        <item quantity="other">%1$d สนิปเปตใช้ค่าที่แอปไม่มีค่าเทียบเท่า ส่วนเหล่านั้นจะว่างเปล่า</item>
+    </plurals>
+    <string name="core_content_font_error_download">แอปไม่สามารถดาวน์โหลดแบบอักษรได้ โปรดตรวจสอบการเชื่อมต่อของคุณแล้วลองใหม่อีกครั้ง</string>
+    <string name="core_content_font_error_empty">ไฟล์ว่างเปล่า</string>
+    <string name="core_content_font_error_load">แอปไม่สามารถโหลดไฟล์ฟอนต์นี้ได้</string>
+    <string name="core_content_font_error_markup">ไฟล์นี้เป็นไฟล์ HTML หรือ XML ไม่ใช่ไฟล์ฟอนต์</string>
+    <string name="core_content_font_error_no_storage">ไม่มีพื้นที่จัดเก็บสำหรับแบบอักษร</string>
+    <string name="core_content_font_error_not_a_font">ไฟล์นี้ดูไม่เหมือนไฟล์ฟอนต์ .ttf หรือ .otf</string>
+    <string name="core_content_font_error_read">แอปไม่สามารถอ่านแบบอักษรได้</string>
+    <string name="core_content_font_error_save">แอปไม่สามารถบันทึกแบบอักษรได้</string>
+    <string name="core_content_font_error_too_large">ฟอนต์ต้องมีขนาดเล็กกว่า %1$d MB</string>
+    <string name="core_content_font_error_too_many">คลังแบบอักษรเต็มแล้ว โปรดลบแบบอักษรออกแล้วลองใหม่อีกครั้ง</string>
+    <string name="core_content_font_error_too_short">ไฟล์สั้นเกินกว่าจะเป็นแบบอักษร</string>
+    <string name="core_content_font_error_woff">แอปไม่สามารถอ่านฟอนต์เว็บ WOFF ได้ โปรดใช้ฟอนต์เวอร์ชัน .ttf หรือ .otf</string>
+    <string name="core_content_font_error_woff2">แอปไม่สามารถอ่านฟอนต์เว็บ WOFF2 ได้ โปรดใช้ฟอนต์เวอร์ชัน .ttf หรือ .otf</string>
+    <string name="core_content_font_error_zip">ไฟล์นี้เป็นไฟล์บีบอัด zip ไม่ใช่แบบอักษร</string>
+    <string name="core_content_selection_macro_add_contact">ผู้ติดต่อ</string>
+    <string name="core_content_selection_macro_calendar">ปฏิทิน</string>
+    <string name="core_content_selection_macro_call">โทร</string>
+    <string name="core_content_selection_macro_case_lower">ตัวพิมพ์เล็ก</string>
+    <string name="core_content_selection_macro_case_sentence">ตัวพิมพ์ใหญ่ขึ้นต้นประโยค</string>
+    <string name="core_content_selection_macro_case_title">ตัวพิมพ์ใหญ่</string>
+    <string name="core_content_selection_macro_case_upper">ตัวพิมพ์ใหญ่</string>
+    <string name="core_content_selection_macro_chat_bold">ตัวหนา</string>
+    <string name="core_content_selection_macro_chat_italic">ตัวเอียง</string>
+    <string name="core_content_selection_macro_chat_mono">โมโน</string>
+    <string name="core_content_selection_macro_chat_strike">ขีดฆ่า</string>
+    <string name="core_content_selection_macro_colour">สี</string>
+    <string name="core_content_selection_macro_copy">คัดลอก</string>
+    <string name="core_content_selection_macro_digits_latin">ตัวเลข</string>
+    <string name="core_content_selection_macro_email">อีเมล</string>
+    <string name="core_content_selection_macro_fancy">แฟนซี</string>
+    <string name="core_content_selection_macro_find">ค้นหา</string>
+    <string name="core_content_selection_macro_format">รูปแบบ</string>
+    <string name="core_content_selection_macro_grammar">ไวยากรณ์</string>
+    <string name="core_content_selection_macro_lines_bullet">สัญลักษณ์แสดงหัวข้อย่อย</string>
+    <string name="core_content_selection_macro_lines_dedupe">ไม่ซ้ำกัน</string>
+    <string name="core_content_selection_macro_lines_number">ตัวเลข</string>
+    <string name="core_content_selection_macro_lines_sort">เรียงลำดับ</string>
+    <string name="core_content_selection_macro_map">แผนที่</string>
+    <string name="core_content_selection_macro_open">เปิด</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">พูด</string>
+    <string name="core_content_selection_macro_replace">แทนที่</string>
+    <string name="core_content_selection_macro_search">ค้นหา</string>
+    <string name="core_content_selection_macro_share">แชร์</string>
+    <string name="core_content_selection_macro_sms">ข้อความ</string>
+    <string name="core_content_selection_macro_time_zones">โซนเวลา</string>
+    <string name="core_content_selection_macro_to_bangla">ภาษาเบงกาลี</string>
+    <string name="core_content_selection_macro_to_banglish">บังกลิช</string>
+    <string name="core_content_selection_macro_translate">แปล</string>
+    <string name="core_content_selection_macro_url_decode">ถอดรหัส</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">แอปละเว้นส่วนขยาย %2$d รายการออกจาก \"%1$s\"</item>
+        <item quantity="other">แอปละเว้นส่วนขยาย %2$d รายการออกจาก \"%1$s\"</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">แอปได้ลบรูปแบบออกจาก \"%1$s\" แล้ว เนื่องจากรูปแบบไม่ถูกต้อง แต่ข้อความสั้นจะยังคงอยู่ในรายการ</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">แอปได้ละทิ้ง %1$d โฟลเดอร์ที่ไม่มีชื่อหรือซ้ำกับโฟลเดอร์อื่น สนิปเป็ตของมันถูกนำเข้ามาโดยไม่มีโฟลเดอร์</item>
+        <item quantity="other">แอปได้ละทิ้ง %1$d โฟลเดอร์ที่ไม่มีชื่อหรือซ้ำกับโฟลเดอร์อื่น สนิปเป็ตของมันถูกนำเข้ามาโดยไม่มีโฟลเดอร์</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">ไฟล์มีข้อความสั้นมากกว่าที่แอปเก็บไว้ แอปได้นำเข้า %1$d รายการแรก</item>
+        <item quantity="other">ไฟล์มีข้อความสั้นมากกว่าที่แอปเก็บไว้ แอปได้นำเข้า %1$d รายการแรก</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">ข้อความสั้นไม่มีชื่อ แอปจึงตั้งชื่อตามบรรทัดแรกของข้อความนั้น</string>
+    <string name="core_content_snippet_repair_no_text">แอปทิ้ง \"%1$s\" ไป เนื่องจากไม่มีข้อความ</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">แอปได้ลบรูปแบบออกจาก \"%1$s\" เนื่องจากมีความยาวเกิน %2$d อักขระ</item>
+        <item quantity="other">แอปได้ลบรูปแบบออกจาก \"%1$s\" เนื่องจากมีความยาวเกิน %2$d อักขระ</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">แอปย่อ \"%1$s\" แล้ว เนื่องจากมีความยาวเกิน %2$d ตัวอักษร</item>
+        <item quantity="other">แอปย่อ \"%1$s\" แล้ว เนื่องจากมีความยาวเกิน %2$d ตัวอักษร</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">ชื่อของแอปที่คุณกำลังพิมพ์อยู่</string>
+    <string name="core_content_snippet_var_clip_info">รายการคลิปบอร์ดล่าสุด</string>
+    <string name="core_content_snippet_var_cursor_info">ตำแหน่งที่เคอร์เซอร์วางอยู่</string>
+    <string name="core_content_snippet_var_date_info">วันที่วันนี้</string>
+    <string name="core_content_snippet_var_datetime_info">วันที่และเวลา</string>
+    <string name="core_content_snippet_var_day_info">วันที่ของเดือน</string>
+    <string name="core_content_snippet_var_isodate_info">วันที่ในรูปแบบ ISO เช่น 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">วันที่และเวลาในรูปแบบ ISO</string>
+    <string name="core_content_snippet_var_month_info">ชื่อของเดือน</string>
+    <string name="core_content_snippet_var_package_info">ชื่อแพ็กเกจของแอปนั้น</string>
+    <string name="core_content_snippet_var_selection_info">ข้อความที่คุณเลือกในช่อง</string>
+    <string name="core_content_snippet_var_time12_info">เวลาปัจจุบันในรูปแบบ 12 ชั่วโมง</string>
+    <string name="core_content_snippet_var_time_info">เวลาปัจจุบันในรูปแบบ 24 ชั่วโมง</string>
+    <string name="core_content_snippet_var_timestamp_info">เวลาในหน่วยวินาทีแบบ Unix</string>
+    <string name="core_content_snippet_var_timezone_info">เขตเวลา เช่น GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">UUID สุ่มใหม่</string>
+    <string name="core_content_snippet_var_weekday_info">ชื่อของวัน เช่น วันอาทิตย์</string>
+    <string name="core_content_snippet_var_year_info">ปีแบบสี่หลัก</string>
+    <string name="core_content_sticker_pack_imported_label">สติกเกอร์ที่นำเข้า</string>
+    <string name="core_content_sticker_repair_image_missing">แอปได้ลบ \"%1$s\" ออกไปแล้ว เนื่องจากรูปภาพหายไป</string>
+    <string name="core_content_sticker_repair_image_unreadable">แอปละทิ้ง \"%1$s\" เนื่องจากไม่สามารถอ่านรูปภาพได้</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">ชุดสติกเกอร์มี %1$d ชิ้น แอปจะเก็บไว้ %2$d ชิ้นแรก</item>
+        <item quantity="other">ชุดสติกเกอร์มี %1$d ชิ้น แอปจะเก็บไว้ %2$d ชิ้นแรก</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">แอปทำสติกเกอร์หาย ชื่อสติกเกอร์ไม่มีไฟล์รูปภาพ</string>
+    <string name="core_content_sticker_repair_none_listed">ไฟล์แพ็กไม่มีรายการสติกเกอร์</string>
+    <string name="core_content_sticker_repair_not_saved">แอปวาง \"%1$s\" ไม่ได้ แอปไม่สามารถบันทึกรายการดังกล่าว</string>
+</resources>

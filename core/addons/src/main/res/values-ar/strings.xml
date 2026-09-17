@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">القواميس</string>
+    <string name="core_addons_type_dictionary_singular_label">قاموس</string>
+    <string name="core_addons_type_emoji_font_label">خطوط الرموز التعبيرية</string>
+    <string name="core_addons_type_emoji_font_singular_label">خط الرموز التعبيرية</string>
+    <string name="core_addons_type_emoji_keywords_label">كلمات رئيسية للرموز التعبيرية</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">حزمة كلمات مفتاحية للرموز التعبيرية</string>
+    <string name="core_addons_type_espanso_label">حزم Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">حزمة Espanso</string>
+    <string name="core_addons_type_font_label">الخطوط</string>
+    <string name="core_addons_type_font_singular_label">خط</string>
+    <string name="core_addons_type_icon_pack_label">حزم الأيقونات</string>
+    <string name="core_addons_type_icon_pack_singular_label">حزمة أيقونات</string>
+    <string name="core_addons_type_layout_label">التخطيطات</string>
+    <string name="core_addons_type_layout_singular_label">تخطيط</string>
+    <string name="core_addons_type_plugin_label">الإضافات</string>
+    <string name="core_addons_type_plugin_singular_label">إضافة</string>
+    <string name="core_addons_type_snippets_label">مقتطفات</string>
+    <string name="core_addons_type_snippets_singular_label">حزمة مقتطفات</string>
+    <string name="core_addons_type_sound_label">الأصوات</string>
+    <string name="core_addons_type_sound_pack_label">حزم الأصوات</string>
+    <string name="core_addons_type_sound_pack_singular_label">حزمة صوتية</string>
+    <string name="core_addons_type_sound_singular_label">صوت المفتاح</string>
+    <string name="core_addons_type_stickers_label">حزم الملصقات</string>
+    <string name="core_addons_type_stickers_singular_label">حزمة ملصقات</string>
+    <string name="core_addons_type_theme_label">السمات</string>
+    <string name="core_addons_type_theme_singular_label">سمة</string>
+    <string name="core_addons_type_unknown_label">أخرى</string>
+    <string name="core_addons_type_unknown_singular_label">إضافة</string>
+    <string name="core_addons_type_vocabulary_label">المفردات</string>
+    <string name="core_addons_type_vocabulary_singular_label">حزمة مفردات</string>
+</resources>

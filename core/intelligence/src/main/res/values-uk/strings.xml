@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Ця модель є закритою. Спочатку додайте свій токен Hugging Face.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face повернув статус HTTP %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Прийміть ліцензію моделі на її сторінці Hugging Face. Потім спробуйте ще раз.</string>
+    <string name="core_intel_llm_download_error_no_space">На вашому пристрої недостатньо пам\'яті. Спочатку звільніть близько %1$s ГБ.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face не прийняв токен. Перевірте токен і спробуйте ще раз.</string>
+    <string name="core_intel_llm_download_error_truncated">З\'єднання перервалося під час завантаження. Натисніть «Відновити», щоб продовжити.</string>
+    <string name="core_intel_llm_engine_error_gpu">Помилка моделі на GPU. Пам\'ять GPU значно менша за системну пам\'ять. Наступна спроба використовуватиме CPU. Щоб завжди використовувати CPU, встановіть Обчислення на CPU в налаштуваннях. Ви також можете вибрати меншу модель.</string>
+    <string name="core_intel_llm_engine_error_load">Модель не завантажилася. Ймовірно, файл пошкоджено. Видаліть модель у налаштуваннях і завантажте її знову.</string>
+    <string name="core_intel_llm_engine_error_memory">Бракує пам\'яті моделі або сталася помилка. Виберіть меншу модель.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Мала модель Gemma попереднього покоління. Має гарну якість та контекст 4K токенів.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Найменша модель Gemma від Google. Вона швидко працює на всіх пристроях.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Найновіше покоління Gemma. Забезпечує найвищу якість на вашому пристрої.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Найбільша модель. Вона пише найкраще, але потребує потужного пристрою.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Універсальна модель, яка підходить для базового пристрою.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Значно розумніша за моделі менше 1 млрд параметрів. Потребує пристрою середнього рівня.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Нещодавня невелика модель. Якість висока для її розміру.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Дуже маленька та швидка. Добре підходить для швидкого перефразування, але має обмежені можливості міркування.</string>
+    <string name="core_intel_llm_module_downloading">ШІ-компонент клавіатури завантажується з Google Play. Спробуйте ще раз за мить.</string>
+    <string name="core_intel_llm_module_restart">ШІ-модуль щойно завершив встановлення. Закрийте та знову відкрийте клавіатуру, щоб використовувати його.</string>
+    <string name="core_intel_llm_tier_experimental_label">Експериментальний</string>
+    <string name="core_intel_llm_tier_recommended_label">Рекомендовано</string>
+    <string name="core_intel_llm_tier_untested_label">Неперевірено</string>
+</resources>

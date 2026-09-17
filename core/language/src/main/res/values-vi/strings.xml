@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Ứng dụng đã thay đổi %1$d phím thành phím gần nhất mà nó có.</item>
+        <item quantity="other">Ứng dụng đã thay đổi %1$d phím thành các phím gần nhất mà nó có.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Ứng dụng đã xóa %1$d phím. Bàn phím này không có phím nào thực hiện cùng chức năng (mã %2$s).</item>
+        <item quantity="other">Ứng dụng đã xóa %1$d phím. Bàn phím này không có phím nào thực hiện cùng chức năng (mã %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Ứng dụng đã giữ kích thước nhãn của %1$d phím nhưng không giữ kiểu văn bản của nó. Bàn phím này vẽ các nhãn theo một kiểu.</item>
+        <item quantity="other">Ứng dụng đã giữ kích thước nhãn của %1$d phím nhưng không giữ kiểu văn bản của chúng. Bàn phím này vẽ các nhãn theo một kiểu.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Ứng dụng đã thay đổi %1$d chữ cái sang dạng mà bàn phím này viết.</item>
+        <item quantity="other">Ứng dụng đã thay đổi %1$d chữ cái sang dạng mà bàn phím này viết.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d phím không có chữ cái khi nhấn và giữ. Tệp lưu chúng trong một tệp thứ hai mà bạn chưa mở.</item>
+        <item quantity="other">%1$d phím không có chữ cái khi nhấn và giữ. Tệp lưu chúng trong một tệp thứ hai mà bạn chưa mở.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Bàn phím khác đo chiều rộng phím theo cách khác. Ứng dụng đã thay đổi chiều rộng để phù hợp với lưới này.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d phím chấm braille trong lớp %2$s có số chấm nằm ngoài phạm vi từ 1 đến 6.</item>
+        <item quantity="other">%1$d phím chấm braille trong lớp %2$s có số chấm nằm ngoài phạm vi từ 1 đến 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d phím trong lớp %2$s không có nhãn và không có đầu ra. Nó không gõ gì cả và ứng dụng sẽ xóa nó khi bạn bật bố cục này.</item>
+        <item quantity="other">%1$d phím trong lớp %2$s không có nhãn và không có đầu ra. Chúng không gõ gì cả và ứng dụng sẽ xóa chúng khi bạn bật bố cục này.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Hàng %1$d của lớp %2$s trống.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d phím trong lớp %2$s là một thành phần bảng. Các thành phần chỉ hoạt động trong bố cục bảng.</item>
+        <item quantity="other">%1$d phím trong lớp %2$s là các thành phần bảng. Các thành phần chỉ hoạt động trong bố cục bảng.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Hàng %1$d của lớp %2$s có một phím không có chiều rộng.</string>
+    <string name="core_lang_layout_key_span_error">Hàng %1$d của lớp %2$s có một phím bao phủ ít hơn 1 hoặc nhiều hơn %3$d hàng.</string>
+    <string name="core_lang_layout_letters_empty_error">Lớp chữ cái không có phím nào.</string>
+    <string name="core_lang_layout_no_delete_error">Bố cục này không có phím xóa. Bạn không thể sửa lỗi.</string>
+    <string name="core_lang_layout_no_enter_error">Bố cục này không có phím enter.</string>
+    <string name="core_lang_layout_no_shift_warning">Bố cục không có phím shift. Để nhập chữ in hoa, hãy nhấn và giữ phím.</string>
+    <string name="core_lang_layout_no_space_error">Bố cục này không có phím cách.</string>
+    <string name="core_lang_layout_no_way_back_error">Lớp %1$s không có phím nào để quay lại các chữ cái. Bạn không thể rời khỏi lớp này.</string>
+    <string name="core_lang_layout_persistent_warning">Lớp %1$s vẫn mở khi bàn phím đóng. Hãy đảm bảo bạn có cách để thoát khỏi bố cục này.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Bố cục này không có phím nào để thoát. Hãy đảm bảo bạn có cách để thoát khỏi bố cục này: phím ABC, phím ký hiệu hoặc công cụ Bố cục tùy chỉnh trên thanh công cụ.</string>
+    <string name="core_lang_layout_span_past_end_warning">Hàng %1$d của lớp %2$s có một phím bao phủ nhiều hàng hơn số hàng hiện có của lớp đó. Bàn phím sẽ dừng nó lại ở hàng cuối cùng.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Hàng %1$d của lớp %2$s có %3$d phím. Chỉ có %4$d phím đủ lớn để nhấn.</item>
+        <item quantity="other">Hàng %1$d của lớp %2$s có %3$d phím. Chỉ có %4$d phím đủ lớn để nhấn.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Lớp %1$s có %2$d hàng. Chỉ có thể chứa %3$d hàng.</item>
+        <item quantity="other">Lớp %1$s có %2$d hàng. Chỉ có thể chứa %3$d hàng.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d phím trong lớp %2$s sử dụng một tác vụ mà phiên bản ứng dụng này không nhận diện được.</item>
+        <item quantity="other">%1$d phím trong lớp %2$s sử dụng các tác vụ mà phiên bản ứng dụng này không nhận diện được.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Hàng %1$d của lớp %2$s rộng hơn các hàng khác. Bàn phím sẽ hiển thị các phím của hàng này hẹp hơn.</string>
+    <string name="core_lang_numeral_scope_display_only">Chỉ hiển thị</string>
+    <string name="core_lang_numeral_scope_everywhere">Mọi nơi</string>
+    <string name="core_lang_numeral_scope_text_fields">Các trường văn bản</string>
+    <string name="core_lang_numeral_system_auto">Tự động</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d thành phần xuất hiện nhiều hơn một lần. Ứng dụng giữ lại bản sao đầu tiên.</item>
+        <item quantity="other">%1$d thành phần xuất hiện nhiều hơn một lần. Ứng dụng giữ lại bản sao đầu tiên của mỗi thành phần.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Bảng này không có phím nào. Ứng dụng sẽ sử dụng bảng tiêu chuẩn thay thế.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d phím có hành động không hoạt động trên bảng điều khiển. Ứng dụng sẽ xóa nó.</item>
+        <item quantity="other">%1$d phím có hành động không hoạt động trên bảng điều khiển. Ứng dụng sẽ xóa chúng.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Bảng điều khiển này không có phím ABC. Sử dụng thanh công cụ hoặc nút Quay lại để quay lại các phím.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Ứng dụng đã xóa bản sao thứ hai của một thành phần.</string>
+    <string name="core_lang_panel_repair_field_added">Ứng dụng đã thêm thành phần chính của bảng điều khiển vào một hàng mới.</string>
+    <string name="core_lang_panel_repair_field_dropped">Ứng dụng đã xóa một thành phần không thuộc về bảng này.</string>
+    <string name="core_lang_panel_repair_key_dropped">Ứng dụng đã xóa một phím có hành động không hoạt động trên bảng điều khiển.</string>
+    <string name="core_lang_panel_repair_reset">Ứng dụng đã thay thế bảng trống bằng bảng tiêu chuẩn.</string>
+    <string name="core_lang_panel_required_field_error">Bảng này thiếu thành phần chính. Ứng dụng sẽ thêm một thành phần khi vẽ bảng.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d thành phần không thuộc về bảng điều khiển này. Ứng dụng sẽ xóa nó.</item>
+        <item quantity="other">%1$d thành phần không thuộc về bảng điều khiển này. Ứng dụng sẽ xóa chúng.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Ứng dụng đã xóa một phím trống trong lớp %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Một phím trong lớp %1$s đã sử dụng điểm braille %2$d. Ứng dụng đã chuyển nó thành điểm %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Lớp chữ cái không có phím xóa. Ứng dụng đã thêm một phím.</string>
+    <string name="core_lang_repair_enter_key_added">Lớp chữ cái không có phím enter. Ứng dụng đã thêm một phím.</string>
+    <string name="core_lang_repair_field_key_deleted">Ứng dụng đã xóa một thành phần bảng điều khiển khỏi lớp %1$s. Các thành phần chỉ hoạt động trong bố cục bảng điều khiển.</string>
+    <string name="core_lang_repair_key_letters_anchored">Một phím trong lớp %1$s đại diện cho %2$s. Ứng dụng đã đặt nó thành kiểu %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Một phím trong lớp %1$s đã liệt kê %2$s là các chữ cái mà nó đại diện. Đó không phải là chữ cái, vì vậy ứng dụng đã biến nó thành một phím thông thường.</string>
+    <string name="core_lang_repair_key_span_clamped">Một phím trong lớp %1$s đã bao phủ %2$d hàng. Ứng dụng đã điều chỉnh nó bao phủ %3$d hàng.</string>
+    <string name="core_lang_repair_key_width_capped">Một phím trong lớp %1$s có độ rộng %2$s đơn vị. Ứng dụng đã điều chỉnh thành %3$s đơn vị.</string>
+    <string name="core_lang_repair_key_width_set">Một phím trong lớp %1$s không có chiều rộng. Ứng dụng đã đặt chiều rộng thành 1.</string>
+    <string name="core_lang_repair_layer_replaced">Lớp %1$s không có phím nào hoạt động. Hiện tại nó đang sử dụng lưới tích hợp sẵn.</string>
+    <string name="core_lang_repair_letters_key_added">Lớp %1$s không có phím nào quay lại các chữ cái. Ứng dụng đã thêm một phím ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Một hàng trong lớp %1$s có %2$d phím. Ứng dụng giữ lại %3$d phím đầu tiên.</item>
+        <item quantity="other">Một hàng trong lớp %1$s có %2$d phím. Ứng dụng giữ lại %3$d phím đầu tiên.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Một hàng trong lớp %1$s rộng %2$s đơn vị. Ứng dụng đã thu nhỏ các phím để hàng đó vừa vặn.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Lớp %1$s có %2$d hàng. Ứng dụng giữ lại %3$d hàng đầu tiên.</item>
+        <item quantity="other">Lớp %1$s có %2$d hàng. Ứng dụng giữ lại %3$d hàng đầu tiên.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Lớp chữ cái không có phím cách. Ứng dụng đã thêm một phím.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Ứng dụng đã xóa một khóa trong lớp %1$s. Hành động \"%2$s\" của nó không được xác định.</string>
+</resources>

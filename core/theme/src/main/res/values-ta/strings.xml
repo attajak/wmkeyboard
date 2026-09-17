@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">அரோரா</string>
+    <string name="core_theme_builtin_berry_label">பெர்ரி</string>
+    <string name="core_theme_builtin_bubble_label">குமிழி</string>
+    <string name="core_theme_builtin_crimson_label">கிரிம்சன்</string>
+    <string name="core_theme_builtin_cyberpunk_label">சைபர்பங்க்</string>
+    <string name="core_theme_builtin_deep_sea_label">ஆழ்கடல்</string>
+    <string name="core_theme_builtin_facet_label">Facet</string>
+    <string name="core_theme_builtin_forest_label">காடு</string>
+    <string name="core_theme_builtin_glacier_label">பனிப்பாறை</string>
+    <string name="core_theme_builtin_mint_label">மின்ட் (Mint)</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">கடல்</string>
+    <string name="core_theme_builtin_pitch_label">பிட்ச் பிளாக்</string>
+    <string name="core_theme_builtin_rose_label">ரோஜா</string>
+    <string name="core_theme_builtin_sand_label">மணல்</string>
+    <string name="core_theme_builtin_slate_label">ஸ்லேட்</string>
+    <string name="core_theme_builtin_snow_label">பனி</string>
+    <string name="core_theme_builtin_sunset_drift_label">சன்செட் டிரிஃப்ட்</string>
+    <string name="core_theme_builtin_sunset_label">சூரிய அஸ்தமனம்</string>
+    <string name="core_theme_family_gradient_label">கிரேடியண்டுகள்</string>
+    <string name="core_theme_family_ocean_label">நைட்ஃபால்</string>
+    <string name="core_theme_family_snow_label">பேஸ்டல்</string>
+</resources>

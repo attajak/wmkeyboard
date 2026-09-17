@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Eenmalige code</string>
+    <string name="core_content_clip_entity_otp_tag">CODE</string>
+    <string name="core_content_clip_entity_phone_label">Telefoonnummer</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFOON</string>
+    <string name="core_content_clip_entity_url_label">Link</string>
+    <string name="core_content_clip_entity_url_tag">LINK</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d fragment heeft andere uitbreidingen die Espanso niet kan bevatten. Alleen de eerste is geschreven.</item>
+        <item quantity="other">%1$d fragmenten hebben andere uitbreidingen die Espanso niet kan bevatten. Alleen de eerste van elk is geschreven.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d snippet is beperkt tot bepaalde computerprogramma\'s. Op je telefoon werkt het overal.</item>
+        <item quantity="other">%1$d snippets zijn beperkt tot bepaalde computerprogramma\'s. Op je telefoon werken ze overal.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d fragment vraagt je om uit een lijst te kiezen. De app kiest er in plaats daarvan willekeurig een.</item>
+        <item quantity="other">%1$d fragmenten vragen je om uit een lijst te kiezen. De app kiest er in plaats daarvan willekeurig een.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d fragment vraagt om bevestiging voordat het wordt uitgebreid. Espanso heeft zo\'n instelling niet, dus daar zal het automatisch uitbreiden.</item>
+        <item quantity="other">%1$d fragmenten vragen om bevestiging voordat ze worden uitgebreid. Espanso heeft zo\'n instelling niet, dus daar zullen ze automatisch uitbreiden.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d fragment gebruikt een datumnotatie die de app niet volledig kan schrijven. De app heeft het deel weggelaten dat niet kan worden uitgevoerd.</item>
+        <item quantity="other">%1$d fragmenten gebruiken datumnotaties die de app niet volledig kan schrijven. De app heeft de delen weggelaten die niet kunnen worden uitgevoerd.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d fragment staat in een uitgeschakelde map. Espanso heeft geen map-schakelaar, dus het zal daar worden uitgebreid.</item>
+        <item quantity="other">%1$d fragmenten staan in uitgeschakelde mappen. Espanso heeft geen map-schakelaar, dus ze zullen daar worden uitgebreid.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">De app heeft %1$d fragment overgeslagen dat niets bevat om in te voegen.</item>
+        <item quantity="other">De app heeft %1$d fragmenten overgeslagen die niets bevatten om in te voegen.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d fragment vraagt je om een formulier in te vullen. De app voegt het formulier in als tekst, met de cursor in het eerste lege veld.</item>
+        <item quantity="other">%1$d fragmenten vragen je om een formulier in te vullen. De app voegt elk formulier in als tekst, met de cursor in het eerste lege veld.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">De app heeft %1$d fragment overgeslagen dat een afbeelding invoegt.</item>
+        <item quantity="other">De app heeft %1$d fragmenten overgeslagen die afbeeldingen invoegen.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Het bestand leest %1$d ander bestand. Eén bestand kan de andere niet meenemen.</item>
+        <item quantity="other">Het bestand leest %1$d andere bestanden. Eén bestand kan de andere niet meenemen.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d fragment verwijst naar andere fragmenten. Espanso kan dat niet verwerken, dus de koppelingen zijn weggelaten.</item>
+        <item quantity="other">%1$d fragmenten verwijzen naar andere fragmenten. Espanso kan dat niet verwerken, dus de koppelingen zijn weggelaten.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d trigger is bedoeld om binnen een woord te werken. Op je telefoon werkt het alleen als een heel woord.</item>
+        <item quantity="other">%1$d triggers zijn bedoeld om binnen een woord te werken. Op je telefoon werken ze alleen als hele woorden.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d fragment gebruikt een waarde waar Espanso geen equivalent voor heeft. Het wordt uitgeschreven zoals het is.</item>
+        <item quantity="other">%1$d fragmenten gebruiken waarden waar Espanso geen equivalent voor heeft. Ze worden uitgeschreven zoals ze zijn.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">De app heeft het patroon uit %1$d fragment verwijderd. De app voert geen patronen van die vorm uit. Het fragment blijft in de lijst staan.</item>
+        <item quantity="other">De app heeft het patroon uit %1$d fragmenten verwijderd. De app voert geen patronen van die vorm uit. De fragmenten blijven in de lijst staan.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d fragment gebruikt opgemaakte tekst. De app behoudt de woorden en verwijdert de opmaak.</item>
+        <item quantity="other">%1$d fragmenten gebruiken opgemaakte tekst. De app behoudt de woorden en verwijdert de opmaak.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d fragment voert een opdracht uit op je computer. De app heeft de opdracht weggelaten en voert deze nooit uit.</item>
+        <item quantity="other">%1$d fragmenten voeren opdrachten uit op je computer. De app heeft de opdrachten weggelaten en voert ze nooit uit.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d trigger eindigt niet op een woord, dus de app kan deze niet in de gaten houden. Het fragment blijft in de lijst staan.</item>
+        <item quantity="other">%1$d triggers eindigen niet op een woord, dus de app kan deze niet in de gaten houden. De fragmenten blijven in de lijst staan.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d fragment bevat tekst tussen accolades die deze app invult, zoals {date}. Het wordt uitgevouwen in plaats van weergegeven zoals geschreven.</item>
+        <item quantity="other">%1$d fragmenten bevatten tekst tussen accolades die deze app invult, zoals {date}. Het wordt uitgevouwen in plaats van weergegeven zoals geschreven.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d fragment wijzigt de hoofdletters van wat het patroon heeft vastgelegd. Espanso kan dat niet, dus de vastgelegde tekst wordt ongewijzigd ingevoerd.</item>
+        <item quantity="other">%1$d fragmenten wijzigen de hoofdletters van wat hun patronen hebben vastgelegd. Espanso kan dat niet, dus de vastgelegde tekst wordt ongewijzigd ingevoerd.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d fragment gebruikt een waarde waarvoor de app geen equivalent heeft. Dat deel komt leeg binnen.</item>
+        <item quantity="other">%1$d fragmenten gebruiken waarden waarvoor de app geen equivalent heeft. Die delen komen leeg binnen.</item>
+    </plurals>
+    <string name="core_content_font_error_download">De app kan het lettertype niet downloaden. Controleer je verbinding en probeer het opnieuw.</string>
+    <string name="core_content_font_error_empty">Het bestand is leeg.</string>
+    <string name="core_content_font_error_load">De app kan dit lettertypebestand niet laden.</string>
+    <string name="core_content_font_error_markup">Dit bestand is een HTML- of XML-bestand, geen lettertype.</string>
+    <string name="core_content_font_error_no_storage">Er is geen opslagruimte beschikbaar voor het lettertype.</string>
+    <string name="core_content_font_error_not_a_font">Dit bestand ziet er niet uit als een .ttf- of .otf-lettertype.</string>
+    <string name="core_content_font_error_read">De app kan het lettertype niet lezen.</string>
+    <string name="core_content_font_error_save">De app kan het lettertype niet opslaan.</string>
+    <string name="core_content_font_error_too_large">Een lettertype moet kleiner zijn dan %1$d MB.</string>
+    <string name="core_content_font_error_too_many">De lettertypebibliotheek is vol. Verwijder een lettertype en probeer het opnieuw.</string>
+    <string name="core_content_font_error_too_short">Het bestand is te kort om een lettertype te zijn.</string>
+    <string name="core_content_font_error_woff">De app kan WOFF-webfonts niet lezen. Gebruik de .ttf- of .otf-versie van het lettertype.</string>
+    <string name="core_content_font_error_woff2">De app kan geen WOFF2-webfonts lezen. Gebruik de .ttf- of .otf-versie van het lettertype.</string>
+    <string name="core_content_font_error_zip">Dit bestand is een zip-archief, geen lettertype.</string>
+    <string name="core_content_selection_macro_add_contact">Contact</string>
+    <string name="core_content_selection_macro_calendar">Agenda</string>
+    <string name="core_content_selection_macro_call">Bellen</string>
+    <string name="core_content_selection_macro_case_lower">kleine letters</string>
+    <string name="core_content_selection_macro_case_sentence">Zinsstijl</string>
+    <string name="core_content_selection_macro_case_title">Titelkast</string>
+    <string name="core_content_selection_macro_case_upper">HOOFDLETTERS</string>
+    <string name="core_content_selection_macro_chat_bold">Vet</string>
+    <string name="core_content_selection_macro_chat_italic">Cursief</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Doorhalen</string>
+    <string name="core_content_selection_macro_colour">Kleur</string>
+    <string name="core_content_selection_macro_copy">Kopiëren</string>
+    <string name="core_content_selection_macro_digits_latin">Cijfers</string>
+    <string name="core_content_selection_macro_email">E-mail</string>
+    <string name="core_content_selection_macro_fancy">Fancy</string>
+    <string name="core_content_selection_macro_find">Zoeken</string>
+    <string name="core_content_selection_macro_format">Opmaak</string>
+    <string name="core_content_selection_macro_grammar">Grammatica</string>
+    <string name="core_content_selection_macro_lines_bullet">Opsommingstekens</string>
+    <string name="core_content_selection_macro_lines_dedupe">Uniek</string>
+    <string name="core_content_selection_macro_lines_number">Nummer</string>
+    <string name="core_content_selection_macro_lines_sort">Sorteren</string>
+    <string name="core_content_selection_macro_map">Kaart</string>
+    <string name="core_content_selection_macro_open">Openen</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Uitspreken</string>
+    <string name="core_content_selection_macro_replace">Vervangen</string>
+    <string name="core_content_selection_macro_search">Zoeken</string>
+    <string name="core_content_selection_macro_share">Delen</string>
+    <string name="core_content_selection_macro_sms">Bericht</string>
+    <string name="core_content_selection_macro_time_zones">Tijdzones</string>
+    <string name="core_content_selection_macro_to_bangla">Bengaals</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Vertalen</string>
+    <string name="core_content_selection_macro_url_decode">Decoderen</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">De app heeft %2$d uitbreiding weggelaten uit \"%1$s\".</item>
+        <item quantity="other">De app heeft %2$d uitbreidingen weggelaten uit \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">De app heeft het patroon uit \"%1$s\" verwijderd. Het patroon is niet correct. Het fragment blijft in de lijst staan.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">De app heeft %1$d map verwijderd die geen naam heeft of een andere map herhaalt. De fragmenten zijn zonder map toegevoegd.</item>
+        <item quantity="other">De app heeft %1$d mappen verwijderd die geen naam hebben of een andere map herhalen. De fragmenten zijn zonder map toegevoegd.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Het bestand bevat meer fragmenten dan de app bewaart. De app heeft de eerste %1$d geïmporteerd.</item>
+        <item quantity="other">Het bestand bevat meer fragmenten dan de app bewaart. De app heeft de eerste %1$d geïmporteerd.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Een fragment heeft geen naam, dus de app heeft het vernoemd naar de eerste regel.</string>
+    <string name="core_content_snippet_repair_no_text">De app heeft \"%1$s\" verwijderd. Het bevat geen tekst.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">De app heeft het patroon uit \"%1$s\" verwijderd. Het was langer dan %2$d teken.</item>
+        <item quantity="other">De app heeft het patroon uit \"%1$s\" verwijderd. Het was langer dan %2$d tekens.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">De app heeft \"%1$s\" ingekort. Het was langer dan %2$d teken.</item>
+        <item quantity="other">De app heeft \"%1$s\" ingekort. Het was langer dan %2$d tekens.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">De naam van de app waarin je typt</string>
+    <string name="core_content_snippet_var_clip_info">Het nieuwste klemborditem</string>
+    <string name="core_content_snippet_var_cursor_info">De plek waar de cursor landt</string>
+    <string name="core_content_snippet_var_date_info">Datum van vandaag</string>
+    <string name="core_content_snippet_var_datetime_info">De datum en de tijd</string>
+    <string name="core_content_snippet_var_day_info">De dag van de maand</string>
+    <string name="core_content_snippet_var_isodate_info">De datum in ISO-vorm, bijvoorbeeld 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">De datum en tijd in ISO-formaat</string>
+    <string name="core_content_snippet_var_month_info">De naam van de maand</string>
+    <string name="core_content_snippet_var_package_info">De pakketnaam van die app</string>
+    <string name="core_content_snippet_var_selection_info">De tekst die u in het veld selecteert</string>
+    <string name="core_content_snippet_var_time12_info">De huidige tijd in 12-uursnotatie</string>
+    <string name="core_content_snippet_var_time_info">De huidige tijd in 24-uursnotatie</string>
+    <string name="core_content_snippet_var_timestamp_info">De tijd in Unix-seconden</string>
+    <string name="core_content_snippet_var_timezone_info">De tijdzone, bijvoorbeeld GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Een nieuwe willekeurige UUID</string>
+    <string name="core_content_snippet_var_weekday_info">De naam van de dag, bijvoorbeeld zondag</string>
+    <string name="core_content_snippet_var_year_info">Het jaar, met vier cijfers</string>
+    <string name="core_content_sticker_pack_imported_label">Geïmporteerde stickers</string>
+    <string name="core_content_sticker_repair_image_missing">De app heeft \"%1$s\" verwijderd. De afbeelding ontbreekt.</string>
+    <string name="core_content_sticker_repair_image_unreadable">De app heeft \"%1$s\" verwijderd. De app kan de afbeelding niet lezen.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Het pakket bevat %1$d sticker. De app behoudt de eerste %2$d.</item>
+        <item quantity="other">Het pakket bevat %1$d stickers. De app behoudt de eerste %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">De app heeft een sticker verwijderd. De naam van de sticker verwijst naar geen enkel afbeeldingsbestand.</string>
+    <string name="core_content_sticker_repair_none_listed">Het pakketbestand bevat geen stickers.</string>
+    <string name="core_content_sticker_repair_not_saved">De app heeft \"%1$s\" verwijderd. De app kan het niet opslaan.</string>
+</resources>

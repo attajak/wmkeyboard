@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">الملف الذي تم تنزيله تالف. مجموع التحقق لا يتطابق. حاول التنزيل مرة أخرى.</string>
+    <string name="core_input_cjk_download_error_http">أرجع الخادم حالة HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">فشل التنزيل. تحقق من اتصالك وحاول مرة أخرى.</string>
+    <string name="core_input_cjk_download_error_network_detail">لم ينجح التنزيل: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">لا توجد مساحة تخزين كافية على جهازك. قم بتفريغ بعض المساحة أولاً.</string>
+    <string name="core_input_cjk_download_error_truncated">توقف الاتصال أثناء التنزيل. اضغط على \"استئناف\" للمتابعة.</string>
+    <string name="core_input_cjk_download_error_unavailable">هذه الحزمة غير متوفرة بعد.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">جدول رموز الجذور لأحرف الهانزي، 29,000 حرف. تحتاج لوحة المفاتيح إلى هذه الحزمة لتخطيطات Cangjie و Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">قاموس كانجي (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">قراءات الكانا من mozc، 1.08 مليون إدخال، حوالي 42 ميجابايت. تحتاج لوحة المفاتيح إلى هذه الحزمة للتحويل الياباني.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">قاموس الكانا إلى الكانجي الياباني</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">جدول قراءات Jyutping إلى أحرف Hanzi، يحتوي على 163,000 إدخال. تحتاج لوحة المفاتيح إلى هذه الحزمة للتحويل إلى الكانتونية.</string>
+    <string name="core_input_cjk_pack_jyutping_title">قاموس الكانتونية جيوتبينغ</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">حروف وعبارات هانزي من CC-CEDICT، 120,000 مدخل. تحتاج لوحة المفاتيح إلى هذه الحزمة للتحويل إلى الصينية.</string>
+    <string name="core_input_cjk_pack_pinyin_title">قاموس بينيين الصيني</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">جدول لترتيب ضربات أحرف الهانزي. تحتاج لوحة المفاتيح إلى هذه الحزمة لتخطيط الضربات.</string>
+    <string name="core_input_cjk_pack_stroke_title">قاموس ضربات الكتابة الصينية (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">إيقاف (بينين كامل)</string>
+</resources>

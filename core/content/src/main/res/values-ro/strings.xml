@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Cod unic</string>
+    <string name="core_content_clip_entity_otp_tag">COD</string>
+    <string name="core_content_clip_entity_phone_label">Număr de telefon</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFON</string>
+    <string name="core_content_clip_entity_url_label">Link</string>
+    <string name="core_content_clip_entity_url_tag">LINK</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d fragment are alte expansiuni pe care Espanso nu le poate stoca. Doar prima a fost scrisă.</item>
+        <item quantity="other">%1$d fragmente au alte expansiuni pe care Espanso nu le poate stoca. Doar prima din fiecare a fost scrisă.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d fragment este limitat la anumite programe de calculator. Pe telefonul tău funcționează peste tot.</item>
+        <item quantity="other">%1$d fragmente sunt limitate la anumite programe de calculator. Pe telefonul tău funcționează peste tot.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d fragment îți cere să alegi dintr-o listă. Aplicația alege unul la întâmplare în schimb.</item>
+        <item quantity="other">%1$d fragmente îți cer să alegi dintr-o listă. Aplicația alege unul la întâmplare în schimb.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d fragment cere confirmare înainte de a se extinde. Espanso nu are o astfel de setare, așa că se va extinde singur acolo.</item>
+        <item quantity="other">%1$d fragmente cer confirmare înainte de a se extinde. Espanso nu are o astfel de setare, așa că se vor extinde singure acolo.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d fragment folosește un format de dată pe care aplicația nu îl poate scrie complet. Aplicația a omis partea pe care nu o poate procesa.</item>
+        <item quantity="other">%1$d fragmente folosesc formate de dată pe care aplicația nu le poate scrie complet. Aplicația a omis părțile pe care nu le poate procesa.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d fragment se află într-un folder care este dezactivat. Espanso nu are un comutator de folder, așa că se va extinde acolo.</item>
+        <item quantity="other">%1$d fragmente se află în foldere care sunt dezactivate. Espanso nu are un comutator de folder, așa că se vor extinde acolo.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Aplicația a omis %1$d fragment care nu are nimic de inserat.</item>
+        <item quantity="other">Aplicația a omis %1$d fragmente care nu au nimic de inserat.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d fragment îți cere să completezi un formular. Aplicația inserează formularul ca text, cu cursorul în primul spațiu liber.</item>
+        <item quantity="other">%1$d fragmente îți cer să completezi un formular. Aplicația inserează fiecare formular ca text, cu cursorul în primul spațiu liber.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Aplicația a omis %1$d fragment care inserează o imagine.</item>
+        <item quantity="other">Aplicația a omis %1$d fragmente care inserează imagini.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Fișierul citește %1$d alt fișier. Un fișier nu poate aduce celelalte cu el.</item>
+        <item quantity="other">Fișierul citește %1$d alte fișiere. Un fișier nu poate aduce celelalte cu el.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d fragment indică spre alte fragmente. Espanso nu are nicio modalitate de a spune asta, așa că linkurile au fost omise.</item>
+        <item quantity="other">%1$d fragmente indică spre alte fragmente. Espanso nu are nicio modalitate de a spune asta, așa că linkurile au fost omise.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d declanșator este menit să funcționeze în interiorul unui cuvânt. Pe telefon, acesta funcționează doar ca un cuvânt întreg.</item>
+        <item quantity="other">%1$d declanșatoare sunt menite să funcționeze în interiorul unui cuvânt. Pe telefon, acestea funcționează doar ca cuvinte întregi.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d fragment folosește o valoare pentru care Espanso nu are echivalent. Este scris așa cum este.</item>
+        <item quantity="other">%1$d fragmente folosesc valori pentru care Espanso nu are echivalent. Sunt scrise așa cum sunt.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Aplicația a eliminat modelul din %1$d fragment. Aplicația nu rulează modele de acea formă. Fragmentul rămâne în listă.</item>
+        <item quantity="other">Aplicația a eliminat modelul din %1$d fragmente. Aplicația nu rulează modele de acea formă. Fragmentele rămân în listă.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d fragment folosește text formatat. Aplicația păstrează cuvintele și elimină formatarea.</item>
+        <item quantity="other">%1$d fragmente folosesc text formatat. Aplicația păstrează cuvintele și elimină formatarea.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d fragment rulează o comandă pe computerul tău. Aplicația a omis comanda și nu o rulează niciodată.</item>
+        <item quantity="other">%1$d fragmente rulează comenzi pe computerul tău. Aplicația a omis comenzile și nu le rulează niciodată.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d declanșator nu se termină cu un cuvânt, deci aplicația nu îl poate monitoriza. Fragmentul său rămâne în listă.</item>
+        <item quantity="other">%1$d declanșatoare nu se termină cu un cuvânt, deci aplicația nu le poate monitoriza. Fragmentele lor rămân în listă.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d fragment conține text între acolade pe care această aplicație îl completează, cum ar fi {data}. Acesta se va extinde în loc să apară așa cum este scris.</item>
+        <item quantity="other">%1$d fragmente conțin text între acolade pe care această aplicație îl completează, cum ar fi {data}. Acesta se va extinde în loc să apară așa cum este scris.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d fragment modifică majusculele a ceea ce a capturat modelul său. Espanso nu poate face acest lucru, așa că textul capturat este introdus neschimbat.</item>
+        <item quantity="other">%1$d fragmente modifică majusculele a ceea ce au capturat modelele lor. Espanso nu poate face acest lucru, așa că textul capturat este introdus neschimbat.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d fragment folosește o valoare pentru care aplicația nu are echivalent. Acea parte va fi goală.</item>
+        <item quantity="other">%1$d fragmente folosesc valori pentru care aplicația nu are echivalent. Acele părți vor fi goale.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Aplicația nu poate descărca fontul. Verificați conexiunea și încercați din nou.</string>
+    <string name="core_content_font_error_empty">Fișierul este gol.</string>
+    <string name="core_content_font_error_load">Aplicația nu poate încărca acest fișier de font.</string>
+    <string name="core_content_font_error_markup">Acest fișier este un fișier HTML sau XML, nu un font.</string>
+    <string name="core_content_font_error_no_storage">Nu există spațiu de stocare disponibil pentru font.</string>
+    <string name="core_content_font_error_not_a_font">Acest fișier nu pare a fi un font .ttf sau .otf.</string>
+    <string name="core_content_font_error_read">Aplicația nu poate citi fontul.</string>
+    <string name="core_content_font_error_save">Aplicația nu poate salva fontul.</string>
+    <string name="core_content_font_error_too_large">Un font trebuie să fie mai mic de %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Biblioteca de fonturi este plină. Șterge un font și încearcă din nou.</string>
+    <string name="core_content_font_error_too_short">Fișierul este prea scurt pentru a fi un font.</string>
+    <string name="core_content_font_error_woff">Aplicația nu poate citi fonturi web WOFF. Utilizați versiunea .ttf sau .otf a fontului.</string>
+    <string name="core_content_font_error_woff2">Aplicația nu poate citi fonturi web WOFF2. Utilizați versiunea .ttf sau .otf a fontului.</string>
+    <string name="core_content_font_error_zip">Acest fișier este o arhivă zip, nu un font.</string>
+    <string name="core_content_selection_macro_add_contact">Contact</string>
+    <string name="core_content_selection_macro_calendar">Calendar</string>
+    <string name="core_content_selection_macro_call">Apel</string>
+    <string name="core_content_selection_macro_case_lower">litere mici</string>
+    <string name="core_content_selection_macro_case_sentence">Majusculă la începutul propoziției</string>
+    <string name="core_content_selection_macro_case_title">Caz titlu</string>
+    <string name="core_content_selection_macro_case_upper">MAJUSCULE</string>
+    <string name="core_content_selection_macro_chat_bold">Aldin</string>
+    <string name="core_content_selection_macro_chat_italic">Cursiv</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Tăiat</string>
+    <string name="core_content_selection_macro_colour">Culoare</string>
+    <string name="core_content_selection_macro_copy">Copiază</string>
+    <string name="core_content_selection_macro_digits_latin">Cifre</string>
+    <string name="core_content_selection_macro_email">E-mail</string>
+    <string name="core_content_selection_macro_fancy">Elegant</string>
+    <string name="core_content_selection_macro_find">Găsește</string>
+    <string name="core_content_selection_macro_format">Format</string>
+    <string name="core_content_selection_macro_grammar">Gramatică</string>
+    <string name="core_content_selection_macro_lines_bullet">Marcatori</string>
+    <string name="core_content_selection_macro_lines_dedupe">Unic</string>
+    <string name="core_content_selection_macro_lines_number">Număr</string>
+    <string name="core_content_selection_macro_lines_sort">Sortare</string>
+    <string name="core_content_selection_macro_map">Hartă</string>
+    <string name="core_content_selection_macro_open">Deschide</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Vorbește</string>
+    <string name="core_content_selection_macro_replace">Înlocuire</string>
+    <string name="core_content_selection_macro_search">Căutare</string>
+    <string name="core_content_selection_macro_share">Distribuie</string>
+    <string name="core_content_selection_macro_sms">Mesaj</string>
+    <string name="core_content_selection_macro_time_zones">Zone</string>
+    <string name="core_content_selection_macro_to_bangla">Bengaleză</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Traducere</string>
+    <string name="core_content_selection_macro_url_decode">Decodifică</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Aplicația a omis %2$d expansiune din \"%1$s\".</item>
+        <item quantity="other">Aplicația a omis %2$d expansiuni din \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Aplicația a eliminat modelul din \"%1$s\". Modelul nu este corect. Fragmentul rămâne în listă.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Aplicația a eliminat %1$d folder care nu are nume sau care se repetă. Fragmentele sale au fost adăugate fără folder.</item>
+        <item quantity="other">Aplicația a eliminat %1$d foldere care nu au nume sau care se repetă. Fragmentele lor au fost adăugate fără folder.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Fișierul are mai multe fragmente decât păstrează aplicația. Aplicația a importat primul %1$d.</item>
+        <item quantity="other">Fișierul are mai multe fragmente decât păstrează aplicația. Aplicația a importat primele %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Un fragment nu are nume, așa că aplicația l-a numit după prima sa linie.</string>
+    <string name="core_content_snippet_repair_no_text">Aplicația a eliminat \"%1$s\". Nu conține text.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Aplicația a eliminat modelul din „%1$s”. Era mai lung de %2$d caracter.</item>
+        <item quantity="other">Aplicația a eliminat modelul din „%1$s”. Era mai lung de %2$d caractere.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Aplicația a scurtat „%1$s”. Era mai lung de %2$d caracter.</item>
+        <item quantity="other">Aplicația a scurtat „%1$s”. Era mai lung de %2$d caractere.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Numele aplicației în care scrii</string>
+    <string name="core_content_snippet_var_clip_info">Cea mai recentă intrare din clipboard</string>
+    <string name="core_content_snippet_var_cursor_info">Locul unde ajunge cursorul</string>
+    <string name="core_content_snippet_var_date_info">Data de astăzi</string>
+    <string name="core_content_snippet_var_datetime_info">Data și ora</string>
+    <string name="core_content_snippet_var_day_info">Ziua lunii</string>
+    <string name="core_content_snippet_var_isodate_info">Data în format ISO, de exemplu 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Data și ora în format ISO</string>
+    <string name="core_content_snippet_var_month_info">Numele lunii</string>
+    <string name="core_content_snippet_var_package_info">Numele pachetului acelei aplicații</string>
+    <string name="core_content_snippet_var_selection_info">Textul pe care îl selectați în câmp</string>
+    <string name="core_content_snippet_var_time12_info">Ora curentă în format de 12 ore</string>
+    <string name="core_content_snippet_var_time_info">Ora curentă în format de 24 de ore</string>
+    <string name="core_content_snippet_var_timestamp_info">Timpul în secunde Unix</string>
+    <string name="core_content_snippet_var_timezone_info">Fusul orar, de exemplu GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Un nou UUID aleatoriu</string>
+    <string name="core_content_snippet_var_weekday_info">Numele zilei, de exemplu Duminică</string>
+    <string name="core_content_snippet_var_year_info">Anul, cu patru cifre</string>
+    <string name="core_content_sticker_pack_imported_label">Stickere importate</string>
+    <string name="core_content_sticker_repair_image_missing">Aplicația a eliminat \"%1$s\". Imaginea sa lipsește.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Aplicația a eliminat \"%1$s\". Aplicația nu poate citi imaginea.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Pachetul are %1$d autocolant. Aplicația păstrează primele %2$d.</item>
+        <item quantity="other">Pachetul are %1$d autocolante. Aplicația păstrează primele %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Aplicația a pierdut un sticker. Stickerul nu indică niciun fișier imagine.</string>
+    <string name="core_content_sticker_repair_none_listed">Fișierul pachet nu listează niciun autocolant.</string>
+    <string name="core_content_sticker_repair_not_saved">Aplicația a abandonat \"%1$s\". Aplicația nu o poate salva.</string>
+</resources>

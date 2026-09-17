@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">શબ્દકોશો</string>
+    <string name="core_addons_type_dictionary_singular_label">શબ્દકોશ</string>
+    <string name="core_addons_type_emoji_font_label">ઇમોજી ફોન્ટ્સ</string>
+    <string name="core_addons_type_emoji_font_singular_label">ઇમોજી ફોન્ટ</string>
+    <string name="core_addons_type_emoji_keywords_label">ઇમોજી કીવર્ડ્સ</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">ઇમોજી કીવર્ડ પેક</string>
+    <string name="core_addons_type_espanso_label">Espanso પેક્સ</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso પેક</string>
+    <string name="core_addons_type_font_label">ફોન્ટ્સ</string>
+    <string name="core_addons_type_font_singular_label">ફોન્ટ</string>
+    <string name="core_addons_type_icon_pack_label">આઇકન પેક</string>
+    <string name="core_addons_type_icon_pack_singular_label">આઇકન પેક</string>
+    <string name="core_addons_type_layout_label">લેઆઉટ</string>
+    <string name="core_addons_type_layout_singular_label">લેઆઉટ</string>
+    <string name="core_addons_type_plugin_label">પ્લગઈન્સ</string>
+    <string name="core_addons_type_plugin_singular_label">પ્લગિન</string>
+    <string name="core_addons_type_snippets_label">સ્નિપેટ્સ</string>
+    <string name="core_addons_type_snippets_singular_label">સ્નિપેટ પેક</string>
+    <string name="core_addons_type_sound_label">અવાજો</string>
+    <string name="core_addons_type_sound_pack_label">સાઉન્ડ પેક</string>
+    <string name="core_addons_type_sound_pack_singular_label">સાઉન્ડ પેક</string>
+    <string name="core_addons_type_sound_singular_label">કી સાઉન્ડ</string>
+    <string name="core_addons_type_stickers_label">સ્ટીકર પેક</string>
+    <string name="core_addons_type_stickers_singular_label">સ્ટીકર પેક</string>
+    <string name="core_addons_type_theme_label">થીમ્સ</string>
+    <string name="core_addons_type_theme_singular_label">થીમ</string>
+    <string name="core_addons_type_unknown_label">અન્ય</string>
+    <string name="core_addons_type_unknown_singular_label">એડ-ઓન</string>
+    <string name="core_addons_type_vocabulary_label">શબ્દભંડોળ</string>
+    <string name="core_addons_type_vocabulary_singular_label">શબ્દભંડોળ પેક</string>
+</resources>

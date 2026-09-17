@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">לתוסף זה אין פונקציית render().</string>
+    <string name="core_plugins_error_not_installed">התוסף הזה לא מותקן.</string>
+    <string name="core_plugins_error_script_failed">הסקריפט נכשל.</string>
+    <string name="core_plugins_error_script_missing">הסקריפט עבור תוסף זה חסר.</string>
+    <string name="core_plugins_error_turned_off">התוסף הזה כבוי.</string>
+    <string name="core_plugins_permission_storage_label">שמירת נתונים במכשיר שלך</string>
+    <string name="core_plugins_reject_bad_encoding">ל-\"%1$s\" יש סקריפט שאינו טקסט UTF-8 חוקי.</string>
+    <string name="core_plugins_reject_bad_id">לתוסף זה יש מזהה שאינו תקין. מזהה חייב להיות באורך של 3 עד 64 תווים. מזהה יכול להכיל אותיות קטנות, מספרים, נקודות, מקפים וקווים תחתונים.</string>
+    <string name="core_plugins_reject_compiled_lua">‏\"%1$s\" מכיל קוד Lua מהודר. תוסף חייב להשתמש בקוד מקור פשוט, כדי שתוכל לקרוא אותו לפני שהוא מופעל.</string>
+    <string name="core_plugins_reject_empty_script">ל-\"%1$s\" יש סקריפט ריק.</string>
+    <string name="core_plugins_reject_missing_script">ל-\"%1$s\" אין קובץ סקריפט (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">תוסף זה זקוק לגרסה חדשה יותר של WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">לתוסף זה אין שם.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” לא מציין איזו גרסה זו.</string>
+    <string name="core_plugins_reject_script_too_large">ל-\"%1$s\" יש סקריפט גדול מ-%2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">גרסה זו של WM Keyboard אינה מכירה את ההרשאה \"%1$s\". האפליקציה אינה יכולה לומר לך מה \"%2$s\" מורשה לעשות.</string>
+    <string name="core_plugins_stopped_cancelled">האפליקציה עצרה את התוסף הזה.</string>
+    <string name="core_plugins_stopped_deadline">התוסף הזה לקח יותר מדי זמן. האפליקציה עצרה אותו.</string>
+    <string name="core_plugins_stopped_instructions">תוסף זה ביצע יותר מדי עבודה בבת אחת. האפליקציה עצרה אותו.</string>
+    <string name="core_plugins_stopped_not_responding">תוסף זה הפסיק להגיב. האפליקציה סגרה אותו.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">תוסף זה הפסיק להגיב שוב. האפליקציה כיבתה אותו.</string>
+    <string name="core_plugins_stopped_recursion">תוסף זה קרא לעצמו פעמים רבות מדי. האפליקציה עצרה אותו.</string>
+    <string name="core_plugins_stopped_unexpected">תוסף זה נעצר באופן בלתי צפוי.</string>
+    <string name="core_plugins_ui_insert_action">הכנס</string>
+    <string name="core_plugins_ui_repair_no_type">ווידג\'ט לא ציין איזה סוג הוא.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">רשימת ווידג\'טים הכילה משהו שאינו ווידג\'ט.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">לשורת כרטיסיות לא היו דפים.</string>
+    <string name="core_plugins_ui_repair_text_budget">תוסף זה ביקש לצייר יותר מדי טקסט. האפליקציה השמיטה חלק ממנו.</string>
+    <string name="core_plugins_ui_repair_text_shortened">טקסט מסוים היה ארוך מדי להצגה. האפליקציה קיצרה אותו.</string>
+    <string name="core_plugins_ui_repair_too_deep">חלק מהווידג\'טים היו מקוננים עמוק מדי מכדי להציג אותם.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">רק %1$d הכרטיסיות הראשונות מוצגות.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">תוסף זה ביקש יותר מ-%1$d ווידג\'טים. האפליקציה הסירה את השאר.</string>
+    <string name="core_plugins_ui_repair_unknown_type">גרסה זו אינה מכירה את סוג הווידג\'ט \"%1$s\".</string>
+    <string name="core_plugins_ui_tab_default_title">כרטיסייה %1$d</string>
+</resources>

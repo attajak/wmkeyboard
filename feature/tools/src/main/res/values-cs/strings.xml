@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">Poskytovatel AI ukončil odpověď chybou</string>
+    <string name="ftools_photo_error_failed">Aplikaci se nepodařilo získat fotografie</string>
+    <string name="ftools_photo_error_offline">Aplikace se nemůže připojit ke službě fotografií. Zkontrolujte síť a zkuste to znovu.</string>
+    <string name="ftools_photo_error_timeout">Služba pro fotky odpověděla příliš pozdě</string>
+    <string name="ftools_search_error_json_disabled">Tato instance SearXNG nemá povolené JSON API. Přidejte &lt;b&gt;json&lt;/b&gt; do &lt;b&gt;search.formats&lt;/b&gt; v souboru settings.yml nebo použijte jinou instanci.</string>
+</resources>

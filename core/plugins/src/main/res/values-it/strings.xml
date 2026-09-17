@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Questo plugin non ha una funzione render().</string>
+    <string name="core_plugins_error_not_installed">Quel plugin non è installato.</string>
+    <string name="core_plugins_error_script_failed">Lo script non è riuscito.</string>
+    <string name="core_plugins_error_script_missing">Lo script per quel plugin è mancante.</string>
+    <string name="core_plugins_error_turned_off">Quel plugin è disattivato.</string>
+    <string name="core_plugins_permission_storage_label">Salva i dati sul tuo dispositivo</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” contiene uno script che non è un testo UTF-8 valido.</string>
+    <string name="core_plugins_reject_bad_id">Questo plugin ha un ID non valido. Un ID deve avere una lunghezza compresa tra 3 e 64 caratteri. Un ID può contenere lettere minuscole, numeri, punti, trattini e trattini bassi.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” contiene codice Lua compilato. Un plugin deve utilizzare codice sorgente semplice, in modo che tu possa leggerlo prima che venga eseguito.</string>
+    <string name="core_plugins_reject_empty_script">\"%1$s\" ha uno script vuoto.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” non ha il suo file script (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Questo plugin richiede una versione più recente di WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Questo plugin non ha un nome.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” non specifica la versione.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” ha uno script più grande di %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Questa versione di WM Keyboard non riconosce l\'autorizzazione \"%1$s\". L\'app non può dirti cosa è autorizzato a fare \"%2$s\".</string>
+    <string name="core_plugins_stopped_cancelled">L\'app ha interrotto questo plugin.</string>
+    <string name="core_plugins_stopped_deadline">Questo plugin ha impiegato troppo tempo. L\'app lo ha interrotto.</string>
+    <string name="core_plugins_stopped_instructions">Questo plugin ha eseguito troppe operazioni contemporaneamente. L\'app lo ha interrotto.</string>
+    <string name="core_plugins_stopped_not_responding">Questo plugin ha smesso di rispondere. L\'app lo ha chiuso.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Questo plugin ha smesso di rispondere di nuovo. L\'app lo ha disattivato.</string>
+    <string name="core_plugins_stopped_recursion">Questo plugin ha richiamato se stesso troppe volte. L\'app lo ha interrotto.</string>
+    <string name="core_plugins_stopped_unexpected">Questo plugin si è arrestato in modo imprevisto.</string>
+    <string name="core_plugins_ui_insert_action">Inserisci</string>
+    <string name="core_plugins_ui_repair_no_type">Un widget non ha specificato il suo tipo.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Un elenco di widget conteneva qualcosa che non è un widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Una barra delle schede non aveva pagine.</string>
+    <string name="core_plugins_ui_repair_text_budget">Questo plugin ha richiesto di visualizzare troppo testo. L\'app ne ha omesso una parte.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Alcuni testi erano troppo lunghi da visualizzare. L\'app li ha abbreviati.</string>
+    <string name="core_plugins_ui_repair_too_deep">Alcuni widget erano annidati troppo profondamente per essere disegnati.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Vengono mostrate solo le prime %1$d schede.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Questo plugin ha richiesto più di %1$d widget. L\'app ha eliminato i restanti.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Questa build non riconosce il tipo di widget “%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Scheda %1$d</string>
+</resources>

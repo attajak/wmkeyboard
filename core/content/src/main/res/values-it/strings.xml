@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Codice monouso</string>
+    <string name="core_content_clip_entity_otp_tag">CODICE</string>
+    <string name="core_content_clip_entity_phone_label">Numero di telefono</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFONO</string>
+    <string name="core_content_clip_entity_url_label">Link</string>
+    <string name="core_content_clip_entity_url_tag">LINK</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d snippet ha altre espansioni che Espanso non può contenere. È stata scritta solo la prima.</item>
+        <item quantity="other">%1$d snippet hanno altre espansioni che Espanso non può contenere. È stata scritta solo la prima di ciascuno.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d snippet è limitato a determinati programmi per computer. Sul tuo telefono funziona ovunque.</item>
+        <item quantity="other">%1$d snippet sono limitati a determinati programmi per computer. Sul tuo telefono funzionano ovunque.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d snippet ti chiede di scegliere da un elenco. L\'app ne sceglie uno a caso.</item>
+        <item quantity="other">%1$d snippet ti chiedono di scegliere da un elenco. L\'app ne sceglie uno a caso.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d snippet chiede conferma prima di espandersi. Espanso non ha questa impostazione, quindi si espanderà da solo.</item>
+        <item quantity="other">%1$d snippet chiedono conferma prima di espandersi. Espanso non ha questa impostazione, quindi si espanderanno da soli.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d snippet utilizza un formato data che l\'app non può scrivere per intero. L\'app ha omesso la parte che non può gestire.</item>
+        <item quantity="other">%1$d snippet utilizzano formati data che l\'app non può scrivere per intero. L\'app ha omesso le parti che non può gestire.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d snippet si trova in una cartella disattivata. Espanso non ha un interruttore per le cartelle, quindi si espanderà lì.</item>
+        <item quantity="other">%1$d snippet si trovano in cartelle disattivate. Espanso non ha un interruttore per le cartelle, quindi si espanderanno lì.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">L\'app ha saltato %1$d snippet che non ha nulla da inserire.</item>
+        <item quantity="other">L\'app ha saltato %1$d snippet che non hanno nulla da inserire.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d snippet ti chiede di compilare un modulo. L\'app inserisce il modulo come testo, con il cursore nel primo spazio vuoto.</item>
+        <item quantity="other">%1$d snippet ti chiedono di compilare un modulo. L\'app inserisce ogni modulo come testo, con il cursore nel primo spazio vuoto.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">L\'app ha saltato %1$d snippet che inserisce un\'immagine.</item>
+        <item quantity="other">L\'app ha saltato %1$d snippet che inseriscono immagini.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Il file legge %1$d altro file. Un file non può portare con sé gli altri.</item>
+        <item quantity="other">Il file legge %1$d altri file. Un file non può portare con sé gli altri.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d snippet punta ad altri snippet. Espanso non ha modo di dirlo, quindi i collegamenti sono stati omessi.</item>
+        <item quantity="other">%1$d snippet puntano ad altri snippet. Espanso non ha modo di dirlo, quindi i collegamenti sono stati omessi.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d trigger è pensato per funzionare all\'interno di una parola. Sul tuo telefono funziona solo come parola intera.</item>
+        <item quantity="other">%1$d trigger sono pensati per funzionare all\'interno di una parola. Sul tuo telefono funzionano solo come parole intere.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d snippet utilizza un valore per il quale Espanso non ha un equivalente. Viene scritto così com\'è.</item>
+        <item quantity="other">%1$d snippet utilizzano valori per i quali Espanso non ha un equivalente. Vengono scritti così come sono.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">L\'app ha rimosso il pattern da %1$d snippet. L\'app non esegue pattern di quel tipo. Lo snippet rimane nell\'elenco.</item>
+        <item quantity="other">L\'app ha rimosso il pattern da %1$d snippet. L\'app non esegue pattern di quel tipo. Gli snippet rimangono nell\'elenco.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d snippet utilizza testo formattato. L\'app mantiene le parole e rimuove la formattazione.</item>
+        <item quantity="other">%1$d snippet utilizzano testo formattato. L\'app mantiene le parole e rimuove la formattazione.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d snippet esegue un comando sul tuo computer. L\'app ha omesso il comando e non lo eseguirà mai.</item>
+        <item quantity="other">%1$d snippet eseguono comandi sul tuo computer. L\'app ha omesso i comandi e non li eseguirà mai.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d trigger è composto solo da simboli, quindi l\'app non può rilevarlo. Il suo snippet rimane nell\'elenco.</item>
+        <item quantity="other">%1$d trigger sono composti solo da simboli, quindi l\'app non può rilevarli. I loro snippet rimangono nell\'elenco.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d snippet contiene testo tra parentesi che questa app compila, come {date}. Verrà espanso invece di apparire come scritto.</item>
+        <item quantity="other">%1$d snippet contengono testo tra parentesi che questa app compila, come {date}. Verranno espansi invece di apparire come scritti.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d snippet modifica le maiuscole di ciò che il suo pattern ha catturato. Espanso non può farlo, quindi il testo catturato viene inserito invariato.</item>
+        <item quantity="other">%1$d snippet modificano le maiuscole di ciò che i loro pattern hanno catturato. Espanso non può farlo, quindi il testo catturato viene inserito invariato.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d snippet utilizza un valore per il quale l\'app non ha un equivalente. Quella parte risulterà vuota.</item>
+        <item quantity="other">%1$d snippet utilizzano valori per i quali l\'app non ha un equivalente. Quelle parti risulteranno vuote.</item>
+    </plurals>
+    <string name="core_content_font_error_download">L\'app non può scaricare il carattere. Controlla la tua connessione e riprova.</string>
+    <string name="core_content_font_error_empty">Il file è vuoto.</string>
+    <string name="core_content_font_error_load">L\'app non può caricare questo file di font.</string>
+    <string name="core_content_font_error_markup">Questo file è un file HTML o XML, non un font.</string>
+    <string name="core_content_font_error_no_storage">Nessuno spazio di archiviazione disponibile per il font.</string>
+    <string name="core_content_font_error_not_a_font">Questo file non sembra essere un font .ttf o .otf.</string>
+    <string name="core_content_font_error_read">L\'app non può leggere il font.</string>
+    <string name="core_content_font_error_save">L\'app non può salvare il carattere.</string>
+    <string name="core_content_font_error_too_large">Un font deve essere più piccolo di %1$d MB.</string>
+    <string name="core_content_font_error_too_many">La libreria dei font è piena. Elimina un font e riprova.</string>
+    <string name="core_content_font_error_too_short">Il file è troppo breve per essere un font.</string>
+    <string name="core_content_font_error_woff">L\'app non può leggere i font web WOFF. Utilizza la versione .ttf o .otf del font.</string>
+    <string name="core_content_font_error_woff2">L\'app non può leggere i font web WOFF2. Usa la versione .ttf o .otf del font.</string>
+    <string name="core_content_font_error_zip">Questo file è un archivio zip, non un carattere.</string>
+    <string name="core_content_selection_macro_add_contact">Contatto</string>
+    <string name="core_content_selection_macro_calendar">Calendario</string>
+    <string name="core_content_selection_macro_call">Chiama</string>
+    <string name="core_content_selection_macro_case_lower">minuscolo</string>
+    <string name="core_content_selection_macro_case_sentence">Maiuscole/minuscole frase</string>
+    <string name="core_content_selection_macro_case_title">Iniziale maiuscola</string>
+    <string name="core_content_selection_macro_case_upper">MAIUSCOLO</string>
+    <string name="core_content_selection_macro_chat_bold">Grassetto</string>
+    <string name="core_content_selection_macro_chat_italic">Corsivo</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Barrato</string>
+    <string name="core_content_selection_macro_colour">Colore</string>
+    <string name="core_content_selection_macro_copy">Copia</string>
+    <string name="core_content_selection_macro_digits_latin">Cifre</string>
+    <string name="core_content_selection_macro_email">Email</string>
+    <string name="core_content_selection_macro_fancy">Elegante</string>
+    <string name="core_content_selection_macro_find">Trova</string>
+    <string name="core_content_selection_macro_format">Formato</string>
+    <string name="core_content_selection_macro_grammar">Grammatica</string>
+    <string name="core_content_selection_macro_lines_bullet">Elenchi puntati</string>
+    <string name="core_content_selection_macro_lines_dedupe">Univoco</string>
+    <string name="core_content_selection_macro_lines_number">Numero</string>
+    <string name="core_content_selection_macro_lines_sort">Ordina</string>
+    <string name="core_content_selection_macro_map">Mappa</string>
+    <string name="core_content_selection_macro_open">Apri</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Leggi</string>
+    <string name="core_content_selection_macro_replace">Sostituisci</string>
+    <string name="core_content_selection_macro_search">Cerca</string>
+    <string name="core_content_selection_macro_share">Condividi</string>
+    <string name="core_content_selection_macro_sms">Messaggio</string>
+    <string name="core_content_selection_macro_time_zones">Fusi orari</string>
+    <string name="core_content_selection_macro_to_bangla">Bengalese</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Traduci</string>
+    <string name="core_content_selection_macro_url_decode">Decodifica</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">L\'app ha escluso %2$d espansione da \"%1$s\".</item>
+        <item quantity="other">L\'app ha escluso %2$d espansioni da \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">L\'app ha rimosso il pattern da \"%1$s\". Il pattern non è corretto. Lo snippet rimane nell\'elenco.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">L\'app ha rimosso %1$d cartella senza nome o che ne ripete un\'altra. I suoi snippet sono stati importati senza cartella.</item>
+        <item quantity="other">L\'app ha rimosso %1$d cartelle senza nome o che ne ripetono un\'altra. I loro snippet sono stati importati senza cartella.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Il file ha più snippet di quanti l\'app ne conservi. L\'app ha importato il primo %1$d.</item>
+        <item quantity="other">Il file ha più snippet di quanti l\'app ne conservi. L\'app ha importato i primi %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Uno snippet non ha un nome, quindi l\'app lo ha chiamato come la sua prima riga.</string>
+    <string name="core_content_snippet_repair_no_text">L\'app ha rimosso \"%1$s\". Non contiene testo.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">L\'app ha rimosso il pattern da \"%1$s\". Era più lungo di %2$d carattere.</item>
+        <item quantity="other">L\'app ha rimosso il pattern da \"%1$s\". Era più lungo di %2$d caratteri.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">L\'app ha abbreviato \"%1$s\". Era più lungo di %2$d carattere.</item>
+        <item quantity="other">L\'app ha abbreviato \"%1$s\". Era più lungo di %2$d caratteri.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Il nome dell\'app in cui stai scrivendo</string>
+    <string name="core_content_snippet_var_clip_info">L\'elemento più recente negli appunti</string>
+    <string name="core_content_snippet_var_cursor_info">Il punto in cui si posiziona il cursore</string>
+    <string name="core_content_snippet_var_date_info">Data di oggi</string>
+    <string name="core_content_snippet_var_datetime_info">Data e ora</string>
+    <string name="core_content_snippet_var_day_info">Il giorno del mese</string>
+    <string name="core_content_snippet_var_isodate_info">La data in formato ISO, ad esempio 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Data e ora in formato ISO</string>
+    <string name="core_content_snippet_var_month_info">Il nome del mese</string>
+    <string name="core_content_snippet_var_package_info">Il nome del pacchetto di quell\'app</string>
+    <string name="core_content_snippet_var_selection_info">Il testo selezionato nel campo</string>
+    <string name="core_content_snippet_var_time12_info">L\'ora attuale nel formato a 12 ore</string>
+    <string name="core_content_snippet_var_time_info">L\'ora attuale nel formato 24 ore</string>
+    <string name="core_content_snippet_var_timestamp_info">Il tempo in secondi Unix</string>
+    <string name="core_content_snippet_var_timezone_info">Il fuso orario, ad esempio GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Un nuovo UUID casuale</string>
+    <string name="core_content_snippet_var_weekday_info">Il nome del giorno, ad esempio domenica</string>
+    <string name="core_content_snippet_var_year_info">L\'anno, con quattro cifre</string>
+    <string name="core_content_sticker_pack_imported_label">Sticker importati</string>
+    <string name="core_content_sticker_repair_image_missing">L\'app ha rimosso \"%1$s\". La sua immagine manca.</string>
+    <string name="core_content_sticker_repair_image_unreadable">L\'app ha rimosso \"%1$s\". L\'app non riesce a leggere la sua immagine.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Il pacchetto ha %1$d adesivo. L\'app mantiene il primo %2$d.</item>
+        <item quantity="other">Il pacchetto ha %1$d adesivi. L\'app mantiene i primi %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">L\'app ha perso uno sticker. Il nome dello sticker non corrisponde ad alcun file immagine.</string>
+    <string name="core_content_sticker_repair_none_listed">Il file del pacchetto non elenca alcun adesivo.</string>
+    <string name="core_content_sticker_repair_not_saved">L\'app ha rimosso \"%1$s\". L\'app non può salvarlo.</string>
+</resources>

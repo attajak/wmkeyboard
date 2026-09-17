@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">ایپ نے %1$d کلید کو اس کے قریب ترین کلید میں تبدیل کر دیا جو اس کے پاس ہے۔</item>
+        <item quantity="other">ایپ نے %1$d کلیدوں کو ان کے قریب ترین کلیدوں میں تبدیل کر دیا جو اس کے پاس ہیں۔</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">ایپ نے %1$d کلید ہٹا دی۔ اس کی بورڈ میں کوئی ایسی کلید نہیں ہے جو وہی کام کرتی ہو (کوڈ %2$s)۔</item>
+        <item quantity="other">ایپ نے %1$d کلیدیں ہٹا دیں۔ اس کی بورڈ میں کوئی ایسی کلیدیں نہیں ہیں جو وہی کام کرتی ہوں (کوڈز %2$s)۔</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">ایپ نے %1$d کلید کا لیبل سائز برقرار رکھا لیکن اس کا ٹیکسٹ اسٹائل نہیں۔ یہ کی بورڈ لیبلز کو ایک ہی اسٹائل میں ڈرا کرتا ہے۔</item>
+        <item quantity="other">ایپ نے %1$d کلیدوں کا لیبل سائز برقرار رکھا لیکن ان کا ٹیکسٹ اسٹائل نہیں۔ یہ کی بورڈ لیبلز کو ایک ہی اسٹائل میں ڈرا کرتا ہے۔</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">ایپ نے %1$d حرف کو اس شکل میں تبدیل کر دیا ہے جو یہ کی بورڈ لکھتا ہے۔</item>
+        <item quantity="other">ایپ نے %1$d حروف کو اس شکل میں تبدیل کر دیا ہے جو یہ کی بورڈ لکھتا ہے۔</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d کی میں کوئی پریس اینڈ ہولڈ حروف نہیں ہیں۔ فائل انہیں دوسری فائل میں رکھتی ہے جسے آپ نے نہیں کھولا۔</item>
+        <item quantity="other">%1$d کیز میں کوئی پریس اینڈ ہولڈ حروف نہیں ہیں۔ فائل انہیں دوسری فائل میں رکھتی ہے جسے آپ نے نہیں کھولا۔</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">دوسرا کی بورڈ کلید کی چوڑائی کو مختلف طریقے سے ناپتا ہے۔ ایپ نے اس گرڈ کے مطابق چوڑائی کو تبدیل کر دیا ہے۔</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s لیئر میں %1$d بریل ڈاٹ کی (key) کا ڈاٹ نمبر 1 سے 6 کے باہر ہے۔</item>
+        <item quantity="other">%2$s لیئر میں %1$d بریل ڈاٹ کیز (keys) کے ڈاٹ نمبر 1 سے 6 کے باہر ہیں۔</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s لیئر میں %1$d کلید کا کوئی لیبل اور کوئی آؤٹ پٹ نہیں ہے۔ یہ کچھ بھی ٹائپ نہیں کرتی، اور جب آپ اس لے آؤٹ کو آن کرتے ہیں تو ایپ اسے حذف کر دیتی ہے۔</item>
+        <item quantity="other">%2$s لیئر میں %1$d کلیدوں کا کوئی لیبل اور کوئی آؤٹ پٹ نہیں ہے۔ وہ کچھ بھی ٹائپ نہیں کرتیں، اور جب آپ اس لے آؤٹ کو آن کرتے ہیں تو ایپ انہیں حذف کر دیتی ہے۔</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s لیئر کی %1$d قطار خالی ہے۔</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s لیئر میں %1$d کلید ایک پینل جزو ہے۔ اجزاء صرف پینل لے آؤٹ میں کام کرتے ہیں۔</item>
+        <item quantity="other">%2$s لیئر میں %1$d کلیدیں پینل اجزاء ہیں۔ اجزاء صرف پینل لے آؤٹ میں کام کرتے ہیں۔</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s لیئر کی قطار %1$d میں ایک ایسی کلید ہے جس کی کوئی چوڑائی نہیں ہے۔</string>
+    <string name="core_lang_layout_key_span_error">%2$s لیئر کی %1$d قطار میں ایک ایسی کلید ہے جو 1 سے کم یا %3$d سے زیادہ قطاروں کا احاطہ کرتی ہے۔</string>
+    <string name="core_lang_layout_letters_empty_error">حروف کی تہہ میں کوئی کلید نہیں ہے۔</string>
+    <string name="core_lang_layout_no_delete_error">لے آؤٹ میں کوئی ڈیلیٹ کلید نہیں ہے۔ آپ غلطی کو درست نہیں کر سکتے۔</string>
+    <string name="core_lang_layout_no_enter_error">لے آؤٹ میں کوئی انٹر کلید نہیں ہے۔</string>
+    <string name="core_lang_layout_no_shift_warning">لے آؤٹ میں کوئی شفٹ کلید نہیں ہے۔ بڑا حرف ٹائپ کرنے کے لیے، ایک کلید کو دبائے رکھیں۔</string>
+    <string name="core_lang_layout_no_space_error">لے آؤٹ میں کوئی اسپیس کی (space key) نہیں ہے۔</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s لیئر میں کوئی ایسی کلید نہیں ہے جو واپس حروف پر لے جائے۔ آپ اس لیئر سے باہر نہیں نکل سکتے۔</string>
+    <string name="core_lang_layout_persistent_warning">کی بورڈ بند ہونے پر %1$s لیئر کھلی رہتی ہے۔ یقینی بنائیں کہ آپ کے پاس اس لے آؤٹ سے باہر نکلنے کا کوئی طریقہ موجود ہے۔</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">اس لے آؤٹ میں کوئی ایسی کلید نہیں ہے جو اسے چھوڑ سکے۔ یقینی بنائیں کہ آپ کے پاس اس لے آؤٹ سے باہر نکلنے کا کوئی طریقہ ہے: ایک ABC کلید، ایک علامتوں والی کلید، یا ٹول بار پر کسٹم لے آؤٹ ٹول۔</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s لیئر کی %1$d قطار میں ایک ایسی کلید ہے جو لیئر کی قطاروں سے زیادہ قطاروں کا احاطہ کرتی ہے۔ کی بورڈ اسے آخری قطار پر روک دیتا ہے۔</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s لیئر کی قطار %1$d میں %3$d کلید ہے۔ صرف %4$d کلیدیں دبانے کے لیے کافی بڑی رہتی ہیں۔</item>
+        <item quantity="other">%2$s لیئر کی قطار %1$d میں %3$d کلیدیں ہیں۔ صرف %4$d کلیدیں دبانے کے لیے کافی بڑی رہتی ہیں۔</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s لیئر میں %2$d قطار ہے۔ صرف %3$d قطاریں فٹ ہوتی ہیں۔</item>
+        <item quantity="other">%1$s لیئر میں %2$d قطاریں ہیں۔ صرف %3$d قطاریں فٹ ہوتی ہیں۔</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s لیئر میں %1$d کلید ایک ایسا ایکشن استعمال کرتی ہے جسے ایپ کا یہ ورژن نہیں جانتا۔</item>
+        <item quantity="other">%2$s لیئر میں %1$d کلیدیں ایک ایسا ایکشن استعمال کرتی ہیں جسے ایپ کا یہ ورژن نہیں جانتا۔</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s لیئر کی %1$d قطار دوسری قطاروں سے زیادہ چوڑی ہے۔ کی بورڈ اس قطار کی کیز کو تنگ بناتا ہے۔</string>
+    <string name="core_lang_numeral_scope_display_only">صرف ڈسپلے</string>
+    <string name="core_lang_numeral_scope_everywhere">ہر جگہ</string>
+    <string name="core_lang_numeral_scope_text_fields">ٹیکسٹ فیلڈز</string>
+    <string name="core_lang_numeral_system_auto">خودکار</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d جزو ایک سے زیادہ بار ظاہر ہوتا ہے۔ ایپ پہلی کاپی رکھتی ہے۔</item>
+        <item quantity="other">%1$d اجزاء ایک سے زیادہ بار ظاہر ہوتے ہیں۔ ایپ ہر ایک کی پہلی کاپی رکھتی ہے۔</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">اس پینل میں کوئی کیز نہیں ہیں۔ ایپ اس کے بجائے معیاری پینل استعمال کرتی ہے۔</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d کلید کا ایک ایسا عمل ہے جو پینل پر کام نہیں کرتا۔ ایپ اسے حذف کر دیتی ہے۔</item>
+        <item quantity="other">%1$d کلیدوں کے ایسے اعمال ہیں جو پینل پر کام نہیں کرتے۔ ایپ انہیں حذف کر دیتی ہے۔</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">اس پینل میں کوئی ABC کلید نہیں ہے۔ کلیدوں پر واپس جانے کے لیے ٹول بار یا بیک بٹن کا استعمال کریں۔</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">ایپ نے ایک جزو کی دوسری کاپی حذف کر دی ہے۔</string>
+    <string name="core_lang_panel_repair_field_added">ایپ نے پینل کے مرکزی جزو کو ایک نئی قطار میں شامل کیا ہے۔</string>
+    <string name="core_lang_panel_repair_field_dropped">ایپ نے ایک ایسا کمپوننٹ حذف کر دیا ہے جو اس پینل سے تعلق نہیں رکھتا۔</string>
+    <string name="core_lang_panel_repair_key_dropped">ایپ نے ایک ایسی کلید حذف کر دی جس کا عمل پینل پر کام نہیں کرتا۔</string>
+    <string name="core_lang_panel_repair_reset">ایپ نے خالی پینل کو معیاری پینل سے بدل دیا ہے۔</string>
+    <string name="core_lang_panel_required_field_error">اس پینل میں اس کا مرکزی جزو غائب ہے۔ ایپ پینل بناتے وقت ایک شامل کرتی ہے۔</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d جزو اس پینل سے تعلق نہیں رکھتا ہے۔ ایپ اسے حذف کر دیتی ہے۔</item>
+        <item quantity="other">%1$d اجزاء اس پینل سے تعلق نہیں رکھتے ہیں۔ ایپ انہیں حذف کر دیتی ہے۔</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">ایپ نے %1$s لیئر میں ایک خالی کلید حذف کر دی ہے۔</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s لیئر کی ایک کلید نے بریل ڈاٹ %2$d استعمال کیا۔ ایپ نے اسے ڈاٹ %3$d بنا دیا۔</string>
+    <string name="core_lang_repair_delete_key_added">حروف کی تہہ میں ڈیلیٹ کی کلید نہیں تھی۔ ایپ نے ایک شامل کر دی ہے۔</string>
+    <string name="core_lang_repair_enter_key_added">حروف کی تہہ میں کوئی انٹر کلید نہیں تھی۔ ایپ نے ایک شامل کر دی ہے۔</string>
+    <string name="core_lang_repair_field_key_deleted">ایپ نے %1$s لیئر سے ایک پینل جزو حذف کر دیا ہے۔ اجزاء صرف پینل لے آؤٹ میں کام کرتے ہیں۔</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s لیئر میں ایک کلید %2$s کے لیے ہے۔ ایپ نے اسے %3$s ٹائپ کرنے کے لیے بنایا ہے۔</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s لیئر میں ایک کلید نے %2$s کو ان حروف کے طور پر درج کیا جن کی وہ نمائندگی کرتی ہے۔ وہ حروف نہیں ہیں، اس لیے ایپ نے اسے ایک عام کلید بنا دیا ہے۔</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s لیئر میں ایک کلید %2$d قطاروں پر محیط تھی۔ ایپ نے اسے %3$d پر محیط کر دیا۔</string>
+    <string name="core_lang_repair_key_width_capped">%1$s لیئر میں ایک کلید %2$s یونٹ چوڑی تھی۔ ایپ نے اسے %3$s یونٹ چوڑا کر دیا ہے۔</string>
+    <string name="core_lang_repair_key_width_set">%1$s لیئر میں ایک کلید کی کوئی چوڑائی نہیں تھی۔ ایپ نے چوڑائی 1 پر سیٹ کر دی ہے۔</string>
+    <string name="core_lang_repair_layer_replaced">%1$s لیئر میں کوئی کام کرنے والی کیز نہیں تھیں۔ اب یہ بلٹ ان گرڈ استعمال کرتی ہے۔</string>
+    <string name="core_lang_repair_letters_key_added">%1$s لیئر میں کوئی ایسی کلید نہیں تھی جو حروف پر واپس جائے۔ ایپ نے ایک ABC کلید شامل کی۔</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s لیئر کی ایک قطار میں %2$d کلید تھی۔ ایپ پہلی %3$d کو رکھتی ہے۔</item>
+        <item quantity="other">%1$s لیئر کی ایک قطار میں %2$d کلیدیں تھیں۔ ایپ پہلی %3$d کو رکھتی ہے۔</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s لیئر میں ایک قطار %2$s یونٹ چوڑی تھی۔ ایپ نے کلیدوں کو چھوٹا کر دیا تاکہ قطار فٹ ہو سکے۔</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s لیئر میں %2$d قطار تھی۔ ایپ پہلی %3$d کو برقرار رکھتی ہے۔</item>
+        <item quantity="other">%1$s لیئر میں %2$d قطاریں تھیں۔ ایپ پہلی %3$d کو برقرار رکھتی ہے۔</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">حروف کی تہہ میں اسپیس کی (space key) نہیں تھی۔ ایپ نے ایک شامل کر دی ہے۔</string>
+    <string name="core_lang_repair_unknown_key_deleted">ایپ نے %1$s تہہ میں ایک کی حذف کر دی ہے۔ اس کا عمل \"%2$s\" معلوم نہیں ہے۔</string>
+</resources>

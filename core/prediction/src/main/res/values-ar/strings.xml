@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">لم يرسل الخادم الملف. رمز الخطأ هو HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">قائمة الكلمات هذه فارغة أو غير قابلة للقراءة.</string>
+    <string name="core_pred_wordlist_no_space_error">لا توجد مساحة تخزين كافية على جهازك. احذف بعض الملفات ثم حاول مرة أخرى.</string>
+    <string name="core_pred_wordlist_save_error">لا يمكن للتطبيق حفظ قائمة الكلمات. حاول مجددًا.</string>
+    <string name="core_pred_wordlist_size_all_label">الكل</string>
+    <string name="core_pred_wordlist_size_large_label">كبير</string>
+    <string name="core_pred_wordlist_size_medium_label">متوسط</string>
+    <string name="core_pred_wordlist_size_small_label">صغير</string>
+    <string name="core_pred_wordlist_variant_brazil_label">البرازيل</string>
+    <string name="core_pred_wordlist_variant_europe_label">أوروبا</string>
+</resources>

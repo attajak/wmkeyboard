@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Αυτή η λίστα λέξεων-κλειδιών emoji είναι κενή ή μη αναγνώσιμη.</string>
+    <string name="core_emoji_dict_error_http">Ο διακομιστής δεν έστειλε το αρχείο. Ο κωδικός σφάλματος είναι HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Αυτό το αρχείο δεν είναι λίστα λέξεων-κλειδιών emoji.</string>
+    <string name="core_emoji_dict_error_save">Η εφαρμογή δεν μπόρεσε να αποθηκεύσει τη λίστα λέξεων-κλειδιών emoji.</string>
+    <string name="core_emoji_dict_error_too_large">Αυτή η λίστα λέξεων-κλειδιών emoji είναι πολύ μεγάλη.</string>
+</resources>

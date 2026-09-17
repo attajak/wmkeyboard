@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">آن لیست کلمات کلیدی ایموجی خالی یا غیرقابل خواندن است.</string>
+    <string name="core_emoji_dict_error_http">سرور فایل را ارسال نکرد. کد خطا HTTP %1$s است.</string>
+    <string name="core_emoji_dict_error_not_a_list">آن فایل یک لیست کلمات کلیدی ایموجی نیست.</string>
+    <string name="core_emoji_dict_error_save">برنامه نتوانست فهرست کلمات کلیدی ایموجی را ذخیره کند.</string>
+    <string name="core_emoji_dict_error_too_large">آن لیست کلمات کلیدی ایموجی خیلی بزرگ است.</string>
+</resources>

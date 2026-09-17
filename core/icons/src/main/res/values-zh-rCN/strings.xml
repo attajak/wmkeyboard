@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Emoji 标签页</string>
+    <string name="core_icons_group_keys_title">按键</string>
+    <string name="core_icons_group_toolbar_title">工具栏</string>
+    <string name="core_icons_group_tools_title">工具</string>
+    <string name="core_icons_pack_imported_label">已导入的图标</string>
+    <string name="core_icons_pack_mine_label">我的图标</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">应用忽略了 %1$d 个文件。此版本没有对应的图标：%2$s</item>
+        <item quantity="other">应用忽略了 %1$d 个文件。此版本没有对应的图标：%2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">应用已丢弃“%1$s”，无法保存。</string>
+    <string name="core_icons_repair_svg_unreadable">应用丢失了“%1$s”。应用无法读取其 SVG 文件。</string>
+    <string name="core_icons_slot_backspace_label">退格键</string>
+    <string name="core_icons_slot_caps_lock_label">大写锁定</string>
+    <string name="core_icons_slot_emoji_activities_label">活动</string>
+    <string name="core_icons_slot_emoji_animals_label">动物</string>
+    <string name="core_icons_slot_emoji_flags_label">旗帜</string>
+    <string name="core_icons_slot_emoji_food_label">食物</string>
+    <string name="core_icons_slot_emoji_key_label">表情符号键</string>
+    <string name="core_icons_slot_emoji_most_used_label">最常使用</string>
+    <string name="core_icons_slot_emoji_nature_label">自然</string>
+    <string name="core_icons_slot_emoji_objects_label">物体</string>
+    <string name="core_icons_slot_emoji_people_label">人物</string>
+    <string name="core_icons_slot_emoji_recent_label">最近使用</string>
+    <string name="core_icons_slot_emoji_shortcut_label">表情符号快捷方式</string>
+    <string name="core_icons_slot_emoji_smileys_label">表情符号</string>
+    <string name="core_icons_slot_emoji_symbols_label">符号</string>
+    <string name="core_icons_slot_emoji_travel_label">旅行</string>
+    <string name="core_icons_slot_enter_done_label">回车：完成</string>
+    <string name="core_icons_slot_enter_go_label">回车：前往</string>
+    <string name="core_icons_slot_enter_label">回车</string>
+    <string name="core_icons_slot_enter_next_label">回车：下一项</string>
+    <string name="core_icons_slot_enter_previous_label">回车：上一个</string>
+    <string name="core_icons_slot_enter_search_label">回车：搜索</string>
+    <string name="core_icons_slot_enter_send_label">回车键：发送</string>
+    <string name="core_icons_slot_forward_delete_label">向后删除</string>
+    <string name="core_icons_slot_globe_label">切换语言</string>
+    <string name="core_icons_slot_incognito_label">隐身模式徽标</string>
+    <string name="core_icons_slot_input_method_picker_label">切换键盘</string>
+    <string name="core_icons_slot_panel_back_label">返回按键</string>
+    <string name="core_icons_slot_power_saving_label">省电模式徽标</string>
+    <string name="core_icons_slot_search_close_label">关闭搜索</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (开启)</string>
+    <string name="core_icons_slot_suggestions_expand_label">显示工具</string>
+    <string name="core_icons_slot_toolbox_label">工具箱</string>
+</resources>

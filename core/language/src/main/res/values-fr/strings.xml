@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">L\'application a remplacé %1$d touche par la touche la plus proche disponible.</item>
+        <item quantity="other">L\'application a remplacé %1$d touches par les touches les plus proches disponibles.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">L\'application a supprimé %1$d touche. Ce clavier ne possède aucune touche effectuant la même action (code %2$s).</item>
+        <item quantity="other">L\'application a supprimé %1$d touches. Ce clavier ne possède aucune touche effectuant la même action (codes %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">L\'application a conservé la taille d\'étiquette de %1$d touche mais pas son style de texte. Ce clavier dessine les étiquettes dans un seul style.</item>
+        <item quantity="other">L\'application a conservé la taille d\'étiquette de %1$d touches mais pas leur style de texte. Ce clavier dessine les étiquettes dans un seul style.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">L\'application a modifié %1$d lettre pour la forme utilisée par ce clavier.</item>
+        <item quantity="other">L\'application a modifié %1$d lettres pour la forme utilisée par ce clavier.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d touche n\'a pas de lettres accessibles par appui long. Le fichier les conserve dans un second fichier que vous n\'avez pas ouvert.</item>
+        <item quantity="other">%1$d touches n\'ont pas de lettres accessibles par appui long. Le fichier les conserve dans un second fichier que vous n\'avez pas ouvert.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">L\'autre clavier mesure les largeurs de touches différemment. L\'application a modifié les largeurs pour s\'adapter à cette grille.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d touche de point braille dans la couche %2$s a un numéro de point en dehors de 1 à 6.</item>
+        <item quantity="other">%1$d touches de point braille dans la couche %2$s ont un numéro de point en dehors de 1 à 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d touche dans la couche %2$s n\'a ni étiquette ni sortie. Elle ne tape rien, et l\'application la supprime lorsque vous activez cette disposition.</item>
+        <item quantity="other">%1$d touches dans la couche %2$s n\'ont ni étiquette ni sortie. Elles ne tapent rien, et l\'application les supprime lorsque vous activez cette disposition.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">La ligne %1$d de la couche %2$s est vide.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d touche dans la couche %2$s est un composant de panneau. Les composants ne fonctionnent que dans une disposition de panneau.</item>
+        <item quantity="other">%1$d touches dans la couche %2$s sont des composants de panneau. Les composants ne fonctionnent que dans une disposition de panneau.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">La ligne %1$d de la couche %2$s contient une touche sans largeur.</string>
+    <string name="core_lang_layout_key_span_error">La ligne %1$d de la couche %2$s possède une touche qui couvre moins de 1 ou plus de %3$d lignes.</string>
+    <string name="core_lang_layout_letters_empty_error">La couche des lettres ne contient aucune touche.</string>
+    <string name="core_lang_layout_no_delete_error">La disposition n\'a pas de touche de suppression. Vous ne pouvez pas corriger une erreur.</string>
+    <string name="core_lang_layout_no_enter_error">La disposition n\'a pas de touche Entrée.</string>
+    <string name="core_lang_layout_no_shift_warning">La disposition n\'a pas de touche Maj. Pour taper une lettre majuscule, maintenez une touche enfoncée.</string>
+    <string name="core_lang_layout_no_space_error">La disposition n\'a pas de touche espace.</string>
+    <string name="core_lang_layout_no_way_back_error">La couche %1$s n\'a aucune touche permettant de revenir aux lettres. Vous ne pouvez pas quitter cette couche.</string>
+    <string name="core_lang_layout_persistent_warning">La couche %1$s reste ouverte lorsque le clavier se ferme. Assurez-vous d\'avoir un moyen de quitter cette disposition.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Cette disposition ne possède aucune touche permettant d\'en sortir. Assurez-vous d\'avoir un moyen de quitter cette disposition : une touche ABC, une touche de symboles ou l\'outil de disposition personnalisée dans la barre d\'outils.</string>
+    <string name="core_lang_layout_span_past_end_warning">La ligne %1$d de la couche %2$s possède une touche qui couvre plus de lignes que la couche n\'en contient. Le clavier l\'arrête à la dernière ligne.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">La ligne %1$d de la couche %2$s a %3$d touche. Seules %4$d touches restent assez grandes pour être pressées.</item>
+        <item quantity="other">La ligne %1$d de la couche %2$s a %3$d touches. Seules %4$d touches restent assez grandes pour être pressées.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">La couche %1$s a %2$d ligne. Seules %3$d lignes tiennent.</item>
+        <item quantity="other">La couche %1$s a %2$d lignes. Seules %3$d lignes tiennent.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d touche dans la couche %2$s utilise une action que cette version de l\'application ne reconnaît pas.</item>
+        <item quantity="other">%1$d touches dans la couche %2$s utilisent une action que cette version de l\'application ne reconnaît pas.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">La ligne %1$d de la couche %2$s est plus large que les autres lignes. Le clavier dessine les touches de cette ligne de manière plus étroite.</string>
+    <string name="core_lang_numeral_scope_display_only">Affichage uniquement</string>
+    <string name="core_lang_numeral_scope_everywhere">Partout</string>
+    <string name="core_lang_numeral_scope_text_fields">Champs de texte</string>
+    <string name="core_lang_numeral_system_auto">Auto</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d composant apparaît plus d\'une fois. L\'application conserve la première copie.</item>
+        <item quantity="other">%1$d composants apparaissent plus d\'une fois. L\'application conserve la première copie de chacun.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Ce panneau ne contient aucune touche. L\'application utilise le panneau standard à la place.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d touche a une action qui ne fonctionne pas sur un panneau. L\'application la supprime.</item>
+        <item quantity="other">%1$d touches ont des actions qui ne fonctionnent pas sur un panneau. L\'application les supprime.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Ce panneau n\'a pas de touche ABC. Utilisez la barre d\'outils ou le bouton Retour pour revenir aux touches.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">L\'application a supprimé une deuxième copie d\'un composant.</string>
+    <string name="core_lang_panel_repair_field_added">L\'application a ajouté le composant principal du panneau dans une nouvelle ligne.</string>
+    <string name="core_lang_panel_repair_field_dropped">L\'application a supprimé un composant qui n\'appartient pas à ce panneau.</string>
+    <string name="core_lang_panel_repair_key_dropped">L\'application a supprimé une touche dont l\'action ne fonctionne pas sur un panneau.</string>
+    <string name="core_lang_panel_repair_reset">L\'application a remplacé le panneau vide par le panneau standard.</string>
+    <string name="core_lang_panel_required_field_error">Il manque à ce panneau son composant principal. L\'application en ajoute un lorsqu\'elle dessine le panneau.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d composant n\'appartient pas à ce panneau. L\'application le supprime.</item>
+        <item quantity="other">%1$d composants n\'appartiennent pas à ce panneau. L\'application les supprime.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">L\'application a supprimé une touche vide dans la couche %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Une touche dans la couche %1$s utilisait le point braille %2$d. L\'application l\'a défini sur le point %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">La couche de lettres n\'avait pas de touche de suppression. L\'application en a ajouté une.</string>
+    <string name="core_lang_repair_enter_key_added">La couche de lettres n\'avait pas de touche Entrée. L\'application en a ajouté une.</string>
+    <string name="core_lang_repair_field_key_deleted">L\'application a supprimé un composant de panneau de la couche %1$s. Les composants ne fonctionnent que dans une disposition de panneau.</string>
+    <string name="core_lang_repair_key_letters_anchored">Une touche dans la couche %1$s représente %2$s. L\'application l\'a fait taper %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Une touche dans la couche %1$s liste %2$s comme les lettres qu\'elle représente. Ce ne sont pas des lettres, donc l\'application en a fait une touche ordinaire.</string>
+    <string name="core_lang_repair_key_span_clamped">Une touche de la couche %1$s couvrait %2$d lignes. L\'application l\'a ajustée pour qu\'elle en couvre %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Une touche dans la couche %1$s avait une largeur de %2$s unités. L\'application l\'a définie à %3$s unités de large.</string>
+    <string name="core_lang_repair_key_width_set">Une touche de la couche %1$s n\'avait pas de largeur. L\'application a défini la largeur sur 1.</string>
+    <string name="core_lang_repair_layer_replaced">La couche %1$s n\'avait aucune touche fonctionnelle. Elle utilise désormais la grille intégrée.</string>
+    <string name="core_lang_repair_letters_key_added">La couche %1$s n\'avait aucune touche permettant de revenir aux lettres. L\'application a ajouté une touche ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Une ligne dans la couche %1$s contenait %2$d touche. L\'application conserve la première %3$d.</item>
+        <item quantity="other">Une ligne dans la couche %1$s contenait %2$d touches. L\'application conserve les %3$d premières.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Une ligne dans la couche %1$s mesurait %2$s unités de large. L\'application a réduit la taille des touches pour que la ligne s\'adapte.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">La couche %1$s contenait %2$d ligne. L\'application conserve les %3$d premières.</item>
+        <item quantity="other">La couche %1$s contenait %2$d lignes. L\'application conserve les %3$d premières.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">La couche de lettres n\'avait pas de touche espace. L\'application en a ajouté une.</string>
+    <string name="core_lang_repair_unknown_key_deleted">L\'application a supprimé une touche dans la couche %1$s. Son action \"%2$s\" est inconnue.</string>
+</resources>

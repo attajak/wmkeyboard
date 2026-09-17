@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Dessiner des émojis avec maintenant ?</string>
+    <string name="faddons_apply_icon_pack_question">Utiliser ses icônes sur le clavier maintenant ?</string>
+    <string name="faddons_apply_layout_question">L\'activer pour pouvoir taper avec ?</string>
+    <string name="faddons_apply_plugin_question">L\'activer pour qu\'il apparaisse dans le panneau des plugins ?</string>
+    <string name="faddons_apply_sound_pack_question">Utiliser ce pack de sons pour vos touches maintenant ?</string>
+    <string name="faddons_apply_sound_question">L\'utiliser comme son de touche maintenant ?</string>
+    <string name="faddons_apply_switch_action">Passer à celui-ci</string>
+    <string name="faddons_apply_theme_question">L\'utiliser comme thème de clavier maintenant ?</string>
+    <string name="faddons_download_error_app_too_old">Cet add-on nécessite une version plus récente de l\'application.</string>
+    <string name="faddons_download_error_bad_url">Le lien de téléchargement n\'est pas une URL https valide.</string>
+    <string name="faddons_download_error_checksum">Le fichier téléchargé ne correspond pas à la somme de contrôle du manifeste.</string>
+    <string name="faddons_download_error_http_status">Le serveur a renvoyé HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Il n\'y a pas assez d\'espace libre pour installer ceci.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Ce plugin n\'a pas de somme de contrôle. L\'application ne peut pas le vérifier.</string>
+    <string name="faddons_download_error_too_large">Cet add-on dépasse la limite de %1$d Mo pour son type.</string>
+    <string name="faddons_error_no_words">L\'application n\'a pu lire aucun mot à partir de ce fichier.</string>
+    <string name="faddons_error_not_a_plugin">Ce fichier n\'est pas un plugin WM Keyboard.</string>
+    <string name="faddons_install_error_dictionary_no_language">Ce dictionnaire n\'indique pas pour quelle langue il est destiné.</string>
+    <string name="faddons_install_error_dictionary_not_saved">L\'application n\'a pas pu enregistrer le dictionnaire.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">L\'application n\'a pas pu lire le pack d\'icônes.</string>
+    <string name="faddons_install_error_keywords_no_language">Ce pack n\'indique pas pour quelle langue il est conçu.</string>
+    <string name="faddons_install_error_keywords_not_saved">L\'application n\'a pas pu enregistrer le pack de mots-clés.</string>
+    <string name="faddons_install_error_keywords_too_large">Ce pack de mots-clés est trop volumineux pour être importé.</string>
+    <string name="faddons_install_error_no_keywords">L\'application n\'a pas pu lire de mots-clés emoji dans ce fichier.</string>
+    <string name="faddons_install_error_no_stickers">L\'application n\'a pas pu lire d\'autocollants dans ce pack. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Ce fichier n\'est pas une disposition de clavier WM.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Ce fichier n\'est pas un pack de snippets WM Keyboard.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Ce fichier n\'est pas un pack de sons.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Ce fichier n\'est pas un pack d\'autocollants.</string>
+    <string name="faddons_install_error_not_a_theme">Ce fichier n\'est pas un thème de clavier WM.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Ce fichier n\'est pas un paquet Espanso ou un fichier de correspondance.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Ce fichier n\'est pas un pack d\'icônes.</string>
+    <string name="faddons_install_error_plugin_failed">L\'application n\'a pas pu installer ce plugin.</string>
+    <string name="faddons_install_error_plugins_turned_off">Les plugins sont désactivés. Activez « Autoriser les plugins » sous Outils › Plugins. Ensuite, installez ceci à nouveau.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Ce pack d\'extraits est vide.</string>
+    <string name="faddons_install_error_sound_pack_read">L\'application ne peut pas lire ce pack de sons.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">L\'application n\'a pas pu lire le pack d\'autocollants.</string>
+    <string name="faddons_install_error_too_many_fonts">Vous avez atteint le nombre maximum de polices installées.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Vous avez atteint le nombre maximum de packs d\'icônes.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Vous avez déjà atteint le maximum de %1$d plugin.</item>
+        <item quantity="other">Vous avez déjà atteint le maximum de %1$d plugins.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Vous avez atteint le nombre maximum de packs de sons installés.</string>
+    <string name="faddons_install_error_too_many_sounds">Vous avez atteint le nombre maximum de sons de touches installés.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Vous avez atteint le nombre maximum de packs d\'autocollants.</string>
+    <string name="faddons_install_error_unknown_language">Cette version de l\'application ne prend pas en charge la langue « %1$s ».</string>
+    <string name="faddons_install_error_unknown_type">Cette version de l\'application ne prend pas en charge ce type d\'extension.</string>
+    <string name="faddons_install_error_vocab_no_language">Ce pack de vocabulaire n\'indique pas la langue pour laquelle il est conçu.</string>
+    <string name="faddons_install_error_vocab_no_words">L\'application n\'a pu lire aucun mot dans ce pack.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Ce fichier n\'est pas un pack de vocabulaire.</string>
+    <string name="faddons_install_error_vocab_too_large">Ce paquet de vocabulaire est plus volumineux que ce que l\'application accepte.</string>
+    <string name="faddons_preview_error_no_preview">L\'application ne peut pas prévisualiser cet add-on.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Ce fichier n\'est pas un paquet ou un fichier de correspondance Espanso.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Ce fichier n\'est pas un pack de mots-clés emoji.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Ce fichier n\'est pas un pack d\'extraits.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Ce fichier n\'est pas un pack de vocabulaire.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">L\'application n\'a pas pu lire les sons de ce pack.</string>
+    <string name="faddons_preview_error_stickers_unreadable">L\'application n\'a pas pu lire les images des autocollants.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Pack d\'extraits</string>
+</resources>

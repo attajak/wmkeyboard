@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">下载的文件已损坏。校验和不匹配。请重新下载。</string>
+    <string name="core_input_cjk_download_error_http">服务器返回了 HTTP 状态码 %1$s。</string>
+    <string name="core_input_cjk_download_error_network">下载失败。请检查您的网络连接并重试。</string>
+    <string name="core_input_cjk_download_error_network_detail">下载失败：%1$s</string>
+    <string name="core_input_cjk_download_error_no_space">设备存储空间不足。请先清理一些空间。</string>
+    <string name="core_input_cjk_download_error_truncated">下载过程中连接中断。请按“恢复”继续。</string>
+    <string name="core_input_cjk_download_error_unavailable">此包尚不可用。</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">包含 29,000 个汉字的字根编码表。键盘需要此包以支持仓颉和速成布局。</string>
+    <string name="core_input_cjk_pack_cangjie_title">仓颉输入法词库</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">来自 mozc 的假名读音，108 万个条目，约 42 MB。键盘需要此包进行日语转换。</string>
+    <string name="core_input_cjk_pack_ja_kana_title">日语假名转汉字词典</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">包含 163,000 条粤拼到汉字的对照表。键盘需要此包进行粤语转换。</string>
+    <string name="core_input_cjk_pack_jyutping_title">粤语粤拼词典</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">来自 CC-CEDICT 的汉字和短语，共 120,000 条目。键盘需要此包进行中文转换。</string>
+    <string name="core_input_cjk_pack_pinyin_title">中文拼音词典</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">汉字笔画顺序表。键盘需要此包以支持笔画布局。</string>
+    <string name="core_input_cjk_pack_stroke_title">中文笔画词典</string>
+    <string name="core_input_double_pinyin_off_label">关闭（全拼）</string>
+</resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">زبانه های ایموجی</string>
+    <string name="core_icons_group_keys_title">کلیدها</string>
+    <string name="core_icons_group_toolbar_title">نوار ابزار</string>
+    <string name="core_icons_group_tools_title">ابزارها</string>
+    <string name="core_icons_pack_imported_label">آیکون‌های واردشده</string>
+    <string name="core_icons_pack_mine_label">آیکون‌های من</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">برنامه %1$d فایل را نادیده گرفت. این نسخه آیکونی برای آن ندارد: %2$s</item>
+        <item quantity="other">برنامه %1$d فایل را نادیده گرفت. این نسخه آیکونی برای آن‌ها ندارد: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">برنامه \"%1$s\" را رها کرد. برنامه نمی‌تواند آن را ذخیره کند.</string>
+    <string name="core_icons_repair_svg_unreadable">برنامه «%1$s» را حذف کرد. برنامه نمی‌تواند فایل SVG آن را بخواند.</string>
+    <string name="core_icons_slot_backspace_label">پس‌بر (Backspace)</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">فعالیت‌ها</string>
+    <string name="core_icons_slot_emoji_animals_label">حیوانات</string>
+    <string name="core_icons_slot_emoji_flags_label">پرچم‌ها</string>
+    <string name="core_icons_slot_emoji_food_label">غذا</string>
+    <string name="core_icons_slot_emoji_key_label">کلید ایموجی</string>
+    <string name="core_icons_slot_emoji_most_used_label">پرکاربردترین‌ها</string>
+    <string name="core_icons_slot_emoji_nature_label">طبیعت</string>
+    <string name="core_icons_slot_emoji_objects_label">اشیاء</string>
+    <string name="core_icons_slot_emoji_people_label">افراد</string>
+    <string name="core_icons_slot_emoji_recent_label">اخیر</string>
+    <string name="core_icons_slot_emoji_shortcut_label">میانبر ایموجی</string>
+    <string name="core_icons_slot_emoji_smileys_label">شکلک‌ها</string>
+    <string name="core_icons_slot_emoji_symbols_label">نمادها</string>
+    <string name="core_icons_slot_emoji_travel_label">سفر</string>
+    <string name="core_icons_slot_enter_done_label">اینتر: انجام شد</string>
+    <string name="core_icons_slot_enter_go_label">اینتر: برو</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">اینتر: بعدی</string>
+    <string name="core_icons_slot_enter_previous_label">اینتر: قبلی</string>
+    <string name="core_icons_slot_enter_search_label">اینتر: جستجو</string>
+    <string name="core_icons_slot_enter_send_label">اینتر: ارسال</string>
+    <string name="core_icons_slot_forward_delete_label">حذف رو به جلو</string>
+    <string name="core_icons_slot_globe_label">تغییر زبان</string>
+    <string name="core_icons_slot_incognito_label">نشان ناشناس</string>
+    <string name="core_icons_slot_input_method_picker_label">تغییر صفحه‌کلید</string>
+    <string name="core_icons_slot_panel_back_label">بازگشت به کلیدها</string>
+    <string name="core_icons_slot_power_saving_label">نشان صرفه‌جویی در مصرف انرژی</string>
+    <string name="core_icons_slot_search_close_label">بستن جستجو</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">شیفت (روشن)</string>
+    <string name="core_icons_slot_suggestions_expand_label">نمایش ابزارها</string>
+    <string name="core_icons_slot_toolbox_label">جعبه‌ابزار</string>
+</resources>

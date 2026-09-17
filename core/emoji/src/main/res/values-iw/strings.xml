@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">רשימת מילות המפתח של האימוג\'י ריקה או שאינה ניתנת לקריאה.</string>
+    <string name="core_emoji_dict_error_http">השרת לא שלח את הקובץ. קוד השגיאה הוא HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">קובץ זה אינו רשימת מילות מפתח של אימוג\'י.</string>
+    <string name="core_emoji_dict_error_save">האפליקציה לא הצליחה לשמור את רשימת מילות המפתח של האימוג\'י.</string>
+    <string name="core_emoji_dict_error_too_large">רשימת מילות המפתח של האימוג\'י גדולה מדי.</string>
+</resources>

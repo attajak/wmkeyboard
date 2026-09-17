@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">เซิร์ฟเวอร์ไม่ได้ส่งไฟล์ รหัสข้อผิดพลาดคือ HTTP %1$s</string>
+    <string name="core_pred_wordlist_malformed_error">รายการคำนั้นว่างเปล่าหรืออ่านไม่ได้</string>
+    <string name="core_pred_wordlist_no_space_error">พื้นที่จัดเก็บข้อมูลบนอุปกรณ์ของคุณไม่เพียงพอ โปรดลบไฟล์บางส่วนแล้วลองใหม่อีกครั้ง</string>
+    <string name="core_pred_wordlist_save_error">แอปไม่สามารถบันทึกรายการคำศัพท์ได้ โปรดลองใหม่อีกครั้ง</string>
+    <string name="core_pred_wordlist_size_all_label">ทั้งหมด</string>
+    <string name="core_pred_wordlist_size_large_label">ใหญ่</string>
+    <string name="core_pred_wordlist_size_medium_label">ปานกลาง</string>
+    <string name="core_pred_wordlist_size_small_label">เล็ก</string>
+    <string name="core_pred_wordlist_variant_brazil_label">บราซิล</string>
+    <string name="core_pred_wordlist_variant_europe_label">ยุโรป</string>
+</resources>

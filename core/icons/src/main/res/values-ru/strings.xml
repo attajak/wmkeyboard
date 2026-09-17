@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Вкладки эмодзи</string>
+    <string name="core_icons_group_keys_title">Клавиши</string>
+    <string name="core_icons_group_toolbar_title">Панель инструментов</string>
+    <string name="core_icons_group_tools_title">Инструменты</string>
+    <string name="core_icons_pack_imported_label">Импортированные значки</string>
+    <string name="core_icons_pack_mine_label">Мои значки</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Приложение проигнорировало %1$d файл. В этой версии для него нет значка: %2$s</item>
+        <item quantity="other">Приложение проигнорировало %1$d файлов. В этой версии для них нет значков: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Приложение отбросило «%1$s». Приложение не может его сохранить.</string>
+    <string name="core_icons_repair_svg_unreadable">Приложение отбросило \"%1$s\". Приложение не может прочитать свой SVG-файл.</string>
+    <string name="core_icons_slot_backspace_label">Backspace</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Активность</string>
+    <string name="core_icons_slot_emoji_animals_label">Животные</string>
+    <string name="core_icons_slot_emoji_flags_label">Флаги</string>
+    <string name="core_icons_slot_emoji_food_label">Еда</string>
+    <string name="core_icons_slot_emoji_key_label">Клавиша эмодзи</string>
+    <string name="core_icons_slot_emoji_most_used_label">Часто используемые</string>
+    <string name="core_icons_slot_emoji_nature_label">Природа</string>
+    <string name="core_icons_slot_emoji_objects_label">Объекты</string>
+    <string name="core_icons_slot_emoji_people_label">Люди</string>
+    <string name="core_icons_slot_emoji_recent_label">Недавние</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Ярлык эмодзи</string>
+    <string name="core_icons_slot_emoji_smileys_label">Смайлики</string>
+    <string name="core_icons_slot_emoji_symbols_label">Символы</string>
+    <string name="core_icons_slot_emoji_travel_label">Путешествия</string>
+    <string name="core_icons_slot_enter_done_label">Ввод: готово</string>
+    <string name="core_icons_slot_enter_go_label">Enter: перейти</string>
+    <string name="core_icons_slot_enter_label">Ввод</string>
+    <string name="core_icons_slot_enter_next_label">Ввод: далее</string>
+    <string name="core_icons_slot_enter_previous_label">Ввод: предыдущий</string>
+    <string name="core_icons_slot_enter_search_label">Ввод: поиск</string>
+    <string name="core_icons_slot_enter_send_label">Ввод: отправить</string>
+    <string name="core_icons_slot_forward_delete_label">Удалить вперед</string>
+    <string name="core_icons_slot_globe_label">Переключить язык</string>
+    <string name="core_icons_slot_incognito_label">Значок инкогнито</string>
+    <string name="core_icons_slot_input_method_picker_label">Переключить клавиатуру</string>
+    <string name="core_icons_slot_panel_back_label">Назад к клавишам</string>
+    <string name="core_icons_slot_power_saving_label">Значок энергосбережения</string>
+    <string name="core_icons_slot_search_close_label">Закрыть поиск</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (вкл.)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Показать инструменты</string>
+    <string name="core_icons_slot_toolbox_label">Панель инструментов</string>
+</resources>

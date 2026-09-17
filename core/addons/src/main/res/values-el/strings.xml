@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Λεξικά</string>
+    <string name="core_addons_type_dictionary_singular_label">Λεξικό</string>
+    <string name="core_addons_type_emoji_font_label">Γραμματοσειρές Emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Γραμματοσειρά Emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Λέξεις-κλειδιά emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Πακέτο λέξεων-κλειδιών emoji</string>
+    <string name="core_addons_type_espanso_label">Πακέτα Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Πακέτο Espanso</string>
+    <string name="core_addons_type_font_label">Γραμματοσειρές</string>
+    <string name="core_addons_type_font_singular_label">Γραμματοσειρά</string>
+    <string name="core_addons_type_icon_pack_label">Πακέτα εικονιδίων</string>
+    <string name="core_addons_type_icon_pack_singular_label">Πακέτο εικονιδίων</string>
+    <string name="core_addons_type_layout_label">Διατάξεις</string>
+    <string name="core_addons_type_layout_singular_label">Διάταξη</string>
+    <string name="core_addons_type_plugin_label">Πρόσθετα</string>
+    <string name="core_addons_type_plugin_singular_label">Πρόσθετο</string>
+    <string name="core_addons_type_snippets_label">Αποσπάσματα</string>
+    <string name="core_addons_type_snippets_singular_label">Πακέτο αποσπασμάτων</string>
+    <string name="core_addons_type_sound_label">Ήχοι</string>
+    <string name="core_addons_type_sound_pack_label">Πακέτα ήχων</string>
+    <string name="core_addons_type_sound_pack_singular_label">Πακέτο ήχων</string>
+    <string name="core_addons_type_sound_singular_label">Ήχος πλήκτρου</string>
+    <string name="core_addons_type_stickers_label">Πακέτα αυτοκόλλητων</string>
+    <string name="core_addons_type_stickers_singular_label">Πακέτο αυτοκόλλητων</string>
+    <string name="core_addons_type_theme_label">Θέματα</string>
+    <string name="core_addons_type_theme_singular_label">Θέμα</string>
+    <string name="core_addons_type_unknown_label">Άλλο</string>
+    <string name="core_addons_type_unknown_singular_label">Πρόσθετο</string>
+    <string name="core_addons_type_vocabulary_label">Λεξιλόγιο</string>
+    <string name="core_addons_type_vocabulary_singular_label">Πακέτο λεξιλογίου</string>
+</resources>

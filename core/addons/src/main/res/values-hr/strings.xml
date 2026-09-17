@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Rječnici</string>
+    <string name="core_addons_type_dictionary_singular_label">Rječnik</string>
+    <string name="core_addons_type_emoji_font_label">Emoji fontovi</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emoji font</string>
+    <string name="core_addons_type_emoji_keywords_label">Ključne riječi za emojije</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Paket ključnih riječi za emojije</string>
+    <string name="core_addons_type_espanso_label">Espanso paketi</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso paket</string>
+    <string name="core_addons_type_font_label">Fontovi</string>
+    <string name="core_addons_type_font_singular_label">Font</string>
+    <string name="core_addons_type_icon_pack_label">Paketi ikona</string>
+    <string name="core_addons_type_icon_pack_singular_label">Paket ikona</string>
+    <string name="core_addons_type_layout_label">Rasporedi</string>
+    <string name="core_addons_type_layout_singular_label">Izgled</string>
+    <string name="core_addons_type_plugin_label">Dodaci</string>
+    <string name="core_addons_type_plugin_singular_label">Dodatak</string>
+    <string name="core_addons_type_snippets_label">Isječci</string>
+    <string name="core_addons_type_snippets_singular_label">Paket isječaka</string>
+    <string name="core_addons_type_sound_label">Zvukovi</string>
+    <string name="core_addons_type_sound_pack_label">Paketi zvukova</string>
+    <string name="core_addons_type_sound_pack_singular_label">Zvučni paket</string>
+    <string name="core_addons_type_sound_singular_label">Zvuk tipke</string>
+    <string name="core_addons_type_stickers_label">Paketi naljepnica</string>
+    <string name="core_addons_type_stickers_singular_label">Paket naljepnica</string>
+    <string name="core_addons_type_theme_label">Teme</string>
+    <string name="core_addons_type_theme_singular_label">Tema</string>
+    <string name="core_addons_type_unknown_label">Ostalo</string>
+    <string name="core_addons_type_unknown_singular_label">Dodatak</string>
+    <string name="core_addons_type_vocabulary_label">Rječnik</string>
+    <string name="core_addons_type_vocabulary_singular_label">Paket rječnika</string>
+</resources>

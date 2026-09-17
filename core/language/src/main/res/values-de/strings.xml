@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Die App hat %1$d Taste durch die nächstgelegene verfügbare ersetzt.</item>
+        <item quantity="other">Die App hat %1$d Tasten durch die nächstgelegenen verfügbaren ersetzt.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Die App hat %1$d Taste entfernt. Diese Tastatur hat keine Taste, die dasselbe bewirkt (Code %2$s).</item>
+        <item quantity="other">Die App hat %1$d Tasten entfernt. Diese Tastatur hat keine Tasten, die dasselbe bewirken (Codes %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Die App hat die Beschriftungsgröße von %1$d Taste beibehalten, aber nicht ihren Textstil. Diese Tastatur zeichnet Beschriftungen in einem Stil.</item>
+        <item quantity="other">Die App hat die Beschriftungsgröße von %1$d Tasten beibehalten, aber nicht ihren Textstil. Diese Tastatur zeichnet Beschriftungen in einem Stil.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Die App hat %1$d Buchstaben in die Form geändert, die diese Tastatur schreibt.</item>
+        <item quantity="other">Die App hat %1$d Buchstaben in die Form geändert, die diese Tastatur schreibt.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d Taste hat keine Buchstaben beim Gedrückthalten. Die Datei bewahrt sie in einer zweiten Datei auf, die Sie nicht geöffnet haben.</item>
+        <item quantity="other">%1$d Tasten haben keine Buchstaben beim Gedrückthalten. Die Datei bewahrt sie in einer zweiten Datei auf, die Sie nicht geöffnet haben.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Die andere Tastatur misst die Tastenbreiten anders. Die App hat die Breiten angepasst, um in dieses Raster zu passen.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d Braille-Punkt-Taste in der %2$s-Ebene hat eine Punktnummer außerhalb von 1 bis 6.</item>
+        <item quantity="other">%1$d Braille-Punkt-Tasten in der %2$s-Ebene haben eine Punktnummer außerhalb von 1 bis 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d Taste in der %2$s-Ebene hat keine Beschriftung und keine Ausgabe. Sie tippt nichts, und die App löscht sie, wenn Sie dieses Layout aktivieren.</item>
+        <item quantity="other">%1$d Tasten in der %2$s-Ebene haben keine Beschriftung und keine Ausgabe. Sie tippen nichts, und die App löscht sie, wenn Sie dieses Layout aktivieren.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Zeile %1$d der %2$s-Ebene ist leer.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d Taste in der %2$s-Ebene ist eine Bedienfeldkomponente. Komponenten funktionieren nur in einem Bedienfeldlayout.</item>
+        <item quantity="other">%1$d Tasten in der %2$s-Ebene sind Bedienfeldkomponenten. Komponenten funktionieren nur in einem Bedienfeldlayout.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Zeile %1$d der Ebene %2$s enthält eine Taste ohne Breite.</string>
+    <string name="core_lang_layout_key_span_error">Zeile %1$d der %2$s-Ebene hat eine Taste, die weniger als 1 oder mehr als %3$d Zeilen abdeckt.</string>
+    <string name="core_lang_layout_letters_empty_error">Die Buchstabenebene hat keine Tasten.</string>
+    <string name="core_lang_layout_no_delete_error">Das Layout hat keine Löschtaste. Sie können einen Fehler nicht korrigieren.</string>
+    <string name="core_lang_layout_no_enter_error">Das Layout hat keine Eingabetaste.</string>
+    <string name="core_lang_layout_no_shift_warning">Das Layout hat keine Umschalttaste. Um einen Großbuchstaben zu schreiben, halten Sie eine Taste gedrückt.</string>
+    <string name="core_lang_layout_no_space_error">Das Layout hat keine Leertaste.</string>
+    <string name="core_lang_layout_no_way_back_error">Die Ebene %1$s hat keine Taste, die zu den Buchstaben zurückführt. Sie können diese Ebene nicht verlassen.</string>
+    <string name="core_lang_layout_persistent_warning">Die Ebene %1$s bleibt geöffnet, wenn die Tastatur geschlossen wird. Stellen Sie sicher, dass Sie eine Möglichkeit haben, dieses Layout zu beenden.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Dieses Layout hat keine Taste, um es zu verlassen. Stellen Sie sicher, dass Sie einen Weg haben, dieses Layout zu beenden: eine ABC-Taste, eine Symboltaste oder das Werkzeug für benutzerdefinierte Layouts in der Symbolleiste.</string>
+    <string name="core_lang_layout_span_past_end_warning">Zeile %1$d der %2$s-Ebene hat eine Taste, die mehr Zeilen abdeckt, als die Ebene hat. Die Tastatur stoppt sie in der letzten Zeile.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Reihe %1$d der %2$s-Ebene hat %3$d Taste. Nur %4$d Tasten bleiben groß genug zum Drücken.</item>
+        <item quantity="other">Reihe %1$d der %2$s-Ebene hat %3$d Tasten. Nur %4$d Tasten bleiben groß genug zum Drücken.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Die Ebene %1$s hat %2$d Zeile. Es passen nur %3$d Zeilen.</item>
+        <item quantity="other">Die Ebene %1$s hat %2$d Zeilen. Es passen nur %3$d Zeilen.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d Taste in der %2$s-Ebene verwendet eine Aktion, die diese Version der App nicht kennt.</item>
+        <item quantity="other">%1$d Tasten in der %2$s-Ebene verwenden eine Aktion, die diese Version der App nicht kennt.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Zeile %1$d der %2$s-Ebene ist breiter als die anderen Zeilen. Die Tastatur stellt die Tasten dieser Zeile schmaler dar.</string>
+    <string name="core_lang_numeral_scope_display_only">Nur Anzeige</string>
+    <string name="core_lang_numeral_scope_everywhere">Überall</string>
+    <string name="core_lang_numeral_scope_text_fields">Textfelder</string>
+    <string name="core_lang_numeral_system_auto">Automatisch</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d Komponente erscheint mehr als einmal. Die App behält die erste Kopie.</item>
+        <item quantity="other">%1$d Komponenten erscheinen mehr als einmal. Die App behält jeweils die erste Kopie.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Dieses Panel enthält keine Tasten. Die App verwendet stattdessen das Standard-Panel.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d Taste hat eine Aktion, die in einem Bedienfeld nicht funktioniert. Die App löscht sie.</item>
+        <item quantity="other">%1$d Tasten haben Aktionen, die in einem Bedienfeld nicht funktionieren. Die App löscht sie.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Dieses Panel hat keine ABC-Taste. Verwenden Sie die Symbolleiste oder die Zurück-Taste, um zu den Tasten zurückzukehren.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Die App hat eine zweite Kopie einer Komponente gelöscht.</string>
+    <string name="core_lang_panel_repair_field_added">Die App hat die Hauptkomponente des Panels in einer neuen Zeile hinzugefügt.</string>
+    <string name="core_lang_panel_repair_field_dropped">Die App hat eine Komponente gelöscht, die nicht zu diesem Bedienfeld gehört.</string>
+    <string name="core_lang_panel_repair_key_dropped">Die App hat eine Taste gelöscht, deren Aktion in einem Bedienfeld nicht funktioniert.</string>
+    <string name="core_lang_panel_repair_reset">Die App hat das leere Bedienfeld durch das Standardbedienfeld ersetzt.</string>
+    <string name="core_lang_panel_required_field_error">Diesem Feld fehlt seine Hauptkomponente. Die App fügt eine hinzu, wenn sie das Feld zeichnet.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d Komponente gehört nicht zu diesem Panel. Die App löscht sie.</item>
+        <item quantity="other">%1$d Komponenten gehören nicht zu diesem Panel. Die App löscht sie.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Die App hat eine leere Taste in der %1$s-Ebene gelöscht.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Eine Taste in der %1$s-Ebene verwendete Braille-Punkt %2$d. Die App hat daraus Punkt %3$d gemacht.</string>
+    <string name="core_lang_repair_delete_key_added">Die Buchstabenebene hatte keine Löschtaste. Die App hat eine hinzugefügt.</string>
+    <string name="core_lang_repair_enter_key_added">Die Buchstabenebene hatte keine Eingabetaste. Die App hat eine hinzugefügt.</string>
+    <string name="core_lang_repair_field_key_deleted">Die App hat eine Panel-Komponente aus der %1$s-Ebene gelöscht. Komponenten funktionieren nur in einem Panel-Layout.</string>
+    <string name="core_lang_repair_key_letters_anchored">Eine Taste in der %1$s-Ebene steht für %2$s. Die App hat sie so eingestellt, dass sie %3$s tippt.</string>
+    <string name="core_lang_repair_key_letters_dropped">Eine Taste in der Ebene %1$s gab %2$s als Buchstaben an, für die sie steht. Da dies keine Buchstaben sind, hat die App daraus eine gewöhnliche Taste gemacht.</string>
+    <string name="core_lang_repair_key_span_clamped">Eine Taste in der %1$s-Ebene deckte %2$d Zeilen ab. Die App hat sie auf %3$d angepasst.</string>
+    <string name="core_lang_repair_key_width_capped">Eine Taste in der Ebene %1$s war %2$s Einheiten breit. Die App hat sie auf %3$s Einheiten angepasst.</string>
+    <string name="core_lang_repair_key_width_set">Eine Taste in der %1$s-Ebene hatte keine Breite. Die App hat die Breite auf 1 gesetzt.</string>
+    <string name="core_lang_repair_layer_replaced">Die %1$s-Ebene hatte keine funktionierenden Tasten. Sie verwendet jetzt das integrierte Raster.</string>
+    <string name="core_lang_repair_letters_key_added">Die %1$s-Ebene hatte keine Taste, die zu den Buchstaben zurückführt. Die App hat eine ABC-Taste hinzugefügt.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Eine Zeile in der %1$s-Ebene hatte %2$d Taste. Die App behält die ersten %3$d.</item>
+        <item quantity="other">Eine Zeile in der %1$s-Ebene hatte %2$d Tasten. Die App behält die ersten %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Eine Zeile in der %1$s-Ebene war %2$s Einheiten breit. Die App hat die Tasten verkleinert, damit die Zeile passt.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Die %1$s-Ebene hatte %2$d Zeile. Die App behält die ersten %3$d.</item>
+        <item quantity="other">Die %1$s-Ebene hatte %2$d Zeilen. Die App behält die ersten %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Die Buchstabenebene hatte keine Leertaste. Die App hat eine hinzugefügt.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Die App hat eine Taste in der %1$s-Ebene gelöscht. Ihre Aktion „%2$s“ ist unbekannt.</string>
+</resources>

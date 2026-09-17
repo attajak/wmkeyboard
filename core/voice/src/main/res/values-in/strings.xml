@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Server Hugging Face tidak mengirim file. Kode kesalahan adalah HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Koneksi terhenti selama pengunduhan. Coba lagi untuk melanjutkan dari tempat terakhir terhenti.</string>
+    <string name="core_voice_download_space_error">Penyimpanan di perangkat Anda tidak cukup. Anda harus mengosongkan sekitar %1$s MB terlebih dahulu.</string>
+    <string name="core_voice_model_base_eu_body">Model ini menggunakan bahasa yang Anda ketik, sama seperti model 40 bahasa. Model ini hanya mencakup bahasa-bahasa Eropa, sehingga unduhannya lebih kecil.</string>
+    <string name="core_voice_model_base_multi_body">Model ini menyeimbangkan akurasi dan kecepatan. Model ini mencakup setiap bahasa yang diketahui Whisper. Pilih ini jika model Kecil terlalu lambat.</string>
+    <string name="core_voice_model_base_world_body">Model ini menggunakan bahasa yang Anda ketik alih-alih tebakan. Frasa pendek menjadi jauh lebih andal. Pilih model ini jika daftarnya memuat bahasa Anda.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d bahasa</item>
+        <item quantity="other">%1$d bahasa</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Ini adalah salah satu model Whisper yang paling akurat, tetapi terlalu besar untuk sebagian besar ponsel. Unduhannya sebesar 1,5 GB. Hanya perangkat dengan memori besar yang dapat memuatnya.</string>
+    <string name="core_voice_model_large_v3_multi_body">Ini adalah model Whisper yang paling akurat, dan yang terbaik dalam mengenali bahasa yang Anda gunakan. Ukuran unduhannya adalah 1,5 GB. Hanya perangkat dengan memori besar yang dapat memuatnya. Model Turbo hampir sama akuratnya dan ukurannya setengahnya.</string>
+    <string name="core_voice_model_medium_multi_body">Model ini memberikan akurasi yang hampir setara dengan desktop. Setiap frasa memerlukan waktu beberapa detik. Model ini menggunakan hampir satu gigabyte memori saat dijalankan.</string>
+    <string name="core_voice_model_single_language_body">Model ini hanya menangani %1$s. Tidak ada langkah deteksi bahasa. Hal ini membuatnya lebih cepat dan sedikit lebih akurat daripada model multibahasa dengan ukuran yang sama.</string>
+    <string name="core_voice_model_small_multi_body">Model ini memberikan akurasi terbaik yang tetap berjalan lancar di ponsel. Model ini menangani aksen dan kebisingan latar belakang lebih baik daripada model Dasar. Ini mencakup setiap bahasa yang diketahui Whisper.</string>
+    <string name="core_voice_model_small_world_body">Model ini menggunakan bahasa yang Anda ketik dan memiliki akurasi model Kecil. Ini adalah model paling akurat yang masih muat di ponsel.</string>
+    <string name="core_voice_model_tiny_multi_body">Ini adalah model multibahasa tercepat. Model ini bekerja dengan baik dengan ucapan yang jelas, tetapi kebisingan mengurangi akurasinya.</string>
+    <string name="core_voice_model_turbo_multi_body">Model ini mengenali bahasa yang Anda ucapkan jauh lebih baik daripada model yang lebih kecil. Pilih ini jika model yang lebih kecil mentranskripsikan ucapan Anda ke bahasa yang salah. Ini adalah unduhan yang besar, dan setiap frasa memerlukan beberapa detik.</string>
+    <string name="core_voice_size_base_label">Dasar</string>
+    <string name="core_voice_size_large_label">Besar</string>
+    <string name="core_voice_size_medium_label">Sedang</string>
+    <string name="core_voice_size_small_label">Kecil</string>
+    <string name="core_voice_size_tiny_label">Sangat Kecil</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Direkomendasikan</string>
+    <string name="core_voice_whisper_mel_bins_error">Model suara ini memerlukan spektrogram pita %1$s, yang tidak cocok dengan file yang diunduh bersamanya. Hapus model di pengaturan dan unduh lagi.</string>
+    <string name="core_voice_whisper_model_load_error">Model suara tidak dimuat. File mungkin rusak. Hapus model di pengaturan dan unduh lagi.</string>
+    <string name="core_voice_whisper_transcribe_error">Pengetikan suara tidak berfungsi. Coba lagi, atau pilih model yang lebih kecil.</string>
+</resources>

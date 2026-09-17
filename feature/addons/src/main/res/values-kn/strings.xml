@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">ಇದರೊಂದಿಗೆ ಈಗ ಎಮೋಜಿಯನ್ನು ಸೆಳೆಯಬೇಕೇ?</string>
+    <string name="faddons_apply_icon_pack_question">ಇದರ ಐಕಾನ್‌ಗಳನ್ನು ಈಗ ಕೀಬೋರ್ಡ್‌ನಲ್ಲಿ ಬಳಸಬೇಕೆ?</string>
+    <string name="faddons_apply_layout_question">ಇದರೊಂದಿಗೆ ಟೈಪ್ ಮಾಡಲು ಇದನ್ನು ಆನ್ ಮಾಡಬೇಕೇ?</string>
+    <string name="faddons_apply_plugin_question">ಪ್ಲಗಿನ್‌ಗಳ ಫಲಕದಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳಲು ಇದನ್ನು ಆನ್ ಮಾಡಬೇಕೇ?</string>
+    <string name="faddons_apply_sound_pack_question">ಈ ಸೌಂಡ್ ಪ್ಯಾಕ್ ಅನ್ನು ನಿಮ್ಮ ಕೀಗಳಿಗಾಗಿ ಈಗ ಬಳಸುವಿರಾ?</string>
+    <string name="faddons_apply_sound_question">ಇದನ್ನು ಈಗ ನಿಮ್ಮ ಕೀ ಸೌಂಡ್ ಆಗಿ ಬಳಸುವಿರಾ?</string>
+    <string name="faddons_apply_switch_action">ಅದಕ್ಕೆ ಬದಲಾಯಿಸಿ</string>
+    <string name="faddons_apply_theme_question">ಇದನ್ನು ಈಗ ನಿಮ್ಮ ಕೀಬೋರ್ಡ್ ಥೀಮ್ ಆಗಿ ಬಳಸುವಿರಾ?</string>
+    <string name="faddons_download_error_app_too_old">ಈ ಆಡ್-ಆನ್‌ಗೆ ಅಪ್ಲಿಕೇಶನ್‌ನ ಹೊಸ ಆವೃತ್ತಿಯ ಅಗತ್ಯವಿದೆ.</string>
+    <string name="faddons_download_error_bad_url">ಡೌನ್‌ಲೋಡ್ ಲಿಂಕ್ ಮಾನ್ಯವಾದ https URL ಅಲ್ಲ.</string>
+    <string name="faddons_download_error_checksum">ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್ ಮ್ಯಾನಿಫೆಸ್ಟ್‌ನಲ್ಲಿರುವ ಚೆಕ್‌ಸಮ್‌ಗೆ ಹೊಂದಿಕೆಯಾಗುವುದಿಲ್ಲ.</string>
+    <string name="faddons_download_error_http_status">ಸರ್ವರ್ HTTP %1$d ಅನ್ನು ಹಿಂತಿರುಗಿಸಿದೆ.</string>
+    <string name="faddons_download_error_no_space">ಇದನ್ನು ಸ್ಥಾಪಿಸಲು ಸಾಕಷ್ಟು ಖಾಲಿ ಜಾಗವಿಲ್ಲ.</string>
+    <string name="faddons_download_error_plugin_no_checksum">ಈ ಪ್ಲಗಿನ್ ಚೆಕ್‌ಸಮ್ ಹೊಂದಿಲ್ಲ. ಅಪ್ಲಿಕೇಶನ್ ಅದನ್ನು ಪರಿಶೀಲಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="faddons_download_error_too_large">ಈ ಆಡ್-ಆನ್ ಅದರ ಪ್ರಕಾರಕ್ಕೆ %1$d MB ಮಿತಿಗಿಂತ ದೊಡ್ಡದಾಗಿದೆ.</string>
+    <string name="faddons_error_no_words">ಅಪ್ಲಿಕೇಶನ್ ಆ ಫೈಲ್‌ನಿಂದ ಯಾವುದೇ ಪದಗಳನ್ನು ಓದಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_error_not_a_plugin">ಆ ಫೈಲ್ WM ಕೀಬೋರ್ಡ್ ಪ್ಲಗಿನ್ ಅಲ್ಲ.</string>
+    <string name="faddons_install_error_dictionary_no_language">ಈ ನಿಘಂಟು ಯಾವ ಭಾಷೆಗಾಗಿ ಎಂದು ಹೇಳುವುದಿಲ್ಲ.</string>
+    <string name="faddons_install_error_dictionary_not_saved">ಅಪ್ಲಿಕೇಶನ್ ನಿಘಂಟನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">ಅಪ್ಲಿಕೇಶನ್ ಐಕಾನ್ ಪ್ಯಾಕ್ ಅನ್ನು ಓದಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_install_error_keywords_no_language">ಈ ಪ್ಯಾಕ್ ಯಾವ ಭಾಷೆಗಾಗಿ ಎಂದು ಹೇಳುವುದಿಲ್ಲ.</string>
+    <string name="faddons_install_error_keywords_not_saved">ಅಪ್ಲಿಕೇಶನ್ ಕೀವರ್ಡ್ ಪ್ಯಾಕ್ ಅನ್ನು ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_install_error_keywords_too_large">ಆ ಕೀವರ್ಡ್ ಪ್ಯಾಕ್ ಆಮದು ಮಾಡಿಕೊಳ್ಳಲು ತುಂಬಾ ದೊಡ್ಡದಾಗಿದೆ.</string>
+    <string name="faddons_install_error_no_keywords">ಆ ಫೈಲ್‌ನಿಂದ ಯಾವುದೇ ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳನ್ನು ಓದಲು ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_install_error_no_stickers">ಆಪ್ ಆ ಪ್ಯಾಕ್‌ನಿಂದ ಯಾವುದೇ ಸ್ಟಿಕ್ಕರ್‌ಗಳನ್ನು ಓದಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">ಆ ಫೈಲ್ WM ಕೀಬೋರ್ಡ್ ಲೇಔಟ್ ಅಲ್ಲ.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">ಆ ಫೈಲ್ WM ಕೀಬೋರ್ಡ್ ಸ್ನಿಪ್ಪೆಟ್ ಪ್ಯಾಕ್ ಅಲ್ಲ.</string>
+    <string name="faddons_install_error_not_a_sound_pack">ಈ ಫೈಲ್ ಸೌಂಡ್ ಪ್ಯಾಕ್ ಅಲ್ಲ.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">ಆ ಫೈಲ್ ಸ್ಟಿಕ್ಕರ್ ಪ್ಯಾಕ್ ಅಲ್ಲ.</string>
+    <string name="faddons_install_error_not_a_theme">ಆ ಫೈಲ್ WM ಕೀಬೋರ್ಡ್ ಥೀಮ್ ಅಲ್ಲ.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">ಆ ಫೈಲ್ Espanso ಪ್ಯಾಕೇಜ್ ಅಥವಾ ಮ್ಯಾಚ್ ಫೈಲ್ ಅಲ್ಲ.</string>
+    <string name="faddons_install_error_not_an_icon_pack">ಆ ಫೈಲ್ ಐಕಾನ್ ಪ್ಯಾಕ್ ಅಲ್ಲ.</string>
+    <string name="faddons_install_error_plugin_failed">ಅಪ್ಲಿಕೇಶನ್ ಆ ಪ್ಲಗಿನ್ ಅನ್ನು ಸ್ಥಾಪಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_install_error_plugins_turned_off">ಪ್ಲಗಿನ್‌ಗಳನ್ನು ಆಫ್ ಮಾಡಲಾಗಿದೆ. ಪರಿಕರಗಳು › ಪ್ಲಗಿನ್‌ಗಳ ಅಡಿಯಲ್ಲಿ “ಪ್ಲಗಿನ್‌ಗಳನ್ನು ಅನುಮತಿಸಿ” ಎಂಬುದನ್ನು ಆನ್ ಮಾಡಿ. ನಂತರ ಇದನ್ನು ಮತ್ತೆ ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಿ.</string>
+    <string name="faddons_install_error_snippet_pack_empty">ಆ ಸ್ನಿಪ್ಪೆಟ್ ಪ್ಯಾಕ್ ಖಾಲಿಯಾಗಿದೆ.</string>
+    <string name="faddons_install_error_sound_pack_read">ಅಪ್ಲಿಕೇಶನ್ ಈ ಸೌಂಡ್ ಪ್ಯಾಕ್ ಅನ್ನು ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">ಅಪ್ಲಿಕೇಶನ್ ಸ್ಟಿಕ್ಕರ್ ಪ್ಯಾಕ್ ಅನ್ನು ಓದಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_install_error_too_many_fonts">ನೀವು ಗರಿಷ್ಠ ಸಂಖ್ಯೆಯ ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಿದ ಫಾಂಟ್‌ಗಳನ್ನು ತಲುಪಿದ್ದೀರಿ.</string>
+    <string name="faddons_install_error_too_many_icon_packs">ನೀವು ಗರಿಷ್ಠ ಸಂಖ್ಯೆಯ ಐಕಾನ್ ಪ್ಯಾಕ್‌ಗಳನ್ನು ತಲುಪಿದ್ದೀರಿ.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">ನೀವು ಈಗಾಗಲೇ ಗರಿಷ್ಠ %1$d ಪ್ಲಗಿನ್ ಅನ್ನು ಹೊಂದಿದ್ದೀರಿ.</item>
+        <item quantity="other">ನೀವು ಈಗಾಗಲೇ ಗರಿಷ್ಠ %1$d ಪ್ಲಗಿನ್‌ಗಳನ್ನು ಹೊಂದಿದ್ದೀರಿ.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">ನೀವು ಸ್ಥಾಪಿಸಲಾದ ಸೌಂಡ್ ಪ್ಯಾಕ್‌ಗಳ ಗರಿಷ್ಠ ಸಂಖ್ಯೆಯನ್ನು ತಲುಪಿದ್ದೀರಿ.</string>
+    <string name="faddons_install_error_too_many_sounds">ನೀವು ಸ್ಥಾಪಿಸಲಾದ ಕೀ ಸೌಂಡ್‌ಗಳ ಗರಿಷ್ಠ ಸಂಖ್ಯೆಯನ್ನು ತಲುಪಿದ್ದೀರಿ.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">ನೀವು ಸ್ಟಿಕ್ಕರ್ ಪ್ಯಾಕ್‌ಗಳ ಗರಿಷ್ಠ ಸಂಖ್ಯೆಯನ್ನು ತಲುಪಿದ್ದೀರಿ.</string>
+    <string name="faddons_install_error_unknown_language">ಈ ಆಪ್‌ನ ಆವೃತ್ತಿಯು “%1$s” ಭಾಷೆಯನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ.</string>
+    <string name="faddons_install_error_unknown_type">ಈ ಆ್ಯಪ್‌ನ ಆವೃತ್ತಿಯು ಆ ಆಡ್-ಆನ್ ಪ್ರಕಾರವನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ.</string>
+    <string name="faddons_install_error_vocab_no_language">ಈ ಶಬ್ದಕೋಶದ ಪ್ಯಾಕ್ ಯಾವ ಭಾಷೆಗೆ ಎಂದು ಹೇಳುವುದಿಲ್ಲ.</string>
+    <string name="faddons_install_error_vocab_no_words">ಆ ಪ್ಯಾಕ್‌ನಿಂದ ಯಾವುದೇ ಪದಗಳನ್ನು ಓದಲು ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">ಆ ಫೈಲ್ ಶಬ್ದಕೋಶದ ಪ್ಯಾಕ್ ಅಲ್ಲ.</string>
+    <string name="faddons_install_error_vocab_too_large">ಈ ಶಬ್ದಕೋಶದ ಪ್ಯಾಕ್ ಅಪ್ಲಿಕೇಶನ್ ಸ್ವೀಕರಿಸುವುದಕ್ಕಿಂತ ದೊಡ್ಡದಾಗಿದೆ.</string>
+    <string name="faddons_preview_error_no_preview">ಆ್ಯಪ್ ಈ ಆಡ್-ಆನ್ ಅನ್ನು ಪ್ರಿವ್ಯೂ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="faddons_preview_error_not_espanso_pack">ಆ ಫೈಲ್ ಎಸ್ಪಾನ್ಸೊ ಪ್ಯಾಕೇಜ್ ಅಥವಾ ಮ್ಯಾಚ್ ಫೈಲ್ ಅಲ್ಲ.</string>
+    <string name="faddons_preview_error_not_keyword_pack">ಆ ಫೈಲ್ ಎಮೋಜಿ ಕೀವರ್ಡ್ ಪ್ಯಾಕ್ ಅಲ್ಲ.</string>
+    <string name="faddons_preview_error_not_snippet_pack">ಆ ಫೈಲ್ ಸ್ನಿಪ್ಪೆಟ್ ಪ್ಯಾಕ್ ಅಲ್ಲ.</string>
+    <string name="faddons_preview_error_not_vocab_pack">ಆ ಫೈಲ್ ಶಬ್ದಕೋಶದ ಪ್ಯಾಕ್ ಅಲ್ಲ.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">ಈ ಪ್ಯಾಕ್‌ನಲ್ಲಿರುವ ಶಬ್ದಗಳನ್ನು ಓದಲು ಆ್ಯಪ್‌ಗೆ ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_preview_error_stickers_unreadable">ಅಪ್ಲಿಕೇಶನ್ ಸ್ಟಿಕ್ಕರ್ ಚಿತ್ರಗಳನ್ನು ಓದಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.</string>
+    <string name="faddons_snippet_pack_folder_fallback">ಸ್ನಿಪ್ಪೆಟ್ ಪ್ಯಾಕ್</string>
+</resources>

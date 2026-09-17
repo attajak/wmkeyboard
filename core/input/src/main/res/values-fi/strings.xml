@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Ladattu tiedosto on vioittunut. Sen tarkistussumma ei täsmää. Yritä lataamista uudelleen.</string>
+    <string name="core_input_cjk_download_error_http">Palvelin palautti HTTP-tilan %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Lataus ei onnistunut. Tarkista yhteytesi ja yritä uudelleen.</string>
+    <string name="core_input_cjk_download_error_network_detail">Lataus epäonnistui: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Laitteesi tallennustila ei riitä. Vapauta ensin tilaa.</string>
+    <string name="core_input_cjk_download_error_truncated">Yhteys katkesi latauksen aikana. Jatka painamalla Jatka.</string>
+    <string name="core_input_cjk_download_error_unavailable">Tämä paketti ei ole vielä saatavilla.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Taulukko radikaalikoodeista hanzi-merkkeihin, 29 000 merkkiä. Näppäimistö tarvitsee tämän paketin Cangjie- ja Quick-asetteluja varten.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) -sanakirja</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana-luennat mozcista, 1,08 miljoonaa merkintää, noin 42 Mt. Näppäimistö tarvitsee tämän paketin japanin kielen muuntamiseen.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Japanin kana-kanji-sanakirja</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Taulukko Jyutping-lukutavoista Hanzi-merkkeihin, 163 000 merkintää. Näppäimistö tarvitsee tämän paketin kantoninkiinan muuntamiseen.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantoninkiinan Jyutping-sanakirja</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Hanzi-merkit ja lauseet CC-CEDICT-tietokannasta, 120 000 merkintää. Näppäimistö tarvitsee tämän paketin kiinan kielen muuntamiseen.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Kiinalainen Pinyin-sanakirja</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Hanzi-merkkien piirtojärjestystaulukko. Näppäimistö tarvitsee tämän paketin piirtoasettelua varten.</string>
+    <string name="core_input_cjk_pack_stroke_title">Kiinalainen viivajärjestelmä (笔画) -sanakirja</string>
+    <string name="core_input_double_pinyin_off_label">Pois päältä (täysi Pinyin)</string>
+</resources>

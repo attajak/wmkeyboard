@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Diese Emoji-Schlüsselwortliste ist leer oder nicht lesbar.</string>
+    <string name="core_emoji_dict_error_http">Der Server hat die Datei nicht gesendet. Der Fehlercode ist HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Diese Datei ist keine Emoji-Schlüsselwortliste.</string>
+    <string name="core_emoji_dict_error_save">Die App konnte die Emoji-Schlüsselwortliste nicht speichern.</string>
+    <string name="core_emoji_dict_error_too_large">Diese Emoji-Schlüsselwortliste ist zu groß.</string>
+</resources>

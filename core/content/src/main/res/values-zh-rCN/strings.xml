@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">一次性验证码</string>
+    <string name="core_content_clip_entity_otp_tag">验证码</string>
+    <string name="core_content_clip_entity_phone_label">电话号码</string>
+    <string name="core_content_clip_entity_phone_tag">电话</string>
+    <string name="core_content_clip_entity_url_label">链接</string>
+    <string name="core_content_clip_entity_url_tag">链接</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d 个片段有 Espanso 无法容纳的其他扩展。仅写入了第一个。</item>
+        <item quantity="other">%1$d 个片段有 Espanso 无法容纳的其他扩展。每个仅写入了第一个。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d 个片段仅限于特定的计算机程序。在您的手机上，它在任何地方都有效。</item>
+        <item quantity="other">%1$d 个片段仅限于特定的计算机程序。在您的手机上，它们在任何地方都有效。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d 个片段要求您从列表中进行选择。应用改为随机选择一个。</item>
+        <item quantity="other">%1$d 个片段要求您从列表中进行选择。应用改为随机选择一个。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d 个片段在展开前需要确认。Espanso 没有此设置，因此它会在那里自动展开。</item>
+        <item quantity="other">%1$d 个片段在展开前需要确认。Espanso 没有此设置，因此它们会在那里自动展开。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d 个片段使用了应用无法完整写入的日期格式。应用已省略无法处理的部分。</item>
+        <item quantity="other">%1$d 个片段使用了应用无法完整写入的日期格式。应用已省略无法处理的部分。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d 个代码片段位于已关闭的文件夹中。Espanso 没有文件夹开关，因此它将在那里展开。</item>
+        <item quantity="other">%1$d 个代码片段位于已关闭的文件夹中。Espanso 没有文件夹开关，因此它们将在那里展开。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">应用跳过了 %1$d 个没有内容可插入的代码片段。</item>
+        <item quantity="other">应用跳过了 %1$d 个没有内容可插入的代码片段。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d 个代码片段要求您填写表单。应用会将表单作为文本插入，并将光标置于第一个空白处。</item>
+        <item quantity="other">%1$d 个代码片段要求您填写表单。应用会将每个表单作为文本插入，并将光标置于第一个空白处。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">应用跳过了 %1$d 个插入图片的片段。</item>
+        <item quantity="other">应用跳过了 %1$d 个插入图片的片段。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">该文件读取了 %1$d 个其他文件。一个文件无法携带其他文件。</item>
+        <item quantity="other">该文件读取了 %1$d 个其他文件。一个文件无法携带其他文件。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d 个片段指向其他片段。Espanso 无法处理此逻辑，因此链接已被忽略。</item>
+        <item quantity="other">%1$d 个片段指向其他片段。Espanso 无法处理此逻辑，因此链接已被忽略。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d 个触发器旨在单词内部工作。在您的手机上，它仅作为整个单词起作用。</item>
+        <item quantity="other">%1$d 个触发器旨在单词内部工作。在您的手机上，它们仅作为整个单词起作用。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d 个片段使用了 Espanso 没有对应项的值。它将按原样写出。</item>
+        <item quantity="other">%1$d 个片段使用了 Espanso 没有对应项的值。它们将按原样写出。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">应用已从 %1$d 个片段中移除了该模式。应用无法运行此类形状的模式。该片段将保留在列表中。</item>
+        <item quantity="other">应用已从 %1$d 个片段中移除了该模式。应用无法运行此类形状的模式。这些片段将保留在列表中。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d 个片段使用了格式化文本。应用将保留文字并去除格式。</item>
+        <item quantity="other">%1$d 个片段使用了格式化文本。应用将保留文字并去除格式。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d 个代码片段会在您的计算机上运行命令。本应用已剔除该命令且绝不会运行它。</item>
+        <item quantity="other">%1$d 个代码片段会在您的计算机上运行命令。本应用已剔除这些命令且绝不会运行它们。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d 个触发器仅由符号组成，因此应用无法监视它。其代码片段将保留在列表中。</item>
+        <item quantity="other">%1$d 个触发器仅由符号组成，因此应用无法监视它们。其代码片段将保留在列表中。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d 个片段包含此应用会填充的大括号文本，例如 {date}。它将展开，而不是按原样显示。</item>
+        <item quantity="other">%1$d 个片段包含此应用会填充的大括号文本，例如 {date}。它将展开，而不是按原样显示。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d 个片段会更改其模式所捕获内容的大小写。Espanso 无法做到这一点，因此捕获的文本将保持原样。</item>
+        <item quantity="other">%1$d 个片段会更改其模式所捕获内容的大小写。Espanso 无法做到这一点，因此捕获的文本将保持原样。</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d 个代码片段使用了本应用无法识别的值。该部分将为空。</item>
+        <item quantity="other">%1$d 个代码片段使用了本应用无法识别的值。这些部分将为空。</item>
+    </plurals>
+    <string name="core_content_font_error_download">应用无法下载字体。请检查您的网络连接并重试。</string>
+    <string name="core_content_font_error_empty">文件为空。</string>
+    <string name="core_content_font_error_load">应用无法加载此字体文件。</string>
+    <string name="core_content_font_error_markup">此文件是 HTML 或 XML 文件，而非字体文件。</string>
+    <string name="core_content_font_error_no_storage">没有可用于字体的存储空间。</string>
+    <string name="core_content_font_error_not_a_font">此文件看起来不是 .ttf 或 .otf 字体文件。</string>
+    <string name="core_content_font_error_read">应用无法读取字体。</string>
+    <string name="core_content_font_error_save">应用无法保存字体。</string>
+    <string name="core_content_font_error_too_large">字体大小必须小于 %1$d MB。</string>
+    <string name="core_content_font_error_too_many">字体库已满。请删除一个字体后再试。</string>
+    <string name="core_content_font_error_too_short">该文件太短，无法作为字体文件。</string>
+    <string name="core_content_font_error_woff">应用无法读取 WOFF 网络字体。请使用 .ttf 或 .otf 版本的字体。</string>
+    <string name="core_content_font_error_woff2">该应用无法读取 WOFF2 网络字体。请使用 .ttf 或 .otf 版本的字体。</string>
+    <string name="core_content_font_error_zip">此文件是 zip 压缩包，而非字体文件。</string>
+    <string name="core_content_selection_macro_add_contact">联系人</string>
+    <string name="core_content_selection_macro_calendar">日历</string>
+    <string name="core_content_selection_macro_call">呼叫</string>
+    <string name="core_content_selection_macro_case_lower">小写</string>
+    <string name="core_content_selection_macro_case_sentence">句首字母大写</string>
+    <string name="core_content_selection_macro_case_title">标题大小写</string>
+    <string name="core_content_selection_macro_case_upper">大写</string>
+    <string name="core_content_selection_macro_chat_bold">粗体</string>
+    <string name="core_content_selection_macro_chat_italic">斜体</string>
+    <string name="core_content_selection_macro_chat_mono">等宽</string>
+    <string name="core_content_selection_macro_chat_strike">删除线</string>
+    <string name="core_content_selection_macro_colour">颜色</string>
+    <string name="core_content_selection_macro_copy">复制</string>
+    <string name="core_content_selection_macro_digits_latin">数字</string>
+    <string name="core_content_selection_macro_email">电子邮件</string>
+    <string name="core_content_selection_macro_fancy">花式</string>
+    <string name="core_content_selection_macro_find">查找</string>
+    <string name="core_content_selection_macro_format">格式</string>
+    <string name="core_content_selection_macro_grammar">语法</string>
+    <string name="core_content_selection_macro_lines_bullet">项目符号</string>
+    <string name="core_content_selection_macro_lines_dedupe">唯一</string>
+    <string name="core_content_selection_macro_lines_number">编号</string>
+    <string name="core_content_selection_macro_lines_sort">排序</string>
+    <string name="core_content_selection_macro_map">地图</string>
+    <string name="core_content_selection_macro_open">打开</string>
+    <string name="core_content_selection_macro_qr">二维码</string>
+    <string name="core_content_selection_macro_read_aloud">朗读</string>
+    <string name="core_content_selection_macro_replace">替换</string>
+    <string name="core_content_selection_macro_search">搜索</string>
+    <string name="core_content_selection_macro_share">分享</string>
+    <string name="core_content_selection_macro_sms">短信</string>
+    <string name="core_content_selection_macro_time_zones">时区</string>
+    <string name="core_content_selection_macro_to_bangla">孟加拉语</string>
+    <string name="core_content_selection_macro_to_banglish">孟加拉语拼音 (Banglish)</string>
+    <string name="core_content_selection_macro_translate">翻译</string>
+    <string name="core_content_selection_macro_url_decode">解码</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">应用从“%1$s”中遗漏了 %2$d 个扩展。</item>
+        <item quantity="other">应用从“%1$s”中遗漏了 %2$d 个扩展。</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">应用已从“%1$s”中移除了该模式。该模式不正确。片段将保留在列表中。</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">应用丢弃了 %1$d 个没有名称或重复的文件夹。其片段已移至无文件夹状态。</item>
+        <item quantity="other">应用丢弃了 %1$d 个没有名称或重复的文件夹。其片段已移至无文件夹状态。</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">文件中的文本片段数量超过了应用保留的上限。应用已导入前 %1$d 个。</item>
+        <item quantity="other">文件中的文本片段数量超过了应用保留的上限。应用已导入前 %1$d 个。</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">片段没有名称，因此应用已根据其第一行内容为其命名。</string>
+    <string name="core_content_snippet_repair_no_text">应用丢弃了 \"%1$s\"。它没有文本。</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">应用已从“%1$s”中移除了该模式。它超过了 %2$d 个字符。</item>
+        <item quantity="other">应用已从“%1$s”中移除了该模式。它超过了 %2$d 个字符。</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">应用已缩短“%1$s”。它超过了 %2$d 个字符。</item>
+        <item quantity="other">应用已缩短“%1$s”。它超过了 %2$d 个字符。</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">您正在输入的应用名称</string>
+    <string name="core_content_snippet_var_clip_info">最新的剪贴板条目</string>
+    <string name="core_content_snippet_var_cursor_info">光标落下的位置</string>
+    <string name="core_content_snippet_var_date_info">今天的日期</string>
+    <string name="core_content_snippet_var_datetime_info">日期和时间</string>
+    <string name="core_content_snippet_var_day_info">月份中的某一天</string>
+    <string name="core_content_snippet_var_isodate_info">ISO 格式的日期，例如 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">ISO 格式的日期和时间</string>
+    <string name="core_content_snippet_var_month_info">月份名称</string>
+    <string name="core_content_snippet_var_package_info">该应用的软件包名称</string>
+    <string name="core_content_snippet_var_selection_info">您在字段中选择的文本</string>
+    <string name="core_content_snippet_var_time12_info">当前 12 小时制时间</string>
+    <string name="core_content_snippet_var_time_info">当前时间（24小时制）</string>
+    <string name="core_content_snippet_var_timestamp_info">以 Unix 秒为单位的时间</string>
+    <string name="core_content_snippet_var_timezone_info">时区，例如 GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">一个新的随机 UUID</string>
+    <string name="core_content_snippet_var_weekday_info">星期几的名称，例如星期日</string>
+    <string name="core_content_snippet_var_year_info">年份，四位数字</string>
+    <string name="core_content_sticker_pack_imported_label">已导入的贴纸</string>
+    <string name="core_content_sticker_repair_image_missing">应用丢失了“%1$s”。其图像缺失。</string>
+    <string name="core_content_sticker_repair_image_unreadable">应用已丢弃“%1$s”。应用无法读取其图像。</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">该包有 %1$d 个贴纸。应用保留前 %2$d 个。</item>
+        <item quantity="other">该包有 %1$d 个贴纸。应用保留前 %2$d 个。</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">应用丢失了一个贴纸。该贴纸未命名任何图像文件。</string>
+    <string name="core_content_sticker_repair_none_listed">贴纸包文件中未列出任何贴纸。</string>
+    <string name="core_content_sticker_repair_not_saved">应用丢弃了“%1$s”。应用无法保存它。</string>
+</resources>

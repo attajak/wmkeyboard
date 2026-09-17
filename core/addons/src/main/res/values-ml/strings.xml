@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">നിഘണ്ടുക്കൾ</string>
+    <string name="core_addons_type_dictionary_singular_label">നിഘണ്ടു</string>
+    <string name="core_addons_type_emoji_font_label">ഇമോജി ഫോണ്ടുകൾ</string>
+    <string name="core_addons_type_emoji_font_singular_label">ഇമോജി ഫോണ്ട്</string>
+    <string name="core_addons_type_emoji_keywords_label">ഇമോജി കീവേഡുകൾ</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">ഇമോജി കീവേഡ് പാക്ക്</string>
+    <string name="core_addons_type_espanso_label">എസ്പാൻസോ പാക്കുകൾ</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso പാക്ക്</string>
+    <string name="core_addons_type_font_label">ഫോണ്ടുകൾ</string>
+    <string name="core_addons_type_font_singular_label">ഫോണ്ട്</string>
+    <string name="core_addons_type_icon_pack_label">ഐക്കൺ പാക്കുകൾ</string>
+    <string name="core_addons_type_icon_pack_singular_label">ഐക്കൺ പാക്ക്</string>
+    <string name="core_addons_type_layout_label">ലേഔട്ടുകൾ</string>
+    <string name="core_addons_type_layout_singular_label">ലേഔട്ട്</string>
+    <string name="core_addons_type_plugin_label">പ്ലഗിനുകൾ</string>
+    <string name="core_addons_type_plugin_singular_label">പ്ലഗിൻ</string>
+    <string name="core_addons_type_snippets_label">സ്നിപ്പറ്റുകൾ</string>
+    <string name="core_addons_type_snippets_singular_label">സ്നിപ്പറ്റ് പാക്ക്</string>
+    <string name="core_addons_type_sound_label">ശബ്ദങ്ങൾ</string>
+    <string name="core_addons_type_sound_pack_label">സൗണ്ട് പാക്കുകൾ</string>
+    <string name="core_addons_type_sound_pack_singular_label">സൗണ്ട് പാക്ക്</string>
+    <string name="core_addons_type_sound_singular_label">കീ സൗണ്ട്</string>
+    <string name="core_addons_type_stickers_label">സ്റ്റിക്കർ പാക്കുകൾ</string>
+    <string name="core_addons_type_stickers_singular_label">സ്റ്റിക്കർ പാക്ക്</string>
+    <string name="core_addons_type_theme_label">തീമുകൾ</string>
+    <string name="core_addons_type_theme_singular_label">തീം</string>
+    <string name="core_addons_type_unknown_label">മറ്റുള്ളവ</string>
+    <string name="core_addons_type_unknown_singular_label">ആഡ്-ഓൺ</string>
+    <string name="core_addons_type_vocabulary_label">പദാവലി</string>
+    <string name="core_addons_type_vocabulary_singular_label">വൊക്കാബുലറി പാക്ക്</string>
+</resources>

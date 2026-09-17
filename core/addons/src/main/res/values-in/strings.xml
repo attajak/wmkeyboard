@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Kamus</string>
+    <string name="core_addons_type_dictionary_singular_label">Kamus</string>
+    <string name="core_addons_type_emoji_font_label">Font emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Font emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Kata kunci emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Paket kata kunci emoji</string>
+    <string name="core_addons_type_espanso_label">Paket Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Paket Espanso</string>
+    <string name="core_addons_type_font_label">Font</string>
+    <string name="core_addons_type_font_singular_label">Font</string>
+    <string name="core_addons_type_icon_pack_label">Paket ikon</string>
+    <string name="core_addons_type_icon_pack_singular_label">Pak ikon</string>
+    <string name="core_addons_type_layout_label">Tata letak</string>
+    <string name="core_addons_type_layout_singular_label">Tata letak</string>
+    <string name="core_addons_type_plugin_label">Plugin</string>
+    <string name="core_addons_type_plugin_singular_label">Plugin</string>
+    <string name="core_addons_type_snippets_label">Cuplikan</string>
+    <string name="core_addons_type_snippets_singular_label">Paket cuplikan</string>
+    <string name="core_addons_type_sound_label">Suara</string>
+    <string name="core_addons_type_sound_pack_label">Paket suara</string>
+    <string name="core_addons_type_sound_pack_singular_label">Paket suara</string>
+    <string name="core_addons_type_sound_singular_label">Suara tombol</string>
+    <string name="core_addons_type_stickers_label">Paket stiker</string>
+    <string name="core_addons_type_stickers_singular_label">Paket stiker</string>
+    <string name="core_addons_type_theme_label">Tema</string>
+    <string name="core_addons_type_theme_singular_label">Tema</string>
+    <string name="core_addons_type_unknown_label">Lainnya</string>
+    <string name="core_addons_type_unknown_singular_label">Add-on</string>
+    <string name="core_addons_type_vocabulary_label">Kosakata</string>
+    <string name="core_addons_type_vocabulary_singular_label">Paket kosakata</string>
+</resources>

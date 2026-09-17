@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Prenesena datoteka je poškodovana. Njena kontrolna vsota se ne ujema. Poskusite znova prenesti.</string>
+    <string name="core_input_cjk_download_error_http">Strežnik je vrnil status HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Prenos ni uspel. Preverite povezavo in poskusite znova.</string>
+    <string name="core_input_cjk_download_error_network_detail">Prenos ni uspel: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">V vaši napravi ni dovolj prostora za shranjevanje. Najprej sprostite nekaj prostora.</string>
+    <string name="core_input_cjk_download_error_truncated">Povezava je bila med prenosom prekinjena. Pritisnite Nadaljuj za nadaljevanje.</string>
+    <string name="core_input_cjk_download_error_unavailable">Ta paket še ni na voljo.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Tabela radikalnih kod za znake Hanzi, 29.000 znakov. Tipkovnica potrebuje ta paket za postavitvi Cangjie in Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Slovar Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Branja Kana iz mozc, 1,08 milijona vnosov, približno 42 MB. Tipkovnica potrebuje ta paket za pretvorbo japonščine.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Japonski slovar kana v kandži</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Tabela branja Jyutping za znake Hanzi, 163.000 vnosov. Tipkovnica potrebuje ta paket za pretvorbo kantonščine.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantonski slovar Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Znaki in fraze Hanzi iz CC-CEDICT, 120.000 vnosov. Tipkovnica potrebuje ta paket za pretvorbo v kitajščino.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Kitajski slovar Pinyin</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Tabela vrstnega reda potez za znake Hanzi. Tipkovnica potrebuje ta paket za postavitev potez.</string>
+    <string name="core_input_cjk_pack_stroke_title">Kitajski slovar potez (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Izklopljeno (polni Pinyin)</string>
+</resources>

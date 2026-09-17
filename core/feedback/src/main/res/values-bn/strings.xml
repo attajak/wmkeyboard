@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">এই প্যাকটির জন্য সাউন্ড প্যাক ফরম্যাট %1$s প্রয়োজন। অ্যাপটি আপডেট করুন।</string>
+    <string name="core_feedback_pack_reject_no_samples">এই প্যাকে এমন কোনো সাউন্ড নেই যা অ্যাপটি প্লে করতে পারে।</string>
+    <string name="core_feedback_pack_reject_too_large">একটি সাউন্ড প্যাক অবশ্যই %1$s এমবি-এর চেয়ে ছোট হতে হবে।</string>
+    <string name="core_feedback_sound_import_empty_error">ফাইলটি খালি।</string>
+    <string name="core_feedback_sound_import_html_error">এটি একটি HTML বা XML ফাইল, কোনো শব্দ নয়।</string>
+    <string name="core_feedback_sound_import_mp4_error">অ্যাপটি MP4 এবং M4A ফাইল প্লে করে না। একটি MP3 ফাইল ব্যবহার করুন।</string>
+    <string name="core_feedback_sound_import_no_storage_error">আপনার ডিভাইসে কোনো স্টোরেজ খালি নেই।</string>
+    <string name="core_feedback_sound_import_read_error">অ্যাপটি সাউন্ডটি পড়তে পারছে না।</string>
+    <string name="core_feedback_sound_import_save_error">অ্যাপটি সাউন্ড সংরক্ষণ করতে পারে না।</string>
+    <string name="core_feedback_sound_import_too_large_error">একটি কী সাউন্ড অবশ্যই %1$s এমবি-এর চেয়ে ছোট হতে হবে।</string>
+    <string name="core_feedback_sound_import_too_short_error">ফাইলটি সাউন্ড হওয়ার জন্য খুব ছোট।</string>
+    <string name="core_feedback_sound_import_unknown_format_error">এটি MP3, OGG বা WAV ফাইলের মতো মনে হচ্ছে না।</string>
+    <string name="core_feedback_sound_import_zip_error">এটি একটি জিপ আর্কাইভ, সাউন্ড ফাইল নয়।</string>
+</resources>

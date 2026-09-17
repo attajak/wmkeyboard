@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">ਇਹ ਮਾਡਲ ਗੇਟਡ ਹੈ। ਪਹਿਲਾਂ ਆਪਣਾ Hugging Face ਟੋਕਨ ਜੋੜੋ।</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face ਨੇ HTTP ਸਥਿਤੀ %1$s ਵਾਪਸ ਕੀਤੀ।</string>
+    <string name="core_intel_llm_download_error_licence">ਇਸਦੇ Hugging Face ਪੰਨੇ \'ਤੇ ਮਾਡਲ ਦੇ ਲਾਇਸੈਂਸ ਨੂੰ ਸਵੀਕਾਰ ਕਰੋ। ਫਿਰ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="core_intel_llm_download_error_no_space">ਤੁਹਾਡੀ ਡਿਵਾਈਸ \'ਤੇ ਲੋੜੀਂਦੀ ਸਟੋਰੇਜ ਨਹੀਂ ਹੈ। ਪਹਿਲਾਂ ਲਗਭਗ %1$s GB ਖਾਲੀ ਕਰੋ।</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face ਨੇ ਟੋਕਨ ਸਵੀਕਾਰ ਨਹੀਂ ਕੀਤਾ। ਟੋਕਨ ਦੀ ਜਾਂਚ ਕਰੋ ਅਤੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="core_intel_llm_download_error_truncated">ਡਾਊਨਲੋਡ ਦੌਰਾਨ ਕਨੈਕਸ਼ਨ ਰੁਕ ਗਿਆ ਸੀ। ਜਾਰੀ ਰੱਖਣ ਲਈ \'Resume\' ਦਬਾਓ।</string>
+    <string name="core_intel_llm_engine_error_gpu">ਮਾਡਲ GPU \'ਤੇ ਅਸਫਲ ਰਿਹਾ। GPU ਮੈਮੋਰੀ ਸਿਸਟਮ ਮੈਮੋਰੀ ਨਾਲੋਂ ਬਹੁਤ ਛੋਟੀ ਹੈ। ਅਗਲੀ ਕੋਸ਼ਿਸ਼ CPU ਦੀ ਵਰਤੋਂ ਕਰਦੀ ਹੈ। ਹਮੇਸ਼ਾ CPU ਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ, ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਕੰਪਿਊਟ ਨੂੰ CPU \'ਤੇ ਸੈੱਟ ਕਰੋ। ਤੁਸੀਂ ਇੱਕ ਛੋਟਾ ਮਾਡਲ ਵੀ ਚੁਣ ਸਕਦੇ ਹੋ।</string>
+    <string name="core_intel_llm_engine_error_load">ਮਾਡਲ ਲੋਡ ਨਹੀਂ ਹੋਇਆ। ਫਾਈਲ ਸ਼ਾਇਦ ਖਰਾਬ ਹੈ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਮਾਡਲ ਨੂੰ ਮਿਟਾਓ ਅਤੇ ਇਸਨੂੰ ਦੁਬਾਰਾ ਡਾਊਨਲੋਡ ਕਰੋ।</string>
+    <string name="core_intel_llm_engine_error_memory">ਮਾਡਲ ਦੀ ਮੈਮੋਰੀ ਖਤਮ ਹੋ ਗਈ ਹੈ, ਜਾਂ ਇਹ ਅਸਫਲ ਹੋ ਗਿਆ ਹੈ। ਇੱਕ ਛੋਟਾ ਮਾਡਲ ਚੁਣੋ।</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">ਪਿਛਲੀ ਪੀੜ੍ਹੀ ਦਾ ਇੱਕ ਛੋਟਾ ਜੇਮਾ (Gemma) ਮਾਡਲ। ਇਸਦੀ ਕੁਆਲਿਟੀ ਚੰਗੀ ਹੈ ਅਤੇ 4K ਟੋਕਨਾਂ ਦਾ ਸੰਦਰਭ ਹੈ।</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">ਗੂਗਲ ਵੱਲੋਂ ਸਭ ਤੋਂ ਛੋਟਾ ਜੇਮਾ (Gemma)। ਇਹ ਸਾਰੀਆਂ ਡਿਵਾਈਸਾਂ \'ਤੇ ਤੇਜ਼ ਹੈ।</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">ਸਭ ਤੋਂ ਨਵੀਂ Gemma ਪੀੜ੍ਹੀ। ਇਹ ਤੁਹਾਡੀ ਡਿਵਾਈਸ \'ਤੇ ਉੱਚ ਗੁਣਵੱਤਾ ਦਿੰਦੀ ਹੈ।</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">ਸਭ ਤੋਂ ਵੱਡਾ ਮਾਡਲ। ਇਹ ਸਭ ਤੋਂ ਵਧੀਆ ਲਿਖਦਾ ਹੈ, ਪਰ ਇਸਨੂੰ ਇੱਕ ਸ਼ਕਤੀਸ਼ਾਲੀ ਡਿਵਾਈਸ ਦੀ ਲੋੜ ਹੈ।</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">ਇੱਕ ਆਮ-ਉਦੇਸ਼ ਵਾਲਾ ਮਾਡਲ ਜੋ ਅਜੇ ਵੀ ਇੱਕ ਬੁਨਿਆਦੀ ਡਿਵਾਈਸ \'ਤੇ ਫਿੱਟ ਬੈਠਦਾ ਹੈ।</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">1B ਤੋਂ ਹੇਠਾਂ ਦੇ ਮਾਡਲਾਂ ਨਾਲੋਂ ਸਪੱਸ਼ਟ ਤੌਰ \'ਤੇ ਚੁਸਤ। ਇਸ ਨੂੰ ਮੱਧ-ਰੇਂਜ ਵਾਲੀ ਡਿਵਾਈਸ ਦੀ ਲੋੜ ਹੈ।</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">ਇੱਕ ਹਾਲੀਆ ਛੋਟਾ ਮਾਡਲ। ਇਸਦੇ ਆਕਾਰ ਲਈ ਗੁਣਵੱਤਾ ਉੱਚੀ ਹੈ।</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">ਬਹੁਤ ਛੋਟਾ ਅਤੇ ਤੇਜ਼। ਇਹ ਤੇਜ਼ੀ ਨਾਲ ਦੁਬਾਰਾ ਲਿਖਣ ਲਈ ਵਧੀਆ ਹੈ, ਪਰ ਤਰਕ ਸੀਮਤ ਹੈ।</string>
+    <string name="core_intel_llm_module_downloading">ਕੀਬੋਰਡ ਦਾ AI ਹਿੱਸਾ ਗੂਗਲ ਪਲੇ ਤੋਂ ਡਾਊਨਲੋਡ ਹੋ ਰਿਹਾ ਹੈ। ਥੋੜ੍ਹੀ ਦੇਰ ਬਾਅਦ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="core_intel_llm_module_restart">AI ਭਾਗ ਇੰਸਟਾਲ ਹੋ ਗਿਆ ਹੈ। ਇਸਨੂੰ ਵਰਤਣ ਲਈ ਕੀਬੋਰਡ ਨੂੰ ਬੰਦ ਕਰਕੇ ਦੁਬਾਰਾ ਖੋਲ੍ਹੋ।</string>
+    <string name="core_intel_llm_tier_experimental_label">ਪ੍ਰਯੋਗਾਤਮਕ</string>
+    <string name="core_intel_llm_tier_recommended_label">ਸਿਫਾਰਸ਼ੀ</string>
+    <string name="core_intel_llm_tier_untested_label">ਅਣਪ੍ਰੀਖਿਤ</string>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Server Hugging Face neodoslal súbor. Kód chyby je HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Počas sťahovania došlo k prerušeniu pripojenia. Skúste to znova a pokračujte tam, kde sa sťahovanie zastavilo.</string>
+    <string name="core_voice_download_space_error">V zariadení nie je dostatok úložného priestoru. Najprv musíte uvoľniť približne %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">Tento model používa jazyk, v ktorom píšete, rovnako ako 40-jazykový model. Zahŕňa iba európske jazyky, takže sťahovanie je menšie.</string>
+    <string name="core_voice_model_base_multi_body">Tento model vyvažuje presnosť a rýchlosť. Pokrýva každý jazyk, ktorý Whisper pozná. Vyberte ho, ak je malý model príliš pomalý.</string>
+    <string name="core_voice_model_base_world_body">Tento model používa jazyk, v ktorom píšete, namiesto odhadu. Krátke frázy sa stávajú oveľa spoľahlivejšími. Vyberte ho, keď jeho zoznam obsahuje vaše jazyky.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d jazyk</item>
+        <item quantity="other">%1$d jazykov</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Toto je jeden z najpresnejších modelov Whisper, ale je príliš veľký pre väčšinu telefónov. Sťahovanie má 1,5 GB. Načítanie zvládne iba zariadenie s veľkým množstvom pamäte.</string>
+    <string name="core_voice_model_large_v3_multi_body">Toto je najpresnejší model Whisper a najlepší na rozpoznávanie jazyka, ktorým hovoríte. Súbor na stiahnutie má 1,5 GB. Načítať ho dokáže iba zariadenie s veľkým množstvom pamäte. Model Turbo je takmer rovnako presný a má polovičnú veľkosť.</string>
+    <string name="core_voice_model_medium_multi_body">Tento model poskytuje presnosť takmer ako na počítači. Každá fráza trvá niekoľko sekúnd. Model pri behu využíva takmer jeden gigabajt pamäte.</string>
+    <string name="core_voice_model_single_language_body">Tento model spracováva iba %1$s. Nemá krok detekcie jazyka. Vďaka tomu je rýchlejší a o niečo presnejší ako viacjazyčný model rovnakej veľkosti.</string>
+    <string name="core_voice_model_small_multi_body">Tento model poskytuje najlepšiu presnosť, ktorá stále dobre funguje na telefóne. Lepšie zvláda prízvuky a hluk v pozadí ako základný model. Pokrýva každý jazyk, ktorý Whisper pozná.</string>
+    <string name="core_voice_model_small_world_body">Tento model používa jazyk, v ktorom píšete, a má presnosť modelu Small. Je to najpresnejší model, ktorý sa stále zmestí do telefónu.</string>
+    <string name="core_voice_model_tiny_multi_body">Toto je najrýchlejší viacjazyčný model. Funguje dobre pri jasnej reči, ale hluk znižuje presnosť.</string>
+    <string name="core_voice_model_turbo_multi_body">Tento model rozpoznáva jazyk, ktorým hovoríte, oveľa lepšie ako menšie modely. Vyberte ho, ak menší model prepisuje vašu reč ako nesprávny jazyk. Ide o veľké stiahnutie a každá fráza trvá niekoľko sekúnd.</string>
+    <string name="core_voice_size_base_label">Základná</string>
+    <string name="core_voice_size_large_label">Veľké</string>
+    <string name="core_voice_size_medium_label">Stredná</string>
+    <string name="core_voice_size_small_label">Malé</string>
+    <string name="core_voice_size_tiny_label">Drobný</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Odporúčané</string>
+    <string name="core_voice_whisper_mel_bins_error">Tento hlasový model vyžaduje %1$s-pásmový spektrogram, ktorý sa nezhoduje so súborom, s ktorým bol stiahnutý. Odstráňte model v nastaveniach a stiahnite ho znova.</string>
+    <string name="core_voice_whisper_model_load_error">Hlasový model sa nepodarilo načítať. Súbor je pravdepodobne poškodený. Odstráňte model v nastaveniach a stiahnite ho znova.</string>
+    <string name="core_voice_whisper_transcribe_error">Hlasové písanie nefungovalo. Skúste to znova alebo vyberte menší model.</string>
+</resources>

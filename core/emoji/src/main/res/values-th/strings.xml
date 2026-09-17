@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">รายการคำหลักของอีโมจินั้นว่างเปล่าหรืออ่านไม่ได้</string>
+    <string name="core_emoji_dict_error_http">เซิร์ฟเวอร์ไม่ได้ส่งไฟล์ รหัสข้อผิดพลาดคือ HTTP %1$s</string>
+    <string name="core_emoji_dict_error_not_a_list">ไฟล์นั้นไม่ใช่รายการคำหลักของอีโมจิ</string>
+    <string name="core_emoji_dict_error_save">แอปไม่สามารถบันทึกรายการคำหลักของอีโมจิได้</string>
+    <string name="core_emoji_dict_error_too_large">รายการคำหลักอีโมจินั้นใหญ่เกินไป</string>
+</resources>

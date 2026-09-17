@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Egyszer használatos kód</string>
+    <string name="core_content_clip_entity_otp_tag">KÓD</string>
+    <string name="core_content_clip_entity_phone_label">Telefonszám</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFON</string>
+    <string name="core_content_clip_entity_url_label">Link</string>
+    <string name="core_content_clip_entity_url_tag">LINK</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d kódrészletnek vannak más kiterjesztései, amelyeket az Espanso nem tud tárolni. Csak az első lett kiírva.</item>
+        <item quantity="other">%1$d kódrészletnek vannak más kiterjesztései, amelyeket az Espanso nem tud tárolni. Mindegyikből csak az első lett kiírva.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d kódrészlet bizonyos számítógépes programokra korlátozódik. A telefonján mindenhol működik.</item>
+        <item quantity="other">%1$d kódrészlet bizonyos számítógépes programokra korlátozódik. A telefonján mindenhol működnek.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d kódrészlet listából való választást igényel. Az alkalmazás helyette véletlenszerűen választ egyet.</item>
+        <item quantity="other">%1$d kódrészlet listából való választást igényel. Az alkalmazás helyette véletlenszerűen választ egyet.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d kódrészlet kérdez a kibontás előtt. Az Espanso nem rendelkezik ilyen beállítással, ezért ott automatikusan kibontásra kerül.</item>
+        <item quantity="other">%1$d kódrészlet kérdez a kibontás előtt. Az Espanso nem rendelkezik ilyen beállítással, ezért ott automatikusan kibontásra kerülnek.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d kódrészlet olyan dátumformátumot használ, amelyet az alkalmazás nem tud teljes egészében kiírni. Az alkalmazás kihagyta azt a részt, amelyet nem tud kezelni.</item>
+        <item quantity="other">%1$d kódrészlet olyan dátumformátumokat használ, amelyeket az alkalmazás nem tud teljes egészében kiírni. Az alkalmazás kihagyta azokat a részeket, amelyeket nem tud kezelni.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d kódrészlet olyan mappában van, amely ki van kapcsolva. Az Espanso nem rendelkezik mappakapcsolóval, így ott ki fog bontakozni.</item>
+        <item quantity="other">%1$d kódrészlet olyan mappákban van, amelyek ki vannak kapcsolva. Az Espanso nem rendelkezik mappakapcsolóval, így ott ki fognak bontakozni.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Az alkalmazás kihagyott %1$d kódrészletet, amelyben nincs beszúrható tartalom.</item>
+        <item quantity="other">Az alkalmazás kihagyott %1$d kódrészletet, amelyekben nincs beszúrható tartalom.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d kódrészlet arra kér, hogy tölts ki egy űrlapot. Az alkalmazás szövegként szúrja be az űrlapot, a kurzor az első üres mezőben áll.</item>
+        <item quantity="other">%1$d kódrészlet arra kér, hogy tölts ki egy űrlapot. Az alkalmazás minden űrlapot szövegként szúr be, a kurzor az első üres mezőben áll.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Az alkalmazás kihagyott %1$d kódrészletet, amely képet szúr be.</item>
+        <item quantity="other">Az alkalmazás kihagyott %1$d kódrészletet, amely képeket szúr be.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">A fájl %1$d másik fájlt olvas be. Egy fájl nem hozhatja magával a többit.</item>
+        <item quantity="other">A fájl %1$d másik fájlt olvas be. Egy fájl nem hozhatja magával a többit.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d kódrészlet más kódrészletekre mutat. Az Espanso ezt nem tudja kezelni, ezért a hivatkozások kimaradtak.</item>
+        <item quantity="other">%1$d kódrészlet más kódrészletekre mutat. Az Espanso ezt nem tudja kezelni, ezért a hivatkozások kimaradtak.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d kiváltó szó belsejében történő működésre készült. Telefonon csak teljes szóként működik.</item>
+        <item quantity="other">%1$d kiváltó szó belsejében történő működésre készült. Telefonon csak teljes szóként működnek.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d kódrészlet olyan értéket használ, amelyre az Espansónak nincs megfelelője. Úgy van kiírva, ahogy van.</item>
+        <item quantity="other">%1$d kódrészlet olyan értékeket használ, amelyekre az Espansónak nincs megfelelője. Úgy vannak kiírva, ahogy vannak.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Az alkalmazás eltávolította a mintát %1$d kódrészletből. Az alkalmazás nem futtat ilyen formájú mintákat. A kódrészlet a listában marad.</item>
+        <item quantity="other">Az alkalmazás eltávolította a mintát %1$d kódrészletből. Az alkalmazás nem futtat ilyen formájú mintákat. A kódrészletek a listában maradnak.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d kódrészlet formázott szöveget használ. Az alkalmazás megtartja a szavakat, de eldobja a formázást.</item>
+        <item quantity="other">%1$d kódrészlet formázott szöveget használ. Az alkalmazás megtartja a szavakat, de eldobja a formázást.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d kódrészlet parancsot futtat a számítógépeden. Az alkalmazás kihagyta a parancsot, és soha nem futtatja.</item>
+        <item quantity="other">%1$d kódrészlet parancsokat futtat a számítógépeden. Az alkalmazás kihagyta a parancsokat, és soha nem futtatja őket.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d trigger nem szóval végződik, így az alkalmazás nem tudja figyelni. A snippetje a listában marad.</item>
+        <item quantity="other">%1$d trigger nem szóval végződik, így az alkalmazás nem tudja figyelni őket. A snippetjeik a listában maradnak.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d kódrészlet olyan kapcsos zárójelben lévő szöveget tartalmaz, amelyet ez az alkalmazás kitölt, például {dátum}. Ez ki fog bővülni, ahelyett, hogy úgy jelenne meg, ahogy le van írva.</item>
+        <item quantity="other">%1$d kódrészlet olyan kapcsos zárójelben lévő szöveget tartalmaz, amelyet ez az alkalmazás kitölt, például {dátum}. Ezek ki fognak bővülni, ahelyett, hogy úgy jelennének meg, ahogy le vannak írva.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d kódrészlet megváltoztatja a mintája által rögzített szöveg nagybetűit. Az Espanso erre nem képes, ezért a rögzített szöveg változatlanul kerül be.</item>
+        <item quantity="other">%1$d kódrészlet megváltoztatja a mintájuk által rögzített szöveg nagybetűit. Az Espanso erre nem képes, ezért a rögzített szöveg változatlanul kerül be.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d kódrészlet olyan értéket használ, amelyre az alkalmazásnak nincs megfelelője. Az a rész üresen jelenik meg.</item>
+        <item quantity="other">%1$d kódrészlet olyan értékeket használ, amelyekre az alkalmazásnak nincs megfelelője. Azok a részek üresen jelennek meg.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Az alkalmazás nem tudja letölteni a betűtípust. Ellenőrizze a kapcsolatot, és próbálja újra.</string>
+    <string name="core_content_font_error_empty">A fájl üres.</string>
+    <string name="core_content_font_error_load">Az alkalmazás nem tudja betölteni ezt a betűkészletfájlt.</string>
+    <string name="core_content_font_error_markup">Ez a fájl egy HTML- vagy XML-fájl, nem betűtípus.</string>
+    <string name="core_content_font_error_no_storage">Nem áll rendelkezésre tárhely a betűtípus számára.</string>
+    <string name="core_content_font_error_not_a_font">Ez a fájl nem tűnik .ttf vagy .otf betűtípusnak.</string>
+    <string name="core_content_font_error_read">Az alkalmazás nem tudja olvasni a betűtípust.</string>
+    <string name="core_content_font_error_save">Az alkalmazás nem tudja menteni a betűtípust.</string>
+    <string name="core_content_font_error_too_large">A betűtípusnak kisebbnek kell lennie, mint %1$d MB.</string>
+    <string name="core_content_font_error_too_many">A betűkészlet-könyvtár megtelt. Töröljön egy betűkészletet, majd próbálja újra.</string>
+    <string name="core_content_font_error_too_short">A fájl túl rövid ahhoz, hogy betűtípus legyen.</string>
+    <string name="core_content_font_error_woff">Az alkalmazás nem tudja olvasni a WOFF webes betűtípusokat. Használd a betűtípus .ttf vagy .otf verzióját.</string>
+    <string name="core_content_font_error_woff2">Az alkalmazás nem tudja olvasni a WOFF2 webes betűtípusokat. Használja a betűtípus .ttf vagy .otf verzióját.</string>
+    <string name="core_content_font_error_zip">Ez a fájl egy zip archívum, nem betűtípus.</string>
+    <string name="core_content_selection_macro_add_contact">Névjegy</string>
+    <string name="core_content_selection_macro_calendar">Naptár</string>
+    <string name="core_content_selection_macro_call">Hívás</string>
+    <string name="core_content_selection_macro_case_lower">kisbetű</string>
+    <string name="core_content_selection_macro_case_sentence">Mondatkezdő nagybetű</string>
+    <string name="core_content_selection_macro_case_title">Cím stílus</string>
+    <string name="core_content_selection_macro_case_upper">NAGYBETŰS</string>
+    <string name="core_content_selection_macro_chat_bold">Félkövér</string>
+    <string name="core_content_selection_macro_chat_italic">Dőlt</string>
+    <string name="core_content_selection_macro_chat_mono">Monó</string>
+    <string name="core_content_selection_macro_chat_strike">Áthúzás</string>
+    <string name="core_content_selection_macro_colour">Szín</string>
+    <string name="core_content_selection_macro_copy">Másolás</string>
+    <string name="core_content_selection_macro_digits_latin">Számjegyek</string>
+    <string name="core_content_selection_macro_email">E-mail</string>
+    <string name="core_content_selection_macro_fancy">Díszes</string>
+    <string name="core_content_selection_macro_find">Keresés</string>
+    <string name="core_content_selection_macro_format">Formátum</string>
+    <string name="core_content_selection_macro_grammar">Nyelvtan</string>
+    <string name="core_content_selection_macro_lines_bullet">Felsorolásjelek</string>
+    <string name="core_content_selection_macro_lines_dedupe">Egyedi</string>
+    <string name="core_content_selection_macro_lines_number">Szám</string>
+    <string name="core_content_selection_macro_lines_sort">Rendezés</string>
+    <string name="core_content_selection_macro_map">Térkép</string>
+    <string name="core_content_selection_macro_open">Megnyitás</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Felolvasás</string>
+    <string name="core_content_selection_macro_replace">Csere</string>
+    <string name="core_content_selection_macro_search">Keresés</string>
+    <string name="core_content_selection_macro_share">Megosztás</string>
+    <string name="core_content_selection_macro_sms">Üzenet</string>
+    <string name="core_content_selection_macro_time_zones">Időzónák</string>
+    <string name="core_content_selection_macro_to_bangla">Bengáli</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Fordítás</string>
+    <string name="core_content_selection_macro_url_decode">Dekódolás</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Az alkalmazás %2$d kiterjesztést hagyott ki a(z) \"%1$s\"-ből.</item>
+        <item quantity="other">Az alkalmazás %2$d kiterjesztést hagyott ki a(z) \"%1$s\"-ből.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Az alkalmazás eltávolította a mintát innen: \"%1$s\". A minta nem megfelelő. A részlet a listában marad.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Az alkalmazás elvetett %1$d mappát, amelynek nincs neve, vagy amely ismétlődik. A benne lévő részletek mappa nélkül kerültek be.</item>
+        <item quantity="other">Az alkalmazás elvetett %1$d mappát, amelyeknek nincs neve, vagy amelyek ismétlődnek. A bennük lévő részletek mappa nélkül kerültek be.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">A fájl több kódrészletet tartalmaz, mint amennyit az alkalmazás megőriz. Az alkalmazás az első %1$d-t importálta.</item>
+        <item quantity="other">A fájl több kódrészletet tartalmaz, mint amennyit az alkalmazás megőriz. Az alkalmazás az első %1$d-t importálta.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">A részletnek nincs neve, ezért az alkalmazás az első sora alapján nevezte el.</string>
+    <string name="core_content_snippet_repair_no_text">Az alkalmazás eldobta ezt: \"%1$s\". Nincs szövege.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Az alkalmazás eltávolította a mintát a(z) \"%1$s\" elemből. Hosszabb volt, mint %2$d karakter.</item>
+        <item quantity="other">Az alkalmazás eltávolította a mintát a(z) \"%1$s\" elemből. Hosszabb volt, mint %2$d karakter.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Az alkalmazás lerövidítette a(z) \"%1$s\" szöveget. Hosszabb volt, mint %2$d karakter.</item>
+        <item quantity="other">Az alkalmazás lerövidítette a(z) \"%1$s\" szöveget. Hosszabb volt, mint %2$d karakter.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Annak az alkalmazásnak a neve, amelyben gépel</string>
+    <string name="core_content_snippet_var_clip_info">A legújabb vágólap-bejegyzés</string>
+    <string name="core_content_snippet_var_cursor_info">A hely, ahol a kurzor landol</string>
+    <string name="core_content_snippet_var_date_info">A mai dátum</string>
+    <string name="core_content_snippet_var_datetime_info">A dátum és az idő</string>
+    <string name="core_content_snippet_var_day_info">A hónap napja</string>
+    <string name="core_content_snippet_var_isodate_info">A dátum ISO formátumban, például 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">A dátum és az idő ISO formátumban</string>
+    <string name="core_content_snippet_var_month_info">A hónap neve</string>
+    <string name="core_content_snippet_var_package_info">Az alkalmazás csomagneve</string>
+    <string name="core_content_snippet_var_selection_info">A mezőben kijelölt szöveg</string>
+    <string name="core_content_snippet_var_time12_info">Az aktuális idő 12 órás formátumban</string>
+    <string name="core_content_snippet_var_time_info">Az aktuális idő 24 órás formátumban</string>
+    <string name="core_content_snippet_var_timestamp_info">Az idő Unix másodpercben</string>
+    <string name="core_content_snippet_var_timezone_info">Az időzóna, például GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Egy új véletlenszerű UUID</string>
+    <string name="core_content_snippet_var_weekday_info">A nap neve, például vasárnap</string>
+    <string name="core_content_snippet_var_year_info">Az év, négy számjeggyel</string>
+    <string name="core_content_sticker_pack_imported_label">Importált matricák</string>
+    <string name="core_content_sticker_repair_image_missing">Az alkalmazás eldobta a következőt: \"%1$s\". A kép hiányzik.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Az alkalmazás eldobta a(z) \"%1$s\" elemet. Az alkalmazás nem tudja olvasni a képét.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">A csomag %1$d matricát tartalmaz. Az alkalmazás az első %2$d-t tartja meg.</item>
+        <item quantity="other">A csomag %1$d matricát tartalmaz. Az alkalmazás az első %2$d-t tartja meg.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Az alkalmazás eldobott egy matricát. A matrica nem nevez meg képfájlt.</string>
+    <string name="core_content_sticker_repair_none_listed">A csomagfájl nem tartalmaz matricákat.</string>
+    <string name="core_content_sticker_repair_not_saved">Az alkalmazás eldobta a(z) „%1$s” elemet. Az alkalmazás nem tudja menteni.</string>
+</resources>

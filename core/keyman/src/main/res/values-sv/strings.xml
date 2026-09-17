@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">Appen tog bort %1$d diagonalt svep. Detta tangentbord stöder endast svep uppåt, nedåt, åt vänster och åt höger.</item>
+        <item quantity="other">Appen tog bort %1$d diagonala svep. Detta tangentbord stöder endast svep uppåt, nedåt, åt vänster och åt höger.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d tangent skriver tecknet som är tryckt på den. Det ursprungliga tangentbordet använde en regel för att bestämma vad den skriver.</item>
+        <item quantity="other">%1$d tangenter skriver tecknen som är tryckta på dem. Det ursprungliga tangentbordet använde regler för att bestämma vad de skriver.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Detta tangentbord har %1$d tangent som du trycker på upprepade gånger för att bläddra igenom tecken. Denna tangentbordsapp har ingen sådan tangent, så endast det första tecknet är tillgängligt.</item>
+        <item quantity="other">Detta tangentbord har %1$d tangenter som du trycker på upprepade gånger för att bläddra igenom tecken. Denna tangentbordsapp har inga sådana tangenter, så endast det första tecknet för varje är tillgängligt.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Det här tangentbordet använder regler för att avgöra vad dess tangenter skriver. Appen har inte dessa regler, så varje tangent skriver tecknet som står på den.</string>
+    <string name="core_keyman_shift_layer_folded">Appen slog ihop skiftlagret med tangenterna. Håll ned Skift för att nå dessa tecken.</string>
+    <string name="core_keyman_shift_layer_separate">Skift-lagret har en annan form, så appen behöll det som ett eget lager.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">Appen tog bort %1$d tangent. Detta tangentbord har ingen tangent som gör samma sak.</item>
+        <item quantity="other">Appen tog bort %1$d tangenter. Detta tangentbord har inga tangenter som gör samma sak.</item>
+    </plurals>
+</resources>

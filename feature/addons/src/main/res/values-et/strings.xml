@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Kas joonistada emotikonid sellega nüüd?</string>
+    <string name="faddons_apply_icon_pack_question">Kas kasutada selle ikoone nüüd klaviatuuril?</string>
+    <string name="faddons_apply_layout_question">Kas lülitada see sisse, et saaksid sellega tippida?</string>
+    <string name="faddons_apply_plugin_question">Kas lülitada see sisse, et see kuvataks pluginate paneelil?</string>
+    <string name="faddons_apply_sound_pack_question">Kas kasutada seda helipaketti oma klahvide jaoks nüüd?</string>
+    <string name="faddons_apply_sound_question">Kas kasutada seda nüüd klahvihelina?</string>
+    <string name="faddons_apply_switch_action">Lülitu sellele</string>
+    <string name="faddons_apply_theme_question">Kas soovite seda nüüd klaviatuuri teemana kasutada?</string>
+    <string name="faddons_download_error_app_too_old">See lisandmoodul vajab rakenduse uuemat versiooni.</string>
+    <string name="faddons_download_error_bad_url">Allalaadimislink ei ole kehtiv https-aadress.</string>
+    <string name="faddons_download_error_checksum">Allalaaditud fail ei vasta manifestis olevale kontrollsummale.</string>
+    <string name="faddons_download_error_http_status">Server tagastas HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Selle installimiseks pole piisavalt vaba ruumi.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Sellel pistikprogrammil pole kontrollsummat. Rakendus ei saa seda kontrollida.</string>
+    <string name="faddons_download_error_too_large">See lisandmoodul on suurem kui selle tüübi jaoks lubatud %1$d MB piirang.</string>
+    <string name="faddons_error_no_words">Rakendus ei suutnud sellest failist ühtegi sõna lugeda.</string>
+    <string name="faddons_error_not_a_plugin">See fail ei ole WM-klaviatuuri plugin.</string>
+    <string name="faddons_install_error_dictionary_no_language">See sõnastik ei ütle, millise keele jaoks see on.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Rakendus ei suutnud sõnastikku salvestada.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Rakendus ei suutnud ikoonipaketti lugeda.</string>
+    <string name="faddons_install_error_keywords_no_language">See pakk ei ütle, millise keele jaoks see on.</string>
+    <string name="faddons_install_error_keywords_not_saved">Rakendus ei suutnud märksõnade pakki salvestada.</string>
+    <string name="faddons_install_error_keywords_too_large">See märksõnapakk on importimiseks liiga suur.</string>
+    <string name="faddons_install_error_no_keywords">Rakendus ei suutnud sellest failist ühtegi emotikoni märksõna lugeda.</string>
+    <string name="faddons_install_error_no_stickers">Rakendus ei suutnud sellest pakist ühtegi kleebist lugeda. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">See fail ei ole WM-klaviatuuri paigutus.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">See fail ei ole WM-klaviatuuri väljavõtete pakk.</string>
+    <string name="faddons_install_error_not_a_sound_pack">See fail ei ole helipakett.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">See fail ei ole kleepsupakett.</string>
+    <string name="faddons_install_error_not_a_theme">See fail ei ole WM Keyboardi teema.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">See fail ei ole Espanso pakett ega vastefail.</string>
+    <string name="faddons_install_error_not_an_icon_pack">See fail ei ole ikoonipakk.</string>
+    <string name="faddons_install_error_plugin_failed">Rakendus ei suutnud seda pluginat installida.</string>
+    <string name="faddons_install_error_plugins_turned_off">Pluginad on välja lülitatud. Lülitage sisse „Luba pluginad“ jaotises Tööriistad › Pluginad. Seejärel installige see uuesti.</string>
+    <string name="faddons_install_error_snippet_pack_empty">See koodijuppide pakk on tühi.</string>
+    <string name="faddons_install_error_sound_pack_read">Rakendus ei suuda seda helipaketti lugeda.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Rakendus ei suutnud kleebistepakki lugeda.</string>
+    <string name="faddons_install_error_too_many_fonts">Oled saavutanud installitud fontide maksimaalse arvu.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Olete saavutanud ikoonipakkide maksimaalse arvu.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Teil on juba maksimaalselt %1$d plugin.</item>
+        <item quantity="other">Teil on juba maksimaalselt %1$d pluginat.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Olete saavutanud installitud helipakettide maksimaalse arvu.</string>
+    <string name="faddons_install_error_too_many_sounds">Oled saavutanud installitud klahvihelide maksimaalse arvu.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Olete saavutanud kleebisepakkide maksimaalse arvu.</string>
+    <string name="faddons_install_error_unknown_language">See rakenduse versioon ei toeta keelt „%1$s“.</string>
+    <string name="faddons_install_error_unknown_type">See rakenduse versioon ei toeta seda lisandmooduli tüüpi.</string>
+    <string name="faddons_install_error_vocab_no_language">See sõnavarapakk ei ütle, millise keele jaoks see on.</string>
+    <string name="faddons_install_error_vocab_no_words">Rakendus ei suutnud sellest pakist ühtegi sõna lugeda.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">See fail ei ole sõnavarapakk.</string>
+    <string name="faddons_install_error_vocab_too_large">See sõnavarapakk on suurem, kui rakendus lubab.</string>
+    <string name="faddons_preview_error_no_preview">Rakendus ei saa seda lisandmoodulit eelvaadata.</string>
+    <string name="faddons_preview_error_not_espanso_pack">See fail ei ole Espanso pakett ega vastefail.</string>
+    <string name="faddons_preview_error_not_keyword_pack">See fail ei ole emotikonide märksõnade pakk.</string>
+    <string name="faddons_preview_error_not_snippet_pack">See fail ei ole väljavõttepakett.</string>
+    <string name="faddons_preview_error_not_vocab_pack">See fail ei ole sõnavarapakk.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Rakendus ei suutnud selle paki helisid lugeda.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Rakendus ei suutnud kleepsude pilte lugeda.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Koodilõikude pakk</string>
+</resources>

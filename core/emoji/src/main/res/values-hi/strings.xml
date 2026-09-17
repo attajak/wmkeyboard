@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">वह इमोजी कीवर्ड सूची खाली है या पढ़ने योग्य नहीं है।</string>
+    <string name="core_emoji_dict_error_http">सर्वर ने फ़ाइल नहीं भेजी। त्रुटि कोड HTTP %1$s है।</string>
+    <string name="core_emoji_dict_error_not_a_list">वह फ़ाइल इमोजी कीवर्ड सूची नहीं है।</string>
+    <string name="core_emoji_dict_error_save">ऐप इमोजी कीवर्ड सूची को सहेज नहीं सका।</string>
+    <string name="core_emoji_dict_error_too_large">वह इमोजी कीवर्ड सूची बहुत बड़ी है।</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Kifurushi hiki kinahitaji umbizo la kifurushi cha sauti %1$s. Sasisha programu.</string>
+    <string name="core_feedback_pack_reject_no_samples">Kifurushi hiki hakina sauti ambazo programu inaweza kucheza.</string>
+    <string name="core_feedback_pack_reject_too_large">Kifurushi cha sauti lazima kiwe kidogo kuliko %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Faili hili ni tupu.</string>
+    <string name="core_feedback_sound_import_html_error">Hii ni faili ya HTML au XML, si sauti.</string>
+    <string name="core_feedback_sound_import_mp4_error">Programu haichezi faili za MP4 na M4A. Tumia faili ya MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Hakuna hifadhi inayopatikana kwenye kifaa chako.</string>
+    <string name="core_feedback_sound_import_read_error">Programu haiwezi kusoma sauti hiyo.</string>
+    <string name="core_feedback_sound_import_save_error">Programu haiwezi kuhifadhi sauti.</string>
+    <string name="core_feedback_sound_import_too_large_error">Sauti ya ufunguo lazima iwe ndogo kuliko %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Faili ni fupi sana kuwa sauti.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Hii haionekani kama faili ya MP3, OGG au WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Hii ni kumbukumbu ya zip, si faili ya sauti.</string>
+</resources>

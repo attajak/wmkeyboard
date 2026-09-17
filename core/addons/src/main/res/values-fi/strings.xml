@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Sanakirjat</string>
+    <string name="core_addons_type_dictionary_singular_label">Sanakirja</string>
+    <string name="core_addons_type_emoji_font_label">Emoji-fontit</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emojifontti</string>
+    <string name="core_addons_type_emoji_keywords_label">Emoji-avainsanat</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Emoji-avainsanapaketti</string>
+    <string name="core_addons_type_espanso_label">Espanso-paketit</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso-paketti</string>
+    <string name="core_addons_type_font_label">Fontit</string>
+    <string name="core_addons_type_font_singular_label">Fontti</string>
+    <string name="core_addons_type_icon_pack_label">Kuvakepakkaukset</string>
+    <string name="core_addons_type_icon_pack_singular_label">Kuvakepaketti</string>
+    <string name="core_addons_type_layout_label">Asettelut</string>
+    <string name="core_addons_type_layout_singular_label">Asettelu</string>
+    <string name="core_addons_type_plugin_label">Liitännäiset</string>
+    <string name="core_addons_type_plugin_singular_label">Liitännäinen</string>
+    <string name="core_addons_type_snippets_label">Katkelmat</string>
+    <string name="core_addons_type_snippets_singular_label">Katkelmapaketti</string>
+    <string name="core_addons_type_sound_label">Äänet</string>
+    <string name="core_addons_type_sound_pack_label">Äänipaketit</string>
+    <string name="core_addons_type_sound_pack_singular_label">Äänipaketti</string>
+    <string name="core_addons_type_sound_singular_label">Näppäinääni</string>
+    <string name="core_addons_type_stickers_label">Tarrapaketit</string>
+    <string name="core_addons_type_stickers_singular_label">Tarrapaketti</string>
+    <string name="core_addons_type_theme_label">Teemat</string>
+    <string name="core_addons_type_theme_singular_label">Teema</string>
+    <string name="core_addons_type_unknown_label">Muu</string>
+    <string name="core_addons_type_unknown_singular_label">Lisäosa</string>
+    <string name="core_addons_type_vocabulary_label">Sanasto</string>
+    <string name="core_addons_type_vocabulary_singular_label">Sanastopaketti</string>
+</resources>

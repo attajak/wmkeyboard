@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face सर्वर ने फ़ाइल नहीं भेजी। त्रुटि कोड HTTP %1$s है।</string>
+    <string name="core_voice_download_interrupted_error">डाउनलोड के दौरान कनेक्शन रुक गया। जहाँ से रुका था, वहीं से जारी रखने के लिए फिर से प्रयास करें।</string>
+    <string name="core_voice_download_space_error">आपके डिवाइस पर पर्याप्त स्टोरेज नहीं है। आपको पहले लगभग %1$s MB खाली करना होगा।</string>
+    <string name="core_voice_model_base_eu_body">यह मॉडल उसी भाषा का उपयोग करता है जिसमें आप टाइप करते हैं, 40 भाषा मॉडल के समान। यह केवल यूरोपीय भाषाओं को कवर करता है, इसलिए डाउनलोड छोटा है।</string>
+    <string name="core_voice_model_base_multi_body">यह मॉडल सटीकता और गति को संतुलित करता है। यह व्हिस्पर (Whisper) द्वारा जानी जाने वाली हर भाषा को कवर करता है। यदि स्मॉल मॉडल बहुत धीमा है तो इसे चुनें।</string>
+    <string name="core_voice_model_base_world_body">यह मॉडल अनुमान लगाने के बजाय उस भाषा का उपयोग करता है जिसमें आप टाइप करते हैं। छोटे वाक्यांश बहुत अधिक विश्वसनीय हो जाते हैं। जब इसकी सूची में आपकी भाषाएं हों तो इसे चुनें।</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d भाषा</item>
+        <item quantity="other">%1$d भाषाएं</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">यह सबसे सटीक व्हिस्पर मॉडलों में से एक है, लेकिन यह अधिकांश फोन के लिए बहुत बड़ा है। डाउनलोड 1.5 जीबी का है। केवल अधिक मेमोरी वाला डिवाइस ही इसे लोड कर सकता है।</string>
+    <string name="core_voice_model_large_v3_multi_body">यह सबसे सटीक व्हिस्पर मॉडल है, और यह पहचानने में सबसे अच्छा है कि आप कौन सी भाषा बोलते हैं। डाउनलोड 1.5 GB का है। केवल अधिक मेमोरी वाला डिवाइस ही इसे लोड कर सकता है। टर्बो मॉडल लगभग उतना ही सटीक है और आकार में आधा है।</string>
+    <string name="core_voice_model_medium_multi_body">यह मॉडल लगभग डेस्कटॉप जैसी सटीकता देता है। प्रत्येक वाक्यांश में कई सेकंड लगते हैं। यह मॉडल चलते समय लगभग एक गीगाबाइट मेमोरी का उपयोग करता है।</string>
+    <string name="core_voice_model_single_language_body">यह मॉडल केवल %1$s को संभालता है। इसमें कोई भाषा पहचान चरण नहीं है। यह इसे समान आकार के बहुभाषी मॉडल की तुलना में तेज़ और थोड़ा अधिक सटीक बनाता है।</string>
+    <string name="core_voice_model_small_multi_body">यह मॉडल सबसे अच्छी सटीकता देता है जो फोन पर भी अच्छी तरह से काम करता है। यह बेस मॉडल की तुलना में लहजे और बैकग्राउंड शोर को बेहतर तरीके से संभालता है। यह उन सभी भाषाओं को कवर करता है जिन्हें व्हिस्पर (Whisper) जानता है।</string>
+    <string name="core_voice_model_small_world_body">यह मॉडल उस भाषा का उपयोग करता है जिसमें आप टाइप करते हैं और इसमें स्मॉल मॉडल की सटीकता है। यह सबसे सटीक मॉडल है जो अभी भी फ़ोन पर फिट बैठता है।</string>
+    <string name="core_voice_model_tiny_multi_body">यह सबसे तेज़ बहुभाषी मॉडल है। यह स्पष्ट आवाज़ के साथ अच्छा काम करता है, लेकिन शोर सटीकता को कम कर देता है।</string>
+    <string name="core_voice_model_turbo_multi_body">यह मॉडल आपके द्वारा बोली जाने वाली भाषा को छोटे मॉडलों की तुलना में बहुत बेहतर तरीके से पहचानता है। यदि कोई छोटा मॉडल आपकी बोली को गलत भाषा के रूप में ट्रांसक्राइब करता है, तो इसे चुनें। यह एक बड़ा डाउनलोड है, और प्रत्येक वाक्यांश में कई सेकंड लगते हैं।</string>
+    <string name="core_voice_size_base_label">बेस</string>
+    <string name="core_voice_size_large_label">बड़ा</string>
+    <string name="core_voice_size_medium_label">मध्यम</string>
+    <string name="core_voice_size_small_label">छोटा</string>
+    <string name="core_voice_size_tiny_label">बहुत छोटा</string>
+    <string name="core_voice_size_turbo_label">टर्बो</string>
+    <string name="core_voice_tier_recommended_label">अनुशंसित</string>
+    <string name="core_voice_whisper_mel_bins_error">इस वॉयस मॉडल को %1$s बैंड स्पेक्ट्रोग्राम की आवश्यकता है, जो उस फ़ाइल से मेल नहीं खाता जिसके साथ इसे डाउनलोड किया गया था। सेटिंग्स में मॉडल को हटाएं और इसे फिर से डाउनलोड करें।</string>
+    <string name="core_voice_whisper_model_load_error">वॉयस मॉडल लोड नहीं हुआ। फ़ाइल संभवतः क्षतिग्रस्त है। सेटिंग्स में मॉडल को हटाएं और इसे फिर से डाउनलोड करें।</string>
+    <string name="core_voice_whisper_transcribe_error">वॉयस टाइपिंग काम नहीं कर रही है। पुनः प्रयास करें, या छोटा मॉडल चुनें।</string>
+</resources>

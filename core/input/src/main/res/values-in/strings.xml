@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">File yang diunduh rusak. Checksum-nya tidak cocok. Coba unduh lagi.</string>
+    <string name="core_input_cjk_download_error_http">Server mengembalikan status HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Unduhan tidak berhasil. Periksa koneksi Anda dan coba lagi.</string>
+    <string name="core_input_cjk_download_error_network_detail">Unduhan tidak berhasil: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Penyimpanan di perangkat Anda tidak cukup. Kosongkan ruang terlebih dahulu.</string>
+    <string name="core_input_cjk_download_error_truncated">Koneksi terhenti selama pengunduhan. Tekan Lanjutkan untuk meneruskan.</string>
+    <string name="core_input_cjk_download_error_unavailable">Paket ini belum tersedia.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Tabel kode radikal untuk karakter Hanzi, 29.000 karakter. Papan ketik memerlukan paket ini untuk tata letak Cangjie dan Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Kamus Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Pembacaan Kana dari mozc, 1,08 juta entri, sekitar 42 MB. Papan ketik memerlukan paket ini untuk konversi bahasa Jepang.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Kamus kana ke kanji Jepang</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Tabel bacaan Jyutping ke karakter Hanzi, 163.000 entri. Papan ketik memerlukan paket ini untuk konversi bahasa Kanton.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kamus Jyutping Kanton</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Karakter dan frasa Hanzi dari CC-CEDICT, 120.000 entri. Papan ketik memerlukan paket ini untuk konversi bahasa Mandarin.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Kamus Pinyin Mandarin</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Tabel urutan goresan untuk karakter Hanzi. Papan ketik memerlukan paket ini untuk tata letak goresan.</string>
+    <string name="core_input_cjk_pack_stroke_title">Kamus goresan bahasa Mandarin (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Nonaktif (Pinyin lengkap)</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Palvelin ei lähettänyt tiedostoa. Virhekoodi on HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Kyseinen sanaluettelo on tyhjä tai lukukelvoton.</string>
+    <string name="core_pred_wordlist_no_space_error">Laitteesi tallennustila on loppumassa. Poista joitakin tiedostoja ja yritä uudelleen.</string>
+    <string name="core_pred_wordlist_save_error">Sovellus ei voi tallentaa sanaluetteloa. Yritä uudelleen.</string>
+    <string name="core_pred_wordlist_size_all_label">Kaikki</string>
+    <string name="core_pred_wordlist_size_large_label">Suuri</string>
+    <string name="core_pred_wordlist_size_medium_label">Keskikokoinen</string>
+    <string name="core_pred_wordlist_size_small_label">Pieni</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brasilia</string>
+    <string name="core_pred_wordlist_variant_europe_label">Eurooppa</string>
+</resources>

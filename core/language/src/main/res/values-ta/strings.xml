@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">ஆப்ஸ் %1$d கீயை அது கொண்டுள்ள மிக நெருக்கமான கீயாக மாற்றியது.</item>
+        <item quantity="other">ஆப்ஸ் %1$d கீகளை அது கொண்டுள்ள மிக நெருக்கமான கீகளாக மாற்றியது.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">ஆப் %1$d விசையை நீக்கியது. அதே செயலைச் செய்யும் விசை இந்த விசைப்பலகையில் இல்லை (குறியீடு %2$s).</item>
+        <item quantity="other">ஆப் %1$d விசைகளை நீக்கியது. அதே செயலைச் செய்யும் விசைகள் இந்த விசைப்பலகையில் இல்லை (குறியீடுகள் %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">செயலி %1$d விசையின் லேபிள் அளவை வைத்திருந்தது, ஆனால் அதன் உரை பாணியை அல்ல. இந்த விசைப்பலகை லேபிள்களை ஒரே பாணியில் வரைகிறது.</item>
+        <item quantity="other">செயலி %1$d விசைகளின் லேபிள் அளவை வைத்திருந்தது, ஆனால் அவற்றின் உரை பாணியை அல்ல. இந்த விசைப்பலகை லேபிள்களை ஒரே பாணியில் வரைகிறது.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">இந்த விசைப்பலகை எழுதும் வடிவத்திற்கு ஆப் %1$d எழுத்தை மாற்றியது.</item>
+        <item quantity="other">இந்த விசைப்பலகை எழுதும் வடிவத்திற்கு ஆப் %1$d எழுத்துகளை மாற்றியது.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d விசையில அழுத்திப் பிடிக்கும் எழுத்துக்கள் இல்லை. கோப்பு அவற்றை நீங்கள் திறக்காத இரண்டாவது கோப்பில் வைத்திருக்கிறது.</item>
+        <item quantity="other">%1$d விசைகளில் அழுத்திப் பிடிக்கும் எழுத்துக்கள் இல்லை. கோப்பு அவற்றை நீங்கள் திறக்காத இரண்டாவது கோப்பில் வைத்திருக்கிறது.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">மற்றொரு விசைப்பலகை விசையின் அகலத்தை வித்தியாசமாக அளவிடுகிறது. இந்த கட்டத்திற்கு ஏற்ப ஆப்ஸ் அகலங்களை மாற்றியுள்ளது.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s லேயரில் உள்ள %1$d பிரெய்லி புள்ளி விசை 1 முதல் 6 வரை இல்லாத புள்ளி எண்ணைக் கொண்டுள்ளது.</item>
+        <item quantity="other">%2$s லேயரில் உள்ள %1$d பிரெய்லி புள்ளி விசைகள் 1 முதல் 6 வரை இல்லாத புள்ளி எண்ணைக் கொண்டுள்ளன.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s லேயரில் உள்ள %1$d விசைக்கு லேபிளும் வெளியீடும் இல்லை. இது எதையும் தட்டச்சு செய்யாது, மேலும் இந்த லேஅவுட்டை ஆன் செய்யும்போது ஆப்ஸ் அதை நீக்கிவிடும்.</item>
+        <item quantity="other">%2$s லேயரில் உள்ள %1$d விசைகளுக்கு லேபிளும் வெளியீடும் இல்லை. அவை எதையும் தட்டச்சு செய்யாது, மேலும் இந்த லேஅவுட்டை ஆன் செய்யும்போது ஆப்ஸ் அவற்றை நீக்கிவிடும்.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s அடுக்கின் வரிசை %1$d காலியாக உள்ளது.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s அடுக்கில் உள்ள %1$d விசை ஒரு பேனல் கூறு ஆகும். கூறுகள் பேனல் தளவமைப்பில் மட்டுமே செயல்படும்.</item>
+        <item quantity="other">%2$s அடுக்கில் உள்ள %1$d விசைகள் பேனல் கூறுகள் ஆகும். கூறுகள் பேனல் தளவமைப்பில் மட்டுமே செயல்படும்.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s அடுக்கின் %1$d வரிசையில் அகலம் இல்லாத ஒரு விசை உள்ளது.</string>
+    <string name="core_lang_layout_key_span_error">%2$s அடுக்கின் %1$d வரிசையில் 1-க்கும் குறைவான அல்லது %3$d-க்கும் அதிகமான வரிசைகளை உள்ளடக்கிய ஒரு விசை உள்ளது.</string>
+    <string name="core_lang_layout_letters_empty_error">எழுத்துகள் லேயரில் விசைகள் இல்லை.</string>
+    <string name="core_lang_layout_no_delete_error">இந்த தளவமைப்பில் நீக்கு விசை இல்லை. நீங்கள் பிழையைத் திருத்த முடியாது.</string>
+    <string name="core_lang_layout_no_enter_error">இந்த அமைப்பில் என்டர் (Enter) விசை இல்லை.</string>
+    <string name="core_lang_layout_no_shift_warning">இந்த அமைப்பில் ஷிப்ட் விசை இல்லை. பெரிய எழுத்தைத் தட்டச்சு செய்ய, ஒரு விசையை அழுத்திப் பிடிக்கவும்.</string>
+    <string name="core_lang_layout_no_space_error">இந்த தளவமைப்பில் ஸ்பேஸ் கீ இல்லை.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s லேயரில் எழுத்துக்களுக்குத் திரும்பும் விசை இல்லை. நீங்கள் இந்த லேயரிலிருந்து வெளியேற முடியாது.</string>
+    <string name="core_lang_layout_persistent_warning">விசைப்பலகை மூடும்போது %1$s அடுக்கு திறந்திருக்கும். இந்த தளவமைப்பிலிருந்து வெளியேற உங்களுக்கு வழி இருப்பதை உறுதிப்படுத்திக் கொள்ளுங்கள்.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">இந்த அமைப்பில் வெளியேற எந்த விசையும் இல்லை. இந்த அமைப்பிலிருந்து வெளியேற ஒரு வழி இருப்பதை உறுதிப்படுத்திக் கொள்ளுங்கள்: ஒரு ABC விசை, குறியீடுகள் விசை அல்லது கருவிப்பட்டியில் உள்ள தனிப்பயன் அமைப்பு கருவி.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s அடுக்கின் %1$d வரிசையில் ஒரு விசை உள்ளது, அது அடுக்கில் உள்ளதை விட அதிகமான வரிசைகளை உள்ளடக்கியது. விசைப்பலகை அதை கடைசி வரிசையில் நிறுத்துகிறது.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s அடுக்கின் வரிசை %1$d-இல் %3$d விசை உள்ளது. %4$d விசைகள் மட்டுமே அழுத்த போதுமான அளவில் உள்ளன.</item>
+        <item quantity="other">%2$s அடுக்கின் வரிசை %1$d-இல் %3$d விசைகள் உள்ளன. %4$d விசைகள் மட்டுமே அழுத்த போதுமான அளவில் உள்ளன.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s அடுக்கில் %2$d வரிசை உள்ளது. %3$d வரிசைகள் மட்டுமே பொருந்தும்.</item>
+        <item quantity="other">%1$s அடுக்கில் %2$d வரிசைகள் உள்ளன. %3$d வரிசைகள் மட்டுமே பொருந்தும்.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s லேயரில் உள்ள %1$d விசை, இந்த ஆப்ஸ் பதிப்பிற்குத் தெரியாத ஒரு செயலைப் பயன்படுத்துகிறது.</item>
+        <item quantity="other">%2$s லேயரில் உள்ள %1$d விசைகள், இந்த ஆப்ஸ் பதிப்பிற்குத் தெரியாத ஒரு செயலைப் பயன்படுத்துகின்றன.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s அடுக்கின் வரிசை %1$d மற்ற வரிசைகளை விட அகலமானது. விசைப்பலகை இந்த வரிசையின் விசைகளை குறுகலாக வரைகிறது.</string>
+    <string name="core_lang_numeral_scope_display_only">காட்சிக்கு மட்டும்</string>
+    <string name="core_lang_numeral_scope_everywhere">எங்கும்</string>
+    <string name="core_lang_numeral_scope_text_fields">உரை புலங்கள்</string>
+    <string name="core_lang_numeral_system_auto">தானியங்கி</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d கூறு ஒன்றுக்கும் மேற்பட்ட முறை உள்ளது. ஆப்ஸ் முதல் நகலை மட்டும் வைத்திருக்கும்.</item>
+        <item quantity="other">%1$d கூறுகள் ஒன்றுக்கும் மேற்பட்ட முறை உள்ளன. ஆப்ஸ் ஒவ்வொன்றின் முதல் நகலை மட்டும் வைத்திருக்கும்.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">இந்த பேனலில் விசைகள் இல்லை. ஆப் அதற்கு பதிலாக நிலையான பேனலைப் பயன்படுத்துகிறது.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d விசை ஒரு பலகையில் வேலை செய்யாத செயலைக் கொண்டுள்ளது. ஆப் அதை நீக்குகிறது.</item>
+        <item quantity="other">%1$d விசைகள் ஒரு பலகையில் வேலை செய்யாத செயல்களைக் கொண்டுள்ளன. ஆப் அவற்றை நீக்குகிறது.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">இந்த பேனலில் ABC விசை இல்லை. விசைகளுக்குத் திரும்ப கருவிப்பட்டி அல்லது பின் பொத்தானைப் பயன்படுத்தவும்.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">ஒரு கூறுகளின் இரண்டாவது நகலை ஆப் நீக்கிவிட்டது.</string>
+    <string name="core_lang_panel_repair_field_added">ஆப் பேனலின் முக்கிய கூறுகளை ஒரு புதிய வரிசையில் சேர்த்துள்ளது.</string>
+    <string name="core_lang_panel_repair_field_dropped">இந்த பேனலுக்குச் சொந்தமில்லாத ஒரு கூறினை ஆப் நீக்கிவிட்டது.</string>
+    <string name="core_lang_panel_repair_key_dropped">பேனலில் வேலை செய்யாத ஒரு விசையை ஆப் நீக்கிவிட்டது.</string>
+    <string name="core_lang_panel_repair_reset">ஆப் காலியான பேனலுக்குப் பதிலாக நிலையான பேனலை மாற்றியது.</string>
+    <string name="core_lang_panel_required_field_error">இந்த பேனலில் அதன் முக்கிய கூறு விடுபட்டுள்ளது. பேனலை வரையும்போது ஆப்ஸ் ஒன்றைச் சேர்க்கும்.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d கூறு இந்த பேனலுக்குச் சொந்தமானது அல்ல. ஆப் அதை நீக்குகிறது.</item>
+        <item quantity="other">%1$d கூறுகள் இந்த பேனலுக்குச் சொந்தமானவை அல்ல. ஆப் அவற்றை நீக்குகிறது.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">%1$s லேயரில் உள்ள காலியான விசையை ஆப் நீக்கிவிட்டது.</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s அடுக்கில் உள்ள ஒரு விசை பிரெய்லி புள்ளி %2$d-ஐப் பயன்படுத்தியது. ஆப் அதை புள்ளி %3$d ஆக மாற்றியது.</string>
+    <string name="core_lang_repair_delete_key_added">எழுத்துகள் அடுக்கில் நீக்கு விசை இல்லை. பயன்பாடு ஒன்றைச் சேர்த்தது.</string>
+    <string name="core_lang_repair_enter_key_added">எழுத்துகள் அடுக்கில் என்டர் விசை இல்லை. ஆப்ஸ் ஒன்றைச் சேர்த்தது.</string>
+    <string name="core_lang_repair_field_key_deleted">%1$s அடுக்கிலிருந்து ஒரு பேனல் கூறுகளை ஆப்ஸ் நீக்கியது. கூறுகள் பேனல் தளவமைப்பில் மட்டுமே செயல்படும்.</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s அடுக்கில் உள்ள ஒரு விசை %2$s-ஐக் குறிக்கிறது. ஆப்ஸ் அதை %3$s எனத் தட்டச்சு செய்ய வைத்தது.</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s லேயரில் உள்ள ஒரு கீ, %2$s என்பதை அது குறிக்கும் எழுத்துகளாகப் பட்டியலிட்டுள்ளது. அவை எழுத்துகள் அல்ல என்பதால், ஆப்ஸ் அதை ஒரு சாதாரண கீயாக மாற்றியது.</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s லேயரில் உள்ள ஒரு விசை %2$d வரிசைகளை உள்ளடக்கியது. ஆப்ஸ் அதை %3$d ஆக மாற்றியது.</string>
+    <string name="core_lang_repair_key_width_capped">%1$s லேயரில் உள்ள ஒரு கீ %2$s அலகுகள் அகலமாக இருந்தது. ஆப் அதை %3$s அலகுகள் அகலமாக மாற்றியது.</string>
+    <string name="core_lang_repair_key_width_set">%1$s அடுக்கில் உள்ள ஒரு விசைக்கு அகலம் இல்லை. ஆப்ஸ் அகலத்தை 1 என அமைத்தது.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s லேயரில் வேலை செய்யும் கீகள் இல்லை. இது இப்போது உள்ளமைக்கப்பட்ட கிரிட்டைப் பயன்படுத்துகிறது.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s அடுக்கில் எழுத்துகளுக்குத் திரும்பும் விசை இல்லை. ஆப் ஒரு ABC விசையைச் சேர்த்தது.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s அடுக்கில் உள்ள ஒரு வரிசையில் %2$d விசை இருந்தது. ஆப்ஸ் முதல் %3$d விசைகளை வைத்திருக்கிறது.</item>
+        <item quantity="other">%1$s அடுக்கில் உள்ள ஒரு வரிசையில் %2$d விசைகள் இருந்தன. ஆப்ஸ் முதல் %3$d விசைகளை வைத்திருக்கிறது.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s லேயரில் உள்ள ஒரு வரிசை %2$s அலகுகள் அகலமாக இருந்தது. வரிசை பொருந்துவதற்காக ஆப் விசைகளைச் சிறியதாக்கியது.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s லேயரில் %2$d வரிசை இருந்தது. ஆப்ஸ் முதல் %3$d வரியை மட்டும் வைத்திருக்கிறது.</item>
+        <item quantity="other">%1$s லேயரில் %2$d வரிசைகள் இருந்தன. ஆப்ஸ் முதல் %3$d வரிசைகளை மட்டும் வைத்திருக்கிறது.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">எழுத்துக்கள் அடுக்கில் ஸ்பேஸ் கீ இல்லை. ஆப் அதைச் சேர்த்துள்ளது.</string>
+    <string name="core_lang_repair_unknown_key_deleted">%1$s லேயரில் உள்ள ஒரு கீயை ஆப் நீக்கிவிட்டது. அதன் செயல் \"%2$s\" அறியப்படவில்லை.</string>
+</resources>

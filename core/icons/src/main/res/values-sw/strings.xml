@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Vichupo vya emoji</string>
+    <string name="core_icons_group_keys_title">Funguo</string>
+    <string name="core_icons_group_toolbar_title">Upau wa zana</string>
+    <string name="core_icons_group_tools_title">Zana</string>
+    <string name="core_icons_pack_imported_label">Ikoni zilizoingizwa</string>
+    <string name="core_icons_pack_mine_label">Ikoni zangu</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Programu imepuuza faili %1$d. Toleo hili halina ikoni yake: %2$s</item>
+        <item quantity="other">Programu imepuuza faili %1$d. Toleo hili halina ikoni zake: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Programu imeacha \"%1$s\". Programu haiwezi kuihifadhi.</string>
+    <string name="core_icons_repair_svg_unreadable">Programu imeondoa \"%1$s\". Programu haiwezi kusoma faili yake ya SVG.</string>
+    <string name="core_icons_slot_backspace_label">Futa</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Shughuli</string>
+    <string name="core_icons_slot_emoji_animals_label">Wanyama</string>
+    <string name="core_icons_slot_emoji_flags_label">Bendera</string>
+    <string name="core_icons_slot_emoji_food_label">Chakula</string>
+    <string name="core_icons_slot_emoji_key_label">Kitufe cha emoji</string>
+    <string name="core_icons_slot_emoji_most_used_label">Zilizotumiwa zaidi</string>
+    <string name="core_icons_slot_emoji_nature_label">Asili</string>
+    <string name="core_icons_slot_emoji_objects_label">Vitu</string>
+    <string name="core_icons_slot_emoji_people_label">Watu</string>
+    <string name="core_icons_slot_emoji_recent_label">Hivi karibuni</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Njia ya mkato ya emoji</string>
+    <string name="core_icons_slot_emoji_smileys_label">Vikaragosi</string>
+    <string name="core_icons_slot_emoji_symbols_label">Alama</string>
+    <string name="core_icons_slot_emoji_travel_label">Usafiri</string>
+    <string name="core_icons_slot_enter_done_label">Ingiza: imekamilika</string>
+    <string name="core_icons_slot_enter_go_label">Ingiza: nenda</string>
+    <string name="core_icons_slot_enter_label">Ingiza</string>
+    <string name="core_icons_slot_enter_next_label">Enter: inayofuata</string>
+    <string name="core_icons_slot_enter_previous_label">Ingiza: kilichotangulia</string>
+    <string name="core_icons_slot_enter_search_label">Ingiza: tafuta</string>
+    <string name="core_icons_slot_enter_send_label">Enter: tuma</string>
+    <string name="core_icons_slot_forward_delete_label">Futa mbele</string>
+    <string name="core_icons_slot_globe_label">Badilisha lugha</string>
+    <string name="core_icons_slot_incognito_label">Beji ya fiche</string>
+    <string name="core_icons_slot_input_method_picker_label">Badilisha kibodi</string>
+    <string name="core_icons_slot_panel_back_label">Rudi kwenye funguo</string>
+    <string name="core_icons_slot_power_saving_label">Beji ya kuokoa nishati</string>
+    <string name="core_icons_slot_search_close_label">Funga utafutaji</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (imewashwa)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Onyesha zana</string>
+    <string name="core_icons_slot_toolbox_label">Sanduku la zana</string>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">ਡਾਊਨਲੋਡ ਕੀਤੀ ਫਾਈਲ ਖਰਾਬ ਹੈ। ਇਸਦਾ ਚੈੱਕਸਮ ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ। ਡਾਊਨਲੋਡ ਨੂੰ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="core_input_cjk_download_error_http">ਸਰਵਰ ਨੇ HTTP ਸਥਿਤੀ %1$s ਵਾਪਸ ਕੀਤੀ।</string>
+    <string name="core_input_cjk_download_error_network">ਡਾਊਨਲੋਡ ਕੰਮ ਨਹੀਂ ਕਰ ਰਿਹਾ ਹੈ। ਆਪਣਾ ਕਨੈਕਸ਼ਨ ਚੈੱਕ ਕਰੋ ਅਤੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="core_input_cjk_download_error_network_detail">ਡਾਊਨਲੋਡ ਕੰਮ ਨਹੀਂ ਕਰ ਰਿਹਾ: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">ਤੁਹਾਡੀ ਡਿਵਾਈਸ \'ਤੇ ਲੋੜੀਂਦੀ ਸਟੋਰੇਜ ਨਹੀਂ ਹੈ। ਪਹਿਲਾਂ ਕੁਝ ਥਾਂ ਖਾਲੀ ਕਰੋ।</string>
+    <string name="core_input_cjk_download_error_truncated">ਡਾਊਨਲੋਡ ਦੌਰਾਨ ਕਨੈਕਸ਼ਨ ਰੁਕ ਗਿਆ ਸੀ। ਜਾਰੀ ਰੱਖਣ ਲਈ ਰਿਜ਼ਿਊਮ ਦਬਾਓ।</string>
+    <string name="core_input_cjk_download_error_unavailable">ਇਹ ਪੈਕ ਅਜੇ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">ਹਾਂਜ਼ੀ ਅੱਖਰਾਂ ਲਈ ਰੈਡੀਕਲ ਕੋਡਾਂ ਦੀ ਇੱਕ ਸਾਰਣੀ, 29,000 ਅੱਖਰ। ਕੀਬੋਰਡ ਨੂੰ ਕੈਂਜੀ ਅਤੇ ਕੁਇੱਕ ਲੇਆਉਟ ਲਈ ਇਸ ਪੈਕ ਦੀ ਲੋੜ ਹੈ।</string>
+    <string name="core_input_cjk_pack_cangjie_title">ਕੈਂਜੀ (倉頡) ਡਿਕਸ਼ਨਰੀ</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">mozc ਤੋਂ ਕਾਨਾ ਰੀਡਿੰਗ, 1.08 ਮਿਲੀਅਨ ਐਂਟਰੀਆਂ, ਲਗਭਗ 42 MB। ਜਾਪਾਨੀ ਰੂਪਾਂਤਰਣ ਲਈ ਕੀਬੋਰਡ ਨੂੰ ਇਸ ਪੈਕ ਦੀ ਲੋੜ ਹੈ।</string>
+    <string name="core_input_cjk_pack_ja_kana_title">ਜਾਪਾਨੀ ਕਾਨਾ ਤੋਂ ਕਾਂਜੀ ਸ਼ਬਦਕੋਸ਼</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">ਹਾਂਜ਼ੀ ਅੱਖਰਾਂ ਲਈ ਜਯੂਟਪਿੰਗ ਰੀਡਿੰਗਾਂ ਦੀ ਇੱਕ ਸਾਰਣੀ, 163,000 ਐਂਟਰੀਆਂ। ਕੀਬੋਰਡ ਨੂੰ ਕੈਂਟੋਨੀਜ਼ ਪਰਿਵਰਤਨ ਲਈ ਇਸ ਪੈਕ ਦੀ ਲੋੜ ਹੈ।</string>
+    <string name="core_input_cjk_pack_jyutping_title">ਕੈਂਟੋਨੀਜ਼ ਜਿਊਟਪਿੰਗ ਡਿਕਸ਼ਨਰੀ</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT ਤੋਂ ਹਾਨਜ਼ੀ ਅੱਖਰ ਅਤੇ ਵਾਕਾਂਸ਼, 120,000 ਐਂਟਰੀਆਂ। ਚੀਨੀ ਰੂਪਾਂਤਰਣ ਲਈ ਕੀਬੋਰਡ ਨੂੰ ਇਸ ਪੈਕ ਦੀ ਲੋੜ ਹੈ।</string>
+    <string name="core_input_cjk_pack_pinyin_title">ਚੀਨੀ ਪਿਨਯਿਨ ਡਿਕਸ਼ਨਰੀ</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">ਹਾਨਜ਼ੀ ਅੱਖਰਾਂ ਲਈ ਸਟ੍ਰੋਕ ਆਰਡਰ ਦੀ ਇੱਕ ਸਾਰਣੀ। ਕੀਬੋਰਡ ਨੂੰ ਸਟ੍ਰੋਕ ਲੇਆਉਟ ਲਈ ਇਸ ਪੈਕ ਦੀ ਲੋੜ ਹੈ।</string>
+    <string name="core_input_cjk_pack_stroke_title">ਚੀਨੀ ਸਟ੍ਰੋਕ (笔画) ਡਿਕਸ਼ਨਰੀ</string>
+    <string name="core_input_double_pinyin_off_label">ਬੰਦ (ਪੂਰਾ ਪਿਨਯਿਨ)</string>
+</resources>

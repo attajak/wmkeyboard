@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">일회용 코드</string>
+    <string name="core_content_clip_entity_otp_tag">코드</string>
+    <string name="core_content_clip_entity_phone_label">전화번호</string>
+    <string name="core_content_clip_entity_phone_tag">전화</string>
+    <string name="core_content_clip_entity_url_label">링크</string>
+    <string name="core_content_clip_entity_url_tag">링크</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">Espanso가 처리할 수 없는 다른 확장을 가진 스니펫이 %1$d개 있습니다. 첫 번째 스니펫만 작성되었습니다.</item>
+        <item quantity="other">Espanso가 처리할 수 없는 다른 확장을 가진 스니펫이 %1$d개 있습니다. 각각의 첫 번째 스니펫만 작성되었습니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d개의 스니펫이 특정 컴퓨터 프로그램으로 제한됩니다. 휴대폰에서는 어디서나 작동합니다.</item>
+        <item quantity="other">%1$d개의 스니펫이 특정 컴퓨터 프로그램으로 제한됩니다. 휴대폰에서는 어디서나 작동합니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">스니펫 %1$d개가 목록에서 선택하도록 요청합니다. 대신 앱이 무작위로 하나를 선택합니다.</item>
+        <item quantity="other">스니펫 %1$d개가 목록에서 선택하도록 요청합니다. 대신 앱이 무작위로 하나를 선택합니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d개의 스니펫이 확장 전 확인을 요청합니다. Espanso에는 그러한 설정이 없으므로 해당 위치에서 자동으로 확장됩니다.</item>
+        <item quantity="other">%1$d개의 스니펫이 확장 전 확인을 요청합니다. Espanso에는 그러한 설정이 없으므로 해당 위치에서 자동으로 확장됩니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d개의 스니펫이 앱에서 완전히 작성할 수 없는 날짜 형식을 사용합니다. 앱에서 처리할 수 없는 부분을 제외했습니다.</item>
+        <item quantity="other">%1$d개의 스니펫이 앱에서 완전히 작성할 수 없는 날짜 형식을 사용합니다. 앱에서 처리할 수 없는 부분들을 제외했습니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d개의 스니펫이 꺼진 폴더에 있습니다. Espanso에는 폴더 스위치가 없으므로 해당 위치에서 확장됩니다.</item>
+        <item quantity="other">%1$d개의 스니펫들이 꺼진 폴더들에 있습니다. Espanso에는 폴더 스위치가 없으므로 해당 위치에서 확장됩니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">삽입할 내용이 없는 스니펫 %1$d개를 건너뛰었습니다.</item>
+        <item quantity="other">삽입할 내용이 없는 스니펫 %1$d개를 건너뛰었습니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d개의 스니펫이 양식 작성을 요청합니다. 앱이 첫 번째 빈칸에 커서를 둔 채 양식을 텍스트로 삽입합니다.</item>
+        <item quantity="other">%1$d개의 스니펫이 양식 작성을 요청합니다. 앱이 각 양식을 첫 번째 빈칸에 커서를 둔 채 텍스트로 삽입합니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">앱이 사진을 삽입하는 스니펫 %1$d개를 건너뛰었습니다.</item>
+        <item quantity="other">앱이 사진을 삽입하는 스니펫 %1$d개를 건너뛰었습니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">이 파일은 %1$d개의 다른 파일을 읽습니다. 하나의 파일이 다른 파일들을 함께 가져올 수는 없습니다.</item>
+        <item quantity="other">이 파일은 %1$d개의 다른 파일들을 읽습니다. 하나의 파일이 다른 파일들을 함께 가져올 수는 없습니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d개의 스니펫이 다른 스니펫을 가리킵니다. Espanso는 이를 표현할 방법이 없어 링크가 제외되었습니다.</item>
+        <item quantity="other">%1$d개의 스니펫이 다른 스니펫을 가리킵니다. Espanso는 이를 표현할 방법이 없어 링크가 제외되었습니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d개의 트리거는 단어 중간에서 작동하도록 설계되었습니다. 휴대폰에서는 전체 단어로만 작동합니다.</item>
+        <item quantity="other">%1$d개의 트리거는 단어 중간에서 작동하도록 설계되었습니다. 휴대폰에서는 전체 단어로만 작동합니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">Espanso에 대응하는 값이 없는 스니펫이 %1$d개 있습니다. 그대로 작성됩니다.</item>
+        <item quantity="other">Espanso에 대응하는 값이 없는 스니펫이 %1$d개 있습니다. 그대로 작성됩니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">앱이 %1$d개의 스니펫에서 패턴을 제거했습니다. 앱은 해당 형태의 패턴을 실행하지 않습니다. 스니펫은 목록에 유지됩니다.</item>
+        <item quantity="other">앱이 %1$d개의 스니펫에서 패턴을 제거했습니다. 앱은 해당 형태의 패턴을 실행하지 않습니다. 스니펫은 목록에 유지됩니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d개의 스니펫이 서식 있는 텍스트를 사용합니다. 앱이 단어는 유지하고 서식은 제거합니다.</item>
+        <item quantity="other">%1$d개의 스니펫이 서식 있는 텍스트를 사용합니다. 앱이 단어는 유지하고 서식은 제거합니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d개의 스니펫이 컴퓨터에서 명령을 실행합니다. 앱에서 해당 명령을 제외했으므로 실행되지 않습니다.</item>
+        <item quantity="other">%1$d개의 스니펫이 컴퓨터에서 명령을 실행합니다. 앱에서 해당 명령들을 제외했으므로 실행되지 않습니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d개의 트리거가 기호로만 구성되어 있어 앱에서 감시할 수 없습니다. 해당 스니펫은 목록에 유지됩니다.</item>
+        <item quantity="other">%1$d개의 트리거가 기호로만 구성되어 있어 앱에서 감시할 수 없습니다. 해당 스니펫들은 목록에 유지됩니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">스니펫 %1$d개에 {date}와 같이 앱이 채워 넣는 중괄호 텍스트가 포함되어 있습니다. 작성된 대로 나타나는 대신 확장됩니다.</item>
+        <item quantity="other">스니펫 %1$d개에 {date}와 같이 앱이 채워 넣는 중괄호 텍스트가 포함되어 있습니다. 작성된 대로 나타나는 대신 확장됩니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d개의 스니펫이 패턴으로 캡처된 텍스트의 대소문자를 변경합니다. Espanso는 이를 지원하지 않으므로 캡처된 텍스트가 그대로 입력됩니다.</item>
+        <item quantity="other">%1$d개의 스니펫이 패턴으로 캡처된 텍스트의 대소문자를 변경합니다. Espanso는 이를 지원하지 않으므로 캡처된 텍스트가 그대로 입력됩니다.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">앱에서 대응할 수 없는 값을 사용하는 스니펫이 %1$d개 있습니다. 해당 부분은 비어 있게 됩니다.</item>
+        <item quantity="other">앱에서 대응할 수 없는 값을 사용하는 스니펫이 %1$d개 있습니다. 해당 부분들은 비어 있게 됩니다.</item>
+    </plurals>
+    <string name="core_content_font_error_download">글꼴을 다운로드할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.</string>
+    <string name="core_content_font_error_empty">파일이 비어 있습니다.</string>
+    <string name="core_content_font_error_load">앱에서 이 글꼴 파일을 로드할 수 없습니다.</string>
+    <string name="core_content_font_error_markup">이 파일은 글꼴이 아니라 HTML 또는 XML 파일입니다.</string>
+    <string name="core_content_font_error_no_storage">글꼴을 저장할 공간이 없습니다.</string>
+    <string name="core_content_font_error_not_a_font">이 파일은 .ttf 또는 .otf 폰트 형식이 아닌 것 같습니다.</string>
+    <string name="core_content_font_error_read">앱에서 글꼴을 읽을 수 없습니다.</string>
+    <string name="core_content_font_error_save">앱에서 폰트를 저장할 수 없습니다.</string>
+    <string name="core_content_font_error_too_large">글꼴은 %1$d MB보다 작아야 합니다.</string>
+    <string name="core_content_font_error_too_many">글꼴 라이브러리가 가득 찼습니다. 글꼴을 삭제하고 다시 시도하세요.</string>
+    <string name="core_content_font_error_too_short">파일이 너무 짧아 폰트로 사용할 수 없습니다.</string>
+    <string name="core_content_font_error_woff">앱에서 WOFF 웹 폰트를 읽을 수 없습니다. .ttf 또는 .otf 버전의 폰트를 사용하세요.</string>
+    <string name="core_content_font_error_woff2">앱이 WOFF2 웹 폰트를 읽을 수 없습니다. .ttf 또는 .otf 버전의 폰트를 사용하세요.</string>
+    <string name="core_content_font_error_zip">이 파일은 글꼴이 아니라 zip 아카이브입니다.</string>
+    <string name="core_content_selection_macro_add_contact">연락처</string>
+    <string name="core_content_selection_macro_calendar">캘린더</string>
+    <string name="core_content_selection_macro_call">통화</string>
+    <string name="core_content_selection_macro_case_lower">소문자</string>
+    <string name="core_content_selection_macro_case_sentence">문장 대소문자</string>
+    <string name="core_content_selection_macro_case_title">제목 대소문자</string>
+    <string name="core_content_selection_macro_case_upper">대문자</string>
+    <string name="core_content_selection_macro_chat_bold">굵게</string>
+    <string name="core_content_selection_macro_chat_italic">기울임꼴</string>
+    <string name="core_content_selection_macro_chat_mono">고정폭</string>
+    <string name="core_content_selection_macro_chat_strike">취소선</string>
+    <string name="core_content_selection_macro_colour">색상</string>
+    <string name="core_content_selection_macro_copy">복사</string>
+    <string name="core_content_selection_macro_digits_latin">숫자</string>
+    <string name="core_content_selection_macro_email">이메일</string>
+    <string name="core_content_selection_macro_fancy">멋진</string>
+    <string name="core_content_selection_macro_find">찾기</string>
+    <string name="core_content_selection_macro_format">형식</string>
+    <string name="core_content_selection_macro_grammar">문법</string>
+    <string name="core_content_selection_macro_lines_bullet">글머리 기호</string>
+    <string name="core_content_selection_macro_lines_dedupe">고유 항목</string>
+    <string name="core_content_selection_macro_lines_number">숫자</string>
+    <string name="core_content_selection_macro_lines_sort">정렬</string>
+    <string name="core_content_selection_macro_map">매핑</string>
+    <string name="core_content_selection_macro_open">열기</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">읽기</string>
+    <string name="core_content_selection_macro_replace">바꾸기</string>
+    <string name="core_content_selection_macro_search">검색</string>
+    <string name="core_content_selection_macro_share">공유</string>
+    <string name="core_content_selection_macro_sms">메시지</string>
+    <string name="core_content_selection_macro_time_zones">영역</string>
+    <string name="core_content_selection_macro_to_bangla">벵골어</string>
+    <string name="core_content_selection_macro_to_banglish">뱅글리시</string>
+    <string name="core_content_selection_macro_translate">번역</string>
+    <string name="core_content_selection_macro_url_decode">디코딩</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">앱이 \"%1$s\"에서 %2$d개의 확장을 제외했습니다.</item>
+        <item quantity="other">앱이 \"%1$s\"에서 %2$d개의 확장을 제외했습니다.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">앱이 \"%1$s\"에서 패턴을 제거했습니다. 패턴이 올바르지 않습니다. 스니펫은 목록에 유지됩니다.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">앱이 이름이 없거나 중복된 %1$d개의 폴더를 삭제했습니다. 해당 스니펫은 폴더 없이 추가되었습니다.</item>
+        <item quantity="other">앱이 이름이 없거나 중복된 %1$d개의 폴더를 삭제했습니다. 해당 스니펫은 폴더 없이 추가되었습니다.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">파일에 앱이 보관하는 것보다 더 많은 스니펫이 있습니다. 앱이 처음 %1$d개를 가져왔습니다.</item>
+        <item quantity="other">파일에 앱이 보관하는 것보다 더 많은 스니펫이 있습니다. 앱이 처음 %1$d개를 가져왔습니다.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">스니펫에 이름이 없어 첫 번째 줄을 따서 이름을 지정했습니다.</string>
+    <string name="core_content_snippet_repair_no_text">앱이 \"%1$s\"을(를) 삭제했습니다. 텍스트가 없습니다.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">앱이 \"%1$s\"에서 패턴을 제거했습니다. %2$d자보다 길었습니다.</item>
+        <item quantity="other">앱이 \"%1$s\"에서 패턴을 제거했습니다. %2$d자보다 길었습니다.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">앱이 \"%1$s\"을(를) 단축했습니다. %2$d자보다 길었습니다.</item>
+        <item quantity="other">앱이 \"%1$s\"을(를) 단축했습니다. %2$d자보다 길었습니다.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">입력 중인 앱 이름</string>
+    <string name="core_content_snippet_var_clip_info">가장 최근 클립보드 항목</string>
+    <string name="core_content_snippet_var_cursor_info">커서가 위치할 곳</string>
+    <string name="core_content_snippet_var_date_info">오늘 날짜</string>
+    <string name="core_content_snippet_var_datetime_info">날짜와 시간</string>
+    <string name="core_content_snippet_var_day_info">일(날짜)</string>
+    <string name="core_content_snippet_var_isodate_info">ISO 형식의 날짜(예: 2026-07-19)</string>
+    <string name="core_content_snippet_var_isotime_info">ISO 형식의 날짜 및 시간</string>
+    <string name="core_content_snippet_var_month_info">월 이름</string>
+    <string name="core_content_snippet_var_package_info">해당 앱의 패키지 이름</string>
+    <string name="core_content_snippet_var_selection_info">필드에서 선택한 텍스트</string>
+    <string name="core_content_snippet_var_time12_info">현재 시간을 12시간 형식으로 표시</string>
+    <string name="core_content_snippet_var_time_info">24시간 형식의 현재 시간</string>
+    <string name="core_content_snippet_var_timestamp_info">Unix 시간(초)</string>
+    <string name="core_content_snippet_var_timezone_info">시간대(예: GMT+06:00)</string>
+    <string name="core_content_snippet_var_uuid_info">새로운 무작위 UUID</string>
+    <string name="core_content_snippet_var_weekday_info">요일 이름(예: 일요일)</string>
+    <string name="core_content_snippet_var_year_info">연도, 4자리 숫자</string>
+    <string name="core_content_sticker_pack_imported_label">가져온 스티커</string>
+    <string name="core_content_sticker_repair_image_missing">앱이 \"%1$s\"을(를) 삭제했습니다. 이미지가 없습니다.</string>
+    <string name="core_content_sticker_repair_image_unreadable">앱이 \"%1$s\"을(를) 삭제했습니다. 이미지를 읽을 수 없습니다.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">팩에 스티커가 %1$d개 있습니다. 앱이 처음 %2$d개를 유지합니다.</item>
+        <item quantity="other">팩에 스티커가 %1$d개 있습니다. 앱이 처음 %2$d개를 유지합니다.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">앱에서 스티커를 삭제했습니다. 스티커가 이미지 파일을 지정하지 않습니다.</string>
+    <string name="core_content_sticker_repair_none_listed">팩 파일에 나열된 스티커가 없습니다.</string>
+    <string name="core_content_sticker_repair_not_saved">앱이 \"%1$s\"을(를) 삭제했습니다. 앱에서 저장할 수 없습니다.</string>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">このプラグインにはrender()関数がありません。</string>
+    <string name="core_plugins_error_not_installed">そのプラグインはインストールされていません。</string>
+    <string name="core_plugins_error_script_failed">スクリプトの実行に失敗しました。</string>
+    <string name="core_plugins_error_script_missing">そのプラグインのスクリプトが見つかりません。</string>
+    <string name="core_plugins_error_turned_off">そのプラグインはオフになっています。</string>
+    <string name="core_plugins_permission_storage_label">デバイスにデータを保存</string>
+    <string name="core_plugins_reject_bad_encoding">「%1$s」には有効なUTF-8テキストではないスクリプトが含まれています。</string>
+    <string name="core_plugins_reject_bad_id">このプラグインのIDは無効です。IDは3〜64文字である必要があります。IDには小文字、数字、ドット、ハイフン、アンダースコアを使用できます。</string>
+    <string name="core_plugins_reject_compiled_lua">「%1$s」にはコンパイル済みのLuaコードが含まれています。プラグインはプレーンなソースコードを使用する必要があるため、実行前に内容を確認できます。</string>
+    <string name="core_plugins_reject_empty_script">「%1$s」には空のスクリプトが含まれています。</string>
+    <string name="core_plugins_reject_missing_script">「%1$s」にはスクリプトファイル（%2$s）がありません。</string>
+    <string name="core_plugins_reject_newer_version">このプラグインには、より新しいバージョンのWM Keyboardが必要です。</string>
+    <string name="core_plugins_reject_no_name">このプラグインには名前がありません。</string>
+    <string name="core_plugins_reject_no_version">「%1$s」にはバージョン情報がありません。</string>
+    <string name="core_plugins_reject_script_too_large">「%1$s」のスクリプトが%2$d KBを超えています。</string>
+    <string name="core_plugins_reject_unknown_permission">このバージョンの WM Keyboard は権限「%1$s」を認識できません。「%2$s」が何を実行できるかを確認できません。</string>
+    <string name="core_plugins_stopped_cancelled">アプリがこのプラグインを停止しました。</string>
+    <string name="core_plugins_stopped_deadline">このプラグインの処理に時間がかかりすぎたため、アプリによって停止されました。</string>
+    <string name="core_plugins_stopped_instructions">このプラグインは一度に過剰な処理を行ったため、アプリによって停止されました。</string>
+    <string name="core_plugins_stopped_not_responding">このプラグインが応答を停止したため、アプリが終了させました。</string>
+    <string name="core_plugins_stopped_not_responding_disabled">このプラグインが再び応答しなくなりました。アプリによって無効化されました。</string>
+    <string name="core_plugins_stopped_recursion">このプラグインが自身を過剰に呼び出したため、アプリが停止させました。</string>
+    <string name="core_plugins_stopped_unexpected">このプラグインは予期せず停止しました。</string>
+    <string name="core_plugins_ui_insert_action">挿入</string>
+    <string name="core_plugins_ui_repair_no_type">ウィジェットの種類が指定されていません。</string>
+    <string name="core_plugins_ui_repair_not_a_widget">ウィジェットリストにウィジェットではないものが含まれていました。</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">タブストリップにページがありません。</string>
+    <string name="core_plugins_ui_repair_text_budget">このプラグインは描画するテキストが多すぎます。アプリは一部を省略しました。</string>
+    <string name="core_plugins_ui_repair_text_shortened">一部のテキストが長すぎて描画できなかったため、短縮されました。</string>
+    <string name="core_plugins_ui_repair_too_deep">一部のウィジェットが深くネストされすぎており、描画できませんでした。</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">最初の %1$d 個のタブのみが表示されています。</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">このプラグインは%1$d個を超えるウィジェットを要求しました。アプリは残りを破棄しました。</string>
+    <string name="core_plugins_ui_repair_unknown_type">このビルドではウィジェットタイプ「%1$s」は認識されません。</string>
+    <string name="core_plugins_ui_tab_default_title">タブ %1$d</string>
+</resources>

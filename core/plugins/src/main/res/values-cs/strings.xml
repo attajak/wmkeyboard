@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Tento plugin nemá funkci render().</string>
+    <string name="core_plugins_error_not_installed">Tento plugin není nainstalován.</string>
+    <string name="core_plugins_error_script_failed">Skript selhal.</string>
+    <string name="core_plugins_error_script_missing">Skript pro tento plugin chybí.</string>
+    <string name="core_plugins_error_turned_off">Tento plugin je vypnutý.</string>
+    <string name="core_plugins_permission_storage_label">Uložit data do zařízení</string>
+    <string name="core_plugins_reject_bad_encoding">„%1$s“ obsahuje skript, který není platným textem v kódování UTF-8.</string>
+    <string name="core_plugins_reject_bad_id">Tento plugin má neplatné ID. ID musí mít délku 3 až 64 znaků. ID může obsahovat malá písmena, číslice, tečky, pomlčky a podtržítka.</string>
+    <string name="core_plugins_reject_compiled_lua">„%1$s“ obsahuje zkompilovaný kód Lua. Plugin musí používat prostý zdrojový kód, abyste si jej mohli přečíst před spuštěním.</string>
+    <string name="core_plugins_reject_empty_script">„%1$s“ má prázdný skript.</string>
+    <string name="core_plugins_reject_missing_script">„%1$s“ nemá svůj soubor skriptu (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Tento plugin vyžaduje novější verzi WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Tento plugin nemá název.</string>
+    <string name="core_plugins_reject_no_version">„%1$s“ neuvádí, o jakou verzi se jedná.</string>
+    <string name="core_plugins_reject_script_too_large">„%1$s“ má skript větší než %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Tato verze klávesnice WM nezná oprávnění „%1$s“. Aplikace vám nemůže říct, co má „%2$s“ povoleno dělat.</string>
+    <string name="core_plugins_stopped_cancelled">Aplikace tento plugin zastavila.</string>
+    <string name="core_plugins_stopped_deadline">Tento zásuvný modul trval příliš dlouho. Aplikace jej zastavila.</string>
+    <string name="core_plugins_stopped_instructions">Tento plugin prováděl příliš mnoho práce najednou. Aplikace jej zastavila.</string>
+    <string name="core_plugins_stopped_not_responding">Tento plugin přestal odpovídat. Aplikace jej ukončila.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Tento plugin přestal znovu odpovídat. Aplikace ho vypnula.</string>
+    <string name="core_plugins_stopped_recursion">Tento plugin se volal příliš mnohokrát. Aplikace jej zastavila.</string>
+    <string name="core_plugins_stopped_unexpected">Tento plugin neočekávaně přestal fungovat.</string>
+    <string name="core_plugins_ui_insert_action">Vložit</string>
+    <string name="core_plugins_ui_repair_no_type">Widget neuvedl, jakého je typu.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Seznam widgetů obsahoval něco, co není widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Panel karet neměl žádné stránky.</string>
+    <string name="core_plugins_ui_repair_text_budget">Tento plugin se pokusil vykreslit příliš mnoho textu. Aplikace část vynechala.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Některý text byl příliš dlouhý na vykreslení. Aplikace jej zkrátila.</string>
+    <string name="core_plugins_ui_repair_too_deep">Některé widgety byly vnořeny příliš hluboko, aby je bylo možné vykreslit.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Zobrazeny jsou pouze první %1$d karty.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Tento plugin požadoval více než %1$d widgetů. Aplikace zbytek zahodila.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Tento build nezná typ widgetu „%1$s“.</string>
+    <string name="core_plugins_ui_tab_default_title">Karta %1$d</string>
+</resources>

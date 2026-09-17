@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Słowniki</string>
+    <string name="core_addons_type_dictionary_singular_label">Słownik</string>
+    <string name="core_addons_type_emoji_font_label">Czcionki emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Czcionka emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Słowa kluczowe emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Paczka słów kluczowych emoji</string>
+    <string name="core_addons_type_espanso_label">Pakiety Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Pakiet Espanso</string>
+    <string name="core_addons_type_font_label">Czcionki</string>
+    <string name="core_addons_type_font_singular_label">Czcionka</string>
+    <string name="core_addons_type_icon_pack_label">Pakiety ikon</string>
+    <string name="core_addons_type_icon_pack_singular_label">Pakiet ikon</string>
+    <string name="core_addons_type_layout_label">Układy</string>
+    <string name="core_addons_type_layout_singular_label">Układ</string>
+    <string name="core_addons_type_plugin_label">Wtyczki</string>
+    <string name="core_addons_type_plugin_singular_label">Wtyczka</string>
+    <string name="core_addons_type_snippets_label">Fragmenty</string>
+    <string name="core_addons_type_snippets_singular_label">Pakiet fragmentów</string>
+    <string name="core_addons_type_sound_label">Dźwięki</string>
+    <string name="core_addons_type_sound_pack_label">Pakiety dźwiękowe</string>
+    <string name="core_addons_type_sound_pack_singular_label">Pakiet dźwięków</string>
+    <string name="core_addons_type_sound_singular_label">Dźwięk klawisza</string>
+    <string name="core_addons_type_stickers_label">Pakiety naklejek</string>
+    <string name="core_addons_type_stickers_singular_label">Pakiet naklejek</string>
+    <string name="core_addons_type_theme_label">Motywy</string>
+    <string name="core_addons_type_theme_singular_label">Motyw</string>
+    <string name="core_addons_type_unknown_label">Inne</string>
+    <string name="core_addons_type_unknown_singular_label">Dodatek</string>
+    <string name="core_addons_type_vocabulary_label">Słownictwo</string>
+    <string name="core_addons_type_vocabulary_singular_label">Pakiet słownictwa</string>
+</resources>

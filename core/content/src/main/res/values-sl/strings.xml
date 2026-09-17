@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Enkratna koda</string>
+    <string name="core_content_clip_entity_otp_tag">KODA</string>
+    <string name="core_content_clip_entity_phone_label">Telefonska številka</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFON</string>
+    <string name="core_content_clip_entity_url_label">Povezava</string>
+    <string name="core_content_clip_entity_url_tag">POVEZAVA</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d izrezek ima druge razširitve, ki jih Espanso ne more shraniti. Zapisan je bil le prvi.</item>
+        <item quantity="other">%1$d izrezkov ima druge razširitve, ki jih Espanso ne more shraniti. Zapisan je bil le prvi od vsakega.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d izrez je omejen na določene računalniške programe. V telefonu deluje povsod.</item>
+        <item quantity="other">%1$d izrezov je omejenih na določene računalniške programe. V telefonu delujejo povsod.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d izrez zahteva izbiro s seznama. Aplikacija namesto tega naključno izbere enega.</item>
+        <item quantity="other">%1$d izrezov zahteva izbiro s seznama. Aplikacija namesto tega naključno izbere enega.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d izrezka zahteva potrditev pred razširitvijo. Espanso nima takšne nastavitve, zato se bo tam razširil samodejno.</item>
+        <item quantity="other">%1$d izrezkov zahteva potrditev pred razširitvijo. Espanso nima takšne nastavitve, zato se bodo tam razširili samodejno.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d izrez uporablja format datuma, ki ga aplikacija ne more v celoti zapisati. Aplikacija je izpustila del, ki ga ne more izvesti.</item>
+        <item quantity="other">%1$d izrezov uporablja formate datuma, ki jih aplikacija ne more v celoti zapisati. Aplikacija je izpustila dele, ki jih ne more izvesti.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d izsek je v mapi, ki je izklopljena. Espanso nima stikala za mape, zato se bo tam razširil.</item>
+        <item quantity="other">%1$d izsekov je v mapah, ki so izklopljene. Espanso nima stikala za mape, zato se bodo tam razširili.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Aplikacija je preskočila %1$d izrezek, ki nima ničesar za vstavljanje.</item>
+        <item quantity="other">Aplikacija je preskočila %1$d izrezkov, ki nimajo ničesar za vstavljanje.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d izrezka zahteva izpolnitev obrazca. Aplikacija vstavi obrazec kot besedilo s kazalko v prvem praznem polju.</item>
+        <item quantity="other">%1$d izrezkov zahteva izpolnitev obrazca. Aplikacija vstavi vsak obrazec kot besedilo s kazalko v prvem praznem polju.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Aplikacija je preskočila %1$d izrezek, ki vstavi sliko.</item>
+        <item quantity="other">Aplikacija je preskočila %1$d izrezkov, ki vstavijo slike.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Datoteka bere %1$d drugo datoteko. Ena datoteka ne more prinesti drugih s seboj.</item>
+        <item quantity="other">Datoteka bere %1$d drugih datotek. Ena datoteka ne more prinesti drugih s seboj.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d izrez kaže na druge izreze. Espanso tega ne zna izraziti, zato povezave niso bile vključene.</item>
+        <item quantity="other">%1$d izrezov kaže na druge izreze. Espanso tega ne zna izraziti, zato povezave niso bile vključene.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d sprožilec naj bi deloval znotraj besede. V telefonu deluje le kot cela beseda.</item>
+        <item quantity="other">%1$d sprožilcev naj bi delovalo znotraj besede. V telefonu delujejo le kot cele besede.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d izrezka uporablja vrednost, za katero Espanso nima enakovredne. Zapisano je tako, kot je.</item>
+        <item quantity="other">%1$d izrezkov uporablja vrednosti, za katere Espanso nima enakovrednih. Zapisani so tako, kot so.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Aplikacija je odstranila vzorec iz %1$d izrezka. Aplikacija ne izvaja vzorcev te oblike. Izrezek ostane na seznamu.</item>
+        <item quantity="other">Aplikacija je odstranila vzorec iz %1$d izrezkov. Aplikacija ne izvaja vzorcev te oblike. Izrezki ostanejo na seznamu.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d izrezek uporablja oblikovano besedilo. Aplikacija ohrani besede in opusti oblikovanje.</item>
+        <item quantity="other">%1$d izrezkov uporablja oblikovano besedilo. Aplikacija ohrani besede in opusti oblikovanje.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d izrezka zažene ukaz v vašem računalniku. Aplikacija je ukaz izpustila in ga nikoli ne zažene.</item>
+        <item quantity="other">%1$d izrezkov zažene ukaze v vašem računalniku. Aplikacija je ukaze izpustila in jih nikoli ne zažene.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d sprožilec se ne konča z besedo, zato ga aplikacija ne more spremljati. Njegova izrezka ostane na seznamu.</item>
+        <item quantity="other">%1$d sprožilcev se ne konča z besedo, zato jih aplikacija ne more spremljati. Njihovi izrezki ostanejo na seznamu.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d izrezek vsebuje besedilo v oklepajih, ki ga ta aplikacija izpolni, na primer {date}. Razširil se bo, namesto da bi se prikazal tako, kot je napisan.</item>
+        <item quantity="other">%1$d izrezkov vsebuje besedilo v oklepajih, ki ga ta aplikacija izpolni, na primer {date}. Razširili se bodo, namesto da bi se prikazali tako, kot so napisani.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d izrezka spremeni velike črke v tistem, kar je zajel njegov vzorec. Espanso tega ne zmore, zato je zajeto besedilo vstavljeno nespremenjeno.</item>
+        <item quantity="other">%1$d izrezkov spremeni velike črke v tistem, kar so zajeli njihovi vzorci. Espanso tega ne zmore, zato je zajeto besedilo vstavljeno nespremenjeno.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d izrez uporablja vrednost, za katero aplikacija nima enakovredne. Ta del bo prazen.</item>
+        <item quantity="other">%1$d izrezov uporablja vrednosti, za katere aplikacija nima enakovrednih. Ti deli bodo prazni.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Aplikacija ne more prenesti pisave. Preverite povezavo in poskusite znova.</string>
+    <string name="core_content_font_error_empty">Datoteka je prazna.</string>
+    <string name="core_content_font_error_load">Aplikacija ne more naložiti te datoteke pisave.</string>
+    <string name="core_content_font_error_markup">Ta datoteka je datoteka HTML ali XML, ne pisava.</string>
+    <string name="core_content_font_error_no_storage">Za pisavo ni na voljo prostora za shranjevanje.</string>
+    <string name="core_content_font_error_not_a_font">Ta datoteka ni videti kot pisava .ttf ali .otf.</string>
+    <string name="core_content_font_error_read">Aplikacija ne more prebrati pisave.</string>
+    <string name="core_content_font_error_save">Aplikacija ne more shraniti pisave.</string>
+    <string name="core_content_font_error_too_large">Pisava mora biti manjša od %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Knjižnica pisav je polna. Izbrišite pisavo in poskusite znova.</string>
+    <string name="core_content_font_error_too_short">Datoteka je prekratka, da bi bila pisava.</string>
+    <string name="core_content_font_error_woff">Aplikacija ne more brati spletnih pisav WOFF. Uporabite različico pisave .ttf ali .otf.</string>
+    <string name="core_content_font_error_woff2">Aplikacija ne more prebrati spletnih pisav WOFF2. Uporabite različico pisave .ttf ali .otf.</string>
+    <string name="core_content_font_error_zip">Ta datoteka je arhiv zip, ne pisava.</string>
+    <string name="core_content_selection_macro_add_contact">Stik</string>
+    <string name="core_content_selection_macro_calendar">Koledar</string>
+    <string name="core_content_selection_macro_call">Klic</string>
+    <string name="core_content_selection_macro_case_lower">male črke</string>
+    <string name="core_content_selection_macro_case_sentence">Velika začetnica stavka</string>
+    <string name="core_content_selection_macro_case_title">Velike začetnice</string>
+    <string name="core_content_selection_macro_case_upper">VELIKE ČRKE</string>
+    <string name="core_content_selection_macro_chat_bold">Krepko</string>
+    <string name="core_content_selection_macro_chat_italic">Ležeče</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Prečrtano</string>
+    <string name="core_content_selection_macro_colour">Barva</string>
+    <string name="core_content_selection_macro_copy">Kopiraj</string>
+    <string name="core_content_selection_macro_digits_latin">Številke</string>
+    <string name="core_content_selection_macro_email">E-pošta</string>
+    <string name="core_content_selection_macro_fancy">Domiselno</string>
+    <string name="core_content_selection_macro_find">Najdi</string>
+    <string name="core_content_selection_macro_format">Oblika</string>
+    <string name="core_content_selection_macro_grammar">Slovnica</string>
+    <string name="core_content_selection_macro_lines_bullet">Oznake</string>
+    <string name="core_content_selection_macro_lines_dedupe">Edinstveno</string>
+    <string name="core_content_selection_macro_lines_number">Številka</string>
+    <string name="core_content_selection_macro_lines_sort">Razvrsti</string>
+    <string name="core_content_selection_macro_map">Zemljevid</string>
+    <string name="core_content_selection_macro_open">Odpri</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Preberi</string>
+    <string name="core_content_selection_macro_replace">Zamenjaj</string>
+    <string name="core_content_selection_macro_search">Išči</string>
+    <string name="core_content_selection_macro_share">Deli</string>
+    <string name="core_content_selection_macro_sms">Sporočilo</string>
+    <string name="core_content_selection_macro_time_zones">Časovni pasovi</string>
+    <string name="core_content_selection_macro_to_bangla">Bengalščina</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Prevedi</string>
+    <string name="core_content_selection_macro_url_decode">Dekodiraj</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Aplikacija je izpustila %2$d razširitev iz \"%1$s\".</item>
+        <item quantity="other">Aplikacija je izpustila %2$d razširitev iz \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Aplikacija je odstranila vzorec iz \"%1$s\". Vzorec ni pravilen. Izsek ostane na seznamu.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Aplikacija je opustila %1$d mapo, ki nima imena ali se ponavlja z drugo. Njeni izrezki so prišli brez mape.</item>
+        <item quantity="other">Aplikacija je opustila %1$d map, ki nimajo imena ali se ponavljajo z drugimi. Njihovi izrezki so prišli brez mape.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Datoteka ima več izrezkov, kot jih aplikacija hrani. Aplikacija je uvozila prvih %1$d.</item>
+        <item quantity="other">Datoteka ima več izrezkov, kot jih aplikacija hrani. Aplikacija je uvozila prvih %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Izsek nima imena, zato ga je aplikacija poimenovala po njegovi prvi vrstici.</string>
+    <string name="core_content_snippet_repair_no_text">Aplikacija je opustila \"%1$s\". Nima besedila.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Aplikacija je odstranila vzorec iz \"%1$s\". Bil je daljši od %2$d znaka.</item>
+        <item quantity="other">Aplikacija je odstranila vzorec iz \"%1$s\". Bil je daljši od %2$d znakov.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Aplikacija je skrajšala \"%1$s\". Bila je daljša od %2$d znaka.</item>
+        <item quantity="other">Aplikacija je skrajšala \"%1$s\". Bila je daljša od %2$d znakov.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Ime aplikacije, v kateri tipkate</string>
+    <string name="core_content_snippet_var_clip_info">Najnovejši vnos v odložišču</string>
+    <string name="core_content_snippet_var_cursor_info">Mesto, kjer se ustavi kazalec</string>
+    <string name="core_content_snippet_var_date_info">Današnji datum</string>
+    <string name="core_content_snippet_var_datetime_info">Datum in čas</string>
+    <string name="core_content_snippet_var_day_info">Dan v mesecu</string>
+    <string name="core_content_snippet_var_isodate_info">Datum v obliki ISO, na primer 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Datum in čas v obliki ISO</string>
+    <string name="core_content_snippet_var_month_info">Ime meseca</string>
+    <string name="core_content_snippet_var_package_info">Ime paketa te aplikacije</string>
+    <string name="core_content_snippet_var_selection_info">Besedilo, ki ga izberete v polju</string>
+    <string name="core_content_snippet_var_time12_info">Trenutni čas v 12-urnem formatu</string>
+    <string name="core_content_snippet_var_time_info">Trenutni čas v 24-urnem formatu</string>
+    <string name="core_content_snippet_var_timestamp_info">Čas v Unix sekundah</string>
+    <string name="core_content_snippet_var_timezone_info">Časovni pas, na primer GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Nov naključni UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Ime dneva, na primer nedelja</string>
+    <string name="core_content_snippet_var_year_info">Leto s štirimi števkami</string>
+    <string name="core_content_sticker_pack_imported_label">Uvožene nalepke</string>
+    <string name="core_content_sticker_repair_image_missing">Aplikacija je opustila »%1$s«. Njena slika manjka.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Aplikacija je opustila \"%1$s\". Aplikacija ne more prebrati njene slike.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Paket ima %1$d nalepko. Aplikacija obdrži prvo %2$d.</item>
+        <item quantity="other">Paket ima %1$d nalepk. Aplikacija obdrži prvih %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Aplikacija je opustila nalepko. Nalepka ne poimenuje nobene slikovne datoteke.</string>
+    <string name="core_content_sticker_repair_none_listed">Datoteka paketa ne navaja nobenih nalepk.</string>
+    <string name="core_content_sticker_repair_not_saved">Aplikacija je opustila \"%1$s\". Aplikacija je ne more shraniti.</string>
+</resources>

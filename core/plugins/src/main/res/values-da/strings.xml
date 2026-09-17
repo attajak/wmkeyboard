@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Dette plugin har ingen render()-funktion.</string>
+    <string name="core_plugins_error_not_installed">Dette plugin er ikke installeret.</string>
+    <string name="core_plugins_error_script_failed">Scriptet fejlede.</string>
+    <string name="core_plugins_error_script_missing">Scriptet til det plugin mangler.</string>
+    <string name="core_plugins_error_turned_off">Det plugin er slået fra.</string>
+    <string name="core_plugins_permission_storage_label">Gem data på din enhed</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” har et script, der ikke er gyldig UTF-8-tekst.</string>
+    <string name="core_plugins_reject_bad_id">Dette plugin har et id, der ikke er gyldigt. Et id er 3 til 64 tegn langt. Et id kan indeholde små bogstaver, tal, prikker, bindestreger og understregninger.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” indeholder kompileret Lua-kode. Et plugin skal bruge almindelig kildekode, så du kan læse den, før den køres.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” har et tomt script.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” har ikke sin scriptfil (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Dette plugin kræver en nyere version af WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Dette plugin har ikke et navn.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” angiver ikke, hvilken version det er.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” har et script, der er større end %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Denne version af WM Keyboard kender ikke tilladelsen “%1$s”. Appen kan ikke fortælle dig, hvad “%2$s” har tilladelse til at gøre.</string>
+    <string name="core_plugins_stopped_cancelled">Appen stoppede dette plugin.</string>
+    <string name="core_plugins_stopped_deadline">Dette plugin tog for lang tid. Appen stoppede det.</string>
+    <string name="core_plugins_stopped_instructions">Dette plugin udførte for meget arbejde på én gang. Appen stoppede det.</string>
+    <string name="core_plugins_stopped_not_responding">Dette plugin holdt op med at svare. Appen lukkede det.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Dette plugin holdt op med at svare igen. Appen deaktiverede det.</string>
+    <string name="core_plugins_stopped_recursion">Dette plugin kaldte sig selv for mange gange. Appen stoppede det.</string>
+    <string name="core_plugins_stopped_unexpected">Dette plugin stoppede uventet.</string>
+    <string name="core_plugins_ui_insert_action">Indsæt</string>
+    <string name="core_plugins_ui_repair_no_type">En widget angav ikke, hvilken type den er.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">En widget-liste indeholdt noget, der ikke er en widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">En fanebjælke havde ingen sider.</string>
+    <string name="core_plugins_ui_repair_text_budget">Dette plugin bad om at tegne for meget tekst. Appen udelod noget af det.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Noget tekst var for lang til at blive tegnet. Appen forkortede den.</string>
+    <string name="core_plugins_ui_repair_too_deep">Nogle widgets var indlejret for dybt til at kunne tegnes.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Kun de første %1$d faner vises.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Dette plugin bad om mere end %1$d widgets. Appen droppede resten.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Denne version kender ikke widget-typen “%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Fane %1$d</string>
+</resources>

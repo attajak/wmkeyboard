@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Mã dùng một lần</string>
+    <string name="core_content_clip_entity_otp_tag">MÃ</string>
+    <string name="core_content_clip_entity_phone_label">Số điện thoại</string>
+    <string name="core_content_clip_entity_phone_tag">ĐIỆN THOẠI</string>
+    <string name="core_content_clip_entity_url_label">Liên kết</string>
+    <string name="core_content_clip_entity_url_tag">LIÊN KẾT</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d đoạn mã có các phần mở rộng khác mà Espanso không thể chứa. Chỉ phần đầu tiên được ghi lại.</item>
+        <item quantity="other">%1$d đoạn mã có các phần mở rộng khác mà Espanso không thể chứa. Chỉ phần đầu tiên của mỗi đoạn được ghi lại.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d đoạn mã bị giới hạn trong một số chương trình máy tính nhất định. Trên điện thoại, nó hoạt động ở mọi nơi.</item>
+        <item quantity="other">%1$d đoạn mã bị giới hạn trong một số chương trình máy tính nhất định. Trên điện thoại, chúng hoạt động ở mọi nơi.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d đoạn mã yêu cầu bạn chọn từ danh sách. Ứng dụng sẽ chọn ngẫu nhiên một cái thay thế.</item>
+        <item quantity="other">%1$d đoạn mã yêu cầu bạn chọn từ danh sách. Ứng dụng sẽ chọn ngẫu nhiên một cái thay thế.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d đoạn mã yêu cầu xác nhận trước khi mở rộng. Espanso không có cài đặt như vậy, vì vậy nó sẽ tự động mở rộng ở đó.</item>
+        <item quantity="other">%1$d đoạn mã yêu cầu xác nhận trước khi mở rộng. Espanso không có cài đặt như vậy, vì vậy chúng sẽ tự động mở rộng ở đó.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d đoạn mã sử dụng định dạng ngày mà ứng dụng không thể viết đầy đủ. Ứng dụng đã bỏ qua phần không thể thực hiện.</item>
+        <item quantity="other">%1$d đoạn mã sử dụng định dạng ngày mà ứng dụng không thể viết đầy đủ. Ứng dụng đã bỏ qua các phần không thể thực hiện.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d đoạn mã nằm trong thư mục đã bị tắt. Espanso không có tính năng chuyển đổi thư mục, vì vậy nó sẽ được mở rộng tại đó.</item>
+        <item quantity="other">%1$d đoạn mã nằm trong các thư mục đã bị tắt. Espanso không có tính năng chuyển đổi thư mục, vì vậy chúng sẽ được mở rộng tại đó.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Ứng dụng đã bỏ qua %1$d đoạn mã không có nội dung để chèn.</item>
+        <item quantity="other">Ứng dụng đã bỏ qua %1$d đoạn mã không có nội dung để chèn.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d đoạn mã yêu cầu bạn điền vào biểu mẫu. Ứng dụng sẽ chèn biểu mẫu dưới dạng văn bản, với con trỏ ở ô trống đầu tiên.</item>
+        <item quantity="other">%1$d đoạn mã yêu cầu bạn điền vào biểu mẫu. Ứng dụng sẽ chèn từng biểu mẫu dưới dạng văn bản, với con trỏ ở ô trống đầu tiên.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Ứng dụng đã bỏ qua %1$d đoạn mã chèn hình ảnh.</item>
+        <item quantity="other">Ứng dụng đã bỏ qua %1$d đoạn mã chèn hình ảnh.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Tệp đọc %1$d tệp khác. Một tệp không thể mang theo các tệp khác.</item>
+        <item quantity="other">Tệp đọc %1$d tệp khác. Một tệp không thể mang theo các tệp khác.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d đoạn mã trỏ đến các đoạn mã khác. Espanso không có cách nào để thể hiện điều đó, vì vậy các liên kết đã bị lược bỏ.</item>
+        <item quantity="other">%1$d đoạn mã trỏ đến các đoạn mã khác. Espanso không có cách nào để thể hiện điều đó, vì vậy các liên kết đã bị lược bỏ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d từ kích hoạt được thiết kế để hoạt động bên trong một từ. Trên điện thoại của bạn, nó chỉ hoạt động như một từ hoàn chỉnh.</item>
+        <item quantity="other">%1$d từ kích hoạt được thiết kế để hoạt động bên trong một từ. Trên điện thoại của bạn, chúng chỉ hoạt động như các từ hoàn chỉnh.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d đoạn mã sử dụng giá trị mà Espanso không có tương đương. Nó được viết ra như hiện trạng.</item>
+        <item quantity="other">%1$d đoạn mã sử dụng các giá trị mà Espanso không có tương đương. Chúng được viết ra như hiện trạng.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Ứng dụng đã xóa mẫu khỏi %1$d đoạn mã. Ứng dụng không chạy các mẫu có dạng đó. Đoạn mã vẫn nằm trong danh sách.</item>
+        <item quantity="other">Ứng dụng đã xóa mẫu khỏi %1$d đoạn mã. Ứng dụng không chạy các mẫu có dạng đó. Các đoạn mã vẫn nằm trong danh sách.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d đoạn mã sử dụng văn bản có định dạng. Ứng dụng giữ lại các từ và loại bỏ định dạng.</item>
+        <item quantity="other">%1$d đoạn mã sử dụng văn bản có định dạng. Ứng dụng giữ lại các từ và loại bỏ định dạng.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d đoạn mã chạy một lệnh trên máy tính của bạn. Ứng dụng đã bỏ qua lệnh này và không bao giờ chạy nó.</item>
+        <item quantity="other">%1$d đoạn mã chạy các lệnh trên máy tính của bạn. Ứng dụng đã bỏ qua các lệnh này và không bao giờ chạy chúng.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d trình kích hoạt chỉ được tạo bằng các ký hiệu, vì vậy ứng dụng không thể theo dõi nó. Đoạn mã của nó vẫn nằm trong danh sách.</item>
+        <item quantity="other">%1$d trình kích hoạt chỉ được tạo bằng các ký hiệu, vì vậy ứng dụng không thể theo dõi chúng. Các đoạn mã của chúng vẫn nằm trong danh sách.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d đoạn mã chứa văn bản trong dấu ngoặc nhọn mà ứng dụng này sẽ điền vào, chẳng hạn như {date}. Nó sẽ mở rộng thay vì xuất hiện như đã viết.</item>
+        <item quantity="other">%1$d đoạn mã chứa văn bản trong dấu ngoặc nhọn mà ứng dụng này sẽ điền vào, chẳng hạn như {date}. Nó sẽ mở rộng thay vì xuất hiện như đã viết.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d đoạn mã thay đổi chữ hoa/thường của nội dung mà mẫu của nó đã bắt được. Espanso không thể làm điều đó, vì vậy văn bản được bắt sẽ giữ nguyên.</item>
+        <item quantity="other">%1$d đoạn mã thay đổi chữ hoa/thường của nội dung mà các mẫu của chúng đã bắt được. Espanso không thể làm điều đó, vì vậy văn bản được bắt sẽ giữ nguyên.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d đoạn mã sử dụng một giá trị mà ứng dụng không có giá trị tương đương. Phần đó sẽ bị để trống.</item>
+        <item quantity="other">%1$d đoạn mã sử dụng các giá trị mà ứng dụng không có giá trị tương đương. Những phần đó sẽ bị để trống.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Ứng dụng không thể tải xuống phông chữ. Hãy kiểm tra kết nối của bạn và thử lại.</string>
+    <string name="core_content_font_error_empty">Tệp trống.</string>
+    <string name="core_content_font_error_load">Ứng dụng không thể tải tệp phông chữ này.</string>
+    <string name="core_content_font_error_markup">Tệp này là tệp HTML hoặc XML, không phải phông chữ.</string>
+    <string name="core_content_font_error_no_storage">Không có bộ nhớ khả dụng cho phông chữ.</string>
+    <string name="core_content_font_error_not_a_font">Tệp này không giống phông chữ .ttf hoặc .otf.</string>
+    <string name="core_content_font_error_read">Ứng dụng không thể đọc phông chữ.</string>
+    <string name="core_content_font_error_save">Ứng dụng không thể lưu phông chữ.</string>
+    <string name="core_content_font_error_too_large">Phông chữ phải nhỏ hơn %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Thư viện phông chữ đã đầy. Hãy xóa một phông chữ và thử lại.</string>
+    <string name="core_content_font_error_too_short">Tệp quá ngắn để trở thành một phông chữ.</string>
+    <string name="core_content_font_error_woff">Ứng dụng không thể đọc phông chữ web WOFF. Hãy sử dụng phiên bản .ttf hoặc .otf của phông chữ.</string>
+    <string name="core_content_font_error_woff2">Ứng dụng không thể đọc phông chữ web WOFF2. Hãy sử dụng phiên bản .ttf hoặc .otf của phông chữ.</string>
+    <string name="core_content_font_error_zip">Tệp này là một tệp nén zip, không phải là phông chữ.</string>
+    <string name="core_content_selection_macro_add_contact">Liên hệ</string>
+    <string name="core_content_selection_macro_calendar">Lịch</string>
+    <string name="core_content_selection_macro_call">Gọi</string>
+    <string name="core_content_selection_macro_case_lower">chữ thường</string>
+    <string name="core_content_selection_macro_case_sentence">Viết hoa đầu câu</string>
+    <string name="core_content_selection_macro_case_title">Viết hoa tiêu đề</string>
+    <string name="core_content_selection_macro_case_upper">VIẾT HOA</string>
+    <string name="core_content_selection_macro_chat_bold">Đậm</string>
+    <string name="core_content_selection_macro_chat_italic">In nghiêng</string>
+    <string name="core_content_selection_macro_chat_mono">Đơn cách</string>
+    <string name="core_content_selection_macro_chat_strike">Gạch ngang</string>
+    <string name="core_content_selection_macro_colour">Màu sắc</string>
+    <string name="core_content_selection_macro_copy">Sao chép</string>
+    <string name="core_content_selection_macro_digits_latin">Chữ số</string>
+    <string name="core_content_selection_macro_email">Email</string>
+    <string name="core_content_selection_macro_fancy">Đẹp mắt</string>
+    <string name="core_content_selection_macro_find">Tìm kiếm</string>
+    <string name="core_content_selection_macro_format">Định dạng</string>
+    <string name="core_content_selection_macro_grammar">Ngữ pháp</string>
+    <string name="core_content_selection_macro_lines_bullet">Dấu đầu dòng</string>
+    <string name="core_content_selection_macro_lines_dedupe">Duy nhất</string>
+    <string name="core_content_selection_macro_lines_number">Số</string>
+    <string name="core_content_selection_macro_lines_sort">Sắp xếp</string>
+    <string name="core_content_selection_macro_map">Bản đồ</string>
+    <string name="core_content_selection_macro_open">Mở</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Nói</string>
+    <string name="core_content_selection_macro_replace">Thay thế</string>
+    <string name="core_content_selection_macro_search">Tìm kiếm</string>
+    <string name="core_content_selection_macro_share">Chia sẻ</string>
+    <string name="core_content_selection_macro_sms">Tin nhắn</string>
+    <string name="core_content_selection_macro_time_zones">Múi giờ</string>
+    <string name="core_content_selection_macro_to_bangla">Tiếng Bengal</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Dịch</string>
+    <string name="core_content_selection_macro_url_decode">Giải mã</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Ứng dụng đã bỏ qua %2$d phần mở rộng khỏi \"%1$s\".</item>
+        <item quantity="other">Ứng dụng đã bỏ qua %2$d phần mở rộng khỏi \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Ứng dụng đã xóa mẫu khỏi \"%1$s\". Mẫu không chính xác. Đoạn mã vẫn nằm trong danh sách.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Ứng dụng đã loại bỏ %1$d thư mục không có tên hoặc trùng lặp với thư mục khác. Các đoạn mã của nó đã được đưa vào mà không có thư mục.</item>
+        <item quantity="other">Ứng dụng đã loại bỏ %1$d thư mục không có tên hoặc trùng lặp với thư mục khác. Các đoạn mã của chúng đã được đưa vào mà không có thư mục.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Tệp có nhiều đoạn mã hơn mức ứng dụng lưu trữ. Ứng dụng đã nhập %1$d đoạn đầu tiên.</item>
+        <item quantity="other">Tệp có nhiều đoạn mã hơn mức ứng dụng lưu trữ. Ứng dụng đã nhập %1$d đoạn đầu tiên.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Một đoạn trích không có tên, vì vậy ứng dụng đã đặt tên theo dòng đầu tiên của nó.</string>
+    <string name="core_content_snippet_repair_no_text">Ứng dụng đã loại bỏ \"%1$s\". Nó không có văn bản.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Ứng dụng đã xóa mẫu khỏi \"%1$s\". Mẫu này dài hơn %2$d ký tự.</item>
+        <item quantity="other">Ứng dụng đã xóa mẫu khỏi \"%1$s\". Mẫu này dài hơn %2$d ký tự.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Ứng dụng đã rút ngắn \"%1$s\". Nó dài hơn %2$d ký tự.</item>
+        <item quantity="other">Ứng dụng đã rút ngắn \"%1$s\". Nó dài hơn %2$d ký tự.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Tên của ứng dụng bạn đang nhập</string>
+    <string name="core_content_snippet_var_clip_info">Mục nhập bộ nhớ tạm mới nhất</string>
+    <string name="core_content_snippet_var_cursor_info">Nơi con trỏ dừng lại</string>
+    <string name="core_content_snippet_var_date_info">Ngày hôm nay</string>
+    <string name="core_content_snippet_var_datetime_info">Ngày và giờ</string>
+    <string name="core_content_snippet_var_day_info">Ngày trong tháng</string>
+    <string name="core_content_snippet_var_isodate_info">Ngày ở định dạng ISO, ví dụ: 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Ngày và giờ ở định dạng ISO</string>
+    <string name="core_content_snippet_var_month_info">Tên của tháng</string>
+    <string name="core_content_snippet_var_package_info">Tên gói của ứng dụng đó</string>
+    <string name="core_content_snippet_var_selection_info">Văn bản bạn chọn trong trường</string>
+    <string name="core_content_snippet_var_time12_info">Thời gian hiện tại ở định dạng 12 giờ</string>
+    <string name="core_content_snippet_var_time_info">Thời gian hiện tại ở định dạng 24 giờ</string>
+    <string name="core_content_snippet_var_timestamp_info">Thời gian tính bằng giây Unix</string>
+    <string name="core_content_snippet_var_timezone_info">Múi giờ, ví dụ: GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Một UUID ngẫu nhiên mới</string>
+    <string name="core_content_snippet_var_weekday_info">Tên của ngày, ví dụ: Chủ nhật</string>
+    <string name="core_content_snippet_var_year_info">Năm, gồm bốn chữ số</string>
+    <string name="core_content_sticker_pack_imported_label">Nhãn dán đã nhập</string>
+    <string name="core_content_sticker_repair_image_missing">Ứng dụng đã loại bỏ \"%1$s\". Hình ảnh của nó bị thiếu.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Ứng dụng đã loại bỏ \"%1$s\". Ứng dụng không thể đọc hình ảnh của nó.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Gói này có %1$d nhãn dán. Ứng dụng giữ lại %2$d nhãn đầu tiên.</item>
+        <item quantity="other">Gói này có %1$d nhãn dán. Ứng dụng giữ lại %2$d nhãn đầu tiên.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Ứng dụng đã làm mất một nhãn dán. Nhãn dán này không có tên tệp hình ảnh.</string>
+    <string name="core_content_sticker_repair_none_listed">Tệp gói không liệt kê nhãn dán nào.</string>
+    <string name="core_content_sticker_repair_not_saved">Ứng dụng đã loại bỏ \"%1$s\". Ứng dụng không thể lưu tệp này.</string>
+</resources>

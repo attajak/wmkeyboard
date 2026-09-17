@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">Die App hat %1$d diagonale Wischgeste entfernt. Diese Tastatur unterstützt nur Wischgesten nach oben, unten, links und rechts.</item>
+        <item quantity="other">Die App hat %1$d diagonale Wischgesten entfernt. Diese Tastatur unterstützt nur Wischgesten nach oben, unten, links und rechts.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d Taste gibt das darauf abgedruckte Zeichen ein. Die ursprüngliche Tastatur verwendete eine Regel, um zu entscheiden, was sie eingibt.</item>
+        <item quantity="other">%1$d Tasten geben die darauf abgedruckten Zeichen ein. Die ursprüngliche Tastatur verwendete Regeln, um zu entscheiden, was sie eingeben.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Diese Tastatur hat %1$d Taste, die du wiederholt antippst, um durch die Zeichen zu blättern. Diese Tastatur-App hat keine solche Taste, daher ist nur das erste Zeichen verfügbar.</item>
+        <item quantity="other">Diese Tastatur hat %1$d Tasten, die du wiederholt antippst, um durch die Zeichen zu blättern. Diese Tastatur-App hat keine solchen Tasten, daher ist nur das erste Zeichen jeder Taste verfügbar.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Diese Tastatur verwendet Regeln, um zu entscheiden, welche Zeichen ihre Tasten eingeben. Die App verfügt nicht über diese Regeln, daher gibt jede Taste das darauf abgebildete Zeichen ein.</string>
+    <string name="core_keyman_shift_layer_folded">Die App hat die Umschalttaste in die Tasten integriert. Halten Sie die Umschalttaste gedrückt, um diese Zeichen zu erreichen.</string>
+    <string name="core_keyman_shift_layer_separate">Die Umschalttaste hat eine andere Form, daher hat die App sie als eigene Ebene beibehalten.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">Die App hat %1$d Taste entfernt. Diese Tastatur hat keine Taste, die dasselbe bewirkt.</item>
+        <item quantity="other">Die App hat %1$d Tasten entfernt. Diese Tastatur hat keine Tasten, die dasselbe bewirken.</item>
+    </plurals>
+</resources>

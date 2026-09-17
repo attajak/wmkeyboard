@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Server soubor neodeslal. Kód chyby je HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Tento seznam slov je prázdný nebo nečitelný.</string>
+    <string name="core_pred_wordlist_no_space_error">V zařízení není dostatek úložného prostoru. Smažte některé soubory a zkuste to znovu.</string>
+    <string name="core_pred_wordlist_save_error">Aplikace nemůže uložit seznam slov. Zkuste to znovu.</string>
+    <string name="core_pred_wordlist_size_all_label">Vše</string>
+    <string name="core_pred_wordlist_size_large_label">Velké</string>
+    <string name="core_pred_wordlist_size_medium_label">Střední</string>
+    <string name="core_pred_wordlist_size_small_label">Malý</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brazílie</string>
+    <string name="core_pred_wordlist_variant_europe_label">Evropa</string>
+</resources>

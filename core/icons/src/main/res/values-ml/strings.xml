@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">ഇമോജി ടാബുകൾ</string>
+    <string name="core_icons_group_keys_title">കീകൾ</string>
+    <string name="core_icons_group_toolbar_title">ടൂൾബാർ</string>
+    <string name="core_icons_group_tools_title">ടൂളുകൾ</string>
+    <string name="core_icons_pack_imported_label">ഇറക്കുമതി ചെയ്ത ഐക്കണുകൾ</string>
+    <string name="core_icons_pack_mine_label">എന്റെ ഐക്കണുകൾ</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">ആപ്പ് %1$d ഫയൽ അവഗണിച്ചു. ഈ പതിപ്പിൽ അതിനായി ഐക്കൺ ഇല്ല: %2$s</item>
+        <item quantity="other">ആപ്പ് %1$d ഫയലുകൾ അവഗണിച്ചു. ഈ പതിപ്പിൽ അവയ്ക്കായി ഐക്കൺ ഇല്ല: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">ആപ്പ് \"%1$s\" ഉപേക്ഷിച്ചു. ആപ്പിന് അത് സംരക്ഷിക്കാൻ കഴിയില്ല.</string>
+    <string name="core_icons_repair_svg_unreadable">ആപ്പ് \"%1$s\" ഒഴിവാക്കി. ആപ്പിന് അതിന്റെ SVG ഫയൽ വായിക്കാൻ കഴിയില്ല.</string>
+    <string name="core_icons_slot_backspace_label">ബാക്ക്‌സ്‌പേസ്</string>
+    <string name="core_icons_slot_caps_lock_label">ക്യാപ്സ് ലോക്ക്</string>
+    <string name="core_icons_slot_emoji_activities_label">പ്രവർത്തനങ്ങൾ</string>
+    <string name="core_icons_slot_emoji_animals_label">മൃഗങ്ങൾ</string>
+    <string name="core_icons_slot_emoji_flags_label">പതാകകൾ</string>
+    <string name="core_icons_slot_emoji_food_label">ഭക്ഷണം</string>
+    <string name="core_icons_slot_emoji_key_label">ഇമോജി കീ</string>
+    <string name="core_icons_slot_emoji_most_used_label">ഏറ്റവും കൂടുതൽ ഉപയോഗിച്ചത്</string>
+    <string name="core_icons_slot_emoji_nature_label">പ്രകൃതി</string>
+    <string name="core_icons_slot_emoji_objects_label">ഒബ്‌ജക്റ്റുകൾ</string>
+    <string name="core_icons_slot_emoji_people_label">ആളുകൾ</string>
+    <string name="core_icons_slot_emoji_recent_label">സമീപകാലത്തുള്ളവ</string>
+    <string name="core_icons_slot_emoji_shortcut_label">ഇമോജി കുറുക്കുവഴി</string>
+    <string name="core_icons_slot_emoji_smileys_label">സ്മൈലികൾ</string>
+    <string name="core_icons_slot_emoji_symbols_label">ചിഹ്നങ്ങൾ</string>
+    <string name="core_icons_slot_emoji_travel_label">യാത്ര</string>
+    <string name="core_icons_slot_enter_done_label">എന്റർ: പൂർത്തിയായി</string>
+    <string name="core_icons_slot_enter_go_label">എന്റർ: ഗോ</string>
+    <string name="core_icons_slot_enter_label">എന്റർ</string>
+    <string name="core_icons_slot_enter_next_label">എന്റർ: അടുത്തത്</string>
+    <string name="core_icons_slot_enter_previous_label">എന്റർ: മുൻപുള്ളത്</string>
+    <string name="core_icons_slot_enter_search_label">എന്റർ: തിരയുക</string>
+    <string name="core_icons_slot_enter_send_label">എന്റർ: അയയ്ക്കുക</string>
+    <string name="core_icons_slot_forward_delete_label">ഫോർവേഡ് ഡിലീറ്റ്</string>
+    <string name="core_icons_slot_globe_label">ഭാഷ മാറ്റുക</string>
+    <string name="core_icons_slot_incognito_label">ഇൻകോഗ്നിറ്റോ ബാഡ്ജ്</string>
+    <string name="core_icons_slot_input_method_picker_label">കീബോർഡ് മാറ്റുക</string>
+    <string name="core_icons_slot_panel_back_label">കീകളിലേക്ക് മടങ്ങുക</string>
+    <string name="core_icons_slot_power_saving_label">പവർ സേവിംഗ് ബാഡ്ജ്</string>
+    <string name="core_icons_slot_search_close_label">തിരയൽ അവസാനിപ്പിക്കുക</string>
+    <string name="core_icons_slot_shift_label">ഷിഫ്റ്റ്</string>
+    <string name="core_icons_slot_shift_on_label">ഷിഫ്റ്റ് (ഓൺ)</string>
+    <string name="core_icons_slot_suggestions_expand_label">ടൂളുകൾ കാണിക്കുക</string>
+    <string name="core_icons_slot_toolbox_label">ടൂൾബോക്സ്</string>
+</resources>

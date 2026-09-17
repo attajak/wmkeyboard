@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">هل تريد رسم الرموز التعبيرية بها الآن؟</string>
+    <string name="faddons_apply_icon_pack_question">هل تريد استخدام أيقوناتها على لوحة المفاتيح الآن؟</string>
+    <string name="faddons_apply_layout_question">هل تريد تشغيله حتى تتمكن من الكتابة به؟</string>
+    <string name="faddons_apply_plugin_question">هل تريد تفعيله ليظهر في لوحة الإضافات؟</string>
+    <string name="faddons_apply_sound_pack_question">هل تريد استخدام حزمة الصوت هذه لمفاتيحك الآن؟</string>
+    <string name="faddons_apply_sound_question">هل تريد استخدامه كصوت للمفاتيح الآن؟</string>
+    <string name="faddons_apply_switch_action">التبديل إليه</string>
+    <string name="faddons_apply_theme_question">هل تريد استخدامه كمظهر للوحة المفاتيح الآن؟</string>
+    <string name="faddons_download_error_app_too_old">تحتاج هذه الإضافة إلى إصدار أحدث من التطبيق.</string>
+    <string name="faddons_download_error_bad_url">رابط التنزيل ليس رابط https صالحاً.</string>
+    <string name="faddons_download_error_checksum">الملف الذي تم تنزيله لا يطابق المجموع الاختباري في البيان.</string>
+    <string name="faddons_download_error_http_status">أرجع الخادم حالة HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">لا توجد مساحة خالية كافية للتثبيت.</string>
+    <string name="faddons_download_error_plugin_no_checksum">هذه الإضافة لا تملك مجموعًا اختباريًا. لا يمكن للتطبيق التحقق منها.</string>
+    <string name="faddons_download_error_too_large">هذه الإضافة أكبر من الحد المسموح به وهو %1$d ميجابايت لنوعها.</string>
+    <string name="faddons_error_no_words">لم يتمكن التطبيق من قراءة أي كلمات من ذلك الملف.</string>
+    <string name="faddons_error_not_a_plugin">هذا الملف ليس إضافة للوحة مفاتيح WM.</string>
+    <string name="faddons_install_error_dictionary_no_language">لا يحدد هذا القاموس اللغة التي يدعمها.</string>
+    <string name="faddons_install_error_dictionary_not_saved">لم يتمكن التطبيق من حفظ القاموس.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">لم يتمكن التطبيق من قراءة حزمة الأيقونات.</string>
+    <string name="faddons_install_error_keywords_no_language">هذه الحزمة لا تحدد اللغة المخصصة لها.</string>
+    <string name="faddons_install_error_keywords_not_saved">تعذر على التطبيق حفظ حزمة الكلمات الرئيسية.</string>
+    <string name="faddons_install_error_keywords_too_large">حزمة الكلمات المفتاحية هذه كبيرة جداً ولا يمكن استيرادها.</string>
+    <string name="faddons_install_error_no_keywords">لم يتمكن التطبيق من قراءة أي كلمات مفتاحية للرموز التعبيرية من ذلك الملف.</string>
+    <string name="faddons_install_error_no_stickers">لم يتمكن التطبيق من قراءة أي ملصقات من تلك الحزمة. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">هذا الملف ليس تخطيط لوحة مفاتيح WM.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">هذا الملف ليس حزمة مقتطفات WM Keyboard.</string>
+    <string name="faddons_install_error_not_a_sound_pack">هذا الملف ليس حزمة صوتية.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">هذا الملف ليس حزمة ملصقات.</string>
+    <string name="faddons_install_error_not_a_theme">هذا الملف ليس سمة لوحة مفاتيح WM.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">هذا الملف ليس حزمة Espanso أو ملف مطابقة.</string>
+    <string name="faddons_install_error_not_an_icon_pack">هذا الملف ليس حزمة أيقونات.</string>
+    <string name="faddons_install_error_plugin_failed">تعذر على التطبيق تثبيت تلك الإضافة.</string>
+    <string name="faddons_install_error_plugins_turned_off">الإضافات معطلة. قم بتفعيل \"السماح بالإضافات\" ضمن الأدوات › الإضافات. ثم قم بتثبيت هذا مرة أخرى.</string>
+    <string name="faddons_install_error_snippet_pack_empty">حزمة المقتطفات تلك فارغة.</string>
+    <string name="faddons_install_error_sound_pack_read">لا يمكن للتطبيق قراءة حزمة الصوت هذه.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">لم يتمكن التطبيق من قراءة حزمة الملصقات.</string>
+    <string name="faddons_install_error_too_many_fonts">لقد وصلت إلى الحد الأقصى لعدد الخطوط المثبتة.</string>
+    <string name="faddons_install_error_too_many_icon_packs">لقد وصلت إلى الحد الأقصى لعدد حزم الأيقونات.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">لديك بالفعل الحد الأقصى من الإضافات وهو %1$d إضافة.</item>
+        <item quantity="other">لديك بالفعل الحد الأقصى من الإضافات وهو %1$d إضافات.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">لقد وصلت إلى الحد الأقصى لعدد حزم الأصوات المثبتة.</string>
+    <string name="faddons_install_error_too_many_sounds">لقد وصلت إلى الحد الأقصى لعدد أصوات المفاتيح المثبتة.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">لقد وصلت إلى الحد الأقصى لعدد حزم الملصقات.</string>
+    <string name="faddons_install_error_unknown_language">هذا الإصدار من التطبيق لا يدعم اللغة \"%1$s\".</string>
+    <string name="faddons_install_error_unknown_type">هذا الإصدار من التطبيق لا يدعم نوع الإضافة هذا.</string>
+    <string name="faddons_install_error_vocab_no_language">حزمة المفردات هذه لا تحدد اللغة التي تدعمها.</string>
+    <string name="faddons_install_error_vocab_no_words">لم يتمكن التطبيق من قراءة أي كلمات من تلك الحزمة.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">هذا الملف ليس حزمة مفردات.</string>
+    <string name="faddons_install_error_vocab_too_large">حزمة المفردات هذه أكبر مما يقبله التطبيق.</string>
+    <string name="faddons_preview_error_no_preview">لا يمكن للتطبيق معاينة هذه الإضافة.</string>
+    <string name="faddons_preview_error_not_espanso_pack">هذا الملف ليس حزمة Espanso أو ملف مطابقة.</string>
+    <string name="faddons_preview_error_not_keyword_pack">هذا الملف ليس حزمة كلمات مفتاحية للرموز التعبيرية.</string>
+    <string name="faddons_preview_error_not_snippet_pack">هذا الملف ليس حزمة مقتطفات.</string>
+    <string name="faddons_preview_error_not_vocab_pack">هذا الملف ليس حزمة مفردات.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">لم يتمكن التطبيق من قراءة الأصوات في هذه الحزمة.</string>
+    <string name="faddons_preview_error_stickers_unreadable">لم يتمكن التطبيق من قراءة صور الملصقات.</string>
+    <string name="faddons_snippet_pack_folder_fallback">حزمة المقتطفات</string>
+</resources>

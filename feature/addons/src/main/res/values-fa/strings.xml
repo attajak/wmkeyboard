@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">آیا اکنون ایموجی‌ها را با آن ترسیم کنید؟</string>
+    <string name="faddons_apply_icon_pack_question">آیا اکنون از آیکون‌های آن در صفحه‌کلید استفاده شود؟</string>
+    <string name="faddons_apply_layout_question">آن را روشن کنید تا بتوانید با آن تایپ کنید؟</string>
+    <string name="faddons_apply_plugin_question">آن را روشن کنید تا در پنل افزونه‌ها نمایش داده شود؟</string>
+    <string name="faddons_apply_sound_pack_question">آیا می‌خواهید اکنون از این بسته صوتی برای کلیدهای خود استفاده کنید؟</string>
+    <string name="faddons_apply_sound_question">اکنون از آن به عنوان صدای کلید استفاده شود؟</string>
+    <string name="faddons_apply_switch_action">تغییر به آن</string>
+    <string name="faddons_apply_theme_question">اکنون از آن به عنوان تم صفحه‌کلید خود استفاده کنید؟</string>
+    <string name="faddons_download_error_app_too_old">این افزونه به نسخه جدیدتری از برنامه نیاز دارد.</string>
+    <string name="faddons_download_error_bad_url">لینک دانلود یک آدرس https معتبر نیست.</string>
+    <string name="faddons_download_error_checksum">فایل دانلود شده با چک‌سام موجود در مانیفست مطابقت ندارد.</string>
+    <string name="faddons_download_error_http_status">سرور وضعیت HTTP %1$d را بازگرداند.</string>
+    <string name="faddons_download_error_no_space">فضای خالی کافی برای نصب این مورد وجود ندارد.</string>
+    <string name="faddons_download_error_plugin_no_checksum">این افزونه فاقد مقدار هش (checksum) است. برنامه نمی‌تواند آن را تأیید کند.</string>
+    <string name="faddons_download_error_too_large">این افزونه از محدودیت %1$d مگابایتی برای نوع خود بزرگتر است.</string>
+    <string name="faddons_error_no_words">برنامه نتوانست هیچ کلمه‌ای را از آن فایل بخواند.</string>
+    <string name="faddons_error_not_a_plugin">این فایل یک افزونه صفحه‌کلید WM نیست.</string>
+    <string name="faddons_install_error_dictionary_no_language">این فرهنگ لغت مشخص نمی‌کند که برای چه زبانی است.</string>
+    <string name="faddons_install_error_dictionary_not_saved">برنامه نتوانست فرهنگ لغت را ذخیره کند.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">برنامه نتوانست بسته آیکون را بخواند.</string>
+    <string name="faddons_install_error_keywords_no_language">این بسته مشخص نمی‌کند که برای کدام زبان است.</string>
+    <string name="faddons_install_error_keywords_not_saved">برنامه نتوانست بسته کلمات کلیدی را ذخیره کند.</string>
+    <string name="faddons_install_error_keywords_too_large">آن بسته کلمات کلیدی برای وارد کردن خیلی بزرگ است.</string>
+    <string name="faddons_install_error_no_keywords">برنامه نتوانست هیچ کلمه کلیدی ایموجی از آن فایل بخواند.</string>
+    <string name="faddons_install_error_no_stickers">برنامه نتوانست هیچ استیکری از آن بسته بخواند. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">آن فایل یک طرح‌بندی کیبورد WM نیست.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">آن فایل یک بسته قطعه کد WM Keyboard نیست.</string>
+    <string name="faddons_install_error_not_a_sound_pack">این فایل یک بسته صوتی نیست.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">این فایل یک بسته استیکر نیست.</string>
+    <string name="faddons_install_error_not_a_theme">آن فایل یک تم صفحه‌کلید WM نیست.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">آن فایل یک بسته Espanso یا فایل تطبیق نیست.</string>
+    <string name="faddons_install_error_not_an_icon_pack">این فایل یک بسته آیکون نیست.</string>
+    <string name="faddons_install_error_plugin_failed">برنامه نتوانست آن افزونه را نصب کند.</string>
+    <string name="faddons_install_error_plugins_turned_off">افزونه‌ها غیرفعال هستند. گزینه «اجازه دادن به افزونه‌ها» را در مسیر ابزارها › افزونه‌ها فعال کنید. سپس دوباره آن را نصب نمایید.</string>
+    <string name="faddons_install_error_snippet_pack_empty">آن بسته قطعه‌کد خالی است.</string>
+    <string name="faddons_install_error_sound_pack_read">برنامه نمی‌تواند این بسته صوتی را بخواند.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">برنامه نتوانست بسته استیکر را بخواند.</string>
+    <string name="faddons_install_error_too_many_fonts">شما به حداکثر تعداد فونت‌های نصب‌شده رسیده‌اید.</string>
+    <string name="faddons_install_error_too_many_icon_packs">شما به حداکثر تعداد بسته‌های آیکون رسیده‌اید.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">شما قبلاً حداکثر %1$d افزونه را دارید.</item>
+        <item quantity="other">شما قبلاً حداکثر %1$d افزونه را دارید.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">شما به حداکثر تعداد بسته‌های صوتی نصب‌شده رسیده‌اید.</string>
+    <string name="faddons_install_error_too_many_sounds">شما به حداکثر تعداد صداهای کلید نصب‌شده رسیده‌اید.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">شما به حداکثر تعداد بسته‌های استیکر رسیده‌اید.</string>
+    <string name="faddons_install_error_unknown_language">این نسخه از برنامه از زبان «%1$s» پشتیبانی نمی‌کند.</string>
+    <string name="faddons_install_error_unknown_type">این نسخه از برنامه از این نوع افزونه پشتیبانی نمی‌کند.</string>
+    <string name="faddons_install_error_vocab_no_language">این بسته واژگان مشخص نمی‌کند که برای چه زبانی است.</string>
+    <string name="faddons_install_error_vocab_no_words">برنامه نتوانست هیچ کلمه‌ای را از آن بسته بخواند.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">این فایل یک بسته واژگان نیست.</string>
+    <string name="faddons_install_error_vocab_too_large">این بسته واژگان بزرگتر از حد مجاز برنامه است.</string>
+    <string name="faddons_preview_error_no_preview">برنامه نمی‌تواند پیش‌نمایشی از این افزونه ارائه دهد.</string>
+    <string name="faddons_preview_error_not_espanso_pack">آن فایل یک بسته Espanso یا فایل تطبیق نیست.</string>
+    <string name="faddons_preview_error_not_keyword_pack">آن فایل یک بسته کلمات کلیدی ایموجی نیست.</string>
+    <string name="faddons_preview_error_not_snippet_pack">آن فایل یک بسته قطعه کد (snippet pack) نیست.</string>
+    <string name="faddons_preview_error_not_vocab_pack">این فایل یک بسته واژگان نیست.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">برنامه نتوانست صداهای این بسته را بخواند.</string>
+    <string name="faddons_preview_error_stickers_unreadable">برنامه نتوانست تصاویر استیکر را بخواند.</string>
+    <string name="faddons_snippet_pack_folder_fallback">بسته قطعه متن</string>
+</resources>

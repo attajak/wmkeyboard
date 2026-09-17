@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Seznam klíčových slov emoji je prázdný nebo nečitelný.</string>
+    <string name="core_emoji_dict_error_http">Server neodeslal soubor. Kód chyby je HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Tento soubor není seznamem klíčových slov emoji.</string>
+    <string name="core_emoji_dict_error_save">Aplikaci se nepodařilo uložit seznam klíčových slov pro emoji.</string>
+    <string name="core_emoji_dict_error_too_large">Tento seznam klíčových slov emoji je příliš velký.</string>
+</resources>

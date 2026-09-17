@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">이 팩은 사운드 팩 형식 %1$s이(가) 필요합니다. 앱을 업데이트하세요.</string>
+    <string name="core_feedback_pack_reject_no_samples">이 팩에는 앱에서 재생할 수 있는 소리가 없습니다.</string>
+    <string name="core_feedback_pack_reject_too_large">사운드 팩은 %1$s MB보다 작아야 합니다.</string>
+    <string name="core_feedback_sound_import_empty_error">파일이 비어 있습니다.</string>
+    <string name="core_feedback_sound_import_html_error">이것은 소리 파일이 아니라 HTML 또는 XML 파일입니다.</string>
+    <string name="core_feedback_sound_import_mp4_error">앱에서 MP4 및 M4A 파일을 재생할 수 없습니다. MP3 파일을 사용하세요.</string>
+    <string name="core_feedback_sound_import_no_storage_error">기기에 저장 공간이 없습니다.</string>
+    <string name="core_feedback_sound_import_read_error">앱에서 사운드를 읽을 수 없습니다.</string>
+    <string name="core_feedback_sound_import_save_error">앱에서 소리를 저장할 수 없습니다.</string>
+    <string name="core_feedback_sound_import_too_large_error">키 사운드는 %1$s MB보다 작아야 합니다.</string>
+    <string name="core_feedback_sound_import_too_short_error">파일이 너무 짧아 소리로 사용할 수 없습니다.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">MP3, OGG 또는 WAV 파일 형식이 아닙니다.</string>
+    <string name="core_feedback_sound_import_zip_error">이것은 사운드 파일이 아닌 zip 아카이브입니다.</string>
+</resources>

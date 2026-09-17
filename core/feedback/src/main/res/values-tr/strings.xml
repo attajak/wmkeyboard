@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Bu paket %1$s ses paketi biçimine ihtiyaç duyuyor. Uygulamayı güncelleyin.</string>
+    <string name="core_feedback_pack_reject_no_samples">Bu paket, uygulamanın oynatabileceği hiçbir ses içermiyor.</string>
+    <string name="core_feedback_pack_reject_too_large">Bir ses paketi %1$s MB\'dan küçük olmalıdır.</string>
+    <string name="core_feedback_sound_import_empty_error">Dosya boş.</string>
+    <string name="core_feedback_sound_import_html_error">Bu bir ses dosyası değil, bir HTML veya XML dosyasıdır.</string>
+    <string name="core_feedback_sound_import_mp4_error">Uygulama MP4 ve M4A dosyalarını oynatmaz. Bir MP3 dosyası kullanın.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Cihazınızda kullanılabilir depolama alanı yok.</string>
+    <string name="core_feedback_sound_import_read_error">Uygulama sesi okuyamıyor.</string>
+    <string name="core_feedback_sound_import_save_error">Uygulama sesi kaydedemiyor.</string>
+    <string name="core_feedback_sound_import_too_large_error">Bir tuş sesi %1$s MB\'tan küçük olmalıdır.</string>
+    <string name="core_feedback_sound_import_too_short_error">Dosya bir ses olmak için çok kısa.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Bu bir MP3, OGG veya WAV dosyasına benzemiyor.</string>
+    <string name="core_feedback_sound_import_zip_error">Bu bir ses dosyası değil, bir zip arşividir.</string>
+</resources>

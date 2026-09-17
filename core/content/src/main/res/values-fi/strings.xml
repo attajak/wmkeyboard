@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Kertakäyttökoodi</string>
+    <string name="core_content_clip_entity_otp_tag">KOODI</string>
+    <string name="core_content_clip_entity_phone_label">Puhelinnumero</string>
+    <string name="core_content_clip_entity_phone_tag">PUHELIN</string>
+    <string name="core_content_clip_entity_url_label">Linkki</string>
+    <string name="core_content_clip_entity_url_tag">LINKKI</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d tekstikatkelmalla on muita laajennuksia, joita Espanso ei voi käsitellä. Vain ensimmäinen kirjoitettiin.</item>
+        <item quantity="other">%1$d tekstikatkelmalla on muita laajennuksia, joita Espanso ei voi käsitellä. Vain jokaisen ensimmäinen kirjoitettiin.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d tekstinpätkä on rajoitettu tiettyihin tietokoneohjelmiin. Puhelimellasi se toimii kaikkialla.</item>
+        <item quantity="other">%1$d tekstinpätkää on rajoitettu tiettyihin tietokoneohjelmiin. Puhelimellasi ne toimivat kaikkialla.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d tekstinpätkä pyytää sinua valitsemaan listasta. Sovellus valitsee sen sijaan yhden satunnaisesti.</item>
+        <item quantity="other">%1$d tekstinpätkää pyytävät sinua valitsemaan listasta. Sovellus valitsee sen sijaan yhden satunnaisesti.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d tekstinpätkä kysyy ennen laajentamista. Espansossa ei ole tällaista asetusta, joten se laajenee siellä itsestään.</item>
+        <item quantity="other">%1$d tekstinpätkää kysyvät ennen laajentamista. Espansossa ei ole tällaista asetusta, joten ne laajenevat siellä itsestään.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d tekstinpätkä käyttää päivämäärämuotoa, jota sovellus ei voi kirjoittaa kokonaan. Sovellus jätti pois osan, jota se ei voi tehdä.</item>
+        <item quantity="other">%1$d tekstinpätkää käyttää päivämäärämuotoja, joita sovellus ei voi kirjoittaa kokonaan. Sovellus jätti pois osat, joita se ei voi tehdä.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d tekstinpätkä on kansiossa, joka on kytketty pois päältä. Espansossa ei ole kansiokytkintä, joten se laajenee siellä.</item>
+        <item quantity="other">%1$d tekstinpätkää on kansioissa, jotka on kytketty pois päältä. Espansossa ei ole kansiokytkintä, joten ne laajenevat siellä.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Sovellus ohitti %1$d tekstinpätkän, jossa ei ole mitään lisättävää.</item>
+        <item quantity="other">Sovellus ohitti %1$d tekstinpätkää, joissa ei ole mitään lisättävää.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d tekstinpätkä pyytää sinua täyttämään lomakkeen. Sovellus lisää lomakkeen tekstinä, ja kohdistin on ensimmäisessä tyhjässä kohdassa.</item>
+        <item quantity="other">%1$d tekstinpätkää pyytävät sinua täyttämään lomakkeen. Sovellus lisää jokaisen lomakkeen tekstinä, ja kohdistin on ensimmäisessä tyhjässä kohdassa.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Sovellus ohitti %1$d tekstinpätkän, joka lisää kuvan.</item>
+        <item quantity="other">Sovellus ohitti %1$d tekstinpätkää, jotka lisäävät kuvia.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Tiedosto lukee %1$d muun tiedoston. Yksi tiedosto ei voi tuoda muita mukanaan.</item>
+        <item quantity="other">Tiedosto lukee %1$d muuta tiedostoa. Yksi tiedosto ei voi tuoda muita mukanaan.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d tekstinpätkä viittaa muihin tekstinpätkiin. Espansolla ei ole tapaa ilmaista tätä, joten linkit jätettiin pois.</item>
+        <item quantity="other">%1$d tekstinpätkää viittaavat muihin tekstinpätkiin. Espansolla ei ole tapaa ilmaista tätä, joten linkit jätettiin pois.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d liipaisin on tarkoitettu toimimaan sanan sisällä. Puhelimellasi se toimii vain kokonaisena sanana.</item>
+        <item quantity="other">%1$d liipaisinta on tarkoitettu toimimaan sanan sisällä. Puhelimellasi ne toimivat vain kokonaisina sanoina.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d tekstinpätkä käyttää arvoa, jolle Espansolla ei ole vastinetta. Se kirjoitetaan sellaisenaan.</item>
+        <item quantity="other">%1$d tekstinpätkää käyttää arvoja, joille Espansolla ei ole vastinetta. Ne kirjoitetaan sellaisinaan.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Sovellus poisti kaavan %1$d tekstinpätkästä. Sovellus ei suorita kyseisen muotoisia kaavoja. Tekstinpätkä pysyy luettelossa.</item>
+        <item quantity="other">Sovellus poisti kaavan %1$d tekstinpätkästä. Sovellus ei suorita kyseisen muotoisia kaavoja. Tekstinpätkät pysyvät luettelossa.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d tekstinpätkä käyttää muotoiltua tekstiä. Sovellus säilyttää sanat ja poistaa muotoilun.</item>
+        <item quantity="other">%1$d tekstinpätkää käyttää muotoiltua tekstiä. Sovellus säilyttää sanat ja poistaa muotoilun.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d tekstinpätkä suorittaa komennon tietokoneellasi. Sovellus jätti komennon pois eikä suorita sitä koskaan.</item>
+        <item quantity="other">%1$d tekstinpätkää suorittavat komentoja tietokoneellasi. Sovellus jätti komennot pois eikä suorita niitä koskaan.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d liipaisin ei pääty sanaan, joten sovellus ei voi seurata sitä. Sen tekstinpätkä pysyy luettelossa.</item>
+        <item quantity="other">%1$d liipaisinta ei pääty sanaan, joten sovellus ei voi seurata niitä. Niiden tekstinpätkät pysyvät luettelossa.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d tekstinpätkä sisältää aaltosulkeissa olevaa tekstiä, jonka sovellus täyttää, kuten {date}. Se laajenee sen sijaan, että se näkyisi kirjoitettuna.</item>
+        <item quantity="other">%1$d tekstinpätkää sisältävät aaltosulkeissa olevaa tekstiä, jonka sovellus täyttää, kuten {date}. Ne laajenevat sen sijaan, että ne näkyisivät kirjoitettuna.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d tekstinpätkä muuttaa sen, mitä sen malli kaappasi, isoiksi kirjaimiksi. Espanso ei pysty siihen, joten kaapattu teksti lisätään muuttumattomana.</item>
+        <item quantity="other">%1$d tekstinpätkää muuttavat sen, mitä niiden mallit kaappasivat, isoiksi kirjaimiksi. Espanso ei pysty siihen, joten kaapattu teksti lisätään muuttumattomana.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d tekstinpätkä käyttää arvoa, jolle sovelluksessa ei ole vastinetta. Kyseinen osa jää tyhjäksi.</item>
+        <item quantity="other">%1$d tekstinpätkää käyttää arvoja, joille sovelluksessa ei ole vastinetta. Kyseiset osat jäävät tyhjiksi.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Sovellus ei voi ladata fonttia. Tarkista yhteytesi ja yritä uudelleen.</string>
+    <string name="core_content_font_error_empty">Tiedosto on tyhjä.</string>
+    <string name="core_content_font_error_load">Sovellus ei voi ladata tätä fonttitiedostoa.</string>
+    <string name="core_content_font_error_markup">Tämä tiedosto on HTML- tai XML-tiedosto, ei fontti.</string>
+    <string name="core_content_font_error_no_storage">Fontille ei ole käytettävissä tallennustilaa.</string>
+    <string name="core_content_font_error_not_a_font">Tämä tiedosto ei näytä .ttf- tai .otf-fontilta.</string>
+    <string name="core_content_font_error_read">Sovellus ei voi lukea fonttia.</string>
+    <string name="core_content_font_error_save">Sovellus ei voi tallentaa fonttia.</string>
+    <string name="core_content_font_error_too_large">Fontin on oltava pienempi kuin %1$d Mt.</string>
+    <string name="core_content_font_error_too_many">Kirjasinkirjasto on täynnä. Poista kirjasin ja yritä uudelleen.</string>
+    <string name="core_content_font_error_too_short">Tiedosto on liian lyhyt ollakseen fontti.</string>
+    <string name="core_content_font_error_woff">Sovellus ei voi lukea WOFF-verkkofontteja. Käytä fontin .ttf- tai .otf-versiota.</string>
+    <string name="core_content_font_error_woff2">Sovellus ei voi lukea WOFF2-verkkofontteja. Käytä fontin .ttf- tai .otf-versiota.</string>
+    <string name="core_content_font_error_zip">Tämä tiedosto on zip-arkisto, ei fontti.</string>
+    <string name="core_content_selection_macro_add_contact">Yhteystieto</string>
+    <string name="core_content_selection_macro_calendar">Kalenteri</string>
+    <string name="core_content_selection_macro_call">Soita</string>
+    <string name="core_content_selection_macro_case_lower">pienet kirjaimet</string>
+    <string name="core_content_selection_macro_case_sentence">Lauseen alkukirjain isolla</string>
+    <string name="core_content_selection_macro_case_title">Otsikkokirjoitus</string>
+    <string name="core_content_selection_macro_case_upper">ISOILLA KIRJAIMILLA</string>
+    <string name="core_content_selection_macro_chat_bold">Lihavointi</string>
+    <string name="core_content_selection_macro_chat_italic">Kursiivi</string>
+    <string name="core_content_selection_macro_chat_mono">Tasavälinen</string>
+    <string name="core_content_selection_macro_chat_strike">Yliviivaa</string>
+    <string name="core_content_selection_macro_colour">Väri</string>
+    <string name="core_content_selection_macro_copy">Kopioi</string>
+    <string name="core_content_selection_macro_digits_latin">Numerot</string>
+    <string name="core_content_selection_macro_email">Sähköposti</string>
+    <string name="core_content_selection_macro_fancy">Hieno</string>
+    <string name="core_content_selection_macro_find">Etsi</string>
+    <string name="core_content_selection_macro_format">Muotoile</string>
+    <string name="core_content_selection_macro_grammar">Kielioppi</string>
+    <string name="core_content_selection_macro_lines_bullet">Luettelomerkit</string>
+    <string name="core_content_selection_macro_lines_dedupe">Uniikit</string>
+    <string name="core_content_selection_macro_lines_number">Numero</string>
+    <string name="core_content_selection_macro_lines_sort">Lajittele</string>
+    <string name="core_content_selection_macro_map">Kartoita</string>
+    <string name="core_content_selection_macro_open">Avaa</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Puhu</string>
+    <string name="core_content_selection_macro_replace">Korvaa</string>
+    <string name="core_content_selection_macro_search">Hae</string>
+    <string name="core_content_selection_macro_share">Jaa</string>
+    <string name="core_content_selection_macro_sms">Viesti</string>
+    <string name="core_content_selection_macro_time_zones">Aikavyöhykkeet</string>
+    <string name="core_content_selection_macro_to_bangla">Bengali</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Käännä</string>
+    <string name="core_content_selection_macro_url_decode">Pura koodaus</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Sovellus jätti %2$d laajennuksen pois kohdasta \"%1$s\".</item>
+        <item quantity="other">Sovellus jätti %2$d laajennusta pois kohdasta \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Sovellus poisti mallin kohteesta \"%1$s\". Malli ei ole oikein. Tekstikatkelma pysyy luettelossa.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Sovellus hylkäsi %1$d kansion, jolla ei ole nimeä tai joka toistaa toisen kansion. Sen tekstinpätkät tulivat ilman kansiota.</item>
+        <item quantity="other">Sovellus hylkäsi %1$d kansiota, joilla ei ole nimeä tai jotka toistavat toisen kansion. Niiden tekstinpätkät tulivat ilman kansiota.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Tiedostossa on enemmän katkelmia kuin sovellus säilyttää. Sovellus toi ensimmäiset %1$d.</item>
+        <item quantity="other">Tiedostossa on enemmän katkelmia kuin sovellus säilyttää. Sovellus toi ensimmäiset %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Katkelmalla ei ole nimeä, joten sovellus nimesi sen ensimmäisen rivin mukaan.</string>
+    <string name="core_content_snippet_repair_no_text">Sovellus hylkäsi kohteen \"%1$s\". Siinä ei ole tekstiä.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Sovellus poisti mallin kohteesta \"%1$s\". Se oli pidempi kuin %2$d merkki.</item>
+        <item quantity="other">Sovellus poisti mallin kohteesta \"%1$s\". Se oli pidempi kuin %2$d merkkiä.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Sovellus lyhensi tekstin \"%1$s\". Se oli pidempi kuin %2$d merkki.</item>
+        <item quantity="other">Sovellus lyhensi tekstin \"%1$s\". Se oli pidempi kuin %2$d merkkiä.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Sovelluksen nimi, johon kirjoitat</string>
+    <string name="core_content_snippet_var_clip_info">Uusin leikepöydän kohde</string>
+    <string name="core_content_snippet_var_cursor_info">Kohta, johon kohdistin asettuu</string>
+    <string name="core_content_snippet_var_date_info">Tämän päivän päivämäärä</string>
+    <string name="core_content_snippet_var_datetime_info">Päivämäärä ja kellonaika</string>
+    <string name="core_content_snippet_var_day_info">Kuukauden päivä</string>
+    <string name="core_content_snippet_var_isodate_info">Päivämäärä ISO-muodossa, esimerkiksi 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Päivämäärä ja kellonaika ISO-muodossa</string>
+    <string name="core_content_snippet_var_month_info">Kuukauden nimi</string>
+    <string name="core_content_snippet_var_package_info">Kyseisen sovelluksen paketin nimi</string>
+    <string name="core_content_snippet_var_selection_info">Kentässä valitsemasi teksti</string>
+    <string name="core_content_snippet_var_time12_info">Kellonaika 12 tunnin muodossa</string>
+    <string name="core_content_snippet_var_time_info">Nykyinen aika 24 tunnin muodossa</string>
+    <string name="core_content_snippet_var_timestamp_info">Aika Unix-sekunteina</string>
+    <string name="core_content_snippet_var_timezone_info">Aikavyöhyke, esimerkiksi GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Uusi satunnainen UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Viikonpäivän nimi, esimerkiksi sunnuntai</string>
+    <string name="core_content_snippet_var_year_info">Vuosi neljällä numerolla</string>
+    <string name="core_content_sticker_pack_imported_label">Tuodut tarrat</string>
+    <string name="core_content_sticker_repair_image_missing">Sovellus hylkäsi kohteen \"%1$s\". Sen kuva puuttuu.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Sovellus hylkäsi kohteen \"%1$s\". Sovellus ei voi lukea sen kuvaa.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Paketissa on %1$d tarra. Sovellus säilyttää ensimmäiset %2$d.</item>
+        <item quantity="other">Paketissa on %1$d tarraa. Sovellus säilyttää ensimmäiset %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Sovellus pudotti tarran. Tarran nimi ei viittaa kuvatiedostoon.</string>
+    <string name="core_content_sticker_repair_none_listed">Pakkaustiedosto ei listaa tarroja.</string>
+    <string name="core_content_sticker_repair_not_saved">Sovellus hylkäsi kohteen \"%1$s\". Sovellus ei voi tallentaa sitä.</string>
+</resources>

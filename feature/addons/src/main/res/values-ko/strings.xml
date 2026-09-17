@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">지금 이 글꼴로 이모지를 그릴까요?</string>
+    <string name="faddons_apply_icon_pack_question">지금 키보드에서 해당 아이콘을 사용할까요?</string>
+    <string name="faddons_apply_layout_question">이 레이아웃으로 입력할 수 있도록 켜시겠습니까?</string>
+    <string name="faddons_apply_plugin_question">플러그인 패널에 표시되도록 켜시겠습니까?</string>
+    <string name="faddons_apply_sound_pack_question">이 사운드 팩을 지금 키에 적용하시겠습니까?</string>
+    <string name="faddons_apply_sound_question">지금 키 소리로 사용하시겠습니까?</string>
+    <string name="faddons_apply_switch_action">전환하기</string>
+    <string name="faddons_apply_theme_question">지금 키보드 테마로 사용하시겠습니까?</string>
+    <string name="faddons_download_error_app_too_old">이 애드온은 더 최신 버전의 앱이 필요합니다.</string>
+    <string name="faddons_download_error_bad_url">다운로드 링크가 유효한 https URL이 아닙니다.</string>
+    <string name="faddons_download_error_checksum">다운로드한 파일이 매니페스트의 체크섬과 일치하지 않습니다.</string>
+    <string name="faddons_download_error_http_status">서버가 HTTP %1$d을(를) 반환했습니다.</string>
+    <string name="faddons_download_error_no_space">설치할 공간이 부족합니다.</string>
+    <string name="faddons_download_error_plugin_no_checksum">이 플러그인에는 체크섬이 없습니다. 앱에서 확인할 수 없습니다.</string>
+    <string name="faddons_download_error_too_large">이 애드온은 해당 유형의 제한 용량인 %1$d MB보다 큽니다.</string>
+    <string name="faddons_error_no_words">앱이 해당 파일에서 단어를 읽을 수 없습니다.</string>
+    <string name="faddons_error_not_a_plugin">해당 파일은 WM Keyboard 플러그인이 아닙니다.</string>
+    <string name="faddons_install_error_dictionary_no_language">이 사전은 어떤 언어용인지 명시되어 있지 않습니다.</string>
+    <string name="faddons_install_error_dictionary_not_saved">앱이 사전을 저장할 수 없습니다.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">앱이 아이콘 팩을 읽을 수 없습니다.</string>
+    <string name="faddons_install_error_keywords_no_language">이 팩은 어떤 언어용인지 명시되어 있지 않습니다.</string>
+    <string name="faddons_install_error_keywords_not_saved">앱이 키워드 팩을 저장할 수 없습니다.</string>
+    <string name="faddons_install_error_keywords_too_large">해당 키워드 팩이 너무 커서 가져올 수 없습니다.</string>
+    <string name="faddons_install_error_no_keywords">앱이 해당 파일에서 이모지 키워드를 읽을 수 없습니다.</string>
+    <string name="faddons_install_error_no_stickers">앱이 해당 팩에서 스티커를 읽을 수 없습니다. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">해당 파일은 WM 키보드 레이아웃이 아닙니다.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">해당 파일은 WM 키보드 스니펫 팩이 아닙니다.</string>
+    <string name="faddons_install_error_not_a_sound_pack">이 파일은 사운드 팩이 아닙니다.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">해당 파일은 스티커 팩이 아닙니다.</string>
+    <string name="faddons_install_error_not_a_theme">해당 파일은 WM 키보드 테마가 아닙니다.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">해당 파일은 Espanso 패키지 또는 매치 파일이 아닙니다.</string>
+    <string name="faddons_install_error_not_an_icon_pack">해당 파일은 아이콘 팩이 아닙니다.</string>
+    <string name="faddons_install_error_plugin_failed">앱에서 해당 플러그인을 설치할 수 없습니다.</string>
+    <string name="faddons_install_error_plugins_turned_off">플러그인이 꺼져 있습니다. 도구 › 플러그인에서 \"플러그인 허용\"을 켜세요. 그런 다음 다시 설치하세요.</string>
+    <string name="faddons_install_error_snippet_pack_empty">해당 스니펫 팩이 비어 있습니다.</string>
+    <string name="faddons_install_error_sound_pack_read">앱이 이 사운드 팩을 읽을 수 없습니다.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">앱에서 스티커 팩을 읽을 수 없습니다.</string>
+    <string name="faddons_install_error_too_many_fonts">설치된 폰트의 최대 개수에 도달했습니다.</string>
+    <string name="faddons_install_error_too_many_icon_packs">아이콘 팩 최대 개수에 도달했습니다.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">이미 최대 %1$d개의 플러그인을 보유하고 있습니다.</item>
+        <item quantity="other">이미 최대 %1$d개의 플러그인을 보유하고 있습니다.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">설치 가능한 최대 사운드 팩 개수에 도달했습니다.</string>
+    <string name="faddons_install_error_too_many_sounds">설치된 키 사운드 수가 최대치에 도달했습니다.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">스티커 팩의 최대 개수에 도달했습니다.</string>
+    <string name="faddons_install_error_unknown_language">이 앱 버전은 \"%1$s\" 언어를 지원하지 않습니다.</string>
+    <string name="faddons_install_error_unknown_type">이 앱 버전은 해당 애드온 유형을 지원하지 않습니다.</string>
+    <string name="faddons_install_error_vocab_no_language">이 어휘 팩은 어떤 언어용인지 명시되어 있지 않습니다.</string>
+    <string name="faddons_install_error_vocab_no_words">해당 팩에서 단어를 읽어올 수 없습니다.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">해당 파일은 어휘 팩이 아닙니다.</string>
+    <string name="faddons_install_error_vocab_too_large">이 어휘 팩은 앱에서 허용하는 크기보다 큽니다.</string>
+    <string name="faddons_preview_error_no_preview">앱에서 이 애드온을 미리 볼 수 없습니다.</string>
+    <string name="faddons_preview_error_not_espanso_pack">해당 파일은 Espanso 패키지 또는 매치 파일이 아닙니다.</string>
+    <string name="faddons_preview_error_not_keyword_pack">해당 파일은 이모지 키워드 팩이 아닙니다.</string>
+    <string name="faddons_preview_error_not_snippet_pack">해당 파일은 스니펫 팩이 아닙니다.</string>
+    <string name="faddons_preview_error_not_vocab_pack">해당 파일은 어휘 팩이 아닙니다.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">이 팩의 소리를 읽을 수 없습니다.</string>
+    <string name="faddons_preview_error_stickers_unreadable">앱에서 스티커 이미지를 읽을 수 없습니다.</string>
+    <string name="faddons_snippet_pack_folder_fallback">스니펫 팩</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">El servidor no envió el archivo. El código de error es HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Esa lista de palabras está vacía o es ilegible.</string>
+    <string name="core_pred_wordlist_no_space_error">No hay suficiente almacenamiento en tu dispositivo. Elimina algunos archivos y vuelve a intentarlo.</string>
+    <string name="core_pred_wordlist_save_error">La aplicación no puede guardar la lista de palabras. Inténtalo de nuevo.</string>
+    <string name="core_pred_wordlist_size_all_label">Todo</string>
+    <string name="core_pred_wordlist_size_large_label">Grande</string>
+    <string name="core_pred_wordlist_size_medium_label">Mediano</string>
+    <string name="core_pred_wordlist_size_small_label">Pequeño</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brasil</string>
+    <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">A Hugging Face szerver nem küldte el a fájlt. A hibakód: HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">A kapcsolat megszakadt a letöltés közben. Próbálja újra, hogy onnan folytassa, ahol abbahagyta.</string>
+    <string name="core_voice_download_space_error">Nincs elég tárhely az eszközön. Először körülbelül %1$s MB-ot kell felszabadítania.</string>
+    <string name="core_voice_model_base_eu_body">Ez a modell azt a nyelvet használja, amelyen gépelsz, ugyanúgy, mint a 40 nyelvű modell. Csak az európai nyelveket fedi le, így a letöltés kisebb.</string>
+    <string name="core_voice_model_base_multi_body">Ez a modell egyensúlyt teremt a pontosság és a sebesség között. Lefedi a Whisper által ismert összes nyelvet. Válaszd ezt, ha a Small modell túl lassú.</string>
+    <string name="core_voice_model_base_world_body">Ez a modell a beírt nyelvet használja találgatás helyett. A rövid kifejezések sokkal megbízhatóbbak lesznek. Akkor válassza, ha a listája tartalmazza az Ön nyelveit.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d nyelv</item>
+        <item quantity="other">%1$d nyelv</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Ez az egyik legpontosabb Whisper-modell, de a legtöbb telefon számára túl nagy. A letöltés 1,5 GB. Csak nagy memóriával rendelkező eszközök tudják betölteni.</string>
+    <string name="core_voice_model_large_v3_multi_body">Ez a legpontosabb Whisper-modell, amely a legjobban ismeri fel a beszélt nyelvet. A letöltés 1,5 GB. Csak nagy memóriakapacitású eszközök tudják betölteni. A Turbo modell majdnem ilyen pontos, de feleakkora.</string>
+    <string name="core_voice_model_medium_multi_body">Ez a modell majdnem asztali számítógépes pontosságot biztosít. Minden kifejezés több másodpercet vesz igénybe. A modell futás közben majdnem egy gigabájt memóriát használ.</string>
+    <string name="core_voice_model_single_language_body">Ez a modell csak %1$s nyelvet kezel. Nem rendelkezik nyelvfelismerő lépéssel. Ez gyorsabbá és valamivel pontosabbá teszi, mint az azonos méretű többnyelvű modelleket.</string>
+    <string name="core_voice_model_small_multi_body">Ez a modell nyújtja a legjobb pontosságot, amely még jól fut egy telefonon. Jobban kezeli az akcentusokat és a háttérzajt, mint az alapmodell. Lefedi az összes nyelvet, amelyet a Whisper ismer.</string>
+    <string name="core_voice_model_small_world_body">Ez a modell az Ön által használt nyelvet használja, és a Small modell pontosságával rendelkezik. Ez a legpontosabb modell, amely még elfér egy telefonon.</string>
+    <string name="core_voice_model_tiny_multi_body">Ez a leggyorsabb többnyelvű modell. Tiszta beszéd esetén jól működik, de a zaj csökkenti a pontosságot.</string>
+    <string name="core_voice_model_turbo_multi_body">Ez a modell sokkal jobban felismeri a beszélt nyelvet, mint a kisebb modellek. Válassza ezt, ha egy kisebb modell rossz nyelvként írja le a beszédét. Ez egy nagy letöltés, és minden kifejezés feldolgozása több másodpercet vesz igénybe.</string>
+    <string name="core_voice_size_base_label">Alap</string>
+    <string name="core_voice_size_large_label">Nagy</string>
+    <string name="core_voice_size_medium_label">Közepes</string>
+    <string name="core_voice_size_small_label">Kicsi</string>
+    <string name="core_voice_size_tiny_label">Apró</string>
+    <string name="core_voice_size_turbo_label">Turbó</string>
+    <string name="core_voice_tier_recommended_label">Ajánlott</string>
+    <string name="core_voice_whisper_mel_bins_error">Ehhez a hangmodellhez %1$s sávos spektrogram szükséges, ami nem egyezik meg a fájllal, amivel letöltődött. Töröld a modellt a beállításokban, és töltsd le újra.</string>
+    <string name="core_voice_whisper_model_load_error">A hangmodell nem töltődött be. A fájl valószínűleg sérült. Törölje a modellt a beállításokban, majd töltse le újra.</string>
+    <string name="core_voice_whisper_transcribe_error">A hangalapú gépelés nem működött. Próbálja újra, vagy válasszon kisebb modellt.</string>
+</resources>

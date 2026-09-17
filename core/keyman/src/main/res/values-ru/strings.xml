@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">Приложение удалило %1$d диагональный жест. Эта клавиатура поддерживает только жесты вверх, вниз, влево и вправо.</item>
+        <item quantity="other">Приложение удалило %1$d диагональных жеста. Эта клавиатура поддерживает только жесты вверх, вниз, влево и вправо.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d клавиша вводит символ, напечатанный на ней. Исходная клавиатура использовала правило для определения того, что она вводит.</item>
+        <item quantity="other">%1$d клавиш вводят символы, напечатанные на них. Исходная клавиатура использовала правила для определения того, что они вводят.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">На этой клавиатуре есть %1$d клавиша, которую нужно нажимать несколько раз для переключения символов. В этом приложении такой клавиши нет, поэтому доступен только первый символ.</item>
+        <item quantity="other">На этой клавиатуре есть %1$d клавиши, которые нужно нажимать несколько раз для переключения символов. В этом приложении таких клавиш нет, поэтому доступен только первый символ каждой из них.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Эта клавиатура использует правила для определения того, какие символы вводить. В приложении нет этих правил, поэтому каждая клавиша вводит символ, напечатанный на ней.</string>
+    <string name="core_keyman_shift_layer_folded">Приложение объединило слой Shift с клавишами. Удерживайте Shift, чтобы ввести эти символы.</string>
+    <string name="core_keyman_shift_layer_separate">Слой Shift имеет другую форму, поэтому приложение сохранило его как отдельный слой.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">Приложение удалило %1$d клавишу. На этой клавиатуре нет клавиши, выполняющей ту же функцию.</item>
+        <item quantity="other">Приложение удалило %1$d клавиш. На этой клавиатуре нет клавиш, выполняющих те же функции.</item>
+    </plurals>
+</resources>

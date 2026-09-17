@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face -palvelin ei lähettänyt tiedostoa. Virhekoodi on HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Yhteys katkesi latauksen aikana. Yritä uudelleen jatkaaksesi siitä, mihin se jäi.</string>
+    <string name="core_voice_download_space_error">Laitteellasi ei ole tarpeeksi tallennustilaa. Sinun on vapautettava ensin noin %1$s Mt.</string>
+    <string name="core_voice_model_base_eu_body">Tämä malli käyttää kieltä, jolla kirjoitat, samalla tavalla kuin 40 kielen malli. Se kattaa vain eurooppalaiset kielet, joten lataus on pienempi.</string>
+    <string name="core_voice_model_base_multi_body">Tämä malli tasapainottaa tarkkuuden ja nopeuden. Se kattaa jokaisen kielen, jonka Whisper tuntee. Valitse tämä, jos Small-malli on liian hidas.</string>
+    <string name="core_voice_model_base_world_body">Tämä malli käyttää kirjoittamaasi kieltä arvaamisen sijaan. Lyhyet ilmaisut muuttuvat paljon luotettavammiksi. Valitse tämä, kun luettelossa on kielesi.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d kieli</item>
+        <item quantity="other">%1$d kieltä</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Tämä on yksi tarkimmista Whisper-malleista, mutta se on liian suuri useimmille puhelimille. Lataus on 1,5 Gt. Vain laite, jossa on paljon muistia, voi ladata sen.</string>
+    <string name="core_voice_model_large_v3_multi_body">Tämä on tarkin Whisper-malli ja paras tunnistamaan, mitä kieltä puhut. Lataus on 1,5 Gt. Vain laite, jossa on paljon muistia, voi ladata sen. Turbo-malli on lähes yhtä tarkka ja puolet pienempi.</string>
+    <string name="core_voice_model_medium_multi_body">Tämä malli tarjoaa lähes työpöytätason tarkkuuden. Jokainen lause vie useita sekunteja. Malli käyttää lähes gigatavun muistia toimiessaan.</string>
+    <string name="core_voice_model_single_language_body">Tämä malli käsittelee vain kieltä %1$s. Siinä ei ole kielen tunnistusvaihetta. Tämä tekee siitä nopeamman ja hieman tarkemman kuin samankokoinen monikielinen malli.</string>
+    <string name="core_voice_model_small_multi_body">Tämä malli tarjoaa parhaan tarkkuuden, joka toimii silti hyvin puhelimella. Se käsittelee korostuksia ja taustahälyä paremmin kuin Base-malli. Se kattaa kaikki kielet, jotka Whisper tuntee.</string>
+    <string name="core_voice_model_small_world_body">Tämä malli käyttää kieltä, jolla kirjoitat, ja sen tarkkuus vastaa Small-mallia. Se on tarkin malli, joka mahtuu vielä puhelimeen.</string>
+    <string name="core_voice_model_tiny_multi_body">Tämä on nopein monikielinen malli. Se toimii hyvin selkeän puheen kanssa, mutta melu heikentää tarkkuutta.</string>
+    <string name="core_voice_model_turbo_multi_body">Tämä malli tunnistaa puhumasi kielen paljon paremmin kuin pienemmät mallit. Valitse tämä, jos pienempi malli tunnistaa puheesi vääräksi kieleksi. Tämä on suuri lataus, ja jokaisen lauseen käsittely vie useita sekunteja.</string>
+    <string name="core_voice_size_base_label">Perus</string>
+    <string name="core_voice_size_large_label">Suuri</string>
+    <string name="core_voice_size_medium_label">Keskikokoinen</string>
+    <string name="core_voice_size_small_label">Pieni</string>
+    <string name="core_voice_size_tiny_label">Pieni</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Suositeltu</string>
+    <string name="core_voice_whisper_mel_bins_error">Tämä puhemalli vaatii %1$s-kaistaisen spektrogrammin, joka ei vastaa tiedostoa, jonka kanssa se ladattiin. Poista malli asetuksista ja lataa se uudelleen.</string>
+    <string name="core_voice_whisper_model_load_error">Puhemallia ei voitu ladata. Tiedosto on mahdollisesti vioittunut. Poista malli asetuksista ja lataa se uudelleen.</string>
+    <string name="core_voice_whisper_transcribe_error">Puheella kirjoittaminen ei toiminut. Yritä uudelleen tai valitse pienempi malli.</string>
+</resources>

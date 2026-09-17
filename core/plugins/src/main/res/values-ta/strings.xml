@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">இந்த செருகுநிரலில் render() செயல்பாடு இல்லை.</string>
+    <string name="core_plugins_error_not_installed">அந்த செருகுநிரல் நிறுவப்படவில்லை.</string>
+    <string name="core_plugins_error_script_failed">ஸ்கிரிப்ட் தோல்வியடைந்தது.</string>
+    <string name="core_plugins_error_script_missing">அந்த செருகுநிரலுக்கான ஸ்கிரிப்ட் விடுபட்டுள்ளது.</string>
+    <string name="core_plugins_error_turned_off">அந்த செருகுநிரல் அணைக்கப்பட்டுள்ளது.</string>
+    <string name="core_plugins_permission_storage_label">உங்கள் சாதனத்தில் தரவைச் சேமிக்கவும்</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s”-இல் செல்லுபடியாகாத UTF-8 உரை ஸ்கிரிப்ட் உள்ளது.</string>
+    <string name="core_plugins_reject_bad_id">இந்த செருகுநிரல் செல்லுபடியாகாத ஐடியைக் கொண்டுள்ளது. ஐடி 3 முதல் 64 எழுத்துக்கள் நீளம் கொண்டது. ஐடியில் சிறிய எழுத்துக்கள், எண்கள், புள்ளிகள், கோடுகள் மற்றும் அடிக்கோடுகள் இருக்கலாம்.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” தொகுக்கப்பட்ட லூவா குறியீட்டைக் கொண்டுள்ளது. ஒரு செருகுநிரல் எளிய மூலக் குறியீட்டைப் பயன்படுத்த வேண்டும், எனவே அது இயங்குவதற்கு முன்பு நீங்கள் அதைப் படிக்கலாம்.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” இல் காலியான ஸ்கிரிப்ட் உள்ளது.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” இல் அதன் ஸ்கிரிப்ட் கோப்பு (%2$s) இல்லை.</string>
+    <string name="core_plugins_reject_newer_version">இந்த பிளகினுக்கு WM கீபோர்டின் புதிய பதிப்பு தேவை.</string>
+    <string name="core_plugins_reject_no_name">இந்த செருகுநிரலுக்குப் பெயர் இல்லை.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” எந்தப் பதிப்பு என்று குறிப்பிடவில்லை.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” இல் உள்ள ஸ்கிரிப்ட் %2$d KB-க்கும் அதிகமாக உள்ளது.</string>
+    <string name="core_plugins_reject_unknown_permission">WM விசைப்பலகையின் இந்த பதிப்பிற்கு “%1$s” அனுமதி தெரியவில்லை. “%2$s” எதைச் செய்ய அனுமதிக்கப்படுகிறது என்பதை இந்த செயலியால் உங்களுக்குச் சொல்ல முடியாது.</string>
+    <string name="core_plugins_stopped_cancelled">இந்த ஆப்ஸ் இந்த செருகுநிரலை நிறுத்திவிட்டது.</string>
+    <string name="core_plugins_stopped_deadline">இந்த செருகுநிரல் அதிக நேரம் எடுத்துக்கொண்டது. ஆப்ஸ் அதை நிறுத்திவிட்டது.</string>
+    <string name="core_plugins_stopped_instructions">இந்தச் செருகுநிரல் ஒரே நேரத்தில் அதிக வேலைகளைச் செய்தது. செயலி அதை நிறுத்திவிட்டது.</string>
+    <string name="core_plugins_stopped_not_responding">இந்த செருகுநிரல் பதிலளிக்கவில்லை. ஆப்ஸ் இதை மூடிவிட்டது.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">இந்த செருகுநிரல் (plugin) மீண்டும் பதிலளிக்கவில்லை. செயலி அதை அணைத்துவிட்டது.</string>
+    <string name="core_plugins_stopped_recursion">இந்தச் செருகுநிரல் (plugin) தன்னைத்தானே பலமுறை அழைத்துக்கொண்டது. அதனால் செயலி அதை நிறுத்திவிட்டது.</string>
+    <string name="core_plugins_stopped_unexpected">இந்த பிளகின் எதிர்பாராதவிதமாக நின்றுவிட்டது.</string>
+    <string name="core_plugins_ui_insert_action">செருகு</string>
+    <string name="core_plugins_ui_repair_no_type">ஒரு விட்ஜெட் அது என்ன வகை என்று சொல்லவில்லை.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">விட்ஜெட் பட்டியலில் விட்ஜெட் அல்லாத ஒன்று இருந்தது.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">தாவல் பட்டையில் பக்கங்கள் இல்லை.</string>
+    <string name="core_plugins_ui_repair_text_budget">இந்த செருகுநிரல் அதிக உரையை வரையக் கோரியது. ஆப்ஸ் சிலவற்றைத் தவிர்த்துவிட்டது.</string>
+    <string name="core_plugins_ui_repair_text_shortened">சில உரைகள் வரைவதற்கு மிக நீளமாக இருந்தன. ஆப் அதைச் சுருக்கியது.</string>
+    <string name="core_plugins_ui_repair_too_deep">சில விட்ஜெட்டுகள் வரைவதற்கு மிகவும் ஆழமாக அடுக்கப்பட்டுள்ளன.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">முதல் %1$d தாவல்கள் மட்டுமே காட்டப்படுகின்றன.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">இந்த செருகுநிரல் %1$d க்கும் மேற்பட்ட விட்ஜெட்டுகளைக் கேட்டது. ஆப்ஸ் மீதமுள்ளவற்றை நீக்கிவிட்டது.</string>
+    <string name="core_plugins_ui_repair_unknown_type">இந்த உருவாக்கத்திற்கு “%1$s” விட்ஜெட் வகை தெரியவில்லை.</string>
+    <string name="core_plugins_ui_tab_default_title">தாவல் %1$d</string>
+</resources>

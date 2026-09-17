@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">اس پیک کو ساؤنڈ پیک فارمیٹ %1$s کی ضرورت ہے۔ ایپ کو اپ ڈیٹ کریں۔</string>
+    <string name="core_feedback_pack_reject_no_samples">اس پیک میں ایسی کوئی آوازیں نہیں ہیں جنہیں ایپ چلا سکے۔</string>
+    <string name="core_feedback_pack_reject_too_large">ساؤنڈ پیک %1$s MB سے چھوٹا ہونا چاہیے۔</string>
+    <string name="core_feedback_sound_import_empty_error">فائل خالی ہے۔</string>
+    <string name="core_feedback_sound_import_html_error">یہ ایک HTML یا XML فائل ہے، آواز نہیں۔</string>
+    <string name="core_feedback_sound_import_mp4_error">ایپ MP4 اور M4A فائلیں نہیں چلاتی۔ MP3 فائل استعمال کریں۔</string>
+    <string name="core_feedback_sound_import_no_storage_error">آپ کے آلے پر کوئی اسٹوریج دستیاب نہیں ہے۔</string>
+    <string name="core_feedback_sound_import_read_error">ایپ آواز کو پڑھ نہیں سکتی۔</string>
+    <string name="core_feedback_sound_import_save_error">ایپ آواز کو محفوظ نہیں کر سکتی۔</string>
+    <string name="core_feedback_sound_import_too_large_error">کلید کی آواز %1$s MB سے چھوٹی ہونی چاہیے۔</string>
+    <string name="core_feedback_sound_import_too_short_error">فائل آواز ہونے کے لیے بہت مختصر ہے۔</string>
+    <string name="core_feedback_sound_import_unknown_format_error">یہ MP3، OGG یا WAV فائل نہیں لگتی۔</string>
+    <string name="core_feedback_sound_import_zip_error">یہ ایک زپ آرکائیو ہے، ساؤنڈ فائل نہیں۔</string>
+</resources>

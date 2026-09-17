@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face-servern skickade inte filen. Felkoden är HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Anslutningen avbröts under nedladdningen. Försök igen för att fortsätta där den slutade.</string>
+    <string name="core_voice_download_space_error">Det finns inte tillräckligt med lagringsutrymme på din enhet. Du måste frigöra cirka %1$s MB först.</string>
+    <string name="core_voice_model_base_eu_body">Denna modell använder språket du skriver på, precis som 40-språksmodellen. Den täcker endast europeiska språk, så nedladdningen är mindre.</string>
+    <string name="core_voice_model_base_multi_body">Denna modell balanserar noggrannhet och hastighet. Den täcker alla språk som Whisper känner till. Välj den om Small-modellen är för långsam.</string>
+    <string name="core_voice_model_base_world_body">Denna modell använder språket du skriver på istället för en gissning. Korta fraser blir mycket mer tillförlitliga. Välj den när dess lista innehåller dina språk.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d språk</item>
+        <item quantity="other">%1$d språk</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Detta är en av de mest exakta Whisper-modellerna, men den är för stor för de flesta telefoner. Nedladdningen är 1,5 GB. Endast en enhet med en stor mängd minne kan ladda den.</string>
+    <string name="core_voice_model_large_v3_multi_body">Detta är den mest exakta Whisper-modellen och den som är bäst på att känna igen vilket språk du talar. Nedladdningen är 1,5 GB. Endast en enhet med mycket minne kan läsa in den. Turbo-modellen är nästan lika exakt och är hälften så stor.</string>
+    <string name="core_voice_model_medium_multi_body">Denna modell ger nästan skrivbordsnoggrannhet. Varje fras tar flera sekunder. Modellen använder nästan en gigabyte minne när den körs.</string>
+    <string name="core_voice_model_single_language_body">Denna modell hanterar endast %1$s. Den har inget steg för språkdetektering. Detta gör den snabbare och något mer exakt än en flerspråkig modell av samma storlek.</string>
+    <string name="core_voice_model_small_multi_body">Den här modellen ger bäst noggrannhet som fortfarande körs bra på en telefon. Den hanterar accenter och bakgrundsbrus bättre än basmodellen. Den täcker alla språk som Whisper känner till.</string>
+    <string name="core_voice_model_small_world_body">Den här modellen använder språket du skriver på och har samma noggrannhet som den lilla modellen. Det är den mest exakta modellen som fortfarande får plats på en telefon.</string>
+    <string name="core_voice_model_tiny_multi_body">Detta är den snabbaste flerspråkiga modellen. Den fungerar bra med tydligt tal, men brus minskar noggrannheten.</string>
+    <string name="core_voice_model_turbo_multi_body">Denna modell känner igen språket du talar mycket bättre än de mindre modellerna. Välj den om en mindre modell transkriberar ditt tal som fel språk. Det är en stor nedladdning, och varje fras tar flera sekunder.</string>
+    <string name="core_voice_size_base_label">Bas</string>
+    <string name="core_voice_size_large_label">Stor</string>
+    <string name="core_voice_size_medium_label">Medium</string>
+    <string name="core_voice_size_small_label">Liten</string>
+    <string name="core_voice_size_tiny_label">Mycket liten</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Rekommenderas</string>
+    <string name="core_voice_whisper_mel_bins_error">Denna röstmodell behöver ett %1$s-bands spektrogram, vilket inte matchar filen den laddades ner med. Ta bort modellen i inställningarna och ladda ner den igen.</string>
+    <string name="core_voice_whisper_model_load_error">Röstmodellen laddades inte. Filen är troligen skadad. Ta bort modellen i inställningarna och ladda ner den igen.</string>
+    <string name="core_voice_whisper_transcribe_error">Röstinmatning fungerade inte. Försök igen eller välj en mindre modell.</string>
+</resources>

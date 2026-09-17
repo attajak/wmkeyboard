@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Il file scaricato è danneggiato. Il checksum non corrisponde. Riprova il download.</string>
+    <string name="core_input_cjk_download_error_http">Il server ha restituito lo stato HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Il download non è riuscito. Controlla la connessione e riprova.</string>
+    <string name="core_input_cjk_download_error_network_detail">Il download non ha funzionato: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Non c\'è abbastanza spazio di archiviazione sul dispositivo. Libera un po\' di spazio prima.</string>
+    <string name="core_input_cjk_download_error_truncated">La connessione si è interrotta durante il download. Premi Riprendi per continuare.</string>
+    <string name="core_input_cjk_download_error_unavailable">Questo pacchetto non è ancora disponibile.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Una tabella di codici radicali per caratteri Hanzi, 29.000 caratteri. La tastiera necessita di questo pacchetto per i layout Cangjie e Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Dizionario Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Letture kana da mozc, 1,08 milioni di voci, circa 42 MB. La tastiera necessita di questo pacchetto per la conversione giapponese.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Dizionario kana-kanji giapponese</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Una tabella di letture Jyutping per caratteri Hanzi, 163.000 voci. La tastiera necessita di questo pacchetto per la conversione in cantonese.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Dizionario Jyutping cantonese</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Caratteri Hanzi e frasi da CC-CEDICT, 120.000 voci. La tastiera necessita di questo pacchetto per la conversione in cinese.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Dizionario Pinyin cinese</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Una tabella dell\'ordine dei tratti per i caratteri Hanzi. La tastiera necessita di questo pacchetto per il layout a tratti.</string>
+    <string name="core_input_cjk_pack_stroke_title">Dizionario dei tratti cinesi (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Disattivato (Pinyin completo)</string>
+</resources>

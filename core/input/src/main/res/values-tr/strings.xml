@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">İndirilen dosya hasarlı. Sağlama toplamı eşleşmiyor. İndirmeyi tekrar deneyin.</string>
+    <string name="core_input_cjk_download_error_http">Sunucu %1$s HTTP durum kodunu döndürdü.</string>
+    <string name="core_input_cjk_download_error_network">İndirme başarısız oldu. Bağlantınızı kontrol edin ve tekrar deneyin.</string>
+    <string name="core_input_cjk_download_error_network_detail">İndirme çalışmadı: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Cihazınızda yeterli depolama alanı yok. Önce biraz yer açın.</string>
+    <string name="core_input_cjk_download_error_truncated">İndirme sırasında bağlantı kesildi. Devam etmek için Sürdür\'e basın.</string>
+    <string name="core_input_cjk_download_error_unavailable">Bu paket henüz mevcut değil.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Hanzi karakterleri için 29.000 karakterlik bir kök kod tablosu. Klavye, Cangjie ve Quick düzenleri için bu pakete ihtiyaç duyar.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) sözlüğü</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Mozc\'tan Kana okumaları, 1,08 milyon giriş, yaklaşık 42 MB. Klavye, Japonca dönüştürme için bu pakete ihtiyaç duyar.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Japonca kana - kanji sözlüğü</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Hanzi karakterleri için 163.000 girişli bir Jyutping okuma tablosu. Klavye, Kantonca dönüşümü için bu pakete ihtiyaç duyar.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantonca Jyutping sözlüğü</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT\'ten 120.000 girişli Hanzi karakterleri ve ifadeleri. Klavye, Çince dönüştürme için bu pakete ihtiyaç duyar.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Çince Pinyin sözlüğü</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Hanzi karakterleri için vuruş sırası tablosu. Klavye, vuruş düzeni için bu pakete ihtiyaç duyar.</string>
+    <string name="core_input_cjk_pack_stroke_title">Çince vuruş (笔画) sözlüğü</string>
+    <string name="core_input_double_pinyin_off_label">Kapalı (tam Pinyin)</string>
+</resources>

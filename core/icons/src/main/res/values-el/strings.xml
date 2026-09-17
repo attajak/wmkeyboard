@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Καρτέλες emoji</string>
+    <string name="core_icons_group_keys_title">Πλήκτρα</string>
+    <string name="core_icons_group_toolbar_title">Γραμμή εργαλείων</string>
+    <string name="core_icons_group_tools_title">Εργαλεία</string>
+    <string name="core_icons_pack_imported_label">Εισηγμένα εικονίδια</string>
+    <string name="core_icons_pack_mine_label">Τα εικονίδιά μου</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Η εφαρμογή αγνόησε %1$d αρχείο. Αυτή η έκδοση δεν έχει εικονίδιο για αυτό: %2$s</item>
+        <item quantity="other">Η εφαρμογή αγνόησε %1$d αρχεία. Αυτή η έκδοση δεν έχει εικονίδιο για αυτά: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Η εφαρμογή απέρριψε το \"%1$s\". Η εφαρμογή δεν μπορεί να το αποθηκεύσει.</string>
+    <string name="core_icons_repair_svg_unreadable">Η εφαρμογή απέρριψε το \"%1$s\". Η εφαρμογή δεν μπορεί να διαβάσει το αρχείο SVG του.</string>
+    <string name="core_icons_slot_backspace_label">Backspace</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Δραστηριότητες</string>
+    <string name="core_icons_slot_emoji_animals_label">Ζώα</string>
+    <string name="core_icons_slot_emoji_flags_label">Σημαίες</string>
+    <string name="core_icons_slot_emoji_food_label">Φαγητό</string>
+    <string name="core_icons_slot_emoji_key_label">Πλήκτρο Emoji</string>
+    <string name="core_icons_slot_emoji_most_used_label">Πιο συχνά χρησιμοποιούμενα</string>
+    <string name="core_icons_slot_emoji_nature_label">Φύση</string>
+    <string name="core_icons_slot_emoji_objects_label">Αντικείμενα</string>
+    <string name="core_icons_slot_emoji_people_label">Άνθρωποι</string>
+    <string name="core_icons_slot_emoji_recent_label">Πρόσφατα</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Συντόμευση emoji</string>
+    <string name="core_icons_slot_emoji_smileys_label">Smileys</string>
+    <string name="core_icons_slot_emoji_symbols_label">Σύμβολα</string>
+    <string name="core_icons_slot_emoji_travel_label">Ταξίδια</string>
+    <string name="core_icons_slot_enter_done_label">Enter: τέλος</string>
+    <string name="core_icons_slot_enter_go_label">Enter: μετάβαση</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: επόμενο</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: προηγούμενο</string>
+    <string name="core_icons_slot_enter_search_label">Enter: αναζήτηση</string>
+    <string name="core_icons_slot_enter_send_label">Enter: αποστολή</string>
+    <string name="core_icons_slot_forward_delete_label">Διαγραφή προς τα εμπρός</string>
+    <string name="core_icons_slot_globe_label">Αλλαγή γλώσσας</string>
+    <string name="core_icons_slot_incognito_label">Εικονίδιο ανώνυμης περιήγησης</string>
+    <string name="core_icons_slot_input_method_picker_label">Εναλλαγή πληκτρολογίου</string>
+    <string name="core_icons_slot_panel_back_label">Πίσω στα πλήκτρα</string>
+    <string name="core_icons_slot_power_saving_label">Εικονίδιο εξοικονόμησης ενέργειας</string>
+    <string name="core_icons_slot_search_close_label">Κλείσιμο αναζήτησης</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (ενεργό)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Εμφάνιση εργαλείων</string>
+    <string name="core_icons_slot_toolbox_label">Εργαλειοθήκη</string>
+</resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">现在用它绘制表情符号吗？</string>
+    <string name="faddons_apply_icon_pack_question">现在在键盘上使用其图标吗？</string>
+    <string name="faddons_apply_layout_question">开启它以便使用它进行输入？</string>
+    <string name="faddons_apply_plugin_question">开启它以在插件面板中显示？</string>
+    <string name="faddons_apply_sound_pack_question">现在将此音效包用于您的按键吗？</string>
+    <string name="faddons_apply_sound_question">现在将其用作按键音吗？</string>
+    <string name="faddons_apply_switch_action">切换到此项</string>
+    <string name="faddons_apply_theme_question">现在将其用作您的键盘主题吗？</string>
+    <string name="faddons_download_error_app_too_old">此插件需要更新版本的应用。</string>
+    <string name="faddons_download_error_bad_url">下载链接不是有效的 https URL。</string>
+    <string name="faddons_download_error_checksum">下载的文件与清单中的校验和不匹配。</string>
+    <string name="faddons_download_error_http_status">服务器返回 HTTP %1$d。</string>
+    <string name="faddons_download_error_no_space">没有足够的可用空间来安装此内容。</string>
+    <string name="faddons_download_error_plugin_no_checksum">此插件没有校验和。应用无法验证它。</string>
+    <string name="faddons_download_error_too_large">此附加组件的大小超过了其类型 %1$d MB 的限制。</string>
+    <string name="faddons_error_no_words">应用无法从该文件中读取任何单词。</string>
+    <string name="faddons_error_not_a_plugin">该文件不是 WM 键盘插件。</string>
+    <string name="faddons_install_error_dictionary_no_language">此词典未说明其对应的语言。</string>
+    <string name="faddons_install_error_dictionary_not_saved">应用无法保存词典。</string>
+    <string name="faddons_install_error_icon_pack_unreadable">应用无法读取该图标包。</string>
+    <string name="faddons_install_error_keywords_no_language">此包未说明其适用的语言。</string>
+    <string name="faddons_install_error_keywords_not_saved">应用无法保存关键词包。</string>
+    <string name="faddons_install_error_keywords_too_large">该关键词包太大，无法导入。</string>
+    <string name="faddons_install_error_no_keywords">应用无法从该文件中读取任何表情符号关键词。</string>
+    <string name="faddons_install_error_no_stickers">应用无法从该包中读取任何贴纸。%1$s</string>
+    <string name="faddons_install_error_not_a_layout">该文件不是 WM 键盘布局。</string>
+    <string name="faddons_install_error_not_a_snippet_pack">该文件不是 WM Keyboard 代码片段包。</string>
+    <string name="faddons_install_error_not_a_sound_pack">此文件不是声音包。</string>
+    <string name="faddons_install_error_not_a_sticker_pack">该文件不是贴纸包。</string>
+    <string name="faddons_install_error_not_a_theme">该文件不是 WM 键盘主题。</string>
+    <string name="faddons_install_error_not_an_espanso_pack">该文件不是 Espanso 包或匹配文件。</string>
+    <string name="faddons_install_error_not_an_icon_pack">该文件不是图标包。</string>
+    <string name="faddons_install_error_plugin_failed">应用无法安装该插件。</string>
+    <string name="faddons_install_error_plugins_turned_off">插件已关闭。请在“工具 › 插件”下开启“允许插件”，然后重新安装。</string>
+    <string name="faddons_install_error_snippet_pack_empty">该片段包为空。</string>
+    <string name="faddons_install_error_sound_pack_read">应用无法读取此音效包。</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">应用无法读取该贴纸包。</string>
+    <string name="faddons_install_error_too_many_fonts">您已达到安装字体的最大数量。</string>
+    <string name="faddons_install_error_too_many_icon_packs">您已达到图标包的最大数量限制。</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">您已达到 %1$d 个插件的上限。</item>
+        <item quantity="other">您已达到 %1$d 个插件的上限。</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">您已达到安装音效包的最大数量。</string>
+    <string name="faddons_install_error_too_many_sounds">您已达到安装按键音的最大数量。</string>
+    <string name="faddons_install_error_too_many_sticker_packs">您已达到贴纸包的最大数量。</string>
+    <string name="faddons_install_error_unknown_language">此版本的应用程序不支持语言“%1$s”。</string>
+    <string name="faddons_install_error_unknown_type">此版本的应用不支持该插件类型。</string>
+    <string name="faddons_install_error_vocab_no_language">此词汇包未说明其适用的语言。</string>
+    <string name="faddons_install_error_vocab_no_words">应用无法从该词库中读取任何单词。</string>
+    <string name="faddons_install_error_vocab_not_a_pack">该文件不是词汇包。</string>
+    <string name="faddons_install_error_vocab_too_large">此词汇包超过了应用允许的大小。</string>
+    <string name="faddons_preview_error_no_preview">应用无法预览此插件。</string>
+    <string name="faddons_preview_error_not_espanso_pack">该文件不是 Espanso 包或匹配文件。</string>
+    <string name="faddons_preview_error_not_keyword_pack">该文件不是表情符号关键词包。</string>
+    <string name="faddons_preview_error_not_snippet_pack">该文件不是代码片段包。</string>
+    <string name="faddons_preview_error_not_vocab_pack">该文件不是词汇包。</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">应用无法读取此音效包中的声音。</string>
+    <string name="faddons_preview_error_stickers_unreadable">应用无法读取贴纸图片。</string>
+    <string name="faddons_snippet_pack_folder_fallback">代码片段包</string>
+</resources>

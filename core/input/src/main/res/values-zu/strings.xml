@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Ifayela elilandiwe lonakele. I-checksum yalo ayihambisani. Zama ukulanda futhi.</string>
+    <string name="core_input_cjk_download_error_http">Iseva ibuyise isimo se-HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Ukulanda akusebenzanga. Hlola uxhumano lwakho bese uzama futhi.</string>
+    <string name="core_input_cjk_download_error_network_detail">Ukulanda akusebenzanga: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Ayikho indawo eyanele yokugcina kudivayisi yakho. Khulula indawo kuqala.</string>
+    <string name="core_input_cjk_download_error_truncated">Ukuxhumana kumile ngesikhathi sokulanda. Cindezela Qalisa kabusha ukuze uqhubeke.</string>
+    <string name="core_input_cjk_download_error_unavailable">Leli phakethe alikatholakali okwamanje.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Ithebula lamakhodi ezimpande ezinhlamvini ze-Hanzi, izinhlamvu ezingama-29,000. Ikhibhodi idinga leli phakethe lezinhlelo ze-Cangjie ne-Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Isichazamazwi se-Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Ukufundwa kwe-Kana okuvela ku-mozc, okufakiwe okuyizigidi eziyi-1.08, cishe ama-42 MB. Ikhibhodi idinga leli phakethe ukuze iguqule isiJapane.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Isichazamazwi sesi-Japanese kana kuya ku-kanji</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Ithebula lokufundwa kwe-Jyutping ezinhlamvini ze-Hanzi, okufakiwe okungu-163,000. Ikhibhodi idinga leli phakethe ukuze iguqule isi-Cantonese.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Isichazamazwi sesi-Cantonese Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Izinhlamvu ze-Hanzi nemishwana evela ku-CC-CEDICT, okufakiwe okungu-120,000. Ikhibhodi idinga leli phakethe ukuze iguqule isiShayina.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Isichazamazwi sesiShayina se-Pinyin</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Ithebula lokuhleleka kwemivimbo yezinhlamvu zesi-Hanzi. Ikhibhodi idinga leli phakethe lesakhiwo semivimbo.</string>
+    <string name="core_input_cjk_pack_stroke_title">Isichazamazwi semivimbo yesiShayina (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Valiwe (Pinyin egcwele)</string>
+</resources>

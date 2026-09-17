@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face سرور نے فائل نہیں بھیجی۔ ایرر کوڈ HTTP %1$s ہے۔</string>
+    <string name="core_voice_download_interrupted_error">ڈاؤن لوڈ کے دوران کنکشن رک گیا۔ جہاں سے رکا تھا وہاں سے جاری رکھنے کے لیے دوبارہ کوشش کریں۔</string>
+    <string name="core_voice_download_space_error">آپ کے آلے پر کافی اسٹوریج نہیں ہے۔ آپ کو پہلے تقریباً %1$s MB خالی کرنا ہوگا۔</string>
+    <string name="core_voice_model_base_eu_body">یہ ماڈل وہی زبان استعمال کرتا ہے جس میں آپ ٹائپ کرتے ہیں، بالکل 40 زبانوں والے ماڈل کی طرح۔ یہ صرف یورپی زبانوں کا احاطہ کرتا ہے، اس لیے ڈاؤن لوڈ کا سائز چھوٹا ہے۔</string>
+    <string name="core_voice_model_base_multi_body">یہ ماڈل درستگی اور رفتار میں توازن رکھتا ہے۔ یہ ہر اس زبان کا احاطہ کرتا ہے جسے وِسپر (Whisper) جانتا ہے۔ اگر چھوٹا ماڈل بہت سست ہے تو اسے منتخب کریں۔</string>
+    <string name="core_voice_model_base_world_body">یہ ماڈل اندازہ لگانے کے بجائے اس زبان کا استعمال کرتا ہے جس میں آپ ٹائپ کرتے ہیں۔ مختصر جملے بہت زیادہ قابل اعتماد ہو جاتے ہیں۔ جب اس کی فہرست میں آپ کی زبانیں موجود ہوں تو اسے منتخب کریں۔</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d زبان</item>
+        <item quantity="other">%1$d زبانیں</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">یہ وسپر (Whisper) کے سب سے درست ماڈلز میں سے ایک ہے، لیکن یہ زیادہ تر فونز کے لیے بہت بڑا ہے۔ اس کا ڈاؤن لوڈ سائز 1.5 جی بی ہے۔ صرف زیادہ میموری والا آلہ ہی اسے لوڈ کر سکتا ہے۔</string>
+    <string name="core_voice_model_large_v3_multi_body">یہ سب سے درست وِسپر (Whisper) ماڈل ہے، اور یہ پہچاننے میں بہترین ہے کہ آپ کون سی زبان بولتے ہیں۔ ڈاؤن لوڈ 1.5 جی بی کا ہے۔ صرف زیادہ میموری والا آلہ ہی اسے لوڈ کر سکتا ہے۔ ٹربو ماڈل تقریباً اتنا ہی درست ہے اور سائز میں آدھا ہے۔</string>
+    <string name="core_voice_model_medium_multi_body">یہ ماڈل تقریباً ڈیسک ٹاپ جیسی درستگی دیتا ہے۔ ہر جملے میں کئی سیکنڈ لگتے ہیں۔ یہ ماڈل چلتے وقت تقریباً ایک گیگا بائٹ میموری استعمال کرتا ہے۔</string>
+    <string name="core_voice_model_single_language_body">یہ ماڈل صرف %1$s کو ہینڈل کرتا ہے۔ اس میں زبان کا پتہ لگانے کا کوئی مرحلہ نہیں ہے۔ یہ اسے اسی سائز کے کثیر لسانی ماڈل سے تیز اور تھوڑا زیادہ درست بناتا ہے۔</string>
+    <string name="core_voice_model_small_multi_body">یہ ماڈل بہترین درستگی فراہم کرتا ہے جو فون پر بھی اچھی طرح چلتا ہے۔ یہ بیس ماڈل کے مقابلے میں لہجوں اور پس منظر کے شور کو بہتر طریقے سے ہینڈل کرتا ہے۔ یہ ہر اس زبان کا احاطہ کرتا ہے جسے وِسپر (Whisper) جانتا ہے۔</string>
+    <string name="core_voice_model_small_world_body">یہ ماڈل اس زبان کا استعمال کرتا ہے جس میں آپ ٹائپ کرتے ہیں اور اس میں چھوٹے ماڈل کی درستگی ہے۔ یہ سب سے درست ماڈل ہے جو اب بھی فون پر فٹ بیٹھتا ہے۔</string>
+    <string name="core_voice_model_tiny_multi_body">یہ سب سے تیز کثیر لسانی ماڈل ہے۔ یہ واضح تقریر کے ساتھ اچھا کام کرتا ہے، لیکن شور درستگی کو کم کر دیتا ہے۔</string>
+    <string name="core_voice_model_turbo_multi_body">یہ ماڈل آپ کی بولی جانے والی زبان کو چھوٹے ماڈلز کے مقابلے میں بہت بہتر طریقے سے پہچانتا ہے۔ اگر کوئی چھوٹا ماڈل آپ کی تقریر کو غلط زبان میں ٹرانسکرائب کرتا ہے تو اسے منتخب کریں۔ یہ ایک بڑی ڈاؤن لوڈ ہے، اور ہر جملے میں کئی سیکنڈ لگتے ہیں۔</string>
+    <string name="core_voice_size_base_label">بنیادی</string>
+    <string name="core_voice_size_large_label">بڑا</string>
+    <string name="core_voice_size_medium_label">درمیانہ</string>
+    <string name="core_voice_size_small_label">چھوٹا</string>
+    <string name="core_voice_size_tiny_label">بہت چھوٹا</string>
+    <string name="core_voice_size_turbo_label">ٹربو</string>
+    <string name="core_voice_tier_recommended_label">تجویز کردہ</string>
+    <string name="core_voice_whisper_mel_bins_error">اس وائس ماڈل کو %1$s بینڈ سپیکٹروگرام کی ضرورت ہے، جو اس فائل سے میل نہیں کھاتا جس کے ساتھ یہ ڈاؤن لوڈ ہوا تھا۔ ترتیبات میں ماڈل کو حذف کریں اور اسے دوبارہ ڈاؤن لوڈ کریں۔</string>
+    <string name="core_voice_whisper_model_load_error">وائس ماڈل لوڈ نہیں ہوا۔ فائل ممکنہ طور پر خراب ہے۔ ترتیبات میں ماڈل کو حذف کریں اور اسے دوبارہ ڈاؤن لوڈ کریں۔</string>
+    <string name="core_voice_whisper_transcribe_error">وائس ٹائپنگ کام نہیں کر رہی ہے۔ دوبارہ کوشش کریں، یا کوئی چھوٹا ماڈل منتخب کریں۔</string>
+</resources>

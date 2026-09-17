@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">แอปได้เปลี่ยนปุ่ม %1$d ปุ่มเป็นปุ่มที่ใกล้เคียงที่สุดที่มี</item>
+        <item quantity="other">แอปได้เปลี่ยนปุ่ม %1$d ปุ่มเป็นปุ่มที่ใกล้เคียงที่สุดที่มี</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">แอปได้ลบคีย์ %1$d คีย์ แป้นพิมพ์นี้ไม่มีคีย์ที่ทำหน้าที่เดียวกัน (รหัส %2$s)</item>
+        <item quantity="other">แอปได้ลบคีย์ %1$d คีย์ แป้นพิมพ์นี้ไม่มีคีย์ที่ทำหน้าที่เดียวกัน (รหัส %2$s)</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">แอปคงขนาดป้ายกำกับของปุ่ม %1$d ปุ่มไว้ แต่ไม่ได้คงรูปแบบข้อความไว้ คีย์บอร์ดนี้วาดป้ายกำกับในรูปแบบเดียว</item>
+        <item quantity="other">แอปคงขนาดป้ายกำกับของปุ่ม %1$d ปุ่มไว้ แต่ไม่ได้คงรูปแบบข้อความไว้ คีย์บอร์ดนี้วาดป้ายกำกับในรูปแบบเดียว</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">แอปเปลี่ยนตัวอักษร %1$d ตัวเป็นรูปแบบที่แป้นพิมพ์นี้เขียน</item>
+        <item quantity="other">แอปเปลี่ยนตัวอักษร %1$d ตัวเป็นรูปแบบที่แป้นพิมพ์นี้เขียน</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d ปุ่มไม่มีตัวอักษรสำหรับการกดค้างไว้ ไฟล์เก็บข้อมูลเหล่านั้นไว้ในไฟล์ที่สองที่คุณไม่ได้เปิด</item>
+        <item quantity="other">%1$d ปุ่มไม่มีตัวอักษรสำหรับการกดค้างไว้ ไฟล์เก็บข้อมูลเหล่านั้นไว้ในไฟล์ที่สองที่คุณไม่ได้เปิด</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">แป้นพิมพ์อื่นวัดความกว้างของคีย์ต่างออกไป แอปได้ปรับความกว้างให้พอดีกับตารางนี้</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">ปุ่มจุดอักษรเบรลล์ %1$d ปุ่มในเลเยอร์ %2$s มีหมายเลขจุดอยู่นอกช่วง 1 ถึง 6</item>
+        <item quantity="other">ปุ่มจุดอักษรเบรลล์ %1$d ปุ่มในเลเยอร์ %2$s มีหมายเลขจุดอยู่นอกช่วง 1 ถึง 6</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">ปุ่ม %1$d ปุ่มในเลเยอร์ %2$s ไม่มีป้ายกำกับและไม่มีผลลัพธ์ มันไม่พิมพ์อะไรเลย และแอปจะลบมันออกเมื่อคุณเปิดใช้เค้าโครงนี้</item>
+        <item quantity="other">ปุ่ม %1$d ปุ่มในเลเยอร์ %2$s ไม่มีป้ายกำกับและไม่มีผลลัพธ์ พวกมันไม่พิมพ์อะไรเลย และแอปจะลบพวกมันออกเมื่อคุณเปิดใช้เค้าโครงนี้</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">แถวที่ %1$d ของเลเยอร์ %2$s ว่างเปล่า</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">ปุ่ม %1$d ในเลเยอร์ %2$s เป็นส่วนประกอบของแผงควบคุม ส่วนประกอบจะทำงานได้ในเลย์เอาต์แผงควบคุมเท่านั้น</item>
+        <item quantity="other">ปุ่ม %1$d ปุ่มในเลเยอร์ %2$s เป็นส่วนประกอบของแผงควบคุม ส่วนประกอบจะทำงานได้ในเลย์เอาต์แผงควบคุมเท่านั้น</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">แถวที่ %1$d ของเลเยอร์ %2$s มีปุ่มที่ไม่มีความกว้าง</string>
+    <string name="core_lang_layout_key_span_error">แถวที่ %1$d ของเลเยอร์ %2$s มีปุ่มที่ครอบคลุมน้อยกว่า 1 หรือมากกว่า %3$d แถว</string>
+    <string name="core_lang_layout_letters_empty_error">เลเยอร์ตัวอักษรไม่มีปุ่ม</string>
+    <string name="core_lang_layout_no_delete_error">เลย์เอาต์นี้ไม่มีปุ่มลบ คุณไม่สามารถแก้ไขข้อผิดพลาดได้</string>
+    <string name="core_lang_layout_no_enter_error">เลย์เอาต์นี้ไม่มีปุ่ม Enter</string>
+    <string name="core_lang_layout_no_shift_warning">เค้าโครงนี้ไม่มีปุ่ม Shift หากต้องการพิมพ์ตัวพิมพ์ใหญ่ ให้กดปุ่มค้างไว้</string>
+    <string name="core_lang_layout_no_space_error">เลย์เอาต์นี้ไม่มีปุ่มเว้นวรรค</string>
+    <string name="core_lang_layout_no_way_back_error">เลเยอร์ %1$s ไม่มีปุ่มสำหรับกลับไปที่ตัวอักษร คุณไม่สามารถออกจากเลเยอร์นี้ได้</string>
+    <string name="core_lang_layout_persistent_warning">เลเยอร์ %1$s จะยังคงเปิดอยู่เมื่อปิดแป้นพิมพ์ ตรวจสอบให้แน่ใจว่าคุณมีวิธีออกจากเลย์เอาต์นี้</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">เลย์เอาต์นี้ไม่มีปุ่มสำหรับออกจากเลย์เอาต์ ตรวจสอบให้แน่ใจว่าคุณมีวิธีออกจากเลย์เอาต์นี้ เช่น ปุ่ม ABC, ปุ่มสัญลักษณ์ หรือเครื่องมือเลย์เอาต์แบบกำหนดเองบนแถบเครื่องมือ</string>
+    <string name="core_lang_layout_span_past_end_warning">แถวที่ %1$d ของเลเยอร์ %2$s มีปุ่มที่ครอบคลุมแถวมากกว่าที่เลเยอร์มี แป้นพิมพ์จะหยุดไว้ที่แถวสุดท้าย</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">แถวที่ %1$d ของเลเยอร์ %2$s มี %3$d ปุ่ม มีเพียง %4$d ปุ่มเท่านั้นที่ยังคงใหญ่พอที่จะกดได้</item>
+        <item quantity="other">แถวที่ %1$d ของเลเยอร์ %2$s มี %3$d ปุ่ม มีเพียง %4$d ปุ่มเท่านั้นที่ยังคงใหญ่พอที่จะกดได้</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">เลเยอร์ %1$s มี %2$d แถว แต่ใส่ได้เพียง %3$d แถวเท่านั้น</item>
+        <item quantity="other">เลเยอร์ %1$s มี %2$d แถว แต่ใส่ได้เพียง %3$d แถวเท่านั้น</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">มีปุ่มกด %1$d ปุ่มในเลเยอร์ %2$s ที่ใช้การดำเนินการซึ่งแอปเวอร์ชันนี้ไม่รู้จัก</item>
+        <item quantity="other">มีปุ่มกด %1$d ปุ่มในเลเยอร์ %2$s ที่ใช้การดำเนินการซึ่งแอปเวอร์ชันนี้ไม่รู้จัก</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">แถวที่ %1$d ของเลเยอร์ %2$s กว้างกว่าแถวอื่น แป้นพิมพ์จะแสดงปุ่มในแถวนี้ให้แคบลง</string>
+    <string name="core_lang_numeral_scope_display_only">แสดงเท่านั้น</string>
+    <string name="core_lang_numeral_scope_everywhere">ทุกที่</string>
+    <string name="core_lang_numeral_scope_text_fields">ช่องข้อความ</string>
+    <string name="core_lang_numeral_system_auto">อัตโนมัติ</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">มีส่วนประกอบ %1$d รายการปรากฏซ้ำ แอปจะเก็บสำเนาแรกไว้</item>
+        <item quantity="other">มีส่วนประกอบ %1$d รายการปรากฏซ้ำ แอปจะเก็บสำเนาแรกของแต่ละรายการไว้</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">แผงนี้ไม่มีปุ่ม แอปจะใช้แผงมาตรฐานแทน</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">มี %1$d ปุ่มที่มีการทำงานซึ่งไม่สามารถใช้ได้บนแผงควบคุม แอปจะลบปุ่มนั้นออก</item>
+        <item quantity="other">มี %1$d ปุ่มที่มีการทำงานซึ่งไม่สามารถใช้ได้บนแผงควบคุม แอปจะลบปุ่มเหล่านั้นออก</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">แผงนี้ไม่มีปุ่ม ABC ใช้แถบเครื่องมือหรือปุ่มย้อนกลับเพื่อกลับไปยังปุ่มต่างๆ</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">แอปได้ลบสำเนาที่สองของส่วนประกอบออกแล้ว</string>
+    <string name="core_lang_panel_repair_field_added">แอปได้เพิ่มส่วนประกอบหลักของแผงควบคุมในแถวใหม่</string>
+    <string name="core_lang_panel_repair_field_dropped">แอปได้ลบส่วนประกอบที่ไม่เกี่ยวข้องกับแผงนี้ออกไป</string>
+    <string name="core_lang_panel_repair_key_dropped">แอปได้ลบปุ่มที่การทำงานไม่รองรับบนแผงควบคุมออกแล้ว</string>
+    <string name="core_lang_panel_repair_reset">แอปได้แทนที่แผงควบคุมที่ว่างเปล่าด้วยแผงควบคุมมาตรฐานแล้ว</string>
+    <string name="core_lang_panel_required_field_error">พาเนลนี้ไม่มีส่วนประกอบหลัก แอปจะเพิ่มให้เมื่อวาดพาเนล</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">มี %1$d องค์ประกอบที่ไม่เกี่ยวข้องกับแผงนี้ แอปจะลบออก</item>
+        <item quantity="other">มี %1$d องค์ประกอบที่ไม่เกี่ยวข้องกับแผงนี้ แอปจะลบออก</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">แอปได้ลบปุ่มว่างในเลเยอร์ %1$s ออกแล้ว</string>
+    <string name="core_lang_repair_braille_dot_clamped">ปุ่มในเลเยอร์ %1$s ใช้จุดอักษรเบรลล์ %2$d แอปได้เปลี่ยนเป็นจุด %3$d</string>
+    <string name="core_lang_repair_delete_key_added">เลเยอร์ตัวอักษรไม่มีปุ่มลบ แอปจึงเพิ่มปุ่มลบให้</string>
+    <string name="core_lang_repair_enter_key_added">เลเยอร์ตัวอักษรไม่มีปุ่ม Enter แอปจึงเพิ่มให้หนึ่งปุ่ม</string>
+    <string name="core_lang_repair_field_key_deleted">แอปได้ลบส่วนประกอบแผงออกจากเลเยอร์ %1$s แล้ว ส่วนประกอบจะทำงานได้ในเลย์เอาต์แผงเท่านั้น</string>
+    <string name="core_lang_repair_key_letters_anchored">ปุ่มในเลเยอร์ %1$s หมายถึง %2$s แอปทำให้พิมพ์เป็น %3$s</string>
+    <string name="core_lang_repair_key_letters_dropped">คีย์ในเลเยอร์ %1$s ระบุ %2$s เป็นตัวอักษรที่คีย์นั้นแทน ซึ่งไม่ใช่ตัวอักษร แอปจึงเปลี่ยนให้เป็นคีย์ปกติ</string>
+    <string name="core_lang_repair_key_span_clamped">ปุ่มในเลเยอร์ %1$s ครอบคลุม %2$d แถว แอปได้ปรับให้ครอบคลุม %3$d แถว</string>
+    <string name="core_lang_repair_key_width_capped">ปุ่มในเลเยอร์ %1$s มีความกว้าง %2$s หน่วย แอปได้ปรับให้มีความกว้าง %3$s หน่วย</string>
+    <string name="core_lang_repair_key_width_set">ปุ่มในเลเยอร์ %1$s ไม่มีความกว้าง แอปจึงตั้งค่าความกว้างเป็น 1</string>
+    <string name="core_lang_repair_layer_replaced">เลเยอร์ %1$s ไม่มีปุ่มที่ใช้งานได้ ตอนนี้จึงใช้ตารางในตัวแทน</string>
+    <string name="core_lang_repair_letters_key_added">เลเยอร์ %1$s ไม่มีปุ่มที่ย้อนกลับไปยังตัวอักษร แอปจึงเพิ่มปุ่ม ABC ให้</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">แถวในเลเยอร์ %1$s มี %2$d ปุ่ม แอปจะเก็บไว้เฉพาะ %3$d ปุ่มแรก</item>
+        <item quantity="other">แถวในเลเยอร์ %1$s มี %2$d ปุ่ม แอปจะเก็บไว้เฉพาะ %3$d ปุ่มแรก</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">แถวในเลเยอร์ %1$s มีความกว้าง %2$s หน่วย แอปได้ปรับขนาดปุ่มให้เล็กลงเพื่อให้แถวพอดี</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">เลเยอร์ %1$s มี %2$d แถว แอปจะเก็บไว้ %3$d แถวแรก</item>
+        <item quantity="other">เลเยอร์ %1$s มี %2$d แถว แอปจะเก็บไว้ %3$d แถวแรก</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">เลเยอร์ตัวอักษรไม่มีแป้นเว้นวรรค แอปได้เพิ่มให้แล้ว</string>
+    <string name="core_lang_repair_unknown_key_deleted">แอปได้ลบปุ่มในเลเยอร์ %1$s ออก เนื่องจากไม่รู้จักการทำงาน \"%2$s\"</string>
+</resources>

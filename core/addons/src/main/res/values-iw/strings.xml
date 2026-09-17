@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">מילונים</string>
+    <string name="core_addons_type_dictionary_singular_label">מילון</string>
+    <string name="core_addons_type_emoji_font_label">גופני אימוג\'י</string>
+    <string name="core_addons_type_emoji_font_singular_label">גופן אימוג\'י</string>
+    <string name="core_addons_type_emoji_keywords_label">מילות מפתח לאימוג\'י</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">חבילת מילות מפתח לאימוג\'י</string>
+    <string name="core_addons_type_espanso_label">חבילות Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">חבילת Espanso</string>
+    <string name="core_addons_type_font_label">גופנים</string>
+    <string name="core_addons_type_font_singular_label">גופן</string>
+    <string name="core_addons_type_icon_pack_label">חבילות אייקונים</string>
+    <string name="core_addons_type_icon_pack_singular_label">חבילת אייקונים</string>
+    <string name="core_addons_type_layout_label">פריסות</string>
+    <string name="core_addons_type_layout_singular_label">פריסה</string>
+    <string name="core_addons_type_plugin_label">תוספים</string>
+    <string name="core_addons_type_plugin_singular_label">תוסף</string>
+    <string name="core_addons_type_snippets_label">קטעי קוד</string>
+    <string name="core_addons_type_snippets_singular_label">חבילת קטעי טקסט</string>
+    <string name="core_addons_type_sound_label">צלילים</string>
+    <string name="core_addons_type_sound_pack_label">חבילות צלילים</string>
+    <string name="core_addons_type_sound_pack_singular_label">חבילת צלילים</string>
+    <string name="core_addons_type_sound_singular_label">צליל מקש</string>
+    <string name="core_addons_type_stickers_label">חבילות מדבקות</string>
+    <string name="core_addons_type_stickers_singular_label">חבילת מדבקות</string>
+    <string name="core_addons_type_theme_label">ערכות נושא</string>
+    <string name="core_addons_type_theme_singular_label">ערכת נושא</string>
+    <string name="core_addons_type_unknown_label">אחר</string>
+    <string name="core_addons_type_unknown_singular_label">תוסף</string>
+    <string name="core_addons_type_vocabulary_label">אוצר מילים</string>
+    <string name="core_addons_type_vocabulary_singular_label">חבילת אוצר מילים</string>
+</resources>

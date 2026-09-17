@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Seva ya Hugging Face haikutuma faili. Msimbo wa hitilafu ni HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Muunganisho ulikatika wakati wa upakuaji. Jaribu tena ili uendelee kutoka pale ulipoishia.</string>
+    <string name="core_voice_download_space_error">Hakuna nafasi ya kutosha ya kuhifadhi kwenye kifaa chako. Lazima uweke nafasi ya takriban %1$s MB kwanza.</string>
+    <string name="core_voice_model_base_eu_body">Muundo huu unatumia lugha unayoandika, sawa na muundo wa lugha 40. Unashughulikia lugha za Ulaya pekee, kwa hivyo upakuaji ni mdogo.</string>
+    <string name="core_voice_model_base_multi_body">Muundo huu unasawazisha usahihi na kasi. Unashughulikia kila lugha inayojulikana na Whisper. Chagua huu ikiwa muundo mdogo ni wa polepole sana.</string>
+    <string name="core_voice_model_base_world_body">Muundo huu unatumia lugha unayoandika badala ya kubahatisha. Misemo mifupi inakuwa ya kutegemewa zaidi. Iteue wakati orodha yake ina lugha zako.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">lugha %1$d</item>
+        <item quantity="other">lugha %1$d</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Hii ni mojawapo ya miundo sahihi zaidi ya Whisper, lakini ni kubwa mno kwa simu nyingi. Upakuaji ni GB 1.5. Kifaa chenye kumbukumbu kubwa pekee ndicho kinachoweza kuipakia.</string>
+    <string name="core_voice_model_large_v3_multi_body">Hii ndiyo modeli sahihi zaidi ya Whisper, na bora zaidi katika kutambua lugha unayozungumza. Upakuaji ni GB 1.5. Kifaa chenye kumbukumbu kubwa pekee ndicho kinachoweza kuipakia. Modeli ya Turbo ni sahihi karibu kama hii na ina ukubwa wa nusu yake.</string>
+    <string name="core_voice_model_medium_multi_body">Muundo huu unatoa usahihi karibu na wa kompyuta ya mezani. Kila kifungu cha maneno huchukua sekunde kadhaa. Muundo huu hutumia karibu gigabaiti moja ya kumbukumbu wakati unafanya kazi.</string>
+    <string name="core_voice_model_single_language_body">Muundo huu hushughulikia %1$s pekee. Haina hatua ya kutambua lugha. Hii inafanya iwe haraka na sahihi zaidi kidogo kuliko muundo wa lugha nyingi wa ukubwa sawa.</string>
+    <string name="core_voice_model_small_multi_body">Muundo huu unatoa usahihi bora zaidi ambao bado unafanya kazi vizuri kwenye simu. Unashughulikia lafudhi na kelele za chinichini vizuri zaidi kuliko muundo wa Msingi. Unashughulikia kila lugha ambayo Whisper inaijua.</string>
+    <string name="core_voice_model_small_world_body">Muundo huu unatumia lugha unayoandika na una usahihi wa muundo mdogo. Huu ndio muundo sahihi zaidi ambao bado unafaa kwenye simu.</string>
+    <string name="core_voice_model_tiny_multi_body">Hii ndiyo modeli ya lugha nyingi ya haraka zaidi. Inafanya kazi vizuri na matamshi yaliyo wazi, lakini kelele hupunguza usahihi.</string>
+    <string name="core_voice_model_turbo_multi_body">Muundo huu hutambua lugha unayozungumza vizuri zaidi kuliko miundo midogo. Iuchague ikiwa muundo mdogo unanakili usemi wako kama lugha isiyo sahihi. Ni upakuaji mkubwa, na kila sentensi huchukua sekunde kadhaa.</string>
+    <string name="core_voice_size_base_label">Msingi</string>
+    <string name="core_voice_size_large_label">Kubwa</string>
+    <string name="core_voice_size_medium_label">Kati</string>
+    <string name="core_voice_size_small_label">Ndogo</string>
+    <string name="core_voice_size_tiny_label">Ndogo sana</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Inayopendekezwa</string>
+    <string name="core_voice_whisper_mel_bins_error">Muundo huu wa sauti unahitaji spectrogram ya bendi ya %1$s, ambayo hailingani na faili iliyopakuliwa nayo. Futa muundo katika mipangilio na uipakue tena.</string>
+    <string name="core_voice_whisper_model_load_error">Muundo wa sauti haukupakia. Faili inaweza kuwa imeharibika. Futa muundo katika mipangilio na uipakue tena.</string>
+    <string name="core_voice_whisper_transcribe_error">Kuandika kwa kutumia sauti hakufanya kazi. Jaribu tena, au chagua modeli ndogo zaidi.</string>
+</resources>

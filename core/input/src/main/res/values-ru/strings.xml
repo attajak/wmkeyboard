@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Загруженный файл поврежден. Его контрольная сумма не совпадает. Попробуйте загрузить снова.</string>
+    <string name="core_input_cjk_download_error_http">Сервер вернул статус HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Не удалось выполнить загрузку. Проверьте подключение и повторите попытку.</string>
+    <string name="core_input_cjk_download_error_network_detail">Ошибка загрузки: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">На вашем устройстве недостаточно памяти. Сначала освободите немного места.</string>
+    <string name="core_input_cjk_download_error_truncated">Соединение прервалось во время загрузки. Нажмите «Возобновить», чтобы продолжить.</string>
+    <string name="core_input_cjk_download_error_unavailable">Этот пакет пока недоступен.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Таблица кодов радикалов для иероглифов, 29 000 символов. Клавиатуре нужен этот пакет для раскладок Cangjie и Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Словарь Цанцзе (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Чтения кана из mozc, 1,08 миллиона записей, около 42 МБ. Клавиатуре нужен этот пакет для японской конвертации.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Словарь японской каны и кандзи</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Таблица чтений Jyutping для иероглифов, 163 000 записей. Клавиатуре нужен этот пакет для преобразования в кантонский диалект.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Кантонский словарь Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Китайские иероглифы и фразы из CC-CEDICT, 120 000 записей. Клавиатуре нужен этот пакет для китайского преобразования.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Китайский словарь Пиньинь</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Таблица порядка черт для иероглифов ханьцзы. Клавиатуре нужен этот пакет для раскладки по чертам.</string>
+    <string name="core_input_cjk_pack_stroke_title">Словарь китайских черт (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Выкл. (полный Pinyin)</string>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">Aplikacja usunęła %1$d gest ukośny. Ta klawiatura obsługuje tylko gesty w górę, w dół, w lewo i w prawo.</item>
+        <item quantity="other">Aplikacja usunęła %1$d gestów ukośnych. Ta klawiatura obsługuje tylko gesty w górę, w dół, w lewo i w prawo.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d klawisz wpisuje znak na nim nadrukowany. Oryginalna klawiatura używała reguły do określenia, co wpisuje.</item>
+        <item quantity="other">%1$d klawiszy wpisuje znaki na nich nadrukowane. Oryginalna klawiatura używała reguł do określenia, co wpisują.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Ta klawiatura ma %1$d klawisz, który naciskasz wielokrotnie, aby przełączać znaki. Ta aplikacja klawiatury nie posiada takiego klawisza, więc dostępny jest tylko pierwszy znak.</item>
+        <item quantity="other">Ta klawiatura ma %1$d klawiszy, które naciskasz wielokrotnie, aby przełączać znaki. Ta aplikacja klawiatury nie posiada takich klawiszy, więc dostępny jest tylko pierwszy znak każdego z nich.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Ta klawiatura używa reguł do decydowania, co wpisują jej klawisze. Aplikacja nie posiada tych reguł, więc każdy klawisz wpisuje znak na nim nadrukowany.</string>
+    <string name="core_keyman_shift_layer_folded">Aplikacja połączyła warstwę Shift z klawiszami. Przytrzymaj Shift, aby uzyskać dostęp do tych znaków.</string>
+    <string name="core_keyman_shift_layer_separate">Warstwa Shift ma inny kształt, więc aplikacja zachowała ją jako osobną warstwę.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">Aplikacja usunęła %1$d klawisz. Ta klawiatura nie ma klawisza, który wykonuje to samo działanie.</item>
+        <item quantity="other">Aplikacja usunęła %1$d klawiszy. Ta klawiatura nie ma klawiszy, które wykonują to samo działanie.</item>
+    </plurals>
+</resources>

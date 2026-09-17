@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Tệp đã tải xuống bị hỏng. Tổng kiểm tra không khớp. Hãy thử tải xuống lại.</string>
+    <string name="core_input_cjk_download_error_http">Máy chủ trả về trạng thái HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Tải xuống không thành công. Kiểm tra kết nối của bạn và thử lại.</string>
+    <string name="core_input_cjk_download_error_network_detail">Quá trình tải xuống không thành công: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Thiết bị của bạn không đủ dung lượng lưu trữ. Hãy giải phóng bớt dung lượng trước.</string>
+    <string name="core_input_cjk_download_error_truncated">Kết nối bị gián đoạn trong quá trình tải xuống. Nhấn Tiếp tục để tiếp tục.</string>
+    <string name="core_input_cjk_download_error_unavailable">Gói này hiện chưa khả dụng.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Bảng mã bộ thủ cho các ký tự Hán tự, với 29.000 ký tự. Bàn phím cần gói này cho bố cục Thương Hiệt (Cangjie) và Tốc thành (Quick).</string>
+    <string name="core_input_cjk_pack_cangjie_title">Từ điển Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Cách đọc Kana từ mozc, 1,08 triệu mục, khoảng 42 MB. Bàn phím cần gói này để chuyển đổi tiếng Nhật.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Từ điển kana sang kanji tiếng Nhật</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Bảng các cách đọc Việt bính (Jyutping) cho các ký tự Hán, 163.000 mục. Bàn phím cần gói này để chuyển đổi tiếng Quảng Đông.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Từ điển Jyutping tiếng Quảng Đông</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Các ký tự và cụm từ Hán tự từ CC-CEDICT, 120.000 mục. Bàn phím cần gói này để chuyển đổi tiếng Trung.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Từ điển Pinyin tiếng Trung</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Bảng thứ tự nét cho các ký tự Hán tự. Bàn phím cần gói này cho bố cục nét.</string>
+    <string name="core_input_cjk_pack_stroke_title">Từ điển nét chữ Hán (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Tắt (Pinyin đầy đủ)</string>
+</resources>

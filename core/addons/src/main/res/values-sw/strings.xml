@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Kamusi</string>
+    <string name="core_addons_type_dictionary_singular_label">Kamusi</string>
+    <string name="core_addons_type_emoji_font_label">Fonti za emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Fonti ya emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Maneno muhimu ya emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Kifurushi cha maneno muhimu ya emoji</string>
+    <string name="core_addons_type_espanso_label">Vifurushi vya Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Kifurushi cha Espanso</string>
+    <string name="core_addons_type_font_label">Fonti</string>
+    <string name="core_addons_type_font_singular_label">Fonti</string>
+    <string name="core_addons_type_icon_pack_label">Vifurushi vya ikoni</string>
+    <string name="core_addons_type_icon_pack_singular_label">Kifurushi cha ikoni</string>
+    <string name="core_addons_type_layout_label">Mipangilio</string>
+    <string name="core_addons_type_layout_singular_label">Mpangilio</string>
+    <string name="core_addons_type_plugin_label">Programu jalizi</string>
+    <string name="core_addons_type_plugin_singular_label">Programu-jalizi</string>
+    <string name="core_addons_type_snippets_label">Vipande</string>
+    <string name="core_addons_type_snippets_singular_label">Kifurushi cha vijisehemu</string>
+    <string name="core_addons_type_sound_label">Sauti</string>
+    <string name="core_addons_type_sound_pack_label">Vifurushi vya sauti</string>
+    <string name="core_addons_type_sound_pack_singular_label">Kifurushi cha sauti</string>
+    <string name="core_addons_type_sound_singular_label">Sauti ya kitufe</string>
+    <string name="core_addons_type_stickers_label">Vifurushi vya vibandiko</string>
+    <string name="core_addons_type_stickers_singular_label">Kifurushi cha vibandiko</string>
+    <string name="core_addons_type_theme_label">Mandhari</string>
+    <string name="core_addons_type_theme_singular_label">Mandhari</string>
+    <string name="core_addons_type_unknown_label">Nyingine</string>
+    <string name="core_addons_type_unknown_singular_label">Nyongeza</string>
+    <string name="core_addons_type_vocabulary_label">Msamiati</string>
+    <string name="core_addons_type_vocabulary_singular_label">Kifurushi cha msamiati</string>
+</resources>

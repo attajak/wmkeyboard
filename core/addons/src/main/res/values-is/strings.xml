@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Orðabækur</string>
+    <string name="core_addons_type_dictionary_singular_label">Orðabók</string>
+    <string name="core_addons_type_emoji_font_label">Broskalla-leturgerðir</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emoji-letur</string>
+    <string name="core_addons_type_emoji_keywords_label">Lykilorð fyrir emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Emoji-lykilorðapakki</string>
+    <string name="core_addons_type_espanso_label">Espanso pakkar</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso-pakki</string>
+    <string name="core_addons_type_font_label">Leturgerðir</string>
+    <string name="core_addons_type_font_singular_label">Leturgerð</string>
+    <string name="core_addons_type_icon_pack_label">Táknmyndapakkar</string>
+    <string name="core_addons_type_icon_pack_singular_label">Táknmyndapakki</string>
+    <string name="core_addons_type_layout_label">Útlit</string>
+    <string name="core_addons_type_layout_singular_label">Skipulag</string>
+    <string name="core_addons_type_plugin_label">Viðbætur</string>
+    <string name="core_addons_type_plugin_singular_label">Viðbót</string>
+    <string name="core_addons_type_snippets_label">Bútar</string>
+    <string name="core_addons_type_snippets_singular_label">Brotsamningur</string>
+    <string name="core_addons_type_sound_label">Hljóð</string>
+    <string name="core_addons_type_sound_pack_label">Hljóðpakkar</string>
+    <string name="core_addons_type_sound_pack_singular_label">Hljóðpakki</string>
+    <string name="core_addons_type_sound_singular_label">Hljóð við takka</string>
+    <string name="core_addons_type_stickers_label">Límmiðapakkar</string>
+    <string name="core_addons_type_stickers_singular_label">Límmiðapakki</string>
+    <string name="core_addons_type_theme_label">Þemu</string>
+    <string name="core_addons_type_theme_singular_label">Þema</string>
+    <string name="core_addons_type_unknown_label">Annað</string>
+    <string name="core_addons_type_unknown_singular_label">Viðbót</string>
+    <string name="core_addons_type_vocabulary_label">Orðaforði</string>
+    <string name="core_addons_type_vocabulary_singular_label">Orðasafnspakki</string>
+</resources>

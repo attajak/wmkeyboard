@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Dictionnaires</string>
+    <string name="core_addons_type_dictionary_singular_label">Dictionnaire</string>
+    <string name="core_addons_type_emoji_font_label">Polices d\'émojis</string>
+    <string name="core_addons_type_emoji_font_singular_label">Police emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Mots-clés d\'émojis</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Pack de mots-clés emoji</string>
+    <string name="core_addons_type_espanso_label">Paquets Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Pack Espanso</string>
+    <string name="core_addons_type_font_label">Polices</string>
+    <string name="core_addons_type_font_singular_label">Police</string>
+    <string name="core_addons_type_icon_pack_label">Packs d\'icônes</string>
+    <string name="core_addons_type_icon_pack_singular_label">Pack d\'icônes</string>
+    <string name="core_addons_type_layout_label">Dispositions</string>
+    <string name="core_addons_type_layout_singular_label">Disposition</string>
+    <string name="core_addons_type_plugin_label">Plugins</string>
+    <string name="core_addons_type_plugin_singular_label">Plugin</string>
+    <string name="core_addons_type_snippets_label">Extraits</string>
+    <string name="core_addons_type_snippets_singular_label">Pack d\'extraits</string>
+    <string name="core_addons_type_sound_label">Sons</string>
+    <string name="core_addons_type_sound_pack_label">Packs de sons</string>
+    <string name="core_addons_type_sound_pack_singular_label">Pack de sons</string>
+    <string name="core_addons_type_sound_singular_label">Son de touche</string>
+    <string name="core_addons_type_stickers_label">Packs d\'autocollants</string>
+    <string name="core_addons_type_stickers_singular_label">Pack d\'autocollants</string>
+    <string name="core_addons_type_theme_label">Thèmes</string>
+    <string name="core_addons_type_theme_singular_label">Thème</string>
+    <string name="core_addons_type_unknown_label">Autre</string>
+    <string name="core_addons_type_unknown_singular_label">Module complémentaire</string>
+    <string name="core_addons_type_vocabulary_label">Vocabulaire</string>
+    <string name="core_addons_type_vocabulary_singular_label">Pack de vocabulaire</string>
+</resources>

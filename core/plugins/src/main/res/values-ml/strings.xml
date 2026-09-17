@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">ഈ പ്ലഗിന്നിന് render() ഫംഗ്‌ഷൻ ഇല്ല.</string>
+    <string name="core_plugins_error_not_installed">ആ പ്ലഗിൻ ഇൻസ്റ്റാൾ ചെയ്തിട്ടില്ല.</string>
+    <string name="core_plugins_error_script_failed">സ്ക്രിപ്റ്റ് പരാജയപ്പെട്ടു.</string>
+    <string name="core_plugins_error_script_missing">ആ പ്ലഗിനിനായുള്ള സ്ക്രിപ്റ്റ് കാണാനില്ല.</string>
+    <string name="core_plugins_error_turned_off">ആ പ്ലഗിൻ ഓഫാക്കിയിരിക്കുന്നു.</string>
+    <string name="core_plugins_permission_storage_label">നിങ്ങളുടെ ഉപകരണത്തിൽ ഡാറ്റ സംരക്ഷിക്കുക</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s”-ൽ സാധുവായ UTF-8 ടെക്സ്റ്റ് അല്ലാത്ത ഒരു സ്ക്രിപ്റ്റ് ഉണ്ട്.</string>
+    <string name="core_plugins_reject_bad_id">ഈ പ്ലഗിന്നിന്റെ ഐഡി സാധുവല്ല. ഒരു ഐഡിക്ക് 3 മുതൽ 64 വരെ അക്ഷരങ്ങൾ ഉണ്ടായിരിക്കണം. ഐഡിയിൽ ചെറിയ അക്ഷരങ്ങൾ, അക്കങ്ങൾ, ഡോട്ടുകൾ, ഡാഷുകൾ, അണ്ടർസ്കോറുകൾ എന്നിവ ഉൾപ്പെടാം.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s”-ൽ കംപൈൽ ചെയ്ത ലുവാ (Lua) കോഡ് അടങ്ങിയിരിക്കുന്നു. ഒരു പ്ലഗിൻ സാധാരണ സോഴ്സ് കോഡ് ഉപയോഗിക്കണം, അതിനാൽ അത് പ്രവർത്തിക്കുന്നതിന് മുമ്പ് നിങ്ങൾക്ക് അത് വായിക്കാൻ കഴിയും.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s”-ൽ സ്ക്രിപ്റ്റ് ഒന്നുമില്ല.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s”-ന് അതിന്റേതായ സ്ക്രിപ്റ്റ് ഫയൽ (%2$s) ഇല്ല.</string>
+    <string name="core_plugins_reject_newer_version">ഈ പ്ലഗിന്നിന് WM കീബോർഡിന്റെ പുതിയ പതിപ്പ് ആവശ്യമാണ്.</string>
+    <string name="core_plugins_reject_no_name">ഈ പ്ലഗിന് പേരില്ല.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” ഏത് പതിപ്പാണെന്ന് പറയുന്നില്ല.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s”-ന് %2$d KB-യിൽ കൂടുതൽ വലുപ്പമുള്ള സ്ക്രിപ്റ്റ് ഉണ്ട്.</string>
+    <string name="core_plugins_reject_unknown_permission">WM കീബോർഡിന്റെ ഈ പതിപ്പിന് “%1$s” എന്ന അനുമതി അറിയില്ല. “%2$s”-ന് എന്ത് ചെയ്യാൻ അനുവാദമുണ്ടെന്ന് ആപ്പിന് നിങ്ങളോട് പറയാൻ കഴിയില്ല.</string>
+    <string name="core_plugins_stopped_cancelled">ആപ്പ് ഈ പ്ലഗിൻ നിർത്തി.</string>
+    <string name="core_plugins_stopped_deadline">ഈ പ്ലഗിൻ പ്രവർത്തിക്കാൻ കൂടുതൽ സമയമെടുത്തു. ആപ്പ് അത് നിർത്തിവെച്ചു.</string>
+    <string name="core_plugins_stopped_instructions">ഈ പ്ലഗിൻ ഒരേസമയം കൂടുതൽ ജോലി ചെയ്തതിനാൽ ആപ്പ് അത് നിർത്തിവെച്ചു.</string>
+    <string name="core_plugins_stopped_not_responding">ഈ പ്ലഗിൻ പ്രതികരിക്കുന്നത് നിർത്തി. ആപ്പ് അത് അടച്ചു.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">ഈ പ്ലഗിൻ വീണ്ടും പ്രതികരിക്കുന്നത് നിർത്തി. ആപ്പ് അത് ഓഫാക്കി.</string>
+    <string name="core_plugins_stopped_recursion">ഈ പ്ലഗിൻ സ്വയം പലതവണ വിളിച്ചു. ആപ്പ് അത് തടഞ്ഞു.</string>
+    <string name="core_plugins_stopped_unexpected">ഈ പ്ലഗിൻ അപ്രതീക്ഷിതമായി നിലച്ചു.</string>
+    <string name="core_plugins_ui_insert_action">ഇൻസേർട്ട് ചെയ്യുക</string>
+    <string name="core_plugins_ui_repair_no_type">ഒരു വിജറ്റ് അത് ഏത് തരമാണെന്ന് വ്യക്തമാക്കിയിട്ടില്ല.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">ഒരു വിജറ്റ് ലിസ്റ്റിൽ വിജറ്റ് അല്ലാത്ത എന്തോ ഒന്ന് ഉൾപ്പെട്ടിരുന്നു.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">ഒരു ടാബ് സ്ട്രിപ്പിൽ പേജുകളില്ലായിരുന്നു.</string>
+    <string name="core_plugins_ui_repair_text_budget">ഈ പ്ലഗിൻ വളരെയധികം ടെക്സ്റ്റ് വരയ്ക്കാൻ ആവശ്യപ്പെട്ടു. ആപ്പ് ചിലത് ഒഴിവാക്കി.</string>
+    <string name="core_plugins_ui_repair_text_shortened">ചില ടെക്സ്റ്റ് വരയ്ക്കാൻ വളരെ വലുതായിരുന്നു. ആപ്പ് അത് ചുരുക്കി.</string>
+    <string name="core_plugins_ui_repair_too_deep">ചില വിജറ്റുകൾ വരയ്ക്കാൻ കഴിയാത്തത്ര ആഴത്തിൽ ഉൾച്ചേർത്തിരുന്നു.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">ആദ്യത്തെ %1$d ടാബുകൾ മാത്രമേ കാണിക്കൂ.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">ഈ പ്ലഗിൻ %1$d-ൽ കൂടുതൽ വിജറ്റുകൾ ആവശ്യപ്പെട്ടു. ആപ്പ് ബാക്കിയുള്ളവ ഒഴിവാക്കി.</string>
+    <string name="core_plugins_ui_repair_unknown_type">ഈ ബിൽഡിന് “%1$s” എന്ന വിജറ്റ് തരം അറിയില്ല.</string>
+    <string name="core_plugins_ui_tab_default_title">ടാബ് %1$d</string>
+</resources>

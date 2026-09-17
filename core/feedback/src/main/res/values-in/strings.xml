@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Paket ini memerlukan format paket suara %1$s. Perbarui aplikasi.</string>
+    <string name="core_feedback_pack_reject_no_samples">Paket ini tidak berisi suara yang dapat diputar oleh aplikasi.</string>
+    <string name="core_feedback_pack_reject_too_large">Paket suara harus lebih kecil dari %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">File kosong.</string>
+    <string name="core_feedback_sound_import_html_error">Ini adalah file HTML atau XML, bukan suara.</string>
+    <string name="core_feedback_sound_import_mp4_error">Aplikasi tidak memutar file MP4 dan M4A. Gunakan file MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Tidak ada penyimpanan yang tersedia di perangkat Anda.</string>
+    <string name="core_feedback_sound_import_read_error">Aplikasi tidak dapat membaca suara tersebut.</string>
+    <string name="core_feedback_sound_import_save_error">Aplikasi tidak dapat menyimpan suara.</string>
+    <string name="core_feedback_sound_import_too_large_error">Suara tombol harus lebih kecil dari %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">File terlalu pendek untuk menjadi suara.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Ini sepertinya bukan file MP3, OGG, atau WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Ini adalah arsip zip, bukan file suara.</string>
+</resources>

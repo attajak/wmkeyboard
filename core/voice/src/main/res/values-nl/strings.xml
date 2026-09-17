@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">De Hugging Face-server heeft het bestand niet verzonden. De foutcode is HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">De verbinding werd verbroken tijdens het downloaden. Probeer het opnieuw om verder te gaan waar het stopte.</string>
+    <string name="core_voice_download_space_error">Er is onvoldoende opslagruimte op uw apparaat. U moet eerst ongeveer %1$s MB vrijmaken.</string>
+    <string name="core_voice_model_base_eu_body">Dit model gebruikt de taal waarin je typt, hetzelfde als het model voor 40 talen. Het bevat alleen Europese talen, waardoor de download kleiner is.</string>
+    <string name="core_voice_model_base_multi_body">Dit model biedt een balans tussen nauwkeurigheid en snelheid. Het ondersteunt alle talen die Whisper kent. Selecteer dit model als het \'Small\'-model te traag is.</string>
+    <string name="core_voice_model_base_world_body">Dit model gebruikt de taal waarin je typt in plaats van een gok. Korte zinnen worden veel betrouwbaarder. Selecteer dit model wanneer de lijst jouw talen bevat.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d taal</item>
+        <item quantity="other">%1$d talen</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Dit is een van de meest nauwkeurige Whisper-modellen, maar het is te groot voor de meeste telefoons. De download is 1,5 GB. Alleen een apparaat met een grote hoeveelheid geheugen kan het laden.</string>
+    <string name="core_voice_model_large_v3_multi_body">Dit is het meest nauwkeurige Whisper-model en het beste in het herkennen van de taal die je spreekt. De download is 1,5 GB. Alleen een apparaat met veel geheugen kan dit laden. Het Turbo-model is bijna net zo nauwkeurig en is de helft kleiner.</string>
+    <string name="core_voice_model_medium_multi_body">Dit model biedt bijna desktop-nauwkeurigheid. Elke zin duurt enkele seconden. Het model gebruikt bijna een gigabyte aan geheugen terwijl het draait.</string>
+    <string name="core_voice_model_single_language_body">Dit model verwerkt alleen %1$s. Het heeft geen taalherkenningsstap. Dit maakt het sneller en iets nauwkeuriger dan een meertalig model van dezelfde grootte.</string>
+    <string name="core_voice_model_small_multi_body">Dit model biedt de beste nauwkeurigheid die nog steeds goed werkt op een telefoon. Het gaat beter om met accenten en achtergrondgeluid dan het Base-model. Het ondersteunt elke taal die Whisper kent.</string>
+    <string name="core_voice_model_small_world_body">Dit model gebruikt de taal waarin je typt en heeft de nauwkeurigheid van het kleine model. Het is het meest nauwkeurige model dat nog op een telefoon past.</string>
+    <string name="core_voice_model_tiny_multi_body">Dit is het snelste meertalige model. Het werkt goed bij duidelijke spraak, maar ruis vermindert de nauwkeurigheid.</string>
+    <string name="core_voice_model_turbo_multi_body">Dit model herkent de taal die je spreekt veel beter dan de kleinere modellen. Selecteer dit als een kleiner model je spraak in de verkeerde taal transcribeert. Het is een grote download en elke zin duurt enkele seconden.</string>
+    <string name="core_voice_size_base_label">Basis</string>
+    <string name="core_voice_size_large_label">Groot</string>
+    <string name="core_voice_size_medium_label">Middelgroot</string>
+    <string name="core_voice_size_small_label">Klein</string>
+    <string name="core_voice_size_tiny_label">Heel klein</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Aanbevolen</string>
+    <string name="core_voice_whisper_mel_bins_error">Dit stemmodel heeft een %1$s-bands spectrogram nodig, wat niet overeenkomt met het bestand waarmee het is gedownload. Verwijder het model in de instellingen en download het opnieuw.</string>
+    <string name="core_voice_whisper_model_load_error">Het spraakmodel is niet geladen. Het bestand is mogelijk beschadigd. Verwijder het model in de instellingen en download het opnieuw.</string>
+    <string name="core_voice_whisper_transcribe_error">Spraakgestuurd typen werkte niet. Probeer het opnieuw of selecteer een kleiner model.</string>
+</resources>

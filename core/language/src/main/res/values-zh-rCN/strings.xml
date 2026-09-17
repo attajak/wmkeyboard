@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">应用已将 %1$d 个按键更改为它所拥有的最接近的按键。</item>
+        <item quantity="other">应用已将 %1$d 个按键更改为它所拥有的最接近的按键。</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">应用已移除 %1$d 个按键。此键盘没有执行相同功能的按键（代码 %2$s）。</item>
+        <item quantity="other">应用已移除 %1$d 个按键。此键盘没有执行相同功能的按键（代码 %2$s）。</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">应用保留了 %1$d 个按键的标签大小，但未保留其文本样式。此键盘以统一样式绘制标签。</item>
+        <item quantity="other">应用保留了 %1$d 个按键的标签大小，但未保留其文本样式。此键盘以统一样式绘制标签。</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">应用已将 %1$d 个字母更改为此键盘所使用的格式。</item>
+        <item quantity="other">应用已将 %1$d 个字母更改为此键盘所使用的格式。</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d 个按键没有长按字母。该文件将它们保存在您未打开的第二个文件中。</item>
+        <item quantity="other">%1$d 个按键没有长按字母。该文件将它们保存在您未打开的第二个文件中。</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">其他键盘的按键宽度测量方式不同。应用已调整宽度以适应此网格。</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s 层中的 %1$d 个盲文点位键的点数超出了 1 到 6 的范围。</item>
+        <item quantity="other">%2$s 层中的 %1$d 个盲文点位键的点数超出了 1 到 6 的范围。</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s 层中有 %1$d 个按键没有标签且没有输出。它不会输入任何内容，当您启用此布局时，应用会将其删除。</item>
+        <item quantity="other">%2$s 层中有 %1$d 个按键没有标签且没有输出。它们不会输入任何内容，当您启用此布局时，应用会将其删除。</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s 层的第 %1$d 行为空。</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s 层中有 %1$d 个按键是面板组件。组件仅在面板布局中有效。</item>
+        <item quantity="other">%2$s 层中有 %1$d 个按键是面板组件。组件仅在面板布局中有效。</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s 层第 %1$d 行有一个按键没有宽度。</string>
+    <string name="core_lang_layout_key_span_error">%2$s 层第 %1$d 行的某个按键跨度小于 1 或大于 %3$d 行。</string>
+    <string name="core_lang_layout_letters_empty_error">字母层没有按键。</string>
+    <string name="core_lang_layout_no_delete_error">该布局没有删除键。您无法纠正错误。</string>
+    <string name="core_lang_layout_no_enter_error">该布局没有回车键。</string>
+    <string name="core_lang_layout_no_shift_warning">该布局没有 Shift 键。要输入大写字母，请长按按键。</string>
+    <string name="core_lang_layout_no_space_error">该布局没有空格键。</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s 层没有返回字母层的按键。您无法离开此层。</string>
+    <string name="core_lang_layout_persistent_warning">当键盘关闭时，%1$s 层保持打开状态。请确保您有退出此布局的方法。</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">此布局没有可退出的按键。请确保您有退出此布局的方法：ABC 键、符号键或工具栏上的自定义布局工具。</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s 层第 %1$d 行的某个按键覆盖的行数超过了该层实际拥有的行数。键盘将其限制在最后一行。</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s 层第 %1$d 行有 %3$d 个按键。只有 %4$d 个按键能保持足够大以便点击。</item>
+        <item quantity="other">%2$s 层第 %1$d 行有 %3$d 个按键。只有 %4$d 个按键能保持足够大以便点击。</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s 层有 %2$d 行。仅能容纳 %3$d 行。</item>
+        <item quantity="other">%1$s 层有 %2$d 行。仅能容纳 %3$d 行。</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s 层中的 %1$d 个按键使用了此版本应用无法识别的操作。</item>
+        <item quantity="other">%2$s 层中的 %1$d 个按键使用了此版本应用无法识别的操作。</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s 层中的第 %1$d 行比其他行宽。键盘会将此行的按键绘制得更窄。</string>
+    <string name="core_lang_numeral_scope_display_only">仅显示</string>
+    <string name="core_lang_numeral_scope_everywhere">到处</string>
+    <string name="core_lang_numeral_scope_text_fields">文本字段</string>
+    <string name="core_lang_numeral_system_auto">自动</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d 个组件出现多次。应用保留第一个副本。</item>
+        <item quantity="other">%1$d 个组件出现多次。应用保留每个组件的第一个副本。</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">此面板没有按键。应用将改用标准面板。</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">有 %1$d 个按键的操作在面板上无效。应用已将其删除。</item>
+        <item quantity="other">有 %1$d 个按键的操作在面板上无效。应用已将其删除。</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">此面板没有 ABC 键。请使用工具栏或“返回”按钮回到按键界面。</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">应用已删除组件的第二个副本。</string>
+    <string name="core_lang_panel_repair_field_added">应用已在新行中添加了面板的主组件。</string>
+    <string name="core_lang_panel_repair_field_dropped">应用删除了一个不属于此面板的组件。</string>
+    <string name="core_lang_panel_repair_key_dropped">应用删除了一个在面板上无法使用的按键。</string>
+    <string name="core_lang_panel_repair_reset">应用已将空面板替换为标准面板。</string>
+    <string name="core_lang_panel_required_field_error">此面板缺少其主要组件。应用在绘制面板时会添加一个。</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d 个组件不属于此面板。应用已将其删除。</item>
+        <item quantity="other">%1$d 个组件不属于此面板。应用已将其删除。</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">应用已删除 %1$s 层中的一个空键。</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s 层中的一个按键使用了盲文点 %2$d。应用已将其设为点 %3$d。</string>
+    <string name="core_lang_repair_delete_key_added">字母层没有删除键。应用已添加了一个。</string>
+    <string name="core_lang_repair_enter_key_added">字母层没有回车键。应用已添加了一个。</string>
+    <string name="core_lang_repair_field_key_deleted">应用已从 %1$s 层中删除了一个面板组件。组件仅在面板布局中有效。</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s 层中的一个键代表 %2$s。应用已将其设置为输入 %3$s。</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s 层中的某个按键将 %2$s 列为其代表的字母。由于这些并非字母，应用已将其恢复为普通按键。</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s 层中的一个按键覆盖了 %2$d 行。应用已将其调整为覆盖 %3$d 行。</string>
+    <string name="core_lang_repair_key_width_capped">%1$s层中的一个按键宽度为 %2$s 个单位。应用已将其宽度调整为 %3$s 个单位。</string>
+    <string name="core_lang_repair_key_width_set">%1$s 层中的某个按键没有宽度。应用已将宽度设置为 1。</string>
+    <string name="core_lang_repair_layer_replaced">%1$s 层中没有可用的按键。它现在使用内置网格。</string>
+    <string name="core_lang_repair_letters_key_added">%1$s 层没有返回字母的按键。应用已添加了一个 ABC 键。</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s 层中的某一行有 %2$d 个按键。应用保留了前 %3$d 个。</item>
+        <item quantity="other">%1$s 层中的某一行有 %2$d 个按键。应用保留了前 %3$d 个。</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s 层中的某一行宽度为 %2$s 个单位。应用已缩小按键以使该行能够适配。</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s 层有 %2$d 行。应用保留前 %3$d 行。</item>
+        <item quantity="other">%1$s 层有 %2$d 行。应用保留前 %3$d 行。</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">字母层没有空格键。应用已为您添加了一个。</string>
+    <string name="core_lang_repair_unknown_key_deleted">应用删除了 %1$s 层中的一个键。其操作“%2$s”未知。</string>
+</resources>

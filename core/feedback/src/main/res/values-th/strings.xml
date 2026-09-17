@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">ชุดนี้ต้องการรูปแบบชุดเสียง %1$s โปรดอัปเดตแอป</string>
+    <string name="core_feedback_pack_reject_no_samples">ชุดนี้ไม่มีเสียงที่แอปสามารถเล่นได้</string>
+    <string name="core_feedback_pack_reject_too_large">ชุดเสียงต้องมีขนาดเล็กกว่า %1$s MB</string>
+    <string name="core_feedback_sound_import_empty_error">ไฟล์ว่างเปล่า</string>
+    <string name="core_feedback_sound_import_html_error">นี่คือไฟล์ HTML หรือ XML ไม่ใช่ไฟล์เสียง</string>
+    <string name="core_feedback_sound_import_mp4_error">แอปไม่เล่นไฟล์ MP4 และ M4A โปรดใช้ไฟล์ MP3</string>
+    <string name="core_feedback_sound_import_no_storage_error">ไม่มีพื้นที่จัดเก็บข้อมูลบนอุปกรณ์ของคุณ</string>
+    <string name="core_feedback_sound_import_read_error">แอปไม่สามารถอ่านเสียงนี้ได้</string>
+    <string name="core_feedback_sound_import_save_error">แอปไม่สามารถบันทึกเสียงได้</string>
+    <string name="core_feedback_sound_import_too_large_error">เสียงปุ่มกดต้องมีขนาดเล็กกว่า %1$s MB</string>
+    <string name="core_feedback_sound_import_too_short_error">ไฟล์สั้นเกินกว่าจะเป็นเสียง</string>
+    <string name="core_feedback_sound_import_unknown_format_error">ไฟล์นี้ดูไม่เหมือนไฟล์ MP3, OGG หรือ WAV</string>
+    <string name="core_feedback_sound_import_zip_error">นี่คือไฟล์บีบอัด zip ไม่ใช่ไฟล์เสียง</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Slovníky</string>
+    <string name="core_addons_type_dictionary_singular_label">Slovník</string>
+    <string name="core_addons_type_emoji_font_label">Písma emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Písmo emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Klíčová slova emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Balíček klíčových slov emoji</string>
+    <string name="core_addons_type_espanso_label">Balíčky Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Balíček Espanso</string>
+    <string name="core_addons_type_font_label">Písma</string>
+    <string name="core_addons_type_font_singular_label">Písmo</string>
+    <string name="core_addons_type_icon_pack_label">Sady ikon</string>
+    <string name="core_addons_type_icon_pack_singular_label">Balíček ikon</string>
+    <string name="core_addons_type_layout_label">Rozložení</string>
+    <string name="core_addons_type_layout_singular_label">Rozvržení</string>
+    <string name="core_addons_type_plugin_label">Pluginy</string>
+    <string name="core_addons_type_plugin_singular_label">Doplněk</string>
+    <string name="core_addons_type_snippets_label">Úryvky</string>
+    <string name="core_addons_type_snippets_singular_label">Balíček úryvků</string>
+    <string name="core_addons_type_sound_label">Zvuky</string>
+    <string name="core_addons_type_sound_pack_label">Zvukové balíčky</string>
+    <string name="core_addons_type_sound_pack_singular_label">Zvukový balíček</string>
+    <string name="core_addons_type_sound_singular_label">Zvuk klávesy</string>
+    <string name="core_addons_type_stickers_label">Balíčky nálepek</string>
+    <string name="core_addons_type_stickers_singular_label">Balíček nálepek</string>
+    <string name="core_addons_type_theme_label">Motivy</string>
+    <string name="core_addons_type_theme_singular_label">Motiv</string>
+    <string name="core_addons_type_unknown_label">Ostatní</string>
+    <string name="core_addons_type_unknown_singular_label">Doplněk</string>
+    <string name="core_addons_type_vocabulary_label">Slovní zásoba</string>
+    <string name="core_addons_type_vocabulary_singular_label">Balíček slovní zásoby</string>
+</resources>

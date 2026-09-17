@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">极光</string>
+    <string name="core_theme_builtin_berry_label">浆果色</string>
+    <string name="core_theme_builtin_bubble_label">气泡</string>
+    <string name="core_theme_builtin_crimson_label">深红色</string>
+    <string name="core_theme_builtin_cyberpunk_label">赛博朋克</string>
+    <string name="core_theme_builtin_deep_sea_label">深海</string>
+    <string name="core_theme_builtin_facet_label">切面</string>
+    <string name="core_theme_builtin_forest_label">森林</string>
+    <string name="core_theme_builtin_glacier_label">冰川</string>
+    <string name="core_theme_builtin_mint_label">薄荷绿</string>
+    <string name="core_theme_builtin_nebula_label">星云</string>
+    <string name="core_theme_builtin_ocean_label">海洋</string>
+    <string name="core_theme_builtin_pitch_label">纯黑</string>
+    <string name="core_theme_builtin_rose_label">玫瑰红</string>
+    <string name="core_theme_builtin_sand_label">沙色</string>
+    <string name="core_theme_builtin_slate_label">板岩色</string>
+    <string name="core_theme_builtin_snow_label">雪花</string>
+    <string name="core_theme_builtin_sunset_drift_label">日落漂移</string>
+    <string name="core_theme_builtin_sunset_label">日落</string>
+    <string name="core_theme_family_gradient_label">渐变</string>
+    <string name="core_theme_family_ocean_label">Nightfall</string>
+    <string name="core_theme_family_snow_label">柔和色</string>
+</resources>

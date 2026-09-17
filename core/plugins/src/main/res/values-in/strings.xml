@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Plugin ini tidak memiliki fungsi render().</string>
+    <string name="core_plugins_error_not_installed">Plugin tersebut tidak terpasang.</string>
+    <string name="core_plugins_error_script_failed">Skrip gagal dijalankan.</string>
+    <string name="core_plugins_error_script_missing">Skrip untuk plugin tersebut hilang.</string>
+    <string name="core_plugins_error_turned_off">Plugin tersebut dimatikan.</string>
+    <string name="core_plugins_permission_storage_label">Simpan data di perangkat Anda</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” memiliki skrip yang bukan teks UTF-8 yang valid.</string>
+    <string name="core_plugins_reject_bad_id">Plugin ini memiliki id yang tidak valid. Id harus sepanjang 3 hingga 64 karakter. Id dapat berisi huruf kecil, angka, titik, tanda hubung, dan garis bawah.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” berisi kode Lua yang dikompilasi. Plugin harus menggunakan kode sumber biasa, sehingga Anda dapat membacanya sebelum dijalankan.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” memiliki skrip kosong.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” tidak memiliki file skripnya (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Plugin ini memerlukan versi WM Keyboard yang lebih baru.</string>
+    <string name="core_plugins_reject_no_name">Plugin ini tidak memiliki nama.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” tidak menyebutkan versinya.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” memiliki skrip yang lebih besar dari %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Versi WM Keyboard ini tidak mengenali izin “%1$s”. Aplikasi tidak dapat memberi tahu Anda apa yang diizinkan untuk dilakukan oleh “%2$s”.</string>
+    <string name="core_plugins_stopped_cancelled">Aplikasi menghentikan plugin ini.</string>
+    <string name="core_plugins_stopped_deadline">Plugin ini memakan waktu terlalu lama. Aplikasi telah menghentikannya.</string>
+    <string name="core_plugins_stopped_instructions">Plugin ini melakukan terlalu banyak pekerjaan sekaligus. Aplikasi telah menghentikannya.</string>
+    <string name="core_plugins_stopped_not_responding">Plugin ini berhenti merespons. Aplikasi telah menutupnya.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Plugin ini berhenti merespons lagi. Aplikasi telah mematikannya.</string>
+    <string name="core_plugins_stopped_recursion">Plugin ini memanggil dirinya sendiri terlalu sering. Aplikasi menghentikannya.</string>
+    <string name="core_plugins_stopped_unexpected">Plugin ini berhenti secara tidak terduga.</string>
+    <string name="core_plugins_ui_insert_action">Sisipkan</string>
+    <string name="core_plugins_ui_repair_no_type">Widget tidak menyebutkan jenisnya.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Daftar widget berisi sesuatu yang bukan widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Strip tab tidak memiliki halaman.</string>
+    <string name="core_plugins_ui_repair_text_budget">Plugin ini meminta untuk menggambar terlalu banyak teks. Aplikasi melewatkan sebagian teks.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Beberapa teks terlalu panjang untuk ditampilkan. Aplikasi telah menyingkatnya.</string>
+    <string name="core_plugins_ui_repair_too_deep">Beberapa widget terlalu dalam untuk digambar.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Hanya %1$d tab pertama yang ditampilkan.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Plugin ini meminta lebih dari %1$d widget. Aplikasi membuang sisanya.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Build ini tidak mengenali tipe widget “%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Tab %1$d</string>
+</resources>

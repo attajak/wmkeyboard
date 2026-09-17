@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">„Hugging Face“ serveris neatsiuntė failo. Klaidos kodas yra HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Atsisiuntimo metu ryšys nutrūko. Bandykite dar kartą, kad tęstumėte nuo ten, kur sustojo.</string>
+    <string name="core_voice_download_space_error">Jūsų įrenginyje nepakanka vietos. Pirmiausia turite atlaisvinti apie %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">Šis modelis naudoja kalbą, kuria rašote, kaip ir 40 kalbų modelis. Jis apima tik Europos kalbas, todėl atsisiuntimo dydis yra mažesnis.</string>
+    <string name="core_voice_model_base_multi_body">Šis modelis subalansuoja tikslumą ir greitį. Jis apima visas „Whisper“ žinomas kalbas. Pasirinkite jį, jei mažas modelis veikia per lėtai.</string>
+    <string name="core_voice_model_base_world_body">Šis modelis naudoja kalbą, kuria rašote, o ne spėlioja. Trumpos frazės tampa daug patikimesnės. Pasirinkite jį, kai sąraše bus jūsų kalbos.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d kalba</item>
+        <item quantity="other">%1$d kalbos</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Tai vienas tiksliausių „Whisper“ modelių, tačiau jis per didelis daugumai telefonų. Atsisiuntimo dydis yra 1,5 GB. Jį gali įkelti tik įrenginys su dideliu atminties kiekiu.</string>
+    <string name="core_voice_model_large_v3_multi_body">Tai tiksliausias „Whisper“ modelis, geriausiai atpažįstantis jūsų kalbą. Atsisiuntimo dydis yra 1,5 GB. Jį gali įkelti tik įrenginys su dideliu atminties kiekiu. „Turbo“ modelis yra beveik toks pat tikslus ir perpus mažesnis.</string>
+    <string name="core_voice_model_medium_multi_body">Šis modelis suteikia beveik stalinio kompiuterio tikslumą. Kiekviena frazė užtrunka kelias sekundes. Veikdamas modelis naudoja beveik vieną gigabaitą atminties.</string>
+    <string name="core_voice_model_single_language_body">Šis modelis apdoroja tik %1$s. Jame nėra kalbos aptikimo žingsnio. Dėl to jis yra greitesnis ir šiek tiek tikslesnis nei tokio paties dydžio daugiakalbis modelis.</string>
+    <string name="core_voice_model_small_multi_body">Šis modelis užtikrina geriausią tikslumą, kuris vis dar gerai veikia telefone. Jis geriau nei „Base“ modelis susidoroja su akcentais ir foniniu triukšmu. Jis apima visas „Whisper“ žinomas kalbas.</string>
+    <string name="core_voice_model_small_world_body">Šis modelis naudoja kalbą, kuria rašote, ir pasižymi „Small“ modelio tikslumu. Tai tiksliausias modelis, kuris vis dar telpa telefone.</string>
+    <string name="core_voice_model_tiny_multi_body">Tai greičiausias daugiakalbis modelis. Jis gerai veikia esant aiškiai kalbai, tačiau triukšmas sumažina tikslumą.</string>
+    <string name="core_voice_model_turbo_multi_body">Šis modelis atpažįsta jūsų kalbą daug geriau nei mažesni modeliai. Pasirinkite jį, jei mažesnis modelis transkribuoja jūsų kalbą kaip netinkamą kalbą. Tai didelis atsisiuntimas, ir kiekviena frazė užtrunka kelias sekundes.</string>
+    <string name="core_voice_size_base_label">Pagrindinis</string>
+    <string name="core_voice_size_large_label">Didelis</string>
+    <string name="core_voice_size_medium_label">Vidutinis</string>
+    <string name="core_voice_size_small_label">Mažas</string>
+    <string name="core_voice_size_tiny_label">Labai mažas</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Rekomenduojama</string>
+    <string name="core_voice_whisper_mel_bins_error">Šiam balso modeliui reikia %1$s juostų spektrogramos, kuri neatitinka failo, su kuriuo jis buvo atsisiųstas. Ištrinkite modelį nustatymuose ir atsisiųskite jį dar kartą.</string>
+    <string name="core_voice_whisper_model_load_error">Balso modelis neįkeltas. Failas gali būti sugadintas. Ištrinkite modelį nustatymuose ir atsisiųskite jį dar kartą.</string>
+    <string name="core_voice_whisper_transcribe_error">Įvedimas balsu neveikė. Bandykite dar kartą arba pasirinkite mažesnį modelį.</string>
+</resources>

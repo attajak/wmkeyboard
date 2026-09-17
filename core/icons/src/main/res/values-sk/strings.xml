@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Karty emodži</string>
+    <string name="core_icons_group_keys_title">Klávesy</string>
+    <string name="core_icons_group_toolbar_title">Panel nástrojov</string>
+    <string name="core_icons_group_tools_title">Nástroje</string>
+    <string name="core_icons_pack_imported_label">Importované ikony</string>
+    <string name="core_icons_pack_mine_label">Moje ikony</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Aplikácia ignorovala %1$d súbor. Táto verzia preň nemá ikonu: %2$s</item>
+        <item quantity="other">Aplikácia ignorovala %1$d súborov. Táto verzia pre ne nemá ikonu: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Aplikácia zahodila \"%1$s\". Aplikácia ho nemôže uložiť.</string>
+    <string name="core_icons_repair_svg_unreadable">Aplikácia zahodila \"%1$s\". Aplikácia nedokáže prečítať jej súbor SVG.</string>
+    <string name="core_icons_slot_backspace_label">Backspace</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Aktivity</string>
+    <string name="core_icons_slot_emoji_animals_label">Zvieratá</string>
+    <string name="core_icons_slot_emoji_flags_label">Vlajky</string>
+    <string name="core_icons_slot_emoji_food_label">Jedlo</string>
+    <string name="core_icons_slot_emoji_key_label">Kláves emoji</string>
+    <string name="core_icons_slot_emoji_most_used_label">Najpoužívanejšie</string>
+    <string name="core_icons_slot_emoji_nature_label">Príroda</string>
+    <string name="core_icons_slot_emoji_objects_label">Objekty</string>
+    <string name="core_icons_slot_emoji_people_label">Ľudia</string>
+    <string name="core_icons_slot_emoji_recent_label">Nedávne</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Skratka pre emoji</string>
+    <string name="core_icons_slot_emoji_smileys_label">Smajlíky</string>
+    <string name="core_icons_slot_emoji_symbols_label">Symboly</string>
+    <string name="core_icons_slot_emoji_travel_label">Cestovanie</string>
+    <string name="core_icons_slot_enter_done_label">Enter: hotovo</string>
+    <string name="core_icons_slot_enter_go_label">Enter: ísť</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: ďalší</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: predchádzajúci</string>
+    <string name="core_icons_slot_enter_search_label">Enter: vyhľadávanie</string>
+    <string name="core_icons_slot_enter_send_label">Enter: odoslať</string>
+    <string name="core_icons_slot_forward_delete_label">Odstrániť dopredu</string>
+    <string name="core_icons_slot_globe_label">Zmeniť jazyk</string>
+    <string name="core_icons_slot_incognito_label">Ikona inkognito</string>
+    <string name="core_icons_slot_input_method_picker_label">Prepnúť klávesnicu</string>
+    <string name="core_icons_slot_panel_back_label">Späť na klávesy</string>
+    <string name="core_icons_slot_power_saving_label">Odznak úspory energie</string>
+    <string name="core_icons_slot_search_close_label">Zavrieť vyhľadávanie</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (zapnutý)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Zobraziť nástroje</string>
+    <string name="core_icons_slot_toolbox_label">Panel nástrojov</string>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">El archivo descargado está dañado. Su suma de comprobación no coincide. Intenta descargar de nuevo.</string>
+    <string name="core_input_cjk_download_error_http">El servidor devolvió el estado HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">La descarga no funcionó. Comprueba tu conexión e inténtalo de nuevo.</string>
+    <string name="core_input_cjk_download_error_network_detail">La descarga no funcionó: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">No hay suficiente almacenamiento en tu dispositivo. Libera algo de espacio primero.</string>
+    <string name="core_input_cjk_download_error_truncated">La conexión se interrumpió durante la descarga. Presiona Reanudar para continuar.</string>
+    <string name="core_input_cjk_download_error_unavailable">Este paquete aún no está disponible.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Una tabla de códigos radicales para caracteres Hanzi, 29,000 caracteres. El teclado necesita este paquete para los diseños Cangjie y Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Diccionario Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Lecturas Kana de mozc, 1,08 millones de entradas, unos 42 MB. El teclado necesita este paquete para la conversión de japonés.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Diccionario de kana a kanji japonés</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Una tabla de lecturas Jyutping para caracteres Hanzi, 163,000 entradas. El teclado necesita este paquete para la conversión al cantonés.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Diccionario de cantonés Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Caracteres y frases Hanzi de CC-CEDICT, 120.000 entradas. El teclado necesita este paquete para la conversión al chino.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Diccionario de Pinyin chino</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Una tabla de orden de trazos para caracteres Hanzi. El teclado necesita este paquete para el diseño de trazos.</string>
+    <string name="core_input_cjk_pack_stroke_title">Diccionario de trazos chinos (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Desactivado (Pinyin completo)</string>
+</resources>

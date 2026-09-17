@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Aquest connector no té cap funció render().</string>
+    <string name="core_plugins_error_not_installed">Aquest connector no està instal·lat.</string>
+    <string name="core_plugins_error_script_failed">L\'script ha fallat.</string>
+    <string name="core_plugins_error_script_missing">Falta l\'script per a aquest connector.</string>
+    <string name="core_plugins_error_turned_off">Aquest connector està desactivat.</string>
+    <string name="core_plugins_permission_storage_label">Desa dades al vostre dispositiu</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” té un script que no és un text UTF-8 vàlid.</string>
+    <string name="core_plugins_reject_bad_id">Aquest connector té un identificador que no és vàlid. Un identificador té entre 3 i 64 caràcters. Un identificador pot contenir lletres minúscules, números, punts, guions i guions baixos.</string>
+    <string name="core_plugins_reject_compiled_lua">«%1$s» conté codi Lua compilat. Un connector ha d\'utilitzar codi font senzill perquè el pugueu llegir abans que s\'executi.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” té un script buit.</string>
+    <string name="core_plugins_reject_missing_script">«%1$s» no té el seu fitxer d\'script (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Aquest connector necessita una versió més recent del teclat WM.</string>
+    <string name="core_plugins_reject_no_name">Aquest connector no té nom.</string>
+    <string name="core_plugins_reject_no_version">«%1$s» no indica quina versió és.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” té un script més gran de %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Aquesta versió del teclat WM no reconeix el permís «%1$s». L\'aplicació no pot dir-vos què té permès fer «%2$s».</string>
+    <string name="core_plugins_stopped_cancelled">L\'aplicació ha aturat aquest connector.</string>
+    <string name="core_plugins_stopped_deadline">Aquest connector ha trigat massa. L\'aplicació l\'ha aturat.</string>
+    <string name="core_plugins_stopped_instructions">Aquest connector ha fet massa feina alhora. L\'aplicació l\'ha aturat.</string>
+    <string name="core_plugins_stopped_not_responding">Aquest connector ha deixat de respondre. L\'aplicació l\'ha tancat.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Aquest connector ha deixat de respondre de nou. L\'aplicació l\'ha desactivat.</string>
+    <string name="core_plugins_stopped_recursion">Aquest connector s\'ha cridat a si mateix massa vegades. L\'aplicació l\'ha aturat.</string>
+    <string name="core_plugins_stopped_unexpected">Aquest connector s\'ha aturat inesperadament.</string>
+    <string name="core_plugins_ui_insert_action">Insereix</string>
+    <string name="core_plugins_ui_repair_no_type">Un giny no ha especificat quin tipus és.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Una llista de ginys contenia alguna cosa que no és un giny.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Una pestanya no tenia pàgines.</string>
+    <string name="core_plugins_ui_repair_text_budget">Aquest connector ha intentat dibuixar massa text. L\'aplicació n\'ha omès una part.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Alguna part del text era massa llarga per dibuixar-la. L\'aplicació l\'ha escurçat.</string>
+    <string name="core_plugins_ui_repair_too_deep">Alguns ginys estaven imbricats massa profundament per dibuixar-los.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Només es mostren les primeres %1$d pestanyes.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Aquest connector ha sol·licitat més de %1$d ginys. L\'aplicació ha descartat la resta.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Aquesta compilació no coneix el tipus de giny “%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Pestanya %1$d</string>
+</resources>

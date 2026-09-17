@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">అరోరా</string>
+    <string name="core_theme_builtin_berry_label">బెర్రీ</string>
+    <string name="core_theme_builtin_bubble_label">బబుల్</string>
+    <string name="core_theme_builtin_crimson_label">క్రిమ్సన్</string>
+    <string name="core_theme_builtin_cyberpunk_label">సైబర్‌పంక్</string>
+    <string name="core_theme_builtin_deep_sea_label">డీప్ సీ</string>
+    <string name="core_theme_builtin_facet_label">ఫ్యాసెట్</string>
+    <string name="core_theme_builtin_forest_label">అడవి (Forest)</string>
+    <string name="core_theme_builtin_glacier_label">గ్లేసియర్</string>
+    <string name="core_theme_builtin_mint_label">మింట్</string>
+    <string name="core_theme_builtin_nebula_label">నెబ్యులా</string>
+    <string name="core_theme_builtin_ocean_label">ఓషన్</string>
+    <string name="core_theme_builtin_pitch_label">పిచ్ బ్లాక్</string>
+    <string name="core_theme_builtin_rose_label">రోజ్</string>
+    <string name="core_theme_builtin_sand_label">ఇసుక (Sand)</string>
+    <string name="core_theme_builtin_slate_label">స్లేట్</string>
+    <string name="core_theme_builtin_snow_label">మంచు</string>
+    <string name="core_theme_builtin_sunset_drift_label">సన్‌సెట్ డ్రిఫ్ట్</string>
+    <string name="core_theme_builtin_sunset_label">సన్‌సెట్</string>
+    <string name="core_theme_family_gradient_label">గ్రేడియంట్లు</string>
+    <string name="core_theme_family_ocean_label">నైట్‌ఫాల్</string>
+    <string name="core_theme_family_snow_label">పాస్టెల్</string>
+</resources>

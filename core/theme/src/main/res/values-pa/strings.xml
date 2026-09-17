@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">ਅਰੋਰਾ</string>
+    <string name="core_theme_builtin_berry_label">ਬੇਰੀ</string>
+    <string name="core_theme_builtin_bubble_label">ਬੁਲਬੁਲਾ</string>
+    <string name="core_theme_builtin_crimson_label">ਕ੍ਰਿਮਸਨ</string>
+    <string name="core_theme_builtin_cyberpunk_label">ਸਾਈਬਰਪੰਕ</string>
+    <string name="core_theme_builtin_deep_sea_label">ਡੂੰਘਾ ਸਮੁੰਦਰ</string>
+    <string name="core_theme_builtin_facet_label">ਫੈਸੇਟ</string>
+    <string name="core_theme_builtin_forest_label">ਜੰਗਲ</string>
+    <string name="core_theme_builtin_glacier_label">ਗਲੇਸ਼ੀਅਰ</string>
+    <string name="core_theme_builtin_mint_label">ਮਿੰਟ</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">ਸਮੁੰਦਰ</string>
+    <string name="core_theme_builtin_pitch_label">ਪੂਰਾ ਕਾਲਾ</string>
+    <string name="core_theme_builtin_rose_label">ਗੁਲਾਬੀ</string>
+    <string name="core_theme_builtin_sand_label">ਰੇਤ</string>
+    <string name="core_theme_builtin_slate_label">ਸਲੇਟੀ</string>
+    <string name="core_theme_builtin_snow_label">ਬਰਫ਼</string>
+    <string name="core_theme_builtin_sunset_drift_label">ਸਨਸੈੱਟ ਡ੍ਰਿਫਟ</string>
+    <string name="core_theme_builtin_sunset_label">ਸੂਰਜ ਡੁੱਬਣਾ</string>
+    <string name="core_theme_family_gradient_label">ਗਰੇਡੀਐਂਟ</string>
+    <string name="core_theme_family_ocean_label">ਨਾਈਟਫਾਲ</string>
+    <string name="core_theme_family_snow_label">ਪੇਸਟਲ</string>
+</resources>

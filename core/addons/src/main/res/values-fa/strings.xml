@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">فرهنگ‌های لغت</string>
+    <string name="core_addons_type_dictionary_singular_label">فرهنگ لغت</string>
+    <string name="core_addons_type_emoji_font_label">قلم‌های ایموجی</string>
+    <string name="core_addons_type_emoji_font_singular_label">قلم ایموجی</string>
+    <string name="core_addons_type_emoji_keywords_label">کلمات کلیدی ایموجی</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">بسته کلمات کلیدی ایموجی</string>
+    <string name="core_addons_type_espanso_label">بسته‌های Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">بسته Espanso</string>
+    <string name="core_addons_type_font_label">قلم‌ها</string>
+    <string name="core_addons_type_font_singular_label">قلم</string>
+    <string name="core_addons_type_icon_pack_label">بسته‌های آیکون</string>
+    <string name="core_addons_type_icon_pack_singular_label">بسته آیکون</string>
+    <string name="core_addons_type_layout_label">طرح‌بندی‌ها</string>
+    <string name="core_addons_type_layout_singular_label">طرح‌بندی</string>
+    <string name="core_addons_type_plugin_label">افزونه‌ها</string>
+    <string name="core_addons_type_plugin_singular_label">افزونه</string>
+    <string name="core_addons_type_snippets_label">قطعه‌کدها</string>
+    <string name="core_addons_type_snippets_singular_label">بسته قطعه‌کد</string>
+    <string name="core_addons_type_sound_label">صداها</string>
+    <string name="core_addons_type_sound_pack_label">بسته‌های صوتی</string>
+    <string name="core_addons_type_sound_pack_singular_label">بسته صوتی</string>
+    <string name="core_addons_type_sound_singular_label">صدای کلید</string>
+    <string name="core_addons_type_stickers_label">بسته‌های استیکر</string>
+    <string name="core_addons_type_stickers_singular_label">بسته استیکر</string>
+    <string name="core_addons_type_theme_label">تم‌ها</string>
+    <string name="core_addons_type_theme_singular_label">تم</string>
+    <string name="core_addons_type_unknown_label">سایر</string>
+    <string name="core_addons_type_unknown_singular_label">افزونه</string>
+    <string name="core_addons_type_vocabulary_label">واژگان</string>
+    <string name="core_addons_type_vocabulary_singular_label">بسته واژگان</string>
+</resources>

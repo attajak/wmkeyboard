@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">Ponudnik umetne inteligence je odgovor zaključil z napako</string>
+    <string name="ftools_photo_error_failed">Aplikacija ni mogla pridobiti fotografij</string>
+    <string name="ftools_photo_error_offline">Aplikacija ne more vzpostaviti povezave s storitvijo za fotografije. Preverite omrežno povezavo in poskusite znova.</string>
+    <string name="ftools_photo_error_timeout">Storitev za fotografije se je odzvala prepočasi</string>
+    <string name="ftools_search_error_json_disabled">Ta instanca SearXNG nima omogočenega svojega API-ja JSON. V svojo datoteko settings.yml dodajte &lt;b&gt;json&lt;/b&gt; v &lt;b&gt;search.formats&lt;/b&gt; ali pa uporabite drugo instanco.</string>
+</resources>

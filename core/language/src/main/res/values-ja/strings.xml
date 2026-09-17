@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">アプリが%1$d個のキーを、利用可能な最も近いキーに変更しました。</item>
+        <item quantity="other">アプリが%1$d個のキーを、利用可能な最も近いキーに変更しました。</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">アプリが%1$d個のキーを削除しました。このキーボードには同じ機能を持つキー（コード%2$s）がありません。</item>
+        <item quantity="other">アプリが%1$d個のキーを削除しました。このキーボードには同じ機能を持つキー（コード%2$s）がありません。</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">アプリは%1$d個のキーのラベルサイズを維持しましたが、テキストスタイルは維持されませんでした。このキーボードはラベルを単一のスタイルで描画します。</item>
+        <item quantity="other">アプリは%1$d個のキーのラベルサイズを維持しましたが、テキストスタイルは維持されませんでした。このキーボードはラベルを単一のスタイルで描画します。</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">アプリが %1$d 文字をこのキーボードの書き方に変更しました。</item>
+        <item quantity="other">アプリが %1$d 文字をこのキーボードの書き方に変更しました。</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d 個のキーに長押し用の文字がありません。それらは開いていない別のファイルに保存されています。</item>
+        <item quantity="other">%1$d 個のキーに長押し用の文字がありません。それらは開いていない別のファイルに保存されています。</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">他のキーボードはキー幅の測定方法が異なります。アプリはこのグリッドに合わせて幅を変更しました。</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s レイヤー内の %1$d 個の点字キーに、1〜6以外の点番号が含まれています。</item>
+        <item quantity="other">%2$s レイヤー内の %1$d 個の点字キーに、1〜6以外の点番号が含まれています。</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$sレイヤーの%1$d個のキーにはラベルも出力もありません。何も入力されず、このレイアウトを有効にするとアプリによって削除されます。</item>
+        <item quantity="other">%2$sレイヤーの%1$d個のキーにはラベルも出力もありません。何も入力されず、このレイアウトを有効にするとアプリによって削除されます。</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$sレイヤーの%1$d行目が空です。</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$sレイヤーの%1$d個のキーはパネルコンポーネントです。コンポーネントはパネルレイアウトでのみ機能します。</item>
+        <item quantity="other">%2$sレイヤーの%1$d個のキーはパネルコンポーネントです。コンポーネントはパネルレイアウトでのみ機能します。</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$sレイヤーの%1$d行目に幅のないキーがあります。</string>
+    <string name="core_lang_layout_key_span_error">%2$sレイヤーの %1$d行目にあるキーが、1行未満または %3$d行を超える範囲を占有しています。</string>
+    <string name="core_lang_layout_letters_empty_error">文字レイヤーにキーがありません。</string>
+    <string name="core_lang_layout_no_delete_error">このレイアウトには削除キーがありません。間違いを修正することはできません。</string>
+    <string name="core_lang_layout_no_enter_error">レイアウトにEnterキーがありません。</string>
+    <string name="core_lang_layout_no_shift_warning">このレイアウトにはShiftキーがありません。大文字を入力するには、キーを長押ししてください。</string>
+    <string name="core_lang_layout_no_space_error">レイアウトにスペースキーがありません。</string>
+    <string name="core_lang_layout_no_way_back_error">%1$sレイヤーには文字入力に戻るキーがありません。このレイヤーから移動できません。</string>
+    <string name="core_lang_layout_persistent_warning">キーボードを閉じても %1$s レイヤーは開いたままになります。このレイアウトを終了する方法があることを確認してください。</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">このレイアウトには、そこから抜けるためのキーがありません。ABCキー、記号キー、またはツールバーのカスタムレイアウトツールなど、このレイアウトを終了する方法があることを確認してください。</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$sレイヤーの%1$d行目には、レイヤーの行数を超えるキーが含まれています。キーボードは最終行で停止します。</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s レイヤーの %1$d 行目には %3$d 個のキーがあります。押せるサイズを維持できるのは %4$d 個のみです。</item>
+        <item quantity="other">%2$s レイヤーの %1$d 行目には %3$d 個のキーがあります。押せるサイズを維持できるのは %4$d 個のみです。</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$sレイヤーには%2$d行あります。%3$d行までしか収まりません。</item>
+        <item quantity="other">%1$sレイヤーには%2$d行あります。%3$d行までしか収まりません。</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s レイヤーの %1$d 個のキーが、このバージョンのアプリでは認識できないアクションを使用しています。</item>
+        <item quantity="other">%2$s レイヤーの %1$d 個のキーが、このバージョンのアプリでは認識できないアクションを使用しています。</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$sレイヤーの%1$d行目は他の行より幅が広くなっています。キーボードはこの行のキーを狭く描画します。</string>
+    <string name="core_lang_numeral_scope_display_only">表示のみ</string>
+    <string name="core_lang_numeral_scope_everywhere">どこでも</string>
+    <string name="core_lang_numeral_scope_text_fields">テキストフィールド</string>
+    <string name="core_lang_numeral_system_auto">自動</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d個のコンポーネントが重複しています。最初のコピーが保持されます。</item>
+        <item quantity="other">%1$d個のコンポーネントが重複しています。それぞれ最初のコピーが保持されます。</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">このパネルにはキーがありません。アプリは標準パネルを使用します。</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d 個のキーにパネル上で機能しないアクションが設定されています。アプリが削除します。</item>
+        <item quantity="other">%1$d 個のキーにパネル上で機能しないアクションが設定されています。アプリが削除します。</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">このパネルにはABCキーがありません。ツールバーまたは戻るボタンを使用してキーに戻ってください。</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">アプリがコンポーネントの重複コピーを削除しました。</string>
+    <string name="core_lang_panel_repair_field_added">アプリがパネルのメインコンポーネントを新しい行に追加しました。</string>
+    <string name="core_lang_panel_repair_field_dropped">アプリがこのパネルに属さないコンポーネントを削除しました。</string>
+    <string name="core_lang_panel_repair_key_dropped">パネル上で動作しないキーがアプリによって削除されました。</string>
+    <string name="core_lang_panel_repair_reset">アプリが空のパネルを標準のものに置き換えました。</string>
+    <string name="core_lang_panel_required_field_error">このパネルにはメインコンポーネントがありません。アプリがパネルを描画する際に追加されます。</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d 個のコンポーネントがこのパネルに属していません。アプリによって削除されます。</item>
+        <item quantity="other">%1$d 個のコンポーネントがこのパネルに属していません。アプリによって削除されます。</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">%1$sレイヤーの空のキーを削除しました。</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s レイヤーのキーで点字ドット %2$d が使用されていました。アプリによってドット %3$d に修正されました。</string>
+    <string name="core_lang_repair_delete_key_added">文字レイヤーに削除キーがありませんでした。アプリが追加しました。</string>
+    <string name="core_lang_repair_enter_key_added">文字レイヤーにEnterキーがありませんでした。アプリが追加しました。</string>
+    <string name="core_lang_repair_field_key_deleted">アプリが %1$s レイヤーからパネルコンポーネントを削除しました。コンポーネントはパネルレイアウトでのみ機能します。</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$sレイヤーのキーは%2$sを表します。アプリによって%3$sタイプに設定されました。</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s レイヤーのキーに、文字として %2$s が指定されていました。これらは文字ではないため、アプリは通常のキーとして扱いました。</string>
+    <string name="core_lang_repair_key_span_clamped">%1$sレイヤーのキーが%2$d行をカバーしていました。アプリはこれを%3$d行に修正しました。</string>
+    <string name="core_lang_repair_key_width_capped">%1$sレイヤーのキーの幅が%2$s単位でした。アプリによって%3$s単位に調整されました。</string>
+    <string name="core_lang_repair_key_width_set">%1$sレイヤーのキーに幅が設定されていませんでした。アプリは幅を1に設定しました。</string>
+    <string name="core_lang_repair_layer_replaced">%1$s レイヤーに有効なキーがありませんでした。組み込みのグリッドを使用します。</string>
+    <string name="core_lang_repair_letters_key_added">%1$sレイヤーに文字入力に戻るキーがありませんでした。ABCキーが追加されました。</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$sレイヤーの行に%2$d個のキーがありました。最初の%3$d個を保持します。</item>
+        <item quantity="other">%1$sレイヤーの行に%2$d個のキーがありました。最初の%3$d個を保持します。</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$sレイヤーの行の幅が%2$sユニットでした。行が収まるようにキーを小さくしました。</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$sレイヤーには%2$d行ありました。アプリは最初の%3$d行を保持します。</item>
+        <item quantity="other">%1$sレイヤーには%2$d行ありました。アプリは最初の%3$d行を保持します。</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">文字レイヤーにスペースキーがありませんでした。アプリが自動的に追加しました。</string>
+    <string name="core_lang_repair_unknown_key_deleted">アプリは %1$s レイヤーのキーを削除しました。そのアクション \"%2$s\" は不明です。</string>
+</resources>

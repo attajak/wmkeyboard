@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">Dostawca AI zakończył odpowiedź błędem</string>
+    <string name="ftools_photo_error_failed">Aplikacja nie mogła pobrać zdjęć</string>
+    <string name="ftools_photo_error_offline">Aplikacja nie może połączyć się z usługą zdjęć. Sprawdź połączenie sieciowe i spróbuj ponownie.</string>
+    <string name="ftools_photo_error_timeout">Usługa zdjęć odpowiadała zbyt długo</string>
+    <string name="ftools_search_error_json_disabled">Ta instancja SearXNG nie ma włączonego interfejsu API JSON. Dodaj 6b&gt;json&lt;/b&gt; do 6b&gt;search.formats&lt;/b&gt; w pliku settings.yml lub użyj innej instancji.</string>
+</resources>

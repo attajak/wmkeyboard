@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Schede emoji</string>
+    <string name="core_icons_group_keys_title">Tasti</string>
+    <string name="core_icons_group_toolbar_title">Barra degli strumenti</string>
+    <string name="core_icons_group_tools_title">Strumenti</string>
+    <string name="core_icons_pack_imported_label">Icone importate</string>
+    <string name="core_icons_pack_mine_label">Le mie icone</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">L\'app ha ignorato %1$d file. Questa versione non ha un\'icona per esso: %2$s</item>
+        <item quantity="other">L\'app ha ignorato %1$d file. Questa versione non ha un\'icona per essi: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">L\'app ha rimosso \"%1$s\". L\'app non può salvarlo.</string>
+    <string name="core_icons_repair_svg_unreadable">L\'app ha rimosso \"%1$s\". L\'app non riesce a leggere il suo file SVG.</string>
+    <string name="core_icons_slot_backspace_label">Backspace</string>
+    <string name="core_icons_slot_caps_lock_label">Blocco maiuscole</string>
+    <string name="core_icons_slot_emoji_activities_label">Attività</string>
+    <string name="core_icons_slot_emoji_animals_label">Animali</string>
+    <string name="core_icons_slot_emoji_flags_label">Bandiere</string>
+    <string name="core_icons_slot_emoji_food_label">Cibo</string>
+    <string name="core_icons_slot_emoji_key_label">Tasto emoji</string>
+    <string name="core_icons_slot_emoji_most_used_label">Più usate</string>
+    <string name="core_icons_slot_emoji_nature_label">Natura</string>
+    <string name="core_icons_slot_emoji_objects_label">Oggetti</string>
+    <string name="core_icons_slot_emoji_people_label">Persone</string>
+    <string name="core_icons_slot_emoji_recent_label">Recenti</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Scorciatoia emoji</string>
+    <string name="core_icons_slot_emoji_smileys_label">Faccine</string>
+    <string name="core_icons_slot_emoji_symbols_label">Simboli</string>
+    <string name="core_icons_slot_emoji_travel_label">Viaggi</string>
+    <string name="core_icons_slot_enter_done_label">Invio: fatto</string>
+    <string name="core_icons_slot_enter_go_label">Invio: vai</string>
+    <string name="core_icons_slot_enter_label">Invio</string>
+    <string name="core_icons_slot_enter_next_label">Invio: successivo</string>
+    <string name="core_icons_slot_enter_previous_label">Invio: precedente</string>
+    <string name="core_icons_slot_enter_search_label">Invio: cerca</string>
+    <string name="core_icons_slot_enter_send_label">Invio: invia</string>
+    <string name="core_icons_slot_forward_delete_label">Elimina in avanti</string>
+    <string name="core_icons_slot_globe_label">Cambia lingua</string>
+    <string name="core_icons_slot_incognito_label">Badge Incognito</string>
+    <string name="core_icons_slot_input_method_picker_label">Cambia tastiera</string>
+    <string name="core_icons_slot_panel_back_label">Torna ai tasti</string>
+    <string name="core_icons_slot_power_saving_label">Badge risparmio energetico</string>
+    <string name="core_icons_slot_search_close_label">Chiudi ricerca</string>
+    <string name="core_icons_slot_shift_label">Maiusc</string>
+    <string name="core_icons_slot_shift_on_label">Maiusc (attivo)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Mostra strumenti</string>
+    <string name="core_icons_slot_toolbox_label">Cassetta degli attrezzi</string>
+</resources>

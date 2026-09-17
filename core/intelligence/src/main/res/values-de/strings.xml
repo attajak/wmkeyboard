@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Dieses Modell ist zugangsbeschränkt. Fügen Sie zuerst Ihren Hugging Face-Token hinzu.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face gab den HTTP-Status %1$s zurück.</string>
+    <string name="core_intel_llm_download_error_licence">Akzeptieren Sie die Lizenz des Modells auf dessen Hugging Face-Seite. Versuchen Sie es dann erneut.</string>
+    <string name="core_intel_llm_download_error_no_space">Es ist nicht genügend Speicherplatz auf Ihrem Gerät vorhanden. Geben Sie zuerst etwa %1$s GB frei.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face hat das Token nicht akzeptiert. Überprüfe das Token und versuche es erneut.</string>
+    <string name="core_intel_llm_download_error_truncated">Die Verbindung wurde während des Downloads unterbrochen. Drücken Sie Fortsetzen, um fortzufahren.</string>
+    <string name="core_intel_llm_engine_error_gpu">Das Modell ist auf der GPU fehlgeschlagen. Der GPU-Speicher ist viel kleiner als der Systemspeicher. Der nächste Versuch verwendet die CPU. Um immer die CPU zu verwenden, stelle in den Einstellungen „Berechnung“ auf „CPU“. Du kannst auch ein kleineres Modell auswählen.</string>
+    <string name="core_intel_llm_engine_error_load">Das Modell wurde nicht geladen. Die Datei ist wahrscheinlich beschädigt. Lösche das Modell in den Einstellungen und lade es erneut herunter.</string>
+    <string name="core_intel_llm_engine_error_memory">Dem Modell ging der Speicher aus oder es ist fehlgeschlagen. Wählen Sie ein kleineres Modell.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Ein kleines Gemma-Modell der vorherigen Generation. Es bietet gute Qualität und einen Kontext von 4K-Token.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Das kleinste Gemma von Google. Es ist auf allen Geräten schnell.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Die neueste Gemma-Generation. Sie bietet höchste Qualität auf Ihrem Gerät.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Das größte Modell. Es schreibt am besten, erfordert aber ein leistungsstarkes Gerät.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Ein Allzweckmodell, das auch auf einem einfachen Gerät Platz findet.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Deutlich intelligenter als Modelle unter 1B. Erfordert ein Mittelklasse-Gerät.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Ein aktuelles kleines Modell. Die Qualität ist für seine Größe hoch.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Sehr klein und schnell. Gut für schnelle Umschreibungen geeignet, aber die Schlussfolgerungsfähigkeit ist begrenzt.</string>
+    <string name="core_intel_llm_module_downloading">Der KI-Teil der Tastatur wird von Google Play heruntergeladen. Versuchen Sie es in einem Moment erneut.</string>
+    <string name="core_intel_llm_module_restart">Die KI-Komponente wurde gerade installiert. Schließen Sie die Tastatur und öffnen Sie sie erneut, um sie zu verwenden.</string>
+    <string name="core_intel_llm_tier_experimental_label">Experimentell</string>
+    <string name="core_intel_llm_tier_recommended_label">Empfohlen</string>
+    <string name="core_intel_llm_tier_untested_label">Ungetestet</string>
+</resources>

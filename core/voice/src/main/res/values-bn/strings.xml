@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face সার্ভার ফাইলটি পাঠায়নি। ত্রুটি কোডটি হলো HTTP %1$s।</string>
+    <string name="core_voice_download_interrupted_error">ডাউনলোডের সময় সংযোগ বিচ্ছিন্ন হয়েছে। যেখানে থেমেছিল সেখান থেকে চালিয়ে যেতে আবার চেষ্টা করুন।</string>
+    <string name="core_voice_download_space_error">আপনার ডিভাইসে পর্যাপ্ত স্টোরেজ নেই। আপনাকে প্রথমে প্রায় %1$s এমবি খালি করতে হবে।</string>
+    <string name="core_voice_model_base_eu_body">এই মডেলটি আপনার টাইপ করা ভাষাতেই কাজ করে, যা ৪০টি ভাষার মডেলের মতোই। এটি শুধুমাত্র ইউরোপীয় ভাষাগুলো কভার করে, তাই এর ডাউনলোড সাইজ ছোট।</string>
+    <string name="core_voice_model_base_multi_body">এই মডেলটি নির্ভুলতা এবং গতির মধ্যে ভারসাম্য বজায় রাখে। এটি হুইস্পার (Whisper) জানা প্রতিটি ভাষা কভার করে। যদি স্মল মডেলটি খুব ধীরগতির হয় তবে এটি নির্বাচন করুন।</string>
+    <string name="core_voice_model_base_world_body">এই মডেলটি অনুমানের পরিবর্তে আপনার টাইপ করা ভাষা ব্যবহার করে। ছোট বাক্যাংশগুলো অনেক বেশি নির্ভরযোগ্য হয়ে ওঠে। যখন এর তালিকায় আপনার ভাষা থাকবে তখন এটি নির্বাচন করুন।</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d ভাষা</item>
+        <item quantity="other">%1$d ভাষা</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">এটি সবচেয়ে নির্ভুল হুইস্পার মডেলগুলোর মধ্যে একটি, তবে বেশিরভাগ ফোনের জন্য এটি খুব বড়। ডাউনলোডটি ১.৫ জিবি। শুধুমাত্র প্রচুর মেমরিযুক্ত ডিভাইস এটি লোড করতে পারে।</string>
+    <string name="core_voice_model_large_v3_multi_body">এটি সবচেয়ে নির্ভুল হুইস্পার মডেল এবং আপনি কোন ভাষায় কথা বলছেন তা শনাক্ত করার ক্ষেত্রে সেরা। ডাউনলোডটি ১.৫ জিবি। শুধুমাত্র প্রচুর মেমরি আছে এমন ডিভাইস এটি লোড করতে পারে। টার্বো মডেলটি প্রায় একই রকম নির্ভুল এবং আকারে অর্ধেক।</string>
+    <string name="core_voice_model_medium_multi_body">এই মডেলটি প্রায় ডেস্কটপের সমান নির্ভুলতা দেয়। প্রতিটি বাক্যাংশের জন্য কয়েক সেকেন্ড সময় লাগে। চলার সময় মডেলটি প্রায় এক গিগাবাইট মেমরি ব্যবহার করে।</string>
+    <string name="core_voice_model_single_language_body">এই মডেলটি শুধুমাত্র %1$s পরিচালনা করে। এতে কোনো ভাষা শনাক্তকরণ ধাপ নেই। এটি এটিকে একই আকারের বহুভাষিক মডেলের চেয়ে দ্রুত এবং কিছুটা বেশি নির্ভুল করে তোলে।</string>
+    <string name="core_voice_model_small_multi_body">এই মডেলটি সেরা নির্ভুলতা প্রদান করে যা ফোনেও ভালোভাবে চলে। এটি বেস মডেলের চেয়ে উচ্চারণ এবং ব্যাকগ্রাউন্ড নয়েজ আরও ভালোভাবে সামলাতে পারে। এটি হুইস্পার (Whisper) জানা প্রতিটি ভাষা কভার করে।</string>
+    <string name="core_voice_model_small_world_body">এই মডেলটি আপনার টাইপ করা ভাষা ব্যবহার করে এবং এতে স্মল মডেলের মতো নির্ভুলতা রয়েছে। এটি সবচেয়ে নির্ভুল মডেল যা ফোনে ব্যবহার করা যায়।</string>
+    <string name="core_voice_model_tiny_multi_body">এটি দ্রুততম বহুভাষিক মডেল। এটি স্পষ্ট উচ্চারণের সাথে ভালো কাজ করে, কিন্তু শব্দ বা নয়েজ থাকলে নির্ভুলতা কমে যায়।</string>
+    <string name="core_voice_model_turbo_multi_body">এই মডেলটি ছোট মডেলগুলির তুলনায় আপনার বলা ভাষা অনেক ভালো বোঝে। যদি কোনো ছোট মডেল আপনার কথাকে ভুল ভাষা হিসেবে ট্রান্সক্রাইব করে, তবে এটি নির্বাচন করুন। এটি একটি বড় ডাউনলোড এবং প্রতিটি বাক্যাংশের জন্য কয়েক সেকেন্ড সময় লাগে।</string>
+    <string name="core_voice_size_base_label">বেস</string>
+    <string name="core_voice_size_large_label">বড়</string>
+    <string name="core_voice_size_medium_label">মাঝারি</string>
+    <string name="core_voice_size_small_label">ছোট</string>
+    <string name="core_voice_size_tiny_label">খুব ছোট</string>
+    <string name="core_voice_size_turbo_label">টার্বো</string>
+    <string name="core_voice_tier_recommended_label">প্রস্তাবিত</string>
+    <string name="core_voice_whisper_mel_bins_error">এই ভয়েস মডেলটির একটি %1$s ব্যান্ড স্পেকট্রোগ্রাম প্রয়োজন, যা এটি যে ফাইলের সাথে ডাউনলোড হয়েছে তার সাথে মেলে না। সেটিংস থেকে মডেলটি মুছে ফেলুন এবং পুনরায় ডাউনলোড করুন।</string>
+    <string name="core_voice_whisper_model_load_error">ভয়েস মডেল লোড হয়নি। ফাইলটি সম্ভবত ক্ষতিগ্রস্ত। সেটিংসে মডেলটি মুছে ফেলুন এবং আবার ডাউনলোড করুন।</string>
+    <string name="core_voice_whisper_transcribe_error">ভয়েস টাইপিং কাজ করেনি। আবার চেষ্টা করুন, অথবা ছোট কোনো মডেল নির্বাচন করুন।</string>
+</resources>

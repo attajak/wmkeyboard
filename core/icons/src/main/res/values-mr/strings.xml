@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">इमोजी टॅब</string>
+    <string name="core_icons_group_keys_title">कीज</string>
+    <string name="core_icons_group_toolbar_title">टूलबार</string>
+    <string name="core_icons_group_tools_title">टूल्स</string>
+    <string name="core_icons_pack_imported_label">आयात केलेले आयकॉन्स</string>
+    <string name="core_icons_pack_mine_label">माझे आयकॉन्स</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">ॲपने %1$d फाईल दुर्लक्षित केली. या आवृत्तीमध्ये त्यासाठी कोणतेही आयकॉन नाही: %2$s</item>
+        <item quantity="other">ॲपने %1$d फाईल्स दुर्लक्षित केल्या. या आवृत्तीमध्ये त्यांच्यासाठी कोणतेही आयकॉन नाही: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">ॲपने \"%1$s\" काढून टाकले. ॲप ते सेव्ह करू शकत नाही.</string>
+    <string name="core_icons_repair_svg_unreadable">ॲपने \"%1$s\" सोडून दिले. ॲप त्याची SVG फाइल वाचू शकत नाही.</string>
+    <string name="core_icons_slot_backspace_label">बॅकस्पेस</string>
+    <string name="core_icons_slot_caps_lock_label">कॅप्स लॉक</string>
+    <string name="core_icons_slot_emoji_activities_label">ॲक्टिव्हिटीज</string>
+    <string name="core_icons_slot_emoji_animals_label">प्राणी</string>
+    <string name="core_icons_slot_emoji_flags_label">ध्वज</string>
+    <string name="core_icons_slot_emoji_food_label">अन्न</string>
+    <string name="core_icons_slot_emoji_key_label">इमोजी की</string>
+    <string name="core_icons_slot_emoji_most_used_label">सर्वात जास्त वापरलेले</string>
+    <string name="core_icons_slot_emoji_nature_label">निसर्ग</string>
+    <string name="core_icons_slot_emoji_objects_label">वस्तू</string>
+    <string name="core_icons_slot_emoji_people_label">लोक</string>
+    <string name="core_icons_slot_emoji_recent_label">अलीकडील</string>
+    <string name="core_icons_slot_emoji_shortcut_label">इमोजी शॉर्टकट</string>
+    <string name="core_icons_slot_emoji_smileys_label">स्माइलीज</string>
+    <string name="core_icons_slot_emoji_symbols_label">चिन्हे</string>
+    <string name="core_icons_slot_emoji_travel_label">प्रवास</string>
+    <string name="core_icons_slot_enter_done_label">एंटर: पूर्ण</string>
+    <string name="core_icons_slot_enter_go_label">एंटर: गो</string>
+    <string name="core_icons_slot_enter_label">एंटर</string>
+    <string name="core_icons_slot_enter_next_label">एंटर: पुढील</string>
+    <string name="core_icons_slot_enter_previous_label">एंटर: मागील</string>
+    <string name="core_icons_slot_enter_search_label">एंटर: शोध</string>
+    <string name="core_icons_slot_enter_send_label">एंटर: पाठवा</string>
+    <string name="core_icons_slot_forward_delete_label">फॉरवर्ड डिलीट</string>
+    <string name="core_icons_slot_globe_label">भाषा बदला</string>
+    <string name="core_icons_slot_incognito_label">इनकोग्निटो बॅज</string>
+    <string name="core_icons_slot_input_method_picker_label">कीबोर्ड बदला</string>
+    <string name="core_icons_slot_panel_back_label">कीजवर परत जा</string>
+    <string name="core_icons_slot_power_saving_label">पॉवर सेव्हिंग बॅज</string>
+    <string name="core_icons_slot_search_close_label">शोध बंद करा</string>
+    <string name="core_icons_slot_shift_label">शिफ्ट</string>
+    <string name="core_icons_slot_shift_on_label">शिफ्ट (चालू)</string>
+    <string name="core_icons_slot_suggestions_expand_label">टूल्स दाखवा</string>
+    <string name="core_icons_slot_toolbox_label">टूलबॉक्स</string>
+</resources>

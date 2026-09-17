@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Serverul Hugging Face nu a trimis fișierul. Codul de eroare este HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Conexiunea s-a întrerupt în timpul descărcării. Încearcă din nou pentru a continua de unde s-a oprit.</string>
+    <string name="core_voice_download_space_error">Nu există suficient spațiu de stocare pe dispozitiv. Trebuie să eliberezi aproximativ %1$s MB mai întâi.</string>
+    <string name="core_voice_model_base_eu_body">Acest model folosește limba în care tastați, la fel ca modelul de 40 de limbi. Acoperă doar limbile europene, deci descărcarea este mai mică.</string>
+    <string name="core_voice_model_base_multi_body">Acest model echilibrează acuratețea și viteza. Acoperă fiecare limbă pe care o cunoaște Whisper. Selectați-l dacă modelul Mic este prea lent.</string>
+    <string name="core_voice_model_base_world_body">Acest model folosește limba în care tastezi în loc de o presupunere. Frazele scurte devin mult mai fiabile. Selectează-l când lista sa conține limbile tale.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d limbă</item>
+        <item quantity="other">%1$d limbi</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Acesta este unul dintre cele mai precise modele Whisper, dar este prea mare pentru majoritatea telefoanelor. Descărcarea are 1,5 GB. Doar un dispozitiv cu o cantitate mare de memorie îl poate încărca.</string>
+    <string name="core_voice_model_large_v3_multi_body">Acesta este cel mai precis model Whisper și cel mai bun la recunoașterea limbii pe care o vorbești. Descărcarea are 1,5 GB. Doar un dispozitiv cu o cantitate mare de memorie îl poate încărca. Modelul Turbo este aproape la fel de precis și are jumătate din dimensiune.</string>
+    <string name="core_voice_model_medium_multi_body">Acest model oferă o precizie aproape de nivelul desktop. Fiecare frază durează câteva secunde. Modelul folosește aproape un gigabyte de memorie în timp ce rulează.</string>
+    <string name="core_voice_model_single_language_body">Acest model gestionează doar %1$s. Nu are un pas de detectare a limbii. Acest lucru îl face mai rapid și puțin mai precis decât un model multilingv de aceeași dimensiune.</string>
+    <string name="core_voice_model_small_multi_body">Acest model oferă cea mai bună precizie care rulează bine pe un telefon. Gestionează accentele și zgomotul de fundal mai bine decât modelul de bază. Acoperă fiecare limbă pe care o cunoaște Whisper.</string>
+    <string name="core_voice_model_small_world_body">Acest model folosește limba în care tastați și are acuratețea modelului Mic. Este cel mai precis model care încă încape pe un telefon.</string>
+    <string name="core_voice_model_tiny_multi_body">Acesta este cel mai rapid model multilingv. Funcționează bine cu vorbire clară, dar zgomotul reduce acuratețea.</string>
+    <string name="core_voice_model_turbo_multi_body">Acest model recunoaște limba pe care o vorbești mult mai bine decât modelele mai mici. Selectează-l dacă un model mai mic îți transcrie vorbirea în limba greșită. Este o descărcare mare și fiecare frază durează câteva secunde.</string>
+    <string name="core_voice_size_base_label">Bază</string>
+    <string name="core_voice_size_large_label">Mare</string>
+    <string name="core_voice_size_medium_label">Mediu</string>
+    <string name="core_voice_size_small_label">Mic</string>
+    <string name="core_voice_size_tiny_label">Minuscul</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Recomandat</string>
+    <string name="core_voice_whisper_mel_bins_error">Acest model vocal necesită o spectrogramă cu %1$s benzi, care nu se potrivește cu fișierul descărcat. Șterge modelul din setări și descarcă-l din nou.</string>
+    <string name="core_voice_whisper_model_load_error">Modelul vocal nu s-a încărcat. Fișierul este posibil să fie deteriorat. Șterge modelul din setări și descarcă-l din nou.</string>
+    <string name="core_voice_whisper_transcribe_error">Tastarea vocală nu a funcționat. Încearcă din nou sau selectează un model mai mic.</string>
+</resources>

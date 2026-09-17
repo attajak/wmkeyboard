@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Šiam paketui reikalingas garso paketo formatas %1$s. Atnaujinkite programą.</string>
+    <string name="core_feedback_pack_reject_no_samples">Šiame pakete nėra garsų, kuriuos programa galėtų atkurti.</string>
+    <string name="core_feedback_pack_reject_too_large">Garso paketas turi būti mažesnis nei %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Failas tuščias.</string>
+    <string name="core_feedback_sound_import_html_error">Tai HTML arba XML failas, o ne garsas.</string>
+    <string name="core_feedback_sound_import_mp4_error">Programa neatkuria MP4 ir M4A failų. Naudokite MP3 failą.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Jūsų įrenginyje nėra laisvos vietos saugykloje.</string>
+    <string name="core_feedback_sound_import_read_error">Programa negali nuskaityti garso.</string>
+    <string name="core_feedback_sound_import_save_error">Programa negali išsaugoti garso.</string>
+    <string name="core_feedback_sound_import_too_large_error">Klavišo garsas turi būti mažesnis nei %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Failas per trumpas, kad būtų garsas.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Tai nepanašu į MP3, OGG arba WAV failą.</string>
+    <string name="core_feedback_sound_import_zip_error">Tai yra ZIP archyvas, o ne garso failas.</string>
+</resources>

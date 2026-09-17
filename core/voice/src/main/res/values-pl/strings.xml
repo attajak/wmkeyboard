@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Serwer Hugging Face nie wysłał pliku. Kod błędu to HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Połączenie zostało przerwane podczas pobierania. Spróbuj ponownie, aby kontynuować od miejsca, w którym zostało przerwane.</string>
+    <string name="core_voice_download_space_error">Na urządzeniu nie ma wystarczającej ilości miejsca. Musisz najpierw zwolnić około %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">Ten model używa języka, w którym piszesz, tak samo jak model 40-językowy. Obejmuje tylko języki europejskie, więc pobierany plik jest mniejszy.</string>
+    <string name="core_voice_model_base_multi_body">Ten model równoważy dokładność i szybkość. Obsługuje każdy język znany Whisperowi. Wybierz go, jeśli model Small jest zbyt wolny.</string>
+    <string name="core_voice_model_base_world_body">Ten model używa języka, w którym piszesz, zamiast zgadywać. Krótkie frazy stają się znacznie bardziej niezawodne. Wybierz go, gdy na liście znajdą się Twoje języki.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d język</item>
+        <item quantity="other">%1$d języków</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Jest to jeden z najdokładniejszych modeli Whisper, ale jest zbyt duży dla większości telefonów. Pobieranie zajmuje 1,5 GB. Tylko urządzenie z dużą ilością pamięci może go załadować.</string>
+    <string name="core_voice_model_large_v3_multi_body">To najdokładniejszy model Whisper i najlepiej rozpoznający język, w którym mówisz. Pobieranie zajmuje 1,5 GB. Tylko urządzenie z dużą ilością pamięci może go załadować. Model Turbo jest prawie tak samo dokładny i ma połowę rozmiaru.</string>
+    <string name="core_voice_model_medium_multi_body">Ten model zapewnia dokładność niemal jak na komputerze stacjonarnym. Każda fraza zajmuje kilka sekund. Model podczas działania zużywa prawie jeden gigabajt pamięci.</string>
+    <string name="core_voice_model_single_language_body">Ten model obsługuje tylko %1$s. Nie posiada kroku wykrywania języka. Dzięki temu jest szybszy i nieco dokładniejszy niż model wielojęzyczny o tym samym rozmiarze.</string>
+    <string name="core_voice_model_small_multi_body">Ten model zapewnia najlepszą dokładność, która nadal dobrze działa na telefonie. Lepiej radzi sobie z akcentami i szumem tła niż model podstawowy. Obsługuje każdy język, który zna Whisper.</string>
+    <string name="core_voice_model_small_world_body">Ten model używa języka, w którym piszesz, i ma dokładność modelu Small. Jest to najdokładniejszy model, który nadal mieści się w telefonie.</string>
+    <string name="core_voice_model_tiny_multi_body">To najszybszy model wielojęzyczny. Działa dobrze przy wyraźnej mowie, ale hałas zmniejsza dokładność.</string>
+    <string name="core_voice_model_turbo_multi_body">Ten model rozpoznaje język, w którym mówisz, znacznie lepiej niż mniejsze modele. Wybierz go, jeśli mniejszy model transkrybuje Twoją mowę jako niewłaściwy język. Jest to duży plik do pobrania, a przetwarzanie każdej frazy zajmuje kilka sekund.</string>
+    <string name="core_voice_size_base_label">Podstawa</string>
+    <string name="core_voice_size_large_label">Duży</string>
+    <string name="core_voice_size_medium_label">Średni</string>
+    <string name="core_voice_size_small_label">Mały</string>
+    <string name="core_voice_size_tiny_label">Bardzo mały</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Zalecane</string>
+    <string name="core_voice_whisper_mel_bins_error">Ten model głosowy wymaga spektrogramu pasmowego %1$s, który nie pasuje do pliku, z którym został pobrany. Usuń model w ustawieniach i pobierz go ponownie.</string>
+    <string name="core_voice_whisper_model_load_error">Model głosowy nie został załadowany. Plik jest prawdopodobnie uszkodzony. Usuń model w ustawieniach i pobierz go ponownie.</string>
+    <string name="core_voice_whisper_transcribe_error">Pisanie głosowe nie zadziałało. Spróbuj ponownie lub wybierz mniejszy model.</string>
+</resources>

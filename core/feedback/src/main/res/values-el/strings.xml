@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Αυτό το πακέτο απαιτεί μορφή πακέτου ήχου %1$s. Ενημερώστε την εφαρμογή.</string>
+    <string name="core_feedback_pack_reject_no_samples">Αυτό το πακέτο δεν περιέχει ήχους που μπορεί να αναπαράγει η εφαρμογή.</string>
+    <string name="core_feedback_pack_reject_too_large">Ένα πακέτο ήχων πρέπει να είναι μικρότερο από %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Το αρχείο είναι κενό.</string>
+    <string name="core_feedback_sound_import_html_error">Αυτό είναι αρχείο HTML ή XML, όχι ήχος.</string>
+    <string name="core_feedback_sound_import_mp4_error">Η εφαρμογή δεν αναπαράγει αρχεία MP4 και M4A. Χρησιμοποιήστε ένα αρχείο MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Δεν υπάρχει διαθέσιμος αποθηκευτικός χώρος στη συσκευή σας.</string>
+    <string name="core_feedback_sound_import_read_error">Η εφαρμογή δεν μπορεί να διαβάσει τον ήχο.</string>
+    <string name="core_feedback_sound_import_save_error">Η εφαρμογή δεν μπορεί να αποθηκεύσει τον ήχο.</string>
+    <string name="core_feedback_sound_import_too_large_error">Ένας ήχος πλήκτρου πρέπει να είναι μικρότερος από %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Το αρχείο είναι πολύ μικρό για να είναι ήχος.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Αυτό δεν μοιάζει με αρχείο MP3, OGG ή WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Αυτό είναι αρχείο zip, όχι αρχείο ήχου.</string>
+</resources>

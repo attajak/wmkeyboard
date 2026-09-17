@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Baia</string>
+    <string name="core_theme_builtin_bubble_label">Bombolla</string>
+    <string name="core_theme_builtin_crimson_label">Carmesí</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Mar profund</string>
+    <string name="core_theme_builtin_facet_label">Faceta</string>
+    <string name="core_theme_builtin_forest_label">Bosc</string>
+    <string name="core_theme_builtin_glacier_label">Glacera</string>
+    <string name="core_theme_builtin_mint_label">Menta</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Oceà</string>
+    <string name="core_theme_builtin_pitch_label">Negre intens</string>
+    <string name="core_theme_builtin_rose_label">Rosa</string>
+    <string name="core_theme_builtin_sand_label">Sorra</string>
+    <string name="core_theme_builtin_slate_label">Pissarra</string>
+    <string name="core_theme_builtin_snow_label">Neu</string>
+    <string name="core_theme_builtin_sunset_drift_label">Deriva de la posta de sol</string>
+    <string name="core_theme_builtin_sunset_label">Posta de sol</string>
+    <string name="core_theme_family_gradient_label">Degradats</string>
+    <string name="core_theme_family_ocean_label">Capvespre</string>
+    <string name="core_theme_family_snow_label">Pastel</string>
+</resources>

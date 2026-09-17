@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Þetta líkan er læst. Bættu við Hugging Face auðkenni þínu fyrst.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face skilaði HTTP stöðu %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Samþykktu leyfi líkansins á Hugging Face síðunni. Reyndu síðan aftur.</string>
+    <string name="core_intel_llm_download_error_no_space">Það er ekki nægilegt geymslupláss á tækinu þínu. Losaðu um u.þ.b. %1$s GB fyrst.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face samþykkti ekki auðkennið. Athugaðu auðkennið og reyndu aftur.</string>
+    <string name="core_intel_llm_download_error_truncated">Tengingin rofnaði meðan á niðurhali stóð. Ýttu á Halda áfram til að halda áfram.</string>
+    <string name="core_intel_llm_engine_error_gpu">Líkanið bilaði á GPU. GPU-minni er mun minna en kerfisminni. Næsta tilraun notar CPU. Til að nota alltaf CPU, stilltu Compute á CPU í stillingum. Þú getur líka valið minna líkan.</string>
+    <string name="core_intel_llm_engine_error_load">Gagnamódelið hlaðast ekki inn. Skráin er sennilega skemmd. Eyddu módeli í stillingum og halaðu því niður aftur.</string>
+    <string name="core_intel_llm_engine_error_memory">Gerðin kláraði minnið eða hún bilaði. Veldu minni gerð.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Lítil Gemma frá fyrri kynslóð. Hún hefur góð gæði og 4K tákna samhengi.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Minnsta Gemma frá Google. Hún er hröð á öllum tækjum.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Nýjasta Gemma kynslóðin. Hún gefur hágæða niðurstöður á tækinu þínu.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Stærsta líkanið. Það skrifar best, en þarf öflugt tæki.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Almennt líkan sem passar enn á einföld tæki.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Greinilega snjallari en gerðir undir 1B. Þarfnast tækis í milliflokki.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Nýleg lítið líkan. Gæðin eru mikil miðað við stærð.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Mjög lítið og hratt. Það er gott fyrir fljótlegar endurskrifanir, en rökhugsunin er takmörkuð.</string>
+    <string name="core_intel_llm_module_downloading">AI-hluti lyklaborðsins er að hlaðast niður frá Google Play. Reyndu aftur eftir augnablik.</string>
+    <string name="core_intel_llm_module_restart">Uppsetningu á gervigreindarhlutanum er lokið. Lokaðu og opnaðu lyklaborðið aftur til að nota hann.</string>
+    <string name="core_intel_llm_tier_experimental_label">Tilraunakennt</string>
+    <string name="core_intel_llm_tier_recommended_label">Mælt með</string>
+    <string name="core_intel_llm_tier_untested_label">Óprófað</string>
+</resources>

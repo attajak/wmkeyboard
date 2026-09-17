@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Ο διακομιστής δεν έστειλε το αρχείο. Ο κωδικός σφάλματος είναι HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Αυτή η λίστα λέξεων είναι κενή ή μη αναγνώσιμη.</string>
+    <string name="core_pred_wordlist_no_space_error">Δεν υπάρχει αρκετός αποθηκευτικός χώρος στη συσκευή σας. Διαγράψτε μερικά αρχεία και προσπαθήστε ξανά.</string>
+    <string name="core_pred_wordlist_save_error">Η εφαρμογή δεν μπορεί να αποθηκεύσει τη λίστα λέξεων. Προσπαθήστε ξανά.</string>
+    <string name="core_pred_wordlist_size_all_label">Τα πάντα</string>
+    <string name="core_pred_wordlist_size_large_label">Μεγάλο</string>
+    <string name="core_pred_wordlist_size_medium_label">Μεσαίο</string>
+    <string name="core_pred_wordlist_size_small_label">Μικρό</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Βραζιλία</string>
+    <string name="core_pred_wordlist_variant_europe_label">Ευρώπη</string>
+</resources>

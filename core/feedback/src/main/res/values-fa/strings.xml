@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">این بسته به فرمت بسته صوتی %1$s نیاز دارد. برنامه را به‌روزرسانی کنید.</string>
+    <string name="core_feedback_pack_reject_no_samples">این بسته حاوی هیچ صدایی نیست که برنامه بتواند پخش کند.</string>
+    <string name="core_feedback_pack_reject_too_large">حجم بسته صوتی باید کمتر از %1$s مگابایت باشد.</string>
+    <string name="core_feedback_sound_import_empty_error">فایل خالی است.</string>
+    <string name="core_feedback_sound_import_html_error">این یک فایل HTML یا XML است، نه یک صدا.</string>
+    <string name="core_feedback_sound_import_mp4_error">این برنامه فایل‌های MP4 و M4A را پخش نمی‌کند. از یک فایل MP3 استفاده کنید.</string>
+    <string name="core_feedback_sound_import_no_storage_error">هیچ فضای ذخیره‌سازی در دستگاه شما موجود نیست.</string>
+    <string name="core_feedback_sound_import_read_error">برنامه نمی‌تواند صدا را بخواند.</string>
+    <string name="core_feedback_sound_import_save_error">برنامه نمی‌تواند صدا را ذخیره کند.</string>
+    <string name="core_feedback_sound_import_too_large_error">صدای کلید باید کمتر از %1$s مگابایت باشد.</string>
+    <string name="core_feedback_sound_import_too_short_error">فایل برای اینکه یک صدا باشد، بیش از حد کوتاه است.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">این فایل شبیه فایل MP3، OGG یا WAV نیست.</string>
+    <string name="core_feedback_sound_import_zip_error">این یک فایل فشرده (zip) است، نه یک فایل صوتی.</string>
+</resources>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Tek kullanımlık kod</string>
+    <string name="core_content_clip_entity_otp_tag">KOD</string>
+    <string name="core_content_clip_entity_phone_label">Telefon numarası</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFON</string>
+    <string name="core_content_clip_entity_url_label">Bağlantı</string>
+    <string name="core_content_clip_entity_url_tag">BAĞLANTI</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d kırpma, Espanso\'nun tutamayacağı başka genişletmelere sahip. Sadece ilki yazıldı.</item>
+        <item quantity="other">%1$d kırpma, Espanso\'nun tutamayacağı başka genişletmelere sahip. Her birinin sadece ilki yazıldı.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d metin parçacığı belirli bilgisayar programlarıyla sınırlıdır. Telefonunuzda her yerde çalışır.</item>
+        <item quantity="other">%1$d metin parçacığı belirli bilgisayar programlarıyla sınırlıdır. Telefonunuzda her yerde çalışırlar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d kod parçacığı bir listeden seçim yapmanızı istiyor. Uygulama bunun yerine rastgele birini seçiyor.</item>
+        <item quantity="other">%1$d kod parçacığı bir listeden seçim yapmanızı istiyor. Uygulama bunun yerine rastgele birini seçiyor.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d snippet genişletilmeden önce sorar. Espanso\'da böyle bir ayar yoktur, bu yüzden orada kendiliğinden genişleyecektir.</item>
+        <item quantity="other">%1$d snippet genişletilmeden önce sorar. Espanso\'da böyle bir ayar yoktur, bu yüzden orada kendiliğinden genişleyeceklerdir.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d metin parçacığı, uygulamanın tam olarak yazamadığı bir tarih biçimi kullanıyor. Uygulama yapamadığı kısmı çıkardı.</item>
+        <item quantity="other">%1$d metin parçacığı, uygulamanın tam olarak yazamadığı tarih biçimleri kullanıyor. Uygulama yapamadığı kısımları çıkardı.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d snippet, kapalı olan bir klasörde. Espanso\'da klasör anahtarı yoktur, bu yüzden orada genişleyecektir.</item>
+        <item quantity="other">%1$d snippet, kapalı olan klasörlerde. Espanso\'da klasör anahtarı yoktur, bu yüzden orada genişleyeceklerdir.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Uygulama, eklenecek hiçbir şeyi olmayan %1$d snippet\'i atladı.</item>
+        <item quantity="other">Uygulama, eklenecek hiçbir şeyi olmayan %1$d snippet\'i atladı.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d kod parçacığı bir form doldurmanızı istiyor. Uygulama formu metin olarak, imleç ilk boşlukta olacak şekilde ekler.</item>
+        <item quantity="other">%1$d kod parçacığı form doldurmanızı istiyor. Uygulama her formu metin olarak, imleç ilk boşlukta olacak şekilde ekler.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Uygulama, resim ekleyen %1$d snippet\'i atladı.</item>
+        <item quantity="other">Uygulama, resim ekleyen %1$d snippet\'i atladı.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Dosya %1$d başka dosya okuyor. Bir dosya diğerlerini yanında getiremez.</item>
+        <item quantity="other">Dosya %1$d başka dosya okuyor. Bir dosya diğerlerini yanında getiremez.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d kod parçacığı diğer kod parçacıklarını işaret ediyor. Espanso\'nun bunu belirtme yolu yok, bu yüzden bağlantılar dışarıda bırakıldı.</item>
+        <item quantity="other">%1$d kod parçacığı diğer kod parçacıklarını işaret ediyor. Espanso\'nun bunu belirtme yolu yok, bu yüzden bağlantılar dışarıda bırakıldı.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d tetikleyici kelime içinde çalışacak şekilde ayarlanmış. Telefonunuzda sadece tam kelime olarak çalışır.</item>
+        <item quantity="other">%1$d tetikleyici kelime içinde çalışacak şekilde ayarlanmış. Telefonunuzda sadece tam kelime olarak çalışırlar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d metin parçacığı, Espanso\'nun eşdeğerine sahip olmadığı bir değer kullanıyor. Olduğu gibi yazılır.</item>
+        <item quantity="other">%1$d metin parçacığı, Espanso\'nun eşdeğerine sahip olmadığı değerler kullanıyor. Oldukları gibi yazılırlar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Uygulama, %1$d snippet\'ten deseni kaldırdı. Uygulama bu şekildeki desenleri çalıştırmaz. Snippet listede kalır.</item>
+        <item quantity="other">Uygulama, %1$d snippet\'ten deseni kaldırdı. Uygulama bu şekildeki desenleri çalıştırmaz. Snippet\'ler listede kalır.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d metin parçacığı biçimlendirilmiş metin kullanıyor. Uygulama kelimeleri korur ancak biçimlendirmeyi kaldırır.</item>
+        <item quantity="other">%1$d metin parçacığı biçimlendirilmiş metin kullanıyor. Uygulama kelimeleri korur ancak biçimlendirmeyi kaldırır.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d kod parçacığı bilgisayarınızda bir komut çalıştırıyor. Uygulama komutu dışarıda bıraktı ve asla çalıştırmıyor.</item>
+        <item quantity="other">%1$d kod parçacığı bilgisayarınızda komutlar çalıştırıyor. Uygulama komutları dışarıda bıraktı ve asla çalıştırmıyor.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d tetikleyici yalnızca sembollerden oluştuğu için uygulama bunu izleyemez. Metin parçacığı listede kalır.</item>
+        <item quantity="other">%1$d tetikleyici yalnızca sembollerden oluştuğu için uygulama bunları izleyemez. Metin parçacıkları listede kalır.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d snippet, bu uygulamanın {date} gibi doldurduğu parantez içi metinler içerir. Yazıldığı gibi görünmek yerine genişleyecektir.</item>
+        <item quantity="other">%1$d snippet, bu uygulamanın {date} gibi doldurduğu parantez içi metinler içerir. Yazıldığı gibi görünmek yerine genişleyecektir.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d metin parçacığı, deseninin yakaladığı metnin büyük/küçük harf durumunu değiştirir. Espanso bunu yapamaz, bu yüzden yakalanan metin olduğu gibi eklenir.</item>
+        <item quantity="other">%1$d metin parçacığı, desenlerinin yakaladığı metinlerin büyük/küçük harf durumunu değiştirir. Espanso bunu yapamaz, bu yüzden yakalanan metin olduğu gibi eklenir.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d metin parçacığı, uygulamanın eşdeğerine sahip olmadığı bir değer kullanıyor. O kısım boş geliyor.</item>
+        <item quantity="other">%1$d metin parçacığı, uygulamanın eşdeğerine sahip olmadığı değerler kullanıyor. O kısımlar boş geliyor.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Uygulama yazı tipini indiremiyor. Bağlantınızı kontrol edin ve tekrar deneyin.</string>
+    <string name="core_content_font_error_empty">Dosya boş.</string>
+    <string name="core_content_font_error_load">Uygulama bu yazı tipi dosyasını yükleyemiyor.</string>
+    <string name="core_content_font_error_markup">Bu dosya bir yazı tipi değil, bir HTML veya XML dosyasıdır.</string>
+    <string name="core_content_font_error_no_storage">Yazı tipi için kullanılabilir depolama alanı yok.</string>
+    <string name="core_content_font_error_not_a_font">Bu dosya bir .ttf veya .otf yazı tipi gibi görünmüyor.</string>
+    <string name="core_content_font_error_read">Uygulama yazı tipini okuyamıyor.</string>
+    <string name="core_content_font_error_save">Uygulama yazı tipini kaydedemiyor.</string>
+    <string name="core_content_font_error_too_large">Bir yazı tipi %1$d MB\'den küçük olmalıdır.</string>
+    <string name="core_content_font_error_too_many">Yazı tipi kütüphanesi dolu. Bir yazı tipini silin ve tekrar deneyin.</string>
+    <string name="core_content_font_error_too_short">Dosya bir yazı tipi olmak için çok kısa.</string>
+    <string name="core_content_font_error_woff">Uygulama WOFF web yazı tiplerini okuyamıyor. Yazı tipinin .ttf veya .otf sürümünü kullanın.</string>
+    <string name="core_content_font_error_woff2">Uygulama WOFF2 web yazı tiplerini okuyamıyor. Yazı tipinin .ttf veya .otf sürümünü kullanın.</string>
+    <string name="core_content_font_error_zip">Bu dosya bir yazı tipi değil, bir zip arşividir.</string>
+    <string name="core_content_selection_macro_add_contact">Kişi</string>
+    <string name="core_content_selection_macro_calendar">Takvim</string>
+    <string name="core_content_selection_macro_call">Ara</string>
+    <string name="core_content_selection_macro_case_lower">küçük harf</string>
+    <string name="core_content_selection_macro_case_sentence">Cümle düzeni</string>
+    <string name="core_content_selection_macro_case_title">Başlık Düzeni</string>
+    <string name="core_content_selection_macro_case_upper">BÜYÜK HARF</string>
+    <string name="core_content_selection_macro_chat_bold">Kalın</string>
+    <string name="core_content_selection_macro_chat_italic">İtalik</string>
+    <string name="core_content_selection_macro_chat_mono">Sabit Genişlikli (Mono)</string>
+    <string name="core_content_selection_macro_chat_strike">Üstü çizili</string>
+    <string name="core_content_selection_macro_colour">Renk</string>
+    <string name="core_content_selection_macro_copy">Kopyala</string>
+    <string name="core_content_selection_macro_digits_latin">Rakamlar</string>
+    <string name="core_content_selection_macro_email">E-posta</string>
+    <string name="core_content_selection_macro_fancy">Süslü</string>
+    <string name="core_content_selection_macro_find">Bul</string>
+    <string name="core_content_selection_macro_format">Biçim</string>
+    <string name="core_content_selection_macro_grammar">Dilbilgisi</string>
+    <string name="core_content_selection_macro_lines_bullet">Madde işaretleri</string>
+    <string name="core_content_selection_macro_lines_dedupe">Benzersiz</string>
+    <string name="core_content_selection_macro_lines_number">Sayı</string>
+    <string name="core_content_selection_macro_lines_sort">Sırala</string>
+    <string name="core_content_selection_macro_map">Harita</string>
+    <string name="core_content_selection_macro_open">Aç</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Seslendir</string>
+    <string name="core_content_selection_macro_replace">Değiştir</string>
+    <string name="core_content_selection_macro_search">Ara</string>
+    <string name="core_content_selection_macro_share">Paylaş</string>
+    <string name="core_content_selection_macro_sms">Mesaj</string>
+    <string name="core_content_selection_macro_time_zones">Zaman Dilimleri</string>
+    <string name="core_content_selection_macro_to_bangla">Bengalce</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Çevir</string>
+    <string name="core_content_selection_macro_url_decode">Kod Çöz</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Uygulama, \"%1$s\" içinden %2$d genişletmeyi dışarıda bıraktı.</item>
+        <item quantity="other">Uygulama, \"%1$s\" içinden %2$d genişletmeyi dışarıda bıraktı.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Uygulama, \"%1$s\" içindeki deseni kaldırdı. Desen doğru değil. Parçacık listede kalır.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Uygulama, adı olmayan veya başka bir klasörle çakışan %1$d klasörü kaldırdı. İçindeki metin parçacıkları klasörsüz olarak eklendi.</item>
+        <item quantity="other">Uygulama, adı olmayan veya başka bir klasörle çakışan %1$d klasörü kaldırdı. İçindeki metin parçacıkları klasörsüz olarak eklendi.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Dosya, uygulamanın tuttuğundan daha fazla snippet içeriyor. Uygulama ilk %1$d tanesini içe aktardı.</item>
+        <item quantity="other">Dosya, uygulamanın tuttuğundan daha fazla snippet içeriyor. Uygulama ilk %1$d tanesini içe aktardı.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Bir parçanın adı yok, bu yüzden uygulama onu ilk satırına göre adlandırdı.</string>
+    <string name="core_content_snippet_repair_no_text">Uygulama \"%1$s\" öğesini bıraktı. Metni yok.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Uygulama, \"%1$s\" içindeki deseni kaldırdı. %2$d karakterden uzundu.</item>
+        <item quantity="other">Uygulama, \"%1$s\" içindeki deseni kaldırdı. %2$d karakterden uzundu.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Uygulama \"%1$s\" kısmını kısalttı. %2$d karakterden uzundu.</item>
+        <item quantity="other">Uygulama \"%1$s\" kısmını kısalttı. %2$d karakterden uzundu.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Yazdığınız uygulamanın adı</string>
+    <string name="core_content_snippet_var_clip_info">En yeni pano girişi</string>
+    <string name="core_content_snippet_var_cursor_info">İmlecin konumlandığı yer</string>
+    <string name="core_content_snippet_var_date_info">Bugünün tarihi</string>
+    <string name="core_content_snippet_var_datetime_info">Tarih ve saat</string>
+    <string name="core_content_snippet_var_day_info">Ayın günü</string>
+    <string name="core_content_snippet_var_isodate_info">ISO formatında tarih, örneğin 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">ISO biçiminde tarih ve saat</string>
+    <string name="core_content_snippet_var_month_info">Ayın adı</string>
+    <string name="core_content_snippet_var_package_info">O uygulamanın paket adı</string>
+    <string name="core_content_snippet_var_selection_info">Alanda seçtiğiniz metin</string>
+    <string name="core_content_snippet_var_time12_info">12 saatlik biçimde şu anki zaman</string>
+    <string name="core_content_snippet_var_time_info">24 saatlik biçimde şu anki zaman</string>
+    <string name="core_content_snippet_var_timestamp_info">Unix saniyesi cinsinden zaman</string>
+    <string name="core_content_snippet_var_timezone_info">Saat dilimi, örneğin GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Yeni bir rastgele UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Günün adı, örneğin Pazar</string>
+    <string name="core_content_snippet_var_year_info">Dört haneli yıl</string>
+    <string name="core_content_sticker_pack_imported_label">İçe aktarılan çıkartmalar</string>
+    <string name="core_content_sticker_repair_image_missing">Uygulama \"%1$s\" öğesini bıraktı. Resmi eksik.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Uygulama \"%1$s\" öğesini bıraktı. Uygulama görselini okuyamıyor.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Pakette %1$d çıkartma var. Uygulama ilk %2$d tanesini tutar.</item>
+        <item quantity="other">Pakette %1$d çıkartma var. Uygulama ilk %2$d tanesini tutar.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Uygulama bir çıkartmayı bıraktı. Çıkartma hiçbir resim dosyasını adlandırmıyor.</string>
+    <string name="core_content_sticker_repair_none_listed">Paket dosyası hiçbir çıkartma listelemiyor.</string>
+    <string name="core_content_sticker_repair_not_saved">Uygulama \"%1$s\" öğesini bıraktı. Uygulama bunu kaydedemiyor.</string>
+</resources>

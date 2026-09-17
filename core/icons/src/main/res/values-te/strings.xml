@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">ఎమోజి ట్యాబ్‌లు</string>
+    <string name="core_icons_group_keys_title">కీలు</string>
+    <string name="core_icons_group_toolbar_title">టూల్ బార్</string>
+    <string name="core_icons_group_tools_title">టూల్స్</string>
+    <string name="core_icons_pack_imported_label">దిగుమతి చేసుకున్న చిహ్నాలు</string>
+    <string name="core_icons_pack_mine_label">నా చిహ్నాలు</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">యాప్ %1$d ఫైల్‌ను విస్మరించింది. ఈ వెర్షన్‌లో దీని కోసం ఐకాన్ లేదు: %2$s</item>
+        <item quantity="other">యాప్ %1$d ఫైళ్లను విస్మరించింది. ఈ వెర్షన్‌లో వాటి కోసం ఐకాన్ లేదు: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">యాప్ \"%1$s\"ని వదిలేసింది. యాప్ దానిని సేవ్ చేయలేదు.</string>
+    <string name="core_icons_repair_svg_unreadable">యాప్ \"%1$s\"ని తొలగించింది. యాప్ దాని SVG ఫైల్‌ను చదవలేదు.</string>
+    <string name="core_icons_slot_backspace_label">బ్యాక్‌స్పేస్</string>
+    <string name="core_icons_slot_caps_lock_label">క్యాప్స్ లాక్</string>
+    <string name="core_icons_slot_emoji_activities_label">కార్యకలాపాలు</string>
+    <string name="core_icons_slot_emoji_animals_label">జంతువులు</string>
+    <string name="core_icons_slot_emoji_flags_label">జెండాలు</string>
+    <string name="core_icons_slot_emoji_food_label">ఆహారం</string>
+    <string name="core_icons_slot_emoji_key_label">ఎమోజి కీ</string>
+    <string name="core_icons_slot_emoji_most_used_label">ఎక్కువగా ఉపయోగించినవి</string>
+    <string name="core_icons_slot_emoji_nature_label">ప్రకృతి</string>
+    <string name="core_icons_slot_emoji_objects_label">వస్తువులు</string>
+    <string name="core_icons_slot_emoji_people_label">ప్రజలు</string>
+    <string name="core_icons_slot_emoji_recent_label">ఇటీవలివి</string>
+    <string name="core_icons_slot_emoji_shortcut_label">ఎమోజీ షార్ట్‌కట్</string>
+    <string name="core_icons_slot_emoji_smileys_label">స్మైలీలు</string>
+    <string name="core_icons_slot_emoji_symbols_label">చిహ్నాలు</string>
+    <string name="core_icons_slot_emoji_travel_label">ప్రయాణం</string>
+    <string name="core_icons_slot_enter_done_label">ఎంటర్: పూర్తయింది</string>
+    <string name="core_icons_slot_enter_go_label">ఎంటర్: గో</string>
+    <string name="core_icons_slot_enter_label">ఎంటర్</string>
+    <string name="core_icons_slot_enter_next_label">ఎంటర్: తదుపరి</string>
+    <string name="core_icons_slot_enter_previous_label">ఎంటర్: మునుపటి</string>
+    <string name="core_icons_slot_enter_search_label">ఎంటర్: శోధన</string>
+    <string name="core_icons_slot_enter_send_label">ఎంటర్: పంపండి</string>
+    <string name="core_icons_slot_forward_delete_label">ఫార్వర్డ్ డిలీట్</string>
+    <string name="core_icons_slot_globe_label">భాషను మార్చండి</string>
+    <string name="core_icons_slot_incognito_label">ఇన్‌కాగ్నిటో బ్యాడ్జ్</string>
+    <string name="core_icons_slot_input_method_picker_label">కీబోర్డ్‌ను మార్చండి</string>
+    <string name="core_icons_slot_panel_back_label">కీలకు తిరిగి వెళ్ళు</string>
+    <string name="core_icons_slot_power_saving_label">పవర్ సేవింగ్ బ్యాడ్జ్</string>
+    <string name="core_icons_slot_search_close_label">సెర్చ్‌ను మూసివేయండి</string>
+    <string name="core_icons_slot_shift_label">షిఫ్ట్</string>
+    <string name="core_icons_slot_shift_on_label">షిఫ్ట్ (ఆన్)</string>
+    <string name="core_icons_slot_suggestions_expand_label">సాధనాలను చూపించు</string>
+    <string name="core_icons_slot_toolbox_label">టూల్‌బాక్స్</string>
+</resources>

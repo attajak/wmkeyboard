@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">De app heeft %1$d diagonaal veeggebaar verwijderd. Dit toetsenbord ondersteunt alleen veegbewegingen naar boven, beneden, links en rechts.</item>
+        <item quantity="other">De app heeft %1$d diagonaal veeggebaren verwijderd. Dit toetsenbord ondersteunt alleen veegbewegingen naar boven, beneden, links en rechts.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d toets typt het teken dat erop staat. Het oorspronkelijke toetsenbord gebruikte een regel om te bepalen wat het typt.</item>
+        <item quantity="other">%1$d toetsen typen de tekens die erop staan. Het oorspronkelijke toetsenbord gebruikte regels om te bepalen wat ze typen.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Dit toetsenbord heeft %1$d toets waar je herhaaldelijk op tikt om door tekens te bladeren. Deze toetsenbord-app heeft niet zo\'n toets, dus alleen het eerste teken is beschikbaar.</item>
+        <item quantity="other">Dit toetsenbord heeft %1$d toetsen waar je herhaaldelijk op tikt om door tekens te bladeren. Deze toetsenbord-app heeft geen dergelijke toetsen, dus alleen het eerste teken van elk is beschikbaar.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Dit toetsenbord gebruikt regels om te bepalen welke toetsen worden getypt. De app heeft die regels niet, dus elke toets typt het teken dat erop staat.</string>
+    <string name="core_keyman_shift_layer_folded">De app heeft de shift-laag samengevoegd met de toetsen. Houd Shift ingedrukt om die tekens te bereiken.</string>
+    <string name="core_keyman_shift_layer_separate">De shift-laag heeft een andere vorm, dus de app heeft deze als een eigen laag behouden.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">De app heeft %1$d toets verwijderd. Dit toetsenbord heeft geen toets die hetzelfde doet.</item>
+        <item quantity="other">De app heeft %1$d toetsen verwijderd. Dit toetsenbord heeft geen toetsen die hetzelfde doen.</item>
+    </plurals>
+</resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">এখন এটি দিয়ে ইমোজি আঁকবেন?</string>
+    <string name="faddons_apply_icon_pack_question">এখন কিবোর্ডে এর আইকনগুলো ব্যবহার করবেন?</string>
+    <string name="faddons_apply_layout_question">এটি চালু করবেন যাতে আপনি এটি দিয়ে টাইপ করতে পারেন?</string>
+    <string name="faddons_apply_plugin_question">এটি কি চালু করবেন যাতে এটি প্লাগইন প্যানেলে দেখা যায়?</string>
+    <string name="faddons_apply_sound_pack_question">আপনার কী-এর জন্য এই সাউন্ড প্যাকটি এখনই ব্যবহার করবেন?</string>
+    <string name="faddons_apply_sound_question">এটি কি এখন আপনার কি সাউন্ড হিসেবে ব্যবহার করবেন?</string>
+    <string name="faddons_apply_switch_action">এটিতে স্যুইচ করুন</string>
+    <string name="faddons_apply_theme_question">এখন এটি আপনার কীবোর্ড থিম হিসেবে ব্যবহার করবেন?</string>
+    <string name="faddons_download_error_app_too_old">এই অ্যাড-অনটির জন্য অ্যাপের একটি নতুন সংস্করণ প্রয়োজন।</string>
+    <string name="faddons_download_error_bad_url">ডাউনলোড লিঙ্কটি একটি বৈধ https URL নয়।</string>
+    <string name="faddons_download_error_checksum">ডাউনলোড করা ফাইলটি ম্যানিফেস্টের চেকসামের সাথে মিলছে না।</string>
+    <string name="faddons_download_error_http_status">সার্ভার HTTP %1$d রিটার্ন করেছে।</string>
+    <string name="faddons_download_error_no_space">এটি ইনস্টল করার জন্য পর্যাপ্ত খালি জায়গা নেই।</string>
+    <string name="faddons_download_error_plugin_no_checksum">এই প্লাগইনটির কোনো চেকসাম নেই। অ্যাপটি এটি যাচাই করতে পারছে না।</string>
+    <string name="faddons_download_error_too_large">এই অ্যাড-অনটি তার ধরনের জন্য নির্ধারিত %1$d মেগাবাইটের সীমা অতিক্রম করেছে।</string>
+    <string name="faddons_error_no_words">অ্যাপটি সেই ফাইল থেকে কোনো শব্দ পড়তে পারেনি।</string>
+    <string name="faddons_error_not_a_plugin">ফাইলটি কোনো ডাব্লিউএম কীবোর্ড প্লাগইন নয়।</string>
+    <string name="faddons_install_error_dictionary_no_language">এই অভিধানটি কোন ভাষার জন্য তা উল্লেখ করা নেই।</string>
+    <string name="faddons_install_error_dictionary_not_saved">অ্যাপটি ডিকশনারিটি সংরক্ষণ করতে পারেনি।</string>
+    <string name="faddons_install_error_icon_pack_unreadable">অ্যাপটি আইকন প্যাকটি পড়তে পারেনি।</string>
+    <string name="faddons_install_error_keywords_no_language">এই প্যাকটি বলে না যে এটি কোন ভাষার জন্য।</string>
+    <string name="faddons_install_error_keywords_not_saved">অ্যাপটি কিউওয়ার্ড প্যাকটি সংরক্ষণ করতে পারেনি।</string>
+    <string name="faddons_install_error_keywords_too_large">সেই কিওয়ার্ড প্যাকটি ইমপোর্ট করার জন্য খুব বড়।</string>
+    <string name="faddons_install_error_no_keywords">অ্যাপটি সেই ফাইল থেকে কোনো ইমোজি কিওয়ার্ড পড়তে পারেনি।</string>
+    <string name="faddons_install_error_no_stickers">অ্যাপটি সেই প্যাক থেকে কোনো স্টিকার পড়তে পারেনি। %1$s</string>
+    <string name="faddons_install_error_not_a_layout">ফাইলটি কোনো WM কিবোর্ড লেআউট নয়।</string>
+    <string name="faddons_install_error_not_a_snippet_pack">ফাইলটি কোনো WM কীবোর্ড স্নিপেট প্যাক নয়।</string>
+    <string name="faddons_install_error_not_a_sound_pack">এই ফাইলটি কোনো সাউন্ড প্যাক নয়।</string>
+    <string name="faddons_install_error_not_a_sticker_pack">ফাইলটি কোনো স্টিকার প্যাক নয়।</string>
+    <string name="faddons_install_error_not_a_theme">ফাইলটি কোনো WM কীবোর্ড থিম নয়।</string>
+    <string name="faddons_install_error_not_an_espanso_pack">ফাইলটি কোনো Espanso প্যাকেজ বা ম্যাচ ফাইল নয়।</string>
+    <string name="faddons_install_error_not_an_icon_pack">ফাইলটি কোনো আইকন প্যাক নয়।</string>
+    <string name="faddons_install_error_plugin_failed">অ্যাপটি সেই প্লাগইনটি ইনস্টল করতে পারেনি।</string>
+    <string name="faddons_install_error_plugins_turned_off">প্লাগইন বন্ধ আছে। টুলস › প্লাগইন-এর অধীনে “প্লাগইন অনুমোদন করুন” চালু করুন। তারপর এটি আবার ইনস্টল করুন।</string>
+    <string name="faddons_install_error_snippet_pack_empty">সেই স্নিপেট প্যাকটি খালি।</string>
+    <string name="faddons_install_error_sound_pack_read">অ্যাপটি এই সাউন্ড প্যাকটি পড়তে পারে না।</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">অ্যাপটি স্টিকার প্যাকটি পড়তে পারেনি।</string>
+    <string name="faddons_install_error_too_many_fonts">আপনি ইনস্টল করা ফন্টের সর্বোচ্চ সীমায় পৌঁছে গেছেন।</string>
+    <string name="faddons_install_error_too_many_icon_packs">আপনি আইকন প্যাকের সর্বোচ্চ সংখ্যায় পৌঁছেছেন।</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">আপনার কাছে ইতিমধ্যে সর্বোচ্চ %1$d প্লাগইন আছে।</item>
+        <item quantity="other">আপনার কাছে ইতিমধ্যে সর্বোচ্চ %1$d প্লাগইন আছে।</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">আপনি ইনস্টল করা সাউন্ড প্যাকের সর্বোচ্চ সীমায় পৌঁছে গেছেন।</string>
+    <string name="faddons_install_error_too_many_sounds">আপনি ইনস্টল করা কী সাউন্ডের সর্বোচ্চ সীমায় পৌঁছে গেছেন।</string>
+    <string name="faddons_install_error_too_many_sticker_packs">আপনি স্টিকার প্যাকের সর্বোচ্চ সীমায় পৌঁছে গেছেন।</string>
+    <string name="faddons_install_error_unknown_language">অ্যাপের এই সংস্করণটি “%1$s” ভাষা সমর্থন করে না।</string>
+    <string name="faddons_install_error_unknown_type">অ্যাপের এই সংস্করণটি সেই অ্যাড-অন টাইপ সমর্থন করে না।</string>
+    <string name="faddons_install_error_vocab_no_language">এই ভোকাবুলারি প্যাকটিতে কোন ভাষার জন্য তা উল্লেখ নেই।</string>
+    <string name="faddons_install_error_vocab_no_words">অ্যাপটি সেই প্যাক থেকে কোনো শব্দ পড়তে পারেনি।</string>
+    <string name="faddons_install_error_vocab_not_a_pack">ফাইলটি কোনো ভোকাবুলারি প্যাক নয়।</string>
+    <string name="faddons_install_error_vocab_too_large">এই ভোকাবুলারি প্যাকটি অ্যাপের গ্রহণযোগ্য সীমার চেয়ে বড়।</string>
+    <string name="faddons_preview_error_no_preview">অ্যাপটি এই অ্যাড-অনটির পূর্বরূপ দেখাতে পারে না।</string>
+    <string name="faddons_preview_error_not_espanso_pack">ফাইলটি কোনো Espanso প্যাকেজ বা ম্যাচ ফাইল নয়।</string>
+    <string name="faddons_preview_error_not_keyword_pack">সেই ফাইলটি কোনো ইমোজি কিওয়ার্ড প্যাক নয়।</string>
+    <string name="faddons_preview_error_not_snippet_pack">ফাইলটি কোনো স্নিপেট প্যাক নয়।</string>
+    <string name="faddons_preview_error_not_vocab_pack">ফাইলটি কোনো ভোকাবুলারি প্যাক নয়।</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">অ্যাপটি এই প্যাকে থাকা সাউন্ডগুলো পড়তে পারেনি।</string>
+    <string name="faddons_preview_error_stickers_unreadable">অ্যাপটি স্টিকারের ছবিগুলো পড়তে পারেনি।</string>
+    <string name="faddons_snippet_pack_folder_fallback">স্নিপেট প্যাক</string>
+</resources>

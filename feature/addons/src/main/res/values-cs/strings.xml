@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Vykreslovat jím nyní emoji?</string>
+    <string name="faddons_apply_icon_pack_question">Použít jeho ikony na klávesnici nyní?</string>
+    <string name="faddons_apply_layout_question">Zapnout, abyste s ním mohli psát?</string>
+    <string name="faddons_apply_plugin_question">Zapnout, aby se zobrazoval v panelu doplňků?</string>
+    <string name="faddons_apply_sound_pack_question">Použít nyní tento zvukový balíček pro klávesy?</string>
+    <string name="faddons_apply_sound_question">Použít nyní jako zvuk kláves?</string>
+    <string name="faddons_apply_switch_action">Přepnout na něj</string>
+    <string name="faddons_apply_theme_question">Použít nyní jako motiv klávesnice?</string>
+    <string name="faddons_download_error_app_too_old">Tento doplněk vyžaduje novější verzi aplikace.</string>
+    <string name="faddons_download_error_bad_url">Odkaz ke stažení není platná adresa URL typu https.</string>
+    <string name="faddons_download_error_checksum">Stažený soubor neodpovídá kontrolnímu součtu v manifestu.</string>
+    <string name="faddons_download_error_http_status">Server vrátil HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Pro instalaci není dostatek volného místa.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Tento doplněk nemá kontrolní součet. Aplikace jej nemůže ověřit.</string>
+    <string name="faddons_download_error_too_large">Tento doplněk je větší než limit %1$d MB pro tento typ.</string>
+    <string name="faddons_error_no_words">Aplikace nedokázala ze souboru přečíst žádná slova.</string>
+    <string name="faddons_error_not_a_plugin">Tento soubor není pluginem klávesnice WM.</string>
+    <string name="faddons_install_error_dictionary_no_language">Tento slovník neuvádí, pro jaký jazyk je určen.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Aplikaci se nepodařilo uložit slovník.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Aplikace nemohla přečíst balíček ikon.</string>
+    <string name="faddons_install_error_keywords_no_language">Tento balíček neuvádí, pro jaký jazyk je určen.</string>
+    <string name="faddons_install_error_keywords_not_saved">Aplikaci se nepodařilo uložit balíček klíčových slov.</string>
+    <string name="faddons_install_error_keywords_too_large">Tento balíček klíčových slov je příliš velký pro import.</string>
+    <string name="faddons_install_error_no_keywords">Aplikace nedokázala ze souboru přečíst žádná klíčová slova pro emoji.</string>
+    <string name="faddons_install_error_no_stickers">Aplikace nemohla z tohoto balíčku přečíst žádné nálepky. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Tento soubor není rozvržení klávesnice WM.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Tento soubor není balíček úryvků klávesnice WM.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Tento soubor není balíček zvuků.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Tento soubor není balíček nálepek.</string>
+    <string name="faddons_install_error_not_a_theme">Tento soubor není motivem klávesnice WM.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Tento soubor není balíček Espanso ani soubor shody.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Tento soubor není balíček ikon.</string>
+    <string name="faddons_install_error_plugin_failed">Aplikaci se nepodařilo nainstalovat tento plugin.</string>
+    <string name="faddons_install_error_plugins_turned_off">Pluginy jsou vypnuté. Zapněte „Povolit pluginy“ v Nástroje › Pluginy. Poté to nainstalujte znovu.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Tento balíček úryvků je prázdný.</string>
+    <string name="faddons_install_error_sound_pack_read">Aplikace nemůže přečíst tento balíček zvuků.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Aplikace nemohla přečíst balíček nálepek.</string>
+    <string name="faddons_install_error_too_many_fonts">Dosáhli jste maximálního počtu nainstalovaných písem.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Dosáhli jste maximálního počtu balíčků ikon.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Již máte maximální počet %1$d pluginu.</item>
+        <item quantity="other">Již máte maximální počet %1$d pluginů.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Dosáhli jste maximálního počtu nainstalovaných zvukových balíčků.</string>
+    <string name="faddons_install_error_too_many_sounds">Dosáhli jste maximálního počtu nainstalovaných zvuků kláves.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Dosáhli jste maximálního počtu balíčků nálepek.</string>
+    <string name="faddons_install_error_unknown_language">Tato verze aplikace nepodporuje jazyk „%1$s“.</string>
+    <string name="faddons_install_error_unknown_type">Tato verze aplikace tento typ doplňku nepodporuje.</string>
+    <string name="faddons_install_error_vocab_no_language">Tento balíček slovní zásoby neuvádí, pro jaký jazyk je určen.</string>
+    <string name="faddons_install_error_vocab_no_words">Aplikace nedokázala z tohoto balíčku přečíst žádná slova.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Tento soubor není balíček slovní zásoby.</string>
+    <string name="faddons_install_error_vocab_too_large">Tento balíček slovní zásoby je větší, než aplikace přijímá.</string>
+    <string name="faddons_preview_error_no_preview">Aplikace nemůže zobrazit náhled tohoto doplňku.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Tento soubor není balíček Espanso ani soubor shody.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Tento soubor není balíček klíčových slov pro emoji.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Tento soubor není balíček úryvků.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Tento soubor není balíček slovní zásoby.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Aplikace nemohla přečíst zvuky v tomto balíčku.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Aplikace nemohla přečíst obrázky nálepek.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Balíček úryvků</string>
+</resources>

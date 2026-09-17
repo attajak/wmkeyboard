@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Dit pakket vereist geluidspakketformaat %1$s. Update de app.</string>
+    <string name="core_feedback_pack_reject_no_samples">Dit pakket bevat geen geluiden die de app kan afspelen.</string>
+    <string name="core_feedback_pack_reject_too_large">Een geluidspakket moet kleiner zijn dan %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Het bestand is leeg.</string>
+    <string name="core_feedback_sound_import_html_error">Dit is een HTML- of XML-bestand, geen geluid.</string>
+    <string name="core_feedback_sound_import_mp4_error">De app speelt geen MP4- en M4A-bestanden af. Gebruik een MP3-bestand.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Er is geen opslagruimte beschikbaar op je apparaat.</string>
+    <string name="core_feedback_sound_import_read_error">De app kan het geluid niet lezen.</string>
+    <string name="core_feedback_sound_import_save_error">De app kan het geluid niet opslaan.</string>
+    <string name="core_feedback_sound_import_too_large_error">Een toetsgeluid moet kleiner zijn dan %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Het bestand is te kort om een geluid te zijn.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Dit ziet er niet uit als een MP3-, OGG- of WAV-bestand.</string>
+    <string name="core_feedback_sound_import_zip_error">Dit is een zip-archief, geen geluidsbestand.</string>
+</resources>

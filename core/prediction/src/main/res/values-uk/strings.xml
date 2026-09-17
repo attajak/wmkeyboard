@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Сервер не надіслав файл. Код помилки: HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Цей список слів порожній або нечитабельний.</string>
+    <string name="core_pred_wordlist_no_space_error">На вашому пристрої недостатньо пам\'яті. Видаліть деякі файли, а потім спробуйте знову.</string>
+    <string name="core_pred_wordlist_save_error">Додаток не може зберегти список слів. Спробуйте ще раз.</string>
+    <string name="core_pred_wordlist_size_all_label">Все</string>
+    <string name="core_pred_wordlist_size_large_label">Великий</string>
+    <string name="core_pred_wordlist_size_medium_label">Середній</string>
+    <string name="core_pred_wordlist_size_small_label">Малий</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Бразилія</string>
+    <string name="core_pred_wordlist_variant_europe_label">Європа</string>
+</resources>

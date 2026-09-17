@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">ডাউনলোড করা ফাইলটি ক্ষতিগ্রস্ত। এর চেকসাম মিলছে না। আবার ডাউনলোড করার চেষ্টা করুন।</string>
+    <string name="core_input_cjk_download_error_http">সার্ভার HTTP স্ট্যাটাস %1$s ফেরত দিয়েছে।</string>
+    <string name="core_input_cjk_download_error_network">ডাউনলোড কাজ করেনি। আপনার সংযোগ পরীক্ষা করুন এবং আবার চেষ্টা করুন।</string>
+    <string name="core_input_cjk_download_error_network_detail">ডাউনলোড কাজ করেনি: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">আপনার ডিভাইসে পর্যাপ্ত স্টোরেজ নেই। প্রথমে কিছু জায়গা খালি করুন।</string>
+    <string name="core_input_cjk_download_error_truncated">ডাউনলোডের সময় সংযোগ বিচ্ছিন্ন হয়ে গেছে। চালিয়ে যেতে \'পুনরায় শুরু করুন\' চাপুন।</string>
+    <string name="core_input_cjk_download_error_unavailable">এই প্যাকটি এখনও উপলব্ধ নয়।</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">হানজি অক্ষরের জন্য র‍্যাডিকাল কোডের একটি টেবিল, ২৯,০০০ অক্ষর। ক্যাংজি এবং কুইক লেআউটের জন্য কিবোর্ডের এই প্যাকটি প্রয়োজন।</string>
+    <string name="core_input_cjk_pack_cangjie_title">কাংজি (倉頡) অভিধান</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">mozc থেকে কানা রিডিং, ১.০৮ মিলিয়ন এন্ট্রি, প্রায় ৪২ এমবি। জাপানি রূপান্তরের জন্য কীবোর্ডের এই প্যাকটি প্রয়োজন।</string>
+    <string name="core_input_cjk_pack_ja_kana_title">জাপানি কানা থেকে কাঞ্জি অভিধান</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">হানজি অক্ষরের জন্য জিউটপিং রিডিংয়ের একটি টেবিল, ১৬৩,০০০ এন্ট্রি। ক্যান্টোনিজ রূপান্তরের জন্য কীবোর্ডের এই প্যাকটি প্রয়োজন।</string>
+    <string name="core_input_cjk_pack_jyutping_title">ক্যান্টোনিজ জিউটপিং ডিকশনারি</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT থেকে ১২০,০০০ এন্ট্রি সহ হানজি অক্ষর এবং শব্দগুচ্ছ। চীনা রূপান্তরের জন্য কীবোর্ডের এই প্যাকটি প্রয়োজন।</string>
+    <string name="core_input_cjk_pack_pinyin_title">চীনা পিনয়িন অভিধান</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">হানজি অক্ষরের স্ট্রোক অর্ডারের একটি টেবিল। স্ট্রোক লেআউটের জন্য কীবোর্ডের এই প্যাকটি প্রয়োজন।</string>
+    <string name="core_input_cjk_pack_stroke_title">চাইনিজ স্ট্রোক (笔画) অভিধান</string>
+    <string name="core_input_double_pinyin_off_label">বন্ধ (সম্পূর্ণ পিনয়িন)</string>
+</resources>

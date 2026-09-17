@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Эта модель закрыта. Сначала добавьте свой токен Hugging Face.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face вернул статус HTTP %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Примите условия лицензии модели на ее странице на Hugging Face. Затем попробуйте снова.</string>
+    <string name="core_intel_llm_download_error_no_space">На вашем устройстве недостаточно памяти. Сначала освободите около %1$s ГБ.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face не принял токен. Проверьте токен и попробуйте снова.</string>
+    <string name="core_intel_llm_download_error_truncated">Соединение было прервано во время загрузки. Нажмите «Возобновить», чтобы продолжить.</string>
+    <string name="core_intel_llm_engine_error_gpu">Ошибка модели на GPU. Память GPU значительно меньше системной памяти. Следующая попытка будет выполнена с использованием CPU. Чтобы всегда использовать CPU, установите «Compute» на «CPU» в настройках. Вы также можете выбрать модель меньшего размера.</string>
+    <string name="core_intel_llm_engine_error_load">Не удалось загрузить модель. Вероятно, файл поврежден. Удалите модель в настройках и загрузите её снова.</string>
+    <string name="core_intel_llm_engine_error_memory">Модели не хватило памяти или произошла ошибка. Выберите модель поменьше.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Небольшая модель Gemma предыдущего поколения. Обладает хорошим качеством и контекстом в 4K токенов.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Самая маленькая модель Gemma от Google. Она быстрая на всех устройствах.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Новейшее поколение Gemma. Обеспечивает высочайшее качество на вашем устройстве.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Самая большая модель. Она пишет лучше всего, но требует мощного устройства.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Универсальная модель, которая помещается даже на базовом устройстве.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Заметно умнее моделей меньше 1B. Требует устройство среднего уровня.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Недавняя небольшая модель. Качество высокое для ее размера.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Очень маленькая и быстрая. Хорошо подходит для быстрого переписывания, но возможности рассуждения ограничены.</string>
+    <string name="core_intel_llm_module_downloading">ИИ-компонент клавиатуры загружается из Google Play. Попробуйте еще раз через мгновение.</string>
+    <string name="core_intel_llm_module_restart">Установка ИИ-компонента завершена. Закройте и снова откройте клавиатуру, чтобы начать использование.</string>
+    <string name="core_intel_llm_tier_experimental_label">Экспериментальный</string>
+    <string name="core_intel_llm_tier_recommended_label">Рекомендуется</string>
+    <string name="core_intel_llm_tier_untested_label">Не протестировано</string>
+</resources>

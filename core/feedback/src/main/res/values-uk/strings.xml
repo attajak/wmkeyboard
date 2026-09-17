@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Цей пакет потребує формату звукового пакета %1$s. Оновіть додаток.</string>
+    <string name="core_feedback_pack_reject_no_samples">Цей набір не містить звуків, які може відтворити додаток.</string>
+    <string name="core_feedback_pack_reject_too_large">Пакет звуків має бути меншим за %1$s МБ.</string>
+    <string name="core_feedback_sound_import_empty_error">Файл порожній.</string>
+    <string name="core_feedback_sound_import_html_error">Це HTML або XML файл, а не звук.</string>
+    <string name="core_feedback_sound_import_mp4_error">Додаток не відтворює файли MP4 та M4A. Використовуйте файл MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">На вашому пристрої немає доступного сховища.</string>
+    <string name="core_feedback_sound_import_read_error">Додаток не може прочитати цей звук.</string>
+    <string name="core_feedback_sound_import_save_error">Додаток не може зберегти звук.</string>
+    <string name="core_feedback_sound_import_too_large_error">Звук клавіші має бути меншим за %1$s МБ.</string>
+    <string name="core_feedback_sound_import_too_short_error">Файл занадто короткий, щоб бути звуком.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Це не схоже на файл MP3, OGG або WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Це zip-архів, а не звуковий файл.</string>
+</resources>

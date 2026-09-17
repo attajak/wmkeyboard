@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Lolo hlu lwamagama angukhiye we-emoji alunalutho noma alufundeki.</string>
+    <string name="core_emoji_dict_error_http">Iseva ayizange ithumele ifayela. Ikhodi yephutha ithi HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Lelo fayela akulona uhlu lwamagama angukhiye we-emoji.</string>
+    <string name="core_emoji_dict_error_save">Uhlelo lokusebenza alukwazanga ukulondoloza uhlu lwamagama angukhiye we-emoji.</string>
+    <string name="core_emoji_dict_error_too_large">Lolo hlu lwamagama angukhiye we-emoji lukhulu kakhulu.</string>
+</resources>

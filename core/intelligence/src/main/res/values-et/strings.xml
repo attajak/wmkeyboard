@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">See mudel on piiratud. Lisa esmalt oma Hugging Face\'i luba.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face tagastas HTTP-oleku %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Nõustuge mudeli litsentsiga selle Hugging Face lehel. Seejärel proovige uuesti.</string>
+    <string name="core_intel_llm_download_error_no_space">Sinu seadmes pole piisavalt salvestusruumi. Vabasta esmalt umbes %1$s GB.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face ei aktsepteerinud luba. Kontrollige luba ja proovige uuesti.</string>
+    <string name="core_intel_llm_download_error_truncated">Ühendus katkes allalaadimise ajal. Jätkamiseks vajutage nuppu Jätka.</string>
+    <string name="core_intel_llm_engine_error_gpu">Mudel ebaõnnestus GPU-l. GPU mälu on palju väiksem kui süsteemi mälu. Järgmine katse kasutab CPU-d. CPU kasutamiseks alati määrake seadetes Compute väärtuseks CPU. Samuti saate valida väiksema mudeli.</string>
+    <string name="core_intel_llm_engine_error_load">Mudelit ei õnnestunud laadida. Fail on tõenäoliselt kahjustatud. Kustutage mudel seadetes ja laadige see uuesti alla.</string>
+    <string name="core_intel_llm_engine_error_memory">Mudelil sai mälu otsa või see ebaõnnestus. Vali väiksem mudel.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Väike Gemma eelmisest põlvkonnast. Sellel on hea kvaliteet ja 4K märgiline kontekst.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Google\'i väikseim Gemma. See on kiire kõigis seadmetes.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Uusim Gemma põlvkond. See tagab teie seadmes tipptasemel kvaliteedi.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Suurim mudel. See kirjutab kõige paremini, kuid vajab võimsat seadet.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Üldotstarbeline mudel, mis mahub endiselt lihtsasse seadmesse.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Selgelt nutikam kui alla 1B mudelid. See vajab keskklassi seadet.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Hiljutine väike mudel. Kvaliteet on oma suuruse kohta kõrge.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Väga väike ja kiire. See sobib hästi kiireteks ümberkirjutusteks, kuid arutlusvõime on piiratud.</string>
+    <string name="core_intel_llm_module_downloading">Klaviatuuri tehisintellekti osa laaditakse alla Google Playst. Proovige hetke pärast uuesti.</string>
+    <string name="core_intel_llm_module_restart">AI-osa installimine on lõpetatud. Selle kasutamiseks sulgege ja avage klaviatuur uuesti.</string>
+    <string name="core_intel_llm_tier_experimental_label">Eksperimentaalne</string>
+    <string name="core_intel_llm_tier_recommended_label">Soovitatav</string>
+    <string name="core_intel_llm_tier_untested_label">Testimata</string>
+</resources>

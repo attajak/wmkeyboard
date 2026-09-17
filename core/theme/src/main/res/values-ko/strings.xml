@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">오로라</string>
+    <string name="core_theme_builtin_berry_label">베리</string>
+    <string name="core_theme_builtin_bubble_label">버블</string>
+    <string name="core_theme_builtin_crimson_label">크림슨</string>
+    <string name="core_theme_builtin_cyberpunk_label">사이버펑크</string>
+    <string name="core_theme_builtin_deep_sea_label">심해</string>
+    <string name="core_theme_builtin_facet_label">면(Facet)</string>
+    <string name="core_theme_builtin_forest_label">숲</string>
+    <string name="core_theme_builtin_glacier_label">빙하</string>
+    <string name="core_theme_builtin_mint_label">민트</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">오션</string>
+    <string name="core_theme_builtin_pitch_label">완전한 검정</string>
+    <string name="core_theme_builtin_rose_label">로즈</string>
+    <string name="core_theme_builtin_sand_label">모래색</string>
+    <string name="core_theme_builtin_slate_label">슬레이트</string>
+    <string name="core_theme_builtin_snow_label">눈</string>
+    <string name="core_theme_builtin_sunset_drift_label">선셋 드리프트</string>
+    <string name="core_theme_builtin_sunset_label">일몰</string>
+    <string name="core_theme_family_gradient_label">그라데이션</string>
+    <string name="core_theme_family_ocean_label">나이트폴</string>
+    <string name="core_theme_family_snow_label">파스텔</string>
+</resources>

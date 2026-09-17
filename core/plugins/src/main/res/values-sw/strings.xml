@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Programu-jalizi hii haina kitendaji cha render().</string>
+    <string name="core_plugins_error_not_installed">Programu-jalizi hiyo haijasakinishwa.</string>
+    <string name="core_plugins_error_script_failed">Hati imeshindwa.</string>
+    <string name="core_plugins_error_script_missing">Hati ya programu-jalizi hiyo haipo.</string>
+    <string name="core_plugins_error_turned_off">Programu-jalizi hiyo imezimwa.</string>
+    <string name="core_plugins_permission_storage_label">Hifadhi data kwenye kifaa chako</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” ina hati ambayo si maandishi halali ya UTF-8.</string>
+    <string name="core_plugins_reject_bad_id">Programu-jalizi hii ina kitambulisho kisicho sahihi. Kitambulisho kina urefu wa herufi 3 hadi 64. Kitambulisho kinaweza kuwa na herufi ndogo, namba, nukta, vistari na mistari ya chini.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” ina nambari ya Lua iliyokusanywa. Programu-jalizi lazima itumie nambari ya chanzo wazi, ili uweze kuisoma kabla haijaanza kufanya kazi.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” ina hati tupu.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” haina faili yake ya hati (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Programu-jalizi hii inahitaji toleo jipya zaidi la Kibodi ya WM.</string>
+    <string name="core_plugins_reject_no_name">Programu-jalizi hii haina jina.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” haisemi ni toleo gani.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” ina hati kubwa kuliko %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Toleo hili la WM Keyboard halijui ruhusa “%1$s”. Programu haiwezi kukuambia “%2$s” inaruhusiwa kufanya nini.</string>
+    <string name="core_plugins_stopped_cancelled">Programu imesimamisha programu jalizi hii.</string>
+    <string name="core_plugins_stopped_deadline">Programu-jalizi hii ilichukua muda mrefu sana. Programu imeisimamisha.</string>
+    <string name="core_plugins_stopped_instructions">Programu-jalizi hii ilifanya kazi nyingi sana kwa wakati mmoja. Programu imeisimamisha.</string>
+    <string name="core_plugins_stopped_not_responding">Programu-jalizi hii imeacha kuitikia. Programu imeifunga.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Programu-jalizi hii imeacha kujibu tena. Programu imeizima.</string>
+    <string name="core_plugins_stopped_recursion">Programu-jalizi hii ilijiita mara nyingi sana. Programu imeizuia.</string>
+    <string name="core_plugins_stopped_unexpected">Programu jalizi hii imesimama bila kutarajiwa.</string>
+    <string name="core_plugins_ui_insert_action">Ingiza</string>
+    <string name="core_plugins_ui_repair_no_type">Wijeti haikusema ni ya aina gani.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Orodha ya wijeti ilikuwa na kitu ambacho si wijeti.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Utepe wa kichupo haukuwa na kurasa.</string>
+    <string name="core_plugins_ui_repair_text_budget">Programu jalizi hii iliomba kuchora maandishi mengi sana. Programu imeacha baadhi.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Maandishi fulani yalikuwa marefu sana kuchorwa. Programu imeyafupisha.</string>
+    <string name="core_plugins_ui_repair_too_deep">Wijeti zingine zilikuwa zimeingizwa ndani sana ili kuchorwa.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Tabu %1$d za kwanza pekee ndizo zinazoonyeshwa.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Programu-jalizi hii iliomba wijeti zaidi ya %1$d. Programu iliondoa zingine zilizobaki.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Toleo hili halijui aina ya wijeti “%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Kichupo %1$d</string>
+</resources>

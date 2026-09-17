@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">שרת Hugging Face לא שלח את הקובץ. קוד השגיאה הוא HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">החיבור הופסק במהלך ההורדה. נסה שוב כדי להמשיך מהמקום שבו הוא נעצר.</string>
+    <string name="core_voice_download_space_error">אין מספיק שטח אחסון במכשיר שלך. עליך לפנות כ-%1$s מ\"ב תחילה.</string>
+    <string name="core_voice_model_base_eu_body">מודל זה משתמש בשפה שבה אתה מקליד, בדומה למודל 40 השפות. הוא מכסה רק שפות אירופאיות, לכן ההורדה קטנה יותר.</string>
+    <string name="core_voice_model_base_multi_body">מודל זה מאזן בין דיוק למהירות. הוא מכסה כל שפה ש-Whisper מכיר. בחר בו אם המודל הקטן איטי מדי.</string>
+    <string name="core_voice_model_base_world_body">מודל זה משתמש בשפה שבה אתה מקליד במקום לנחש. ביטויים קצרים הופכים לאמינים הרבה יותר. בחר בו כאשר הרשימה שלו כוללת את השפות שלך.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d שפה</item>
+        <item quantity="other">%1$d שפות</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">זהו אחד ממודלי Whisper המדויקים ביותר, אך הוא גדול מדי עבור רוב הטלפונים. ההורדה היא 1.5 ג\'יגה-בייט. רק מכשיר עם כמות זיכרון גדולה יכול לטעון אותו.</string>
+    <string name="core_voice_model_large_v3_multi_body">זהו מודל Whisper המדויק ביותר, והטוב ביותר בזיהוי השפה שאתה מדבר. ההורדה היא בגודל 1.5 ג\'יגה-בייט. רק מכשיר עם כמות זיכרון גדולה יכול לטעון אותו. מודל ה-Turbo מדויק כמעט באותה מידה והוא בחצי מהגודל.</string>
+    <string name="core_voice_model_medium_multi_body">מודל זה מספק דיוק כמעט כמו במחשב שולחני. כל ביטוי לוקח מספר שניות. המודל משתמש בכמעט גיגה-בייט אחד של זיכרון בזמן שהוא פועל.</string>
+    <string name="core_voice_model_single_language_body">מודל זה מטפל ב-%1$s בלבד. אין לו שלב זיהוי שפה. זה הופך אותו למהיר ומדויק מעט יותר ממודל רב-לשוני באותו גודל.</string>
+    <string name="core_voice_model_small_multi_body">מודל זה מספק את הדיוק הטוב ביותר שעדיין פועל היטב בטלפון. הוא מטפל במבטאים וברעשי רקע טוב יותר ממודל הבסיס. הוא מכסה כל שפה ש-Whisper מכיר.</string>
+    <string name="core_voice_model_small_world_body">מודל זה משתמש בשפה שבה אתה מקליד ובעל דיוק של המודל הקטן. זהו המודל המדויק ביותר שעדיין מתאים לטלפון.</string>
+    <string name="core_voice_model_tiny_multi_body">זהו המודל הרב-לשוני המהיר ביותר. הוא עובד היטב עם דיבור ברור, אך רעש מפחית את הדיוק.</string>
+    <string name="core_voice_model_turbo_multi_body">מודל זה מזהה את השפה שאתה מדבר הרבה יותר טוב מהמודלים הקטנים יותר. בחר בו אם מודל קטן יותר מתמלל את הדיבור שלך כשפה הלא נכונה. זו הורדה גדולה, וכל משפט לוקח מספר שניות.</string>
+    <string name="core_voice_size_base_label">בסיסי</string>
+    <string name="core_voice_size_large_label">גדול</string>
+    <string name="core_voice_size_medium_label">בינוני</string>
+    <string name="core_voice_size_small_label">קטן</string>
+    <string name="core_voice_size_tiny_label">זעיר</string>
+    <string name="core_voice_size_turbo_label">טורבו</string>
+    <string name="core_voice_tier_recommended_label">מומלץ</string>
+    <string name="core_voice_whisper_mel_bins_error">מודל קולי זה זקוק לספקטרוגרמה של %1$s להקות, שאינה תואמת את הקובץ שאיתו הוא הורד. מחק את המודל בהגדרות והורד אותו שוב.</string>
+    <string name="core_voice_whisper_model_load_error">מודל הקול לא נטען. ייתכן שהקובץ פגום. מחק את המודל בהגדרות והורד אותו שוב.</string>
+    <string name="core_voice_whisper_transcribe_error">הקלדה קולית לא עבדה. נסה שוב, או בחר מודל קטן יותר.</string>
+</resources>

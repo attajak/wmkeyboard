@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Poslužitelj nije poslao datoteku. Kôd pogreške je HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Taj popis riječi je prazan ili nečitljiv.</string>
+    <string name="core_pred_wordlist_no_space_error">Na vašem uređaju nema dovoljno prostora za pohranu. Izbrišite neke datoteke, a zatim pokušajte ponovno.</string>
+    <string name="core_pred_wordlist_save_error">Aplikacija ne može spremiti popis riječi. Pokušajte ponovno.</string>
+    <string name="core_pred_wordlist_size_all_label">Sve</string>
+    <string name="core_pred_wordlist_size_large_label">Veliko</string>
+    <string name="core_pred_wordlist_size_medium_label">Srednje</string>
+    <string name="core_pred_wordlist_size_small_label">Malo</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brazil</string>
+    <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+</resources>

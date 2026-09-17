@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Šai pakotnei ir nepieciešams skaņas pakotnes formāts %1$s. Atjauniniet lietotni.</string>
+    <string name="core_feedback_pack_reject_no_samples">Šajā pakā nav skaņu, kuras lietotne varētu atskaņot.</string>
+    <string name="core_feedback_pack_reject_too_large">Skaņas pakai jābūt mazākai par %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Fails ir tukšs.</string>
+    <string name="core_feedback_sound_import_html_error">Šis ir HTML vai XML fails, nevis skaņa.</string>
+    <string name="core_feedback_sound_import_mp4_error">Lietotne neatskaņo MP4 un M4A failus. Izmantojiet MP3 failu.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Jūsu ierīcē nav pieejama krātuve.</string>
+    <string name="core_feedback_sound_import_read_error">Lietotne nevar nolasīt skaņu.</string>
+    <string name="core_feedback_sound_import_save_error">Lietotne nevar saglabāt skaņu.</string>
+    <string name="core_feedback_sound_import_too_large_error">Taustiņa skaņai jābūt mazākai par %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Fails ir pārāk īss, lai būtu skaņa.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Šis neizskatās pēc MP3, OGG vai WAV faila.</string>
+    <string name="core_feedback_sound_import_zip_error">Šis ir zip arhīvs, nevis skaņas fails.</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Сервер не отправил файл. Код ошибки: HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Этот список слов пуст или нечитаем.</string>
+    <string name="core_pred_wordlist_no_space_error">На вашем устройстве недостаточно памяти. Удалите некоторые файлы и повторите попытку.</string>
+    <string name="core_pred_wordlist_save_error">Приложение не может сохранить список слов. Попробуйте еще раз.</string>
+    <string name="core_pred_wordlist_size_all_label">Все</string>
+    <string name="core_pred_wordlist_size_large_label">Большой</string>
+    <string name="core_pred_wordlist_size_medium_label">Средний</string>
+    <string name="core_pred_wordlist_size_small_label">Маленький</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Бразилия</string>
+    <string name="core_pred_wordlist_variant_europe_label">Европа</string>
+</resources>

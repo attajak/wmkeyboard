@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Stažený soubor je poškozený. Jeho kontrolní součet nesouhlasí. Zkuste stahování znovu.</string>
+    <string name="core_input_cjk_download_error_http">Server vrátil stav HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Stahování se nezdařilo. Zkontrolujte připojení a zkuste to znovu.</string>
+    <string name="core_input_cjk_download_error_network_detail">Stahování se nezdařilo: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">V zařízení není dostatek místa. Nejprve uvolněte nějaké místo.</string>
+    <string name="core_input_cjk_download_error_truncated">Během stahování došlo k přerušení spojení. Pokračujte stisknutím tlačítka Obnovit.</string>
+    <string name="core_input_cjk_download_error_unavailable">Tento balíček zatím není k dispozici.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Tabulka radikálových kódů pro znaky kandži, 29 000 znaků. Klávesnice potřebuje tento balíček pro rozložení Cangjie a Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Slovník Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Čtení Kana z mozc, 1,08 milionu záznamů, přibližně 42 MB. Klávesnice tento balíček potřebuje pro převod do japonštiny.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Slovník japonské kany do kandži</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Tabulka čtení Jyutping pro znaky Hanzi, 163 000 záznamů. Klávesnice tento balíček potřebuje pro převod do kantonštiny.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantonský slovník Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Znaky a fráze Hanzi z CC-CEDICT, 120 000 záznamů. Klávesnice tento balíček potřebuje pro čínský převod.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Čínský slovník Pinyin</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Tabulka pořadí tahů pro znaky Hanzi. Klávesnice tento balíček potřebuje pro rozložení tahů.</string>
+    <string name="core_input_cjk_pack_stroke_title">Čínský tahový slovník (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Vypnuto (úplný Pinyin)</string>
+</resources>

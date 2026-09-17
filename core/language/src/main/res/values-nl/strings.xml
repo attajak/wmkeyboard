@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">De app heeft %1$d toets gewijzigd naar de dichtstbijzijnde toets die beschikbaar is.</item>
+        <item quantity="other">De app heeft %1$d toetsen gewijzigd naar de dichtstbijzijnde toetsen die beschikbaar zijn.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">De app heeft %1$d toets verwijderd. Dit toetsenbord heeft geen toets die hetzelfde doet (code %2$s).</item>
+        <item quantity="other">De app heeft %1$d toetsen verwijderd. Dit toetsenbord heeft geen toetsen die hetzelfde doen (codes %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">De app heeft de labelgrootte van %1$d toets behouden, maar niet de tekststijl. Dit toetsenbord tekent labels in één stijl.</item>
+        <item quantity="other">De app heeft de labelgrootte van %1$d toetsen behouden, maar niet hun tekststijl. Dit toetsenbord tekent labels in één stijl.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">De app heeft %1$d letter gewijzigd naar de vorm die dit toetsenbord schrijft.</item>
+        <item quantity="other">De app heeft %1$d letters gewijzigd naar de vorm die dit toetsenbord schrijft.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d toets heeft geen letters bij lang indrukken. Het bestand bewaart ze in een tweede bestand dat je niet hebt geopend.</item>
+        <item quantity="other">%1$d toetsen hebben geen letters bij lang indrukken. Het bestand bewaart ze in een tweede bestand dat je niet hebt geopend.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Het andere toetsenbord meet toetsbreedtes anders. De app heeft de breedtes aangepast aan dit raster.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d braillepunt-toets in de %2$s-laag heeft een puntnummer buiten 1 tot 6.</item>
+        <item quantity="other">%1$d braillepunt-toetsen in de %2$s-laag hebben een puntnummer buiten 1 tot 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d toets in de %2$s-laag heeft geen label en geen uitvoer. Het typt niets en de app verwijdert deze wanneer je deze lay-out inschakelt.</item>
+        <item quantity="other">%1$d toetsen in de %2$s-laag hebben geen label en geen uitvoer. Ze typen niets en de app verwijdert ze wanneer je deze lay-out inschakelt.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Rij %1$d van de %2$s-laag is leeg.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d toets in de %2$s-laag is een paneelcomponent. Componenten werken alleen in een paneelindeling.</item>
+        <item quantity="other">%1$d toetsen in de %2$s-laag zijn paneelcomponenten. Componenten werken alleen in een paneelindeling.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Rij %1$d van de %2$s-laag heeft een toets zonder breedte.</string>
+    <string name="core_lang_layout_key_span_error">Rij %1$d van de %2$s-laag heeft een toets die minder dan 1 of meer dan %3$d rijen beslaat.</string>
+    <string name="core_lang_layout_letters_empty_error">De letterlaag heeft geen toetsen.</string>
+    <string name="core_lang_layout_no_delete_error">De lay-out heeft geen verwijder-toets. U kunt een fout niet corrigeren.</string>
+    <string name="core_lang_layout_no_enter_error">De lay-out heeft geen enter-toets.</string>
+    <string name="core_lang_layout_no_shift_warning">De lay-out heeft geen shift-toets. Houd een toets ingedrukt om een hoofdletter te typen.</string>
+    <string name="core_lang_layout_no_space_error">De lay-out heeft geen spatietoets.</string>
+    <string name="core_lang_layout_no_way_back_error">De %1$s-laag heeft geen toets die teruggaat naar de letters. Je kunt deze laag niet verlaten.</string>
+    <string name="core_lang_layout_persistent_warning">De %1$s-laag blijft open wanneer het toetsenbord sluit. Zorg ervoor dat je een manier hebt om deze lay-out te verlaten.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Deze lay-out heeft geen toets om deze te verlaten. Zorg ervoor dat je een manier hebt om deze lay-out te verlaten: een ABC-toets, een symbooltoets of de secundaire lay-outtool op de werkbalk.</string>
+    <string name="core_lang_layout_span_past_end_warning">Rij %1$d van de %2$s-laag heeft een toets die meer rijen beslaat dan de laag heeft. Het toetsenbord stopt bij de laatste rij.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Rij %1$d van de %2$s-laag heeft %3$d toets. Slechts %4$d toetsen blijven groot genoeg om in te drukken.</item>
+        <item quantity="other">Rij %1$d van de %2$s-laag heeft %3$d toetsen. Slechts %4$d toetsen blijven groot genoeg om in te drukken.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">De %1$s-laag heeft %2$d rij. Er passen slechts %3$d rijen.</item>
+        <item quantity="other">De %1$s-laag heeft %2$d rijen. Er passen slechts %3$d rijen.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d toets in de %2$s-laag gebruikt een actie die deze versie van de app niet kent.</item>
+        <item quantity="other">%1$d toetsen in de %2$s-laag gebruiken een actie die deze versie van de app niet kent.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Rij %1$d van de %2$s-laag is breder dan de andere rijen. Het toetsenbord tekent de toetsen van deze rij smaller.</string>
+    <string name="core_lang_numeral_scope_display_only">Alleen weergeven</string>
+    <string name="core_lang_numeral_scope_everywhere">Overal</string>
+    <string name="core_lang_numeral_scope_text_fields">Tekstvelden</string>
+    <string name="core_lang_numeral_system_auto">Auto</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d component komt meer dan eens voor. De app behoudt de eerste kopie.</item>
+        <item quantity="other">%1$d componenten komen meer dan eens voor. De app behoudt van elk de eerste kopie.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Dit paneel heeft geen toetsen. De app gebruikt in plaats daarvan het standaardpaneel.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d toets heeft een actie die niet werkt op een paneel. De app verwijdert deze.</item>
+        <item quantity="other">%1$d toetsen hebben acties die niet werken op een paneel. De app verwijdert deze.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Dit paneel heeft geen ABC-toets. Gebruik de werkbalk of de Terug-knop om terug te keren naar de toetsen.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">De app heeft een tweede kopie van een onderdeel verwijderd.</string>
+    <string name="core_lang_panel_repair_field_added">De app heeft het hoofdcomponent van het paneel in een nieuwe rij toegevoegd.</string>
+    <string name="core_lang_panel_repair_field_dropped">De app heeft een onderdeel verwijderd dat niet bij dit paneel hoort.</string>
+    <string name="core_lang_panel_repair_key_dropped">De app heeft een toets verwijderd waarvan de actie niet werkt op een paneel.</string>
+    <string name="core_lang_panel_repair_reset">De app heeft het lege paneel vervangen door het standaardpaneel.</string>
+    <string name="core_lang_panel_required_field_error">Dit paneel mist zijn hoofdcomponent. De app voegt er een toe wanneer het paneel wordt getekend.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d onderdeel hoort niet bij dit paneel. De app verwijdert het.</item>
+        <item quantity="other">%1$d onderdelen horen niet bij dit paneel. De app verwijdert ze.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">De app heeft een lege toets in de %1$s-laag verwijderd.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Een toets in de %1$s-laag gebruikte braillepunt %2$d. De app heeft er punt %3$d van gemaakt.</string>
+    <string name="core_lang_repair_delete_key_added">De letterslaag had geen verwijder-toets. De app heeft er een toegevoegd.</string>
+    <string name="core_lang_repair_enter_key_added">De letterlaag had geen enter-toets. De app heeft er een toegevoegd.</string>
+    <string name="core_lang_repair_field_key_deleted">De app heeft een paneelcomponent verwijderd uit de %1$s-laag. Componenten werken alleen in een paneellay-out.</string>
+    <string name="core_lang_repair_key_letters_anchored">Een toets in de %1$s-laag staat voor %2$s. De app heeft ervoor gezorgd dat deze %3$s typt.</string>
+    <string name="core_lang_repair_key_letters_dropped">Een toets in de %1$s-laag gaf %2$s op als de letters waarvoor deze staat. Dat zijn geen letters, dus de app heeft er een gewone toets van gemaakt.</string>
+    <string name="core_lang_repair_key_span_clamped">Een toets in de %1$s-laag besloeg %2$d rijen. De app heeft dit aangepast naar %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Een toets in de %1$s-laag was %2$s eenheden breed. De app heeft deze %3$s eenheden breed gemaakt.</string>
+    <string name="core_lang_repair_key_width_set">Een toets in de %1$s-laag had geen breedte. De app heeft de breedte op 1 ingesteld.</string>
+    <string name="core_lang_repair_layer_replaced">De %1$s-laag had geen werkende toetsen. Het gebruikt nu het ingebouwde raster.</string>
+    <string name="core_lang_repair_letters_key_added">De %1$s-laag had geen toets die teruggaat naar de letters. De app heeft een ABC-toets toegevoegd.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Een rij in de %1$s-laag had %2$d toets. De app behoudt de eerste %3$d.</item>
+        <item quantity="other">Een rij in de %1$s-laag had %2$d toetsen. De app behoudt de eerste %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Een rij in de %1$s-laag was %2$s eenheden breed. De app heeft de toetsen kleiner gemaakt zodat de rij past.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">De %1$s-laag had %2$d rij. De app behoudt de eerste %3$d.</item>
+        <item quantity="other">De %1$s-laag had %2$d rijen. De app behoudt de eerste %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">De letterlaag had geen spatiebalk. De app heeft er een toegevoegd.</string>
+    <string name="core_lang_repair_unknown_key_deleted">De app heeft een toets in de %1$s-laag verwijderd. De actie \"%2$s\" is onbekend.</string>
+</resources>

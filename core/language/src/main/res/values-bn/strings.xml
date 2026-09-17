@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">অ্যাপটি %1$d কি-কে তার কাছে থাকা সবচেয়ে কাছের কি-তে পরিবর্তন করেছে।</item>
+        <item quantity="other">অ্যাপটি %1$d কি-কে তার কাছে থাকা সবচেয়ে কাছের কি-গুলোতে পরিবর্তন করেছে।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">অ্যাপটি %1$d কী সরিয়েছে। এই কিবোর্ডে একই কাজ করে এমন কোনো কী নেই (কোড %2$s)।</item>
+        <item quantity="other">অ্যাপটি %1$d কী সরিয়েছে। এই কিবোর্ডে একই কাজ করে এমন কোনো কী নেই (কোড %2$s)।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">অ্যাপটি %1$d টি কী-এর লেবেলের আকার বজায় রেখেছে কিন্তু টেক্সট স্টাইল রাখেনি। এই কিবোর্ডটি লেবেলগুলোকে একটি স্টাইলে আঁকে।</item>
+        <item quantity="other">অ্যাপটি %1$d টি কী-এর লেবেলের আকার বজায় রেখেছে কিন্তু তাদের টেক্সট স্টাইল রাখেনি। এই কিবোর্ডটি লেবেলগুলোকে একটি স্টাইলে আঁকে।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">অ্যাপটি %1$d টি অক্ষরকে এমন রূপে পরিবর্তন করেছে যা এই কিবোর্ড লেখে।</item>
+        <item quantity="other">অ্যাপটি %1$d টি অক্ষরকে এমন রূপে পরিবর্তন করেছে যা এই কিবোর্ড লেখে।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d কী-তে কোনো প্রেস-অ্যান্ড-হোল্ড অক্ষর নেই। ফাইলটি সেগুলোকে দ্বিতীয় একটি ফাইলে রাখে যা আপনি খোলেননি।</item>
+        <item quantity="other">%1$d কী-তে কোনো প্রেস-অ্যান্ড-হোল্ড অক্ষর নেই। ফাইলটি সেগুলোকে দ্বিতীয় একটি ফাইলে রাখে যা আপনি খোলেননি।</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">অন্য কিবোর্ডগুলো কি-এর প্রস্থ ভিন্নভাবে পরিমাপ করে। অ্যাপটি এই গ্রিডের সাথে মানানসই করার জন্য প্রস্থ পরিবর্তন করেছে।</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s লেয়ারের %1$d ব্রেইল ডট কী-তে ১ থেকে ৬-এর বাইরের একটি ডট নম্বর আছে।</item>
+        <item quantity="other">%2$s লেয়ারের %1$d ব্রেইল ডট কী-তে ১ থেকে ৬-এর বাইরের ডট নম্বর আছে।</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s লেয়ারের %1$d কি-এর কোনো লেবেল এবং আউটপুট নেই। এটি কিছুই টাইপ করে না, এবং আপনি এই লেআউটটি চালু করলে অ্যাপটি এটি মুছে ফেলে।</item>
+        <item quantity="other">%2$s লেয়ারের %1$d কি-এর কোনো লেবেল এবং আউটপুট নেই। এগুলো কিছুই টাইপ করে না, এবং আপনি এই লেআউটটি চালু করলে অ্যাপটি এগুলো মুছে ফেলে।</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s লেয়ারের %1$d নম্বর সারিটি খালি।</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s লেয়ারের %1$d কি (key) একটি প্যানেল উপাদান। উপাদানগুলো শুধুমাত্র প্যানেল লেআউটে কাজ করে।</item>
+        <item quantity="other">%2$s লেয়ারের %1$d কি (keys) প্যানেল উপাদান। উপাদানগুলো শুধুমাত্র প্যানেল লেআউটে কাজ করে।</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s লেয়ারের %1$d সারিতে এমন একটি কী আছে যার কোনো প্রস্থ নেই।</string>
+    <string name="core_lang_layout_key_span_error">%2$s লেয়ারের %1$d নম্বর সারিতে এমন একটি কী আছে যা ১টির কম বা %3$dটির বেশি সারি জুড়ে থাকে।</string>
+    <string name="core_lang_layout_letters_empty_error">অক্ষরের লেয়ারে কোনো কী নেই।</string>
+    <string name="core_lang_layout_no_delete_error">এই লেআউটে কোনো ডিলিট কি নেই। আপনি ভুল সংশোধন করতে পারবেন না।</string>
+    <string name="core_lang_layout_no_enter_error">লেআউটে কোনো এন্টার কী নেই।</string>
+    <string name="core_lang_layout_no_shift_warning">লেআউটে কোনো শিফট কী নেই। বড় হাতের অক্ষর টাইপ করতে, একটি কী চেপে ধরে রাখুন।</string>
+    <string name="core_lang_layout_no_space_error">লেআউটে কোনো স্পেস কি নেই।</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s লেয়ারে এমন কোনো কি নেই যা আপনাকে অক্ষরের লেয়ারে ফিরিয়ে নিয়ে যাবে। আপনি এই লেয়ার থেকে বের হতে পারবেন না।</string>
+    <string name="core_lang_layout_persistent_warning">কীবোর্ড বন্ধ হয়ে গেলে %1$s লেয়ারটি খোলা থাকে। নিশ্চিত করুন যে এই লেআউট থেকে বের হওয়ার উপায় আপনার কাছে আছে।</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">এই লেআউটে বের হওয়ার কোনো কী নেই। নিশ্চিত করুন যে এই লেআউট থেকে বের হওয়ার উপায় আপনার কাছে আছে: একটি ABC কী, একটি সিম্বল কী, অথবা টুলবারে কাস্টম লেআউট টুল।</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s লেয়ারের %1$d নম্বর সারিতে এমন একটি কি আছে যা লেয়ারের মোট সারির চেয়ে বেশি সারি দখল করে। কিবোর্ড এটিকে শেষ সারিতে থামিয়ে দেয়।</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s লেয়ারের %1$d সারিতে %3$d টি কী আছে। শুধুমাত্র %4$d টি কী চাপার জন্য যথেষ্ট বড় থাকে।</item>
+        <item quantity="other">%2$s লেয়ারের %1$d সারিতে %3$d টি কী আছে। শুধুমাত্র %4$d টি কী চাপার জন্য যথেষ্ট বড় থাকে।</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s লেয়ারে %2$dটি সারি আছে। শুধুমাত্র %3$dটি সারি ধরে।</item>
+        <item quantity="other">%1$s লেয়ারে %2$dটি সারি আছে। শুধুমাত্র %3$dটি সারি ধরে।</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s লেয়ারের %1$d টি কি এমন একটি অ্যাকশন ব্যবহার করে যা অ্যাপের এই সংস্করণটি জানে না।</item>
+        <item quantity="other">%2$s লেয়ারের %1$d টি কি এমন একটি অ্যাকশন ব্যবহার করে যা অ্যাপের এই সংস্করণটি জানে না।</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s লেয়ারের %1$d নম্বর সারিটি অন্য সারিগুলোর চেয়ে চওড়া। কিবোর্ড এই সারির কী-গুলোকে সরু করে দেখাবে।</string>
+    <string name="core_lang_numeral_scope_display_only">শুধুমাত্র প্রদর্শন</string>
+    <string name="core_lang_numeral_scope_everywhere">সর্বত্র</string>
+    <string name="core_lang_numeral_scope_text_fields">টেক্সট ফিল্ড</string>
+    <string name="core_lang_numeral_system_auto">অটো</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d উপাদানটি একাধিকবার দেখা যাচ্ছে। অ্যাপটি প্রথম কপিটি রাখে।</item>
+        <item quantity="other">%1$d উপাদান একাধিকবার দেখা যাচ্ছে। অ্যাপটি প্রতিটির প্রথম কপি রাখে।</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">এই প্যানেলে কোনো কি নেই। অ্যাপটি পরিবর্তে স্ট্যান্ডার্ড প্যানেল ব্যবহার করে।</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$dটি কি-এর এমন একটি অ্যাকশন আছে যা প্যানেলে কাজ করে না। অ্যাপটি এটি মুছে ফেলছে।</item>
+        <item quantity="other">%1$dটি কি-এর এমন অ্যাকশন আছে যা প্যানেলে কাজ করে না। অ্যাপটি সেগুলো মুছে ফেলছে।</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">এই প্যানেলে কোনো ABC কী নেই। কী-তে ফিরে যেতে টুলবার বা ব্যাক বোতাম ব্যবহার করুন।</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">অ্যাপটি একটি উপাদানের দ্বিতীয় অনুলিপি মুছে ফেলেছে।</string>
+    <string name="core_lang_panel_repair_field_added">অ্যাপটি একটি নতুন সারিতে প্যানেলের প্রধান উপাদান যোগ করেছে।</string>
+    <string name="core_lang_panel_repair_field_dropped">অ্যাপটি এমন একটি উপাদান মুছে ফেলেছে যা এই প্যানেলের অন্তর্ভুক্ত নয়।</string>
+    <string name="core_lang_panel_repair_key_dropped">অ্যাপটি এমন একটি কী ডিলিট করেছে যার অ্যাকশন প্যানেলে কাজ করে না।</string>
+    <string name="core_lang_panel_repair_reset">অ্যাপটি খালি প্যানেলটিকে স্ট্যান্ডার্ড প্যানেল দিয়ে প্রতিস্থাপন করেছে।</string>
+    <string name="core_lang_panel_required_field_error">এই প্যানেলটিতে তার প্রধান উপাদানটি নেই। অ্যাপটি প্যানেলটি আঁকার সময় একটি যোগ করে।</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d উপাদানটি এই প্যানেলের অন্তর্গত নয়। অ্যাপটি এটি মুছে ফেলছে।</item>
+        <item quantity="other">%1$d উপাদানগুলো এই প্যানেলের অন্তর্গত নয়। অ্যাপটি সেগুলো মুছে ফেলছে।</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">অ্যাপটি %1$s লেয়ারে একটি খালি কি মুছে ফেলেছে।</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s লেয়ারের একটি কী ব্রেইল ডট %2$d ব্যবহার করেছে। অ্যাপটি এটিকে ডট %3$d করেছে।</string>
+    <string name="core_lang_repair_delete_key_added">অক্ষরের লেয়ারে কোনো ডিলিট কি ছিল না। অ্যাপটি একটি যোগ করেছে।</string>
+    <string name="core_lang_repair_enter_key_added">অক্ষরের লেয়ারে কোনো এন্টার কী ছিল না। অ্যাপটি একটি যোগ করেছে।</string>
+    <string name="core_lang_repair_field_key_deleted">অ্যাপটি %1$s লেয়ার থেকে একটি প্যানেল কম্পোনেন্ট মুছে ফেলেছে। কম্পোনেন্টগুলো শুধুমাত্র প্যানেল লেআউটে কাজ করে।</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s লেয়ারের একটি কি %2$s এর জন্য কাজ করে। অ্যাপটি এটিকে %3$s টাইপ করতে বাধ্য করেছে।</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s লেয়ারের একটি কি (key) %2$s-কে তার প্রতিনিধিত্বকারী অক্ষর হিসেবে তালিকাভুক্ত করেছে। সেগুলো অক্ষর নয়, তাই অ্যাপ এটিকে একটি সাধারণ কি হিসেবে তৈরি করেছে।</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s লেয়ারের একটি কী %2$d সারি জুড়ে ছিল। অ্যাপটি সেটিকে %3$d সারি জুড়ে করেছে।</string>
+    <string name="core_lang_repair_key_width_capped">%1$s লেয়ারের একটি কি %2$s ইউনিট চওড়া ছিল। অ্যাপটি এটিকে %3$s ইউনিট চওড়া করেছে।</string>
+    <string name="core_lang_repair_key_width_set">%1$s লেয়ারের একটি কি-এর কোনো প্রস্থ ছিল না। অ্যাপটি প্রস্থ ১ হিসেবে সেট করেছে।</string>
+    <string name="core_lang_repair_layer_replaced">%1$s লেয়ারে কোনো কার্যকরী কী ছিল না। এটি এখন বিল্ট-ইন গ্রিড ব্যবহার করে।</string>
+    <string name="core_lang_repair_letters_key_added">%1$s লেয়ারে এমন কোনো কী ছিল না যা লেটারে ফিরে যায়। অ্যাপটি একটি ABC কী যোগ করেছে।</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s লেয়ারের একটি সারিতে %2$dটি কী ছিল। অ্যাপটি প্রথম %3$dটি রাখে।</item>
+        <item quantity="other">%1$s লেয়ারের একটি সারিতে %2$dটি কী ছিল। অ্যাপটি প্রথম %3$dটি রাখে।</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s লেয়ারের একটি সারি %2$s ইউনিট চওড়া ছিল। সারিটি ফিট করার জন্য অ্যাপটি কি (key) গুলো ছোট করেছে।</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s লেয়ারে %2$dটি সারি ছিল। অ্যাপটি প্রথম %3$dটি রাখে।</item>
+        <item quantity="other">%1$s লেয়ারে %2$dটি সারি ছিল। অ্যাপটি প্রথম %3$dটি রাখে।</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">লেটার লেয়ারে কোনো স্পেস কি ছিল না। অ্যাপটি একটি যোগ করেছে।</string>
+    <string name="core_lang_repair_unknown_key_deleted">অ্যাপটি %1$s লেয়ারের একটি কী মুছে ফেলেছে। এর অ্যাকশন \"%2$s\" অজানা।</string>
+</resources>

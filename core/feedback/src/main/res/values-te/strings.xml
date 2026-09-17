@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">ఈ ప్యాక్‌కు సౌండ్ ప్యాక్ ఫార్మాట్ %1$s అవసరం. యాప్‌ను అప్‌డేట్ చేయండి.</string>
+    <string name="core_feedback_pack_reject_no_samples">ఈ ప్యాక్‌లో యాప్ ప్లే చేయగల శబ్దాలు ఏవీ లేవు.</string>
+    <string name="core_feedback_pack_reject_too_large">సౌండ్ ప్యాక్ %1$s MB కంటే తక్కువ ఉండాలి.</string>
+    <string name="core_feedback_sound_import_empty_error">ఫైల్ ఖాళీగా ఉంది.</string>
+    <string name="core_feedback_sound_import_html_error">ఇది HTML లేదా XML ఫైల్, సౌండ్ ఫైల్ కాదు.</string>
+    <string name="core_feedback_sound_import_mp4_error">ఈ యాప్ MP4 మరియు M4A ఫైళ్లను ప్లే చేయదు. MP3 ఫైల్‌ను ఉపయోగించండి.</string>
+    <string name="core_feedback_sound_import_no_storage_error">మీ పరికరంలో నిల్వ అందుబాటులో లేదు.</string>
+    <string name="core_feedback_sound_import_read_error">యాప్ సౌండ్‌ను చదవలేకపోతోంది.</string>
+    <string name="core_feedback_sound_import_save_error">యాప్ సౌండ్‌ను సేవ్ చేయలేదు.</string>
+    <string name="core_feedback_sound_import_too_large_error">కీ సౌండ్ %1$s MB కంటే తక్కువ ఉండాలి.</string>
+    <string name="core_feedback_sound_import_too_short_error">ఫైల్ సౌండ్‌గా ఉండటానికి చాలా చిన్నదిగా ఉంది.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">ఇది MP3, OGG లేదా WAV ఫైల్ లాగా లేదు.</string>
+    <string name="core_feedback_sound_import_zip_error">ఇది జిప్ ఆర్కైవ్, సౌండ్ ఫైల్ కాదు.</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Bær</string>
+    <string name="core_theme_builtin_bubble_label">Boble</string>
+    <string name="core_theme_builtin_crimson_label">Crimson</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Dybt hav</string>
+    <string name="core_theme_builtin_facet_label">Facet</string>
+    <string name="core_theme_builtin_forest_label">Skov</string>
+    <string name="core_theme_builtin_glacier_label">Gletsjer</string>
+    <string name="core_theme_builtin_mint_label">Mynte</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Ocean</string>
+    <string name="core_theme_builtin_pitch_label">Kulsort</string>
+    <string name="core_theme_builtin_rose_label">Rose</string>
+    <string name="core_theme_builtin_sand_label">Sand</string>
+    <string name="core_theme_builtin_slate_label">Slate</string>
+    <string name="core_theme_builtin_snow_label">Sne</string>
+    <string name="core_theme_builtin_sunset_drift_label">Solnedgangsdrift</string>
+    <string name="core_theme_builtin_sunset_label">Solnedgang</string>
+    <string name="core_theme_family_gradient_label">Gradienter</string>
+    <string name="core_theme_family_ocean_label">Skumring</string>
+    <string name="core_theme_family_snow_label">Pastel</string>
+</resources>

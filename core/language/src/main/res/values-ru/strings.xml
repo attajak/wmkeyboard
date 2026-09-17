@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Приложение заменило %1$d клавишу на наиболее подходящую из имеющихся.</item>
+        <item quantity="other">Приложение заменило %1$d клавиш на наиболее подходящие из имеющихся.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Приложение удалило %1$d клавишу. На этой клавиатуре нет клавиши, выполняющей ту же функцию (код %2$s).</item>
+        <item quantity="other">Приложение удалило %1$d клавиш. На этой клавиатуре нет клавиш, выполняющих ту же функцию (коды %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Приложение сохранило размер метки для %1$d клавиши, но не её стиль текста. Эта клавиатура рисует метки в одном стиле.</item>
+        <item quantity="other">Приложение сохранило размер метки для %1$d клавиш, но не их стиль текста. Эта клавиатура рисует метки в одном стиле.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Приложение изменило %1$d букву на форму, которую использует эта клавиатура.</item>
+        <item quantity="other">Приложение изменило %1$d букв на форму, которую использует эта клавиатура.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">У %1$d клавиши нет дополнительных символов при долгом нажатии. Они хранятся во втором файле, который вы не открыли.</item>
+        <item quantity="other">У %1$d клавиш нет дополнительных символов при долгом нажатии. Они хранятся во втором файле, который вы не открыли.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Другая клавиатура измеряет ширину клавиш иначе. Приложение изменило ширину, чтобы соответствовать этой сетке.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d клавиша шрифта Брайля в слое %2$s имеет номер точки вне диапазона от 1 до 6.</item>
+        <item quantity="other">%1$d клавиш шрифта Брайля в слое %2$s имеют номер точки вне диапазона от 1 до 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d клавиша в слое %2$s не имеет метки и вывода. Она ничего не печатает, и приложение удалит ее при активации этой раскладки.</item>
+        <item quantity="other">%1$d клавиш в слое %2$s не имеют меток и вывода. Они ничего не печатают, и приложение удалит их при активации этой раскладки.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Ряд %1$d слоя %2$s пуст.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d клавиша в слое %2$s является компонентом панели. Компоненты работают только в макете панели.</item>
+        <item quantity="other">%1$d клавиш в слое %2$s являются компонентами панели. Компоненты работают только в макете панели.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">В строке %1$d слоя %2$s есть клавиша без ширины.</string>
+    <string name="core_lang_layout_key_span_error">Строка %1$d слоя %2$s содержит клавишу, которая занимает менее 1 или более %3$d строк.</string>
+    <string name="core_lang_layout_letters_empty_error">В слое букв нет клавиш.</string>
+    <string name="core_lang_layout_no_delete_error">В раскладке нет клавиши удаления. Вы не сможете исправить ошибку.</string>
+    <string name="core_lang_layout_no_enter_error">В раскладке нет клавиши ввода.</string>
+    <string name="core_lang_layout_no_shift_warning">В этой раскладке нет клавиши Shift. Чтобы ввести заглавную букву, нажмите и удерживайте клавишу.</string>
+    <string name="core_lang_layout_no_space_error">В раскладке нет клавиши пробела.</string>
+    <string name="core_lang_layout_no_way_back_error">В слое %1$s нет клавиши для возврата к буквам. Вы не можете покинуть этот слой.</string>
+    <string name="core_lang_layout_persistent_warning">Слой %1$s остается открытым при закрытии клавиатуры. Убедитесь, что у вас есть способ выйти из этой раскладки.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">В этой раскладке нет клавиши для выхода из неё. Убедитесь, что у вас есть способ выйти из этой раскладки: клавиша ABC, клавиша символов или инструмент «Пользовательская раскладка» на панели инструментов.</string>
+    <string name="core_lang_layout_span_past_end_warning">Ряд %1$d слоя %2$s содержит клавишу, которая занимает больше рядов, чем есть в слое. Клавиатура ограничит ее последним рядом.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">В ряду %1$d слоя %2$s находится %3$d клавиша. Только %4$d клавиш остаются достаточно большими для нажатия.</item>
+        <item quantity="other">В ряду %1$d слоя %2$s находится %3$d клавиш. Только %4$d клавиш остаются достаточно большими для нажатия.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Слой %1$s имеет %2$d строку. Помещается только %3$d строк.</item>
+        <item quantity="other">Слой %1$s имеет %2$d строк. Помещается только %3$d строк.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d клавиша в слое %2$s использует действие, которое неизвестно этой версии приложения.</item>
+        <item quantity="other">%1$d клавиш в слое %2$s используют действие, которое неизвестно этой версии приложения.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Строка %1$d слоя %2$s шире остальных строк. Клавиатура делает клавиши в этой строке уже.</string>
+    <string name="core_lang_numeral_scope_display_only">Только отображение</string>
+    <string name="core_lang_numeral_scope_everywhere">Везде</string>
+    <string name="core_lang_numeral_scope_text_fields">Текстовые поля</string>
+    <string name="core_lang_numeral_system_auto">Авто</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d компонент встречается более одного раза. Приложение сохранит первую копию.</item>
+        <item quantity="other">%1$d компонентов встречаются более одного раза. Приложение сохранит первую копию каждого.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">На этой панели нет клавиш. Приложение использует стандартную панель.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d клавиша имеет действие, которое не работает на панели. Приложение удаляет ее.</item>
+        <item quantity="other">%1$d клавиш имеют действия, которые не работают на панели. Приложение удаляет их.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">На этой панели нет клавиши ABC. Используйте панель инструментов или кнопку «Назад», чтобы вернуться к клавишам.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Приложение удалило вторую копию компонента.</string>
+    <string name="core_lang_panel_repair_field_added">Приложение добавило основной компонент панели в новую строку.</string>
+    <string name="core_lang_panel_repair_field_dropped">Приложение удалило компонент, который не принадлежит этой панели.</string>
+    <string name="core_lang_panel_repair_key_dropped">Приложение удалило клавишу, действие которой не работает на панели.</string>
+    <string name="core_lang_panel_repair_reset">Приложение заменило пустую панель на стандартную.</string>
+    <string name="core_lang_panel_required_field_error">На этой панели отсутствует основной компонент. Приложение добавит его при отрисовке панели.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d компонент не принадлежит этой панели. Приложение удалит его.</item>
+        <item quantity="other">%1$d компонентов не принадлежат этой панели. Приложение удалит их.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Приложение удалило пустую клавишу в слое %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Клавиша в слое %1$s использовала точку Брайля %2$d. Приложение заменило ее на точку %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">На слое с буквами не было клавиши удаления. Приложение добавило её.</string>
+    <string name="core_lang_repair_enter_key_added">На слое букв не было клавиши ввода. Приложение добавило ее.</string>
+    <string name="core_lang_repair_field_key_deleted">Приложение удалило компонент панели из слоя %1$s. Компоненты работают только в макете панели.</string>
+    <string name="core_lang_repair_key_letters_anchored">Клавиша в слое %1$s отвечает за %2$s. Приложение заставило её печатать %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Клавиша в слое %1$s указала %2$s в качестве букв, которые она представляет. Это не буквы, поэтому приложение сделало её обычной клавишей.</string>
+    <string name="core_lang_repair_key_span_clamped">Клавиша в слое %1$s занимала %2$d строк. Приложение изменило её размер на %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Клавиша в слое %1$s имела ширину %2$s единиц. Приложение установило её ширину равной %3$s единицам.</string>
+    <string name="core_lang_repair_key_width_set">Клавиша в слое %1$s не имела ширины. Приложение установило ширину равной 1.</string>
+    <string name="core_lang_repair_layer_replaced">Слой %1$s не содержал рабочих клавиш. Теперь используется встроенная сетка.</string>
+    <string name="core_lang_repair_letters_key_added">На слое %1$s не было клавиши для возврата к буквам. Приложение добавило клавишу ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">В строке слоя %1$s была %2$d клавиша. Приложение сохраняет первые %3$d.</item>
+        <item quantity="other">В строке слоя %1$s было %2$d клавиш. Приложение сохраняет первые %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Ширина ряда в слое %1$s составляла %2$s единиц. Приложение уменьшило клавиши, чтобы ряд поместился.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Слой %1$s содержал %2$d строку. Приложение сохраняет первые %3$d.</item>
+        <item quantity="other">Слой %1$s содержал %2$d строк. Приложение сохраняет первые %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">В раскладке букв не было клавиши пробела. Приложение добавило её.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Приложение удалило клавишу в слое %1$s. Её действие \"%2$s\" неизвестно.</string>
+</resources>

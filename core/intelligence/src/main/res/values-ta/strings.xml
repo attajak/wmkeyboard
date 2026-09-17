@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">இந்த மாடல் பாதுகாக்கப்பட்டுள்ளது. முதலில் உங்கள் Hugging Face டோக்கனைச் சேர்க்கவும்.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face %1$s HTTP நிலையைத் திருப்பியளித்தது.</string>
+    <string name="core_intel_llm_download_error_licence">அதன் Hugging Face பக்கத்தில் உள்ள மாதிரியின் உரிமத்தை ஏற்கவும். பிறகு மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_intel_llm_download_error_no_space">உங்கள் சாதனத்தில் போதுமான சேமிப்பிடம் இல்லை. முதலில் சுமார் %1$s ஜிபி (GB) இடத்தை விடுவிக்கவும்.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face டோக்கனை ஏற்கவில்லை. டோக்கனைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_intel_llm_download_error_truncated">பதிவிறக்கத்தின் போது இணைப்பு துண்டிக்கப்பட்டது. தொடர \'மீண்டும் தொடங்கு\' என்பதை அழுத்தவும்.</string>
+    <string name="core_intel_llm_engine_error_gpu">GPU இல் மாதிரி தோல்வியடைந்தது. GPU நினைவகம் கணினி நினைவகத்தை விட மிகச் சிறியது. அடுத்த முயற்சியில் CPU பயன்படுத்தப்படும். எப்போதும் CPU ஐப் பயன்படுத்த, அமைப்புகளில் கம்ப்யூட்டை CPU ஆக அமைக்கவும். நீங்கள் சிறிய மாதிரியையும் தேர்ந்தெடுக்கலாம்.</string>
+    <string name="core_intel_llm_engine_error_load">மாதிரி ஏற்றப்படவில்லை. கோப்பு சேதமடைந்திருக்கலாம். அமைப்புகளில் மாதிரியை நீக்கிவிட்டு மீண்டும் பதிவிறக்கவும்.</string>
+    <string name="core_intel_llm_engine_error_memory">மாதிரியின் நினைவகம் தீர்ந்துவிட்டது அல்லது அது தோல்வியடைந்தது. சிறிய மாதிரியைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">முந்தைய தலைமுறையைச் சேர்ந்த ஒரு சிறிய ஜெம்மா. இது நல்ல தரம் மற்றும் 4K டோக்கன்களின் சூழலைக் கொண்டுள்ளது.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">கூகுளின் மிகச்சிறிய ஜெம்மா (Gemma). இது அனைத்து சாதனங்களிலும் வேகமாகச் செயல்படும்.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">புதிய ஜெம்மா தலைமுறை. இது உங்கள் சாதனத்தில் உயர்தரத்தை வழங்குகிறது.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">மிகப்பெரிய மாதிரி. இது சிறப்பாக எழுதும், ஆனால் இதற்கு சக்திவாய்ந்த சாதனம் தேவை.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">அடிப்படை சாதனத்திலும் இயங்கக்கூடிய பொதுவான பயன்பாட்டு மாதிரி.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">1B-க்கும் குறைவான மாடல்களை விட தெளிவாக புத்திசாலித்தனமானது. இதற்கு நடுத்தர ரக சாதனம் தேவை.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">சமீபத்திய சிறிய மாடல். அதன் அளவிற்கு தரம் அதிகமாக உள்ளது.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">மிகவும் சிறியது மற்றும் வேகமானது. இது விரைவான மாற்றங்களுக்கு நல்லது, ஆனால் பகுத்தறிவு குறைவாகவே உள்ளது.</string>
+    <string name="core_intel_llm_module_downloading">விசைப்பலகையின் AI பகுதி Google Play-யிலிருந்து பதிவிறக்கம் செய்யப்படுகிறது. சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_intel_llm_module_restart">AI பகுதி நிறுவுதல் முடிந்தது. விசைப்பலகையைப் பயன்படுத்த அதை மூடிவிட்டு மீண்டும் திறக்கவும்.</string>
+    <string name="core_intel_llm_tier_experimental_label">சோதனைமுறை</string>
+    <string name="core_intel_llm_tier_recommended_label">பரிந்துரைக்கப்பட்டது</string>
+    <string name="core_intel_llm_tier_untested_label">சோதிக்கப்படாதது</string>
+</resources>

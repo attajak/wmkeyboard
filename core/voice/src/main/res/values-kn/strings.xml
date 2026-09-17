@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">ಹಗ್ಗಿಂಗ್ ಫೇಸ್ ಸರ್ವರ್ ಫೈಲ್ ಅನ್ನು ಕಳುಹಿಸಿಲ್ಲ. ದೋಷ ಕೋಡ್ HTTP %1$s ಆಗಿದೆ.</string>
+    <string name="core_voice_download_interrupted_error">ಡೌನ್‌ಲೋಡ್ ಮಾಡುವಾಗ ಸಂಪರ್ಕ ಕಡಿತಗೊಂಡಿದೆ. ಅದು ನಿಂತಿದ್ದ ಸ್ಥಳದಿಂದ ಮುಂದುವರಿಸಲು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="core_voice_download_space_error">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಸಾಕಷ್ಟು ಸಂಗ್ರಹಣೆಯಿಲ್ಲ. ನೀವು ಮೊದಲು ಸುಮಾರು %1$s MB ಅನ್ನು ಖಾಲಿ ಮಾಡಬೇಕು.</string>
+    <string name="core_voice_model_base_eu_body">ಈ ಮಾದರಿಯು ನೀವು ಟೈಪ್ ಮಾಡುವ ಭಾಷೆಯನ್ನು ಬಳಸುತ್ತದೆ, ಇದು 40 ಭಾಷೆಯ ಮಾದರಿಯಂತೆಯೇ ಇರುತ್ತದೆ. ಇದು ಯುರೋಪಿಯನ್ ಭಾಷೆಗಳನ್ನು ಮಾತ್ರ ಒಳಗೊಂಡಿದೆ, ಆದ್ದರಿಂದ ಡೌನ್‌ಲೋಡ್ ಚಿಕ್ಕದಾಗಿದೆ.</string>
+    <string name="core_voice_model_base_multi_body">ಈ ಮಾದರಿಯು ನಿಖರತೆ ಮತ್ತು ವೇಗವನ್ನು ಸಮತೋಲನಗೊಳಿಸುತ್ತದೆ. ಇದು ವಿಸ್ಪರ್ (Whisper) ಗೆ ತಿಳಿದಿರುವ ಪ್ರತಿಯೊಂದು ಭಾಷೆಯನ್ನು ಒಳಗೊಂಡಿದೆ. ಸ್ಮಾಲ್ (Small) ಮಾದರಿಯು ತುಂಬಾ ನಿಧಾನವಾಗಿದ್ದರೆ ಇದನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="core_voice_model_base_world_body">ಈ ಮಾದರಿಯು ಊಹೆಯ ಬದಲಿಗೆ ನೀವು ಟೈಪ್ ಮಾಡುವ ಭಾಷೆಯನ್ನು ಬಳಸುತ್ತದೆ. ಸಣ್ಣ ನುಡಿಗಟ್ಟುಗಳು ಹೆಚ್ಚು ವಿಶ್ವಾಸಾರ್ಹವಾಗುತ್ತವೆ. ಅದರ ಪಟ್ಟಿಯಲ್ಲಿ ನಿಮ್ಮ ಭಾಷೆಗಳಿದ್ದಾಗ ಅದನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d ಭಾಷೆ</item>
+        <item quantity="other">%1$d ಭಾಷೆಗಳು</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">ಇದು ಅತ್ಯಂತ ನಿಖರವಾದ ವಿಸ್ಪರ್ ಮಾದರಿಗಳಲ್ಲಿ ಒಂದಾಗಿದೆ, ಆದರೆ ಇದು ಹೆಚ್ಚಿನ ಫೋನ್‌ಗಳಿಗೆ ತುಂಬಾ ದೊಡ್ಡದಾಗಿದೆ. ಡೌನ್‌ಲೋಡ್ 1.5 GB ಆಗಿದೆ. ಹೆಚ್ಚಿನ ಮೆಮೊರಿ ಹೊಂದಿರುವ ಸಾಧನ ಮಾತ್ರ ಇದನ್ನು ಲೋಡ್ ಮಾಡಬಹುದು.</string>
+    <string name="core_voice_model_large_v3_multi_body">ಇದು ಅತ್ಯಂತ ನಿಖರವಾದ ವಿಸ್ಪರ್ (Whisper) ಮಾದರಿಯಾಗಿದೆ ಮತ್ತು ನೀವು ಯಾವ ಭಾಷೆಯನ್ನು ಮಾತನಾಡುತ್ತೀರಿ ಎಂಬುದನ್ನು ಗುರುತಿಸುವಲ್ಲಿ ಇದು ಅತ್ಯುತ್ತಮವಾಗಿದೆ. ಡೌನ್‌ಲೋಡ್ 1.5 GB ಇದೆ. ಹೆಚ್ಚಿನ ಮೆಮೊರಿ ಹೊಂದಿರುವ ಸಾಧನ ಮಾತ್ರ ಇದನ್ನು ಲೋಡ್ ಮಾಡಬಹುದು. ಟರ್ಬೊ ಮಾದರಿಯು ಬಹುತೇಕ ಅಷ್ಟೇ ನಿಖರವಾಗಿದೆ ಮತ್ತು ಗಾತ್ರದಲ್ಲಿ ಅರ್ಧದಷ್ಟಿದೆ.</string>
+    <string name="core_voice_model_medium_multi_body">ಈ ಮಾದರಿಯು ಡೆಸ್ಕ್‌ಟಾಪ್‌ನಷ್ಟು ನಿಖರತೆಯನ್ನು ನೀಡುತ್ತದೆ. ಪ್ರತಿ ನುಡಿಗಟ್ಟು ಕೆಲವು ಸೆಕೆಂಡುಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳುತ್ತದೆ. ಇದು ಚಾಲನೆಯಲ್ಲಿರುವಾಗ ಸುಮಾರು ಒಂದು ಗಿಗಾಬೈಟ್ ಮೆಮೊರಿಯನ್ನು ಬಳಸುತ್ತದೆ.</string>
+    <string name="core_voice_model_single_language_body">ಈ ಮಾದರಿಯು %1$s ಅನ್ನು ಮಾತ್ರ ನಿರ್ವಹಿಸುತ್ತದೆ. ಇದು ಯಾವುದೇ ಭಾಷಾ ಪತ್ತೆ ಹಂತವನ್ನು ಹೊಂದಿಲ್ಲ. ಇದು ಒಂದೇ ಗಾತ್ರದ ಬಹುಭಾಷಾ ಮಾದರಿಗಿಂತ ವೇಗವಾಗಿ ಮತ್ತು ಸ್ವಲ್ಪ ಹೆಚ್ಚು ನಿಖರವಾಗಿದೆ.</string>
+    <string name="core_voice_model_small_multi_body">ಈ ಮಾದರಿಯು ಫೋನ್‌ನಲ್ಲಿ ಉತ್ತಮವಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುವ ಅತ್ಯುತ್ತಮ ನಿಖರತೆಯನ್ನು ನೀಡುತ್ತದೆ. ಇದು ಬೇಸ್ ಮಾದರಿಗಿಂತ ಉಚ್ಚಾರಣೆಗಳು ಮತ್ತು ಹಿನ್ನೆಲೆ ಶಬ್ದವನ್ನು ಉತ್ತಮವಾಗಿ ನಿರ್ವಹಿಸುತ್ತದೆ. ಇದು ವಿಸ್ಪರ್ (Whisper) ಗೆ ತಿಳಿದಿರುವ ಪ್ರತಿಯೊಂದು ಭಾಷೆಯನ್ನು ಒಳಗೊಂಡಿದೆ.</string>
+    <string name="core_voice_model_small_world_body">ಈ ಮಾದರಿಯು ನೀವು ಟೈಪ್ ಮಾಡುವ ಭಾಷೆಯನ್ನು ಬಳಸುತ್ತದೆ ಮತ್ತು ಸಣ್ಣ ಮಾದರಿಯ ನಿಖರತೆಯನ್ನು ಹೊಂದಿದೆ. ಇದು ಫೋನ್‌ನಲ್ಲಿ ಹೊಂದಿಕೊಳ್ಳುವ ಅತ್ಯಂತ ನಿಖರವಾದ ಮಾದರಿಯಾಗಿದೆ.</string>
+    <string name="core_voice_model_tiny_multi_body">ಇದು ಅತ್ಯಂತ ವೇಗದ ಬಹುಭಾಷಾ ಮಾದರಿಯಾಗಿದೆ. ಇದು ಸ್ಪಷ್ಟವಾದ ಭಾಷಣದೊಂದಿಗೆ ಉತ್ತಮವಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ, ಆದರೆ ಶಬ್ದವು ನಿಖರತೆಯನ್ನು ಕಡಿಮೆ ಮಾಡುತ್ತದೆ.</string>
+    <string name="core_voice_model_turbo_multi_body">ಈ ಮಾದರಿಯು ನೀವು ಮಾತನಾಡುವ ಭಾಷೆಯನ್ನು ಸಣ್ಣ ಮಾದರಿಗಳಿಗಿಂತ ಉತ್ತಮವಾಗಿ ಗುರುತಿಸುತ್ತದೆ. ಸಣ್ಣ ಮಾದರಿಯು ನಿಮ್ಮ ಭಾಷಣವನ್ನು ತಪ್ಪಾದ ಭಾಷೆಯಾಗಿ ಲಿಪ್ಯಂತರಗೊಳಿಸಿದರೆ ಇದನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಇದು ದೊಡ್ಡ ಡೌನ್‌ಲೋಡ್ ಆಗಿದೆ ಮತ್ತು ಪ್ರತಿ ನುಡಿಗಟ್ಟು ಕೆಲವು ಸೆಕೆಂಡುಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳುತ್ತದೆ.</string>
+    <string name="core_voice_size_base_label">ಬೇಸ್</string>
+    <string name="core_voice_size_large_label">ದೊಡ್ಡದು</string>
+    <string name="core_voice_size_medium_label">ಮಧ್ಯಮ</string>
+    <string name="core_voice_size_small_label">ಸಣ್ಣ</string>
+    <string name="core_voice_size_tiny_label">ತುಂಬಾ ಚಿಕ್ಕದು</string>
+    <string name="core_voice_size_turbo_label">ಟರ್ಬೊ</string>
+    <string name="core_voice_tier_recommended_label">ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ</string>
+    <string name="core_voice_whisper_mel_bins_error">ಈ ಧ್ವನಿ ಮಾದರಿಗೆ %1$s ಬ್ಯಾಂಡ್ ಸ್ಪೆಕ್ಟ್ರೋಗ್ರಾಮ್ ಅಗತ್ಯವಿದೆ, ಇದು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್‌ನೊಂದಿಗೆ ಹೊಂದಿಕೆಯಾಗುವುದಿಲ್ಲ. ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಮಾದರಿಯನ್ನು ಅಳಿಸಿ ಮತ್ತು ಅದನ್ನು ಮತ್ತೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.</string>
+    <string name="core_voice_whisper_model_load_error">ಧ್ವನಿ ಮಾದರಿಯು ಲೋಡ್ ಆಗಿಲ್ಲ. ಫೈಲ್ ಬಹುಶಃ ಹಾನಿಗೊಳಗಾಗಿದೆ. ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಮಾದರಿಯನ್ನು ಅಳಿಸಿ ಮತ್ತು ಅದನ್ನು ಮತ್ತೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.</string>
+    <string name="core_voice_whisper_transcribe_error">ಧ್ವನಿ ಟೈಪಿಂಗ್ ಕೆಲಸ ಮಾಡಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಸಣ್ಣ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+</resources>

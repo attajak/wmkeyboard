@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">کد یک‌بار مصرف</string>
+    <string name="core_content_clip_entity_otp_tag">کد</string>
+    <string name="core_content_clip_entity_phone_label">شماره تلفن</string>
+    <string name="core_content_clip_entity_phone_tag">تلفن</string>
+    <string name="core_content_clip_entity_url_label">لینک</string>
+    <string name="core_content_clip_entity_url_tag">لینک</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d قطعه دارای بسط‌های دیگری است که Espanso نمی‌تواند نگه دارد. فقط اولین مورد نوشته شد.</item>
+        <item quantity="other">%1$d قطعه دارای بسط‌های دیگری هستند که Espanso نمی‌تواند نگه دارد. فقط اولین مورد از هر کدام نوشته شد.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d قطعه کد محدود به برنامه‌های خاص کامپیوتری است. در گوشی شما، این قطعه کد در همه جا کار می‌کند.</item>
+        <item quantity="other">%1$d قطعه کد محدود به برنامه‌های خاص کامپیوتری هستند. در گوشی شما، این قطعه کدها در همه جا کار می‌کنند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d قطعه کد از شما می‌خواهد از یک لیست انتخاب کنید. برنامه به جای آن یکی را به صورت تصادفی انتخاب می‌کند.</item>
+        <item quantity="other">%1$d قطعه کد از شما می‌خواهند از یک لیست انتخاب کنید. برنامه به جای آن یکی را به صورت تصادفی انتخاب می‌کند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d قطعه کد قبل از گسترش پرسش می‌کند. Espanso چنین تنظیمی ندارد، بنابراین در آنجا به طور خودکار گسترش می‌یابد.</item>
+        <item quantity="other">%1$d قطعه کد قبل از گسترش پرسش می‌کنند. Espanso چنین تنظیمی ندارد، بنابراین در آنجا به طور خودکار گسترش می‌یابند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d قطعه‌متن از فرمت تاریخی استفاده می‌کند که برنامه نمی‌تواند آن را کامل بنویسد. برنامه بخشی را که قادر به انجامش نبود، حذف کرد.</item>
+        <item quantity="other">%1$d قطعه‌متن از فرمت‌های تاریخی استفاده می‌کنند که برنامه نمی‌تواند آن‌ها را کامل بنویسد. برنامه بخش‌هایی را که قادر به انجامشان نبود، حذف کرد.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d قطعه کد در پوشه‌ای است که خاموش شده است. Espanso سوئیچ پوشه ندارد، بنابراین در آنجا گسترش می‌یابد.</item>
+        <item quantity="other">%1$d قطعه کد در پوشه‌هایی هستند که خاموش شده‌اند. Espanso سوئیچ پوشه ندارد، بنابراین در آنجا گسترش می‌یابند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">برنامه %1$d قطعه کد را که چیزی برای درج نداشت، نادیده گرفت.</item>
+        <item quantity="other">برنامه %1$d قطعه کد را که چیزی برای درج نداشتند، نادیده گرفت.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d قطعه کد از شما می‌خواهد فرمی را پر کنید. برنامه فرم را به عنوان متن درج می‌کند و مکان‌نما در اولین جای خالی قرار می‌گیرد.</item>
+        <item quantity="other">%1$d قطعه کد از شما می‌خواهند فرمی را پر کنید. برنامه هر فرم را به عنوان متن درج می‌کند و مکان‌نما در اولین جای خالی قرار می‌گیرد.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">برنامه %1$d قطعه متنی که تصویر درج می‌کند را نادیده گرفت.</item>
+        <item quantity="other">برنامه %1$d قطعه متنی که تصویر درج می‌کنند را نادیده گرفت.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">فایل %1$d فایل دیگر را می‌خواند. یک فایل نمی‌تواند فایل‌های دیگر را با خود بیاورد.</item>
+        <item quantity="other">فایل %1$d فایل دیگر را می‌خواند. یک فایل نمی‌تواند فایل‌های دیگر را با خود بیاورد.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d قطعه متن به قطعات دیگر اشاره دارد. اسپانسو راهی برای بیان این موضوع ندارد، بنابراین پیوندها حذف شدند.</item>
+        <item quantity="other">%1$d قطعه متن به قطعات دیگر اشاره دارند. اسپانسو راهی برای بیان این موضوع ندارد، بنابراین پیوندها حذف شدند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d محرک برای کار در داخل یک کلمه در نظر گرفته شده است. در گوشی شما، این محرک فقط به عنوان یک کلمه کامل کار می‌کند.</item>
+        <item quantity="other">%1$d محرک برای کار در داخل یک کلمه در نظر گرفته شده‌اند. در گوشی شما، آن‌ها فقط به عنوان کلمات کامل کار می‌کنند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d قطعه کد از مقداری استفاده می‌کند که Espanso معادل آن را ندارد. این مقدار همان‌طور که هست نوشته می‌شود.</item>
+        <item quantity="other">%1$d قطعه کد از مقادیری استفاده می‌کنند که Espanso معادل آن‌ها را ندارد. آن‌ها همان‌طور که هستند نوشته می‌شوند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">برنامه الگو را از %1$d قطعه کد حذف کرد. برنامه الگوهایی با آن شکل را اجرا نمی‌کند. قطعه کد در لیست باقی می‌ماند.</item>
+        <item quantity="other">برنامه الگو را از %1$d قطعه کد حذف کرد. برنامه الگوهایی با آن شکل را اجرا نمی‌کند. قطعه کدها در لیست باقی می‌مانند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d قطعه کد از متن فرمت‌دار استفاده می‌کند. برنامه کلمات را نگه می‌دارد و فرمت را حذف می‌کند.</item>
+        <item quantity="other">%1$d قطعه کد از متن فرمت‌دار استفاده می‌کنند. برنامه کلمات را نگه می‌دارد و فرمت را حذف می‌کند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d قطعه کد یک دستور را روی رایانه شما اجرا می‌کند. برنامه این دستور را حذف کرده و هرگز آن را اجرا نمی‌کند.</item>
+        <item quantity="other">%1$d قطعه کد دستوراتی را روی رایانه شما اجرا می‌کنند. برنامه این دستورات را حذف کرده و هرگز آن‌ها را اجرا نمی‌کند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d ماشه فقط از نمادها تشکیل شده است، بنابراین برنامه نمی‌تواند آن را رصد کند. قطعه‌کد آن در لیست باقی می‌ماند.</item>
+        <item quantity="other">%1$d ماشه فقط از نمادها تشکیل شده‌اند، بنابراین برنامه نمی‌تواند آن‌ها را رصد کند. قطعه‌کدهای آن‌ها در لیست باقی می‌مانند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d قطعه شامل متنی در داخل آکولاد است که این برنامه آن را پر می‌کند، مانند {date}. این قطعه به جای نمایش به صورت نوشته شده، بسط می‌یابد.</item>
+        <item quantity="other">%1$d قطعه شامل متنی در داخل آکولاد هستند که این برنامه آن‌ها را پر می‌کند، مانند {date}. این قطعات به جای نمایش به صورت نوشته شده، بسط می‌یابند.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d قطعه‌متن حروف بزرگ/کوچک آنچه را که الگوی آن ضبط کرده تغییر می‌دهد. Espanso نمی‌تواند این کار را انجام دهد، بنابراین متن ضبط‌شده بدون تغییر وارد می‌شود.</item>
+        <item quantity="other">%1$d قطعه‌متن حروف بزرگ/کوچک آنچه را که الگوهایشان ضبط کرده تغییر می‌دهند. Espanso نمی‌تواند این کار را انجام دهد، بنابراین متن ضبط‌شده بدون تغییر وارد می‌شود.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d قطعه متن از مقداری استفاده می‌کند که برنامه معادل آن را ندارد. آن بخش خالی وارد می‌شود.</item>
+        <item quantity="other">%1$d قطعه متن از مقادیری استفاده می‌کنند که برنامه معادل آن‌ها را ندارد. آن بخش‌ها خالی وارد می‌شوند.</item>
+    </plurals>
+    <string name="core_content_font_error_download">برنامه نمی‌تواند فونت را دانلود کند. اتصال خود را بررسی کرده و دوباره تلاش کنید.</string>
+    <string name="core_content_font_error_empty">فایل خالی است.</string>
+    <string name="core_content_font_error_load">برنامه نمی‌تواند این فایل فونت را بارگذاری کند.</string>
+    <string name="core_content_font_error_markup">این فایل یک فایل HTML یا XML است، نه یک قلم.</string>
+    <string name="core_content_font_error_no_storage">هیچ فضای ذخیره‌سازی برای فونت موجود نیست.</string>
+    <string name="core_content_font_error_not_a_font">این فایل شبیه به یک فونت با فرمت .ttf یا .otf نیست.</string>
+    <string name="core_content_font_error_read">برنامه نمی‌تواند فونت را بخواند.</string>
+    <string name="core_content_font_error_save">برنامه نمی‌تواند فونت را ذخیره کند.</string>
+    <string name="core_content_font_error_too_large">اندازه قلم باید کمتر از %1$d مگابایت باشد.</string>
+    <string name="core_content_font_error_too_many">کتابخانه فونت پر است. یک فونت را حذف کنید و دوباره تلاش کنید.</string>
+    <string name="core_content_font_error_too_short">فایل برای فونت بودن بیش از حد کوتاه است.</string>
+    <string name="core_content_font_error_woff">برنامه نمی‌تواند فونت‌های وب WOFF را بخواند. از نسخه .ttf یا .otf فونت استفاده کنید.</string>
+    <string name="core_content_font_error_woff2">برنامه نمی‌تواند فونت‌های وب WOFF2 را بخواند. از نسخه .ttf یا .otf فونت استفاده کنید.</string>
+    <string name="core_content_font_error_zip">این فایل یک آرشیو فشرده (zip) است، نه یک فونت.</string>
+    <string name="core_content_selection_macro_add_contact">مخاطب</string>
+    <string name="core_content_selection_macro_calendar">تقویم</string>
+    <string name="core_content_selection_macro_call">تماس</string>
+    <string name="core_content_selection_macro_case_lower">حروف کوچک</string>
+    <string name="core_content_selection_macro_case_sentence">حروف بزرگ ابتدای جمله</string>
+    <string name="core_content_selection_macro_case_title">حروف بزرگ در عنوان</string>
+    <string name="core_content_selection_macro_case_upper">حروف بزرگ</string>
+    <string name="core_content_selection_macro_chat_bold">ضخیم</string>
+    <string name="core_content_selection_macro_chat_italic">ایتالیک</string>
+    <string name="core_content_selection_macro_chat_mono">تک‌فاصله</string>
+    <string name="core_content_selection_macro_chat_strike">خط‌زدن</string>
+    <string name="core_content_selection_macro_colour">رنگ</string>
+    <string name="core_content_selection_macro_copy">کپی</string>
+    <string name="core_content_selection_macro_digits_latin">ارقام</string>
+    <string name="core_content_selection_macro_email">ایمیل</string>
+    <string name="core_content_selection_macro_fancy">فانتزی</string>
+    <string name="core_content_selection_macro_find">یافتن</string>
+    <string name="core_content_selection_macro_format">قالب</string>
+    <string name="core_content_selection_macro_grammar">دستور زبان</string>
+    <string name="core_content_selection_macro_lines_bullet">گلوله‌ها</string>
+    <string name="core_content_selection_macro_lines_dedupe">منحصربه‌فرد</string>
+    <string name="core_content_selection_macro_lines_number">شماره</string>
+    <string name="core_content_selection_macro_lines_sort">مرتب‌سازی</string>
+    <string name="core_content_selection_macro_map">نقشه</string>
+    <string name="core_content_selection_macro_open">باز کردن</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">خواندن</string>
+    <string name="core_content_selection_macro_replace">جایگزینی</string>
+    <string name="core_content_selection_macro_search">جستجو</string>
+    <string name="core_content_selection_macro_share">اشتراک‌گذاری</string>
+    <string name="core_content_selection_macro_sms">پیام</string>
+    <string name="core_content_selection_macro_time_zones">مناطق</string>
+    <string name="core_content_selection_macro_to_bangla">بنگالی</string>
+    <string name="core_content_selection_macro_to_banglish">بنگلیش</string>
+    <string name="core_content_selection_macro_translate">ترجمه</string>
+    <string name="core_content_selection_macro_url_decode">رمزگشایی</string>
+    <string name="core_content_selection_macro_whatsapp">واتس‌اپ</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">برنامه %2$d بسط را از \"%1$s\" حذف کرد.</item>
+        <item quantity="other">برنامه %2$d بسط را از \"%1$s\" حذف کرد.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">برنامه الگو را از \"%1$s\" حذف کرد. الگو صحیح نیست. قطعه در فهرست باقی می‌ماند.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">برنامه %1$d پوشه را که نام نداشت یا تکراری بود حذف کرد. قطعه کدهای آن بدون پوشه وارد شدند.</item>
+        <item quantity="other">برنامه %1$d پوشه را که نام نداشتند یا تکراری بودند حذف کرد. قطعه کدهای آن‌ها بدون پوشه وارد شدند.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">فایل دارای قطعات بیشتری نسبت به ظرفیت نگهداری برنامه است. برنامه %1$d مورد اول را وارد کرد.</item>
+        <item quantity="other">فایل دارای قطعات بیشتری نسبت به ظرفیت نگهداری برنامه است. برنامه %1$d مورد اول را وارد کرد.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">یک قطعه کد نامی ندارد، بنابراین برنامه آن را بر اساس خط اولش نام‌گذاری کرد.</string>
+    <string name="core_content_snippet_repair_no_text">برنامه \"%1$s\" را حذف کرد. این مورد متنی ندارد.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">برنامه الگو را از \"%1$s\" حذف کرد. طول آن بیش از %2$d کاراکتر بود.</item>
+        <item quantity="other">برنامه الگو را از \"%1$s\" حذف کرد. طول آن بیش از %2$d کاراکتر بود.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">برنامه \"%1$s\" را کوتاه کرد. طول آن بیشتر از %2$d کاراکتر بود.</item>
+        <item quantity="other">برنامه \"%1$s\" را کوتاه کرد. طول آن بیشتر از %2$d کاراکتر بود.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">نام برنامه‌ای که در آن تایپ می‌کنید</string>
+    <string name="core_content_snippet_var_clip_info">جدیدترین ورودی کلیپ‌بورد</string>
+    <string name="core_content_snippet_var_cursor_info">مکانی که مکان‌نما در آن قرار می‌گیرد</string>
+    <string name="core_content_snippet_var_date_info">تاریخ امروز</string>
+    <string name="core_content_snippet_var_datetime_info">تاریخ و زمان</string>
+    <string name="core_content_snippet_var_day_info">روز از ماه</string>
+    <string name="core_content_snippet_var_isodate_info">تاریخ به فرمت ISO، برای مثال 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">تاریخ و زمان به فرمت ISO</string>
+    <string name="core_content_snippet_var_month_info">نام ماه</string>
+    <string name="core_content_snippet_var_package_info">نام بسته آن برنامه</string>
+    <string name="core_content_snippet_var_selection_info">متنی که در فیلد انتخاب می‌کنید</string>
+    <string name="core_content_snippet_var_time12_info">زمان فعلی به صورت ۱۲ ساعته</string>
+    <string name="core_content_snippet_var_time_info">زمان فعلی به صورت ۲۴ ساعته</string>
+    <string name="core_content_snippet_var_timestamp_info">زمان به ثانیه یونیکس</string>
+    <string name="core_content_snippet_var_timezone_info">منطقه زمانی، برای مثال GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">یک UUID تصادفی جدید</string>
+    <string name="core_content_snippet_var_weekday_info">نام روز، برای مثال یکشنبه</string>
+    <string name="core_content_snippet_var_year_info">سال، با چهار رقم</string>
+    <string name="core_content_sticker_pack_imported_label">استیکرهای واردشده</string>
+    <string name="core_content_sticker_repair_image_missing">برنامه \"%1$s\" را حذف کرد. تصویر آن موجود نیست.</string>
+    <string name="core_content_sticker_repair_image_unreadable">برنامه \"%1$s\" را حذف کرد. برنامه نمی‌تواند تصویر آن را بخواند.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">این بسته %1$d استیکر دارد. برنامه %2$d مورد اول را نگه می‌دارد.</item>
+        <item quantity="other">این بسته %1$d استیکر دارد. برنامه %2$d مورد اول را نگه می‌دارد.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">برنامه یک استیکر را حذف کرد. نام استیکر به هیچ فایل تصویری اشاره نمی‌کند.</string>
+    <string name="core_content_sticker_repair_none_listed">فایل بسته هیچ استیکری را فهرست نمی‌کند.</string>
+    <string name="core_content_sticker_repair_not_saved">برنامه \"%1$s\" را حذف کرد. برنامه نمی‌تواند آن را ذخیره کند.</string>
+</resources>

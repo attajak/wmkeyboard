@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">इस प्लगइन में कोई render() फ़ंक्शन नहीं है।</string>
+    <string name="core_plugins_error_not_installed">वह प्लगइन इंस्टॉल नहीं है।</string>
+    <string name="core_plugins_error_script_failed">स्क्रिप्ट विफल रही।</string>
+    <string name="core_plugins_error_script_missing">उस प्लगइन के लिए स्क्रिप्ट गायब है।</string>
+    <string name="core_plugins_error_turned_off">वह प्लगइन बंद है।</string>
+    <string name="core_plugins_permission_storage_label">अपने डिवाइस पर डेटा सहेजें</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” में एक ऐसी स्क्रिप्ट है जो मान्य UTF-8 टेक्स्ट नहीं है।</string>
+    <string name="core_plugins_reject_bad_id">इस प्लगइन की आईडी मान्य नहीं है। आईडी 3 से 64 वर्ण लंबी होनी चाहिए। आईडी में छोटे अक्षर, अंक, बिंदु, डैश और अंडरस्कोर हो सकते हैं।</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” में संकलित Lua कोड है। प्लगइन को सादे स्रोत कोड का उपयोग करना चाहिए, ताकि आप इसे चलाने से पहले पढ़ सकें।</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” में एक खाली स्क्रिप्ट है।</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” में इसकी स्क्रिप्ट फ़ाइल (%2$s) नहीं है।</string>
+    <string name="core_plugins_reject_newer_version">इस प्लगइन को WM कीबोर्ड के नए संस्करण की आवश्यकता है।</string>
+    <string name="core_plugins_reject_no_name">इस प्लगइन का कोई नाम नहीं है।</string>
+    <string name="core_plugins_reject_no_version">“%1$s” यह नहीं बताता कि यह कौन सा संस्करण है।</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” की स्क्रिप्ट %2$d KB से बड़ी है।</string>
+    <string name="core_plugins_reject_unknown_permission">WM कीबोर्ड का यह संस्करण \"%1$s\" अनुमति को नहीं पहचानता है। ऐप आपको यह नहीं बता सकता कि \"%2$s\" को क्या करने की अनुमति है।</string>
+    <string name="core_plugins_stopped_cancelled">ऐप ने इस प्लगइन को रोक दिया है।</string>
+    <string name="core_plugins_stopped_deadline">इस प्लगइन ने बहुत अधिक समय लिया। ऐप ने इसे रोक दिया।</string>
+    <string name="core_plugins_stopped_instructions">इस प्लगइन ने एक बार में बहुत अधिक काम किया। ऐप ने इसे रोक दिया।</string>
+    <string name="core_plugins_stopped_not_responding">यह प्लगइन प्रतिक्रिया देना बंद कर दिया है। ऐप ने इसे बंद कर दिया है।</string>
+    <string name="core_plugins_stopped_not_responding_disabled">यह प्लगइन फिर से प्रतिक्रिया देना बंद कर गया है। ऐप ने इसे बंद कर दिया है।</string>
+    <string name="core_plugins_stopped_recursion">इस प्लगइन ने खुद को बहुत बार कॉल किया। ऐप ने इसे रोक दिया।</string>
+    <string name="core_plugins_stopped_unexpected">यह प्लगइन अप्रत्याशित रूप से बंद हो गया।</string>
+    <string name="core_plugins_ui_insert_action">डालें</string>
+    <string name="core_plugins_ui_repair_no_type">एक विजेट ने यह नहीं बताया कि वह किस प्रकार का है।</string>
+    <string name="core_plugins_ui_repair_not_a_widget">एक विजेट सूची में कुछ ऐसा था जो विजेट नहीं है।</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">एक टैब स्ट्रिप में कोई पेज नहीं था।</string>
+    <string name="core_plugins_ui_repair_text_budget">इस प्लगइन ने बहुत अधिक टेक्स्ट ड्रा करने के लिए कहा। ऐप ने कुछ छोड़ दिया।</string>
+    <string name="core_plugins_ui_repair_text_shortened">कुछ टेक्स्ट बहुत लंबा था। ऐप ने इसे छोटा कर दिया है।</string>
+    <string name="core_plugins_ui_repair_too_deep">कुछ विजेट्स को ड्रा करने के लिए बहुत गहराई में रखा गया था।</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">केवल पहले %1$d टैब दिखाए गए हैं।</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">इस प्लगइन ने %1$d से अधिक विजेट मांगे। ऐप ने बाकी को हटा दिया।</string>
+    <string name="core_plugins_ui_repair_unknown_type">यह बिल्ड विजेट प्रकार \"%1$s\" को नहीं जानता है।</string>
+    <string name="core_plugins_ui_tab_default_title">टैब %1$d</string>
+</resources>

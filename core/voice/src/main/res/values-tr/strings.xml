@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face sunucusu dosyayı göndermedi. Hata kodu: HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">İndirme sırasında bağlantı kesildi. Kaldığı yerden devam etmek için tekrar deneyin.</string>
+    <string name="core_voice_download_space_error">Cihazınızda yeterli depolama alanı yok. Önce yaklaşık %1$s MB boşaltmanız gerekiyor.</string>
+    <string name="core_voice_model_base_eu_body">Bu model, 40 dil modeliyle aynı şekilde, yazdığınız dili kullanır. Yalnızca Avrupa dillerini kapsar, bu nedenle indirme boyutu daha küçüktür.</string>
+    <string name="core_voice_model_base_multi_body">Bu model doğruluk ve hız arasında denge kurar. Whisper\'ın bildiği her dili kapsar. Küçük model çok yavaşsa bunu seçin.</string>
+    <string name="core_voice_model_base_world_body">Bu model, tahmin yerine yazdığınız dili kullanır. Kısa ifadeler çok daha güvenilir hale gelir. Listesinde dilleriniz olduğunda bunu seçin.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d dil</item>
+        <item quantity="other">%1$d dil</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Bu, en doğru Whisper modellerinden biridir ancak çoğu telefon için çok büyüktür. İndirme boyutu 1,5 GB\'tır. Yalnızca yüksek bellek kapasitesine sahip bir cihaz bunu yükleyebilir.</string>
+    <string name="core_voice_model_large_v3_multi_body">Bu, en doğru Whisper modelidir ve hangi dili konuştuğunuzu tanımada en iyisidir. İndirme boyutu 1,5 GB\'tır. Yalnızca yüksek bellek miktarına sahip bir cihaz bunu yükleyebilir. Turbo modeli neredeyse aynı derecede doğrudur ve yarısı boyutundadır.</string>
+    <string name="core_voice_model_medium_multi_body">Bu model neredeyse masaüstü doğruluğu sağlar. Her ifade birkaç saniye sürer. Model çalışırken yaklaşık bir gigabayt bellek kullanır.</string>
+    <string name="core_voice_model_single_language_body">Bu model yalnızca %1$s dilini işler. Dil algılama adımı yoktur. Bu, onu aynı boyuttaki çok dilli bir modelden daha hızlı ve biraz daha doğru yapar.</string>
+    <string name="core_voice_model_small_multi_body">Bu model, telefonda iyi çalışırken en iyi doğruluğu sağlar. Aksanları ve arka plan gürültüsünü Temel modelden daha iyi işler. Whisper\'ın bildiği her dili kapsar.</string>
+    <string name="core_voice_model_small_world_body">Bu model, yazdığınız dili kullanır ve Küçük modelin doğruluğuna sahiptir. Telefona sığan en doğru modeldir.</string>
+    <string name="core_voice_model_tiny_multi_body">Bu en hızlı çok dilli modeldir. Net konuşmalarla iyi çalışır ancak gürültü doğruluğu azaltır.</string>
+    <string name="core_voice_model_turbo_multi_body">Bu model, konuştuğunuz dili daha küçük modellerden çok daha iyi tanır. Daha küçük bir model konuşmanızı yanlış dil olarak yazıya döküyorsa bunu seçin. Büyük bir indirmedir ve her ifade birkaç saniye sürer.</string>
+    <string name="core_voice_size_base_label">Temel</string>
+    <string name="core_voice_size_large_label">Büyük</string>
+    <string name="core_voice_size_medium_label">Orta</string>
+    <string name="core_voice_size_small_label">Küçük</string>
+    <string name="core_voice_size_tiny_label">Küçük</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Önerilen</string>
+    <string name="core_voice_whisper_mel_bins_error">Bu ses modeli, indirilen dosya ile eşleşmeyen %1$s bantlı bir spektrograma ihtiyaç duyuyor. Ayarlardan modeli silin ve tekrar indirin.</string>
+    <string name="core_voice_whisper_model_load_error">Ses modeli yüklenemedi. Dosya muhtemelen hasarlı. Ayarlardan modeli silin ve tekrar indirin.</string>
+    <string name="core_voice_whisper_transcribe_error">Sesle yazma çalışmadı. Tekrar deneyin veya daha küçük bir model seçin.</string>
+</resources>

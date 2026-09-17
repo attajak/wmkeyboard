@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">이 모델은 제한되어 있습니다. 먼저 Hugging Face 토큰을 추가하세요.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face가 HTTP 상태 %1$s을(를) 반환했습니다.</string>
+    <string name="core_intel_llm_download_error_licence">Hugging Face 페이지에서 모델 라이선스에 동의한 후 다시 시도하세요.</string>
+    <string name="core_intel_llm_download_error_no_space">기기에 저장 공간이 부족합니다. 먼저 약 %1$s GB를 확보하세요.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face에서 토큰을 수락하지 않았습니다. 토큰을 확인하고 다시 시도하세요.</string>
+    <string name="core_intel_llm_download_error_truncated">다운로드 중 연결이 중단되었습니다. 계속하려면 재개를 누르세요.</string>
+    <string name="core_intel_llm_engine_error_gpu">GPU에서 모델 실행에 실패했습니다. GPU 메모리가 시스템 메모리보다 훨씬 작습니다. 다음 시도에서는 CPU를 사용합니다. 항상 CPU를 사용하려면 설정에서 연산을 CPU로 설정하세요. 더 작은 모델을 선택할 수도 있습니다.</string>
+    <string name="core_intel_llm_engine_error_load">모델을 불러오지 못했습니다. 파일이 손상되었을 가능성이 높습니다. 설정에서 모델을 삭제하고 다시 다운로드하세요.</string>
+    <string name="core_intel_llm_engine_error_memory">모델 메모리가 부족하거나 오류가 발생했습니다. 더 작은 모델을 선택하세요.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">이전 세대의 소형 Gemma 모델입니다. 품질이 우수하며 4K 토큰의 컨텍스트를 지원합니다.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Google에서 제공하는 가장 작은 Gemma 모델입니다. 모든 기기에서 빠르게 작동합니다.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">최신 Gemma 세대입니다. 기기에서 최고 품질을 제공합니다.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">가장 큰 모델입니다. 글쓰기 성능은 가장 뛰어나지만 강력한 기기가 필요합니다.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">기본 기기에서도 실행 가능한 범용 모델입니다.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">1B 미만 모델보다 확실히 똑똑합니다. 중급 사양의 기기가 필요합니다.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">최근에 나온 소형 모델입니다. 크기 대비 품질이 높습니다.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">매우 작고 빠릅니다. 빠른 다시 쓰기에는 좋지만 추론 능력은 제한적입니다.</string>
+    <string name="core_intel_llm_module_downloading">키보드의 AI 구성 요소를 Google Play에서 다운로드 중입니다. 잠시 후 다시 시도하세요.</string>
+    <string name="core_intel_llm_module_restart">AI 구성 요소 설치가 완료되었습니다. 키보드를 닫았다가 다시 열어 사용하세요.</string>
+    <string name="core_intel_llm_tier_experimental_label">실험적</string>
+    <string name="core_intel_llm_tier_recommended_label">권장</string>
+    <string name="core_intel_llm_tier_untested_label">테스트되지 않음</string>
+</resources>

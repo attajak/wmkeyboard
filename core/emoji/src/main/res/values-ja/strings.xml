@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">その絵文字キーワードリストは空か、読み込めません。</string>
+    <string name="core_emoji_dict_error_http">サーバーがファイルを送信しませんでした。エラーコードはHTTP %1$sです。</string>
+    <string name="core_emoji_dict_error_not_a_list">そのファイルは絵文字キーワードリストではありません。</string>
+    <string name="core_emoji_dict_error_save">絵文字キーワードリストを保存できませんでした。</string>
+    <string name="core_emoji_dict_error_too_large">その絵文字キーワードリストは大きすぎます。</string>
+</resources>

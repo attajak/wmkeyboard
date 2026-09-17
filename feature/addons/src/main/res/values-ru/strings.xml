@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Использовать этот шрифт для эмодзи сейчас?</string>
+    <string name="faddons_apply_icon_pack_question">Использовать эти значки на клавиатуре сейчас?</string>
+    <string name="faddons_apply_layout_question">Включить, чтобы использовать для ввода?</string>
+    <string name="faddons_apply_plugin_question">Включить его, чтобы он отображался на панели плагинов?</string>
+    <string name="faddons_apply_sound_pack_question">Использовать этот звуковой пакет для клавиш сейчас?</string>
+    <string name="faddons_apply_sound_question">Использовать его как звук клавиш сейчас?</string>
+    <string name="faddons_apply_switch_action">Переключиться на него</string>
+    <string name="faddons_apply_theme_question">Использовать её как тему клавиатуры сейчас?</string>
+    <string name="faddons_download_error_app_too_old">Для этого дополнения требуется более новая версия приложения.</string>
+    <string name="faddons_download_error_bad_url">Ссылка для скачивания не является действительным URL-адресом https.</string>
+    <string name="faddons_download_error_checksum">Загруженный файл не соответствует контрольной сумме в манифесте.</string>
+    <string name="faddons_download_error_http_status">Сервер вернул HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Недостаточно свободного места для установки.</string>
+    <string name="faddons_download_error_plugin_no_checksum">У этого плагина нет контрольной суммы. Приложение не может его проверить.</string>
+    <string name="faddons_download_error_too_large">Этот аддон превышает лимит в %1$d МБ для своего типа.</string>
+    <string name="faddons_error_no_words">Приложение не смогло прочитать ни одного слова из этого файла.</string>
+    <string name="faddons_error_not_a_plugin">Этот файл не является плагином для WM Keyboard.</string>
+    <string name="faddons_install_error_dictionary_no_language">В этом словаре не указано, для какого языка он предназначен.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Приложение не смогло сохранить словарь.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Приложение не смогло прочитать пакет значков.</string>
+    <string name="faddons_install_error_keywords_no_language">В этом пакете не указано, для какого он языка.</string>
+    <string name="faddons_install_error_keywords_not_saved">Приложению не удалось сохранить пакет ключевых слов.</string>
+    <string name="faddons_install_error_keywords_too_large">Этот пакет ключевых слов слишком велик для импорта.</string>
+    <string name="faddons_install_error_no_keywords">Приложению не удалось прочитать ключевые слова эмодзи из этого файла.</string>
+    <string name="faddons_install_error_no_stickers">Приложению не удалось прочитать стикеры из этого набора. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Этот файл не является раскладкой клавиатуры WM.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Этот файл не является пакетом фрагментов WM Keyboard.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Этот файл не является звуковым пакетом.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Этот файл не является набором стикеров.</string>
+    <string name="faddons_install_error_not_a_theme">Этот файл не является темой для клавиатуры WM.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Этот файл не является пакетом Espanso или файлом соответствий.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Этот файл не является набором значков.</string>
+    <string name="faddons_install_error_plugin_failed">Приложение не смогло установить этот плагин.</string>
+    <string name="faddons_install_error_plugins_turned_off">Плагины отключены. Включите «Разрешить плагины» в разделе Инструменты › Плагины. Затем установите это снова.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Этот пакет фрагментов пуст.</string>
+    <string name="faddons_install_error_sound_pack_read">Приложение не может прочитать этот звуковой пакет.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Приложение не смогло прочитать набор стикеров.</string>
+    <string name="faddons_install_error_too_many_fonts">Вы достигли максимального количества установленных шрифтов.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Вы достигли максимального количества наборов значков.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">У вас уже достигнут максимум в %1$d плагин.</item>
+        <item quantity="other">У вас уже достигнут максимум в %1$d плагинов.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Вы достигли максимального количества установленных звуковых пакетов.</string>
+    <string name="faddons_install_error_too_many_sounds">Вы достигли максимального количества установленных звуков клавиш.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Вы достигли максимального количества наборов стикеров.</string>
+    <string name="faddons_install_error_unknown_language">Эта версия приложения не поддерживает язык «%1$s».</string>
+    <string name="faddons_install_error_unknown_type">Эта версия приложения не поддерживает данный тип дополнений.</string>
+    <string name="faddons_install_error_vocab_no_language">В этом словаре не указан язык.</string>
+    <string name="faddons_install_error_vocab_no_words">Приложению не удалось прочитать ни одного слова из этого пакета.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Этот файл не является словарем.</string>
+    <string name="faddons_install_error_vocab_too_large">Этот набор слов больше, чем допустимо в приложении.</string>
+    <string name="faddons_preview_error_no_preview">Приложение не может отобразить предварительный просмотр этого дополнения.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Этот файл не является пакетом или файлом соответствий Espanso.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Этот файл не является пакетом ключевых слов для эмодзи.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Этот файл не является пакетом сниппетов.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Этот файл не является словарным пакетом.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Приложение не смогло прочитать звуки в этом пакете.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Приложению не удалось прочитать изображения стикеров.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Пакет сниппетов</string>
+</resources>

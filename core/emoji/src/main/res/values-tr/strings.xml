@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Bu emoji anahtar kelime listesi boş veya okunamıyor.</string>
+    <string name="core_emoji_dict_error_http">Sunucu dosyayı göndermedi. Hata kodu HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Bu dosya bir emoji anahtar kelime listesi değil.</string>
+    <string name="core_emoji_dict_error_save">Uygulama emoji anahtar kelime listesini kaydedemedi.</string>
+    <string name="core_emoji_dict_error_too_large">Bu emoji anahtar kelime listesi çok büyük.</string>
+</resources>

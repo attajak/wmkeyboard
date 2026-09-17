@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Þessi listi yfir leitarorð fyrir broskarla er tómur eða ólæsilegur.</string>
+    <string name="core_emoji_dict_error_http">Netþjónninn sendi ekki skrána. Villukóðinn er HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Sú skrá er ekki emoji-leitarorðalisti.</string>
+    <string name="core_emoji_dict_error_save">Forritið gat ekki vistað lista yfir emoji-leitarorð.</string>
+    <string name="core_emoji_dict_error_too_large">Þessi listi yfir emoji-leitarorð er of stór.</string>
+</resources>

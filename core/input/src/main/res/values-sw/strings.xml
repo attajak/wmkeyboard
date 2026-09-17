@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Faili iliyopakuliwa imeharibika. Cheki-sumu yake hailingani. Jaribu kupakua tena.</string>
+    <string name="core_input_cjk_download_error_http">Seva imerejesha hali ya HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Upakuaji haukufanikiwa. Angalia muunganisho wako na ujaribu tena.</string>
+    <string name="core_input_cjk_download_error_network_detail">Upakuaji haukufanikiwa: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Hakuna nafasi ya kutosha ya kuhifadhi kwenye kifaa chako. Futa nafasi kwanza.</string>
+    <string name="core_input_cjk_download_error_truncated">Muunganisho ulikatika wakati wa upakuaji. Bonyeza Endelea ili kuendelea.</string>
+    <string name="core_input_cjk_download_error_unavailable">Kifurushi hiki hakipatikani bado.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Jedwali la misimbo ya mizizi kwa vibambo vya Hanzi, vibambo 29,000. Kibodi inahitaji kifurushi hiki kwa ajili ya mipangilio ya Cangjie na Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Kamusi ya Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Usomaji wa Kana kutoka mozc, viingilio milioni 1.08, takriban MB 42. Kibodi inahitaji kifurushi hiki kwa ajili ya ubadilishaji wa Kijapani.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Kamusi ya kana hadi kanji ya Kijapani</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Jedwali la usomaji wa Jyutping kwa herufi za Hanzi, maingizo 163,000. Kibodi inahitaji kifurushi hiki kwa ubadilishaji wa Kikantoni.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kamusi ya Jyutping ya Kikantoni</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Herufi za Hanzi na misemo kutoka CC-CEDICT, viingilio 120,000. Kibodi inahitaji kifurushi hiki kwa ajili ya ubadilishaji wa Kichina.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Kamusi ya Kichina ya Pinyin</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Jedwali la mpangilio wa viboko kwa vibambo vya Hanzi. Kibodi inahitaji kifurushi hiki kwa ajili ya mpangilio wa viboko.</string>
+    <string name="core_input_cjk_pack_stroke_title">Kamusi ya viboko vya Kichina (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Zima (Pinyin kamili)</string>
+</resources>

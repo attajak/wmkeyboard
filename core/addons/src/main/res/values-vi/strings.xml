@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Từ điển</string>
+    <string name="core_addons_type_dictionary_singular_label">Từ điển</string>
+    <string name="core_addons_type_emoji_font_label">Phông chữ biểu tượng cảm xúc</string>
+    <string name="core_addons_type_emoji_font_singular_label">Phông chữ biểu tượng cảm xúc</string>
+    <string name="core_addons_type_emoji_keywords_label">Từ khóa biểu tượng cảm xúc</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Gói từ khóa biểu tượng cảm xúc</string>
+    <string name="core_addons_type_espanso_label">Gói Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Gói Espanso</string>
+    <string name="core_addons_type_font_label">Phông chữ</string>
+    <string name="core_addons_type_font_singular_label">Phông chữ</string>
+    <string name="core_addons_type_icon_pack_label">Gói biểu tượng</string>
+    <string name="core_addons_type_icon_pack_singular_label">Gói biểu tượng</string>
+    <string name="core_addons_type_layout_label">Bố cục</string>
+    <string name="core_addons_type_layout_singular_label">Bố cục</string>
+    <string name="core_addons_type_plugin_label">Plugin</string>
+    <string name="core_addons_type_plugin_singular_label">Plugin</string>
+    <string name="core_addons_type_snippets_label">Đoạn mã</string>
+    <string name="core_addons_type_snippets_singular_label">Gói đoạn mã</string>
+    <string name="core_addons_type_sound_label">Âm thanh</string>
+    <string name="core_addons_type_sound_pack_label">Gói âm thanh</string>
+    <string name="core_addons_type_sound_pack_singular_label">Gói âm thanh</string>
+    <string name="core_addons_type_sound_singular_label">Âm thanh phím</string>
+    <string name="core_addons_type_stickers_label">Gói nhãn dán</string>
+    <string name="core_addons_type_stickers_singular_label">Gói nhãn dán</string>
+    <string name="core_addons_type_theme_label">Chủ đề</string>
+    <string name="core_addons_type_theme_singular_label">Chủ đề</string>
+    <string name="core_addons_type_unknown_label">Khác</string>
+    <string name="core_addons_type_unknown_singular_label">Tiện ích bổ sung</string>
+    <string name="core_addons_type_vocabulary_label">Từ vựng</string>
+    <string name="core_addons_type_vocabulary_singular_label">Gói từ vựng</string>
+</resources>

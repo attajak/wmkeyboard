@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Цей плагін не має функції render().</string>
+    <string name="core_plugins_error_not_installed">Цей плагін не встановлено.</string>
+    <string name="core_plugins_error_script_failed">Помилка виконання скрипта.</string>
+    <string name="core_plugins_error_script_missing">Скрипт для цього плагіна відсутній.</string>
+    <string name="core_plugins_error_turned_off">Цей плагін вимкнено.</string>
+    <string name="core_plugins_permission_storage_label">Зберігати дані на вашому пристрої</string>
+    <string name="core_plugins_reject_bad_encoding">«%1$s» містить скрипт, який не є дійсним текстом у кодуванні UTF-8.</string>
+    <string name="core_plugins_reject_bad_id">Цей плагін має недійсний ідентифікатор. Ідентифікатор має довжину від 3 до 64 символів. Ідентифікатор може містити малі літери, цифри, крапки, дефіси та підкреслення.</string>
+    <string name="core_plugins_reject_compiled_lua">«%1$s» містить скомпільований код Lua. Плагін повинен використовувати звичайний вихідний код, щоб ви могли прочитати його перед виконанням.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” має порожній скрипт.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” не має свого файлу сценарію (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Цей плагін потребує новішої версії WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Цей плагін не має назви.</string>
+    <string name="core_plugins_reject_no_version">«%1$s» не вказує, яка це версія.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” має скрипт, розмір якого перевищує %2$d КБ.</string>
+    <string name="core_plugins_reject_unknown_permission">Ця версія WM Keyboard не знає дозволу “%1$s”. Додаток не може сказати вам, що дозволено робити “%2$s”.</string>
+    <string name="core_plugins_stopped_cancelled">Додаток зупинив цей плагін.</string>
+    <string name="core_plugins_stopped_deadline">Цей плагін працював занадто довго. Додаток зупинив його.</string>
+    <string name="core_plugins_stopped_instructions">Цей плагін виконав забагато роботи одночасно. Додаток зупинив його.</string>
+    <string name="core_plugins_stopped_not_responding">Цей плагін перестав відповідати. Додаток закрив його.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Цей плагін знову перестав відповідати. Додаток вимкнув його.</string>
+    <string name="core_plugins_stopped_recursion">Цей плагін викликав сам себе занадто багато разів. Додаток зупинив його.</string>
+    <string name="core_plugins_stopped_unexpected">Цей плагін несподівано зупинився.</string>
+    <string name="core_plugins_ui_insert_action">Вставити</string>
+    <string name="core_plugins_ui_repair_no_type">Віджет не вказав свій тип.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Список віджетів містив щось, що не є віджетом.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Панель вкладок не мала сторінок.</string>
+    <string name="core_plugins_ui_repair_text_budget">Цей плагін намагався відобразити забагато тексту. Додаток пропустив частину.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Деякий текст був занадто довгим для відображення. Додаток скоротив його.</string>
+    <string name="core_plugins_ui_repair_too_deep">Деякі віджети були вкладені занадто глибоко для відображення.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Показано лише перші %1$d вкладок.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Цей плагін запитав більше ніж %1$d віджетів. Додаток відхилив решту.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Ця збірка не розпізнає тип віджета “%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Вкладка %1$d</string>
+</resources>

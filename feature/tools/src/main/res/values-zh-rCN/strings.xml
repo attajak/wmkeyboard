@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">AI 提供商返回了错误响应</string>
+    <string name="ftools_photo_error_failed">应用无法获取照片</string>
+    <string name="ftools_photo_error_offline">应用无法连接到照片服务。请检查您的网络并重试。</string>
+    <string name="ftools_photo_error_timeout">照片服务响应超时</string>
+    <string name="ftools_search_error_json_disabled">此 SearXNG 实例未启用其 JSON API。请在其 settings.yml 文件中的 search.formats 下添加 &lt;b&gt;json&lt;/b&gt;，或使用其他实例。</string>
+</resources>

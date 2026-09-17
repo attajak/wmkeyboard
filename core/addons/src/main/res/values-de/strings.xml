@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Wörterbücher</string>
+    <string name="core_addons_type_dictionary_singular_label">Wörterbuch</string>
+    <string name="core_addons_type_emoji_font_label">Emoji-Schriftarten</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emoji-Schriftart</string>
+    <string name="core_addons_type_emoji_keywords_label">Emoji-Schlüsselwörter</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Emoji-Schlüsselwortpaket</string>
+    <string name="core_addons_type_espanso_label">Espanso-Pakete</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso-Paket</string>
+    <string name="core_addons_type_font_label">Schriftarten</string>
+    <string name="core_addons_type_font_singular_label">Schriftart</string>
+    <string name="core_addons_type_icon_pack_label">Icon-Packs</string>
+    <string name="core_addons_type_icon_pack_singular_label">Symbolpaket</string>
+    <string name="core_addons_type_layout_label">Layouts</string>
+    <string name="core_addons_type_layout_singular_label">Layout</string>
+    <string name="core_addons_type_plugin_label">Plugins</string>
+    <string name="core_addons_type_plugin_singular_label">Plugin</string>
+    <string name="core_addons_type_snippets_label">Snippets</string>
+    <string name="core_addons_type_snippets_singular_label">Snippet-Paket</string>
+    <string name="core_addons_type_sound_label">Sounds</string>
+    <string name="core_addons_type_sound_pack_label">Sound-Pakete</string>
+    <string name="core_addons_type_sound_pack_singular_label">Soundpaket</string>
+    <string name="core_addons_type_sound_singular_label">Tastenton</string>
+    <string name="core_addons_type_stickers_label">Sticker-Pakete</string>
+    <string name="core_addons_type_stickers_singular_label">Sticker-Paket</string>
+    <string name="core_addons_type_theme_label">Designs</string>
+    <string name="core_addons_type_theme_singular_label">Design</string>
+    <string name="core_addons_type_unknown_label">Sonstiges</string>
+    <string name="core_addons_type_unknown_singular_label">Add-on</string>
+    <string name="core_addons_type_vocabulary_label">Vokabular</string>
+    <string name="core_addons_type_vocabulary_singular_label">Vokabelpaket</string>
+</resources>

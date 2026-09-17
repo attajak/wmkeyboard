@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Aplikacija je promijenila %1$d tipku u najbližu tipku koju ima.</item>
+        <item quantity="other">Aplikacija je promijenila %1$d tipki u najbliže tipke koje ima.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Aplikacija je uklonila %1$d tipku. Ova tipkovnica nema tipku koja radi istu stvar (kod %2$s).</item>
+        <item quantity="other">Aplikacija je uklonila %1$d tipki. Ova tipkovnica nema tipke koje rade istu stvar (kodovi %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Aplikacija je zadržala veličinu oznake za %1$d tipku, ali ne i njezin stil teksta. Ova tipkovnica iscrtava oznake u jednom stilu.</item>
+        <item quantity="other">Aplikacija je zadržala veličinu oznake za %1$d tipki, ali ne i njihov stil teksta. Ova tipkovnica iscrtava oznake u jednom stilu.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Aplikacija je promijenila %1$d slovo u oblik koji ova tipkovnica piše.</item>
+        <item quantity="other">Aplikacija je promijenila %1$d slova u oblik koji ova tipkovnica piše.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tipka nema slova pri dugom pritisku. Datoteka ih drži u drugoj datoteci koju niste otvorili.</item>
+        <item quantity="other">%1$d tipki nema slova pri dugom pritisku. Datoteka ih drži u drugoj datoteci koju niste otvorili.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Druga tipkovnica mjeri širinu tipki drugačije. Aplikacija je promijenila širine kako bi odgovarale ovoj mreži.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d tipka za brajicu u sloju %2$s ima broj točke izvan raspona od 1 do 6.</item>
+        <item quantity="other">%1$d tipki za brajicu u sloju %2$s ima broj točke izvan raspona od 1 do 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d tipka u %2$s sloju nema oznaku i nema izlaz. Ne upisuje ništa, a aplikacija je briše kada uključite ovaj raspored.</item>
+        <item quantity="other">%1$d tipki u %2$s sloju nemaju oznaku i nemaju izlaz. Ne upisuju ništa, a aplikacija ih briše kada uključite ovaj raspored.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Redak %1$d sloja %2$s je prazan.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d tipka u %2$s sloju je komponenta ploče. Komponente rade samo u izgledu ploče.</item>
+        <item quantity="other">%1$d tipki u %2$s sloju su komponente ploče. Komponente rade samo u izgledu ploče.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Redak %1$d sloja %2$s sadrži tipku bez širine.</string>
+    <string name="core_lang_layout_key_span_error">Redak %1$d sloja %2$s ima tipku koja pokriva manje od 1 ili više od %3$d redaka.</string>
+    <string name="core_lang_layout_letters_empty_error">Sloj sa slovima nema tipki.</string>
+    <string name="core_lang_layout_no_delete_error">Izgled nema tipku za brisanje. Ne možete ispraviti pogrešku.</string>
+    <string name="core_lang_layout_no_enter_error">Izgled nema tipku za unos.</string>
+    <string name="core_lang_layout_no_shift_warning">Izgled nema tipku shift. Za upisivanje velikog slova, pritisnite i držite tipku.</string>
+    <string name="core_lang_layout_no_space_error">Raspored nema tipku za razmak.</string>
+    <string name="core_lang_layout_no_way_back_error">Sloj %1$s nema tipku za povratak na slova. Ne možete napustiti ovaj sloj.</string>
+    <string name="core_lang_layout_persistent_warning">Sloj %1$s ostaje otvoren kada se tipkovnica zatvori. Provjerite imate li način za izlazak iz ovog rasporeda.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Ovaj raspored nema tipku za izlaz. Provjerite imate li način za izlazak iz ovog rasporeda: tipku ABC, tipku za simbole ili alat za sekundarni raspored na alatnoj traci.</string>
+    <string name="core_lang_layout_span_past_end_warning">Redak %1$d sloja %2$s ima tipku koja obuhvaća više redaka nego što sloj ima. Tipkovnica je zaustavlja na zadnjem retku.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Redak %1$d sloja %2$s ima %3$d tipku. Samo %4$d tipki ostaje dovoljno velikih za pritisak.</item>
+        <item quantity="other">Redak %1$d sloja %2$s ima %3$d tipki. Samo %4$d tipki ostaje dovoljno velikih za pritisak.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Sloj %1$s ima %2$d redak. Stane samo %3$d redak.</item>
+        <item quantity="other">Sloj %1$s ima %2$d redaka. Stane samo %3$d redaka.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d tipka u sloju %2$s koristi radnju koju ova verzija aplikacije ne prepoznaje.</item>
+        <item quantity="other">%1$d tipki u sloju %2$s koristi radnju koju ova verzija aplikacije ne prepoznaje.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Redak %1$d sloja %2$s širi je od ostalih redaka. Tipkovnica iscrtava tipke ovog retka užima.</string>
+    <string name="core_lang_numeral_scope_display_only">Samo prikaz</string>
+    <string name="core_lang_numeral_scope_everywhere">Svugdje</string>
+    <string name="core_lang_numeral_scope_text_fields">Tekstualna polja</string>
+    <string name="core_lang_numeral_system_auto">Automatski</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponenta se pojavljuje više od jednom. Aplikacija zadržava prvu kopiju.</item>
+        <item quantity="other">%1$d komponenti se pojavljuje više od jednom. Aplikacija zadržava prvu kopiju svake.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Ova ploča nema tipki. Aplikacija umjesto nje koristi standardnu ploču.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tipka ima radnju koja ne radi na ploči. Aplikacija je briše.</item>
+        <item quantity="other">%1$d tipki ima radnje koje ne rade na ploči. Aplikacija ih briše.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Ova ploča nema ABC tipku. Koristite alatnu traku ili gumb Natrag za povratak na tipke.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Aplikacija je izbrisala drugu kopiju komponente.</string>
+    <string name="core_lang_panel_repair_field_added">Aplikacija je dodala glavnu komponentu ploče u novi redak.</string>
+    <string name="core_lang_panel_repair_field_dropped">Aplikacija je izbrisala komponentu koja ne pripada ovoj ploči.</string>
+    <string name="core_lang_panel_repair_key_dropped">Aplikacija je izbrisala tipku čija radnja ne radi na ploči.</string>
+    <string name="core_lang_panel_repair_reset">Aplikacija je zamijenila praznu ploču standardnom.</string>
+    <string name="core_lang_panel_required_field_error">Ovoj ploči nedostaje glavna komponenta. Aplikacija je dodaje kada iscrtava ploču.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponenta ne pripada ovoj ploči. Aplikacija je briše.</item>
+        <item quantity="other">%1$d komponenti ne pripadaju ovoj ploči. Aplikacija ih briše.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Aplikacija je izbrisala praznu tipku u sloju %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Tipka u sloju %1$s koristila je brajičnu točku %2$d. Aplikacija ju je postavila na točku %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Sloj sa slovima nije imao tipku za brisanje. Aplikacija ju je dodala.</string>
+    <string name="core_lang_repair_enter_key_added">Sloj slova nije imao tipku Enter. Aplikacija ju je dodala.</string>
+    <string name="core_lang_repair_field_key_deleted">Aplikacija je izbrisala komponentu ploče iz sloja %1$s. Komponente rade samo u rasporedu ploče.</string>
+    <string name="core_lang_repair_key_letters_anchored">Tipka u %1$s sloju označava %2$s. Aplikacija ju je postavila na %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Tipka u sloju %1$s navela je %2$s kao slova koja predstavlja. To nisu slova, pa je aplikacija pretvorila tipku u običnu.</string>
+    <string name="core_lang_repair_key_span_clamped">Tipka u sloju %1$s pokrivala je %2$d redaka. Aplikacija ju je postavila da pokriva %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Tipka u sloju %1$s bila je široka %2$s jedinica. Aplikacija ju je postavila na %3$s jedinica širine.</string>
+    <string name="core_lang_repair_key_width_set">Tipka u sloju %1$s nije imala širinu. Aplikacija je postavila širinu na 1.</string>
+    <string name="core_lang_repair_layer_replaced">Sloj %1$s nije imao funkcionalne tipke. Sada koristi ugrađenu mrežu.</string>
+    <string name="core_lang_repair_letters_key_added">Sloj %1$s nije imao tipku za povratak na slova. Aplikacija je dodala ABC tipku.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Redak u sloju %1$s imao je %2$d tipku. Aplikacija zadržava prvu %3$d.</item>
+        <item quantity="other">Redak u sloju %1$s imao je %2$d tipki. Aplikacija zadržava prve %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Redak u sloju %1$s bio je širok %2$s jedinica. Aplikacija je smanjila tipke kako bi redak stao.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Sloj %1$s imao je %2$d redak. Aplikacija zadržava prva %3$d.</item>
+        <item quantity="other">Sloj %1$s imao je %2$d redaka. Aplikacija zadržava prva %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Sloj sa slovima nije imao tipku za razmak. Aplikacija ju je dodala.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Aplikacija je izbrisala tipku u sloju %1$s. Njezina radnja \"%2$s\" nije poznata.</string>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Ta wtyczka nie posiada funkcji render().</string>
+    <string name="core_plugins_error_not_installed">Ta wtyczka nie jest zainstalowana.</string>
+    <string name="core_plugins_error_script_failed">Skrypt nie powiódł się.</string>
+    <string name="core_plugins_error_script_missing">Brakuje skryptu dla tej wtyczki.</string>
+    <string name="core_plugins_error_turned_off">Ta wtyczka jest wyłączona.</string>
+    <string name="core_plugins_permission_storage_label">Zapisz dane na swoim urządzeniu</string>
+    <string name="core_plugins_reject_bad_encoding">„%1$s” zawiera skrypt, który nie jest poprawnym tekstem UTF-8.</string>
+    <string name="core_plugins_reject_bad_id">Ta wtyczka ma nieprawidłowy identyfikator. Identyfikator musi mieć od 3 do 64 znaków. Może zawierać małe litery, cyfry, kropki, myślniki i podkreślniki.</string>
+    <string name="core_plugins_reject_compiled_lua">„%1$s” zawiera skompilowany kod Lua. Wtyczka musi używać zwykłego kodu źródłowego, aby można było go przeczytać przed uruchomieniem.</string>
+    <string name="core_plugins_reject_empty_script">„%1$s” ma pusty skrypt.</string>
+    <string name="core_plugins_reject_missing_script">„%1$s” nie posiada pliku skryptu (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Ta wtyczka wymaga nowszej wersji klawiatury WM.</string>
+    <string name="core_plugins_reject_no_name">Ta wtyczka nie ma nazwy.</string>
+    <string name="core_plugins_reject_no_version">„%1$s” nie określa swojej wersji.</string>
+    <string name="core_plugins_reject_script_too_large">„%1$s” posiada skrypt większy niż %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Ta wersja klawiatury WM nie rozpoznaje uprawnienia „%1$s”. Aplikacja nie może określić, co „%2$s” ma prawo robić.</string>
+    <string name="core_plugins_stopped_cancelled">Aplikacja zatrzymała tę wtyczkę.</string>
+    <string name="core_plugins_stopped_deadline">Ta wtyczka działała zbyt długo. Aplikacja ją zatrzymała.</string>
+    <string name="core_plugins_stopped_instructions">Ta wtyczka wykonała zbyt wiele pracy jednocześnie. Aplikacja ją zatrzymała.</string>
+    <string name="core_plugins_stopped_not_responding">Ta wtyczka przestała odpowiadać. Aplikacja ją zamknęła.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Ta wtyczka przestała odpowiadać. Aplikacja ją wyłączyła.</string>
+    <string name="core_plugins_stopped_recursion">Ta wtyczka wywołała samą siebie zbyt wiele razy. Aplikacja ją zatrzymała.</string>
+    <string name="core_plugins_stopped_unexpected">Ta wtyczka zatrzymała się nieoczekiwanie.</string>
+    <string name="core_plugins_ui_insert_action">Wstaw</string>
+    <string name="core_plugins_ui_repair_no_type">Widżet nie określił swojego typu.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Lista widżetów zawierała element, który nie jest widżetem.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Pasek kart nie zawierał żadnych stron.</string>
+    <string name="core_plugins_ui_repair_text_budget">Ta wtyczka próbowała wyświetlić zbyt dużo tekstu. Aplikacja pominęła część z nich.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Niektóre teksty były zbyt długie, aby je wyświetlić. Aplikacja je skróciła.</string>
+    <string name="core_plugins_ui_repair_too_deep">Niektóre widżety były zbyt głęboko zagnieżdżone, aby je narysować.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Wyświetlono tylko pierwsze %1$d kart.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Ta wtyczka zażądała więcej niż %1$d widżetów. Aplikacja odrzuciła resztę.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Ta kompilacja nie rozpoznaje typu widżetu „%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Karta %1$d</string>
+</resources>

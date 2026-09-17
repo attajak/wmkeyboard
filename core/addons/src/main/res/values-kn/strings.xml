@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">ನಿಘಂಟುಗಳು</string>
+    <string name="core_addons_type_dictionary_singular_label">ನಿಘಂಟು</string>
+    <string name="core_addons_type_emoji_font_label">ಎಮೋಜಿ ಫಾಂಟ್‌ಗಳು</string>
+    <string name="core_addons_type_emoji_font_singular_label">ಎಮೋಜಿ ಫಾಂಟ್</string>
+    <string name="core_addons_type_emoji_keywords_label">ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳು</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">ಎಮೋಜಿ ಕೀವರ್ಡ್ ಪ್ಯಾಕ್</string>
+    <string name="core_addons_type_espanso_label">Espanso ಪ್ಯಾಕ್‌ಗಳು</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso ಪ್ಯಾಕ್</string>
+    <string name="core_addons_type_font_label">ಫಾಂಟ್‌ಗಳು</string>
+    <string name="core_addons_type_font_singular_label">ಫಾಂಟ್</string>
+    <string name="core_addons_type_icon_pack_label">ಐಕಾನ್ ಪ್ಯಾಕ್‌ಗಳು</string>
+    <string name="core_addons_type_icon_pack_singular_label">ಐಕಾನ್ ಪ್ಯಾಕ್</string>
+    <string name="core_addons_type_layout_label">ಲೇಔಟ್‌ಗಳು</string>
+    <string name="core_addons_type_layout_singular_label">ಲೇಔಟ್</string>
+    <string name="core_addons_type_plugin_label">ಪ್ಲಗಿನ್‌ಗಳು</string>
+    <string name="core_addons_type_plugin_singular_label">ಪ್ಲಗಿನ್</string>
+    <string name="core_addons_type_snippets_label">ಸ್ನಿಪ್ಪೆಟ್‌ಗಳು</string>
+    <string name="core_addons_type_snippets_singular_label">ಸ್ನಿಪ್ಪೆಟ್ ಪ್ಯಾಕ್</string>
+    <string name="core_addons_type_sound_label">ಶಬ್ದಗಳು</string>
+    <string name="core_addons_type_sound_pack_label">ಸೌಂಡ್ ಪ್ಯಾಕ್‌ಗಳು</string>
+    <string name="core_addons_type_sound_pack_singular_label">ಸೌಂಡ್ ಪ್ಯಾಕ್</string>
+    <string name="core_addons_type_sound_singular_label">ಕೀ ಸೌಂಡ್</string>
+    <string name="core_addons_type_stickers_label">ಸ್ಟಿಕ್ಕರ್ ಪ್ಯಾಕ್‌ಗಳು</string>
+    <string name="core_addons_type_stickers_singular_label">ಸ್ಟಿಕರ್ ಪ್ಯಾಕ್</string>
+    <string name="core_addons_type_theme_label">ಥೀಮ್‌ಗಳು</string>
+    <string name="core_addons_type_theme_singular_label">ಥೀಮ್</string>
+    <string name="core_addons_type_unknown_label">ಇತರೆ</string>
+    <string name="core_addons_type_unknown_singular_label">ಆಡ್-ಆನ್</string>
+    <string name="core_addons_type_vocabulary_label">ಶಬ್ದಕೋಶ</string>
+    <string name="core_addons_type_vocabulary_singular_label">ಶಬ್ದಕೋಶ ಪ್ಯಾಕ್</string>
+</resources>

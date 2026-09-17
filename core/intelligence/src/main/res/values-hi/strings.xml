@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">यह मॉडल गेटेड है। पहले अपना हगिंग फेस टोकन जोड़ें।</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face ने HTTP स्टेटस %1$s लौटाया।</string>
+    <string name="core_intel_llm_download_error_licence">मॉडल के Hugging Face पेज पर उसका लाइसेंस स्वीकार करें। फिर पुनः प्रयास करें।</string>
+    <string name="core_intel_llm_download_error_no_space">आपके डिवाइस पर पर्याप्त स्टोरेज नहीं है। पहले लगभग %1$s GB खाली करें।</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face ने टोकन स्वीकार नहीं किया। टोकन की जाँच करें और पुनः प्रयास करें।</string>
+    <string name="core_intel_llm_download_error_truncated">डाउनलोड के दौरान कनेक्शन रुक गया। जारी रखने के लिए \'फिर से शुरू करें\' दबाएं।</string>
+    <string name="core_intel_llm_engine_error_gpu">मॉडल GPU पर विफल हो गया। GPU मेमोरी सिस्टम मेमोरी से बहुत छोटी है। अगला प्रयास CPU का उपयोग करता है। हमेशा CPU का उपयोग करने के लिए, सेटिंग्स में कंप्यूट को CPU पर सेट करें। आप एक छोटा मॉडल भी चुन सकते हैं।</string>
+    <string name="core_intel_llm_engine_error_load">मॉडल लोड नहीं हुआ। फ़ाइल शायद क्षतिग्रस्त है। सेटिंग्स में मॉडल को हटाएं और इसे फिर से डाउनलोड करें।</string>
+    <string name="core_intel_llm_engine_error_memory">मॉडल की मेमोरी खत्म हो गई है, या यह विफल हो गया है। एक छोटा मॉडल चुनें।</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">पिछली पीढ़ी का एक छोटा जेम्मा (Gemma)। इसमें अच्छी गुणवत्ता और 4K टोकन का कॉन्टेक्स्ट है।</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">गूगल का सबसे छोटा जेम्मा। यह सभी डिवाइस पर तेज़ है।</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">नवीनतम जेम्मा पीढ़ी। यह आपके डिवाइस पर शीर्ष गुणवत्ता प्रदान करती है।</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">सबसे बड़ा मॉडल। यह सबसे अच्छा लिखता है, लेकिन इसके लिए एक शक्तिशाली डिवाइस की आवश्यकता होती है।</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">एक सामान्य-उद्देश्य वाला मॉडल जो बुनियादी डिवाइस पर भी फिट बैठता है।</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">1B से कम वाले मॉडलों से स्पष्ट रूप से बेहतर। इसके लिए मिड-रेंज डिवाइस की आवश्यकता है।</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">एक हालिया छोटा मॉडल। अपने आकार के लिए गुणवत्ता उच्च है।</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">बहुत छोटा और तेज़। यह त्वरित पुनर्लेखन के लिए अच्छा है, लेकिन तर्क सीमित है।</string>
+    <string name="core_intel_llm_module_downloading">कीबोर्ड का AI हिस्सा Google Play से डाउनलोड हो रहा है। थोड़ी देर में फिर से कोशिश करें।</string>
+    <string name="core_intel_llm_module_restart">AI भाग इंस्टॉल हो गया है। इसका उपयोग करने के लिए कीबोर्ड को बंद करके फिर से खोलें।</string>
+    <string name="core_intel_llm_tier_experimental_label">प्रायोगिक</string>
+    <string name="core_intel_llm_tier_recommended_label">अनुशंसित</string>
+    <string name="core_intel_llm_tier_untested_label">अपरीक्षित</string>
+</resources>

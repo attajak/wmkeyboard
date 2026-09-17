@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Mari</string>
+    <string name="core_theme_builtin_bubble_label">Mull</string>
+    <string name="core_theme_builtin_crimson_label">Karmiinpunane</string>
+    <string name="core_theme_builtin_cyberpunk_label">Küberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Süvamere</string>
+    <string name="core_theme_builtin_facet_label">Tahk</string>
+    <string name="core_theme_builtin_forest_label">Mets</string>
+    <string name="core_theme_builtin_glacier_label">Glacier</string>
+    <string name="core_theme_builtin_mint_label">Piparmünt</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Ookean</string>
+    <string name="core_theme_builtin_pitch_label">Pigimust</string>
+    <string name="core_theme_builtin_rose_label">Roos</string>
+    <string name="core_theme_builtin_sand_label">Liiv</string>
+    <string name="core_theme_builtin_slate_label">Kiltkivi</string>
+    <string name="core_theme_builtin_snow_label">Lumi</string>
+    <string name="core_theme_builtin_sunset_drift_label">Päikeseloojangu triiv</string>
+    <string name="core_theme_builtin_sunset_label">Päikeseloojang</string>
+    <string name="core_theme_family_gradient_label">Gradiendid</string>
+    <string name="core_theme_family_ocean_label">Videvik</string>
+    <string name="core_theme_family_snow_label">Pastell</string>
+</resources>

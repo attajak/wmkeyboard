@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">તે ઇમોજી કીવર્ડ સૂચિ ખાલી છે અથવા વાંચી શકાય તેવી નથી.</string>
+    <string name="core_emoji_dict_error_http">સર્વરે ફાઇલ મોકલી નથી. ભૂલ કોડ HTTP %1$s છે.</string>
+    <string name="core_emoji_dict_error_not_a_list">તે ફાઇલ ઇમોજી કીવર્ડ સૂચિ નથી.</string>
+    <string name="core_emoji_dict_error_save">એપ ઇમોજી કીવર્ડ સૂચિ સાચવી શકી નથી.</string>
+    <string name="core_emoji_dict_error_too_large">તે ઇમોજી કીવર્ડ સૂચિ ખૂબ મોટી છે.</string>
+</resources>

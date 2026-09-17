@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">এই মডেলটি গেটেড। প্রথমে আপনার হাগিং ফেস (Hugging Face) টোকেন যোগ করুন।</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face HTTP স্ট্যাটাস %1$s ফেরত দিয়েছে।</string>
+    <string name="core_intel_llm_download_error_licence">মডেলটির Hugging Face পৃষ্ঠায় গিয়ে এর লাইসেন্স গ্রহণ করুন। তারপর আবার চেষ্টা করুন।</string>
+    <string name="core_intel_llm_download_error_no_space">আপনার ডিভাইসে পর্যাপ্ত স্টোরেজ নেই। প্রথমে প্রায় %1$s জিবি খালি করুন।</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face টোকেনটি গ্রহণ করেনি। টোকেনটি চেক করুন এবং আবার চেষ্টা করুন।</string>
+    <string name="core_intel_llm_download_error_truncated">ডাউনলোডের সময় সংযোগ বিচ্ছিন্ন হয়েছে। চালিয়ে যেতে \'পুনরায় শুরু করুন\' চাপুন।</string>
+    <string name="core_intel_llm_engine_error_gpu">মডেলটি GPU-তে ব্যর্থ হয়েছে। GPU মেমরি সিস্টেম মেমরির চেয়ে অনেক ছোট। পরবর্তী প্রচেষ্টায় CPU ব্যবহার করা হবে। সবসময় CPU ব্যবহার করতে, সেটিংসে Compute-কে CPU-তে সেট করুন। আপনি একটি ছোট মডেলও নির্বাচন করতে পারেন।</string>
+    <string name="core_intel_llm_engine_error_load">মডেলটি লোড হয়নি। ফাইলটি সম্ভবত ক্ষতিগ্রস্ত। সেটিংসে গিয়ে মডেলটি মুছে ফেলুন এবং আবার ডাউনলোড করুন।</string>
+    <string name="core_intel_llm_engine_error_memory">মডেলটির মেমরি শেষ হয়ে গেছে, অথবা এটি ব্যর্থ হয়েছে। একটি ছোট মডেল নির্বাচন করুন।</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">পূর্ববর্তী প্রজন্মের একটি ছোট জেম্মা। এটি ভালো মানের এবং ৪কে টোকেনের কনটেক্সট সাপোর্ট করে।</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">গুগলের সবচেয়ে ছোট জেম্মা। এটি সব ডিভাইসে দ্রুত কাজ করে।</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">সবচেয়ে নতুন জেম্মা জেনারেশন। এটি আপনার ডিভাইসে সেরা মানের পারফরম্যান্স দেয়।</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">সবচেয়ে বড় মডেল। এটি সবচেয়ে ভালো লেখে, কিন্তু এর জন্য একটি শক্তিশালী ডিভাইস প্রয়োজন।</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">একটি সাধারণ-উদ্দেশ্যের মডেল যা একটি সাধারণ ডিভাইসেও চলে।</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">এটি 1B-এর নিচের মডেলগুলোর চেয়ে স্পষ্টতই স্মার্ট। এর জন্য একটি মিড-রেঞ্জ ডিভাইসের প্রয়োজন।</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">একটি সাম্প্রতিক ছোট মডেল। এর আকারের তুলনায় গুণমান বেশ ভালো।</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">খুব ছোট এবং দ্রুত। এটি দ্রুত রিরাইটের জন্য ভালো, কিন্তু রিজনিং সীমিত।</string>
+    <string name="core_intel_llm_module_downloading">কিবোর্ডের এআই অংশটি গুগল প্লে থেকে ডাউনলোড হচ্ছে। কিছুক্ষণ পর আবার চেষ্টা করুন।</string>
+    <string name="core_intel_llm_module_restart">এআই অংশটি ইনস্টল করা শেষ হয়েছে। এটি ব্যবহার করতে কিবোর্ডটি বন্ধ করে আবার খুলুন।</string>
+    <string name="core_intel_llm_tier_experimental_label">পরীক্ষামূলক</string>
+    <string name="core_intel_llm_tier_recommended_label">প্রস্তাবিত</string>
+    <string name="core_intel_llm_tier_untested_label">পরীক্ষা করা হয়নি</string>
+</resources>

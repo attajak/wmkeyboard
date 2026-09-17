@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">ആ ഇമോജി കീവേഡ് ലിസ്റ്റ് ശൂന്യമാണ് അല്ലെങ്കിൽ വായിക്കാൻ കഴിയാത്തതാണ്.</string>
+    <string name="core_emoji_dict_error_http">സെർവർ ഫയൽ അയച്ചില്ല. പിശക് കോഡ് HTTP %1$s ആണ്.</string>
+    <string name="core_emoji_dict_error_not_a_list">ആ ഫയൽ ഒരു ഇമോജി കീവേഡ് ലിസ്റ്റ് അല്ല.</string>
+    <string name="core_emoji_dict_error_save">ആപ്പിന് ഇമോജി കീവേഡ് ലിസ്റ്റ് സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല.</string>
+    <string name="core_emoji_dict_error_too_large">ആ ഇമോജി കീവേഡ് ലിസ്റ്റ് വളരെ വലുതാണ്.</string>
+</resources>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">ਐਪ ਨੇ %1$d ਕੁੰਜੀ ਨੂੰ ਇਸਦੇ ਸਭ ਤੋਂ ਨਜ਼ਦੀਕੀ ਕੁੰਜੀ ਵਿੱਚ ਬਦਲ ਦਿੱਤਾ ਹੈ।</item>
+        <item quantity="other">ਐਪ ਨੇ %1$d ਕੁੰਜੀਆਂ ਨੂੰ ਉਹਨਾਂ ਦੀਆਂ ਸਭ ਤੋਂ ਨਜ਼ਦੀਕੀ ਕੁੰਜੀਆਂ ਵਿੱਚ ਬਦਲ ਦਿੱਤਾ ਹੈ।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">ਐਪ ਨੇ %1$d ਕੁੰਜੀ ਹਟਾ ਦਿੱਤੀ ਹੈ। ਇਸ ਕੀਬੋਰਡ ਵਿੱਚ ਕੋਈ ਅਜਿਹੀ ਕੁੰਜੀ ਨਹੀਂ ਹੈ ਜੋ ਉਹੀ ਕੰਮ ਕਰਦੀ ਹੋਵੇ (ਕੋਡ %2$s)।</item>
+        <item quantity="other">ਐਪ ਨੇ %1$d ਕੁੰਜੀਆਂ ਹਟਾ ਦਿੱਤੀਆਂ ਹਨ। ਇਸ ਕੀਬੋਰਡ ਵਿੱਚ ਕੋਈ ਅਜਿਹੀ ਕੁੰਜੀ ਨਹੀਂ ਹੈ ਜੋ ਉਹੀ ਕੰਮ ਕਰਦੀ ਹੋਵੇ (ਕੋਡ %2$s)।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">ਐਪ ਨੇ %1$d ਕੁੰਜੀ ਦਾ ਲੇਬਲ ਆਕਾਰ ਰੱਖਿਆ ਪਰ ਇਸਦੀ ਟੈਕਸਟ ਸ਼ੈਲੀ ਨਹੀਂ। ਇਹ ਕੀਬੋਰਡ ਇੱਕ ਸ਼ੈਲੀ ਵਿੱਚ ਲੇਬਲ ਖਿੱਚਦਾ ਹੈ।</item>
+        <item quantity="other">ਐਪ ਨੇ %1$d ਕੁੰਜੀਆਂ ਦਾ ਲੇਬਲ ਆਕਾਰ ਰੱਖਿਆ ਪਰ ਉਹਨਾਂ ਦੀ ਟੈਕਸਟ ਸ਼ੈਲੀ ਨਹੀਂ। ਇਹ ਕੀਬੋਰਡ ਇੱਕ ਸ਼ੈਲੀ ਵਿੱਚ ਲੇਬਲ ਖਿੱਚਦਾ ਹੈ।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">ਐਪ ਨੇ %1$d ਅੱਖਰ ਨੂੰ ਉਸ ਰੂਪ ਵਿੱਚ ਬਦਲ ਦਿੱਤਾ ਹੈ ਜੋ ਇਹ ਕੀਬੋਰਡ ਲਿਖਦਾ ਹੈ।</item>
+        <item quantity="other">ਐਪ ਨੇ %1$d ਅੱਖਰਾਂ ਨੂੰ ਉਸ ਰੂਪ ਵਿੱਚ ਬਦਲ ਦਿੱਤਾ ਹੈ ਜੋ ਇਹ ਕੀਬੋਰਡ ਲਿਖਦਾ ਹੈ।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d ਕੁੰਜੀ ਵਿੱਚ ਕੋਈ ਪ੍ਰੈਸ-ਐਂਡ-ਹੋਲਡ ਅੱਖਰ ਨਹੀਂ ਹਨ। ਫਾਈਲ ਉਹਨਾਂ ਨੂੰ ਇੱਕ ਦੂਜੀ ਫਾਈਲ ਵਿੱਚ ਰੱਖਦੀ ਹੈ ਜੋ ਤੁਸੀਂ ਨਹੀਂ ਖੋਲ੍ਹੀ ਹੈ।</item>
+        <item quantity="other">%1$d ਕੁੰਜੀਆਂ ਵਿੱਚ ਕੋਈ ਪ੍ਰੈਸ-ਐਂਡ-ਹੋਲਡ ਅੱਖਰ ਨਹੀਂ ਹਨ। ਫਾਈਲ ਉਹਨਾਂ ਨੂੰ ਇੱਕ ਦੂਜੀ ਫਾਈਲ ਵਿੱਚ ਰੱਖਦੀ ਹੈ ਜੋ ਤੁਸੀਂ ਨਹੀਂ ਖੋਲ੍ਹੀ ਹੈ।</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">ਦੂਜਾ ਕੀਬੋਰਡ ਕੁੰਜੀ ਦੀ ਚੌੜਾਈ ਨੂੰ ਵੱਖਰੇ ਤਰੀਕੇ ਨਾਲ ਮਾਪਦਾ ਹੈ। ਐਪ ਨੇ ਇਸ ਗਰਿੱਡ ਵਿੱਚ ਫਿੱਟ ਕਰਨ ਲਈ ਚੌੜਾਈ ਨੂੰ ਬਦਲ ਦਿੱਤਾ ਹੈ।</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s ਲੇਅਰ ਵਿੱਚ %1$d ਬ੍ਰੇਲ ਡੌਟ ਕੁੰਜੀ ਦਾ ਡੌਟ ਨੰਬਰ 1 ਤੋਂ 6 ਤੋਂ ਬਾਹਰ ਹੈ।</item>
+        <item quantity="other">%2$s ਲੇਅਰ ਵਿੱਚ %1$d ਬ੍ਰੇਲ ਡੌਟ ਕੁੰਜੀਆਂ ਦੇ ਡੌਟ ਨੰਬਰ 1 ਤੋਂ 6 ਤੋਂ ਬਾਹਰ ਹਨ।</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s ਲੇਅਰ ਵਿੱਚ %1$d ਕੁੰਜੀ ਦਾ ਕੋਈ ਲੇਬਲ ਅਤੇ ਕੋਈ ਆਉਟਪੁੱਟ ਨਹੀਂ ਹੈ। ਇਹ ਕੁਝ ਵੀ ਟਾਈਪ ਨਹੀਂ ਕਰਦੀ, ਅਤੇ ਜਦੋਂ ਤੁਸੀਂ ਇਸ ਲੇਆਉਟ ਨੂੰ ਚਾਲੂ ਕਰਦੇ ਹੋ ਤਾਂ ਐਪ ਇਸਨੂੰ ਮਿਟਾ ਦਿੰਦੀ ਹੈ।</item>
+        <item quantity="other">%2$s ਲੇਅਰ ਵਿੱਚ %1$d ਕੁੰਜੀਆਂ ਦਾ ਕੋਈ ਲੇਬਲ ਅਤੇ ਕੋਈ ਆਉਟਪੁੱਟ ਨਹੀਂ ਹੈ। ਇਹ ਕੁਝ ਵੀ ਟਾਈਪ ਨਹੀਂ ਕਰਦੀਆਂ, ਅਤੇ ਜਦੋਂ ਤੁਸੀਂ ਇਸ ਲੇਆਉਟ ਨੂੰ ਚਾਲੂ ਕਰਦੇ ਹੋ ਤਾਂ ਐਪ ਇਹਨਾਂ ਨੂੰ ਮਿਟਾ ਦਿੰਦੀ ਹੈ।</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s ਲੇਅਰ ਦੀ %1$d ਕਤਾਰ ਖਾਲੀ ਹੈ।</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s ਲੇਅਰ ਵਿੱਚ %1$d ਕੀ (key) ਇੱਕ ਪੈਨਲ ਕੰਪੋਨੈਂਟ ਹੈ। ਕੰਪੋਨੈਂਟ ਸਿਰਫ਼ ਪੈਨਲ ਲੇਆਉਟ ਵਿੱਚ ਕੰਮ ਕਰਦੇ ਹਨ।</item>
+        <item quantity="other">%2$s ਲੇਅਰ ਵਿੱਚ %1$d ਕੀ (keys) ਪੈਨਲ ਕੰਪੋਨੈਂਟ ਹਨ। ਕੰਪੋਨੈਂਟ ਸਿਰਫ਼ ਪੈਨਲ ਲੇਆਉਟ ਵਿੱਚ ਕੰਮ ਕਰਦੇ ਹਨ।</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s ਲੇਅਰ ਦੀ %1$d ਕਤਾਰ ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ ਹੈ ਜਿਸਦੀ ਕੋਈ ਚੌੜਾਈ ਨਹੀਂ ਹੈ।</string>
+    <string name="core_lang_layout_key_span_error">%2$s ਲੇਅਰ ਦੀ ਕਤਾਰ %1$d ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ ਹੈ ਜੋ 1 ਤੋਂ ਘੱਟ ਜਾਂ %3$d ਤੋਂ ਵੱਧ ਕਤਾਰਾਂ ਨੂੰ ਕਵਰ ਕਰਦੀ ਹੈ।</string>
+    <string name="core_lang_layout_letters_empty_error">ਅੱਖਰਾਂ ਵਾਲੀ ਲੇਅਰ ਵਿੱਚ ਕੋਈ ਕੁੰਜੀ ਨਹੀਂ ਹੈ।</string>
+    <string name="core_lang_layout_no_delete_error">ਲੇਆਉਟ ਵਿੱਚ ਕੋਈ ਡਿਲੀਟ ਕੁੰਜੀ ਨਹੀਂ ਹੈ। ਤੁਸੀਂ ਗਲਤੀ ਨੂੰ ਸੁਧਾਰ ਨਹੀਂ ਸਕਦੇ।</string>
+    <string name="core_lang_layout_no_enter_error">ਲੇਆਉਟ ਵਿੱਚ ਕੋਈ ਐਂਟਰ ਕੁੰਜੀ ਨਹੀਂ ਹੈ।</string>
+    <string name="core_lang_layout_no_shift_warning">ਲੇਆਉਟ ਵਿੱਚ ਕੋਈ ਸ਼ਿਫਟ ਕੁੰਜੀ ਨਹੀਂ ਹੈ। ਵੱਡੇ ਅੱਖਰ ਟਾਈਪ ਕਰਨ ਲਈ, ਇੱਕ ਕੁੰਜੀ ਨੂੰ ਦਬਾ ਕੇ ਰੱਖੋ।</string>
+    <string name="core_lang_layout_no_space_error">ਲੇਆਉਟ ਵਿੱਚ ਕੋਈ ਸਪੇਸ ਕੁੰਜੀ ਨਹੀਂ ਹੈ।</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s ਲੇਅਰ ਵਿੱਚ ਅਜਿਹੀ ਕੋਈ ਕੁੰਜੀ ਨਹੀਂ ਹੈ ਜੋ ਅੱਖਰਾਂ \'ਤੇ ਵਾਪਸ ਜਾਂਦੀ ਹੋਵੇ। ਤੁਸੀਂ ਇਸ ਲੇਅਰ ਤੋਂ ਬਾਹਰ ਨਹੀਂ ਨਿਕਲ ਸਕਦੇ।</string>
+    <string name="core_lang_layout_persistent_warning">ਜਦੋਂ ਕੀਬੋਰਡ ਬੰਦ ਹੁੰਦਾ ਹੈ ਤਾਂ %1$s ਲੇਅਰ ਖੁੱਲ੍ਹੀ ਰਹਿੰਦੀ ਹੈ। ਯਕੀਨੀ ਬਣਾਓ ਕਿ ਤੁਹਾਡੇ ਕੋਲ ਇਸ ਲੇਆਉਟ ਤੋਂ ਬਾਹਰ ਨਿਕਲਣ ਦਾ ਕੋਈ ਤਰੀਕਾ ਹੈ।</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">ਇਸ ਲੇਆਉਟ ਵਿੱਚ ਕੋਈ ਅਜਿਹੀ ਕੁੰਜੀ ਨਹੀਂ ਹੈ ਜੋ ਇਸ ਤੋਂ ਬਾਹਰ ਨਿਕਲ ਸਕੇ। ਯਕੀਨੀ ਬਣਾਓ ਕਿ ਤੁਹਾਡੇ ਕੋਲ ਇਸ ਲੇਆਉਟ ਤੋਂ ਬਾਹਰ ਨਿਕਲਣ ਦਾ ਕੋਈ ਤਰੀਕਾ ਹੈ: ਇੱਕ ABC ਕੁੰਜੀ, ਇੱਕ ਚਿੰਨ੍ਹ ਕੁੰਜੀ, ਜਾਂ ਟੂਲਬਾਰ \'ਤੇ ਕਸਟਮ ਲੇਆਉਟ ਟੂਲ।</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s ਪਰਤ ਦੀ ਕਤਾਰ %1$d ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ ਹੈ ਜੋ ਪਰਤ ਦੀਆਂ ਕਤਾਰਾਂ ਨਾਲੋਂ ਵੱਧ ਕਤਾਰਾਂ ਨੂੰ ਕਵਰ ਕਰਦੀ ਹੈ। ਕੀਬੋਰਡ ਇਸਨੂੰ ਆਖਰੀ ਕਤਾਰ \'ਤੇ ਰੋਕ ਦਿੰਦਾ ਹੈ।</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s ਲੇਅਰ ਦੀ %1$d ਕਤਾਰ ਵਿੱਚ %3$d ਕੁੰਜੀ ਹੈ। ਸਿਰਫ਼ %4$d ਕੁੰਜੀਆਂ ਹੀ ਦਬਾਉਣ ਲਈ ਕਾਫ਼ੀ ਵੱਡੀਆਂ ਰਹਿੰਦੀਆਂ ਹਨ।</item>
+        <item quantity="other">%2$s ਲੇਅਰ ਦੀ %1$d ਕਤਾਰ ਵਿੱਚ %3$d ਕੁੰਜੀਆਂ ਹਨ। ਸਿਰਫ਼ %4$d ਕੁੰਜੀਆਂ ਹੀ ਦਬਾਉਣ ਲਈ ਕਾਫ਼ੀ ਵੱਡੀਆਂ ਰਹਿੰਦੀਆਂ ਹਨ।</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s ਲੇਅਰ ਵਿੱਚ %2$d ਕਤਾਰ ਹੈ। ਸਿਰਫ਼ %3$d ਕਤਾਰਾਂ ਫਿੱਟ ਹੁੰਦੀਆਂ ਹਨ।</item>
+        <item quantity="other">%1$s ਲੇਅਰ ਵਿੱਚ %2$d ਕਤਾਰਾਂ ਹਨ। ਸਿਰਫ਼ %3$d ਕਤਾਰਾਂ ਫਿੱਟ ਹੁੰਦੀਆਂ ਹਨ।</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s ਲੇਅਰ ਵਿੱਚ %1$d ਕੁੰਜੀ ਇੱਕ ਅਜਿਹੀ ਕਾਰਵਾਈ ਦੀ ਵਰਤੋਂ ਕਰਦੀ ਹੈ ਜਿਸਨੂੰ ਐਪ ਦਾ ਇਹ ਸੰਸਕਰਣ ਨਹੀਂ ਜਾਣਦਾ ਹੈ।</item>
+        <item quantity="other">%2$s ਲੇਅਰ ਵਿੱਚ %1$d ਕੁੰਜੀਆਂ ਇੱਕ ਅਜਿਹੀ ਕਾਰਵਾਈ ਦੀ ਵਰਤੋਂ ਕਰਦੀਆਂ ਹਨ ਜਿਸਨੂੰ ਐਪ ਦਾ ਇਹ ਸੰਸਕਰਣ ਨਹੀਂ ਜਾਣਦਾ ਹੈ।</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s ਲੇਅਰ ਦੀ %1$d ਕਤਾਰ ਦੂਜੀਆਂ ਕਤਾਰਾਂ ਨਾਲੋਂ ਚੌੜੀ ਹੈ। ਕੀਬੋਰਡ ਇਸ ਕਤਾਰ ਦੀਆਂ ਕੁੰਜੀਆਂ ਨੂੰ ਤੰਗ ਖਿੱਚਦਾ ਹੈ।</string>
+    <string name="core_lang_numeral_scope_display_only">ਸਿਰਫ਼ ਪ੍ਰਦਰਸ਼ਿਤ ਕਰੋ</string>
+    <string name="core_lang_numeral_scope_everywhere">ਹਰ ਜਗ੍ਹਾ</string>
+    <string name="core_lang_numeral_scope_text_fields">ਟੈਕਸਟ ਫੀਲਡ</string>
+    <string name="core_lang_numeral_system_auto">ਆਟੋ</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d ਕੰਪੋਨੈਂਟ ਇੱਕ ਤੋਂ ਵੱਧ ਵਾਰ ਦਿਖਾਈ ਦਿੰਦਾ ਹੈ। ਐਪ ਪਹਿਲੀ ਕਾਪੀ ਰੱਖਦੀ ਹੈ।</item>
+        <item quantity="other">%1$d ਕੰਪੋਨੈਂਟ ਇੱਕ ਤੋਂ ਵੱਧ ਵਾਰ ਦਿਖਾਈ ਦਿੰਦੇ ਹਨ। ਐਪ ਹਰੇਕ ਦੀ ਪਹਿਲੀ ਕਾਪੀ ਰੱਖਦੀ ਹੈ।</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">ਇਸ ਪੈਨਲ ਵਿੱਚ ਕੋਈ ਕੁੰਜੀ ਨਹੀਂ ਹੈ। ਐਪ ਇਸ ਦੀ ਬਜਾਏ ਸਟੈਂਡਰਡ ਪੈਨਲ ਦੀ ਵਰਤੋਂ ਕਰਦੀ ਹੈ।</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d ਕੁੰਜੀ ਕੋਲ ਇੱਕ ਅਜਿਹੀ ਕਾਰਵਾਈ ਹੈ ਜੋ ਪੈਨਲ \'ਤੇ ਕੰਮ ਨਹੀਂ ਕਰਦੀ। ਐਪ ਇਸਨੂੰ ਮਿਟਾ ਦਿੰਦੀ ਹੈ।</item>
+        <item quantity="other">%1$d ਕੁੰਜੀਆਂ ਕੋਲ ਅਜਿਹੀਆਂ ਕਾਰਵਾਈਆਂ ਹਨ ਜੋ ਪੈਨਲ \'ਤੇ ਕੰਮ ਨਹੀਂ ਕਰਦੀਆਂ। ਐਪ ਉਹਨਾਂ ਨੂੰ ਮਿਟਾ ਦਿੰਦੀ ਹੈ।</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">ਇਸ ਪੈਨਲ ਵਿੱਚ ਕੋਈ ABC ਕੁੰਜੀ ਨਹੀਂ ਹੈ। ਕੁੰਜੀਆਂ \'ਤੇ ਵਾਪਸ ਜਾਣ ਲਈ ਟੂਲਬਾਰ ਜਾਂ ਬੈਕ ਬਟਨ ਦੀ ਵਰਤੋਂ ਕਰੋ।</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">ਐਪ ਨੇ ਇੱਕ ਕੰਪੋਨੈਂਟ ਦੀ ਦੂਜੀ ਕਾਪੀ ਮਿਟਾ ਦਿੱਤੀ ਹੈ।</string>
+    <string name="core_lang_panel_repair_field_added">ਐਪ ਨੇ ਇੱਕ ਨਵੀਂ ਕਤਾਰ ਵਿੱਚ ਪੈਨਲ ਦਾ ਮੁੱਖ ਭਾਗ ਜੋੜਿਆ ਹੈ।</string>
+    <string name="core_lang_panel_repair_field_dropped">ਐਪ ਨੇ ਇੱਕ ਅਜਿਹਾ ਕੰਪੋਨੈਂਟ ਮਿਟਾ ਦਿੱਤਾ ਹੈ ਜੋ ਇਸ ਪੈਨਲ ਨਾਲ ਸਬੰਧਤ ਨਹੀਂ ਹੈ।</string>
+    <string name="core_lang_panel_repair_key_dropped">ਐਪ ਨੇ ਇੱਕ ਅਜਿਹੀ ਕੁੰਜੀ ਨੂੰ ਮਿਟਾ ਦਿੱਤਾ ਹੈ ਜਿਸਦੀ ਕਾਰਵਾਈ ਪੈਨਲ \'ਤੇ ਕੰਮ ਨਹੀਂ ਕਰਦੀ ਹੈ।</string>
+    <string name="core_lang_panel_repair_reset">ਐਪ ਨੇ ਖਾਲੀ ਪੈਨਲ ਨੂੰ ਸਟੈਂਡਰਡ ਪੈਨਲ ਨਾਲ ਬਦਲ ਦਿੱਤਾ ਹੈ।</string>
+    <string name="core_lang_panel_required_field_error">ਇਸ ਪੈਨਲ ਵਿੱਚ ਇਸਦਾ ਮੁੱਖ ਭਾਗ ਗੁੰਮ ਹੈ। ਜਦੋਂ ਐਪ ਪੈਨਲ ਨੂੰ ਡਰਾਅ ਕਰਦੀ ਹੈ ਤਾਂ ਇਹ ਇੱਕ ਜੋੜ ਦਿੰਦੀ ਹੈ।</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d ਕੰਪੋਨੈਂਟ ਇਸ ਪੈਨਲ ਨਾਲ ਸਬੰਧਤ ਨਹੀਂ ਹੈ। ਐਪ ਇਸਨੂੰ ਮਿਟਾ ਦਿੰਦੀ ਹੈ।</item>
+        <item quantity="other">%1$d ਕੰਪੋਨੈਂਟ ਇਸ ਪੈਨਲ ਨਾਲ ਸਬੰਧਤ ਨਹੀਂ ਹਨ। ਐਪ ਉਹਨਾਂ ਨੂੰ ਮਿਟਾ ਦਿੰਦੀ ਹੈ।</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">ਐਪ ਨੇ %1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਖਾਲੀ ਕੁੰਜੀ ਨੂੰ ਮਿਟਾ ਦਿੱਤਾ ਹੈ।</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ ਨੇ ਬ੍ਰੇਲ ਡੌਟ %2$d ਦੀ ਵਰਤੋਂ ਕੀਤੀ। ਐਪ ਨੇ ਇਸਨੂੰ ਡੌਟ %3$d ਬਣਾ ਦਿੱਤਾ ਹੈ।</string>
+    <string name="core_lang_repair_delete_key_added">ਅੱਖਰਾਂ ਦੀ ਪਰਤ ਵਿੱਚ ਕੋਈ ਡਿਲੀਟ ਕੁੰਜੀ ਨਹੀਂ ਸੀ। ਐਪ ਨੇ ਇੱਕ ਸ਼ਾਮਲ ਕੀਤੀ ਹੈ।</string>
+    <string name="core_lang_repair_enter_key_added">ਅੱਖਰਾਂ ਦੀ ਪਰਤ ਵਿੱਚ ਕੋਈ ਐਂਟਰ ਕੁੰਜੀ ਨਹੀਂ ਸੀ। ਐਪ ਨੇ ਇੱਕ ਜੋੜ ਦਿੱਤੀ ਹੈ।</string>
+    <string name="core_lang_repair_field_key_deleted">ਐਪ ਨੇ %1$s ਲੇਅਰ ਤੋਂ ਇੱਕ ਪੈਨਲ ਕੰਪੋਨੈਂਟ ਨੂੰ ਮਿਟਾ ਦਿੱਤਾ ਹੈ। ਕੰਪੋਨੈਂਟ ਸਿਰਫ਼ ਪੈਨਲ ਲੇਆਉਟ ਵਿੱਚ ਹੀ ਕੰਮ ਕਰਦੇ ਹਨ।</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ %2$s ਲਈ ਹੈ। ਐਪ ਨੇ ਇਸਨੂੰ %3$s ਟਾਈਪ ਕਰਨ ਲਈ ਬਣਾਇਆ ਹੈ।</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ ਨੇ %2$s ਨੂੰ ਉਹਨਾਂ ਅੱਖਰਾਂ ਵਜੋਂ ਸੂਚੀਬੱਧ ਕੀਤਾ ਹੈ ਜਿਨ੍ਹਾਂ ਲਈ ਇਹ ਖੜ੍ਹਾ ਹੈ। ਉਹ ਅੱਖਰ ਨਹੀਂ ਹਨ, ਇਸ ਲਈ ਐਪ ਨੇ ਇਸਨੂੰ ਇੱਕ ਆਮ ਕੁੰਜੀ ਬਣਾ ਦਿੱਤਾ ਹੈ।</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ ਨੇ %2$d ਕਤਾਰਾਂ ਨੂੰ ਕਵਰ ਕੀਤਾ। ਐਪ ਨੇ ਇਸਨੂੰ %3$d ਕਤਾਰਾਂ ਤੱਕ ਸੀਮਤ ਕਰ ਦਿੱਤਾ ਹੈ।</string>
+    <string name="core_lang_repair_key_width_capped">%1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ %2$s ਯੂਨਿਟ ਚੌੜੀ ਸੀ। ਐਪ ਨੇ ਇਸਨੂੰ %3$s ਯੂਨਿਟ ਚੌੜਾ ਬਣਾਇਆ ਹੈ।</string>
+    <string name="core_lang_repair_key_width_set">%1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ ਦੀ ਕੋਈ ਚੌੜਾਈ ਨਹੀਂ ਸੀ। ਐਪ ਨੇ ਚੌੜਾਈ 1 \'ਤੇ ਸੈੱਟ ਕਰ ਦਿੱਤੀ ਹੈ।</string>
+    <string name="core_lang_repair_layer_replaced">%1$s ਲੇਅਰ ਵਿੱਚ ਕੋਈ ਵੀ ਕੰਮ ਕਰਨ ਵਾਲੀਆਂ ਕੁੰਜੀਆਂ ਨਹੀਂ ਸਨ। ਇਹ ਹੁਣ ਬਿਲਟ-ਇਨ ਗਰਿੱਡ ਦੀ ਵਰਤੋਂ ਕਰਦੀ ਹੈ।</string>
+    <string name="core_lang_repair_letters_key_added">%1$s ਲੇਅਰ ਵਿੱਚ ਕੋਈ ਅਜਿਹੀ ਕੁੰਜੀ ਨਹੀਂ ਸੀ ਜੋ ਅੱਖਰਾਂ \'ਤੇ ਵਾਪਸ ਜਾ ਸਕੇ। ਐਪ ਨੇ ਇੱਕ ABC ਕੁੰਜੀ ਜੋੜੀ ਹੈ।</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕਤਾਰ ਵਿੱਚ %2$d ਕੁੰਜੀ ਸੀ। ਐਪ ਪਹਿਲੀ %3$d ਰੱਖਦੀ ਹੈ।</item>
+        <item quantity="other">%1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕਤਾਰ ਵਿੱਚ %2$d ਕੁੰਜੀਆਂ ਸਨ। ਐਪ ਪਹਿਲੀ %3$d ਰੱਖਦੀ ਹੈ।</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕਤਾਰ %2$s ਯੂਨਿਟ ਚੌੜੀ ਸੀ। ਐਪ ਨੇ ਕੁੰਜੀਆਂ ਨੂੰ ਛੋਟਾ ਕਰ ਦਿੱਤਾ ਹੈ ਤਾਂ ਜੋ ਕਤਾਰ ਫਿੱਟ ਹੋ ਸਕੇ।</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s ਲੇਅਰ ਵਿੱਚ %2$d ਕਤਾਰ ਸੀ। ਐਪ ਪਹਿਲੀ %3$d ਰੱਖਦੀ ਹੈ।</item>
+        <item quantity="other">%1$s ਲੇਅਰ ਵਿੱਚ %2$d ਕਤਾਰਾਂ ਸਨ। ਐਪ ਪਹਿਲੀ %3$d ਰੱਖਦੀ ਹੈ।</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">ਅੱਖਰਾਂ ਦੀ ਪਰਤ ਵਿੱਚ ਕੋਈ ਸਪੇਸ ਕੁੰਜੀ ਨਹੀਂ ਸੀ। ਐਪ ਨੇ ਇੱਕ ਜੋੜ ਦਿੱਤੀ ਹੈ।</string>
+    <string name="core_lang_repair_unknown_key_deleted">ਐਪ ਨੇ %1$s ਲੇਅਰ ਵਿੱਚ ਇੱਕ ਕੁੰਜੀ ਮਿਟਾ ਦਿੱਤੀ ਹੈ। ਇਸਦੀ ਕਾਰਵਾਈ \"%2$s\" ਅਣਜਾਣ ਹੈ।</string>
+</resources>

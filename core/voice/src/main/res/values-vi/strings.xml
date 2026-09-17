@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Máy chủ Hugging Face không gửi tệp. Mã lỗi là HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Kết nối bị gián đoạn trong quá trình tải xuống. Hãy thử lại để tiếp tục từ nơi đã dừng.</string>
+    <string name="core_voice_download_space_error">Thiết bị của bạn không đủ dung lượng lưu trữ. Bạn phải giải phóng khoảng %1$s MB trước.</string>
+    <string name="core_voice_model_base_eu_body">Mô hình này sử dụng ngôn ngữ bạn nhập, giống như mô hình 40 ngôn ngữ. Nó chỉ bao gồm các ngôn ngữ châu Âu nên dung lượng tải xuống nhỏ hơn.</string>
+    <string name="core_voice_model_base_multi_body">Mô hình này cân bằng giữa độ chính xác và tốc độ. Nó bao phủ mọi ngôn ngữ mà Whisper biết. Hãy chọn nó nếu mô hình Nhỏ quá chậm.</string>
+    <string name="core_voice_model_base_world_body">Mô hình này sử dụng ngôn ngữ bạn nhập thay vì dự đoán. Các cụm từ ngắn trở nên đáng tin cậy hơn nhiều. Hãy chọn nó khi danh sách hiển thị ngôn ngữ của bạn.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d ngôn ngữ</item>
+        <item quantity="other">%1$d ngôn ngữ</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Đây là một trong những mô hình Whisper chính xác nhất, nhưng nó quá lớn đối với hầu hết các điện thoại. Bản tải xuống có dung lượng 1,5 GB. Chỉ thiết bị có bộ nhớ lớn mới có thể tải được nó.</string>
+    <string name="core_voice_model_large_v3_multi_body">Đây là mô hình Whisper chính xác nhất và tốt nhất trong việc nhận diện ngôn ngữ bạn đang nói. Tệp tải xuống có dung lượng 1.5 GB. Chỉ thiết bị có bộ nhớ lớn mới có thể tải nó. Mô hình Turbo có độ chính xác gần tương đương và chỉ bằng một nửa kích thước.</string>
+    <string name="core_voice_model_medium_multi_body">Mô hình này mang lại độ chính xác gần như máy tính để bàn. Mỗi cụm từ mất vài giây. Mô hình sử dụng gần một gigabyte bộ nhớ khi chạy.</string>
+    <string name="core_voice_model_single_language_body">Mô hình này chỉ xử lý %1$s. Nó không có bước phát hiện ngôn ngữ. Điều này làm cho nó nhanh hơn và chính xác hơn một chút so với mô hình đa ngôn ngữ có cùng kích thước.</string>
+    <string name="core_voice_model_small_multi_body">Mô hình này mang lại độ chính xác tốt nhất mà vẫn chạy tốt trên điện thoại. Nó xử lý giọng địa phương và tiếng ồn nền tốt hơn mô hình Base. Nó bao phủ mọi ngôn ngữ mà Whisper biết.</string>
+    <string name="core_voice_model_small_world_body">Mô hình này sử dụng ngôn ngữ bạn nhập và có độ chính xác của mô hình Nhỏ. Đây là mô hình chính xác nhất vẫn phù hợp với điện thoại.</string>
+    <string name="core_voice_model_tiny_multi_body">Đây là mô hình đa ngôn ngữ nhanh nhất. Nó hoạt động tốt với giọng nói rõ ràng, nhưng tiếng ồn sẽ làm giảm độ chính xác.</string>
+    <string name="core_voice_model_turbo_multi_body">Mô hình này nhận dạng ngôn ngữ bạn nói tốt hơn nhiều so với các mô hình nhỏ hơn. Hãy chọn nó nếu mô hình nhỏ hơn phiên âm giọng nói của bạn thành ngôn ngữ sai. Đây là một bản tải xuống lớn và mỗi cụm từ mất vài giây.</string>
+    <string name="core_voice_size_base_label">Cơ bản</string>
+    <string name="core_voice_size_large_label">Lớn</string>
+    <string name="core_voice_size_medium_label">Trung bình</string>
+    <string name="core_voice_size_small_label">Nhỏ</string>
+    <string name="core_voice_size_tiny_label">Rất nhỏ</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Được đề xuất</string>
+    <string name="core_voice_whisper_mel_bins_error">Mô hình giọng nói này cần phổ tần %1$s băng tần, không khớp với tệp đã tải xuống. Hãy xóa mô hình trong cài đặt và tải xuống lại.</string>
+    <string name="core_voice_whisper_model_load_error">Không tải được mô hình giọng nói. Tệp có thể đã bị hỏng. Hãy xóa mô hình trong cài đặt và tải xuống lại.</string>
+    <string name="core_voice_whisper_transcribe_error">Nhập liệu bằng giọng nói không hoạt động. Hãy thử lại hoặc chọn mô hình nhỏ hơn.</string>
+</resources>

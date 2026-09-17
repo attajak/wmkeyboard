@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Berry</string>
+    <string name="core_theme_builtin_bubble_label">Bulă</string>
+    <string name="core_theme_builtin_crimson_label">Crimson</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Adâncurile mării</string>
+    <string name="core_theme_builtin_facet_label">Facet</string>
+    <string name="core_theme_builtin_forest_label">Pădure</string>
+    <string name="core_theme_builtin_glacier_label">Ghețar</string>
+    <string name="core_theme_builtin_mint_label">Mentă</string>
+    <string name="core_theme_builtin_nebula_label">Nebuloasă</string>
+    <string name="core_theme_builtin_ocean_label">Ocean</string>
+    <string name="core_theme_builtin_pitch_label">Negru intens</string>
+    <string name="core_theme_builtin_rose_label">Trandafiriu</string>
+    <string name="core_theme_builtin_sand_label">Nisip</string>
+    <string name="core_theme_builtin_slate_label">Ardezie</string>
+    <string name="core_theme_builtin_snow_label">Zăpadă</string>
+    <string name="core_theme_builtin_sunset_drift_label">Sunset drift</string>
+    <string name="core_theme_builtin_sunset_label">Apus</string>
+    <string name="core_theme_family_gradient_label">Degradeuri</string>
+    <string name="core_theme_family_ocean_label">Amurg</string>
+    <string name="core_theme_family_snow_label">Pastel</string>
+</resources>

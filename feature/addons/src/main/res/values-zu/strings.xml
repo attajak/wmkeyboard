@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Dweba ama-emoji ngayo manje?</string>
+    <string name="faddons_apply_icon_pack_question">Sebenzisa izithonjana zawo kukhibhodi manje?</string>
+    <string name="faddons_apply_layout_question">Yivule ukuze ukwazi ukubhala ngayo?</string>
+    <string name="faddons_apply_plugin_question">Yivule ukuze ibonakale kuphaneli yama-plugin?</string>
+    <string name="faddons_apply_sound_pack_question">Sebenzisa leli phakethe lomsindo okhiye bakho manje?</string>
+    <string name="faddons_apply_sound_question">Uyalisebenzisa njengomsindo wakho wokhiye manje?</string>
+    <string name="faddons_apply_switch_action">Shintshela kulo</string>
+    <string name="faddons_apply_theme_question">Uyisebenzise njengengqikithi yekhibhodi yakho manje?</string>
+    <string name="faddons_download_error_app_too_old">Le ngezithasiselo idinga inguqulo entsha yohlelo lokusebenza.</string>
+    <string name="faddons_download_error_bad_url">Isixhumanisi sokulanda akusona i-URL ye-https evumelekile.</string>
+    <string name="faddons_download_error_checksum">Ifayela elilandiwe alihambisani ne-checksum ekumanifesto.</string>
+    <string name="faddons_download_error_http_status">Iseva ibuyise i-HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Asikho isikhala esanele sokufaka lokhu.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Le plugin ayinawo ama-checksum. Uhlelo lokusebenza alukwazi ukuyiqinisekisa.</string>
+    <string name="faddons_download_error_too_large">Lesi sengezo sikhulu kunomkhawulo wama-MB angu-%1$d wohlobo lwaso.</string>
+    <string name="faddons_error_no_words">Uhlelo lokusebenza alukwazanga ukufunda amagama kulelo fayela.</string>
+    <string name="faddons_error_not_a_plugin">Lelo fayela akulona i-plugin yekhibhodi ye-WM.</string>
+    <string name="faddons_install_error_dictionary_no_language">Lesi sichazamazwi asisho ukuthi singesaluphi ulimi.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Uhlelo lokusebenza alukwazanga ukulondoloza isichazamazwi.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Uhlelo lokusebenza alukwazanga ukufunda iphakethe lesithonjana.</string>
+    <string name="faddons_install_error_keywords_no_language">Leli phakethe alisho ukuthi elaluphi ulimi.</string>
+    <string name="faddons_install_error_keywords_not_saved">Uhlelo lokusebenza alukwazanga ukulondoloza iphakethe lamagama angukhiye.</string>
+    <string name="faddons_install_error_keywords_too_large">Lelo phakethe lamagama angukhiye likhulu kakhulu ukuthi lingangeniswa.</string>
+    <string name="faddons_install_error_no_keywords">Uhlelo lokusebenza alukwazanga ukufunda noma yimaphi amagama angukhiye e-emoji kulelo fayela.</string>
+    <string name="faddons_install_error_no_stickers">Uhlelo lokusebenza alukwazanga ukufunda izitikha kulelo phakethe. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Lelo fayela akulona isakhiwo sekhibhodi se-WM.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Lelo ifayela akulona iphakethe le-snippet lekhibhodi ye-WM.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Leli fayela aliyona iphakethe lomsindo.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Lelo fayela akulona iphakethe lezitikha.</string>
+    <string name="faddons_install_error_not_a_theme">Lelo fayela akulona itimu ye-WM Keyboard.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Lelo fayela akulona iphakethe le-Espanso noma ifayela lokufanisa.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Leyo fayela akuyona iphakethe lezithonjana.</string>
+    <string name="faddons_install_error_plugin_failed">Uhlelo lokusebenza alukwazanga ukufaka leyo plugin.</string>
+    <string name="faddons_install_error_plugins_turned_off">Ama-plugin acishiwe. Vula \"Vumela ama-plugin\" ngaphansi kwe-Tools › Plugins. Bese ufaka lokhu futhi.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Leyo phakethe leziqephu alinalutho.</string>
+    <string name="faddons_install_error_sound_pack_read">Uhlelo lokusebenza alukwazi ukufunda leli phakethe lomsindo.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Uhlelo lokusebenza alukwazanga ukufunda iphakethe lezitikha.</string>
+    <string name="faddons_install_error_too_many_fonts">Ufinyelele inani eliphezulu lamafonti afakiwe.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Ufinyelele inani eliphezulu lamaphakethe ezithonjana.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Usuvele unepulagini engu-%1$d ephezulu.</item>
+        <item quantity="other">Usuvele unamapulagini angu-%1$d aphezulu.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Ufinyelele inani eliphezulu lamaphakethe omsindo afakiwe.</string>
+    <string name="faddons_install_error_too_many_sounds">Ufinyelele inani eliphezulu lemisindo yokhiye efakiwe.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Ufinyelele inani eliphezulu lamaphakethe ezitikha.</string>
+    <string name="faddons_install_error_unknown_language">Le nguqulo yohlelo lokusebenza ayiwusekeli ulimi \"%1$s\".</string>
+    <string name="faddons_install_error_unknown_type">Le nguqulo yohlelo lokusebenza ayiwusekeli lolo hlobo lwe-add-on.</string>
+    <string name="faddons_install_error_vocab_no_language">Leli phakethe lesilulumagama alisho ukuthi elaluphi ulimi.</string>
+    <string name="faddons_install_error_vocab_no_words">Uhlelo lokusebenza alukwazanga ukufunda noma yimaphi amagama kulelo phakethe.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Lelo fayela akulona iphakethe lesilulumagama.</string>
+    <string name="faddons_install_error_vocab_too_large">Leli phakethe lamagama likhulu kakhulu kunalokho okwamukelwa uhlelo lokusebenza.</string>
+    <string name="faddons_preview_error_no_preview">Uhlelo lokusebenza alukwazi ukubuka kuqala le-add-on.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Lelo fayela akulona iphakethe le-Espanso noma ifayela lokufanisa.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Lelo fayela akulona iphakethe lamagama angukhiye we-emoji.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Lelo fayela aliyona iphakethe le-snippet.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Lelo fayela aliyona iphakethe lamagama.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Uhlelo lokusebenza alukwazanga ukufunda imisindo kuleli phakethe.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Uhlelo lokusebenza alukwazanga ukufunda izithombe zezitikha.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Iphakethe leziqephu</string>
+</resources>

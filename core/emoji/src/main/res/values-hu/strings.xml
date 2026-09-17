@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Az emoji kulcsszólista üres vagy olvashatatlan.</string>
+    <string name="core_emoji_dict_error_http">A kiszolgáló nem küldte el a fájlt. A hibakód: HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Ez a fájl nem egy emoji kulcsszólista.</string>
+    <string name="core_emoji_dict_error_save">Az alkalmazás nem tudta elmenteni az emoji kulcsszólistát.</string>
+    <string name="core_emoji_dict_error_too_large">Az emoji kulcsszólista túl nagy.</string>
+</resources>

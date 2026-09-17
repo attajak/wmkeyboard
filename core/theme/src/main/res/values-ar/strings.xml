@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">أورورا</string>
+    <string name="core_theme_builtin_berry_label">توت</string>
+    <string name="core_theme_builtin_bubble_label">فقاعة</string>
+    <string name="core_theme_builtin_crimson_label">قرمزي</string>
+    <string name="core_theme_builtin_cyberpunk_label">سايبر بانك</string>
+    <string name="core_theme_builtin_deep_sea_label">أعماق البحار</string>
+    <string name="core_theme_builtin_facet_label">الوجه</string>
+    <string name="core_theme_builtin_forest_label">الغابة</string>
+    <string name="core_theme_builtin_glacier_label">نهر جليدي</string>
+    <string name="core_theme_builtin_mint_label">النعناعي</string>
+    <string name="core_theme_builtin_nebula_label">سديم</string>
+    <string name="core_theme_builtin_ocean_label">المحيط</string>
+    <string name="core_theme_builtin_pitch_label">أسود فاحم</string>
+    <string name="core_theme_builtin_rose_label">وردي</string>
+    <string name="core_theme_builtin_sand_label">رملي</string>
+    <string name="core_theme_builtin_slate_label">أردوازي (Slate)</string>
+    <string name="core_theme_builtin_snow_label">ثلج</string>
+    <string name="core_theme_builtin_sunset_drift_label">انجراف الغروب</string>
+    <string name="core_theme_builtin_sunset_label">غروب الشمس</string>
+    <string name="core_theme_family_gradient_label">التدرجات اللونية</string>
+    <string name="core_theme_family_ocean_label">غسق</string>
+    <string name="core_theme_family_snow_label">باستيل</string>
+</resources>

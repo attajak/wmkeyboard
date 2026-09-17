@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">AIプロバイダーがエラーで応答を終了しました</string>
+    <string name="ftools_photo_error_failed">アプリは写真を取得できませんでした</string>
+    <string name="ftools_photo_error_offline">アプリが写真サービスに接続できません。ネットワークを確認して再試行してください。</string>
+    <string name="ftools_photo_error_timeout">写真サービスの応答に時間がかかりすぎました</string>
+    <string name="ftools_search_error_json_disabled">このSearXNGインスタンスではJSON APIが有効になっていません。settings.ymlの&lt;b&gt;search.formats&lt;/b&gt;に&lt;b&gt;json&lt;/b&gt;を追加するか、別のインスタンスを使用してください。</string>
+</resources>

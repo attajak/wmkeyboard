@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">ไฟล์ที่ดาวน์โหลดเสียหาย เช็คซัมไม่ตรงกัน โปรดลองดาวน์โหลดอีกครั้ง</string>
+    <string name="core_input_cjk_download_error_http">เซิร์ฟเวอร์ส่งคืนสถานะ HTTP %1$s</string>
+    <string name="core_input_cjk_download_error_network">การดาวน์โหลดไม่สำเร็จ โปรดตรวจสอบการเชื่อมต่อของคุณแล้วลองใหม่อีกครั้ง</string>
+    <string name="core_input_cjk_download_error_network_detail">การดาวน์โหลดไม่สำเร็จ: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">พื้นที่จัดเก็บข้อมูลบนอุปกรณ์ของคุณไม่เพียงพอ โปรดเพิ่มพื้นที่ว่างก่อน</string>
+    <string name="core_input_cjk_download_error_truncated">การเชื่อมต่อหยุดลงระหว่างการดาวน์โหลด กดดำเนินการต่อเพื่อทำต่อ</string>
+    <string name="core_input_cjk_download_error_unavailable">แพ็กนี้ยังไม่พร้อมใช้งาน</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">ตารางรหัสรากศัพท์สำหรับตัวอักษรฮั่นจื่อ จำนวน 29,000 ตัว แป้นพิมพ์ต้องการชุดข้อมูลนี้สำหรับเค้าโครง Cangjie และ Quick</string>
+    <string name="core_input_cjk_pack_cangjie_title">พจนานุกรมชางเจี๋ย (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">การอ่านคานะจาก mozc มีรายการ 1.08 ล้านรายการ ขนาดประมาณ 42 MB แป้นพิมพ์จำเป็นต้องใช้ชุดข้อมูลนี้สำหรับการแปลงภาษาญี่ปุ่น</string>
+    <string name="core_input_cjk_pack_ja_kana_title">พจนานุกรมคานะเป็นคันจิภาษาญี่ปุ่น</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">ตารางการอ่าน Jyutping สำหรับตัวอักษรจีน (Hanzi) จำนวน 163,000 รายการ แป้นพิมพ์จำเป็นต้องใช้ชุดข้อมูลนี้สำหรับการแปลงภาษาจีนกวางตุ้ง</string>
+    <string name="core_input_cjk_pack_jyutping_title">พจนานุกรมภาษากวางตุ้งเย้าพิง</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">ตัวอักษรและวลีภาษาจีนจาก CC-CEDICT จำนวน 120,000 รายการ แป้นพิมพ์จำเป็นต้องใช้ชุดข้อมูลนี้สำหรับการแปลงภาษาจีน</string>
+    <string name="core_input_cjk_pack_pinyin_title">พจนานุกรมพินอินภาษาจีน</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">ตารางลำดับขีดสำหรับตัวอักษรฮั่นจื่อ แป้นพิมพ์จำเป็นต้องใช้แพ็กนี้สำหรับรูปแบบการพิมพ์แบบลำดับขีด</string>
+    <string name="core_input_cjk_pack_stroke_title">พจนานุกรมขีดเขียนภาษาจีน (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">ปิด (พินอินแบบเต็ม)</string>
+</resources>

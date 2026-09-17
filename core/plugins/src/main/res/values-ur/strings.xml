@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">اس پلگ ان میں کوئی render() فنکشن نہیں ہے۔</string>
+    <string name="core_plugins_error_not_installed">وہ پلگ ان انسٹال نہیں ہے۔</string>
+    <string name="core_plugins_error_script_failed">اسکرپٹ ناکام ہو گیا۔</string>
+    <string name="core_plugins_error_script_missing">اس پلگ ان کے لیے اسکرپٹ غائب ہے۔</string>
+    <string name="core_plugins_error_turned_off">وہ پلگ ان بند ہے۔</string>
+    <string name="core_plugins_permission_storage_label">اپنے آلے پر ڈیٹا محفوظ کریں</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” میں ایک اسکرپٹ ہے جو درست UTF-8 متن نہیں ہے۔</string>
+    <string name="core_plugins_reject_bad_id">اس پلگ ان کی ایک آئی ڈی ہے جو درست نہیں ہے۔ ایک آئی ڈی 3 سے 64 حروف لمبی ہوتی ہے۔ ایک آئی ڈی میں چھوٹے حروف، نمبر، نقطے، ڈیش اور انڈر سکور ہو سکتے ہیں۔</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” میں کمپائلڈ Lua کوڈ شامل ہے۔ پلگ ان کو سادہ سورس کوڈ استعمال کرنا چاہیے، تاکہ آپ اسے چلنے سے پہلے پڑھ سکیں۔</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” میں ایک خالی اسکرپٹ ہے۔</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” کے پاس اس کی اسکرپٹ فائل (%2$s) نہیں ہے۔</string>
+    <string name="core_plugins_reject_newer_version">اس پلگ ان کو WM کی بورڈ کے نئے ورژن کی ضرورت ہے۔</string>
+    <string name="core_plugins_reject_no_name">اس پلگ ان کا کوئی نام نہیں ہے۔</string>
+    <string name="core_plugins_reject_no_version">“%1$s” یہ نہیں بتاتا کہ اس کا ورژن کیا ہے۔</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” کی اسکرپٹ %2$d KB سے بڑی ہے۔</string>
+    <string name="core_plugins_reject_unknown_permission">WM کی بورڈ کا یہ ورژن اجازت \"%1$s\" کو نہیں جانتا۔ ایپ آپ کو یہ نہیں بتا سکتی کہ \"%2$s\" کو کیا کرنے کی اجازت ہے۔</string>
+    <string name="core_plugins_stopped_cancelled">ایپ نے اس پلگ ان کو روک دیا۔</string>
+    <string name="core_plugins_stopped_deadline">اس پلگ ان نے بہت زیادہ وقت لیا۔ ایپ نے اسے روک دیا۔</string>
+    <string name="core_plugins_stopped_instructions">اس پلگ ان نے ایک وقت میں بہت زیادہ کام کیا۔ ایپ نے اسے روک دیا۔</string>
+    <string name="core_plugins_stopped_not_responding">یہ پلگ ان جواب دینا بند کر گیا ہے۔ ایپ نے اسے بند کر دیا ہے۔</string>
+    <string name="core_plugins_stopped_not_responding_disabled">یہ پلگ ان دوبارہ جواب دینا بند کر گیا ہے۔ ایپ نے اسے بند کر دیا ہے۔</string>
+    <string name="core_plugins_stopped_recursion">اس پلگ ان نے خود کو بہت زیادہ بار کال کیا۔ ایپ نے اسے روک دیا۔</string>
+    <string name="core_plugins_stopped_unexpected">یہ پلگ ان غیر متوقع طور پر رک گیا۔</string>
+    <string name="core_plugins_ui_insert_action">درج کریں</string>
+    <string name="core_plugins_ui_repair_no_type">ایک ویجیٹ نے یہ نہیں بتایا کہ وہ کس قسم کا ہے۔</string>
+    <string name="core_plugins_ui_repair_not_a_widget">ایک ویجیٹ لسٹ میں ایسی چیز شامل تھی جو ویجیٹ نہیں ہے۔</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">ٹیب سٹرپ میں کوئی صفحہ نہیں تھا۔</string>
+    <string name="core_plugins_ui_repair_text_budget">اس پلگ ان نے بہت زیادہ متن دکھانے کی درخواست کی۔ ایپ نے کچھ حصہ چھوڑ دیا ہے۔</string>
+    <string name="core_plugins_ui_repair_text_shortened">کچھ ٹیکسٹ ڈرا کرنے کے لیے بہت لمبا تھا۔ ایپ نے اسے مختصر کر دیا۔</string>
+    <string name="core_plugins_ui_repair_too_deep">کچھ ویجٹ ڈرا کرنے کے لیے بہت گہرائی میں تھے۔</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">صرف پہلے %1$d ٹیبز دکھائے گئے ہیں۔</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">اس پلگ ان نے %1$d سے زیادہ ویجٹ کی درخواست کی۔ ایپ نے باقی کو ہٹا دیا۔</string>
+    <string name="core_plugins_ui_repair_unknown_type">یہ بلڈ ویجیٹ کی قسم \"%1$s\" کو نہیں جانتا ہے۔</string>
+    <string name="core_plugins_ui_tab_default_title">ٹیب %1$d</string>
+</resources>

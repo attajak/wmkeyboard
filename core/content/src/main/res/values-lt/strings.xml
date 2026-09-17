@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Vienkartinis kodas</string>
+    <string name="core_content_clip_entity_otp_tag">KODAS</string>
+    <string name="core_content_clip_entity_phone_label">Telefono numeris</string>
+    <string name="core_content_clip_entity_phone_tag">TELEFONAS</string>
+    <string name="core_content_clip_entity_url_label">Nuoroda</string>
+    <string name="core_content_clip_entity_url_tag">NUORODA</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d fragmentas turi kitų plėtinių, kurių „Espanso“ negali išlaikyti. Buvo įrašytas tik pirmasis.</item>
+        <item quantity="other">%1$d fragmentų turi kitų plėtinių, kurių „Espanso“ negali išlaikyti. Buvo įrašytas tik pirmasis iš kiekvieno.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d fragmentas yra apribotas tam tikromis kompiuterio programomis. Jūsų telefone jis veikia visur.</item>
+        <item quantity="other">%1$d fragmentai yra apriboti tam tikromis kompiuterio programomis. Jūsų telefone jie veikia visur.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d fragmentas prašo pasirinkti iš sąrašo. Programėlė vietoj to pasirenka atsitiktinį.</item>
+        <item quantity="other">%1$d fragmentų prašo pasirinkti iš sąrašo. Programėlė vietoj to pasirenka atsitiktinį.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d fragmentas prašo patvirtinimo prieš išskleidimą. „Espanso“ neturi tokio nustatymo, todėl jis ten išsiskleis automatiškai.</item>
+        <item quantity="other">%1$d fragmentų prašo patvirtinimo prieš išskleidimą. „Espanso“ neturi tokio nustatymo, todėl jie ten išsiskleis automatiškai.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d fragmentas naudoja datos formatą, kurio programa negali parašyti pilnai. Programa praleido dalį, kurios negali atlikti.</item>
+        <item quantity="other">%1$d fragmentai naudoja datos formatus, kurių programa negali parašyti pilnai. Programa praleido dalis, kurių negali atlikti.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d fragmentas yra išjungtame aplanke. „Espanso“ neturi aplankų jungiklio, todėl jis ten bus išplėstas.</item>
+        <item quantity="other">%1$d fragmentai yra išjungtuose aplankuose. „Espanso“ neturi aplankų jungiklio, todėl jie ten bus išplėsti.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Programa praleido %1$d fragmentą, kurio nėra ką įterpti.</item>
+        <item quantity="other">Programa praleido %1$d fragmentų, kurių nėra ką įterpti.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d fragmentas prašo užpildyti formą. Programa įterpia formą kaip tekstą, o žymeklis atsiduria pirmajame tuščiame lauke.</item>
+        <item quantity="other">%1$d fragmentų prašo užpildyti formą. Programa įterpia kiekvieną formą kaip tekstą, o žymeklis atsiduria pirmajame tuščiame lauke.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Programa praleido %1$d fragmentą, kuris įterpia paveikslėlį.</item>
+        <item quantity="other">Programa praleido %1$d fragmentų, kurie įterpia paveikslėlius.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Failas nuskaito %1$d kitą failą. Vienas failas negali atsinešti kitų kartu su savimi.</item>
+        <item quantity="other">Failas nuskaito %1$d kitus failus. Vienas failas negali atsinešti kitų kartu su savimi.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d fragmentas nurodo į kitus fragmentus. „Espanso“ neturi būdo to nurodyti, todėl nuorodos buvo praleistos.</item>
+        <item quantity="other">%1$d fragmentai nurodo į kitus fragmentus. „Espanso“ neturi būdo to nurodyti, todėl nuorodos buvo praleistos.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d aktyviklis skirtas veikti žodžio viduje. Jūsų telefone jis veikia tik kaip visas žodis.</item>
+        <item quantity="other">%1$d aktyvikliai skirti veikti žodžio viduje. Jūsų telefone jie veikia tik kaip visaverčiai žodžiai.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d fragmentas naudoja reikšmę, kurios „Espanso“ neturi atitikmens. Jis parašytas toks, koks yra.</item>
+        <item quantity="other">%1$d fragmentai naudoja reikšmes, kurių „Espanso“ neturi atitikmens. Jie parašyti tokie, kokie yra.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Programa pašalino šabloną iš %1$d fragmento. Programa nevykdo tokios formos šablonų. Fragmentas lieka sąraše.</item>
+        <item quantity="other">Programa pašalino šabloną iš %1$d fragmentų. Programa nevykdo tokios formos šablonų. Fragmentai lieka sąraše.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d fragmentas naudoja formatuotą tekstą. Programa išsaugo žodžius, bet pašalina formatavimą.</item>
+        <item quantity="other">%1$d fragmentai naudoja formatuotą tekstą. Programa išsaugo žodžius, bet pašalina formatavimą.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d fragmentas vykdo komandą jūsų kompiuteryje. Programa praleido komandą ir jos niekada nevykdo.</item>
+        <item quantity="other">%1$d fragmentai vykdo komandas jūsų kompiuteryje. Programa praleido komandas ir jų niekada nevykdo.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d paleidiklis nesibaigia žodžiu, todėl programa negali jo stebėti. Jo fragmentas lieka sąraše.</item>
+        <item quantity="other">%1$d paleidikliai nesibaigia žodžiu, todėl programa negali jų stebėti. Jų fragmentai lieka sąraše.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d fragmentas turi skliausteliuose esantį tekstą, kurį ši programa užpildo, pvz., {date}. Jis bus išplėstas, o ne rodomas taip, kaip parašyta.</item>
+        <item quantity="other">%1$d fragmentų turi skliausteliuose esantį tekstą, kurį ši programa užpildo, pvz., {date}. Jis bus išplėstas, o ne rodomas taip, kaip parašyta.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d fragmentas keičia didžiąsias raides to, ką užfiksavo jo šablonas. „Espanso“ to padaryti negali, todėl užfiksuotas tekstas įkeliamas nepakeistas.</item>
+        <item quantity="other">%1$d fragmentų keičia didžiąsias raides to, ką užfiksavo jų šablonai. „Espanso“ to padaryti negali, todėl užfiksuotas tekstas įkeliamas nepakeistas.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d ištraukoje naudojama reikšmė, kurios programa neatpažįsta. Ta dalis bus tuščia.</item>
+        <item quantity="other">%1$d ištraukų naudoja reikšmes, kurių programa neatpažįsta. Tos dalys bus tuščios.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Programėlė negali atsisiųsti šrifto. Patikrinkite ryšį ir bandykite dar kartą.</string>
+    <string name="core_content_font_error_empty">Failas tuščias.</string>
+    <string name="core_content_font_error_load">Programa negali įkelti šio šrifto failo.</string>
+    <string name="core_content_font_error_markup">Šis failas yra HTML arba XML failas, o ne šriftas.</string>
+    <string name="core_content_font_error_no_storage">Šriftui nėra vietos saugykloje.</string>
+    <string name="core_content_font_error_not_a_font">Šis failas neatrodo kaip .ttf arba .otf šriftas.</string>
+    <string name="core_content_font_error_read">Programa negali nuskaityti šrifto.</string>
+    <string name="core_content_font_error_save">Programa negali išsaugoti šrifto.</string>
+    <string name="core_content_font_error_too_large">Šriftas turi būti mažesnis nei %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Šriftų biblioteka pilna. Ištrinkite šriftą ir bandykite dar kartą.</string>
+    <string name="core_content_font_error_too_short">Failas per trumpas, kad būtų šriftas.</string>
+    <string name="core_content_font_error_woff">Programa negali nuskaityti WOFF žiniatinklio šriftų. Naudokite .ttf arba .otf šrifto versiją.</string>
+    <string name="core_content_font_error_woff2">Programėlė negali nuskaityti WOFF2 žiniatinklio šriftų. Naudokite .ttf arba .otf šrifto versiją.</string>
+    <string name="core_content_font_error_zip">Šis failas yra ZIP archyvas, o ne šriftas.</string>
+    <string name="core_content_selection_macro_add_contact">Kontaktas</string>
+    <string name="core_content_selection_macro_calendar">Kalendorius</string>
+    <string name="core_content_selection_macro_call">Skambinti</string>
+    <string name="core_content_selection_macro_case_lower">mažosios raidės</string>
+    <string name="core_content_selection_macro_case_sentence">Sakinio didžiosios raidės</string>
+    <string name="core_content_selection_macro_case_title">Pavadinimo formatas (Title Case)</string>
+    <string name="core_content_selection_macro_case_upper">DIDŽIOSIOS RAIDĖS</string>
+    <string name="core_content_selection_macro_chat_bold">Paryškintasis</string>
+    <string name="core_content_selection_macro_chat_italic">Kursyvas</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Perbraukti</string>
+    <string name="core_content_selection_macro_colour">Spalva</string>
+    <string name="core_content_selection_macro_copy">Kopijuoti</string>
+    <string name="core_content_selection_macro_digits_latin">Skaitmenys</string>
+    <string name="core_content_selection_macro_email">El. paštas</string>
+    <string name="core_content_selection_macro_fancy">Išgalvotas</string>
+    <string name="core_content_selection_macro_find">Rasti</string>
+    <string name="core_content_selection_macro_format">Formatas</string>
+    <string name="core_content_selection_macro_grammar">Gramatika</string>
+    <string name="core_content_selection_macro_lines_bullet">Sąrašo ženkleliai</string>
+    <string name="core_content_selection_macro_lines_dedupe">Unikalus</string>
+    <string name="core_content_selection_macro_lines_number">Skaičius</string>
+    <string name="core_content_selection_macro_lines_sort">Rūšiuoti</string>
+    <string name="core_content_selection_macro_map">Žemėlapis</string>
+    <string name="core_content_selection_macro_open">Atidaryti</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Skaityti garsiai</string>
+    <string name="core_content_selection_macro_replace">Pakeisti</string>
+    <string name="core_content_selection_macro_search">Paieška</string>
+    <string name="core_content_selection_macro_share">Bendrinti</string>
+    <string name="core_content_selection_macro_sms">Žinutė</string>
+    <string name="core_content_selection_macro_time_zones">Laiko juostos</string>
+    <string name="core_content_selection_macro_to_bangla">Bengalų kalba</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Versti</string>
+    <string name="core_content_selection_macro_url_decode">Dekoduoti</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Programa praleido %2$d plėtinį iš „%1$s“.</item>
+        <item quantity="other">Programa praleido %2$d plėtinių iš „%1$s“.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Programa pašalino šabloną iš „%1$s“. Šablonas neteisingas. Ištrauka lieka sąraše.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Programa atmetė %1$d aplanką, kuris neturi pavadinimo arba dubliuoja kitą. Jo fragmentai buvo įkelti be aplanko.</item>
+        <item quantity="other">Programa atmetė %1$d aplankų, kurie neturi pavadinimo arba dubliuoja kitus. Jų fragmentai buvo įkelti be aplanko.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Faile yra daugiau fragmentų, nei programa gali išsaugoti. Programa importavo pirmuosius %1$d.</item>
+        <item quantity="other">Faile yra daugiau fragmentų, nei programa gali išsaugoti. Programa importavo pirmuosius %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Ištrauka neturi pavadinimo, todėl programėlė pavadino ją pagal pirmąją eilutę.</string>
+    <string name="core_content_snippet_repair_no_text">Programa atmetė „%1$s“. Jame nėra teksto.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Programa pašalino šabloną iš „%1$s“. Jis buvo ilgesnis nei %2$d simbolis.</item>
+        <item quantity="other">Programa pašalino šabloną iš „%1$s“. Jis buvo ilgesnis nei %2$d simboliai.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Programa sutrumpino „%1$s“. Jis buvo ilgesnis nei %2$d simbolis.</item>
+        <item quantity="other">Programa sutrumpino „%1$s“. Jis buvo ilgesnis nei %2$d simboliai.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Programos, kurioje rašote, pavadinimas</string>
+    <string name="core_content_snippet_var_clip_info">Naujausias iškarpinės įrašas</string>
+    <string name="core_content_snippet_var_cursor_info">Vieta, kurioje atsiduria žymeklis</string>
+    <string name="core_content_snippet_var_date_info">Šiandienos data</string>
+    <string name="core_content_snippet_var_datetime_info">Data ir laikas</string>
+    <string name="core_content_snippet_var_day_info">Mėnesio diena</string>
+    <string name="core_content_snippet_var_isodate_info">Data ISO formatu, pavyzdžiui, 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Data ir laikas ISO formatu</string>
+    <string name="core_content_snippet_var_month_info">Mėnesio pavadinimas</string>
+    <string name="core_content_snippet_var_package_info">Tos programėlės paketo pavadinimas</string>
+    <string name="core_content_snippet_var_selection_info">Tekstas, kurį pasirenkate lauke</string>
+    <string name="core_content_snippet_var_time12_info">Dabartinis laikas 12 valandų formatu</string>
+    <string name="core_content_snippet_var_time_info">Dabartinis laikas 24 valandų formatu</string>
+    <string name="core_content_snippet_var_timestamp_info">Laikas Unix sekundėmis</string>
+    <string name="core_content_snippet_var_timezone_info">Laiko juosta, pavyzdžiui, GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Naujas atsitiktinis UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Dienos pavadinimas, pavyzdžiui, sekmadienis</string>
+    <string name="core_content_snippet_var_year_info">Metai, keturiais skaitmenimis</string>
+    <string name="core_content_sticker_pack_imported_label">Importuoti lipdukai</string>
+    <string name="core_content_sticker_repair_image_missing">Programa pašalino „%1$s“. Trūksta jos vaizdo.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Programa atmetė „%1$s“. Programa negali nuskaityti jos vaizdo.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Pakete yra %1$d lipdukas. Programa išsaugo pirmąjį %2$d.</item>
+        <item quantity="other">Pakete yra %1$d lipdukų. Programa išsaugo pirmuosius %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Programėlė prarado lipduką. Lipduko pavadinime nėra nurodyto vaizdo failo.</string>
+    <string name="core_content_sticker_repair_none_listed">Paketo faile nėra nurodytų lipdukų.</string>
+    <string name="core_content_sticker_repair_not_saved">Programa atmetė „%1$s“. Programa negali jo išsaugoti.</string>
+</resources>

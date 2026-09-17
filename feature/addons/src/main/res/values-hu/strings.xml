@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Rajzolja az emojikat ezzel most?</string>
+    <string name="faddons_apply_icon_pack_question">Használja az ikonjait a billentyűzeten most?</string>
+    <string name="faddons_apply_layout_question">Bekapcsolja, hogy gépelhessen vele?</string>
+    <string name="faddons_apply_plugin_question">Bekapcsolja, hogy megjelenjen a bővítmények panelen?</string>
+    <string name="faddons_apply_sound_pack_question">Használja ezt a hangcsomagot a billentyűkhöz most?</string>
+    <string name="faddons_apply_sound_question">Használja ezt billentyűhangként most?</string>
+    <string name="faddons_apply_switch_action">Váltás rá</string>
+    <string name="faddons_apply_theme_question">Használja ezt a billentyűzet-témát most?</string>
+    <string name="faddons_download_error_app_too_old">Ehhez a kiegészítőhöz az alkalmazás újabb verziója szükséges.</string>
+    <string name="faddons_download_error_bad_url">A letöltési link nem érvényes https URL.</string>
+    <string name="faddons_download_error_checksum">A letöltött fájl nem egyezik a jegyzékben szereplő ellenőrző összeggel.</string>
+    <string name="faddons_download_error_http_status">A szerver HTTP %1$d választ adott.</string>
+    <string name="faddons_download_error_no_space">Nincs elég szabad hely a telepítéshez.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Ennek a bővítménynek nincs ellenőrző összege. Az alkalmazás nem tudja ellenőrizni.</string>
+    <string name="faddons_download_error_too_large">Ez a kiegészítő nagyobb, mint a típusára vonatkozó %1$d MB-os korlát.</string>
+    <string name="faddons_error_no_words">Az alkalmazás nem tudott szavakat olvasni abból a fájlból.</string>
+    <string name="faddons_error_not_a_plugin">Ez a fájl nem WM billentyűzet-bővítmény.</string>
+    <string name="faddons_install_error_dictionary_no_language">Ez a szótár nem jelzi, hogy melyik nyelvhez tartozik.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Az alkalmazás nem tudta elmenteni a szótárat.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Az alkalmazás nem tudta beolvasni az ikoncsomagot.</string>
+    <string name="faddons_install_error_keywords_no_language">Ez a csomag nem jelöli meg, hogy melyik nyelvhez tartozik.</string>
+    <string name="faddons_install_error_keywords_not_saved">Az alkalmazás nem tudta elmenteni a kulcsszócsomagot.</string>
+    <string name="faddons_install_error_keywords_too_large">Ez a kulcsszócsomag túl nagy az importáláshoz.</string>
+    <string name="faddons_install_error_no_keywords">Az alkalmazás nem tudott emoji-kulcsszavakat olvasni abból a fájlból.</string>
+    <string name="faddons_install_error_no_stickers">Az alkalmazás nem tudott matricákat olvasni abból a csomagból. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Ez a fájl nem egy WM billentyűzetkiosztás.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Ez a fájl nem egy WM Keyboard snippet csomag.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Ez a fájl nem hangcsomag.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Ez a fájl nem matrica-csomag.</string>
+    <string name="faddons_install_error_not_a_theme">Ez a fájl nem egy WM billentyűzettéma.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Ez a fájl nem Espanso-csomag vagy illesztési fájl.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Ez a fájl nem egy ikoncsomag.</string>
+    <string name="faddons_install_error_plugin_failed">Az alkalmazás nem tudta telepíteni a bővítményt.</string>
+    <string name="faddons_install_error_plugins_turned_off">A bővítmények ki vannak kapcsolva. Kapcsolja be a „Bővítmények engedélyezése” opciót az Eszközök › Bővítmények menüpont alatt. Ezután telepítse újra.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Ez a kódrészletcsomag üres.</string>
+    <string name="faddons_install_error_sound_pack_read">Az alkalmazás nem tudja olvasni ezt a hangcsomagot.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Az alkalmazás nem tudta beolvasni a matricacsomagot.</string>
+    <string name="faddons_install_error_too_many_fonts">Elérte a telepített betűtípusok maximális számát.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Elérte az ikoncsomagok maximális számát.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Már elérted a maximum %1$d bővítményt.</item>
+        <item quantity="other">Már elérted a maximum %1$d bővítményt.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Elérted a telepített hangcsomagok maximális számát.</string>
+    <string name="faddons_install_error_too_many_sounds">Elérte a telepített billentyűhangok maximális számát.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Elérte a matricacsomagok maximális számát.</string>
+    <string name="faddons_install_error_unknown_language">Az alkalmazás ezen verziója nem támogatja a(z) „%1$s” nyelvet.</string>
+    <string name="faddons_install_error_unknown_type">Az alkalmazás ezen verziója nem támogatja ezt a bővítménytípust.</string>
+    <string name="faddons_install_error_vocab_no_language">Ez a szókincs-csomag nem tartalmazza, hogy melyik nyelvhez tartozik.</string>
+    <string name="faddons_install_error_vocab_no_words">Az alkalmazás nem tudott egyetlen szót sem kiolvasni abból a csomagból.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Ez a fájl nem szókincs-csomag.</string>
+    <string name="faddons_install_error_vocab_too_large">Ez a szókincs-csomag nagyobb, mint amit az alkalmazás elfogad.</string>
+    <string name="faddons_preview_error_no_preview">Az alkalmazás nem tud előnézetet mutatni erről a kiegészítőről.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Ez a fájl nem Espanso csomag vagy egyezésfájl.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Ez a fájl nem egy hangulatjel-kulcsszócsomag.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Ez a fájl nem egy kódrészlet-csomag.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Ez a fájl nem szókincs-csomag.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Az alkalmazás nem tudta elolvasni a hangokat ebben a csomagban.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Az alkalmazás nem tudta beolvasni a matrica képeit.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Részletcsomag</string>
+</resources>

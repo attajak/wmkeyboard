@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">האפליקציה שינתה מקש %1$d למקש הקרוב ביותר שיש לה.</item>
+        <item quantity="other">האפליקציה שינתה %1$d מקשים למקשים הקרובים ביותר שיש לה.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">האפליקציה הסירה %1$d מקש. למקלדת זו אין מקש שמבצע את אותה פעולה (קוד %2$s).</item>
+        <item quantity="other">האפליקציה הסירה %1$d מקשים. למקלדת זו אין מקשים שמבצעים את אותה פעולה (קודים %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">האפליקציה שמרה על גודל התווית של %1$d מקש אך לא על סגנון הטקסט שלה. מקלדת זו מציירת תוויות בסגנון אחד.</item>
+        <item quantity="other">האפליקציה שמרה על גודל התווית של %1$d מקשים אך לא על סגנון הטקסט שלהם. מקלדת זו מציירת תוויות בסגנון אחד.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">האפליקציה שינתה אות %1$d לצורה שהמקלדת הזו כותבת.</item>
+        <item quantity="other">האפליקציה שינתה %1$d אותיות לצורה שהמקלדת הזו כותבת.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">ל-%1$d מקש אין אותיות בלחיצה ארוכה. הקובץ שומר אותן בקובץ שני שלא פתחת.</item>
+        <item quantity="other">ל-%1$d מקשים אין אותיות בלחיצה ארוכה. הקובץ שומר אותן בקובץ שני שלא פתחת.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">המקלדת האחרת מודדת רוחב מקשים בצורה שונה. האפליקציה שינתה את הרוחב כדי להתאים לרשת זו.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">למקש נקודת ברייל %1$d בשכבה %2$s יש מספר נקודה מחוץ לטווח 1 עד 6.</item>
+        <item quantity="other">ל-%1$d מקשי נקודות ברייל בשכבה %2$s יש מספר נקודה מחוץ לטווח 1 עד 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">למקש אחד בשכבה %2$s אין תווית ואין פלט. הוא לא מקליד דבר, והאפליקציה תמחק אותו כשתפעיל פריסה זו.</item>
+        <item quantity="other">ל-%1$d מקשים בשכבה %2$s אין תווית ואין פלט. הם לא מקלידים דבר, והאפליקציה תמחק אותם כשתפעיל פריסה זו.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">שורה %1$d בשכבה %2$s ריקה.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">מקש %1$d בשכבת %2$s הוא רכיב לוח. רכיבים פועלים רק בפריסת לוח.</item>
+        <item quantity="other">%1$d מקשים בשכבת %2$s הם רכיבי לוח. רכיבים פועלים רק בפריסת לוח.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">בשורה %1$d של שכבת %2$s יש מקש ללא רוחב.</string>
+    <string name="core_lang_layout_key_span_error">בשורה %1$d של השכבה %2$s יש מקש שתופס פחות מ-1 או יותר מ-%3$d שורות.</string>
+    <string name="core_lang_layout_letters_empty_error">בשכבת האותיות אין מקשים.</string>
+    <string name="core_lang_layout_no_delete_error">לפריסה אין מקש מחיקה. לא ניתן לתקן טעות.</string>
+    <string name="core_lang_layout_no_enter_error">לפריסה אין מקש Enter.</string>
+    <string name="core_lang_layout_no_shift_warning">בפריסה אין מקש Shift. כדי להקליד אות גדולה, לחץ והחזק מקש.</string>
+    <string name="core_lang_layout_no_space_error">לפריסה אין מקש רווח.</string>
+    <string name="core_lang_layout_no_way_back_error">לשכבה %1$s אין מקש שחוזר לאותיות. לא ניתן לצאת משכבה זו.</string>
+    <string name="core_lang_layout_persistent_warning">השכבה %1$s נשארת פתוחה כאשר המקלדת נסגרת. ודא שיש לך דרך לצאת מפריסה זו.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">לפריסה זו אין מקש שיוצא ממנה. ודא שיש לך דרך לצאת מפריסה זו: מקש ABC, מקש סמלים, או כלי הפריסה המשנית בסרגל הכלים.</string>
+    <string name="core_lang_layout_span_past_end_warning">שורה %1$d בשכבה %2$s כוללת מקש המשתרע על יותר שורות ממה שיש בשכבה. המקלדת עוצרת אותו בשורה האחרונה.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">בשורה %1$d של שכבת %2$s יש %3$d מקש. רק %4$d מקשים נשארים גדולים מספיק ללחיצה.</item>
+        <item quantity="other">בשורה %1$d של שכבת %2$s יש %3$d מקשים. רק %4$d מקשים נשארים גדולים מספיק ללחיצה.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">בשכבת %1$s יש %2$d שורה. רק %3$d שורות נכנסות.</item>
+        <item quantity="other">בשכבת %1$s יש %2$d שורות. רק %3$d שורות נכנסות.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">מקש %1$d בשכבת %2$s משתמש בפעולה שגרסה זו של האפליקציה אינה מכירה.</item>
+        <item quantity="other">%1$d מקשים בשכבת %2$s משתמשים בפעולה שגרסה זו של האפליקציה אינה מכירה.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">שורה %1$d בשכבת %2$s רחבה יותר מהשורות האחרות. המקלדת מציירת את המקשים של שורה זו צרים יותר.</string>
+    <string name="core_lang_numeral_scope_display_only">תצוגה בלבד</string>
+    <string name="core_lang_numeral_scope_everywhere">בכל מקום</string>
+    <string name="core_lang_numeral_scope_text_fields">שדות טקסט</string>
+    <string name="core_lang_numeral_system_auto">אוטומטי</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">רכיב %1$d מופיע יותר מפעם אחת. האפליקציה שומרת את העותק הראשון.</item>
+        <item quantity="other">%1$d רכיבים מופיעים יותר מפעם אחת. האפליקציה שומרת את העותק הראשון של כל אחד.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">בלוח זה אין מקשים. האפליקציה משתמשת בלוח הסטנדרטי במקום.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">ל-%1$d מקש יש פעולה שלא עובדת על לוח. האפליקציה מוחקת אותו.</item>
+        <item quantity="other">ל-%1$d מקשים יש פעולות שלא עובדות על לוח. האפליקציה מוחקת אותם.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">בלוח זה אין מקש ABC. השתמש בסרגל הכלים או בכפתור \'חזור\' כדי לחזור למקשים.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">האפליקציה מחקה עותק שני של רכיב.</string>
+    <string name="core_lang_panel_repair_field_added">האפליקציה הוסיפה את הרכיב הראשי של הפאנל בשורה חדשה.</string>
+    <string name="core_lang_panel_repair_field_dropped">האפליקציה מחקה רכיב שאינו שייך ללוח זה.</string>
+    <string name="core_lang_panel_repair_key_dropped">האפליקציה מחקה מקש שהפעולה שלו לא עובדת בלוח.</string>
+    <string name="core_lang_panel_repair_reset">האפליקציה החליפה את הלוח הריק בלוח הסטנדרטי.</string>
+    <string name="core_lang_panel_required_field_error">לפאנל זה חסר הרכיב העיקרי שלו. האפליקציה מוסיפה אחד כשהיא מציירת את הפאנל.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">רכיב אחד אינו שייך ללוח זה. האפליקציה מוחקת אותו.</item>
+        <item quantity="other">%1$d רכיבים אינם שייכים ללוח זה. האפליקציה מוחקת אותם.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">האפליקציה מחקה מקש ריק בשכבת %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">מקש בשכבת %1$s השתמש בנקודת ברייל %2$d. האפליקציה הפכה אותה לנקודה %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">בשכבת האותיות לא היה מקש מחיקה. האפליקציה הוסיפה אחד.</string>
+    <string name="core_lang_repair_enter_key_added">בשכבת האותיות לא היה מקש Enter. האפליקציה הוסיפה אחד.</string>
+    <string name="core_lang_repair_field_key_deleted">האפליקציה מחקה רכיב לוח משכבת ה-%1$s. רכיבים עובדים רק בפריסת לוח.</string>
+    <string name="core_lang_repair_key_letters_anchored">מקש בשכבה %1$s מייצג את %2$s. האפליקציה גרמה לו להקליד %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">מקש בשכבת %1$s ציין את %2$s כאותיות שהוא מייצג. אלו אינן אותיות, לכן האפליקציה הפכה אותו למקש רגיל.</string>
+    <string name="core_lang_repair_key_span_clamped">מקש בשכבת %1$s כיסה %2$d שורות. האפליקציה גרמה לו לכסות %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">מקש בשכבת %1$s היה ברוחב %2$s יחידות. האפליקציה הפכה אותו לרוחב %3$s יחידות.</string>
+    <string name="core_lang_repair_key_width_set">למקש בשכבת %1$s לא היה רוחב. האפליקציה הגדירה את הרוחב ל-1.</string>
+    <string name="core_lang_repair_layer_replaced">בשכבה %1$s לא היו מקשים פעילים. כעת היא משתמשת ברשת המובנית.</string>
+    <string name="core_lang_repair_letters_key_added">בשכבת ה-%1$s לא היה מקש שחוזר לאותיות. האפליקציה הוסיפה מקש ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">בשורה בשכבת %1$s היה מקש אחד (%2$d). האפליקציה שומרת את ה-%3$d הראשונים.</item>
+        <item quantity="other">בשורה בשכבת %1$s היו %2$d מקשים. האפליקציה שומרת את ה-%3$d הראשונים.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">שורה בשכבת %1$s הייתה ברוחב %2$s יחידות. האפליקציה הקטינה את המקשים כדי שהשורה תתאים.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">בשכבת %1$s הייתה %2$d שורה. האפליקציה שומרת את %3$d הראשונות.</item>
+        <item quantity="other">בשכבת %1$s היו %2$d שורות. האפליקציה שומרת את %3$d הראשונות.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">בשכבת האותיות לא היה מקש רווח. האפליקציה הוסיפה אחד.</string>
+    <string name="core_lang_repair_unknown_key_deleted">האפליקציה מחקה מקש בשכבת %1$s. הפעולה שלו \"%2$s\" אינה מוכרת.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Този списък с ключови думи за емоджи е празен или не може да бъде прочетен.</string>
+    <string name="core_emoji_dict_error_http">Сървърът не изпрати файла. Кодът на грешката е HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Този файл не е списък с ключови думи за емоджи.</string>
+    <string name="core_emoji_dict_error_save">Приложението не успя да запише списъка с ключови думи за емоджи.</string>
+    <string name="core_emoji_dict_error_too_large">Списъкът с ключови думи за емоджи е твърде голям.</string>
+</resources>

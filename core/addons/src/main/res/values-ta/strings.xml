@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">அகராதிகள்</string>
+    <string name="core_addons_type_dictionary_singular_label">அகராதி</string>
+    <string name="core_addons_type_emoji_font_label">ஈமோஜி எழுத்துருக்கள்</string>
+    <string name="core_addons_type_emoji_font_singular_label">ஈமோஜி எழுத்துரு</string>
+    <string name="core_addons_type_emoji_keywords_label">ஈமோஜி முக்கிய வார்த்தைகள்</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">ஈமோஜி முக்கியச்சொல் தொகுப்பு</string>
+    <string name="core_addons_type_espanso_label">Espanso பேக்குகள்</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso பேக்</string>
+    <string name="core_addons_type_font_label">எழுத்துருக்கள்</string>
+    <string name="core_addons_type_font_singular_label">எழுத்துரு</string>
+    <string name="core_addons_type_icon_pack_label">ஐகான் பேக்குகள்</string>
+    <string name="core_addons_type_icon_pack_singular_label">ஐகான் பேக்</string>
+    <string name="core_addons_type_layout_label">தளவமைப்புகள்</string>
+    <string name="core_addons_type_layout_singular_label">தளவமைப்பு</string>
+    <string name="core_addons_type_plugin_label">செருகுநிரல்கள்</string>
+    <string name="core_addons_type_plugin_singular_label">செருகுநிரல்</string>
+    <string name="core_addons_type_snippets_label">துணுக்குகள்</string>
+    <string name="core_addons_type_snippets_singular_label">ஸ்னிப்பெட் பேக்</string>
+    <string name="core_addons_type_sound_label">ஒலிகள்</string>
+    <string name="core_addons_type_sound_pack_label">ஒலித் தொகுப்புகள்</string>
+    <string name="core_addons_type_sound_pack_singular_label">ஒலி தொகுப்பு</string>
+    <string name="core_addons_type_sound_singular_label">விசை ஒலி</string>
+    <string name="core_addons_type_stickers_label">ஸ்டிக்கர் பேக்குகள்</string>
+    <string name="core_addons_type_stickers_singular_label">ஸ்டிக்கர் பேக்</string>
+    <string name="core_addons_type_theme_label">தீம்கள்</string>
+    <string name="core_addons_type_theme_singular_label">தீம்</string>
+    <string name="core_addons_type_unknown_label">பிற</string>
+    <string name="core_addons_type_unknown_singular_label">ஆட்-ஆன்</string>
+    <string name="core_addons_type_vocabulary_label">சொற்களஞ்சியம்</string>
+    <string name="core_addons_type_vocabulary_singular_label">சொற்களஞ்சியத் தொகுப்பு</string>
+</resources>

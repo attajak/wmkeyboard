@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Uygulama %1$d tuşu sahip olduğu en yakın tuşla değiştirdi.</item>
+        <item quantity="other">Uygulama %1$d tuşu sahip olduğu en yakın tuşlarla değiştirdi.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Uygulama %1$d tuşu kaldırdı. Bu klavyede aynı işi yapan bir tuş yok (kod %2$s).</item>
+        <item quantity="other">Uygulama %1$d tuşu kaldırdı. Bu klavyede aynı işi yapan tuşlar yok (kodlar %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Uygulama %1$d tuşun etiket boyutunu korudu ancak metin stilini korumadı. Bu klavye etiketleri tek bir stilde çizer.</item>
+        <item quantity="other">Uygulama %1$d tuşun etiket boyutunu korudu ancak metin stillerini korumadı. Bu klavye etiketleri tek bir stilde çizer.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Uygulama %1$d harfi bu klavyenin yazdığı biçime dönüştürdü.</item>
+        <item quantity="other">Uygulama %1$d harfi bu klavyenin yazdığı biçime dönüştürdü.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tuşun basılı tutma harfi yok. Dosya bunları açmadığınız ikinci bir dosyada tutuyor.</item>
+        <item quantity="other">%1$d tuşun basılı tutma harfi yok. Dosya bunları açmadığınız ikinci bir dosyada tutuyor.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Diğer klavye, tuş genişliklerini farklı ölçer. Uygulama, bu ızgaraya uyması için genişlikleri değiştirdi.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s katmanındaki %1$d braille nokta tuşu, 1 ile 6 dışında bir nokta numarasına sahip.</item>
+        <item quantity="other">%2$s katmanındaki %1$d braille nokta tuşu, 1 ile 6 dışında nokta numaralarına sahip.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s katmanındaki %1$d tuşun etiketi ve çıktısı yok. Hiçbir şey yazmaz ve bu düzeni açtığınızda uygulama onu siler.</item>
+        <item quantity="other">%2$s katmanındaki %1$d tuşun etiketi ve çıktısı yok. Hiçbir şey yazmazlar ve bu düzeni açtığınızda uygulama onları siler.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s katmanının %1$d. satırı boş.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s katmanındaki %1$d tuş bir panel bileşenidir. Bileşenler yalnızca panel düzeninde çalışır.</item>
+        <item quantity="other">%2$s katmanındaki %1$d tuş panel bileşenidir. Bileşenler yalnızca panel düzeninde çalışır.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s katmanının %1$d. satırında genişliği olmayan bir tuş var.</string>
+    <string name="core_lang_layout_key_span_error">%2$s katmanının %1$d. satırı, 1\'den az veya %3$d\'den fazla satırı kapsayan bir tuşa sahip.</string>
+    <string name="core_lang_layout_letters_empty_error">Harfler katmanında tuş yok.</string>
+    <string name="core_lang_layout_no_delete_error">Düzenin silme tuşu yok. Hataları düzeltemezsiniz.</string>
+    <string name="core_lang_layout_no_enter_error">Düzenin enter tuşu yok.</string>
+    <string name="core_lang_layout_no_shift_warning">Düzenin shift tuşu yok. Büyük harf yazmak için bir tuşa basılı tutun.</string>
+    <string name="core_lang_layout_no_space_error">Düzenin boşluk tuşu yok.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s katmanında harflere geri dönen bir tuş yok. Bu katmandan çıkamazsınız.</string>
+    <string name="core_lang_layout_persistent_warning">Klavye kapandığında %1$s katmanı açık kalır. Bu düzenden çıkmak için bir yolunuz olduğundan emin olun.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Bu düzenin çıkışını sağlayan hiçbir tuşu yok. Bu düzenden çıkmak için bir yolunuz olduğundan emin olun: bir ABC tuşu, bir semboller tuşu veya araç çubuğundaki Özel düzen aracı.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s katmanının %1$d. satırı, katmandan daha fazla satırı kaplayan bir tuşa sahip. Klavye bunu son satırda durdurur.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s katmanının %1$d. satırında %3$d tuş var. Sadece %4$d tuş basılabilecek kadar büyük kalıyor.</item>
+        <item quantity="other">%2$s katmanının %1$d. satırında %3$d tuş var. Sadece %4$d tuş basılabilecek kadar büyük kalıyor.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s katmanında %2$d satır var. Sadece %3$d satır sığar.</item>
+        <item quantity="other">%1$s katmanında %2$d satır var. Sadece %3$d satır sığar.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s katmanındaki %1$d tuş, uygulamanın bu sürümünün tanımadığı bir eylem kullanıyor.</item>
+        <item quantity="other">%2$s katmanındaki %1$d tuş, uygulamanın bu sürümünün tanımadığı bir eylem kullanıyor.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s katmanının %1$d. satırı diğer satırlardan daha geniş. Klavye bu satırdaki tuşları daha dar çizer.</string>
+    <string name="core_lang_numeral_scope_display_only">Sadece görüntüleme</string>
+    <string name="core_lang_numeral_scope_everywhere">Her yerde</string>
+    <string name="core_lang_numeral_scope_text_fields">Metin alanları</string>
+    <string name="core_lang_numeral_system_auto">Otomatik</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d bileşen birden fazla kez görünüyor. Uygulama ilk kopyayı tutar.</item>
+        <item quantity="other">%1$d bileşen birden fazla kez görünüyor. Uygulama her birinin ilk kopyasını tutar.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Bu panelde tuş yok. Uygulama bunun yerine standart paneli kullanır.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tuşun panelde çalışmayan bir eylemi var. Uygulama bunu siliyor.</item>
+        <item quantity="other">%1$d tuşun panelde çalışmayan eylemleri var. Uygulama bunları siliyor.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Bu panelde ABC tuşu yok. Tuşlara dönmek için araç çubuğunu veya Geri düğmesini kullanın.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Uygulama, bir bileşenin ikinci kopyasını sildi.</string>
+    <string name="core_lang_panel_repair_field_added">Uygulama, panelin ana bileşenini yeni bir satıra ekledi.</string>
+    <string name="core_lang_panel_repair_field_dropped">Uygulama, bu panele ait olmayan bir bileşeni sildi.</string>
+    <string name="core_lang_panel_repair_key_dropped">Uygulama, eylemi bir panelde çalışmayan bir tuşu sildi.</string>
+    <string name="core_lang_panel_repair_reset">Uygulama boş paneli standart olanla değiştirdi.</string>
+    <string name="core_lang_panel_required_field_error">Bu panelin ana bileşeni eksik. Uygulama, paneli çizdiğinde bir tane ekler.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d bileşen bu panele ait değil. Uygulama onu siliyor.</item>
+        <item quantity="other">%1$d bileşen bu panele ait değil. Uygulama onları siliyor.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Uygulama, %1$s katmanındaki boş bir tuşu sildi.</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s katmanındaki bir tuş %2$d braille noktasını kullandı. Uygulama bunu %3$d noktası yaptı.</string>
+    <string name="core_lang_repair_delete_key_added">Harfler katmanında silme tuşu yoktu. Uygulama bir tane ekledi.</string>
+    <string name="core_lang_repair_enter_key_added">Harfler katmanında enter tuşu yoktu. Uygulama bir tane ekledi.</string>
+    <string name="core_lang_repair_field_key_deleted">Uygulama, %1$s katmanından bir panel bileşenini sildi. Bileşenler yalnızca bir panel düzeninde çalışır.</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s katmanındaki bir tuş %2$s anlamına gelir. Uygulama bunu %3$s olarak yazdı.</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s katmanındaki bir tuş, temsil ettiği harfler olarak %2$s listeledi. Bunlar harf olmadığı için uygulama onu sıradan bir tuş haline getirdi.</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s katmanındaki bir tuş %2$d satırı kapsıyordu. Uygulama bunu %3$d satır olacak şekilde ayarladı.</string>
+    <string name="core_lang_repair_key_width_capped">%1$s katmanındaki bir tuş %2$s birim genişliğindeydi. Uygulama onu %3$s birim genişliğine getirdi.</string>
+    <string name="core_lang_repair_key_width_set">%1$s katmanındaki bir tuşun genişliği yoktu. Uygulama genişliği 1 olarak ayarladı.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s katmanında çalışan tuş yoktu. Artık yerleşik ızgarayı kullanıyor.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s katmanında harflere geri dönen bir tuş yoktu. Uygulama bir ABC tuşu ekledi.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s katmanındaki bir satırda %2$d tuş vardı. Uygulama ilk %3$d tanesini tutar.</item>
+        <item quantity="other">%1$s katmanındaki bir satırda %2$d tuş vardı. Uygulama ilk %3$d tanesini tutar.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s katmanındaki bir satır %2$s birim genişliğindeydi. Uygulama, satırın sığması için tuşları küçülttü.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s katmanında %2$d satır vardı. Uygulama ilk %3$d tanesini tutuyor.</item>
+        <item quantity="other">%1$s katmanında %2$d satır vardı. Uygulama ilk %3$d tanesini tutuyor.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Harfler katmanında boşluk tuşu yoktu. Uygulama bir tane ekledi.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Uygulama, %1$s katmanındaki bir tuşu sildi. \"%2$s\" eylemi bilinmiyor.</string>
+</resources>

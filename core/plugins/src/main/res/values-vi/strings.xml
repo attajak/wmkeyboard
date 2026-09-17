@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Plugin này không có hàm render().</string>
+    <string name="core_plugins_error_not_installed">Plugin đó chưa được cài đặt.</string>
+    <string name="core_plugins_error_script_failed">Tập lệnh đã thất bại.</string>
+    <string name="core_plugins_error_script_missing">Tập lệnh cho plugin đó bị thiếu.</string>
+    <string name="core_plugins_error_turned_off">Plugin đó đã bị tắt.</string>
+    <string name="core_plugins_permission_storage_label">Lưu dữ liệu trên thiết bị của bạn</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” có một tập lệnh không phải là văn bản UTF-8 hợp lệ.</string>
+    <string name="core_plugins_reject_bad_id">Plugin này có id không hợp lệ. Id phải dài từ 3 đến 64 ký tự. Id có thể chứa các chữ cái thường, số, dấu chấm, dấu gạch ngang và dấu gạch dưới.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” chứa mã Lua đã biên dịch. Plugin phải sử dụng mã nguồn thuần túy để bạn có thể đọc trước khi chạy.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” có tập lệnh trống.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” không có tệp tập lệnh của nó (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Plugin này cần phiên bản WM Keyboard mới hơn.</string>
+    <string name="core_plugins_reject_no_name">Plugin này không có tên.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” không cho biết phiên bản nào.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” có tập lệnh lớn hơn %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Phiên bản WM Keyboard này không nhận diện được quyền “%1$s”. Ứng dụng không thể cho bạn biết “%2$s” được phép làm gì.</string>
+    <string name="core_plugins_stopped_cancelled">Ứng dụng đã dừng plugin này.</string>
+    <string name="core_plugins_stopped_deadline">Plugin này mất quá nhiều thời gian. Ứng dụng đã dừng nó lại.</string>
+    <string name="core_plugins_stopped_instructions">Plugin này đã thực hiện quá nhiều tác vụ cùng một lúc. Ứng dụng đã dừng nó lại.</string>
+    <string name="core_plugins_stopped_not_responding">Plugin này đã ngừng phản hồi. Ứng dụng đã đóng nó.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Plugin này lại ngừng phản hồi. Ứng dụng đã tắt nó.</string>
+    <string name="core_plugins_stopped_recursion">Plugin này đã tự gọi chính nó quá nhiều lần. Ứng dụng đã dừng nó lại.</string>
+    <string name="core_plugins_stopped_unexpected">Plugin này đã dừng đột ngột.</string>
+    <string name="core_plugins_ui_insert_action">Chèn</string>
+    <string name="core_plugins_ui_repair_no_type">Một tiện ích không xác định được loại của nó.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Danh sách tiện ích con chứa một mục không phải là tiện ích con.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Một dải tab không có trang nào.</string>
+    <string name="core_plugins_ui_repair_text_budget">Plugin này yêu cầu vẽ quá nhiều văn bản. Ứng dụng đã bỏ bớt một số phần.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Một số văn bản quá dài để hiển thị. Ứng dụng đã rút ngắn nó.</string>
+    <string name="core_plugins_ui_repair_too_deep">Một số tiện ích được lồng quá sâu để hiển thị.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Chỉ hiển thị %1$d thẻ đầu tiên.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Plugin này đã yêu cầu nhiều hơn %1$d tiện ích. Ứng dụng đã loại bỏ phần còn lại.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Bản dựng này không nhận dạng được loại tiện ích “%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Tab %1$d</string>
+</resources>

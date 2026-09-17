@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Faceサーバーからファイルが送信されませんでした。エラーコード: HTTP %1$s</string>
+    <string name="core_voice_download_interrupted_error">ダウンロード中に接続が中断されました。もう一度やり直して、中断したところから再開してください。</string>
+    <string name="core_voice_download_space_error">デバイスのストレージ容量が不足しています。まず約 %1$s MBの空き容量を確保してください。</string>
+    <string name="core_voice_model_base_eu_body">このモデルは、40言語モデルと同じく、入力した言語を使用します。ヨーロッパ言語のみを対象としているため、ダウンロードサイズが小さくなっています。</string>
+    <string name="core_voice_model_base_multi_body">このモデルは精度と速度のバランスが取れています。Whisperが対応するすべての言語をカバーします。Smallモデルが遅すぎる場合に選択してください。</string>
+    <string name="core_voice_model_base_world_body">このモデルは推測ではなく、入力した言語を使用します。短いフレーズの認識精度が大幅に向上します。リストに自分の言語が含まれている場合に選択してください。</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d言語</item>
+        <item quantity="other">%1$d言語</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">これは最も正確なWhisperモデルの1つですが、ほとんどのスマートフォンには大きすぎます。ダウンロードサイズは1.5GBです。大容量メモリを搭載したデバイスでのみ読み込み可能です。</string>
+    <string name="core_voice_model_large_v3_multi_body">これは最も正確なWhisperモデルであり、話している言語を認識するのに最適です。ダウンロードサイズは1.5GBです。メモリ容量が大きいデバイスでのみ読み込み可能です。Turboモデルもほぼ同等の精度で、サイズは半分です。</string>
+    <string name="core_voice_model_medium_multi_body">このモデルはデスクトップ並みの精度を提供します。各フレーズの処理に数秒かかります。実行中、約1GBのメモリを使用します。</string>
+    <string name="core_voice_model_single_language_body">このモデルは%1$sのみを処理します。言語検出ステップがないため、同じサイズの多言語モデルよりも高速で、わずかに精度が高くなります。</string>
+    <string name="core_voice_model_small_multi_body">このモデルは、スマートフォンでも快適に動作しつつ、最高の精度を提供します。Baseモデルよりもアクセントや背景ノイズの処理能力に優れています。Whisperが対応するすべての言語をカバーしています。</string>
+    <string name="core_voice_model_small_world_body">このモデルは入力した言語を使用し、Smallモデルと同等の精度を持ちます。スマートフォンに収まる最も精度の高いモデルです。</string>
+    <string name="core_voice_model_tiny_multi_body">これは最も高速な多言語モデルです。明瞭な音声ではうまく機能しますが、ノイズがあると精度が低下します。</string>
+    <string name="core_voice_model_turbo_multi_body">このモデルは、小さいモデルよりもはるかに正確に言語を認識します。小さいモデルで話した言語が誤って認識される場合は、これを選択してください。ダウンロードサイズが大きく、フレーズごとに数秒かかります。</string>
+    <string name="core_voice_size_base_label">ベース</string>
+    <string name="core_voice_size_large_label">大</string>
+    <string name="core_voice_size_medium_label">中</string>
+    <string name="core_voice_size_small_label">小</string>
+    <string name="core_voice_size_tiny_label">極小</string>
+    <string name="core_voice_size_turbo_label">ターボ</string>
+    <string name="core_voice_tier_recommended_label">推奨</string>
+    <string name="core_voice_whisper_mel_bins_error">この音声モデルには%1$sバンドのスペクトログラムが必要ですが、ダウンロードされたファイルと一致しません。設定からモデルを削除し、再度ダウンロードしてください。</string>
+    <string name="core_voice_whisper_model_load_error">音声モデルを読み込めませんでした。ファイルが破損している可能性があります。設定からモデルを削除し、再度ダウンロードしてください。</string>
+    <string name="core_voice_whisper_transcribe_error">音声入力が機能しませんでした。もう一度試すか、より小さなモデルを選択してください。</string>
+</resources>

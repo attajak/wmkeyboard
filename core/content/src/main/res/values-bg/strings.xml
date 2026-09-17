@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Еднократен код</string>
+    <string name="core_content_clip_entity_otp_tag">КОД</string>
+    <string name="core_content_clip_entity_phone_label">Телефонен номер</string>
+    <string name="core_content_clip_entity_phone_tag">ТЕЛЕФОН</string>
+    <string name="core_content_clip_entity_url_label">Връзка</string>
+    <string name="core_content_clip_entity_url_tag">ВРЪЗКА</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d фрагмент има други разширения, които Espanso не може да съхрани. Записано е само първото.</item>
+        <item quantity="other">%1$d фрагмента имат други разширения, които Espanso не може да съхрани. Записано е само първото от всяко.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d фрагмент е ограничен до определени компютърни програми. На телефона ви работи навсякъде.</item>
+        <item quantity="other">%1$d фрагмента са ограничени до определени компютърни програми. На телефона ви работят навсякъде.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d фрагмент изисква избор от списък. Приложението избира произволен вместо това.</item>
+        <item quantity="other">%1$d фрагмента изискват избор от списък. Приложението избира произволен вместо това.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d фрагмент изисква потвърждение преди разширяване. Espanso няма такава настройка, така че там той ще се разшири автоматично.</item>
+        <item quantity="other">%1$d фрагмента изискват потвърждение преди разширяване. Espanso няма такава настройка, така че там те ще се разширят автоматично.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d фрагмент използва формат за дата, който приложението не може да запише изцяло. Приложението пропусна частта, която не може да изпълни.</item>
+        <item quantity="other">%1$d фрагмента използват формати за дата, които приложението не може да запише изцяло. Приложението пропусна частите, които не може да изпълни.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d фрагмент е в папка, която е изключена. Espanso няма превключвател за папки, така че ще се разгърне там.</item>
+        <item quantity="other">%1$d фрагмента са в папки, които са изключени. Espanso няма превключвател за папки, така че те ще се разгърнат там.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Приложението пропусна %1$d фрагмент, който няма какво да вмъкне.</item>
+        <item quantity="other">Приложението пропусна %1$d фрагмента, които нямат какво да вмъкнат.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d фрагмент изисква попълване на формуляр. Приложението вмъква формуляра като текст с курсора в първото празно поле.</item>
+        <item quantity="other">%1$d фрагмента изискват попълване на формуляр. Приложението вмъква всеки формуляр като текст с курсора в първото празно поле.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Приложението пропусна %1$d фрагмент, който вмъква картина.</item>
+        <item quantity="other">Приложението пропусна %1$d фрагмента, които вмъкват картини.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Файлът чете %1$d друг файл. Един файл не може да донесе останалите със себе си.</item>
+        <item quantity="other">Файлът чете %1$d други файла. Един файл не може да донесе останалите със себе си.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d фрагмент сочи към други фрагменти. Espanso няма начин да изрази това, така че връзките бяха пропуснати.</item>
+        <item quantity="other">%1$d фрагмента сочат към други фрагменти. Espanso няма начин да изрази това, така че връзките бяха пропуснати.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d тригер е предназначен да работи в рамките на дума. На телефона ви той работи само като цяла дума.</item>
+        <item quantity="other">%1$d тригера са предназначени да работят в рамките на дума. На телефона ви те работят само като цели думи.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d фрагмент използва стойност, за която Espanso няма еквивалент. Той се изписва такъв, какъвто е.</item>
+        <item quantity="other">%1$d фрагмента използват стойности, за които Espanso няма еквивалент. Те се изписват такива, каквито са.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Приложението премахна шаблона от %1$d фрагмент. Приложението не изпълнява шаблони с такъв формат. Фрагментът остава в списъка.</item>
+        <item quantity="other">Приложението премахна шаблона от %1$d фрагмента. Приложението не изпълнява шаблони с такъв формат. Фрагментите остават в списъка.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d фрагмент използва форматиран текст. Приложението запазва думите и премахва форматирането.</item>
+        <item quantity="other">%1$d фрагмента използват форматиран текст. Приложението запазва думите и премахва форматирането.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d фрагмент изпълнява команда на вашия компютър. Приложението е пропуснало командата и никога не я изпълнява.</item>
+        <item quantity="other">%1$d фрагмента изпълняват команди на вашия компютър. Приложението е пропуснало командите и никога не ги изпълнява.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d тригер не завършва с дума, така че приложението не може да го следи. Неговият фрагмент остава в списъка.</item>
+        <item quantity="other">%1$d тригера не завършват с дума, така че приложението не може да ги следи. Техните фрагменти остават в списъка.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d фрагмент съдържа текст в скоби, който това приложение попълва, като например {date}. Той ще се разгърне, вместо да се появява така, както е написан.</item>
+        <item quantity="other">%1$d фрагмента съдържат текст в скоби, който това приложение попълва, като например {date}. Те ще се разгърнат, вместо да се появяват така, както са написани.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d фрагмент променя главните букви на това, което неговият шаблон е уловил. Espanso не може да направи това, така че уловеният текст остава непроменен.</item>
+        <item quantity="other">%1$d фрагмента променят главните букви на това, което техните шаблони са уловили. Espanso не може да направи това, така че уловеният текст остава непроменен.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d фрагмент използва стойност, за която приложението няма еквивалент. Тази част остава празна.</item>
+        <item quantity="other">%1$d фрагмента използват стойности, за които приложението няма еквивалент. Тези части остават празни.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Приложението не може да изтегли шрифта. Проверете връзката си и опитайте отново.</string>
+    <string name="core_content_font_error_empty">Файлът е празен.</string>
+    <string name="core_content_font_error_load">Приложението не може да зареди този файл с шрифт.</string>
+    <string name="core_content_font_error_markup">Този файл е HTML или XML файл, а не шрифт.</string>
+    <string name="core_content_font_error_no_storage">Няма налично място за съхранение на шрифта.</string>
+    <string name="core_content_font_error_not_a_font">Този файл не изглежда като шрифт .ttf или .otf.</string>
+    <string name="core_content_font_error_read">Приложението не може да прочете шрифта.</string>
+    <string name="core_content_font_error_save">Приложението не може да запише шрифта.</string>
+    <string name="core_content_font_error_too_large">Шрифтът трябва да бъде по-малък от %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Библиотеката с шрифтове е пълна. Изтрийте шрифт и опитайте отново.</string>
+    <string name="core_content_font_error_too_short">Файлът е твърде кратък, за да бъде шрифт.</string>
+    <string name="core_content_font_error_woff">Приложението не може да чете уеб шрифтове WOFF. Използвайте версията на шрифта .ttf или .otf.</string>
+    <string name="core_content_font_error_woff2">Приложението не може да чете уеб шрифтове WOFF2. Използвайте версията на шрифта .ttf или .otf.</string>
+    <string name="core_content_font_error_zip">Този файл е ZIP архив, а не шрифт.</string>
+    <string name="core_content_selection_macro_add_contact">Контакт</string>
+    <string name="core_content_selection_macro_calendar">Календар</string>
+    <string name="core_content_selection_macro_call">Извикване</string>
+    <string name="core_content_selection_macro_case_lower">малки букви</string>
+    <string name="core_content_selection_macro_case_sentence">Изреченски регистър</string>
+    <string name="core_content_selection_macro_case_title">Заглавен регистър</string>
+    <string name="core_content_selection_macro_case_upper">ГЛАВНИ БУКВИ</string>
+    <string name="core_content_selection_macro_chat_bold">Удебелен</string>
+    <string name="core_content_selection_macro_chat_italic">Курсив</string>
+    <string name="core_content_selection_macro_chat_mono">Моно</string>
+    <string name="core_content_selection_macro_chat_strike">Зачеркнат</string>
+    <string name="core_content_selection_macro_colour">Цвят</string>
+    <string name="core_content_selection_macro_copy">Копирай</string>
+    <string name="core_content_selection_macro_digits_latin">Цифри</string>
+    <string name="core_content_selection_macro_email">Имейл</string>
+    <string name="core_content_selection_macro_fancy">Ефектно</string>
+    <string name="core_content_selection_macro_find">Намери</string>
+    <string name="core_content_selection_macro_format">Формат</string>
+    <string name="core_content_selection_macro_grammar">Граматика</string>
+    <string name="core_content_selection_macro_lines_bullet">Булети</string>
+    <string name="core_content_selection_macro_lines_dedupe">Уникални</string>
+    <string name="core_content_selection_macro_lines_number">Брой</string>
+    <string name="core_content_selection_macro_lines_sort">Сортиране</string>
+    <string name="core_content_selection_macro_map">Карта</string>
+    <string name="core_content_selection_macro_open">Отваряне</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Изговаряне</string>
+    <string name="core_content_selection_macro_replace">Замяна</string>
+    <string name="core_content_selection_macro_search">Търсене</string>
+    <string name="core_content_selection_macro_share">Споделяне</string>
+    <string name="core_content_selection_macro_sms">Съобщение</string>
+    <string name="core_content_selection_macro_time_zones">Часови зони</string>
+    <string name="core_content_selection_macro_to_bangla">Бенгалски</string>
+    <string name="core_content_selection_macro_to_banglish">Банглийски</string>
+    <string name="core_content_selection_macro_translate">Превод</string>
+    <string name="core_content_selection_macro_url_decode">Декодиране</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Приложението пропусна %2$d разгръщане от \"%1$s\".</item>
+        <item quantity="other">Приложението пропусна %2$d разгръщания от \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Приложението премахна шаблона от \"%1$s\". Шаблонът не е правилен. Фрагментът остава в списъка.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Приложението премахна %1$d папка, която няма име или повтаря друга. Нейните фрагменти бяха добавени без папка.</item>
+        <item quantity="other">Приложението премахна %1$d папки, които нямат имена или повтарят други. Техните фрагменти бяха добавени без папка.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Файлът има повече фрагменти, отколкото приложението съхранява. Приложението импортира първите %1$d.</item>
+        <item quantity="other">Файлът има повече фрагменти, отколкото приложението съхранява. Приложението импортира първите %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Фрагментът няма име, затова приложението го наименува според първия му ред.</string>
+    <string name="core_content_snippet_repair_no_text">Приложението премахна \"%1$s\". Няма текст.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Приложението премахна шаблона от „%1$s“. Той беше по-дълъг от %2$d символ.</item>
+        <item quantity="other">Приложението премахна шаблона от „%1$s“. Той беше по-дълъг от %2$d символа.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Приложението съкрати „%1$s“. Беше по-дълго от %2$d знак.</item>
+        <item quantity="other">Приложението съкрати „%1$s“. Беше по-дълго от %2$d знака.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Името на приложението, в което пишете</string>
+    <string name="core_content_snippet_var_clip_info">Най-новият запис в клипборда</string>
+    <string name="core_content_snippet_var_cursor_info">Мястото, където се позиционира курсорът</string>
+    <string name="core_content_snippet_var_date_info">Днешната дата</string>
+    <string name="core_content_snippet_var_datetime_info">Датата и часът</string>
+    <string name="core_content_snippet_var_day_info">Денят от месеца</string>
+    <string name="core_content_snippet_var_isodate_info">Датата в ISO формат, например 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Датата и часът в ISO формат</string>
+    <string name="core_content_snippet_var_month_info">Името на месеца</string>
+    <string name="core_content_snippet_var_package_info">Името на пакета на това приложение</string>
+    <string name="core_content_snippet_var_selection_info">Текстът, който избирате в полето</string>
+    <string name="core_content_snippet_var_time12_info">Текущото време в 12-часов формат</string>
+    <string name="core_content_snippet_var_time_info">Текущото време в 24-часов формат</string>
+    <string name="core_content_snippet_var_timestamp_info">Времето в Unix секунди</string>
+    <string name="core_content_snippet_var_timezone_info">Часовата зона, например GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Нов произволен UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Името на деня, например неделя</string>
+    <string name="core_content_snippet_var_year_info">Годината с четири цифри</string>
+    <string name="core_content_sticker_pack_imported_label">Импортирани стикери</string>
+    <string name="core_content_sticker_repair_image_missing">Приложението изтри \"%1$s\". Изображението му липсва.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Приложението изпусна \"%1$s\". Приложението не може да прочете изображението му.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Пакетът има %1$d стикер. Приложението запазва първите %2$d.</item>
+        <item quantity="other">Пакетът има %1$d стикера. Приложението запазва първите %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Приложението премахна стикер. Името на стикера не съответства на никакъв файл с изображение.</string>
+    <string name="core_content_sticker_repair_none_listed">Файлът на пакета не съдържа стикери.</string>
+    <string name="core_content_sticker_repair_not_saved">Приложението премахна \"%1$s\". Приложението не може да го запише.</string>
+</resources>

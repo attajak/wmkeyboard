@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Berry</string>
+    <string name="core_theme_builtin_bubble_label">Балонче</string>
+    <string name="core_theme_builtin_crimson_label">Пурпурен</string>
+    <string name="core_theme_builtin_cyberpunk_label">Киберпънк</string>
+    <string name="core_theme_builtin_deep_sea_label">Дълбоко море</string>
+    <string name="core_theme_builtin_facet_label">Аспект</string>
+    <string name="core_theme_builtin_forest_label">Гора</string>
+    <string name="core_theme_builtin_glacier_label">Ледник</string>
+    <string name="core_theme_builtin_mint_label">Ментово</string>
+    <string name="core_theme_builtin_nebula_label">Мъглявина</string>
+    <string name="core_theme_builtin_ocean_label">Океан</string>
+    <string name="core_theme_builtin_pitch_label">Наситено черно</string>
+    <string name="core_theme_builtin_rose_label">Роза</string>
+    <string name="core_theme_builtin_sand_label">Пясък</string>
+    <string name="core_theme_builtin_slate_label">Шистов</string>
+    <string name="core_theme_builtin_snow_label">Сняг</string>
+    <string name="core_theme_builtin_sunset_drift_label">Залез</string>
+    <string name="core_theme_builtin_sunset_label">Залез</string>
+    <string name="core_theme_family_gradient_label">Градиенти</string>
+    <string name="core_theme_family_ocean_label">Здрач</string>
+    <string name="core_theme_family_snow_label">Пастелни</string>
+</resources>

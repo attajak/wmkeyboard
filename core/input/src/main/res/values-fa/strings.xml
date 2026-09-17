@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">فایل دانلود شده آسیب دیده است. مجموع بررسی (checksum) آن مطابقت ندارد. دانلود را دوباره امتحان کنید.</string>
+    <string name="core_input_cjk_download_error_http">سرور وضعیت HTTP %1$s را بازگرداند.</string>
+    <string name="core_input_cjk_download_error_network">دانلود کار نکرد. اتصال خود را بررسی کنید و دوباره امتحان کنید.</string>
+    <string name="core_input_cjk_download_error_network_detail">دانلود انجام نشد: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">فضای ذخیره‌سازی کافی در دستگاه شما وجود ندارد. ابتدا مقداری فضا آزاد کنید.</string>
+    <string name="core_input_cjk_download_error_truncated">اتصال در حین دانلود قطع شد. برای ادامه، «ازسرگیری» را بزنید.</string>
+    <string name="core_input_cjk_download_error_unavailable">این بسته هنوز در دسترس نیست.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">جدولی از کدهای رادیکال برای نویسه‌های هانزی شامل ۲۹۰۰۰ نویسه. صفحه کلید برای چیدمان‌های Cangjie و Quick به این بسته نیاز دارد.</string>
+    <string name="core_input_cjk_pack_cangjie_title">فرهنگ لغت کانجی (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">خوانش‌های کانا از mozc، با ۱.۰۸ میلیون ورودی، حدود ۴۲ مگابایت. صفحه‌کلید برای تبدیل ژاپنی به این بسته نیاز دارد.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">فرهنگ لغت کانا به کانجی ژاپنی</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">جدولی از خوانش‌های Jyutping برای کاراکترهای هانزی، شامل ۱۶۳,۰۰۰ ورودی. صفحه‌کلید برای تبدیل کانتونی به این بسته نیاز دارد.</string>
+    <string name="core_input_cjk_pack_jyutping_title">فرهنگ لغت کانتونی Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">کاراکترها و عبارات چینی از CC-CEDICT، شامل ۱۲۰,۰۰۰ ورودی. صفحه‌کلید برای تبدیل چینی به این بسته نیاز دارد.</string>
+    <string name="core_input_cjk_pack_pinyin_title">فرهنگ لغت پین‌یین چینی</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">جدول ترتیب ضربات برای کاراکترهای هانزی. صفحه‌کلید برای طرح‌بندی ضربه‌ای به این بسته نیاز دارد.</string>
+    <string name="core_input_cjk_pack_stroke_title">فرهنگ لغت ضربات چینی (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">خاموش (پین‌یین کامل)</string>
+</resources>

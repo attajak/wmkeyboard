@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">کیا اب اس کے ساتھ ایموجی ڈرا کریں؟</string>
+    <string name="faddons_apply_icon_pack_question">کیا اس کے آئیکنز ابھی کی بورڈ پر استعمال کریں؟</string>
+    <string name="faddons_apply_layout_question">اسے آن کریں تاکہ آپ اس کے ساتھ ٹائپ کر سکیں؟</string>
+    <string name="faddons_apply_plugin_question">کیا اسے آن کریں تاکہ یہ پلگ ان پینل میں نظر آئے؟</string>
+    <string name="faddons_apply_sound_pack_question">کیا اب اپنی کیز کے لیے یہ ساؤنڈ پیک استعمال کریں؟</string>
+    <string name="faddons_apply_sound_question">کیا اسے ابھی اپنی کلید کی آواز کے طور پر استعمال کریں؟</string>
+    <string name="faddons_apply_switch_action">اس پر سوئچ کریں</string>
+    <string name="faddons_apply_theme_question">کیا اسے ابھی اپنے کی بورڈ تھیم کے طور پر استعمال کریں؟</string>
+    <string name="faddons_download_error_app_too_old">اس ایڈ آن کو ایپ کے نئے ورژن کی ضرورت ہے۔</string>
+    <string name="faddons_download_error_bad_url">ڈاؤن لوڈ لنک ایک درست https URL نہیں ہے۔</string>
+    <string name="faddons_download_error_checksum">ڈاؤن لوڈ کردہ فائل مینی فیسٹ میں موجود چیک سم سے میل نہیں کھاتی۔</string>
+    <string name="faddons_download_error_http_status">سرور نے HTTP %1$d واپس کیا۔</string>
+    <string name="faddons_download_error_no_space">اسے انسٹال کرنے کے لیے کافی خالی جگہ نہیں ہے۔</string>
+    <string name="faddons_download_error_plugin_no_checksum">اس پلگ ان کا کوئی چیکسم نہیں ہے۔ ایپ اس کی تصدیق نہیں کر سکتی۔</string>
+    <string name="faddons_download_error_too_large">یہ ایڈ آن اپنی قسم کے لیے %1$d MB کی حد سے بڑا ہے۔</string>
+    <string name="faddons_error_no_words">ایپ اس فائل سے کوئی لفظ نہیں پڑھ سکی۔</string>
+    <string name="faddons_error_not_a_plugin">یہ فائل WM کی بورڈ پلگ ان نہیں ہے۔</string>
+    <string name="faddons_install_error_dictionary_no_language">یہ لغت یہ نہیں بتاتی کہ یہ کس زبان کے لیے ہے۔</string>
+    <string name="faddons_install_error_dictionary_not_saved">ایپ لغت کو محفوظ نہیں کر سکی۔</string>
+    <string name="faddons_install_error_icon_pack_unreadable">ایپ آئیکن پیک کو پڑھ نہیں سکی۔</string>
+    <string name="faddons_install_error_keywords_no_language">یہ پیک یہ نہیں بتاتا کہ یہ کس زبان کے لیے ہے۔</string>
+    <string name="faddons_install_error_keywords_not_saved">ایپ کلیدی الفاظ کا پیک محفوظ نہیں کر سکی۔</string>
+    <string name="faddons_install_error_keywords_too_large">وہ کی ورڈ پیک درآمد کرنے کے لیے بہت بڑا ہے۔</string>
+    <string name="faddons_install_error_no_keywords">ایپ اس فائل سے کوئی ایموجی کی ورڈز نہیں پڑھ سکی۔</string>
+    <string name="faddons_install_error_no_stickers">ایپ اس پیک سے کوئی اسٹیکر نہیں پڑھ سکی۔ %1$s</string>
+    <string name="faddons_install_error_not_a_layout">یہ فائل WM کی بورڈ لے آؤٹ نہیں ہے۔</string>
+    <string name="faddons_install_error_not_a_snippet_pack">یہ فائل WM کی بورڈ اسنیپٹ پیک نہیں ہے۔</string>
+    <string name="faddons_install_error_not_a_sound_pack">یہ فائل ساؤنڈ پیک نہیں ہے۔</string>
+    <string name="faddons_install_error_not_a_sticker_pack">یہ فائل اسٹیکر پیک نہیں ہے۔</string>
+    <string name="faddons_install_error_not_a_theme">یہ فائل WM کی بورڈ تھیم نہیں ہے۔</string>
+    <string name="faddons_install_error_not_an_espanso_pack">یہ فائل Espanso پیکیج یا میچ فائل نہیں ہے۔</string>
+    <string name="faddons_install_error_not_an_icon_pack">یہ فائل آئیکن پیک نہیں ہے۔</string>
+    <string name="faddons_install_error_plugin_failed">ایپ اس پلگ ان کو انسٹال نہیں کر سکی۔</string>
+    <string name="faddons_install_error_plugins_turned_off">پلگ انز بند ہیں۔ ٹولز › پلگ انز کے تحت \"پلگ انز کی اجازت دیں\" کو آن کریں۔ پھر اسے دوبارہ انسٹال کریں۔</string>
+    <string name="faddons_install_error_snippet_pack_empty">وہ اسنیپٹ پیک خالی ہے۔</string>
+    <string name="faddons_install_error_sound_pack_read">ایپ اس ساؤنڈ پیک کو پڑھ نہیں سکتی۔</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">ایپ اسٹیکر پیک کو پڑھ نہیں سکی۔</string>
+    <string name="faddons_install_error_too_many_fonts">آپ انسٹال کردہ فونٹس کی زیادہ سے زیادہ تعداد تک پہنچ چکے ہیں۔</string>
+    <string name="faddons_install_error_too_many_icon_packs">آپ آئیکن پیک کی زیادہ سے زیادہ تعداد تک پہنچ چکے ہیں۔</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">آپ کے پاس پہلے ہی زیادہ سے زیادہ %1$d پلگ ان موجود ہے۔</item>
+        <item quantity="other">آپ کے پاس پہلے ہی زیادہ سے زیادہ %1$d پلگ انز موجود ہیں۔</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">آپ انسٹال شدہ ساؤنڈ پیکس کی زیادہ سے زیادہ تعداد تک پہنچ چکے ہیں۔</string>
+    <string name="faddons_install_error_too_many_sounds">آپ نے انسٹال کردہ کلیدی آوازوں کی زیادہ سے زیادہ تعداد تک پہنچ گئے ہیں۔</string>
+    <string name="faddons_install_error_too_many_sticker_packs">آپ اسٹیکر پیک کی زیادہ سے زیادہ تعداد تک پہنچ چکے ہیں۔</string>
+    <string name="faddons_install_error_unknown_language">ایپ کا یہ ورژن ”%1$s“ زبان کو سپورٹ نہیں کرتا ہے۔</string>
+    <string name="faddons_install_error_unknown_type">ایپ کا یہ ورژن اس ایڈ آن کی قسم کو سپورٹ نہیں کرتا ہے۔</string>
+    <string name="faddons_install_error_vocab_no_language">اس الفاظ کے پیک میں یہ نہیں بتایا گیا کہ یہ کس زبان کے لیے ہے۔</string>
+    <string name="faddons_install_error_vocab_no_words">ایپ اس پیک سے کوئی الفاظ نہیں پڑھ سکی۔</string>
+    <string name="faddons_install_error_vocab_not_a_pack">وہ فائل الفاظ کا پیک نہیں ہے۔</string>
+    <string name="faddons_install_error_vocab_too_large">یہ وکیبلری پیک ایپ کی قبول کردہ حد سے بڑا ہے۔</string>
+    <string name="faddons_preview_error_no_preview">ایپ اس ایڈ آن کا پیش نظارہ نہیں دکھا سکتی۔</string>
+    <string name="faddons_preview_error_not_espanso_pack">وہ فائل Espanso پیکیج یا میچ فائل نہیں ہے۔</string>
+    <string name="faddons_preview_error_not_keyword_pack">یہ فائل ایموجی کی ورڈ پیک نہیں ہے۔</string>
+    <string name="faddons_preview_error_not_snippet_pack">وہ فائل اسنیپٹ پیک نہیں ہے۔</string>
+    <string name="faddons_preview_error_not_vocab_pack">یہ فائل وکیبلری پیک نہیں ہے۔</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">ایپ اس پیک میں موجود آوازوں کو پڑھ نہیں سکی۔</string>
+    <string name="faddons_preview_error_stickers_unreadable">ایپ اسٹیکر کی تصاویر کو پڑھ نہیں سکی۔</string>
+    <string name="faddons_snippet_pack_folder_fallback">اسنیپٹ پیک</string>
+</resources>

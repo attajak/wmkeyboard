@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Ta lista słów kluczowych emoji jest pusta lub nieczytelna.</string>
+    <string name="core_emoji_dict_error_http">Serwer nie wysłał pliku. Kod błędu to HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Ten plik nie jest listą słów kluczowych emoji.</string>
+    <string name="core_emoji_dict_error_save">Aplikacja nie mogła zapisać listy słów kluczowych emoji.</string>
+    <string name="core_emoji_dict_error_too_large">Ta lista słów kluczowych emoji jest za długa.</string>
+</resources>

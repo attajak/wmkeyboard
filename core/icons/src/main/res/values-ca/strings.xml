@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Pestanyes d\'emoji</string>
+    <string name="core_icons_group_keys_title">Tecles</string>
+    <string name="core_icons_group_toolbar_title">Barra d\'eines</string>
+    <string name="core_icons_group_tools_title">Eines</string>
+    <string name="core_icons_pack_imported_label">Icones importades</string>
+    <string name="core_icons_pack_mine_label">Les meves icones</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">L\'aplicació ha ignorat %1$d fitxer. Aquesta versió no té cap icona per a ell: %2$s</item>
+        <item quantity="other">L\'aplicació ha ignorat %1$d fitxers. Aquesta versió no té cap icona per a ells: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">L\'aplicació ha descartat \"%1$s\". L\'aplicació no el pot desar.</string>
+    <string name="core_icons_repair_svg_unreadable">L\'aplicació ha descartat \"%1$s\". L\'aplicació no pot llegir el seu fitxer SVG.</string>
+    <string name="core_icons_slot_backspace_label">Retrocés</string>
+    <string name="core_icons_slot_caps_lock_label">Bloqueig de majúscules</string>
+    <string name="core_icons_slot_emoji_activities_label">Activitats</string>
+    <string name="core_icons_slot_emoji_animals_label">Animals</string>
+    <string name="core_icons_slot_emoji_flags_label">Banderes</string>
+    <string name="core_icons_slot_emoji_food_label">Menjar</string>
+    <string name="core_icons_slot_emoji_key_label">Tecla d\'emoji</string>
+    <string name="core_icons_slot_emoji_most_used_label">Més utilitzats</string>
+    <string name="core_icons_slot_emoji_nature_label">Natura</string>
+    <string name="core_icons_slot_emoji_objects_label">Objectes</string>
+    <string name="core_icons_slot_emoji_people_label">Persones</string>
+    <string name="core_icons_slot_emoji_recent_label">Recents</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Drecera d\'emoji</string>
+    <string name="core_icons_slot_emoji_smileys_label">Somriures</string>
+    <string name="core_icons_slot_emoji_symbols_label">Símbols</string>
+    <string name="core_icons_slot_emoji_travel_label">Viatges</string>
+    <string name="core_icons_slot_enter_done_label">Retorn: fet</string>
+    <string name="core_icons_slot_enter_go_label">Retorn: anar</string>
+    <string name="core_icons_slot_enter_label">Retorn</string>
+    <string name="core_icons_slot_enter_next_label">Retorn: següent</string>
+    <string name="core_icons_slot_enter_previous_label">Retorn: anterior</string>
+    <string name="core_icons_slot_enter_search_label">Retorn: cerca</string>
+    <string name="core_icons_slot_enter_send_label">Retorn: enviar</string>
+    <string name="core_icons_slot_forward_delete_label">Suprimir endavant</string>
+    <string name="core_icons_slot_globe_label">Canvia l\'idioma</string>
+    <string name="core_icons_slot_incognito_label">Insígnia d\'incògnit</string>
+    <string name="core_icons_slot_input_method_picker_label">Canvia el teclat</string>
+    <string name="core_icons_slot_panel_back_label">Tornar a les tecles</string>
+    <string name="core_icons_slot_power_saving_label">Distintiu d\'estalvi d\'energia</string>
+    <string name="core_icons_slot_search_close_label">Tanca la cerca</string>
+    <string name="core_icons_slot_shift_label">Majúscules</string>
+    <string name="core_icons_slot_shift_on_label">Majúscules (activat)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Mostra eines</string>
+    <string name="core_icons_slot_toolbox_label">Caixa d\'eines</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Žodynai</string>
+    <string name="core_addons_type_dictionary_singular_label">Žodynas</string>
+    <string name="core_addons_type_emoji_font_label">Jaustukų šriftai</string>
+    <string name="core_addons_type_emoji_font_singular_label">Jaustukų šriftas</string>
+    <string name="core_addons_type_emoji_keywords_label">Jaustukų raktažodžiai</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Jaustukų raktinių žodžių paketas</string>
+    <string name="core_addons_type_espanso_label">„Espanso“ paketai</string>
+    <string name="core_addons_type_espanso_singular_label">„Espanso“ paketas</string>
+    <string name="core_addons_type_font_label">Šriftai</string>
+    <string name="core_addons_type_font_singular_label">Šriftas</string>
+    <string name="core_addons_type_icon_pack_label">Piktogramų paketai</string>
+    <string name="core_addons_type_icon_pack_singular_label">Piktogramų paketas</string>
+    <string name="core_addons_type_layout_label">Išdėstymai</string>
+    <string name="core_addons_type_layout_singular_label">Išdėstymas</string>
+    <string name="core_addons_type_plugin_label">Papildiniai</string>
+    <string name="core_addons_type_plugin_singular_label">Papildinys</string>
+    <string name="core_addons_type_snippets_label">Fragmentai</string>
+    <string name="core_addons_type_snippets_singular_label">Fragmentų paketas</string>
+    <string name="core_addons_type_sound_label">Garsai</string>
+    <string name="core_addons_type_sound_pack_label">Garso paketai</string>
+    <string name="core_addons_type_sound_pack_singular_label">Garso paketas</string>
+    <string name="core_addons_type_sound_singular_label">Klavišo garsas</string>
+    <string name="core_addons_type_stickers_label">Lipdukų rinkiniai</string>
+    <string name="core_addons_type_stickers_singular_label">Lipdukų paketas</string>
+    <string name="core_addons_type_theme_label">Temos</string>
+    <string name="core_addons_type_theme_singular_label">Tema</string>
+    <string name="core_addons_type_unknown_label">Kita</string>
+    <string name="core_addons_type_unknown_singular_label">Priedas</string>
+    <string name="core_addons_type_vocabulary_label">Žodynas</string>
+    <string name="core_addons_type_vocabulary_singular_label">Žodyno paketas</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Tento balíček vyžaduje formát zvukového balíčku %1$s. Aktualizujte aplikaci.</string>
+    <string name="core_feedback_pack_reject_no_samples">Tento balíček neobsahuje žádné zvuky, které může aplikace přehrát.</string>
+    <string name="core_feedback_pack_reject_too_large">Balíček zvuků musí být menší než %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Soubor je prázdný.</string>
+    <string name="core_feedback_sound_import_html_error">Toto je soubor HTML nebo XML, nikoliv zvuk.</string>
+    <string name="core_feedback_sound_import_mp4_error">Aplikace nepřehrává soubory MP4 a M4A. Použijte soubor MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">V zařízení není k dispozici žádné úložiště.</string>
+    <string name="core_feedback_sound_import_read_error">Aplikace nemůže přečíst zvuk.</string>
+    <string name="core_feedback_sound_import_save_error">Aplikace nemůže zvuk uložit.</string>
+    <string name="core_feedback_sound_import_too_large_error">Zvuk klávesy musí být menší než %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Soubor je příliš krátký na to, aby mohl být zvukem.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Toto nevypadá jako soubor MP3, OGG nebo WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Toto je archiv zip, nikoliv zvukový soubor.</string>
+</resources>

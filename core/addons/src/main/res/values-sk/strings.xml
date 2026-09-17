@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Slovníky</string>
+    <string name="core_addons_type_dictionary_singular_label">Slovník</string>
+    <string name="core_addons_type_emoji_font_label">Písma emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Písmo emodži</string>
+    <string name="core_addons_type_emoji_keywords_label">Kľúčové slová pre emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Balík kľúčových slov emodži</string>
+    <string name="core_addons_type_espanso_label">Balíky Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Balík Espanso</string>
+    <string name="core_addons_type_font_label">Písma</string>
+    <string name="core_addons_type_font_singular_label">Písmo</string>
+    <string name="core_addons_type_icon_pack_label">Balíky ikon</string>
+    <string name="core_addons_type_icon_pack_singular_label">Balík ikon</string>
+    <string name="core_addons_type_layout_label">Rozloženia</string>
+    <string name="core_addons_type_layout_singular_label">Rozloženie</string>
+    <string name="core_addons_type_plugin_label">Doplnky</string>
+    <string name="core_addons_type_plugin_singular_label">Doplnok</string>
+    <string name="core_addons_type_snippets_label">Úryvky</string>
+    <string name="core_addons_type_snippets_singular_label">Balík úryvkov</string>
+    <string name="core_addons_type_sound_label">Zvuky</string>
+    <string name="core_addons_type_sound_pack_label">Balíky zvukov</string>
+    <string name="core_addons_type_sound_pack_singular_label">Balík zvukov</string>
+    <string name="core_addons_type_sound_singular_label">Zvuk klávesy</string>
+    <string name="core_addons_type_stickers_label">Balíky nálepiek</string>
+    <string name="core_addons_type_stickers_singular_label">Balík nálepiek</string>
+    <string name="core_addons_type_theme_label">Motívy</string>
+    <string name="core_addons_type_theme_singular_label">Motív</string>
+    <string name="core_addons_type_unknown_label">Iné</string>
+    <string name="core_addons_type_unknown_singular_label">Doplnok</string>
+    <string name="core_addons_type_vocabulary_label">Slovná zásoba</string>
+    <string name="core_addons_type_vocabulary_singular_label">Balík slovnej zásoby</string>
+</resources>

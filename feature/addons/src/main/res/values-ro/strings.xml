@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Desenezi emoji-uri cu el acum?</string>
+    <string name="faddons_apply_icon_pack_question">Folosiți pictogramele sale pe tastatură acum?</string>
+    <string name="faddons_apply_layout_question">Îl activați pentru a putea tasta cu el?</string>
+    <string name="faddons_apply_plugin_question">Activează-l pentru a apărea în panoul de pluginuri?</string>
+    <string name="faddons_apply_sound_pack_question">Folosiți acest pachet de sunete pentru taste acum?</string>
+    <string name="faddons_apply_sound_question">Să îl folosești ca sunet de tastă acum?</string>
+    <string name="faddons_apply_switch_action">Comută la acesta</string>
+    <string name="faddons_apply_theme_question">Să o folosești ca temă de tastatură acum?</string>
+    <string name="faddons_download_error_app_too_old">Acest add-on necesită o versiune mai nouă a aplicației.</string>
+    <string name="faddons_download_error_bad_url">Linkul de descărcare nu este un URL https valid.</string>
+    <string name="faddons_download_error_checksum">Fișierul descărcat nu corespunde cu suma de control din manifest.</string>
+    <string name="faddons_download_error_http_status">Serverul a returnat HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Nu există suficient spațiu liber pentru a instala acest lucru.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Acest plugin nu are o sumă de control. Aplicația nu îl poate verifica.</string>
+    <string name="faddons_download_error_too_large">Acest add-on este mai mare decât limita de %1$d MB pentru tipul său.</string>
+    <string name="faddons_error_no_words">Aplicația nu a putut citi niciun cuvânt din acel fișier.</string>
+    <string name="faddons_error_not_a_plugin">Acel fișier nu este un plugin WM Keyboard.</string>
+    <string name="faddons_install_error_dictionary_no_language">Acest dicționar nu specifică limba pentru care este destinat.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Aplicația nu a putut salva dicționarul.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Aplicația nu a putut citi pachetul de pictograme.</string>
+    <string name="faddons_install_error_keywords_no_language">Acest pachet nu specifică limba pentru care este destinat.</string>
+    <string name="faddons_install_error_keywords_not_saved">Aplicația nu a putut salva pachetul de cuvinte cheie.</string>
+    <string name="faddons_install_error_keywords_too_large">Acel pachet de cuvinte cheie este prea mare pentru a fi importat.</string>
+    <string name="faddons_install_error_no_keywords">Aplicația nu a putut citi niciun cuvânt cheie emoji din acel fișier.</string>
+    <string name="faddons_install_error_no_stickers">Aplicația nu a putut citi niciun sticker din acel pachet. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Fișierul respectiv nu este un layout de tastatură WM.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Acel fișier nu este un pachet de fragmente WM Keyboard.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Acest fișier nu este un pachet de sunete.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Fișierul respectiv nu este un pachet de stickere.</string>
+    <string name="faddons_install_error_not_a_theme">Fișierul respectiv nu este o temă WM Keyboard.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Fișierul respectiv nu este un pachet Espanso sau un fișier de potrivire.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Fișierul respectiv nu este un pachet de pictograme.</string>
+    <string name="faddons_install_error_plugin_failed">Aplicația nu a putut instala acel plugin.</string>
+    <string name="faddons_install_error_plugins_turned_off">Modulele sunt dezactivate. Activează „Permite module” în Instrumente › Module. Apoi instalează din nou.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Pachetul de fragmente este gol.</string>
+    <string name="faddons_install_error_sound_pack_read">Aplicația nu poate citi acest pachet de sunete.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Aplicația nu a putut citi pachetul de stickere.</string>
+    <string name="faddons_install_error_too_many_fonts">Ați atins numărul maxim de fonturi instalate.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Ai atins numărul maxim de pachete de pictograme.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Aveți deja numărul maxim de %1$d plugin.</item>
+        <item quantity="other">Aveți deja numărul maxim de %1$d pluginuri.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Ai atins numărul maxim de pachete de sunete instalate.</string>
+    <string name="faddons_install_error_too_many_sounds">Ați atins numărul maxim de sunete de taste instalate.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Ai atins numărul maxim de pachete de autocolante.</string>
+    <string name="faddons_install_error_unknown_language">Această versiune a aplicației nu acceptă limba „%1$s”.</string>
+    <string name="faddons_install_error_unknown_type">Această versiune a aplicației nu acceptă acel tip de add-on.</string>
+    <string name="faddons_install_error_vocab_no_language">Acest pachet de vocabular nu specifică limba pentru care este destinat.</string>
+    <string name="faddons_install_error_vocab_no_words">Aplicația nu a putut citi niciun cuvânt din acel pachet.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Acel fișier nu este un pachet de vocabular.</string>
+    <string name="faddons_install_error_vocab_too_large">Acest pachet de vocabular este mai mare decât acceptă aplicația.</string>
+    <string name="faddons_preview_error_no_preview">Aplicația nu poate previzualiza acest add-on.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Fișierul respectiv nu este un pachet Espanso sau un fișier de potrivire.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Acel fișier nu este un pachet de cuvinte cheie pentru emoji.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Fișierul respectiv nu este un pachet de fragmente.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Acel fișier nu este un pachet de vocabular.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Aplicația nu a putut citi sunetele din acest pachet.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Aplicația nu a putut citi imaginile autocolantelor.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Pachet de fragmente</string>
+</resources>

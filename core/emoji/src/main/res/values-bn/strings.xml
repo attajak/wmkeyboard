@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">সেই ইমোজি কিওয়ার্ড তালিকাটি খালি বা পড়ার অযোগ্য।</string>
+    <string name="core_emoji_dict_error_http">সার্ভার ফাইলটি পাঠায়নি। ত্রুটি কোডটি হলো এইচটিটিপি (HTTP) %1$s।</string>
+    <string name="core_emoji_dict_error_not_a_list">ফাইলটি কোনো ইমোজি কিওয়ার্ড তালিকা নয়।</string>
+    <string name="core_emoji_dict_error_save">অ্যাপটি ইমোজি কীওয়ার্ড তালিকা সংরক্ষণ করতে পারেনি।</string>
+    <string name="core_emoji_dict_error_too_large">সেই ইমোজি কিওয়ার্ড তালিকাটি খুব বড়।</string>
+</resources>

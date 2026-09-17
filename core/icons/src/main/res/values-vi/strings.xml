@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Tab biểu tượng cảm xúc</string>
+    <string name="core_icons_group_keys_title">Phím</string>
+    <string name="core_icons_group_toolbar_title">Thanh công cụ</string>
+    <string name="core_icons_group_tools_title">Công cụ</string>
+    <string name="core_icons_pack_imported_label">Biểu tượng đã nhập</string>
+    <string name="core_icons_pack_mine_label">Biểu tượng của tôi</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Ứng dụng đã bỏ qua %1$d tệp. Phiên bản này không có biểu tượng cho nó: %2$s</item>
+        <item quantity="other">Ứng dụng đã bỏ qua %1$d tệp. Phiên bản này không có biểu tượng cho chúng: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Ứng dụng đã bỏ \"%1$s\". Ứng dụng không thể lưu nó.</string>
+    <string name="core_icons_repair_svg_unreadable">Ứng dụng đã loại bỏ \"%1$s\". Ứng dụng không thể đọc tệp SVG của nó.</string>
+    <string name="core_icons_slot_backspace_label">Phím xóa lùi</string>
+    <string name="core_icons_slot_caps_lock_label">Khóa viết hoa</string>
+    <string name="core_icons_slot_emoji_activities_label">Hoạt động</string>
+    <string name="core_icons_slot_emoji_animals_label">Động vật</string>
+    <string name="core_icons_slot_emoji_flags_label">Cờ</string>
+    <string name="core_icons_slot_emoji_food_label">Thực phẩm</string>
+    <string name="core_icons_slot_emoji_key_label">Phím biểu tượng cảm xúc</string>
+    <string name="core_icons_slot_emoji_most_used_label">Được sử dụng nhiều nhất</string>
+    <string name="core_icons_slot_emoji_nature_label">Thiên nhiên</string>
+    <string name="core_icons_slot_emoji_objects_label">Đồ vật</string>
+    <string name="core_icons_slot_emoji_people_label">Mọi người</string>
+    <string name="core_icons_slot_emoji_recent_label">Gần đây</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Phím tắt biểu tượng cảm xúc</string>
+    <string name="core_icons_slot_emoji_smileys_label">Mặt cười</string>
+    <string name="core_icons_slot_emoji_symbols_label">Ký hiệu</string>
+    <string name="core_icons_slot_emoji_travel_label">Du lịch</string>
+    <string name="core_icons_slot_enter_done_label">Enter: xong</string>
+    <string name="core_icons_slot_enter_go_label">Enter: đi</string>
+    <string name="core_icons_slot_enter_label">Nhập</string>
+    <string name="core_icons_slot_enter_next_label">Enter: tiếp theo</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: trước đó</string>
+    <string name="core_icons_slot_enter_search_label">Enter: tìm kiếm</string>
+    <string name="core_icons_slot_enter_send_label">Enter: gửi</string>
+    <string name="core_icons_slot_forward_delete_label">Xóa tiến</string>
+    <string name="core_icons_slot_globe_label">Chuyển đổi ngôn ngữ</string>
+    <string name="core_icons_slot_incognito_label">Huy hiệu ẩn danh</string>
+    <string name="core_icons_slot_input_method_picker_label">Chuyển đổi bàn phím</string>
+    <string name="core_icons_slot_panel_back_label">Quay lại phím</string>
+    <string name="core_icons_slot_power_saving_label">Huy hiệu tiết kiệm pin</string>
+    <string name="core_icons_slot_search_close_label">Đóng tìm kiếm</string>
+    <string name="core_icons_slot_shift_label">Phím Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (bật)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Hiện công cụ</string>
+    <string name="core_icons_slot_toolbox_label">Hộp công cụ</string>
+</resources>

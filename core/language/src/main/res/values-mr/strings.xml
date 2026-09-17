@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">ॲपने %1$d की ला त्याच्या जवळच्या की मध्ये बदलले आहे.</item>
+        <item quantity="other">ॲपने %1$d की ना त्यांच्या जवळच्या की मध्ये बदलले आहे.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">ॲपने %1$d की काढली. या कीबोर्डवर अशी कोणतीही की नाही जी तेच काम करते (कोड %2$s).</item>
+        <item quantity="other">ॲपने %1$d की काढल्या. या कीबोर्डवर अशा कोणत्याही की नाहीत ज्या तेच काम करतात (कोड %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">ॲपने %1$d कीचा लेबल आकार ठेवला पण त्याची मजकूर शैली नाही. हा कीबोर्ड लेबल्स एकाच शैलीत काढतो.</item>
+        <item quantity="other">ॲपने %1$d कीजचा लेबल आकार ठेवला पण त्यांची मजकूर शैली नाही. हा कीबोर्ड लेबल्स एकाच शैलीत काढतो.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">ॲपने %1$d अक्षर अशा स्वरूपात बदलले आहे जे हा कीबोर्ड लिहितो.</item>
+        <item quantity="other">ॲपने %1$d अक्षरे अशा स्वरूपात बदलली आहेत जी हा कीबोर्ड लिहितो.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d की ला प्रेस-अँड-होल्ड अक्षरे नाहीत. फाईल त्यांना दुसऱ्या फाईलमध्ये ठेवते जी तुम्ही उघडली नाही.</item>
+        <item quantity="other">%1$d की ला प्रेस-अँड-होल्ड अक्षरे नाहीत. फाईल त्यांना दुसऱ्या फाईलमध्ये ठेवते जी तुम्ही उघडली नाही.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">दुसरा कीबोर्ड कीची रुंदी वेगळ्या प्रकारे मोजतो. ॲपने या ग्रिडमध्ये बसण्यासाठी रुंदी बदलली आहे.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s लेयरमधील %1$d ब्रेल डॉट की मध्ये १ ते ६ च्या बाहेरील डॉट नंबर आहे.</item>
+        <item quantity="other">%2$s लेयरमधील %1$d ब्रेल डॉट की मध्ये १ ते ६ च्या बाहेरील डॉट नंबर आहेत.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s लेयरमधील %1$d की ला कोणतेही लेबल आणि आउटपुट नाही. ती काहीही टाइप करत नाही आणि तुम्ही हे लेआउट चालू केल्यावर ॲप ती हटवते.</item>
+        <item quantity="other">%2$s लेयरमधील %1$d की ला कोणतेही लेबल आणि आउटपुट नाही. त्या काहीही टाइप करत नाहीत आणि तुम्ही हे लेआउट चालू केल्यावर ॲप त्या हटवते.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s लेयरची %1$d ओळ रिकामी आहे.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s लेयरमधील %1$d की एक पॅनेल घटक आहे. घटक फक्त पॅनेल लेआउटमध्ये काम करतात.</item>
+        <item quantity="other">%2$s लेयरमधील %1$d की पॅनेल घटक आहेत. घटक फक्त पॅनेल लेआउटमध्ये काम करतात.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s लेयरच्या %1$d ओळीमध्ये रुंदी नसलेली की आहे.</string>
+    <string name="core_lang_layout_key_span_error">%2$s लेयरची %1$d ओळ अशा की (key) ला समाविष्ट करते जी १ पेक्षा कमी किंवा %3$d पेक्षा जास्त ओळी व्यापते.</string>
+    <string name="core_lang_layout_letters_empty_error">अक्षरांच्या स्तरावर कोणतीही की नाही.</string>
+    <string name="core_lang_layout_no_delete_error">लेआउटमध्ये डिलीट की नाही. तुम्ही चूक सुधारू शकत नाही.</string>
+    <string name="core_lang_layout_no_enter_error">लेआउटमध्ये एंटर की नाही.</string>
+    <string name="core_lang_layout_no_shift_warning">लेआउटमध्ये शिफ्ट की नाही. कॅपिटल अक्षर टाईप करण्यासाठी, की दाबून धरा.</string>
+    <string name="core_lang_layout_no_space_error">लेआउटमध्ये स्पेस की नाही.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s लेयरमध्ये अक्षरांकडे परत जाणारी कोणतीही की नाही. तुम्ही हा लेयर सोडू शकत नाही.</string>
+    <string name="core_lang_layout_persistent_warning">कीबोर्ड बंद झाल्यावरही %1$s लेयर उघडा राहतो. या लेआउटमधून बाहेर पडण्याचा मार्ग तुमच्याकडे असल्याची खात्री करा.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">या लेआउटमध्ये बाहेर पडण्यासाठी कोणतीही की नाही. या लेआउटमधून बाहेर पडण्याचा मार्ग असल्याची खात्री करा: ABC की, चिन्हांची की, किंवा टूलबारवरील कस्टम लेआउट टूल.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s लेयरच्या %1$d ओळीमध्ये अशी की आहे जी लेयरमध्ये असलेल्या ओळींपेक्षा जास्त ओळी व्यापते. कीबोर्ड तिला शेवटच्या ओळीवर थांबवतो.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s लेयरच्या %1$d ओळीत %3$d की आहे. फक्त %4$d की दाबण्याइतपत मोठ्या राहतात.</item>
+        <item quantity="other">%2$s लेयरच्या %1$d ओळीत %3$d की आहेत. फक्त %4$d की दाबण्याइतपत मोठ्या राहतात.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s लेयरमध्ये %2$d ओळ आहे. फक्त %3$d ओळी मावतात.</item>
+        <item quantity="other">%1$s लेयरमध्ये %2$d ओळी आहेत. फक्त %3$d ओळी मावतात.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s लेयरमधील %1$d की अशी कृती वापरते जी ॲपच्या या आवृत्तीला माहित नाही.</item>
+        <item quantity="other">%2$s लेयरमधील %1$d की अशा कृती वापरतात ज्या ॲपच्या या आवृत्तीला माहित नाहीत.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s लेयरची %1$d ओळ इतर ओळींपेक्षा रुंद आहे. कीबोर्ड या ओळीच्या की अरुंद काढतो.</string>
+    <string name="core_lang_numeral_scope_display_only">केवळ प्रदर्शित करा</string>
+    <string name="core_lang_numeral_scope_everywhere">सर्वत्र</string>
+    <string name="core_lang_numeral_scope_text_fields">मजकूर फील्ड्स</string>
+    <string name="core_lang_numeral_system_auto">स्वयंचलित</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d घटक एकापेक्षा जास्त वेळा दिसतो. ॲप पहिली प्रत ठेवते.</item>
+        <item quantity="other">%1$d घटक एकापेक्षा जास्त वेळा दिसतात. ॲप प्रत्येकाची पहिली प्रत ठेवते.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">या पॅनेलमध्ये कोणतीही की नाही. ॲप त्याऐवजी मानक पॅनेल वापरते.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d की मध्ये अशी क्रिया आहे जी पॅनेलवर काम करत नाही. ॲप ती काढून टाकते.</item>
+        <item quantity="other">%1$d की मध्ये अशा क्रिया आहेत ज्या पॅनेलवर काम करत नाहीत. ॲप त्या काढून टाकते.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">या पॅनेलमध्ये ABC की नाही. कीजवर परत जाण्यासाठी टूलबार किंवा बॅक बटण वापरा.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">ॲपने घटकाची दुसरी प्रत हटवली आहे.</string>
+    <string name="core_lang_panel_repair_field_added">ॲपने पॅनेलचा मुख्य घटक नवीन ओळीत जोडला आहे.</string>
+    <string name="core_lang_panel_repair_field_dropped">ॲपने या पॅनेलशी संबंधित नसलेला एक घटक हटवला आहे.</string>
+    <string name="core_lang_panel_repair_key_dropped">ॲपने अशी की हटवली आहे जिची क्रिया पॅनेलवर काम करत नाही.</string>
+    <string name="core_lang_panel_repair_reset">ॲपने रिकाम्या पॅनेलची जागा मानक पॅनेलने घेतली आहे.</string>
+    <string name="core_lang_panel_required_field_error">या पॅनेलमध्ये त्याचा मुख्य घटक गहाळ आहे. ॲप पॅनेल काढताना तो जोडते.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d घटक या पॅनेलशी संबंधित नाही. ॲप ते हटवते.</item>
+        <item quantity="other">%1$d घटक या पॅनेलशी संबंधित नाहीत. ॲप त्यांना हटवते.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">ॲपने %1$s लेयरमधील एक रिकामी की हटवली आहे.</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s लेयरमधील एका की ने ब्रेल डॉट %2$d वापरला. ॲपने तो %3$d डॉट केला.</string>
+    <string name="core_lang_repair_delete_key_added">अक्षरांच्या लेयरमध्ये डिलीट की नव्हती. ॲपने ती जोडली आहे.</string>
+    <string name="core_lang_repair_enter_key_added">अक्षरांच्या लेयरमध्ये एंटर की नव्हती. ॲपने ती जोडली आहे.</string>
+    <string name="core_lang_repair_field_key_deleted">ॲपने %1$s लेयरमधून एक पॅनेल घटक हटवला आहे. घटक फक्त पॅनेल लेआउटमध्येच काम करतात.</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s लेयरमधील एक की %2$s साठी आहे. ॲपने तिला %3$s टाईप करायला लावले.</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s लेयरमधील एका की ने %2$s ला ती दर्शवणारी अक्षरे म्हणून सूचीबद्ध केले आहे. ती अक्षरे नसल्यामुळे, ॲपने त्याला सामान्य की बनवले आहे.</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s लेयरमधील एका की ने %2$d ओळी व्यापल्या होत्या. ॲपने ती %3$d व्यापण्यासाठी केली.</string>
+    <string name="core_lang_repair_key_width_capped">%1$s लेयरमधील एक की %2$s युनिट्स रुंद होती. ॲपने ती %3$s युनिट्स रुंद केली आहे.</string>
+    <string name="core_lang_repair_key_width_set">%1$s लेयरमधील एका कीला रुंदी नव्हती. ॲपने रुंदी 1 वर सेट केली आहे.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s लेयरमध्ये कोणतीही कार्य करणारी की नव्हती. आता तो अंगभूत ग्रिड वापरतो.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s लेयरमध्ये अक्षरांकडे परत जाणारी कोणतीही की नव्हती. ॲपने एक ABC की जोडली आहे.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s लेयरमधील एका ओळीत %2$d की होती. ॲप पहिली %3$d की ठेवते.</item>
+        <item quantity="other">%1$s लेयरमधील एका ओळीत %2$d की होत्या. ॲप पहिल्या %3$d की ठेवते.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s लेयरमधील एक ओळ %2$s युनिट्स रुंद होती. ॲपने कीज लहान केल्या जेणेकरून ओळ फिट होईल.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s लेयरमध्ये %2$d ओळ होती. ॲप पहिली %3$d ओळ ठेवते.</item>
+        <item quantity="other">%1$s लेयरमध्ये %2$d ओळी होत्या. ॲप पहिल्या %3$d ओळी ठेवते.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">अक्षरांच्या लेयरमध्ये स्पेस की नव्हती. ॲपने एक जोडली आहे.</string>
+    <string name="core_lang_repair_unknown_key_deleted">ॲपने %1$s लेयरमधील एक की हटवली आहे. तिची क्रिया \"%2$s\" ज्ञात नाही.</string>
+</resources>

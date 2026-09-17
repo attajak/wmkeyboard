@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Der Hugging Face-Server hat die Datei nicht gesendet. Der Fehlercode ist HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Die Verbindung wurde während des Downloads unterbrochen. Versuchen Sie es erneut, um dort fortzufahren, wo er gestoppt wurde.</string>
+    <string name="core_voice_download_space_error">Es ist nicht genügend Speicherplatz auf Ihrem Gerät vorhanden. Sie müssen zuerst etwa %1$s MB freigeben.</string>
+    <string name="core_voice_model_base_eu_body">Dieses Modell verwendet die Sprache, in der Sie tippen, genau wie das 40-Sprachen-Modell. Es deckt nur europäische Sprachen ab, daher ist der Download kleiner.</string>
+    <string name="core_voice_model_base_multi_body">Dieses Modell gleicht Genauigkeit und Geschwindigkeit aus. Es deckt jede Sprache ab, die Whisper kennt. Wähle es aus, wenn das kleine Modell zu langsam ist.</string>
+    <string name="core_voice_model_base_world_body">Dieses Modell verwendet die Sprache, in der Sie tippen, anstatt zu raten. Kurze Sätze werden viel zuverlässiger. Wählen Sie es aus, wenn seine Liste Ihre Sprachen enthält.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d Sprache</item>
+        <item quantity="other">%1$d Sprachen</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Dies ist eines der genauesten Whisper-Modelle, aber es ist für die meisten Telefone zu groß. Der Download beträgt 1,5 GB. Nur ein Gerät mit viel Arbeitsspeicher kann es laden.</string>
+    <string name="core_voice_model_large_v3_multi_body">Dies ist das genaueste Whisper-Modell und am besten darin, die von Ihnen gesprochene Sprache zu erkennen. Der Download beträgt 1,5 GB. Nur ein Gerät mit viel Arbeitsspeicher kann es laden. Das Turbo-Modell ist fast genauso genau und halb so groß.</string>
+    <string name="core_voice_model_medium_multi_body">Dieses Modell bietet eine Genauigkeit, die fast an Desktop-Niveau heranreicht. Jeder Satz dauert einige Sekunden. Das Modell belegt während der Ausführung fast ein Gigabyte Arbeitsspeicher.</string>
+    <string name="core_voice_model_single_language_body">Dieses Modell verarbeitet nur %1$s. Es hat keinen Spracherkennungsschritt. Dies macht es schneller und etwas genauer als ein mehrsprachiges Modell derselben Größe.</string>
+    <string name="core_voice_model_small_multi_body">Dieses Modell bietet die beste Genauigkeit, die auf einem Telefon noch gut läuft. Es verarbeitet Akzente und Hintergrundgeräusche besser als das Basismodell. Es deckt jede Sprache ab, die Whisper kennt.</string>
+    <string name="core_voice_model_small_world_body">Dieses Modell verwendet die Sprache, in der Sie tippen, und bietet die Genauigkeit des Small-Modells. Es ist das genaueste Modell, das noch auf ein Telefon passt.</string>
+    <string name="core_voice_model_tiny_multi_body">Dies ist das schnellste mehrsprachige Modell. Es funktioniert gut bei klarer Sprache, aber Lärm verringert die Genauigkeit.</string>
+    <string name="core_voice_model_turbo_multi_body">Dieses Modell erkennt die Sprache, die Sie sprechen, viel besser als die kleineren Modelle. Wählen Sie es aus, wenn ein kleineres Modell Ihre Sprache als die falsche Sprache transkribiert. Es ist ein großer Download und jeder Satz dauert einige Sekunden.</string>
+    <string name="core_voice_size_base_label">Basis</string>
+    <string name="core_voice_size_large_label">Groß</string>
+    <string name="core_voice_size_medium_label">Mittel</string>
+    <string name="core_voice_size_small_label">Klein</string>
+    <string name="core_voice_size_tiny_label">Winzig</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Empfohlen</string>
+    <string name="core_voice_whisper_mel_bins_error">Dieses Sprachmodell benötigt ein %1$s-Band-Spektrogramm, das nicht mit der Datei übereinstimmt, mit der es heruntergeladen wurde. Löschen Sie das Modell in den Einstellungen und laden Sie es erneut herunter.</string>
+    <string name="core_voice_whisper_model_load_error">Das Sprachmodell wurde nicht geladen. Die Datei ist möglicherweise beschädigt. Löschen Sie das Modell in den Einstellungen und laden Sie es erneut herunter.</string>
+    <string name="core_voice_whisper_transcribe_error">Die Spracheingabe hat nicht funktioniert. Versuchen Sie es erneut oder wählen Sie ein kleineres Modell.</string>
+</resources>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">קוד חד-פעמי</string>
+    <string name="core_content_clip_entity_otp_tag">קוד</string>
+    <string name="core_content_clip_entity_phone_label">מספר טלפון</string>
+    <string name="core_content_clip_entity_phone_tag">טלפון</string>
+    <string name="core_content_clip_entity_url_label">קישור</string>
+    <string name="core_content_clip_entity_url_tag">קישור</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">ל-%1$d קטע יש הרחבות אחרות ש-Espanso לא יכול להכיל. רק הראשונה נכתבה.</item>
+        <item quantity="other">ל-%1$d קטעים יש הרחבות אחרות ש-Espanso לא יכול להכיל. רק הראשונה מכל אחד נכתבה.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">קטע טקסט %1$d מוגבל לתוכנות מחשב מסוימות. בטלפון שלך הוא עובד בכל מקום.</item>
+        <item quantity="other">%1$d קטעי טקסט מוגבלים לתוכנות מחשב מסוימות. בטלפון שלך הם עובדים בכל מקום.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d קטע טקסט מבקש ממך לבחור מרשימה. האפליקציה בוחרת אחד באקראי במקום.</item>
+        <item quantity="other">%1$d קטעי טקסט מבקשים ממך לבחור מרשימה. האפליקציה בוחרת אחד באקראי במקום.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d קטע קוד מבקש אישור לפני הרחבה. ל-Espanso אין הגדרה כזו, לכן הוא יורחב שם באופן אוטומטי.</item>
+        <item quantity="other">%1$d קטעי קוד מבקשים אישור לפני הרחבה. ל-Espanso אין הגדרה כזו, לכן הם יורחבו שם באופן אוטומטי.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d קטע משתמש בפורמט תאריך שהאפליקציה אינה יכולה לכתוב במלואו. האפליקציה השמיטה את החלק שהיא אינה יכולה לבצע.</item>
+        <item quantity="other">%1$d קטעים משתמשים בפורמטי תאריך שהאפליקציה אינה יכולה לכתוב במלואם. האפליקציה השמיטה את החלקים שהיא אינה יכולה לבצע.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">קטע טקסט אחד (%1$d) נמצא בתיקייה כבויה. ל-Espanso אין מתג תיקיות, לכן הוא יורחב שם.</item>
+        <item quantity="other">%1$d קטעי טקסט נמצאים בתיקיות כבויות. ל-Espanso אין מתג תיקיות, לכן הם יורחבו שם.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">האפליקציה דילגה על קטע קוד %1$d שאין לו מה להוסיף.</item>
+        <item quantity="other">האפליקציה דילגה על %1$d קטעי קוד שאין להם מה להוסיף.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d קטע מבקש ממך למלא טופס. האפליקציה מכניסה את הטופס כטקסט, עם הסמן בריק הראשון.</item>
+        <item quantity="other">%1$d קטעים מבקשים ממך למלא טופס. האפליקציה מכניסה כל טופס כטקסט, עם הסמן בריק הראשון.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">האפליקציה דילגה על %1$d קטע קוד שמכניס תמונה.</item>
+        <item quantity="other">האפליקציה דילגה על %1$d קטעי קוד שמכניסים תמונות.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">הקובץ קורא %1$d קובץ אחר. קובץ אחד לא יכול להביא את האחרים איתו.</item>
+        <item quantity="other">הקובץ קורא %1$d קבצים אחרים. קובץ אחד לא יכול להביא את האחרים איתו.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">קטע קוד %1$d מצביע על קטעי קוד אחרים. ל-Espanso אין דרך לציין זאת, לכן הקישורים הושמטו.</item>
+        <item quantity="other">%1$d קטעי קוד מצביעים על קטעי קוד אחרים. ל-Espanso אין דרך לציין זאת, לכן הקישורים הושמטו.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">טריגר %1$d נועד לעבוד בתוך מילה. בטלפון שלך הוא עובד רק כמילה שלמה.</item>
+        <item quantity="other">%1$d טריגרים נועדו לעבוד בתוך מילה. בטלפון שלך הם עובדים רק כמילים שלמות.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">קטע קוד %1$d משתמש בערך שאין לו שווה ערך ב-Espanso. הוא נכתב כפי שהוא.</item>
+        <item quantity="other">%1$d קטעי קוד משתמשים בערכים שאין להם שווה ערך ב-Espanso. הם נכתבים כפי שהם.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">האפליקציה הסירה את התבנית מ-%1$d קטע קוד. האפליקציה לא מריצה תבניות בצורה זו. קטע הקוד נשאר ברשימה.</item>
+        <item quantity="other">האפליקציה הסירה את התבנית מ-%1$d קטעי קוד. האפליקציה לא מריצה תבניות בצורה זו. קטעי הקוד נשארים ברשימה.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d קטע משתמש בטקסט מעוצב. האפליקציה שומרת את המילים ומסירה את העיצוב.</item>
+        <item quantity="other">%1$d קטעים משתמשים בטקסט מעוצב. האפליקציה שומרת את המילים ומסירה את העיצוב.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d קטע טקסט מריץ פקודה במחשב שלך. האפליקציה השמיטה את הפקודה ולעולם לא מריצה אותה.</item>
+        <item quantity="other">%1$d קטעי טקסט מריצים פקודות במחשב שלך. האפליקציה השמיטה את הפקודות ולעולם לא מריצה אותן.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">טריגר %1$d אינו מסתיים במילה, לכן האפליקציה לא יכולה לעקוב אחריו. קטע הקוד שלו נשאר ברשימה.</item>
+        <item quantity="other">%1$d טריגרים אינם מסתיימים במילה, לכן האפליקציה לא יכולה לעקוב אחריהם. קטעי הקוד שלהם נשארים ברשימה.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d קטע טקסט מכיל טקסט בסוגריים מסולסלים שהאפליקציה ממלאת, כגון {date}. הוא יורחב במקום להופיע כפי שנכתב.</item>
+        <item quantity="other">%1$d קטעי טקסט מכילים טקסט בסוגריים מסולסלים שהאפליקציה ממלאת, כגון {date}. הם יורחבו במקום להופיע כפי שנכתבו.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d קטע משנה את האותיות הגדולות של מה שהתבנית שלו תפסה. Espanso לא יכול לעשות זאת, לכן הטקסט שנתפס מוכנס ללא שינוי.</item>
+        <item quantity="other">%1$d קטעים משנים את האותיות הגדולות של מה שהתבניות שלהם תפסו. Espanso לא יכול לעשות זאת, לכן הטקסט שנתפס מוכנס ללא שינוי.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d קטע משתמש בערך שאין לאפליקציה שווה ערך עבורו. חלק זה יופיע ריק.</item>
+        <item quantity="other">%1$d קטעים משתמשים בערכים שאין לאפליקציה שווה ערך עבורם. חלקים אלו יופיעו ריקים.</item>
+    </plurals>
+    <string name="core_content_font_error_download">האפליקציה לא מצליחה להוריד את הגופן. בדוק את החיבור שלך ונסה שוב.</string>
+    <string name="core_content_font_error_empty">הקובץ ריק.</string>
+    <string name="core_content_font_error_load">האפליקציה לא יכולה לטעון את קובץ הגופן הזה.</string>
+    <string name="core_content_font_error_markup">קובץ זה הוא קובץ HTML או XML, לא גופן.</string>
+    <string name="core_content_font_error_no_storage">אין אחסון זמין עבור הגופן.</string>
+    <string name="core_content_font_error_not_a_font">קובץ זה לא נראה כמו גופן מסוג .ttf או .otf.</string>
+    <string name="core_content_font_error_read">האפליקציה אינה יכולה לקרוא את הגופן.</string>
+    <string name="core_content_font_error_save">האפליקציה אינה יכולה לשמור את הגופן.</string>
+    <string name="core_content_font_error_too_large">גופן חייב להיות קטן מ-%1$d מ\"ב.</string>
+    <string name="core_content_font_error_too_many">ספריית הגופנים מלאה. מחק גופן ונסה שוב.</string>
+    <string name="core_content_font_error_too_short">הקובץ קצר מדי מכדי להיות גופן.</string>
+    <string name="core_content_font_error_woff">האפליקציה אינה יכולה לקרוא גופני אינטרנט מסוג WOFF. השתמש בגרסת ה-.ttf או ה-.otf של הגופן.</string>
+    <string name="core_content_font_error_woff2">האפליקציה אינה יכולה לקרוא גופני אינטרנט מסוג WOFF2. השתמש בגרסת .ttf או .otf של הגופן.</string>
+    <string name="core_content_font_error_zip">קובץ זה הוא ארכיון zip, לא גופן.</string>
+    <string name="core_content_selection_macro_add_contact">איש קשר</string>
+    <string name="core_content_selection_macro_calendar">לוח שנה</string>
+    <string name="core_content_selection_macro_call">שיחה</string>
+    <string name="core_content_selection_macro_case_lower">אותיות קטנות</string>
+    <string name="core_content_selection_macro_case_sentence">אות ראשונה גדולה</string>
+    <string name="core_content_selection_macro_case_title">אותיות רישיות בתחילת מילה</string>
+    <string name="core_content_selection_macro_case_upper">אותיות גדולות</string>
+    <string name="core_content_selection_macro_chat_bold">מודגש</string>
+    <string name="core_content_selection_macro_chat_italic">נטוי</string>
+    <string name="core_content_selection_macro_chat_mono">מונו</string>
+    <string name="core_content_selection_macro_chat_strike">קו חוצה</string>
+    <string name="core_content_selection_macro_colour">צבע</string>
+    <string name="core_content_selection_macro_copy">העתק</string>
+    <string name="core_content_selection_macro_digits_latin">ספרות</string>
+    <string name="core_content_selection_macro_email">אימייל</string>
+    <string name="core_content_selection_macro_fancy">מהודר</string>
+    <string name="core_content_selection_macro_find">חיפוש</string>
+    <string name="core_content_selection_macro_format">פורמט</string>
+    <string name="core_content_selection_macro_grammar">דקדוק</string>
+    <string name="core_content_selection_macro_lines_bullet">תבליטים</string>
+    <string name="core_content_selection_macro_lines_dedupe">ייחודי</string>
+    <string name="core_content_selection_macro_lines_number">מספר</string>
+    <string name="core_content_selection_macro_lines_sort">מיין</string>
+    <string name="core_content_selection_macro_map">מפה</string>
+    <string name="core_content_selection_macro_open">פתח</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">דבר</string>
+    <string name="core_content_selection_macro_replace">החלף</string>
+    <string name="core_content_selection_macro_search">חיפוש</string>
+    <string name="core_content_selection_macro_share">שיתוף</string>
+    <string name="core_content_selection_macro_sms">הודעה</string>
+    <string name="core_content_selection_macro_time_zones">אזורי זמן</string>
+    <string name="core_content_selection_macro_to_bangla">בנגלית</string>
+    <string name="core_content_selection_macro_to_banglish">בנגליש</string>
+    <string name="core_content_selection_macro_translate">תרגם</string>
+    <string name="core_content_selection_macro_url_decode">פענוח</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">האפליקציה השאירה %2$d הרחבה מחוץ ל-\"%1$s\".</item>
+        <item quantity="other">האפליקציה השאירה %2$d הרחבות מחוץ ל-\"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">האפליקציה הסירה את התבנית מ-\"%1$s\". התבנית אינה נכונה. הקטע נשאר ברשימה.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">האפליקציה הסירה תיקייה אחת (%1$d) ללא שם או שחוזרת על עצמה. קטעי הטקסט שלה הועברו ללא תיקייה.</item>
+        <item quantity="other">האפליקציה הסירה %1$d תיקיות ללא שם או שחוזרות על עצמן. קטעי הטקסט שלהן הועברו ללא תיקייה.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">בקובץ יש יותר קטעי טקסט ממה שהאפליקציה שומרת. האפליקציה ייבאה את ה-%1$d הראשון.</item>
+        <item quantity="other">בקובץ יש יותר קטעי טקסט ממה שהאפליקציה שומרת. האפליקציה ייבאה את ה-%1$d הראשונים.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">לקטע אין שם, לכן האפליקציה קראה לו על שם השורה הראשונה שלו.</string>
+    <string name="core_content_snippet_repair_no_text">האפליקציה השמיטה את \"%1$s\". אין לו טקסט.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">האפליקציה הסירה את התבנית מ-\"%1$s\". היא הייתה ארוכה מ-%2$d תו.</item>
+        <item quantity="other">האפליקציה הסירה את התבנית מ-\"%1$s\". היא הייתה ארוכה מ-%2$d תווים.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">האפליקציה קיצרה את \"%1$s\". הוא היה ארוך יותר מ-%2$d תו.</item>
+        <item quantity="other">האפליקציה קיצרה את \"%1$s\". הוא היה ארוך יותר מ-%2$d תווים.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">שם האפליקציה שבה אתה מקליד</string>
+    <string name="core_content_snippet_var_clip_info">הפריט החדש ביותר בלוח הגזירים</string>
+    <string name="core_content_snippet_var_cursor_info">המקום שבו הסמן נוחת</string>
+    <string name="core_content_snippet_var_date_info">התאריך של היום</string>
+    <string name="core_content_snippet_var_datetime_info">התאריך והשעה</string>
+    <string name="core_content_snippet_var_day_info">יום בחודש</string>
+    <string name="core_content_snippet_var_isodate_info">התאריך בפורמט ISO, לדוגמה 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">התאריך והשעה בפורמט ISO</string>
+    <string name="core_content_snippet_var_month_info">שם החודש</string>
+    <string name="core_content_snippet_var_package_info">שם החבילה של אותה אפליקציה</string>
+    <string name="core_content_snippet_var_selection_info">הטקסט שבחרת בשדה</string>
+    <string name="core_content_snippet_var_time12_info">השעה הנוכחית בפורמט של 12 שעות</string>
+    <string name="core_content_snippet_var_time_info">השעה כעת בפורמט של 24 שעות</string>
+    <string name="core_content_snippet_var_timestamp_info">הזמן בשניות Unix</string>
+    <string name="core_content_snippet_var_timezone_info">אזור הזמן, לדוגמה GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">UUID אקראי חדש</string>
+    <string name="core_content_snippet_var_weekday_info">שם היום, לדוגמה יום ראשון</string>
+    <string name="core_content_snippet_var_year_info">השנה, עם ארבע ספרות</string>
+    <string name="core_content_sticker_pack_imported_label">מדבקות מיובאות</string>
+    <string name="core_content_sticker_repair_image_missing">האפליקציה הסירה את \"%1$s\". התמונה שלו חסרה.</string>
+    <string name="core_content_sticker_repair_image_unreadable">האפליקציה הסירה את \"%1$s\". האפליקציה לא יכולה לקרוא את התמונה שלו.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">בחבילה יש %1$d מדבקה. האפליקציה שומרת את ה-%2$d הראשונה.</item>
+        <item quantity="other">בחבילה יש %1$d מדבקות. האפליקציה שומרת את ה-%2$d הראשונות.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">האפליקציה איבדה מדבקה. המדבקה לא מציינת קובץ תמונה.</string>
+    <string name="core_content_sticker_repair_none_listed">קובץ החבילה לא מפרט מדבקות.</string>
+    <string name="core_content_sticker_repair_not_saved">האפליקציה השמיטה את \"%1$s\". האפליקציה לא יכולה לשמור אותו.</string>
+</resources>

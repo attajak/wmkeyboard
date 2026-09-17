@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Quell\'elenco di parole chiave emoji è vuoto o illeggibile.</string>
+    <string name="core_emoji_dict_error_http">Il server non ha inviato il file. Il codice di errore è HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Quel file non è un elenco di parole chiave emoji.</string>
+    <string name="core_emoji_dict_error_save">L\'app non è riuscita a salvare l\'elenco delle parole chiave emoji.</string>
+    <string name="core_emoji_dict_error_too_large">Quell\'elenco di parole chiave emoji è troppo grande.</string>
+</resources>

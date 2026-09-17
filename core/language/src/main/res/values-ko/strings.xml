@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">앱이 %1$d개의 키를 가장 가까운 키로 변경했습니다.</item>
+        <item quantity="other">앱이 %1$d개의 키를 가장 가까운 키들로 변경했습니다.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">앱이 키 %1$d개를 제거했습니다. 이 키보드에는 동일한 기능을 하는 키가 없습니다(코드 %2$s).</item>
+        <item quantity="other">앱이 키 %1$d개를 제거했습니다. 이 키보드에는 동일한 기능을 하는 키가 없습니다(코드 %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">앱이 %1$d개 키의 라벨 크기는 유지했지만 텍스트 스타일은 유지하지 않았습니다. 이 키보드는 라벨을 단일 스타일로 그립니다.</item>
+        <item quantity="other">앱이 %1$d개 키의 라벨 크기는 유지했지만 텍스트 스타일은 유지하지 않았습니다. 이 키보드는 라벨을 단일 스타일로 그립니다.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">앱이 %1$d개의 문자를 이 키보드에서 사용하는 형식으로 변경했습니다.</item>
+        <item quantity="other">앱이 %1$d개의 문자를 이 키보드에서 사용하는 형식으로 변경했습니다.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d개의 키에 길게 누르기 문자가 없습니다. 해당 문자는 열지 않은 두 번째 파일에 보관되어 있습니다.</item>
+        <item quantity="other">%1$d개의 키에 길게 누르기 문자가 없습니다. 해당 문자는 열지 않은 두 번째 파일에 보관되어 있습니다.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">다른 키보드는 키 너비를 다르게 측정합니다. 앱이 이 그리드에 맞게 너비를 변경했습니다.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s 레이어의 점자 점 키 %1$d개의 점 번호가 1~6 범위를 벗어났습니다.</item>
+        <item quantity="other">%2$s 레이어의 점자 점 키 %1$d개의 점 번호가 1~6 범위를 벗어났습니다.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s 레이어의 %1$d개 키에 라벨과 출력이 없습니다. 아무것도 입력되지 않으며, 이 레이아웃을 켜면 앱이 해당 키를 삭제합니다.</item>
+        <item quantity="other">%2$s 레이어의 %1$d개 키에 라벨과 출력이 없습니다. 아무것도 입력되지 않으며, 이 레이아웃을 켜면 앱이 해당 키들을 삭제합니다.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s 레이어의 %1$d번째 행이 비어 있습니다.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s 레이어의 키 %1$d개가 패널 구성 요소입니다. 구성 요소는 패널 레이아웃에서만 작동합니다.</item>
+        <item quantity="other">%2$s 레이어의 키 %1$d개가 패널 구성 요소입니다. 구성 요소는 패널 레이아웃에서만 작동합니다.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s 레이어의 %1$d번째 행에 너비가 지정되지 않은 키가 있습니다.</string>
+    <string name="core_lang_layout_key_span_error">%2$s 레이어의 %1$d행에 1개 미만 또는 %3$d개 초과의 행을 차지하는 키가 있습니다.</string>
+    <string name="core_lang_layout_letters_empty_error">문자 레이어에 키가 없습니다.</string>
+    <string name="core_lang_layout_no_delete_error">이 레이아웃에는 삭제 키가 없습니다. 실수를 수정할 수 없습니다.</string>
+    <string name="core_lang_layout_no_enter_error">레이아웃에 엔터 키가 없습니다.</string>
+    <string name="core_lang_layout_no_shift_warning">레이아웃에 Shift 키가 없습니다. 대문자를 입력하려면 키를 길게 누르세요.</string>
+    <string name="core_lang_layout_no_space_error">레이아웃에 스페이스 키가 없습니다.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s 레이어에는 문자로 돌아가는 키가 없습니다. 이 레이어를 나갈 수 없습니다.</string>
+    <string name="core_lang_layout_persistent_warning">키보드가 닫혀도 %1$s 레이어가 열린 상태로 유지됩니다. 이 레이어를 종료할 방법을 마련해 두었는지 확인하세요.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">이 레이아웃에는 빠져나갈 수 있는 키가 없습니다. ABC 키, 기호 키 또는 툴바의 사용자 지정 레이아웃 도구와 같이 이 레이아웃을 종료할 수 있는 방법이 있는지 확인하세요.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s 레이어의 %1$d행에 레이어보다 더 많은 행을 차지하는 키가 있습니다. 키보드가 마지막 행에서 이를 중단합니다.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s 레이어의 %1$d번째 행에 키가 %3$d개 있습니다. %4$d개의 키만 누를 수 있을 만큼 충분히 크게 유지됩니다.</item>
+        <item quantity="other">%2$s 레이어의 %1$d번째 행에 키가 %3$d개 있습니다. %4$d개의 키만 누를 수 있을 만큼 충분히 크게 유지됩니다.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s 레이어에 %2$d개의 행이 있습니다. %3$d개의 행만 들어갈 수 있습니다.</item>
+        <item quantity="other">%1$s 레이어에 %2$d개의 행이 있습니다. %3$d개의 행만 들어갈 수 있습니다.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s 레이어의 키 %1$d개가 이 앱 버전에서 알 수 없는 작업을 사용합니다.</item>
+        <item quantity="other">%2$s 레이어의 키 %1$d개가 이 앱 버전에서 알 수 없는 작업을 사용합니다.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s 레이어의 %1$d번째 행이 다른 행보다 넓습니다. 키보드가 이 행의 키를 더 좁게 그립니다.</string>
+    <string name="core_lang_numeral_scope_display_only">표시 전용</string>
+    <string name="core_lang_numeral_scope_everywhere">모든 곳</string>
+    <string name="core_lang_numeral_scope_text_fields">텍스트 필드</string>
+    <string name="core_lang_numeral_system_auto">자동</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d 구성 요소가 두 번 이상 나타납니다. 앱은 첫 번째 복사본을 유지합니다.</item>
+        <item quantity="other">%1$d 구성 요소가 두 번 이상 나타납니다. 앱은 각 구성 요소의 첫 번째 복사본을 유지합니다.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">이 패널에는 키가 없습니다. 앱이 표준 패널을 대신 사용합니다.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d개의 키에 패널에서 작동하지 않는 작업이 설정되어 있어 앱에서 삭제합니다.</item>
+        <item quantity="other">%1$d개의 키에 패널에서 작동하지 않는 작업이 설정되어 있어 앱에서 삭제합니다.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">이 패널에는 ABC 키가 없습니다. 도구 모음이나 뒤로 버튼을 사용하여 키로 돌아가세요.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">앱이 구성 요소의 두 번째 복사본을 삭제했습니다.</string>
+    <string name="core_lang_panel_repair_field_added">앱이 새 행에 패널의 기본 구성 요소를 추가했습니다.</string>
+    <string name="core_lang_panel_repair_field_dropped">앱이 이 패널에 속하지 않는 구성 요소를 삭제했습니다.</string>
+    <string name="core_lang_panel_repair_key_dropped">앱이 패널에서 작동하지 않는 동작을 가진 키를 삭제했습니다.</string>
+    <string name="core_lang_panel_repair_reset">앱이 빈 패널을 표준 패널로 교체했습니다.</string>
+    <string name="core_lang_panel_required_field_error">이 패널에 주요 구성 요소가 없습니다. 앱이 패널을 그릴 때 하나를 추가합니다.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d개의 구성 요소가 이 패널에 속하지 않아 앱에서 삭제합니다.</item>
+        <item quantity="other">%1$d개의 구성 요소가 이 패널에 속하지 않아 앱에서 삭제합니다.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">앱이 %1$s 레이어에서 빈 키를 삭제했습니다.</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s 레이어의 키가 점자 점 %2$d을(를) 사용했습니다. 앱에서 이를 점 %3$d(으)로 변경했습니다.</string>
+    <string name="core_lang_repair_delete_key_added">문자 레이어에 삭제 키가 없어서 앱이 추가했습니다.</string>
+    <string name="core_lang_repair_enter_key_added">문자 레이어에 엔터 키가 없습니다. 앱이 자동으로 추가했습니다.</string>
+    <string name="core_lang_repair_field_key_deleted">앱이 %1$s 레이어에서 패널 구성 요소를 삭제했습니다. 구성 요소는 패널 레이아웃에서만 작동합니다.</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s 레이어의 키는 %2$s를 나타냅니다. 앱이 이를 %3$s로 입력하도록 만들었습니다.</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s 레이어의 키가 %2$s을(를) 나타내는 문자로 나열되었습니다. 이는 문자가 아니므로 앱에서 일반 키로 설정했습니다.</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s 레이어의 키가 %2$d개의 행을 차지했습니다. 앱이 이를 %3$d개로 조정했습니다.</string>
+    <string name="core_lang_repair_key_width_capped">%1$s 레이어의 키 너비가 %2$s 단위였습니다. 앱에서 %3$s 단위로 조정했습니다.</string>
+    <string name="core_lang_repair_key_width_set">%1$s 레이어의 키에 너비가 없습니다. 앱에서 너비를 1로 설정했습니다.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s 레이어에 작동하는 키가 없습니다. 이제 내장 그리드를 사용합니다.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s 레이어에 문자로 돌아가는 키가 없습니다. 앱이 ABC 키를 추가했습니다.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s 레이어의 행에 키가 %2$d개 있었습니다. 앱이 처음 %3$d개를 유지합니다.</item>
+        <item quantity="other">%1$s 레이어의 행에 키가 %2$d개 있었습니다. 앱이 처음 %3$d개를 유지합니다.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s 레이어의 행 너비가 %2$s 단위였습니다. 행이 맞도록 키 크기를 줄였습니다.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s 레이어에 %2$d개의 행이 있었습니다. 앱에서 처음 %3$d개를 유지합니다.</item>
+        <item quantity="other">%1$s 레이어에 %2$d개의 행이 있었습니다. 앱에서 처음 %3$d개를 유지합니다.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">문자 레이어에 스페이스 키가 없었습니다. 앱이 하나를 추가했습니다.</string>
+    <string name="core_lang_repair_unknown_key_deleted">앱이 %1$s 레이어의 키를 삭제했습니다. 해당 작업 \"%2$s\"을(를) 알 수 없습니다.</string>
+</resources>

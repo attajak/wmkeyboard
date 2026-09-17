@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Dizionari</string>
+    <string name="core_addons_type_dictionary_singular_label">Dizionario</string>
+    <string name="core_addons_type_emoji_font_label">Font emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Font emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Parole chiave emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Pacchetto parole chiave emoji</string>
+    <string name="core_addons_type_espanso_label">Pacchetti Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Pacchetto Espanso</string>
+    <string name="core_addons_type_font_label">Font</string>
+    <string name="core_addons_type_font_singular_label">Carattere</string>
+    <string name="core_addons_type_icon_pack_label">Pacchetti icone</string>
+    <string name="core_addons_type_icon_pack_singular_label">Pacchetto icone</string>
+    <string name="core_addons_type_layout_label">Layout</string>
+    <string name="core_addons_type_layout_singular_label">Layout</string>
+    <string name="core_addons_type_plugin_label">Plugin</string>
+    <string name="core_addons_type_plugin_singular_label">Plugin</string>
+    <string name="core_addons_type_snippets_label">Snippet</string>
+    <string name="core_addons_type_snippets_singular_label">Pacchetto snippet</string>
+    <string name="core_addons_type_sound_label">Suoni</string>
+    <string name="core_addons_type_sound_pack_label">Pacchetti audio</string>
+    <string name="core_addons_type_sound_pack_singular_label">Pacchetto audio</string>
+    <string name="core_addons_type_sound_singular_label">Suono tasto</string>
+    <string name="core_addons_type_stickers_label">Pacchetti di adesivi</string>
+    <string name="core_addons_type_stickers_singular_label">Pacchetto sticker</string>
+    <string name="core_addons_type_theme_label">Temi</string>
+    <string name="core_addons_type_theme_singular_label">Tema</string>
+    <string name="core_addons_type_unknown_label">Altro</string>
+    <string name="core_addons_type_unknown_singular_label">Componente aggiuntivo</string>
+    <string name="core_addons_type_vocabulary_label">Vocabolario</string>
+    <string name="core_addons_type_vocabulary_singular_label">Pacchetto vocabolario</string>
+</resources>

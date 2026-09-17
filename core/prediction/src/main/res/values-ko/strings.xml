@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">서버가 파일을 보내지 않았습니다. 오류 코드는 HTTP %1$s입니다.</string>
+    <string name="core_pred_wordlist_malformed_error">해당 단어 목록이 비어 있거나 읽을 수 없습니다.</string>
+    <string name="core_pred_wordlist_no_space_error">기기 저장 공간이 부족합니다. 일부 파일을 삭제한 후 다시 시도하세요.</string>
+    <string name="core_pred_wordlist_save_error">단어 목록을 저장할 수 없습니다. 다시 시도하세요.</string>
+    <string name="core_pred_wordlist_size_all_label">전체</string>
+    <string name="core_pred_wordlist_size_large_label">대형</string>
+    <string name="core_pred_wordlist_size_medium_label">중간</string>
+    <string name="core_pred_wordlist_size_small_label">작게</string>
+    <string name="core_pred_wordlist_variant_brazil_label">브라질</string>
+    <string name="core_pred_wordlist_variant_europe_label">유럽</string>
+</resources>

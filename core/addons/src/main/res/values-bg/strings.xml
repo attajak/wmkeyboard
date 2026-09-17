@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Речници</string>
+    <string name="core_addons_type_dictionary_singular_label">Речник</string>
+    <string name="core_addons_type_emoji_font_label">Шрифтове за емоджита</string>
+    <string name="core_addons_type_emoji_font_singular_label">Шрифт за емоджи</string>
+    <string name="core_addons_type_emoji_keywords_label">Ключови думи за емоджита</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Пакет с ключови думи за емоджи</string>
+    <string name="core_addons_type_espanso_label">Пакети Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Пакет Espanso</string>
+    <string name="core_addons_type_font_label">Шрифтове</string>
+    <string name="core_addons_type_font_singular_label">Шрифт</string>
+    <string name="core_addons_type_icon_pack_label">Пакети с икони</string>
+    <string name="core_addons_type_icon_pack_singular_label">Пакет с икони</string>
+    <string name="core_addons_type_layout_label">Оформления</string>
+    <string name="core_addons_type_layout_singular_label">Оформление</string>
+    <string name="core_addons_type_plugin_label">Приставки</string>
+    <string name="core_addons_type_plugin_singular_label">Плъгин</string>
+    <string name="core_addons_type_snippets_label">Фрагменти</string>
+    <string name="core_addons_type_snippets_singular_label">Пакет с фрагменти</string>
+    <string name="core_addons_type_sound_label">Звуци</string>
+    <string name="core_addons_type_sound_pack_label">Звукови пакети</string>
+    <string name="core_addons_type_sound_pack_singular_label">Звуков пакет</string>
+    <string name="core_addons_type_sound_singular_label">Звук на клавиш</string>
+    <string name="core_addons_type_stickers_label">Пакети със стикери</string>
+    <string name="core_addons_type_stickers_singular_label">Пакет със стикери</string>
+    <string name="core_addons_type_theme_label">Теми</string>
+    <string name="core_addons_type_theme_singular_label">Тема</string>
+    <string name="core_addons_type_unknown_label">Други</string>
+    <string name="core_addons_type_unknown_singular_label">Добавка</string>
+    <string name="core_addons_type_vocabulary_label">Речник</string>
+    <string name="core_addons_type_vocabulary_singular_label">Пакет с речник</string>
+</resources>

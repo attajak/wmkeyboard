@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Atsisiųstas failas sugadintas. Jo kontrolinė suma nesutampa. Bandykite atsisiųsti dar kartą.</string>
+    <string name="core_input_cjk_download_error_http">Serveris grąžino HTTP būseną %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Atsisiųsti nepavyko. Patikrinkite ryšį ir bandykite dar kartą.</string>
+    <string name="core_input_cjk_download_error_network_detail">Atsisiųsti nepavyko: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Įrenginyje nepakanka vietos. Pirmiausia atlaisvinkite šiek tiek vietos.</string>
+    <string name="core_input_cjk_download_error_truncated">Atsisiuntimo metu ryšys nutrūko. Paspauskite „Tęsti“, kad tęstumėte.</string>
+    <string name="core_input_cjk_download_error_unavailable">Šis paketas dar nepasiekiamas.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Radikalių kodų į Hanzi simbolius lentelė, 29 000 simbolių. Klaviatūrai šis paketas reikalingas „Cangjie“ ir „Quick“ išdėstymams.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) žodynas</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana skaitymai iš mozc, 1,08 mln. įrašų, apie 42 MB. Klaviatūrai šis paketas reikalingas japonų kalbos konvertavimui.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Japonų kalbos kana į kandži žodynas</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Jyutping skaitymų į Hanzi simbolius lentelė, 163 000 įrašų. Klaviatūrai šis paketas reikalingas kantonų kalbos konvertavimui.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantono kalbos „Jyutping“ žodynas</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Hanzi rašmenys ir frazės iš CC-CEDICT, 120 000 įrašų. Klaviatūrai šis paketas reikalingas kinų kalbos konvertavimui.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Kinų kalbos „Pinyin“ žodynas</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Brūkšnių tvarkos ir hieroglifų atitikmenų lentelė. Klaviatūrai šis paketas reikalingas brūkšnių išdėstymui.</string>
+    <string name="core_input_cjk_pack_stroke_title">Kinų kalbos brūkšnių (笔画) žodynas</string>
+    <string name="core_input_double_pinyin_off_label">Išjungta (pilnas Pinyin)</string>
+</resources>

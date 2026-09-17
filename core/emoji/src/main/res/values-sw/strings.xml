@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Orodha hiyo ya maneno ya emoji ni tupu au haiwezi kusomeka.</string>
+    <string name="core_emoji_dict_error_http">Seva haikutuma faili. Msimbo wa hitilafu ni HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Faili hiyo si orodha ya maneno muhimu ya emoji.</string>
+    <string name="core_emoji_dict_error_save">Programu haikuweza kuhifadhi orodha ya maneno muhimu ya emoji.</string>
+    <string name="core_emoji_dict_error_too_large">Orodha hiyo ya maneno muhimu ya emoji ni kubwa sana.</string>
+</resources>

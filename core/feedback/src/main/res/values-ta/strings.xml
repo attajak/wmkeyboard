@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">இந்த பேக்கிற்கு சவுண்ட் பேக் ஃபார்மேட் %1$s தேவைப்படுகிறது. ஆப்ஸைப் புதுப்பிக்கவும்.</string>
+    <string name="core_feedback_pack_reject_no_samples">இந்த பேக்கில் ஆப் இயக்கக்கூடிய ஒலிகள் எதுவும் இல்லை.</string>
+    <string name="core_feedback_pack_reject_too_large">ஒலி தொகுப்பு %1$s MB-க்கும் குறைவாக இருக்க வேண்டும்.</string>
+    <string name="core_feedback_sound_import_empty_error">கோப்பு காலியாக உள்ளது.</string>
+    <string name="core_feedback_sound_import_html_error">இது ஒரு HTML அல்லது XML கோப்பு, ஒலி (sound) அல்ல.</string>
+    <string name="core_feedback_sound_import_mp4_error">இந்த ஆப் MP4 மற்றும் M4A கோப்புகளை இயக்காது. MP3 கோப்பைப் பயன்படுத்தவும்.</string>
+    <string name="core_feedback_sound_import_no_storage_error">உங்கள் சாதனத்தில் சேமிப்பகம் இல்லை.</string>
+    <string name="core_feedback_sound_import_read_error">ஆப்ஸால் ஒலியை வாசிக்க முடியவில்லை.</string>
+    <string name="core_feedback_sound_import_save_error">பயன்பாட்டால் ஒலியைச் சேமிக்க முடியவில்லை.</string>
+    <string name="core_feedback_sound_import_too_large_error">விசை ஒலியானது %1$s MB-க்கும் குறைவாக இருக்க வேண்டும்.</string>
+    <string name="core_feedback_sound_import_too_short_error">இந்தக் கோப்பு ஒலியாக இருப்பதற்கு மிகவும் சிறியதாக உள்ளது.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">இது MP3, OGG அல்லது WAV கோப்பு போலத் தெரியவில்லை.</string>
+    <string name="core_feedback_sound_import_zip_error">இது ஒரு ஜிப் ஆர்க்கைவ், ஒலி கோப்பு அல்ல.</string>
+</resources>

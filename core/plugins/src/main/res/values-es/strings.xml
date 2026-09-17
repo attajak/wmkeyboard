@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Este plugin no tiene una función render().</string>
+    <string name="core_plugins_error_not_installed">Ese complemento no está instalado.</string>
+    <string name="core_plugins_error_script_failed">El script falló.</string>
+    <string name="core_plugins_error_script_missing">Falta el script para ese complemento.</string>
+    <string name="core_plugins_error_turned_off">Ese complemento está desactivado.</string>
+    <string name="core_plugins_permission_storage_label">Guardar datos en tu dispositivo</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” contiene un script que no es un texto UTF-8 válido.</string>
+    <string name="core_plugins_reject_bad_id">Este plugin tiene un ID no válido. Un ID debe tener entre 3 y 64 caracteres. Un ID puede contener letras minúsculas, números, puntos, guiones y guiones bajos.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” contiene código Lua compilado. Un complemento debe usar código fuente sin formato, para que puedas leerlo antes de que se ejecute.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” tiene un script vacío.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” no tiene su archivo de script (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Este complemento necesita una versión más reciente de WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Este plugin no tiene nombre.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” no indica qué versión es.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” tiene un script mayor a %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Esta versión de WM Keyboard no reconoce el permiso “%1$s”. La aplicación no puede determinar qué tiene permitido hacer “%2$s”.</string>
+    <string name="core_plugins_stopped_cancelled">La aplicación detuvo este complemento.</string>
+    <string name="core_plugins_stopped_deadline">Este complemento tardó demasiado. La aplicación lo detuvo.</string>
+    <string name="core_plugins_stopped_instructions">Este complemento realizó demasiadas tareas a la vez. La aplicación lo detuvo.</string>
+    <string name="core_plugins_stopped_not_responding">Este complemento dejó de responder. La aplicación lo cerró.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Este complemento dejó de responder de nuevo. La aplicación lo desactivó.</string>
+    <string name="core_plugins_stopped_recursion">Este plugin se llamó a sí mismo demasiadas veces. La aplicación lo ha detenido.</string>
+    <string name="core_plugins_stopped_unexpected">Este complemento se detuvo inesperadamente.</string>
+    <string name="core_plugins_ui_insert_action">Insertar</string>
+    <string name="core_plugins_ui_repair_no_type">Un widget no especificó qué tipo es.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Una lista de widgets contenía algo que no es un widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Una barra de pestañas no tenía páginas.</string>
+    <string name="core_plugins_ui_repair_text_budget">Este plugin pidió dibujar demasiado texto. La aplicación omitió parte.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Parte del texto era demasiado largo para mostrarse. La aplicación lo ha acortado.</string>
+    <string name="core_plugins_ui_repair_too_deep">Algunos widgets estaban anidados demasiado profundamente para dibujarlos.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Solo se muestran las primeras %1$d pestañas.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Este complemento solicitó más de %1$d widgets. La aplicación descartó el resto.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Esta compilación no reconoce el tipo de widget “%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Pestaña %1$d</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Този пакет изисква формат на звуковия пакет %1$s. Актуализирайте приложението.</string>
+    <string name="core_feedback_pack_reject_no_samples">Този пакет не съдържа звуци, които приложението може да възпроизведе.</string>
+    <string name="core_feedback_pack_reject_too_large">Пакетът със звуци трябва да бъде по-малък от %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Файлът е празен.</string>
+    <string name="core_feedback_sound_import_html_error">Това е HTML или XML файл, а не звуков файл.</string>
+    <string name="core_feedback_sound_import_mp4_error">Приложението не възпроизвежда MP4 и M4A файлове. Използвайте MP3 файл.</string>
+    <string name="core_feedback_sound_import_no_storage_error">На устройството ви няма свободно място.</string>
+    <string name="core_feedback_sound_import_read_error">Приложението не може да прочете звука.</string>
+    <string name="core_feedback_sound_import_save_error">Приложението не може да запише звука.</string>
+    <string name="core_feedback_sound_import_too_large_error">Звукът на клавиша трябва да бъде по-малък от %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Файлът е твърде кратък, за да бъде звук.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Това не изглежда като MP3, OGG или WAV файл.</string>
+    <string name="core_feedback_sound_import_zip_error">Това е zip архив, а не звуков файл.</string>
+</resources>

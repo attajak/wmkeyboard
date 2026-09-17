@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">El proveïdor d\'IA ha finalitzat la resposta amb un error</string>
+    <string name="ftools_photo_error_failed">L\'aplicació no ha pogut obtenir les fotos</string>
+    <string name="ftools_photo_error_offline">L\'aplicació no pot connectar amb el servei de fotos. Comprova la xarxa i torna a intentar-ho.</string>
+    <string name="ftools_photo_error_timeout">El servei de fotos ha trigat massa a respondre</string>
+    <string name="ftools_search_error_json_disabled">Aquesta instància de SearXNG no ha habilitat la seva API JSON. Afegeix 3bjson&lt;/b&gt; a 3bsearch.formats&lt;/b&gt; al seu fitxer settings.yml, o utilitza una altra instància.</string>
+</resources>

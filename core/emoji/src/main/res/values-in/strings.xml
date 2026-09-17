@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Daftar kata kunci emoji tersebut kosong atau tidak dapat dibaca.</string>
+    <string name="core_emoji_dict_error_http">Server tidak mengirim file. Kode kesalahan adalah HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">File tersebut bukan daftar kata kunci emoji.</string>
+    <string name="core_emoji_dict_error_save">Aplikasi tidak dapat menyimpan daftar kata kunci emoji.</string>
+    <string name="core_emoji_dict_error_too_large">Daftar kata kunci emoji tersebut terlalu besar.</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Serveren sendte ikke filen. Fejlkoden er HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Den ordliste er tom eller ulæselig.</string>
+    <string name="core_pred_wordlist_no_space_error">Der er ikke nok lagerplads på din enhed. Slet nogle filer, og prøv derefter igen.</string>
+    <string name="core_pred_wordlist_save_error">Appen kan ikke gemme ordlisten. Prøv igen.</string>
+    <string name="core_pred_wordlist_size_all_label">Alt</string>
+    <string name="core_pred_wordlist_size_large_label">Stor</string>
+    <string name="core_pred_wordlist_size_medium_label">Medium</string>
+    <string name="core_pred_wordlist_size_small_label">Lille</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brasilien</string>
+    <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+</resources>

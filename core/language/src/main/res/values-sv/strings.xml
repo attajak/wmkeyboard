@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Appen ändrade %1$d tangent till den närmaste tangenten den har.</item>
+        <item quantity="other">Appen ändrade %1$d tangenter till de närmaste tangenterna den har.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Appen tog bort %1$d tangent. Det här tangentbordet har ingen tangent som gör samma sak (kod %2$s).</item>
+        <item quantity="other">Appen tog bort %1$d tangenter. Det här tangentbordet har inga tangenter som gör samma sak (koder %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Appen behöll etikettstorleken för %1$d tangent men inte dess textstil. Detta tangentbord ritar etiketter i en stil.</item>
+        <item quantity="other">Appen behöll etikettstorleken för %1$d tangenter men inte deras textstil. Detta tangentbord ritar etiketter i en stil.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Appen ändrade %1$d bokstav till den form som detta tangentbord skriver.</item>
+        <item quantity="other">Appen ändrade %1$d bokstäver till den form som detta tangentbord skriver.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tangent saknar bokstäver vid långtryck. Filen sparar dem i en andra fil som du inte öppnade.</item>
+        <item quantity="other">%1$d tangenter saknar bokstäver vid långtryck. Filen sparar dem i en andra fil som du inte öppnade.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Det andra tangentbordet mäter tangentbredder annorlunda. Appen ändrade bredderna för att passa detta rutnät.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d punktskriftstangent i %2$s-lagret har ett punktnummer utanför 1 till 6.</item>
+        <item quantity="other">%1$d punktskriftstangenter i %2$s-lagret har ett punktnummer utanför 1 till 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d tangent i %2$s-lagret har ingen etikett och ingen utmatning. Den skriver ingenting, och appen tar bort den när du aktiverar den här layouten.</item>
+        <item quantity="other">%1$d tangenter i %2$s-lagret har ingen etikett och ingen utmatning. De skriver ingenting, och appen tar bort dem när du aktiverar den här layouten.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Rad %1$d i lagret %2$s är tom.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d tangent i %2$s-lagret är en panelkomponent. Komponenter fungerar endast i en panellayout.</item>
+        <item quantity="other">%1$d tangenter i %2$s-lagret är panelkomponenter. Komponenter fungerar endast i en panellayout.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Rad %1$d i lagret %2$s har en tangent utan bredd.</string>
+    <string name="core_lang_layout_key_span_error">Rad %1$d i %2$s-lagret har en tangent som täcker färre än 1 eller fler än %3$d rader.</string>
+    <string name="core_lang_layout_letters_empty_error">Bokstavslagret har inga tangenter.</string>
+    <string name="core_lang_layout_no_delete_error">Layouten har ingen raderingstangent. Du kan inte korrigera ett misstag.</string>
+    <string name="core_lang_layout_no_enter_error">Layouten har ingen returtangent.</string>
+    <string name="core_lang_layout_no_shift_warning">Layouten har ingen skifttangent. För att skriva en stor bokstav, tryck och håll ned en tangent.</string>
+    <string name="core_lang_layout_no_space_error">Layouten saknar en mellanslagstangent.</string>
+    <string name="core_lang_layout_no_way_back_error">Lagret %1$s har ingen tangent som går tillbaka till bokstäverna. Du kan inte lämna detta lager.</string>
+    <string name="core_lang_layout_persistent_warning">%1$s-lagret förblir öppet när tangentbordet stängs. Se till att du har ett sätt att avsluta denna layout.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Denna layout har ingen tangent för att lämna den. Se till att du har ett sätt att avsluta denna layout: en ABC-tangent, en symboltangent eller verktyget för sekundär layout i verktygsfältet.</string>
+    <string name="core_lang_layout_span_past_end_warning">Rad %1$d i lagret %2$s har en tangent som täcker fler rader än vad lagret har. Tangentbordet stoppar den vid den sista raden.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Rad %1$d i %2$s-lagret har %3$d tangent. Endast %4$d tangenter förblir tillräckligt stora för att trycka på.</item>
+        <item quantity="other">Rad %1$d i %2$s-lagret har %3$d tangenter. Endast %4$d tangenter förblir tillräckligt stora för att trycka på.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Lagret %1$s har %2$d rad. Endast %3$d rader får plats.</item>
+        <item quantity="other">Lagret %1$s har %2$d rader. Endast %3$d rader får plats.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d tangent i %2$s-lagret använder en åtgärd som den här versionen av appen inte känner till.</item>
+        <item quantity="other">%1$d tangenter i %2$s-lagret använder en åtgärd som den här versionen av appen inte känner till.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Rad %1$d i %2$s-lagret är bredare än de andra raderna. Tangentbordet ritar tangenterna på denna rad smalare.</string>
+    <string name="core_lang_numeral_scope_display_only">Endast visning</string>
+    <string name="core_lang_numeral_scope_everywhere">Överallt</string>
+    <string name="core_lang_numeral_scope_text_fields">Textfält</string>
+    <string name="core_lang_numeral_system_auto">Auto</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponent förekommer mer än en gång. Appen behåller den första kopian.</item>
+        <item quantity="other">%1$d komponenter förekommer mer än en gång. Appen behåller den första kopian av varje.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Denna panel har inga tangenter. Appen använder standardpanelen istället.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tangent har en åtgärd som inte fungerar på en panel. Appen tar bort den.</item>
+        <item quantity="other">%1$d tangenter har åtgärder som inte fungerar på en panel. Appen tar bort dem.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Den här panelen har ingen ABC-tangent. Använd verktygsfältet eller bakåtknappen för att återgå till tangenterna.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Appen tog bort en kopia av en komponent.</string>
+    <string name="core_lang_panel_repair_field_added">Appen lade till panelens huvudkomponent i en ny rad.</string>
+    <string name="core_lang_panel_repair_field_dropped">Appen tog bort en komponent som inte hör till denna panel.</string>
+    <string name="core_lang_panel_repair_key_dropped">Appen tog bort en tangent vars åtgärd inte fungerar på en panel.</string>
+    <string name="core_lang_panel_repair_reset">Appen ersatte den tomma panelen med standardpanelen.</string>
+    <string name="core_lang_panel_required_field_error">Denna panel saknar sin huvudkomponent. Appen lägger till en när den ritar panelen.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponent hör inte till denna panel. Appen tar bort den.</item>
+        <item quantity="other">%1$d komponenter hör inte till denna panel. Appen tar bort dem.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Appen tog bort en tom tangent i lagret %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">En tangent i lagret %1$s använde punktskriftspunkt %2$d. Appen ändrade den till punkt %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Bokstavslagret saknade en raderingstangent. Appen lade till en.</string>
+    <string name="core_lang_repair_enter_key_added">Bokstavslagret hade ingen returtangent. Appen lade till en.</string>
+    <string name="core_lang_repair_field_key_deleted">Appen tog bort en panelkomponent från lagret %1$s. Komponenter fungerar endast i en panellayout.</string>
+    <string name="core_lang_repair_key_letters_anchored">En tangent i %1$s-lagret står för %2$s. Appen fick den att skriva %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">En tangent i lagret %1$s listade %2$s som de bokstäver den representerar. Det är inte bokstäver, så appen gjorde det till en vanlig tangent.</string>
+    <string name="core_lang_repair_key_span_clamped">En nyckel i lagret %1$s täckte %2$d rader. Appen fick den att täcka %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">En tangent i lagret %1$s var %2$s enheter bred. Appen gjorde den %3$s enheter bred.</string>
+    <string name="core_lang_repair_key_width_set">En tangent i lagret %1$s saknade bredd. Appen satte bredden till 1.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s-lagret hade inga tangenter som fungerar. Det använder nu det inbyggda rutnätet.</string>
+    <string name="core_lang_repair_letters_key_added">Lagret %1$s saknade en tangent för att gå tillbaka till bokstäverna. Appen lade till en ABC-tangent.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">En rad i %1$s-lagret hade %2$d tangent. Appen behåller de första %3$d.</item>
+        <item quantity="other">En rad i %1$s-lagret hade %2$d tangenter. Appen behåller de första %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">En rad i %1$s-lagret var %2$s enheter bred. Appen gjorde tangenterna mindre så att raden får plats.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Lagret %1$s hade %2$d rad. Appen behåller de första %3$d.</item>
+        <item quantity="other">Lagret %1$s hade %2$d rader. Appen behåller de första %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Bokstavslagret saknade mellanslagstangent. Appen lade till en.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Appen tog bort en tangent i %1$s-lagret. Dess åtgärd \"%2$s\" är okänd.</string>
+</resources>

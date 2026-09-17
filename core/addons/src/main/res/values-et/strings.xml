@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Sõnastikud</string>
+    <string name="core_addons_type_dictionary_singular_label">Sõnastik</string>
+    <string name="core_addons_type_emoji_font_label">Emotikonide fondid</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emotikonide font</string>
+    <string name="core_addons_type_emoji_keywords_label">Emotikonide märksõnad</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Emotikonide märksõnade pakk</string>
+    <string name="core_addons_type_espanso_label">Espanso pakid</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso pakk</string>
+    <string name="core_addons_type_font_label">Fondid</string>
+    <string name="core_addons_type_font_singular_label">Font</string>
+    <string name="core_addons_type_icon_pack_label">Ikoonipaketid</string>
+    <string name="core_addons_type_icon_pack_singular_label">Ikoonipakk</string>
+    <string name="core_addons_type_layout_label">Paigutused</string>
+    <string name="core_addons_type_layout_singular_label">Paigutus</string>
+    <string name="core_addons_type_plugin_label">Pluginad</string>
+    <string name="core_addons_type_plugin_singular_label">Plugin</string>
+    <string name="core_addons_type_snippets_label">Tekstilõigud</string>
+    <string name="core_addons_type_snippets_singular_label">Tekstijuppide pakk</string>
+    <string name="core_addons_type_sound_label">Helid</string>
+    <string name="core_addons_type_sound_pack_label">Helipakid</string>
+    <string name="core_addons_type_sound_pack_singular_label">Helipakett</string>
+    <string name="core_addons_type_sound_singular_label">Klahviheli</string>
+    <string name="core_addons_type_stickers_label">Kleebisepakid</string>
+    <string name="core_addons_type_stickers_singular_label">Kleebistepakk</string>
+    <string name="core_addons_type_theme_label">Teemad</string>
+    <string name="core_addons_type_theme_singular_label">Teema</string>
+    <string name="core_addons_type_unknown_label">Muu</string>
+    <string name="core_addons_type_unknown_singular_label">Lisandmoodul</string>
+    <string name="core_addons_type_vocabulary_label">Sõnavara</string>
+    <string name="core_addons_type_vocabulary_singular_label">Sõnavarapakk</string>
+</resources>

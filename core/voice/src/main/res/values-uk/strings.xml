@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Сервер Hugging Face не надіслав файл. Код помилки: HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">З\'єднання перервалося під час завантаження. Спробуйте ще раз, щоб продовжити з того місця, де воно зупинилося.</string>
+    <string name="core_voice_download_space_error">На вашому пристрої недостатньо пам\'яті. Спочатку потрібно звільнити близько %1$s МБ.</string>
+    <string name="core_voice_model_base_eu_body">Ця модель використовує мову, якою ви друкуєте, так само як і модель на 40 мов. Вона охоплює лише європейські мови, тому завантаження менше.</string>
+    <string name="core_voice_model_base_multi_body">Ця модель збалансовує точність і швидкість. Вона охоплює кожну мову, яку знає Whisper. Виберіть її, якщо модель Small працює занадто повільно.</string>
+    <string name="core_voice_model_base_world_body">Ця модель використовує мову, якою ви друкуєте, замість того, щоб вгадувати. Короткі фрази стають набагато надійнішими. Виберіть її, коли в її списку є ваші мови.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d мова</item>
+        <item quantity="other">%1$d мови</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Це одна з найточніших моделей Whisper, але вона занадто велика для більшості телефонів. Розмір завантаження становить 1,5 ГБ. Її може завантажити лише пристрій з великим обсягом пам\'яті.</string>
+    <string name="core_voice_model_large_v3_multi_body">Це найбільш точна модель Whisper, яка найкраще розпізнає мову, якою ви розмовляєте. Розмір завантаження становить 1,5 ГБ. Лише пристрій із великим обсягом пам\'яті зможе її завантажити. Модель Turbo майже така ж точна, але вдвічі менша.</string>
+    <string name="core_voice_model_medium_multi_body">Ця модель забезпечує точність майже як на настільному комп\'ютері. Кожна фраза займає кілька секунд. Модель використовує майже один гігабайт пам\'яті під час роботи.</string>
+    <string name="core_voice_model_single_language_body">Ця модель обробляє лише %1$s. У ній немає етапу визначення мови. Це робить її швидшою та трохи точнішою за багатомовну модель такого ж розміру.</string>
+    <string name="core_voice_model_small_multi_body">Ця модель забезпечує найкращу точність, яка все ще добре працює на телефоні. Вона краще обробляє акценти та фоновий шум, ніж базова модель. Вона охоплює всі мови, які знає Whisper.</string>
+    <string name="core_voice_model_small_world_body">Ця модель використовує мову, якою ви друкуєте, і має точність моделі Small. Це найточніша модель, яка все ще поміщається на телефоні.</string>
+    <string name="core_voice_model_tiny_multi_body">Це найшвидша багатомовна модель. Вона добре працює з чіткою вимовою, але шум знижує точність.</string>
+    <string name="core_voice_model_turbo_multi_body">Ця модель розпізнає мову, якою ви розмовляєте, набагато краще, ніж менші моделі. Виберіть її, якщо менша модель розпізнає вашу мову як іншу. Це великий файл для завантаження, і обробка кожної фрази займає кілька секунд.</string>
+    <string name="core_voice_size_base_label">Базовий</string>
+    <string name="core_voice_size_large_label">Великий</string>
+    <string name="core_voice_size_medium_label">Середній</string>
+    <string name="core_voice_size_small_label">Малий</string>
+    <string name="core_voice_size_tiny_label">Крихітний</string>
+    <string name="core_voice_size_turbo_label">Турбо</string>
+    <string name="core_voice_tier_recommended_label">Рекомендовано</string>
+    <string name="core_voice_whisper_mel_bins_error">Ця голосова модель потребує спектрограму з %1$s смугами, що не збігається з файлом, з яким вона була завантажена. Видаліть модель у налаштуваннях і завантажте її знову.</string>
+    <string name="core_voice_whisper_model_load_error">Голосова модель не завантажилася. Можливо, файл пошкоджено. Видаліть модель у налаштуваннях і завантажте її знову.</string>
+    <string name="core_voice_whisper_transcribe_error">Голосове введення не спрацювало. Спробуйте ще раз або виберіть меншу модель.</string>
+</resources>

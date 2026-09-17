@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">ఈ ప్లగిన్‌కు render() ఫంక్షన్ లేదు.</string>
+    <string name="core_plugins_error_not_installed">ఆ ప్లగిన్ ఇన్‌స్టాల్ చేయబడలేదు.</string>
+    <string name="core_plugins_error_script_failed">స్క్రిప్ట్ విఫలమైంది.</string>
+    <string name="core_plugins_error_script_missing">ఆ ప్లగిన్ కోసం స్క్రిప్ట్ లేదు.</string>
+    <string name="core_plugins_error_turned_off">ఆ ప్లగిన్ ఆఫ్ చేయబడింది.</string>
+    <string name="core_plugins_permission_storage_label">మీ పరికరంలో డేటాను సేవ్ చేయండి</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s”లో చెల్లుబాటు కాని UTF-8 వచన స్క్రిప్ట్ ఉంది.</string>
+    <string name="core_plugins_reject_bad_id">ఈ ప్లగిన్ ఐడి చెల్లుబాటు కాదు. ఐడి 3 నుండి 64 అక్షరాల పొడవు ఉండాలి. ఐడిలో చిన్న అక్షరాలు, సంఖ్యలు, చుక్కలు, డాష్‌లు మరియు అండర్‌స్కోర్‌లు ఉండవచ్చు.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” కంపైల్ చేయబడిన Lua కోడ్‌ను కలిగి ఉంది. ప్లగిన్ తప్పనిసరిగా సాధారణ సోర్స్ కోడ్‌ను ఉపయోగించాలి, తద్వారా అది రన్ అవ్వడానికి ముందే మీరు దాన్ని చదవగలరు.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” ఖాళీ స్క్రిప్ట్‌ను కలిగి ఉంది.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s”కి దాని స్క్రిప్ట్ ఫైల్ (%2$s) లేదు.</string>
+    <string name="core_plugins_reject_newer_version">ఈ ప్లగిన్‌కు WM కీబోర్డ్ యొక్క కొత్త వెర్షన్ అవసరం.</string>
+    <string name="core_plugins_reject_no_name">ఈ ప్లగిన్‌కు పేరు లేదు.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” ఏ వెర్షన్ అనేది చెప్పడం లేదు.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” స్క్రిప్ట్ %2$d KB కంటే పెద్దదిగా ఉంది.</string>
+    <string name="core_plugins_reject_unknown_permission">WM కీబోర్డ్ యొక్క ఈ వెర్షన్‌కు “%1$s” అనుమతి తెలియదు. “%2$s” ఏమి చేయడానికి అనుమతించబడిందో యాప్ మీకు చెప్పలేదు.</string>
+    <string name="core_plugins_stopped_cancelled">యాప్ ఈ ప్లగిన్‌ను ఆపివేసింది.</string>
+    <string name="core_plugins_stopped_deadline">ఈ ప్లగిన్ చాలా సమయం తీసుకుంది. యాప్ దీన్ని ఆపివేసింది.</string>
+    <string name="core_plugins_stopped_instructions">ఈ ప్లగిన్ ఒకే సమయంలో ఎక్కువ పని చేసింది. యాప్ దీన్ని ఆపివేసింది.</string>
+    <string name="core_plugins_stopped_not_responding">ఈ ప్లగిన్ స్పందించడం ఆపివేసింది. యాప్ దీన్ని మూసివేసింది.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">ఈ ప్లగిన్ మళ్లీ స్పందించడం ఆపివేసింది. యాప్ దీన్ని ఆపివేసింది.</string>
+    <string name="core_plugins_stopped_recursion">ఈ ప్లగిన్ తనను తాను చాలాసార్లు పిలుచుకుంది. యాప్ దీన్ని ఆపివేసింది.</string>
+    <string name="core_plugins_stopped_unexpected">ఈ ప్లగిన్ అనుకోకుండా ఆగిపోయింది.</string>
+    <string name="core_plugins_ui_insert_action">ఇన్సర్ట్ చేయండి</string>
+    <string name="core_plugins_ui_repair_no_type">ఒక విడ్జెట్ అది ఏ రకమైనదో చెప్పలేదు.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">విడ్జెట్ జాబితాలో విడ్జెట్ కానిది ఏదో ఉంది.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">ట్యాబ్ స్ట్రిప్‌లో పేజీలు లేవు.</string>
+    <string name="core_plugins_ui_repair_text_budget">ఈ ప్లగిన్ చాలా ఎక్కువ వచనాన్ని డ్రా చేయమని అడిగింది. యాప్ కొన్నింటిని వదిలివేసింది.</string>
+    <string name="core_plugins_ui_repair_text_shortened">కొంత టెక్స్ట్ డ్రా చేయడానికి చాలా పొడవుగా ఉంది. యాప్ దాన్ని కుదించింది.</string>
+    <string name="core_plugins_ui_repair_too_deep">కొన్ని విడ్జెట్‌లు డ్రా చేయడానికి వీలులేనంత లోతుగా ఉన్నాయి.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">మొదటి %1$d ట్యాబ్‌లు మాత్రమే చూపబడ్డాయి.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">ఈ ప్లగిన్ %1$d కంటే ఎక్కువ విడ్జెట్‌లను అడిగింది. యాప్ మిగిలిన వాటిని తొలగించింది.</string>
+    <string name="core_plugins_ui_repair_unknown_type">ఈ బిల్డ్‌కు “%1$s” విడ్జెట్ రకం తెలియదు.</string>
+    <string name="core_plugins_ui_tab_default_title">ట్యాబ్ %1$d</string>
+</resources>

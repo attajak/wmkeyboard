@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">השרת לא שלח את הקובץ. קוד השגיאה הוא HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">רשימת המילים הזו ריקה או לא ניתנת לקריאה.</string>
+    <string name="core_pred_wordlist_no_space_error">אין מספיק שטח אחסון במכשיר שלך. מחק כמה קבצים ונסה שוב.</string>
+    <string name="core_pred_wordlist_save_error">האפליקציה לא יכולה לשמור את רשימת המילים. נסה שוב.</string>
+    <string name="core_pred_wordlist_size_all_label">הכל</string>
+    <string name="core_pred_wordlist_size_large_label">גדול</string>
+    <string name="core_pred_wordlist_size_medium_label">בינוני</string>
+    <string name="core_pred_wordlist_size_small_label">קטן</string>
+    <string name="core_pred_wordlist_variant_brazil_label">ברזיל</string>
+    <string name="core_pred_wordlist_variant_europe_label">אירופה</string>
+</resources>

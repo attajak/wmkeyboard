@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">વન-ટાઇમ કોડ</string>
+    <string name="core_content_clip_entity_otp_tag">કોડ</string>
+    <string name="core_content_clip_entity_phone_label">ફોન નંબર</string>
+    <string name="core_content_clip_entity_phone_tag">ફોન</string>
+    <string name="core_content_clip_entity_url_label">લિંક</string>
+    <string name="core_content_clip_entity_url_tag">લિંક</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d સ્નિપેટમાં અન્ય વિસ્તરણો છે જે Espanso રાખી શકતું નથી. માત્ર પ્રથમ લખવામાં આવ્યું હતું.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સમાં અન્ય વિસ્તરણો છે જે Espanso રાખી શકતું નથી. દરેકનું માત્ર પ્રથમ લખવામાં આવ્યું હતું.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d સ્નિપેટ અમુક કમ્પ્યુટર પ્રોગ્રામ્સ સુધી મર્યાદિત છે. તમારા ફોન પર તે બધે જ કામ કરે છે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ અમુક કમ્પ્યુટર પ્રોગ્રામ્સ સુધી મર્યાદિત છે. તમારા ફોન પર તે બધે જ કામ કરે છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d સ્નિપેટ તમને સૂચિમાંથી પસંદ કરવાનું કહે છે. એપ તેના બદલે રેન્ડમલી એક પસંદ કરે છે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ તમને સૂચિમાંથી પસંદ કરવાનું કહે છે. એપ તેના બદલે રેન્ડમલી એક પસંદ કરે છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d સ્નિપેટ વિસ્તૃત થાય તે પહેલાં પૂછે છે. Espanso માં આવી કોઈ સેટિંગ નથી, તેથી તે ત્યાં પોતાની મેળે વિસ્તૃત થશે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ વિસ્તૃત થાય તે પહેલાં પૂછે છે. Espanso માં આવી કોઈ સેટિંગ નથી, તેથી તે ત્યાં પોતાની મેળે વિસ્તૃત થશે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d સ્નિપેટ એવી તારીખ ફોર્મેટનો ઉપયોગ કરે છે જે એપ સંપૂર્ણ રીતે લખી શકતી નથી. એપ જે ભાગ કરી શકતી નથી તેને બાકાત રાખ્યો છે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ એવી તારીખ ફોર્મેટનો ઉપયોગ કરે છે જે એપ સંપૂર્ણ રીતે લખી શકતી નથી. એપ જે ભાગો કરી શકતી નથી તેમને બાકાત રાખ્યા છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d સ્નિપેટ એવા ફોલ્ડરમાં છે જે બંધ છે. Espanso પાસે કોઈ ફોલ્ડર સ્વિચ નથી, તેથી તે ત્યાં વિસ્તરશે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ એવા ફોલ્ડર્સમાં છે જે બંધ છે. Espanso પાસે કોઈ ફોલ્ડર સ્વિચ નથી, તેથી તે ત્યાં વિસ્તરશે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">એપે %1$d સ્નિપેટ છોડી દીધું છે જેમાં દાખલ કરવા માટે કંઈ નથી.</item>
+        <item quantity="other">એપે %1$d સ્નિપેટ્સ છોડી દીધા છે જેમાં દાખલ કરવા માટે કંઈ નથી.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d સ્નિપેટ તમને ફોર્મ ભરવા માટે કહે છે. એપ ફોર્મને ટેક્સ્ટ તરીકે દાખલ કરે છે, જેમાં કર્સર પ્રથમ ખાલી જગ્યામાં હોય છે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ તમને ફોર્મ ભરવા માટે કહે છે. એપ દરેક ફોર્મને ટેક્સ્ટ તરીકે દાખલ કરે છે, જેમાં કર્સર પ્રથમ ખાલી જગ્યામાં હોય છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">એપે %1$d સ્નિપેટ છોડી દીધું જે ચિત્ર દાખલ કરે છે.</item>
+        <item quantity="other">એપે %1$d સ્નિપેટ્સ છોડી દીધા જે ચિત્રો દાખલ કરે છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">ફાઇલ %1$d અન્ય ફાઇલ વાંચે છે. એક ફાઇલ અન્યને પોતાની સાથે લાવી શકતી નથી.</item>
+        <item quantity="other">ફાઇલ %1$d અન્ય ફાઇલો વાંચે છે. એક ફાઇલ અન્યને પોતાની સાથે લાવી શકતી નથી.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d સ્નિપેટ અન્ય સ્નિપેટ્સ તરફ નિર્દેશ કરે છે. એસ્પેન્સો પાસે તે કહેવાની કોઈ રીત નથી, તેથી લિંક્સ છોડી દેવામાં આવી હતી.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ અન્ય સ્નિપેટ્સ તરફ નિર્દેશ કરે છે. એસ્પેન્સો પાસે તે કહેવાની કોઈ રીત નથી, તેથી લિંક્સ છોડી દેવામાં આવી હતી.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d ટ્રિગર શબ્દની અંદર કામ કરવા માટે છે. તમારા ફોન પર તે ફક્ત આખા શબ્દ તરીકે જ કામ કરે છે.</item>
+        <item quantity="other">%1$d ટ્રિગર્સ શબ્દની અંદર કામ કરવા માટે છે. તમારા ફોન પર તે ફક્ત આખા શબ્દો તરીકે જ કામ કરે છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d સ્નિપેટ એવી કિંમતનો ઉપયોગ કરે છે જેના માટે Espanso પાસે કોઈ સમકક્ષ નથી. તે જેવું છે તેવું જ લખવામાં આવે છે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ એવી કિંમતોનો ઉપયોગ કરે છે જેના માટે Espanso પાસે કોઈ સમકક્ષ નથી. તે જેવી છે તેવી જ લખવામાં આવે છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">એપે %1$d સ્નિપેટમાંથી પેટર્ન દૂર કરી છે. એપ તે આકારની પેટર્ન ચલાવતી નથી. સ્નિપેટ સૂચિમાં રહે છે.</item>
+        <item quantity="other">એપે %1$d સ્નિપેટ્સમાંથી પેટર્ન દૂર કરી છે. એપ તે આકારની પેટર્ન ચલાવતી નથી. સ્નિપેટ્સ સૂચિમાં રહે છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d સ્નિપેટ ફોર્મેટ કરેલા ટેક્સ્ટનો ઉપયોગ કરે છે. એપ શબ્દો રાખે છે અને ફોર્મેટિંગ દૂર કરે છે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ ફોર્મેટ કરેલા ટેક્સ્ટનો ઉપયોગ કરે છે. એપ શબ્દો રાખે છે અને ફોર્મેટિંગ દૂર કરે છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d સ્નિપેટ તમારા કમ્પ્યુટર પર કમાન્ડ ચલાવે છે. એપ કમાન્ડને બાકાત રાખે છે અને તેને ક્યારેય ચલાવતી નથી.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ તમારા કમ્પ્યુટર પર કમાન્ડ ચલાવે છે. એપ કમાન્ડ્સને બાકાત રાખે છે અને તેમને ક્યારેય ચલાવતી નથી.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d ટ્રિગર ફક્ત પ્રતીકોનું બનેલું છે, તેથી એપ તેને જોઈ શકતી નથી. તેનું સ્નિપેટ સૂચિમાં રહે છે.</item>
+        <item quantity="other">%1$d ટ્રિગર્સ ફક્ત પ્રતીકોના બનેલા છે, તેથી એપ તેમને જોઈ શકતી નથી. તેમના સ્નિપેટ્સ સૂચિમાં રહે છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d સ્નિપેટમાં કૌંસમાં ટેક્સ્ટ છે જે આ એપ ભરે છે, જેમ કે {date}. તે લખ્યા મુજબ દેખાવાને બદલે વિસ્તરશે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સમાં કૌંસમાં ટેક્સ્ટ છે જે આ એપ ભરે છે, જેમ કે {date}. તે લખ્યા મુજબ દેખાવાને બદલે વિસ્તરશે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d સ્નિપેટ તેના પેટર્ન દ્વારા કેપ્ચર કરેલા ટેક્સ્ટના કેપિટલ્સ બદલે છે. Espanso તે કરી શકતું નથી, તેથી કેપ્ચર કરેલ ટેક્સ્ટ યથાવત રહે છે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ તેમના પેટર્ન દ્વારા કેપ્ચર કરેલા ટેક્સ્ટના કેપિટલ્સ બદલે છે. Espanso તે કરી શકતું નથી, તેથી કેપ્ચર કરેલ ટેક્સ્ટ યથાવત રહે છે.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d સ્નિપેટ એવી કિંમતનો ઉપયોગ કરે છે જેના માટે એપ પાસે કોઈ સમકક્ષ નથી. તે ભાગ ખાલી આવે છે.</item>
+        <item quantity="other">%1$d સ્નિપેટ્સ એવી કિંમતોનો ઉપયોગ કરે છે જેના માટે એપ પાસે કોઈ સમકક્ષ નથી. તે ભાગો ખાલી આવે છે.</item>
+    </plurals>
+    <string name="core_content_font_error_download">એપ ફોન્ટ ડાઉનલોડ કરી શકતી નથી. તમારું કનેક્શન તપાસો અને ફરી પ્રયાસ કરો.</string>
+    <string name="core_content_font_error_empty">ફાઇલ ખાલી છે.</string>
+    <string name="core_content_font_error_load">એપ આ ફોન્ટ ફાઇલ લોડ કરી શકતી નથી.</string>
+    <string name="core_content_font_error_markup">આ ફાઇલ HTML અથવા XML ફાઇલ છે, ફોન્ટ નથી.</string>
+    <string name="core_content_font_error_no_storage">ફોન્ટ માટે કોઈ સ્ટોરેજ ઉપલબ્ધ નથી.</string>
+    <string name="core_content_font_error_not_a_font">આ ફાઇલ .ttf અથવા .otf ફોન્ટ જેવી લાગતી નથી.</string>
+    <string name="core_content_font_error_read">એપ ફોન્ટ વાંચી શકતી નથી.</string>
+    <string name="core_content_font_error_save">એપ ફોન્ટ સેવ કરી શકતી નથી.</string>
+    <string name="core_content_font_error_too_large">ફોન્ટ %1$d MB કરતા નાનો હોવો જોઈએ.</string>
+    <string name="core_content_font_error_too_many">ફોન્ટ લાઇબ્રેરી ભરાઈ ગઈ છે. એક ફોન્ટ ડિલીટ કરો અને ફરી પ્રયાસ કરો.</string>
+    <string name="core_content_font_error_too_short">ફાઇલ ફોન્ટ હોવા માટે ખૂબ ટૂંકી છે.</string>
+    <string name="core_content_font_error_woff">એપ WOFF વેબ ફોન્ટ્સ વાંચી શકતી નથી. ફોન્ટના .ttf અથવા .otf વર્ઝનનો ઉપયોગ કરો.</string>
+    <string name="core_content_font_error_woff2">એપ WOFF2 વેબ ફોન્ટ્સ વાંચી શકતી નથી. ફોન્ટના .ttf અથવા .otf વર્ઝનનો ઉપયોગ કરો.</string>
+    <string name="core_content_font_error_zip">આ ફાઇલ ઝિપ આર્કાઇવ છે, ફોન્ટ નથી.</string>
+    <string name="core_content_selection_macro_add_contact">સંપર્ક</string>
+    <string name="core_content_selection_macro_calendar">કેલેન્ડર</string>
+    <string name="core_content_selection_macro_call">કોલ કરો</string>
+    <string name="core_content_selection_macro_case_lower">નાના અક્ષરો</string>
+    <string name="core_content_selection_macro_case_sentence">વાક્ય કેસ</string>
+    <string name="core_content_selection_macro_case_title">ટાઈટલ કેસ</string>
+    <string name="core_content_selection_macro_case_upper">અપર કેસ</string>
+    <string name="core_content_selection_macro_chat_bold">બોલ્ડ</string>
+    <string name="core_content_selection_macro_chat_italic">ઇટાલિક</string>
+    <string name="core_content_selection_macro_chat_mono">મોનો</string>
+    <string name="core_content_selection_macro_chat_strike">સ્ટ્રાઈક</string>
+    <string name="core_content_selection_macro_colour">રંગ</string>
+    <string name="core_content_selection_macro_copy">કોપી કરો</string>
+    <string name="core_content_selection_macro_digits_latin">અંકો</string>
+    <string name="core_content_selection_macro_email">ઈમેલ</string>
+    <string name="core_content_selection_macro_fancy">ફેન્સી</string>
+    <string name="core_content_selection_macro_find">શોધો</string>
+    <string name="core_content_selection_macro_format">ફોર્મેટ</string>
+    <string name="core_content_selection_macro_grammar">વ્યાકરણ</string>
+    <string name="core_content_selection_macro_lines_bullet">બુલેટ્સ</string>
+    <string name="core_content_selection_macro_lines_dedupe">અનન્ય</string>
+    <string name="core_content_selection_macro_lines_number">નંબર</string>
+    <string name="core_content_selection_macro_lines_sort">સૉર્ટ કરો</string>
+    <string name="core_content_selection_macro_map">મેપ</string>
+    <string name="core_content_selection_macro_open">ખોલો</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">બોલો</string>
+    <string name="core_content_selection_macro_replace">બદલો</string>
+    <string name="core_content_selection_macro_search">શોધો</string>
+    <string name="core_content_selection_macro_share">શેર કરો</string>
+    <string name="core_content_selection_macro_sms">મેસેજ</string>
+    <string name="core_content_selection_macro_time_zones">ઝોન</string>
+    <string name="core_content_selection_macro_to_bangla">બંગાળી</string>
+    <string name="core_content_selection_macro_to_banglish">બંગ્લિશ</string>
+    <string name="core_content_selection_macro_translate">અનુવાદ કરો</string>
+    <string name="core_content_selection_macro_url_decode">ડીકોડ</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">એપ્લિકેશને \"%1$s\" માંથી %2$d વિસ્તરણ બાકાત રાખ્યું છે.</item>
+        <item quantity="other">એપ્લિકેશને \"%1$s\" માંથી %2$d વિસ્તરણો બાકાત રાખ્યા છે.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">એપે \"%1$s\" માંથી પેટર્ન દૂર કરી છે. પેટર્ન સાચી નથી. સ્નિપેટ સૂચિમાં જ રહે છે.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">એપ્લિકેશને %1$d ફોલ્ડર છોડી દીધું છે જેનું કોઈ નામ નથી અથવા જે બીજાનું પુનરાવર્તન કરે છે. તેના સ્નિપેટ્સ ફોલ્ડર વગર આવ્યા છે.</item>
+        <item quantity="other">એપ્લિકેશને %1$d ફોલ્ડર્સ છોડી દીધા છે જેનું કોઈ નામ નથી અથવા જે બીજાનું પુનરાવર્તન કરે છે. તેમના સ્નિપેટ્સ ફોલ્ડર વગર આવ્યા છે.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">ફાઇલમાં એપ રાખે છે તેના કરતા વધુ સ્નિપેટ્સ છે. એપે પ્રથમ %1$d આયાત કર્યા છે.</item>
+        <item quantity="other">ફાઇલમાં એપ રાખે છે તેના કરતા વધુ સ્નિપેટ્સ છે. એપે પ્રથમ %1$d આયાત કર્યા છે.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">સ્નિપેટનું કોઈ નામ નથી, તેથી એપે તેને તેની પ્રથમ લાઇનના નામ પરથી નામ આપ્યું છે.</string>
+    <string name="core_content_snippet_repair_no_text">એપે \"%1$s\" ને છોડી દીધું. તેમાં કોઈ ટેક્સ્ટ નથી.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">એપે \"%1$s\" માંથી પેટર્ન દૂર કરી છે. તે %2$d અક્ષર કરતા લાંબી હતી.</item>
+        <item quantity="other">એપે \"%1$s\" માંથી પેટર્ન દૂર કરી છે. તે %2$d અક્ષરો કરતા લાંબી હતી.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">એપે \"%1$s\" ને ટૂંકું કર્યું. તે %2$d અક્ષર કરતા લાંબુ હતું.</item>
+        <item quantity="other">એપે \"%1$s\" ને ટૂંકું કર્યું. તે %2$d અક્ષરો કરતા લાંબુ હતું.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">તમે જે એપમાં ટાઈપ કરો છો તેનું નામ</string>
+    <string name="core_content_snippet_var_clip_info">સૌથી નવી ક્લિપબોર્ડ એન્ટ્રી</string>
+    <string name="core_content_snippet_var_cursor_info">જ્યાં કર્સર ઉતરે છે તે જગ્યા</string>
+    <string name="core_content_snippet_var_date_info">આજની તારીખ</string>
+    <string name="core_content_snippet_var_datetime_info">તારીખ અને સમય</string>
+    <string name="core_content_snippet_var_day_info">મહિનાનો દિવસ</string>
+    <string name="core_content_snippet_var_isodate_info">ISO ફોર્મમાં તારીખ, ઉદાહરણ તરીકે 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">ISO ફોર્મમાં તારીખ અને સમય</string>
+    <string name="core_content_snippet_var_month_info">મહિનાનું નામ</string>
+    <string name="core_content_snippet_var_package_info">તે એપનું પેકેજ નામ</string>
+    <string name="core_content_snippet_var_selection_info">તમે ફીલ્ડમાં જે ટેક્સ્ટ પસંદ કરો છો</string>
+    <string name="core_content_snippet_var_time12_info">૧૨-કલાકના ફોર્મેટમાં અત્યારનો સમય</string>
+    <string name="core_content_snippet_var_time_info">અત્યારનો સમય 24-કલાકના ફોર્મેટમાં</string>
+    <string name="core_content_snippet_var_timestamp_info">યુનિક્સ સેકન્ડમાં સમય</string>
+    <string name="core_content_snippet_var_timezone_info">સમય ઝોન, ઉદાહરણ તરીકે GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">એક નવું રેન્ડમ UUID</string>
+    <string name="core_content_snippet_var_weekday_info">દિવસનું નામ, ઉદાહરણ તરીકે રવિવાર</string>
+    <string name="core_content_snippet_var_year_info">વર્ષ, ચાર અંકો સાથે</string>
+    <string name="core_content_sticker_pack_imported_label">આયાત કરેલ સ્ટીકરો</string>
+    <string name="core_content_sticker_repair_image_missing">એપે \"%1$s\" ને દૂર કર્યું. તેની છબી ખૂટે છે.</string>
+    <string name="core_content_sticker_repair_image_unreadable">એપે \"%1$s\" ને છોડી દીધું. એપ તેની છબી વાંચી શકતી નથી.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">પેકમાં %1$d સ્ટીકર છે. એપ પ્રથમ %2$d રાખે છે.</item>
+        <item quantity="other">પેકમાં %1$d સ્ટીકરો છે. એપ પ્રથમ %2$d રાખે છે.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">એપે એક સ્ટીકર કાઢી નાખ્યું છે. સ્ટીકરના નામમાં કોઈ ઇમેજ ફાઇલ નથી.</string>
+    <string name="core_content_sticker_repair_none_listed">પેક ફાઇલમાં કોઈ સ્ટીકર સૂચિબદ્ધ નથી.</string>
+    <string name="core_content_sticker_repair_not_saved">એપે \"%1$s\" છોડી દીધું છે. એપ તેને સેવ કરી શકતી નથી.</string>
+</resources>

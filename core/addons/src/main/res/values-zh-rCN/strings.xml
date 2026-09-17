@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">词典</string>
+    <string name="core_addons_type_dictionary_singular_label">词典</string>
+    <string name="core_addons_type_emoji_font_label">表情符号字体</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emoji 字体</string>
+    <string name="core_addons_type_emoji_keywords_label">表情符号关键词</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">表情符号关键字包</string>
+    <string name="core_addons_type_espanso_label">Espanso 包</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso 包</string>
+    <string name="core_addons_type_font_label">字体</string>
+    <string name="core_addons_type_font_singular_label">字体</string>
+    <string name="core_addons_type_icon_pack_label">图标包</string>
+    <string name="core_addons_type_icon_pack_singular_label">图标包</string>
+    <string name="core_addons_type_layout_label">布局</string>
+    <string name="core_addons_type_layout_singular_label">布局</string>
+    <string name="core_addons_type_plugin_label">插件</string>
+    <string name="core_addons_type_plugin_singular_label">插件</string>
+    <string name="core_addons_type_snippets_label">片段</string>
+    <string name="core_addons_type_snippets_singular_label">代码片段包</string>
+    <string name="core_addons_type_sound_label">声音</string>
+    <string name="core_addons_type_sound_pack_label">音效包</string>
+    <string name="core_addons_type_sound_pack_singular_label">音效包</string>
+    <string name="core_addons_type_sound_singular_label">按键音</string>
+    <string name="core_addons_type_stickers_label">贴纸包</string>
+    <string name="core_addons_type_stickers_singular_label">贴纸包</string>
+    <string name="core_addons_type_theme_label">主题</string>
+    <string name="core_addons_type_theme_singular_label">主题</string>
+    <string name="core_addons_type_unknown_label">其他</string>
+    <string name="core_addons_type_unknown_singular_label">插件</string>
+    <string name="core_addons_type_vocabulary_label">词汇</string>
+    <string name="core_addons_type_vocabulary_singular_label">词汇包</string>
+</resources>

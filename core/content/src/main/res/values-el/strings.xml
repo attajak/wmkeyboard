@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Κωδικός μίας χρήσης</string>
+    <string name="core_content_clip_entity_otp_tag">ΚΩΔΙΚΟΣ</string>
+    <string name="core_content_clip_entity_phone_label">Αριθμός τηλεφώνου</string>
+    <string name="core_content_clip_entity_phone_tag">ΤΗΛΕΦΩΝΟ</string>
+    <string name="core_content_clip_entity_url_label">Σύνδεσμος</string>
+    <string name="core_content_clip_entity_url_tag">ΣΥΝΔΕΣΜΟΣ</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d απόσπασμα έχει άλλες επεκτάσεις που το Espanso δεν μπορεί να διατηρήσει. Μόνο το πρώτο γράφτηκε.</item>
+        <item quantity="other">%1$d αποσπάσματα έχουν άλλες επεκτάσεις που το Espanso δεν μπορεί να διατηρήσει. Μόνο το πρώτο από κάθε ένα γράφτηκε.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d απόσπασμα περιορίζεται σε ορισμένα προγράμματα υπολογιστή. Στο τηλέφωνό σας λειτουργεί παντού.</item>
+        <item quantity="other">%1$d αποσπάσματα περιορίζονται σε ορισμένα προγράμματα υπολογιστή. Στο τηλέφωνό σας λειτουργούν παντού.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d απόσπασμα σας ζητά να επιλέξετε από μια λίστα. Η εφαρμογή επιλέγει ένα τυχαία.</item>
+        <item quantity="other">%1$d αποσπάσματα σας ζητούν να επιλέξετε από μια λίστα. Η εφαρμογή επιλέγει ένα τυχαία.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d απόσπασμα ζητά επιβεβαίωση πριν την επέκταση. Το Espanso δεν διαθέτει τέτοια ρύθμιση, επομένως θα επεκταθεί αυτόματα εκεί.</item>
+        <item quantity="other">%1$d αποσπάσματα ζητούν επιβεβαίωση πριν την επέκταση. Το Espanso δεν διαθέτει τέτοια ρύθμιση, επομένως θα επεκταθούν αυτόματα εκεί.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d απόσπασμα χρησιμοποιεί μορφή ημερομηνίας που η εφαρμογή δεν μπορεί να γράψει πλήρως. Η εφαρμογή παρέλειψε το μέρος που δεν μπορεί να διαχειριστεί.</item>
+        <item quantity="other">%1$d αποσπάσματα χρησιμοποιούν μορφές ημερομηνίας που η εφαρμογή δεν μπορεί να γράψει πλήρως. Η εφαρμογή παρέλειψε τα μέρη που δεν μπορεί να διαχειριστεί.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d απόσπασμα βρίσκεται σε φάκελο που είναι απενεργοποιημένος. Το Espanso δεν διαθέτει διακόπτη φακέλου, οπότε θα αναπτυχθεί εκεί.</item>
+        <item quantity="other">%1$d αποσπάσματα βρίσκονται σε φακέλους που είναι απενεργοποιημένοι. Το Espanso δεν διαθέτει διακόπτη φακέλου, οπότε θα αναπτυχθούν εκεί.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Η εφαρμογή παρέλειψε %1$d απόσπασμα που δεν έχει τίποτα να εισάγει.</item>
+        <item quantity="other">Η εφαρμογή παρέλειψε %1$d αποσπάσματα που δεν έχουν τίποτα να εισάγουν.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d απόσπασμα σας ζητά να συμπληρώσετε μια φόρμα. Η εφαρμογή εισάγει τη φόρμα ως κείμενο, με τον κέρσορα στο πρώτο κενό.</item>
+        <item quantity="other">%1$d αποσπάσματα σας ζητούν να συμπληρώσετε μια φόρμα. Η εφαρμογή εισάγει κάθε φόρμα ως κείμενο, με τον κέρσορα στο πρώτο κενό.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Η εφαρμογή παρέλειψε %1$d απόσπασμα που εισάγει μια εικόνα.</item>
+        <item quantity="other">Η εφαρμογή παρέλειψε %1$d αποσπάσματα που εισάγουν εικόνες.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Το αρχείο διαβάζει %1$d άλλο αρχείο. Ένα αρχείο δεν μπορεί να φέρει τα άλλα μαζί του.</item>
+        <item quantity="other">Το αρχείο διαβάζει %1$d άλλα αρχεία. Ένα αρχείο δεν μπορεί να φέρει τα άλλα μαζί του.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d απόσπασμα δείχνει σε άλλα αποσπάσματα. Το Espanso δεν έχει τρόπο να το εκφράσει αυτό, οπότε οι σύνδεσμοι παραλείφθηκαν.</item>
+        <item quantity="other">%1$d αποσπάσματα δείχνουν σε άλλα αποσπάσματα. Το Espanso δεν έχει τρόπο να το εκφράσει αυτό, οπότε οι σύνδεσμοι παραλείφθηκαν.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d έναυσμα προορίζεται να λειτουργεί μέσα σε μια λέξη. Στο τηλέφωνό σας λειτουργεί μόνο ως ολόκληρη λέξη.</item>
+        <item quantity="other">%1$d εναύσματα προορίζονται να λειτουργούν μέσα σε μια λέξη. Στο τηλέφωνό σας λειτουργούν μόνο ως ολόκληρες λέξεις.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d απόσπασμα χρησιμοποιεί μια τιμή για την οποία το Espanso δεν έχει αντίστοιχο. Γράφεται ως έχει.</item>
+        <item quantity="other">%1$d αποσπάσματα χρησιμοποιούν τιμές για τις οποίες το Espanso δεν έχει αντίστοιχο. Γράφονται ως έχουν.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Η εφαρμογή αφαίρεσε το μοτίβο από %1$d απόσπασμα. Η εφαρμογή δεν εκτελεί μοτίβα αυτού του σχήματος. Το απόσπασμα παραμένει στη λίστα.</item>
+        <item quantity="other">Η εφαρμογή αφαίρεσε το μοτίβο από %1$d αποσπάσματα. Η εφαρμογή δεν εκτελεί μοτίβα αυτού του σχήματος. Τα αποσπάσματα παραμένουν στη λίστα.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d απόσπασμα χρησιμοποιεί μορφοποιημένο κείμενο. Η εφαρμογή διατηρεί τις λέξεις και αφαιρεί τη μορφοποίηση.</item>
+        <item quantity="other">%1$d αποσπάσματα χρησιμοποιούν μορφοποιημένο κείμενο. Η εφαρμογή διατηρεί τις λέξεις και αφαιρεί τη μορφοποίηση.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d απόσπασμα εκτελεί μια εντολή στον υπολογιστή σας. Η εφαρμογή παρέλειψε την εντολή και δεν την εκτελεί ποτέ.</item>
+        <item quantity="other">%1$d αποσπάσματα εκτελούν εντολές στον υπολογιστή σας. Η εφαρμογή παρέλειψε τις εντολές και δεν τις εκτελεί ποτέ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">Το %1$d έναυσμα δεν τελειώνει σε λέξη, επομένως η εφαρμογή δεν μπορεί να το παρακολουθήσει. Το απόσπασμά του παραμένει στη λίστα.</item>
+        <item quantity="other">Τα %1$d εναύσματα δεν τελειώνουν σε λέξη, επομένως η εφαρμογή δεν μπορεί να τα παρακολουθήσει. Τα αποσπάσματά τους παραμένουν στη λίστα.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d απόσπασμα περιέχει κείμενο σε αγκύλες που συμπληρώνει αυτή η εφαρμογή, όπως {date}. Θα αναπτυχθεί αντί να εμφανίζεται όπως είναι γραμμένο.</item>
+        <item quantity="other">%1$d αποσπάσματα περιέχουν κείμενο σε αγκύλες που συμπληρώνει αυτή η εφαρμογή, όπως {date}. Θα αναπτυχθεί αντί να εμφανίζεται όπως είναι γραμμένο.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d απόσπασμα αλλάζει τα κεφαλαία αυτού που κατέγραψε το μοτίβο του. Το Espanso δεν μπορεί να το κάνει αυτό, επομένως το καταγεγραμμένο κείμενο παραμένει αμετάβλητο.</item>
+        <item quantity="other">%1$d αποσπάσματα αλλάζουν τα κεφαλαία αυτού που κατέγραψαν τα μοτίβα τους. Το Espanso δεν μπορεί να το κάνει αυτό, επομένως το καταγεγραμμένο κείμενο παραμένει αμετάβλητο.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d απόσπασμα χρησιμοποιεί μια τιμή για την οποία η εφαρμογή δεν έχει αντίστοιχη. Αυτό το μέρος εμφανίζεται κενό.</item>
+        <item quantity="other">%1$d αποσπάσματα χρησιμοποιούν τιμές για τις οποίες η εφαρμογή δεν έχει αντίστοιχες. Αυτά τα μέρη εμφανίζονται κενά.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Η εφαρμογή δεν μπορεί να κατεβάσει τη γραμματοσειρά. Ελέγξτε τη σύνδεσή σας και προσπαθήστε ξανά.</string>
+    <string name="core_content_font_error_empty">Το αρχείο είναι κενό.</string>
+    <string name="core_content_font_error_load">Η εφαρμογή δεν μπορεί να φορτώσει αυτό το αρχείο γραμματοσειράς.</string>
+    <string name="core_content_font_error_markup">Αυτό το αρχείο είναι αρχείο HTML ή XML, όχι γραμματοσειρά.</string>
+    <string name="core_content_font_error_no_storage">Δεν υπάρχει διαθέσιμος αποθηκευτικός χώρος για τη γραμματοσειρά.</string>
+    <string name="core_content_font_error_not_a_font">Αυτό το αρχείο δεν μοιάζει με γραμματοσειρά .ttf ή .otf.</string>
+    <string name="core_content_font_error_read">Η εφαρμογή δεν μπορεί να διαβάσει τη γραμματοσειρά.</string>
+    <string name="core_content_font_error_save">Η εφαρμογή δεν μπορεί να αποθηκεύσει τη γραμματοσειρά.</string>
+    <string name="core_content_font_error_too_large">Μια γραμματοσειρά πρέπει να είναι μικρότερη από %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Η βιβλιοθήκη γραμματοσειρών είναι γεμάτη. Διαγράψτε μια γραμματοσειρά και δοκιμάστε ξανά.</string>
+    <string name="core_content_font_error_too_short">Το αρχείο είναι πολύ μικρό για να είναι γραμματοσειρά.</string>
+    <string name="core_content_font_error_woff">Η εφαρμογή δεν μπορεί να διαβάσει γραμματοσειρές ιστού WOFF. Χρησιμοποιήστε την έκδοση .ttf ή .otf της γραμματοσειράς.</string>
+    <string name="core_content_font_error_woff2">Η εφαρμογή δεν μπορεί να διαβάσει γραμματοσειρές ιστού WOFF2. Χρησιμοποιήστε την έκδοση .ttf ή .otf της γραμματοσειράς.</string>
+    <string name="core_content_font_error_zip">Αυτό το αρχείο είναι αρχείο zip, όχι γραμματοσειρά.</string>
+    <string name="core_content_selection_macro_add_contact">Επαφή</string>
+    <string name="core_content_selection_macro_calendar">Ημερολόγιο</string>
+    <string name="core_content_selection_macro_call">Κλήση</string>
+    <string name="core_content_selection_macro_case_lower">πεζά</string>
+    <string name="core_content_selection_macro_case_sentence">Πρώτο γράμμα κεφαλαίο</string>
+    <string name="core_content_selection_macro_case_title">Κεφαλαία Τίτλου</string>
+    <string name="core_content_selection_macro_case_upper">ΚΕΦΑΛΑΙΑ</string>
+    <string name="core_content_selection_macro_chat_bold">Έντονα</string>
+    <string name="core_content_selection_macro_chat_italic">Πλάγια</string>
+    <string name="core_content_selection_macro_chat_mono">Μονοφωνικό</string>
+    <string name="core_content_selection_macro_chat_strike">Διακριτική γραμμή</string>
+    <string name="core_content_selection_macro_colour">Χρώμα</string>
+    <string name="core_content_selection_macro_copy">Αντιγραφή</string>
+    <string name="core_content_selection_macro_digits_latin">Ψηφία</string>
+    <string name="core_content_selection_macro_email">Email</string>
+    <string name="core_content_selection_macro_fancy">Εντυπωσιακό</string>
+    <string name="core_content_selection_macro_find">Εύρεση</string>
+    <string name="core_content_selection_macro_format">Μορφή</string>
+    <string name="core_content_selection_macro_grammar">Γραμματική</string>
+    <string name="core_content_selection_macro_lines_bullet">Κουκκίδες</string>
+    <string name="core_content_selection_macro_lines_dedupe">Μοναδικά</string>
+    <string name="core_content_selection_macro_lines_number">Αριθμός</string>
+    <string name="core_content_selection_macro_lines_sort">Ταξινόμηση</string>
+    <string name="core_content_selection_macro_map">Χάρτης</string>
+    <string name="core_content_selection_macro_open">Άνοιγμα</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Εκφώνηση</string>
+    <string name="core_content_selection_macro_replace">Αντικατάσταση</string>
+    <string name="core_content_selection_macro_search">Αναζήτηση</string>
+    <string name="core_content_selection_macro_share">Κοινοποίηση</string>
+    <string name="core_content_selection_macro_sms">Μήνυμα</string>
+    <string name="core_content_selection_macro_time_zones">Ζώνες</string>
+    <string name="core_content_selection_macro_to_bangla">Μπενγκάλι</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Μετάφραση</string>
+    <string name="core_content_selection_macro_url_decode">Αποκωδικοποίηση</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Η εφαρμογή άφησε έξω %2$d επέκταση από το \"%1$s\".</item>
+        <item quantity="other">Η εφαρμογή άφησε έξω %2$d επεκτάσεις από το \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Η εφαρμογή αφαίρεσε το μοτίβο από το «%1$s». Το μοτίβο δεν είναι σωστό. Το απόσπασμα παραμένει στη λίστα.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Η εφαρμογή απέρριψε %1$d φάκελο που δεν έχει όνομα ή που επαναλαμβάνεται. Τα αποσπάσματά του προστέθηκαν χωρίς φάκελο.</item>
+        <item quantity="other">Η εφαρμογή απέρριψε %1$d φακέλους που δεν έχουν όνομα ή που επαναλαμβάνονται. Τα αποσπάσματά τους προστέθηκαν χωρίς φάκελο.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Το αρχείο έχει περισσότερα αποσπάσματα από όσα διατηρεί η εφαρμογή. Η εφαρμογή εισήγαγε τα πρώτα %1$d.</item>
+        <item quantity="other">Το αρχείο έχει περισσότερα αποσπάσματα από όσα διατηρεί η εφαρμογή. Η εφαρμογή εισήγαγε τα πρώτα %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Ένα απόσπασμα δεν έχει όνομα, οπότε η εφαρμογή το ονόμασε από την πρώτη του γραμμή.</string>
+    <string name="core_content_snippet_repair_no_text">Η εφαρμογή απέρριψε το \"%1$s\". Δεν περιέχει κείμενο.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Η εφαρμογή αφαίρεσε το μοτίβο από το \"%1$s\". Ήταν μεγαλύτερο από %2$d χαρακτήρα.</item>
+        <item quantity="other">Η εφαρμογή αφαίρεσε το μοτίβο από το \"%1$s\". Ήταν μεγαλύτερο από %2$d χαρακτήρες.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Η εφαρμογή συντόμευσε το \"%1$s\". Ήταν μεγαλύτερο από %2$d χαρακτήρα.</item>
+        <item quantity="other">Η εφαρμογή συντόμευσε το \"%1$s\". Ήταν μεγαλύτερο από %2$d χαρακτήρες.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Το όνομα της εφαρμογής στην οποία πληκτρολογείτε</string>
+    <string name="core_content_snippet_var_clip_info">Η νεότερη καταχώρηση στο πρόχειρο</string>
+    <string name="core_content_snippet_var_cursor_info">Το σημείο όπου προσγειώνεται ο κέρσορας</string>
+    <string name="core_content_snippet_var_date_info">Η σημερινή ημερομηνία</string>
+    <string name="core_content_snippet_var_datetime_info">Η ημερομηνία και η ώρα</string>
+    <string name="core_content_snippet_var_day_info">Η ημέρα του μήνα</string>
+    <string name="core_content_snippet_var_isodate_info">Η ημερομηνία σε μορφή ISO, για παράδειγμα 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Η ημερομηνία και η ώρα σε μορφή ISO</string>
+    <string name="core_content_snippet_var_month_info">Το όνομα του μήνα</string>
+    <string name="core_content_snippet_var_package_info">Το όνομα πακέτου αυτής της εφαρμογής</string>
+    <string name="core_content_snippet_var_selection_info">Το κείμενο που επιλέγετε στο πεδίο</string>
+    <string name="core_content_snippet_var_time12_info">Η τρέχουσα ώρα σε 12ωρη μορφή</string>
+    <string name="core_content_snippet_var_time_info">Η τρέχουσα ώρα σε μορφή 24 ωρών</string>
+    <string name="core_content_snippet_var_timestamp_info">Η ώρα σε δευτερόλεπτα Unix</string>
+    <string name="core_content_snippet_var_timezone_info">Η ζώνη ώρας, για παράδειγμα GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Ένα νέο τυχαίο UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Το όνομα της ημέρας, για παράδειγμα Κυριακή</string>
+    <string name="core_content_snippet_var_year_info">Το έτος, με τέσσερα ψηφία</string>
+    <string name="core_content_sticker_pack_imported_label">Εισηγμένα αυτοκόλλητα</string>
+    <string name="core_content_sticker_repair_image_missing">Η εφαρμογή απέρριψε το \"%1$s\". Η εικόνα του λείπει.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Η εφαρμογή απέρριψε το \"%1$s\". Η εφαρμογή δεν μπορεί να διαβάσει την εικόνα του.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Το πακέτο έχει %1$d αυτοκόλλητο. Η εφαρμογή διατηρεί το πρώτο %2$d.</item>
+        <item quantity="other">Το πακέτο έχει %1$d αυτοκόλλητα. Η εφαρμογή διατηρεί τα πρώτα %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Η εφαρμογή απέρριψε ένα αυτοκόλλητο. Το αυτοκόλλητο δεν ονομάζει κανένα αρχείο εικόνας.</string>
+    <string name="core_content_sticker_repair_none_listed">Το αρχείο του πακέτου δεν περιλαμβάνει αυτοκόλλητα.</string>
+    <string name="core_content_sticker_repair_not_saved">Η εφαρμογή απέρριψε το \"%1$s\". Η εφαρμογή δεν μπορεί να το αποθηκεύσει.</string>
+</resources>

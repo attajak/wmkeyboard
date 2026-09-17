@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Aquest paquet necessita el format de paquet de so %1$s. Actualitzeu l\'aplicació.</string>
+    <string name="core_feedback_pack_reject_no_samples">Aquest paquet no conté sons que l\'aplicació pugui reproduir.</string>
+    <string name="core_feedback_pack_reject_too_large">Un paquet de so ha de ser inferior a %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">El fitxer està buit.</string>
+    <string name="core_feedback_sound_import_html_error">Aquest és un fitxer HTML o XML, no un so.</string>
+    <string name="core_feedback_sound_import_mp4_error">L\'aplicació no reprodueix fitxers MP4 ni M4A. Utilitza un fitxer MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">No hi ha emmagatzematge disponible al teu dispositiu.</string>
+    <string name="core_feedback_sound_import_read_error">L\'aplicació no pot llegir el so.</string>
+    <string name="core_feedback_sound_import_save_error">L\'aplicació no pot desar el so.</string>
+    <string name="core_feedback_sound_import_too_large_error">Un so de tecla ha de ser inferior a %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">El fitxer és massa curt per ser un so.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Això no sembla un fitxer MP3, OGG o WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">Aquest és un fitxer zip, no un fitxer de so.</string>
+</resources>

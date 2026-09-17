@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">Programu imeondoa %1$d flick ya diagonal. Kibodi hii inasaidia flick za juu, chini, kushoto na kulia pekee.</item>
+        <item quantity="other">Programu imeondoa %1$d flick za diagonal. Kibodi hii inasaidia flick za juu, chini, kushoto na kulia pekee.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">Ufunguo %1$d huandika herufi iliyochapishwa juu yake. Kibodi asili ilitumia sheria kuamua kile inachoandika.</item>
+        <item quantity="other">Funguo %1$d huandika herufi zilizochapishwa juu yake. Kibodi asili ilitumia sheria kuamua kile zinachoandika.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Kibodi hii ina kitufe %1$d unachogonga mara kwa mara ili kuzunguka herufi. Programu hii ya kibodi haina kitufe kama hicho, kwa hivyo herufi ya kwanza pekee ndiyo inayopatikana.</item>
+        <item quantity="other">Kibodi hii ina vitufe %1$d unavyogonga mara kwa mara ili kuzunguka herufi. Programu hii ya kibodi haina vitufe kama hivyo, kwa hivyo herufi ya kwanza ya kila kimoja pekee ndiyo inayopatikana.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Kibodi hii hutumia kanuni kuamua vitufe vyake vinachapa nini. Programu haina kanuni hizo, kwa hivyo kila kitufe huchapa herufi iliyochapishwa juu yake.</string>
+    <string name="core_keyman_shift_layer_folded">Programu imeunganisha safu ya shift kwenye vitufe. Shikilia Shift ili kufikia herufi hizo.</string>
+    <string name="core_keyman_shift_layer_separate">Safu ya shift ina umbo tofauti, kwa hivyo programu iliihifadhi kama safu yake yenyewe.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">Programu imeondoa ufunguo %1$d. Kibodi hii haina ufunguo unaofanya kazi sawa na huo.</item>
+        <item quantity="other">Programu imeondoa funguo %1$d. Kibodi hii haina funguo zinazofanya kazi sawa na hizo.</item>
+    </plurals>
+</resources>

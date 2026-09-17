@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Ta model je omejen. Najprej dodajte svoj žeton Hugging Face.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face je vrnil status HTTP %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Sprejmite licenco modela na njegovi strani Hugging Face. Nato poskusite znova.</string>
+    <string name="core_intel_llm_download_error_no_space">V vaši napravi ni dovolj prostora za shranjevanje. Najprej sprostite približno %1$s GB.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face ni sprejel žetona. Preverite žeton in poskusite znova.</string>
+    <string name="core_intel_llm_download_error_truncated">Povezava je bila med prenosom prekinjena. Pritisnite Nadaljuj za nadaljevanje.</string>
+    <string name="core_intel_llm_engine_error_gpu">Model ni uspel na GPE-ju. Pomnilnik GPE-ja je veliko manjši od sistemskega pomnilnika. Naslednji poskus bo uporabil CPE. Če želite vedno uporabljati CPE, v nastavitvah nastavite Izračun na CPE. Izberete lahko tudi manjši model.</string>
+    <string name="core_intel_llm_engine_error_load">Model se ni naložil. Datoteka je verjetno poškodovana. Izbrišite model v nastavitvah in ga znova prenesite.</string>
+    <string name="core_intel_llm_engine_error_memory">Modelu je zmanjkalo pomnilnika ali pa je prišlo do napake. Izberite manjši model.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Majhen model Gemma iz prejšnje generacije. Ima dobro kakovost in kontekst 4K žetonov.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Najmanjši model Gemma iz Googla. Hiter je na vseh napravah.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Najnovejša generacija Gemma. Zagotavlja vrhunsko kakovost v vaši napravi.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Največji model. Piše najbolje, vendar potrebuje zmogljivo napravo.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Model za splošno uporabo, ki še vedno deluje na osnovni napravi.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Očitno pametnejši od modelov pod 1B. Potrebuje napravo srednjega razreda.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Nedavni majhen model. Kakovost je glede na velikost visoka.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Zelo majhen in hiter. Dober je za hitro prepisovanje, vendar je sklepanje omejeno.</string>
+    <string name="core_intel_llm_module_downloading">AI del tipkovnice se prenaša iz trgovine Google Play. Poskusite znova čez trenutek.</string>
+    <string name="core_intel_llm_module_restart">Namestitev komponente AI je pravkar končana. Zaprite in znova odprite tipkovnico, da jo uporabite.</string>
+    <string name="core_intel_llm_tier_experimental_label">Eksperimentalno</string>
+    <string name="core_intel_llm_tier_recommended_label">Priporočeno</string>
+    <string name="core_intel_llm_tier_untested_label">Nepreizkušeno</string>
+</resources>

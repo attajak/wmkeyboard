@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">File emoji</string>
+    <string name="core_icons_group_keys_title">Taste</string>
+    <string name="core_icons_group_toolbar_title">Bară de instrumente</string>
+    <string name="core_icons_group_tools_title">Instrumente</string>
+    <string name="core_icons_pack_imported_label">Pictograme importate</string>
+    <string name="core_icons_pack_mine_label">Pictogramele mele</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Aplicația a ignorat %1$d fișier. Această versiune nu are nicio pictogramă pentru el: %2$s</item>
+        <item quantity="other">Aplicația a ignorat %1$d fișiere. Această versiune nu are nicio pictogramă pentru ele: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Aplicația a abandonat \"%1$s\". Aplicația nu o poate salva.</string>
+    <string name="core_icons_repair_svg_unreadable">Aplicația a eliminat \"%1$s\". Aplicația nu poate citi fișierul SVG.</string>
+    <string name="core_icons_slot_backspace_label">Backspace</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Activități</string>
+    <string name="core_icons_slot_emoji_animals_label">Animale</string>
+    <string name="core_icons_slot_emoji_flags_label">Steaguri</string>
+    <string name="core_icons_slot_emoji_food_label">Mâncare</string>
+    <string name="core_icons_slot_emoji_key_label">Tastă emoji</string>
+    <string name="core_icons_slot_emoji_most_used_label">Cele mai utilizate</string>
+    <string name="core_icons_slot_emoji_nature_label">Natură</string>
+    <string name="core_icons_slot_emoji_objects_label">Obiecte</string>
+    <string name="core_icons_slot_emoji_people_label">Oameni</string>
+    <string name="core_icons_slot_emoji_recent_label">Recente</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Comandă rapidă emoji</string>
+    <string name="core_icons_slot_emoji_smileys_label">Fețe zâmbitoare</string>
+    <string name="core_icons_slot_emoji_symbols_label">Simboluri</string>
+    <string name="core_icons_slot_emoji_travel_label">Călătorii</string>
+    <string name="core_icons_slot_enter_done_label">Enter: gata</string>
+    <string name="core_icons_slot_enter_go_label">Enter: go</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: următorul</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: anterior</string>
+    <string name="core_icons_slot_enter_search_label">Enter: căutare</string>
+    <string name="core_icons_slot_enter_send_label">Enter: trimite</string>
+    <string name="core_icons_slot_forward_delete_label">Ștergere înainte</string>
+    <string name="core_icons_slot_globe_label">Schimbă limba</string>
+    <string name="core_icons_slot_incognito_label">Insignă incognito</string>
+    <string name="core_icons_slot_input_method_picker_label">Schimbă tastatura</string>
+    <string name="core_icons_slot_panel_back_label">Înapoi la taste</string>
+    <string name="core_icons_slot_power_saving_label">Pictogramă economisire energie</string>
+    <string name="core_icons_slot_search_close_label">Închide căutarea</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (activat)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Afișează instrumentele</string>
+    <string name="core_icons_slot_toolbox_label">Cutie cu instrumente</string>
+</resources>

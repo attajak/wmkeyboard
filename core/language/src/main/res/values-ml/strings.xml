@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">ആപ്പ് %1$d കീ അതിന് ലഭ്യമായ ഏറ്റവും അടുത്ത കീയിലേക്ക് മാറ്റി.</item>
+        <item quantity="other">ആപ്പ് %1$d കീകൾ അതിന് ലഭ്യമായ ഏറ്റവും അടുത്ത കീകളിലേക്ക് മാറ്റി.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">ആപ്പ് %1$d കീ നീക്കം ചെയ്തു. സമാനമായ പ്രവർത്തനം ചെയ്യുന്ന കീ ഈ കീബോർഡിലില്ല (കോഡ് %2$s).</item>
+        <item quantity="other">ആപ്പ് %1$d കീകൾ നീക്കം ചെയ്തു. സമാനമായ പ്രവർത്തനം ചെയ്യുന്ന കീകൾ ഈ കീബോർഡിലില്ല (കോഡുകൾ %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">ആപ്പ് %1$d കീയുടെ ലേബൽ വലുപ്പം നിലനിർത്തി, പക്ഷേ അതിന്റെ ടെക്സ്റ്റ് ശൈലി നിലനിർത്തിയില്ല. ഈ കീബോർഡ് ലേബലുകൾ ഒരൊറ്റ ശൈലിയിലാണ് വരയ്ക്കുന്നത്.</item>
+        <item quantity="other">ആപ്പ് %1$d കീകളുടെ ലേബൽ വലുപ്പം നിലനിർത്തി, പക്ഷേ അവയുടെ ടെക്സ്റ്റ് ശൈലി നിലനിർത്തിയില്ല. ഈ കീബോർഡ് ലേബലുകൾ ഒരൊറ്റ ശൈലിയിലാണ് വരയ്ക്കുന്നത്.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">ഈ കീബോർഡ് എഴുതുന്ന രീതിയിലേക്ക് ആപ്പ് %1$d അക്ഷരം മാറ്റി.</item>
+        <item quantity="other">ഈ കീബോർഡ് എഴുതുന്ന രീതിയിലേക്ക് ആപ്പ് %1$d അക്ഷരങ്ങൾ മാറ്റി.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d കീയിൽ പ്രസ്-ആൻഡ്-ഹോൾഡ് അക്ഷരങ്ങളില്ല. നിങ്ങൾ തുറക്കാത്ത രണ്ടാമതൊരു ഫയലിലാണ് അവ സൂക്ഷിച്ചിരിക്കുന്നത്.</item>
+        <item quantity="other">%1$d കീകളിൽ പ്രസ്-ആൻഡ്-ഹോൾഡ് അക്ഷരങ്ങളില്ല. നിങ്ങൾ തുറക്കാത്ത രണ്ടാമതൊരു ഫയലിലാണ് അവ സൂക്ഷിച്ചിരിക്കുന്നത്.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">മറ്റ് കീബോർഡുകൾ കീയുടെ വീതി വ്യത്യസ്തമായാണ് അളക്കുന്നത്. ഈ ഗ്രിഡിന് അനുയോജ്യമാക്കാൻ ആപ്പ് വീതി മാറ്റിയിട്ടുണ്ട്.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s ലെയറിലെ %1$d ബ്രെയ്‌ലി ഡോട്ട് കീക്ക് 1 മുതൽ 6 വരെയുള്ള പരിധിക്ക് പുറത്തുള്ള ഒരു ഡോട്ട് നമ്പറുണ്ട്.</item>
+        <item quantity="other">%2$s ലെയറിലെ %1$d ബ്രെയ്‌ലി ഡോട്ട് കീകൾക്ക് 1 മുതൽ 6 വരെയുള്ള പരിധിക്ക് പുറത്തുള്ള ഡോട്ട് നമ്പറുകളുണ്ട്.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s ലെയറിലെ %1$d കീയ്ക്ക് ലേബലോ ഔട്ട്‌പുട്ടോ ഇല്ല. ഇത് ഒന്നും ടൈപ്പ് ചെയ്യുന്നില്ല, ഈ ലേഔട്ട് ഓണാക്കുമ്പോൾ ആപ്പ് ഇത് ഇല്ലാതാക്കുന്നു.</item>
+        <item quantity="other">%2$s ലെയറിലെ %1$d കീകൾക്ക് ലേബലോ ഔട്ട്‌പുട്ടോ ഇല്ല. അവ ഒന്നും ടൈപ്പ് ചെയ്യുന്നില്ല, ഈ ലേഔട്ട് ഓണാക്കുമ്പോൾ ആപ്പ് അവ ഇല്ലാതാക്കുന്നു.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s ലെയറിലെ %1$d-ാമത്തെ വരി ശൂന്യമാണ്.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s ലെയറിലെ %1$d കീ ഒരു പാനൽ ഘടകമാണ്. ഘടകങ്ങൾ പാനൽ ലേഔട്ടിൽ മാത്രമേ പ്രവർത്തിക്കൂ.</item>
+        <item quantity="other">%2$s ലെയറിലെ %1$d കീകൾ പാനൽ ഘടകങ്ങളാണ്. ഘടകങ്ങൾ പാനൽ ലേഔട്ടിൽ മാത്രമേ പ്രവർത്തിക്കൂ.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s ലെയറിന്റെ %1$d-ാം വരിയിൽ വീതിയില്ലാത്ത ഒരു കീ ഉണ്ട്.</string>
+    <string name="core_lang_layout_key_span_error">%2$s ലെയറിലെ %1$d-ാം വരിയിൽ 1-ൽ കുറവോ അല്ലെങ്കിൽ %3$d-ൽ കൂടുതലോ വരികൾ ഉൾക്കൊള്ളുന്ന ഒരു കീ ഉണ്ട്.</string>
+    <string name="core_lang_layout_letters_empty_error">അക്ഷരങ്ങളുടെ ലെയറിൽ കീകളൊന്നുമില്ല.</string>
+    <string name="core_lang_layout_no_delete_error">ഈ ലേഔട്ടിൽ ഡിലീറ്റ് കീ ഇല്ല. നിങ്ങൾക്ക് തെറ്റ് തിരുത്താൻ കഴിയില്ല.</string>
+    <string name="core_lang_layout_no_enter_error">ഈ ലേഔട്ടിൽ എന്റർ കീ ഇല്ല.</string>
+    <string name="core_lang_layout_no_shift_warning">ഈ ലേഔട്ടിൽ ഷിഫ്റ്റ് കീ ഇല്ല. വലിയ അക്ഷരം ടൈപ്പ് ചെയ്യാൻ, ഒരു കീ അമർത്തിപ്പിടിക്കുക.</string>
+    <string name="core_lang_layout_no_space_error">ലേഔട്ടിൽ സ്പേസ് കീ ഇല്ല.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s ലെയറിൽ അക്ഷരങ്ങളിലേക്ക് തിരികെ പോകാനുള്ള കീ ഇല്ല. നിങ്ങൾക്ക് ഈ ലെയറിൽ നിന്ന് പുറത്തുകടക്കാൻ കഴിയില്ല.</string>
+    <string name="core_lang_layout_persistent_warning">കീബോർഡ് അടയ്ക്കുമ്പോൾ %1$s ലെയർ തുറന്നിരിക്കും. ഈ ലേഔട്ടിൽ നിന്ന് പുറത്തുകടക്കാൻ നിങ്ങൾക്ക് വഴിയുണ്ടെന്ന് ഉറപ്പാക്കുക.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">ഈ ലേഔട്ടിൽ നിന്ന് പുറത്തുകടക്കാൻ ഒരു കീയും ഇല്ല. ഈ ലേഔട്ടിൽ നിന്ന് പുറത്തുകടക്കാൻ നിങ്ങൾക്ക് ഒരു മാർഗ്ഗമുണ്ടെന്ന് ഉറപ്പാക്കുക: ഒരു ABC കീ, ചിഹ്നങ്ങളുടെ കീ, അല്ലെങ്കിൽ ടൂൾബാറിലെ കസ്റ്റം ലേഔട്ട് ടൂൾ.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s ലെയറിലെ %1$d-ാം വരിയിൽ ലെയറിലുള്ളതിനേക്കാൾ കൂടുതൽ വരികൾ ഉൾക്കൊള്ളുന്ന ഒരു കീ ഉണ്ട്. കീബോർഡ് അവസാന വരിയിൽ അത് നിർത്തുന്നു.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s ലെയറിന്റെ %1$d-ാം വരിയിൽ %3$d കീ ഉണ്ട്. %4$d കീകൾ മാത്രമേ അമർത്താൻ പാകത്തിന് വലുപ്പത്തിൽ നിൽക്കുകയുള്ളൂ.</item>
+        <item quantity="other">%2$s ലെയറിന്റെ %1$d-ാം വരിയിൽ %3$d കീകളുണ്ട്. %4$d കീകൾ മാത്രമേ അമർത്താൻ പാകത്തിന് വലുപ്പത്തിൽ നിൽക്കുകയുള്ളൂ.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s ലെയറിൽ %2$d വരിയുണ്ട്. %3$d വരികൾ മാത്രമേ ഉൾക്കൊള്ളൂ.</item>
+        <item quantity="other">%1$s ലെയറിൽ %2$d വരികളുണ്ട്. %3$d വരികൾ മാത്രമേ ഉൾക്കൊള്ളൂ.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s ലെയറിലെ %1$d കീ, ആപ്പിന്റെ ഈ പതിപ്പിന് അറിയാത്ത ഒരു പ്രവർത്തനം ഉപയോഗിക്കുന്നു.</item>
+        <item quantity="other">%2$s ലെയറിലെ %1$d കീകൾ, ആപ്പിന്റെ ഈ പതിപ്പിന് അറിയാത്ത ഒരു പ്രവർത്തനം ഉപയോഗിക്കുന്നു.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s ലെയറിലെ %1$d-ാമത്തെ വരി മറ്റ് വരികളേക്കാൾ വീതിയുള്ളതാണ്. ഈ വരിയിലെ കീകൾ കീബോർഡ് ചെറുതാക്കിയാണ് കാണിക്കുന്നത്.</string>
+    <string name="core_lang_numeral_scope_display_only">പ്രദർശനത്തിന് മാത്രം</string>
+    <string name="core_lang_numeral_scope_everywhere">എല്ലായിടത്തും</string>
+    <string name="core_lang_numeral_scope_text_fields">ടെക്സ്റ്റ് ഫീൽഡുകൾ</string>
+    <string name="core_lang_numeral_system_auto">ഓട്ടോ</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d ഘടകം ഒന്നിലധികം തവണ കാണപ്പെടുന്നു. ആപ്പ് ആദ്യത്തെ പകർപ്പ് നിലനിർത്തുന്നു.</item>
+        <item quantity="other">%1$d ഘടകങ്ങൾ ഒന്നിലധികം തവണ കാണപ്പെടുന്നു. ആപ്പ് ഓരോന്നിന്റെയും ആദ്യത്തെ പകർപ്പ് നിലനിർത്തുന്നു.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">ഈ പാനലിൽ കീകളൊന്നുമില്ല. ആപ്പ് പകരം സാധാരണ പാനൽ ഉപയോഗിക്കുന്നു.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d കീയ്ക്ക് പാനലിൽ പ്രവർത്തിക്കാത്ത ഒരു പ്രവർത്തനമുണ്ട്. ആപ്പ് അത് ഇല്ലാതാക്കുന്നു.</item>
+        <item quantity="other">%1$d കീകൾക്ക് പാനലിൽ പ്രവർത്തിക്കാത്ത പ്രവർത്തനങ്ങളുണ്ട്. ആപ്പ് അവ ഇല്ലാതാക്കുന്നു.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">ഈ പാനലിൽ ABC കീ ഇല്ല. കീകളിലേക്ക് മടങ്ങാൻ ടൂൾബാറോ ബാക്ക് ബട്ടണോ ഉപയോഗിക്കുക.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">ആപ്പ് ഒരു ഘടകത്തിന്റെ രണ്ടാമത്തെ പകർപ്പ് ഇല്ലാതാക്കി.</string>
+    <string name="core_lang_panel_repair_field_added">ആപ്പ് പാനലിന്റെ പ്രധാന ഘടകം ഒരു പുതിയ വരിയിൽ ചേർത്തു.</string>
+    <string name="core_lang_panel_repair_field_dropped">ഈ പാനലിൽ പെടാത്ത ഒരു ഘടകം ആപ്പ് ഇല്ലാതാക്കി.</string>
+    <string name="core_lang_panel_repair_key_dropped">ഒരു പാനലിൽ പ്രവർത്തിക്കാത്ത ആക്ഷനുള്ള ഒരു കീ ആപ്പ് ഇല്ലാതാക്കി.</string>
+    <string name="core_lang_panel_repair_reset">ആപ്പ് ശൂന്യമായ പാനലിന് പകരം സാധാരണ പാനൽ ഉപയോഗിച്ചു.</string>
+    <string name="core_lang_panel_required_field_error">ഈ പാനലിൽ അതിന്റെ പ്രധാന ഘടകം ഇല്ല. പാനൽ വരയ്ക്കുമ്പോൾ ആപ്പ് അത് ചേർക്കുന്നു.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d ഘടകം ഈ പാനലിൽ ഉൾപ്പെടുന്നതല്ല. ആപ്പ് അത് ഇല്ലാതാക്കുന്നു.</item>
+        <item quantity="other">%1$d ഘടകങ്ങൾ ഈ പാനലിൽ ഉൾപ്പെടുന്നതല്ല. ആപ്പ് അവ ഇല്ലാതാക്കുന്നു.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">%1$s ലെയറിലെ ശൂന്യമായ കീ ആപ്പ് നീക്കം ചെയ്തു.</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s ലെയറിലെ ഒരു കീ ബ്രെയ്‌ലി ഡോട്ട് %2$d ഉപയോഗിച്ചു. ആപ്പ് അതിനെ ഡോട്ട് %3$d ആക്കി മാറ്റി.</string>
+    <string name="core_lang_repair_delete_key_added">അക്ഷരങ്ങളുടെ ലെയറിൽ ഡിലീറ്റ് കീ ഉണ്ടായിരുന്നില്ല. ആപ്പ് ഒരെണ്ണം ചേർത്തു.</string>
+    <string name="core_lang_repair_enter_key_added">അക്ഷരങ്ങളുടെ ലെയറിൽ എന്റർ കീ ഉണ്ടായിരുന്നില്ല. ആപ്പ് ഒരെണ്ണം ചേർത്തു.</string>
+    <string name="core_lang_repair_field_key_deleted">ആപ്പ് %1$s ലെയറിൽ നിന്ന് ഒരു പാനൽ ഘടകം നീക്കം ചെയ്തു. ഘടകങ്ങൾ ഒരു പാനൽ ലേഔട്ടിൽ മാത്രമേ പ്രവർത്തിക്കൂ.</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s ലെയറിലെ ഒരു കീ %2$s-നെ സൂചിപ്പിക്കുന്നു. ആപ്പ് അത് %3$s എന്ന് ടൈപ്പ് ചെയ്യാൻ സജ്ജമാക്കി.</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s ലെയറിലെ ഒരു കീ %2$s അക്ഷരങ്ങളെ പ്രതിനിധീകരിക്കുന്നു. അവ അക്ഷരങ്ങളല്ലാത്തതിനാൽ, ആപ്പ് അതിനെ ഒരു സാധാരണ കീയാക്കി മാറ്റി.</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s ലെയറിലെ ഒരു കീ %2$d വരികൾ ഉൾക്കൊള്ളുന്നു. ആപ്പ് അത് %3$d ആക്കി മാറ്റി.</string>
+    <string name="core_lang_repair_key_width_capped">%1$s ലെയറിലെ ഒരു കീ %2$s യൂണിറ്റ് വീതിയിലായിരുന്നു. ആപ്പ് അത് %3$s യൂണിറ്റ് വീതിയിലാക്കി.</string>
+    <string name="core_lang_repair_key_width_set">%1$s ലെയറിലെ ഒരു കീക്ക് വീതി ഉണ്ടായിരുന്നില്ല. ആപ്പ് വീതി 1 ആയി സജ്ജീകരിച്ചു.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s ലെയറിൽ പ്രവർത്തിക്കുന്ന കീകളൊന്നും ഉണ്ടായിരുന്നില്ല. ഇപ്പോൾ അത് ഇൻ-ബിൽറ്റ് ഗ്രിഡ് ഉപയോഗിക്കുന്നു.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s ലെയറിൽ അക്ഷരങ്ങളിലേക്ക് മടങ്ങാനുള്ള കീ ഉണ്ടായിരുന്നില്ല. ആപ്പ് ഒരു ABC കീ ചേർത്തു.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s ലെയറിലെ ഒരു വരിയിൽ %2$d കീ ഉണ്ടായിരുന്നു. ആപ്പ് ആദ്യത്തെ %3$d കീകൾ നിലനിർത്തുന്നു.</item>
+        <item quantity="other">%1$s ലെയറിലെ ഒരു വരിയിൽ %2$d കീകൾ ഉണ്ടായിരുന്നു. ആപ്പ് ആദ്യത്തെ %3$d കീകൾ നിലനിർത്തുന്നു.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s ലെയറിലെ ഒരു വരി %2$s യൂണിറ്റ് വീതിയിലായിരുന്നു. വരി യോജിക്കുന്നതിനായി ആപ്പ് കീകളുടെ വലിപ്പം കുറച്ചു.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s ലെയറിൽ %2$d വരി ഉണ്ടായിരുന്നു. ആപ്പ് ആദ്യത്തെ %3$d വരികൾ നിലനിർത്തുന്നു.</item>
+        <item quantity="other">%1$s ലെയറിൽ %2$d വരികൾ ഉണ്ടായിരുന്നു. ആപ്പ് ആദ്യത്തെ %3$d വരികൾ നിലനിർത്തുന്നു.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">അക്ഷരങ്ങളുടെ ലെയറിൽ സ്പേസ് കീ ഉണ്ടായിരുന്നില്ല. ആപ്പ് ഒരെണ്ണം ചേർത്തു.</string>
+    <string name="core_lang_repair_unknown_key_deleted">%1$s ലെയറിലെ ഒരു കീ ആപ്പ് നീക്കം ചെയ്തു. അതിന്റെ പ്രവർത്തനം \"%2$s\" അജ്ഞാതമാണ്.</string>
+</resources>

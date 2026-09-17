@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Deze plugin heeft geen render()-functie.</string>
+    <string name="core_plugins_error_not_installed">Die plug-in is niet geïnstalleerd.</string>
+    <string name="core_plugins_error_script_failed">Het script is mislukt.</string>
+    <string name="core_plugins_error_script_missing">Het script voor die plugin ontbreekt.</string>
+    <string name="core_plugins_error_turned_off">Die plug-in is uitgeschakeld.</string>
+    <string name="core_plugins_permission_storage_label">Gegevens opslaan op uw apparaat</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s” bevat een script dat geen geldige UTF-8-tekst is.</string>
+    <string name="core_plugins_reject_bad_id">Deze plugin heeft een id die niet geldig is. Een id is 3 tot 64 tekens lang. Een id kan kleine letters, cijfers, punten, koppeltekens en underscores bevatten.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” bevat gecompileerde Lua-code. Een plug-in moet gewone broncode gebruiken, zodat je deze kunt lezen voordat deze wordt uitgevoerd.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” heeft een leeg script.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” heeft geen scriptbestand (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Deze plug-in heeft een nieuwere versie van WM Keyboard nodig.</string>
+    <string name="core_plugins_reject_no_name">Deze plug-in heeft geen naam.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” geeft niet aan welke versie het is.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” heeft een script dat groter is dan %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Deze versie van WM Keyboard kent de toestemming “%1$s” niet. De app kan je niet vertellen wat “%2$s” mag doen.</string>
+    <string name="core_plugins_stopped_cancelled">De app heeft deze plug-in gestopt.</string>
+    <string name="core_plugins_stopped_deadline">Deze plug-in duurde te lang. De app heeft hem gestopt.</string>
+    <string name="core_plugins_stopped_instructions">Deze plug-in deed te veel werk tegelijk. De app heeft deze gestopt.</string>
+    <string name="core_plugins_stopped_not_responding">Deze plug-in reageerde niet meer. De app heeft deze gesloten.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Deze plug-in reageerde opnieuw niet. De app heeft deze uitgeschakeld.</string>
+    <string name="core_plugins_stopped_recursion">Deze plug-in riep zichzelf te vaak aan. De app heeft deze gestopt.</string>
+    <string name="core_plugins_stopped_unexpected">Deze plug-in is onverwacht gestopt.</string>
+    <string name="core_plugins_ui_insert_action">Invoegen</string>
+    <string name="core_plugins_ui_repair_no_type">Een widget gaf niet aan wat voor soort het is.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Een widgetlijst bevatte iets dat geen widget is.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Een tabbladbalk had geen pagina\'s.</string>
+    <string name="core_plugins_ui_repair_text_budget">Deze plugin probeerde te veel tekst te tekenen. De app heeft een deel weggelaten.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Sommige tekst was te lang om weer te geven. De app heeft deze ingekort.</string>
+    <string name="core_plugins_ui_repair_too_deep">Sommige widgets waren te diep genest om te tekenen.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Alleen de eerste %1$d tabbladen worden getoond.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Deze plugin vroeg om meer dan %1$d widgets. De app heeft de rest verwijderd.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Deze build kent het widgettype “%1$s” niet.</string>
+    <string name="core_plugins_ui_tab_default_title">Tabblad %1$d</string>
+</resources>

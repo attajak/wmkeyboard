@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">แท็บอีโมจิ</string>
+    <string name="core_icons_group_keys_title">ปุ่ม</string>
+    <string name="core_icons_group_toolbar_title">แถบเครื่องมือ</string>
+    <string name="core_icons_group_tools_title">เครื่องมือ</string>
+    <string name="core_icons_pack_imported_label">ไอคอนที่นำเข้า</string>
+    <string name="core_icons_pack_mine_label">ไอคอนของฉัน</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">แอปละเว้นไฟล์ %1$d ไฟล์ เวอร์ชันนี้ไม่มีไอคอนสำหรับไฟล์ดังกล่าว: %2$s</item>
+        <item quantity="other">แอปละเว้นไฟล์ %1$d ไฟล์ เวอร์ชันนี้ไม่มีไอคอนสำหรับไฟล์ดังกล่าว: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">แอปทิ้ง \"%1$s\" แอปไม่สามารถบันทึกได้</string>
+    <string name="core_icons_repair_svg_unreadable">แอปได้ละทิ้ง \"%1$s\" เนื่องจากไม่สามารถอ่านไฟล์ SVG ได้</string>
+    <string name="core_icons_slot_backspace_label">ลบ</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">กิจกรรม</string>
+    <string name="core_icons_slot_emoji_animals_label">สัตว์</string>
+    <string name="core_icons_slot_emoji_flags_label">ธง</string>
+    <string name="core_icons_slot_emoji_food_label">อาหาร</string>
+    <string name="core_icons_slot_emoji_key_label">ปุ่มอีโมจิ</string>
+    <string name="core_icons_slot_emoji_most_used_label">ใช้บ่อยที่สุด</string>
+    <string name="core_icons_slot_emoji_nature_label">ธรรมชาติ</string>
+    <string name="core_icons_slot_emoji_objects_label">วัตถุ</string>
+    <string name="core_icons_slot_emoji_people_label">ผู้คน</string>
+    <string name="core_icons_slot_emoji_recent_label">ล่าสุด</string>
+    <string name="core_icons_slot_emoji_shortcut_label">ทางลัดอีโมจิ</string>
+    <string name="core_icons_slot_emoji_smileys_label">อีโมจิหน้ายิ้ม</string>
+    <string name="core_icons_slot_emoji_symbols_label">สัญลักษณ์</string>
+    <string name="core_icons_slot_emoji_travel_label">การเดินทาง</string>
+    <string name="core_icons_slot_enter_done_label">Enter: เสร็จสิ้น</string>
+    <string name="core_icons_slot_enter_go_label">Enter: ไป</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: ถัดไป</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: ก่อนหน้า</string>
+    <string name="core_icons_slot_enter_search_label">Enter: ค้นหา</string>
+    <string name="core_icons_slot_enter_send_label">Enter: ส่ง</string>
+    <string name="core_icons_slot_forward_delete_label">ลบไปข้างหน้า</string>
+    <string name="core_icons_slot_globe_label">สลับภาษา</string>
+    <string name="core_icons_slot_incognito_label">ป้ายสถานะไม่ระบุตัวตน</string>
+    <string name="core_icons_slot_input_method_picker_label">สลับแป้นพิมพ์</string>
+    <string name="core_icons_slot_panel_back_label">กลับไปที่ปุ่ม</string>
+    <string name="core_icons_slot_power_saving_label">ป้ายประหยัดพลังงาน</string>
+    <string name="core_icons_slot_search_close_label">ปิดการค้นหา</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (เปิด)</string>
+    <string name="core_icons_slot_suggestions_expand_label">แสดงเครื่องมือ</string>
+    <string name="core_icons_slot_toolbox_label">กล่องเครื่องมือ</string>
+</resources>

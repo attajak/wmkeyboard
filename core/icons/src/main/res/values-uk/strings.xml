@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Вкладки емодзі</string>
+    <string name="core_icons_group_keys_title">Клавіші</string>
+    <string name="core_icons_group_toolbar_title">Панель інструментів</string>
+    <string name="core_icons_group_tools_title">Інструменти</string>
+    <string name="core_icons_pack_imported_label">Імпортовані значки</string>
+    <string name="core_icons_pack_mine_label">Мої іконки</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Додаток проігнорував %1$d файл. У цій версії немає значка для нього: %2$s</item>
+        <item quantity="other">Додаток проігнорував %1$d файлів. У цій версії немає значків для них: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Додаток відхилив \"%1$s\". Додаток не може його зберегти.</string>
+    <string name="core_icons_repair_svg_unreadable">Додаток відхилив \"%1$s\". Додаток не може прочитати його SVG-файл.</string>
+    <string name="core_icons_slot_backspace_label">Backspace</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Активності</string>
+    <string name="core_icons_slot_emoji_animals_label">Тварини</string>
+    <string name="core_icons_slot_emoji_flags_label">Прапори</string>
+    <string name="core_icons_slot_emoji_food_label">Їжа</string>
+    <string name="core_icons_slot_emoji_key_label">Клавіша емодзі</string>
+    <string name="core_icons_slot_emoji_most_used_label">Найчастіше використовувані</string>
+    <string name="core_icons_slot_emoji_nature_label">Природа</string>
+    <string name="core_icons_slot_emoji_objects_label">Об\'єкти</string>
+    <string name="core_icons_slot_emoji_people_label">Люди</string>
+    <string name="core_icons_slot_emoji_recent_label">Нещодавні</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Ярлик емодзі</string>
+    <string name="core_icons_slot_emoji_smileys_label">Смайли</string>
+    <string name="core_icons_slot_emoji_symbols_label">Символи</string>
+    <string name="core_icons_slot_emoji_travel_label">Подорожі</string>
+    <string name="core_icons_slot_enter_done_label">Enter: готово</string>
+    <string name="core_icons_slot_enter_go_label">Enter: перейти</string>
+    <string name="core_icons_slot_enter_label">Введення</string>
+    <string name="core_icons_slot_enter_next_label">Enter: далі</string>
+    <string name="core_icons_slot_enter_previous_label">Введення: попередній</string>
+    <string name="core_icons_slot_enter_search_label">Введення: пошук</string>
+    <string name="core_icons_slot_enter_send_label">Enter: надіслати</string>
+    <string name="core_icons_slot_forward_delete_label">Видалити вперед</string>
+    <string name="core_icons_slot_globe_label">Змінити мову</string>
+    <string name="core_icons_slot_incognito_label">Значок режиму інкогніто</string>
+    <string name="core_icons_slot_input_method_picker_label">Перемкнути клавіатуру</string>
+    <string name="core_icons_slot_panel_back_label">Назад до клавіш</string>
+    <string name="core_icons_slot_power_saving_label">Значок енергозбереження</string>
+    <string name="core_icons_slot_search_close_label">Закрити пошук</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (увімкнено)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Показати інструменти</string>
+    <string name="core_icons_slot_toolbox_label">Панель інструментів</string>
+</resources>

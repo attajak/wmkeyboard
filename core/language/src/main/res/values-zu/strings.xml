@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Uhlelo lokusebenza lushintshe ukhiye ongu-%1$d uba ukhiye oseduze onawo.</item>
+        <item quantity="other">Uhlelo lokusebenza lushintshe okhiye abangu-%1$d baba okhiye abaseduze onawo.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Uhlelo lokusebenza lususe inkinobho engu-%1$d. Le khibhodi ayinayo inkinobho eyenza into efanayo (ikhodi %2$s).</item>
+        <item quantity="other">Uhlelo lokusebenza lususe izinkinobho ezingu-%1$d. Le khibhodi ayinazo izinkinobho ezenza into efanayo (amakhodi %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Uhlelo lokusebenza lugcine usayizi welebula wokhiye ongu-%1$d kodwa hhayi isitayela sawo sombhalo. Le ikhibhodi idweba amalebula ngesitayela esisodwa.</item>
+        <item quantity="other">Uhlelo lokusebenza lugcine usayizi welebula wokhiye abangu-%1$d kodwa hhayi isitayela sabo sombhalo. Le ikhibhodi idweba amalebula ngesitayela esisodwa.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Uhlelo lokusebenza lushintshe uhlamvu olu-%1$d lwaya efomini elibhalwa yile khibhodi.</item>
+        <item quantity="other">Uhlelo lokusebenza lushintshe izinhlamvu ezi-%1$d zaya efomini elibhalwa yile khibhodi.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d ukhiye awunazo izinhlamvu zokucindezela nokubamba. Ifayela lizigcina kwelinye ifayela ongalivulanga.</item>
+        <item quantity="other">%1$d okhiye abanazo izinhlamvu zokucindezela nokubamba. Ifayela lizigcina kwelinye ifayela ongalivulanga.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Enye ikhibhodi ilinganisa ububanzi bokhiye ngokuhlukile. Uhlelo lokusebenza lushintshe ububanzi ukuze bulingane nale gridi.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d isikhiye samachashazi e-braille kusendlalelo sika-%2$s sinenombolo yechashazi engaphandle kuka-1 kuya ku-6.</item>
+        <item quantity="other">%1$d izikhiye zamachashazi e-braille kusendlalelo sika-%2$s zinenombolo yechashazi engaphandle kuka-1 kuya ku-6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">Ukhiye ongu-%1$d kusendlalelo sika-%2$s awunawo umbhalo futhi awunawo umphumela. Awuthayiphi lutho, futhi uhlelo lokusebenza luwususa uma uvula lesi sakhiwo.</item>
+        <item quantity="other">Izinkinobho ezingu-%1$d kusendlalelo sika-%2$s azinawo umbhalo futhi azinawo umphumela. Azithayiphi lutho, futhi uhlelo lokusebenza luzisusa uma uvula lesi sakhiwo.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Umugqa %1$d wengqimba engu-%2$s awunalutho.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">Ukhiye ongu-%1$d kusendlalelo sika-%2$s uyingxenye yephaneli. Izingxenye zisebenza kuphela kusakhiwo sephaneli.</item>
+        <item quantity="other">Okhiye abangu-%1$d kusendlalelo sika-%2$s yizingxenye zephaneli. Izingxenye zisebenza kuphela kusakhiwo sephaneli.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Umugqa %1$d wesendlalelo se-%2$s unokhiye ongenabubanzi.</string>
+    <string name="core_lang_layout_key_span_error">Umugqa %1$d wesendlalelo %2$s unokhiye ohlanganisa ngaphansi kuka-1 noma ngaphezu kwemigqa engu-%3$d.</string>
+    <string name="core_lang_layout_letters_empty_error">Ungqimba lwezinhlamvu alunawo okhiye.</string>
+    <string name="core_lang_layout_no_delete_error">Isakhiwo asinalo inkinobho yokususa. Awukwazi ukulungisa iphutha.</string>
+    <string name="core_lang_layout_no_enter_error">Isakhiwo asinalo inkinobho yokufaka.</string>
+    <string name="core_lang_layout_no_shift_warning">Isakhiwo asinakhi soshintsho. Ukuze uthayiphe uhlamvu olukhulu, cindezela ubambe ukhiye.</string>
+    <string name="core_lang_layout_no_space_error">Isakhiwo asinasikhiye sesikhala.</string>
+    <string name="core_lang_layout_no_way_back_error">Ungqimba lwe-%1$s alunawo ukhiye obuyela ezinhlamvini. Awukwazi ukushiya ungqimba lolu.</string>
+    <string name="core_lang_layout_persistent_warning">Ungqimba lwe-%1$s luhlala luvulekile lapho ikhibhodi ivaleka. Qiniseka ukuthi unendlela yokuphuma kulesi sakhiwo.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Lesi sakhiwo asinasikhiye esisikhiphayo. Qiniseka ukuthi unendlela yokuphuma kulesi sakhiwo: isikhiye se-ABC, isikhiye sezimpawu, noma ithuluzi lesakhiwo sangokwezifiso kubha yamathuluzi.</string>
+    <string name="core_lang_layout_span_past_end_warning">Umugqa %1$d wesendlalelo %2$s unokhiye ohlanganisa imigqa eminingi kunaleyo enayo isendlalelo. Ikhibhodi iyawumisa emugqeni wokugcina.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Umugqa %1$d wesendlalelo %2$s unokhiye ongu-%3$d. Okhiye abangu-%4$d kuphela abahlala benkulu ngokwanele ukuba bacindezelwe.</item>
+        <item quantity="other">Umugqa %1$d wesendlalelo %2$s unokhiye abangu-%3$d. Okhiye abangu-%4$d kuphela abahlala benkulu ngokwanele ukuba bacindezelwe.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Ungqimba lwe-%1$s lunomugqa ongu-%2$d. Imigqa engu-%3$d kuphela engalingana.</item>
+        <item quantity="other">Ungqimba lwe-%1$s lunemigqa engu-%2$d. Imigqa engu-%3$d kuphela engalingana.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">Inkinobho engu-%1$d kungqimba lwe-%2$s isebenzisa isenzo le nguqulo yohlelo lokusebenza engasazi.</item>
+        <item quantity="other">Izinkinobho ezingu-%1$d kungqimba lwe-%2$s zisebenzisa isenzo le nguqulo yohlelo lokusebenza engasazi.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Umugqa %1$d wesendlalelo %2$s ubanzi kuneminye imigqa. Ikhibhodi idweba okhiye balomugqa bancane.</string>
+    <string name="core_lang_numeral_scope_display_only">Bonisa kuphela</string>
+    <string name="core_lang_numeral_scope_everywhere">Yonke indawo</string>
+    <string name="core_lang_numeral_scope_text_fields">Izinkambu zombhalo</string>
+    <string name="core_lang_numeral_system_auto">Okuzenzakalelayo</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d ingxenye ivela ngaphezu kwesisodwa. Uhlelo lokusebenza lugcina ikhophi yokuqala.</item>
+        <item quantity="other">%1$d izingxenye zivela ngaphezu kwesisodwa. Uhlelo lokusebenza lugcina ikhophi yokuqala yengxenye ngayinye.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Leli phaneli alinawo okhiye. Uhlelo lokusebenza lusebenzisa iphaneli ejwayelekile esikhundleni salokho.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d ukhiye unesenzo esingasebenzi kuphaneli. Uhlelo lokusebenza luyawususa.</item>
+        <item quantity="other">%1$d okhiye banesenzo esingasebenzi kuphaneli. Uhlelo lokusebenza luyabasusa.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Le phaneli ayinawo ukhiye we-ABC. Sebenzisa ibha yamathuluzi noma inkinobho ethi Emuva ukuze ubuyele kokhiye.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Uhlelo lokusebenza lususe ikhophi yesibili yengxenye.</string>
+    <string name="core_lang_panel_repair_field_added">Uhlelo lokusebenza lungeze ingxenye eyinhloko yephaneli emgqeni omusha.</string>
+    <string name="core_lang_panel_repair_field_dropped">Uhlelo lokusebenza lususe ingxenye engeyona eyale phaneli.</string>
+    <string name="core_lang_panel_repair_key_dropped">Uhlelo lokusebenza lususe ukhiye isenzo sawo esingasebenzi kuphaneli.</string>
+    <string name="core_lang_panel_repair_reset">Uhlelo lokusebenza lubuyisele iphaneli elingenalutho ngelivamile.</string>
+    <string name="core_lang_panel_required_field_error">Le phaneli ilahlekelwe yingxenye yayo eyinhloko. Uhlelo lokusebenza lungeza eyodwa uma ludweba iphaneli.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">Ingxenye engu-%1$d ayikho kule phaneli. Uhlelo lokusebenza luyayisusa.</item>
+        <item quantity="other">Izingxenye ezingu-%1$d azikho kule phaneli. Uhlelo lokusebenza luyazisusa.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Uhlelo lokusebenza lususe ukhiye ongenalutho kusendlalelo sika-%1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Ukhiye kusendlalelo sika-%1$s usebenzise ichashazi le-braille %2$d. Uhlelo lokusebenza lulenze laba ichashazi %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Ungqimba lwezinhlamvu lwalungenaso isikhi sokususa. Uhlelo lokusebenza lungeze esisodwa.</string>
+    <string name="core_lang_repair_enter_key_added">Ungqimba lwezinhlamvu lwalungenaso isihluthulelo sokungena (enter key). Uhlelo lokusebenza lungeze esisodwa.</string>
+    <string name="core_lang_repair_field_key_deleted">Uhlelo lokusebenza lususe ingxenye yephaneli kusendlalelo se-%1$s. Izingxenye zisebenza kuphela kusakhiwo sephaneli.</string>
+    <string name="core_lang_repair_key_letters_anchored">Ukhiye kusendlalelo se-%1$s umela u-%2$s. Uhlelo lokusebenza lwenze ukuthi lube uhlobo lwe-%3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Ukhiye kusendlalelo %1$s ufake %2$s njengezinhlamvu ezimele wona. Lezo akuzona izinhlamvu, ngakho uhlelo lwenze ukuthi ube ukhiye ojwayelekile.</string>
+    <string name="core_lang_repair_key_span_clamped">Ukhiye kusendlalelo sika-%1$s uhlanganise imigqa engu-%2$d. Uhlelo lokusebenza lwenze ukuthi luhlanganise engu-%3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Inkinobho kusendlalelo sika-%1$s yayingamayunithi angu-%2$s ububanzi. Uhlelo lokusebenza luyenze yaba ngamayunithi angu-%3$s ububanzi.</string>
+    <string name="core_lang_repair_key_width_set">Ukhiye kusendlalelo %1$s wawungenabubanzi. Uhlelo lokusebenza lubeke ububanzi baba ngu-1.</string>
+    <string name="core_lang_repair_layer_replaced">Ungqimba lwe-%1$s lwalungenazo izinkinobho ezisebenzayo. Manje lusebenzisa igridi eyakhelwe ngaphakathi.</string>
+    <string name="core_lang_repair_letters_key_added">Ungqimba lwe-%1$s lwalungenakhiye obuyela ezinhlamvini. Uhlelo lokusebenza lungeze ukhiye we-ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Ulayini kusendlalelo se-%1$s wawunokhiye ongu-%2$d. Uhlelo lokusebenza lugcina owokuqala ongu-%3$d.</item>
+        <item quantity="other">Ulayini kusendlalelo se-%1$s wawunokhiye abangu-%2$d. Uhlelo lokusebenza lugcina abangu-%3$d bokuqala.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Ulayini kusendlalelo sika-%1$s wawubanzi ngamayunithi angu-%2$s. Uhlelo lokusebenza lwenze okhiye baba bancane ukuze ulayini ulingane.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Ungqimba lwe-%1$s belunomugqa ongu-%2$d. Uhlelo lokusebenza lugcina owokuqala ongu-%3$d.</item>
+        <item quantity="other">Ungqimba lwe-%1$s belunemigqa engu-%2$d. Uhlelo lokusebenza lugcina eyokuqala engu-%3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Ungqimba lwezinhlamvu lwalungenaso isikhala. Uhlelo lokusebenza lungeze esisodwa.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Uhlelo lokusebenza lususe ukhiye kusendlalelo sika-%1$s. Isenzo sawo esithi \"%2$s\" asaziwa.</string>
+</resources>

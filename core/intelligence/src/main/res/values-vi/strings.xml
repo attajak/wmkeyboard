@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Mô hình này bị hạn chế. Hãy thêm mã thông báo Hugging Face của bạn trước.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face đã trả về trạng thái HTTP %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Chấp nhận giấy phép của mô hình trên trang Hugging Face của nó. Sau đó thử lại.</string>
+    <string name="core_intel_llm_download_error_no_space">Thiết bị của bạn không đủ bộ nhớ. Hãy giải phóng khoảng %1$s GB trước.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face không chấp nhận mã thông báo. Hãy kiểm tra mã thông báo và thử lại.</string>
+    <string name="core_intel_llm_download_error_truncated">Kết nối bị gián đoạn trong quá trình tải xuống. Nhấn Tiếp tục để tải tiếp.</string>
+    <string name="core_intel_llm_engine_error_gpu">Mô hình bị lỗi trên GPU. Bộ nhớ GPU nhỏ hơn nhiều so với bộ nhớ hệ thống. Lần thử tiếp theo sẽ sử dụng CPU. Để luôn sử dụng CPU, hãy đặt Compute thành CPU trong cài đặt. Bạn cũng có thể chọn một mô hình nhỏ hơn.</string>
+    <string name="core_intel_llm_engine_error_load">Không tải được mô hình. Tệp có thể đã bị hỏng. Hãy xóa mô hình trong phần cài đặt và tải xuống lại.</string>
+    <string name="core_intel_llm_engine_error_memory">Mô hình đã hết bộ nhớ hoặc gặp lỗi. Hãy chọn một mô hình nhỏ hơn.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">Một mô hình Gemma nhỏ từ thế hệ trước. Nó có chất lượng tốt và ngữ cảnh 4K token.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Gemma nhỏ nhất từ Google. Nó hoạt động nhanh trên mọi thiết bị.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Thế hệ Gemma mới nhất. Mang lại chất lượng hàng đầu trên thiết bị của bạn.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Mô hình lớn nhất. Nó viết tốt nhất, nhưng cần một thiết bị mạnh mẽ.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Một mô hình đa năng vẫn phù hợp với thiết bị cơ bản.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Thông minh hơn rõ rệt so với các mô hình dưới 1B. Nó cần một thiết bị tầm trung.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Một mô hình nhỏ gần đây. Chất lượng cao so với kích thước của nó.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Rất nhỏ và nhanh. Nó tốt cho việc viết lại nhanh, nhưng khả năng suy luận bị hạn chế.</string>
+    <string name="core_intel_llm_module_downloading">Thành phần AI của bàn phím đang được tải xuống từ Google Play. Vui lòng thử lại sau một lát.</string>
+    <string name="core_intel_llm_module_restart">Phần AI vừa cài đặt xong. Hãy đóng và mở lại bàn phím để sử dụng.</string>
+    <string name="core_intel_llm_tier_experimental_label">Thử nghiệm</string>
+    <string name="core_intel_llm_tier_recommended_label">Được đề xuất</string>
+    <string name="core_intel_llm_tier_untested_label">Chưa được kiểm thử</string>
+</resources>

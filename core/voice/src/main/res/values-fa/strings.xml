@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">سرور Hugging Face فایل را ارسال نکرد. کد خطا HTTP %1$s است.</string>
+    <string name="core_voice_download_interrupted_error">اتصال در حین دانلود قطع شد. دوباره تلاش کنید تا از همان‌جایی که متوقف شده ادامه یابد.</string>
+    <string name="core_voice_download_space_error">فضای ذخیره‌سازی کافی روی دستگاه شما وجود ندارد. ابتدا باید حدود %1$s مگابایت فضا آزاد کنید.</string>
+    <string name="core_voice_model_base_eu_body">این مدل از زبانی که در آن تایپ می‌کنید استفاده می‌کند، مشابه مدل ۴۰ زبانه. این مدل فقط زبان‌های اروپایی را پوشش می‌دهد، بنابراین حجم دانلود آن کمتر است.</string>
+    <string name="core_voice_model_base_multi_body">این مدل تعادلی بین دقت و سرعت ایجاد می‌کند. این مدل تمام زبان‌هایی که Whisper می‌شناسد را پوشش می‌دهد. اگر مدل کوچک (Small) خیلی کند است، این را انتخاب کنید.</string>
+    <string name="core_voice_model_base_world_body">این مدل به جای حدس زدن، از زبانی که در آن تایپ می‌کنید استفاده می‌کند. عبارات کوتاه بسیار قابل‌اعتمادتر می‌شوند. زمانی که لیست آن شامل زبان‌های شماست، آن را انتخاب کنید.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d زبان</item>
+        <item quantity="other">%1$d زبان</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">این یکی از دقیق‌ترین مدل‌های Whisper است، اما برای اکثر گوشی‌ها بسیار بزرگ است. حجم دانلود ۱.۵ گیگابایت است. فقط دستگاهی با حافظه زیاد می‌تواند آن را بارگذاری کند.</string>
+    <string name="core_voice_model_large_v3_multi_body">این دقیق‌ترین مدل Whisper است و بهترین عملکرد را در تشخیص زبان گفتاری شما دارد. حجم دانلود ۱.۵ گیگابایت است. فقط دستگاه‌هایی با حافظه زیاد می‌توانند آن را بارگذاری کنند. مدل توربو تقریباً به همان اندازه دقیق است و حجم آن نصف است.</string>
+    <string name="core_voice_model_medium_multi_body">این مدل دقتی نزدیک به دسکتاپ ارائه می‌دهد. هر عبارت چندین ثانیه طول می‌کشد. این مدل هنگام اجرا تقریباً یک گیگابایت حافظه مصرف می‌کند.</string>
+    <string name="core_voice_model_single_language_body">این مدل فقط %1$s را مدیریت می‌کند. هیچ مرحله تشخیص زبانی ندارد. این باعث می‌شود سریع‌تر و کمی دقیق‌تر از یک مدل چندزبانه با همان اندازه باشد.</string>
+    <string name="core_voice_model_small_multi_body">این مدل بهترین دقت را ارائه می‌دهد که همچنان به خوبی روی گوشی اجرا می‌شود. این مدل لهجه‌ها و نویز پس‌زمینه را بهتر از مدل پایه مدیریت می‌کند و تمام زبان‌هایی که Whisper می‌شناسد را پوشش می‌دهد.</string>
+    <string name="core_voice_model_small_world_body">این مدل از زبانی که در آن تایپ می‌کنید استفاده می‌کند و دقت مدل کوچک را دارد. این دقیق‌ترین مدلی است که هنوز روی گوشی جا می‌شود.</string>
+    <string name="core_voice_model_tiny_multi_body">این سریع‌ترین مدل چندزبانه است. با گفتار واضح به خوبی کار می‌کند، اما نویز دقت آن را کاهش می‌دهد.</string>
+    <string name="core_voice_model_turbo_multi_body">این مدل زبان گفتاری شما را بسیار بهتر از مدل‌های کوچک‌تر تشخیص می‌دهد. اگر مدل کوچک‌تر گفتار شما را به اشتباه به زبان دیگری تبدیل می‌کند، این مدل را انتخاب کنید. این یک دانلود حجیم است و پردازش هر عبارت چندین ثانیه طول می‌کشد.</string>
+    <string name="core_voice_size_base_label">پایه</string>
+    <string name="core_voice_size_large_label">بزرگ</string>
+    <string name="core_voice_size_medium_label">متوسط</string>
+    <string name="core_voice_size_small_label">کوچک</string>
+    <string name="core_voice_size_tiny_label">خیلی کوچک</string>
+    <string name="core_voice_size_turbo_label">توربو</string>
+    <string name="core_voice_tier_recommended_label">پیشنهادی</string>
+    <string name="core_voice_whisper_mel_bins_error">این مدل صوتی به یک طیف‌سنج %1$s باندی نیاز دارد که با فایلی که با آن دانلود شده مطابقت ندارد. مدل را در تنظیمات حذف کرده و دوباره دانلود کنید.</string>
+    <string name="core_voice_whisper_model_load_error">مدل صوتی بارگیری نشد. فایل احتمالاً آسیب دیده است. مدل را در تنظیمات حذف کرده و دوباره بارگیری کنید.</string>
+    <string name="core_voice_whisper_transcribe_error">تایپ صوتی کار نکرد. دوباره تلاش کنید یا مدل کوچک‌تری انتخاب کنید.</string>
+</resources>

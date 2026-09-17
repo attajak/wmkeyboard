@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Az alkalmazás %1$d billentyűt a legközelebbi elérhető billentyűre cserélt.</item>
+        <item quantity="other">Az alkalmazás %1$d billentyűt a legközelebbi elérhető billentyűkre cserélt.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Az alkalmazás eltávolított %1$d billentyűt. Ezen a billentyűzeten nincs olyan billentyű, amely ugyanazt csinálná (kód: %2$s).</item>
+        <item quantity="other">Az alkalmazás eltávolított %1$d billentyűt. Ezen a billentyűzeten nincsenek olyan billentyűk, amelyek ugyanazt csinálnák (kódok: %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Az alkalmazás megtartotta a(z) %1$d billentyű címkeméretét, de a szövegstílusát nem. Ez a billentyűzet egyetlen stílusban rajzolja a címkéket.</item>
+        <item quantity="other">Az alkalmazás megtartotta a(z) %1$d billentyű címkeméretét, de a szövegstílusukat nem. Ez a billentyűzet egyetlen stílusban rajzolja a címkéket.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Az alkalmazás %1$d betűt módosított arra az alakra, amelyet ez a billentyűzet használ.</item>
+        <item quantity="other">Az alkalmazás %1$d betűt módosított arra az alakra, amelyet ez a billentyűzet használ.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d billentyűhöz nincsenek lenyomva tartható betűk. A fájl ezeket egy második fájlban tárolja, amelyet nem nyitottál meg.</item>
+        <item quantity="other">%1$d billentyűhöz nincsenek lenyomva tartható betűk. A fájl ezeket egy második fájlban tárolja, amelyet nem nyitottál meg.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">A másik billentyűzet eltérően méri a billentyűszélességeket. Az alkalmazás módosította a szélességeket, hogy illeszkedjenek ehhez a rácshoz.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">A(z) %2$s rétegben lévő %1$d braille-pont billentyű pontszáma kívül esik az 1-6 tartományon.</item>
+        <item quantity="other">A(z) %2$s rétegben lévő %1$d braille-pont billentyű pontszáma kívül esik az 1-6 tartományon.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d billentyű a(z) %2$s rétegen nem rendelkezik címkével és kimenettel. Nem ír semmit, és az alkalmazás törli, amikor bekapcsolja ezt az elrendezést.</item>
+        <item quantity="other">%1$d billentyű a(z) %2$s rétegen nem rendelkezik címkével és kimenettel. Nem írnak semmit, és az alkalmazás törli őket, amikor bekapcsolja ezt az elrendezést.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">A(z) %2$s réteg %1$d. sora üres.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d billentyű a(z) %2$s rétegen panelkomponens. A komponensek csak panelkiosztásban működnek.</item>
+        <item quantity="other">%1$d billentyű a(z) %2$s rétegen panelkomponens. A komponensek csak panelkiosztásban működnek.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">A(z) %2$s réteg %1$d. sorában van egy billentyű szélesség nélkül.</string>
+    <string name="core_lang_layout_key_span_error">A(z) %2$s réteg %1$d. sorában van egy billentyű, amely kevesebb mint 1 vagy több mint %3$d sort fed le.</string>
+    <string name="core_lang_layout_letters_empty_error">A betűk rétegnek nincsenek billentyűi.</string>
+    <string name="core_lang_layout_no_delete_error">A kiosztásnak nincs törlés billentyűje. Nem tudsz hibát javítani.</string>
+    <string name="core_lang_layout_no_enter_error">Az elrendezésnek nincs Enter billentyűje.</string>
+    <string name="core_lang_layout_no_shift_warning">Az elrendezésnek nincs shift billentyűje. Nagybetű írásához tartson lenyomva egy billentyűt.</string>
+    <string name="core_lang_layout_no_space_error">A kiosztás nem tartalmaz szóköz billentyűt.</string>
+    <string name="core_lang_layout_no_way_back_error">A(z) %1$s rétegnek nincs olyan billentyűje, amely visszavezetne a betűkhöz. Nem hagyhatja el ezt a réteget.</string>
+    <string name="core_lang_layout_persistent_warning">A %1$s réteg nyitva marad a billentyűzet bezárása után is. Győződjön meg róla, hogy van módja kilépni ebből az elrendezésből.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Ennek az elrendezésnek nincs olyan billentyűje, amivel ki lehetne lépni belőle. Győződj meg róla, hogy van módod kilépni ebből az elrendezésből: egy ABC billentyű, egy szimbólum billentyű vagy a másodlagos elrendezés eszköz az eszköztáron.</string>
+    <string name="core_lang_layout_span_past_end_warning">A(z) %2$s réteg %1$d. sora olyan billentyűt tartalmaz, amely több sort fed le, mint amennyiből a réteg áll. A billentyűzet az utolsó sornál megállítja.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">A(z) %2$s réteg %1$d. sora %3$d billentyűt tartalmaz. Csak %4$d billentyű marad elég nagy a megnyomáshoz.</item>
+        <item quantity="other">A(z) %2$s réteg %1$d. sora %3$d billentyűt tartalmaz. Csak %4$d billentyű marad elég nagy a megnyomáshoz.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">A(z) %1$s réteg %2$d sort tartalmaz. Csak %3$d sor fér el.</item>
+        <item quantity="other">A(z) %1$s réteg %2$d sort tartalmaz. Csak %3$d sor fér el.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">A(z) %2$s réteg %1$d billentyűje olyan műveletet használ, amelyet az alkalmazás ezen verziója nem ismer.</item>
+        <item quantity="other">A(z) %2$s réteg %1$d billentyűje olyan műveletet használ, amelyet az alkalmazás ezen verziója nem ismer.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">A(z) %2$s réteg %1$d. sora szélesebb, mint a többi sor. A billentyűzet keskenyebbre rajzolja ennek a sornak a billentyűit.</string>
+    <string name="core_lang_numeral_scope_display_only">Csak megjelenítés</string>
+    <string name="core_lang_numeral_scope_everywhere">Mindenhol</string>
+    <string name="core_lang_numeral_scope_text_fields">Szövegmezők</string>
+    <string name="core_lang_numeral_system_auto">Automatikus</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d összetevő többször is szerepel. Az alkalmazás az első példányt tartja meg.</item>
+        <item quantity="other">%1$d összetevő többször is szerepel. Az alkalmazás mindegyikből az első példányt tartja meg.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Ez a panel nem tartalmaz gombokat. Az alkalmazás helyette a szabványos panelt használja.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d billentyűhöz olyan művelet tartozik, amely nem működik panelen. Az alkalmazás törli.</item>
+        <item quantity="other">%1$d billentyűhöz olyan műveletek tartoznak, amelyek nem működnek panelen. Az alkalmazás törli őket.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Ez a panel nem tartalmaz ABC billentyűt. Használd az eszköztárat vagy a Vissza gombot a billentyűkhöz való visszatéréshez.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Az alkalmazás törölt egy másodpéldányt egy összetevőből.</string>
+    <string name="core_lang_panel_repair_field_added">Az alkalmazás új sorban adta hozzá a panel fő összetevőjét.</string>
+    <string name="core_lang_panel_repair_field_dropped">Az alkalmazás törölt egy összetevőt, amely nem tartozik ehhez a panelhez.</string>
+    <string name="core_lang_panel_repair_key_dropped">Az alkalmazás törölt egy billentyűt, amelynek művelete nem működik panelen.</string>
+    <string name="core_lang_panel_repair_reset">Az alkalmazás lecserélte az üres panelt a szabványosra.</string>
+    <string name="core_lang_panel_required_field_error">Ebből a panelből hiányzik a fő összetevője. Az alkalmazás hozzáad egyet, amikor kirajzolja a panelt.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d összetevő nem tartozik ehhez a panelhez. Az alkalmazás törli.</item>
+        <item quantity="other">%1$d összetevő nem tartozik ehhez a panelhez. Az alkalmazás törli őket.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Az alkalmazás törölt egy üres billentyűt a(z) %1$s rétegben.</string>
+    <string name="core_lang_repair_braille_dot_clamped">A %1$s réteg egyik billentyűje a %2$d. braille-pontot használta. Az alkalmazás a %3$d. pontra állította.</string>
+    <string name="core_lang_repair_delete_key_added">A betűk rétegén nem volt törlés gomb. Az alkalmazás hozzáadott egyet.</string>
+    <string name="core_lang_repair_enter_key_added">A betűrétegnek nem volt Enter billentyűje. Az alkalmazás hozzáadott egyet.</string>
+    <string name="core_lang_repair_field_key_deleted">Az alkalmazás törölt egy panelkomponenst a(z) %1$s rétegről. A komponensek csak panel elrendezésben működnek.</string>
+    <string name="core_lang_repair_key_letters_anchored">A(z) %1$s réteg egyik billentyűje a(z) %2$s karaktert jelöli. Az alkalmazás beállította, hogy %3$s karaktert írjon.</string>
+    <string name="core_lang_repair_key_letters_dropped">A(z) %1$s réteg egyik billentyűje %2$s-t sorolta fel a betűk helyett. Ezek nem betűk, ezért az alkalmazás normál billentyűvé tette.</string>
+    <string name="core_lang_repair_key_span_clamped">A(z) %1$s réteg egyik billentyűje %2$d sort fedett le. Az alkalmazás módosította, hogy %3$d sort fedjen le.</string>
+    <string name="core_lang_repair_key_width_capped">A(z) %1$s réteg egyik billentyűje %2$s egység széles volt. Az alkalmazás %3$s egység szélesre állította.</string>
+    <string name="core_lang_repair_key_width_set">A(z) %1$s réteg egyik billentyűjének nem volt szélessége. Az alkalmazás a szélességet 1-re állította.</string>
+    <string name="core_lang_repair_layer_replaced">A(z) %1$s rétegnek nem voltak működő billentyűi. Mostantól a beépített rácsot használja.</string>
+    <string name="core_lang_repair_letters_key_added">A %1$s rétegnek nem volt olyan billentyűje, amely visszavisz a betűkhöz. Az alkalmazás hozzáadott egy ABC billentyűt.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">A(z) %1$s réteg egyik sora %2$d billentyűt tartalmazott. Az alkalmazás megtartja az első %3$d-t.</item>
+        <item quantity="other">A(z) %1$s réteg egyik sora %2$d billentyűt tartalmazott. Az alkalmazás megtartja az első %3$d-t.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">A %1$s réteg egyik sora %2$s egység széles volt. Az alkalmazás kisebbre vette a billentyűket, hogy a sor beférjen.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">A(z) %1$s rétegnek %2$d sora volt. Az alkalmazás az első %3$d-t tartja meg.</item>
+        <item quantity="other">A(z) %1$s rétegnek %2$d sora volt. Az alkalmazás az első %3$d-t tartja meg.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">A betűk rétegén nem volt szóköz billentyű. Az alkalmazás hozzáadott egyet.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Az alkalmazás törölt egy billentyűt a(z) %1$s rétegből. A(z) „%2$s” művelete ismeretlen.</string>
+</resources>

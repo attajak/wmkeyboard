@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Ovaj paket zahtijeva format paketa zvukova %1$s. Ažurirajte aplikaciju.</string>
+    <string name="core_feedback_pack_reject_no_samples">Ovaj paket ne sadrži zvukove koje aplikacija može reproducirati.</string>
+    <string name="core_feedback_pack_reject_too_large">Paket zvukova mora biti manji od %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Datoteka je prazna.</string>
+    <string name="core_feedback_sound_import_html_error">Ovo je HTML ili XML datoteka, a ne zvuk.</string>
+    <string name="core_feedback_sound_import_mp4_error">Aplikacija ne reproducira MP4 i M4A datoteke. Koristite MP3 datoteku.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Na vašem uređaju nema dostupnog prostora za pohranu.</string>
+    <string name="core_feedback_sound_import_read_error">Aplikacija ne može pročitati zvuk.</string>
+    <string name="core_feedback_sound_import_save_error">Aplikacija ne može spremiti zvuk.</string>
+    <string name="core_feedback_sound_import_too_large_error">Ključni zvuk mora biti manji od %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Datoteka je prekratka da bi bila zvuk.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Ovo ne izgleda kao MP3, OGG ili WAV datoteka.</string>
+    <string name="core_feedback_sound_import_zip_error">Ovo je zip arhiva, a ne zvučna datoteka.</string>
+</resources>

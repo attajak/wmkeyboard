@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Detta paket kräver ljudpaketformat %1$s. Uppdatera appen.</string>
+    <string name="core_feedback_pack_reject_no_samples">Detta paket innehåller inga ljud som appen kan spela upp.</string>
+    <string name="core_feedback_pack_reject_too_large">Ett ljudpaket måste vara mindre än %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Filen är tom.</string>
+    <string name="core_feedback_sound_import_html_error">Detta är en HTML- eller XML-fil, inte ett ljud.</string>
+    <string name="core_feedback_sound_import_mp4_error">Appen spelar inte upp MP4- och M4A-filer. Använd en MP3-fil.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Inget lagringsutrymme är tillgängligt på din enhet.</string>
+    <string name="core_feedback_sound_import_read_error">Appen kan inte läsa ljudet.</string>
+    <string name="core_feedback_sound_import_save_error">Appen kan inte spara ljudet.</string>
+    <string name="core_feedback_sound_import_too_large_error">Ett tangentljud måste vara mindre än %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Filen är för kort för att vara ett ljud.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Detta ser inte ut som en MP3-, OGG- eller WAV-fil.</string>
+    <string name="core_feedback_sound_import_zip_error">Detta är ett zip-arkiv, inte en ljudfil.</string>
+</resources>

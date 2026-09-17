@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Додаток змінив %1$d клавішу на найближчу доступну.</item>
+        <item quantity="other">Додаток змінив %1$d клавіш на найближчі доступні.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Додаток видалив %1$d клавішу. На цій клавіатурі немає клавіші, яка виконує ту саму дію (код %2$s).</item>
+        <item quantity="other">Додаток видалив %1$d клавіш. На цій клавіатурі немає клавіш, які виконують ту саму дію (коди %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Додаток зберіг розмір мітки для %1$d клавіші, але не її стиль тексту. Ця клавіатура малює мітки в одному стилі.</item>
+        <item quantity="other">Додаток зберіг розмір мітки для %1$d клавіш, але не їхній стиль тексту. Ця клавіатура малює мітки в одному стилі.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Додаток змінив %1$d літеру на форму, яку використовує ця клавіатура.</item>
+        <item quantity="other">Додаток змінив %1$d літери на форму, яку використовує ця клавіатура.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d клавіша не має символів при тривалому натисканні. Файл зберігає їх у другому файлі, який ви не відкрили.</item>
+        <item quantity="other">%1$d клавіш не мають символів при тривалому натисканні. Файл зберігає їх у другому файлі, який ви не відкрили.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Інша клавіатура вимірює ширину клавіш інакше. Програма змінила ширину, щоб вона відповідала цій сітці.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d клавіша шрифту Брайля в шарі %2$s має номер точки поза межами від 1 до 6.</item>
+        <item quantity="other">%1$d клавіш шрифту Брайля в шарі %2$s мають номер точки поза межами від 1 до 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d клавіша в шарі %2$s не має мітки та виводу. Вона нічого не друкує, і програма видаляє її, коли ви вмикаєте цю розкладку.</item>
+        <item quantity="other">%1$d клавіш у шарі %2$s не мають мітки та виводу. Вони нічого не друкують, і програма видаляє їх, коли ви вмикаєте цю розкладку.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Рядок %1$d шару %2$s порожній.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d клавіша у шарі %2$s є компонентом панелі. Компоненти працюють лише в макеті панелі.</item>
+        <item quantity="other">%1$d клавіш у шарі %2$s є компонентами панелі. Компоненти працюють лише в макеті панелі.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Рядок %1$d шару %2$s містить клавішу без ширини.</string>
+    <string name="core_lang_layout_key_span_error">Рядок %1$d шару %2$s має клавішу, яка охоплює менше 1 або більше %3$d рядків.</string>
+    <string name="core_lang_layout_letters_empty_error">Шар літер не має клавіш.</string>
+    <string name="core_lang_layout_no_delete_error">У розкладці немає клавіші видалення. Ви не можете виправити помилку.</string>
+    <string name="core_lang_layout_no_enter_error">У розкладці немає клавіші Enter.</string>
+    <string name="core_lang_layout_no_shift_warning">У розкладці немає клавіші Shift. Щоб ввести велику літеру, натисніть і утримуйте клавішу.</string>
+    <string name="core_lang_layout_no_space_error">У розкладці немає клавіші пробілу.</string>
+    <string name="core_lang_layout_no_way_back_error">Шар %1$s не має клавіші, яка повертає до літер. Ви не можете залишити цей шар.</string>
+    <string name="core_lang_layout_persistent_warning">Шар %1$s залишається відкритим, коли клавіатура закривається. Переконайтеся, що у вас є спосіб вийти з цієї розкладки.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">У цій розкладці немає клавіші для виходу. Переконайтеся, що у вас є спосіб вийти з цієї розкладки: клавіша ABC, клавіша символів або інструмент власної розкладки на панелі інструментів.</string>
+    <string name="core_lang_layout_span_past_end_warning">Рядок %1$d шару %2$s має клавішу, яка охоплює більше рядків, ніж є в шарі. Клавіатура зупиняє її на останньому рядку.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Рядок %1$d шару %2$s має %3$d клавішу. Лише %4$d клавіш залишаються достатньо великими для натискання.</item>
+        <item quantity="other">Рядок %1$d шару %2$s має %3$d клавіш. Лише %4$d клавіш залишаються достатньо великими для натискання.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Шар %1$s має %2$d рядок. Допускається лише %3$d рядок.</item>
+        <item quantity="other">Шар %1$s має %2$d рядки. Допускається лише %3$d рядків.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d клавіша в шарі %2$s використовує дію, невідому цій версії програми.</item>
+        <item quantity="other">%1$d клавіш у шарі %2$s використовують дію, невідому цій версії програми.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Рядок %1$d шару %2$s ширший за інші рядки. Клавіатура малює клавіші цього рядка вужчими.</string>
+    <string name="core_lang_numeral_scope_display_only">Тільки для відображення</string>
+    <string name="core_lang_numeral_scope_everywhere">Всюди</string>
+    <string name="core_lang_numeral_scope_text_fields">Текстові поля</string>
+    <string name="core_lang_numeral_system_auto">Авто</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d компонент з\'являється більше одного разу. Додаток зберігає першу копію.</item>
+        <item quantity="other">%1$d компонентів з\'являються більше одного разу. Додаток зберігає першу копію кожного.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Ця панель не має клавіш. Додаток використовує стандартну панель.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d клавіша має дію, яка не працює на панелі. Додаток видаляє її.</item>
+        <item quantity="other">%1$d клавіш мають дії, які не працюють на панелі. Додаток видаляє їх.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">На цій панелі немає клавіші ABC. Використовуйте панель інструментів або кнопку «Назад», щоб повернутися до клавіш.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Програма видалила другу копію компонента.</string>
+    <string name="core_lang_panel_repair_field_added">Програма додала основний компонент панелі в новий рядок.</string>
+    <string name="core_lang_panel_repair_field_dropped">Додаток видалив компонент, який не належить до цієї панелі.</string>
+    <string name="core_lang_panel_repair_key_dropped">Додаток видалив клавішу, дія якої не працює на панелі.</string>
+    <string name="core_lang_panel_repair_reset">Програма замінила порожню панель на стандартну.</string>
+    <string name="core_lang_panel_required_field_error">У цій панелі відсутній основний компонент. Програма додає його під час малювання панелі.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d компонент не належить до цієї панелі. Додаток видаляє його.</item>
+        <item quantity="other">%1$d компонентів не належать до цієї панелі. Додаток видаляє їх.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Додаток видалив порожню клавішу в шарі %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Клавіша в шарі %1$s використовувала крапку Брайля %2$d. Додаток змінив її на крапку %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">На шарі літер не було клавіші видалення. Додаток додав її.</string>
+    <string name="core_lang_repair_enter_key_added">На шарі літер не було клавіші Enter. Програма додала її.</string>
+    <string name="core_lang_repair_field_key_deleted">Програма видалила компонент панелі з шару %1$s. Компоненти працюють лише в макеті панелі.</string>
+    <string name="core_lang_repair_key_letters_anchored">Клавіша в шарі %1$s означає %2$s. Додаток зробив її типу %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Клавіша в шарі %1$s містила %2$s як літери, які вона позначає. Це не літери, тому програма зробила її звичайною клавішею.</string>
+    <string name="core_lang_repair_key_span_clamped">Клавіша в шарі %1$s охоплювала %2$d рядків. Програма змінила її на %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Клавіша в шарі %1$s мала ширину %2$s одиниць. Додаток зробив її шириною %3$s одиниць.</string>
+    <string name="core_lang_repair_key_width_set">Клавіша в шарі %1$s не мала ширини. Додаток встановив ширину на 1.</string>
+    <string name="core_lang_repair_layer_replaced">Шар %1$s не мав робочих клавіш. Тепер він використовує вбудовану сітку.</string>
+    <string name="core_lang_repair_letters_key_added">У шарі %1$s не було клавіші для повернення до літер. Додано клавішу ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Рядок у шарі %1$s мав %2$d клавішу. Додаток зберігає перші %3$d.</item>
+        <item quantity="other">Рядок у шарі %1$s мав %2$d клавіш. Додаток зберігає перші %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Рядок у шарі %1$s мав ширину %2$s одиниць. Додаток зменшив клавіші, щоб рядок помістився.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Шар %1$s мав %2$d рядок. Додаток залишає перші %3$d.</item>
+        <item quantity="other">Шар %1$s мав %2$d рядків. Додаток залишає перші %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">У шарі літер не було клавіші пробілу. Додаток додав її.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Додаток видалив клавішу в шарі %1$s. Її дія \"%2$s\" невідома.</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Máy chủ không gửi tệp. Mã lỗi là HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Danh sách từ đó trống hoặc không thể đọc được.</string>
+    <string name="core_pred_wordlist_no_space_error">Thiết bị của bạn không đủ dung lượng lưu trữ. Hãy xóa bớt một số tệp rồi thử lại.</string>
+    <string name="core_pred_wordlist_save_error">Ứng dụng không thể lưu danh sách từ. Hãy thử lại.</string>
+    <string name="core_pred_wordlist_size_all_label">Tất cả</string>
+    <string name="core_pred_wordlist_size_large_label">Lớn</string>
+    <string name="core_pred_wordlist_size_medium_label">Trung bình</string>
+    <string name="core_pred_wordlist_size_small_label">Nhỏ</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brazil</string>
+    <string name="core_pred_wordlist_variant_europe_label">Châu Âu</string>
+</resources>

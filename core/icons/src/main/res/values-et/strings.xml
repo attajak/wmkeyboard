@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Emotikonide vahelehed</string>
+    <string name="core_icons_group_keys_title">Klahvid</string>
+    <string name="core_icons_group_toolbar_title">Tööriistariba</string>
+    <string name="core_icons_group_tools_title">Tööriistad</string>
+    <string name="core_icons_pack_imported_label">Imporditud ikoonid</string>
+    <string name="core_icons_pack_mine_label">Minu ikoonid</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Rakendus eiras %1$d faili. Sellel versioonil pole selle jaoks ikooni: %2$s</item>
+        <item quantity="other">Rakendus eiras %1$d faili. Sellel versioonil pole nende jaoks ikooni: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Rakendus loobus failist \"%1$s\". Rakendus ei saa seda salvestada.</string>
+    <string name="core_icons_repair_svg_unreadable">Rakendus loobus failist „%1$s“. Rakendus ei suuda selle SVG-faili lugeda.</string>
+    <string name="core_icons_slot_backspace_label">Tagasilükkeklahv</string>
+    <string name="core_icons_slot_caps_lock_label">Suurtähelukk</string>
+    <string name="core_icons_slot_emoji_activities_label">Tegevused</string>
+    <string name="core_icons_slot_emoji_animals_label">Loomad</string>
+    <string name="core_icons_slot_emoji_flags_label">Lipud</string>
+    <string name="core_icons_slot_emoji_food_label">Toit</string>
+    <string name="core_icons_slot_emoji_key_label">Emotikonide klahv</string>
+    <string name="core_icons_slot_emoji_most_used_label">Enim kasutatud</string>
+    <string name="core_icons_slot_emoji_nature_label">Loodus</string>
+    <string name="core_icons_slot_emoji_objects_label">Objektid</string>
+    <string name="core_icons_slot_emoji_people_label">Inimesed</string>
+    <string name="core_icons_slot_emoji_recent_label">Hiljutised</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Emotikonide otsetee</string>
+    <string name="core_icons_slot_emoji_smileys_label">Naerunäod</string>
+    <string name="core_icons_slot_emoji_symbols_label">Sümbolid</string>
+    <string name="core_icons_slot_emoji_travel_label">Reisimine</string>
+    <string name="core_icons_slot_enter_done_label">Sisestus: valmis</string>
+    <string name="core_icons_slot_enter_go_label">Sisestus: mine</string>
+    <string name="core_icons_slot_enter_label">Sisesta</string>
+    <string name="core_icons_slot_enter_next_label">Sisestus: järgmine</string>
+    <string name="core_icons_slot_enter_previous_label">Sisestus: eelmine</string>
+    <string name="core_icons_slot_enter_search_label">Sisestusklahv: otsing</string>
+    <string name="core_icons_slot_enter_send_label">Sisestus: saada</string>
+    <string name="core_icons_slot_forward_delete_label">Kustuta edasi</string>
+    <string name="core_icons_slot_globe_label">Vaheta keelt</string>
+    <string name="core_icons_slot_incognito_label">Inkognito-märk</string>
+    <string name="core_icons_slot_input_method_picker_label">Vaheta klaviatuuri</string>
+    <string name="core_icons_slot_panel_back_label">Tagasi klahvide juurde</string>
+    <string name="core_icons_slot_power_saving_label">Energiasäästurežiimi märk</string>
+    <string name="core_icons_slot_search_close_label">Sulge otsing</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Tõstuklahv (sees)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Näita tööriistu</string>
+    <string name="core_icons_slot_toolbox_label">Tööriistakast</string>
+</resources>

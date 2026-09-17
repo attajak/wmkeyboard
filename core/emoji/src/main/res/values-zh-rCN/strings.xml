@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">该表情符号关键词列表为空或无法读取。</string>
+    <string name="core_emoji_dict_error_http">服务器未发送文件。错误代码为 HTTP %1$s。</string>
+    <string name="core_emoji_dict_error_not_a_list">该文件不是表情符号关键词列表。</string>
+    <string name="core_emoji_dict_error_save">应用无法保存表情符号关键词列表。</string>
+    <string name="core_emoji_dict_error_too_large">该 Emoji 关键词列表太大。</string>
+</resources>

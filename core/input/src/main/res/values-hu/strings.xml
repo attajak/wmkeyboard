@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">A letöltött fájl sérült. Az ellenőrzőösszege nem egyezik. Próbálja meg újra a letöltést.</string>
+    <string name="core_input_cjk_download_error_http">A szerver a következő HTTP-állapotot adta vissza: %1$s.</string>
+    <string name="core_input_cjk_download_error_network">A letöltés nem sikerült. Ellenőrizd a kapcsolatot, és próbáld újra.</string>
+    <string name="core_input_cjk_download_error_network_detail">A letöltés nem sikerült: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Nincs elég tárhely az eszközön. Először szabadíts fel egy kis helyet.</string>
+    <string name="core_input_cjk_download_error_truncated">A kapcsolat megszakadt a letöltés közben. A folytatáshoz nyomja meg a Folytatás gombot.</string>
+    <string name="core_input_cjk_download_error_unavailable">Ez a csomag még nem érhető el.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Radikális kódok táblázata a Hanzi karakterekhez, 29 000 karakter. A billentyűzetnek szüksége van erre a csomagra a Cangjie és Quick elrendezésekhez.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) szótár</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana olvasatok a mozc-tól, 1,08 millió bejegyzés, körülbelül 42 MB. A billentyűzetnek szüksége van erre a csomagra a japán konverzióhoz.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Japán kana-kanji szótár</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Jyutping-olvasatok táblázata kandzsi karakterekhez, 163 000 bejegyzéssel. A billentyűzetnek szüksége van erre a csomagra a kantoni konverzióhoz.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantoni Jyutping szótár</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Hanzi karakterek és kifejezések a CC-CEDICT-ből, 120 000 bejegyzés. A billentyűzetnek szüksége van erre a csomagra a kínai konverzióhoz.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Kínai Pinyin szótár</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Vonássorrend-táblázat a kínai írásjegyekhez. A billentyűzetnek szüksége van erre a csomagra a vonásalapú elrendezéshez.</string>
+    <string name="core_input_cjk_pack_stroke_title">Kínai vonás (笔画) szótár</string>
+    <string name="core_input_double_pinyin_off_label">Ki (teljes Pinyin)</string>
+</resources>

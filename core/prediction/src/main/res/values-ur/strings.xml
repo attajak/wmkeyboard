@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">سرور نے فائل نہیں بھیجی۔ ایرر کوڈ HTTP %1$s ہے۔</string>
+    <string name="core_pred_wordlist_malformed_error">وہ الفاظ کی فہرست خالی یا ناقابل مطالعہ ہے۔</string>
+    <string name="core_pred_wordlist_no_space_error">آپ کے آلے پر کافی اسٹوریج نہیں ہے۔ کچھ فائلیں حذف کریں، پھر دوبارہ کوشش کریں۔</string>
+    <string name="core_pred_wordlist_save_error">ایپ الفاظ کی فہرست محفوظ نہیں کر سکتی۔ دوبارہ کوشش کریں۔</string>
+    <string name="core_pred_wordlist_size_all_label">سب کچھ</string>
+    <string name="core_pred_wordlist_size_large_label">بڑا</string>
+    <string name="core_pred_wordlist_size_medium_label">درمیانہ</string>
+    <string name="core_pred_wordlist_size_small_label">چھوٹا</string>
+    <string name="core_pred_wordlist_variant_brazil_label">برازیل</string>
+    <string name="core_pred_wordlist_variant_europe_label">یورپ</string>
+</resources>

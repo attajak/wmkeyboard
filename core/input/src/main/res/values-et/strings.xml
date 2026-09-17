@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Allalaaditud fail on rikutud. Selle kontrollsumma ei klapi. Proovige uuesti alla laadida.</string>
+    <string name="core_input_cjk_download_error_http">Server tagastas HTTP-oleku %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Allalaadimine ebaõnnestus. Kontrollige oma ühendust ja proovige uuesti.</string>
+    <string name="core_input_cjk_download_error_network_detail">Allalaadimine ei õnnestunud: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Seadmes pole piisavalt salvestusruumi. Vabasta esmalt veidi ruumi.</string>
+    <string name="core_input_cjk_download_error_truncated">Ühendus katkes allalaadimise ajal. Jätkamiseks vajutage nuppu Jätka.</string>
+    <string name="core_input_cjk_download_error_unavailable">See pakk pole veel saadaval.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Radikaalkoodide tabel hiina tähemärkide jaoks, 29 000 tähemärki. Klaviatuur vajab seda paketti Cangjie ja Quick paigutuste jaoks.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) sõnastik</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana lugemid mozc-ist, 1,08 miljonit kirjet, umbes 42 MB. Klaviatuur vajab seda pakki jaapani keelde teisendamiseks.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Jaapani kana-kanji sõnastik</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Jyutpingi lugemite tabel hanzi märkide jaoks, 163 000 kirjet. Klaviatuur vajab seda paketti kantoni keele teisendamiseks.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantoni keele Jyutpingi sõnastik</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Hanzi märgid ja fraasid CC-CEDICT-ist, 120 000 kirjet. Klaviatuur vajab seda paketti hiina keelde teisendamiseks.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Hiina Pinyini sõnastik</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Hanzi-märkide tõmmete järjekorra tabel. Klaviatuur vajab seda paketti tõmmete paigutuse jaoks.</string>
+    <string name="core_input_cjk_pack_stroke_title">Hiina keele kriipsude (笔画) sõnastik</string>
+    <string name="core_input_double_pinyin_off_label">Väljas (täielik Pinyin)</string>
+</resources>

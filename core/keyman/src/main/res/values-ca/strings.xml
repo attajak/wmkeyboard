@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">L\'aplicació ha eliminat %1$d lliscament diagonal. Aquest teclat només admet lliscaments cap amunt, cap avall, cap a l\'esquerra i cap a la dreta.</item>
+        <item quantity="other">L\'aplicació ha eliminat %1$d lliscaments diagonals. Aquest teclat només admet lliscaments cap amunt, cap avall, cap a l\'esquerra i cap a la dreta.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d tecla escriu el caràcter imprès. El teclat original utilitzava una regla per decidir què escriu.</item>
+        <item quantity="other">%1$d tecles escriuen els caràcters impresos. El teclat original utilitzava regles per decidir què escriuen.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Aquest teclat té %1$d tecla que es prem repetidament per alternar entre caràcters. Aquesta aplicació de teclat no té cap tecla així, per la qual cosa només està disponible el primer caràcter.</item>
+        <item quantity="other">Aquest teclat té %1$d tecles que es premen repetidament per alternar entre caràcters. Aquesta aplicació de teclat no té aquestes tecles, per la qual cosa només està disponible el primer caràcter de cadascuna.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Aquest teclat utilitza regles per decidir què escriuen les seves tecles. L\'aplicació no té aquestes regles, així que cada tecla escriu el caràcter imprès a sobre.</string>
+    <string name="core_keyman_shift_layer_folded">L\'aplicació ha fusionat la capa de majúscules a les tecles. Mantén premuda la tecla Majús per accedir a aquests caràcters.</string>
+    <string name="core_keyman_shift_layer_separate">La capa de majúscules té una forma diferent, així que l\'aplicació l\'ha mantingut com la seva pròpia capa.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">L\'aplicació ha eliminat %1$d tecla. Aquest teclat no té cap tecla que faci el mateix.</item>
+        <item quantity="other">L\'aplicació ha eliminat %1$d tecles. Aquest teclat no té cap tecla que faci el mateix.</item>
+    </plurals>
+</resources>

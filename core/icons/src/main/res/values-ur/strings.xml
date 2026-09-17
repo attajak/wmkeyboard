@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">ایموجی ٹیبز</string>
+    <string name="core_icons_group_keys_title">کلیدیں</string>
+    <string name="core_icons_group_toolbar_title">ٹول بار</string>
+    <string name="core_icons_group_tools_title">ٹولز</string>
+    <string name="core_icons_pack_imported_label">درآمد شدہ آئیکنز</string>
+    <string name="core_icons_pack_mine_label">میرے آئیکنز</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">ایپ نے %1$d فائل کو نظر انداز کر دیا۔ اس ورژن میں اس کے لیے کوئی آئیکن نہیں ہے: %2$s</item>
+        <item quantity="other">ایپ نے %1$d فائلوں کو نظر انداز کر دیا۔ اس ورژن میں ان کے لیے کوئی آئیکن نہیں ہے: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">ایپ نے \"%1$s\" کو چھوڑ دیا۔ ایپ اسے محفوظ نہیں کر سکتی۔</string>
+    <string name="core_icons_repair_svg_unreadable">ایپ نے \"%1$s\" کو گرا دیا۔ ایپ اپنی SVG فائل کو پڑھ نہیں سکتی۔</string>
+    <string name="core_icons_slot_backspace_label">بیک اسپیس</string>
+    <string name="core_icons_slot_caps_lock_label">کیپس لاک</string>
+    <string name="core_icons_slot_emoji_activities_label">سرگرمیاں</string>
+    <string name="core_icons_slot_emoji_animals_label">جانور</string>
+    <string name="core_icons_slot_emoji_flags_label">پرچم</string>
+    <string name="core_icons_slot_emoji_food_label">کھانا</string>
+    <string name="core_icons_slot_emoji_key_label">ایموجی کی</string>
+    <string name="core_icons_slot_emoji_most_used_label">سب سے زیادہ استعمال شدہ</string>
+    <string name="core_icons_slot_emoji_nature_label">فطرت</string>
+    <string name="core_icons_slot_emoji_objects_label">اشیاء</string>
+    <string name="core_icons_slot_emoji_people_label">لوگ</string>
+    <string name="core_icons_slot_emoji_recent_label">حالیہ</string>
+    <string name="core_icons_slot_emoji_shortcut_label">ایموجی شارٹ کٹ</string>
+    <string name="core_icons_slot_emoji_smileys_label">سمائلیز</string>
+    <string name="core_icons_slot_emoji_symbols_label">علامات</string>
+    <string name="core_icons_slot_emoji_travel_label">سفر</string>
+    <string name="core_icons_slot_enter_done_label">انٹر: مکمل</string>
+    <string name="core_icons_slot_enter_go_label">انٹر: گو</string>
+    <string name="core_icons_slot_enter_label">داخل کریں</string>
+    <string name="core_icons_slot_enter_next_label">انٹر: اگلا</string>
+    <string name="core_icons_slot_enter_previous_label">انٹر: پچھلا</string>
+    <string name="core_icons_slot_enter_search_label">انٹر: تلاش</string>
+    <string name="core_icons_slot_enter_send_label">انٹر: بھیجیں</string>
+    <string name="core_icons_slot_forward_delete_label">فارورڈ ڈیلیٹ</string>
+    <string name="core_icons_slot_globe_label">زبان تبدیل کریں</string>
+    <string name="core_icons_slot_incognito_label">انکوگنیٹو بیج</string>
+    <string name="core_icons_slot_input_method_picker_label">کی بورڈ تبدیل کریں</string>
+    <string name="core_icons_slot_panel_back_label">کلیدوں پر واپس جائیں</string>
+    <string name="core_icons_slot_power_saving_label">پاور سیونگ بیج</string>
+    <string name="core_icons_slot_search_close_label">تلاش بند کریں</string>
+    <string name="core_icons_slot_shift_label">شفٹ</string>
+    <string name="core_icons_slot_shift_on_label">شفٹ (آن)</string>
+    <string name="core_icons_slot_suggestions_expand_label">ٹولز دکھائیں</string>
+    <string name="core_icons_slot_toolbox_label">ٹول باکس</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Baya</string>
+    <string name="core_theme_builtin_bubble_label">Burbuja</string>
+    <string name="core_theme_builtin_crimson_label">Carmesí</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Mar profundo</string>
+    <string name="core_theme_builtin_facet_label">Faceta</string>
+    <string name="core_theme_builtin_forest_label">Bosque</string>
+    <string name="core_theme_builtin_glacier_label">Glaciar</string>
+    <string name="core_theme_builtin_mint_label">Menta</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Océano</string>
+    <string name="core_theme_builtin_pitch_label">Negro absoluto</string>
+    <string name="core_theme_builtin_rose_label">Rosa</string>
+    <string name="core_theme_builtin_sand_label">Arena</string>
+    <string name="core_theme_builtin_slate_label">Pizarra</string>
+    <string name="core_theme_builtin_snow_label">Nieve</string>
+    <string name="core_theme_builtin_sunset_drift_label">Deriva del atardecer</string>
+    <string name="core_theme_builtin_sunset_label">Atardecer</string>
+    <string name="core_theme_family_gradient_label">Degradados</string>
+    <string name="core_theme_family_ocean_label">Anochecer</string>
+    <string name="core_theme_family_snow_label">Pastel</string>
+</resources>

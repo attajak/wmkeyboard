@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Le modeli ivaliwe. Engeza ithokheni yakho ye-Hugging Face kuqala.</string>
+    <string name="core_intel_llm_download_error_http">I-Hugging Face ibuyise isimo se-HTTP %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Yamukela ilayisensi yemodeli ekhasini layo le-Hugging Face. Bese uzama futhi.</string>
+    <string name="core_intel_llm_download_error_no_space">Ayikho indawo eyanele yokugcina kudivayisi yakho. Khulula cishe u-%1$s GB kuqala.</string>
+    <string name="core_intel_llm_download_error_token_rejected">I-Hugging Face ayizange iyamukele ithokheni. Hlola ithokheni bese uzama futhi.</string>
+    <string name="core_intel_llm_download_error_truncated">Ukuxhumana kumile ngesikhathi sokulanda. Cindezela u-Resume ukuze uqhubeke.</string>
+    <string name="core_intel_llm_engine_error_gpu">Imodeli yehlulekile ku-GPU. Inkumbulo ye-GPU incane kakhulu kunenkumbulo yesistimu. Ukuzama okulandelayo kuzosebenzisa i-CPU. Ukuze usebenzise i-CPU ngaso sonke isikhathi, setha i-Compute ku-CPU kuzilungiselelo. Ungaphinde ukhethe imodeli encane.</string>
+    <string name="core_intel_llm_engine_error_load">Imodeli ayilayishanga. Ifayela cishe lonakele. Susa imodeli kuzilungiselelo bese uyilanda futhi.</string>
+    <string name="core_intel_llm_engine_error_memory">Imodeli iphelelwe yinkumbulo, noma yehlulekile. Khetha imodeli encane.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">IGemma encane evela esizukulwaneni esedlule. Inekhwalithi enhle kanye nomongo wamathokheni angu-4K.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">I-Gemma encane kunazo zonke evela ku-Google. Iyashesha kuwo wonke amadivayisi.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Isizukulwane esisha se-Gemma. Inikeza ikhwalithi ephezulu kudivayisi yakho.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Imodeli enkulu kunazo zonke. Ibhalela kahle kakhulu, kodwa idinga idivayisi enamandla.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">Imodeli ejwayelekile esangena kudivayisi eyisisekelo.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Ihlakaniphe ngokusobala kunezinhlobo ezingaphansi kuka-1B. Idinga idivayisi esezingeni eliphakathi.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">Imodeli encane yakamuva. Izinga liphezulu kakhulu ngosayizi wayo.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Incane kakhulu futhi iyashesha. Ilungele ukubhala kabusha ngokushesha, kodwa ukucabanga kwayo kulinganiselwe.</string>
+    <string name="core_intel_llm_module_downloading">Ingxenye ye-AI yekhibhodi ilanda kusuka ku-Google Play. Zama futhi ngomzuzu.</string>
+    <string name="core_intel_llm_module_restart">Ingxenye ye-AI isiqedile ukufakwa. Vala bese uvula kabusha ikhibhodi ukuze uyisebenzise.</string>
+    <string name="core_intel_llm_tier_experimental_label">Okokuhlola</string>
+    <string name="core_intel_llm_tier_recommended_label">Kunconyiwe</string>
+    <string name="core_intel_llm_tier_untested_label">Akukahlolwa</string>
+</resources>

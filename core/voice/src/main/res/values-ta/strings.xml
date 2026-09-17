@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face சர்வர் கோப்பை அனுப்பவில்லை. பிழைக் குறியீடு HTTP %1$s ஆகும்.</string>
+    <string name="core_voice_download_interrupted_error">பதிவிறக்கத்தின் போது இணைப்பு துண்டிக்கப்பட்டது. நின்ற இடத்திலிருந்து தொடர மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_voice_download_space_error">உங்கள் சாதனத்தில் போதிய சேமிப்பிடம் இல்லை. முதலில் சுமார் %1$s MB-ஐ காலி செய்ய வேண்டும்.</string>
+    <string name="core_voice_model_base_eu_body">இந்த மாதிரி நீங்கள் தட்டச்சு செய்யும் மொழியைப் பயன்படுத்துகிறது, இது 40 மொழி மாதிரியைப் போன்றது. இது ஐரோப்பிய மொழிகளை மட்டுமே உள்ளடக்கியது, எனவே பதிவிறக்கம் சிறியது.</string>
+    <string name="core_voice_model_base_multi_body">இந்த மாடல் துல்லியம் மற்றும் வேகத்தை சமநிலைப்படுத்துகிறது. விஸ்பர் (Whisper) அறிந்த அனைத்து மொழிகளையும் இது உள்ளடக்கியது. ஸ்மால் (Small) மாடல் மிகவும் மெதுவாக இருந்தால் இதைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="core_voice_model_base_world_body">இந்த மாதிரி யூகத்திற்குப் பதிலாக நீங்கள் தட்டச்சு செய்யும் மொழியைப் பயன்படுத்துகிறது. குறுகிய சொற்றொடர்கள் மிகவும் நம்பகமானதாக மாறும். அதன் பட்டியலில் உங்கள் மொழிகள் இருக்கும்போது அதைத் தேர்ந்தெடுக்கவும்.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d மொழி</item>
+        <item quantity="other">%1$d மொழிகள்</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">இது மிகவும் துல்லியமான விஸ்பர் (Whisper) மாடல்களில் ஒன்றாகும், ஆனால் பெரும்பாலான தொலைபேசிகளுக்கு இது மிகவும் பெரியது. இதன் அளவு 1.5 ஜிபி. அதிக நினைவகம் கொண்ட சாதனங்களால் மட்டுமே இதை ஏற்ற முடியும்.</string>
+    <string name="core_voice_model_large_v3_multi_body">இது மிகவும் துல்லியமான விஸ்பர் (Whisper) மாடல், மேலும் நீங்கள் எந்த மொழியில் பேசுகிறீர்கள் என்பதை அடையாளம் காண்பதில் சிறந்தது. இதன் பதிவிறக்க அளவு 1.5 ஜிபி. அதிக நினைவகம் கொண்ட சாதனத்தில் மட்டுமே இதை ஏற்ற முடியும். டர்போ (Turbo) மாடல் கிட்டத்தட்ட அதே அளவு துல்லியமானது மற்றும் பாதி அளவு மட்டுமே கொண்டது.</string>
+    <string name="core_voice_model_medium_multi_body">இந்த மாதிரி டெஸ்க்டாப் துல்லியத்திற்கு இணையான துல்லியத்தை வழங்குகிறது. ஒவ்வொரு சொற்றொடருக்கும் சில நொடிகள் ஆகும். இது இயங்கும்போது கிட்டத்தட்ட ஒரு ஜிகாபைட் நினைவகத்தைப் பயன்படுத்துகிறது.</string>
+    <string name="core_voice_model_single_language_body">இந்த மாடல் %1$s ஐ மட்டுமே கையாளும். இதில் மொழி கண்டறிதல் படி இல்லை. இது அதே அளவுள்ள பலமொழி மாடலை விட வேகமாகவும் சற்று துல்லியமாகவும் இருக்கும்.</string>
+    <string name="core_voice_model_small_multi_body">இந்த மாடல் போனில் சிறப்பாகச் செயல்படும் அதே வேளையில் சிறந்த துல்லியத்தை வழங்குகிறது. இது பேஸ் மாடலை விட உச்சரிப்புகள் மற்றும் பின்னணி இரைச்சலை சிறப்பாகக் கையாளுகிறது. விஸ்பர் (Whisper) அறிந்த அனைத்து மொழிகளையும் இது உள்ளடக்கியது.</string>
+    <string name="core_voice_model_small_world_body">இந்த மாதிரி நீங்கள் தட்டச்சு செய்யும் மொழியைப் பயன்படுத்துகிறது மற்றும் சிறிய மாதிரியின் துல்லியத்தைக் கொண்டுள்ளது. இது தொலைபேசியில் பொருந்தக்கூடிய மிகவும் துல்லியமான மாதிரியாகும்.</string>
+    <string name="core_voice_model_tiny_multi_body">இது மிக வேகமான பன்மொழி மாதிரி. இது தெளிவான பேச்சில் நன்றாக வேலை செய்கிறது, ஆனால் இரைச்சல் துல்லியத்தைக் குறைக்கிறது.</string>
+    <string name="core_voice_model_turbo_multi_body">இந்த மாடல் நீங்கள் பேசும் மொழியை சிறிய மாடல்களை விட மிகச் சிறப்பாக அடையாளம் காணும். சிறிய மாடல் உங்கள் பேச்சை தவறான மொழியில் மாற்றினால் இதைத் தேர்ந்தெடுக்கவும். இது பெரிய பதிவிறக்கம், மேலும் ஒவ்வொரு சொற்றொடருக்கும் சில நொடிகள் ஆகும்.</string>
+    <string name="core_voice_size_base_label">அடிப்படை</string>
+    <string name="core_voice_size_large_label">பெரியது</string>
+    <string name="core_voice_size_medium_label">நடுத்தரம்</string>
+    <string name="core_voice_size_small_label">சிறியது</string>
+    <string name="core_voice_size_tiny_label">மிகச்சிறியது</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">பரிந்துரைக்கப்படுகிறது</string>
+    <string name="core_voice_whisper_mel_bins_error">இந்தக் குரல் மாதிரிக்கு %1$s பேண்ட் ஸ்பெக்ட்ரோகிராம் தேவை, இது பதிவிறக்கம் செய்யப்பட்ட கோப்புடன் பொருந்தவில்லை. அமைப்புகளில் மாதிரியை நீக்கிவிட்டு மீண்டும் பதிவிறக்கவும்.</string>
+    <string name="core_voice_whisper_model_load_error">குரல் மாதிரி ஏற்றப்படவில்லை. கோப்பு சேதமடைந்திருக்கலாம். அமைப்புகளில் மாதிரியை நீக்கிவிட்டு மீண்டும் பதிவிறக்கவும்.</string>
+    <string name="core_voice_whisper_transcribe_error">குரல் தட்டச்சு வேலை செய்யவில்லை. மீண்டும் முயற்சிக்கவும் அல்லது சிறிய மாடலைத் தேர்ந்தெடுக்கவும்.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Acea listă de cuvinte cheie pentru emoji este goală sau ilizibilă.</string>
+    <string name="core_emoji_dict_error_http">Serverul nu a trimis fișierul. Codul de eroare este HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Acel fișier nu este o listă de cuvinte cheie emoji.</string>
+    <string name="core_emoji_dict_error_save">Aplicația nu a putut salva lista de cuvinte cheie pentru emoji.</string>
+    <string name="core_emoji_dict_error_too_large">Acea listă de cuvinte cheie pentru emoji este prea mare.</string>
+</resources>

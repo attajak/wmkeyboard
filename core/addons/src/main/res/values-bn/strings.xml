@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">অভিধান</string>
+    <string name="core_addons_type_dictionary_singular_label">অভিধান</string>
+    <string name="core_addons_type_emoji_font_label">ইমোজি ফন্ট</string>
+    <string name="core_addons_type_emoji_font_singular_label">ইমোজি ফন্ট</string>
+    <string name="core_addons_type_emoji_keywords_label">ইমোজি কিওয়ার্ড</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">ইমোজি কিওয়ার্ড প্যাক</string>
+    <string name="core_addons_type_espanso_label">Espanso প্যাক</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso প্যাক</string>
+    <string name="core_addons_type_font_label">ফন্ট</string>
+    <string name="core_addons_type_font_singular_label">ফন্ট</string>
+    <string name="core_addons_type_icon_pack_label">আইকন প্যাক</string>
+    <string name="core_addons_type_icon_pack_singular_label">আইকন প্যাক</string>
+    <string name="core_addons_type_layout_label">লেআউট</string>
+    <string name="core_addons_type_layout_singular_label">লেআউট</string>
+    <string name="core_addons_type_plugin_label">প্লাগইন</string>
+    <string name="core_addons_type_plugin_singular_label">প্লাগইন</string>
+    <string name="core_addons_type_snippets_label">স্নিপেট</string>
+    <string name="core_addons_type_snippets_singular_label">স্নিপেট প্যাক</string>
+    <string name="core_addons_type_sound_label">সাউন্ড</string>
+    <string name="core_addons_type_sound_pack_label">সাউন্ড প্যাক</string>
+    <string name="core_addons_type_sound_pack_singular_label">সাউন্ড প্যাক</string>
+    <string name="core_addons_type_sound_singular_label">কী সাউন্ড</string>
+    <string name="core_addons_type_stickers_label">স্টিকার প্যাক</string>
+    <string name="core_addons_type_stickers_singular_label">স্টিকার প্যাক</string>
+    <string name="core_addons_type_theme_label">থিম</string>
+    <string name="core_addons_type_theme_singular_label">থিম</string>
+    <string name="core_addons_type_unknown_label">অন্যান্য</string>
+    <string name="core_addons_type_unknown_singular_label">অ্যাড-অন</string>
+    <string name="core_addons_type_vocabulary_label">ভোকাবুলারি</string>
+    <string name="core_addons_type_vocabulary_singular_label">ভোকাবুলারি প্যাক</string>
+</resources>

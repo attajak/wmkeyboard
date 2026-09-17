@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">వన్-టైమ్ కోడ్</string>
+    <string name="core_content_clip_entity_otp_tag">కోడ్</string>
+    <string name="core_content_clip_entity_phone_label">ఫోన్ నంబర్</string>
+    <string name="core_content_clip_entity_phone_tag">ఫోన్</string>
+    <string name="core_content_clip_entity_url_label">లింక్</string>
+    <string name="core_content_clip_entity_url_tag">లింక్</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d స్నిప్పెట్ ఇతర విస్తరణలను కలిగి ఉంది, వీటిని ఎస్పన్సో ఉంచలేదు. మొదటిది మాత్రమే వ్రాయబడింది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్లు ఇతర విస్తరణలను కలిగి ఉన్నాయి, వీటిని ఎస్పన్సో ఉంచలేదు. ప్రతిదానిలో మొదటిది మాత్రమే వ్రాయబడింది.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d స్నిప్పెట్ కొన్ని కంప్యూటర్ ప్రోగ్రామ్‌లకు మాత్రమే పరిమితం చేయబడింది. మీ ఫోన్‌లో ఇది ప్రతిచోటా పనిచేస్తుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్‌లు కొన్ని కంప్యూటర్ ప్రోగ్రామ్‌లకు మాత్రమే పరిమితం చేయబడ్డాయి. మీ ఫోన్‌లో అవి ప్రతిచోటా పనిచేస్తాయి.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d స్నిప్పెట్ జాబితా నుండి ఎంచుకోమని మిమ్మల్ని అడుగుతుంది. యాప్ దానికి బదులుగా యాదృచ్ఛికంగా ఒకదానిని ఎంచుకుంటుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్‌లు జాబితా నుండి ఎంచుకోమని మిమ్మల్ని అడుగుతాయి. యాప్ దానికి బదులుగా యాదృచ్ఛికంగా ఒకదానిని ఎంచుకుంటుంది.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d స్నిప్పెట్ విస్తరించే ముందు అడుగుతుంది. ఎస్పన్సోలో అటువంటి సెట్టింగ్ లేదు, కాబట్టి అది అక్కడ తనంతట అదే విస్తరిస్తుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్లు విస్తరించే ముందు అడుగుతాయి. ఎస్పన్సోలో అటువంటి సెట్టింగ్ లేదు, కాబట్టి అవి అక్కడ తమంతట అవే విస్తరిస్తాయి.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d స్నిప్పెట్ యాప్ పూర్తిగా వ్రాయలేని తేదీ ఫార్మాట్‌ను ఉపయోగిస్తుంది. యాప్ చేయలేని భాగాన్ని వదిలివేసింది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్‌లు యాప్ పూర్తిగా వ్రాయలేని తేదీ ఫార్మాట్‌లను ఉపయోగిస్తాయి. యాప్ చేయలేని భాగాలను వదిలివేసింది.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d స్నిప్పెట్ ఆఫ్ చేయబడిన ఫోల్డర్‌లో ఉంది. ఎస్పన్సోకు ఫోల్డర్ స్విచ్ లేదు, కాబట్టి అది అక్కడ విస్తరిస్తుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్లు ఆఫ్ చేయబడిన ఫోల్డర్లలో ఉన్నాయి. ఎస్పన్సోకు ఫోల్డర్ స్విచ్ లేదు, కాబట్టి అవి అక్కడ విస్తరిస్తాయి.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">యాప్ ఇన్సర్ట్ చేయడానికి ఏమీ లేని %1$d స్నిప్పెట్‌ను దాటవేసింది.</item>
+        <item quantity="other">యాప్ ఇన్సర్ట్ చేయడానికి ఏమీ లేని %1$d స్నిప్పెట్‌లను దాటవేసింది.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d స్నిప్పెట్ మిమ్మల్ని ఫారమ్‌ను పూరించమని అడుగుతుంది. యాప్ ఫారమ్‌ను వచనంగా చొప్పిస్తుంది, కర్సర్ మొదటి ఖాళీలో ఉంటుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్‌లు మిమ్మల్ని ఫారమ్‌ను పూరించమని అడుగుతాయి. యాప్ ప్రతి ఫారమ్‌ను వచనంగా చొప్పిస్తుంది, కర్సర్ మొదటి ఖాళీలో ఉంటుంది.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">యాప్ చిత్రాన్ని ఇన్సర్ట్ చేసే %1$d స్నిప్పెట్‌ను దాటవేసింది.</item>
+        <item quantity="other">యాప్ చిత్రాలను ఇన్సర్ట్ చేసే %1$d స్నిప్పెట్‌లను దాటవేసింది.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">ఫైల్ %1$d ఇతర ఫైల్‌ను చదువుతుంది. ఒక ఫైల్ మిగిలిన వాటిని తనతో తీసుకురాలేదు.</item>
+        <item quantity="other">ఫైల్ %1$d ఇతర ఫైళ్లను చదువుతుంది. ఒక ఫైల్ మిగిలిన వాటిని తనతో తీసుకురాలేదు.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d స్నిప్పెట్ ఇతర స్నిప్పెట్‌లను సూచిస్తుంది. ఎస్పన్సో (Espanso) దీన్ని చెప్పడానికి మార్గం లేదు, కాబట్టి లింక్‌లు వదిలివేయబడ్డాయి.</item>
+        <item quantity="other">%1$d స్నిప్పెట్‌లు ఇతర స్నిప్పెట్‌లను సూచిస్తాయి. ఎస్పన్సో (Espanso) దీన్ని చెప్పడానికి మార్గం లేదు, కాబట్టి లింక్‌లు వదిలివేయబడ్డాయి.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d ట్రిగ్గర్ పదం లోపల పని చేయడానికి ఉద్దేశించబడింది. మీ ఫోన్‌లో ఇది కేవలం పూర్తి పదంగా మాత్రమే పనిచేస్తుంది.</item>
+        <item quantity="other">%1$d ట్రిగ్గర్లు పదం లోపల పని చేయడానికి ఉద్దేశించబడ్డాయి. మీ ఫోన్‌లో ఇవి కేవలం పూర్తి పదాలుగా మాత్రమే పనిచేస్తాయి.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d స్నిప్పెట్ ఎస్పన్సోలో సమానమైన విలువ లేని ఒక విలువను ఉపయోగిస్తుంది. అది ఉన్నది ఉన్నట్లుగా వ్రాయబడుతుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్లు ఎస్పన్సోలో సమానమైన విలువ లేని విలువలను ఉపయోగిస్తాయి. అవి ఉన్నవి ఉన్నట్లుగా వ్రాయబడతాయి.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">యాప్ %1$d స్నిప్పెట్ నుండి ప్యాటర్న్‌ను తొలగించింది. యాప్ ఆ ఆకృతి గల ప్యాటర్న్‌లను రన్ చేయదు. స్నిప్పెట్ జాబితాలోనే ఉంటుంది.</item>
+        <item quantity="other">యాప్ %1$d స్నిప్పెట్‌ల నుండి ప్యాటర్న్‌లను తొలగించింది. యాప్ ఆ ఆకృతి గల ప్యాటర్న్‌లను రన్ చేయదు. స్నిప్పెట్‌లు జాబితాలోనే ఉంటాయి.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d స్నిప్పెట్ ఫార్మాట్ చేసిన వచనాన్ని ఉపయోగిస్తుంది. యాప్ పదాలను ఉంచుతుంది మరియు ఫార్మాటింగ్‌ను తొలగిస్తుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్‌లు ఫార్మాట్ చేసిన వచనాన్ని ఉపయోగిస్తాయి. యాప్ పదాలను ఉంచుతుంది మరియు ఫార్మాటింగ్‌ను తొలగిస్తుంది.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d స్నిప్పెట్ మీ కంప్యూటర్‌లో ఒక కమాండ్‌ను రన్ చేస్తుంది. యాప్ ఆ కమాండ్‌ను వదిలేసింది మరియు దానిని ఎప్పటికీ రన్ చేయదు.</item>
+        <item quantity="other">%1$d స్నిప్పెట్‌లు మీ కంప్యూటర్‌లో కమాండ్‌లను రన్ చేస్తాయి. యాప్ ఆ కమాండ్‌లను వదిలేసింది మరియు వాటిని ఎప్పటికీ రన్ చేయదు.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d ట్రిగ్గర్ కేవలం చిహ్నాలతో మాత్రమే రూపొందించబడింది, కాబట్టి యాప్ దీన్ని గమనించలేదు. దీని స్నిప్పెట్ జాబితాలోనే ఉంటుంది.</item>
+        <item quantity="other">%1$d ట్రిగ్గర్లు కేవలం చిహ్నాలతో మాత్రమే రూపొందించబడ్డాయి, కాబట్టి యాప్ వీటిని గమనించలేదు. వీటి స్నిప్పెట్లు జాబితాలోనే ఉంటాయి.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d స్నిప్పెట్‌లో బ్రేస్‌లలో టెక్స్ట్ ఉంది, దీనిని ఈ యాప్ {date} వంటి వాటితో భర్తీ చేస్తుంది. ఇది రాసినట్లుగా కనిపించకుండా విస్తరిస్తుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్‌లలో బ్రేస్‌లలో టెక్స్ట్ ఉంది, దీనిని ఈ యాప్ {date} వంటి వాటితో భర్తీ చేస్తుంది. ఇది రాసినట్లుగా కనిపించకుండా విస్తరిస్తుంది.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d స్నిప్పెట్ దాని ప్యాటర్న్ క్యాప్చర్ చేసిన టెక్స్ట్ యొక్క క్యాపిటల్ అక్షరాలను మారుస్తుంది. Espanso అలా చేయలేదు, కాబట్టి క్యాప్చర్ చేసిన టెక్స్ట్ మార్పు లేకుండానే ఉంటుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్‌లు వాటి ప్యాటర్న్‌లు క్యాప్చర్ చేసిన టెక్స్ట్ యొక్క క్యాపిటల్ అక్షరాలను మారుస్తాయి. Espanso అలా చేయలేదు, కాబట్టి క్యాప్చర్ చేసిన టెక్స్ట్ మార్పు లేకుండానే ఉంటుంది.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d స్నిప్పెట్ యాప్‌లో సమానమైన విలువ లేని ఒక విలువను ఉపయోగిస్తుంది. ఆ భాగం ఖాళీగా వస్తుంది.</item>
+        <item quantity="other">%1$d స్నిప్పెట్లు యాప్‌లో సమానమైన విలువ లేని విలువలను ఉపయోగిస్తాయి. ఆ భాగాలు ఖాళీగా వస్తాయి.</item>
+    </plurals>
+    <string name="core_content_font_error_download">యాప్ ఫాంట్‌ను డౌన్‌లోడ్ చేయలేకపోయింది. మీ కనెక్షన్‌ని తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.</string>
+    <string name="core_content_font_error_empty">ఫైల్ ఖాళీగా ఉంది.</string>
+    <string name="core_content_font_error_load">యాప్ ఈ ఫాంట్ ఫైల్‌ను లోడ్ చేయలేదు.</string>
+    <string name="core_content_font_error_markup">ఈ ఫైల్ HTML లేదా XML ఫైల్, ఫాంట్ కాదు.</string>
+    <string name="core_content_font_error_no_storage">ఫాంట్ కోసం నిల్వ అందుబాటులో లేదు.</string>
+    <string name="core_content_font_error_not_a_font">ఈ ఫైల్ .ttf లేదా .otf ఫాంట్ లాగా లేదు.</string>
+    <string name="core_content_font_error_read">యాప్ ఫాంట్‌ను చదవలేదు.</string>
+    <string name="core_content_font_error_save">యాప్ ఫాంట్‌ను సేవ్ చేయలేదు.</string>
+    <string name="core_content_font_error_too_large">ఫాంట్ %1$d MB కంటే తక్కువ ఉండాలి.</string>
+    <string name="core_content_font_error_too_many">ఫాంట్ లైబ్రరీ నిండిపోయింది. ఒక ఫాంట్‌ను తొలగించి మళ్ళీ ప్రయత్నించండి.</string>
+    <string name="core_content_font_error_too_short">ఆ ఫైల్ ఫాంట్‌గా ఉండటానికి చాలా చిన్నదిగా ఉంది.</string>
+    <string name="core_content_font_error_woff">యాప్ WOFF వెబ్ ఫాంట్‌లను చదవలేదు. ఫాంట్ యొక్క .ttf లేదా .otf వెర్షన్‌ను ఉపయోగించండి.</string>
+    <string name="core_content_font_error_woff2">యాప్ WOFF2 వెబ్ ఫాంట్‌లను చదవలేదు. ఫాంట్ యొక్క .ttf లేదా .otf వెర్షన్‌ను ఉపయోగించండి.</string>
+    <string name="core_content_font_error_zip">ఈ ఫైల్ జిప్ ఆర్కైవ్, ఫాంట్ కాదు.</string>
+    <string name="core_content_selection_macro_add_contact">కాంటాక్ట్</string>
+    <string name="core_content_selection_macro_calendar">క్యాలెండర్</string>
+    <string name="core_content_selection_macro_call">కాల్</string>
+    <string name="core_content_selection_macro_case_lower">లోయర్ కేస్</string>
+    <string name="core_content_selection_macro_case_sentence">సెంటెన్స్ కేస్</string>
+    <string name="core_content_selection_macro_case_title">టైటిల్ కేస్</string>
+    <string name="core_content_selection_macro_case_upper">పెద్ద అక్షరాలు (UPPER CASE)</string>
+    <string name="core_content_selection_macro_chat_bold">బోల్డ్</string>
+    <string name="core_content_selection_macro_chat_italic">ఇటాలిక్</string>
+    <string name="core_content_selection_macro_chat_mono">మోనో</string>
+    <string name="core_content_selection_macro_chat_strike">స్ట్రైక్</string>
+    <string name="core_content_selection_macro_colour">రంగు</string>
+    <string name="core_content_selection_macro_copy">కాపీ చేయి</string>
+    <string name="core_content_selection_macro_digits_latin">అంకెలు</string>
+    <string name="core_content_selection_macro_email">ఈమెయిల్</string>
+    <string name="core_content_selection_macro_fancy">ఫ్యాన్సీ</string>
+    <string name="core_content_selection_macro_find">కనుగొను</string>
+    <string name="core_content_selection_macro_format">ఫార్మాట్</string>
+    <string name="core_content_selection_macro_grammar">వ్యాకరణం</string>
+    <string name="core_content_selection_macro_lines_bullet">బుల్లెట్లు</string>
+    <string name="core_content_selection_macro_lines_dedupe">ప్రత్యేకమైనవి</string>
+    <string name="core_content_selection_macro_lines_number">సంఖ్య</string>
+    <string name="core_content_selection_macro_lines_sort">క్రమబద్ధీకరించు</string>
+    <string name="core_content_selection_macro_map">మ్యాప్</string>
+    <string name="core_content_selection_macro_open">ఓపెన్</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">మాట్లాడండి</string>
+    <string name="core_content_selection_macro_replace">భర్తీ చేయి</string>
+    <string name="core_content_selection_macro_search">శోధన</string>
+    <string name="core_content_selection_macro_share">షేర్ చేయండి</string>
+    <string name="core_content_selection_macro_sms">సందేశం</string>
+    <string name="core_content_selection_macro_time_zones">జోన్‌లు</string>
+    <string name="core_content_selection_macro_to_bangla">బంగ్లా</string>
+    <string name="core_content_selection_macro_to_banglish">బాంగ్లిష్</string>
+    <string name="core_content_selection_macro_translate">అనువదించు</string>
+    <string name="core_content_selection_macro_url_decode">డీకోడ్</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">యాప్ \"%1$s\" నుండి %2$d విస్తరణను వదిలివేసింది.</item>
+        <item quantity="other">యాప్ \"%1$s\" నుండి %2$d విస్తరణలను వదిలివేసింది.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">యాప్ \"%1$s\" నుండి ప్యాటర్న్‌ను తొలగించింది. ప్యాటర్న్ సరిగ్గా లేదు. స్నిప్పెట్ జాబితాలోనే ఉంటుంది.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">యాప్ పేరు లేని లేదా మరొక దానిని పునరావృతం చేసే %1$d ఫోల్డర్‌ను తొలగించింది. దాని స్నిప్పెట్‌లు ఫోల్డర్ లేకుండా వచ్చాయి.</item>
+        <item quantity="other">యాప్ పేరు లేని లేదా మరొక దానిని పునరావృతం చేసే %1$d ఫోల్డర్‌లను తొలగించింది. వాటి స్నిప్పెట్‌లు ఫోల్డర్ లేకుండా వచ్చాయి.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">యాప్ ఉంచగలిగే దానికంటే ఫైల్‌లో ఎక్కువ స్నిప్పెట్‌లు ఉన్నాయి. యాప్ మొదటి %1$dని దిగుమతి చేసుకుంది.</item>
+        <item quantity="other">యాప్ ఉంచగలిగే దానికంటే ఫైల్‌లో ఎక్కువ స్నిప్పెట్‌లు ఉన్నాయి. యాప్ మొదటి %1$dని దిగుమతి చేసుకుంది.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">స్నిప్పెట్‌కు పేరు లేదు, కాబట్టి యాప్ దాని మొదటి లైన్ ఆధారంగా దానికి పేరు పెట్టింది.</string>
+    <string name="core_content_snippet_repair_no_text">యాప్ \"%1$s\"ను వదిలేసింది. ఇందులో ఎటువంటి వచనం లేదు.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">యాప్ \"%1$s\" నుండి ప్యాటర్న్‌ను తొలగించింది. ఇది %2$d అక్షరం కంటే ఎక్కువ పొడవు ఉంది.</item>
+        <item quantity="other">యాప్ \"%1$s\" నుండి ప్యాటర్న్‌ను తొలగించింది. ఇది %2$d అక్షరాల కంటే ఎక్కువ పొడవు ఉంది.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">యాప్ \"%1$s\"ని కుదించింది. ఇది %2$d అక్షరం కంటే ఎక్కువగా ఉంది.</item>
+        <item quantity="other">యాప్ \"%1$s\"ని కుదించింది. ఇది %2$d అక్షరాల కంటే ఎక్కువగా ఉంది.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">మీరు టైప్ చేస్తున్న యాప్ పేరు</string>
+    <string name="core_content_snippet_var_clip_info">అత్యంత కొత్త క్లిప్‌బోర్డ్ ఎంట్రీ</string>
+    <string name="core_content_snippet_var_cursor_info">కర్సర్ ఆగే ప్రదేశం</string>
+    <string name="core_content_snippet_var_date_info">ఈరోజు తేదీ</string>
+    <string name="core_content_snippet_var_datetime_info">తేదీ మరియు సమయం</string>
+    <string name="core_content_snippet_var_day_info">నెలలోని రోజు</string>
+    <string name="core_content_snippet_var_isodate_info">ISO రూపంలో తేదీ, ఉదాహరణకు 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">ISO ఫార్మాట్‌లో తేదీ మరియు సమయం</string>
+    <string name="core_content_snippet_var_month_info">నెల పేరు</string>
+    <string name="core_content_snippet_var_package_info">ఆ యాప్ యొక్క ప్యాకేజీ పేరు</string>
+    <string name="core_content_snippet_var_selection_info">ఫీల్డ్‌లో మీరు ఎంచుకున్న టెక్స్ట్</string>
+    <string name="core_content_snippet_var_time12_info">ప్రస్తుత సమయం 12-గంటల ఫార్మాట్‌లో</string>
+    <string name="core_content_snippet_var_time_info">ప్రస్తుత సమయం 24-గంటల ఫార్మాట్‌లో</string>
+    <string name="core_content_snippet_var_timestamp_info">Unix సెకన్లలో సమయం</string>
+    <string name="core_content_snippet_var_timezone_info">సమయ క్షేత్రం, ఉదాహరణకు GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">కొత్త యాదృచ్ఛిక UUID</string>
+    <string name="core_content_snippet_var_weekday_info">రోజు పేరు, ఉదాహరణకు ఆదివారం</string>
+    <string name="core_content_snippet_var_year_info">సంవత్సరం, నాలుగు అంకెలతో</string>
+    <string name="core_content_sticker_pack_imported_label">దిగుమతి చేసుకున్న స్టిక్కర్లు</string>
+    <string name="core_content_sticker_repair_image_missing">యాప్ \"%1$s\"ని తొలగించింది. దాని చిత్రం లేదు.</string>
+    <string name="core_content_sticker_repair_image_unreadable">యాప్ \"%1$s\"ని తొలగించింది. యాప్ దాని చిత్రాన్ని చదవలేకపోతోంది.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">ఈ ప్యాక్‌లో %1$d స్టిక్కర్ ఉంది. యాప్ మొదటి %2$dని ఉంచుతుంది.</item>
+        <item quantity="other">ఈ ప్యాక్‌లో %1$d స్టిక్కర్లు ఉన్నాయి. యాప్ మొదటి %2$dని ఉంచుతుంది.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">యాప్ ఒక స్టిక్కర్‌ను వదిలివేసింది. స్టిక్కర్ పేరు ఏ ఇమేజ్ ఫైల్‌ను సూచించడం లేదు.</string>
+    <string name="core_content_sticker_repair_none_listed">ప్యాక్ ఫైల్‌లో స్టిక్కర్లు ఏవీ లేవు.</string>
+    <string name="core_content_sticker_repair_not_saved">యాప్ \"%1$s\"ని వదిలివేసింది. యాప్ దీన్ని సేవ్ చేయలేదు.</string>
+</resources>

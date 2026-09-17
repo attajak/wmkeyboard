@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Preuzeta datoteka je oštećena. Njezin kontrolni zbroj se ne podudara. Pokušajte ponovno preuzeti.</string>
+    <string name="core_input_cjk_download_error_http">Poslužitelj je vratio HTTP status %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Preuzimanje nije uspjelo. Provjerite vezu i pokušajte ponovno.</string>
+    <string name="core_input_cjk_download_error_network_detail">Preuzimanje nije uspjelo: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Na vašem uređaju nema dovoljno prostora za pohranu. Prvo oslobodite malo prostora.</string>
+    <string name="core_input_cjk_download_error_truncated">Veza je prekinuta tijekom preuzimanja. Pritisnite Nastavi za nastavak.</string>
+    <string name="core_input_cjk_download_error_unavailable">Ovaj paket još nije dostupan.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Tablica radikalnih kodova za Hanzi znakove, 29.000 znakova. Tipkovnici je potreban ovaj paket za Cangjie i Quick rasporede.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) rječnik</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana očitanja iz mozc-a, 1,08 milijuna unosa, oko 42 MB. Tipkovnica treba ovaj paket za japansku konverziju.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Rječnik japanske kana u kanji</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Tablica Jyutping očitanja za Hanzi znakove, 163.000 unosa. Tipkovnica treba ovaj paket za kantonsku konverziju.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantonski Jyutping rječnik</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Hanzi znakovi i fraze iz CC-CEDICT-a, 120.000 unosa. Tipkovnici je potreban ovaj paket za kinesku konverziju.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Kineski Pinyin rječnik</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Tablica redoslijeda poteza za Hanzi znakove. Tipkovnica treba ovaj paket za raspored poteza.</string>
+    <string name="core_input_cjk_pack_stroke_title">Kineski rječnik poteza (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Isključeno (puni Pinyin)</string>
+</resources>

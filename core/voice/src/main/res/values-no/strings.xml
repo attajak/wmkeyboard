@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face-serveren sendte ikke filen. Feilkoden er HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Tilkoblingen ble avbrutt under nedlastingen. Prøv igjen for å fortsette der den stoppet.</string>
+    <string name="core_voice_download_space_error">Det er ikke nok lagringsplass på enheten din. Du må frigjøre omtrent %1$s MB først.</string>
+    <string name="core_voice_model_base_eu_body">Denne modellen bruker språket du skriver på, det samme som 40-språksmodellen. Den dekker bare de europeiske språkene, så nedlastingen er mindre.</string>
+    <string name="core_voice_model_base_multi_body">Denne modellen balanserer nøyaktighet og hastighet. Den dekker alle språk som Whisper kjenner til. Velg denne hvis den lille modellen er for treg.</string>
+    <string name="core_voice_model_base_world_body">Denne modellen bruker språket du skriver på i stedet for å gjette. Korte fraser blir mye mer pålitelige. Velg den når listen inneholder språkene dine.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d språk</item>
+        <item quantity="other">%1$d språk</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Dette er en av de mest nøyaktige Whisper-modellene, men den er for stor for de fleste telefoner. Nedlastingen er på 1,5 GB. Bare en enhet med mye minne kan laste den inn.</string>
+    <string name="core_voice_model_large_v3_multi_body">Dette er den mest nøyaktige Whisper-modellen, og den beste til å gjenkjenne hvilket språk du snakker. Nedlastingen er på 1,5 GB. Bare en enhet med mye minne kan laste den inn. Turbo-modellen er nesten like nøyaktig og er halvparten så stor.</string>
+    <string name="core_voice_model_medium_multi_body">Denne modellen gir nesten skrivebordsnøyaktighet. Hver frase tar flere sekunder. Modellen bruker nesten én gigabyte minne mens den kjører.</string>
+    <string name="core_voice_model_single_language_body">Denne modellen håndterer kun %1$s. Den har ikke noe trinn for språkdeteksjon. Dette gjør den raskere og litt mer nøyaktig enn en flerspråklig modell av samme størrelse.</string>
+    <string name="core_voice_model_small_multi_body">Denne modellen gir den beste nøyaktigheten som fortsatt kjører bra på en telefon. Den håndterer aksenter og bakgrunnsstøy bedre enn Base-modellen. Den dekker alle språk som Whisper kjenner.</string>
+    <string name="core_voice_model_small_world_body">Denne modellen bruker språket du skriver på og har nøyaktigheten til Small-modellen. Det er den mest nøyaktige modellen som fortsatt får plass på en telefon.</string>
+    <string name="core_voice_model_tiny_multi_body">Dette er den raskeste flerspråklige modellen. Den fungerer bra med tydelig tale, men støy reduserer nøyaktigheten.</string>
+    <string name="core_voice_model_turbo_multi_body">Denne modellen gjenkjenner språket du snakker mye bedre enn de mindre modellene. Velg den hvis en mindre modell transkriberer talen din som feil språk. Det er en stor nedlasting, og hver frase tar flere sekunder.</string>
+    <string name="core_voice_size_base_label">Base</string>
+    <string name="core_voice_size_large_label">Stor</string>
+    <string name="core_voice_size_medium_label">Middels</string>
+    <string name="core_voice_size_small_label">Liten</string>
+    <string name="core_voice_size_tiny_label">Liten</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Anbefalt</string>
+    <string name="core_voice_whisper_mel_bins_error">Denne stemmemodellen krever et %1$s-bånds spektrogram, som ikke samsvarer med filen den ble lastet ned med. Slett modellen i innstillinger og last den ned på nytt.</string>
+    <string name="core_voice_whisper_model_load_error">Talemodellen ble ikke lastet inn. Filen er muligens skadet. Slett modellen i innstillingene og last den ned på nytt.</string>
+    <string name="core_voice_whisper_transcribe_error">Talestyrt skriving fungerte ikke. Prøv igjen, eller velg en mindre modell.</string>
+</resources>

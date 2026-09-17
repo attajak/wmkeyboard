@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Poslužitelj Hugging Face nije poslao datoteku. Kod pogreške je HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Veza je prekinuta tijekom preuzimanja. Pokušajte ponovno kako biste nastavili od mjesta gdje je stalo.</string>
+    <string name="core_voice_download_space_error">Na uređaju nema dovoljno prostora za pohranu. Prvo morate osloboditi oko %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">Ovaj model koristi jezik na kojem tipkate, isto kao i model od 40 jezika. Pokriva samo europske jezike, pa je preuzimanje manje.</string>
+    <string name="core_voice_model_base_multi_body">Ovaj model balansira točnost i brzinu. Pokriva svaki jezik koji Whisper poznaje. Odaberite ga ako je mali model prespor.</string>
+    <string name="core_voice_model_base_world_body">Ovaj model koristi jezik na kojem tipkate umjesto nagađanja. Kratke fraze postaju puno pouzdanije. Odaberite ga kada njegov popis sadrži vaše jezike.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d jezik</item>
+        <item quantity="other">%1$d jezika</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Ovo je jedan od najtočnijih Whisper modela, ali je prevelik za većinu telefona. Preuzimanje iznosi 1,5 GB. Samo uređaj s velikom količinom memorije ga može učitati.</string>
+    <string name="core_voice_model_large_v3_multi_body">Ovo je najprecizniji Whisper model i najbolji u prepoznavanju jezika kojim govorite. Preuzimanje iznosi 1,5 GB. Samo uređaj s velikom količinom memorije može ga učitati. Turbo model je gotovo jednako precizan i upola manji.</string>
+    <string name="core_voice_model_medium_multi_body">Ovaj model pruža gotovo točnost stolnog računala. Svaka fraza traje nekoliko sekundi. Model koristi gotovo jedan gigabajt memorije dok radi.</string>
+    <string name="core_voice_model_single_language_body">Ovaj model obrađuje samo %1$s. Nema korak otkrivanja jezika. To ga čini bržim i malo preciznijim od višejezičnog modela iste veličine.</string>
+    <string name="core_voice_model_small_multi_body">Ovaj model pruža najbolju točnost koja još uvijek dobro radi na telefonu. Bolje podnosi naglaske i pozadinsku buku od osnovnog modela. Pokriva svaki jezik koji Whisper poznaje.</string>
+    <string name="core_voice_model_small_world_body">Ovaj model koristi jezik na kojem tipkate i ima točnost malog modela. To je najtočniji model koji još uvijek stane na telefon.</string>
+    <string name="core_voice_model_tiny_multi_body">Ovo je najbrži višejezični model. Dobro radi s jasnim govorom, ali buka smanjuje točnost.</string>
+    <string name="core_voice_model_turbo_multi_body">Ovaj model prepoznaje jezik kojim govorite puno bolje od manjih modela. Odaberite ga ako manji model transkribira vaš govor kao pogrešan jezik. To je veliko preuzimanje i za svaku frazu potrebno je nekoliko sekundi.</string>
+    <string name="core_voice_size_base_label">Osnovno</string>
+    <string name="core_voice_size_large_label">Veliko</string>
+    <string name="core_voice_size_medium_label">Srednje</string>
+    <string name="core_voice_size_small_label">Malo</string>
+    <string name="core_voice_size_tiny_label">Sićušno</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Preporučeno</string>
+    <string name="core_voice_whisper_mel_bins_error">Ovaj glasovni model treba spektrogram s %1$s pojaseva, što se ne podudara s datotekom s kojom je preuzet. Izbrišite model u postavkama i ponovno ga preuzmite.</string>
+    <string name="core_voice_whisper_model_load_error">Glasovni model nije učitan. Datoteka je možda oštećena. Izbrišite model u postavkama i ponovno ga preuzmite.</string>
+    <string name="core_voice_whisper_transcribe_error">Glasovno tipkanje nije uspjelo. Pokušajte ponovno ili odaberite manji model.</string>
+</resources>

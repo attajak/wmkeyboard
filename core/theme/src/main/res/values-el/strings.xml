@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Μούρο</string>
+    <string name="core_theme_builtin_bubble_label">Φούσκα</string>
+    <string name="core_theme_builtin_crimson_label">Πορφυρό</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Βαθιά θάλασσα</string>
+    <string name="core_theme_builtin_facet_label">Όψη</string>
+    <string name="core_theme_builtin_forest_label">Δάσος</string>
+    <string name="core_theme_builtin_glacier_label">Παγετώνας</string>
+    <string name="core_theme_builtin_mint_label">Μέντα</string>
+    <string name="core_theme_builtin_nebula_label">Νεφέλωμα</string>
+    <string name="core_theme_builtin_ocean_label">Ωκεανός</string>
+    <string name="core_theme_builtin_pitch_label">Κατάμαυρο</string>
+    <string name="core_theme_builtin_rose_label">Τριαντάφυλλο</string>
+    <string name="core_theme_builtin_sand_label">Άμμος</string>
+    <string name="core_theme_builtin_slate_label">Σχιστόλιθος</string>
+    <string name="core_theme_builtin_snow_label">Χιόνι</string>
+    <string name="core_theme_builtin_sunset_drift_label">Sunset drift</string>
+    <string name="core_theme_builtin_sunset_label">Ηλιοβασίλεμα</string>
+    <string name="core_theme_family_gradient_label">Διαβαθμίσεις</string>
+    <string name="core_theme_family_ocean_label">Σούρουπο</string>
+    <string name="core_theme_family_snow_label">Παστέλ</string>
+</resources>

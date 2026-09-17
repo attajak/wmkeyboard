@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Den listen med emoji-nøkkelord er tom eller uleselig.</string>
+    <string name="core_emoji_dict_error_http">Serveren sendte ikke filen. Feilkoden er HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Denne filen er ikke en liste over emojinøkkelord.</string>
+    <string name="core_emoji_dict_error_save">Appen kunne ikke lagre listen over emojinøkkelord.</string>
+    <string name="core_emoji_dict_error_too_large">Denne listen med emojinøkkelord er for stor.</string>
+</resources>

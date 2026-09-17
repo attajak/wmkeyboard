@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">સર્વરે ફાઇલ મોકલી નથી. ભૂલ કોડ HTTP %1$s છે.</string>
+    <string name="core_pred_wordlist_malformed_error">તે શબ્દ સૂચિ ખાલી છે અથવા વાંચી શકાય તેવી નથી.</string>
+    <string name="core_pred_wordlist_no_space_error">તમારા ઉપકરણ પર પૂરતી સ્ટોરેજ નથી. કેટલીક ફાઇલો ડિલીટ કરો, પછી ફરી પ્રયાસ કરો.</string>
+    <string name="core_pred_wordlist_save_error">એપ શબ્દ સૂચિ સાચવી શકતી નથી. ફરી પ્રયાસ કરો.</string>
+    <string name="core_pred_wordlist_size_all_label">બધું જ</string>
+    <string name="core_pred_wordlist_size_large_label">મોટું</string>
+    <string name="core_pred_wordlist_size_medium_label">મધ્યમ</string>
+    <string name="core_pred_wordlist_size_small_label">નાનું</string>
+    <string name="core_pred_wordlist_variant_brazil_label">બ્રાઝિલ</string>
+    <string name="core_pred_wordlist_variant_europe_label">યુરોપ</string>
+</resources>

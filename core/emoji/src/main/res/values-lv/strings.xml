@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Šis emocijzīmju atslēgvārdu saraksts ir tukšs vai nav nolasāms.</string>
+    <string name="core_emoji_dict_error_http">Serveris nenosūtīja failu. Kļūdas kods ir HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Šis fails nav emocijzīmju atslēgvārdu saraksts.</string>
+    <string name="core_emoji_dict_error_save">Lietotne nevarēja saglabāt emocijzīmju atslēgvārdu sarakstu.</string>
+    <string name="core_emoji_dict_error_too_large">Šis emocijzīmju atslēgvārdu saraksts ir pārāk liels.</string>
+</resources>

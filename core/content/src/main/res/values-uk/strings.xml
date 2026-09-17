@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Одноразовий код</string>
+    <string name="core_content_clip_entity_otp_tag">КОД</string>
+    <string name="core_content_clip_entity_phone_label">Номер телефону</string>
+    <string name="core_content_clip_entity_phone_tag">ТЕЛЕФОН</string>
+    <string name="core_content_clip_entity_url_label">Посилання</string>
+    <string name="core_content_clip_entity_url_tag">ПОСИЛАННЯ</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d фрагмент має інші розширення, які Espanso не може підтримувати. Було записано лише перше.</item>
+        <item quantity="other">%1$d фрагментів мають інші розширення, які Espanso не може підтримувати. Було записано лише перше з кожного.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d фрагмент обмежений певними комп\'ютерними програмами. На вашому телефоні він працює всюди.</item>
+        <item quantity="other">%1$d фрагментів обмежені певними комп\'ютерними програмами. На вашому телефоні вони працюють всюди.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d фрагмент просить вас вибрати зі списку. Додаток вибирає один випадковим чином.</item>
+        <item quantity="other">%1$d фрагментів просять вас вибрати зі списку. Додаток вибирає один випадковим чином.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d фрагмент запитує підтвердження перед розгортанням. Espanso не має такого налаштування, тому він розгорнеться самостійно.</item>
+        <item quantity="other">%1$d фрагментів запитують підтвердження перед розгортанням. Espanso не має такого налаштування, тому вони розгорнуться самостійно.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d фрагмент використовує формат дати, який додаток не може записати повністю. Додаток пропустив частину, яку не зміг обробити.</item>
+        <item quantity="other">%1$d фрагментів використовують формати дати, які додаток не може записати повністю. Додаток пропустив частини, які не зміг обробити.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d фрагмент знаходиться у вимкненій папці. Espanso не має перемикача папок, тому він розгорнеться там.</item>
+        <item quantity="other">%1$d фрагментів знаходяться у вимкнених папках. Espanso не має перемикача папок, тому вони розгорнуться там.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Додаток пропустив %1$d фрагмент, якому нічого вставити.</item>
+        <item quantity="other">Додаток пропустив %1$d фрагментів, яким нічого вставити.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d фрагмент просить вас заповнити форму. Додаток вставляє форму як текст, встановлюючи курсор у першому порожньому полі.</item>
+        <item quantity="other">%1$d фрагментів просять вас заповнити форму. Додаток вставляє кожну форму як текст, встановлюючи курсор у першому порожньому полі.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Додаток пропустив %1$d фрагмент, який вставляє зображення.</item>
+        <item quantity="other">Додаток пропустив %1$d фрагментів, які вставляють зображення.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Файл зчитує %1$d інший файл. Один файл не може переносити інші разом із собою.</item>
+        <item quantity="other">Файл зчитує %1$d інших файлів. Один файл не може переносити інші разом із собою.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d фрагмент вказує на інші фрагменти. Espanso не має способу це вказати, тому посилання було пропущено.</item>
+        <item quantity="other">%1$d фрагментів вказують на інші фрагменти. Espanso не має способу це вказати, тому посилання було пропущено.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d тригер призначений для роботи всередині слова. На вашому телефоні він працює лише як ціле слово.</item>
+        <item quantity="other">%1$d тригерів призначені для роботи всередині слова. На вашому телефоні вони працюють лише як цілі слова.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d фрагмент використовує значення, для якого в Espanso немає еквівалента. Воно записується як є.</item>
+        <item quantity="other">%1$d фрагментів використовують значення, для яких в Espanso немає еквівалента. Вони записуються як є.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Додаток видалив шаблон з %1$d фрагмента. Додаток не запускає шаблони такого типу. Фрагмент залишається у списку.</item>
+        <item quantity="other">Додаток видалив шаблон з %1$d фрагментів. Додаток не запускає шаблони такого типу. Фрагменти залишаються у списку.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d фрагмент використовує форматований текст. Програма зберігає слова, але видаляє форматування.</item>
+        <item quantity="other">%1$d фрагментів використовують форматований текст. Програма зберігає слова, але видаляє форматування.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d фрагмент запускає команду на вашому комп\'ютері. Додаток пропустив цю команду і ніколи її не запускає.</item>
+        <item quantity="other">%1$d фрагментів запускають команди на вашому комп\'ютері. Додаток пропустив ці команди і ніколи їх не запускає.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d тригер складається лише із символів, тому програма не може відстежувати його. Його фрагмент залишається у списку.</item>
+        <item quantity="other">%1$d тригерів складаються лише із символів, тому програма не може відстежувати їх. Їхні фрагменти залишаються у списку.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d фрагмент містить текст у дужках, який ця програма заповнює, наприклад {date}. Він розгорнеться замість того, щоб з\'явитися в написаному вигляді.</item>
+        <item quantity="other">%1$d фрагментів містять текст у дужках, який ця програма заповнює, наприклад {date}. Вони розгорнуться замість того, щоб з\'явитися в написаному вигляді.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d фрагмент змінює регістр того, що захопив його шаблон. Espanso не може цього зробити, тому захоплений текст вставляється без змін.</item>
+        <item quantity="other">%1$d фрагментів змінюють регістр того, що захопили їхні шаблони. Espanso не може цього зробити, тому захоплений текст вставляється без змін.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d фрагмент використовує значення, для якого в додатку немає еквівалента. Ця частина буде порожньою.</item>
+        <item quantity="other">%1$d фрагментів використовують значення, для яких у додатку немає еквівалента. Ці частини будуть порожніми.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Додаток не може завантажити шрифт. Перевірте з\'єднання та спробуйте ще раз.</string>
+    <string name="core_content_font_error_empty">Файл порожній.</string>
+    <string name="core_content_font_error_load">Додаток не може завантажити цей файл шрифту.</string>
+    <string name="core_content_font_error_markup">Цей файл є файлом HTML або XML, а не шрифтом.</string>
+    <string name="core_content_font_error_no_storage">Немає доступного сховища для шрифту.</string>
+    <string name="core_content_font_error_not_a_font">Цей файл не схожий на шрифт .ttf або .otf.</string>
+    <string name="core_content_font_error_read">Додаток не може прочитати шрифт.</string>
+    <string name="core_content_font_error_save">Додаток не може зберегти шрифт.</string>
+    <string name="core_content_font_error_too_large">Шрифт має бути меншим за %1$d МБ.</string>
+    <string name="core_content_font_error_too_many">Бібліотека шрифтів заповнена. Видаліть шрифт і спробуйте ще раз.</string>
+    <string name="core_content_font_error_too_short">Файл занадто малий, щоб бути шрифтом.</string>
+    <string name="core_content_font_error_woff">Додаток не може зчитувати веб-шрифти WOFF. Використовуйте версію шрифту .ttf або .otf.</string>
+    <string name="core_content_font_error_woff2">Додаток не може зчитувати веб-шрифти WOFF2. Використовуйте версію шрифту .ttf або .otf.</string>
+    <string name="core_content_font_error_zip">Цей файл є zip-архівом, а не шрифтом.</string>
+    <string name="core_content_selection_macro_add_contact">Контакт</string>
+    <string name="core_content_selection_macro_calendar">Календар</string>
+    <string name="core_content_selection_macro_call">Виклик</string>
+    <string name="core_content_selection_macro_case_lower">малі літери</string>
+    <string name="core_content_selection_macro_case_sentence">Як у реченні</string>
+    <string name="core_content_selection_macro_case_title">Заголовний регістр</string>
+    <string name="core_content_selection_macro_case_upper">ВЕРХНІЙ РЕГІСТР</string>
+    <string name="core_content_selection_macro_chat_bold">Жирний</string>
+    <string name="core_content_selection_macro_chat_italic">Курсив</string>
+    <string name="core_content_selection_macro_chat_mono">Моноширинний</string>
+    <string name="core_content_selection_macro_chat_strike">Закреслений</string>
+    <string name="core_content_selection_macro_colour">Колір</string>
+    <string name="core_content_selection_macro_copy">Копіювати</string>
+    <string name="core_content_selection_macro_digits_latin">Цифри</string>
+    <string name="core_content_selection_macro_email">Ел. пошта</string>
+    <string name="core_content_selection_macro_fancy">Вигадливий</string>
+    <string name="core_content_selection_macro_find">Знайти</string>
+    <string name="core_content_selection_macro_format">Формат</string>
+    <string name="core_content_selection_macro_grammar">Граматика</string>
+    <string name="core_content_selection_macro_lines_bullet">Маркери</string>
+    <string name="core_content_selection_macro_lines_dedupe">Унікальні</string>
+    <string name="core_content_selection_macro_lines_number">Число</string>
+    <string name="core_content_selection_macro_lines_sort">Сортувати</string>
+    <string name="core_content_selection_macro_map">Карта</string>
+    <string name="core_content_selection_macro_open">Відкрити</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Прочитати</string>
+    <string name="core_content_selection_macro_replace">Замінити</string>
+    <string name="core_content_selection_macro_search">Пошук</string>
+    <string name="core_content_selection_macro_share">Поділитися</string>
+    <string name="core_content_selection_macro_sms">Повідомлення</string>
+    <string name="core_content_selection_macro_time_zones">Зони</string>
+    <string name="core_content_selection_macro_to_bangla">Бенгальська</string>
+    <string name="core_content_selection_macro_to_banglish">Бенгліш</string>
+    <string name="core_content_selection_macro_translate">Перекласти</string>
+    <string name="core_content_selection_macro_url_decode">Декодувати</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Програма пропустила %2$d розширення з \"%1$s\".</item>
+        <item quantity="other">Програма пропустила %2$d розширень з \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Додаток видалив шаблон із \"%1$s\". Шаблон неправильний. Фрагмент залишається у списку.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Додаток відкинув %1$d папку, яка не має назви або дублює іншу. Її фрагменти були додані без папки.</item>
+        <item quantity="other">Додаток відкинув %1$d папок, які не мають назви або дублюють інші. Їхні фрагменти були додані без папки.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">У файлі більше фрагментів, ніж зберігає додаток. Додаток імпортував перші %1$d.</item>
+        <item quantity="other">У файлі більше фрагментів, ніж зберігає додаток. Додаток імпортував перші %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Фрагмент не має назви, тому програма назвала його за першим рядком.</string>
+    <string name="core_content_snippet_repair_no_text">Додаток відкинув \"%1$s\". У ньому немає тексту.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Додаток видалив шаблон з \"%1$s\". Він був довшим за %2$d символ.</item>
+        <item quantity="other">Додаток видалив шаблон з \"%1$s\". Він був довшим за %2$d символів.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Додаток скоротив \"%1$s\". Він був довшим за %2$d символ.</item>
+        <item quantity="other">Додаток скоротив \"%1$s\". Він був довшим за %2$d символів.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Назва програми, у якій ви вводите текст</string>
+    <string name="core_content_snippet_var_clip_info">Останній запис буфера обміну</string>
+    <string name="core_content_snippet_var_cursor_info">Місце, де зупиняється курсор</string>
+    <string name="core_content_snippet_var_date_info">Сьогоднішня дата</string>
+    <string name="core_content_snippet_var_datetime_info">Дата та час</string>
+    <string name="core_content_snippet_var_day_info">День місяця</string>
+    <string name="core_content_snippet_var_isodate_info">Дата у форматі ISO, наприклад 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Дата та час у форматі ISO</string>
+    <string name="core_content_snippet_var_month_info">Назва місяця</string>
+    <string name="core_content_snippet_var_package_info">Назва пакета цієї програми</string>
+    <string name="core_content_snippet_var_selection_info">Текст, який ви виділяєте в полі</string>
+    <string name="core_content_snippet_var_time12_info">Час зараз у 12-годинному форматі</string>
+    <string name="core_content_snippet_var_time_info">Поточний час у 24-годинному форматі</string>
+    <string name="core_content_snippet_var_timestamp_info">Час у секундах Unix</string>
+    <string name="core_content_snippet_var_timezone_info">Часовий пояс, наприклад GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Новий випадковий UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Назва дня, наприклад, неділя</string>
+    <string name="core_content_snippet_var_year_info">Рік, чотири цифри</string>
+    <string name="core_content_sticker_pack_imported_label">Імпортовані стікери</string>
+    <string name="core_content_sticker_repair_image_missing">Додаток видалив \"%1$s\". Його зображення відсутнє.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Додаток відхилив \"%1$s\". Додаток не може прочитати його зображення.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">У пакеті %1$d стікер. Програма зберігає перші %2$d.</item>
+        <item quantity="other">У пакеті %1$d стікерів. Програма зберігає перші %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Додаток видалив стікер. Назва стікера не вказує на файл зображення.</string>
+    <string name="core_content_sticker_repair_none_listed">Файл набору не містить стікерів.</string>
+    <string name="core_content_sticker_repair_not_saved">Додаток відхилив \"%1$s\". Додаток не може його зберегти.</string>
+</resources>

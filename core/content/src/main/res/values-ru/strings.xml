@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Одноразовый код</string>
+    <string name="core_content_clip_entity_otp_tag">КОД</string>
+    <string name="core_content_clip_entity_phone_label">Номер телефона</string>
+    <string name="core_content_clip_entity_phone_tag">ТЕЛЕФОН</string>
+    <string name="core_content_clip_entity_url_label">Ссылка</string>
+    <string name="core_content_clip_entity_url_tag">ССЫЛКА</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d фрагмент имеет другие варианты развертывания, которые Espanso не может сохранить. Был записан только первый.</item>
+        <item quantity="other">%1$d фрагментов имеют другие варианты развертывания, которые Espanso не может сохранить. Для каждого был записан только первый.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d сниппет ограничен определенными компьютерными программами. На вашем телефоне он работает везде.</item>
+        <item quantity="other">%1$d сниппетов ограничены определенными компьютерными программами. На вашем телефоне они работают везде.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d сниппет требует выбора из списка. Вместо этого приложение выбирает один случайным образом.</item>
+        <item quantity="other">%1$d сниппетов требуют выбора из списка. Вместо этого приложение выбирает один случайным образом.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d сниппет требует подтверждения перед развертыванием. В Espanso нет такой настройки, поэтому там он будет разворачиваться автоматически.</item>
+        <item quantity="other">%1$d сниппетов требуют подтверждения перед развертыванием. В Espanso нет такой настройки, поэтому там они будут разворачиваться автоматически.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d фрагмент использует формат даты, который приложение не может записать полностью. Приложение пропустило часть, которую не может обработать.</item>
+        <item quantity="other">%1$d фрагментов используют форматы даты, которые приложение не может записать полностью. Приложение пропустило части, которые не может обработать.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d сниппет находится в отключенной папке. В Espanso нет переключателя папок, поэтому он будет развернут там.</item>
+        <item quantity="other">%1$d сниппетов находятся в отключенных папках. В Espanso нет переключателя папок, поэтому они будут развернуты там.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Приложение пропустило %1$d сниппет, которому нечего вставлять.</item>
+        <item quantity="other">Приложение пропустило %1$d сниппетов, которым нечего вставлять.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d сниппет требует заполнения формы. Приложение вставляет форму как текст с курсором в первом пустом поле.</item>
+        <item quantity="other">%1$d сниппетов требуют заполнения формы. Приложение вставляет каждую форму как текст с курсором в первом пустом поле.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Приложение пропустило %1$d сниппет, который вставляет изображение.</item>
+        <item quantity="other">Приложение пропустило %1$d сниппетов, которые вставляют изображения.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Файл считывает %1$d другой файл. Один файл не может подтянуть остальные вместе с собой.</item>
+        <item quantity="other">Файл считывает %1$d других файлов. Один файл не может подтянуть остальные вместе с собой.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d фрагмент указывает на другие фрагменты. В Espanso нет способа это выразить, поэтому ссылки были опущены.</item>
+        <item quantity="other">%1$d фрагментов указывают на другие фрагменты. В Espanso нет способа это выразить, поэтому ссылки были опущены.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d триггер предназначен для работы внутри слова. На вашем телефоне он работает только как целое слово.</item>
+        <item quantity="other">%1$d триггеров предназначены для работы внутри слова. На вашем телефоне они работают только как целые слова.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d фрагмент использует значение, для которого у Espanso нет эквивалента. Оно записано как есть.</item>
+        <item quantity="other">%1$d фрагментов используют значения, для которых у Espanso нет эквивалента. Они записаны как есть.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Приложение удалило шаблон из %1$d фрагмента. Приложение не выполняет шаблоны такого типа. Фрагмент остается в списке.</item>
+        <item quantity="other">Приложение удалило шаблоны из %1$d фрагментов. Приложение не выполняет шаблоны такого типа. Фрагменты остаются в списке.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d сниппет использует форматированный текст. Приложение сохраняет слова, но удаляет форматирование.</item>
+        <item quantity="other">%1$d сниппетов используют форматированный текст. Приложение сохраняет слова, но удаляет форматирование.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d сниппет выполняет команду на вашем компьютере. Приложение исключило эту команду и никогда ее не запускает.</item>
+        <item quantity="other">%1$d сниппетов выполняют команды на вашем компьютере. Приложение исключило эти команды и никогда их не запускает.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d триггер состоит только из символов, поэтому приложение не может его отслеживать. Его фрагмент остается в списке.</item>
+        <item quantity="other">%1$d триггеров состоят только из символов, поэтому приложение не может их отслеживать. Их фрагменты остаются в списке.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d фрагмент содержит текст в фигурных скобках, который заполняется этим приложением, например {date}. Он будет развернут, а не отображен как написано.</item>
+        <item quantity="other">%1$d фрагментов содержат текст в фигурных скобках, который заполняется этим приложением, например {date}. Он будет развернут, а не отображен как написано.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d сниппет изменяет регистр того, что захватил его шаблон. Espanso не может этого сделать, поэтому захваченный текст вставляется без изменений.</item>
+        <item quantity="other">%1$d сниппетов изменяют регистр того, что захватили их шаблоны. Espanso не может этого сделать, поэтому захваченный текст вставляется без изменений.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d сниппет использует значение, для которого в приложении нет эквивалента. Эта часть будет пустой.</item>
+        <item quantity="other">%1$d сниппетов используют значения, для которых в приложении нет эквивалента. Эти части будут пустыми.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Приложение не может загрузить шрифт. Проверьте подключение и попробуйте снова.</string>
+    <string name="core_content_font_error_empty">Файл пуст.</string>
+    <string name="core_content_font_error_load">Приложение не может загрузить этот файл шрифта.</string>
+    <string name="core_content_font_error_markup">Этот файл является HTML или XML файлом, а не шрифтом.</string>
+    <string name="core_content_font_error_no_storage">Нет доступного места для хранения шрифта.</string>
+    <string name="core_content_font_error_not_a_font">Этот файл не похож на шрифт в формате .ttf или .otf.</string>
+    <string name="core_content_font_error_read">Приложение не может прочитать шрифт.</string>
+    <string name="core_content_font_error_save">Приложение не может сохранить шрифт.</string>
+    <string name="core_content_font_error_too_large">Шрифт должен быть меньше %1$d МБ.</string>
+    <string name="core_content_font_error_too_many">Библиотека шрифтов заполнена. Удалите шрифт и попробуйте снова.</string>
+    <string name="core_content_font_error_too_short">Файл слишком короткий, чтобы быть шрифтом.</string>
+    <string name="core_content_font_error_woff">Приложение не может читать веб-шрифты WOFF. Используйте версию шрифта в формате .ttf или .otf.</string>
+    <string name="core_content_font_error_woff2">Приложение не может читать веб-шрифты WOFF2. Используйте версию шрифта .ttf или .otf.</string>
+    <string name="core_content_font_error_zip">Этот файл является zip-архивом, а не шрифтом.</string>
+    <string name="core_content_selection_macro_add_contact">Контакт</string>
+    <string name="core_content_selection_macro_calendar">Календарь</string>
+    <string name="core_content_selection_macro_call">Позвонить</string>
+    <string name="core_content_selection_macro_case_lower">строчные буквы</string>
+    <string name="core_content_selection_macro_case_sentence">Как в предложениях</string>
+    <string name="core_content_selection_macro_case_title">Как в заголовках</string>
+    <string name="core_content_selection_macro_case_upper">ЗАГЛАВНЫЕ БУКВЫ</string>
+    <string name="core_content_selection_macro_chat_bold">Жирный</string>
+    <string name="core_content_selection_macro_chat_italic">Курсив</string>
+    <string name="core_content_selection_macro_chat_mono">Моноширинный</string>
+    <string name="core_content_selection_macro_chat_strike">Зачеркнутый</string>
+    <string name="core_content_selection_macro_colour">Цвет</string>
+    <string name="core_content_selection_macro_copy">Копировать</string>
+    <string name="core_content_selection_macro_digits_latin">Цифры</string>
+    <string name="core_content_selection_macro_email">Эл. почта</string>
+    <string name="core_content_selection_macro_fancy">Красивый</string>
+    <string name="core_content_selection_macro_find">Найти</string>
+    <string name="core_content_selection_macro_format">Формат</string>
+    <string name="core_content_selection_macro_grammar">Грамматика</string>
+    <string name="core_content_selection_macro_lines_bullet">Маркеры</string>
+    <string name="core_content_selection_macro_lines_dedupe">Уникальные</string>
+    <string name="core_content_selection_macro_lines_number">Номер</string>
+    <string name="core_content_selection_macro_lines_sort">Сортировать</string>
+    <string name="core_content_selection_macro_map">Карта</string>
+    <string name="core_content_selection_macro_open">Открыть</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Произнести</string>
+    <string name="core_content_selection_macro_replace">Заменить</string>
+    <string name="core_content_selection_macro_search">Поиск</string>
+    <string name="core_content_selection_macro_share">Поделиться</string>
+    <string name="core_content_selection_macro_sms">Сообщение</string>
+    <string name="core_content_selection_macro_time_zones">Часовые пояса</string>
+    <string name="core_content_selection_macro_to_bangla">Бенгальский</string>
+    <string name="core_content_selection_macro_to_banglish">Бангл</string>
+    <string name="core_content_selection_macro_translate">Перевести</string>
+    <string name="core_content_selection_macro_url_decode">Декодировать</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Приложение исключило %2$d расширение из \"%1$s\".</item>
+        <item quantity="other">Приложение исключило %2$d расширений из \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Приложение удалило шаблон из \"%1$s\". Шаблон некорректен. Фрагмент остается в списке.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Приложение отбросило %1$d папку, у которой нет имени или которая повторяет другую. Ее сниппеты были добавлены без папки.</item>
+        <item quantity="other">Приложение отбросило %1$d папок, у которых нет имени или которые повторяют другие. Их сниппеты были добавлены без папки.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">В файле больше фрагментов, чем может хранить приложение. Приложение импортировало первый %1$d.</item>
+        <item quantity="other">В файле больше фрагментов, чем может хранить приложение. Приложение импортировало первые %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">У фрагмента нет названия, поэтому приложение назвало его по первой строке.</string>
+    <string name="core_content_snippet_repair_no_text">Приложение отбросило \"%1$s\". В нем нет текста.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Приложение удалило шаблон из «%1$s». Он был длиннее %2$d символа.</item>
+        <item quantity="other">Приложение удалило шаблон из «%1$s». Он был длиннее %2$d символов.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Приложение сократило \"%1$s\". Оно было длиннее %2$d символа.</item>
+        <item quantity="other">Приложение сократило \"%1$s\". Оно было длиннее %2$d символов.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Название приложения, в котором вы печатаете</string>
+    <string name="core_content_snippet_var_clip_info">Последняя запись в буфере обмена</string>
+    <string name="core_content_snippet_var_cursor_info">Место, где находится курсор</string>
+    <string name="core_content_snippet_var_date_info">Сегодняшняя дата</string>
+    <string name="core_content_snippet_var_datetime_info">Дата и время</string>
+    <string name="core_content_snippet_var_day_info">День месяца</string>
+    <string name="core_content_snippet_var_isodate_info">Дата в формате ISO, например 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Дата и время в формате ISO</string>
+    <string name="core_content_snippet_var_month_info">Название месяца</string>
+    <string name="core_content_snippet_var_package_info">Имя пакета этого приложения</string>
+    <string name="core_content_snippet_var_selection_info">Текст, который вы выделяете в поле</string>
+    <string name="core_content_snippet_var_time12_info">Текущее время в 12-часовом формате</string>
+    <string name="core_content_snippet_var_time_info">Текущее время в 24-часовом формате</string>
+    <string name="core_content_snippet_var_timestamp_info">Время в секундах Unix</string>
+    <string name="core_content_snippet_var_timezone_info">Часовой пояс, например GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Новый случайный UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Название дня недели, например, воскресенье</string>
+    <string name="core_content_snippet_var_year_info">Год, состоящий из четырех цифр</string>
+    <string name="core_content_sticker_pack_imported_label">Импортированные стикеры</string>
+    <string name="core_content_sticker_repair_image_missing">Приложение удалило \"%1$s\". Изображение отсутствует.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Приложение отбросило \"%1$s\". Приложение не может прочитать его изображение.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">В наборе %1$d стикер. Приложение сохраняет первые %2$d.</item>
+        <item quantity="other">В наборе %1$d стикеров. Приложение сохраняет первые %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Приложение удалило стикер. У стикера нет названия файла изображения.</string>
+    <string name="core_content_sticker_repair_none_listed">Файл пакета не содержит стикеров.</string>
+    <string name="core_content_sticker_repair_not_saved">Приложение отбросило \"%1$s\". Приложение не может его сохранить.</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">See pakk vajab helipaki vormingut %1$s. Uuenda rakendust.</string>
+    <string name="core_feedback_pack_reject_no_samples">See pakk ei sisalda helisid, mida rakendus saaks esitada.</string>
+    <string name="core_feedback_pack_reject_too_large">Helipakett peab olema väiksem kui %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Fail on tühi.</string>
+    <string name="core_feedback_sound_import_html_error">See on HTML- või XML-fail, mitte heli.</string>
+    <string name="core_feedback_sound_import_mp4_error">Rakendus ei esita MP4- ega M4A-faile. Kasutage MP3-faili.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Seadmes pole salvestusruumi saadaval.</string>
+    <string name="core_feedback_sound_import_read_error">Rakendus ei suuda heli lugeda.</string>
+    <string name="core_feedback_sound_import_save_error">Rakendus ei saa heli salvestada.</string>
+    <string name="core_feedback_sound_import_too_large_error">Klahviheli peab olema väiksem kui %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">Fail on heli jaoks liiga lühike.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">See ei paista olevat MP3, OGG või WAV fail.</string>
+    <string name="core_feedback_sound_import_zip_error">See on zip-arhiiv, mitte helifail.</string>
+</resources>

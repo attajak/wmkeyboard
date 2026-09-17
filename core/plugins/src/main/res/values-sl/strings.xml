@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Ta vtičnik nima funkcije render().</string>
+    <string name="core_plugins_error_not_installed">Ta vtičnik ni nameščen.</string>
+    <string name="core_plugins_error_script_failed">Skript ni uspel.</string>
+    <string name="core_plugins_error_script_missing">Skript za ta vtičnik manjka.</string>
+    <string name="core_plugins_error_turned_off">Ta vtičnik je izklopljen.</string>
+    <string name="core_plugins_permission_storage_label">Shrani podatke v svojo napravo</string>
+    <string name="core_plugins_reject_bad_encoding">»%1$s« vsebuje skript, ki ni veljavno besedilo UTF-8.</string>
+    <string name="core_plugins_reject_bad_id">Ta vtičnik ima neveljaven ID. ID mora biti dolg od 3 do 64 znakov. ID lahko vsebuje male črke, številke, pike, pomišljaje in podčrtaje.</string>
+    <string name="core_plugins_reject_compiled_lua">„%1$s“ vsebuje prevedeno kodo Lua. Vtičnik mora uporabljati navadno izvorno kodo, da jo lahko preberete, preden se izvede.</string>
+    <string name="core_plugins_reject_empty_script">»%1$s« ima prazen skript.</string>
+    <string name="core_plugins_reject_missing_script">»%1$s« nima svoje skriptne datoteke (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Ta vtičnik potrebuje novejšo različico tipkovnice WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Ta vtičnik nima imena.</string>
+    <string name="core_plugins_reject_no_version">»%1$s« ne navaja, katera različica je to.</string>
+    <string name="core_plugins_reject_script_too_large">»%1$s« ima skript, večji od %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Ta različica tipkovnice WM Keyboard ne pozna dovoljenja »%1$s«. Aplikacija vam ne more povedati, kaj sme »%2$s« početi.</string>
+    <string name="core_plugins_stopped_cancelled">Aplikacija je ustavila ta vtičnik.</string>
+    <string name="core_plugins_stopped_deadline">Ta vtičnik je deloval predolgo. Aplikacija ga je zaustavila.</string>
+    <string name="core_plugins_stopped_instructions">Ta vtičnik je opravil preveč dela naenkrat. Aplikacija ga je ustavila.</string>
+    <string name="core_plugins_stopped_not_responding">Ta vtičnik se je prenehal odzivati. Aplikacija ga je zaprla.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Ta vtičnik se je znova prenehal odzivati. Aplikacija ga je izklopila.</string>
+    <string name="core_plugins_stopped_recursion">Ta vtičnik se je prevečkrat samodejno zagnal. Aplikacija ga je ustavila.</string>
+    <string name="core_plugins_stopped_unexpected">Ta vtičnik se je nepričakovano zaustavil.</string>
+    <string name="core_plugins_ui_insert_action">Vstavi</string>
+    <string name="core_plugins_ui_repair_no_type">Gradnik ni navedel, kakšne vrste je.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Seznam gradnikov je vseboval nekaj, kar ni gradnik.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Trak z zavihki ni imel strani.</string>
+    <string name="core_plugins_ui_repair_text_budget">Ta vtičnik je zahteval izris preveč besedila. Aplikacija je nekaj izpustila.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Nekatero besedilo je bilo predolgo za izris. Aplikacija ga je skrajšala.</string>
+    <string name="core_plugins_ui_repair_too_deep">Nekateri gradniki so bili ugnezdeni pregloboko, da bi jih bilo mogoče izrisati.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Prikazanih je le prvih %1$d zavihkov.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Ta vtičnik je zahteval več kot %1$d gradnikov. Aplikacija je ostale zavrgla.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Ta različica ne pozna vrste gradnika »%1$s«.</string>
+    <string name="core_plugins_ui_tab_default_title">Zavihek %1$d</string>
+</resources>

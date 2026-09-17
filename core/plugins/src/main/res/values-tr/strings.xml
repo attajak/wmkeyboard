@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Bu eklentinin render() işlevi yok.</string>
+    <string name="core_plugins_error_not_installed">Bu eklenti yüklü değil.</string>
+    <string name="core_plugins_error_script_failed">Komut dosyası başarısız oldu.</string>
+    <string name="core_plugins_error_script_missing">Bu eklenti için komut dosyası eksik.</string>
+    <string name="core_plugins_error_turned_off">Bu eklenti kapalı.</string>
+    <string name="core_plugins_permission_storage_label">Verileri cihazınıza kaydedin</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s”, geçerli bir UTF-8 metni olmayan bir betiğe sahip.</string>
+    <string name="core_plugins_reject_bad_id">Bu eklentinin kimliği geçerli değil. Kimlik 3 ila 64 karakter uzunluğundadır. Kimlik küçük harfler, sayılar, noktalar, tireler ve alt çizgiler içerebilir.</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s” derlenmiş Lua kodu içeriyor. Bir eklenti düz kaynak kodu kullanmalıdır, böylece çalışmadan önce onu okuyabilirsiniz.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” boş bir betiğe sahip.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” betik dosyasına (%2$s) sahip değil.</string>
+    <string name="core_plugins_reject_newer_version">Bu eklenti, WM Keyboard\'un daha yeni bir sürümüne ihtiyaç duyar.</string>
+    <string name="core_plugins_reject_no_name">Bu eklentinin bir adı yok.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” hangi sürüm olduğunu belirtmiyor.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s”, %2$d KB\'den daha büyük bir betiğe sahip.</string>
+    <string name="core_plugins_reject_unknown_permission">WM Keyboard\'un bu sürümü “%1$s” iznini tanımıyor. Uygulama, “%2$s” öğesinin ne yapmasına izin verildiğini size söyleyemez.</string>
+    <string name="core_plugins_stopped_cancelled">Uygulama bu eklentiyi durdurdu.</string>
+    <string name="core_plugins_stopped_deadline">Bu eklenti çok uzun sürdü. Uygulama onu durdurdu.</string>
+    <string name="core_plugins_stopped_instructions">Bu eklenti bir kerede çok fazla işlem yaptı. Uygulama onu durdurdu.</string>
+    <string name="core_plugins_stopped_not_responding">Bu eklenti yanıt vermeyi durdurdu. Uygulama onu kapattı.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Bu eklenti tekrar yanıt vermeyi durdurdu. Uygulama onu devre dışı bıraktı.</string>
+    <string name="core_plugins_stopped_recursion">Bu eklenti kendini çok fazla kez çağırdı. Uygulama onu durdurdu.</string>
+    <string name="core_plugins_stopped_unexpected">Bu eklenti beklenmedik bir şekilde durdu.</string>
+    <string name="core_plugins_ui_insert_action">Ekle</string>
+    <string name="core_plugins_ui_repair_no_type">Bir araç, ne tür olduğunu belirtmedi.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Bir araç listesi, araç olmayan bir şey içeriyordu.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Bir sekme şeridinde sayfa yoktu.</string>
+    <string name="core_plugins_ui_repair_text_budget">Bu eklenti çok fazla metin çizmeye çalıştı. Uygulama bazılarını dışarıda bıraktı.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Bazı metinler çizilemeyecek kadar uzundu. Uygulama bunu kısalttı.</string>
+    <string name="core_plugins_ui_repair_too_deep">Bazı araçlar çizilemeyecek kadar derine yerleştirilmiş.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Sadece ilk %1$d sekme gösteriliyor.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Bu eklenti %1$d adetten fazla araç istedi. Uygulama geri kalanını bıraktı.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Bu yapı “%1$s” araç türünü tanımıyor.</string>
+    <string name="core_plugins_ui_tab_default_title">Sekme %1$d</string>
+</resources>

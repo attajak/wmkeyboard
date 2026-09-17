@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">त्याच्यासह आता इमोजी काढायचे आहेत का?</string>
+    <string name="faddons_apply_icon_pack_question">आता कीबोर्डवर त्याचे आयकॉन वापरावेत का?</string>
+    <string name="faddons_apply_layout_question">ते चालू करायचे का जेणेकरून तुम्ही त्याद्वारे टाइप करू शकाल?</string>
+    <string name="faddons_apply_plugin_question">हे प्लगइन पॅनेलमध्ये दिसण्यासाठी ते चालू करायचे का?</string>
+    <string name="faddons_apply_sound_pack_question">तुमच्या कीजसाठी आता हे साऊंड पॅक वापरायचे आहे का?</string>
+    <string name="faddons_apply_sound_question">आता ते तुमच्या की साऊंड म्हणून वापरायचे का?</string>
+    <string name="faddons_apply_switch_action">त्यावर स्विच करा</string>
+    <string name="faddons_apply_theme_question">आता ते तुमच्या कीबोर्ड थीम म्हणून वापरायचे का?</string>
+    <string name="faddons_download_error_app_too_old">या ॲड-ऑनसाठी ॲपची नवीन आवृत्ती आवश्यक आहे.</string>
+    <string name="faddons_download_error_bad_url">डाउनलोड लिंक वैध https URL नाही.</string>
+    <string name="faddons_download_error_checksum">डाउनलोड केलेली फाईल मॅनिफेस्ट मधील चेकसमशी जुळत नाही.</string>
+    <string name="faddons_download_error_http_status">सर्व्हरने HTTP %1$d परत केले.</string>
+    <string name="faddons_download_error_no_space">हे इन्स्टॉल करण्यासाठी पुरेशी मोकळी जागा नाही.</string>
+    <string name="faddons_download_error_plugin_no_checksum">या प्लगइनचा कोणताही चेकसम नाही. ॲप ते सत्यापित करू शकत नाही.</string>
+    <string name="faddons_download_error_too_large">हे ॲड-ऑन त्याच्या प्रकारासाठी असलेल्या %1$d MB च्या मर्यादेपेक्षा मोठे आहे.</string>
+    <string name="faddons_error_no_words">ॲप त्या फाईलमधून कोणतेही शब्द वाचू शकले नाही.</string>
+    <string name="faddons_error_not_a_plugin">ती फाईल WM कीबोर्ड प्लगइन नाही.</string>
+    <string name="faddons_install_error_dictionary_no_language">हा शब्दकोश कोणत्या भाषेसाठी आहे हे सांगत नाही.</string>
+    <string name="faddons_install_error_dictionary_not_saved">ॲप शब्दकोश सेव्ह करू शकले नाही.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">ॲप आयकॉन पॅक वाचू शकले नाही.</string>
+    <string name="faddons_install_error_keywords_no_language">हे पॅक कोणत्या भाषेसाठी आहे हे सांगत नाही.</string>
+    <string name="faddons_install_error_keywords_not_saved">ॲप कीवर्ड पॅक जतन करू शकले नाही.</string>
+    <string name="faddons_install_error_keywords_too_large">तो कीवर्ड पॅक इम्पोर्ट करण्यासाठी खूप मोठा आहे.</string>
+    <string name="faddons_install_error_no_keywords">ॲप त्या फाईलमधून कोणतेही इमोजी कीवर्ड वाचू शकले नाही.</string>
+    <string name="faddons_install_error_no_stickers">ॲप त्या पॅकमधून कोणतेही स्टिकर्स वाचू शकले नाही. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">ती फाईल WM कीबोर्ड लेआउट नाही.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">ती फाईल WM कीबोर्ड स्निपेट पॅक नाही.</string>
+    <string name="faddons_install_error_not_a_sound_pack">ही फाईल साउंड पॅक नाही.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">ती फाईल स्टिकर पॅक नाही.</string>
+    <string name="faddons_install_error_not_a_theme">ती फाईल WM कीबोर्ड थीम नाही.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">ती फाईल Espanso पॅकेज किंवा मॅच फाईल नाही.</string>
+    <string name="faddons_install_error_not_an_icon_pack">ती फाईल आयकॉन पॅक नाही.</string>
+    <string name="faddons_install_error_plugin_failed">ॲप ते प्लगइन इन्स्टॉल करू शकले नाही.</string>
+    <string name="faddons_install_error_plugins_turned_off">प्लगइन्स बंद आहेत. टूल्स › प्लगइन्स अंतर्गत “प्लगइन्सना अनुमती द्या” चालू करा. त्यानंतर हे पुन्हा इंस्टॉल करा.</string>
+    <string name="faddons_install_error_snippet_pack_empty">ते स्निपेट पॅक रिकामे आहे.</string>
+    <string name="faddons_install_error_sound_pack_read">ॲप हे साऊंड पॅक वाचू शकत नाही.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">ॲप स्टिकर पॅक वाचू शकले नाही.</string>
+    <string name="faddons_install_error_too_many_fonts">तुम्ही इन्स्टॉल केलेल्या फॉन्टची कमाल मर्यादा गाठली आहे.</string>
+    <string name="faddons_install_error_too_many_icon_packs">तुम्ही आयकॉन पॅकची कमाल संख्या गाठली आहे.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">तुमच्याकडे आधीच जास्तीत जास्त %1$d प्लगइन आहे.</item>
+        <item quantity="other">तुमच्याकडे आधीच जास्तीत जास्त %1$d प्लगइन्स आहेत.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">तुम्ही इन्स्टॉल केलेल्या साऊंड पॅक्सच्या कमाल मर्यादेपर्यंत पोहोचला आहात.</string>
+    <string name="faddons_install_error_too_many_sounds">तुम्ही इन्स्टॉल केलेल्या की साऊंड्सच्या कमाल मर्यादेपर्यंत पोहोचला आहात.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">तुम्ही स्टिकर पॅकची कमाल संख्या गाठली आहे.</string>
+    <string name="faddons_install_error_unknown_language">ॲपची ही आवृत्ती “%1$s” भाषेला सपोर्ट करत नाही.</string>
+    <string name="faddons_install_error_unknown_type">ॲपची ही आवृत्ती त्या ॲड-ऑन प्रकाराला सपोर्ट करत नाही.</string>
+    <string name="faddons_install_error_vocab_no_language">हे शब्दसंग्रह पॅक कोणत्या भाषेसाठी आहे हे सांगत नाही.</string>
+    <string name="faddons_install_error_vocab_no_words">ॲप त्या पॅकमधून कोणतेही शब्द वाचू शकले नाही.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">ती फाईल शब्दसंग्रह पॅक नाही.</string>
+    <string name="faddons_install_error_vocab_too_large">हा शब्दसंग्रह पॅक ॲप स्वीकारू शकेल त्यापेक्षा मोठा आहे.</string>
+    <string name="faddons_preview_error_no_preview">ॲप या ॲड-ऑनचे पूर्वावलोकन करू शकत नाही.</string>
+    <string name="faddons_preview_error_not_espanso_pack">ती फाईल Espanso पॅकेज किंवा मॅच फाईल नाही.</string>
+    <string name="faddons_preview_error_not_keyword_pack">ती फाईल इमोजी कीवर्ड पॅक नाही.</string>
+    <string name="faddons_preview_error_not_snippet_pack">ती फाईल स्निपेट पॅक नाही.</string>
+    <string name="faddons_preview_error_not_vocab_pack">ती फाईल शब्दसंग्रह पॅक नाही.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">ॲप या पॅकमधील आवाज वाचू शकले नाही.</string>
+    <string name="faddons_preview_error_stickers_unreadable">ॲप स्टिकरच्या प्रतिमा वाचू शकले नाही.</string>
+    <string name="faddons_snippet_pack_folder_fallback">स्निपेट पॅक</string>
+</resources>

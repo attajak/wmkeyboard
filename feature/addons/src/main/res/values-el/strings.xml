@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Να σχεδιάζονται τα emoji με αυτό τώρα;</string>
+    <string name="faddons_apply_icon_pack_question">Χρήση των εικονιδίων του στο πληκτρολόγιο τώρα;</string>
+    <string name="faddons_apply_layout_question">Ενεργοποιήστε το για να μπορείτε να πληκτρολογείτε με αυτό;</string>
+    <string name="faddons_apply_plugin_question">Ενεργοποίηση για να εμφανίζεται στον πίνακα πρόσθετων;</string>
+    <string name="faddons_apply_sound_pack_question">Χρήση αυτού του πακέτου ήχων για τα πλήκτρα σας τώρα;</string>
+    <string name="faddons_apply_sound_question">Να χρησιμοποιηθεί ως ήχος πλήκτρων τώρα;</string>
+    <string name="faddons_apply_switch_action">Μετάβαση σε αυτό</string>
+    <string name="faddons_apply_theme_question">Να χρησιμοποιηθεί ως το θέμα του πληκτρολογίου σας τώρα;</string>
+    <string name="faddons_download_error_app_too_old">Αυτό το πρόσθετο απαιτεί νεότερη έκδοση της εφαρμογής.</string>
+    <string name="faddons_download_error_bad_url">Ο σύνδεσμος λήψης δεν είναι έγκυρο URL https.</string>
+    <string name="faddons_download_error_checksum">Το ληφθέν αρχείο δεν ταιριάζει με το άθροισμα ελέγχου στο αρχείο manifest.</string>
+    <string name="faddons_download_error_http_status">Ο διακομιστής επέστρεψε HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Δεν υπάρχει αρκετός ελεύθερος χώρος για την εγκατάσταση.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Αυτό το πρόσθετο δεν έχει άθροισμα ελέγχου. Η εφαρμογή δεν μπορεί να το επαληθεύσει.</string>
+    <string name="faddons_download_error_too_large">Αυτό το πρόσθετο είναι μεγαλύτερο από το όριο των %1$d MB για τον τύπο του.</string>
+    <string name="faddons_error_no_words">Η εφαρμογή δεν μπόρεσε να διαβάσει καμία λέξη από αυτό το αρχείο.</string>
+    <string name="faddons_error_not_a_plugin">Αυτό το αρχείο δεν είναι πρόσθετο του WM Keyboard.</string>
+    <string name="faddons_install_error_dictionary_no_language">Αυτό το λεξικό δεν αναφέρει για ποια γλώσσα προορίζεται.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Η εφαρμογή δεν μπόρεσε να αποθηκεύσει το λεξικό.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Η εφαρμογή δεν μπόρεσε να διαβάσει το πακέτο εικονιδίων.</string>
+    <string name="faddons_install_error_keywords_no_language">Αυτό το πακέτο δεν αναφέρει για ποια γλώσσα προορίζεται.</string>
+    <string name="faddons_install_error_keywords_not_saved">Η εφαρμογή δεν μπόρεσε να αποθηκεύσει το πακέτο λέξεων-κλειδιών.</string>
+    <string name="faddons_install_error_keywords_too_large">Αυτό το πακέτο λέξεων-κλειδιών είναι πολύ μεγάλο για εισαγωγή.</string>
+    <string name="faddons_install_error_no_keywords">Η εφαρμογή δεν μπόρεσε να διαβάσει λέξεις-κλειδιά emoji από αυτό το αρχείο.</string>
+    <string name="faddons_install_error_no_stickers">Η εφαρμογή δεν μπόρεσε να διαβάσει κανένα αυτοκόλλητο από αυτό το πακέτο. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Αυτό το αρχείο δεν είναι διάταξη πληκτρολογίου WM.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Αυτό το αρχείο δεν είναι πακέτο αποσπασμάτων του WM Keyboard.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Αυτό το αρχείο δεν είναι πακέτο ήχων.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Αυτό το αρχείο δεν είναι πακέτο αυτοκόλλητων.</string>
+    <string name="faddons_install_error_not_a_theme">Αυτό το αρχείο δεν είναι θέμα του WM Keyboard.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Αυτό το αρχείο δεν είναι πακέτο Espanso ή αρχείο αντιστοίχισης.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Αυτό το αρχείο δεν είναι πακέτο εικονιδίων.</string>
+    <string name="faddons_install_error_plugin_failed">Η εφαρμογή δεν μπόρεσε να εγκαταστήσει αυτό το πρόσθετο.</string>
+    <string name="faddons_install_error_plugins_turned_off">Τα πρόσθετα είναι απενεργοποιημένα. Ενεργοποιήστε την επιλογή \"Να επιτρέπονται τα πρόσθετα\" στην ενότητα Εργαλεία › Πρόσθετα. Στη συνέχεια, εγκαταστήστε το ξανά.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Αυτό το πακέτο αποσπασμάτων είναι άδειο.</string>
+    <string name="faddons_install_error_sound_pack_read">Η εφαρμογή δεν μπορεί να διαβάσει αυτό το πακέτο ήχων.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Η εφαρμογή δεν μπόρεσε να διαβάσει το πακέτο αυτοκόλλητων.</string>
+    <string name="faddons_install_error_too_many_fonts">Έχετε φτάσει τον μέγιστο αριθμό εγκατεστημένων γραμματοσειρών.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Έχετε φτάσει τον μέγιστο αριθμό πακέτων εικονιδίων.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Έχετε ήδη το μέγιστο των %1$d πρόσθετων.</item>
+        <item quantity="other">Έχετε ήδη το μέγιστο των %1$d πρόσθετων.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Έχετε φτάσει τον μέγιστο αριθμό εγκατεστημένων πακέτων ήχων.</string>
+    <string name="faddons_install_error_too_many_sounds">Έχετε φτάσει τον μέγιστο αριθμό εγκατεστημένων ήχων πλήκτρων.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Έχετε φτάσει τον μέγιστο αριθμό πακέτων αυτοκόλλητων.</string>
+    <string name="faddons_install_error_unknown_language">Αυτή η έκδοση της εφαρμογής δεν υποστηρίζει τη γλώσσα “%1$s”.</string>
+    <string name="faddons_install_error_unknown_type">Αυτή η έκδοση της εφαρμογής δεν υποστηρίζει αυτόν τον τύπο πρόσθετου.</string>
+    <string name="faddons_install_error_vocab_no_language">Αυτό το πακέτο λεξιλογίου δεν αναφέρει για ποια γλώσσα προορίζεται.</string>
+    <string name="faddons_install_error_vocab_no_words">Η εφαρμογή δεν μπόρεσε να διαβάσει καμία λέξη από αυτό το πακέτο.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Αυτό το αρχείο δεν είναι πακέτο λεξιλογίου.</string>
+    <string name="faddons_install_error_vocab_too_large">Αυτό το πακέτο λεξιλογίου είναι μεγαλύτερο από όσο επιτρέπει η εφαρμογή.</string>
+    <string name="faddons_preview_error_no_preview">Η εφαρμογή δεν μπορεί να κάνει προεπισκόπηση αυτού του πρόσθετου.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Αυτό το αρχείο δεν είναι πακέτο Espanso ή αρχείο αντιστοίχισης.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Αυτό το αρχείο δεν είναι πακέτο λέξεων-κλειδιών emoji.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Αυτό το αρχείο δεν είναι πακέτο αποσπασμάτων.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Αυτό το αρχείο δεν είναι πακέτο λεξιλογίου.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Η εφαρμογή δεν μπόρεσε να διαβάσει τους ήχους σε αυτό το πακέτο.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Η εφαρμογή δεν μπόρεσε να διαβάσει τις εικόνες των αυτοκόλλητων.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Πακέτο αποσπασμάτων</string>
+</resources>

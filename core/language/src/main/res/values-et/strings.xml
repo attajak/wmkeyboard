@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Rakendus muutis %1$d klahvi lähimaks olemasolevaks klahviks.</item>
+        <item quantity="other">Rakendus muutis %1$d klahvi lähimateks olemasolevateks klahvideks.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Rakendus eemaldas %1$d klahvi. Sellel klaviatuuril pole klahvi, mis teeb sama asja (kood %2$s).</item>
+        <item quantity="other">Rakendus eemaldas %1$d klahvi. Sellel klaviatuuril pole klahve, mis teevad sama asja (koodid %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Rakendus säilitas %1$d klahvi sildi suuruse, kuid mitte selle tekstistiili. See klaviatuur joonistab sildid ühes stiilis.</item>
+        <item quantity="other">Rakendus säilitas %1$d klahvi sildi suuruse, kuid mitte nende tekstistiili. See klaviatuur joonistab sildid ühes stiilis.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Rakendus muutis %1$d tähe selliseks, mida see klaviatuur kirjutab.</item>
+        <item quantity="other">Rakendus muutis %1$d tähte selliseks, mida see klaviatuur kirjutab.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d klahvil pole vajutades-ja-hoides tähti. Fail hoiab neid teises failis, mida te ei avanud.</item>
+        <item quantity="other">%1$d klahvil pole vajutades-ja-hoides tähti. Fail hoiab neid teises failis, mida te ei avanud.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Teine klaviatuur mõõdab klahvide laiust teisiti. Rakendus muutis laiused selle ruudustikuga sobivaks.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d punktkirja klahvil %2$s kihis on punktinumber väljaspool vahemikku 1–6.</item>
+        <item quantity="other">%1$d punktkirja klahvil %2$s kihis on punktinumber väljaspool vahemikku 1–6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d klahvil %2$s kihis puudub silt ja väljund. See ei trüki midagi ja rakendus kustutab selle, kui lülitate selle paigutuse sisse.</item>
+        <item quantity="other">%1$d klahvil %2$s kihis puudub silt ja väljund. Need ei trüki midagi ja rakendus kustutab need, kui lülitate selle paigutuse sisse.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s kihi rida %1$d on tühi.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d klahv %2$s kihis on paneelikomponent. Komponendid töötavad ainult paneelipaigutuses.</item>
+        <item quantity="other">%1$d klahvi %2$s kihis on paneelikomponendid. Komponendid töötavad ainult paneelipaigutuses.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s kihi real %1$d on klahv ilma laiuseta.</string>
+    <string name="core_lang_layout_key_span_error">%2$s kihi real %1$d on klahv, mis katab vähem kui 1 või rohkem kui %3$d rida.</string>
+    <string name="core_lang_layout_letters_empty_error">Tähtede kihil pole klahve.</string>
+    <string name="core_lang_layout_no_delete_error">Paigutusel pole kustutusklahvi. Te ei saa viga parandada.</string>
+    <string name="core_lang_layout_no_enter_error">Paigutusel pole sisestusklahvi.</string>
+    <string name="core_lang_layout_no_shift_warning">Paigutusel pole tõstuklahvi. Suurtähe sisestamiseks vajutage ja hoidke klahvi all.</string>
+    <string name="core_lang_layout_no_space_error">Paigutusel puudub tühikuklahv.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s kihil pole klahvi, mis viiks tagasi tähtede juurde. Te ei saa sellest kihist lahkuda.</string>
+    <string name="core_lang_layout_persistent_warning">%1$s kiht jääb avatuks, kui klaviatuur sulgub. Veendu, et sul on viis sellest paigutusest väljumiseks.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Sellel paigutusel pole klahvi, mis sellest väljuks. Veenduge, et teil on viis sellest paigutusest väljumiseks: ABC-klahv, sümbolite klahv või tööriistaribal olev sekundaarse paigutuse tööriist.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s kihi real %1$d on klahv, mis katab rohkem ridu, kui kihil on. Klaviatuur peatab selle viimasel real.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Kihil %2$s on real %1$d %3$d klahv. Ainult %4$d klahvi jäävad piisavalt suureks, et neid vajutada.</item>
+        <item quantity="other">Kihil %2$s on real %1$d %3$d klahvi. Ainult %4$d klahvi jäävad piisavalt suureks, et neid vajutada.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s kihil on %2$d rida. Mahub ainult %3$d rida.</item>
+        <item quantity="other">%1$s kihil on %2$d rida. Mahub ainult %3$d rida.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d klahv kihis %2$s kasutab toimingut, mida see rakenduse versioon ei tunne.</item>
+        <item quantity="other">%1$d klahvi kihis %2$s kasutavad toimingut, mida see rakenduse versioon ei tunne.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s kihi rida %1$d on laiem kui teised read. Klaviatuur joonistab selle rea klahvid kitsamana.</string>
+    <string name="core_lang_numeral_scope_display_only">Ainult kuvamiseks</string>
+    <string name="core_lang_numeral_scope_everywhere">Kõikjal</string>
+    <string name="core_lang_numeral_scope_text_fields">Tekstiväljad</string>
+    <string name="core_lang_numeral_system_auto">Automaatne</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponent esineb rohkem kui üks kord. Rakendus jätab alles esimese koopia.</item>
+        <item quantity="other">%1$d komponenti esinevad rohkem kui üks kord. Rakendus jätab alles igaühe esimese koopia.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Sellel paneelil pole klahve. Rakendus kasutab selle asemel standardpaneeli.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d klahvil on toiming, mis paneelil ei tööta. Rakendus kustutab selle.</item>
+        <item quantity="other">%1$d klahvil on toimingud, mis paneelil ei tööta. Rakendus kustutab need.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Sellel paneelil pole ABC-klahvi. Kasutage tööriistariba või tagasinuppu, et naasta klahvide juurde.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Rakendus kustutas komponendi teise koopia.</string>
+    <string name="core_lang_panel_repair_field_added">Rakendus lisas paneeli põhikomponendi uude ritta.</string>
+    <string name="core_lang_panel_repair_field_dropped">Rakendus kustutas komponendi, mis ei kuulu sellele paneelile.</string>
+    <string name="core_lang_panel_repair_key_dropped">Rakendus kustutas klahvi, mille toiming paneelil ei tööta.</string>
+    <string name="core_lang_panel_repair_reset">Rakendus asendas tühja paneeli standardsega.</string>
+    <string name="core_lang_panel_required_field_error">Sellel paneelil puudub põhikomponent. Rakendus lisab ühe, kui see paneeli joonistab.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponent ei kuulu sellele paneelile. Rakendus kustutab selle.</item>
+        <item quantity="other">%1$d komponenti ei kuulu sellele paneelile. Rakendus kustutab need.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Rakendus kustutas tühja klahvi %1$s kihis.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Klahv %1$s kihis kasutas punktkirja punkti %2$d. Rakendus muutis selle punktiks %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Tähtede kihil polnud kustutusklahvi. Rakendus lisas ühe.</string>
+    <string name="core_lang_repair_enter_key_added">Tähtede kihil polnud sisestusklahvi. Rakendus lisas ühe.</string>
+    <string name="core_lang_repair_field_key_deleted">Rakendus kustutas paneelikomponendi kihist %1$s. Komponendid töötavad ainult paneelipaigutuses.</string>
+    <string name="core_lang_repair_key_letters_anchored">Klahv kihis %1$s tähistab %2$s. Rakendus määras selle tüübiks %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Klahv kihis %1$s loetles %2$s tähtedena, mida see tähistab. Need ei ole tähed, seega muutis rakendus selle tavaliseks klahviks.</string>
+    <string name="core_lang_repair_key_span_clamped">Klahv kihis %1$s kattis %2$d rida. Rakendus muutis selle katma %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Klahv kihis %1$s oli %2$s ühikut lai. Rakendus tegi selle %3$s ühikut laiaks.</string>
+    <string name="core_lang_repair_key_width_set">Klahvil %1$s kihis polnud laiust. Rakendus määras laiuseks 1.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s kihil polnud töötavaid klahve. See kasutab nüüd sisseehitatud ruudustikku.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s kihil polnud klahvi, mis viiks tagasi tähtede juurde. Rakendus lisas ABC-klahvi.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Real %1$s kihis oli %2$d klahv. Rakendus jätab alles esimesed %3$d.</item>
+        <item quantity="other">Real %1$s kihis oli %2$d klahvi. Rakendus jätab alles esimesed %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Rida %1$s kihis oli %2$s ühikut lai. Rakendus muutis klahvid väiksemaks, et rida ära mahuks.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Kihis %1$s oli %2$d rida. Rakendus jätab alles esimesed %3$d.</item>
+        <item quantity="other">Kihis %1$s oli %2$d rida. Rakendus jätab alles esimesed %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Tähtede kihil polnud tühikuklahvi. Rakendus lisas ühe.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Rakendus kustutas klahvi %1$s kihis. Selle toiming \"%2$s\" pole teada.</string>
+</resources>

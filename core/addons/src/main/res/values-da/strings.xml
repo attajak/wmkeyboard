@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Ordbøger</string>
+    <string name="core_addons_type_dictionary_singular_label">Ordbog</string>
+    <string name="core_addons_type_emoji_font_label">Emoji-skrifttyper</string>
+    <string name="core_addons_type_emoji_font_singular_label">Emoji-skrifttype</string>
+    <string name="core_addons_type_emoji_keywords_label">Emoji-søgeord</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Emoji-nøgleordspakke</string>
+    <string name="core_addons_type_espanso_label">Espanso-pakker</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso-pakke</string>
+    <string name="core_addons_type_font_label">Skrifttyper</string>
+    <string name="core_addons_type_font_singular_label">Skrifttype</string>
+    <string name="core_addons_type_icon_pack_label">Ikonpakker</string>
+    <string name="core_addons_type_icon_pack_singular_label">Ikonpakke</string>
+    <string name="core_addons_type_layout_label">Layouts</string>
+    <string name="core_addons_type_layout_singular_label">Layout</string>
+    <string name="core_addons_type_plugin_label">Plugins</string>
+    <string name="core_addons_type_plugin_singular_label">Plugin</string>
+    <string name="core_addons_type_snippets_label">Tekstbidder</string>
+    <string name="core_addons_type_snippets_singular_label">Snippet-pakke</string>
+    <string name="core_addons_type_sound_label">Lyde</string>
+    <string name="core_addons_type_sound_pack_label">Lydpakker</string>
+    <string name="core_addons_type_sound_pack_singular_label">Lydpakke</string>
+    <string name="core_addons_type_sound_singular_label">Tastelyd</string>
+    <string name="core_addons_type_stickers_label">Sticker-pakker</string>
+    <string name="core_addons_type_stickers_singular_label">Klistermærkepakke</string>
+    <string name="core_addons_type_theme_label">Temaer</string>
+    <string name="core_addons_type_theme_singular_label">Tema</string>
+    <string name="core_addons_type_unknown_label">Andet</string>
+    <string name="core_addons_type_unknown_singular_label">Tilføjelse</string>
+    <string name="core_addons_type_vocabulary_label">Ordforråd</string>
+    <string name="core_addons_type_vocabulary_singular_label">Ordforrådspakke</string>
+</resources>

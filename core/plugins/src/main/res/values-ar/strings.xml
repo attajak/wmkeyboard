@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">هذه الإضافة لا تحتوي على دالة render().</string>
+    <string name="core_plugins_error_not_installed">هذه الإضافة غير مثبتة.</string>
+    <string name="core_plugins_error_script_failed">فشل البرنامج النصي.</string>
+    <string name="core_plugins_error_script_missing">البرنامج النصي لهذه الإضافة مفقود.</string>
+    <string name="core_plugins_error_turned_off">هذه الإضافة متوقفة.</string>
+    <string name="core_plugins_permission_storage_label">حفظ البيانات على جهازك</string>
+    <string name="core_plugins_reject_bad_encoding">\"%1$s\" يحتوي على برنامج نصي ليس نص UTF-8 صالحًا.</string>
+    <string name="core_plugins_reject_bad_id">هذه الإضافة لها معرف غير صالح. يجب أن يتراوح طول المعرف بين 3 و 64 حرفًا. يمكن أن يحتوي المعرف على أحرف صغيرة وأرقام ونقاط وشرطات وشرطات سفلية.</string>
+    <string name="core_plugins_reject_compiled_lua">يحتوي \"%1$s\" على كود Lua مجمع. يجب أن يستخدم المكون الإضافي كود مصدر بسيطاً، حتى تتمكن من قراءته قبل تشغيله.</string>
+    <string name="core_plugins_reject_empty_script">“%1$s” يحتوي على نص برمجي فارغ.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” لا يحتوي على ملف البرنامج النصي الخاص به (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">تحتاج هذه الإضافة إلى إصدار أحدث من لوحة مفاتيح WM.</string>
+    <string name="core_plugins_reject_no_name">هذه الإضافة ليس لها اسم.</string>
+    <string name="core_plugins_reject_no_version">“%1$s” لا يحدد الإصدار الخاص به.</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s” يحتوي على نص برمجي أكبر من %2$d كيلوبايت.</string>
+    <string name="core_plugins_reject_unknown_permission">هذا الإصدار من لوحة مفاتيح WM لا يعرف الإذن \"%1$s\". لا يمكن للتطبيق إخبارك بما يُسمح لـ \"%2$s\" بفعله.</string>
+    <string name="core_plugins_stopped_cancelled">أوقف التطبيق هذه الإضافة.</string>
+    <string name="core_plugins_stopped_deadline">استغرقت هذه الإضافة وقتاً طويلاً جداً. قام التطبيق بإيقافها.</string>
+    <string name="core_plugins_stopped_instructions">قام هذا الملحق بعمل كثير في وقت واحد، لذا أوقفه التطبيق.</string>
+    <string name="core_plugins_stopped_not_responding">توقف هذا المكون الإضافي عن الاستجابة. قام التطبيق بإغلاقه.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">توقف هذا المكون الإضافي عن الاستجابة مرة أخرى. قام التطبيق بإيقاف تشغيله.</string>
+    <string name="core_plugins_stopped_recursion">استدعى هذا المكون الإضافي نفسه مرات كثيرة جداً. قام التطبيق بإيقافه.</string>
+    <string name="core_plugins_stopped_unexpected">توقفت هذه الإضافة بشكل غير متوقع.</string>
+    <string name="core_plugins_ui_insert_action">إدراج</string>
+    <string name="core_plugins_ui_repair_no_type">لم تحدد الأداة نوعها.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">احتوت قائمة الأدوات على عنصر ليس أداة.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">شريط علامات التبويب لم يحتوِ على أي صفحات.</string>
+    <string name="core_plugins_ui_repair_text_budget">طلب هذا المكون الإضافي رسم الكثير من النصوص. ترك التطبيق بعضها.</string>
+    <string name="core_plugins_ui_repair_text_shortened">كان بعض النص طويلاً جداً للعرض. قام التطبيق بتقصيره.</string>
+    <string name="core_plugins_ui_repair_too_deep">بعض الأدوات كانت متداخلة بعمق كبير بحيث لا يمكن رسمها.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">يتم عرض أول %1$d علامات تبويب فقط.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">طلبت هذه الإضافة أكثر من %1$d من الأدوات. قام التطبيق بإسقاط الباقي.</string>
+    <string name="core_plugins_ui_repair_unknown_type">هذا الإصدار لا يتعرف على نوع الأداة \"%1$s\".</string>
+    <string name="core_plugins_ui_tab_default_title">علامة تبويب %1$d</string>
+</resources>

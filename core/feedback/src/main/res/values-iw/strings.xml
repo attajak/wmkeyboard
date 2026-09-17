@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">חבילה זו דורשת פורמט חבילת צלילים %1$s. עדכן את האפליקציה.</string>
+    <string name="core_feedback_pack_reject_no_samples">חבילה זו אינה מכילה צלילים שהאפליקציה יכולה להשמיע.</string>
+    <string name="core_feedback_pack_reject_too_large">חבילת צלילים חייבת להיות קטנה מ-%1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">הקובץ ריק.</string>
+    <string name="core_feedback_sound_import_html_error">זהו קובץ HTML או XML, לא צליל.</string>
+    <string name="core_feedback_sound_import_mp4_error">האפליקציה לא מנגנת קבצי MP4 ו-M4A. השתמש בקובץ MP3.</string>
+    <string name="core_feedback_sound_import_no_storage_error">אין אחסון זמין במכשיר שלך.</string>
+    <string name="core_feedback_sound_import_read_error">האפליקציה אינה יכולה לקרוא את הצליל.</string>
+    <string name="core_feedback_sound_import_save_error">האפליקציה אינה יכולה לשמור את הצליל.</string>
+    <string name="core_feedback_sound_import_too_large_error">צליל מקש חייב להיות קטן מ-%1$s מגה-בייט.</string>
+    <string name="core_feedback_sound_import_too_short_error">הקובץ קצר מדי מכדי להיות צליל.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">זה לא נראה כמו קובץ MP3, OGG או WAV.</string>
+    <string name="core_feedback_sound_import_zip_error">זהו ארכיון zip, לא קובץ קול.</string>
+</resources>

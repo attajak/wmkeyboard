@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">이모지 탭</string>
+    <string name="core_icons_group_keys_title">키</string>
+    <string name="core_icons_group_toolbar_title">도구 모음</string>
+    <string name="core_icons_group_tools_title">도구</string>
+    <string name="core_icons_pack_imported_label">가져온 아이콘</string>
+    <string name="core_icons_pack_mine_label">내 아이콘</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">앱이 파일 %1$d개를 무시했습니다. 이 버전에는 해당 아이콘이 없습니다: %2$s</item>
+        <item quantity="other">앱이 파일 %1$d개를 무시했습니다. 이 버전에는 해당 아이콘이 없습니다: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">앱이 \"%1$s\"을(를) 삭제했습니다. 앱에서 저장할 수 없습니다.</string>
+    <string name="core_icons_repair_svg_unreadable">앱이 \"%1$s\"을(를) 삭제했습니다. 앱에서 SVG 파일을 읽을 수 없습니다.</string>
+    <string name="core_icons_slot_backspace_label">백스페이스</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">활동</string>
+    <string name="core_icons_slot_emoji_animals_label">동물</string>
+    <string name="core_icons_slot_emoji_flags_label">국기</string>
+    <string name="core_icons_slot_emoji_food_label">음식</string>
+    <string name="core_icons_slot_emoji_key_label">이모지 키</string>
+    <string name="core_icons_slot_emoji_most_used_label">가장 많이 사용함</string>
+    <string name="core_icons_slot_emoji_nature_label">자연</string>
+    <string name="core_icons_slot_emoji_objects_label">사물</string>
+    <string name="core_icons_slot_emoji_people_label">사람</string>
+    <string name="core_icons_slot_emoji_recent_label">최근 항목</string>
+    <string name="core_icons_slot_emoji_shortcut_label">이모지 바로가기</string>
+    <string name="core_icons_slot_emoji_smileys_label">스마일리</string>
+    <string name="core_icons_slot_emoji_symbols_label">기호</string>
+    <string name="core_icons_slot_emoji_travel_label">여행</string>
+    <string name="core_icons_slot_enter_done_label">Enter: 완료</string>
+    <string name="core_icons_slot_enter_go_label">Enter: 이동</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: 다음</string>
+    <string name="core_icons_slot_enter_previous_label">입력: 이전</string>
+    <string name="core_icons_slot_enter_search_label">Enter: 검색</string>
+    <string name="core_icons_slot_enter_send_label">Enter: 전송</string>
+    <string name="core_icons_slot_forward_delete_label">앞으로 삭제</string>
+    <string name="core_icons_slot_globe_label">언어 전환</string>
+    <string name="core_icons_slot_incognito_label">시크릿 배지</string>
+    <string name="core_icons_slot_input_method_picker_label">키보드 전환</string>
+    <string name="core_icons_slot_panel_back_label">키로 돌아가기</string>
+    <string name="core_icons_slot_power_saving_label">절전 배지</string>
+    <string name="core_icons_slot_search_close_label">검색 닫기</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (켜짐)</string>
+    <string name="core_icons_slot_suggestions_expand_label">도구 표시</string>
+    <string name="core_icons_slot_toolbox_label">도구 상자</string>
+</resources>

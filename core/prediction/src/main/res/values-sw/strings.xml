@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Seva haikutuma faili. Msimbo wa hitilafu ni HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Orodha hiyo ya maneno ni tupu au haisomeki.</string>
+    <string name="core_pred_wordlist_no_space_error">Hakuna nafasi ya kutosha ya kuhifadhi kwenye kifaa chako. Futa faili zingine, kisha ujaribu tena.</string>
+    <string name="core_pred_wordlist_save_error">Programu haiwezi kuhifadhi orodha ya maneno. Jaribu tena.</string>
+    <string name="core_pred_wordlist_size_all_label">Kila kitu</string>
+    <string name="core_pred_wordlist_size_large_label">Kubwa</string>
+    <string name="core_pred_wordlist_size_medium_label">Kati</string>
+    <string name="core_pred_wordlist_size_small_label">Ndogo</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brazili</string>
+    <string name="core_pred_wordlist_variant_europe_label">Ulaya</string>
+</resources>

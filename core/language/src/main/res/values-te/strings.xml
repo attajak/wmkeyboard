@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">యాప్ %1$d కీని దానికి దగ్గరగా ఉన్న కీకి మార్చింది.</item>
+        <item quantity="other">యాప్ %1$d కీలను వాటికి దగ్గరగా ఉన్న కీలకు మార్చింది.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">యాప్ %1$d కీని తొలగించింది. ఈ కీబోర్డ్‌లో అదే పని చేసే కీ లేదు (కోడ్ %2$s).</item>
+        <item quantity="other">యాప్ %1$d కీలను తొలగించింది. ఈ కీబోర్డ్‌లో అదే పని చేసే కీలు లేవు (కోడ్‌లు %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">యాప్ %1$d కీ యొక్క లేబుల్ పరిమాణాన్ని ఉంచింది కానీ దాని టెక్స్ట్ శైలిని కాదు. ఈ కీబోర్డ్ లేబుల్‌లను ఒకే శైలిలో గీస్తుంది.</item>
+        <item quantity="other">యాప్ %1$d కీలలో లేబుల్ పరిమాణాన్ని ఉంచింది కానీ వాటి టెక్స్ట్ శైలిని కాదు. ఈ కీబోర్డ్ లేబుల్‌లను ఒకే శైలిలో గీస్తుంది.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">యాప్ %1$d అక్షరాన్ని ఈ కీబోర్డ్ రాసే రూపానికి మార్చింది.</item>
+        <item quantity="other">యాప్ %1$d అక్షరాలను ఈ కీబోర్డ్ రాసే రూపానికి మార్చింది.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d కీకి ప్రెస్-అండ్-హోల్డ్ అక్షరాలు లేవు. ఫైల్ వాటిని మీరు తెరవని రెండవ ఫైల్‌లో ఉంచుతుంది.</item>
+        <item quantity="other">%1$d కీలకు ప్రెస్-అండ్-హోల్డ్ అక్షరాలు లేవు. ఫైల్ వాటిని మీరు తెరవని రెండవ ఫైల్‌లో ఉంచుతుంది.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">ఇతర కీబోర్డ్ కీ వెడల్పులను భిన్నంగా కొలుస్తుంది. ఈ గ్రిడ్‌కు సరిపోయేలా యాప్ వెడల్పులను మార్చింది.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s లేయర్‌లోని %1$d బ్రెయిలీ డాట్ కీ 1 నుండి 6 వెలుపల డాట్ నంబర్‌ను కలిగి ఉంది.</item>
+        <item quantity="other">%2$s లేయర్‌లోని %1$d బ్రెయిలీ డాట్ కీలు 1 నుండి 6 వెలుపల డాట్ నంబర్‌ను కలిగి ఉన్నాయి.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s లేయర్‌లోని %1$d కీకి లేబుల్ మరియు అవుట్‌పుట్ లేదు. ఇది ఏమీ టైప్ చేయదు, మరియు మీరు ఈ లేఅవుట్‌ను ఆన్ చేసినప్పుడు యాప్ దీన్ని తొలగిస్తుంది.</item>
+        <item quantity="other">%2$s లేయర్‌లోని %1$d కీలకు లేబుల్ మరియు అవుట్‌పుట్ లేవు. అవి ఏమీ టైప్ చేయవు, మరియు మీరు ఈ లేఅవుట్‌ను ఆన్ చేసినప్పుడు యాప్ వీటిని తొలగిస్తుంది.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s లేయర్‌లోని %1$d వరుస ఖాళీగా ఉంది.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s లేయర్‌లోని %1$d కీ ఒక ప్యానెల్ కాంపోనెంట్. కాంపోనెంట్‌లు ప్యానెల్ లేఅవుట్‌లో మాత్రమే పనిచేస్తాయి.</item>
+        <item quantity="other">%2$s లేయర్‌లోని %1$d కీలు ప్యానెల్ కాంపోనెంట్‌లు. కాంపోనెంట్‌లు ప్యానెల్ లేఅవుట్‌లో మాత్రమే పనిచేస్తాయి.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s లేయర్‌లోని వరుస %1$dలో వెడల్పు లేని కీ ఉంది.</string>
+    <string name="core_lang_layout_key_span_error">%2$s లేయర్‌లోని %1$d అడ్డు వరుసలో 1 కంటే తక్కువ లేదా %3$d కంటే ఎక్కువ అడ్డు వరుసలను కవర్ చేసే కీ ఉంది.</string>
+    <string name="core_lang_layout_letters_empty_error">అక్షరాల లేయర్‌లో కీలు లేవు.</string>
+    <string name="core_lang_layout_no_delete_error">ఈ లేఅవుట్‌లో డిలీట్ కీ లేదు. మీరు తప్పులను సరిదిద్దలేరు.</string>
+    <string name="core_lang_layout_no_enter_error">ఈ లేఅవుట్‌లో ఎంటర్ కీ లేదు.</string>
+    <string name="core_lang_layout_no_shift_warning">ఈ లేఅవుట్‌లో షిఫ్ట్ కీ లేదు. పెద్ద అక్షరాన్ని టైప్ చేయడానికి, ఒక కీని నొక్కి పట్టుకోండి.</string>
+    <string name="core_lang_layout_no_space_error">లేఅవుట్‌లో స్పేస్ కీ లేదు.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s లేయర్‌లో అక్షరాలకు తిరిగి వెళ్లే కీ లేదు. మీరు ఈ లేయర్ నుండి బయటకు రాలేరు.</string>
+    <string name="core_lang_layout_persistent_warning">కీబోర్డ్ మూసివేయబడినప్పుడు %1$s లేయర్ తెరిచి ఉంటుంది. ఈ లేఅవుట్ నుండి నిష్క్రమించడానికి మీకు మార్గం ఉందని నిర్ధారించుకోండి.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">ఈ లేఅవుట్ నుండి బయటకు వెళ్ళడానికి ఎటువంటి కీ లేదు. ఈ లేఅవుట్ నుండి నిష్క్రమించడానికి మీకు మార్గం ఉందని నిర్ధారించుకోండి: ABC కీ, చిహ్నాల కీ లేదా టూల్‌బార్‌లోని కస్టమ్ లేఅవుట్ టూల్.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s లేయర్‌లోని వరుస %1$dలో లేయర్ కంటే ఎక్కువ వరుసలను కవర్ చేసే కీ ఉంది. కీబోర్డ్ దానిని చివరి వరుస వద్ద ఆపుతుంది.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s లేయర్ యొక్క %1$d వరుసలో %3$d కీ ఉంది. కేవలం %4$d కీలు మాత్రమే నొక్కడానికి తగినంత పెద్దవిగా ఉంటాయి.</item>
+        <item quantity="other">%2$s లేయర్ యొక్క %1$d వరుసలో %3$d కీలు ఉన్నాయి. కేవలం %4$d కీలు మాత్రమే నొక్కడానికి తగినంత పెద్దవిగా ఉంటాయి.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s లేయర్‌లో %2$d అడ్డు వరుస ఉంది. కేవలం %3$d అడ్డు వరుసలు మాత్రమే సరిపోతాయి.</item>
+        <item quantity="other">%1$s లేయర్‌లో %2$d అడ్డు వరుసలు ఉన్నాయి. కేవలం %3$d అడ్డు వరుసలు మాత్రమే సరిపోతాయి.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s లేయర్‌లోని %1$d కీ, ఈ యాప్ వెర్షన్‌కు తెలియని చర్యను ఉపయోగిస్తుంది.</item>
+        <item quantity="other">%2$s లేయర్‌లోని %1$d కీలు, ఈ యాప్ వెర్షన్‌కు తెలియని చర్యను ఉపయోగిస్తాయి.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s లేయర్‌లోని %1$d అడ్డు వరుస ఇతర వరుసల కంటే వెడల్పుగా ఉంది. కీబోర్డ్ ఈ వరుసలోని కీలను ఇరుకుగా గీస్తుంది.</string>
+    <string name="core_lang_numeral_scope_display_only">ప్రదర్శన కోసం మాత్రమే</string>
+    <string name="core_lang_numeral_scope_everywhere">ప్రతిచోటా</string>
+    <string name="core_lang_numeral_scope_text_fields">టెక్స్ట్ ఫీల్డ్‌లు</string>
+    <string name="core_lang_numeral_system_auto">ఆటో</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d కాంపోనెంట్ ఒకటి కంటే ఎక్కువసార్లు కనిపిస్తోంది. యాప్ మొదటి కాపీని ఉంచుకుంటుంది.</item>
+        <item quantity="other">%1$d కాంపోనెంట్లు ఒకటి కంటే ఎక్కువసార్లు కనిపిస్తున్నాయి. యాప్ ప్రతిదాని మొదటి కాపీని ఉంచుకుంటుంది.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">ఈ ప్యానెల్‌లో కీలు లేవు. యాప్ బదులుగా ప్రామాణిక ప్యానెల్‌ను ఉపయోగిస్తుంది.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d కీ ప్యానెల్‌పై పని చేయని చర్యను కలిగి ఉంది. యాప్ దీన్ని తొలగిస్తుంది.</item>
+        <item quantity="other">%1$d కీలు ప్యానెల్‌పై పని చేయని చర్యలను కలిగి ఉన్నాయి. యాప్ వీటిని తొలగిస్తుంది.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">ఈ ప్యానెల్‌లో ABC కీ లేదు. కీలకు తిరిగి రావడానికి టూల్‌బార్ లేదా బ్యాక్ బటన్‌ను ఉపయోగించండి.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">యాప్ ఒక కాంపోనెంట్ యొక్క రెండవ కాపీని తొలగించింది.</string>
+    <string name="core_lang_panel_repair_field_added">యాప్ ప్యానెల్ యొక్క ప్రధాన భాగాన్ని కొత్త అడ్డు వరుసలో జోడించింది.</string>
+    <string name="core_lang_panel_repair_field_dropped">ఈ ప్యానెల్‌కు చెందని భాగాన్ని యాప్ తొలగించింది.</string>
+    <string name="core_lang_panel_repair_key_dropped">ప్యానెల్‌పై పని చేయని చర్యను కలిగి ఉన్న కీని యాప్ తొలగించింది.</string>
+    <string name="core_lang_panel_repair_reset">యాప్ ఖాళీ ప్యానెల్‌ను ప్రామాణికమైన దానితో భర్తీ చేసింది.</string>
+    <string name="core_lang_panel_required_field_error">ఈ ప్యానెల్‌లో దాని ప్రధాన భాగం లేదు. యాప్ ప్యానెల్‌ను గీసినప్పుడు అది ఒకదాన్ని జోడిస్తుంది.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d భాగం ఈ ప్యానెల్‌కు చెందినది కాదు. యాప్ దీన్ని తొలగిస్తుంది.</item>
+        <item quantity="other">%1$d భాగాలు ఈ ప్యానెల్‌కు చెందినవి కావు. యాప్ వీటిని తొలగిస్తుంది.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">%1$s లేయర్‌లో యాప్ ఖాళీ కీని తొలగించింది.</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s లేయర్‌లోని ఒక కీ బ్రెయిలీ డాట్ %2$dని ఉపయోగించింది. యాప్ దానిని డాట్ %3$dగా మార్చింది.</string>
+    <string name="core_lang_repair_delete_key_added">అక్షరాల లేయర్‌లో డిలీట్ కీ లేదు. యాప్ ఒకదాన్ని జోడించింది.</string>
+    <string name="core_lang_repair_enter_key_added">అక్షరాల లేయర్‌లో ఎంటర్ కీ లేదు. యాప్ ఒకదాన్ని జోడించింది.</string>
+    <string name="core_lang_repair_field_key_deleted">%1$s లేయర్ నుండి ఒక ప్యానెల్ కాంపోనెంట్‌ను యాప్ తొలగించింది. కాంపోనెంట్‌లు ప్యానెల్ లేఅవుట్‌లో మాత్రమే పనిచేస్తాయి.</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s లేయర్‌లోని కీ %2$sని సూచిస్తుంది. యాప్ దానిని %3$s రకంగా మార్చింది.</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s లేయర్‌లోని ఒక కీ %2$sను అది సూచించే అక్షరాలుగా జాబితా చేసింది. అవి అక్షరాలు కావు, కాబట్టి యాప్ దీన్ని సాధారణ కీగా మార్చింది.</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s లేయర్‌లోని ఒక కీ %2$d వరుసలను కవర్ చేసింది. యాప్ దానిని %3$d వరుసలను కవర్ చేసేలా చేసింది.</string>
+    <string name="core_lang_repair_key_width_capped">%1$s లేయర్‌లోని ఒక కీ %2$s యూనిట్ల వెడల్పుతో ఉంది. యాప్ దానిని %3$s యూనిట్ల వెడల్పుకు మార్చింది.</string>
+    <string name="core_lang_repair_key_width_set">%1$s లేయర్‌లోని కీకి వెడల్పు లేదు. యాప్ వెడల్పును 1కి సెట్ చేసింది.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s లేయర్‌లో పనిచేసే కీలు లేవు. ఇది ఇప్పుడు అంతర్నిర్మిత గ్రిడ్‌ను ఉపయోగిస్తుంది.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s లేయర్‌లో అక్షరాలకు తిరిగి వెళ్లే కీ లేదు. యాప్ ఒక ABC కీని జోడించింది.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s లేయర్‌లోని ఒక అడ్డు వరుసలో %2$d కీ ఉంది. యాప్ మొదటి %3$d కీలను ఉంచుతుంది.</item>
+        <item quantity="other">%1$s లేయర్‌లోని ఒక అడ్డు వరుసలో %2$d కీలు ఉన్నాయి. యాప్ మొదటి %3$d కీలను ఉంచుతుంది.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s లేయర్‌లోని ఒక అడ్డు వరుస %2$s యూనిట్ల వెడల్పుతో ఉంది. అడ్డు వరుస సరిపోయేలా యాప్ కీలను చిన్నదిగా చేసింది.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s పొరలో %2$d అడ్డు వరుస ఉంది. యాప్ మొదటి %3$d అడ్డు వరుసలను ఉంచుతుంది.</item>
+        <item quantity="other">%1$s పొరలో %2$d అడ్డు వరుసలు ఉన్నాయి. యాప్ మొదటి %3$d అడ్డు వరుసలను ఉంచుతుంది.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">అక్షరాల లేయర్‌లో స్పేస్ కీ లేదు. యాప్ ఒకదాన్ని జోడించింది.</string>
+    <string name="core_lang_repair_unknown_key_deleted">%1$s లేయర్‌లో యాప్ ఒక కీని తొలగించింది. దాని చర్య \"%2$s\" తెలియదు.</string>
+</resources>

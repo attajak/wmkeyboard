@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">قام التطبيق بتغيير مفتاح واحد (%1$d) إلى أقرب مفتاح لديه.</item>
+        <item quantity="other">قام التطبيق بتغيير %1$d مفاتيح إلى أقرب مفاتيح لديه.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">أزال التطبيق مفتاحًا واحدًا (%1$d). لا تحتوي لوحة المفاتيح هذه على مفتاح يقوم بنفس الوظيفة (الرمز %2$s).</item>
+        <item quantity="other">أزال التطبيق %1$d مفاتيح. لا تحتوي لوحة المفاتيح هذه على مفاتيح تقوم بنفس الوظيفة (الرموز %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">احتفظ التطبيق بحجم تسمية %1$d مفتاح ولكن ليس بنمط النص الخاص به. ترسم لوحة المفاتيح هذه التسميات بنمط واحد.</item>
+        <item quantity="other">احتفظ التطبيق بحجم تسمية %1$d مفاتيح ولكن ليس بنمط النص الخاص بها. ترسم لوحة المفاتيح هذه التسميات بنمط واحد.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">قام التطبيق بتغيير %1$d حرف إلى الشكل الذي تكتبه لوحة المفاتيح هذه.</item>
+        <item quantity="other">قام التطبيق بتغيير %1$d حرف إلى الشكل الذي تكتبه لوحة المفاتيح هذه.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">مفتاح واحد %1$d ليس له أحرف عند الضغط المطول. يحتفظ الملف بها في ملف ثانٍ لم تقم بفتحه.</item>
+        <item quantity="other">%1$d مفاتيح ليس لها أحرف عند الضغط المطول. يحتفظ الملف بها في ملف ثانٍ لم تقم بفتحه.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">تقيس لوحة المفاتيح الأخرى عرض المفاتيح بشكل مختلف. قام التطبيق بتغيير العرض ليتناسب مع هذه الشبكة.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">مفتاح نقطة برايل %1$d في طبقة %2$s يحتوي على رقم نقطة خارج النطاق من 1 إلى 6.</item>
+        <item quantity="other">مفاتيح نقاط برايل %1$d في طبقة %2$s تحتوي على رقم نقطة خارج النطاق من 1 إلى 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">مفتاح واحد (%1$d) في طبقة %2$s ليس له تسمية ولا مخرج. لا يكتب شيئاً، وسيقوم التطبيق بحذفه عند تفعيل هذا التخطيط.</item>
+        <item quantity="other">%1$d مفاتيح في طبقة %2$s ليس لها تسمية ولا مخرج. لا تكتب شيئاً، وسيقوم التطبيق بحذفها عند تفعيل هذا التخطيط.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">الصف %1$d من طبقة %2$s فارغ.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">مفتاح واحد في الطبقة %2$s هو مكون لوحة. المكونات تعمل فقط في تخطيط اللوحة.</item>
+        <item quantity="other">%1$d مفاتيح في الطبقة %2$s هي مكونات لوحة. المكونات تعمل فقط في تخطيط اللوحة.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">الصف %1$d من الطبقة %2$s يحتوي على مفتاح بدون عرض.</string>
+    <string name="core_lang_layout_key_span_error">الصف %1$d من الطبقة %2$s يحتوي على مفتاح يغطي أقل من 1 أو أكثر من %3$d صفوف.</string>
+    <string name="core_lang_layout_letters_empty_error">طبقة الحروف لا تحتوي على مفاتيح.</string>
+    <string name="core_lang_layout_no_delete_error">لا يحتوي التخطيط على مفتاح حذف. لا يمكنك تصحيح الخطأ.</string>
+    <string name="core_lang_layout_no_enter_error">التخطيط لا يحتوي على مفتاح إدخال.</string>
+    <string name="core_lang_layout_no_shift_warning">لا يحتوي التخطيط على مفتاح العالي (Shift). لكتابة حرف كبير، اضغط مع الاستمرار على مفتاح.</string>
+    <string name="core_lang_layout_no_space_error">التخطيط لا يحتوي على مفتاح مسافة.</string>
+    <string name="core_lang_layout_no_way_back_error">طبقة %1$s لا تحتوي على مفتاح للعودة إلى الحروف. لا يمكنك مغادرة هذه الطبقة.</string>
+    <string name="core_lang_layout_persistent_warning">تظل طبقة %1$s مفتوحة عند إغلاق لوحة المفاتيح. تأكد من وجود طريقة للخروج من هذا التخطيط.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">هذا التخطيط لا يحتوي على زر للخروج منه. تأكد من وجود طريقة للخروج من هذا التخطيط: زر ABC، أو زر الرموز، أو أداة التخطيط المخصص في شريط الأدوات.</string>
+    <string name="core_lang_layout_span_past_end_warning">يحتوي الصف %1$d من طبقة %2$s على مفتاح يغطي صفوفاً أكثر مما تحتويه الطبقة. توقفه لوحة المفاتيح عند الصف الأخير.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">يحتوي الصف %1$d من طبقة %2$s على %3$d مفتاح. فقط %4$d مفاتيح تبقى كبيرة بما يكفي للضغط عليها.</item>
+        <item quantity="other">يحتوي الصف %1$d من طبقة %2$s على %3$d مفاتيح. فقط %4$d مفاتيح تبقى كبيرة بما يكفي للضغط عليها.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">تحتوي الطبقة %1$s على %2$d صف. يتسع المكان لـ %3$d صف فقط.</item>
+        <item quantity="other">تحتوي الطبقة %1$s على %2$d صفوف. يتسع المكان لـ %3$d صف فقط.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">مفتاح واحد %1$d في طبقة %2$s يستخدم إجراءً لا يعرفه هذا الإصدار من التطبيق.</item>
+        <item quantity="other">%1$d مفاتيح في طبقة %2$s تستخدم إجراءً لا يعرفه هذا الإصدار من التطبيق.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">الصف %1$d من الطبقة %2$s أعرض من الصفوف الأخرى. تقوم لوحة المفاتيح برسم مفاتيح هذا الصف بشكل أضيق.</string>
+    <string name="core_lang_numeral_scope_display_only">عرض فقط</string>
+    <string name="core_lang_numeral_scope_everywhere">في كل مكان</string>
+    <string name="core_lang_numeral_scope_text_fields">حقول النص</string>
+    <string name="core_lang_numeral_system_auto">تلقائي</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">يظهر المكون %1$d أكثر من مرة. يحتفظ التطبيق بالنسخة الأولى.</item>
+        <item quantity="other">تظهر المكونات %1$d أكثر من مرة. يحتفظ التطبيق بالنسخة الأولى من كل منها.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">هذه اللوحة لا تحتوي على مفاتيح. يستخدم التطبيق اللوحة القياسية بدلاً منها.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">مفتاح واحد لديه إجراء لا يعمل على اللوحة. سيقوم التطبيق بحذفه.</item>
+        <item quantity="other">%1$d مفاتيح لديها إجراءات لا تعمل على اللوحة. سيقوم التطبيق بحذفها.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">هذه اللوحة لا تحتوي على مفتاح ABC. استخدم شريط الأدوات أو زر الرجوع للعودة إلى المفاتيح.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">قام التطبيق بحذف نسخة ثانية من أحد المكونات.</string>
+    <string name="core_lang_panel_repair_field_added">أضاف التطبيق المكون الرئيسي للوحة في صف جديد.</string>
+    <string name="core_lang_panel_repair_field_dropped">قام التطبيق بحذف مكون لا ينتمي إلى هذه اللوحة.</string>
+    <string name="core_lang_panel_repair_key_dropped">قام التطبيق بحذف مفتاح لا يعمل إجراءه على لوحة.</string>
+    <string name="core_lang_panel_repair_reset">استبدل التطبيق اللوحة الفارغة باللوحة القياسية.</string>
+    <string name="core_lang_panel_required_field_error">هذه اللوحة تفتقد لمكونها الرئيسي. يضيف التطبيق واحدًا عند رسم اللوحة.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d مكون لا ينتمي إلى هذه اللوحة. سيقوم التطبيق بحذفه.</item>
+        <item quantity="other">%1$d مكونات لا تنتمي إلى هذه اللوحة. سيقوم التطبيق بحذفها.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">قام التطبيق بحذف مفتاح فارغ في طبقة %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">مفتاح في طبقة %1$s استخدم نقطة برايل %2$d. قام التطبيق بجعلها النقطة %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">طبقة الأحرف لم تكن تحتوي على مفتاح حذف. أضاف التطبيق واحداً.</string>
+    <string name="core_lang_repair_enter_key_added">لم تكن طبقة الحروف تحتوي على مفتاح إدخال. أضاف التطبيق واحداً.</string>
+    <string name="core_lang_repair_field_key_deleted">حذف التطبيق مكون لوحة من الطبقة %1$s. المكونات تعمل فقط في تخطيط اللوحة.</string>
+    <string name="core_lang_repair_key_letters_anchored">المفتاح في طبقة %1$s يمثل %2$s. قام التطبيق بجعله يكتب %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">أدرج مفتاح في طبقة %1$s الحرف %2$s كحرف يمثله. هذه ليست أحرفاً، لذا جعلها التطبيق مفتاحاً عادياً.</string>
+    <string name="core_lang_repair_key_span_clamped">مفتاح في طبقة %1$s غطى %2$d صفوف. جعله التطبيق يغطي %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">كان عرض مفتاح في طبقة %1$s هو %2$s وحدة. جعل التطبيق عرضه %3$s وحدة.</string>
+    <string name="core_lang_repair_key_width_set">مفتاح في الطبقة %1$s لم يكن له عرض. قام التطبيق بضبط العرض على 1.</string>
+    <string name="core_lang_repair_layer_replaced">طبقة %1$s لم تكن تحتوي على مفاتيح تعمل. وهي تستخدم الآن الشبكة المدمجة.</string>
+    <string name="core_lang_repair_letters_key_added">طبقة %1$s لم تكن تحتوي على مفتاح للعودة إلى الحروف. أضاف التطبيق مفتاح ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">كان هناك صف في طبقة %1$s يحتوي على %2$d مفتاح. يحتفظ التطبيق بأول %3$d.</item>
+        <item quantity="other">كان هناك صف في طبقة %1$s يحتوي على %2$d مفاتيح. يحتفظ التطبيق بأول %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">كان عرض صف في طبقة %1$s يساوي %2$s وحدة. قام التطبيق بتصغير المفاتيح ليتناسب الصف.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">كانت طبقة %1$s تحتوي على %2$d صف. يحتفظ التطبيق بأول %3$d.</item>
+        <item quantity="other">كانت طبقة %1$s تحتوي على %2$d صفوف. يحتفظ التطبيق بأول %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">لم تكن طبقة الحروف تحتوي على مفتاح مسافة. أضاف التطبيق واحداً.</string>
+    <string name="core_lang_repair_unknown_key_deleted">حذف التطبيق مفتاحاً في طبقة %1$s. إجراء \"%2$s\" الخاص به غير معروف.</string>
+</resources>

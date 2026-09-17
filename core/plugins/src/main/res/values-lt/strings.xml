@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Šis papildinys neturi render() funkcijos.</string>
+    <string name="core_plugins_error_not_installed">Šis papildinys neįdiegtas.</string>
+    <string name="core_plugins_error_script_failed">Scenarijus nepavyko.</string>
+    <string name="core_plugins_error_script_missing">Trūksta šio papildinio scenarijaus.</string>
+    <string name="core_plugins_error_turned_off">Tas papildinys išjungtas.</string>
+    <string name="core_plugins_permission_storage_label">Išsaugoti duomenis jūsų įrenginyje</string>
+    <string name="core_plugins_reject_bad_encoding">„%1$s“ turi scenarijų, kuris nėra tinkamas UTF-8 tekstas.</string>
+    <string name="core_plugins_reject_bad_id">Šio įskiepio ID netinkamas. ID turi būti nuo 3 iki 64 simbolių ilgio. ID gali sudaryti mažosios raidės, skaičiai, taškai, brūkšneliai ir apatiniai brūkšniai.</string>
+    <string name="core_plugins_reject_compiled_lua">„%1$s“ yra sukompiliuotas Lua kodas. Papildinys turi naudoti paprastą šaltinio kodą, kad galėtumėte jį perskaityti prieš paleidžiant.</string>
+    <string name="core_plugins_reject_empty_script">„%1$s“ turi tuščią scenarijų.</string>
+    <string name="core_plugins_reject_missing_script">„%1$s“ neturi savo scenarijaus failo (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Šiam papildiniui reikia naujesnės „WM Keyboard“ versijos.</string>
+    <string name="core_plugins_reject_no_name">Šis papildinys neturi pavadinimo.</string>
+    <string name="core_plugins_reject_no_version">„%1$s“ nenurodo, kokia tai versija.</string>
+    <string name="core_plugins_reject_script_too_large">„%1$s“ scenarijus yra didesnis nei %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Ši WM Keyboard versija neatpažįsta leidimo „%1$s“. Programa negali pasakyti, ką „%2$s“ leidžiama daryti.</string>
+    <string name="core_plugins_stopped_cancelled">Programa sustabdė šį papildinį.</string>
+    <string name="core_plugins_stopped_deadline">Šis papildinys veikė per ilgai. Programa jį sustabdė.</string>
+    <string name="core_plugins_stopped_instructions">Šis papildinys vienu metu atliko per daug darbo. Programa jį sustabdė.</string>
+    <string name="core_plugins_stopped_not_responding">Šis papildinys nustojo reaguoti. Programa jį uždarė.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Šis papildinys vėl nustojo reaguoti. Programa jį išjungė.</string>
+    <string name="core_plugins_stopped_recursion">Šis papildinys per daug kartų iškvietė pats save. Programa jį sustabdė.</string>
+    <string name="core_plugins_stopped_unexpected">Šis papildinys netikėtai sustojo.</string>
+    <string name="core_plugins_ui_insert_action">Įterpti</string>
+    <string name="core_plugins_ui_repair_no_type">Valdiklis nenurodė savo tipo.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Valdiklių sąraše buvo kažkas, kas nėra valdiklis.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Skirtukų juostoje nebuvo puslapių.</string>
+    <string name="core_plugins_ui_repair_text_budget">Šis papildinys paprašė nubrėžti per daug teksto. Programa dalį praleido.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Kai kurie tekstai buvo per ilgi, kad būtų atvaizduoti. Programėlė juos sutrumpino.</string>
+    <string name="core_plugins_ui_repair_too_deep">Kai kurie valdikliai buvo per giliai įdėti, kad būtų atvaizduoti.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Rodomi tik pirmieji %1$d skirtukai.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Šis papildinys paprašė daugiau nei %1$d valdiklių. Programėlė likusius atmetė.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Ši versija neatpažįsta valdiklio tipo „%1$s“.</string>
+    <string name="core_plugins_ui_tab_default_title">Skirtukas %1$d</string>
+</resources>

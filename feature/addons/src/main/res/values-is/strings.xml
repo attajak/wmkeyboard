@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Teikna emoji með því núna?</string>
+    <string name="faddons_apply_icon_pack_question">Nota táknmyndirnar á lyklaborðinu núna?</string>
+    <string name="faddons_apply_layout_question">Kveikja á því svo þú getir skrifað með því?</string>
+    <string name="faddons_apply_plugin_question">Kveikja á því svo það sjáist í viðbótarborðinu?</string>
+    <string name="faddons_apply_sound_pack_question">Nota þennan hljóðpakka fyrir lyklana þína núna?</string>
+    <string name="faddons_apply_sound_question">Nota það sem hljóð fyrir takka núna?</string>
+    <string name="faddons_apply_switch_action">Skipta yfir í það</string>
+    <string name="faddons_apply_theme_question">Nota sem lyklaborðsþema núna?</string>
+    <string name="faddons_download_error_app_too_old">Þessi viðbót þarf nýrri útgáfu af forritinu.</string>
+    <string name="faddons_download_error_bad_url">Niðurhalstengillinn er ekki gildur https-slóð.</string>
+    <string name="faddons_download_error_checksum">Niðurhalaða skráin passar ekki við eftirlitssummu í skránni.</string>
+    <string name="faddons_download_error_http_status">Þjónninn skilaði HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Það er ekki nægilegt laust pláss til að setja þetta upp.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Þessi viðbót hefur enga eftirlitssummu. Forritið getur ekki staðfest hana.</string>
+    <string name="faddons_download_error_too_large">Þessi viðbót er stærri en %1$d MB mörkin fyrir þessa tegund.</string>
+    <string name="faddons_error_no_words">Forritið gat ekki lesið nein orð úr þeirri skrá.</string>
+    <string name="faddons_error_not_a_plugin">Sú skrá er ekki WM lyklaborðsviðbót.</string>
+    <string name="faddons_install_error_dictionary_no_language">Þessi orðabók tilgreinir ekki hvaða tungumáli hún tilheyrir.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Forritið gat ekki vistað orðabókina.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Forritið gat ekki lesið táknmyndapakkann.</string>
+    <string name="faddons_install_error_keywords_no_language">Þessi pakki segir ekki til um hvaða tungumál hann er fyrir.</string>
+    <string name="faddons_install_error_keywords_not_saved">Forritið gat ekki vistað lykilorðapakkann.</string>
+    <string name="faddons_install_error_keywords_too_large">Þessi leitarorðapakki er of stór til að flytja inn.</string>
+    <string name="faddons_install_error_no_keywords">Forritið gat ekki lesið nein emoji-leitarorð úr þeirri skrá.</string>
+    <string name="faddons_install_error_no_stickers">Forritið gat ekki lesið neina límmiða úr þeim pakka. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">Skráin er ekki WM lyklaborðsuppsetning.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">Sú skrá er ekki WM Keyboard bútapakki.</string>
+    <string name="faddons_install_error_not_a_sound_pack">Þessi skrá er ekki hljóðpakki.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">Sú skrá er ekki límmiðapakki.</string>
+    <string name="faddons_install_error_not_a_theme">Sú skrá er ekki WM Keyboard þema.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">Sú skrá er ekki Espanso-pakki eða samsvörunarskrá.</string>
+    <string name="faddons_install_error_not_an_icon_pack">Sú skrá er ekki táknmyndapakki.</string>
+    <string name="faddons_install_error_plugin_failed">Forritið gat ekki sett upp þá viðbót.</string>
+    <string name="faddons_install_error_plugins_turned_off">Viðbætur eru óvirkar. Kveiktu á „Leyfa viðbætur“ undir Verkfæri › Viðbætur. Settu síðan upp aftur.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Þessi bútapakki er tómur.</string>
+    <string name="faddons_install_error_sound_pack_read">Forritið getur ekki lesið þennan hljóðpakka.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Forritið gat ekki lesið límmiðapakkann.</string>
+    <string name="faddons_install_error_too_many_fonts">Þú hefur náð hámarksfjölda uppsettra leturgerða.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Þú hefur náð hámarksfjölda táknmyndapakka.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Þú ert nú þegar með hámarksfjölda af %1$d viðbót.</item>
+        <item quantity="other">Þú ert nú þegar með hámarksfjölda af %1$d viðbótum.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Þú hefur náð hámarksfjölda uppsettra hljóðpakka.</string>
+    <string name="faddons_install_error_too_many_sounds">Þú hefur náð hámarksfjölda uppsettra lyklahljóða.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Þú hefur náð hámarksfjölda límmiðapakka.</string>
+    <string name="faddons_install_error_unknown_language">Þessi útgáfa af forritinu styður ekki tungumálið „%1$s“.</string>
+    <string name="faddons_install_error_unknown_type">Þessi útgáfa af forritinu styður ekki þá tegund viðbótar.</string>
+    <string name="faddons_install_error_vocab_no_language">Þessi orðaforðapakki segir ekki til um hvaða tungumál hann er fyrir.</string>
+    <string name="faddons_install_error_vocab_no_words">Forritið gat ekki lesið nein orð úr þeim pakka.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">Sú skrá er ekki orðaforðapakki.</string>
+    <string name="faddons_install_error_vocab_too_large">Þessi orðaforðapakki er stærri en forritið leyfir.</string>
+    <string name="faddons_preview_error_no_preview">Forritið getur ekki forskoðað þessa viðbót.</string>
+    <string name="faddons_preview_error_not_espanso_pack">Skráin er ekki Espanso pakki eða samsvörunarskrá.</string>
+    <string name="faddons_preview_error_not_keyword_pack">Sú skrá er ekki emoji-lykilorðapakki.</string>
+    <string name="faddons_preview_error_not_snippet_pack">Sú skrá er ekki brotapakki.</string>
+    <string name="faddons_preview_error_not_vocab_pack">Sú skrá er ekki orðaforðapakki.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Forritið gat ekki lesið hljóðin í þessum pakka.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Forritið gat ekki lesið límmiðamyndirnar.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Úrklippupakki</string>
+</resources>

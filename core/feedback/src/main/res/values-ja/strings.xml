@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">このパックにはサウンドパック形式 %1$s が必要です。アプリをアップデートしてください。</string>
+    <string name="core_feedback_pack_reject_no_samples">このパックには、アプリで再生可能なサウンドが含まれていません。</string>
+    <string name="core_feedback_pack_reject_too_large">サウンドパックは %1$s MB 未満である必要があります。</string>
+    <string name="core_feedback_sound_import_empty_error">ファイルが空です。</string>
+    <string name="core_feedback_sound_import_html_error">これはHTMLまたはXMLファイルであり、サウンドではありません。</string>
+    <string name="core_feedback_sound_import_mp4_error">このアプリはMP4およびM4Aファイルを再生できません。MP3ファイルを使用してください。</string>
+    <string name="core_feedback_sound_import_no_storage_error">デバイスに利用可能なストレージがありません。</string>
+    <string name="core_feedback_sound_import_read_error">アプリがサウンドを読み取れません。</string>
+    <string name="core_feedback_sound_import_save_error">アプリがサウンドを保存できません。</string>
+    <string name="core_feedback_sound_import_too_large_error">キー音は %1$s MB未満である必要があります。</string>
+    <string name="core_feedback_sound_import_too_short_error">ファイルが短すぎて音声として使用できません。</string>
+    <string name="core_feedback_sound_import_unknown_format_error">MP3、OGG、WAVファイルではないようです。</string>
+    <string name="core_feedback_sound_import_zip_error">これは音声ファイルではなく、zipアーカイブです。</string>
+</resources>

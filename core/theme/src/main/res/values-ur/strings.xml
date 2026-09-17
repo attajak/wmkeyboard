@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">ارورہ</string>
+    <string name="core_theme_builtin_berry_label">بیری</string>
+    <string name="core_theme_builtin_bubble_label">بلبلہ</string>
+    <string name="core_theme_builtin_crimson_label">کرمزی</string>
+    <string name="core_theme_builtin_cyberpunk_label">سائبرپنک</string>
+    <string name="core_theme_builtin_deep_sea_label">گہرا سمندر</string>
+    <string name="core_theme_builtin_facet_label">فیسیٹ</string>
+    <string name="core_theme_builtin_forest_label">جنگل</string>
+    <string name="core_theme_builtin_glacier_label">گلیشیر</string>
+    <string name="core_theme_builtin_mint_label">پودینہ</string>
+    <string name="core_theme_builtin_nebula_label">نیبولا</string>
+    <string name="core_theme_builtin_ocean_label">اوشن</string>
+    <string name="core_theme_builtin_pitch_label">گہرا سیاہ</string>
+    <string name="core_theme_builtin_rose_label">گلاب</string>
+    <string name="core_theme_builtin_sand_label">ریت</string>
+    <string name="core_theme_builtin_slate_label">سلیٹ</string>
+    <string name="core_theme_builtin_snow_label">برف</string>
+    <string name="core_theme_builtin_sunset_drift_label">غروب آفتاب کا بہاؤ</string>
+    <string name="core_theme_builtin_sunset_label">غروب آفتاب</string>
+    <string name="core_theme_family_gradient_label">گریڈینٹس</string>
+    <string name="core_theme_family_ocean_label">نائٹ فال</string>
+    <string name="core_theme_family_snow_label">پیسٹل</string>
+</resources>

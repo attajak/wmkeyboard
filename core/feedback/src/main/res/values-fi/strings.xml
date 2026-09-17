@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Tämä paketti vaatii äänipakettimuodon %1$s. Päivitä sovellus.</string>
+    <string name="core_feedback_pack_reject_no_samples">Tämä pakkaus ei sisällä ääniä, joita sovellus voi toistaa.</string>
+    <string name="core_feedback_pack_reject_too_large">Äänipaketin on oltava pienempi kuin %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">Tiedosto on tyhjä.</string>
+    <string name="core_feedback_sound_import_html_error">Tämä on HTML- tai XML-tiedosto, ei ääni.</string>
+    <string name="core_feedback_sound_import_mp4_error">Sovellus ei toista MP4- tai M4A-tiedostoja. Käytä MP3-tiedostoa.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Laitteellasi ei ole käytettävissä tallennustilaa.</string>
+    <string name="core_feedback_sound_import_read_error">Sovellus ei voi lukea ääntä.</string>
+    <string name="core_feedback_sound_import_save_error">Sovellus ei voi tallentaa ääntä.</string>
+    <string name="core_feedback_sound_import_too_large_error">Näppäinäänen on oltava pienempi kuin %1$s Mt.</string>
+    <string name="core_feedback_sound_import_too_short_error">Tiedosto on liian lyhyt ollakseen ääni.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Tämä ei näytä olevan MP3-, OGG- tai WAV-tiedosto.</string>
+    <string name="core_feedback_sound_import_zip_error">Tämä on zip-arkisto, ei äänitiedosto.</string>
+</resources>

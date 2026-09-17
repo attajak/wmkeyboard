@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Jagoda</string>
+    <string name="core_theme_builtin_bubble_label">Dymek</string>
+    <string name="core_theme_builtin_crimson_label">Karmazynowy</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Głębiny morskie</string>
+    <string name="core_theme_builtin_facet_label">Aspekt</string>
+    <string name="core_theme_builtin_forest_label">Las</string>
+    <string name="core_theme_builtin_glacier_label">Lodowiec</string>
+    <string name="core_theme_builtin_mint_label">Miętowy</string>
+    <string name="core_theme_builtin_nebula_label">Mgławica</string>
+    <string name="core_theme_builtin_ocean_label">Ocean</string>
+    <string name="core_theme_builtin_pitch_label">Głęboka czerń</string>
+    <string name="core_theme_builtin_rose_label">Różany</string>
+    <string name="core_theme_builtin_sand_label">Piaskowy</string>
+    <string name="core_theme_builtin_slate_label">Łupkowy</string>
+    <string name="core_theme_builtin_snow_label">Śnieg</string>
+    <string name="core_theme_builtin_sunset_drift_label">Zachód słońca</string>
+    <string name="core_theme_builtin_sunset_label">Zachód słońca</string>
+    <string name="core_theme_family_gradient_label">Gradienty</string>
+    <string name="core_theme_family_ocean_label">Zmierzch</string>
+    <string name="core_theme_family_snow_label">Pastelowy</string>
+</resources>

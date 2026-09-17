@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Bes</string>
+    <string name="core_theme_builtin_bubble_label">Bubbel</string>
+    <string name="core_theme_builtin_crimson_label">Karmozijn</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Diepzee</string>
+    <string name="core_theme_builtin_facet_label">Facet</string>
+    <string name="core_theme_builtin_forest_label">Bos</string>
+    <string name="core_theme_builtin_glacier_label">Gletsjer</string>
+    <string name="core_theme_builtin_mint_label">Muntgroen</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Oceaan</string>
+    <string name="core_theme_builtin_pitch_label">Gitzwart</string>
+    <string name="core_theme_builtin_rose_label">Roos</string>
+    <string name="core_theme_builtin_sand_label">Zand</string>
+    <string name="core_theme_builtin_slate_label">Leisteen</string>
+    <string name="core_theme_builtin_snow_label">Sneeuw</string>
+    <string name="core_theme_builtin_sunset_drift_label">Sunset drift</string>
+    <string name="core_theme_builtin_sunset_label">Zonsondergang</string>
+    <string name="core_theme_family_gradient_label">Verlopen</string>
+    <string name="core_theme_family_ocean_label">Nachtval</string>
+    <string name="core_theme_family_snow_label">Pastel</string>
+</resources>

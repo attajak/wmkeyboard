@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">ಈ ಮಾದರಿಯು ಗೇಟ್ ಆಗಿದೆ. ಮೊದಲು ನಿಮ್ಮ ಹಗ್ಗಿಂಗ್ ಫೇಸ್ ಟೋಕನ್ ಸೇರಿಸಿ.</string>
+    <string name="core_intel_llm_download_error_http">ಹಗ್ಗಿಂಗ್ ಫೇಸ್ HTTP ಸ್ಥಿತಿ %1$s ಅನ್ನು ಹಿಂತಿರುಗಿಸಿದೆ.</string>
+    <string name="core_intel_llm_download_error_licence">ಅದರ Hugging Face ಪುಟದಲ್ಲಿ ಮಾದರಿಯ ಪರವಾನಗಿಯನ್ನು ಸ್ವೀಕರಿಸಿ. ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="core_intel_llm_download_error_no_space">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಸಾಕಷ್ಟು ಸಂಗ್ರಹಣಾ ಸ್ಥಳವಿಲ್ಲ. ಮೊದಲು ಸುಮಾರು %1$s GB ಖಾಲಿ ಮಾಡಿ.</string>
+    <string name="core_intel_llm_download_error_token_rejected">ಹಗ್ಗಿಂಗ್ ಫೇಸ್ ಟೋಕನ್ ಅನ್ನು ಸ್ವೀಕರಿಸಿಲ್ಲ. ಟೋಕನ್ ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="core_intel_llm_download_error_truncated">ಡೌನ್‌ಲೋಡ್ ಸಮಯದಲ್ಲಿ ಸಂಪರ್ಕ ಕಡಿತಗೊಂಡಿದೆ. ಮುಂದುವರಿಸಲು \'ಪುನರಾರಂಭಿಸು\' ಒತ್ತಿರಿ.</string>
+    <string name="core_intel_llm_engine_error_gpu">GPU ನಲ್ಲಿ ಮಾದರಿಯು ವಿಫಲವಾಗಿದೆ. GPU ಮೆಮೊರಿಯು ಸಿಸ್ಟಮ್ ಮೆಮೊರಿಗಿಂತ ಬಹಳ ಚಿಕ್ಕದಾಗಿದೆ. ಮುಂದಿನ ಪ್ರಯತ್ನವು CPU ಅನ್ನು ಬಳಸುತ್ತದೆ. ಯಾವಾಗಲೂ CPU ಅನ್ನು ಬಳಸಲು, ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ Compute ಅನ್ನು CPU ಗೆ ಹೊಂದಿಸಿ. ನೀವು ಚಿಕ್ಕ ಮಾದರಿಯನ್ನು ಸಹ ಆಯ್ಕೆ ಮಾಡಬಹುದು.</string>
+    <string name="core_intel_llm_engine_error_load">ಮಾದರಿಯು ಲೋಡ್ ಆಗಿಲ್ಲ. ಫೈಲ್ ಬಹುಶಃ ಹಾನಿಗೊಳಗಾಗಿದೆ. ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಮಾದರಿಯನ್ನು ಅಳಿಸಿ ಮತ್ತು ಅದನ್ನು ಮತ್ತೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.</string>
+    <string name="core_intel_llm_engine_error_memory">ಮಾದರಿಯು ಮೆಮೊರಿಯಿಂದ ಹೊರಗುಳಿದಿದೆ ಅಥವಾ ಅದು ವಿಫಲವಾಗಿದೆ. ಸಣ್ಣ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">ಹಿಂದಿನ ಪೀಳಿಗೆಯ ಸಣ್ಣ ಗೆಮ್ಮಾ ಮಾಡೆಲ್. ಇದು ಉತ್ತಮ ಗುಣಮಟ್ಟವನ್ನು ಹೊಂದಿದೆ ಮತ್ತು 4K ಟೋಕನ್‌ಗಳ ಸಂದರ್ಭವನ್ನು ಹೊಂದಿದೆ.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">ಗೂಗಲ್‌ನಿಂದ ಚಿಕ್ಕದಾದ ಜೆಮ್ಮಾ. ಇದು ಎಲ್ಲಾ ಸಾಧನಗಳಲ್ಲಿ ವೇಗವಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">ಅತ್ಯಂತ ಹೊಸ ಜೆಮ್ಮಾ ಪೀಳಿಗೆ. ಇದು ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಉನ್ನತ ಗುಣಮಟ್ಟವನ್ನು ನೀಡುತ್ತದೆ.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">ಅತಿದೊಡ್ಡ ಮಾದರಿ. ಇದು ಅತ್ಯುತ್ತಮವಾಗಿ ಬರೆಯುತ್ತದೆ, ಆದರೆ ಇದಕ್ಕೆ ಶಕ್ತಿಯುತ ಸಾಧನದ ಅಗತ್ಯವಿದೆ.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">ಮೂಲ ಸಾಧನದಲ್ಲಿಯೂ ಹೊಂದಿಕೊಳ್ಳುವ ಸಾಮಾನ್ಯ ಉದ್ದೇಶದ ಮಾದರಿ.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">1B ಗಿಂತ ಕಡಿಮೆ ಇರುವ ಮಾದರಿಗಳಿಗಿಂತ ಸ್ಪಷ್ಟವಾಗಿ ಬುದ್ಧಿವಂತವಾಗಿದೆ. ಇದಕ್ಕೆ ಮಧ್ಯಮ ಶ್ರೇಣಿಯ ಸಾಧನದ ಅಗತ್ಯವಿದೆ.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">ಇತ್ತೀಚಿನ ಸಣ್ಣ ಮಾದರಿ. ಅದರ ಗಾತ್ರಕ್ಕೆ ಅನುಗುಣವಾಗಿ ಗುಣಮಟ್ಟವು ಹೆಚ್ಚಾಗಿದೆ.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">ತುಂಬಾ ಚಿಕ್ಕದು ಮತ್ತು ವೇಗವಾದದ್ದು. ಇದು ತ್ವರಿತ ಮರುಬರಹಗಳಿಗೆ ಒಳ್ಳೆಯದು, ಆದರೆ ತಾರ್ಕಿಕ ಸಾಮರ್ಥ್ಯ ಸೀಮಿತವಾಗಿದೆ.</string>
+    <string name="core_intel_llm_module_downloading">ಕೀಬೋರ್ಡ್‌ನ AI ಭಾಗವು Google Play ನಿಂದ ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ. ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <string name="core_intel_llm_module_restart">AI ಭಾಗವು ಇದೀಗ ಸ್ಥಾಪನೆಯಾಗಿದೆ. ಅದನ್ನು ಬಳಸಲು ಕೀಬೋರ್ಡ್ ಅನ್ನು ಮುಚ್ಚಿ ಮತ್ತು ಮರುಪ್ರಾರಂಭಿಸಿ.</string>
+    <string name="core_intel_llm_tier_experimental_label">ಪ್ರಾಯೋಗಿಕ</string>
+    <string name="core_intel_llm_tier_recommended_label">ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ</string>
+    <string name="core_intel_llm_tier_untested_label">ಪರೀಕ್ಷಿಸದ</string>
+</resources>

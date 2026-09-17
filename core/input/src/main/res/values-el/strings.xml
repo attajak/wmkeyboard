@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Το ληφθέν αρχείο είναι κατεστραμμένο. Το άθροισμα ελέγχου (checksum) δεν ταιριάζει. Δοκιμάστε ξανά τη λήψη.</string>
+    <string name="core_input_cjk_download_error_http">Ο διακομιστής επέστρεψε κατάσταση HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Η λήψη δεν λειτούργησε. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.</string>
+    <string name="core_input_cjk_download_error_network_detail">Η λήψη δεν λειτούργησε: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Δεν υπάρχει αρκετός αποθηκευτικός χώρος στη συσκευή σας. Ελευθερώστε λίγο χώρο πρώτα.</string>
+    <string name="core_input_cjk_download_error_truncated">Η σύνδεση διακόπηκε κατά τη λήψη. Πατήστε Συνέχεια για να συνεχίσετε.</string>
+    <string name="core_input_cjk_download_error_unavailable">Αυτό το πακέτο δεν είναι ακόμα διαθέσιμο.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Ένας πίνακας ριζικών κωδικών για χαρακτήρες Hanzi, 29.000 χαρακτήρες. Το πληκτρολόγιο χρειάζεται αυτό το πακέτο για τις διατάξεις Cangjie και Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Λεξικό Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Αναγνώσεις Kana από το mozc, 1,08 εκατομμύρια καταχωρήσεις, περίπου 42 MB. Το πληκτρολόγιο χρειάζεται αυτό το πακέτο για την ιαπωνική μετατροπή.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Λεξικό ιαπωνικών kana σε kanji</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Ένας πίνακας με αναγνώσεις Jyutping για χαρακτήρες Hanzi, με 163.000 καταχωρήσεις. Το πληκτρολόγιο χρειάζεται αυτό το πακέτο για τη μετατροπή στα Καντονέζικα.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Λεξικό Καντονέζικων Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Χαρακτήρες και φράσεις Hanzi από το CC-CEDICT, 120.000 καταχωρήσεις. Το πληκτρολόγιο χρειάζεται αυτό το πακέτο για την κινεζική μετατροπή.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Κινεζικό λεξικό Pinyin</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Ένας πίνακας σειράς γραμμών για χαρακτήρες Hanzi. Το πληκτρολόγιο χρειάζεται αυτό το πακέτο για τη διάταξη γραμμών.</string>
+    <string name="core_input_cjk_pack_stroke_title">Κινεζικό λεξικό με βάση τις γραμμές (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Απενεργοποιημένο (πλήρες Pinyin)</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">De AI-provider heeft de reactie beëindigd met een fout</string>
+    <string name="ftools_photo_error_failed">De app kon de foto\'s niet ophalen</string>
+    <string name="ftools_photo_error_offline">De app kan de fotoservice niet bereiken. Controleer je netwerk en probeer het opnieuw.</string>
+    <string name="ftools_photo_error_timeout">De fotoservice deed er te lang over om te antwoorden</string>
+    <string name="ftools_search_error_json_disabled">Deze SearXNG-instantie heeft zijn JSON API niet ingeschakeld. Voeg 3b3json3/b3 toe aan 3b3search.formats3/b3 in de settings.yml, of gebruik een andere instantie.</string>
+</resources>

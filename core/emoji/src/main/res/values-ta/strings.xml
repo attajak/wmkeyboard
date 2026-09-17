@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">அந்த எமோஜி கீவேர்டு பட்டியல் காலியாக உள்ளது அல்லது படிக்க முடியவில்லை.</string>
+    <string name="core_emoji_dict_error_http">சர்வர் கோப்பை அனுப்பவில்லை. பிழைக் குறியீடு HTTP %1$s ஆகும்.</string>
+    <string name="core_emoji_dict_error_not_a_list">அந்தக் கோப்பு ஈமோஜி முக்கிய சொல் பட்டியல் அல்ல.</string>
+    <string name="core_emoji_dict_error_save">ஆப்பால் ஈமோஜி முக்கிய வார்த்தைப் பட்டியலைச் சேமிக்க முடியவில்லை.</string>
+    <string name="core_emoji_dict_error_too_large">அந்த எமோஜி முக்கியச்சொல் பட்டியல் மிக நீளமானது.</string>
+</resources>

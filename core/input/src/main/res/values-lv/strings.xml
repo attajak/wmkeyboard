@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Lejupielādētais fails ir bojāts. Tā kontrolsumma nesakrīt. Mēģiniet lejupielādēt vēlreiz.</string>
+    <string name="core_input_cjk_download_error_http">Serveris atgrieza HTTP statusu %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Lejupielāde neizdevās. Pārbaudiet savienojumu un mēģiniet vēlreiz.</string>
+    <string name="core_input_cjk_download_error_network_detail">Lejupielāde neizdevās: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Jūsu ierīcē nav pietiekami daudz vietas. Vispirms atbrīvojiet nedaudz vietas.</string>
+    <string name="core_input_cjk_download_error_truncated">Savienojums tika pārtraukts lejupielādes laikā. Nospiediet Atsākt, lai turpinātu.</string>
+    <string name="core_input_cjk_download_error_unavailable">Šī pakotne vēl nav pieejama.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Radikālo kodu tabula Hanzi rakstzīmēm, 29 000 rakstzīmju. Tastatūrai ir nepieciešama šī pakotne Cangjie un Quick izkārtojumiem.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) vārdnīca</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana lasījumi no mozc, 1,08 miljoni ierakstu, aptuveni 42 MB. Tastatūrai šī pakotne ir nepieciešama japāņu valodas konvertēšanai.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Japāņu kana uz kanji vārdnīca</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Džutpina lasījumu tabula hanzi rakstzīmēm, 163 000 ierakstu. Tastatūrai šī pakotne ir nepieciešama kantoniešu valodas konvertēšanai.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantoniešu valodas Jyutping vārdnīca</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Hanu hieroglifu zīmes un frāzes no CC-CEDICT, 120 000 ierakstu. Tastatūrai ir nepieciešama šī pakotne ķīniešu valodas konvertēšanai.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Ķīniešu piņjiņa vārdnīca</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Hanzi rakstzīmju vilkumu secības tabula. Tastatūrai šī pakotne ir nepieciešama vilkumu izkārtojumam.</string>
+    <string name="core_input_cjk_pack_stroke_title">Ķīniešu vilcienu (笔画) vārdnīca</string>
+    <string name="core_input_double_pinyin_off_label">Izslēgts (pilns Piņjiņs)</string>
+</resources>

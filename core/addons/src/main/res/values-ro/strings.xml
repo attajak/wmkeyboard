@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Dicționare</string>
+    <string name="core_addons_type_dictionary_singular_label">Dicționar</string>
+    <string name="core_addons_type_emoji_font_label">Fonturi emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Font emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Cuvinte cheie pentru emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Pachet de cuvinte cheie emoji</string>
+    <string name="core_addons_type_espanso_label">Pachete Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Pachet Espanso</string>
+    <string name="core_addons_type_font_label">Fonturi</string>
+    <string name="core_addons_type_font_singular_label">Font</string>
+    <string name="core_addons_type_icon_pack_label">Pachete de pictograme</string>
+    <string name="core_addons_type_icon_pack_singular_label">Pachet de pictograme</string>
+    <string name="core_addons_type_layout_label">Layout-uri</string>
+    <string name="core_addons_type_layout_singular_label">Aspect</string>
+    <string name="core_addons_type_plugin_label">Pluginuri</string>
+    <string name="core_addons_type_plugin_singular_label">Plugin</string>
+    <string name="core_addons_type_snippets_label">Fragmente</string>
+    <string name="core_addons_type_snippets_singular_label">Pachet de fragmente</string>
+    <string name="core_addons_type_sound_label">Sunete</string>
+    <string name="core_addons_type_sound_pack_label">Pachete de sunete</string>
+    <string name="core_addons_type_sound_pack_singular_label">Pachet de sunete</string>
+    <string name="core_addons_type_sound_singular_label">Sunet tastă</string>
+    <string name="core_addons_type_stickers_label">Pachete de stickere</string>
+    <string name="core_addons_type_stickers_singular_label">Pachet de stickere</string>
+    <string name="core_addons_type_theme_label">Teme</string>
+    <string name="core_addons_type_theme_singular_label">Temă</string>
+    <string name="core_addons_type_unknown_label">Altele</string>
+    <string name="core_addons_type_unknown_singular_label">Add-on</string>
+    <string name="core_addons_type_vocabulary_label">Vocabular</string>
+    <string name="core_addons_type_vocabulary_singular_label">Pachet de vocabular</string>
+</resources>

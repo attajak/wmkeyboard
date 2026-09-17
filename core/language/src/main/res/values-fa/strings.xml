@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">برنامه %1$d کلید را به نزدیک‌ترین کلیدی که دارد تغییر داد.</item>
+        <item quantity="other">برنامه %1$d کلید را به نزدیک‌ترین کلیدهایی که دارد تغییر داد.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">برنامه %1$d کلید را حذف کرد. این صفحه‌کلید کلیدی که همان کار را انجام دهد ندارد (کد %2$s).</item>
+        <item quantity="other">برنامه %1$d کلید را حذف کرد. این صفحه‌کلید کلیدهایی که همان کار را انجام دهند ندارد (کدها %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">برنامه اندازه برچسب %1$d کلید را حفظ کرد اما سبک متن آن را نه. این صفحه‌کلید برچسب‌ها را با یک سبک ترسیم می‌کند.</item>
+        <item quantity="other">برنامه اندازه برچسب %1$d کلید را حفظ کرد اما سبک متن آن‌ها را نه. این صفحه‌کلید برچسب‌ها را با یک سبک ترسیم می‌کند.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">برنامه %1$d حرف را به شکلی که این صفحه‌کلید می‌نویسد تغییر داد.</item>
+        <item quantity="other">برنامه %1$d حرف را به شکلی که این صفحه‌کلید می‌نویسد تغییر داد.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d کلید هیچ حرفی برای فشار طولانی ندارد. فایل آن‌ها را در فایل دومی نگه می‌دارد که شما باز نکردید.</item>
+        <item quantity="other">%1$d کلید هیچ حرفی برای فشار طولانی ندارند. فایل آن‌ها را در فایل دومی نگه می‌دارد که شما باز نکردید.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">صفحه‌کلید دیگر عرض کلیدها را متفاوت اندازه‌گیری می‌کند. برنامه عرض‌ها را تغییر داد تا با این شبکه مطابقت داشته باشد.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d کلید نقطه بریل در لایه %2$s دارای شماره نقطه‌ای خارج از محدوده ۱ تا ۶ است.</item>
+        <item quantity="other">%1$d کلید نقطه بریل در لایه %2$s دارای شماره نقطه‌ای خارج از محدوده ۱ تا ۶ هستند.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d کلید در لایه %2$s هیچ برچسب و خروجی ندارد. این کلید چیزی تایپ نمی‌کند و برنامه هنگام فعال کردن این طرح‌بندی، آن را حذف می‌کند.</item>
+        <item quantity="other">%1$d کلید در لایه %2$s هیچ برچسب و خروجی ندارند. این کلیدها چیزی تایپ نمی‌کنند و برنامه هنگام فعال کردن این طرح‌بندی، آن‌ها را حذف می‌کند.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">ردیف %1$d از لایه %2$s خالی است.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d کلید در لایه %2$s یک مؤلفه پنل است. مؤلفه‌ها فقط در چیدمان پنل کار می‌کنند.</item>
+        <item quantity="other">%1$d کلید در لایه %2$s مؤلفه‌های پنل هستند. مؤلفه‌ها فقط در چیدمان پنل کار می‌کنند.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">ردیف %1$d از لایه %2$s دارای کلیدی بدون عرض است.</string>
+    <string name="core_lang_layout_key_span_error">ردیف %1$d از لایه %2$s دارای کلیدی است که کمتر از ۱ یا بیش از %3$d ردیف را پوشش می‌دهد.</string>
+    <string name="core_lang_layout_letters_empty_error">لایه حروف هیچ کلیدی ندارد.</string>
+    <string name="core_lang_layout_no_delete_error">این طرح‌بندی کلید حذف ندارد. شما نمی‌توانید اشتباه را اصلاح کنید.</string>
+    <string name="core_lang_layout_no_enter_error">این طرح‌بندی کلید ورود (Enter) ندارد.</string>
+    <string name="core_lang_layout_no_shift_warning">این طرح‌بندی فاقد کلید شیفت است. برای تایپ حرف بزرگ، یک کلید را فشار دهید و نگه دارید.</string>
+    <string name="core_lang_layout_no_space_error">طرح‌بندی کلید فاصله ندارد.</string>
+    <string name="core_lang_layout_no_way_back_error">لایه %1$s هیچ کلیدی برای بازگشت به حروف ندارد. شما نمی‌توانید از این لایه خارج شوید.</string>
+    <string name="core_lang_layout_persistent_warning">لایه %1$s هنگام بسته شدن صفحه‌کلید باز می‌ماند. مطمئن شوید که راهی برای خروج از این طرح‌بندی دارید.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">این طرح‌بندی کلیدی برای خروج ندارد. مطمئن شوید که راهی برای خروج از این طرح‌بندی دارید: یک کلید ABC، یک کلید نمادها، یا ابزار طرح‌بندی سفارشی در نوار ابزار.</string>
+    <string name="core_lang_layout_span_past_end_warning">ردیف %1$d از لایه %2$s کلیدی دارد که ردیف‌های بیشتری نسبت به لایه پوشش می‌دهد. صفحه‌کلید آن را در ردیف آخر متوقف می‌کند.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">ردیف %1$d از لایه %2$s دارای %3$d کلید است. فقط %4$d کلید به اندازه کافی برای فشردن بزرگ باقی می‌مانند.</item>
+        <item quantity="other">ردیف %1$d از لایه %2$s دارای %3$d کلید است. فقط %4$d کلید به اندازه کافی برای فشردن بزرگ باقی می‌مانند.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">لایه %1$s دارای %2$d ردیف است. فقط %3$d ردیف جا می‌شود.</item>
+        <item quantity="other">لایه %1$s دارای %2$d ردیف است. فقط %3$d ردیف جا می‌شود.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d کلید در لایه %2$s از عملیاتی استفاده می‌کند که این نسخه از برنامه آن را نمی‌شناسد.</item>
+        <item quantity="other">%1$d کلید در لایه %2$s از عملیاتی استفاده می‌کنند که این نسخه از برنامه آن‌ها را نمی‌شناسد.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">ردیف %1$d از لایه %2$s عریض‌تر از ردیف‌های دیگر است. صفحه‌کلید کلیدهای این ردیف را باریک‌تر ترسیم می‌کند.</string>
+    <string name="core_lang_numeral_scope_display_only">فقط نمایش</string>
+    <string name="core_lang_numeral_scope_everywhere">همه جا</string>
+    <string name="core_lang_numeral_scope_text_fields">فیلدهای متنی</string>
+    <string name="core_lang_numeral_system_auto">خودکار</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d مؤلفه بیش از یک بار ظاهر می‌شود. برنامه اولین نسخه را نگه می‌دارد.</item>
+        <item quantity="other">%1$d مؤلفه بیش از یک بار ظاهر می‌شوند. برنامه اولین نسخه از هر کدام را نگه می‌دارد.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">این پنل هیچ کلیدی ندارد. برنامه به جای آن از پنل استاندارد استفاده می‌کند.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d کلید دارای کنشی است که در پنل کار نمی‌کند. برنامه آن را حذف می‌کند.</item>
+        <item quantity="other">%1$d کلید دارای کنش‌هایی هستند که در پنل کار نمی‌کنند. برنامه آن‌ها را حذف می‌کند.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">این پنل کلید ABC ندارد. از نوار ابزار یا دکمه بازگشت برای بازگشت به کلیدها استفاده کنید.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">برنامه نسخه دوم یک مؤلفه را حذف کرد.</string>
+    <string name="core_lang_panel_repair_field_added">برنامه، مؤلفه اصلی پنل را در یک ردیف جدید اضافه کرد.</string>
+    <string name="core_lang_panel_repair_field_dropped">برنامه مؤلفه‌ای را حذف کرد که متعلق به این پنل نیست.</string>
+    <string name="core_lang_panel_repair_key_dropped">برنامه کلیدی را حذف کرد که عملکرد آن در پنل کار نمی‌کند.</string>
+    <string name="core_lang_panel_repair_reset">برنامه پنل خالی را با پنل استاندارد جایگزین کرد.</string>
+    <string name="core_lang_panel_required_field_error">این پنل فاقد مؤلفه اصلی خود است. برنامه هنگام ترسیم پنل، یکی را اضافه می‌کند.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d مؤلفه متعلق به این پنل نیست. برنامه آن را حذف می‌کند.</item>
+        <item quantity="other">%1$d مؤلفه متعلق به این پنل نیستند. برنامه آن‌ها را حذف می‌کند.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">برنامه یک کلید خالی را در لایه %1$s حذف کرد.</string>
+    <string name="core_lang_repair_braille_dot_clamped">یک کلید در لایه %1$s از نقطه بریل %2$d استفاده کرده است. برنامه آن را به نقطه %3$d تغییر داد.</string>
+    <string name="core_lang_repair_delete_key_added">لایه حروف کلید حذف نداشت. برنامه یکی اضافه کرد.</string>
+    <string name="core_lang_repair_enter_key_added">لایه حروف کلید اینتر نداشت. برنامه یکی اضافه کرد.</string>
+    <string name="core_lang_repair_field_key_deleted">برنامه یک مؤلفه پنل را از لایه %1$s حذف کرد. مؤلفه‌ها فقط در طرح‌بندی پنل کار می‌کنند.</string>
+    <string name="core_lang_repair_key_letters_anchored">یک کلید در لایه %1$s نشان‌دهنده %2$s است. برنامه آن را به %3$s تبدیل کرد.</string>
+    <string name="core_lang_repair_key_letters_dropped">یک کلید در لایه %1$s، %2$s را به عنوان حروف نشان‌دهنده خود فهرست کرده است. این‌ها حرف نیستند، بنابراین برنامه آن را به یک کلید معمولی تبدیل کرد.</string>
+    <string name="core_lang_repair_key_span_clamped">یک کلید در لایه %1$s، %2$d ردیف را پوشش می‌داد. برنامه آن را به %3$d ردیف تغییر داد.</string>
+    <string name="core_lang_repair_key_width_capped">عرض یک کلید در لایه %1$s برابر با %2$s واحد بود. برنامه آن را به %3$s واحد تغییر داد.</string>
+    <string name="core_lang_repair_key_width_set">یک کلید در لایه %1$s عرض نداشت. برنامه عرض را روی ۱ تنظیم کرد.</string>
+    <string name="core_lang_repair_layer_replaced">لایه %1$s هیچ کلید فعالی نداشت. اکنون از شبکه پیش‌فرض استفاده می‌کند.</string>
+    <string name="core_lang_repair_letters_key_added">لایه %1$s هیچ کلیدی که به حروف برگردد نداشت. برنامه یک کلید ABC اضافه کرد.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">یک ردیف در لایه %1$s دارای %2$d کلید بود. برنامه %3$d کلید اول را نگه می‌دارد.</item>
+        <item quantity="other">یک ردیف در لایه %1$s دارای %2$d کلید بود. برنامه %3$d کلید اول را نگه می‌دارد.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">طول یک ردیف در لایه %1$s برابر با %2$s واحد بود. برنامه اندازه‌ کلیدها را کوچک‌تر کرد تا ردیف در آن جای بگیرد.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">لایه %1$s دارای %2$d ردیف بود. برنامه %3$d ردیف اول را نگه می‌دارد.</item>
+        <item quantity="other">لایه %1$s دارای %2$d ردیف بود. برنامه %3$d ردیف اول را نگه می‌دارد.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">لایه حروف کلید فاصله نداشت. برنامه یکی اضافه کرد.</string>
+    <string name="core_lang_repair_unknown_key_deleted">برنامه یک کلید را در لایه %1$s حذف کرد. عملکرد آن \"%2$s\" ناشناخته است.</string>
+</resources>

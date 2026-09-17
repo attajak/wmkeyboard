@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">Server ei saatnud faili. Veakood on HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">See sõnaloend on tühi või loetamatu.</string>
+    <string name="core_pred_wordlist_no_space_error">Seadmes pole piisavalt salvestusruumi. Kustutage mõned failid ja proovige uuesti.</string>
+    <string name="core_pred_wordlist_save_error">Rakendus ei saa sõnaloendit salvestada. Proovi uuesti.</string>
+    <string name="core_pred_wordlist_size_all_label">Kõik</string>
+    <string name="core_pred_wordlist_size_large_label">Suur</string>
+    <string name="core_pred_wordlist_size_medium_label">Keskmine</string>
+    <string name="core_pred_wordlist_size_small_label">Väike</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brasiilia</string>
+    <string name="core_pred_wordlist_variant_europe_label">Euroopa</string>
+</resources>

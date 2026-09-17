@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">ایک بار استعمال ہونے والا کوڈ</string>
+    <string name="core_content_clip_entity_otp_tag">کوڈ</string>
+    <string name="core_content_clip_entity_phone_label">فون نمبر</string>
+    <string name="core_content_clip_entity_phone_tag">فون</string>
+    <string name="core_content_clip_entity_url_label">لنک</string>
+    <string name="core_content_clip_entity_url_tag">لنک</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d اسنیپٹ میں دیگر توسیع ہیں جنہیں Espanso نہیں رکھ سکتا۔ صرف پہلا لکھا گیا تھا۔</item>
+        <item quantity="other">%1$d اسنیپٹس میں دیگر توسیع ہیں جنہیں Espanso نہیں رکھ سکتا۔ ہر ایک کا صرف پہلا حصہ لکھا گیا تھا۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d اسنیپٹ کچھ کمپیوٹر پروگراموں تک محدود ہے۔ آپ کے فون پر یہ ہر جگہ کام کرتا ہے۔</item>
+        <item quantity="other">%1$d اسنیپٹس کچھ کمپیوٹر پروگراموں تک محدود ہیں۔ آپ کے فون پر یہ ہر جگہ کام کرتے ہیں۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d اسنیپٹ آپ سے فہرست میں سے انتخاب کرنے کو کہتا ہے۔ ایپ اس کے بجائے تصادفی طور پر ایک کا انتخاب کرتی ہے۔</item>
+        <item quantity="other">%1$d اسنیپٹس آپ سے فہرست میں سے انتخاب کرنے کو کہتے ہیں۔ ایپ اس کے بجائے تصادفی طور پر ایک کا انتخاب کرتی ہے۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d اسنیپٹ پھیلنے سے پہلے پوچھتا ہے۔ Espanso میں ایسی کوئی ترتیب نہیں ہے، لہذا یہ وہاں خود بخود پھیل جائے گا۔</item>
+        <item quantity="other">%1$d اسنیپٹس پھیلنے سے پہلے پوچھتے ہیں۔ Espanso میں ایسی کوئی ترتیب نہیں ہے، لہذا وہ وہاں خود بخود پھیل جائیں گے۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d اسنیپٹ ایک ایسا تاریخ فارمیٹ استعمال کرتا ہے جسے ایپ مکمل طور پر نہیں لکھ سکتی۔ ایپ نے وہ حصہ چھوڑ دیا جو وہ نہیں کر سکتی۔</item>
+        <item quantity="other">%1$d اسنیپٹس ایسے تاریخ فارمیٹس استعمال کرتے ہیں جنہیں ایپ مکمل طور پر نہیں لکھ سکتی۔ ایپ نے وہ حصے چھوڑ دیے جو وہ نہیں کر سکتی۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d اسنیپٹ ایک ایسے فولڈر میں ہے جو بند ہے۔ Espanso میں کوئی فولڈر سوئچ نہیں ہے، لہذا یہ وہاں پھیل جائے گا۔</item>
+        <item quantity="other">%1$d اسنیپٹس ایسے فولڈرز میں ہیں جو بند ہیں۔ Espanso میں کوئی فولڈر سوئچ نہیں ہے، لہذا وہ وہاں پھیل جائیں گے۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">ایپ نے %1$d اسنیپٹ کو چھوڑ دیا جس میں داخل کرنے کے لیے کچھ نہیں ہے۔</item>
+        <item quantity="other">ایپ نے %1$d اسنیپٹس کو چھوڑ دیا جن میں داخل کرنے کے لیے کچھ نہیں ہے۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d اسنیپٹ آپ سے فارم پُر کرنے کو کہتا ہے۔ ایپ فارم کو متن کے طور پر داخل کرتی ہے، کرسر پہلے خالی جگہ پر ہوتا ہے۔</item>
+        <item quantity="other">%1$d اسنیپٹس آپ سے فارم پُر کرنے کو کہتے ہیں۔ ایپ ہر فارم کو متن کے طور پر داخل کرتی ہے، کرسر پہلے خالی جگہ پر ہوتا ہے۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">ایپ نے %1$d اسنیپٹ کو چھوڑ دیا جو تصویر داخل کرتا ہے۔</item>
+        <item quantity="other">ایپ نے %1$d اسنیپٹس کو چھوڑ دیا جو تصاویر داخل کرتے ہیں۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">فائل %1$d دوسری فائل کو پڑھتی ہے۔ ایک فائل دوسری فائلوں کو اپنے ساتھ نہیں لا سکتی۔</item>
+        <item quantity="other">فائل %1$d دوسری فائلوں کو پڑھتی ہے۔ ایک فائل دوسری فائلوں کو اپنے ساتھ نہیں لا سکتی۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d اسنیپٹ دوسرے اسنیپٹس کی طرف اشارہ کرتا ہے۔ Espanso کے پاس اسے کہنے کا کوئی طریقہ نہیں ہے، اس لیے لنکس کو چھوڑ دیا گیا تھا۔</item>
+        <item quantity="other">%1$d اسنیپٹس دوسرے اسنیپٹس کی طرف اشارہ کرتے ہیں۔ Espanso کے پاس اسے کہنے کا کوئی طریقہ نہیں ہے، اس لیے لنکس کو چھوڑ دیا گیا تھا۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d ٹرگر کا مطلب لفظ کے اندر کام کرنا ہے۔ آپ کے فون پر یہ صرف ایک مکمل لفظ کے طور پر کام کرتا ہے۔</item>
+        <item quantity="other">%1$d ٹرگرز کا مطلب لفظ کے اندر کام کرنا ہے۔ آپ کے فون پر یہ صرف مکمل الفاظ کے طور پر کام کرتے ہیں۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d سنیپٹ ایک ایسی قدر استعمال کرتا ہے جس کا Espanso میں کوئی متبادل نہیں ہے۔ اسے ویسا ہی لکھا جاتا ہے جیسا کہ یہ ہے۔</item>
+        <item quantity="other">%1$d سنیپٹس ایسی اقدار استعمال کرتے ہیں جن کا Espanso میں کوئی متبادل نہیں ہے۔ انہیں ویسا ہی لکھا جاتا ہے جیسے وہ ہیں۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">ایپ نے %1$d اسنیپٹ سے پیٹرن ہٹا دیا ہے۔ ایپ اس شکل کے پیٹرن نہیں چلاتی۔ اسنیپٹ فہرست میں موجود ہے۔</item>
+        <item quantity="other">ایپ نے %1$d اسنیپٹس سے پیٹرن ہٹا دیا ہے۔ ایپ اس شکل کے پیٹرن نہیں چلاتی۔ اسنیپٹس فہرست میں موجود ہیں۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d سنیپٹ فارمیٹ شدہ متن استعمال کرتا ہے۔ ایپ الفاظ کو رکھتی ہے اور فارمیٹنگ کو ہٹا دیتی ہے۔</item>
+        <item quantity="other">%1$d سنیپٹس فارمیٹ شدہ متن استعمال کرتے ہیں۔ ایپ الفاظ کو رکھتی ہے اور فارمیٹنگ کو ہٹا دیتی ہے۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d اسنیپٹ آپ کے کمپیوٹر پر ایک کمانڈ چلاتا ہے۔ ایپ نے کمانڈ کو چھوڑ دیا ہے اور اسے کبھی نہیں چلاتی۔</item>
+        <item quantity="other">%1$d اسنیپٹس آپ کے کمپیوٹر پر کمانڈز چلاتے ہیں۔ ایپ نے کمانڈز کو چھوڑ دیا ہے اور انہیں کبھی نہیں چلاتی۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d ٹرگر صرف علامتوں پر مشتمل ہے، لہذا ایپ اس کی نگرانی نہیں کر سکتی۔ اس کا اسنیپٹ فہرست میں موجود رہے گا۔</item>
+        <item quantity="other">%1$d ٹرگر صرف علامتوں پر مشتمل ہیں، لہذا ایپ ان کی نگرانی نہیں کر سکتی۔ ان کے اسنیپٹس فہرست میں موجود رہیں گے۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d اسنیپٹ میں منحنی خطوط وحدانی (braces) میں ٹیکسٹ شامل ہے جسے یہ ایپ پُر کرتی ہے، جیسے کہ {date}۔ یہ لکھے ہوئے کے بجائے پھیل جائے گا۔</item>
+        <item quantity="other">%1$d اسنیپٹس میں منحنی خطوط وحدانی (braces) میں ٹیکسٹ شامل ہے جسے یہ ایپ پُر کرتی ہے، جیسے کہ {date}۔ یہ لکھے ہوئے کے بجائے پھیل جائے گا۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d اسنیپٹ اس کے پیٹرن کے ذریعے پکڑے گئے متن کے بڑے حروف کو تبدیل کرتا ہے۔ Espanso ایسا نہیں کر سکتا، لہذا پکڑا گیا متن بغیر کسی تبدیلی کے شامل ہو جاتا ہے۔</item>
+        <item quantity="other">%1$d اسنیپٹس ان کے پیٹرن کے ذریعے پکڑے گئے متن کے بڑے حروف کو تبدیل کرتے ہیں۔ Espanso ایسا نہیں کر سکتا، لہذا پکڑا گیا متن بغیر کسی تبدیلی کے شامل ہو جاتا ہے۔</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d اسنیپٹ ایسی ویلیو استعمال کرتا ہے جس کا ایپ میں کوئی متبادل نہیں ہے۔ وہ حصہ خالی آتا ہے۔</item>
+        <item quantity="other">%1$d اسنیپٹس ایسی ویلیوز استعمال کرتے ہیں جن کا ایپ میں کوئی متبادل نہیں ہے۔ وہ حصے خالی آتے ہیں۔</item>
+    </plurals>
+    <string name="core_content_font_error_download">ایپ فونٹ ڈاؤن لوڈ نہیں کر سکتی۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="core_content_font_error_empty">فائل خالی ہے۔</string>
+    <string name="core_content_font_error_load">ایپ اس فونٹ فائل کو لوڈ نہیں کر سکتی۔</string>
+    <string name="core_content_font_error_markup">یہ فائل ایک HTML یا XML فائل ہے، فونٹ نہیں۔</string>
+    <string name="core_content_font_error_no_storage">فونٹ کے لیے کوئی اسٹوریج دستیاب نہیں ہے۔</string>
+    <string name="core_content_font_error_not_a_font">یہ فائل .ttf یا .otf فونٹ جیسی نہیں لگتی ہے۔</string>
+    <string name="core_content_font_error_read">ایپ فونٹ کو پڑھ نہیں سکتی۔</string>
+    <string name="core_content_font_error_save">ایپ فونٹ کو محفوظ نہیں کر سکتی۔</string>
+    <string name="core_content_font_error_too_large">فونٹ %1$d MB سے چھوٹا ہونا چاہیے۔</string>
+    <string name="core_content_font_error_too_many">فونٹ لائبریری بھری ہوئی ہے۔ ایک فونٹ حذف کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="core_content_font_error_too_short">فائل فونٹ ہونے کے لیے بہت مختصر ہے۔</string>
+    <string name="core_content_font_error_woff">ایپ WOFF ویب فونٹس کو نہیں پڑھ سکتی۔ فونٹ کا .ttf یا .otf ورژن استعمال کریں۔</string>
+    <string name="core_content_font_error_woff2">ایپ WOFF2 ویب فونٹس کو نہیں پڑھ سکتی۔ فونٹ کا .ttf یا .otf ورژن استعمال کریں۔</string>
+    <string name="core_content_font_error_zip">یہ فائل زپ آرکائیو ہے، فونٹ نہیں۔</string>
+    <string name="core_content_selection_macro_add_contact">رابطہ</string>
+    <string name="core_content_selection_macro_calendar">کیلنڈر</string>
+    <string name="core_content_selection_macro_call">کال کریں</string>
+    <string name="core_content_selection_macro_case_lower">چھوٹے حروف</string>
+    <string name="core_content_selection_macro_case_sentence">جملے کا کیس</string>
+    <string name="core_content_selection_macro_case_title">عنوان کا کیس</string>
+    <string name="core_content_selection_macro_case_upper">بڑے حروف (UPPER CASE)</string>
+    <string name="core_content_selection_macro_chat_bold">بولڈ</string>
+    <string name="core_content_selection_macro_chat_italic">ترچھا (Italic)</string>
+    <string name="core_content_selection_macro_chat_mono">مونو</string>
+    <string name="core_content_selection_macro_chat_strike">اسٹرائیک</string>
+    <string name="core_content_selection_macro_colour">رنگ</string>
+    <string name="core_content_selection_macro_copy">کاپی کریں</string>
+    <string name="core_content_selection_macro_digits_latin">ہندسے</string>
+    <string name="core_content_selection_macro_email">ای میل</string>
+    <string name="core_content_selection_macro_fancy">فینسی</string>
+    <string name="core_content_selection_macro_find">تلاش کریں</string>
+    <string name="core_content_selection_macro_format">فارمیٹ</string>
+    <string name="core_content_selection_macro_grammar">گرائمر</string>
+    <string name="core_content_selection_macro_lines_bullet">بلٹس</string>
+    <string name="core_content_selection_macro_lines_dedupe">منفرد</string>
+    <string name="core_content_selection_macro_lines_number">نمبر</string>
+    <string name="core_content_selection_macro_lines_sort">ترتیب دیں</string>
+    <string name="core_content_selection_macro_map">نقشہ</string>
+    <string name="core_content_selection_macro_open">کھولیں</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">بولیں</string>
+    <string name="core_content_selection_macro_replace">تبدیل کریں</string>
+    <string name="core_content_selection_macro_search">تلاش کریں</string>
+    <string name="core_content_selection_macro_share">شیئر کریں</string>
+    <string name="core_content_selection_macro_sms">پیغام</string>
+    <string name="core_content_selection_macro_time_zones">زونز</string>
+    <string name="core_content_selection_macro_to_bangla">بنگالی</string>
+    <string name="core_content_selection_macro_to_banglish">بنگلش</string>
+    <string name="core_content_selection_macro_translate">ترجمہ کریں</string>
+    <string name="core_content_selection_macro_url_decode">ڈی کوڈ کریں</string>
+    <string name="core_content_selection_macro_whatsapp">واٹس ایپ</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">ایپ نے \"%1$s\" سے %2$d ایکسپینشن چھوڑ دی۔</item>
+        <item quantity="other">ایپ نے \"%1$s\" سے %2$d ایکسپینشنز چھوڑ دیں۔</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">ایپ نے \"%1$s\" سے پیٹرن کو ہٹا دیا ہے۔ پیٹرن درست نہیں ہے۔ اسنیپٹ فہرست میں رہتا ہے۔</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">ایپ نے %1$d فولڈر کو حذف کر دیا جس کا کوئی نام نہیں ہے یا جو کسی دوسرے کی تکرار ہے۔ اس کے اسنیپٹس بغیر فولڈر کے آ گئے۔</item>
+        <item quantity="other">ایپ نے %1$d فولڈرز کو حذف کر دیا جن کا کوئی نام نہیں ہے یا جو کسی دوسرے کی تکرار ہیں۔ ان کے اسنیپٹس بغیر فولڈر کے آ گئے۔</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">فائل میں ایپ کی گنجائش سے زیادہ اسنیپٹس ہیں۔ ایپ نے پہلے %1$d درآمد کیے ہیں۔</item>
+        <item quantity="other">فائل میں ایپ کی گنجائش سے زیادہ اسنیپٹس ہیں۔ ایپ نے پہلے %1$d درآمد کیے ہیں۔</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">ایک اسنیپٹ کا کوئی نام نہیں ہے، اس لیے ایپ نے اسے اس کی پہلی لائن کے نام پر رکھا ہے۔</string>
+    <string name="core_content_snippet_repair_no_text">ایپ نے \"%1$s\" کو ہٹا دیا۔ اس میں کوئی ٹیکسٹ نہیں ہے۔</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">ایپ نے \"%1$s\" سے پیٹرن ہٹا دیا ہے۔ یہ %2$d حرف سے زیادہ لمبا تھا۔</item>
+        <item quantity="other">ایپ نے \"%1$s\" سے پیٹرن ہٹا دیا ہے۔ یہ %2$d حروف سے زیادہ لمبا تھا۔</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">ایپ نے \"%1$s\" کو مختصر کر دیا ہے۔ یہ %2$d حرف سے زیادہ لمبا تھا۔</item>
+        <item quantity="other">ایپ نے \"%1$s\" کو مختصر کر دیا ہے۔ یہ %2$d حروف سے زیادہ لمبا تھا۔</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">اس ایپ کا نام جس میں آپ ٹائپ کرتے ہیں</string>
+    <string name="core_content_snippet_var_clip_info">کلپ بورڈ کا تازہ ترین اندراج</string>
+    <string name="core_content_snippet_var_cursor_info">وہ جگہ جہاں کرسر رکتا ہے</string>
+    <string name="core_content_snippet_var_date_info">آج کی تاریخ</string>
+    <string name="core_content_snippet_var_datetime_info">تاریخ اور وقت</string>
+    <string name="core_content_snippet_var_day_info">مہینے کا دن</string>
+    <string name="core_content_snippet_var_isodate_info">ISO شکل میں تاریخ، مثال کے طور پر 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">ISO شکل میں تاریخ اور وقت</string>
+    <string name="core_content_snippet_var_month_info">مہینے کا نام</string>
+    <string name="core_content_snippet_var_package_info">اس ایپ کا پیکیج نام</string>
+    <string name="core_content_snippet_var_selection_info">وہ متن جو آپ فیلڈ میں منتخب کرتے ہیں</string>
+    <string name="core_content_snippet_var_time12_info">اب وقت 12 گھنٹے کی شکل میں</string>
+    <string name="core_content_snippet_var_time_info">اب وقت 24 گھنٹے کی شکل میں</string>
+    <string name="core_content_snippet_var_timestamp_info">Unix سیکنڈز میں وقت</string>
+    <string name="core_content_snippet_var_timezone_info">ٹائم زون، مثال کے طور پر GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">ایک نیا بے ترتیب UUID</string>
+    <string name="core_content_snippet_var_weekday_info">دن کا نام، مثال کے طور پر اتوار</string>
+    <string name="core_content_snippet_var_year_info">سال، چار ہندسوں کے ساتھ</string>
+    <string name="core_content_sticker_pack_imported_label">درآمد شدہ اسٹیکرز</string>
+    <string name="core_content_sticker_repair_image_missing">ایپ نے \"%1$s\" کو ہٹا دیا ہے۔ اس کی تصویر غائب ہے۔</string>
+    <string name="core_content_sticker_repair_image_unreadable">ایپ نے \"%1$s\" کو ہٹا دیا۔ ایپ اس کی تصویر نہیں پڑھ سکتی۔</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">پیک میں %1$d اسٹیکر ہے۔ ایپ پہلے %2$d کو رکھتی ہے۔</item>
+        <item quantity="other">پیک میں %1$d اسٹیکرز ہیں۔ ایپ پہلے %2$d کو رکھتی ہے۔</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">ایپ نے ایک اسٹیکر گرا دیا۔ اسٹیکر کسی امیج فائل کا نام نہیں بتاتا۔</string>
+    <string name="core_content_sticker_repair_none_listed">پیک فائل میں کوئی اسٹیکر درج نہیں ہے۔</string>
+    <string name="core_content_sticker_repair_not_saved">ایپ نے \"%1$s\" کو گرا دیا ہے۔ ایپ اسے محفوظ نہیں کر سکتی۔</string>
+</resources>

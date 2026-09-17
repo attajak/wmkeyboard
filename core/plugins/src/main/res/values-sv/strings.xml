@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Detta plugin har ingen render()-funktion.</string>
+    <string name="core_plugins_error_not_installed">Det insticksprogrammet är inte installerat.</string>
+    <string name="core_plugins_error_script_failed">Skriptet misslyckades.</string>
+    <string name="core_plugins_error_script_missing">Skriptet för det insticksprogrammet saknas.</string>
+    <string name="core_plugins_error_turned_off">Det tillägget är avstängt.</string>
+    <string name="core_plugins_permission_storage_label">Spara data på din enhet</string>
+    <string name="core_plugins_reject_bad_encoding">”%1$s” har ett skript som inte är giltig UTF-8-text.</string>
+    <string name="core_plugins_reject_bad_id">Detta plugin har ett id som inte är giltigt. Ett id är 3 till 64 tecken långt. Ett id kan innehålla gemener, siffror, punkter, bindestreck och understreck.</string>
+    <string name="core_plugins_reject_compiled_lua">”%1$s” innehåller kompilerad Lua-kod. Ett tillägg måste använda vanlig källkod så att du kan läsa den innan den körs.</string>
+    <string name="core_plugins_reject_empty_script">”%1$s” har ett tomt skript.</string>
+    <string name="core_plugins_reject_missing_script">”%1$s” saknar sin skriptfil (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Detta plugin kräver en nyare version av WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Det här insticksprogrammet har inget namn.</string>
+    <string name="core_plugins_reject_no_version">”%1$s” anger inte vilken version det är.</string>
+    <string name="core_plugins_reject_script_too_large">”%1$s” har ett skript som är större än %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Den här versionen av WM Keyboard känner inte till behörigheten ”%1$s”. Appen kan inte berätta för dig vad ”%2$s” får göra.</string>
+    <string name="core_plugins_stopped_cancelled">Appen stoppade detta insticksprogram.</string>
+    <string name="core_plugins_stopped_deadline">Detta plugin tog för lång tid. Appen stoppade det.</string>
+    <string name="core_plugins_stopped_instructions">Detta plugin utförde för mycket arbete samtidigt. Appen stoppade det.</string>
+    <string name="core_plugins_stopped_not_responding">Detta plugin slutade svara. Appen stängde det.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Detta tillägg slutade svara igen. Appen stängde av det.</string>
+    <string name="core_plugins_stopped_recursion">Detta tillägg anropade sig självt för många gånger. Appen stoppade det.</string>
+    <string name="core_plugins_stopped_unexpected">Detta plugin stoppades oväntat.</string>
+    <string name="core_plugins_ui_insert_action">Infoga</string>
+    <string name="core_plugins_ui_repair_no_type">En widget angav inte vilken typ den är.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">En widgetlista innehöll något som inte är en widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">En flikrad saknade sidor.</string>
+    <string name="core_plugins_ui_repair_text_budget">Detta plugin försökte rita för mycket text. Appen utelämnade en del.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Viss text var för lång för att visas. Appen förkortade den.</string>
+    <string name="core_plugins_ui_repair_too_deep">Vissa widgetar var för djupt kapslade för att kunna ritas.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Endast de första %1$d flikarna visas.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Detta tillägg bad om fler än %1$d widgetar. Appen tog bort resten.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Denna version känner inte till widgettypen ”%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Flik %1$d</string>
+</resources>

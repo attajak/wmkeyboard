@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Ο διακομιστής Hugging Face δεν έστειλε το αρχείο. Ο κωδικός σφάλματος είναι HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Η σύνδεση διακόπηκε κατά τη λήψη. Προσπαθήστε ξανά για να συνεχίσετε από εκεί που σταμάτησε.</string>
+    <string name="core_voice_download_space_error">Δεν υπάρχει αρκετός αποθηκευτικός χώρος στη συσκευή σας. Πρέπει πρώτα να ελευθερώσετε περίπου %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">Αυτό το μοντέλο χρησιμοποιεί τη γλώσσα στην οποία πληκτρολογείτε, την ίδια με το μοντέλο 40 γλωσσών. Καλύπτει μόνο τις ευρωπαϊκές γλώσσες, επομένως η λήψη είναι μικρότερη.</string>
+    <string name="core_voice_model_base_multi_body">Αυτό το μοντέλο εξισορροπεί την ακρίβεια και την ταχύτητα. Καλύπτει κάθε γλώσσα που αναγνωρίζει το Whisper. Επιλέξτε το αν το μικρό μοντέλο είναι πολύ αργό.</string>
+    <string name="core_voice_model_base_world_body">Αυτό το μοντέλο χρησιμοποιεί τη γλώσσα που πληκτρολογείτε αντί για πρόβλεψη. Οι σύντομες φράσεις γίνονται πολύ πιο αξιόπιστες. Επιλέξτε το όταν η λίστα του περιλαμβάνει τις γλώσσες σας.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d γλώσσα</item>
+        <item quantity="other">%1$d γλώσσες</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Αυτό είναι ένα από τα πιο ακριβή μοντέλα Whisper, αλλά είναι πολύ μεγάλο για τα περισσότερα τηλέφωνα. Η λήψη είναι 1,5 GB. Μόνο μια συσκευή με μεγάλη ποσότητα μνήμης μπορεί να το φορτώσει.</string>
+    <string name="core_voice_model_large_v3_multi_body">Αυτό είναι το πιο ακριβές μοντέλο Whisper και το καλύτερο στην αναγνώριση της γλώσσας που μιλάτε. Η λήψη είναι 1,5 GB. Μόνο μια συσκευή με μεγάλη μνήμη μπορεί να το φορτώσει. Το μοντέλο Turbo είναι σχεδόν εξίσου ακριβές και έχει το μισό μέγεθος.</string>
+    <string name="core_voice_model_medium_multi_body">Αυτό το μοντέλο προσφέρει ακρίβεια σχεδόν επιπέδου υπολογιστή. Κάθε φράση απαιτεί αρκετά δευτερόλεπτα. Το μοντέλο χρησιμοποιεί σχεδόν ένα gigabyte μνήμης κατά τη λειτουργία του.</string>
+    <string name="core_voice_model_single_language_body">Αυτό το μοντέλο χειρίζεται μόνο %1$s. Δεν διαθέτει βήμα ανίχνευσης γλώσσας. Αυτό το καθιστά ταχύτερο και ελαφρώς πιο ακριβές από ένα πολύγλωσσο μοντέλο του ίδιου μεγέθους.</string>
+    <string name="core_voice_model_small_multi_body">Αυτό το μοντέλο παρέχει την καλύτερη ακρίβεια που εξακολουθεί να λειτουργεί καλά σε ένα τηλέφωνο. Διαχειρίζεται τις προφορές και τον θόρυβο του περιβάλλοντος καλύτερα από το βασικό μοντέλο. Καλύπτει κάθε γλώσσα που αναγνωρίζει το Whisper.</string>
+    <string name="core_voice_model_small_world_body">Αυτό το μοντέλο χρησιμοποιεί τη γλώσσα στην οποία πληκτρολογείτε και έχει την ακρίβεια του μικρού μοντέλου. Είναι το πιο ακριβές μοντέλο που χωράει ακόμα σε ένα τηλέφωνο.</string>
+    <string name="core_voice_model_tiny_multi_body">Αυτό είναι το ταχύτερο πολύγλωσσο μοντέλο. Λειτουργεί καλά με καθαρή ομιλία, αλλά ο θόρυβος μειώνει την ακρίβεια.</string>
+    <string name="core_voice_model_turbo_multi_body">Αυτό το μοντέλο αναγνωρίζει τη γλώσσα που μιλάτε πολύ καλύτερα από τα μικρότερα μοντέλα. Επιλέξτε το αν ένα μικρότερο μοντέλο μεταγράφει την ομιλία σας σε λάθος γλώσσα. Είναι μια μεγάλη λήψη και κάθε φράση απαιτεί αρκετά δευτερόλεπτα.</string>
+    <string name="core_voice_size_base_label">Βάση</string>
+    <string name="core_voice_size_large_label">Μεγάλο</string>
+    <string name="core_voice_size_medium_label">Μεσαίο</string>
+    <string name="core_voice_size_small_label">Μικρό</string>
+    <string name="core_voice_size_tiny_label">Πολύ μικρό</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Προτεινόμενο</string>
+    <string name="core_voice_whisper_mel_bins_error">Αυτό το μοντέλο φωνής χρειάζεται ένα φασματογράφημα ζώνης %1$s, το οποίο δεν ταιριάζει με το αρχείο που κατέβηκε. Διαγράψτε το μοντέλο στις ρυθμίσεις και κατεβάστε το ξανά.</string>
+    <string name="core_voice_whisper_model_load_error">Το μοντέλο φωνής δεν φορτώθηκε. Το αρχείο είναι πιθανώς κατεστραμμένο. Διαγράψτε το μοντέλο στις ρυθμίσεις και κατεβάστε το ξανά.</string>
+    <string name="core_voice_whisper_transcribe_error">Η φωνητική πληκτρολόγηση δεν λειτούργησε. Δοκιμάστε ξανά ή επιλέξτε ένα μικρότερο μοντέλο.</string>
+</resources>

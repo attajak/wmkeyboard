@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">సర్వర్ ఫైల్‌ను పంపలేదు. ఎర్రర్ కోడ్ HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">ఆ పదాల జాబితా ఖాళీగా ఉంది లేదా చదవడానికి వీలుపడదు.</string>
+    <string name="core_pred_wordlist_no_space_error">మీ పరికరంలో తగినంత నిల్వ లేదు. కొన్ని ఫైళ్లను తొలగించి, ఆపై మళ్ళీ ప్రయత్నించండి.</string>
+    <string name="core_pred_wordlist_save_error">యాప్ పదాల జాబితాను సేవ్ చేయలేదు. మళ్ళీ ప్రయత్నించండి.</string>
+    <string name="core_pred_wordlist_size_all_label">అన్నీ</string>
+    <string name="core_pred_wordlist_size_large_label">పెద్దది</string>
+    <string name="core_pred_wordlist_size_medium_label">మధ్యస్థం</string>
+    <string name="core_pred_wordlist_size_small_label">చిన్నది</string>
+    <string name="core_pred_wordlist_variant_brazil_label">బ్రెజిల్</string>
+    <string name="core_pred_wordlist_variant_europe_label">యూరప్</string>
+</resources>

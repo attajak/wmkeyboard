@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">See emotikonide märksõnade loend on tühi või loetamatu.</string>
+    <string name="core_emoji_dict_error_http">Server ei saatnud faili. Veakood on HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">See fail ei ole emotikonide märksõnade loend.</string>
+    <string name="core_emoji_dict_error_save">Rakendus ei saanud emotikonide märksõnade loendit salvestada.</string>
+    <string name="core_emoji_dict_error_too_large">See emotikonide märksõnade loend on liiga suur.</string>
+</resources>

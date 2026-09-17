@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Fișierul descărcat este deteriorat. Suma de control nu se potrivește. Încearcă descărcarea din nou.</string>
+    <string name="core_input_cjk_download_error_http">Serverul a returnat starea HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Descărcarea nu a funcționat. Verifică conexiunea și încearcă din nou.</string>
+    <string name="core_input_cjk_download_error_network_detail">Descărcarea nu a funcționat: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Nu există suficient spațiu de stocare pe dispozitiv. Eliberați puțin spațiu mai întâi.</string>
+    <string name="core_input_cjk_download_error_truncated">Conexiunea s-a întrerupt în timpul descărcării. Apăsați pe Reluare pentru a continua.</string>
+    <string name="core_input_cjk_download_error_unavailable">Acest pachet nu este încă disponibil.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Un tabel de coduri radicale pentru caractere Hanzi, 29.000 de caractere. Tastatura are nevoie de acest pachet pentru layout-urile Cangjie și Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Dicționar Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Citiri Kana de la mozc, 1,08 milioane de intrări, aproximativ 42 MB. Tastatura are nevoie de acest pachet pentru conversia în japoneză.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Dicționar japonez kana în kanji</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Un tabel de citiri Jyutping pentru caractere Hanzi, 163.000 de intrări. Tastatura are nevoie de acest pachet pentru conversia în cantoneză.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Dicționar cantonez Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Caractere și fraze Hanzi din CC-CEDICT, 120.000 de intrări. Tastatura are nevoie de acest pachet pentru conversia în chineză.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Dicționar chinez Pinyin</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Un tabel cu ordinea trăsăturilor pentru caracterele Hanzi. Tastatura are nevoie de acest pachet pentru aspectul trăsăturilor.</string>
+    <string name="core_input_cjk_pack_stroke_title">Dicționar de trăsături chinezești (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Oprit (Pinyin complet)</string>
+</resources>

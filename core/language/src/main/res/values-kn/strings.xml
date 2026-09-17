@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">ಅಪ್ಲಿಕೇಶನ್ %1$d ಕೀಯನ್ನು ಅದು ಹೊಂದಿರುವ ಹತ್ತಿರದ ಕೀಗೆ ಬದಲಾಯಿಸಿದೆ.</item>
+        <item quantity="other">ಅಪ್ಲಿಕೇಶನ್ %1$d ಕೀಗಳನ್ನು ಅದು ಹೊಂದಿರುವ ಹತ್ತಿರದ ಕೀಗಳಿಗೆ ಬದಲಾಯಿಸಿದೆ.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">ಅಪ್ಲಿಕೇಶನ್ %1$d ಕೀಯನ್ನು ತೆಗೆದುಹಾಕಿದೆ. ಈ ಕೀಬೋರ್ಡ್‌ನಲ್ಲಿ ಅದೇ ಕೆಲಸವನ್ನು ಮಾಡುವ ಯಾವುದೇ ಕೀ ಇಲ್ಲ (ಕೋಡ್ %2$s).</item>
+        <item quantity="other">ಅಪ್ಲಿಕೇಶನ್ %1$d ಕೀಗಳನ್ನು ತೆಗೆದುಹಾಕಿದೆ. ಈ ಕೀಬೋರ್ಡ್‌ನಲ್ಲಿ ಅದೇ ಕೆಲಸವನ್ನು ಮಾಡುವ ಯಾವುದೇ ಕೀಗಳಿಲ್ಲ (ಕೋಡ್‌ಗಳು %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">ಅಪ್ಲಿಕೇಶನ್ %1$d ಕೀಯ ಲೇಬಲ್ ಗಾತ್ರವನ್ನು ಉಳಿಸಿಕೊಂಡಿದೆ ಆದರೆ ಅದರ ಪಠ್ಯ ಶೈಲಿಯನ್ನು ಅಲ್ಲ. ಈ ಕೀಬೋರ್ಡ್ ಲೇಬಲ್‌ಗಳನ್ನು ಒಂದೇ ಶೈಲಿಯಲ್ಲಿ ಸೆಳೆಯುತ್ತದೆ.</item>
+        <item quantity="other">ಅಪ್ಲಿಕೇಶನ್ %1$d ಕೀಗಳ ಲೇಬಲ್ ಗಾತ್ರವನ್ನು ಉಳಿಸಿಕೊಂಡಿದೆ ಆದರೆ ಅವುಗಳ ಪಠ್ಯ ಶೈಲಿಯನ್ನು ಅಲ್ಲ. ಈ ಕೀಬೋರ್ಡ್ ಲೇಬಲ್‌ಗಳನ್ನು ಒಂದೇ ಶೈಲಿಯಲ್ಲಿ ಸೆಳೆಯುತ್ತದೆ.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">ಆ್ಯಪ್ %1$d ಅಕ್ಷರವನ್ನು ಈ ಕೀಬೋರ್ಡ್ ಬರೆಯುವ ರೂಪಕ್ಕೆ ಬದಲಾಯಿಸಿದೆ.</item>
+        <item quantity="other">ಆ್ಯಪ್ %1$d ಅಕ್ಷರಗಳನ್ನು ಈ ಕೀಬೋರ್ಡ್ ಬರೆಯುವ ರೂಪಕ್ಕೆ ಬದಲಾಯಿಸಿದೆ.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d ಕೀಯು ಯಾವುದೇ ಪ್ರೆಸ್-ಅಂಡ್-ಹೋಲ್ಡ್ ಅಕ್ಷರಗಳನ್ನು ಹೊಂದಿಲ್ಲ. ಫೈಲ್ ಅವುಗಳನ್ನು ನೀವು ತೆರೆಯದ ಎರಡನೇ ಫೈಲ್‌ನಲ್ಲಿ ಇರಿಸುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಕೀಗಳು ಯಾವುದೇ ಪ್ರೆಸ್-ಅಂಡ್-ಹೋಲ್ಡ್ ಅಕ್ಷರಗಳನ್ನು ಹೊಂದಿಲ್ಲ. ಫೈಲ್ ಅವುಗಳನ್ನು ನೀವು ತೆರೆಯದ ಎರಡನೇ ಫೈಲ್‌ನಲ್ಲಿ ಇರಿಸುತ್ತದೆ.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">ಇತರ ಕೀಬೋರ್ಡ್ ಕೀ ಅಗಲವನ್ನು ವಿಭಿನ್ನವಾಗಿ ಅಳೆಯುತ್ತದೆ. ಈ ಗ್ರಿಡ್‌ಗೆ ಹೊಂದಿಕೊಳ್ಳಲು ಆ್ಯಪ್ ಅಗಲವನ್ನು ಬದಲಾಯಿಸಿದೆ.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s ಲೇಯರ್‌ನಲ್ಲಿರುವ %1$d ಬ್ರೈಲ್ ಡಾಟ್ ಕೀಯು 1 ರಿಂದ 6 ರ ಹೊರಗಿನ ಡಾಟ್ ಸಂಖ್ಯೆಯನ್ನು ಹೊಂದಿದೆ.</item>
+        <item quantity="other">%2$s ಲೇಯರ್‌ನಲ್ಲಿರುವ %1$d ಬ್ರೈಲ್ ಡಾಟ್ ಕೀಗಳು 1 ರಿಂದ 6 ರ ಹೊರಗಿನ ಡಾಟ್ ಸಂಖ್ಯೆಯನ್ನು ಹೊಂದಿವೆ.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s ಲೇಯರ್‌ನಲ್ಲಿರುವ %1$d ಕೀಗೆ ಯಾವುದೇ ಲೇಬಲ್ ಮತ್ತು ಔಟ್‌ಪುಟ್ ಇಲ್ಲ. ಇದು ಏನನ್ನೂ ಟೈಪ್ ಮಾಡುವುದಿಲ್ಲ, ಮತ್ತು ನೀವು ಈ ಲೇಔಟ್ ಅನ್ನು ಆನ್ ಮಾಡಿದಾಗ ಅಪ್ಲಿಕೇಶನ್ ಅದನ್ನು ಅಳಿಸುತ್ತದೆ.</item>
+        <item quantity="other">%2$s ಲೇಯರ್‌ನಲ್ಲಿರುವ %1$d ಕೀಗಳಿಗೆ ಯಾವುದೇ ಲೇಬಲ್ ಮತ್ತು ಔಟ್‌ಪುಟ್ ಇಲ್ಲ. ಅವು ಏನನ್ನೂ ಟೈಪ್ ಮಾಡುವುದಿಲ್ಲ, ಮತ್ತು ನೀವು ಈ ಲೇಔಟ್ ಅನ್ನು ಆನ್ ಮಾಡಿದಾಗ ಅಪ್ಲಿಕೇಶನ್ ಅವುಗಳನ್ನು ಅಳಿಸುತ್ತದೆ.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s ಲೇಯರ್‌ನ ಸಾಲು %1$d ಖಾಲಿಯಾಗಿದೆ.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s ಲೇಯರ್‌ನಲ್ಲಿರುವ %1$d ಕೀಯು ಪ್ಯಾನಲ್ ಕಾಂಪೊನೆಂಟ್ ಆಗಿದೆ. ಕಾಂಪೊನೆಂಟ್‌ಗಳು ಪ್ಯಾನಲ್ ಲೇಔಟ್‌ನಲ್ಲಿ ಮಾತ್ರ ಕೆಲಸ ಮಾಡುತ್ತವೆ.</item>
+        <item quantity="other">%2$s ಲೇಯರ್‌ನಲ್ಲಿರುವ %1$d ಕೀಗಳು ಪ್ಯಾನಲ್ ಕಾಂಪೊನೆಂಟ್‌ಗಳಾಗಿವೆ. ಕಾಂಪೊನೆಂಟ್‌ಗಳು ಪ್ಯಾನಲ್ ಲೇಔಟ್‌ನಲ್ಲಿ ಮಾತ್ರ ಕೆಲಸ ಮಾಡುತ್ತವೆ.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s ಲೇಯರ್‌ನ ಸಾಲು %1$d ರಲ್ಲಿ ಅಗಲವಿಲ್ಲದ ಕೀ ಇದೆ.</string>
+    <string name="core_lang_layout_key_span_error">%2$s ಲೇಯರ್‌ನ %1$d ಸಾಲು 1 ಕ್ಕಿಂತ ಕಡಿಮೆ ಅಥವಾ %3$d ಸಾಲುಗಳಿಗಿಂತ ಹೆಚ್ಚು ವ್ಯಾಪಿಸುವ ಕೀಲಿಯನ್ನು ಹೊಂದಿದೆ.</string>
+    <string name="core_lang_layout_letters_empty_error">ಅಕ್ಷರಗಳ ಲೇಯರ್‌ನಲ್ಲಿ ಯಾವುದೇ ಕೀಗಳಿಲ್ಲ.</string>
+    <string name="core_lang_layout_no_delete_error">ಈ ಲೇಔಟ್‌ನಲ್ಲಿ ಡಿಲೀಟ್ ಕೀ ಇಲ್ಲ. ನೀವು ತಪ್ಪುಗಳನ್ನು ಸರಿಪಡಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="core_lang_layout_no_enter_error">ಲೇಔಟ್‌ನಲ್ಲಿ ಎಂಟರ್ ಕೀ ಇಲ್ಲ.</string>
+    <string name="core_lang_layout_no_shift_warning">ಈ ಲೇಔಟ್‌ನಲ್ಲಿ ಶಿಫ್ಟ್ ಕೀ ಇಲ್ಲ. ದೊಡ್ಡ ಅಕ್ಷರವನ್ನು ಟೈಪ್ ಮಾಡಲು, ಕೀಲಿಯನ್ನು ಒತ್ತಿ ಹಿಡಿದುಕೊಳ್ಳಿ.</string>
+    <string name="core_lang_layout_no_space_error">ಲೇಔಟ್‌ನಲ್ಲಿ ಯಾವುದೇ ಸ್ಪೇಸ್ ಕೀ ಇಲ್ಲ.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s ಲೇಯರ್ ಅಕ್ಷರಗಳಿಗೆ ಹಿಂತಿರುಗುವ ಯಾವುದೇ ಕೀಯನ್ನು ಹೊಂದಿಲ್ಲ. ನೀವು ಈ ಲೇಯರ್‌ನಿಂದ ಹೊರಬರಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
+    <string name="core_lang_layout_persistent_warning">ಕೀಬೋರ್ಡ್ ಮುಚ್ಚಿದಾಗಲೂ %1$s ಲೇಯರ್ ತೆರೆದಿರುತ್ತದೆ. ಈ ಲೇಔಟ್‌ನಿಂದ ಹೊರಬರಲು ನಿಮಗೆ ದಾರಿ ಇದೆಯೇ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">ಈ ಲೇಔಟ್‌ನಿಂದ ಹೊರಬರಲು ಯಾವುದೇ ಕೀ ಇಲ್ಲ. ಈ ಲೇಔಟ್‌ನಿಂದ ನಿರ್ಗಮಿಸಲು ನಿಮಗೆ ದಾರಿ ಇದೆ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ: ABC ಕೀ, ಚಿಹ್ನೆಗಳ ಕೀ, ಅಥವಾ ಟೂಲ್‌ಬಾರ್‌ನಲ್ಲಿರುವ ಕಸ್ಟಮ್ ಲೇಔಟ್ ಟೂಲ್.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s ಲೇಯರ್‌ನ %1$d ನೇ ಸಾಲು ಲೇಯರ್ ಹೊಂದಿರುವ ಸಾಲುಗಳಿಗಿಂತ ಹೆಚ್ಚಿನ ಸಾಲುಗಳನ್ನು ಆವರಿಸುವ ಕೀಲಿಯನ್ನು ಹೊಂದಿದೆ. ಕೀಬೋರ್ಡ್ ಅದನ್ನು ಕೊನೆಯ ಸಾಲಿನಲ್ಲಿ ನಿಲ್ಲಿಸುತ್ತದೆ.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s ಲೇಯರ್‌ನ %1$dನೇ ಸಾಲಿನಲ್ಲಿ %3$d ಕೀ ಇದೆ. ಕೇವಲ %4$d ಕೀಗಳು ಮಾತ್ರ ಒತ್ತಲು ಸಾಧ್ಯವಾಗುವಷ್ಟು ದೊಡ್ಡದಾಗಿವೆ.</item>
+        <item quantity="other">%2$s ಲೇಯರ್‌ನ %1$dನೇ ಸಾಲಿನಲ್ಲಿ %3$d ಕೀಗಳಿವೆ. ಕೇವಲ %4$d ಕೀಗಳು ಮಾತ್ರ ಒತ್ತಲು ಸಾಧ್ಯವಾಗುವಷ್ಟು ದೊಡ್ಡದಾಗಿವೆ.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s ಲೇಯರ್ %2$d ಸಾಲನ್ನು ಹೊಂದಿದೆ. ಕೇವಲ %3$d ಸಾಲುಗಳು ಮಾತ್ರ ಹೊಂದಿಕೊಳ್ಳುತ್ತವೆ.</item>
+        <item quantity="other">%1$s ಲೇಯರ್ %2$d ಸಾಲುಗಳನ್ನು ಹೊಂದಿದೆ. ಕೇವಲ %3$d ಸಾಲುಗಳು ಮಾತ್ರ ಹೊಂದಿಕೊಳ್ಳುತ್ತವೆ.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s ಲೇಯರ್‌ನಲ್ಲಿರುವ %1$d ಕೀ, ಈ ಆ್ಯಪ್‌ನ ಆವೃತ್ತಿಗೆ ತಿಳಿಯದ ಕ್ರಿಯೆಯನ್ನು ಬಳಸುತ್ತದೆ.</item>
+        <item quantity="other">%2$s ಲೇಯರ್‌ನಲ್ಲಿರುವ %1$d ಕೀಗಳು, ಈ ಆ್ಯಪ್‌ನ ಆವೃತ್ತಿಗೆ ತಿಳಿಯದ ಕ್ರಿಯೆಯನ್ನು ಬಳಸುತ್ತವೆ.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s ಲೇಯರ್‌ನ %1$d ಸಾಲು ಇತರ ಸಾಲುಗಳಿಗಿಂತ ಅಗಲವಾಗಿದೆ. ಕೀಬೋರ್ಡ್ ಈ ಸಾಲಿನ ಕೀಲಿಗಳನ್ನು ಕಿರಿದಾಗಿ ಚಿತ್ರಿಸುತ್ತದೆ.</string>
+    <string name="core_lang_numeral_scope_display_only">ಪ್ರದರ್ಶನ ಮಾತ್ರ</string>
+    <string name="core_lang_numeral_scope_everywhere">ಎಲ್ಲೆಡೆ</string>
+    <string name="core_lang_numeral_scope_text_fields">ಪಠ್ಯ ಕ್ಷೇತ್ರಗಳು</string>
+    <string name="core_lang_numeral_system_auto">ಸ್ವಯಂ</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d ಘಟಕವು ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು ಬಾರಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತದೆ. ಆ್ಯಪ್ ಮೊದಲ ಪ್ರತಿಯನ್ನು ಇರಿಸಿಕೊಳ್ಳುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಘಟಕಗಳು ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು ಬಾರಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ. ಆ್ಯಪ್ ಪ್ರತಿಯೊಂದರ ಮೊದಲ ಪ್ರತಿಯನ್ನು ಇರಿಸಿಕೊಳ್ಳುತ್ತದೆ.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">ಈ ಪ್ಯಾನಲ್‌ನಲ್ಲಿ ಯಾವುದೇ ಕೀಗಳಿಲ್ಲ. ಆ್ಯಪ್ ಬದಲಿಗೆ ಪ್ರಮಾಣಿತ ಪ್ಯಾನಲ್ ಅನ್ನು ಬಳಸುತ್ತದೆ.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d ಕೀಯು ಪ್ಯಾನಲ್‌ನಲ್ಲಿ ಕೆಲಸ ಮಾಡದ ಕ್ರಿಯೆಯನ್ನು ಹೊಂದಿದೆ. ಆ್ಯಪ್ ಅದನ್ನು ಅಳಿಸುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಕೀಗಳು ಪ್ಯಾನಲ್‌ನಲ್ಲಿ ಕೆಲಸ ಮಾಡದ ಕ್ರಿಯೆಗಳನ್ನು ಹೊಂದಿವೆ. ಆ್ಯಪ್ ಅವುಗಳನ್ನು ಅಳಿಸುತ್ತದೆ.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">ಈ ಫಲಕದಲ್ಲಿ ABC ಕೀ ಇಲ್ಲ. ಕೀಗಳಿಗೆ ಹಿಂತಿರುಗಲು ಟೂಲ್‌ಬಾರ್ ಅಥವಾ ಬ್ಯಾಕ್ ಬಟನ್ ಬಳಸಿ.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">ಅಪ್ಲಿಕೇಶನ್ ಘಟಕದ ಎರಡನೇ ಪ್ರತಿಯನ್ನು ಅಳಿಸಿದೆ.</string>
+    <string name="core_lang_panel_repair_field_added">ಆ್ಯಪ್ ಪ್ಯಾನೆಲ್‌ನ ಮುಖ್ಯ ಘಟಕವನ್ನು ಹೊಸ ಸಾಲಿನಲ್ಲಿ ಸೇರಿಸಿದೆ.</string>
+    <string name="core_lang_panel_repair_field_dropped">ಈ ಪ್ಯಾನೆಲ್‌ಗೆ ಸೇರದ ಘಟಕವನ್ನು ಆ್ಯಪ್ ಅಳಿಸಿದೆ.</string>
+    <string name="core_lang_panel_repair_key_dropped">ಆ್ಯಪ್ ಒಂದು ಕೀಯನ್ನು ಅಳಿಸಿದೆ, ಅದರ ಕ್ರಿಯೆಯು ಪ್ಯಾನಲ್‌ನಲ್ಲಿ ಕೆಲಸ ಮಾಡುವುದಿಲ್ಲ.</string>
+    <string name="core_lang_panel_repair_reset">ಆ್ಯಪ್ ಖಾಲಿ ಪ್ಯಾನೆಲ್ ಅನ್ನು ಪ್ರಮಾಣಿತ ಒಂದರೊಂದಿಗೆ ಬದಲಾಯಿಸಿದೆ.</string>
+    <string name="core_lang_panel_required_field_error">ಈ ಪ್ಯಾನೆಲ್‌ನಲ್ಲಿ ಅದರ ಮುಖ್ಯ ಘಟಕವಿಲ್ಲ. ಪ್ಯಾನೆಲ್ ಅನ್ನು ಸೆಳೆಯುವಾಗ ಆ್ಯಪ್ ಒಂದನ್ನು ಸೇರಿಸುತ್ತದೆ.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d ಘಟಕವು ಈ ಪ್ಯಾನೆಲ್‌ಗೆ ಸೇರಿಲ್ಲ. ಆ್ಯಪ್ ಅದನ್ನು ಅಳಿಸುತ್ತದೆ.</item>
+        <item quantity="other">%1$d ಘಟಕಗಳು ಈ ಪ್ಯಾನೆಲ್‌ಗೆ ಸೇರಿಲ್ಲ. ಆ್ಯಪ್ ಅವುಗಳನ್ನು ಅಳಿಸುತ್ತದೆ.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">ಆ್ಯಪ್ %1$s ಲೇಯರ್‌ನಲ್ಲಿ ಖಾಲಿ ಕೀಯನ್ನು ಅಳಿಸಿದೆ.</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s ಲೇಯರ್‌ನಲ್ಲಿರುವ ಕೀ ಬ್ರೈಲ್ ಡಾಟ್ %2$d ಅನ್ನು ಬಳಸಿದೆ. ಆಪ್ ಅದನ್ನು ಡಾಟ್ %3$d ಮಾಡಿದೆ.</string>
+    <string name="core_lang_repair_delete_key_added">ಅಕ್ಷರಗಳ ಲೇಯರ್‌ನಲ್ಲಿ ಡಿಲೀಟ್ ಕೀ ಇರಲಿಲ್ಲ. ಆಪ್ ಒಂದನ್ನು ಸೇರಿಸಿದೆ.</string>
+    <string name="core_lang_repair_enter_key_added">ಅಕ್ಷರಗಳ ಲೇಯರ್‌ನಲ್ಲಿ ಎಂಟರ್ ಕೀ ಇರಲಿಲ್ಲ. ಆ್ಯಪ್ ಒಂದನ್ನು ಸೇರಿಸಿದೆ.</string>
+    <string name="core_lang_repair_field_key_deleted">ಆ್ಯಪ್ %1$s ಲೇಯರ್‌ನಿಂದ ಪ್ಯಾನಲ್ ಘಟಕವನ್ನು ಅಳಿಸಿದೆ. ಘಟಕಗಳು ಪ್ಯಾನಲ್ ಲೇಔಟ್‌ನಲ್ಲಿ ಮಾತ್ರ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತವೆ.</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s ಲೇಯರ್‌ನಲ್ಲಿರುವ ಕೀ %2$s ಅನ್ನು ಸೂಚಿಸುತ್ತದೆ. ಆ್ಯಪ್ ಅದನ್ನು %3$s ಎಂದು ಟೈಪ್ ಮಾಡುವಂತೆ ಮಾಡಿದೆ.</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s ಲೇಯರ್‌ನಲ್ಲಿರುವ ಕೀಲಿಯು %2$s ಅನ್ನು ಅದು ಪ್ರತಿನಿಧಿಸುವ ಅಕ್ಷರಗಳೆಂದು ಪಟ್ಟಿ ಮಾಡಿದೆ. ಅವು ಅಕ್ಷರಗಳಲ್ಲ, ಆದ್ದರಿಂದ ಅಪ್ಲಿಕೇಶನ್ ಅದನ್ನು ಸಾಮಾನ್ಯ ಕೀಲಿಯನ್ನಾಗಿ ಮಾಡಿದೆ.</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s ಲೇಯರ್‌ನಲ್ಲಿರುವ ಕೀಲಿಯು %2$d ಸಾಲುಗಳನ್ನು ಆವರಿಸಿದೆ. ಅಪ್ಲಿಕೇಶನ್ ಅದನ್ನು %3$d ಸಾಲುಗಳನ್ನು ಆವರಿಸುವಂತೆ ಮಾಡಿದೆ.</string>
+    <string name="core_lang_repair_key_width_capped">%1$s ಲೇಯರ್‌ನಲ್ಲಿನ ಕೀಲಿಯು %2$s ಯೂನಿಟ್‌ಗಳ ಅಗಲವಿತ್ತು. ಅಪ್ಲಿಕೇಶನ್ ಅದನ್ನು %3$s ಯೂನಿಟ್‌ಗಳ ಅಗಲವನ್ನಾಗಿ ಮಾಡಿದೆ.</string>
+    <string name="core_lang_repair_key_width_set">%1$s ಲೇಯರ್‌ನಲ್ಲಿರುವ ಕೀಲಿಯು ಅಗಲವನ್ನು ಹೊಂದಿಲ್ಲ. ಅಪ್ಲಿಕೇಶನ್ ಅಗಲವನ್ನು 1 ಕ್ಕೆ ಹೊಂದಿಸಿದೆ.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s ಲೇಯರ್‌ನಲ್ಲಿ ಕೆಲಸ ಮಾಡುವ ಯಾವುದೇ ಕೀಗಳಿಲ್ಲ. ಇದು ಈಗ ಅಂತರ್ನಿರ್ಮಿತ ಗ್ರಿಡ್ ಅನ್ನು ಬಳಸುತ್ತದೆ.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s ಲೇಯರ್ ಅಕ್ಷರಗಳಿಗೆ ಹಿಂತಿರುಗುವ ಯಾವುದೇ ಕೀಲಿಯನ್ನು ಹೊಂದಿಲ್ಲ. ಅಪ್ಲಿಕೇಶನ್ ABC ಕೀಲಿಯನ್ನು ಸೇರಿಸಿದೆ.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s ಪದರದ ಒಂದು ಸಾಲಿನಲ್ಲಿ %2$d ಕೀ ಇತ್ತು. ಅಪ್ಲಿಕೇಶನ್ ಮೊದಲ %3$d ಅನ್ನು ಉಳಿಸಿಕೊಳ್ಳುತ್ತದೆ.</item>
+        <item quantity="other">%1$s ಪದರದ ಒಂದು ಸಾಲಿನಲ್ಲಿ %2$d ಕೀಗಳಿದ್ದವು. ಅಪ್ಲಿಕೇಶನ್ ಮೊದಲ %3$d ಅನ್ನು ಉಳಿಸಿಕೊಳ್ಳುತ್ತದೆ.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s ಲೇಯರ್‌ನಲ್ಲಿನ ಒಂದು ಸಾಲು %2$s ಯೂನಿಟ್‌ಗಳಷ್ಟು ಅಗಲವಾಗಿತ್ತು. ಸಾಲು ಹೊಂದಿಕೊಳ್ಳುವಂತೆ ಅಪ್ಲಿಕೇಶನ್ ಕೀಗಳನ್ನು ಚಿಕ್ಕದಾಗಿಸಿದೆ.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s ಲೇಯರ್ %2$d ಸಾಲನ್ನು ಹೊಂದಿತ್ತು. ಅಪ್ಲಿಕೇಶನ್ ಮೊದಲ %3$d ಅನ್ನು ಇರಿಸುತ್ತದೆ.</item>
+        <item quantity="other">%1$s ಲೇಯರ್ %2$d ಸಾಲುಗಳನ್ನು ಹೊಂದಿತ್ತು. ಅಪ್ಲಿಕೇಶನ್ ಮೊದಲ %3$d ಅನ್ನು ಇರಿಸುತ್ತದೆ.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">ಅಕ್ಷರಗಳ ಲೇಯರ್‌ನಲ್ಲಿ ಸ್ಪೇಸ್ ಕೀ ಇರಲಿಲ್ಲ. ಆ್ಯಪ್ ಒಂದನ್ನು ಸೇರಿಸಿದೆ.</string>
+    <string name="core_lang_repair_unknown_key_deleted">ಆ್ಯಪ್ %1$s ಲೇಯರ್‌ನಲ್ಲಿರುವ ಕೀಲಿಯನ್ನು ಅಳಿಸಿದೆ. ಅದರ ಕ್ರಿಯೆ \"%2$s\" ತಿಳಿದಿಲ್ಲ.</string>
+</resources>

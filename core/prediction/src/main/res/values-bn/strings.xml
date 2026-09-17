@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">সার্ভার ফাইলটি পাঠায়নি। এরর কোড হলো HTTP %1$s।</string>
+    <string name="core_pred_wordlist_malformed_error">সেই শব্দ তালিকাটি খালি বা পড়ার অযোগ্য।</string>
+    <string name="core_pred_wordlist_no_space_error">আপনার ডিভাইসে পর্যাপ্ত স্টোরেজ নেই। কিছু ফাইল ডিলিট করুন, তারপর আবার চেষ্টা করুন।</string>
+    <string name="core_pred_wordlist_save_error">অ্যাপটি শব্দ তালিকা সংরক্ষণ করতে পারছে না। আবার চেষ্টা করুন।</string>
+    <string name="core_pred_wordlist_size_all_label">সবকিছু</string>
+    <string name="core_pred_wordlist_size_large_label">বড়</string>
+    <string name="core_pred_wordlist_size_medium_label">মাঝারি</string>
+    <string name="core_pred_wordlist_size_small_label">ছোট</string>
+    <string name="core_pred_wordlist_variant_brazil_label">ব্রাজিল</string>
+    <string name="core_pred_wordlist_variant_europe_label">ইউরোপ</string>
+</resources>

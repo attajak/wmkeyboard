@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">AI 제공업체가 오류로 응답을 종료했습니다</string>
+    <string name="ftools_photo_error_failed">앱이 사진을 가져올 수 없습니다.</string>
+    <string name="ftools_photo_error_offline">앱이 사진 서비스에 연결할 수 없습니다. 네트워크를 확인하고 다시 시도하세요.</string>
+    <string name="ftools_photo_error_timeout">사진 서비스가 응답하는 데 너무 오래 걸렸습니다</string>
+    <string name="ftools_search_error_json_disabled">이 SearXNG 인스턴스는 JSON API를 활성화하지 않았습니다. settings.yml의 search.formats에 &lt;b&gt;json&lt;/b&gt;을 추가하거나 다른 인스턴스를 사용하세요.</string>
+</resources>

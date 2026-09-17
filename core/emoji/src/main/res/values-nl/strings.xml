@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Die emoji-trefwoordenlijst is leeg of onleesbaar.</string>
+    <string name="core_emoji_dict_error_http">De server heeft het bestand niet verzonden. De foutcode is HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Dat bestand is geen lijst met emoji-trefwoorden.</string>
+    <string name="core_emoji_dict_error_save">De app kon de emoji-trefwoordenlijst niet opslaan.</string>
+    <string name="core_emoji_dict_error_too_large">Die emoji-trefwoordenlijst is te groot.</string>
+</resources>

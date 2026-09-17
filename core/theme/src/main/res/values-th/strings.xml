@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">เบอร์รี่</string>
+    <string name="core_theme_builtin_bubble_label">ฟองสบู่</string>
+    <string name="core_theme_builtin_crimson_label">สีแดงเข้ม</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">ทะเลลึก</string>
+    <string name="core_theme_builtin_facet_label">Facet</string>
+    <string name="core_theme_builtin_forest_label">ป่าไม้</string>
+    <string name="core_theme_builtin_glacier_label">ธารน้ำแข็ง</string>
+    <string name="core_theme_builtin_mint_label">มิ้นต์</string>
+    <string name="core_theme_builtin_nebula_label">เนบิวลา</string>
+    <string name="core_theme_builtin_ocean_label">มหาสมุทร</string>
+    <string name="core_theme_builtin_pitch_label">ดำสนิท</string>
+    <string name="core_theme_builtin_rose_label">กุหลาบ</string>
+    <string name="core_theme_builtin_sand_label">ทราย</string>
+    <string name="core_theme_builtin_slate_label">หินชนวน</string>
+    <string name="core_theme_builtin_snow_label">หิมะ</string>
+    <string name="core_theme_builtin_sunset_drift_label">Sunset drift</string>
+    <string name="core_theme_builtin_sunset_label">พระอาทิตย์ตก</string>
+    <string name="core_theme_family_gradient_label">การไล่ระดับสี</string>
+    <string name="core_theme_family_ocean_label">ยามค่ำคืน</string>
+    <string name="core_theme_family_snow_label">พาสเทล</string>
+</resources>

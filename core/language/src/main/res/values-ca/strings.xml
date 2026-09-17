@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">L\'aplicació ha canviat %1$d tecla per la més propera que té.</item>
+        <item quantity="other">L\'aplicació ha canviat %1$d tecles per les més properes que té.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">L\'aplicació ha eliminat %1$d tecla. Aquest teclat no té cap tecla que faci la mateixa funció (codi %2$s).</item>
+        <item quantity="other">L\'aplicació ha eliminat %1$d tecles. Aquest teclat no té cap tecla que faci la mateixa funció (codis %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">L\'aplicació ha mantingut la mida de l\'etiqueta de %1$d tecla però no el seu estil de text. Aquest teclat dibuixa les etiquetes amb un sol estil.</item>
+        <item quantity="other">L\'aplicació ha mantingut la mida de l\'etiqueta de %1$d tecles però no el seu estil de text. Aquest teclat dibuixa les etiquetes amb un sol estil.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">L\'aplicació ha canviat %1$d lletra a la forma que escriu aquest teclat.</item>
+        <item quantity="other">L\'aplicació ha canviat %1$d lletres a la forma que escriu aquest teclat.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tecla no té lletres en mantenir premut. El fitxer les guarda en un segon fitxer que no has obert.</item>
+        <item quantity="other">%1$d tecles no tenen lletres en mantenir premut. El fitxer les guarda en un segon fitxer que no has obert.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">L\'altre teclat mesura les amplades de les tecles de manera diferent. L\'aplicació ha canviat les amplades per ajustar-se a aquesta graella.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d tecla de punt braille a la capa %2$s té un número de punt fora de l\'1 al 6.</item>
+        <item quantity="other">%1$d tecles de punt braille a la capa %2$s tenen un número de punt fora de l\'1 al 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d tecla a la capa %2$s no té etiqueta ni sortida. No escriu res, i l\'aplicació l\'elimina quan activeu aquesta disposició.</item>
+        <item quantity="other">%1$d tecles a la capa %2$s no tenen etiqueta ni sortida. No escriuen res, i l\'aplicació les elimina quan activeu aquesta disposició.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">La fila %1$d de la capa %2$s està buida.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d tecla a la capa %2$s és un component de tauler. Els components només funcionen en un disseny de tauler.</item>
+        <item quantity="other">%1$d tecles a la capa %2$s són components de tauler. Els components només funcionen en un disseny de tauler.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">La fila %1$d de la capa %2$s té una tecla sense amplada.</string>
+    <string name="core_lang_layout_key_span_error">La fila %1$d de la capa %2$s té una tecla que ocupa menys d\'1 o més de %3$d files.</string>
+    <string name="core_lang_layout_letters_empty_error">La capa de lletres no té tecles.</string>
+    <string name="core_lang_layout_no_delete_error">La disposició no té tecla d\'esborrar. No pots corregir un error.</string>
+    <string name="core_lang_layout_no_enter_error">El disseny no té tecla d\'entrada.</string>
+    <string name="core_lang_layout_no_shift_warning">La disposició no té tecla de majúscules. Per escriure una lletra majúscula, mantén premuda una tecla.</string>
+    <string name="core_lang_layout_no_space_error">La disposició no té tecla d\'espai.</string>
+    <string name="core_lang_layout_no_way_back_error">La capa %1$s no té cap tecla per tornar a les lletres. No podeu sortir d\'aquesta capa.</string>
+    <string name="core_lang_layout_persistent_warning">La capa %1$s roman oberta quan es tanca el teclat. Assegureu-vos que teniu una manera de sortir d\'aquest disseny.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Aquesta disposició no té cap tecla per sortir-ne. Assegura\'t de tenir una manera de sortir d\'aquesta disposició: una tecla ABC, una tecla de símbols o l\'eina de disposició secundària a la barra d\'eines.</string>
+    <string name="core_lang_layout_span_past_end_warning">La fila %1$d de la capa %2$s té una tecla que cobreix més files de les que té la capa. El teclat l\'atura a l\'última fila.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">La fila %1$d de la capa %2$s té %3$d tecla. Només %4$d tecles es mantenen prou grans per prémer-les.</item>
+        <item quantity="other">La fila %1$d de la capa %2$s té %3$d tecles. Només %4$d tecles es mantenen prou grans per prémer-les.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">La capa %1$s té %2$d fila. Només en caben %3$d.</item>
+        <item quantity="other">La capa %1$s té %2$d files. Només en caben %3$d.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d tecla a la capa %2$s utilitza una acció que aquesta versió de l\'aplicació no reconeix.</item>
+        <item quantity="other">%1$d tecles a la capa %2$s utilitzen una acció que aquesta versió de l\'aplicació no reconeix.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">La fila %1$d de la capa %2$s és més ampla que les altres files. El teclat dibuixa les tecles d\'aquesta fila més estretes.</string>
+    <string name="core_lang_numeral_scope_display_only">Només visualització</string>
+    <string name="core_lang_numeral_scope_everywhere">A tot arreu</string>
+    <string name="core_lang_numeral_scope_text_fields">Camps de text</string>
+    <string name="core_lang_numeral_system_auto">Automàtic</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d component apareix més d\'una vegada. L\'aplicació manté la primera còpia.</item>
+        <item quantity="other">%1$d components apareixen més d\'una vegada. L\'aplicació manté la primera còpia de cadascun.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Aquest tauler no té tecles. L\'aplicació utilitza el tauler estàndard en el seu lloc.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tecla té una acció que no funciona en un panell. L\'aplicació l\'esborra.</item>
+        <item quantity="other">%1$d tecles tenen accions que no funcionen en un panell. L\'aplicació les esborra.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Aquest panell no té cap tecla ABC. Utilitzeu la barra d\'eines o el botó Enrere per tornar a les tecles.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">L\'aplicació ha suprimit una segona còpia d\'un component.</string>
+    <string name="core_lang_panel_repair_field_added">L\'aplicació ha afegit el component principal del tauler en una fila nova.</string>
+    <string name="core_lang_panel_repair_field_dropped">L\'aplicació ha suprimit un component que no pertany a aquest panell.</string>
+    <string name="core_lang_panel_repair_key_dropped">L\'aplicació ha suprimit una tecla l\'acció de la qual no funciona en un panell.</string>
+    <string name="core_lang_panel_repair_reset">L\'aplicació ha substituït el panell buit per l\'estàndard.</string>
+    <string name="core_lang_panel_required_field_error">Aquest panell no té el seu component principal. L\'aplicació n\'afegeix un quan dibuixa el panell.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d component no pertany a aquest panell. L\'aplicació l\'elimina.</item>
+        <item quantity="other">%1$d components no pertanyen a aquest panell. L\'aplicació els elimina.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">L\'aplicació ha suprimit una tecla buida a la capa %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Una tecla a la capa %1$s utilitzava el punt braille %2$d. L\'aplicació l\'ha convertit en el punt %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">La capa de lletres no tenia cap tecla d\'esborrar. L\'aplicació n\'ha afegit una.</string>
+    <string name="core_lang_repair_enter_key_added">La capa de lletres no tenia cap tecla d\'intro. L\'aplicació n\'ha afegit una.</string>
+    <string name="core_lang_repair_field_key_deleted">L\'aplicació ha suprimit un component del tauler de la capa %1$s. Els components només funcionen en un disseny de tauler.</string>
+    <string name="core_lang_repair_key_letters_anchored">Una tecla a la capa %1$s representa %2$s. L\'aplicació ha fet que escrigui %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Una tecla a la capa %1$s indicava %2$s com les lletres que representa. Com que no són lletres, l\'aplicació l\'ha convertit en una tecla normal.</string>
+    <string name="core_lang_repair_key_span_clamped">Una tecla a la capa %1$s cobria %2$d files. L\'aplicació ha fet que en cobreixi %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Una tecla a la capa %1$s tenia %2$s unitats d\'amplada. L\'aplicació l\'ha fet de %3$s unitats d\'amplada.</string>
+    <string name="core_lang_repair_key_width_set">Una tecla a la capa %1$s no tenia amplada. L\'aplicació ha establert l\'amplada a 1.</string>
+    <string name="core_lang_repair_layer_replaced">La capa %1$s no tenia tecles que funcionessin. Ara utilitza la graella integrada.</string>
+    <string name="core_lang_repair_letters_key_added">La capa %1$s no tenia cap tecla per tornar a les lletres. L\'aplicació ha afegit una tecla ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Una fila a la capa %1$s tenia %2$d tecla. L\'aplicació manté la primera %3$d.</item>
+        <item quantity="other">Una fila a la capa %1$s tenia %2$d tecles. L\'aplicació manté les primeres %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Una fila a la capa %1$s tenia %2$s unitats d\'amplada. L\'aplicació ha fet les tecles més petites perquè la fila hi càpiga.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">La capa %1$s tenia %2$d fila. L\'aplicació manté la primera %3$d.</item>
+        <item quantity="other">La capa %1$s tenia %2$d files. L\'aplicació manté les primeres %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">La capa de lletres no tenia tecla d\'espai. L\'aplicació n\'ha afegit una.</string>
+    <string name="core_lang_repair_unknown_key_deleted">L\'aplicació ha suprimit una tecla a la capa %1$s. La seva acció \"%2$s\" és desconeguda.</string>
+</resources>

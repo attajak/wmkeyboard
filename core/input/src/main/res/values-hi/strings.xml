@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">डाउनलोड की गई फ़ाइल क्षतिग्रस्त है। इसका चेकसम मेल नहीं खाता है। डाउनलोड को फिर से प्रयास करें।</string>
+    <string name="core_input_cjk_download_error_http">सर्वर ने HTTP स्थिति %1$s लौटाई।</string>
+    <string name="core_input_cjk_download_error_network">डाउनलोड काम नहीं कर रहा है। अपना कनेक्शन जांचें और पुनः प्रयास करें।</string>
+    <string name="core_input_cjk_download_error_network_detail">डाउनलोड काम नहीं कर रहा है: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">आपके डिवाइस पर पर्याप्त स्टोरेज नहीं है। पहले कुछ जगह खाली करें।</string>
+    <string name="core_input_cjk_download_error_truncated">डाउनलोड के दौरान कनेक्शन रुक गया। जारी रखने के लिए \'फिर से शुरू करें\' दबाएं।</string>
+    <string name="core_input_cjk_download_error_unavailable">यह पैक अभी उपलब्ध नहीं है।</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">हांजी वर्णों के लिए रेडिकल कोड की एक तालिका, 29,000 वर्ण। कीबोर्ड को Cangjie और Quick लेआउट के लिए इस पैक की आवश्यकता है।</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) शब्दकोश</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">mozc से काना रीडिंग, 1.08 मिलियन प्रविष्टियाँ, लगभग 42 MB। जापानी रूपांतरण के लिए कीबोर्ड को इस पैक की आवश्यकता है।</string>
+    <string name="core_input_cjk_pack_ja_kana_title">जापानी काना से कांजी शब्दकोश</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Hanzi वर्णों के लिए Jyutping रीडिंग की एक तालिका, 163,000 प्रविष्टियाँ। कैंटोनीज़ रूपांतरण के लिए कीबोर्ड को इस पैक की आवश्यकता है।</string>
+    <string name="core_input_cjk_pack_jyutping_title">कैंटोनीज़ ज्युटपिंग शब्दकोश</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT से हन्ज़ी अक्षर और वाक्यांश, 120,000 प्रविष्टियाँ। चीनी रूपांतरण के लिए कीबोर्ड को इस पैक की आवश्यकता है।</string>
+    <string name="core_input_cjk_pack_pinyin_title">चीनी पिनयिन शब्दकोश</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">हांज़ी वर्णों के लिए स्ट्रोक क्रम की एक तालिका। कीबोर्ड को स्ट्रोक लेआउट के लिए इस पैक की आवश्यकता है।</string>
+    <string name="core_input_cjk_pack_stroke_title">चीनी स्ट्रोक (笔画) शब्दकोश</string>
+    <string name="core_input_double_pinyin_off_label">बंद (पूर्ण पिनयिन)</string>
+</resources>

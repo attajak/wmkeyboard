@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Diccionaris</string>
+    <string name="core_addons_type_dictionary_singular_label">Diccionari</string>
+    <string name="core_addons_type_emoji_font_label">Tipus de lletra d\'emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Tipus de lletra d\'emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Paraules clau d\'emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Paquet de paraules clau d\'emoji</string>
+    <string name="core_addons_type_espanso_label">Paquets Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Paquet Espanso</string>
+    <string name="core_addons_type_font_label">Tipus de lletra</string>
+    <string name="core_addons_type_font_singular_label">Tipus de lletra</string>
+    <string name="core_addons_type_icon_pack_label">Paquets d\'icones</string>
+    <string name="core_addons_type_icon_pack_singular_label">Paquet d\'icones</string>
+    <string name="core_addons_type_layout_label">Dissenys</string>
+    <string name="core_addons_type_layout_singular_label">Disposició</string>
+    <string name="core_addons_type_plugin_label">Connectors</string>
+    <string name="core_addons_type_plugin_singular_label">Connector</string>
+    <string name="core_addons_type_snippets_label">Fragments</string>
+    <string name="core_addons_type_snippets_singular_label">Paquet de fragments</string>
+    <string name="core_addons_type_sound_label">Sons</string>
+    <string name="core_addons_type_sound_pack_label">Paquets de so</string>
+    <string name="core_addons_type_sound_pack_singular_label">Paquet de so</string>
+    <string name="core_addons_type_sound_singular_label">So de tecla</string>
+    <string name="core_addons_type_stickers_label">Paquets d\'adhesius</string>
+    <string name="core_addons_type_stickers_singular_label">Paquet d\'adhesius</string>
+    <string name="core_addons_type_theme_label">Temes</string>
+    <string name="core_addons_type_theme_singular_label">Tema</string>
+    <string name="core_addons_type_unknown_label">Altres</string>
+    <string name="core_addons_type_unknown_singular_label">Complement</string>
+    <string name="core_addons_type_vocabulary_label">Vocabulari</string>
+    <string name="core_addons_type_vocabulary_singular_label">Paquet de vocabulari</string>
+</resources>

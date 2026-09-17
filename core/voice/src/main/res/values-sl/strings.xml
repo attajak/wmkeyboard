@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Strežnik Hugging Face ni poslal datoteke. Koda napake je HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Povezava je bila med prenosom prekinjena. Poskusite znova, da nadaljujete tam, kjer se je ustavilo.</string>
+    <string name="core_voice_download_space_error">V vaši napravi ni dovolj prostora za shranjevanje. Najprej morate sprostiti približno %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">Ta model uporablja jezik, v katerem tipkate, enako kot model za 40 jezikov. Zajema le evropske jezike, zato je prenos manjši.</string>
+    <string name="core_voice_model_base_multi_body">Ta model uravnoteži natančnost in hitrost. Pokriva vse jezike, ki jih pozna Whisper. Izberite ga, če je model Small prepočasen.</string>
+    <string name="core_voice_model_base_world_body">Ta model uporablja jezik, v katerem tipkate, namesto ugibanja. Kratke fraze postanejo veliko bolj zanesljive. Izberite ga, ko je na seznamu vaš jezik.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d jezik</item>
+        <item quantity="other">%1$d jezikov</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">To je eden najbolj natančnih modelov Whisper, vendar je prevelik za večino telefonov. Prenos meri 1,5 GB. Naloži ga lahko le naprava z veliko količino pomnilnika.</string>
+    <string name="core_voice_model_large_v3_multi_body">To je najbolj natančen model Whisper in najboljši pri prepoznavanju jezika, ki ga govorite. Prenos meri 1,5 GB. Naloži ga lahko le naprava z veliko količino pomnilnika. Model Turbo je skoraj tako natančen in pol manjši.</string>
+    <string name="core_voice_model_medium_multi_body">Ta model zagotavlja skoraj namizno natančnost. Vsaka fraza traja nekaj sekund. Model med delovanjem porabi skoraj en gigabajt pomnilnika.</string>
+    <string name="core_voice_model_single_language_body">Ta model obravnava samo %1$s. Nima koraka za zaznavanje jezika. Zaradi tega je hitrejši in nekoliko natančnejši od večjezičnega modela enake velikosti.</string>
+    <string name="core_voice_model_small_multi_body">Ta model zagotavlja najboljšo natančnost, ki še vedno dobro deluje na telefonu. Bolje obravnava naglase in hrup v ozadju kot osnovni model. Zajema vse jezike, ki jih Whisper pozna.</string>
+    <string name="core_voice_model_small_world_body">Ta model uporablja jezik, v katerem tipkate, in ima natančnost modela Small. To je najbolj natančen model, ki še vedno deluje na telefonu.</string>
+    <string name="core_voice_model_tiny_multi_body">To je najhitrejši večjezični model. Dobro deluje pri jasnem govoru, vendar hrup zmanjša natančnost.</string>
+    <string name="core_voice_model_turbo_multi_body">Ta model prepozna jezik, ki ga govorite, veliko bolje kot manjši modeli. Izberite ga, če manjši model vaš govor prepiše v napačen jezik. Prenos je velik in vsaka fraza traja več sekund.</string>
+    <string name="core_voice_size_base_label">Osnovno</string>
+    <string name="core_voice_size_large_label">Velik</string>
+    <string name="core_voice_size_medium_label">Srednje</string>
+    <string name="core_voice_size_small_label">Majhno</string>
+    <string name="core_voice_size_tiny_label">Zelo majhna</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Priporočeno</string>
+    <string name="core_voice_whisper_mel_bins_error">Ta glasovni model potrebuje spektrogram s pasom %1$s, ki se ne ujema z datoteko, s katero je bil prenesen. Izbrišite model v nastavitvah in ga znova prenesite.</string>
+    <string name="core_voice_whisper_model_load_error">Glasovni model se ni naložil. Datoteka je morda poškodovana. Izbrišite model v nastavitvah in ga znova prenesite.</string>
+    <string name="core_voice_whisper_transcribe_error">Glasovno tipkanje ni delovalo. Poskusite znova ali izberite manjši model.</string>
+</resources>

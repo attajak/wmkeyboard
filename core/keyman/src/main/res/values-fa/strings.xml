@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">برنامه %1$d حرکت مورب را حذف کرد. این صفحه‌کلید فقط از حرکات به بالا، پایین، چپ و راست پشتیبانی می‌کند.</item>
+        <item quantity="other">برنامه %1$d حرکت مورب را حذف کرد. این صفحه‌کلید فقط از حرکات به بالا، پایین، چپ و راست پشتیبانی می‌کند.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d کلید کاراکتر چاپ‌شده روی خود را تایپ می‌کند. صفحه‌کلید اصلی از یک قانون برای تصمیم‌گیری در مورد آنچه تایپ می‌کند استفاده می‌کرد.</item>
+        <item quantity="other">%1$d کلید کاراکترهای چاپ‌شده روی خود را تایپ می‌کنند. صفحه‌کلید اصلی از قوانینی برای تصمیم‌گیری در مورد آنچه تایپ می‌کنند استفاده می‌کرد.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">این صفحه‌کلید دارای %1$d کلید است که برای چرخش بین کاراکترها باید مکرراً روی آن ضربه بزنید. این برنامه صفحه‌کلید چنین کلیدی ندارد، بنابراین فقط اولین کاراکتر در دسترس است.</item>
+        <item quantity="other">این صفحه‌کلید دارای %1$d کلید است که برای چرخش بین کاراکترها باید مکرراً روی آن‌ها ضربه بزنید. این برنامه صفحه‌کلید چنین کلیدهایی ندارد، بنابراین فقط اولین کاراکتر هر کدام در دسترس است.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">این صفحه‌کلید از قوانینی برای تعیین عملکرد کلیدها استفاده می‌کند. برنامه این قوانین را ندارد، بنابراین هر کلید همان کاراکتری را تایپ می‌کند که روی آن چاپ شده است.</string>
+    <string name="core_keyman_shift_layer_folded">برنامه لایه Shift را در کلیدها ادغام کرده است. برای دسترسی به آن کاراکترها، کلید Shift را نگه دارید.</string>
+    <string name="core_keyman_shift_layer_separate">لایه شیفت شکل متفاوتی دارد، بنابراین برنامه آن را به عنوان لایه اختصاصی خود نگه داشته است.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">برنامه %1$d کلید را حذف کرد. این صفحه‌کلید کلیدی که همان کار را انجام دهد ندارد.</item>
+        <item quantity="other">برنامه %1$d کلید را حذف کرد. این صفحه‌کلید کلیدهایی که همان کار را انجام دهند ندارد.</item>
+    </plurals>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">এই প্লাগইনটিতে কোনো render() ফাংশন নেই।</string>
+    <string name="core_plugins_error_not_installed">সেই প্লাগইনটি ইনস্টল করা নেই।</string>
+    <string name="core_plugins_error_script_failed">স্ক্রিপ্টটি ব্যর্থ হয়েছে।</string>
+    <string name="core_plugins_error_script_missing">সেই প্লাগইনের স্ক্রিপ্টটি অনুপস্থিত।</string>
+    <string name="core_plugins_error_turned_off">সেই প্লাগইনটি বন্ধ করা আছে।</string>
+    <string name="core_plugins_permission_storage_label">আপনার ডিভাইসে ডেটা সেভ করুন</string>
+    <string name="core_plugins_reject_bad_encoding">“%1$s”-এ এমন একটি স্ক্রিপ্ট আছে যা বৈধ UTF-8 টেক্সট নয়।</string>
+    <string name="core_plugins_reject_bad_id">এই প্লাগইনটির আইডি বৈধ নয়। একটি আইডি ৩ থেকে ৬৪ অক্ষরের দীর্ঘ হতে হবে। একটি আইডিতে ছোট হাতের অক্ষর, সংখ্যা, ডট, ড্যাশ এবং আন্ডারস্কোর থাকতে পারে।</string>
+    <string name="core_plugins_reject_compiled_lua">“%1$s”-এ কম্পাইল করা লুয়া (Lua) কোড রয়েছে। একটি প্লাগইন অবশ্যই সাধারণ সোর্স কোড ব্যবহার করবে, যাতে এটি চলার আগে আপনি তা পড়তে পারেন।</string>
+    <string name="core_plugins_reject_empty_script">“%1$s”-এ কোনো স্ক্রিপ্ট নেই।</string>
+    <string name="core_plugins_reject_missing_script">“%1$s”-এ এর স্ক্রিপ্ট ফাইল (%2$s) নেই।</string>
+    <string name="core_plugins_reject_newer_version">এই প্লাগইনটির জন্য WM কিবোর্ডের একটি নতুন সংস্করণ প্রয়োজন।</string>
+    <string name="core_plugins_reject_no_name">এই প্লাগইনটির কোনো নাম নেই।</string>
+    <string name="core_plugins_reject_no_version">“%1$s” কোন সংস্করণের তা উল্লেখ নেই।</string>
+    <string name="core_plugins_reject_script_too_large">“%1$s”-এর স্ক্রিপ্ট %2$d কেবি (KB)-এর চেয়ে বড়।</string>
+    <string name="core_plugins_reject_unknown_permission">WM Keyboard-এর এই ভার্সনটি “%1$s” পারমিশনটি চেনে না। “%2$s”-কে কী করার অনুমতি দেওয়া হয়েছে তা অ্যাপটি আপনাকে জানাতে পারবে না।</string>
+    <string name="core_plugins_stopped_cancelled">অ্যাপটি এই প্লাগইনটি বন্ধ করেছে।</string>
+    <string name="core_plugins_stopped_deadline">এই প্লাগইনটি অনেক বেশি সময় নিয়েছে। অ্যাপটি এটি বন্ধ করে দিয়েছে।</string>
+    <string name="core_plugins_stopped_instructions">এই প্লাগইনটি একবারে খুব বেশি কাজ করেছে। অ্যাপটি এটিকে থামিয়ে দিয়েছে।</string>
+    <string name="core_plugins_stopped_not_responding">এই প্লাগইনটি সাড়া দেওয়া বন্ধ করে দিয়েছে। অ্যাপটি এটি বন্ধ করে দিয়েছে।</string>
+    <string name="core_plugins_stopped_not_responding_disabled">এই প্লাগইনটি আবার সাড়া দেওয়া বন্ধ করে দিয়েছে। অ্যাপটি এটি বন্ধ করে দিয়েছে।</string>
+    <string name="core_plugins_stopped_recursion">এই প্লাগইনটি নিজেকে খুব বেশিবার কল করেছে। অ্যাপটি এটিকে থামিয়ে দিয়েছে।</string>
+    <string name="core_plugins_stopped_unexpected">এই প্লাগইনটি অপ্রত্যাশিতভাবে বন্ধ হয়ে গেছে।</string>
+    <string name="core_plugins_ui_insert_action">ইনসার্ট করুন</string>
+    <string name="core_plugins_ui_repair_no_type">একটি উইজেট এটি কী ধরনের তা উল্লেখ করেনি।</string>
+    <string name="core_plugins_ui_repair_not_a_widget">একটি উইজেট তালিকায় এমন কিছু ছিল যা উইজেট নয়।</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">একটি ট্যাব স্ট্রিপে কোনো পেজ ছিল না।</string>
+    <string name="core_plugins_ui_repair_text_budget">এই প্লাগইনটি খুব বেশি টেক্সট আঁকার অনুরোধ করেছিল। অ্যাপটি কিছু অংশ বাদ দিয়েছে।</string>
+    <string name="core_plugins_ui_repair_text_shortened">কিছু টেক্সট খুব বড় হওয়ায় তা দেখানো সম্ভব হয়নি। অ্যাপটি তা ছোট করে দিয়েছে।</string>
+    <string name="core_plugins_ui_repair_too_deep">কিছু উইজেট খুব গভীরে নেস্ট করা ছিল যা আঁকা সম্ভব হয়নি।</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">শুধুমাত্র প্রথম %1$dটি ট্যাব দেখানো হয়েছে।</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">এই প্লাগইনটি %1$d-এর বেশি উইজেটের জন্য অনুরোধ করেছে। অ্যাপটি বাকিগুলো বাদ দিয়েছে।</string>
+    <string name="core_plugins_ui_repair_unknown_type">এই বিল্ডটি “%1$s” উইজেট টাইপটি চেনে না।</string>
+    <string name="core_plugins_ui_tab_default_title">ট্যাব %1$d</string>
+</resources>

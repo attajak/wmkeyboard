@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">El fitxer descarregat està malmès. La suma de verificació no coincideix. Torna a provar la descàrrega.</string>
+    <string name="core_input_cjk_download_error_http">El servidor ha retornat l\'estat HTTP %1$s.</string>
+    <string name="core_input_cjk_download_error_network">La descàrrega no ha funcionat. Comprova la teva connexió i torna-ho a provar.</string>
+    <string name="core_input_cjk_download_error_network_detail">La descàrrega no ha funcionat: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">No hi ha prou emmagatzematge al teu dispositiu. Allibera una mica d\'espai primer.</string>
+    <string name="core_input_cjk_download_error_truncated">La connexió s\'ha interromput durant la descàrrega. Prem Reprèn per continuar.</string>
+    <string name="core_input_cjk_download_error_unavailable">Aquest paquet encara no està disponible.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Una taula de codis radicals per a caràcters Hanzi, 29.000 caràcters. El teclat necessita aquest paquet per als dissenys Cangjie i Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Diccionari Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Lectures Kana de mozc, 1,08 milions d\'entrades, uns 42 MB. El teclat necessita aquest paquet per a la conversió al japonès.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Diccionari japonès de kana a kanji</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Una taula de lectures Jyutping per a caràcters Hanzi, 163.000 entrades. El teclat necessita aquest paquet per a la conversió al cantonès.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Diccionari de cantonès Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Caràcters i frases Hanzi de CC-CEDICT, 120.000 entrades. El teclat necessita aquest paquet per a la conversió al xinès.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Diccionari xinès Pinyin</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Una taula d\'ordre de traços per als caràcters Hanzi. El teclat necessita aquest paquet per a la disposició de traços.</string>
+    <string name="core_input_cjk_pack_stroke_title">Diccionari de traços xinesos (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Desactivat (Pinyin complet)</string>
+</resources>

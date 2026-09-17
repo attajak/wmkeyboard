@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Этот список ключевых слов эмодзи пуст или нечитаем.</string>
+    <string name="core_emoji_dict_error_http">Сервер не отправил файл. Код ошибки: HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Этот файл не является списком ключевых слов эмодзи.</string>
+    <string name="core_emoji_dict_error_save">Приложение не смогло сохранить список ключевых слов эмодзи.</string>
+    <string name="core_emoji_dict_error_too_large">Этот список ключевых слов эмодзи слишком велик.</string>
+</resources>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">ஒருமுறை பயன்படுத்தும் குறியீடு</string>
+    <string name="core_content_clip_entity_otp_tag">CODE</string>
+    <string name="core_content_clip_entity_phone_label">தொலைபேசி எண்</string>
+    <string name="core_content_clip_entity_phone_tag">தொலைபேசி</string>
+    <string name="core_content_clip_entity_url_label">இணைப்பு</string>
+    <string name="core_content_clip_entity_url_tag">இணைப்பு</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d ஸ்னிப்பெட்டில் Espanso-வால் வைத்திருக்க முடியாத பிற விரிவாக்கங்கள் உள்ளன. முதல் ஒன்று மட்டுமே எழுதப்பட்டது.</item>
+        <item quantity="other">%1$d ஸ்னிப்பெட்டுகளில் Espanso-வால் வைத்திருக்க முடியாத பிற விரிவாக்கங்கள் உள்ளன. ஒவ்வொன்றிலும் முதல் ஒன்று மட்டுமே எழுதப்பட்டது.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d துணுக்கு சில கணினி நிரல்களுக்கு மட்டுமே வரையறுக்கப்பட்டுள்ளது. உங்கள் மொபைலில் இது எல்லா இடங்களிலும் வேலை செய்யும்.</item>
+        <item quantity="other">%1$d துணுக்குகள் சில கணினி நிரல்களுக்கு மட்டுமே வரையறுக்கப்பட்டுள்ளன. உங்கள் மொபைலில் அவை எல்லா இடங்களிலும் வேலை செய்யும்.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d துணுக்கு உங்களை ஒரு பட்டியலிலிருந்து தேர்ந்தெடுக்கச் சொல்கிறது. அதற்குப் பதிலாக ஆப்ஸ் தற்செயலாக ஒன்றைத் தேர்ந்தெடுக்கிறது.</item>
+        <item quantity="other">%1$d துணுக்குகள் உங்களை ஒரு பட்டியலிலிருந்து தேர்ந்தெடுக்கச் சொல்கின்றன. அதற்குப் பதிலாக ஆப்ஸ் தற்செயலாக ஒன்றைத் தேர்ந்தெடுக்கிறது.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d ஸ்னிப்பெட் விரிவுபடுத்துவதற்கு முன்பு கேட்கிறது. Espanso-வில் அத்தகைய அமைப்பு இல்லை, எனவே அது தானாகவே விரிவடையும்.</item>
+        <item quantity="other">%1$d ஸ்னிப்பெட்டுகள் விரிவுபடுத்துவதற்கு முன்பு கேட்கின்றன. Espanso-வில் அத்தகைய அமைப்பு இல்லை, எனவே அவை தானாகவே விரிவடையும்.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d துணுக்கு பயன்பாட்டால் முழுமையாக எழுத முடியாத தேதி வடிவமைப்பைப் பயன்படுத்துகிறது. பயன்பாடு செய்ய முடியாத பகுதியை விட்டுவிட்டது.</item>
+        <item quantity="other">%1$d துணுக்குகள் பயன்பாட்டால் முழுமையாக எழுத முடியாத தேதி வடிவமைப்புகளைப் பயன்படுத்துகின்றன. பயன்பாடு செய்ய முடியாத பகுதிகளை விட்டுவிட்டது.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d துணுக்கு முடக்கப்பட்ட கோப்புறையில் உள்ளது. Espanso-வில் கோப்புறை சுவிட்ச் இல்லை, எனவே அது அங்கு விரிவடையும்.</item>
+        <item quantity="other">%1$d துணுக்குகள் முடக்கப்பட்ட கோப்புறைகளில் உள்ளன. Espanso-வில் கோப்புறை சுவிட்ச் இல்லை, எனவே அவை அங்கு விரிவடையும்.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">செருகுவதற்கு எதுவுமில்லாத %1$d துணுக்கை ஆப்ஸ் தவிர்த்துவிட்டது.</item>
+        <item quantity="other">செருகுவதற்கு எதுவுமில்லாத %1$d துணுக்குகளை ஆப்ஸ் தவிர்த்துவிட்டது.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d துணுக்கு ஒரு படிவத்தை நிரப்பக் கேட்கிறது. செயலி படிவத்தை உரையாகச் செருகி, கர்சரை முதல் காலி இடத்தில் வைக்கும்.</item>
+        <item quantity="other">%1$d துணுக்குகள் படிவத்தை நிரப்பக் கேட்கின்றன. செயலி ஒவ்வொரு படிவத்தையும் உரையாகச் செருகி, கர்சரை முதல் காலி இடத்தில் வைக்கும்.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">படத்தைச் செருகும் %1$d துணுக்கை ஆப்ஸ் தவிர்த்துவிட்டது.</item>
+        <item quantity="other">படங்களைச் செருகும் %1$d துணுக்குகளை ஆப்ஸ் தவிர்த்துவிட்டது.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">இந்தக் கோப்பு %1$d பிற கோப்பைப் படிக்கிறது. ஒரு கோப்பு மற்றவற்றை தன்னுடன் கொண்டு வர முடியாது.</item>
+        <item quantity="other">இந்தக் கோப்பு %1$d பிற கோப்புகளைப் படிக்கிறது. ஒரு கோப்பு மற்றவற்றை தன்னுடன் கொண்டு வர முடியாது.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d ஸ்னிப்பெட் பிற ஸ்னிப்பெட்டுகளைச் சுட்டிக்காட்டுகிறது. இதைச் சொல்ல Espanso-வில் வழியில்லை, எனவே இணைப்புகள் தவிர்க்கப்பட்டன.</item>
+        <item quantity="other">%1$d ஸ்னிப்பெட்டுகள் பிற ஸ்னிப்பெட்டுகளைச் சுட்டிக்காட்டுகின்றன. இதைச் சொல்ல Espanso-வில் வழியில்லை, எனவே இணைப்புகள் தவிர்க்கப்பட்டன.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d தூண்டுதல் ஒரு சொல்லுக்குள் செயல்படும் வகையில் உள்ளது. உங்கள் தொலைபேசியில் இது முழுச் சொல்லாக மட்டுமே செயல்படும்.</item>
+        <item quantity="other">%1$d தூண்டுதல்கள் ஒரு சொல்லுக்குள் செயல்படும் வகையில் உள்ளன. உங்கள் தொலைபேசியில் இவை முழுச் சொற்களாக மட்டுமே செயல்படும்.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d ஸ்னிப்பெட் Espanso-வில் இணையான மதிப்பு இல்லாத ஒன்றைப் பயன்படுத்துகிறது. அது அப்படியே எழுதப்பட்டுள்ளது.</item>
+        <item quantity="other">%1$d ஸ்னிப்பெட்டுகள் Espanso-வில் இணையான மதிப்பு இல்லாதவற்றைப் பயன்படுத்துகின்றன. அவை அப்படியே எழுதப்பட்டுள்ளன.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">ஆப் %1$d ஸ்னிப்பெட்டிலிருந்து பேட்டர்னை நீக்கியது. ஆப் அந்த வடிவத்தின் பேட்டர்ன்களை இயக்குவதில்லை. ஸ்னிப்பெட் பட்டியலில் இருக்கும்.</item>
+        <item quantity="other">ஆப் %1$d ஸ்னிப்பெட்டுகளிலிருந்து பேட்டர்னை நீக்கியது. ஆப் அந்த வடிவத்தின் பேட்டர்ன்களை இயக்குவதில்லை. ஸ்னிப்பெட்டுகள் பட்டியலில் இருக்கும்.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d துணுக்கு வடிவமைக்கப்பட்ட உரையைப் பயன்படுத்துகிறது. செயலி சொற்களை வைத்துக்கொண்டு வடிவமைப்பை நீக்குகிறது.</item>
+        <item quantity="other">%1$d துணுக்குகள் வடிவமைக்கப்பட்ட உரையைப் பயன்படுத்துகின்றன. செயலி சொற்களை வைத்துக்கொண்டு வடிவமைப்பை நீக்குகிறது.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d ஸ்னிப்பெட் உங்கள் கணினியில் ஒரு கட்டளையை இயக்குகிறது. ஆப் அந்த கட்டளையை நீக்கிவிட்டது மற்றும் அதை ஒருபோதும் இயக்குவதில்லை.</item>
+        <item quantity="other">%1$d ஸ்னிப்பெட்டுகள் உங்கள் கணினியில் கட்டளைகளை இயக்குகின்றன. ஆப் அந்த கட்டளைகளை நீக்கிவிட்டது மற்றும் அவற்றை ஒருபோதும் இயக்குவதில்லை.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d தூண்டுதல் குறியீடுகளால் மட்டுமே ஆனது, எனவே செயலியால் அதைக் கவனிக்க முடியாது. அதன் ஸ்னிப்பெட் பட்டியலில் இருக்கும்.</item>
+        <item quantity="other">%1$d தூண்டுதல்கள் குறியீடுகளால் மட்டுமே ஆனவை, எனவே செயலியால் அவற்றைக் கவனிக்க முடியாது. அவற்றின் ஸ்னிப்பெட்டுகள் பட்டியலில் இருக்கும்.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d ஸ்னிப்பெட், {date} போன்ற இந்த ஆப் நிரப்பும் அடைப்புக்குறிக்குள் உள்ள உரையை கொண்டுள்ளது. அது எழுதப்பட்டபடி தோன்றுவதற்கு பதிலாக விரிவடையும்.</item>
+        <item quantity="other">%1$d ஸ்னிப்பெட்டுகள், {date} போன்ற இந்த ஆப் நிரப்பும் அடைப்புக்குறிக்குள் உள்ள உரையை கொண்டுள்ளன. அவை எழுதப்பட்டபடி தோன்றுவதற்கு பதிலாக விரிவடையும்.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d ஸ்னிப்பெட் அதன் பேட்டர்ன் கைப்பற்றியவற்றின் பெரிய எழுத்துக்களை மாற்றுகிறது. Espanso அதைச் செய்ய முடியாது, எனவே கைப்பற்றப்பட்ட உரை மாற்றப்படாமல் அப்படியே இருக்கும்.</item>
+        <item quantity="other">%1$d ஸ்னிப்பெட்டுகள் அவற்றின் பேட்டர்ன்கள் கைப்பற்றியவற்றின் பெரிய எழுத்துக்களை மாற்றுகின்றன. Espanso அதைச் செய்ய முடியாது, எனவே கைப்பற்றப்பட்ட உரை மாற்றப்படாமல் அப்படியே இருக்கும்.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d துணுக்கு, ஆப்ஸ் இணையாகக் கொண்டிராத ஒரு மதிப்பை பயன்படுத்துகிறது. அந்தப் பகுதி காலியாக வரும்.</item>
+        <item quantity="other">%1$d துணுக்குகள், ஆப்ஸ் இணையாகக் கொண்டிராத மதிப்புகளைப் பயன்படுத்துகின்றன. அந்தப் பகுதிகள் காலியாக வரும்.</item>
+    </plurals>
+    <string name="core_content_font_error_download">செயலியால் எழுத்துருவைப் பதிவிறக்க முடியவில்லை. உங்கள் இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_content_font_error_empty">கோப்பு காலியாக உள்ளது.</string>
+    <string name="core_content_font_error_load">பயன்பாட்டால் இந்த எழுத்துரு கோப்பை ஏற்ற முடியாது.</string>
+    <string name="core_content_font_error_markup">இந்தக் கோப்பு ஒரு HTML அல்லது XML கோப்பு, எழுத்துரு (font) அல்ல.</string>
+    <string name="core_content_font_error_no_storage">எழுத்துருவிற்குச் சேமிப்பகம் இல்லை.</string>
+    <string name="core_content_font_error_not_a_font">இந்தக் கோப்பு .ttf அல்லது .otf எழுத்துரு போலத் தெரியவில்லை.</string>
+    <string name="core_content_font_error_read">ஆப்ஸால் எழுத்துருவை வாசிக்க முடியவில்லை.</string>
+    <string name="core_content_font_error_save">ஆப்பால் எழுத்துருவைச் சேமிக்க முடியவில்லை.</string>
+    <string name="core_content_font_error_too_large">எழுத்துரு %1$d MB-க்கும் குறைவாக இருக்க வேண்டும்.</string>
+    <string name="core_content_font_error_too_many">எழுத்துரு நூலகம் நிறைந்துள்ளது. ஒரு எழுத்துருவை நீக்கிவிட்டு மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_content_font_error_too_short">கோப்பு எழுத்துருவாக இருக்க மிகவும் சிறியது.</string>
+    <string name="core_content_font_error_woff">இந்த ஆப்ஸால் WOFF இணைய எழுத்துருக்களைப் படிக்க முடியாது. எழுத்துருவின் .ttf அல்லது .otf பதிப்பைப் பயன்படுத்தவும்.</string>
+    <string name="core_content_font_error_woff2">பயன்பாட்டால் WOFF2 இணைய எழுத்துருக்களைப் படிக்க முடியாது. எழுத்துருவின் .ttf அல்லது .otf பதிப்பைப் பயன்படுத்தவும்.</string>
+    <string name="core_content_font_error_zip">இந்தக் கோப்பு ஒரு ஜிப் ஆவணக் காப்பகம், எழுத்துரு அல்ல.</string>
+    <string name="core_content_selection_macro_add_contact">தொடர்பு</string>
+    <string name="core_content_selection_macro_calendar">நாட்காட்டி</string>
+    <string name="core_content_selection_macro_call">அழை</string>
+    <string name="core_content_selection_macro_case_lower">சிறிய எழுத்து</string>
+    <string name="core_content_selection_macro_case_sentence">வாக்கிய வடிவம்</string>
+    <string name="core_content_selection_macro_case_title">தலைப்பு எழுத்து நடை</string>
+    <string name="core_content_selection_macro_case_upper">பெரிய எழுத்துக்கள்</string>
+    <string name="core_content_selection_macro_chat_bold">தடித்த எழுத்து</string>
+    <string name="core_content_selection_macro_chat_italic">சாய்வெழுத்து</string>
+    <string name="core_content_selection_macro_chat_mono">மோனோ</string>
+    <string name="core_content_selection_macro_chat_strike">அடித்தல் (Strike)</string>
+    <string name="core_content_selection_macro_colour">நிறம்</string>
+    <string name="core_content_selection_macro_copy">நகலெடு</string>
+    <string name="core_content_selection_macro_digits_latin">எண்கள்</string>
+    <string name="core_content_selection_macro_email">மின்னஞ்சல்</string>
+    <string name="core_content_selection_macro_fancy">அலங்காரமான</string>
+    <string name="core_content_selection_macro_find">கண்டுபிடி</string>
+    <string name="core_content_selection_macro_format">வடிவமை</string>
+    <string name="core_content_selection_macro_grammar">இலக்கணம்</string>
+    <string name="core_content_selection_macro_lines_bullet">புல்லட்டுகள்</string>
+    <string name="core_content_selection_macro_lines_dedupe">தனித்துவமானது</string>
+    <string name="core_content_selection_macro_lines_number">எண்</string>
+    <string name="core_content_selection_macro_lines_sort">வரிசைப்படுத்து</string>
+    <string name="core_content_selection_macro_map">வரைபடம்</string>
+    <string name="core_content_selection_macro_open">திற</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">பேசவும்</string>
+    <string name="core_content_selection_macro_replace">மாற்றவும்</string>
+    <string name="core_content_selection_macro_search">தேடு</string>
+    <string name="core_content_selection_macro_share">பகிரவும்</string>
+    <string name="core_content_selection_macro_sms">செய்தி</string>
+    <string name="core_content_selection_macro_time_zones">மண்டலங்கள்</string>
+    <string name="core_content_selection_macro_to_bangla">பெங்காலி</string>
+    <string name="core_content_selection_macro_to_banglish">பாங்க்லிஷ்</string>
+    <string name="core_content_selection_macro_translate">மொழிபெயர்க்கவும்</string>
+    <string name="core_content_selection_macro_url_decode">டிகோட் செய்யவும்</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">செயலி \"%1$s\" இலிருந்து %2$d விரிவாக்கத்தை விட்டுவிட்டது.</item>
+        <item quantity="other">செயலி \"%1$s\" இலிருந்து %2$d விரிவாக்கங்களை விட்டுவிட்டது.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">\"%1$s\" என்பதிலிருந்து அந்த பேட்டர்னை செயலி நீக்கிவிட்டது. பேட்டர்ன் சரியாக இல்லை. ஸ்னிப்பெட் பட்டியலில் அப்படியே இருக்கும்.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">பெயரில்லாத அல்லது மற்றொன்றை மீண்டும் கொண்ட %1$d கோப்புறையை ஆப்ஸ் நீக்கியது. அதன் துணுக்குகள் கோப்புறை இல்லாமல் வந்தன.</item>
+        <item quantity="other">பெயரில்லாத அல்லது மற்றொன்றை மீண்டும் கொண்ட %1$d கோப்புறைகளை ஆப்ஸ் நீக்கியது. அவற்றின் துணுக்குகள் கோப்புறை இல்லாமல் வந்தன.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">கோப்பில் செயலி வைத்திருப்பதை விட அதிகமான துணுக்குகள் உள்ளன. செயலி முதல் %1$d துணுக்குகளை இறக்குமதி செய்தது.</item>
+        <item quantity="other">கோப்பில் செயலி வைத்திருப்பதை விட அதிகமான துணுக்குகள் உள்ளன. செயலி முதல் %1$d துணுக்குகளை இறக்குமதி செய்தது.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">ஒரு ஸ்னிப்பெட்டிற்கு பெயர்கள் இல்லை, எனவே செயலி அதன் முதல் வரியை அடிப்படையாகக் கொண்டு அதற்குப் பெயரிட்டது.</string>
+    <string name="core_content_snippet_repair_no_text">ஆப் \"%1$s\"-ஐ நீக்கியது. இதில் உரை இல்லை.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">\"%1$s\" இலிருந்து பேட்டர்னை ஆப்ஸ் நீக்கியது. அது %2$d எழுத்தை விட நீளமாக இருந்தது.</item>
+        <item quantity="other">\"%1$s\" இலிருந்து பேட்டர்னை ஆப்ஸ் நீக்கியது. அது %2$d எழுத்துகளை விட நீளமாக இருந்தது.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">பயன்பாடு \"%1$s\" என்பதைச் சுருக்கியது. இது %2$d எழுத்தை விட நீளமாக இருந்தது.</item>
+        <item quantity="other">பயன்பாடு \"%1$s\" என்பதைச் சுருக்கியது. இது %2$d எழுத்துகளை விட நீளமாக இருந்தது.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">நீங்கள் தட்டச்சு செய்யும் செயலியின் பெயர்</string>
+    <string name="core_content_snippet_var_clip_info">மிகப் புதிய கிளிப்போர்டு உள்ளீடு</string>
+    <string name="core_content_snippet_var_cursor_info">கர்சர் அமரும் இடம்</string>
+    <string name="core_content_snippet_var_date_info">இன்றைய தேதி</string>
+    <string name="core_content_snippet_var_datetime_info">தேதி மற்றும் நேரம்</string>
+    <string name="core_content_snippet_var_day_info">மாதத்தின் நாள்</string>
+    <string name="core_content_snippet_var_isodate_info">ISO வடிவத்தில் உள்ள தேதி, உதாரணமாக 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">ISO வடிவத்தில் தேதி மற்றும் நேரம்</string>
+    <string name="core_content_snippet_var_month_info">மாதத்தின் பெயர்</string>
+    <string name="core_content_snippet_var_package_info">அந்த ஆப்ஸின் தொகுப்பு பெயர்</string>
+    <string name="core_content_snippet_var_selection_info">புலத்தில் நீங்கள் தேர்ந்தெடுக்கும் உரை</string>
+    <string name="core_content_snippet_var_time12_info">தற்போதைய நேரம் 12-மணிநேர வடிவில்</string>
+    <string name="core_content_snippet_var_time_info">தற்போதைய நேரம் 24-மணிநேர வடிவில்</string>
+    <string name="core_content_snippet_var_timestamp_info">Unix வினாடிகளில் நேரம்</string>
+    <string name="core_content_snippet_var_timezone_info">நேர மண்டலம், உதாரணமாக GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">புதிய ரேண்டம் UUID</string>
+    <string name="core_content_snippet_var_weekday_info">நாளின் பெயர், உதாரணமாக ஞாயிறு</string>
+    <string name="core_content_snippet_var_year_info">ஆண்டு, நான்கு இலக்கங்களுடன்</string>
+    <string name="core_content_sticker_pack_imported_label">இறக்குமதி செய்யப்பட்ட ஸ்டிக்கர்கள்</string>
+    <string name="core_content_sticker_repair_image_missing">ஆப்ஸ் \"%1$s\"-ஐ நீக்கியது. அதன் படம் காணவில்லை.</string>
+    <string name="core_content_sticker_repair_image_unreadable">ஆப் \"%1$s\"-ஐ நீக்கியது. அதன் படத்தை ஆப்பால் படிக்க முடியவில்லை.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">இந்த பேக்கில் %1$d ஸ்டிக்கர் உள்ளது. ஆப்ஸ் முதல் %2$d-ஐ வைத்திருக்கிறது.</item>
+        <item quantity="other">இந்த பேக்கில் %1$d ஸ்டிக்கர்கள் உள்ளன. ஆப்ஸ் முதல் %2$d-ஐ வைத்திருக்கிறது.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">ஆப் ஒரு ஸ்டிக்கரை நீக்கியது. அந்த ஸ்டிக்கர் எந்தப் படக் கோப்பையும் குறிப்பிடவில்லை.</string>
+    <string name="core_content_sticker_repair_none_listed">பேக் கோப்பில் ஸ்டிக்கர்கள் எதுவும் பட்டியலிடப்படவில்லை.</string>
+    <string name="core_content_sticker_repair_not_saved">பயன்பாடு \"%1$s\"ஐ நீக்கிவிட்டது. அந்தப் பயன்பாட்டால் அதைச் சேமிக்க முடியவில்லை.</string>
+</resources>

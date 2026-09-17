@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">ఈ మోడల్ గేట్ చేయబడింది. ముందుగా మీ హగ్గింగ్ ఫేస్ టోకెన్‌ను జోడించండి.</string>
+    <string name="core_intel_llm_download_error_http">హగ్గింగ్ ఫేస్ (Hugging Face) HTTP స్థితి %1$sని అందించింది.</string>
+    <string name="core_intel_llm_download_error_licence">దాని Hugging Face పేజీలో మోడల్ లైసెన్స్‌ను అంగీకరించండి. ఆపై మళ్ళీ ప్రయత్నించండి.</string>
+    <string name="core_intel_llm_download_error_no_space">మీ పరికరంలో తగినంత నిల్వ లేదు. ముందుగా సుమారు %1$s GB ఖాళీ చేయండి.</string>
+    <string name="core_intel_llm_download_error_token_rejected">హగ్గింగ్ ఫేస్ టోకెన్‌ను అంగీకరించలేదు. టోకెన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.</string>
+    <string name="core_intel_llm_download_error_truncated">డౌన్‌లోడ్ సమయంలో కనెక్షన్ ఆగిపోయింది. కొనసాగించడానికి \'రీజ్యూమ్\' (Resume) నొక్కండి.</string>
+    <string name="core_intel_llm_engine_error_gpu">GPUపై మోడల్ విఫలమైంది. GPU మెమరీ సిస్టమ్ మెమరీ కంటే చాలా తక్కువగా ఉంటుంది. తదుపరి ప్రయత్నం CPUని ఉపయోగిస్తుంది. ఎల్లప్పుడూ CPUని ఉపయోగించడానికి, సెట్టింగ్‌లలో కంప్యూట్‌ను CPUకి సెట్ చేయండి. మీరు చిన్న మోడల్‌ను కూడా ఎంచుకోవచ్చు.</string>
+    <string name="core_intel_llm_engine_error_load">మోడల్ లోడ్ కాలేదు. ఫైల్ బహుశా పాడై ఉండవచ్చు. సెట్టింగ్‌లలో మోడల్‌ను తొలగించి, మళ్లీ డౌన్‌లోడ్ చేయండి.</string>
+    <string name="core_intel_llm_engine_error_memory">మోడల్ మెమరీ అయిపోయింది లేదా విఫలమైంది. చిన్న మోడల్‌ను ఎంచుకోండి.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">మునుపటి తరం నుండి వచ్చిన చిన్న జెమ్మా. ఇది మంచి నాణ్యతను మరియు 4K టోకెన్ల సందర్భాన్ని కలిగి ఉంది.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">గూగుల్ నుండి అతి చిన్న గెమ్మా. ఇది అన్ని పరికరాల్లో వేగంగా పనిచేస్తుంది.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">అత్యంత కొత్త జెమ్మా జనరేషన్. ఇది మీ పరికరంలో అత్యుత్తమ నాణ్యతను అందిస్తుంది.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">అతిపెద్ద మోడల్. ఇది ఉత్తమంగా వ్రాస్తుంది, కానీ దీనికి శక్తివంతమైన పరికరం అవసరం.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">సాధారణ పరికరాల్లో కూడా పనిచేసే ఒక సాధారణ ప్రయోజన మోడల్.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">1B కంటే తక్కువ ఉన్న మోడల్స్ కంటే ఇది స్పష్టంగా తెలివైనది. దీనికి మిడ్-రేంజ్ పరికరం అవసరం.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">ఇది ఇటీవలి చిన్న మోడల్. దీని పరిమాణానికి తగినట్లుగా నాణ్యత ఎక్కువగా ఉంటుంది.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">చాలా చిన్నది మరియు వేగవంతమైనది. ఇది త్వరితగతిన తిరిగి రాయడానికి బాగుంటుంది, కానీ దీని విశ్లేషణా సామర్థ్యం పరిమితం.</string>
+    <string name="core_intel_llm_module_downloading">కీబోర్డ్ యొక్క AI భాగం గూగుల్ ప్లే నుండి డౌన్‌లోడ్ అవుతోంది. కాసేపటి తర్వాత మళ్ళీ ప్రయత్నించండి.</string>
+    <string name="core_intel_llm_module_restart">AI భాగం ఇన్‌స్టాల్ అవ్వడం పూర్తయింది. దీన్ని ఉపయోగించడానికి కీబోర్డ్‌ను మూసివేసి మళ్లీ తెరవండి.</string>
+    <string name="core_intel_llm_tier_experimental_label">ప్రయోగాత్మక</string>
+    <string name="core_intel_llm_tier_recommended_label">సిఫార్సు చేయబడింది</string>
+    <string name="core_intel_llm_tier_untested_label">పరీక్షించబడలేదు</string>
+</resources>

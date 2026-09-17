@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">பதிவிறக்கம் செய்யப்பட்ட கோப்பு சேதமடைந்துள்ளது. அதன் செக்சம் பொருந்தவில்லை. பதிவிறக்கத்தை மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_input_cjk_download_error_http">சர்வர் HTTP நிலை %1$s ஐத் திருப்பியளித்தது.</string>
+    <string name="core_input_cjk_download_error_network">பதிவிறக்கம் வேலை செய்யவில்லை. உங்கள் இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_input_cjk_download_error_network_detail">பதிவிறக்கம் வேலை செய்யவில்லை: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">உங்கள் சாதனத்தில் போதிய சேமிப்பிடம் இல்லை. முதலில் சிறிது இடத்தை காலி செய்யவும்.</string>
+    <string name="core_input_cjk_download_error_truncated">பதிவிறக்கத்தின் போது இணைப்பு துண்டிக்கப்பட்டது. தொடர \'மீண்டும் தொடங்கு\' என்பதை அழுத்தவும்.</string>
+    <string name="core_input_cjk_download_error_unavailable">இந்த பேக் இன்னும் கிடைக்கவில்லை.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">ஹான்சி எழுத்துக்களுக்கான ரேடிக்கல் குறியீடுகளின் அட்டவணை, 29,000 எழுத்துக்கள். கேங்ஜி மற்றும் குயிக் லேஅவுட்களுக்கு விசைப்பலகைக்கு இந்த பேக் தேவை.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) அகராதி</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">மோஸ்க்கிலிருந்து (mozc) கானா வாசிப்புகள், 1.08 மில்லியன் உள்ளீடுகள், சுமார் 42 எம்பி. ஜப்பானிய மொழி மாற்றத்திற்கு விசைப்பலகைக்கு இந்த பேக் தேவை.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">ஜப்பானிய கானா முதல் காஞ்சி அகராதி</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">ஜியுட்பிங் வாசிப்புகளை ஹான்சி எழுத்துக்களுடன் இணைக்கும் அட்டவணை, 163,000 உள்ளீடுகள். கான்டோனீஸ் மாற்றத்திற்கு விசைப்பலகைக்கு இந்த பேக் தேவை.</string>
+    <string name="core_input_cjk_pack_jyutping_title">காண்டனீஸ் ஜியுட்பிங் அகராதி</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT-லிருந்து ஹான்சி எழுத்துக்கள் மற்றும் சொற்றொடர்கள், 120,000 உள்ளீடுகள். சீன மொழி மாற்றத்திற்கு விசைப்பலகைக்கு இந்த பேக் தேவை.</string>
+    <string name="core_input_cjk_pack_pinyin_title">சீன பின்யின் அகராதி</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">ஹான்சி எழுத்துக்களுக்கான பக்கவாட்டு வரிசை அட்டவணை. பக்கவாட்டு தளவமைப்பிற்கு விசைப்பலகைக்கு இந்த பேக் தேவை.</string>
+    <string name="core_input_cjk_pack_stroke_title">சீன ஸ்ட்ரோக் (笔画) அகராதி</string>
+    <string name="core_input_double_pinyin_off_label">முடக்கப்பட்டது (முழு பின்யின்)</string>
+</resources>

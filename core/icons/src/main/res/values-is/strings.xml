@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Emoji flipar</string>
+    <string name="core_icons_group_keys_title">Lyklar</string>
+    <string name="core_icons_group_toolbar_title">Tækjastika</string>
+    <string name="core_icons_group_tools_title">Tól</string>
+    <string name="core_icons_pack_imported_label">Innflutt tákn</string>
+    <string name="core_icons_pack_mine_label">Táknin mín</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Forritið hunsaði %1$d skrá. Þessi útgáfa hefur ekkert tákn fyrir hana: %2$s</item>
+        <item quantity="other">Forritið hunsaði %1$d skrár. Þessi útgáfa hefur ekkert tákn fyrir þær: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Forritið sleppti \"%1$s\". Forritið getur ekki vistað það.</string>
+    <string name="core_icons_repair_svg_unreadable">Forritið sleppti \"%1$s\". Forritið getur ekki lesið SVG-skrána.</string>
+    <string name="core_icons_slot_backspace_label">Bakfærsla</string>
+    <string name="core_icons_slot_caps_lock_label">Hástafalás</string>
+    <string name="core_icons_slot_emoji_activities_label">Virkni</string>
+    <string name="core_icons_slot_emoji_animals_label">Dýr</string>
+    <string name="core_icons_slot_emoji_flags_label">Fánar</string>
+    <string name="core_icons_slot_emoji_food_label">Matur</string>
+    <string name="core_icons_slot_emoji_key_label">Emoji-lykill</string>
+    <string name="core_icons_slot_emoji_most_used_label">Mest notað</string>
+    <string name="core_icons_slot_emoji_nature_label">Náttúra</string>
+    <string name="core_icons_slot_emoji_objects_label">Hlutir</string>
+    <string name="core_icons_slot_emoji_people_label">Fólk</string>
+    <string name="core_icons_slot_emoji_recent_label">Nýleg</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Emoji-flýtileið</string>
+    <string name="core_icons_slot_emoji_smileys_label">broskarlar</string>
+    <string name="core_icons_slot_emoji_symbols_label">Tákn</string>
+    <string name="core_icons_slot_emoji_travel_label">Ferðalög</string>
+    <string name="core_icons_slot_enter_done_label">Enter: lokið</string>
+    <string name="core_icons_slot_enter_go_label">Enter: áfram</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: næsta</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: fyrra</string>
+    <string name="core_icons_slot_enter_search_label">Enter: leita</string>
+    <string name="core_icons_slot_enter_send_label">Enter: senda</string>
+    <string name="core_icons_slot_forward_delete_label">Eyða áfram</string>
+    <string name="core_icons_slot_globe_label">Skipta um tungumál</string>
+    <string name="core_icons_slot_incognito_label">Nafnlaust merki</string>
+    <string name="core_icons_slot_input_method_picker_label">Skipta um lyklaborð</string>
+    <string name="core_icons_slot_panel_back_label">Til baka í lykla</string>
+    <string name="core_icons_slot_power_saving_label">Merki um rafhlöðusparnað</string>
+    <string name="core_icons_slot_search_close_label">Loka leit</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (á)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Sýna verkfæri</string>
+    <string name="core_icons_slot_toolbox_label">Verkfærakassi</string>
+</resources>

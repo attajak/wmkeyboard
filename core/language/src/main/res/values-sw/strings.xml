@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Programu imebadilisha ufunguo %1$d kuwa ufunguo wa karibu zaidi ilionao.</item>
+        <item quantity="other">Programu imebadilisha funguo %1$d kuwa funguo za karibu zaidi ilizonazo.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Programu imeondoa ufunguo %1$d. Kibodi hii haina ufunguo unaofanya kitu kilekile (kodi %2$s).</item>
+        <item quantity="other">Programu imeondoa funguo %1$d. Kibodi hii haina funguo zinazofanya kitu kilekile (kodi %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Programu ilihifadhi ukubwa wa lebo ya kitufe %1$d lakini si mtindo wake wa maandishi. Kibodi hii huchora lebo katika mtindo mmoja.</item>
+        <item quantity="other">Programu ilihifadhi ukubwa wa lebo ya vitufe %1$d lakini si mtindo wao wa maandishi. Kibodi hii huchora lebo katika mtindo mmoja.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Programu imebadilisha herufi %1$d kuwa umbo ambalo kibodi hii huandika.</item>
+        <item quantity="other">Programu imebadilisha herufi %1$d kuwa umbo ambalo kibodi hii huandika.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">Ufunguo %1$d hauna herufi za kubonyeza na kushikilia. Faili linazihifadhi katika faili la pili ambalo hukulifungua.</item>
+        <item quantity="other">Funguo %1$d hazina herufi za kubonyeza na kushikilia. Faili linazihifadhi katika faili la pili ambalo hukulifungua.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Kibodi nyingine hupima upana wa vitufe kwa njia tofauti. Programu imebadilisha upana ili kutoshea gridi hii.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">Ufunguo wa nukta ya braille %1$d katika safu ya %2$s una namba ya nukta nje ya 1 hadi 6.</item>
+        <item quantity="other">Funguo za nukta za braille %1$d katika safu ya %2$s zina namba ya nukta nje ya 1 hadi 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">Ufunguo %1$d katika safu ya %2$s hauna lebo na hauna pato. Hauandiki chochote, na programu huufuta unapowasha mpangilio huu.</item>
+        <item quantity="other">Funguo %1$d katika safu ya %2$s hazina lebo na hazina pato. Haziandiki chochote, na programu huzifuta unapowasha mpangilio huu.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Safu ya %1$d ya safu ya %2$s haina kitu.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">Ufunguo %1$d katika safu ya %2$s ni sehemu ya paneli. Vipengele hufanya kazi katika mpangilio wa paneli pekee.</item>
+        <item quantity="other">Funguo %1$d katika safu ya %2$s ni sehemu za paneli. Vipengele hufanya kazi katika mpangilio wa paneli pekee.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Safu ya %1$d ya safu ya %2$s ina kitufe kisicho na upana.</string>
+    <string name="core_lang_layout_key_span_error">Mstari %1$d wa tabaka la %2$s una ufunguo unaofunika chini ya 1 au zaidi ya %3$d mistari.</string>
+    <string name="core_lang_layout_letters_empty_error">Tabaka la herufi halina vifunguo.</string>
+    <string name="core_lang_layout_no_delete_error">Mpangilio hauna ufunguo wa kufuta. Huwezi kurekebisha makosa.</string>
+    <string name="core_lang_layout_no_enter_error">Mpangilio hauna ufunguo wa kuingiza (enter).</string>
+    <string name="core_lang_layout_no_shift_warning">Mpangilio huu hauna kitufe cha shift. Ili kuandika herufi kubwa, bonyeza na ushikilie kitufe.</string>
+    <string name="core_lang_layout_no_space_error">Mpangilio hauna ufunguo wa nafasi.</string>
+    <string name="core_lang_layout_no_way_back_error">Tabaka la %1$s halina ufunguo unaorudi kwenye herufi. Huwezi kuondoka kwenye tabaka hili.</string>
+    <string name="core_lang_layout_persistent_warning">Safu ya %1$s inabaki wazi wakati kibodi inafungwa. Hakikisha una njia ya kutoka kwenye mpangilio huu.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Mpangilio huu hauna kitufe cha kuutoka. Hakikisha una njia ya kutoka kwenye mpangilio huu: kitufe cha ABC, kitufe cha alama, au zana ya mpangilio wa Sekondari kwenye upau wa zana.</string>
+    <string name="core_lang_layout_span_past_end_warning">Safu ya %1$d ya safu ya %2$s ina ufunguo unaofunika safu nyingi kuliko safu iliyo nayo. Kibodi huizuia kwenye safu ya mwisho.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Safu ya %1$d ya safu ya %2$s ina ufunguo %3$d. Ufunguo %4$d pekee ndio unabaki mkubwa wa kutosha kubonyeza.</item>
+        <item quantity="other">Safu ya %1$d ya safu ya %2$s ina funguo %3$d. Funguo %4$d pekee ndizo zinazobaki kubwa za kutosha kubonyeza.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Tabaka la %1$s lina safu %2$d. Safu %3$d pekee ndizo zinazotoshea.</item>
+        <item quantity="other">Tabaka la %1$s lina safu %2$d. Safu %3$d pekee ndizo zinazotoshea.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">Kitufe %1$d katika safu ya %2$s kinatumia kitendo ambacho toleo hili la programu halijui.</item>
+        <item quantity="other">Vitufe %1$d katika safu ya %2$s vinatumia kitendo ambacho toleo hili la programu halijui.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Safu ya %1$d ya safu ya %2$s ni pana kuliko safu nyingine. Kibodi huchora funguo za safu hii kuwa nyembamba.</string>
+    <string name="core_lang_numeral_scope_display_only">Onyesha pekee</string>
+    <string name="core_lang_numeral_scope_everywhere">Kila mahali</string>
+    <string name="core_lang_numeral_scope_text_fields">Sehemu za maandishi</string>
+    <string name="core_lang_numeral_system_auto">Otomatiki</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">Kipengele %1$d kinaonekana zaidi ya mara moja. Programu huhifadhi nakala ya kwanza.</item>
+        <item quantity="other">Vipengele %1$d vinaonekana zaidi ya mara moja. Programu huhifadhi nakala ya kwanza ya kila kimoja.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Paneli hii haina funguo. Programu inatumia paneli ya kawaida badala yake.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">Ufunguo %1$d una kitendo kisichofanya kazi kwenye paneli. Programu inaufuta.</item>
+        <item quantity="other">Funguo %1$d zina vitendo visivyofanya kazi kwenye paneli. Programu inazifuta.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Paneli hii haina ufunguo wa ABC. Tumia upau wa zana au kitufe cha Nyuma ili kurudi kwenye funguo.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Programu imefuta nakala ya pili ya kijenzi.</string>
+    <string name="core_lang_panel_repair_field_added">Programu imeongeza sehemu kuu ya paneli katika safu mpya.</string>
+    <string name="core_lang_panel_repair_field_dropped">Programu imefuta kijenzi ambacho hakihusiani na paneli hii.</string>
+    <string name="core_lang_panel_repair_key_dropped">Programu imefuta ufunguo ambao kitendo chake hakifanyi kazi kwenye paneli.</string>
+    <string name="core_lang_panel_repair_reset">Programu imebadilisha paneli tupu na ile ya kawaida.</string>
+    <string name="core_lang_panel_required_field_error">Paneli hii inakosa sehemu yake kuu. Programu huongeza moja inapochora paneli.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">Kipengele %1$d hakimiliki paneli hii. Programu inakifuta.</item>
+        <item quantity="other">Vipengele %1$d havimiliki paneli hii. Programu inavifuta.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Programu imefuta ufunguo tupu katika safu ya %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Ufunguo katika safu ya %1$s ulitumia nukta ya braille %2$d. Programu imeifanya kuwa nukta %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Safu ya herufi haikuwa na kitufe cha kufuta. Programu imeongeza kimoja.</string>
+    <string name="core_lang_repair_enter_key_added">Safu ya herufi haikuwa na ufunguo wa kuingiza (enter). Programu imeongeza mmoja.</string>
+    <string name="core_lang_repair_field_key_deleted">Programu ilifuta kijenzi cha paneli kutoka kwa safu ya %1$s. Vijenzi hufanya kazi tu katika mpangilio wa paneli.</string>
+    <string name="core_lang_repair_key_letters_anchored">Ufunguo katika safu ya %1$s unawakilisha %2$s. Programu imefanya uandike %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Kitufe katika safu ya %1$s kiliorodhesha %2$s kama herufi kinazowakilisha. Hizo si herufi, kwa hivyo programu imekifanya kuwa kitufe cha kawaida.</string>
+    <string name="core_lang_repair_key_span_clamped">Kitufe katika safu ya %1$s kilichukua safu mlalo %2$d. Programu imekifanya kichukue %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Ufunguo katika safu ya %1$s ulikuwa na upana wa vitengo %2$s. Programu imeufanya uwe na upana wa vitengo %3$s.</string>
+    <string name="core_lang_repair_key_width_set">Ufunguo katika safu ya %1$s haukuwa na upana. Programu imeweka upana kuwa 1.</string>
+    <string name="core_lang_repair_layer_replaced">Safu ya %1$s haikuwa na vitufe vinavyofanya kazi. Sasa inatumia gridi iliyojengewa ndani.</string>
+    <string name="core_lang_repair_letters_key_added">Tabaka la %1$s halikuwa na kitufe kinachorudi kwenye herufi. Programu iliongeza kitufe cha ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Safu katika safu ya %1$s ilikuwa na ufunguo %2$d. Programu huhifadhi %3$d ya kwanza.</item>
+        <item quantity="other">Safu katika safu ya %1$s ilikuwa na funguo %2$d. Programu huhifadhi %3$d ya kwanza.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Safu katika safu ya %1$s ilikuwa na upana wa vitengo %2$s. Programu imefanya funguo kuwa ndogo ili safu hiyo iweze kutoshea.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Tabaka la %1$s lilikuwa na safu %2$d. Programu huhifadhi %3$d ya kwanza.</item>
+        <item quantity="other">Tabaka la %1$s lilikuwa na safu %2$d. Programu huhifadhi %3$d ya kwanza.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Safu ya herufi haikuwa na kitufe cha nafasi. Programu imeongeza kimoja.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Programu imefuta ufunguo katika safu ya %1$s. Kitendo chake \"%2$s\" hakijulikani.</string>
+</resources>

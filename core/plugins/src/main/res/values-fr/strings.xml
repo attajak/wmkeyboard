@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Ce plugin n\'a pas de fonction render().</string>
+    <string name="core_plugins_error_not_installed">Ce plugin n\'est pas installé.</string>
+    <string name="core_plugins_error_script_failed">Le script a échoué.</string>
+    <string name="core_plugins_error_script_missing">Le script pour ce plugin est manquant.</string>
+    <string name="core_plugins_error_turned_off">Ce plugin est désactivé.</string>
+    <string name="core_plugins_permission_storage_label">Enregistrer des données sur votre appareil</string>
+    <string name="core_plugins_reject_bad_encoding">« %1$s » contient un script qui n\'est pas un texte UTF-8 valide.</string>
+    <string name="core_plugins_reject_bad_id">Cet identifiant de plugin n\'est pas valide. Un identifiant doit comporter entre 3 et 64 caractères. Il peut contenir des lettres minuscules, des chiffres, des points, des tirets et des traits de soulignement.</string>
+    <string name="core_plugins_reject_compiled_lua">« %1$s » contient du code Lua compilé. Un plugin doit utiliser du code source brut afin que vous puissiez le lire avant son exécution.</string>
+    <string name="core_plugins_reject_empty_script">« %1$s » a un script vide.</string>
+    <string name="core_plugins_reject_missing_script">« %1$s » n\'a pas son fichier de script (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Ce plugin nécessite une version plus récente de WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Ce plugin n\'a pas de nom.</string>
+    <string name="core_plugins_reject_no_version">« %1$s » n\'indique pas sa version.</string>
+    <string name="core_plugins_reject_script_too_large">« %1$s » contient un script supérieur à %2$d Ko.</string>
+    <string name="core_plugins_reject_unknown_permission">Cette version de WM Keyboard ne connaît pas l\'autorisation « %1$s ». L\'application ne peut pas vous dire ce que « %2$s » est autorisé à faire.</string>
+    <string name="core_plugins_stopped_cancelled">L\'application a arrêté ce plugin.</string>
+    <string name="core_plugins_stopped_deadline">Ce plugin a pris trop de temps. L\'application l\'a arrêté.</string>
+    <string name="core_plugins_stopped_instructions">Ce plugin a effectué trop de tâches simultanément. L\'application l\'a arrêté.</string>
+    <string name="core_plugins_stopped_not_responding">Ce plugin a cessé de répondre. L\'application l\'a fermé.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Ce plugin a cessé de répondre à nouveau. L\'application l\'a désactivé.</string>
+    <string name="core_plugins_stopped_recursion">Ce plugin s\'est appelé lui-même trop de fois. L\'application l\'a arrêté.</string>
+    <string name="core_plugins_stopped_unexpected">Ce plugin s\'est arrêté de manière inattendue.</string>
+    <string name="core_plugins_ui_insert_action">Insérer</string>
+    <string name="core_plugins_ui_repair_no_type">Un widget n\'a pas indiqué son type.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Une liste de widgets contenait un élément qui n\'est pas un widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Une barre d\'onglets ne contenait aucune page.</string>
+    <string name="core_plugins_ui_repair_text_budget">Ce plugin a demandé à afficher trop de texte. L\'application en a omis une partie.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Certains textes étaient trop longs pour être affichés. L\'application les a raccourcis.</string>
+    <string name="core_plugins_ui_repair_too_deep">Certains widgets étaient imbriqués trop profondément pour être affichés.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Seuls les %1$d premiers onglets sont affichés.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Ce plugin a demandé plus de %1$d widgets. L\'application a supprimé le reste.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Cette version ne reconnaît pas le type de widget « %1$s ».</string>
+    <string name="core_plugins_ui_tab_default_title">Onglet %1$d</string>
+</resources>

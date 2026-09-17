@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Tab emoji</string>
+    <string name="core_icons_group_keys_title">Tombol</string>
+    <string name="core_icons_group_toolbar_title">Toolbar</string>
+    <string name="core_icons_group_tools_title">Alat</string>
+    <string name="core_icons_pack_imported_label">Ikon yang diimpor</string>
+    <string name="core_icons_pack_mine_label">Ikon saya</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Aplikasi mengabaikan %1$d file. Versi ini tidak memiliki ikon untuk file tersebut: %2$s</item>
+        <item quantity="other">Aplikasi mengabaikan %1$d file. Versi ini tidak memiliki ikon untuk file-file tersebut: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Aplikasi menjatuhkan \"%1$s\". Aplikasi tidak dapat menyimpannya.</string>
+    <string name="core_icons_repair_svg_unreadable">Aplikasi menjatuhkan \"%1$s\". Aplikasi tidak dapat membaca file SVG-nya.</string>
+    <string name="core_icons_slot_backspace_label">Backspace</string>
+    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_emoji_activities_label">Aktivitas</string>
+    <string name="core_icons_slot_emoji_animals_label">Hewan</string>
+    <string name="core_icons_slot_emoji_flags_label">Bendera</string>
+    <string name="core_icons_slot_emoji_food_label">Makanan</string>
+    <string name="core_icons_slot_emoji_key_label">Tombol emoji</string>
+    <string name="core_icons_slot_emoji_most_used_label">Paling sering digunakan</string>
+    <string name="core_icons_slot_emoji_nature_label">Alam</string>
+    <string name="core_icons_slot_emoji_objects_label">Objek</string>
+    <string name="core_icons_slot_emoji_people_label">Orang</string>
+    <string name="core_icons_slot_emoji_recent_label">Terbaru</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Pintasan emoji</string>
+    <string name="core_icons_slot_emoji_smileys_label">Smiley</string>
+    <string name="core_icons_slot_emoji_symbols_label">Simbol</string>
+    <string name="core_icons_slot_emoji_travel_label">Perjalanan</string>
+    <string name="core_icons_slot_enter_done_label">Enter: selesai</string>
+    <string name="core_icons_slot_enter_go_label">Enter: buka</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: berikutnya</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: sebelumnya</string>
+    <string name="core_icons_slot_enter_search_label">Enter: cari</string>
+    <string name="core_icons_slot_enter_send_label">Enter: kirim</string>
+    <string name="core_icons_slot_forward_delete_label">Hapus maju</string>
+    <string name="core_icons_slot_globe_label">Ganti bahasa</string>
+    <string name="core_icons_slot_incognito_label">Lencana penyamaran</string>
+    <string name="core_icons_slot_input_method_picker_label">Ganti papan ketik</string>
+    <string name="core_icons_slot_panel_back_label">Kembali ke tombol</string>
+    <string name="core_icons_slot_power_saving_label">Lencana hemat daya</string>
+    <string name="core_icons_slot_search_close_label">Tutup pencarian</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (aktif)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Tampilkan alat</string>
+    <string name="core_icons_slot_toolbox_label">Kotak alat</string>
+</resources>

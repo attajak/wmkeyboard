@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Acest plugin nu are o funcție render().</string>
+    <string name="core_plugins_error_not_installed">Acel plugin nu este instalat.</string>
+    <string name="core_plugins_error_script_failed">Scriptul a eșuat.</string>
+    <string name="core_plugins_error_script_missing">Scriptul pentru acel plugin lipsește.</string>
+    <string name="core_plugins_error_turned_off">Acel plugin este oprit.</string>
+    <string name="core_plugins_permission_storage_label">Salvează datele pe dispozitivul tău</string>
+    <string name="core_plugins_reject_bad_encoding">„%1$s” are un script care nu este text UTF-8 valid.</string>
+    <string name="core_plugins_reject_bad_id">Acest plugin are un ID nevalid. Un ID trebuie să aibă între 3 și 64 de caractere. Un ID poate conține litere mici, cifre, puncte, cratime și caractere de subliniere.</string>
+    <string name="core_plugins_reject_compiled_lua">„%1$s” conține cod Lua compilat. Un plugin trebuie să folosească cod sursă simplu, astfel încât să îl poți citi înainte de a fi executat.</string>
+    <string name="core_plugins_reject_empty_script">„%1$s” are un script gol.</string>
+    <string name="core_plugins_reject_missing_script">„%1$s” nu are fișierul său de script (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Acest plugin are nevoie de o versiune mai nouă de WM Keyboard.</string>
+    <string name="core_plugins_reject_no_name">Acest plugin nu are un nume.</string>
+    <string name="core_plugins_reject_no_version">„%1$s” nu specifică ce versiune este.</string>
+    <string name="core_plugins_reject_script_too_large">„%1$s” are un script mai mare de %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">Această versiune de WM Keyboard nu cunoaște permisiunea „%1$s”. Aplicația nu îți poate spune ce are voie să facă „%2$s”.</string>
+    <string name="core_plugins_stopped_cancelled">Aplicația a oprit acest plugin.</string>
+    <string name="core_plugins_stopped_deadline">Acest plugin a durat prea mult. Aplicația l-a oprit.</string>
+    <string name="core_plugins_stopped_instructions">Acest plugin a efectuat prea multe operațiuni simultan. Aplicația l-a oprit.</string>
+    <string name="core_plugins_stopped_not_responding">Acest plugin a încetat să răspundă. Aplicația l-a închis.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Acest plugin a încetat din nou să răspundă. Aplicația l-a dezactivat.</string>
+    <string name="core_plugins_stopped_recursion">Acest plugin s-a apelat singur de prea multe ori. Aplicația l-a oprit.</string>
+    <string name="core_plugins_stopped_unexpected">Acest plugin s-a oprit neașteptat.</string>
+    <string name="core_plugins_ui_insert_action">Inserează</string>
+    <string name="core_plugins_ui_repair_no_type">Un widget nu a specificat ce tip este.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">O listă de widgeturi conținea ceva ce nu este un widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">O bandă de file nu avea pagini.</string>
+    <string name="core_plugins_ui_repair_text_budget">Acest plugin a solicitat afișarea prea multui text. Aplicația a omis o parte din acesta.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Un text a fost prea lung pentru a fi afișat. Aplicația l-a scurtat.</string>
+    <string name="core_plugins_ui_repair_too_deep">Unele widgeturi au fost imbricate prea adânc pentru a fi afișate.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Sunt afișate doar primele %1$d file.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Acest plugin a solicitat mai mult de %1$d widgeturi. Aplicația le-a eliminat pe restul.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Această versiune nu cunoaște tipul de widget „%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Filă %1$d</string>
+</resources>

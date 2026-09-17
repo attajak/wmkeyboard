@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Listan med emoji-nyckelord är tom eller oläslig.</string>
+    <string name="core_emoji_dict_error_http">Servern skickade inte filen. Felkoden är HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Filen är inte en lista med emoji-nyckelord.</string>
+    <string name="core_emoji_dict_error_save">Appen kunde inte spara listan med emoji-nyckelord.</string>
+    <string name="core_emoji_dict_error_too_large">Den listan med emojinyckelord är för stor.</string>
+</resources>

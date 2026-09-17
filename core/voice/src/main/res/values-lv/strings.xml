@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face serveris nesūtīja failu. Kļūdas kods ir HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Savienojums tika pārtraukts lejupielādes laikā. Mēģiniet vēlreiz, lai turpinātu no vietas, kur tas apstājās.</string>
+    <string name="core_voice_download_space_error">Jūsu ierīcē nav pietiekami daudz vietas. Vispirms jāatbrīvo aptuveni %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">Šis modelis izmanto valodu, kurā rakstāt, tāpat kā 40 valodu modelis. Tas aptver tikai Eiropas valodas, tāpēc lejupielāde ir mazāka.</string>
+    <string name="core_voice_model_base_multi_body">Šis modelis līdzsvaro precizitāti un ātrumu. Tas aptver visas valodas, kuras atpazīst Whisper. Izvēlieties to, ja mazais (Small) modelis ir pārāk lēns.</string>
+    <string name="core_voice_model_base_world_body">Šis modelis izmanto valodu, kurā rakstāt, nevis minējumu. Īsas frāzes kļūst daudz uzticamākas. Atlasiet to, kad sarakstā ir jūsu valodas.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d valoda</item>
+        <item quantity="other">%1$d valodas</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Šis ir viens no precīzākajiem Whisper modeļiem, taču tas ir pārāk liels vairumam tālruņu. Lejupielādes lielums ir 1,5 GB. To var ielādēt tikai ierīce ar lielu atmiņas apjomu.</string>
+    <string name="core_voice_model_large_v3_multi_body">Šis ir visprecīzākais Whisper modelis un vislabākais, lai atpazītu, kādā valodā runājat. Lejupielādes lielums ir 1,5 GB. To var ielādēt tikai ierīce ar lielu atmiņas apjomu. Turbo modelis ir gandrīz tikpat precīzs un ir uz pusi mazāks.</string>
+    <string name="core_voice_model_medium_multi_body">Šis modelis nodrošina gandrīz darbvirsmas precizitāti. Katra frāze aizņem vairākas sekundes. Modelis izmanto gandrīz vienu gigabaitu atmiņas, kamēr tas darbojas.</string>
+    <string name="core_voice_model_single_language_body">Šis modelis apstrādā tikai %1$s. Tam nav valodas noteikšanas darbības. Tas padara to ātrāku un nedaudz precīzāku nekā tāda paša izmēra daudzvalodu modeli.</string>
+    <string name="core_voice_model_small_multi_body">Šis modelis nodrošina vislabāko precizitāti, kas joprojām labi darbojas tālrunī. Tas labāk nekā bāzes modelis apstrādā akcentus un fona troksni. Tas aptver visas valodas, kuras pazīst Whisper.</string>
+    <string name="core_voice_model_small_world_body">Šis modelis izmanto valodu, kurā rakstāt, un tam ir mazā modeļa precizitāte. Tas ir visprecīzākais modelis, kas joprojām ietilpst tālrunī.</string>
+    <string name="core_voice_model_tiny_multi_body">Šis ir ātrākais daudzvalodu modelis. Tas labi darbojas ar skaidru runu, taču troksnis samazina precizitāti.</string>
+    <string name="core_voice_model_turbo_multi_body">Šis modelis atpazīst jūsu runāto valodu daudz labāk nekā mazākie modeļi. Izvēlieties to, ja mazāks modelis transkribē jūsu runu nepareizā valodā. Tas ir liels lejupielādes fails, un katra frāze aizņem vairākas sekundes.</string>
+    <string name="core_voice_size_base_label">Pamata</string>
+    <string name="core_voice_size_large_label">Liels</string>
+    <string name="core_voice_size_medium_label">Vidējs</string>
+    <string name="core_voice_size_small_label">Mazs</string>
+    <string name="core_voice_size_tiny_label">Sīks</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Ieteicams</string>
+    <string name="core_voice_whisper_mel_bins_error">Šim balss modelim ir nepieciešama %1$s joslu spektrogramma, kas neatbilst failam, ar kuru tas tika lejupielādēts. Dzēsiet modeli iestatījumos un lejupielādējiet to vēlreiz.</string>
+    <string name="core_voice_whisper_model_load_error">Balss modelis netika ielādēts. Fails, iespējams, ir bojāts. Izdzēsiet modeli iestatījumos un lejupielādējiet to vēlreiz.</string>
+    <string name="core_voice_whisper_transcribe_error">Balss ievade nedarbojās. Mēģiniet vēlreiz vai atlasiet mazāku modeli.</string>
+</resources>

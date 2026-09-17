@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Aplikacija je spremenila %1$d tipko v najbližjo razpoložljivo.</item>
+        <item quantity="other">Aplikacija je spremenila %1$d tipk v najbližje razpoložljive.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Aplikacija je odstranila %1$d tipko. Ta tipkovnica nima tipke, ki opravlja isto funkcijo (koda %2$s).</item>
+        <item quantity="other">Aplikacija je odstranila %1$d tipk. Ta tipkovnica nima tipk, ki opravljajo isto funkcijo (kode %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Aplikacija je ohranila velikost oznake %1$d tipke, ne pa tudi sloga besedila. Ta tipkovnica riše oznake v enem slogu.</item>
+        <item quantity="other">Aplikacija je ohranila velikost oznak %1$d tipk, ne pa tudi sloga besedila. Ta tipkovnica riše oznake v enem slogu.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Aplikacija je spremenila %1$d črko v obliko, ki jo piše ta tipkovnica.</item>
+        <item quantity="other">Aplikacija je spremenila %1$d črk v obliko, ki jo piše ta tipkovnica.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tipka nima črk za dolg pritisk. Datoteka jih hrani v drugi datoteki, ki je niste odprli.</item>
+        <item quantity="other">%1$d tipk nima črk za dolg pritisk. Datoteka jih hrani v drugi datoteki, ki je niste odprli.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Druga tipkovnica meri širino tipk drugače. Aplikacija je prilagodila širine, da ustrezajo tej mreži.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d tipka za braillovo pisavo v plasti %2$s ima številko pike zunaj obsega od 1 do 6.</item>
+        <item quantity="other">%1$d tipk za braillovo pisavo v plasti %2$s ima številko pike zunaj obsega od 1 do 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d tipka v plasti %2$s nima oznake in nobenega izhoda. Ne vtipka ničesar in aplikacija jo izbriše, ko vklopite to razporeditev.</item>
+        <item quantity="other">%1$d tipk v plasti %2$s nima oznake in nobenega izhoda. Ne vtipkajo ničesar in aplikacija jih izbriše, ko vklopite to razporeditev.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Vrstica %1$d plasti %2$s je prazna.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d tipka v plasti %2$s je komponenta plošče. Komponente delujejo samo v postavitvi plošče.</item>
+        <item quantity="other">%1$d tipk v plasti %2$s je komponenta plošče. Komponente delujejo samo v postavitvi plošče.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Vrstica %1$d plasti %2$s ima tipko brez širine.</string>
+    <string name="core_lang_layout_key_span_error">Vrstica %1$d plasti %2$s ima tipko, ki pokriva manj kot 1 ali več kot %3$d vrstic.</string>
+    <string name="core_lang_layout_letters_empty_error">Plast s črkami nima tipk.</string>
+    <string name="core_lang_layout_no_delete_error">Postavitev nima tipke za brisanje. Napake ne morete popraviti.</string>
+    <string name="core_lang_layout_no_enter_error">Postavitev nima tipke za vnos.</string>
+    <string name="core_lang_layout_no_shift_warning">Postavitev nima tipke za velike črke. Za vnos velike črke pritisnite in pridržite tipko.</string>
+    <string name="core_lang_layout_no_space_error">Postavitev nima preslednice.</string>
+    <string name="core_lang_layout_no_way_back_error">Plast %1$s nima tipke za vrnitev na črke. Te plasti ne morete zapustiti.</string>
+    <string name="core_lang_layout_persistent_warning">Plast %1$s ostane odprta, ko se tipkovnica zapre. Prepričajte se, da imate način za izhod iz te postavitve.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Ta postavitev nima tipke za izhod. Prepričajte se, da imate način za izhod iz te postavitve: tipko ABC, tipko za simbole ali orodje za sekundarno postavitev v orodni vrstici.</string>
+    <string name="core_lang_layout_span_past_end_warning">Vrstica %1$d plasti %2$s ima tipko, ki pokriva več vrstic, kot jih ima plast. Tipkovnica jo ustavi pri zadnji vrstici.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Vrstica %1$d plasti %2$s ima %3$d tipko. Samo %4$d tipk ostane dovolj velikih za pritisk.</item>
+        <item quantity="other">Vrstica %1$d plasti %2$s ima %3$d tipk. Samo %4$d tipk ostane dovolj velikih za pritisk.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Plast %1$s ima %2$d vrstico. Prilega se le %3$d vrstica.</item>
+        <item quantity="other">Plast %1$s ima %2$d vrstic. Prilega se le %3$d vrstic.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d tipka v plasti %2$s uporablja dejanje, ki ga ta različica aplikacije ne pozna.</item>
+        <item quantity="other">%1$d tipk v plasti %2$s uporablja dejanje, ki ga ta različica aplikacije ne pozna.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Vrstica %1$d plasti %2$s je širša od ostalih vrstic. Tipkovnica izriše tipke te vrstice ožje.</string>
+    <string name="core_lang_numeral_scope_display_only">Samo prikaz</string>
+    <string name="core_lang_numeral_scope_everywhere">Povsod</string>
+    <string name="core_lang_numeral_scope_text_fields">Besedilna polja</string>
+    <string name="core_lang_numeral_system_auto">Samodejno</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponenta se pojavi več kot enkrat. Aplikacija obdrži prvo kopijo.</item>
+        <item quantity="other">%1$d komponent se pojavi več kot enkrat. Aplikacija obdrži prvo kopijo vsake.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Ta plošča nima tipk. Aplikacija namesto nje uporablja standardno ploščo.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tipka ima dejanje, ki na plošči ne deluje. Aplikacija jo izbriše.</item>
+        <item quantity="other">%1$d tipk ima dejanja, ki na plošči ne delujejo. Aplikacija jih izbriše.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Ta plošča nima tipke ABC. Uporabite orodno vrstico ali gumb Nazaj za vrnitev na tipke.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Aplikacija je izbrisala drugo kopijo komponente.</string>
+    <string name="core_lang_panel_repair_field_added">Aplikacija je dodala glavno komponento plošče v novo vrstico.</string>
+    <string name="core_lang_panel_repair_field_dropped">Aplikacija je izbrisala komponento, ki ne spada na to ploščo.</string>
+    <string name="core_lang_panel_repair_key_dropped">Aplikacija je izbrisala tipko, katere dejanje ne deluje na plošči.</string>
+    <string name="core_lang_panel_repair_reset">Aplikacija je zamenjala prazno ploščo s standardno.</string>
+    <string name="core_lang_panel_required_field_error">V tem podoknu manjka glavna komponenta. Aplikacija jo doda, ko izriše podokno.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponenta ne pripada tej plošči. Aplikacija jo bo izbrisala.</item>
+        <item quantity="other">%1$d komponent ne pripada tej plošči. Aplikacija jih bo izbrisala.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Aplikacija je izbrisala prazno tipko v plasti %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Tipka v plasti %1$s je uporabljala braillovo piko %2$d. Aplikacija jo je spremenila v piko %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Plast s črkami ni imela tipke za brisanje. Aplikacija jo je dodala.</string>
+    <string name="core_lang_repair_enter_key_added">Plast s črkami ni imela tipke za vnos. Aplikacija jo je dodala.</string>
+    <string name="core_lang_repair_field_key_deleted">Aplikacija je izbrisala komponento plošče iz plasti %1$s. Komponente delujejo samo v postavitvi plošče.</string>
+    <string name="core_lang_repair_key_letters_anchored">Tipka v plasti %1$s pomeni %2$s. Aplikacija je poskrbela, da vtipka %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Tipka v plasti %1$s je navedla %2$s kot črke, ki jih predstavlja. To niso črke, zato jo je aplikacija spremenila v navadno tipko.</string>
+    <string name="core_lang_repair_key_span_clamped">Tipka v plasti %1$s je pokrivala %2$d vrstic. Aplikacija je nastavila, da jih pokriva %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Tipka v plasti %1$s je bila široka %2$s enot. Aplikacija jo je nastavila na %3$s enot širine.</string>
+    <string name="core_lang_repair_key_width_set">Tipka v plasti %1$s ni imela širine. Aplikacija je širino nastavila na 1.</string>
+    <string name="core_lang_repair_layer_replaced">Plast %1$s ni imela delujočih tipk. Zdaj uporablja vgrajeno mrežo.</string>
+    <string name="core_lang_repair_letters_key_added">Plast %1$s ni imela tipke za vrnitev na črke. Aplikacija je dodala tipko ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Vrstica v plasti %1$s je imela %2$d tipko. Aplikacija ohrani prvo %3$d.</item>
+        <item quantity="other">Vrstica v plasti %1$s je imela %2$d tipk. Aplikacija ohrani prvih %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Vrstica v plasti %1$s je bila široka %2$s enot. Aplikacija je pomanjšala tipke, da se vrstica prilega.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Plast %1$s je imela %2$d vrstico. Aplikacija ohrani prvo %3$d.</item>
+        <item quantity="other">Plast %1$s je imela %2$d vrstic. Aplikacija ohrani prvih %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Plast črk ni imela preslednice. Aplikacija jo je dodala.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Aplikacija je izbrisala ključ v plasti %1$s. Njegovo dejanje \"%2$s\" ni znano.</string>
+</resources>

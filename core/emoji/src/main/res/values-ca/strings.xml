@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Aquesta llista de paraules clau d\'emoji està buida o és il·legible.</string>
+    <string name="core_emoji_dict_error_http">El servidor no ha enviat el fitxer. El codi d\'error és HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Aquest fitxer no és una llista de paraules clau d\'emojis.</string>
+    <string name="core_emoji_dict_error_save">L\'aplicació no ha pogut desar la llista de paraules clau d\'emojis.</string>
+    <string name="core_emoji_dict_error_too_large">Aquesta llista de paraules clau d\'emoji és massa gran.</string>
+</resources>

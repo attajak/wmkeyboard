@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">AI ప్రొవైడర్ ప్రతిస్పందనను ఎర్రర్‌తో ముగించింది</string>
+    <string name="ftools_photo_error_failed">యాప్ ఫోటోలను పొందలేకపోయింది</string>
+    <string name="ftools_photo_error_offline">యాప్ ఫోటో సేవను చేరుకోలేకపోతోంది. మీ నెట్‌వర్క్‌ను తనిఖీ చేసి, మళ్లీ ప్రయత్నించండి.</string>
+    <string name="ftools_photo_error_timeout">ఫోటో సర్వీస్ సమాధానం ఇవ్వడానికి చాలా సమయం తీసుకుంది</string>
+    <string name="ftools_search_error_json_disabled">ఈ SearXNG ఇన్‌స్టాన్స్ దాని JSON APIని ఎనేబుల్ చేయలేదు. దాని settings.ymlలో search.formatsకి &lt;b&gt;json&lt;/b&gt;ని జోడించండి లేదా మరొక ఇన్‌స్టాన్స్‌ని ఉపయోగించండి.</string>
+</resources>

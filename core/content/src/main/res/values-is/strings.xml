@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Einskiptiskóði</string>
+    <string name="core_content_clip_entity_otp_tag">KÓÐI</string>
+    <string name="core_content_clip_entity_phone_label">Símanúmer</string>
+    <string name="core_content_clip_entity_phone_tag">SÍMI</string>
+    <string name="core_content_clip_entity_url_label">Tengill</string>
+    <string name="core_content_clip_entity_url_tag">TENGILL</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d bútur hefur aðrar útvíkkanir sem Espanso getur ekki geymt. Aðeins sá fyrsti var skrifaður.</item>
+        <item quantity="other">%1$d bútar hafa aðrar útvíkkanir sem Espanso getur ekki geymt. Aðeins sá fyrsti af hverjum var skrifaður.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d textabútur er bundinn við ákveðin tölvuforrit. Í símanum þínum virkar hann alls staðar.</item>
+        <item quantity="other">%1$d textabútar eru bundnir við ákveðin tölvuforrit. Í símanum þínum virka þeir alls staðar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d textabútur biður þig um að velja úr lista. Forritið velur einn af handahófi í staðinn.</item>
+        <item quantity="other">%1$d textabútar biðja þig um að velja úr lista. Forritið velur einn af handahófi í staðinn.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d brot spyr áður en það stækkar. Espanso hefur enga slíka stillingu, svo það mun stækka af sjálfu sér þar.</item>
+        <item quantity="other">%1$d brot spyrja áður en þau stækka. Espanso hefur enga slíka stillingu, svo þau munu stækka af sjálfu sér þar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d textabútur notar dagsetningarsnið sem forritið getur ekki skrifað að fullu. Forritið sleppti þeim hluta sem það getur ekki gert.</item>
+        <item quantity="other">%1$d textabútar nota dagsetningarsnið sem forritið getur ekki skrifað að fullu. Forritið sleppti þeim hlutum sem það getur ekki gert.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d textabútur er í möppu sem er slökkt á. Espanso hefur engan möppurofa, svo hann mun stækka þar.</item>
+        <item quantity="other">%1$d textabútar eru í möppum sem er slökkt á. Espanso hefur engan möppurofa, svo þeir munu stækka þar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">Forritið sleppti %1$d bút sem hefur ekkert til að setja inn.</item>
+        <item quantity="other">Forritið sleppti %1$d bútum sem hafa ekkert til að setja inn.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d bútur biður þig um að fylla út eyðublað. Forritið setur eyðublaðið inn sem texta, með bendilinn í fyrsta auða reitnum.</item>
+        <item quantity="other">%1$d bútar biðja þig um að fylla út eyðublað. Forritið setur hvert eyðublað inn sem texta, með bendilinn í fyrsta auða reitnum.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">Forritið sleppti %1$d textabút sem setur inn mynd.</item>
+        <item quantity="other">Forritið sleppti %1$d textabútum sem setja inn myndir.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">Skráin les %1$d aðra skrá. Ein skrá getur ekki tekið hinar með sér.</item>
+        <item quantity="other">Skráin les %1$d aðrar skrár. Ein skrá getur ekki tekið hinar með sér.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d bútur vísar í aðra búta. Espanso hefur enga leið til að segja það, svo tenglarnir voru skildir eftir.</item>
+        <item quantity="other">%1$d bútar vísa í aðra búta. Espanso hefur enga leið til að segja það, svo tenglarnir voru skildir eftir.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d kveikja er ætluð til að virka inni í orði. Í símanum þínum virkar hún aðeins sem heilt orð.</item>
+        <item quantity="other">%1$d kveikjur eru ætlaðar til að virka inni í orði. Í símanum þínum virka þær aðeins sem heil orð.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d brot notar gildi sem Espanso hefur enga hliðstæðu fyrir. Það er skrifað út eins og það er.</item>
+        <item quantity="other">%1$d brot nota gildi sem Espanso hefur enga hliðstæðu fyrir. Þau eru skrifuð út eins og þau eru.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">Forritið fjarlægði mynstrið úr %1$d textabút. Forritið keyrir ekki mynstur af þessari gerð. Textabúturinn verður áfram á listanum.</item>
+        <item quantity="other">Forritið fjarlægði mynstrið úr %1$d textabútum. Forritið keyrir ekki mynstur af þessari gerð. Textabútarnir verða áfram á listanum.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d brot notar forsniðinn texta. Forritið heldur orðunum en fjarlægir forsniðið.</item>
+        <item quantity="other">%1$d brot nota forsniðinn texta. Forritið heldur orðunum en fjarlægir forsniðið.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d brottskot keyrir skipun á tölvunni þinni. Forritið sleppti skipuninni og keyrir hana aldrei.</item>
+        <item quantity="other">%1$d brottskot keyra skipanir á tölvunni þinni. Forritið sleppti skipununum og keyrir þær aldrei.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d ræsir endar ekki á orði, svo forritið getur ekki fylgst með honum. Sniðmátið hans verður áfram á listanum.</item>
+        <item quantity="other">%1$d ræsir enda ekki á orði, svo forritið getur ekki fylgst með þeim. Sniðmátin þeirra verða áfram á listanum.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d bútur inniheldur texta innan sviga sem þetta forrit fyllir út, eins og {date}. Hann stækkar í stað þess að birtast eins og hann er skrifaður.</item>
+        <item quantity="other">%1$d bútar innihalda texta innan sviga sem þetta forrit fyllir út, eins og {date}. Hann stækkar í stað þess að birtast eins og hann er skrifaður.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d bútur breytir hástöfum þess sem mynstur hans náði. Espanso getur ekki gert það, svo textinn er settur inn óbreyttur.</item>
+        <item quantity="other">%1$d bútar breyta hástöfum þess sem mynstur þeirra náðu. Espanso getur ekki gert það, svo textinn er settur inn óbreyttur.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d brot notar gildi sem appið hefur enga hliðstæðu fyrir. Sá hluti kemur inn tómur.</item>
+        <item quantity="other">%1$d brot nota gildi sem appið hefur enga hliðstæðu fyrir. Þeir hlutar koma inn tómir.</item>
+    </plurals>
+    <string name="core_content_font_error_download">Forritið getur ekki sótt letrið. Athugaðu tenginguna og reyndu aftur.</string>
+    <string name="core_content_font_error_empty">Skráin er tóm.</string>
+    <string name="core_content_font_error_load">Forritið getur ekki hlaðið þessari leturskrá.</string>
+    <string name="core_content_font_error_markup">Þessi skrá er HTML- eða XML-skrá, ekki leturgerð.</string>
+    <string name="core_content_font_error_no_storage">Engin geymsla er tiltæk fyrir leturgerðina.</string>
+    <string name="core_content_font_error_not_a_font">Þessi skrá lítur ekki út fyrir að vera .ttf eða .otf leturgerð.</string>
+    <string name="core_content_font_error_read">Forritið getur ekki lesið letrið.</string>
+    <string name="core_content_font_error_save">Forritið getur ekki vistað leturgerðina.</string>
+    <string name="core_content_font_error_too_large">Leturgerð verður að vera minni en %1$d MB.</string>
+    <string name="core_content_font_error_too_many">Letursafnið er fullt. Eyddu letri og reyndu aftur.</string>
+    <string name="core_content_font_error_too_short">Skráin er of stutt til að vera leturgerð.</string>
+    <string name="core_content_font_error_woff">Forritið getur ekki lesið WOFF-vefletur. Notaðu .ttf eða .otf útgáfu letursins.</string>
+    <string name="core_content_font_error_woff2">Forritið getur ekki lesið WOFF2 vefleturgerðir. Notaðu .ttf eða .otf útgáfu af leturgerðinni.</string>
+    <string name="core_content_font_error_zip">Þessi skrá er zip-skjalasafn, ekki leturgerð.</string>
+    <string name="core_content_selection_macro_add_contact">Tengiliður</string>
+    <string name="core_content_selection_macro_calendar">Dagatal</string>
+    <string name="core_content_selection_macro_call">Kalla</string>
+    <string name="core_content_selection_macro_case_lower">lágstafir</string>
+    <string name="core_content_selection_macro_case_sentence">Setningastafsetning</string>
+    <string name="core_content_selection_macro_case_title">Titilstafir</string>
+    <string name="core_content_selection_macro_case_upper">HÁSTAFIR</string>
+    <string name="core_content_selection_macro_chat_bold">Feitletrað</string>
+    <string name="core_content_selection_macro_chat_italic">Skáletrað</string>
+    <string name="core_content_selection_macro_chat_mono">Einlit</string>
+    <string name="core_content_selection_macro_chat_strike">Strika yfir</string>
+    <string name="core_content_selection_macro_colour">Litur</string>
+    <string name="core_content_selection_macro_copy">Afrita</string>
+    <string name="core_content_selection_macro_digits_latin">Tölustafir</string>
+    <string name="core_content_selection_macro_email">Netfang</string>
+    <string name="core_content_selection_macro_fancy">Flott</string>
+    <string name="core_content_selection_macro_find">Finna</string>
+    <string name="core_content_selection_macro_format">Snið</string>
+    <string name="core_content_selection_macro_grammar">Málfræði</string>
+    <string name="core_content_selection_macro_lines_bullet">Punktar</string>
+    <string name="core_content_selection_macro_lines_dedupe">Einstakt</string>
+    <string name="core_content_selection_macro_lines_number">Númer</string>
+    <string name="core_content_selection_macro_lines_sort">Raða</string>
+    <string name="core_content_selection_macro_map">Kortleggja</string>
+    <string name="core_content_selection_macro_open">Opna</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Tala</string>
+    <string name="core_content_selection_macro_replace">Skipta út</string>
+    <string name="core_content_selection_macro_search">Leita</string>
+    <string name="core_content_selection_macro_share">Deila</string>
+    <string name="core_content_selection_macro_sms">Skilaboð</string>
+    <string name="core_content_selection_macro_time_zones">Tímabelti</string>
+    <string name="core_content_selection_macro_to_bangla">Bengalska</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Þýða</string>
+    <string name="core_content_selection_macro_url_decode">Afkóða</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">Forritið skildi %2$d stækkun eftir út úr \"%1$s\".</item>
+        <item quantity="other">Forritið skildi %2$d stækkanir eftir út úr \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">Forritið fjarlægði mynstrið úr „%1$s“. Mynstrið er ekki rétt. Textabúturinn verður eftir á listanum.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">Forritið sleppti %1$d möppu sem hefur ekkert nafn eða endurtekur aðra. Brot hennar komu inn án möppu.</item>
+        <item quantity="other">Forritið sleppti %1$d möppum sem hafa ekkert nafn eða endurtaka aðra. Brot þeirra komu inn án möppu.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">Skráin inniheldur fleiri brot en forritið geymir. Forritið flutti inn fyrstu %1$d.</item>
+        <item quantity="other">Skráin inniheldur fleiri brot en forritið geymir. Forritið flutti inn fyrstu %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Bútur hefur ekkert nafn, svo forritið nefndi hann eftir fyrstu línunni.</string>
+    <string name="core_content_snippet_repair_no_text">Forritið sleppti \"%1$s\". Það hefur engan texta.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">Forritið fjarlægði mynstrið úr \"%1$s\". Það var lengra en %2$d stafur.</item>
+        <item quantity="other">Forritið fjarlægði mynstrið úr \"%1$s\". Það var lengra en %2$d stafir.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">Forritið stytti „%1$s“. Það var lengra en %2$d stafur.</item>
+        <item quantity="other">Forritið stytti „%1$s“. Það var lengra en %2$d stafir.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">Nafn forritsins sem þú skrifar í</string>
+    <string name="core_content_snippet_var_clip_info">Nýjasta færslan á klemmuspjaldinu</string>
+    <string name="core_content_snippet_var_cursor_info">Staðurinn þar sem bendillinn lendir</string>
+    <string name="core_content_snippet_var_date_info">Dagsetning dagsins í dag</string>
+    <string name="core_content_snippet_var_datetime_info">Dagsetning og tími</string>
+    <string name="core_content_snippet_var_day_info">Dagur mánaðarins</string>
+    <string name="core_content_snippet_var_isodate_info">Dagsetningin á ISO-formi, til dæmis 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">Dagsetning og tími á ISO-formi</string>
+    <string name="core_content_snippet_var_month_info">Nafn mánaðarins</string>
+    <string name="core_content_snippet_var_package_info">Pakkaheiti þess forrits</string>
+    <string name="core_content_snippet_var_selection_info">Textinn sem þú velur í reitnum</string>
+    <string name="core_content_snippet_var_time12_info">Tíminn núna á 12 tíma formi</string>
+    <string name="core_content_snippet_var_time_info">Tíminn núna á 24-tíma formi</string>
+    <string name="core_content_snippet_var_timestamp_info">Tíminn í Unix-sekúndum</string>
+    <string name="core_content_snippet_var_timezone_info">Tímabeltið, til dæmis GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Nýtt handahófskennt UUID</string>
+    <string name="core_content_snippet_var_weekday_info">Nafn dagsins, til dæmis sunnudagur</string>
+    <string name="core_content_snippet_var_year_info">Árið, með fjórum tölustöfum</string>
+    <string name="core_content_sticker_pack_imported_label">Innfluttir límmiðar</string>
+    <string name="core_content_sticker_repair_image_missing">Forritið fjarlægði „%1$s“. Myndin vantar.</string>
+    <string name="core_content_sticker_repair_image_unreadable">Forritið fjarlægði \"%1$s\". Forritið getur ekki lesið myndina.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">Pakkinn inniheldur %1$d límmiða. Forritið heldur þeim fyrsta %2$d.</item>
+        <item quantity="other">Pakkinn inniheldur %1$d límmiða. Forritið heldur þeim fyrstu %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">Forritið týndi límmiða. Límmiðinn vísar ekki í neina myndskrá.</string>
+    <string name="core_content_sticker_repair_none_listed">Pakkskráin inniheldur enga límmiða.</string>
+    <string name="core_content_sticker_repair_not_saved">Forritið sleppti \"%1$s\". Forritið getur ekki vistað það.</string>
+</resources>

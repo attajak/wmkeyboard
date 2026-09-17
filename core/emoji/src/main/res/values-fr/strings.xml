@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Cette liste de mots-clés d\'émojis est vide ou illisible.</string>
+    <string name="core_emoji_dict_error_http">Le serveur n\'a pas envoyé le fichier. Le code d\'erreur est HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Ce fichier n\'est pas une liste de mots-clés d\'émojis.</string>
+    <string name="core_emoji_dict_error_save">L\'application n\'a pas pu enregistrer la liste des mots-clés emoji.</string>
+    <string name="core_emoji_dict_error_too_large">Cette liste de mots-clés emoji est trop volumineuse.</string>
+</resources>

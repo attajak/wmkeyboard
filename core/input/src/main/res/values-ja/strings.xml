@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">ダウンロードしたファイルが破損しています。チェックサムが一致しません。もう一度ダウンロードしてください。</string>
+    <string name="core_input_cjk_download_error_http">サーバーがHTTPステータス %1$s を返しました。</string>
+    <string name="core_input_cjk_download_error_network">ダウンロードに失敗しました。接続を確認して再試行してください。</string>
+    <string name="core_input_cjk_download_error_network_detail">ダウンロードに失敗しました: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">デバイスのストレージ容量が不足しています。先に空き容量を確保してください。</string>
+    <string name="core_input_cjk_download_error_truncated">ダウンロード中に接続が中断されました。「再開」を押して続行してください。</string>
+    <string name="core_input_cjk_download_error_unavailable">このパックはまだ利用できません。</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">漢字の部首コード表（29,000文字）。キーボードが倉頡および速成レイアウトを使用するために必要なパックです。</string>
+    <string name="core_input_cjk_pack_cangjie_title">倉頡（Cangjie）辞書</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Mozc由来のかな読み、108万語、約42MB。日本語変換にはこのパックが必要です。</string>
+    <string name="core_input_cjk_pack_ja_kana_title">日本語かな漢字変換辞書</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">漢字に対する粤拼（Jyutping）読みのテーブル（163,000エントリ）。広東語変換にはこのパックが必要です。</string>
+    <string name="core_input_cjk_pack_jyutping_title">広東語粤拼（Jyutping）辞書</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICTに基づく12万語の漢字とフレーズ。中国語変換にはこのパックが必要です。</string>
+    <string name="core_input_cjk_pack_pinyin_title">中国語ピンイン辞書</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">漢字の筆順表です。キーボードのストロークレイアウトにはこのパックが必要です。</string>
+    <string name="core_input_cjk_pack_stroke_title">中国語筆画（笔画）辞書</string>
+    <string name="core_input_double_pinyin_off_label">オフ (フルピンイン)</string>
+</resources>

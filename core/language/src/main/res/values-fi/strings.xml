@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Sovellus vaihtoi %1$d näppäimen lähimpään käytettävissä olevaan näppäimeen.</item>
+        <item quantity="other">Sovellus vaihtoi %1$d näppäintä lähimpiin käytettävissä oleviin näppäimiin.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Sovellus poisti %1$d näppäimen. Tässä näppäimistössä ei ole näppäintä, joka tekee saman asian (koodi %2$s).</item>
+        <item quantity="other">Sovellus poisti %1$d näppäintä. Tässä näppäimistössä ei ole näppäimiä, jotka tekevät saman asian (koodit %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Sovellus säilytti %1$d näppäimen etiketin koon, mutta ei sen tekstityyliä. Tämä näppäimistö piirtää etiketit yhdellä tyylillä.</item>
+        <item quantity="other">Sovellus säilytti %1$d näppäimen etiketin koon, mutta ei niiden tekstityyliä. Tämä näppäimistö piirtää etiketit yhdellä tyylillä.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Sovellus muutti %1$d kirjaimen muotoon, jota tämä näppäimistö käyttää.</item>
+        <item quantity="other">Sovellus muutti %1$d kirjainta muotoon, jota tämä näppäimistö käyttää.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d näppäimellä ei ole paina-ja-pidä-kirjaimia. Tiedosto säilyttää ne toisessa tiedostossa, jota et avannut.</item>
+        <item quantity="other">%1$d näppäimellä ei ole paina-ja-pidä-kirjaimia. Tiedosto säilyttää ne toisessa tiedostossa, jota et avannut.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Toinen näppäimistö mittaa näppäinten leveydet eri tavalla. Sovellus muutti leveyksiä sopimaan tähän ruudukkoon.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d pistekirjoitusnäppäin %2$s-tasossa sisältää pistenumeron välillä 1–6.</item>
+        <item quantity="other">%1$d pistekirjoitusnäppäintä %2$s-tasossa sisältää pistenumeron välillä 1–6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d näppäimellä %2$s-kerroksessa ei ole etikettiä eikä tulostetta. Se ei kirjoita mitään, ja sovellus poistaa sen, kun otat tämän asettelun käyttöön.</item>
+        <item quantity="other">%1$d näppäimellä %2$s-kerroksessa ei ole etikettiä eikä tulostetta. Ne eivät kirjoita mitään, ja sovellus poistaa ne, kun otat tämän asettelun käyttöön.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Kerroksen %2$s rivi %1$d on tyhjä.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d näppäin %2$s-tasossa on paneelikomponentti. Komponentit toimivat vain paneeliasettelussa.</item>
+        <item quantity="other">%1$d näppäintä %2$s-tasossa ovat paneelikomponentteja. Komponentit toimivat vain paneeliasettelussa.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s-tason rivillä %1$d on näppäin, jolla ei ole leveyttä.</string>
+    <string name="core_lang_layout_key_span_error">Kerroksen %2$s rivillä %1$d on näppäin, joka peittää vähemmän kuin 1 tai enemmän kuin %3$d riviä.</string>
+    <string name="core_lang_layout_letters_empty_error">Kirjaintasossa ei ole näppäimiä.</string>
+    <string name="core_lang_layout_no_delete_error">Asettelussa ei ole poistonäppäintä. Et voi korjata virhettä.</string>
+    <string name="core_lang_layout_no_enter_error">Asettelussa ei ole rivinvaihtonäppäintä.</string>
+    <string name="core_lang_layout_no_shift_warning">Asettelussa ei ole vaihtonäppäintä. Kirjoita iso kirjain painamalla näppäintä pitkään.</string>
+    <string name="core_lang_layout_no_space_error">Asettelussa ei ole välilyöntinäppäintä.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s-tasolla ei ole näppäintä, joka palaisi kirjaimiin. Et voi poistua tältä tasolta.</string>
+    <string name="core_lang_layout_persistent_warning">%1$s-taso pysyy auki, kun näppäimistö sulkeutuu. Varmista, että sinulla on tapa poistua tästä asettelusta.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Tässä asettelussa ei ole näppäintä, jolla siitä pääsee pois. Varmista, että sinulla on tapa poistua tästä asettelusta: ABC-näppäin, symbolinäppäin tai työkalupalkin toissijainen asettelutyökalu.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s-tason rivillä %1$d on avain, joka kattaa enemmän rivejä kuin tasossa on. Näppäimistö pysäyttää sen viimeiselle riville.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s-tason rivillä %1$d on %3$d näppäin. Vain %4$d näppäintä pysyy riittävän suurina painettavaksi.</item>
+        <item quantity="other">%2$s-tason rivillä %1$d on %3$d näppäintä. Vain %4$d näppäintä pysyy riittävän suurina painettavaksi.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Tasossa %1$s on %2$d rivi. Vain %3$d riviä mahtuu.</item>
+        <item quantity="other">Tasossa %1$s on %2$d riviä. Vain %3$d riviä mahtuu.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d näppäin %2$s-tasossa käyttää toimintoa, jota tämä sovellusversio ei tunne.</item>
+        <item quantity="other">%1$d näppäintä %2$s-tasossa käyttää toimintoa, jota tämä sovellusversio ei tunne.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s-tason rivi %1$d on leveämpi kuin muut rivit. Näppäimistö piirtää tämän rivin näppäimet kapeammiksi.</string>
+    <string name="core_lang_numeral_scope_display_only">Vain näyttö</string>
+    <string name="core_lang_numeral_scope_everywhere">Kaikkialla</string>
+    <string name="core_lang_numeral_scope_text_fields">Tekstikentät</string>
+    <string name="core_lang_numeral_system_auto">Automaattinen</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponentti esiintyy useammin kuin kerran. Sovellus säilyttää ensimmäisen kopion.</item>
+        <item quantity="other">%1$d komponenttia esiintyy useammin kuin kerran. Sovellus säilyttää jokaisesta ensimmäisen kopion.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Tässä paneelissa ei ole näppäimiä. Sovellus käyttää sen sijaan vakiopaneelia.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d näppäimellä on toiminto, joka ei toimi paneelissa. Sovellus poistaa sen.</item>
+        <item quantity="other">%1$d näppäimellä on toimintoja, jotka eivät toimi paneelissa. Sovellus poistaa ne.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Tässä paneelissa ei ole ABC-näppäintä. Käytä työkalupalkkia tai Takaisin-painiketta palataksesi näppäimiin.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Sovellus poisti komponentin toisen kopion.</string>
+    <string name="core_lang_panel_repair_field_added">Sovellus lisäsi paneelin pääkomponentin uudelle riville.</string>
+    <string name="core_lang_panel_repair_field_dropped">Sovellus poisti komponentin, joka ei kuulu tähän paneeliin.</string>
+    <string name="core_lang_panel_repair_key_dropped">Sovellus poisti näppäimen, jonka toiminto ei toimi paneelissa.</string>
+    <string name="core_lang_panel_repair_reset">Sovellus korvasi tyhjän paneelin vakioversiolla.</string>
+    <string name="core_lang_panel_required_field_error">Tästä paneelista puuttuu sen pääkomponentti. Sovellus lisää sellaisen, kun se piirtää paneelin.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponentti ei kuulu tähän paneeliin. Sovellus poistaa sen.</item>
+        <item quantity="other">%1$d komponenttia ei kuulu tähän paneeliin. Sovellus poistaa ne.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Sovellus poisti tyhjän näppäimen %1$s-tasolta.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Kerroksen %1$s näppäin käytti pistekirjoituspistettä %2$d. Sovellus muutti sen pisteeksi %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Kirjaintasossa ei ollut poistonäppäintä. Sovellus lisäsi sellaisen.</string>
+    <string name="core_lang_repair_enter_key_added">Kirjaintasossa ei ollut rivinvaihtonäppäintä. Sovellus lisäsi sellaisen.</string>
+    <string name="core_lang_repair_field_key_deleted">Sovellus poisti paneelikomponentin %1$s-tasosta. Komponentit toimivat vain paneeliasettelussa.</string>
+    <string name="core_lang_repair_key_letters_anchored">Näppäin %1$s-tasolla tarkoittaa %2$s. Sovellus sai sen kirjoittamaan %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Näppäin %1$s-tasossa listasi %2$s kirjaimiksi, joita se edustaa. Nämä eivät ole kirjaimia, joten sovellus teki siitä tavallisen näppäimen.</string>
+    <string name="core_lang_repair_key_span_clamped">Näppäin %1$s-tasossa peitti %2$d riviä. Sovellus muutti sen peittämään %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">Näppäin %1$s-tasossa oli %2$s yksikköä leveä. Sovellus muutti sen %3$s yksikköä leveäksi.</string>
+    <string name="core_lang_repair_key_width_set">Näppäimellä %1$s-tasossa ei ollut leveyttä. Sovellus asetti leveydeksi 1.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s-tasolla ei ollut toimivia näppäimiä. Se käyttää nyt sisäänrakennettua ruudukkoa.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s-tasolla ei ollut näppäintä, joka palauttaa kirjaimiin. Sovellus lisäsi ABC-näppäimen.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s-tasolla rivillä oli %2$d näppäin. Sovellus säilyttää ensimmäiset %3$d.</item>
+        <item quantity="other">%1$s-tasolla rivillä oli %2$d näppäintä. Sovellus säilyttää ensimmäiset %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Rivi %1$s-tasossa oli %2$s yksikköä leveä. Sovellus pienensi näppäimiä, jotta rivi mahtuu.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s-kerroksessa oli %2$d rivi. Sovellus säilyttää ensimmäiset %3$d.</item>
+        <item quantity="other">%1$s-kerroksessa oli %2$d riviä. Sovellus säilyttää ensimmäiset %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Kirjaintasossa ei ollut välilyöntinäppäintä. Sovellus lisäsi sellaisen.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Sovellus poisti näppäimen %1$s-tasosta. Sen toiminto \"%2$s\" ei ole tunnettu.</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">サーバーからファイルが送信されませんでした。エラーコードは HTTP %1$s です。</string>
+    <string name="core_pred_wordlist_malformed_error">その単語リストは空か、読み込めません。</string>
+    <string name="core_pred_wordlist_no_space_error">デバイスのストレージ容量が不足しています。不要なファイルを削除してから再試行してください。</string>
+    <string name="core_pred_wordlist_save_error">単語リストを保存できません。もう一度やり直してください。</string>
+    <string name="core_pred_wordlist_size_all_label">すべて</string>
+    <string name="core_pred_wordlist_size_large_label">大</string>
+    <string name="core_pred_wordlist_size_medium_label">中</string>
+    <string name="core_pred_wordlist_size_small_label">小</string>
+    <string name="core_pred_wordlist_variant_brazil_label">ブラジル</string>
+    <string name="core_pred_wordlist_variant_europe_label">ヨーロッパ</string>
+</resources>

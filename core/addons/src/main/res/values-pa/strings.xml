@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">ਸ਼ਬਦਕੋਸ਼</string>
+    <string name="core_addons_type_dictionary_singular_label">ਸ਼ਬਦਕੋਸ਼</string>
+    <string name="core_addons_type_emoji_font_label">ਇਮੋਜੀ ਫੌਂਟ</string>
+    <string name="core_addons_type_emoji_font_singular_label">ਇਮੋਜੀ ਫੌਂਟ</string>
+    <string name="core_addons_type_emoji_keywords_label">ਇਮੋਜੀ ਕੀਵਰਡ</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">ਇਮੋਜੀ ਕੀਵਰਡ ਪੈਕ</string>
+    <string name="core_addons_type_espanso_label">Espanso ਪੈਕ</string>
+    <string name="core_addons_type_espanso_singular_label">Espanso ਪੈਕ</string>
+    <string name="core_addons_type_font_label">ਫੌਂਟ</string>
+    <string name="core_addons_type_font_singular_label">ਫੌਂਟ</string>
+    <string name="core_addons_type_icon_pack_label">ਆਈਕਨ ਪੈਕ</string>
+    <string name="core_addons_type_icon_pack_singular_label">ਆਈਕਨ ਪੈਕ</string>
+    <string name="core_addons_type_layout_label">ਲੇਆਉਟ</string>
+    <string name="core_addons_type_layout_singular_label">ਲੇਆਉਟ</string>
+    <string name="core_addons_type_plugin_label">ਪਲੱਗਇਨ</string>
+    <string name="core_addons_type_plugin_singular_label">ਪਲੱਗਇਨ</string>
+    <string name="core_addons_type_snippets_label">ਸਨਿੱਪਟ</string>
+    <string name="core_addons_type_snippets_singular_label">ਸਨਿੱਪਟ ਪੈਕ</string>
+    <string name="core_addons_type_sound_label">ਆਵਾਜ਼ਾਂ</string>
+    <string name="core_addons_type_sound_pack_label">ਸਾਊਂਡ ਪੈਕ</string>
+    <string name="core_addons_type_sound_pack_singular_label">ਸਾਊਂਡ ਪੈਕ</string>
+    <string name="core_addons_type_sound_singular_label">ਕੀ ਸਾਊਂਡ</string>
+    <string name="core_addons_type_stickers_label">ਸਟਿੱਕਰ ਪੈਕ</string>
+    <string name="core_addons_type_stickers_singular_label">ਸਟਿੱਕਰ ਪੈਕ</string>
+    <string name="core_addons_type_theme_label">ਥੀਮ</string>
+    <string name="core_addons_type_theme_singular_label">ਥੀਮ</string>
+    <string name="core_addons_type_unknown_label">ਹੋਰ</string>
+    <string name="core_addons_type_unknown_singular_label">ਐਡ-ਆਨ</string>
+    <string name="core_addons_type_vocabulary_label">ਸ਼ਬਦਾਵਲੀ</string>
+    <string name="core_addons_type_vocabulary_singular_label">ਸ਼ਬਦਾਵਲੀ ਪੈਕ</string>
+</resources>

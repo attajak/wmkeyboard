@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Aplikasi mengubah %1$d tombol ke tombol terdekat yang dimilikinya.</item>
+        <item quantity="other">Aplikasi mengubah %1$d tombol ke tombol terdekat yang dimilikinya.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Aplikasi menghapus %1$d tombol. Papan ketik ini tidak memiliki tombol yang melakukan hal yang sama (kode %2$s).</item>
+        <item quantity="other">Aplikasi menghapus %1$d tombol. Papan ketik ini tidak memiliki tombol yang melakukan hal yang sama (kode %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Aplikasi mempertahankan ukuran label %1$d tombol tetapi tidak gaya teksnya. Papan ketik ini menggambar label dalam satu gaya.</item>
+        <item quantity="other">Aplikasi mempertahankan ukuran label %1$d tombol tetapi tidak gaya teksnya. Papan ketik ini menggambar label dalam satu gaya.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Aplikasi mengubah %1$d huruf ke bentuk yang ditulis oleh papan ketik ini.</item>
+        <item quantity="other">Aplikasi mengubah %1$d huruf ke bentuk yang ditulis oleh papan ketik ini.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tombol tidak memiliki huruf tekan-dan-tahan. File tersebut menyimpannya di file kedua yang tidak Anda buka.</item>
+        <item quantity="other">%1$d tombol tidak memiliki huruf tekan-dan-tahan. File tersebut menyimpannya di file kedua yang tidak Anda buka.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Papan ketik lain mengukur lebar tombol secara berbeda. Aplikasi mengubah lebar tersebut agar sesuai dengan kisi ini.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d tombol titik braille di lapisan %2$s memiliki nomor titik di luar 1 hingga 6.</item>
+        <item quantity="other">%1$d tombol titik braille di lapisan %2$s memiliki nomor titik di luar 1 hingga 6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d tombol di lapisan %2$s tidak memiliki label dan tidak ada output. Tombol ini tidak mengetik apa pun, dan aplikasi akan menghapusnya saat Anda mengaktifkan tata letak ini.</item>
+        <item quantity="other">%1$d tombol di lapisan %2$s tidak memiliki label dan tidak ada output. Tombol-tombol ini tidak mengetik apa pun, dan aplikasi akan menghapusnya saat Anda mengaktifkan tata letak ini.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Baris %1$d dari lapisan %2$s kosong.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d tombol di lapisan %2$s adalah komponen panel. Komponen hanya berfungsi dalam tata letak panel.</item>
+        <item quantity="other">%1$d tombol di lapisan %2$s adalah komponen panel. Komponen hanya berfungsi dalam tata letak panel.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Baris %1$d dari lapisan %2$s memiliki tombol tanpa lebar.</string>
+    <string name="core_lang_layout_key_span_error">Baris %1$d dari lapisan %2$s memiliki tombol yang mencakup kurang dari 1 atau lebih dari %3$d baris.</string>
+    <string name="core_lang_layout_letters_empty_error">Lapisan huruf tidak memiliki tombol.</string>
+    <string name="core_lang_layout_no_delete_error">Tata letak ini tidak memiliki tombol hapus. Anda tidak dapat memperbaiki kesalahan.</string>
+    <string name="core_lang_layout_no_enter_error">Tata letak tidak memiliki tombol enter.</string>
+    <string name="core_lang_layout_no_shift_warning">Tata letak ini tidak memiliki tombol shift. Untuk mengetik huruf kapital, tekan dan tahan tombol.</string>
+    <string name="core_lang_layout_no_space_error">Tata letak ini tidak memiliki tombol spasi.</string>
+    <string name="core_lang_layout_no_way_back_error">Lapisan %1$s tidak memiliki tombol yang kembali ke huruf. Anda tidak dapat meninggalkan lapisan ini.</string>
+    <string name="core_lang_layout_persistent_warning">Lapisan %1$s tetap terbuka saat papan ketik ditutup. Pastikan Anda memiliki cara untuk keluar dari tata letak ini.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Tata letak ini tidak memiliki tombol untuk keluar. Pastikan Anda memiliki cara untuk keluar dari tata letak ini: tombol ABC, tombol simbol, atau alat Tata letak kustom pada bilah alat.</string>
+    <string name="core_lang_layout_span_past_end_warning">Baris %1$d dari lapisan %2$s memiliki tombol yang mencakup lebih banyak baris daripada yang dimiliki lapisan tersebut. Keyboard menghentikannya di baris terakhir.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Baris %1$d dari lapisan %2$s memiliki %3$d tombol. Hanya %4$d tombol yang tetap cukup besar untuk ditekan.</item>
+        <item quantity="other">Baris %1$d dari lapisan %2$s memiliki %3$d tombol. Hanya %4$d tombol yang tetap cukup besar untuk ditekan.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Lapisan %1$s memiliki %2$d baris. Hanya %3$d baris yang muat.</item>
+        <item quantity="other">Lapisan %1$s memiliki %2$d baris. Hanya %3$d baris yang muat.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d tombol di lapisan %2$s menggunakan aksi yang tidak diketahui oleh versi aplikasi ini.</item>
+        <item quantity="other">%1$d tombol di lapisan %2$s menggunakan aksi yang tidak diketahui oleh versi aplikasi ini.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Baris %1$d dari lapisan %2$s lebih lebar dari baris lainnya. Papan ketik menggambar tombol baris ini lebih sempit.</string>
+    <string name="core_lang_numeral_scope_display_only">Hanya tampilan</string>
+    <string name="core_lang_numeral_scope_everywhere">Di mana saja</string>
+    <string name="core_lang_numeral_scope_text_fields">Kolom teks</string>
+    <string name="core_lang_numeral_system_auto">Otomatis</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d komponen muncul lebih dari sekali. Aplikasi menyimpan salinan pertama.</item>
+        <item quantity="other">%1$d komponen muncul lebih dari sekali. Aplikasi menyimpan salinan pertama dari masing-masing komponen.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Panel ini tidak memiliki tombol. Aplikasi menggunakan panel standar sebagai gantinya.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tombol memiliki tindakan yang tidak berfungsi pada panel. Aplikasi menghapusnya.</item>
+        <item quantity="other">%1$d tombol memiliki tindakan yang tidak berfungsi pada panel. Aplikasi menghapusnya.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Panel ini tidak memiliki tombol ABC. Gunakan bilah alat atau tombol Kembali untuk kembali ke tombol.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Aplikasi menghapus salinan kedua dari sebuah komponen.</string>
+    <string name="core_lang_panel_repair_field_added">Aplikasi menambahkan komponen utama panel di baris baru.</string>
+    <string name="core_lang_panel_repair_field_dropped">Aplikasi menghapus komponen yang bukan milik panel ini.</string>
+    <string name="core_lang_panel_repair_key_dropped">Aplikasi menghapus tombol yang tindakannya tidak berfungsi pada panel.</string>
+    <string name="core_lang_panel_repair_reset">Aplikasi mengganti panel kosong dengan yang standar.</string>
+    <string name="core_lang_panel_required_field_error">Panel ini kehilangan komponen utamanya. Aplikasi menambahkan satu saat menggambar panel.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d komponen tidak termasuk dalam panel ini. Aplikasi akan menghapusnya.</item>
+        <item quantity="other">%1$d komponen tidak termasuk dalam panel ini. Aplikasi akan menghapusnya.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Aplikasi menghapus tombol kosong di lapisan %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">Tombol di lapisan %1$s menggunakan titik braille %2$d. Aplikasi mengubahnya menjadi titik %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Lapisan huruf tidak memiliki tombol hapus. Aplikasi telah menambahkannya.</string>
+    <string name="core_lang_repair_enter_key_added">Lapisan huruf tidak memiliki tombol enter. Aplikasi telah menambahkannya.</string>
+    <string name="core_lang_repair_field_key_deleted">Aplikasi menghapus komponen panel dari lapisan %1$s. Komponen hanya berfungsi dalam tata letak panel.</string>
+    <string name="core_lang_repair_key_letters_anchored">Tombol di layer %1$s mewakili %2$s. Aplikasi membuatnya mengetik %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">Sebuah tombol di lapisan %1$s mencantumkan %2$s sebagai huruf yang diwakilinya. Itu bukan huruf, jadi aplikasi menjadikannya tombol biasa.</string>
+    <string name="core_lang_repair_key_span_clamped">Sebuah tombol di lapisan %1$s mencakup %2$d baris. Aplikasi telah mengubahnya menjadi mencakup %3$d baris.</string>
+    <string name="core_lang_repair_key_width_capped">Tombol pada lapisan %1$s memiliki lebar %2$s unit. Aplikasi mengubahnya menjadi %3$s unit.</string>
+    <string name="core_lang_repair_key_width_set">Sebuah tombol di lapisan %1$s tidak memiliki lebar. Aplikasi menetapkan lebar ke 1.</string>
+    <string name="core_lang_repair_layer_replaced">Lapisan %1$s tidak memiliki tombol yang berfungsi. Sekarang menggunakan kisi bawaan.</string>
+    <string name="core_lang_repair_letters_key_added">Lapisan %1$s tidak memiliki tombol yang kembali ke huruf. Aplikasi menambahkan tombol ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Satu baris di lapisan %1$s memiliki %2$d tombol. Aplikasi menyimpan %3$d yang pertama.</item>
+        <item quantity="other">Satu baris di lapisan %1$s memiliki %2$d tombol. Aplikasi menyimpan %3$d yang pertama.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Baris di lapisan %1$s memiliki lebar %2$s unit. Aplikasi memperkecil tombol agar baris tersebut pas.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Lapisan %1$s memiliki %2$d baris. Aplikasi menyimpan %3$d yang pertama.</item>
+        <item quantity="other">Lapisan %1$s memiliki %2$d baris. Aplikasi menyimpan %3$d yang pertama.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Lapisan huruf tidak memiliki tombol spasi. Aplikasi telah menambahkannya.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Aplikasi menghapus kunci di lapisan %1$s. Aksinya \"%2$s\" tidak diketahui.</string>
+</resources>

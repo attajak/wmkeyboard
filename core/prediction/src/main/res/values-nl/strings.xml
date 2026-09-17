@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">De server heeft het bestand niet verzonden. De foutcode is HTTP %1$s.</string>
+    <string name="core_pred_wordlist_malformed_error">Die woordenlijst is leeg of onleesbaar.</string>
+    <string name="core_pred_wordlist_no_space_error">Er is onvoldoende opslagruimte op je apparaat. Verwijder wat bestanden en probeer het opnieuw.</string>
+    <string name="core_pred_wordlist_save_error">De app kan de woordenlijst niet opslaan. Probeer het opnieuw.</string>
+    <string name="core_pred_wordlist_size_all_label">Alles</string>
+    <string name="core_pred_wordlist_size_large_label">Groot</string>
+    <string name="core_pred_wordlist_size_medium_label">Gemiddeld</string>
+    <string name="core_pred_wordlist_size_small_label">Klein</string>
+    <string name="core_pred_wordlist_variant_brazil_label">Brazilië</string>
+    <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+</resources>

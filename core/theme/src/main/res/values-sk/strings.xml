@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Bobuľová</string>
+    <string name="core_theme_builtin_bubble_label">Bublina</string>
+    <string name="core_theme_builtin_crimson_label">Karmínová</string>
+    <string name="core_theme_builtin_cyberpunk_label">Cyberpunk</string>
+    <string name="core_theme_builtin_deep_sea_label">Hlboké more</string>
+    <string name="core_theme_builtin_facet_label">Fazeta</string>
+    <string name="core_theme_builtin_forest_label">Les</string>
+    <string name="core_theme_builtin_glacier_label">Ľadovec</string>
+    <string name="core_theme_builtin_mint_label">Mätová</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Oceán</string>
+    <string name="core_theme_builtin_pitch_label">Sýta čierna</string>
+    <string name="core_theme_builtin_rose_label">Ružová</string>
+    <string name="core_theme_builtin_sand_label">Piesková</string>
+    <string name="core_theme_builtin_slate_label">Bridlicová</string>
+    <string name="core_theme_builtin_snow_label">Sneh</string>
+    <string name="core_theme_builtin_sunset_drift_label">Západ slnka</string>
+    <string name="core_theme_builtin_sunset_label">Západ slnka</string>
+    <string name="core_theme_family_gradient_label">Prechody</string>
+    <string name="core_theme_family_ocean_label">Nightfall</string>
+    <string name="core_theme_family_snow_label">Pastelové</string>
+</resources>

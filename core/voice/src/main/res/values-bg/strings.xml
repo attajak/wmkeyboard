@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Сървърът на Hugging Face не изпрати файла. Кодът на грешката е HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">Връзката прекъсна по време на изтеглянето. Опитайте отново, за да продължите от мястото, където спря.</string>
+    <string name="core_voice_download_space_error">Няма достатъчно място за съхранение на вашето устройство. Първо трябва да освободите около %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">Този модел използва езика, на който пишете, същият като модела за 40 езика. Той обхваща само европейските езици, така че изтеглянето е по-малко.</string>
+    <string name="core_voice_model_base_multi_body">Този модел балансира между точност и скорост. Той покрива всеки език, който Whisper познава. Изберете го, ако малкият модел е твърде бавен.</string>
+    <string name="core_voice_model_base_world_body">Този модел използва езика, на който пишете, вместо да гадае. Кратките фрази стават много по-надеждни. Изберете го, когато списъкът му съдържа вашите езици.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d език</item>
+        <item quantity="other">%1$d езика</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Това е един от най-точните модели на Whisper, но е твърде голям за повечето телефони. Изтеглянето е 1,5 GB. Само устройство с голямо количество памет може да го зареди.</string>
+    <string name="core_voice_model_large_v3_multi_body">Това е най-точният модел на Whisper и най-добрият при разпознаването на езика, на който говорите. Изтеглянето е 1,5 GB. Само устройство с голямо количество памет може да го зареди. Моделът Turbo е почти толкова точен и е наполовина по-малък.</string>
+    <string name="core_voice_model_medium_multi_body">Този модел осигурява точност, близка до настолна. Всяка фраза отнема няколко секунди. Моделът използва почти един гигабайт памет, докато работи.</string>
+    <string name="core_voice_model_single_language_body">Този модел обработва само %1$s. Той няма стъпка за откриване на езика. Това го прави по-бърз и малко по-точен от многоезичен модел със същия размер.</string>
+    <string name="core_voice_model_small_multi_body">Този модел осигурява най-добра точност, която все още работи добре на телефон. Той се справя с акценти и фонов шум по-добре от базовия модел. Покрива всеки език, който Whisper познава.</string>
+    <string name="core_voice_model_small_world_body">Този модел използва езика, на който пишете, и има точността на малкия модел. Това е най-точният модел, който все още се побира на телефон.</string>
+    <string name="core_voice_model_tiny_multi_body">Това е най-бързият многоезичен модел. Работи добре при ясна реч, но шумът намалява точността.</string>
+    <string name="core_voice_model_turbo_multi_body">Този модел разпознава езика, на който говорите, много по-добре от по-малките модели. Изберете го, ако по-малък модел транскрибира речта ви на грешен език. Това е голям файл за изтегляне и всяка фраза отнема няколко секунди.</string>
+    <string name="core_voice_size_base_label">Базов</string>
+    <string name="core_voice_size_large_label">Голям</string>
+    <string name="core_voice_size_medium_label">Среден</string>
+    <string name="core_voice_size_small_label">Малък</string>
+    <string name="core_voice_size_tiny_label">Много малък</string>
+    <string name="core_voice_size_turbo_label">Турбо</string>
+    <string name="core_voice_tier_recommended_label">Препоръчително</string>
+    <string name="core_voice_whisper_mel_bins_error">Този гласов модел се нуждае от %1$s-лентова спектрограма, която не съвпада с файла, с който е изтеглен. Изтрийте модела в настройките и го изтеглете отново.</string>
+    <string name="core_voice_whisper_model_load_error">Гласовият модел не се зареди. Файлът вероятно е повреден. Изтрийте модела в настройките и го изтеглете отново.</string>
+    <string name="core_voice_whisper_transcribe_error">Гласовото въвеждане не проработи. Опитайте отново или изберете по-малък модел.</string>
+</resources>

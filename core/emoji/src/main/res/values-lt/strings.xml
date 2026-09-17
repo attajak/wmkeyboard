@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Tas jaustukų raktažodžių sąrašas yra tuščias arba neįskaitomas.</string>
+    <string name="core_emoji_dict_error_http">Serveris neatsiuntė failo. Klaidos kodas yra HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Šis failas nėra jaustukų raktinių žodžių sąrašas.</string>
+    <string name="core_emoji_dict_error_save">Programėlei nepavyko išsaugoti jaustukų raktinių žodžių sąrašo.</string>
+    <string name="core_emoji_dict_error_too_large">Šis jaustukų raktažodžių sąrašas yra per didelis.</string>
+</resources>

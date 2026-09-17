@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">Danh sách từ khóa biểu tượng cảm xúc đó trống hoặc không thể đọc được.</string>
+    <string name="core_emoji_dict_error_http">Máy chủ không gửi tệp. Mã lỗi là HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">Tệp đó không phải là danh sách từ khóa biểu tượng cảm xúc.</string>
+    <string name="core_emoji_dict_error_save">Ứng dụng không thể lưu danh sách từ khóa biểu tượng cảm xúc.</string>
+    <string name="core_emoji_dict_error_too_large">Danh sách từ khóa biểu tượng cảm xúc đó quá lớn.</string>
+</resources>

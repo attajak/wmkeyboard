@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">హగ్గింగ్ ఫేస్ సర్వర్ ఫైల్‌ను పంపలేదు. ఎర్రర్ కోడ్ HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">డౌన్‌లోడ్ సమయంలో కనెక్షన్ ఆగిపోయింది. అది ఎక్కడ ఆగిందో అక్కడి నుండి కొనసాగించడానికి మళ్ళీ ప్రయత్నించండి.</string>
+    <string name="core_voice_download_space_error">మీ పరికరంలో తగినంత నిల్వ లేదు. మీరు ముందుగా సుమారు %1$s MB ఖాళీ చేయాలి.</string>
+    <string name="core_voice_model_base_eu_body">ఈ మోడల్ మీరు టైప్ చేసే భాషను ఉపయోగిస్తుంది, ఇది 40 భాషల మోడల్ లాగానే ఉంటుంది. ఇది కేవలం యూరోపియన్ భాషలను మాత్రమే కవర్ చేస్తుంది, కాబట్టి డౌన్‌లోడ్ పరిమాణం తక్కువగా ఉంటుంది.</string>
+    <string name="core_voice_model_base_multi_body">ఈ మోడల్ ఖచ్చితత్వాన్ని మరియు వేగాన్ని సమతుల్యం చేస్తుంది. ఇది విస్పర్‌కు తెలిసిన ప్రతి భాషను కవర్ చేస్తుంది. స్మాల్ మోడల్ చాలా నెమ్మదిగా ఉంటే దీన్ని ఎంచుకోండి.</string>
+    <string name="core_voice_model_base_world_body">ఈ మోడల్ ఊహలకు బదులుగా మీరు టైప్ చేసే భాషను ఉపయోగిస్తుంది. చిన్న పదబంధాలు మరింత నమ్మదగినవిగా మారతాయి. దీని జాబితాలో మీ భాషలు ఉన్నప్పుడు దీన్ని ఎంచుకోండి.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d భాష</item>
+        <item quantity="other">%1$d భాషలు</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">ఇది అత్యంత ఖచ్చితమైన విస్పర్స్ మోడల్స్‌లో ఒకటి, కానీ ఇది చాలా ఫోన్‌లకు చాలా పెద్దది. దీని డౌన్‌లోడ్ పరిమాణం 1.5 GB. ఎక్కువ మెమరీ ఉన్న పరికరం మాత్రమే దీన్ని లోడ్ చేయగలదు.</string>
+    <string name="core_voice_model_large_v3_multi_body">ఇది అత్యంత ఖచ్చితమైన విస్పర్స్ మోడల్, మరియు మీరు ఏ భాష మాట్లాడుతున్నారో గుర్తించడంలో ఇది ఉత్తమమైనది. దీని డౌన్‌లోడ్ పరిమాణం 1.5 GB. ఎక్కువ మెమరీ ఉన్న పరికరాలు మాత్రమే దీనిని లోడ్ చేయగలవు. టర్బో మోడల్ కూడా దాదాపు ఇంతే ఖచ్చితంగా ఉంటుంది మరియు పరిమాణంలో సగం మాత్రమే ఉంటుంది.</string>
+    <string name="core_voice_model_medium_multi_body">ఈ మోడల్ దాదాపు డెస్క్‌టాప్ ఖచ్చితత్వాన్ని ఇస్తుంది. ప్రతి పదబంధానికి కొన్ని సెకన్లు పడుతుంది. ఇది నడుస్తున్నప్పుడు ఈ మోడల్ దాదాపు ఒక గిగాబైట్ మెమరీని ఉపయోగిస్తుంది.</string>
+    <string name="core_voice_model_single_language_body">ఈ మోడల్ %1$s భాషను మాత్రమే నిర్వహిస్తుంది. ఇందులో భాషను గుర్తించే దశ లేదు. దీనివల్ల ఇది అదే పరిమాణంలో ఉన్న బహుభాషా మోడల్ కంటే వేగంగా మరియు కొంచెం ఖచ్చితంగా పనిచేస్తుంది.</string>
+    <string name="core_voice_model_small_multi_body">ఈ మోడల్ ఫోన్‌లో బాగా పనిచేసేటప్పుడు కూడా అత్యుత్తమ ఖచ్చితత్వాన్ని ఇస్తుంది. ఇది బేస్ మోడల్ కంటే యాసలను మరియు నేపథ్య శబ్దాలను మెరుగ్గా నిర్వహించగలదు. విస్పర్‌కు తెలిసిన ప్రతి భాషను ఇది కవర్ చేస్తుంది.</string>
+    <string name="core_voice_model_small_world_body">ఈ మోడల్ మీరు టైప్ చేసే భాషను ఉపయోగిస్తుంది మరియు స్మాల్ మోడల్ ఖచ్చితత్వాన్ని కలిగి ఉంటుంది. ఫోన్‌లో సరిపోయే అత్యంత ఖచ్చితమైన మోడల్ ఇది.</string>
+    <string name="core_voice_model_tiny_multi_body">ఇది అత్యంత వేగవంతమైన బహుభాషా మోడల్. ఇది స్పష్టమైన మాటలతో బాగా పనిచేస్తుంది, కానీ శబ్దం ఖచ్చితత్వాన్ని తగ్గిస్తుంది.</string>
+    <string name="core_voice_model_turbo_multi_body">ఈ మోడల్ మీరు మాట్లాడే భాషను చిన్న మోడల్స్ కంటే మెరుగ్గా గుర్తిస్తుంది. చిన్న మోడల్ మీ మాటలను తప్పు భాషగా ట్రాన్స్‌క్రైబ్ చేస్తే దీన్ని ఎంచుకోండి. ఇది పెద్ద డౌన్‌లోడ్, మరియు ప్రతి పదబంధానికి కొన్ని సెకన్లు పడుతుంది.</string>
+    <string name="core_voice_size_base_label">బేస్</string>
+    <string name="core_voice_size_large_label">పెద్దది</string>
+    <string name="core_voice_size_medium_label">మధ్యస్థం</string>
+    <string name="core_voice_size_small_label">చిన్నది</string>
+    <string name="core_voice_size_tiny_label">చాలా చిన్నది</string>
+    <string name="core_voice_size_turbo_label">టర్బో</string>
+    <string name="core_voice_tier_recommended_label">సిఫార్సు చేయబడింది</string>
+    <string name="core_voice_whisper_mel_bins_error">ఈ వాయిస్ మోడల్‌కు %1$s బ్యాండ్ స్పెక్ట్రోగ్రామ్ అవసరం, ఇది డౌన్‌లోడ్ చేసిన ఫైల్‌తో సరిపోలడం లేదు. సెట్టింగ్‌లలో మోడల్‌ను తొలగించి, మళ్లీ డౌన్‌లోడ్ చేయండి.</string>
+    <string name="core_voice_whisper_model_load_error">వాయిస్ మోడల్ లోడ్ కాలేదు. ఫైల్ పాడై ఉండవచ్చు. సెట్టింగ్‌లలో మోడల్‌ను తొలగించి, మళ్లీ డౌన్‌లోడ్ చేయండి.</string>
+    <string name="core_voice_whisper_transcribe_error">వాయిస్ టైపింగ్ పని చేయలేదు. మళ్ళీ ప్రయత్నించండి లేదా చిన్న మోడల్‌ను ఎంచుకోండి.</string>
+</resources>

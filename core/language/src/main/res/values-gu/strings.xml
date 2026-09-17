@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">એપે %1$d કીને તેની પાસેની સૌથી નજીકની કીમાં બદલી છે.</item>
+        <item quantity="other">એપે %1$d કીને તેની પાસેની સૌથી નજીકની કીઓમાં બદલી છે.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">એપે %1$d કી દૂર કરી છે. આ કીબોર્ડમાં એવી કોઈ કી નથી જે સમાન કામ કરે (કોડ %2$s).</item>
+        <item quantity="other">એપે %1$d કીઓ દૂર કરી છે. આ કીબોર્ડમાં એવી કોઈ કીઓ નથી જે સમાન કામ કરે (કોડ %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">એપે %1$d કીનું લેબલ કદ જાળવી રાખ્યું છે પણ તેની ટેક્સ્ટ શૈલી નહીં. આ કીબોર્ડ લેબલ્સને એક શૈલીમાં દોરે છે.</item>
+        <item quantity="other">એપે %1$d કીનું લેબલ કદ જાળવી રાખ્યું છે પણ તેમની ટેક્સ્ટ શૈલી નહીં. આ કીબોર્ડ લેબલ્સને એક શૈલીમાં દોરે છે.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">એપ્લિકેશને %1$d અક્ષરને તે સ્વરૂપમાં બદલ્યો છે જે આ કીબોર્ડ લખે છે.</item>
+        <item quantity="other">એપ્લિકેશને %1$d અક્ષરોને તે સ્વરૂપમાં બદલ્યા છે જે આ કીબોર્ડ લખે છે.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d કીમાં પ્રેસ-એન્ડ-હોલ્ડ અક્ષરો નથી. ફાઇલ તેમને બીજી ફાઇલમાં રાખે છે જે તમે ખોલી નથી.</item>
+        <item quantity="other">%1$d કીમાં પ્રેસ-એન્ડ-હોલ્ડ અક્ષરો નથી. ફાઇલ તેમને બીજી ફાઇલમાં રાખે છે જે તમે ખોલી નથી.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">બીજું કીબોર્ડ કીની પહોળાઈને અલગ રીતે માપે છે. એપ્લિકેશને આ ગ્રીડમાં ફિટ કરવા માટે પહોળાઈ બદલી છે.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%2$s લેયરમાં %1$d બ્રેઈલ ડોટ કીમાં 1 થી 6 ની બહારનો ડોટ નંબર છે.</item>
+        <item quantity="other">%2$s લેયરમાં %1$d બ્રેઈલ ડોટ કીમાં 1 થી 6 ની બહારના ડોટ નંબર છે.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%2$s લેયરમાં %1$d કી પાસે કોઈ લેબલ અને કોઈ આઉટપુટ નથી. તે કંઈ ટાઈપ કરતી નથી, અને જ્યારે તમે આ લેઆઉટ ચાલુ કરો છો ત્યારે એપ તેને કાઢી નાખે છે.</item>
+        <item quantity="other">%2$s લેયરમાં %1$d કી પાસે કોઈ લેબલ અને કોઈ આઉટપુટ નથી. તે કંઈ ટાઈપ કરતી નથી, અને જ્યારે તમે આ લેઆઉટ ચાલુ કરો છો ત્યારે એપ તેમને કાઢી નાખે છે.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">%2$s લેયરની હરોળ %1$d ખાલી છે.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%2$s લેયરમાં %1$d કી એક પેનલ ઘટક છે. ઘટકો ફક્ત પેનલ લેઆઉટમાં જ કામ કરે છે.</item>
+        <item quantity="other">%2$s લેયરમાં %1$d કીઓ પેનલ ઘટકો છે. ઘટકો ફક્ત પેનલ લેઆઉટમાં જ કામ કરે છે.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">%2$s લેયરની %1$d રો માં એવી કી છે જેની કોઈ પહોળાઈ નથી.</string>
+    <string name="core_lang_layout_key_span_error">%2$s લેયરની %1$d હરોળમાં એક એવી કી છે જે 1 કરતા ઓછી અથવા %3$d કરતા વધુ હરોળને આવરી લે છે.</string>
+    <string name="core_lang_layout_letters_empty_error">અક્ષરો લેયરમાં કોઈ કી નથી.</string>
+    <string name="core_lang_layout_no_delete_error">લેઆઉટમાં કોઈ ડિલીટ કી નથી. તમે ભૂલ સુધારી શકતા નથી.</string>
+    <string name="core_lang_layout_no_enter_error">લેઆઉટમાં કોઈ એન્ટર કી નથી.</string>
+    <string name="core_lang_layout_no_shift_warning">લેઆઉટમાં શિફ્ટ કી નથી. કેપિટલ અક્ષર ટાઈપ કરવા માટે, એક કી દબાવી રાખો.</string>
+    <string name="core_lang_layout_no_space_error">લેઆઉટમાં સ્પેસ કી નથી.</string>
+    <string name="core_lang_layout_no_way_back_error">%1$s લેયરમાં એવી કોઈ કી નથી જે અક્ષરો પર પાછા જાય. તમે આ લેયર છોડી શકતા નથી.</string>
+    <string name="core_lang_layout_persistent_warning">જ્યારે કીબોર્ડ બંધ થાય ત્યારે %1$s લેયર ખુલ્લું રહે છે. ખાતરી કરો કે તમારી પાસે આ લેઆઉટમાંથી બહાર નીકળવાનો રસ્તો છે.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">આ લેઆઉટમાં એવી કોઈ કી નથી જે તેને છોડી શકે. ખાતરી કરો કે તમારી પાસે આ લેઆઉટમાંથી બહાર નીકળવાનો રસ્તો છે: ABC કી, સિમ્બોલ કી, અથવા ટૂલબાર પરનું કસ્ટમ લેઆઉટ ટૂલ.</string>
+    <string name="core_lang_layout_span_past_end_warning">%2$s લેયરની %1$d હરોળમાં એક એવી કી છે જે લેયરમાં છે તેના કરતા વધુ હરોળને આવરી લે છે. કીબોર્ડ તેને છેલ્લી હરોળ પર અટકાવે છે.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">%2$s લેયરની %1$d હરોળમાં %3$d કી છે. માત્ર %4$d કી દબાવવા માટે પૂરતી મોટી રહે છે.</item>
+        <item quantity="other">%2$s લેયરની %1$d હરોળમાં %3$d કી છે. માત્ર %4$d કી દબાવવા માટે પૂરતી મોટી રહે છે.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">%1$s લેયરમાં %2$d હરોળ છે. માત્ર %3$d હરોળ સમાઈ શકે છે.</item>
+        <item quantity="other">%1$s લેયરમાં %2$d હરોળ છે. માત્ર %3$d હરોળ સમાઈ શકે છે.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%2$s લેયરમાં %1$d કી એવી ક્રિયાનો ઉપયોગ કરે છે જે એપ્લિકેશનનું આ સંસ્કરણ જાણતું નથી.</item>
+        <item quantity="other">%2$s લેયરમાં %1$d કી એવી ક્રિયાઓનો ઉપયોગ કરે છે જે એપ્લિકેશનનું આ સંસ્કરણ જાણતું નથી.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">%2$s લેયરની %1$d રો અન્ય રો કરતા પહોળી છે. કીબોર્ડ આ રોની કીને સાંકડી દોરે છે.</string>
+    <string name="core_lang_numeral_scope_display_only">માત્ર પ્રદર્શન</string>
+    <string name="core_lang_numeral_scope_everywhere">દરેક જગ્યાએ</string>
+    <string name="core_lang_numeral_scope_text_fields">ટેક્સ્ટ ફીલ્ડ્સ</string>
+    <string name="core_lang_numeral_system_auto">ઓટો</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d ઘટક એક કરતા વધુ વાર દેખાય છે. એપ પ્રથમ નકલ રાખે છે.</item>
+        <item quantity="other">%1$d ઘટકો એક કરતા વધુ વાર દેખાય છે. એપ દરેકની પ્રથમ નકલ રાખે છે.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">આ પેનલમાં કોઈ કી નથી. એપ તેના બદલે સ્ટાન્ડર્ડ પેનલનો ઉપયોગ કરે છે.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d કી પાસે એવી ક્રિયા છે જે પેનલ પર કામ કરતી નથી. એપ તેને ડિલીટ કરે છે.</item>
+        <item quantity="other">%1$d કી પાસે એવી ક્રિયાઓ છે જે પેનલ પર કામ કરતી નથી. એપ તેમને ડિલીટ કરે છે.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">આ પેનલમાં કોઈ ABC કી નથી. કી પર પાછા જવા માટે ટૂલબાર અથવા બેક બટનનો ઉપયોગ કરો.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">એપે ઘટકની બીજી નકલ કાઢી નાખી છે.</string>
+    <string name="core_lang_panel_repair_field_added">એપે પેનલના મુખ્ય ઘટકને નવી હરોળમાં ઉમેર્યું છે.</string>
+    <string name="core_lang_panel_repair_field_dropped">એપે એક ઘટક કાઢી નાખ્યું છે જે આ પેનલનું નથી.</string>
+    <string name="core_lang_panel_repair_key_dropped">એપે એવી કી ડિલીટ કરી છે જેનું કાર્ય પેનલ પર કામ કરતું નથી.</string>
+    <string name="core_lang_panel_repair_reset">એપે ખાલી પેનલને પ્રમાણભૂત પેનલ સાથે બદલી નાખી છે.</string>
+    <string name="core_lang_panel_required_field_error">આ પેનલમાં તેનો મુખ્ય ઘટક ખૂટે છે. જ્યારે એપ પેનલ ડ્રો કરે છે ત્યારે તે એક ઉમેરે છે.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d ઘટક આ પેનલનો ભાગ નથી. એપ તેને ડિલીટ કરે છે.</item>
+        <item quantity="other">%1$d ઘટકો આ પેનલનો ભાગ નથી. એપ તેમને ડિલીટ કરે છે.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">એપે %1$s લેયરમાં એક ખાલી કી કાઢી નાખી છે.</string>
+    <string name="core_lang_repair_braille_dot_clamped">%1$s લેયરની એક કી બ્રેઈલ ડોટ %2$d નો ઉપયોગ કરતી હતી. એપ તેને ડોટ %3$d બનાવી દીધી છે.</string>
+    <string name="core_lang_repair_delete_key_added">અક્ષરોના લેયરમાં કોઈ ડિલીટ કી નહોતી. એપ દ્વારા એક ઉમેરવામાં આવી છે.</string>
+    <string name="core_lang_repair_enter_key_added">અક્ષરોની લેયરમાં એન્ટર કી નહોતી. એપ દ્વારા એક ઉમેરવામાં આવી છે.</string>
+    <string name="core_lang_repair_field_key_deleted">એપે %1$s લેયરમાંથી પેનલ ઘટક ડિલીટ કર્યું છે. ઘટકો ફક્ત પેનલ લેઆઉટમાં જ કામ કરે છે.</string>
+    <string name="core_lang_repair_key_letters_anchored">%1$s લેયરમાં એક કી %2$s માટે છે. એપ તેને %3$s ટાઇપ કરવા માટે બનાવી છે.</string>
+    <string name="core_lang_repair_key_letters_dropped">%1$s લેયરમાં એક કીએ %2$s ને તે જે અક્ષરો માટે છે તે તરીકે સૂચિબદ્ધ કર્યા છે. તે અક્ષરો નથી, તેથી એપ્લિકેશને તેને સામાન્ય કી બનાવી દીધી છે.</string>
+    <string name="core_lang_repair_key_span_clamped">%1$s લેયરમાં એક કી %2$d પંક્તિઓને આવરી લે છે. એપ તેને %3$d આવરી લે તેવી બનાવી છે.</string>
+    <string name="core_lang_repair_key_width_capped">%1$s લેયરમાં એક કી %2$s યુનિટ પહોળી હતી. એપ દ્વારા તેને %3$s યુનિટ પહોળી કરવામાં આવી છે.</string>
+    <string name="core_lang_repair_key_width_set">%1$s લેયરમાં એક કીની કોઈ પહોળાઈ નહોતી. એપ દ્વારા પહોળાઈ 1 સેટ કરવામાં આવી છે.</string>
+    <string name="core_lang_repair_layer_replaced">%1$s લેયરમાં કોઈ કામ કરતી કી નહોતી. તે હવે બિલ્ટ-ઇન ગ્રીડનો ઉપયોગ કરે છે.</string>
+    <string name="core_lang_repair_letters_key_added">%1$s લેયરમાં અક્ષરો પર પાછા જવા માટે કોઈ કી નહોતી. એપમાં એક ABC કી ઉમેરવામાં આવી છે.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">%1$s લેયરમાં એક હરોળમાં %2$d કી હતી. એપ પ્રથમ %3$d રાખે છે.</item>
+        <item quantity="other">%1$s લેયરમાં એક હરોળમાં %2$d કી હતી. એપ પ્રથમ %3$d રાખે છે.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">%1$s લેયરમાં એક પંક્તિ %2$s યુનિટ પહોળી હતી. એપ દ્વારા કીને નાની કરવામાં આવી છે જેથી પંક્તિ ફિટ થઈ શકે.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">%1$s લેયરમાં %2$d રો હતી. એપ પ્રથમ %3$d રાખે છે.</item>
+        <item quantity="other">%1$s લેયરમાં %2$d રો હતી. એપ પ્રથમ %3$d રાખે છે.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">અક્ષરોના લેયરમાં કોઈ સ્પેસ કી નહોતી. એપ્લિકેશને એક ઉમેરી છે.</string>
+    <string name="core_lang_repair_unknown_key_deleted">એપે %1$s લેયરમાં એક કી ડિલીટ કરી છે. તેની ક્રિયા \"%2$s\" અજ્ઞાત છે.</string>
+</resources>

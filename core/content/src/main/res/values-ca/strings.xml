@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">Codi d\'un sol ús</string>
+    <string name="core_content_clip_entity_otp_tag">CODI</string>
+    <string name="core_content_clip_entity_phone_label">Número de telèfon</string>
+    <string name="core_content_clip_entity_phone_tag">TELÈFON</string>
+    <string name="core_content_clip_entity_url_label">Enllaç</string>
+    <string name="core_content_clip_entity_url_tag">ENLLAÇ</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d fragment té altres expansions que l\'Espanso no pot contenir. Només s\'ha escrit la primera.</item>
+        <item quantity="other">%1$d fragments tenen altres expansions que l\'Espanso no pot contenir. Només s\'ha escrit la primera de cadascun.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d fragment està limitat a determinats programes informàtics. Al telèfon funciona a tot arreu.</item>
+        <item quantity="other">%1$d fragments estan limitats a determinats programes informàtics. Al telèfon funcionen a tot arreu.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d fragment et demana que triïs d\'una llista. L\'aplicació en tria un a l\'atzar.</item>
+        <item quantity="other">%1$d fragments et demanen que triïs d\'una llista. L\'aplicació en tria un a l\'atzar.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d fragment demana confirmació abans d\'expandir-se. Espanso no té aquesta configuració, així que s\'expandirà sol allà.</item>
+        <item quantity="other">%1$d fragments demanen confirmació abans d\'expandir-se. Espanso no té aquesta configuració, així que s\'expandiran sols allà.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d fragment utilitza un format de data que l\'aplicació no pot escriure completament. L\'aplicació ha omès la part que no pot fer.</item>
+        <item quantity="other">%1$d fragments utilitzen formats de data que l\'aplicació no pot escriure completament. L\'aplicació ha omès les parts que no pot fer.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d fragment es troba en una carpeta que està desactivada. Espanso no té commutador de carpetes, així que s\'hi expandirà.</item>
+        <item quantity="other">%1$d fragments es troben en carpetes que estan desactivades. Espanso no té commutador de carpetes, així que s\'hi expandiran.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">L\'aplicació ha omès %1$d fragment que no té res per inserir.</item>
+        <item quantity="other">L\'aplicació ha omès %1$d fragments que no tenen res per inserir.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d fragment us demana que ompliu un formulari. L\'aplicació insereix el formulari com a text, amb el cursor al primer espai en blanc.</item>
+        <item quantity="other">%1$d fragments us demanen que ompliu un formulari. L\'aplicació insereix cada formulari com a text, amb el cursor al primer espai en blanc.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">L\'aplicació ha omès %1$d fragment que insereix una imatge.</item>
+        <item quantity="other">L\'aplicació ha omès %1$d fragments que insereixen imatges.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">El fitxer llegeix %1$d altre fitxer. Un fitxer no pot portar els altres amb ell.</item>
+        <item quantity="other">El fitxer llegeix %1$d altres fitxers. Un fitxer no pot portar els altres amb ell.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d fragment apunta a altres fragments. Espanso no té manera d\'expressar-ho, així que els enllaços s\'han omès.</item>
+        <item quantity="other">%1$d fragments apunten a altres fragments. Espanso no té manera d\'expressar-ho, així que els enllaços s\'han omès.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d activador està pensat per funcionar dins d\'una paraula. Al teu telèfon només funciona com a paraula sencera.</item>
+        <item quantity="other">%1$d activadors estan pensats per funcionar dins d\'una paraula. Al teu telèfon només funcionen com a paraules senceres.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d fragment utilitza un valor per al qual Espanso no té cap equivalent. S\'escriu tal qual.</item>
+        <item quantity="other">%1$d fragments utilitzen valors per als quals Espanso no té cap equivalent. S\'escriuen tal qual.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">L\'aplicació ha eliminat el patró de %1$d fragment. L\'aplicació no executa patrons d\'aquesta forma. El fragment roman a la llista.</item>
+        <item quantity="other">L\'aplicació ha eliminat el patró de %1$d fragments. L\'aplicació no executa patrons d\'aquesta forma. Els fragments romanen a la llista.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d fragment utilitza text amb format. L\'aplicació conserva les paraules i elimina el format.</item>
+        <item quantity="other">%1$d fragments utilitzen text amb format. L\'aplicació conserva les paraules i elimina el format.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d fragment executa una ordre a l\'ordinador. L\'aplicació ha omès l\'ordre i no l\'executa mai.</item>
+        <item quantity="other">%1$d fragments executen ordres a l\'ordinador. L\'aplicació ha omès les ordres i no les executa mai.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d activador no acaba en una paraula, així que l\'aplicació no pot vigilar-lo. El seu fragment roman a la llista.</item>
+        <item quantity="other">%1$d activadors no acaben en una paraula, així que l\'aplicació no pot vigilar-los. Els seus fragments romanen a la llista.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d fragment conté text entre claus que aquesta aplicació omple, com ara {date}. S\'expandirà en lloc d\'aparèixer tal com està escrit.</item>
+        <item quantity="other">%1$d fragments contenen text entre claus que aquesta aplicació omple, com ara {date}. S\'expandiran en lloc d\'aparèixer tal com estan escrits.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d fragment canvia les majúscules del que ha capturat el seu patró. Espanso no pot fer-ho, així que el text capturat es manté sense canvis.</item>
+        <item quantity="other">%1$d fragments canvien les majúscules del que han capturat els seus patrons. Espanso no pot fer-ho, així que el text capturat es manté sense canvis.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">%1$d fragment utilitza un valor per al qual l\'aplicació no té cap equivalent. Aquesta part apareix buida.</item>
+        <item quantity="other">%1$d fragments utilitzen valors per als quals l\'aplicació no té cap equivalent. Aquestes parts apareixen buides.</item>
+    </plurals>
+    <string name="core_content_font_error_download">L\'aplicació no pot descarregar el tipus de lletra. Comprova la teva connexió i torna-ho a provar.</string>
+    <string name="core_content_font_error_empty">El fitxer està buit.</string>
+    <string name="core_content_font_error_load">L\'aplicació no pot carregar aquest fitxer de tipus de lletra.</string>
+    <string name="core_content_font_error_markup">Aquest fitxer és un fitxer HTML o XML, no un tipus de lletra.</string>
+    <string name="core_content_font_error_no_storage">No hi ha emmagatzematge disponible per al tipus de lletra.</string>
+    <string name="core_content_font_error_not_a_font">Aquest fitxer no sembla una font .ttf o .otf.</string>
+    <string name="core_content_font_error_read">L\'aplicació no pot llegir el tipus de lletra.</string>
+    <string name="core_content_font_error_save">L\'aplicació no pot desar el tipus de lletra.</string>
+    <string name="core_content_font_error_too_large">Un tipus de lletra ha de ser inferior a %1$d MB.</string>
+    <string name="core_content_font_error_too_many">La biblioteca de tipus de lletra està plena. Suprimeix un tipus de lletra i torna-ho a provar.</string>
+    <string name="core_content_font_error_too_short">El fitxer és massa curt per ser un tipus de lletra.</string>
+    <string name="core_content_font_error_woff">L\'aplicació no pot llegir tipus de lletra web WOFF. Utilitzeu la versió .ttf o .otf del tipus de lletra.</string>
+    <string name="core_content_font_error_woff2">L\'aplicació no pot llegir tipus de lletra web WOFF2. Utilitza la versió .ttf o .otf del tipus de lletra.</string>
+    <string name="core_content_font_error_zip">Aquest fitxer és un arxiu zip, no un tipus de lletra.</string>
+    <string name="core_content_selection_macro_add_contact">Contacte</string>
+    <string name="core_content_selection_macro_calendar">Calendari</string>
+    <string name="core_content_selection_macro_call">Truca</string>
+    <string name="core_content_selection_macro_case_lower">minúscules</string>
+    <string name="core_content_selection_macro_case_sentence">Majúscula inicial</string>
+    <string name="core_content_selection_macro_case_title">Majúscules inicials</string>
+    <string name="core_content_selection_macro_case_upper">MAJÚSCULES</string>
+    <string name="core_content_selection_macro_chat_bold">Negreta</string>
+    <string name="core_content_selection_macro_chat_italic">Cursiva</string>
+    <string name="core_content_selection_macro_chat_mono">Mono</string>
+    <string name="core_content_selection_macro_chat_strike">Ratllat</string>
+    <string name="core_content_selection_macro_colour">Color</string>
+    <string name="core_content_selection_macro_copy">Copia</string>
+    <string name="core_content_selection_macro_digits_latin">Dígits</string>
+    <string name="core_content_selection_macro_email">Correu electrònic</string>
+    <string name="core_content_selection_macro_fancy">Elegant</string>
+    <string name="core_content_selection_macro_find">Cerca</string>
+    <string name="core_content_selection_macro_format">Format</string>
+    <string name="core_content_selection_macro_grammar">Gramàtica</string>
+    <string name="core_content_selection_macro_lines_bullet">Vinyetes</string>
+    <string name="core_content_selection_macro_lines_dedupe">Únic</string>
+    <string name="core_content_selection_macro_lines_number">Número</string>
+    <string name="core_content_selection_macro_lines_sort">Ordenar</string>
+    <string name="core_content_selection_macro_map">Mapa</string>
+    <string name="core_content_selection_macro_open">Obre</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">Parla</string>
+    <string name="core_content_selection_macro_replace">Reemplaçar</string>
+    <string name="core_content_selection_macro_search">Cerca</string>
+    <string name="core_content_selection_macro_share">Comparteix</string>
+    <string name="core_content_selection_macro_sms">Missatge</string>
+    <string name="core_content_selection_macro_time_zones">Zones</string>
+    <string name="core_content_selection_macro_to_bangla">Bengalí</string>
+    <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_translate">Tradueix</string>
+    <string name="core_content_selection_macro_url_decode">Descodificar</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">L\'aplicació ha deixat fora %2$d expansió de \"%1$s\".</item>
+        <item quantity="other">L\'aplicació ha deixat fora %2$d expansions de \"%1$s\".</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">L\'aplicació ha eliminat el patró de \"%1$s\". El patró no és correcte. El fragment es manté a la llista.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">L\'aplicació ha descartat %1$d carpeta que no té nom o que en repeteix una altra. Els seus fragments han entrat sense carpeta.</item>
+        <item quantity="other">L\'aplicació ha descartat %1$d carpetes que no tenen nom o que en repeteixen una altra. Els seus fragments han entrat sense carpeta.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">El fitxer té més fragments dels que l\'aplicació conserva. L\'aplicació ha importat els primers %1$d.</item>
+        <item quantity="other">El fitxer té més fragments dels que l\'aplicació conserva. L\'aplicació ha importat els primers %1$d.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">Un fragment no té nom, així que l\'aplicació l\'ha anomenat segons la seva primera línia.</string>
+    <string name="core_content_snippet_repair_no_text">L\'aplicació ha descartat \"%1$s\". No té text.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">L\'aplicació ha eliminat el patró de \"%1$s\". Era més llarg d\'1 caràcter.</item>
+        <item quantity="other">L\'aplicació ha eliminat el patró de \"%1$s\". Era més llarg de %2$d caràcters.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">L\'aplicació ha escurçat \"%1$s\". Era més llarg d\'1 caràcter.</item>
+        <item quantity="other">L\'aplicació ha escurçat \"%1$s\". Era més llarg de %2$d caràcters.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">El nom de l\'aplicació on escrius</string>
+    <string name="core_content_snippet_var_clip_info">L\'entrada més recent del porta-retalls</string>
+    <string name="core_content_snippet_var_cursor_info">El lloc on cau el cursor</string>
+    <string name="core_content_snippet_var_date_info">Data d\'avui</string>
+    <string name="core_content_snippet_var_datetime_info">La data i l\'hora</string>
+    <string name="core_content_snippet_var_day_info">El dia del mes</string>
+    <string name="core_content_snippet_var_isodate_info">La data en format ISO, per exemple 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">La data i l\'hora en format ISO</string>
+    <string name="core_content_snippet_var_month_info">El nom del mes</string>
+    <string name="core_content_snippet_var_package_info">El nom del paquet d\'aquesta aplicació</string>
+    <string name="core_content_snippet_var_selection_info">El text que seleccioneu al camp</string>
+    <string name="core_content_snippet_var_time12_info">L\'hora actual en format de 12 hores</string>
+    <string name="core_content_snippet_var_time_info">L\'hora actual en format de 24 hores</string>
+    <string name="core_content_snippet_var_timestamp_info">L\'hora en segons Unix</string>
+    <string name="core_content_snippet_var_timezone_info">La zona horària, per exemple GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">Un nou UUID aleatori</string>
+    <string name="core_content_snippet_var_weekday_info">El nom del dia, per exemple diumenge</string>
+    <string name="core_content_snippet_var_year_info">L\'any, amb quatre dígits</string>
+    <string name="core_content_sticker_pack_imported_label">Adhesius importats</string>
+    <string name="core_content_sticker_repair_image_missing">L\'aplicació ha descartat \"%1$s\". Falta la seva imatge.</string>
+    <string name="core_content_sticker_repair_image_unreadable">L\'aplicació ha descartat \"%1$s\". L\'aplicació no pot llegir la seva imatge.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">El paquet té %1$d adhesiu. L\'aplicació en manté el primer %2$d.</item>
+        <item quantity="other">El paquet té %1$d adhesius. L\'aplicació en manté els primers %2$d.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">L\'aplicació ha deixat caure un adhesiu. El nom de l\'adhesiu no correspon a cap fitxer d\'imatge.</string>
+    <string name="core_content_sticker_repair_none_listed">El fitxer del paquet no llista cap adhesiu.</string>
+    <string name="core_content_sticker_repair_not_saved">L\'aplicació ha descartat \"%1$s\". L\'aplicació no el pot desar.</string>
+</resources>

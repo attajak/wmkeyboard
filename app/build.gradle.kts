@@ -303,6 +303,16 @@ android {
         buildConfig = true
     }
 
+    androidResources {
+        // Writes a LocaleConfig listing every res/values-xx the build carries,
+        // and points the manifest at it. Without this, Android 13 and up has
+        // no per-app entry under Settings > Apps > WM Keyboard > Language, so
+        // the translations recovered by tools/i18n/pull-play-translations.py
+        // could only ever follow the system language. Generated rather than
+        // hand-written so the list cannot drift from the locales that shipped.
+        generateLocaleConfig = true
+    }
+
     // Android Lint. Severities live in config/lint/lint.xml — this block only
     // says *what* to analyse and *how loudly* to report it.
     lint {

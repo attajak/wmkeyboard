@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">قائمة كلمات الرموز التعبيرية هذه فارغة أو غير قابلة للقراءة.</string>
+    <string name="core_emoji_dict_error_http">لم يرسل الخادم الملف. رمز الخطأ هو HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">هذا الملف ليس قائمة كلمات رئيسية للرموز التعبيرية.</string>
+    <string name="core_emoji_dict_error_save">لم يتمكن التطبيق من حفظ قائمة كلمات الرموز التعبيرية.</string>
+    <string name="core_emoji_dict_error_too_large">قائمة كلمات الرموز التعبيرية هذه كبيرة جدًا.</string>
+</resources>

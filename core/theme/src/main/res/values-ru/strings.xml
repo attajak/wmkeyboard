@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Аврора</string>
+    <string name="core_theme_builtin_berry_label">Ягодная</string>
+    <string name="core_theme_builtin_bubble_label">Пузырь</string>
+    <string name="core_theme_builtin_crimson_label">Малиновый</string>
+    <string name="core_theme_builtin_cyberpunk_label">Киберпанк</string>
+    <string name="core_theme_builtin_deep_sea_label">Глубокое море</string>
+    <string name="core_theme_builtin_facet_label">Аспект</string>
+    <string name="core_theme_builtin_forest_label">Лес</string>
+    <string name="core_theme_builtin_glacier_label">Ледник</string>
+    <string name="core_theme_builtin_mint_label">Мятный</string>
+    <string name="core_theme_builtin_nebula_label">Туманность</string>
+    <string name="core_theme_builtin_ocean_label">Океан</string>
+    <string name="core_theme_builtin_pitch_label">Абсолютно черный</string>
+    <string name="core_theme_builtin_rose_label">Розовая</string>
+    <string name="core_theme_builtin_sand_label">Песок</string>
+    <string name="core_theme_builtin_slate_label">Сланец</string>
+    <string name="core_theme_builtin_snow_label">Снег</string>
+    <string name="core_theme_builtin_sunset_drift_label">Закатный дрейф</string>
+    <string name="core_theme_builtin_sunset_label">Закат</string>
+    <string name="core_theme_family_gradient_label">Градиенты</string>
+    <string name="core_theme_family_ocean_label">Nightfall</string>
+    <string name="core_theme_family_snow_label">Пастельные</string>
+</resources>

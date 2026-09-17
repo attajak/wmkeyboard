@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Sellel pistikprogrammil pole render() funktsiooni.</string>
+    <string name="core_plugins_error_not_installed">See plugin pole installitud.</string>
+    <string name="core_plugins_error_script_failed">Skript nurjus.</string>
+    <string name="core_plugins_error_script_missing">Selle pistikprogrammi skript puudub.</string>
+    <string name="core_plugins_error_turned_off">See pistikprogramm on välja lülitatud.</string>
+    <string name="core_plugins_permission_storage_label">Salvesta andmed oma seadmesse</string>
+    <string name="core_plugins_reject_bad_encoding">„%1$s“ sisaldab skripti, mis ei ole kehtiv UTF-8 tekst.</string>
+    <string name="core_plugins_reject_bad_id">Sellel pistikprogrammil on kehtetu ID. ID peab olema 3 kuni 64 tähemärki pikk. ID võib sisaldada väiketähti, numbreid, punkte, sidekriipse ja allkriipse.</string>
+    <string name="core_plugins_reject_compiled_lua">„%1$s“ sisaldab kompileeritud Lua koodi. Plugin peab kasutama lihtsat lähtekoodi, et saaksite seda enne käivitamist lugeda.</string>
+    <string name="core_plugins_reject_empty_script">„%1$s“ skript on tühi.</string>
+    <string name="core_plugins_reject_missing_script">“%1$s” skriptifaili (%2$s) ei leitud.</string>
+    <string name="core_plugins_reject_newer_version">See pistikprogramm vajab WM-klaviatuuri uuemat versiooni.</string>
+    <string name="core_plugins_reject_no_name">Sellel pluginil pole nime.</string>
+    <string name="core_plugins_reject_no_version">„%1$s“ ei ütle, mis versioon see on.</string>
+    <string name="core_plugins_reject_script_too_large">„%1$s“ skript on suurem kui %2$d KB.</string>
+    <string name="core_plugins_reject_unknown_permission">See WM-klaviatuuri versioon ei tunne luba „%1$s“. Rakendus ei saa sulle öelda, mida „%2$s“ tohib teha.</string>
+    <string name="core_plugins_stopped_cancelled">Rakendus peatas selle pistikprogrammi.</string>
+    <string name="core_plugins_stopped_deadline">See plugin võttis liiga kaua aega. Rakendus peatas selle.</string>
+    <string name="core_plugins_stopped_instructions">See pistikprogramm tegi korraga liiga palju tööd. Rakendus peatas selle.</string>
+    <string name="core_plugins_stopped_not_responding">See plugin lõpetas vastamise. Rakendus sulges selle.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">See plugin lõpetas uuesti vastamise. Rakendus lülitas selle välja.</string>
+    <string name="core_plugins_stopped_recursion">See plugin kutsus end liiga mitu korda. Rakendus peatas selle.</string>
+    <string name="core_plugins_stopped_unexpected">See pistikprogramm seiskus ootamatult.</string>
+    <string name="core_plugins_ui_insert_action">Sisesta</string>
+    <string name="core_plugins_ui_repair_no_type">Vidin ei täpsustanud oma tüüpi.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Vidinate loend sisaldas midagi, mis pole vidin.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Vahekaardiribal polnud lehti.</string>
+    <string name="core_plugins_ui_repair_text_budget">See pistikprogramm palus joonistada liiga palju teksti. Rakendus jättis osa sellest välja.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Mõni tekst oli kuvamiseks liiga pikk. Rakendus lühendas seda.</string>
+    <string name="core_plugins_ui_repair_too_deep">Mõned vidinad olid kuvamiseks liiga sügavale pesastatud.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Kuvatakse ainult esimesed %1$d vahekaarti.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">See pistikprogramm küsis rohkem kui %1$d vidinat. Rakendus jättis ülejäänud kõrvale.</string>
+    <string name="core_plugins_ui_repair_unknown_type">See järk ei tunne vidina tüüpi „%1$s“.</string>
+    <string name="core_plugins_ui_tab_default_title">Vahekaart %1$d</string>
+</resources>

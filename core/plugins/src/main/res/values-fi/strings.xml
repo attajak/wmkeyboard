@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_plugins_error_no_render">Tällä liitännäisellä ei ole render()-funktiota.</string>
+    <string name="core_plugins_error_not_installed">Kyseistä liitännäistä ei ole asennettu.</string>
+    <string name="core_plugins_error_script_failed">Skripti epäonnistui.</string>
+    <string name="core_plugins_error_script_missing">Kyseisen liitännäisen komentosarja puuttuu.</string>
+    <string name="core_plugins_error_turned_off">Kyseinen liitännäinen on pois päältä.</string>
+    <string name="core_plugins_permission_storage_label">Tallenna tietoja laitteellesi</string>
+    <string name="core_plugins_reject_bad_encoding">”%1$s” sisältää skriptin, joka ei ole kelvollista UTF-8-tekstiä.</string>
+    <string name="core_plugins_reject_bad_id">Tämän liitännäisen tunnus ei ole kelvollinen. Tunnuksen on oltava 3–64 merkkiä pitkä. Tunnus voi sisältää pieniä kirjaimia, numeroita, pisteitä, viivoja ja alaviivoja.</string>
+    <string name="core_plugins_reject_compiled_lua">”%1$s” sisältää käännettyä Lua-koodia. Laajennuksen on käytettävä tavallista lähdekoodia, jotta voit lukea sen ennen kuin se suoritetaan.</string>
+    <string name="core_plugins_reject_empty_script">”%1$s” sisältää tyhjän skriptin.</string>
+    <string name="core_plugins_reject_missing_script">Kohteelta ”%1$s” puuttuu skriptitiedosto (%2$s).</string>
+    <string name="core_plugins_reject_newer_version">Tämä laajennus vaatii WM Keyboardin uudemman version.</string>
+    <string name="core_plugins_reject_no_name">Tällä liitännäisellä ei ole nimeä.</string>
+    <string name="core_plugins_reject_no_version">”%1$s” ei kerro, mikä versio se on.</string>
+    <string name="core_plugins_reject_script_too_large">”%1$s” sisältää skriptin, joka on suurempi kuin %2$d kt.</string>
+    <string name="core_plugins_reject_unknown_permission">Tämä WM Keyboardin versio ei tunne lupaa ”%1$s”. Sovellus ei voi kertoa, mitä ”%2$s” saa tehdä.</string>
+    <string name="core_plugins_stopped_cancelled">Sovellus pysäytti tämän liitännäisen.</string>
+    <string name="core_plugins_stopped_deadline">Tämä liitännäinen kesti liian kauan. Sovellus pysäytti sen.</string>
+    <string name="core_plugins_stopped_instructions">Tämä laajennus teki liikaa työtä kerralla. Sovellus pysäytti sen.</string>
+    <string name="core_plugins_stopped_not_responding">Tämä liitännäinen lakkasi vastaamasta. Sovellus sulki sen.</string>
+    <string name="core_plugins_stopped_not_responding_disabled">Tämä laajennus lakkasi vastaamasta uudelleen. Sovellus kytki sen pois päältä.</string>
+    <string name="core_plugins_stopped_recursion">Tämä laajennus kutsui itseään liian monta kertaa. Sovellus pysäytti sen.</string>
+    <string name="core_plugins_stopped_unexpected">Tämä liitännäinen pysähtyi odottamatta.</string>
+    <string name="core_plugins_ui_insert_action">Lisää</string>
+    <string name="core_plugins_ui_repair_no_type">Widget ei kertonut, mikä se on.</string>
+    <string name="core_plugins_ui_repair_not_a_widget">Widget-luettelo sisälsi jotain, mikä ei ole widget.</string>
+    <string name="core_plugins_ui_repair_tabs_no_pages">Välilehtipalkissa ei ollut sivuja.</string>
+    <string name="core_plugins_ui_repair_text_budget">Tämä laajennus yritti piirtää liikaa tekstiä. Sovellus jätti osan pois.</string>
+    <string name="core_plugins_ui_repair_text_shortened">Jotkin tekstit olivat liian pitkiä piirrettäväksi. Sovellus lyhensi niitä.</string>
+    <string name="core_plugins_ui_repair_too_deep">Jotkin widgetit olivat liian syvällä piirrettäväksi.</string>
+    <string name="core_plugins_ui_repair_too_many_tabs">Vain ensimmäiset %1$d välilehteä näytetään.</string>
+    <string name="core_plugins_ui_repair_too_many_widgets">Tämä laajennus pyysi yli %1$d widgetiä. Sovellus hylkäsi loput.</string>
+    <string name="core_plugins_ui_repair_unknown_type">Tämä versio ei tunnista widget-tyyppiä ”%1$s”.</string>
+    <string name="core_plugins_ui_tab_default_title">Välilehti %1$d</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">சேவையகம் கோப்பை அனுப்பவில்லை. பிழை குறியீடு HTTP %1$s ஆகும்.</string>
+    <string name="core_pred_wordlist_malformed_error">அந்தச் சொல் பட்டியல் காலியாக உள்ளது அல்லது படிக்க முடியாததாக உள்ளது.</string>
+    <string name="core_pred_wordlist_no_space_error">உங்கள் சாதனத்தில் போதுமான சேமிப்பிடம் இல்லை. சில கோப்புகளை நீக்கிவிட்டு, மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_pred_wordlist_save_error">இந்த செயலியில் சொல் பட்டியலைச் சேமிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_pred_wordlist_size_all_label">அனைத்தும்</string>
+    <string name="core_pred_wordlist_size_large_label">பெரியது</string>
+    <string name="core_pred_wordlist_size_medium_label">நடுத்தரம்</string>
+    <string name="core_pred_wordlist_size_small_label">சிறியது</string>
+    <string name="core_pred_wordlist_variant_brazil_label">பிரேசில்</string>
+    <string name="core_pred_wordlist_variant_europe_label">ஐரோப்பா</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">Umhlinzeki we-AI uqede impendulo ngephutha</string>
+    <string name="ftools_photo_error_failed">Uhlelo lokusebenza alukwazanga ukuthola izithombe</string>
+    <string name="ftools_photo_error_offline">Uhlelo lokusebenza alukwazi ukufinyelela isevisi yezithombe. Hlola inethiwekhi yakho bese uzama futhi.</string>
+    <string name="ftools_photo_error_timeout">Isevisi yezithombe ithathe isikhathi eside kakhulu ukuphendula</string>
+    <string name="ftools_search_error_json_disabled">Lesi sikhungo se-SearXNG asikayivuli i-JSON API yaso. Engeza i-&lt;b&gt;json&lt;/b&gt; ku-&lt;b&gt;search.formats&lt;/b&gt; kuzilungiselelo zayo ze-settings.yml, noma usebenzise esinye isikhungo.</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_pred_wordlist_http_error">سرور فایل را ارسال نکرد. کد خطا HTTP %1$s است.</string>
+    <string name="core_pred_wordlist_malformed_error">آن لیست کلمات خالی یا غیرقابل خواندن است.</string>
+    <string name="core_pred_wordlist_no_space_error">فضای ذخیره‌سازی کافی روی دستگاه شما وجود ندارد. تعدادی از فایل‌ها را حذف کنید و دوباره تلاش کنید.</string>
+    <string name="core_pred_wordlist_save_error">برنامه نمی‌تواند فهرست کلمات را ذخیره کند. دوباره تلاش کنید.</string>
+    <string name="core_pred_wordlist_size_all_label">همه</string>
+    <string name="core_pred_wordlist_size_large_label">بزرگ</string>
+    <string name="core_pred_wordlist_size_medium_label">متوسط</string>
+    <string name="core_pred_wordlist_size_small_label">کوچک</string>
+    <string name="core_pred_wordlist_variant_brazil_label">برزیل</string>
+    <string name="core_pred_wordlist_variant_europe_label">اروپا</string>
+</resources>

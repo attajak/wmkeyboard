@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_lang_foreign_keys_approximated">
+        <item quantity="one">Aplicația a schimbat %1$d tastă cu cea mai apropiată tastă disponibilă.</item>
+        <item quantity="other">Aplicația a schimbat %1$d taste cu cele mai apropiate taste disponibile.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_keys_dropped">
+        <item quantity="one">Aplicația a eliminat %1$d tastă. Această tastatură nu are nicio tastă care să facă același lucru (cod %2$s).</item>
+        <item quantity="other">Aplicația a eliminat %1$d taste. Această tastatură nu are taste care să facă același lucru (coduri %2$s).</item>
+    </plurals>
+    <plurals name="core_lang_foreign_labels_restyled">
+        <item quantity="one">Aplicația a păstrat dimensiunea etichetei pentru %1$d tastă, dar nu și stilul textului acesteia. Această tastatură desenează etichetele într-un singur stil.</item>
+        <item quantity="other">Aplicația a păstrat dimensiunea etichetei pentru %1$d taste, dar nu și stilul textului acestora. Această tastatură desenează etichetele într-un singur stil.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_letters_normalized">
+        <item quantity="one">Aplicația a schimbat %1$d literă în forma pe care o scrie această tastatură.</item>
+        <item quantity="other">Aplicația a schimbat %1$d litere în forma pe care o scrie această tastatură.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_popups_missing">
+        <item quantity="one">%1$d tastă nu are litere pentru apăsare lungă. Fișierul le păstrează într-un al doilea fișier pe care nu l-ați deschis.</item>
+        <item quantity="other">%1$d taste nu au litere pentru apăsare lungă. Fișierul le păstrează într-un al doilea fișier pe care nu l-ați deschis.</item>
+    </plurals>
+    <string name="core_lang_foreign_widths_scaled">Cealaltă tastatură măsoară lățimile tastelor diferit. Aplicația a modificat lățimile pentru a se potrivi acestei grile.</string>
+    <plurals name="core_lang_layout_bad_braille_dots_error">
+        <item quantity="one">%1$d tastă cu punct Braille din stratul %2$s are un număr de punct în afara intervalului 1-6.</item>
+        <item quantity="other">%1$d taste cu puncte Braille din stratul %2$s au un număr de punct în afara intervalului 1-6.</item>
+    </plurals>
+    <plurals name="core_lang_layout_blank_key_warning">
+        <item quantity="one">%1$d tastă din stratul %2$s nu are etichetă și nici ieșire. Nu scrie nimic, iar aplicația o șterge când activați acest aspect.</item>
+        <item quantity="other">%1$d taste din stratul %2$s nu au etichetă și nici ieșire. Nu scriu nimic, iar aplicația le șterge când activați acest aspect.</item>
+    </plurals>
+    <string name="core_lang_layout_empty_row_warning">Rândul %1$d al stratului %2$s este gol.</string>
+    <plurals name="core_lang_layout_field_key_error">
+        <item quantity="one">%1$d tastă din stratul %2$s este o componentă de panou. Componentele funcționează doar într-un aspect de panou.</item>
+        <item quantity="other">%1$d taste din stratul %2$s sunt componente de panou. Componentele funcționează doar într-un aspect de panou.</item>
+    </plurals>
+    <string name="core_lang_layout_key_no_width_error">Rândul %1$d al stratului %2$s are o tastă fără lățime.</string>
+    <string name="core_lang_layout_key_span_error">Rândul %1$d al stratului %2$s are o tastă care acoperă mai puțin de 1 sau mai mult de %3$d rânduri.</string>
+    <string name="core_lang_layout_letters_empty_error">Stratul de litere nu are taste.</string>
+    <string name="core_lang_layout_no_delete_error">Aspectul nu are o tastă de ștergere. Nu poți corecta o greșeală.</string>
+    <string name="core_lang_layout_no_enter_error">Aspectul nu are o tastă enter.</string>
+    <string name="core_lang_layout_no_shift_warning">Aspectul nu are o tastă Shift. Pentru a tasta o literă mare, apăsați și mențineți apăsată o tastă.</string>
+    <string name="core_lang_layout_no_space_error">Aspectul nu are o tastă de spațiu.</string>
+    <string name="core_lang_layout_no_way_back_error">Stratul %1$s nu are nicio tastă care să revină la litere. Nu poți părăsi acest strat.</string>
+    <string name="core_lang_layout_persistent_warning">Stratul %1$s rămâne deschis când tastatura se închide. Asigură-te că ai o modalitate de a ieși din acest aspect.</string>
+    <string name="core_lang_layout_secondary_no_way_out_warning">Acest layout nu are nicio tastă care să permită ieșirea din el. Asigură-te că ai o modalitate de a ieși din acest layout: o tastă ABC, o tastă de simboluri sau instrumentul de layout secundar din bara de instrumente.</string>
+    <string name="core_lang_layout_span_past_end_warning">Rândul %1$d al stratului %2$s are o tastă care acoperă mai multe rânduri decât are stratul. Tastatura o oprește la ultimul rând.</string>
+    <plurals name="core_lang_layout_too_many_keys_error">
+        <item quantity="one">Rândul %1$d al stratului %2$s are %3$d tastă. Doar %4$d taste rămân suficient de mari pentru a fi apăsate.</item>
+        <item quantity="other">Rândul %1$d al stratului %2$s are %3$d taste. Doar %4$d taste rămân suficient de mari pentru a fi apăsate.</item>
+    </plurals>
+    <plurals name="core_lang_layout_too_many_rows_error">
+        <item quantity="one">Stratul %1$s are %2$d rând. Doar %3$d rânduri încap.</item>
+        <item quantity="other">Stratul %1$s are %2$d rânduri. Doar %3$d rânduri încap.</item>
+    </plurals>
+    <plurals name="core_lang_layout_unknown_action_error">
+        <item quantity="one">%1$d tastă din stratul %2$s folosește o acțiune pe care această versiune a aplicației nu o cunoaște.</item>
+        <item quantity="other">%1$d taste din stratul %2$s folosesc o acțiune pe care această versiune a aplicației nu o cunoaște.</item>
+    </plurals>
+    <string name="core_lang_layout_wide_row_warning">Rândul %1$d al stratului %2$s este mai lat decât celelalte rânduri. Tastatura desenează tastele acestui rând mai înguste.</string>
+    <string name="core_lang_numeral_scope_display_only">Doar afișare</string>
+    <string name="core_lang_numeral_scope_everywhere">Peste tot</string>
+    <string name="core_lang_numeral_scope_text_fields">Câmpuri text</string>
+    <string name="core_lang_numeral_system_auto">Auto</string>
+    <plurals name="core_lang_panel_duplicate_field_error">
+        <item quantity="one">%1$d componentă apare de mai multe ori. Aplicația păstrează prima copie.</item>
+        <item quantity="other">%1$d componente apar de mai multe ori. Aplicația păstrează prima copie a fiecăreia.</item>
+    </plurals>
+    <string name="core_lang_panel_empty_error">Acest panou nu are taste. Aplicația folosește panoul standard în schimb.</string>
+    <plurals name="core_lang_panel_key_not_allowed_error">
+        <item quantity="one">%1$d tastă are o acțiune care nu funcționează pe un panou. Aplicația o șterge.</item>
+        <item quantity="other">%1$d taste au acțiuni care nu funcționează pe un panou. Aplicația le șterge.</item>
+    </plurals>
+    <string name="core_lang_panel_no_letters_warning">Acest panou nu are nicio tastă ABC. Folosește bara de instrumente sau butonul Înapoi pentru a reveni la taste.</string>
+    <string name="core_lang_panel_repair_duplicate_dropped">Aplicația a șters o a doua copie a unei componente.</string>
+    <string name="core_lang_panel_repair_field_added">Aplicația a adăugat componenta principală a panoului într-un rând nou.</string>
+    <string name="core_lang_panel_repair_field_dropped">Aplicația a șters o componentă care nu aparține acestui panou.</string>
+    <string name="core_lang_panel_repair_key_dropped">Aplicația a șters o tastă a cărei acțiune nu funcționează pe un panou.</string>
+    <string name="core_lang_panel_repair_reset">Aplicația a înlocuit panoul gol cu cel standard.</string>
+    <string name="core_lang_panel_required_field_error">Acestui panou îi lipsește componenta principală. Aplicația adaugă una când desenează panoul.</string>
+    <plurals name="core_lang_panel_wrong_field_error">
+        <item quantity="one">%1$d componentă nu aparține acestui panou. Aplicația o va șterge.</item>
+        <item quantity="other">%1$d componente nu aparțin acestui panou. Aplicația le va șterge.</item>
+    </plurals>
+    <string name="core_lang_repair_blank_key_deleted">Aplicația a șters o tastă goală din stratul %1$s.</string>
+    <string name="core_lang_repair_braille_dot_clamped">O tastă din stratul %1$s a folosit punctul Braille %2$d. Aplicația l-a transformat în punctul %3$d.</string>
+    <string name="core_lang_repair_delete_key_added">Stratul de litere nu avea o tastă de ștergere. Aplicația a adăugat una.</string>
+    <string name="core_lang_repair_enter_key_added">Stratul de litere nu avea o tastă Enter. Aplicația a adăugat una.</string>
+    <string name="core_lang_repair_field_key_deleted">Aplicația a șters o componentă de panou din stratul %1$s. Componentele funcționează doar într-un aspect de panou.</string>
+    <string name="core_lang_repair_key_letters_anchored">O tastă din stratul %1$s reprezintă %2$s. Aplicația a făcut-o să scrie %3$s.</string>
+    <string name="core_lang_repair_key_letters_dropped">O tastă din stratul %1$s a listat %2$s ca fiind literele pe care le reprezintă. Acelea nu sunt litere, așa că aplicația a transformat-o într-o tastă obișnuită.</string>
+    <string name="core_lang_repair_key_span_clamped">O tastă din stratul %1$s acoperea %2$d rânduri. Aplicația a făcut-o să acopere %3$d.</string>
+    <string name="core_lang_repair_key_width_capped">O tastă din stratul %1$s avea o lățime de %2$s unități. Aplicația a setat-o la %3$s unități.</string>
+    <string name="core_lang_repair_key_width_set">O tastă din stratul %1$s nu avea lățime. Aplicația a setat lățimea la 1.</string>
+    <string name="core_lang_repair_layer_replaced">Stratul %1$s nu avea taste funcționale. Acum folosește grila încorporată.</string>
+    <string name="core_lang_repair_letters_key_added">Stratul %1$s nu avea nicio tastă care să revină la litere. Aplicația a adăugat o tastă ABC.</string>
+    <plurals name="core_lang_repair_row_keys_trimmed">
+        <item quantity="one">Un rând din stratul %1$s avea %2$d tastă. Aplicația păstrează primele %3$d.</item>
+        <item quantity="other">Un rând din stratul %1$s avea %2$d taste. Aplicația păstrează primele %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_row_scaled">Un rând din stratul %1$s avea o lățime de %2$s unități. Aplicația a micșorat tastele pentru ca rândul să se potrivească.</string>
+    <plurals name="core_lang_repair_rows_trimmed">
+        <item quantity="one">Stratul %1$s avea %2$d rând. Aplicația păstrează primele %3$d.</item>
+        <item quantity="other">Stratul %1$s avea %2$d rânduri. Aplicația păstrează primele %3$d.</item>
+    </plurals>
+    <string name="core_lang_repair_space_key_added">Stratul de litere nu avea o tastă spațiu. Aplicația a adăugat una.</string>
+    <string name="core_lang_repair_unknown_key_deleted">Aplicația a șters o tastă din stratul %1$s. Acțiunea sa \"%2$s\" nu este cunoscută.</string>
+</resources>

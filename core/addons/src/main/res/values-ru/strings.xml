@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Словари</string>
+    <string name="core_addons_type_dictionary_singular_label">Словарь</string>
+    <string name="core_addons_type_emoji_font_label">Шрифты эмодзи</string>
+    <string name="core_addons_type_emoji_font_singular_label">Шрифт эмодзи</string>
+    <string name="core_addons_type_emoji_keywords_label">Ключевые слова эмодзи</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Пакет ключевых слов для эмодзи</string>
+    <string name="core_addons_type_espanso_label">Пакеты Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Пакет Espanso</string>
+    <string name="core_addons_type_font_label">Шрифты</string>
+    <string name="core_addons_type_font_singular_label">Шрифт</string>
+    <string name="core_addons_type_icon_pack_label">Наборы иконок</string>
+    <string name="core_addons_type_icon_pack_singular_label">Набор значков</string>
+    <string name="core_addons_type_layout_label">Раскладки</string>
+    <string name="core_addons_type_layout_singular_label">Макет</string>
+    <string name="core_addons_type_plugin_label">Плагины</string>
+    <string name="core_addons_type_plugin_singular_label">Плагин</string>
+    <string name="core_addons_type_snippets_label">Фрагменты</string>
+    <string name="core_addons_type_snippets_singular_label">Пакет сниппетов</string>
+    <string name="core_addons_type_sound_label">Звуки</string>
+    <string name="core_addons_type_sound_pack_label">Звуковые пакеты</string>
+    <string name="core_addons_type_sound_pack_singular_label">Звуковой пакет</string>
+    <string name="core_addons_type_sound_singular_label">Звук клавиш</string>
+    <string name="core_addons_type_stickers_label">Наборы стикеров</string>
+    <string name="core_addons_type_stickers_singular_label">Набор стикеров</string>
+    <string name="core_addons_type_theme_label">Темы</string>
+    <string name="core_addons_type_theme_singular_label">Тема</string>
+    <string name="core_addons_type_unknown_label">Другое</string>
+    <string name="core_addons_type_unknown_singular_label">Дополнение</string>
+    <string name="core_addons_type_vocabulary_label">Словарный запас</string>
+    <string name="core_addons_type_vocabulary_singular_label">Пакет словаря</string>
+</resources>

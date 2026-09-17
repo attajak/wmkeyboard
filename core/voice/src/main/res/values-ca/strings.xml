@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">El servidor de Hugging Face no ha enviat el fitxer. El codi d\'error és HTTP %1$s.</string>
+    <string name="core_voice_download_interrupted_error">La connexió s\'ha aturat durant la descàrrega. Torneu-ho a provar per continuar des d\'on s\'ha aturat.</string>
+    <string name="core_voice_download_space_error">No hi ha prou espai d\'emmagatzematge al dispositiu. Primer has d\'alliberar uns %1$s MB.</string>
+    <string name="core_voice_model_base_eu_body">Aquest model utilitza l\'idioma en què escriviu, igual que el model de 40 idiomes. Només cobreix els idiomes europeus, per la qual cosa la descàrrega és més petita.</string>
+    <string name="core_voice_model_base_multi_body">Aquest model equilibra precisió i velocitat. Cobreix tots els idiomes que coneix Whisper. Selecciona\'l si el model petit és massa lent.</string>
+    <string name="core_voice_model_base_world_body">Aquest model utilitza l\'idioma en què escrius en lloc d\'una suposició. Les frases curtes es tornen molt més fiables. Selecciona\'l quan la seva llista contingui els teus idiomes.</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d idioma</item>
+        <item quantity="other">%1$d idiomes</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">Aquest és un dels models Whisper més precisos, però és massa gran per a la majoria de telèfons. La descàrrega és d\'1,5 GB. Només un dispositiu amb molta memòria el pot carregar.</string>
+    <string name="core_voice_model_large_v3_multi_body">Aquest és el model Whisper més precís i el millor per reconèixer quin idioma parleu. La descàrrega és d\'1,5 GB. Només un dispositiu amb una gran quantitat de memòria el pot carregar. El model Turbo és gairebé tan precís i té la meitat de la mida.</string>
+    <string name="core_voice_model_medium_multi_body">Aquest model ofereix una precisió gairebé d\'escriptori. Cada frase triga uns quants segons. El model utilitza gairebé un gigabyte de memòria mentre s\'executa.</string>
+    <string name="core_voice_model_single_language_body">Aquest model només gestiona %1$s. No té cap pas de detecció d\'idioma. Això el fa més ràpid i una mica més precís que un model multilingüe de la mateixa mida.</string>
+    <string name="core_voice_model_small_multi_body">Aquest model ofereix la millor precisió que encara funciona bé en un telèfon. Gestiona millor els accents i el soroll de fons que el model Base. Cobreix tots els idiomes que Whisper coneix.</string>
+    <string name="core_voice_model_small_world_body">Aquest model utilitza l\'idioma en què escriviu i té la precisió del model petit. És el model més precís que encara cap en un telèfon.</string>
+    <string name="core_voice_model_tiny_multi_body">Aquest és el model multilingüe més ràpid. Funciona bé amb una parla clara, però el soroll en redueix la precisió.</string>
+    <string name="core_voice_model_turbo_multi_body">Aquest model reconeix l\'idioma que parles molt millor que els models més petits. Selecciona\'l si un model més petit transcriu la teva veu en l\'idioma incorrecte. És una descàrrega gran i cada frase triga uns quants segons.</string>
+    <string name="core_voice_size_base_label">Base</string>
+    <string name="core_voice_size_large_label">Gran</string>
+    <string name="core_voice_size_medium_label">Mitjà</string>
+    <string name="core_voice_size_small_label">Petit</string>
+    <string name="core_voice_size_tiny_label">Molt petit</string>
+    <string name="core_voice_size_turbo_label">Turbo</string>
+    <string name="core_voice_tier_recommended_label">Recomanat</string>
+    <string name="core_voice_whisper_mel_bins_error">Aquest model de veu necessita un espectrograma de banda %1$s, que no coincideix amb el fitxer amb què s\'ha descarregat. Suprimeix el model a la configuració i torna\'l a descarregar.</string>
+    <string name="core_voice_whisper_model_load_error">El model de veu no s\'ha carregat. És possible que el fitxer estigui danyat. Suprimeix el model a la configuració i torna-lo a descarregar.</string>
+    <string name="core_voice_whisper_transcribe_error">L\'escriptura per veu no ha funcionat. Torna-ho a provar o selecciona un model més petit.</string>
+</resources>

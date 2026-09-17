@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">האפליקציה הסירה %1$d תנועה אלכסונית. מקלדת זו תומכת בתנועות למעלה, למטה, שמאלה וימינה בלבד.</item>
+        <item quantity="other">האפליקציה הסירה %1$d תנועות אלכסוניות. מקלדת זו תומכת בתנועות למעלה, למטה, שמאלה וימינה בלבד.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">מקש %1$d מקליד את התו המודפס עליו. המקלדת המקורית השתמשה בכלל כדי להחליט מה הוא מקליד.</item>
+        <item quantity="other">%1$d מקשים מקלידים את התווים המודפסים עליהם. המקלדת המקורית השתמשה בכללים כדי להחליט מה הם מקלידים.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">למקלדת זו יש %1$d מקש שאתה מקיש עליו שוב ושוב כדי לעבור בין תווים. לאפליקציית המקלדת הזו אין מקש כזה, לכן רק התו הראשון זמין.</item>
+        <item quantity="other">למקלדת זו יש %1$d מקשים שאתה מקיש עליהם שוב ושוב כדי לעבור בין תווים. לאפליקציית המקלדת הזו אין מקשים כאלה, לכן רק התו הראשון של כל אחד מהם זמין.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">מקלדת זו משתמשת בכללים כדי להחליט מה המקשים שלה מקלידים. לאפליקציה אין את הכללים האלה, לכן כל מקש מקליד את התו המודפס עליו.</string>
+    <string name="core_keyman_shift_layer_folded">האפליקציה מיזגה את שכבת ה-Shift לתוך המקשים. החזק את Shift כדי להגיע לתווים אלו.</string>
+    <string name="core_keyman_shift_layer_separate">לשכבת ה-Shift יש צורה שונה, לכן האפליקציה שמרה עליה כשכבה נפרדת.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">האפליקציה הסירה %1$d מקש. למקלדת זו אין מקש שמבצע את אותה פעולה.</item>
+        <item quantity="other">האפליקציה הסירה %1$d מקשים. למקלדת זו אין מקשים שמבצעים את אותה פעולה.</item>
+    </plurals>
+</resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_icons_group_emoji_tabs_title">Emocijzīmju cilnes</string>
+    <string name="core_icons_group_keys_title">Taustiņi</string>
+    <string name="core_icons_group_toolbar_title">Rīkjosla</string>
+    <string name="core_icons_group_tools_title">Rīki</string>
+    <string name="core_icons_pack_imported_label">Importētās ikonas</string>
+    <string name="core_icons_pack_mine_label">Manas ikonas</string>
+    <plurals name="core_icons_repair_files_ignored">
+        <item quantity="one">Lietotne ignorēja %1$d failu. Šajā versijā tam nav ikonas: %2$s</item>
+        <item quantity="other">Lietotne ignorēja %1$d failus. Šajā versijā tiem nav ikonas: %2$s</item>
+    </plurals>
+    <string name="core_icons_repair_not_saved">Lietotne noraidīja \"%1$s\". Lietotne to nevar saglabāt.</string>
+    <string name="core_icons_repair_svg_unreadable">Lietotne noraidīja \"%1$s\". Lietotne nevar nolasīt tās SVG failu.</string>
+    <string name="core_icons_slot_backspace_label">Atpakaļatkāpe</string>
+    <string name="core_icons_slot_caps_lock_label">Lielo burtu slēdzis</string>
+    <string name="core_icons_slot_emoji_activities_label">Aktivitātes</string>
+    <string name="core_icons_slot_emoji_animals_label">Dzīvnieki</string>
+    <string name="core_icons_slot_emoji_flags_label">Karogi</string>
+    <string name="core_icons_slot_emoji_food_label">Ēdiens</string>
+    <string name="core_icons_slot_emoji_key_label">Emocijzīmju taustiņš</string>
+    <string name="core_icons_slot_emoji_most_used_label">Visbiežāk izmantotie</string>
+    <string name="core_icons_slot_emoji_nature_label">Daba</string>
+    <string name="core_icons_slot_emoji_objects_label">Objekti</string>
+    <string name="core_icons_slot_emoji_people_label">Cilvēki</string>
+    <string name="core_icons_slot_emoji_recent_label">Nesenie</string>
+    <string name="core_icons_slot_emoji_shortcut_label">Emocijzīmju saīsne</string>
+    <string name="core_icons_slot_emoji_smileys_label">Smaidiņi</string>
+    <string name="core_icons_slot_emoji_symbols_label">Simboli</string>
+    <string name="core_icons_slot_emoji_travel_label">Ceļojumi</string>
+    <string name="core_icons_slot_enter_done_label">Enter: pabeigts</string>
+    <string name="core_icons_slot_enter_go_label">Enter: doties</string>
+    <string name="core_icons_slot_enter_label">Enter</string>
+    <string name="core_icons_slot_enter_next_label">Enter: nākamais</string>
+    <string name="core_icons_slot_enter_previous_label">Enter: iepriekšējais</string>
+    <string name="core_icons_slot_enter_search_label">Ievadīt: meklēt</string>
+    <string name="core_icons_slot_enter_send_label">Enter: sūtīt</string>
+    <string name="core_icons_slot_forward_delete_label">Dzēst uz priekšu</string>
+    <string name="core_icons_slot_globe_label">Mainīt valodu</string>
+    <string name="core_icons_slot_incognito_label">Inkognito nozīmīte</string>
+    <string name="core_icons_slot_input_method_picker_label">Pārslēgt tastatūru</string>
+    <string name="core_icons_slot_panel_back_label">Atpakaļ pie taustiņiem</string>
+    <string name="core_icons_slot_power_saving_label">Enerģijas taupīšanas nozīmīte</string>
+    <string name="core_icons_slot_search_close_label">Aizvērt meklēšanu</string>
+    <string name="core_icons_slot_shift_label">Shift</string>
+    <string name="core_icons_slot_shift_on_label">Shift (ieslēgts)</string>
+    <string name="core_icons_slot_suggestions_expand_label">Rādīt rīkus</string>
+    <string name="core_icons_slot_toolbox_label">Rīkjosla</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_feedback_pack_reject_newer_format">Ehhez a csomaghoz %1$s hangcsomag-formátum szükséges. Frissítse az alkalmazást.</string>
+    <string name="core_feedback_pack_reject_no_samples">Ez a csomag nem tartalmaz olyan hangokat, amelyeket az alkalmazás le tud játszani.</string>
+    <string name="core_feedback_pack_reject_too_large">A hangcsomagnak kisebbnek kell lennie, mint %1$s MB.</string>
+    <string name="core_feedback_sound_import_empty_error">A fájl üres.</string>
+    <string name="core_feedback_sound_import_html_error">Ez egy HTML vagy XML fájl, nem hangfájl.</string>
+    <string name="core_feedback_sound_import_mp4_error">Az alkalmazás nem játssza le az MP4 és M4A fájlokat. Használj MP3 fájlt.</string>
+    <string name="core_feedback_sound_import_no_storage_error">Nincs elérhető tárhely az eszközön.</string>
+    <string name="core_feedback_sound_import_read_error">Az alkalmazás nem tudja beolvasni a hangot.</string>
+    <string name="core_feedback_sound_import_save_error">Az alkalmazás nem tudja menteni a hangot.</string>
+    <string name="core_feedback_sound_import_too_large_error">A billentyűhangnak kisebbnek kell lennie, mint %1$s MB.</string>
+    <string name="core_feedback_sound_import_too_short_error">A fájl túl rövid ahhoz, hogy hang legyen.</string>
+    <string name="core_feedback_sound_import_unknown_format_error">Ez nem tűnik MP3, OGG vagy WAV fájlnak.</string>
+    <string name="core_feedback_sound_import_zip_error">Ez egy zip archívum, nem hangfájl.</string>
+</resources>

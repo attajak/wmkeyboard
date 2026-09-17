@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_content_clip_entity_otp_label">ഒറ്റത്തവണ ഉപയോഗിക്കാവുന്ന കോഡ് (OTP)</string>
+    <string name="core_content_clip_entity_otp_tag">കോഡ്</string>
+    <string name="core_content_clip_entity_phone_label">ഫോൺ നമ്പർ</string>
+    <string name="core_content_clip_entity_phone_tag">ഫോൺ</string>
+    <string name="core_content_clip_entity_url_label">ലിങ്ക്</string>
+    <string name="core_content_clip_entity_url_tag">ലിങ്ക്</string>
+    <plurals name="core_content_espanso_note_alternates">
+        <item quantity="one">%1$d സ്നിപ്പറ്റിന് Espanso-യ്ക്ക് ഉൾക്കൊള്ളാൻ കഴിയാത്ത മറ്റ് വിപുലീകരണങ്ങളുണ്ട്. ആദ്യത്തേത് മാത്രമാണ് എഴുതിയത്.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾക്ക് Espanso-യ്ക്ക് ഉൾക്കൊള്ളാൻ കഴിയാത്ത മറ്റ് വിപുലീകരണങ്ങളുണ്ട്. ഓരോന്നിലെയും ആദ്യത്തേത് മാത്രമാണ് എഴുതിയത്.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_apps">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് ചില കമ്പ്യൂട്ടർ പ്രോഗ്രാമുകളിൽ മാത്രമായി പരിമിതപ്പെടുത്തിയിരിക്കുന്നു. നിങ്ങളുടെ ഫോണിൽ ഇത് എല്ലായിടത്തും പ്രവർത്തിക്കും.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ ചില കമ്പ്യൂട്ടർ പ്രോഗ്രാമുകളിൽ മാത്രമായി പരിമിതപ്പെടുത്തിയിരിക്കുന്നു. നിങ്ങളുടെ ഫോണിൽ അവ എല്ലായിടത്തും പ്രവർത്തിക്കും.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_choice">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് ഒരു ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കാൻ നിങ്ങളോട് ആവശ്യപ്പെടുന്നു. ആപ്പ് പകരം ക്രമരഹിതമായി ഒന്ന് തിരഞ്ഞെടുക്കുന്നു.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ ഒരു ലിസ്റ്റിൽ നിന്ന് തിരഞ്ഞെടുക്കാൻ നിങ്ങളോട് ആവശ്യപ്പെടുന്നു. ആപ്പ് പകരം ക്രമരഹിതമായി ഒന്ന് തിരഞ്ഞെടുക്കുന്നു.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_confirm">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് വികസിപ്പിക്കുന്നതിന് മുമ്പ് ചോദിക്കുന്നു. എസ്‌പാൻസോയ്ക്ക് അത്തരം ക്രമീകരണമില്ല, അതിനാൽ അത് അവിടെ സ്വയം വികസിക്കും.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ വികസിപ്പിക്കുന്നതിന് മുമ്പ് ചോദിക്കുന്നു. എസ്‌പാൻസോയ്ക്ക് അത്തരം ക്രമീകരണമില്ല, അതിനാൽ അവ അവിടെ സ്വയം വികസിക്കും.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_date">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് ആപ്പിന് പൂർണ്ണമായി എഴുതാൻ കഴിയാത്ത ഒരു തീയതി ഫോർമാറ്റ് ഉപയോഗിക്കുന്നു. ആപ്പിന് കഴിയാത്ത ഭാഗം അത് ഒഴിവാക്കി.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ ആപ്പിന് പൂർണ്ണമായി എഴുതാൻ കഴിയാത്ത തീയതി ഫോർമാറ്റുകൾ ഉപയോഗിക്കുന്നു. ആപ്പിന് കഴിയാത്ത ഭാഗങ്ങൾ അത് ഒഴിവാക്കി.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_disabled_folder">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് ഓഫാക്കിയ ഒരു ഫോൾഡറിലാണ്. Espanso-യ്ക്ക് ഫോൾഡർ സ്വിച്ച് ഇല്ല, അതിനാൽ അത് അവിടെ വികസിക്കും.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ ഓഫാക്കിയ ഫോൾഡറുകളിലാണ്. Espanso-യ്ക്ക് ഫോൾഡർ സ്വിച്ച് ഇല്ല, അതിനാൽ അവ അവിടെ വികസിക്കും.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_empty">
+        <item quantity="one">ഇൻസേർട്ട് ചെയ്യാൻ ഒന്നുമില്ലാത്ത %1$d സ്നിപ്പെറ്റ് ആപ്പ് ഒഴിവാക്കി.</item>
+        <item quantity="other">ഇൻസേർട്ട് ചെയ്യാൻ ഒന്നുമില്ലാത്ത %1$d സ്നിപ്പെറ്റുകൾ ആപ്പ് ഒഴിവാക്കി.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_form">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് ഒരു ഫോം പൂരിപ്പിക്കാൻ നിങ്ങളോട് ആവശ്യപ്പെടുന്നു. ആപ്പ് ഫോം ടെക്സ്റ്റായി ചേർക്കുന്നു, കർസർ ആദ്യത്തെ ശൂന്യമായ ഭാഗത്തായിരിക്കും.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ ഒരു ഫോം പൂരിപ്പിക്കാൻ നിങ്ങളോട് ആവശ്യപ്പെടുന്നു. ആപ്പ് ഓരോ ഫോമും ടെക്സ്റ്റായി ചേർക്കുന്നു, കർസർ ആദ്യത്തെ ശൂന്യമായ ഭാഗത്തായിരിക്കും.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_image">
+        <item quantity="one">ചിത്രം ചേർക്കുന്ന %1$d സ്നിപ്പറ്റ് ആപ്പ് ഒഴിവാക്കി.</item>
+        <item quantity="other">ചിത്രങ്ങൾ ചേർക്കുന്ന %1$d സ്നിപ്പറ്റുകൾ ആപ്പ് ഒഴിവാക്കി.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_imports">
+        <item quantity="one">ഈ ഫയൽ %1$d മറ്റ് ഫയൽ വായിക്കുന്നു. ഒരു ഫയലിന് മറ്റുള്ളവയെ കൂടെ കൊണ്ടുവരാൻ കഴിയില്ല.</item>
+        <item quantity="other">ഈ ഫയൽ %1$d മറ്റ് ഫയലുകൾ വായിക്കുന്നു. ഒരു ഫയലിന് മറ്റുള്ളവയെ കൂടെ കൊണ്ടുവരാൻ കഴിയില്ല.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_links">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് മറ്റ് സ്നിപ്പറ്റുകളെ ചൂണ്ടിക്കാണിക്കുന്നു. എസ്‌പാൻസോയ്ക്ക് അത് പറയാൻ മാർഗമില്ല, അതിനാൽ ലിങ്കുകൾ ഒഴിവാക്കി.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ മറ്റ് സ്നിപ്പറ്റുകളെ ചൂണ്ടിക്കാണിക്കുന്നു. എസ്‌പാൻസോയ്ക്ക് അത് പറയാൻ മാർഗമില്ല, അതിനാൽ ലിങ്കുകൾ ഒഴിവാക്കി.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_mid_word">
+        <item quantity="one">%1$d ട്രിഗർ ഒരു വാക്കിനുള്ളിൽ പ്രവർത്തിക്കാൻ ഉദ്ദേശിച്ചുള്ളതാണ്. നിങ്ങളുടെ ഫോണിൽ ഇത് ഒരു മുഴുവൻ വാക്കായി മാത്രമേ പ്രവർത്തിക്കൂ.</item>
+        <item quantity="other">%1$d ട്രിഗറുകൾ ഒരു വാക്കിനുള്ളിൽ പ്രവർത്തിക്കാൻ ഉദ്ദേശിച്ചുള്ളതാണ്. നിങ്ങളുടെ ഫോണിൽ അവ മുഴുവൻ വാക്കുകളായി മാത്രമേ പ്രവർത്തിക്കൂ.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_no_variable">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് എസ്‌പാൻസോയ്ക്ക് തുല്യമായ മൂല്യമില്ലാത്ത ഒന്ന് ഉപയോഗിക്കുന്നു. അത് ഉള്ളതുപോലെ എഴുതുന്നു.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ എസ്‌പാൻസോയ്ക്ക് തുല്യമായ മൂല്യമില്ലാത്തവ ഉപയോഗിക്കുന്നു. അവ ഉള്ളതുപോലെ എഴുതുന്നു.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_regex">
+        <item quantity="one">ആപ്പ് %1$d സ്നിപ്പറ്റിൽ നിന്ന് പാറ്റേൺ നീക്കം ചെയ്തു. ആപ്പ് ആ രൂപത്തിലുള്ള പാറ്റേണുകൾ പ്രവർത്തിപ്പിക്കുന്നില്ല. സ്നിപ്പറ്റ് ലിസ്റ്റിൽ തുടരുന്നു.</item>
+        <item quantity="other">ആപ്പ് %1$d സ്നിപ്പറ്റുകളിൽ നിന്ന് പാറ്റേൺ നീക്കം ചെയ്തു. ആപ്പ് ആ രൂപത്തിലുള്ള പാറ്റേണുകൾ പ്രവർത്തിപ്പിക്കുന്നില്ല. സ്നിപ്പറ്റുകൾ ലിസ്റ്റിൽ തുടരുന്നു.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_rich_text">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് ഫോർമാറ്റ് ചെയ്ത ടെക്സ്റ്റ് ഉപയോഗിക്കുന്നു. ആപ്പ് വാക്കുകൾ നിലനിർത്തുകയും ഫോർമാറ്റിംഗ് ഒഴിവാക്കുകയും ചെയ്യുന്നു.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ ഫോർമാറ്റ് ചെയ്ത ടെക്സ്റ്റ് ഉപയോഗിക്കുന്നു. ആപ്പ് വാക്കുകൾ നിലനിർത്തുകയും ഫോർമാറ്റിംഗ് ഒഴിവാക്കുകയും ചെയ്യുന്നു.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_shell">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് നിങ്ങളുടെ കമ്പ്യൂട്ടറിൽ ഒരു കമാൻഡ് പ്രവർത്തിപ്പിക്കുന്നു. ആപ്പ് ആ കമാൻഡ് ഒഴിവാക്കി, അത് ഒരിക്കലും പ്രവർത്തിപ്പിക്കുന്നില്ല.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ നിങ്ങളുടെ കമ്പ്യൂട്ടറിൽ കമാൻഡുകൾ പ്രവർത്തിപ്പിക്കുന്നു. ആപ്പ് ആ കമാൻഡുകൾ ഒഴിവാക്കി, അവ ഒരിക്കലും പ്രവർത്തിപ്പിക്കുന്നില്ല.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_symbol_trigger">
+        <item quantity="one">%1$d ട്രിഗർ ചിഹ്നങ്ങൾ കൊണ്ട് മാത്രം നിർമ്മിച്ചതാണ്, അതിനാൽ ആപ്പിന് അത് നിരീക്ഷിക്കാൻ കഴിയില്ല. ഇതിന്റെ സ്നിപ്പറ്റ് ലിസ്റ്റിൽ തന്നെ തുടരുന്നു.</item>
+        <item quantity="other">%1$d ട്രിഗറുകൾ ചിഹ്നങ്ങൾ കൊണ്ട് മാത്രം നിർമ്മിച്ചതാണ്, അതിനാൽ ആപ്പിന് അവ നിരീക്ഷിക്കാൻ കഴിയില്ല. അവയുടെ സ്നിപ്പറ്റുകൾ ലിസ്റ്റിൽ തന്നെ തുടരുന്നു.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_token">
+        <item quantity="one">%1$d സ്നിപ്പറ്റിൽ ബ്രേസുകൾക്കുള്ളിൽ ഈ ആപ്പ് പൂരിപ്പിക്കുന്ന ടെക്സ്റ്റ് അടങ്ങിയിരിക്കുന്നു, ഉദാഹരണത്തിന് {date}. ഇത് എഴുതിയതുപോലെ കാണപ്പെടുന്നതിന് പകരം വികസിക്കും.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകളിൽ ബ്രേസുകൾക്കുള്ളിൽ ഈ ആപ്പ് പൂരിപ്പിക്കുന്ന ടെക്സ്റ്റ് അടങ്ങിയിരിക്കുന്നു, ഉദാഹരണത്തിന് {date}. ഇത് എഴുതിയതുപോലെ കാണപ്പെടുന്നതിന് പകരം വികസിക്കും.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_transform">
+        <item quantity="one">%1$d സ്നിപ്പറ്റ് അതിന്റെ പാറ്റേൺ പിടിച്ചെടുത്തതിന്റെ വലിയക്ഷരങ്ങൾ മാറ്റുന്നു. എസ്‌പാൻസോയ്ക്ക് അത് ചെയ്യാൻ കഴിയില്ല, അതിനാൽ പിടിച്ചെടുത്ത വാചകം മാറ്റമില്ലാതെ പോകുന്നു.</item>
+        <item quantity="other">%1$d സ്നിപ്പറ്റുകൾ അവയുടെ പാറ്റേണുകൾ പിടിച്ചെടുത്തതിന്റെ വലിയക്ഷരങ്ങൾ മാറ്റുന്നു. എസ്‌പാൻസോയ്ക്ക് അത് ചെയ്യാൻ കഴിയില്ല, അതിനാൽ പിടിച്ചെടുത്ത വാചകം മാറ്റമില്ലാതെ പോകുന്നു.</item>
+    </plurals>
+    <plurals name="core_content_espanso_note_variable">
+        <item quantity="one">ആപ്പിന് തുല്യമായ മൂല്യമില്ലാത്ത ഒരു സ്നിപ്പെറ്റ് %1$d ഉപയോഗിക്കുന്നു. ആ ഭാഗം ശൂന്യമായി വരുന്നു.</item>
+        <item quantity="other">ആപ്പിന് തുല്യമായ മൂല്യമില്ലാത്ത %1$d സ്നിപ്പെറ്റുകൾ ഉപയോഗിക്കുന്നു. ആ ഭാഗങ്ങൾ ശൂന്യമായി വരുന്നു.</item>
+    </plurals>
+    <string name="core_content_font_error_download">ആപ്പിന് ഫോണ്ട് ഡൗൺലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല. നിങ്ങളുടെ കണക്ഷൻ പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="core_content_font_error_empty">ഫയൽ ശൂന്യമാണ്.</string>
+    <string name="core_content_font_error_load">ഈ ഫോണ്ട് ഫയൽ ലോഡ് ചെയ്യാൻ ആപ്പിന് കഴിയില്ല.</string>
+    <string name="core_content_font_error_markup">ഈ ഫയൽ ഒരു HTML അല്ലെങ്കിൽ XML ഫയലാണ്, ഫോണ്ടല്ല.</string>
+    <string name="core_content_font_error_no_storage">ഫോണ്ടിനായി സ്റ്റോറേജ് ലഭ്യമല്ല.</string>
+    <string name="core_content_font_error_not_a_font">ഈ ഫയൽ ഒരു .ttf അല്ലെങ്കിൽ .otf ഫോണ്ട് പോലെ കാണപ്പെടുന്നില്ല.</string>
+    <string name="core_content_font_error_read">ആപ്പിന് ഫോണ്ട് വായിക്കാൻ കഴിയുന്നില്ല.</string>
+    <string name="core_content_font_error_save">ആപ്പിന് ഫോണ്ട് സേവ് ചെയ്യാൻ കഴിയില്ല.</string>
+    <string name="core_content_font_error_too_large">ഒരു ഫോണ്ട് %1$d MB-യിൽ കുറവായിരിക്കണം.</string>
+    <string name="core_content_font_error_too_many">ഫോണ്ട് ലൈബ്രറി നിറഞ്ഞു. ഒരു ഫോണ്ട് ഡിലീറ്റ് ചെയ്ത് വീണ്ടും ശ്രമിക്കുക.</string>
+    <string name="core_content_font_error_too_short">ഒരു ഫോണ്ട് ആകാൻ ഈ ഫയൽ വളരെ ചെറുതാണ്.</string>
+    <string name="core_content_font_error_woff">ആപ്പിന് WOFF വെബ് ഫോണ്ടുകൾ വായിക്കാൻ കഴിയില്ല. ഫോണ്ടിന്റെ .ttf അല്ലെങ്കിൽ .otf പതിപ്പ് ഉപയോഗിക്കുക.</string>
+    <string name="core_content_font_error_woff2">ആപ്പിന് WOFF2 വെബ് ഫോണ്ടുകൾ വായിക്കാൻ കഴിയില്ല. ഫോണ്ടിന്റെ .ttf അല്ലെങ്കിൽ .otf പതിപ്പ് ഉപയോഗിക്കുക.</string>
+    <string name="core_content_font_error_zip">ഈ ഫയൽ ഒരു സിപ്പ് ആർക്കൈവ് ആണ്, ഫോണ്ട് അല്ല.</string>
+    <string name="core_content_selection_macro_add_contact">കോൺടാക്റ്റ്</string>
+    <string name="core_content_selection_macro_calendar">കലണ്ടർ</string>
+    <string name="core_content_selection_macro_call">വിളിക്കുക</string>
+    <string name="core_content_selection_macro_case_lower">ചെറിയ അക്ഷരങ്ങൾ</string>
+    <string name="core_content_selection_macro_case_sentence">വാചകത്തിന്റെ കേസ്</string>
+    <string name="core_content_selection_macro_case_title">ടൈറ്റിൽ കേസ്</string>
+    <string name="core_content_selection_macro_case_upper">അപ്പർ കേസ്</string>
+    <string name="core_content_selection_macro_chat_bold">ബോൾഡ്</string>
+    <string name="core_content_selection_macro_chat_italic">ഇറ്റാലിക്</string>
+    <string name="core_content_selection_macro_chat_mono">മോണോ</string>
+    <string name="core_content_selection_macro_chat_strike">സ്ട്രൈക്ക്</string>
+    <string name="core_content_selection_macro_colour">നിറം</string>
+    <string name="core_content_selection_macro_copy">പകർത്തുക</string>
+    <string name="core_content_selection_macro_digits_latin">അക്കങ്ങൾ</string>
+    <string name="core_content_selection_macro_email">ഇമെയിൽ</string>
+    <string name="core_content_selection_macro_fancy">ഫാൻസി</string>
+    <string name="core_content_selection_macro_find">കണ്ടെത്തുക</string>
+    <string name="core_content_selection_macro_format">ഫോർമാറ്റ്</string>
+    <string name="core_content_selection_macro_grammar">വ്യാകരണം</string>
+    <string name="core_content_selection_macro_lines_bullet">ബുള്ളറ്റുകൾ</string>
+    <string name="core_content_selection_macro_lines_dedupe">യൂണിക്ക്</string>
+    <string name="core_content_selection_macro_lines_number">നമ്പർ</string>
+    <string name="core_content_selection_macro_lines_sort">തരംതിരിക്കുക</string>
+    <string name="core_content_selection_macro_map">മാപ്പ്</string>
+    <string name="core_content_selection_macro_open">തുറക്കുക</string>
+    <string name="core_content_selection_macro_qr">QR</string>
+    <string name="core_content_selection_macro_read_aloud">സംസാരിക്കുക</string>
+    <string name="core_content_selection_macro_replace">മാറ്റിസ്ഥാപിക്കുക</string>
+    <string name="core_content_selection_macro_search">തിരയുക</string>
+    <string name="core_content_selection_macro_share">പങ്കിടുക</string>
+    <string name="core_content_selection_macro_sms">സന്ദേശം</string>
+    <string name="core_content_selection_macro_time_zones">സോണുകൾ</string>
+    <string name="core_content_selection_macro_to_bangla">ബംഗ്ലാ</string>
+    <string name="core_content_selection_macro_to_banglish">ബാംഗ്ലിഷ്</string>
+    <string name="core_content_selection_macro_translate">വിവർത്തനം ചെയ്യുക</string>
+    <string name="core_content_selection_macro_url_decode">ഡീകോഡ് ചെയ്യുക</string>
+    <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
+    <plurals name="core_content_snippet_repair_alternates_dropped">
+        <item quantity="one">ആപ്പ് \"%1$s\"-ൽ നിന്ന് %2$d വിപുലീകരണം ഒഴിവാക്കി.</item>
+        <item quantity="other">ആപ്പ് \"%1$s\"-ൽ നിന്ന് %2$d വിപുലീകരണങ്ങൾ ഒഴിവാക്കി.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_bad_pattern">\"%1$s\"-ൽ നിന്ന് ആപ്പ് പാറ്റേൺ നീക്കം ചെയ്തു. പാറ്റേൺ ശരിയല്ല. സ്നിപ്പറ്റ് ലിസ്റ്റിൽ തന്നെ തുടരുന്നു.</string>
+    <plurals name="core_content_snippet_repair_folders_dropped">
+        <item quantity="one">പേരില്ലാത്തതോ മറ്റൊന്നുമായി ആവർത്തിക്കുന്നതോ ആയ %1$d ഫോൾഡർ ആപ്പ് ഒഴിവാക്കി. അതിന്റെ സ്നിപ്പറ്റുകൾ ഫോൾഡർ ഇല്ലാതെ വന്നു.</item>
+        <item quantity="other">പേരില്ലാത്തതോ മറ്റൊന്നുമായി ആവർത്തിക്കുന്നതോ ആയ %1$d ഫോൾഡറുകൾ ആപ്പ് ഒഴിവാക്കി. അവയുടെ സ്നിപ്പറ്റുകൾ ഫോൾഡർ ഇല്ലാതെ വന്നു.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_kept_first">
+        <item quantity="one">ആപ്പ് സൂക്ഷിക്കുന്നതിനേക്കാൾ കൂടുതൽ സ്നിപ്പെറ്റുകൾ ഫയലിലുണ്ട്. ആപ്പ് ആദ്യത്തെ %1$d എണ്ണം ഇറക്കുമതി ചെയ്തു.</item>
+        <item quantity="other">ആപ്പ് സൂക്ഷിക്കുന്നതിനേക്കാൾ കൂടുതൽ സ്നിപ്പെറ്റുകൾ ഫയലിലുണ്ട്. ആപ്പ് ആദ്യത്തെ %1$d എണ്ണം ഇറക്കുമതി ചെയ്തു.</item>
+    </plurals>
+    <string name="core_content_snippet_repair_named_after_text">ഒരു സ്നിപ്പറ്റിന് പേരില്ലാത്തതിനാൽ, ആപ്പ് അതിന്റെ ആദ്യ വരി വെച്ച് അതിന് പേര് നൽകി.</string>
+    <string name="core_content_snippet_repair_no_text">ആപ്പ് \"%1$s\" ഒഴിവാക്കി. ഇതിൽ വാചകമൊന്നുമില്ല.</string>
+    <plurals name="core_content_snippet_repair_pattern_too_long">
+        <item quantity="one">\"%1$s\"-ൽ നിന്ന് ആപ്പ് പാറ്റേൺ നീക്കം ചെയ്തു. ഇത് %2$d അക്ഷരത്തേക്കാൾ കൂടുതലായിരുന്നു.</item>
+        <item quantity="other">\"%1$s\"-ൽ നിന്ന് ആപ്പ് പാറ്റേൺ നീക്കം ചെയ്തു. ഇത് %2$d അക്ഷരങ്ങളേക്കാൾ കൂടുതലായിരുന്നു.</item>
+    </plurals>
+    <plurals name="core_content_snippet_repair_shortened">
+        <item quantity="one">ആപ്പ് \"%1$s\" ചുരുക്കി. ഇത് %2$d അക്ഷരത്തേക്കാൾ കൂടുതലായിരുന്നു.</item>
+        <item quantity="other">ആപ്പ് \"%1$s\" ചുരുക്കി. ഇത് %2$d അക്ഷരങ്ങളേക്കാൾ കൂടുതലായിരുന്നു.</item>
+    </plurals>
+    <string name="core_content_snippet_var_app_info">നിങ്ങൾ ടൈപ്പ് ചെയ്യുന്ന ആപ്പിന്റെ പേര്</string>
+    <string name="core_content_snippet_var_clip_info">ഏറ്റവും പുതിയ ക്ലിപ്പ്ബോർഡ് എൻട്രി</string>
+    <string name="core_content_snippet_var_cursor_info">കർസർ എത്തുന്ന സ്ഥലം</string>
+    <string name="core_content_snippet_var_date_info">ഇന്നത്തെ തീയതി</string>
+    <string name="core_content_snippet_var_datetime_info">തീയതിയും സമയവും</string>
+    <string name="core_content_snippet_var_day_info">മാസത്തിലെ ദിവസം</string>
+    <string name="core_content_snippet_var_isodate_info">ISO രൂപത്തിലുള്ള തീയതി, ഉദാഹരണത്തിന് 2026-07-19</string>
+    <string name="core_content_snippet_var_isotime_info">ISO രൂപത്തിലുള്ള തീയതിയും സമയവും</string>
+    <string name="core_content_snippet_var_month_info">മാസത്തിന്റെ പേര്</string>
+    <string name="core_content_snippet_var_package_info">ആ ആപ്പിന്റെ പാക്കേജ് നാമം</string>
+    <string name="core_content_snippet_var_selection_info">ഫീൽഡിൽ നിങ്ങൾ തിരഞ്ഞെടുക്കുന്ന വാചകം</string>
+    <string name="core_content_snippet_var_time12_info">12-മണിക്കൂർ ഫോർമാറ്റിലുള്ള ഇപ്പോഴത്തെ സമയം</string>
+    <string name="core_content_snippet_var_time_info">24-മണിക്കൂർ ഫോർമാറ്റിലുള്ള ഇപ്പോഴത്തെ സമയം</string>
+    <string name="core_content_snippet_var_timestamp_info">യുണിക്സ് സെക്കൻഡിലുള്ള സമയം</string>
+    <string name="core_content_snippet_var_timezone_info">സമയമേഖല, ഉദാഹരണത്തിന് GMT+06:00</string>
+    <string name="core_content_snippet_var_uuid_info">ഒരു പുതിയ റാൻഡം UUID</string>
+    <string name="core_content_snippet_var_weekday_info">ദിവസത്തിന്റെ പേര്, ഉദാഹരണത്തിന് ഞായറാഴ്ച</string>
+    <string name="core_content_snippet_var_year_info">നാല് അക്കങ്ങളുള്ള വർഷം</string>
+    <string name="core_content_sticker_pack_imported_label">ഇറക്കുമതി ചെയ്ത സ്റ്റിക്കറുകൾ</string>
+    <string name="core_content_sticker_repair_image_missing">ആപ്പ് \"%1$s\" ഒഴിവാക്കി. ഇതിന്റെ ചിത്രം കാണാനില്ല.</string>
+    <string name="core_content_sticker_repair_image_unreadable">ആപ്പ് \"%1$s\" ഒഴിവാക്കി. ആപ്പിന് അതിന്റെ ചിത്രം വായിക്കാൻ കഴിയില്ല.</string>
+    <plurals name="core_content_sticker_repair_kept_first">
+        <item quantity="one">ഈ പാക്കിൽ %1$d സ്റ്റിക്കർ ഉണ്ട്. ആപ്പ് ആദ്യത്തെ %2$d എണ്ണം നിലനിർത്തുന്നു.</item>
+        <item quantity="other">ഈ പാക്കിൽ %1$d സ്റ്റിക്കറുകൾ ഉണ്ട്. ആപ്പ് ആദ്യത്തെ %2$d എണ്ണം നിലനിർത്തുന്നു.</item>
+    </plurals>
+    <string name="core_content_sticker_repair_no_image_named">ആപ്പ് ഒരു സ്റ്റിക്കർ ഒഴിവാക്കി. സ്റ്റിക്കർ ഒരു ഇമേജ് ഫയലിനെയും സൂചിപ്പിക്കുന്നില്ല.</string>
+    <string name="core_content_sticker_repair_none_listed">പാക്ക് ഫയലിൽ സ്റ്റിക്കറുകളൊന്നും ലിസ്റ്റ് ചെയ്തിട്ടില്ല.</string>
+    <string name="core_content_sticker_repair_not_saved">ആപ്പ് \"%1$s\" ഒഴിവാക്കി. ആപ്പിന് അത് സംരക്ഷിക്കാൻ കഴിയില്ല.</string>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">Hugging Face 服务器未发送文件。错误代码为 HTTP %1$s。</string>
+    <string name="core_voice_download_interrupted_error">下载过程中连接中断。请重试以从中断处继续。</string>
+    <string name="core_voice_download_space_error">您的设备存储空间不足。您必须先释放约 %1$s MB 的空间。</string>
+    <string name="core_voice_model_base_eu_body">此模型使用您输入的语言，与 40 语言模型相同。它仅涵盖欧洲语言，因此下载包更小。</string>
+    <string name="core_voice_model_base_multi_body">此模型平衡了准确性和速度。它涵盖了 Whisper 所知的所有语言。如果小型模型太慢，请选择此模型。</string>
+    <string name="core_voice_model_base_world_body">此模型使用您输入的语言，而不是进行猜测。短语会变得更加可靠。当列表中包含您的语言时，请选择它。</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d 种语言</item>
+        <item quantity="other">%1$d 种语言</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">这是最准确的 Whisper 模型之一，但对于大多数手机来说太大了。下载大小为 1.5 GB。只有内存充足的设备才能加载它。</string>
+    <string name="core_voice_model_large_v3_multi_body">这是最准确的 Whisper 模型，也是识别您所说语言能力最强的模型。下载大小为 1.5 GB。只有内存充足的设备才能加载它。Turbo 模型同样非常准确，且体积仅为其一半。</string>
+    <string name="core_voice_model_medium_multi_body">此模型可提供接近桌面的准确度。每个短语需要几秒钟处理。模型运行时会占用近 1GB 内存。</string>
+    <string name="core_voice_model_single_language_body">此模型仅处理 %1$s。它没有语言检测步骤。这使其比相同大小的多语言模型更快且更准确。</string>
+    <string name="core_voice_model_small_multi_body">此模型在手机上运行良好，同时提供最佳准确度。它比基础模型能更好地处理口音和背景噪音。它涵盖了 Whisper 已知的所有语言。</string>
+    <string name="core_voice_model_small_world_body">此模型使用您输入的语言，并具有 Small 模型级别的准确性。它是目前能在手机上运行的最准确模型。</string>
+    <string name="core_voice_model_tiny_multi_body">这是速度最快的多语言模型。它在语音清晰时效果良好，但噪音会降低准确性。</string>
+    <string name="core_voice_model_turbo_multi_body">此模型识别您所说语言的能力远优于较小的模型。如果较小的模型将您的语音转录为错误的语言，请选择此模型。这是一个较大的下载包，且每个短语需要几秒钟处理。</string>
+    <string name="core_voice_size_base_label">基础</string>
+    <string name="core_voice_size_large_label">大</string>
+    <string name="core_voice_size_medium_label">中</string>
+    <string name="core_voice_size_small_label">小</string>
+    <string name="core_voice_size_tiny_label">极小</string>
+    <string name="core_voice_size_turbo_label">极速版</string>
+    <string name="core_voice_tier_recommended_label">推荐</string>
+    <string name="core_voice_whisper_mel_bins_error">此语音模型需要 %1$s 波段频谱图，与下载的文件不匹配。请在设置中删除该模型并重新下载。</string>
+    <string name="core_voice_whisper_model_load_error">语音模型加载失败。文件可能已损坏。请在设置中删除该模型并重新下载。</string>
+    <string name="core_voice_whisper_transcribe_error">语音输入无法工作。请重试，或选择较小的模型。</string>
+</resources>

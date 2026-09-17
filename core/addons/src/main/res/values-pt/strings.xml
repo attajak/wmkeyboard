@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">Dicionários</string>
+    <string name="core_addons_type_dictionary_singular_label">Dicionário</string>
+    <string name="core_addons_type_emoji_font_label">Fontes de emoji</string>
+    <string name="core_addons_type_emoji_font_singular_label">Fonte de emoji</string>
+    <string name="core_addons_type_emoji_keywords_label">Palavras-chave de emoji</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">Pacote de palavras-chave de emoji</string>
+    <string name="core_addons_type_espanso_label">Pacotes Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">Pacote Espanso</string>
+    <string name="core_addons_type_font_label">Fontes</string>
+    <string name="core_addons_type_font_singular_label">Fonte</string>
+    <string name="core_addons_type_icon_pack_label">Pacotes de ícones</string>
+    <string name="core_addons_type_icon_pack_singular_label">Pacote de ícones</string>
+    <string name="core_addons_type_layout_label">Layouts</string>
+    <string name="core_addons_type_layout_singular_label">Layout</string>
+    <string name="core_addons_type_plugin_label">Plugins</string>
+    <string name="core_addons_type_plugin_singular_label">Plugin</string>
+    <string name="core_addons_type_snippets_label">Snippets</string>
+    <string name="core_addons_type_snippets_singular_label">Pacote de snippets</string>
+    <string name="core_addons_type_sound_label">Sons</string>
+    <string name="core_addons_type_sound_pack_label">Pacotes de som</string>
+    <string name="core_addons_type_sound_pack_singular_label">Pacote de sons</string>
+    <string name="core_addons_type_sound_singular_label">Som da tecla</string>
+    <string name="core_addons_type_stickers_label">Pacotes de figurinhas</string>
+    <string name="core_addons_type_stickers_singular_label">Pacote de figurinhas</string>
+    <string name="core_addons_type_theme_label">Temas</string>
+    <string name="core_addons_type_theme_singular_label">Tema</string>
+    <string name="core_addons_type_unknown_label">Outro</string>
+    <string name="core_addons_type_unknown_singular_label">Complemento</string>
+    <string name="core_addons_type_vocabulary_label">Vocabulário</string>
+    <string name="core_addons_type_vocabulary_singular_label">Pacote de vocabulário</string>
+</resources>

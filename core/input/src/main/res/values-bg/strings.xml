@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Изтегленият файл е повреден. Контролната му сума не съвпада. Опитайте изтеглянето отново.</string>
+    <string name="core_input_cjk_download_error_http">Сървърът върна HTTP статус %1$s.</string>
+    <string name="core_input_cjk_download_error_network">Изтеглянето не бе успешно. Проверете връзката си и опитайте отново.</string>
+    <string name="core_input_cjk_download_error_network_detail">Изтеглянето не беше успешно: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Няма достатъчно място за съхранение на вашето устройство. Първо освободете малко място.</string>
+    <string name="core_input_cjk_download_error_truncated">Връзката прекъсна по време на изтеглянето. Натиснете „Възобновяване“, за да продължите.</string>
+    <string name="core_input_cjk_download_error_unavailable">Този пакет все още не е наличен.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Таблица с радикални кодове за йероглифи Hanzi, 29 000 знака. Клавиатурата се нуждае от този пакет за подредбите Cangjie и Quick.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Речник Cangjie (倉頡)</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana четения от mozc, 1.08 милиона записа, около 42 MB. Клавиатурата се нуждае от този пакет за японска конверсия.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Речник на японски кана към канджи</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Таблица с Jyutping четения към йероглифи, 163 000 записа. Клавиатурата се нуждае от този пакет за конвертиране на кантонски.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Кантонски речник Jyutping</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Йероглифи и фрази от CC-CEDICT, 120 000 записа. Клавиатурата се нуждае от този пакет за конвертиране на китайски.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Китайски Pinyin речник</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Таблица с реда на чертите за йероглифите Ханзъ. Клавиатурата се нуждае от този пакет за оформлението чрез черти.</string>
+    <string name="core_input_cjk_pack_stroke_title">Речник за китайски черти (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Изключено (пълен Pinyin)</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">شفق قطبی</string>
+    <string name="core_theme_builtin_berry_label">توت</string>
+    <string name="core_theme_builtin_bubble_label">حباب</string>
+    <string name="core_theme_builtin_crimson_label">زرشکی</string>
+    <string name="core_theme_builtin_cyberpunk_label">سایبرپانک</string>
+    <string name="core_theme_builtin_deep_sea_label">دریای عمیق</string>
+    <string name="core_theme_builtin_facet_label">وجه</string>
+    <string name="core_theme_builtin_forest_label">جنگلی</string>
+    <string name="core_theme_builtin_glacier_label">یخچال طبیعی</string>
+    <string name="core_theme_builtin_mint_label">نعنایی</string>
+    <string name="core_theme_builtin_nebula_label">سحابی (Nebula)</string>
+    <string name="core_theme_builtin_ocean_label">اقیانوس</string>
+    <string name="core_theme_builtin_pitch_label">سیاه مطلق</string>
+    <string name="core_theme_builtin_rose_label">رز</string>
+    <string name="core_theme_builtin_sand_label">شنی</string>
+    <string name="core_theme_builtin_slate_label">تخته‌سنگی</string>
+    <string name="core_theme_builtin_snow_label">برف</string>
+    <string name="core_theme_builtin_sunset_drift_label">غروب متحرک</string>
+    <string name="core_theme_builtin_sunset_label">غروب</string>
+    <string name="core_theme_family_gradient_label">گرادیان‌ها</string>
+    <string name="core_theme_family_ocean_label">گرگ‌ومیش</string>
+    <string name="core_theme_family_snow_label">پاستلی</string>
+</resources>

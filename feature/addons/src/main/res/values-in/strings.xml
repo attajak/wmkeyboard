@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="faddons_apply_emoji_font_question">Gambar emoji dengannya sekarang?</string>
+    <string name="faddons_apply_icon_pack_question">Gunakan ikonnya di papan ketik sekarang?</string>
+    <string name="faddons_apply_layout_question">Aktifkan agar Anda dapat mengetik dengannya?</string>
+    <string name="faddons_apply_plugin_question">Aktifkan agar muncul di panel plugin?</string>
+    <string name="faddons_apply_sound_pack_question">Gunakan paket suara ini untuk tombol Anda sekarang?</string>
+    <string name="faddons_apply_sound_question">Gunakan sebagai suara tombol Anda sekarang?</string>
+    <string name="faddons_apply_switch_action">Beralih ke itu</string>
+    <string name="faddons_apply_theme_question">Gunakan sebagai tema papan ketik Anda sekarang?</string>
+    <string name="faddons_download_error_app_too_old">Pengaya ini memerlukan versi aplikasi yang lebih baru.</string>
+    <string name="faddons_download_error_bad_url">Tautan unduhan bukan URL https yang valid.</string>
+    <string name="faddons_download_error_checksum">File yang diunduh tidak cocok dengan checksum di manifes.</string>
+    <string name="faddons_download_error_http_status">Server mengembalikan HTTP %1$d.</string>
+    <string name="faddons_download_error_no_space">Tidak ada cukup ruang kosong untuk menginstal ini.</string>
+    <string name="faddons_download_error_plugin_no_checksum">Plugin ini tidak memiliki checksum. Aplikasi tidak dapat memverifikasinya.</string>
+    <string name="faddons_download_error_too_large">Add-on ini lebih besar dari batas %1$d MB untuk jenisnya.</string>
+    <string name="faddons_error_no_words">Aplikasi tidak dapat membaca kata apa pun dari file tersebut.</string>
+    <string name="faddons_error_not_a_plugin">File tersebut bukan plugin WM Keyboard.</string>
+    <string name="faddons_install_error_dictionary_no_language">Kamus ini tidak menyebutkan bahasa apa yang dituju.</string>
+    <string name="faddons_install_error_dictionary_not_saved">Aplikasi tidak dapat menyimpan kamus.</string>
+    <string name="faddons_install_error_icon_pack_unreadable">Aplikasi tidak dapat membaca paket ikon.</string>
+    <string name="faddons_install_error_keywords_no_language">Paket ini tidak menyebutkan bahasa apa yang dituju.</string>
+    <string name="faddons_install_error_keywords_not_saved">Aplikasi tidak dapat menyimpan paket kata kunci.</string>
+    <string name="faddons_install_error_keywords_too_large">Paket kata kunci tersebut terlalu besar untuk diimpor.</string>
+    <string name="faddons_install_error_no_keywords">Aplikasi tidak dapat membaca kata kunci emoji apa pun dari file tersebut.</string>
+    <string name="faddons_install_error_no_stickers">Aplikasi tidak dapat membaca stiker apa pun dari paket tersebut. %1$s</string>
+    <string name="faddons_install_error_not_a_layout">File tersebut bukan tata letak Papan Ketik WM.</string>
+    <string name="faddons_install_error_not_a_snippet_pack">File tersebut bukan paket cuplikan Keyboard WM.</string>
+    <string name="faddons_install_error_not_a_sound_pack">File ini bukan paket suara.</string>
+    <string name="faddons_install_error_not_a_sticker_pack">File tersebut bukan paket stiker.</string>
+    <string name="faddons_install_error_not_a_theme">File tersebut bukan tema Papan Ketik WM.</string>
+    <string name="faddons_install_error_not_an_espanso_pack">File tersebut bukan paket Espanso atau file kecocokan.</string>
+    <string name="faddons_install_error_not_an_icon_pack">File tersebut bukan paket ikon.</string>
+    <string name="faddons_install_error_plugin_failed">Aplikasi tidak dapat menginstal plugin tersebut.</string>
+    <string name="faddons_install_error_plugins_turned_off">Plugin dimatikan. Aktifkan “Izinkan plugin” di bawah Alat › Plugin. Kemudian instal ini lagi.</string>
+    <string name="faddons_install_error_snippet_pack_empty">Paket cuplikan tersebut kosong.</string>
+    <string name="faddons_install_error_sound_pack_read">Aplikasi tidak dapat membaca paket suara ini.</string>
+    <string name="faddons_install_error_sticker_pack_unreadable">Aplikasi tidak dapat membaca paket stiker.</string>
+    <string name="faddons_install_error_too_many_fonts">Anda telah mencapai jumlah maksimum font yang diinstal.</string>
+    <string name="faddons_install_error_too_many_icon_packs">Anda telah mencapai jumlah maksimum paket ikon.</string>
+    <plurals name="faddons_install_error_too_many_plugins">
+        <item quantity="one">Anda sudah mencapai batas maksimum %1$d plugin.</item>
+        <item quantity="other">Anda sudah mencapai batas maksimum %1$d plugin.</item>
+    </plurals>
+    <string name="faddons_install_error_too_many_sound_packs">Anda telah mencapai jumlah maksimum paket suara yang diinstal.</string>
+    <string name="faddons_install_error_too_many_sounds">Anda telah mencapai jumlah maksimum suara tombol yang diinstal.</string>
+    <string name="faddons_install_error_too_many_sticker_packs">Anda telah mencapai jumlah maksimum paket stiker.</string>
+    <string name="faddons_install_error_unknown_language">Versi aplikasi ini tidak mendukung bahasa “%1$s”.</string>
+    <string name="faddons_install_error_unknown_type">Versi aplikasi ini tidak mendukung jenis add-on tersebut.</string>
+    <string name="faddons_install_error_vocab_no_language">Paket kosakata ini tidak menyebutkan bahasa apa yang dituju.</string>
+    <string name="faddons_install_error_vocab_no_words">Aplikasi tidak dapat membaca kata apa pun dari paket tersebut.</string>
+    <string name="faddons_install_error_vocab_not_a_pack">File tersebut bukan paket kosakata.</string>
+    <string name="faddons_install_error_vocab_too_large">Paket kosakata ini lebih besar dari yang diizinkan oleh aplikasi.</string>
+    <string name="faddons_preview_error_no_preview">Aplikasi tidak dapat mempratinjau add-on ini.</string>
+    <string name="faddons_preview_error_not_espanso_pack">File tersebut bukan paket Espanso atau file kecocokan.</string>
+    <string name="faddons_preview_error_not_keyword_pack">File itu bukan paket kata kunci emoji.</string>
+    <string name="faddons_preview_error_not_snippet_pack">File tersebut bukan paket cuplikan.</string>
+    <string name="faddons_preview_error_not_vocab_pack">File tersebut bukan paket kosakata.</string>
+    <string name="faddons_preview_error_sound_pack_unreadable">Aplikasi tidak dapat membaca suara dalam paket ini.</string>
+    <string name="faddons_preview_error_stickers_unreadable">Aplikasi tidak dapat membaca gambar stiker.</string>
+    <string name="faddons_snippet_pack_folder_fallback">Paket cuplikan</string>
+</resources>

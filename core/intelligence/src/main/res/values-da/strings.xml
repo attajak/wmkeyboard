@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_intel_llm_download_error_gated_no_token">Denne model er begrænset. Tilføj dit Hugging Face-token først.</string>
+    <string name="core_intel_llm_download_error_http">Hugging Face returnerede HTTP-status %1$s.</string>
+    <string name="core_intel_llm_download_error_licence">Acceptér licensen for modellen på dens Hugging Face-side. Prøv derefter igen.</string>
+    <string name="core_intel_llm_download_error_no_space">Der er ikke nok lagerplads på din enhed. Frigør ca. %1$s GB først.</string>
+    <string name="core_intel_llm_download_error_token_rejected">Hugging Face accepterede ikke tokenet. Tjek tokenet og prøv igen.</string>
+    <string name="core_intel_llm_download_error_truncated">Forbindelsen blev afbrudt under download. Tryk på Genoptag for at fortsætte.</string>
+    <string name="core_intel_llm_engine_error_gpu">Modellen fejlede på GPU\'en. GPU-hukommelsen er meget mindre end systemhukommelsen. Næste forsøg bruger CPU\'en. For altid at bruge CPU\'en, indstil Compute til CPU i indstillingerne. Du kan også vælge en mindre model.</string>
+    <string name="core_intel_llm_engine_error_load">Modellen blev ikke indlæst. Filen er sandsynligvis beskadiget. Slet modellen i indstillingerne og download den igen.</string>
+    <string name="core_intel_llm_engine_error_memory">Modellen løb tør for hukommelse, eller den fejlede. Vælg en mindre model.</string>
+    <string name="core_intel_llm_model_gemma3_1b_subtitle">En lille Gemma fra den forrige generation. Den har god kvalitet og en kontekst på 4K-tokens.</string>
+    <string name="core_intel_llm_model_gemma3_270m_subtitle">Den mindste Gemma fra Google. Den er hurtig på alle enheder.</string>
+    <string name="core_intel_llm_model_gemma4_e2b_subtitle">Den nyeste Gemma-generation. Den giver topkvalitet på din enhed.</string>
+    <string name="core_intel_llm_model_gemma4_e4b_subtitle">Den største model. Den skriver bedst, men kræver en kraftfuld enhed.</string>
+    <string name="core_intel_llm_model_qwen25_05b_subtitle">En generel model, der stadig passer på en basisenhed.</string>
+    <string name="core_intel_llm_model_qwen25_15b_subtitle">Helt klart smartere end modellerne under 1B. Den kræver en enhed i mellemklassen.</string>
+    <string name="core_intel_llm_model_qwen3_06b_subtitle">En nyere lille model. Kvaliteten er høj i forhold til dens størrelse.</string>
+    <string name="core_intel_llm_model_smollm2_135m_subtitle">Meget lille og hurtig. Den er god til hurtige omskrivninger, men ræsonnementet er begrænset.</string>
+    <string name="core_intel_llm_module_downloading">AI-delen af tastaturet downloades fra Google Play. Prøv igen om et øjeblik.</string>
+    <string name="core_intel_llm_module_restart">AI-delen er lige færdig med at installere. Luk og genåbn tastaturet for at bruge det.</string>
+    <string name="core_intel_llm_tier_experimental_label">Eksperimentel</string>
+    <string name="core_intel_llm_tier_recommended_label">Anbefalet</string>
+    <string name="core_intel_llm_tier_untested_label">Utestet</string>
+</resources>

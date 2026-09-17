@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">Die heruntergeladene Datei ist beschädigt. Die Prüfsumme stimmt nicht überein. Versuche den Download erneut.</string>
+    <string name="core_input_cjk_download_error_http">Der Server gab den HTTP-Status %1$s zurück.</string>
+    <string name="core_input_cjk_download_error_network">Der Download hat nicht funktioniert. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.</string>
+    <string name="core_input_cjk_download_error_network_detail">Der Download hat nicht funktioniert: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">Auf Ihrem Gerät ist nicht genügend Speicherplatz vorhanden. Geben Sie zuerst etwas Speicherplatz frei.</string>
+    <string name="core_input_cjk_download_error_truncated">Die Verbindung wurde während des Downloads unterbrochen. Drücken Sie auf Fortsetzen, um fortzufahren.</string>
+    <string name="core_input_cjk_download_error_unavailable">Dieses Paket ist noch nicht verfügbar.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Eine Tabelle mit Radikal-Codes für Hanzi-Zeichen, 29.000 Zeichen. Die Tastatur benötigt dieses Paket für die Cangjie- und Quick-Layouts.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) Wörterbuch</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">Kana-Lesungen von mozc, 1,08 Millionen Einträge, ca. 42 MB. Die Tastatur benötigt dieses Paket für die japanische Konvertierung.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">Japanisches Kana-zu-Kanji-Wörterbuch</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Eine Tabelle mit Jyutping-Lesungen für Hanzi-Zeichen, 163.000 Einträge. Die Tastatur benötigt dieses Paket für die kantonesische Konvertierung.</string>
+    <string name="core_input_cjk_pack_jyutping_title">Kantonesisches Jyutping-Wörterbuch</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">Hanzi-Zeichen und Phrasen aus CC-CEDICT, 120.000 Einträge. Die Tastatur benötigt dieses Paket für die chinesische Konvertierung.</string>
+    <string name="core_input_cjk_pack_pinyin_title">Chinesisches Pinyin-Wörterbuch</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">Eine Tabelle der Strichfolge für Hanzi-Zeichen. Die Tastatur benötigt dieses Paket für das Strich-Layout.</string>
+    <string name="core_input_cjk_pack_stroke_title">Chinesisches Strich-Wörterbuch (笔画)</string>
+    <string name="core_input_double_pinyin_off_label">Aus (vollständiges Pinyin)</string>
+</resources>

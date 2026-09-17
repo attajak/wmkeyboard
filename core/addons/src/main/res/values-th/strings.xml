@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_addons_type_dictionary_label">พจนานุกรม</string>
+    <string name="core_addons_type_dictionary_singular_label">พจนานุกรม</string>
+    <string name="core_addons_type_emoji_font_label">แบบอักษรอีโมจิ</string>
+    <string name="core_addons_type_emoji_font_singular_label">แบบอักษรอีโมจิ</string>
+    <string name="core_addons_type_emoji_keywords_label">คำหลักของอีโมจิ</string>
+    <string name="core_addons_type_emoji_keywords_singular_label">ชุดคำหลักอีโมจิ</string>
+    <string name="core_addons_type_espanso_label">ชุด Espanso</string>
+    <string name="core_addons_type_espanso_singular_label">ชุด Espanso</string>
+    <string name="core_addons_type_font_label">แบบอักษร</string>
+    <string name="core_addons_type_font_singular_label">แบบอักษร</string>
+    <string name="core_addons_type_icon_pack_label">ชุดไอคอน</string>
+    <string name="core_addons_type_icon_pack_singular_label">ชุดไอคอน</string>
+    <string name="core_addons_type_layout_label">เลย์เอาต์</string>
+    <string name="core_addons_type_layout_singular_label">เค้าโครง</string>
+    <string name="core_addons_type_plugin_label">ปลั๊กอิน</string>
+    <string name="core_addons_type_plugin_singular_label">ปลั๊กอิน</string>
+    <string name="core_addons_type_snippets_label">สนิปเพ็ต</string>
+    <string name="core_addons_type_snippets_singular_label">ชุดข้อความสั้นๆ</string>
+    <string name="core_addons_type_sound_label">เสียง</string>
+    <string name="core_addons_type_sound_pack_label">ชุดเสียง</string>
+    <string name="core_addons_type_sound_pack_singular_label">ชุดเสียง</string>
+    <string name="core_addons_type_sound_singular_label">เสียงกดปุ่ม</string>
+    <string name="core_addons_type_stickers_label">ชุดสติกเกอร์</string>
+    <string name="core_addons_type_stickers_singular_label">ชุดสติกเกอร์</string>
+    <string name="core_addons_type_theme_label">ธีม</string>
+    <string name="core_addons_type_theme_singular_label">ธีม</string>
+    <string name="core_addons_type_unknown_label">อื่นๆ</string>
+    <string name="core_addons_type_unknown_singular_label">ส่วนเสริม</string>
+    <string name="core_addons_type_vocabulary_label">คำศัพท์</string>
+    <string name="core_addons_type_vocabulary_singular_label">ชุดคำศัพท์</string>
+</resources>

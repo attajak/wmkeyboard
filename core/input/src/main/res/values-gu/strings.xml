@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_input_cjk_download_error_checksum">ડાઉનલોડ કરેલી ફાઇલ ક્ષતિગ્રસ્ત છે. તેનો ચેકસમ મેળ ખાતો નથી. ફરીથી ડાઉનલોડ કરવાનો પ્રયાસ કરો.</string>
+    <string name="core_input_cjk_download_error_http">સર્વરે HTTP સ્ટેટસ %1$s પરત કર્યું છે.</string>
+    <string name="core_input_cjk_download_error_network">ડાઉનલોડ કામ કરતું નથી. તમારું કનેક્શન તપાસો અને ફરી પ્રયાસ કરો.</string>
+    <string name="core_input_cjk_download_error_network_detail">ડાઉનલોડ કામ કરતું નથી: %1$s</string>
+    <string name="core_input_cjk_download_error_no_space">તમારા ઉપકરણ પર પૂરતી સ્ટોરેજ નથી. પહેલા થોડી જગ્યા ખાલી કરો.</string>
+    <string name="core_input_cjk_download_error_truncated">ડાઉનલોડ દરમિયાન કનેક્શન અટકી ગયું હતું. ચાલુ રાખવા માટે \'ફરી શરૂ કરો\' દબાવો.</string>
+    <string name="core_input_cjk_download_error_unavailable">આ પેક હજુ ઉપલબ્ધ નથી.</string>
+    <string name="core_input_cjk_pack_cangjie_subtitle">Hanzi અક્ષરો માટે રેડિકલ કોડ્સનું ટેબલ, 29,000 અક્ષરો. કીબોર્ડને Cangjie અને Quick લેઆઉટ માટે આ પેકની જરૂર છે.</string>
+    <string name="core_input_cjk_pack_cangjie_title">Cangjie (倉頡) શબ્દકોશ</string>
+    <string name="core_input_cjk_pack_ja_kana_subtitle">mozc તરફથી કાના રીડિંગ્સ, 1.08 મિલિયન એન્ટ્રીઓ, લગભગ 42 MB. જાપાનીઝ કન્વર્ઝન માટે કીબોર્ડને આ પેકની જરૂર છે.</string>
+    <string name="core_input_cjk_pack_ja_kana_title">જાપાનીઝ કાના થી કાંજી શબ્દકોશ</string>
+    <string name="core_input_cjk_pack_jyutping_subtitle">Hanzi અક્ષરો માટે Jyutping રીડિંગ્સનું ટેબલ, 163,000 એન્ટ્રીઓ. કેન્ટોનીઝ રૂપાંતરણ માટે કીબોર્ડને આ પેકની જરૂર છે.</string>
+    <string name="core_input_cjk_pack_jyutping_title">કેન્ટોનીઝ જ્યુટપિંગ શબ્દકોશ</string>
+    <string name="core_input_cjk_pack_pinyin_subtitle">CC-CEDICT માંથી હાનઝી અક્ષરો અને શબ્દસમૂહો, 120,000 એન્ટ્રીઓ. ચાઇનીઝ રૂપાંતરણ માટે કીબોર્ડને આ પેકની જરૂર છે.</string>
+    <string name="core_input_cjk_pack_pinyin_title">ચાઈનીઝ પિનયિન ડિક્શનરી</string>
+    <string name="core_input_cjk_pack_stroke_subtitle">હાનઝી અક્ષરો માટે સ્ટ્રોક ઓર્ડરનું ટેબલ. કીબોર્ડને સ્ટ્રોક લેઆઉટ માટે આ પેકની જરૂર છે.</string>
+    <string name="core_input_cjk_pack_stroke_title">ચાઇનીઝ સ્ટ્રોક (笔画) શબ્દકોશ</string>
+    <string name="core_input_double_pinyin_off_label">બંધ (સંપૂર્ણ પિનયિન)</string>
+</resources>

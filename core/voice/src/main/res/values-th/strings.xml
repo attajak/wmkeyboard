@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_voice_download_http_error">เซิร์ฟเวอร์ Hugging Face ไม่ได้ส่งไฟล์ รหัสข้อผิดพลาดคือ HTTP %1$s</string>
+    <string name="core_voice_download_interrupted_error">การเชื่อมต่อหยุดชะงักระหว่างการดาวน์โหลด โปรดลองใหม่อีกครั้งเพื่อดำเนินการต่อจากจุดที่ค้างไว้</string>
+    <string name="core_voice_download_space_error">พื้นที่จัดเก็บข้อมูลในอุปกรณ์ของคุณไม่เพียงพอ คุณต้องเพิ่มพื้นที่ว่างประมาณ %1$s MB ก่อน</string>
+    <string name="core_voice_model_base_eu_body">โมเดลนี้ใช้ภาษาที่คุณพิมพ์ เช่นเดียวกับโมเดลภาษา 40 ภาษา ครอบคลุมเฉพาะภาษาในยุโรป ดังนั้นขนาดการดาวน์โหลดจึงเล็กลง</string>
+    <string name="core_voice_model_base_multi_body">โมเดลนี้สร้างสมดุลระหว่างความแม่นยำและความเร็ว ครอบคลุมทุกภาษาที่ Whisper รู้จัก เลือกโมเดลนี้หากโมเดลขนาดเล็กทำงานช้าเกินไป</string>
+    <string name="core_voice_model_base_world_body">โมเดลนี้ใช้ภาษาที่คุณพิมพ์แทนการคาดเดา วลีสั้นๆ จะมีความแม่นยำมากขึ้น เลือกโมเดลนี้เมื่อรายการแสดงภาษาของคุณ</string>
+    <plurals name="core_voice_model_language_count">
+        <item quantity="one">%1$d ภาษา</item>
+        <item quantity="other">%1$d ภาษา</item>
+    </plurals>
+    <string name="core_voice_model_large_multi_body">นี่เป็นหนึ่งในโมเดล Whisper ที่แม่นยำที่สุด แต่มีขนาดใหญ่เกินไปสำหรับโทรศัพท์ส่วนใหญ่ ไฟล์ดาวน์โหลดมีขนาด 1.5 GB เฉพาะอุปกรณ์ที่มีหน่วยความจำจำนวนมากเท่านั้นที่จะโหลดได้</string>
+    <string name="core_voice_model_large_v3_multi_body">นี่คือโมเดล Whisper ที่แม่นยำที่สุดและจดจำภาษาที่คุณพูดได้ดีที่สุด ไฟล์ดาวน์โหลดมีขนาด 1.5 GB เฉพาะอุปกรณ์ที่มีหน่วยความจำมากเท่านั้นที่สามารถโหลดได้ โมเดล Turbo มีความแม่นยำใกล้เคียงกันและมีขนาดเพียงครึ่งเดียว</string>
+    <string name="core_voice_model_medium_multi_body">โมเดลนี้ให้ความแม่นยำเกือบเท่าเดสก์ท็อป แต่ละวลีใช้เวลาหลายวินาที โมเดลนี้ใช้หน่วยความจำเกือบหนึ่งกิกะไบต์ขณะทำงาน</string>
+    <string name="core_voice_model_single_language_body">โมเดลนี้จัดการเฉพาะภาษา %1$s เท่านั้น โดยไม่มีขั้นตอนการตรวจจับภาษา ซึ่งทำให้ทำงานได้รวดเร็วและแม่นยำกว่าโมเดลหลายภาษาที่มีขนาดเท่ากันเล็กน้อย</string>
+    <string name="core_voice_model_small_multi_body">โมเดลนี้ให้ความแม่นยำสูงสุดที่ยังคงทำงานได้ดีบนโทรศัพท์ จัดการกับสำเนียงและเสียงรบกวนรอบข้างได้ดีกว่าโมเดล Base ครอบคลุมทุกภาษาที่ Whisper รู้จัก</string>
+    <string name="core_voice_model_small_world_body">โมเดลนี้ใช้ภาษาที่คุณพิมพ์และมีความแม่นยำระดับโมเดลขนาดเล็ก เป็นโมเดลที่แม่นยำที่สุดที่ยังสามารถใช้งานบนโทรศัพท์ได้</string>
+    <string name="core_voice_model_tiny_multi_body">นี่คือโมเดลหลายภาษาที่เร็วที่สุด ทำงานได้ดีกับเสียงที่ชัดเจน แต่เสียงรบกวนจะลดความแม่นยำลง</string>
+    <string name="core_voice_model_turbo_multi_body">โมเดลนี้จดจำภาษาที่คุณพูดได้ดีกว่าโมเดลขนาดเล็กมาก ให้เลือกใช้หากโมเดลขนาดเล็กถอดความคำพูดของคุณเป็นภาษาที่ผิด นี่เป็นการดาวน์โหลดขนาดใหญ่ และแต่ละวลีจะใช้เวลาหลายวินาที</string>
+    <string name="core_voice_size_base_label">พื้นฐาน</string>
+    <string name="core_voice_size_large_label">ใหญ่</string>
+    <string name="core_voice_size_medium_label">ปานกลาง</string>
+    <string name="core_voice_size_small_label">เล็ก</string>
+    <string name="core_voice_size_tiny_label">เล็กมาก</string>
+    <string name="core_voice_size_turbo_label">เทอร์โบ</string>
+    <string name="core_voice_tier_recommended_label">แนะนำ</string>
+    <string name="core_voice_whisper_mel_bins_error">โมเดลเสียงนี้ต้องการสเปกโทรแกรมแบบ %1$s แบนด์ ซึ่งไม่ตรงกับไฟล์ที่ดาวน์โหลดมา ให้ลบโมเดลในการตั้งค่าแล้วดาวน์โหลดใหม่อีกครั้ง</string>
+    <string name="core_voice_whisper_model_load_error">ไม่สามารถโหลดโมเดลเสียงได้ ไฟล์อาจเสียหาย ให้ลบโมเดลในการตั้งค่าแล้วดาวน์โหลดใหม่อีกครั้ง</string>
+    <string name="core_voice_whisper_transcribe_error">การพิมพ์ด้วยเสียงไม่ทำงาน โปรดลองใหม่อีกครั้ง หรือเลือกรุ่นที่เล็กลง</string>
+</resources>

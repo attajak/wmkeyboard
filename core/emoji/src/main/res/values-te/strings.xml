@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_emoji_dict_error_empty">ఆ ఎమోజి కీవర్డ్ జాబితా ఖాళీగా ఉంది లేదా చదవలేని విధంగా ఉంది.</string>
+    <string name="core_emoji_dict_error_http">సర్వర్ ఫైల్‌ను పంపలేదు. ఎర్రర్ కోడ్ HTTP %1$s.</string>
+    <string name="core_emoji_dict_error_not_a_list">ఆ ఫైల్ ఎమోజి కీవర్డ్ జాబితా కాదు.</string>
+    <string name="core_emoji_dict_error_save">యాప్ ఎమోజి కీవర్డ్ జాబితాను సేవ్ చేయలేకపోయింది.</string>
+    <string name="core_emoji_dict_error_too_large">ఆ ఎమోజీ కీవర్డ్ జాబితా చాలా పెద్దదిగా ఉంది.</string>
+</resources>

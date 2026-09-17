@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="core_theme_builtin_aurora_label">Aurora</string>
+    <string name="core_theme_builtin_berry_label">Ягода</string>
+    <string name="core_theme_builtin_bubble_label">Бульбашка</string>
+    <string name="core_theme_builtin_crimson_label">Малиновий</string>
+    <string name="core_theme_builtin_cyberpunk_label">Кіберпанк</string>
+    <string name="core_theme_builtin_deep_sea_label">Глибоке море</string>
+    <string name="core_theme_builtin_facet_label">Facet</string>
+    <string name="core_theme_builtin_forest_label">Ліс</string>
+    <string name="core_theme_builtin_glacier_label">Льодовик</string>
+    <string name="core_theme_builtin_mint_label">М\'ятний</string>
+    <string name="core_theme_builtin_nebula_label">Nebula</string>
+    <string name="core_theme_builtin_ocean_label">Океан</string>
+    <string name="core_theme_builtin_pitch_label">Вугільно-чорний</string>
+    <string name="core_theme_builtin_rose_label">Троянда</string>
+    <string name="core_theme_builtin_sand_label">Пісочний</string>
+    <string name="core_theme_builtin_slate_label">Шифер</string>
+    <string name="core_theme_builtin_snow_label">Сніг</string>
+    <string name="core_theme_builtin_sunset_drift_label">Захід сонця</string>
+    <string name="core_theme_builtin_sunset_label">Захід сонця</string>
+    <string name="core_theme_family_gradient_label">Градієнти</string>
+    <string name="core_theme_family_ocean_label">Настання ночі</string>
+    <string name="core_theme_family_snow_label">Пастельний</string>
+</resources>

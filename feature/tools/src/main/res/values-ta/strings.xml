@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <string name="ftools_ai_stream_error">AI வழங்குநர் பிழையுடன் பதிலை முடித்துவிட்டார்</string>
+    <string name="ftools_photo_error_failed">பயன்பாட்டால் புகைப்படங்களைப் பெற முடியவில்லை</string>
+    <string name="ftools_photo_error_offline">ஆப்ஸால் புகைப்படச் சேவையை அடைய முடியவில்லை. உங்கள் நெட்வொர்க்கைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="ftools_photo_error_timeout">புகைப்பட சேவை பதிலளிக்க அதிக நேரம் எடுத்துக்கொண்டது</string>
+    <string name="ftools_search_error_json_disabled">இந்த SearXNG நிகழ்வு அதன் JSON API-ஐ இயக்கவில்லை. அதன் settings.yml கோப்பில் search.formats-இல் &lt;b&gt;json&lt;/b&gt;-ஐச் சேர்க்கவும் அல்லது மற்றொரு நிகழ்வைப் பயன்படுத்தவும்.</string>
+</resources>

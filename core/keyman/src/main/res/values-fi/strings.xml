@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Machine translated by Google Play. Do not edit by hand:
+     regenerate with tools/i18n/pull-play-translations.py. -->
+<resources>
+    <plurals name="core_keyman_diagonal_flicks_dropped">
+        <item quantity="one">Sovellus poisti %1$d diagonaalisen pyyhkäisyn. Tämä näppäimistö tukee vain ylös-, alas-, vasemmalle- ja oikealle-pyyhkäisyjä.</item>
+        <item quantity="other">Sovellus poisti %1$d diagonaalista pyyhkäisyä. Tämä näppäimistö tukee vain ylös-, alas-, vasemmalle- ja oikealle-pyyhkäisyjä.</item>
+    </plurals>
+    <plurals name="core_keyman_keys_type_their_labels">
+        <item quantity="one">%1$d näppäin kirjoittaa siihen painetun merkin. Alkuperäinen näppäimistö käytti sääntöä päättääkseen, mitä se kirjoittaa.</item>
+        <item quantity="other">%1$d näppäintä kirjoittavat niihin painetut merkit. Alkuperäinen näppäimistö käytti sääntöjä päättääkseen, mitä ne kirjoittavat.</item>
+    </plurals>
+    <plurals name="core_keyman_multitap_dropped">
+        <item quantity="one">Tässä näppäimistössä on %1$d näppäin, jota napauttamalla voit selata merkkejä. Tässä näppäimistösovelluksessa ei ole tällaista näppäintä, joten vain ensimmäinen merkki on käytettävissä.</item>
+        <item quantity="other">Tässä näppäimistössä on %1$d näppäintä, joita napauttamalla voit selata merkkejä. Tässä näppäimistösovelluksessa ei ole tällaisia näppäimiä, joten vain kunkin ensimmäinen merkki on käytettävissä.</item>
+    </plurals>
+    <string name="core_keyman_rules_missing">Tämä näppäimistö käyttää sääntöjä päättääkseen, mitä näppäimet kirjoittavat. Sovelluksella ei ole näitä sääntöjä, joten jokainen näppäin kirjoittaa siihen painetun merkin.</string>
+    <string name="core_keyman_shift_layer_folded">Sovellus yhdisti vaihto-tason näppäimiin. Pidä Vaihto-näppäintä pohjassa päästäksesi näihin merkkeihin.</string>
+    <string name="core_keyman_shift_layer_separate">Vaihtotasolla on eri muoto, joten sovellus piti sen omana tasonaan.</string>
+    <plurals name="core_keyman_special_keys_dropped">
+        <item quantity="one">Sovellus poisti %1$d näppäimen. Tässä näppäimistössä ei ole näppäintä, joka tekee saman asian.</item>
+        <item quantity="other">Sovellus poisti %1$d näppäintä. Tässä näppäimistössä ei ole näppäimiä, jotka tekevät saman asian.</item>
+    </plurals>
+</resources>
