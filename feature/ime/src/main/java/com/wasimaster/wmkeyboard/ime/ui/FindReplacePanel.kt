@@ -84,7 +84,9 @@ internal fun FindReplacePanel(state: KeyboardUiState, callbacks: FindReplaceCall
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(FindReplacePanelHeight)
+            // Less the row the focused field's own suggestion strip takes
+            // below this panel (#161), so the window does not grow one.
+            .height(FindReplacePanelHeight - captureStripHeight(state))
             .padding(horizontal = 10.dp, vertical = 6.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {

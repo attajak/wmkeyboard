@@ -471,10 +471,14 @@ internal fun EmojiSearchPanel(
     // mode hides the toolbar row too (see KeyboardBody).
     val barCompensation =
         if (state.settings.emojiBarMode == EmojiBarMode.ALWAYS) EmojiBarHeight else 0.dp
+    // The suggestion strip for the query takes a row between this panel and
+    // the keys (#161); it comes out of the panel, so opening search still does
+    // not resize the window.
+    val strip = captureStripHeight(state)
     val height = if (fullBleed) {
-        EmojiSearchPanelHeight + fullBleedHiddenRows(state)
+        EmojiSearchPanelHeight + fullBleedHiddenRows(state) - strip
     } else {
-        EmojiSearchPanelHeight + topBarHeight(state.settings) + barCompensation
+        EmojiSearchPanelHeight + topBarHeight(state.settings) + barCompensation - strip
     }
     Column(
         modifier = Modifier

@@ -31,6 +31,8 @@ Up to four predicted emoji can ride after the word chips (see [Emoji in the stri
   {/* shot: smart/suggestion-strip-emoji-tail */}
 </PhoneFrame>
 
+When one of the keyboard's own text boxes has the keys — a panel's search bar, the AI prompt, Find and replace, a plugin's field — the strip moves to the row directly above the keys, since the panel has taken the toolbar's row. It shows the same words for the box's text that it would for your field, and tapping one replaces the word at the box's caret. See [Panels and captured keys](/tools/overview/#panels-and-captured-keys).
+
 The strip shares its row with the toolbar, and several other features can claim that row instead of word candidates. A [smart chip](/smart/chips/) (calculator, currency, unit conversion) takes the full row when it has an answer. [Autofill chips](/smart/autofill/) take it over completely on a login field. The system's [smart replies](/smart/autofill/#smart-replies) take the row when nothing is typed, then ride the tail once you start typing. A "paste your last copy" or one-time-code chip can appear from the [clipboard tool](/tools/clipboard/). Typing `:` turns the row into [inline emoji search](/emoji/customization/#inline-emoji-search-and-shortcodes). Any of these counts as "the strip has something to show," so the row rests on suggestions rather than falling back to the toolbar. **Suggestion strip always visible** (see [Options](#options)) keeps the strip as the resting view even before any of them has anything to offer.
 
 ## Completions, corrections, and predictions

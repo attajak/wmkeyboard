@@ -2447,6 +2447,7 @@ open class WMKeyboardService : InputMethodService() {
         // then, and saves a job launch per preview once a finger is down.
         startGesturePreviewConsumer()
         startGlideReadinessWatcher()
+        startCaptureSuggestionWatcher()
         // A process that started on the lock screen never ran ML Kit's init
         // provider, and every ML Kit tool in it — handwriting, OCR, QR, doc
         // scan — stays broken until it is initialized by hand.
@@ -3704,6 +3705,7 @@ open class WMKeyboardService : InputMethodService() {
                 onModeSelect = ::onModeSelect,
                 onToolInsert = ::onToolTextInsert,
                 converter = converterCallbacks,
+                capture = captureCallbacks,
                 onPwSetting = ::onPwSetting,
                 onTypingTestAction = ::onTypingTestAction,
                 onQrSend = ::onQrSend,
@@ -5897,6 +5899,435 @@ open class WMKeyboardService : InputMethodService() {
         }
     }
 
+    // ---- the keyboard's own text fields ----
+
+    /**
+     * One place where a keystroke reaches a keyboard-owned buffer, and one
+     * caret for whichever of them is focused (#161).
+     *
+     * Before this, each buffer had a branch of its own in seven different
+     * ladders, every branch appended to the end of a plain `String`, and none
+     * of them could be glided into or suggested for because there was no caret
+     * to insert a word at or a word span to replace. [CaptureTarget] names the
+     * focused buffer once and these functions do the rest.
+     *
+     * Two buffers keep their own path because they are not plain text: the
+     * typing test scores keystrokes in the order they were made, and the word
+     * card's [WordSpell] carries a selection as well as a caret (#204). Both
+     * are routed here first so callers still have one question to ask.
+     */
+    private fun captureTyped(text: String): Boolean {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return false
+        when (target) {
+            CaptureTarget.TYPING_TEST -> { typingTestType(text); return true }
+            CaptureTarget.WORD_SPELL -> {
+                wordSpellEdit { it.typed(text, UserLexicon.MAX_WORD_LENGTH) }
+                return true
+            }
+            else -> Unit
+        }
+        val before = state.captureCaretText() ?: return false
+        // What each field will take of what was typed. The two numeric ones
+        // filter rather than accept, and the cluster-shaping scripts need to
+        // know the character the new one lands *after* — which, with a caret,
+        // is the one before the caret and not the last one in the buffer.
+        val insert = when (target) {
+            CaptureTarget.CALC -> mapCalcChars(text)
+            CaptureTarget.CONVERTER -> converterInsert(before, text)
+            CaptureTarget.EMOJI_SEARCH, CaptureTarget.MEDIA_SEARCH ->
+                fixedLayoutContextualVowel(text, before.text.getOrNull(before.at - 1))
+            else -> text
+        }
+        if (insert.isNotEmpty()) captureWrite(target, before, before.typed(insert))
+        return true
+    }
+
+    /**
+     * Backspace in a keyboard-owned field: the character before the caret, a
+     * whole emoji or conjunct at a time, exactly as the field path deletes.
+     * The old per-buffer `dropLast(1)` took half an emoji and could only ever
+     * delete from the end.
+     *
+     * Returns true whenever a field has the keys, *including* when the caret
+     * is already at the start with nothing to delete — falling through there
+     * would delete from the app behind the keyboard.
+     */
+    private fun captureBackspace(): Boolean {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return false
+        when (target) {
+            CaptureTarget.TYPING_TEST -> { typingTestBackspace(); return true }
+            CaptureTarget.WORD_SPELL -> { wordSpellEdit { it.deletedBackward() }; return true }
+            else -> Unit
+        }
+        val before = state.captureCaretText() ?: return false
+        if (before.at <= 0) return true
+        val length = charDeleteLength(before.text.substring(0, before.at))
+        captureWrite(target, before, before.deletedBackward(length))
+        return true
+    }
+
+    /** Forward delete in a keyboard-owned field; see [captureBackspace]. */
+    private fun captureForwardDelete(): Boolean {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return false
+        when (target) {
+            CaptureTarget.TYPING_TEST -> return true
+            CaptureTarget.WORD_SPELL -> { wordSpellEdit { it.deletedForward() }; return true }
+            else -> Unit
+        }
+        val before = state.captureCaretText() ?: return false
+        captureWrite(target, before, before.deletedForward())
+        return true
+    }
+
+    /**
+     * The spacebar while a keyboard-owned field has the keys. True whenever
+     * one does, so the press can never reach the app behind the keyboard —
+     * including in the fields where a space means nothing and the press is
+     * simply spent.
+     *
+     * The clipboard search used to be missing from this ladder, so a space
+     * pressed while filtering clips went into whatever was being written
+     * behind the panel. That is the class of bug one ladder exists to end.
+     */
+    private fun captureSpace(): Boolean {
+        val target = _uiState.value.captureTarget() ?: return false
+        when (target) {
+            CaptureTarget.TYPING_TEST -> typingTestSpace()
+            // A single word: the respelling draft (#138) and the Learn
+            // speller (#174) have no spaces in them, and neither does an
+            // amount. The press is spent rather than passed on.
+            CaptureTarget.WORD_SPELL, CaptureTarget.LEARN_EDIT, CaptureTarget.CONVERTER -> Unit
+            // Everything else takes it at the caret — including the
+            // calculator, whose `mod ` operator is spelled with one, and the
+            // dictionary, where "give up" is a legitimate lookup.
+            else -> captureTyped(" ")
+        }
+        return true
+    }
+
+    /**
+     * Enter while a keyboard-owned field has the keys — mostly the field's own
+     * action rather than a newline. True whenever one has them, so the press
+     * can never reach the app behind the panel.
+     *
+     * The emoji and clipboard searches were both missing from this ladder, so
+     * Enter while filtering either one put a newline into whatever was being
+     * written behind it. They spend the press instead: a search box's Enter
+     * has nothing to run, and a keyboard-owned field's keystroke is never the
+     * field's.
+     */
+    private fun captureEnter(): Boolean {
+        val state = _uiState.value
+        when (state.captureTarget() ?: return false) {
+            // Enter is not part of a run, and letting it through would put a
+            // newline in the field behind the panel.
+            CaptureTarget.TYPING_TEST -> Unit
+            // Enter is the tick on the word card's spelling bar (#138).
+            CaptureTarget.WORD_SPELL -> commitWordSpell()
+            // Enter runs the Custom action rather than dropping a newline.
+            CaptureTarget.AI_CUSTOM -> onAiRunCustom()
+            // Enter finishes typing into a plugin's box: it gives the keys
+            // back to the field.
+            CaptureTarget.PLUGIN -> onPluginInputFocus(null)
+            // Enter in the find field walks to the next match; in the replace
+            // field it replaces the current one.
+            CaptureTarget.FIND_QUERY, CaptureTarget.FIND_REPLACEMENT -> onFindReplaceEnter()
+            // Enter in the spelling editor keeps the spelling.
+            CaptureTarget.LEARN_EDIT -> onLearnEditDone()
+            CaptureTarget.DICTIONARY_SEARCH -> onDictionaryLookup(state.dictionaryQuery)
+            // Enter in the calculator is the `=` key. Only when no focus ring
+            // is up — [handlePanelNavKey] consumes Enter first while one is.
+            CaptureTarget.CALC -> calcEvaluate()
+            // The converters convert live; Enter has nothing to run.
+            CaptureTarget.CONVERTER -> Unit
+            CaptureTarget.MEDIA_SEARCH ->
+                // QR builds its content as you type, so Enter adds a newline
+                // to the buffer (WiFi/vCard payloads span lines) rather than
+                // searching. Every other media box runs the search.
+                if (state.panel == PanelMode.QR_GEN) captureTyped("\n") else runMediaSearch()
+            CaptureTarget.EMOJI_SEARCH, CaptureTarget.CLIPBOARD_SEARCH -> Unit
+        }
+        return true
+    }
+
+    /**
+     * The caret moved by [delta] characters, or put at [index] when one is
+     * given — a tap in the middle of the text, which is what a real field does
+     * and none of these could (#161).
+     */
+    fun onCaptureCaretMove(delta: Int, extend: Boolean = false): Boolean {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return false
+        if (!target.movableCaret) return true
+        if (target == CaptureTarget.WORD_SPELL) {
+            wordSpellEdit { it.caretMoved(delta, extend) }
+            return true
+        }
+        val before = state.captureCaretText() ?: return false
+        captureCaretTo(before.caretMoved(delta).at)
+        return true
+    }
+
+    /**
+     * The caret put at the start or end of the focused keyboard-owned field —
+     * what the vertical scrub, Home and End ask of a one-line buffer.
+     */
+    fun onCaptureCaretToEdge(end: Boolean, extend: Boolean = false): Boolean {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return false
+        if (!target.movableCaret) return true
+        if (target == CaptureTarget.WORD_SPELL) {
+            wordSpellEdit { it.caretAt(if (end) it.draft.length else 0, extend) }
+            return true
+        }
+        val before = state.captureCaretText() ?: return false
+        captureCaretTo(if (end) before.text.length else 0)
+        return true
+    }
+
+    /**
+     * A hardware arrow, Home or End while a keyboard-owned field has the keys:
+     * that field's caret moves, not the app's. Shift extends in the one buffer
+     * that has a selection to extend (#204); the rest simply move.
+     */
+    private fun captureCaretKey(event: KeyEvent): Boolean {
+        if (_uiState.value.captureTarget() == null) return false
+        val extend = event.isShiftPressed
+        val handled = when (event.keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT -> onCaptureCaretMove(-1, extend)
+            KeyEvent.KEYCODE_DPAD_RIGHT -> onCaptureCaretMove(1, extend)
+            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_MOVE_HOME ->
+                onCaptureCaretToEdge(end = false, extend = extend)
+            KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_MOVE_END ->
+                onCaptureCaretToEdge(end = true, extend = extend)
+            else -> false
+        }
+        if (handled) consumeHardwareKey(event.keyCode)
+        return handled
+    }
+
+    /** The caret put where a tap landed in the field's text. */
+    fun onCaptureCaretTap(index: Int) {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return
+        if (!target.movableCaret) return
+        if (target == CaptureTarget.WORD_SPELL) {
+            wordSpellEdit { it.caretAt(index, extend = false) }
+            return
+        }
+        val before = state.captureCaretText() ?: return
+        captureCaretTo(before.caretAt(index).at)
+    }
+
+    /** Moves the shared caret without touching the text. */
+    private fun captureCaretTo(at: Int) {
+        val state = _uiState.value
+        val key = state.captureKey() ?: return
+        _uiState.update { it.copy(captureCaret = CaptureCaret(key, at, state.captureBuffer())) }
+    }
+
+    /**
+     * Writes [after] into whichever buffer [target] names, then settles the
+     * caret and the strip.
+     *
+     * The caret is read back off the state rather than taken from [after]:
+     * three of these buffers cap their own length (a plugin box, the two Find
+     * fields, the Learn speller), so what lands can be shorter than what was
+     * asked for, and a caret past the end of the text would draw outside it.
+     */
+    private fun captureWrite(target: CaptureTarget, before: CaretText, after: CaretText) {
+        val key = _uiState.value.captureKey()
+        if (after.text != before.text) {
+            when (target) {
+                CaptureTarget.TYPING_TEST, CaptureTarget.WORD_SPELL -> return
+                CaptureTarget.AI_CUSTOM -> aiCustomInputEdit { after.text }
+                CaptureTarget.PLUGIN -> pluginInputEdit { after.text }
+                CaptureTarget.FIND_QUERY, CaptureTarget.FIND_REPLACEMENT -> findReplaceEdit { after.text }
+                CaptureTarget.LEARN_EDIT -> learnEdit { after.text }
+                CaptureTarget.CALC -> calcEdit { after.text }
+                CaptureTarget.CONVERTER -> converterEdit { after.text }
+                CaptureTarget.EMOJI_SEARCH -> {
+                    updateQuery { it.copy(emojiQuery = after.text) }
+                    refreshKarContext()
+                    refreshEmojiResults()
+                }
+                CaptureTarget.MEDIA_SEARCH -> {
+                    updateQuery { it.copy(mediaQuery = after.text) }
+                    refreshKarContext()
+                    // QR encodes locally as you type — no network search to schedule.
+                    if (_uiState.value.panel != PanelMode.QR_GEN) scheduleMediaLiveSearch()
+                }
+                CaptureTarget.DICTIONARY_SEARCH -> updateQuery { it.copy(dictionaryQuery = after.text) }
+                CaptureTarget.CLIPBOARD_SEARCH -> updateQuery { it.copy(clipboardQuery = after.text) }
+            }
+        }
+        val written = _uiState.value.captureBuffer()
+        val at = if (written == after.text) after.at else written.length
+        _uiState.update { it.copy(captureCaret = key?.let { k -> CaptureCaret(k, at, written) }) }
+    }
+
+    /**
+     * What the converters will take of [text] at the caret: digits up to the
+     * field's cap, and a decimal point only while the amount has none. The
+     * same rule the append-only path had, asked of an insert instead.
+     */
+    private fun converterInsert(before: CaretText, text: String): String {
+        val room = (CONVERTER_VALUE_MAX - before.text.length).coerceAtLeast(0)
+        var hasDot = '.' in before.text
+        val out = StringBuilder()
+        for (c in text) {
+            when {
+                c.isDigit() && out.length < room -> out.append(c)
+                c == '.' && !hasDot -> { out.append(c); hasDot = true }
+            }
+        }
+        return out.toString()
+    }
+
+    /**
+     * The suggestion strip for a keyboard-owned field.
+     *
+     * The same engine and the same lookup the field's own strip uses — the
+     * word in front of the caret, with the word before it as context — so
+     * these fields predict as well as the app behind them does. Only the
+     * destination differs: [KeyboardUiState.captureSuggestions] is drawn in the
+     * row above the keys, because the panel has taken the toolbar's row, and a
+     * word picked there must never reach the field behind the keyboard.
+     *
+     * The typing test keeps [refreshTypingSuggestions]: it predicts against the
+     * prompt it is scoring, not against a free-text buffer.
+     */
+    private fun startCaptureSuggestionWatcher() {
+        serviceScope.launch {
+            _uiState
+                // Everything the strip is a function of: which field has the
+                // keys, what is in it, and where the caret stands. Driven off
+                // the state rather than called at each edit site, so a query
+                // set any other way — dictated, pasted, prefilled by a tool —
+                // gets the same strip the keys would have given it.
+                .map { Triple(it.captureKey(), it.captureBuffer(), it.captureCaretIndex()) }
+                .distinctUntilChanged()
+                .collect { refreshCaptureSuggestions() }
+        }
+    }
+
+    private fun refreshCaptureSuggestions() {
+        val state = _uiState.value
+        val target = state.captureTarget()
+        captureSuggestJob?.cancel()
+        val caret = state.captureCaretText()
+        if (target == null || !target.takesWords || caret == null || !state.settings.suggestions) {
+            if (state.captureSuggestions.isNotEmpty()) {
+                _uiState.update { it.copy(captureSuggestions = emptyList()) }
+            }
+            return
+        }
+        val engine = suggestionEngine ?: return
+        val word = caret.wordAtCaret()
+        val previous = caret.wordBeforeCaret()
+        val avro = state.composer.isBengaliPhonetic
+        val slots = state.settings.suggestionStrip.slotCount
+        val key = state.captureKey()
+        val snapshot = caret
+        captureSuggestJob = serviceScope.launch {
+            delay(CAPTURE_SUGGEST_DEBOUNCE_MS)
+            val words = withContext(Dispatchers.Default) {
+                // An empty word in front of the caret is the between-words
+                // case, and `suggest` answers that with next-word predictions
+                // itself — the same split the field's own strip makes.
+                engine.suggest(
+                    composing = word.typed,
+                    previousWord = previous,
+                    avroMode = avro,
+                    limit = slots,
+                )
+            }
+            _uiState.update { s ->
+                // Only for the buffer and the caret it was asked about.
+                if (s.captureKey() != key || s.captureCaretText() != snapshot) s
+                else s.copy(captureSuggestions = words)
+            }
+        }
+    }
+
+    /** Debounce for [refreshCaptureSuggestions]; the field strip's own pace. */
+    private var captureSuggestJob: Job? = null
+
+    /**
+     * A word picked off a keyboard-owned field's strip: it replaces the word
+     * at the caret and leaves a space behind it, exactly as a pick does in a
+     * real field. Nothing is learned from it — the word came from the word
+     * list, and a search query is not writing.
+     */
+    fun onCaptureSuggestion(word: String) {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return
+        if (!target.takesWords) return
+        vibrate()
+        if (target == CaptureTarget.WORD_SPELL) {
+            // The card is choosing one spelling, so a pick is the whole draft
+            // and no space follows it.
+            wordSpellEdit { it.copy(draft = word, cursor = word.length, anchor = word.length) }
+            return
+        }
+        val before = state.captureCaretText() ?: return
+        captureWrite(target, before, before.replacedWordAtCaret(word, spaceAfter = true))
+        consumeShift()
+    }
+
+    /**
+     * A glide drawn while a keyboard-owned field has the keys (#161).
+     *
+     * Decoded by the same engine and the same word list a field glide is, then
+     * inserted at the field's own caret, one word per segment of a chained
+     * stroke. Nothing reaches the app behind the keyboard, and nothing is
+     * learned: a query is not writing, so a glide into one must not teach the
+     * dictionary what the user was looking for.
+     */
+    private fun captureGlide(
+        target: CaptureTarget,
+        segments: List<List<GesturePoint>>,
+        keys: List<KeyCenter>,
+        keyWidthPx: Float,
+        verdict: GlideVerdict,
+        shift: ShiftState,
+    ) {
+        // Retires every preview from this stroke, in flight or queued.
+        gestureGeneration.incrementAndGet()
+        gestureJob?.cancel()
+        clearGlidePreview()
+        if (verdict is GlideVerdict.Cancel) return
+        val chosen = (verdict as? GlideVerdict.Word)?.word
+        val steadiness = _uiState.value.settings.gesture.previewSteadiness
+        gestureJob = serviceScope.launch {
+            for ((index, segment) in segments.withIndex()) {
+                val last = index == segments.lastIndex
+                val reading = withContext(Dispatchers.Default) {
+                    glideDecode(segment, keys, keyWidthPx, guessAhead = last)
+                }
+                val picked = chosen?.takeIf { last }
+                    ?: previewGate.commit(reading.words, reading.scores, steadiness)
+                    ?: reading.words.firstOrNull()
+                    ?: continue
+                val word = glideCased(picked, shift, verdict.caseAt(index), segment, keys, keyWidthPx)
+                // Re-read between segments: each one has moved the caret.
+                val state = _uiState.value
+                if (state.captureTarget() != target) return@launch
+                val before = state.captureCaretText() ?: return@launch
+                // A glide types a whole word and the space that ends it, the
+                // way it does in a field — except at the very end of a search
+                // query, where a trailing space would hold the results back a
+                // word. The space arrives with the next stroke instead.
+                val spaceAfter = before.at < before.text.length
+                captureWrite(target, before, before.replacedWordAtCaret(word, spaceAfter))
+            }
+            consumeShift()
+        }
+    }
+
     /**
      * Shared path for one typed character, whether it came from a soft key
      * ([onTextKey]) or a physical keyboard ([handleHardwareKeyDown]).
@@ -5952,58 +6383,15 @@ open class WMKeyboardService : InputMethodService() {
             }
         }
 
-        // Three buffers that live on the keyboard itself and take the character
-        // before any suggestion or field machinery sees it:
-        //  - the typing test scores keystrokes instead of committing them, so
-        //    nothing typed during a run reaches the user's text;
-        //  - the AI Custom instruction composes on the key rows;
-        //  - a plugin's own text box has the keys.
-        // Returning here, before the field is touched, is the whole guarantee:
-        // what the user types into one of these never reaches the app behind
-        // the keyboard.
-        val takenByKeyboardBuffer = when {
-            state.typingTestActive -> { typingTestType(text); true }
-            state.aiCustomInputActive -> { aiCustomInputEdit { it + text }; true }
-            state.pluginTypingActive -> { pluginInputEdit { it + text }; true }
-            state.findReplaceTypingActive -> { findReplaceEdit { it + text }; true }
-            state.learnEditActive -> { learnEdit { it + text }; true }
-            // The calculator's display is a buffer too: a physical keyboard
-            // types the expression instead of arrow-driving the keypad.
-            state.calcTypingActive -> { calcEdit { it + mapCalcChars(text) }; true }
-            state.converterTypingActive -> { converterEdit { appendConverterDigits(it, text) }; true }
-            // The word card is respelling one of its own words; the app
-            // behind the keyboard must not see a letter of it (#138).
-            state.wordSpellActive -> { wordSpellEdit { it.typed(text, UserLexicon.MAX_WORD_LENGTH) }; true }
-            else -> false
-        }
-        if (takenByKeyboardBuffer) {
-            consumeShift()
-            return
-        }
-
-        if (state.emojiSearchActive) {
-            text = fixedLayoutContextualVowel(text, state.emojiQuery.lastOrNull())
-            updateQuery { it.copy(emojiQuery = it.emojiQuery + text) }
-            refreshKarContext()
-            refreshEmojiResults()
-            return
-        }
-        if (state.mediaSearchActive && state.panel.hasMediaSearch) {
-            text = fixedLayoutContextualVowel(text, state.mediaQuery.lastOrNull())
-            updateQuery { it.copy(mediaQuery = it.mediaQuery + text) }
-            refreshKarContext()
-            // QR encodes locally as you type — no network search to schedule.
-            if (state.panel != PanelMode.QR_GEN) scheduleMediaLiveSearch()
-            return
-        }
-
-        if (state.dictionarySearchActive) {
-            updateQuery { it.copy(dictionaryQuery = it.dictionaryQuery + text) }
-            consumeShift()
-            return
-        }
-        if (state.clipboardSearchActive) {
-            updateQuery { it.copy(clipboardQuery = it.clipboardQuery + text) }
+        // The keyboard's own fields take the character before any suggestion or
+        // field machinery sees it — the typing test, which scores keystrokes
+        // instead of committing them; the AI Custom instruction; a plugin's
+        // text box; Find and replace; the Learn speller; the calculator and the
+        // converters; the word card; and the four search queries. Returning
+        // here, before the field is touched, is the whole guarantee: what the
+        // user types into one of these never reaches the app behind the
+        // keyboard. [captureTyped] is the single ladder that decides which.
+        if (captureTyped(text)) {
             consumeShift()
             return
         }
@@ -6655,8 +7043,12 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun refreshKarContext() {
         if (!_uiState.value.composer.isClusterShaping) return
-        val previous = if (_uiState.value.emojiSearchActive) {
-            _uiState.value.emojiQuery.lastOrNull()
+        // A keyboard-owned field answers from its own caret, not from the end
+        // of its text: with a movable caret (#161) those stopped being the
+        // same character.
+        val caret = _uiState.value.captureCaretText()
+        val previous = if (caret != null) {
+            caret.text.getOrNull(caret.at - 1)
         } else {
             currentInputConnection?.getTextBeforeCursor(1, 0)?.lastOrNull()
         }
@@ -6842,66 +7234,10 @@ open class WMKeyboardService : InputMethodService() {
             }
             return
         }
-        if (state.typingTestActive) {
-            typingTestBackspace()
-            return
-        }
-        if (state.aiCustomInputActive) {
-            aiCustomInputEdit { it.dropLast(1) }
-            return
-        }
-        if (state.pluginTypingActive) {
-            pluginInputEdit { it.dropLast(1) }
-            return
-        }
-        if (state.findReplaceTypingActive) {
-            findReplaceEdit { it.dropLast(1) }
-            return
-        }
-        if (state.learnEditActive) {
-            learnEdit { it.dropLast(1) }
-            return
-        }
-        if (state.calcTypingActive) {
-            calcEdit { it.dropLast(1) }
-            return
-        }
-        if (state.converterTypingActive) {
-            converterEdit { it.dropLast(1) }
-            return
-        }
-        if (state.wordSpellActive) {
-            wordSpellEdit { it.deletedBackward() }
-            return
-        }
-        if (state.emojiSearchActive) {
-            if (state.emojiQuery.isNotEmpty()) {
-                updateQuery { it.copy(emojiQuery = it.emojiQuery.dropLast(1)) }
-                refreshKarContext()
-                refreshEmojiResults()
-            }
-            return
-        }
-        if (state.dictionarySearchActive) {
-            if (state.dictionaryQuery.isNotEmpty()) {
-                updateQuery { it.copy(dictionaryQuery = it.dictionaryQuery.dropLast(1)) }
-            }
-            return
-        }
-        if (state.clipboardSearchActive) {
-            if (state.clipboardQuery.isNotEmpty()) {
-                updateQuery { it.copy(clipboardQuery = it.clipboardQuery.dropLast(1)) }
-            }
-            return
-        }
-        if (state.mediaSearchActive && state.panel.hasMediaSearch) {
-            if (state.mediaQuery.isNotEmpty()) {
-                updateQuery { it.copy(mediaQuery = it.mediaQuery.dropLast(1)) }
-                refreshKarContext()
-                scheduleMediaLiveSearch()
-            }
-            return
-        }
+        // A keyboard-owned field deletes from its own caret, never from the app
+        // behind the keyboard — including when the caret is already at the
+        // start and there is nothing to take.
+        if (captureBackspace()) return
         deleteFromField()
     }
 
@@ -7206,14 +7542,9 @@ open class WMKeyboardService : InputMethodService() {
      * something surprising.
      */
     private fun onForwardDelete() {
-        val state = _uiState.value
-        // The spelling bar's draft has a caret of its own (#204), so it does
-        // have an "after the cursor".
-        if (state.wordSpellActive) {
-            wordSpellEdit { it.deletedForward() }
-            return
-        }
-        if (!forwardDeleteOwnsBuffer()) return
+        // Every keyboard-owned field has a caret now (#161), so every one of
+        // them has an "after the cursor" to delete from.
+        if (captureForwardDelete()) return
         deleteForwardFromField()
     }
 
@@ -7301,21 +7632,12 @@ open class WMKeyboardService : InputMethodService() {
      * Whether ⌦ is acting on the real text field rather than standing down in
      * favour of one of the keyboard's own text boxes.
      *
-     * The opposite shape to [backspaceEditsBuffer], and deliberately not the
-     * same list: the spelling draft (#204) has a caret of its own, so ⌦ works
-     * in it, while every other buffer is a plain string with nothing after a
-     * cursor to delete.
+     * One question now, not a hand-written list: the list used to name every
+     * buffer but the spelling draft, on the reasoning that a plain string has
+     * nothing after a cursor. They all have a cursor since #161, so they all
+     * take their own forward delete.
      */
-    private fun forwardDeleteOwnsBuffer(): Boolean {
-        val state = _uiState.value
-        return !state.wordSpellActive &&
-            !state.typingTestActive && !state.aiCustomInputActive && !state.pluginTypingActive &&
-            !state.findReplaceTypingActive && !state.learnEditActive &&
-            !state.calcTypingActive && !state.converterTypingActive &&
-            !state.emojiSearchActive && !state.dictionarySearchActive &&
-            !state.clipboardSearchActive &&
-            !(state.mediaSearchActive && state.panel.hasMediaSearch)
-    }
+    private fun forwardDeleteOwnsBuffer(): Boolean = _uiState.value.captureTarget() == null
 
     /**
      * Whether a forward delete would still remove anything, so the held-repeat
@@ -7324,7 +7646,12 @@ open class WMKeyboardService : InputMethodService() {
     fun canForwardDelete(): Boolean {
         val state = _uiState.value
         state.wordSpell?.let { return it.hasSelection || it.cursor < it.draft.length }
-        if (!forwardDeleteOwnsBuffer()) return false
+        // A keyboard-owned field stops the held key at the end of its own text.
+        state.captureTarget()?.let { target ->
+            if (!target.movableCaret) return false
+            val caret = state.captureCaretText() ?: return false
+            return caret.at < caret.text.length
+        }
         val ic = currentInputConnection ?: return false
         if (hasSelection(ic)) return true
         // A null answer means the editor can't say — keep deleting rather than
@@ -7555,10 +7882,10 @@ open class WMKeyboardService : InputMethodService() {
             !keyboardHandwriteActive(state) &&
             !state.secureField && !state.fieldNoSuggestions &&
             state.allowsTypingIntelligence &&
-            !state.typingTestActive && !state.emojiSearchActive &&
-            !state.dictionarySearchActive && !state.mediaSearchActive &&
-            !state.clipboardSearchActive && !state.pluginTypingActive &&
-            !state.findReplaceTypingActive && !state.learnEditActive &&
+            // Nothing of the keyboard's own has the keys: a caret settling in
+            // the app behind an open search box is not a word the user is
+            // writing, and resuming it would compose into text they cannot see.
+            state.captureTarget() == null &&
             !voiceBlocksResume &&
             // Last, so the one term that asks the engine anything is only
             // reached once the screen and the field have already said yes.
@@ -7728,13 +8055,7 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun backspaceEditsBuffer(): Boolean {
         val state = _uiState.value
-        return state.emojiSearchActive || state.dictionarySearchActive ||
-            state.clipboardSearchActive || state.pluginTypingActive ||
-            state.findReplaceTypingActive || state.learnEditActive ||
-            state.aiCustomInputActive || state.typingTestActive ||
-            state.calcTypingActive || state.converterTypingActive ||
-            state.wordSpellActive ||
-            (state.mediaSearchActive && state.panel.hasMediaSearch) ||
+        return state.captureTarget() != null ||
             ((state.panel == PanelMode.HANDWRITING || keyboardHandwriteActive(state)) &&
                 state.handwriting.strokes.isNotEmpty())
     }
@@ -7968,38 +8289,13 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     private fun onSpace() {
-        // Ahead of the input-connection check: a typing test scores space as
-        // the word separator and never touches the field, so it must still
-        // work in a window that has no editor focused.
-        if (_uiState.value.typingTestActive) {
-            typingTestSpace()
-            return
-        }
-        // Ahead of the editor check too: the Custom instruction must accept a
-        // space even in a window with no focused field.
-        if (_uiState.value.aiCustomInputActive) {
-            aiCustomInputEdit { it + " " }
-            return
-        }
-        // Also ahead of the editor check: a plugin's box must take a space even
-        // in a window with no field focused at all.
-        if (_uiState.value.pluginTypingActive) {
-            pluginInputEdit { it + " " }
-            return
-        }
-        if (_uiState.value.findReplaceTypingActive) {
-            findReplaceEdit { it + " " }
-            return
-        }
-        // A word has no spaces: the press is spent, never sent to the field.
-        if (_uiState.value.learnEditActive) return
-        // The calculator's `mod ` operator is spelled with a space; the
-        // converters' amount has no use for one, so the press is just spent.
-        if (_uiState.value.calcTypingActive) {
-            calcEdit { it + " " }
-            return
-        }
-        if (_uiState.value.converterTypingActive) return
+        // Ahead of the input-connection check: every keyboard-owned field must
+        // take a space — or spend the press — even in a window that has no
+        // editor focused at all. A typing test scores space as the word
+        // separator, an instruction or a query takes it at its caret, and the
+        // fields a space means nothing in eat the press rather than letting it
+        // reach the app behind the keyboard.
+        if (captureSpace()) return
         val ic = currentInputConnection ?: return
         val state = _uiState.value
         val now = System.currentTimeMillis()
@@ -8011,26 +8307,6 @@ open class WMKeyboardService : InputMethodService() {
         // Same as a typed character: the mid-word strip described the field
         // before this press.
         clearCaretWord()
-
-        // A word being respelled has no spaces in it, and the field behind the
-        // keyboard must not collect the ones pressed at it (#138).
-        if (state.wordSpellActive) return
-        if (state.emojiSearchActive) {
-            updateQuery { it.copy(emojiQuery = it.emojiQuery + " ") }
-            refreshEmojiResults()
-            return
-        }
-        if (state.mediaSearchActive && state.panel.hasMediaSearch) {
-            updateQuery { it.copy(mediaQuery = it.mediaQuery + " ") }
-            if (state.panel != PanelMode.QR_GEN) scheduleMediaLiveSearch()
-            return
-        }
-
-        // Multi-word dictionary entries ("give up") are legitimate lookups.
-        if (state.dictionarySearchActive) {
-            updateQuery { it.copy(dictionaryQuery = it.dictionaryQuery + " ") }
-            return
-        }
 
         // Space over a selection replaces it; skip autocorrect/double-space.
         if (hasSelection(ic)) {
@@ -8185,63 +8461,9 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun onEnter(hardwareShift: Boolean? = null) {
         val state = _uiState.value
-        // Enter is not part of a typing test, and letting it through would
-        // put a newline in the field behind the panel.
-        if (state.typingTestActive) return
-        // Enter is the tick on the word card's spelling bar, not a newline in
-        // the app behind the keyboard (#138).
-        if (state.wordSpellActive) {
-            commitWordSpell()
-            return
-        }
-        // Enter runs the Custom action rather than dropping a newline into the
-        // app behind the panel.
-        if (state.aiCustomInputActive) {
-            onAiRunCustom()
-            return
-        }
-        // Enter finishes typing into a plugin's box: it gives the keys back to
-        // the field rather than putting a newline in the app behind the panel.
-        if (state.pluginTypingActive) {
-            onPluginInputFocus(null)
-            return
-        }
-        // Enter in the find field walks to the next match; in the replace
-        // field it replaces the current one.
-        if (state.findReplaceTypingActive) {
-            onFindReplaceEnter()
-            return
-        }
-        // Enter in the spelling editor keeps the spelling.
-        if (state.learnEditActive) {
-            onLearnEditDone()
-            return
-        }
-        if (state.dictionarySearchActive) {
-            onDictionaryLookup(state.dictionaryQuery)
-            return
-        }
-        // Enter in the calculator is the `=` key. Only when no focus ring is
-        // up — [handlePanelNavKey] consumes Enter first while one is.
-        if (state.calcTypingActive) {
-            calcEvaluate()
-            return
-        }
-        // The converters convert live; Enter has nothing to run and must not
-        // reach the field behind the panel.
-        if (state.converterTypingActive) return
-        // QR builds its content as you type; Enter adds a newline to the
-        // buffer (WiFi/vCard payloads span lines) rather than searching.
-        if (state.mediaSearchActive && state.panel == PanelMode.QR_GEN) {
-            updateQuery { it.copy(mediaQuery = it.mediaQuery + "\n") }
-            return
-        }
-        // Enter in a media search box runs the search instead of typing a
-        // newline into the app behind the keyboard.
-        if (state.mediaSearchActive && state.panel.hasMediaSearch) {
-            runMediaSearch()
-            return
-        }
+        // Enter belongs to whichever keyboard-owned field has the keys, and
+        // never to the app behind the panel.
+        if (captureEnter()) return
         val ic = currentInputConnection ?: return
         // Whether this ends up a newline or an editor action, it ends the
         // word the same way a space does, autocorrect included. A word ended
@@ -13534,11 +13756,12 @@ open class WMKeyboardService : InputMethodService() {
      * on) and the other scrubs the spacebar.
      */
     fun onCursorMove(delta: Int) {
-        // The spelling bar's caret, asked before the field is: a scrub meant
-        // for the draft used to walk the app's caret behind the keyboard (#204).
-        if (_uiState.value.wordSpellActive) {
+        // A keyboard-owned field's own caret, asked before the field's is: a
+        // scrub meant for a search query or a spelling draft used to walk the
+        // app's caret behind the keyboard (#204, #161).
+        if (_uiState.value.captureTarget() != null) {
             vibrate()
-            wordSpellEdit { it.caretMoved(delta, extend = _uiState.value.caretExtendsSelection) }
+            onCaptureCaretMove(delta, extend = _uiState.value.caretExtendsSelection)
             return
         }
         val ic = currentInputConnection ?: return
@@ -13560,11 +13783,10 @@ open class WMKeyboardService : InputMethodService() {
      * shift included.
      */
     fun onCursorMoveVertical(delta: Int) {
-        // A one-line draft: up is its start, down its end.
-        if (_uiState.value.wordSpellActive) {
+        // A one-line buffer: up is its start, down its end.
+        if (_uiState.value.captureTarget() != null) {
             vibrate()
-            val extend = _uiState.value.caretExtendsSelection
-            wordSpellEdit { it.caretAt(if (delta < 0) 0 else it.draft.length, extend) }
+            onCaptureCaretToEdge(end = delta >= 0, extend = _uiState.value.caretExtendsSelection)
             return
         }
         val ic = currentInputConnection ?: return
@@ -14307,9 +14529,11 @@ open class WMKeyboardService : InputMethodService() {
             onText(POSSESSIVE)
             return true
         }
-        // The keyboard's own buffers take a typed character before the field
-        // sees it; a possessive has nothing to attach to in any of them.
-        if (state.typingTestActive || state.aiCustomInputActive || state.pluginTypingActive) return false
+        // The keyboard's own fields take a typed character before the field
+        // sees it; a possessive has nothing to attach to in any of them. Three
+        // of the dozen used to be named here, so the flick reached into the
+        // app behind the other nine.
+        if (state.captureTarget() != null) return false
         val ic = currentInputConnection ?: return false
         val before = ic.getTextBeforeCursor(POSSESSIVE_CONTEXT_CHARS, 0)?.toString() ?: return false
         val spaces = before.takeLastWhile { it == ' ' }.length
@@ -14362,12 +14586,13 @@ open class WMKeyboardService : InputMethodService() {
     private fun glideAllowed(state: KeyboardUiState): Boolean = when {
         !state.glideReady -> false
         state.typingTestActive -> state.settings.typingTest.glide
-        // The word card's spelling bar takes a stroke into its own draft
-        // (#204), so, as in a test, the field's say does not apply.
-        state.wordSpellActive -> state.settings.gestureTyping
-        // Learn from text's spelling editor takes typed letters only: a stroke
-        // would otherwise commit into the field behind the panel (#174).
-        state.learnEditActive -> false
+        // A keyboard-owned field takes the stroke into its own buffer, at its
+        // own caret (#161) — so, as in a test, the *field's* say does not
+        // apply: [KeyboardUiState.allowsGestureTyping] is about the app behind
+        // the panel, which is not where this word is going. The two numeric
+        // fields have no use for a word list and are not glided into.
+        state.captureTarget() != null ->
+            state.settings.gestureTyping && state.captureTarget()?.takesWords == true
         else -> state.settings.gestureTyping && state.allowsGestureTyping
     }
 
@@ -14704,6 +14929,16 @@ open class WMKeyboardService : InputMethodService() {
         // The word card's spelling bar takes the word, at its own caret (#204).
         if (state.wordSpellActive) {
             wordSpellGlide(points, keys, keyWidthPx, verdict, shiftForGlide(state.shiftState, verdict.caseAt(0)))
+            return
+        }
+        // Every other keyboard-owned field takes it at its own caret (#161):
+        // the search queries, the AI instruction, a plugin's box, the Find
+        // fields, the Learn speller. Nothing reaches the app behind the panel.
+        state.captureTarget()?.let { target ->
+            captureGlide(
+                target, listOf(points), keys, keyWidthPx, verdict,
+                shiftForGlide(state.shiftState, verdict.caseAt(0)),
+            )
             return
         }
 
@@ -15165,6 +15400,15 @@ open class WMKeyboardService : InputMethodService() {
         // A test run takes the words: the field behind the panel never sees them.
         if (state.typingTestActive) {
             typingTestGlide(segments, keys, keyWidthPx, verdict)
+            return
+        }
+        // …and so does every other keyboard-owned field, one word per segment
+        // at its own caret (#161).
+        state.captureTarget()?.let { target ->
+            captureGlide(
+                target, segments, keys, keyWidthPx, verdict,
+                shiftForGlide(state.shiftState, verdict.caseAt(0)),
+            )
             return
         }
 
@@ -18013,6 +18257,17 @@ open class WMKeyboardService : InputMethodService() {
         ::onOctopusPick
     }
 
+    /**
+     * The caret and the strip of whichever keyboard-owned field has the keys
+     * (#161), bundled for the reason [converterCallbacks] is.
+     */
+    private val captureCallbacks by lazy {
+        com.wasimaster.wmkeyboard.ime.ui.CaptureCallbacks(
+            onCaretTap = ::onCaptureCaretTap,
+            onSuggestion = ::onCaptureSuggestion,
+        )
+    }
+
     private val deleteSwipeCallbacks by lazy {
         com.wasimaster.wmkeyboard.ime.ui.DeleteSwipeCallbacks(
             onDeleteUnit = ::onDeleteSwipeUnit,
@@ -18082,19 +18337,6 @@ open class WMKeyboardService : InputMethodService() {
                 else -> c
             }
         }.joinToString("")
-
-    /** The converters accept digits and one dot, capped like their keypad. */
-    private fun appendConverterDigits(current: String, text: String): String {
-        var value = current
-        for (c in text) {
-            value = when {
-                c.isDigit() -> (value + c).take(CONVERTER_VALUE_MAX)
-                c == '.' && '.' !in value -> value + c
-                else -> value
-            }
-        }
-        return value
-    }
 
     private fun converterEdit(transform: (String) -> String) {
         _uiState.update {
@@ -22524,6 +22766,11 @@ open class WMKeyboardService : InputMethodService() {
      * armed it (see [KeyboardUiState.selectingText]).
      */
     fun onTextEdit(action: TextEditAction, extendSelection: Boolean = false, haptic: Boolean = true) {
+        // An arrow or a backspace pressed while one of the keyboard's own
+        // fields has the keys is about *that* field's caret (#161). Asked
+        // first, and before the input-connection check, so it works in a
+        // window with no editor focused at all.
+        if (captureTextEdit(action, extendSelection, haptic)) return
         val ic = currentInputConnection ?: return
         if (haptic) vibrate()
         commitComposing(ic, autocorrect = false)
@@ -22586,6 +22833,43 @@ open class WMKeyboardService : InputMethodService() {
                 _uiState.update { it.copy(textEditSelecting = false) }
             }
         }
+    }
+
+    /**
+     * The movement half of [onTextEdit], for a keyboard-owned field.
+     *
+     * Only the caret moves and the backspace: those are what the field has,
+     * and routing them here is what stops an arrow key pressed over a search
+     * box from walking the caret in the app behind the panel. The rest —
+     * copy, cut, paste, the selection actions — still act on that app, which
+     * is what the text-editing panel is for and what Find and replace needs.
+     */
+    private fun captureTextEdit(
+        action: TextEditAction,
+        extendSelection: Boolean,
+        haptic: Boolean,
+    ): Boolean {
+        if (_uiState.value.captureTarget() == null) return false
+        val extend = extendSelection || _uiState.value.selectingText
+        val handled = when (action) {
+            TextEditAction.LEFT -> onCaptureCaretMove(-1, extend)
+            TextEditAction.RIGHT -> onCaptureCaretMove(1, extend)
+            // A one-line buffer, so up/Home is its start and down/End its end.
+            TextEditAction.UP, TextEditAction.HOME, TextEditAction.PAGE_UP,
+            TextEditAction.DOC_START,
+            -> onCaptureCaretToEdge(end = false, extend = extend)
+            TextEditAction.DOWN, TextEditAction.END, TextEditAction.PAGE_DOWN,
+            TextEditAction.DOC_END,
+            -> onCaptureCaretToEdge(end = true, extend = extend)
+            // No word steps of its own yet; the ends are the honest answer for
+            // a buffer this short rather than silently moving the app's caret.
+            TextEditAction.WORD_LEFT -> onCaptureCaretToEdge(end = false, extend = extend)
+            TextEditAction.WORD_RIGHT -> onCaptureCaretToEdge(end = true, extend = extend)
+            TextEditAction.BACKSPACE -> captureBackspace()
+            else -> false
+        }
+        if (handled && haptic) vibrate()
+        return handled
     }
 
     /**
@@ -23379,28 +23663,22 @@ open class WMKeyboardService : InputMethodService() {
      */
     fun canDelete(): Boolean {
         val state = _uiState.value
-        // Branch order mirrors [onDelete] exactly — a case missing here makes
-        // the held-repeat loop poll against a different target than the one
-        // backspace actually edits (spinning forever, or stopping early).
-        return when {
-            (state.panel == PanelMode.HANDWRITING || keyboardHandwriteActive(state)) &&
-                state.handwriting.strokes.isNotEmpty() -> true
-            state.typingTestActive -> state.typingTest.current.isNotEmpty()
-            state.aiCustomInputActive ->
-                (state.ai as? AiUi.CustomInput)?.instruction?.isNotEmpty() == true
-            state.calcTypingActive -> state.calcExpression.isNotEmpty()
-            state.converterTypingActive -> state.converterValue.isNotEmpty()
-            state.wordSpellActive -> state.wordSpell?.let { it.hasSelection || it.cursor > 0 } == true
-            state.emojiSearchActive -> state.emojiQuery.isNotEmpty()
-            state.dictionarySearchActive -> state.dictionaryQuery.isNotEmpty()
-            state.clipboardSearchActive -> state.clipboardQuery.isNotEmpty()
-            state.mediaSearchActive && state.panel.hasMediaSearch -> state.mediaQuery.isNotEmpty()
-            state.pluginTypingActive ->
-                state.pluginInputs[state.pluginFocusedInput].orEmpty().isNotEmpty()
-            state.findReplaceTypingActive -> state.findReplace?.focusedText?.isNotEmpty() == true
-            state.learnEditActive -> state.learnFromText?.editText?.isNotEmpty() == true
-            else -> canDeleteField()
+        // Asked of the same [KeyboardUiState.captureTarget] backspace itself
+        // branches on, so the held-repeat loop can no longer poll a different
+        // target than the one being edited — spinning forever, or stopping
+        // early — which is what the hand-copied branch list here risked.
+        if ((state.panel == PanelMode.HANDWRITING || keyboardHandwriteActive(state)) &&
+            state.handwriting.strokes.isNotEmpty()
+        ) {
+            return true
         }
+        val target = state.captureTarget() ?: return canDeleteField()
+        if (target == CaptureTarget.WORD_SPELL) {
+            return state.wordSpell?.let { it.hasSelection || it.cursor > 0 } == true
+        }
+        if (target == CaptureTarget.TYPING_TEST) return state.typingTest.current.isNotEmpty()
+        val caret = state.captureCaretText() ?: return false
+        return caret.at > 0
     }
 
     /** [canDelete] scoped to the real field only, for field-direct controls. */
@@ -23858,25 +24136,6 @@ open class WMKeyboardService : InputMethodService() {
             // under the bar; put back what the field itself would show.
             refreshSuggestions()
         }
-    }
-
-    /**
-     * A hardware arrow, Home or End while the spelling bar is up: the draft's
-     * caret moves, not the app's (#204). Shift extends, as it does in a field.
-     */
-    private fun wordSpellCaretKey(event: KeyEvent): Boolean {
-        val spell = _uiState.value.wordSpell ?: return false
-        val extend = event.isShiftPressed
-        val next = when (event.keyCode) {
-            KeyEvent.KEYCODE_DPAD_LEFT -> spell.caretMoved(-1, extend)
-            KeyEvent.KEYCODE_DPAD_RIGHT -> spell.caretMoved(1, extend)
-            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_MOVE_HOME -> spell.caretAt(0, extend)
-            KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_MOVE_END -> spell.caretAt(spell.draft.length, extend)
-            else -> return false
-        }
-        _uiState.update { it.copy(wordSpell = next) }
-        consumeHardwareKey(event.keyCode)
-        return true
     }
 
     /**
@@ -24744,7 +25003,7 @@ open class WMKeyboardService : InputMethodService() {
         // before [handleHardwareKeyDown], whose composing gate and input-connection
         // check must not apply to opening a tool.
         if (handleHardwareNav(event)) return true
-        if (wordSpellCaretKey(event)) return true
+        if (captureCaretKey(event)) return true
         if (volumeCursorDelta(keyCode) != 0) {
             // Auto-repeat rides along for free: holding the key repeats DOWN.
             onCursorMove(volumeCursorDelta(keyCode))
@@ -25578,13 +25837,11 @@ open class WMKeyboardService : InputMethodService() {
     private fun hardwareIntercepts(state: KeyboardUiState): Boolean {
         val composingMode = (!state.composer.isClusterShaping || composing.isNotEmpty()) &&
             (state.composer.isTransliterating || state.composesForSuggestions)
-        return composingMode || state.emojiSearchActive ||
-            (state.mediaSearchActive && state.panel.hasMediaSearch) ||
-            state.dictionarySearchActive || state.clipboardSearchActive ||
-            state.typingTestActive || state.pluginTypingActive ||
-            state.findReplaceTypingActive || state.learnEditActive ||
-            state.aiCustomInputActive || state.wordSpellActive ||
-            state.calcTypingActive || state.converterTypingActive
+        // One question for every keyboard-owned field, rather than the
+        // hand-copied list of them this used to be: that list is how the AI
+        // custom-instruction box shipped typing its physical keys into the
+        // app's field.
+        return composingMode || state.captureTarget() != null
     }
 
     /**
@@ -26483,6 +26740,9 @@ open class WMKeyboardService : InputMethodService() {
 
         /** The typing test's suggestion row: how long a keystroke burst is left to settle. */
         private const val TYPING_TEST_SUGGEST_DEBOUNCE_MS = 24L
+
+        /** The same, for a keyboard-owned field's own suggestion row (#161). */
+        private const val CAPTURE_SUGGEST_DEBOUNCE_MS = 24L
 
         /**
          * …and how many words it asks for: the strip's own slot count, since

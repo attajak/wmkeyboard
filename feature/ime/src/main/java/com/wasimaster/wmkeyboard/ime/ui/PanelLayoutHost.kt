@@ -215,7 +215,9 @@ internal fun ClipboardPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCa
             state, session, callbacks.clipboard,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(ClipboardSearchHeight + topBarHeight(state.settings)),
+                // Less the row the query's own suggestion strip takes below
+                // the panel (#161), for the same reason.
+                .height(ClipboardSearchHeight + topBarHeight(state.settings) - captureStripHeight(state)),
         )
         return
     }

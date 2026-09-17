@@ -65,13 +65,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
@@ -143,13 +147,17 @@ internal fun showMediaCategories(
 }
 
 /**
- * Query text plus a blinking caret, for the in-panel search fields.
+ * Query text with a caret in it, for the in-panel search fields.
  *
  * None of those are real text fields — keys are rerouted into panel state
- * instead of the focused editor — so the platform draws no cursor for them
- * and typing looked dead. This fakes the caret: it sits after the query, or
- * before the placeholder while the field is empty, and resets to solid on
- * every keystroke like a real one.
+ * instead of the focused editor — so the platform draws no cursor for them and
+ * typing looked dead. This draws one, and since #161 it draws it *where the
+ * caret actually is*: these fields have a movable caret now, a tap in the
+ * middle of the text puts it there, and typing, backspace and a glide all land
+ * at it.
+ *
+ * The text scrolls to keep the caret in view rather than ellipsizing, because
+ * an ellipsis at the end of a query is an ellipsis over the part being typed.
  */
 @Composable
 internal fun SearchQueryText(
@@ -161,27 +169,108 @@ internal fun SearchQueryText(
     fontSize: TextUnit,
     modifier: Modifier = Modifier,
 ) {
+    val handle = LocalCaptureCaret.current
+    val caret = if (active) handle.at.coerceIn(0, query.length) else -1
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        if (active && query.isEmpty()) {
+        // Empty field: the caret sits in front of the placeholder, where the
+        // first character will land. Nothing to scroll and nowhere to tap.
+        if (caret >= 0 && query.isEmpty()) {
             SearchCaret(textColor, fontSize, query)
             Spacer(Modifier.width(4.dp))
         }
-        Text(
-            text = query.ifEmpty { placeholder },
-            color = if (query.isEmpty()) placeholderColor else textColor,
-            fontSize = fontSize,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f, fill = false),
-        )
-        if (active && query.isNotEmpty()) {
-            Spacer(Modifier.width(2.dp))
-            SearchCaret(textColor, fontSize, query)
+        if (query.isEmpty()) {
+            Text(
+                text = placeholder,
+                color = placeholderColor,
+                fontSize = fontSize,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f, fill = false),
+            )
+        } else {
+            CaretQueryText(
+                query = query,
+                caret = caret,
+                textColor = textColor,
+                fontSize = fontSize,
+                onCaretTap = handle.onCaretTap,
+                modifier = Modifier.weight(1f, fill = false),
+            )
         }
     }
 }
 
-/** The blinking bar itself. [restartKey] resets the phase on each keystroke. */
+/**
+ * The query itself, with the caret drawn inside it and a tap that moves it.
+ *
+ * The caret's x comes from the text's own layout, so it lands between the same
+ * two glyphs the index names in any script and at any font scale, and the tap
+ * is the inverse of that — `getOffsetForPosition`, which is what a real text
+ * field uses. Both work in the *content's* coordinates: the scroll modifier is
+ * applied outside them, so a query scrolled halfway along still maps a touch
+ * to the character under the finger.
+ */
+@Composable
+private fun CaretQueryText(
+    query: String,
+    caret: Int,
+    textColor: Color,
+    fontSize: TextUnit,
+    onCaretTap: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val scroll = rememberScrollState()
+    var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
+    val density = LocalDensity.current
+    Box(
+        modifier = modifier
+            .horizontalScroll(scroll)
+            .pointerInput(query, caret < 0) {
+                if (caret < 0) return@pointerInput
+                detectTapGestures { position ->
+                    layout?.let { onCaretTap(it.getOffsetForPosition(position)) }
+                }
+            },
+    ) {
+        Text(
+            text = query,
+            color = textColor,
+            fontSize = fontSize,
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Clip,
+            onTextLayout = { layout = it },
+        )
+        val result = layout
+        if (caret >= 0 && result != null) {
+            val x = result.getHorizontalPosition(caret.coerceIn(0, query.length), usePrimaryDirection = true)
+            Box(Modifier.offset { IntOffset(x.roundToInt(), 0) }) {
+                SearchCaret(textColor, fontSize, caret to query)
+            }
+            // Keep the caret on screen: typing at the end of a long query used
+            // to run off the edge behind an ellipsis.
+            val caretX = with(density) { x.toDp() }
+            LaunchedEffect(caret, query, scroll.maxValue, scroll.viewportSize) {
+                val viewport = scroll.viewportSize
+                if (viewport <= 0) return@LaunchedEffect
+                val target = with(density) { caretX.toPx() }.roundToInt()
+                val margin = with(density) { CaretScrollMarginDp.dp.toPx() }.roundToInt()
+                val want = when {
+                    target - margin < scroll.value -> target - margin
+                    target + margin > scroll.value + viewport -> target + margin - viewport
+                    else -> return@LaunchedEffect
+                }
+                scroll.scrollTo(want.coerceIn(0, scroll.maxValue))
+            }
+        }
+    }
+}
+
+/** How much text is kept visible either side of the caret when it scrolls. */
+private const val CaretScrollMarginDp = 12
+
+/** The blinking bar itself. [restartKey] resets the phase on each keystroke — and on
+ *  each caret move, so a tap into the middle of the text shows the caret solid. */
 @Composable
 private fun SearchCaret(color: Color, fontSize: TextUnit, restartKey: Any?) {
     // Reduce motion holds it solid. The caret still has to be drawn — it is

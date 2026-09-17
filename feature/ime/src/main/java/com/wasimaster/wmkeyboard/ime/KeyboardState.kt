@@ -2537,6 +2537,22 @@ data class KeyboardUiState(
     val launcherLoading: Boolean = false,
     /** The app whose activity list is open, or null for the grid. */
     val launcherDetail: LauncherDetailUi? = null,
+    /**
+     * The caret in whichever keyboard-owned field has the keys (#161).
+     *
+     * One caret, not one per buffer: exactly one of those fields is focused at
+     * a time, and the buffer it belongs to is named in [CaptureCaret.key], so
+     * a caret left behind by a field that has since closed simply stops
+     * matching and the next field starts at its own end. See [captureTarget].
+     */
+    val captureCaret: CaptureCaret? = null,
+    /**
+     * The suggestion strip for the focused keyboard-owned field — drawn in the
+     * row above the keys, where a panel has taken the toolbar. Empty whenever
+     * no such field is focused, so nothing of the field behind the keyboard
+     * can leak into it and nothing of it can leak out.
+     */
+    val captureSuggestions: List<String> = emptyList(),
 ) {
     /**
      * Whether incognito is in force right now, from either source: the
@@ -2758,12 +2774,90 @@ data class KeyboardUiState(
      * bypasses that path — the Keyman rule engine writes to the field directly —
      * has to ask this first, and asking a single property is the only way that
      * question stays answered the same way in both places. The two existing
-     * copies of this list have already drifted apart once.
+     * copies of this list have already drifted apart once — and a third copy,
+     * this one, used to omit the three search fields, which is part of why
+     * none of them could be glided into (#161). It is now [captureTarget]'s
+     * answer rather than a list of its own, so there is nothing left to drift.
      */
     val keysTakenByKeyboard: Boolean
-        get() = typingTestActive || calcTypingActive || converterTypingActive ||
-            aiCustomInputActive || pluginTypingActive || emojiSearchActive ||
-            wordSpellActive || findReplaceTypingActive || learnEditActive
+        get() = captureTarget() != null
+
+    /**
+     * Which keyboard-owned field has the keys, or null when they belong to the
+     * app behind the keyboard.
+     *
+     * **The one ladder.** Every path that has to know — typed text, backspace,
+     * forward delete, space, enter, glide, the suggestion strip, the Keyman
+     * seam — asks this instead of re-deriving it, and the order here is the
+     * order `processTypedText` always used, so nothing changes hands.
+     */
+    fun captureTarget(): CaptureTarget? = when {
+        typingTestActive -> CaptureTarget.TYPING_TEST
+        aiCustomInputActive -> CaptureTarget.AI_CUSTOM
+        pluginTypingActive -> CaptureTarget.PLUGIN
+        findReplaceTypingActive ->
+            if (findReplace?.focused == FindReplaceField.REPLACE) {
+                CaptureTarget.FIND_REPLACEMENT
+            } else {
+                CaptureTarget.FIND_QUERY
+            }
+        learnEditActive -> CaptureTarget.LEARN_EDIT
+        calcTypingActive -> CaptureTarget.CALC
+        converterTypingActive -> CaptureTarget.CONVERTER
+        wordSpellActive -> CaptureTarget.WORD_SPELL
+        emojiSearchActive -> CaptureTarget.EMOJI_SEARCH
+        mediaSearchActive && panel.hasMediaSearch -> CaptureTarget.MEDIA_SEARCH
+        dictionarySearchActive -> CaptureTarget.DICTIONARY_SEARCH
+        clipboardSearchActive -> CaptureTarget.CLIPBOARD_SEARCH
+        else -> null
+    }
+
+    /**
+     * A stable identity for the focused buffer, for [CaptureCaret] to hang on.
+     * A plugin has one box per widget, so its id is part of the key; everything
+     * else is one buffer per target.
+     */
+    fun captureKey(): String? = when (val target = captureTarget()) {
+        null -> null
+        CaptureTarget.PLUGIN -> "PLUGIN:${pluginFocusedInput}"
+        else -> target.name
+    }
+
+    /** What is in the focused keyboard-owned buffer right now. */
+    fun captureBuffer(): String = when (captureTarget()) {
+        null -> ""
+        CaptureTarget.TYPING_TEST -> typingTest.current
+        CaptureTarget.AI_CUSTOM -> (ai as? AiUi.CustomInput)?.instruction.orEmpty()
+        CaptureTarget.PLUGIN -> pluginFocusedInput?.let { pluginInputs[it] }.orEmpty()
+        CaptureTarget.FIND_QUERY -> findReplace?.query.orEmpty()
+        CaptureTarget.FIND_REPLACEMENT -> findReplace?.replacement.orEmpty()
+        CaptureTarget.LEARN_EDIT -> learnFromText?.editText.orEmpty()
+        CaptureTarget.CALC -> calcExpression
+        CaptureTarget.CONVERTER -> converterValue
+        CaptureTarget.WORD_SPELL -> wordSpell?.draft.orEmpty()
+        CaptureTarget.EMOJI_SEARCH -> emojiQuery
+        CaptureTarget.MEDIA_SEARCH -> mediaQuery
+        CaptureTarget.DICTIONARY_SEARCH -> dictionaryQuery
+        CaptureTarget.CLIPBOARD_SEARCH -> clipboardQuery
+    }
+
+    /**
+     * The focused buffer with its caret, or null when the keys belong to the
+     * field. The caret is the end of the text whenever [captureCaret] is about
+     * some other buffer, which is what makes focus changes need no reset.
+     */
+    fun captureCaretText(): CaretText? {
+        val key = captureKey() ?: return null
+        val text = captureBuffer()
+        // The word card runs its own caret and selection (#204); reporting a
+        // second one here would let two of them disagree about the draft.
+        if (captureTarget()?.ownsCaret == true) return CaretText(text, wordSpell?.cursor ?: text.length)
+        val at = captureCaret?.takeIf { it.key == key && it.text == text }?.at ?: text.length
+        return CaretText(text, at)
+    }
+
+    /** Where the caret is drawn in the focused buffer, for the panels' fields. */
+    fun captureCaretIndex(): Int = captureCaretText()?.at ?: 0
 
     /**
      * The item a panel should ring in [region], or null when the ring is

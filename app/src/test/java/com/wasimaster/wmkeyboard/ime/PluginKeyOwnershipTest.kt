@@ -6,20 +6,23 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * A plugin's own text box is one of several places that take the keys away from
+ * A plugin's own text box is one of a dozen places that take the keys away from
  * the user's field. Every one of them has to be handled the same way in a
  * scattered set of conditions — the delete keys, the forward-delete guards, the
- * numeric-pad override, and the decision to draw the key rows at all.
+ * hardware intercept, the numeric-pad override, and the decision to draw the
+ * key rows at all.
  *
- * Those lists are hand-maintained, and a plugin box added to some but not others
- * is exactly what shipped: the panel collapsed to make room for keys that were
- * never drawn, so a focused box had nothing to type into it, and a backspace
- * swipe word-deleted the app's own text behind the panel.
+ * Those lists used to be hand-maintained, and a buffer added to some but not
+ * others is exactly what shipped, repeatedly: the plugin panel collapsed to
+ * make room for keys that were never drawn; a physical keyboard typed the AI
+ * instruction into the app's field; a space pressed in the clipboard search
+ * went into the text behind the panel.
  *
- * There is no way to assert this from state alone — the conditions live inside
- * private methods and composables that need an Android runtime. So this reads
- * the sources and holds the lists together: wherever the clipboard search is
- * named as owning the keys, the plugin box must be named too.
+ * Issue #161 replaced the lists with one ladder — `KeyboardUiState.captureTarget`,
+ * over the `CaptureTarget` enum, which the compiler makes exhaustive. So this
+ * test's job changed: instead of holding a dozen copies in step, it holds the
+ * copies to *one*. It reads the sources and fails if any of those sites grows
+ * its own list of buffer flags again.
  */
 class PluginKeyOwnershipTest {
 
@@ -37,67 +40,91 @@ class PluginKeyOwnershipTest {
         source("../feature/ime/src/main/java/com/wasimaster/wmkeyboard/ime/ui/KeyboardScreen.kt")
     }
 
+    private val stateSource: String by lazy {
+        source("../feature/ime/src/main/java/com/wasimaster/wmkeyboard/ime/KeyboardState.kt")
+    }
+
+    /** Every buffer flag the ladder has to name, in any order. */
+    private val ownerFlags = listOf(
+        "typingTestActive", "aiCustomInputActive", "pluginTypingActive",
+        "findReplaceTypingActive", "learnEditActive", "calcTypingActive",
+        "converterTypingActive", "wordSpellActive", "emojiSearchActive",
+        "mediaSearchActive", "dictionarySearchActive", "clipboardSearchActive",
+    )
+
     /**
-     * The multi-clause boolean expressions that name the clipboard search among
-     * several other buffers. Single-clause guards are left alone: those are the
-     * dispatch branches that route a keystroke to one particular buffer, and a
-     * plugin box has its own branch right beside them.
+     * The multi-clause boolean expressions that name a buffer flag alongside
+     * others. One of these outside the ladder is a second list, and a second
+     * list is the drift this whole test exists for.
      *
-     * Collected by line rather than by syntax, because the same list is written
-     * four different ways — two `if (...)` heads, and two `return` chains. An
-     * earlier net matched only `if (` heads, so extracting one of those guards
-     * into a `return` expression quietly took it out of the net rather than
-     * failing: two of the four sites went unchecked.
-     *
-     * An expression is the run of lines around the clipboard term that are
-     * joined by a trailing operator. Negated mentions are skipped: those say
-     * "no buffer owns the keys" and carry their own membership rules, so the
-     * calculator's absence from one is not the drift this is looking for.
+     * An expression is the run of lines around the flag that are joined by a
+     * trailing operator. Collected by line rather than by syntax, because the
+     * lists were written four different ways — two `if (...)` heads and two
+     * `return` chains — and an earlier net that matched only `if (` heads let
+     * two of the four sites go unchecked.
      */
     private fun ownerConditions(text: String): List<String> = buildList {
         val lines = text.lines()
         fun continues(line: String) = line.trimEnd().endsWith("||") || line.trimEnd().endsWith("&&")
         for ((index, line) in lines.withIndex()) {
-            if (!line.contains("clipboardSearchActive")) continue
-            if (line.contains("!state.clipboardSearchActive")) continue
+            if (ownerFlags.none { line.contains(it) }) continue
             var first = index
             while (first > 0 && continues(lines[first - 1])) first--
             var last = index
             while (last + 1 < lines.size && continues(lines[last])) last++
             val expression = lines.subList(first, last + 1).joinToString("\n")
-            if (expression.contains("||")) add(expression)
+            // Two flags or more in one expression is a list; one flag joined to
+            // something else (a panel check, a strokes check) is a branch.
+            if (ownerFlags.count { expression.contains(it) } >= 2) add(expression)
         }
     }
 
     @Test
-    fun `the service treats a plugin box as owning the keys wherever the clipboard search does`() {
-        val conditions = ownerConditions(serviceSource)
-        assertTrue("no keystroke-owner conditions found in the service", conditions.size >= 3)
-        val missing = conditions.filterNot { it.contains("pluginTypingActive") }
+    fun `the ladder names every buffer`() {
+        val ladder = stateSource
+            .substringAfter("fun captureTarget(): CaptureTarget?")
+            .substringBefore("\n    }")
         assertEquals(
-            "service conditions that hand the keys to the clipboard search but not to a plugin box",
+            "buffers the capture ladder does not name, so their keys reach the app behind the keyboard",
             emptyList<String>(),
-            missing,
+            ownerFlags.filterNot { ladder.contains(it) },
         )
     }
 
     @Test
-    fun `the numeric pad steps aside for a plugin box`() {
+    fun `the service keeps no owner list of its own`() {
+        assertEquals(
+            "the service grew a second list of keyboard-owned buffers; ask captureTarget() instead",
+            emptyList<String>(),
+            ownerConditions(serviceSource),
+        )
+    }
+
+    @Test
+    fun `the keyboard screen keeps no owner list of its own`() {
+        assertEquals(
+            "KeyboardScreen grew a second list of keyboard-owned buffers; ask captureTarget() instead",
+            emptyList<String>(),
+            ownerConditions(screenSource),
+        )
+    }
+
+    @Test
+    fun `the numeric pad asks the ladder`() {
         val body = screenSource
             .substringAfter("private fun numericPadActive(")
             .substringBefore("\n\n")
-        assertTrue("numericPadActive not found", body.contains("clipboardSearchActive"))
         assertTrue(
-            "a numeric field would give a plugin box a digits-only pad",
-            body.contains("pluginTypingActive"),
+            "a numeric field would give a keyboard-owned box a digits-only pad",
+            body.contains("captureTarget()"),
         )
     }
 
     /**
      * The hardware gate is a bare `return` expression, not an `if (` head, so
-     * the owner-condition net above never sees it — which is exactly how the
-     * AI custom-instruction box shipped typing its physical keys into the
-     * app's field. Held to the full list by name instead.
+     * the owner-condition net above would never have seen it — which is exactly
+     * how the AI custom-instruction box shipped typing its physical keys into
+     * the app's field. Held by name instead.
      */
     @Test
     fun `physical keys reach every buffer the soft keys do`() {
@@ -105,64 +132,18 @@ class PluginKeyOwnershipTest {
             .substringAfter("private fun hardwareIntercepts(")
             .substringBefore("\n    }")
         assertTrue("hardwareIntercepts not found", body.contains("composingMode"))
-        val owners = listOf(
-            "emojiSearchActive", "dictionarySearchActive", "clipboardSearchActive",
-            "typingTestActive", "pluginTypingActive", "aiCustomInputActive",
-            "calcTypingActive", "converterTypingActive", "findReplaceTypingActive",
-        )
-        assertEquals(
-            "buffers the soft keys feed but a physical keyboard cannot reach",
-            emptyList<String>(),
-            owners.filterNot { body.contains(it) },
-        )
-    }
-
-    /**
-     * The calculator/converter buffers joined the same scattered owner lists,
-     * and the same drift is possible: a delete guard that forgets them edits
-     * the field behind the panel.
-     */
-    @Test
-    fun `the service treats the calculator buffers as owning the keys too`() {
-        val conditions = ownerConditions(serviceSource)
-        assertTrue("no keystroke-owner conditions found in the service", conditions.size >= 3)
-        val missing = conditions.filterNot {
-            it.contains("calcTypingActive") && it.contains("converterTypingActive")
-        }
-        assertEquals(
-            "service conditions that hand the keys to the clipboard search but not to the calculator",
-            emptyList<String>(),
-            missing,
-        )
-    }
-
-    /**
-     * The find and replace fields are the newest buffers on the same lists,
-     * with the same way to drift.
-     */
-    @Test
-    fun `the service treats the find fields as owning the keys too`() {
-        val conditions = ownerConditions(serviceSource)
-        assertTrue("no keystroke-owner conditions found in the service", conditions.size >= 3)
-        assertEquals(
-            "service conditions that hand the keys to the clipboard search but not to the find fields",
-            emptyList<String>(),
-            conditions.filterNot { it.contains("findReplaceTypingActive") },
-        )
-        val pad = screenSource.substringAfter("private fun numericPadActive(").substringBefore("\n\n")
-        assertTrue("a numeric field would give the find fields a digits-only pad", pad.contains("findReplaceTypingActive"))
         assertTrue(
-            "no KeyRows are drawn for findReplaceTypingActive",
-            Regex("""if \(state\.findReplaceTypingActive\) \{\s*KeyRows\(""").containsMatchIn(screenSource),
+            "a physical keyboard cannot reach the keyboard's own fields",
+            body.contains("captureTarget()"),
         )
     }
 
     @Test
-    fun `the key rows are drawn while a plugin box has the keys`() {
+    fun `the key rows are drawn while a keyboard-owned box has the keys`() {
         assertTrue(
-            "no KeyRows are drawn for pluginTypingActive, so a focused plugin box " +
+            "no KeyRows are drawn for a capture target, so a focused box " +
                 "would have nothing on screen to type into it",
-            Regex("""if \(state\.pluginTypingActive\) \{\s*KeyRows\(""")
+            Regex("""val captureRows = when \(state\.captureTarget\(\)\)""")
                 .containsMatchIn(screenSource),
         )
     }
