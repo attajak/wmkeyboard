@@ -6,7 +6,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
- * The guardrails against the two ways an asset layout goes wrong quietly.
+ * The guardrails against the ways an asset layout goes wrong quietly.
  *
  * [AssetLayoutsTest] already proves every shipped file *parses*, needs no
  * repair and names a real language. None of that catches the failure mode that
@@ -17,10 +17,16 @@ import org.junit.Test
  * alongside seven groups of layouts that were byte-identical to the sibling
  * they were copied from.
  *
- * Both checks are allow-lists rather than heuristics, and deliberately so: a
- * new exception has to be added here by hand. The cost of the fifth
- * placeholder bug should be a failing test, not a bug report in a language none
- * of us reads.
+ * A layout can also be filled in and still be wrong. Swedish shipped as a
+ * verbatim English QWERTY with å, ä and ö on the long-press of `a` and `o`:
+ * every letter typeable, so every check here passed, and none of the three on a
+ * key. A Swede reported it as the layout simply not existing. The last test
+ * below is that case — the letters a language's own keyboard puts on keys.
+ *
+ * The checks are allow-lists rather than heuristics, and deliberately so: a
+ * new exception has to be added here by hand. The cost of the next placeholder
+ * bug should be a failing test, not a bug report in a language none of us
+ * reads.
  */
 class AssetLayoutHygieneTest {
 
@@ -157,6 +163,80 @@ class AssetLayoutHygieneTest {
         assertEquals(
             "these non-Latin layouts are byte-identical, so at least one is an unfilled copy of " +
                 "another; if the sharing is deliberate, add the group to sharedGridIsIntentional",
+            emptyList<String>(),
+            offenders,
+        )
+    }
+
+    /**
+     * The letters a language's own keyboard puts on the keys, for the languages
+     * whose keyboard is not bare QWERTY.
+     *
+     * This is the check the Swedish bug report needed and nobody had written.
+     * `sv_qwerty` shipped as an unmodified English grid with å, ä and ö buried
+     * in the long-press of `a` and `o` — every letter of Swedish *reachable*,
+     * which is all any existing test asked, and none of the three on a key. The
+     * duplicate-grid check above deliberately looks only at the non-Latin half,
+     * on the reasoning that sharing QWERTY is normal on Latin; true for the 68
+     * languages that really do write with a–z, and exactly why seven Nordic and
+     * Baltic grids that do not went eight releases without anyone noticing.
+     *
+     * Membership is the narrow claim that two independent sources agree on: the
+     * national layout in CLDR `keyboards/windows/<lang>-t-k0-windows.xml` has
+     * the letter on row D or C, **and** a mobile keyboard puts it on a key
+     * rather than behind a hold (checked against HeliBoard's
+     * `locale_key_texts/<lang>.txt` `[extra_keys]`). Both halves are load-bearing.
+     * CLDR alone would drag in Czech, Polish, Hungarian, Slovak, Italian and
+     * Latvian, whose desktop boards carry diacritics that every phone keyboard —
+     * ours included, correctly — leaves on long-press. The rule of thumb behind
+     * both: the letter has its own seat in the alphabet, so it is no more an
+     * accented `a` than `x` is a bent `k`.
+     *
+     * Deliberately absent, and to stay absent: German ä/ö/ü, Czech, Slovak,
+     * Polish, Hungarian, Slovenian, Croatian, Romanian, Latvian and Lithuanian,
+     * where long-press is the phone convention; French, Spanish, Italian and
+     * Portuguese accents, which belong to their base letter. Northern, Inari and
+     * Skolt Sami are absent for a different reason — their board is a genuine
+     * remap (q→á, w→š, y→ŧ, x→č), not letters appended to QWERTY, so it wants a
+     * layout of its own rather than an entry here.
+     */
+    private val lettersTheNationalKeyboardPutsOnKeys = mapOf(
+        "sv" to "åöä", "fi" to "åöä",
+        "da" to "åæø", "nb" to "åøæ", "nn" to "åøæ", "kl" to "åæø",
+        "fo" to "åðæø",
+        "is" to "ðæöþ",
+        "et" to "üõöä",
+        "tr" to "ıöüşçğ", "az" to "ıöüşçğə",
+        "mt" to "ġħċż",
+        "sq" to "ëç",
+        "es" to "ñ",
+    )
+
+    @Test
+    fun `a letter its own keyboard puts on a key is not hidden behind a hold`() {
+        val byLang = handAuthored.groupBy { (_, layout) -> layout.langId }
+        val offenders = lettersTheNationalKeyboardPutsOnKeys.entries
+            .sortedBy { it.key }
+            .mapNotNull { (lang, letters) ->
+                val forLang = byLang[lang].orEmpty()
+                if (forLang.isEmpty()) return@mapNotNull "$lang: no layout ships for this language"
+                // One layout has to carry them, not all: a language may also ship
+                // a Dvorak or a phonetic grid that legitimately arranges them
+                // differently, and demanding every variant match would forbid that.
+                val onKeys = forLang.map { (_, layout) ->
+                    layout.layers.values
+                        .flatMap { it.rows.flatten() }
+                        .flatMap { (it.output ?: it.label).lowercase().toList() }
+                        .toSet()
+                }
+                if (onKeys.any { keys -> letters.all { it in keys } }) return@mapNotNull null
+                val best = forLang.zip(onKeys).maxByOrNull { (_, keys) -> letters.count { it in keys } }!!
+                val missing = letters.filterNot { it in best.second }
+                "${best.first.first}: $missing not on a key (long-press is not a key)"
+            }
+        assertEquals(
+            "these layouts hide a letter of their own alphabet behind a long-press; it belongs " +
+                "on a key of its own, as the language's national keyboard has it",
             emptyList<String>(),
             offenders,
         )

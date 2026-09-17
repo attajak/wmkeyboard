@@ -71,6 +71,9 @@
               "longPress": [
                 "0"
               ]
+            },
+            {
+              "label": "å"
             }
           ],
           [
@@ -128,6 +131,18 @@
               "label": "l",
               "longPress": [
                 ")"
+              ]
+            },
+            {
+              "label": "æ",
+              "longPress": [
+                "ä"
+              ]
+            },
+            {
+              "label": "ø",
+              "longPress": [
+                "ö"
               ]
             }
           ],
