@@ -1,6 +1,8 @@
 ---
 import StoreShell from '../../../layouts/StoreShell.astro';
 import { loadAllSeeds } from '../../../lib/seed-repos.mjs';
+import { collectionGraph } from '../../../lib/structured-data.mjs';
+import { SITE_URL } from '../../../site.mjs';
 
 export async function getStaticPaths() {
 	const seeds = await loadAllSeeds();
@@ -15,12 +17,28 @@ const preloaded = Object.fromEntries(Object.values(seeds).map((s) => [s.seed.url
 const source = Object.values(seeds).some((s) => s.source === 'snapshot') ? 'snapshot' : 'live';
 const repo = me.manifest.repo;
 const n = me.manifest.addons.length;
+
+const canonical = new URL(`/addons/${slug}/`, SITE_URL).href;
+const description = repo.description ?? `${n} addons for WM Keyboard.`;
+// Every addon in the repository, each linking to its own prerendered page.
+const jsonLd = collectionGraph({
+	canonical,
+	title: `${repo.name} · Addon store`,
+	description,
+	image: repo.icon && /^https:\/\//.test(repo.icon) ? repo.icon : undefined,
+	items: me.manifest.addons.map((addon: any) => ({
+		name: addon.name,
+		url: new URL(`/addons/${slug}/${addon.id}/`, SITE_URL).href,
+		description: addon.description,
+	})),
+});
 ---
 
 <StoreShell
 	title={`${repo.name} · Addon store`}
-	description={repo.description ?? `${n} addons for WM Keyboard.`}
+	description={description}
 	image={repo.icon && /^https:\/\//.test(repo.icon) ? repo.icon : undefined}
+	jsonLd={jsonLd}
 	route={{ view: 'repo', repo: me.seed.url }}
 	preloaded={preloaded}
 	preloadedSource={source}

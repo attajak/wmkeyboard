@@ -1,6 +1,8 @@
 ---
 import StoreShell from '../../../layouts/StoreShell.astro';
 import { loadAllSeeds } from '../../../lib/seed-repos.mjs';
+import { addonGraph } from '../../../lib/structured-data.mjs';
+import { SITE_URL } from '../../../site.mjs';
 
 /** One prerendered page per addon in the seeded repositories: real title, description and social image. */
 export async function getStaticPaths() {
@@ -32,12 +34,33 @@ if (firstPreview) {
 		if (u.protocol === 'https:') image = u.href;
 	} catch {}
 }
+
+const canonical = new URL(`/addons/${slug}/${addon.id}/`, SITE_URL).href;
+const description =
+	addon.description ?? `${addon.name}, a ${kind.toLowerCase()} for WM Keyboard from ${me.manifest.repo.name}.`;
+// The addon itself is the page's subject, so it — not a TechArticle — is what
+// the page publishes. A plugin is a program and gets SoftwareApplication; a
+// theme, font or word list is a CreativeWork.
+const jsonLd = addonGraph({
+	canonical,
+	name: addon.name,
+	description,
+	kind,
+	type: addon.type,
+	image,
+	repoName: me.manifest.repo.name,
+	repoUrl: me.manifest.repo.homepage ?? me.seed.url,
+	author: addon.author,
+	version: addon.version,
+	license: addon.license,
+});
 ---
 
 <StoreShell
 	title={`${addon.name} · ${kind}`}
-	description={addon.description ?? `${addon.name}, a ${kind.toLowerCase()} for WM Keyboard from ${me.manifest.repo.name}.`}
+	description={description}
 	image={image}
+	jsonLd={jsonLd}
 	route={{ view: 'addon', repo: me.seed.url, id: addon.id }}
 	preloaded={preloaded}
 	preloadedSource={source}

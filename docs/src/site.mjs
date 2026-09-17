@@ -14,9 +14,57 @@ export const SITE_URL = 'https://wmkeyboard.pages.dev';
 
 export const SITE_TITLE = 'WM Keyboard';
 
+/**
+ * The landing page's `<title>`. Starlight titles a page `<name> | <site>`,
+ * which on the landing page — whose name *is* the site — came out as
+ * "WM Keyboard | WM Keyboard": two of the ~60 characters Google shows spent
+ * saying the brand twice, and nothing said about what the app is. This is the
+ * one title worth writing by hand.
+ */
+export const SITE_TAGLINE_TITLE = 'WM Keyboard — privacy-first Android keyboard, 843 languages';
+
 export const SITE_DESCRIPTION =
-	'A modern, privacy-first Android keyboard — offline intelligence, 350+ languages, themes, tools and an addon ecosystem.';
+	'A modern, privacy-first Android keyboard — offline intelligence, 843 languages, themes, tools and an addon ecosystem.';
 
 /** Social card. 1200×630, regenerate with `npm run og`. */
 export const OG_IMAGE = '/og-card.png';
-export const OG_IMAGE_ALT = `${SITE_TITLE}: a privacy-first Android keyboard with 350+ languages, offline intelligence, tools and themes.`;
+export const OG_IMAGE_ALT = `${SITE_TITLE}: a privacy-first Android keyboard with 843 languages, offline intelligence, tools and themes.`;
+
+/**
+ * Who the structured data credits. `SITE_AUTHOR` is the copyright holder in
+ * LICENSE; `REPO_URL` is what `sameAs` points at, so a search engine can tie
+ * this site, the repository and the Play listing together as one entity.
+ */
+export const SITE_AUTHOR = 'Wasi Master';
+export const REPO_URL = 'https://github.com/wasi-master/wmkeyboard';
+export const PLAY_URL =
+	'https://play.google.com/store/apps/details?id=com.wasimaster.wmkeyboard';
+export const APP_ID = 'com.wasimaster.wmkeyboard';
+
+/**
+ * The sidebar's shape, and the only place a section's name lives.
+ *
+ * `astro.config.mjs` builds the sidebar from this, and the SEO layer reads the
+ * same list to name a page's section in its `<title>`, its BreadcrumbList and
+ * its llms.txt group. Renaming a group used to mean editing four places and
+ * finding out later that one of them still said the old name.
+ */
+export const SECTIONS = [
+	{ label: 'Getting started', directory: 'start' },
+	{ label: 'Typing', directory: 'typing' },
+	{ label: 'Languages', directory: 'languages' },
+	{ label: 'Suggestions & correction', directory: 'smart' },
+	{ label: 'Emoji & expression', directory: 'emoji' },
+	{ label: 'Tools', directory: 'tools' },
+	{ label: 'Themes & appearance', directory: 'themes' },
+	{ label: 'Addons', directory: 'addons' },
+	{ label: 'Plugins', directory: 'plugins', badge: { text: 'Lua', variant: 'tip' } },
+	{ label: 'Privacy & security', directory: 'privacy' },
+	{ label: 'Accessibility', directory: 'accessibility' },
+	{ label: 'Reference', directory: 'reference', collapsed: true },
+	{ label: 'Development', directory: 'development', collapsed: true },
+];
+
+/** The section label for a doc id ('typing/glide-typing'), or undefined for the landing page. */
+export const sectionFor = (id) =>
+	SECTIONS.find((s) => id === s.directory || id.startsWith(`${s.directory}/`))?.label;

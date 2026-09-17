@@ -1,32 +1,51 @@
 ---
 /**
- * Starlight's `<Head>` with the SEO tags handed over to astro-seo.
+ * Starlight's `<Head>` with the SEO tags handed over to astro-seo, plus the
+ * structured data and the per-page social card.
  *
  * Starlight already emits `<title>`, the description and the sitemap link, so
- * those stay exactly as they were. Its Open Graph set is thin though — there's
- * no `og:image` at all, and nothing past `twitter:card` for Twitter — which is
- * what makes shared links look empty. So we strip its `og:*`/`twitter:*` tags
- * and let astro-seo emit a complete set in their place.
+ * those stay exactly as they were — except for the `<title>` on a page whose
+ * name is shared with another page, which is rewritten below. Its Open Graph
+ * set is thin though — there's no `og:image` at all, and nothing past
+ * `twitter:card` for Twitter — which is what makes shared links look empty. So
+ * we strip its `og:*`/`twitter:*` tags and let astro-seo emit a complete set in
+ * their place.
  *
  * The canonical link goes the same way: astro-seo always emits one, so we drop
  * Starlight's and feed astro-seo the href Starlight computed (it's the one that
  * respects `build.format` and `trailingSlash`) rather than ending up with two.
+ *
+ * The `robots` tag needs the opposite treatment. astro-seo emits one
+ * unconditionally, so on the six routes that ask for `noindex` the page used to
+ * carry both that and an `index, follow` — a contradiction Search Console
+ * reports against the site, and one the sitemap was repeating by listing those
+ * pages at all. `isNoindex` is now the single answer, read here and by the
+ * sitemap (src/lib/robots.mjs).
  *
  * starlight-theme-black overrides `Head` too, but steps aside once we claim it.
  * All its override does is preload Geist, so we do that here instead.
  */
 import { Font } from 'astro:assets';
 import { SEO } from 'astro-seo';
-import { OG_IMAGE, OG_IMAGE_ALT, SITE_DESCRIPTION, SITE_URL } from '../site.mjs';
+import { getCollection } from 'astro:content';
 
-const { entry, head, lang, siteTitle } = Astro.locals.starlightRoute;
+import { OG_IMAGE, OG_IMAGE_ALT, SITE_DESCRIPTION, SITE_TAGLINE_TITLE, SITE_TITLE, SITE_URL, sectionFor } from '../site.mjs';
+import { isNoindex } from '../lib/robots.mjs';
+import { lastModifiedForDoc } from '../lib/last-modified.mjs';
+import { buildCrumbs } from '../lib/crumbs';
+import { docPageGraph, faqNode, graph, homeGraph } from '../lib/structured-data.mjs';
+
+const { entry, head, headings, lang, siteTitle } = Astro.locals.starlightRoute;
 
 type HeadTag = (typeof head)[number];
 
 /** Tags astro-seo emits below, dropped here so nothing is declared twice. */
 const isOwnedBySeo = (tag: HeadTag) => {
 	if (tag.tag === 'link') return tag.attrs?.rel === 'canonical';
-	if (tag.tag === 'meta' && tag.attrs?.name === 'wm:og-image') return true;
+	// Private `wm:*` metas are how a page talks to this component; none ship.
+	if (tag.tag === 'meta' && String(tag.attrs?.name ?? '').startsWith('wm:')) return true;
+	// `robots` is decided here, not per page: see the note above.
+	if (tag.tag === 'meta' && tag.attrs?.name === 'robots') return true;
 	if (tag.tag === 'meta') {
 		return /^(og|twitter):/.test(String(tag.attrs?.property ?? tag.attrs?.name ?? ''));
 	}
@@ -42,17 +61,152 @@ const canonical = String(starlightCanonical ?? new URL(Astro.url.pathname, site)
 // The addon store hands over a per-page social image through a private meta
 // tag (StoreShell.astro); it never reaches the output, only the og: tags do.
 const ownImage = head.find((tag) => tag.tag === 'meta' && tag.attrs?.name === 'wm:og-image')?.attrs?.content;
-const imageUrl = ownImage ? String(ownImage) : new URL(OG_IMAGE, site).href;
 const description = entry.data.description ?? SITE_DESCRIPTION;
 const title = entry.data.title;
+
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
+const noindex = isNoindex(Astro.url.pathname);
+/**
+ * The landing page's entry id is the empty string at render time, though the
+ * collection stores it as `index` — so every lookup keyed on the id (the
+ * section, the git date, the card) silently missed on the one page where it
+ * matters most, and the homepage fell back to the generic site card.
+ */
+const docId = entry.id || 'index';
+const section = sectionFor(docId);
+
+/**
+ * Eleven pages share a name with another page — three `Permissions`, two each
+ * of `Backup & restore`, `Data saver`, `Selection actions` and `Accessibility`
+ * — because a feature and its settings screen are documented separately. With
+ * `<title>` set from the name alone, a search engine sees three identical
+ * `Permissions | WM Keyboard` titles and has to guess which one answers the
+ * query, which is exactly the "duplicate title tag" case it demotes for.
+ *
+ * So the `<title>` of an ambiguous page names its section too. The H1 is left
+ * alone: on the page itself the sidebar and the breadcrumbs already say which
+ * `Permissions` this is, and a heading that repeats them reads as clutter.
+ */
+const docs = await getCollection('docs');
+const sharedTitles = new Set(
+	Object.entries(
+		docs.reduce<Record<string, number>>((counts, doc) => {
+			const name = String(doc.data.title);
+			counts[name] = (counts[name] ?? 0) + 1;
+			return counts;
+		}, {})
+	)
+		.filter(([, count]) => count > 1)
+		.map(([name]) => name)
+);
+
+const needsSectionInTitle = !isHome && section && sharedTitles.has(String(title));
+const pageTitle = needsSectionInTitle ? `${title} · ${section}` : String(title);
+const fullTitle = isHome ? SITE_TAGLINE_TITLE : `${pageTitle} | ${siteTitle}`;
+
+// The same trail PageTitle.astro renders above the heading.
+const crumbs = buildCrumbs(Astro.locals.starlightRoute, Astro.url.pathname);
+
+const modified = isHome ? undefined : lastModifiedForDoc(docId);
+
+/**
+ * The page's own card (src/pages/og/[...page].png.ts), which puts this page's
+ * section, title and description on it. Every page used to share one card, so
+ * a link to the glide-typing guide and a link to the build instructions looked
+ * identical wherever they were pasted.
+ *
+ * The store's routes are not in the `docs` collection and have no card of
+ * their own, so they keep the repository icon they already pass, or the site
+ * card. So does anything the collection somehow doesn't cover.
+ */
+const hasCard = !noindex && docs.some((doc) => doc.id === docId);
+const pageCard = hasCard ? new URL(`/og/${docId}.png`, site).href : undefined;
+const imageUrl = ownImage ? String(ownImage) : (pageCard ?? new URL(OG_IMAGE, site).href);
+/** A card that names the page needs alt text that names it too. */
+const imageAlt = ownImage || !pageCard ? OG_IMAGE_ALT : `${title} — ${SITE_TITLE} documentation`;
+
+/**
+ * The FAQ page's H2s are questions, so it also publishes a `FAQPage`. The
+ * answers are read from the rendered page rather than kept in a second copy
+ * here, which would go stale the first time an answer was edited.
+ */
+const faqQuestions =
+	docId === 'start/faq'
+		? (() => {
+				// `entry.body` is the page's own MDX, which the collection already
+				// holds — reading the file from disk works in dev and then fails in
+				// the build, where the render runs from a bundle in dist/.prerender/.
+				const source = String(entry.body ?? '');
+				// Each `## question` up to the next `##`; the first prose paragraph
+				// is the answer, since that is where every answer on the page starts.
+				const blocks = source.split(/\n## /).slice(1);
+				return blocks
+					.map((block) => {
+						const [heading, ...rest] = block.split('\n');
+						const body = rest
+							.join('\n')
+							// MDX components and JSX comments are not prose.
+							.replace(/<[^>]*>[\s\S]*?<\/[^>]*>|<[^>]*\/>/g, '')
+							.replace(/\{\/\*[\s\S]*?\*\/\}/g, '');
+						const paragraph = body
+							.split(/\n\s*\n/)
+							.map((p) => p.trim())
+							.find((p) => p && !p.startsWith('#') && !p.startsWith('<') && !p.startsWith(':::'));
+						if (!heading.trim().endsWith('?') || !paragraph) return undefined;
+						return {
+							question: heading.trim(),
+							// Strip the inline Markdown a plain-text answer shouldn't carry.
+							answer: paragraph
+								.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+								.replace(/[*_`]/g, '')
+								.replace(/\s+/g, ' ')
+								.trim(),
+						};
+					})
+					.filter((q): q is { question: string; answer: string } => Boolean(q));
+			})()
+		: [];
+
+const nodes = isHome
+	? homeGraph({ canonical, title: String(title), description, image: imageUrl })
+	: docPageGraph({
+			canonical,
+			title: String(title),
+			description,
+			section,
+			crumbs,
+			image: imageUrl,
+			modified,
+			headings: headings?.filter((h) => h.depth === 2).map((h) => ({ text: h.text, slug: h.slug })),
+		});
+if (faqQuestions.length) nodes.push(faqNode({ canonical, questions: faqQuestions }));
+
+/**
+ * The store's pages describe an addon or a list of them, so they build their
+ * own graph and hand it over through `head` (StoreShell.astro). Where one
+ * arrives, the generic TechArticle below would only contradict it.
+ */
+const ownGraph = head.some(
+	(tag) => tag.tag === 'script' && tag.attrs?.type === 'application/ld+json'
+);
+
+// A page kept out of the index has nothing to say to a structured-data parser.
+const jsonLd = noindex || ownGraph ? undefined : JSON.stringify(graph(nodes));
 ---
 
-{head.filter((tag) => !isOwnedBySeo(tag)).map(({ tag: Tag, attrs, content }) => (
-	<Tag {...attrs} set:html={content} />
-))}
+{head
+	.filter((tag) => !isOwnedBySeo(tag))
+	.map(({ tag: Tag, attrs, content }) =>
+		Tag === 'title' ? <title set:html={fullTitle} /> : <Tag {...attrs} set:html={content} />
+	)}
 
 <Font cssVariable="--font-geist" preload />
 <Font cssVariable="--font-geist-mono" preload />
+
+{/* Matches the palette's page background so the browser chrome doesn't flash
+    white on a dark page, which Lighthouse counts against the paint. */}
+<meta name="theme-color" content="#17182b" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 
 {/* Proves ownership of the site to Google Search Console. */}
 <meta name="google-site-verification" content="iD_97pLxZEiUbIXCTrU4aRmKHGfZkguyIs_lldo2j2w" />
@@ -64,17 +218,23 @@ const title = entry.data.title;
 
 <SEO
 	canonical={canonical}
-	robotsExtras="max-image-preview:large, max-snippet:-1"
+	noindex={noindex}
+	nofollow={noindex}
+	robotsExtras={noindex ? undefined : 'max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
 	openGraph={{
-		basic: { title, type: 'article', image: imageUrl, url: canonical },
+		// The landing page is the site, not an article on it.
+		basic: { title: pageTitle, type: isHome ? 'website' : 'article', image: imageUrl, url: canonical },
 		optional: { description, siteName: siteTitle, locale: lang },
-		image: { alt: OG_IMAGE_ALT, type: 'image/png', width: 1200, height: 630 },
+		image: { alt: imageAlt, type: 'image/png', width: 1200, height: 630 },
+		...(modified ? { article: { modifiedTime: modified } } : {}),
 	}}
 	twitter={{
 		card: 'summary_large_image',
-		title: `${title} | ${siteTitle}`,
+		title: fullTitle,
 		description,
 		image: imageUrl,
-		imageAlt: OG_IMAGE_ALT,
+		imageAlt,
 	}}
 />
+
+{jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}

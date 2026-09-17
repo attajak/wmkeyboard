@@ -1,16 +1,36 @@
 ---
 import StoreShell from '../../layouts/StoreShell.astro';
 import { loadAllSeeds } from '../../lib/seed-repos.mjs';
+import { collectionGraph } from '../../lib/structured-data.mjs';
+import { SITE_URL } from '../../site.mjs';
 
 const seeds = await loadAllSeeds();
 const preloaded = Object.fromEntries(Object.values(seeds).map((s) => [s.seed.url, s.manifest]));
 const source = Object.values(seeds).some((s) => s.source === 'snapshot') ? 'snapshot' : 'live';
+
+const canonical = new URL('/addons/', SITE_URL).href;
+const description =
+	'Browse themes, layouts, dictionaries, fonts, sounds, sticker packs, icon packs and plugins for WM Keyboard, from the official repository or any you add.';
+// The store's front page lists every addon the build seeded, across repositories.
+const jsonLd = collectionGraph({
+	canonical,
+	title: 'Addon store',
+	description,
+	items: Object.values(seeds).flatMap((s) =>
+		s.manifest.addons.map((addon: any) => ({
+			name: addon.name,
+			url: new URL(`/addons/${s.seed.slug}/${addon.id}/`, SITE_URL).href,
+			description: addon.description,
+		}))
+	),
+});
 ---
 
 <StoreShell
 	title="Addon store"
-	description="Browse themes, layouts, dictionaries, fonts, sounds, sticker packs, icon packs and plugins for WM Keyboard, from the official repository or any you add."
+	description={description}
 	route={{ view: 'home' }}
+	jsonLd={jsonLd}
 	preloaded={preloaded}
 	preloadedSource={source}
 />

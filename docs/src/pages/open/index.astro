@@ -35,7 +35,12 @@ import logoMark from '../../assets/logo-mark.png';
 import { INSTALL_SOURCES } from '../../lib/install-links.mjs';
 import { BRAND_PATHS } from '../../lib/brand-icons.mjs';
 
-const head: { tag: 'meta'; attrs: Record<string, string> }[] = [{ tag: 'meta', attrs: { name: 'robots', content: 'noindex' } }];
+// `robots` comes from Head.astro, which reads the same isNoindex() the sitemap
+// does (src/lib/robots.mjs). `wm:own-title` keeps the splash template from
+// adding a second, hidden <h1> above the card's own one.
+const head: { tag: 'meta'; attrs: Record<string, string> }[] = [
+	{ tag: 'meta', attrs: { name: 'wm:own-title', content: '' } },
+];
 ---
 
 <StarlightPage

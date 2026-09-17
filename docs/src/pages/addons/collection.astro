@@ -6,4 +6,4 @@ const seeds = await loadAllSeeds();
 const preloaded = Object.fromEntries(Object.values(seeds).map((s) => [s.seed.url, s.manifest]));
 ---
 
-<StoreShell title="Collection · Addon store" description="Starred addons, ready to send to your phone." route={{ view: 'collection' }} preloaded={preloaded} noindex />
+<StoreShell title="Collection · Addon store" description="Starred addons, ready to send to your phone." route={{ view: 'collection' }} preloaded={preloaded} />

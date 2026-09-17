@@ -9,7 +9,9 @@ import starlightImageZoom from 'starlight-image-zoom';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightThemeBlack from 'starlight-theme-black';
 
-import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from './src/site.mjs';
+import { SECTIONS, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from './src/site.mjs';
+import { crawlWeight, isNoindex } from './src/lib/robots.mjs';
+import { lastModifiedForDoc, lastModifiedForPage } from './src/lib/last-modified.mjs';
 
 // Link validation is opt-in (`npm run check`) so half-written pages never
 // block the dev loop. CI should run `npm run check`.
@@ -52,6 +54,30 @@ plugins.push(
 		docs: { showMarkdownActions: false },
 	})
 );
+
+/**
+ * The source file behind a built URL, so the sitemap can date it.
+ *
+ * Content pages map straight onto `src/content/docs/<id>.mdx`. The store's
+ * routes are generated from seed manifests, so they take the date of the Astro
+ * page that generates them, which is the closest honest answer available.
+ */
+function lastmodFor(pathname) {
+	const id = pathname.replace(/^\/|\/$/g, '');
+	if (id === '') return lastModifiedForDoc('index');
+
+	const fromDocs = lastModifiedForDoc(id);
+	if (fromDocs) return fromDocs;
+
+	// /addons/official/twemoji/ -> the [id].astro that prerenders it.
+	if (/^addons\/[^/]+\/[^/]+$/.test(id)) return lastModifiedForPage('addons/[slug]/[id].astro');
+	if (/^addons\/[^/]+$/.test(id)) {
+		return (
+			lastModifiedForPage(`${id}.astro`) ?? lastModifiedForPage('addons/[slug]/index.astro')
+		);
+	}
+	return lastModifiedForPage(`${id}/index.astro`) ?? lastModifiedForPage(`${id}.astro`);
+}
 
 export default defineConfig({
 	site: SITE_URL,
@@ -101,75 +127,30 @@ export default defineConfig({
 				Sidebar: './src/components/Sidebar.astro',
 			},
 			plugins,
-			sidebar: [
-				{
-					label: 'Getting started',
-					items: [{ autogenerate: { directory: 'start' } }],
-				},
-				{
-					label: 'Typing',
-					items: [{ autogenerate: { directory: 'typing' } }],
-				},
-				{
-					label: 'Languages',
-					items: [{ autogenerate: { directory: 'languages' } }],
-				},
-				{
-					label: 'Suggestions & correction',
-					items: [{ autogenerate: { directory: 'smart' } }],
-				},
-				{
-					label: 'Emoji & expression',
-					items: [{ autogenerate: { directory: 'emoji' } }],
-				},
-				{
-					label: 'Tools',
-					items: [{ autogenerate: { directory: 'tools' } }],
-				},
-				{
-					label: 'Themes & appearance',
-					items: [{ autogenerate: { directory: 'themes' } }],
-				},
-				{
-					label: 'Addons',
-					items: [{ autogenerate: { directory: 'addons' } }],
-				},
-				{
-					label: 'Plugins',
-					badge: { text: 'Lua', variant: 'tip' },
-					items: [{ autogenerate: { directory: 'plugins' } }],
-				},
-				{
-					label: 'Privacy & security',
-					items: [{ autogenerate: { directory: 'privacy' } }],
-				},
-				{
-					label: 'Accessibility',
-					items: [{ autogenerate: { directory: 'accessibility' } }],
-				},
-				{
-					label: 'Reference',
-					collapsed: true,
-					items: [
-						{ autogenerate: { directory: 'reference', collapsed: true } },
-					],
-				},
-				{
-					label: 'Development',
-					collapsed: true,
-					items: [{ autogenerate: { directory: 'development', collapsed: true } }],
-				},
-			],
+			// One group per SECTIONS entry (src/site.mjs), which is also what the
+			// SEO layer reads to name a page's section. The labels used to live
+			// here as well, so renaming a group renamed it in the sidebar only.
+			sidebar: SECTIONS.map(({ label, directory, badge, collapsed }) => ({
+				label,
+				...(badge ? { badge } : {}),
+				...(collapsed ? { collapsed: true } : {}),
+				items: [{ autogenerate: { directory, ...(collapsed ? { collapsed: true } : {}) } }],
+			}))
 		}),
 		sitemap({
-			// The 404 page has nothing to index.
-			filter: (page) => !page.endsWith('/404/'),
-			changefreq: 'weekly',
-			priority: 0.7,
+			// Anything a crawler is told not to index has no business being
+			// advertised here — the 404 page, and the store routes that are an
+			// empty frame until the visitor's own state fills them in. One list
+			// answers both questions (src/lib/robots.mjs).
+			filter: (page) => !isNoindex(new URL(page).pathname),
 			serialize(item) {
-				// The landing page is the entry point; everything else inherits
-				// the defaults above.
-				if (item.url === `${SITE_URL}/`) item.priority = 1.0;
+				const { pathname } = new URL(item.url);
+				Object.assign(item, crawlWeight(pathname));
+
+				// `lastmod` from the commit that last touched the page's source, so
+				// a deploy that changed three pages doesn't claim all 224 are new.
+				const modified = lastmodFor(pathname);
+				if (modified) item.lastmod = modified;
 				return item;
 			},
 		}),
