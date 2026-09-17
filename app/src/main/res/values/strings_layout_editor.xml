@@ -266,6 +266,13 @@
     <string name="layout_editor_icon_found_hint">Shows the \"<xliff:g id="icon_name" example="mic">%1$s</xliff:g>\" icon</string>
     <string name="layout_editor_icon_missing_hint">There is no icon with the name \"<xliff:g id="icon_name" example="mik">%1$s</xliff:g>\". The app draws the label instead</string>
 
+    <!-- Switch on a key's sheet. On: holding the key fires it again and again, the way holding delete does. -->
+    <string name="layout_editor_repeat_hold_title">Repeat while held</string>
+    <string name="layout_editor_repeat_hold_subtitle">Holding the key keeps doing what it does, the way delete does</string>
+    <string name="layout_editor_repeat_hold_info">Hold the key and, after the same wait delete takes, it does its action over and over until you lift your finger. Arrow keys are what this is for: one press moves the cursor one place, and a hold walks it along. The two speeds are yours to set under Key press: Time before a key repeats, and Repeating key interval.</string>
+    <!-- Shown under the switch when the key already has alternates, which the repeat takes the long press away from. -->
+    <string name="layout_editor_repeat_hold_alternates_notice">A press and hold on this key now repeats it, so its alternates cannot open any more. Turn the repeat off to get them back.</string>
+
     <string name="layout_editor_alternates_field_label">Alternates for press and hold</string>
     <!-- .com is an example of an entry with more than one character. Do not translate it. -->
     <string name="layout_editor_select_hold_notice">Holding a Select key turns selection mode on for as long as you hold it. If you give this key alternates, the long press opens them instead and hold to select stops working on it. Tap, double tap and triple tap still work either way.</string>

@@ -223,6 +223,32 @@ class LayoutRepairTest {
     }
 
     /**
+     * Issue #231, and quietly for the same reason the column count is: a repeat
+     * on a key that cannot use one is a flag nothing reads, not a grid that will
+     * not draw. It has to go, though, or the key's hold is spent on nothing.
+     */
+    @Test
+    fun `a repeat on a key that cannot use one is dropped quietly`() {
+        val spec = letters(
+            listOf(
+                Key("\u2190", action = KeyAction.SendKey(21), repeatOnHold = true),
+                Key("?123", action = KeyAction.Symbols, longPress = listOf("@"), repeatOnHold = true),
+                Key("\u304b", flick = mapOf(FlickDirection.LEFT to "\u304d"), repeatOnHold = true),
+            ) + usableBottomRow,
+        )
+
+        assertTrue(spec.canBeEnabled())
+
+        val repaired = spec.repair()
+        val keys = repaired.spec.lettersKeys().associateBy { it.label }
+        assertTrue("a raw arrow is exactly what the switch is for", keys.getValue("\u2190").repeatOnHold)
+        assertFalse("a layer switch has nothing to repeat", keys.getValue("?123").repeatOnHold)
+        assertTrue("and it keeps the hold it had", keys.getValue("?123").opensAlternatesPopup())
+        assertFalse("the flick pad owns the gesture", keys.getValue("\u304b").repeatOnHold)
+        assertTrue("repair notes were ${repaired.repairNotes}", repaired.repairNotes.isEmpty())
+    }
+
+    /**
      * Repair's whole contract in one test: whatever went in, what comes out can
      * be turned on. A braille dot outside 1..6 used to slip through — validate
      * blocked it, repair had no branch for it, and the import sheet reported

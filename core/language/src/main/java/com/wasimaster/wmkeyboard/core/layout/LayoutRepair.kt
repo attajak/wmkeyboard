@@ -690,6 +690,13 @@ internal fun Key.repairKey(
     if (fixed.actionAlternates.any { !it.isUsable() }) {
         fixed = fixed.copy(actionAlternates = fixed.actionAlternates.filter { it.isUsable() })
     }
+    // Quietly again: a repeat on a key that cannot use one is not a broken
+    // layout, it is a flag nothing reads — the hold on a ?123 key would
+    // otherwise be spent flipping layers rather than opening the alternates the
+    // same key may well carry (issue #231).
+    if (fixed.repeatOnHold && !fixed.canRepeatOnHold()) {
+        fixed = fixed.copy(repeatOnHold = false)
+    }
     return fixed
 }
 

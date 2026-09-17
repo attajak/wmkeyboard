@@ -450,6 +450,7 @@ import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.commitsNoText
 import com.wasimaster.wmkeyboard.core.layout.numberRowFor
+import com.wasimaster.wmkeyboard.core.layout.opensAlternatesPopup
 import com.wasimaster.wmkeyboard.core.layout.repair
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.input.composer.composerFor
@@ -5621,8 +5622,10 @@ open class WMKeyboardService : InputMethodService() {
         pendingKeyLetters = key.letterSet().takeIf { it.length > 1 }
         // Its corner hint too, for the number prediction (#181) — read off the
         // key as the layout rewrote it, so a number row that is showing has
-        // already taken the digits away and there is nothing to read.
-        pendingKeyHint = key.longPress.firstOrNull()
+        // already taken the digits away and there is nothing to read. Nothing
+        // at all from a key whose hold is spoken for: the digit is a promise
+        // the popup keeps, and a key that repeats instead never opens one.
+        pendingKeyHint = key.longPress.firstOrNull()?.takeIf { key.opensAlternatesPopup() }
         // A converted Keyman layout owns its own dead keys, in its own context,
         // where its rules can match them. Running ours as well would apply an
         // accent twice.

@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.layout
 
+import com.wasimaster.wmkeyboard.core.settings.repeats
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlinx.serialization.SerialName
@@ -207,6 +208,28 @@ data class Key(
      * nothing on any key but the space bar.
      */
     val iconBesideLabel: Boolean = false,
+    /**
+     * A held finger on this key fires it again and again, the way it always has
+     * on backspace, at [KeyRepeatSettings.customKeyMs] and after the same
+     * [KeyRepeatSettings.startDelayMs] every other repeat waits out (issue
+     * #231).
+     *
+     * Per key rather than per action because the same action is worth repeating
+     * on one board and not on another: the arrow cluster somebody adds a whole
+     * row for is the case this exists for, and a `SendKey(DPAD_LEFT)` on a
+     * function row they press once is not. Off by default, so no existing key
+     * changes what a hold does.
+     *
+     * Turning it on spends the hold: the alternates popup, the clipboard
+     * shortcut and every other long-press meaning are gone for as long as it is
+     * set, which is what [holdIsSpokenFor] says on this key's behalf and what
+     * the key sheet says in words before the fields disappear. Only offered
+     * where a second press does something the first did not — see
+     * [KeyAction.canRepeatOnHold], which the repair pass also clears a stored
+     * value against, so a file cannot hang a repeat on a key that has no use
+     * for one.
+     */
+    val repeatOnHold: Boolean = false,
 )
 
 /**
@@ -286,15 +309,50 @@ fun KeyboardLayout.hasAmbiguousKeys(): Boolean =
  * repeat or chord under a held finger never get one; see [holdIsSpokenFor].
  */
 fun Key.opensAlternatesPopup(): Boolean =
-    clipboardAction == null &&
-        !action.holdIsSpokenFor() &&
-        (longPress.isNotEmpty() || actionAlternates.isNotEmpty())
+    canHoldAlternates() && (longPress.isNotEmpty() || actionAlternates.isNotEmpty())
 
 /**
  * Whether this key *could* hold alternates, whether or not it has any — the
  * question the layout editor asks before drawing the fields that author them.
  */
-fun Key.canHoldAlternates(): Boolean = clipboardAction == null && !action.holdIsSpokenFor()
+fun Key.canHoldAlternates(): Boolean = clipboardAction == null && !holdIsSpokenFor()
+
+/**
+ * [KeyAction.holdIsSpokenFor] asked of a whole key, which is the form every
+ * caller wants: the action answers for the keys that have always repeated or
+ * chorded, and [Key.repeatOnHold] answers for the one an author has just told
+ * to repeat (issue #231).
+ */
+fun Key.holdIsSpokenFor(): Boolean = repeatOnHold || action.holdIsSpokenFor()
+
+/**
+ * Whether [Key.repeatOnHold] can be turned on for this key — the question the
+ * key sheet asks before drawing the switch and the repair pass asks of a stored
+ * one.
+ *
+ * [KeyAction.canRepeatOnHold] decides it for all but one case: a 12-key kana pad
+ * key owns its whole gesture, tap and flick and hold together, and a repeat has
+ * nowhere to live inside it. That is a fact about the key rather than about
+ * typing text, which is why it is here and not there.
+ */
+fun Key.canRepeatOnHold(): Boolean = flick.isEmpty() && action.canRepeatOnHold()
+
+/**
+ * Whether a held finger on this key fires it over and over.
+ *
+ * The single answer three things need and used to each spell out: the pointer
+ * handler that starts the repeat loop, the key sheet that offers the switch, and
+ * the settings screen that names the cadence. Backspace and forward delete
+ * always repeat; a text-editing key repeats when its operation does; the
+ * spacebar repeats unless alternates have taken its hold (issue #57); and any
+ * key at all repeats when its author said so ([Key.repeatOnHold]).
+ */
+fun Key.holdRepeats(): Boolean =
+    repeatOnHold ||
+        action == KeyAction.Delete ||
+        action == KeyAction.ForwardDelete ||
+        (action == KeyAction.Space && !opensAlternatesPopup()) ||
+        (action as? KeyAction.Edit)?.op?.repeats == true
 
 /**
  * Column counts a fixed alternates grid may be set to, on [Key.alternateColumns]

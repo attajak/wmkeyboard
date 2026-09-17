@@ -96,6 +96,9 @@ object LayoutJsonDocs {
         "Key.flick" to "What a flick in each direction types, for a 12-key kana pad.",
         "Key.labelScale" to "This key's label size, as a multiple of a letter's. Leave it out and the keyboard decides.",
         "Key.letters" to "Every letter this key stands for, such as \"abc\" on a T9 key. The prediction works out which one you meant.",
+        "Key.repeatOnHold" to
+            "Holding the key does its action over and over, the way holding delete does. It spends the press and hold, so " +
+            "the key's alternates stop opening.",
 
         "KeyAlternate.action" to "What choosing this entry does.",
         "KeyAlternate.label" to "What the popup draws for this entry. Blank draws the action's own glyph or icon.",

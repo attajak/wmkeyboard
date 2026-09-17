@@ -744,6 +744,17 @@ internal fun KeyPressSettings(
         }
         item {
             SliderSetting(
+                R.string.keypress_custom_repeat_title,
+                subtitle = stringResource(R.string.keypress_custom_repeat_subtitle),
+                value = settings.keyRepeat.customKeyMs.toFloat(),
+                range = 20f..200f,
+                display = { context.getString(R.string.keypress_value_ms, it.toInt()) },
+                info = stringResource(R.string.keypress_custom_repeat_info),
+                default = SettingsDefaults.keyRepeat.customKeyMs.toFloat(),
+            ) { scope.launch { repository.setCustomKeyRepeatIntervalMs(it.toInt()) } }
+        }
+        item {
+            SliderSetting(
                 R.string.keypress_caps_lock_title,
                 subtitle = stringResource(R.string.keypress_caps_lock_subtitle),
                 value = settings.layoutBehavior.shiftCapsLockMs.toFloat(),

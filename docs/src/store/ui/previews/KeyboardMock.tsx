@@ -306,7 +306,9 @@ export function KeyboardMock({ spec, layout, layer = 'letters', interactive = tr
 
 function Key({ k, spec, shifted, pressed, selected, onDown, onUp, onClick, slot }: { k: LayoutKey; spec: ThemeSpec | null; shifted: boolean; pressed?: boolean; selected?: boolean; onDown?: () => void; onUp?: () => void; onClick?: () => void; slot?: Record<string, string> }) {
 	const { text, icon } = keyLabel(k, shifted);
-	const hint = k.hideHint ? null : k.iconHint ? null : k.longPress?.[0] ?? (k.actionAlternates?.[0]?.label || null);
+	// A repeat spends the press and hold, so the popup the hint promises never
+	// opens — the app drops the hint on those keys and so does this.
+	const hint = k.hideHint || k.repeatOnHold ? null : k.iconHint ? null : k.longPress?.[0] ?? (k.actionAlternates?.[0]?.label || null);
 	const t = k.action?.type ?? 'text';
 	const showPopup = pressed && t === 'text' && !!text;
 	const ls = typeof k.labelScale === 'number' && Number.isFinite(k.labelScale) ? Math.min(Math.max(k.labelScale, 0.3), 2) : null;

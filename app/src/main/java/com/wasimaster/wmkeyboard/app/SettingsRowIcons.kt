@@ -464,6 +464,7 @@ internal object SettingsRowIcons {
         put(R.string.keypress_hold_words_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.keypress_word_delete_repeat_title) { Icons.Outlined.Repeat }
         put(R.string.keypress_space_repeat_title) { Icons.Outlined.Repeat }
+        put(R.string.keypress_custom_repeat_title) { Icons.Outlined.Repeat }
         put(R.string.keypress_caps_lock_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.keypress_long_press_hints_title) { Icons.Outlined.Lightbulb }
         put(R.string.keypress_all_accents_title) { Icons.Outlined.Translate }

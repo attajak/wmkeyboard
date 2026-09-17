@@ -487,6 +487,10 @@ fun KeyAlternate.drawnLabel(): String = label.ifBlank { action.fallbackLabel() }
  * that opens the popup, the key that draws (or does not draw) a corner hint, and
  * the layout editor, which must not offer an author a field that will silently
  * do nothing.
+ *
+ * Ask [com.wasimaster.wmkeyboard.core.layout.holdIsSpokenFor] rather than this
+ * wherever a whole key is in hand: a key can also have been *told* to repeat,
+ * and only the key knows that.
  */
 fun KeyAction.holdIsSpokenFor(): Boolean = when (this) {
     KeyAction.Delete, KeyAction.ForwardDelete -> true
@@ -498,6 +502,38 @@ fun KeyAction.holdIsSpokenFor(): Boolean = when (this) {
     // hold is free for an alternate (the shipped grid puts Page Up on Home).
     is KeyAction.Edit -> op.repeats
     else -> false
+}
+
+/**
+ * Whether `Key.repeatOnHold` is worth offering for a key running this action
+ * (issue #231).
+ *
+ * The rule is one question: does a second press do something the first did not?
+ * Typing, a raw key event, a text-editing operation, a broadcast and a Keyman
+ * key all say yes — the arrow cluster somebody builds a row of is a
+ * `SendKey(DPAD_LEFT)`, and holding it should walk the caret. A layer switch, a
+ * modifier latch, the language cycle, the system keyboard picker, a tool and the
+ * emoji panel all say no: the second press either undoes the first or reopens
+ * something that is already open, twenty times a second.
+ *
+ * The keys that already repeat or chord are left out through
+ * [holdIsSpokenFor] — a backspace has nothing to turn on — and so is the
+ * spacebar, whose hold is a repeat by default and whose one way of giving that
+ * up is the alternates (issue #57).
+ *
+ * The editor asks this before drawing the switch, and the repair pass asks it of
+ * a stored value, so a hand-written layout cannot hang a repeat somewhere the
+ * editor would never have put one.
+ */
+fun KeyAction.canRepeatOnHold(): Boolean = when (this) {
+    KeyAction.Space, KeyAction.None -> false
+    KeyAction.MorseDot, KeyAction.MorseDash -> false
+    KeyAction.Shift, KeyAction.CapsLock, KeyAction.Fn -> false
+    KeyAction.Symbols, KeyAction.Letters, KeyAction.Numpad, KeyAction.Emoji -> false
+    KeyAction.LanguageSwitch, KeyAction.InputMethodPicker -> false
+    is KeyAction.Mod, is KeyAction.Layout, is KeyAction.Tool -> false
+    is KeyAction.Unknown -> false
+    else -> !holdIsSpokenFor()
 }
 
 /**

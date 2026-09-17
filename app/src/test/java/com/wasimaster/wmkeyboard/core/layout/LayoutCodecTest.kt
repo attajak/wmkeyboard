@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.layout
 
+import com.wasimaster.wmkeyboard.core.settings.TextEditAction
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -480,6 +481,60 @@ class LayoutCodecTest {
         // The editor asks the other question: not "has any" but "may have".
         assertTrue(Key("⏎", action = KeyAction.Enter).canHoldAlternates())
         assertTrue(Key(" ", action = KeyAction.Space).canHoldAlternates())
+
+        // Issue #231: a repeat the author turned on spends the hold the same
+        // way the built-in repeats do, so the popup stops opening and the
+        // editor stops offering the fields that would fill it.
+        val arrow = Key("←", action = KeyAction.SendKey(21), longPress = listOf("x"))
+        assertTrue(arrow.opensAlternatesPopup())
+        assertFalse(arrow.copy(repeatOnHold = true).opensAlternatesPopup())
+        assertFalse(arrow.copy(repeatOnHold = true).canHoldAlternates())
+    }
+
+    /**
+     * The one answer the pointer handler, the key sheet and the settings screen
+     * all read for "does a held finger fire this again?" (issue #231).
+     */
+    @Test
+    fun `a key repeats when it always has or when its author said so`() {
+        assertTrue(Key("⌫", action = KeyAction.Delete).holdRepeats())
+        assertTrue(Key("⌦", action = KeyAction.ForwardDelete).holdRepeats())
+        assertTrue(Key(" ", action = KeyAction.Space).holdRepeats())
+        assertTrue(Key("←", action = KeyAction.Edit(TextEditAction.LEFT)).holdRepeats())
+
+        assertFalse("the caret is already there", Key("⇤", action = KeyAction.Edit(TextEditAction.HOME)).holdRepeats())
+        assertFalse("a raw arrow is an ordinary key", Key("←", action = KeyAction.SendKey(21)).holdRepeats())
+        assertFalse(
+            "alternates take the space hold, repeat and all",
+            Key(" ", action = KeyAction.Space, longPress = listOf("🙂")).holdRepeats(),
+        )
+
+        // The switch, which is the whole of the issue: the arrow row somebody
+        // built out of raw key events now walks the caret under a thumb.
+        assertTrue(Key("←", action = KeyAction.SendKey(21), repeatOnHold = true).holdRepeats())
+        assertTrue(Key("a", repeatOnHold = true).holdRepeats())
+    }
+
+    /**
+     * Where the switch is offered. The rule is "does a second press do something
+     * the first did not", and the repair pass holds a file to it (issue #231).
+     */
+    @Test
+    fun `only a key worth pressing twice can be told to repeat`() {
+        assertTrue(Key("←", action = KeyAction.SendKey(21)).canRepeatOnHold())
+        assertTrue(Key("a").canRepeatOnHold())
+        assertTrue(Key("⇤", action = KeyAction.Edit(TextEditAction.HOME)).canRepeatOnHold())
+
+        assertFalse("it already repeats", Key("⌫", action = KeyAction.Delete).canRepeatOnHold())
+        assertFalse("it already repeats", Key("←", action = KeyAction.Edit(TextEditAction.LEFT)).canRepeatOnHold())
+        assertFalse("the hold is the picker or the repeat", Key(" ", action = KeyAction.Space).canRepeatOnHold())
+        assertFalse("the second press undoes the first", Key("⇧", action = KeyAction.Shift).canRepeatOnHold())
+        assertFalse("nothing to reopen", Key("?123", action = KeyAction.Symbols).canRepeatOnHold())
+        assertFalse("the tool is already open", Key("🎤", action = KeyAction.Tool(ToolbarTool.VOICE)).canRepeatOnHold())
+        assertFalse(
+            "the flick pad owns the whole gesture",
+            Key("か", flick = mapOf(FlickDirection.LEFT to "き"), repeatOnHold = true).canRepeatOnHold(),
+        )
     }
 
     /**

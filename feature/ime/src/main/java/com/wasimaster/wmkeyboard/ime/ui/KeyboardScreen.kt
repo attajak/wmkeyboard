@@ -440,7 +440,6 @@ import com.wasimaster.wmkeyboard.ime.voiceChipOnly
 import com.wasimaster.wmkeyboard.ime.SizingAction
 import com.wasimaster.wmkeyboard.ime.SoundHapticAction
 import com.wasimaster.wmkeyboard.core.settings.TextEditAction
-import com.wasimaster.wmkeyboard.core.settings.repeats
 import com.wasimaster.wmkeyboard.ime.ShiftState
 import com.wasimaster.wmkeyboard.ime.displayCaseForShift
 import com.wasimaster.wmkeyboard.ime.shiftForGlide
@@ -467,6 +466,7 @@ import com.wasimaster.wmkeyboard.core.layout.drawnFontScale
 import com.wasimaster.wmkeyboard.core.layout.drawnLabel
 import com.wasimaster.wmkeyboard.core.layout.drawnLabelScale
 import com.wasimaster.wmkeyboard.core.layout.fallbackLabel
+import com.wasimaster.wmkeyboard.core.layout.holdRepeats
 import com.wasimaster.wmkeyboard.core.layout.opensAlternatesPopup
 import com.wasimaster.wmkeyboard.core.layout.expandNumberRowForTablet
 import com.wasimaster.wmkeyboard.core.layout.gridWeightOf
@@ -18586,12 +18586,13 @@ private fun Modifier.pointerInputKey(
                                 // A text-editing key repeats when its operation
                                 // does (the moves, backspace), at the text-edit
                                 // tool's own cadence; Home, End and the selection
-                                // commands hold to their alternates instead.
+                                // commands hold to their alternates instead. And
+                                // any key at all repeats when its author said so
+                                // (issue #231) — the answer lives on the key so
+                                // the sheet that offers the switch and the draw
+                                // that drops the hint cannot disagree with this.
                                 val editOp = (key.action as? KeyAction.Edit)?.op
-                                val repeats = key.action == KeyAction.Delete ||
-                                    key.action == KeyAction.ForwardDelete ||
-                                    (key.action == KeyAction.Space && !key.opensAlternatesPopup()) ||
-                                    (editOp != null && editOp.repeats)
+                                val repeats = key.holdRepeats()
                                 p.job = scope.launch {
                                     delay(
                                         if (repeats) keyRepeat.startDelayMs.toLong()
@@ -18617,7 +18618,12 @@ private fun Modifier.pointerInputKey(
                                             key.action == KeyAction.Space -> keyRepeat.spaceMs
                                             editOp != null -> textEditing.repeatMs
                                             holdWords -> keyRepeat.wordDeleteMs
-                                            else -> keyRepeat.deleteMs
+                                            key.action == KeyAction.Delete ||
+                                                key.action == KeyAction.ForwardDelete ->
+                                                keyRepeat.deleteMs
+                                            // Everything left is a key an author
+                                            // turned the repeat on for.
+                                            else -> keyRepeat.customKeyMs
                                         }.toLong()
                                         // Held backspace stops once there is
                                         // nothing left to delete — no point

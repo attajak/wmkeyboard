@@ -165,6 +165,7 @@ import com.wasimaster.wmkeyboard.core.layout.MaxKeyWidth
 import com.wasimaster.wmkeyboard.core.layout.MaxRowHeightScale
 import com.wasimaster.wmkeyboard.core.layout.MinRowHeightScale
 import com.wasimaster.wmkeyboard.core.layout.canHoldAlternates
+import com.wasimaster.wmkeyboard.core.layout.canRepeatOnHold
 import com.wasimaster.wmkeyboard.core.layout.isAmbiguous
 import com.wasimaster.wmkeyboard.core.layout.withLetters
 import com.wasimaster.wmkeyboard.core.layout.drawnFontScale
@@ -3637,6 +3638,28 @@ internal fun KeyEditSheet(
             }
             if (key.action == KeyAction.Text) {
                 IconPickRow(R.string.layout_editor_icon_hint_field_label, key.iconHint) { pickingIcon = true }
+            }
+
+            // Issue #231: a key whose action is worth doing twice can be told
+            // to repeat under a held finger, the way delete always has. Above
+            // the alternates on purpose — it is what takes them away, so it has
+            // to be readable from where they were.
+            if (key.canRepeatOnHold()) {
+                ToggleSetting(
+                    R.string.layout_editor_repeat_hold_title,
+                    stringResource(R.string.layout_editor_repeat_hold_subtitle),
+                    key.repeatOnHold,
+                    info = stringResource(R.string.layout_editor_repeat_hold_info),
+                ) { repeat -> onChange { it.copy(repeatOnHold = repeat) } }
+                // Only once both are true: the fields below have just vanished
+                // and the entries the author typed into them are still stored,
+                // so say where they went rather than leaving a key that quietly
+                // stopped opening its popup.
+                if (key.repeatOnHold &&
+                    (key.longPress.isNotEmpty() || key.actionAlternates.isNotEmpty())
+                ) {
+                    CaptionText(stringResource(R.string.layout_editor_repeat_hold_alternates_notice))
+                }
             }
 
             // Not only text keys: every key whose press and hold is free can

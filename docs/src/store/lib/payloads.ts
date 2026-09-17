@@ -149,6 +149,7 @@ export interface LayoutKey {
 	iconHint?: string | null;
 	hideHint?: boolean;
 	forceHint?: boolean;
+	repeatOnHold?: boolean;
 	flick?: Record<string, string>;
 	labelScale?: number | null;
 	letters?: string | null;

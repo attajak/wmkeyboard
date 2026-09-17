@@ -165,6 +165,10 @@
     <string name="keypress_space_repeat_subtitle">How fast space repeats while you hold it</string>
     <string name="keypress_space_repeat_info">While you hold the space bar, it repeats at this interval. Space has its own value because a run of spaces is harder to correct than a run of deletes. Use a higher value here to make it slower.</string>
 
+    <string name="keypress_custom_repeat_title">Repeating key interval</string>
+    <string name="keypress_custom_repeat_subtitle">How fast a key you set to repeat fires while you hold it</string>
+    <string name="keypress_custom_repeat_info">This is the speed of the keys you turned Repeat while held on for in the key layout editor, such as a row of arrow keys. Delete and space keep their own speeds above. Lower values repeat faster.</string>
+
     <string name="keypress_caps_lock_title">Caps lock double press</string>
     <string name="keypress_caps_lock_subtitle">How fast a second press of shift turns on caps lock</string>
     <string name="keypress_caps_lock_info">Two presses of shift inside this time turn on caps lock. A shorter time makes caps lock faster, but it starts by accident more easily. A longer time accepts a slower double press. The default is 350 ms.</string>

@@ -515,6 +515,7 @@ private fun SearchStrings.keyPressRows(): List<SettingsSearchEntry> {
         row(R.string.keypress_hold_words_title, R.string.keypress_hold_words_subtitle),
         row(R.string.keypress_word_delete_repeat_title, R.string.keypress_word_delete_repeat_subtitle),
         row(R.string.keypress_space_repeat_title, R.string.keypress_space_repeat_subtitle),
+        row(R.string.keypress_custom_repeat_title, R.string.keypress_custom_repeat_subtitle),
         row(R.string.keypress_caps_lock_title, R.string.keypress_caps_lock_subtitle, weight = EntryWeight.PRIMARY),
     )
 }

@@ -47,6 +47,7 @@ function cleanKey(k: LayoutKey): LayoutKey {
 	if (k.iconHint) o.iconHint = k.iconHint;
 	if (k.hideHint) o.hideHint = true;
 	if (k.forceHint) o.forceHint = true;
+	if (k.repeatOnHold) o.repeatOnHold = true;
 	if (k.flick && Object.keys(k.flick).length) o.flick = k.flick;
 	if (k.labelScale != null && k.labelScale !== 1) o.labelScale = k.labelScale;
 	if (k.letters) o.letters = k.letters;
@@ -205,6 +206,7 @@ export function LayoutEditor() {
 								<Text key={dir} label={`Flick ${dir}`} value={key.flick?.[dir] ?? ''} onInput={(v) => { const flick = { ...(key.flick ?? {}) }; if (v) flick[dir] = v; else delete flick[dir]; patchKey({ flick }); }} />
 							))}
 						</div>
+						<Toggle label="Repeat while held" value={!!key.repeatOnHold} onInput={(v) => patchKey({ repeatOnHold: v })} help="Holding the key keeps firing it, the way delete does. It takes the press and hold, so the alternates stop opening." />
 						<Toggle label="Hide the corner hint" value={!!key.hideHint} onInput={(v) => patchKey({ hideHint: v })} />
 						<Toggle label="Force the corner hint" value={!!key.forceHint} onInput={(v) => patchKey({ forceHint: v })} />
 					</Section>

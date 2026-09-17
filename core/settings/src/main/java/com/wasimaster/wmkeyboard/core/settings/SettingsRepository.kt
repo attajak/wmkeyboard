@@ -421,10 +421,11 @@ data class KeyPopupSettings(
 /**
  * Hold-to-repeat cadence, per key.
  *
- * Backspace and space are the only keys that repeat under a held finger, and
- * they are held for opposite reasons: a fast backspace clears a line in one
- * hold, while a fast spacebar runs away and has to be undone. So each keeps its
- * own interval rather than sharing one "key repeat" slider.
+ * Backspace and space are the two keys that repeat under a held finger by
+ * themselves, and they are held for opposite reasons: a fast backspace clears a
+ * line in one hold, while a fast spacebar runs away and has to be undone. So
+ * each keeps its own interval rather than sharing one "key repeat" slider. A key
+ * an author has turned "Repeat while held" on has a third ([customKeyMs]).
  *
  * Nested to keep [KeyboardSettings]'s top-level field count under the JVM
  * `copy$default` ceiling; the DataStore keys stay flat.
@@ -449,6 +450,17 @@ data class KeyRepeatSettings(
      * the word after them lands in the wrong place.
      */
     val spaceMs: Int = 100,
+    /**
+     * Any key a layout turned `Key.repeatOnHold` on — the arrow row issue #231
+     * asked for, and whatever else somebody builds with it.
+     *
+     * One number for all of them rather than one per action: the keys this
+     * covers are the author's own, and the thing they have in common is that the
+     * author wants them to walk under a thumb. Backspace's cadence is the right
+     * starting point — an arrow key and a delete are held for the same "keep
+     * going until I see what I want" reason — so it starts at the same 50 ms.
+     */
+    val customKeyMs: Int = 50,
     /**
      * How long a key is held before it starts repeating.
      *
@@ -6290,6 +6302,7 @@ class SettingsRepository(private val context: Context) {
         private val KEY_REPEAT_DELETE = intPreferencesKey("key_repeat_delete")
         private val KEY_REPEAT_WORD_DELETE = intPreferencesKey("key_repeat_word_delete")
         private val KEY_REPEAT_SPACE = intPreferencesKey("key_repeat_space")
+        private val KEY_REPEAT_CUSTOM = intPreferencesKey("key_repeat_custom")
         private val KEY_REPEAT_START_DELAY = intPreferencesKey("key_repeat_start_delay")
         private val LONG_PRESS_HINTS = booleanPreferencesKey("long_press_hints")
         private val LONG_PRESS_A_SELECT_ALL = booleanPreferencesKey("long_press_a_select_all")
@@ -7436,6 +7449,7 @@ class SettingsRepository(private val context: Context) {
                 wordDeleteMs = p[KEY_REPEAT_WORD_DELETE] ?: defaults.keyRepeat.wordDeleteMs,
                 spaceMs = p[KEY_REPEAT_SPACE] ?: p[KEY_REPEAT_INTERVAL]
                     ?: defaults.keyRepeat.spaceMs,
+                customKeyMs = p[KEY_REPEAT_CUSTOM] ?: defaults.keyRepeat.customKeyMs,
                 startDelayMs = p[KEY_REPEAT_START_DELAY] ?: defaults.keyRepeat.startDelayMs,
             ),
             longPressHints = p[LONG_PRESS_HINTS] ?: defaults.longPressHints,
@@ -12232,6 +12246,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpaceRepeatIntervalMs(value: Int) =
         editPrefs { it[KEY_REPEAT_SPACE] = value.coerceIn(20, 200) }
+
+    suspend fun setCustomKeyRepeatIntervalMs(value: Int) =
+        editPrefs { it[KEY_REPEAT_CUSTOM] = value.coerceIn(20, 200) }
 
     suspend fun setKeyRepeatStartDelayMs(value: Int) =
         editPrefs { it[KEY_REPEAT_START_DELAY] = value.coerceIn(150, 800) }
