@@ -12,12 +12,12 @@
     </plurals>
     <!-- Category header of one issue card. %1$s is the category, %2$s the kind of issue. -->
     <string name="ime_grammar_category_kind_label">%1$s • %2$s</string>
-    <string name="ime_grammar_category_correctness_label">Correctness</string>
-    <string name="ime_grammar_category_clarity_label">Clarity</string>
-    <string name="ime_grammar_category_engagement_label">Engagement</string>
-    <string name="ime_grammar_category_delivery_label">Delivery</string>
     <string name="ime_grammar_empty_hint">Type text, or open a field that has text. The issues show here. The checks run offline.</string>
     <string name="ime_grammar_no_issues_empty">No issues found</string>
+    <string name="ime_grammar_all_filtered_empty">Every issue found is hidden by the filter</string>
+    <string name="ime_grammar_filter_desc">Filter which issues are shown</string>
+    <string name="ime_grammar_filter_expand_desc">Show the kinds in this category</string>
+    <string name="ime_grammar_filter_show_all_action">Show every kind</string>
     <!-- Button that applies the first suggestion of every issue. %1$d is how many issues have one. -->
     <string name="ime_grammar_fix_all_action">Fix all (%1$d)</string>
     <!-- Label of a chip that applies a fix which has no text of its own. -->

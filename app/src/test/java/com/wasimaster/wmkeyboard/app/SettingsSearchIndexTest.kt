@@ -128,6 +128,10 @@ class SettingsSearchIndexTest {
         // user picked or from a sticker they tapped, so the index describes it
         // and lands on the pack list instead.
         "import_sticker_editor_subtitle",
+        // The grammar issue-type rows draw a count ("3 of 10 kinds shown"),
+        // which is nothing to search for. The index says what the row does
+        // instead, once for all four of them.
+        "tooldetail_grammar_category_search_subtitle",
     )
 
     private fun isIndexOwned(key: String) = key in indexOwnedKeys || key.startsWith("search_")

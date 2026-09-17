@@ -602,6 +602,90 @@ enum class GrammarDialect(@StringRes val labelRes: Int) {
     AUSTRALIAN(R.string.core_settings_grammar_dialect_australian_label),
 }
 
+/**
+ * The four buckets the grammar panel sorts issues into, each with its own
+ * colour dot on the card. Harper's twenty fine-grained kinds map onto these
+ * (see [GrammarLintKind.category]) so the header reads at a glance and so the
+ * filter can be worked at either level.
+ */
+enum class GrammarCategory(@StringRes val labelRes: Int) {
+    /** It is wrong: spelling, agreement, punctuation, a word mistaken for another. */
+    CORRECTNESS(R.string.core_settings_grammar_category_correctness_label),
+    /** It is right but hard work to read: wordy, repeated, the wrong word for the job. */
+    CLARITY(R.string.core_settings_grammar_category_clarity_label),
+    /** It could be better: a stylistic lift rather than a fix. */
+    ENGAGEMENT(R.string.core_settings_grammar_category_engagement_label),
+    /** It reads oddly for this audience: formatting, a regional form, a nonstandard one. */
+    DELIVERY(R.string.core_settings_grammar_category_delivery_label),
+}
+
+/**
+ * One kind of issue the offline grammar engine reports — the unit a filter
+ * hides, and what [KeyboardSettings.grammarHiddenKinds] holds.
+ *
+ * These mirror Harper's `LintKind`. The names it puts on the wire are matched
+ * letters-only and case-insensitively by [forKind], because Harper's own
+ * spelling of them is not quite its variant names: `WordChoice` arrives as
+ * "Word Choice". A kind this list does not know — a newer engine's — resolves
+ * to null and is never filtered out, so an upgrade adds issues rather than
+ * silently swallowing them.
+ *
+ * Enum names are persisted in DataStore, so rename nothing here.
+ */
+enum class GrammarLintKind(
+    @StringRes val labelRes: Int,
+    val category: GrammarCategory,
+) {
+    SPELLING(R.string.core_settings_grammar_kind_spelling_label, GrammarCategory.CORRECTNESS),
+    TYPO(R.string.core_settings_grammar_kind_typo_label, GrammarCategory.CORRECTNESS),
+    GRAMMAR(R.string.core_settings_grammar_kind_grammar_label, GrammarCategory.CORRECTNESS),
+    AGREEMENT(R.string.core_settings_grammar_kind_agreement_label, GrammarCategory.CORRECTNESS),
+    CAPITALIZATION(
+        R.string.core_settings_grammar_kind_capitalization_label,
+        GrammarCategory.CORRECTNESS,
+    ),
+    PUNCTUATION(R.string.core_settings_grammar_kind_punctuation_label, GrammarCategory.CORRECTNESS),
+    BOUNDARY_ERROR(R.string.core_settings_grammar_kind_boundary_label, GrammarCategory.CORRECTNESS),
+    MALAPROPISM(R.string.core_settings_grammar_kind_malapropism_label, GrammarCategory.CORRECTNESS),
+    EGGCORN(R.string.core_settings_grammar_kind_eggcorn_label, GrammarCategory.CORRECTNESS),
+    USAGE(R.string.core_settings_grammar_kind_usage_label, GrammarCategory.CORRECTNESS),
+    READABILITY(R.string.core_settings_grammar_kind_readability_label, GrammarCategory.CLARITY),
+    REDUNDANCY(R.string.core_settings_grammar_kind_redundancy_label, GrammarCategory.CLARITY),
+    REPETITION(R.string.core_settings_grammar_kind_repetition_label, GrammarCategory.CLARITY),
+    WORD_CHOICE(R.string.core_settings_grammar_kind_word_choice_label, GrammarCategory.CLARITY),
+    ENHANCEMENT(R.string.core_settings_grammar_kind_enhancement_label, GrammarCategory.ENGAGEMENT),
+    STYLE(R.string.core_settings_grammar_kind_style_label, GrammarCategory.ENGAGEMENT),
+    MISCELLANEOUS(
+        R.string.core_settings_grammar_kind_miscellaneous_label,
+        GrammarCategory.ENGAGEMENT,
+    ),
+    FORMATTING(R.string.core_settings_grammar_kind_formatting_label, GrammarCategory.DELIVERY),
+    REGIONALISM(R.string.core_settings_grammar_kind_regionalism_label, GrammarCategory.DELIVERY),
+    NONSTANDARD(R.string.core_settings_grammar_kind_nonstandard_label, GrammarCategory.DELIVERY),
+    ;
+
+    companion object {
+        private val byWireName = entries.associateBy { it.name.normalizedKind() }
+
+        private fun String.normalizedKind(): String =
+            lowercase().filter { it in 'a'..'z' }
+
+        /** The kind [wireName] names, or null when the engine reports one we do not know. */
+        fun forKind(wireName: String): GrammarLintKind? = byWireName[wireName.normalizedKind()]
+
+        /**
+         * Whether an issue reported as [wireName] should be shown given the
+         * filter in [hidden]. Unknown kinds are shown: see the class KDoc.
+         */
+        fun isVisible(wireName: String, hidden: Set<GrammarLintKind>): Boolean =
+            forKind(wireName)?.let { it !in hidden } ?: true
+
+        /** Every kind in [category], in declaration order. */
+        fun of(category: GrammarCategory): List<GrammarLintKind> =
+            entries.filter { it.category == category }
+    }
+}
+
 /** Content filter for the GIF and sticker tools (provider rating levels). */
 enum class GifContentFilter { OFF, LOW, MEDIUM, HIGH }
 
@@ -2547,6 +2631,13 @@ data class KeyboardSettings(
     val translateTargetLang: String = "en",
     /** English dialect the offline grammar tool checks against. */
     val grammarDialect: GrammarDialect = GrammarDialect.AMERICAN,
+    /**
+     * Issue kinds the grammar panel leaves out. Empty — the default — shows
+     * everything the engine finds; a kind in here is filtered out of the
+     * cards, the issue count and "Fix all" alike, so a filtered issue is not
+     * one "Fix all" quietly rewrites behind the user's back.
+     */
+    val grammarHiddenKinds: Set<GrammarLintKind> = emptySet(),
     /**
      * Squiggle spelling errors but offer no fix popup when Harper acts as the
      * system spell checker. Only has an effect on Android 12+, where the
@@ -6538,6 +6629,7 @@ class SettingsRepository(private val context: Context) {
         private val EMOJI_ROW_ABOVE_TOOLBAR = booleanPreferencesKey("emoji_row_above_toolbar")
         private val TRANSLATE_TARGET_LANG = stringPreferencesKey("translate_target_lang")
         private val GRAMMAR_DIALECT = stringPreferencesKey("grammar_dialect")
+        private val GRAMMAR_HIDDEN_KINDS = stringSetPreferencesKey("grammar_hidden_kinds")
         private val SPELL_CHECKER_NO_SUGGESTIONS =
             booleanPreferencesKey("spell_checker_no_suggestions")
         private val TRANSLATE_API_KEY = stringPreferencesKey("translate_api_key")
@@ -7898,6 +7990,11 @@ class SettingsRepository(private val context: Context) {
             grammarDialect = p[GRAMMAR_DIALECT]
                 ?.let { runCatching { GrammarDialect.valueOf(it) }.getOrNull() }
                 ?: defaults.grammarDialect,
+            grammarHiddenKinds = p[GRAMMAR_HIDDEN_KINDS]
+                ?.mapNotNullTo(mutableSetOf()) {
+                    runCatching { GrammarLintKind.valueOf(it) }.getOrNull()
+                }
+                ?: defaults.grammarHiddenKinds,
             spellCheckerNoSuggestions = p[SPELL_CHECKER_NO_SUGGESTIONS]
                 ?: defaults.spellCheckerNoSuggestions,
             translateApiKey = p[TRANSLATE_API_KEY] ?: defaults.translateApiKey,
@@ -12502,6 +12599,25 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setGrammarDialect(value: GrammarDialect) =
         editPrefs { it[GRAMMAR_DIALECT] = value.name }
+
+    /** Replaces the grammar filter; see [KeyboardSettings.grammarHiddenKinds]. */
+    suspend fun setGrammarHiddenKinds(value: Set<GrammarLintKind>) =
+        editPrefs { prefs -> prefs[GRAMMAR_HIDDEN_KINDS] = value.mapTo(mutableSetOf()) { it.name } }
+
+    /** Shows or hides one grammar issue kind, leaving the rest of the filter alone. */
+    suspend fun setGrammarKindShown(kind: GrammarLintKind, shown: Boolean) =
+        editPrefs { prefs ->
+            val now = prefs[GRAMMAR_HIDDEN_KINDS] ?: emptySet()
+            prefs[GRAMMAR_HIDDEN_KINDS] = if (shown) now - kind.name else now + kind.name
+        }
+
+    /** Shows or hides every kind in one grammar category at once. */
+    suspend fun setGrammarCategoryShown(category: GrammarCategory, shown: Boolean) =
+        editPrefs { prefs ->
+            val names = GrammarLintKind.of(category).mapTo(mutableSetOf()) { it.name }
+            val now = prefs[GRAMMAR_HIDDEN_KINDS] ?: emptySet()
+            prefs[GRAMMAR_HIDDEN_KINDS] = if (shown) now - names else now + names
+        }
 
     suspend fun setSpellCheckerNoSuggestions(value: Boolean) =
         editPrefs { it[SPELL_CHECKER_NO_SUGGESTIONS] = value }

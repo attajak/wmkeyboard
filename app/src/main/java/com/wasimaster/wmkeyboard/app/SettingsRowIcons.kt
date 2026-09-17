@@ -48,6 +48,7 @@ import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Calculate
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Cameraswitch
+import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.CenterFocusStrong
 import androidx.compose.material.icons.outlined.CheckBoxOutlineBlank
@@ -1033,6 +1034,10 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_grammar_debounce_title) { Icons.Outlined.Timer }
         put(R.string.tooldetail_grammar_system_title) { Icons.Outlined.Public }
         put(R.string.tooldetail_grammar_no_suggestions_title) { Icons.Outlined.FormatUnderlined }
+        put(R.string.tooldetail_grammar_correctness_title) { Icons.Outlined.Spellcheck }
+        put(R.string.tooldetail_grammar_clarity_title) { Icons.Outlined.Visibility }
+        put(R.string.tooldetail_grammar_engagement_title) { Icons.Outlined.AutoAwesome }
+        put(R.string.tooldetail_grammar_delivery_title) { Icons.Outlined.Campaign }
         put(R.string.tooldetail_wiki_markdown_title) { Icons.Outlined.Link }
         put(R.string.tooldetail_wiki_link_limit_title) { Icons.Outlined.Numbers }
         put(R.string.tooldetail_chips_nav_title) { Icons.Outlined.Calculate }

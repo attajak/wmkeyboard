@@ -331,7 +331,9 @@ import com.wasimaster.wmkeyboard.core.grammar.GrammarChecker
 import com.wasimaster.wmkeyboard.core.grammar.GrammarEdit
 import com.wasimaster.wmkeyboard.core.grammar.GrammarFix
 import com.wasimaster.wmkeyboard.core.grammar.GrammarLint
+import com.wasimaster.wmkeyboard.core.settings.GrammarCategory
 import com.wasimaster.wmkeyboard.core.settings.GrammarDialect
+import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
 import com.wasimaster.wmkeyboard.core.tools.GifSource
 import com.wasimaster.wmkeyboard.core.tools.LinkPreviewClient
 import com.wasimaster.wmkeyboard.core.tools.GifSources
@@ -3716,6 +3718,9 @@ open class WMKeyboardService : InputMethodService() {
                 onGrammarFixAll = ::onGrammarFixAll,
                 onGrammarDismiss = ::onGrammarDismiss,
                 onGrammarDialect = ::onGrammarDialectChange,
+                onGrammarKindShown = ::onGrammarKindShown,
+                onGrammarCategoryShown = ::onGrammarCategoryShown,
+                onGrammarShowAllKinds = ::onGrammarShowAllKinds,
                 onGrammarFocus = ::onGrammarFocus,
                 onWikiOpen = ::onWikiOpen,
                 onWikiBack = ::onWikiBack,
@@ -21498,11 +21503,15 @@ open class WMKeyboardService : InputMethodService() {
         }
     }
 
-    /** Tapped "Fix all": apply every lint's top suggestion. */
+    /**
+     * Tapped "Fix all": apply the top suggestion of every issue the panel is
+     * showing. Issues the filter hides are left alone — the button says how
+     * many it will fix, and that count is of the visible ones.
+     */
     fun onGrammarFixAll() {
         vibrate()
         val source = _uiState.value.grammar.sourceText
-        val edits = GrammarChecker.editsAll(source, _uiState.value.grammar.lints)
+        val edits = GrammarChecker.editsAll(source, _uiState.value.visibleGrammarLints)
         var fixed = source
         for (edit in edits) fixed = fixed.replaceRange(edit.start, edit.end, edit.text)
         if (fixed == source) return
@@ -21516,6 +21525,24 @@ open class WMKeyboardService : InputMethodService() {
     fun onGrammarDismiss(lint: GrammarLint) {
         vibrate()
         _uiState.update { it.copy(grammar = it.grammar.copy(lints = it.grammar.lints - lint)) }
+    }
+
+    /** Toggled one issue kind in the panel's filter. */
+    fun onGrammarKindShown(kind: GrammarLintKind, shown: Boolean) {
+        vibrate()
+        serviceScope.launch { settingsRepository.setGrammarKindShown(kind, shown) }
+    }
+
+    /** Toggled a whole category in the panel's filter — every kind inside it. */
+    fun onGrammarCategoryShown(category: GrammarCategory, shown: Boolean) {
+        vibrate()
+        serviceScope.launch { settingsRepository.setGrammarCategoryShown(category, shown) }
+    }
+
+    /** Cleared the panel's filter: every kind of issue is worth showing again. */
+    fun onGrammarShowAllKinds() {
+        vibrate()
+        serviceScope.launch { settingsRepository.setGrammarHiddenKinds(emptySet()) }
     }
 
     fun onGrammarDialectChange(dialect: GrammarDialect) {

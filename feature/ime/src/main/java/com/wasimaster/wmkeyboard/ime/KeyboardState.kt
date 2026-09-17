@@ -34,6 +34,7 @@ import com.wasimaster.wmkeyboard.core.settings.DataSaverStatus
 import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxPolicy
 import com.wasimaster.wmkeyboard.core.prediction.OctopusWord
 import com.wasimaster.wmkeyboard.core.prediction.WordFacts
+import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.RankControl
 import com.wasimaster.wmkeyboard.core.settings.ScreenVariant
@@ -923,6 +924,21 @@ fun KeyboardUiState.voiceChipOnly(): Boolean =
  * before reading that mirror, so the two can never disagree about whether the
  * buffer is live.
  */
+/**
+ * The grammar issues the panel shows: everything the last check found, minus
+ * the kinds the filter hides ([KeyboardSettings.grammarHiddenKinds]).
+ *
+ * The one gate both sides share. The panel draws these and counts them, and
+ * "Fix all" rewrites exactly these — filtering only the cards would leave
+ * "Fix all" silently applying fixes for issues the user asked not to see.
+ */
+val KeyboardUiState.visibleGrammarLints: List<com.wasimaster.wmkeyboard.core.grammar.GrammarLint>
+    get() {
+        val hidden = settings.grammarHiddenKinds
+        if (hidden.isEmpty()) return grammar.lints
+        return grammar.lints.filter { GrammarLintKind.isVisible(it.kind, hidden) }
+    }
+
 fun KeyboardUiState.transliterationHintsShown(): Boolean =
     composer.isTransliterating &&
         settings.layoutBehavior.transliterationHints != TransliterationHintMode.OFF

@@ -1261,6 +1261,28 @@ private fun SearchStrings.toolPageRowsB(): List<SettingsSearchEntry> = listOf(
     toolEntry(ToolbarTool.GRAMMAR, R.string.tooldetail_grammar_dialect_title, R.string.tooldetail_grammar_dialect_subtitle),
     toolEntry(ToolbarTool.GRAMMAR, R.string.tooldetail_grammar_debounce_title, R.string.tooldetail_grammar_debounce_subtitle),
     toolEntry(ToolbarTool.GRAMMAR, R.string.tooldetail_grammar_system_title, R.string.tooldetail_grammar_system_subtitle),
+    // The four issue-type folds. Each is indexed by its own master switch, so a
+    // search for a category lands on its fold rather than on the tool page.
+    toolEntry(
+        ToolbarTool.GRAMMAR,
+        R.string.tooldetail_grammar_correctness_title,
+        R.string.tooldetail_grammar_category_search_subtitle,
+    ),
+    toolEntry(
+        ToolbarTool.GRAMMAR,
+        R.string.tooldetail_grammar_clarity_title,
+        R.string.tooldetail_grammar_category_search_subtitle,
+    ),
+    toolEntry(
+        ToolbarTool.GRAMMAR,
+        R.string.tooldetail_grammar_engagement_title,
+        R.string.tooldetail_grammar_category_search_subtitle,
+    ),
+    toolEntry(
+        ToolbarTool.GRAMMAR,
+        R.string.tooldetail_grammar_delivery_title,
+        R.string.tooldetail_grammar_category_search_subtitle,
+    ),
     toolEntry(
         ToolbarTool.GRAMMAR,
         R.string.tooldetail_grammar_no_suggestions_title,

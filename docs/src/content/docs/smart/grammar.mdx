@@ -20,12 +20,14 @@ Grammar check runs your writing past Harper, the same open-source engine behind 
 
 ## What it catches
 
-Harper checks English spelling, grammar, and style: agreement errors, punctuation and capitalization slips, redundant or repeated words, malapropisms, and a long tail of style nits. The panel groups Harper's fine-grained lint kinds into four color-coded categories, so an issue reads at a glance:
+Harper checks English spelling, grammar, and style: agreement errors, punctuation and capitalization slips, redundant or repeated words, malapropisms, and a long tail of style nits. It reports twenty fine-grained kinds of issue, which the panel groups into four color-coded categories so an issue reads at a glance:
 
-- **Correctness**: spelling, typos, grammar, agreement, capitalization, punctuation, and similar hard errors
+- **Correctness**: spelling, typo, grammar, agreement, capitalization, punctuation, word boundaries, confused words, misheard phrases, usage
 - **Clarity**: readability, redundancy, repetition, word choice
-- **Engagement**: style and phrasing suggestions, plus anything Harper doesn't tag with a specific kind
-- **Delivery**: formatting, regionalisms, nonstandard usage
+- **Engagement**: enhancement, style, miscellaneous
+- **Delivery**: formatting, regionalism, nonstandard
+
+Any of those twenty can be switched off, either one at a time or a whole category at once. See [Filtering what you see](#filtering-what-you-see).
 
 Each issue also lints against a specific English dialect: **American** (the default), **British**, **Canadian**, or **Australian**. You pick that independently of whatever language or layout you're actually typing with, since Harper only understands English. See [Options](#options) below for where to change it.
 
@@ -46,12 +48,37 @@ Each issue is a card: a colored dot and category label, the flagged text struck 
 - **Tap the dismiss icon** (**×**) to hide a card. It stays hidden only until the text changes and re-lints. Dismissing isn't remembered past that.
 - **Tap "Fix all"**, shown whenever at least one issue has a suggestion, to apply every issue's top fix in one go. Fixes go in back to front, so earlier issues don't shift the ones after them. An issue whose span overlaps one already fixed is skipped rather than risk mangling the text.
 - **Tap the dialect chip** in the header to switch American/British/Canadian/Australian on the fly. The same text re-checks immediately under the new dialect.
+- **Tap the funnel** beside the dialect chip to choose which kinds of issue are worth showing at all. See below.
 
 <PhoneFrame caption="A card mid-fix: struck-through original text, fix chips, and Harper's explanation.">
   {/* shot: smart/grammar-fix-chips */}
 </PhoneFrame>
 
-If nothing's flagged, the panel says so. If the field is empty, it invites you to type or to open a field with text in it.
+If nothing's flagged, the panel says so. If the field is empty, it invites you to type or to open a field with text in it. If issues were found but your filter hides every one of them, the panel says that instead, so a quiet panel is never ambiguous.
+
+## Filtering what you see
+
+Harper is thorough, and thoroughness is not always what you want. If you don't care to be told about regionalisms, or you want spelling but not style suggestions, the funnel in the panel header turns individual kinds off.
+
+<PhoneFrame caption="The filter open in the panel header, with a category expanded onto the kinds inside it.">
+  {/* shot: smart/grammar-filter-open */}
+</PhoneFrame>
+
+The filter is two levels deep:
+
+- **Tap a category row** (Correctness, Clarity, Engagement, Delivery) to switch every kind inside it at once.
+- **Tap the chevron** on a category to expand it onto its own kinds, then tap one to switch just that kind.
+- A category shows a **tick** when all of its kinds are on, a **dash** when only some are, and nothing when they're all off. Turning one kind of an off category back on leaves the category dashed rather than quietly re-enabling the rest.
+- Every row carries **the number of issues of that kind in the current text**, filter or no filter, so you can see what you're hiding before you hide it.
+- **Show every kind** at the bottom clears the filter in one tap. It only appears while something is hidden.
+
+The funnel turns accent-colored while any filter is active, so a panel that's hiding things says so from the header.
+
+Filtering is not the same as dismissing. A dismissed card comes back on the next re-check; a filtered kind stays gone until you turn it back on, and the choice is remembered across sessions and carried in your [backup](/settings/backup/).
+
+A hidden kind is hidden from **everything the panel does**, not just the cards: it's left out of the issue count in the header, and **"Fix all" will not touch it**. Turning off a kind of suggestion you disagree with means "Fix all" stops applying it, which is usually the whole point.
+
+The same filter lives in settings, where the four categories are folds you can open onto their kinds. Changing it in either place changes it in both.
 
 ## Fully offline (in-process)
 
@@ -75,6 +102,12 @@ The very first check after opening the panel can take a beat longer, since build
 | --- | --- | --- |
 | English dialect | American | American, British, Canadian, Australian |
 | Re-check delay | 350&nbsp;ms | 100–1500&nbsp;ms |
+| Show Correctness issues | On | Per kind: spelling, typo, grammar, agreement, capitalization, punctuation, word boundaries, confused words, misheard phrases, usage |
+| Show Clarity issues | On | Per kind: readability, redundancy, repetition, word choice |
+| Show Engagement issues | On | Per kind: enhancement, style, miscellaneous |
+| Show Delivery issues | On | Per kind: formatting, regionalism, nonstandard |
+
+Each category is a fold. The heading's switch turns the whole category on or off; open it to reach the individual kinds, and the closed fold names the kinds still showing. These are the same switches as the panel's funnel.
 
 A **System-wide** group sits below these two, with a **Use Harper everywhere** button and (on Android 12 and up) an **Underline only, no fix popup** toggle. Those set up Harper as Android's system spell checker, so the same engine underlines typos in other apps too. See [System spell checker](/smart/spell-checker/) for what that covers and how it differs from this in-keyboard tool.
 
@@ -86,6 +119,8 @@ A **System-wide** group sits below these two, with a **Use Harper everywhere** b
 - **A fix only touches the words it flagged.** Applying a chip (or "Fix all") replaces the flagged spans and nothing else, so the rest of what you wrote isn't re-typed into the field. That's what keeps formatting alive in apps that have any: bold, colour, a checklist item in Google Keep. The one exception is an editor that won't tell the keyboard where its text starts. There's no way to address a span in one of those, so the fix falls back to rewriting the whole field, which flattens any styling it was carrying.
 - **Dismissing an issue is temporary.** A dismissed card comes back if you edit the text again and it re-lints to the same issue. There's no permanent "ignore this" list.
 - **"Fix all" only uses each issue's first suggestion.** For an issue with several possible fixes, use its individual fix chips instead if you want a different one applied.
+- **A filter hides issues, it doesn't stop the checking.** Harper still lints the whole text; the filter decides what's worth showing you. Turning kinds off doesn't make checking faster.
+- **An unfamiliar kind is always shown.** If a future Harper adds a kind of issue this version of the app doesn't know, it appears in the panel (under Engagement's color) rather than being silently swallowed by a filter that can't name it.
 - **Re-check delay only paces this panel.** It has no effect on [the system spell checker](/smart/spell-checker/), which always answers synchronously when another app's text field asks it to.
 
 For contact-aware, dictionary-based red squiggles in every other app on your phone, not only WM Keyboard's own writing surface, see [System spell checker](/smart/spell-checker/). For the everyday typo-fixing that runs on every language and every edition, see [Autocorrect](/smart/autocorrect/).
