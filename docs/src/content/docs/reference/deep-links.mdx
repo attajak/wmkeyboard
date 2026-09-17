@@ -335,10 +335,12 @@ goes nowhere rather than opening a broken screen.
 </PhoneFrame>
 
 Where a custom scheme cannot be a link at all, such as most chat apps, put
-`https://wmkeyboard.pages.dev/open/#` in front of any of these addresses. That
-page offers to open the link, and offers to install the app when it is
-missing. The [link builder](/reference/link-builder/) writes that form for
-you.
+`https://wmkeyboard.pages.dev/open/#` in front of any of these addresses. WM
+Keyboard claims that page, so on a phone that has the app installed the link
+opens the screen directly and the page never draws. Without the app, the page
+loads and offers to install it. The
+[link builder](/reference/link-builder/) writes that form for you, and
+[explains what happens when the claim cannot be verified](/reference/link-builder/#when-the-link-opens-the-app-by-itself).
 
 Like settings links, these are reachable from the web: the manifest declares
 a browsable `VIEW` filter for the `addons`, `repo`, and `addon` hosts, so
@@ -465,10 +467,12 @@ addon repository.
 
 ## Details & edge cases
 
-- **Custom scheme, not App Links.** All of these use `wmkeyboard://` rather
-  than `https://` App Links, so there's no domain to verify and no
-  `assetlinks.json` to host: nothing about a link needs a real web page to
-  exist on the other end.
+- **Custom scheme, not App Links, for every address above.** They all use
+  `wmkeyboard://` rather than `https://` App Links, so there's no domain to
+  verify and no `assetlinks.json` to depend on: nothing about a link needs a
+  real web page to exist on the other end. The one https address the app does
+  claim is `/open/` on this site, which exists only to carry one of these
+  addresses to a phone that cannot be handed a custom scheme.
 - **Every link form is browsable.** Settings links, setting links and addon
   links are all declared browsable, so they work from anywhere a link can be
   tapped: a page on this site, a chat message, a support reply, another app.

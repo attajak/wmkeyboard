@@ -60,17 +60,21 @@ page's sibling at `/open/`:
 https://wmkeyboard.pages.dev/open/#wmkeyboard://settings/themes
 ```
 
-That address is an ordinary web page, so everything treats it as a link. Open
-it on an Android phone and it says what the link opens, then offers a button
-to open it. The page checks whether WM Keyboard is installed first, using the
-same check as the settings chips on this site, and draws what fits:
+That address is an ordinary web page, so everything treats it as a link. On a
+phone that has WM Keyboard, the page never draws at all: the app claims that
+address, so Android hands the link straight to it and the screen opens with
+nothing to press. Everywhere else the page loads, says what the link opens,
+and offers a button.
+
+When the page does draw, it checks whether WM Keyboard is installed, using the
+same check as the settings chips on this site, and shows what fits:
 
 | What the page can tell | What you get |
 |---|---|
-| The app is installed | One **Open in WM Keyboard** button. |
-| The app is missing | Where to install it, and a **Try to open anyway** button, because a copy installed before this check existed also reads as missing. |
+| The app is installed | One **Open in WM Keyboard** button. You only reach this when Android did not hand the link over itself. |
+| The app is missing | Where to install it, and a **Try to open anyway** button, because version 0.5.8 and earlier also read as missing. |
 | The browser cannot tell, as in Firefox | The **Open in WM Keyboard** button, with the install list one press away. |
-| You are not on Android | A QR code to scan with your phone, since nothing on a desktop can open the address. |
+| You are not on Android | A QR code of the web address, to scan with a phone. |
 
 The page never opens the link by itself. You press the button. It also reads
 the address the same way this builder does, so a link that goes nowhere says
@@ -88,7 +92,26 @@ https://wmkeyboard.pages.dev/open/?repo=github.com/wasi-master/wmkeyboard-addon-
 ```
 
 Prefer the `#` form when you can. What follows a `#` never leaves the browser,
-so the address you are opening stays out of server logs.
+so the address you are opening stays out of server logs, and it still reaches
+the app when Android hands the link over. Use `?link=` for anything shared
+widely, since link shorteners and preview bots drop fragments.
+
+### When the link opens the app by itself
+
+The app claims `/open` and `/open/` on this site, and nothing else, so reading
+any other page still opens a browser. Android checks the claim when the app is
+installed: it fetches the site's `assetlinks.json` and confirms it names the
+app and the key the installed build was signed with. Released, F-Droid and
+debug builds are all named there.
+
+If that check fails, the link opens the browser instead, with no chooser on
+Android 12 and later. That is not a dead end. The browser lands on this page,
+which offers the button. You can also turn link handling on by hand under
+Android's **Default apps**, then **Open by default** for WM Keyboard.
+
+One case never hands over: a link from this site to `/open/`. Chrome keeps
+same-site navigation in the browser. It is links from elsewhere, a chat app, a
+note, a scanned code, that open the app.
 
 ## Which spelling to use
 
@@ -99,7 +122,7 @@ so the address you are opening stays out of server logs.
 | A web page or a README read in Chrome on Android | The `intent://` form. It names the package, so Chrome never asks which app should open it, and it opens the fallback page when the app is not installed. Other browsers do not understand it, so give them the plain link as well. |
 | A terminal with a phone on USB | The `adb` command. |
 | Another app on the same device | The intent extras form, shown for settings links. It is what an explicit intent to the settings activity would carry. |
-| A poster or a screen | The QR code. Scanning it on Android offers to open the app. |
+| A poster or a screen | The QR code. It carries the web address, so scanning it opens the app when it is installed and this page when it is not. |
 
 The plain link and the opaque form (`wmkeyboard:settings/themes`, no slashes)
 are the same address to the app. Prefer the one with slashes. More things
@@ -150,6 +173,12 @@ worked.
   `node scripts/check-deep-link-routes.mjs` in `docs/` fails when a screen,
   tool, panel, script, storage category or licence file is added to the app
   and not here.
+- **Version 0.5.8 and earlier always read as missing.** Chrome answers the
+  question from a Digital Asset Links statement the app publishes, and that
+  statement named the wrong thing until the release after 0.5.8, so no copy
+  before it can be detected. The **Try to open anyway** button is there for
+  exactly that. Firefox cannot answer the question at all, and gets the
+  button regardless.
 - **The `/open/` page is not indexed** and carries no link of its own. It is
   a doorway, so it only does anything with an address after its `#`.
 - **`?link=` and `#wmkeyboard:…` pre-fill the reader.** Open

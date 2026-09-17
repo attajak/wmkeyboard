@@ -99,7 +99,7 @@ const head: { tag: 'meta'; attrs: Record<string, string> }[] = [{ tag: 'meta', a
 
 			<!-- not Android -->
 			<div class="op-act" data-for="desktop">
-				<p class="op-note">Only an Android phone can open this. Scan the code to carry it across.</p>
+				<p class="op-note">Only an Android phone can open this. Scan the code and WM Keyboard opens on it, or this page does when the app is not installed.</p>
 				<div class="op-qr"><canvas id="op-qr" width="200" height="200" aria-label="QR code of this page"></canvas></div>
 				<p class="op-note op-qr-fallback" id="op-qr-fallback" hidden></p>
 				<div class="op-row">
@@ -377,6 +377,12 @@ const head: { tag: 'meta'; attrs: Record<string, string> }[] = [{ tag: 'meta', a
 		if (!onAndroid()) {
 			setState('desktop');
 			const canvas = document.getElementById('op-qr') as HTMLCanvasElement | null;
+			// The code carries this page's https address rather than the
+			// wmkeyboard:// one inside it. The app claims this page as an App
+			// Link, so a phone that has it opens the app and never draws the
+			// page, and a phone that does not lands here and gets the button.
+			// A QR reader that refuses a custom scheme, and many do, still
+			// reads this one.
 			const here = location.href;
 			if (canvas) {
 				import('qrcode')

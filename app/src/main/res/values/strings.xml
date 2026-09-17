@@ -5,8 +5,16 @@
     <string name="app_name_short" translatable="false">WMK</string>
     <!-- Digital Asset Links statement read by Chrome for
          navigator.getInstalledRelatedApps() on the docs site. The site is
-         DOCS_URL in AboutScreens.kt; change both together. -->
-    <string name="asset_statements" translatable="false">[{\"include\": \"https://wmkeyboard.pages.dev/.well-known/assetlinks.json\"}]</string>
+         DOCS_URL in AboutScreens.kt; change both together.
+
+         It must target the WEB namespace: the question Chrome answers is
+         whether this app vouches for that site, so the statement this app
+         publishes has to name the site. An "include" of the site's own
+         /.well-known/assetlinks.json does not work, however right it looks:
+         that file's statements target an android_app, so following it leaves
+         this app vouching for itself and Chrome reports the app as missing.
+         The site file stays where it is; it answers the other direction. -->
+    <string name="asset_statements" translatable="false">[{\"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://wmkeyboard.pages.dev\"}}]</string>
     <string name="ime_name">WM Keyboard</string>
     <!-- Play's name for the on-demand AI-runtime module (:feature:llm);
          surfaces in Play's download UI and settings. Lives here because a

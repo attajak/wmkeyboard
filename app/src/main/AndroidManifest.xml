@@ -163,10 +163,19 @@
              Lets the documentation site ask Chrome whether this app is
              installed (navigator.getInstalledRelatedApps), so its settings
              chips only become wmkeyboard:// links on a phone that can open
-             them. The statement names the site; the site's
-             /.well-known/assetlinks.json names this package and its signing
-             certificates. Nothing here claims https URLs: no autoVerify
-             filter, so it grants no App Links.
+             them, and so /open/ on that site knows which button to draw.
+
+             This half is the whole answer: Chrome reads the statement below
+             out of this package and checks that it names the site asking.
+             The site's /.well-known/assetlinks.json is the other direction
+             and plays no part here, signing certificates included, which is
+             why a build signed by F-Droid answers the question too. That
+             file lists the keys that may speak for this package, should
+             https App Links ever be claimed: the release key, the debug key
+             and F-Droid's own (they re-sign what they build). Play App
+             Signing would re-sign again, so enrolling means adding the key
+             Play Console shows under App integrity, or the /open/ App Link
+             below stops verifying for anyone who installs from Play.
         -->
         <meta-data
             android:name="asset_statements"
@@ -199,6 +208,38 @@
                 <data android:scheme="wmkeyboard" android:host="addons" />
                 <data android:scheme="wmkeyboard" android:host="repo" />
                 <data android:scheme="wmkeyboard" android:host="addon" />
+            </intent-filter>
+
+            <!--
+                 The documentation site's /open/ page, claimed as an App Link
+                 so the page never has to draw: Android hands the link here
+                 and the screen it names opens with nothing to press. The page
+                 still exists for everyone else, and still works.
+
+                 autoVerify means Android fetches
+                 https://wmkeyboard.pages.dev/.well-known/assetlinks.json at
+                 install time and checks that it names this package and the
+                 key this very build was signed with. Every key that ships has
+                 to be in that file: release, debug and F-Droid's today, plus
+                 Play's own if this is ever published there. A key it does not
+                 name fails the check, and on Android 12 and later a failed
+                 App Link opens the browser with no chooser, which lands on
+                 the page and its button. That is the fallback, not a bug.
+
+                 Two exact paths, never a prefix: this claims /open and
+                 /open/, so reading any other page of the documentation still
+                 opens a browser. Query and fragment take no part in matching,
+                 so /open/?link=… and /open/#wmkeyboard://… both arrive.
+                 WebOpenLink turns what arrives back into a wmkeyboard://
+                 address and hands it to the same two parsers as any other
+                 link. The host is DOCS_URL in AboutScreens.kt; change both.
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="wmkeyboard.pages.dev" android:path="/open" />
+                <data android:scheme="https" android:host="wmkeyboard.pages.dev" android:path="/open/" />
             </intent-filter>
 
             <!--

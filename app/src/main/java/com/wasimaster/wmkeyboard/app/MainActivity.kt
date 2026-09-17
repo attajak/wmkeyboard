@@ -338,8 +338,11 @@ class MainActivity : FragmentActivity() {
      */
     private fun navFor(intent: Intent?): PendingNav? {
         if (intent == null) return null
-        AddonDeepLink.routeFor(intent.data)?.let { return PendingNav(route = it) }
-        SettingsDeepLink.parse(intent.data)?.let { target -> return pendingFor(target) }
+        // An https /open/ address is one of ours wearing a web page's
+        // clothes; unwrap it first and everything below treats it the same.
+        val link = WebOpenLink.appLink(intent.data) ?: intent.data?.toString()
+        AddonDeepLink.routeFor(link)?.let { return PendingNav(route = it) }
+        SettingsDeepLink.parse(link)?.let { target -> return pendingFor(target) }
         // The extras are the same two addresses in intent form, for a caller
         // holding an Intent rather than writing a URL — the keyboard's own
         // "open settings", and any app that names the activity explicitly.
