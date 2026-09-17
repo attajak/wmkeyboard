@@ -8,7 +8,7 @@ sidebar:
 import Flavor from '@components/Flavor.astro';
 import { Steps } from '@astrojs/starlight/components';
 
-WM Keyboard is an ordinary Gradle/AGP Android project. There's no bootstrap script to run first, and everything from the dictionary compiler to the two build flavors goes through normal Gradle tasks. This page covers what you need installed, what `assembleFullDebug` and `assembleLiteDebug` differ on, and the things that catch people out the first time.
+WM Keyboard is an ordinary Gradle/AGP Android project. There's no bootstrap script to run first, and everything from the dictionary compiler to the two build flavors goes through normal Gradle tasks. This page covers what you need installed, what the flavors differ on, and the things that catch people out the first time.
 
 ## Setting up your toolchain
 
@@ -23,12 +23,12 @@ WM Keyboard is an ordinary Gradle/AGP Android project. There's no bootstrap scri
    ```sh
    git clone <repo-url>
    cd WMKeyboard
-   ./gradlew assembleFullDebug
+   ./gradlew assembleFullIntlDebug
    ```
 
    The first run downloads the Gradle 9.5 distribution, the JDK 21 toolchain and every Maven dependency. Budget a few minutes and a good connection. Later builds are incremental.
 
-4. **Install the APK.** Run `adb install app/build/outputs/apk/full/debug/app-full-debug.apk`. A default debug build is a single APK restricted to `arm64-v8a` by `ndk.abiFilters`. ABI-suffixed filenames like `app-full-arm64-v8a-release.apk` only appear when `-Pwmkb.splitApks=true` turns on `splits.abi`, which is what the release workflow does.
+4. **Install the APK.** Run `adb install app/build/outputs/apk/fullIntl/debug/app-full-intl-debug.apk`. A default debug build is a single APK restricted to `arm64-v8a` by `ndk.abiFilters`. ABI-suffixed filenames like `app-full-intl-arm64-v8a-release.apk` only appear when `-Pwmkb.splitApks=true` turns on `splits.abi`, which is what the release workflow does.
 
 5. **Turn the keyboard on.** Open the app. Follow the setup card to enable WM Keyboard as a system input method. See [installation](/start/installation/) and [initial setup](/start/setup/) for the in-app side of this.
 
@@ -42,10 +42,20 @@ The auto-provisioned JDK 21 toolchain is not the project's bytecode target. Ever
 
 WM Keyboard ships as two build flavors on the same `capabilities` flavor dimension, declared identically in `:app` and all 20 `:core:*`/`:feature:*` modules. A 21st, `:feature:llm`, declares the same dimension but only joins the build for Play-channel releases. The standalone `:tools:dictc` compiler is a plain JVM module and carries no flavors at all.
 
-- **`assembleFullDebug`** builds every feature: ML Kit handwriting recognition, ML Kit OCR/QR/document scanning, the Harper grammar checker (and the Harper spell-checker service it registers with Android), the local LLM tool, offline Whisper dictation, and one-tap background removal in the sticker editor.
-- **`assembleLiteDebug`** switches all of those off. That drops roughly 100 MB of ML Kit models and the Harper native library from the install, which is what makes it useful on a low-storage device.
+- **`full`** builds every feature: ML Kit handwriting recognition, ML Kit OCR/QR/document scanning, the Harper grammar checker (and the Harper spell-checker service it registers with Android), the local LLM tool, offline Whisper dictation, and one-tap background removal in the sticker editor.
+- **`lite`** switches all of those off. That drops roughly 100 MB of ML Kit models and the Harper native library from the install, which is what makes it useful on a low-storage device.
 
 Both flavors exist on every module so the project builds uniformly across variants. Four modules actually carry different Kotlin per flavor: `core/voice`, `core/content`, `core/intelligence` and `feature/ime` each have a real `src/full/` and `src/lite/` split. `:app` has a `src/full/` as well, holding the spell-checker service's manifest entry and its strings, with nothing on the lite side. Everywhere else the flavor dimension is structural, and the sources compiling under `full` and `lite` are identical. `core/config` mirrors five `ENABLE_*` flags as `BuildConfig` booleans so library modules can read them without depending on `:app`. The sticker cutout has no flag of its own: `core/content` declares the segmentation library as `fullImplementation` and its lite stub reports `supported = false`.
+
+## The languages dimension
+
+`:app` carries a second flavour dimension that the library modules do not. `intl` packages the app's own text in 48 languages besides English; `en` packages English alone. So `:app`'s variants are `fullIntlDebug`, `fullEnDebug`, `liteIntlDebug` and `liteEnDebug`, while every `core/*` and `feature/*` module is still just `fullDebug` and `liteDebug`.
+
+Nothing about the Kotlin differs between `intl` and `en`. The whole of it is one line in `app/build.gradle.kts` that sets `localeFilters` on the `en` variants, which tells AGP to keep the unqualified `res/values` and drop every `res/values-xx` beside it, the dependencies' translations included. That is worth about 41 MB, because `resources.arsc` is stored uncompressed and a single APK carries every language it offers.
+
+It has to be applied through the Variant API rather than in a `productFlavors` block: AGP 9 removed `resourceConfigurations` from `ProductFlavor`, and the DSL's `androidResources.localeFilters` is a single global setting that cannot vary per flavour.
+
+The practical consequence is that the two halves of the project disagree about variant names. `./gradlew testFullDebugUnitTest` runs the library suites and silently skips all of `:app`, which has no task by that name. Use `./gradlew unitTests`, the aggregate in the root build, which depends on both spellings.
 
 See [full vs. lite](/start/editions/) for what this means from the user's side, and [architecture](/development/architecture/) for how the module graph is laid out.
 

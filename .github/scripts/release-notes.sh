@@ -83,20 +83,35 @@ if [ "$have_apk" = true ]; then
 cat <<EOF
 ## Download
 
-Pick the row that matches your phone, then the build you want. **⭐ arm64-v8a is
-the right answer for essentially every phone sold since 2017.** Take that row
-unless you know you need another.
+There are two choices to make, and the second one is easy.
 
-| Architecture | full | lite |
+**full or lite?** **full** is the whole keyboard. **lite** leaves out ML Kit and
+the on-device models (handwriting, OCR, document scanning, Whisper voice input
+and the local LLM) for a far smaller download.
+
+**Which languages?** This is about the words the app *shows* you, on its
+settings screens and its panels. **all** has them in 48 languages besides
+English. **English** has English alone and is around 41 MB smaller. What you can
+*type* is identical: every layout and every dictionary is in both. You can swap
+one for the other later without uninstalling or losing a setting.
+
+Almost every phone sold since 2017 takes an **arm64-v8a** build, so start here:
+
+| arm64-v8a | all languages | English only |
 |:---|:---|:---|
-| **⭐ arm64-v8a**<br><sub>Essentially every phone since 2017</sub> | **$(cell "${prefix}-full-arm64-v8a.apk")** | **$(cell "${prefix}-lite-arm64-v8a.apk")** |
-| armeabi-v7a<br><sub>Older 32-bit phones and watches</sub> | $(cell "${prefix}-full-armeabi-v7a.apk") | $(cell "${prefix}-lite-armeabi-v7a.apk") |
-| x86_64<br><sub>Emulators, ChromeOS, x86 tablets</sub> | $(cell "${prefix}-full-x86_64.apk") | $(cell "${prefix}-lite-x86_64.apk") |
-| universal<br><sub>All three in one file. Only if the others refuse to install</sub> | $(cell "${prefix}-full-universal.apk") | $(cell "${prefix}-lite-universal.apk") |
+| **⭐ full** | **$(cell "${prefix}-full-intl-arm64-v8a.apk")** | **$(cell "${prefix}-full-en-arm64-v8a.apk")** |
+| **lite** | $(cell "${prefix}-lite-intl-arm64-v8a.apk") | $(cell "${prefix}-lite-en-arm64-v8a.apk") |
 
-**full** is the whole keyboard. **lite** leaves out ML Kit and the on-device
-models (handwriting, OCR, document scanning, Whisper voice input and the local
-LLM) for a far smaller download. Everything else is the same build.
+<details>
+<summary><b>Other architectures</b> (older 32-bit phones, emulators, ChromeOS, or if the above refuses to install)</summary>
+
+| Architecture | full · all | full · English | lite · all | lite · English |
+|:---|:---|:---|:---|:---|
+| armeabi-v7a<br><sub>Older 32-bit phones and watches</sub> | $(cell "${prefix}-full-intl-armeabi-v7a.apk") | $(cell "${prefix}-full-en-armeabi-v7a.apk") | $(cell "${prefix}-lite-intl-armeabi-v7a.apk") | $(cell "${prefix}-lite-en-armeabi-v7a.apk") |
+| x86_64<br><sub>Emulators, ChromeOS, x86 tablets</sub> | $(cell "${prefix}-full-intl-x86_64.apk") | $(cell "${prefix}-full-en-x86_64.apk") | $(cell "${prefix}-lite-intl-x86_64.apk") | $(cell "${prefix}-lite-en-x86_64.apk") |
+| universal<br><sub>All three in one file. Only if the others refuse to install</sub> | $(cell "${prefix}-full-intl-universal.apk") | $(cell "${prefix}-full-en-universal.apk") | $(cell "${prefix}-lite-intl-universal.apk") | $(cell "${prefix}-lite-en-universal.apk") |
+
+</details>
 
 EOF
 
@@ -110,14 +125,17 @@ row() { # <file> <what it is>
 "
 }
 row SHA256SUMS.txt 'Checksums for everything above'
-row "${prefix}-full-mapping.txt.gz" 'R8 mapping, **full**. Retraces a stack trace'
-row "${prefix}-lite-mapping.txt.gz" 'R8 mapping, **lite**'
-row "${prefix}-full-native-symbols.zip" 'Native debug symbols, **full**'
+row "${prefix}-full-intl-mapping.txt.gz" 'R8 mapping, **full · all languages**. Retraces a stack trace'
+row "${prefix}-full-en-mapping.txt.gz" 'R8 mapping, **full · English**'
+row "${prefix}-lite-intl-mapping.txt.gz" 'R8 mapping, **lite · all languages**'
+row "${prefix}-lite-en-mapping.txt.gz" 'R8 mapping, **lite · English**'
+row "${prefix}-full-intl-native-symbols.zip" 'Native debug symbols, **full · all languages**'
+row "${prefix}-full-en-native-symbols.zip" 'Native debug symbols, **full · English**'
 
 if [ -n "$extras" ]; then
   # Name only what is in the block. Mappings and symbols were first attached in
   # 0.5.8, so an older release's block is checksums alone.
-  if [ -f "$dist/${prefix}-full-mapping.txt.gz" ]; then
+  if [ -f "$dist/${prefix}-full-intl-mapping.txt.gz" ]; then
     summary='Checksums, R8 mappings and native symbols'
     blurb='For verifying a download, and for reading a crash report from these APKs.'
   else
@@ -143,13 +161,15 @@ sha256sum -c SHA256SUMS.txt --ignore-missing
 
 EOF
   fi
-  if [ -f "$dist/${prefix}-full-mapping.txt.gz" ]; then
+  if [ -f "$dist/${prefix}-full-intl-mapping.txt.gz" ]; then
     cat <<EOF
-Retrace a crash with the mapping from the same flavour and version:
+Retrace a crash with the mapping from the same build and version. The
+flavour has to match on both axes, because R8 renames the two language
+builds independently:
 
 \`\`\`sh
-gunzip -k ${prefix}-full-mapping.txt.gz
-retrace ${prefix}-full-mapping.txt stacktrace.txt
+gunzip -k ${prefix}-full-intl-mapping.txt.gz
+retrace ${prefix}-full-intl-mapping.txt stacktrace.txt
 \`\`\`
 
 A crash from the Play build needs neither file: that build is compiled with

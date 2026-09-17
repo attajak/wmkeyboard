@@ -28,7 +28,31 @@ plugins {
 // And KeymanConversionParityTest lives in :app, because it reads the committed
 // assets; :app's suite is large enough to want running on its own, so it is not
 // pulled in here:
-//   ./gradlew :app:testFullDebugUnitTest --tests '*KeymanConversionParityTest*'
+//   ./gradlew :app:testFullIntlDebugUnitTest --tests '*KeymanConversionParityTest*'
+// Every unit test in the project, under one name.
+//
+// This exists because :app and the library modules no longer agree on what a
+// variant is called. :app carries the `languages` flavour dimension and the
+// libraries do not, so :app's suite is testFullIntlDebugUnitTest while theirs
+// are still testFullDebugUnitTest. An unqualified `./gradlew
+// testFullDebugUnitTest` therefore runs the libraries and silently skips the
+// ~560 tests in :app, which is the sort of quiet hole that only shows up as a
+// bug in production. Run this instead.
+tasks.register("unitTests") {
+    group = "verification"
+    description = "Runs every module's unit tests, :app included, across the two variant naming schemes."
+    dependsOn(":app:testFullIntlDebugUnitTest")
+    // Only the library modules. `:core` and `:feature` are bare containers
+    // with no build file and no tasks, and `:tools:dictc` is a plain JVM tool
+    // whose task is `test`, so neither takes a flavoured task name.
+    dependsOn(
+        subprojects
+            .filter { it.buildFile.exists() }
+            .filter { it.path.startsWith(":core:") || it.path.startsWith(":feature:") }
+            .map { "${it.path}:testFullDebugUnitTest" },
+    )
+}
+
 tasks.register("keymanCheck") {
     group = "verification"
     description = "Runs the Keyman engine, converter, package and seam tests."
@@ -46,7 +70,7 @@ tasks.register("staticAnalysis") {
     // app sources (see tools/dictc/build.gradle.kts), so analysing it would
     // report the same five files twice.
     dependsOn(
-        ":app:lintFullDebug",
+        ":app:lintFullIntlDebug",
         ":app:detektFullDebug",
         // The lite flavour compiles a different set of sources (the stubs in
         // src/lite replace the ML Kit / LiteRT implementations), so it needs its

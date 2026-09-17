@@ -113,11 +113,11 @@ through Foojay on the first build. Install the Android SDK with compileSdk 36.1 
 Android Studio's bundled JBR works well as `JAVA_HOME`.
 
 ```bash
-./gradlew assembleFullDebug
+./gradlew assembleFullIntlDebug
 ```
 
 ```bash
-./gradlew testFullDebugUnitTest
+./gradlew unitTests
 ```
 
 ```bash

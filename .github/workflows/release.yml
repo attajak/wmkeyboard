@@ -106,10 +106,20 @@ jobs:
           WMKB_UNSPLASH_API_KEY: ${{ secrets.WMKB_UNSPLASH_API_KEY }}
           WMKB_PEXELS_API_KEY: ${{ secrets.WMKB_PEXELS_API_KEY }}
           WMKB_DROPBOX_APP_KEY: ${{ secrets.WMKB_DROPBOX_APP_KEY }}
-        # Both flavors compile at once and share one Kotlin daemon, whose 2 GB
-        # heap (gradle.properties) is sized for a 16 GB laptop next to an IDE.
-        # The runner has nothing else on it, so give the daemon room.
-        run: ./gradlew assembleFullRelease assembleLiteRelease -Pkotlin.daemon.jvmargs=-Xmx4g --stacktrace
+        # All four flavour combinations compile at once and share one Kotlin
+        # daemon, whose 2 GB heap (gradle.properties) is sized for a 16 GB
+        # laptop next to an IDE. The runner has nothing else on it, so give the
+        # daemon room.
+        #
+        # The `languages` flavour changes only which res/values-xx are packaged,
+        # but Gradle still gives each variant its own Kotlin compilation, so
+        # this is roughly twice the work the two-flavour build was. It ran in
+        # about 12 minutes; the timeout above has the room.
+        run: |
+          ./gradlew \
+            assembleFullIntlRelease assembleFullEnRelease \
+            assembleLiteIntlRelease assembleLiteEnRelease \
+            -Pkotlin.daemon.jvmargs=-Xmx4g --stacktrace
 
       # Versioned filenames (wmkeyboard-0.3.0-vc7-full-arm64-v8a.apk) so APKs
       # from different releases can sit in the same Downloads folder without
@@ -126,25 +136,38 @@ jobs:
             name=${name%-release}
             cp "$apk" "dist/wmkeyboard-${version}-vc${code}-${name}.apk"
           done
-          # R8 mappings, one per flavour (ABI splits share one). Taken from this
+          # R8 mappings, one per variant (ABI splits share one). Taken from this
           # job's build, not the bundle job's: the Play flags change what R8
           # renames, so the AAB's map does not retrace these APKs. The AAB
           # carries its own map in BUNDLE-METADATA, which Play reads by itself.
-          for flavor in full lite; do
-            map="app/build/outputs/mapping/${flavor}Release/mapping.txt"
-            if [ ! -f "$map" ]; then
-              echo "::error::No R8 mapping at $map"
-              exit 1
-            fi
-            gzip -9c "$map" > "dist/wmkeyboard-${version}-vc${code}-${flavor}-mapping.txt.gz"
+          #
+          # Four now rather than two. The two language builds are separate R8
+          # runs, so their maps are not interchangeable even though the Kotlin
+          # that went in was identical.
+          for capability in full lite; do
+            for language in Intl En; do
+              lower=$(echo "$language" | tr '[:upper:]' '[:lower:]')
+              map="app/build/outputs/mapping/${capability}${language}Release/mapping.txt"
+              if [ ! -f "$map" ]; then
+                echo "::error::No R8 mapping at $map"
+                exit 1
+              fi
+              gzip -9c "$map" \
+                > "dist/wmkeyboard-${version}-vc${code}-${capability}-${lower}-mapping.txt.gz"
+            done
           done
-          # Native symbols, full only: lite sets debugSymbolLevel NONE.
-          syms=app/build/outputs/native-debug-symbols/fullRelease/native-debug-symbols.zip
-          if [ -f "$syms" ]; then
-            cp "$syms" "dist/wmkeyboard-${version}-vc${code}-full-native-symbols.zip"
-          else
-            echo "::warning::No native debug symbols at $syms"
-          fi
+          # Native symbols, full only: lite sets debugSymbolLevel NONE. Both
+          # language builds carry the same .so files, but each variant writes
+          # its own zip and the release grid links them separately.
+          for language in Intl En; do
+            lower=$(echo "$language" | tr '[:upper:]' '[:lower:]')
+            syms="app/build/outputs/native-debug-symbols/full${language}Release/native-debug-symbols.zip"
+            if [ -f "$syms" ]; then
+              cp "$syms" "dist/wmkeyboard-${version}-vc${code}-full-${lower}-native-symbols.zip"
+            else
+              echo "::warning::No native debug symbols at $syms"
+            fi
+          done
           # nullglob: with no symbols zip, a literal `*.zip` would reach
           # sha256sum and fail the step under the runner's `bash -e`.
           shopt -s nullglob

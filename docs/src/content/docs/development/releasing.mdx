@@ -16,12 +16,12 @@ of it, so nothing here needs a branch or a patched source tree.
 
 | | GitHub release | F-Droid | Play Store |
 |---|---|---|---|
-| Flavor | `full` **and** `lite` | `lite` | `full` |
+| Flavor | `full` **and** `lite`, each in `intl` **and** `en` | `lite`, `en` | `full`, `intl` |
 | `wmkb.enablePlayStore` | `false` | `false` | `true` |
 | `wmkb.enableGms` | `true` | `false` | `true` |
 | `wmkb.enableFdroid` | `false` | `true` | `false` |
 | `wmkb.splitApks` | `true` | not used | ignored by `bundle*` |
-| Artifact | one APK per ABI, for both flavors, plus R8 mappings, native symbols and `SHA256SUMS.txt` | one APK, built by F-Droid | one AAB, with its R8 mapping and native symbols inside |
+| Artifact | one APK per ABI, for all four flavor combinations, plus R8 mappings, native symbols and `SHA256SUMS.txt` | one APK, built by F-Droid | one AAB, with its R8 mapping and native symbols inside |
 | ML Kit | bundled in the APK | absent | unbundled, fetched from Play services |
 | Local LLM | bundled | absent | on-demand `:feature:llm` module |
 | In-app updates | GitHub releases, downloads and installs | checks F-Droid, links out | Play In-App Updates |
@@ -65,8 +65,10 @@ and no installer at all, since F-Droid signs its own builds.
 The channel picks source directories and a manifest overlay, wired through the
 Variant API in `app/build.gradle.kts` (`channelSourceDirs` and
 `channelManifests`). There is no product flavour for it: the channel is
-orthogonal to `full`/`lite`, and a second dimension would double every variant
-and task name in the project.
+orthogonal to the others, and a dimension for it would double every variant and
+task name in the project for the sake of one file. The `languages` dimension
+was judged to be worth that price and the channel was not, because `languages`
+changes about 41 MB of what a user downloads.
 
 | Directory | Compiled when | Holds |
 |---|---|---|
@@ -106,13 +108,16 @@ predates the property (`v0.1.0` and `v0.2.0` kept the version in
 comparing the tag against an empty string, and that release is written by hand.
 Neither of those two tags carries this workflow, so pushing them starts no run
 at all; the guard is for a tag that does reach it without a version to check. It signs with your release key, then
-attaches one APK per ABI for each flavor, plus a `SHA256SUMS.txt`, to the
-release.
+attaches one APK per ABI for each of the four flavor combinations, plus a
+`SHA256SUMS.txt`, to the release.
 
 The release also carries the files you need to read a crash report from those
-APKs. `*-full-mapping.txt.gz` and `*-lite-mapping.txt.gz` are the R8 mappings,
-one per flavor, and `*-full-native-symbols.zip` holds the native debug
-symbols. Retrace a stack trace with the mapping from the same flavor and
+APKs. The `*-mapping.txt.gz` files are the R8 mappings, one per flavor
+combination (`full-intl`, `full-en`, `lite-intl`, `lite-en`), and
+`*-full-intl-native-symbols.zip` and `*-full-en-native-symbols.zip` hold the
+native debug symbols. The two language builds are separate R8 runs, so their
+mappings are not interchangeable even though the Kotlin that went in was
+identical. Retrace a stack trace with the mapping from the same flavor and
 version:
 
 ```sh
@@ -261,6 +266,26 @@ delivery libraries, `play-services-auth`) is declared `fullImplementation` or
 sits behind a channel flag, so `lite` has no Google artifact on its compile
 classpath at all.
 
+Since 0.5.10 the recipe's `gradle:` list has to name **two** flavours, not one:
+
+```yaml
+    gradle:
+      - lite
+      - en
+```
+
+fdroidserver joins them in order to build the task name, so those two lines
+mean `assembleLiteEnRelease`. They must be listed in the same order as the
+dimensions are declared in `app/build.gradle.kts`, which is `capabilities` and
+then `languages`. A recipe that still lists `lite` alone names a task that no
+longer exists and the build fails outright rather than quietly producing the
+wrong APK.
+
+F-Droid gets `en` on purpose. It ships one APK to everybody, so the 48
+translations would land on every installer whole, and they are worth about
+41 MB against a `lite` build that is otherwise around 12 MB. Anyone who wants
+the translated app can take an `intl` APK from the GitHub release.
+
 The build recipe is staged in the repo at `fdroid/com.wasimaster.wmkeyboard.yml`.
 F-Droid never reads it from there; it is versioned next to the code so the
 recipe and the build stay in step. It carries no comments, because fdroiddata's
@@ -287,7 +312,7 @@ instead.
    on their side means a round trip:
 
    ```sh
-   ./gradlew clean assembleLiteRelease -Pwmkb.enablePlayStore=false -Pwmkb.enableGms=false
+   ./gradlew clean assembleLiteEnRelease -Pwmkb.enablePlayStore=false -Pwmkb.enableGms=false
    ```
 
    :::caution[No module may ask for a JDK toolchain]
@@ -477,8 +502,8 @@ bundle install
 | Lane | What it does |
 |---|---|
 | `preflight` | checks the changelog for the current `versionCode` exists, signing is configured, and both listing trees are within Play's character limits |
-| `bundle_play` | `bundleFullRelease` with the Play channel flags |
-| `apks` | sideload APKs, full + lite, one per ABI |
+| `bundle_play` | `bundleFullIntlRelease` with the Play channel flags. Play always gets `intl`: the bundle splits by language, so each installer downloads only their own and the translations cost them nothing |
+| `apks` | sideload APKs, full and lite in both language builds, one per ABI |
 | `internal` | checks the changelog, builds the AAB (or takes `aab:path`), uploads to the internal track. Only the build path checks signing, since a prebuilt `aab:` is assumed already signed |
 | `promote` | move the internal release to production (`to:`, `from:`, `rollout:` options) |
 | `listing` | push the **Play** store-listing text, from `fastlane/play/metadata/`, nothing else |

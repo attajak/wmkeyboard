@@ -116,16 +116,25 @@ platform :android do
     UI.success("#{version_name} (#{version_code}) — changelog present, signing configured")
   end
 
-  desc "Build the Play AAB (bundleFullRelease with the Play channel flags)"
+  # Play always gets the `intl` build. The bundle splits by language and each
+  # user downloads only their own, so the 48 translations cost a Play installer
+  # nothing, and an `en` bundle would take them away for no saving. The `en`
+  # flavour exists for the single-APK channels, GitHub and F-Droid, where one
+  # file has to carry every language it offers.
+  desc "Build the Play AAB (bundleFullIntlRelease with the Play channel flags)"
   lane :bundle_play do
     ensure_signing!
-    gradle(task: "bundleFullRelease", properties: PLAY_PROPS)
+    gradle(task: "bundleFullIntlRelease", properties: PLAY_PROPS)
   end
 
-  desc "Build the sideload/GitHub-release APKs: full + lite, one APK per ABI"
+  desc "Build the sideload/GitHub-release APKs: full + lite in both language builds, one APK per ABI"
   lane :apks do
     ensure_signing!
-    gradle(task: "assembleFullRelease assembleLiteRelease", properties: SIDELOAD_PROPS)
+    gradle(
+      task: "assembleFullIntlRelease assembleFullEnRelease " \
+            "assembleLiteIntlRelease assembleLiteEnRelease",
+      properties: SIDELOAD_PROPS,
+    )
     UI.success("APKs under app/build/outputs/apk/*/release/")
   end
 

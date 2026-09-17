@@ -13,10 +13,10 @@ WM Keyboard's tests span three runners: plain JVM unit tests, Compose and instru
 ## Running the JVM suite
 
 ```sh
-./gradlew testFullDebugUnitTest
+./gradlew unitTests
 ```
 
-Notice there's no module prefix. Every `core/*` and `feature/*` module (plus `app`) declares a `testFullDebugUnitTest` task for the `full` flavor. Calling the bare task name tells Gradle to run it everywhere it exists across the whole multi-project build, where `:app:testFullDebugUnitTest` would scope to one module. Swap in `testLiteDebugUnitTest` to run the same suite against the `lite` flavor. See [building from source](/development/building/) for what the flavors change.
+`unitTests` is a task in the root build, and it exists because a bare flavored task name no longer reaches the whole project. `:app` carries the `languages` flavour dimension and the library modules do not, so `:app`'s suite is `testFullIntlDebugUnitTest` while every `core/*` and `feature/*` module still declares `testFullDebugUnitTest`. Running the bare `testFullDebugUnitTest` therefore runs the libraries and silently skips all of `:app`, which is most of the tests. `unitTests` depends on both spellings. Swap in `testLiteDebugUnitTest` (or `:app:testLiteIntlDebugUnitTest`) to run a suite against the `lite` flavor. See [building from source](/development/building/) for what the flavors change.
 
 Almost all of it lives in one place:
 
@@ -33,7 +33,7 @@ Almost all of it lives in one place:
 | `core/common` | 1 |
 | `core/intelligence` | 1 (in `src/testFull/`, full-flavor only) |
 
-345 of 482 test files (about 7 in 10) sit in `app/src/test/`, and 12 of the 21 `core/*`/`feature/*` modules have no test source set at all. That's a leftover of how the codebase was split into modules rather than a rule anyone enforces. Tests mostly stayed where they were written. It also means `./gradlew testFullDebugUnitTest` is the command you want almost all the time, since scoping to a single module rarely saves you much.
+345 of 482 test files (about 7 in 10) sit in `app/src/test/`, and 12 of the 21 `core/*`/`feature/*` modules have no test source set at all. That's a leftover of how the codebase was split into modules rather than a rule anyone enforces. Tests mostly stayed where they were written. It also means `./gradlew unitTests` is the command you want almost all the time, since scoping to a single module rarely saves you much.
 
 ## Instrumented and Compose UI tests
 
@@ -87,7 +87,7 @@ To see where a long frame went, `adb shell atrace --async_start view gfx sched`,
 
 ## Details & edge cases
 
-- **The unit-test task name is flavor-specific, not module-specific.** `testFullDebugUnitTest` runs against the `full` flavor's dependency set (ML Kit, Whisper, and the rest). If you're chasing a bug that only reproduces in the `lite` build, you need `testLiteDebugUnitTest`, not a different module scope.
+- **The unit-test task name is flavor-specific, not module-specific.** `testFullDebugUnitTest` runs against the `full` flavor's dependency set (ML Kit, Whisper, and the rest). If you're chasing a bug that only reproduces in the `lite` build, you need `testLiteDebugUnitTest`, not a different module scope. And in `:app` alone the name carries the language flavour too, so it is `testFullIntlDebugUnitTest` there.
 - **A green JVM suite doesn't mean the feature works on a phone.** The `SvgParserAndroidTest` story above is the concrete example: the JVM's XML stack silently tolerated a call Android's SAX parser rejects outright. If a class calls into an Android or platform API rather than pure Kotlin, treat JVM-green as provisional until it has also run on a device.
 - **`app` is where almost everything lives, tests included.** If you're adding tests for new logic and the surrounding code is in `app/src/main`, its test belongs in `app/src/test` alongside the rest. That isn't an oversight. It matches where about 72% of the existing suite already sits.
 - Static analysis (`./gradlew staticAnalysis`, lint plus detekt) is a separate gate from either test suite. It's covered on the [building from source](/development/building/) page, not here.

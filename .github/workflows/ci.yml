@@ -39,7 +39,11 @@ jobs:
           build-scan-terms-of-use-agree: "yes"
 
       - name: Run unit tests
-        run: ./gradlew testFullDebugUnitTest -Pwmkb.skipBenchmarks=true --stacktrace
+        # `unitTests` and not a bare testFullIntlDebugUnitTest: :app carries the
+        # `languages` flavour and the library modules do not, so no single
+        # flavoured task name reaches both. The aggregate in the root build
+        # does.
+        run: ./gradlew unitTests -Pwmkb.skipBenchmarks=true --stacktrace
 
       - name: Upload test reports
         if: failure()
@@ -49,14 +53,20 @@ jobs:
           path: '**/build/reports/tests/'
           retention-days: 7
 
+  # Four jobs rather than two now that `languages` is a flavour dimension.
+  # They run on separate runners at the same time, so the wall clock is what it
+  # was; only the runner minutes double. The English build is here to prove the
+  # localeFilters path still packages, which nothing else would catch before a
+  # release was already being cut.
   assemble:
-    name: Assemble ${{ matrix.flavor }} debug
+    name: Assemble ${{ matrix.capability }} ${{ matrix.language }} debug
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        flavor: [full, lite]
+        capability: [full, lite]
+        language: [intl, en]
     steps:
       - uses: actions/checkout@v4
 
@@ -73,17 +83,25 @@ jobs:
           build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-use-agree: "yes"
 
-      # Capitalised task name: assembleFullDebug / assembleLiteDebug.
+      # Capitalised and joined: assembleFullIntlDebug, assembleLiteEnDebug.
+      # AGP names the output directory the same way, minus the build type:
+      # app/build/outputs/apk/fullIntl/debug/.
       - name: Assemble
         run: |
-          flavor='${{ matrix.flavor }}'
-          ./gradlew "assemble${flavor^}Debug" --stacktrace
+          capability='${{ matrix.capability }}'
+          language='${{ matrix.language }}'
+          variant="${capability}${language^}"
+          # Exported because the upload step needs the same capitalisation and
+          # a GitHub expression cannot produce it: "${{ matrix.capability }}${{
+          # matrix.language }}" would spell the directory "fullintl".
+          echo "VARIANT_DIR=$variant" >> "$GITHUB_ENV"
+          ./gradlew "assemble${capability^}${language^}Debug" --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: apk-${{ matrix.flavor }}-debug
-          path: app/build/outputs/apk/${{ matrix.flavor }}/debug/*.apk
+          name: apk-${{ matrix.capability }}-${{ matrix.language }}-debug
+          path: app/build/outputs/apk/${{ env.VARIANT_DIR }}/debug/*.apk
           retention-days: 7
 
   # Accuracy floors move when a dictionary or a ranking weight changes, which
@@ -114,7 +132,7 @@ jobs:
       # and a Test task whose --tests filter matches nothing fails the build.
       - name: Run evals
         run: >
-          ./gradlew :app:testFullDebugUnitTest
+          ./gradlew :app:testFullIntlDebugUnitTest
           --tests '*.prediction.eval.*' --tests '*.gesture.eval.*'
           -Pwmkb.skipBenchmarks=true --stacktrace
 

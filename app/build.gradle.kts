@@ -140,6 +140,20 @@ android {
     // - full: all features (handwriting, OCR, QR scan, doc scan, grammar checker).
     // - lite: removes ~100 MB of ML Kit + Harper native libraries for low-storage devices.
     flavorDimensions += "capabilities"
+
+    // Interface languages, the words the app shows rather than the ones it
+    // types. The translations recovered from Play weigh ~39 MB, and because
+    // resources.arsc is stored uncompressed that lands on every APK whole.
+    // Play never sees it (the bundle splits by language and each user fetches
+    // one), but a single APK from GitHub or F-Droid carries all of them, which
+    // roughly quadruples the lite build. So the choice is the downloader's:
+    // - intl: English plus the 48 translated languages.
+    // - en:   English only, which is what every build before 0.5.10 was.
+    // Nothing else differs. Same applicationId, same signing key and same
+    // versionCode, so either one installs over the other as a plain update and
+    // no setting is lost in the move.
+    flavorDimensions += "languages"
+
     productFlavors {
         create("full") {
             dimension = "capabilities"
@@ -157,6 +171,10 @@ android {
             buildConfigField("Boolean", "ENABLE_LOCAL_LLM", "false")
             buildConfigField("Boolean", "ENABLE_WHISPER", "false")
         }
+
+        // Declared first, so it is what the IDE and a bare `assemble` pick.
+        create("intl") { dimension = "languages" }
+        create("en") { dimension = "languages" }
     }
 
     signingConfigs {
@@ -426,6 +444,24 @@ androidComponents {
         // way. addStaticManifestFile appends, and a merged manifest overlays,
         // so the entries land on top of src/main's.
         channelManifests.forEach { variant.sources.manifests?.addStaticManifestFile(it) }
+
+        // The `languages` flavour is applied here rather than in its own
+        // productFlavors block because AGP 9 dropped resourceConfigurations
+        // from ProductFlavor; localeFilters is reachable only from the DSL's
+        // single androidResources block, which cannot vary per flavour, or
+        // from the variant, which can.
+        //
+        // "en" keeps the unqualified res/values, which is the English one, and
+        // drops every values-xx alongside it. That takes the translations of
+        // the dependencies with it, so the saving is a little larger than the
+        // app's own strings account for. Nothing filters the `intl` variant:
+        // it packages whatever values-xx the merge produced.
+        if (variant.productFlavors.any { (dimension, flavor) ->
+                dimension == "languages" && flavor == "en"
+            }
+        ) {
+            variant.androidResources.localeFilters.set(setOf("en"))
+        }
     }
 }
 
@@ -572,34 +608,40 @@ fun registerTypeResolvedDetekt(
     }
 }
 
+// The detekt task names deliberately do not carry the `languages` flavour.
+// That flavour changes which res/values-xx are packaged and nothing else, so
+// there is no second set of Kotlin sources for it to analyse and a
+// detektFullIntlDebug/detektFullEnDebug pair would run the same files twice.
+// Only the compile task these borrow their classpath from has to name a real
+// variant, and they take the `intl` one.
 registerTypeResolvedDetekt(
     taskName = "detektFullDebug",
     description = "Runs detekt with type resolution over the fullDebug variant's sources.",
     sourceDirs = listOf("src/main/java", "src/full/java") + channelSourceDirs,
-    compileTaskName = "compileFullDebugKotlin",
+    compileTaskName = "compileFullIntlDebugKotlin",
 )
 
 registerTypeResolvedDetekt(
     taskName = "detektLiteDebug",
     description = "Runs detekt with type resolution over the liteDebug variant's sources.",
     sourceDirs = listOf("src/main/java", "src/lite/java") + channelSourceDirs,
-    compileTaskName = "compileLiteDebugKotlin",
+    compileTaskName = "compileLiteIntlDebugKotlin",
 )
 
 registerTypeResolvedDetekt(
     taskName = "detektFullDebugUnitTest",
     description = "Runs detekt with type resolution over the unit tests, including the library modules'.",
     sourceDirs = listOf("src/test/java", "src/testFull/java") + moduleTestSrc,
-    compileTaskName = "compileFullDebugUnitTestKotlin",
-    extraClasspath = listOf("tmp/kotlin-classes/fullDebug"),
+    compileTaskName = "compileFullIntlDebugUnitTestKotlin",
+    extraClasspath = listOf("tmp/kotlin-classes/fullIntlDebug"),
 )
 
 registerTypeResolvedDetekt(
     taskName = "detektFullDebugAndroidTest",
     description = "Runs detekt with type resolution over the instrumentation tests.",
     sourceDirs = listOf("src/androidTest/java"),
-    compileTaskName = "compileFullDebugAndroidTestKotlin",
-    extraClasspath = listOf("tmp/kotlin-classes/fullDebug"),
+    compileTaskName = "compileFullIntlDebugAndroidTestKotlin",
+    extraClasspath = listOf("tmp/kotlin-classes/fullIntlDebug"),
 )
 
 // `./gradlew check` should mean "everything the analysers know how to check".
