@@ -82,6 +82,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.animation.core.animate
 import androidx.compose.runtime.rememberCoroutineScope
@@ -96,6 +98,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -806,6 +809,30 @@ internal fun Modifier.wmSharedBounds(key: Any): Modifier {
             zIndexInOverlay = 1f,
         )
     }
+}
+
+/**
+ * Hands this field the caret the first time it is really on screen.
+ *
+ * [FocusRequester.requestFocus] throws `FocusRequester is not initialized`
+ * when no focus node has attached yet, and running the request from a
+ * `LaunchedEffect` is no promise that one has: Material3's Scaffold
+ * subcomposes its top bar inside the measure pass, so an effect that lands
+ * between composition and the first layout finds no field to focus and takes
+ * the app down with it (#237). Waiting for `onPlaced` asks at the one moment
+ * the node is known to be there, and only once, so the keyboard does not come
+ * back every time the field is moved.
+ */
+@Composable
+internal fun Modifier.focusOncePlaced(
+    requester: FocusRequester,
+    enabled: Boolean = true,
+): Modifier {
+    var placed by remember(requester) { mutableStateOf(false) }
+    LaunchedEffect(placed, enabled, requester) {
+        if (placed && enabled) requester.requestFocus()
+    }
+    return focusRequester(requester).onPlaced { placed = true }
 }
 
 // ---- rows ----

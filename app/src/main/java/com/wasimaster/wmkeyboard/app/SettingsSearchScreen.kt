@@ -101,7 +101,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -587,8 +586,11 @@ internal fun SettingsSearchScreen(
     val keyboard = LocalSoftwareKeyboardController.current
     val reduceMotion = settings.reduceMotion
     // Only on a fresh search: coming back to results with a query typed, the
-    // user wants to read them, not to have the keyboard cover them again.
-    LaunchedEffect(Unit) { if (query.isEmpty()) focusRequester.requestFocus() }
+    // user wants to read them, not to have the keyboard cover them again. The
+    // asking itself is the field's own job — see [focusOncePlaced] — because
+    // the field lives in a Scaffold top bar, which is subcomposed a pass later
+    // than the screen around it.
+    val takeCaret = remember { query.isEmpty() }
 
     // The path the result draws under itself, put on the trail before the jump
     // so the screen it opens wears the path it really lives at rather than the
@@ -641,7 +643,7 @@ internal fun SettingsSearchScreen(
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .focusRequester(focusRequester),
+                            .focusOncePlaced(focusRequester, enabled = takeCaret),
                     )
                 },
                 navigationIcon = {

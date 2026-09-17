@@ -45,6 +45,7 @@ import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -100,7 +101,11 @@ internal fun CodeFindBar(
     val replaceFocus = remember { FocusRequester() }
     var inReplace by remember { mutableStateOf(false) }
     var replaceRequests by remember { mutableIntStateOf(0) }
-    LaunchedEffect(focusRequests) { queryFocus.requestFocus() }
+    // Waits for the field rather than for a clock: the first of these runs
+    // with the bar's own first composition, before the query field has a
+    // focus node to hand the caret to (#237).
+    var queryPlaced by remember { mutableStateOf(false) }
+    LaunchedEffect(focusRequests, queryPlaced) { if (queryPlaced) queryFocus.requestFocus() }
     LaunchedEffect(replaceRequests) {
         if (replaceRequests == 0) return@LaunchedEffect
         // A frame, so a replace field shown by this same press is there to take the caret.
@@ -156,7 +161,7 @@ internal fun CodeFindBar(
                 textStyle = MaterialTheme.typography.bodyMedium,
                 keyboardOptions = PlainTextKeys,
                 keyboardActions = KeyboardActions(onSearch = { onStep(1) }),
-                modifier = Modifier.weight(1f).focusRequester(queryFocus),
+                modifier = Modifier.weight(1f).focusRequester(queryFocus).onPlaced { queryPlaced = true },
             )
             val count = when {
                 find.query.isEmpty() || invalid -> ""

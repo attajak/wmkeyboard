@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,7 +16,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -38,7 +36,6 @@ internal fun GoToLineDialog(lines: Int, onDismiss: () -> Unit, onGo: (Int) -> Un
     var input by rememberSaveable { mutableStateOf("") }
     val line = parseLineNumber(input, lines)
     val focus = remember { FocusRequester() }
-    LaunchedEffect(Unit) { focus.requestFocus() }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.code_go_to_line_title)) },
@@ -54,7 +51,7 @@ internal fun GoToLineDialog(lines: Int, onDismiss: () -> Unit, onGo: (Int) -> Un
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Go),
                 keyboardActions = KeyboardActions(onGo = { line?.let(onGo) }),
-                modifier = Modifier.focusRequester(focus),
+                modifier = Modifier.focusOncePlaced(focus),
             )
         },
         confirmButton = {
@@ -95,7 +92,6 @@ internal fun RenameDialog(plan: RenamePlan, onDismiss: () -> Unit, onRename: (St
     }
     val ready = name != plan.oldName && problem == null
     val focus = remember { FocusRequester() }
-    LaunchedEffect(Unit) { focus.requestFocus() }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.plugin_ide_rename_title, plan.oldName)) },
@@ -119,7 +115,7 @@ internal fun RenameDialog(plan: RenamePlan, onDismiss: () -> Unit, onRename: (St
                     imeAction = ImeAction.Done,
                 ),
                 keyboardActions = KeyboardActions(onDone = { if (ready) onRename(name) }),
-                modifier = Modifier.focusRequester(focus),
+                modifier = Modifier.focusOncePlaced(focus),
             )
         },
         confirmButton = {
