@@ -24,11 +24,25 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.v.outputs.version }}
+      buildable: ${{ steps.v.outputs.buildable }}
     steps:
       - uses: actions/checkout@v4
       - id: v
         run: |
           declared=$(grep '^wmkb.versionName=' gradle.properties | cut -d= -f2)
+          # Tags older than this pipeline keep the version in
+          # app/build.gradle.kts and cannot be built by it. They were tagged
+          # after the fact so their notes have somewhere to live, so stand the
+          # run down rather than failing it; their releases are made by hand.
+          if [ -z "$declared" ]; then
+            echo "::notice::${{ github.ref_name }} has no wmkb.versionName and predates this workflow. Nothing to build."
+            {
+              echo "version="
+              echo "buildable=false"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "buildable=true" >> "$GITHUB_OUTPUT"
           echo "version=$declared" >> "$GITHUB_OUTPUT"
           if [ "${{ github.ref_type }}" = 'tag' ]; then
             tag='${{ github.ref_name }}'
@@ -42,6 +56,7 @@ jobs:
   apks:
     name: Signed APKs (direct download)
     needs: verify
+    if: needs.verify.outputs.buildable == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -148,6 +163,7 @@ jobs:
   bundle:
     name: Play bundle (artifact only)
     needs: verify
+    if: needs.verify.outputs.buildable == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:

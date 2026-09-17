@@ -100,7 +100,12 @@ That has to print `0` for a Play build and `1` for a GitHub one.
 
 The [`Release` workflow](https://github.com/wasi-master/wmkeyboard/blob/main/.github/workflows/release.yml)
 does the build. It runs on any tag starting with `v` and refuses to run if the
-tag disagrees with `wmkb.versionName`. It signs with your release key, then
+tag disagrees with `wmkb.versionName`. A tag with no `wmkb.versionName` at all
+predates the property — `v0.1.0` and `v0.2.0` kept the version in
+`app/build.gradle.kts` — so the run stands down with a notice instead of
+comparing the tag against an empty string, and that release is written by hand.
+Neither of those two tags carries this workflow, so pushing them starts no run
+at all; the guard is for a tag that does reach it without a version to check. It signs with your release key, then
 attaches one APK per ABI for each flavor, plus a `SHA256SUMS.txt`, to the
 release.
 
