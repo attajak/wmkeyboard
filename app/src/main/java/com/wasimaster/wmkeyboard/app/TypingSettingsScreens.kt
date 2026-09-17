@@ -2219,6 +2219,18 @@ internal fun TypingHardwareSettings(
         }
         item {
             ToggleSetting(
+                R.string.typing_hw_dpad_keys_title,
+                stringResource(R.string.typing_hw_dpad_keys_subtitle),
+                hw.dpadKeyNavigation,
+                info = stringResource(R.string.typing_hw_dpad_keys_info),
+                // The stored default, not the effective one: a television turns
+                // this on for itself (see TelevisionDefaults), and a "reset" that
+                // claimed to put it back to off there would be a lie.
+                default = SettingsDefaults.hardwareKeyboard.dpadKeyNavigation,
+            ) { scope.launch { repository.setHwDpadKeyNavigation(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.typing_hw_esc_title,
                 stringResource(R.string.typing_hw_esc_subtitle),
                 hw.escClosesPanel,

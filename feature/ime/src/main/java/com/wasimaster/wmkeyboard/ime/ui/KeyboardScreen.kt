@@ -1282,6 +1282,10 @@ fun KeyboardScreen(
             LocalPassthroughService provides
                 KeyboardPassthrough.serviceConnected.collectAsState().value,
             LocalPanelFocus provides panelFocus,
+            // Whether a D-pad ring can land on the toolbar and the strip. The
+            // keys read the same setting through the grid itself; these two
+            // surfaces are too far from it to be handed a parameter.
+            LocalDpadRing provides bodyState.settings.hardwareKeyboard.dpadKeyNavigation,
         ) {
             KeyboardBody(
                 state = bodyState,
@@ -1551,6 +1555,7 @@ fun KeyboardScreen(
                             onOneHandedSide = onOneHandedSide,
                             resize = resizeSession,
                             keyPreview = keyPreview,
+                            keyGridFocus = panelFocus.keyGrid,
                             onWindowHeadroom = onWindowHeadroom,
                             body = movableBody,
                         )
@@ -1586,6 +1591,8 @@ private fun DockedKeyboardFrame(
     onOneHandedSide: (Boolean, OneHandedSide) -> Unit,
     resize: ResizeSession? = null,
     keyPreview: KeyPreviewState,
+    /** Where a television remote is pointing, drawn over the whole frame. */
+    keyGridFocus: KeyGridFocus,
     onWindowHeadroom: (Int) -> Unit = {},
     body: @Composable ColumnScope.(KeyboardUiState) -> Unit,
 ) {
@@ -1749,6 +1756,17 @@ private fun DockedKeyboardFrame(
             frameSize,
             modifier = Modifier.matchParentSize(),
         )
+        // Where the remote is pointing (a television, normally). Drawn at the
+        // frame rather than inside the key grid because the ring also lands on
+        // the suggestion strip and the toolbar, which are above the keys and
+        // outside the grid's own canvas — one clipped to the keys would simply
+        // stop drawing the moment the ring left them.
+        // Not while a panel is open: the panel owns the arrow keys then (its
+        // own ring is what moves), and the keys this one was standing on are
+        // behind it.
+        if (state.settings.hardwareKeyboard.dpadKeyNavigation && state.panel == PanelMode.NONE) {
+            KeyFocusRing(keyGridFocus, state.settings) { frameOrigin }
+        }
     }
 }
 
@@ -3761,6 +3779,9 @@ private fun RowScope.LatinSuggestionChips(
     // here rather than per slot so the menu survives the strip re-laying itself
     // out underneath it, which it does on every keystroke.
     var heldWord by remember { mutableStateOf<String?>(null) }
+    // One static read for the whole strip: whether a D-pad ring can land on
+    // these chips (a television remote, normally). See [dpadTarget].
+    val dpadRing = LocalDpadRing.current
     // What the service knew about that word when it was held; read once, so
     // the menu cannot change shape under a finger.
     var heldFacts by remember { mutableStateOf(WordMenuFacts()) }
@@ -3840,6 +3861,20 @@ private fun RowScope.LatinSuggestionChips(
                 Box(
                     modifier = slotModifier
                         .fillMaxHeight()
+                        // Reachable by remote: a suggestion taken with one
+                        // button press is the difference between typing a word
+                        // and walking a ring across ten keys to spell it.
+                        // Registered by slot, not by word — the words change on
+                        // every keystroke and the slots do not.
+                        .then(
+                            if (dpadRing) {
+                                Modifier.dpadTarget(SuggestionRingId(index)) {
+                                    onSuggestion(suggestion)
+                                }
+                            } else {
+                                Modifier
+                            },
+                        )
                         .combinedClickable(
                             enabled = enabled,
                             onLongClickLabel = holdLabel,
@@ -7323,6 +7358,10 @@ private fun RowScope.ToolbarRow(
     // sake, so a mirrored list flipped it a second time and every drag landed
     // on the slot opposite the finger (issue #79).
     val tools = visibleToolbarTools(state)
+    // The D-pad ring reaches the bar as well as the keys: without it a remote
+    // could type but never open a tool, change a setting or start voice input.
+    // Each button registers where it is while it is drawn (see [dpadTarget]).
+    val dpadRing = LocalDpadRing.current
     drag.visibleTools = tools
     val toolsRtl = toolbarReadsRtl(state)
     val toolsDirection = if (toolsRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
@@ -7409,6 +7448,11 @@ private fun RowScope.ToolbarRow(
                         description = stringResource(R.string.ime_panel_back_desc),
                         active = false,
                         longPressLabel = stringResource(R.string.ime_panel_back_desc),
+                        modifier = if (dpadRing) {
+                            Modifier.dpadTarget(BarBackRingId) { onPanelChange(state.panel) }
+                        } else {
+                            Modifier
+                        },
                         wide = true,
                     ) { onPanelChange(state.panel) }
                 }
@@ -7426,6 +7470,15 @@ private fun RowScope.ToolbarRow(
                 label = stringResource(R.string.ime_toolbox_desc).takeIf { labels },
                 labelSizeSp = labelSize,
                 modifier = Modifier
+                    .then(
+                        if (dpadRing) {
+                            Modifier.dpadTarget(BarToolboxRingId) {
+                                onPanelChange(PanelMode.TOOLBOX)
+                            }
+                        } else {
+                            Modifier
+                        },
+                    )
                     // The width a pinned button actually gets, published for the
                     // strip's emoji shortcut to match (see [pinnedToolWidthPx]).
                     .onSizeChanged { drag.pinnedToolWidthPx = it.width }
@@ -7515,6 +7568,13 @@ private fun RowScope.ToolbarRow(
                             // across that swap instead of tracking only
                             // its own node.
                             modifier = dragModifier
+                                .then(
+                                    if (dpadRing) {
+                                        Modifier.dpadTarget(tool) { onToolTap(tool) }
+                                    } else {
+                                        Modifier
+                                    },
+                                )
                                 .then(
                                     if (tool == ToolbarTool.EMOJI) {
                                         Modifier.animateSharedPlacement(
@@ -10629,6 +10689,15 @@ internal class KeyRects {
         }
         return null
     }
+
+    /**
+     * Every cell the D-pad ring may sit on, in the order the grid reported them.
+     *
+     * A copy rather than the live map: [KeyGridFocus] walks it on each arrow
+     * key, off the composition, while the grid may be filing a new layer's keys
+     * into the same table.
+     */
+    fun focusCells(): List<Pair<Rect, Key>> = cells.map { (rect, key) -> rect to key }
 }
 
 /** The modifier this key latches, or null when it is not a Ctrl/Alt/Meta key. */
@@ -12392,6 +12461,24 @@ private fun KeyRows(
     }
     val stampedOnText = remember(onText) {
         { t: String -> lastKeyPressTime.longValue = SystemClock.uptimeMillis(); onText(t) }
+    }
+    // The D-pad ring (a television remote, or a hardware keyboard whose owner
+    // asked for it): the service moves it, so the grid hands up the cell table
+    // it is already keeping and the lambda that types a key. Published in a
+    // SideEffect because the controller holds plain vars read from outside
+    // Compose — the same reason [PanelFocusTarget] does.
+    val keyGridFocus = LocalPanelFocus.current.keyGrid
+    val dpadRing = state.settings.hardwareKeyboard.dpadKeyNavigation
+    // The centre button spends the same click a finger would, in the key's own
+    // role, so the spacebar and backspace still sound like themselves. It is
+    // the only feedback a ring press gets: a television has speakers and no
+    // vibrator, and `applyTelevision` has already switched the haptics off.
+    val ringFeedback = LocalKeyRoleFeedback.current
+    if (dpadRing) {
+        val typeKey: (Key) -> Unit = remember(stampedOnKey, ringFeedback) {
+            { key -> ringFeedback(key.keySoundRole()); stampedOnKey(key) }
+        }
+        SideEffect { keyGridFocus.publish(keyRects, typeKey) }
     }
     val dotCooldownMs = gesture.handwriteDotCooldownMs
     // Uptime of the last *drawn* handwriting stroke. For [dotCooldownMs] after

@@ -1,0 +1,71 @@
+---
+title: "Android TV and Google TV"
+description: "Typing with a remote: the D-pad ring over the keys, and what a television changes on its own."
+sidebar:
+  order: 10
+---
+
+import SettingsPath from '@components/SettingsPath.astro';
+import KeyCap from '@components/KeyCap.astro';
+
+WM Keyboard runs on Android TV and Google TV, and it is driven entirely with the remote. The arrow keys move a ring from key to key, and the centre button types the key the ring is on. Nothing else about the keyboard changes: the same layouts, languages, suggestions and tools are there, on the same engine as on a phone.
+
+## Setting it up
+
+1. Install the app on the TV. It appears in the TV's own launcher, under its own tile, and opens straight into the settings app.
+2. Turn the keyboard on in **Settings → System → Keyboard** (the wording differs between TV makers) and select **WM Keyboard** as the current keyboard.
+3. Open any text field — a search box is easiest. The board comes up as it does anywhere else; press an arrow key and the ring appears on the spacebar.
+
+If you are sideloading rather than installing from a store, the same APK works: there is no separate television build.
+
+## Typing with the remote
+
+| Press | What happens |
+| --- | --- |
+| Arrows | Move the ring one key |
+| Left or right at the end of a row | Wrap around to the other end of the same row |
+| Up from the top row | Reach the suggestions, then the toolbar, then leave the keyboard for the app behind it |
+| Centre, or <KeyCap>Enter</KeyCap> | Type the key the ring is on |
+| Back | Close whatever the keyboard has open, then hide the keyboard |
+
+Holding an arrow repeats it, so crossing the board is one long press rather than ten short ones.
+
+The ring reaches the toolbar and the suggestion strip as well as the keys: ring up off the top row of keys and it lands on the words, then on the toolbar buttons above them. Taking a suggestion is one button press instead of spelling the rest of the word.
+
+Everything a key does when it is tapped, it does when the ring types it: <KeyCap>?123</KeyCap> switches layer, the globe switches language, the emoji key opens the emoji picker. Inside a tool the ring becomes the tool's own highlight — the same one a physical keyboard's arrow keys drive — so the emoji grid, the clipboard and the rest are navigable with the remote too. See [Hardware keyboards](/typing/hardware-keyboard/) for what that highlight can do.
+
+## What a television changes by itself
+
+A TV has no touchscreen, so the features that need a finger are switched off there and stay off however they are set on your phone:
+
+- Glide typing, and handwriting on the keys
+- The split and floating boards, and the one-handed rail
+- The press-and-hold preview bubble
+- Key-press vibration — a TV box has nothing to vibrate
+
+Three more are *defaults* rather than overrides, so a number you choose on the TV is kept:
+
+- The number row is on, because reaching a digit through a layer switch costs a button press
+- The keys are slightly shorter than a phone's (40 dp), so six rows do not fill the screen
+- The board fills 60% of the width and sits in the middle, which keeps it clear of the edges older sets crop, and keeps the keys close enough together that the ring does not have far to travel
+
+Change any of them under <SettingsPath path="Layout & size" /> and your choice sticks.
+
+## Options
+
+<SettingsPath path="Typing / Physical keyboard / Arrow keys move over the keys" />
+
+The ring itself. On by default on a television, off by default everywhere else — on a phone or a laptop the arrow keys belong to the text field you are typing into, and a keyboard that took them would break every cursor movement. Turn it on anywhere if you want to drive the on-screen keys from a physical keyboard's arrow keys.
+
+<SettingsPath path="Typing / Physical keyboard / Arrow keys move a highlight" />
+
+The highlight *inside* a tool, which is a separate switch and on everywhere. With the ring on and a tool open, this one is what is moving.
+
+## Details & edge cases
+
+- **The ring never appears until you press an arrow key.** Until then the board looks exactly as it does on a phone. On a keyboard with an <KeyCap>Esc</KeyCap> key, Escape puts it away again — useful if you switched the ring on beside a physical keyboard and want <KeyCap>Enter</KeyCap> back.
+- **The floating board has no ring.** It is off on a television anyway; if you turn the ring on by hand on a phone and then float the keyboard, the arrow keys go back to the app.
+- **Up and down can leave the keyboard; left and right cannot.** Leaving upward — past the suggestions and the toolbar — is how the remote gets back to the app's own controls. Left and right wrap inside the row instead, so spelling a word can never quietly move the app's selection.
+- **A layer switch keeps the ring where your eye is.** Press <KeyCap>?123</KeyCap> and the ring lands on whichever symbol key is nearest to where it was standing.
+- **Long-press alternates are not reachable from the remote** yet. Accented characters that live in a key's long-press popup have to come from a layout that gives them keys of their own — see [Key layouts](/languages/custom-layouts/).
+- **Voice typing works**, and is usually the fastest way to enter a long string on a TV: ring up to the toolbar, land on the microphone and press the centre button. A remote with a microphone button of its own does not route it to the keyboard; the system handles that itself.

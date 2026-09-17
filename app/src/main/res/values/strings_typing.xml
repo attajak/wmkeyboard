@@ -672,6 +672,10 @@
     <string name="typing_hw_panel_nav_subtitle">Arrows move a highlight in a tool, Enter selects it, Esc closes the tool</string>
     <string name="typing_hw_panel_nav_info">In a tool, the arrow keys move a highlight over the emoji, the clips or the results. Enter uses the item with the highlight. Tab moves between the search box, the category chips and the results.\n\nThe highlight shows only after you press a key. It never shows while you use the keyboard by touch.</string>
 
+    <string name="typing_hw_dpad_keys_title">Arrow keys move over the keys</string>
+    <string name="typing_hw_dpad_keys_subtitle">A ring on one key; the centre button or Enter types it</string>
+    <string name="typing_hw_dpad_keys_info">For a television remote, which has no other way to reach a key. The arrow keys move a ring from key to key and the centre button types the key it is on. Left and right stay inside the row. Up from the top row leaves the keyboard, so the remote can go back to the app.\n\nEscape puts the ring away, so Enter goes back to the text field.\n\nOn a television this is on to begin with. Everywhere else it starts off, because the arrow keys belong to the text field you are typing in.</string>
+
     <string name="typing_hw_esc_title">Esc closes the tool</string>
     <string name="typing_hw_esc_subtitle">Escape closes an open tool instead of going to the app</string>
     <string name="typing_hw_esc_info">Escape closes only what the keyboard has open. With no tool open, Escape goes straight to the app, so it still stops a page load or exits insert mode in an editor.</string>

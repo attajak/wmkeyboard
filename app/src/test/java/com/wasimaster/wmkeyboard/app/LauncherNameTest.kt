@@ -100,4 +100,61 @@ class LauncherNameTest {
             Regex("""<string name="app_name_short"[^>]*>WMK</string>""").containsMatchIn(strings),
         )
     }
+
+    /**
+     * The television entry. A TV home screen lists LEANBACK_LAUNCHER and
+     * nothing else, so losing this alias — or its banner, without which the
+     * launcher draws an empty tile — makes the settings app unreachable on a
+     * Google TV with no visible sign that anything is wrong.
+     *
+     * It is also the one launcher entry that must stay enabled whichever app
+     * name the user picked, which is why it is not a category on either of the
+     * two aliases above.
+     */
+    @Test
+    fun `the television alias is enabled, banner and all`() {
+        val (attributes, body) = alias(TV_ALIAS)
+        assertEquals(MainActivity::class.java.name, attribute(attributes, "targetActivity"))
+        assertEquals("true", attribute(attributes, "enabled"))
+        assertEquals("true", attribute(attributes, "exported"))
+        assertEquals("@drawable/tv_banner", attribute(attributes, "banner"))
+        assertTrue("$TV_ALIAS has no MAIN action", "android.intent.action.MAIN" in body)
+        assertTrue("$TV_ALIAS is not a leanback launcher entry", leanback in body)
+        assertTrue("$TV_ALIAS must follow MainActivity", manifest.indexOf(TV_ALIAS) > target)
+    }
+
+    /** Exactly one, and it is that alias: two would put two tiles on the TV home screen. */
+    @Test
+    fun `the television alias is the only leanback entry`() {
+        assertEquals(1, Regex(Regex.escape(leanback)).findAll(manifest).count())
+    }
+
+    /**
+     * Google TV filters on a *not*-required touchscreen, and the Play Store
+     * reads a leanback launcher entry with no `android.software.leanback`
+     * declaration as "TV only" and stops offering the app to phones. Both lines
+     * are one edit away from silently halving the install base in one direction
+     * or the other.
+     */
+    @Test
+    fun `the manifest declares a television can install this`() {
+        for (feature in listOf("android.hardware.touchscreen", "android.software.leanback")) {
+            assertTrue(
+                "$feature must be declared not required",
+                Regex(
+                    """<uses-feature\s+android:name="${Regex.escape(feature)}"\s+""" +
+                        """android:required="false"\s*/>""",
+                ).containsMatchIn(manifest),
+            )
+        }
+    }
+
+    private val leanback =
+        """<category android:name="android.intent.category.LEANBACK_LAUNCHER" />"""
+
+    private val target = manifest.indexOf("""android:name="${MainActivity::class.java.name}"""")
+
+    private companion object {
+        const val TV_ALIAS = "com.wasimaster.wmkeyboard.app.LauncherTelevision"
+    }
 }

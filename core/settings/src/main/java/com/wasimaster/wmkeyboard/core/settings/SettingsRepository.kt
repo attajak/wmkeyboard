@@ -1478,6 +1478,27 @@ data class HardwareKeyboardSettings(
      */
     val panelNavigation: Boolean = true,
     /**
+     * Arrow keys move a ring over the *keys* themselves, and Enter (or the
+     * D-pad's centre button) types the one it is on.
+     *
+     * Off everywhere but a television, where `applyTelevision` turns it on:
+     * a remote has no other way to reach a key, while on a phone or a laptop
+     * the arrow keys belong to the app's own text field and an IME that ate
+     * them would break every cursor movement. [panelNavigation] is the same
+     * idea one layer in, and stays independent — a hardware-keyboard user may
+     * well want a ring inside the emoji grid and nothing over their letters.
+     */
+    val dpadKeyNavigation: Boolean = false,
+    /**
+     * The user has never touched [dpadKeyNavigation], so a television is free
+     * to turn it on. Derived from the DataStore key's presence, like
+     * [LayoutBehaviorSettings.numberRowUntouched] and for the same reason:
+     * without it, a TV user could never switch the ring off.
+     *
+     * Not persisted itself.
+     */
+    val dpadKeyNavigationUntouched: Boolean = true,
+    /**
      * Escape closes an open panel. Only ever consumed when the keyboard actually
      * has something open — a bare Escape belongs to the app, which may be a
      * browser loading a page or an editor leaving insert mode.
@@ -5098,6 +5119,13 @@ data class LayoutBehaviorSettings(
      * this one at the wrong moment.
      */
     val keyHeightUntouched: Boolean = true,
+    /**
+     * The same again, for the board-width slider. Its own flag rather than a
+     * ride on [keyHeightUntouched]: a television narrows the board without
+     * touching its height (see `TelevisionDefaults`), so the two questions have
+     * different answers there.
+     */
+    val keyboardWidthUntouched: Boolean = true,
 ) {
     /** The characters that spring the symbols layer back, with the default applied. */
     fun symbolsReturnCharSet(): String =
@@ -6139,6 +6167,7 @@ class SettingsRepository(private val context: Context) {
         private val HARDWARE_KEYBOARD_INPUT = booleanPreferencesKey("hardware_keyboard_input")
         private val HW_SHORTCUTS_ENABLED = booleanPreferencesKey("hw_shortcuts_enabled")
         private val HW_PANEL_NAVIGATION = booleanPreferencesKey("hw_panel_navigation")
+        private val HW_DPAD_KEY_NAVIGATION = booleanPreferencesKey("hw_dpad_key_navigation")
         private val HW_ESC_CLOSES_PANEL = booleanPreferencesKey("hw_esc_closes_panel")
         private val HW_SUGGESTION_HOTKEYS = stringPreferencesKey("hw_suggestion_hotkeys")
         private val HW_SUGGESTION_HINTS_ALWAYS =
@@ -7159,6 +7188,9 @@ class SettingsRepository(private val context: Context) {
             hardwareKeyboard = HardwareKeyboardSettings(
                 shortcutsEnabled = p[HW_SHORTCUTS_ENABLED] ?: defaults.hardwareKeyboard.shortcutsEnabled,
                 panelNavigation = p[HW_PANEL_NAVIGATION] ?: defaults.hardwareKeyboard.panelNavigation,
+                dpadKeyNavigation = p[HW_DPAD_KEY_NAVIGATION]
+                    ?: defaults.hardwareKeyboard.dpadKeyNavigation,
+                dpadKeyNavigationUntouched = p[HW_DPAD_KEY_NAVIGATION] == null,
                 escClosesPanel = p[HW_ESC_CLOSES_PANEL] ?: defaults.hardwareKeyboard.escClosesPanel,
                 suggestionHotkeys = p[HW_SUGGESTION_HOTKEYS]
                     ?.let { raw -> runCatching { SuggestionHotkeyMode.valueOf(raw) }.getOrNull() }
@@ -7549,6 +7581,7 @@ class SettingsRepository(private val context: Context) {
                 // information survives; every other read collapses it with `?:`.
                 numberRowUntouched = p[NUMBER_ROW] == null,
                 keyHeightUntouched = p[KEY_HEIGHT] == null,
+                keyboardWidthUntouched = p[KEYBOARD_WIDTH_PERCENT] == null,
             ),
             rawClipboardShortcuts = p[RAW_CLIPBOARD_SHORTCUTS] ?: defaults.rawClipboardShortcuts,
             longPressLetterActions = LongPressLetterActions(
@@ -11828,6 +11861,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setHwPanelNavigation(value: Boolean) =
         editPrefs { it[HW_PANEL_NAVIGATION] = value }
+
+    suspend fun setHwDpadKeyNavigation(value: Boolean) =
+        editPrefs { it[HW_DPAD_KEY_NAVIGATION] = value }
 
     suspend fun setHwEscClosesPanel(value: Boolean) =
         editPrefs { it[HW_ESC_CLOSES_PANEL] = value }

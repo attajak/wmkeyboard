@@ -259,6 +259,8 @@ import com.wasimaster.wmkeyboard.core.layout.tabletGridWidth
 import com.wasimaster.wmkeyboard.core.settings.DeviceForm
 import com.wasimaster.wmkeyboard.core.settings.applyDeviceForm
 import com.wasimaster.wmkeyboard.core.settings.applyMode
+import com.wasimaster.wmkeyboard.core.settings.applyTelevision
+import com.wasimaster.wmkeyboard.core.settings.isTelevision
 import com.wasimaster.wmkeyboard.core.settings.modeThemeOwner
 import com.wasimaster.wmkeyboard.core.settings.themeSelectionTarget
 import com.wasimaster.wmkeyboard.core.settings.isSupportedTool
@@ -741,6 +743,12 @@ open class WMKeyboardService : InputMethodService() {
      * Written by the panels during composition, read here on every arrow key.
      */
     private val panelFocus = PanelFocusController()
+
+    /**
+     * Whether this is a television. Asked once: a box does not stop being a box,
+     * and the answer steers a settings overlay that every emission reads.
+     */
+    private val television: Boolean by lazy { isTelevision() }
 
     /** Latest settings straight from DataStore, before mode overrides. */
     private var baseSettings: KeyboardSettings? = null
@@ -2662,7 +2670,14 @@ open class WMKeyboardService : InputMethodService() {
                 // the mode list, and every overlay below reads a keyboard that
                 // simply has no modes rather than one that has to remember not
                 // to apply them (issue #41).
-                val formed = stored.withoutModes().applyDeviceForm(form)
+                // Screen size, then the television overlay beside it: both are
+                // "what this device would have shipped with", and the TV one
+                // has to be able to take away what a 960 dp-wide screen just
+                // read as a tablet's — a glide-typing board is still wrong when
+                // the big screen has no touch panel behind it.
+                val formed = stored.withoutModes()
+                    .applyDeviceForm(form)
+                    .applyTelevision(television)
                 // Direct boot: everything backed by credential-encrypted
                 // storage is switched off once, here, so that nothing below —
                 // nor anything reading the ui state afterwards — has to know
@@ -4899,6 +4914,10 @@ open class WMKeyboardService : InputMethodService() {
     override fun onFinishInputView(finishingInput: Boolean) {
         super.onFinishInputView(finishingInput)
         keyboardVisible = false
+        // The ring belongs to the board that is going away: a new session gets
+        // a fresh one, seeded where [KeyGridFocus.show] puts it rather than on
+        // whatever key the last field was left pointing at.
+        panelFocus.keyGrid.reset()
         lifecycleOwner.onPause()
         // The window is gone, so the media-session listener goes with it.
         syncMediaTracking()
@@ -25056,6 +25075,10 @@ open class WMKeyboardService : InputMethodService() {
         // check must not apply to opening a tool.
         if (handleHardwareNav(event)) return true
         if (captureCaretKey(event)) return true
+        // After the panel ring and the keyboard's own fields, both of which own
+        // the arrow keys while they are up, and before everything below, which
+        // is about a physical keyboard typing rather than a remote pointing.
+        if (handleKeyGridNavKey(event)) return true
         if (volumeCursorDelta(keyCode) != 0) {
             // Auto-repeat rides along for free: holding the key repeats DOWN.
             onCursorMove(volumeCursorDelta(keyCode))
@@ -25247,6 +25270,58 @@ open class WMKeyboardService : InputMethodService() {
         }
 
         return handlePanelNavKey(event)
+    }
+
+    /**
+     * Arrow keys and the centre button over the *keys*: a television remote
+     * typing (see [com.wasimaster.wmkeyboard.ime.ui.KeyGridFocus]).
+     *
+     * Every branch is gated on the ring being reachable at all — the setting on
+     * (a television turns it on for itself), an input view on screen, and no
+     * panel open, because a panel owns the arrow keys for as long as it is up
+     * and [handlePanelNavKey] has already had its turn by the time this runs.
+     *
+     * Up and down off the edge of the board are deliberately *not* consumed:
+     * that is how a remote leaves the keyboard for the app's own controls, the
+     * way it would leave any other view. Left and right wrap inside the row, so
+     * spelling a word never quietly moves the app's selection instead.
+     */
+    private fun handleKeyGridNavKey(event: KeyEvent): Boolean {
+        if (!_uiState.value.settings.hardwareKeyboard.dpadKeyNavigation) return false
+        if (!isInputViewShown) return false
+        // The ring is drawn by the docked frame, which is the only frame a
+        // television ever has (floating is one of the touch features
+        // `applyTelevision` switches off). On a phone whose owner turned the
+        // ring on by hand and then floated the board, moving a ring nobody can
+        // see would be worse than leaving the arrow keys to the app.
+        if (_uiState.value.settings.floatingKeyboard) return false
+        if (_uiState.value.panel != PanelMode.NONE) return false
+        val focus = panelFocus.keyGrid
+        val keyCode = event.keyCode
+        return when (keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT -> focus.move(-1, 0) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_RIGHT -> focus.move(1, 0) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_UP -> focus.move(0, -1) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_DOWN -> focus.move(0, 1) && consumeHardwareKey(keyCode)
+            // The centre button types the ringed key. With no ring up it is the
+            // app's own "activate", which is what put the keyboard on screen in
+            // the first place — and on a keyboard with a hardware Enter, an
+            // Enter with no ring still has to mean the field's editor action.
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_NUMPAD_ENTER,
+            -> focus.press() && consumeHardwareKey(keyCode)
+
+            // The way out, for a physical keyboard whose owner turned the ring
+            // on: with it down, Enter means the field's editor action again and
+            // the arrow keys are the app's. Only ever consumed while the ring is
+            // actually up — a bare Escape belongs to the app (see the note in
+            // [handleHardwareNav]), and this one has not even opened a panel.
+            KeyEvent.KEYCODE_ESCAPE -> {
+                focus.showing && run { focus.clear(); consumeHardwareKey(keyCode) }
+            }
+
+            else -> false
+        }
     }
 
     /** Arrow, Enter and Tab inside an open panel: move, activate, change region. */

@@ -110,6 +110,7 @@ import androidx.compose.material.icons.outlined.FormatQuote
 import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material.icons.outlined.FormatUnderlined
 import androidx.compose.material.icons.outlined.Fullscreen
+import androidx.compose.material.icons.outlined.ControlCamera
 import androidx.compose.material.icons.outlined.Gamepad
 import androidx.compose.material.icons.outlined.Gavel
 import androidx.compose.material.icons.outlined.Gesture
@@ -820,6 +821,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_hw_shortcuts_title) { Icons.Outlined.Bolt }
         put(R.string.typing_hw_shortcuts_list_title) { Icons.Outlined.Keyboard }
         put(R.string.typing_hw_panel_nav_title) { Icons.Outlined.Gamepad }
+        put(R.string.typing_hw_dpad_keys_title) { Icons.Outlined.ControlCamera }
         put(R.string.typing_hw_esc_title) { Icons.Outlined.Close }
         put(R.string.typing_hw_digit_chord_title) { Icons.Outlined.Pin }
         put(R.string.typing_hw_modifier_words_title) { Icons.Outlined.Abc }
