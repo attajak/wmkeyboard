@@ -1184,6 +1184,26 @@ open class WMKeyboardService : InputMethodService() {
      */
     private var patternFiredAtCommit = false
 
+    /**
+     * True between the enter key ending a word and the caret update that
+     * follows it, so the word enter just finished is not re-armed as the
+     * composing region (see [restartSuggestionsAtCursor] and issue #236).
+     *
+     * Enter hands the field to the app: a search box keeps the text, a message
+     * box is about to be emptied by the send. Either way the caret is left
+     * sitting at the end of a word the keyboard has finished with, which is
+     * exactly the shape a caret settling *inside* text has — and resuming
+     * there re-composes text that has already gone out. In a message box the
+     * resume is over text the app then throws away without saying so (a
+     * TextWatcher that restyles mentions drops the span the same way), and the
+     * next enter commits that buffer back into the emptied field and sends it
+     * again, over and over.
+     *
+     * One-shot: spent by the first caret update after the enter, and cleared by
+     * any other key ([onKey]) in case the field reports nothing at all.
+     */
+    private var wordEndedByEnter = false
+
     /** The snippets file, watched for edits made by the settings app. */
     private var snippetsFile: File? = null
 
@@ -5232,6 +5252,10 @@ open class WMKeyboardService : InputMethodService() {
     // callback (onKeyPressed) so feedback lands on touch, not on release.
     fun onKey(key: Key) {
         stopVoiceForManualInput()
+        // Armed by the enter key itself, below, and spent by the caret update
+        // that answers it. Cleared here so a field that reports no update at
+        // all cannot leave it armed over the next word the user types.
+        wordEndedByEnter = false
         // Typing deliberately does NOT dismiss the recent-copy strip chip. It
         // used to (Gboard style), but the common case is typing a few words and
         // *then* wanting the copy — a username before a pasted password, a
@@ -7848,6 +7872,18 @@ open class WMKeyboardService : InputMethodService() {
             refreshSmartSuggestion()
             return
         }
+        // And for the caret settling after the enter key. The word it ended has
+        // gone to the app — searched for, or sent — and re-arming it as the
+        // composing region puts the keyboard back inside text it has finished
+        // with: the next enter commits that buffer over again, which in a
+        // message box the app has meanwhile emptied means the message is
+        // retyped and sent a second time, and a third (#236). See
+        // [wordEndedByEnter], which this spends.
+        if (wordEndedByEnter) {
+            wordEndedByEnter = false
+            refreshSmartSuggestion()
+            return
+        }
         val scrubbing = SystemClock.uptimeMillis() - lastCaretScrubMs < CARET_SCRUB_WINDOW_MS
         // A drag is still in progress, so this landing spot is not the one the
         // user means. The editor sends no update when the finger finally stops,
@@ -8476,6 +8512,10 @@ open class WMKeyboardService : InputMethodService() {
             fixApostrophes = state.settings.autoText.apostrophe,
             expandPatterns = true,
         )
+        // The word is over, however this key ends up reaching the field. What
+        // follows hands the field to the app, so the caret update that comes
+        // back must not re-compose the word this just finished (#236).
+        wordEndedByEnter = true
         // Same as the spacebar: a newline typed at a caret parked inside an
         // expansion would break the text the snippet just inserted.
         if (swallowTerminatorAfterCommit) {
@@ -8494,6 +8534,13 @@ open class WMKeyboardService : InputMethodService() {
         val action = if (forceNewline) null else currentInputEditorInfo.editorActionId()
         if (action != null) {
             ic.performEditorAction(action)
+            // The action is the app's to answer, and a message box answers it by
+            // emptying itself. Neither the cached caret nor the words the
+            // pattern gate remembers survive that, and an app that empties the
+            // field without reporting it would otherwise have the keyboard's own
+            // stale idea of the text used against it (#236).
+            invalidateExpectedSelection()
+            invalidateRecentWords()
         } else if (forceNewline) {
             // Committed rather than sent as a key event, which is what the
             // override needs and what a plain newline does not. A field that
@@ -8566,6 +8613,9 @@ open class WMKeyboardService : InputMethodService() {
             fixApostrophes = settings.autoText.apostrophe,
             expandPatterns = true,
         )
+        // Same as [onEnter]: the break ends the word, so the caret update it
+        // causes must not re-arm it as composing (#236).
+        wordEndedByEnter = true
         if (swallowTerminatorAfterCommit) {
             swallowTerminatorAfterCommit = false
             return
@@ -25860,6 +25910,7 @@ open class WMKeyboardService : InputMethodService() {
     private fun clearForHardwareTyping() {
         lastGestureWord = null
         pendingAutoSpace = false
+        wordEndedByEnter = false
     }
 
     /**
