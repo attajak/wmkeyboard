@@ -102,14 +102,11 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.snapshotFlow
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -118,6 +115,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.Color
 import com.wasimaster.wmkeyboard.core.ui.WmSlider
+import com.wasimaster.wmkeyboard.core.ui.rememberLiveSlider
 import com.wasimaster.wmkeyboard.core.ui.toolAccentColor
 import com.wasimaster.wmkeyboard.core.ui.toolAccentPaint
 import androidx.compose.ui.platform.LocalConfiguration
@@ -165,7 +163,6 @@ import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.emoji.EmojiDictDownloadManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.RowScope
@@ -3250,71 +3247,6 @@ internal fun ToggleNavRow(
     }
 }
 
-/**
- * How often a drag in progress is pushed through [SliderSetting]'s `onChange`,
- * i.e. written to DataStore. Live previews still follow the finger closely, but
- * a 100-pixel drag no longer queues 100 preference writes (each of which
- * recomposes the whole settings screen).
- */
-private const val SLIDER_WRITE_INTERVAL_MS = 40L
-
-/**
- * The live position of a settings slider, held locally so the thumb follows the
- * finger instead of the stored value: routing every touch event through a
- * DataStore write and waiting for the settings flow to come back made the thumb
- * visibly trail. Create one with [rememberLiveSlider], read [value] for both the
- * thumb and the readout, and hand [onDrag]/[onRelease] to the `WmSlider`.
- */
-@Stable
-internal class LiveSliderState(initial: Float) {
-    var value by mutableFloatStateOf(initial)
-        private set
-    internal var dragging by mutableStateOf(false)
-        private set
-
-    /** Replaced on every composition so the latest lambda is always called. */
-    internal var commit: (Float) -> Unit = {}
-
-    internal fun adopt(external: Float) {
-        if (!dragging) value = external
-    }
-
-    fun onDrag(next: Float) {
-        dragging = true
-        value = next
-    }
-
-    fun onRelease() {
-        dragging = false
-        commit(value)
-    }
-}
-
-/**
- * A [LiveSliderState] wired to [value] and [onChange]. Writes are throttled to
- * one per [SLIDER_WRITE_INTERVAL_MS] while dragging — enough for anything
- * previewing the setting to keep up, without queueing a preference write (and a
- * recomposition of the whole screen) per touch event — with a final write when
- * the finger lifts. [value] is adopted only while no drag is in progress, so an
- * edit from elsewhere (a reset, another screen showing the same setting) still
- * moves the thumb but the user's own drag is never fought.
- */
-@Composable
-internal fun rememberLiveSlider(value: Float, onChange: (Float) -> Unit): LiveSliderState {
-    val state = remember { LiveSliderState(value) }
-    state.commit = onChange
-    LaunchedEffect(value) { state.adopt(value) }
-    LaunchedEffect(state) {
-        snapshotFlow { state.value }
-            .conflate()
-            .collect {
-                if (state.dragging) state.commit(it)
-                delay(SLIDER_WRITE_INTERVAL_MS)
-            }
-    }
-    return state
-}
-
 /** The gap between a row's icon tile and the words beside it. */
 private val RowIconGap = 16.dp
 
@@ -3373,6 +3305,7 @@ internal fun SliderSetting(
     icon: ImageVector? = SettingsRowIcons[title],
     enabled: Boolean = true,
     default: Float? = null,
+    preview: ((Float) -> Unit)? = null,
     onChange: (Float) -> Unit,
 ) = SliderSetting(
     title = stringResource(title),
@@ -3385,6 +3318,7 @@ internal fun SliderSetting(
     highlightKey = title,
     enabled = enabled,
     default = default,
+    preview = preview,
     onChange = onChange,
 )
 
@@ -3413,9 +3347,15 @@ internal fun SliderSetting(
     // [ToggleSetting]'s own `enabled`.
     enabled: Boolean = true,
     default: Float? = null,
+    /**
+     * Acts on the value under the finger on every step, for a row whose whole
+     * point is heard or felt rather than stored — the key sound's volume, a
+     * haptic's strength. [onChange] still runs once, on release.
+     */
+    preview: ((Float) -> Unit)? = null,
     onChange: (Float) -> Unit,
 ) {
-    val slider = rememberLiveSlider(value, onChange)
+    val slider = rememberLiveSlider(value, onChange, preview = preview)
     // The readout is the slider's detent: this row's values are continuous, so
     // the steps the user is actually aiming at are the ones the number they can
     // read changes on. Keyed on the string rather than the float, so a drag

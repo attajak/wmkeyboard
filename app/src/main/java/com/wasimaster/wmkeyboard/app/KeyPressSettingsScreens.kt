@@ -264,10 +264,11 @@ internal fun KeySoundGroup(
                 range = 0.05f..1f,
                 display = { percentFormat.format((it * 100).roundToInt()) },
                 default = SettingsDefaults.sound.volume,
+                // Debounced inside the player, so dragging previews smoothly.
+                // The store waits for the finger to lift; the sound does not.
+                preview = { KeySoundPlayer.preview(context, settings.sound.style, it, soundId) },
             ) {
                 scope.launch { repository.setKeySoundVolume(it) }
-                // Debounced inside the player, so dragging previews smoothly.
-                KeySoundPlayer.preview(context, settings.sound.style, it, soundId)
             }
         }
     }
@@ -971,10 +972,12 @@ internal fun KeyPressHapticsSettings(
                     display = { context.getString(R.string.keypress_value_ms, it.roundToInt()) },
                     info = stringResource(R.string.keypress_haptic_strength_info),
                     default = SettingsDefaults.haptics.strengthMs.toFloat(),
+                    // Debounced inside the player, so dragging previews smoothly.
+                    preview = {
+                        HapticPlayer.preview(context, settings.haptics.style, settings.haptics.amplitude, it.toInt(), view)
+                    },
                 ) {
                     scope.launch { repository.setHapticStrengthMs(it.toInt()) }
-                    // Debounced inside the player, so dragging previews smoothly.
-                    HapticPlayer.preview(context, settings.haptics.style, settings.haptics.amplitude, it.toInt(), view)
                 }
             }
         }
@@ -990,9 +993,12 @@ internal fun KeyPressHapticsSettings(
                     },
                     info = stringResource(R.string.keypress_haptic_intensity_info),
                     default = SettingsDefaults.haptics.amplitude.toFloat(),
+                    // Debounced inside the player, so dragging previews smoothly.
+                    preview = {
+                        HapticPlayer.preview(context, settings.haptics.style, it.toInt(), settings.haptics.strengthMs, view)
+                    },
                 ) {
                     scope.launch { repository.setHapticAmplitude(it.toInt()) }
-                    HapticPlayer.preview(context, settings.haptics.style, it.toInt(), settings.haptics.strengthMs, view)
                 }
             }
         }

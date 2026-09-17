@@ -122,6 +122,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeySoundStyle
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.ui.WmSlider
+import com.wasimaster.wmkeyboard.core.ui.rememberLiveSlider
 import com.wasimaster.wmkeyboard.core.util.PlayServices
 import com.wasimaster.wmkeyboard.core.util.requireOutputStream
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardFonts
@@ -4666,9 +4667,12 @@ internal fun SliderRow(
     info: String? = null,
     onChange: (Float) -> Unit,
 ) {
-    // Local drag state, throttled writes — see rememberLiveSlider; without it
-    // the thumb waits for the theme to round-trip through DataStore.
-    val slider = rememberLiveSlider(value, onChange)
+    // Local drag state, and one of the few sliders that keeps writing while the
+    // finger is down (`live`): this row's own screen draws the theme it is
+    // editing, so the preview above it has to follow the thumb. See
+    // rememberLiveSlider; without the local state the thumb itself would wait
+    // for the theme to round-trip through DataStore.
+    val slider = rememberLiveSlider(value, onChange, live = true)
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(title, style = MaterialTheme.typography.bodyLarge)

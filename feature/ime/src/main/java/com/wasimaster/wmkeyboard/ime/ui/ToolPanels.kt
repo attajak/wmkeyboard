@@ -129,6 +129,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeySoundStyle
 import com.wasimaster.wmkeyboard.core.settings.ThemeSelectionTarget
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.ui.WmSlider
+import com.wasimaster.wmkeyboard.core.ui.rememberLiveSlider
 import com.wasimaster.wmkeyboard.core.util.PlayServices
 import com.wasimaster.wmkeyboard.core.settings.modeThemeOwner
 import com.wasimaster.wmkeyboard.core.settings.slotThemeId
@@ -2976,14 +2977,23 @@ internal fun SoundHapticsPanel(
                     Text(stringResource(R.string.ime_sound_intensity_label),
                         color = kb.toolbarIcon, fontSize = 11.sp,
                         modifier = Modifier.width(60.dp))
+                    // One write when the finger lifts, not one per touch
+                    // event: a settings write recomposes this keyboard and the
+                    // settings app behind it, so the old per-event write left
+                    // the thumb waiting for the store to answer.
+                    val amplitude = rememberLiveSlider(
+                        settings.haptics.amplitude.toFloat(),
+                        { onAction(SoundHapticAction.HapticAmplitude(it.toInt())) },
+                    )
                     WmSlider(
-                        value = settings.haptics.amplitude.toFloat(),
-                        onValueChange = { onAction(SoundHapticAction.HapticAmplitude(it.toInt())) },
+                        value = amplitude.value,
+                        onValueChange = amplitude::onDrag,
+                        onValueChangeFinished = amplitude::onRelease,
                         valueRange = 1f..255f,
                         modifier = Modifier.weight(1f).height(28.dp),
                     )
                     Text(
-                        "${settings.haptics.amplitude * 100 / 255}%",
+                        "${amplitude.value.roundToInt() * 100 / 255}%",
                         color = kb.toolbarIcon, fontSize = 11.sp,
                     )
                 }
@@ -2995,14 +3005,19 @@ internal fun SoundHapticsPanel(
                     Text(stringResource(R.string.ime_sound_duration_label),
                         color = kb.toolbarIcon, fontSize = 11.sp,
                         modifier = Modifier.width(60.dp))
+                    val duration = rememberLiveSlider(
+                        settings.haptics.strengthMs.toFloat(),
+                        { onAction(SoundHapticAction.HapticDuration(it.toInt())) },
+                    )
                     WmSlider(
-                        value = settings.haptics.strengthMs.toFloat(),
-                        onValueChange = { onAction(SoundHapticAction.HapticDuration(it.toInt())) },
+                        value = duration.value,
+                        onValueChange = duration::onDrag,
+                        onValueChangeFinished = duration::onRelease,
                         valueRange = 5f..60f,
                         modifier = Modifier.weight(1f).height(28.dp),
                     )
                     Text(
-                        "${settings.haptics.strengthMs} ms",
+                        "${duration.value.roundToInt()} ms",
                         color = kb.toolbarIcon, fontSize = 11.sp,
                     )
                 }
@@ -3080,14 +3095,19 @@ internal fun SoundHapticsPanel(
                 Text(stringResource(R.string.ime_sound_volume_label),
                     color = kb.toolbarIcon, fontSize = 11.sp,
                     modifier = Modifier.width(60.dp))
+                val volume = rememberLiveSlider(
+                    settings.sound.volume,
+                    { onAction(SoundHapticAction.SoundVolume(it)) },
+                )
                 WmSlider(
-                    value = settings.sound.volume,
-                    onValueChange = { onAction(SoundHapticAction.SoundVolume(it)) },
+                    value = volume.value,
+                    onValueChange = volume::onDrag,
+                    onValueChangeFinished = volume::onRelease,
                     valueRange = 0.05f..1f,
                     modifier = Modifier.weight(1f).height(28.dp),
                 )
                 Text(
-                    "${(settings.sound.volume * 100).roundToInt()}%",
+                    "${(volume.value * 100).roundToInt()}%",
                     color = kb.toolbarIcon, fontSize = 11.sp,
                 )
             }

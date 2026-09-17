@@ -550,6 +550,29 @@ open class WMKeyboardService : InputMethodService() {
     private val _uiState = MutableStateFlow(KeyboardUiState())
     val uiState = _uiState.asStateFlow()
 
+    /**
+     * What the composition reads: [_uiState] while the window is on screen,
+     * and the last thing it saw while it is not.
+     *
+     * The service keeps working with the keyboard away — a hardware key still
+     * types, a settings change still lands, the clipboard still fills — and
+     * every one of those updates used to recompose a keyboard nobody could
+     * see. That is paid on the main thread this process shares with the
+     * settings app, where it was measured at ~20 ms per preference write on
+     * top of the app's own recomposition, which is what made a settings slider
+     * trail the finger. [_uiState] stays authoritative for the logic that
+     * reads it; only the drawing waits.
+     */
+    private val _shownState = MutableStateFlow(KeyboardUiState())
+
+    /**
+     * Whether the window is really on screen, which is when [_shownState] is
+     * worth keeping up to date. Distinct from [keyboardVisible]: this one has
+     * to stay true through a hide's exit frames, so it is cleared by
+     * onWindowHidden rather than by onFinishInputView.
+     */
+    private var windowOnScreen = false
+
     private lateinit var settingsRepository: SettingsRepository
     private var suggestionEngine: SuggestionEngine? = null
     private var emojiSearch: EmojiSearch? = null
@@ -2500,6 +2523,12 @@ open class WMKeyboardService : InputMethodService() {
         // isSupportedTool reads the answer with no Context of its own, and a
         // tool that appears and then vanishes a frame later looks like a bug.
         PlayServices.prime(this)
+        // Mirrors the state the composition draws — see [_shownState]. The
+        // scope is Main.immediate and every update comes from the main thread,
+        // so this resumes inside the update rather than a frame later.
+        serviceScope.launch {
+            _uiState.collect { if (windowOnScreen) _shownState.value = it }
+        }
         // Parks on an empty channel until the first glide; costs nothing until
         // then, and saves a job launch per preview once a finger is down.
         startGesturePreviewConsumer()
@@ -3631,6 +3660,10 @@ open class WMKeyboardService : InputMethodService() {
     private var inputRootView: View? = null
 
     override fun onCreateInputView(): View {
+        // The window is about to draw for the first time, so the gated state
+        // starts from whatever the service has now rather than from an empty
+        // keyboard — see [_shownState].
+        _shownState.value = _uiState.value
         val view = ComposeView(this)
         inputRootView = view
         lifecycleOwner.attachTo(requireNotNull(window.window).decorView)
@@ -3645,7 +3678,7 @@ open class WMKeyboardService : InputMethodService() {
     @androidx.compose.runtime.Composable
     private fun ServiceKeyboardContent() {
             KeyboardScreen(
-                stateFlow = uiState,
+                stateFlow = _shownState,
                 panelFocus = panelFocus,
                 onKey = ::onKey,
                 onKeyPressed = ::vibrate,
@@ -4237,6 +4270,7 @@ open class WMKeyboardService : InputMethodService() {
         // (the media one re-checks notification access there) would otherwise
         // ask about a keyboard this flag still calls hidden.
         keyboardVisible = true
+        onScreenAgain()
         lifecycleOwner.onResume()
         // Starts the media-session listener the toolbar's auto-pin needs, and
         // catches music that began while the keyboard was away.
@@ -4943,11 +4977,23 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * The window is on screen again: the composition takes new state from here
+     * on, starting with everything it missed while it was away. Called from
+     * both doors, onStartInputView and onWindowShown, because either can be
+     * the first one on a given device.
+     */
+    private fun onScreenAgain() {
+        windowOnScreen = true
+        _shownState.value = _uiState.value
+    }
+
+    /**
      * The window is really on screen. onStartInputView has normally resumed the
      * owner already; this is the OEM path where a window arrives without one.
      */
     override fun onWindowShown() {
         super.onWindowShown()
+        onScreenAgain()
         lifecycleOwner.onResume()
     }
 
@@ -4959,6 +5005,9 @@ open class WMKeyboardService : InputMethodService() {
      */
     override fun onWindowHidden() {
         super.onWindowHidden()
+        // Nothing to draw from here until the window comes back, so the
+        // composition stops being handed new state — see [_shownState].
+        windowOnScreen = false
         lifecycleOwner.onStop()
     }
 
