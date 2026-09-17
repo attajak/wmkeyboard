@@ -72,6 +72,14 @@ echo
 
 # ---------------------------------------------------------------- downloads
 
+# A release with no APKs attached — a tag cut before the build pipeline, say —
+# gets notes and nothing else rather than a grid of em dashes.
+have_apk=false
+for f in "$dist"/*.apk; do
+  [ -e "$f" ] && have_apk=true && break
+done
+
+if [ "$have_apk" = true ]; then
 cat <<EOF
 ## Download
 
@@ -81,7 +89,7 @@ unless you know you need another.
 
 | Architecture | full | lite |
 |:---|:---|:---|
-| **⭐ arm64-v8a**<br><sub>Essentially every phone since 2017</sub> | **$(cell "${prefix}-full-arm64-v8a.apk" '')** | **$(cell "${prefix}-lite-arm64-v8a.apk" '')** |
+| **⭐ arm64-v8a**<br><sub>Essentially every phone since 2017</sub> | **$(cell "${prefix}-full-arm64-v8a.apk")** | **$(cell "${prefix}-lite-arm64-v8a.apk")** |
 | armeabi-v7a<br><sub>Older 32-bit phones and watches</sub> | $(cell "${prefix}-full-armeabi-v7a.apk") | $(cell "${prefix}-lite-armeabi-v7a.apk") |
 | x86_64<br><sub>Emulators, ChromeOS, x86 tablets</sub> | $(cell "${prefix}-full-x86_64.apk") | $(cell "${prefix}-lite-x86_64.apk") |
 | universal<br><sub>All three in one file — only if the others refuse to install</sub> | $(cell "${prefix}-full-universal.apk") | $(cell "${prefix}-lite-universal.apk") |
@@ -90,24 +98,53 @@ unless you know you need another.
 models — handwriting, OCR, document scanning, Whisper voice input and the local
 LLM — for a far smaller download. Everything else is the same build.
 
-<details>
-<summary><b>Checksums, R8 mappings and native symbols</b></summary>
+EOF
 
-For verifying a download, and for reading a crash report from these APKs.
+# The extras block lists only what this release actually carries: mappings and
+# native symbols were first attached in 0.5.8, so an older release has nothing
+# under the checksums but the checksums.
+extras=''
+row() { # <file> <what it is>
+  [ -f "$dist/$1" ] || return 0
+  extras="${extras}| [\`$1\`](${base}/$1) | $(size_of "$1") | $2 |
+"
+}
+row SHA256SUMS.txt 'Checksums for everything above'
+row "${prefix}-full-mapping.txt.gz" 'R8 mapping, **full** — retraces a stack trace'
+row "${prefix}-lite-mapping.txt.gz" 'R8 mapping, **lite**'
+row "${prefix}-full-native-symbols.zip" 'Native debug symbols, **full**'
 
-| File | Size | What it is |
-|:---|:---|:---|
-| [\`SHA256SUMS.txt\`](${base}/SHA256SUMS.txt) | $(size_of SHA256SUMS.txt) | Checksums for everything above |
-| [\`${prefix}-full-mapping.txt.gz\`](${base}/${prefix}-full-mapping.txt.gz) | $(size_of "${prefix}-full-mapping.txt.gz") | R8 mapping, **full** — retraces a stack trace |
-| [\`${prefix}-lite-mapping.txt.gz\`](${base}/${prefix}-lite-mapping.txt.gz) | $(size_of "${prefix}-lite-mapping.txt.gz") | R8 mapping, **lite** |
-| [\`${prefix}-full-native-symbols.zip\`](${base}/${prefix}-full-native-symbols.zip) | $(size_of "${prefix}-full-native-symbols.zip") | Native debug symbols, **full** |
-
+if [ -n "$extras" ]; then
+  # Name only what is in the block. Mappings and symbols were first attached in
+  # 0.5.8, so an older release's block is checksums alone.
+  if [ -f "$dist/${prefix}-full-mapping.txt.gz" ]; then
+    summary='Checksums, R8 mappings and native symbols'
+    blurb='For verifying a download, and for reading a crash report from these APKs.'
+  else
+    summary='Checksums'
+    blurb='For verifying what you downloaded.'
+  fi
+  echo '<details>'
+  echo "<summary><b>${summary}</b></summary>"
+  echo
+  echo "$blurb"
+  echo
+  echo '| File | Size | What it is |'
+  echo '|:---|:---|:---|'
+  printf '%s' "$extras"
+  echo
+  if [ -f "$dist/SHA256SUMS.txt" ]; then
+    cat <<'EOF'
 Verify a download before installing it:
 
-\`\`\`sh
+```sh
 sha256sum -c SHA256SUMS.txt --ignore-missing
-\`\`\`
+```
 
+EOF
+  fi
+  if [ -f "$dist/${prefix}-full-mapping.txt.gz" ]; then
+    cat <<EOF
 Retrace a crash with the mapping from the same flavour and version:
 
 \`\`\`sh
@@ -119,9 +156,12 @@ A crash from the Play build needs neither file: that build is compiled with
 different flags, so R8 renames it differently, and Play Console reads the
 mapping out of the bundle by itself.
 
-</details>
-
 EOF
+  fi
+  echo '</details>'
+  echo
+fi
+fi
 
 # ---------------------------------------------------------------- footer
 
