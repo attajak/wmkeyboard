@@ -80,7 +80,9 @@ import com.wasimaster.wmkeyboard.ime.WMKeyboardService
 import com.wasimaster.wmkeyboard.ime.ui.SlotIcon
 import com.wasimaster.wmkeyboard.core.settings.GifContentFilter
 import com.wasimaster.wmkeyboard.core.settings.GifSourceMode
+import com.wasimaster.wmkeyboard.core.settings.GrammarCategory
 import com.wasimaster.wmkeyboard.core.settings.GrammarDialect
+import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
 import com.wasimaster.wmkeyboard.core.settings.QrEccLevel
 import com.wasimaster.wmkeyboard.core.tools.AltCalendar
@@ -1876,6 +1878,57 @@ internal fun ToolDetailSettings(
                     ) { scope.launch { repository.setGrammarDebounceMs(it.toInt()) } }
                 }
             }
+            // One fold per category, opening onto the kinds inside it. The same
+            // filter the keyboard's funnel writes, so a kind switched off here
+            // is gone from the panel's cards, its issue count and "Fix all".
+            val hiddenKinds = settings.grammarHiddenKinds
+            GrammarCategory.entries.forEach { category ->
+                val kinds = GrammarLintKind.of(category)
+                val shownKinds = kinds.filter { it !in hiddenKinds }
+                SettingsGroup(
+                    stringResource(category.labelRes),
+                    foldKey = "grammar_${category.name.lowercase()}",
+                    info = stringResource(grammarCategoryInfo(category)),
+                    foldSummary = {
+                        when (shownKinds.size) {
+                            0 -> stringResource(R.string.tooldetail_grammar_category_none_summary)
+                            kinds.size ->
+                                stringResource(R.string.tooldetail_grammar_category_all_summary)
+                            else -> shownKinds
+                                .map { stringResource(it.labelRes) }
+                                .joinToString(", ")
+                        }
+                    },
+                ) {
+                    item {
+                        ToggleSetting(
+                            grammarCategoryTitle(category),
+                            stringResource(
+                                R.string.tooldetail_grammar_category_toggle_subtitle,
+                                shownKinds.size,
+                                kinds.size,
+                            ),
+                            // Reads as on while any kind inside is on; switching
+                            // it sets every kind in the category at once.
+                            checked = shownKinds.isNotEmpty(),
+                        ) { on ->
+                            scope.launch { repository.setGrammarCategoryShown(category, on) }
+                        }
+                    }
+                    kinds.forEach { kind ->
+                        item {
+                            ToggleSetting(
+                                title = stringResource(kind.labelRes),
+                                subtitle = null,
+                                checked = kind !in hiddenKinds,
+                                onChange = { on ->
+                                    scope.launch { repository.setGrammarKindShown(kind, on) }
+                                },
+                            )
+                        }
+                    }
+                }
+            }
             if (BuildConfig.ENABLE_GRAMMAR) {
                 val context = LocalContext.current
                 SettingsGroup(
@@ -3397,4 +3450,24 @@ private fun qrEccDescRes(level: QrEccLevel): Int = when (level) {
     QrEccLevel.M -> R.string.tooldetail_qr_gen_ecc_m_desc
     QrEccLevel.Q -> R.string.tooldetail_qr_gen_ecc_q_desc
     QrEccLevel.H -> R.string.tooldetail_qr_gen_ecc_h_desc
+}
+
+/** The settings row that switches a whole grammar category on or off. */
+private fun grammarCategoryTitle(category: GrammarCategory): Int = when (category) {
+    GrammarCategory.CORRECTNESS -> R.string.tooldetail_grammar_correctness_title
+    GrammarCategory.CLARITY -> R.string.tooldetail_grammar_clarity_title
+    GrammarCategory.ENGAGEMENT -> R.string.tooldetail_grammar_engagement_title
+    GrammarCategory.DELIVERY -> R.string.tooldetail_grammar_delivery_title
+}
+
+/**
+ * What a grammar category covers, behind its fold's "?". The four names are
+ * borrowed from the way writing tools group this, and none of them says on its
+ * own which of the twenty kinds landed inside.
+ */
+private fun grammarCategoryInfo(category: GrammarCategory): Int = when (category) {
+    GrammarCategory.CORRECTNESS -> R.string.tooldetail_grammar_correctness_info
+    GrammarCategory.CLARITY -> R.string.tooldetail_grammar_clarity_info
+    GrammarCategory.ENGAGEMENT -> R.string.tooldetail_grammar_engagement_info
+    GrammarCategory.DELIVERY -> R.string.tooldetail_grammar_delivery_info
 }

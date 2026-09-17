@@ -336,7 +336,9 @@ import com.wasimaster.wmkeyboard.core.grammar.GrammarChecker
 import com.wasimaster.wmkeyboard.core.grammar.GrammarEdit
 import com.wasimaster.wmkeyboard.core.grammar.GrammarFix
 import com.wasimaster.wmkeyboard.core.grammar.GrammarLint
+import com.wasimaster.wmkeyboard.core.settings.GrammarCategory
 import com.wasimaster.wmkeyboard.core.settings.GrammarDialect
+import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
 import com.wasimaster.wmkeyboard.core.tools.GifSource
 import com.wasimaster.wmkeyboard.core.tools.LinkPreviewClient
 import com.wasimaster.wmkeyboard.core.tools.GifSources
@@ -3734,6 +3736,9 @@ open class WMKeyboardService : InputMethodService() {
                 onGrammarFixAll = ::onGrammarFixAll,
                 onGrammarDismiss = ::onGrammarDismiss,
                 onGrammarDialect = ::onGrammarDialectChange,
+                onGrammarKindShown = ::onGrammarKindShown,
+                onGrammarCategoryShown = ::onGrammarCategoryShown,
+                onGrammarShowAllKinds = ::onGrammarShowAllKinds,
                 onGrammarFocus = ::onGrammarFocus,
                 onWikiOpen = ::onWikiOpen,
                 onWikiBack = ::onWikiBack,
@@ -4341,6 +4346,16 @@ open class WMKeyboardService : InputMethodService() {
         if (pkg != null) currentPackage = pkg
         refreshPerAppContext()
         currentFieldHint = info?.hintText?.toString()?.takeIf { it.isNotBlank() }
+        // Whether a code chip may show here, when the user has asked for code
+        // boxes only. The field's own words go in alongside its input class,
+        // because a code box built out of a text input says what it is even
+        // when its input type does not (see [looksLikeCodeField]).
+        val codeField = looksLikeCodeField(
+            fieldKind,
+            currentFieldHint,
+            info?.label?.toString(),
+            info?.fieldName,
+        )
         currentModeFields = buildSet {
             if (secure) add(ModeField.PASSWORD)
             // The shape of a text box (one line, many lines, no suggestions)
@@ -4466,6 +4481,7 @@ open class WMKeyboardService : InputMethodService() {
                 // between sessions, not during a hold.
                 selectionHold = false,
                 fieldKind = fieldKind,
+                codeField = codeField,
                 nullField = nullField,
                 fieldNoSuggestions = fieldNoSuggestions,
                 fieldIncognito = fieldIncognito,
@@ -21527,11 +21543,15 @@ open class WMKeyboardService : InputMethodService() {
         }
     }
 
-    /** Tapped "Fix all": apply every lint's top suggestion. */
+    /**
+     * Tapped "Fix all": apply the top suggestion of every issue the panel is
+     * showing. Issues the filter hides are left alone — the button says how
+     * many it will fix, and that count is of the visible ones.
+     */
     fun onGrammarFixAll() {
         vibrate()
         val source = _uiState.value.grammar.sourceText
-        val edits = GrammarChecker.editsAll(source, _uiState.value.grammar.lints)
+        val edits = GrammarChecker.editsAll(source, _uiState.value.visibleGrammarLints)
         var fixed = source
         for (edit in edits) fixed = fixed.replaceRange(edit.start, edit.end, edit.text)
         if (fixed == source) return
@@ -21545,6 +21565,24 @@ open class WMKeyboardService : InputMethodService() {
     fun onGrammarDismiss(lint: GrammarLint) {
         vibrate()
         _uiState.update { it.copy(grammar = it.grammar.copy(lints = it.grammar.lints - lint)) }
+    }
+
+    /** Toggled one issue kind in the panel's filter. */
+    fun onGrammarKindShown(kind: GrammarLintKind, shown: Boolean) {
+        vibrate()
+        serviceScope.launch { settingsRepository.setGrammarKindShown(kind, shown) }
+    }
+
+    /** Toggled a whole category in the panel's filter — every kind inside it. */
+    fun onGrammarCategoryShown(category: GrammarCategory, shown: Boolean) {
+        vibrate()
+        serviceScope.launch { settingsRepository.setGrammarCategoryShown(category, shown) }
+    }
+
+    /** Cleared the panel's filter: every kind of issue is worth showing again. */
+    fun onGrammarShowAllKinds() {
+        vibrate()
+        serviceScope.launch { settingsRepository.setGrammarHiddenKinds(emptySet()) }
     }
 
     fun onGrammarDialectChange(dialect: GrammarDialect) {
@@ -24618,7 +24656,7 @@ open class WMKeyboardService : InputMethodService() {
         if (!ClipSensitivity.isBareCode(clip.text.trim())) return
         val allowed = offersCopiedCode(
             mode = settings.clipboard.copiedCodeChip,
-            fieldKind = state.fieldKind,
+            codeField = state.codeField,
             clipTimestamp = clip.timestamp,
             showingTimestamp = state.clipboardSuggestion?.timestamp,
             now = System.currentTimeMillis(),
@@ -24674,7 +24712,7 @@ open class WMKeyboardService : InputMethodService() {
         // Incognito no longer hides the chip: reading a code out of a
         // notification records nothing about what is typed, and a private
         // browsing tab is where the code is wanted (#151 follow-up).
-        val hidden = settings.otp.numberFieldsOnly && state.fieldKind != FieldKind.NUMBER
+        val hidden = settings.otp.codeFieldsOnly && !state.codeField
         if (hidden) {
             clearOtpSuggestion()
             return

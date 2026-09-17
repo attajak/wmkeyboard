@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -28,11 +27,11 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
+import kotlin.math.abs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -47,8 +46,8 @@ import org.robolectric.Shadows.shadowOf
  * [WmSlider] inside a scrolling column, driven with real touch events.
  *
  * Every movement is measured in touch slops, so an input means the same thing
- * at any density. The flick that matters is also played against Material's own
- * slider, which has to take it: nothing here passes because the input was too
+ * at any density, and the flick that matters is checked to be one a slider
+ * without this guard takes: nothing here passes because the input was too
  * gentle to trip the bug in the first place.
  */
 @RunWith(RobolectricTestRunner::class)
@@ -95,20 +94,30 @@ class WmSliderTest {
             moveBy(Offset(0f, -slop * 2f))
             // ...and a long swing sideways after that does not hand it over.
             repeat(3) { moveBy(Offset(slop * 4f, 0f)) }
-            up()
         }
+        compose.waitForIdle()
+        // How far the page came while the finger was still down. Lifting it after
+        // a sideways plateau flings the page back to the top, with a slider under
+        // the finger or without one: foundation fits a curve to the last samples,
+        // which by then is heading back down.
+        val scrolled = scroll.value
+        compose.onNodeWithTag(SLIDER).performTouchInput { up() }
         compose.waitForIdle()
         assertEquals(0f, value, 0f)
         assertEquals(0, finishes)
-        assertTrue("the page did not scroll", scroll.value > 0)
+        assertTrue("the page did not scroll", scrolled > 0)
     }
 
     @Test
-    fun `Material's own slider takes that same flick, which is the bug`() {
-        page { Slider(value = value, onValueChange = { value = it }, onValueChangeFinished = { finishes++ }) }
-        flickUp()
-        assertNotEquals(0f, value, 0f)
-        assertEquals(0, scroll.value)
+    fun `the flick's first frame is the one a slider without the guard takes`() {
+        // Issue #153 in one frame: a slider that starts a drag on a slop of
+        // sideways travel alone takes this, because it sees the event before the
+        // page does. Material's own slider did until material3 1.4.0, which
+        // guards it the way this one does, so the frame is measured here rather
+        // than played against it.
+        assertTrue("sideways past the slop", abs(FIRST_FRAME.x) >= 1f)
+        assertTrue("vertically past the slop", abs(FIRST_FRAME.y) >= 1f)
+        assertFalse("and further up than sideways", isSliderDrag(FIRST_FRAME, slop = 1f))
     }
 
     @Test
@@ -190,12 +199,12 @@ class WmSliderTest {
     /**
      * A quick flick up the page from the slider's middle. Its first frame takes
      * the finger past the slop on both axes at once, twice as far up as
-     * sideways — the frame Material's slider claims.
+     * sideways — the frame a slider without the guard claims.
      */
     private fun flickUp() {
         compose.onNodeWithTag(SLIDER).performTouchInput {
             down(center)
-            moveBy(Offset(slop * 1.5f, -slop * 3f))
+            moveBy(FIRST_FRAME * slop)
             repeat(4) { moveBy(Offset(slop / 4f, -slop * 3f)) }
             up()
         }
@@ -208,6 +217,9 @@ private const val PAGE_DP = 300
 private const val ABOVE_DP = 100
 private const val BELOW_DP = 600
 private const val SCROLL_PX = 200f
+
+/** The flick's first frame, in touch slops: past the slop on both axes at once. */
+private val FIRST_FRAME = Offset(1.5f, -3f)
 
 /** Thumb widths shift the answer by under a hundredth on the test's slider. */
 private const val TOLERANCE = 0.01f

@@ -2669,6 +2669,20 @@
     "kind": "still"
   },
   {
+    "id": "smart/grammar-filter-open",
+    "page": "docs/src/content/docs/smart/grammar.mdx",
+    "file": "src/assets/screens/smart/grammar-filter-open.webp",
+    "caption": "The filter open in the panel header, with a category expanded onto the kinds inside it.",
+    "host": "harness-field",
+    "setup": [
+      "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text --es text 'Their going to the store, but there not sure when. Basic fundamentals matter alot.'",
+      "Open Grammar check, wait for lints, tap the funnel icon beside the dialect chip, then tap the chevron on Correctness to expand it"
+    ],
+    "status": "todo",
+    "notes": "The counts beside each row come from the text above, so seed the field with issues in more than one category; expand one category so both levels of the filter show in the same shot.",
+    "kind": "still"
+  },
+  {
     "id": "smart/grammar-settings",
     "page": "docs/src/content/docs/smart/grammar.mdx",
     "file": "src/assets/screens/smart/grammar-settings.webp",

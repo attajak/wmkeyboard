@@ -482,6 +482,13 @@ internal fun EmojiPanelSettings(
         }
         item {
             NavRow(
+                R.string.langemoji_emoji_categories_title,
+                stringResource(R.string.langemoji_emoji_categories_subtitle),
+                route = "emojicategories",
+            ) { onNavigate("emojicategories") }
+        }
+        item {
+            NavRow(
                 R.string.langemoji_emoji_keywords_title,
                 stringResource(R.string.langemoji_emoji_keywords_subtitle),
                 route = "emojikeywords",

@@ -53,7 +53,9 @@ The chip is drawn with a dashed outline, the same visual language the clipboard 
 
 It ranks high in the strip, above the clipboard and snippet chips, because the code is usually the whole reason you're in that field and it expires while everything else can wait. Only the [password-manager lane](/smart/autofill/) beats it, since the platform may be offering the same code with more context.
 
-The chip hides itself, without dropping the code, when the current field doesn't qualify. One case does that: **Only in number fields** is on and this field isn't a number field. [Incognito mode](/privacy/incognito/) doesn't hide it: reading a code out of a notification records nothing, and a login in a private tab is where the code is wanted. It hides rather than drops, because you're often one tap away from the box the code belongs in.
+The chip hides itself, without dropping the code, when the current field doesn't qualify. One case does that: **Only in code boxes** is on and this field doesn't read as one. [Incognito mode](/privacy/incognito/) doesn't hide it: reading a code out of a notification records nothing, and a login in a private tab is where the code is wanted. It hides rather than drops, because you're often one tap away from the box the code belongs in.
+
+A field counts as a code box when it asks for a number keypad, or when the app named it one — the hint it shows while empty, its accessibility label or its resource id saying `OTP`, `PIN`, `passcode` or `verification code`. The names that only look like codes don't count: a ZIP code, a country code, a promo code and a coupon code are all left alone.
 
 ## Typing into a row of boxes
 
@@ -71,12 +73,12 @@ This setting sits outside the rest of the group on purpose. It governs every pat
 | --- | --- | --- |
 | Codes from notifications | Off | always |
 | Allow notification access | Action row | Codes from notifications on, and access not granted yet |
-| Only in number fields | On | Codes from notifications on |
+| Only in code boxes | Off | Codes from notifications on |
 | Offer a code for | 3 min (range 1–10 min) | Codes from notifications on |
 | Clear the notification | Off | Codes from notifications on |
 | Type codes one character at a time | On | always |
 
-**Only in number fields** matches the shape most code boxes have. Some apps use a plain text box instead, so if your chip never shows up in one particular app, this is the switch to turn off.
+**Only in code boxes** narrows the chip to the fields described above. It's off by default because some apps give their code box neither a number keypad nor a telling name, and there is no way to recognise those — a code that never appears where you need it is worse than one offered in a field you weren't going to use it in. Turn it on if you'd rather never see a code offered mid-sentence.
 
 **Offer a code for** is measured from when the notification was posted, not from when you saw it. Past that, the code is dropped rather than hidden.
 

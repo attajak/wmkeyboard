@@ -1,6 +1,5 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -21,11 +20,16 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.ExpandLess
+import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -48,56 +52,55 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import com.wasimaster.wmkeyboard.core.grammar.GrammarFix
 import com.wasimaster.wmkeyboard.core.grammar.GrammarLint
+import com.wasimaster.wmkeyboard.core.settings.GrammarCategory
 import com.wasimaster.wmkeyboard.core.settings.GrammarDialect
+import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
 import com.wasimaster.wmkeyboard.ime.FocusRegion
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.R
+import com.wasimaster.wmkeyboard.ime.visibleGrammarLints
 
 /**
- * Grammarly-style category for a lint: Harper's fine-grained kinds collapse
- * into four color-coded buckets so the card header reads at a glance.
+ * The colour dot each [GrammarCategory] wears on a card and in the filter.
+ * The buckets themselves live in `:core:settings` beside [GrammarLintKind],
+ * because the filter in settings sorts by them too; only the paint is here.
  */
-private data class LintCategory(
-    @StringRes val labelRes: Int,
-    val light: Color,
-    val dark: Color,
-) {
-    fun color(isDark: Boolean): Color = if (isDark) dark else light
+private data class CategoryColors(val light: Color, val dark: Color)
+
+private val CATEGORY_COLORS = mapOf(
+    GrammarCategory.CORRECTNESS to CategoryColors(Color(0xFFD64545), Color(0xFFEF7070)),
+    GrammarCategory.CLARITY to CategoryColors(Color(0xFF2D7FD6), Color(0xFF6AAFF5)),
+    GrammarCategory.ENGAGEMENT to CategoryColors(Color(0xFF15845D), Color(0xFF43C593)),
+    GrammarCategory.DELIVERY to CategoryColors(Color(0xFF8A56C9), Color(0xFFB68AF0)),
+)
+
+private fun GrammarCategory.color(isDark: Boolean): Color {
+    val colors = CATEGORY_COLORS.getValue(this)
+    return if (isDark) colors.dark else colors.light
 }
 
-private val CORRECTNESS = LintCategory(
-    R.string.ime_grammar_category_correctness_label, Color(0xFFD64545), Color(0xFFEF7070),
-)
-private val CLARITY = LintCategory(
-    R.string.ime_grammar_category_clarity_label, Color(0xFF2D7FD6), Color(0xFF6AAFF5),
-)
-private val ENGAGEMENT = LintCategory(
-    R.string.ime_grammar_category_engagement_label, Color(0xFF15845D), Color(0xFF43C593),
-)
-private val DELIVERY = LintCategory(
-    R.string.ime_grammar_category_delivery_label, Color(0xFF8A56C9), Color(0xFFB68AF0),
-)
+/**
+ * The bucket a lint's kind falls into. A kind the app does not know — a newer
+ * engine's — is painted as [GrammarCategory.ENGAGEMENT] rather than dropped,
+ * the same way the filter shows it rather than hiding it.
+ */
+private fun categoryFor(kind: String): GrammarCategory =
+    GrammarLintKind.forKind(kind)?.category ?: GrammarCategory.ENGAGEMENT
 
-private fun categoryFor(kind: String): LintCategory = when (kind.lowercase()) {
-    "spelling", "typo", "grammar", "agreement", "capitalization", "punctuation",
-    "boundaryerror", "malapropism", "eggcorn", "usage",
-    -> CORRECTNESS
-    "readability", "redundancy", "repetition", "wordchoice",
-    -> CLARITY
-    "enhancement", "style", "miscellaneous", "",
-    -> ENGAGEMENT
-    "formatting", "regionalism", "nonstandard",
-    -> DELIVERY
-    else -> ENGAGEMENT
-}
-
-/** "WordChoice" -> "Word choice"; keeps Harper's kind readable in the header. */
-private fun kindLabel(kind: String): String {
+/** "WordChoice" -> "Word choice"; the fallback for a kind with no label of its own. */
+private fun prettifyKind(kind: String): String {
     if (kind.isBlank()) return ""
     return kind.replace(Regex("(?<=[a-z])(?=[A-Z])"), " ")
         .lowercase()
         .replaceFirstChar { it.uppercase() }
+}
+
+/** The name on the card header for a lint's kind, translated where we know it. */
+@Composable
+private fun kindLabel(kind: String): String {
+    val known = GrammarLintKind.forKind(kind)
+    return if (known != null) stringResource(known.labelRes) else prettifyKind(kind)
 }
 
 /**
@@ -106,7 +109,8 @@ private fun kindLabel(kind: String): String {
  * card — category header, struck-through original, tappable fix chips and an
  * explanation — in a scrollable list. "Fix all" applies each issue's top
  * suggestion; the X on a card hides that issue until the text changes. The
- * dialect chip switches the English variant Harper checks.
+ * dialect chip switches the English variant Harper checks, and the funnel
+ * beside it picks which kinds of issue are worth showing at all.
  */
 @Composable
 internal fun GrammarPanel(
@@ -116,31 +120,52 @@ internal fun GrammarPanel(
     onDismiss: (GrammarLint) -> Unit,
     onDialect: (GrammarDialect) -> Unit,
     onFocus: (GrammarLint) -> Unit,
+    onKindShown: (GrammarLintKind, Boolean) -> Unit,
+    onCategoryShown: (GrammarCategory, Boolean) -> Unit,
+    onShowAllKinds: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
     val grammar = state.grammar
     var pickerOpen by remember { mutableStateOf(false) }
-    val fixable = grammar.lints.count { it.suggestions.isNotEmpty() }
+    var filterOpen by remember { mutableStateOf(false) }
+    val hidden = state.settings.grammarHiddenKinds
+    // What the panel is actually about: the cards, the count and "Fix all" all
+    // read this, so a filtered-out issue is not one "Fix all" quietly rewrites.
+    val lints = remember(grammar.lints, hidden) { state.visibleGrammarLints }
+    // How many of each kind the last check found, filter or no filter — the
+    // filter rows need the numbers they are hiding, not the ones left over.
+    val countByKind = remember(grammar.lints) {
+        grammar.lints.mapNotNull { GrammarLintKind.forKind(it.kind) }
+            .groupingBy { it }
+            .eachCount()
+    }
+    val fixable = lints.count { it.suggestions.isNotEmpty() }
     // The ring's regions. Seed-only (panelFocusSeedOnly): while the panel is
     // open the user is editing the field, so no arrow ever summons the ring —
-    // only opening the tool from the leader does. CHIPS is the header pair;
-    // RESULTS activates a card the way "Fix all" would fix it (its top
-    // suggestion), or jumps the caret to it when it has none.
+    // only opening the tool from the leader does. CHIPS is the header row —
+    // dialect, filter, and "Fix all" when there is anything to fix; RESULTS
+    // activates a card the way "Fix all" would fix it (its top suggestion), or
+    // jumps the caret to it when it has none.
+    val chipCount = if (fixable > 0) 3 else 2
     PanelFocusTarget(
         panel = PanelMode.GRAMMAR,
         region = FocusRegion.CHIPS,
-        count = if (fixable > 0) 2 else 1,
-        columns = 2,
+        count = chipCount,
+        columns = chipCount,
     ) { index ->
-        if (index == 0) pickerOpen = true else onFixAll()
+        when (index) {
+            0 -> pickerOpen = true
+            1 -> filterOpen = true
+            else -> onFixAll()
+        }
     }
     PanelFocusTarget(
         panel = PanelMode.GRAMMAR,
         region = FocusRegion.RESULTS,
-        count = grammar.lints.size,
+        count = lints.size,
         columns = 1,
     ) { index ->
-        grammar.lints.getOrNull(index)?.let { lint ->
+        lints.getOrNull(index)?.let { lint ->
             val top = lint.suggestions.firstOrNull()
             if (top != null) onFix(lint, top) else onFocus(lint)
         }
@@ -197,13 +222,39 @@ internal fun GrammarPanel(
                     )
                 }
             }
-            if (grammar.lints.isNotEmpty()) {
+            Spacer(Modifier.width(4.dp))
+            Box {
+                Icon(
+                    Icons.Outlined.FilterList,
+                    contentDescription = stringResource(R.string.ime_grammar_filter_desc),
+                    modifier = Modifier
+                        .clip(kb.chipShape())
+                        .background(if (hidden.isEmpty()) kb.chip else kb.chipActive)
+                        .chipBorder(kb, kb.chipShape())
+                        .focusRing(focusedChip == 1, kb.chipShape())
+                        .clickable { filterOpen = true }
+                        .padding(horizontal = 6.dp, vertical = 4.dp)
+                        .size(16.dp),
+                    tint = if (hidden.isEmpty()) kb.toolbarIcon else kb.chipActiveText,
+                )
+                if (filterOpen) {
+                    GrammarFilterPicker(
+                        hidden = hidden,
+                        countByKind = countByKind,
+                        onCategory = onCategoryShown,
+                        onKind = onKindShown,
+                        onShowAll = onShowAllKinds,
+                        onDismiss = { filterOpen = false },
+                    )
+                }
+            }
+            if (lints.isNotEmpty()) {
                 Spacer(Modifier.width(8.dp))
                 Text(
                     pluralStringResource(
                         R.plurals.ime_grammar_issue_count,
-                        grammar.lints.size,
-                        grammar.lints.size,
+                        lints.size,
+                        lints.size,
                     ),
                     color = kb.secondaryText,
                     fontSize = 11.sp,
@@ -225,7 +276,7 @@ internal fun GrammarPanel(
                         .clip(kb.chipShape())
                         .background(kb.chipActive)
                         .chipBorder(kb, kb.chipShape())
-                        .focusRing(focusedChip == 1, kb.chipShape())
+                        .focusRing(focusedChip == 2, kb.chipShape())
                         .clickable { onFixAll() }
                         .padding(horizontal = 10.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -255,7 +306,7 @@ internal fun GrammarPanel(
             grammar.sourceText.isEmpty() && !grammar.checking -> GrammarHint(
                 stringResource(R.string.ime_grammar_empty_hint),
             )
-            grammar.lints.isEmpty() && grammar.checkedOnce && !grammar.checking -> Row(
+            lints.isEmpty() && grammar.checkedOnce && !grammar.checking -> Row(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
@@ -263,14 +314,22 @@ internal fun GrammarPanel(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    Icons.Outlined.Check,
+                    if (grammar.lints.isEmpty()) Icons.Outlined.Check else Icons.Outlined.FilterList,
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
                     tint = kb.accent,
                 )
                 Spacer(Modifier.width(6.dp))
                 Text(
-                    stringResource(R.string.ime_grammar_no_issues_empty),
+                    stringResource(
+                        if (grammar.lints.isEmpty()) {
+                            R.string.ime_grammar_no_issues_empty
+                        } else {
+                            // Not "all clear": the issues are there, the
+                            // filter is simply not showing them.
+                            R.string.ime_grammar_all_filtered_empty
+                        },
+                    ),
                     color = kb.secondaryText,
                     fontSize = 13.sp,
                 )
@@ -285,7 +344,7 @@ internal fun GrammarPanel(
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
-                    itemsIndexed(grammar.lints) { index, lint ->
+                    itemsIndexed(lints) { index, lint ->
                         GrammarLintCard(
                             lint, onFix, onDismiss, onFocus,
                             focused = index == focusedLint,
@@ -440,6 +499,161 @@ private fun GrammarLintCard(
                 fontSize = 11.sp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
+/**
+ * Which kinds of issue the panel shows, two levels deep: the four categories,
+ * each of which opens onto the kinds inside it.
+ *
+ * The filter is over kinds — a category row is a shortcut that sets every kind
+ * inside it at once, and reads back as a tick when all of them are on, a dash
+ * when only some are. That is why hiding "Engagement" and then re-showing
+ * "Style" alone leaves the category dashed rather than silently re-hiding the
+ * kind the user just asked for.
+ *
+ * Counts are of the last check, filter and all: a row has to say what it is
+ * hiding, or turning a category off looks like it did nothing.
+ */
+@Composable
+private fun GrammarFilterPicker(
+    hidden: Set<GrammarLintKind>,
+    countByKind: Map<GrammarLintKind, Int>,
+    onCategory: (GrammarCategory, Boolean) -> Unit,
+    onKind: (GrammarLintKind, Boolean) -> Unit,
+    onShowAll: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val kb = LocalKbTheme.current
+    // One category open at a time: the popup is 260dp tall and four categories
+    // of twenty kinds unfolded at once would be a scroll with no landmarks.
+    var expanded by remember { mutableStateOf<GrammarCategory?>(null) }
+    Popup(onDismissRequest = onDismiss) {
+        Column(
+            modifier = Modifier
+                .widthIn(min = 220.dp, max = 280.dp)
+                .heightIn(max = 260.dp)
+                .clip(kb.menuShape())
+                .background(kb.popup)
+                .popupBorder(kb, kb.menuShape())
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 4.dp),
+        ) {
+            GrammarCategory.entries.forEach { category ->
+                val kinds = GrammarLintKind.of(category)
+                val shown = kinds.count { it !in hidden }
+                val open = expanded == category
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onCategory(category, shown < kinds.size) }
+                        .padding(start = 12.dp, end = 4.dp, top = 8.dp, bottom = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Box(
+                        Modifier
+                            .size(7.dp)
+                            .background(category.color(kb.dark), CircleShape),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        stringResource(category.labelRes),
+                        color = kb.suggestionText,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        modifier = Modifier.weight(1f),
+                    )
+                    FilterCount(kinds.sumOf { countByKind[it] ?: 0 })
+                    FilterMark(shown = shown, total = kinds.size)
+                    Icon(
+                        if (open) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                        contentDescription = stringResource(R.string.ime_grammar_filter_expand_desc),
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable { expanded = if (open) null else category }
+                            .padding(4.dp)
+                            .size(16.dp),
+                        tint = kb.secondaryText,
+                    )
+                }
+                if (open) {
+                    kinds.forEach { kind ->
+                        val kindShown = kind !in hidden
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onKind(kind, !kindShown) }
+                                .padding(start = 27.dp, end = 32.dp, top = 6.dp, bottom = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                stringResource(kind.labelRes),
+                                color = kb.suggestionText,
+                                fontSize = 12.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f),
+                            )
+                            FilterCount(countByKind[kind] ?: 0)
+                            FilterMark(shown = if (kindShown) 1 else 0, total = 1)
+                        }
+                    }
+                }
+            }
+            if (hidden.isNotEmpty()) {
+                Text(
+                    stringResource(R.string.ime_grammar_filter_show_all_action),
+                    color = kb.accent,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        // One write, not one per category: four edits of the
+                        // same key would be four settings emissions for a
+                        // button whose whole job is "back to the default".
+                        .clickable { onShowAll() }
+                        .padding(horizontal = 14.dp, vertical = 8.dp),
+                )
+            }
+        }
+    }
+}
+
+/** How many issues of this row's kind the last check found; blank at zero. */
+@Composable
+private fun FilterCount(count: Int) {
+    if (count <= 0) return
+    val kb = LocalKbTheme.current
+    Text(
+        count.toString(),
+        color = kb.secondaryText,
+        fontSize = 11.sp,
+        maxLines = 1,
+        modifier = Modifier.padding(end = 6.dp),
+    )
+}
+
+/** Tick for all shown, dash for some, nothing for none — in a fixed-width slot. */
+@Composable
+private fun FilterMark(shown: Int, total: Int) {
+    val kb = LocalKbTheme.current
+    Box(Modifier.size(16.dp), contentAlignment = Alignment.Center) {
+        when {
+            shown == total -> Icon(
+                Icons.Outlined.Check,
+                contentDescription = null,
+                modifier = Modifier.size(15.dp),
+                tint = kb.accent,
+            )
+            shown > 0 -> Icon(
+                Icons.Outlined.Remove,
+                contentDescription = null,
+                modifier = Modifier.size(15.dp),
+                tint = kb.secondaryText,
             )
         }
     }

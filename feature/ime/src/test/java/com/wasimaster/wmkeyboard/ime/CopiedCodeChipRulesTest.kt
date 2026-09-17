@@ -12,12 +12,12 @@ class CopiedCodeChipRulesTest {
 
     private fun offers(
         mode: CopiedCodeChip = CopiedCodeChip.ANY_FIELD,
-        fieldKind: FieldKind = FieldKind.TEXT,
+        codeField: Boolean = false,
         clipAgeMs: Long = 0,
         showingAgeMs: Long? = null,
     ) = offersCopiedCode(
         mode = mode,
-        fieldKind = fieldKind,
+        codeField = codeField,
         clipTimestamp = now - clipAgeMs,
         showingTimestamp = showingAgeMs?.let { now - it },
         now = now,
@@ -27,24 +27,21 @@ class CopiedCodeChipRulesTest {
     @Test
     fun `off never offers`() {
         assertFalse(offers(mode = CopiedCodeChip.OFF))
-        assertFalse(offers(mode = CopiedCodeChip.OFF, fieldKind = FieldKind.NUMBER))
+        assertFalse(offers(mode = CopiedCodeChip.OFF, codeField = true))
     }
 
     @Test
-    fun `code fields only wants a number field`() {
-        assertTrue(offers(mode = CopiedCodeChip.CODE_FIELDS, fieldKind = FieldKind.NUMBER))
-        assertFalse(offers(mode = CopiedCodeChip.CODE_FIELDS, fieldKind = FieldKind.TEXT))
-        // A phone or date keypad asks for digits without being a code box.
-        assertFalse(offers(mode = CopiedCodeChip.CODE_FIELDS, fieldKind = FieldKind.PHONE))
-        assertFalse(offers(mode = CopiedCodeChip.CODE_FIELDS, fieldKind = FieldKind.DATE))
+    fun `code fields only wants a code box`() {
+        assertTrue(offers(mode = CopiedCodeChip.CODE_FIELDS, codeField = true))
+        assertFalse(offers(mode = CopiedCodeChip.CODE_FIELDS, codeField = false))
     }
 
     @Test
     fun `any field offers outside a code box`() {
         // Issue #66: an alphanumeric code box is a plain text field, and a code
         // copied by hand is offered there like any other copy.
-        assertTrue(offers(fieldKind = FieldKind.TEXT))
-        assertTrue(offers(fieldKind = FieldKind.NUMBER))
+        assertTrue(offers(codeField = false))
+        assertTrue(offers(codeField = true))
     }
 
     @Test

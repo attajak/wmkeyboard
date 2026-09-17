@@ -60,6 +60,34 @@
     <string name="core_settings_grammar_dialect_canadian_label">Canadian</string>
     <string name="core_settings_grammar_dialect_australian_label">Australian</string>
 
+    <!-- Grammar issue buckets, shown on the panel cards and in the filter. -->
+    <string name="core_settings_grammar_category_correctness_label">Correctness</string>
+    <string name="core_settings_grammar_category_clarity_label">Clarity</string>
+    <string name="core_settings_grammar_category_engagement_label">Engagement</string>
+    <string name="core_settings_grammar_category_delivery_label">Delivery</string>
+
+    <!-- The individual grammar issue kinds the filter can hide. -->
+    <string name="core_settings_grammar_kind_spelling_label">Spelling</string>
+    <string name="core_settings_grammar_kind_typo_label">Typo</string>
+    <string name="core_settings_grammar_kind_grammar_label">Grammar</string>
+    <string name="core_settings_grammar_kind_agreement_label">Agreement</string>
+    <string name="core_settings_grammar_kind_capitalization_label">Capitalization</string>
+    <string name="core_settings_grammar_kind_punctuation_label">Punctuation</string>
+    <string name="core_settings_grammar_kind_boundary_label">Word boundaries</string>
+    <string name="core_settings_grammar_kind_malapropism_label">Confused words</string>
+    <string name="core_settings_grammar_kind_eggcorn_label">Misheard phrases</string>
+    <string name="core_settings_grammar_kind_usage_label">Usage</string>
+    <string name="core_settings_grammar_kind_readability_label">Readability</string>
+    <string name="core_settings_grammar_kind_redundancy_label">Redundancy</string>
+    <string name="core_settings_grammar_kind_repetition_label">Repetition</string>
+    <string name="core_settings_grammar_kind_word_choice_label">Word choice</string>
+    <string name="core_settings_grammar_kind_enhancement_label">Enhancement</string>
+    <string name="core_settings_grammar_kind_style_label">Style</string>
+    <string name="core_settings_grammar_kind_miscellaneous_label">Miscellaneous</string>
+    <string name="core_settings_grammar_kind_formatting_label">Formatting</string>
+    <string name="core_settings_grammar_kind_regionalism_label">Regionalism</string>
+    <string name="core_settings_grammar_kind_nonstandard_label">Nonstandard</string>
+
     <!-- ================================================================== -->
     <!-- Haptics: the shape of the buzz on a key press. Short chip labels.  -->
     <!-- ================================================================== -->

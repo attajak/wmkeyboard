@@ -48,6 +48,7 @@ import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Calculate
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Cameraswitch
+import androidx.compose.material.icons.outlined.Campaign
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.CenterFocusStrong
 import androidx.compose.material.icons.outlined.CheckBoxOutlineBlank
@@ -499,6 +500,7 @@ internal object SettingsRowIcons {
         put(R.string.langemoji_emoji_tone_override_title) { Icons.Outlined.Colorize }
         put(R.string.langemoji_emoji_close_after_insert_title) { Icons.AutoMirrored.Outlined.KeyboardReturn }
         put(R.string.langemoji_emoji_hide_unrenderable_title) { Icons.Outlined.VisibilityOff }
+        put(R.string.langemoji_emoji_categories_title) { Icons.AutoMirrored.Outlined.Sort }
         put(R.string.langemoji_emoji_keywords_title) { Icons.Outlined.EmojiEmotions }
 
         // ---- Languages ----
@@ -758,7 +760,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_smart_number_grouping_title) { Icons.AutoMirrored.Outlined.Segment }
         put(R.string.typing_otp_chip_title) { Icons.Outlined.Password }
         put(R.string.typing_otp_access_title) { Icons.Outlined.Notifications }
-        put(R.string.typing_otp_number_fields_title) { Icons.Outlined.Dialpad }
+        put(R.string.typing_otp_code_fields_title) { Icons.Outlined.Dialpad }
         put(R.string.typing_otp_expiry_title) { Icons.Outlined.Timer }
         put(R.string.typing_otp_dismiss_title) { Icons.Outlined.NotificationsOff }
         put(R.string.typing_otp_per_digit_title) { Icons.Outlined.Pin }
@@ -1035,6 +1037,10 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_grammar_debounce_title) { Icons.Outlined.Timer }
         put(R.string.tooldetail_grammar_system_title) { Icons.Outlined.Public }
         put(R.string.tooldetail_grammar_no_suggestions_title) { Icons.Outlined.FormatUnderlined }
+        put(R.string.tooldetail_grammar_correctness_title) { Icons.Outlined.Spellcheck }
+        put(R.string.tooldetail_grammar_clarity_title) { Icons.Outlined.Visibility }
+        put(R.string.tooldetail_grammar_engagement_title) { Icons.Outlined.AutoAwesome }
+        put(R.string.tooldetail_grammar_delivery_title) { Icons.Outlined.Campaign }
         put(R.string.tooldetail_wiki_markdown_title) { Icons.Outlined.Link }
         put(R.string.tooldetail_wiki_link_limit_title) { Icons.Outlined.Numbers }
         put(R.string.tooldetail_chips_nav_title) { Icons.Outlined.Calculate }

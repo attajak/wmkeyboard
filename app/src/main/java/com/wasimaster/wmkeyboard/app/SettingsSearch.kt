@@ -401,7 +401,7 @@ private fun SearchStrings.typingCodesRows(): List<SettingsSearchEntry> {
     return listOf(
         row(R.string.typing_otp_chip_title, R.string.typing_otp_chip_subtitle, weight = EntryWeight.PRIMARY),
         row(R.string.typing_otp_access_title, R.string.typing_otp_access_subtitle),
-        row(R.string.typing_otp_number_fields_title, R.string.typing_otp_number_fields_subtitle),
+        row(R.string.typing_otp_code_fields_title, R.string.typing_otp_code_fields_subtitle),
         row(R.string.typing_otp_expiry_title, R.string.typing_otp_expiry_subtitle),
         row(R.string.typing_otp_dismiss_title, R.string.typing_otp_dismiss_subtitle),
         row(R.string.typing_otp_per_digit_title, R.string.typing_otp_per_digit_subtitle),
@@ -1262,6 +1262,28 @@ private fun SearchStrings.toolPageRowsB(): List<SettingsSearchEntry> = listOf(
     toolEntry(ToolbarTool.GRAMMAR, R.string.tooldetail_grammar_dialect_title, R.string.tooldetail_grammar_dialect_subtitle),
     toolEntry(ToolbarTool.GRAMMAR, R.string.tooldetail_grammar_debounce_title, R.string.tooldetail_grammar_debounce_subtitle),
     toolEntry(ToolbarTool.GRAMMAR, R.string.tooldetail_grammar_system_title, R.string.tooldetail_grammar_system_subtitle),
+    // The four issue-type folds. Each is indexed by its own master switch, so a
+    // search for a category lands on its fold rather than on the tool page.
+    toolEntry(
+        ToolbarTool.GRAMMAR,
+        R.string.tooldetail_grammar_correctness_title,
+        R.string.tooldetail_grammar_category_search_subtitle,
+    ),
+    toolEntry(
+        ToolbarTool.GRAMMAR,
+        R.string.tooldetail_grammar_clarity_title,
+        R.string.tooldetail_grammar_category_search_subtitle,
+    ),
+    toolEntry(
+        ToolbarTool.GRAMMAR,
+        R.string.tooldetail_grammar_engagement_title,
+        R.string.tooldetail_grammar_category_search_subtitle,
+    ),
+    toolEntry(
+        ToolbarTool.GRAMMAR,
+        R.string.tooldetail_grammar_delivery_title,
+        R.string.tooldetail_grammar_category_search_subtitle,
+    ),
     toolEntry(
         ToolbarTool.GRAMMAR,
         R.string.tooldetail_grammar_no_suggestions_title,
@@ -1778,6 +1800,13 @@ private fun SearchStrings.sectionRows(): List<SettingsSearchEntry> {
             R.string.home_emoji_title,
             "emojikeywords",
             R.string.search_kw_emojikeywords,
+        ),
+        under(
+            R.string.langemoji_emoji_categories_title,
+            R.string.langemoji_emoji_categories_subtitle,
+            R.string.home_emoji_title,
+            "emojicategories",
+            R.string.search_kw_emojicategories,
         ),
         under(
             R.string.typing_blacklist_title, R.string.typing_blacklist_subtitle,

@@ -115,6 +115,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
@@ -600,6 +601,90 @@ enum class GrammarDialect(@StringRes val labelRes: Int) {
     BRITISH(R.string.core_settings_grammar_dialect_british_label),
     CANADIAN(R.string.core_settings_grammar_dialect_canadian_label),
     AUSTRALIAN(R.string.core_settings_grammar_dialect_australian_label),
+}
+
+/**
+ * The four buckets the grammar panel sorts issues into, each with its own
+ * colour dot on the card. Harper's twenty fine-grained kinds map onto these
+ * (see [GrammarLintKind.category]) so the header reads at a glance and so the
+ * filter can be worked at either level.
+ */
+enum class GrammarCategory(@StringRes val labelRes: Int) {
+    /** It is wrong: spelling, agreement, punctuation, a word mistaken for another. */
+    CORRECTNESS(R.string.core_settings_grammar_category_correctness_label),
+    /** It is right but hard work to read: wordy, repeated, the wrong word for the job. */
+    CLARITY(R.string.core_settings_grammar_category_clarity_label),
+    /** It could be better: a stylistic lift rather than a fix. */
+    ENGAGEMENT(R.string.core_settings_grammar_category_engagement_label),
+    /** It reads oddly for this audience: formatting, a regional form, a nonstandard one. */
+    DELIVERY(R.string.core_settings_grammar_category_delivery_label),
+}
+
+/**
+ * One kind of issue the offline grammar engine reports — the unit a filter
+ * hides, and what [KeyboardSettings.grammarHiddenKinds] holds.
+ *
+ * These mirror Harper's `LintKind`. The names it puts on the wire are matched
+ * letters-only and case-insensitively by [forKind], because Harper's own
+ * spelling of them is not quite its variant names: `WordChoice` arrives as
+ * "Word Choice". A kind this list does not know — a newer engine's — resolves
+ * to null and is never filtered out, so an upgrade adds issues rather than
+ * silently swallowing them.
+ *
+ * Enum names are persisted in DataStore, so rename nothing here.
+ */
+enum class GrammarLintKind(
+    @StringRes val labelRes: Int,
+    val category: GrammarCategory,
+) {
+    SPELLING(R.string.core_settings_grammar_kind_spelling_label, GrammarCategory.CORRECTNESS),
+    TYPO(R.string.core_settings_grammar_kind_typo_label, GrammarCategory.CORRECTNESS),
+    GRAMMAR(R.string.core_settings_grammar_kind_grammar_label, GrammarCategory.CORRECTNESS),
+    AGREEMENT(R.string.core_settings_grammar_kind_agreement_label, GrammarCategory.CORRECTNESS),
+    CAPITALIZATION(
+        R.string.core_settings_grammar_kind_capitalization_label,
+        GrammarCategory.CORRECTNESS,
+    ),
+    PUNCTUATION(R.string.core_settings_grammar_kind_punctuation_label, GrammarCategory.CORRECTNESS),
+    BOUNDARY_ERROR(R.string.core_settings_grammar_kind_boundary_label, GrammarCategory.CORRECTNESS),
+    MALAPROPISM(R.string.core_settings_grammar_kind_malapropism_label, GrammarCategory.CORRECTNESS),
+    EGGCORN(R.string.core_settings_grammar_kind_eggcorn_label, GrammarCategory.CORRECTNESS),
+    USAGE(R.string.core_settings_grammar_kind_usage_label, GrammarCategory.CORRECTNESS),
+    READABILITY(R.string.core_settings_grammar_kind_readability_label, GrammarCategory.CLARITY),
+    REDUNDANCY(R.string.core_settings_grammar_kind_redundancy_label, GrammarCategory.CLARITY),
+    REPETITION(R.string.core_settings_grammar_kind_repetition_label, GrammarCategory.CLARITY),
+    WORD_CHOICE(R.string.core_settings_grammar_kind_word_choice_label, GrammarCategory.CLARITY),
+    ENHANCEMENT(R.string.core_settings_grammar_kind_enhancement_label, GrammarCategory.ENGAGEMENT),
+    STYLE(R.string.core_settings_grammar_kind_style_label, GrammarCategory.ENGAGEMENT),
+    MISCELLANEOUS(
+        R.string.core_settings_grammar_kind_miscellaneous_label,
+        GrammarCategory.ENGAGEMENT,
+    ),
+    FORMATTING(R.string.core_settings_grammar_kind_formatting_label, GrammarCategory.DELIVERY),
+    REGIONALISM(R.string.core_settings_grammar_kind_regionalism_label, GrammarCategory.DELIVERY),
+    NONSTANDARD(R.string.core_settings_grammar_kind_nonstandard_label, GrammarCategory.DELIVERY),
+    ;
+
+    companion object {
+        private val byWireName = entries.associateBy { it.name.normalizedKind() }
+
+        private fun String.normalizedKind(): String =
+            lowercase().filter { it in 'a'..'z' }
+
+        /** The kind [wireName] names, or null when the engine reports one we do not know. */
+        fun forKind(wireName: String): GrammarLintKind? = byWireName[wireName.normalizedKind()]
+
+        /**
+         * Whether an issue reported as [wireName] should be shown given the
+         * filter in [hidden]. Unknown kinds are shown: see the class KDoc.
+         */
+        fun isVisible(wireName: String, hidden: Set<GrammarLintKind>): Boolean =
+            forKind(wireName)?.let { it !in hidden } ?: true
+
+        /** Every kind in [category], in declaration order. */
+        fun of(category: GrammarCategory): List<GrammarLintKind> =
+            entries.filter { it.category == category }
+    }
 }
 
 /** Content filter for the GIF and sticker tools (provider rating levels). */
@@ -2569,6 +2654,13 @@ data class KeyboardSettings(
     /** English dialect the offline grammar tool checks against. */
     val grammarDialect: GrammarDialect = GrammarDialect.AMERICAN,
     /**
+     * Issue kinds the grammar panel leaves out. Empty — the default — shows
+     * everything the engine finds; a kind in here is filtered out of the
+     * cards, the issue count and "Fix all" alike, so a filtered issue is not
+     * one "Fix all" quietly rewrites behind the user's back.
+     */
+    val grammarHiddenKinds: Set<GrammarLintKind> = emptySet(),
+    /**
      * Squiggle spelling errors but offer no fix popup when Harper acts as the
      * system spell checker. Only has an effect on Android 12+, where the
      * framework honours the "mark but don't show suggestions UI" flag.
@@ -2719,11 +2811,19 @@ data class OtpSettings(
     /** Master switch. Mirrored to the notification listener's own flag. */
     val enabled: Boolean = false,
     /**
-     * Only raise the chip when the focused field asks for digits — the shape
-     * every code box has. Off shows the chip in any ordinary field, for the
-     * apps that put their code box behind a plain text input.
+     * Only raise the chip when the focused field reads as a code box — it
+     * asks for digits, or its hint, label or resource id names it a code.
+     *
+     * Off by default, and that is the point: a code box that the app built
+     * out of a plain text input with no telling name is invisible to any
+     * test, and the chip not appearing where the code was wanted is a worse
+     * failure than a chip appearing where it was not. On is for people who
+     * would rather never see a code offered mid-sentence.
+     *
+     * Was `numberFieldsOnly`, when the test was the input class alone; the
+     * stored key keeps the old name so nobody's choice is lost.
      */
-    val numberFieldsOnly: Boolean = true,
+    val codeFieldsOnly: Boolean = false,
     /**
      * How long a captured code stays on offer. Codes outlive their welcome
      * fast: a chip still showing last hour's code is worse than no chip.
@@ -4220,7 +4320,7 @@ enum class CopiedCodeChip {
     /** Never offered; a code-shaped clip is reachable only from the panel. */
     OFF,
 
-    /** Only in a field that asks for digits, where the code is all you type. */
+    /** Only in a box that asks for a code, where the code is all you type. */
     CODE_FIELDS,
 
     /** In any field, like any other copied text. */
@@ -4478,6 +4578,32 @@ data class EmojiSettings(
      * device — but it only appears on a field that accepts images.
      */
     val sendAsSticker: Boolean = true,
+    /**
+     * The order of the panel's category tabs, as catalog category ids. Empty
+     * — the default — leaves them in the catalog's own Unicode order.
+     *
+     * A partial list is honoured rather than rejected: whatever it names is
+     * placed in that order, and the rest of the catalog falls in around it.
+     * See `EmojiOrder.merge`, which is where the two are reconciled for both
+     * the panel and the screen that edits this.
+     */
+    val categoryOrder: List<String> = emptyList(),
+    /**
+     * Category ids whose tab the panel does not draw. Hiding every category is
+     * refused at both ends — the editor keeps the last one switched on, and
+     * `EmojiOrder.categories` ignores a hidden set that would empty the panel.
+     */
+    val hiddenCategories: Set<String> = emptySet(),
+    /**
+     * Per category, the order its emoji are laid out in — catalog order where
+     * a category is absent, which is every category until someone drags one.
+     *
+     * Stored whole for a category the user has touched, not as a list of
+     * moves: 270 emoji is the largest category there is, so the honest
+     * representation costs a couple of kilobytes and cannot drift the way a
+     * replayed move list does.
+     */
+    val categoryEmojiOrder: Map<String, List<String>> = emptyMap(),
 )
 
 /** Bounds for [EmojiSettings.barCount]; the settings slider shares them. */
@@ -5741,6 +5867,27 @@ private fun decodeRepoMap(raw: String): Map<String, RepoLocation> =
         .mapNotNull { (id, fields) -> repoLocationFromFields(fields)?.let { id to it } }
         .toMap()
 
+private val emojiOrderSerializer =
+    MapSerializer(String.serializer(), ListSerializer(String.serializer()))
+
+/** The per-category emoji order as a JSON object of category id to emoji list. */
+private fun encodeEmojiOrder(map: Map<String, List<String>>): String =
+    endpointJson.encodeToString(emojiOrderSerializer, map)
+
+/**
+ * A malformed blob reads as "no custom order", which puts every category back
+ * in catalog order. That is the right failure: the orders here are a
+ * preference laid over a catalog that is itself intact, so losing one costs
+ * an arrangement, never an emoji.
+ */
+private fun decodeEmojiOrder(raw: String?): Map<String, List<String>> {
+    if (raw.isNullOrBlank()) return emptyMap()
+    return runCatching { endpointJson.decodeFromString(emojiOrderSerializer, raw) }
+        .getOrDefault(emptyMap())
+        .mapValues { (_, order) -> order.filter { it.isNotEmpty() }.distinct() }
+        .filterValues { it.isNotEmpty() }
+}
+
 /** Serializes the per-script font map to a compact `SCRIPT=fontId;...` string. */
 private fun encodeScriptFontIds(map: Map<String, String>): String =
     map.entries
@@ -6278,7 +6425,10 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_PHONE_FORMATS = stringSetPreferencesKey("clipboard_phone_formats")
         private val CLIPBOARD_FULL_BLEED = booleanPreferencesKey("clipboard_full_bleed")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
-        private val OTP_NUMBER_FIELDS_ONLY = booleanPreferencesKey("otp_number_fields_only")
+        // Stored under its old name: the test behind it grew from "number
+        // field" to "code box", but a user who turned it on meant the same
+        // thing either way and must not be silently reset.
+        private val OTP_CODE_FIELDS_ONLY = booleanPreferencesKey("otp_number_fields_only")
         private val OTP_EXPIRY_MINUTES = intPreferencesKey("otp_expiry_minutes")
         private val OTP_DISMISS_NOTIFICATION = booleanPreferencesKey("otp_dismiss_notification")
         private val OTP_PER_DIGIT_ENTRY = booleanPreferencesKey("otp_per_digit_entry")
@@ -6396,6 +6546,13 @@ class SettingsRepository(private val context: Context) {
         private val MEDIA_GRID_COLUMNS = intPreferencesKey("media_grid_columns")
         private val EMOJI_ANIMATED = booleanPreferencesKey("emoji_animated")
         private val EMOJI_SEND_AS_STICKER = booleanPreferencesKey("emoji_send_as_sticker")
+        private val EMOJI_CATEGORY_ORDER = stringPreferencesKey("emoji_category_order")
+        private val EMOJI_HIDDEN_CATEGORIES = stringSetPreferencesKey("emoji_hidden_categories")
+        // JSON rather than the comma-joined form its neighbours use: the values
+        // are emoji sequences, and a ZWJ sequence is a string whose parts must
+        // stay glued. JSON is the encoding already trusted with layout specs.
+        private val EMOJI_CATEGORY_EMOJI_ORDER =
+            stringPreferencesKey("emoji_category_emoji_order")
         private val EMOJI_AUTO_DOWNLOAD_KEYWORDS =
             booleanPreferencesKey("emoji_auto_download_keywords")
         // Stored as the DISABLED set so tools added in future versions
@@ -6567,6 +6724,7 @@ class SettingsRepository(private val context: Context) {
         private val EMOJI_ROW_ABOVE_TOOLBAR = booleanPreferencesKey("emoji_row_above_toolbar")
         private val TRANSLATE_TARGET_LANG = stringPreferencesKey("translate_target_lang")
         private val GRAMMAR_DIALECT = stringPreferencesKey("grammar_dialect")
+        private val GRAMMAR_HIDDEN_KINDS = stringSetPreferencesKey("grammar_hidden_kinds")
         private val SPELL_CHECKER_NO_SUGGESTIONS =
             booleanPreferencesKey("spell_checker_no_suggestions")
         private val TRANSLATE_API_KEY = stringPreferencesKey("translate_api_key")
@@ -7332,7 +7490,7 @@ class SettingsRepository(private val context: Context) {
             ),
             otp = OtpSettings(
                 enabled = p[OTP_CHIP_ENABLED] ?: defaults.otp.enabled,
-                numberFieldsOnly = p[OTP_NUMBER_FIELDS_ONLY] ?: defaults.otp.numberFieldsOnly,
+                codeFieldsOnly = p[OTP_CODE_FIELDS_ONLY] ?: defaults.otp.codeFieldsOnly,
                 expiryMinutes = p[OTP_EXPIRY_MINUTES] ?: defaults.otp.expiryMinutes,
                 dismissNotification = p[OTP_DISMISS_NOTIFICATION]
                     ?: defaults.otp.dismissNotification,
@@ -7682,6 +7840,15 @@ class SettingsRepository(private val context: Context) {
                 usageVersion = p[EMOJI_USAGE_VERSION] ?: defaults.emoji.usageVersion,
                 animated = p[EMOJI_ANIMATED] ?: defaults.emoji.animated,
                 sendAsSticker = p[EMOJI_SEND_AS_STICKER] ?: defaults.emoji.sendAsSticker,
+                categoryOrder = p[EMOJI_CATEGORY_ORDER]
+                    ?.split(',')
+                    ?.map { it.trim() }
+                    ?.filter { it.isNotEmpty() }
+                    ?.distinct()
+                    ?: defaults.emoji.categoryOrder,
+                hiddenCategories = p[EMOJI_HIDDEN_CATEGORIES] ?: defaults.emoji.hiddenCategories,
+                categoryEmojiOrder = decodeEmojiOrder(p[EMOJI_CATEGORY_EMOJI_ORDER])
+                    .ifEmpty { defaults.emoji.categoryEmojiOrder },
             ),
             enabledTools = ToolbarTool.entries - decodeDisabledTools(p[DISABLED_TOOLS]),
             toolboxOrder = decodeToolOrder(p[TOOLBOX_ORDER]),
@@ -7931,6 +8098,11 @@ class SettingsRepository(private val context: Context) {
             grammarDialect = p[GRAMMAR_DIALECT]
                 ?.let { runCatching { GrammarDialect.valueOf(it) }.getOrNull() }
                 ?: defaults.grammarDialect,
+            grammarHiddenKinds = p[GRAMMAR_HIDDEN_KINDS]
+                ?.mapNotNullTo(mutableSetOf()) {
+                    runCatching { GrammarLintKind.valueOf(it) }.getOrNull()
+                }
+                ?: defaults.grammarHiddenKinds,
             spellCheckerNoSuggestions = p[SPELL_CHECKER_NO_SUGGESTIONS]
                 ?: defaults.spellCheckerNoSuggestions,
             translateApiKey = p[TRANSLATE_API_KEY] ?: defaults.translateApiKey,
@@ -10870,6 +11042,52 @@ class SettingsRepository(private val context: Context) {
     suspend fun setSendEmojiAsSticker(value: Boolean) =
         editPrefs { it[EMOJI_SEND_AS_STICKER] = value }
 
+    /**
+     * Rewrites the category tab order; see [EmojiSettings.categoryOrder]. The
+     * ids are stored as given, including categories this build's catalog does
+     * not have — a keyword pack may add one back, and dropping it here would
+     * lose the place the user put it.
+     */
+    suspend fun setEmojiCategoryOrder(order: List<String>) =
+        editPrefs {
+            val clean = order.map(String::trim).filter(String::isNotEmpty).distinct()
+            if (clean.isEmpty()) it.remove(EMOJI_CATEGORY_ORDER)
+            else it[EMOJI_CATEGORY_ORDER] = clean.joinToString(",")
+        }
+
+    suspend fun resetEmojiCategoryOrder() = editPrefs { it.remove(EMOJI_CATEGORY_ORDER) }
+
+    /** Shows or hides one category's tab; see [EmojiSettings.hiddenCategories]. */
+    suspend fun setEmojiCategoryVisible(category: String, visible: Boolean) =
+        editPrefs {
+            val hidden = it[EMOJI_HIDDEN_CATEGORIES].orEmpty()
+            val next = if (visible) hidden - category else hidden + category
+            if (next.isEmpty()) it.remove(EMOJI_HIDDEN_CATEGORIES)
+            else it[EMOJI_HIDDEN_CATEGORIES] = next
+        }
+
+    /**
+     * Rewrites one category's emoji order; see [EmojiSettings.categoryEmojiOrder].
+     * An empty [order] drops the entry, which is how a category goes back to
+     * catalog order — storing an empty list would mean the same thing but
+     * leave a growing map of nothing behind.
+     */
+    suspend fun setEmojiCategoryEmojiOrder(category: String, order: List<String>) =
+        editPrefs { prefs ->
+            val current = decodeEmojiOrder(prefs[EMOJI_CATEGORY_EMOJI_ORDER])
+            val clean = order.filter { it.isNotEmpty() }.distinct()
+            val next = if (clean.isEmpty()) current - category else current + (category to clean)
+            if (next.isEmpty()) prefs.remove(EMOJI_CATEGORY_EMOJI_ORDER)
+            else prefs[EMOJI_CATEGORY_EMOJI_ORDER] = encodeEmojiOrder(next)
+        }
+
+    /** Puts every category's emoji, and the tabs themselves, back in catalog order. */
+    suspend fun resetEmojiOrder() = editPrefs {
+        it.remove(EMOJI_CATEGORY_ORDER)
+        it.remove(EMOJI_HIDDEN_CATEGORIES)
+        it.remove(EMOJI_CATEGORY_EMOJI_ORDER)
+    }
+
     suspend fun bumpEmojiKeywordPackVersion() =
         editPrefs {
             it[EMOJI_KEYWORD_PACK_VERSION] = (it[EMOJI_KEYWORD_PACK_VERSION] ?: 0) + 1
@@ -12222,8 +12440,8 @@ class SettingsRepository(private val context: Context) {
     suspend fun setOtpChipEnabled(value: Boolean) =
         editPrefs { it[OTP_CHIP_ENABLED] = value }
 
-    suspend fun setOtpNumberFieldsOnly(value: Boolean) =
-        editPrefs { it[OTP_NUMBER_FIELDS_ONLY] = value }
+    suspend fun setOtpCodeFieldsOnly(value: Boolean) =
+        editPrefs { it[OTP_CODE_FIELDS_ONLY] = value }
 
     suspend fun setOtpExpiryMinutes(value: Int) =
         editPrefs { it[OTP_EXPIRY_MINUTES] = value.coerceIn(1, 10) }
@@ -12538,6 +12756,25 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setGrammarDialect(value: GrammarDialect) =
         editPrefs { it[GRAMMAR_DIALECT] = value.name }
+
+    /** Replaces the grammar filter; see [KeyboardSettings.grammarHiddenKinds]. */
+    suspend fun setGrammarHiddenKinds(value: Set<GrammarLintKind>) =
+        editPrefs { prefs -> prefs[GRAMMAR_HIDDEN_KINDS] = value.mapTo(mutableSetOf()) { it.name } }
+
+    /** Shows or hides one grammar issue kind, leaving the rest of the filter alone. */
+    suspend fun setGrammarKindShown(kind: GrammarLintKind, shown: Boolean) =
+        editPrefs { prefs ->
+            val now = prefs[GRAMMAR_HIDDEN_KINDS] ?: emptySet()
+            prefs[GRAMMAR_HIDDEN_KINDS] = if (shown) now - kind.name else now + kind.name
+        }
+
+    /** Shows or hides every kind in one grammar category at once. */
+    suspend fun setGrammarCategoryShown(category: GrammarCategory, shown: Boolean) =
+        editPrefs { prefs ->
+            val names = GrammarLintKind.of(category).mapTo(mutableSetOf()) { it.name }
+            val now = prefs[GRAMMAR_HIDDEN_KINDS] ?: emptySet()
+            prefs[GRAMMAR_HIDDEN_KINDS] = if (shown) now - names else now + names
+        }
 
     suspend fun setSpellCheckerNoSuggestions(value: Boolean) =
         editPrefs { it[SPELL_CHECKER_NO_SUGGESTIONS] = value }

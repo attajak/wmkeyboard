@@ -219,4 +219,27 @@
     <!-- First sentence of the metered download dialog. The datasaver_metered_*
          strings give the rest. %1$s is an already formatted size such as "42 MB". -->
     <string name="languages_metered_confirm_body">This language data is about %1$s.</string>
+    <!-- Emoji category order and per-category emoji order (issue #183). -->
+    <string name="langemoji_emoji_categories_title">Emoji categories</string>
+    <string name="langemoji_emoji_categories_subtitle">Reorder the tabs, hide the ones you never open, and arrange the emoji inside each</string>
+    <string name="langemoji_emoji_categories_info">The emoji panel ships its categories in Unicode\'s own order, which is rarely the order you reach for them in. Drag a category to move its tab, and press the eye to hide a tab you never open. Press a category to arrange the emoji inside it: press and hold one, then drag it where you want it. The Recent tab, and the Kaomoji and Emoticons tabs, are not listed here — Recent orders itself by use, and the other two are switched on and off above.</string>
+    <string name="langemoji_emoji_categories_order_title">Tab order</string>
+    <string name="langemoji_emoji_categories_hidden_label">Hidden</string>
+    <!-- %1$s is a category name such as "Animals". -->
+    <string name="langemoji_emoji_category_show_desc">Show the %1$s tab</string>
+    <string name="langemoji_emoji_category_hide_desc">Hide the %1$s tab</string>
+    <!-- %1$d is a number of emoji. -->
+    <plurals name="langemoji_emoji_category_count">
+        <item quantity="one">%1$d emoji</item>
+        <item quantity="other">%1$d emoji</item>
+    </plurals>
+    <string name="langemoji_emoji_categories_reset_title">Reset every order</string>
+    <string name="langemoji_emoji_categories_reset_subtitle">Put the tabs, the hidden ones and the emoji in every category back the way they shipped</string>
+    <string name="langemoji_emoji_categories_reset_confirm">Every category goes back to Unicode order, every hidden tab comes back, and the emoji inside every category go back to their catalogue order. Your recents, favourites and skin tones are not touched.</string>
+    <string name="langemoji_emoji_order_hint">Press and hold an emoji, then drag it where you want it.</string>
+    <string name="langemoji_emoji_order_reset_action">Reset</string>
+    <string name="langemoji_emoji_order_reset_desc">Put this category back in catalogue order</string>
+    <string name="langemoji_emoji_order_custom_label">Custom order</string>
+    <string name="langemoji_emoji_order_catalog_label">Catalogue order</string>
 </resources>
+
