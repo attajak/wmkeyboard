@@ -17,6 +17,9 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import com.wasimaster.wmkeyboard.core.layout.Key
+import com.wasimaster.wmkeyboard.core.layout.alternateEntries
+import com.wasimaster.wmkeyboard.core.layout.holdRepeats
+import com.wasimaster.wmkeyboard.core.layout.opensAlternatesPopup
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import kotlin.math.abs
 import kotlin.math.max
@@ -56,6 +59,26 @@ internal class KeyGridFocus {
 
     /** What pressing the centre button does where the ring is standing. */
     private var focused: (() -> Unit)? = null
+
+    /** The key under the ring, or null when it is on a chip or a tool button. */
+    private var focusedKey: Key? = null
+
+    /**
+     * The key whose alternates a held centre button has opened, with the cell
+     * to hang the popup off; null when no popup is up. Snapshot state: the
+     * frame composes the popup from it.
+     */
+    val alternates = mutableStateOf<RingAlternates?>(null)
+
+    /**
+     * The popup's own selection and geometry, driven from the arrow keys here
+     * rather than from a finger. The same holder a touch long-press uses, so
+     * both routes highlight and commit through one path.
+     */
+    val hold = AlternatesHold()
+
+    /** Whether a held centre button has a popup open over the ringed key. */
+    val alternatesOpen: Boolean get() = alternates.value != null
 
     private var rects: KeyRects? = null
     private var typeKey: ((Key) -> Unit)? = null
@@ -139,8 +162,10 @@ internal class KeyGridFocus {
 
     /** Takes the ring down: the board is going away, or a finger has taken over. */
     fun clear() {
+        cancelAlternates()
         cell.value = null
         focused = null
+        focusedKey = null
     }
 
     /** Forgets the screen as well — a new input session gets a fresh ring. */
@@ -154,6 +179,85 @@ internal class KeyGridFocus {
     private fun take(target: FocusCell) {
         cell.value = target.rect
         focused = target.activate
+        focusedKey = target.key
+    }
+
+    /** Whether holding the centre button on the ringed key should repeat it (#231). */
+    fun repeatsOnHold(): Boolean = focusedKey?.holdRepeats() == true
+
+    /**
+     * Opens the ringed key's alternates, the way a long press does — the only
+     * route a remote has to an accented character on a layout that keeps them
+     * in a popup. False when the ring is on something with no popup to open,
+     * which leaves a held button doing nothing rather than typing twice.
+     */
+    fun openAlternates(): Boolean {
+        if (alternatesOpen) return true
+        val key = focusedKey ?: return false
+        val at = cell.value ?: return false
+        if (!key.opensAlternatesPopup() || key.alternateEntries().isEmpty()) return false
+        hold.open()
+        alternates.value = RingAlternates(key, at)
+        return true
+    }
+
+    /**
+     * One arrow key inside the open popup.
+     *
+     * The entries' own rectangles are what the popup already publishes for a
+     * hold-drag ([AlternatesHold.rects]), so the ring walks them with the same
+     * geometry it walks the keys with — wrapping along a row included. A
+     * down-press with nothing below closes the popup and types nothing: on a
+     * touch keyboard sliding back down to the key is the cancel, and this is
+     * that gesture with a D-pad.
+     */
+    fun moveAlternates(dx: Int, dy: Int): Boolean {
+        if (!alternatesOpen) return false
+        val rects = hold.rects
+        val index = hold.selected.intValue
+        if (rects.isEmpty() || index !in rects.indices) {
+            // Opened but not yet placed: step the selection by hand so the
+            // first press after the popup appears is never swallowed.
+            hold.selected.intValue = (index + dx).coerceAtLeast(0)
+            return true
+        }
+        val next = nextKeyCell(rects, rects[index], dx, dy)
+        if (next == null) {
+            if (dy > 0) {
+                cancelAlternates()
+                return true
+            }
+            return false
+        }
+        hold.selected.intValue = rects.indexOf(next)
+        return true
+    }
+
+    /**
+     * One arrow key, wherever the ring currently lives: inside the open
+     * alternates popup, or over the board. One call so the service's key
+     * handler reads as the four directions it is, rather than as eight
+     * branches that must not disagree about which layer owns the arrows.
+     */
+    fun step(inPopup: Boolean, dx: Int, dy: Int): Boolean =
+        if (inPopup) moveAlternates(dx, dy) else move(dx, dy)
+
+    /** Types the highlighted alternate and closes the popup. */
+    fun commitAlternates(): Boolean {
+        if (!alternatesOpen) return false
+        // `commit` reads the selection, clears it and calls the popup's own
+        // onCommit — the same call a lifted finger makes.
+        hold.commit()
+        alternates.value = null
+        return true
+    }
+
+    /** Closes the popup without typing anything. */
+    fun cancelAlternates(): Boolean {
+        if (!alternatesOpen) return false
+        hold.cancel()
+        alternates.value = null
+        return true
     }
 
     /**
@@ -166,7 +270,7 @@ internal class KeyGridFocus {
             emptyList()
         } else {
             rects?.focusCells().orEmpty().map { (rect, key) ->
-                FocusCell(rect, { type(key) }, isKey = true)
+                FocusCell(rect, { type(key) }, key)
             }
         }
         return (keys + targets.values).takeIf { it.isNotEmpty() }
@@ -198,9 +302,16 @@ internal class KeyGridFocus {
 private class FocusCell(
     val rect: Rect,
     val activate: () -> Unit,
+    /**
+     * The key this cell draws, or null for a toolbar button or a suggestion
+     * chip. Carried so a held centre button can open the key's own alternates,
+     * which is the remote's only route to an accented character.
+     */
+    val key: Key? = null,
+) {
     /** Keys are what the ring seeds onto, and what it prefers in a tie. */
-    val isKey: Boolean = false,
-)
+    val isKey: Boolean get() = key != null
+}
 
 /**
  * Whether the D-pad ring is on, for the surfaces that are not the key grid.
@@ -231,6 +342,9 @@ internal fun Modifier.dpadTarget(id: Any, onActivate: () -> Unit): Modifier {
     DisposableEffect(focus, id) { onDispose { focus.removeTarget(id) } }
     return onGloballyPositioned { focus.putTarget(id, it.boundsInRoot()) { activate.value() } }
 }
+
+/** A long press the ring is holding open: whose alternates, and over which cell. */
+internal class RingAlternates(val key: Key, val cell: Rect)
 
 /** The two toolbar buttons that are not tools, as ring ids. */
 internal const val BarBackRingId = "wm.bar.back"

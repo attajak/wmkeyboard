@@ -326,6 +326,7 @@ import com.wasimaster.wmkeyboard.core.tools.page
 import com.wasimaster.wmkeyboard.core.tools.step
 import com.wasimaster.wmkeyboard.core.util.PlayServices
 import com.wasimaster.wmkeyboard.core.util.runCancellable
+import com.wasimaster.wmkeyboard.ime.ui.KeyGridFocus
 import com.wasimaster.wmkeyboard.ime.ui.PanelFocusController
 import com.wasimaster.wmkeyboard.core.tools.DictionaryClient
 import com.wasimaster.wmkeyboard.core.tools.GifItem
@@ -24985,6 +24986,10 @@ open class WMKeyboardService : InputMethodService() {
      * drifted on which layer they checked first.
      */
     private fun dismissTopLayer(fromBack: Boolean = false): Boolean {
+        // Above everything else, and for the same reason the layer peek's popup
+        // closes before the layer it is on: it is the newest thing the user
+        // opened and the one they are looking at.
+        if (panelFocus.keyGrid.cancelAlternates()) return true
         val close = topLayerDismissal(_uiState.value, fromBack) ?: return false
         close()
         return true
@@ -25003,8 +25008,14 @@ open class WMKeyboardService : InputMethodService() {
      * the system's (issue #227).
      */
     private fun backClosesLayer(state: KeyboardUiState = _uiState.value): Boolean =
-        (state.panel != PanelMode.NONE || state.voice.strip) &&
-            topLayerDismissal(state, fromBack = true) != null
+        // The ring's own long-press popup is a layer like any other, and on a
+        // television Back is the only key that can close it — a remote has no
+        // Escape. It is not in the ui state (the ring lives in the controller,
+        // where nothing it does costs the board a recomposition), so it is
+        // asked about here rather than in [topLayerDismissal]'s `when`.
+        panelFocus.keyGrid.alternatesOpen ||
+            ((state.panel != PanelMode.NONE || state.voice.strip) &&
+                topLayerDismissal(state, fromBack = true) != null)
 
     /**
      * How to close the topmost layer showing, or null when Back has nothing of
@@ -25289,39 +25300,62 @@ open class WMKeyboardService : InputMethodService() {
     private fun handleKeyGridNavKey(event: KeyEvent): Boolean {
         if (!_uiState.value.settings.hardwareKeyboard.dpadKeyNavigation) return false
         if (!isInputViewShown) return false
-        // The ring is drawn by the docked frame, which is the only frame a
-        // television ever has (floating is one of the touch features
-        // `applyTelevision` switches off). On a phone whose owner turned the
-        // ring on by hand and then floated the board, moving a ring nobody can
-        // see would be worse than leaving the arrow keys to the app.
-        if (_uiState.value.settings.floatingKeyboard) return false
         if (_uiState.value.panel != PanelMode.NONE) return false
         val focus = panelFocus.keyGrid
         val keyCode = event.keyCode
+        // A long press has the ringed key's alternates open: the arrows are
+        // steering that popup, not the board behind it.
+        val inPopup = focus.alternatesOpen
         return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_LEFT -> focus.move(-1, 0) && consumeHardwareKey(keyCode)
-            KeyEvent.KEYCODE_DPAD_RIGHT -> focus.move(1, 0) && consumeHardwareKey(keyCode)
-            KeyEvent.KEYCODE_DPAD_UP -> focus.move(0, -1) && consumeHardwareKey(keyCode)
-            KeyEvent.KEYCODE_DPAD_DOWN -> focus.move(0, 1) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_LEFT -> focus.step(inPopup, -1, 0) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_RIGHT -> focus.step(inPopup, 1, 0) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_UP -> focus.step(inPopup, 0, -1) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_DOWN -> focus.step(inPopup, 0, 1) && consumeHardwareKey(keyCode)
             // The centre button types the ringed key. With no ring up it is the
             // app's own "activate", which is what put the keyboard on screen in
             // the first place — and on a keyboard with a hardware Enter, an
             // Enter with no ring still has to mean the field's editor action.
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
             KeyEvent.KEYCODE_NUMPAD_ENTER,
-            -> focus.press() && consumeHardwareKey(keyCode)
+            -> handleRingPress(focus, event) && consumeHardwareKey(keyCode)
 
             // The way out, for a physical keyboard whose owner turned the ring
             // on: with it down, Enter means the field's editor action again and
             // the arrow keys are the app's. Only ever consumed while the ring is
             // actually up — a bare Escape belongs to the app (see the note in
             // [handleHardwareNav]), and this one has not even opened a panel.
-            KeyEvent.KEYCODE_ESCAPE -> {
-                focus.showing && run { focus.clear(); consumeHardwareKey(keyCode) }
+            KeyEvent.KEYCODE_ESCAPE -> when {
+                inPopup -> focus.cancelAlternates() && consumeHardwareKey(keyCode)
+                focus.showing -> run { focus.clear(); consumeHardwareKey(keyCode) }
+                else -> false
             }
 
             else -> false
         }
+    }
+
+    /**
+     * The centre button, in all four of its meanings.
+     *
+     * A tap types the ringed key. Holding it does what holding a finger on that
+     * key does: a key that repeats while held repeats (backspace, the arrows —
+     * issue #231), and a key with alternates opens them, which is the only way
+     * a remote reaches an accented character. Once the popup is up the same
+     * button commits the highlighted entry.
+     *
+     * Auto-repeat is the clock: `repeatCount` 0 is the press, 1 is the platform
+     * long-press threshold, and the repeats after it are swallowed rather than
+     * left to fall through to the app half-way through a hold.
+     */
+    private fun handleRingPress(focus: KeyGridFocus, event: KeyEvent): Boolean = when {
+        focus.alternatesOpen -> focus.commitAlternates()
+        event.repeatCount == 0 -> focus.press()
+        // Repeating keys spend the hold on repeating, exactly as a finger does;
+        // they have no popup to open (`holdRepeats` and `opensAlternatesPopup`
+        // are exclusive on the same key).
+        focus.repeatsOnHold() -> focus.press()
+        event.repeatCount == 1 -> focus.openAlternates() || focus.showing
+        else -> focus.showing
     }
 
     /** Arrow, Enter and Tab inside an open panel: move, activate, change region. */

@@ -26,6 +26,9 @@ If you are sideloading rather than installing from a store, the same APK works: 
 | Left or right at the end of a row | Wrap around to the other end of the same row |
 | Up from the top row | Reach the suggestions, then the toolbar, then leave the keyboard for the app behind it |
 | Centre, or <KeyCap>Enter</KeyCap> | Type the key the ring is on |
+| Centre, held | Open that key's long-press alternates — or repeat it, for the keys that repeat |
+| Centre, in an open popup | Type the highlighted alternate |
+| Back, in an open popup | Close it without typing |
 | Back | Close whatever the keyboard has open, then hide the keyboard |
 
 Holding an arrow repeats it, so crossing the board is one long press rather than ten short ones.
@@ -64,8 +67,7 @@ The highlight *inside* a tool, which is a separate switch and on everywhere. Wit
 ## Details & edge cases
 
 - **The ring never appears until you press an arrow key.** Until then the board looks exactly as it does on a phone. On a keyboard with an <KeyCap>Esc</KeyCap> key, Escape puts it away again — useful if you switched the ring on beside a physical keyboard and want <KeyCap>Enter</KeyCap> back.
-- **The floating board has no ring.** It is off on a television anyway; if you turn the ring on by hand on a phone and then float the keyboard, the arrow keys go back to the app.
 - **Up and down can leave the keyboard; left and right cannot.** Leaving upward — past the suggestions and the toolbar — is how the remote gets back to the app's own controls. Left and right wrap inside the row instead, so spelling a word can never quietly move the app's selection.
 - **A layer switch keeps the ring where your eye is.** Press <KeyCap>?123</KeyCap> and the ring lands on whichever symbol key is nearest to where it was standing.
-- **Long-press alternates are not reachable from the remote** yet. Accented characters that live in a key's long-press popup have to come from a layout that gives them keys of their own — see [Key layouts](/languages/custom-layouts/).
+- **Accents come from a held centre button.** It opens the same popup a long press opens on a phone; the arrows walk the entries and the centre button types the highlighted one. Pressing down out of the bottom row closes the popup without typing, which is the remote's version of sliding your finger back to the key. Keys that repeat while held — backspace, the arrow keys — repeat instead of opening anything, so holding backspace still deletes.
 - **Voice typing works**, and is usually the fastest way to enter a long string on a TV: ring up to the toolbar, land on the microphone and press the centre button. A remote with a microphone button of its own does not route it to the keyboard; the system handles that itself.

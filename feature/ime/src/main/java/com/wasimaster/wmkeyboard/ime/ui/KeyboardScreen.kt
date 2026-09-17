@@ -1531,6 +1531,9 @@ fun KeyboardScreen(
                             },
                             onBounds = onFloatingBounds,
                             keyPreview = keyPreview,
+                            keyGridFocus = panelFocus.keyGrid,
+                            onRingKey = onKey,
+                            onRingText = onText,
                             content = { heightScale ->
                                 // Key height carries the whole layout (panels
                                 // included), so scaling it scales the
@@ -1556,6 +1559,8 @@ fun KeyboardScreen(
                             resize = resizeSession,
                             keyPreview = keyPreview,
                             keyGridFocus = panelFocus.keyGrid,
+                            onRingKey = onKey,
+                            onRingText = onText,
                             onWindowHeadroom = onWindowHeadroom,
                             body = movableBody,
                         )
@@ -1593,6 +1598,9 @@ private fun DockedKeyboardFrame(
     keyPreview: KeyPreviewState,
     /** Where a television remote is pointing, drawn over the whole frame. */
     keyGridFocus: KeyGridFocus,
+    /** What the ring's own long-press popup commits with; see [RingAlternatesPopup]. */
+    onRingKey: (Key) -> Unit,
+    onRingText: (String) -> Unit,
     onWindowHeadroom: (Int) -> Unit = {},
     body: @Composable ColumnScope.(KeyboardUiState) -> Unit,
 ) {
@@ -1766,6 +1774,14 @@ private fun DockedKeyboardFrame(
         // behind it.
         if (state.settings.hardwareKeyboard.dpadKeyNavigation && state.panel == PanelMode.NONE) {
             KeyFocusRing(keyGridFocus, state.settings) { frameOrigin }
+            RingAlternatesPopup(
+                focus = keyGridFocus,
+                popup = state.settings.popup,
+                onKey = onRingKey,
+                onText = onRingText,
+                shifted = state.shiftState != ShiftState.OFF,
+                origin = { frameOrigin },
+            )
         }
     }
 }
@@ -1849,6 +1865,11 @@ private fun FloatingKeyboardFrame(
     onResized: (Int, Float) -> Unit,
     onBounds: (IntRect) -> Unit,
     keyPreview: KeyPreviewState,
+    /** Where a television remote is pointing, drawn over the floating panel. */
+    keyGridFocus: KeyGridFocus,
+    /** What the ring's own long-press popup commits with; see [RingAlternatesPopup]. */
+    onRingKey: (Key) -> Unit,
+    onRingText: (String) -> Unit,
     content: @Composable ColumnScope.(Float) -> Unit,
 ) {
     // Where the bubbles' overlay sits in the root, read here since the
@@ -2086,6 +2107,21 @@ private fun FloatingKeyboardFrame(
                     content(liveHeightScale)
                 }
             }
+        }
+        // The ring, over the panel wherever the panel has been dragged to. A
+        // Canvas takes no pointers, so the touchable region the service carves
+        // out for the floating board is unchanged — everything outside the
+        // panel still falls through to the app.
+        if (state.settings.hardwareKeyboard.dpadKeyNavigation && state.panel == PanelMode.NONE) {
+            KeyFocusRing(keyGridFocus, state.settings) { frameOrigin }
+            RingAlternatesPopup(
+                focus = keyGridFocus,
+                popup = state.settings.popup,
+                onKey = onRingKey,
+                onText = onRingText,
+                shifted = state.shiftState != ShiftState.OFF,
+                origin = { frameOrigin },
+            )
         }
     }
 }
@@ -11240,6 +11276,74 @@ internal fun LayerPeekPopup(
             },
             onAction = { alternateKey ->
                 peek.popupKey = null
+                onKey(alternateKey)
+            },
+        )
+    }
+}
+
+/**
+ * The alternates a *held centre button* has opened over the ring (a television
+ * remote's long press).
+ *
+ * Built exactly like [LayerPeekPopup] and for the same reason: the popup hangs
+ * off a stand-in the size of the ringed key's cell, because no key composable
+ * is running the press that would normally open it. The difference is only the
+ * driver — [KeyGridFocus] moves the selection from the arrow keys instead of a
+ * finger moving it, through the same [AlternatesHold].
+ *
+ * [origin] converts the ring's root-space cell into this frame's own space, the
+ * way the ring itself is drawn.
+ */
+@Composable
+internal fun RingAlternatesPopup(
+    focus: KeyGridFocus,
+    popup: KeyPopupSettings,
+    onKey: (Key) -> Unit,
+    onText: (String) -> Unit,
+    /** [shiftCasesText] for the board the ring is typing on. */
+    shifted: Boolean,
+    origin: () -> Offset,
+) {
+    val open = focus.alternates.value ?: return
+    val key = open.key
+    // Assigned each composition, the way a key and the layer peek both assign
+    // their own: it closes over the commit paths as they are now, and the
+    // centre button reads it through `hold.commit()`.
+    focus.hold.onCommit = { index ->
+        when (val entry = key.alternateEntries().getOrNull(index)) {
+            is AlternateEntry.Character -> onText(entry.text)
+            is AlternateEntry.Action -> onKey(
+                Key(label = entry.alternate.label, action = entry.alternate.action),
+            )
+            null -> Unit
+        }
+    }
+    val density = LocalDensity.current
+    val cell = open.cell.translate(-origin())
+    Box(
+        modifier = Modifier
+            .offset { IntOffset(cell.left.roundToInt(), cell.top.roundToInt()) }
+            .size(
+                with(density) { cell.width.toDp() },
+                with(density) { cell.height.toDp() },
+            ),
+    ) {
+        AlternatesPopup(
+            key = key,
+            popupPosition = rememberAboveAnchorPopup(),
+            popup = popup,
+            hold = focus.hold,
+            shifted = shifted,
+            onDismiss = { focus.cancelAlternates() },
+            // The touch paths inside the popup still work — a hybrid device can
+            // finish with a tap what the remote started.
+            onText = { text ->
+                focus.cancelAlternates()
+                onText(text)
+            },
+            onAction = { alternateKey ->
+                focus.cancelAlternates()
                 onKey(alternateKey)
             },
         )
