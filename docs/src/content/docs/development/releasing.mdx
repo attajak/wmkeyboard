@@ -213,6 +213,24 @@ have in `dist/`:
 .github/scripts/release-notes.sh 0.5.9 20 v0.5.9 dist wasi-master/wmkeyboard
 ```
 
+### Rewriting a release that is already out
+
+`.github/scripts/backfill-release-notes.sh` puts a published release's body
+through the same generator, and creates the release when a tag has none:
+
+```sh
+.github/scripts/backfill-release-notes.sh --dry-run v0.4.0
+.github/scripts/backfill-release-notes.sh v0.4.0 v0.4.1
+```
+
+It downloads nothing. The asset list from the API carries each file's byte
+count, and the script writes sparse stand-ins of exactly that size for the
+generator to measure, so the grid ends up with the real numbers. Two details it
+handles on its own: 0.3.0 predates the versioned filenames, so its grid is
+pointed back at the `app-<flavor>-<abi>-release.apk` names actually attached;
+and a release it *creates* passes `--latest=false`, because a tag cut after the
+fact must not take the Latest badge that the in-app updater reads.
+
 :::tip[Rehearse without publishing]
 Run the workflow from the Actions tab with **dry run** left on. Everything
 builds and uploads as workflow artifacts, and no release is created.
