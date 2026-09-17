@@ -71,7 +71,15 @@ The first row follows whatever the updater is currently doing, and its label alw
 | **Install the update** | The download finished and passed its checks | Installs it |
 | **Installing the update** | While it installs | Nothing; it isn't pressable |
 
-Underneath, a **Release page** row appears whenever an update is on offer, so you can read the notes or fetch the file yourself.
+Underneath, a **Release page** row appears whenever an update is on offer, so you can fetch the file yourself.
+
+### Reading what changed
+
+Wherever an update is offered, on the home-screen card and in the dialog that asks about it, a **What's new** button opens that version's release notes in a dialog of their own. These are the full notes, the same ones the release page carries: headings, bullets, and links to the issues a change closed, laid out rather than shown as raw markdown. Tapping a link opens it in your browser.
+
+The notes are fetched the moment you press the button, not with the update check, so nothing is downloaded for a release you never asked about. The dialog opens straight away and shows a progress bar until they arrive. A release that never had notes written for it says so instead of opening empty.
+
+GitHub builds only. An F-Droid build has a page to send you to and no notes behind it, so it offers no button, and the Play Store shows its own "What's new" in the store listing.
 
 ### What a GitHub build checks before it installs
 

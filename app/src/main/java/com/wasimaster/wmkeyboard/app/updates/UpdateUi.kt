@@ -125,16 +125,40 @@ internal fun UpdatePromptDialog(settings: KeyboardSettings) {
     val available = state as? UpdateState.Available ?: return
     if (!available.promptOpen) return
     val download = rememberUpdateDownloadRequest(updater, available.sizeBytes, settings)
+    var showNotes by remember(available.versionCode) { mutableStateOf(false) }
+    if (showNotes) {
+        ReleaseNotesDialog(
+            version = available.versionName,
+            notes = notes,
+            onDismiss = { showNotes = false },
+        )
+        return
+    }
     AlertDialog(
         onDismissRequest = updater::dismiss,
         title = { Text(stringResource(R.string.update_card_available_title)) },
-        text = { Text(availableBody(available, updater) + notesTail(notes)) },
+        text = { Text(availableBody(available, updater)) },
         confirmButton = {
             TextButton(onClick = download) { Text(startActionLabel(updater)) }
         },
         dismissButton = {
-            TextButton(onClick = updater::dismiss) {
-                Text(stringResource(R.string.update_action_later))
+            Row {
+                // The notes are their own dialog rather than more text in this
+                // one: an offer the user has to read past to reach the button
+                // is a worse offer.
+                if (updater.supportsNotes) {
+                    TextButton(
+                        onClick = {
+                            showNotes = true
+                            updater.loadNotes()
+                        },
+                    ) {
+                        Text(stringResource(R.string.update_action_notes))
+                    }
+                }
+                TextButton(onClick = updater::dismiss) {
+                    Text(stringResource(R.string.update_action_later))
+                }
             }
         },
     )
@@ -150,13 +174,16 @@ private fun AvailableCard(
     val notes by updater.releaseNotes.collectAsStateWithLifecycle()
     var showNotes by remember(state.versionCode) { mutableStateOf(false) }
     val download = rememberUpdateDownloadRequest(updater, state.sizeBytes, settings)
+    if (showNotes) {
+        ReleaseNotesDialog(
+            version = state.versionName,
+            notes = notes,
+            onDismiss = { showNotes = false },
+        )
+    }
     UpdateCardFrame(
         title = stringResource(R.string.update_card_available_title),
-        body = availableBody(state, updater) + if (showNotes) notesTail(notes) else "",
-        // The notes come off the network, and until they land the card looks
-        // exactly as it did before the press — the button is gone and nothing
-        // has replaced it. The bar is what says the press was heard.
-        busy = showNotes && notes == null,
+        body = availableBody(state, updater),
         modifier = modifier,
     ) {
         Button(onClick = download) { Text(startActionLabel(updater)) }
@@ -171,7 +198,7 @@ private fun AvailableCard(
         }
         // Gated on the updater rather than on there being a page to link to:
         // F-Droid has the page and no notes behind it. See [AppUpdater.supportsNotes].
-        if (updater.supportsNotes && !showNotes) {
+        if (updater.supportsNotes) {
             Spacer(Modifier.width(8.dp))
             TextButton(
                 onClick = {
@@ -364,14 +391,6 @@ private fun availableBody(state: UpdateState.Available, updater: AppUpdater): St
             source,
         )
     }
-}
-
-/** The release notes appended to a card body, or a line saying there are none. */
-@Composable
-private fun notesTail(notes: String?): String = when {
-    notes == null -> ""
-    notes.isBlank() -> "\n\n" + stringResource(R.string.update_notes_empty)
-    else -> "\n\n$notes"
 }
 
 /** "12 MB of 30 MB", or null while the size is still unknown. */

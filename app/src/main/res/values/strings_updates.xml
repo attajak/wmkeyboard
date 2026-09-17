@@ -47,6 +47,9 @@
     <!-- %1$s is the update source, from update_source_*. -->
     <string name="update_action_open_source">Open <xliff:g id="source" example="F-Droid">%1$s</xliff:g></string>
 
+    <!-- Title of the dialog holding a release's notes. %1$s is the version. -->
+    <string name="update_notes_title">What\'s new in <xliff:g id="version" example="0.5.9">%1$s</xliff:g></string>
+
     <!-- Release notes, when the release has none. -->
     <string name="update_notes_empty">This release has no notes</string>
 

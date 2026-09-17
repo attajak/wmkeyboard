@@ -33,7 +33,10 @@ internal data class UpdateCandidate(
     val publishedAtMillis: Long?,
     val releaseUrl: String,
 ) {
-    /** Where the human release notes for this version live. */
+    /** Where this version's long-form release notes live. */
+    val releaseNotesUrl: String get() = GithubReleases.releaseNotesUrl(tag, versionName)
+
+    /** The short store changelog, read only when [releaseNotesUrl] is not there. */
     val changelogUrl: String get() = GithubReleases.changelogUrl(tag, versionCode)
 }
 

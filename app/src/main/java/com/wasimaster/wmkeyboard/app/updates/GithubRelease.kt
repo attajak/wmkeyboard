@@ -68,11 +68,23 @@ internal object GithubReleases {
     fun releasePage(tag: String): String = "https://github.com/$REPO/releases/tag/$tag"
 
     /**
-     * The human release notes for one version.
+     * The long-form release notes for one version.
      *
-     * Not the release body, which is a generated list of commits plus fixed
-     * installation boilerplate. The notes a person wrote are the changelog
-     * file that Play and F-Droid already read, and it is in the tag's tree.
+     * Not the release body: that wraps these same notes in a download grid and
+     * a pile of HTML, which is right for a web page and wrong for a dialog.
+     * This is the markdown file the release body is built from, taken from the
+     * tag's own tree so it is the text that shipped with that version.
+     */
+    fun releaseNotesUrl(tag: String, versionName: String): String =
+        "https://raw.githubusercontent.com/$REPO/$tag/release-notes/$versionName.md"
+
+    /**
+     * The short release notes for one version.
+     *
+     * The changelog file Play and F-Droid read. Only a fallback now, for a
+     * release cut without a [releaseNotesUrl] file: every tag from 0.1.0 has
+     * one, but a future release could still be tagged before its notes were
+     * written, and a paragraph beats an empty dialog.
      */
     fun changelogUrl(tag: String, versionCode: Int): String =
         "https://raw.githubusercontent.com/$REPO/$tag/" +

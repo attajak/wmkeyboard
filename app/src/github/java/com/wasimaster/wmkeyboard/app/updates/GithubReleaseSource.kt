@@ -120,15 +120,21 @@ internal class ReleaseFileCache(private val file: File) : ReleaseCache {
 }
 
 /**
- * The human release notes for one version, or null.
+ * The release notes for one version, or null.
  *
- * Not the release body, which is a generated list of commits followed by fixed
- * installation instructions. This is the changelog file that Play and F-Droid
- * already read, fetched from the tag it belongs to. A missing one is ordinary:
- * the file is written before the tag, and one release was tagged without it.
+ * Not the release body, which wraps the notes in a download grid and a pile of
+ * HTML. This is the markdown file that body is built from, fetched from the
+ * tag it belongs to, so it is the text that shipped with that version.
+ *
+ * The short store changelog is the fallback. A release with neither is
+ * ordinary rather than a fault: the files are written before the tag, and a
+ * release can be cut before one of them lands.
  */
-internal fun fetchReleaseNotes(candidate: UpdateCandidate): String? = runCatching {
-    ToolHttp.get(candidate.changelogUrl).trim().take(GithubReleases.MAX_NOTES_CHARS)
+internal fun fetchReleaseNotes(candidate: UpdateCandidate): String? =
+    fetchNotesFrom(candidate.releaseNotesUrl) ?: fetchNotesFrom(candidate.changelogUrl)
+
+private fun fetchNotesFrom(url: String): String? = runCatching {
+    ToolHttp.get(url).trim().take(GithubReleases.MAX_NOTES_CHARS)
 }.getOrNull()?.takeIf { it.isNotBlank() }
 
 /** The checksums file a release attaches, for a release whose asset has no digest. */
