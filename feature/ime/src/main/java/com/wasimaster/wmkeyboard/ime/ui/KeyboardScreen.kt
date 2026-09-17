@@ -12373,6 +12373,12 @@ private fun KeyRows(
     // Every tap then falls through to the key underneath while the flick, which
     // reads the centres above, goes on working (#209).
     val liveBounds = rememberUpdatedState(keyBounds)
+    // The spacebar's cell, for the glide's word split and its apostrophe key.
+    // A State of a State, which reads oddly and is the point: the *holder* is
+    // what a new layout replaces, so a loop that captured the holder keeps
+    // reading the old layout's rectangle — filled, plausible and wrong — long
+    // after that spacebar has gone. Only the outer read is live.
+    val liveSpace = rememberUpdatedState(spaceRect)
     // The layer the board is really on, for the peek loop: it decides which
     // layer a drag looks through to (issue #108) and must not restart when the
     // user switches layer by tapping.
@@ -12889,8 +12895,13 @@ private fun KeyRows(
                         return@awaitEachGesture
                     }
                     if (!octopusFlickHere) return@awaitEachGesture
-                    val startKey = nearestOctopusCentre(keyCenters, floating.keys, down.position)
-                        ?: return@awaitEachGesture
+                    // Live, like the bounds above and for the same reason: the
+                    // centres are per layout, this loop is not, and a flick
+                    // anchored on the previous layout's grid reaches for a key
+                    // that is no longer under the finger.
+                    val startKey =
+                        nearestOctopusCentre(liveCenters.value, floating.keys, down.position)
+                            ?: return@awaitEachGesture
                     // The nearest word of a stacked key (#136): a flick is aimed
                     // at the key, and the stack's best sits closest to it.
                     val word = floating.top(startKey.first) ?: return@awaitEachGesture
@@ -13159,7 +13170,7 @@ private fun KeyRows(
                                 apostropheCenter = apostropheCenter(
                                     apostropheKey.value,
                                     liveCenters.value,
-                                    spaceRect.value,
+                                    liveSpace.value.value,
                                     boxOrigin,
                                 ),
                             ) { codePoint ->
@@ -13184,7 +13195,8 @@ private fun KeyRows(
                             // spaceRect is in root space; lift the box-local
                             // touch point into root space to test it.
                             val overSpace = spaceGlide &&
-                                spaceRect.value?.contains(change.position + boxOrigin) == true
+                                liveSpace.value.value
+                                    ?.contains(change.position + boxOrigin) == true
                             // Crossing the shift key asks for a capital. Its
                             // points are dropped from the word for the same
                             // reason the spacebar's are: the detour is an
