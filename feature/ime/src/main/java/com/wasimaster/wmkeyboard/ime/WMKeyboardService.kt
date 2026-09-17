@@ -2938,24 +2938,6 @@ open class WMKeyboardService : InputMethodService() {
                 val nowArmed = keyboardHandwriteActive(_uiState.value)
                 if (nowArmed && !hwKeyboardArmed) refreshHandwritingStatus()
                 hwKeyboardArmed = nowArmed
-                // Everything below keys off the mode actually being typed, so
-                // a field-forced mode gets its own proximity grid and word
-                // lists rather than the saved mode's.
-                val activeLang = activeSpec.language()
-                // Typo weighting follows the grid actually on screen, so a
-                // rearranged custom layout weights its own neighbours.
-                suggestionEngine?.proximity = KeyProximity.forLayout(
-                    activeSpec,
-                    numberRow = settings.numberRow &&
-                        settings.suggestionStrip.numberRowCorrections,
-                )
-                // The letters a space-bar miss lands on follow the layout too —
-                // this was a QWERTY constant for every layout before.
-                suggestionEngine?.spaceAdjacentKeys = KeyProximity.spaceAdjacentKeys(activeSpec)
-                    .ifEmpty { SuggestionEngine.SPACE_ADJACENT_DEFAULT }
-                // Slips are a property of where the keys sit, so they follow
-                // the layout as well; the setter ignores an unchanged snapshot.
-                suggestionEngine?.editHabits = correctionMemory.habitsFor(activeSpec.id)
                 if (settings.suggestionStrip.adaptToTaps != tapAdaptApplied) applyTouchModel()
                 suggestionEngine?.autocorrectConfidence =
                     settings.correction.confidence.toDouble()
@@ -3039,11 +3021,6 @@ open class WMKeyboardService : InputMethodService() {
                     suggestionEngine?.offensiveWords = widened
                     loadedOffensiveLangs = offensiveLangs
                 }
-                // Only English drives the bundled English word list; every other
-                // language (with no bundled dictionary) drops it so autocorrect
-                // and completions never offer English for their words. Bengali
-                // routes through its own transliteration path either way.
-                suggestionEngine?.englishSources = activeLang.isEnglish
                 // Imported word lists are per language, so the active one
                 // follows the mode: a French list never reaches English.
                 if (customDictVersion != -1 && settings.customDictVersion != customDictVersion) {
@@ -3077,20 +3054,10 @@ open class WMKeyboardService : InputMethodService() {
                 emojiUsageVersion = settings.emoji.usageVersion
                 refreshLanguageDataDownloads(settings)
                 refreshDictionaryBar(settings)
-                suggestionEngine?.primaryLanguageId = activeLang.id
-                suggestionEngine?.customDictionary =
-                    customDictionaries[activeLang.id] ?: PackedTrie.EMPTY
-                suggestionEngine?.ngramPack = loadNgramPack(activeLang.id)
-                // Secondary languages feed the strip alongside the primary. English
-                // rides its bundled list (englishAsSecondary); every other language
-                // its imported list. Each is tagged with its id so its share of the
-                // strip adapts to how much the user actually types it.
-                val secondaryIds = settings.secondaryLanguages[activeLang.id].orEmpty()
-                suggestionEngine?.secondaryDictionaries =
-                    secondaryIds.filter { it != "en" }
-                        .mapNotNull { id -> customDictionaries[id]?.let { SecondaryDictionary(id, it) } }
-                suggestionEngine?.englishAsSecondary =
-                    "en" in secondaryIds && !activeLang.isEnglish
+                // Keyed off the mode actually being typed, so a field-forced
+                // mode gets its own proximity grid and word lists rather than
+                // the saved mode's.
+                bindEngineToLayout(activeSpec, settings)
                 suggestionEngine?.fieldDetectionShift = fieldDetectionShift(settings)
                 glideSourcesEpoch.update { it + 1 }
             }
@@ -8740,6 +8707,52 @@ open class WMKeyboardService : InputMethodService() {
         }
     }
 
+    /**
+     * Points the engine at the language and the grid [spec] describes: the
+     * word sources it reads, and the geometry it weights typos against.
+     *
+     * The settings collector runs this on every emission, but a language
+     * switch cannot wait for one. Telling the store which layout is active is
+     * a round trip through DataStore, and until it comes back the engine is
+     * still reading the language the user just left — which is why the strip
+     * went on offering that language until the next keystroke (#233).
+     */
+    private fun bindEngineToLayout(spec: LayoutSpec, settings: KeyboardSettings) {
+        val engine = suggestionEngine ?: return
+        val lang = spec.language()
+        // Typo weighting follows the grid actually on screen, so a
+        // rearranged custom layout weights its own neighbours.
+        engine.proximity = KeyProximity.forLayout(
+            spec,
+            numberRow = settings.numberRow && settings.suggestionStrip.numberRowCorrections,
+        )
+        // The letters a space-bar miss lands on follow the layout too —
+        // this was a QWERTY constant for every layout before.
+        engine.spaceAdjacentKeys = KeyProximity.spaceAdjacentKeys(spec)
+            .ifEmpty { SuggestionEngine.SPACE_ADJACENT_DEFAULT }
+        // Slips are a property of where the keys sit, so they follow the
+        // layout as well; the setter ignores an unchanged snapshot.
+        engine.editHabits = correctionMemory.habitsFor(spec.id)
+        // Only English drives the bundled English word list; every other
+        // language (with no bundled dictionary) drops it so autocorrect and
+        // completions never offer English for their words. Bengali routes
+        // through its own transliteration path either way.
+        engine.englishSources = lang.isEnglish
+        engine.primaryLanguageId = lang.id
+        // Imported word lists are per language, so the active one follows the
+        // mode: a French list never reaches English.
+        engine.customDictionary = customDictionaries[lang.id] ?: PackedTrie.EMPTY
+        engine.ngramPack = loadNgramPack(lang.id)
+        // Secondary languages feed the strip alongside the primary. English
+        // rides its bundled list (englishAsSecondary); every other language
+        // its imported list. Each is tagged with its id so its share of the
+        // strip adapts to how much the user actually types it.
+        val secondaryIds = settings.secondaryLanguages[lang.id].orEmpty()
+        engine.secondaryDictionaries = secondaryIds.filter { it != "en" }
+            .mapNotNull { id -> customDictionaries[id]?.let { SecondaryDictionary(id, it) } }
+        engine.englishAsSecondary = "en" in secondaryIds && !lang.isEnglish
+    }
+
     /** Spacebar swipe (or 🌐 cycle): switch to an explicit layout. */
     fun onLayoutSelected(layoutId: String) {
         val spec = resolveLayout(_uiState.value.settings.customLayouts, layoutId)
@@ -8776,6 +8789,13 @@ open class WMKeyboardService : InputMethodService() {
         // into the new one (or worse, keep a dot counted as held forever).
         resetChordInputs()
         refreshKarContext()
+        // The engine follows the switch in the same frame, and the strip is
+        // rebuilt off it. Left to the settings write at the bottom of this
+        // function to come back round, both went on answering in the language
+        // just left, so the strip offered its words until the next keystroke
+        // moved it (#233).
+        bindEngineToLayout(spec, _uiState.value.settings)
+        refreshSuggestions()
         // The typing test follows the language: a prompt dealt in one
         // language cannot be typed on another's keys, so the switch re-deals.
         // The panel's own language chip lands here too, via the same layout
