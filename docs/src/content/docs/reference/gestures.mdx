@@ -152,7 +152,7 @@ Every default on this page, gathered in one place. "Where" is the settings scree
 | Word delete interval | Key press → Timing | 140 ms (60–500 ms) |
 | Volume keys move the cursor | Typing → Volume keys | Off |
 | Release the keys while audio plays | Typing → Volume keys | On |
-| Press and hold delay | Key press → Timing | 300 ms (150–800 ms) |
+| Press and hold delay | Key press → Timing | 300 ms (100–800 ms) |
 | Time before a key repeats | Key press → Timing | 300 ms (150–800 ms) |
 | Delete repeat interval | Key press → Timing | 50 ms (20–200 ms) |
 | Space repeat interval | Key press → Timing | 100 ms (20–200 ms) |
@@ -176,7 +176,7 @@ Every default on this page, gathered in one place. "Where" is the settings scree
 - **<KeyCap>⌦</KeyCap> is the same gesture pointed the other way, and shares every setting but its own on/off switch.** Swipe deletes, Show what you will delete and the two step distances govern both keys. No built-in layout carries a forward delete key; add one in the [layout editor](/languages/custom-layouts/).
 - **Backspace's word-delete acceleration resets on a reversal, not on release.** Dragging right mid-swipe doesn't bring back a deleted word. It only means the next leftward word costs full travel (72&nbsp;dp) again instead of the shrunk amount.
 - **Volume-key cursor control re-checks "is audio playing" on every key press**, not once at the start, so Release the keys while audio plays hands control back and forth live as playback starts and stops mid-typing.
-- **The Key press → Timing slider silently clamps past 700&nbsp;ms.** It shows a 150–800&nbsp;ms range, but the stored value still coerces to 150–700&nbsp;ms. Drag it past 700 and it snaps back once you let go. Accessibility → Touch no longer has its own copy of this slider: it links straight to Key press → Timing instead.
+- **The press-and-hold delay has one slider.** Key press → Timing runs 100–800&nbsp;ms, the whole range stores. Accessibility → Touch no longer has its own copy: it links straight to Key press → Timing instead.
 - **The backspace repeat has its own wait, not the press-and-hold delay.** Holding <KeyCap>⌫</KeyCap> starts repeating after Time before a key repeats (300&nbsp;ms), which is a separate slider. Lengthening the press-and-hold delay for accent popups no longer slows backspace down with it.
 - **A very wide screen can let the floating panel's resize grip briefly exceed its 500&nbsp;dp maximum mid-drag.** It snaps back the moment you release.
 - **With TalkBack or another screen reader running, most drags above stop working unless you turn on gesture pass-through.** Set **TalkBack support** to **Gestures** under Accessibility → Screen reader. Then grant the "WM Keyboard gestures" accessibility service. Those two steps keep the spacebar cursor slide, the backspace word-swipe, glide typing, and handwriting alive underneath TalkBack's own touch exploration. Without that service granted, all four fall back to Explore-by-touch and don't respond to a drag. See [Accessibility overview](/accessibility/overview/#the-gesture-pass-through-service).

@@ -12751,7 +12751,7 @@ class SettingsRepository(private val context: Context) {
     }
 
     suspend fun setLongPressDelayMs(value: Int) =
-        editPrefs { it[LONG_PRESS_DELAY] = value.coerceIn(150, 700) }
+        editPrefs { it[LONG_PRESS_DELAY] = value.coerceIn(100, 800) }
 
     suspend fun setDeleteRepeatIntervalMs(value: Int) =
         editPrefs { it[KEY_REPEAT_DELETE] = value.coerceIn(20, 200) }

@@ -156,7 +156,7 @@ This one is the keyboard-wide default. A single key can carry a count of its own
 
 | Setting | Control | Options / range | Default |
 |---|---|---|---|
-| Press and hold delay | Slider | 150–800 ms (drag past 700 ms and it snaps back to 700 on release) | 300 ms |
+| Press and hold delay | Slider | 100–800 ms | 300 ms |
 | Time before a key repeats | Slider | 150–800 ms | 300 ms |
 | Delete repeat interval | Slider | 20–200 ms | 50 ms |
 | Holding delete clears words | Toggle | On / Off | Off |
@@ -216,7 +216,7 @@ The repeat interval is two sliders, because delete and space are held for opposi
 ## Details & edge cases
 
 - **The five per-event toggles fold away rather than grey out.** With Key press haptics off, Vibrate on space, Vibrate on delete swipe, Vibrate on key repeat, Follow the system touch feedback setting and Mute haptics in Do Not Disturb all leave the screen. Click on key repeat follows Key sound instead, not Key press haptics, so it disappears only when Key sound is off.
-- **Press and hold delay lives here only.** The Timing slider shows a 150–800 ms range, but the stored value still clamps to 150–700 ms. Drag past 700 ms and it snaps back to 700 on release. Accessibility → Touch shows the current value and links back to this screen.
+- **Press and hold delay lives here only.** The Timing slider runs 100–800 ms and the stored value takes the whole range. Accessibility → Touch shows the current value and links back to this screen.
 - **A few rows on this screen aren't reachable from in-app settings search.** Haptic style, Click on key repeat, Follow the system touch feedback setting, Sound style, Key release sound, Time before a key repeats and Shortcut keys are all real, rendered rows here. They're just missing from the search index. Everything else is indexed, Key sound, Sound volume, Maximum popup duration, Popup shape, Popup corner radius and Press and hold ?123 among them.
 - **Most rows here grow a restore button once you move them, but four never do.** Change a toggle, a slider or the Shortcut keys row and a small restore control appears beside it, putting just that setting back. The two chip rows (Haptic style, Sound style), the Popup shape picker and the Currency keys field are hand-built controls with no restore of their own. Clearing Currency keys back to blank is how you get its built-in set again. See [Putting one setting back](/reference/settings/#putting-one-setting-back).
 - **The "Sound & haptics" toolbar tool isn't a separate settings surface.** Its page carries the Key sound switch, plus a nav row into the Haptics and sound page, so a change on either surface writes to the same settings. See [Sound & vibration](/typing/feedback/#a-toolbar-shortcut).

@@ -149,7 +149,7 @@ Both delete keys also have a drag-to-delete-whole-words gesture, on by default, 
 | Popup distance above key | 10&nbsp;dp (0–96&nbsp;dp) |
 | Popup sideways shift | 0&nbsp;dp (−64–64&nbsp;dp) |
 | Popup color / Popup text color | Automatic |
-| Press and hold delay | 300&nbsp;ms (150–800&nbsp;ms) |
+| Press and hold delay | 300&nbsp;ms (100–800&nbsp;ms) |
 | Time before a key repeats | 300&nbsp;ms (150–800&nbsp;ms) |
 | Delete repeat interval | 50&nbsp;ms (20–200&nbsp;ms) |
 | Space repeat interval | 100&nbsp;ms (20–200&nbsp;ms) |
@@ -178,7 +178,7 @@ A handful of related settings live elsewhere:
 - **Exiting Caps Lock only takes one tap.** The double-tap window matters only on the way *into* Caps Lock. Any single tap while Shift or Caps Lock is already active turns it off.
 - **The Enter key never lies about what it's about to do.** With Shift + Enter's newline override active, the key visibly redraws to the newline symbol first. It doesn't swap behavior behind an unchanged icon.
 - **A line break from the popup is a real one, even in apps that read Enter themselves.** Some chat apps watch for the Enter key press and send on it regardless of what the keyboard meant. The popup entry types the character straight into the field instead of pressing a key, so there's nothing for the app to catch. Shift + Enter works the same way, and so does plain Enter in a message box that asked for a line break.
-- **The long-press delay has one home.** It's the Key press → Timing slider (150–800&nbsp;ms). Accessibility → Touch shows the current value and links to it.
+- **The long-press delay has one home.** It's the Key press → Timing slider (100–800&nbsp;ms). Accessibility → Touch shows the current value and links to it.
 - **Number row height is independent of key height.** Shrinking the digit row doesn't touch the letter keys below it, so you can get quick number access without paying for a full extra row of keyboard height.
 - **Ignore repeated presses only filters repeats of the *same* key.** Two different keys typed quickly are never blocked, so the setting can be raised without slowing normal typing down.
 
