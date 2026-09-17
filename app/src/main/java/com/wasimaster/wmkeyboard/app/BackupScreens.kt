@@ -98,6 +98,7 @@ internal fun sectionLabelRes(section: ConfigBackup.Section): Int = when (section
     ConfigBackup.Section.EMOJI -> R.string.backup_section_emoji_label
     ConfigBackup.Section.STATISTICS -> R.string.backup_section_statistics_label
     ConfigBackup.Section.VOCAB -> R.string.backup_section_vocab_label
+    ConfigBackup.Section.SWIPE -> R.string.backup_section_swipe_label
 }
 internal fun sectionLabel(context: Context, section: ConfigBackup.Section): String =
     context.getString(sectionLabelRes(section))
@@ -121,6 +122,7 @@ internal fun sectionLabelLowercase(context: Context, section: ConfigBackup.Secti
             ConfigBackup.Section.EMOJI -> R.string.backup_section_emoji_label_lowercase
             ConfigBackup.Section.STATISTICS -> R.string.backup_section_statistics_label_lowercase
             ConfigBackup.Section.VOCAB -> R.string.backup_section_vocab_label_lowercase
+            ConfigBackup.Section.SWIPE -> R.string.backup_section_swipe_label_lowercase
         },
     )
 @PluralsRes
@@ -137,6 +139,7 @@ private fun sectionCountPlural(section: ConfigBackup.Section): Int = when (secti
     ConfigBackup.Section.EMOJI -> R.plurals.backup_section_emoji_count
     ConfigBackup.Section.STATISTICS -> R.plurals.backup_section_statistics_count
     ConfigBackup.Section.VOCAB -> R.plurals.backup_section_vocab_count
+    ConfigBackup.Section.SWIPE -> R.plurals.backup_section_swipe_count
 }
 /** "3 themes", "1 snippet": the count line shown per section on import. */
 internal fun sectionSummary(context: Context, section: ConfigBackup.Section, count: Int): String =
@@ -618,8 +621,11 @@ private fun AutoBackupGroup(
     var running by remember { mutableStateOf(false) }
     val configured = auto.destinationConfigured
     val encrypted = auto.encrypt && auto.passphrase.isNotEmpty()
+    // The swipe style counts as personal for the dictionary's reason: its
+    // shapes are filed under the words they were drawn for.
     val personal = ConfigBackup.Section.DICTIONARY.id in auto.sections ||
-        ConfigBackup.Section.CLIPBOARD.id in auto.sections
+        ConfigBackup.Section.CLIPBOARD.id in auto.sections ||
+        ConfigBackup.Section.SWIPE.id in auto.sections
 
     SettingsGroup(stringResource(R.string.backup_auto_group_title)) {
         item {
@@ -1344,6 +1350,15 @@ internal fun BackupContentsSettings(repository: SettingsRepository, settings: Ke
                 default = ConfigBackup.Section.VOCAB.id in
                     AutoBackupSettings.DEFAULT_SECTIONS,
             ) { setSection(ConfigBackup.Section.VOCAB, it) }
+        }
+        item {
+            ToggleSetting(
+                R.string.backup_section_swipe_label,
+                stringResource(R.string.backup_include_swipe_subtitle),
+                ConfigBackup.Section.SWIPE in sections,
+                default = ConfigBackup.Section.SWIPE.id in
+                    AutoBackupSettings.DEFAULT_SECTIONS,
+            ) { setSection(ConfigBackup.Section.SWIPE, it) }
         }
     }
     Spacer(Modifier.height(16.dp))

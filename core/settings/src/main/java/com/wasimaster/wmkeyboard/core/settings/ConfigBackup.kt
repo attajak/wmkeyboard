@@ -86,6 +86,23 @@ object ConfigBackup {
          * an older build reads bundles positionally in its tests.
          */
         VOCAB("vocab"),
+
+        /**
+         * The swipe style: where this hand lands when it glides, the readings
+         * the user corrected, and the shape they draw each word in. Everything
+         * the "learn my swipe style" switch governs, which is the same set its
+         * Forget deletes.
+         *
+         * A section of its own rather than a ride inside [DICTIONARY], the way
+         * the tap model rides: this one is a few hundred bytes a word across up
+         * to a thousand words, so it is worth its own switch. Off by default
+         * for [DICTIONARY]'s reason as well, since the shapes are filed under
+         * the words they were drawn for.
+         *
+         * Appended after [VOCAB] for the reason given there: sections encode in
+         * declaration order.
+         */
+        SWIPE("swipe"),
     }
 
     private val json = Json { prettyPrint = true }
