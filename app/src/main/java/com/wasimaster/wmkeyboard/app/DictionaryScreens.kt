@@ -56,6 +56,12 @@ import com.wasimaster.wmkeyboard.common.R as CommonR
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.FilterChip
+import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
+import com.wasimaster.wmkeyboard.core.settings.BlacklistScope
+import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.settings.DictionarySort
 import com.wasimaster.wmkeyboard.core.settings.DictionarySortKey
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
@@ -726,25 +732,72 @@ private fun EditWordDialog(
 // ---- suggestion blacklist ----
 
 /**
+ * One row of the blacklist editor: a word and the language it is blocked in,
+ * or null for the list that applies everywhere (#136).
+ */
+private data class BlacklistEntry(val word: String, val languageId: String?)
+
+/**
  * The never-suggest word list, stored in settings. A blacklisted word is kept
  * out of the suggestion strip and never used as an autocorrect target, but can
  * still be typed and committed normally. Matched case-insensitively.
+ *
+ * Since #136 a word can be blocked in one language only. The editor lists the
+ * global words and the per-language ones together, each language-bound row
+ * saying so under the word, and the Add dialog asks which list a new word
+ * goes on. The choice row at the top is for the keyboard's own "Never
+ * suggest", which cannot ask.
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun BlacklistSettings(repository: SettingsRepository, settings: KeyboardSettings) {
     val scope = rememberCoroutineScope()
-    val words = remember(settings.suggestionSources.blacklist) {
-        settings.suggestionSources.blacklist.sorted()
+    val sources = settings.suggestionSources
+    val entries = remember(sources.blacklist, sources.blacklistByLanguage) {
+        buildList {
+            for (word in sources.blacklist) add(BlacklistEntry(word, null))
+            for ((language, words) in sources.blacklistByLanguage) {
+                for (word in words) add(BlacklistEntry(word, language))
+            }
+        }.sortedWith(compareBy({ it.word }, { it.languageId.orEmpty() }))
     }
     var showAdd by remember { mutableStateOf(false) }
 
     RegisterAddFab(stringResource(R.string.backup_add_word_action)) { showAdd = true }
+    SettingsGroup {
+        item {
+            ChoiceSetting(
+                R.string.backup_blacklist_scope_title,
+                subtitle = stringResource(R.string.backup_blacklist_scope_subtitle),
+                info = stringResource(R.string.backup_blacklist_scope_info),
+                options = listOf(
+                    BlacklistScope.ALL_LANGUAGES to
+                        stringResource(R.string.backup_blacklist_scope_all_label),
+                    BlacklistScope.CURRENT_LANGUAGE to
+                        stringResource(R.string.backup_blacklist_scope_current_label),
+                ),
+                selected = sources.blacklistScope,
+                default = SettingsDefaults.suggestionSources.blacklistScope,
+                detail = { scope ->
+                    ChoiceDetail(
+                        stringResource(
+                            if (scope == BlacklistScope.CURRENT_LANGUAGE) {
+                                R.string.backup_blacklist_scope_current_desc
+                            } else {
+                                R.string.backup_blacklist_scope_all_desc
+                            },
+                        ),
+                    )
+                },
+            ) { scope.launch { repository.setSuggestionBlacklistScope(it) } }
+        }
+    }
     // Same shape as the personal dictionary above it: a search box once the
     // list is long enough to need one, and pages rather than every row at
     // once — hundreds of blacklisted words composed in one go ran the app
     // out of memory (#75).
     var query by remember { mutableStateOf("") }
-    if (words.size > DICTIONARY_SEARCH_THRESHOLD || query.isNotEmpty()) {
+    if (entries.size > DICTIONARY_SEARCH_THRESHOLD || query.isNotEmpty()) {
         OutlinedTextField(
             value = query,
             onValueChange = { query = it },
@@ -766,13 +819,13 @@ internal fun BlacklistSettings(repository: SettingsRepository, settings: Keyboar
                 .padding(horizontal = 16.dp, vertical = 4.dp),
         )
     }
-    val shown = remember(words, query) {
+    val shown = remember(entries, query) {
         val needle = query.trim().lowercase()
-        if (needle.isEmpty()) words else words.filter { needle in it }
+        if (needle.isEmpty()) entries else entries.filter { needle in it.word }
     }
     // Keyed on the query, not the list, so a deletion keeps the pages open (#85).
     var visible by remember(query) { mutableIntStateOf(WORD_LIST_PAGE) }
-    if (words.isEmpty()) {
+    if (entries.isEmpty()) {
         CaptionText(stringResource(R.string.backup_blacklist_empty))
     } else if (shown.isEmpty()) {
         CaptionText(stringResource(R.string.backup_blacklist_no_matches, query))
@@ -785,8 +838,8 @@ internal fun BlacklistSettings(repository: SettingsRepository, settings: Keyboar
                     title = R.string.backup_blacklist_clear_title,
                     subtitle = pluralStringResource(
                         R.plurals.backup_blacklist_clear_subtitle,
-                        words.size,
-                        words.size,
+                        entries.size,
+                        entries.size,
                     ),
                     action = stringResource(CommonR.string.common_clear),
                     confirm = stringResource(R.string.backup_blacklist_clear_confirm),
@@ -796,13 +849,21 @@ internal fun BlacklistSettings(repository: SettingsRepository, settings: Keyboar
         }
     }
     SettingsGroup {
-        for (word in shown.take(visible)) {
+        for (entry in shown.take(visible)) {
             item {
+                val word = entry.word
                 WmRow(
                     title = word,
+                    // A language-bound word says so; a global one needs no line.
+                    subtitle = entry.languageId?.let { id ->
+                        stringResource(
+                            R.string.backup_blacklist_language_word_subtitle,
+                            LanguageRegistry.byId(id).displayName,
+                        )
+                    },
                     trailing = {
                         IconButton(onClick = {
-                            scope.launch { repository.removeSuggestionBlacklistWord(word) }
+                            scope.launch { repository.removeSuggestionBlacklistWord(word, entry.languageId) }
                         }) {
                             Icon(
                                 Icons.Outlined.Delete,
@@ -820,22 +881,50 @@ internal fun BlacklistSettings(repository: SettingsRepository, settings: Keyboar
 
     if (showAdd) {
         var input by remember { mutableStateOf("") }
+        // Which list the word goes on: null is the global one. The chips are
+        // the enabled languages, which is every language the strip can be
+        // typing in; a word for a language not in the list has no strip to
+        // stay out of.
+        var language by remember { mutableStateOf<String?>(null) }
         AlertDialog(
             onDismissRequest = { showAdd = false },
             title = { Text(stringResource(R.string.backup_add_word_title)) },
             text = {
-                OutlinedTextField(
-                    value = input,
-                    onValueChange = { input = it },
-                    label = { Text(stringResource(R.string.backup_word_field_label)) },
-                    singleLine = true,
-                )
+                Column {
+                    OutlinedTextField(
+                        value = input,
+                        onValueChange = { input = it },
+                        label = { Text(stringResource(R.string.backup_word_field_label)) },
+                        singleLine = true,
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        stringResource(R.string.backup_blacklist_language_label),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        FilterChip(
+                            selected = language == null,
+                            onClick = { language = null },
+                            label = { Text(stringResource(R.string.backup_blacklist_all_languages_label)) },
+                        )
+                        for (lang in settings.enabledLanguages) {
+                            FilterChip(
+                                selected = language == lang.id,
+                                onClick = { language = lang.id },
+                                label = { Text(lang.displayName) },
+                            )
+                        }
+                    }
+                }
             },
             confirmButton = {
                 TextButton(
                     enabled = input.isNotBlank(),
                     onClick = {
-                        scope.launch { repository.addSuggestionBlacklistWord(input) }
+                        val target = language
+                        scope.launch { repository.addSuggestionBlacklistWord(input, target) }
                         showAdd = false
                     },
                 ) { Text(stringResource(CommonR.string.common_add)) }

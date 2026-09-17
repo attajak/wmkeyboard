@@ -69,6 +69,7 @@ import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.ViewAgenda
+import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material.icons.outlined.MusicNote
@@ -482,6 +483,7 @@ internal object SettingsRouteIcons {
         "layout/onehanded" to { Icons.Outlined.PanTool },
         "keymaps" to { Icons.Outlined.GridOn },
         "rows" to { Icons.Outlined.ViewAgenda },
+        "rows/symbol" to { Icons.Outlined.Tag },
         "ai_actions" to { Icons.Outlined.AutoAwesome },
         "ai_history" to { Icons.Outlined.History },
         "ai_chat" to { Icons.AutoMirrored.Outlined.Chat },

@@ -804,4 +804,7 @@
     <string name="typing_adapt_taps_forget">Forget where my taps land</string>
     <string name="typing_adapt_taps_forget_title">Forget learned tap positions?</string>
     <string name="typing_adapt_taps_forget_body">Taps go back to being read against the keys exactly as drawn, and learning starts again from your next word. Learned words and corrections are not affected.</string>
+    <string name="typing_octopus_stack_title">Words per key</string>
+    <string name="typing_octopus_stack_subtitle">How many words one key can carry, stacked</string>
+    <string name="typing_octopus_stack_info">One word per key is what the BlackBerry and Octopus keyboards drew, and it is all a phone-sized key has room for. On a tablet the keys are tall enough for two or three, stacked away from the key with the likeliest word nearest it. A flick up takes the nearest word; a tap takes the word you touch. How many words still caps the whole keyboard.</string>
 </resources>

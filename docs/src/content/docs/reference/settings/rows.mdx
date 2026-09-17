@@ -18,7 +18,7 @@ The Rows & bars screen controls the strip of rows that stack above and below the
 
 <SettingsPath path="Rows & bars" />
 
-The screen has five groups, top to bottom: Row order, Fancy text, Dictionary bar, Symbol row, and Symbol sets. Row order is a list you drag, and the keys themselves are one of the rows in it: drag a row above **Keyboard** to draw it over the keys, or below **Keyboard** to draw it under them.
+The screen has four groups, top to bottom: Row order, Fancy text, Dictionary bar, and Symbol row. Row order is a list you drag, and the keys themselves are one of the rows in it: drag a row above **Keyboard** to draw it over the keys, or below **Keyboard** to draw it under them. The Symbol row group is one row that is both a switch and a door: the switch turns the row on, and tapping the rest of the row opens the **Symbol row** page, which holds the row's height, lines and scrolling and the Symbol sets group.
 
 ### Fancy text
 
@@ -48,14 +48,14 @@ The switches behind the chips are the same ones on each language's own screen (*
 
 | Setting | Control | Default |
 |---|---|---|
-| Symbol row | Toggle | Off |
-| Symbol row height *(shown only while Symbol row is on)* | Slider, 28–64 dp | 40 dp |
-| Lines of symbols *(same)* | Stepper, 1–4 | 1 |
-| Scrolling *(shown only while Lines of symbols is more than 1)* | Segmented row, Together / Each line alone | Together |
+| Symbol row | Toggle and page | Off |
+| Symbol row height *(on the Symbol row page, shown only while Symbol row is on)* | Slider, 28–64 dp | 40 dp |
+| Lines of symbols *(same page, same gate)* | Stepper, 1–4 | 1 |
+| Scrolling *(same page, shown with two or more lines)* | Together / Each line alone | Together |
 
-**Symbol row** is off out of the box. Its info button explains what the row does: it shows one symbol set at a time, and a chip at the row's left edge switches between whichever sets you've enabled. A keyboard mode can pick a set automatically per app as well. See [The symbol row](/typing/modes/#the-symbol-row) for how the row behaves once it's on.
+**Symbol row** is off out of the box. The row on Rows & bars carries the switch, and tapping it anywhere else opens the **Symbol row** page, where the same switch sits at the top above everything else the row has. Its info button explains what the row does: it shows one symbol set at a time, and a chip at the row's left edge switches between whichever sets you've enabled. A keyboard mode can pick a set automatically per app as well. See [The symbol row](/typing/modes/#the-symbol-row) for how the row behaves once it's on.
 
-**Symbol row height** appears under the toggle once the row is on. It ships at 40 dp and runs 28–64 dp. The number row's own **Number row height** slider on [Layout & size](/reference/settings/layout/) covers a wider 32–100 dp, so the two rows can be brought to the same height, or the symbol row shortened to give the keys below it more room.
+**Symbol row height** appears under the toggle on the Symbol row page once the row is on. It ships at 40 dp and runs 28–64 dp. The number row's own **Number row height** slider on [Layout & size](/reference/settings/layout/) covers a wider 32–100 dp, so the two rows can be brought to the same height, or the symbol row shortened to give the keys below it more room.
 
 **Lines of symbols** stacks the row up to four lines tall, each one a full symbol-row height showing the next entries of the set, so more of a set is on screen without a scroll. Past one line, **Scrolling** appears: **Together** moves every line as one grid, and **Each line alone** lets each line scroll on its own, so one line can sit at its start while another sits at its end.
 
@@ -84,9 +84,9 @@ The tools row only exists under the **A button** and **Always** choices of [Wher
 
 ### Symbol sets
 
-<SettingsPath path="Rows & bars / Symbol sets" />
+<SettingsPath path="Rows & bars / Symbol row / Symbol sets" />
 
-One row per set, built-in sets first in their shipped order, then any custom sets you've created. Each row has a checkbox (enabled in the row's picker or not), the set's name and a preview of its first characters, and an edit icon.
+On the Symbol row page, under the row's own settings. One row per set, built-in sets first in their shipped order, then any custom sets you've created. Each row has a checkbox (enabled in the row's picker or not), the set's name and a preview of its first characters, and an edit icon.
 
 | Set | Characters / snippets | Enabled by default |
 |---|---|---|
@@ -96,7 +96,7 @@ One row per set, built-in sets first in their shipped order, then any custom set
 | Math | `±` `×` `÷` `≠` `≈` `≤` `≥` `√` `π` `∞` `°` `²` `³` `½` `¼` `¾` `%` `‰` `∑` `∫` `Δ` `μ` | Yes |
 | Punctuation | `—` `–` `…` `•` `·` `‘` `’` `“` `”` `«` `»` `¡` `¿` `§` `¶` `†` `©` `®` `™` `№` | Yes |
 
-All five ship enabled, and Punctuation is the set the row's picker opens on the first time you use it. Unchecking a set's box removes it from the row's picker; the app won't let the last checked box go to zero, so at least one set always stays available. There are no custom sets by default. **New symbol set** at the bottom of the group adds one from scratch.
+All five ship enabled, and Punctuation is the set the row's picker opens on the first time you use it. Unchecking a set's box removes it from the row's picker; the app won't let the last checked box go to zero, so at least one set always stays available. There are no custom sets by default. **New symbol set**, the floating button on the Symbol row page, adds one from scratch.
 
 <PhoneFrame caption="The Symbol sets group, with the edit icon open on Coding.">
   {/* shot: reference/settings/rows-symbol-sets */}

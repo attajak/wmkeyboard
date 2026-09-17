@@ -252,6 +252,7 @@ internal val SettingsRouteColors: Map<String, Color> = mapOf(
     "layout/onehanded" to Color(0xFF5C6BC0),
     "keymaps" to Color(0xFF26C6DA),
     "rows" to Color(0xFF26A69A),
+    "rows/symbol" to Color(0xFF26A69A),
     "ai_actions" to Color(0xFF7E57C2),
     "ai_history" to Color(0xFF7E57C2),
     "ai_chat" to Color(0xFF7E57C2),
@@ -1177,10 +1178,25 @@ private val ResetGlyphSize = 18.dp
  * [name] is the setting's own name, and goes into the content description
  * rather than into anything drawn: the glyph is the same on every row, so
  * "Reset" alone would leave a screen reader with a dozen identical buttons.
+ *
+ * The control's slot is reserved while it is not drawn (#136): a row whose
+ * value can be reset keeps the same width for it whether or not it is changed
+ * right now, so the switch or the value beside it never shifts when the glyph
+ * comes and goes. [possible] is false on a row that could never reset — one
+ * with no shipped default — and such a row reserves nothing.
  */
 @Composable
-internal fun ResetSetting(name: String, changed: Boolean, onReset: () -> Unit) {
-    if (!changed) return
+internal fun ResetSetting(
+    name: String,
+    changed: Boolean,
+    possible: Boolean = true,
+    onReset: () -> Unit,
+) {
+    if (!possible) return
+    if (!changed) {
+        Spacer(Modifier.size(ResetTargetSize))
+        return
+    }
     IconButton(
         onClick = onReset,
         modifier = Modifier.size(ResetTargetSize),

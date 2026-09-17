@@ -35,6 +35,12 @@ data class OctopusWord(
     val kind: OctopusKind,
     /** 0 is the board's best word; drives density trimming and emphasis. */
     val rank: Int,
+    /**
+     * Which step of its key's stack this word is on: 0 sits nearest the key,
+     * 1 is drawn one band further from it, and so on (#136). Always 0 while a
+     * key may carry one word, which is the default.
+     */
+    val tier: Int = 0,
 )
 
 /**
@@ -85,7 +91,12 @@ fun octopusDivergence(typed: String, candidate: String, keys: KeySets? = null): 
 
 /**
  * Hangs each candidate off the key that continues it, keeps the best ones, and
- * hands back at most [limit] words with at most one per key.
+ * hands back at most [limit] words with at most [perKey] per key.
+ *
+ * [perKey] above one lets a key carry a stack (#136): the best claim takes
+ * tier 0, the next tier 1, and so on, in rank order. A word still goes to the
+ * key that continues it and nowhere else — the stack only says how many claims
+ * a key honours before the rest are dropped.
  *
  * [keyOf] maps a code point to the anchor code point of the key that produces
  * it, or -1 when this board cannot produce it in one press — a long-press-only
@@ -106,8 +117,10 @@ fun assignOctopus(
     keyOf: (Int) -> Int,
     limit: Int,
     scoreSpread: Double,
+    perKey: Int = 1,
 ): List<OctopusWord> {
     if (limit <= 0 || candidates.isEmpty()) return emptyList()
+    val stack = perKey.coerceAtLeast(1)
     // Deterministic: score, then word. Mirrors the ordering `suggest` itself
     // uses, so the same buffer always paints the same board and a tie is never
     // decided by hash iteration order.
@@ -115,7 +128,9 @@ fun assignOctopus(
         compareByDescending<OctopusCandidate> { it.score }.thenBy { it.word }
     )
     val floor = ranked.first().score - scoreSpread
-    val claimedKeys = HashSet<Int>()
+    // How many claims each key has honoured so far; the count is the next
+    // word's tier.
+    val claimedKeys = HashMap<Int, Int>()
     val claimedWords = HashSet<String>()
     val out = ArrayList<OctopusWord>(minOf(limit, ranked.size))
     for (candidate in ranked) {
@@ -129,16 +144,18 @@ fun assignOctopus(
         } else {
             keyOf(candidate.word.codePointAt(at))
         }
-        // One word per key and one key per word, best claim first. A candidate
-        // whose key is taken is dropped, never moved to its second choice:
-        // moving it would break the one promise the feature makes. Both claims
-        // are staked together so a word rejected as a duplicate does not hold
-        // its key hostage against the candidate behind it.
+        // At most [perKey] words per key and one key per word, best claim
+        // first. A candidate whose key is full is dropped, never moved to its
+        // second choice: moving it would break the one promise the feature
+        // makes. Both claims are staked together so a word rejected as a
+        // duplicate does not hold its key hostage against the candidate
+        // behind it.
+        val tier = claimedKeys[key] ?: 0
         val fresh = key >= 0 &&
             candidate.word.lowercase() !in claimedWords &&
-            key !in claimedKeys
+            tier < stack
         if (fresh) {
-            claimedKeys.add(key)
+            claimedKeys[key] = tier + 1
             claimedWords.add(candidate.word.lowercase())
             out.add(
                 OctopusWord(
@@ -147,6 +164,7 @@ fun assignOctopus(
                     typedChars = at,
                     kind = candidate.kind,
                     rank = out.size,
+                    tier = tier,
                 )
             )
         }

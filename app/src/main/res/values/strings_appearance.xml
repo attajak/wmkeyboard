@@ -173,4 +173,7 @@
     <string name="appearance_reset_toolbox_order_title">Reset toolbox order</string>
     <string name="appearance_reset_toolbox_order_subtitle">Put the tools in the toolbox grid back in their original order</string>
     <string name="appearance_reset_toolbox_order_confirm">The tools in the toolbox grid go back to the order they shipped in. Which tools are switched on, and which are pinned to the toolbar, are not affected.</string>
+    <string name="appearance_toolbar_drag_title">Rearrange by dragging</string>
+    <string name="appearance_toolbar_drag_subtitle">Press and hold a tool on the toolbar, then drag it to a new place</string>
+    <string name="appearance_toolbar_drag_info">When this is on, a press and hold that moves picks the tool up so you can drop it elsewhere on the toolbar. When it is off, a press and hold that moves stays a press and hold, and the toolbox is where you rearrange the toolbar. Turn it off if a hold keeps turning into a drag by accident.</string>
 </resources>

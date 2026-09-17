@@ -8,7 +8,6 @@ import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
 import com.wasimaster.wmkeyboard.core.gesture.KeyCenter
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
-import com.wasimaster.wmkeyboard.core.prediction.OctopusWord
 import com.wasimaster.wmkeyboard.core.settings.GestureSettings
 import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
@@ -100,11 +99,11 @@ class GlideMultiWordAndPossessiveTest {
 
     /** A service, a field, and the board planted on it before the stroke. */
     private fun keyboard(
-        octopus: Map<Int, OctopusWord> = emptyMap(),
+        octopus: OctopusBoard = emptyMap(),
         shiftState: ShiftState = ShiftState.OFF,
         gesture: GestureSettings = GestureSettings(),
         initial: String = "",
-    ): Triple<WMKeyboardService, RecordingEditor, Map<Int, OctopusWord>> {
+    ): Triple<WMKeyboardService, RecordingEditor, OctopusBoard> {
         val (service, editor, _) = glideKeyboard(
             glideReadyState(
                 shiftState = shiftState,

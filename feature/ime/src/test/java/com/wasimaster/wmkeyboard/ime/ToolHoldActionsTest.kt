@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.ime
 
+import com.wasimaster.wmkeyboard.core.settings.ToolHoldAction
 import com.wasimaster.wmkeyboard.core.settings.ToolHoldActions
 import com.wasimaster.wmkeyboard.core.settings.ToolbarPlacement
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
@@ -22,10 +23,19 @@ class ToolHoldActionsTest {
     @Test
     fun `round trips a map`() {
         val map = mapOf(
-            ToolbarTool.UNDO to ToolbarTool.REDO,
-            ToolbarTool.TEXT_EDIT to ToolbarTool.CLIPBOARD,
+            ToolbarTool.UNDO to ToolHoldAction.Run(ToolbarTool.REDO),
+            ToolbarTool.TEXT_EDIT to ToolHoldAction.Run(ToolbarTool.CLIPBOARD),
+            ToolbarTool.SNIPPETS to ToolHoldAction.None,
         )
         assertEquals(map, ToolHoldActions.decode(ToolHoldActions.encode(map)))
+    }
+
+    /** "Does nothing" (#136) is its own token, and no tool can ever be named that. */
+    @Test
+    fun `a hold bound to nothing survives the round trip and is not a tool`() {
+        assertEquals("UNDO=NONE", ToolHoldActions.encode(mapOf(ToolbarTool.UNDO to ToolHoldAction.None)))
+        assertEquals(mapOf(ToolbarTool.UNDO to ToolHoldAction.None), ToolHoldActions.decode("UNDO=NONE"))
+        assertTrue(ToolbarTool.entries.none { it.name == ToolHoldActions.NONE_TOKEN })
     }
 
     @Test
@@ -46,8 +56,8 @@ class ToolHoldActionsTest {
         )
         assertEquals(
             mapOf(
-                ToolbarTool.UNDO to ToolbarTool.REDO,
-                ToolbarTool.SNIPPETS to ToolbarTool.CLIPBOARD,
+                ToolbarTool.UNDO to ToolHoldAction.Run(ToolbarTool.REDO),
+                ToolbarTool.SNIPPETS to ToolHoldAction.Run(ToolbarTool.CLIPBOARD),
             ),
             decoded,
         )
@@ -58,7 +68,7 @@ class ToolHoldActionsTest {
     fun `a tool bound to itself is dropped`() {
         assertTrue(ToolHoldActions.decode("UNDO=UNDO").isEmpty())
         assertEquals(
-            mapOf(ToolbarTool.UNDO to ToolbarTool.REDO),
+            mapOf(ToolbarTool.UNDO to ToolHoldAction.Run(ToolbarTool.REDO)),
             ToolHoldActions.decode("UNDO=REDO,REDO=REDO"),
         )
     }

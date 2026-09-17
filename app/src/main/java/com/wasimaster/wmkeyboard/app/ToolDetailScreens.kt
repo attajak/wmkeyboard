@@ -117,6 +117,7 @@ import com.wasimaster.wmkeyboard.core.settings.toolBlocker
 import com.wasimaster.wmkeyboard.core.settings.PowerSavingTrigger
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
+import com.wasimaster.wmkeyboard.core.settings.ToolHoldAction
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.outlined.AltRoute
@@ -178,23 +179,30 @@ private fun ToolHoldRow(
     NavRow(
         title = R.string.tooldetail_hold_title,
         subtitle = stringResource(R.string.tooldetail_hold_subtitle),
-        value = if (bound == null) {
-            stringResource(R.string.tooldetail_hold_settings_value)
-        } else {
-            stringResource(toolTitle(bound))
+        value = when (bound) {
+            null -> stringResource(R.string.tooldetail_hold_settings_value)
+            ToolHoldAction.None -> stringResource(R.string.tooldetail_hold_nothing_value)
+            is ToolHoldAction.Run -> stringResource(toolTitle(bound.tool))
         },
     ) { editing = true }
     if (editing) {
         ToolPickerDialog(
             title = stringResource(R.string.tooldetail_hold_pick_title, stringResource(toolTitle(tool))),
-            current = bound,
+            current = (bound as? ToolHoldAction.Run)?.tool,
             // Every tool but this one: holding a tool to run itself is a slow tap.
             options = ToolbarTool.entries.filter { isSupportedTool(it) && it != tool },
             noneSubtitle = stringResource(R.string.tooldetail_hold_settings_value),
+            // The third answer (#136): a hold that does nothing at all.
+            nothingSubtitle = stringResource(R.string.tooldetail_hold_nothing_subtitle),
+            nothingSelected = bound == ToolHoldAction.None,
             onDismiss = { editing = false },
             onPick = { picked ->
                 editing = false
-                scope.launch { repository.setToolHoldAction(tool, picked) }
+                scope.launch { repository.setToolHoldAction(tool, picked?.let(ToolHoldAction::Run)) }
+            },
+            onPickNothing = {
+                editing = false
+                scope.launch { repository.setToolHoldAction(tool, ToolHoldAction.None) }
             },
         )
     }
@@ -206,6 +214,11 @@ private fun ToolHoldRow(
  * [noneSubtitle] both words the "None" row and decides whether there is one: the
  * layout editor picks the tool a key opens, where "no tool" is not a key anyone
  * would want, so it passes null and the row goes.
+ *
+ * [nothingSubtitle] is the same shape for a "Does nothing" row (#136), which
+ * only the hold picker has a use for: a key that does nothing is a blank, a
+ * hold that does nothing is a choice. [nothingSelected] says whether it is the
+ * standing one, since the row is not a tool and [current] cannot name it.
  */
 @Composable
 internal fun ToolPickerDialog(
@@ -215,6 +228,9 @@ internal fun ToolPickerDialog(
     onDismiss: () -> Unit,
     onPick: (ToolbarTool?) -> Unit,
     noneSubtitle: String? = null,
+    nothingSubtitle: String? = null,
+    nothingSelected: Boolean = false,
+    onPickNothing: () -> Unit = {},
 ) {
     val list = rememberLazyListState()
     val rail = rememberScrollRailState(list)
@@ -229,9 +245,22 @@ internal fun ToolPickerDialog(
                             title = stringResource(CommonR.string.common_none),
                             supporting = { CaptionText(noneSubtitle) },
                             trailing = {
-                                RadioButton(selected = current == null, onClick = { onPick(null) })
+                                RadioButton(
+                                    selected = current == null && !nothingSelected,
+                                    onClick = { onPick(null) },
+                                )
                             },
                             onClick = { onPick(null) },
+                        )
+                    }
+                    if (nothingSubtitle != null) item {
+                        WmRow(
+                            title = stringResource(R.string.tooldetail_hold_nothing_value),
+                            supporting = { CaptionText(nothingSubtitle) },
+                            trailing = {
+                                RadioButton(selected = nothingSelected, onClick = onPickNothing)
+                            },
+                            onClick = onPickNothing,
                         )
                     }
                     items(options, key = { it.name }) { tool ->
@@ -2848,7 +2877,7 @@ internal fun TextFieldSetting(
             singleLine = true,
             supportingText = { Text(hint) },
             trailingIcon = {
-                ResetSetting(label, default != null && text != default) {
+                ResetSetting(label, default != null && text != default, possible = default != null) {
                     text = default.orEmpty()
                     scope.launch { onSave(default.orEmpty()) }
                 }

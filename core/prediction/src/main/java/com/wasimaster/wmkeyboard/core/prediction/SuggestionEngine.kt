@@ -1951,6 +1951,7 @@ class SuggestionEngine(
      *        this hangs off keys before it considers any of its own
      * @param keyOf code point to the anchor code point of the key that types
      *        it, or -1 when this board cannot type it in one press
+     * @param perKey how many words one key may carry, stacked (#136)
      */
     fun octopusWords(
         composing: String,
@@ -1962,6 +1963,7 @@ class SuggestionEngine(
         dense: Boolean = false,
         pool: List<String> = emptyList(),
         keyOf: (Int) -> Int,
+        perKey: Int = 1,
     ): List<OctopusWord> {
         if (limit <= 0 || kinds.isEmpty()) return emptyList()
         // Dense mode means "fill the board", so the quietening floor that makes
@@ -1971,7 +1973,9 @@ class SuggestionEngine(
         if (composing.isEmpty()) {
             if (OctopusKind.NEXT_WORD !in kinds) return emptyList()
             val words = pool.ifEmpty { nextWords(previousWord, previousWord2, limit * 2) }
-            return assignOctopus("", ranked(words, OctopusKind.NEXT_WORD), keys, keyOf, limit, spread)
+            return assignOctopus(
+                "", ranked(words, OctopusKind.NEXT_WORD), keys, keyOf, limit, spread, perKey,
+            )
         }
 
         val lower = composing.lowercase()
@@ -2019,7 +2023,7 @@ class SuggestionEngine(
             candidates.addAll(octopusFan(lower, candidates))
         }
         if (candidates.isEmpty()) return emptyList()
-        return assignOctopus(composing, candidates, keys, keyOf, limit, spread)
+        return assignOctopus(composing, candidates, keys, keyOf, limit, spread, perKey)
             // Written the way the user writes it, then re-cased to follow what
             // they have typed — the same treatment the strip gives, so the word
             // drawn over the key is character-for-character the word that will

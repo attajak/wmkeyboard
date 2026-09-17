@@ -2158,7 +2158,7 @@ data class KeyboardUiState(
      * It changes on every keystroke, so a key that read it would cost the whole
      * board the recomposition skip that class exists to buy.
      */
-    val octopus: Map<Int, OctopusWord> = emptyMap(),
+    val octopus: OctopusBoard = emptyMap(),
     /**
      * The same, for a stroke that is still being drawn: each alternate the
      * decoder is still holding, over the key that would reach it.
@@ -2170,7 +2170,7 @@ data class KeyboardUiState(
      * had already been overwritten by the alternates and every flick fell
      * through to the decoder.
      */
-    val octopusGlide: Map<Int, OctopusWord> = emptyMap(),
+    val octopusGlide: OctopusBoard = emptyMap(),
     /** Text-edit panel: arrows extend the selection instead of moving the cursor. */
     val textEditSelecting: Boolean = false,
     /**

@@ -69,6 +69,7 @@ import com.wasimaster.wmkeyboard.app.StoragePermissionActivity
 import com.wasimaster.wmkeyboard.core.media.GallerySaver
 import com.wasimaster.wmkeyboard.core.media.MediaMime
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
+import com.wasimaster.wmkeyboard.core.settings.BlacklistScope
 import android.provider.DocumentsContract
 import android.provider.Settings
 import com.wasimaster.wmkeyboard.core.clipboard.ClipEntityKind
@@ -1982,6 +1983,27 @@ open class WMKeyboardService : InputMethodService() {
      * runs against the whole list on the first emission, which is what makes
      * an entry added while the keyboard was not running take effect too.
      */
+    /**
+     * Points the engine at the blacklist for [languageId], the language about
+     * to be typed (#136): the global list plus that language's own. Called on
+     * the layout switches, ahead of the state update that names the language,
+     * so the first suggestion pass on the new board already filters by it.
+     * The settings collector does the same on every emission.
+     */
+    private fun syncEngineBlacklist(languageId: String) {
+        val engine = suggestionEngine ?: return
+        engine.blacklist = _uiState.value.settings.suggestionSources.blacklistFor(languageId)
+    }
+
+    /**
+     * Where a word the keyboard itself blocks lands: the language being typed
+     * when the user chose that, or the global list (#136).
+     */
+    private fun blacklistTarget(state: KeyboardUiState): String? =
+        state.language.id.takeIf {
+            state.settings.suggestionSources.blacklistScope == BlacklistScope.CURRENT_LANGUAGE
+        }
+
     private suspend fun purgeBlacklisted(blacklist: Set<String>) {
         val added = blacklist - purgedBlacklist
         purgedBlacklist = blacklist
@@ -2970,7 +2992,14 @@ open class WMKeyboardService : InputMethodService() {
                 correctionStats.memory = settings.correction.undoMemory
                 glideOutcomes.applied = settings.gesture.learnSwipeStyle
                 suggestionEngine?.reranker = resolveReranker(settings)
-                suggestionEngine?.blacklist = settings.suggestionSources.blacklist
+                // The engine sees one flat set: the global list plus the list of
+                // the language being typed (#136). Re-pointed on every language
+                // switch by [syncEngineBlacklist].
+                suggestionEngine?.blacklist =
+                    settings.suggestionSources.blacklistFor(activeSpec.language().id)
+                // Only the global list is purged from the personal dictionary:
+                // a word blocked in one language is still wanted in the others,
+                // and the lexicon is shared between them.
                 purgeBlacklisted(settings.suggestionSources.blacklist)
                 suggestionEngine?.blockOffensiveWords =
                     settings.suggestionStrip.blockOffensiveWords
@@ -3408,7 +3437,7 @@ open class WMKeyboardService : InputMethodService() {
                     memory = _uiState.value.settings.correction.undoMemory
                 }
                 glideOutcomes = this@WMKeyboardService.glideOutcomes
-                blacklist = _uiState.value.settings.suggestionSources.blacklist
+                blacklist = _uiState.value.let { it.settings.suggestionSources.blacklistFor(it.language.id) }
                 rankOffsets = wordRanks.snapshot()
                 offensiveWords = offensiveSet
                 blockOffensiveWords = _uiState.value.settings.suggestionStrip.blockOffensiveWords
@@ -4415,6 +4444,7 @@ open class WMKeyboardService : InputMethodService() {
         // language switch must not leave the old keyboard's rules
         // running against the new grid.
         syncKeymanSession(fieldSpec)
+        syncEngineBlacklist(fieldSpec.language().id)
         _uiState.update {
             it.copy(
                 settings = modeSettings,
@@ -9058,6 +9088,7 @@ open class WMKeyboardService : InputMethodService() {
         // language switch must not leave the old keyboard's rules
         // running against the new grid.
         syncKeymanSession(spec)
+        syncEngineBlacklist(spec.language().id)
         _uiState.update {
             it.copy(
                 language = spec.language(),
@@ -11296,7 +11327,7 @@ open class WMKeyboardService : InputMethodService() {
             // A word on the never-suggest list is neither counted nor parked
             // in the waiting room: learning it would only put it back in the
             // personal dictionary the user just took it out of (#48).
-            val blacklisted = cleaned.lowercase() in state.settings.suggestionSources.blacklist
+            val blacklisted = state.settings.suggestionSources.blacklisted(cleaned, state.language.id)
             // Put into the dictionary by hand a moment ago: this commit is the
             // same event finishing, not a use of it (#115). The n-grams below
             // still run — the word did land in the field, and the phrase it
@@ -11467,6 +11498,7 @@ open class WMKeyboardService : InputMethodService() {
         if (queued.isEmpty()) return
         val entries = oneEntryPerInstance(queued)
         val settings = _uiState.value.settings
+        val languageId = _uiState.value.language.id
         val threshold = settings.suggestionStrip.newWordSightings.coerceAtLeast(1)
         // One bounded read of the field, only if a positional suspect needs it
         // (see [teachRevision]) and only where the field can answer for these
@@ -11483,7 +11515,7 @@ open class WMKeyboardService : InputMethodService() {
         for (entry in entries) {
             // Blacklisted since the commit: the user has just taken this word
             // out of their dictionary, and the queue must not put it back (#48).
-            if (entry.word.lowercase() in settings.suggestionSources.blacklist) continue
+            if (settings.suggestionSources.blacklisted(entry.word, languageId)) continue
             if (entry.known) {
                 // Recognised when it was typed, and it has to still be
                 // recognised now: a language switched off while the word sat
@@ -11928,7 +11960,7 @@ open class WMKeyboardService : InputMethodService() {
             original = fired.typed
         }
         if (!CorrectionMemory.accepts(original, rev.revised, ::isKnownWord)) return null
-        val blacklist = _uiState.value.settings.suggestionSources.blacklist
+        val blacklist = _uiState.value.let { it.settings.suggestionSources.blacklistFor(it.language.id) }
         if (original.lowercase() in blacklist ||
             rev.revised.lowercase().split(' ').any { it in blacklist }
         ) {
@@ -11972,7 +12004,7 @@ open class WMKeyboardService : InputMethodService() {
             if (containsWord(text, original) || !containsWord(text, revised)) return
         }
         if (!CorrectionMemory.accepts(original, revised, ::isKnownWord)) return
-        val blacklist = _uiState.value.settings.suggestionSources.blacklist
+        val blacklist = _uiState.value.let { it.settings.suggestionSources.blacklistFor(it.language.id) }
         if (original.lowercase() in blacklist || revised.lowercase().split(' ').any { it in blacklist }) return
         val kind = if (entry.replacesOrigin == WordOrigin.TYPED && !isKnownWord(original)) {
             CorrectionMemory.Kind.PAIR_AND_HABITS
@@ -12874,7 +12906,7 @@ open class WMKeyboardService : InputMethodService() {
         val words: List<String>,
         val emojis: List<String>,
         val bias: Map<Char, Float>,
-        val octopus: Map<Int, OctopusWord>,
+        val octopus: OctopusBoard,
     )
 
     /**
@@ -12913,7 +12945,7 @@ open class WMKeyboardService : InputMethodService() {
     private fun octopusForGlide(
         state: KeyboardUiState,
         words: List<String>,
-    ): Map<Int, OctopusWord> {
+    ): OctopusBoard {
         val octopus = state.settings.octopus
         if (!octopus.enabled || words.size < 2) return emptyMap()
         if (!state.allowsTypingIntelligence) return emptyMap()
@@ -12934,7 +12966,8 @@ open class WMKeyboardService : InputMethodService() {
             // already survived the beam, and quietening it here would hide the
             // one the stroke is about to be wrong about.
             scoreSpread = Double.POSITIVE_INFINITY,
-        ).associateBy { it.keyCodePoint }
+            perKey = octopus.wordsPerKey,
+        ).toOctopusBoard()
     }
 
     private fun octopusFor(
@@ -12942,7 +12975,7 @@ open class WMKeyboardService : InputMethodService() {
         typed: String,
         keys: KeySets?,
         pool: List<String>,
-    ): Map<Int, OctopusWord> {
+    ): OctopusBoard {
         val octopus = state.settings.octopus
         if (!octopus.enabled || !state.allowsTypingIntelligence) return emptyMap()
         if (state.composer.isConversion || state.composer.isTransliterating) return emptyMap()
@@ -12960,7 +12993,8 @@ open class WMKeyboardService : InputMethodService() {
             dense = octopus.dense,
             pool = pool,
             keyOf = { codePoint -> anchors[codePoint] ?: -1 },
-        ).associateBy { it.keyCodePoint }
+            perKey = octopus.wordsPerKey,
+        ).toOctopusBoard()
     }
 
     /**
@@ -12976,7 +13010,7 @@ open class WMKeyboardService : InputMethodService() {
      * questions here: the strip is still about the word that just landed, the
      * keys are about the one after it.
      */
-    private suspend fun nextWordOctopus(): Map<Int, OctopusWord> {
+    private suspend fun nextWordOctopus(): OctopusBoard {
         val state = _uiState.value
         // Off is the common case and this sits on the commit path, so it is
         // answered before the thread hop rather than inside [octopusFor].
@@ -14525,7 +14559,9 @@ open class WMKeyboardService : InputMethodService() {
         if (state.octopus.isEmpty() || points.isEmpty() || keyWidthPx <= 0f) return false
         val start = points.first()
         val centre = nearestOctopusKey(state, keys, start) ?: return false
-        val word = state.octopus[centre.codePoint] ?: return false
+        // The word nearest the key: a flick is aimed at the key, not at one of
+        // the words stacked over it, and the stack's best sits closest (#136).
+        val word = state.octopus.top(centre.codePoint) ?: return false
         val taken = octopusFlick(
             points = points,
             startX = centre.x,
@@ -23813,7 +23849,8 @@ open class WMKeyboardService : InputMethodService() {
         if (trimmed.isEmpty()) return
         vibrate()
         stopSuggesting(trimmed)
-        serviceScope.launch { settingsRepository.addSuggestionBlacklistWord(trimmed) }
+        val target = blacklistTarget(_uiState.value)
+        serviceScope.launch { settingsRepository.addSuggestionBlacklistWord(trimmed, target) }
     }
 
     /**
@@ -23863,8 +23900,8 @@ open class WMKeyboardService : InputMethodService() {
                 autocorrectWord = state.autocorrectWord?.takeUnless { blocked(it) },
                 joinSuggestion = state.joinSuggestion?.takeUnless { blocked(it) },
                 revisionSuggestion = state.revisionSuggestion?.takeUnless { blocked(it) },
-                octopus = state.octopus.filterValues { !blocked(it.word) },
-                octopusGlide = state.octopusGlide.filterValues { !blocked(it.word) },
+                octopus = state.octopus.without { blocked(it.word) },
+                octopusGlide = state.octopusGlide.without { blocked(it.word) },
             )
         }
     }
@@ -23917,7 +23954,7 @@ open class WMKeyboardService : InputMethodService() {
         return WordMenuFacts(
             typedAddable = addableTypedWord(),
             deletable = isForgettable(trimmed),
-            blacklisted = trimmed.lowercase() in _uiState.value.settings.suggestionSources.blacklist,
+            blacklisted = _uiState.value.let { it.settings.suggestionSources.blacklisted(trimmed, it.language.id) },
         )
     }
 
@@ -23936,7 +23973,9 @@ open class WMKeyboardService : InputMethodService() {
         val trimmed = word.trim()
         if (trimmed.isEmpty()) return
         vibrate()
-        serviceScope.launch { settingsRepository.removeSuggestionBlacklistWord(trimmed) }
+        // Off every list it is on: "Suggest again" is the whole opinion, not
+        // one per language (#136).
+        serviceScope.launch { settingsRepository.removeSuggestionBlacklistWordEverywhere(trimmed) }
     }
 
     /**
@@ -23961,8 +24000,8 @@ open class WMKeyboardService : InputMethodService() {
         handAddedWord = WordKey.of(word)
         userLexicon.addWord(word, caseEvidence = true)
         val state = _uiState.value
-        if (word.lowercase() in state.settings.suggestionSources.blacklist) {
-            serviceScope.launch { settingsRepository.removeSuggestionBlacklistWord(word) }
+        if (state.settings.suggestionSources.blacklistedAnywhere(word)) {
+            serviceScope.launch { settingsRepository.removeSuggestionBlacklistWordEverywhere(word) }
         }
         if (state.settings.addWordsToSystemDictionary) {
             serviceScope.launch(Dispatchers.IO) {
@@ -24040,9 +24079,11 @@ open class WMKeyboardService : InputMethodService() {
     private fun blacklistIfStillListed(word: String) {
         val lower = word.lowercase()
         val stillListed = suggestionEngine?.inDictionaries(lower, includePlatform = false) == true
-        if (stillListed && lower !in _uiState.value.settings.suggestionSources.blacklist) {
+        val state = _uiState.value
+        if (stillListed && !state.settings.suggestionSources.blacklisted(lower, state.language.id)) {
             stopSuggesting(word)
-            serviceScope.launch { settingsRepository.addSuggestionBlacklistWord(word) }
+            val target = blacklistTarget(state)
+            serviceScope.launch { settingsRepository.addSuggestionBlacklistWord(word, target) }
         }
     }
 
@@ -24068,7 +24109,7 @@ open class WMKeyboardService : InputMethodService() {
             learnedCount = userLexicon.frequencyOf(word),
             rankOffset = wordRanks.offsetOf(word),
             rankControl = state.settings.suggestionStrip.rankControl,
-            blacklisted = word.lowercase() in state.settings.suggestionSources.blacklist,
+            blacklisted = state.settings.suggestionSources.blacklisted(word, state.language.id),
             casePinned = userLexicon.isCasePinned(word),
         )
         _uiState.update { it.copy(wordCard = card) }
@@ -24286,8 +24327,8 @@ open class WMKeyboardService : InputMethodService() {
         }
         // Choosing a spelling says the opposite of never suggesting it, the
         // same reading [addTypedWord] gives.
-        if (spelling.lowercase() in _uiState.value.settings.suggestionSources.blacklist) {
-            serviceScope.launch { settingsRepository.removeSuggestionBlacklistWord(spelling) }
+        if (_uiState.value.settings.suggestionSources.blacklistedAnywhere(spelling)) {
+            serviceScope.launch { settingsRepository.removeSuggestionBlacklistWordEverywhere(spelling) }
         }
         if (oldKey != newKey) {
             val offset = wordRanks.offsetOf(word)

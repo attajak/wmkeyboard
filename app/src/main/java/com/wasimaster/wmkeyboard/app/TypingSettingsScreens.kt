@@ -23,7 +23,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import com.wasimaster.wmkeyboard.core.media.hasNotificationAccess
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
 import com.wasimaster.wmkeyboard.core.prediction.UndoMemory
-import com.wasimaster.wmkeyboard.core.settings.BackspaceSwipeUnit
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
 import com.wasimaster.wmkeyboard.core.tools.CheatSheetLetter
@@ -210,88 +209,8 @@ internal fun TypingSettings(
 
 
 
-    SettingsGroup(stringResource(R.string.typing_group_backspace_title)) {
-        item {
-            ToggleSetting(
-                R.string.typing_backspace_swipe_title,
-                stringResource(R.string.typing_backspace_swipe_subtitle),
-                settings.backspaceSwipeDelete,
-                info = stringResource(R.string.typing_backspace_swipe_info),
-                default = SettingsDefaults.backspaceSwipeDelete,
-            ) { scope.launch { repository.setBackspaceSwipeDelete(it) } }
-        }
-        if (settings.backspaceSwipeDelete) {
-            item {
-                ChoiceSetting(
-                    R.string.typing_backspace_unit_title,
-                    subtitle = stringResource(R.string.typing_backspace_unit_subtitle),
-                    info = stringResource(R.string.typing_backspace_unit_info),
-                    options = listOf(
-                        BackspaceSwipeUnit.WORD to
-                            stringResource(R.string.typing_backspace_unit_word),
-                        BackspaceSwipeUnit.CHARACTER to
-                            stringResource(R.string.typing_backspace_unit_character),
-                    ),
-                    selected = settings.textEditing.backspaceSwipeUnit,
-                    default = SettingsDefaults.textEditing.backspaceSwipeUnit,
-                    detail = { unit ->
-                        ChoiceDetail(
-                            stringResource(
-                                if (unit == BackspaceSwipeUnit.WORD) {
-                                    R.string.typing_backspace_unit_word_desc
-                                } else {
-                                    R.string.typing_backspace_unit_character_desc
-                                },
-                            ),
-                        )
-                    },
-                ) { scope.launch { repository.setBackspaceSwipeUnit(it) } }
-            }
-            item {
-                ToggleSetting(
-                    R.string.typing_backspace_preview_title,
-                    stringResource(R.string.typing_backspace_preview_subtitle),
-                    settings.textEditing.backspaceSwipePreview,
-                    info = stringResource(R.string.typing_backspace_preview_info),
-                    default = SettingsDefaults.textEditing.backspaceSwipePreview,
-                ) { scope.launch { repository.setBackspaceSwipePreview(it) } }
-            }
-            if (settings.textEditing.backspaceSwipeUnit == BackspaceSwipeUnit.WORD) {
-                item {
-                    SliderSetting(
-                        R.string.typing_backspace_step_title,
-                        subtitle = stringResource(R.string.typing_backspace_step_subtitle),
-                        value = settings.textEditing.backspaceWordStepDp.toFloat(),
-                        range = 32f..120f,
-                        display = { context.getString(R.string.typing_value_dp, it.toInt()) },
-                        info = stringResource(R.string.typing_backspace_step_info),
-                        default = SettingsDefaults.textEditing.backspaceWordStepDp.toFloat(),
-                    ) { scope.launch { repository.setBackspaceWordStepDp(it.toInt()) } }
-                }
-            } else {
-                item {
-                    SliderSetting(
-                        R.string.typing_backspace_char_step_title,
-                        subtitle = stringResource(R.string.typing_backspace_char_step_subtitle),
-                        value = settings.textEditing.backspaceCharStepDp.toFloat(),
-                        range = 8f..48f,
-                        display = { context.getString(R.string.typing_value_dp, it.toInt()) },
-                        info = stringResource(R.string.typing_backspace_char_step_info),
-                        default = SettingsDefaults.textEditing.backspaceCharStepDp.toFloat(),
-                    ) { scope.launch { repository.setBackspaceCharStepDp(it.toInt()) } }
-                }
-            }
-        }
-        item {
-            ToggleSetting(
-                R.string.typing_forward_delete_swipe_title,
-                stringResource(R.string.typing_forward_delete_swipe_subtitle),
-                settings.textEditing.forwardDeleteSwipe,
-                info = stringResource(R.string.typing_forward_delete_swipe_info),
-                default = SettingsDefaults.textEditing.forwardDeleteSwipe,
-            ) { scope.launch { repository.setForwardDeleteSwipe(it) } }
-        }
-    }
+    // The Backspace group lives on Key press since #136: what a key does under
+    // a swipe is a key-press matter, and this screen is the typing engine's.
 
     SettingsGroup(stringResource(R.string.typing_group_enter_title)) {
         item {
@@ -968,7 +887,7 @@ internal fun TypingSuggestionsSettings(
             )
         }
         item {
-            val count = settings.suggestionSources.blacklist.size
+            val count = settings.suggestionSources.blacklistCount
             NavRow(
                 R.string.typing_blacklist_title,
                 if (count == 0) {
@@ -1239,6 +1158,17 @@ internal fun TypingOctopusSettings(
                     info = stringResource(R.string.typing_octopus_long_press_info),
                     default = SettingsDefaults.octopus.longPressKeys,
                 ) { scope.launch { repository.setOctopusLongPressKeys(it) } }
+            }
+            item {
+                StepperSetting(
+                    R.string.typing_octopus_stack_title,
+                    subtitle = stringResource(R.string.typing_octopus_stack_subtitle),
+                    value = octopus.wordsPerKey,
+                    range = OctopusSettings.WORDS_PER_KEY_RANGE.toList(),
+                    display = { context.getString(R.string.values_number, it) },
+                    info = stringResource(R.string.typing_octopus_stack_info),
+                    default = SettingsDefaults.octopus.wordsPerKey,
+                ) { scope.launch { repository.setOctopusWordsPerKey(it) } }
             }
         }
     }

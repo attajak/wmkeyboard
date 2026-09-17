@@ -270,6 +270,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Suppresses suggesting, not typing — The word can still be typed and committed verbatim
     - Applies to strip, next-word, glide results and split halves
     - Added by hand in a settings dialog, or by holding a chip on the strip — "Never suggest", with "Suggest again" to undo
+    - Per-language lists (#136) — blacklistByLanguage, one string-set pref per language id; the engine sees global + the language being typed, re-pointed on every layout switch
+    - "Blocked from the keyboard" scope — blacklistScope decides where the hold menu's Never suggest lands (all languages by default, or the current one); the editor asks per word; Suggest again clears every list
 - **Held-word menu and word card** `uncommon` — Press and hold a suggestion for a menu about it (#99)
   - Contextual items with icons — Never suggest / Suggest again; Add "typed" while the word being typed is unlearned; Delete for a word the keyboard can forget; Edit always
   - Add pins the capitals — The typed spelling goes in at full strength and no later vote changes it (#100)
@@ -461,6 +463,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Shared with the panel's Select key — Either surface arms it, either one turns it off, and both light up while it is on; the toolbar's mode outlives a panel opening, the panel's does not
   - Trackpad tool (issue #39) — The key area as a relative pointing surface: one finger drags the caret a character per stepXDp sideways and a line per stepYDp vertically, sub-step travel carried between frames (TrackpadAxis), every move a real arrow key through onTextEdit
     - Hold, then drag selects — The long press arms selectionHold through the Selection mode tool's own callback and the release disarms it; the selection stays in the editor
+    - The selection-actions bar waits for the lift (#136) — selectionMacroBarVisible is false while selectionHold is on, so the bar never pushes or swaps the toolbar out from under the held finger; it appears once the finger comes up
     - Two and three taps — Select word and select line at the caret (TrackpadTapCounter: window plus a distance test, since a surface is wide); switchable off
     - Two fingers — Drag moves by words (Ctrl+Arrow) at twice the character step; a two-finger tap types a space; a finger arriving or leaving re-anchors the centroid rather than counting as travel
     - Tap and hold modes — Tap toggles the panel; a press and hold on the toolbar tool opens it only while the finger stays (onTrackpadHold, paired like onSelectionHold, released on drag pick-up and on onFinishInputView); a hold over a tapped-open panel is a no-op
@@ -580,6 +583,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Never relocated — A candidate whose key is already claimed is dropped rather than moved, because a word over a key that would not type it is a lie about the affordance
   - The strip's own words — the pool is `suggest`'s finished list, so the keys and the strip never disagree; the engine's raw walk only fills keys the strip had no room for, and past a density of 9 the tries are fanned for the rest
   - Three placements — Floating in the gap above the key (no height change), a reserved lane per row, or inside the key; top-row words straddle the grid and are tapped on the half still over it
+  - Words per key (#136) — wordsPerKey 1–3, default 1; a key honours that many claims in rank order (OctopusWord.tier), stacked away from the key; the flick takes the nearest, a tap the one touched, density still caps the board
   - Flick or tap `uncommon` — Both switchable; the flick is judged at the lift against a sensitivity tier whose cone matches the glide picker's, so a glide that opens upward stays a glide
   - Live during a glide — Mid-stroke each alternate hangs off the key where it leaves the decoder's leader, which no other surface can show; one decode, one state write
   - Hints step aside — A key carrying a word drops its corner hint, read at draw time so the board keeps its per-keystroke recomposition skip; the transliteration hint is never hidden
@@ -1509,10 +1513,13 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Toolbar only — The toolbox hold keeps opening settings pages, so no page loses its way in
     - Repeat tools excluded — A caret tool's hold is already spent repeating the move; its row says so rather than hiding
     - Self-binding refused — Encoder drops tool=itself, which is a tap done slowly
+    - "Does nothing" is a third answer (#136) — ToolHoldAction.None, stored as `TOOL=NONE`; the hold buzzes and nothing opens or runs
     - Voice hold picks a mode `uncommon` — voiceBar.holdPicksTypingMode (default on, #173): a hold on the pinned Voice tool opens a menu of the three typing modes; a pick persists the mode and starts dictation at once (onVoiceModePick, optimistic state update ahead of the DataStore write). Its own flag, like trackpad.holdToOpen, since holdActions can only name a tool; off hands the hold back to the map
   - Toolbar chrome options `uncommon` — ToolbarBehavior + height/label/shape fields
     - Master strip switch — toolbarBehavior.enabled off reclaims the height for keys
     - Swipe down on the bar to hide keyboard — swipeDownHide, off by default
+    - Rearrange by dragging can be turned off (#136) — dragToRearrange, on by default; off, a hold that travels stays a hold and the toolbox is where the bar is rearranged
+    - The drag-scope pill never covers the bar — parked below the toolbar, or above it when the row order puts the bar under the keys; the finger dodge goes to whichever end is not the toolbar's
     - Toolbar-only with a hardware keyboard — onlyWithHardwareKeyboard drops the key rows, keeps the strip
     - RTL mirroring of pinned order — reverseForRtl on by default; toolbox grid unaffected
     - Spread vs packed vs scrollable bar — greedy on by default; scrollable forces packed
@@ -3169,6 +3176,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Global only — a keyboard mode cannot reorder the stack
     - Migrated from the old emoji-row-above-toolbar boolean
   - Symbol row `RARE` — One-tap characters and snippets above the keys, off by default
+    - A page of its own (#136) — route `rows/symbol`: the Rows & bars row is a switch and a door (ToggleNavRow), the page repeats the switch and holds height, lines, scrolling and the symbol sets
     - 5 built-in sets, all enabled by default — Email (11 entries), Web (15), Coding (32), Math (22), Punctuation (20)
     - Left-edge picker chip, shown only when more than one set is enabled
     - Entries can be whole snippets, not just characters — @gmail.com, https://, ->, => and a literal tab

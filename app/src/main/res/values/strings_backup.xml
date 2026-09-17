@@ -442,4 +442,14 @@
     <!-- Screen reader action name of that button. -->
     <string name="backup_dictionary_sort_reverse">Reverse the order</string>
     <string name="backup_dictionary_no_matches">No learned word matches \"%1$s\".</string>
+    <string name="backup_blacklist_scope_title">Blocked from the keyboard</string>
+    <string name="backup_blacklist_scope_subtitle">Where a word you block with Never suggest applies</string>
+    <string name="backup_blacklist_scope_info">Pressing and holding a suggestion and choosing Never suggest blocks the word. This decides whether it is blocked in every language or only in the language you were typing. Words you add on this screen ask each time.</string>
+    <string name="backup_blacklist_scope_all_label">All languages</string>
+    <string name="backup_blacklist_scope_current_label">Current language</string>
+    <string name="backup_blacklist_scope_all_desc">The word is never suggested, whatever language you type in.</string>
+    <string name="backup_blacklist_scope_current_desc">The word is never suggested in the language you were typing. Other languages still suggest it.</string>
+    <string name="backup_blacklist_language_label">Block in</string>
+    <string name="backup_blacklist_all_languages_label">All languages</string>
+    <string name="backup_blacklist_language_word_subtitle">Only in <xliff:g id="language" example="French">%1$s</xliff:g></string>
 </resources>

@@ -111,11 +111,21 @@ data class OctopusSettings(
      * that promises nothing.
      */
     val longPressKeys: Boolean = false,
+    /**
+     * How many words one key may carry, stacked away from the key: the best
+     * nearest the key, the next above it (#136). One by default, which is what
+     * both reference boards drew and all a phone-sized key has room for; a
+     * tablet's tall keys can take a second and a third without the stacks of
+     * neighbouring rows meeting. [density] still caps the board as a whole.
+     */
+    val wordsPerKey: Int = 1,
 ) {
     /** Whether this board should fan the tries to fill the keys it can. */
     val dense: Boolean get() = density >= DENSE_FROM
 
     companion object {
+        val WORDS_PER_KEY_RANGE = 1..3
+
         const val SPARSE_DENSITY = 6
         const val MIN_DENSITY = 3
 
