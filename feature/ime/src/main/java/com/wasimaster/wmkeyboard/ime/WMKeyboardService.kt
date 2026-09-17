@@ -3003,6 +3003,7 @@ open class WMKeyboardService : InputMethodService() {
                 suggestionEngine?.autocorrectSplits = settings.suggestionStrip.autocorrectSplits
                 suggestionEngine?.digitSlipCorrections =
                     settings.numberRow && settings.suggestionStrip.numberRowCorrections
+                suggestionEngine?.apostropheFixes = settings.autoText.apostrophe
                 pushRegister(settings)
                 // Chinese Pinyin options the composer reads at call time (it stays a
                 // parameter-less singleton). Pushed from the same block, like above.
@@ -3436,6 +3437,7 @@ open class WMKeyboardService : InputMethodService() {
                 autocorrectSplits = _uiState.value.settings.suggestionStrip.autocorrectSplits
                 digitSlipCorrections = _uiState.value.settings.numberRow &&
                     _uiState.value.settings.suggestionStrip.numberRowCorrections
+                apostropheFixes = _uiState.value.settings.autoText.apostrophe
                 val lang = _uiState.value.language
                 englishSources = lang.isEnglish
                 primaryLanguageId = lang.id
@@ -6688,7 +6690,21 @@ open class WMKeyboardService : InputMethodService() {
             // of those is not what anybody typed.
             val endsWord = text.length == 1 &&
                 (text[0] in SENTENCE_ENDERS || text[0] in AUTO_SPACE_PUNCTUATION)
-            commitComposing(ic, autocorrect = false, expandPatterns = endsWord)
+            // A full stop ends a word as squarely as a space does, so the
+            // apostrophe a contraction is missing goes back the same way:
+            // "thats." was the one ending that left it out (#240). Only for
+            // the marks that end a word — a slash or a symbol-layer insert is
+            // a character landing mid-thought, not a word being finished —
+            // and only the apostrophe, not autocorrect: guessing at a whole
+            // spelling on a mark the user may be typing for its own sake is a
+            // wider change than this, and the space bar is still where a word
+            // gets second-guessed.
+            commitComposing(
+                ic,
+                autocorrect = false,
+                fixApostrophes = endsWord && state.settings.autoText.apostrophe,
+                expandPatterns = endsWord,
+            )
             if (swallowTerminatorAfterCommit) {
                 swallowTerminatorAfterCommit = false
                 consumeShift()
@@ -9605,12 +9621,12 @@ open class WMKeyboardService : InputMethodService() {
                 } == true
         // Apostrophe restoration outranks autocorrect: "dont" is a known
         // contraction slip, not a typo for "font"/"done" to be guessed at.
-        // English reads a table of contractions; a language that elides
-        // (French: "cest" is c'est) reads its own word lists, through the
-        // engine (#215).
+        // Which route the language takes — English's table of contractions,
+        // an elision language's own word lists — is the engine's to know
+        // (#215, #240).
         val apostrophized =
             if (fixApostrophes && state.allowsTypingIntelligence && !gluedToWord) {
-                if (state.language.isEnglish) Apostrophes.fix(typed) else suggestionEngine?.elide(typed)
+                suggestionEngine?.elide(typed)
             } else {
                 null
             }
@@ -14520,16 +14536,14 @@ open class WMKeyboardService : InputMethodService() {
      *
      * The letters layer has no apostrophe key, so a contraction can only ever
      * be *drawn* without one — which makes this less of a correction than a
-     * transcription. Deliberately applied here rather than inside the engine:
-     * the setting and the language check live at this level, and the offline
-     * harness decodes through the engine, where a word coming back spelled
-     * differently from the one the corpus drew would read as a miss.
+     * transcription. Deliberately applied here rather than inside the engine's
+     * own decode: the setting lives at this level, and the offline harness
+     * decodes through the engine, where a word coming back spelled differently
+     * from the one the corpus drew would read as a miss.
      */
     private fun restoreApostrophe(word: String): String? {
         val state = _uiState.value
         if (!state.settings.autoText.apostrophe || !state.allowsTypingIntelligence) return null
-        if (state.language.isEnglish) return Apostrophes.fix(word)
-        // A language that elides: "cest" drawn is c'est, from the lists (#215).
         return suggestionEngine?.elide(word)
     }
 

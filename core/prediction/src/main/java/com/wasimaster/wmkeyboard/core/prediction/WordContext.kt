@@ -90,6 +90,27 @@ object WordContext {
     private const val WORD_JOINERS = "'\u2019-\u200C\u200D"
 
     /**
+     * Whether the character at [i] of [text] belongs to the word around it —
+     * [isWordChar], plus an apostrophe with a letter on each side.
+     *
+     * A contraction is one word, and every store here keys on it as one:
+     * [isLearnableWord] admits the apostrophe as a joiner, the lexicon holds
+     * `don't` under that spelling, and the English list carries the
+     * contractions themselves (#128). The scans below read words back *out*
+     * of the text field, and they used to stop at the apostrophe — so
+     * "that's " handed the next suggestion the context word "s", and the
+     * pair the keyboard learned was `s` followed by whatever came next
+     * (#240). Only medial: a quote around a word, or the one a possessive
+     * ends on, is punctuation and still ends it.
+     */
+    private fun isWordCharAt(text: CharSequence, i: Int): Boolean {
+        val c = text[i]
+        if (isWordChar(c)) return true
+        if (c != '\'' && c != '\u2019') return false
+        return i > 0 && i + 1 < text.length && isWordChar(text[i - 1]) && isWordChar(text[i + 1])
+    }
+
+    /**
      * The completed word ending [text], for next-word context:
      *  - null while still inside a word, and null for null text, which is an
      *    editor saying it cannot answer rather than saying there is nothing;
@@ -112,14 +133,14 @@ object WordContext {
         if (isWordChar(text.last()) || text.last().isDigit()) return null
         // The run of separators between the last word and the caret.
         var i = text.length - 1
-        while (i >= 0 && !isWordChar(text[i])) {
+        while (i >= 0 && !isWordCharAt(text, i)) {
             if (text[i] in enders) return SENTENCE_START
             i--
         }
-        val word = text.toString()
-            .trim { !isWordChar(it) }
-            .takeLastWhile { isWordChar(it) }
-        return WordKey.of(word).ifEmpty { null }
+        if (i < 0) return null
+        var start = i
+        while (start > 0 && isWordCharAt(text, start - 1)) start--
+        return WordKey.of(text.subSequence(start, i + 1).toString()).ifEmpty { null }
     }
 
     /** True for the sentinel (or anything in its reserved control plane). */
@@ -138,8 +159,8 @@ object WordContext {
         // same question of what remains.
         val s = text.toString()
         var end = s.length
-        while (end > 0 && !isWordChar(s[end - 1])) end--
-        while (end > 0 && isWordChar(s[end - 1])) end--
+        while (end > 0 && !isWordCharAt(s, end - 1)) end--
+        while (end > 0 && isWordCharAt(s, end - 1)) end--
         val prev2 = completedWordBefore(s.substring(0, end), enders)
         return prev1 to prev2?.takeUnless { isSentinel(it) }
     }
@@ -157,8 +178,8 @@ object WordContext {
         val s = text.toString()
         var end = s.length
         repeat(2) {
-            while (end > 0 && !isWordChar(s[end - 1])) end--
-            while (end > 0 && isWordChar(s[end - 1])) end--
+            while (end > 0 && !isWordCharAt(s, end - 1)) end--
+            while (end > 0 && isWordCharAt(s, end - 1)) end--
         }
         val prev3 = completedWordBefore(s.substring(0, end), enders)
         return Triple(prev1, prev2, prev3?.takeUnless { isSentinel(it) })
