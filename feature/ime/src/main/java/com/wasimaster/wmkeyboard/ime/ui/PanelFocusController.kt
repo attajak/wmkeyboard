@@ -26,6 +26,19 @@ import com.wasimaster.wmkeyboard.ime.PanelMode
 class PanelFocusController {
 
     /**
+     * The same idea one layer out: the ring over the *keys*, for a television
+     * remote (see [KeyGridFocus]).
+     *
+     * Carried here rather than passed to [com.wasimaster.wmkeyboard.ime.ui.KeyboardScreen]
+     * as a parameter of its own, because that function's argument list already
+     * compiles to a method at the JVM's 64K ceiling — the note on its signature
+     * is not decoration. This object is already the service's handle on "where
+     * the focus ring is", and the two rings are never up at once: a panel owns
+     * the arrow keys whenever one is open.
+     */
+    internal val keyGrid = KeyGridFocus()
+
+    /**
      * The panel that published the current geometry. The service checks it
      * before every move: a panel that has just closed leaves its counts behind
      * for a frame, and acting on those would activate an invisible item.

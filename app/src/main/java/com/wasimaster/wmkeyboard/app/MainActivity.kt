@@ -24,6 +24,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -122,6 +123,7 @@ import com.wasimaster.wmkeyboard.core.ui.toolAccentPaint
 import androidx.compose.ui.platform.LocalConfiguration
 import com.wasimaster.wmkeyboard.core.settings.DeviceForm
 import com.wasimaster.wmkeyboard.core.settings.applyDeviceForm
+import com.wasimaster.wmkeyboard.core.settings.isTelevision
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -435,8 +437,16 @@ internal fun AppTheme(settings: KeyboardSettings, content: @Composable () -> Uni
     // The type scale is the app's, not Material's — see [WmTypography]. It is
     // scoped to this theme, so it dresses the settings app and the screens the
     // core modules contribute to it, and leaves the keyboard itself alone.
+    // On a television the D-pad is the only pointer there is, so the app says
+    // where it is pointing (see [TvFocusIndication]). Nothing is provided
+    // anywhere else, so a phone keeps the ripple and pays one boolean.
+    val television = remember(context) { context.isTelevision() }
+    val indication = remember(television, scheme.primary) {
+        if (television) arrayOf(LocalIndication provides TvFocusIndication(scheme.primary))
+        else emptyArray()
+    }
     MaterialTheme(colorScheme = scheme, typography = WmTypography, shapes = WmShapes) {
-        CompositionLocalProvider(LocalIconSet provides iconSet, content = content)
+        CompositionLocalProvider(LocalIconSet provides iconSet, *indication, content = content)
     }
 }
 

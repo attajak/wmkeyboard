@@ -486,6 +486,7 @@ private fun SearchStrings.typingHardwareRows(): List<SettingsSearchEntry> {
         row(R.string.typing_hardware_input_title, R.string.typing_hardware_input_subtitle, weight = EntryWeight.PRIMARY),
         row(R.string.typing_hw_shortcuts_title, R.string.typing_hw_shortcuts_subtitle),
         row(R.string.typing_hw_panel_nav_title, R.string.typing_hw_panel_nav_subtitle),
+        row(R.string.typing_hw_dpad_keys_title, R.string.typing_hw_dpad_keys_subtitle),
         row(R.string.typing_hw_esc_title, R.string.typing_hw_esc_subtitle),
         row(R.string.typing_hw_digit_chord_title, R.string.typing_hw_digit_chord_subtitle),
         row(R.string.typing_hw_lang_chord_title, R.string.typing_hw_lang_chord_subtitle),

@@ -256,10 +256,14 @@ import com.wasimaster.wmkeyboard.core.net.NetworkWatcher
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
 import com.wasimaster.wmkeyboard.core.layout.expandForTablet
+import com.wasimaster.wmkeyboard.core.layout.gridForTelevision
+import com.wasimaster.wmkeyboard.core.layout.televisionGridColumns
 import com.wasimaster.wmkeyboard.core.layout.tabletGridWidth
 import com.wasimaster.wmkeyboard.core.settings.DeviceForm
 import com.wasimaster.wmkeyboard.core.settings.applyDeviceForm
 import com.wasimaster.wmkeyboard.core.settings.applyMode
+import com.wasimaster.wmkeyboard.core.settings.applyTelevision
+import com.wasimaster.wmkeyboard.core.settings.isTelevision
 import com.wasimaster.wmkeyboard.core.settings.modeThemeOwner
 import com.wasimaster.wmkeyboard.core.settings.themeSelectionTarget
 import com.wasimaster.wmkeyboard.core.settings.isSupportedTool
@@ -325,6 +329,7 @@ import com.wasimaster.wmkeyboard.core.tools.page
 import com.wasimaster.wmkeyboard.core.tools.step
 import com.wasimaster.wmkeyboard.core.util.PlayServices
 import com.wasimaster.wmkeyboard.core.util.runCancellable
+import com.wasimaster.wmkeyboard.ime.ui.KeyGridFocus
 import com.wasimaster.wmkeyboard.ime.ui.PanelFocusController
 import com.wasimaster.wmkeyboard.core.tools.DictionaryClient
 import com.wasimaster.wmkeyboard.core.tools.GifItem
@@ -744,6 +749,12 @@ open class WMKeyboardService : InputMethodService() {
      * Written by the panels during composition, read here on every arrow key.
      */
     private val panelFocus = PanelFocusController()
+
+    /**
+     * Whether this is a television. Asked once: a box does not stop being a box,
+     * and the answer steers a settings overlay that every emission reads.
+     */
+    private val television: Boolean by lazy { isTelevision() }
 
     /** Latest settings straight from DataStore, before mode overrides. */
     private var baseSettings: KeyboardSettings? = null
@@ -2686,7 +2697,14 @@ open class WMKeyboardService : InputMethodService() {
                 // the mode list, and every overlay below reads a keyboard that
                 // simply has no modes rather than one that has to remember not
                 // to apply them (issue #41).
-                val formed = stored.withoutModes().applyDeviceForm(form)
+                // Screen size, then the television overlay beside it: both are
+                // "what this device would have shipped with", and the TV one
+                // has to be able to take away what a 960 dp-wide screen just
+                // read as a tablet's — a glide-typing board is still wrong when
+                // the big screen has no touch panel behind it.
+                val formed = stored.withoutModes()
+                    .applyDeviceForm(form)
+                    .applyTelevision(television)
                 // Direct boot: everything backed by credential-encrypted
                 // storage is switched off once, here, so that nothing below —
                 // nor anything reading the ui state afterwards — has to know
@@ -4945,6 +4963,10 @@ open class WMKeyboardService : InputMethodService() {
     override fun onFinishInputView(finishingInput: Boolean) {
         super.onFinishInputView(finishingInput)
         keyboardVisible = false
+        // The ring belongs to the board that is going away: a new session gets
+        // a fresh one, seeded where [KeyGridFocus.show] puts it rather than on
+        // whatever key the last field was left pointing at.
+        panelFocus.keyGrid.reset()
         lifecycleOwner.onPause()
         // The window is gone, so the media-session listener goes with it.
         syncMediaTracking()
@@ -8932,13 +8954,20 @@ open class WMKeyboardService : InputMethodService() {
         // key and so decline on their own, and the numeric keypads must never be
         // stretched to twelve columns — a four-column PIN pad at that width is
         // not a keypad any more.
-        val expand = form.isTablet && safe.tabletExpand
+        // A television takes the grid transform instead of the tablet one, even
+        // though its screen reports as a large tablet's: the two want opposite
+        // things. A tablet widens the board so two hands can reach more keys at
+        // once; a remote wants the *fewest* presses between keys, which is an
+        // even rectangle. `tabletExpand` gates both — a layout whose geometry is
+        // authored (T9, the kana pads) says no to being rebuilt at all.
+        val reflow = television && safe.tabletExpand && televisionGridColumns(letters) != null
+        val expand = !reflow && form.isTablet && safe.tabletExpand
         val gridWidth = if (expand) tabletGridWidth(letters, form) else null
         val set = LayoutSet(
-            letters = if (gridWidth != null) {
-                letters.expandForTablet(form, numberRowShown)
-            } else {
-                letters
+            letters = when {
+                reflow -> letters.gridForTelevision()
+                gridWidth != null -> letters.expandForTablet(form, numberRowShown)
+                else -> letters
             },
             symbols = safe.compile(LayoutLayer.SYMBOLS),
             symbolsShifted = safe.compile(LayoutLayer.SYMBOLS_SHIFTED),
@@ -25045,6 +25074,10 @@ open class WMKeyboardService : InputMethodService() {
      * drifted on which layer they checked first.
      */
     private fun dismissTopLayer(fromBack: Boolean = false): Boolean {
+        // Above everything else, and for the same reason the layer peek's popup
+        // closes before the layer it is on: it is the newest thing the user
+        // opened and the one they are looking at.
+        if (panelFocus.keyGrid.cancelAlternates()) return true
         val close = topLayerDismissal(_uiState.value, fromBack) ?: return false
         close()
         return true
@@ -25063,8 +25096,14 @@ open class WMKeyboardService : InputMethodService() {
      * the system's (issue #227).
      */
     private fun backClosesLayer(state: KeyboardUiState = _uiState.value): Boolean =
-        (state.panel != PanelMode.NONE || state.voice.strip) &&
-            topLayerDismissal(state, fromBack = true) != null
+        // The ring's own long-press popup is a layer like any other, and on a
+        // television Back is the only key that can close it — a remote has no
+        // Escape. It is not in the ui state (the ring lives in the controller,
+        // where nothing it does costs the board a recomposition), so it is
+        // asked about here rather than in [topLayerDismissal]'s `when`.
+        panelFocus.keyGrid.alternatesOpen ||
+            ((state.panel != PanelMode.NONE || state.voice.strip) &&
+                topLayerDismissal(state, fromBack = true) != null)
 
     /**
      * How to close the topmost layer showing, or null when Back has nothing of
@@ -25135,6 +25174,10 @@ open class WMKeyboardService : InputMethodService() {
         // check must not apply to opening a tool.
         if (handleHardwareNav(event)) return true
         if (captureCaretKey(event)) return true
+        // After the panel ring and the keyboard's own fields, both of which own
+        // the arrow keys while they are up, and before everything below, which
+        // is about a physical keyboard typing rather than a remote pointing.
+        if (handleKeyGridNavKey(event)) return true
         if (volumeCursorDelta(keyCode) != 0) {
             // Auto-repeat rides along for free: holding the key repeats DOWN.
             onCursorMove(volumeCursorDelta(keyCode))
@@ -25145,6 +25188,12 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        // Before the swallow below, which would eat it: this is where a ring
+        // press types, and the key it releases is one the DOWN consumed.
+        if (handleKeyGridNavKeyUp(event)) {
+            consumedHardwareKeys.remove(keyCode)
+            return true
+        }
         // Swallow the UP of any DOWN this IME consumed, so the focused app
         // never sees half a physical keypress. Checked before the BACK/volume
         // handling, which never registers its keys here.
@@ -25326,6 +25375,98 @@ open class WMKeyboardService : InputMethodService() {
         }
 
         return handlePanelNavKey(event)
+    }
+
+    /**
+     * Arrow keys and the centre button over the *keys*: a television remote
+     * typing (see [com.wasimaster.wmkeyboard.ime.ui.KeyGridFocus]).
+     *
+     * Every branch is gated on the ring being reachable at all — the setting on
+     * (a television turns it on for itself), an input view on screen, and no
+     * panel open, because a panel owns the arrow keys for as long as it is up
+     * and [handlePanelNavKey] has already had its turn by the time this runs.
+     *
+     * Up and down off the edge of the board are deliberately *not* consumed:
+     * that is how a remote leaves the keyboard for the app's own controls, the
+     * way it would leave any other view. Left and right wrap inside the row, so
+     * spelling a word never quietly moves the app's selection instead.
+     */
+    private fun handleKeyGridNavKey(event: KeyEvent): Boolean {
+        if (!_uiState.value.settings.hardwareKeyboard.dpadKeyNavigation) return false
+        if (!isInputViewShown) return false
+        if (_uiState.value.panel != PanelMode.NONE) return false
+        val focus = panelFocus.keyGrid
+        val keyCode = event.keyCode
+        // A long press has the ringed key's alternates open: the arrows are
+        // steering that popup, not the board behind it.
+        val inPopup = focus.alternatesOpen
+        return when (keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT -> focus.step(inPopup, -1, 0) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_RIGHT -> focus.step(inPopup, 1, 0) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_UP -> focus.step(inPopup, 0, -1) && consumeHardwareKey(keyCode)
+            KeyEvent.KEYCODE_DPAD_DOWN -> focus.step(inPopup, 0, 1) && consumeHardwareKey(keyCode)
+            // The centre button types the ringed key. With no ring up it is the
+            // app's own "activate", which is what put the keyboard on screen in
+            // the first place — and on a keyboard with a hardware Enter, an
+            // Enter with no ring still has to mean the field's editor action.
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_NUMPAD_ENTER,
+            -> handleRingPress(focus, event) && consumeHardwareKey(keyCode)
+
+            // The way out, for a physical keyboard whose owner turned the ring
+            // on: with it down, Enter means the field's editor action again and
+            // the arrow keys are the app's. Only ever consumed while the ring is
+            // actually up — a bare Escape belongs to the app (see the note in
+            // [handleHardwareNav]), and this one has not even opened a panel.
+            KeyEvent.KEYCODE_ESCAPE -> when {
+                inPopup -> focus.cancelAlternates() && consumeHardwareKey(keyCode)
+                focus.showing -> run { focus.clear(); consumeHardwareKey(keyCode) }
+                else -> false
+            }
+
+            else -> false
+        }
+    }
+
+    /**
+     * The centre button, in all four of its meanings.
+     *
+     * A tap types the ringed key. Holding it does what holding a finger on that
+     * key does: a key that repeats while held repeats (backspace, the arrows —
+     * issue #231), and a key with alternates opens them, which is the only way
+     * a remote reaches an accented character. Once the popup is up the same
+     * button commits the highlighted entry.
+     *
+     * Auto-repeat is the clock: `repeatCount` 0 is the press, 1 is the platform
+     * long-press threshold, and the repeats after it are swallowed rather than
+     * left to fall through to the app half-way through a hold.
+     */
+    private fun handleRingPress(focus: KeyGridFocus, event: KeyEvent): Boolean = when {
+        // A popup is open: this press is the one that takes the highlighted
+        // entry, and the release after it has nothing left to do.
+        focus.alternatesOpen -> focus.commitAlternates()
+        // Nothing is typed on the way down — see [KeyGridFocus.armPress].
+        event.repeatCount == 0 -> focus.armPress()
+        event.repeatCount == 1 -> focus.holdPress()
+        else -> focus.repeatPress()
+    }
+
+    /**
+     * The centre button coming up: where a press that neither repeated nor
+     * opened a popup finally types, the way a finger lifting off a key does.
+     *
+     * Runs before [onKeyUp]'s blanket swallow of consumed keys, which would
+     * otherwise eat the release this is waiting for.
+     */
+    private fun handleKeyGridNavKeyUp(event: KeyEvent): Boolean {
+        if (!_uiState.value.settings.hardwareKeyboard.dpadKeyNavigation) return false
+        return when (event.keyCode) {
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
+            KeyEvent.KEYCODE_NUMPAD_ENTER,
+            -> panelFocus.keyGrid.releasePress()
+
+            else -> false
+        }
     }
 
     /** Arrow, Enter and Tab inside an open panel: move, activate, change region. */

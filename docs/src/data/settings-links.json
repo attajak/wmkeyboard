@@ -273,6 +273,7 @@
   {"title":"Process the physical keys","name":"typing_hardware_input_title","route":"typing/hardware","screens":["Typing","Physical keyboard"],"screen":false},
   {"title":"Tool shortcuts","name":"typing_hw_shortcuts_title","route":"typing/hardware","screens":["Typing","Physical keyboard"],"screen":false},
   {"title":"Arrow keys move a highlight","name":"typing_hw_panel_nav_title","route":"typing/hardware","screens":["Typing","Physical keyboard"],"screen":false},
+  {"title":"Arrow keys move over the keys","name":"typing_hw_dpad_keys_title","route":"typing/hardware","screens":["Typing","Physical keyboard"],"screen":false},
   {"title":"Esc closes the tool","name":"typing_hw_esc_title","route":"typing/hardware","screens":["Typing","Physical keyboard"],"screen":false},
   {"title":"Ctrl + number opens a toolbar tool","name":"typing_hw_digit_chord_title","route":"typing/hardware","screens":["Typing","Physical keyboard"],"screen":false},
   {"title":"Ctrl+Space changes the language","name":"typing_hw_lang_chord_title","route":"typing/hardware","screens":["Typing","Physical keyboard"],"screen":false},

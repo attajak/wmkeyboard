@@ -93,6 +93,22 @@
     <uses-feature android:name="android.hardware.sensor.compass" android:required="false" />
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
 
+    <!--
+         Televisions. Both lines are about the *store*, not about the code:
+         `android.hardware.touchscreen` is implicitly required by every app that
+         does not say otherwise, and a required touchscreen is what keeps an app
+         off Google TV entirely. Saying "false" here is the declaration that the
+         keyboard can be driven without a finger — which, since the D-pad ring
+         (see KeyGridFocus) and the television settings overlay, it can.
+
+         `android.software.leanback` is declared not-required for the mirror
+         image of the same reason: the leanback launcher alias below makes this
+         a TV app, and without this line the Play Store would read that alias as
+         a promise that it is a TV-*only* app and stop offering it to phones.
+    -->
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+
     <!-- The keyboard-mode editor lists installed apps (launcher activities)
          so a mode can be bound to specific apps; Android 11+ hides the app
          list without this. -->
@@ -328,6 +344,37 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
+        </activity-alias>
+
+        <!--
+             The same settings app again, for a television's own launcher
+             (Google TV, Android TV). A TV home screen lists what answers
+             LEANBACK_LAUNCHER and nothing else, so without this the app is
+             installed, enabled and invisible — which is exactly what it was
+             before this alias existed.
+
+             Its own alias rather than a third category on the two above,
+             because those two are the app *name* switch (#140) and exactly one
+             of them is ever enabled: hanging the TV entry off either would make
+             it disappear the moment someone chose the short name on their
+             phone, since the enabled state is carried per component by Package
+             Manager and travels with a backup.
+
+             Invisible on phones and tablets, where launchers query MAIN +
+             LAUNCHER and this answers only MAIN + LEANBACK_LAUNCHER. No
+             shortcuts meta-data: a remote has no long-press.
+        -->
+        <activity-alias
+            android:name="com.wasimaster.wmkeyboard.app.LauncherTelevision"
+            android:banner="@drawable/tv_banner"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:targetActivity="com.wasimaster.wmkeyboard.app.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
         </activity-alias>
 
         <!--
