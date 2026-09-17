@@ -125,6 +125,17 @@ object Apostrophes {
     )
 
     /**
+     * Whether [languageId] is the language this table is written for.
+     *
+     * English, and only English — the table is English grammar spelled out.
+     * Asked by [SuggestionEngine] the way [Elisions.rulesFor] is, so the two
+     * apostrophe routes are chosen in one place and a language reaches at
+     * most one of them.
+     */
+    fun servesLanguage(languageId: String): Boolean =
+        languageId.substringBefore('-').substringBefore('_') == "en"
+
+    /**
      * The corrected word, or null when [word] needs no fixing. The typed
      * capitalization is preserved: Dont → Don't, ARENT → AREN'T; words the
      * fix itself capitalizes (im → I'm) stay capitalized regardless.
