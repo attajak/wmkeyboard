@@ -720,23 +720,21 @@ class SuggestionEngine(
     private val beam = FuzzyBeamSearch()
     private val beamWorkspace = ThreadLocal.withInitial { BeamWorkspace() }
 
-    @Volatile
-    private var glideBeam = GlideBeam()
-    private val glideWorkspace = ThreadLocal.withInitial { GlideWorkspace() }
-
     /**
-     * How many of a dictionary's commonest words a swipe may decode to, 0 for
-     * all of them — [GlideBeam.Tuning.vocabularyRank], which is why it rebuilds
-     * the decoder rather than being read per stroke. [GlideBeam] holds nothing
-     * but its tuning (the workspace is the caller's), so replacing it costs an
-     * allocation and no state.
+     * The weights both glide decoders are built from — the shipped
+     * [GlideBeam.Tuning] with whatever the user has moved on top.
+     *
+     * Held rather than read per stroke because [GlideBeam] takes its tuning at
+     * construction. It holds nothing else (the workspace is the caller's), so
+     * replacing one costs an allocation and no state, which is what makes a
+     * setting that changes a weight cheap enough to apply this way.
      */
-    var glideVocabularyRank: Int = 0
-        set(value) {
-            if (field == value) return
-            field = value
-            glideBeam = GlideBeam(GlideBeam.Tuning(vocabularyRank = value))
-        }
+    @Volatile
+    private var glideTuning = GlideBeam.Tuning.DEFAULT
+
+    @Volatile
+    private var glideBeam = GlideBeam(glideTuning)
+    private val glideWorkspace = ThreadLocal.withInitial { GlideWorkspace() }
 
     /**
      * The decoder a deep search runs on: the same weights with the vocabulary
@@ -746,7 +744,47 @@ class SuggestionEngine(
      * deep search is the one moment the user has said the common word was
      * not what they meant.
      */
-    private val deepGlideBeam = GlideBeam(GlideBeam.Tuning(vocabularyRank = 0))
+    @Volatile
+    private var deepGlideBeam = GlideBeam(glideTuning.copy(vocabularyRank = 0))
+
+    /**
+     * Point both decoders at new weights, rebuilding them only when something
+     * actually moved.
+     *
+     * Every argument defaults to what the engine is already using, so a caller
+     * that knows about one setting does not have to know about the others. The
+     * three radii are the decoder's tolerances, exposed as settings by #222;
+     * [vocabularyRank] is how much of the dictionary a swipe may answer with,
+     * and is the one weight the deep decoder deliberately ignores.
+     */
+    fun tuneGlide(
+        startRadius: Float = glideTuning.startRadius,
+        endRadius: Float = glideTuning.endRadius,
+        nearRadius: Float = glideTuning.nearRadius,
+        vocabularyRank: Int = glideTuning.vocabularyRank,
+    ) {
+        val next = glideTuning.copy(
+            startRadius = startRadius,
+            endRadius = endRadius,
+            nearRadius = nearRadius,
+            vocabularyRank = vocabularyRank,
+        )
+        if (next == glideTuning) return
+        glideTuning = next
+        glideBeam = GlideBeam(next)
+        deepGlideBeam = GlideBeam(next.copy(vocabularyRank = 0))
+    }
+
+    /**
+     * How many of a dictionary's commonest words a swipe may decode to, 0 for
+     * all of them — [GlideBeam.Tuning.vocabularyRank]. A shorthand for
+     * [tuneGlide], kept because it reads as a property at the call sites.
+     */
+    var glideVocabularyRank: Int
+        get() = glideTuning.vocabularyRank
+        set(value) {
+            tuneGlide(vocabularyRank = value)
+        }
 
     /**
      * The romanization a glide is decoded through, when the layout's keys and

@@ -37,6 +37,7 @@ import com.wasimaster.wmkeyboard.core.tools.QrCodeGen
 import com.wasimaster.wmkeyboard.core.input.composer.DoublePinyinScheme
 import com.wasimaster.wmkeyboard.core.input.composer.HanVariant
 import com.wasimaster.wmkeyboard.core.input.composer.PinyinFuzzy
+import com.wasimaster.wmkeyboard.core.gesture.GlideBeam
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
 import com.wasimaster.wmkeyboard.core.prediction.SuggestionEngine
@@ -4723,6 +4724,17 @@ val GlidePickerChoicesRange = 2..5
 /** Bounds for [GestureSettings.pickerDwellMs]; the settings slider shares them. */
 val GlidePickerDwellMsRange = 150..1000
 
+/**
+ * Bounds for the decoder's three tolerances — [GestureSettings.startRadius],
+ * [GestureSettings.endRadius] and [GestureSettings.nearRadius] — in key
+ * widths. The settings sliders and the setters below share them, so a value
+ * the slider can reach is never one the repository refuses to store (#241).
+ *
+ * The floor is deliberately above zero: a radius of 0 admits no key at all and
+ * would turn glide typing off from inside a slider.
+ */
+val GlideRadiusRange = 0.5f..4f
+
 /** Glide-typing behaviour and swipe-trail appearance. See [KeyboardSettings.gesture]. */
 data class GestureSettings(
     /**
@@ -4970,6 +4982,37 @@ data class GestureSettings(
      * strip is a promise mostly unread.
      */
     val commitColorScope: GlideCommitColorScope = GlideCommitColorScope.STRIP_AND_PILL,
+    /**
+     * How far the stroke's *first* sample may sit from a word's first key, in
+     * key widths, for that word to be an answer to the stroke at all (#222).
+     *
+     * This and the two below are the decoder's three tolerances, the only
+     * weights of [GlideBeam.Tuning] a user can move. They are gates rather
+     * than scores: inside the radius a word is scored as it always was, and
+     * outside it the word is not considered. Widening one lets a sloppier
+     * stroke still reach the word it meant; narrowing one drops words the
+     * finger never went near, which is faster and stricter.
+     *
+     * Defaults come off [GlideBeam.Tuning.DEFAULT] so the row's reset restores
+     * the value the decoder was measured at. Swept, both anchors sit on a flat
+     * plateau above about 1.3, so the useful direction here is downwards:
+     * a tight anchor is what costs accuracy.
+     */
+    val startRadius: Float = GlideBeam.Tuning.DEFAULT.startRadius,
+    /**
+     * How far the stroke's *last* sample may sit from a word's last key, in key
+     * widths. See [startRadius]. Separate from it because the two ends of a
+     * stroke are not the same event: a touch-down is placed deliberately, and a
+     * lift-off is where a movement happened to stop.
+     */
+    val endRadius: Float = GlideBeam.Tuning.DEFAULT.endRadius,
+    /**
+     * How close the stroke must pass to a key, in key widths, for any word
+     * through that key to be walked at all. See [startRadius]. This is the
+     * path tolerance: it is what decides how much corner cutting a stroke may
+     * do before the letter in the corner stops being available.
+     */
+    val nearRadius: Float = GlideBeam.Tuning.DEFAULT.nearRadius,
     /**
      * Learn this user's swipe style from the swipes they keep, and read later
      * swipes by it (issue #52): where their finger actually lands on each
@@ -6311,6 +6354,9 @@ class SettingsRepository(private val context: Context) {
         /** The toggle the possessive swipe shipped as, read only to migrate it. */
         private val GESTURE_APOSTROPHE_S = booleanPreferencesKey("gesture_apostrophe_s")
         private val GESTURE_AUTO_SPACE = booleanPreferencesKey("gesture_auto_space")
+        private val GESTURE_START_RADIUS = floatPreferencesKey("gesture_start_radius")
+        private val GESTURE_END_RADIUS = floatPreferencesKey("gesture_end_radius")
+        private val GESTURE_NEAR_RADIUS = floatPreferencesKey("gesture_near_radius")
         private val GESTURE_START_THRESHOLD_SLOP = floatPreferencesKey("gesture_start_threshold_slop")
         private val GESTURE_POST_TYPE_COOLDOWN_MS = intPreferencesKey("gesture_post_type_cooldown_ms")
         private val GESTURE_HANDWRITE_DOT_COOLDOWN_MS = intPreferencesKey("gesture_handwrite_dot_cooldown_ms")
@@ -7455,6 +7501,9 @@ class SettingsRepository(private val context: Context) {
                 commitColorScope = p[GESTURE_COMMIT_COLOR_SCOPE]
                     ?.let { runCatching { GlideCommitColorScope.valueOf(it) }.getOrNull() }
                     ?: defaults.gesture.commitColorScope,
+                startRadius = p[GESTURE_START_RADIUS] ?: defaults.gesture.startRadius,
+                endRadius = p[GESTURE_END_RADIUS] ?: defaults.gesture.endRadius,
+                nearRadius = p[GESTURE_NEAR_RADIUS] ?: defaults.gesture.nearRadius,
                 learnSwipeStyle = p[GESTURE_LEARN_SWIPE_STYLE] ?: defaults.gesture.learnSwipeStyle,
                 swipeStyleVersion = p[GESTURE_SWIPE_STYLE_VERSION] ?: defaults.gesture.swipeStyleVersion,
             ),
@@ -11946,6 +11995,18 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setGestureAutoSpace(value: Boolean) =
         editPrefs { it[GESTURE_AUTO_SPACE] = value }
+
+    /** @see GestureSettings.startRadius; the bounds match the slider's. */
+    suspend fun setGestureStartRadius(value: Float) =
+        editPrefs { it[GESTURE_START_RADIUS] = value.coerceIn(GlideRadiusRange) }
+
+    /** @see GestureSettings.endRadius */
+    suspend fun setGestureEndRadius(value: Float) =
+        editPrefs { it[GESTURE_END_RADIUS] = value.coerceIn(GlideRadiusRange) }
+
+    /** @see GestureSettings.nearRadius */
+    suspend fun setGestureNearRadius(value: Float) =
+        editPrefs { it[GESTURE_NEAR_RADIUS] = value.coerceIn(GlideRadiusRange) }
 
     suspend fun setGestureStartThresholdSlop(value: Float) =
         editPrefs { it[GESTURE_START_THRESHOLD_SLOP] = value.coerceIn(0.5f, 4f) }

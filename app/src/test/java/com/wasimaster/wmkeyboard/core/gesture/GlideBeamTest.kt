@@ -386,6 +386,29 @@ class GlideBeamTest {
         assertFalse("the" in decode(gestureFor("was")))
     }
 
+    /**
+     * The anchors are settings now (#222), so the two directions the settings
+     * screen promises have to hold: a wider radius reads a stroke that starts
+     * off the key, and a tighter one refuses it.
+     */
+    @Test
+    fun `the start radius decides how far off the first key a stroke may begin`() {
+        val h = centers.getValue('h'.code)
+        val late = gestureFor("hello").toMutableList().apply {
+            // Touch down a key width below h, the way a low thumb starts.
+            this[0] = GesturePoint(h.x, h.y + keyWidth)
+        }
+        fun wordsAt(startRadius: Float): List<String> =
+            GlideBeam(GlideBeam.Tuning(startRadius = startRadius))
+                .decode(late, grid, keyWidth, sources, GlideWorkspace(), 4)
+                .map { it.word }
+
+        val wide = wordsAt(2f)
+        assertTrue("expected hello in $wide", "hello" in wide)
+        val tight = wordsAt(0.5f)
+        assertFalse("expected no hello in $tight", "hello" in tight)
+    }
+
     @Test
     fun `too short a path returns nothing`() {
         val h = centers.getValue('h'.code)

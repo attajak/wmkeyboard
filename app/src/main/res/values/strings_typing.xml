@@ -496,6 +496,19 @@
 
 
 
+    <!-- Three sliders for the glide decoder's tolerances, in key widths. -->
+    <string name="typing_glide_start_radius_title">Start error radius</string>
+    <string name="typing_glide_start_radius_subtitle">How far the start of a glide can be from the first letter</string>
+    <string name="typing_glide_start_radius_info">Measured in key widths. The keyboard offers a word only when your finger went down this close to the first letter of that word. A high value lets a glide start off the key and still find the word. A low value refuses a glide that starts in the wrong place, which is stricter but can lose the word you wanted. Move this up if your glides start late or low.</string>
+
+    <string name="typing_glide_end_radius_title">End error radius</string>
+    <string name="typing_glide_end_radius_subtitle">How far the end of a glide can be from the last letter</string>
+    <string name="typing_glide_end_radius_info">Measured in key widths. The keyboard offers a word only when you lifted your finger this close to the last letter of that word. The end of a glide is where a movement stops, so it is usually less accurate than the start. This is a separate value for that reason. Move it up if your glides slide past the last letter.</string>
+
+    <string name="typing_glide_near_radius_title">Path error radius</string>
+    <string name="typing_glide_near_radius_subtitle">How far a glide can pass from a letter on the way</string>
+    <string name="typing_glide_near_radius_info">Measured in key widths. A letter is available to a word only when the glide passed this close to its key. A high value lets you cut corners and still get the letter. A low value keeps the keyboard to the keys you touched, which is faster and more exact, but a cut corner then loses the word. Move this up if long words come out with a letter missing.</string>
+
     <string name="typing_swipe_start_distance_title">Swipe start distance</string>
     <string name="typing_swipe_start_distance_subtitle">How far to move before a glide starts. A low value is more sensitive</string>
     <string name="typing_swipe_start_distance_info">This is the finger movement that changes a press into a glide. It is a multiple of the system touch slop. A low value starts the glide sooner and is more sensitive, but a still press can start a glide. A high value needs a more deliberate swipe.</string>

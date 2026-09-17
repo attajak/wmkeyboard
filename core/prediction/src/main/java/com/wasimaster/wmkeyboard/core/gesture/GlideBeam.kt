@@ -360,6 +360,16 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         val startRadiusSq: Float get() = startRadius * startRadius
         val endRadiusSq: Float get() = endRadius * endRadius
         val nearCost: Float get() = nearRadius * nearRadius * invTwoSigmaSq
+
+        companion object {
+            /**
+             * The shipped weights, so a setting that exposes one of them can
+             * default to what the decoder does rather than to a number retyped
+             * beside it. A settings default that drifts from the decoder's is
+             * invisible until someone presses the row's reset.
+             */
+            val DEFAULT = Tuning()
+        }
     }
 
     /**

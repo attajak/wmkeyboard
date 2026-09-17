@@ -71,6 +71,7 @@ import com.wasimaster.wmkeyboard.ime.ui.SlotIcon
 import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
 import com.wasimaster.wmkeyboard.core.settings.ShiftGlideMode
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerChoicesRange
+import com.wasimaster.wmkeyboard.core.settings.GlideRadiusRange
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerDwellMsRange
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerSensitivity
 import com.wasimaster.wmkeyboard.core.settings.GlideCommitColor
@@ -1690,6 +1691,8 @@ internal fun TypingGesturesSettings(
                 // kept together and out of line: this screen's body is already
                 // past its length budget and these belong to one another.
                 glideVocabularyRows(settings, repository, scope)
+                // The three tolerances the decoder reads a stroke with (#222).
+                glideRadiusRows(settings, repository, scope)
                 item {
                     ToggleSetting(
                         R.string.typing_space_after_glide_title,
@@ -2741,5 +2744,60 @@ private fun SettingsGroupScope.glideVocabularyRows(
             onChange = { scope.launch { repository.setGestureCommitColorScope(it) } },
             default = SettingsDefaults.gesture.commitColorScope,
         )
+    }
+}
+
+/**
+ * The decoder's three tolerances: how far the start, the end and the middle of
+ * a stroke may sit from the keys of a word for that word to be an answer at all
+ * (#222). Out of line for the same reason as [glideVocabularyRows] — the screen
+ * body is past its length budget and these three belong together.
+ *
+ * All three are in key widths and share [GlideRadiusRange] with the setters
+ * that store them, so a value the slider reaches is always one that is kept.
+ */
+private fun SettingsGroupScope.glideRadiusRows(
+    settings: KeyboardSettings,
+    repository: SettingsRepository,
+    scope: CoroutineScope,
+) {
+    // Where the finger went down, which is a deliberate placement.
+    item {
+        val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
+        SliderSetting(
+            R.string.typing_glide_start_radius_title,
+            subtitle = stringResource(R.string.typing_glide_start_radius_subtitle),
+            value = settings.gesture.startRadius,
+            range = GlideRadiusRange,
+            display = { valueFormat.format("%.1f".format(it)) },
+            info = stringResource(R.string.typing_glide_start_radius_info),
+            default = SettingsDefaults.gesture.startRadius,
+        ) { scope.launch { repository.setGestureStartRadius(it) } }
+    }
+    // Where it came up, which is only where a movement stopped.
+    item {
+        val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
+        SliderSetting(
+            R.string.typing_glide_end_radius_title,
+            subtitle = stringResource(R.string.typing_glide_end_radius_subtitle),
+            value = settings.gesture.endRadius,
+            range = GlideRadiusRange,
+            display = { valueFormat.format("%.1f".format(it)) },
+            info = stringResource(R.string.typing_glide_end_radius_info),
+            default = SettingsDefaults.gesture.endRadius,
+        ) { scope.launch { repository.setGestureEndRadius(it) } }
+    }
+    // And how much corner cutting the letters in between survive.
+    item {
+        val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
+        SliderSetting(
+            R.string.typing_glide_near_radius_title,
+            subtitle = stringResource(R.string.typing_glide_near_radius_subtitle),
+            value = settings.gesture.nearRadius,
+            range = GlideRadiusRange,
+            display = { valueFormat.format("%.1f".format(it)) },
+            info = stringResource(R.string.typing_glide_near_radius_info),
+            default = SettingsDefaults.gesture.nearRadius,
+        ) { scope.launch { repository.setGestureNearRadius(it) } }
     }
 }

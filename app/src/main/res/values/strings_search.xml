@@ -142,6 +142,9 @@
     <string name="search_kw_typing_block_offensive">swear curse cuss censor nsfw</string>
     <string name="search_kw_typing_contact_names">address book phonebook people</string>
     <string name="search_kw_typing_double_space">period full</string>
+    <string name="search_kw_typing_glide_end_radius">tolerance accuracy sloppy precision anchor lift</string>
+    <string name="search_kw_typing_glide_near_radius">tolerance accuracy sloppy precision corner cutting pathway</string>
+    <string name="search_kw_typing_glide_start_radius">tolerance accuracy sloppy precision anchor touchdown</string>
     <string name="search_kw_typing_glide_typing">flow swype shapewriter slide continuous</string>
     <string name="search_kw_typing_group_autopilot">hit detection hitbox proximity targeting</string>
     <string name="search_kw_typing_group_hardware">bluetooth external usb dock hardware</string>

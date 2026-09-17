@@ -23,6 +23,7 @@ import androidx.compose.material.icons.automirrored.outlined.VolumeUp
 import androidx.compose.material.icons.outlined.Abc
 import androidx.compose.material.icons.outlined.Accessibility
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Adjust
 import androidx.compose.material.icons.outlined.AdsClick
 import androidx.compose.material.icons.outlined.AltRoute
 import androidx.compose.material.icons.outlined.AlternateEmail
@@ -230,6 +231,7 @@ import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material.icons.outlined.Toll
 import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.Translate
+import androidx.compose.material.icons.outlined.TripOrigin
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.VerticalAlignBottom
 import androidx.compose.material.icons.outlined.VerticalAlignTop
@@ -794,6 +796,9 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_icon_colour_end_title) { Icons.Outlined.Gradient }
         put(R.string.typing_glide_apostrophe_title) { Icons.Outlined.FormatQuote }
         put(R.string.typing_possessive_swipe_title) { Icons.Outlined.FormatQuote }
+        put(R.string.typing_glide_start_radius_title) { Icons.Outlined.TripOrigin }
+        put(R.string.typing_glide_end_radius_title) { Icons.Outlined.Adjust }
+        put(R.string.typing_glide_near_radius_title) { Icons.Outlined.AltRoute }
         put(R.string.typing_swipe_start_distance_title) { Icons.Outlined.Straighten }
         put(R.string.typing_trail_width_title) { Icons.Outlined.LineWeight }
         put(R.string.typing_trail_length_title) { Icons.Outlined.Timeline }

@@ -244,6 +244,9 @@ Full writeup: [One-time codes](/smart/one-time-codes/), and [Permissions](/priva
 | Finish long words early | Choice: Off / When sure / Eager | Off | Glide typing on and swipe mode is Type words |
 | Color the word a lift will type | Choice: Never / When sure / Any early word / Always | When sure | Glide typing on and swipe mode is Type words |
 | Where the color shows | Choice: Strip / Strip and pill / Strip, pill and keys | Strip and pill | Glide typing on and swipe mode is Type words |
+| Start error radius | Slider, 0.5×–4× | 1.6× | Glide typing on and swipe mode is Type words |
+| End error radius | Slider, 0.5×–4× | 1.6× | Glide typing on and swipe mode is Type words |
+| Path error radius | Slider, 0.5×–4× | 1.5× | Glide typing on and swipe mode is Type words |
 | Space after a glided word | Toggle | On | Glide typing on and swipe mode is Type words |
 | Apostrophe in a glide | Choice: Off / Comma / Full stop / Spacebar / Apostrophe key | Off | Glide typing on and swipe mode is Type words |
 | Swipe start distance | Slider, 0.5×–4× | 2.0× | Glide typing on |
@@ -295,6 +298,8 @@ Full writeup: [Gestures](/typing/gestures/) for the spacebar/backspace/volume-ke
 | Shift and Enter type a new line | Toggle | On |
 
 With this on, holding <KeyCap>Shift</KeyCap> (or pressing it first on a physical keyboard) makes <KeyCap>Enter</KeyCap> insert a line break instead of triggering the field's Send/Go/Search action. Only a shift you pressed yourself counts: auto-capitalize's own shift doesn't arm it, and caps lock is ignored.
+
+It also puts a small second glyph in the Enter key's top right corner, holding whichever of the two the key isn't currently doing: the newline symbol next to a Send icon, and the Send icon next to the newline symbol once Shift is up. The two trade places on the shift rather than one replacing the other.
 
 Turning it off doesn't take line breaks away. Press and hold <KeyCap>Enter</KeyCap> in any field where it shows the app's action, and the popup offers one.
 

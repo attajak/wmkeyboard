@@ -95,6 +95,30 @@ class GlideAlternateCountTest {
         assertTrue("deep $deep", "the" in deep && "thee" in deep)
     }
 
+    /**
+     * The three tolerances are settings now (#222), so the engine has to carry
+     * a changed one to both decoders: the capped one a stroke reads through,
+     * and the deep twin behind a glide undo, which drops the vocabulary cap
+     * and nothing else.
+     */
+    @Test
+    fun `a changed tolerance reaches the decoder and its deep twin`() {
+        val t = centers.getValue('t'.code)
+        // Touch down a key width below t, the way a low thumb starts.
+        val late = gestureFor("there").toMutableList().apply {
+            this[0] = GesturePoint(t.x, t.y + keyWidth)
+        }
+        val engine = engine()
+        val asShipped = engine.glide(late, grid, keyWidth, limit = 8).map { it.word }
+        assertTrue("as shipped $asShipped", "there" in asShipped)
+
+        engine.tuneGlide(startRadius = 0.5f)
+        val tight = engine.glide(late, grid, keyWidth, limit = 8).map { it.word }
+        val tightDeep = engine.glide(late, grid, keyWidth, limit = 8, deep = true).map { it.word }
+        assertTrue("tight $tight", "there" !in tight)
+        assertTrue("tight deep $tightDeep", "there" !in tightDeep)
+    }
+
     /** The contract the slot count relies on: ask for n, never get more than n. */
     @Test
     fun `a stroke never answers with more words than it was asked for`() {
