@@ -41,6 +41,20 @@ object WordContext {
     }
 
     /**
+     * Whether [c] separates two words the way a space does.
+     *
+     * `Char.isWhitespace()` is not that test, and the gap is not academic:
+     * Java excludes every no-break space from it by design, so U+00A0 — the
+     * space French keeps in front of `!`, `?`, `;` and `:`
+     * (`SpacedPunctuation`) — reads as an ordinary character and glues
+     * "Bonjour" and "!" into one nine-character "word". Adding
+     * [Char.isSpaceChar] puts the no-break and typographic spaces back;
+     * keeping [Char.isWhitespace] keeps tab, newline and carriage return,
+     * which `isSpaceChar` leaves out. Both are needed.
+     */
+    fun isSpaceLike(c: Char): Boolean = c.isWhitespace() || Character.isSpaceChar(c)
+
+    /**
      * Whether [word] is a word the keyboard may learn *on its own* (#185).
      *
      * Letters and digits, with at least one letter ("mp3" and "b2b" are words;

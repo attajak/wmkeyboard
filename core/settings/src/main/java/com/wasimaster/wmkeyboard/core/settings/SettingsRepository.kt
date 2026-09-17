@@ -1732,8 +1732,9 @@ data class AutoTextSettings(
      * than a choice, the rule is narrow (only after a word, a number or a
      * closing bracket), and one backspace right after puts the space back.
      * French typography puts a space in front of `?`, `!`, `:` and `;` on
-     * purpose; those writers take the four off [hugPunctuationMarks] or turn
-     * the rule off.
+     * purpose. That is [languagePunctuationSpacing]'s business now, and it wins
+     * over this rule mark by mark, so a French writer no longer has to edit
+     * [hugPunctuationMarks] or give the rule up in their other languages.
      */
     val hugPunctuation: Boolean = true,
     /**
@@ -1742,9 +1743,33 @@ data class AutoTextSettings(
      * marks, danda included.
      */
     val hugPunctuationMarks: String = HUG_PUNCTUATION_MARKS_DEFAULT,
+    /**
+     * Type the space a language puts in *front* of a punctuation mark, and keep
+     * every other rule from taking it back: French "Bonjour !", "Quoi ?",
+     * "voici :" (#215).
+     *
+     * On by default, and it is not a mode that switches itself on: a language
+     * either declares the marks (`LanguageDef.spacedPunctuation`) or it does
+     * not, and today only French does. Everybody else types into exactly the
+     * keyboard they had. For a French writer who would rather have the marks
+     * hug, this is the one switch that turns it off.
+     */
+    val languagePunctuationSpacing: Boolean = true,
 ) {
     companion object {
-        const val HUG_PUNCTUATION_MARKS_DEFAULT = ".,?!;:।"
+        /**
+         * Written as escapes, not as the marks themselves. Four of them are
+         * Arabic, and a literal here would reorder this line on screen in
+         * every editor that honours bidi — the list would read in an order
+         * that is not the order it is stored in.
+         *
+         * The Arabic marks (comma, semicolon, question mark, and the full stop
+         * Urdu and Sindhi write) were missing until #215: Arabic hugs its
+         * punctuation exactly as English does, so a space slipped in front of
+         * one used to stay there while the same slip in front of "?" was
+         * caught.
+         */
+        const val HUG_PUNCTUATION_MARKS_DEFAULT = ".,?!;:\u0964\u060C\u061B\u061F\u06D4"
 
         /** Longest mark list the app stores. */
         const val HUG_PUNCTUATION_MARKS_MAX = 24
@@ -5916,6 +5941,8 @@ class SettingsRepository(private val context: Context) {
             booleanPreferencesKey("auto_space_after_punctuation")
         private val HUG_PUNCTUATION = booleanPreferencesKey("hug_punctuation")
         private val HUG_PUNCTUATION_MARKS = stringPreferencesKey("hug_punctuation_marks")
+        private val LANGUAGE_PUNCTUATION_SPACING =
+            booleanPreferencesKey("language_punctuation_spacing")
         private val WRAP_SELECTION_WITH_PAIR = booleanPreferencesKey("wrap_selection_with_pair")
         /**
          * Read only: the text-editing pad's grid from before panel layouts. Folded
@@ -7016,6 +7043,8 @@ class SettingsRepository(private val context: Context) {
                 hugPunctuation = p[HUG_PUNCTUATION] ?: defaults.autoText.hugPunctuation,
                 hugPunctuationMarks = p[HUG_PUNCTUATION_MARKS]?.takeIf { it.isNotBlank() }
                     ?: defaults.autoText.hugPunctuationMarks,
+                languagePunctuationSpacing = p[LANGUAGE_PUNCTUATION_SPACING]
+                    ?: defaults.autoText.languagePunctuationSpacing,
             ),
             suggestions = p[SUGGESTIONS] ?: defaults.suggestions,
             suggestionSources = SuggestionSourceSettings(
@@ -11018,6 +11047,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setHugPunctuation(value: Boolean) =
         editPrefs { it[HUG_PUNCTUATION] = value }
+
+    suspend fun setLanguagePunctuationSpacing(value: Boolean) =
+        editPrefs { it[LANGUAGE_PUNCTUATION_SPACING] = value }
 
     /** Whitespace can never be a mark, and a very long list is a typo. */
     suspend fun setHugPunctuationMarks(value: String) = editPrefs {

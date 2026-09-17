@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.ime
 
 import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
 import com.wasimaster.wmkeyboard.core.gesture.KeyCenter
+import com.wasimaster.wmkeyboard.core.prediction.WordContext
 import kotlin.math.hypot
 
 /**
@@ -131,7 +132,7 @@ internal fun spacesBeforeGlidedWord(
 ): Boolean {
     if (fieldKind == FieldKind.URI) return false
     val last = textBefore.lastOrNull() ?: return false
-    if (last.isWhitespace()) return false
+    if (WordContext.isSpaceLike(last)) return false
     if (last in WORD_OPENERS) return false
     // The quote behind the caret opened a quotation exactly when a quote typed
     // now would close it, so the word goes straight up against it.
@@ -140,7 +141,7 @@ internal fun spacesBeforeGlidedWord(
         // A joiner at the very start of the line has no word to be attached to,
         // and nothing to be separated from either.
         val beforeJoiner = textBefore.dropLast(1).lastOrNull() ?: return false
-        return beforeJoiner.isWhitespace()
+        return WordContext.isSpaceLike(beforeJoiner)
     }
     return true
 }

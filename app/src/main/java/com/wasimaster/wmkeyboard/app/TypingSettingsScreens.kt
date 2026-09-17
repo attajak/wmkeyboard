@@ -635,6 +635,15 @@ internal fun TypingCorrectionsSettings(
         }
         item {
             ToggleSetting(
+                R.string.typing_language_punctuation_spacing_title,
+                stringResource(R.string.typing_language_punctuation_spacing_subtitle),
+                settings.autoText.languagePunctuationSpacing,
+                info = stringResource(R.string.typing_language_punctuation_spacing_info),
+                default = SettingsDefaults.autoText.languagePunctuationSpacing,
+            ) { scope.launch { repository.setLanguagePunctuationSpacing(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.typing_space_after_suggestion_title,
                 stringResource(R.string.typing_space_after_suggestion_subtitle),
                 settings.suggestionStrip.autoSpaceAfterSuggestion,

@@ -34,6 +34,20 @@ data class LanguageDef(
      * languages) set their own. A manual override in settings ignores this.
      */
     val numeralSystem: NumeralSystem = NumeralSystem.LATIN,
+    /**
+     * The punctuation marks this language keeps a no-break space in *front* of,
+     * against the keyboard's general rule that a mark hugs the word before it.
+     * Empty for every language that does not do this, which is nearly all of
+     * them — see [SpacedPunctuation] for what the exceptions want and why.
+     */
+    val spacedPunctuation: String = "",
+    /**
+     * The marks this language keeps a no-break space *after* — the other half
+     * of [spacedPunctuation], and empty for the same near-totality of
+     * languages. Today only the opening guillemet, in the languages written to
+     * the French standard.
+     */
+    val spacedOpeners: String = "",
 ) {
     /** English-language convenience, preserving the old `InputMode.isEnglish` reads. */
     val isEnglish: Boolean get() = id == "en"
@@ -98,6 +112,8 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "fr-FR",
             layoutIds = listOf(BuiltInLayouts.FRENCH_ID, AssetLayouts.FR_BEPO_ID, AssetLayouts.FR_CANADIAN_ID, AssetLayouts.FR_SWISS_ID),
+            spacedPunctuation = SpacedPunctuation.FRENCH_STYLE,
+            spacedOpeners = SpacedPunctuation.FRENCH_STYLE_OPENERS,
         ),
         LanguageDef(
             id = "de",
@@ -621,6 +637,8 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "oc-FR",
             layoutIds = listOf(AssetLayouts.OC_OCCITAN_ID),
+            spacedPunctuation = SpacedPunctuation.FRENCH_STYLE,
+            spacedOpeners = SpacedPunctuation.FRENCH_STYLE_OPENERS,
         ),
         LanguageDef(
             id = "br",
@@ -629,6 +647,8 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "br-FR",
             layoutIds = listOf(AssetLayouts.BR_BRETON_ID),
+            spacedPunctuation = SpacedPunctuation.FRENCH_STYLE,
+            spacedOpeners = SpacedPunctuation.FRENCH_STYLE_OPENERS,
         ),
         LanguageDef(
             id = "co",
@@ -1265,6 +1285,8 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "wa-BE",
             layoutIds = listOf(AssetLayouts.WA_QWERTY_ID),
+            spacedPunctuation = SpacedPunctuation.FRENCH_STYLE,
+            spacedOpeners = SpacedPunctuation.FRENCH_STYLE_OPENERS,
         ),
         LanguageDef(
             id = "scn",
@@ -1569,6 +1591,8 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "nrf-JE",
             layoutIds = listOf(AssetLayouts.NRF_QWERTY_ID),
+            spacedPunctuation = SpacedPunctuation.FRENCH_STYLE,
+            spacedOpeners = SpacedPunctuation.FRENCH_STYLE_OPENERS,
         ),
         LanguageDef(
             id = "hac",
@@ -2113,6 +2137,8 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "frp",
             layoutIds = listOf(AssetLayouts.FRP_ID),
+            spacedPunctuation = SpacedPunctuation.FRENCH_STYLE,
+            spacedOpeners = SpacedPunctuation.FRENCH_STYLE_OPENERS,
         ),
         LanguageDef(
             id = "frr",
@@ -2449,6 +2475,8 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "pcd",
             layoutIds = listOf(AssetLayouts.PCD_ID),
+            spacedPunctuation = SpacedPunctuation.FRENCH_STYLE,
+            spacedOpeners = SpacedPunctuation.FRENCH_STYLE_OPENERS,
         ),
         LanguageDef(
             id = "pcm",

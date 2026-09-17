@@ -89,7 +89,7 @@ object TextWordScan {
         val n = text.length
         while (i < n) {
             // Whitespace between chunks: a line break ends the sentence too.
-            if (text[i].isWhitespace()) {
+            if (WordContext.isSpaceLike(text[i])) {
                 if (text[i] == '\n' || text[i] == '\r') {
                     breakRun()
                     sentenceStart = true
@@ -98,7 +98,7 @@ object TextWordScan {
                 continue
             }
             var chunkEnd = i
-            while (chunkEnd < n && !text[chunkEnd].isWhitespace()) chunkEnd++
+            while (chunkEnd < n && !WordContext.isSpaceLike(text[chunkEnd])) chunkEnd++
             if (looksLikeAddress(text, i, chunkEnd)) {
                 breakRun()
                 i = chunkEnd

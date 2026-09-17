@@ -158,7 +158,19 @@ Getting to the mark does not spend the space. A colon and a slash live on the sy
 
 The rule above never touches a space you typed. **Remove a space before punctuation** is the setting that does, and it is on by default: with it on, `Hey .` lands as `Hey.` and `yes , no` as `yes, no`, the moment the mark is typed. It is narrow on purpose. The mark has to come after a word, a number or something that closes one (a bracket, a quote), so a mark at the start of a line or after another mark keeps its space, and a line break is never treated as a slip. A space in a password, an address or a number pad is left alone, same as every other rule here. One backspace straight after puts the space back.
 
-Which marks do this is yours to set. The list under the switch takes one character per mark with nothing between them, and starts out as the sentence and clause marks: `.,?!;:` and the Bengali `।`. Some languages want that space. French sets a space in front of `?`, `!`, `:` and `;`, so if you write French, take those four off the list or turn the switch off.
+Which marks do this is yours to set. The list under the switch takes one character per mark with nothing between them, and starts out as the sentence and clause marks: `.,?!;:`, the Bengali `।`, and the Arabic comma, semicolon, question mark and full stop (`،؛؟۔`), which hug their words exactly as the Latin ones do. You do not have to edit it for French: the languages that keep a space in front of a mark are handled on their own, below, and are never hugged whatever the list says.
+
+### The space in front of a mark
+
+French does the opposite of everything above. `!`, `?`, `;`, `:` and the guillemets are double marks there, and they take a space on both sides: `Bonjour !`, `Quoi ?`, `voici :`. **Space before French punctuation** is the switch for that, on by default, and it types the space for you and keeps every other rule from swallowing it again.
+
+It is a no-break space, so the mark can never wrap onto the next line on its own — which is the whole reason the rule exists in print. Type the space yourself and it is replaced with the no-break one; type none and you get one anyway; let the keyboard put one there after a swipe or a strip pick and it stays. One backspace straight after takes it out again, for the times you are quoting code rather than writing a sentence.
+
+The same guards apply as everywhere else on this page. The mark has to follow a word, a number or a closing bracket, so a mark at the start of a line, after a line break, or after another mark is left exactly as you typed it, and passwords, addresses and number pads are untouched. One knock-on: in these languages a colon after a word is punctuation rather than the start of an emoji shortcode, so `:tada:` opens the emoji search at the start of a line but not in the middle of a sentence.
+
+French quotation marks get the same treatment from both ends. `»` takes its space in front like any other mark, and `«` takes one behind — typed with the mark, so `«` then a swiped word gives `« oui` rather than `«oui`. Quoting in French is `« oui »` with no spacebar taps of your own.
+
+Seven languages are written this way and carry the rule: French, Breton, Occitan, Walloon, Picard, Norman and Franco-Provençal. Every other language, Haitian Creole and Catalan included, types exactly as it did before — the switch has nothing to act on.
 
 ### A glided word joins an opening bracket
 
@@ -205,7 +217,8 @@ Autopilot nudges which key a *borderline* tap resolves to, biasing toward whiche
 | Double space speed | 400 ms (range 200&ndash;800 ms) | Double space is Full stop or Tab |
 | Automatic space after punctuation | Off | always |
 | Remove a space before punctuation | On | always |
-| Marks that pull the space out | `.,?!;:।` | Remove a space before punctuation on |
+| Marks that pull the space out | `.,?!;:।،؛؟۔` | Remove a space before punctuation on |
+| Space before French punctuation | On | always |
 
 The table covers the rows this page is about. The same group also carries **Adapt to app tone** and **Space after a suggestion** (both described on [Suggestions & prediction](/smart/suggestions/)), **Automatic capital letters**, and the two selection rules, wrap-with-a-pair and shift-re-cases-the-selection.
 

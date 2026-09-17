@@ -472,6 +472,7 @@ import com.wasimaster.wmkeyboard.core.script.LanguageDef
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.NumeralCommitScope
 import com.wasimaster.wmkeyboard.core.script.ScriptId
+import com.wasimaster.wmkeyboard.core.script.SpacedPunctuation
 import com.wasimaster.wmkeyboard.core.script.mapDigits
 import com.wasimaster.wmkeyboard.core.script.resolveNumeralDigits
 import com.wasimaster.wmkeyboard.core.layout.composerType
@@ -6150,15 +6151,27 @@ open class WMKeyboardService : InputMethodService() {
         // the word in front of it hugs it whichever path it leaves by
         // (issue #123). Letters and digits are not marks, so a word typed after
         // a glide keeps its space exactly as before.
-        val ateAutoSpace = takeBackAutoSpace(ic, text, state, followsWordSpace)
+        //
+        // ...unless this language spaces the mark instead ("Bonjour !", #215).
+        // Then the space in front is not a slip to be swallowed, it is the
+        // thing being typed, and the rules below put the language's own
+        // no-break space there. Null means the mark takes no space *here* —
+        // at the start of a line, or after another mark — and the ordinary
+        // hugging applies after all.
+        val spacedRun = spacedMarkRun(ic, text, state)
+        val ateAutoSpace = spacedRun == null &&
+            takeBackAutoSpace(ic, text, state, followsWordSpace)
 
         // ":" on a word boundary opens inline emoji search: the colon and the
         // letters after it go into the composing buffer, and refreshSuggestions
         // turns that buffer into emoji instead of words. Nothing else needs to
         // track a mode — "composing starts with a colon" *is* the mode, so
         // backspacing the colon away ends it on its own.
+        // A colon the language spaces is punctuation, not the opening of a
+        // shortcode: in French "voici :" ends a clause. Only where the space
+        // belongs, so ":tada:" at the start of a line still opens the search.
         if (state.settings.suggestionSources.inlineEmojiSearch && text == ":" &&
-            composing.isEmpty() && composingMode
+            composing.isEmpty() && composingMode && spacedRun == null
         ) {
             // Which of the two this colon turns out to be is not knowable yet,
             // so the space above is taken now and handed back if a shortcode
@@ -6232,7 +6245,7 @@ open class WMKeyboardService : InputMethodService() {
             // The user's own space in front of a mark, under the rule that asks
             // for it: "Hey ." is a slip, and the mark lands on the word. The
             // keyboard's own auto-space was already taken back above.
-            val hugged = takeBackStraySpace(ic, text, state)
+            val hugged = if (spacedRun != null) null else takeBackStraySpace(ic, text, state)
             val autoSpace = shouldAutoSpaceAfterPunctuation(ic, state, text)
             if (autoSpace) {
                 // A run of marks ("...", "?!") must not be pulled apart by the
@@ -6243,12 +6256,40 @@ open class WMKeyboardService : InputMethodService() {
                     ic.deleteSurroundingText(1, 0)
                 }
             }
+            // Last thing before the mark lands, so the word it attaches to is
+            // already in the field and any pattern expansion above has had its
+            // say. Returns what stood there before — usually nothing, sometimes
+            // the plain space the user or the keyboard typed.
+            val spacedOver = if (spacedRun == null) null else insertSpaceBeforeMark(ic, text, state)
             commitTypedCharacter(ic, text)
             if (hugged != null) {
                 // One backspace puts the space back, the same as any other
                 // correction: the rule removed something the user typed.
                 lastRevertible = RevertibleCommit(
                     RevertibleCommit.Kind.JOIN, original = hugged + text, committed = text,
+                )
+                armRevertGuard()
+            } else if (isSpacedOpener(text, state)) {
+                // "«" opens a French quotation and the space is part of it, so
+                // it is typed here rather than left for the user — and, being
+                // in the field already, there is no bare opener for a glided
+                // word to go up against.
+                ic.commitText(SpacedPunctuation.SPACE.toString(), 1)
+                invalidateExpectedSelection()
+                lastRevertible = RevertibleCommit(
+                    RevertibleCommit.Kind.JOIN,
+                    original = text,
+                    committed = text + SpacedPunctuation.SPACE,
+                )
+                armRevertGuard()
+            } else if (spacedOver != null) {
+                // The mirror of the hug undo: this rule *added* a space, so one
+                // backspace takes it back out and leaves whatever the user had
+                // there. A French writer quoting code gets "x?" in one press.
+                lastRevertible = RevertibleCommit(
+                    RevertibleCommit.Kind.JOIN,
+                    original = spacedOver + text,
+                    committed = SpacedPunctuation.SPACE + text,
                 )
                 armRevertGuard()
             }
@@ -6369,6 +6410,80 @@ open class WMKeyboardService : InputMethodService() {
         if (ic.getTextBeforeCursor(1, 0)?.toString() != " ") return false
         ic.deleteSurroundingText(1, 0)
         return true
+    }
+
+    /**
+     * The marks the active language keeps a space in *front* of, or "" when
+     * nothing here spaces anything — no language table, the setting off, or a
+     * field the keyboard keeps its hands out of.
+     *
+     * The conversion guard is [takeBackStraySpace]'s: while a transliterating
+     * composer is mid-conversion the marks are input, not punctuation.
+     */
+    private fun spacedMarks(state: KeyboardUiState): String =
+        if (state.settings.autoText.languagePunctuationSpacing &&
+            state.allowsTypingIntelligence &&
+            !state.composer.isConversion
+        ) {
+            state.language.spacedPunctuation
+        } else {
+            ""
+        }
+
+    /**
+     * How many characters in front of the caret the language's space should
+     * replace when [text] lands, or null when this mark takes no space here.
+     *
+     * Costs an editor read, so the mark is checked against the language's list
+     * first: on every other keystroke, and in every language that spaces
+     * nothing, this answers null without touching the field.
+     */
+    private fun spacedMarkRun(ic: InputConnection, text: String, state: KeyboardUiState): Int? {
+        val marks = spacedMarks(state)
+        if (marks.isEmpty() || text.length != 1 || text[0] !in marks) return null
+        val before = ic.getTextBeforeCursor(SpacedPunctuation.LOOKBACK, 0) ?: return null
+        return SpacedPunctuation.spacesToReplace(before, text[0], marks)
+    }
+
+    /**
+     * Whether [text] is a mark the active language keeps a space *after* — the
+     * opening guillemet, and so far only that.
+     *
+     * No field read and no position test, unlike the marks that take a space in
+     * front. An opener has nothing behind it that the space could belong to:
+     * wherever it lands, the quotation starts after it.
+     */
+    private fun isSpacedOpener(text: String, state: KeyboardUiState): Boolean {
+        if (!state.settings.autoText.languagePunctuationSpacing ||
+            !state.allowsTypingIntelligence || state.composer.isConversion
+        ) {
+            return false
+        }
+        val openers = state.language.spacedOpeners
+        return openers.isNotEmpty() && text.length == 1 && text[0] in openers
+    }
+
+    /**
+     * Puts the language's no-break space in front of [text], and says what was
+     * standing there before (so a backspace can put it back), or null when
+     * nothing was done.
+     *
+     * Called after the composing word has committed, and re-reading the field
+     * rather than trusting the count taken before it: a pattern expansion on
+     * the way through can rewrite the very text the space attaches to.
+     */
+    private fun insertSpaceBeforeMark(ic: InputConnection, text: String, state: KeyboardUiState): String? {
+        val run = spacedMarkRun(ic, text, state) ?: return null
+        val removed = if (run > 0) {
+            val existing = ic.getTextBeforeCursor(run, 0)?.toString() ?: return null
+            ic.deleteSurroundingText(run, 0)
+            existing
+        } else {
+            ""
+        }
+        ic.commitText(SpacedPunctuation.SPACE.toString(), 1)
+        invalidateExpectedSelection()
+        return removed
     }
 
     /**
@@ -7306,10 +7421,10 @@ open class WMKeyboardService : InputMethodService() {
         if (text == null) return
         var end = text.length
         while (end > 0 && recentWords.size < RECENT_WORDS) {
-            while (end > 0 && text[end - 1].isWhitespace()) end--
+            while (end > 0 && WordContext.isSpaceLike(text[end - 1])) end--
             if (end == 0) break
             var start = end
-            while (start > 0 && !text[start - 1].isWhitespace()) start--
+            while (start > 0 && !WordContext.isSpaceLike(text[start - 1])) start--
             recentWords.addFirst(text.subSequence(start, end).toString())
             end = start
         }
@@ -16895,7 +17010,7 @@ open class WMKeyboardService : InputMethodService() {
         // punctuation ("," "." "?" …).
         val needsSpace = settings.handwritingAutoSpace &&
             word.firstOrNull()?.isLetterOrDigit() == true &&
-            preContext.isNotEmpty() && !preContext.last().isWhitespace()
+            preContext.isNotEmpty() && !WordContext.isSpaceLike(preContext.last())
         val connection = currentInputConnection ?: run {
             // Input connection lost between recognition and commit. Clear the
             // spinner and drop the ink instead of leaving the panel stuck in
