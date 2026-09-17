@@ -76,6 +76,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeySoundStyle
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.OneHandedMode
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
+import com.wasimaster.wmkeyboard.core.settings.keySound
 import com.wasimaster.wmkeyboard.core.theme.ThemeSpec
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.LayoutMode
@@ -219,11 +220,11 @@ fun ThemeKeyboardPreview(
     // one, exactly as the service resolves it.
     val hapticsOn = previewSettings.haptics.enabled
     val soundSettings = previewSettings.sound
-    val themeSound = remember(theme.soundStyle, theme.soundCustomId) {
-        theme.soundStyle
-            ?.let { wanted -> KeySoundStyle.entries.firstOrNull { it.name == wanted } }
-            ?.let { it to theme.soundCustomId.orEmpty() }
-    }
+    // Through the shared resolver, so the preview and the service cannot
+    // disagree about what a theme's sound field means — including the shapes
+    // that mean "no sound of my own", which is what [ThemeSpec.keySound]
+    // exists to spell out.
+    val themeSound = remember(theme.soundStyle, theme.soundCustomId) { theme.keySound() }
     val haptic: (KeySoundRole) -> Unit = remember(view, hapticsOn) {
         { _ -> if (hapticsOn) view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP) }
     }

@@ -312,3 +312,56 @@ class ThemeOverridesTest {
         assertEquals(30, resolved.keyHeightDp)
     }
 }
+
+/**
+ * The key sound a theme carries ([keySound]), which beats the global sound
+ * setting — so the shapes that mean "this theme has no sound of its own" have
+ * to be recognised as such. Issue #238: a theme saved with the Pack style and
+ * no pack named overrode the user's pick with a sound that could never play,
+ * and every key on the board fell back to the system click.
+ */
+class ThemeKeySoundTest {
+
+    private fun themed(style: String?, id: String? = null) =
+        ThemeSpec(id = "t", name = "T", soundStyle = style, soundCustomId = id)
+
+    @Test
+    fun `a theme naming no style follows the global setting`() {
+        assertNull(themed(null).keySound())
+    }
+
+    @Test
+    fun `a fixed style needs no id`() {
+        assertEquals(KeySoundStyle.THOCK to "", themed("THOCK").keySound())
+    }
+
+    @Test
+    fun `an unknown style name costs the field, not the theme`() {
+        assertNull(themed("GONG").keySound())
+    }
+
+    @Test
+    fun `custom with a sound named carries it`() {
+        assertEquals(
+            KeySoundStyle.CUSTOM to "Typewriter",
+            themed("CUSTOM", "Typewriter").keySound(),
+        )
+    }
+
+    @Test
+    fun `pack with a pack named carries it`() {
+        assertEquals(KeySoundStyle.PACK to "pack_7", themed("PACK", "pack_7").keySound())
+    }
+
+    @Test
+    fun `custom naming nothing follows the global setting`() {
+        assertNull(themed("CUSTOM").keySound())
+        assertNull(themed("CUSTOM", "").keySound())
+    }
+
+    @Test
+    fun `pack naming nothing follows the global setting`() {
+        assertNull(themed("PACK").keySound())
+        assertNull(themed("PACK", "").keySound())
+    }
+}

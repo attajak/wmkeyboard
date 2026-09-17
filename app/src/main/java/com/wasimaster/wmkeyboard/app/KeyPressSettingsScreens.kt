@@ -87,6 +87,14 @@ internal fun KeySoundGroup(
     // here and captured. The format also puts the number through the locale,
     // which is what gives Bengali or Arabic digits.
     val percentFormat = stringResource(R.string.typing_value_percent)
+    // Custom and Pack read their id from different fields, and a preview that
+    // passes neither plays the system click instead of the sound being previewed
+    // — which reads as the chosen sound not working at all. Resolved once here
+    // so every preview on this screen sounds what the keyboard will.
+    val soundId = when (settings.sound.style) {
+        KeySoundStyle.PACK -> settings.sound.packId
+        else -> settings.sound.customId
+    }
     SettingsGroup(stringResource(R.string.hardware_sound_group_title)) {
         item {
             ToggleSetting(
@@ -97,7 +105,9 @@ internal fun KeySoundGroup(
             ) {
                 scope.launch { repository.setKeySound(it) }
                 if (it) {
-                    KeySoundPlayer.preview(context, settings.sound.style, settings.sound.volume)
+                    KeySoundPlayer.preview(
+                        context, settings.sound.style, settings.sound.volume, soundId,
+                    )
                 }
             }
         }
@@ -131,6 +141,14 @@ internal fun KeySoundGroup(
                 val soundStore = remember { SoundStore.get(context) }
                 val soundRevision by soundStore.revision.collectAsStateWithLifecycle()
                 val installedSounds = remember(soundRevision) { soundStore.sounds() }
+                // Sound pack is the same shape of chip and needs the same
+                // fallback: the pack list below only appears once the style is
+                // Pack, so a chip that switched the style without choosing a
+                // pack left every key on the system click until the user
+                // guessed that a second tap was owed.
+                val packStore = remember { SoundPackStore.get(context) }
+                val packRevision by packStore.revision.collectAsStateWithLifecycle()
+                val installedPacks = remember(packRevision) { packStore.packs() }
                 // Chips rather than a segmented row. Six equal segments across a
                 // phone leave ~55dp of label each, which truncated "Chime" to
                 // "Chim" and "Custom" to "Custo"; a segmented row set to scroll is
@@ -146,35 +164,57 @@ internal fun KeySoundGroup(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     for (style in KeySoundStyle.entries) {
-                        val custom = style == KeySoundStyle.CUSTOM
                         FilterChip(
                             selected = settings.sound.style == style,
                             onClick = {
                                 scope.launch {
-                                    if (custom) {
-                                        // Falls back to the first installed sound
-                                        // when none has been chosen yet, so the
-                                        // chip always makes a sound. With nothing
-                                        // installed it still selects — the section
-                                        // it reveals is where a sound is imported,
-                                        // so a disabled chip would hide its own
-                                        // remedy.
-                                        val id = settings.sound.customId
-                                            .takeIf { id -> installedSounds.any { it.id == id } }
-                                            ?: installedSounds.firstOrNull()?.id
-                                        if (id == null) {
+                                    when (style) {
+                                        KeySoundStyle.CUSTOM -> {
+                                            // Falls back to the first installed
+                                            // sound when none has been chosen yet,
+                                            // so the chip always makes a sound.
+                                            // With nothing installed it still
+                                            // selects — the section it reveals is
+                                            // where a sound is imported, so a
+                                            // disabled chip would hide its own
+                                            // remedy.
+                                            val id = settings.sound.customId
+                                                .takeIf { id -> installedSounds.any { it.id == id } }
+                                                ?: installedSounds.firstOrNull()?.id
+                                            if (id == null) {
+                                                repository.setKeySoundStyle(style)
+                                            } else {
+                                                repository.setKeySoundCustomId(id)
+                                                KeySoundPlayer.preview(
+                                                    context, style, settings.sound.volume, id,
+                                                )
+                                            }
+                                        }
+                                        KeySoundStyle.PACK -> {
+                                            // Same, for packs. The whole keystroke
+                                            // previews, since a pack that recorded
+                                            // the key coming back up is only half
+                                            // itself on the way down.
+                                            val id = settings.sound.packId
+                                                .takeIf { id -> installedPacks.any { it.id == id } }
+                                                ?: installedPacks.firstOrNull()?.id
+                                            if (id == null) {
+                                                repository.setKeySoundStyle(style)
+                                            } else {
+                                                repository.setKeySoundPackId(id)
+                                                KeySoundPlayer.previewStroke(
+                                                    context, style, settings.sound.volume, id,
+                                                )
+                                            }
+                                        }
+                                        else -> {
                                             repository.setKeySoundStyle(style)
-                                        } else {
-                                            repository.setKeySoundCustomId(id)
+                                            // Sound the freshly picked style so the
+                                            // user hears the choice immediately.
                                             KeySoundPlayer.preview(
-                                                context, style, settings.sound.volume, id,
+                                                context, style, settings.sound.volume,
                                             )
                                         }
-                                    } else {
-                                        repository.setKeySoundStyle(style)
-                                        // Sound the freshly picked style so the user
-                                        // hears the choice immediately.
-                                        KeySoundPlayer.preview(context, style, settings.sound.volume)
                                     }
                                 }
                             },
@@ -226,7 +266,7 @@ internal fun KeySoundGroup(
             ) {
                 scope.launch { repository.setKeySoundVolume(it) }
                 // Debounced inside the player, so dragging previews smoothly.
-                KeySoundPlayer.preview(context, settings.sound.style, it)
+                KeySoundPlayer.preview(context, settings.sound.style, it, soundId)
             }
         }
     }

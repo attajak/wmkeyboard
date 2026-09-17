@@ -175,3 +175,36 @@ fun KeyboardSettings.applyThemeOverrides(spec: ThemeSpec?): KeyboardSettings {
         },
     )
 }
+
+/**
+ * The key sound a theme asks for — (style, sound id) — or null to follow the
+ * global sound setting.
+ *
+ * The single definition of that question. The service resolves it on every
+ * keystroke and the theme preview resolves it for its own fake board, and the
+ * two answering separately is what let a theme carrying a broken sound silence
+ * one of them and not the other.
+ *
+ * Null covers three shapes that all mean "this theme has no sound of its own":
+ * no [ThemeSpec.soundStyle] at all, a style name this build does not know (a
+ * theme written by a later one), and — the case worth spelling out —
+ * [KeySoundStyle.CUSTOM] or [KeySoundStyle.PACK] naming nothing.
+ *
+ * Those two styles are a *pointer* to something installed rather than a sound
+ * in their own right, so a theme that selects one without naming a target has
+ * asked for a sound that does not exist. Answering with it anyway is worse than
+ * useless: the theme beats the global setting, so every key on the board falls
+ * back to the system click while the sound the user picked in Settings sits
+ * there being ignored, with nothing on screen to say why. A theme that names
+ * nothing defers instead. See [ThemeSpec.soundCustomId], which has always
+ * promised exactly this.
+ */
+fun ThemeSpec.keySound(): Pair<KeySoundStyle, String>? {
+    val style = soundStyle
+        ?.let { wanted -> KeySoundStyle.entries.firstOrNull { it.name == wanted } }
+        ?: return null
+    val id = soundCustomId.orEmpty()
+    val needsTarget = style == KeySoundStyle.CUSTOM || style == KeySoundStyle.PACK
+    if (needsTarget && id.isBlank()) return null
+    return style to id
+}

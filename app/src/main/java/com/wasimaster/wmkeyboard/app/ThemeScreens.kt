@@ -3798,20 +3798,34 @@ private fun themeSoundLabel(theme: ThemeSpec): String {
         KeySoundStyle.entries.firstOrNull { it.name == name }
     } ?: return stringResource(R.string.theme_follow_settings_label)
     // A theme names its sound in one field whichever kind it picked, so both
-    // styles resolve the same id against their own store.
+    // styles resolve the same id against their own store — by store id first
+    // and then by display name, exactly as the player resolves it at play time.
+    // A theme that arrived as an addon can only carry the name: the id is
+    // minted per device at install time, so matching on it alone left every
+    // distributed theme reading "Custom" here.
     if (style == KeySoundStyle.CUSTOM) {
         val name = remember(theme.soundCustomId) {
+            val wanted = theme.soundCustomId.orEmpty()
             SoundStore.get(context).sounds()
-                .firstOrNull { it.id == theme.soundCustomId }?.name
+                .firstOrNull { it.id == wanted || it.name.equals(wanted, ignoreCase = true) }
+                ?.name
         }
         if (name != null) return name
     }
     if (style == KeySoundStyle.PACK) {
         val name = remember(theme.soundCustomId) {
+            val wanted = theme.soundCustomId.orEmpty()
             SoundPackStore.get(context).packs()
-                .firstOrNull { it.id == theme.soundCustomId }?.name
+                .firstOrNull { it.id == wanted || it.name.equals(wanted, ignoreCase = true) }
+                ?.name
         }
         if (name != null) return name
+    }
+    // Custom and Pack are a pointer to an installed sound rather than a sound:
+    // with nothing behind the pointer the theme has no sound of its own, which
+    // is what it does at play time too ([ThemeSpec.keySound]).
+    if (style == KeySoundStyle.CUSTOM || style == KeySoundStyle.PACK) {
+        return stringResource(R.string.theme_follow_settings_label)
     }
     return stringResource(keySoundStyleLabelRes(style))
 }
@@ -3972,9 +3986,21 @@ private fun ThemeFontChoiceRow(
 }
 
 /**
+ * Whether a theme's `soundCustomId` names this installed sound or pack.
+ *
+ * By store id or by display name, the same pair the player accepts: a theme
+ * written on this device carries the id, while one that arrived as an addon can
+ * only carry the name, because the id is minted per device at install time.
+ */
+private fun namesSound(themeId: String?, storeId: String, name: String): Boolean {
+    val wanted = themeId.orEmpty()
+    return wanted == storeId || wanted.equals(name, ignoreCase = true)
+}
+
+/**
  * Picks the theme's key sound. Tapping a row previews it right away — a sound
- * has to be heard to be chosen. Installed sounds each get their own row (they
- * are the CUSTOM style plus an id under the hood).
+ * has to be heard to be chosen. Installed sounds and packs each get their own
+ * row (they are the CUSTOM and PACK styles plus an id under the hood).
  */
 @Composable
 private fun ThemeSoundPickerDialog(
@@ -3985,7 +4011,15 @@ private fun ThemeSoundPickerDialog(
 ) {
     val context = LocalContext.current
     val installed = remember { SoundStore.get(context).sounds() }
-    val styles = KeySoundStyle.entries.filter { it != KeySoundStyle.CUSTOM }
+    val installedPacks = remember { SoundPackStore.get(context).packs() }
+    // Custom and Pack are left out of the style rows and offered below as the
+    // sounds and packs themselves. Neither is a sound on its own — both are a
+    // pointer to something installed — so a row that set the style and named
+    // nothing saved a theme that could only ever play the system click, and
+    // did it in preference to whatever the user had picked in Settings.
+    val styles = KeySoundStyle.entries.filter {
+        it != KeySoundStyle.CUSTOM && it != KeySoundStyle.PACK
+    }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.theme_sound_title)) },
@@ -4011,12 +4045,29 @@ private fun ThemeSoundPickerDialog(
                         label = sound.name,
                         family = null,
                         selected = currentStyle == KeySoundStyle.CUSTOM.name &&
-                            currentCustomId == sound.id,
+                            namesSound(currentCustomId, sound.id, sound.name),
                     ) {
                         KeySoundPlayer.preview(
                             context, KeySoundStyle.CUSTOM, PREVIEW_SOUND_VOLUME, sound.id,
                         )
                         onPick(KeySoundStyle.CUSTOM.name, sound.id)
+                    }
+                }
+                // Packs sit beside the sounds rather than behind a "Sound pack"
+                // style, for the reason above: the pack *is* the choice. The
+                // whole keystroke previews, since a pack that recorded the key
+                // coming back up is only half itself on the way down.
+                for (pack in installedPacks) {
+                    ThemeFontChoiceRow(
+                        label = pack.name,
+                        family = null,
+                        selected = currentStyle == KeySoundStyle.PACK.name &&
+                            namesSound(currentCustomId, pack.id, pack.name),
+                    ) {
+                        KeySoundPlayer.previewStroke(
+                            context, KeySoundStyle.PACK, PREVIEW_SOUND_VOLUME, pack.id,
+                        )
+                        onPick(KeySoundStyle.PACK.name, pack.id)
                     }
                 }
             }

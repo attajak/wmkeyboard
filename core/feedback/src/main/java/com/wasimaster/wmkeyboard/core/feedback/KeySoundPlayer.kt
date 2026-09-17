@@ -252,18 +252,47 @@ object KeySoundPlayer {
     }
 
     /**
-     * The pool's sample id for an installed sound, loading it on first use.
-     * Null while it is still decoding, and on the press that triggers the load.
+     * Whether [style] with [id] has a sound behind it at all.
+     *
+     * Asked of the *store*, not of the pool: a sample still decoding is
+     * playable and will be audible a keystroke or two from now, while one that
+     * was never installed — or has been deleted — never will be. The caller
+     * uses this to decide whether a theme's sound stands or whether the user's
+     * own pick takes over ([com.wasimaster.wmkeyboard.core.settings.keySound]),
+     * and that answer must not flip mid-burst because the decoder is behind.
+     *
+     * True for every style that renders itself or borrows a system effect;
+     * only Custom and Pack can name something that is not there.
+     */
+    fun canPlay(context: Context, style: KeySoundStyle, id: String): Boolean =
+        canPlay(SoundStore.get(context), SoundPackStore.get(context), style, id)
+
+    /** [canPlay] against stores handed in, so it can be answered without a context. */
+    fun canPlay(
+        sounds: SoundStore,
+        packs: SoundPackStore,
+        style: KeySoundStyle,
+        id: String,
+    ): Boolean = when (style) {
+        KeySoundStyle.CUSTOM -> resolveCustom(sounds, id) != null
+        KeySoundStyle.PACK -> packs.resolve(id)?.let { packs.existingDirFor(it) } != null
+        else -> true
+    }
+
+    /**
+     * An installed sound's store id and file, or null when [soundId] names
+     * nothing this device has.
      *
      * [soundId] resolves by the store id first, then by the sound's display
      * name. The id is minted per device at install time, so a *distributed*
      * theme has no way to know it — but an addon-installed sound keeps its
      * catalogue name on every device, which is what a theme's `soundCustomId`
      * can carry ("Typewriter") next to a `requires` on that sound's addon.
+     *
+     * Takes no lock and caches nothing, so [canPlay] can ask it from anywhere.
      */
-    private fun customSampleId(context: Context, soundId: String): Int? {
+    private fun resolveCustom(store: SoundStore, soundId: String): Pair<String, File>? {
         if (soundId.isBlank()) return null
-        val store = SoundStore.get(context)
         // Resolved to the store id before anything is cached, so forgetCustom
         // (which speaks store ids) still evicts a name-resolved sample.
         val resolvedId = if (store.existingFileFor(soundId) != null) {
@@ -272,6 +301,15 @@ object KeySoundPlayer {
             store.sounds().firstOrNull { it.name.equals(soundId, ignoreCase = true) }?.id
         } ?: return null
         val file = store.existingFileFor(resolvedId) ?: return null
+        return resolvedId to file
+    }
+
+    /**
+     * The pool's sample id for an installed sound, loading it on first use.
+     * Null while it is still decoding, and on the press that triggers the load.
+     */
+    private fun customSampleId(context: Context, soundId: String): Int? {
+        val (resolvedId, file) = resolveCustom(SoundStore.get(context), soundId) ?: return null
         val key = "$resolvedId:${file.lastModified()}"
         customIds[key]?.let { return it.takeIf { id -> id in loadedIds } }
         val p = ensurePool(context)

@@ -143,7 +143,7 @@ Six more controls shape every particle at the moment it spawns: a **Colour** pic
 
 ### Font and sound
 
-The theme can bring its own key font and key sound. You pick both from what's on the device: the styles the app ships, plus anything installed from the font and sound libraries. They're referenced by name and never copied into the theme file. If someone imports your theme without that font or sound installed, their keyboard quietly uses their own global choice instead. Publish the font and sound as their own add-ons and list them under the theme's `requires` in a [repository manifest](/development/addon-repos/repo-format/), so the install screen offers to fetch them together.
+The theme can bring its own key font and key sound. You pick both from what's on the device: the styles the app ships, plus anything installed from the font and sound libraries. The sound list holds your installed sounds *and* your installed sound packs, each as its own row, so picking one is picking the sound itself rather than a category. They're referenced by name and never copied into the theme file. If someone imports your theme without that font or sound installed, their keyboard quietly uses their own global choice instead. Publish the font and sound as their own add-ons and list them under the theme's `requires` in a [repository manifest](/development/addon-repos/repo-format/), so the install screen offers to fetch them together.
 
 **Key font** covers Latin, Cyrillic and Greek. Every other script keeps its own face, because a Latin-only display font draws a Bengali board as empty boxes.
 
@@ -152,6 +152,8 @@ The theme can bring its own key font and key sound. You pick both from what's on
 Your own per-script pick in Appearance → Fonts still beats the theme's. You chose that font on purpose, and a theme doesn't get to overrule it.
 
 For a theme you plan to share, use the forms that travel. Google Font ids (`google:Caveat`) resolve the same on every device, and an installed sound or font can be named by its catalogue name: "Typewriter" for a sound, `installed:Bloxat` for a font. The ids the libraries mint locally differ from phone to phone.
+
+A theme's sound is only ever a sound it can actually make. A theme whose sound is missing on this device — never installed, or since deleted — falls back to the global **Key press → Sound style** pick, and so does a theme file whose `soundStyle` is `CUSTOM` or `PACK` with no `soundCustomId` beside it. Those two styles name something installed rather than a waveform of their own, so without a name there is nothing to play, and overriding your own pick with silence-turned-system-click would leave the whole keyboard clicking with nothing on screen to say why.
 
 ### Accent & popups
 

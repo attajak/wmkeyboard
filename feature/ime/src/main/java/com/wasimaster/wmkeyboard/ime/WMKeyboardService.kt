@@ -100,6 +100,7 @@ import com.wasimaster.wmkeyboard.core.settings.ManualModeDuration
 import com.wasimaster.wmkeyboard.core.settings.CopiedCodeChip
 import com.wasimaster.wmkeyboard.core.settings.SensitiveClipHandling
 import com.wasimaster.wmkeyboard.core.settings.activeThemeSpec
+import com.wasimaster.wmkeyboard.core.settings.keySound
 import com.wasimaster.wmkeyboard.core.theme.ThemeSpec
 import com.wasimaster.wmkeyboard.core.tools.SolarCalculator
 import com.wasimaster.wmkeyboard.core.emoji.AnimatedEmoji
@@ -122,6 +123,7 @@ import com.wasimaster.wmkeyboard.core.feedback.KeySoundPhase
 import com.wasimaster.wmkeyboard.core.feedback.KeySoundPlayer
 import com.wasimaster.wmkeyboard.core.feedback.KeySoundRole
 import com.wasimaster.wmkeyboard.core.feedback.SoundPackStore
+import com.wasimaster.wmkeyboard.core.feedback.SoundStore
 import com.wasimaster.wmkeyboard.core.gesture.GlideBeam
 import com.wasimaster.wmkeyboard.core.gesture.GlideCoverage
 import com.wasimaster.wmkeyboard.core.gesture.RomanizedIndex
@@ -3219,7 +3221,7 @@ open class WMKeyboardService : InputMethodService() {
         com.wasimaster.wmkeyboard.core.stickers.StickerPackStore.attach(this)
         com.wasimaster.wmkeyboard.core.icons.IconPackStore.attach(this)
         com.wasimaster.wmkeyboard.core.fonts.FontStore.attach(this)
-        com.wasimaster.wmkeyboard.core.feedback.SoundStore.attach(this)
+        SoundStore.attach(this)
         com.wasimaster.wmkeyboard.core.feedback.SoundPackStore.attach(this)
         com.wasimaster.wmkeyboard.core.addons.AddonStore.attach(this)
         stickerPackStore = com.wasimaster.wmkeyboard.core.stickers.StickerPackStore.get(this)
@@ -26470,6 +26472,12 @@ open class WMKeyboardService : InputMethodService() {
     // keystroke is too hot a path to re-answer either on.
     private var themeSoundSettings: KeyboardSettings? = null
     private var themeSoundMinute: Int = -1
+    // The two sound stores' revisions join that cache key, because the answer
+    // also depends on what is installed: a theme naming a sound the user has
+    // just deleted has to stop overriding their own pick at that moment, not
+    // whenever the minute happens to roll over.
+    private var themeSoundRevision: Int = -1
+    private var themeSoundPackRevision: Int = -1
     private var themeSoundValue: Pair<com.wasimaster.wmkeyboard.core.settings.KeySoundStyle, String>? =
         null
 
@@ -26487,17 +26495,26 @@ open class WMKeyboardService : InputMethodService() {
         val minute = java.util.Calendar.getInstance().let {
             it.get(java.util.Calendar.HOUR_OF_DAY) * 60 + it.get(java.util.Calendar.MINUTE)
         }
-        if (settings === themeSoundSettings && minute == themeSoundMinute) return themeSoundValue
-        val spec = settings.activeThemeSpec(activeDarkSlot(settings, minute))
-        val styleName = spec?.soundStyle
-        val resolved = styleName
-            ?.let { wanted ->
-                com.wasimaster.wmkeyboard.core.settings.KeySoundStyle.entries
-                    .firstOrNull { it.name == wanted }
-            }
-            ?.let { it to spec.soundCustomId.orEmpty() }
+        val soundRevision = SoundStore.get(this).revision.value
+        val packRevision = SoundPackStore.get(this).revision.value
+        if (settings === themeSoundSettings && minute == themeSoundMinute &&
+            soundRevision == themeSoundRevision && packRevision == themeSoundPackRevision
+        ) {
+            return themeSoundValue
+        }
+        val resolved = settings.activeThemeSpec(activeDarkSlot(settings, minute))
+            ?.keySound()
+            // A theme may name a sound this device does not have: its addon was
+            // never installed, or it has since been deleted. Overriding with one
+            // that cannot play would leave every key on the board falling back
+            // to the system click while the sound the user picked in Settings
+            // sat there being ignored, with nothing on screen to say why — so a
+            // theme whose sound is missing defers to that pick instead.
+            ?.takeIf { KeySoundPlayer.canPlay(this, it.first, it.second) }
         themeSoundSettings = settings
         themeSoundMinute = minute
+        themeSoundRevision = soundRevision
+        themeSoundPackRevision = packRevision
         themeSoundValue = resolved
         return resolved
     }
