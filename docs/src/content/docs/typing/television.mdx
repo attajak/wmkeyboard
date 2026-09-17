@@ -37,15 +37,20 @@ The ring reaches the toolbar and the suggestion strip as well as the keys: ring 
 
 Everything a key does when it is tapped, it does when the ring types it: <KeyCap>?123</KeyCap> switches layer, the globe switches language, the emoji key opens the emoji picker. Inside a tool the ring becomes the tool's own highlight — the same one a physical keyboard's arrow keys drive — so the emoji grid, the clipboard and the rest are navigable with the remote too. See [Hardware keyboards](/typing/hardware-keyboard/) for what that highlight can do.
 
-## The board is evened out
+## The board becomes a grid
 
-On a television the keyboard you are already on is drawn as an even grid: every key one column wide, the rows lined up, and any row too long for the grid split into equal halves. The letters keep their own order and their own rows — `z` stays with `x c v b n m`, shift and backspace still flank them — and the row the spacebar sits on is left exactly as it was.
+On a television the keyboard you are already on is drawn as a rectangle: every row exactly ten columns, every key one column wide, each key squarely above and below its neighbours. It is the shape every TV keyboard converges on, and the reason is the remote — one press right always travels the same distance, so nothing about the board is a surprise.
 
-It is the same idea as the wider board a tablet gets: one transform over whichever layout you use, rather than a separate "TV layout" that could only ever be English. Type Russian, Greek, Hindi or Bangla on a set-top box and you get your own alphabet, in your own order, on an even grid. A Russian board's eleven-key top row comes out as six and five rather than ten and a stub of one.
+What it does with your layout:
 
-Why even: a remote costs you *distance*, not precision. Every key is one press from its neighbour whatever size it is drawn at, so what slows a phone grid down is its unevenness — keys of five different widths and rows that do not line up — rather than its letter order, which is the one thing you already know. A wide spacebar is left alone for the same reason: crossing it is still a single press.
+- **The letters keep their rows and their order.** That order is the thing you already know. A row too long for the grid — a Cyrillic board's eleven — is split into equal parts (six and five) rather than spilling one key onto a line of its own.
+- **Shift and backspace flank the last letter row**, where a phone keyboard already draws them, one column each.
+- **A short row is filled** with the punctuation your layout was carrying on its bottom row: on QWERTY the full stop finishes the home row and the comma sits beside `m`, exactly as a TV board draws them. If a layout has none to spare, the grid fills from `. , ? ' - /`.
+- **The bottom row carries caret arrows** — `◀ ▶` — beside the layer switch, the spacebar and Enter. They are not decoration: the remote's own arrows move the ring, so without these there is no way to put the cursor back into the middle of a word.
 
-Two kinds of board are left exactly as they were authored: the ambiguous ones (T9 and Compact QWERTY), which are already big-key grids meant to be aimed at, and the pads whose geometry is the feature — kana flick, braille, morse, the Chinese shape pads.
+Because it is a transform rather than a layout, you keep your own alphabet: type Russian, Greek, Hindi or Bangla on a set-top box and you get your letters, in your order, on the same grid.
+
+Two kinds of board are left exactly as authored: the ambiguous ones (T9 and Compact QWERTY), which are already big-key grids meant to be aimed at, and the pads whose geometry is the feature — kana flick, braille, morse, the Chinese shape pads.
 
 ## What a television changes by itself
 
@@ -61,7 +66,7 @@ Three more are *defaults* rather than overrides, so a number you choose on the T
 - The number row is on, because reaching a digit through a layer switch costs a button press
 - The keys are slightly shorter than a phone's (40 dp), so six rows do not fill the screen
 - The board fills 60% of the width and sits in the middle, which keeps it clear of the edges older sets crop, and keeps the keys close enough together that the ring does not have far to travel
-- The board is evened out, as described above
+- The board is drawn as the grid described above
 
 Change any of them under <SettingsPath path="Layout & size" /> and your choice sticks.
 

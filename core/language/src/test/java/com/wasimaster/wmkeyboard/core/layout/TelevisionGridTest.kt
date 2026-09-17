@@ -1,16 +1,15 @@
 package com.wasimaster.wmkeyboard.core.layout
 
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * The television reflow, over the shipped corpus rather than one hand-made
- * board: the point of a transform is that a Russian or a Greek layout gets the
- * same treatment a QWERTY one does, with its own alphabet in its own order.
+ * The television grid, over the shipped corpus rather than one hand-made board:
+ * the point of a transform is that a Russian or a Greek layout gets the same
+ * rectangle a QWERTY one does, with its own alphabet in its own order.
  */
 class TelevisionGridTest {
 
@@ -18,75 +17,103 @@ class TelevisionGridTest {
 
     private fun spell(row: List<Key>) = row.map { it.label }
 
+    private fun width(row: List<Key>) = row.sumOf { it.width.toDouble() }.toFloat()
+
     @Test
-    fun `qwerty keeps its rows, one column per key`() {
+    fun `qwerty comes out as the grid gboard's tv board uses`() {
         val grid = letters(BuiltInLayouts.QWERTY).gridForTelevision()
         assertEquals(
             listOf("q", "w", "e", "r", "t", "y", "u", "i", "o", "p"),
             spell(grid.rows[0]),
         )
-        assertEquals(listOf("a", "s", "d", "f", "g", "h", "j", "k", "l"), spell(grid.rows[1]))
-        assertTrue("every letter key is one column", grid.rows.take(2).flatten().all { it.width == 1f })
-    }
-
-    /**
-     * The row the user actually complained about when this transform first
-     * chunked keys blindly: `z` belongs with `x c v b n m`, and shift and
-     * backspace belong on either side of them — which is where its layout
-     * already had them.
-     */
-    @Test
-    fun `shift and backspace stay where they flank the last letter row`() {
-        val row = letters(BuiltInLayouts.QWERTY).gridForTelevision().rows[2]
-        assertEquals(KeyAction.Shift, row.first().action)
-        assertEquals(KeyAction.Delete, row.last().action)
+        // Nine letters and the layout's own full stop, which its bottom row was
+        // carrying: ten keys, no gap.
         assertEquals(
-            listOf("z", "x", "c", "v", "b", "n", "m"),
-            spell(row.drop(1).dropLast(1)),
+            listOf("a", "s", "d", "f", "g", "h", "j", "k", "l", "."),
+            spell(grid.rows[1]),
         )
-        assertTrue("the flanks are one column too", row.all { it.width == 1f })
-    }
-
-    @Test
-    fun `the spacebar's row is left exactly as authored`() {
-        val before = letters(BuiltInLayouts.QWERTY)
-        val authored = before.rows.first { row -> row.any { it.action == KeyAction.Space } }
-        val after = letters(BuiltInLayouts.QWERTY).gridForTelevision().rows.last()
-        assertEquals(spell(authored), spell(after))
         assertEquals(
-            "a wide spacebar costs a remote nothing",
-            authored.first { it.action == KeyAction.Space }.width,
-            after.first { it.action == KeyAction.Space }.width,
-            0.001f,
+            listOf("⇧", "z", "x", "c", "v", "b", "n", "m", ",", "⌫"),
+            spell(grid.rows[2]),
         )
     }
 
     @Test
-    fun `nothing is lost, gained or reordered`() {
+    fun `every row is exactly the grid wide`() {
         for (spec in BuiltInLayouts.all) {
             val before = letters(spec)
-            val after = before.gridForTelevision()
-            assertEquals(
-                "${spec.id} changed its keys",
-                before.rows.flatten().map { it.label },
-                after.rows.flatten().map { it.label },
-            )
+            val columns = televisionGridColumns(before) ?: continue
+            for ((index, row) in before.gridForTelevision().rows.withIndex()) {
+                assertEquals("${spec.id} row $index", columns.toFloat(), width(row), 0.001f)
+            }
         }
     }
 
     @Test
-    fun `a russian board keeps its own alphabet and its own rows`() {
-        val before = letters(BuiltInLayouts.RUSSIAN)
-        val after = before.gridForTelevision()
-        assertEquals(before.rows.flatten().map { it.label }, after.rows.flatten().map { it.label })
-        // Its top row is eleven keys, wider than the grid: it comes out as six
-        // and five rather than ten and a stub of one.
-        assertEquals(11, before.rows[0].size)
-        assertEquals(listOf(6, 5), after.rows.take(2).map { it.size })
+    fun `every letter key is one column`() {
+        val grid = letters(BuiltInLayouts.QWERTY).gridForTelevision()
+        assertTrue(grid.rows.dropLast(1).flatten().all { it.width == 1f })
     }
 
     @Test
-    fun `long-press alternates survive the reflow`() {
+    fun `shift and backspace flank the last letter row`() {
+        val row = letters(BuiltInLayouts.QWERTY).gridForTelevision().rows[2]
+        assertEquals(KeyAction.Shift, row.first().action)
+        assertEquals(KeyAction.Delete, row.last().action)
+    }
+
+    @Test
+    fun `the bottom row carries the caret arrows a remote has no other way to move`() {
+        val bottom = letters(BuiltInLayouts.QWERTY).gridForTelevision().rows.last()
+        val sent = bottom.mapNotNull { (it.action as? KeyAction.SendKey)?.keyCode }
+        assertEquals("left and right, in that order", listOf(21, 22), sent)
+        assertTrue("the layer switch", bottom.any { it.action == KeyAction.Symbols })
+        assertTrue("space", bottom.any { it.action == KeyAction.Space })
+        assertTrue("enter", bottom.any { it.action == KeyAction.Enter })
+        assertTrue(
+            "the spacebar takes what is left",
+            bottom.first { it.action == KeyAction.Space }.width >= 2f,
+        )
+    }
+
+    @Test
+    fun `no letter is lost, repeated or reordered`() {
+        for (spec in BuiltInLayouts.all) {
+            val before = letters(spec)
+            if (televisionGridColumns(before) == null) continue
+            // Letters only: the punctuation a layout carries is allowed to move
+            // (filling the grid is what the spare keys are for), and Dvorak puts
+            // an apostrophe and a comma in its top row, so comparing every text
+            // key would compare a filler against a letter.
+            assertEquals(
+                "${spec.id} dropped or reordered its alphabet",
+                alphabet(before),
+                alphabet(before.gridForTelevision()),
+            )
+        }
+    }
+
+    /** The single-letter keys, in the order the grid draws them. */
+    private fun alphabet(layout: KeyboardLayout) = layout.rows.flatten()
+        .filter { it.action == KeyAction.Text && it.label.singleOrNull()?.isLetter() == true }
+        .map { it.label }
+
+    @Test
+    fun `a russian board keeps its own alphabet, split evenly`() {
+        val before = letters(BuiltInLayouts.RUSSIAN)
+        val after = before.gridForTelevision()
+        // Its top row is eleven keys, wider than the grid: six and five rather
+        // than ten and a stub of one, each padded out to the full ten.
+        assertEquals(11, before.rows[0].size)
+        assertEquals(
+            before.rows[0].take(6).map { it.label },
+            spell(after.rows[0]).take(6),
+        )
+        assertTrue(after.rows.all { width(it) == 10f })
+    }
+
+    @Test
+    fun `long-press alternates survive the rebuild`() {
         val grid = letters(BuiltInLayouts.QWERTY).gridForTelevision()
         val e = grid.rows.flatten().first { it.label == "e" }
         assertTrue("accents are the remote's only route to them", "é" in e.longPress)
@@ -99,23 +126,6 @@ class TelevisionGridTest {
             assertNull("${spec.id} must decline", televisionGridColumns(before))
             assertSame("${spec.id} must not be rewritten", before, before.gridForTelevision())
         }
-    }
-
-    @Test
-    fun `an over-long row splits into equal parts`() {
-        val wide = KeyboardLayout(name = "wide", rows = listOf((1..23).map { Key("k$it") }))
-        assertEquals(8, televisionGridColumns(wide))
-        assertEquals(listOf(8, 8, 7), wide.gridForTelevision().rows.map { it.size })
-    }
-
-    @Test
-    fun `a row that already fits is not cut at all`() {
-        val fits = KeyboardLayout(
-            name = "fits",
-            rows = listOf((1..10).map { Key("k$it") }, (1..9).map { Key("j$it") }),
-        )
-        assertEquals(10, televisionGridColumns(fits))
-        assertEquals(listOf(10, 9), fits.gridForTelevision().rows.map { it.size })
     }
 
     @Test
@@ -136,6 +146,21 @@ class TelevisionGridTest {
         assertNull(televisionGridColumns(tall))
     }
 
+    @Test
+    fun `a board with no punctuation to spare is filled from the defaults`() {
+        val bare = KeyboardLayout(
+            name = "bare",
+            rows = listOf(
+                (1..10).map { Key("k$it") },
+                (1..7).map { Key("j$it") },
+                listOf(Key(" ", action = KeyAction.Space, width = 4f)),
+            ),
+        )
+        val grid = bare.gridForTelevision()
+        assertEquals(10, grid.rows[1].size)
+        assertEquals(listOf(".", ",", "?"), spell(grid.rows[1]).takeLast(3))
+    }
+
     /**
      * The corpus, as a change detector: which shipped boards decline. A layout
      * moving in or out of this list changes what a television user sees, and
@@ -148,21 +173,5 @@ class TelevisionGridTest {
             .map { it.id }
             .sorted()
         assertEquals(listOf(BuiltInLayouts.COMPACT_ID, BuiltInLayouts.T9_ID).sorted(), declined)
-    }
-
-    @Test
-    fun `every shipped board that reflows comes out inside the grid`() {
-        for (spec in BuiltInLayouts.all) {
-            val before = letters(spec)
-            val columns = televisionGridColumns(before) ?: continue
-            assertNotNull(columns)
-            val rows = before.gridForTelevision().rows.filterNot { row ->
-                row.any { it.action == KeyAction.Space }
-            }
-            assertTrue(
-                "${spec.id} has a row wider than its grid",
-                rows.all { it.size <= columns },
-            )
-        }
     }
 }
