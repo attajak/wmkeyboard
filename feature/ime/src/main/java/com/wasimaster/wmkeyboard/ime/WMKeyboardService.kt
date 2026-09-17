@@ -13036,13 +13036,23 @@ open class WMKeyboardService : InputMethodService() {
      * as it shares the leader's spelling — which is what makes this exact
      * rather than an approximation of a number the beam does not report.
      */
-    private fun octopusForGlide(
+    // Internal rather than private for `OctopusGlideKindsTest`: the gates below
+    // are settings the stroke has to read, and the decode that would reach them
+    // through `onGesturePreview` needs a loaded engine this module cannot build.
+    internal fun octopusForGlide(
         state: KeyboardUiState,
         words: List<String>,
     ): OctopusBoard {
         val octopus = state.settings.octopus
         if (!octopus.enabled || words.size < 2) return emptyMap()
         if (!state.allowsTypingIntelligence) return emptyMap()
+        // What may appear applies to the stroke too (#209). Every alternate
+        // here carries on the word the finger is drawing, so they are
+        // completions by the same definition the idle board uses — and a user
+        // who allowed only next words asked for a board that stays quiet until
+        // a word has landed. This is the one place the setting was not read,
+        // so the keys lit up mid-swipe and went bare again at the lift.
+        if (OctopusKind.COMPLETION !in octopus.kinds) return emptyMap()
         val anchors = state.layouts.keyAnchors(octopus.longPressKeys)
         if (anchors.isEmpty()) return emptyMap()
         val leader = words.first()

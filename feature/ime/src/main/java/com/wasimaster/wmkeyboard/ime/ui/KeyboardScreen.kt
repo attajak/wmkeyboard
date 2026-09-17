@@ -12365,6 +12365,14 @@ private fun KeyRows(
     val liveCenters = rememberUpdatedState(keyCenters)
     val liveRects = rememberUpdatedState(keyRects)
     val liveLayouts = rememberUpdatedState(state.layouts)
+    // The bounds table, for the octopus tap, and the one that bites hardest:
+    // [OctopusRects] stamps its rectangles with the very map they were measured
+    // from and answers nothing against any other, so a loop holding the
+    // previous layout's map does not hit-test the wrong word — it stops
+    // resolving words at all, silently and for as long as the loop lives.
+    // Every tap then falls through to the key underneath while the flick, which
+    // reads the centres above, goes on working (#209).
+    val liveBounds = rememberUpdatedState(keyBounds)
     // The layer the board is really on, for the peek loop: it decides which
     // layer a drag looks through to (issue #108) and must not restart when the
     // user switches layer by tapping.
@@ -12857,8 +12865,11 @@ private fun KeyRows(
                     }
                     val floating = octopusLive.value
                     if (floating.isEmpty()) return@awaitEachGesture
+                    // Read through the State, never captured: this loop outlives
+                    // a layout change and the table is per layout (#209).
+                    val bounds = liveBounds.value
                     val tapped = if (octopusTapHere) {
-                        octopusRects.wordAt(down.position, keyBounds)
+                        octopusRects.wordAt(down.position, bounds)
                     } else {
                         null
                     }
@@ -12871,7 +12882,7 @@ private fun KeyRows(
                             change.consume()
                             // Slide off the word to change your mind, the way
                             // every other target on this keyboard behaves.
-                            inside = octopusRects.wordAt(change.position, keyBounds) === tapped
+                            inside = octopusRects.wordAt(change.position, bounds) === tapped
                             if (!change.pressed) break
                         }
                         if (inside) octopusPick(tapped.word, OctopusSource.TAP)
