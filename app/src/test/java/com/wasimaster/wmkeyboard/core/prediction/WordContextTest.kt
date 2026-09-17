@@ -132,6 +132,25 @@ class WordContextTest {
         assertEquals("developers", before("the developers' "))
     }
 
+    @Test fun everyScriptsApostropheHoldsItsWordTogether() {
+        // Not an English problem, and not an ASCII one. Each of these is a
+        // word in a language the keyboard ships, and each was read as its
+        // last fragment before #240.
+        assertEquals("c'hoar", before("c'hoar "))          // Breton, a digraph
+        assertEquals("об'єкт", before("об'єкт "))          // Ukrainian
+        assertEquals("l'home", before("l'home "))          // Catalan
+        assertEquals("auto's", before("auto's "))          // Dutch plural
+        assertEquals("d'ith", before("d'ith "))            // Irish
+        assertEquals("ג׳ינס", before("ג׳ינס "))              // Hebrew geresh
+        // A smart-quote keyboard writes U+2019, a careless one U+2018.
+        assertEquals("that\u2019s", before("that\u2019s "))
+        assertEquals("that\u2018s", before("that\u2018s "))
+        // The modifier letters are letters already and need no rule:
+        // Hawaiian ʻokina, and the apostrophe Kazakh and Uzbek write.
+        assertEquals("hawaiʻi", before("Hawaiʻi "))
+        assertEquals("oʻzbek", before("oʻzbek "))
+    }
+
     @Test fun bothContextWordsSurviveAnApostrophe() {
         fun two(text: String?) = WordContext.lastTwoWords(text, enders)
         assertEquals("don't" to "i", two("I don't "))

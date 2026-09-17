@@ -86,8 +86,31 @@ object WordContext {
         return letters > 0
     }
 
+    /**
+     * Every character that spells an apostrophe *inside* a word, across the
+     * scripts that write one.
+     *
+     * More than the two an English keyboard types, because the field is read
+     * back from whatever put text in it. Breton spells `c'hoar` with a plain
+     * U+0027 and the digraph is a letter of the alphabet; Ukrainian writes
+     * `об'єкт`; Dutch pluralises `auto's`; Hebrew makes `ג׳ינס` with a GERESH
+     * and Western Armenian uses its own APOSTROPHE, and neither of those is
+     * the ASCII one. A keyboard with smart quotes turns the lot into U+2019,
+     * and a careless one into U+2018.
+     *
+     * Deliberately not here: U+02BB ʻOKINA, U+02BC MODIFIER LETTER APOSTROPHE
+     * and U+02BD. Unicode calls those modifier *letters*, so Hawaiian,
+     * Kazakh and Uzbek already pass [isWordChar] without asking, and adding
+     * them would say they need the letter on each side that a real letter
+     * never needs.
+     */
+    fun isApostrophe(c: Char): Boolean = when (c) {
+        '\'', '\u2019', '\u2018', '\u05F3', '\u055A' -> true
+        else -> false
+    }
+
     /** What may sit between two letters of one word: the apostrophes, the hyphen, ZWNJ and ZWJ. */
-    private const val WORD_JOINERS = "'\u2019-\u200C\u200D"
+    const val WORD_JOINERS = "'\u2019\u2018\u05F3\u055A-\u200C\u200D"
 
     /**
      * Whether the character at [i] of [text] belongs to the word around it —
@@ -100,13 +123,17 @@ object WordContext {
      * of the text field, and they used to stop at the apostrophe — so
      * "that's " handed the next suggestion the context word "s", and the
      * pair the keyboard learned was `s` followed by whatever came next
-     * (#240). Only medial: a quote around a word, or the one a possessive
-     * ends on, is punctuation and still ends it.
+     * (#240). Not an English problem: Breton `c'hoar`, Ukrainian `об'єкт`,
+     * Catalan `l'home` and Dutch `auto's` were each read as their last
+     * fragment. See [isApostrophe] for which characters count.
+     *
+     * Only medial: a quote around a word, or the one a possessive ends on,
+     * is punctuation and still ends it.
      */
     private fun isWordCharAt(text: CharSequence, i: Int): Boolean {
         val c = text[i]
         if (isWordChar(c)) return true
-        if (c != '\'' && c != '\u2019') return false
+        if (!isApostrophe(c)) return false
         return i > 0 && i + 1 < text.length && isWordChar(text[i - 1]) && isWordChar(text[i + 1])
     }
 

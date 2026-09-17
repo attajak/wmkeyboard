@@ -40,6 +40,12 @@ object Elisions {
         when (languageId.substringBefore('-').substringBefore('_')) {
             "fr" -> FRENCH
             "it" -> ITALIAN
+            "ca" -> CATALAN
+            "oc" -> OCCITAN
+            "rm" -> ROMANSH
+            "co" -> CORSICAN
+            "sc" -> SARDINIAN
+            "pms" -> PIEDMONTESE
             else -> null
         }
 
@@ -79,6 +85,18 @@ object Elisions {
          * not be asked, since they would answer with the commoner bare *a*.
          */
         private val respelled: Map<String, Map<String, String>>,
+        /**
+         * Spellings that are words, whatever the grammar and the counts make
+         * of them: Italian *duomo* is a cathedral and Catalan *dens* means
+         * dense, and both are rare enough beside *uomo* and *ens* for the
+         * ratio to read them as stand-ins.
+         *
+         * A short, named list rather than a cleverer rule, because that is
+         * what these are — a handful of words, found by sweeping the real
+         * list, that no amount of grammar would have told apart. Each one
+         * earns its line by being a word somebody types.
+         */
+        private val never: Set<String> = emptySet(),
     ) {
 
         /**
@@ -104,7 +122,7 @@ object Elisions {
          */
         fun endsWithElidedPrefix(text: CharSequence): Boolean {
             val end = text.length - 1
-            if (end < 1 || (text[end] != APOSTROPHE && text[end] != CURLY_APOSTROPHE)) return false
+            if (end < 1 || !WordContext.isApostrophe(text[end])) return false
             for (prefix in prefixes) {
                 val start = end - prefix.length
                 if (start < 0 || !prefix.contentEquals(text.subSequence(start, end), ignoreCase = true)) {
@@ -123,7 +141,8 @@ object Elisions {
          * that could split two ways is left to the lists to settle.
          */
         fun splits(fused: String): List<Split> {
-            if (fused.length < 2 || fused.indexOf(APOSTROPHE) >= 0) return emptyList()
+            if (fused.length < 2 || fused in never) return emptyList()
+            if (fused.any { WordContext.isApostrophe(it) }) return emptyList()
             var out: MutableList<Split>? = null
             for (prefix in prefixes) {
                 if (fused.length <= prefix.length || !fused.startsWith(prefix)) continue
@@ -155,7 +174,12 @@ object Elisions {
     /** The straight apostrophe, which is what the lists spell an elision with. */
     const val APOSTROPHE = '\''
 
-    /** The typographic one, which a long press or another keyboard may have typed. */
+    /**
+     * The typographic one, which a long press or another keyboard may have
+     * typed. Both of these name a character to *write*; to ask whether one
+     * is already there, use [WordContext.isApostrophe], which knows every
+     * spelling of it.
+     */
     const val CURLY_APOSTROPHE = '\u2019'
 
     /** [word] with its accents off, for the table lookups; [word] itself when it has none. */
@@ -254,15 +278,8 @@ object Elisions {
      * against that table — that is what keeps `jet` from being *j'et* — so
      * listing `idea` for `quest'` alone would have taken `un'idea` and
      * `l'idea` away from prefixes that never needed listing.
-     *
-     * `d'` before *uomo* is the one subtraction: `d'uomo` is a real phrase,
-     * but *duomo* is a cathedral and 1,300 times rarer than *uomo*, which is
-     * exactly the shape the ratio reads as a stand-in.
      */
-    private fun adjectivePrefixesFor(word: String): Set<String> = when (word) {
-        "uomo", "uomini" -> ADJECTIVE_PREFIXES + ITALIAN_OPEN - "d"
-        else -> ADJECTIVE_PREFIXES + ITALIAN_OPEN
-    }
+    private val ADJECTIVE_PREFIX_SET = ADJECTIVE_PREFIXES + ITALIAN_OPEN
 
     /**
      * Italian elides as constantly as French — *lo albero* is `l'albero`,
@@ -339,7 +356,7 @@ object Elisions {
             // The adjective prefixes are not [open]: they elide in a short
             // list of collocations and nothing else. Left open, `quest` read
             // *questore* — a police chief — as `quest'ore`.
-            for (w in ADJECTIVE_COLLOCATIONS) put(w, adjectivePrefixesFor(w))
+            for (w in ADJECTIVE_COLLOCATIONS) put(w, ADJECTIVE_PREFIX_SET)
             for (w in listOf("altro", "altra", "altri", "altre")) {
                 put(w, setOf("tutt", "nient", "quest", "un", "l", "d", "dell", "quell", "all"))
             }
@@ -364,5 +381,176 @@ object Elisions {
         respelled = mapOf(
             "e" to mapOf("c" to "è", "dov" to "è", "com" to "è"),
         ),
+        // *duomo* is a cathedral, and 1,300 times rarer than *uomo*.
+        never = setOf("duomo"),
+    )
+
+    /**
+     * Catalan elides as hard as either of the others — *el home* is
+     * `l'home`, *de acord* is `d'acord`, *es ha* is `s'ha` — and its list is
+     * tokenised the French way, at the apostrophe, so `l` and `d` are its
+     * seventh and eighth commonest tokens. The fused spellings, though, are
+     * Italian-rare: `lhome` and `lhora` and `mha` appear once each in 184k
+     * words, so nearly every reading here is applied outright.
+     *
+     * `l'` and `d'` take any word, the way an article and a preposition do.
+     * The weak pronouns `s' m' t' n'` take a listed function word and nothing
+     * else, the call Italian made and for the same reason: a verb test that
+     * admits every Catalan verb admits *sona*, *dona* and *mona* with it. The
+     * list is *haver* (`s'ha`, `t'hem`, `l'han`), the two adverbial pronouns
+     * `hi` and `ho`, and *estar*, which is where the pronoun actually lands.
+     *
+     * Swept over the whole list, 184 of its 184,216 words are rewritten.
+     * Deliberately absent from that table: *ser* and *ésser*. `s'és` is real
+     * Catalan but Balearic *ses* outnumbers it, and `s'era` is not Catalan at
+     * all — it was an Italian habit that took `serà`, `seria` and `seran`
+     * with it until the sweep caught it.
+     */
+    private val CATALAN = Rules(
+        prefixes = listOf("l", "d", "s", "m", "t", "n"),
+        functionWords = buildMap {
+            // *haver*, the auxiliary every weak pronoun leans on.
+            for (w in listOf("ha", "han", "has", "he", "hem", "heu", "havia", "havien", "hauria", "haura")) {
+                put(w, setOf("l", "s", "m", "t", "n"))
+            }
+            // The adverbial pronouns: `n'hi ha`, `s'hi posa`, `m'ho diu`.
+            put("hi", setOf("l", "s", "m", "t", "n"))
+            put("ho", setOf("s", "m", "t", "n"))
+            // *estar*, written with the accent off as the typist leaves it.
+            for (w in listOf("esta", "estan", "estava", "estaven", "estat")) put(w, setOf("s"))
+            for (w in listOf("un", "una", "uns", "unes")) put(w, setOf("d", "l"))
+            for (w in listOf("altre", "altra", "altres")) put(w, setOf("l", "d", "n"))
+        },
+        alwaysElide = emptySet(),
+        open = setOf("l", "d"),
+        verbsOnly = emptySet(),
+        verbEndings = emptyList(),
+        vowels = "aeiouàèéíòóúïüh".toSet(),
+        respelled = emptyMap(),
+        // *dens* is dense, and *amb* and *ets* are words the English-shaped
+        // tokens `lamb` and `lets` would otherwise be read as eliding.
+        never = setOf("dens", "lamb", "lets"),
+    )
+
+    /**
+     * The five smaller Romance languages that elide the same way and ship a
+     * word list: Occitan, Romansh, Corsican, Sardinian and Piedmontese.
+     *
+     * Each table was read off its own corpus rather than out of a grammar —
+     * every `prefix'rest` token in the list, counted by prefix — and then
+     * swept twice. Once for what it *breaks*: how many of the language's own
+     * words come back rewritten. Once for what it *buys*: of the elisions the
+     * corpus attests, how many a typist who left the apostrophe out would get
+     * back.
+     *
+     * | language     | rewrites / vocabulary | elisions recovered |
+     * |--------------|-----------------------|--------------------|
+     * | Occitan      | 12 / 154,753          | 51% (76% by use)   |
+     * | Romansh      | 5 / 49,238            | 54% (77% by use)   |
+     * | Corsican     | 5 / 30,522            | 39% (54% by use)   |
+     * | Sardinian    | 6 / 38,576            | 38% (59% by use)   |
+     * | Piedmontese  | 3 / 47,916            | 49% (51% by use)   |
+     *
+     * One lesson runs through all of them, and it is why the tables look
+     * thinner than a grammar would write them. **A one-letter prefix in front
+     * of a short function word spells a word.** Occitan `ma` and `ta` are
+     * *my* and *your*, not `m'a` and `t'a`; Corsican `se`, `sa`, `su` and
+     * `comu` are words, not `s'è` and `com'u`; Catalan `ses` is Balearic. The
+     * first pass of each of these tables ate all of them. What survives is
+     * the multi-letter prefixes (`qu'`, `ch'`, `sch'`, `com'`, `nant'`),
+     * which fuse into spellings no one types, plus the open prefixes in front
+     * of real content words, where the ratio has something to weigh.
+     *
+     * Sardinian is the odd one: `s'` there is the *article* (su/sa), not a
+     * pronoun, so it is open and carries the language's commonest elision.
+     */
+    private val OCCITAN = Rules(
+        prefixes = listOf("qu", "pr", "l", "d", "s", "n"),
+        functionWords = buildMap {
+            for (w in listOf("a", "an", "ei", "en", "era", "eran", "es", "avia", "avian")) put(w, setOf("qu"))
+            put("an", setOf("qu", "l"))
+            for (w in listOf("un", "una", "unes", "unas")) put(w, setOf("d", "qu"))
+            for (w in listOf("amor", "aquo", "aco", "aqui")) put(w, setOf("pr"))
+        },
+        alwaysElide = emptySet(),
+        // `m'` and `t'` are gone on purpose: in front of a content word they
+        // produced *t'amb*, *t'estat*, *m'ont* and nothing that was right.
+        open = setOf("l", "d", "qu", "s", "n"),
+        verbsOnly = emptySet(),
+        verbEndings = emptyList(),
+        vowels = "aeiouàèéíòóúüh".toSet(),
+        respelled = emptyMap(),
+    )
+
+    private val ROMANSH = Rules(
+        prefixes = listOf("mintg", "quest", "sch", "ch", "in", "si", "l", "d", "n", "s"),
+        functionWords = buildMap {
+            for (w in listOf(
+                "e", "en", "ha", "han", "era", "eran", "aveva", "avevan",
+                "i", "ins", "il", "el", "ils", "els", "ella", "igl",
+            )) {
+                put(w, setOf("ch", "sch", "n"))
+            }
+            for (w in listOf("in", "ina")) put(w, setOf("d"))
+        },
+        alwaysElide = emptySet(),
+        open = setOf("l", "d", "in", "si", "quest", "mintg", "s", "n"),
+        verbsOnly = emptySet(),
+        verbEndings = emptyList(),
+        vowels = "aeiouàèéìíòóùúh".toSet(),
+        // The lists answer "e" — the conjunction — for both spellings.
+        respelled = mapOf("e" to mapOf("ch" to "è", "n" to "è", "sch" to "è")),
+    )
+
+    private val CORSICAN = Rules(
+        prefixes = listOf("nant", "cum", "com", "ind", "sin", "ch", "un", "l", "d", "s"),
+        functionWords = buildMap {
+            for (w in listOf("eddu", "ellu", "ella", "eddi", "edda", "elle", "iddu", "iddi", "era", "ha")) {
+                put(w, setOf("ch", "com", "cum", "ind"))
+            }
+            put("e", setOf("ch", "ind"))
+            put("a", setOf("sin", "nant"))
+        },
+        alwaysElide = emptySet(),
+        open = setOf("l", "d", "un", "s"),
+        verbsOnly = emptySet(),
+        verbEndings = emptyList(),
+        vowels = "aeiouàèéìíòóùúh".toSet(),
+        respelled = mapOf(
+            "e" to mapOf("ch" to "è", "ind" to "è"),
+            "a" to mapOf("sin" to "à", "nant" to "à"),
+        ),
+    )
+
+    private val SARDINIAN = Rules(
+        prefixes = listOf("sant", "nch", "dd", "nd", "ch", "un", "s", "l", "b", "d"),
+        functionWords = buildMap {
+            for (w in listOf("at", "ant", "aiant", "aiat", "est", "aian", "an", "apat", "istat", "in")) {
+                put(w, setOf("dd", "nd", "nch", "ch", "l", "b", "s"))
+            }
+        },
+        alwaysElide = emptySet(),
+        // `s'` is the article here (su/sa), not a pronoun, so it is the one
+        // single-letter prefix in this file that opens onto anything.
+        open = setOf("s", "un", "d", "sant", "l", "b"),
+        verbsOnly = emptySet(),
+        verbEndings = emptyList(),
+        vowels = "aeiouàèéìíòóùúh".toSet(),
+        respelled = emptyMap(),
+    )
+
+    private val PIEDMONTESE = Rules(
+        prefixes = listOf("dl", "dj", "sl", "pr", "ch", "l", "d", "n", "j", "s"),
+        functionWords = buildMap {
+            for (w in listOf("a", "as", "i", "el", "an", "ij", "o", "un", "na")) put(w, setOf("ch"))
+            for (w in listOf("e", "ha")) put(w, setOf("l"))
+        },
+        alwaysElide = emptySet(),
+        open = setOf("l", "d", "n", "j", "dl", "dj", "sl", "pr", "s"),
+        verbsOnly = emptySet(),
+        verbEndings = emptyList(),
+        // `ë` is a vowel of its own here, and a common one.
+        vowels = "aeiouàèéìíòóùúëh".toSet(),
+        respelled = mapOf("e" to mapOf("l" to "é")),
     )
 }
