@@ -2,7 +2,9 @@
 """Regenerate EmojiDictCatalog.kt from the wmkeyboard-data repo.
 
 The repo carries one gzipped JSON emoji dictionary per language at
-`data/<code>/<code>_emoji.json.gz`. This walks the repo tree, downloads each
+`data/<dir>/<code>_emoji.json.gz`, where the folder is the code itself except
+for a pack filed beside its parent language's data (Banglish
+`data/bn/bn_rom_emoji.json.gz`). This walks the repo tree, downloads each
 one to count what it actually contains, maps the repo's codes onto the app's
 `LanguageRegistry` ids, and writes the Kotlin table.
 
@@ -51,6 +53,9 @@ def app_language_ids(root: Path) -> set[str]:
 def emoji_paths(tree_file: Path | None = None) -> list[tuple[str, str, int]]:
     """(repo code, path, compressed size) for every emoji dictionary.
 
+    The code is the file stem, not the folder: `bn/bn_rom_emoji.json.gz` is
+    Banglish's pack, not a second Bengali one.
+
     The tree comes from the GitHub API, which rate-limits unauthenticated
     callers hard enough to block a rerun; `--tree` takes a saved copy instead
     (`curl -o tree.json <the API url>`).
@@ -63,17 +68,17 @@ def emoji_paths(tree_file: Path | None = None) -> list[tuple[str, str, int]]:
     if tree.get("truncated"):
         print("warning: repo tree was truncated; some packs may be missing", file=sys.stderr)
     return [
-        (blob["path"].split("/")[1], blob["path"], blob["size"])
+        (blob["path"].rsplit("/", 1)[1].removesuffix("_emoji.json.gz"), blob["path"], blob["size"])
         for blob in tree["tree"]
         if blob["path"].endswith("_emoji.json.gz")
     ]
 
 
-def count(entry: tuple[str, str, int]) -> tuple[str, int, int]:
+def count(entry: tuple[str, str, int]) -> tuple[str, str, int, int]:
     code, path, size = entry
     with urllib.request.urlopen(f"{RAW}/{path}", timeout=120) as response:
         data = json.loads(gzip.decompress(response.read()))
-    return code, len(data), size
+    return code, path.split("/")[1], len(data), size
 
 
 def main() -> int:
@@ -92,7 +97,7 @@ def main() -> int:
         counted = list(pool.map(count, emoji_paths(args.tree)))
 
     rows, skipped = [], []
-    for code, emoji, size in sorted(counted):
+    for code, folder, emoji, size in sorted(counted):
         if code in DUPLICATE_CODES:
             skipped.append((code, "duplicate"))
             continue
@@ -103,7 +108,7 @@ def main() -> int:
         if language not in languages:
             skipped.append((code, "no app language"))
             continue
-        rows.append((language, code, emoji, size))
+        rows.append((language, code, folder, emoji, size))
     rows.sort()
 
     ids = [row[0] for row in rows]
@@ -112,10 +117,12 @@ def main() -> int:
         return 1
 
     body = "\n".join(
-        '        entry("{}", {}, {}L{}),'.format(
-            language, emoji, size, "" if code == language else f', repoCode = "{code}"'
+        '        entry("{}", {}, {}L{}{}),'.format(
+            language, emoji, size,
+            "" if code == language else f', repoCode = "{code}"',
+            "" if folder == code else f', repoDir = "{folder}"',
         )
-        for language, code, emoji, size in rows
+        for language, code, folder, emoji, size in rows
     )
     existing = args.out.read_text(encoding="utf-8")
     head, _, rest = existing.partition("    val entries: List<EmojiDictEntry> = listOf(\n")

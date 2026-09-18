@@ -11,7 +11,10 @@ import com.wasimaster.wmkeyboard.core.endpoints.ServiceRepo
  *
  * The payload is a gzipped JSON array of
  * `{ emoji, name, keywords[], category }`, derived from Unicode CLDR
- * annotations via KDE/kemoji. Unlike a word list it is small enough to take
+ * annotations via KDE/kemoji. Banglish is the one pack built rather than
+ * imported: the Bengali pack's keywords in the Latin spellings people chat
+ * in, with the English ones alongside (`scripts/build_bn_rom_emoji.py` in the
+ * data repo). Unlike a word list it is small enough to take
  * whole — the largest is 112 KB compressed — so there is no size tier and no
  * early abort.
  */
@@ -22,20 +25,23 @@ data class EmojiDictEntry(
     val emojiCount: Int,
     /** Compressed size of the file — the progress denominator. */
     val approxGzBytes: Long,
-    /** Directory/file stem in the data repo; equal to [languageId] unless the
-     * repo spells it differently (`no` for Norwegian Bokmål). */
+    /** File stem in the data repo; equal to [languageId] unless the repo
+     * spells it differently (`no` for Norwegian Bokmål). */
     val repoCode: String = languageId,
+    /** Folder in the data repo; equal to [repoCode] unless the pack lives
+     * with a parent language's files (Banglish `bn_rom` sits in `bn/`). */
+    val repoDir: String = repoCode,
 ) {
     /** The data repository, wherever [ServiceRepo.DATA] points. */
     val url: String
-        get() = ServiceEndpoints.repo(ServiceRepo.DATA).rawUrl("data/$repoCode/${repoCode}_emoji.json.gz")
+        get() = ServiceEndpoints.repo(ServiceRepo.DATA).rawUrl("data/$repoDir/${repoCode}_emoji.json.gz")
 }
 
 /**
  * The downloadable emoji dictionary for every language the registry knows and
  * the data repo covers.
  *
- * 125 of the repo's 141: the codes it spells differently are remapped (`no` ->
+ * 126 of the repo's 142: the codes it spells differently are remapped (`no` ->
  * `nb`), its exact duplicates are dropped (`fil` == `tl`, `pt_br` == `pt`,
  * `zh_cn` == `zh`), and so are the languages the app has no entry for
  * (`blo`, `bs`, `ccp`, `quc`, `rhg`, `zh_tw`) and the seven packs the upstream
@@ -54,7 +60,8 @@ object EmojiDictCatalog {
         emojiCount: Int,
         approxGzBytes: Long,
         repoCode: String = languageId,
-    ) = EmojiDictEntry(languageId, emojiCount, approxGzBytes, repoCode)
+        repoDir: String = repoCode,
+    ) = EmojiDictEntry(languageId, emojiCount, approxGzBytes, repoCode, repoDir)
 
     val entries: List<EmojiDictEntry> = listOf(
         entry("af", 3943, 86736L),
@@ -69,6 +76,7 @@ object EmojiDictCatalog {
         entry("bew", 288, 3915L),
         entry("bg", 3943, 87434L),
         entry("bn", 3943, 93862L),
+        entry("bn_rom", 3943, 129656L, repoDir = "bn"),
         entry("br", 1400, 24287L),
         entry("ca", 3943, 86524L),
         entry("chr", 3940, 74620L),

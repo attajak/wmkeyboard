@@ -80,7 +80,7 @@ The densest of the four screens. A **Downloads** group sits up top, holding the 
 
 **Download automatically** (<SettingsPath path="Emoji / Emoji panel / Emoji keywords / Downloads" />) defaults to **on**, so turning a language on fetches its keywords in the background, around 100 KB, once. Off leaves the per-language Download buttons below as the only way to get them.
 
-Each language group can carry a bundled-catalog row (only shown for the 125 languages the [wmkeyboard-data](https://github.com/wasi-master/wmkeyboard-data) repo covers) and any number of user-imported packs below it:
+Each language group can carry a bundled-catalog row (only shown for the 126 languages the [wmkeyboard-data](https://github.com/wasi-master/wmkeyboard-data) repo covers) and any number of user-imported packs below it:
 
 - **Bundled catalog row**: reads "N emoji, size to download" before you download it (for example "3,943 emoji, 74 KB to download"), "Waiting…" while it's queued, then a progress bar and a Cancel button while it transfers, then "N emoji, size" plus a delete icon once it's there. A failure leaves an error message and a Retry button.
 - **Imported packs**: one row per file, headline the filename minus extension, subtitle "N emoji", trash to remove. **Import pack**/**Import another** and **From URL** buttons work exactly as they do on Custom dictionaries.
@@ -93,7 +93,7 @@ A language's group appears here if it's currently enabled, has a downloaded cata
 
 The import format is a tab-separated file: one emoji per line, then its comma-separated keywords, then optionally another tab and a display name. Lines starting with `"# "` are ignored. A bare `#` isn't a comment here, since it starts the keycap row. The repo's own JSON dictionaries import as-is too. The size cap is 8 MiB, smaller than Custom dictionaries' 32 MiB, and it's enforced the same way for local files and URL downloads. Once the download starts, every failure collapses onto one code path, so a dead link or a network error reports the same "That file is too large to import." as a genuinely oversized file. A URL with the wrong scheme is the exception, since it never gets that far. A successful import reports "The app added keywords for N emoji to `<language>`." An empty file reports "The app found no emoji in that file. Make sure that it is a keyword pack."
 
-See [Emoji search in your language](/emoji/customization/#emoji-search-in-your-language) for why 125 languages, what auto-download does in practice, and how a pack changes what you see while typing.
+See [Emoji search in your language](/emoji/customization/#emoji-search-in-your-language) for why 126 languages, what auto-download does in practice, and how a pack changes what you see while typing.
 
 ## Details & edge cases
 

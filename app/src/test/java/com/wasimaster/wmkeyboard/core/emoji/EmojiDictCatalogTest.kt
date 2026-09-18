@@ -42,8 +42,8 @@ class EmojiDictCatalogTest {
                 entry.url.startsWith("https://raw.githubusercontent.com/wasi-master/wmkeyboard-data/"),
             )
             assertTrue("bad url ${entry.url}", entry.url.endsWith("_emoji.json.gz"))
-            // The file lives in the folder it is named after.
-            assertTrue("bad url ${entry.url}", "/${entry.repoCode}/${entry.repoCode}_" in entry.url)
+            // The file lives in its folder, named after its code.
+            assertTrue("bad url ${entry.url}", "/${entry.repoDir}/${entry.repoCode}_" in entry.url)
         }
     }
 
@@ -52,6 +52,14 @@ class EmojiDictCatalogTest {
         val norwegian = EmojiDictCatalog.forLanguage("nb")
         assertEquals("no", norwegian?.repoCode)
         assertTrue(norwegian!!.url.endsWith("/data/no/no_emoji.json.gz"))
+    }
+
+    /** Banglish's pack is filed with the rest of the Banglish data, under `bn/`. */
+    @Test fun banglishPackLivesBesideBengali() {
+        val banglish = EmojiDictCatalog.forLanguage("bn_rom")
+        assertEquals("bn_rom", banglish?.repoCode)
+        assertTrue(banglish!!.url.endsWith("/data/bn/bn_rom_emoji.json.gz"))
+        assertTrue(EmojiDictCatalog.forLanguage("bn")!!.url.endsWith("/data/bn/bn_emoji.json.gz"))
     }
 
     @Test fun lookupsAnswerForKnownAndUnknownLanguages() {
