@@ -92,8 +92,9 @@ jobs:
           language='${{ matrix.language }}'
           variant="${capability}${language^}"
           # Exported because the upload step needs the same capitalisation and
-          # a GitHub expression cannot produce it: "${{ matrix.capability }}${{
-          # matrix.language }}" would spell the directory "fullintl".
+          # a GitHub expression cannot produce it: joining the two matrix
+          # values would spell the directory "fullintl". (No expression syntax
+          # in this comment: Actions evaluates it inside run blocks too.)
           echo "VARIANT_DIR=$variant" >> "$GITHUB_ENV"
           ./gradlew "assemble${capability^}${language^}Debug" --stacktrace
 
