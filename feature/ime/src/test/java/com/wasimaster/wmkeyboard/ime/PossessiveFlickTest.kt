@@ -2,7 +2,9 @@ package com.wasimaster.wmkeyboard.ime
 
 import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
 import com.wasimaster.wmkeyboard.core.gesture.KeyCenter
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -107,5 +109,54 @@ class PossessiveFlickTest {
             letterS.x to letterS.y,
         )
         assertTrue(possessiveFlick(nearStart, comma, letterS, keyWidth))
+    }
+
+    /** A few of the contraction targets, laid out on the same rows as [letterS]. */
+    private val letterT = KeyCenter('t', x = 270f, y = 60f)
+    private val letterD = KeyCenter('d', x = 210f, y = 120f)
+    private val letterL = KeyCenter('l', x = 510f, y = 120f)
+    private val targets = listOf(letterS, letterD, letterT, letterL)
+
+    /** Issue #243: the letter the swipe lifts on picks the suffix. */
+    @Test
+    fun `a straight swipe names the letter it lifted on`() {
+        val toT = stroke(comma.x to comma.y, 420f to 120f, letterT.x to letterT.y)
+        assertEquals('t', contractionFlick(toT, comma, targets, keyWidth))
+        val toL = stroke(comma.x to comma.y, 540f to 150f, letterL.x to letterL.y)
+        assertEquals('l', contractionFlick(toL, comma, targets, keyWidth))
+        val toS = stroke(comma.x to comma.y, 360f to 150f, letterS.x to letterS.y)
+        assertEquals('s', contractionFlick(toS, comma, targets, keyWidth))
+    }
+
+    /**
+     * Neighbouring targets: the one nearest the lift is judged, and only that one.
+     * A lift between `s` and `d` but nearer `d` is `'d`.
+     */
+    @Test
+    fun `the nearest target to the lift is the one judged`() {
+        val nearD = stroke(comma.x to comma.y, 400f to 150f, (letterD.x - 10f) to letterD.y)
+        assertEquals('d', contractionFlick(nearD, comma, targets, keyWidth))
+    }
+
+    /** A wandering path to a target is a word, not a contraction, whichever key it ends on. */
+    @Test
+    fun `a word shaped stroke names no letter`() {
+        val points = stroke(
+            comma.x to comma.y,
+            520f to 60f,
+            300f to 180f,
+            480f to 120f,
+            letterT.x to letterT.y,
+        )
+        assertNull(contractionFlick(points, comma, targets, keyWidth))
+        assertNull(contractionFlick(points, comma, emptyList(), keyWidth))
+    }
+
+    /** Every suffix is spelt with the letter that draws it, straight apostrophe first. */
+    @Test
+    fun `each suffix starts with an apostrophe and contains its letter`() {
+        for ((letter, suffix) in CONTRACTION_SUFFIXES) {
+            assertTrue(suffix, suffix.startsWith("'") && suffix[1] == letter)
+        }
     }
 }

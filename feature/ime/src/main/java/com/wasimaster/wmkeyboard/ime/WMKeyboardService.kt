@@ -14936,15 +14936,22 @@ open class WMKeyboardService : InputMethodService() {
      *
      * English only, like [Apostrophes]: every other language forms its
      * possessive elsewhere.
+     *
+     * [letter] is the key the swipe lifted on, and picks the suffix out of
+     * [CONTRACTION_SUFFIXES] (issue #243): `s` for the possessive, `t` for
+     * "don't", `l` for "we'll" and so on. `'t` only follows a stem ending in
+     * n, which every English n't contraction has; anywhere else it is a typo
+     * the swipe would be writing on the user's behalf.
      */
-    fun onPossessiveFlick(): Boolean {
+    fun onPossessiveFlick(letter: Char = 's'): Boolean {
         val state = _uiState.value
         val key = state.settings.gesture.possessiveKey
         if (key == GlideApostropheKey.OFF || key == GlideApostropheKey.SPACE) return false
         if (!state.language.isEnglish) return false
+        val suffix = CONTRACTION_SUFFIXES[letter] ?: return false
         if (composing.isNotEmpty()) {
-            if (!composing.last().isLetter() || endsPossessive(composing)) return false
-            onText(POSSESSIVE)
+            if (!takesContraction(composing, letter)) return false
+            onText(contractionCased(composing, suffix))
             return true
         }
         // The keyboard's own fields take a typed character before the field
@@ -14957,17 +14964,18 @@ open class WMKeyboardService : InputMethodService() {
         val spaces = before.takeLastWhile { it == ' ' }.length
         val stem = before.dropLast(spaces)
         val word = stem.takeLastWhile(::isComposingWordChar)
-        if (word.isEmpty() || !word.last().isLetter() || endsPossessive(word)) return false
+        if (!takesContraction(word, letter)) return false
         val gestureWord = lastGestureWord?.takeIf { stem.endsWith(it) }
+        val cased = contractionCased(word, suffix)
 
         vibrate()
         ic.beginBatchEdit()
         if (spaces > 0) ic.deleteSurroundingText(spaces, 0)
-        ic.commitText(POSSESSIVE, 1)
+        ic.commitText(cased, 1)
         if (spaces > 0) ic.commitText(" ", 1)
         ic.endBatchEdit()
         pendingWordSpace = spaces > 0
-        val possessive = word + POSSESSIVE
+        val possessive = word + cased
         // After a glide, backspace still takes the whole thing back in one
         // press, stem included, which is what the swipe built. The stroke on
         // record drew the stem, not the possessive, so it is not offered a
@@ -14990,9 +14998,19 @@ open class WMKeyboardService : InputMethodService() {
         return true
     }
 
-    /** Whether [word] already carries the possessive, straight or curly. */
-    private fun endsPossessive(word: CharSequence): Boolean =
-        word.endsWith(POSSESSIVE) || word.endsWith("\u2019s")
+    /**
+     * Whether [word] can take the suffix [letter] names: it ends on a letter,
+     * carries no apostrophe yet (straight or curly — "what's" is not extended
+     * to "what's'd"), and for `'t` ends in n.
+     */
+    private fun takesContraction(word: CharSequence, letter: Char): Boolean =
+        word.isNotEmpty() && word.last().isLetter() &&
+            word.none { it == '\'' || it == '\u2019' } &&
+            (letter != 't' || word.last().lowercaseChar() == 'n')
+
+    /** [suffix] in capitals after a word typed in capitals: "WHAT'S", not "WHAT's". */
+    private fun contractionCased(word: CharSequence, suffix: String): String =
+        if (word.length > 1 && word.all { !it.isLetter() || it.isUpperCase() }) suffix.uppercase() else suffix
 
     /**
      * Whether a glide may run right now. During a typing test the test's own
@@ -27367,9 +27385,6 @@ open class WMKeyboardService : InputMethodService() {
          * rows, so a stroke that reaches the punctuation key went there on purpose.
          */
         private const val APOSTROPHE_CROSS_WIDTHS = 0.5f
-
-        /** What the possessive swipe appends (#169). The shape test is in GlideSpace. */
-        private const val POSSESSIVE = "'s"
 
         /** How far behind the caret the possessive swipe looks for its word. */
         private const val POSSESSIVE_CONTEXT_CHARS = 64

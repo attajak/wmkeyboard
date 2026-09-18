@@ -290,8 +290,9 @@ import com.wasimaster.wmkeyboard.ime.top
 import com.wasimaster.wmkeyboard.ime.glideAnchor
 import com.wasimaster.wmkeyboard.ime.HINT_FLICK_MIN_TRAVEL_HEIGHTS
 import com.wasimaster.wmkeyboard.ime.hintFlick
+import com.wasimaster.wmkeyboard.ime.CONTRACTION_SUFFIXES
 import com.wasimaster.wmkeyboard.ime.POSSESSIVE_REACH_WIDTHS
-import com.wasimaster.wmkeyboard.ime.possessiveFlick
+import com.wasimaster.wmkeyboard.ime.contractionFlick
 import com.wasimaster.wmkeyboard.ime.OCTOPUS_MIN_TRAVEL_WIDTHS
 import com.wasimaster.wmkeyboard.ime.OCTOPUS_SLOP_CLEARANCE
 import com.wasimaster.wmkeyboard.ime.OCTOPUS_START_REACH_WIDTHS
@@ -594,7 +595,7 @@ internal val LocalOctopusPick =
  * swipe that changed the field and lets any other land as the tap it was. A
  * composition local for the reason [LocalOctopusPick] is one.
  */
-internal val LocalPossessiveFlick = staticCompositionLocalOf<() -> Boolean> { { false } }
+internal val LocalPossessiveFlick = staticCompositionLocalOf<(Char) -> Boolean> { { false } }
 
 /**
  * The floating words, for the keys' *semantics* alone (discussion #102).
@@ -954,8 +955,11 @@ fun KeyboardScreen(
      * resolved here, in the grid, and only the word travels.
      */
     onOctopusPick: (String, OctopusSource) -> Unit = { _, _ -> },
-    /** A possessive swipe lifted on `s`: append `'s` and say whether it did (#169). */
-    onPossessiveFlick: () -> Boolean = { false },
+    /**
+     * A possessive swipe lifted on one of [CONTRACTION_SUFFIXES]' letters: append
+     * that suffix and say whether it did (#169, #243).
+     */
+    onPossessiveFlick: (Char) -> Boolean = { false },
     onSuggestion: (String) -> Unit,
     /**
      * A word on the strip was held rather than tapped (#28, #99). One bundle
@@ -13608,16 +13612,29 @@ private fun KeyRows(
                 }
             }
             // Issue #169: a short straight swipe from the chosen punctuation
-            // key to `s` appends `'s` to the word behind the caret. On the same
-            // footing as the hint flick above, and for the same reason: the
+            // key to `s` appends `'s` to the word behind the caret; to `t`,
+            // `d`, `m`, `l`, `r` or `v` the matching contraction (#243). The
             // glide loop never claims a stroke that begins on a punctuation
             // key, so every one of them — glide typing on or off, after a
-            // glided word or a tapped one — arrives here unconsumed. Judged at
-            // the lift and consuming only the lift, so a stroke that is not the
-            // swipe still lands on the key it began on, and so does a swipe
-            // with no word to attach to; a consumed lift is what tells that key
-            // to drop the press it would have typed.
-            .pointerInput(possessiveChar) {
+            // glided word or a tapped one — arrives here unconsumed.
+            //
+            // Owned the way the modifier chord drag owns its stroke (#67), and
+            // for the two reasons #243 found: a slow swipe let the key's hold
+            // timer open its popup mid-stroke, which then committed the comma's
+            // first alternate, `!`; and nothing on screen said the swipe was
+            // being read at all. So once the finger leaves the slop the stroke
+            // is claimed — every move consumed, which is what tells the key to
+            // drop its press and its timer — and a rubber band runs from the key
+            // to the fingertip. A hold that opened the popup *before* the finger
+            // moved is still the popup's.
+            //
+            // Judged at the lift. A stroke that is not the swipe and lifts back
+            // on the key it began on types that key, as the chord drag does; one
+            // that lifts anywhere else types nothing, the slide-off cancel every
+            // key has. The hint flick sits above this loop on the same pass, so
+            // a flick down off the comma is still its hint: it consumes the lift
+            // before this loop sees it.
+            .pointerInput(possessiveChar, trailMs) {
                 if (possessiveChar == null) return@pointerInput
                 awaitEachGesture {
                     val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
@@ -13625,29 +13642,60 @@ private fun KeyRows(
                     if (width <= 0f) return@awaitEachGesture
                     val centers = liveCenters.value
                     val from = centers[possessiveChar.code] ?: return@awaitEachGesture
-                    val to = centers['s'.code] ?: return@awaitEachGesture
                     // Only a stroke that begins on the chosen key is worth
                     // following; every other one is some other loop's.
                     if ((down.position - from).getDistance() > width * POSSESSIVE_REACH_WIDTHS) {
                         return@awaitEachGesture
                     }
+                    val targets = CONTRACTION_SUFFIXES.keys.mapNotNull { letter ->
+                        centers[letter.code]?.let { KeyCenter(letter, it.x, it.y) }
+                    }
+                    if (targets.isEmpty()) return@awaitEachGesture
+                    val source = liveRects.value.keyAt(down.position + boxOrigin)
+                    // The key's own lift test, half a key beyond each edge, so
+                    // a tap that wobbled past the slop still types the key.
+                    val sourceCell = liveRects.value.cellAt(down.position + boxOrigin)?.let {
+                        it.inflate(minOf(it.width, it.height) / 2f)
+                    }
+                    val slop = viewConfiguration.touchSlop
+                    var dragging = false
                     val points = ArrayList<GesturePoint>()
                     points.add(GesturePoint(down.position.x, down.position.y, down.uptimeMillis))
                     while (true) {
                         val event = awaitPointerEvent(PointerEventPass.Initial)
                         val change = event.changes.firstOrNull { it.id == down.id }
-                            ?: return@awaitEachGesture
-                        if (change.isConsumed || alternatesGate.open) return@awaitEachGesture
+                        // Another loop took the stroke, or the hold opened the
+                        // key's popup and the finger is choosing in it.
+                        if (change == null || change.isConsumed || alternatesGate.open) {
+                            if (dragging) trail.release()
+                            return@awaitEachGesture
+                        }
                         points.add(GesturePoint(change.position.x, change.position.y, change.uptimeMillis))
                         if (!change.pressed) {
-                            val flick = possessiveFlick(
+                            if (!dragging) return@awaitEachGesture
+                            change.consume()
+                            trail.release()
+                            val letter = contractionFlick(
                                 points,
                                 from = KeyCenter(possessiveChar, from.x, from.y),
-                                to = KeyCenter('s', to.x, to.y),
+                                targets = targets,
                                 keyWidthPx = width,
                             )
-                            if (flick && possessiveFlickTaken()) change.consume()
+                            val taken = letter != null && possessiveFlickTaken(letter)
+                            if (!taken && source != null &&
+                                sourceCell?.contains(change.position + boxOrigin) == true
+                            ) {
+                                stampedOnKey(source)
+                            }
                             return@awaitEachGesture
+                        }
+                        if (!dragging && (change.position - down.position).getDistance() > slop) {
+                            dragging = true
+                            trail.beginLine(from.x, from.y)
+                        }
+                        if (dragging) {
+                            change.consume()
+                            trail.add(change.position.x, change.position.y, change.uptimeMillis, trailMs)
                         }
                     }
                 }

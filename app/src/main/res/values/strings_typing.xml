@@ -496,8 +496,8 @@
     <!-- The 's is the English possessive ending, as in "the developer's keyboard".
          One-of-four choice: which punctuation key the swipe starts from. -->
     <string name="typing_possessive_swipe_title">Swipe to add \'s</string>
-    <string name="typing_possessive_swipe_subtitle">Swipe from a punctuation key to s to add \'s to the last word</string>
-    <string name="typing_possessive_swipe_info">Select a key here. A short, straight swipe from that key to the s key adds \'s to the word before the cursor, so \"developer\" becomes \"developer\'s\". This works after you type a word and after you glide one, with glide typing on or off. A space after the word moves behind the \'s. The key still types its own character when you press it. The swipe must be short and straight. A longer path from the same key to s is a glide, as before. This works with English only. The spacebar cannot start this swipe.</string>
+    <string name="typing_possessive_swipe_subtitle">Swipe from a punctuation key to s to add \'s to the last word, or to t, d, m, l, r or v for \'t, \'d, \'m, \'ll, \'re or \'ve</string>
+    <string name="typing_possessive_swipe_info">Select a key here. A short, straight swipe from that key to the s key adds \'s to the word before the cursor, so \"developer\" becomes \"developer\'s\". Swipe to t, d, m, l, r or v to add \'t, \'d, \'m, \'ll, \'re or \'ve. \'t is added only after a word that ends in n, so \"don\" becomes \"don\'t\". A line from the key to your finger shows that the swipe is active. This works after you type a word and after you glide one, with glide typing on or off. A space after the word moves behind the \'s. The key still types its own character when you press it. The swipe must be short and straight. A longer path from the same key to s is a glide, as before. This works with English only. The spacebar cannot start this swipe.</string>
     <!-- One line under each option in the swipe to add 's picker. -->
     <string name="typing_possessive_swipe_off_desc">No swipe adds \'s</string>
     <string name="typing_possessive_swipe_comma_desc">Swipe from the comma key to s. A press still types a comma</string>

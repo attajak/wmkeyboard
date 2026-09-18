@@ -66,9 +66,25 @@ The one real cost is with [glide typing](/typing/glide-typing/). A very fast gli
 
 The apostrophe is rarely a key of its own, so a possessive usually costs a long press and a tap. Pick a key here, comma, full stop or a real apostrophe key if the layout has one, and a short straight swipe from that key to <KeyCap>s</KeyCap> adds `'s` to the word before the cursor: "developer" becomes "developer's". Off by default.
 
-It's a gesture in its own right, not a glide-typing feature. It works after a tapped word, after a glided one, and on the word you're still typing, with glide typing on or off. A space after the word moves behind the `'s`, so you get "developer's " and never "developer 's". The chosen key still types its own character when you press it, and a stroke that isn't the swipe still lands as the tap it began as.
+The same swipe to another letter adds a contraction instead:
 
-The shape is what separates it from a glide: **short** and **straight**, its path no more than 1.6× the straight line between the two keys. A real word glided from the same key to <KeyCap>s</KeyCap> wanders further than that, so it decodes as a word. The spacebar can't start this swipe, since a stroke off the spacebar is always a spacebar swipe, and it's English only.
+| Swipe to | Adds | Example |
+|---|---|---|
+| <KeyCap>s</KeyCap> | `'s` | what → what's |
+| <KeyCap>t</KeyCap> | `'t` | don → don't |
+| <KeyCap>d</KeyCap> | `'d` | she → she'd |
+| <KeyCap>m</KeyCap> | `'m` | I → I'm |
+| <KeyCap>l</KeyCap> | `'ll` | we → we'll |
+| <KeyCap>r</KeyCap> | `'re` | they → they're |
+| <KeyCap>v</KeyCap> | `'ve` | you → you've |
+
+`'t` only goes on a word ending in n, so "what" never becomes "what't". A word that already has an apostrophe isn't extended again, and a word in capitals gets its suffix in capitals: "WHAT'S".
+
+While you swipe, a line runs from the key to your finger, the same line a [modifier drag](#dragging-from-a-modifier-key) draws, so you can see the swipe is being read.
+
+It's a gesture in its own right, not a glide-typing feature. It works after a tapped word, after a glided one, and on the word you're still typing, with glide typing on or off. A space after the word moves behind the `'s`, so you get "developer's " and never "developer 's". The chosen key still types its own character when you press it. Holding it still opens its long-press popup as usual, but once your finger starts to move the swipe owns the stroke, so a slow swipe no longer opens the popup and types `!`. A stroke that isn't the swipe types the key if you lift back on it, and nothing if you lift anywhere else. A short flick down still types the hint when [Swipe down to type the hint](#swiping-down-on-a-key-for-its-hint) is on.
+
+The shape is what separates it from a glide: **short** and **straight**, its path no more than 1.6× the straight line between the two keys. A real word glided from the same key to one of those letters wanders further than that, so it decodes as a word. The spacebar can't start this swipe, since a stroke off the spacebar is always a spacebar swipe, and it's English only.
 
 ## Opening the numpad with a swipe
 

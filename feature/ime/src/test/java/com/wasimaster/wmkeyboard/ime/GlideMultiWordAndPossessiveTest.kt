@@ -308,6 +308,63 @@ class GlideMultiWordAndPossessiveTest {
         assertEquals("", editor.text.toString())
     }
 
+    /** Issue #243: the other letters append their contractions, space moved as before. */
+    @Test
+    fun `the swipe appends the contraction its letter names`() {
+        val cases = mapOf('d' to "'d", 'm' to "'m", 'l' to "'ll", 'r' to "'re", 'v' to "'ve")
+        for ((letter, suffix) in cases) {
+            val (service, editor, _) = keyboard(
+                gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
+                initial = "we ",
+            )
+            assertTrue(letter.toString(), service.onPossessiveFlick(letter))
+            assertEquals("we$suffix ", editor.text.toString())
+        }
+    }
+
+    /**
+     * `'t` only after a stem ending in n: "don" becomes "don't", and "what"
+     * stays "what" rather than becoming "what't".
+     */
+    @Test
+    fun `the t swipe needs a stem ending in n`() {
+        val (service, editor, _) = keyboard(
+            gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
+            initial = "don",
+        )
+        assertTrue(service.onPossessiveFlick('t'))
+        assertEquals("don't", editor.text.toString())
+
+        val (other, otherEditor, _) = keyboard(
+            gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
+            initial = "what",
+        )
+        assertFalse(other.onPossessiveFlick('t'))
+        assertEquals("what", otherEditor.text.toString())
+    }
+
+    /** A word that already carries an apostrophe is not extended a second time. */
+    @Test
+    fun `the swipe declines a word that is already a contraction`() {
+        val (service, editor, _) = keyboard(
+            gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
+            initial = "what's ",
+        )
+        assertFalse(service.onPossessiveFlick('d'))
+        assertEquals("what's ", editor.text.toString())
+    }
+
+    /** A word typed in capitals takes its suffix in capitals. */
+    @Test
+    fun `the swipe follows a word typed in capitals`() {
+        val (service, editor, _) = keyboard(
+            gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
+            initial = "WHAT",
+        )
+        assertTrue(service.onPossessiveFlick('s'))
+        assertEquals("WHAT'S", editor.text.toString())
+    }
+
     /** Off is off: the default key adds nothing, whatever is behind the caret. */
     @Test
     fun `the possessive swipe is inert while no key is chosen`() {
