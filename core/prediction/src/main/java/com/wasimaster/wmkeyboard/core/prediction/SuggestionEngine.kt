@@ -1490,6 +1490,26 @@ class SuggestionEngine(
         private const val ACCENT_SHADOW_RATIO = 20.0
 
         /**
+         * How many times the best one-edit fix must outscore a listed spelling,
+         * edit cost included, before that spelling counts as a typo the corpus
+         * kept (#244); see [typoShadowed]. The English list's typos sit far
+         * above it in raw counts: `wheee` against `where` at 22,000, `thw`
+         * against `the` at 690,000, `teh` at 180,000. At 100 it would take
+         * real rare words as well: `cress` (`dress`), `votive` (`motive`).
+         */
+        private const val TYPO_SHADOW_RATIO = 1_000.0
+
+        /**
+         * How far down its list a word must rank before [typoShadowed] may call
+         * it a typo: the size of the Small download. The Small list does not
+         * hold a word ranked below this at all, so it was corrected like any
+         * unknown word, and the larger lists stop protecting it only where it
+         * is a thousand times rarer than its fix. Every word the Small list
+         * and the bundled one hold stays a word.
+         */
+        private const val TYPO_SHADOW_MIN_RANK = 50_000
+
+        /**
          * How many times commoner the word after an elided prefix must be
          * than the fused spelling before that spelling stops counting as a
          * word of its own and reads as the elision (#215); see
@@ -1779,7 +1799,10 @@ class SuggestionEngine(
         // ever "known as typed" there, so every reading the walk finds — all of
         // which come back at zero edits — reaches the strip.
         val ambiguous = keys?.isAmbiguous == true
-        val known = !ambiguous && (inDictionaries(lower) || userLexicon.contains(lower))
+        // A typo the corpus kept is not known: the strip has to show the fix
+        // the space bar is about to make (#244).
+        val known = !ambiguous && (inDictionaries(lower) || userLexicon.contains(lower)) &&
+            !typoShadowed(lower, touch, keys)
         val merged = HashMap<String, Double>()
 
         // One fuzzy walk covers completions AND corrections over every trie
@@ -2556,6 +2579,51 @@ class SuggestionEngine(
     }
 
     /**
+     * Whether the word lists hold [lower] only as a typo the corpus kept (#244).
+     *
+     * The downloadable lists are counted from subtitles, and subtitles are
+     * full of typos. The English one holds `wheee` 60 times, `thw` 33 times
+     * and `teh` 124 times, so on anything bigger than the Small download
+     * those spellings were known words and were never corrected. The bundled
+     * list and the Small one stop above them, which is why only a bigger
+     * download broke the fix.
+     *
+     * A spelling is such a typo when it ranks below [TYPO_SHADOW_MIN_RANK] in
+     * every list that holds it and a one-edit fix outscores it
+     * [TYPO_SHADOW_RATIO] times over. A word in Android's personal dictionary
+     * was put there by the user, and is never shadowed.
+     */
+    private fun typoShadowed(lower: String, touch: List<TouchPoint?>?, keys: KeySets? = null): Boolean {
+        if (systemDictionary.contains(lower)) return false
+        var typed = Double.NEGATIVE_INFINITY
+        var holders: ArrayList<Pair<TrieWalker, Int>>? = null
+        for (src in walkSources()) {
+            if (src.tier != FuzzyBeamSearch.Tier.DICTIONARY) continue
+            val walker = src.walker
+            var node = walker.root
+            for (ch in lower) {
+                node = walker.child(node, ch)
+                if (node < 0) break
+            }
+            if (node < 0 || !walker.isWord(node)) continue
+            val frequency = walker.frequency(node)
+            typed = maxOf(typed, src.logWeight + ln(1.0 + frequency))
+            (holders ?: ArrayList<Pair<TrieWalker, Int>>(2).also { holders = it }).add(walker to frequency)
+        }
+        val lists = holders ?: return false
+        // The same walk the strip and decideOrdinary rank, so this reads the
+        // memoised result.
+        val fix = rankedFor(lower, FuzzyBeamSearch.AUTOCORRECT_K / 2, touch, keys)
+            .take(FuzzyBeamSearch.AUTOCORRECT_K)
+            .filter { it.edits == 1 && it.completedChars == 0 && !suppressed(it.word) }
+            .maxOfOrNull { it.dictScore }
+            ?: return false
+        if (fix - typed < ln(TYPO_SHADOW_RATIO)) return false
+        // Last, because the first rank asked of a list builds its histogram.
+        return lists.all { (walker, frequency) -> walker.rankOfFrequency(frequency) > TYPO_SHADOW_MIN_RANK }
+    }
+
+    /**
      * [lower]'s best score in the dictionary-tier walk sources, on the walk's
      * own scale; NEGATIVE_INFINITY when no list holds it.
      */
@@ -2742,9 +2810,8 @@ class SuggestionEngine(
     ): CorrectionDecision {
         // A shadowed spelling is protected by neither the lists nor the
         // lexicon. The lexicon learned it only because a list vouched for it.
-        if (!accentShadowed(lower, touch) &&
-            (inDictionaries(lower) || userLexicon.isEstablished(lower, learnedWordMinCount))
-        ) {
+        val known = inDictionaries(lower) || userLexicon.isEstablished(lower, learnedWordMinCount)
+        if (known && !accentShadowed(lower, touch) && !typoShadowed(lower, touch)) {
             return NO_CORRECTION
         }
         // Contact and app names are known words too — never "corrected" away.
