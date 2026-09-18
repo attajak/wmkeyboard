@@ -1961,20 +1961,9 @@
     <string name="languages_data_delete_body">%1$s มีรายการคำหรือคำหลักอีโมจิที่ดาวน์โหลดไว้ ต้องการลบข้อมูลเหล่านี้เพื่อคืนพื้นที่จัดเก็บประมาณ %2$s หรือไม่</string>
     <string name="languages_data_delete_dismiss_action">เก็บไว้</string>
     <string name="languages_data_delete_title">ลบไฟล์ที่ดาวน์โหลดใช่หรือไม่?</string>
-    <string name="languages_data_download_all_action">ดาวน์โหลดข้อมูลทั้งหมด (ประมาณ %1$s)</string>
-    <string name="languages_data_download_all_info">ดาวน์โหลดรายการคำ คำหลักอิโมจิ และข้อมูลคู่คำสำหรับภาษานี้ ไฟล์ที่มีอยู่ในอุปกรณ์แล้วจะไม่ถูกดาวน์โหลดซ้ำ แถวด้านล่างจะดำเนินการแบบเดียวกันทีละไฟล์</string>
     <string name="languages_data_download_body">แป้นพิมพ์สามารถดาวน์โหลดข้อมูลที่ %1$s จำเป็นต้องใช้เพื่อคาดเดาและแก้ไขคำได้อย่างแม่นยำ ได้แก่ รายการคำศัพท์ คำค้นหาอีโมจิ และข้อมูลคู่คำ (ถ้ามี) ซึ่งจะใช้ข้อมูลประมาณ %2$s คุณสามารถดาวน์โหลดข้อมูลเหล่านี้ในภายหลังได้จากหน้าจอภาษา</string>
     <string name="languages_data_download_dismiss_action">ไม่ใช่ตอนนี้</string>
     <string name="languages_data_download_title">ดาวน์โหลดข้อมูลภาษาหรือไม่</string>
-    <string name="languages_data_title">ข้อมูลภาษา</string>
-    <string name="languages_dictionary_bundled">ภาษานี้มีพจนานุกรมในตัว</string>
-    <string name="languages_dictionary_bundled_more">ภาษานี้มีพจนานุกรมในตัว ดาวน์โหลดพจนานุกรมขนาดใหญ่ขึ้นเพื่อคำแนะนำที่ดีกว่า</string>
-    <string name="languages_dictionary_none_download">ภาษานี้ไม่มีพจนานุกรมในตัว ดาวน์โหลดพจนานุกรมเพื่อรับคำแนะนำและการแก้ไขอัตโนมัติ หรือนำเข้ารายการคำศัพท์ของคุณเอง</string>
-    <string name="languages_dictionary_none_learn">ภาษานี้ไม่มีพจนานุกรมในตัว คีย์บอร์ดจะเรียนรู้คำศัพท์ของคุณในขณะที่คุณพิมพ์ และคุณสามารถนำเข้ารายการคำศัพท์ของคุณเองได้</string>
-    <string name="languages_dictionary_title">พจนานุกรม</string>
-    <string name="languages_dictionary_use_info">ปิด คีย์บอร์ดจะลืมคำศัพท์ที่มาพร้อมกับเครื่องและคำศัพท์ที่ดาวน์โหลดมาสำหรับภาษานี้ และจะอ่านเฉพาะรายการคำศัพท์ที่คุณนำเข้า รวมถึงคำศัพท์ที่เรียนรู้จากคุณเท่านั้น สวิตช์เดียวกันนี้จะปรากฏบนแถบพจนานุกรม (แถวและแถบ) และในทางกลับกันคือ ใช้รายการคำศัพท์ของฉันเท่านั้น ภายใต้พจนานุกรมแบบกำหนดเอง</string>
-    <string name="languages_dictionary_use_subtitle">แนะนำและแก้ไขจากรายการที่รวมมาหรือดาวน์โหลดมา</string>
-    <string name="languages_dictionary_use_title">ใช้รายการคำ</string>
     <string name="languages_download_queued">กำลังรอ...</string>
     <string name="languages_emoji_dict_delete_desc">ลบคีย์เวิร์ดอีโมจิ</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1985,15 +1974,7 @@
         <item quantity="one">อิโมจิ %1$,d รายการ, %2$s</item>
         <item quantity="other">อิโมจิ %1$,d รายการ, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">คำหลักสำหรับอิโมจิช่วยให้คุณค้นหาอิโมจิใน %1$s ได้ หากคุณพิมพ์คำว่า \"เค้ก\" คุณก็จะพบ 🎂 แป้นพิมพ์จะดาวน์โหลดคำหลักโดยอัตโนมัติขณะที่เปิดใช้งานภาษานั้นอยู่</string>
-    <string name="languages_emoji_keywords_manual">คำหลักสำหรับอีโมจิช่วยให้คุณค้นหาอีโมจิใน %1$s ได้ หากคุณพิมพ์คำว่า \"เค้ก\" คุณจะพบ 🎂 การดาวน์โหลดอัตโนมัติถูกปิดไว้ ดังนั้นคุณต้องเริ่มการดาวน์โหลดนี้ด้วยตัวเอง</string>
-    <string name="languages_emoji_keywords_subtitle">ดาวน์โหลดสำหรับทุกภาษา และการนำเข้าของคุณเอง</string>
     <string name="languages_emoji_keywords_title">คำสำคัญของอีโมจิ</string>
-    <string name="languages_emoji_keywords_unavailable">ยังไม่มีคำหลักอีโมจิสำหรับ %1$s การค้นหาอีโมจิจะตอบกลับเป็นภาษาอังกฤษ คุณสามารถนำเข้ารายการของคุณเองได้</string>
-    <string name="languages_emoji_keywords_use_info">หากปิดไว้ คำหลักที่ดาวน์โหลดมาและชุดคำที่นำเข้ามาสำหรับภาษานี้จะยังคงอยู่ในอุปกรณ์แต่จะไม่ถูกอ่าน ดังนั้นการค้นหาและคำแนะนำอิโมจิจะไม่ทำงานในภาษานี้ สวิตช์เดียวกันนี้จะปรากฏบนแถบพจนานุกรม (แถวและแถบ)</string>
-    <string name="languages_emoji_keywords_use_subtitle">ค้นหาและแนะนำอิโมจิด้วยชื่อในภาษานี้</string>
-    <string name="languages_emoji_keywords_use_title">ใช้คำหลักของอีโมจิ</string>
-    <string name="languages_emoji_title">อิโมจิ</string>
     <string name="languages_fancy_style_row_subtitle">รูปแบบตัวอักษรที่แป้นพิมพ์แฟนซีพิมพ์ออกมา สามารถสลับได้จากแถบเหนือแป้นพิมพ์</string>
     <string name="languages_fancy_style_row_title">สไตล์แฟนซี</string>
     <string name="languages_fancy_style_title">สไตล์</string>
@@ -2062,16 +2043,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">ดาวน์โหลดแล้ว %1$s</string>
     <string name="languages_wordlist_preparing">กำลังเตรียมพจนานุกรม...</string>
-    <string name="languages_wordlist_size_desc">ขนาดพจนานุกรม</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s สูงสุด %2$,d คำ</item>
         <item quantity="other">%1$s สูงสุด %2$,d คำ</item>
-    </plurals>
-    <string name="languages_wordlist_title">พจนานุกรมที่ดาวน์โหลดได้</string>
-    <string name="languages_wordlist_title_variant">พจนานุกรมที่ดาวน์โหลดได้ (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">คำที่พบบ่อยที่สุดสูงสุด %1$,d คำ</item>
-        <item quantity="other">คำที่พบบ่อยที่สุดสูงสุด %1$,d คำ</item>
     </plurals>
     <string name="layout_bottom_padding_info">แป้นพิมพ์ทั้งหมดจะเลื่อนขึ้น ห่างจากขอบด้านล่างและแถบนำทางด้วยท่าทาง เพิ่มค่านี้หากแถวล่างอยู่ใกล้ขอบหน้าจอเกินไป หรือหากคุณเริ่มการนำทางระบบโดยไม่ได้ตั้งใจ</string>
     <string name="layout_bottom_padding_subtitle">เพิ่มพื้นที่ว่างใต้ปุ่มกด เหนือแถบนำทาง</string>

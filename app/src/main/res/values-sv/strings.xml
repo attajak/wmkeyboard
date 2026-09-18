@@ -1967,20 +1967,9 @@
     <string name="languages_data_delete_body">%1$s har en nedladdad ordlista eller emoji-nyckelord. Vill du ta bort dem och frigöra cirka %2$s lagringsutrymme?</string>
     <string name="languages_data_delete_dismiss_action">Behåll dem</string>
     <string name="languages_data_delete_title">Ta bort de nedladdade filerna?</string>
-    <string name="languages_data_download_all_action">Ladda ner all data (cirka %1$s)</string>
-    <string name="languages_data_download_all_info">Laddar ner ordlistan, emoji-nyckelorden och ordparet-data för detta språk. Filer som redan finns på enheten laddas inte ner igen. Raderna nedan gör samma sak en fil i taget.</string>
     <string name="languages_data_download_body">Tangentbordet kan ladda ner den data %1$s behöver för att förutsäga och korrigera bra: en ordlista, emoji-nyckelord och ordparsdata, beroende på vad som finns. Detta använder cirka %2$s data. Du kan också ladda ner dem senare från språkskärmen.</string>
     <string name="languages_data_download_dismiss_action">Inte nu</string>
     <string name="languages_data_download_title">Ladda ner språkdata?</string>
-    <string name="languages_data_title">Språkdata</string>
-    <string name="languages_dictionary_bundled">Detta språk inkluderar en inbyggd ordbok.</string>
-    <string name="languages_dictionary_bundled_more">Detta språk inkluderar en inbyggd ordbok. Ladda ner en större för bättre förslag.</string>
-    <string name="languages_dictionary_none_download">Det här språket har ingen inbyggd ordbok. Ladda ner en för förslag och rättstavning, eller importera din egen ordlista.</string>
-    <string name="languages_dictionary_none_learn">Detta språk har ingen inbyggd ordlista. Tangentbordet lär sig dina ord medan du skriver, och du kan importera din egen ordlista.</string>
-    <string name="languages_dictionary_title">Ordbok</string>
-    <string name="languages_dictionary_use_info">Av: tangentbordet glömmer de medföljande och nedladdade orden för detta språk och läser endast de ordlistor du importerat, plus de ord det lärt sig från dig. Samma omkopplare visas i ordboksfältet (Rader &amp; fält) och, tvärtom, som Använd endast mina ordlistor under Anpassade ordböcker.</string>
-    <string name="languages_dictionary_use_subtitle">Föreslå och korrigera från den medföljande eller nedladdade listan</string>
-    <string name="languages_dictionary_use_title">Använd ordlistan</string>
     <string name="languages_download_queued">Väntar…</string>
     <string name="languages_emoji_dict_delete_desc">Ta bort emoji-nyckelorden</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1991,15 +1980,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Emoji-nyckelord låter dig söka efter emoji på %1$s. Om du skriver ordet för \"tårta\" hittar du 🎂. Tangentbordet laddar ner nyckelorden automatiskt medan språket är aktiverat.</string>
-    <string name="languages_emoji_keywords_manual">Emoji-nyckelord låter dig söka efter emoji på %1$s. Om du skriver ordet för \"tårta\" hittar du 🎂. Automatiska nedladdningar är avstängda, så du får starta denna själv.</string>
-    <string name="languages_emoji_keywords_subtitle">Nedladdningar för varje språk, samt dina egna importer</string>
     <string name="languages_emoji_keywords_title">Emoji-nyckelord</string>
-    <string name="languages_emoji_keywords_unavailable">Inga emoji-nyckelord finns tillgängliga för %1$s än. Emojisökningar svarar på engelska. Du kan importera din egen lista.</string>
-    <string name="languages_emoji_keywords_use_info">Avstängd: de nedladdade nyckelorden och alla paket du importerat för detta språk stannar på enheten men läses inte, så emojisökning och emojiförslag slutar svara på detta språk. Samma brytare visas i ordboksfältet (Rader &amp; fält).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Sök och föreslå emoji efter deras namn på detta språk</string>
-    <string name="languages_emoji_keywords_use_title">Använd emoji-nyckelord</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Typsnittet som det snygga tangentbordet använder. Kan även växlas från listen ovanför tangenterna.</string>
     <string name="languages_fancy_style_row_title">Fancy-stil</string>
     <string name="languages_fancy_style_title">Stil</string>
@@ -2068,16 +2049,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s nedladdat</string>
     <string name="languages_wordlist_preparing">Förbereder ordboken…</string>
-    <string name="languages_wordlist_size_desc">Ordboksstorlek</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, upp till %2$,d ord</item>
         <item quantity="other">%1$s, upp till %2$,d ord</item>
-    </plurals>
-    <string name="languages_wordlist_title">Nedladdningsbar ordbok</string>
-    <string name="languages_wordlist_title_variant">Nedladdningsbar ordbok (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Upp till det %1$,d vanligaste ordet</item>
-        <item quantity="other">Upp till de %1$,d vanligaste orden</item>
     </plurals>
     <string name="layout_bottom_padding_info">Hela tangentbordet flyttas uppåt, bort från nederkanten och navigeringsfältet för gester. Öka detta om den nedersta raden är för nära skärmkanten, eller om du startar systemnavigeringen av misstag.</string>
     <string name="layout_bottom_padding_subtitle">Mer utrymme under tangenterna, ovanför navigeringsfältet</string>

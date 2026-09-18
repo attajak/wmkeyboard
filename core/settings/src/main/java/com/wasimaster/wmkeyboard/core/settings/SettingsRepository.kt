@@ -5852,6 +5852,13 @@ data class SuggestionStripSettings(
      */
     val importedOnlyLangs: Set<String> = emptySet(),
     /**
+     * Languages whose downloaded word-pair data (the n-gram pack) is switched
+     * off: the pack stays on the device but predictions stop reading it. The
+     * checkbox beside it on the language screen. Stored as the exceptions, like
+     * [importedOnlyLangs], so a language nobody has touched needs no entry.
+     */
+    val wordPairsOffLangs: Set<String> = emptySet(),
+    /**
      * Detect which language of the mix the current field is being written in
      * — from the words already in it — and lean suggestions and autocorrect
      * toward that language while it holds. Typing "ami tomake" on the English
@@ -5910,6 +5917,9 @@ data class SuggestionStripSettings(
      * opposed to the user's imported lists alone. See [importedOnlyLangs].
      */
     fun shippedDictionaryEnabledFor(langId: String): Boolean = langId !in importedOnlyLangs
+
+    /** Whether predictions read [langId]'s downloaded word-pair data. */
+    fun wordPairsEnabledFor(langId: String): Boolean = langId !in wordPairsOffLangs
 }
 
 /**
@@ -6342,6 +6352,7 @@ class SettingsRepository(private val context: Context) {
         }
         private val SPELLING_MAP_OFF_LANGS = stringSetPreferencesKey("spelling_map_off_langs")
         private val IMPORTED_ONLY_LANGS = stringSetPreferencesKey("imported_only_langs")
+        private val WORD_PAIRS_OFF_LANGS = stringSetPreferencesKey("word_pairs_off_langs")
         private val WORD_MENU_ITEMS = stringSetPreferencesKey("word_menu_items")
         private val WORD_RANK_CONTROL = stringPreferencesKey("word_rank_control")
         private val DELETE_EDITS_IMPORTED_LISTS = booleanPreferencesKey("delete_edits_imported_lists")
@@ -7799,6 +7810,8 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.suggestionStrip.spellingMapOffLangs,
                 importedOnlyLangs = p[IMPORTED_ONLY_LANGS]
                     ?: defaults.suggestionStrip.importedOnlyLangs,
+                wordPairsOffLangs = p[WORD_PAIRS_OFF_LANGS]
+                    ?: defaults.suggestionStrip.wordPairsOffLangs,
                 languageDetection = p[LANGUAGE_DETECTION]
                     ?: defaults.suggestionStrip.languageDetection,
                 languageDetectionStrength = p[LANGUAGE_DETECTION_STRENGTH]
@@ -11858,6 +11871,13 @@ class SettingsRepository(private val context: Context) {
         editPrefs {
             val off = it[IMPORTED_ONLY_LANGS].orEmpty()
             it[IMPORTED_ONLY_LANGS] = if (enabled) off - langId else off + langId
+        }
+
+    /** Turn one language's downloaded word-pair data on or off. */
+    suspend fun setWordPairsEnabled(langId: String, enabled: Boolean) =
+        editPrefs {
+            val off = it[WORD_PAIRS_OFF_LANGS].orEmpty()
+            it[WORD_PAIRS_OFF_LANGS] = if (enabled) off - langId else off + langId
         }
 
     /** Replaces the whole set of optional held-word menu items (#99). */

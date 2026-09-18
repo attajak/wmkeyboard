@@ -1967,20 +1967,9 @@
     <string name="languages_data_delete_body">%1$s turi atsisiųstą žodžių sąrašą arba jaustukų raktinius žodžius. Ištrinti juos ir atlaisvinti apie %2$s vietos?</string>
     <string name="languages_data_delete_dismiss_action">Palikti juos</string>
     <string name="languages_data_delete_title">Ištrinti atsisiųstus failus?</string>
-    <string name="languages_data_download_all_action">Atsisiųsti visus duomenis (apie %1$s)</string>
-    <string name="languages_data_download_all_info">Atsisiunčia žodžių sąrašą, jaustukų raktinius žodžius ir žodžių porų duomenis šiai kalbai. Įrenginyje jau esantys failai neatsisiunčiami iš naujo. Žemiau esančios eilutės atlieka tą patį po vieną failą.</string>
     <string name="languages_data_download_body">Klaviatūra gali atsisiųsti duomenis, kurių %1$s reikia geram numatymui ir taisymui: žodžių sąrašą, jaustukų raktinius žodžius ir žodžių porų duomenis, jei jie egzistuoja. Tai užima apie %2$s duomenų. Vėliau juos taip pat galite atsisiųsti kalbos ekrane.</string>
     <string name="languages_data_download_dismiss_action">Ne dabar</string>
     <string name="languages_data_download_title">Atsisiųsti kalbos duomenis?</string>
-    <string name="languages_data_title">Kalbos duomenys</string>
-    <string name="languages_dictionary_bundled">Ši kalba turi įdiegtą žodyną.</string>
-    <string name="languages_dictionary_bundled_more">Ši kalba turi įdiegtą žodyną. Atsisiųskite didesnį, kad gautumėte geresnių pasiūlymų.</string>
-    <string name="languages_dictionary_none_download">Ši kalba neturi įmontuoto žodyno. Atsisiųskite jį pasiūlymams ir automatiniam taisymui arba importuokite savo žodžių sąrašą.</string>
-    <string name="languages_dictionary_none_learn">Ši kalba neturi įtaisyto žodyno. Klaviatūra mokosi jūsų žodžių, kai rašote, ir galite importuoti savo žodžių sąrašą.</string>
-    <string name="languages_dictionary_title">Žodynas</string>
-    <string name="languages_dictionary_use_info">Kai išjungta, klaviatūra pamiršta šios kalbos sukomplektuotus ir atsisiųstus žodžius ir skaito tik jūsų importuotus žodžių sąrašus bei žodžius, kurių išmoko iš jūsų. Tas pats jungiklis rodomas žodyno juostoje (Eilutės ir juostos) ir, atvirkščiai, kaip „Naudoti tik mano žodžių sąrašus“ skiltyje „Pasirinktiniai žodynai“.</string>
-    <string name="languages_dictionary_use_subtitle">Siūlyti ir taisyti iš sujungto arba atsisiųsto sąrašo</string>
-    <string name="languages_dictionary_use_title">Naudoti žodžių sąrašą</string>
     <string name="languages_download_queued">Laukiama…</string>
     <string name="languages_emoji_dict_delete_desc">Ištrinti jaustukų raktinius žodžius</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1991,15 +1980,7 @@
         <item quantity="one">%1$,d jaustukas, %2$s</item>
         <item quantity="other">%1$,d jaustukai, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Jaustukų raktiniai žodžiai leidžia ieškoti jaustukų %1$s kalba. Jei įrašysite žodį „tortas“, rasite 🎂. Klaviatūra automatiškai atsisiunčia raktinius žodžius, kol kalba įjungta.</string>
-    <string name="languages_emoji_keywords_manual">Jaustukų raktažodžiai leidžia ieškoti jaustukų %1$s kalba. Jei įvesite žodį „tortas“, rasite 🎂. Automatiniai atsisiuntimai išjungti, todėl turite tai pradėti patys.</string>
-    <string name="languages_emoji_keywords_subtitle">Atsisiuntimai kiekvienai kalbai ir jūsų pačių importuoti duomenys</string>
     <string name="languages_emoji_keywords_title">Jaustukų raktažodžiai</string>
-    <string name="languages_emoji_keywords_unavailable">Kalbai %1$s dar nėra jaustukų raktažodžių. Jaustukų paieška atsako anglų kalba. Galite importuoti savo sąrašą.</string>
-    <string name="languages_emoji_keywords_use_info">Išjungus, atsisiųsti raktažodžiai ir bet koks paketas, kurį importavote šiai kalbai, lieka įrenginyje, bet nėra skaitomi, todėl jaustukų paieška ir jaustukų pasiūlymai šia kalba nebeveikia. Tas pats jungiklis rodomas žodyno juostoje (Eilutės ir juostos).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Ieškokite ir siūlykite jaustukus pagal jų pavadinimus šia kalba</string>
-    <string name="languages_emoji_keywords_use_title">Naudoti jaustukų raktinius žodžius</string>
-    <string name="languages_emoji_title">Jaustukai</string>
     <string name="languages_fancy_style_row_subtitle">Šriftas, kurį rašo išgalvota klaviatūra. Taip pat perjungiamas iš juostos virš klavišų.</string>
     <string name="languages_fancy_style_row_title">Išgalvotas stilius</string>
     <string name="languages_fancy_style_title">Stilius</string>
@@ -2068,16 +2049,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">Atsisiųsta %1$s</string>
     <string name="languages_wordlist_preparing">Ruošiamas žodynas…</string>
-    <string name="languages_wordlist_size_desc">Žodyno dydis</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, iki %2$,d žodžio</item>
         <item quantity="other">%1$s, iki %2$,d žodžių</item>
-    </plurals>
-    <string name="languages_wordlist_title">Atsisiunčiamas žodynas</string>
-    <string name="languages_wordlist_title_variant">Atsisiunčiamas žodynas (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Iki %1$,d dažniausiai vartojamo žodžio</item>
-        <item quantity="other">Iki %1$,d dažniausiai vartojamų žodžių</item>
     </plurals>
     <string name="layout_bottom_padding_info">Visa klaviatūra pasikelia aukštyn, toliau nuo apatinio krašto ir gestų navigacijos juostos. Padidinkite tai, jei apatinė eilutė yra per arti ekrano krašto arba jei netyčia įjungiate sistemos navigaciją.</string>
     <string name="layout_bottom_padding_subtitle">Daugiau vietos po klavišais, virš naršymo juostos</string>

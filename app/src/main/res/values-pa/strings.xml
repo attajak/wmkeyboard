@@ -1975,20 +1975,9 @@
     <string name="languages_data_delete_body">%1$s ਵਿੱਚ ਇੱਕ ਡਾਊਨਲੋਡ ਕੀਤੀ ਸ਼ਬਦ ਸੂਚੀ ਜਾਂ ਇਮੋਜੀ ਕੀਵਰਡ ਹਨ। ਕੀ ਉਹਨਾਂ ਨੂੰ ਮਿਟਾ ਕੇ ਲਗਭਗ %2$s ਸਟੋਰੇਜ ਵਾਪਸ ਪ੍ਰਾਪਤ ਕਰਨੀ ਹੈ?</string>
     <string name="languages_data_delete_dismiss_action">ਉਹਨਾਂ ਨੂੰ ਰੱਖੋ</string>
     <string name="languages_data_delete_title">ਡਾਊਨਲੋਡ ਕੀਤੀਆਂ ਫਾਈਲਾਂ ਨੂੰ ਮਿਟਾਉਣਾ ਹੈ?</string>
-    <string name="languages_data_download_all_action">ਸਾਰਾ ਡੇਟਾ ਡਾਊਨਲੋਡ ਕਰੋ (ਲਗਭਗ %1$s)</string>
-    <string name="languages_data_download_all_info">ਇਸ ਭਾਸ਼ਾ ਲਈ ਸ਼ਬਦ ਸੂਚੀ, ਇਮੋਜੀ ਕੀਵਰਡਸ ਅਤੇ ਸ਼ਬਦ-ਜੋੜਾ ਡੇਟਾ ਡਾਊਨਲੋਡ ਕਰਦਾ ਹੈ। ਡਿਵਾਈਸ \'ਤੇ ਪਹਿਲਾਂ ਤੋਂ ਮੌਜੂਦ ਫਾਈਲਾਂ ਨੂੰ ਦੁਬਾਰਾ ਡਾਊਨਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾਂਦਾ ਹੈ। ਹੇਠਾਂ ਦਿੱਤੀਆਂ ਕਤਾਰਾਂ ਇੱਕ ਸਮੇਂ ਵਿੱਚ ਇੱਕ ਫਾਈਲ ਲਈ ਅਜਿਹਾ ਹੀ ਕਰਦੀਆਂ ਹਨ।</string>
     <string name="languages_data_download_body">ਕੀਬੋਰਡ ਉਹ ਡੇਟਾ ਡਾਊਨਲੋਡ ਕਰ ਸਕਦਾ ਹੈ ਜਿਸਦੀ %1$s ਨੂੰ ਵਧੀਆ ਅਨੁਮਾਨ ਲਗਾਉਣ ਅਤੇ ਸਹੀ ਕਰਨ ਲਈ ਲੋੜ ਹੈ: ਇੱਕ ਸ਼ਬਦ ਸੂਚੀ, ਇਮੋਜੀ ਕੀਵਰਡਸ ਅਤੇ ਸ਼ਬਦ-ਜੋੜਾ ਡੇਟਾ, ਜੋ ਵੀ ਮੌਜੂਦ ਹੋਵੇ। ਇਹ ਲਗਭਗ %2$s ਡੇਟਾ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ। ਤੁਸੀਂ ਉਹਨਾਂ ਨੂੰ ਬਾਅਦ ਵਿੱਚ ਭਾਸ਼ਾ ਸਕ੍ਰੀਨ ਤੋਂ ਵੀ ਡਾਊਨਲੋਡ ਕਰ ਸਕਦੇ ਹੋ।</string>
     <string name="languages_data_download_dismiss_action">ਹੁਣ ਨਹੀਂ</string>
     <string name="languages_data_download_title">ਭਾਸ਼ਾ ਡੇਟਾ ਡਾਊਨਲੋਡ ਕਰੀਏ?</string>
-    <string name="languages_data_title">ਭਾਸ਼ਾ ਡੇਟਾ</string>
-    <string name="languages_dictionary_bundled">ਇਸ ਭਾਸ਼ਾ ਵਿੱਚ ਇੱਕ ਬਿਲਟ-ਇਨ ਡਿਕਸ਼ਨਰੀ ਸ਼ਾਮਲ ਹੈ।</string>
-    <string name="languages_dictionary_bundled_more">ਇਸ ਭਾਸ਼ਾ ਵਿੱਚ ਇੱਕ ਬਿਲਟ-ਇਨ ਡਿਕਸ਼ਨਰੀ ਸ਼ਾਮਲ ਹੈ। ਬਿਹਤਰ ਸੁਝਾਵਾਂ ਲਈ ਇੱਕ ਵੱਡੀ ਡਿਕਸ਼ਨਰੀ ਡਾਊਨਲੋਡ ਕਰੋ।</string>
-    <string name="languages_dictionary_none_download">ਇਸ ਭਾਸ਼ਾ ਵਿੱਚ ਕੋਈ ਬਿਲਟ-ਇਨ ਡਿਕਸ਼ਨਰੀ ਨਹੀਂ ਹੈ। ਸੁਝਾਵਾਂ ਅਤੇ ਆਟੋ-ਕਰੈਕਟ ਲਈ ਇੱਕ ਡਾਊਨਲੋਡ ਕਰੋ, ਜਾਂ ਆਪਣੀ ਖੁਦ ਦੀ ਸ਼ਬਦ ਸੂਚੀ ਆਯਾਤ ਕਰੋ।</string>
-    <string name="languages_dictionary_none_learn">ਇਸ ਭਾਸ਼ਾ ਵਿੱਚ ਕੋਈ ਇਨ-ਬਿਲਟ ਡਿਕਸ਼ਨਰੀ ਨਹੀਂ ਹੈ। ਜਿਵੇਂ ਤੁਸੀਂ ਟਾਈਪ ਕਰਦੇ ਹੋ, ਕੀਬੋਰਡ ਤੁਹਾਡੇ ਸ਼ਬਦ ਸਿੱਖ ਲੈਂਦਾ ਹੈ, ਅਤੇ ਤੁਸੀਂ ਆਪਣੀ ਸ਼ਬਦ ਸੂਚੀ ਨੂੰ ਇੰਪੋਰਟ ਕਰ ਸਕਦੇ ਹੋ।</string>
-    <string name="languages_dictionary_title">ਸ਼ਬਦਕੋਸ਼</string>
-    <string name="languages_dictionary_use_info">ਬੰਦ, ਕੀਬੋਰਡ ਇਸ ਭਾਸ਼ਾ ਲਈ ਬੰਡਲ ਅਤੇ ਡਾਊਨਲੋਡ ਕੀਤੇ ਸ਼ਬਦਾਂ ਨੂੰ ਭੁੱਲ ਜਾਂਦਾ ਹੈ ਅਤੇ ਸਿਰਫ ਉਹਨਾਂ ਸ਼ਬਦ ਸੂਚੀਆਂ ਨੂੰ ਪੜ੍ਹਦਾ ਹੈ ਜੋ ਤੁਸੀਂ ਆਯਾਤ ਕੀਤੀਆਂ ਹਨ, ਨਾਲ ਹੀ ਉਹ ਸ਼ਬਦ ਜੋ ਇਸਨੇ ਤੁਹਾਡੇ ਤੋਂ ਸਿੱਖੇ ਹਨ। ਉਹੀ ਸਵਿੱਚ ਡਿਕਸ਼ਨਰੀ ਬਾਰ (ਕਤਾਰਾਂ ਅਤੇ ਬਾਰਾਂ) \'ਤੇ ਦਿਖਾਈ ਦਿੰਦਾ ਹੈ ਅਤੇ, ਦੂਜੇ ਪਾਸੇ, ਕਸਟਮ ਡਿਕਸ਼ਨਰੀਆਂ ਦੇ ਅਧੀਨ \'ਸਿਰਫ ਮੇਰੀਆਂ ਸ਼ਬਦ ਸੂਚੀਆਂ ਦੀ ਵਰਤੋਂ ਕਰੋ\' ਦੇ ਰੂਪ ਵਿੱਚ।</string>
-    <string name="languages_dictionary_use_subtitle">ਬੰਡਲ ਜਾਂ ਡਾਊਨਲੋਡ ਕੀਤੀ ਸੂਚੀ ਤੋਂ ਸੁਝਾਅ ਅਤੇ ਸਹੀ ਕਰੋ</string>
-    <string name="languages_dictionary_use_title">ਸ਼ਬਦ ਸੂਚੀ ਦੀ ਵਰਤੋਂ ਕਰੋ</string>
     <string name="languages_download_queued">ਉਡੀਕ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ...</string>
     <string name="languages_emoji_dict_delete_desc">ਇਮੋਜੀ ਕੀਵਰਡਸ ਨੂੰ ਮਿਟਾਓ</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1999,15 +1988,7 @@
         <item quantity="one">%1$,d ਇਮੋਜੀ, %2$s</item>
         <item quantity="other">%1$,d ਇਮੋਜੀ, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">ਇਮੋਜੀ ਕੀਵਰਡ ਤੁਹਾਨੂੰ %1$s ਵਿੱਚ ਇਮੋਜੀ ਖੋਜਣ ਦਿੰਦੇ ਹਨ। ਜੇਕਰ ਤੁਸੀਂ \"ਕੇਕ\" ਲਈ ਇਸਦਾ ਸ਼ਬਦ ਟਾਈਪ ਕਰਦੇ ਹੋ, ਤਾਂ ਤੁਹਾਨੂੰ 🎂 ਮਿਲੇਗਾ। ਜਦੋਂ ਭਾਸ਼ਾ ਚਾਲੂ ਹੁੰਦੀ ਹੈ ਤਾਂ ਕੀਬੋਰਡ ਆਪਣੇ ਆਪ ਕੀਵਰਡ ਡਾਊਨਲੋਡ ਕਰ ਲੈਂਦਾ ਹੈ।</string>
-    <string name="languages_emoji_keywords_manual">ਇਮੋਜੀ ਕੀਵਰਡ ਤੁਹਾਨੂੰ %1$s ਵਿੱਚ ਇਮੋਜੀ ਖੋਜਣ ਦਿੰਦੇ ਹਨ। ਜੇਕਰ ਤੁਸੀਂ \"ਕੇਕ\" ਲਈ ਇਸਦਾ ਸ਼ਬਦ ਟਾਈਪ ਕਰਦੇ ਹੋ, ਤਾਂ ਤੁਹਾਨੂੰ 🎂 ਮਿਲਦਾ ਹੈ। ਆਟੋਮੈਟਿਕ ਡਾਊਨਲੋਡ ਬੰਦ ਹਨ, ਇਸ ਲਈ ਤੁਸੀਂ ਇਸਨੂੰ ਖੁਦ ਸ਼ੁਰੂ ਕਰੋ।</string>
-    <string name="languages_emoji_keywords_subtitle">ਹਰ ਭਾਸ਼ਾ ਲਈ ਡਾਊਨਲੋਡ, ਅਤੇ ਤੁਹਾਡੀਆਂ ਆਪਣੀਆਂ ਇੰਪੋਰਟਾਂ</string>
     <string name="languages_emoji_keywords_title">ਇਮੋਜੀ ਕੀਵਰਡਸ</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s ਲਈ ਅਜੇ ਕੋਈ ਇਮੋਜੀ ਕੀਵਰਡ ਉਪਲਬਧ ਨਹੀਂ ਹਨ। ਇਮੋਜੀ ਖੋਜ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਜਵਾਬ ਦਿੰਦੀ ਹੈ। ਤੁਸੀਂ ਆਪਣੀ ਖੁਦ ਦੀ ਸੂਚੀ ਆਯਾਤ ਕਰ ਸਕਦੇ ਹੋ।</string>
-    <string name="languages_emoji_keywords_use_info">ਬੰਦ ਹੋਣ \'ਤੇ, ਡਾਊਨਲੋਡ ਕੀਤੇ ਕੀਵਰਡ ਅਤੇ ਇਸ ਭਾਸ਼ਾ ਲਈ ਤੁਹਾਡੇ ਦੁਆਰਾ ਆਯਾਤ ਕੀਤਾ ਗਿਆ ਕੋਈ ਵੀ ਪੈਕ ਡਿਵਾਈਸ \'ਤੇ ਰਹਿੰਦਾ ਹੈ ਪਰ ਪੜ੍ਹਿਆ ਨਹੀਂ ਜਾਂਦਾ, ਇਸ ਲਈ ਇਮੋਜੀ ਖੋਜ ਅਤੇ ਇਮੋਜੀ ਸੁਝਾਅ ਇਸ ਭਾਸ਼ਾ ਵਿੱਚ ਜਵਾਬ ਦੇਣਾ ਬੰਦ ਕਰ ਦਿੰਦੇ ਹਨ। ਉਹੀ ਸਵਿੱਚ ਡਿਕਸ਼ਨਰੀ ਬਾਰ (ਕਤਾਰਾਂ ਅਤੇ ਬਾਰਾਂ) \'ਤੇ ਦਿਖਾਈ ਦਿੰਦਾ ਹੈ।</string>
-    <string name="languages_emoji_keywords_use_subtitle">ਇਸ ਭਾਸ਼ਾ ਵਿੱਚ ਇਮੋਜੀ ਨੂੰ ਉਹਨਾਂ ਦੇ ਨਾਮਾਂ ਦੁਆਰਾ ਖੋਜੋ ਅਤੇ ਸੁਝਾਓ</string>
-    <string name="languages_emoji_keywords_use_title">ਇਮੋਜੀ ਕੀਵਰਡਸ ਦੀ ਵਰਤੋਂ ਕਰੋ</string>
-    <string name="languages_emoji_title">ਇਮੋਜੀ</string>
     <string name="languages_fancy_style_row_subtitle">ਫੈਂਸੀ ਕੀਬੋਰਡ ਦੁਆਰਾ ਟਾਈਪ ਕੀਤੇ ਜਾਣ ਵਾਲੇ ਅੱਖਰ। ਕੁੰਜੀਆਂ ਦੇ ਉੱਪਰਲੀ ਪੱਟੀ ਤੋਂ ਵੀ ਬਦਲਿਆ ਜਾ ਸਕਦਾ ਹੈ।</string>
     <string name="languages_fancy_style_row_title">ਫੈਂਸੀ ਸਟਾਈਲ</string>
     <string name="languages_fancy_style_title">ਸ਼ੈਲੀ</string>
@@ -2076,16 +2057,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s ਡਾਊਨਲੋਡ ਕੀਤਾ ਗਿਆ</string>
     <string name="languages_wordlist_preparing">ਸ਼ਬਦਕੋਸ਼ ਤਿਆਰ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...</string>
-    <string name="languages_wordlist_size_desc">ਸ਼ਬਦਕੋਸ਼ ਦਾ ਆਕਾਰ</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, %2$,d ਸ਼ਬਦ ਤੱਕ</item>
         <item quantity="other">%1$s, %2$,d ਸ਼ਬਦਾਂ ਤੱਕ</item>
-    </plurals>
-    <string name="languages_wordlist_title">ਡਾਊਨਲੋਡ ਕਰਨ ਯੋਗ ਸ਼ਬਦਕੋਸ਼</string>
-    <string name="languages_wordlist_title_variant">ਡਾਊਨਲੋਡ ਕਰਨ ਯੋਗ ਸ਼ਬਦਕੋਸ਼ (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">%1$,d ਸਭ ਤੋਂ ਵੱਧ ਵਰਤੇ ਜਾਣ ਵਾਲੇ ਸ਼ਬਦ ਤੱਕ</item>
-        <item quantity="other">%1$,d ਸਭ ਤੋਂ ਵੱਧ ਵਰਤੇ ਜਾਣ ਵਾਲੇ ਸ਼ਬਦਾਂ ਤੱਕ</item>
     </plurals>
     <string name="layout_bottom_padding_info">ਪੂਰਾ ਕੀਬੋਰਡ ਉੱਪਰ ਵੱਲ ਵਧਦਾ ਹੈ, ਹੇਠਲੇ ਕਿਨਾਰੇ ਅਤੇ ਸੰਕੇਤ ਨੈਵੀਗੇਸ਼ਨ ਬਾਰ ਤੋਂ ਦੂਰ। ਜੇਕਰ ਹੇਠਲੀ ਕਤਾਰ ਸਕ੍ਰੀਨ ਦੇ ਕਿਨਾਰੇ ਦੇ ਬਹੁਤ ਨੇੜੇ ਹੈ, ਜਾਂ ਜੇਕਰ ਤੁਸੀਂ ਗਲਤੀ ਨਾਲ ਸਿਸਟਮ ਨੈਵੀਗੇਸ਼ਨ ਸ਼ੁਰੂ ਕਰਦੇ ਹੋ, ਤਾਂ ਇਸਨੂੰ ਵਧਾਓ।</string>
     <string name="layout_bottom_padding_subtitle">ਕੁੰਜੀਆਂ ਦੇ ਹੇਠਾਂ ਅਤੇ ਨੈਵੀਗੇਸ਼ਨ ਬਾਰ ਦੇ ਉੱਪਰ ਵਧੇਰੇ ਥਾਂ</string>

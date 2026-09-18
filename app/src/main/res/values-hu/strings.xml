@@ -1963,20 +1963,9 @@
     <string name="languages_data_delete_body">A(z) %1$s letöltött szólistával vagy hangulatjel-kulcsszavakkal rendelkezik. Törli őket, és visszakap kb. %2$s tárhelyet?</string>
     <string name="languages_data_delete_dismiss_action">Megtartás</string>
     <string name="languages_data_delete_title">Törli a letöltött fájlokat?</string>
-    <string name="languages_data_download_all_action">Összes adat letöltése (kb. %1$s)</string>
-    <string name="languages_data_download_all_info">Letölti a szójegyzéket, az emoji kulcsszavakat és a szópár-adatokat ehhez a nyelvhez. Az eszközön már meglévő fájlok nem töltődnek le újra. Az alábbi sorok ugyanezt teszik, fájlonként.</string>
     <string name="languages_data_download_body">A billentyűzet le tudja tölteni azokat az adatokat, amelyekre a %1$s-nek szüksége van a megfelelő előrejelzéshez és javításhoz: egy szójegyzéket, emoji kulcsszavakat és szó-pár adatokat, attól függően, hogy melyek léteznek. Ez körülbelül %2$s adatforgalmat igényel. Később a nyelvi képernyőről is letöltheted őket.</string>
     <string name="languages_data_download_dismiss_action">Nem most</string>
     <string name="languages_data_download_title">Letöltöd a nyelvi adatokat?</string>
-    <string name="languages_data_title">Nyelvi adatok</string>
-    <string name="languages_dictionary_bundled">Ez a nyelv beépített szótárt tartalmaz.</string>
-    <string name="languages_dictionary_bundled_more">Ez a nyelv beépített szótárt tartalmaz. Töltsön le egy nagyobbat a jobb javaslatokért.</string>
-    <string name="languages_dictionary_none_download">Ehhez a nyelvhez nincs beépített szótár. Töltsön le egyet a javaslatokhoz és az automatikus javításhoz, vagy importálja saját szólistáját.</string>
-    <string name="languages_dictionary_none_learn">Ehhez a nyelvhez nincs beépített szótár. A billentyűzet gépelés közben tanulja meg a szavaidat, és importálhatod a saját szólistádat is.</string>
-    <string name="languages_dictionary_title">Szótár</string>
-    <string name="languages_dictionary_use_info">Kikapcsolt állapotban a billentyűzet elfelejti az ehhez a nyelvhez tartozó kötegelt és letöltött szavakat, és csak az Ön által importált szójegyzékeket, valamint az Öntől tanult szavakat olvassa be. Ugyanez a kapcsoló megjelenik a szótársávon (Sorok és sávok), és fordítva, az Egyéni szótárak alatt a „Csak a saját szójegyzékeim használata” opcióként.</string>
-    <string name="languages_dictionary_use_subtitle">Javaslatok és javítások a beépített vagy letöltött listából</string>
-    <string name="languages_dictionary_use_title">Szólista használata</string>
     <string name="languages_download_queued">Várakozás…</string>
     <string name="languages_emoji_dict_delete_desc">Az emoji-kulcsszavak törlése</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1987,15 +1976,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Az emoji-kulcsszavakkal emojikat kereshet %1$s nyelven. Ha beírja a \"torta\" szót, megtalálja a 🎂 emojit. A billentyűzet automatikusan letölti a kulcsszavakat, amíg a nyelv be van kapcsolva.</string>
-    <string name="languages_emoji_keywords_manual">Az emojikulcsszavak lehetővé teszik az emojik keresését %1$s nyelven. Ha beírod a „torta” szót, megtalálod a 🎂-t. Az automatikus letöltések ki vannak kapcsolva, így ezt neked kell elindítanod.</string>
-    <string name="languages_emoji_keywords_subtitle">Letöltések minden nyelvhez, és saját importálások</string>
     <string name="languages_emoji_keywords_title">Emoji kulcsszavak</string>
-    <string name="languages_emoji_keywords_unavailable">Még nincsenek elérhető hangulatjel-kulcsszavak a(z) %1$s nyelvhez. A hangulatjel-keresés angolul válaszol. Importálhatja saját listáját.</string>
-    <string name="languages_emoji_keywords_use_info">Kikapcsolt állapotban a letöltött kulcsszavak és az ehhez a nyelvhez importált csomagok az eszközön maradnak, de nem kerülnek beolvasásra, így az emojikeresés és az emojijavaslatok nem fognak válaszolni ezen a nyelven. Ugyanez a kapcsoló megjelenik a szótársávon is (Sorok és sávok).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Hangulatjelek keresése és javaslása a nevük alapján ezen a nyelven</string>
-    <string name="languages_emoji_keywords_use_title">Hangulatjel-kulcsszavak használata</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">A betűtípus, amelyet a díszes billentyűzet használ. A billentyűk feletti sávból is váltható.</string>
     <string name="languages_fancy_style_row_title">Díszes stílus</string>
     <string name="languages_fancy_style_title">Stílus</string>
@@ -2064,16 +2045,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s letöltve</string>
     <string name="languages_wordlist_preparing">Szótár előkészítése…</string>
-    <string name="languages_wordlist_size_desc">Szótár mérete</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, legfeljebb %2$,d szó</item>
         <item quantity="other">%1$s, legfeljebb %2$,d szó</item>
-    </plurals>
-    <string name="languages_wordlist_title">Letölthető szótár</string>
-    <string name="languages_wordlist_title_variant">Letölthető szótár (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Legfeljebb a %1$,d leggyakoribb szó</item>
-        <item quantity="other">Legfeljebb a %1$,d leggyakoribb szó</item>
     </plurals>
     <string name="layout_bottom_padding_info">A teljes billentyűzet felfelé mozdul el, távol az alsó széltől és a gesztusnavigációs sávtól. Növelje ezt az értéket, ha az alsó sor túl közel van a képernyő széléhez, vagy ha véletlenül elindítja a rendszernavigációt.</string>
     <string name="layout_bottom_padding_subtitle">Több hely a billentyűk alatt, a navigációs sáv felett</string>

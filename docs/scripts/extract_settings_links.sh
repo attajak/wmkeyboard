@@ -18,7 +18,7 @@ if [ -z "${JAVA_HOME:-}" ] && [ -d "/Applications/Android Studio.app/Contents/jb
 fi
 
 cd "$REPO"
-WM_SETTINGS_LINKS_OUT="$OUT" ./gradlew :app:testFullDebugUnitTest \
+WM_SETTINGS_LINKS_OUT="$OUT" ./gradlew :app:testFullIntlDebugUnitTest \
   --tests 'com.wasimaster.wmkeyboard.app.SettingsLinksDump' --rerun
 test -s "$OUT" || { echo "no dump written to $OUT" >&2; exit 1; }
 echo "wrote $OUT ($(grep -c '"title"' "$OUT") entries)"

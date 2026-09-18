@@ -1962,20 +1962,9 @@
     <string name="languages_data_delete_body">%1$s에 다운로드된 단어 목록이나 이모지 키워드가 있습니다. 이를 삭제하고 약 %2$s의 저장 공간을 확보하시겠습니까?</string>
     <string name="languages_data_delete_dismiss_action">유지하기</string>
     <string name="languages_data_delete_title">다운로드한 파일을 삭제하시겠습니까?</string>
-    <string name="languages_data_download_all_action">모든 데이터 다운로드(약 %1$s)</string>
-    <string name="languages_data_download_all_info">이 언어에 대한 단어 목록, 이모지 키워드 및 단어 쌍 데이터를 다운로드합니다. 기기에 이미 있는 파일은 다시 다운로드되지 않습니다. 아래 행은 한 번에 하나의 파일씩 동일한 작업을 수행합니다.</string>
     <string name="languages_data_download_body">키보드는 예측 및 교정을 위해 %1$s에 필요한 데이터(단어 목록, 이모지 키워드, 단어 쌍 데이터 등 존재하는 데이터)를 다운로드할 수 있습니다. 이 작업에는 약 %2$s의 데이터가 사용됩니다. 나중에 언어 화면에서 다운로드할 수도 있습니다.</string>
     <string name="languages_data_download_dismiss_action">나중에</string>
     <string name="languages_data_download_title">언어 데이터를 다운로드하시겠습니까?</string>
-    <string name="languages_data_title">언어 데이터</string>
-    <string name="languages_dictionary_bundled">이 언어에는 내장 사전이 포함되어 있습니다.</string>
-    <string name="languages_dictionary_bundled_more">이 언어에는 기본 제공 사전이 포함되어 있습니다. 더 나은 제안을 받으려면 더 큰 사전을 다운로드하세요.</string>
-    <string name="languages_dictionary_none_download">이 언어에는 내장 사전이 없습니다. 제안 및 자동 수정을 위해 사전을 다운로드하거나 나만의 단어 목록을 가져오세요.</string>
-    <string name="languages_dictionary_none_learn">이 언어에는 내장 사전이 없습니다. 키보드가 입력하는 단어를 학습하며, 나만의 단어 목록을 가져올 수도 있습니다.</string>
-    <string name="languages_dictionary_title">사전</string>
-    <string name="languages_dictionary_use_info">끄면 키보드가 이 언어에 대해 번들로 제공되거나 다운로드된 단어를 잊고 사용자가 가져온 단어 목록과 사용자로부터 학습한 단어만 읽습니다. 동일한 스위치가 사전 표시줄(행 및 표시줄)에 나타나며, 반대로 사용자 지정 사전 아래의 \'내 단어 목록만 사용\'으로도 나타납니다.</string>
-    <string name="languages_dictionary_use_subtitle">번들 또는 다운로드된 목록에서 제안 및 수정</string>
-    <string name="languages_dictionary_use_title">단어 목록 사용</string>
     <string name="languages_download_queued">대기 중…</string>
     <string name="languages_emoji_dict_delete_desc">이모티콘 키워드 삭제</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1986,15 +1975,7 @@
         <item quantity="one">이모지 %1$,d개, %2$s</item>
         <item quantity="other">이모지 %1$,d개, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">이모티콘 키워드를 사용하면 %1$s에서 이모티콘을 검색할 수 있습니다. 예를 들어 \"케이크\"를 입력하면 🎂를 찾을 수 있습니다. 언어가 켜져 있는 동안 키보드가 키워드를 자동으로 다운로드합니다.</string>
-    <string name="languages_emoji_keywords_manual">이모지 키워드를 사용하면 %1$s에서 이모지를 검색할 수 있습니다. \"케이크\"에 해당하는 단어를 입력하면 🎂를 찾을 수 있습니다. 자동 다운로드가 꺼져 있으므로 직접 시작해야 합니다.</string>
-    <string name="languages_emoji_keywords_subtitle">모든 언어에 대한 다운로드 및 직접 가져오기</string>
     <string name="languages_emoji_keywords_title">이모지 키워드</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s에 사용할 수 있는 이모지 키워드가 아직 없습니다. 이모지 검색은 영어로 응답합니다. 직접 목록을 가져올 수 있습니다.</string>
-    <string name="languages_emoji_keywords_use_info">끄면 다운로드된 키워드와 이 언어에 대해 가져온 모든 팩이 기기에 남아 있지만 읽히지 않으므로, 이 언어에서는 이모지 검색 및 이모지 제안이 작동하지 않습니다. 동일한 스위치가 사전 표시줄(행 및 표시줄)에도 나타납니다.</string>
-    <string name="languages_emoji_keywords_use_subtitle">이 언어의 이름으로 이모지를 검색하고 추천받기</string>
-    <string name="languages_emoji_keywords_use_title">이모지 키워드 사용</string>
-    <string name="languages_emoji_title">이모지</string>
     <string name="languages_fancy_style_row_subtitle">멋진 키보드가 입력하는 글자체입니다. 키 위의 스트립에서도 전환할 수 있습니다.</string>
     <string name="languages_fancy_style_row_title">멋진 스타일</string>
     <string name="languages_fancy_style_title">스타일</string>
@@ -2063,16 +2044,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s 다운로드됨</string>
     <string name="languages_wordlist_preparing">사전 준비 중…</string>
-    <string name="languages_wordlist_size_desc">사전 크기</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, 최대 %2$,d단어</item>
         <item quantity="other">%1$s, 최대 %2$,d단어</item>
-    </plurals>
-    <string name="languages_wordlist_title">다운로드 가능한 사전</string>
-    <string name="languages_wordlist_title_variant">다운로드 가능한 사전 (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">가장 빈도가 높은 단어 최대 %1$,d개</item>
-        <item quantity="other">가장 빈도가 높은 단어 최대 %1$,d개</item>
     </plurals>
     <string name="layout_bottom_padding_info">키보드 전체가 아래쪽 가장자리와 제스처 탐색 바에서 위로 이동합니다. 아래쪽 행이 화면 가장자리에 너무 가깝거나 실수로 시스템 탐색이 시작되는 경우 이 값을 늘리세요.</string>
     <string name="layout_bottom_padding_subtitle">키 아래, 내비게이션 바 위의 여백 추가</string>

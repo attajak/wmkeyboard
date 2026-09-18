@@ -1981,20 +1981,9 @@
     <string name="languages_data_delete_body">%1$s-এ একটি ডাউনলোড করা শব্দের তালিকা বা ইমোজি কিওয়ার্ড আছে। এগুলি মুছে ফেললে কি প্রায় %2$s স্টোরেজ ফিরে পাবেন?</string>
     <string name="languages_data_delete_dismiss_action">সেগুলো রাখুন</string>
     <string name="languages_data_delete_title">ডাউনলোড করা ফাইলগুলো মুছে ফেলবেন?</string>
-    <string name="languages_data_download_all_action">সব ডেটা ডাউনলোড করুন (প্রায় %1$s)</string>
-    <string name="languages_data_download_all_info">এই ভাষার জন্য শব্দের তালিকা, ইমোজি কিওয়ার্ড এবং শব্দ-জোড়ার ডেটা ডাউনলোড করে। ডিভাইসে ইতিমধ্যে থাকা ফাইলগুলো পুনরায় ডাউনলোড করা হয় না। নিচের সারিগুলো একই কাজ একটি করে ফাইল হিসেবে করে।</string>
     <string name="languages_data_download_body">কীবোর্ডটি সঠিকভাবে অনুমান এবং সংশোধন করার জন্য প্রয়োজনীয় ডেটা %1$s ডাউনলোড করতে পারে: একটি শব্দ তালিকা, ইমোজি কিওয়ার্ড এবং শব্দ-জোড়া ডেটা, যার মধ্যে যা যা বিদ্যমান। এটি প্রায় %2$s ডেটা ব্যবহার করে। আপনি পরবর্তীতে ভাষা স্ক্রিন থেকেও এগুলো ডাউনলোড করতে পারেন।</string>
     <string name="languages_data_download_dismiss_action">এখন নয়</string>
     <string name="languages_data_download_title">ভাষার ডেটা ডাউনলোড করবেন?</string>
-    <string name="languages_data_title">ভাষার ডেটা</string>
-    <string name="languages_dictionary_bundled">এই ভাষায় একটি বিল্ট-ইন অভিধান অন্তর্ভুক্ত আছে।</string>
-    <string name="languages_dictionary_bundled_more">এই ভাষায় একটি বিল্ট-ইন ডিকশনারি অন্তর্ভুক্ত আছে। আরও ভালো পরামর্শের জন্য একটি বড় ডিকশনারি ডাউনলোড করুন।</string>
-    <string name="languages_dictionary_none_download">এই ভাষার কোনো বিল্ট-ইন অভিধান নেই। সাজেশন এবং অটোকারেক্টের জন্য একটি ডাউনলোড করুন, অথবা আপনার নিজস্ব শব্দের তালিকা ইম্পোর্ট করুন।</string>
-    <string name="languages_dictionary_none_learn">এই ভাষার কোনো বিল্ট-ইন অভিধান নেই। আপনি টাইপ করার সাথে সাথে কীবোর্ড আপনার শব্দগুলো শিখে নেয় এবং আপনি আপনার নিজের শব্দ তালিকা ইম্পোর্ট করতে পারেন।</string>
-    <string name="languages_dictionary_title">অভিধান</string>
-    <string name="languages_dictionary_use_info">বন্ধ থাকলে, কিবোর্ড এই ভাষার জন্য বান্ডেল করা এবং ডাউনলোড করা শব্দগুলো ভুলে যায় এবং শুধুমাত্র আপনার ইমপোর্ট করা শব্দ তালিকা এবং আপনার কাছ থেকে শেখা শব্দগুলো পড়ে। একই সুইচ ডিকশনারি বারে (রো এবং বার) দেখা যায় এবং কাস্টম ডিকশনারির অধীনে \'শুধুমাত্র আমার শব্দ তালিকা ব্যবহার করুন\' হিসেবেও থাকে।</string>
-    <string name="languages_dictionary_use_subtitle">বান্ডেল বা ডাউনলোড করা তালিকা থেকে পরামর্শ দিন এবং সংশোধন করুন</string>
-    <string name="languages_dictionary_use_title">শব্দ তালিকা ব্যবহার করুন</string>
     <string name="languages_download_queued">অপেক্ষা করা হচ্ছে…</string>
     <string name="languages_emoji_dict_delete_desc">ইমোজি কিওয়ার্ডগুলো মুছে ফেলুন</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -2005,15 +1994,7 @@
         <item quantity="one">%1$,d ইমোজি, %2$s</item>
         <item quantity="other">%1$,d ইমোজি, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">ইমোজি কিওয়ার্ড আপনাকে %1$s-এ ইমোজি অনুসন্ধান করতে দেয়। আপনি যদি \"cake\" এর জন্য এর শব্দটি টাইপ করেন, তবে আপনি 🎂 খুঁজে পাবেন। ভাষা চালু থাকা অবস্থায় কীবোর্ড স্বয়ংক্রিয়ভাবে কিওয়ার্ডগুলো ডাউনলোড করে।</string>
-    <string name="languages_emoji_keywords_manual">ইমোজি কিওয়ার্ড আপনাকে %1$s-এ ইমোজি খুঁজতে সাহায্য করে। আপনি যদি \"cake\"-এর জন্য এর শব্দটি টাইপ করেন, তবে আপনি 🎂 খুঁজে পাবেন। স্বয়ংক্রিয় ডাউনলোড বন্ধ আছে, তাই আপনাকে এটি নিজে শুরু করতে হবে।</string>
-    <string name="languages_emoji_keywords_subtitle">প্রতিটি ভাষার জন্য ডাউনলোড এবং আপনার নিজস্ব ইমপোর্ট</string>
     <string name="languages_emoji_keywords_title">ইমোজি কিওয়ার্ড</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s-এর জন্য এখনও কোনো ইমোজি কিওয়ার্ড উপলব্ধ নেই। ইমোজি সার্চ ইংরেজিতে উত্তর দেয়। আপনি আপনার নিজস্ব তালিকা ইমপোর্ট করতে পারেন।</string>
-    <string name="languages_emoji_keywords_use_info">বন্ধ থাকলে, ডাউনলোড করা কীওয়ার্ড এবং এই ভাষার জন্য আপনার আমদানি করা যেকোনো প্যাক ডিভাইসে থেকে যাবে কিন্তু পড়া হবে না, তাই ইমোজি অনুসন্ধান এবং ইমোজি পরামর্শ এই ভাষায় উত্তর দেওয়া বন্ধ করে দেবে। একই সুইচ ডিকশনারি বারেও (সারি এবং বার) দেখা যায়।</string>
-    <string name="languages_emoji_keywords_use_subtitle">এই ভাষায় ইমোজির নাম দিয়ে অনুসন্ধান এবং পরামর্শ দিন</string>
-    <string name="languages_emoji_keywords_use_title">ইমোজি কিওয়ার্ড ব্যবহার করুন</string>
-    <string name="languages_emoji_title">ইমোজি</string>
     <string name="languages_fancy_style_row_subtitle">ফ্যান্সি কিবোর্ড যে ধরনের অক্ষর টাইপ করে। কী-এর উপরের স্ট্রিপ থেকেও এটি পরিবর্তন করা যায়।</string>
     <string name="languages_fancy_style_row_title">ফ্যান্সি স্টাইল</string>
     <string name="languages_fancy_style_title">স্টাইল</string>
@@ -2082,16 +2063,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s ডাউনলোড হয়েছে</string>
     <string name="languages_wordlist_preparing">অভিধান প্রস্তুত করা হচ্ছে…</string>
-    <string name="languages_wordlist_size_desc">অভিধানের আকার</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, সর্বোচ্চ %2$,d শব্দ</item>
         <item quantity="other">%1$s, সর্বোচ্চ %2$,d শব্দ</item>
-    </plurals>
-    <string name="languages_wordlist_title">ডাউনলোডযোগ্য অভিধান</string>
-    <string name="languages_wordlist_title_variant">ডাউনলোডযোগ্য অভিধান (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">সর্বাধিক %1$,d টি ঘন ঘন ব্যবহৃত শব্দ পর্যন্ত</item>
-        <item quantity="other">সর্বাধিক %1$,d টি ঘন ঘন ব্যবহৃত শব্দ পর্যন্ত</item>
     </plurals>
     <string name="layout_bottom_padding_info">পুরো কীবোর্ডটি নিচের প্রান্ত এবং জেসচার নেভিগেশন বার থেকে উপরে উঠে যায়। যদি নিচের সারিটি স্ক্রিনের প্রান্তের খুব কাছাকাছি থাকে, অথবা আপনি ভুলবশত সিস্টেম নেভিগেশন শুরু করে ফেলেন, তবে এটি বাড়িয়ে দিন।</string>
     <string name="layout_bottom_padding_subtitle">কি-গুলোর নিচে এবং নেভিগেশন বারের উপরে আরও জায়গা</string>

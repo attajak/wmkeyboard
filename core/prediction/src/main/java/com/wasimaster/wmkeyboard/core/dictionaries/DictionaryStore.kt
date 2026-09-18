@@ -64,11 +64,20 @@ object DictionaryStore {
                 val main = File(dir, FILE_NAME)
                 main.isFile && !PackedTrieCodec.isReadable(main)
             }
-            .map { dir -> dir.also { it.deleteRecursively() }.name }
+            .map { dir -> dir.name.also { delete(filesDir, it) } }
             .sorted()
 
+    /**
+     * Deletes [langId]'s downloaded word list and nothing else. The folder is
+     * shared with the language's word-pair data (`ngrams.wmng`), which is its
+     * own item on the language screen with its own Delete.
+     */
     fun delete(filesDir: File, langId: String) {
-        File(root(filesDir), langId).takeIf { it.name != BUNDLED_DIR }?.deleteRecursively()
+        if (langId == BUNDLED_DIR) return
+        val dir = File(root(filesDir), langId)
+        File(dir, FILE_NAME).delete()
+        File(dir, "$FILE_NAME.part").delete()
+        File(dir, "source").delete()
     }
 
     /**

@@ -1969,20 +1969,9 @@
     <string name="languages_data_delete_body">%1$s hat eine heruntergeladene Wortliste oder Emoji-Schlüsselwörter. Möchtest du sie löschen und etwa %2$s Speicherplatz zurückgewinnen?</string>
     <string name="languages_data_delete_dismiss_action">Behalten</string>
     <string name="languages_data_delete_title">Die heruntergeladenen Dateien löschen?</string>
-    <string name="languages_data_download_all_action">Alle Daten herunterladen (ca. %1$s)</string>
-    <string name="languages_data_download_all_info">Lädt die Wortliste, die Emoji-Schlüsselwörter und die Wortpaar-Daten für diese Sprache herunter. Bereits auf dem Gerät vorhandene Dateien werden nicht erneut heruntergeladen. Die Zeilen unten führen dies für jede Datei einzeln aus.</string>
     <string name="languages_data_download_body">Die Tastatur kann die Daten herunterladen, die %1$s für gute Vorhersagen und Korrekturen benötigt: eine Wortliste, Emoji-Schlüsselwörter und Wortpaar-Daten, sofern diese existieren. Dies verbraucht etwa %2$s an Daten. Du kannst sie später auch über den Sprachbildschirm herunterladen.</string>
     <string name="languages_data_download_dismiss_action">Nicht jetzt</string>
     <string name="languages_data_download_title">Sprachdaten herunterladen?</string>
-    <string name="languages_data_title">Sprachdaten</string>
-    <string name="languages_dictionary_bundled">Diese Sprache enthält ein integriertes Wörterbuch.</string>
-    <string name="languages_dictionary_bundled_more">Diese Sprache enthält ein integriertes Wörterbuch. Lade ein größeres herunter, um bessere Vorschläge zu erhalten.</string>
-    <string name="languages_dictionary_none_download">Diese Sprache hat kein eingebautes Wörterbuch. Laden Sie eines für Vorschläge und Autokorrektur herunter oder importieren Sie Ihre eigene Wortliste.</string>
-    <string name="languages_dictionary_none_learn">Diese Sprache hat kein integriertes Wörterbuch. Die Tastatur lernt Ihre Wörter während der Eingabe, und Sie können Ihre eigene Wortliste importieren.</string>
-    <string name="languages_dictionary_title">Wörterbuch</string>
-    <string name="languages_dictionary_use_info">Ausgeschaltet vergisst die Tastatur die gebündelten und heruntergeladenen Wörter für diese Sprache und liest nur die Wortlisten, die Sie importiert haben, sowie die Wörter, die sie von Ihnen gelernt hat. Derselbe Schalter erscheint in der Wörterbuchleiste (Zeilen &amp; Leisten) und umgekehrt als \"Nur meine Wortlisten verwenden\" unter \"Benutzerdefinierte Wörterbücher\".</string>
-    <string name="languages_dictionary_use_subtitle">Aus der gebündelten oder heruntergeladenen Liste vorschlagen und korrigieren</string>
-    <string name="languages_dictionary_use_title">Wortliste verwenden</string>
     <string name="languages_download_queued">Wartet…</string>
     <string name="languages_emoji_dict_delete_desc">Emoji-Schlüsselwörter löschen</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1993,15 +1982,7 @@
         <item quantity="one">%1$,d Emoji, %2$s</item>
         <item quantity="other">%1$,d Emojis, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Emoji-Schlüsselwörter ermöglichen es Ihnen, nach Emojis in %1$s zu suchen. Wenn Sie das Wort für \"Kuchen\" eingeben, finden Sie 🎂. Die Tastatur lädt die Schlüsselwörter automatisch herunter, während die Sprache aktiviert ist.</string>
-    <string name="languages_emoji_keywords_manual">Emoji-Schlüsselwörter ermöglichen es Ihnen, nach Emojis in %1$s zu suchen. Wenn Sie das Wort für \"Kuchen\" eingeben, finden Sie 🎂. Automatische Downloads sind deaktiviert, daher starten Sie diesen manuell.</string>
-    <string name="languages_emoji_keywords_subtitle">Downloads für jede Sprache und Ihre eigenen Importe</string>
     <string name="languages_emoji_keywords_title">Emoji-Schlüsselwörter</string>
-    <string name="languages_emoji_keywords_unavailable">Für %1$s sind noch keine Emoji-Schlüsselwörter verfügbar. Die Emoji-Suche antwortet auf Englisch. Sie können Ihre eigene Liste importieren.</string>
-    <string name="languages_emoji_keywords_use_info">Wenn deaktiviert, bleiben die heruntergeladenen Schlüsselwörter und alle Pakete, die Sie für diese Sprache importiert haben, auf dem Gerät, werden aber nicht gelesen, sodass die Emoji-Suche und Emoji-Vorschläge in dieser Sprache nicht mehr reagieren. Derselbe Schalter erscheint in der Wörterbuchleiste (Zeilen &amp; Leisten).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Emoji anhand ihrer Namen in dieser Sprache suchen und vorschlagen</string>
-    <string name="languages_emoji_keywords_use_title">Emoji-Schlüsselwörter verwenden</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Die Schriftart, die die ausgefallene Tastatur verwendet. Kann auch über die Leiste über den Tasten umgeschaltet werden.</string>
     <string name="languages_fancy_style_row_title">Ausgefallener Stil</string>
     <string name="languages_fancy_style_title">Stil</string>
@@ -2070,16 +2051,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s heruntergeladen</string>
     <string name="languages_wordlist_preparing">Wörterbuch wird vorbereitet…</string>
-    <string name="languages_wordlist_size_desc">Wörterbuchgröße</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, bis zu %2$,d Wort</item>
         <item quantity="other">%1$s, bis zu %2$,d Wörtern</item>
-    </plurals>
-    <string name="languages_wordlist_title">Herunterladbares Wörterbuch</string>
-    <string name="languages_wordlist_title_variant">Herunterladbares Wörterbuch (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Bis zum %1$,d häufigsten Wort</item>
-        <item quantity="other">Bis zu den %1$,d häufigsten Wörtern</item>
     </plurals>
     <string name="layout_bottom_padding_info">Die gesamte Tastatur verschiebt sich nach oben, weg vom unteren Rand und der Gestennavigationsleiste. Erhöhen Sie diesen Wert, wenn die untere Reihe zu nah am Bildschirmrand liegt oder wenn Sie versehentlich die Systemnavigation starten.</string>
     <string name="layout_bottom_padding_subtitle">Mehr Platz unter den Tasten, über der Navigationsleiste</string>

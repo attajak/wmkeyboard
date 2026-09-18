@@ -1963,20 +1963,9 @@
     <string name="languages_data_delete_body">%1$s có danh sách từ hoặc từ khóa biểu tượng cảm xúc đã tải xuống. Xóa chúng và giải phóng khoảng %2$s dung lượng lưu trữ?</string>
     <string name="languages_data_delete_dismiss_action">Giữ lại</string>
     <string name="languages_data_delete_title">Xóa các tệp đã tải xuống?</string>
-    <string name="languages_data_download_all_action">Tải xuống tất cả dữ liệu (khoảng %1$s)</string>
-    <string name="languages_data_download_all_info">Tải xuống danh sách từ, từ khóa biểu tượng cảm xúc và dữ liệu cặp từ cho ngôn ngữ này. Các tệp đã có trên thiết bị sẽ không được tải xuống lại. Các hàng bên dưới thực hiện tương tự cho từng tệp một.</string>
     <string name="languages_data_download_body">Bàn phím có thể tải xuống dữ liệu mà %1$s cần để dự đoán và sửa lỗi tốt: danh sách từ, từ khóa biểu tượng cảm xúc và dữ liệu cặp từ, tùy thuộc vào những gì tồn tại. Việc này sử dụng khoảng %2$s dữ liệu. Bạn cũng có thể tải xuống sau từ màn hình ngôn ngữ.</string>
     <string name="languages_data_download_dismiss_action">Để sau</string>
     <string name="languages_data_download_title">Tải xuống dữ liệu ngôn ngữ?</string>
-    <string name="languages_data_title">Dữ liệu ngôn ngữ</string>
-    <string name="languages_dictionary_bundled">Ngôn ngữ này bao gồm một từ điển tích hợp.</string>
-    <string name="languages_dictionary_bundled_more">Ngôn ngữ này bao gồm một từ điển tích hợp. Tải xuống từ điển lớn hơn để có gợi ý tốt hơn.</string>
-    <string name="languages_dictionary_none_download">Ngôn ngữ này không có từ điển tích hợp. Hãy tải xuống một từ điển để nhận gợi ý và tự động sửa lỗi, hoặc nhập danh sách từ của riêng bạn.</string>
-    <string name="languages_dictionary_none_learn">Ngôn ngữ này không có từ điển tích hợp. Bàn phím sẽ học các từ của bạn khi bạn nhập và bạn có thể nhập danh sách từ của riêng mình.</string>
-    <string name="languages_dictionary_title">Từ điển</string>
-    <string name="languages_dictionary_use_info">Khi tắt, bàn phím sẽ quên các từ đi kèm và đã tải xuống cho ngôn ngữ này và chỉ đọc các danh sách từ bạn đã nhập, cộng với các từ nó đã học được từ bạn. Công tắc tương tự xuất hiện trên thanh từ điển (Hàng &amp; thanh) và ngược lại, dưới dạng Chỉ sử dụng danh sách từ của tôi trong Từ điển tùy chỉnh.</string>
-    <string name="languages_dictionary_use_subtitle">Gợi ý và sửa lỗi từ danh sách đi kèm hoặc đã tải xuống</string>
-    <string name="languages_dictionary_use_title">Sử dụng danh sách từ</string>
     <string name="languages_download_queued">Đang chờ…</string>
     <string name="languages_emoji_dict_delete_desc">Xóa các từ khóa biểu tượng cảm xúc</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1987,15 +1976,7 @@
         <item quantity="one">%1$,d biểu tượng cảm xúc, %2$s</item>
         <item quantity="other">%1$,d biểu tượng cảm xúc, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Từ khóa biểu tượng cảm xúc cho phép bạn tìm kiếm biểu tượng cảm xúc bằng %1$s. Nếu bạn nhập từ \"bánh kem\", bạn sẽ tìm thấy 🎂. Bàn phím sẽ tự động tải xuống các từ khóa khi ngôn ngữ được bật.</string>
-    <string name="languages_emoji_keywords_manual">Từ khóa biểu tượng cảm xúc cho phép bạn tìm kiếm biểu tượng cảm xúc bằng %1$s. Nếu bạn nhập từ \"bánh\", bạn sẽ tìm thấy 🎂. Tự động tải xuống đang tắt, vì vậy bạn hãy tự bắt đầu việc này.</string>
-    <string name="languages_emoji_keywords_subtitle">Tải xuống cho mọi ngôn ngữ và các mục nhập của riêng bạn</string>
     <string name="languages_emoji_keywords_title">Từ khóa biểu tượng cảm xúc</string>
-    <string name="languages_emoji_keywords_unavailable">Chưa có từ khóa biểu tượng cảm xúc nào cho %1$s. Tìm kiếm biểu tượng cảm xúc trả lời bằng tiếng Anh. Bạn có thể nhập danh sách của riêng mình.</string>
-    <string name="languages_emoji_keywords_use_info">Khi tắt, các từ khóa đã tải xuống và bất kỳ gói nào bạn đã nhập cho ngôn ngữ này vẫn nằm trên thiết bị nhưng không được đọc, vì vậy tìm kiếm và gợi ý biểu tượng cảm xúc sẽ ngừng phản hồi bằng ngôn ngữ này. Công tắc tương tự xuất hiện trên thanh từ điển (Hàng &amp; thanh).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Tìm kiếm và gợi ý biểu tượng cảm xúc theo tên của chúng bằng ngôn ngữ này</string>
-    <string name="languages_emoji_keywords_use_title">Sử dụng từ khóa biểu tượng cảm xúc</string>
-    <string name="languages_emoji_title">Biểu tượng cảm xúc</string>
     <string name="languages_fancy_style_row_subtitle">Kiểu chữ mà bàn phím kiểu cách sử dụng. Cũng có thể chuyển đổi từ dải phía trên các phím.</string>
     <string name="languages_fancy_style_row_title">Kiểu cách điệu</string>
     <string name="languages_fancy_style_title">Kiểu</string>
@@ -2064,16 +2045,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">Đã tải xuống %1$s</string>
     <string name="languages_wordlist_preparing">Đang chuẩn bị từ điển…</string>
-    <string name="languages_wordlist_size_desc">Kích thước từ điển</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, tối đa %2$,d từ</item>
         <item quantity="other">%1$s, tối đa %2$,d từ</item>
-    </plurals>
-    <string name="languages_wordlist_title">Từ điển có thể tải xuống</string>
-    <string name="languages_wordlist_title_variant">Từ điển có thể tải xuống (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Tối đa %1$,d từ phổ biến nhất</item>
-        <item quantity="other">Tối đa %1$,d từ phổ biến nhất</item>
     </plurals>
     <string name="layout_bottom_padding_info">Toàn bộ bàn phím sẽ di chuyển lên trên, cách xa cạnh dưới và thanh điều hướng bằng cử chỉ. Hãy tăng khoảng cách này nếu hàng dưới cùng quá gần cạnh màn hình hoặc nếu bạn vô tình kích hoạt điều hướng hệ thống.</string>
     <string name="layout_bottom_padding_subtitle">Thêm khoảng trống bên dưới các phím, phía trên thanh điều hướng</string>

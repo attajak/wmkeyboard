@@ -1970,20 +1970,9 @@
     <string name="languages_data_delete_body">%1$s er með niðurhalaðan orðalista eða emoji-leitarorð. Eyða þeim og fá um %2$s af geymsluplássi til baka?</string>
     <string name="languages_data_delete_dismiss_action">Halda þeim</string>
     <string name="languages_data_delete_title">Eyða niðurhölðum skrám?</string>
-    <string name="languages_data_download_all_action">Sækja öll gögn (um %1$s)</string>
-    <string name="languages_data_download_all_info">Sækir orðalistann, emoji-leitarorðin og orðapör fyrir þetta tungumál. Skrár sem þegar eru á tækinu verða ekki sóttar aftur. Raðirnar hér að neðan gera það sama, eina skrá í einu.</string>
     <string name="languages_data_download_body">Lyklaborðið getur hlaðið niður gögnunum sem %1$s þarf til að spá fyrir um og leiðrétta vel: orðalista, emoji-lykilorð og orðapör, eftir því hvað er til. Þetta notar um %2$s af gögnum. Þú getur líka hlaðið þeim niður síðar af tungumálaskjánum.</string>
     <string name="languages_data_download_dismiss_action">Ekki núna</string>
     <string name="languages_data_download_title">Sækja tungumálagögn?</string>
-    <string name="languages_data_title">Tungumálagögn</string>
-    <string name="languages_dictionary_bundled">Þetta tungumál inniheldur innbyggða orðabók.</string>
-    <string name="languages_dictionary_bundled_more">Þetta tungumál inniheldur innbyggða orðabók. Sæktu stærri orðabók fyrir betri tillögur.</string>
-    <string name="languages_dictionary_none_download">Þetta tungumál hefur enga innbyggða orðabók. Halaðu niður einni fyrir tillögur og sjálfvirka leiðréttingu, eða flyttu inn þinn eigin orðalista.</string>
-    <string name="languages_dictionary_none_learn">Þetta tungumál hefur enga innbyggða orðabók. Lyklaborðið lærir orðin þín eftir því sem þú skrifar, og þú getur flutt inn þinn eigin orðalista.</string>
-    <string name="languages_dictionary_title">Orðabók</string>
-    <string name="languages_dictionary_use_info">Ef slökkt er á þessu gleymir lyklaborðið innbyggðum og niðurhölðum orðum fyrir þetta tungumál og les aðeins orðalistana sem þú fluttir inn, auk orðanna sem það lærði af þér. Sami rofi birtist á orðabókarstikunni (Raðir og stikur) og, öfugt, sem Nota aðeins mína orðalista undir Sérsniðnar orðabækur.</string>
-    <string name="languages_dictionary_use_subtitle">Stinga upp á og leiðrétta úr innbyggða eða niðurhalaða listanum</string>
-    <string name="languages_dictionary_use_title">Nota orðalistann</string>
     <string name="languages_download_queued">Bíður…</string>
     <string name="languages_emoji_dict_delete_desc">Eyða emoji-leitarorðum</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1994,15 +1983,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Lykilorð fyrir emoji gera þér kleift að leita að emoji á %1$s. Ef þú skrifar orðið fyrir „kaka“, finnurðu 🎂. Lyklaborðið sækir lykilorðin sjálfkrafa á meðan tungumálið er virkt.</string>
-    <string name="languages_emoji_keywords_manual">Emoji-lykilorð leyfa þér að leita að emoji á %1$s. Ef þú skrifar orðið fyrir \"kaka\", finnurðu 🎂. Sjálfvirk niðurhal er óvirkt, svo þú verður að ræsa þetta sjálfur.</string>
-    <string name="languages_emoji_keywords_subtitle">Niðurhal fyrir hvert tungumál, og þín eigin innflutningur</string>
     <string name="languages_emoji_keywords_title">Emoji-leitarorð</string>
-    <string name="languages_emoji_keywords_unavailable">Engir leitarorð fyrir emoji eru í boði fyrir %1$s enn sem komið er. Emoji-leit svarar á ensku. Þú getur flutt inn þinn eigin lista.</string>
-    <string name="languages_emoji_keywords_use_info">Ef slökkt er á þessu, verða niðurhalaðir lykilorð og pakkar sem þú fluttir inn fyrir þetta tungumál áfram í tækinu en eru ekki lesnir, svo emoji-leit og emoji-tillögur hætta að svara á þessu tungumáli. Sami rofi birtist á orðabókarstikunni (Raðir og stikur).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Leitaðu að og fáðu tillögur um emoji eftir nöfnum þeirra á þessu tungumáli</string>
-    <string name="languages_emoji_keywords_use_title">Nota leitarorð fyrir emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Leturgerðin sem fínn lyklaborðið notar. Einnig hægt að breyta frá borðanum fyrir ofan lyklana.</string>
     <string name="languages_fancy_style_row_title">Flottur stíll</string>
     <string name="languages_fancy_style_title">Stíll</string>
@@ -2071,16 +2052,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s sótt</string>
     <string name="languages_wordlist_preparing">Undirbý orðabókina…</string>
-    <string name="languages_wordlist_size_desc">Stærð orðabókar</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, allt að %2$,d orð</item>
         <item quantity="other">%1$s, allt að %2$,d orð</item>
-    </plurals>
-    <string name="languages_wordlist_title">Orðabók sem hægt er að hlaða niður</string>
-    <string name="languages_wordlist_title_variant">Niðurhalanleg orðabók (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Allt að %1$,d algengasta orðið</item>
-        <item quantity="other">Allt að %1$,d algengustu orðin</item>
     </plurals>
     <string name="layout_bottom_padding_info">Allt lyklaborðið færist upp, fjarri neðri brúninni og bendingastikunni. Auktu þetta ef neðsta röðin er of nálægt brún skjásins, eða ef þú ræsir kerfisleiðsögnina fyrir mistök.</string>
     <string name="layout_bottom_padding_subtitle">Meira pláss fyrir neðan takkana, fyrir ofan leiðsögustikuna</string>

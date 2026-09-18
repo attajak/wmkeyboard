@@ -1977,20 +1977,9 @@
     <string name="languages_data_delete_body">%1$s ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಪದಗಳ ಪಟ್ಟಿ ಅಥವಾ ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳನ್ನು ಹೊಂದಿದೆ. ಅವುಗಳನ್ನು ಅಳಿಸಿ ಮತ್ತು ಸುಮಾರು %2$s ಸಂಗ್ರಹಣೆಯನ್ನು ಮರಳಿ ಪಡೆಯುವುದೇ?</string>
     <string name="languages_data_delete_dismiss_action">ಅವುಗಳನ್ನು ಇರಿಸಿಕೊಳ್ಳಿ</string>
     <string name="languages_data_delete_title">ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್‌ಗಳನ್ನು ಅಳಿಸಬೇಕೆ?</string>
-    <string name="languages_data_download_all_action">ಎಲ್ಲಾ ಡೇಟಾವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ (ಸುಮಾರು %1$s)</string>
-    <string name="languages_data_download_all_info">ಈ ಭಾಷೆಗಾಗಿ ಪದಗಳ ಪಟ್ಟಿ, ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳು ಮತ್ತು ಪದ-ಜೋಡಿ ಡೇಟಾವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡುತ್ತದೆ. ಈಗಾಗಲೇ ಸಾಧನದಲ್ಲಿರುವ ಫೈಲ್‌ಗಳನ್ನು ಮತ್ತೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ. ಕೆಳಗಿನ ಸಾಲುಗಳು ಒಂದೇ ಸಮಯದಲ್ಲಿ ಒಂದು ಫೈಲ್ ಅನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡುತ್ತವೆ.</string>
     <string name="languages_data_download_body">ಕೀಬೋರ್ಡ್ ಊಹಿಸಲು ಮತ್ತು ಸರಿಯಾಗಿ ತಿದ್ದಲು ಅಗತ್ಯವಿರುವ ಡೇಟಾವನ್ನು %1$s ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದು: ಪದಗಳ ಪಟ್ಟಿ, ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳು ಮತ್ತು ಪದ-ಜೋಡಿ ಡೇಟಾ, ಇವುಗಳಲ್ಲಿ ಯಾವುದು ಅಸ್ತಿತ್ವದಲ್ಲಿದೆಯೋ ಅದು. ಇದು ಸುಮಾರು %2$s ಡೇಟಾವನ್ನು ಬಳಸುತ್ತದೆ. ನೀವು ಅವುಗಳನ್ನು ನಂತರ ಭಾಷೆಯ ಪರದೆಯಿಂದಲೂ ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದು.</string>
     <string name="languages_data_download_dismiss_action">ಈಗ ಬೇಡ</string>
     <string name="languages_data_download_title">ಭಾಷಾ ಡೇಟಾವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಬೇಕೆ?</string>
-    <string name="languages_data_title">ಭಾಷಾ ಡೇಟಾ</string>
-    <string name="languages_dictionary_bundled">ಈ ಭಾಷೆಯು ಅಂತರ್ನಿರ್ಮಿತ ನಿಘಂಟನ್ನು ಒಳಗೊಂಡಿದೆ.</string>
-    <string name="languages_dictionary_bundled_more">ಈ ಭಾಷೆಯು ಅಂತರ್ನಿರ್ಮಿತ ನಿಘಂಟನ್ನು ಒಳಗೊಂಡಿದೆ. ಉತ್ತಮ ಸಲಹೆಗಳಿಗಾಗಿ ದೊಡ್ಡದನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.</string>
-    <string name="languages_dictionary_none_download">ಈ ಭಾಷೆಗೆ ಯಾವುದೇ ಅಂತರ್ನಿರ್ಮಿತ ನಿಘಂಟು ಇಲ್ಲ. ಸಲಹೆಗಳು ಮತ್ತು ಸ್ವಯಂ-ತಿದ್ದುಪಡಿಗಾಗಿ ಒಂದನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ ಅಥವಾ ನಿಮ್ಮ ಸ್ವಂತ ಪದಗಳ ಪಟ್ಟಿಯನ್ನು ಆಮದು ಮಾಡಿಕೊಳ್ಳಿ.</string>
-    <string name="languages_dictionary_none_learn">ಈ ಭಾಷೆಗೆ ಯಾವುದೇ ಅಂತರ್ನಿರ್ಮಿತ ನಿಘಂಟು ಇಲ್ಲ. ನೀವು ಟೈಪ್ ಮಾಡುವಾಗ ಕೀಬೋರ್ಡ್ ನಿಮ್ಮ ಪದಗಳನ್ನು ಕಲಿಯುತ್ತದೆ ಮತ್ತು ನೀವು ನಿಮ್ಮ ಸ್ವಂತ ಪದಗಳ ಪಟ್ಟಿಯನ್ನು ಆಮದು ಮಾಡಿಕೊಳ್ಳಬಹುದು.</string>
-    <string name="languages_dictionary_title">ನಿಘಂಟು</string>
-    <string name="languages_dictionary_use_info">ಆಫ್ ಮಾಡಿದರೆ, ಕೀಬೋರ್ಡ್ ಈ ಭಾಷೆಗಾಗಿ ಬಂಡಲ್ ಮಾಡಿದ ಮತ್ತು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಪದಗಳನ್ನು ಮರೆತುಬಿಡುತ್ತದೆ ಮತ್ತು ನೀವು ಆಮದು ಮಾಡಿಕೊಂಡ ಪದಗಳ ಪಟ್ಟಿಗಳನ್ನು ಮಾತ್ರ ಓದುತ್ತದೆ, ಜೊತೆಗೆ ಅದು ನಿಮ್ಮಿಂದ ಕಲಿತ ಪದಗಳನ್ನು ಓದುತ್ತದೆ. ಇದೇ ಸ್ವಿಚ್ ಡಿಕ್ಷನರಿ ಬಾರ್‌ನಲ್ಲಿ (ಸಾಲುಗಳು ಮತ್ತು ಬಾರ್‌ಗಳು) ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತದೆ ಮತ್ತು, ಇನ್ನೊಂದು ರೀತಿಯಲ್ಲಿ, ಕಸ್ಟಮ್ ಡಿಕ್ಷನರಿಗಳ ಅಡಿಯಲ್ಲಿ \'ನನ್ನ ಪದಗಳ ಪಟ್ಟಿಗಳನ್ನು ಮಾತ್ರ ಬಳಸಿ\' ಎಂದು ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತದೆ.</string>
-    <string name="languages_dictionary_use_subtitle">ಬಂಡಲ್ ಮಾಡಿದ ಅಥವಾ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಪಟ್ಟಿಯಿಂದ ಸಲಹೆ ನೀಡಿ ಮತ್ತು ಸರಿಪಡಿಸಿ</string>
-    <string name="languages_dictionary_use_title">ಪದಗಳ ಪಟ್ಟಿಯನ್ನು ಬಳಸಿ</string>
     <string name="languages_download_queued">ಕಾಯಲಾಗುತ್ತಿದೆ…</string>
     <string name="languages_emoji_dict_delete_desc">ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳನ್ನು ಅಳಿಸಿ</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -2001,15 +1990,7 @@
         <item quantity="one">%1$,d ಎಮೋಜಿ, %2$s</item>
         <item quantity="other">%1$,d ಎಮೋಜಿಗಳು, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳು %1$s ನಲ್ಲಿ ಎಮೋಜಿಯನ್ನು ಹುಡುಕಲು ನಿಮಗೆ ಅನುಮತಿಸುತ್ತದೆ. ನೀವು \"ಕೇಕ್\" ಗಾಗಿ ಅದರ ಪದವನ್ನು ಟೈಪ್ ಮಾಡಿದರೆ, ನೀವು 🎂 ಅನ್ನು ಕಾಣುತ್ತೀರಿ. ಭಾಷೆ ಆನ್ ಆಗಿರುವಾಗ ಕೀಬೋರ್ಡ್ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಕೀವರ್ಡ್‌ಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡುತ್ತದೆ.</string>
-    <string name="languages_emoji_keywords_manual">ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳು ನಿಮಗೆ %1$s ನಲ್ಲಿ ಎಮೋಜಿಯನ್ನು ಹುಡುಕಲು ಅನುವು ಮಾಡಿಕೊಡುತ್ತವೆ. ನೀವು \"cake\" ಗಾಗಿ ಅದರ ಪದವನ್ನು ಟೈಪ್ ಮಾಡಿದರೆ, ನೀವು 🎂 ಅನ್ನು ಕಾಣುತ್ತೀರಿ. ಸ್ವಯಂಚಾಲಿತ ಡೌನ್‌ಲೋಡ್‌ಗಳು ಆಫ್ ಆಗಿವೆ, ಆದ್ದರಿಂದ ನೀವು ಇದನ್ನು ನೀವೇ ಪ್ರಾರಂಭಿಸಬೇಕು.</string>
-    <string name="languages_emoji_keywords_subtitle">ಪ್ರತಿ ಭಾಷೆಗೆ ಡೌನ್‌ಲೋಡ್‌ಗಳು, ಮತ್ತು ನಿಮ್ಮ ಸ್ವಂತ ಆಮದುಗಳು</string>
     <string name="languages_emoji_keywords_title">ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳು</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s ಗಾಗಿ ಇನ್ನೂ ಯಾವುದೇ ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳು ಲಭ್ಯವಿಲ್ಲ. ಎಮೋಜಿ ಹುಡುಕಾಟವು ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಉತ್ತರಿಸುತ್ತದೆ. ನೀವು ನಿಮ್ಮ ಸ್ವಂತ ಪಟ್ಟಿಯನ್ನು ಆಮದು ಮಾಡಿಕೊಳ್ಳಬಹುದು.</string>
-    <string name="languages_emoji_keywords_use_info">ಆಫ್, ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಕೀವರ್ಡ್‌ಗಳು ಮತ್ತು ಈ ಭಾಷೆಗಾಗಿ ನೀವು ಆಮದು ಮಾಡಿಕೊಂಡ ಯಾವುದೇ ಪ್ಯಾಕ್ ಸಾಧನದಲ್ಲಿ ಉಳಿಯುತ್ತದೆ ಆದರೆ ಓದಲಾಗುವುದಿಲ್ಲ, ಆದ್ದರಿಂದ ಎಮೋಜಿ ಹುಡುಕಾಟ ಮತ್ತು ಎಮೋಜಿ ಸಲಹೆಗಳು ಈ ಭಾಷೆಯಲ್ಲಿ ಉತ್ತರಿಸುವುದನ್ನು ನಿಲ್ಲಿಸುತ್ತವೆ. ಅದೇ ಸ್ವಿಚ್ ಡಿಕ್ಷನರಿ ಬಾರ್‌ನಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತದೆ (ಸಾಲುಗಳು ಮತ್ತು ಬಾರ್‌ಗಳು).</string>
-    <string name="languages_emoji_keywords_use_subtitle">ಈ ಭಾಷೆಯಲ್ಲಿ ಎಮೋಜಿಗಳನ್ನು ಅವುಗಳ ಹೆಸರುಗಳಿಂದ ಹುಡುಕಿ ಮತ್ತು ಸೂಚಿಸಿ</string>
-    <string name="languages_emoji_keywords_use_title">ಎಮೋಜಿ ಕೀವರ್ಡ್‌ಗಳನ್ನು ಬಳಸಿ</string>
-    <string name="languages_emoji_title">ಎಮೋಜಿ</string>
     <string name="languages_fancy_style_row_subtitle">ಫ್ಯಾನ್ಸಿ ಕೀಬೋರ್ಡ್ ಟೈಪ್ ಮಾಡುವ ಅಕ್ಷರಶೈಲಿ. ಕೀಗಳ ಮೇಲಿನ ಪಟ್ಟಿಯಿಂದಲೂ ಬದಲಾಯಿಸಬಹುದು.</string>
     <string name="languages_fancy_style_row_title">ಫ್ಯಾನ್ಸಿ ಶೈಲಿ</string>
     <string name="languages_fancy_style_title">ಶೈಲಿ</string>
@@ -2078,16 +2059,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s ಡೌನ್‌ಲೋಡ್ ಆಗಿದೆ</string>
     <string name="languages_wordlist_preparing">ನಿಘಂಟನ್ನು ಸಿದ್ಧಪಡಿಸಲಾಗುತ್ತಿದೆ...</string>
-    <string name="languages_wordlist_size_desc">ನಿಘಂಟಿನ ಗಾತ್ರ</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, %2$,d ಪದದವರೆಗೆ</item>
         <item quantity="other">%1$s, %2$,d ಪದಗಳವರೆಗೆ</item>
-    </plurals>
-    <string name="languages_wordlist_title">ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದಾದ ನಿಘಂಟು</string>
-    <string name="languages_wordlist_title_variant">ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದಾದ ನಿಘಂಟು (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">%1$,d ಅತಿ ಹೆಚ್ಚು ಬಳಸುವ ಪದದವರೆಗೆ</item>
-        <item quantity="other">%1$,d ಅತಿ ಹೆಚ್ಚು ಬಳಸುವ ಪದಗಳವರೆಗೆ</item>
     </plurals>
     <string name="layout_bottom_padding_info">ಇಡೀ ಕೀಬೋರ್ಡ್ ಮೇಲಕ್ಕೆ ಚಲಿಸುತ್ತದೆ, ಕೆಳಗಿನ ಅಂಚು ಮತ್ತು ಗೆಸ್ಚರ್ ನ್ಯಾವಿಗೇಶನ್ ಬಾರ್‌ನಿಂದ ದೂರ ಸರಿಯುತ್ತದೆ. ಕೆಳಗಿನ ಸಾಲು ಪರದೆಯ ಅಂಚಿಗೆ ತುಂಬಾ ಹತ್ತಿರದಲ್ಲಿದ್ದರೆ ಅಥವಾ ನೀವು ತಪ್ಪಾಗಿ ಸಿಸ್ಟಮ್ ನ್ಯಾವಿಗೇಶನ್ ಅನ್ನು ಪ್ರಾರಂಭಿಸಿದರೆ, ಅದನ್ನು ಹೆಚ್ಚಿಸಿ.</string>
     <string name="layout_bottom_padding_subtitle">ಕೀಲಿಗಳ ಕೆಳಗೆ, ನ್ಯಾವಿಗೇಷನ್ ಬಾರ್‌ಗಿಂತ ಮೇಲೆ ಹೆಚ್ಚಿನ ಸ್ಥಳ</string>

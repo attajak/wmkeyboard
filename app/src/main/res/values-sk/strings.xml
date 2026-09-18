@@ -1968,20 +1968,9 @@
     <string name="languages_data_delete_body">%1$s má stiahnutý zoznam slov alebo kľúčové slová emoji. Odstrániť ich a získať späť približne %2$s úložného priestoru?</string>
     <string name="languages_data_delete_dismiss_action">Ponechať ich</string>
     <string name="languages_data_delete_title">Odstrániť stiahnuté súbory?</string>
-    <string name="languages_data_download_all_action">Stiahnuť všetky dáta (približne %1$s)</string>
-    <string name="languages_data_download_all_info">Stiahne zoznam slov, kľúčové slová emodži a údaje o pároch slov pre tento jazyk. Súbory, ktoré už sú v zariadení, sa znova nesťahujú. Riadky nižšie robia to isté po jednom súbore.</string>
     <string name="languages_data_download_body">Klávesnica si môže stiahnuť údaje, ktoré %1$s potrebuje na správnu predikciu a opravu: zoznam slov, kľúčové slová emodži a údaje o dvojiciach slov, ak existujú. Toto spotrebuje približne %2$s dát. Môžete si ich stiahnuť aj neskôr na obrazovke jazykov.</string>
     <string name="languages_data_download_dismiss_action">Teraz nie</string>
     <string name="languages_data_download_title">Stiahnuť jazykové údaje?</string>
-    <string name="languages_data_title">Jazykové údaje</string>
-    <string name="languages_dictionary_bundled">Tento jazyk obsahuje vstavaný slovník.</string>
-    <string name="languages_dictionary_bundled_more">Tento jazyk obsahuje vstavaný slovník. Stiahnite si väčší pre lepšie návrhy.</string>
-    <string name="languages_dictionary_none_download">Tento jazyk nemá vstavaný slovník. Stiahnite si ho pre návrhy a automatické opravy, alebo importujte svoj vlastný zoznam slov.</string>
-    <string name="languages_dictionary_none_learn">Tento jazyk nemá vstavaný slovník. Klávesnica sa učí vaše slová počas písania a môžete importovať vlastný zoznam slov.</string>
-    <string name="languages_dictionary_title">Slovník</string>
-    <string name="languages_dictionary_use_info">Ak je vypnuté, klávesnica zabudne pribalené a stiahnuté slová pre tento jazyk a číta iba zoznamy slov, ktoré ste importovali, plus slová, ktoré sa od vás naučila. Rovnaký prepínač sa zobrazuje na paneli slovníka (Riadky a panely) a naopak, ako Použiť iba moje zoznamy slov v časti Vlastné slovníky.</string>
-    <string name="languages_dictionary_use_subtitle">Navrhovať a opravovať zo zbaleného alebo stiahnutého zoznamu</string>
-    <string name="languages_dictionary_use_title">Použiť zoznam slov</string>
     <string name="languages_download_queued">Čaká sa…</string>
     <string name="languages_emoji_dict_delete_desc">Odstrániť kľúčové slová emoji</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1992,15 +1981,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Kľúčové slová emoji vám umožňujú vyhľadávať emoji v jazyku %1$s. Ak napíšete slovo pre \"koláč\", nájdete 🎂. Klávesnica sťahuje kľúčové slová automaticky, kým je jazyk zapnutý.</string>
-    <string name="languages_emoji_keywords_manual">Kľúčové slová emoji vám umožňujú vyhľadávať emoji v %1$s. Ak napíšete slovo pre „koláč“, nájdete 🎂. Automatické sťahovanie je vypnuté, takže toto spustíte sami.</string>
-    <string name="languages_emoji_keywords_subtitle">Sťahovanie pre každý jazyk a vaše vlastné importy</string>
     <string name="languages_emoji_keywords_title">Kľúčové slová pre emoji</string>
-    <string name="languages_emoji_keywords_unavailable">Pre %1$s zatiaľ nie sú k dispozícii žiadne kľúčové slová pre emoji. Vyhľadávanie emoji odpovedá v angličtine. Môžete importovať svoj vlastný zoznam.</string>
-    <string name="languages_emoji_keywords_use_info">Ak je vypnuté, stiahnuté kľúčové slová a akýkoľvek balík, ktorý ste pre tento jazyk importovali, zostanú v zariadení, ale nebudú sa čítať, takže vyhľadávanie a návrhy emoji v tomto jazyku prestanú fungovať. Rovnaký prepínač sa zobrazuje na paneli slovníka (Riadky a panely).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Vyhľadávajte a navrhujte emoji podľa ich názvov v tomto jazyku</string>
-    <string name="languages_emoji_keywords_use_title">Používať kľúčové slová pre emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Písmo, ktoré píše efektná klávesnica. Dá sa prepnúť aj z panela nad klávesmi.</string>
     <string name="languages_fancy_style_row_title">Efektný štýl</string>
     <string name="languages_fancy_style_title">Štýl</string>
@@ -2069,16 +2050,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s stiahnutých</string>
     <string name="languages_wordlist_preparing">Pripravuje sa slovník…</string>
-    <string name="languages_wordlist_size_desc">Veľkosť slovníka</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, až %2$,d slovo</item>
         <item quantity="other">%1$s, až %2$,d slov</item>
-    </plurals>
-    <string name="languages_wordlist_title">Slovník na stiahnutie</string>
-    <string name="languages_wordlist_title_variant">Sťahovateľný slovník (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Až po %1$,d najčastejšie slovo</item>
-        <item quantity="other">Až po %1$,d najčastejších slov</item>
     </plurals>
     <string name="layout_bottom_padding_info">Celá klávesnica sa posunie nahor, preč od spodného okraja a navigačného panela gest. Zväčšite túto hodnotu, ak je spodný rad príliš blízko okraja obrazovky alebo ak omylom spúšťate systémovú navigáciu.</string>
     <string name="layout_bottom_padding_subtitle">Viac miesta pod klávesmi, nad navigačným panelom</string>

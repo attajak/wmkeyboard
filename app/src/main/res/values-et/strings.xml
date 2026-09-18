@@ -1971,20 +1971,9 @@
     <string name="languages_data_delete_body">%1$s-l on allalaaditud sõnaloend või emotikonide märksõnad. Kas kustutada need ja vabastada umbes %2$s salvestusruumi?</string>
     <string name="languages_data_delete_dismiss_action">Jäta alles</string>
     <string name="languages_data_delete_title">Kas kustutada allalaaditud failid?</string>
-    <string name="languages_data_download_all_action">Laadi alla kõik andmed (umbes %1$s)</string>
-    <string name="languages_data_download_all_info">Laadib alla selle keele sõnaloendi, emotikonide märksõnad ja sõnapaaride andmed. Juba seadmes olevaid faile uuesti alla ei laadita. Allpool olevad read teevad sama ühe faili kaupa.</string>
     <string name="languages_data_download_body">Klaviatuur saab alla laadida andmed, mida %1$s vajab hästi ennustamiseks ja parandamiseks: sõnaloend, emotikonide märksõnad ja sõnapaaride andmed, olenevalt sellest, mis on olemas. See kasutab umbes %2$s andmeid. Saad need hiljem ka keelekuvalt alla laadida.</string>
     <string name="languages_data_download_dismiss_action">Mitte praegu</string>
     <string name="languages_data_download_title">Kas laadida keeleandmed alla?</string>
-    <string name="languages_data_title">Keeleandmed</string>
-    <string name="languages_dictionary_bundled">See keel sisaldab sisseehitatud sõnastikku.</string>
-    <string name="languages_dictionary_bundled_more">See keel sisaldab sisseehitatud sõnastikku. Paremate soovituste saamiseks laadige alla suurem sõnastik.</string>
-    <string name="languages_dictionary_none_download">Sellel keelel pole sisseehitatud sõnastikku. Laadige alla üks soovituste ja automaatse paranduse jaoks või importige oma sõnaloend.</string>
-    <string name="languages_dictionary_none_learn">Sellel keelel pole sisseehitatud sõnastikku. Klaviatuur õpib teie sõnu tippimise ajal ja saate importida oma sõnaloendi.</string>
-    <string name="languages_dictionary_title">Sõnastik</string>
-    <string name="languages_dictionary_use_info">Väljalülitatuna unustab klaviatuur selle keele jaoks kaasasolevad ja allalaaditud sõnad ning loeb ainult sinu imporditud sõnaloendeid ja sinult õpitud sõnu. Sama lüliti ilmub sõnastikuribal (Read ja ribad) ja vastupidi, kui \"Kasuta ainult minu sõnaloendeid\" kohandatud sõnastike all.</string>
-    <string name="languages_dictionary_use_subtitle">Soovitage ja parandage komplektis oleva või allalaaditud loendi põhjal</string>
-    <string name="languages_dictionary_use_title">Kasuta sõnaloendit</string>
     <string name="languages_download_queued">Ootel…</string>
     <string name="languages_emoji_dict_delete_desc">Kustuta emotikonide märksõnad</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1995,15 +1984,7 @@
         <item quantity="one">%1$,d emotikon, %2$s</item>
         <item quantity="other">%1$,d emotikoni, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Emotikonide märksõnad võimaldavad otsida emotikone keeles %1$s. Kui sisestad sõna \"kook\", leiad 🎂. Klaviatuur laadib märksõnad automaatselt alla, kui keel on sisse lülitatud.</string>
-    <string name="languages_emoji_keywords_manual">Emoji märksõnad võimaldavad otsida emotikone keeles %1$s. Kui sisestate sõna \"kook\", leiate 🎂. Automaatsed allalaadimised on välja lülitatud, seega peate selle ise käivitama.</string>
-    <string name="languages_emoji_keywords_subtitle">Allalaadimised iga keele jaoks ja teie enda impordid</string>
     <string name="languages_emoji_keywords_title">Emotikonide märksõnad</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s jaoks pole veel emotikonide märksõnu saadaval. Emotikonide otsing vastab inglise keeles. Saate importida oma loendi.</string>
-    <string name="languages_emoji_keywords_use_info">Väljalülitatuna jäävad allalaaditud märksõnad ja kõik selle keele jaoks imporditud paketid seadmesse, kuid neid ei loeta, seega emotikonide otsing ja emotikonide soovitused selles keeles ei toimi. Sama lüliti kuvatakse sõnastikuribal (Read ja ribad).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Otsige ja soovitage emotikone nende nimede järgi selles keeles</string>
-    <string name="languages_emoji_keywords_use_title">Kasutage emotikonide märksõnu</string>
-    <string name="languages_emoji_title">" इमोजी"</string>
     <string name="languages_fancy_style_row_subtitle">Kirjatüübid, mida uhke klaviatuur kasutab. Samuti vahetatav klahvide kohal olevalt ribalt.</string>
     <string name="languages_fancy_style_row_title">Uhke stiil</string>
     <string name="languages_fancy_style_title">Stiil</string>
@@ -2072,16 +2053,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s alla laaditud</string>
     <string name="languages_wordlist_preparing">Sõnastiku ettevalmistamine…</string>
-    <string name="languages_wordlist_size_desc">Sõnastiku suurus</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, kuni %2$,d sõna</item>
         <item quantity="other">%1$s, kuni %2$,d sõna</item>
-    </plurals>
-    <string name="languages_wordlist_title">Allalaaditav sõnastik</string>
-    <string name="languages_wordlist_title_variant">Allalaaditav sõnastik (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Kuni %1$,d kõige sagedamini kasutatav sõna</item>
-        <item quantity="other">Kuni %1$,d kõige sagedamini kasutatavat sõna</item>
     </plurals>
     <string name="layout_bottom_padding_info">Kogu klaviatuur liigub ülespoole, eemale alumisest servast ja žestidega navigeerimisribast. Suurendage seda, kui alumine rida on ekraani servale liiga lähedal või kui käivitate süsteemi navigeerimise kogemata.</string>
     <string name="layout_bottom_padding_subtitle">Rohkem ruumi klahvide all, navigeerimisriba kohal</string>

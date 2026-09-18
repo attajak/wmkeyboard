@@ -3129,6 +3129,13 @@ open class WMKeyboardService : InputMethodService() {
                     }
                     loadDictionariesAndEmoji()
                 }
+                // The word-pair checkbox on the language screen: re-map (or
+                // drop) the active language's pack when it flips.
+                val wordPairsOff = settings.suggestionStrip.wordPairsOffLangs
+                if (wordPairsOff != loadedWordPairsOff) {
+                    loadedWordPairsOff = wordPairsOff
+                    suggestionEngine?.ngramPack = loadNgramPack(_uiState.value.language.id)
+                }
                 // What a swipe may answer with, and how far off the keys it
                 // may be drawn. Cheap to set — the engine rebuilds nothing
                 // for values it already has.
@@ -26740,8 +26747,12 @@ open class WMKeyboardService : InputMethodService() {
      * The downloaded n-gram pack for [langId], or EMPTY while locked or not
      * yet downloaded. mmap-backed: opening is one map call, no heap.
      */
+    /** The word-pair switches [loadNgramPack] last answered for. */
+    private var loadedWordPairsOff: Set<String> = emptySet()
+
     private fun loadNgramPack(langId: String): NgramPack {
         if (!userUnlocked) return NgramPack.EMPTY
+        if (!_uiState.value.settings.suggestionStrip.wordPairsEnabledFor(langId)) return NgramPack.EMPTY
         return NgramPack.of(
             MappedNgramPack.open(NgramPackDownloadManager.packFile(filesDir, langId)),
         )

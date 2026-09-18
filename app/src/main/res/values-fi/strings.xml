@@ -1964,20 +1964,9 @@
     <string name="languages_data_delete_body">Kohteella %1$s on ladattu sanaluettelo tai emoji-avainsanoja. Poistetaanko ne ja vapautetaanko noin %2$s tallennustilaa?</string>
     <string name="languages_data_delete_dismiss_action">Pidä ne</string>
     <string name="languages_data_delete_title">Poistetaanko ladatut tiedostot?</string>
-    <string name="languages_data_download_all_action">Lataa kaikki tiedot (noin %1$s)</string>
-    <string name="languages_data_download_all_info">Lataa sanaluettelon, emojien avainsanat ja sanaparitiedot tälle kielelle. Laitteella jo olevia tiedostoja ei ladata uudelleen. Alla olevat rivit tekevät saman tiedosto kerrallaan.</string>
     <string name="languages_data_download_body">Näppäimistö voi ladata tiedot, joita %1$s tarvitsee ennustaakseen ja korjatakseen hyvin: sanalista, emojien avainsanat ja sanaparitiedot, mikäli niitä on olemassa. Tämä käyttää noin %2$s dataa. Voit ladata ne myös myöhemmin kielinäytöstä.</string>
     <string name="languages_data_download_dismiss_action">Ei nyt</string>
     <string name="languages_data_download_title">Ladataanko kielidata?</string>
-    <string name="languages_data_title">Kielidata</string>
-    <string name="languages_dictionary_bundled">Tämä kieli sisältää sisäänrakennetun sanakirjan.</string>
-    <string name="languages_dictionary_bundled_more">Tämä kieli sisältää sisäänrakennetun sanakirjan. Lataa laajempi sanakirja parempia ehdotuksia varten.</string>
-    <string name="languages_dictionary_none_download">Tällä kielellä ei ole sisäänrakennettua sanakirjaa. Lataa sellainen ehdotuksia ja automaattista korjausta varten tai tuo oma sanalistasi.</string>
-    <string name="languages_dictionary_none_learn">Tällä kielellä ei ole sisäänrakennettua sanakirjaa. Näppäimistö oppii sanasi kirjoittaessasi, ja voit tuoda oman sanalistasi.</string>
-    <string name="languages_dictionary_title">Sanakirja</string>
-    <string name="languages_dictionary_use_info">Pois päältä: näppäimistö unohtaa tämän kielen valmiit ja ladatut sanat ja lukee vain tuomasi sanalistat sekä sanat, jotka se on oppinut sinulta. Sama kytkin näkyy sanakirjapalkissa (Rivit ja palkit) ja päinvastoin muodossa Käytä vain omia sanalistojani kohdassa Mukautetut sanakirjat.</string>
-    <string name="languages_dictionary_use_subtitle">Ehdota ja korjaa niputetusta tai ladatusta luettelosta</string>
-    <string name="languages_dictionary_use_title">Käytä sanaluetteloa</string>
     <string name="languages_download_queued">Odottaa…</string>
     <string name="languages_emoji_dict_delete_desc">Poista emoji-avainsanat</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1988,15 +1977,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emojia, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Emoji-avainsanojen avulla voit etsiä emojeita kielellä %1$s. Jos kirjoitat sanan \"kakku\", löydät 🎂. Näppäimistö lataa avainsanat automaattisesti, kun kieli on käytössä.</string>
-    <string name="languages_emoji_keywords_manual">Emoji-avainsanojen avulla voit etsiä emojeita kielellä %1$s. Jos kirjoitat sanan \"kakku\", löydät 🎂. Automaattiset lataukset ovat pois päältä, joten aloitat tämän itse.</string>
-    <string name="languages_emoji_keywords_subtitle">Lataukset jokaiselle kielelle sekä omat tuontisi</string>
     <string name="languages_emoji_keywords_title">Emoji-avainsanat</string>
-    <string name="languages_emoji_keywords_unavailable">Emoji-avainsanoja ei ole vielä saatavilla kielelle %1$s. Emoji-haku vastaa englanniksi. Voit tuoda oman luettelosi.</string>
-    <string name="languages_emoji_keywords_use_info">Kun tämä on pois päältä, ladattuja avainsanoja ja tälle kielelle tuotuja paketteja ei lueta, vaikka ne pysyvät laitteella. Tämän vuoksi emoji-haku ja emoji-ehdotukset eivät vastaa tällä kielellä. Sama kytkin näkyy sanakirjapalkissa (Rivit ja palkit).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Etsi ja ehdota emojeita niiden nimillä tällä kielellä</string>
-    <string name="languages_emoji_keywords_use_title">Käytä emojien avainsanoja</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Kirjasintyyli, jota hieno näppäimistö käyttää. Vaihdettavissa myös näppäinten yläpuolella olevasta palkista.</string>
     <string name="languages_fancy_style_row_title">Hieno tyyli</string>
     <string name="languages_fancy_style_title">Tyyli</string>
@@ -2065,16 +2046,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s ladattu</string>
     <string name="languages_wordlist_preparing">Valmistellaan sanakirjaa…</string>
-    <string name="languages_wordlist_size_desc">Sanakirjan koko</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, enintään %2$,d sana</item>
         <item quantity="other">%1$s, enintään %2$,d sanaa</item>
-    </plurals>
-    <string name="languages_wordlist_title">Ladattava sanakirja</string>
-    <string name="languages_wordlist_title_variant">Ladattava sanakirja (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Enintään %1$,d yleisin sana</item>
-        <item quantity="other">Enintään %1$,d yleisintä sanaa</item>
     </plurals>
     <string name="layout_bottom_padding_info">Koko näppäimistö siirtyy ylöspäin, pois alareunasta ja eleohjauspalkista. Suurenna tätä, jos alarivi on liian lähellä näytön reunaa tai jos käynnistät järjestelmän navigoinnin vahingossa.</string>
     <string name="layout_bottom_padding_subtitle">Lisää tilaa näppäinten alapuolella, navigointipalkin yläpuolella</string>

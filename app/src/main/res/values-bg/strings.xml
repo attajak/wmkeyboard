@@ -1968,20 +1968,9 @@
     <string name="languages_data_delete_body">%1$s има изтеглен списък с думи или ключови думи за емоджита. Да ги изтриете ли и да освободите около %2$s място?</string>
     <string name="languages_data_delete_dismiss_action">Запазване</string>
     <string name="languages_data_delete_title">Изтриване на изтеглените файлове?</string>
-    <string name="languages_data_download_all_action">Изтегляне на всички данни (около %1$s)</string>
-    <string name="languages_data_download_all_info">Изтегля списъка с думи, ключовите думи за емоджита и данните за двойки думи за този език. Файловете, които вече са на устройството, не се изтеглят отново. Редовете по-долу правят същото, по един файл наведнъж.</string>
     <string name="languages_data_download_body">Клавиатурата може да изтегли данните, от които %1$s се нуждае, за да предвижда и коригира добре: списък с думи, ключови думи за емоджита и данни за двойки думи, ако съществуват. Това използва около %2$s данни. Можете също да ги изтеглите по-късно от екрана за езици.</string>
     <string name="languages_data_download_dismiss_action">Не сега</string>
     <string name="languages_data_download_title">Изтегляне на езикови данни?</string>
-    <string name="languages_data_title">Езикови данни</string>
-    <string name="languages_dictionary_bundled">Този език включва вграден речник.</string>
-    <string name="languages_dictionary_bundled_more">Този език включва вграден речник. Изтеглете по-голям за по-добри предложения.</string>
-    <string name="languages_dictionary_none_download">Този език няма вграден речник. Изтеглете такъв за предложения и автоматично коригиране или импортирайте собствен списък с думи.</string>
-    <string name="languages_dictionary_none_learn">Този език няма вграден речник. Клавиатурата научава думите ви, докато пишете, и можете да импортирате свой собствен списък с думи.</string>
-    <string name="languages_dictionary_title">Речник</string>
-    <string name="languages_dictionary_use_info">Когато е изключено, клавиатурата забравя вградените и изтеглените думи за този език и чете само списъците с думи, които сте импортирали, плюс думите, които е научила от вас. Същият превключвател се появява в лентата на речника (Редове и ленти) и, обратно, като „Използване само на моите списъци с думи“ под „Персонализирани речници“.</string>
-    <string name="languages_dictionary_use_subtitle">Предлагане и коригиране от включения или изтегления списък</string>
-    <string name="languages_dictionary_use_title">Използване на списъка с думи</string>
     <string name="languages_download_queued">Изчакване…</string>
     <string name="languages_emoji_dict_delete_desc">Изтриване на ключовите думи за емоджи</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1992,15 +1981,7 @@
         <item quantity="one">%1$,d емоджи, %2$s</item>
         <item quantity="other">%1$,d емоджита, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Ключовите думи за емоджи ви позволяват да търсите емоджи в %1$s. Ако напишете думата за „торта“, ще намерите 🎂. Клавиатурата изтегля ключовите думи автоматично, докато езикът е включен.</string>
-    <string name="languages_emoji_keywords_manual">Ключовите думи за емоджи ви позволяват да търсите емоджи в %1$s. Ако напишете думата за „торта“, ще намерите 🎂. Автоматичните изтегляния са изключени, така че стартирайте това сами.</string>
-    <string name="languages_emoji_keywords_subtitle">Изтегляния за всеки език и ваши собствени импорти</string>
     <string name="languages_emoji_keywords_title">Ключови думи за емоджи</string>
-    <string name="languages_emoji_keywords_unavailable">Все още няма налични ключови думи за емоджита за %1$s. Търсенето на емоджита отговаря на английски. Можете да импортирате свой собствен списък.</string>
-    <string name="languages_emoji_keywords_use_info">Ако е изключено, изтеглените ключови думи и всеки пакет, който сте импортирали за този език, остават на устройството, но не се четат, така че търсенето и предложенията на емоджи спират да работят на този език. Същият превключвател се появява в лентата на речника (Редове и ленти).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Търсене и предлагане на емоджита по техните имена на този език</string>
-    <string name="languages_emoji_keywords_use_title">Използване на ключови думи за емоджита</string>
-    <string name="languages_emoji_title">Емоджи</string>
     <string name="languages_fancy_style_row_subtitle">Буквите, които изписва ефектната клавиатура. Може да се превключва и от лентата над клавишите.</string>
     <string name="languages_fancy_style_row_title">Ефектен стил</string>
     <string name="languages_fancy_style_title">Стил</string>
@@ -2069,16 +2050,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s изтеглени</string>
     <string name="languages_wordlist_preparing">Подготовка на речника…</string>
-    <string name="languages_wordlist_size_desc">Размер на речника</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, до %2$,d дума</item>
         <item quantity="other">%1$s, до %2$,d думи</item>
-    </plurals>
-    <string name="languages_wordlist_title">Речник за изтегляне</string>
-    <string name="languages_wordlist_title_variant">Речник за изтегляне (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">До %1$,d най-често срещана дума</item>
-        <item quantity="other">До %1$,d най-често срещани думи</item>
     </plurals>
     <string name="layout_bottom_padding_info">Цялата клавиатура се премества нагоре, далеч от долния ръб и лентата за жестова навигация. Увеличете го, ако долният ред е твърде близо до ръба на екрана или ако стартирате системната навигация по погрешка.</string>
     <string name="layout_bottom_padding_subtitle">Повече място под клавишите, над лентата за навигация</string>

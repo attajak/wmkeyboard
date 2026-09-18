@@ -1967,20 +1967,9 @@
     <string name="languages_data_delete_body">Το %1$s διαθέτει ληφθείσα λίστα λέξεων ή λέξεις-κλειδιά emoji. Να διαγραφούν και να ανακτήσετε περίπου %2$s αποθηκευτικού χώρου;</string>
     <string name="languages_data_delete_dismiss_action">Διατήρηση</string>
     <string name="languages_data_delete_title">Διαγραφή των ληφθέντων αρχείων;</string>
-    <string name="languages_data_download_all_action">Λήψη όλων των δεδομένων (περίπου %1$s)</string>
-    <string name="languages_data_download_all_info">Πραγματοποιεί λήψη της λίστας λέξεων, των λέξεων-κλειδιών emoji και των δεδομένων ζευγών λέξεων για αυτήν τη γλώσσα. Τα αρχεία που βρίσκονται ήδη στη συσκευή δεν λαμβάνονται ξανά. Οι παρακάτω σειρές κάνουν το ίδιο, ένα αρχείο τη φορά.</string>
     <string name="languages_data_download_body">Το πληκτρολόγιο μπορεί να κατεβάσει τα δεδομένα που χρειάζεται το %1$s για σωστή πρόβλεψη και διόρθωση: μια λίστα λέξεων, λέξεις-κλειδιά emoji και δεδομένα ζευγών λέξεων, όσα από αυτά υπάρχουν. Αυτό χρησιμοποιεί περίπου %2$s δεδομένων. Μπορείτε επίσης να τα κατεβάσετε αργότερα από την οθόνη γλώσσας.</string>
     <string name="languages_data_download_dismiss_action">Όχι τώρα</string>
     <string name="languages_data_download_title">Λήψη δεδομένων γλώσσας;</string>
-    <string name="languages_data_title">Δεδομένα γλώσσας</string>
-    <string name="languages_dictionary_bundled">Αυτή η γλώσσα περιλαμβάνει ενσωματωμένο λεξικό.</string>
-    <string name="languages_dictionary_bundled_more">Αυτή η γλώσσα περιλαμβάνει ένα ενσωματωμένο λεξικό. Κατεβάστε ένα μεγαλύτερο για καλύτερες προτάσεις.</string>
-    <string name="languages_dictionary_none_download">Αυτή η γλώσσα δεν διαθέτει ενσωματωμένο λεξικό. Κατεβάστε ένα για προτάσεις και αυτόματη διόρθωση ή εισαγάγετε τη δική σας λίστα λέξεων.</string>
-    <string name="languages_dictionary_none_learn">Αυτή η γλώσσα δεν διαθέτει ενσωματωμένο λεξικό. Το πληκτρολόγιο μαθαίνει τις λέξεις σας καθώς πληκτρολογείτε και μπορείτε να εισαγάγετε τη δική σας λίστα λέξεων.</string>
-    <string name="languages_dictionary_title">Λεξικό</string>
-    <string name="languages_dictionary_use_info">Αν είναι απενεργοποιημένο, το πληκτρολόγιο ξεχνά τις ενσωματωμένες και ληφθείσες λέξεις για αυτήν τη γλώσσα και διαβάζει μόνο τις λίστες λέξεων που εισαγάγατε, συν τις λέξεις που έμαθε από εσάς. Ο ίδιος διακόπτης εμφανίζεται στη γραμμή λεξικού (Γραμμές &amp; μπάρες) και, αντίστροφα, ως «Χρήση μόνο των λιστών λέξεων μου» στις Προσαρμοσμένες λίστες λέξεων.</string>
-    <string name="languages_dictionary_use_subtitle">Πρόταση και διόρθωση από τη συνοδευτική ή τη ληφθείσα λίστα</string>
-    <string name="languages_dictionary_use_title">Χρήση της λίστας λέξεων</string>
     <string name="languages_download_queued">Αναμονή…</string>
     <string name="languages_emoji_dict_delete_desc">Διαγραφή των λέξεων-κλειδιών emoji</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1991,15 +1980,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Οι λέξεις-κλειδιά emoji σάς επιτρέπουν να αναζητάτε emoji στα %1$s. Αν πληκτρολογήσετε τη λέξη για το \"κέικ\", θα βρείτε το 🎂. Το πληκτρολόγιο κατεβάζει αυτόματα τις λέξεις-κλειδιά όσο η γλώσσα είναι ενεργοποιημένη.</string>
-    <string name="languages_emoji_keywords_manual">Οι λέξεις-κλειδιά emoji σάς επιτρέπουν να αναζητάτε emoji στο %1$s. Αν πληκτρολογήσετε τη λέξη για το \"κέικ\", θα βρείτε το 🎂. Οι αυτόματες λήψεις είναι απενεργοποιημένες, οπότε ξεκινήστε αυτήν τη διαδικασία μόνοι σας.</string>
-    <string name="languages_emoji_keywords_subtitle">Λήψεις για κάθε γλώσσα, και οι δικές σας εισαγωγές</string>
     <string name="languages_emoji_keywords_title">Λέξεις-κλειδιά emoji</string>
-    <string name="languages_emoji_keywords_unavailable">Δεν υπάρχουν ακόμη διαθέσιμες λέξεις-κλειδιά emoji για τα %1$s. Οι απαντήσεις αναζήτησης emoji είναι στα Αγγλικά. Μπορείτε να εισαγάγετε τη δική σας λίστα.</string>
-    <string name="languages_emoji_keywords_use_info">Αν είναι απενεργοποιημένο, οι ληφθείσες λέξεις-κλειδιά και οποιοδήποτε πακέτο εισαγάγατε για αυτή τη γλώσσα παραμένουν στη συσκευή αλλά δεν διαβάζονται, επομένως η αναζήτηση emoji και οι προτάσεις emoji σταματούν να ανταποκρίνονται σε αυτή τη γλώσσα. Ο ίδιος διακόπτης εμφανίζεται στη γραμμή λεξικού (Σειρές &amp; γραμμές).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Αναζήτηση και πρόταση emoji με τα ονόματά τους σε αυτή τη γλώσσα</string>
-    <string name="languages_emoji_keywords_use_title">Χρήση των λέξεων-κλειδιών για emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Τα γράμματα που πληκτρολογεί το φανταχτερό πληκτρολόγιο. Επίσης εναλλάξιμα από τη λωρίδα πάνω από τα πλήκτρα.</string>
     <string name="languages_fancy_style_row_title">Εντυπωσιακό στυλ</string>
     <string name="languages_fancy_style_title">Στυλ</string>
@@ -2068,16 +2049,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s λήφθηκαν</string>
     <string name="languages_wordlist_preparing">Προετοιμασία του λεξικού…</string>
-    <string name="languages_wordlist_size_desc">Μέγεθος λεξικού</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, έως %2$,d λέξη</item>
         <item quantity="other">%1$s, έως %2$,d λέξεις</item>
-    </plurals>
-    <string name="languages_wordlist_title">Λήψιμο λεξικό</string>
-    <string name="languages_wordlist_title_variant">Λήψιμο λεξικό (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Έως τη συχνότερη λέξη %1$,d</item>
-        <item quantity="other">Έως τις συχνότερες λέξεις %1$,d</item>
     </plurals>
     <string name="layout_bottom_padding_info">Ολόκληρο το πληκτρολόγιο μετακινείται προς τα πάνω, μακριά από το κάτω άκρο και τη γραμμή πλοήγησης με χειρονομίες. Αυξήστε το αν η κάτω σειρά είναι πολύ κοντά στην άκρη της οθόνης ή αν ξεκινάτε κατά λάθος την πλοήγηση συστήματος.</string>
     <string name="layout_bottom_padding_subtitle">Περισσότερος χώρος κάτω από τα πλήκτρα, πάνω από τη γραμμή πλοήγησης</string>

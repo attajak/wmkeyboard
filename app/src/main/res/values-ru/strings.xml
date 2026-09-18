@@ -1970,20 +1970,9 @@
     <string name="languages_data_delete_body">Для %1$s загружен список слов или ключевые слова эмодзи. Удалить их и освободить около %2$s места?</string>
     <string name="languages_data_delete_dismiss_action">Оставить их</string>
     <string name="languages_data_delete_title">Удалить загруженные файлы?</string>
-    <string name="languages_data_download_all_action">Скачать все данные (около %1$s)</string>
-    <string name="languages_data_download_all_info">Загружает список слов, ключевые слова для эмодзи и данные о парах слов для этого языка. Файлы, которые уже есть на устройстве, повторно не загружаются. Строки ниже выполняют то же самое для каждого файла по отдельности.</string>
     <string name="languages_data_download_body">Клавиатура может загрузить данные, необходимые %1$s для качественного прогнозирования и исправления: список слов, ключевые слова для эмодзи и данные о парах слов (если они существуют). Это займет около %2$s данных. Вы также можете загрузить их позже на экране языка.</string>
     <string name="languages_data_download_dismiss_action">Не сейчас</string>
     <string name="languages_data_download_title">Скачать языковые данные?</string>
-    <string name="languages_data_title">Языковые данные</string>
-    <string name="languages_dictionary_bundled">Этот язык включает встроенный словарь.</string>
-    <string name="languages_dictionary_bundled_more">Этот язык включает встроенный словарь. Загрузите более полный для лучших подсказок.</string>
-    <string name="languages_dictionary_none_download">Для этого языка нет встроенного словаря. Скачайте его для получения подсказок и автокоррекции или импортируйте свой список слов.</string>
-    <string name="languages_dictionary_none_learn">Для этого языка нет встроенного словаря. Клавиатура запоминает ваши слова по мере ввода, и вы можете импортировать свой собственный список слов.</string>
-    <string name="languages_dictionary_title">Словарь</string>
-    <string name="languages_dictionary_use_info">Если выключено, клавиатура забывает встроенные и загруженные слова для этого языка и читает только импортированные вами списки слов, а также слова, которые она выучила от вас. Тот же переключатель появляется на панели словаря (Строки и панели) и, наоборот, как «Использовать только мои списки слов» в разделе «Пользовательские словари».</string>
-    <string name="languages_dictionary_use_subtitle">Предлагать и исправлять на основе встроенного или загруженного списка</string>
-    <string name="languages_dictionary_use_title">Использовать список слов</string>
     <string name="languages_download_queued">Ожидание…</string>
     <string name="languages_emoji_dict_delete_desc">Удалить ключевые слова эмодзи</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1994,15 +1983,7 @@
         <item quantity="one">%1$,d эмодзи, %2$s</item>
         <item quantity="other">%1$,d эмодзи, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Ключевые слова для эмодзи позволяют искать их на языке %1$s. Если вы введете слово «торт», вы найдете 🎂. Клавиатура автоматически загружает ключевые слова, пока включен соответствующий язык.</string>
-    <string name="languages_emoji_keywords_manual">Ключевые слова для эмодзи позволяют искать их на языке %1$s. Если вы введете слово «торт», вы найдете 🎂. Автоматическая загрузка отключена, поэтому вам нужно запустить ее вручную.</string>
-    <string name="languages_emoji_keywords_subtitle">Загрузки для каждого языка и ваши собственные импорты</string>
     <string name="languages_emoji_keywords_title">Ключевые слова для эмодзи</string>
-    <string name="languages_emoji_keywords_unavailable">Для %1$s пока нет ключевых слов для эмодзи. Поиск эмодзи работает на английском языке. Вы можете импортировать свой собственный список.</string>
-    <string name="languages_emoji_keywords_use_info">Если выключено, загруженные ключевые слова и любой пакет, который вы импортировали для этого языка, остаются на устройстве, но не считываются, поэтому поиск эмодзи и подсказки эмодзи перестают отвечать на этом языке. Тот же переключатель появляется на панели словаря (Ряды и панели).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Поиск и предложение эмодзи по их названиям на этом языке</string>
-    <string name="languages_emoji_keywords_use_title">Использовать ключевые слова для эмодзи</string>
-    <string name="languages_emoji_title">Эмодзи</string>
     <string name="languages_fancy_style_row_subtitle">Шрифт, который печатает необычная клавиатура. Также переключается с полоски над клавишами.</string>
     <string name="languages_fancy_style_row_title">Необычный стиль</string>
     <string name="languages_fancy_style_title">Стиль</string>
@@ -2071,16 +2052,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">Загружено: %1$s</string>
     <string name="languages_wordlist_preparing">Подготовка словаря…</string>
-    <string name="languages_wordlist_size_desc">Размер словаря</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, до %2$,d слова</item>
         <item quantity="other">%1$s, до %2$,d слов</item>
-    </plurals>
-    <string name="languages_wordlist_title">Загружаемый словарь</string>
-    <string name="languages_wordlist_title_variant">Загружаемый словарь (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">До %1$,d наиболее частого слова</item>
-        <item quantity="other">До %1$,d наиболее частых слов</item>
     </plurals>
     <string name="layout_bottom_padding_info">Вся клавиатура сдвигается вверх, подальше от нижнего края и панели жестов навигации. Увеличьте это значение, если нижний ряд находится слишком близко к краю экрана или если вы случайно запускаете системную навигацию.</string>
     <string name="layout_bottom_padding_subtitle">Больше места под клавишами, над панелью навигации</string>

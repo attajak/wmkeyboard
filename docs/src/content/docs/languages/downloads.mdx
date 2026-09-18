@@ -32,22 +32,22 @@ Word lists are never in this set, whatever the switches say. They're the big one
 
 | Download | Where | Rough size |
 |---|---|---|
-| Word list, per size tier | Languages → *(a language)* → Dictionary | Not named on the row, which counts words instead. The full remote files run from a few KB to about 41 MB, and a size tier stops the transfer well short of that. [Downloadable dictionaries](/languages/dictionaries/) lists every one |
+| Word list, per size tier | Languages → *(a language)* → Dictionaries | Named per size in the dialog that Download opens. The full remote files run from a few KB to about 41 MB, and a size tier stops the transfer well short of that. [Downloadable dictionaries](/languages/dictionaries/) lists every one |
 | **Download language data?** prompt (word list, emoji keywords and word-pair data in one go) | Shown as you add a language | Named on the dialog |
-| **Download all data** | Languages → *(a language)* → Language data | Named on the button |
+| **Download all** | Languages → *(a language)* → Dictionaries heading, while anything is missing | Named on the button |
 | Pinyin table | Languages → Chinese → Chinese options | About 2.5 MB |
 | Stroke table | Languages → Chinese → Chinese options | About 450 KB |
 | Cangjie table | Languages → Chinese → Chinese options | About 350 KB |
 | Jyutping table | Languages → Cantonese → Cantonese options | About 3.4 MB |
 | Kana to kanji table | Languages → Japanese → Japanese options | **About 42 MB** |
 
-Pressing the button is the consent, and nothing here starts on its own. Some of these name a size first and some don't. The add-language dialog and the **Download all data** button each name the whole set they're about to fetch, and the Japanese pack's row says "about 42 MB" because it's the one worth warning about. The word-list row counts words rather than bytes, and the Pinyin, Stroke, Cangjie and Jyutping rows describe what the table holds rather than what it weighs, so the column above is the place to check those. The only thing that can come between is the mobile-data question below. The add-language prompt is the one with a way out: **Download** fetches the set, **Not now** adds the language with nothing, and **Cancel** backs out of the language too. Word-list tiers and how downloaded and imported lists combine are covered on [Downloadable dictionaries](/languages/dictionaries/). The CJK tables and what each one is for are on [Chinese, Japanese & Korean](/languages/cjk/).
+Pressing the button is the consent, and nothing here starts on its own. Some of these name a size first and some don't. The add-language dialog and the **Download all** button each name the whole set they're about to fetch, the word-list dialog names each size, and the Japanese pack's row says "about 42 MB" because it's the one worth warning about. The Pinyin, Stroke, Cangjie and Jyutping rows describe what the table holds rather than what it weighs, so the column above is the place to check those. The only thing that can come between is the mobile-data question below. The add-language prompt is the one with a way out: **Download** fetches the set, **Not now** adds the language with nothing, and **Cancel** backs out of the language too. Word-list tiers and how downloaded and imported lists combine are covered on [Downloadable dictionaries](/languages/dictionaries/). The CJK tables and what each one is for are on [Chinese, Japanese & Korean](/languages/cjk/).
 
 ## The one that checks your connection
 
 The **Downloads** row in [Data saver](/privacy/data-saver/)
 (<SettingsPath path="Advanced / Data saver / Downloads" />, default **Ask each time**)
-puts a size-naming confirmation in front of **Download all data** while data
+puts a size-naming confirmation in front of **Download all** while data
 saver is on. Data saver never turns on by itself unless you pick a trigger
 for it, such as **On mobile data or a metered network**. That's the one tap that fetches a word list, emoji
 keywords and word-pair data together, so it's the one most likely to
@@ -61,7 +61,7 @@ Nothing else on this page consults it. The automatic emoji and word-pair packs s
 If your plan is tight, three habits keep it that way:
 
 - Turn **Download data automatically** off. Nothing is fetched until you ask for it on a language's own screen.
-- Answer **Not now** to the add-language prompt. Come back to **Download all data** when you're on Wi-Fi.
+- Answer **Not now** to the add-language prompt. Come back to **Download all** on the language's screen when you're on Wi-Fi.
 - Leave the CJK tables, the Japanese one above all, for a Wi-Fi moment. Nothing else about a language comes close to it except a word list taken at the Everything tier.
 
 Nothing here downloads in the background when the keyboard isn't running, and nothing resumes on a schedule. No job queue sits waiting for a better connection. See [Network policy](/privacy/network/) for the full accounting of what this keyboard contacts and when.
@@ -87,8 +87,8 @@ Models under those thresholds go through without a word, as long as Data saver i
 | Download data automatically | Languages → Language data | On (off on F-Droid builds) |
 | Downloads (on a metered connection) | Data saver | Ask each time |
 | Download automatically (emoji keywords) | Emoji → Emoji keywords | On |
-| Download all data | Languages → *(a language)* → Language data | A button (no stored value) |
-| Dictionary size tier | Languages → *(a language)* → Dictionary | Large (up to 300,000 words), remembered once you change it |
+| Download all | Languages → *(a language)* → Dictionaries | A button (no stored value), shown while anything is missing |
+| Dictionary size tier | Languages → *(a language)* → Dictionaries → Word list → Download | Large (up to 300,000 words), remembered once you change it |
 | Use mobile data (photo backgrounds) | Appearance → Keyboard themes → *(edit a theme)* → Board → Rotating background → Online photos | Off |
 
 ## Details & edge cases

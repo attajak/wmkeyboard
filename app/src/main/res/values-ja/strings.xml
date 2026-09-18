@@ -1963,20 +1963,9 @@
     <string name="languages_data_delete_body">%1$s にはダウンロード済みの単語リストまたは絵文字キーワードが含まれています。これらを削除して約 %2$s のストレージを解放しますか？</string>
     <string name="languages_data_delete_dismiss_action">保持する</string>
     <string name="languages_data_delete_title">ダウンロードしたファイルを削除しますか？</string>
-    <string name="languages_data_download_all_action">すべてのデータをダウンロード（約%1$s）</string>
-    <string name="languages_data_download_all_info">この言語の単語リスト、絵文字キーワード、単語ペアデータをダウンロードします。デバイスに既に存在するファイルは再ダウンロードされません。以下の行は、一度に1ファイルずつ同じ処理を行います。</string>
     <string name="languages_data_download_body">キーボードは、予測と修正を適切に行うために必要なデータ（単語リスト、絵文字キーワード、単語ペアデータなど、存在するデータ）をダウンロードできます。これには約%2$sのデータを使用します。後で言語画面からダウンロードすることも可能です。</string>
     <string name="languages_data_download_dismiss_action">今はしない</string>
     <string name="languages_data_download_title">言語データをダウンロードしますか？</string>
-    <string name="languages_data_title">言語データ</string>
-    <string name="languages_dictionary_bundled">この言語には組み込み辞書が含まれています。</string>
-    <string name="languages_dictionary_bundled_more">この言語には辞書が組み込まれています。より良い候補を表示するには、より大きな辞書をダウンロードしてください。</string>
-    <string name="languages_dictionary_none_download">この言語には組み込みの辞書がありません。提案や自動修正のために辞書をダウンロードするか、独自の単語リストをインポートしてください。</string>
-    <string name="languages_dictionary_none_learn">この言語には組み込みの辞書がありません。キーボードは入力した単語を学習し、独自の単語リストをインポートすることもできます。</string>
-    <string name="languages_dictionary_title">辞書</string>
-    <string name="languages_dictionary_use_info">オフにすると、キーボードはこの言語のバンドル済みおよびダウンロード済みの単語を忘れ、インポートした単語リストと学習した単語のみを読み取ります。同じスイッチが辞書バー（行とバー）にも表示され、逆に「カスタム辞書」の下の「自分の単語リストのみを使用」としても表示されます。</string>
-    <string name="languages_dictionary_use_subtitle">バンドルまたはダウンロードしたリストから提案および修正を行います</string>
-    <string name="languages_dictionary_use_title">単語リストを使用する</string>
     <string name="languages_download_queued">待機中…</string>
     <string name="languages_emoji_dict_delete_desc">絵文字キーワードを削除</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1987,15 +1976,7 @@
         <item quantity="one">絵文字 %1$,d 個、%2$s</item>
         <item quantity="other">絵文字 %1$,d 個、%2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">絵文字キーワードを使用すると、%1$sで絵文字を検索できます。「ケーキ」と入力すると🎂が見つかります。言語が有効な間、キーボードはキーワードを自動的にダウンロードします。</string>
-    <string name="languages_emoji_keywords_manual">絵文字キーワードを使用すると、%1$sで絵文字を検索できます。「ケーキ」という単語を入力すると、🎂が見つかります。自動ダウンロードはオフになっているため、手動で開始してください。</string>
-    <string name="languages_emoji_keywords_subtitle">すべての言語のダウンロードと、独自のインポート</string>
     <string name="languages_emoji_keywords_title">絵文字のキーワード</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s用の絵文字キーワードはまだ利用できません。絵文字検索は英語で回答します。独自のリストをインポートすることも可能です。</string>
-    <string name="languages_emoji_keywords_use_info">オフにすると、ダウンロードされたキーワードやこの言語用にインポートしたパックはデバイス上に残りますが読み込まれないため、この言語での絵文字検索や絵文字候補は機能しなくなります。同じスイッチが辞書バー（行とバー）にも表示されます。</string>
-    <string name="languages_emoji_keywords_use_subtitle">この言語の名前で絵文字を検索・提案する</string>
-    <string name="languages_emoji_keywords_use_title">絵文字キーワードを使用する</string>
-    <string name="languages_emoji_title">絵文字</string>
     <string name="languages_fancy_style_row_subtitle">ファンシーなキーボードタイプで使用される文字です。キーの上のストリップからも切り替え可能です。</string>
     <string name="languages_fancy_style_row_title">ファンシースタイル</string>
     <string name="languages_fancy_style_title">スタイル</string>
@@ -2064,16 +2045,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s ダウンロード済み</string>
     <string name="languages_wordlist_preparing">辞書を準備中…</string>
-    <string name="languages_wordlist_size_desc">辞書のサイズ</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s、最大%2$,d単語</item>
         <item quantity="other">%1$s、最大%2$,d単語</item>
-    </plurals>
-    <string name="languages_wordlist_title">ダウンロード可能な辞書</string>
-    <string name="languages_wordlist_title_variant">ダウンロード可能な辞書 (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">頻出単語の上位%1$,d語まで</item>
-        <item quantity="other">頻出単語の上位%1$,d語まで</item>
     </plurals>
     <string name="layout_bottom_padding_info">キーボード全体が下端やジェスチャーナビゲーションバーから離れて上に移動します。一番下の行が画面の端に近すぎる場合や、誤ってシステムナビゲーションを開始してしまう場合は、この値を大きくしてください。</string>
     <string name="layout_bottom_padding_subtitle">キーの下、ナビゲーションバーの上のスペースを広げます</string>

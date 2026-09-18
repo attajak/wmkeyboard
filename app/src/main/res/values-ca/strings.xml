@@ -1964,20 +1964,9 @@
     <string name="languages_data_delete_body">%1$s té una llista de paraules o paraules clau d\'emoji descarregades. Voleu suprimir-les i recuperar aproximadament %2$s d\'emmagatzematge?</string>
     <string name="languages_data_delete_dismiss_action">Mantén-los</string>
     <string name="languages_data_delete_title">Voleu suprimir els fitxers baixats?</string>
-    <string name="languages_data_download_all_action">Baixa totes les dades (aproximadament %1$s)</string>
-    <string name="languages_data_download_all_info">Baixa la llista de paraules, les paraules clau d\'emoji i les dades de parells de paraules per a aquest idioma. Els fitxers que ja són al dispositiu no es tornen a baixar. Les files de sota fan el mateix un fitxer cada vegada.</string>
     <string name="languages_data_download_body">El teclat pot descarregar les dades que necessita %1$s per predir i corregir bé: una llista de paraules, paraules clau d\'emoji i dades de parells de paraules, si n\'existeix alguna. Això utilitza aproximadament %2$s de dades. També les pots descarregar més tard des de la pantalla d\'idiomes.</string>
     <string name="languages_data_download_dismiss_action">Ara no</string>
     <string name="languages_data_download_title">Vols baixar les dades de l\'idioma?</string>
-    <string name="languages_data_title">Dades de l\'idioma</string>
-    <string name="languages_dictionary_bundled">Aquest idioma inclou un diccionari integrat.</string>
-    <string name="languages_dictionary_bundled_more">Aquest idioma inclou un diccionari integrat. Baixa\'n un de més gran per obtenir millors suggeriments.</string>
-    <string name="languages_dictionary_none_download">Aquesta llengua no té cap diccionari integrat. Descarregueu-ne un per obtenir suggeriments i correcció automàtica, o importeu la vostra pròpia llista de paraules.</string>
-    <string name="languages_dictionary_none_learn">Aquest idioma no té cap diccionari integrat. El teclat aprèn les teves paraules a mesura que escrius i pots importar la teva pròpia llista de paraules.</string>
-    <string name="languages_dictionary_title">Diccionari</string>
-    <string name="languages_dictionary_use_info">Desactivat, el teclat oblida les paraules incloses i descarregades per a aquest idioma i només llegeix les llistes de paraules que heu importat, a més de les paraules que ha après de vosaltres. El mateix interruptor apareix a la barra del diccionari (Files i barres) i, a la inversa, com a Utilitza només les meves llistes de paraules a Diccionaris personalitzats.</string>
-    <string name="languages_dictionary_use_subtitle">Suggereix i corregeix a partir de la llista inclosa o descarregada</string>
-    <string name="languages_dictionary_use_title">Utilitza la llista de paraules</string>
     <string name="languages_download_queued">Esperant…</string>
     <string name="languages_emoji_dict_delete_desc">Suprimeix les paraules clau dels emojis</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1988,15 +1977,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emojis, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Les paraules clau d\'emoji et permeten cercar emojis en %1$s. Si escrius la paraula \"pastís\", trobaràs 🎂. El teclat descarrega les paraules clau automàticament mentre l\'idioma està activat.</string>
-    <string name="languages_emoji_keywords_manual">Les paraules clau d\'emoji us permeten cercar emojis en %1$s. Si escriviu la seva paraula per a \"pastís\", trobareu 🎂. Les descàrregues automàtiques estan desactivades, així que heu d\'iniciar-la vosaltres mateixos.</string>
-    <string name="languages_emoji_keywords_subtitle">Descàrregues per a cada idioma i les teves pròpies importacions</string>
     <string name="languages_emoji_keywords_title">Paraules clau d\'emojis</string>
-    <string name="languages_emoji_keywords_unavailable">Encara no hi ha paraules clau d\'emoji disponibles per a %1$s. La cerca d\'emojis respon en anglès. Podeu importar la vostra pròpia llista.</string>
-    <string name="languages_emoji_keywords_use_info">Si està desactivat, les paraules clau baixades i qualsevol paquet que hàgiu importat per a aquest idioma romanen al dispositiu però no es llegeixen, de manera que la cerca i els suggeriments d\'emojis deixen de respondre en aquest idioma. El mateix commutador apareix a la barra del diccionari (Files i barres).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Cerca i suggereix emojis pels seus noms en aquest idioma</string>
-    <string name="languages_emoji_keywords_use_title">Utilitza les paraules clau d\'emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">La lletra que escriu el teclat elegant. També es pot canviar des de la franja sobre les tecles.</string>
     <string name="languages_fancy_style_row_title">Estil elegant</string>
     <string name="languages_fancy_style_title">Estil</string>
@@ -2065,16 +2046,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s baixat</string>
     <string name="languages_wordlist_preparing">S\'està preparant el diccionari...</string>
-    <string name="languages_wordlist_size_desc">Mida del diccionari</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, fins a %2$,d paraula</item>
         <item quantity="other">%1$s, fins a %2$,d paraules</item>
-    </plurals>
-    <string name="languages_wordlist_title">Diccionari descarregable</string>
-    <string name="languages_wordlist_title_variant">Diccionari descarregable (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Fins a la paraula més freqüent %1$,d</item>
-        <item quantity="other">Fins a les %1$,d paraules més freqüents</item>
     </plurals>
     <string name="layout_bottom_padding_info">Tot el teclat es desplaça cap amunt, allunyant-se de la vora inferior i de la barra de navegació per gestos. Augmenta-ho si la fila inferior està massa a prop de la vora de la pantalla o si inicies la navegació del sistema per error.</string>
     <string name="layout_bottom_padding_subtitle">Més espai a sota de les tecles, a sobre de la barra de navegació</string>

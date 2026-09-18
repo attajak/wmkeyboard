@@ -1977,20 +1977,9 @@
     <string name="languages_data_delete_body">%1$s में एक डाउनलोड की गई शब्द सूची या इमोजी कीवर्ड हैं। क्या उन्हें हटाकर लगभग %2$s स्टोरेज वापस पाएं?</string>
     <string name="languages_data_delete_dismiss_action">उन्हें रखें</string>
     <string name="languages_data_delete_title">डाउनलोड की गई फ़ाइलें हटाएं?</string>
-    <string name="languages_data_download_all_action">सभी डेटा डाउनलोड करें (लगभग %1$s)</string>
-    <string name="languages_data_download_all_info">इस भाषा के लिए शब्द सूची, इमोजी कीवर्ड और शब्द-युग्म डेटा डाउनलोड करता है। डिवाइस पर पहले से मौजूद फ़ाइलें दोबारा डाउनलोड नहीं की जाती हैं। नीचे दी गई पंक्तियाँ एक बार में एक फ़ाइल के लिए यही काम करती हैं।</string>
     <string name="languages_data_download_body">कीबोर्ड उन डेटा को डाउनलोड कर सकता है जिनकी %1$s को बेहतर तरीके से अनुमान लगाने और सुधारने के लिए ज़रूरत होती है: एक शब्द सूची, इमोजी कीवर्ड और शब्द-जोड़ी डेटा, जो भी मौजूद हो। यह लगभग %2$s डेटा का उपयोग करता है। आप इन्हें बाद में भाषा स्क्रीन से भी डाउनलोड कर सकते हैं।</string>
     <string name="languages_data_download_dismiss_action">अभी नहीं</string>
     <string name="languages_data_download_title">भाषा डेटा डाउनलोड करें?</string>
-    <string name="languages_data_title">भाषा डेटा</string>
-    <string name="languages_dictionary_bundled">इस भाषा में एक इन-बिल्ट शब्दकोश शामिल है।</string>
-    <string name="languages_dictionary_bundled_more">इस भाषा में एक इन-बिल्ट शब्दकोश शामिल है। बेहतर सुझावों के लिए एक बड़ा शब्दकोश डाउनलोड करें।</string>
-    <string name="languages_dictionary_none_download">इस भाषा में कोई इन-बिल्ट शब्दकोश नहीं है। सुझावों और ऑटोकरेक्ट के लिए एक डाउनलोड करें, या अपनी खुद की शब्द सूची आयात करें।</string>
-    <string name="languages_dictionary_none_learn">इस भाषा में कोई इन-बिल्ट शब्दकोश नहीं है। कीबोर्ड आपके टाइप करते समय आपके शब्दों को सीखता है, और आप अपनी खुद की शब्द सूची आयात कर सकते हैं।</string>
-    <string name="languages_dictionary_title">शब्दकोश</string>
-    <string name="languages_dictionary_use_info">बंद होने पर, कीबोर्ड इस भाषा के लिए बंडल और डाउनलोड किए गए शब्दों को भूल जाता है और केवल आपके द्वारा आयातित शब्द सूचियों को पढ़ता है, साथ ही वे शब्द जो उसने आपसे सीखे हैं। यही स्विच डिक्शनरी बार (पंक्तियाँ और बार) पर दिखाई देता है और, इसके विपरीत, कस्टम डिक्शनरी के अंतर्गत \'केवल मेरी शब्द सूचियों का उपयोग करें\' के रूप में दिखाई देता है।</string>
-    <string name="languages_dictionary_use_subtitle">बंडल या डाउनलोड की गई सूची से सुझाव दें और सुधारें</string>
-    <string name="languages_dictionary_use_title">शब्द सूची का उपयोग करें</string>
     <string name="languages_download_queued">प्रतीक्षा की जा रही है...</string>
     <string name="languages_emoji_dict_delete_desc">इमोजी कीवर्ड हटाएं</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -2001,15 +1990,7 @@
         <item quantity="one">%1$,d इमोजी, %2$s</item>
         <item quantity="other">%1$,d इमोजी, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">इमोजी कीवर्ड आपको %1$s में इमोजी खोजने देते हैं। यदि आप \"केक\" के लिए उसका शब्द टाइप करते हैं, तो आपको 🎂 मिलता है। भाषा चालू रहने पर कीबोर्ड स्वचालित रूप से कीवर्ड डाउनलोड करता है।</string>
-    <string name="languages_emoji_keywords_manual">इमोजी कीवर्ड आपको %1$s में इमोजी खोजने देते हैं। यदि आप \"केक\" के लिए उसका शब्द टाइप करते हैं, तो आपको 🎂 मिलता है। स्वचालित डाउनलोड बंद हैं, इसलिए आप इसे स्वयं शुरू करें।</string>
-    <string name="languages_emoji_keywords_subtitle">हर भाषा के लिए डाउनलोड, और आपके अपने इंपोर्ट</string>
     <string name="languages_emoji_keywords_title">इमोजी कीवर्ड</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s के लिए अभी तक कोई इमोजी कीवर्ड उपलब्ध नहीं है। इमोजी खोज अंग्रेजी में उत्तर देती है। आप अपनी खुद की सूची आयात कर सकते हैं।</string>
-    <string name="languages_emoji_keywords_use_info">बंद होने पर, डाउनलोड किए गए कीवर्ड और इस भाषा के लिए आपके द्वारा आयात किया गया कोई भी पैक डिवाइस पर रहता है लेकिन पढ़ा नहीं जाता है, इसलिए इमोजी खोज और इमोजी सुझाव इस भाषा में उत्तर देना बंद कर देते हैं। वही स्विच शब्दकोश पट्टी (पंक्तियाँ और बार) पर दिखाई देता है।</string>
-    <string name="languages_emoji_keywords_use_subtitle">इस भाषा में इमोजी को उनके नामों से खोजें और सुझाएं</string>
-    <string name="languages_emoji_keywords_use_title">इमोजी कीवर्ड का उपयोग करें</string>
-    <string name="languages_emoji_title">इमोजी</string>
     <string name="languages_fancy_style_row_subtitle">फैंसी कीबोर्ड द्वारा टाइप की जाने वाली लिखावट। इसे कुंजियों के ऊपर की पट्टी से भी बदला जा सकता है।</string>
     <string name="languages_fancy_style_row_title">फैंसी स्टाइल</string>
     <string name="languages_fancy_style_title">शैली</string>
@@ -2078,16 +2059,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s डाउनलोड किया गया</string>
     <string name="languages_wordlist_preparing">शब्दकोश तैयार किया जा रहा है…</string>
-    <string name="languages_wordlist_size_desc">शब्दकोश का आकार</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, %2$,d शब्द तक</item>
         <item quantity="other">%1$s, %2$,d शब्दों तक</item>
-    </plurals>
-    <string name="languages_wordlist_title">डाउनलोड करने योग्य शब्दकोश</string>
-    <string name="languages_wordlist_title_variant">डाउनलोड करने योग्य शब्दकोश (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">%1$,d सबसे अधिक बार उपयोग किए जाने वाले शब्द तक</item>
-        <item quantity="other">%1$,d सबसे अधिक बार उपयोग किए जाने वाले शब्दों तक</item>
     </plurals>
     <string name="layout_bottom_padding_info">पूरा कीबोर्ड ऊपर की ओर, निचले किनारे और जेस्चर नेविगेशन बार से दूर चला जाता है। यदि निचली पंक्ति स्क्रीन के किनारे के बहुत करीब है, या यदि आप गलती से सिस्टम नेविगेशन शुरू कर देते हैं, तो इसे बढ़ाएं।</string>
     <string name="layout_bottom_padding_subtitle">कुंजियों के नीचे, नेविगेशन बार के ऊपर अधिक स्थान</string>

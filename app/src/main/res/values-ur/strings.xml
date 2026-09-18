@@ -1967,20 +1967,9 @@
     <string name="languages_data_delete_body">%1$s میں ڈاؤن لوڈ کردہ الفاظ کی فہرست یا ایموجی کی ورڈز موجود ہیں۔ کیا انہیں حذف کر کے تقریباً %2$s اسٹوریج واپس حاصل کر لیں؟</string>
     <string name="languages_data_delete_dismiss_action">انہیں رکھیں</string>
     <string name="languages_data_delete_title">ڈاؤن لوڈ کردہ فائلیں حذف کریں؟</string>
-    <string name="languages_data_download_all_action">تمام ڈیٹا ڈاؤن لوڈ کریں (تقریباً %1$s)</string>
-    <string name="languages_data_download_all_info">اس زبان کے لیے الفاظ کی فہرست، ایموجی کی ورڈز اور ورڈ پیئر ڈیٹا ڈاؤن لوڈ کرتا ہے۔ جو فائلیں پہلے سے ڈیوائس پر موجود ہیں انہیں دوبارہ ڈاؤن لوڈ نہیں کیا جاتا۔ نیچے دی گئی قطاریں ایک وقت میں ایک فائل کے ساتھ یہی کام کرتی ہیں۔</string>
     <string name="languages_data_download_body">کی بورڈ وہ ڈیٹا ڈاؤن لوڈ کر سکتا ہے جس کی %1$s کو اچھی پیشین گوئی اور تصحیح کے لیے ضرورت ہے: ایک لفظ کی فہرست، ایموجی کی ورڈز اور لفظ کے جوڑے کا ڈیٹا، جو بھی موجود ہو۔ یہ تقریباً %2$s ڈیٹا استعمال کرتا ہے۔ آپ انہیں بعد میں زبان کی اسکرین سے بھی ڈاؤن لوڈ کر سکتے ہیں۔</string>
     <string name="languages_data_download_dismiss_action">ابھی نہیں</string>
     <string name="languages_data_download_title">زبان کا ڈیٹا ڈاؤن لوڈ کریں؟</string>
-    <string name="languages_data_title">زبان کا ڈیٹا</string>
-    <string name="languages_dictionary_bundled">اس زبان میں ایک بلٹ ان لغت شامل ہے۔</string>
-    <string name="languages_dictionary_bundled_more">اس زبان میں ایک بلٹ ان لغت شامل ہے۔ بہتر تجاویز کے لیے بڑی لغت ڈاؤن لوڈ کریں۔</string>
-    <string name="languages_dictionary_none_download">اس زبان کی کوئی بلٹ ان لغت نہیں ہے۔ تجاویز اور خودکار تصحیح کے لیے ایک ڈاؤن لوڈ کریں، یا اپنی الفاظ کی فہرست درآمد کریں۔</string>
-    <string name="languages_dictionary_none_learn">اس زبان کی کوئی بلٹ ان لغت نہیں ہے۔ کی بورڈ آپ کے ٹائپ کرنے کے ساتھ ہی آپ کے الفاظ سیکھ لیتا ہے، اور آپ اپنی الفاظ کی فہرست درآمد کر سکتے ہیں۔</string>
-    <string name="languages_dictionary_title">لغت</string>
-    <string name="languages_dictionary_use_info">آف ہونے پر، کی بورڈ اس زبان کے لیے بنڈل اور ڈاؤن لوڈ کردہ الفاظ کو بھول جاتا ہے اور صرف ان الفاظ کی فہرستیں پڑھتا ہے جو آپ نے امپورٹ کی ہیں، نیز وہ الفاظ جو اس نے آپ سے سیکھے ہیں۔ یہی سوئچ ڈکشنری بار (قطاریں اور بارز) پر ظاہر ہوتا ہے اور، دوسری طرف، کسٹم ڈکشنریز کے تحت \'صرف میری الفاظ کی فہرستیں استعمال کریں\' کے طور پر۔</string>
-    <string name="languages_dictionary_use_subtitle">بنڈل یا ڈاؤن لوڈ کردہ فہرست سے تجویز اور درست کریں</string>
-    <string name="languages_dictionary_use_title">لفظوں کی فہرست استعمال کریں</string>
     <string name="languages_download_queued">انتظار کیا جا رہا ہے...</string>
     <string name="languages_emoji_dict_delete_desc">ایموجی کی ورڈز کو حذف کریں</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1991,15 +1980,7 @@
         <item quantity="one">%1$,d ایموجی، %2$s</item>
         <item quantity="other">%1$,d ایموجی، %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">ایموجی کی ورڈز آپ کو %1$s میں ایموجی تلاش کرنے دیتے ہیں۔ اگر آپ \"کیک\" کے لیے اس کا لفظ ٹائپ کرتے ہیں، تو آپ کو 🎂 مل جاتا ہے۔ جب زبان آن ہوتی ہے تو کی بورڈ خود بخود کی ورڈز ڈاؤن لوڈ کر لیتا ہے۔</string>
-    <string name="languages_emoji_keywords_manual">ایموجی کی ورڈز آپ کو %1$s میں ایموجی تلاش کرنے دیتے ہیں۔ اگر آپ \"کیک\" کے لیے اس کا لفظ ٹائپ کرتے ہیں، تو آپ کو 🎂 مل جاتا ہے۔ خودکار ڈاؤن لوڈز بند ہیں، لہذا آپ اسے خود شروع کریں۔</string>
-    <string name="languages_emoji_keywords_subtitle">ہر زبان کے لیے ڈاؤن لوڈز، اور آپ کی اپنی درآمدات</string>
     <string name="languages_emoji_keywords_title">ایموجی کے کلیدی الفاظ</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s کے لیے ابھی تک کوئی ایموجی کلیدی الفاظ دستیاب نہیں ہیں۔ ایموجی تلاش کے جوابات انگریزی میں ہیں۔ آپ اپنی فہرست درآمد کر سکتے ہیں۔</string>
-    <string name="languages_emoji_keywords_use_info">آف ہونے پر، ڈاؤن لوڈ کردہ کلیدی الفاظ اور اس زبان کے لیے آپ کی درآمد کردہ کوئی بھی پیک ڈیوائس پر موجود رہتے ہیں لیکن پڑھے نہیں جاتے، اس لیے ایموجی تلاش اور ایموجی تجاویز اس زبان میں جواب دینا بند کر دیتی ہیں۔ یہی سوئچ لغت کی پٹی (قطاریں اور پٹیاں) پر بھی ظاہر ہوتا ہے۔</string>
-    <string name="languages_emoji_keywords_use_subtitle">اس زبان میں ایموجی کو ان کے ناموں سے تلاش کریں اور تجویز کریں</string>
-    <string name="languages_emoji_keywords_use_title">ایموجی کلیدی الفاظ استعمال کریں</string>
-    <string name="languages_emoji_title">ایموجی</string>
     <string name="languages_fancy_style_row_subtitle">وہ لکھائی جو فینسی کی بورڈ ٹائپ کرتا ہے۔ اسے کیز کے اوپر والی پٹی سے بھی تبدیل کیا جا سکتا ہے۔</string>
     <string name="languages_fancy_style_row_title">فینسی اسٹائل</string>
     <string name="languages_fancy_style_title">اسٹائل</string>
@@ -2068,16 +2049,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s ڈاؤن لوڈ ہو گیا</string>
     <string name="languages_wordlist_preparing">لغت تیار کی جا رہی ہے...</string>
-    <string name="languages_wordlist_size_desc">لغت کا سائز</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s، %2$,d لفظ تک</item>
         <item quantity="other">%1$s، %2$,d الفاظ تک</item>
-    </plurals>
-    <string name="languages_wordlist_title">ڈاؤن لوڈ کے قابل لغت</string>
-    <string name="languages_wordlist_title_variant">ڈاؤن لوڈ کے قابل لغت (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">سب سے زیادہ استعمال ہونے والے %1$,d لفظ تک</item>
-        <item quantity="other">سب سے زیادہ استعمال ہونے والے %1$,d الفاظ تک</item>
     </plurals>
     <string name="layout_bottom_padding_info">پورا کی بورڈ اوپر کی طرف، نچلے کنارے اور گیسچر نیویگیشن بار سے دور ہو جاتا ہے۔ اگر نچلی قطار اسکرین کے کنارے کے بہت قریب ہو، یا اگر آپ غلطی سے سسٹم نیویگیشن شروع کر دیتے ہیں تو اسے بڑھا دیں۔</string>
     <string name="layout_bottom_padding_subtitle">کیز کے نیچے، نیویگیشن بار کے اوپر مزید جگہ</string>

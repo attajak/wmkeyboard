@@ -4,21 +4,16 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -34,9 +29,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
@@ -55,8 +50,6 @@ import com.wasimaster.wmkeyboard.core.emoji.EmojiDictCatalog
 import com.wasimaster.wmkeyboard.core.emoji.EmojiDictDownloadManager
 import com.wasimaster.wmkeyboard.core.emoji.EmojiDictEntry
 import com.wasimaster.wmkeyboard.core.emoji.EmojiDictStore
-import com.wasimaster.wmkeyboard.core.emoji.EmojiKeywordPacks
-import com.wasimaster.wmkeyboard.core.settings.keywordsEnabledFor
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictCatalog
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictDownloadManager
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictPack
@@ -83,7 +76,6 @@ import com.wasimaster.wmkeyboard.core.script.SuggestedLanguage
 import com.wasimaster.wmkeyboard.core.script.SuggestionReason
 import com.wasimaster.wmkeyboard.core.script.resolveNumeralDigits
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
-import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.TransliterationHintMode
@@ -454,7 +446,20 @@ internal data class LanguageData(
     val bytes: Long,
 ) {
     val isEmpty: Boolean get() = wordlist == null && emojiDict == null && ngram == null
+
+    /** Roughly what fetching all of it costs, with the word list at [size]. */
+    fun approxBytes(size: DictionaryCatalog.DictionarySize): Long =
+        (wordlist?.let { entryBytes(it, size) } ?: 0L) +
+            (emojiDict?.approxGzBytes ?: 0L) + (ngram?.approxGzBytes ?: 0L)
 }
+
+/**
+ * Roughly what [entry] transfers at [size]. The catalogue sizes the whole
+ * file, and a capped download stops partway through it, so this scales by the
+ * share of the list actually read.
+ */
+internal fun entryBytes(entry: DictionaryEntry, size: DictionaryCatalog.DictionarySize): Long =
+    entry.approxGzBytes * DictionaryCatalog.wordCap(entry, size) / entry.totalWordCount.coerceAtLeast(1)
 
 /** Everything downloadable for [langId], sized for a prompt. */
 internal fun languageData(langId: String): LanguageData {
@@ -464,18 +469,8 @@ internal fun languageData(langId: String): LanguageData {
     val wordlist = lists.firstOrNull { it.id == langId } ?: lists.firstOrNull()
     val emojiDict = EmojiDictCatalog.forLanguage(langId)
     val ngram = NgramPackCatalog.forLanguage(langId)
-    // The catalogue sizes the whole file, and a capped download stops partway
-    // through it, so scale by the share of the list actually read.
-    val wordlistBytes = wordlist?.let {
-        val cap = DictionaryCatalog.wordCap(it, AUTO_DOWNLOAD_SIZE)
-        it.approxGzBytes * cap / it.totalWordCount.coerceAtLeast(1)
-    } ?: 0L
-    return LanguageData(
-        wordlist = wordlist,
-        emojiDict = emojiDict,
-        ngram = ngram,
-        bytes = wordlistBytes + (emojiDict?.approxGzBytes ?: 0L) + (ngram?.approxGzBytes ?: 0L),
-    )
+    val data = LanguageData(wordlist = wordlist, emojiDict = emojiDict, ngram = ngram, bytes = 0L)
+    return data.copy(bytes = data.approxBytes(AUTO_DOWNLOAD_SIZE))
 }
 
 
@@ -490,19 +485,21 @@ internal fun isMeteredNow(context: Context): Boolean =
     context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered ?: false
 
 /**
- * Fetches everything [data] offers, as the prompt's Download does.
+ * Fetches everything [data] offers, as the prompt's Download does, with the
+ * word list at [size].
  *
- * All three managers queue internally and skip what is already on disk, so
- * this is safe to call for a language that is half downloaded already.
+ * The word list is fetched again even when one is on disk, so callers that
+ * may meet a half-downloaded language pass only what is missing.
  */
 internal fun startLanguageDataDownload(
     context: Context,
     data: LanguageData,
     notify: DownloadNotifier? = null,
+    size: DictionaryCatalog.DictionarySize = AUTO_DOWNLOAD_SIZE,
 ) {
     val filesDir = context.filesDir
     data.wordlist?.let { entry ->
-        WordlistDownloadManager.start(filesDir, entry, AUTO_DOWNLOAD_SIZE)
+        WordlistDownloadManager.start(filesDir, entry, size)
         notify?.invoke(
             entry.id,
             context.getString(
@@ -538,7 +535,8 @@ private val AUTO_DOWNLOAD_SIZE = DictionaryCatalog.DictionarySize.LARGE
 /** Bytes a language's downloaded files are taking up right now. */
 private fun downloadedLanguageBytes(filesDir: File, langId: String): Long =
     DictionaryStore.downloadedFile(filesDir, langId).length() +
-        EmojiDictStore.packFile(filesDir, langId).length()
+        EmojiDictStore.packFile(filesDir, langId).length() +
+        NgramPackDownloadManager.packFile(filesDir, langId).length()
 
 /**
  * The download prompt, hoisted so every screen that can add a language asks the
@@ -917,6 +915,7 @@ internal fun LanguageDetailScreen(
                 // Leaves a "declined" mark behind, which is what stops the
                 // automatic pass fetching the keywords straight back.
                 EmojiDictDownloadManager.delete(filesDir, langId)
+                NgramPackDownloadManager.delete(filesDir, langId)
                 removeLanguage()
             },
         )
@@ -1098,148 +1097,9 @@ internal fun LanguageDetailScreen(
         }
     }
 
-    // One tap for the whole set: the word list, the emoji keywords and the
-    // n-gram pack together. Here for the language that was added before this
-    // screen existed, and for the one added with automatic downloads off — the
-    // rows below still fetch them one at a time. The size is on the button
-    // because pressing it is the consent.
-    val downloadable = remember(langId) { languageData(langId) }
-    val downloadDecision = rememberDownloadDecision(settings)
-    var confirmMetered by remember { mutableStateOf(false) }
-    var blockedMetered by remember { mutableStateOf(false) }
-    if (!downloadable.isEmpty) {
-        SettingsGroup(
-            stringResource(R.string.languages_data_title),
-            info = stringResource(R.string.languages_data_download_all_info),
-        ) {
-            item {
-                OutlinedButton(
-                    onClick = {
-                        when (downloadDecision()) {
-                            MeteredDecision.ASK -> confirmMetered = true
-                            MeteredDecision.BLOCKED -> blockedMetered = true
-                            MeteredDecision.ALLOWED ->
-                                startLanguageDataDownload(context, downloadable, notifyDownload)
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                ) {
-                    Text(
-                        stringResource(
-                            R.string.languages_data_download_all_action,
-                            formatBytes(downloadable.bytes),
-                        ),
-                    )
-                }
-            }
-        }
-    }
-    if (confirmMetered) {
-        MeteredDownloadDialog(
-            detail = stringResource(
-                R.string.languages_metered_confirm_body,
-                formatBytes(downloadable.bytes),
-            ),
-            onConfirm = {
-                confirmMetered = false
-                startLanguageDataDownload(context, downloadable, notifyDownload)
-            },
-            onDismiss = { confirmMetered = false },
-        )
-    }
-    if (blockedMetered) MeteredBlockedDialog { blockedMetered = false }
-
-    val wordlistEntries = DictionaryCatalog.forLanguage(langId)
-    SettingsGroup(stringResource(R.string.languages_dictionary_title)) {
-        item {
-            CaptionText(
-                stringResource(
-                    when {
-                        lang.bundledDictionary && wordlistEntries.isNotEmpty() ->
-                            R.string.languages_dictionary_bundled_more
-                        lang.bundledDictionary -> R.string.languages_dictionary_bundled
-                        wordlistEntries.isNotEmpty() ->
-                            R.string.languages_dictionary_none_download
-                        else -> R.string.languages_dictionary_none_learn
-                    },
-                ),
-            )
-        }
-        for (entry in wordlistEntries) {
-            item { WordlistRow(entry, settings.appUi.defaultWordlistSize) { chosen ->
-                scope.launch { repository.setDefaultWordlistSize(chosen) }
-            } }
-        }
-        // The word list's own switch (issue #51): the same setting the
-        // Custom dictionaries screen spells as "Use only my word lists", read
-        // the other way up, and only where there is a list to switch.
-        if (lang.bundledDictionary || DictionaryStore.isDownloaded(filesDir, langId)) {
-            item {
-                ToggleSetting(
-                    R.string.languages_dictionary_use_title,
-                    stringResource(R.string.languages_dictionary_use_subtitle),
-                    settings.suggestionStrip.shippedDictionaryEnabledFor(langId),
-                    info = stringResource(R.string.languages_dictionary_use_info),
-                    default = SettingsDefaults.suggestionStrip.shippedDictionaryEnabledFor(langId),
-                ) { scope.launch { repository.setShippedDictionaryEnabled(langId, it) } }
-            }
-        }
-        item {
-            NavRow(
-                R.string.languages_custom_dictionaries_title,
-                stringResource(R.string.languages_custom_dictionaries_subtitle),
-                route = "customdictionaries",
-            ) {
-                onNavigate("customdictionaries")
-            }
-        }
-    }
-
-    val emojiDict = EmojiDictCatalog.forLanguage(langId)
-    SettingsGroup(stringResource(R.string.languages_emoji_title)) {
-        item {
-            CaptionText(
-                stringResource(
-                    when {
-                        emojiDict == null -> R.string.languages_emoji_keywords_unavailable
-                        settings.autoDownloadLanguageData && settings.emoji.autoDownloadKeywords ->
-                            R.string.languages_emoji_keywords_auto
-                        else -> R.string.languages_emoji_keywords_manual
-                    },
-                    lang.englishName,
-                ),
-            )
-        }
-        if (emojiDict != null) {
-            item { EmojiDictRow(emojiDict) }
-        }
-        // The keywords' own switch (issue #51), only once there is a pack —
-        // downloaded or imported — for it to switch.
-        val emojiPackOnDevice = EmojiDictStore.isDownloaded(filesDir, langId) ||
-            EmojiKeywordPacks.packs(filesDir, langId).isNotEmpty()
-        if (emojiPackOnDevice) {
-            item {
-                ToggleSetting(
-                    R.string.languages_emoji_keywords_use_title,
-                    stringResource(R.string.languages_emoji_keywords_use_subtitle),
-                    settings.emoji.keywordsEnabledFor(langId),
-                    info = stringResource(R.string.languages_emoji_keywords_use_info),
-                    default = SettingsDefaults.emoji.keywordsEnabledFor(langId),
-                ) { scope.launch { repository.setEmojiKeywordsEnabled(langId, it) } }
-            }
-        }
-        item {
-            NavRow(
-                R.string.languages_emoji_keywords_title,
-                stringResource(R.string.languages_emoji_keywords_subtitle),
-                route = "emojikeywords",
-            ) {
-                onNavigate("emojikeywords")
-            }
-        }
-    }
+    // The word list, emoji keywords and word pairs, one row each, with the
+    // Download all that fetches whatever of them is missing.
+    DictionariesGroup(lang, settings, repository, scope, onNavigate)
 
     // Chinese/Japanese get a downloadable large conversion dictionary; Chinese
     // also gets fuzzy + Double Pinyin, all in one "… options" group.
@@ -1255,7 +1115,8 @@ internal fun LanguageDetailScreen(
                 OutlinedButton(
                     onClick = {
                         val downloaded = DictionaryStore.isDownloaded(filesDir, langId) ||
-                            EmojiDictStore.isDownloaded(filesDir, langId)
+                            EmojiDictStore.isDownloaded(filesDir, langId) ||
+                            NgramPackDownloadManager.isDownloaded(filesDir, langId)
                         if (downloaded) pendingDelete = true else removeLanguage()
                     },
                     modifier = Modifier
@@ -1385,195 +1246,6 @@ internal fun EmojiDictRow(entry: EmojiDictEntry) {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp),
         )
-    }
-}
-
-/**
- * Download/delete row for one [DictionaryCatalog] wordlist, driven by the
- * process-level [WordlistDownloadManager] so progress survives navigation
- * (same pattern as the Whisper model rows). Before downloading, the trailing
- * dropdown picks how many of the most frequent words to keep — the choice is
- * a download parameter, not a setting; it is recorded in the file itself.
- */
-@Composable
-private fun WordlistRow(
-    entry: DictionaryEntry,
-    defaultSize: DictionaryCatalog.DictionarySize,
-    onDefaultSizeChange: (DictionaryCatalog.DictionarySize) -> Unit,
-) {
-    val context = LocalContext.current
-    val filesDir = context.filesDir
-    val notifyDownload = rememberDownloadNotifier()
-    val downloadName = stringResource(
-        R.string.notify_download_wordlist,
-        LanguageRegistry.byId(entry.languageId).displayName,
-    )
-    val states by WordlistDownloadManager.states.collectAsState()
-    LaunchedEffect(entry.id) { WordlistDownloadManager.refresh(filesDir) }
-    val status = states[entry.id] ?: WordlistDownloadManager.DownloadStatus.NotDownloaded
-    // Seeded from the stored default and written back on every pick, so the
-    // choice carries to the next language and survives leaving the screen. It
-    // used to be plain composition state that reset to LARGE every time.
-    var size by remember(defaultSize) { mutableStateOf(defaultSize) }
-    var sizeMenu by remember { mutableStateOf(false) }
-    val effectiveWords = DictionaryCatalog.wordCap(entry, size)
-    // Tiers past the end of a short list all keep the same words, so only the
-    // first one that reaches the whole list is worth offering.
-    val sizeOptions = remember(entry.totalWordCount) {
-        DictionaryCatalog.DictionarySize.entries.distinctBy { DictionaryCatalog.wordCap(entry, it) }
-    }
-
-    WmRow(
-        title = entry.variantRes?.let {
-            stringResource(R.string.languages_wordlist_title_variant, stringResource(it))
-        } ?: stringResource(R.string.languages_wordlist_title),
-        supporting = {
-            Text(
-                when (status) {
-                    is WordlistDownloadManager.DownloadStatus.Downloaded -> pluralStringResource(
-                        R.plurals.languages_wordlist_downloaded,
-                        status.wordCount,
-                        status.wordCount,
-                        formatBytes(status.sizeBytes),
-                    )
-                    WordlistDownloadManager.DownloadStatus.Processing ->
-                        stringResource(R.string.languages_wordlist_preparing)
-                    is WordlistDownloadManager.DownloadStatus.Downloading ->
-                        stringResource(CommonR.string.common_downloading)
-                    is WordlistDownloadManager.DownloadStatus.Failed ->
-                        if (status.messageArg.isEmpty()) stringResource(status.messageRes)
-                        else stringResource(status.messageRes, status.messageArg)
-                    WordlistDownloadManager.DownloadStatus.NotDownloaded -> pluralStringResource(
-                        R.plurals.languages_wordlist_word_count,
-                        effectiveWords,
-                        effectiveWords,
-                    )
-                },
-                color = if (status is WordlistDownloadManager.DownloadStatus.Failed) {
-                    MaterialTheme.colorScheme.error
-                } else {
-                    androidx.compose.ui.graphics.Color.Unspecified
-                },
-            )
-        },
-        trailing = {
-            when (status) {
-                is WordlistDownloadManager.DownloadStatus.Downloaded ->
-                    IconButton(onClick = { WordlistDownloadManager.delete(filesDir, entry) }) {
-                        Icon(
-                            Icons.Outlined.Delete,
-                            contentDescription = stringResource(
-                                R.string.languages_wordlist_delete_desc,
-                            ),
-                        )
-                    }
-                is WordlistDownloadManager.DownloadStatus.Downloading,
-                WordlistDownloadManager.DownloadStatus.Processing,
-                ->
-                    IconButton(onClick = { WordlistDownloadManager.cancel() }) {
-                        Icon(
-                            Icons.Outlined.Close,
-                            contentDescription = stringResource(
-                                R.string.languages_cancel_download_desc,
-                            ),
-                        )
-                    }
-                WordlistDownloadManager.DownloadStatus.NotDownloaded,
-                is WordlistDownloadManager.DownloadStatus.Failed,
-                -> Row {
-                    // Hide the size picker when the whole list fits the
-                    // smallest tier anyway.
-                    if (entry.totalWordCount > DictionaryCatalog.DictionarySize.SMALL.wordCap) {
-                        TextButton(
-                            onClick = { sizeMenu = true },
-                            enabled = !WordlistDownloadManager.isBusy,
-                        ) {
-                            Text(stringResource(size.labelRes))
-                            Icon(
-                                Icons.Outlined.ArrowDropDown,
-                                contentDescription = stringResource(
-                                    R.string.languages_wordlist_size_desc,
-                                ),
-                            )
-                        }
-                        DropdownMenu(expanded = sizeMenu, onDismissRequest = { sizeMenu = false }) {
-                            for (option in sizeOptions) {
-                                DropdownMenuItem(
-                                    text = {
-                                        val words = DictionaryCatalog.wordCap(entry, option)
-                                        Text(
-                                            pluralStringResource(
-                                                R.plurals.languages_wordlist_size_option,
-                                                words,
-                                                stringResource(option.labelRes),
-                                                words,
-                                            ),
-                                        )
-                                    },
-                                    onClick = {
-                                        size = option
-                                        onDefaultSizeChange(option)
-                                        sizeMenu = false
-                                    },
-                                )
-                            }
-                        }
-                    }
-                    TextButton(
-                        onClick = {
-                            WordlistDownloadManager.start(filesDir, entry, size)
-                            notifyDownload(
-                                entry.id,
-                                downloadName,
-                                DownloadProgressFlows.wordlist(context, entry.id),
-                            )
-                        },
-                        enabled = !WordlistDownloadManager.isBusy,
-                    ) {
-                        Text(
-                            if (status is WordlistDownloadManager.DownloadStatus.Failed) {
-                                stringResource(CommonR.string.common_retry)
-                            } else {
-                                stringResource(CommonR.string.common_download)
-                            },
-                        )
-                    }
-                }
-            }
-        },
-        modifier = Modifier.padding(horizontal = 4.dp),
-    )
-    when (status) {
-        is WordlistDownloadManager.DownloadStatus.Downloading -> Column(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-        ) {
-            // Indeterminate on purpose: a capped download stops early, so
-            // bytes-of-total would count to a total it never reaches.
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            Text(
-                stringResource(
-                    R.string.languages_wordlist_downloaded_bytes,
-                    formatBytes(status.bytes),
-                ),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 4.dp),
-            )
-        }
-        WordlistDownloadManager.DownloadStatus.Processing -> Column(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-        ) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-        }
-
-        // The three resting states. Nothing goes under the row for any of them:
-        // the row itself already carries the word count, the size and the retry
-        // button, so a second line here would only repeat it. Listed rather than
-        // left to an `else` so a new status has to decide whether it needs one.
-        WordlistDownloadManager.DownloadStatus.NotDownloaded,
-        is WordlistDownloadManager.DownloadStatus.Downloaded,
-        is WordlistDownloadManager.DownloadStatus.Failed,
-        -> Unit
     }
 }
 

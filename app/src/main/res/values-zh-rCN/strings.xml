@@ -1961,20 +1961,9 @@
     <string name="languages_data_delete_body">%1$s 包含已下载的词表或表情符号关键词。删除它们并回收约 %2$s 的存储空间？</string>
     <string name="languages_data_delete_dismiss_action">保留它们</string>
     <string name="languages_data_delete_title">删除已下载的文件吗？</string>
-    <string name="languages_data_download_all_action">下载所有数据（约 %1$s）</string>
-    <string name="languages_data_download_all_info">下载此语言的词汇表、表情符号关键词和词对数据。设备上已有的文件不会再次下载。下方的行可逐个下载文件。</string>
     <string name="languages_data_download_body">键盘可以下载 %1$s 所需的数据以进行良好的预测和纠错：词汇表、表情符号关键词和词对数据（如果存在）。这大约会使用 %2$s 的数据。您以后也可以在语言屏幕中下载它们。</string>
     <string name="languages_data_download_dismiss_action">以后再说</string>
     <string name="languages_data_download_title">下载语言数据？</string>
-    <string name="languages_data_title">语言数据</string>
-    <string name="languages_dictionary_bundled">此语言包含内置词典。</string>
-    <string name="languages_dictionary_bundled_more">此语言包含内置词典。下载更大的词典以获得更好的建议。</string>
-    <string name="languages_dictionary_none_download">此语言没有内置词典。请下载一个以获取建议和自动更正，或导入您自己的词库。</string>
-    <string name="languages_dictionary_none_learn">该语言没有内置词典。键盘会在您输入时学习您的词汇，您也可以导入自己的词汇表。</string>
-    <string name="languages_dictionary_title">词典</string>
-    <string name="languages_dictionary_use_info">关闭后，键盘将忘记该语言的内置和下载词库，仅读取您导入的词表以及从您那里学习到的词汇。同样的开关也会出现在词典栏（行与栏）中，反之亦然，即“自定义词典”下的“仅使用我的词表”。</string>
-    <string name="languages_dictionary_use_subtitle">根据内置或下载的列表进行建议和纠错</string>
-    <string name="languages_dictionary_use_title">使用词库</string>
     <string name="languages_download_queued">等待中……</string>
     <string name="languages_emoji_dict_delete_desc">删除表情符号关键词</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1985,15 +1974,7 @@
         <item quantity="one">%1$,d 个表情符号，%2$s</item>
         <item quantity="other">%1$,d 个表情符号，%2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">表情符号关键词让您可以在 %1$s 中搜索表情符号。如果您输入“cake”对应的单词，就能找到 🎂。当语言开启时，键盘会自动下载这些关键词。</string>
-    <string name="languages_emoji_keywords_manual">Emoji 关键词让您可以在 %1$s 中搜索 Emoji。如果您输入“蛋糕”的单词，就能找到 🎂。自动下载功能已关闭，因此您需要手动启动此项。</string>
-    <string name="languages_emoji_keywords_subtitle">适用于每种语言的下载内容，以及您自己的导入内容</string>
     <string name="languages_emoji_keywords_title">表情符号关键词</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s 暂无表情符号关键词。表情符号搜索结果以英语显示。您可以导入自己的列表。</string>
-    <string name="languages_emoji_keywords_use_info">关闭后，已下载的关键字和您为此语言导入的任何词库将保留在设备上，但不会被读取，因此该语言的表情符号搜索和表情符号建议将停止响应。同样的开关也会出现在字典栏（行与栏）中。</string>
-    <string name="languages_emoji_keywords_use_subtitle">按此语言的名称搜索并建议表情符号</string>
-    <string name="languages_emoji_keywords_use_title">使用表情符号关键词</string>
-    <string name="languages_emoji_title">表情符号</string>
     <string name="languages_fancy_style_row_subtitle">花式键盘输入的字体样式。也可以通过按键上方的工具条进行切换。</string>
     <string name="languages_fancy_style_row_title">花式字体</string>
     <string name="languages_fancy_style_title">样式</string>
@@ -2062,16 +2043,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">已下载 %1$s</string>
     <string name="languages_wordlist_preparing">正在准备词典……</string>
-    <string name="languages_wordlist_size_desc">词典大小</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s，最多 %2$,d 个单词</item>
         <item quantity="other">%1$s，最多 %2$,d 个单词</item>
-    </plurals>
-    <string name="languages_wordlist_title">可下载词典</string>
-    <string name="languages_wordlist_title_variant">可下载词典 (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">最多 %1$,d 个最常用词</item>
-        <item quantity="other">最多 %1$,d 个最常用词</item>
     </plurals>
     <string name="layout_bottom_padding_info">整个键盘向上移动，远离底部边缘和手势导航栏。如果底行太靠近屏幕边缘，或者您误触了系统导航，请增加此间距。</string>
     <string name="layout_bottom_padding_subtitle">按键下方、导航栏上方的更多空间</string>

@@ -136,24 +136,55 @@
          language. %1$s and %2$s are English names of the two languages. -->
     <string name="languages_auto_pair_toast"><xliff:g id="language_one" example="Bangla (Romanized)">%1$s</xliff:g> and <xliff:g id="language_two" example="English">%2$s</xliff:g> now suggest each other\'s words. You can change this on each language\'s page.</string>
 
-    <!-- ===== Dictionary ===== -->
+    <!-- ===== Dictionaries ===== -->
 
-    <string name="languages_dictionary_title">Dictionary</string>
-    <string name="languages_dictionary_bundled_more">This language includes a built-in dictionary. Download a bigger one for better suggestions.</string>
-    <string name="languages_dictionary_bundled">This language includes a built-in dictionary.</string>
-    <string name="languages_dictionary_none_download">This language has no built-in dictionary. Download one for suggestions and autocorrect, or import your own word list.</string>
-    <string name="languages_dictionary_none_learn">This language has no built-in dictionary. The keyboard learns your words as you type, and you can import your own word list.</string>
-    <string name="languages_custom_dictionaries_title">Custom dictionaries</string>
-    <string name="languages_custom_dictionaries_subtitle">Import your own word lists</string>
-    <string name="languages_dictionary_use_title">Use the word list</string>
-    <string name="languages_dictionary_use_subtitle">Suggest and correct from the bundled or downloaded list</string>
-    <string name="languages_dictionary_use_info">Off, the keyboard forgets the bundled and downloaded words for this language and reads only the word lists that you imported, plus the words it learned from you. The same switch appears on the dictionary bar (Rows &amp; bars) and, the other way round, as "Use only my word lists" under Custom dictionaries.</string>
+    <!-- Group on one language's screen: its word list, emoji keywords and
+         word pairs, each with a checkbox, a Download or a Delete button. -->
+    <string name="languages_dictionaries_title">Dictionaries</string>
+    <string name="languages_dictionaries_info">Each item works offline after the download. The checkbox turns an item off and keeps the file. Delete removes the file from the device.</string>
+    <!-- Button in the heading of the Dictionaries group. It downloads every
+         item that is not on the device yet. %1$s is a size like "4.2 MB". -->
+    <string name="languages_dictionaries_download_all_action">Download all (<xliff:g id="size" example="4.2 MB">%1$s</xliff:g>)</string>
 
-    <!-- Row title for a word list the user can download. -->
-    <string name="languages_wordlist_title">Downloadable dictionary</string>
+    <string name="languages_words_title">Word list</string>
     <!-- The same row when one language has more than one list. %1$s tells them
          apart, for example "Brazil". -->
-    <string name="languages_wordlist_title_variant">Downloadable dictionary (<xliff:g id="variant" example="Brazil">%1$s</xliff:g>)</string>
+    <string name="languages_words_title_variant">Word list (<xliff:g id="variant" example="Brazil">%1$s</xliff:g>)</string>
+    <!-- Under the word list of a language that ships one in the app. -->
+    <string name="languages_words_builtin">Built-in list</string>
+    <string name="languages_words_builtin_more">Built-in list. A bigger list is available.</string>
+    <string name="languages_words_missing">For suggestions, autocorrect and glide typing</string>
+    <!-- Dialog that opens from Download on the word list. -->
+    <string name="languages_words_download_title">Download a word list</string>
+    <string name="languages_words_download_variant_label">Variant</string>
+    <string name="languages_words_download_size_label">Size</string>
+    <!-- Detail under one size in the dialog. %1$d is the most words the size
+         keeps, %2$s about how much it downloads, like "1.4 MB". -->
+    <plurals name="languages_words_download_size_detail">
+        <item quantity="one">Up to %1$,d word, about <xliff:g id="size" example="1.4 MB">%2$s</xliff:g> to download</item>
+        <item quantity="other">Up to %1$,d words, about <xliff:g id="size" example="1.4 MB">%2$s</xliff:g> to download</item>
+    </plurals>
+    <!-- Note at the bottom of the dialog. %1$s is a size like "1.1 MB". -->
+    <string name="languages_words_download_pairs_note">The word pairs for next-word predictions download with it, about <xliff:g id="size" example="1.1 MB">%1$s</xliff:g>.</string>
+
+    <!-- Emoji keywords row when the only keywords are ones the user imported. -->
+    <string name="languages_emoji_keywords_imported">Your imported keywords</string>
+
+    <!-- Row for the word-pair data (bigrams and trigrams) that next-word
+         predictions read. -->
+    <string name="languages_word_pairs_title">Word pairs</string>
+    <!-- %1$s is a size like "1.1 MB". -->
+    <string name="languages_word_pairs_download_size">Next-word predictions, <xliff:g id="size" example="1.1 MB">%1$s</xliff:g> to download</string>
+    <!-- %1$s is the size on the device, like "3 MB". -->
+    <string name="languages_word_pairs_downloaded">Next-word predictions, <xliff:g id="size" example="3 MB">%1$s</xliff:g></string>
+    <string name="languages_word_pairs_failed">The download failed. Try again.</string>
+    <string name="languages_word_pairs_delete_desc">Delete the word pairs</string>
+
+    <!-- ===== Dictionary ===== -->
+
+    <string name="languages_custom_dictionaries_title">Custom dictionaries</string>
+    <string name="languages_custom_dictionaries_subtitle">Import your own word lists</string>
+
     <!-- State of a downloaded word list. %1$d is the number of words, %2$s its
          size on your device, for example "4 MB". -->
     <plurals name="languages_wordlist_downloaded">
@@ -161,14 +192,6 @@
         <item quantity="other">%1$,d words, <xliff:g id="size" example="4 MB">%2$s</xliff:g></item>
     </plurals>
     <string name="languages_wordlist_preparing">Preparing the dictionary…</string>
-    <!-- %1$d is the most words the download can keep. It is a maximum: the
-         download also stops at the words that occur only one time in the
-         source text, and some lists run out of usual words before the
-         maximum. -->
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Up to the %1$,d most frequent word</item>
-        <item quantity="other">Up to the %1$,d most frequent words</item>
-    </plurals>
     <!-- Size choice in the download menu. %1$s is the name of the size, %2$d is
          how many words that size keeps. -->
     <plurals name="languages_wordlist_size_option">
@@ -178,22 +201,10 @@
     <!-- Progress under a running download. %1$s is how much has arrived. -->
     <string name="languages_wordlist_downloaded_bytes"><xliff:g id="size" example="2 MB">%1$s</xliff:g> downloaded</string>
     <string name="languages_wordlist_delete_desc">Delete the dictionary</string>
-    <string name="languages_wordlist_size_desc">Dictionary size</string>
 
     <!-- ===== Emoji keywords ===== -->
 
-    <string name="languages_emoji_title">Emoji</string>
-    <!-- %1$s is the English name of the language. Automatic downloads are on. -->
-    <string name="languages_emoji_keywords_auto">Emoji keywords let you search for emoji in <xliff:g id="language" example="Bengali">%1$s</xliff:g>. If you type its word for \"cake\", you find 🎂. The keyboard downloads the keywords automatically while the language is on.</string>
-    <!-- %1$s is the English name of the language. Automatic downloads are off. -->
-    <string name="languages_emoji_keywords_manual">Emoji keywords let you search for emoji in <xliff:g id="language" example="Bengali">%1$s</xliff:g>. If you type its word for \"cake\", you find 🎂. Automatic downloads are off, so you start this one yourself.</string>
-    <!-- %1$s is the English name of the language. -->
-    <string name="languages_emoji_keywords_unavailable">No emoji keywords are available for <xliff:g id="language" example="Bengali">%1$s</xliff:g> yet. Emoji search answers in English. You can import your own list.</string>
     <string name="languages_emoji_keywords_title">Emoji keywords</string>
-    <string name="languages_emoji_keywords_subtitle">Downloads for every language, and your own imports</string>
-    <string name="languages_emoji_keywords_use_title">Use the emoji keywords</string>
-    <string name="languages_emoji_keywords_use_subtitle">Search and suggest emoji by their names in this language</string>
-    <string name="languages_emoji_keywords_use_info">Off, the downloaded keywords and any pack that you imported for this language stay on the device but are not read, so emoji search and emoji suggestions stop answering in this language. The same switch appears on the dictionary bar (Rows &amp; bars).</string>
     <!-- State of a downloaded keyword list. %1$d is the number of emoji, %2$s
          its size on your device, for example "120 KB". -->
     <plurals name="languages_emoji_dict_downloaded">
@@ -271,11 +282,6 @@
     <string name="languages_data_download_body">The keyboard can download the data <xliff:g id="language" example="German">%1$s</xliff:g> needs to predict and correct well: a word list, emoji keywords and word-pair data, whichever of those exist. This uses about <xliff:g id="size" example="4.2 MB">%2$s</xliff:g> of data. You can also download them later from the language screen.</string>
     <string name="languages_data_download_dismiss_action">Not now</string>
 
-    <!-- Group on one language's screen, holding the download-everything button. -->
-    <string name="languages_data_title">Language data</string>
-    <!-- Button that downloads every file the language has. %1$s is a size. -->
-    <string name="languages_data_download_all_action">Download all data (about <xliff:g id="size" example="4.2 MB">%1$s</xliff:g>)</string>
-    <string name="languages_data_download_all_info">Downloads the word list, the emoji keywords and the word-pair data for this language. Files already on the device are not downloaded again. The rows below do the same one file at a time.</string>
 
     <!-- Dialog after the user removes a language that has downloaded files. -->
     <string name="languages_data_delete_title">Delete the downloaded files?</string>

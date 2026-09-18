@@ -1970,20 +1970,9 @@
     <string name="languages_data_delete_body">يحتوي %1$s على قائمة كلمات أو كلمات مفتاحية للرموز التعبيرية تم تنزيلها. هل تريد حذفها واستعادة حوالي %2$s من مساحة التخزين؟</string>
     <string name="languages_data_delete_dismiss_action">الاحتفاظ بها</string>
     <string name="languages_data_delete_title">هل تريد حذف الملفات التي تم تنزيلها؟</string>
-    <string name="languages_data_download_all_action">تنزيل كل البيانات (حوالي %1$s)</string>
-    <string name="languages_data_download_all_info">يقوم بتنزيل قائمة الكلمات، والكلمات الرئيسية للرموز التعبيرية، وبيانات أزواج الكلمات لهذه اللغة. الملفات الموجودة بالفعل على الجهاز لا يتم تنزيلها مرة أخرى. الصفوف أدناه تقوم بنفس الشيء لملف واحد في كل مرة.</string>
     <string name="languages_data_download_body">يمكن للوحة المفاتيح تنزيل البيانات التي يحتاجها %1$s للتنبؤ والتصحيح بشكل جيد: قائمة كلمات، وكلمات رئيسية للرموز التعبيرية، وبيانات أزواج الكلمات، أيًا كان ما هو موجود منها. يستهلك هذا حوالي %2$s من البيانات. يمكنك أيضاً تنزيلها لاحقاً من شاشة اللغة.</string>
     <string name="languages_data_download_dismiss_action">ليس الآن</string>
     <string name="languages_data_download_title">تنزيل بيانات اللغة؟</string>
-    <string name="languages_data_title">بيانات اللغة</string>
-    <string name="languages_dictionary_bundled">تتضمن هذه اللغة قاموساً مدمجاً.</string>
-    <string name="languages_dictionary_bundled_more">تتضمن هذه اللغة قاموساً مدمجاً. قم بتنزيل قاموس أكبر للحصول على اقتراحات أفضل.</string>
-    <string name="languages_dictionary_none_download">لا تحتوي هذه اللغة على قاموس مدمج. قم بتنزيل واحد للاقتراحات والتصحيح التلقائي، أو استورد قائمة كلماتك الخاصة.</string>
-    <string name="languages_dictionary_none_learn">لا تحتوي هذه اللغة على قاموس مدمج. تتعلم لوحة المفاتيح كلماتك أثناء الكتابة، ويمكنك استيراد قائمة كلماتك الخاصة.</string>
-    <string name="languages_dictionary_title">القاموس</string>
-    <string name="languages_dictionary_use_info">عند الإيقاف، تنسى لوحة المفاتيح الكلمات المجمعة والمحملة لهذه اللغة وتقرأ فقط قوائم الكلمات التي استوردتها، بالإضافة إلى الكلمات التي تعلمتها منك. يظهر نفس المفتاح في شريط القاموس (الصفوف والأشرطة) وبطريقة عكسية، كـ \"استخدام قوائم كلماتي فقط\" تحت القواميس المخصصة.</string>
-    <string name="languages_dictionary_use_subtitle">الاقتراح والتصحيح من القائمة المجمعة أو التي تم تنزيلها</string>
-    <string name="languages_dictionary_use_title">استخدام قائمة الكلمات</string>
     <string name="languages_download_queued">في الانتظار...</string>
     <string name="languages_emoji_dict_delete_desc">حذف كلمات البحث الخاصة بالرموز التعبيرية</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1994,15 +1983,7 @@
         <item quantity="one">%1$,d رمز تعبيري، %2$s</item>
         <item quantity="other">%1$,d رمز تعبيري، %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">تتيح لك كلمات البحث الخاصة بالرموز التعبيرية البحث عن الرموز في %1$s. إذا كتبت كلمتها لـ \"كعكة\"، ستجد 🎂. تقوم لوحة المفاتيح بتنزيل الكلمات المفتاحية تلقائيًا أثناء تفعيل اللغة.</string>
-    <string name="languages_emoji_keywords_manual">تتيح لك كلمات مفاتيح الرموز التعبيرية البحث عن الرموز في %1$s. إذا كتبت كلمتها لـ \"كعكة\"، ستجد 🎂. التنزيلات التلقائية متوقفة، لذا عليك بدء هذا التنزيل بنفسك.</string>
-    <string name="languages_emoji_keywords_subtitle">تنزيلات لكل لغة، بالإضافة إلى استيراداتك الخاصة</string>
     <string name="languages_emoji_keywords_title">كلمات مفتاحية للرموز التعبيرية</string>
-    <string name="languages_emoji_keywords_unavailable">لا تتوفر كلمات رئيسية للرموز التعبيرية لـ %1$s بعد. يتم البحث عن الرموز التعبيرية باللغة الإنجليزية. يمكنك استيراد قائمتك الخاصة.</string>
-    <string name="languages_emoji_keywords_use_info">عند الإيقاف، تظل الكلمات الرئيسية التي تم تنزيلها وأي حزمة قمت باستيرادها لهذه اللغة على الجهاز ولكن لا تتم قراءتها، لذا يتوقف البحث عن الرموز التعبيرية واقتراحات الرموز التعبيرية عن الاستجابة بهذه اللغة. يظهر نفس المفتاح في شريط القاموس (الصفوف والأشرطة).</string>
-    <string name="languages_emoji_keywords_use_subtitle">البحث عن الرموز التعبيرية واقتراحها حسب أسمائها بهذه اللغة</string>
-    <string name="languages_emoji_keywords_use_title">استخدام كلمات البحث عن الرموز التعبيرية</string>
-    <string name="languages_emoji_title">رموز تعبيرية</string>
     <string name="languages_fancy_style_row_subtitle">الخط الذي تكتب به لوحة المفاتيح المزخرفة. يمكن تبديله أيضاً من الشريط الموجود فوق المفاتيح.</string>
     <string name="languages_fancy_style_row_title">نمط مزخرف</string>
     <string name="languages_fancy_style_title">النمط</string>
@@ -2071,16 +2052,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">تم تنزيل %1$s</string>
     <string name="languages_wordlist_preparing">جاري إعداد القاموس...</string>
-    <string name="languages_wordlist_size_desc">حجم القاموس</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s، حتى %2$,d كلمة</item>
         <item quantity="other">%1$s، حتى %2$,d كلمة</item>
-    </plurals>
-    <string name="languages_wordlist_title">قاموس قابل للتنزيل</string>
-    <string name="languages_wordlist_title_variant">قاموس قابل للتنزيل (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">ما يصل إلى %1$,d كلمة الأكثر تكراراً</item>
-        <item quantity="other">ما يصل إلى %1$,d كلمة الأكثر تكراراً</item>
     </plurals>
     <string name="layout_bottom_padding_info">تتحرك لوحة المفاتيح بالكامل للأعلى، بعيداً عن الحافة السفلية وشريط التنقل بالإيماءات. قم بزيادة هذه القيمة إذا كان الصف السفلي قريباً جداً من حافة الشاشة، أو إذا كنت تبدأ نظام التنقل عن طريق الخطأ.</string>
     <string name="layout_bottom_padding_subtitle">مساحة أكبر أسفل المفاتيح، فوق شريط التنقل</string>

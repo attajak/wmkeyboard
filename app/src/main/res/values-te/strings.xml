@@ -1972,20 +1972,9 @@
     <string name="languages_data_delete_body">%1$s డౌన్‌లోడ్ చేసిన పదాల జాబితా లేదా ఎమోజి కీవర్డ్‌లను కలిగి ఉంది. వాటిని తొలగించి సుమారు %2$s నిల్వ స్థలాన్ని తిరిగి పొందాలా?</string>
     <string name="languages_data_delete_dismiss_action">వాటిని అలాగే ఉంచండి</string>
     <string name="languages_data_delete_title">డౌన్‌లోడ్ చేసిన ఫైళ్లను తొలగించాలా?</string>
-    <string name="languages_data_download_all_action">అన్ని డేటాను డౌన్‌లోడ్ చేయండి (సుమారు %1$s)</string>
-    <string name="languages_data_download_all_info">ఈ భాష కోసం పదాల జాబితా, ఎమోజి కీవర్డ్‌లు మరియు పద-జంట డేటాను డౌన్‌లోడ్ చేస్తుంది. పరికరంలో ఇప్పటికే ఉన్న ఫైల్‌లు మళ్లీ డౌన్‌లోడ్ చేయబడవు. దిగువన ఉన్న వరుసలు ఒకేసారి ఒక ఫైల్ చొప్పున అదే పనిని చేస్తాయి.</string>
     <string name="languages_data_download_body">కీబోర్డ్ అంచనా వేయడానికి మరియు సరిగ్గా సరిదిద్దడానికి అవసరమైన డేటాను %1$s డౌన్‌లోడ్ చేయగలదు: పదాల జాబితా, ఎమోజి కీవర్డ్‌లు మరియు వర్డ్-పెయిర్ డేటా, వాటిలో ఏవి ఉంటే అవి. ఇది సుమారు %2$s డేటాను ఉపయోగిస్తుంది. మీరు వాటిని తర్వాత భాషా స్క్రీన్ నుండి కూడా డౌన్‌లోడ్ చేసుకోవచ్చు.</string>
     <string name="languages_data_download_dismiss_action">ఇప్పుడు వద్దు</string>
     <string name="languages_data_download_title">భాషా డేటాను డౌన్‌లోడ్ చేయాలా?</string>
-    <string name="languages_data_title">భాషా డేటా</string>
-    <string name="languages_dictionary_bundled">ఈ భాష అంతర్నిర్మిత నిఘంటువును కలిగి ఉంది.</string>
-    <string name="languages_dictionary_bundled_more">ఈ భాష అంతర్నిర్మిత నిఘంటువును కలిగి ఉంది. మెరుగైన సూచనల కోసం పెద్దదాన్ని డౌన్‌లోడ్ చేయండి.</string>
-    <string name="languages_dictionary_none_download">ఈ భాషకు అంతర్నిర్మిత నిఘంటువు లేదు. సూచనలు మరియు ఆటోకరెక్ట్ కోసం ఒకదాన్ని డౌన్‌లోడ్ చేయండి లేదా మీ స్వంత పదాల జాబితాను దిగుమతి చేసుకోండి.</string>
-    <string name="languages_dictionary_none_learn">ఈ భాషకు అంతర్నిర్మిత నిఘంటువు లేదు. మీరు టైప్ చేస్తున్నప్పుడు కీబోర్డ్ మీ పదాలను నేర్చుకుంటుంది మరియు మీరు మీ స్వంత పదాల జాబితాను దిగుమతి చేసుకోవచ్చు.</string>
-    <string name="languages_dictionary_title">నిఘంటువు</string>
-    <string name="languages_dictionary_use_info">ఆఫ్ చేసినప్పుడు, కీబోర్డ్ ఈ భాష కోసం బండిల్ చేయబడిన మరియు డౌన్‌లోడ్ చేయబడిన పదాలను మర్చిపోతుంది మరియు మీరు దిగుమతి చేసుకున్న పదాల జాబితాలను మాత్రమే చదువుతుంది, అలాగే అది మీ నుండి నేర్చుకున్న పదాలను కూడా చదువుతుంది. అదే స్విచ్ డిక్షనరీ బార్ (అడ్డు వరుసలు &amp; బార్‌లు)లో కనిపిస్తుంది మరియు దీనికి విరుద్ధంగా, కస్టమ్ డిక్షనరీల కింద \'నా పదాల జాబితాలను మాత్రమే ఉపయోగించు\' అని ఉంటుంది.</string>
-    <string name="languages_dictionary_use_subtitle">బండిల్ చేసిన లేదా డౌన్‌లోడ్ చేసిన జాబితా నుండి సూచించండి మరియు సరిదిద్దండి</string>
-    <string name="languages_dictionary_use_title">పదాల జాబితాను ఉపయోగించండి</string>
     <string name="languages_download_queued">వేచి ఉంది…</string>
     <string name="languages_emoji_dict_delete_desc">ఎమోజి కీవర్డ్‌లను తొలగించండి</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1996,15 +1985,7 @@
         <item quantity="one">%1$,d ఎమోజి, %2$s</item>
         <item quantity="other">%1$,d ఎమోజిలు, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">ఎమోజి కీవర్డ్‌లు %1$sలో ఎమోజి కోసం వెతకడానికి మిమ్మల్ని అనుమతిస్తాయి. మీరు \"కేక్\" కోసం దాని పదాన్ని టైప్ చేస్తే, మీరు 🎂ని కనుగొంటారు. భాష ఆన్‌లో ఉన్నప్పుడు కీబోర్డ్ కీవర్డ్‌లను స్వయంచాలకంగా డౌన్‌లోడ్ చేస్తుంది.</string>
-    <string name="languages_emoji_keywords_manual">ఎమోజి కీవర్డ్‌లు %1$sలో ఎమోజి కోసం వెతకడానికి మిమ్మల్ని అనుమతిస్తాయి. మీరు \"కేక్\" కోసం దాని పదాన్ని టైప్ చేస్తే, మీరు 🎂ని కనుగొంటారు. ఆటోమేటిక్ డౌన్‌లోడ్‌లు ఆఫ్‌లో ఉన్నాయి, కాబట్టి మీరు దీన్ని మీరే ప్రారంభించాలి.</string>
-    <string name="languages_emoji_keywords_subtitle">ప్రతి భాష కోసం డౌన్‌లోడ్‌లు మరియు మీ స్వంత ఇంపోర్ట్‌లు</string>
     <string name="languages_emoji_keywords_title">ఎమోజి కీవర్డ్‌లు</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s కోసం ఇంకా ఎమోజి కీవర్డ్లు అందుబాటులో లేవు. ఎమోజి శోధన ఫలితాలు ఆంగ్లంలో వస్తాయి. మీరు మీ స్వంత జాబితాను దిగుమతి చేసుకోవచ్చు.</string>
-    <string name="languages_emoji_keywords_use_info">ఆఫ్ చేసినప్పుడు, డౌన్‌లోడ్ చేసిన కీవర్డ్‌లు మరియు ఈ భాష కోసం మీరు దిగుమతి చేసుకున్న ఏదైనా ప్యాక్ పరికరంలోనే ఉంటాయి కానీ చదవబడవు, కాబట్టి ఈ భాషలో ఎమోజి శోధన మరియు ఎమోజి సూచనలు స్పందించవు. అదే స్విచ్ డిక్షనరీ బార్‌లో (వరుసలు &amp; బార్‌లు) కనిపిస్తుంది.</string>
-    <string name="languages_emoji_keywords_use_subtitle">ఈ భాషలో ఎమోజీల పేర్ల ద్వారా వాటిని శోధించండి మరియు సూచించండి</string>
-    <string name="languages_emoji_keywords_use_title">ఎమోజి కీవర్డ్‌లను ఉపయోగించండి</string>
-    <string name="languages_emoji_title">ఎమోజి</string>
     <string name="languages_fancy_style_row_subtitle">ఫ్యాన్సీ కీబోర్డ్ టైప్ చేసే అక్షరాలు. కీలకు పైన ఉన్న స్ట్రిప్ నుండి కూడా మార్చుకోవచ్చు.</string>
     <string name="languages_fancy_style_row_title">ఫ్యాన్సీ స్టైల్</string>
     <string name="languages_fancy_style_title">శైలి</string>
@@ -2073,16 +2054,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s డౌన్‌లోడ్ చేయబడింది</string>
     <string name="languages_wordlist_preparing">నిఘంటువును సిద్ధం చేస్తోంది…</string>
-    <string name="languages_wordlist_size_desc">నిఘంటువు పరిమాణం</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, %2$,d పదం వరకు</item>
         <item quantity="other">%1$s, %2$,d పదాల వరకు</item>
-    </plurals>
-    <string name="languages_wordlist_title">డౌన్‌లోడ్ చేయదగిన నిఘంటువు</string>
-    <string name="languages_wordlist_title_variant">డౌన్‌లోడ్ చేయదగిన నిఘంటువు (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">%1$,d అత్యంత తరచుగా ఉపయోగించే పదం వరకు</item>
-        <item quantity="other">%1$,d అత్యంత తరచుగా ఉపయోగించే పదాల వరకు</item>
     </plurals>
     <string name="layout_bottom_padding_info">మొత్తం కీబోర్డ్ పైకి, దిగువ అంచు మరియు గెస్టర్ నావిగేషన్ బార్ నుండి దూరంగా కదులుతుంది. దిగువ వరుస స్క్రీన్ అంచుకు చాలా దగ్గరగా ఉంటే లేదా మీరు పొరపాటున సిస్టమ్ నావిగేషన్‌ను ప్రారంభిస్తే దీన్ని పెంచండి.</string>
     <string name="layout_bottom_padding_subtitle">కీల కింద, నావిగేషన్ బార్ పైన ఎక్కువ స్థలం</string>

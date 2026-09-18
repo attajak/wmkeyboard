@@ -1966,20 +1966,9 @@
     <string name="languages_data_delete_body">%1$s posiada pobraną listę słów lub słowa kluczowe emoji. Usunąć je i odzyskać około %2$s miejsca?</string>
     <string name="languages_data_delete_dismiss_action">Zachowaj je</string>
     <string name="languages_data_delete_title">Usunąć pobrane pliki?</string>
-    <string name="languages_data_download_all_action">Pobierz wszystkie dane (około %1$s)</string>
-    <string name="languages_data_download_all_info">Pobiera listę słów, słowa kluczowe emoji oraz dane par słów dla tego języka. Pliki znajdujące się już na urządzeniu nie są pobierane ponownie. Poniższe wiersze wykonują to samo dla pojedynczych plików.</string>
     <string name="languages_data_download_body">Klawiatura może pobrać dane, których %1$s potrzebuje do poprawnego przewidywania i korygowania tekstu: listę słów, słowa kluczowe emoji i dane o parach słów, jeśli istnieją. Zużyje to około %2$s danych. Możesz je również pobrać później z ekranu języka.</string>
     <string name="languages_data_download_dismiss_action">Nie teraz</string>
     <string name="languages_data_download_title">Pobrać dane językowe?</string>
-    <string name="languages_data_title">Dane językowe</string>
-    <string name="languages_dictionary_bundled">Ten język zawiera wbudowany słownik.</string>
-    <string name="languages_dictionary_bundled_more">Ten język zawiera wbudowany słownik. Pobierz większy, aby uzyskać lepsze sugestie.</string>
-    <string name="languages_dictionary_none_download">Ten język nie ma wbudowanego słownika. Pobierz go, aby uzyskać sugestie i autokorektę, lub zaimportuj własną listę słów.</string>
-    <string name="languages_dictionary_none_learn">Ten język nie posiada wbudowanego słownika. Klawiatura uczy się Twoich słów podczas pisania, możesz również zaimportować własną listę słów.</string>
-    <string name="languages_dictionary_title">Słownik</string>
-    <string name="languages_dictionary_use_info">Po wyłączeniu klawiatura zapomina wbudowane i pobrane słowa dla tego języka i czyta tylko listy słów, które zaimportowałeś, oraz słowa, których się od Ciebie nauczyła. Ten sam przełącznik pojawia się na pasku słownika (Wiersze i paski) oraz, w drugą stronę, jako Używaj tylko moich list słów w słownikach niestandardowych.</string>
-    <string name="languages_dictionary_use_subtitle">Sugestie i poprawki z dołączonej lub pobranej listy</string>
-    <string name="languages_dictionary_use_title">Użyj listy słów</string>
     <string name="languages_download_queued">Oczekiwanie…</string>
     <string name="languages_emoji_dict_delete_desc">Usuń słowa kluczowe emoji</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1990,15 +1979,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Słowa kluczowe emoji pozwalają wyszukiwać emoji w języku %1$s. Jeśli wpiszesz słowo „ciasto”, znajdziesz 🎂. Klawiatura pobiera słowa kluczowe automatycznie, gdy język jest włączony.</string>
-    <string name="languages_emoji_keywords_manual">Słowa kluczowe emoji pozwalają wyszukiwać emoji w %1$s. Jeśli wpiszesz słowo \"ciasto\", znajdziesz 🎂. Automatyczne pobieranie jest wyłączone, więc musisz uruchomić je samodzielnie.</string>
-    <string name="languages_emoji_keywords_subtitle">Pobrania dla każdego języka oraz własne importy</string>
     <string name="languages_emoji_keywords_title">Słowa kluczowe emoji</string>
-    <string name="languages_emoji_keywords_unavailable">Dla %1$s nie są jeszcze dostępne żadne słowa kluczowe emoji. Wyszukiwanie emoji odpowiada w języku angielskim. Możesz zaimportować własną listę.</string>
-    <string name="languages_emoji_keywords_use_info">Wyłączone: pobrane słowa kluczowe i każdy pakiet zaimportowany dla tego języka pozostają na urządzeniu, ale nie są odczytywane, więc wyszukiwanie i sugestie emoji przestają działać w tym języku. Ten sam przełącznik pojawia się na pasku słownika (Wiersze i paski).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Wyszukuj i sugeruj emoji według ich nazw w tym języku</string>
-    <string name="languages_emoji_keywords_use_title">Używaj słów kluczowych emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Czcionka, którą pisze fantazyjna klawiatura. Można ją również przełączać z paska nad klawiszami.</string>
     <string name="languages_fancy_style_row_title">Wymyślny styl</string>
     <string name="languages_fancy_style_title">Styl</string>
@@ -2067,16 +2048,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">Pobrano %1$s</string>
     <string name="languages_wordlist_preparing">Przygotowywanie słownika…</string>
-    <string name="languages_wordlist_size_desc">Rozmiar słownika</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, do %2$,d słowa</item>
         <item quantity="other">%1$s, do %2$,d słów</item>
-    </plurals>
-    <string name="languages_wordlist_title">Słownik do pobrania</string>
-    <string name="languages_wordlist_title_variant">Słownik do pobrania (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Do %1$,d najczęstszego słowa</item>
-        <item quantity="other">Do %1$,d najczęstszych słów</item>
     </plurals>
     <string name="layout_bottom_padding_info">Cała klawiatura przesuwa się w górę, z dala od dolnej krawędzi i paska nawigacji gestami. Zwiększ to, jeśli dolny wiersz znajduje się zbyt blisko krawędzi ekranu lub jeśli przypadkowo uruchamiasz nawigację systemową.</string>
     <string name="layout_bottom_padding_subtitle">Więcej miejsca pod klawiszami, nad paskiem nawigacji</string>

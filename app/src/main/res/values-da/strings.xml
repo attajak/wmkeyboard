@@ -1968,20 +1968,9 @@
     <string name="languages_data_delete_body">%1$s har en downloadet ordliste eller emoji-nøgleord. Slet dem og få ca. %2$s lagerplads tilbage?</string>
     <string name="languages_data_delete_dismiss_action">Behold dem</string>
     <string name="languages_data_delete_title">Slet de downloadede filer?</string>
-    <string name="languages_data_download_all_action">Download alle data (ca. %1$s)</string>
-    <string name="languages_data_download_all_info">Downloader ordlisten, emoji-søgeordene og ordpar-dataene for dette sprog. Filer, der allerede findes på enheden, downloades ikke igen. Rækkerne nedenfor gør det samme, én fil ad gangen.</string>
     <string name="languages_data_download_body">Tastaturet kan downloade de data, %1$s skal bruge for at forudsige og rette korrekt: en ordliste, emoji-nøgleord og ordpar-data, hvis nogen af disse findes. Dette bruger cirka %2$s data. Du kan også downloade dem senere fra sprogskærmen.</string>
     <string name="languages_data_download_dismiss_action">Ikke nu</string>
     <string name="languages_data_download_title">Download sprogdata?</string>
-    <string name="languages_data_title">Sprogdata</string>
-    <string name="languages_dictionary_bundled">Dette sprog inkluderer en indbygget ordbog.</string>
-    <string name="languages_dictionary_bundled_more">Dette sprog indeholder en indbygget ordbog. Download en større for bedre forslag.</string>
-    <string name="languages_dictionary_none_download">Dette sprog har ingen indbygget ordbog. Download en for forslag og autokorrektur, eller importér din egen ordliste.</string>
-    <string name="languages_dictionary_none_learn">Dette sprog har ingen indbygget ordbog. Tastaturet lærer dine ord, mens du skriver, og du kan importere din egen ordliste.</string>
-    <string name="languages_dictionary_title">Ordbog</string>
-    <string name="languages_dictionary_use_info">Hvis slået fra, glemmer tastaturet de medfølgende og downloadede ord for dette sprog og læser kun de ordlister, du har importeret, plus de ord, det har lært fra dig. Den samme kontakt vises på ordbogslinjen (Rækker og linjer) og, omvendt, som Brug kun mine ordlister under Brugerdefinerede ordbøger.</string>
-    <string name="languages_dictionary_use_subtitle">Foreslå og ret fra den medfølgende eller downloadede liste</string>
-    <string name="languages_dictionary_use_title">Brug ordlisten</string>
     <string name="languages_download_queued">Venter…</string>
     <string name="languages_emoji_dict_delete_desc">Slet emoji-nøgleordene</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1992,15 +1981,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emojis, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Emoji-søgeord lader dig søge efter emoji på %1$s. Hvis du skriver ordet for \"kage\", finder du 🎂. Tastaturet downloader automatisk søgeordene, mens sproget er slået til.</string>
-    <string name="languages_emoji_keywords_manual">Emoji-søgeord lader dig søge efter emoji på %1$s. Hvis du skriver ordet for \"kage\", finder du 🎂. Automatiske downloads er slået fra, så du skal selv starte denne.</string>
-    <string name="languages_emoji_keywords_subtitle">Downloads til hvert sprog og dine egne importer</string>
     <string name="languages_emoji_keywords_title">Emoji-søgeord</string>
-    <string name="languages_emoji_keywords_unavailable">Der er endnu ingen emoji-søgeord tilgængelige for %1$s. Emojisøgning svarer på engelsk. Du kan importere din egen liste.</string>
-    <string name="languages_emoji_keywords_use_info">Fra: De downloadede nøgleord og enhver pakke, du har importeret til dette sprog, bliver på enheden, men læses ikke, så emojisøgning og emojiforslag holder op med at svare på dette sprog. Den samme kontakt vises på ordbogslinjen (Rækker og linjer).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Søg og foreslå emoji efter deres navne på dette sprog</string>
-    <string name="languages_emoji_keywords_use_title">Brug emoji-søgeord</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Den skrifttype, som det smarte tastatur skriver med. Kan også skiftes fra bjælken over tasterne.</string>
     <string name="languages_fancy_style_row_title">Smart stil</string>
     <string name="languages_fancy_style_title">Stil</string>
@@ -2069,16 +2050,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s downloadet</string>
     <string name="languages_wordlist_preparing">Forbereder ordbogen…</string>
-    <string name="languages_wordlist_size_desc">Ordbogsstørrelse</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, op til %2$,d ord</item>
         <item quantity="other">%1$s, op til %2$,d ord</item>
-    </plurals>
-    <string name="languages_wordlist_title">Ordbog til download</string>
-    <string name="languages_wordlist_title_variant">Ordbog, der kan downloades (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Op til det %1$,d mest hyppige ord</item>
-        <item quantity="other">Op til de %1$,d mest hyppige ord</item>
     </plurals>
     <string name="layout_bottom_padding_info">Hele tastaturet flyttes op, væk fra den nederste kant og gestus-navigationslinjen. Øg den, hvis den nederste række er for tæt på skærmens kant, eller hvis du kommer til at starte systemnavigationen ved en fejl.</string>
     <string name="layout_bottom_padding_subtitle">Mere plads under tasterne, over navigationslinjen</string>

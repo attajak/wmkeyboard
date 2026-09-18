@@ -1970,20 +1970,9 @@
     <string name="languages_data_delete_body">%1$s دارای لیست کلمات یا کلمات کلیدی ایموجی دانلود شده است. آن‌ها را حذف کنید و حدود %2$s از فضای ذخیره‌سازی را آزاد کنید؟</string>
     <string name="languages_data_delete_dismiss_action">نگه داشتن آن‌ها</string>
     <string name="languages_data_delete_title">فایل‌های دانلود شده حذف شوند؟</string>
-    <string name="languages_data_download_all_action">دانلود تمام داده‌ها (حدود %1$s)</string>
-    <string name="languages_data_download_all_info">لیست کلمات، کلمات کلیدی ایموجی و داده‌های جفت‌کلمه را برای این زبان دانلود می‌کند. فایل‌هایی که قبلاً روی دستگاه هستند دوباره دانلود نمی‌شوند. ردیف‌های زیر همین کار را یک فایل در هر زمان انجام می‌دهند.</string>
     <string name="languages_data_download_body">صفحه‌کلید می‌تواند داده‌های مورد نیاز %1$s را برای پیش‌بینی و اصلاح بهتر دانلود کند: فهرست کلمات، کلمات کلیدی ایموجی و داده‌های جفت‌کلمه، هر کدام که وجود داشته باشند. این کار حدود %2$s از داده‌ها را مصرف می‌کند. همچنین می‌توانید بعداً آن‌ها را از صفحه زبان دانلود کنید.</string>
     <string name="languages_data_download_dismiss_action">فعلاً نه</string>
     <string name="languages_data_download_title">داده‌های زبان دانلود شود؟</string>
-    <string name="languages_data_title">داده‌های زبان</string>
-    <string name="languages_dictionary_bundled">این زبان شامل یک فرهنگ لغت داخلی است.</string>
-    <string name="languages_dictionary_bundled_more">این زبان شامل یک فرهنگ لغت داخلی است. برای پیشنهادهای بهتر، یک فرهنگ لغت بزرگ‌تر دانلود کنید.</string>
-    <string name="languages_dictionary_none_download">این زبان فرهنگ لغت داخلی ندارد. برای دریافت پیشنهادات و تصحیح خودکار، یکی را دانلود کنید یا لیست کلمات خود را وارد کنید.</string>
-    <string name="languages_dictionary_none_learn">این زبان دیکشنری داخلی ندارد. صفحه‌کلید همان‌طور که تایپ می‌کنید، کلمات شما را یاد می‌گیرد و شما می‌توانید فهرست کلمات خود را وارد کنید.</string>
-    <string name="languages_dictionary_title">فرهنگ لغت</string>
-    <string name="languages_dictionary_use_info">در حالت خاموش، صفحه‌کلید کلمات همراه و دانلود شده برای این زبان را فراموش می‌کند و فقط لیست کلماتی که وارد کرده‌اید، به علاوه کلماتی که از شما یاد گرفته است را می‌خواند. همین سوئیچ در نوار فرهنگ لغت (ردیف‌ها و نوارها) و به صورت معکوس، به عنوان «فقط از لیست کلمات من استفاده کن» در زیر فرهنگ لغت‌های سفارشی ظاهر می‌شود.</string>
-    <string name="languages_dictionary_use_subtitle">پیشنهاد و تصحیح از فهرست همراه یا دانلود شده</string>
-    <string name="languages_dictionary_use_title">استفاده از فهرست کلمات</string>
     <string name="languages_download_queued">در انتظار...</string>
     <string name="languages_emoji_dict_delete_desc">حذف کلمات کلیدی ایموجی</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1994,15 +1983,7 @@
         <item quantity="one">%1$,d ایموجی، %2$s</item>
         <item quantity="other">%1$,d ایموجی، %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">کلمات کلیدی ایموجی به شما امکان می‌دهند ایموجی‌ها را به زبان %1$s جستجو کنید. اگر کلمه «کیک» را تایپ کنید، 🎂 را پیدا می‌کنید. صفحه کلید در حالی که زبان فعال است، کلمات کلیدی را به‌طور خودکار دانلود می‌کند.</string>
-    <string name="languages_emoji_keywords_manual">کلمات کلیدی ایموجی به شما امکان می‌دهند ایموجی‌ها را به زبان %1$s جستجو کنید. اگر کلمه \"کیک\" را تایپ کنید، 🎂 را پیدا می‌کنید. دانلودهای خودکار خاموش هستند، بنابراین باید این مورد را خودتان شروع کنید.</string>
-    <string name="languages_emoji_keywords_subtitle">دانلودها برای هر زبان و موارد واردشده توسط شما</string>
     <string name="languages_emoji_keywords_title">کلمات کلیدی ایموجی</string>
-    <string name="languages_emoji_keywords_unavailable">هنوز کلمات کلیدی ایموجی برای %1$s موجود نیست. جستجوی ایموجی به زبان انگلیسی پاسخ می‌دهد. می‌توانید لیست خود را وارد کنید.</string>
-    <string name="languages_emoji_keywords_use_info">خاموش، کلمات کلیدی دانلود شده و هر بسته‌ای که برای این زبان وارد کرده‌اید روی دستگاه باقی می‌مانند اما خوانده نمی‌شوند، بنابراین جستجوی ایموجی و پیشنهادهای ایموجی در این زبان پاسخ نمی‌دهند. همین سوئیچ در نوار فرهنگ لغت (ردیف‌ها و نوارها) ظاهر می‌شود.</string>
-    <string name="languages_emoji_keywords_use_subtitle">جستجو و پیشنهاد ایموجی‌ها بر اساس نام آن‌ها به این زبان</string>
-    <string name="languages_emoji_keywords_use_title">استفاده از کلمات کلیدی ایموجی</string>
-    <string name="languages_emoji_title">ایموجی</string>
     <string name="languages_fancy_style_row_subtitle">حروفی که صفحه‌کلید فانتزی تایپ می‌کند. همچنین از نوار بالای کلیدها قابل تغییر است.</string>
     <string name="languages_fancy_style_row_title">سبک فانتزی</string>
     <string name="languages_fancy_style_title">سبک</string>
@@ -2071,16 +2052,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s دانلود شد</string>
     <string name="languages_wordlist_preparing">در حال آماده‌سازی فرهنگ لغت...</string>
-    <string name="languages_wordlist_size_desc">اندازه فرهنگ لغت</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s، تا %2$,d کلمه</item>
         <item quantity="other">%1$s، تا %2$,d کلمه</item>
-    </plurals>
-    <string name="languages_wordlist_title">فرهنگ لغت قابل دانلود</string>
-    <string name="languages_wordlist_title_variant">فرهنگ لغت قابل دانلود (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">تا %1$,d کلمه پرکاربرد</item>
-        <item quantity="other">تا %1$,d کلمه پرکاربرد</item>
     </plurals>
     <string name="layout_bottom_padding_info">کل صفحه‌کلید به سمت بالا، دور از لبه پایین و نوار ناوبری حرکتی حرکت می‌کند. اگر ردیف پایین خیلی به لبه صفحه نزدیک است، یا اگر ناوبری سیستم را به اشتباه شروع می‌کنید، آن را افزایش دهید.</string>
     <string name="layout_bottom_padding_subtitle">فضای بیشتر زیر کلیدها، بالای نوار ناوبری</string>

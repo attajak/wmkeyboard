@@ -1960,20 +1960,9 @@
     <string name="languages_data_delete_body">%1$s indirilen bir kelime listesine veya emoji anahtar kelimelerine sahip. Bunları silip yaklaşık %2$s depolama alanı geri kazanmak ister misiniz?</string>
     <string name="languages_data_delete_dismiss_action">Onları tut</string>
     <string name="languages_data_delete_title">İndirilen dosyalar silinsin mi?</string>
-    <string name="languages_data_download_all_action">Tüm verileri indir (yaklaşık %1$s)</string>
-    <string name="languages_data_download_all_info">Bu dil için kelime listesini, emoji anahtar kelimelerini ve kelime çifti verilerini indirir. Cihazda zaten bulunan dosyalar tekrar indirilmez. Aşağıdaki satırlar aynı işlemi dosya dosya yapar.</string>
     <string name="languages_data_download_body">Klavye, %1$s dilinin iyi tahmin etmesi ve düzeltmesi için gereken verileri indirebilir: bir kelime listesi, emoji anahtar kelimeleri ve kelime çifti verileri (hangileri mevcutsa). Bu yaklaşık %2$s veri kullanır. Bunları daha sonra dil ekranından da indirebilirsiniz.</string>
     <string name="languages_data_download_dismiss_action">Şimdi değil</string>
     <string name="languages_data_download_title">Dil verileri indirilsin mi?</string>
-    <string name="languages_data_title">Dil verileri</string>
-    <string name="languages_dictionary_bundled">Bu dil yerleşik bir sözlük içerir.</string>
-    <string name="languages_dictionary_bundled_more">Bu dil yerleşik bir sözlük içerir. Daha iyi öneriler için daha büyük bir sözlük indirin.</string>
-    <string name="languages_dictionary_none_download">Bu dilin yerleşik bir sözlüğü yok. Öneriler ve otomatik düzeltme için bir tane indirin veya kendi kelime listenizi içe aktarın.</string>
-    <string name="languages_dictionary_none_learn">Bu dilin yerleşik bir sözlüğü yok. Klavye, siz yazdıkça kelimelerinizi öğrenir ve kendi kelime listenizi içe aktarabilirsiniz.</string>
-    <string name="languages_dictionary_title">Sözlük</string>
-    <string name="languages_dictionary_use_info">Kapalıyken, klavye bu dil için paketlenmiş ve indirilmiş kelimeleri unutur ve yalnızca içe aktardığınız kelime listelerini ve sizden öğrendiği kelimeleri okur. Aynı anahtar sözlük çubuğunda (Satırlar ve çubuklar) ve diğer taraftan, Özel sözlükler altında Yalnızca kelime listelerimi kullan olarak görünür.</string>
-    <string name="languages_dictionary_use_subtitle">Paketlenmiş veya indirilen listeden önerin ve düzeltin</string>
-    <string name="languages_dictionary_use_title">Kelime listesini kullan</string>
     <string name="languages_download_queued">Bekliyor…</string>
     <string name="languages_emoji_dict_delete_desc">Emoji anahtar kelimelerini sil</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1984,15 +1973,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Emoji anahtar kelimeleri, %1$s içinde emoji aramanızı sağlar. \"Pasta\" için kelimesini yazarsanız, 🎂 bulursunuz. Klavye, dil açıkken anahtar kelimeleri otomatik olarak indirir.</string>
-    <string name="languages_emoji_keywords_manual">Emoji anahtar kelimeleri, %1$s içinde emoji aramanızı sağlar. \"Pasta\" kelimesini yazarsanız 🎂 bulursunuz. Otomatik indirmeler kapalıdır, bu yüzden bunu kendiniz başlatmalısınız.</string>
-    <string name="languages_emoji_keywords_subtitle">Her dil için indirmeler ve kendi içe aktardıklarınız</string>
     <string name="languages_emoji_keywords_title">Emoji anahtar kelimeleri</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s için henüz emoji anahtar kelimesi mevcut değil. Emoji arama sonuçları İngilizce olarak verilir. Kendi listenizi içe aktarabilirsiniz.</string>
-    <string name="languages_emoji_keywords_use_info">Kapalıyken, indirilen anahtar kelimeler ve bu dil için içe aktardığınız tüm paketler cihazda kalır ancak okunmaz, bu nedenle emoji arama ve emoji önerileri bu dilde yanıt vermeyi durdurur. Aynı anahtar sözlük çubuğunda (Satırlar ve çubuklar) görünür.</string>
-    <string name="languages_emoji_keywords_use_subtitle">Emoji\'leri bu dildeki adlarıyla arayın ve önerin</string>
-    <string name="languages_emoji_keywords_use_title">Emoji anahtar kelimelerini kullan</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Süslü klavyenin yazdığı yazı tipi. Ayrıca tuşların üzerindeki şeritten de değiştirilebilir.</string>
     <string name="languages_fancy_style_row_title">Süslü stil</string>
     <string name="languages_fancy_style_title">Stil</string>
@@ -2061,16 +2042,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s indirildi</string>
     <string name="languages_wordlist_preparing">Sözlük hazırlanıyor…</string>
-    <string name="languages_wordlist_size_desc">Sözlük boyutu</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, %2$,d kelimeye kadar</item>
         <item quantity="other">%1$s, %2$,d kelimeye kadar</item>
-    </plurals>
-    <string name="languages_wordlist_title">İndirilebilir sözlük</string>
-    <string name="languages_wordlist_title_variant">İndirilebilir sözlük (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">En sık kullanılan %1$,d kelimeye kadar</item>
-        <item quantity="other">En sık kullanılan %1$,d kelimeye kadar</item>
     </plurals>
     <string name="layout_bottom_padding_info">Tüm klavye yukarıya, alt kenardan ve hareket gezinti çubuğundan uzağa taşınır. Alt satır ekranın kenarına çok yakınsa veya sistem gezintisini yanlışlıkla başlatıyorsanız bu değeri artırın.</string>
     <string name="layout_bottom_padding_subtitle">Tuşların altında, gezinme çubuğunun üzerinde daha fazla boşluk</string>

@@ -1966,20 +1966,9 @@
     <string name="languages_data_delete_body">ל-%1$s יש רשימת מילים שהורדה או מילות מפתח של אימוג\'י. למחוק אותם ולקבל בחזרה כ-%2$s של שטח אחסון?</string>
     <string name="languages_data_delete_dismiss_action">שמור אותם</string>
     <string name="languages_data_delete_title">למחוק את הקבצים שהורדו?</string>
-    <string name="languages_data_download_all_action">הורד את כל הנתונים (כ-%1$s)</string>
-    <string name="languages_data_download_all_info">מוריד את רשימת המילים, מילות המפתח של האימוג\'י ונתוני זוגות המילים עבור שפה זו. קבצים שכבר נמצאים במכשיר לא יורדו שוב. השורות למטה מבצעות את אותה פעולה קובץ אחד בכל פעם.</string>
     <string name="languages_data_download_body">המקלדת יכולה להוריד את הנתונים ש-%1$s צריכה כדי לחזות ולתקן היטב: רשימת מילים, מילות מפתח של אימוג\'י ונתוני זוגות מילים, מה שקיים מביניהם. זה משתמש בכ-%2$s של נתונים. ניתן להוריד אותם גם מאוחר יותר ממסך השפות.</string>
     <string name="languages_data_download_dismiss_action">לא עכשיו</string>
     <string name="languages_data_download_title">להוריד נתוני שפה?</string>
-    <string name="languages_data_title">נתוני שפה</string>
-    <string name="languages_dictionary_bundled">שפה זו כוללת מילון מובנה.</string>
-    <string name="languages_dictionary_bundled_more">שפה זו כוללת מילון מובנה. הורד מילון גדול יותר להצעות טובות יותר.</string>
-    <string name="languages_dictionary_none_download">לשפה זו אין מילון מובנה. הורד אחד עבור הצעות ותיקון אוטומטי, או ייבא רשימת מילים משלך.</string>
-    <string name="languages_dictionary_none_learn">לשפה זו אין מילון מובנה. המקלדת לומדת את המילים שלך בזמן ההקלדה, וניתן לייבא רשימת מילים משלך.</string>
-    <string name="languages_dictionary_title">מילון</string>
-    <string name="languages_dictionary_use_info">כשהגדרה זו כבויה, המקלדת שוכחת את המילים המצורפות והמילים שהורדו עבור שפה זו וקוראת רק את רשימות המילים שייבאת, בתוספת המילים שלמדה ממך. אותו מתג מופיע בסרגל המילון (שורות וסרגלים) ובאופן הפוך, כ\'השתמש רק ברשימות המילים שלי\' תחת מילונים מותאמים אישית.</string>
-    <string name="languages_dictionary_use_subtitle">הצע ותקן מתוך הרשימה המצורפת או שהורדה</string>
-    <string name="languages_dictionary_use_title">השתמש ברשימת המילים</string>
     <string name="languages_download_queued">ממתין...</string>
     <string name="languages_emoji_dict_delete_desc">מחק את מילות המפתח של האימוג\'י</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1990,15 +1979,7 @@
         <item quantity="one">%1$,d אימוג\'י, %2$s</item>
         <item quantity="other">%1$,d אימוג\'י, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">מילות מפתח לאימוג\'י מאפשרות לך לחפש אימוג\'י ב-%1$s. אם תקליד את המילה \"עוגה\", תמצא 🎂. המקלדת מורידה את מילות המפתח באופן אוטומטי בזמן שהשפה פעילה.</string>
-    <string name="languages_emoji_keywords_manual">מילות מפתח לאימוג\'י מאפשרות לך לחפש אימוג\'י ב-%1$s. אם תקליד את המילה \"עוגה\", תמצא 🎂. הורדות אוטומטיות כבויות, לכן עליך להתחיל זאת בעצמך.</string>
-    <string name="languages_emoji_keywords_subtitle">הורדות עבור כל שפה, והייבואים שלך</string>
     <string name="languages_emoji_keywords_title">מילות מפתח לאימוג\'י</string>
-    <string name="languages_emoji_keywords_unavailable">עדיין אין מילות מפתח לאימוג\'י עבור %1$s. חיפוש אימוג\'י עונה באנגלית. אתה יכול לייבא רשימה משלך.</string>
-    <string name="languages_emoji_keywords_use_info">כאשר כבוי, מילות המפתח שהורדו וכל חבילה שייבאת עבור שפה זו נשארות במכשיר אך אינן נקראות, לכן חיפוש אימוג\'י והצעות אימוג\'י מפסיקים להגיב בשפה זו. אותו מתג מופיע בסרגל המילון (שורות וסרגלים).</string>
-    <string name="languages_emoji_keywords_use_subtitle">חפש והצע אימוג\'י לפי השמות שלהם בשפה זו</string>
-    <string name="languages_emoji_keywords_use_title">השתמש במילות מפתח של אימוג\'י</string>
-    <string name="languages_emoji_title">אימוג\'י</string>
     <string name="languages_fancy_style_row_subtitle">האותיות שהמקלדת המעוצבת מקלידה. ניתן להחלפה גם מהסרגל שמעל המקשים.</string>
     <string name="languages_fancy_style_row_title">סגנון מעוצב</string>
     <string name="languages_fancy_style_title">סגנון</string>
@@ -2067,16 +2048,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s הורדו</string>
     <string name="languages_wordlist_preparing">מכין את המילון...</string>
-    <string name="languages_wordlist_size_desc">גודל מילון</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, עד %2$,d מילה</item>
         <item quantity="other">%1$s, עד %2$,d מילים</item>
-    </plurals>
-    <string name="languages_wordlist_title">מילון להורדה</string>
-    <string name="languages_wordlist_title_variant">מילון להורדה (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">עד המילה השכיחה ביותר ב-%1$,d</item>
-        <item quantity="other">עד %1$,d המילים השכיחות ביותר</item>
     </plurals>
     <string name="layout_bottom_padding_info">המקלדת כולה זזה למעלה, הרחק מהקצה התחתון ומסרגל הניווט במחוות. הגדל ערך זה אם השורה התחתונה קרובה מדי לקצה המסך, או אם אתה מפעיל את ניווט המערכת בטעות.</string>
     <string name="layout_bottom_padding_subtitle">מרווח נוסף מתחת למקשים, מעל סרגל הניווט</string>

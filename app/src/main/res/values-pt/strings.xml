@@ -1964,20 +1964,9 @@
     <string name="languages_data_delete_body">%1$s tem uma lista de palavras baixada ou palavras-chave de emoji. Excluí-los e recuperar cerca de %2$s de armazenamento?</string>
     <string name="languages_data_delete_dismiss_action">Mantê-los</string>
     <string name="languages_data_delete_title">Excluir os arquivos baixados?</string>
-    <string name="languages_data_download_all_action">Baixar todos os dados (cerca de %1$s)</string>
-    <string name="languages_data_download_all_info">Baixa a lista de palavras, as palavras-chave de emoji e os dados de pares de palavras para este idioma. Arquivos que já estão no dispositivo não são baixados novamente. As linhas abaixo fazem o mesmo, um arquivo de cada vez.</string>
     <string name="languages_data_download_body">O teclado pode baixar os dados que %1$s precisa para prever e corrigir bem: uma lista de palavras, palavras-chave de emoji e dados de pares de palavras, o que quer que exista. Isso usa cerca de %2$s de dados. Você também pode baixá-los mais tarde na tela de idioma.</string>
     <string name="languages_data_download_dismiss_action">Agora não</string>
     <string name="languages_data_download_title">Baixar dados de idioma?</string>
-    <string name="languages_data_title">Dados de idioma</string>
-    <string name="languages_dictionary_bundled">Este idioma inclui um dicionário integrado.</string>
-    <string name="languages_dictionary_bundled_more">Este idioma inclui um dicionário integrado. Baixe um maior para obter melhores sugestões.</string>
-    <string name="languages_dictionary_none_download">Este idioma não possui um dicionário integrado. Baixe um para sugestões e correção automática, ou importe sua própria lista de palavras.</string>
-    <string name="languages_dictionary_none_learn">Este idioma não possui um dicionário integrado. O teclado aprende suas palavras conforme você digita, e você pode importar sua própria lista de palavras.</string>
-    <string name="languages_dictionary_title">Dicionário</string>
-    <string name="languages_dictionary_use_info">Desativado, o teclado esquece as palavras incluídas e baixadas para este idioma e lê apenas as listas de palavras que você importou, além das palavras que aprendeu com você. O mesmo interruptor aparece na barra de dicionário (Linhas e barras) e, inversamente, como Usar apenas minhas listas de palavras em Dicionários personalizados.</string>
-    <string name="languages_dictionary_use_subtitle">Sugerir e corrigir a partir da lista integrada ou baixada</string>
-    <string name="languages_dictionary_use_title">Usar a lista de palavras</string>
     <string name="languages_download_queued">Aguardando...</string>
     <string name="languages_emoji_dict_delete_desc">Eliminar as palavras-chave de emoji</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1988,15 +1977,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emojis, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">As palavras-chave de emoji permitem que você pesquise emojis em %1$s. Se você digitar a palavra para \"bolo\", encontrará 🎂. O teclado baixa as palavras-chave automaticamente enquanto o idioma estiver ativado.</string>
-    <string name="languages_emoji_keywords_manual">As palavras-chave de emoji permitem pesquisar emojis em %1$s. Se você digitar a palavra para \"bolo\", encontrará 🎂. Os downloads automáticos estão desativados, então você inicia este manualmente.</string>
-    <string name="languages_emoji_keywords_subtitle">Downloads para cada idioma e suas próprias importações</string>
     <string name="languages_emoji_keywords_title">Palavras-chave de emoji</string>
-    <string name="languages_emoji_keywords_unavailable">Ainda não há palavras-chave de emoji disponíveis para %1$s. A pesquisa de emoji responde em inglês. Você pode importar sua própria lista.</string>
-    <string name="languages_emoji_keywords_use_info">Desativado, as palavras-chave baixadas e qualquer pacote que você importou para este idioma permanecem no dispositivo, mas não são lidos, portanto, a pesquisa e as sugestões de emoji param de responder neste idioma. O mesmo botão aparece na barra de dicionário (Linhas e barras).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Pesquisar e sugerir emojis pelos seus nomes neste idioma</string>
-    <string name="languages_emoji_keywords_use_title">Usar as palavras-chave de emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">A letra que o teclado estilizado digita. Também pode ser alternada na faixa acima das teclas.</string>
     <string name="languages_fancy_style_row_title">Estilo sofisticado</string>
     <string name="languages_fancy_style_title">Estilo</string>
@@ -2065,16 +2046,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s baixado</string>
     <string name="languages_wordlist_preparing">Preparando o dicionário…</string>
-    <string name="languages_wordlist_size_desc">Tamanho do dicionário</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, até %2$,d palavra</item>
         <item quantity="other">%1$s, até %2$,d palavras</item>
-    </plurals>
-    <string name="languages_wordlist_title">Dicionário transferível</string>
-    <string name="languages_wordlist_title_variant">Dicionário para download (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Até a %1$,d palavra mais frequente</item>
-        <item quantity="other">Até as %1$,d palavras mais frequentes</item>
     </plurals>
     <string name="layout_bottom_padding_info">O teclado inteiro sobe, afastando-se da borda inferior e da barra de navegação por gestos. Aumente isso se a linha inferior estiver muito perto da borda da tela ou se você iniciar a navegação do sistema por engano.</string>
     <string name="layout_bottom_padding_subtitle">Mais espaço abaixo das teclas, acima da barra de navegação</string>

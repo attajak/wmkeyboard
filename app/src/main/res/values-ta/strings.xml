@@ -1966,20 +1966,9 @@
     <string name="languages_data_delete_body">%1$s பதிவிறக்கம் செய்யப்பட்ட சொல் பட்டியல் அல்லது ஈமோஜி முக்கிய வார்த்தைகளைக் கொண்டுள்ளது. அவற்றை நீக்கிவிட்டு சுமார் %2$s சேமிப்பிடத்தை மீண்டும் பெறவா?</string>
     <string name="languages_data_delete_dismiss_action">அப்படியே வைத்திருக்கவும்</string>
     <string name="languages_data_delete_title">பதிவிறக்கம் செய்யப்பட்ட கோப்புகளை நீக்கவா?</string>
-    <string name="languages_data_download_all_action">அனைத்து தரவையும் பதிவிறக்கவும் (சுமார் %1$s)</string>
-    <string name="languages_data_download_all_info">இந்த மொழிக்கான சொல் பட்டியல், ஈமோஜி முக்கிய வார்த்தைகள் மற்றும் சொல்-ஜோடி தரவை பதிவிறக்குகிறது. சாதனத்தில் ஏற்கனவே உள்ள கோப்புகள் மீண்டும் பதிவிறக்கப்படாது. கீழே உள்ள வரிசைகள் ஒவ்வொன்றாக ஒரே கோப்பைச் செய்கின்றன.</string>
     <string name="languages_data_download_body">விசைப்பலகை சரியாகக் கணிக்கவும் திருத்தவும் தேவையான தரவை %1$s பதிவிறக்கம் செய்யலாம்: ஒரு சொல் பட்டியல், எமோஜி முக்கிய வார்த்தைகள் மற்றும் சொல்-ஜோடி தரவு, அவற்றில் எது இருக்கிறதோ அது. இது சுமார் %2$s தரவைப் பயன்படுத்துகிறது. நீங்கள் அவற்றை மொழித் திரையிலிருந்து பின்னர் பதிவிறக்கம் செய்யலாம்.</string>
     <string name="languages_data_download_dismiss_action">இப்போது வேண்டாம்</string>
     <string name="languages_data_download_title">மொழித் தரவைப் பதிவிறக்கவா?</string>
-    <string name="languages_data_title">மொழித் தரவு</string>
-    <string name="languages_dictionary_bundled">இந்த மொழியில் உள்ளமைக்கப்பட்ட அகராதி உள்ளது.</string>
-    <string name="languages_dictionary_bundled_more">இந்த மொழியில் உள்ளமைக்கப்பட்ட அகராதி உள்ளது. சிறந்த பரிந்துரைகளுக்குப் பெரிய அகராதியைப் பதிவிறக்கவும்.</string>
-    <string name="languages_dictionary_none_download">இந்த மொழியில் உள்ளமைக்கப்பட்ட அகராதி இல்லை. பரிந்துரைகள் மற்றும் தானியங்கி திருத்தத்திற்கு ஒன்றைப் பதிவிறக்கவும் அல்லது உங்கள் சொந்த வார்த்தைப் பட்டியலை இறக்குமதி செய்யவும்.</string>
-    <string name="languages_dictionary_none_learn">இந்த மொழிக்கு உள்ளமைக்கப்பட்ட அகராதி இல்லை. நீங்கள் தட்டச்சு செய்யும் போது விசைப்பலகை உங்கள் சொற்களைக் கற்றுக்கொள்ளும், மேலும் உங்கள் சொந்த சொல் பட்டியலை நீங்கள் இறக்குமதி செய்யலாம்.</string>
-    <string name="languages_dictionary_title">அகராதி</string>
-    <string name="languages_dictionary_use_info">ஆஃப் செய்யப்பட்டால், விசைப்பலகை இந்த மொழிக்கான தொகுக்கப்பட்ட மற்றும் பதிவிறக்கம் செய்யப்பட்ட சொற்களை மறந்துவிட்டு, நீங்கள் இறக்குமதி செய்த சொல் பட்டியல்களை மட்டுமே படிக்கும், மேலும் அது உங்களிடமிருந்து கற்றுக்கொண்ட சொற்களையும் படிக்கும். அதே சுவிட்ச் அகராதி பட்டியிலும் (வரிசைகள் &amp; பட்டிகள்) மற்றும், அதற்கு மாறாக, தனிப்பயன் அகராதிகளின் கீழ் எனது சொல் பட்டியல்களை மட்டும் பயன்படுத்து என்பதிலும் தோன்றும்.</string>
-    <string name="languages_dictionary_use_subtitle">சேர்க்கப்பட்ட அல்லது பதிவிறக்கம் செய்யப்பட்ட பட்டியலிலிருந்து பரிந்துரைக்கவும் மற்றும் திருத்தவும்</string>
-    <string name="languages_dictionary_use_title">சொல் பட்டியலைப் பயன்படுத்து</string>
     <string name="languages_download_queued">காத்திருக்கிறது…</string>
     <string name="languages_emoji_dict_delete_desc">ஈமோஜி முக்கிய வார்த்தைகளை நீக்கவும்</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1990,15 +1979,7 @@
         <item quantity="one">%1$,d ஈமோஜி, %2$s</item>
         <item quantity="other">%1$,d ஈமோஜிகள், %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">ஈமோஜி கீவேர்டுகள் %1$s-இல் ஈமோஜிகளைத் தேட உங்களை அனுமதிக்கின்றன. நீங்கள் \"கேக்\" என்பதற்கான வார்த்தையைத் தட்டச்சு செய்தால், 🎂-ஐக் காண்பீர்கள். மொழி ஆன் செய்யப்பட்டிருக்கும்போது கீபோர்டு தானாகவே கீவேர்டுகளைப் பதிவிறக்கும்.</string>
-    <string name="languages_emoji_keywords_manual">%1$s-இல் ஈமோஜிகளைத் தேட ஈமோஜி முக்கியச்சொற்கள் உதவுகின்றன. நீங்கள் \"cake\" என்பதற்கான சொல்லைத் தட்டச்சு செய்தால், 🎂 என்பதைக் காண்பீர்கள். தானியங்கிப் பதிவிறக்கங்கள் முடக்கப்பட்டுள்ளதால், இதை நீங்களே தொடங்க வேண்டும்.</string>
-    <string name="languages_emoji_keywords_subtitle">ஒவ்வொரு மொழிக்கும் பதிவிறக்கங்கள் மற்றும் உங்கள் சொந்த இறக்குமதிகள்</string>
     <string name="languages_emoji_keywords_title">எமோஜி முக்கிய வார்த்தைகள்</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s-க்கு இன்னும் ஈமோஜி முக்கிய வார்த்தைகள் கிடைக்கவில்லை. ஈமோஜி தேடல் ஆங்கிலத்தில் பதிலளிக்கும். உங்கள் சொந்தப் பட்டியலை நீங்கள் இறக்குமதி செய்யலாம்.</string>
-    <string name="languages_emoji_keywords_use_info">ஆஃப் செய்யப்பட்டால், பதிவிறக்கம் செய்யப்பட்ட முக்கிய வார்த்தைகள் மற்றும் இந்த மொழிக்காக நீங்கள் இறக்குமதி செய்த எந்தப் பொதியும் சாதனத்தில் இருக்கும், ஆனால் படிக்கப்படாது, எனவே இந்த மொழியில் ஈமோஜி தேடல் மற்றும் ஈமோஜி பரிந்துரைகள் பதிலளிக்காது. அதே சுவிட்ச் அகராதி பட்டியில் (வரிசைகள் &amp; பார்கள்) தோன்றும்.</string>
-    <string name="languages_emoji_keywords_use_subtitle">இந்த மொழியில் ஈமோஜிகளை அவற்றின் பெயர்களைக் கொண்டு தேடி பரிந்துரைக்கவும்</string>
-    <string name="languages_emoji_keywords_use_title">ஈமோஜி முக்கிய வார்த்தைகளைப் பயன்படுத்தவும்</string>
-    <string name="languages_emoji_title">எமோஜி</string>
     <string name="languages_fancy_style_row_subtitle">ஃபேன்ஸி கீபோர்டு தட்டச்சு செய்யும் எழுத்துருக்கள். கீகளுக்கு மேலே உள்ள பட்டியில் இருந்தும் மாற்றிக்கொள்ளலாம்.</string>
     <string name="languages_fancy_style_row_title">அலங்கார நடை</string>
     <string name="languages_fancy_style_title">பாணி</string>
@@ -2067,16 +2048,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s பதிவிறக்கம் செய்யப்பட்டது</string>
     <string name="languages_wordlist_preparing">அகராதியைத் தயார் செய்கிறது…</string>
-    <string name="languages_wordlist_size_desc">அகராதி அளவு</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, %2$,d வார்த்தை வரை</item>
         <item quantity="other">%1$s, %2$,d வார்த்தைகள் வரை</item>
-    </plurals>
-    <string name="languages_wordlist_title">பதிவிறக்கக்கூடிய அகராதி</string>
-    <string name="languages_wordlist_title_variant">பதிவிறக்கக்கூடிய அகராதி (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">%1$,d அடிக்கடி பயன்படுத்தப்படும் சொல் வரை</item>
-        <item quantity="other">%1$,d அடிக்கடி பயன்படுத்தப்படும் சொற்கள் வரை</item>
     </plurals>
     <string name="layout_bottom_padding_info">முழு விசைப்பலகையும் கீழ் விளிம்பு மற்றும் சைகை வழிசெலுத்தல் பட்டியில் இருந்து மேலே நகரும். கீழ் வரிசை திரையின் விளிம்பிற்கு மிக அருகில் இருந்தால் அல்லது நீங்கள் தவறுதலாக சிஸ்டம் நேவிகேஷனைத் தொடங்கினால் இதை அதிகரிக்கவும்.</string>
     <string name="layout_bottom_padding_subtitle">விசைகளுக்குக் கீழே, நேவிகேஷன் பாரிற்கு மேலே கூடுதல் இடம்</string>

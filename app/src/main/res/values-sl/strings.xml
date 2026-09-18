@@ -1972,20 +1972,9 @@
     <string name="languages_data_delete_body">%1$s ima prenesen seznam besed ali ključne besede emoji. Jih želite izbrisati in pridobiti približno %2$s prostora za shranjevanje?</string>
     <string name="languages_data_delete_dismiss_action">Obdrži jih</string>
     <string name="languages_data_delete_title">Želite izbrisati prenesene datoteke?</string>
-    <string name="languages_data_download_all_action">Prenesi vse podatke (približno %1$s)</string>
-    <string name="languages_data_download_all_info">Prenese seznam besed, ključne besede za emojije in podatke o besednih parih za ta jezik. Datoteke, ki so že v napravi, se ne prenesejo znova. Spodnje vrstice naredijo enako, datoteko po datoteko.</string>
     <string name="languages_data_download_body">Tipkovnica lahko prenese podatke, ki jih %1$s potrebuje za dobro napovedovanje in popravljanje: seznam besed, ključne besede za emojije in podatke o besednih parih, karkoli od tega obstaja. To porabi približno %2$s podatkov. Pozneje jih lahko prenesete tudi na zaslonu za jezik.</string>
     <string name="languages_data_download_dismiss_action">Ne zdaj</string>
     <string name="languages_data_download_title">Prenesem jezikovne podatke?</string>
-    <string name="languages_data_title">Podatki o jeziku</string>
-    <string name="languages_dictionary_bundled">Ta jezik vključuje vgrajen slovar.</string>
-    <string name="languages_dictionary_bundled_more">Ta jezik vključuje vgrajen slovar. Prenesite večjega za boljše predloge.</string>
-    <string name="languages_dictionary_none_download">Ta jezik nima vgrajenega slovarja. Prenesite ga za predloge in samodejno popravljanje ali uvozite svoj seznam besed.</string>
-    <string name="languages_dictionary_none_learn">Ta jezik nima vgrajenega slovarja. Tipkovnica se uči vaših besed med tipkanjem, uvozite pa lahko tudi svoj seznam besed.</string>
-    <string name="languages_dictionary_title">Slovar</string>
-    <string name="languages_dictionary_use_info">Če je izklopljeno, tipkovnica pozabi vključene in prenesene besede za ta jezik ter bere le sezname besed, ki ste jih uvozili, poleg besed, ki se jih je naučila od vas. Enako stikalo se pojavi v vrstici slovarja (Vrstice in trakovi) in obratno, kot Uporabi samo moje sezname besed v razdelku Slovarji po meri.</string>
-    <string name="languages_dictionary_use_subtitle">Predlagaj in popravi s pomočjo priloženega ali prenesenega seznama</string>
-    <string name="languages_dictionary_use_title">Uporabi seznam besed</string>
     <string name="languages_download_queued">Čakanje...</string>
     <string name="languages_emoji_dict_delete_desc">Izbriši ključne besede za emojije</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1996,15 +1985,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emojijev, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Ključne besede za emojije vam omogočajo iskanje emojijev v %1$s. Če vtipkate besedo za \"torto\", boste našli 🎂. Tipkovnica samodejno prenese ključne besede, medtem ko je jezik vklopljen.</string>
-    <string name="languages_emoji_keywords_manual">Ključne besede za emojije vam omogočajo iskanje emojijev v jeziku %1$s. Če vtipkate besedo za »torto«, boste našli 🎂. Samodejni prenosi so izklopljeni, zato morate to zagnati sami.</string>
-    <string name="languages_emoji_keywords_subtitle">Prenosi za vsak jezik in vaši lastni uvozi</string>
     <string name="languages_emoji_keywords_title">Ključne besede za emojije</string>
-    <string name="languages_emoji_keywords_unavailable">Ključne besede za emojije za %1$s še niso na voljo. Iskanje emojijev odgovarja v angleščini. Uvozite lahko svoj seznam.</string>
-    <string name="languages_emoji_keywords_use_info">Če je izklopljeno, prenesene ključne besede in kateri koli paket, ki ste ga uvozili za ta jezik, ostanejo v napravi, vendar se ne berejo, zato iskanje in predlogi emojijev v tem jeziku prenehajo delovati. Isto stikalo se prikaže v vrstici slovarja (Vrstice in trakovi).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Išči in predlagaj emojije po njihovih imenih v tem jeziku</string>
-    <string name="languages_emoji_keywords_use_title">Uporabi ključne besede za emojije</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Pisava, ki jo tipka domišljijska tipkovnica. Preklopite lahko tudi iz traku nad tipkami.</string>
     <string name="languages_fancy_style_row_title">Domiseln slog</string>
     <string name="languages_fancy_style_title">Slog</string>
@@ -2073,16 +2054,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s preneseno</string>
     <string name="languages_wordlist_preparing">Priprava slovarja...</string>
-    <string name="languages_wordlist_size_desc">Velikost slovarja</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, do %2$,d beseda</item>
         <item quantity="other">%1$s, do %2$,d besed</item>
-    </plurals>
-    <string name="languages_wordlist_title">Slovar za prenos</string>
-    <string name="languages_wordlist_title_variant">Slovar za prenos (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Do %1$,d najpogostejša beseda</item>
-        <item quantity="other">Do %1$,d najpogostejših besed</item>
     </plurals>
     <string name="layout_bottom_padding_info">Celotna tipkovnica se premakne navzgor, stran od spodnjega roba in navigacijske vrstice s kretnjami. Povečajte to vrednost, če je spodnja vrstica preblizu roba zaslona ali če pomotoma sprožite sistemsko navigacijo.</string>
     <string name="layout_bottom_padding_subtitle">Več prostora pod tipkami, nad navigacijsko vrstico</string>

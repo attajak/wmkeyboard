@@ -1967,20 +1967,9 @@
     <string name="languages_data_delete_body">%1$s heeft een gedownloade woordenlijst of emoji-trefwoorden. Wil je deze verwijderen en ongeveer %2$s aan opslagruimte terugkrijgen?</string>
     <string name="languages_data_delete_dismiss_action">Behouden</string>
     <string name="languages_data_delete_title">De gedownloade bestanden verwijderen?</string>
-    <string name="languages_data_download_all_action">Alle gegevens downloaden (ongeveer %1$s)</string>
-    <string name="languages_data_download_all_info">Downloadt de woordenlijst, de emoji-trefwoorden en de woordpaargegevens voor deze taal. Bestanden die al op het apparaat staan, worden niet opnieuw gedownload. De rijen hieronder doen hetzelfde, één bestand per keer.</string>
     <string name="languages_data_download_body">Het toetsenbord kan de gegevens downloaden die %1$s nodig heeft om goed te voorspellen en te corrigeren: een woordenlijst, emoji-trefwoorden en woordpaargegevens, voor zover deze bestaan. Dit verbruikt ongeveer %2$s aan data. Je kunt ze later ook downloaden via het taalscherm.</string>
     <string name="languages_data_download_dismiss_action">Niet nu</string>
     <string name="languages_data_download_title">Taalgegevens downloaden?</string>
-    <string name="languages_data_title">Taalgegevens</string>
-    <string name="languages_dictionary_bundled">Deze taal bevat een ingebouwd woordenboek.</string>
-    <string name="languages_dictionary_bundled_more">Deze taal bevat een ingebouwd woordenboek. Download een grotere voor betere suggesties.</string>
-    <string name="languages_dictionary_none_download">Deze taal heeft geen ingebouwd woordenboek. Download er een voor suggesties en autocorrectie, of importeer je eigen woordenlijst.</string>
-    <string name="languages_dictionary_none_learn">Deze taal heeft geen ingebouwd woordenboek. Het toetsenbord leert je woorden terwijl je typt, en je kunt je eigen woordenlijst importeren.</string>
-    <string name="languages_dictionary_title">Woordenboek</string>
-    <string name="languages_dictionary_use_info">Uit: het toetsenbord vergeet de gebundelde en gedownloade woorden voor deze taal en leest alleen de woordenlijsten die je hebt geïmporteerd, plus de woorden die het van je heeft geleerd. Dezelfde schakelaar verschijnt op de woordenboekbalk (Rijen &amp; balken) en, andersom, als \'Alleen mijn woordenlijsten gebruiken\' onder Aangepaste woordenboeken.</string>
-    <string name="languages_dictionary_use_subtitle">Suggesties en correcties uit de gebundelde of gedownloade lijst</string>
-    <string name="languages_dictionary_use_title">Gebruik de woordenlijst</string>
     <string name="languages_download_queued">Wachten…</string>
     <string name="languages_emoji_dict_delete_desc">De emoji-trefwoorden verwijderen</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1991,15 +1980,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Met emoji-trefwoorden kun je zoeken naar emoji in %1$s. Als je het woord voor \"taart\" typt, vind je 🎂. Het toetsenbord downloadt de trefwoorden automatisch terwijl de taal is ingeschakeld.</string>
-    <string name="languages_emoji_keywords_manual">Met emoji-trefwoorden kun je zoeken naar emoji in %1$s. Als je het woord voor \"taart\" typt, vind je 🎂. Automatische downloads staan uit, dus je start deze zelf.</string>
-    <string name="languages_emoji_keywords_subtitle">Downloads voor elke taal, en je eigen imports</string>
     <string name="languages_emoji_keywords_title">Emoji-trefwoorden</string>
-    <string name="languages_emoji_keywords_unavailable">Er zijn nog geen emoji-trefwoorden beschikbaar voor %1$s. Zoeken naar emoji werkt in het Engels. Je kunt je eigen lijst importeren.</string>
-    <string name="languages_emoji_keywords_use_info">Indien uitgeschakeld, blijven de gedownloade trefwoorden en elk pack dat je voor deze taal hebt geïmporteerd op het apparaat staan, maar worden ze niet gelezen, waardoor emoji-zoeken en emoji-suggesties in deze taal stoppen. Dezelfde schakelaar verschijnt op de woordenboekbalk (Rijen &amp; balken).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Zoek en suggereer emoji op hun naam in deze taal</string>
-    <string name="languages_emoji_keywords_use_title">Gebruik de emoji-trefwoorden</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">De belettering die het hippe toetsenbord typt. Ook schakelbaar via de balk boven de toetsen.</string>
     <string name="languages_fancy_style_row_title">Fancy stijl</string>
     <string name="languages_fancy_style_title">Stijl</string>
@@ -2068,16 +2049,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s gedownload</string>
     <string name="languages_wordlist_preparing">Woordenboek voorbereiden…</string>
-    <string name="languages_wordlist_size_desc">Woordenboekgrootte</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, tot %2$,d woord</item>
         <item quantity="other">%1$s, tot %2$,d woorden</item>
-    </plurals>
-    <string name="languages_wordlist_title">Downloadbaar woordenboek</string>
-    <string name="languages_wordlist_title_variant">Downloadbaar woordenboek (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Tot het %1$,d meest frequente woord</item>
-        <item quantity="other">Tot de %1$,d meest frequente woorden</item>
     </plurals>
     <string name="layout_bottom_padding_info">Het hele toetsenbord schuift omhoog, weg van de onderrand en de gebarennavigatiebalk. Vergroot dit als de onderste rij te dicht bij de rand van het scherm staat, of als je per ongeluk de systeemnavigatie start.</string>
     <string name="layout_bottom_padding_subtitle">Meer ruimte onder de toetsen, boven de navigatiebalk</string>

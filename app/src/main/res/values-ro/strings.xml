@@ -1966,20 +1966,9 @@
     <string name="languages_data_delete_body">%1$s are o listă de cuvinte descărcată sau cuvinte cheie emoji. Să le ștergi și să recuperezi aproximativ %2$s din spațiul de stocare?</string>
     <string name="languages_data_delete_dismiss_action">Păstrează-le</string>
     <string name="languages_data_delete_title">Ștergeți fișierele descărcate?</string>
-    <string name="languages_data_download_all_action">Descarcă toate datele (aproximativ %1$s)</string>
-    <string name="languages_data_download_all_info">Descarcă lista de cuvinte, cuvintele cheie pentru emoji și datele perechilor de cuvinte pentru această limbă. Fișierele deja existente pe dispozitiv nu sunt descărcate din nou. Rândurile de mai jos fac același lucru, câte un fișier pe rând.</string>
     <string name="languages_data_download_body">Tastatura poate descărca datele de care %1$s are nevoie pentru a prezice și a corecta bine: o listă de cuvinte, cuvinte cheie emoji și date despre perechi de cuvinte, oricare dintre acestea există. Aceasta utilizează aproximativ %2$s de date. De asemenea, le puteți descărca mai târziu din ecranul de limbă.</string>
     <string name="languages_data_download_dismiss_action">Nu acum</string>
     <string name="languages_data_download_title">Descarci datele lingvistice?</string>
-    <string name="languages_data_title">Date limbă</string>
-    <string name="languages_dictionary_bundled">Această limbă include un dicționar încorporat.</string>
-    <string name="languages_dictionary_bundled_more">Această limbă include un dicționar încorporat. Descărcați unul mai mare pentru sugestii mai bune.</string>
-    <string name="languages_dictionary_none_download">Această limbă nu are un dicționar încorporat. Descarcă unul pentru sugestii și autocorecție sau importă propria listă de cuvinte.</string>
-    <string name="languages_dictionary_none_learn">Această limbă nu are un dicționar încorporat. Tastatura învață cuvintele pe măsură ce tastezi și poți importa propria listă de cuvinte.</string>
-    <string name="languages_dictionary_title">Dicționar</string>
-    <string name="languages_dictionary_use_info">Dacă este oprit, tastatura uită cuvintele incluse și descărcate pentru această limbă și citește doar listele de cuvinte pe care le-ați importat, plus cuvintele pe care le-a învățat de la dumneavoastră. Același comutator apare pe bara de dicționar (Rânduri și bare) și, invers, ca „Folosește doar listele mele de cuvinte” în Dicționare personalizate.</string>
-    <string name="languages_dictionary_use_subtitle">Sugerează și corectează din lista inclusă sau descărcată</string>
-    <string name="languages_dictionary_use_title">Folosește lista de cuvinte</string>
     <string name="languages_download_queued">În așteptare…</string>
     <string name="languages_emoji_dict_delete_desc">Șterge cuvintele cheie pentru emoji</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1990,15 +1979,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Cuvintele cheie pentru emoji îți permit să cauți emoji în %1$s. Dacă scrii cuvântul pentru \"tort\", vei găsi 🎂. Tastatura descarcă automat cuvintele cheie în timp ce limba este activată.</string>
-    <string name="languages_emoji_keywords_manual">Cuvintele cheie pentru emoji îți permit să cauți emoji în %1$s. Dacă tastezi cuvântul pentru „tort”, vei găsi 🎂. Descărcările automate sunt oprite, așa că trebuie să pornești descărcarea manual.</string>
-    <string name="languages_emoji_keywords_subtitle">Descărcări pentru fiecare limbă și propriile tale importuri</string>
     <string name="languages_emoji_keywords_title">Cuvinte cheie pentru emoji-uri</string>
-    <string name="languages_emoji_keywords_unavailable">Nu există cuvinte cheie pentru emoji disponibile pentru %1$s încă. Căutarea de emoji răspunde în engleză. Poți importa propria listă.</string>
-    <string name="languages_emoji_keywords_use_info">Dacă este oprit, cuvintele cheie descărcate și orice pachet importat pentru această limbă rămân pe dispozitiv, dar nu sunt citite, astfel încât căutarea și sugestiile de emoji nu vor mai funcționa în această limbă. Același comutator apare pe bara de dicționar (Rânduri și bare).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Căutați și sugerați emoji după numele lor în această limbă</string>
-    <string name="languages_emoji_keywords_use_title">Folosește cuvintele cheie pentru emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Scrierea pe care o folosește tastatura stilizată. De asemenea, poate fi comutată din bara de deasupra tastelor.</string>
     <string name="languages_fancy_style_row_title">Stil fantezie</string>
     <string name="languages_fancy_style_title">Stil</string>
@@ -2067,16 +2048,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s descărcat</string>
     <string name="languages_wordlist_preparing">Se pregătește dicționarul…</string>
-    <string name="languages_wordlist_size_desc">Dimensiunea dicționarului</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, până la %2$,d cuvânt</item>
         <item quantity="other">%1$s, până la %2$,d cuvinte</item>
-    </plurals>
-    <string name="languages_wordlist_title">Dicționar descărcabil</string>
-    <string name="languages_wordlist_title_variant">Dicționar descărcabil (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Până la cel mai frecvent cuvânt %1$,d</item>
-        <item quantity="other">Până la cele mai frecvente %1$,d cuvinte</item>
     </plurals>
     <string name="layout_bottom_padding_info">Întreaga tastatură se deplasează în sus, departe de marginea inferioară și de bara de navigare prin gesturi. Măriți această valoare dacă rândul de jos este prea aproape de marginea ecranului sau dacă activați din greșeală navigarea sistemului.</string>
     <string name="layout_bottom_padding_subtitle">Mai mult spațiu sub taste, deasupra barei de navigare</string>

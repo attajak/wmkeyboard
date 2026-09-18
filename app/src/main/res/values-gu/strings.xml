@@ -1964,20 +1964,9 @@
     <string name="languages_data_delete_body">%1$s પાસે ડાઉનલોડ કરેલી શબ્દ સૂચિ અથવા ઇમોજી કીવર્ડ્સ છે. તેમને કાઢી નાખો અને લગભગ %2$s સ્ટોરેજ પાછું મેળવો?</string>
     <string name="languages_data_delete_dismiss_action">તેમને રાખો</string>
     <string name="languages_data_delete_title">ડાઉનલોડ કરેલી ફાઇલો કાઢી નાખવી છે?</string>
-    <string name="languages_data_download_all_action">બધો ડેટા ડાઉનલોડ કરો (આશરે %1$s)</string>
-    <string name="languages_data_download_all_info">આ ભાષા માટે શબ્દ સૂચિ, ઇમોજી કીવર્ડ્સ અને શબ્દ-જોડી ડેટા ડાઉનલોડ કરે છે. ઉપકરણ પર પહેલેથી રહેલી ફાઇલો ફરીથી ડાઉનલોડ થતી નથી. નીચેની હરોળ એક સમયે એક ફાઇલ માટે સમાન કાર્ય કરે છે.</string>
     <string name="languages_data_download_body">કીબોર્ડ સારી રીતે અનુમાન અને સુધારા કરવા માટે જરૂરી ડેટા %1$s ડાઉનલોડ કરી શકે છે: શબ્દ સૂચિ, ઇમોજી કીવર્ડ્સ અને શબ્દ-જોડી ડેટા, જેમાંથી જે અસ્તિત્વમાં હોય તે. આ લગભગ %2$s ડેટાનો ઉપયોગ કરે છે. તમે તેને પછીથી લેંગ્વેજ સ્ક્રીન પરથી પણ ડાઉનલોડ કરી શકો છો.</string>
     <string name="languages_data_download_dismiss_action">અત્યારે નહીં</string>
     <string name="languages_data_download_title">ભાષા ડેટા ડાઉનલોડ કરવો છે?</string>
-    <string name="languages_data_title">ભાષા ડેટા</string>
-    <string name="languages_dictionary_bundled">આ ભાષામાં ઇન-બિલ્ટ શબ્દકોશ શામેલ છે.</string>
-    <string name="languages_dictionary_bundled_more">આ ભાષામાં ઇન-બિલ્ટ ડિક્શનરી શામેલ છે. વધુ સારા સૂચનો માટે મોટી ડિક્શનરી ડાઉનલોડ કરો.</string>
-    <string name="languages_dictionary_none_download">આ ભાષામાં કોઈ ઇન-બિલ્ટ શબ્દકોશ નથી. સૂચનો અને ઓટોકરેક્ટ માટે એક ડાઉનલોડ કરો, અથવા તમારી પોતાની શબ્દ સૂચિ આયાત કરો.</string>
-    <string name="languages_dictionary_none_learn">આ ભાષામાં કોઈ બિલ્ટ-ઇન શબ્દકોશ નથી. તમે ટાઇપ કરો તેમ કીબોર્ડ તમારા શબ્દો શીખે છે, અને તમે તમારી પોતાની શબ્દ સૂચિ આયાત કરી શકો છો.</string>
-    <string name="languages_dictionary_title">શબ્દકોશ</string>
-    <string name="languages_dictionary_use_info">બંધ, કીબોર્ડ આ ભાષા માટે બંડલ કરેલા અને ડાઉનલોડ કરેલા શબ્દોને ભૂલી જાય છે અને ફક્ત તમે આયાત કરેલી શબ્દ સૂચિઓ વાંચે છે, ઉપરાંત તેણે તમારી પાસેથી શીખેલા શબ્દો. સમાન સ્વિચ ડિક્શનરી બાર (પંક્તિઓ અને બાર) પર દેખાય છે અને, બીજી રીતે, કસ્ટમ ડિક્શનરી હેઠળ ફક્ત મારી શબ્દ સૂચિઓનો ઉપયોગ કરો તરીકે.</string>
-    <string name="languages_dictionary_use_subtitle">બંડલ કરેલી અથવા ડાઉનલોડ કરેલી સૂચિમાંથી સૂચવો અને સુધારો</string>
-    <string name="languages_dictionary_use_title">શબ્દ સૂચિનો ઉપયોગ કરો</string>
     <string name="languages_download_queued">રાહ જોઈ રહ્યા છીએ…</string>
     <string name="languages_emoji_dict_delete_desc">ઇમોજી કીવર્ડ્સ કાઢી નાખો</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1988,15 +1977,7 @@
         <item quantity="one">%1$,d ઇમોજી, %2$s</item>
         <item quantity="other">%1$,d ઇમોજી, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">ઇમોજી કીવર્ડ્સ તમને %1$s માં ઇમોજી શોધવા દે છે. જો તમે \"કેક\" માટે તેનો શબ્દ ટાઇપ કરો છો, તો તમને 🎂 મળશે. જ્યારે ભાષા ચાલુ હોય ત્યારે કીબોર્ડ આપમેળે કીવર્ડ્સ ડાઉનલોડ કરે છે.</string>
-    <string name="languages_emoji_keywords_manual">ઇમોજી કીવર્ડ્સ તમને %1$s માં ઇમોજી શોધવા દે છે. જો તમે \"cake\" માટે તેનો શબ્દ ટાઇપ કરો છો, તો તમને 🎂 મળે છે. સ્વચાલિત ડાઉનલોડ્સ બંધ છે, તેથી તમે આને જાતે શરૂ કરો.</string>
-    <string name="languages_emoji_keywords_subtitle">દરેક ભાષા માટે ડાઉનલોડ્સ, અને તમારી પોતાની આયાત</string>
     <string name="languages_emoji_keywords_title">ઇમોજી કીવર્ડ્સ</string>
-    <string name="languages_emoji_keywords_unavailable">%1$s માટે હજુ સુધી કોઈ ઇમોજી કીવર્ડ્સ ઉપલબ્ધ નથી. ઇમોજી શોધ અંગ્રેજીમાં જવાબ આપે છે. તમે તમારી પોતાની સૂચિ આયાત કરી શકો છો.</string>
-    <string name="languages_emoji_keywords_use_info">બંધ, ડાઉનલોડ કરેલા કીવર્ડ્સ અને તમે આ ભાષા માટે આયાત કરેલ કોઈપણ પેક ઉપકરણ પર રહે છે પરંતુ વાંચવામાં આવતા નથી, તેથી ઇમોજી શોધ અને ઇમોજી સૂચનો આ ભાષામાં જવાબ આપવાનું બંધ કરે છે. સમાન સ્વીચ ડિક્શનરી બાર (પંક્તિઓ અને બાર) પર દેખાય છે.</string>
-    <string name="languages_emoji_keywords_use_subtitle">આ ભાષામાં તેમના નામ દ્વારા ઇમોજી શોધો અને સૂચવો</string>
-    <string name="languages_emoji_keywords_use_title">ઇમોજી કીવર્ડ્સનો ઉપયોગ કરો</string>
-    <string name="languages_emoji_title">ઇમોજી</string>
     <string name="languages_fancy_style_row_subtitle">ફેન્સી કીબોર્ડ જે અક્ષરો ટાઈપ કરે છે તે. કીની ઉપરની પટ્ટીમાંથી પણ બદલી શકાય છે.</string>
     <string name="languages_fancy_style_row_title">ફેન્સી સ્ટાઇલ</string>
     <string name="languages_fancy_style_title">શૈલી</string>
@@ -2065,16 +2046,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s ડાઉનલોડ થયું</string>
     <string name="languages_wordlist_preparing">શબ્દકોશ તૈયાર કરી રહ્યા છીએ...</string>
-    <string name="languages_wordlist_size_desc">શબ્દકોશનું કદ</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, %2$,d શબ્દ સુધી</item>
         <item quantity="other">%1$s, %2$,d શબ્દો સુધી</item>
-    </plurals>
-    <string name="languages_wordlist_title">ડાઉનલોડ કરી શકાય તેવો શબ્દકોશ</string>
-    <string name="languages_wordlist_title_variant">ડાઉનલોડ કરી શકાય તેવો શબ્દકોશ (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">%1$,d સૌથી વધુ વાર વપરાતા શબ્દ સુધી</item>
-        <item quantity="other">%1$,d સૌથી વધુ વાર વપરાતા શબ્દો સુધી</item>
     </plurals>
     <string name="layout_bottom_padding_info">આખું કીબોર્ડ નીચેની ધાર અને જેસ્ચર નેવિગેશન બારથી દૂર, ઉપરની તરફ ખસે છે. જો નીચેની હરોળ સ્ક્રીનની ધારની ખૂબ નજીક હોય, અથવા જો તમે ભૂલથી સિસ્ટમ નેવિગેશન શરૂ કરી દો, તો તેને વધારો.</string>
     <string name="layout_bottom_padding_subtitle">કીની નીચે, નેવિગેશન બારની ઉપર વધુ જગ્યા</string>

@@ -1966,20 +1966,9 @@
     <string name="languages_data_delete_body">%1$s має завантажений список слів або ключові слова емодзі. Видалити їх і звільнити близько %2$s пам\'яті?</string>
     <string name="languages_data_delete_dismiss_action">Залишити їх</string>
     <string name="languages_data_delete_title">Видалити завантажені файли?</string>
-    <string name="languages_data_download_all_action">Завантажити всі дані (близько %1$s)</string>
-    <string name="languages_data_download_all_info">Завантажує список слів, ключові слова емодзі та дані про пари слів для цієї мови. Файли, які вже є на пристрої, повторно не завантажуються. Рядки нижче виконують те саме по одному файлу за раз.</string>
     <string name="languages_data_download_body">Клавіатура може завантажити дані, необхідні %1$s для якісного прогнозування та виправлення: список слів, ключові слова емодзі та дані про пари слів, якщо вони існують. Це використає близько %2$s даних. Ви також можете завантажити їх пізніше на екрані мов.</string>
     <string name="languages_data_download_dismiss_action">Не зараз</string>
     <string name="languages_data_download_title">Завантажити мовні дані?</string>
-    <string name="languages_data_title">Мовні дані</string>
-    <string name="languages_dictionary_bundled">Ця мова містить вбудований словник.</string>
-    <string name="languages_dictionary_bundled_more">Ця мова містить вбудований словник. Завантажте більший для кращих підказок.</string>
-    <string name="languages_dictionary_none_download">Ця мова не має вбудованого словника. Завантажте його для отримання підказок і автовиправлення або імпортуйте власний список слів.</string>
-    <string name="languages_dictionary_none_learn">Ця мова не має вбудованого словника. Клавіатура вивчає ваші слова під час введення, і ви можете імпортувати власний список слів.</string>
-    <string name="languages_dictionary_title">Словник</string>
-    <string name="languages_dictionary_use_info">Якщо вимкнено, клавіатура забуває вбудовані та завантажені слова для цієї мови і читає лише імпортовані вами списки слів, а також слова, які вона вивчила від вас. Той самий перемикач з\'являється на панелі словників (Рядки та панелі) і, навпаки, як \"Використовувати лише мої списки слів\" у розділі \"Користувацькі словники\".</string>
-    <string name="languages_dictionary_use_subtitle">Пропонувати та виправляти зі вбудованого або завантаженого списку</string>
-    <string name="languages_dictionary_use_title">Використовувати список слів</string>
     <string name="languages_download_queued">Очікування…</string>
     <string name="languages_emoji_dict_delete_desc">Видалити ключові слова емодзі</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1990,15 +1979,7 @@
         <item quantity="one">%1$,d емодзі, %2$s</item>
         <item quantity="other">%1$,d емодзі, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Ключові слова емодзі дозволяють шукати емодзі в %1$s. Якщо ви введете слово для \"торт\", ви знайдете 🎂. Клавіатура автоматично завантажує ключові слова, поки мова увімкнена.</string>
-    <string name="languages_emoji_keywords_manual">Ключові слова для емодзі дозволяють шукати їх у %1$s. Якщо ви введете \"торт\", ви знайдете 🎂. Автоматичне завантаження вимкнено, тому ви повинні запустити його вручну.</string>
-    <string name="languages_emoji_keywords_subtitle">Завантаження для кожної мови та ваші власні імпорти</string>
     <string name="languages_emoji_keywords_title">Ключові слова для емодзі</string>
-    <string name="languages_emoji_keywords_unavailable">Для %1$s ще немає доступних ключових слів для емодзі. Пошук емодзі відповідає англійською мовою. Ви можете імпортувати власний список.</string>
-    <string name="languages_emoji_keywords_use_info">Якщо вимкнено, завантажені ключові слова та будь-який пакет, імпортований для цієї мови, залишаються на пристрої, але не зчитуються, тому пошук емодзі та пропозиції емодзі перестають працювати цією мовою. Такий самий перемикач з\'являється на панелі словника (Рядки та панелі).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Шукайте та пропонуйте емодзі за їхніми назвами цією мовою</string>
-    <string name="languages_emoji_keywords_use_title">Використовувати ключові слова для емодзі</string>
-    <string name="languages_emoji_title">Емодзі</string>
     <string name="languages_fancy_style_row_subtitle">Шрифти, які використовує вигадлива клавіатура. Також можна перемикати зі смужки над клавішами.</string>
     <string name="languages_fancy_style_row_title">Незвичний стиль</string>
     <string name="languages_fancy_style_title">Стиль</string>
@@ -2067,16 +2048,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">Завантажено %1$s</string>
     <string name="languages_wordlist_preparing">Підготовка словника…</string>
-    <string name="languages_wordlist_size_desc">Розмір словника</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, до %2$,d слова</item>
         <item quantity="other">%1$s, до %2$,d слів</item>
-    </plurals>
-    <string name="languages_wordlist_title">Словник для завантаження</string>
-    <string name="languages_wordlist_title_variant">Словник для завантаження (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">До %1$,d найчастішого слова</item>
-        <item quantity="other">До %1$,d найчастіших слів</item>
     </plurals>
     <string name="layout_bottom_padding_info">Вся клавіатура зміщується вгору, подалі від нижнього краю та панелі навігації жестами. Збільште це значення, якщо нижній ряд занадто близько до краю екрана або якщо ви помилково активуєте системну навігацію.</string>
     <string name="layout_bottom_padding_subtitle">Більше місця під клавішами, над панеллю навігації</string>

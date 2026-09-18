@@ -1975,20 +1975,9 @@
     <string name="languages_data_delete_body">I-%1$s inohlu lwamagama olulandiwe noma amagama angukhiye we-emoji. Uyafuna ukuzisusa futhi uthole cishe i-%2$s yesikhala sokugcina?</string>
     <string name="languages_data_delete_dismiss_action">Wagcine</string>
     <string name="languages_data_delete_title">Susa amafayela alandiwe?</string>
-    <string name="languages_data_download_all_action">Landa yonke idatha (cishe %1$s)</string>
-    <string name="languages_data_download_all_info">Ilanda uhlu lwamagama, amagama angukhiye we-emoji kanye nedatha yamabhangqa amagama alolu limi. Amafayela asevele kule divayisi awalandwa futhi. Imigqa engezansi yenza okufanayo ifayela elilodwa ngesikhathi.</string>
     <string name="languages_data_download_body">Ikhibhodi ingalanda idatha %1$s edingayo ukuze ibikezele futhi ilungise kahle: uhlu lwamagama, amagama angukhiye we-emoji nedatha yamagama amabili, noma yikuphi kwalokho okukhona. Lokhu kusebenzisa cishe %2$s yedatha. Ungaphinda uzilande kamuva kusuka esikrinini solimi.</string>
     <string name="languages_data_download_dismiss_action">Hhayi manje</string>
     <string name="languages_data_download_title">Landa idatha yolimi?</string>
-    <string name="languages_data_title">Idatha yolimi</string>
-    <string name="languages_dictionary_bundled">Lolu limi luhlanganisa isichazamazwi esakhelwe ngaphakathi.</string>
-    <string name="languages_dictionary_bundled_more">Lolu limi luhlanganisa isichazamazwi esakhelwe ngaphakathi. Landa esikhulu ukuze uthole iziphakamiso ezingcono.</string>
-    <string name="languages_dictionary_none_download">Lolu limi alunasichazamazwi esakhelwe ngaphakathi. Landa esisodwa ukuze uthole iziphakamiso nokulungiswa okuzenzakalelayo, noma ngenisa uhlu lwakho lwamagama.</string>
-    <string name="languages_dictionary_none_learn">Lolu limi alunawo isichazamazwi esakhelwe ngaphakathi. Ikhibhodi ifunda amagama akho njengoba uthayipha, futhi ungangenisa uhlu lwakho lwamagama.</string>
-    <string name="languages_dictionary_title">Isichazamazwi</string>
-    <string name="languages_dictionary_use_info">Uma icishiwe, ikhibhodi ikhohlwa amagama ahlanganisiwe nalandiwe alolu limi futhi ifunda kuphela izinhlu zamagama ozingenisile, kanye namagama ekufundile kuwe. Isishintshi esifanayo sivela kubha yesichazamazwi (Imigqa nemigoqo) futhi, ngakolunye uhlangothi, njengokuthi Sebenzisa izinhlu zami zamagama kuphela ngaphansi kwezichazamazwi zangokwezifiso.</string>
-    <string name="languages_dictionary_use_subtitle">Phakamisa futhi ulungise ohlwini oluhlanganisiwe noma olulandiwe</string>
-    <string name="languages_dictionary_use_title">Sebenzisa uhlu lwamagama</string>
     <string name="languages_download_queued">Iyalinda…</string>
     <string name="languages_emoji_dict_delete_desc">Susa amagama angukhiye we-emoji</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1999,15 +1988,7 @@
         <item quantity="one">%1$,d i-emoji, %2$s</item>
         <item quantity="other">%1$,d ama-emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Amagama angukhiye we-emoji akuvumela ukuthi useshe ama-emoji ku-%1$s. Uma uthayipha igama lawo elithi \"ikhekhe\", uthola 🎂. Ikhibhodi ilanda amagama angukhiye ngokuzenzakalelayo ngenkathi ulimi luvuliwe.</string>
-    <string name="languages_emoji_keywords_manual">Amagama angukhiye we-Emoji akuvumela ukuthi useshe ama-emoji ku-%1$s. Uma uthayipha igama lawo elithi \"ikhekhe\", uthola u-🎂. Ukulandwa okuzenzakalelayo kuvaliwe, ngakho uqala lokhu wena ngokwakho.</string>
-    <string name="languages_emoji_keywords_subtitle">Okulandiwe kulo lonke ulimi, kanye nokungenisiwe kwakho</string>
     <string name="languages_emoji_keywords_title">Amagama angukhiye we-Emoji</string>
-    <string name="languages_emoji_keywords_unavailable">Awekho amagama angukhiye we-emoji atholakalayo we-%1$s okwamanje. Ukusesha kwe-emoji kuphendula ngesiNgisi. Ungangenisa uhlu lwakho.</string>
-    <string name="languages_emoji_keywords_use_info">Uma icishiwe, amagama angukhiye alandiwe nanoma yiliphi iphakethe olingenisile lolu limi lihlala kudivayisi kodwa alifundwa, ngakho-ke ukusesha kwe-emoji neziphakamiso ze-emoji ziyayeka ukuphendula ngalolu limi. Inkinobho efanayo ivela kubha yesichazamazwi (Imigqa namabha).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Sesha futhi uphakamise ama-emoji ngamagama awo ngalolu limi</string>
-    <string name="languages_emoji_keywords_use_title">Sebenzisa amagama angukhiye we-emoji</string>
-    <string name="languages_emoji_title">I-Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Izinhlamvu ezibhalwa ikhibhodi yemfashini. Futhi zingashintshwa kusuka emgqeni ongaphezu kwezikhiye.</string>
     <string name="languages_fancy_style_row_title">Isitayela esihle</string>
     <string name="languages_fancy_style_title">Isitayela</string>
@@ -2076,16 +2057,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s ilandiwe</string>
     <string name="languages_wordlist_preparing">Ilungiselela isichazamazwi...</string>
-    <string name="languages_wordlist_size_desc">Usayizi wesichazamazwi</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, kufika egameni elilodwa elingu-%2$,d</item>
         <item quantity="other">%1$s, kufika emagameni angu-%2$,d</item>
-    </plurals>
-    <string name="languages_wordlist_title">Isichazamazwi esilandekayo</string>
-    <string name="languages_wordlist_title_variant">Isichazamazwi esilandekayo (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Kufika egameni elivame kakhulu elingu-%1$,d</item>
-        <item quantity="other">Kufika emagameni avame kakhulu angu-%1$,d</item>
     </plurals>
     <string name="layout_bottom_padding_info">Ikhibhodi yonke inyuka, isuke onqenqemeni olungezansi kanye nebha yokuzulazula. Yandisa lokhu uma umugqa ongezansi usondele kakhulu onqenqemeni lwesikrini, noma uma uqala ukuzulazula kwesistimu ngephutha.</string>
     <string name="layout_bottom_padding_subtitle">Isikhala esengeziwe ngaphansi kokhiye, ngaphezu kwebha yokuzulazula</string>

@@ -1963,20 +1963,9 @@
     <string name="languages_data_delete_body">%1$s memiliki daftar kata atau kata kunci emoji yang diunduh. Hapus dan dapatkan kembali sekitar %2$s ruang penyimpanan?</string>
     <string name="languages_data_delete_dismiss_action">Simpan</string>
     <string name="languages_data_delete_title">Hapus file yang diunduh?</string>
-    <string name="languages_data_download_all_action">Unduh semua data (sekitar %1$s)</string>
-    <string name="languages_data_download_all_info">Mengunduh daftar kata, kata kunci emoji, dan data pasangan kata untuk bahasa ini. File yang sudah ada di perangkat tidak akan diunduh lagi. Baris di bawah ini melakukan hal yang sama satu file sekaligus.</string>
     <string name="languages_data_download_body">Papan ketik dapat mengunduh data yang diperlukan %1$s untuk memprediksi dan mengoreksi dengan baik: daftar kata, kata kunci emoji, dan data pasangan kata, mana pun yang ada. Ini menggunakan sekitar %2$s data. Anda juga dapat mengunduhnya nanti dari layar bahasa.</string>
     <string name="languages_data_download_dismiss_action">Tidak sekarang</string>
     <string name="languages_data_download_title">Unduh data bahasa?</string>
-    <string name="languages_data_title">Data bahasa</string>
-    <string name="languages_dictionary_bundled">Bahasa ini menyertakan kamus bawaan.</string>
-    <string name="languages_dictionary_bundled_more">Bahasa ini menyertakan kamus bawaan. Unduh kamus yang lebih besar untuk saran yang lebih baik.</string>
-    <string name="languages_dictionary_none_download">Bahasa ini tidak memiliki kamus bawaan. Unduh satu untuk saran dan koreksi otomatis, atau impor daftar kata Anda sendiri.</string>
-    <string name="languages_dictionary_none_learn">Bahasa ini tidak memiliki kamus bawaan. Keyboard mempelajari kata-kata Anda saat Anda mengetik, dan Anda dapat mengimpor daftar kata Anda sendiri.</string>
-    <string name="languages_dictionary_title">Kamus</string>
-    <string name="languages_dictionary_use_info">Mati, papan ketik melupakan kata-kata bawaan dan yang diunduh untuk bahasa ini dan hanya membaca daftar kata yang Anda impor, ditambah kata-kata yang dipelajarinya dari Anda. Sakelar yang sama muncul di bilah kamus (Baris &amp; bilah) dan, sebaliknya, sebagai Gunakan hanya daftar kata saya di bawah Kamus khusus.</string>
-    <string name="languages_dictionary_use_subtitle">Sarankan dan koreksi dari daftar bawaan atau yang diunduh</string>
-    <string name="languages_dictionary_use_title">Gunakan daftar kata</string>
     <string name="languages_download_queued">Menunggu…</string>
     <string name="languages_emoji_dict_delete_desc">Hapus kata kunci emoji</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1987,15 +1976,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Kata kunci emoji memungkinkan Anda mencari emoji dalam %1$s. Jika Anda mengetik kata untuk \"kue\", Anda akan menemukan 🎂. Papan ketik mengunduh kata kunci secara otomatis saat bahasa aktif.</string>
-    <string name="languages_emoji_keywords_manual">Kata kunci emoji memungkinkan Anda mencari emoji dalam %1$s. Jika Anda mengetik kata untuk \"kue\", Anda akan menemukan 🎂. Unduhan otomatis nonaktif, jadi Anda harus memulainya sendiri.</string>
-    <string name="languages_emoji_keywords_subtitle">Unduhan untuk setiap bahasa, dan impor Anda sendiri</string>
     <string name="languages_emoji_keywords_title">Kata kunci emoji</string>
-    <string name="languages_emoji_keywords_unavailable">Belum ada kata kunci emoji yang tersedia untuk %1$s. Pencarian emoji menjawab dalam bahasa Inggris. Anda dapat mengimpor daftar Anda sendiri.</string>
-    <string name="languages_emoji_keywords_use_info">Nonaktif, kata kunci yang diunduh dan paket apa pun yang Anda impor untuk bahasa ini tetap ada di perangkat tetapi tidak dibaca, sehingga pencarian emoji dan saran emoji berhenti merespons dalam bahasa ini. Sakelar yang sama muncul di bilah kamus (Baris &amp; bilah).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Cari dan sarankan emoji berdasarkan namanya dalam bahasa ini</string>
-    <string name="languages_emoji_keywords_use_title">Gunakan kata kunci emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Huruf yang diketik oleh keyboard bergaya. Juga dapat dialihkan dari strip di atas tombol.</string>
     <string name="languages_fancy_style_row_title">Gaya mewah</string>
     <string name="languages_fancy_style_title">Gaya</string>
@@ -2064,16 +2045,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s diunduh</string>
     <string name="languages_wordlist_preparing">Menyiapkan kamus…</string>
-    <string name="languages_wordlist_size_desc">Ukuran kamus</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, hingga %2$,d kata</item>
         <item quantity="other">%1$s, hingga %2$,d kata</item>
-    </plurals>
-    <string name="languages_wordlist_title">Kamus yang dapat diunduh</string>
-    <string name="languages_wordlist_title_variant">Kamus yang dapat diunduh (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Hingga %1$,d kata yang paling sering digunakan</item>
-        <item quantity="other">Hingga %1$,d kata yang paling sering digunakan</item>
     </plurals>
     <string name="layout_bottom_padding_info">Seluruh keyboard bergerak ke atas, menjauh dari tepi bawah dan bilah navigasi gestur. Tingkatkan jika baris bawah terlalu dekat dengan tepi layar, atau jika Anda tidak sengaja memulai navigasi sistem.</string>
     <string name="layout_bottom_padding_subtitle">Lebih banyak ruang di bawah tombol, di atas bilah navigasi</string>

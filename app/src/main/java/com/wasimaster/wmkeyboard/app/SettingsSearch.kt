@@ -830,7 +830,10 @@ private fun SearchStrings.languageRows(): List<SettingsSearchEntry> {
         // with nothing to fill it in here. The title carries the search anyway.
         row(R.string.languages_numeral_system_title),
         row(R.string.languages_custom_dictionaries_title, R.string.languages_custom_dictionaries_subtitle),
-        row(R.string.languages_emoji_keywords_title, R.string.languages_emoji_keywords_subtitle),
+        row(R.string.languages_dictionaries_title),
+        row(R.string.languages_words_title),
+        row(R.string.languages_emoji_keywords_title),
+        row(R.string.languages_word_pairs_title),
         row(R.string.languages_cjk_traditional_title, R.string.languages_cjk_traditional_subtitle),
         row(R.string.languages_cjk_lazy_title, R.string.languages_cjk_lazy_subtitle),
         row(R.string.languages_cjk_fuzzy_title, R.string.languages_cjk_fuzzy_subtitle),

@@ -1969,20 +1969,9 @@
     <string name="languages_data_delete_body">%1$s satur lejupielādētu vārdu sarakstu vai emocijzīmju atslēgvārdus. Vai vēlaties tos izdzēst un atbrīvot aptuveni %2$s krātuves vietas?</string>
     <string name="languages_data_delete_dismiss_action">Paturēt tos</string>
     <string name="languages_data_delete_title">Dzēst lejupielādētos failus?</string>
-    <string name="languages_data_download_all_action">Lejupielādēt visus datus (aptuveni %1$s)</string>
-    <string name="languages_data_download_all_info">Lejupielādē vārdu sarakstu, emocijzīmju atslēgvārdus un vārdu pāru datus šai valodai. Ierīcē jau esošie faili netiek lejupielādēti atkārtoti. Zemāk esošās rindas veic to pašu pa vienam failam.</string>
     <string name="languages_data_download_body">Tastatūra var lejupielādēt datus, kas nepieciešami %1$s, lai labi prognozētu un labotu: vārdu sarakstu, emocijzīmju atslēgvārdus un vārdu pāru datus, ja tādi pastāv. Tas aizņem aptuveni %2$s datu. Varat tos lejupielādēt arī vēlāk valodas ekrānā.</string>
     <string name="languages_data_download_dismiss_action">Ne tagad</string>
     <string name="languages_data_download_title">Lejupielādēt valodas datus?</string>
-    <string name="languages_data_title">Valodas dati</string>
-    <string name="languages_dictionary_bundled">Šī valoda ietver iebūvētu vārdnīcu.</string>
-    <string name="languages_dictionary_bundled_more">Šī valoda ietver iebūvētu vārdnīcu. Lejupielādējiet lielāku, lai iegūtu labākus ieteikumus.</string>
-    <string name="languages_dictionary_none_download">Šai valodai nav iebūvētas vārdnīcas. Lejupielādējiet to ieteikumiem un automātiskajai labošanai vai importējiet savu vārdu sarakstu.</string>
-    <string name="languages_dictionary_none_learn">Šai valodai nav iebūvētas vārdnīcas. Tastatūra mācās jūsu vārdus rakstīšanas laikā, un jūs varat importēt savu vārdu sarakstu.</string>
-    <string name="languages_dictionary_title">Vārdnīca</string>
-    <string name="languages_dictionary_use_info">Izslēgts: tastatūra aizmirst šai valodai pievienotos un lejupielādētos vārdus un nolasa tikai jūsu importētos vārdu sarakstus, kā arī vārdus, ko tā no jums iemācījusies. Tas pats slēdzis parādās vārdnīcas joslā (Rindas un joslas) un, otrādi, kā \"Izmantot tikai manus vārdu sarakstus\" sadaļā \"Pielāgotas vārdnīcas\".</string>
-    <string name="languages_dictionary_use_subtitle">Ieteikt un labot no komplektā iekļautā vai lejupielādētā saraksta</string>
-    <string name="languages_dictionary_use_title">Izmantot vārdu sarakstu</string>
     <string name="languages_download_queued">Gaida…</string>
     <string name="languages_emoji_dict_delete_desc">Dzēst emocijzīmju atslēgvārdus</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1993,15 +1982,7 @@
         <item quantity="one">%1$,d emocijzīme, %2$s</item>
         <item quantity="other">%1$,d emocijzīmes, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Emocijzīmju atslēgvārdi ļauj meklēt emocijzīmes %1$s. Ja ierakstāt vārdu \"torte\", jūs atradīsiet 🎂. Tastatūra automātiski lejupielādē atslēgvārdus, kamēr valoda ir ieslēgta.</string>
-    <string name="languages_emoji_keywords_manual">Emoji atslēgvārdi ļauj meklēt emoji valodā %1$s. Ja ierakstāt vārdu \"torte\", atradīsiet 🎂. Automātiskā lejupielāde ir izslēgta, tāpēc sāciet to pats.</string>
-    <string name="languages_emoji_keywords_subtitle">Lejupielādes katrai valodai un jūsu pašu importētie dati</string>
     <string name="languages_emoji_keywords_title">Emocijzīmju atslēgvārdi</string>
-    <string name="languages_emoji_keywords_unavailable">Emocijzīmju atslēgvārdi %1$s vēl nav pieejami. Emocijzīmju meklēšanas atbildes ir angļu valodā. Varat importēt savu sarakstu.</string>
-    <string name="languages_emoji_keywords_use_info">Ja izslēgts, lejupielādētie atslēgvārdi un jebkura šai valodai importētā pakotne paliek ierīcē, bet netiek nolasīti, tāpēc emocijzīmju meklēšana un ieteikumi šajā valodā vairs nedarbosies. Tas pats slēdzis parādās vārdnīcas joslā (Rindas un joslas).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Meklēt un ieteikt emocijzīmes pēc to nosaukumiem šajā valodā</string>
-    <string name="languages_emoji_keywords_use_title">Izmantot emocijzīmju atslēgvārdus</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Burtu stils, ko izmanto izsmalcinātā tastatūra. Pārslēdzams arī no joslas virs taustiņiem.</string>
     <string name="languages_fancy_style_row_title">Izsmalcināts stils</string>
     <string name="languages_fancy_style_title">Stils</string>
@@ -2070,16 +2051,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s lejupielādēts</string>
     <string name="languages_wordlist_preparing">Sagatavo vārdnīcu…</string>
-    <string name="languages_wordlist_size_desc">Vārdnīcas lielums</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, līdz %2$,d vārdam</item>
         <item quantity="other">%1$s, līdz %2$,d vārdiem</item>
-    </plurals>
-    <string name="languages_wordlist_title">Lejupielādējama vārdnīca</string>
-    <string name="languages_wordlist_title_variant">Lejupielādējama vārdnīca (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Līdz %1$,d visbiežāk lietotajam vārdam</item>
-        <item quantity="other">Līdz %1$,d visbiežāk lietotajiem vārdiem</item>
     </plurals>
     <string name="layout_bottom_padding_info">Visa tastatūra pārvietojas uz augšu, prom no apakšējās malas un žestu navigācijas joslas. Palieliniet to, ja apakšējā rinda ir pārāk tuvu ekrāna malai vai ja nejauši sākat sistēmas navigāciju.</string>
     <string name="layout_bottom_padding_subtitle">Vairāk vietas zem taustiņiem, virs navigācijas joslas</string>

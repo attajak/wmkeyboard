@@ -1974,20 +1974,9 @@
     <string name="languages_data_delete_body">%1$s ina orodha ya maneno iliyopakuliwa au maneno muhimu ya emoji. Uifute na upate takriban %2$s ya hifadhi?</string>
     <string name="languages_data_delete_dismiss_action">Yahifadhi</string>
     <string name="languages_data_delete_title">Futa faili zilizopakuliwa?</string>
-    <string name="languages_data_download_all_action">Pakua data yote (takriban %1$s)</string>
-    <string name="languages_data_download_all_info">Hupakua orodha ya maneno, maneno muhimu ya emoji na data ya jozi ya maneno kwa lugha hii. Faili ambazo tayari ziko kwenye kifaa hazipakuliwi tena. Safu zilizo hapa chini hufanya vivyo hivyo faili moja kwa wakati mmoja.</string>
     <string name="languages_data_download_body">Kibodi inaweza kupakua data ambayo %1$s inahitaji ili kutabiri na kusahihisha vyema: orodha ya maneno, maneno muhimu ya emoji na data ya jozi ya maneno, yoyote kati ya hayo yaliyopo. Hii inatumia takriban %2$s ya data. Unaweza pia kuyapakua baadaye kutoka kwenye skrini ya lugha.</string>
     <string name="languages_data_download_dismiss_action">Si sasa</string>
     <string name="languages_data_download_title">Pakua data ya lugha?</string>
-    <string name="languages_data_title">Data ya lugha</string>
-    <string name="languages_dictionary_bundled">Lugha hii inajumuisha kamusi iliyojengewa ndani.</string>
-    <string name="languages_dictionary_bundled_more">Lugha hii inajumuisha kamusi iliyojengewa ndani. Pakua kamusi kubwa zaidi kwa mapendekezo bora.</string>
-    <string name="languages_dictionary_none_download">Lugha hii haina kamusi iliyojengewa ndani. Pakua moja kwa ajili ya mapendekezo na kusahihisha kiotomatiki, au leta orodha yako ya maneno.</string>
-    <string name="languages_dictionary_none_learn">Lugha hii haina kamusi iliyojengewa ndani. Kibodi hujifunza maneno yako unapoandika, na unaweza kuingiza orodha yako ya maneno.</string>
-    <string name="languages_dictionary_title">Kamusi</string>
-    <string name="languages_dictionary_use_info">Ikiwa imezimwa, kibodi husahau maneno yaliyojumuishwa na kupakuliwa kwa lugha hii na kusoma tu orodha za maneno ulizoingiza, pamoja na maneno iliyojifunza kutoka kwako. Swichi hiyo hiyo inaonekana kwenye upau wa kamusi (Safu na pau) na, kwa njia nyingine, kama Tumia orodha zangu za maneno pekee chini ya Kamusi maalum.</string>
-    <string name="languages_dictionary_use_subtitle">Pendekeza na urekebishe kutoka kwenye orodha iliyounganishwa au iliyopakuliwa</string>
-    <string name="languages_dictionary_use_title">Tumia orodha ya maneno</string>
     <string name="languages_download_queued">Inasubiri…</string>
     <string name="languages_emoji_dict_delete_desc">Futa maneno muhimu ya emoji</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1998,15 +1987,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emoji, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Maneno muhimu ya emoji hukuruhusu kutafuta emoji katika %1$s. Ukiandika neno lake la \"keki\", utapata 🎂. Kibodi hupakua maneno muhimu kiotomatiki wakati lugha imewashwa.</string>
-    <string name="languages_emoji_keywords_manual">Maneno muhimu ya emoji hukuruhusu kutafuta emoji katika %1$s. Ukiandika neno lake kwa \"keki\", utapata 🎂. Vipakuzi vya kiotomatiki vimezimwa, kwa hivyo unaanzisha hiki mwenyewe.</string>
-    <string name="languages_emoji_keywords_subtitle">Vipakuliwa kwa kila lugha, na vipengee vyako ulivyoingiza</string>
     <string name="languages_emoji_keywords_title">Maneno muhimu ya emoji</string>
-    <string name="languages_emoji_keywords_unavailable">Hakuna maneno muhimu ya emoji yanayopatikana kwa %1$s bado. Utafutaji wa emoji unajibu kwa Kiingereza. Unaweza kuingiza orodha yako mwenyewe.</string>
-    <string name="languages_emoji_keywords_use_info">Ikiwa imezimwa, maneno muhimu yaliyopakuliwa na kifurushi chochote ulicholeta kwa lugha hii hubaki kwenye kifaa lakini hayasomwi, kwa hivyo utafutaji wa emoji na mapendekezo ya emoji huacha kujibu katika lugha hii. Swichi hiyo hiyo inaonekana kwenye upau wa kamusi (Safu na pau).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Tafuta na upendekeze emoji kwa majina yao katika lugha hii</string>
-    <string name="languages_emoji_keywords_use_title">Tumia maneno muhimu ya emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Mtindo wa maandishi unaoandikwa na kibodi ya kuvutia. Pia inaweza kubadilishwa kutoka kwenye utepe ulio juu ya funguo.</string>
     <string name="languages_fancy_style_row_title">Mtindo wa kupendeza</string>
     <string name="languages_fancy_style_title">Mtindo</string>
@@ -2075,16 +2056,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s imepakuliwa</string>
     <string name="languages_wordlist_preparing">Inatayarisha kamusi…</string>
-    <string name="languages_wordlist_size_desc">Ukubwa wa kamusi</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, hadi neno %2$,d</item>
         <item quantity="other">%1$s, hadi maneno %2$,d</item>
-    </plurals>
-    <string name="languages_wordlist_title">Kamusi inayoweza kupakuliwa</string>
-    <string name="languages_wordlist_title_variant">Kamusi inayoweza kupakuliwa (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Hadi neno %1$,d linalotumiwa zaidi</item>
-        <item quantity="other">Hadi maneno %1$,d yanayotumiwa zaidi</item>
     </plurals>
     <string name="layout_bottom_padding_info">Kibodi nzima husogea juu, mbali na ukingo wa chini na upau wa kusogeza kwa ishara. Iongeze ikiwa safu ya chini iko karibu sana na ukingo wa skrini, au ikiwa utaanza kusogeza mfumo kimakosa.</string>
     <string name="layout_bottom_padding_subtitle">Nafasi zaidi chini ya funguo, juu ya upau wa kusogeza</string>

@@ -1969,20 +1969,9 @@
     <string name="languages_data_delete_body">%1$s ima preuzeti popis riječi ili ključne riječi za emojije. Izbrisati ih i osloboditi oko %2$s prostora?</string>
     <string name="languages_data_delete_dismiss_action">Zadrži ih</string>
     <string name="languages_data_delete_title">Izbrisati preuzete datoteke?</string>
-    <string name="languages_data_download_all_action">Preuzmi sve podatke (oko %1$s)</string>
-    <string name="languages_data_download_all_info">Preuzima popis riječi, ključne riječi za emojije i podatke o parovima riječi za ovaj jezik. Datoteke koje se već nalaze na uređaju neće se ponovno preuzimati. Redovi u nastavku čine isto, jednu po jednu datoteku.</string>
     <string name="languages_data_download_body">Tipkovnica može preuzeti podatke koji su potrebni za %1$s za dobro predviđanje i ispravljanje: popis riječi, ključne riječi za emojije i podatke o parovima riječi, što god od toga postoji. Ovo koristi oko %2$s podataka. Također ih možete preuzeti kasnije sa zaslona jezika.</string>
     <string name="languages_data_download_dismiss_action">Ne sada</string>
     <string name="languages_data_download_title">Preuzeti jezične podatke?</string>
-    <string name="languages_data_title">Podaci o jeziku</string>
-    <string name="languages_dictionary_bundled">Ovaj jezik uključuje ugrađeni rječnik.</string>
-    <string name="languages_dictionary_bundled_more">Ovaj jezik uključuje ugrađeni rječnik. Preuzmite veći za bolje prijedloge.</string>
-    <string name="languages_dictionary_none_download">Ovaj jezik nema ugrađeni rječnik. Preuzmite ga za prijedloge i automatsko ispravljanje ili uvezite vlastiti popis riječi.</string>
-    <string name="languages_dictionary_none_learn">Ovaj jezik nema ugrađeni rječnik. Tipkovnica uči vaše riječi dok tipkate, a možete uvesti i vlastiti popis riječi.</string>
-    <string name="languages_dictionary_title">Rječnik</string>
-    <string name="languages_dictionary_use_info">Ako je isključeno, tipkovnica zaboravlja ugrađene i preuzete riječi za ovaj jezik i čita samo popise riječi koje ste uvezli, uz riječi koje je naučila od vas. Isti prekidač pojavljuje se na traci rječnika (Redovi i trake) i, obrnuto, kao \"Koristi samo moje popise riječi\" pod Prilagođeni rječnici.</string>
-    <string name="languages_dictionary_use_subtitle">Predloži i ispravi s pomoću priloženog ili preuzetog popisa</string>
-    <string name="languages_dictionary_use_title">Koristi popis riječi</string>
     <string name="languages_download_queued">Čekanje…</string>
     <string name="languages_emoji_dict_delete_desc">Izbriši ključne riječi za emojije</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1993,15 +1982,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emojija, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Ključne riječi za emojije omogućuju pretraživanje emojija na %1$s. Ako upišete riječ za \"kolač\", pronaći ćete 🎂. Tipkovnica automatski preuzima ključne riječi dok je jezik uključen.</string>
-    <string name="languages_emoji_keywords_manual">Ključne riječi za emojije omogućuju pretraživanje emojija na jeziku %1$s. Ako upišete riječ za \"kolač\", pronaći ćete 🎂. Automatska preuzimanja su isključena, pa ovo morate pokrenuti sami.</string>
-    <string name="languages_emoji_keywords_subtitle">Preuzimanja za svaki jezik i vaši vlastiti uvozi</string>
     <string name="languages_emoji_keywords_title">Ključne riječi za emojije</string>
-    <string name="languages_emoji_keywords_unavailable">Ključne riječi za emojije još nisu dostupne za %1$s. Pretraživanje emojija odgovara na engleskom. Možete uvesti vlastiti popis.</string>
-    <string name="languages_emoji_keywords_use_info">Isključeno, preuzete ključne riječi i bilo koji paket koji ste uvezli za ovaj jezik ostaju na uređaju, ali se ne čitaju, pa pretraživanje emojija i prijedlozi emojija prestaju odgovarati na ovom jeziku. Isti prekidač pojavljuje se na traci rječnika (Redovi i trake).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Pretražujte i predlažite emojije prema njihovim nazivima na ovom jeziku</string>
-    <string name="languages_emoji_keywords_use_title">Koristi ključne riječi za emojije</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Slova koja tipka otmjena tipkovnica. Također se može prebacivati s trake iznad tipki.</string>
     <string name="languages_fancy_style_row_title">Otkačen stil</string>
     <string name="languages_fancy_style_title">Stil</string>
@@ -2070,16 +2051,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s preuzeto</string>
     <string name="languages_wordlist_preparing">Priprema rječnika…</string>
-    <string name="languages_wordlist_size_desc">Veličina rječnika</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, do %2$,d riječi</item>
         <item quantity="other">%1$s, do %2$,d riječi</item>
-    </plurals>
-    <string name="languages_wordlist_title">Rječnik za preuzimanje</string>
-    <string name="languages_wordlist_title_variant">Rječnik za preuzimanje (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Do %1$,d najčešće riječi</item>
-        <item quantity="other">Do %1$,d najčešćih riječi</item>
     </plurals>
     <string name="layout_bottom_padding_info">Cijela se tipkovnica pomiče prema gore, dalje od donjeg ruba i trake za navigaciju gestama. Povećajte ovo ako je donji red preblizu rubu zaslona ili ako slučajno pokrećete navigaciju sustava.</string>
     <string name="layout_bottom_padding_subtitle">Više prostora ispod tipki, iznad navigacijske trake</string>

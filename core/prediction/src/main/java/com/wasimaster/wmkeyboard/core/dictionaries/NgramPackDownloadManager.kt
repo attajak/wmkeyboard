@@ -14,8 +14,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -36,10 +40,26 @@ import kotlinx.coroutines.sync.withLock
  * Modeled on `EmojiDictDownloadManager`'s automatic pass: [ensure] is
  * silent, queues one language at a time, and a language that fails is
  * remembered for the process rather than retried on every settings emission.
- * There is no per-row UI yet, so there is no status flow — [completions] is
- * the one signal, telling the IME to re-map the freshly landed pack.
+ * [states] drives the "Word pairs" row on a language's screen; [completions]
+ * tells the IME to re-map the freshly landed pack.
  */
 object NgramPackDownloadManager {
+
+    sealed interface DownloadStatus {
+        data object NotDownloaded : DownloadStatus
+
+        /** Queued or transferring. The two reads stop at caps, so there is no
+         * total to count towards, and the row shows an indeterminate bar. */
+        data object Downloading : DownloadStatus
+        data class Downloaded(val sizeBytes: Long) : DownloadStatus
+        data object Failed : DownloadStatus
+    }
+
+    /**
+     * Marker left behind when the user deletes a pack, so the automatic pass
+     * does not fetch it straight back. Same contract as the emoji keywords'.
+     */
+    private const val DECLINED_NAME = "ngrams.declined"
 
     private const val USER_AGENT = "WMKeyboard ngram pack downloader"
 
@@ -61,6 +81,32 @@ object NgramPackDownloadManager {
 
     /** Emits a language id once its pack is on disk. */
     val completions: SharedFlow<String> = _completions.asSharedFlow()
+
+    private val _states = MutableStateFlow<Map<String, DownloadStatus>>(emptyMap())
+
+    /** Language id -> status, for every catalogued language seen so far. */
+    val states: StateFlow<Map<String, DownloadStatus>> = _states.asStateFlow()
+
+    private fun set(langId: String, status: DownloadStatus) {
+        _states.update { it + (langId to status) }
+    }
+
+    /** Seeds [states] from disk; call when a row appears. */
+    fun refresh(filesDir: File) {
+        _states.update { current ->
+            NgramPackCatalog.entries.associate { entry ->
+                val langId = entry.languageId
+                val live = current[langId]
+                langId to when {
+                    live == DownloadStatus.Downloading -> live
+                    isDownloaded(filesDir, langId) ->
+                        DownloadStatus.Downloaded(packFile(filesDir, langId).length())
+                    live == DownloadStatus.Failed -> live
+                    else -> DownloadStatus.NotDownloaded
+                }
+            }
+        }
+    }
 
     fun packFile(filesDir: File, langId: String): File =
         File(langDir(filesDir, langId), "ngrams.wmng")
@@ -98,8 +144,20 @@ object NgramPackDownloadManager {
                     if (langId in givenUp || jobs[langId]?.isActive == true) return@synchronized
                     deleteLegacy(filesDir, langId)
                     if (isDownloaded(filesDir, langId)) return@synchronized
+                    // Deleted on purpose: fetching it again would make Delete
+                    // a button that undoes itself.
+                    if (File(langDir(filesDir, langId), DECLINED_NAME).exists()) return@synchronized
+                    set(langId, DownloadStatus.Downloading)
                     jobs[langId] = scope.launch {
-                        gate.withLock { download(filesDir, entry) }
+                        try {
+                            gate.withLock { download(filesDir, entry) }
+                        } finally {
+                            // Cancelled or failed without a verdict: the row
+                            // must not sit on the bar forever.
+                            if (_states.value[langId] == DownloadStatus.Downloading) {
+                                set(langId, DownloadStatus.NotDownloaded)
+                            }
+                        }
                     }
                 }
             }
@@ -115,16 +173,45 @@ object NgramPackDownloadManager {
      */
     fun start(filesDir: File, langId: String) {
         synchronized(jobs) { givenUp.remove(langId) }
+        // Asking for it by hand undoes an earlier Delete.
+        File(langDir(filesDir, langId), DECLINED_NAME).delete()
         ensure(filesDir, listOf(langId))
+    }
+
+    fun cancel(langId: String) {
+        synchronized(jobs) { jobs[langId]?.cancel() }
+    }
+
+    /**
+     * Removes [langId]'s pack and records that the user did not want it, so
+     * the automatic pass leaves the language alone until they ask again.
+     */
+    fun delete(filesDir: File, langId: String) {
+        cancel(langId)
+        set(langId, DownloadStatus.NotDownloaded)
+        scope.launch {
+            val dir = langDir(filesDir, langId)
+            packFile(filesDir, langId).delete()
+            File(dir, "ngrams.wmng.part").delete()
+            runCatching {
+                dir.mkdirs()
+                File(dir, DECLINED_NAME).createNewFile()
+            }
+        }
     }
 
     private fun download(filesDir: File, entry: NgramPackEntry) {
         val langId = entry.languageId
-        if (isDownloaded(filesDir, langId)) return
+        if (isDownloaded(filesDir, langId)) {
+            set(langId, DownloadStatus.Downloaded(packFile(filesDir, langId).length()))
+            return
+        }
         val ok = runCatching { compile(filesDir, entry) }.isSuccess
         if (ok) {
+            set(langId, DownloadStatus.Downloaded(packFile(filesDir, langId).length()))
             _completions.tryEmit(langId)
         } else {
+            set(langId, DownloadStatus.Failed)
             synchronized(jobs) { givenUp.add(langId) }
         }
     }

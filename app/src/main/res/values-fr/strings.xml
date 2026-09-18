@@ -1962,20 +1962,9 @@
     <string name="languages_data_delete_body">%1$s possède une liste de mots ou des mots-clés d\'émojis téléchargés. Les supprimer et récupérer environ %2$s d\'espace de stockage ?</string>
     <string name="languages_data_delete_dismiss_action">Les conserver</string>
     <string name="languages_data_delete_title">Supprimer les fichiers téléchargés ?</string>
-    <string name="languages_data_download_all_action">Télécharger toutes les données (environ %1$s)</string>
-    <string name="languages_data_download_all_info">Télécharge la liste de mots, les mots-clés emoji et les données de paires de mots pour cette langue. Les fichiers déjà présents sur l\'appareil ne sont pas téléchargés à nouveau. Les lignes ci-dessous font la même chose, un fichier à la fois.</string>
     <string name="languages_data_download_body">Le clavier peut télécharger les données dont %1$s a besoin pour prédire et corriger efficacement : une liste de mots, des mots-clés d\'émojis et des données de paires de mots, si elles existent. Cela utilise environ %2$s de données. Vous pouvez également les télécharger plus tard depuis l\'écran des langues.</string>
     <string name="languages_data_download_dismiss_action">Pas maintenant</string>
     <string name="languages_data_download_title">Télécharger les données linguistiques ?</string>
-    <string name="languages_data_title">Données linguistiques</string>
-    <string name="languages_dictionary_bundled">Cette langue inclut un dictionnaire intégré.</string>
-    <string name="languages_dictionary_bundled_more">Cette langue inclut un dictionnaire intégré. Téléchargez-en un plus complet pour de meilleures suggestions.</string>
-    <string name="languages_dictionary_none_download">Cette langue n\'a pas de dictionnaire intégré. Téléchargez-en un pour les suggestions et la correction automatique, ou importez votre propre liste de mots.</string>
-    <string name="languages_dictionary_none_learn">Cette langue n\'a pas de dictionnaire intégré. Le clavier apprend vos mots au fur et à mesure que vous tapez, et vous pouvez importer votre propre liste de mots.</string>
-    <string name="languages_dictionary_title">Dictionnaire</string>
-    <string name="languages_dictionary_use_info">Si désactivé, le clavier oublie les mots intégrés et téléchargés pour cette langue et ne lit que les listes de mots que vous avez importées, ainsi que les mots qu\'il a appris de vous. Le même commutateur apparaît sur la barre de dictionnaire (Lignes et barres) et, inversement, sous la forme \"Utiliser uniquement mes listes de mots\" dans les dictionnaires personnalisés.</string>
-    <string name="languages_dictionary_use_subtitle">Suggérer et corriger à partir de la liste intégrée ou téléchargée</string>
-    <string name="languages_dictionary_use_title">Utiliser la liste de mots</string>
     <string name="languages_download_queued">En attente…</string>
     <string name="languages_emoji_dict_delete_desc">Supprimer les mots-clés des émojis</string>
     <plurals name="languages_emoji_dict_download_size">
@@ -1986,15 +1975,7 @@
         <item quantity="one">%1$,d emoji, %2$s</item>
         <item quantity="other">%1$,d emojis, %2$s</item>
     </plurals>
-    <string name="languages_emoji_keywords_auto">Les mots-clés emoji vous permettent de rechercher des emoji en %1$s. Si vous tapez le mot pour \"gâteau\", vous trouverez 🎂. Le clavier télécharge automatiquement les mots-clés tant que la langue est activée.</string>
-    <string name="languages_emoji_keywords_manual">Les mots-clés emoji vous permettent de rechercher des emoji en %1$s. Si vous tapez son mot pour \"gâteau\", vous trouverez 🎂. Les téléchargements automatiques sont désactivés, vous devez donc lancer celui-ci vous-même.</string>
-    <string name="languages_emoji_keywords_subtitle">Téléchargements pour chaque langue, et vos propres importations</string>
     <string name="languages_emoji_keywords_title">Mots-clés d\'émojis</string>
-    <string name="languages_emoji_keywords_unavailable">Aucun mot-clé emoji n\'est encore disponible pour %1$s. La recherche d\'emoji répond en anglais. Vous pouvez importer votre propre liste.</string>
-    <string name="languages_emoji_keywords_use_info">Si désactivé, les mots-clés téléchargés et tout pack importé pour cette langue restent sur l\'appareil mais ne sont pas lus, ce qui désactive la recherche et les suggestions d\'émojis dans cette langue. Le même commutateur apparaît sur la barre de dictionnaire (Lignes et barres).</string>
-    <string name="languages_emoji_keywords_use_subtitle">Rechercher et suggérer des émojis par leurs noms dans cette langue</string>
-    <string name="languages_emoji_keywords_use_title">Utiliser les mots-clés emoji</string>
-    <string name="languages_emoji_title">Emoji</string>
     <string name="languages_fancy_style_row_subtitle">Le lettrage utilisé par le clavier fantaisie. Également commutable depuis la barre au-dessus des touches.</string>
     <string name="languages_fancy_style_row_title">Style fantaisie</string>
     <string name="languages_fancy_style_title">Style</string>
@@ -2063,16 +2044,9 @@
     </plurals>
     <string name="languages_wordlist_downloaded_bytes">%1$s téléchargé</string>
     <string name="languages_wordlist_preparing">Préparation du dictionnaire…</string>
-    <string name="languages_wordlist_size_desc">Taille du dictionnaire</string>
     <plurals name="languages_wordlist_size_option">
         <item quantity="one">%1$s, jusqu\'à %2$,d mot</item>
         <item quantity="other">%1$s, jusqu\'à %2$,d mots</item>
-    </plurals>
-    <string name="languages_wordlist_title">Dictionnaire téléchargeable</string>
-    <string name="languages_wordlist_title_variant">Dictionnaire téléchargeable (%1$s)</string>
-    <plurals name="languages_wordlist_word_count">
-        <item quantity="one">Jusqu\'au %1$,d mot le plus fréquent</item>
-        <item quantity="other">Jusqu\'aux %1$,d mots les plus fréquents</item>
     </plurals>
     <string name="layout_bottom_padding_info">L\'ensemble du clavier remonte, s\'éloignant du bord inférieur et de la barre de navigation gestuelle. Augmentez cette valeur si la rangée inférieure est trop proche du bord de l\'écran, ou si vous déclenchez la navigation système par erreur.</string>
     <string name="layout_bottom_padding_subtitle">Plus d\'espace sous les touches, au-dessus de la barre de navigation</string>
