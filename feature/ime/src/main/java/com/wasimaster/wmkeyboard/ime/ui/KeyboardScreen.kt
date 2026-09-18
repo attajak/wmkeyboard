@@ -10982,6 +10982,21 @@ internal fun Key?.startsLayerDrag(): Boolean =
 internal fun Key?.ownsDrag(): Boolean = startsChordDrag() || startsLayerDrag()
 
 /**
+ * Whether a drag off this key is the possessive swipe's (#169) rather than a
+ * glide: the key writes [possessiveChar], the one "Swipe to add 's" is set to.
+ * Null when the setting is off, and then nothing is.
+ *
+ * Asked by glide typing and handwriting at the down, like [ownsDrag], because
+ * the letter-distance test that normally keeps them off punctuation only works
+ * when the punctuation sits away from the letters. A comma placed right beside
+ * `s` is inside one key width of that letter's centre, so the half of it nearer
+ * `s` started a glide and the swipe decoded as a word instead.
+ */
+internal fun Key?.startsPossessiveSwipe(possessiveChar: Char?): Boolean =
+    possessiveChar != null && this?.action == KeyAction.Text &&
+        (output ?: label).singleOrNull() == possessiveChar
+
+/**
  * Whether a short flick down off this key types its corner hint (issue #178).
  *
  * Any key whose hold opens the popup and whose first entry is a character —
@@ -13082,7 +13097,7 @@ private fun KeyRows(
                     }
                 }
             }
-            .pointerInput(gestureEnabled, spaceGlide, startSlop, cooldownMs, trailMs) {
+            .pointerInput(gestureEnabled, spaceGlide, startSlop, cooldownMs, trailMs, possessiveChar) {
                 if (!gestureEnabled) return@pointerInput
                 awaitEachGesture {
                     val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
@@ -13098,7 +13113,12 @@ private fun KeyRows(
                     // edge could start a glide before; now it capitalises the
                     // letter it is dragged to. Starting a word one key further
                     // in is the trade, and it is the gesture issue #67 asked for.
-                    if (liveRects.value.keyAt(down.position + boxOrigin).ownsDrag()) {
+                    //
+                    // The possessive key is the third (#169): on a layout that
+                    // puts it beside a letter, the letter-distance test below
+                    // would otherwise start a glide from it.
+                    val downKey = liveRects.value.keyAt(down.position + boxOrigin)
+                    if (downKey.ownsDrag() || downKey.startsPossessiveSwipe(possessiveChar)) {
                         return@awaitEachGesture
                     }
                     // The key a flick down would type the hint of (#178), fixed
@@ -13511,14 +13531,16 @@ private fun KeyRows(
             // `gestureEnabled` is false whenever `handwriteSwipe` is true. A
             // press that never travels past the slop stays unconsumed and
             // falls through to the key, so taps still type.
-            .pointerInput(handwriteSwipe, dotCooldownMs) {
+            .pointerInput(handwriteSwipe, dotCooldownMs, possessiveChar) {
                 if (!handwriteSwipe) return@pointerInput
                 awaitEachGesture {
                     val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
                     // A drag off a modifier or shift key is a chord (issue
-                    // #67), and one off a mode key is a layer peek (issue #108);
-                    // neither must be drawn as ink either.
-                    if (liveRects.value.keyAt(down.position + boxOrigin).ownsDrag()) {
+                    // #67), one off a mode key is a layer peek (issue #108),
+                    // and one off the possessive key is its swipe (#169);
+                    // none of them must be drawn as ink either.
+                    val downKey = liveRects.value.keyAt(down.position + boxOrigin)
+                    if (downKey.ownsDrag() || downKey.startsPossessiveSwipe(possessiveChar)) {
                         return@awaitEachGesture
                     }
                     val slop = viewConfiguration.touchSlop
@@ -14941,10 +14963,11 @@ private fun Key.glidePunctuationCodePoint(): Int? =
  *
  * Letters only, which is why the punctuation keys the centres map also holds are
  * skipped: they are tracked for the apostrophe setting to find, and a slide off
- * the comma key must keep meaning exactly what it meant before. That is also
- * what hands the possessive swipe (#169) to its own loop: a stroke that begins
- * on a punctuation key is never a glide, so it reaches the loops below this one
- * unconsumed whether glide typing is on or off.
+ * the comma key must keep meaning exactly what it meant before. It measures
+ * distance to letters, not the key under the finger, so a punctuation key set
+ * right beside a letter is partly inside that letter's radius; the possessive
+ * swipe (#169) is kept out of glide typing by [startsPossessiveSwipe] at the
+ * down, not by this.
  */
 private fun nearLetterKey(
     position: Offset,

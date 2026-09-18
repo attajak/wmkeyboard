@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.ime.ui
 import android.view.KeyEvent
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
+import com.wasimaster.wmkeyboard.core.layout.KeyRole
 import com.wasimaster.wmkeyboard.core.layout.ModifierKey
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.ime.LayoutMode
@@ -111,6 +112,23 @@ class LayerDragTest {
         assertTrue(Key("Ctrl", action = KeyAction.Mod(ModifierKey.CTRL)).ownsDrag())
         assertFalse(Key("a").ownsDrag())
         assertFalse(null.ownsDrag())
+    }
+
+    /**
+     * The possessive key keeps glide and ink off its drags (#169), but only the
+     * key the setting names and only while it names one: a comma beside `s` on
+     * an unusual layout started a glide and the swipe decoded as a word.
+     */
+    @Test
+    fun `only the chosen possessive key starts its swipe`() {
+        val comma = Key(",", role = KeyRole.Comma)
+        assertTrue(comma.startsPossessiveSwipe(','))
+        assertTrue(Key("\u2019", output = "'").startsPossessiveSwipe('\''))
+        assertFalse(comma.startsPossessiveSwipe('.'))
+        assertFalse(comma.startsPossessiveSwipe(null))
+        assertFalse(Key("s").startsPossessiveSwipe(','))
+        assertFalse(Key(",", action = KeyAction.Shift).startsPossessiveSwipe(','))
+        assertFalse(null.startsPossessiveSwipe(','))
     }
 
     // ---- commitsFromLayerDrag -----------------------------------------------
