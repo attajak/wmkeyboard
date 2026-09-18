@@ -354,3 +354,47 @@ jobs:
             gh release upload "$TAG" --repo "$REPO" --clobber "$f"
           done
           gh release edit "$TAG" --repo "$REPO" --draft=false --latest
+
+  # Points the bug report form at the version just published, so reporters
+  # are asked to confirm they are on it. Runs after publish, so a failed or
+  # dry run never advertises a version nobody can download. Commits to main,
+  # not the tag: a tag can be cut from an older commit and the form must
+  # follow main.
+  issue-template:
+    name: Bump bug report version
+    needs: [verify, publish]
+    if: github.ref_type == 'tag' && !inputs.dry_run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Rewrite and push
+        env:
+          VERSION: ${{ needs.verify.outputs.version }}
+        run: |
+          file=.github/ISSUE_TEMPLATE/bug_report.yml
+          old=$(sed -n 's/^# latest-version: //p' "$file")
+          if [ -z "$old" ]; then
+            echo "::error::$file has no '# latest-version:' line"
+            exit 1
+          fi
+          if [ "$old" = "$VERSION" ]; then
+            echo "Bug report already names $VERSION"
+            exit 0
+          fi
+          # Dots escaped so 0.5.9 does not also match 0x5y9.
+          pattern=$(printf '%s' "$old" | sed 's/\./\\./g')
+          sed -i "s/$pattern/$VERSION/g" "$file"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$file"
+          git commit -m "chore(issues): bug report asks for $VERSION"
+          # main may move while the release builds; rebase and retry.
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 5
+          done
+          echo "::error::Could not push the bug report bump to main"
+          exit 1

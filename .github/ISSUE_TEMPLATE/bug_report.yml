@@ -1,0 +1,65 @@
+# latest-version: 0.5.9
+# The release workflow rewrites every occurrence of the version on the line
+# above when it publishes a release. Keep that line first and the version
+# spelt the same way everywhere below, or the bump misses it.
+name: 🐛 Bug Report
+description: File a bug report here
+title: "[BUG]: "
+labels: ["bug"]
+assignees: ["wasi-master"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report 🤗
+        Make sure there aren't any open/closed issues for this topic 😃
+
+        > [!IMPORTANT]
+        > The latest version is **0.5.9**. Many reported bugs are already fixed in it, so please update first and check the bug still happens.
+        >
+        > See your version in **Settings › About** ([open it directly](https://wmkeyboard.pages.dev/open/#wmkeyboard://setting/about_version_title)). Get the latest from the [releases page](https://github.com/wasi-master/wmkeyboard/releases/latest).
+
+  - type: checkboxes
+    id: latest-version
+    attributes:
+      label: Version check
+      options:
+        - label: I am on version 0.5.9 (the latest) and the bug still happens there
+          required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      description: As shown in Settings › About
+      placeholder: "0.5.9"
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Description of the bug
+      description: Give us a brief description of what happened and what should have happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps To Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: |
+        Provide any additional information such as logs, screenshots, links, scenarios in which the bug occurs so that it facilitates resolving the issue.
