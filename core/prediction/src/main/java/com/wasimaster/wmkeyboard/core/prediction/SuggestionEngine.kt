@@ -2596,7 +2596,7 @@ class SuggestionEngine(
     private fun typoShadowed(lower: String, touch: List<TouchPoint?>?, keys: KeySets? = null): Boolean {
         if (systemDictionary.contains(lower)) return false
         var typed = Double.NEGATIVE_INFINITY
-        var holders: ArrayList<Pair<TrieWalker, Int>>? = null
+        val holders = ArrayList<Pair<TrieWalker, Int>>(2)
         for (src in walkSources()) {
             if (src.tier != FuzzyBeamSearch.Tier.DICTIONARY) continue
             val walker = src.walker
@@ -2608,9 +2608,9 @@ class SuggestionEngine(
             if (node < 0 || !walker.isWord(node)) continue
             val frequency = walker.frequency(node)
             typed = maxOf(typed, src.logWeight + ln(1.0 + frequency))
-            (holders ?: ArrayList<Pair<TrieWalker, Int>>(2).also { holders = it }).add(walker to frequency)
+            holders.add(walker to frequency)
         }
-        val lists = holders ?: return false
+        if (holders.isEmpty()) return false
         // The same walk the strip and decideOrdinary rank, so this reads the
         // memoised result.
         val fix = rankedFor(lower, FuzzyBeamSearch.AUTOCORRECT_K / 2, touch, keys)
@@ -2620,7 +2620,7 @@ class SuggestionEngine(
             ?: return false
         if (fix - typed < ln(TYPO_SHADOW_RATIO)) return false
         // Last, because the first rank asked of a list builds its histogram.
-        return lists.all { (walker, frequency) -> walker.rankOfFrequency(frequency) > TYPO_SHADOW_MIN_RANK }
+        return holders.all { (walker, frequency) -> walker.rankOfFrequency(frequency) > TYPO_SHADOW_MIN_RANK }
     }
 
     /**
