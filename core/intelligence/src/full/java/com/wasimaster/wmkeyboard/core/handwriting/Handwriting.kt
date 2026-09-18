@@ -5,6 +5,7 @@ import android.os.SystemClock
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
+import com.google.mlkit.common.sdkinternal.MlKitContext
 import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognition
 import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognitionModel
 import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognitionModelIdentifier
@@ -24,6 +25,8 @@ import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -173,6 +176,67 @@ object HandwritingModels {
      */
     private val manager: RemoteModelManager by lazy { RemoteModelManager.getInstance() }
 
+    /**
+     * Where Mobile Data Download keeps its record of every ink file group.
+     * ML Kit registers all 725 of them each time a process first touches ink;
+     * see [prepareMdd] for why that record has to go first.
+     */
+    private const val MDD_GROUPS_PREFS = "gms_icing_mdd_groupsmlkit_digital_ink_recognition"
+
+    private val mddLock = Mutex()
+
+    @Volatile
+    private var mddPrepared = false
+
+    /**
+     * Clears Mobile Data Download's file-group record, once per process and
+     * before ML Kit's first ink call. Every ink entry point here goes through it.
+     *
+     * ML Kit 19 re-registers all 725 ink file groups when a process first
+     * touches ink, and every Task it hands out — the status check, the
+     * download, the recogniser's model lookup — waits for that registration.
+     * In a process whose record already holds those groups, re-registering
+     * them finds nothing but duplicates, and the registration never finishes:
+     * no error, no thread working, just Tasks that never answer. Measured on a
+     * CPH2481 with a one-file app on digital-ink-recognition 19.0.0 and
+     * nothing else: the first process after install downloads and recognises;
+     * every later process hangs for as long as it lives (watched for eleven
+     * minutes), debug or release, interpreted or AOT-compiled. That is the
+     * "downloads forever" of #235 once the shrinker crash in front of it is
+     * gone, and it would stop recognition too after the keyboard restarts.
+     *
+     * With the record cleared the registration is a first one again and takes
+     * about ten seconds, after which a model that was already downloaded
+     * still reads as downloaded: MDD keeps the files and their checksums in a
+     * separate record and re-verifies the group against it, without fetching
+     * anything. Only the group record goes; the files record is what keeps a
+     * downloaded model downloaded.
+     */
+    private suspend fun prepareMdd() {
+        if (mddPrepared) return
+        mddLock.withLock {
+            if (mddPrepared) return
+            // Not initialised yet means ML Kit cannot run either; try again
+            // on the next call rather than marking a reset that never happened.
+            val context = runCatching { MlKitContext.getInstance().applicationContext }.getOrNull() ?: return
+            withContext(Dispatchers.IO) {
+                runCatching {
+                    context.getSharedPreferences(MDD_GROUPS_PREFS, Context.MODE_PRIVATE).edit().clear().commit()
+                }
+            }
+            mddPrepared = true
+        }
+    }
+
+    /** Recogniser side of [prepareMdd]; its model lookup waits on the same registration. */
+    internal suspend fun prepareForRecognition() = prepareMdd()
+
+    /**
+     * Mobile Data Download's instance directory for ink, under `filesDir`.
+     * The files land in `<instance>/shared/datadownload/public/…`.
+     */
+    private const val MDD_INSTANCE_DIRECTORY = "mlkit_digital_ink_recognition"
+
     /** Mobile Data Download's own directory name, under one of the app dirs. */
     private const val MDD_DIRECTORY = "datadownload"
     private const val PROGRESS_POLL_MS = 1_000L
@@ -184,8 +248,12 @@ object HandwritingModels {
      */
     private const val DOWNLOAD_GIVE_UP_MS = 90_000L
 
-    /** A "is it here?" check should be instant; this is only a backstop. */
-    private const val STATUS_TIMEOUT_MS = 15_000L
+    /**
+     * A "is it here?" check waits on ML Kit registering its file groups, which
+     * is about ten seconds the first time in a process (see [prepareMdd]) and
+     * instant after that. This is only a backstop for slower phones.
+     */
+    private const val STATUS_TIMEOUT_MS = 60_000L
 
     fun model(tag: String): DigitalInkRecognitionModel? {
         val identifier = runCatching {
@@ -196,6 +264,7 @@ object HandwritingModels {
 
     suspend fun isDownloaded(tag: String): Boolean {
         val model = model(tag) ?: return false
+        prepareMdd()
         // Bounded for the same reason the download below is: this Task comes
         // out of the same machinery, and a status check that never answers
         // strands the panel on its "checking" spinner.
@@ -221,6 +290,7 @@ object HandwritingModels {
         onProgress: (HandwritingDownloadProgress) -> Unit = {},
     ) {
         val model = model(tag) ?: throw IllegalArgumentException("No model for $tag")
+        prepareMdd()
         val stores = modelStoreDirs(context)
         val total = HandwritingModelSizes.installedBytes(context, tag)
         // Everything already in there belongs to models downloaded before
@@ -271,16 +341,19 @@ object HandwritingModels {
     }
 
     /**
-     * Where Mobile Data Download keeps ink models. ML Kit builds this as
-     * `<filesDir>/datadownload`, but which base directory it starts from has
-     * moved between releases, so watch every plausible one — the ones that do
-     * not exist simply weigh nothing.
+     * Where Mobile Data Download keeps ink models. 19.0.0 writes them under
+     * `<filesDir>/mlkit_digital_ink_recognition/shared/datadownload/public`,
+     * named after its MDD instance. Watching only a bare `datadownload` found
+     * nothing there, so every download looked stalled at zero bytes and was
+     * called off, and its files deleted, after [DOWNLOAD_GIVE_UP_MS]. The bare
+     * directory stays on the list in case a later release moves it back; the
+     * ones that do not exist simply weigh nothing.
      */
     private fun modelStoreDirs(context: Context): List<File> =
         listOf(context.filesDir, context.noBackupFilesDir, context.cacheDir)
             .filterNotNull()
             .distinct()
-            .map { File(it, MDD_DIRECTORY) }
+            .flatMap { listOf(File(it, MDD_INSTANCE_DIRECTORY), File(it, MDD_DIRECTORY)) }
 
     private suspend fun bytesOnDisk(dirs: List<File>): Long = withContext(Dispatchers.IO) {
         runCancellable {
@@ -292,6 +365,7 @@ object HandwritingModels {
 
     suspend fun delete(tag: String) {
         val model = model(tag) ?: return
+        prepareMdd()
         runCancellable { manager.deleteDownloadedModel(model).await() }
     }
 }
@@ -337,6 +411,7 @@ class HandwritingRecognizerCache {
         maxCandidates: Int = 4,
     ): List<String> {
         if (strokes.isEmpty()) return emptyList()
+        HandwritingModels.prepareForRecognition()
         val recognizer = recognizerFor(tag)
             ?: error("No recognizer for $tag")
         val inkBuilder = Ink.builder()

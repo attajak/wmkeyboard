@@ -176,6 +176,22 @@
     <init>();
 }
 
+# --- Google's shaded "shared Random" classes (full flavor) --------------------
+# The GMS-built ML Kit jars carry Guava-style Random subclasses whose setSeed
+# throws once a `final boolean` field is true. That field is assigned after
+# super() returns, and java.util.Random's constructor calls setSeed from inside
+# super(), so at that moment the field is still false and the call goes
+# through. R8 sees the field only ever written `true`, folds the check to
+# "always throw" and merges the two classes, so the class initializer that
+# builds them dies with "Setting the seed on the shared Random object is not
+# permitted" wrapped in ExceptionInInitializerError. In Digital Ink that
+# initializer sits under the model download manager, so every handwriting
+# download failed at once in release (#235); debug and `fast` never shrink.
+# Keeping the classes and their fields stops the folding and the merge.
+-keep class com.google.android.gms.internal.** extends java.util.Random {
+    <fields>;
+}
+
 
 # --- On-device AI runtime bridge ---------------------------------------------
 # LitertLmRuntime is reached ONLY by reflection (LocalLlmEngine's facade):
