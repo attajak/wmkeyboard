@@ -131,6 +131,23 @@ class LayerDragTest {
         assertFalse(null.startsPossessiveSwipe(','))
     }
 
+    /**
+     * The delete keys keep glide, ink and the octopus off their drags (#243),
+     * each only while its own swipe is on: backspace beside the bottom letter
+     * row started a glide that typed a word on top of the swipe's deletion.
+     */
+    @Test
+    fun `a delete key starts its swipe only while that swipe is on`() {
+        val backspace = Key("", action = KeyAction.Delete)
+        val forward = Key("", action = KeyAction.ForwardDelete)
+        assertTrue(backspace.startsDeleteSwipe(backspace = true, forward = false))
+        assertFalse(backspace.startsDeleteSwipe(backspace = false, forward = true))
+        assertTrue(forward.startsDeleteSwipe(backspace = false, forward = true))
+        assertFalse(forward.startsDeleteSwipe(backspace = true, forward = false))
+        assertFalse(Key("m").startsDeleteSwipe(backspace = true, forward = true))
+        assertFalse(null.startsDeleteSwipe(backspace = true, forward = true))
+    }
+
     // ---- commitsFromLayerDrag -----------------------------------------------
 
     @Test
