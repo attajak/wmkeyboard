@@ -3,7 +3,9 @@ package com.wasimaster.wmkeyboard.core.prediction
 import java.io.InputStream
 
 /**
- * Spellings that resolve to a fixed Bengali form, for the Avro input mode.
+ * Spellings that resolve to a fixed native-script form, for a phonetic input
+ * mode — one map per language that has one ([PhoneticScheme.spellingAssets]).
+ * The examples below are Avro's, which is where the map began.
  *
  * Two kinds of spelling need this, and neither is reachable from phonetic
  * rules:
@@ -27,7 +29,7 @@ import java.io.InputStream
  * earlier one leads, which is how the hand-written list stays ahead of the
  * generated one.
  */
-class BengaliSpellingMap private constructor(
+class SpellingMap private constructor(
     private val byWord: Map<String, List<String>>,
 ) {
 
@@ -47,7 +49,7 @@ class BengaliSpellingMap private constructor(
 
     companion object {
         /** Empty map, used as the default when no asset is supplied (tests). */
-        val EMPTY = BengaliSpellingMap(emptyMap())
+        val EMPTY = SpellingMap(emptyMap())
 
         /**
          * Languages that ship a spelling map, by
@@ -64,7 +66,7 @@ class BengaliSpellingMap private constructor(
          * forms in the order the streams are given, de-duplicated — so passing
          * the curated list first leaves it outranking the generated one.
          */
-        fun load(vararg streams: InputStream): BengaliSpellingMap {
+        fun load(vararg streams: InputStream): SpellingMap {
             val byWord = LinkedHashMap<String, MutableList<String>>()
             for (stream in streams) {
                 stream.bufferedReader().useLines { lines ->
@@ -81,7 +83,7 @@ class BengaliSpellingMap private constructor(
                     }
                 }
             }
-            return BengaliSpellingMap(byWord)
+            return SpellingMap(byWord)
         }
     }
 }

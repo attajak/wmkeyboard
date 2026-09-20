@@ -5,10 +5,10 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class BengaliSpellingMapTest {
+class SpellingMapTest {
 
     private fun map(text: String) =
-        BengaliSpellingMap.load(text.byteInputStream(Charsets.UTF_8))
+        SpellingMap.load(text.byteInputStream(Charsets.UTF_8))
 
     @Test fun mapsLoanword() {
         val m = map("keyboard\tকিবোর্ড\nchair\tচেয়ার\n")
@@ -46,7 +46,7 @@ class BengaliSpellingMapTest {
     }
 
     @Test fun unmappedReturnsEmpty() {
-        assertTrue(BengaliSpellingMap.EMPTY.lookup("anything").isEmpty())
+        assertTrue(SpellingMap.EMPTY.lookup("anything").isEmpty())
         assertTrue(map("chair\tচেয়ার").lookup("mouse").isEmpty())
     }
 
@@ -54,7 +54,7 @@ class BengaliSpellingMapTest {
         // How the app loads it: the curated loanword list, then the generated
         // romanized one. Both contribute, and a spelling in both keeps the
         // curated form in front.
-        val m = BengaliSpellingMap.load(
+        val m = SpellingMap.load(
             "keyboard\tকিবোর্ড\npic\tপিক\n".byteInputStream(Charsets.UTF_8),
             "tmr\tতোমার\npic\tছবি\n".byteInputStream(Charsets.UTF_8),
         )

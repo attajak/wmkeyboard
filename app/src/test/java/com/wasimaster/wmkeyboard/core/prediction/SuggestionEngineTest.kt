@@ -632,21 +632,21 @@ class SuggestionEngineTest {
     }
 
     @Test fun avroPhoneticSiblingWins() {
-        val suggestions = engine().suggest("asi", previousWord = null, avroMode = true)
+        val suggestions = engine().suggest("asi", previousWord = null, phoneticLanguage = "bn")
         assertEquals("আছি", suggestions.first())
         assertTrue("আসি" in suggestions)
     }
 
     @Test fun avroLoanwordWinsOverPhonetics() {
         val dictionary = Trie()
-        val loanwords = BengaliSpellingMap.load(
+        val loanwords = SpellingMap.load(
             "keyboard\tকিবোর্ড\nchair\tচেয়ার\n".byteInputStream(Charsets.UTF_8)
         )
         val e = SuggestionEngine(
             dictionary, BengaliPhoneticIndex(emptyList()), UserLexicon(null), loanwords,
         )
-        assertEquals("কিবোর্ড", e.suggest("keyboard", null, avroMode = true).first())
-        assertEquals("চেয়ার", e.suggest("chair", null, avroMode = true).first())
+        assertEquals("কিবোর্ড", e.suggest("keyboard", null, phoneticLanguage = "bn").first())
+        assertEquals("চেয়ার", e.suggest("chair", null, phoneticLanguage = "bn").first())
     }
 
     @Test fun avroLiteralHoldsAgainstNearTieSibling() {
@@ -657,7 +657,7 @@ class SuggestionEngineTest {
             listOf("হলো" to 1986, "হল" to 1900)
         )
         val e = SuggestionEngine(Trie(), bengali, UserLexicon(null))
-        val suggestions = e.suggest("holO", null, avroMode = true)
+        val suggestions = e.suggest("holO", null, phoneticLanguage = "bn")
         assertEquals("হলো", suggestions.first())
         assertTrue("হল" in suggestions)
     }
@@ -667,14 +667,14 @@ class SuggestionEngineTest {
         // transliteration (ওয়াসি) must survive the space commit untouched.
         val e = engine()
         val literal = AvroPhonetic.transliterate("wasi")
-        assertEquals(literal, e.suggest("wasi", null, avroMode = true).first())
+        assertEquals(literal, e.suggest("wasi", null, phoneticLanguage = "bn").first())
     }
 
     @Test fun avroSentenceWords() {
         val e = engine()
-        assertEquals("আমি", e.suggest("ami", null, avroMode = true).first())
-        assertEquals("ভালো", e.suggest("valo", null, avroMode = true).first())
-        assertEquals("আছি", e.suggest("asi", null, avroMode = true).first())
+        assertEquals("আমি", e.suggest("ami", null, phoneticLanguage = "bn").first())
+        assertEquals("ভালো", e.suggest("valo", null, phoneticLanguage = "bn").first())
+        assertEquals("আছি", e.suggest("asi", null, phoneticLanguage = "bn").first())
     }
 
     @Test fun userLearningPersonalizes() {

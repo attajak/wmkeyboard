@@ -62,7 +62,7 @@ import com.wasimaster.wmkeyboard.core.layout.KeymanBinding
 import com.wasimaster.wmkeyboard.core.layout.composerType
 import com.wasimaster.wmkeyboard.core.layout.language
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
-import com.wasimaster.wmkeyboard.core.prediction.BengaliSpellingMap
+import com.wasimaster.wmkeyboard.core.prediction.SpellingMap
 import com.wasimaster.wmkeyboard.core.script.ComposerType
 import com.wasimaster.wmkeyboard.core.script.DeviceLocales
 import com.wasimaster.wmkeyboard.core.script.FancyStyles
@@ -973,7 +973,7 @@ internal fun LanguageDetailScreen(
     // rather than ত্ম্র. Off is for the person who wants the letter-for-letter
     // reading and cannot otherwise get it, since the map outranks every other
     // suggestion source.
-    if (langId in BengaliSpellingMap.LANGUAGES) {
+    if (langId in SpellingMap.LANGUAGES) {
         SettingsGroup(stringResource(R.string.languages_spelling_map_title)) {
             item {
                 ToggleSetting(

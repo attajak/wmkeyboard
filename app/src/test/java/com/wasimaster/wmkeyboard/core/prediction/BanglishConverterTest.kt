@@ -8,7 +8,7 @@ import org.junit.Test
 
 class BanglishConverterTest {
 
-    private val map = BengaliSpellingMap.load(
+    private val map = SpellingMap.load(
         """
         tmr	তোমার
         tomar	তোমার

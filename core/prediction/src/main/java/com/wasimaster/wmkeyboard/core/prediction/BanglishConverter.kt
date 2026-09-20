@@ -2,7 +2,7 @@ package com.wasimaster.wmkeyboard.core.prediction
 
 import com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
-import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliRomanizer
 
 /**
@@ -25,8 +25,8 @@ import com.wasimaster.wmkeyboard.core.transliteration.BengaliRomanizer
  * service asks from a background one.
  */
 class BanglishConverter(
-    private val spellings: BengaliSpellingMap,
-    private val phonetic: BengaliPhoneticIndex,
+    private val spellings: SpellingMap,
+    private val phonetic: PhoneticIndex,
 ) {
 
     /** [text] with every Latin word in Bengali, or null when nothing changed. */
