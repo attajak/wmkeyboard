@@ -3348,7 +3348,14 @@ private fun TopBar(
             if (snippetOffer == null && learnOffer == null && sandboxOffer == null && wordListOffer != null) {
                 val wordListShares = suggestionsShowing || state.smart != null
                 OfferChip(
-                    label = stringResource(R.string.ime_glide_word_list_offer, wordListOffer.englishName),
+                    label = stringResource(
+                        if (state.wordListOfferIsPhonetic) {
+                            R.string.ime_phonetic_word_list_offer
+                        } else {
+                            R.string.ime_glide_word_list_offer
+                        },
+                        wordListOffer.englishName,
+                    ),
                     icon = Icons.Outlined.Download,
                     declineDescription = stringResource(R.string.ime_glide_word_list_offer_dismiss_desc),
                     onAccept = { onStripOfferAction(StripOfferAction.Accept()) },

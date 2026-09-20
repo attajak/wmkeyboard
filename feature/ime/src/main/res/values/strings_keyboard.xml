@@ -263,6 +263,7 @@
          word list to decode a swipe against. %1$s is the language's English
          name. Tapping the chip opens that language's page, where a list downloads. -->
     <string name="ime_glide_word_list_offer">Glide typing needs a %1$s word list</string>
+    <string name="ime_phonetic_word_list_offer">Get the %1$s word list for better words</string>
     <!-- The ✕ on that chip: screen reader text. -->
     <string name="ime_glide_word_list_offer_dismiss_desc">Dismiss</string>
     <!-- The chip offering to decode a swiped word's stroke against every word

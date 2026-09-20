@@ -199,6 +199,7 @@ fun composerFor(script: ScriptDef, type: ComposerType): Composer = when (type) {
     ComposerType.INDIC_CLUSTER -> IndicClusterComposer(script)
     ComposerType.TRANSLITERATE -> when (script.id) {
         ScriptId.BENGALI -> BengaliTransliterateComposer
+        ScriptId.DEVANAGARI -> HindiTransliterateComposer
         else -> NoComposer
     }
     ComposerType.HANGUL -> HangulComposer

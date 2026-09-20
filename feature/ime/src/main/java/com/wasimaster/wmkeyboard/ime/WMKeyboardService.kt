@@ -194,6 +194,9 @@ import com.wasimaster.wmkeyboard.core.prediction.LearningBuffer
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
 import com.wasimaster.wmkeyboard.core.prediction.topWords
 import com.wasimaster.wmkeyboard.core.prediction.PendingLearn
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticBackend
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticScheme
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
 import com.wasimaster.wmkeyboard.core.prediction.Revision
 import com.wasimaster.wmkeyboard.core.prediction.SecondaryDictionary
 import com.wasimaster.wmkeyboard.core.prediction.SeedBigrams
@@ -1684,6 +1687,97 @@ open class WMKeyboardService : InputMethodService() {
     private fun bengaliEnabled(): Boolean =
         _uiState.value.settings.enabledLanguages.any { it.id == "bn" }
 
+    /**
+     * What [loadExtraPhonetic] last built, as [extraPhoneticWanted] spells it,
+     * so a settings save that changed none of it rebuilds nothing.
+     */
+    private var loadedExtraPhonetic: Set<String> = emptySet()
+
+    /**
+     * The phonetic languages other than Bengali that an enabled layout types
+     * through, each with whether its spelling map is switched on.
+     *
+     * Asked of the layouts rather than of the languages: Hindi turned on for
+     * its InScript layout has no use for a phonetic index, and the index is a
+     * fold of the whole downloaded word list — not something to build for a
+     * layout nobody enabled. Bengali is left out because its backend is the
+     * engine's own ([bengaliEnabled]).
+     */
+    private fun extraPhoneticWanted(): Set<String> {
+        val settings = _uiState.value.settings
+        val wanted = HashSet<String>()
+        for (id in settings.enabledLayoutIds) {
+            val spec = resolveLayout(settings.customLayouts, id)
+            val language = composerFor(spec.script(), spec.composerType()).phoneticLanguage ?: continue
+            if (language == PhoneticSchemes.BENGALI.languageId) continue
+            val map = settings.suggestionStrip.spellingMapEnabledFor(language)
+            wanted.add(if (map) "$language$WITH_SPELLING_MAP" else language)
+        }
+        return wanted
+    }
+
+    /**
+     * Builds the backend of every phonetic language [extraPhoneticWanted]
+     * names and hands them to the engine, with the romanization a swipe over
+     * each is decoded through.
+     *
+     * The index is a fold over the language's whole word list — the downloaded
+     * one and anything imported — and is empty when there is neither, which is
+     * the ordinary first-run state for a language that ships no list: the
+     * spelling map and the rules carry the layout until a download lands, and
+     * [reloadDownloadedDictionaries] calls back here when it does.
+     */
+    private suspend fun loadExtraPhonetic() {
+        val engine = suggestionEngine ?: return
+        val wanted = extraPhoneticWanted()
+        loadedExtraPhonetic = wanted
+        val backends = withContext(Dispatchers.Default) {
+            wanted.mapNotNull { token ->
+                val scheme = PhoneticSchemes.forLanguage(token.removeSuffix(WITH_SPELLING_MAP))
+                    ?: return@mapNotNull null
+                val spellings = if (token.endsWith(WITH_SPELLING_MAP)) loadSpellingMap(scheme) else SpellingMap.EMPTY
+                val index = scheme.buildIndex(phoneticEntries(scheme.languageId))
+                scheme.languageId to PhoneticBackend(scheme, index, spellings)
+            }.toMap()
+        }
+        engine.extraPhonetic = backends
+        romanizedGlides = romanizedGlides.filterKeys { it == PhoneticSchemes.BENGALI.languageId } +
+            backends.mapValues { (_, backend) ->
+                RomanizedIndex.of(
+                    spellings = backend.spellings,
+                    phonetic = backend.index,
+                    downloadedRomanized = customDictionaries[backend.scheme.romanizedListId] ?: PackedTrie.EMPTY,
+                    nativeFrequency = backend.index::frequencyOf,
+                )
+            }
+        glideSourcesEpoch.update { it + 1 }
+    }
+
+    /** A scheme's `spelling<TAB>native` assets, most trusted first. */
+    private fun loadSpellingMap(scheme: PhoneticScheme): SpellingMap {
+        val streams = scheme.spellingAssets.map { assets.open(it) }
+        return try {
+            SpellingMap.load(*streams.toTypedArray())
+        } finally {
+            streams.forEach { runCatching { it.close() } }
+        }
+    }
+
+    /**
+     * Every word of [langId]'s lists with its frequency: the download, unless
+     * the language is set to its imported lists alone (#28), and the imports.
+     * Both live in credential-encrypted storage, so a locked boot has neither.
+     */
+    private fun phoneticEntries(langId: String): List<Pair<String, Int>> {
+        if (!userUnlocked) return emptyList()
+        val downloaded = if (shippedDictionaryEnabled(langId)) {
+            MappedTrie.open(DictionaryStore.downloadedFile(filesDir, langId))?.entries().orEmpty()
+        } else {
+            emptyList()
+        }
+        return downloaded + CustomDictionaries.entries(filesDir, langId)
+    }
+
     /** Whether Bengali is on *and* has kept its fixed-spelling map switched on. */
     private fun spellingMapEnabled(): Boolean =
         bengaliEnabled() &&
@@ -3121,6 +3215,12 @@ open class WMKeyboardService : InputMethodService() {
                 ) {
                     loadDictionariesAndEmoji()
                 }
+                // The other phonetic languages hang off the engine rather than
+                // being built into it, so turning one's layout on (or its
+                // spelling map off) rebuilds that backend and nothing else.
+                if (suggestionEngine != null && extraPhoneticWanted() != loadedExtraPhonetic) {
+                    loadExtraPhonetic()
+                }
                 // Switching a language to its imported lists alone (#28)
                 // changes which tries the engine is built over, so it needs the
                 // same rebuild — and the imported-list map too, which is where
@@ -3587,6 +3687,8 @@ open class WMKeyboardService : InputMethodService() {
                 )
             }
             romanizedGlides = romanizedGlides + ("bn" to bengaliGlide)
+            // Every other phonetic language an enabled layout types through.
+            loadExtraPhonetic()
             // A new engine means new word sources; re-ask whether this
             // language and layout can be glided.
             glideSourcesEpoch.update { it + 1 }
@@ -14471,6 +14573,19 @@ open class WMKeyboardService : InputMethodService() {
         return state.language
     }
 
+    /**
+     * The same chip for a phonetic layout running on its rules alone (#239).
+     * Glide has nothing to do with it, so the glide switch is not asked; the
+     * once-per-language memory is shared but keyed apart, since a user told
+     * about glide has not been told about this.
+     */
+    private fun phoneticWordListOffer(languageId: String): LanguageDef? {
+        val state = _uiState.value
+        if (state.language.id != languageId) return null
+        if (!glideWordListNoticed.add("phonetic:$languageId")) return null
+        return state.language
+    }
+
     /** The chip was tapped: the language's own page, where its list downloads. */
     private fun acceptGlideWordListOffer() {
         val language = _uiState.value.glideWordListOffer ?: return
@@ -15110,12 +15225,32 @@ open class WMKeyboardService : InputMethodService() {
                     // the docs are what explain that one.
                     val missingList = allowed && gate.phonetic == null &&
                         engine != null && !engine.hasLanguageWords()
-                    val offer = if (missingList) glideWordListOffer(gate.languageId) else null
+                    // A phonetic layout with no word list behind it still types —
+                    // the rules and the spelling map see to that — but it is
+                    // guessing at every word the map does not list, and nothing
+                    // on screen says a download would stop the guessing (#239).
+                    // Only once the backend is really loaded: before that an
+                    // empty index means "not yet", not "nothing to load". And
+                    // not for a language the user set to its own lists alone.
+                    val phoneticBare = gate.phonetic != null && engine != null &&
+                        engine.extraPhonetic[gate.phonetic]?.index?.isEmpty == true &&
+                        shippedDictionaryEnabled(gate.phonetic)
+                    val offer = when {
+                        missingList -> glideWordListOffer(gate.languageId)
+                        phoneticBare -> phoneticWordListOffer(gate.languageId)
+                        else -> null
+                    }
                     _uiState.update {
-                        if (it.glideReady == ready && it.glideWordListOffer == offer) {
+                        if (it.glideReady == ready && it.glideWordListOffer == offer &&
+                            it.wordListOfferIsPhonetic == (offer != null && phoneticBare)
+                        ) {
                             it
                         } else {
-                            it.copy(glideReady = ready, glideWordListOffer = offer)
+                            it.copy(
+                                glideReady = ready,
+                                glideWordListOffer = offer,
+                                wordListOfferIsPhonetic = offer != null && phoneticBare,
+                            )
                         }
                     }
                 }
@@ -26566,7 +26701,13 @@ open class WMKeyboardService : InputMethodService() {
                 nativeFrequency = engine.bengaliIndex::frequencyOf,
             ))
         }
-        glideSourcesEpoch.update { it + 1 }
+        // An imported list, native or romanized, is part of what a phonetic
+        // language's index and glide are built over.
+        val phoneticTouched = loadedExtraPhonetic.any { token ->
+            val scheme = PhoneticSchemes.forLanguage(token.removeSuffix(WITH_SPELLING_MAP))
+            scheme != null && (scheme.languageId in langIds || scheme.romanizedListId in langIds)
+        }
+        if (phoneticTouched) loadExtraPhonetic() else glideSourcesEpoch.update { it + 1 }
     }
 
     /**
@@ -26652,6 +26793,9 @@ open class WMKeyboardService : InputMethodService() {
             // neither the language nor the layout moved to say so.
             glideSourcesEpoch.update { it + 1 }
         }
+        // A phonetic language with no bundled list is ranked against its
+        // download and nothing else, so this is the moment it gets an index.
+        if (loadedExtraPhonetic.isNotEmpty()) loadExtraPhonetic()
         // A list that just arrived (or left) is a chip the bar should show (or
         // drop), and the settings did not move to say so.
         refreshDictionaryBar(_uiState.value.settings)
@@ -27363,6 +27507,9 @@ open class WMKeyboardService : InputMethodService() {
 
         /** The same, for a keyboard-owned field's own suggestion row (#161). */
         private const val CAPTURE_SUGGEST_DEBOUNCE_MS = 24L
+
+        /** Marks an [extraPhoneticWanted] token whose spelling map is switched on. */
+        private const val WITH_SPELLING_MAP = "+map"
 
         /**
          * …and how many words it asks for: the strip's own slot count, since

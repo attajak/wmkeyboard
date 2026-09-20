@@ -835,6 +835,14 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Loanword conventions — table to টেবিল, keyboard to কিবোর্ড rather than the phonetic তাবলে
     - Curated list outranks the generated one — Duplicate keys accumulate in stream order, hand-written file first
     - Per-language off switch — Turning it off is the only way to reach the letter-for-letter reading
+  - Hindi phonetic `RARE` — Latin keys in, Devanagari out (kaise ho gives कैसे हो); its own layout under Hindi, InScript still the default (#239)
+    - Schwa-aware rules — clusters split unless they open or close the word, double a consonant, precede y, or sit in a short join table; a grammatical ending (na ta ka ko se me kar wala) never joins its stem, so karna gives करना and namaste gives नमस्ते
+    - Long finals and anusvara — a word-final a/i/u is long (mera, bhi, tu), a before o/u is long (jao), a nasal before its stop is ं (hindi, lamba)
+    - Other readings on the strip — last a long (pyar, sarkar), all clusters joined, none joined, final left short; what fills the strip when no word list is installed
+    - Lenient Hinglish matching — a fold that forgets aspiration, dental/retroflex, virama, every inner a and vowel length; ड़ filed under d and r, unwritten nasalisation forgiven (nahi/nahin/nhi); typed details (aa, kh, a doubled consonant, ai) handicap siblings that contradict them
+    - Download-only vocabulary — index built over the downloaded and imported Hindi lists, only while the phonetic layout is enabled; a one-time strip chip points at the download when there is none
+    - Hindi spelling map — hand-written everyday words, chat shorthand (h, nhi, kr, bhut) and English loanwords, consulted first; per-language off switch
+    - Glide — strokes decoded against the spelling map and the downloaded Hinglish list, resolved through the same index
   - Vietnamese Telex and VNI — Two shared-engine transliterators; letters spell the marks in Telex, digits in VNI
     - Standard tone placement — A marked vowel wins; else single vowel, else last vowel of a closed cluster, else first of an open one (oa/oe/uy take the second)
     - qu/gi onsets excluded from the nucleus — The u or i is a glide unless it is the syllable's only vowel

@@ -63,6 +63,37 @@ class SpellingMapTest {
         assertEquals(listOf("পিক", "ছবি"), m.lookup("pic"))
     }
 
+    @Test fun theHindiAssetsAreWellFormed() {
+        for (name in listOf("en_hi.tsv", "hi_rom.tsv")) {
+            val lines = java.io.File("src/main/assets/dictionaries/$name")
+                .readLines()
+                .filterNot { it.isBlank() || it.startsWith("#") }
+            assertTrue("$name looks empty", lines.size > 100)
+            for (line in lines) {
+                val parts = line.split("\t")
+                assertEquals("malformed line in $name: $line", 2, parts.size)
+                assertTrue("non-ascii key in $name: $line", parts[0].all { it in 'a'..'z' })
+                assertTrue("empty form in $name: $line", parts[1].isNotBlank())
+                assertFalse(
+                    "latin in hindi column of $name: $line",
+                    parts[1].any { it in 'a'..'z' || it in 'A'..'Z' },
+                )
+                // Devanagari's nukta letters go the other way from Bengali's:
+                // NFC *decomposes* them, the word lists carry the pair, and a
+                // precomposed one here would never equal the dictionary's word.
+                assertFalse("precomposed nukta in $name: $line", parts[1].any { it in 'क़'..'य़' })
+            }
+        }
+        // Every scheme's assets exist: a missing one is a crash on the first
+        // keystroke of that layout, not a quiet fallback.
+        for (scheme in PhoneticSchemes.all) {
+            for (asset in scheme.spellingAssets) {
+                assertTrue("missing $asset", java.io.File("src/main/assets/$asset").isFile)
+            }
+        }
+        assertEquals(setOf("bn", "hi"), SpellingMap.LANGUAGES)
+    }
+
     @Test fun theShippedAssetIsWellFormed() {
         // Guards the generated file: a stray Latin letter in the Bengali column
         // means a spelling was echoed back instead of translated, and it would

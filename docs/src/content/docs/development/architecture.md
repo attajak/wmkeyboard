@@ -99,6 +99,19 @@ keep composing one the caret handed back to it.
 Corrections that need context (আসি vs আছি) are handled at ranking time,
 deliberately, rather than inside the transliterator.
 
+Hindi has the same pair, `HindiPhonetic` and `HindiPhoneticIndex`, and the
+balance between them is different. Hinglish has no spelling scheme, and spoken
+Hindi drops its inherent vowel, so the rules cannot tell a conjunct from a
+dropped schwa (`namaste` against `karna`): they guess, and offer their other
+readings as `variants()`. The index folds away everything the spelling does not
+carry (virama, every inner "a", dental against retroflex) and is what actually
+knows the word. It is built over a downloaded list, since Hindi bundles none.
+
+Both languages plug in through one seam. A composer names its language in
+`Composer.phoneticLanguage`; `PhoneticSchemes` maps that to the rules, the
+index builder and the spelling assets; the engine resolves a `PhoneticBackend`
+from it. Nothing in the engine or the service names Hindi.
+
 ### Prediction
 
 `Trie` is frequency-weighted and serves prefix completions. `UserLexicon`
@@ -256,5 +269,8 @@ announce nor explore.
   [the dictionary pipeline](/development/dictionaries/).
 - **Emoji.** Append lines to `emoji/catalog.tsv`. Add synonym rows to
   `EmojiSearch.SYNONYMS` for concept queries.
-- **Transliteration schemes.** Implement one alongside `AvroPhonetic`. The
-  suggestion engine only needs a `transliterate()` and an optional index.
+- **Transliteration schemes.** Implement one alongside `AvroPhonetic` and
+  `HindiPhonetic`, give it a composer that sets `phoneticLanguage`, and add a
+  `PhoneticScheme` entry: `transliterate()`, `variants()`, an index builder and
+  the spelling-map assets. The service loads the backend when a layout that
+  types through it is enabled.

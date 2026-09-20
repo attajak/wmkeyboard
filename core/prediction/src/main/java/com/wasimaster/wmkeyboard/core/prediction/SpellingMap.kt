@@ -57,7 +57,9 @@ class SpellingMap private constructor(
          * get the settings row — a language with no lists behind it would be
          * offering a switch that does nothing.
          */
-        val LANGUAGES = setOf("bn")
+        val LANGUAGES: Set<String> = PhoneticSchemes.all
+            .filter { it.spellingAssets.isNotEmpty() }
+            .mapTo(LinkedHashSet()) { it.languageId }
 
         /**
          * Parses `spelling<TAB>bengali` TSVs. Blank lines and `#` comments are

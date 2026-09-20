@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.core.prediction
 
 import com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.HindiPhonetic
+import com.wasimaster.wmkeyboard.core.transliteration.HindiPhoneticIndex
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
@@ -675,6 +677,46 @@ class SuggestionEngineTest {
         assertEquals("আমি", e.suggest("ami", null, phoneticLanguage = "bn").first())
         assertEquals("ভালো", e.suggest("valo", null, phoneticLanguage = "bn").first())
         assertEquals("আছি", e.suggest("asi", null, phoneticLanguage = "bn").first())
+    }
+
+    private fun hindiEngine(
+        words: List<Pair<String, Int>>,
+        spellings: SpellingMap = SpellingMap.EMPTY,
+    ): SuggestionEngine = engine().also {
+        it.extraPhonetic = mapOf(
+            "hi" to PhoneticBackend(PhoneticSchemes.HINDI, HindiPhoneticIndex(words), spellings),
+        )
+    }
+
+    @Test fun hindiDictionarySettlesWhatTheRulesCannot() {
+        // Dental against retroflex is not in the spelling: the rules write थीक.
+        val e = hindiEngine(listOf("ठीक" to 900, "करना" to 800))
+        assertEquals("ठीक", e.suggest("theek", null, phoneticLanguage = "hi").first())
+        assertEquals("करना", e.suggest("karna", null, phoneticLanguage = "hi").first())
+    }
+
+    @Test fun hindiSpellingMapLeads() {
+        val map = SpellingMap.load("school\tस्कूल\n".byteInputStream(Charsets.UTF_8))
+        val e = hindiEngine(emptyList(), map)
+        assertEquals("स्कूल", e.suggest("school", null, phoneticLanguage = "hi").first())
+        assertEquals("स्कूल", e.phoneticSpelling("hi", "school"))
+        assertNull(e.phoneticSpelling("hi", "karna"))
+        // One language's map is not another's.
+        assertNull(e.phoneticSpelling("bn", "school"))
+    }
+
+    @Test fun hindiWithNoWordListOffersTheRulesOtherReadings() {
+        val suggestions = hindiEngine(emptyList()).suggest("pyar", null, phoneticLanguage = "hi")
+        assertEquals(HindiPhonetic.transliterate("pyar"), suggestions.first())
+        assertTrue("प्यार" in suggestions)
+    }
+
+    @Test fun aPhoneticLayoutNeverAnswersInLatin() {
+        // The backend has not been loaded yet — a layout switched to before the
+        // index finished building — and the rules still answer.
+        val suggestions = engine().suggest("kaise", null, phoneticLanguage = "hi")
+        assertEquals("कैसे", suggestions.first())
+        assertTrue(suggestions.none { word -> word.any { it in 'a'..'z' } })
     }
 
     @Test fun userLearningPersonalizes() {

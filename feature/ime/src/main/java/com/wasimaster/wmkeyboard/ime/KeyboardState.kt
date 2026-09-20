@@ -2345,6 +2345,12 @@ data class KeyboardUiState(
      */
     val glideWordListOffer: LanguageDef? = null,
     /**
+     * Whether [glideWordListOffer] is up for a phonetic layout typing on its
+     * rules alone (#239) rather than for glide. Same chip, same tap, same
+     * dismissal — only the sentence on it differs.
+     */
+    val wordListOfferIsPhonetic: Boolean = false,
+    /**
      * The word the caret is sitting in that a swipe wrote, while the strip is
      * offering to search that swipe's path against every word list (#135), or
      * null. Only ever set with `GestureSettings.searchAllChip` on: without it

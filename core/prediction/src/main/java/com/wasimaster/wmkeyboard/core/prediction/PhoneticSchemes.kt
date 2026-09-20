@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.core.prediction
 
 import com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.HindiPhonetic
+import com.wasimaster.wmkeyboard.core.transliteration.HindiPhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
 
 /**
@@ -49,7 +51,22 @@ object PhoneticSchemes {
         buildIndex = ::BengaliPhoneticIndex,
     )
 
-    val all: List<PhoneticScheme> = listOf(BENGALI)
+    /**
+     * Hindi has no bundled word list, so its index is built over whatever the
+     * user downloaded or imported — and is empty until they have. That is why
+     * its [PhoneticScheme.variants] carry more than one reading, and why its
+     * spelling map is a vocabulary rather than a list of exceptions.
+     */
+    val HINDI = PhoneticScheme(
+        languageId = "hi",
+        romanizedListId = "hi_rom",
+        spellingAssets = listOf("dictionaries/en_hi.tsv", "dictionaries/hi_rom.tsv"),
+        transliterate = HindiPhonetic::transliterate,
+        variants = HindiPhonetic::variants,
+        buildIndex = ::HindiPhoneticIndex,
+    )
+
+    val all: List<PhoneticScheme> = listOf(BENGALI, HINDI)
 
     fun forLanguage(languageId: String?): PhoneticScheme? =
         all.firstOrNull { it.languageId == languageId }

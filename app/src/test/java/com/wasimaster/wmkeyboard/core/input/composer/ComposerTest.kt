@@ -9,6 +9,7 @@ import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.script.ScriptRegistry
 import com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
+import com.wasimaster.wmkeyboard.core.transliteration.HindiPhonetic
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -33,8 +34,9 @@ class ComposerTest {
         assertSame(BengaliTransliterateComposer, composerFor(bengali, ComposerType.TRANSLITERATE))
         assertTrue(composerFor(bengali, ComposerType.INDIC_CLUSTER) is IndicClusterComposer)
         assertTrue(composerFor(devanagari, ComposerType.INDIC_CLUSTER) is IndicClusterComposer)
+        assertSame(HindiTransliterateComposer, composerFor(devanagari, ComposerType.TRANSLITERATE))
         // A transliterator with no engine for its script degrades, never crashes.
-        assertSame(NoComposer, composerFor(devanagari, ComposerType.TRANSLITERATE))
+        assertSame(NoComposer, composerFor(latin, ComposerType.TRANSLITERATE))
     }
 
     @Test
@@ -149,6 +151,46 @@ class ComposerTest {
         assertTrue(composer.isClusterShaping)
         // क + ि (consonant + spacing vowel sign) deletes as one cluster.
         assertEquals(2, composer.deleteLength("कि"))
+    }
+
+    @Test
+    fun `the Hindi phonetic built-in overrides the script with the transliterator`() {
+        val spec = BuiltInLayouts.HINDI_PHONETIC
+        assertEquals(ScriptId.DEVANAGARI, spec.script().id)
+        assertEquals(ComposerType.TRANSLITERATE, spec.composerType())
+        val composer = composerFor(spec.script(), spec.composerType())
+        assertSame(HindiTransliterateComposer, composer)
+        assertTrue(composer.isTransliterating)
+        assertFalse(composer.isClusterShaping)
+        // What routes its commit and strip through the Hindi dictionary path.
+        assertEquals("hi", composer.phoneticLanguage)
+        assertEquals("bn", BengaliTransliterateComposer.phoneticLanguage)
+        assertNull(NoComposer.phoneticLanguage)
+        for (word in listOf("kaise", "namaste", "karna")) {
+            assertEquals(HindiPhonetic.transliterate(word), composer.composeBuffer(word))
+        }
+        // Committed text is Devanagari, so a conjunct still deletes as one unit.
+        assertEquals(3, composer.deleteLength("क्ष"))
+    }
+
+    @Test
+    fun `Hindi key preview is the diff of two transliterations`() {
+        val composer = HindiTransliterateComposer
+        assertEquals("क", composer.keyPreview("", "k", wholeCluster = false))
+        // A closing "a" is long, and the hint says so before the key is pressed.
+        assertEquals("ा", composer.keyPreview("k", "a", wholeCluster = false))
+        assertEquals("का", composer.keyPreview("k", "a", wholeCluster = true))
+        // A cluster that closes the word joins: the key adds the virama too.
+        assertEquals("्न", composer.keyPreview("kar", "n", wholeCluster = false))
+        assertEquals("र्न", composer.keyPreview("kar", "n", wholeCluster = true))
+        assertNull(composer.keyPreview("k", "1", wholeCluster = false))
+    }
+
+    @Test
+    fun `a Hindi buffer committed half typed is not a word to learn`() {
+        assertTrue(HindiTransliterateComposer.isPlausibleWord("करना"))
+        assertFalse(HindiTransliterateComposer.isPlausibleWord("कर्"))
+        assertFalse(HindiTransliterateComposer.isPlausibleWord(""))
     }
 
     @Test

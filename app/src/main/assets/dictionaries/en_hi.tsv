@@ -1,0 +1,245 @@
+# English → Hindi loanword map.
+#
+# Words Hindi speakers routinely write in Devanagari but which are NOT
+# phonetically derivable from the Hindi phonetic rules: English spelling says
+# little about English sound, so "school" would come out स्चूल and "phone"
+# फोने. Typed on the Hindi phonetic layout, the English spelling on the left
+# resolves directly to the Hindi form on the right, ahead of the rules and of
+# the dictionary.
+#
+# A hand-written draft that wants a Hindi speaker's review (issue #239). A wrong
+# entry here is worse than a missing one, since it outranks everything.
+#
+# Format: english<TAB>hindi   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+
+# --- Technology / devices ---
+phone	फ़ोन
+mobile	मोबाइल
+computer	कंप्यूटर
+laptop	लैपटॉप
+internet	इंटरनेट
+online	ऑनलाइन
+offline	ऑफ़लाइन
+email	ईमेल
+mail	मेल
+message	मैसेज
+msg	मैसेज
+call	कॉल
+video	वीडियो
+photo	फ़ोटो
+camera	कैमरा
+keyboard	कीबोर्ड
+screen	स्क्रीन
+charger	चार्जर
+battery	बैटरी
+network	नेटवर्क
+wifi	वाईफ़ाई
+data	डेटा
+app	ऐप
+software	सॉफ़्टवेयर
+website	वेबसाइट
+link	लिंक
+password	पासवर्ड
+account	अकाउंट
+download	डाउनलोड
+upload	अपलोड
+update	अपडेट
+file	फ़ाइल
+number	नंबर
+whatsapp	व्हाट्सऐप
+facebook	फ़ेसबुक
+google	गूगल
+youtube	यूट्यूब
+instagram	इंस्टाग्राम
+tv	टीवी
+radio	रेडियो
+machine	मशीन
+light	लाइट
+fan	फ़ैन
+switch	स्विच
+
+# --- School / office ---
+school	स्कूल
+college	कॉलेज
+university	यूनिवर्सिटी
+class	क्लास
+teacher	टीचर
+student	स्टूडेंट
+exam	एग्ज़ाम
+test	टेस्ट
+result	रिज़ल्ट
+book	बुक
+copy	कॉपी
+pen	पेन
+pencil	पेंसिल
+paper	पेपर
+homework	होमवर्क
+project	प्रोजेक्ट
+office	ऑफ़िस
+job	जॉब
+boss	बॉस
+manager	मैनेजर
+meeting	मीटिंग
+company	कंपनी
+business	बिज़नेस
+salary	सैलरी
+interview	इंटरव्यू
+form	फ़ॉर्म
+file	फ़ाइल
+report	रिपोर्ट
+engineer	इंजीनियर
+doctor	डॉक्टर
+nurse	नर्स
+police	पुलिस
+driver	ड्राइवर
+officer	ऑफ़िसर
+minister	मिनिस्टर
+sir	सर
+madam	मैडम
+
+# --- Travel / places ---
+bus	बस
+train	ट्रेन
+station	स्टेशन
+ticket	टिकट
+taxi	टैक्सी
+auto	ऑटो
+car	कार
+bike	बाइक
+cycle	साइकिल
+metro	मेट्रो
+airport	एयरपोर्ट
+flight	फ़्लाइट
+road	रोड
+traffic	ट्रैफ़िक
+petrol	पेट्रोल
+hotel	होटल
+hospital	हॉस्पिटल
+market	मार्केट
+mall	मॉल
+bank	बैंक
+atm	एटीएम
+park	पार्क
+room	रूम
+flat	फ़्लैट
+building	बिल्डिंग
+gate	गेट
+lift	लिफ़्ट
+address	एड्रेस
+city	सिटी
+india	इंडिया
+
+# --- Money / shopping ---
+rupee	रुपया
+rupees	रुपये
+cash	कैश
+card	कार्ड
+bill	बिल
+payment	पेमेंट
+order	ऑर्डर
+delivery	डिलीवरी
+discount	डिस्काउंट
+offer	ऑफ़र
+free	फ़्री
+loan	लोन
+shopping	शॉपिंग
+size	साइज़
+colour	कलर
+color	कलर
+
+# --- Food ---
+tea	टी
+coffee	कॉफ़ी
+cake	केक
+biscuit	बिस्कुट
+bread	ब्रेड
+pizza	पिज़्ज़ा
+burger	बर्गर
+chocolate	चॉकलेट
+juice	जूस
+bottle	बोतल
+glass	गिलास
+plate	प्लेट
+cup	कप
+lunch	लंच
+dinner	डिनर
+breakfast	ब्रेकफ़ास्ट
+party	पार्टी
+
+# --- Time / everyday ---
+time	टाइम
+date	डेट
+minute	मिनट
+second	सेकंड
+week	वीक
+sunday	संडे
+monday	मंडे
+tuesday	ट्यूज़डे
+wednesday	वेडनेसडे
+thursday	थर्सडे
+friday	फ़्राइडे
+saturday	सैटरडे
+birthday	बर्थडे
+holiday	हॉलिडे
+plan	प्लान
+problem	प्रॉब्लम
+tension	टेंशन
+chance	चांस
+risk	रिस्क
+idea	आइडिया
+point	पॉइंट
+reason	रीज़न
+side	साइड
+line	लाइन
+list	लिस्ट
+type	टाइप
+style	स्टाइल
+mood	मूड
+life	लाइफ़
+love	लव
+friend	फ़्रेंड
+family	फ़ैमिली
+brother	ब्रदर
+sister	सिस्टर
+uncle	अंकल
+aunty	आंटी
+baby	बेबी
+team	टीम
+game	गेम
+match	मैच
+cricket	क्रिकेट
+football	फ़ुटबॉल
+film	फ़िल्म
+movie	मूवी
+song	सॉन्ग
+music	म्यूज़िक
+news	न्यूज़
+vote	वोट
+party	पार्टी
+
+# --- Chat ---
+ok	ओके
+okay	ओके
+yes	यस
+no	नो
+hello	हेलो
+# No "hi": on this layout it is ही, a word typed far more often than the greeting.
+bye	बाय
+sorry	सॉरी
+please	प्लीज़
+plz	प्लीज़
+thanks	थैंक्स
+thank	थैंक
+welcome	वेलकम
+good	गुड
+morning	मॉर्निंग
+night	नाइट
+happy	हैप्पी
+best	बेस्ट
+nice	नाइस
+super	सुपर
+ready	रेडी
+busy	बिज़ी
+late	लेट
+sure	श्योर
