@@ -19,6 +19,7 @@ Conversion is honest about being lossy. A layout import always ends on a confirm
 | `.txt` layout | HeliBoard | A custom layout |
 | `.yaml` layout | FUTO Keyboard | A custom layout |
 | `.flex` theme | FlorisBoard 0.4 and later | One theme, one look per theme in the file |
+| `.flex` language pack | FlorisBoard | A Cangjie or stroke table for Chinese |
 | Colour theme text | HeliBoard, LeanType | One theme, from a file or from the clipboard |
 | `.keyman-touch-layout` | Keyman | A custom layout, without the keyboard's rules |
 | `.kmp` package | Keyman | A custom layout **and** its typing rules |
@@ -134,6 +135,21 @@ Frequencies are 0 to 255 over there and 0 to 10000 here, so they are scaled rath
 Two shapes are refused rather than half-read: a version 4 `.dict`, which is a folder of files rather than one file, and a file whose header carries a `codePointTable`, because that table changes what the rest of the file's bytes mean. Bigrams and shortcut expansions are skipped in both formats. A list here is a flat set of words, and a shortcut is an expansion rather than a word anybody typed.
 
 See [Dictionaries & words](/reference/settings/dictionaries/) for the screen itself.
+
+## Chinese code tables
+
+<SettingsPath path="Languages / Chinese / Chinese options / Import from FlorisBoard" />
+
+FlorisBoard's other kind of `.flex` is a language pack: an SQLite database of the shape-based Chinese tables, where a code spells a character by how it looks rather than how it sounds. Those are the same tables this app's own **Cangjie** and **Stroke** packs hold, so a pack you already have fills one without a download.
+
+The rows are written exactly where a download would have put them, so everything else on that screen keeps working on it: the row says Downloaded, the keyboard picks the table up at the next field you tap, and the trash icon removes it.
+
+Two things are worth knowing:
+
+- **Only Cangjie and stroke land.** A pack often holds Wubi, Zhengma, Boshiamy and others as well, and this keyboard has no way to type those, so a table for one would be a large file that changed nothing. The app names the tables it found back to you instead. Cangjie Quick needs no table of its own: it is the same codes queried differently.
+- **A stroke table is rewritten as it is read.** Those tables spell the five strokes as the letters `h s p n z`; a stored code here is always 1 to 5. Without that translation every row would be dropped for having a code no key can produce.
+
+Pick the wrong `.flex` and the app says so rather than failing: a theme file is named as a theme, with Themes as the place to take it.
 
 ## Themes
 

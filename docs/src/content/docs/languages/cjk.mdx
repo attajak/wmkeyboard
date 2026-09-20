@@ -143,6 +143,8 @@ You don't have to know that in advance. The first time you type a reading on a k
 | Cantonese | Jyutping | ~3.4 MB | ~163k entries |
 | Japanese | Kana → kanji | ~42 MB | ~1.08M entries, Mozc-derived |
 
+The two shape-based tables have a second source. **Import from FlorisBoard**, in the same group, reads a FlorisBoard language pack (`.flex`) and fills the Cangjie or Stroke pack from the SQLite table inside it, with no download at all. Only those two land, since Wubi, Zhengma and the rest have no composer here; the app names whatever else it found back to you. See [Importing other keyboards](/reference/importing-other-keyboards/).
+
 Each download is checksum-verified before it's used and, once on disk, needs no further network access. See [Network policy](/privacy/network/) for what the keyboard contacts and when, and [Downloadable dictionaries](/languages/dictionaries/) for how the separate word-list system (which does have entries for plain Japanese and Korean word suggestions, just not for the conversion dictionaries here) works.
 
 ## Details & edge cases

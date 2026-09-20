@@ -50,7 +50,12 @@ import com.wasimaster.wmkeyboard.core.emoji.EmojiDictCatalog
 import com.wasimaster.wmkeyboard.core.emoji.EmojiDictDownloadManager
 import com.wasimaster.wmkeyboard.core.emoji.EmojiDictEntry
 import com.wasimaster.wmkeyboard.core.emoji.EmojiDictStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictCatalog
+import com.wasimaster.wmkeyboard.core.input.composer.FlexLanguagePack
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictDownloadManager
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictPack
 import com.wasimaster.wmkeyboard.core.input.composer.DoublePinyinScheme
@@ -1250,6 +1255,13 @@ internal fun EmojiDictRow(entry: EmojiDictEntry) {
 }
 
 /**
+ * The packs a FlorisBoard language pack can fill: the two shape-based schemes
+ * this app has composers for. Wubi, Zhengma and the rest are in those files
+ * too and have nowhere to go here.
+ */
+private val FLEX_FILLABLE_PACKS = setOf("cangjie", "stroke")
+
+/**
  * Download/delete rows for a language's [CjkDictCatalog] packs, driven by the
  * process-level [CjkDictDownloadManager] so progress survives navigation. The
  * pack replaces the small bundled dictionary once fetched (the service reloads
@@ -1268,6 +1280,46 @@ private fun CjkDictPackManager(
     val notifyDownload = rememberDownloadNotifier()
     val states by CjkDictDownloadManager.states.collectAsState()
     LaunchedEffect(langId) { CjkDictDownloadManager.refresh(filesDir) }
+
+    // Whatever the last FlorisBoard language-pack import had to say, shown in
+    // place of the row's subtitle. A pack is a large file and a silent button
+    // would read as one that did nothing.
+    var flexMessage by remember { mutableStateOf<String?>(null) }
+    var flexBusy by remember { mutableStateOf(false) }
+    val flexLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument(),
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        flexBusy = true
+        scope.launch {
+            val result = withContext(Dispatchers.IO) {
+                runCatching {
+                    context.contentResolver.openInputStream(uri)?.use { input ->
+                        FlexLanguagePack.import(input, filesDir, context.cacheDir)
+                    }
+                }.getOrNull() ?: FlexLanguagePack.Result.Unreadable
+            }
+            flexBusy = false
+            flexMessage = when (result) {
+                is FlexLanguagePack.Result.Imported -> context.getString(
+                    R.string.languages_cjk_flex_import_done,
+                    result.schema,
+                    result.rows,
+                )
+                is FlexLanguagePack.Result.NoUsableTable -> context.getString(
+                    R.string.languages_cjk_flex_import_unusable,
+                    result.schemas.joinToString(", "),
+                )
+                FlexLanguagePack.Result.NotALanguagePack ->
+                    context.getString(R.string.languages_cjk_flex_import_not_a_pack)
+                FlexLanguagePack.Result.Unreadable ->
+                    context.getString(R.string.languages_cjk_flex_import_unreadable)
+            }
+            // A new pack on disk changes the state token, and the row above has
+            // to notice it without a trip out of the screen and back.
+            CjkDictDownloadManager.refresh(filesDir)
+        }
+    }
 
     // Named from the registry rather than an if-chain, so a new CJK language
     // does not silently inherit another language's heading.
@@ -1334,6 +1386,25 @@ private fun CjkDictPackManager(
                                 )
                             }
                         }
+                    },
+                )
+            }
+        }
+
+        // A FlorisBoard language pack holds the same shape-based tables the
+        // Cangjie and stroke packs above do, so somebody arriving with one can
+        // fill them without a download. Only offered for the language whose
+        // packs those are.
+        if (CjkDictCatalog.forLang(langId).any { it.id in FLEX_FILLABLE_PACKS }) {
+            item {
+                WmRow(
+                    title = stringResource(R.string.languages_cjk_flex_import_title),
+                    subtitle = flexMessage ?: stringResource(R.string.languages_cjk_flex_import_subtitle),
+                    trailing = {
+                        TextButton(
+                            enabled = !flexBusy,
+                            onClick = { flexLauncher.launch(FlexLanguagePack.IMPORT_MIME_TYPES) },
+                        ) { Text(stringResource(CommonR.string.common_import)) }
                     },
                 )
             }
