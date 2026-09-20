@@ -882,6 +882,17 @@ internal fun Modifier.focusOncePlaced(
  * more than a string — a badge beside the name, a lock glyph — passes
  * [titleContent] and keeps [title] as its plain-text equivalent.
  *
+ * [trailingOnTitleLine] moves [trailing] out of `ListItem`'s trailing slot and
+ * onto the end of the title's own line (#247). The slot is a column beside the
+ * words for the row's whole height, so a switch and a "?" there carve their
+ * width out of the subtitle too, and a two-line description becomes eight
+ * lines down a 170 dp gutter with the rest of the row blank beside it. Pass
+ * this on a row whose trailing furniture is fixed-width controls — a switch, a
+ * "?", a reset, a chevron, a swatch — and the description gets the row's full
+ * width under them. Leave it off where the slot holds the row's value as
+ * *text*: those rows already budget its width with `fitsBesideTitle` and drop
+ * it under the title themselves when it will not fit.
+ *
  * [flightTo] names the screen the row opens. It tags the row's name — and its
  * tile, when it has one — as the take-off end of the flight into that screen's
  * heading, and tells the screen where it was opened from.
@@ -905,6 +916,7 @@ internal fun WmRow(
     leading: (@Composable () -> Unit)? = null,
     trailing: (@Composable () -> Unit)? = null,
     supporting: (@Composable () -> Unit)? = null,
+    trailingOnTitleLine: Boolean = false,
     flightTo: String? = null,
     subtitleFlies: Boolean = false,
     enabled: Boolean = true,
@@ -924,6 +936,7 @@ internal fun WmRow(
                 leading = leading,
                 trailing = trailing,
                 supporting = supporting,
+                trailingOnTitleLine = trailingOnTitleLine,
                 flightTo = flightTo,
                 subtitleFlies = subtitleFlies,
                 enabled = enabled,
@@ -936,11 +949,26 @@ internal fun WmRow(
     val titleKey = flightTo?.let { takeOffKey("title", it) }
     val iconKey = flightTo?.let { takeOffKey("icon", it) }
     val screen = LocalScreenRoute.current
+    val headline: @Composable () -> Unit = titleContent ?: {
+        val tag = if (titleKey == null) Modifier else Modifier.wmSharedBounds(titleKey)
+        if (titleStyle != null) Text(title, modifier = tag, style = titleStyle)
+        else Text(title, modifier = tag)
+    }
+    val onTitleLine = trailingOnTitleLine && trailing != null
     ListItem(
-        headlineContent = titleContent ?: {
-            val tag = if (titleKey == null) Modifier else Modifier.wmSharedBounds(titleKey)
-            if (titleStyle != null) Text(title, modifier = tag, style = titleStyle)
-            else Text(title, modifier = tag)
+        headlineContent = if (!onTitleLine) headline else {
+            {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(Modifier.weight(1f)) { headline() }
+                    // The trailing slot's own colour: moving the furniture up
+                    // to the headline would otherwise repaint a chevron or a
+                    // value in the headline's stronger `onSurface`.
+                    CompositionLocalProvider(
+                        LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant,
+                        content = trailing,
+                    )
+                }
+            }
         },
         supportingContent = when {
             supporting != null -> supporting
@@ -969,7 +997,7 @@ internal fun WmRow(
             }
             else -> null
         },
-        trailingContent = trailing,
+        trailingContent = if (onTitleLine) null else trailing,
         colors = transparentListColors(),
         modifier = modifier
             .fillMaxWidth()
@@ -1268,6 +1296,7 @@ internal fun ColorSetting(
             title = title,
             subtitle = subtitle,
             icon = icon,
+            trailingOnTitleLine = true,
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (info != null) InfoButton(title, info)

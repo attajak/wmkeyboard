@@ -3175,6 +3175,9 @@ internal fun ToggleSetting(
             title = title,
             subtitle = subtitle,
             icon = icon,
+            // The switch, the "?" and the reset are the title's furniture, not
+            // a second column beside the whole row: see [trailingOnTitleLine].
+            trailingOnTitleLine = true,
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (info != null) InfoButton(title, info)
@@ -3223,6 +3226,7 @@ internal fun ToggleNavRow(
             subtitle = subtitle,
             icon = SettingsRowIcons[title],
             flightTo = route,
+            trailingOnTitleLine = true,
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (info != null) InfoButton(name, info)
