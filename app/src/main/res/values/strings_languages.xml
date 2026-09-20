@@ -166,6 +166,10 @@
     </plurals>
     <!-- Note at the bottom of the dialog. %1$s is a size like "1.1 MB". -->
     <string name="languages_words_download_pairs_note">The word pairs for next-word predictions download with it, about <xliff:g id="size" example="1.1 MB">%1$s</xliff:g>.</string>
+    <!-- The same dialog, opened from the arrows on a word list that is already
+         on the device, to swap it for a bigger or a smaller one. -->
+    <string name="languages_words_resize_title">Change the size</string>
+    <string name="languages_words_resize_note">The list on your device stays in place until the new one has finished downloading, and is then replaced by it.</string>
 
     <!-- Emoji keywords row when the only keywords are ones the user imported. -->
     <string name="languages_emoji_keywords_imported">Your imported keywords</string>
@@ -201,6 +205,12 @@
     <!-- Progress under a running download. %1$s is how much has arrived. -->
     <string name="languages_wordlist_downloaded_bytes"><xliff:g id="size" example="2 MB">%1$s</xliff:g> downloaded</string>
     <string name="languages_wordlist_delete_desc">Delete the dictionary</string>
+    <!-- The button beside Delete on a downloaded word list. Its icon is an up
+         arrow when only bigger sizes are left, a down arrow when only smaller
+         ones are, and both arrows in between. -->
+    <string name="languages_wordlist_resize_desc">Change the word list size</string>
+    <string name="languages_wordlist_resize_bigger_desc">Download a bigger word list</string>
+    <string name="languages_wordlist_resize_smaller_desc">Download a smaller word list</string>
 
     <!-- ===== Emoji keywords ===== -->
 

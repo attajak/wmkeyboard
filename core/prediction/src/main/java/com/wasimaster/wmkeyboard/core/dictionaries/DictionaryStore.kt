@@ -78,6 +78,7 @@ object DictionaryStore {
         File(dir, FILE_NAME).delete()
         File(dir, "$FILE_NAME.part").delete()
         File(dir, "source").delete()
+        File(dir, "size").delete()
     }
 
     /**
@@ -92,6 +93,25 @@ object DictionaryStore {
 
     fun writeSourceEntryId(filesDir: File, langId: String, entryId: String) {
         runCatching { File(File(root(filesDir), langId), "source").writeText(entryId) }
+    }
+
+    /**
+     * Which size tier a language's downloaded dictionary was fetched at, as
+     * the enum constant's own name, or null when nothing recorded it — a file
+     * a build before the marker existed wrote, which the caller dates by its
+     * word count instead.
+     *
+     * Kept beside the file rather than in settings because it describes this
+     * file: the settings value is the tier the *next* download starts from,
+     * and the two part company the moment either one changes.
+     */
+    fun downloadedSize(filesDir: File, langId: String): String? =
+        runCatching { File(File(root(filesDir), langId), "size").readText().trim() }
+            .getOrNull()
+            ?.takeIf { it.isNotEmpty() && isDownloaded(filesDir, langId) }
+
+    fun writeDownloadedSize(filesDir: File, langId: String, size: String) {
+        runCatching { File(File(root(filesDir), langId), "size").writeText(size) }
     }
 
     /**

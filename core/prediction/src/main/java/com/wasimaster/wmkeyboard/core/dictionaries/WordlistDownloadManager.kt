@@ -52,7 +52,17 @@ object WordlistDownloadManager {
         /** Transfer finished; packing entries into the binary trie. */
         data object Processing : DownloadStatus
 
-        data class Downloaded(val wordCount: Int, val sizeBytes: Long) : DownloadStatus
+        /**
+         * [size] is the tier the file on disk was fetched at, so the UI can
+         * offer the others. Read from the marker beside the file, or, for a
+         * file written before that marker existed, the smallest tier that
+         * could have produced [wordCount].
+         */
+        data class Downloaded(
+            val wordCount: Int,
+            val sizeBytes: Long,
+            val size: DictionaryCatalog.DictionarySize,
+        ) : DownloadStatus
 
         /**
          * [messageRes] is the text to show the user. [messageArg] is the one
@@ -65,6 +75,14 @@ object WordlistDownloadManager {
             val reason: FailReason,
             @StringRes val messageRes: Int,
             val messageArg: String = "",
+            /**
+             * Whether the list this download was replacing is still on the
+             * device. A failed *re-download* at another size leaves the old
+             * file untouched — it is only ever replaced by the atomic rename
+             * at the very end — so the row keeps its checkbox and its Delete
+             * beside the error.
+             */
+            val kept: Boolean = false,
         ) : DownloadStatus
     }
 
@@ -126,22 +144,38 @@ object WordlistDownloadManager {
                     throw FailedException(FailReason.OTHER, R.string.core_pred_wordlist_save_error)
                 }
                 DictionaryStore.writeSourceEntryId(filesDir, entry.languageId, entry.id)
-                set(entry.id, DownloadStatus.Downloaded(trie.wordCount, final.length()))
+                DictionaryStore.writeDownloadedSize(filesDir, entry.languageId, size.name)
+                set(entry.id, DownloadStatus.Downloaded(trie.wordCount, final.length(), size))
                 // A language can have several catalog entries (pt); the one
                 // just replaced must stop claiming the file.
                 refresh(filesDir)
             } catch (e: kotlinx.coroutines.CancellationException) {
                 part.delete()
-                set(entry.id, DownloadStatus.NotDownloaded)
+                // Nothing was replaced — the rename is the last step — so the
+                // list this one was going to replace is still there.
+                activeId = null
+                refresh(filesDir)
                 throw e
             } catch (e: FailedException) {
                 part.delete()
-                set(entry.id, DownloadStatus.Failed(e.reason, e.messageRes, e.messageArg))
+                set(
+                    entry.id,
+                    DownloadStatus.Failed(
+                        e.reason,
+                        e.messageRes,
+                        e.messageArg,
+                        kept = downloadedByThisEntry(filesDir, entry),
+                    ),
+                )
             } catch (_: Exception) {
                 part.delete()
                 set(
                     entry.id,
-                    DownloadStatus.Failed(FailReason.NETWORK, CommonR.string.common_error_network),
+                    DownloadStatus.Failed(
+                        FailReason.NETWORK,
+                        CommonR.string.common_error_network,
+                        kept = downloadedByThisEntry(filesDir, entry),
+                    ),
                 )
             } finally {
                 activeId = null
@@ -168,7 +202,23 @@ object WordlistDownloadManager {
     private fun downloadedStatus(filesDir: File, entry: DictionaryEntry): DownloadStatus {
         val file = DictionaryStore.downloadedFile(filesDir, entry.languageId)
         val words = runCatching { PackedTrieCodec.readHeader(file).wordCount }.getOrDefault(0)
-        return DownloadStatus.Downloaded(words, file.length())
+        return DownloadStatus.Downloaded(words, file.length(), sizeOf(filesDir, entry, words))
+    }
+
+    /**
+     * The tier [entry]'s file on disk holds: what the download recorded, or,
+     * for one written before the marker existed, the smallest tier whose cap
+     * could have produced [words]. The guess errs small on purpose — a list cut
+     * short by the frequency floor has fewer words than its tier promised, so
+     * the first tier that fits is the one to offer stepping up from.
+     */
+    private fun sizeOf(filesDir: File, entry: DictionaryEntry, words: Int): DictionaryCatalog.DictionarySize {
+        val recorded = DictionaryStore.downloadedSize(filesDir, entry.languageId)
+        return DictionaryCatalog.DictionarySize.entries.firstOrNull { it.name == recorded }
+            ?: DictionaryCatalog.DictionarySize.entries.firstOrNull {
+                DictionaryCatalog.wordCap(entry, it) >= words
+            }
+            ?: DictionaryCatalog.DictionarySize.ALL
     }
 
     private fun set(id: String, status: DownloadStatus) {

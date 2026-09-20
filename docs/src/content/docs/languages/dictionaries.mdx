@@ -49,7 +49,7 @@ The gap can be wide on a smaller language. Welsh's list is 123,099 lines, but on
 
 Tiers that would all keep the same words collapse into one, and the picker disappears entirely for a language whose whole list is already smaller than Small, since there is nothing to trim.
 
-The tier you pick is remembered, so the dialog opens on it for the next language, and **Download all** uses it too. It starts at Large. Changing it doesn't touch a dictionary you've already fetched: to use a different tier for one that's already down, delete it and download it again. There's no separate "update" action or size switch on a downloaded row. A finished download reports what it actually kept, as an exact word count and file size.
+The tier you pick is remembered, so the dialog opens on it for the next language, and **Download all** uses it too. It starts at Large. Changing it doesn't touch a dictionary you've already fetched, but you don't have to delete one to move it to another tier either: a downloaded row has an arrow button beside its Delete that reopens the same dialog on the size that list is at now. See [Changing the size of a list you already have](#changing-the-size-of-a-list-you-already-have) below. A finished download reports what it actually kept, as an exact word count and file size.
 
 When the language also has word pairs (English, Bangla and Banglish do), they download together with the word list, and the dialog says how much they add.
 
@@ -57,11 +57,31 @@ When the language also has word pairs (English, Bangla and Banglish do), they do
 Portuguese is the one language with two downloadable entries (European and Brazilian), picked in the same dialog as the size, but they share a single download slot. Fetching the Brazilian list after the European one replaces it. Only one variant can be active for Portuguese at a time, and the row for the other one goes back to showing "Download."
 :::
 
+## Changing the size of a list you already have
+
+A downloaded **Word list** row carries an arrow button to the left of its Delete. It opens the same size dialog, already on the tier that list was fetched at, so swapping a Small list for a Large one (or a 41&nbsp;MB Everything list for a Medium one) is one press rather than a delete and a fresh download.
+
+The arrows say which way the trade can go before you open anything:
+
+| Icon | What it means |
+|---|---|
+| Double arrow up | The list is at the smallest tier this language has. Only bigger ones are left |
+| Double arrow down | The list is at the largest tier. Only smaller ones are left |
+| Up-and-down arrows | Tiers exist in both directions |
+
+There's no button at all on a language whose whole list already fits inside Small, since the tiers all keep the same words and there is nothing to trade.
+
+Picking a size downloads that tier and replaces the file when it finishes. The list you already have stays in place and stays in use for the whole download, because the new one is only swapped in at the very last step. Cancel it, or lose your connection partway, and the old list is still there untouched — a failed attempt says so on the row, in red, and keeps the checkbox and the Delete beside it. Going *down* a tier still downloads: a smaller list is fetched fresh from the source rather than trimmed out of the one on your device, so it costs the transfer for that tier.
+
+Portuguese's two lists share the dialog and the download slot, so the same button is also how you move a downloaded Portuguese list between European and Brazilian without deleting it first.
+
+The tier you pick here is remembered as the app-wide default, exactly as the first download's is, so the next language's dialog opens on it too.
+
 ## Downloading, updating, and deleting
 
 Tap **Download** on the Word list row and choose a size to start it. Progress shows as an indeterminate bar rather than a percentage. A capped download stops before the file's full size, so there's no meaningful total to count up to. To cancel, tap the close icon while the download runs. The partial file is discarded and the row goes back to "Download."
 
-Once a dictionary is downloaded, the row has a checkbox and a delete button. Deleting removes the file for that language. English and Bangla fall back to their built-in list, and every other language falls back to learned words plus any imported custom list.
+Once a dictionary is downloaded, the row has a checkbox, a size button (above) and a delete button. Deleting removes the file for that language. English and Bangla fall back to their built-in list, and every other language falls back to learned words plus any imported custom list.
 
 <PhoneFrame caption="A dictionary mid-download, with the indeterminate progress bar and cancel action.">
   {/* shot: languages/dictionary-download-progress */}
@@ -85,7 +105,7 @@ There's no global dictionary settings screen. Each language's own screen has one
 - **Emoji keywords**: the keyword pack, downloaded or imported.
 - **Word pairs**: the bigram and trigram data that next-word predictions read. Only English, Bangla and Banglish have it.
 
-An item that is on the device has a checkbox and a delete button. An item that is not has a **Download** button. The checkbox turns the item off and keeps the file:
+An item that is on the device has a checkbox and a delete button, and the word list has a size button between them. An item that is not has a **Download** button. The checkbox turns the item off and keeps the file:
 
 - Off on **Word list**, the keyboard forgets those words for that language and reads only lists you imported, plus what it learned from you. It's the same setting the Custom dictionaries screen shows the other way up as **Use only my word lists**. English and Bangla always have the checkbox, because their built-in list is on the device.
 - Off on **Emoji keywords**, emoji search and suggestions stop answering in that language.

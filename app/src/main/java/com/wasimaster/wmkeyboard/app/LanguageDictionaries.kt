@@ -12,6 +12,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.KeyboardDoubleArrowDown
+import androidx.compose.material.icons.outlined.KeyboardDoubleArrowUp
+import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
@@ -52,6 +55,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.keywordsEnabledFor
+import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -63,9 +67,12 @@ import kotlinx.coroutines.launch
  * Every row works the same way. Something on the device has a checkbox, which
  * is the "use it" switch, and a Delete. Something that is not has a Download.
  * The word list asks which size (and, for Portuguese, which variant) in a
- * dialog, because that is the one choice a download here has. The heading
- * carries a Download all while anything is still missing, and loses it once
- * nothing is.
+ * dialog, because that is the one choice a download here has. A downloaded
+ * word list keeps that choice open: the arrows beside its Delete reopen the
+ * same dialog on the size it is at now, so trading a 50,000-word list for a
+ * 300,000-word one is one press rather than a delete and a fresh download.
+ * The heading carries a Download all while anything is still missing, and
+ * loses it once nothing is.
  *
  * A row the language has nothing for is left out, rather than shown to say so.
  */
@@ -122,6 +129,10 @@ internal fun DictionariesGroup(
     ).let { it.copy(bytes = it.approxBytes(size)) }
 
     var dialogOpen by remember { mutableStateOf(false) }
+    // The same dialog, opened from the arrows on a downloaded row: it starts on
+    // the size that list is at rather than on the one the next download would
+    // use, and says what replacing it costs.
+    var dialogIsResize by remember { mutableStateOf(false) }
     var confirmMetered by remember { mutableStateOf(false) }
     var blockedMetered by remember { mutableStateOf(false) }
     val downloadDecision = rememberDownloadDecision(settings)
@@ -163,7 +174,14 @@ internal fun DictionariesGroup(
                     status = wordStatus,
                     checked = settings.suggestionStrip.shippedDictionaryEnabledFor(langId),
                     onChecked = { scope.launch { repository.setShippedDictionaryEnabled(langId, it) } },
-                    onDownload = { dialogOpen = true },
+                    onDownload = {
+                        dialogIsResize = false
+                        dialogOpen = true
+                    },
+                    onResize = {
+                        dialogIsResize = true
+                        dialogOpen = true
+                    },
                 )
             }
         }
@@ -200,11 +218,14 @@ internal fun DictionariesGroup(
     }
 
     if (dialogOpen && wordlists.isNotEmpty()) {
+        val downloaded = wordStatus as? WordlistDownloadManager.DownloadStatus.Downloaded
+        val resizing = dialogIsResize && downloaded != null
         WordListDownloadDialog(
             entries = wordlists,
             initial = wordEntry ?: wordlists.first(),
-            initialSize = size,
+            initialSize = if (resizing) downloaded.size else size,
             pairsBytes = pairsEntry?.takeIf { pairStatus.isMissing() }?.approxGzBytes,
+            resizing = resizing,
             onDismiss = { dialogOpen = false },
             onDownload = { entry, chosen ->
                 dialogOpen = false
@@ -282,6 +303,14 @@ private fun DictionaryItemRow(
     )
 }
 
+/**
+ * The word list row.
+ *
+ * [onResize] reopens the download dialog on the size the list is at now. It is
+ * offered only while one is actually on the device and the language has more
+ * than one size worth offering — a list whose whole vocabulary fits inside
+ * Small has nothing to trade.
+ */
 @Composable
 private fun WordListRow(
     lang: LanguageDef,
@@ -290,9 +319,12 @@ private fun WordListRow(
     checked: Boolean,
     onChecked: (Boolean) -> Unit,
     onDownload: () -> Unit,
+    onResize: () -> Unit,
 ) {
     val filesDir = LocalContext.current.filesDir
-    val onDevice = lang.bundledDictionary || status is WordlistDownloadManager.DownloadStatus.Downloaded
+    val onDevice = lang.bundledDictionary ||
+        status is WordlistDownloadManager.DownloadStatus.Downloaded ||
+        (status as? WordlistDownloadManager.DownloadStatus.Failed)?.kept == true
     val title = entry?.variantRes
         ?.takeIf { status is WordlistDownloadManager.DownloadStatus.Downloaded || status.isActive() }
         ?.let { stringResource(R.string.languages_words_title_variant, stringResource(it)) }
@@ -317,6 +349,10 @@ private fun WordListRow(
             else -> stringResource(R.string.languages_words_missing)
         }
     }
+    // A failure that kept the old list keeps its furniture too: the error says
+    // the new size did not arrive, and the list already there is still the
+    // one in use.
+    val kept = (status as? WordlistDownloadManager.DownloadStatus.Failed)?.kept == true
     DictionaryItemRow(
         title = title,
         supporting = supporting,
@@ -327,11 +363,9 @@ private fun WordListRow(
         when (status) {
             is WordlistDownloadManager.DownloadStatus.Downloaded ->
                 if (entry != null) {
-                    IconButton(onClick = { WordlistDownloadManager.delete(filesDir, entry) }) {
-                        Icon(
-                            Icons.Outlined.Delete,
-                            contentDescription = stringResource(R.string.languages_wordlist_delete_desc),
-                        )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        ResizeButton(entry, status.size, onResize)
+                        DeleteWordListButton(filesDir, entry)
                     }
                 }
             is WordlistDownloadManager.DownloadStatus.Downloading,
@@ -345,13 +379,22 @@ private fun WordListRow(
             WordlistDownloadManager.DownloadStatus.NotDownloaded,
             is WordlistDownloadManager.DownloadStatus.Failed,
             -> if (entry != null) {
-                TextButton(onClick = onDownload, enabled = !WordlistDownloadManager.isBusy) {
-                    Text(
-                        stringResource(
-                            if (status is WordlistDownloadManager.DownloadStatus.Failed) CommonR.string.common_retry
-                            else CommonR.string.common_download,
-                        ),
-                    )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = onDownload, enabled = !WordlistDownloadManager.isBusy) {
+                        Text(
+                            stringResource(
+                                if (status is WordlistDownloadManager.DownloadStatus.Failed) {
+                                    CommonR.string.common_retry
+                                } else {
+                                    CommonR.string.common_download
+                                },
+                            ),
+                        )
+                    }
+                    // Retry reopens the size dialog, and the list the failed
+                    // download was going to replace is still there to keep or
+                    // to delete.
+                    if (kept) DeleteWordListButton(filesDir, entry)
                 }
             }
         }
@@ -364,6 +407,54 @@ private fun WordListRow(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 4.dp),
         )
+    }
+}
+
+@Composable
+private fun DeleteWordListButton(filesDir: File, entry: DictionaryEntry) {
+    IconButton(onClick = { WordlistDownloadManager.delete(filesDir, entry) }) {
+        Icon(
+            Icons.Outlined.Delete,
+            contentDescription = stringResource(R.string.languages_wordlist_delete_desc),
+        )
+    }
+}
+
+/**
+ * Trade the downloaded list for another size. The arrows say which way the
+ * trade can go from [current]: up at the smallest size, down at the largest,
+ * both in between — so the icon answers "is there a bigger one?" without
+ * opening the dialog. Nothing is drawn when the language has only one size,
+ * which is every language whose whole list fits inside Small.
+ */
+@Composable
+private fun ResizeButton(
+    entry: DictionaryEntry,
+    current: DictionaryCatalog.DictionarySize,
+    onClick: () -> Unit,
+) {
+    val tiers = remember(entry) {
+        DictionaryCatalog.DictionarySize.entries.distinctBy { DictionaryCatalog.wordCap(entry, it) }
+    }
+    if (tiers.size >= 2) {
+        // The tier on disk may be one the collapse dropped (ALL and Large keep
+        // the same words on a 200,000-word list), so match on what it keeps.
+        val index = tiers.indexOfFirst {
+            DictionaryCatalog.wordCap(entry, it) == DictionaryCatalog.wordCap(entry, current)
+        }.coerceAtLeast(0)
+        val icon = when (index) {
+            0 -> Icons.Outlined.KeyboardDoubleArrowUp
+            tiers.lastIndex -> Icons.Outlined.KeyboardDoubleArrowDown
+            else -> Icons.Outlined.SwapVert
+        }
+        val description = when (index) {
+            0 -> R.string.languages_wordlist_resize_bigger_desc
+            tiers.lastIndex -> R.string.languages_wordlist_resize_smaller_desc
+            else -> R.string.languages_wordlist_resize_desc
+        }
+        IconButton(onClick = onClick, enabled = !WordlistDownloadManager.isBusy) {
+            Icon(icon, contentDescription = stringResource(description))
+        }
     }
 }
 
@@ -529,6 +620,10 @@ private fun WordPairsRow(
  * more than one list, which variant. Each size says how many words it keeps
  * and roughly what it costs to fetch. [pairsBytes] is the word-pair data that
  * comes along with it, when the language has some that is not on the device.
+ *
+ * [resizing] is the same question asked of a list already on the device: same
+ * choices, opened on the size it is at, and a line saying the old list stays
+ * until the new one has finished.
  */
 @Composable
 private fun WordListDownloadDialog(
@@ -536,6 +631,7 @@ private fun WordListDownloadDialog(
     initial: DictionaryEntry,
     initialSize: DictionaryCatalog.DictionarySize,
     pairsBytes: Long?,
+    resizing: Boolean = false,
     onDismiss: () -> Unit,
     onDownload: (DictionaryEntry, DictionaryCatalog.DictionarySize) -> Unit,
 ) {
@@ -551,7 +647,14 @@ private fun WordListDownloadDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.languages_words_download_title)) },
+        title = {
+            Text(
+                stringResource(
+                    if (resizing) R.string.languages_words_resize_title
+                    else R.string.languages_words_download_title,
+                ),
+            )
+        },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 if (entries.size > 1) {
@@ -581,6 +684,14 @@ private fun WordListDownloadDialog(
                 if (pairsBytes != null) {
                     Text(
                         stringResource(R.string.languages_words_download_pairs_note, formatBytes(pairsBytes)),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 12.dp),
+                    )
+                }
+                if (resizing) {
+                    Text(
+                        stringResource(R.string.languages_words_resize_note),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 12.dp),
