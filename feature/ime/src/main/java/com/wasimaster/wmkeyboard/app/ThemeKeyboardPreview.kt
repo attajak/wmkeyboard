@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
@@ -83,7 +84,9 @@ import com.wasimaster.wmkeyboard.ime.LayoutMode
 import com.wasimaster.wmkeyboard.ime.LayoutSet
 import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.R
+import com.wasimaster.wmkeyboard.ime.ui.KeyPreviewBandMode
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardScreen
+import com.wasimaster.wmkeyboard.ime.ui.LocalKeyPreviewBand
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
@@ -257,29 +260,39 @@ fun ThemeKeyboardPreview(
         actions.onHide.value = onHide
     }
 
+    // Neither preview has a window behind the board, so neither holds the
+    // key-preview band: ~130dp of empty space that the editor's pinned strip
+    // paid for out of the board's own room, and that the docked view opened
+    // between the sandbox field and the keys. The docked board lets a bubble
+    // out over the sections above it, as the real board does over the app; the
+    // miniature is clipped to its own rounded corners, so there a bubble is
+    // clamped to the top edge rather than cut in half.
+    val bandMode = if (miniature) KeyPreviewBandMode.INSIDE else KeyPreviewBandMode.OUTSIDE
     val keyboard: @Composable () -> Unit = {
-        KeyboardScreen(
-            stateFlow = stateFlow,
-            onKey = actions.onKey,
-            onKeyPressed = haptic,
-            onHaptic = plainHaptic,
-            onKeySound = sound,
-            onText = actions.onInsert,
-            onLayoutSelect = actions.onLayoutSelect,
-            onSuggestion = actions.onSuggestion,
-            onEmoji = actions.onInsert,
-            onEmojiQueryTap = {},
-            onPunctuation = actions.onInsert,
-            onTextArt = actions.onInsert,
-            onToolTap = actions.onToolTap,
-            onPanelChange = actions.onPanelChange,
-            onClipboardItem = {},
-            onClipboardPin = {},
-            onClipboardDelete = {},
-            onSymbolInsert = actions.onInsert,
-            onToolInsert = actions.onInsert,
-            onHideKeyboard = actions.onHideKeyboard,
-        )
+        CompositionLocalProvider(LocalKeyPreviewBand provides bandMode) {
+            KeyboardScreen(
+                stateFlow = stateFlow,
+                onKey = actions.onKey,
+                onKeyPressed = haptic,
+                onHaptic = plainHaptic,
+                onKeySound = sound,
+                onText = actions.onInsert,
+                onLayoutSelect = actions.onLayoutSelect,
+                onSuggestion = actions.onSuggestion,
+                onEmoji = actions.onInsert,
+                onEmojiQueryTap = {},
+                onPunctuation = actions.onInsert,
+                onTextArt = actions.onInsert,
+                onToolTap = actions.onToolTap,
+                onPanelChange = actions.onPanelChange,
+                onClipboardItem = {},
+                onClipboardPin = {},
+                onClipboardDelete = {},
+                onSymbolInsert = actions.onInsert,
+                onToolInsert = actions.onInsert,
+                onHideKeyboard = actions.onHideKeyboard,
+            )
+        }
     }
 
     if (miniature) {

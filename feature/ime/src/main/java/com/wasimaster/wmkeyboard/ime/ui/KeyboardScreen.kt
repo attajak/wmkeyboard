@@ -1665,7 +1665,11 @@ private fun DockedKeyboardFrame(
     // The empty band above the board where a top-row bubble goes: the height
     // the bubbles ask for, and — once the measure pass has weighed it against
     // the window — the height they actually got.
-    val previewHeadroomPx = keyPreviewHeadroomPx(state.settings)
+    // Only a host with a window behind the band holds one; see [KeyPreviewBandMode].
+    val bandMode = LocalKeyPreviewBand.current
+    val wantedHeadroomPx = keyPreviewHeadroomPx(state.settings)
+    val previewHeadroomPx =
+        if (bandMode == KeyPreviewBandMode.WINDOW) wantedHeadroomPx else 0
     val previewBand = remember { KeyPreviewBand() }
     var frameOrigin by remember { mutableStateOf(Offset.Zero) }
     var frameSize by remember { mutableStateOf(IntSize.Zero) }
@@ -1827,6 +1831,10 @@ private fun DockedKeyboardFrame(
             frameOrigin,
             frameSize,
             modifier = Modifier.matchParentSize(),
+            // No band held, but the host lets the bubble out: anchor it as if
+            // the band were there and draw it above the frame, which is where
+            // the service's own band puts it.
+            virtualHeadroom = bandMode == KeyPreviewBandMode.OUTSIDE,
         )
         // Where the remote is pointing (a television, normally). Drawn at the
         // frame rather than inside the key grid because the ring also lands on
@@ -1863,6 +1871,42 @@ private fun DockedKeyboardFrame(
 internal class KeyPreviewBand {
     var heldPx by mutableIntStateOf(0)
 }
+
+/**
+ * Where a top-row preview bubble goes, which is a question about the host
+ * rather than about the theme.
+ *
+ * The service has a window: the band is empty window above the board, kept out
+ * of the host app's insets, so the bubble drawn in it appears over the app and
+ * the board loses nothing. A host that simply places the keyboard inside its
+ * own layout — the theme editor's preview — has no such window. Room held
+ * there is dead space in that host's UI, and on a scaled miniature it is space
+ * the board itself could have been drawn in: the band is a fixed ~130dp, which
+ * on the editor's pinned strip was a third of the whole budget and shrank the
+ * board to half the width it had room for.
+ */
+internal enum class KeyPreviewBandMode {
+    /** Hold the band inside the frame, and draw the bubble in it. */
+    WINDOW,
+
+    /**
+     * No band; a bubble that wants one is drawn above the frame, over whatever
+     * the host has put there. What the service's band looks like from outside,
+     * for a host whose own content sits above the board and does not clip it.
+     */
+    OUTSIDE,
+
+    /**
+     * No band, and nothing may be drawn past the frame either: the bubble is
+     * clamped to the board's top edge instead, over the row above its key. For
+     * a host that clips the keyboard to its own bounds, where an escaping
+     * bubble would be cut in half rather than seen.
+     */
+    INSIDE,
+}
+
+/** How the host wants the key-preview band handled; see [KeyPreviewBandMode]. */
+internal val LocalKeyPreviewBand = staticCompositionLocalOf { KeyPreviewBandMode.WINDOW }
 
 /**
  * Holds up to [px] of empty space above the frame's content: the band a top-row
