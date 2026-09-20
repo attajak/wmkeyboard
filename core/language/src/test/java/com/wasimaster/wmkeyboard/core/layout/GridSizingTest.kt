@@ -147,6 +147,83 @@ class GridSizingTest {
         assertTrue(abs(fitted.total() - gridWeight) <= 0.01f)
     }
 
+    // ---- filling the space row ----
+
+    /** `?123 , 🌐 space . ⏎`, the shape every shipped bottom row has. */
+    private fun spaceRow(space: Float) = listOf(
+        Key("?123", width = 1.5f),
+        Key(",", width = 1f),
+        Key("🌐", width = 1f),
+        Key(" ", action = KeyAction.Space, width = space),
+        Key(".", width = 1f),
+        Key("⏎", width = 1.5f),
+    )
+
+    @Test
+    fun `the spacebar takes the slack a wide grid leaves the bottom row`() {
+        // The Persian shape: twelve-wide letters over a bottom row written from
+        // the ten-wide template, which used to draw a column of empty space at
+        // each end of it.
+        val rows = listOf(
+            row(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f),
+            row(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f),
+            spaceRow(4f),
+        )
+        val filled = fillSpaceRows(rows, gridWeightOf(rows))
+
+        assertEquals(12f, filled[2].total(), 1e-4f)
+        assertEquals("only the spacebar grew", 6f, filled[2][3].width, 1e-4f)
+        assertEquals(1.5f, filled[2][0].width, 1e-4f)
+        assertEquals(1.5f, filled[2][5].width, 1e-4f)
+    }
+
+    @Test
+    fun `a row of letters is still centred rather than stretched`() {
+        // QWERTY's nine-key home row has no spacebar to give the slack to, so it
+        // keeps the standard key width and the side pads.
+        val rows = listOf(
+            row(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f),
+            row(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f),
+        )
+
+        assertSame(rows, fillSpaceRows(rows, gridWeightOf(rows)))
+    }
+
+    @Test
+    fun `a bottom row that already fills the grid is left alone`() {
+        val rows = listOf(
+            row(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f),
+            spaceRow(4f),
+        )
+
+        assertSame(rows, fillSpaceRows(rows, gridWeightOf(rows)))
+    }
+
+    @Test
+    fun `a row with two spacebars keeps the centring it always had`() {
+        // No single key obviously owns the slack, and centring is never wrong.
+        val wide = row(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f)
+        val two = listOf(
+            Key("?123", width = 1.5f),
+            Key(" ", action = KeyAction.Space, width = 3f),
+            Key(" ", action = KeyAction.Space, width = 3f),
+        )
+        val rows = listOf(wide, wide, two)
+
+        assertSame(rows, fillSpaceRows(rows, gridWeightOf(rows)))
+    }
+
+    @Test
+    fun `an over-wide row is not narrowed`() {
+        val rows = listOf(
+            row(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f),
+            row(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f),
+            spaceRow(6f),
+        )
+
+        assertSame(rows, fillSpaceRows(rows, gridWeightOf(rows)))
+    }
+
     // ---- row height ----
 
     @Test

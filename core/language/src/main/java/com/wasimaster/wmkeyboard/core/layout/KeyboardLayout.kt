@@ -507,6 +507,57 @@ fun sidePadFor(row: List<Key>, gridWeight: Float): Float =
     (gridWeight - row.sumOf { it.width.toDouble() }.toFloat()) / 2f
 
 /**
+ * [rows] with the spacebar of any short row widened to fill the grid.
+ *
+ * Centring a short row is right for a row of letters — that is how QWERTY's
+ * nine-key home row sits under its ten-key top row — and wrong for the row the
+ * spacebar is on. No keyboard puts a gap either side of its bottom row, and the
+ * gap is what a grid wider than ten columns produced: the bottom row is written
+ * from the same ten-column template on every layout, so a board whose letters
+ * are eleven or twelve wide drew `?123` and Enter floating a whole column in
+ * from the edges (issue: the Persian grid, and 256 others with it).
+ *
+ * Widening the spacebar rather than scaling the whole row keeps `?123`, Enter
+ * and the punctuation keys the width the author gave them, which is the width
+ * they have on every other layout. It is the rule [expandForTablet] already
+ * applies to the row it rebuilds, now applied to the row as written.
+ *
+ * A row with no spacebar, or with more than one, is left to [sidePadFor]: there
+ * is no single key that obviously owns the slack, and centring is never wrong,
+ * only narrow. Rows are measured with the columns a spanning key holds over
+ * them, so a row under a two-row Enter is not widened into it.
+ */
+fun fillSpaceRows(rows: List<List<Key>>, gridWeight: Float): List<List<Key>> {
+    if (rows.isEmpty() || !gridWeight.isFinite() || gridWeight <= 0f) return rows
+    val widths = spanRowWidths(rows)
+    var changed = false
+    val filled = rows.mapIndexed { index, row ->
+        val slack = gridWeight - widths[index]
+        if (slack <= SpaceFillEpsilon) return@mapIndexed row
+        val at = row.indexOfSingle { it.action == KeyAction.Space } ?: return@mapIndexed row
+        changed = true
+        row.mapIndexed { column, key ->
+            if (column == at) key.copy(width = roundGridUnit(key.width + slack)) else key
+        }
+    }
+    return if (changed) filled else rows
+}
+
+/** The slack below which a row already fills the grid; these are float sums. */
+private const val SpaceFillEpsilon = 0.01f
+
+/** The index of the one element matching [predicate], or null for none or many. */
+private inline fun <T> List<T>.indexOfSingle(predicate: (T) -> Boolean): Int? {
+    var found = -1
+    for (index in indices) {
+        if (!predicate(this[index])) continue
+        if (found >= 0) return null
+        found = index
+    }
+    return found.takeIf { it >= 0 }
+}
+
+/**
  * The resolution a [Key.width] or a [LayerSpec.rowHeights] entry is edited at:
  * two decimals.
  *

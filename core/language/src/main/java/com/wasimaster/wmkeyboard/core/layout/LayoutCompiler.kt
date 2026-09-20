@@ -27,7 +27,12 @@ fun LayoutSpec.compile(layer: LayoutLayer): KeyboardLayout = synchronized(compil
             ?: error("The default layout has no LETTERS layer")
     val built = KeyboardLayout(
         name = "$id/${layer.key}",
-        rows = resolved.rows,
+        // The spacebar absorbs whatever the bottom row is short of the grid, so
+        // a board whose letters are eleven or twelve columns wide does not draw
+        // its `?123` and Enter floating in from the edges. Done here rather than
+        // at the row's draw so the keyboard, the theme preview and the layout
+        // editor's preview all measure the same grid.
+        rows = fillSpaceRows(resolved.rows, gridWeightOf(resolved.rows)),
         rowHeights = resolved.rowHeights,
         // From this layout, never from whichever layout the *grid* was inherited
         // from: the appearance belongs to the board the user is typing on, so a
