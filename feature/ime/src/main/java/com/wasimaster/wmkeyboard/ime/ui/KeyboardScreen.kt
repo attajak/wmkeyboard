@@ -3494,27 +3494,20 @@ private fun TopBar(
             // and the vocabulary cap keep the ordinary decode away from
             // (#135). Last of the chips — it is about text already in the
             // field, where the others are about what is being typed now — and
-            // narrow, because the words it shares the strip with are the ones
-            // it is offering to improve on.
+            // the one chip with no sentence on it: the words it shares the
+            // strip with are the ones it is offering to improve on, and
+            // spelling the offer out took half the row from them (#264).
             val searchChip = state.glideSearchChip
             if (snippetOffer == null && learnOffer == null && sandboxOffer == null &&
                 wordListOffer == null && searchChip != null
             ) {
-                val searchShares = suggestionsShowing || state.smart != null
-                OfferChip(
-                    label = stringResource(R.string.ime_glide_search_all_offer),
+                StripIconChip(
                     icon = Icons.Outlined.Search,
-                    declineDescription = stringResource(R.string.ime_glide_search_all_dismiss_desc),
+                    description = stringResource(R.string.ime_glide_search_all_offer),
+                    dismissDescription = stringResource(R.string.ime_glide_search_all_dismiss_desc),
                     onAccept = { onStripOfferAction(StripOfferAction.Accept()) },
-                    onDecline = { onStripOfferAction(StripOfferAction.Decline) },
-                    stretch = !searchShares,
-                    modifier = if (searchShares) {
-                        Modifier.widthIn(max = 200.dp).padding(horizontal = 4.dp)
-                    } else {
-                        Modifier.weight(1f).padding(horizontal = 4.dp)
-                    },
+                    onDismiss = { onStripOfferAction(StripOfferAction.Decline) },
                 )
-                if (!searchShares) return@Row
             }
             // A recognised sum/conversion answers the text directly, so it
             // takes the whole strip the way autofill chips do. A keyword
@@ -5132,6 +5125,64 @@ private fun OfferChip(
                 modifier = Modifier.size(15.dp),
             )
         }
+    }
+}
+
+/**
+ * The same offer, shrunk to its icon: one accent-tinted button, no words.
+ *
+ * The strip is four candidates wide on a phone, and a chip that says what it
+ * does in a sentence takes half of that (#264). That is the worst trade
+ * exactly where this one is used — the words it would cover are the words the
+ * offer exists to improve on — so the sentence moves to the content
+ * description, the tool it belongs to and the setting's own info text, and the
+ * row keeps its candidates. Same accent language as [OfferChip] so the two
+ * still read as the same kind of thing.
+ *
+ * The ✕ goes with the label: there is no room for a second target, and the
+ * chip is transient anyway (the cursor leaving the word takes it down). The
+ * hold is the way to send it away early, and TalkBack is told so.
+ */
+@Composable
+private fun StripIconChip(
+    icon: ImageVector,
+    description: String,
+    dismissDescription: String,
+    onAccept: () -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val kb = LocalKbTheme.current
+    val feedback = LocalKeyPressFeedback.current
+    val tint = kb.accent
+    val chipShape = kb.chipShape()
+    Box(
+        modifier = modifier
+            .fillMaxHeight()
+            .padding(vertical = 5.dp, horizontal = 4.dp)
+            .width(34.dp)
+            .clip(chipShape)
+            .background(tint.copy(alpha = if (kb.dark) 0.20f else 0.11f))
+            .border(1.dp, tint.copy(alpha = 0.32f), chipShape)
+            .combinedClickable(
+                onLongClickLabel = dismissDescription,
+                onLongClick = {
+                    feedback()
+                    onDismiss()
+                },
+                onClick = {
+                    feedback()
+                    onAccept()
+                },
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            icon,
+            contentDescription = description,
+            tint = tint,
+            modifier = Modifier.size(17.dp),
+        )
     }
 }
 
@@ -7549,6 +7600,10 @@ private fun GhostToolCircle(
  */
 private val ToolIconSize = 22.dp
 
+/** A [ToolCircle] drawn `compact`: the box's side in dp, and the glyph in it. */
+private const val CompactToolSide = 30
+private val CompactToolIconSize = 18.dp
+
 /**
  * The tools on a row of their own, above the suggestion strip — the row
  * [ToolbarPlacement.ON_DEMAND_ROW] and [ToolbarPlacement.ALWAYS_ROW] add.
@@ -7585,10 +7640,6 @@ private fun ToolsRow(
         }
     }
 }
-
-/** A [ToolCircle] drawn `compact`: the box's side in dp, and the glyph in it. */
-private const val CompactToolSide = 30
-private val CompactToolIconSize = 18.dp
 
 /**
  * The toolbar itself: fixed toolbox launcher, then the user's tools —
