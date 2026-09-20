@@ -719,7 +719,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Per-script pinned fonts `uncommon` — 25 scripts map to a specific Google font; Music to Noto Music, Braille to Noto Sans Symbols 2
     - Per-script font pickers — Curated alternative families per script, shown only while a language on that script is enabled
     - Per-glyph fallback — A glyph the pinned face lacks falls back to the system font rather than blanking
-- **Keyboard layouts** — 1,276 shipped layouts: 20 compiled built-ins + 1,256 JSON assets (862 of them converted Keyman keyboards)
+- **Keyboard layouts** — 1,280 shipped layouts: 21 compiled built-ins + 1,259 JSON assets (862 of them converted Keyman keyboards)
   - Shipped catalogue — 20 Kotlin LayoutSpecs (boot-critical) plus 354 .wmlayout.json assets parsed off the main thread
     - Latin ergonomic alternates — QWERTY, AZERTY, Dvorak, Colemak, Workman, Halmak built in; BÉPO, Swiss German, LatAm Spanish, Turkish-Q as assets
     - Ambiguous boards — T9 and Compact QWERTY built in; keys twice to four times the usual size, decoded rather than multi-tapped (#103)

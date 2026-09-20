@@ -8,11 +8,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * The tablet expansion, run over every layout the app ships — 20 built in plus
- * 1,256 assets, on both tablet forms with the digit row on and off.
+ * The tablet expansion, run over every layout the app ships — 21 built in plus
+ * 1,259 assets, on both tablet forms with the digit row on and off.
  *
  * `TabletExpansionTest` pins the arithmetic on grids it builds by hand; this
- * pins it against reality. The transform relocates keys by role across 1,276
+ * pins it against reality. The transform relocates keys by role across 1,280
  * genuinely different grids — Bengali and Devanagari rows twelve wide, Arabic
  * and Hebrew right-to-left, five-row Khmer, layouts whose top row already
  * overflows their own grid weight — and the only honest way to know it survives
@@ -56,7 +56,7 @@ class TabletExpansionCorpusTest {
 
     @Test
     fun `the corpus is the whole shipped set`() {
-        assertEquals("built-ins plus hand-authored assets", 20 + 397, handAuthored.size)
+        assertEquals("built-ins plus hand-authored assets", 21 + 397, handAuthored.size)
         assertTrue(
             "converted Keyman grids are missing from the corpus",
             corpus.size - handAuthored.size > 800,
