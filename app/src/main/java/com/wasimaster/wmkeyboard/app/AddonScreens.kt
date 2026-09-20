@@ -2618,7 +2618,8 @@ private fun DictionaryPreview(shown: AddonPreviewContent.Dictionary) {
  * installed-sound id and exists to fire the same short clip on every keystroke,
  * which is not what this is. One player, released as soon as it finishes.
  */
-private object AddonSoundPreview {
+/** Shared with the file-import dialog, which previews a sound pack the same way. */
+internal object AddonSoundPreview {
     fun play(file: java.io.File) {
         runCatching {
             android.media.MediaPlayer().apply {

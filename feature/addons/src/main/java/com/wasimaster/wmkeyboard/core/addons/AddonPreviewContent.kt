@@ -357,7 +357,12 @@ object AddonPreviewReader {
      * so what the preview plays is what the keyboard would play — not whatever
      * happened to be in the archive.
      */
-    private fun readSoundPack(payload: File): AddonPreviewContent {
+    /**
+     * Public because the file-import dialog previews a local `.wmsoundpack`
+     * with it: the archive reading is the same work whether the file was
+     * downloaded from a repository or tapped in a file manager.
+     */
+    fun readSoundPack(payload: File): AddonPreviewContent {
         val manifest = runCatching {
             payload.inputStream().use { SoundPackFile.readManifest(it) }
         }.getOrNull() ?: return AddonPreviewContent.Unreadable(
@@ -436,7 +441,8 @@ object AddonPreviewReader {
         )
     }
 
-    private fun readStickers(payload: File): AddonPreviewContent {
+    /** Public for the same reason [readSoundPack] is. */
+    fun readStickers(payload: File): AddonPreviewContent {
         val outDir = File(payload.parentFile, payload.nameWithoutExtension + "_stickers")
         outDir.mkdirs()
         val images = ArrayList<File>(MAX_STICKER_IMAGES)

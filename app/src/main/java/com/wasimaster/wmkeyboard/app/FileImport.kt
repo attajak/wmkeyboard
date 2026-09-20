@@ -12,6 +12,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -46,6 +48,7 @@ import com.wasimaster.wmkeyboard.core.icons.IconImportResult
 import com.wasimaster.wmkeyboard.core.icons.IconPackFile
 import com.wasimaster.wmkeyboard.core.icons.IconPackStore
 import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
+import com.wasimaster.wmkeyboard.core.keyman.ConvertedKeymanLayout
 import com.wasimaster.wmkeyboard.core.keyman.KeymanResult
 import com.wasimaster.wmkeyboard.core.keyman.KeymanRuleStore
 import com.wasimaster.wmkeyboard.core.keyman.KeymanTouchLayoutReader
@@ -629,7 +632,11 @@ private fun ImportFileDialog(
         onDismissRequest = onClose,
         title = { Text(proposalTitle(proposal)) },
         text = {
-            Column {
+            // Scrolls: a preview, a long backup summary and a list of repairs
+            // together are taller than a dialog on a short screen, and a
+            // dialog that cannot reach its own text is worse than no preview.
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                ImportFilePreview(state, uri)
                 Text(proposal.body)
                 if (proposal.repairs.isNotEmpty()) {
                     Spacer(Modifier.height(8.dp))
@@ -690,6 +697,23 @@ private fun ImportFileDialog(
 }
 
 /**
+ * The layout inside a Keyman package, or null for a package that carries no
+ * on-screen keyboard.
+ *
+ * Shared with the preview above the dialog, so the grid the user is shown is
+ * the grid Import would save rather than a second reading of the same file.
+ */
+internal fun keymanLayoutOf(contents: KeymanPackage.Contents): ConvertedKeymanLayout? {
+    val doc = contents.touchLayoutJson
+        ?.let { KeymanTouchLayoutReader.parse(it) as? KeymanResult.Success }
+        ?.value
+    return doc
+        ?.let { TouchLayoutConverter.convert(it, contents.keyboardId, contents.name) }
+        ?.let { it as? KeymanResult.Success }
+        ?.value
+}
+
+/**
  * What a Keyman package offers, and what installing it does.
  *
  * A package is two things at once: a grid, and the rules that decide what its
@@ -704,13 +728,7 @@ private fun keymanProposal(
     repository: SettingsRepository,
     context: android.content.Context,
 ): ImportProposal {
-    val doc = contents.touchLayoutJson
-        ?.let { KeymanTouchLayoutReader.parse(it) as? KeymanResult.Success }
-        ?.value
-    val converted = doc
-        ?.let { TouchLayoutConverter.convert(it, contents.keyboardId, contents.name) }
-        ?.let { it as? KeymanResult.Success }
-        ?.value
+    val converted = keymanLayoutOf(contents)
 
     if (converted == null) {
         return ImportProposal(

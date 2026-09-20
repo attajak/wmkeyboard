@@ -181,6 +181,14 @@
          landing here is normal rather than a mistake. %1$s is the file name. -->
     <string name="import_text_body">The keyboard has no use for <xliff:g id="file_name" example="settings.json">%1$s</xliff:g>. It is not a theme, a layout, a snippet pack, a sticker pack, an icon pack, a plugin or a backup. You can still read and edit it here.</string>
     <string name="import_open_editor_action">Open editor</string>
+
+    <!-- ==== The preview above the confirm dialog. ==== -->
+
+    <!-- How many entries the preview above is not showing. %1$d picks the wording. -->
+    <plurals name="import_preview_more">
+        <item quantity="one">and %1$d more</item>
+        <item quantity="other">and %1$d more</item>
+    </plurals>
     <string name="import_unreadable_title">The app cannot open that file</string>
     <string name="import_unreadable_body">The file is not available. Something moved or deleted it, or the app that shared it stopped access to it.</string>
 
