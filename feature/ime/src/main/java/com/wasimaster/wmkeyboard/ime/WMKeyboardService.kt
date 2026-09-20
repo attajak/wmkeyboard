@@ -17583,9 +17583,16 @@ open class WMKeyboardService : InputMethodService() {
      * of at the start of the session: the cursor has been moving under the
      * open microphone the whole time, so where the words go is only known now.
      * Plain voice typing takes neither the spoken-punctuation pass nor the
-     * spacing, because there the point is the words exactly as they were said
-     * — and no capital at all, since the one the recognizer puts on is not one
-     * that was said.
+     * spacing, because there the point is the words exactly as they were said.
+     *
+     * The capital is not one of those rules. Plain voice typing asks the
+     * recognizer for no formatting, so a recognizer that honours it hands over
+     * nothing to lower; the capital only ever appears when one puts it on
+     * regardless — the system recognizer's default, and Whisper, which has no
+     * such switch at all and transcribes in sentence case. Taking it off
+     * unconditionally lowered the first word of a dictation into an empty
+     * field, which is not a rule anyone asked for either. So the capital is
+     * judged by the same place rule as every other mode.
      */
     private fun commitVoiceUtterance(text: String, tag: String) {
         val settings = _uiState.value.settings
@@ -17618,11 +17625,11 @@ open class WMKeyboardService : InputMethodService() {
 
     /**
      * The recognizer's automatic capital kept only where the text in front of
-     * the caret opens a sentence; never in plain voice typing, which wants the
-     * words as said.
+     * the caret opens a sentence — in every voice typing mode, plain included
+     * (see [commitVoiceUtterance]).
      */
     private fun casedVoiceText(text: String): String =
-        VoiceCasing.apply(text, sentenceStart = !plainVoice() && voiceSentenceStart)
+        VoiceCasing.apply(text, sentenceStart = voiceSentenceStart)
 
     /**
      * Reads the characters around the cursor to decide whether dictated text

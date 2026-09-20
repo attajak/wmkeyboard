@@ -29,14 +29,14 @@
     <string name="voice_ui_bar_desc">A small pill that you can drag anywhere. The keyboard stays hidden</string>
     <string name="voice_typing_title">Voice typing mode</string>
     <string name="voice_typing_subtitle">How voice typing and the keys share the field</string>
-    <string name="voice_typing_info">One block at a time is the usual way. The words appear in the field while you speak, and the first key press stops the microphone.\n\nType while you speak keeps the microphone open. Each phrase goes into the field when you stop for breath, so the keys, the layouts and the suggestion strip stay live all through the session. Use it with the compact bar over the keys. This mode always keeps listening.\n\nPlain text works the same way, but it adds no punctuation, no capital letters and no spaces. You control all of them from the keyboard. Use it for code, for terminals and for any field where you want only the words you said.</string>
+    <string name="voice_typing_info">One block at a time is the usual way. The words appear in the field while you speak, and the first key press stops the microphone.\n\nType while you speak keeps the microphone open. Each phrase goes into the field when you stop for breath, so the keys, the layouts and the suggestion strip stay live all through the session. Use it with the compact bar over the keys. This mode always keeps listening.\n\nPlain text works the same way, but it adds no punctuation and no spaces. You control all of them from the keyboard. Use it for code, for terminals and for any field where you want only the words you said.</string>
     <string name="voice_typing_block">One block at a time</string>
     <string name="voice_typing_interactive">Type while you speak</string>
     <string name="voice_typing_plain">Type while you speak, plain text</string>
     <!-- One line under each option in the voice typing mode picker. -->
     <string name="voice_typing_block_desc">The words appear while you speak. The first key press stops the microphone</string>
     <string name="voice_typing_interactive_desc">The microphone stays open. Each phrase lands when you stop for breath</string>
-    <string name="voice_typing_plain_desc">The same, but with no punctuation, no capital letters and no spaces</string>
+    <string name="voice_typing_plain_desc">The same, but with no punctuation and no spaces</string>
     <string name="voice_continuous_title">Keep listening</string>
     <string name="voice_continuous_subtitle">Start the next sentence automatically after each one goes into the field</string>
     <string name="voice_punctuation_title">Spoken punctuation</string>
