@@ -134,6 +134,7 @@ One key can carry a style of its own. Add a letter (the style follows that lette
 - **Colors**: its face, its label, its hint, its border, and the two colors of the popup bubble it shows.
 - **Key image**: a picture for this one key, drawn with the same Crop/Stretch/Tile fit and opacity the board's [key textures](#key-textures) use, so a dressed key still reads as part of the set. It beats the class texture it would otherwise wear, and a key image works on a board with no class textures at all.
 - **Press effect**: the burst this key throws — Stars, Hearts, Sparkle, Confetti, or Emoji with its own field for the emoji. It overrides the board's [key press effect](#key-press-effect) for this key alone, and a board whose only effect is one key's still bursts on that key. The board's Intensity, Colour and the physics sliders shape every burst; a single-key style picks what is thrown, not how. Images aren't offered per key.
+- **Key shape**: this one key's outline. Automatic follows the board's shape; pick one to make a single key round, pill, cut or anything else in the list, including None. The board's corner radius still decides how round a rounded key is, and the shapes that measure themselves off the key (circle, pill, hexagon and the rest) ignore it as they always do. This is how a round Enter key on a grid of soft rectangles is made, and it is what carries over from an imported FlorisBoard theme built that way.
 - **Bold label** and **Label size**: how the label is drawn. Bold is a three-way choice — Automatic follows the board, On and Off answer for this key. Label size replaces the automatic rule rather than scaling it, which is how you get a `?123` drawn at full letter size. A size the *layout* gave the key in the [layout editor](/languages/custom-layouts/#editing-a-key) wins over the theme's, since the layout is the more specific answer.
 
 An armed or locked modifier still shows the accent or pressed face whatever color you gave it, because state has to stay visible. A key image and a press effect travel inside the exported theme the same way the board's do. High-contrast accessibility drops single-key styles with the rest of the decoration, and a press effect never plays under reduce motion or power saving.
@@ -178,12 +179,15 @@ A theme's sound is only ever a sound it can actually make. A theme whose sound i
 - **Tool background shape** is the outline of the background behind each toolbar tool, from the same twelve shapes. It follows <SettingsPath path="Appearance / Toolbar / Tool background shape" /> until you pick one here. Nothing draws at all while the tool radius is 0, which is the setting for bare icons.
 - **Tool icons** sets the toolbar's icon color, Auto by default.
 - **Tool circles** and **Active tool circle** paint the background behind a toolbar icon, at rest and while pressed or active. Both support alpha.
+- **Active tool icon** colors the glyph sitting on an active tool. Auto picks whichever of black or white reads on the active circle, which is what this was before the row existed. Set it when the automatic pick is technically legible but not the colour you want.
 - **Tool outline** and **Tool outline width** put a border around that background, off until you pick a color, exactly like the key border in [Keys](#keys). The width row appears once a color is set, and nothing draws until it's above 0. A theme that sets one keeps it even with the accessibility **Key outlines** toggle on.
 
 ### Panels & suggestions
 
 - **Cards & search bar** is the `chipBackground` field. It covers suggestion chips and the search-bar surface across the tool panels. Auto falls back to Modifier keys, and the field supports alpha.
 - **Suggestion text** colors the suggestion strip and the panels' body text. Auto falls back to Key text, contrast-guarded against the board, so a theme whose keys invert against its board (dark ink on cream keys over a near-black board) still gets a legible strip. An explicit choice here is honoured as written.
+- **Secondary text** colors the quieter text beside the main text: the second word of a suggestion, and the kind and time on a clipboard entry. Auto draws Suggestion text at 65% alpha, which is what it was before the row existed. Alpha works here.
+- **Dividers** colors the hairlines between the parts of a panel and between suggestions. Auto draws Suggestion text at 25% alpha. Alpha works here too, so you can keep the rule faint in a hue of its own.
 
 ### Chips & buttons
 

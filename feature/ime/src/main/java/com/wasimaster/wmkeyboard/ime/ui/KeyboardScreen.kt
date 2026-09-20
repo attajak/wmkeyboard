@@ -324,7 +324,9 @@ import com.wasimaster.wmkeyboard.core.gesture.GlideShiftDetour
 import androidx.compose.ui.graphics.lerp
 import com.wasimaster.wmkeyboard.core.theme.KEY_OVERRIDE_LABEL_SCALE_RANGE
 import com.wasimaster.wmkeyboard.core.theme.KeyOverride
+import com.wasimaster.wmkeyboard.core.theme.KeyShapeKind
 import com.wasimaster.wmkeyboard.core.theme.brush
+import com.wasimaster.wmkeyboard.core.theme.keyShapeKindOrNull
 import com.wasimaster.wmkeyboard.core.ui.ToolPaint
 import com.wasimaster.wmkeyboard.core.ui.toolAccentPaint
 import com.wasimaster.wmkeyboard.core.grammar.GrammarFix
@@ -11757,6 +11759,12 @@ internal data class KeyVisual(
     /** Whether the theme made this one key's label bold; null follows the board. */
     val bold: Boolean? = null,
     /**
+     * The outline the theme gave this one key; null follows the board's own
+     * shape. A round enter key on a grid of soft rectangles is a look a whole
+     * family of imported themes is built on (issue #266).
+     */
+    val shapeKind: KeyShapeKind? = null,
+    /**
      * What this key is about to write in the target script, on a layout that
      * transliterates ([transliterationHint]). Null on every other board, and
      * on every key whose answer is nothing worth drawing.
@@ -11879,7 +11887,10 @@ internal fun keyVisual(
     // A theme with no key shape gives a key at rest no face, so its label sits on
     // the bare board. The latch and select states below still light theirs, and a
     // colour the theme gave this one key still paints it.
-    val faceless = !palette.keysHaveFaces && overrideBackground == null
+    // A per-key shape is also a per-key face: a theme whose board shape is NONE
+    // still means this one key to be drawn when it names a shape for it.
+    val overrideShape = keyShapeKindOrNull(override?.shape)
+    val faceless = !palette.keysHaveFaces && overrideBackground == null && overrideShape == null
     val background = overrideBackground ?: when {
         latch == ModifierState.LOCKED -> palette.accent
         latch == ModifierState.ARMED -> palette.pressedKey
@@ -11924,6 +11935,7 @@ internal fun keyVisual(
             ?.takeIf { it.isFinite() }
             ?.coerceIn(KEY_OVERRIDE_LABEL_SCALE_RANGE),
         bold = override?.bold,
+        shapeKind = overrideShape,
         transliteration = transliterationHint(key, state),
         alternatesShifted = key.longPress.isNotEmpty() && state.shiftCasesText(),
         iconSlot = when {
@@ -16349,7 +16361,7 @@ internal fun KeyButton(
     // The gap is handed to the shape as the room a leaning outline may spill
     // into: a slanted key then leans across the gap rather than out of its own
     // width, and neighbouring keys interlock instead of thinning out.
-    val keyShape = kb.keyShape(bleedDp = keyGapH(settings).value)
+    val keyShape = kb.keyShape(bleedDp = keyGapH(settings).value, kind = visual.shapeKind)
 
     // Outer box = full grid cell and the touch target; inner box = the
     // visible key, inset by the gap. Presses in the gap between keys land

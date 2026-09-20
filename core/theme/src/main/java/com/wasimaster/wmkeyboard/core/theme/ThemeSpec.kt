@@ -324,6 +324,16 @@ data class ThemeSpec(
     val toolCircleBackground: Long? = null,
     val toolCircleActiveBackground: Long? = null,
     /**
+     * Colour of the glyph on an *active* toolbar tool. Null derives a legible
+     * colour from that tool's fill, which is what every theme did before this
+     * field existed.
+     *
+     * Its own field because the active fill and the glyph on it are separate
+     * elements in a FlorisBoard stylesheet, and deriving one from the other
+     * throws away a colour the theme stated outright.
+     */
+    val toolCircleActiveIcon: Long? = null,
+    /**
      * Outline around the background of every toolbar tool. Null draws none,
      * exactly like [keyBorderColor], and [toolBorderWidthDp] still has to be
      * above 0 for it to show.
@@ -333,6 +343,19 @@ data class ThemeSpec(
     // Panels (clipboard/snippet cards, emoji search bar)
     val chipBackground: Long? = null,
     val suggestionText: Long? = null,
+    /**
+     * The quieter text beside the main one: a suggestion's secondary word, a
+     * clipboard entry's kind and timestamp, a panel subheading. Null draws
+     * [suggestionText] at 65% alpha, which is what this was before the field
+     * existed.
+     */
+    val secondaryText: Long? = null,
+    /**
+     * Hairlines between the parts of a panel and between suggestions. Null
+     * draws [suggestionText] at 25% alpha, as before. Alpha is honoured, so a
+     * theme can keep the rule faint in a hue of its own.
+     */
+    val dividerColor: Long? = null,
     // Chips (tool-panel buttons, style strips, plugin buttons)
     /** Text on an unselected chip; null derives from the modifier-key text. */
     val chipText: Long? = null,
@@ -620,12 +643,25 @@ data class KeyOverride(
      * [ThemeSpec.boldKeyLabels] and the accessibility switch under it).
      */
     val bold: Boolean? = null,
+    /**
+     * This key's own outline, as a [KeyShapeKind] name; null follows the
+     * board's [ThemeSpec.keyShape]. A string for the usual forward-compat
+     * reason; read through [keyShapeKindOrNull].
+     *
+     * A single round enter key on a grid of soft rectangles is a signature a
+     * whole family of themes is built on, and it is the one thing a per-key
+     * style could not say. The key's own radius still comes from the board:
+     * one number per theme is the shape the radius slider has, and a shape
+     * that needs its own is [KeyShapeKind.CIRCLE] or [KeyShapeKind.PILL],
+     * neither of which reads a radius.
+     */
+    val shape: String? = null,
 ) {
     val isEmpty: Boolean
         get() = background == null && text == null && border == null &&
             popupBackground == null && popupText == null && hint == null &&
             texture == null && effect == null && effectParam == null &&
-            labelScale == null && bold == null
+            labelScale == null && bold == null && shape == null
 
     /**
      * The kind of burst this key throws on its own, or null when it follows

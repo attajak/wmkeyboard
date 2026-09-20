@@ -183,6 +183,7 @@ import com.wasimaster.wmkeyboard.core.theme.safeContainerKind
 import com.wasimaster.wmkeyboard.core.theme.findThemeFamily
 import com.wasimaster.wmkeyboard.core.theme.flattenedThemes
 import com.wasimaster.wmkeyboard.core.theme.groupAsFamily
+import com.wasimaster.wmkeyboard.core.theme.onColorFor
 import com.wasimaster.wmkeyboard.core.theme.replacingMember
 import com.wasimaster.wmkeyboard.core.theme.reseeded
 import com.wasimaster.wmkeyboard.core.theme.selfAndVariants
@@ -3028,6 +3029,17 @@ fun ThemeEditorScreen(
             )
         }
         item {
+            // The glyph on an active tool. Its own row rather than a shade of
+            // the fill: a FlorisBoard sheet states the two separately, and
+            // deriving one from the other threw away a colour the theme set.
+            NullableColorRow(
+                stringResource(R.string.theme_tool_circle_active_icon_title),
+                theme.toolCircleActiveIcon,
+                fallback = theme.toolCircleActiveBackground?.let(::onColorFor) ?: theme.accent,
+                onChange = { update { t -> t.copy(toolCircleActiveIcon = it) } },
+            )
+        }
+        item {
             // Colour then width, the way the key border is set: the colour is
             // what turns the outline on, and the width row appears with it.
             NullableColorRow(
@@ -3063,6 +3075,29 @@ fun ThemeEditorScreen(
                 stringResource(R.string.theme_suggestion_text_title),
                 theme.suggestionText, fallback = theme.keyText,
                 onChange = { update { t -> t.copy(suggestionText = it) } },
+            )
+        }
+        item {
+            // The quieter line beside the main one, and the hairlines between
+            // panel parts. Both used to be the suggestion colour at a fixed
+            // alpha, which no theme could overrule.
+            NullableColorRow(
+                stringResource(R.string.theme_secondary_text_title),
+                theme.secondaryText,
+                fallback = theme.suggestionText ?: theme.keyText,
+                supportsAlpha = true,
+                info = stringResource(R.string.theme_secondary_text_body),
+                onChange = { update { t -> t.copy(secondaryText = it) } },
+            )
+        }
+        item {
+            NullableColorRow(
+                stringResource(R.string.theme_divider_title),
+                theme.dividerColor,
+                fallback = theme.suggestionText ?: theme.keyText,
+                supportsAlpha = true,
+                info = stringResource(R.string.theme_divider_body),
+                onChange = { update { t -> t.copy(dividerColor = it) } },
             )
         }
     }
@@ -4197,6 +4232,7 @@ private fun KeyOverrideDialog(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    var shapePickerOpen by rememberSaveable(id) { mutableStateOf(false) }
     val texturePicker = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri ->
@@ -4211,6 +4247,26 @@ private fun KeyOverrideDialog(
                 }
             }
         }
+    }
+    if (shapePickerOpen) {
+        // The board's radius still decides how round a rounded key is: one
+        // number per theme is the shape the slider has, and the shapes that
+        // need their own (circle, pill) read no radius at all.
+        KeyShapePickerDialog(
+            selected = keyShapeKindOrNull(override.shape),
+            radiusDp = theme.keyCornerRadiusDp ?: 8,
+            title = R.string.theme_key_override_shape_title,
+            onAuto = {
+                onChange(override.copy(shape = null))
+                shapePickerOpen = false
+            },
+            onPick = {
+                onChange(override.copy(shape = it.name))
+                shapePickerOpen = false
+            },
+            onDismiss = { shapePickerOpen = false },
+            offerNone = true,
+        )
     }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -4336,6 +4392,19 @@ private fun KeyOverrideDialog(
                         )
                     }
                 }
+                ListItem(
+                    headlineContent = {
+                        Text(stringResource(R.string.theme_key_override_shape_title))
+                    },
+                    supportingContent = {
+                        Text(
+                            keyShapeKindOrNull(override.shape)?.let { keyShapeName(it) }
+                                ?: stringResource(CommonR.string.common_auto),
+                        )
+                    },
+                    colors = transparentListColors(),
+                    modifier = Modifier.clickable { shapePickerOpen = true },
+                )
                 ChoiceControl(
                     options = listOf(
                         null to stringResource(CommonR.string.common_auto),

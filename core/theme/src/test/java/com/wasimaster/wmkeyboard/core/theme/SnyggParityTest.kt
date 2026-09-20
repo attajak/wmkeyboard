@@ -428,6 +428,96 @@ class SnyggParityTest {
         assertNull(t.fontScale)
     }
 
+    // ---- surfaces that used to be derived and nothing else ----
+
+    /**
+     * Three surfaces the keyboard already drew but no theme could set: the
+     * quieter second line, the hairlines between panel parts, and the glyph on
+     * an active toolbar tool. A stylesheet states all three outright, and they
+     * were being derived over the top of what the file said.
+     */
+    @Test
+    fun `secondary text, dividers and the active tool icon come from the sheet`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "smartbar-shared-actions-toggle": { "background": "#4CAF50", "foreground": "#0B1220" },
+              "smartbar-candidate-word-secondary-text": { "foreground": "#8A8A94" },
+              "smartbar-candidate-spacer": { "foreground": "#33333A" }
+            }
+            """,
+        )
+        assertEquals(0xFF8A8A94, t.secondaryText)
+        assertEquals(0xFF33333A, t.dividerColor)
+        assertEquals(0xFF0B1220, t.toolCircleActiveIcon)
+    }
+
+    /**
+     * A section heading is not secondary text. Several themes paint theirs in
+     * the accent colour, and folding it in tinted every suggestion's second
+     * line with it.
+     */
+    @Test
+    fun `a section heading is not read as secondary text`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "smartbar-actions-editor-subheader": { "foreground": "#FF9800" }
+            }
+            """,
+        )
+        assertNull(t.secondaryText)
+    }
+
+    /**
+     * The lifted copy of a clipboard card is usually a shade lighter than the
+     * card. Merging the two let that lighter shade become the resting card.
+     */
+    @Test
+    fun `a card popup does not become the card colour`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "clipboard-item": { "background": "#22222A" },
+              "clipboard-item-popup": { "background": "#3A3A46" }
+            }
+            """,
+        )
+        assertEquals(0xFF22222A, t.chipBackground)
+    }
+
+    // ---- per-key shapes ----
+
+    /**
+     * A round enter key on a grid of soft rectangles is the signature of a
+     * whole family of themes, and the one thing a per-key style could not say.
+     */
+    @Test
+    fun `a key that names its own shape keeps it`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF", "shape": "rounded-corner(7dp)" },
+              "key[code=10]": { "background": "#4CAF50", "shape": "circle()" },
+              "key[code=-201,-202]": { "shape": "circle()" }
+            }
+            """,
+        )
+        assertEquals(KeyShapeKind.ROUNDED, t.keyShape)
+        assertEquals(KeyShapeKind.CIRCLE.name, t.keyOverrides["ENTER"]?.shape)
+        assertEquals(KeyShapeKind.CIRCLE.name, t.keyOverrides["LETTERS"]?.shape)
+        assertEquals(KeyShapeKind.CIRCLE.name, t.keyOverrides["SYMBOLS"]?.shape)
+        // A key the sheet says nothing extra about follows the board.
+        assertNull(t.keyOverrides["SPACE"]?.shape)
+    }
+
     // ---- what the user is told ----
 
     /**
@@ -444,7 +534,76 @@ class SnyggParityTest {
         )
     }
 
+    /**
+     * The count means "this rule changed something", not "this element name
+     * was recognised". A rule that only sets text wrapping names an element
+     * this app has and still changes nothing it draws, so it must not count.
+     */
+    @Test
+    fun `a rule that sets nothing this app draws is not counted as used`() {
+        val result = convert(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "key-hint": { "text-max-lines": "1", "text-overflow": "ellipsis" },
+              "smartbar-candidate-word": { "text-align": "center" }
+            }
+            """,
+        )
+        assertEquals(4, result.ruleCount)
+        assertEquals(2, result.mappedRuleCount)
+    }
+
+    /**
+     * Every element the mapper reads is in [SNYGG_CONSUMED], and everything in
+     * that table is reachable. The table is what the count above is computed
+     * from, so a mapping added without a line in it would quietly under-report
+     * the conversion.
+     */
+    @Test
+    fun `every consumed element is reachable and counted`() {
+        val body = buildString {
+            append("{\n")
+            append(""" "window": { "background": "#101014" },""")
+            append("\n")
+            append(
+                SNYGG_CONSUMED.keys.filter { it != EL_BOARD }.joinToString(",\n") { element ->
+                    val name = SAMPLE_SELECTOR.getValue(element)
+                    """ "$name": { "background": "#2C2C34", "foreground": "#FFFFFF", "shape": "circle()" }"""
+                },
+            )
+            append("\n}")
+        }
+        val result = convert(body)
+        // Every rule in it sets background, foreground and shape, so every one
+        // of them lands on at least one field.
+        assertEquals(result.ruleCount, result.mappedRuleCount)
+    }
+
     private companion object {
+
+        /** One stylesheet spelling per element the mapper consumes. */
+        val SAMPLE_SELECTOR: Map<String, String> = mapOf(
+            EL_NAV_BAR to "system-nav-bar",
+            EL_KEY to "key",
+            EL_HINT to "key-hint",
+            EL_POPUP to "key-popup-box",
+            EL_EMOJI_POPUP to "media-emoji-key-popup-box",
+            EL_TOOLBAR to "smartbar",
+            EL_TOOL to "smartbar-action-key",
+            EL_TOOL_TOGGLE to "smartbar-shared-actions-toggle",
+            EL_CANDIDATE to "smartbar-candidate-word",
+            EL_SECONDARY_TEXT to "clipboard-item-description",
+            EL_DIVIDER to "smartbar-candidate-spacer",
+            EL_CHIP to "smartbar-candidate-clip",
+            EL_TILE to "smartbar-action-tile",
+            EL_CARD to "clipboard-item",
+            EL_SHEET to "subtype-panel",
+            EL_EMOJI_TAB to "media-emoji-tab",
+            EL_GLIDE to "glide-trail",
+        )
+
         /**
          * The elements a FlorisBoard theme actually names, trimmed to one of
          * each family. Hand-written against the published element list.

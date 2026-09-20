@@ -84,16 +84,17 @@ A FlorisBoard extension that holds both a day and a night version becomes **one*
 
 ### How much comes across
 
-Open the `.flex` from a file manager and the dialog puts a number on it: *"The app can use 34 of the 52 style rules in this file."* That dialog is also where the list below shows up, one line per thing that had nowhere to go.
+Open the `.flex` from a file manager and the dialog puts a number on it: *"The app can use 34 of the 52 style rules in this file."* That number counts the rules that changed something the app draws, not the rules it merely recognised. A rule that only sets text wrapping names a part this app has and still changes nothing, so it does not count. That dialog is also where the list below shows up, one line per thing that had nowhere to go.
 
 Colours mostly land. These all have somewhere to go:
 
 - The board, the keys, the pressed key, the enter key, the function keys, borders and per-key colours.
-- The key popup and its border, and the corner hint.
-- The toolbar: the tool icons, the circle behind them, and the active toggle.
-- The suggestion strip: the suggestion text, the clip chip, and a chip's selected colours.
+- The key popup and its border, and the corner hint. A theme that styles only the emoji popup gets that bubble for both.
+- The toolbar: the tool icons, the circle behind them, the active toggle and the glyph on it.
+- The suggestion strip: the suggestion text, the quieter second line, the dividers, the clip chip, and a chip's selected colours.
 - The panel cards, the bottom sheets, the navigation bar band and the glide trail.
 - Key and hint text sizes, bold labels, and the corner shape of keys, popups, chips, cards and menus.
+- **The shape of a single key.** A theme that makes only the enter key round keeps it round here.
 - A board background image and a key texture.
 
 **Colours that follow the wallpaper are read too.** A FlorisBoard theme may name a Material You role, such as `dynamic-dark-color(surfaceContainerLow)`, instead of a fixed colour. On Android 12 and later the app resolves those against the same system palette FlorisBoard reads, so a theme written that way arrives with its colours rather than empty. Two of the most-used theme packs are written entirely this way.

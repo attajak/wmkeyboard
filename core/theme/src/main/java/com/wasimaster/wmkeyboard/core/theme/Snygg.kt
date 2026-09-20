@@ -127,7 +127,13 @@ internal class Stylesheet(
                 if (rule == null) dropped += FlexUnsupported.UNKNOWN_ELEMENT else rules += rule
             }
             if (rules.isEmpty()) return null
-            return Stylesheet(rules, count, rules.size, dropped)
+            // What the user is told is "the app can use N of M rules", so N has
+            // to mean a rule that actually reached a field. Counting every rule
+            // whose *element name* was recognised was the flattering number,
+            // not the true one: a rule setting only `text-overflow` names an
+            // element this app has and still changes nothing it draws. See
+            // [SNYGG_CONSUMED], which is the same contract the mapper keeps.
+            return Stylesheet(rules, count, rules.count { it.lands() }, dropped)
         }
 
         @Suppress("LongParameterList")
@@ -317,13 +323,11 @@ internal class Stylesheet(
             // The board itself. `keyboard` is the 0.4 name, `window` the 0.5 one.
             for (name in listOf("window", "keyboard", "root")) put(name, EL_BOARD)
             put("system nav bar", EL_NAV_BAR)
-            put("one handed panel", EL_ONE_HANDED)
 
             // Keys.
             for (name in listOf("key", "key background")) put(name, EL_KEY)
             for (name in listOf("key hint", "key hint text", "keyhint")) put(name, EL_HINT)
             for (name in listOf("key popup box", "key popup", "popup")) put(name, EL_POPUP)
-            for (name in listOf("key popup element", "key popup extended indicator")) put(name, EL_POPUP_ELEMENT)
 
             // The bar above the keys. 0.4 called the tool buttons `smartbar-key`
             // and `smartbar-quick-action`; 0.5 calls them `smartbar-action-key`.
@@ -346,35 +350,73 @@ internal class Stylesheet(
             )) {
                 put(name, EL_TOOL_TOGGLE)
             }
-            for (name in listOf("smartbar candidate word", "smartbar candidate", "candidate")) {
+            for (name in listOf(
+                "smartbar candidate word", "smartbar candidate", "candidate", "smartbar candidate word text",
+            )) {
                 put(name, EL_CANDIDATE)
             }
             put("smartbar candidate row", EL_CANDIDATE)
-            put("smartbar candidate spacer", EL_CANDIDATE_SPACER)
+            put("smartbar candidate spacer", EL_DIVIDER)
+
+            // The quieter text beside the main text. Upstream splits it across
+            // a subheading, a timestamp, a kind label and a second word; here
+            // they are all the same colour, so they are the same element.
+            // Only what genuinely means "quieter text beside the main text".
+            // A section heading is not that — several themes paint theirs in
+            // the accent colour, and folding it in here tinted every
+            // suggestion's second line orange.
+            for (name in listOf(
+                "smartbar candidate word secondary text",
+                "clipboard subheader",
+                "clipboard item description",
+                "clipboard item timestamp",
+            )) {
+                put(name, EL_SECONDARY_TEXT)
+            }
 
             // Chips: the clip suggestion, the action tiles, the autofill chip and
             // the clipboard's filter row all draw the same kind of pill here.
             for (name in listOf(
-                "smartbar candidate clip", "inline autofill chip", "clipboard filter chip",
+                "smartbar candidate clip",
+                "inline autofill chip",
+                "clipboard filter chip",
+                // Sub-parts of the same pill. They carry typography, and
+                // occasionally the colour the pill itself left unsaid.
+                "smartbar candidate clip text",
+                "smartbar candidate clip icon",
+                "clipboard filter chip text",
+                "clipboard filter chip icon",
             )) {
                 put(name, EL_CHIP)
             }
-            for (name in listOf("smartbar action tile", "smartbar actions editor tile")) put(name, EL_TILE)
+            for (name in listOf(
+                "smartbar action tile",
+                "smartbar actions editor tile",
+                "smartbar action tile icon",
+                "smartbar action tile text",
+            )) {
+                put(name, EL_TILE)
+            }
 
-            // Panel cards and the sheets they sit in.
-            for (name in listOf("clipboard item", "clipboard item popup")) put(name, EL_CARD)
-            put("clipboard header", EL_PANEL_HEADER)
-            for (name in listOf("smartbar actions editor", "subtype panel")) put(name, EL_SHEET)
-            put("smartbar actions editor header", EL_PANEL_HEADER)
-            put("subtype panel header", EL_PANEL_HEADER)
+            // Panel cards and the sheets they sit in. A card's own popup is the
+            // same card lifted, so it is the same surface here.
+            // The card only. `clipboard-item-popup` is the same card lifted and
+            // usually a shade lighter, and merging the two let that lighter
+            // shade become the resting card colour.
+            put("clipboard item", EL_CARD)
+            for (name in listOf(
+                "smartbar actions editor", "subtype panel", "clipboard grid", "clipboard filter row",
+            )) {
+                put(name, EL_SHEET)
+            }
 
-            // The emoji board.
-            for (name in listOf("media emoji key", "emoji key")) put(name, EL_EMOJI_KEY)
+            // The emoji board. Its long-press bubble is the same bubble the
+            // keys use, so it stands in where a sheet styles one and not the
+            // other.
             for (name in listOf("media emoji key popup box", "emoji key popup")) put(name, EL_EMOJI_POPUP)
             for (name in listOf("media emoji tab", "emoji tab")) put(name, EL_EMOJI_TAB)
 
             for (name in listOf("glide trail", "glide")) put(name, EL_GLIDE)
-            put("incognito mode indicator", EL_INCOGNITO)
         }
 
         /** Property aliases, normalized name to the one the mapper reads. */
@@ -446,26 +488,22 @@ internal const val ATTR_CODE = "code"
 
 internal const val EL_BOARD = "board"
 internal const val EL_NAV_BAR = "navBar"
-internal const val EL_ONE_HANDED = "oneHanded"
 internal const val EL_KEY = "key"
 internal const val EL_HINT = "hint"
 internal const val EL_POPUP = "popup"
-internal const val EL_POPUP_ELEMENT = "popupElement"
 internal const val EL_TOOLBAR = "toolbar"
 internal const val EL_TOOL = "tool"
 internal const val EL_TOOL_TOGGLE = "toolToggle"
 internal const val EL_CANDIDATE = "candidate"
-internal const val EL_CANDIDATE_SPACER = "candidateSpacer"
+internal const val EL_SECONDARY_TEXT = "secondaryText"
+internal const val EL_DIVIDER = "divider"
 internal const val EL_CHIP = "chip"
 internal const val EL_TILE = "tile"
 internal const val EL_CARD = "card"
-internal const val EL_PANEL_HEADER = "panelHeader"
 internal const val EL_SHEET = "sheet"
-internal const val EL_EMOJI_KEY = "emojiKey"
 internal const val EL_EMOJI_POPUP = "emojiPopup"
 internal const val EL_EMOJI_TAB = "emojiTab"
 internal const val EL_GLIDE = "glide"
-internal const val EL_INCOGNITO = "incognito"
 
 internal const val PROP_BACKGROUND = "background"
 internal const val PROP_FOREGROUND = "foreground"

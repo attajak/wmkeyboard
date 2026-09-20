@@ -246,7 +246,8 @@ data class KbTheme(
  * pass the horizontal gap where there is one, so a slanted key keeps its full
  * width; leave it at zero where the key has no gap of its own to lean into.
  */
-fun KbTheme.keyShape(bleedDp: Float = 0f) = keyShapeFor(keyShapeKind, keyRadiusDp, bleedDp)
+fun KbTheme.keyShape(bleedDp: Float = 0f, kind: KeyShapeKind? = null) =
+    keyShapeFor(kind ?: keyShapeKind, keyRadiusDp, bleedDp)
 
 /**
  * Whether a key at rest draws a face at all. False only when the theme's key
@@ -697,7 +698,8 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
         toolCircle = spec.toolCircleBackground?.let(::colorOf)
             ?: blendOver(keyText, board, 0.14f),
         toolCircleActive = toolActive,
-        toolCircleActiveIcon = legibleOn(toolActive, listOf(accent, keyText)),
+        toolCircleActiveIcon = spec.toolCircleActiveIcon?.let(::colorOf)
+            ?: legibleOn(toolActive, listOf(accent, keyText)),
         toolBorder = spec.toolBorderColor?.let(::colorOf),
         toolBorderWidthDp = spec.toolBorderWidthDp,
         chip = spec.chipBackground?.let(::colorOf) ?: colorOf(spec.modifierKeyBackground),
@@ -709,8 +711,8 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
         chipBorder = spec.chipBorderColor?.let(::colorOf),
         chipBorderWidthDp = spec.chipBorderWidthDp,
         suggestionText = stripText,
-        secondaryText = secondary,
-        divider = stripText.copy(alpha = 0.25f),
+        secondaryText = spec.secondaryText?.let(::colorOf) ?: secondary,
+        divider = spec.dividerColor?.let(::colorOf) ?: stripText.copy(alpha = 0.25f),
         keyRadiusDp = spec.keyCornerRadiusDp ?: settings.keyCornerRadiusDp,
         popupRadiusDp = spec.popupCornerRadiusDp ?: settings.popup.cornerRadiusDp,
         popupShapeKind = keyShapeKindOrNull(spec.popupShape) ?: settings.popup.shape,

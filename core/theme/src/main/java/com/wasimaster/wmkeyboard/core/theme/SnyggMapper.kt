@@ -58,7 +58,9 @@ internal class SnyggMapper(private val style: Stylesheet) {
         val modifier = modifierRule()
         val enter = enterRule()
         val enterBackground = color(enter, PROP_BACKGROUND) ?: resolvedKey
-        val popup = style.firstOf(EL_POPUP)
+        // The emoji board's bubble is the same bubble the keys use, so it
+        // answers where a sheet styles one and not the other.
+        val popup = style.firstOf(EL_POPUP, EL_EMOJI_POPUP)
         val hint = style.base(EL_HINT)
         val tool = style.base(EL_TOOL)
         val toolToggle = style.base(EL_TOOL_TOGGLE)
@@ -120,9 +122,12 @@ internal class SnyggMapper(private val style: Stylesheet) {
             toolbarIcon = color(tool, PROP_FOREGROUND) ?: color(board, PROP_FOREGROUND),
             toolCircleBackground = color(tool, PROP_BACKGROUND),
             toolCircleActiveBackground = color(toolToggle, PROP_BACKGROUND),
+            toolCircleActiveIcon = color(toolToggle, PROP_FOREGROUND),
             toolShape = shapeName(tool ?: toolToggle, dropped),
             toolCircleRadiusDp = shapeRadius(tool ?: toolToggle, dropped),
             suggestionText = color(candidate, PROP_FOREGROUND),
+            secondaryText = color(style.base(EL_SECONDARY_TEXT), PROP_FOREGROUND)?.takeIf { it.isVisible() },
+            dividerColor = color(style.base(EL_DIVIDER), PROP_FOREGROUND)?.takeIf { it.isVisible() },
             // Chips and panel cards.
             chipBackground = color(chip, PROP_BACKGROUND) ?: color(card, PROP_BACKGROUND),
             chipText = color(chip, PROP_FOREGROUND) ?: color(card, PROP_FOREGROUND),
@@ -274,6 +279,10 @@ internal class SnyggMapper(private val style: Stylesheet) {
                 border = color(rule, PROP_BORDER_COLOR),
                 labelScale = scaleFrom(rule.value(PROP_FONT_SIZE), DEFAULT_KEY_SP, KEY_OVERRIDE_LABEL_SCALE_RANGE),
                 bold = rule.value(PROP_FONT_WEIGHT)?.contains(BOLD, ignoreCase = true),
+                // A round enter key among soft rectangles is a whole family of
+                // themes' signature, and the one thing a per-key style could
+                // not say until now.
+                shape = snyggShape(rule.value(PROP_SHAPE), dropped)?.first?.name,
             )
             if (override.isEmpty) null else id to override
         }.toMap()
@@ -361,6 +370,55 @@ internal class SnyggMapper(private val style: Stylesheet) {
         }
     }
 }
+
+/**
+ * Exactly which property of which element reaches a [ThemeSpec] field.
+ *
+ * This is the contract [SnyggMapper] above implements, written out so that the
+ * count the import puts in front of the user — "the app can use N of the M
+ * style rules in this file" — can be computed from it rather than guessed.
+ *
+ * The earlier count was every rule whose *element name* was recognised, which
+ * flattered the conversion twice over: a rule setting only `text-overflow`
+ * counted, and so did an element that was recognised but never read. A number
+ * a user is shown has to mean what it says, so a rule counts here only when it
+ * sets something that genuinely lands.
+ *
+ * Adding a field to the mapper means adding it here. The parity test asserts
+ * the two agree on a sheet that exercises every element, so a mapping added
+ * without a line here fails rather than silently under-reporting.
+ */
+internal val SNYGG_CONSUMED: Map<String, Set<String>> = mapOf(
+    EL_BOARD to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_IMAGE),
+    EL_NAV_BAR to setOf(PROP_BACKGROUND),
+    EL_KEY to setOf(
+        PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE, PROP_BORDER_COLOR,
+        PROP_BORDER_WIDTH, PROP_FONT_WEIGHT, PROP_FONT_SIZE, PROP_IMAGE,
+    ),
+    EL_HINT to setOf(PROP_FOREGROUND, PROP_FONT_SIZE),
+    EL_POPUP to setOf(
+        PROP_BACKGROUND, PROP_FOREGROUND, PROP_BORDER_COLOR, PROP_BORDER_WIDTH, PROP_SHAPE,
+    ),
+    EL_EMOJI_POPUP to setOf(
+        PROP_BACKGROUND, PROP_FOREGROUND, PROP_BORDER_COLOR, PROP_BORDER_WIDTH, PROP_SHAPE,
+    ),
+    EL_TOOLBAR to setOf(PROP_BACKGROUND),
+    EL_TOOL to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
+    EL_TOOL_TOGGLE to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
+    EL_CANDIDATE to setOf(PROP_FOREGROUND),
+    EL_SECONDARY_TEXT to setOf(PROP_FOREGROUND),
+    EL_DIVIDER to setOf(PROP_FOREGROUND),
+    EL_CHIP to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
+    EL_TILE to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
+    EL_CARD to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
+    EL_SHEET to setOf(PROP_SHAPE),
+    EL_EMOJI_TAB to setOf(PROP_FOREGROUND),
+    EL_GLIDE to setOf(PROP_FOREGROUND, PROP_BACKGROUND),
+)
+
+/** Whether this rule sets anything the mapper will actually read. */
+internal fun SnyggRule.lands(): Boolean =
+    SNYGG_CONSUMED[element].orEmpty().any { it in properties }
 
 /** Whether a colour will actually show, rather than being fully transparent. */
 internal fun Long.isVisible(): Boolean = ((this ushr 24) and 0xFFL) > 0L
