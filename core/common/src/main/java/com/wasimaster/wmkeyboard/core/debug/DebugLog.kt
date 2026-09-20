@@ -85,12 +85,31 @@ object DebugLog {
     @Volatile
     private var appContext: Context? = null
 
+    /**
+     * The whole flavour name, which only `:app` knows.
+     *
+     * Everything in this module compiles against `:core:config`, and that
+     * module carries the `capabilities` dimension alone — so `BuildConfig.FLAVOR`
+     * here reads `full`, never `fullIntl` or `fullEn`. The two language builds
+     * are separate R8 runs whose mappings are not interchangeable, so a record
+     * that cannot name its language build cannot be retraced against the right
+     * one. `WMApplication` fills this in on every process start, before any
+     * handler is installed.
+     */
+    @Volatile
+    private var buildTag: String? = null
+
     @Volatile
     private var handlerInstalled = false
 
     /** Guards against a crash *inside* the crash path looping the handler. */
     @Volatile
     private var handlingCrash = false
+
+    /** See [buildTag]. Called once per process from `WMApplication`. */
+    fun setBuildTag(flavor: String) {
+        buildTag = flavor
+    }
 
     fun d(tag: String, message: String) = record(LogLevel.DEBUG, tag, message)
     fun i(tag: String, message: String) = record(LogLevel.INFO, tag, message)
@@ -213,6 +232,10 @@ object DebugLog {
     /** Whether this is the throwaway process the crash screen runs in. */
     fun isCrashProcess(): Boolean = processName().endsWith(CRASH_PROCESS_SUFFIX)
 
+    /** What a record names as the build: the whole flavour once :app has said. */
+    private val flavorTag: String
+        get() = buildTag ?: BuildConfig.FLAVOR
+
     private val channelTag: String
         get() = when {
             BuildConfig.ENABLE_PLAY_STORE -> " (Play Store)"
@@ -231,7 +254,7 @@ object DebugLog {
             appendLine(CRASH_SEPARATOR)
             appendLine("time: ${timestamp(System.currentTimeMillis())}")
             appendLine("thread: $threadName")
-            appendLine("version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) ${BuildConfig.FLAVOR}$channelTag")
+            appendLine("version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) $flavorTag$channelTag")
             appendLine("android: ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT}) ${Build.MANUFACTURER} ${Build.MODEL}")
             appendLine(error.stackTraceToString())
             // What the app was doing on the way in is usually the whole story,
@@ -267,7 +290,7 @@ object DebugLog {
         appendLine("WM Keyboard diagnostics")
         appendLine(
             "version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) " +
-                "${BuildConfig.FLAVOR}$channelTag ${BuildConfig.BUILD_TYPE}",
+                "$flavorTag$channelTag ${BuildConfig.BUILD_TYPE}",
         )
         appendLine("android: ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})")
         appendLine("device: ${Build.MANUFACTURER} ${Build.MODEL}")

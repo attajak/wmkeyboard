@@ -1,0 +1,89 @@
+name: Retrace
+
+# Turns an obfuscated stack trace pasted into an issue into a readable one.
+#
+# A release build's frames read `at q3.a(SourceFile:15)`, which says nothing to
+# anyone. The mapping that undoes that is already attached to every release, so
+# this reads the `version:` line the app's own crash record carries, fetches
+# that build's mapping, runs R8's retrace over the body, and comments the
+# result. Nobody has to ask the reporter for a file they do not have.
+#
+# Everything here treats the issue body as hostile text: it reaches the script
+# through the environment and a file, never through a shell argument or a
+# workflow expression inside a `run:` block, which is the one mistake that
+# turns a bug report into code execution on a runner holding a write token.
+
+on:
+  issues:
+    types: [opened, edited]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: retrace-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  retrace:
+    name: Retrace a pasted stack trace
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Cheap gates, so an ordinary comment does not start a runner. `contains`
+    # here is a workflow expression evaluated by Actions, not a shell test, so
+    # it reads the untrusted body without ever running it. The script applies
+    # the real test.
+    if: >-
+      github.event.sender.type != 'Bot' &&
+      (
+        github.event_name == 'issues' ||
+        startsWith(github.event.comment.body, '/retrace') ||
+        contains(github.event.comment.body, 'SourceFile:')
+      )
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      # The R8 jar is ~21 MB and the same one retraces every mapping that
+      # names that compiler version.
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/retrace/cache
+          key: retrace-r8-jars-v1
+
+      # The untrusted text moves to disk here and is never interpolated into a
+      # script. A comment of exactly `/retrace` means "do the issue body",
+      # which is how a trace gets retraced after the mapping for its release
+      # exists, or after this workflow itself changes.
+      - name: Collect the text to retrace
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          if [ "$EVENT_NAME" = 'issue_comment' ] \
+             && ! printf '%s' "$COMMENT_BODY" | head -1 | grep -qi '^/retrace'; then
+            printf '%s' "$COMMENT_BODY" > body.txt
+          else
+            printf '%s' "$ISSUE_BODY" > body.txt
+          fi
+          wc -c body.txt
+
+      - name: Retrace and comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          BODY="$(cat body.txt)" python3 .github/scripts/retrace_issue.py \
+            --repo "$GITHUB_REPOSITORY" --issue "$ISSUE_NUMBER"

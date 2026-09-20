@@ -129,6 +129,7 @@ row "${prefix}-full-intl-mapping.txt.gz" 'R8 mapping, **full · all languages**.
 row "${prefix}-full-en-mapping.txt.gz" 'R8 mapping, **full · English**'
 row "${prefix}-lite-intl-mapping.txt.gz" 'R8 mapping, **lite · all languages**'
 row "${prefix}-lite-en-mapping.txt.gz" 'R8 mapping, **lite · English**'
+row "${prefix}-play-mapping.txt.gz" 'R8 mapping, **Play build**. The Play channel flags change what R8 renames, so this is the only one that reads a crash from a Play install'
 row "${prefix}-full-intl-native-symbols.zip" 'Native debug symbols, **full · all languages**'
 row "${prefix}-full-en-native-symbols.zip" 'Native debug symbols, **full · English**'
 
@@ -172,9 +173,14 @@ gunzip -k ${prefix}-full-intl-mapping.txt.gz
 retrace ${prefix}-full-intl-mapping.txt stacktrace.txt
 \`\`\`
 
-A crash from the Play build needs neither file: that build is compiled with
-different flags, so R8 renames it differently, and Play Console reads the
-mapping out of the bundle by itself.
+A crash from the Play build takes \`${prefix}-play-mapping.txt.gz\` instead:
+that build is compiled with different flags, so R8 renames it differently and
+none of the four above fit it.
+
+Or paste the crash into a bug report and let the
+[retrace workflow](https://github.com/${repo}/blob/main/.github/workflows/retrace.yml) do all
+of this for you — it reads the \`version:\` line, fetches the matching mapping
+from this release, and comments the retraced trace on the issue.
 
 EOF
   fi

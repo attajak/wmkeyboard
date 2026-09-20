@@ -246,6 +246,35 @@ jobs:
         if: always()
         run: rm -f release.keystore
 
+      # The fifth mapping. This job builds with the Play channel flags on, and
+      # those change what R8 renames, so none of the four mappings the `apks`
+      # job publishes retraces a crash from a Play install — which is most of
+      # the crashes anyone will ever paste into an issue. Play Console reads
+      # the copy inside the bundle and needs no help; a reporter on GitHub has
+      # no way to reach it, and neither has the retrace bot. So it goes to the
+      # release like the others.
+      #
+      # `fullEnRelease` and not `fullRelease`: the AAB above is the `en` build
+      # by its real name, and the mapping has to come from the same R8 run.
+      - name: Collect the Play mapping
+        run: |
+          version=$(grep '^wmkb.versionName=' gradle.properties | cut -d= -f2)
+          code=$(grep '^wmkb.versionCode=' gradle.properties | cut -d= -f2)
+          map=app/build/outputs/mapping/fullEnRelease/mapping.txt
+          if [ ! -f "$map" ]; then
+            echo "::error::No R8 mapping at $map"
+            exit 1
+          fi
+          mkdir -p dist
+          gzip -9c "$map" > "dist/wmkeyboard-${version}-vc${code}-play-mapping.txt.gz"
+          ls -l dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: play-mapping
+          path: dist/*-play-mapping.txt.gz
+          retention-days: 30
+
       # Not attached to the GitHub release: an AAB is not installable. The
       # play job below picks it up and uploads it to the internal track.
       - uses: actions/upload-artifact@v4
@@ -297,7 +326,10 @@ jobs:
 
   publish:
     name: Publish GitHub release
-    needs: [verify, apks]
+    # `bundle` as well as `apks`: the Play mapping is a release asset now, and
+    # both jobs carry the same `buildable` gate, so nothing that used to
+    # publish is held back by waiting for it.
+    needs: [verify, apks, bundle]
     if: github.ref_type == 'tag' && !inputs.dry_run
     runs-on: ubuntu-latest
     steps:
@@ -311,6 +343,23 @@ jobs:
         with:
           name: release-apks
           path: dist
+
+      # Built on the other runner with the Play flags on, so it arrives as its
+      # own artifact rather than in release-apks.
+      - uses: actions/download-artifact@v4
+        with:
+          name: play-mapping
+          path: dist
+
+      # SHA256SUMS.txt was written by the apks job, before this file existed.
+      - name: Check-sum the Play mapping
+        run: |
+          shopt -s nullglob
+          cd dist
+          for f in *-play-mapping.txt.gz; do
+            grep -q " $f$" SHA256SUMS.txt || sha256sum "$f" >> SHA256SUMS.txt
+          done
+          cat SHA256SUMS.txt
 
       # The body is built from the artifacts that were actually produced, so
       # the download grid carries real file sizes and never links a file the

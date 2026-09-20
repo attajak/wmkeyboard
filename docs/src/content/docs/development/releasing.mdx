@@ -113,23 +113,52 @@ attaches one APK per ABI for each of the four flavor combinations, plus a
 `SHA256SUMS.txt`, to the release.
 
 The release also carries the files you need to read a crash report from those
-APKs. The `*-mapping.txt.gz` files are the R8 mappings, one per flavor
-combination (`full-intl`, `full-en`, `lite-intl`, `lite-en`), and
-`*-full-intl-native-symbols.zip` and `*-full-en-native-symbols.zip` hold the
-native debug symbols. The two language builds are separate R8 runs, so their
-mappings are not interchangeable even though the Kotlin that went in was
-identical. Retrace a stack trace with the mapping from the same flavor and
-version:
+APKs. The `*-mapping.txt.gz` files are the R8 mappings — one per flavor
+combination (`full-intl`, `full-en`, `lite-intl`, `lite-en`), plus a fifth,
+`*-play-mapping.txt.gz` — and `*-full-intl-native-symbols.zip` and
+`*-full-en-native-symbols.zip` hold the native debug symbols. The two language
+builds are separate R8 runs, so their mappings are not interchangeable even
+though the Kotlin that went in was identical. Retrace a stack trace with the
+mapping from the same flavor and version:
 
 ```sh
-gunzip -k wmkeyboard-0.5.8-vc19-full-mapping.txt.gz
-retrace wmkeyboard-0.5.8-vc19-full-mapping.txt stacktrace.txt
+gunzip -k wmkeyboard-0.5.9-vc24-full-intl-mapping.txt.gz
+retrace wmkeyboard-0.5.9-vc24-full-intl-mapping.txt stacktrace.txt
 ```
 
-Do not use these files for a crash from Play. The Play build uses different
-channel flags, so R8 renames the code differently. Play needs no upload for
-this: the AAB carries its own mapping and symbols, and Play Console reads them
-from the bundle.
+The fifth one comes from the `bundle` job rather than the `apks` job, and it is
+there because the Play build is compiled with different channel flags, so R8
+renames it differently and none of the other four fit a crash from a Play
+install. Play Console reads the copy inside the AAB and needs no upload; a
+reporter on GitHub cannot reach that copy, and neither can the retrace
+workflow below, so it is published like the rest.
+
+### The retrace workflow
+
+Nobody has to do any of the above by hand for a crash pasted into an issue.
+[`retrace.yml`](https://github.com/wasi-master/wmkeyboard/blob/main/.github/workflows/retrace.yml)
+watches new issues and comments, and when a body holds frames that look
+obfuscated it reads the `version:` line out of the app's own crash record,
+fetches the matching mapping off that release, runs R8's `retrace` over the
+whole body, and comments the result.
+
+What makes the lookup deterministic rather than a guess is that the record
+names its build. `DebugLog` writes `version: 0.5.9 (24) fullEn (Play Store)`,
+and the flavor there is the whole two-dimension name, which `:app` hands the
+log on startup — `:core:common` compiles against `:core:config`, whose
+`BuildConfig.FLAVOR` carries the `capabilities` dimension alone and would say
+just `full`. A record from an F-Droid install is refused with a note instead:
+F-Droid compiles the app on their own machines, so its mapping never existed
+here. An older record that names no language build is retraced against both
+candidates and the comment says which one resolved more frames.
+
+Commenting `/retrace` on an issue re-runs it against the issue body, which is
+what to do when a trace was pasted before its release was published.
+
+The workflow treats every issue body as hostile text: it reaches the script
+through the environment and a file, never through a shell argument or a
+workflow expression inside a `run:` block, and the retraced output goes back
+inside a fence long enough that no backtick run in it can escape.
 
 ### One-time setup
 

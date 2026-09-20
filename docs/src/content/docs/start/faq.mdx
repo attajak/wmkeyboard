@@ -95,6 +95,8 @@ Export a diagnostic report from the app first. Then use one of the two **Feedbac
 
 This screen shows what the keyboard has recorded since it last started, plus any crash it didn't survive. The page states plainly that nothing you type is ever recorded here. **Share diagnostics** hands the report to Android's share sheet as a file, so no app that only accepts short text can truncate it. **Copy to clipboard** gives you the same report as plain text. An **Include the system log** toggle, off by default, adds the process's full Android log for a hard-to-reproduce bug. Read that log before you send it anywhere: every library in the app writes to it, not only code the keyboard controls.
 
+Paste that report into the issue whole, including the header lines at the top. A crash in a release build reads `at q3.a(SourceFile:15)` — the code is compiled with its names shortened, so the trace names nothing. The header says which build the crash came from, and a bot on the repository uses it to fetch that build's name table and post a readable version of the trace back on your issue, usually within a couple of minutes. Trimming the report to "just the crash part" is what stops that working.
+
 **About → Source code** opens the project's GitHub repository, where you can open an issue or start a discussion the same way you would for any open-source project.
 
 If what went wrong is something the [AI tool](/tools/ai/#reporting-a-result) generated rather than the keyboard misbehaving, use the **Report** button on the AI panel instead. It builds a draft that quotes the generation itself, which a bug report wouldn't.

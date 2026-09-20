@@ -58,6 +58,18 @@ body:
       required: true
 
   - type: textarea
+    id: crash-log
+    attributes:
+      label: Crash log
+      description: |
+        If the keyboard crashed, disappeared mid-typing, or swapped itself out for another keyboard, paste its own record here — **Settings › About › Diagnostics › Share diagnostics** ([open it directly](https://wmkeyboard.pages.dev/open/#wmkeyboard://settings/debug_log)).
+
+        Paste it whole. A release build's stack trace is unreadable on its own (`at q3.a(SourceFile:15)`), and the header at the top of the record is what lets the retrace bot pick the right mapping and post a readable version back. Nothing you type is ever in there.
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
     id: additional-information
     attributes:
       label: Additional Information
