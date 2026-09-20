@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.app
 
+import com.wasimaster.wmkeyboard.core.feedback.SoundPackFile
 import com.wasimaster.wmkeyboard.core.icons.IconPackFile
 import com.wasimaster.wmkeyboard.core.layout.LayoutFile
 import com.wasimaster.wmkeyboard.core.plugins.PluginFile
@@ -120,6 +121,54 @@ class FileImportSniffTest {
             WMFileTypes.Opened.Unrecognized,
             WMFileTypes.archiveKindFor("""{"${'$'}":"${FlexTheme.FORMAT}"}"""),
         )
+    }
+
+    @Test
+    fun `a sound pack is told apart from the other pack_json formats`() {
+        // Sticker, icon and sound packs all name their manifest pack.json, so
+        // the format tag is the whole decision. A sound pack sent to the sticker
+        // importer would be refused with a message about stickers.
+        assertEquals(
+            WMFileTypes.Opened.SoundPack,
+            WMFileTypes.archiveKindFor("""{"format":"${SoundPackFile.FORMAT}","id":"click"}"""),
+        )
+        assertEquals(
+            WMFileTypes.Opened.Icons,
+            WMFileTypes.archiveKindFor("""{"format":"${IconPackFile.FORMAT}"}"""),
+        )
+    }
+
+    // ---- text that is nobody's ----
+
+    @Test
+    fun `someone else's JSON opens in the editor rather than on an error`() {
+        // The app is offered for every .json now, so this is the common case
+        // rather than a mistake, and it has to end somewhere useful.
+        val opened = WMFileTypes.textKindFor("""{"services":{"web":{"image":"nginx"}}}""", "compose.json")
+        assertEquals(WMFileTypes.Opened.Unrecognized, opened)
+        assertTrue(WMFileTypes.isEditableText("""{"services":{}}"""))
+    }
+
+    @Test
+    fun `broken JSON is still text`() {
+        // Half-typed or truncated: worth opening precisely because it is broken.
+        assertTrue(WMFileTypes.isEditableText("""{"a": 1,"""))
+    }
+
+    @Test
+    fun `a binary file is not offered to the editor`() {
+        // decodeToString turns every unreadable byte into U+FFFD rather than
+        // failing, so without this a PNG opens as a screen of garbage.
+        val png = byteArrayOf(-119, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13).decodeToString()
+        assertFalse(WMFileTypes.isEditableText(png))
+        assertFalse(WMFileTypes.isEditableText(""))
+    }
+
+    @Test
+    fun `one odd byte does not condemn a readable file`() {
+        // A stray control character in an otherwise readable config is not a
+        // reason to refuse it, so the test is a share of the whole.
+        assertTrue(WMFileTypes.isEditableText("key = value\u0007\n" + "line\n".repeat(50)))
     }
 }
 

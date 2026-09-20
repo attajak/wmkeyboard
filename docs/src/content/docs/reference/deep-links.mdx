@@ -359,12 +359,13 @@ happens after that.
 
 ## Opening files WM Keyboard made
 
-WM Keyboard registers a file association for twelve extensions. Most are things
-it exports itself, plus four it only ever reads: a plugin file is built by
-its author rather than the app, the settings-only backup has no export button
-left, a `.flex` belongs to FlorisBoard, and a `.kmp` belongs to Keyman.
-Tapping any of these in a file manager offers to import the file instead of
-opening it as plain text.
+WM Keyboard registers a file association for thirteen extensions. Most are
+things it exports itself, plus five it only ever reads: plugin and sound pack
+files are built by their authors rather than the app, the settings-only backup
+has no export button left, a `.flex` belongs to FlorisBoard, and a `.kmp`
+belongs to Keyman. Tapping any of these in a file manager offers to import the
+file instead of opening it as plain text, and so does sharing one into WM
+Keyboard from another app's share sheet.
 
 | Extension | What it holds |
 |---|---|
@@ -374,6 +375,7 @@ opening it as plain text.
 | `.wmvocab.json` | A vocabulary pack |
 | `.wmstickers` | A sticker pack (ZIP) |
 | `.wmicons` | An icon pack (ZIP) |
+| `.wmsoundpack` | A key-sound pack: many recordings of one keyboard (ZIP) |
 | `.wmplugin` | A Lua plugin package (ZIP) |
 | `.wmconfig.json` | A full backup: any combination of settings, themes, dictionary, clipboard, snippets, stickers, icons, custom word lists, and addon repositories, whichever you chose to include when it was exported |
 | `.wmconfig.enc` | The same backup, passphrase-encrypted |
@@ -400,6 +402,9 @@ dialog tells you what happens next:
   first.
 - **Icons.** Installed and switched on immediately, replacing the built-in
   icon set (any icons you've set individually are kept).
+- **Key sounds** (`.wmsoundpack`). Installed and switched on immediately, so
+  your keys play its recordings in place of the built-in sound. Capped at 20
+  packs.
 - **Config backup** (`.wmconfig.json`). Settings merge into your current
   ones. Dictionary, clipboard, and snippets replace what's already on the
   device. If the file contains API keys, the dialog warns that they'll
@@ -434,6 +439,16 @@ successfully to an all-defaults theme, so the file's name is the only signal
 that it was meant to be a theme. Renaming a `.wmtheme.json` file, or pointing
 one at unrelated JSON, will "succeed" as an all-defaults theme rather than
 failing.
+
+Those extensions are not the whole story, because a file's name is not always
+available to match on: a browser download is often passed to other apps as an
+anonymous id with no name attached. WM Keyboard therefore also accepts JSON
+files and files of unknown type by type alone, which is what makes a
+just-downloaded theme openable at all, and which is why WM Keyboard appears in
+the "Open with" list for files that are none of its business. A file that turns
+out not to be one of the formats above gets a plain "not a WM Keyboard file"
+dialog, and if it is readable text, the offer to open it in the app's own
+editor instead. See [File formats](/reference/file-formats/#opening-a-file).
 
 ### Plugins get an extra gate
 

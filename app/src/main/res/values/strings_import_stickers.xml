@@ -147,10 +147,25 @@
     <string name="import_floris_dropped_unknown">Some parts of the file name keyboard elements that this app does not have.</string>
     <string name="import_floris_dropped_contrast">A key text colour was too close to the key colour to read. The app chose a colour that you can read.</string>
 
+    <!-- ==== Key sound packs (.wmsoundpack). ==== -->
+
+    <string name="import_sound_pack_title">Import key sounds?</string>
+    <string name="import_sound_pack_body">The app installs the pack and turns it on. Your keys play its recordings instead of the built-in sound.</string>
+    <!-- %1$s is the pack's name. %2$d is how many recordings it holds, and picks the wording. -->
+    <plurals name="import_sound_pack_done">
+        <item quantity="one">The app installed <xliff:g id="pack_name" example="Cherry MX Blue">%1$s</xliff:g> and turned it on. It has %2$d recording.</item>
+        <item quantity="other">The app installed <xliff:g id="pack_name" example="Cherry MX Blue">%1$s</xliff:g> and turned it on. It has %2$d recordings.</item>
+    </plurals>
+
     <!-- ==== A file the keyboard does not know, or cannot open. ==== -->
 
     <string name="import_unrecognized_title">Not a WM Keyboard file</string>
     <string name="import_unrecognized_body">The keyboard cannot read that file. It is not a theme, a layout, a snippet pack, a sticker pack, an icon pack, a plugin or a backup.</string>
+    <!-- Shown for a file that is readable text but none of the app's formats.
+         The app is offered for any JSON file and for files of unknown type, so
+         landing here is normal rather than a mistake. %1$s is the file name. -->
+    <string name="import_text_body">The keyboard has no use for <xliff:g id="file_name" example="settings.json">%1$s</xliff:g>. It is not a theme, a layout, a snippet pack, a sticker pack, an icon pack, a plugin or a backup. You can still read and edit it here.</string>
+    <string name="import_open_editor_action">Open editor</string>
     <string name="import_unreadable_title">The app cannot open that file</string>
     <string name="import_unreadable_body">The file is not available. Something moved or deleted it, or the app that shared it stopped access to it.</string>
 

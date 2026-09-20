@@ -43,7 +43,7 @@ Importing this way both adds the theme **and switches the keyboard to it immedia
 Tapping a `.wmtheme.json` file in a file manager, or choosing "open with" on one from a chat app, hands it to a small confirmation dialog rather than dropping you into the settings app. It asks "Import *theme name*?" with the note that the theme is added to your themes and applied to the keyboard, then **Import** and **Cancel**. Confirming has the same immediate-apply effect as the in-app Import button: added to Your themes and switched on right away.
 
 :::caution
-This file association is matched by filename, since a theme file carries no internal tag to identify it: a `.wmtheme.json` extension is the only signal. If you rename the file and drop that suffix (keeping just `.json`), Android stops offering WM Keyboard as a handler for it. The in-app Import button above isn't affected, since it doesn't check the filename.
+This file association is matched by filename, since a theme file carries no internal tag to identify it: a `.wmtheme.json` extension is the only signal. WM Keyboard is still offered for a file renamed to plain `.json` — it accepts JSON files by type as well as by name — but it will no longer recognize the contents as a theme, and will offer to open the file in its editor instead. The in-app Import button above isn't affected, since it doesn't check the filename.
 :::
 
 <PhoneFrame caption="Opening a theme file from a file manager shows a one-tap import confirmation.">

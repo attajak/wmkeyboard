@@ -405,6 +405,11 @@
                  API 24. Two filters because an intent with no type only ever matches
                  a filter with no type.
 
+                 Name matching alone is not enough — a provider that hands out no
+                 file name defeats every pattern here — so a MIME-typed filter
+                 follows the two below. These stay because they are what keeps a
+                 named file out of the chooser's "unknown binary" crowd.
+
                  Keep in step with WMFileTypes.EXTENSIONS.
             -->
             <intent-filter android:label="@string/import_file_label">
@@ -449,6 +454,10 @@
                 <data android:pathPattern=".*\\..*\\.wmvocab\\.json" />
                 <data android:pathPattern=".*\\..*\\..*\\.wmvocab\\.json" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.wmvocab\\.json" />
+                <data android:pathPattern=".*\\.wmsoundpack" />
+                <data android:pathPattern=".*\\..*\\.wmsoundpack" />
+                <data android:pathPattern=".*\\..*\\..*\\.wmsoundpack" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.wmsoundpack" />
                 <data android:pathPattern=".*\\.wmplugin" />
                 <data android:pathPattern=".*\\..*\\.wmplugin" />
                 <data android:pathPattern=".*\\..*\\..*\\.wmplugin" />
@@ -504,6 +513,10 @@
                 <data android:pathPattern=".*\\..*\\.wmvocab\\.json" />
                 <data android:pathPattern=".*\\..*\\..*\\.wmvocab\\.json" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.wmvocab\\.json" />
+                <data android:pathPattern=".*\\.wmsoundpack" />
+                <data android:pathPattern=".*\\..*\\.wmsoundpack" />
+                <data android:pathPattern=".*\\..*\\..*\\.wmsoundpack" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.wmsoundpack" />
                 <data android:pathPattern=".*\\.wmplugin" />
                 <data android:pathPattern=".*\\..*\\.wmplugin" />
                 <data android:pathPattern=".*\\..*\\..*\\.wmplugin" />
@@ -517,7 +530,64 @@
                 <data android:pathPattern=".*\\..*\\..*\\.kmp" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.kmp" />
             </intent-filter>
+
+            <!--
+                 The same formats once more, by MIME type, with no name to match
+                 on.
+
+                 A provider is free to hand out a URI that carries no file name,
+                 and the common ones do: the downloads provider answers `msf:19`
+                 for anything MediaStore has indexed, so a theme downloaded in a
+                 browser arrives without the `.wmtheme.json` every pathPattern
+                 above needs. Before this filter those files opened in whichever
+                 other keyboard claims application/octet-stream, and this app was
+                 not even offered.
+
+                 The price is being listed as an opener for JSON files and for
+                 unknown binaries that are none of ours. It is paid back at the
+                 other end: anything readable as text that turns out not to be
+                 one of the formats above opens in the file editor instead of an
+                 error, so being offered is never a dead end.
+            -->
+            <intent-filter android:label="@string/import_file_label">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:mimeType="application/json" />
+                <data android:mimeType="application/octet-stream" />
+                <data android:mimeType="application/zip" />
+                <data android:mimeType="application/x-zip-compressed" />
+            </intent-filter>
+
+            <!--
+                 Sharing into the app rather than opening: the share sheet in a
+                 chat app or a file manager. The file arrives as EXTRA_STREAM,
+                 which ImportFileActivity reads when the intent carries no data
+                 URI of its own. No scheme is declared because a share sheet
+                 matches on the type alone.
+            -->
+            <intent-filter android:label="@string/import_file_label">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/json" />
+                <data android:mimeType="application/octet-stream" />
+                <data android:mimeType="application/zip" />
+                <data android:mimeType="application/x-zip-compressed" />
+            </intent-filter>
         </activity>
+
+        <!--
+             Where a file that is none of the keyboard's formats lands: the code
+             editor, over whatever text the file holds. Not exported — only
+             ImportFileActivity starts it, and it reads the URI under the grant
+             the opening app gave this process.
+        -->
+        <activity
+            android:name="com.wasimaster.wmkeyboard.app.FileEditorActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:label="@string/file_editor_label"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Invisible one-shot activity: the IME cannot show the runtime
              permission dialog itself, so the camera tool bounces through

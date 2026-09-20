@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.app
 
+import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -403,6 +404,39 @@ private fun InstalledSoundSection(
     }
 }
 /**
+ * What importing a sound pack came to, in words.
+ *
+ * Shared with the open-a-file dialog, which reports every outcome including the
+ * good one; the section below stays quiet on success and plays the pack instead.
+ */
+internal fun describeSoundPackImport(context: Context, result: SoundPackImportResult): String = when (result) {
+    is SoundPackImportResult.Imported -> context.resources.getQuantityString(
+        R.plurals.import_sound_pack_done,
+        result.pack.sampleCount,
+        result.pack.name,
+        result.pack.sampleCount,
+    )
+
+    SoundPackImportResult.NotASoundPack ->
+        context.getString(R.string.hardware_sound_pack_not_a_pack_error)
+
+    SoundPackImportResult.TooManyPacks -> context.resources.getQuantityString(
+        R.plurals.hardware_sound_pack_limit_error,
+        SoundPackStore.MAX_PACKS,
+        SoundPackStore.MAX_PACKS,
+    )
+
+    // The refusal carries at most one argument, and "" means none.
+    is SoundPackImportResult.Rejected -> if (result.messageArg.isEmpty()) {
+        context.getString(result.messageRes)
+    } else {
+        context.getString(result.messageRes, result.messageArg)
+    }
+
+    SoundPackImportResult.Failed -> context.getString(R.string.hardware_sound_pack_read_error)
+}
+
+/**
  * The installed sound packs, and the import button.
  *
  * A pack differs from a single sound in the one way worth showing on the row:
@@ -440,29 +474,15 @@ private fun InstalledSoundPackSection(
                     }
                 }.getOrElse { SoundPackImportResult.Failed }
             }
-            when (result) {
-                is SoundPackImportResult.Imported -> {
-                    repository.setKeySoundPackId(result.pack.id)
-                    KeySoundPlayer.previewStroke(
-                        context, KeySoundStyle.PACK, settings.sound.volume, result.pack.id,
-                    )
-                }
-                SoundPackImportResult.NotASoundPack ->
-                    message = context.getString(R.string.hardware_sound_pack_not_a_pack_error)
-                SoundPackImportResult.TooManyPacks ->
-                    message = context.resources.getQuantityString(
-                        R.plurals.hardware_sound_pack_limit_error,
-                        SoundPackStore.MAX_PACKS,
-                        SoundPackStore.MAX_PACKS,
-                    )
-                // The refusal carries at most one argument, and "" means none.
-                is SoundPackImportResult.Rejected -> message = if (result.messageArg.isEmpty()) {
-                    context.getString(result.messageRes)
-                } else {
-                    context.getString(result.messageRes, result.messageArg)
-                }
-                SoundPackImportResult.Failed ->
-                    message = context.getString(R.string.hardware_sound_pack_read_error)
+            if (result is SoundPackImportResult.Imported) {
+                repository.setKeySoundPackId(result.pack.id)
+                // Nothing is said on success here: the pack that was just
+                // selected plays itself, which says it better.
+                KeySoundPlayer.previewStroke(
+                    context, KeySoundStyle.PACK, settings.sound.volume, result.pack.id,
+                )
+            } else {
+                message = describeSoundPackImport(context, result)
             }
         }
     }

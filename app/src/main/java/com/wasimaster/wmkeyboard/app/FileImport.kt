@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.app
 import com.wasimaster.wmkeyboard.core.vocab.VocabPacks
 import com.wasimaster.wmkeyboard.core.vocab.VocabPackFile
 import com.wasimaster.wmkeyboard.core.vocab.VocabPack
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
@@ -35,8 +36,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.core.content.IntentCompat
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.feedback.SoundPackFile
+import com.wasimaster.wmkeyboard.core.feedback.SoundPackImportResult
+import com.wasimaster.wmkeyboard.core.feedback.SoundPackStore
 import com.wasimaster.wmkeyboard.core.icons.IconImportResult
 import com.wasimaster.wmkeyboard.core.icons.IconPackFile
 import com.wasimaster.wmkeyboard.core.icons.IconPackStore
@@ -90,14 +95,21 @@ import java.io.File
  * Opening one of the keyboard's own files from outside the app — a file
  * manager, a chat app's "open with", a downloads notification.
  *
- * Every format the keyboard exports is either JSON or a ZIP, so a MIME-typed
- * intent filter would claim every `.json` and every archive on the device.
- * The manifest filters on the *file name* instead (`pathPattern` per
- * extension), which is why each export writes a compound extension:
- * `.wmtheme.json` rather than `.json`. Files whose content URI carries no
- * name — a downloads-provider `msf:1234`, say — simply don't match, and the
- * user opens them through the in-app pickers as before. That miss is the
- * intended trade for not being offered as a JSON viewer.
+ * Every format the keyboard exports is either JSON or a ZIP, so the manifest
+ * filters on the *file name* first (`pathPattern` per extension), which is why
+ * each export writes a compound extension: `.wmtheme.json` rather than
+ * `.json`. A name is the precise signal, and it is what keeps a file of ours
+ * out of the chooser's crowd of unknown binaries.
+ *
+ * A name is not always there, though. A provider may hand out a URI with no
+ * file name in it at all — the downloads provider answers `msf:19` for
+ * anything MediaStore has indexed — and every pattern misses those, which used
+ * to mean a theme downloaded in a browser opened in some other keyboard and
+ * never in this one. So the manifest also claims `application/json` and
+ * `application/octet-stream` outright, and this app is now offered for files
+ * that are nobody's business here. [Opened.Text] is the other half of that
+ * bargain: anything readable that turns out not to be ours opens in the editor
+ * rather than on an error.
  *
  * The extension only gets the file here. What is actually *done* with it is
  * decided by reading it: every format but the theme carries a format tag, so
@@ -121,6 +133,7 @@ object WMFileTypes {
         SnippetFile.FILE_EXTENSION,
         PluginFile.FILE_EXTENSION,
         VocabPackFile.FILE_EXTENSION,
+        SoundPackFile.FILE_EXTENSION,
         // The one extension here that is not ours. A `.flex` is FlorisBoard's
         // theme file, and claiming it is the point: someone moving over opens
         // the file they already have. FlorisBoard's own filter is unaffected —
@@ -165,6 +178,12 @@ object WMFileTypes {
         data object Icons : Opened
 
         /**
+         * A key-sound pack. A ZIP with the same `pack.json` sticker and icon
+         * packs carry, told apart by its format tag like those two.
+         */
+        data object SoundPack : Opened
+
+        /**
          * A FlorisBoard `.flex` theme extension, already converted.
          *
          * Its own case rather than a [Theme], and it carries the whole
@@ -199,7 +218,22 @@ object WMFileTypes {
          */
         data object Plugin : Opened
 
-        /** Readable, but not one of ours. */
+        /**
+         * Readable text that is none of the formats above: someone else's JSON,
+         * a config file, a note that arrived with the wrong extension. It opens
+         * in the editor.
+         *
+         * Carries no bytes, for the same reason [Stickers] and [Icons] do not:
+         * the editor re-opens the file for itself, because a document may be
+         * two million characters and an intent extra that size kills the
+         * process.
+         *
+         * Anything that is *not* text — a foreign archive, an image, a PDF —
+         * stays [Unrecognized]: a hex dump helps nobody.
+         */
+        data object Text : Opened
+
+        /** Not one of ours, and not something worth showing either. */
         data object Unrecognized : Opened
 
         /** Gone, or no permission, or not readable at all. */
@@ -244,7 +278,35 @@ object WMFileTypes {
         // Exports from before the truncating write could carry the tail of an
         // older, longer file after the document. The proposal below keeps this
         // trimmed text, so what gets applied is what got recognised.
-        return textKindFor(text.firstJsonDocument(), name)
+        val kind = textKindFor(text.firstJsonDocument(), name)
+        if (kind != Opened.Unrecognized) return kind
+        // None of ours. Text still opens — in the editor rather than on a dead
+        // end — now that the manifest claims application/json and
+        // application/octet-stream and files that are nobody's business here
+        // reach this activity on purpose.
+        return if (isEditableText(text)) Opened.Text else Opened.Unrecognized
+    }
+
+    /**
+     * Whether [text] is worth putting in an editor.
+     *
+     * `decodeToString` turns every byte it cannot read into U+FFFD rather than
+     * failing, so a PNG arrives here as a long string of replacement characters
+     * and would otherwise open as a screen of garbage. Control characters are
+     * counted with them: both are common in binary and vanishingly rare in the
+     * text files this is for. One stray byte in an otherwise readable file is
+     * not enough to refuse it, so the test is a share of the whole rather than
+     * a first sighting — except for NUL, which no text file has and every
+     * binary does.
+     */
+    internal fun isEditableText(text: String): Boolean {
+        if (text.isEmpty() || text.length > MAX_EDITABLE_CHARS) return false
+        var odd = 0
+        for (ch in text) {
+            if (ch == '\u0000') return false
+            if (ch == '\uFFFD' || (ch.code < 0x20 && ch != '\t' && ch != '\n' && ch != '\r')) odd++
+        }
+        return odd * BINARY_SHARE < text.length
     }
 
     /**
@@ -342,6 +404,7 @@ object WMFileTypes {
         manifest.contains("\"${IconPackFile.FORMAT}\"") -> Opened.Icons
         manifest.contains("\"${StickerPackFile.FORMAT}\"") -> Opened.Stickers
         manifest.contains("\"${PluginFile.FORMAT}\"") -> Opened.Plugin
+        manifest.contains("\"${SoundPackFile.FORMAT}\"") -> Opened.SoundPack
         else -> Opened.Unrecognized
     }
 
@@ -367,14 +430,24 @@ object WMFileTypes {
     private const val MAX_MANIFEST_BYTES = 64 * 1024
 
     /**
-     * The manifest names the archive formats use. Sticker and icon packs share
-     * `pack.json` and are told apart by their format tag; a plugin names its
-     * manifest differently so that a `.wmplugin` is recognisable without
-     * reading any Lua.
+     * The longest file the editor will open. Well past any hand-written config
+     * and far short of what a field holding the whole document can lay out.
+     */
+    private const val MAX_EDITABLE_CHARS = 2_000_000
+
+    /** One odd character in this many is still text. */
+    private const val BINARY_SHARE = 100
+
+    /**
+     * The manifest names the archive formats use. Sticker, icon and sound packs
+     * all share `pack.json` and are told apart by their format tag; a plugin
+     * names its manifest differently so that a `.wmplugin` is recognisable
+     * without reading any Lua.
      */
     private val ARCHIVE_MANIFESTS =
         setOf(
             StickerPackFile.MANIFEST,
+            SoundPackFile.MANIFEST,
             PluginFile.MANIFEST,
             FlexTheme.MANIFEST,
             KeymanPackage.MANIFEST,
@@ -410,7 +483,7 @@ class ImportFileActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val uri = intent?.data
+        val uri = intent?.let(::sourceUri)
         if (uri == null) {
             finish()
             return
@@ -430,6 +503,21 @@ class ImportFileActivity : ComponentActivity() {
         }
     }
 }
+
+/**
+ * The file an intent points at.
+ *
+ * An "open with" carries it as the data URI. A share sheet carries it as
+ * `EXTRA_STREAM` instead, with no data URI at all, which is why the manifest's
+ * `ACTION_SEND` filter would otherwise reach an activity that finishes on
+ * arrival.
+ */
+private fun sourceUri(intent: Intent): Uri? = intent.data
+    ?: if (intent.action == Intent.ACTION_SEND) {
+        IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
+    } else {
+        null
+    }
 
 /**
  * The pending import, once the file has been read and named.
@@ -456,9 +544,15 @@ private data class ImportProposal(
      * eight formats which need no such thing say nothing about it.
      */
     val applyWithPassphrase: (suspend (String) -> String)? = null,
+    /**
+     * Set instead of [apply] by a proposal whose confirm opens a screen rather
+     * than importing anything. The dialog runs it and closes; there is no
+     * result message to show, because the screen is the result.
+     */
+    val open: (() -> Unit)? = null,
 ) {
-    /** Whether there is anything to press Import for. */
-    val actionable: Boolean get() = apply != null || applyWithPassphrase != null
+    /** Whether there is anything to press the confirm button for. */
+    val actionable: Boolean get() = apply != null || applyWithPassphrase != null || open != null
 }
 
 /** The proposal's heading, resolved against the screen's resources. */
@@ -560,7 +654,15 @@ private fun ImportFileDialog(
         confirmButton = {
             val apply = proposal.apply
             val applyWithPassphrase = proposal.applyWithPassphrase
+            val open = proposal.open
             when {
+                // Closes on the way out: the screen it opens is the result, and
+                // a dialog left behind it would be waiting on a finished import.
+                open != null -> TextButton(onClick = {
+                    open()
+                    onClose()
+                }) { Text(stringResource(proposal.confirmLabelRes)) }
+
                 applyWithPassphrase != null -> TextButton(
                     enabled = passphrase.isNotEmpty(),
                     onClick = {
@@ -974,6 +1076,34 @@ private fun rememberProposal(
         )
 
         WMFileTypes.Opened.Plugin -> pluginProposal(context, uri)
+
+        WMFileTypes.Opened.SoundPack -> ImportProposal(
+            titleRes = R.string.import_sound_pack_title,
+            body = context.getString(R.string.import_sound_pack_body),
+            apply = {
+                val store = SoundPackStore.get(context)
+                // Names a pack whose own manifest gives no name, resolved here
+                // because the import runs off the main thread.
+                val fallbackName = WMFileTypes.displayName(context, uri)
+                val result = withContext(Dispatchers.IO) {
+                    runCatching {
+                        context.contentResolver.requireInputStream(uri)
+                            .use { SoundPackFile.import(it, store, fallbackName) }
+                    }.getOrElse { SoundPackImportResult.Failed }
+                }
+                // Selected on arrival, the way an imported icon pack is: a pack
+                // that stays unselected makes no sound and reads as a failure.
+                if (result is SoundPackImportResult.Imported) repository.setKeySoundPackId(result.pack.id)
+                describeSoundPackImport(context, result)
+            },
+        )
+
+        WMFileTypes.Opened.Text -> ImportProposal(
+            titleRes = R.string.import_unrecognized_title,
+            body = context.getString(R.string.import_text_body, WMFileTypes.displayName(context, uri)),
+            confirmLabelRes = R.string.import_open_editor_action,
+            open = { FileEditorActivity.start(context, uri) },
+        )
 
         WMFileTypes.Opened.Unrecognized -> ImportProposal(
             titleRes = R.string.import_unrecognized_title,

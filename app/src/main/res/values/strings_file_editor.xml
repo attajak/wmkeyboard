@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     The editor a file opens in when it is readable text but none of the
+     keyboard's own formats. The app is offered for every JSON file and for
+     files whose type the system does not know, so this screen is what keeps
+     being offered from being a dead end.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="file_editor_label">File editor</string>
+    <string name="file_editor_save_action">Save</string>
+    <string name="file_editor_save_copy_action">Save a copy…</string>
+    <string name="file_editor_saved">Saved.</string>
+    <!-- Shown when writing back to the file the app was given fails: an app
+         that shares a file for reading only is the usual reason, and saving a
+         copy is what to do instead. -->
+    <string name="file_editor_save_failed">The app cannot write to that file. Use “Save a copy” instead.</string>
+    <string name="file_editor_copy_saved">The app saved the copy.</string>
+    <string name="file_editor_read_error">The app cannot read that file.</string>
+    <string name="file_editor_invalid_json">That is not JSON the app can tidy up.</string>
+    <string name="file_editor_discard_title">Leave without saving?</string>
+    <string name="file_editor_discard_body">Your changes to this file are not saved. Leaving loses them.</string>
+    <string name="file_editor_discard_confirm">Leave</string>
+    <!-- The status line under the editor. %1$d is the line the cursor is on,
+         %2$d the column, counted from one. -->
+    <string name="file_editor_position" tools:ignore="PluralsCandidate">Line <xliff:g id="line" example="12">%1$d</xliff:g>, column <xliff:g id="column" example="4">%2$d</xliff:g></string>
+    <!-- Shown beside the position when the text does not parse as JSON. -->
+    <string name="file_editor_json_error">Not valid JSON</string>
+    <string name="file_editor_unsaved">Not saved</string>
+</resources>
