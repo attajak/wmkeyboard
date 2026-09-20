@@ -96,6 +96,7 @@ object FlexTheme {
         if (entries.isEmpty()) return FlexResult.NotAFlex
 
         val dropped = linkedSetOf<FlexUnsupported>()
+        val unknownElements = linkedSetOf<String>()
         var rules = 0
         var mapped = 0
         val themes = entries.mapNotNull { entry ->
@@ -105,6 +106,7 @@ object FlexTheme {
             rules += style.ruleCount
             mapped += style.mappedCount
             dropped += style.dropped
+            unknownElements += style.unknownElements
             SnyggMapper(style).convert(
                 name = themeName(meta, entry, entries.size),
                 id = entry.string("id").orEmpty(),
@@ -118,6 +120,8 @@ object FlexTheme {
             else -> FlexResult.Converted(
                 themes = themes,
                 dropped = dropped.toList(),
+                unknownElements = unknownElements.toList(),
+                wallpaperColours = palette.fromDevice,
                 ruleCount = rules,
                 mappedRuleCount = mapped,
                 license = meta?.string("license").orEmpty(),
@@ -250,6 +254,14 @@ sealed interface FlexResult {
         val themes: List<ConvertedTheme>,
         /** What the stylesheets asked for that this keyboard cannot draw. */
         val dropped: List<FlexUnsupported>,
+        /** The element names behind [FlexUnsupported.UNKNOWN_ELEMENT], to name them. */
+        val unknownElements: List<String> = emptyList(),
+        /**
+         * Whether the Material You roles resolved against the device's own
+         * palette. False below Android 12, where they fall back to stock
+         * Material and the import must not claim the wallpaper was read.
+         */
+        val wallpaperColours: Boolean = false,
         /** Style rules read, and how many had somewhere to go. */
         val ruleCount: Int,
         val mappedRuleCount: Int,
@@ -286,7 +298,18 @@ data class ConvertedTheme(
 
 /** Something a stylesheet asked for that has nowhere to go here. */
 enum class FlexUnsupported {
-    ELEVATION,
+
+    /**
+     * The sheet gave a shadow a *colour*. The lift itself lands (see
+     * `PROP_ELEVATION`); only the colour has nowhere to go, and Android ignores
+     * one below version 9 anyway.
+     *
+     * Named for what is lost rather than for the property it was read from: as
+     * `ELEVATION` it read as "this app draws no shadows", which stopped being
+     * true when elevation started mapping and left the import telling users
+     * their shadows had been dropped when they had not.
+     */
+    SHADOW_COLOR,
     PER_CORNER_RADIUS,
     PER_ELEMENT_SPACING,
     FONT,

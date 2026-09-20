@@ -42,6 +42,17 @@ internal class Stylesheet(
     val ruleCount: Int,
     val mappedCount: Int,
     val dropped: Set<FlexUnsupported>,
+    /**
+     * The element names the sheet styles that this app has no counterpart for,
+     * in the file's own words.
+     *
+     * Carried so the import can *name* them. "Some parts of the file name
+     * keyboard elements that this app does not have" was true and told the user
+     * nothing they could act on; for the theme packs most people install the
+     * whole of it is the landscape text editor, which Android draws rather than
+     * this app, and FlorisBoard's own smartbar actions editor.
+     */
+    val unknownElements: Set<String> = emptySet(),
 ) {
 
     /**
@@ -114,6 +125,7 @@ internal class Stylesheet(
                 .orEmpty()
 
             val dropped = linkedSetOf<FlexUnsupported>()
+            val unknown = linkedSetOf<String>()
             val rules = mutableListOf<SnyggRule>()
             var count = 0
             for ((raw, value) in root) {
@@ -124,7 +136,12 @@ internal class Stylesheet(
                 val declarations = (value as? JsonObject) ?: continue
                 count++
                 val rule = ruleOf(raw, declarations, defines, palette, night, dropped)
-                if (rule == null) dropped += FlexUnsupported.UNKNOWN_ELEMENT else rules += rule
+                if (rule == null) {
+                    dropped += FlexUnsupported.UNKNOWN_ELEMENT
+                    parseSelector(raw)?.element?.let { unknown += it }
+                } else {
+                    rules += rule
+                }
             }
             if (rules.isEmpty()) return null
             // What the user is told is "the app can use N of M rules", so N has
@@ -133,7 +150,7 @@ internal class Stylesheet(
             // not the true one: a rule setting only `text-overflow` names an
             // element this app has and still changes nothing it draws. See
             // [SNYGG_CONSUMED], which is the same contract the mapper keeps.
-            return Stylesheet(rules, count, rules.count { it.lands() }, dropped)
+            return Stylesheet(rules, count, rules.count { it.lands() }, dropped, unknown)
         }
 
         @Suppress("LongParameterList")
@@ -149,8 +166,12 @@ internal class Stylesheet(
             val element = ELEMENTS[selector.element] ?: return null
             val properties = declarations.mapNotNull { (name, value) ->
                 val key = name.normalizeName()
-                noteUnsupported(key, dropped)
-                val text = valueOf(value, defines, palette, night, dropped) ?: return@mapNotNull null
+                val text = valueOf(value, defines, palette, night, dropped)
+                // After resolving, because what a declaration *says* decides
+                // whether anything was lost: `font-family: inherit` is the
+                // sheet declining to change the font, not a font going missing.
+                noteUnsupported(key, text, dropped)
+                if (text == null) return@mapNotNull null
                 PROPERTIES[key]?.let { it to text }
             }.toMap()
             return SnyggRule(element, selector.state, selector.attributes, properties)
@@ -291,11 +312,20 @@ internal class Stylesheet(
             return "#%08X".format(((resolved and 0xFFFFFFL) shl 8) or (resolved ushr 24))
         }
 
-        private fun noteUnsupported(property: String, dropped: MutableSet<FlexUnsupported>) {
+        private fun noteUnsupported(
+            property: String,
+            value: String?,
+            dropped: MutableSet<FlexUnsupported>,
+        ) {
+            // `inherit` is a declaration that asks for nothing, so it can never
+            // be a loss. Every font-family in both of the theme packs most
+            // people install is exactly that, and reporting them told users a
+            // font had been dropped from a theme that never named one.
+            if (value != null && value.trim().equals(INHERIT, ignoreCase = true)) return
             when {
                 // The lift itself now lands; only a shadow *colour* has nowhere
                 // to go, and below Android 9 the platform ignores one anyway.
-                property.contains("shadow color") -> dropped += FlexUnsupported.ELEVATION
+                property.contains("shadow color") -> dropped += FlexUnsupported.SHADOW_COLOR
                 property.contains("margin") || property.contains("padding") ->
                     dropped += FlexUnsupported.PER_ELEMENT_SPACING
                 property.contains("font family") -> dropped += FlexUnsupported.FONT
@@ -310,6 +340,9 @@ internal class Stylesheet(
 
         private const val DEFINES = "@defines"
         private const val FONT_RULE = "@font"
+
+        /** A value that asks for whatever the element would have had anyway. */
+        private const val INHERIT = "inherit"
         private const val VAR_PREFIX = "var("
         private const val DYNAMIC = "dynamic"
         private const val MAX_VAR_DEPTH = 8

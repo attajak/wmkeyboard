@@ -33,6 +33,7 @@ fun dynamicSnyggPalette(context: Context): SnyggPalette {
         SnyggPalette(
             light = dynamicLightColorScheme(context).asRoles(),
             dark = dynamicDarkColorScheme(context).asRoles(),
+            fromDevice = true,
         )
     }.getOrDefault(SnyggPalette.Baseline)
 }

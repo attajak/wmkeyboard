@@ -29,6 +29,16 @@ data class SnyggPalette(
     val light: Map<String, Long>,
     /** Role name (normalized, lowercase) to ARGB, for the dark scheme. */
     val dark: Map<String, Long>,
+    /**
+     * True when these really are the device's own Material You colours.
+     *
+     * [Baseline] is not: below Android 12 there is no wallpaper palette to
+     * read, so a theme written against one resolves against stock Material
+     * instead. The import has to say which happened, because "the app kept the
+     * colours your wallpaper gives right now" is simply untrue on a phone that
+     * has no such colours, and that is every phone below Android 12.
+     */
+    val fromDevice: Boolean = false,
 ) {
 
     /**

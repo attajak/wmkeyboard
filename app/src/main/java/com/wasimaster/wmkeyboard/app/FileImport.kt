@@ -702,7 +702,13 @@ internal fun ImportFileDialog(
                 Text(proposal.body)
                 if (proposal.repairs.isNotEmpty()) {
                     Spacer(Modifier.height(8.dp))
-                    Text(stringResource(R.string.import_repairs_title), fontWeight = FontWeight.Medium)
+                    // Future tense: this dialog is the *offer*, and its
+                    // button says Import. The past-tense heading belongs to
+                    // the messages shown once an import has happened.
+                    Text(
+                        stringResource(R.string.import_repairs_pending_title),
+                        fontWeight = FontWeight.Medium,
+                    )
                     for (line in proposal.repairs) Text("• $line")
                 }
                 if (proposal.language != null) {
@@ -1344,7 +1350,7 @@ private fun florisProposal(
                 )
             }
         },
-        repairs = result.dropped.map { context.getString(florisDroppedRes(it)) },
+        repairs = result.dropped.map { florisDroppedLine(it, result, context) },
         apply = {
             val dir = withContext(Dispatchers.IO) {
                 File(context.filesDir, "theme_images").apply { mkdirs() }
@@ -1406,8 +1412,46 @@ internal fun ConvertedTheme.stored(id: String, dir: File): ThemeSpec {
 }
 
 @StringRes
+/**
+ * One line of the "what will change" list.
+ *
+ * All but one are a fixed sentence. The unknown-element line names the parts
+ * instead: "some parts of the file" was true of every theme and told the user
+ * nothing, and the file's own words for them are what they can match against
+ * the stylesheet they are looking at.
+ */
+private fun florisDroppedLine(
+    dropped: FlexUnsupported,
+    result: FlexResult.Converted,
+    context: android.content.Context,
+): String {
+    // This phone may have no wallpaper palette at all, in which case those
+    // colours came from stock Material and saying "your wallpaper" is false.
+    if (dropped == FlexUnsupported.DYNAMIC_COLOR && !result.wallpaperColours) {
+        return context.getString(R.string.import_floris_dropped_dynamic_baseline)
+    }
+    if (dropped != FlexUnsupported.UNKNOWN_ELEMENT || result.unknownElements.isEmpty()) {
+        return context.getString(florisDroppedRes(dropped))
+    }
+    val named = result.unknownElements.take(MAX_NAMED_ELEMENTS).joinToString(", ")
+    val rest = result.unknownElements.size - MAX_NAMED_ELEMENTS
+    return if (rest > 0) {
+        context.resources.getQuantityString(
+            R.plurals.import_floris_dropped_unknown_named_more,
+            rest,
+            named,
+            rest,
+        )
+    } else {
+        context.getString(R.string.import_floris_dropped_unknown_named, named)
+    }
+}
+
+/** Enough to recognise the file, short enough to stay one line of prose. */
+private const val MAX_NAMED_ELEMENTS = 4
+
 private fun florisDroppedRes(dropped: FlexUnsupported): Int = when (dropped) {
-    FlexUnsupported.ELEVATION -> R.string.import_floris_dropped_elevation
+    FlexUnsupported.SHADOW_COLOR -> R.string.import_floris_dropped_shadow_color
     FlexUnsupported.PER_CORNER_RADIUS -> R.string.import_floris_dropped_corners
     FlexUnsupported.PER_ELEMENT_SPACING -> R.string.import_floris_dropped_spacing
     FlexUnsupported.FONT -> R.string.import_floris_dropped_font

@@ -285,7 +285,7 @@ class FlexThemeTest {
         assertTrue(FlexUnsupported.UNKNOWN_ELEMENT in result.dropped)
         // The lift itself is carried now, so it is no longer reported as lost.
         assertEquals(4f, result.themes[0].theme.keyElevationDp, 0.001f)
-        assertTrue(FlexUnsupported.ELEVATION !in result.dropped)
+        assertTrue(FlexUnsupported.SHADOW_COLOR !in result.dropped)
     }
 
     @Test

@@ -10,6 +10,10 @@
     <!-- Above the list of lines that say what the app had to change to make the
          file usable. -->
     <string name="import_repairs_title">The app changed these items during the import:</string>
+    <!-- The same list, but on the dialog that asks *before* anything is
+         imported. That dialog's button says Import, so the past tense above
+         read as if the work had already happened. -->
+    <string name="import_repairs_pending_title">What the app will change when you import:</string>
 
     <!-- ==== Theme and layout files. ==== -->
 
@@ -165,15 +169,28 @@
     <string name="import_heli_clipboard_empty_body">The clipboard is empty.</string>
 
     <!-- Lines in the "what the app changed" list of a FlorisBoard import. -->
-    <string name="import_floris_dropped_elevation">Key shadows are not set. This app draws keys without a shadow.</string>
-    <string name="import_floris_dropped_corners">Keys have one corner size. The file sets a different size for each corner.</string>
-    <string name="import_floris_dropped_spacing">Space around single parts is not set. This app sets the key gap for the whole keyboard.</string>
-    <string name="import_floris_dropped_font">The font is not included. A font is a separate add-on in this app.</string>
+    <string name="import_floris_dropped_shadow_color">The file picks a colour for the shadows under the keys. The shadows come across, but this app draws them in its own colour.</string>
+    <string name="import_floris_dropped_corners">The file rounds some corners more than others. This app uses one corner size per key, and takes the first of them.</string>
+    <string name="import_floris_dropped_spacing">The file sets its own spacing around single keys and panels. This app uses one gap between keys for the whole keyboard, so those spacings are not used.</string>
+    <string name="import_floris_dropped_font">The file asks for a font by name but does not contain it. In this app a font is a separate add-on: install the font yourself, then pick it in the theme editor.</string>
     <!-- A stylesheet may name a Material You role instead of a colour. The app
          resolves it against the palette in use at import and stores the result,
          so the theme keeps those colours but stops following the wallpaper. -->
-    <string name="import_floris_dropped_dynamic_snapshot">Colours that follow the system wallpaper are set to the colours in use now. They do not change later when you change the wallpaper.</string>
+    <string name="import_floris_dropped_dynamic_snapshot">Some colours in this file follow your wallpaper. The app saved the colours that your wallpaper gives right now. They stay as they are when you change your wallpaper later.</string>
+    <!-- Shown instead of the line above when the phone has no wallpaper
+         colours to read, which is every phone below Android 12. The colours
+         still resolved, but against stock Material rather than the wallpaper. -->
+    <string name="import_floris_dropped_dynamic_baseline">Some colours in this file follow the wallpaper on phones that support it. This phone does not, so the app used the standard Android colours for them.</string>
     <string name="import_floris_dropped_unknown">Some parts of the file name keyboard elements that this app does not have.</string>
+    <!-- The same line, with the parts named. %1$s is a comma-separated list of
+         the element names from the file, such as "extracted landscape input
+         layout, smartbar actions editor subheader". -->
+    <string name="import_floris_dropped_unknown_named">The file styles parts that this keyboard does not have: <xliff:g id="parts" example="extracted landscape input layout">%1$s</xliff:g>.</string>
+    <!-- %1$s is the named parts, %2$d how many more there are. -->
+    <plurals name="import_floris_dropped_unknown_named_more">
+        <item quantity="one">The file styles parts that this keyboard does not have: <xliff:g id="parts" example="extracted landscape input layout">%1$s</xliff:g>, and %2$d other.</item>
+        <item quantity="other">The file styles parts that this keyboard does not have: <xliff:g id="parts" example="extracted landscape input layout">%1$s</xliff:g>, and %2$d others.</item>
+    </plurals>
     <string name="import_floris_dropped_contrast">A key text colour was too close to the key colour to read. The app chose a colour that you can read.</string>
 
     <!-- ==== Key sound packs (.wmsoundpack). ==== -->
