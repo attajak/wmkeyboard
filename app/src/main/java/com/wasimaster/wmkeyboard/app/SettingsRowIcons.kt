@@ -684,6 +684,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_language_detection_title) { Icons.Outlined.Translate }
         put(R.string.typing_language_detection_strength_title) { Icons.Outlined.Tune }
         put(R.string.typing_language_detection_by_app_title) { Icons.Outlined.Apps }
+        put(R.string.typing_phonetic_english_title) { Icons.Outlined.Translate }
         put(R.string.typing_register_priors_title) { Icons.Outlined.QuestionAnswer }
         put(R.string.typing_context_rerank_title) { Icons.Outlined.Psychology }
         put(R.string.typing_learn_threshold_title) { Icons.Outlined.School }

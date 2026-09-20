@@ -3259,6 +3259,9 @@ const val TAP_MODEL_FILE = "learning/tap_offsets.json"
 /** Which language the user writes in each app (see `AppLanguageMix` in :core:prediction). */
 const val APP_LANGUAGE_MIX_FILE = "learning/app_language_mix.json"
 
+/** Which script the user overruled a phonetic spelling into (see `PhoneticScriptChoices` in :core:prediction). */
+const val PHONETIC_SCRIPT_CHOICES_FILE = "learning/phonetic_script_choices.json"
+
 /** What the user did with the words their glides gave them (see `GlideOutcomes` in :core:prediction). */
 const val GLIDE_OUTCOMES_FILE = "learning/glide_outcomes.json"
 
@@ -3279,6 +3282,7 @@ val LEARNED_DATA_FILES = listOf(
     LEARNED_CORRECTIONS_FILE,
     TAP_MODEL_FILE,
     APP_LANGUAGE_MIX_FILE,
+    PHONETIC_SCRIPT_CHOICES_FILE,
     GLIDE_OUTCOMES_FILE,
     GLIDE_SHAPES_FILE,
     "learning/user_lexicon.json",
@@ -5878,6 +5882,16 @@ data class SuggestionStripSettings(
      */
     val languageDetectionByApp: Boolean = true,
     /**
+     * On a phonetic layout (Avro, Hindi phonetic) with English among the
+     * language's secondary suggestion languages: commit a buffer that reads as
+     * an English word, and not as one of the layout's own, in Latin letters —
+     * `hello` stays hello where it used to come out হ্যালো. Words both
+     * languages have follow the language the field is being written in (see
+     * `PhoneticScriptVerdict`). Off, English is only ever offered on the strip.
+     * Also the toolbar's English words switch.
+     */
+    val phoneticAutoEnglish: Boolean = false,
+    /**
      * Which optional items the held-word menu shows (#99). An item missing
      * from the set is never drawn; "Edit" is drawn regardless. All three by
      * default: the menu is contextual (add only while typing an unlearned
@@ -6309,6 +6323,7 @@ class SettingsRepository(private val context: Context) {
         private val CONTEXT_RERANK = booleanPreferencesKey("context_rerank")
         private val LANGUAGE_DETECTION = booleanPreferencesKey("language_detection")
         private val LANGUAGE_DETECTION_BY_APP = booleanPreferencesKey("language_detection_by_app")
+        private val PHONETIC_AUTO_ENGLISH = booleanPreferencesKey("phonetic_auto_english")
         private val LANGUAGE_DETECTION_STRENGTH =
             stringPreferencesKey("language_detection_strength")
         private val NUMBER_ROW_CORRECTIONS = booleanPreferencesKey("number_row_corrections")
@@ -7819,6 +7834,8 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.suggestionStrip.languageDetectionStrength,
                 languageDetectionByApp = p[LANGUAGE_DETECTION_BY_APP]
                     ?: defaults.suggestionStrip.languageDetectionByApp,
+                phoneticAutoEnglish = p[PHONETIC_AUTO_ENGLISH]
+                    ?: defaults.suggestionStrip.phoneticAutoEnglish,
                 // An item name this build does not know is dropped, not kept
                 // as a stale string.
                 wordMenuItems = p[WORD_MENU_ITEMS]
@@ -11654,6 +11671,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setLanguageDetectionByApp(value: Boolean) =
         editPrefs { it[LANGUAGE_DETECTION_BY_APP] = value }
+
+    suspend fun setPhoneticAutoEnglish(value: Boolean) =
+        editPrefs { it[PHONETIC_AUTO_ENGLISH] = value }
 
     suspend fun setNumberRowCorrections(value: Boolean) =
         editPrefs { it[NUMBER_ROW_CORRECTIONS] = value }

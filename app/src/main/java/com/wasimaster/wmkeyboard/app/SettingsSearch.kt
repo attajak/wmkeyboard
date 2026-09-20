@@ -266,6 +266,7 @@ private fun SearchStrings.typingCorrectionsRows(): List<SettingsSearchEntry> {
             R.string.typing_language_detection_by_app_title,
             R.string.typing_language_detection_by_app_subtitle,
         ),
+        row(R.string.typing_phonetic_english_title, R.string.typing_phonetic_english_subtitle),
         row(
             R.string.typing_language_detection_title,
             R.string.typing_language_detection_subtitle,
@@ -1180,6 +1181,13 @@ private fun SearchStrings.toolPageRowsA(): List<SettingsSearchEntry> = listOf(
         ToolbarTool.SELECTION_ACTIONS,
         R.string.tooldetail_selection_actions_nav_title,
         R.string.tooldetail_selection_actions_nav_subtitle,
+        weight = EntryWeight.MIRROR,
+    ),
+    // And for the English words tool's.
+    toolEntry(
+        ToolbarTool.PHONETIC_ENGLISH,
+        R.string.tooldetail_typing_nav_title,
+        R.string.tooldetail_typing_nav_subtitle,
         weight = EntryWeight.MIRROR,
     ),
     toolEntry(

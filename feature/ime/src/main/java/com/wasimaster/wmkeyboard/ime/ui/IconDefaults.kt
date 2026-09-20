@@ -141,6 +141,7 @@ object IconDefaults {
         ToolbarTool.CALENDAR -> Icons.Outlined.CalendarMonth
         ToolbarTool.INCOGNITO -> Icons.Outlined.VisibilityOff
         ToolbarTool.SELECTION_ACTIONS -> Icons.Outlined.SmartButton
+        ToolbarTool.PHONETIC_ENGLISH -> Icons.Outlined.Translate
         ToolbarTool.POWER_SAVING -> Icons.Outlined.BatterySaver
         ToolbarTool.THEMES -> Icons.Outlined.Palette
         ToolbarTool.AUTOCORRECT -> Icons.Outlined.Spellcheck

@@ -56,6 +56,36 @@ Balanced is the shipped default and the one to leave alone unless something spec
 
 Whichever strength is set, the swing scales with the evidence. One classified word moves the mix about halfway, three make it certain, and a field split evenly between the two languages moves nothing at all.
 
+## English on Avro and Hindi phonetic
+
+A phonetic layout is the one place the two languages cannot share a keyboard the ordinary way. You type Latin letters and the layout turns them into Bangla or Devanagari, so an English word has nowhere to go: `hello` comes out হ্যালো, and one English word in a Bangla message means switching layouts twice.
+
+Add English under **Also suggest from** on Bangla's or Hindi's own screen and that changes in two steps.
+
+**The strip always carries what you typed.** The word exactly as you typed it, in Latin letters, sits on the last visible chip of the strip. The Bangla or Hindi suggestions keep their usual places in front of it, so nothing you reach for moves. Tap the chip and the word is written in English. Once the field has turned English (you tapped that chip, or the text already there is English) the strip leans the same way: the Bangla word stays first, because that is still what the space bar writes, and English completions take the rest.
+
+**Type English words as English** under <SettingsPath path="Typing / Automatic corrections" /> goes one step further, and is off until you turn it on. With it on, the space bar itself writes an English word in English:
+
+| You type | You get | Why |
+| --- | --- | --- |
+| `kemon` | কেমন | only Bangla knows it |
+| `because` | because | only English knows it |
+| `hello`, `keyboard` | hello, keyboard | listed as English loanwords, so the spelling is English |
+| `to`, `are`, `man` | তো, আরে, মান in a Bangla or empty field; to, are, man once the field is English | both languages have the word, so the field decides |
+| a name neither list has | the layout's own script | unless the last couple of words were English |
+
+The text in the field shows the same answer while you are still typing, so `hell` already reads hell and nothing changes under you at the space. An English word at the start of a sentence gets its capital if the field asks for one, since a script with no capitals never arms shift for you. A capital letter anywhere after the first always means Avro, because `T`, `D`, `N` and `O` are letters of their own there.
+
+When the keyboard picks the wrong script for a word both languages have:
+
+- Press backspace straight after the word and it flips to the other script, the same way backspace takes back an autocorrection. It follows the same **Undo autocorrect with backspace** setting.
+- Or tap the other script's word on the strip, before or after the space. The undo chip offers it after the space.
+- Either way the keyboard remembers the spelling. After two flips it stops weighing that spelling at all and writes it your way, until you flip it back.
+
+The **English words** tool puts the switch on the toolbar, lit while it is on. It is there for the moment a Bangla word keeps coming out in English: tap it mid-word and the word in the field turns back before you press space. Tapped on a layout that is not phonetic, or with English missing from Also suggest from, it says so and changes nothing.
+
+After an English word, the next-word predictions come from English too (your own pairs, the bundled ones, and the English word-pair pack if you downloaded it). Which language each app's fields start out leaning towards is the same per-app tally described above. Glide typing on these layouts still decodes Bangla or Hindi only.
+
 ## Options
 
 <SettingsPath path="Typing / Automatic corrections" />
@@ -65,6 +95,7 @@ Whichever strength is set, the swing scales with the evidence. One classified wo
 | Detect the language you type | On | Autocorrect on |
 | Detection strength | Balanced | Autocorrect on, and Detect the language you type on |
 | Remember each app's language | On | Autocorrect on, and Detect the language you type on |
+| Type English words as English | Off | Bangla or Hindi is enabled |
 
 Both rows sit under Automatic corrections rather than Suggestions, because detection moves autocorrect's targets as well as the strip's order. That also means both are hidden by the **Autocorrect** master switch: turn autocorrect off and the two rows disappear from the screen. The switch you set stays set, though, so detection carries on reordering the strip. It's only autocorrect's half of the effect that goes away, and that goes away with autocorrect anyway. See [Typing settings](/reference/settings/typing/#automatic-corrections) for the rest of that group.
 

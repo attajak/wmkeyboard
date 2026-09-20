@@ -115,6 +115,17 @@ class HindiPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
 
     override fun frequencyOf(word: String): Int = freqByWord[word] ?: 0
 
+    override fun matchStrength(input: String): Int {
+        val typed = foldRoman(input)
+        val direct = byKey[typed.key].orEmpty().maxOfOrNull { it.frequency / handicap(it, typed.detail) } ?: 0L
+        val spoken = spokenFinalA(typed)
+        if (spoken.isEmpty()) return direct.toInt()
+        val bare = typed.detail.dropLast(1)
+        return maxOf(direct, spoken.maxOf { it.frequency / (handicap(it, bare) * SPOKEN_FINAL_A) }).toInt()
+    }
+
+    override val maxFrequency: Int = freqByWord.values.maxOrNull() ?: 0
+
     /**
      * What to divide [entry]'s frequency by for disagreeing with what was
      * typed. 1 means it agrees on every count.

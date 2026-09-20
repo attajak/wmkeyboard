@@ -46,7 +46,16 @@ class PhoneticScheme(
     val normalize: (String) -> String,
     /** The other direction: one native word as people would spell it in Latin letters. */
     val romanizeWord: (String) -> String,
-)
+) {
+    /**
+     * How many of [spellingAssets], counted from the front, list another
+     * language's words in this script (`en_bn.tsv`) rather than this language
+     * romanized (`bn_rom.tsv`). What [SpellingMap.load] is told, so that
+     * [SpellingMap.isLoanword] can tell the two apart.
+     */
+    val loanwordAssetCount: Int
+        get() = spellingAssets.takeWhile { !it.substringAfterLast('/').startsWith(languageId) }.size
+}
 
 /** The phonetic schemes that ship, by language. */
 object PhoneticSchemes {

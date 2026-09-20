@@ -1323,6 +1323,24 @@ internal fun ToolDetailSettings(
                 )
             }
         }
+        ToolbarTool.PHONETIC_ENGLISH -> SettingsGroup(stringResource(R.string.tooldetail_options_group)) {
+            item {
+                ToggleSetting(
+                    R.string.typing_phonetic_english_title,
+                    stringResource(R.string.typing_phonetic_english_subtitle),
+                    settings.suggestionStrip.phoneticAutoEnglish,
+                    info = stringResource(R.string.typing_phonetic_english_info),
+                    default = SettingsDefaults.suggestionStrip.phoneticAutoEnglish,
+                ) { scope.launch { repository.setPhoneticAutoEnglish(it) } }
+            }
+            item {
+                NavRow(
+                    R.string.tooldetail_typing_nav_title,
+                    stringResource(R.string.tooldetail_typing_nav_subtitle),
+                    onClick = { onNavigate("typing") },
+                )
+            }
+        }
         ToolbarTool.SELECTION_ACTIONS -> SettingsGroup(stringResource(R.string.tooldetail_options_group)) {
             item {
                 ToggleSetting(

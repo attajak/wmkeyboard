@@ -22,6 +22,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import com.wasimaster.wmkeyboard.core.media.hasNotificationAccess
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
 import com.wasimaster.wmkeyboard.core.prediction.UndoMemory
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
@@ -463,6 +464,22 @@ internal fun TypingCorrectionsSettings(
                         default = SettingsDefaults.suggestionStrip.numberRowCorrections,
                     ) { scope.launch { repository.setNumberRowCorrections(it) } }
                 }
+            }
+        }
+        // Outside the autocorrect gate: which script a phonetic layout commits
+        // is not a correction, and works with autocorrect off. Only where there
+        // is a layout it can do anything on (Avro, Hindi phonetic); that it
+        // needs English among the language's "Also suggest from" languages is
+        // what the info text says.
+        if (settings.enabledLanguages.any { PhoneticSchemes.forLanguage(it.id) != null }) {
+            item {
+                ToggleSetting(
+                    R.string.typing_phonetic_english_title,
+                    stringResource(R.string.typing_phonetic_english_subtitle),
+                    settings.suggestionStrip.phoneticAutoEnglish,
+                    info = stringResource(R.string.typing_phonetic_english_info),
+                    default = SettingsDefaults.suggestionStrip.phoneticAutoEnglish,
+                ) { scope.launch { repository.setPhoneticAutoEnglish(it) } }
             }
         }
         item {

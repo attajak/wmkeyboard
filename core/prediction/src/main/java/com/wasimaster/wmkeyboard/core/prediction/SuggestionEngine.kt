@@ -373,6 +373,38 @@ class SuggestionEngine(
     }
 
     /**
+     * Whether a phonetic layout may commit an English word as English: `hello`
+     * typed on Avro stays hello, where it used to come out হ্যালো. Decided per
+     * buffer by [PhoneticScriptVerdict]; off, the layout only ever commits its
+     * own script and English is something the strip offers. Inert unless
+     * English is a secondary language of the layout's ([englishAsSecondary]).
+     */
+    @Volatile
+    private var phoneticAutoEnglishField: Boolean = false
+    var phoneticAutoEnglish: Boolean
+        get() = phoneticAutoEnglishField
+        set(value) {
+            if (value == phoneticAutoEnglishField) return
+            phoneticAutoEnglishField = value
+            generation.incrementAndGet()
+        }
+
+    /** The spellings the user has overruled the script of; see [recordScriptChoice]. */
+    @Volatile
+    var scriptChoices: PhoneticScriptChoices = PhoneticScriptChoices()
+
+    /**
+     * English's corpus n-grams while English rides as a secondary language,
+     * so the word after `hello` on Avro is predicted from English rather than
+     * from a Bengali pack that has never seen it. [NgramPack.EMPTY] otherwise.
+     */
+    @Volatile
+    var secondaryEnglishNgramPack: NgramPack = NgramPack.EMPTY
+
+    /** Whether English takes part on a phonetic layout at all. */
+    private val phoneticMixing: Boolean get() = englishAsSecondary && !englishSources
+
+    /**
      * How much the winning candidate must outscore the runner-up before
      * autocorrect fires, set from the user's confidence slider. Higher is
      * stricter: fewer corrections, but fewer wrong ones. Defaults to
@@ -667,6 +699,14 @@ class SuggestionEngine(
         if (englishAsSecondary && !englishSources && dictionary.contains(lower)) owners.add(EN)
         for (t in secondaryDictionaries) if (t.source.contains(lower)) owners.add(t.langId)
         userLexicon.languageOf(lower)?.let { owners.add(it) }
+        // A word in the script a phonetic layout writes is that language's
+        // whether or not a list has it: a name, or any word at all while the
+        // language runs on its rules with nothing downloaded. Without this the
+        // field could only ever be seen leaning towards English.
+        if (primaryLanguageId.isNotEmpty() && primaryLanguageId !in owners) {
+            val scheme = PhoneticSchemes.forLanguage(primaryLanguageId)
+            if (scheme != null && lower.any(scheme.isNative)) owners.add(primaryLanguageId)
+        }
         return owners
     }
 
@@ -1520,6 +1560,19 @@ class SuggestionEngine(
          */
         private const val SIBLING_CONFIDENCE = 2.0
 
+        /** Chips a strip is assumed to show when the caller does not say. */
+        const val DEFAULT_PHONETIC_SLOTS = 3
+
+        /**
+         * How common a word the user taught the keyboard under English counts
+         * as, on [PhoneticScriptVerdict]'s scale. It has no corpus frequency,
+         * but it was typed and kept several times, which no rare word was.
+         */
+        private const val LEARNED_LATIN_COMMONNESS = 0.6
+
+        private val NATIVE_UNCONTESTED =
+            PhoneticScriptVerdict.Verdict(PhoneticScript.NATIVE, contested = false)
+
         /** Log-space forms of the source weights, fed to the fuzzy walk. */
         private val LOG_USER_WORD_WEIGHT = ln(USER_WORD_WEIGHT.toDouble())
         private val LOG_CUSTOM_WORD_WEIGHT = ln(CUSTOM_WORD_WEIGHT.toDouble())
@@ -1827,6 +1880,9 @@ class SuggestionEngine(
      *        that puts several on a key (null on every 1:1 board)
      * @param previousWord3 the word before [previousWord2], for the reranker's
      *        2-skip bigrams (#195)
+     * @param phoneticSlots how many chips the strip shows, on a phonetic layout
+     *        that mixes English in: the other script's best is pinned to the
+     *        last of them rather than left somewhere off the end
      */
     fun suggest(
         composing: String,
@@ -1839,11 +1895,21 @@ class SuggestionEngine(
         allowRerank: Boolean = false,
         keys: KeySets? = null,
         previousWord3: String? = null,
+        phoneticSlots: Int = DEFAULT_PHONETIC_SLOTS,
     ): List<String> {
         if (composing.isEmpty()) {
             return nextWords(previousWord, previousWord2, limit, previousWord3)
         }
-        phoneticBackend(phoneticLanguage)?.let { return phoneticSuggestions(it, composing, limit) }
+        phoneticBackend(phoneticLanguage)?.let { backend ->
+            if (!phoneticMixing) return phoneticSuggestions(backend, composing, limit)
+            return phoneticStrip(backend, composing, limit, phoneticSlots) {
+                suggest(
+                    composing, previousWord, phoneticLanguage = null, limit = limit, touch = touch,
+                    previousWord2 = previousWord2, recentWords = recentWords, keys = keys,
+                    previousWord3 = previousWord3,
+                )
+            }
+        }
 
         val lower = composing.lowercase()
         // On an ambiguous board the buffer holds anchor letters, not what the
@@ -2390,6 +2456,199 @@ class SuggestionEngine(
         return ordered.asSequence().filterNot(::suppressed).take(limit).toList()
     }
 
+    /**
+     * What a space commits for [composing] on [languageId]'s phonetic layout,
+     * and what it would have committed in the other script.
+     *
+     * @param output the text the space bar writes
+     * @param script the script [output] is in
+     * @param alternate the other script's best, or null when there is none
+     *        worth a flip (see [PhoneticScriptVerdict.Verdict.contested])
+     */
+    class PhoneticCommit(val output: String, val script: PhoneticScript, val alternate: String?)
+
+    /**
+     * The commit for [composing], without the strip around it: no fuzzy walk,
+     * so it is cheap enough for the composing preview and a synchronous commit.
+     * The head of [suggest]'s list for the same buffer is always [PhoneticCommit.output]
+     * — both ask [scriptVerdict] — which is what lets the preview show it early.
+     */
+    fun phoneticCommit(languageId: String, composing: String): PhoneticCommit? {
+        val backend = phoneticBackend(languageId) ?: return null
+        if (composing.isEmpty()) return null
+        val native = phoneticSuggestions(backend, composing, 1).firstOrNull()
+            ?: backend.scheme.transliterate(composing)
+        if (!phoneticMixing) return PhoneticCommit(native, PhoneticScript.NATIVE, alternate = null)
+        val verdict = scriptVerdict(backend, composing)
+        val latin = latinForm(composing)
+        return if (verdict.script == PhoneticScript.LATIN) {
+            PhoneticCommit(latin, PhoneticScript.LATIN, native.takeIf { verdict.contested })
+        } else {
+            PhoneticCommit(native, PhoneticScript.NATIVE, latin.takeIf { verdict.contested })
+        }
+    }
+
+    /** Which script a space would commit [composing] in; see [phoneticCommit]. */
+    fun phoneticScript(languageId: String, composing: String): PhoneticScript {
+        val backend = phoneticBackend(languageId) ?: return PhoneticScript.NATIVE
+        if (!phoneticMixing || composing.isEmpty()) return PhoneticScript.NATIVE
+        return scriptVerdict(backend, composing).script
+    }
+
+    /**
+     * The English a space would commit for [composing], or null when it would
+     * commit the layout's own script. The composing preview's question, asked
+     * on the main thread at every keystroke, so it stops at the verdict and
+     * never builds the native list [phoneticCommit] needs for its alternate.
+     */
+    fun phoneticLatinPreview(languageId: String, composing: String): String? =
+        if (phoneticScript(languageId, composing) == PhoneticScript.LATIN) latinForm(composing) else null
+
+    /**
+     * The user took [script] for [spelling] where the verdict had chosen the
+     * other one: the chip, or the backspace that flips a commit. Remembered
+     * per spelling, so the same word is not got wrong the same way twice.
+     */
+    fun recordScriptChoice(languageId: String, spelling: String, script: PhoneticScript) {
+        scriptChoices.record(languageId, spelling, script)
+        generation.incrementAndGet()
+    }
+
+    /** The buffer as an English word: as typed, or in the case the user's own lexicon keeps it in. */
+    private fun latinForm(composing: String): String = displayForm(composing)
+
+    @Volatile
+    private var scriptVerdictCache: Pair<String, PhoneticScriptVerdict.Verdict>? = null
+
+    private fun scriptVerdict(backend: PhoneticBackend, composing: String): PhoneticScriptVerdict.Verdict {
+        if (!phoneticAutoEnglish) return NATIVE_UNCONTESTED
+        // A romanization is letters. Anything else in the buffer is the
+        // scheme's own notation, and so is a capital past the first: Avro's T,
+        // D, N and O are letters in their own right, and nobody reaches for
+        // shift in the middle of an English word.
+        if (!composing.all { it in 'a'..'z' || it in 'A'..'Z' }) return NATIVE_UNCONTESTED
+        if (composing.drop(1).any { it.isUpperCase() }) return NATIVE_UNCONTESTED
+        val cacheKey = "${backend.scheme.languageId}:${generation.get()}:$composing"
+        scriptVerdictCache?.let { (key, verdict) -> if (key == cacheKey) return verdict }
+        val verdict = PhoneticScriptVerdict.decide(scriptEvidence(backend, composing))
+        scriptVerdictCache = cacheKey to verdict
+        return verdict
+    }
+
+    private fun scriptEvidence(backend: PhoneticBackend, composing: String): PhoneticScriptVerdict.Evidence {
+        val lower = composing.lowercase()
+        val languageId = backend.scheme.languageId
+        val index = backend.index
+        // English: the bundled list, or a word the user has taught the
+        // keyboard under English. A word on the never-suggest list is not one
+        // the keyboard volunteers in either script.
+        val latin = when {
+            suppressed(lower) -> null
+            dictionary.contains(lower) ->
+                PhoneticScriptVerdict.commonness(dictionary.frequencyOf(lower), englishMaxFrequency())
+            userLexicon.contains(lower) && userLexicon.languageOf(lower) == EN -> LEARNED_LATIN_COMMONNESS
+            else -> null
+        }
+        // The language's own: a listed spelling or the rules' reading being a
+        // dictionary word is exact; a fold sibling is a looser claim.
+        val forms = backend.spellings.lookup(composing).filterNot(::suppressed)
+        val loanword = forms.isNotEmpty() && backend.spellings.isLoanword(composing)
+        val exact = maxOf(
+            forms.maxOfOrNull { index.frequencyOf(it) } ?: 0,
+            index.frequencyOf(backend.scheme.transliterate(composing)),
+        )
+        val folded = index.matchStrength(composing)
+        val native = when {
+            exact > 0 || folded > 0 -> maxOf(
+                PhoneticScriptVerdict.commonness(exact, index.maxFrequency),
+                PhoneticScriptVerdict.foldOnly(PhoneticScriptVerdict.commonness(folded, index.maxFrequency)),
+            )
+            forms.isNotEmpty() && !loanword -> PhoneticScriptVerdict.UNRANKED_LISTED
+            else -> null
+        }
+        val shares = if (fieldDetectionShift > 0.0) fieldMix.shares() else null
+        val context = shares?.let {
+            (it.shareOf(EN) - it.shareOf(languageId)) * it.ramp *
+                (fieldDetectionShift / FIELD_SHIFT_BALANCED).coerceAtMost(1.0)
+        } ?: 0.0
+        return PhoneticScriptVerdict.Evidence(
+            latinCommonness = latin,
+            nativeCommonness = native,
+            loanword = loanword,
+            contextDelta = context,
+            choice = scriptChoices.choiceFor(languageId, lower),
+        )
+    }
+
+    @Volatile
+    private var englishMaxCache: Pair<WordSource, Int>? = null
+
+    /** The top frequency of the English list, the scale its words are read against. */
+    private fun englishMaxFrequency(): Int {
+        val source = dictionary
+        englishMaxCache?.let { (cached, max) -> if (cached === source) return max }
+        val max = source.walkers().maxOfOrNull { it.maxSubtree(it.root) } ?: 0
+        englishMaxCache = source to max
+        return max
+    }
+
+    /**
+     * The strip of a phonetic layout that English is mixed into. Its head is
+     * always what a space commits ([phoneticCommit]); the rest follows the
+     * language the field is being written in.
+     *
+     *  - The layout's own script leads and the field is not English: the list
+     *    is what it always was, with the buffer as typed pinned to the last
+     *    visible chip. One tap writes any word in Latin letters, and the
+     *    siblings a Bengali typist actually reaches for keep their places.
+     *  - The field has turned English but the commit has not (auto-English is
+     *    off): the native word stays first, because that is what the space bar
+     *    does, and English takes the rest.
+     *  - English leads: the buffer, its completions, and the native word pinned
+     *    where the Latin one would have been.
+     *
+     * [latinCompletions] is the ordinary walk, and is only run where English
+     * has chips to fill — a Bengali sentence costs what it always cost.
+     */
+    private fun phoneticStrip(
+        backend: PhoneticBackend,
+        composing: String,
+        limit: Int,
+        slots: Int,
+        latinCompletions: () -> List<String>,
+    ): List<String> {
+        // Never empty: with every reading on the never-suggest list the rules'
+        // own is still what a space commits, and the head has to say so.
+        val native = phoneticSuggestions(backend, composing, limit)
+            .ifEmpty { listOf(backend.scheme.transliterate(composing)) }
+        val literal = latinForm(composing)
+        val latinLeads = scriptVerdict(backend, composing).script == PhoneticScript.LATIN
+        val pin = (slots - 1).coerceIn(1, maxOf(1, limit - 1))
+        if (!latinLeads && detectedLanguageId() != EN) {
+            return pinned(native, literal, pin).take(limit)
+        }
+        val latin = LinkedHashSet<String>()
+        latin.add(literal)
+        for (word in latinCompletions()) {
+            if (!word.equals(literal, ignoreCase = true)) latin.add(word)
+        }
+        val ordered = if (latinLeads) {
+            val top = native.firstOrNull()
+            val head = if (top == null) latin.toList() else pinned(latin.toList(), top, pin)
+            head + native.drop(1)
+        } else {
+            native.take(1) + latin + native.drop(1)
+        }
+        return ordered.distinct().take(limit)
+    }
+
+    /** [list] with [item] at index [at], or at the end when the list is shorter. */
+    private fun pinned(list: List<String>, item: String, at: Int): List<String> {
+        val rest = list.filterNot { it == item }
+        val index = at.coerceAtMost(rest.size)
+        return rest.subList(0, index) + item + rest.subList(index, rest.size)
+    }
+
     private fun nextWords(
         previousWord: String?,
         previousWord2: String?,
@@ -2428,6 +2687,20 @@ class SuggestionEngine(
         }
         // Seed bigrams are English pairs; they only cold-start English modes.
         if (englishSources) ordered.addAll(seedBigrams.nextWords(prev))
+        // English riding as a secondary: after one of its words the primary's
+        // pack has nothing to say (`hello` on Avro), so English's own context
+        // answers instead. Only after a word English owns, so it never talks
+        // over the primary's followers.
+        if (englishAsSecondary && !englishSources && dictionary.contains(prev)) {
+            val englishPack = secondaryEnglishNgramPack
+            if (!englishPack.isEmpty) {
+                previousWord2?.lowercase()?.let { prev2 ->
+                    ordered.addAll(englishPack.nextWordsAfter(prev2, prev, limit))
+                }
+                ordered.addAll(englishPack.nextWords(prev, limit))
+            }
+            ordered.addAll(seedBigrams.nextWords(prev))
+        }
         // Skip-gram rescue: an unknown prev (a just-typed name, a typo) has
         // no followers anywhere and the strip would go quiet. Treat it as
         // transparent and backfill from the word before it — "met Priya"

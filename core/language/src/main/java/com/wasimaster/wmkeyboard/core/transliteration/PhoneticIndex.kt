@@ -19,6 +19,19 @@ interface PhoneticIndex {
     /** Dictionary frequency of a native-script [word], 0 when unknown. */
     fun frequencyOf(word: String): Int
 
+    /**
+     * How good [lookup]'s best answer for [input] is: that word's frequency,
+     * divided by whatever the fold's discarded detail disagreed with. 0 when
+     * nothing matches. A caller weighing "is this romanization a word of the
+     * language at all" wants this rather than [frequencyOf] the head, because a
+     * sibling reached only by ignoring what was typed is weak evidence however
+     * common it is.
+     */
+    fun matchStrength(input: String): Int = lookup(input).firstOrNull()?.let(::frequencyOf) ?: 0
+
+    /** The largest frequency in the list, the scale [frequencyOf] is read against. 0 when empty. */
+    val maxFrequency: Int get() = 0
+
     /** Whether there is no word behind this index at all — no list installed. */
     val isEmpty: Boolean
 

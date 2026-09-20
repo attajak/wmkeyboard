@@ -200,6 +200,8 @@ import com.wasimaster.wmkeyboard.core.prediction.topWords
 import com.wasimaster.wmkeyboard.core.prediction.PendingLearn
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticBackend
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticScheme
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticScript
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticScriptChoices
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
 import com.wasimaster.wmkeyboard.core.prediction.RomanizedConverter
 import com.wasimaster.wmkeyboard.core.prediction.Revision
@@ -307,6 +309,7 @@ import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxPolicy
 import com.wasimaster.wmkeyboard.core.settings.APP_LANGUAGE_MIX_FILE
 import com.wasimaster.wmkeyboard.core.settings.HAND_MODEL_FILE
 import com.wasimaster.wmkeyboard.core.settings.LEARNED_CORRECTIONS_FILE
+import com.wasimaster.wmkeyboard.core.settings.PHONETIC_SCRIPT_CHOICES_FILE
 import com.wasimaster.wmkeyboard.core.settings.TAP_MODEL_FILE
 import com.wasimaster.wmkeyboard.core.text.EmojiGraphemes
 import com.wasimaster.wmkeyboard.core.text.WordDelete
@@ -735,6 +738,12 @@ open class WMKeyboardService : InputMethodService() {
      * until unlock, like every learning store.
      */
     private var appLanguageMix = AppLanguageMix(null)
+
+    /**
+     * The spellings the user has switched between English and a phonetic
+     * layout's own script ([PhoneticScriptChoices]). Memory-only until unlock.
+     */
+    private var scriptChoices = PhoneticScriptChoices(null)
     private lateinit var emojiUsage: EmojiUsage
     /**
      * A tap has moved the usage ranking since [KeyboardUiState.emojiRecents] /
@@ -1420,6 +1429,12 @@ open class WMKeyboardService : InputMethodService() {
         val isPhonetic: Boolean,
         /** Transliteration top on a phonetic layout (Avro); null otherwise. */
         val phoneticTop: String?,
+        /**
+         * The other script's word for the same buffer, where a phonetic layout
+         * could have committed either (see [SuggestionEngine.phoneticCommit]);
+         * null when the commit was never in question.
+         */
+        val phoneticAlternate: String? = null,
         /** English autocorrect target, or null when the word stands as typed. */
         val correction: String?,
         /** Near miss: not applied, but worth a chip. See [correctionOffer]. */
@@ -1467,7 +1482,22 @@ open class WMKeyboardService : InputMethodService() {
      * notice a word or two later, when backspacing back to it would cost you
      * everything you have typed since. This one stands until the sentence ends.
      */
-    private class UndoableCorrection(val typed: String, val corrected: String)
+    private class UndoableCorrection(
+        val typed: String,
+        val corrected: String,
+        /**
+         * Set when this is not a correction but a phonetic layout's choice of
+         * script ([ScriptFlip]): [typed] is then the other script's word, and
+         * undoing it is remembered as a preference rather than a rejection.
+         */
+        val script: ScriptFlip? = null,
+    )
+
+    /**
+     * The buffer a phonetic layout committed in one script where the other was
+     * a real possibility, and the script the user gets by flipping it.
+     */
+    private class ScriptFlip(val languageId: String, val spelling: String, val to: PhoneticScript)
 
     private var undoableCorrection: UndoableCorrection? = null
 
@@ -1500,9 +1530,19 @@ open class WMKeyboardService : InputMethodService() {
      * and taught to the lexicon, while a snippet expansion is a plain text swap
      * that the keyboard should learn nothing from.
      */
-    private class RevertibleCommit(val kind: Kind, val original: String, val committed: String) {
+    private class RevertibleCommit(
+        val kind: Kind,
+        val original: String,
+        val committed: String,
+        /** For [Kind.SCRIPT]: what flipping this commit teaches. */
+        val script: ScriptFlip? = null,
+    ) {
 
-        enum class Kind { AUTOCORRECT, SNIPPET, JOIN, REVISION }
+        /**
+         * SCRIPT is a phonetic layout's commit that could have gone in either
+         * script (`to` as তো or as to): [original] is the other script's word.
+         */
+        enum class Kind { AUTOCORRECT, SNIPPET, JOIN, REVISION, SCRIPT }
     }
 
     /**
@@ -1769,7 +1809,7 @@ open class WMKeyboardService : InputMethodService() {
     private fun loadSpellingMap(scheme: PhoneticScheme): SpellingMap {
         val streams = scheme.spellingAssets.map { assets.open(it) }
         return try {
-            SpellingMap.load(*streams.toTypedArray())
+            SpellingMap.load(*streams.toTypedArray(), loanwordStreams = scheme.loanwordAssetCount)
         } finally {
             streams.forEach { runCatching { it.close() } }
         }
@@ -2791,6 +2831,9 @@ open class WMKeyboardService : InputMethodService() {
                 if (userUnlocked && _uiState.value.language.id == langId) {
                     suggestionEngine?.ngramPack = loadNgramPack(langId)
                 }
+                if (userUnlocked && langId == "en" && suggestionEngine?.englishAsSecondary == true) {
+                    suggestionEngine?.secondaryEnglishNgramPack = loadNgramPack(langId)
+                }
             }
         }
 
@@ -3037,6 +3080,7 @@ open class WMKeyboardService : InputMethodService() {
                         emojiUsage.reload()
                         languageMixConfidence.reload()
                         appLanguageMix.reload()
+                        scriptChoices.reload()
                     }
                     suggestionEngine?.rankOffsets = wordRanks.snapshot()
                     pushLearnedHabits()
@@ -3309,6 +3353,7 @@ open class WMKeyboardService : InputMethodService() {
                 // the saved mode's.
                 bindEngineToLayout(activeSpec, settings)
                 suggestionEngine?.fieldDetectionShift = fieldDetectionShift(settings)
+                syncPhoneticAutoEnglish(settings)
                 glideSourcesEpoch.update { it + 1 }
             }
         }
@@ -3421,6 +3466,8 @@ open class WMKeyboardService : InputMethodService() {
         CjkLearning.store = CjkUserHistory(store("learning/cjk_history.json"))
         languageMixConfidence = LanguageMixConfidence(store("learning/language_mix.json"))
         appLanguageMix = AppLanguageMix(store(APP_LANGUAGE_MIX_FILE))
+        scriptChoices = PhoneticScriptChoices(store(PHONETIC_SCRIPT_CHOICES_FILE))
+        suggestionEngine?.scriptChoices = scriptChoices
         emojiUsage = EmojiUsage(store("learning/emoji_usage.json")).also {
             it.maxRecents = _uiState.value.settings.emoji.recentsLimit
         }
@@ -3562,7 +3609,7 @@ open class WMKeyboardService : InputMethodService() {
                 val lw = if (spellingMapOn) {
                     assets.open("dictionaries/en_bn.tsv").use { en ->
                         assets.open("dictionaries/bn_rom.tsv").use { rom ->
-                            SpellingMap.load(en, rom)
+                            SpellingMap.load(en, rom, loanwordStreams = 1)
                         }
                     }
                 } else {
@@ -3653,6 +3700,9 @@ open class WMKeyboardService : InputMethodService() {
                 secondaryDictionaries = secondaryIds.filter { it != "en" }
                     .mapNotNull { id -> customTries[id]?.let { SecondaryDictionary(id, it) } }
                 englishAsSecondary = "en" in secondaryIds && !lang.isEnglish
+                secondaryEnglishNgramPack = if (englishAsSecondary) loadNgramPack("en") else NgramPack.EMPTY
+                phoneticAutoEnglish = _uiState.value.settings.suggestionStrip.phoneticAutoEnglish
+                scriptChoices = this@WMKeyboardService.scriptChoices
                 fieldDetectionShift = fieldDetectionShift(_uiState.value.settings)
                 _uiState.value.settings.gesture.let { gesture ->
                     tuneGlide(
@@ -5398,6 +5448,7 @@ open class WMKeyboardService : InputMethodService() {
         tapOffsets.save()
         correctionMemory.save()
         appLanguageMix.save()
+        scriptChoices.save()
         glideOutcomes.save()
         glideShapes.save()
         glideSandbox.save()
@@ -5454,6 +5505,7 @@ open class WMKeyboardService : InputMethodService() {
         tapOffsets.save()
         correctionMemory.save()
         appLanguageMix.save()
+        scriptChoices.save()
         glideOutcomes.save()
         glideShapes.save()
         glideSandbox.save()
@@ -7790,6 +7842,9 @@ open class WMKeyboardService : InputMethodService() {
                 RevertibleCommit.Kind.JOIN -> true
                 // Nor is undoing a tapped revision chip.
                 RevertibleCommit.Kind.REVISION -> true
+                // The keyboard chose the script, the way it chooses a
+                // correction, so the same switch says whether backspace argues.
+                RevertibleCommit.Kind.SCRIPT -> state.settings.correction.revertOnBackspace
             }
             if (composing.isEmpty() && allowed) {
                 // A correction is always followed by the space that triggered
@@ -7961,8 +8016,93 @@ open class WMKeyboardService : InputMethodService() {
                 syncPreviousWordFromField(ic)
                 invalidateRecentWords()
             }
+            RevertibleCommit.Kind.SCRIPT -> {
+                // The word stands in the other script now. The one the keyboard
+                // chose was never the user's, so it is not counted; the flip is
+                // remembered against the spelling; and the field's language is
+                // read again, since the word that tipped it has changed sides.
+                learningBuffer.drop(revert.committed)
+                revert.script?.let(::noteScriptFlip)
+                clearUndoChip()
+                invalidateRecentWords()
+                syncPreviousWordFromField(ic)
+            }
         }
     }
+
+    /**
+     * A pick off the strip of a phonetic layout that writes two scripts. Only
+     * the word the keyboard had weighed against its own choice says anything
+     * about script: a sibling or a completion is a different word, not the same
+     * one written differently.
+     */
+    private fun notePhoneticPick(suggestion: String) {
+        val language = _uiState.value.composer.phoneticLanguage ?: return
+        val engine = suggestionEngine ?: return
+        val typed = composing.toString()
+        if (typed.isEmpty() || !engine.phoneticAutoEnglish) return
+        val commit = engine.phoneticCommit(language, typed) ?: return
+        if (suggestion != commit.alternate) return
+        val to = if (commit.script == PhoneticScript.LATIN) PhoneticScript.NATIVE else PhoneticScript.LATIN
+        noteScriptFlip(ScriptFlip(language, typed, to))
+    }
+
+    /** The user took the other script for a spelling; see [PhoneticScriptChoices]. */
+    private fun noteScriptFlip(flip: ScriptFlip) {
+        if (!learningAllowed) return
+        suggestionEngine?.recordScriptChoice(flip.languageId, flip.spelling, flip.to)
+    }
+
+    /**
+     * Pushes the English-words switch to the engine, and redraws the word
+     * being typed when it has just changed: the toolbar's toggle is reached for
+     * exactly when the preview has gone Latin under a word that was not
+     * English, and it has to come back before the space bar is pressed.
+     */
+    private fun syncPhoneticAutoEnglish(settings: KeyboardSettings) {
+        val engine = suggestionEngine ?: return
+        val next = settings.suggestionStrip.phoneticAutoEnglish
+        if (engine.phoneticAutoEnglish == next) return
+        engine.phoneticAutoEnglish = next
+        commitResolution = null
+        if (composing.isEmpty() || _uiState.value.composer.phoneticLanguage == null) return
+        currentInputConnection?.let { updateComposingText(it) }
+        refreshSuggestions()
+    }
+
+    /**
+     * [latin] with the capital a sentence opens on, when the field asks for
+     * one. A phonetic layout's own script has no case, so shift is never armed
+     * there and an English word committed from it would otherwise always open
+     * a message in lower case. [typed] with a capital of its own is left as the
+     * user wrote it.
+     */
+    private fun sentenceCasedLatin(latin: String, typed: String, state: KeyboardUiState): String {
+        if (!state.settings.autoText.capitalize || typed.any { it.isUpperCase() }) return latin
+        if (previousWord != WordContext.SENTENCE_START) return latin
+        val inputType = currentInputEditorInfo?.inputType ?: return latin
+        if (inputType and InputType.TYPE_MASK_CLASS != InputType.TYPE_CLASS_TEXT ||
+            inputType and InputType.TYPE_TEXT_FLAG_CAP_SENTENCES == 0
+        ) {
+            return latin
+        }
+        return latin.replaceFirstChar { it.uppercase() }
+    }
+
+    /** Whether [word] is in Latin letters, on a layout whose own words are not. */
+    private fun isLatinOnPhonetic(word: String, state: KeyboardUiState): Boolean {
+        val scheme = PhoneticSchemes.forLanguage(state.composer.phoneticLanguage) ?: return false
+        return word.none(scheme.isNative) && word.any { it in 'a'..'z' || it in 'A'..'Z' }
+    }
+
+    /**
+     * The language a committed [word] is learned under. A phonetic layout's
+     * language, except for a word it committed in Latin letters: that one is
+     * English, and filed under Bengali it would be damped in English fields and
+     * counted as Bengali by the field's language detection.
+     */
+    private fun learnLanguageId(word: String, state: KeyboardUiState): String =
+        if (isLatinOnPhonetic(word, state)) "en" else state.language.id
 
     /**
      * The ⌦ key: deletes forward, over the character *after* the cursor.
@@ -9468,6 +9608,10 @@ open class WMKeyboardService : InputMethodService() {
         engine.secondaryDictionaries = secondaryIds.filter { it != "en" }
             .mapNotNull { id -> customDictionaries[id]?.let { SecondaryDictionary(id, it) } }
         engine.englishAsSecondary = "en" in secondaryIds && !lang.isEnglish
+        // English's own word pairs, for the word after an English one typed on
+        // a layout that is not English's (`hello` on Avro).
+        engine.secondaryEnglishNgramPack =
+            if (engine.englishAsSecondary) loadNgramPack("en") else NgramPack.EMPTY
     }
 
     /** Spacebar swipe (or 🌐 cycle): switch to an explicit layout. */
@@ -9668,6 +9812,11 @@ open class WMKeyboardService : InputMethodService() {
         }
         if (!state.composer.isTransliterating) return buffer
         state.composer.phoneticLanguage?.let { language ->
+            // An English word the space bar is about to commit as English
+            // shows as English, for the reason the map's spelling shows early.
+            suggestionEngine?.phoneticLatinPreview(language, buffer)?.let {
+                return sentenceCasedLatin(it, buffer, state)
+            }
             suggestionEngine?.phoneticSpelling(language, buffer)?.let { return it }
         }
         return state.composer.composeBuffer(buffer)
@@ -10026,13 +10175,22 @@ open class WMKeyboardService : InputMethodService() {
         // 1 — nothing to remark on — is the right answer for every branch that
         // corrects nothing at all.
         var obviousness = 1.0
+        // On a phonetic layout that could have committed this buffer in either
+        // script: the other script's word, which a backspace or the chip flips to.
+        var scriptAlternate: String? = null
         val output = when {
-            state.composer.phoneticLanguage != null ->
-                (if (pre != null && pre.isPhonetic) pre.phoneticTop
-                else suggestionEngine
-                    ?.suggest(typed, previousWord = null, phoneticLanguage = state.composer.phoneticLanguage)
-                    ?.firstOrNull())
-                    ?: state.composer.composeBuffer(typed)
+            state.composer.phoneticLanguage != null -> {
+                val language = state.composer.phoneticLanguage.orEmpty()
+                val top = if (pre != null && pre.isPhonetic) {
+                    scriptAlternate = pre.phoneticAlternate
+                    pre.phoneticTop
+                } else {
+                    val commit = suggestionEngine?.phoneticCommit(language, typed)
+                    scriptAlternate = commit?.alternate
+                    commit?.output
+                } ?: state.composer.composeBuffer(typed)
+                if (isLatinOnPhonetic(top, state)) sentenceCasedLatin(top, typed, state) else top
+            }
             // Other transliterators (Hangul, Vietnamese) commit the composed text
             // directly, with no dictionary pass.
             state.composer.isTransliterating -> state.composer.composeBuffer(typed)
@@ -10093,11 +10251,29 @@ open class WMKeyboardService : InputMethodService() {
             r.expectReplaceBefore(revisionFragment.length, output)
             revisionFragment = ""
         }
+        val scriptFlip = scriptAlternate?.takeIf { it != output }?.let {
+            ScriptFlip(
+                state.composer.phoneticLanguage.orEmpty(),
+                typed,
+                if (isLatinOnPhonetic(output, state)) PhoneticScript.NATIVE else PhoneticScript.LATIN,
+            )
+        }
         val revertible = corrected?.let {
             RevertibleCommit(RevertibleCommit.Kind.AUTOCORRECT, original = typed, committed = it)
+        } ?: scriptFlip?.let {
+            RevertibleCommit(
+                RevertibleCommit.Kind.SCRIPT,
+                original = if (it.to == PhoneticScript.LATIN) {
+                    sentenceCasedLatin(scriptAlternate.orEmpty(), typed, state)
+                } else {
+                    scriptAlternate.orEmpty()
+                },
+                committed = output,
+                script = it,
+            )
         }
         lastRevertible = revertible
-        if (revertible != null) {
+        if (revertible != null && revertible.kind == RevertibleCommit.Kind.AUTOCORRECT) {
             // The adaptive gate learns from the fired/reverted ratio, but not
             // yet: firing is not a verdict. The correction waits in the watch
             // until the text around it settles, and is counted then — with the
@@ -10107,15 +10283,25 @@ open class WMKeyboardService : InputMethodService() {
                 correctionWatch.push(revertible.original, revertible.committed, taps, tapKeys),
             )
             armRevertGuard()
+        } else if (revertible != null) {
+            armRevertGuard()
         }
         armUndoChip(typed, corrected, obviousness, state)
+        if (revertible != null && revertible.kind == RevertibleCommit.Kind.SCRIPT) {
+            // The same chip, offering the other script. No obviousness gate: a
+            // script the keyboard picked for a word both languages have is
+            // never obvious, which is what made it a flip in the first place.
+            undoChipCaret = -1
+            undoableCorrection = UndoableCorrection(revertible.original, output, revertible.script)
+                .takeIf { state.settings.suggestionStrip.undoCorrectionChip }
+        }
         // Armed before the commit lands so the strip refresh that follows it
         // publishes the chip; cleared here too, so a commit with no near miss
         // takes the previous word's offer down with it.
         correctionOfferFor = offered?.let { typed }
         pendingCorrectionOffer = offered
         ic.commitText(
-            if (revertible == null) {
+            if (revertible == null || revertible.kind == RevertibleCommit.Kind.SCRIPT) {
                 output
             } else {
                 // The mark covers the corrected word, not whatever the commit
@@ -11520,6 +11706,16 @@ open class WMKeyboardService : InputMethodService() {
         invalidateExpectedSelection()
         // A stale precompute would hand the old answer to the next commit.
         commitResolution = null
+        if (undo.script != null) {
+            // A script flipped, not a correction refused: the word the keyboard
+            // chose is not counted, the flip is remembered, and there is no
+            // pair to retire.
+            learningBuffer.drop(undo.corrected)
+            noteScriptFlip(undo.script)
+            lastRevertible = null
+            currentInputConnection?.let { syncPreviousWordFromField(it) }
+            return
+        }
         // The same verdict backspacing it away carries: this exact pair is
         // retired, and the settle pass must not judge it a second time.
         suggestionEngine?.rejectCorrection(undo.typed, undo.corrected)
@@ -11860,7 +12056,7 @@ open class WMKeyboardService : InputMethodService() {
         // queuing it would only take a slot from a word that means something.
         if (reinforcement <= 0) return
         val queued = learningBuffer.push(
-            word, state.language.id, reinforcement, caseTrusted, known = true,
+            word, learnLanguageId(word, state), reinforcement, caseTrusted, known = true,
             origin = origin, replaces = replaces, typed = typed, taps = taps, keys = keys,
         )
         // Between the push and the settle, for the reason [noteUnknownWord]
@@ -11907,7 +12103,7 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val queued = learningBuffer.push(
-            word, state.language.id, reinforcement, caseTrusted,
+            word, learnLanguageId(word, state), reinforcement, caseTrusted,
             origin = origin, replaces = replaces, typed = typed, taps = taps, keys = keys,
         )
         // Between the push and the settle: the stroke a backspaced glide left
@@ -13775,6 +13971,7 @@ open class WMKeyboardService : InputMethodService() {
                     allowRerank = true,
                     keys = keyFrame,
                     previousWord3 = previousWord3,
+                    phoneticSlots = state.settings.suggestionStrip.slotCount,
                 )
                 val suggested = deep.take(SUGGEST_LIMIT)
                 // A28: a personal-dictionary shortcut typed in full offers its
@@ -13794,7 +13991,11 @@ open class WMKeyboardService : InputMethodService() {
                 // slots offer something new. The octopus drops it either way —
                 // a word the buffer already spells has no next key — so this is
                 // only about the strip.
-                val skipTyped = state.settings.suggestionStrip.skipTypedWord && typed.isNotEmpty()
+                // Not on a phonetic layout: the buffer in Latin letters is not
+                // the word being typed there, it is the way to write it in
+                // English, and the only one.
+                val skipTyped = state.settings.suggestionStrip.skipTypedWord && typed.isNotEmpty() &&
+                    state.composer.phoneticLanguage == null
                 fun dropTyped(list: List<String>) =
                     if (skipTyped) list.filterNot { it.equals(typed, ignoreCase = true) } else list
                 // Deliberately unfiltered: commitResolution below reads this,
@@ -13829,6 +14030,13 @@ open class WMKeyboardService : InputMethodService() {
                         typed = typed,
                         isPhonetic = true,
                         phoneticTop = words.firstOrNull(),
+                        // Only while the strip's head is the engine's own
+                        // answer; a shortcut expansion in front of it was never
+                        // a choice between scripts.
+                        phoneticAlternate = engine
+                            .phoneticCommit(state.composer.phoneticLanguage.orEmpty(), typed)
+                            ?.takeIf { it.output == words.firstOrNull() }
+                            ?.alternate,
                         correction = null,
                     )
                     // An ambiguous board's commit takes the reading rather than
@@ -14297,8 +14505,17 @@ open class WMKeyboardService : InputMethodService() {
         // overwrites a committed word lands in a place whose case was decided
         // when that word was written, and the shift that decided it is long
         // since spent — auto-capitalize's above all (#212).
-        val committed =
-            displayCaseForShift(caseLike(suggestion, replacedWord), _uiState.value.shiftState)
+        notePhoneticPick(suggestion)
+        val committed = _uiState.value.let { state ->
+            val cased = displayCaseForShift(caseLike(suggestion, replacedWord), state.shiftState)
+            // An English word picked on a layout with no case of its own opens
+            // a sentence with a capital the way a committed one does.
+            if (composing.isNotEmpty() && isLatinOnPhonetic(cased, state)) {
+                sentenceCasedLatin(cased, composing.toString(), state)
+            } else {
+                cased
+            }
+        }
         ic.commitText(committed + tail, 1)
         // That space is the keyboard's, so a mark typed next takes it back and
         // hugs the word — "word:" and not "word :" (issue #34). Same one-shot a
@@ -16449,6 +16666,7 @@ open class WMKeyboardService : InputMethodService() {
             ToolbarTool.THEMES -> onPanelChange(PanelMode.THEMES)
             ToolbarTool.AUTOCORRECT -> onAutocorrectToggle()
             ToolbarTool.SELECTION_ACTIONS -> onSelectionActionsToggle()
+            ToolbarTool.PHONETIC_ENGLISH -> onPhoneticEnglishToggle()
             ToolbarTool.FANCY -> onFancyToggle()
             ToolbarTool.CUSTOM_LAYOUT -> onCustomLayoutToggle()
             ToolbarTool.SOUND_HAPTICS -> onPanelChange(PanelMode.SOUND_HAPTICS)
@@ -18473,6 +18691,36 @@ open class WMKeyboardService : InputMethodService() {
             Toast.LENGTH_SHORT,
         ).show()
         serviceScope.launch { settingsRepository.setAutocorrect(next) }
+    }
+
+    /**
+     * The toolbar's English words switch: whether a phonetic layout keeps an
+     * English word in Latin letters. The same setting as Typing → Type English
+     * words as English, a tap away because the moment it is wanted is the
+     * middle of a Bengali word the keyboard has just read as English. The
+     * settings collector redraws that word once the write lands
+     * ([syncPhoneticAutoEnglish]).
+     *
+     * Says why instead of switching when it could not do anything: on a layout
+     * that is not phonetic, or with English not among the language's secondary
+     * suggestion languages, the switch would flip and nothing would change.
+     */
+    fun onPhoneticEnglishToggle() {
+        vibrate()
+        val state = _uiState.value
+        val next = !state.settings.suggestionStrip.phoneticAutoEnglish
+        val language = state.composer.phoneticLanguage
+        val message = when {
+            language == null -> getString(R.string.ime_service_phonetic_english_needs_layout_toast)
+            next && "en" !in state.settings.secondaryLanguages[language].orEmpty() ->
+                getString(R.string.ime_service_phonetic_english_needs_secondary_toast, state.language.displayName)
+            next -> getString(R.string.ime_service_phonetic_english_on_toast)
+            else -> getString(R.string.ime_service_phonetic_english_off_toast)
+        }
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        val blocked = language == null ||
+            (next && "en" !in state.settings.secondaryLanguages[language].orEmpty())
+        if (!blocked) serviceScope.launch { settingsRepository.setPhoneticAutoEnglish(next) }
     }
 
     /**

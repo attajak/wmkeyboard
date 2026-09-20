@@ -156,6 +156,7 @@
     <string name="storage_file_learned_corrections_label">Fixes you taught autocorrect</string>
     <string name="storage_file_tap_offsets_label">Where your finger lands when tapping</string>
     <string name="storage_file_app_language_mix_label">Which language you write in each app</string>
+    <string name="storage_file_phonetic_script_choices_label">Words you switched between English and Bengali or Hindi</string>
     <string name="storage_file_glide_outcomes_label">Swipe readings you corrected</string>
     <string name="storage_file_glide_shapes_label">How you draw each word</string>
 

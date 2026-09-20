@@ -69,6 +69,7 @@ internal object StorageNames {
         "learning/learned_corrections.json" to R.string.storage_file_learned_corrections_label,
         "learning/tap_offsets.json" to R.string.storage_file_tap_offsets_label,
         "learning/app_language_mix.json" to R.string.storage_file_app_language_mix_label,
+        "learning/phonetic_script_choices.json" to R.string.storage_file_phonetic_script_choices_label,
         "learning/glide_outcomes.json" to R.string.storage_file_glide_outcomes_label,
         "learning/glide_shapes.json" to R.string.storage_file_glide_shapes_label,
 

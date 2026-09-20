@@ -100,6 +100,7 @@
     <string name="fonts_tool_power_saving_desc">Turn off features that use battery power, on demand or when the battery is low</string>
     <string name="fonts_tool_themes_desc">Change the theme, icons, emoji and fonts from the keyboard</string>
     <string name="fonts_tool_autocorrect_desc">One press turns autocorrect on or off</string>
+    <string name="fonts_tool_phonetic_english_desc">One press turns English words on Avro and Hindi phonetic on or off</string>
     <string name="fonts_tool_selection_actions_desc">One press turns the bar of actions for selected text on or off</string>
     <string name="fonts_tool_fancy_desc">One press puts the Fancy text keyboard on screen, and takes it off again</string>
     <string name="fonts_tool_custom_layout_desc">One press shows a secondary layout of your own over the letters, and takes it off again</string>

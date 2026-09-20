@@ -89,6 +89,15 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
     /** Dictionary frequency of a Bengali [word], 0 when unknown. */
     override fun frequencyOf(word: String): Int = freqByWord[word] ?: 0
 
+    override fun matchStrength(input: String): Int {
+        val folded = foldRomanFull(input)
+        val bucket = byKey[folded.key] ?: return 0
+        val typedFinalO = input.isNotEmpty() && input.last().lowercaseChar() in "ow"
+        return bucket.maxOf { it.frequency / handicap(it, folded.aspiration, typedFinalO) }.toInt()
+    }
+
+    override val maxFrequency: Int = freqByWord.values.maxOrNull() ?: 0
+
     companion object {
 
         /** Marks a key position whose consonant was written aspirated. */

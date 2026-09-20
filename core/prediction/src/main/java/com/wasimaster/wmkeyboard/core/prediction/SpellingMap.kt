@@ -31,6 +31,7 @@ import java.io.InputStream
  */
 class SpellingMap private constructor(
     private val byWord: Map<String, List<String>>,
+    private val loanwords: Set<String> = emptySet(),
 ) {
 
     /** Bengali forms for [spelling], best first; empty if unmapped. */
@@ -40,6 +41,16 @@ class SpellingMap private constructor(
     /** True when [spelling] has at least one mapped Bengali form. */
     fun contains(spelling: String): Boolean =
         byWord.containsKey(spelling.trim().lowercase())
+
+    /**
+     * Whether [spelling] came from a loanword list: the spelling is itself a
+     * word of another language ("keyboard"), and the mapped form is only how
+     * that word is written in this script. A listed romanization ("tmr") says
+     * the typist meant this language; a listed loanword does not, which is what
+     * a caller deciding between the two scripts needs to know.
+     */
+    fun isLoanword(spelling: String): Boolean =
+        spelling.trim().lowercase() in loanwords
 
     val size: Int get() = byWord.size
 
@@ -67,10 +78,15 @@ class SpellingMap private constructor(
          * assets survive hand editing. Duplicate keys accumulate their Bengali
          * forms in the order the streams are given, de-duplicated — so passing
          * the curated list first leaves it outranking the generated one.
+         *
+         * The first [loanwordStreams] of them are loanword lists (see
+         * [isLoanword]); [PhoneticScheme.loanwordAssetCount] is how many of a
+         * scheme's assets are.
          */
-        fun load(vararg streams: InputStream): SpellingMap {
+        fun load(vararg streams: InputStream, loanwordStreams: Int = 0): SpellingMap {
             val byWord = LinkedHashMap<String, MutableList<String>>()
-            for (stream in streams) {
+            val loanwords = HashSet<String>()
+            for ((position, stream) in streams.withIndex()) {
                 stream.bufferedReader().useLines { lines ->
                     for (line in lines) {
                         val trimmed = line.trim()
@@ -82,10 +98,11 @@ class SpellingMap private constructor(
                         if (spelling.isEmpty() || bengali.isEmpty()) continue
                         val forms = byWord.getOrPut(spelling) { mutableListOf() }
                         if (bengali !in forms) forms.add(bengali)
+                        if (position < loanwordStreams) loanwords.add(spelling)
                     }
                 }
             }
-            return SpellingMap(byWord)
+            return SpellingMap(byWord, loanwords)
         }
     }
 }

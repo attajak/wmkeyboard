@@ -77,6 +77,10 @@ enum class ToolbarTool {
     // Reads the field (or the selection) and lists the words the keyboard does
     // not know yet, to add to the personal dictionary in one go (#174).
     LEARN_FROM_TEXT,
+    // Whether Avro and Hindi phonetic keep an English word in Latin letters.
+    // The same setting as Typing → Type English words as English: the switch is
+    // reached for mid-word, when a Bengali word has just been read as English.
+    PHONETIC_ENGLISH,
 }
 
 /** The cursor tools, in the order they read on the toolbar. */
@@ -147,6 +151,8 @@ fun isDirectBootSafeTool(tool: ToolbarTool): Boolean = when (tool) {
     // A switch over a setting, and settings are mirrored into the pre-unlock
     // store. The bar it controls already drops every action that leaves the app.
     ToolbarTool.SELECTION_ACTIONS,
+    // A switch over a setting too.
+    ToolbarTool.PHONETIC_ENGLISH,
     ToolbarTool.CALCULATOR, ToolbarTool.UNIT_CONVERT, ToolbarTool.PASSWORD_GEN, ToolbarTool.QR_GEN,
     ToolbarTool.FLASHLIGHT, ToolbarTool.COMPASS, ToolbarTool.LEVEL, ToolbarTool.MOON_PHASE,
     // Copy and cut only touch the field the user is already typing in. Paste is
@@ -177,7 +183,7 @@ fun toolOpensScreen(tool: ToolbarTool): Boolean = when (tool) {
     ToolbarTool.FLASHLIGHT, ToolbarTool.UNDO, ToolbarTool.REDO,
     ToolbarTool.INCOGNITO, ToolbarTool.POWER_SAVING, ToolbarTool.AUTOCORRECT,
     ToolbarTool.FANCY, ToolbarTool.CUSTOM_LAYOUT, ToolbarTool.HIDE_KEYBOARD,
-    ToolbarTool.SELECTION_ACTIONS,
+    ToolbarTool.SELECTION_ACTIONS, ToolbarTool.PHONETIC_ENGLISH,
     -> false
     // The cursor moves nudge the caret and nothing else, and the clipboard trio
     // acts on the selection in place.
@@ -260,7 +266,7 @@ private val RestOfToolOrder: List<ToolbarTool> = listOf(
     ToolbarTool.WEB_SEARCH, ToolbarTool.IMAGE_SEARCH,
     ToolbarTool.LEARN_FROM_TEXT, ToolbarTool.TYPING_TEST, ToolbarTool.PLUGINS, ToolbarTool.CUSTOM_LAYOUT,
     ToolbarTool.FLOATING, ToolbarTool.PERSISTENT, ToolbarTool.RESIZE, ToolbarTool.INCOGNITO,
-    ToolbarTool.SELECTION_ACTIONS, ToolbarTool.SOUND_HAPTICS,
+    ToolbarTool.SELECTION_ACTIONS, ToolbarTool.PHONETIC_ENGLISH, ToolbarTool.SOUND_HAPTICS,
     ToolbarTool.QR_SCAN, ToolbarTool.QR_GEN, ToolbarTool.DOC_SCAN, ToolbarTool.CAMERA,
     ToolbarTool.FLASHLIGHT, ToolbarTool.COMPASS, ToolbarTool.LEVEL, ToolbarTool.MOON_PHASE,
     // The one-tap cursor moves last: useful, but they would otherwise push
