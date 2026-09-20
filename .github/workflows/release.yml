@@ -217,6 +217,14 @@ jobs:
 
       # Play channel on: unbundled ML Kit, in-app updates, and :feature:llm as
       # an on-demand module. bundle<Variant> ignores the ABI split block.
+      #
+      # The `en` language build, by its real name. Play translates the app
+      # strings itself and injects them into the bundle at upload, so the 48
+      # translations in the repo, which were recovered from Play to begin with,
+      # would only be handed back to it. `bundleFullRelease` still exists as an
+      # alias in app/build.gradle.kts and builds the same thing, but it mirrors
+      # the AAB to bundle/fullRelease/ as well, and this job has no use for a
+      # second 60 MB copy.
       - name: Build AAB
         env:
           RELEASE_STORE_FILE: release.keystore
@@ -232,7 +240,7 @@ jobs:
           WMKB_UNSPLASH_API_KEY: ${{ secrets.WMKB_UNSPLASH_API_KEY }}
           WMKB_PEXELS_API_KEY: ${{ secrets.WMKB_PEXELS_API_KEY }}
           WMKB_DROPBOX_APP_KEY: ${{ secrets.WMKB_DROPBOX_APP_KEY }}
-        run: ./gradlew bundleFullRelease --stacktrace
+        run: ./gradlew bundleFullEnRelease --stacktrace
 
       - name: Wipe keystore
         if: always()
@@ -243,7 +251,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: play-bundle
-          path: app/build/outputs/bundle/fullRelease/*.aab
+          path: app/build/outputs/bundle/fullEnRelease/*.aab
           retention-days: 30
 
   # Uploads the AAB to the Play *internal* track via fastlane; promoting to

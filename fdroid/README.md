@@ -21,6 +21,17 @@ tree (ML Kit, LiteRT, Play in-app updates, `play-services-auth`) is declared
 `fullImplementation` or sits behind the `enablePlayStore`/`enableGms` flags, so
 this variant has no Google artifact on its compile classpath at all.
 
+It names one flavour although `:app` has had two dimensions since 0.5.10, and
+that is deliberate. fdroidserver turns the list into `assembleLiteRelease`,
+which AGP no longer registers, so `app/build.gradle.kts` registers it as an
+alias: it builds `assembleLiteIntlRelease`, the `lite` build with all 48
+interface languages, and mirrors the APK to `app/build/outputs/apk/lite/release/`,
+the only flavoured directory fdroidserver will look in for a recipe that says
+`lite`. The alternative, listing `lite` and `intl`, is a merge request to
+fdroiddata that has to land before their bot writes the next entry, because
+`AutoUpdateMode` copies the previous entry as it stands and a build of the old
+list fails.
+
 **`gradleprops`** — the first two default to `false` when `local.properties` is
 absent, which it is in a clean checkout; they are stated anyway so the recipe
 does not depend on that. `wmkb.enableFdroid=true` is not a default and has to be

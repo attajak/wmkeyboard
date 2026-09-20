@@ -33,6 +33,13 @@ android {
     }
     defaultConfig {
         minSdk = 24
+        // :app has a `languages` dimension and this module does not, so the
+        // dependency on :app below has to be told which one to resolve. `en`
+        // first because this module only exists in Play builds and Play takes
+        // the `en` bundle: with `intl` first, bundleFullEnRelease compiles
+        // :app a second time as fullIntlRelease just to give this module a
+        // classpath, and links the split against a base it will not ship with.
+        missingDimensionStrategy("languages", "en", "intl")
     }
 
     // Must mirror the base app's dimension: each base variant needs a

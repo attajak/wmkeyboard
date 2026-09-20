@@ -16,7 +16,8 @@ of it, so nothing here needs a branch or a patched source tree.
 
 | | GitHub release | F-Droid | Play Store |
 |---|---|---|---|
-| Flavor | `full` **and** `lite`, each in `intl` **and** `en` | `lite`, `en` | `full`, `intl` |
+| Flavor | `full` **and** `lite`, each in `intl` **and** `en` | `lite`, `intl` | `full`, `en` |
+| Gradle task | the four `assemble*Release` | `assembleLiteRelease`, an alias for `assembleLiteIntlRelease` | `bundleFullEnRelease` |
 | `wmkb.enablePlayStore` | `false` | `false` | `true` |
 | `wmkb.enableGms` | `true` | `false` | `true` |
 | `wmkb.enableFdroid` | `false` | `true` | `false` |
@@ -266,25 +267,38 @@ delivery libraries, `play-services-auth`) is declared `fullImplementation` or
 sits behind a channel flag, so `lite` has no Google artifact on its compile
 classpath at all.
 
-Since 0.5.10 the recipe's `gradle:` list has to name **two** flavours, not one:
+The recipe's `gradle:` list names one flavour, `lite`, as it has since before
+`:app` had a second dimension. fdroidserver joins that list into a task name,
+so what it runs is `assembleLiteRelease`. AGP stopped registering a task by
+that name when the `languages` dimension arrived in 0.5.10: with two dimensions
+it offers `assembleLiteIntlRelease` and `assembleLiteEnRelease`, and answers
+the old name with an ambiguity error.
 
-```yaml
-    gradle:
-      - lite
-      - en
-```
+So `app/build.gradle.kts` registers `assembleLiteRelease` itself, as an alias
+for `assembleLiteIntlRelease`. The alias is there because the recipe cannot be
+counted on to change. `AutoUpdateMode: Version` writes each new `Builds:` entry
+by copying the last one, `gradle: [lite]` included, and nobody reviews what
+the bot writes.
 
-fdroidserver joins them in order to build the task name, so those two lines
-mean `assembleLiteEnRelease`. They must be listed in the same order as the
-dimensions are declared in `app/build.gradle.kts`, which is `capabilities` and
-then `languages`. A recipe that still lists `lite` alone names a task that no
-longer exists and the build fails outright rather than quietly producing the
-wrong APK.
+The alias does one thing besides run the build. fdroidserver looks for the APK
+in the directory under `app/build/outputs/apk/` whose name matches its flavour
+list, which is `lite`, and a two-dimension build writes to `liteIntl/`. Without
+help that ends in `Failed to find any output apks` after a build that
+succeeded. The alias therefore mirrors the APK into `apk/lite/release/`, where
+the single-dimension build used to put it. It is a `Sync` and not a `Copy`,
+because fdroidserver also refuses a directory that holds more than one APK.
 
-F-Droid gets `en` on purpose. It ships one APK to everybody, so the 48
-translations would land on every installer whole, and they are worth about
-41 MB against a `lite` build that is otherwise around 12 MB. Anyone who wants
-the translated app can take an `intl` APK from the GitHub release.
+`bundleFullRelease` is kept the same way, as an alias for `bundleFullEnRelease`
+that mirrors the AAB to `bundle/fullRelease/`. Nothing in this repo calls it
+any more: the release workflow and the `bundle_play` lane both name the real
+task.
+
+F-Droid gets `intl` on purpose. It ships one APK to everybody and nothing
+downstream of the build adds a language, so the APK is the only place an
+F-Droid user can get the translations from. That is worth about 41 MB on a
+`lite` build that is otherwise around 12 MB. The small `lite-en` APK is on the
+GitHub release, but F-Droid signs with its own key, so moving to it from an
+F-Droid install means uninstalling first.
 
 The build recipe is staged in the repo at `fdroid/com.wasimaster.wmkeyboard.yml`.
 F-Droid never reads it from there; it is versioned next to the code so the
@@ -312,8 +326,12 @@ instead.
    on their side means a round trip:
 
    ```sh
-   ./gradlew clean assembleLiteEnRelease -Pwmkb.enablePlayStore=false -Pwmkb.enableGms=false
+   ./gradlew clean assembleLiteRelease -Pwmkb.enablePlayStore=false -Pwmkb.enableGms=false
    ```
+
+   That is the task name fdroidserver runs. Afterwards
+   `app/build/outputs/apk/lite/release/` must hold exactly one APK, since that
+   is where it will look.
 
    :::caution[No module may ask for a JDK toolchain]
    The recipe deletes the foojay resolver, because the scanner rejects anything
@@ -502,7 +520,7 @@ bundle install
 | Lane | What it does |
 |---|---|
 | `preflight` | checks the changelog for the current `versionCode` exists, signing is configured, and both listing trees are within Play's character limits |
-| `bundle_play` | `bundleFullIntlRelease` with the Play channel flags. Play always gets `intl`: the bundle splits by language, so each installer downloads only their own and the translations cost them nothing |
+| `bundle_play` | `bundleFullEnRelease` with the Play channel flags. Play always gets `en`: it translates the app strings itself and injects them into the bundle at upload, and the translations in the repo were recovered from Play to begin with, so an `intl` bundle would only hand them back |
 | `apks` | sideload APKs, full and lite in both language builds, one per ABI |
 | `internal` | checks the changelog, builds the AAB (or takes `aab:path`), uploads to the internal track. Only the build path checks signing, since a prebuilt `aab:` is assumed already signed |
 | `promote` | move the internal release to production (`to:`, `from:`, `rollout:` options) |

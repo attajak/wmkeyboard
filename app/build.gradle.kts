@@ -143,15 +143,22 @@ android {
 
     // Interface languages, the words the app shows rather than the ones it
     // types. The translations recovered from Play weigh ~39 MB, and because
-    // resources.arsc is stored uncompressed that lands on every APK whole.
-    // Play never sees it (the bundle splits by language and each user fetches
-    // one), but a single APK from GitHub or F-Droid carries all of them, which
-    // roughly quadruples the lite build. So the choice is the downloader's:
+    // resources.arsc is stored uncompressed that lands on every APK whole,
+    // which roughly quadruples the lite build. So on GitHub the choice is the
+    // downloader's:
     // - intl: English plus the 48 translated languages.
     // - en:   English only, which is what every build before 0.5.10 was.
     // Nothing else differs. Same applicationId, same signing key and same
     // versionCode, so either one installs over the other as a plain update and
     // no setting is lost in the move.
+    //
+    // The two stores each take one. Play gets `en`: it translates the app
+    // strings itself and injects them into the bundle at upload, which is
+    // where the repo's translations came from in the first place, so an `intl`
+    // bundle would only hand Play its own output back. F-Droid gets `intl`:
+    // it ships one APK to everybody and nothing downstream of the build adds a
+    // language, so the APK is the only place its users can get them from.
+    // See the store aliases near the bottom of this file.
     flavorDimensions += "languages"
 
     productFlavors {
@@ -464,6 +471,54 @@ androidComponents {
         }
     }
 }
+
+// The two task names the stores' pipelines were written against, from before
+// the `languages` flavour split every :app variant in two. AGP registers no
+// `assembleLiteRelease` once a second dimension exists, only the ambiguity
+// error, and one of the callers cannot simply be told the new name: F-Droid's
+// bot writes each new `Builds:` entry by copying the last one, `gradle: [lite]`
+// included, and nobody reviews what it writes.
+//
+// So each old name is kept, and means the language build its store takes:
+//
+//     bundleFullRelease    -> bundleFullEnRelease       (Play)
+//     assembleLiteRelease  -> assembleLiteIntlRelease   (F-Droid)
+//
+// The name alone is not enough. fdroidserver looks for the APK in the
+// directory under build/outputs/apk/ whose name matches its flavour list,
+// which is `lite` and never `liteIntl`, and gives up with "Failed to find any
+// output apks" otherwise. So the alias also mirrors the artifact to the path
+// the single-dimension build used to write. Sync rather than Copy: fdroidserver
+// refuses a directory holding more than one APK, and a Sync cannot leave a
+// stale one behind from an earlier run.
+fun registerStoreAlias(
+    taskName: String,
+    variantTaskName: String,
+    variantOutputs: String,
+    legacyOutputs: String,
+) = tasks.register<Sync>(taskName) {
+    group = "build"
+    description = "Runs $variantTaskName and mirrors its artifact to build/$legacyOutputs."
+    dependsOn(variantTaskName)
+    from(layout.buildDirectory.dir(variantOutputs)) {
+        include("*.apk", "*.aab")
+    }
+    into(layout.buildDirectory.dir(legacyOutputs))
+}
+
+registerStoreAlias(
+    taskName = "bundleFullRelease",
+    variantTaskName = "bundleFullEnRelease",
+    variantOutputs = "outputs/bundle/fullEnRelease",
+    legacyOutputs = "outputs/bundle/fullRelease",
+)
+
+registerStoreAlias(
+    taskName = "assembleLiteRelease",
+    variantTaskName = "assembleLiteIntlRelease",
+    variantOutputs = "outputs/apk/liteIntl/release",
+    legacyOutputs = "outputs/apk/lite/release",
+)
 
 kotlin {
     // The update-channel driver picked at the top of this file. It has to be

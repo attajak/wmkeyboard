@@ -55,6 +55,8 @@ Nothing about the Kotlin differs between `intl` and `en`. The whole of it is one
 
 It has to be applied through the Variant API rather than in a `productFlavors` block: AGP 9 removed `resourceConfigurations` from `ProductFlavor`, and the DSL's `androidResources.localeFilters` is a single global setting that cannot vary per flavour.
 
+Two single-dimension names survive in `:app` as aliases, one per store: `bundleFullRelease` builds `bundleFullEnRelease`, which is what Play takes, and `assembleLiteRelease` builds `assembleLiteIntlRelease`, which is what F-Droid takes. Each also mirrors its artifact to the old output path. [Releasing](/development/releasing/#getting-into-f-droid) has the reason, which is F-Droid's. No other old name was kept, so `assembleFullRelease` and `installFullDebug` are still ambiguity errors.
+
 The practical consequence is that the two halves of the project disagree about variant names. `./gradlew testFullDebugUnitTest` runs the library suites and silently skips all of `:app`, which has no task by that name. Use `./gradlew unitTests`, the aggregate in the root build, which depends on both spellings.
 
 See [full vs. lite](/start/editions/) for what this means from the user's side, and [architecture](/development/architecture/) for how the module graph is laid out.
