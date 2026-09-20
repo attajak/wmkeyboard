@@ -1,13 +1,13 @@
 ---
 title: "Importing from other keyboards"
-description: "Bring layouts and themes over from FlorisBoard and HeliBoard: what converts, what doesn't, and why."
+description: "Bring layouts, themes and dictionaries over from FlorisBoard, HeliBoard, LeanType and FUTO: what converts, what doesn't, and why."
 sidebar:
   order: 6
 ---
 
 import SettingsPath from '@components/SettingsPath.astro';
 
-Switching keyboards usually means leaving your layouts and themes behind. WM Keyboard reads FlorisBoard and HeliBoard files directly and converts them into its own, so the grid you built and the theme you picked come with you.
+Switching keyboards usually means leaving your layouts, themes and dictionaries behind. WM Keyboard reads FlorisBoard, HeliBoard, LeanType and FUTO files directly and converts them into its own, so the grid you built, the theme you picked and the word list you collected come with you.
 
 Conversion is honest about being lossy. A layout import always ends on a confirm dialog that lists what changed and what could not be carried, and nothing is written until you accept it. A `.flex` theme opened from a file manager gets the same treatment. The **FlorisBoard** button inside Settings is the one route without a confirm step: it saves the theme straight away and then tells you what it saved. Saved is not switched on, so you still get to look first.
 
@@ -17,6 +17,7 @@ Conversion is honest about being lossy. A layout import always ends on a confirm
 |---|---|---|
 | `.json` layout | FlorisBoard, HeliBoard | A custom layout |
 | `.txt` layout | HeliBoard | A custom layout |
+| `.yaml` layout | FUTO Keyboard | A custom layout |
 | `.flex` theme | FlorisBoard 0.4 and later | One theme, one look per theme in the file |
 | Colour theme text | HeliBoard, LeanType | One theme, from a file or from the clipboard |
 | `.keyman-touch-layout` | Keyman | A custom layout, without the keyboard's rules |
@@ -24,7 +25,7 @@ Conversion is honest about being lossy. A layout import always ends on a confirm
 | `.combined` word list | HeliBoard, LeanType, FUTO, any AOSP keyboard | A custom dictionary |
 | `.dict` dictionary | HeliBoard, LeanType, FUTO, OpenBoard, GApps | A custom dictionary |
 
-HeliBoard's JSON layouts use FlorisBoard's format, so one reader handles both.
+HeliBoard's JSON layouts use FlorisBoard's format, so one reader handles both. LeanType is a HeliBoard fork, so its layouts and themes are HeliBoard's.
 
 **Keyman is a different story.** 862 Keyman key grids are already built into the app, so for most of them there's nothing to import. You can still open a `.keyman-touch-layout` file or a full `.kmp` package yourself, which is how you'd add a keyboard that isn't bundled or one you're writing. A `.kmp` brings its typing rules with it; a touch layout file does not. See [Keyman layouts](/languages/keyman/).
 
@@ -36,7 +37,7 @@ Pick the file. The app reads it, then puts one dialog in front of you before it 
 
 ### It asks for the language
 
-Neither format records one. In FlorisBoard and HeliBoard a layout is a grid and the language comes from the keyboard's own settings, so the file itself cannot say whether a Cyrillic grid is Russian or Ukrainian.
+The FlorisBoard and HeliBoard formats do not record one. There a layout is a grid and the language comes from the keyboard's own settings, so the file itself cannot say whether a Cyrillic grid is Russian or Ukrainian. A FUTO layout does state its languages, and the picker starts from that instead of from a guess.
 
 That matters more here than it sounds. The language picks the dictionary, the autocorrect, the script rules, dictation, and how the shift key behaves. The app guesses from the letters on the keys and shows you the guess, and you can change it before you import. There is no silent default.
 
@@ -100,6 +101,21 @@ Two more need no size at all. `disableKeyHintLabel` turns on **Hide the corner h
 Write the number in decimal or in hex (`"labelFlags": 320` and `"labelFlags": "0x140"` are the same key). An exported file uses decimal.
 
 The rest of the flags ask for a text style this keyboard has no form of, such as a monospaced or an off-centre label. Those keys keep their size and lose the style, and the dialog counts them.
+
+### FUTO layouts
+
+FUTO Keyboard writes its layouts in YAML, and publishes its own as a repository of them. Pick one with the same **Import from another keyboard** button; the app tells a YAML layout from a JSON one by the document itself, not by the file name.
+
+Most of that format reads straight across, because FUTO's keyboard descends from AOSP's and so its key specs are the ones already read here: `a|b`, `!code/`, `!icon/` and the same `!autoColumnOrder!4` popup markers. A row written as `q w e r t`, as `[[a, ą], b]`, or as a list of `{type: base, spec: …}` objects all work, and so does `type: case`, which keeps both cases the way a FlorisBoard case selector does.
+
+Four things are worth knowing:
+
+- **It is the one format that states its language.** `languages: [lt]` seeds the language picker with a fact rather than a guess from the letters. A language this app does not have falls back to the guess.
+- **The number row is dropped**, because this app adds one from a setting and keeping the file's would give the layout two. A layout that sets `numberRowMode: AlwaysEnabled`, which is how the PC-style arrangements carry their backtick and bracket keys, keeps its own.
+- **`$space` takes what is left of its row**, measured against the widest row of ordinary keys in the same layout, so a ten-key grid and a twelve-key one both end up with a spacebar spanning the middle.
+- **The alternate pages are dropped and named.** `$alt0` and its siblings switch to a whole second grid, which has no slot here, and a key that switched to nothing would strand you on it. The symbols and number layers are this app's own for the same reason, and `layoutSetOverrides` names layouts by ids that mean nothing here.
+
+`$contextual` becomes the comma slot, which does the same job from the same signal: `/` in a web address, `@` in an email field.
 
 ### Letters are rewritten to one spelling
 

@@ -61,12 +61,13 @@
     <!-- Layouts made for a different keyboard app. The app reads the file and
          writes a layout of its own from it. -->
     <string name="layout_editor_foreign_title">Import from another keyboard</string>
-    <string name="layout_editor_foreign_subtitle">Read a layout file from FlorisBoard or HeliBoard</string>
-    <string name="layout_editor_foreign_wrong_file_error">The app cannot read that file as a layout. FlorisBoard and HeliBoard layouts are .json or .txt files. To import a FlorisBoard theme (.flex), go to Themes.</string>
+    <string name="layout_editor_foreign_subtitle">Read a layout file from FlorisBoard, HeliBoard or FUTO</string>
+    <string name="layout_editor_foreign_wrong_file_error">The app cannot read that file as a layout. FlorisBoard and HeliBoard layouts are .json or .txt files, and FUTO layouts are .yaml files. To import a FlorisBoard theme (.flex), go to Themes.</string>
     <!-- %1$s is the name of the layout the app made from the file. -->
     <string name="layout_editor_foreign_confirm_title">Import <xliff:g id="layout_name" example="my grid">%1$s</xliff:g>?</string>
     <string name="layout_editor_foreign_from_json">The app read this file as a FlorisBoard or HeliBoard layout. The other keyboard draws its own bottom row, so the app adds the delete, space and enter keys.</string>
     <string name="layout_editor_foreign_from_text">The app read this file as a HeliBoard text layout. That format holds letters only, so the app adds the delete, space and enter keys.</string>
+    <string name="layout_editor_foreign_from_futo">The app read this file as a FUTO Keyboard layout. The other keyboard draws the number row, the symbols and the alternate pages itself, so the app uses its own.</string>
     <string name="layout_editor_foreign_from_keyman">Read as a Keyman touch layout</string>
     <!-- The language a converted layout types in. The file does not say, so the
          app makes a guess from the letters on the keys. -->

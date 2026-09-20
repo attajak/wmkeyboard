@@ -58,6 +58,9 @@ enum class ForeignSource {
     /** The FlorisBoard `KeyData` JSON that HeliBoard also reads. */
     FLORIS_JSON,
 
+    /** FUTO Keyboard's YAML layout. Read by [FutoLayouts]. */
+    FUTO_YAML,
+
     /**
      * A Keyman `.keyman-touch-layout` file. Read by `:core:keyman`, not here:
      * that module depends on this one, so the converter cannot be called from
@@ -205,11 +208,32 @@ object ForeignLayouts {
      * there was nothing to convert — a file of comments, or an array of empty
      * arrays.
      */
+    /**
+     * The shared tail of every converter in this package: repair the grid,
+     * merge the notes, and hand back something the import screen can show.
+     *
+     * Internal so [FutoLayouts] can reach it. That reader lives in its own file
+     * because YAML brings a parser and a set of key types of its own, but it
+     * must finish the same way, or a layout from one format would reach storage
+     * unrepaired while the others did not.
+     *
+     * [langId] is for a format that states its language. The other two do not,
+     * and pass null so the guess from the letters stands.
+     */
+    internal fun assemble(
+        rows: List<List<Key>>,
+        name: String,
+        source: ForeignSource,
+        report: Report,
+        langId: String? = null,
+    ): ConvertedLayout? = finish(rows, name, source, report, langId)
+
     private fun finish(
         rows: List<List<Key>>,
         name: String,
         source: ForeignSource,
         report: Report,
+        declaredLangId: String? = null,
     ): ConvertedLayout? {
         val kept = rows.filter { it.isNotEmpty() }
         if (kept.isEmpty()) return null
@@ -228,7 +252,7 @@ object ForeignLayouts {
             layout = repaired.spec,
             notes = report.notes(scaled !== kept) + repaired.repairNotes,
             unmapped = report.unmapped.toList(),
-            guessedLangId = guessLangId(scaled),
+            guessedLangId = declaredLangId ?: guessLangId(scaled),
             source = source,
         )
     }
@@ -948,7 +972,7 @@ private val scriptDefs: List<ScriptDef> by lazy {
 }
 
 /** What the conversion had to give up, tallied as it goes. */
-private class Report(
+internal class Report(
     var normalized: Int = 0,
     var approximated: Int = 0,
     var lostPopups: Int = 0,
@@ -959,6 +983,8 @@ private class Report(
     val unmapped: MutableList<Int> = mutableListOf(),
     /** Keys named by a label this keyboard has nothing for, such as `dpad`. */
     val droppedLabels: MutableList<String> = mutableListOf(),
+    /** The file drew its own number row, which this app draws from a setting. */
+    var numberRowDropped: Boolean = false,
 ) {
     fun notes(scaled: Boolean): List<LayoutMessage> = buildList {
         if (droppedLabels.isNotEmpty()) {
@@ -1023,6 +1049,9 @@ private class Report(
                     args = listOf(restyled),
                 ),
             )
+        }
+        if (numberRowDropped) {
+            add(LayoutMessage(stringRes = R.string.core_lang_foreign_number_row_dropped))
         }
         if (scaled) add(LayoutMessage(stringRes = R.string.core_lang_foreign_widths_scaled))
     }

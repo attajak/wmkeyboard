@@ -61,6 +61,7 @@ import androidx.compose.material.icons.outlined.SwapHoriz
 import com.wasimaster.wmkeyboard.core.layout.ConvertedLayout
 import com.wasimaster.wmkeyboard.core.keyman.KeymanImport
 import com.wasimaster.wmkeyboard.core.layout.ForeignLayouts
+import com.wasimaster.wmkeyboard.core.layout.FutoLayouts
 import com.wasimaster.wmkeyboard.core.layout.ForeignSource
 import com.wasimaster.wmkeyboard.core.layout.ImportedLayout
 import com.wasimaster.wmkeyboard.core.layout.LayoutFile
@@ -255,8 +256,16 @@ private const val KEYMAPS_ANCHOR = "keymaps"
  * anything from `text/plain` to `application/octet-stream`. Nothing is decided
  * from the MIME type — the converter reads the file and says whether it is one.
  */
-private val FOREIGN_LAYOUT_MIME_TYPES =
-    arrayOf("application/json", "text/plain", "application/octet-stream")
+private val FOREIGN_LAYOUT_MIME_TYPES = arrayOf(
+    "application/json",
+    "text/plain",
+    "application/octet-stream",
+    // FUTO's layouts are YAML, which providers report under three spellings
+    // and, as often as not, as one of the three above.
+    "application/yaml",
+    "text/yaml",
+    "text/x-yaml",
+)
 
 /** Largest foreign layout worth reading. The whole file is decoded as one string. */
 private const val MAX_FOREIGN_LAYOUT_BYTES = 4 * 1024 * 1024
@@ -515,10 +524,17 @@ internal fun KeyLayoutsScreen(
                         // FlorisBoard reader would take one and return null
                         // rather than deferring, so order is the dispatch.
                         val text = bytes.decodeToString()
-                        if (KeymanImport.looksLikeTouchLayout(text)) {
-                            KeymanImport.convert(text, name)
-                        } else {
-                            ForeignLayouts.convert(text, name)
+                        when {
+                            KeymanImport.looksLikeTouchLayout(text) ->
+                                KeymanImport.convert(text, name)
+                            // FUTO before the JSON reader for the same reason:
+                            // a YAML parser accepts a JSON document happily, so
+                            // asking it last would be fine but asking it first
+                            // would swallow every FlorisBoard layout. This test
+                            // is on the document's own shape, not the parser.
+                            FutoLayouts.looksLikeFutoLayout(text) ->
+                                FutoLayouts.convert(text, name)
+                            else -> ForeignLayouts.convert(text, name)
                         }
                     }
                 }.getOrNull()
@@ -886,6 +902,7 @@ internal fun KeyLayoutsScreen(
                             when (converted.source) {
                                 ForeignSource.FLORIS_JSON -> R.string.layout_editor_foreign_from_json
                                 ForeignSource.HELIBOARD_TEXT -> R.string.layout_editor_foreign_from_text
+                                ForeignSource.FUTO_YAML -> R.string.layout_editor_foreign_from_futo
                                 ForeignSource.KEYMAN_TOUCH_LAYOUT ->
                                     R.string.layout_editor_foreign_from_keyman
                             },
