@@ -1389,14 +1389,10 @@
     <string name="import_floris_done_family">Az alkalmazás elmentette a(z) %1$s elemet %2$d megjelenéssel. Nyissa meg a Témákat a megtekintéséhez.</string>
     <string name="import_floris_dropped_contrast">Egy billentyűszöveg színe túl közel volt a billentyű színéhez, így olvashatatlan volt. Az alkalmazás egy olvasható színt választott helyette.</string>
     <string name="import_floris_dropped_corners">A gomboknak egy sarokméretük van. A fájl minden sarokhoz külön méretet állít be.</string>
-    <string name="import_floris_dropped_dynamic">A rendszer háttérképét követő színek nincsenek beállítva. A hasonló hatás eléréséhez kapcsolja be a Material You funkciót a Témák menüben.</string>
     <string name="import_floris_dropped_elevation">A billentyűárnyékok nincsenek beállítva. Ez az alkalmazás árnyék nélkül rajzolja a billentyűket.</string>
     <string name="import_floris_dropped_font">A betűtípus nincs mellékelve. A betűtípus egy külön kiegészítő ebben az alkalmazásban.</string>
-    <string name="import_floris_dropped_old">A fájl egy része a régebbi FlorisBoard stílusformátumot használja.</string>
     <string name="import_floris_dropped_spacing">Az egyes részek körüli térköz nincs beállítva. Ez az alkalmazás a teljes billentyűzetre vonatkozóan állítja be a billentyűk közötti távolságot.</string>
     <string name="import_floris_dropped_unknown">A fájlnév egyes részei olyan billentyűzetelemeket tartalmaznak, amelyekkel ez az alkalmazás nem rendelkezik.</string>
-    <string name="import_floris_old_body">Ez a téma a FlorisBoard 0.4-es verziójához készült. Az a stílusformátum nem ugyanaz, mint a FlorisBoard 0.5-ös és újabb verzióiban, ezért az alkalmazás nem tudja olvasni. Egy olyan téma, amelyet ez az alkalmazás csak részben olvasott be, olyan színeket adhat, amelyeket a fájlod sosem állított be.</string>
-    <string name="import_floris_old_title">A téma egy régebbi FlorisBoard verzióhoz való</string>
     <string name="import_floris_title">Téma a FlorisBoardból</string>
     <string name="import_floris_unreadable_body">Az alkalmazás nem tudja olvasni ezt a FlorisBoard fájlt. Lehet, hogy sérült, vagy egy nyelvi csomag, esetleg billentyűzet-kiegészítő, nem pedig téma.</string>
     <string name="import_icons_body">Az alkalmazás telepíti a csomagot és bekapcsolja. Az ikonjai lecserélik a beépített ikonokat. Az alkalmazás megtartja az általad beállított ikonokat.</string>

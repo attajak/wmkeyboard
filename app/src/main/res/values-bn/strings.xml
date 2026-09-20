@@ -1391,14 +1391,10 @@
     <string name="import_floris_done_family">অ্যাপটি %2$d লুক সহ %1$s সংরক্ষণ করেছে। এটি দেখতে থিম খুলুন।</string>
     <string name="import_floris_dropped_contrast">একটি কী টেক্সট কালার কী কালারের খুব কাছাকাছি ছিল যা পড়া যাচ্ছিল না। অ্যাপটি এমন একটি কালার বেছে নিয়েছে যা আপনি পড়তে পারবেন।</string>
     <string name="import_floris_dropped_corners">কীগুলোর একটি কর্নার সাইজ থাকে। ফাইলটি প্রতিটি কর্নারের জন্য আলাদা সাইজ সেট করে।</string>
-    <string name="import_floris_dropped_dynamic">সিস্টেম ওয়ালপেপার অনুসরণকারী কালারগুলো সেট করা নেই। একই প্রভাবের জন্য থিম-এ \'মেটেরিয়াল ইউ\' চালু করুন।</string>
     <string name="import_floris_dropped_elevation">কি শ্যাডো সেট করা নেই। এই অ্যাপটি শ্যাডো ছাড়াই কি আঁকে।</string>
     <string name="import_floris_dropped_font">ফন্টটি অন্তর্ভুক্ত নয়। এই অ্যাপে ফন্ট একটি আলাদা অ্যাড-অন।</string>
-    <string name="import_floris_dropped_old">ফাইলের একটি অংশ পুরনো ফ্লোরিসবোর্ড স্টাইল ফরম্যাট ব্যবহার করে।</string>
     <string name="import_floris_dropped_spacing">একক অংশের চারপাশের ফাঁকা জায়গা সেট করা নেই। এই অ্যাপটি পুরো কিবোর্ডের জন্য কী-এর গ্যাপ সেট করে।</string>
     <string name="import_floris_dropped_unknown">ফাইলের কিছু অংশ এমন কিবোর্ড এলিমেন্টের নাম দেয় যা এই অ্যাপে নেই।</string>
-    <string name="import_floris_old_body">এই থিমটি FlorisBoard ০.৪-এর জন্য লেখা। সেই স্টাইল ফরম্যাটটি FlorisBoard ০.৫ এবং পরবর্তী সংস্করণের সাথে মেলে না, তাই অ্যাপটি এটি পড়তে পারছে না। যে থিমটি অ্যাপটি আংশিকভাবে পড়েছে তা আপনাকে এমন রঙ দিতে পারে যা আপনার ফাইলে সেট করা ছিল না।</string>
-    <string name="import_floris_old_title">থিমটি পুরনো FlorisBoard-এর জন্য</string>
     <string name="import_floris_title">FlorisBoard থেকে থিম</string>
     <string name="import_floris_unreadable_body">অ্যাপটি এই FlorisBoard ফাইলটি পড়তে পারছে না। এটি ক্ষতিগ্রস্ত হতে পারে, অথবা এটি কোনো থিমের পরিবর্তে ল্যাঙ্গুয়েজ প্যাক বা কিবোর্ড এক্সটেনশন হতে পারে।</string>
     <string name="import_icons_body">অ্যাপটি প্যাকটি ইনস্টল করে এবং চালু করে। এর আইকনগুলো বিল্ট-ইন আইকনগুলোকে প্রতিস্থাপন করে। অ্যাপটি আপনার সেট করা আইকনগুলোই রাখে।</string>

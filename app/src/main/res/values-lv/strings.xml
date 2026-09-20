@@ -1391,14 +1391,10 @@
     <string name="import_floris_done_family">Lietotne saglabāja %1$s ar %2$d izskatiem. Atveriet Tēmas, lai tos apskatītu.</string>
     <string name="import_floris_dropped_contrast">Taustiņa teksta krāsa bija pārāk tuvu taustiņa krāsai, lai to varētu izlasīt. Lietotne izvēlējās krāsu, kuru varat izlasīt.</string>
     <string name="import_floris_dropped_corners">Taustiņiem ir viens stūra izmērs. Fails iestata atšķirīgu izmēru katram stūrim.</string>
-    <string name="import_floris_dropped_dynamic">Krāsas, kas seko sistēmas fona attēlam, nav iestatītas. Lai iegūtu tādu pašu efektu, tēmās ieslēdziet Material You.</string>
     <string name="import_floris_dropped_elevation">Taustiņu ēnas nav iestatītas. Šī lietotne zīmē taustiņus bez ēnas.</string>
     <string name="import_floris_dropped_font">Fonts nav iekļauts. Fonts šajā lietotnē ir atsevišķs papildinājums.</string>
-    <string name="import_floris_dropped_old">Daļa faila izmanto vecāku FlorisBoard stila formātu.</string>
     <string name="import_floris_dropped_spacing">Atstarpe ap atsevišķām daļām nav iestatīta. Šī lietotne iestata taustiņu atstarpi visai tastatūrai.</string>
     <string name="import_floris_dropped_unknown">Dažas faila daļas norāda uz tastatūras elementiem, kuru šajā lietotnē nav.</string>
-    <string name="import_floris_old_body">Šī tēma ir rakstīta FlorisBoard 0.4 versijai. Šis stila formāts nav tāds pats kā FlorisBoard 0.5 un jaunākās versijās, tāpēc lietotne to nevar nolasīt. Tēma, ko šī lietotne nolasīja tikai daļēji, sniegtu jums krāsas, kuras jūsu fails nekad nav iestatījis.</string>
-    <string name="import_floris_old_title">Motīvs ir paredzēts vecākai FlorisBoard versijai</string>
     <string name="import_floris_title">Tēma no FlorisBoard</string>
     <string name="import_floris_unreadable_body">Lietotne nevar nolasīt šo FlorisBoard failu. Tas var būt bojāts, vai arī tā var būt valodu pakotne vai tastatūras paplašinājums, nevis motīvs.</string>
     <string name="import_icons_body">Lietotne instalē pakotni un to ieslēdz. Tās ikonas aizstāj iebūvētās ikonas. Lietotne saglabā jūsu iestatītās ikonas.</string>

@@ -1392,14 +1392,10 @@
     <string name="import_floris_done_family">Programu imehifadhi %1$s na mwonekano %2$d. Fungua Mandhari ili kuitazama.</string>
     <string name="import_floris_dropped_contrast">Rangi ya maandishi ya kitufe ilikuwa karibu sana na rangi ya kitufe kiasi kwamba haisomeki. Programu ilichagua rangi unayoweza kuisoma.</string>
     <string name="import_floris_dropped_corners">Funguo zina ukubwa mmoja wa kona. Faili huweka ukubwa tofauti kwa kila kona.</string>
-    <string name="import_floris_dropped_dynamic">Rangi zinazofuata mandhari ya mfumo hazijawekwa. Washa Material You katika Mandhari ili kupata athari sawa.</string>
     <string name="import_floris_dropped_elevation">Vivuli vya vitufe havijawekwa. Programu hii huchora vitufe bila kivuli.</string>
     <string name="import_floris_dropped_font">Fonti haijajumuishwa. Fonti ni nyongeza tofauti katika programu hii.</string>
-    <string name="import_floris_dropped_old">Sehemu ya faili inatumia umbizo la mtindo wa zamani wa FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Nafasi kuzunguka sehemu moja haijawekwa. Programu hii huweka pengo la vitufe kwa kibodi nzima.</string>
     <string name="import_floris_dropped_unknown">Baadhi ya sehemu za faili zinataja vipengele vya kibodi ambavyo programu hii haina.</string>
-    <string name="import_floris_old_body">Mandhari haya yameandikwa kwa ajili ya FlorisBoard 0.4. Umbizo hilo la mtindo si sawa na lile la FlorisBoard 0.5 na kuendelea, kwa hivyo programu haiwezi kulisoma. Mandhari ambayo programu hii imesoma kwa sehemu tu yatakupa rangi ambazo faili lako halikuwahi kuweka.</string>
-    <string name="import_floris_old_title">Mandhari ni ya FlorisBoard ya zamani</string>
     <string name="import_floris_title">Mandhari kutoka FlorisBoard</string>
     <string name="import_floris_unreadable_body">Programu haiwezi kusoma faili hili la FlorisBoard. Huenda limeharibika, au huenda ni kifurushi cha lugha au kiendelezi cha kibodi badala ya mandhari.</string>
     <string name="import_icons_body">Programu inasakinisha kifurushi na kukiwasha. Aikoni zake huchukua nafasi ya aikoni zilizojengewa ndani. Programu huhifadhi aikoni ulizoweka.</string>

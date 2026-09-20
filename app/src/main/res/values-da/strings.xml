@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">Appen gemte %1$s med %2$d udseender. Åbn Temaer for at se det.</string>
     <string name="import_floris_dropped_contrast">En tastetekstfarve var for tæt på tastfarven til at kunne læses. Appen valgte en farve, som du kan læse.</string>
     <string name="import_floris_dropped_corners">Taster har én hjørnestørrelse. Filen angiver en forskellig størrelse for hvert hjørne.</string>
-    <string name="import_floris_dropped_dynamic">Farver, der følger systemets baggrundsbillede, er ikke indstillet. Slå Material You til under Temaer for at få samme effekt.</string>
     <string name="import_floris_dropped_elevation">Tasteskygger er ikke indstillet. Denne app tegner taster uden skygge.</string>
     <string name="import_floris_dropped_font">Skrifttypen er ikke inkluderet. En skrifttype er en separat tilføjelse i denne app.</string>
-    <string name="import_floris_dropped_old">En del af filen bruger det ældre FlorisBoard-stilformat.</string>
     <string name="import_floris_dropped_spacing">Afstand omkring enkelte dele er ikke indstillet. Denne app indstiller tastafstanden for hele tastaturet.</string>
     <string name="import_floris_dropped_unknown">Nogle dele af filen navngiver tastaturelementer, som denne app ikke har.</string>
-    <string name="import_floris_old_body">Dette tema er skrevet til FlorisBoard 0.4. Det stilformat er ikke det samme som det i FlorisBoard 0.5 og senere, så appen kan ikke læse det. Et tema, som denne app kun læste delvist, ville give dig farver, som din fil aldrig har indstillet.</string>
-    <string name="import_floris_old_title">Temaet er til en ældre FlorisBoard</string>
     <string name="import_floris_title">Tema fra FlorisBoard</string>
     <string name="import_floris_unreadable_body">Appen kan ikke læse denne FlorisBoard-fil. Den kan være beskadiget, eller det kan være en sprogpakke eller en tastaturudvidelse i stedet for et tema.</string>
     <string name="import_icons_body">Appen installerer pakken og aktiverer den. Dens ikoner erstatter de indbyggede ikoner. Appen beholder de ikoner, du har indstillet.</string>

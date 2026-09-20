@@ -1388,14 +1388,10 @@
     <string name="import_floris_done_family">Aplicația a salvat %1$s cu %2$d aspecte. Deschideți Teme pentru a le vizualiza.</string>
     <string name="import_floris_dropped_contrast">O culoare a textului tastei era prea apropiată de culoarea tastei pentru a fi lizibilă. Aplicația a ales o culoare pe care o poți citi.</string>
     <string name="import_floris_dropped_corners">Tastele au o singură dimensiune de colț. Fișierul setează o dimensiune diferită pentru fiecare colț.</string>
-    <string name="import_floris_dropped_dynamic">Culorile care urmează imaginea de fundal a sistemului nu sunt setate. Activați Material You în Teme pentru același efect.</string>
     <string name="import_floris_dropped_elevation">Umbrele tastelor nu sunt setate. Această aplicație desenează tastele fără umbră.</string>
     <string name="import_floris_dropped_font">Fontul nu este inclus. Un font este un add-on separat în această aplicație.</string>
-    <string name="import_floris_dropped_old">O parte din fișier folosește formatul de stil mai vechi FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Spațierea din jurul părților individuale nu este setată. Această aplicație setează spațiul dintre taste pentru întreaga tastatură.</string>
     <string name="import_floris_dropped_unknown">Unele părți ale fișierului denumesc elemente de tastatură pe care această aplicație nu le are.</string>
-    <string name="import_floris_old_body">Această temă este scrisă pentru FlorisBoard 0.4. Formatul de stil nu este același cu cel din FlorisBoard 0.5 și versiunile ulterioare, așa că aplicația nu îl poate citi. O temă pe care această aplicație o citește doar parțial îți va oferi culori pe care fișierul tău nu le-a setat niciodată.</string>
-    <string name="import_floris_old_title">Tema este pentru o versiune mai veche de FlorisBoard</string>
     <string name="import_floris_title">Temă din FlorisBoard</string>
     <string name="import_floris_unreadable_body">Aplicația nu poate citi acest fișier FlorisBoard. Este posibil să fie deteriorat sau să fie un pachet de limbă sau o extensie de tastatură în loc de o temă.</string>
     <string name="import_icons_body">Aplicația instalează pachetul și îl activează. Pictogramele sale le înlocuiesc pe cele încorporate. Aplicația păstrează pictogramele pe care le-ați setat.</string>

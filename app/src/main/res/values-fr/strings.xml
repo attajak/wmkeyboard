@@ -1386,14 +1386,10 @@
     <string name="import_floris_done_family">L\'application a enregistré %1$s avec %2$d apparences. Ouvrez les thèmes pour le consulter.</string>
     <string name="import_floris_dropped_contrast">Une couleur de texte de touche était trop proche de la couleur de la touche pour être lisible. L\'application a choisi une couleur lisible.</string>
     <string name="import_floris_dropped_corners">Les touches ont une taille de coin unique. Le fichier définit une taille différente pour chaque coin.</string>
-    <string name="import_floris_dropped_dynamic">Les couleurs basées sur le fond d\'écran du système ne sont pas définies. Activez Material You dans les thèmes pour obtenir le même effet.</string>
     <string name="import_floris_dropped_elevation">Les ombres des touches ne sont pas définies. Cette application dessine les touches sans ombre.</string>
     <string name="import_floris_dropped_font">La police n\'est pas incluse. Une police est un module complémentaire distinct dans cette application.</string>
-    <string name="import_floris_dropped_old">Une partie du fichier utilise l\'ancien format de style FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">L\'espacement autour des éléments individuels n\'est pas défini. Cette application définit l\'écartement des touches pour l\'ensemble du clavier.</string>
     <string name="import_floris_dropped_unknown">Certaines parties du fichier nomment des éléments de clavier que cette application ne possède pas.</string>
-    <string name="import_floris_old_body">Ce thème est écrit pour FlorisBoard 0.4. Ce format de style n\'est pas le même que celui de FlorisBoard 0.5 et versions ultérieures, l\'application ne peut donc pas le lire. Un thème que cette application ne lirait qu\'en partie vous donnerait des couleurs que votre fichier n\'a jamais définies.</string>
-    <string name="import_floris_old_title">Le thème est destiné à une ancienne version de FlorisBoard</string>
     <string name="import_floris_title">Thème de FlorisBoard</string>
     <string name="import_floris_unreadable_body">L\'application ne peut pas lire ce fichier FlorisBoard. Il est peut-être endommagé, ou il s\'agit peut-être d\'un pack de langue ou d\'une extension de clavier plutôt que d\'un thème.</string>
     <string name="import_icons_body">L\'application installe le pack et l\'active. Ses icônes remplacent les icônes intégrées. L\'application conserve les icônes que vous avez définies.</string>

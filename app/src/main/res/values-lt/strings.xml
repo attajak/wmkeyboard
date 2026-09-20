@@ -1389,14 +1389,10 @@
     <string name="import_floris_done_family">Programa išsaugojo %1$s su %2$d išvaizdų. Atidarykite temas, kad jas peržiūrėtumėte.</string>
     <string name="import_floris_dropped_contrast">Pagrindinė teksto spalva buvo per artima pagrindinei spalvai, kad būtų galima skaityti. Programa pasirinko spalvą, kurią galite perskaityti.</string>
     <string name="import_floris_dropped_corners">Klavišai turi vieną kampo dydį. Failas nustato skirtingą dydį kiekvienam kampui.</string>
-    <string name="import_floris_dropped_dynamic">Spalvos, atitinkančios sistemos ekrano foną, nenustatytos. Norėdami pasiekti tą patį efektą, temose įjunkite „Material You“.</string>
     <string name="import_floris_dropped_elevation">Klavišų šešėliai nenustatyti. Ši programa piešia klavišus be šešėlio.</string>
     <string name="import_floris_dropped_font">Šriftas neįtrauktas. Šriftas šioje programoje yra atskiras priedas.</string>
-    <string name="import_floris_dropped_old">Dalis failo naudoja senesnį FlorisBoard stiliaus formatą.</string>
     <string name="import_floris_dropped_spacing">Tarpai aplink atskiras dalis nenustatyti. Ši programa nustato klavišų tarpus visai klaviatūrai.</string>
     <string name="import_floris_dropped_unknown">Kai kurios failo dalys nurodo klaviatūros elementus, kurių ši programėlė neturi.</string>
-    <string name="import_floris_old_body">Ši tema skirta „FlorisBoard 0.4“. Tas stiliaus formatas nėra toks pat, kaip „FlorisBoard 0.5“ ir vėlesnėse versijose, todėl programa negali jo nuskaityti. Tema, kurią ši programa nuskaitytų tik iš dalies, suteiktų spalvas, kurių jūsų failas niekada nenustatė.</string>
-    <string name="import_floris_old_title">Tema skirta senesnei „FlorisBoard“ versijai</string>
     <string name="import_floris_title">Tema iš „FlorisBoard“</string>
     <string name="import_floris_unreadable_body">Programa negali nuskaityti šio „FlorisBoard“ failo. Jis gali būti sugadintas arba tai gali būti kalbos paketas ar klaviatūros plėtinys, o ne tema.</string>
     <string name="import_icons_body">Programa įdiegia paketą ir jį įjungia. Jo piktogramos pakeičia įdiegtas piktogramas. Programa išsaugo jūsų nustatytas piktogramas.</string>

@@ -1388,14 +1388,10 @@
     <string name="import_floris_done_family">ॲपने %1$s ला %2$d लूकसह सेव्ह केले आहे. ते पाहण्यासाठी थीम्स उघडा.</string>
     <string name="import_floris_dropped_contrast">की मजकुराचा रंग की च्या रंगाशी खूप जवळ होता, ज्यामुळे वाचणे कठीण होते. ॲपने असा रंग निवडला आहे जो तुम्ही वाचू शकता.</string>
     <string name="import_floris_dropped_corners">कीजचा एक कोपरा आकार असतो. फाईल प्रत्येक कोपऱ्यासाठी वेगळा आकार सेट करते.</string>
-    <string name="import_floris_dropped_dynamic">सिस्टम वॉलपेपरचे अनुसरण करणारे रंग सेट केलेले नाहीत. समान प्रभावासाठी थीम्समध्ये \'मटेरियल यू\' चालू करा.</string>
     <string name="import_floris_dropped_elevation">कीच्या सावल्या सेट केलेल्या नाहीत. हे ॲप सावलीशिवाय की काढते.</string>
     <string name="import_floris_dropped_font">फॉन्ट समाविष्ट नाही. फॉन्ट हे या ॲपमधील एक स्वतंत्र ॲड-ऑन आहे.</string>
-    <string name="import_floris_dropped_old">फाईलचा काही भाग जुन्या FlorisBoard शैलीचे फॉरमॅट वापरतो.</string>
     <string name="import_floris_dropped_spacing">स्वतंत्र भागांभोवतीची जागा सेट केलेली नाही. हे ॲप संपूर्ण कीबोर्डसाठी की मधील अंतर सेट करते.</string>
     <string name="import_floris_dropped_unknown">फाईलच्या नावातील काही भाग अशा कीबोर्ड घटकांचा उल्लेख करतात जे या ॲपमध्ये नाहीत.</string>
-    <string name="import_floris_old_body">ही थीम FlorisBoard 0.4 साठी लिहिलेली आहे. ते स्टाईल फॉरमॅट FlorisBoard 0.5 आणि नंतरच्या आवृत्तीतील फॉरमॅटसारखे नाही, त्यामुळे ॲप ते वाचू शकत नाही. ज्या थीमचा काही भाग या ॲपने वाचला असेल, ती तुम्हाला असे रंग देईल जे तुमच्या फाईलने कधीही सेट केले नव्हते.</string>
-    <string name="import_floris_old_title">थीम जुन्या FlorisBoard साठी आहे</string>
     <string name="import_floris_title">FlorisBoard कडून थीम</string>
     <string name="import_floris_unreadable_body">ॲप ही FlorisBoard फाईल वाचू शकत नाही. ती खराब झालेली असू शकते, किंवा ती थीमऐवजी लँग्वेज पॅक किंवा कीबोर्ड एक्स्टेंशन असू शकते.</string>
     <string name="import_icons_body">ॲप पॅक इन्स्टॉल करते आणि तो चालू करते. त्याचे आयकॉन अंगभूत आयकॉनची जागा घेतात. ॲप तुम्ही सेट केलेले आयकॉन ठेवते.</string>

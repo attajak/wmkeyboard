@@ -151,17 +151,34 @@ class FlexThemeTest {
 
     // ---- the dialect ----
 
+    /**
+     * FlorisBoard 0.4's dialect. The element names differ — `keyboard` for the
+     * board, `key-popup` for the bubble, `smartbar-key` for a tool button — but
+     * the properties and the value syntax are the same, so it converts. An
+     * earlier build refused these outright, which threw away most of the themes
+     * in circulation: Dracula, Methone and Lurux are all this dialect.
+     */
     @Test
-    fun `a v1 stylesheet is refused rather than half mapped`() {
+    fun `the older dialect is read, not refused`() {
         val v1 = sheet(
             """
             {
-              "keyboard": { "background": "rgba(16,16,20,1)" },
-              "smartbar": { "background": "rgba(16,16,20,1)" }
+              "@defines": { "--bg": "rgba(16,16,20,1)", "--fg": "rgba(248,248,242,1)" },
+              "keyboard": { "background": "var(--bg)" },
+              "key": { "background": "rgba(68,71,90,1)", "foreground": "var(--fg)" },
+              "key-popup": { "background": "rgba(90,90,110,1)" },
+              "smartbar-key": { "foreground": "var(--fg)" },
+              "emoji-key": { "background": "rgba(0,0,0,0)" },
+              "system-nav-bar": { "background": "var(--bg)" }
             }
             """,
         )
-        assertEquals(FlexResult.SnyggV1, read(manifest(dayEntry), "stylesheets/day.json" to v1))
+        val theme = converted(read(manifest(dayEntry), "stylesheets/day.json" to v1)).themes[0].theme
+        assertEquals(0xFF101014, theme.boardBackground)
+        assertEquals(0xFF44475A, theme.keyBackground)
+        assertEquals(0xFF5A5A6E, theme.popupBackground)
+        assertEquals(0xFFF8F8F2, theme.toolbarIcon)
+        assertEquals(0xFF101014, theme.navigationBarBackground)
     }
 
     // ---- what lands ----

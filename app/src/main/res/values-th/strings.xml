@@ -1387,14 +1387,10 @@
     <string name="import_floris_done_family">แอปบันทึก %1$s พร้อมรูปลักษณ์ %2$d แบบแล้ว เปิดธีมเพื่อดูได้เลย</string>
     <string name="import_floris_dropped_contrast">สีข้อความของปุ่มใกล้เคียงกับสีของปุ่มมากเกินไปจนอ่านไม่ออก แอปจึงเลือกสีที่คุณสามารถอ่านได้</string>
     <string name="import_floris_dropped_corners">ปุ่มมีขนาดมุมเดียว ไฟล์นี้กำหนดขนาดที่แตกต่างกันสำหรับแต่ละมุม</string>
-    <string name="import_floris_dropped_dynamic">ไม่ได้ตั้งค่าสีตามวอลเปเปอร์ของระบบ เปิดใช้งาน Material You ในธีมเพื่อให้ได้ผลลัพธ์เดียวกัน</string>
     <string name="import_floris_dropped_elevation">ไม่ได้ตั้งค่าเงาของปุ่ม แอปนี้วาดปุ่มโดยไม่มีเงา</string>
     <string name="import_floris_dropped_font">ไม่รวมแบบอักษร แบบอักษรเป็นส่วนเสริมแยกต่างหากในแอปนี้</string>
-    <string name="import_floris_dropped_old">ส่วนหนึ่งของไฟล์ใช้รูปแบบสไตล์ FlorisBoard แบบเก่า</string>
     <string name="import_floris_dropped_spacing">ไม่ได้ตั้งค่าช่องว่างรอบส่วนประกอบแต่ละส่วน แอปนี้จะตั้งค่าช่องว่างระหว่างปุ่มสำหรับแป้นพิมพ์ทั้งหมด</string>
     <string name="import_floris_dropped_unknown">บางส่วนของไฟล์ระบุองค์ประกอบแป้นพิมพ์ที่แอปนี้ไม่มี</string>
-    <string name="import_floris_old_body">ธีมนี้เขียนขึ้นสำหรับ FlorisBoard 0.4 รูปแบบสไตล์นั้นไม่เหมือนกับที่ใช้ใน FlorisBoard 0.5 ขึ้นไป แอปจึงไม่สามารถอ่านได้ ธีมที่แอปนี้อ่านได้เพียงบางส่วนอาจทำให้คุณได้สีที่ไม่เคยถูกกำหนดไว้ในไฟล์ของคุณ</string>
-    <string name="import_floris_old_title">ธีมนี้สำหรับ FlorisBoard เวอร์ชันเก่า</string>
     <string name="import_floris_title">ธีมจาก FlorisBoard</string>
     <string name="import_floris_unreadable_body">แอปไม่สามารถอ่านไฟล์ FlorisBoard นี้ได้ อาจเกิดความเสียหาย หรืออาจเป็นชุดภาษาหรือส่วนขยายแป้นพิมพ์แทนที่จะเป็นธีม</string>
     <string name="import_icons_body">แอปจะติดตั้งชุดไอคอนและเปิดใช้งาน ไอคอนเหล่านี้จะแทนที่ไอคอนที่มีอยู่เดิม แอปจะเก็บไอคอนที่คุณตั้งค่าไว้</string>

@@ -1386,14 +1386,10 @@
     <string name="import_floris_done_family">Aplikasi menyimpan %1$s dengan %2$d tampilan. Buka Tema untuk melihatnya.</string>
     <string name="import_floris_dropped_contrast">Warna teks tombol terlalu dekat dengan warna tombol sehingga sulit dibaca. Aplikasi memilih warna yang dapat Anda baca.</string>
     <string name="import_floris_dropped_corners">Tombol memiliki satu ukuran sudut. File tersebut menetapkan ukuran yang berbeda untuk setiap sudut.</string>
-    <string name="import_floris_dropped_dynamic">Warna yang mengikuti wallpaper sistem tidak diatur. Aktifkan Material You di Tema untuk efek yang sama.</string>
     <string name="import_floris_dropped_elevation">Bayangan tombol tidak diatur. Aplikasi ini menggambar tombol tanpa bayangan.</string>
     <string name="import_floris_dropped_font">Font tidak disertakan. Font adalah add-on terpisah di aplikasi ini.</string>
-    <string name="import_floris_dropped_old">Bagian dari file ini menggunakan format gaya FlorisBoard yang lebih lama.</string>
     <string name="import_floris_dropped_spacing">Jarak di sekitar bagian tunggal tidak diatur. Aplikasi ini mengatur celah tombol untuk seluruh papan ketik.</string>
     <string name="import_floris_dropped_unknown">Beberapa bagian dari nama file adalah elemen papan ketik yang tidak dimiliki aplikasi ini.</string>
-    <string name="import_floris_old_body">Tema ini ditulis untuk FlorisBoard 0.4. Format gaya tersebut tidak sama dengan yang ada di FlorisBoard 0.5 ke atas, sehingga aplikasi tidak dapat membacanya. Tema yang hanya dibaca sebagian oleh aplikasi ini akan memberi Anda warna yang tidak pernah ditetapkan oleh file Anda.</string>
-    <string name="import_floris_old_title">Tema ini untuk FlorisBoard versi lama</string>
     <string name="import_floris_title">Tema dari FlorisBoard</string>
     <string name="import_floris_unreadable_body">Aplikasi tidak dapat membaca file FlorisBoard ini. File mungkin rusak, atau mungkin berupa paket bahasa atau ekstensi papan ketik, bukan tema.</string>
     <string name="import_icons_body">Aplikasi akan menginstal paket dan mengaktifkannya. Ikon-ikonnya akan menggantikan ikon bawaan. Aplikasi akan tetap menggunakan ikon yang Anda atur.</string>

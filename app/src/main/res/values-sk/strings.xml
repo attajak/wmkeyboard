@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">Aplikácia uložila %1$s s %2$d vzhľadmi. Otvorte Témy, aby ste si ich pozreli.</string>
     <string name="import_floris_dropped_contrast">Farba textu klávesy bola príliš blízko farbe klávesy na čítanie. Aplikácia vybrala farbu, ktorú môžete čítať.</string>
     <string name="import_floris_dropped_corners">Klávesy majú jednu veľkosť rohu. Súbor nastavuje pre každý roh inú veľkosť.</string>
-    <string name="import_floris_dropped_dynamic">Farby, ktoré nasledujú tapetu systému, nie sú nastavené. Pre rovnaký efekt zapnite Material You v Motívoch.</string>
     <string name="import_floris_dropped_elevation">Tiene klávesov nie sú nastavené. Táto aplikácia vykresľuje klávesy bez tieňa.</string>
     <string name="import_floris_dropped_font">Písmo nie je zahrnuté. Písmo je v tejto aplikácii samostatný doplnok.</string>
-    <string name="import_floris_dropped_old">Časť súboru používa starší formát štýlu FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Medzery okolo jednotlivých častí nie sú nastavené. Táto aplikácia nastavuje medzeru medzi klávesmi pre celú klávesnicu.</string>
     <string name="import_floris_dropped_unknown">Niektoré časti súboru pomenúvajú prvky klávesnice, ktoré táto aplikácia nemá.</string>
-    <string name="import_floris_old_body">Tento motív je napísaný pre FlorisBoard 0.4. Formát štýlu nie je rovnaký ako vo FlorisBoard 0.5 a novších, takže ho aplikácia nedokáže prečítať. Motív, ktorý táto aplikácia prečítala iba čiastočne, by vám poskytol farby, ktoré váš súbor nikdy nenastavil.</string>
-    <string name="import_floris_old_title">Téma je pre staršiu verziu FlorisBoard</string>
     <string name="import_floris_title">Motív z FlorisBoard</string>
     <string name="import_floris_unreadable_body">Aplikácia nedokáže prečítať tento súbor FlorisBoard. Môže byť poškodený, alebo to môže byť jazykový balík či rozšírenie klávesnice namiesto motívu.</string>
     <string name="import_icons_body">Aplikácia nainštaluje balík a zapne ho. Jeho ikony nahradia vstavané ikony. Aplikácia ponechá ikony, ktoré ste nastavili.</string>

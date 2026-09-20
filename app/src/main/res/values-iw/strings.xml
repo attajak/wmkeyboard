@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">האפליקציה שמרה את %1$s עם %2$d מראות. פתח את \'ערכות נושא\' כדי לצפות בו.</string>
     <string name="import_floris_dropped_contrast">צבע טקסט של מקש היה קרוב מדי לצבע המקש כדי לקרוא אותו. האפליקציה בחרה צבע שניתן לקרוא.</string>
     <string name="import_floris_dropped_corners">למקשים יש גודל פינה אחד. הקובץ מגדיר גודל שונה לכל פינה.</string>
-    <string name="import_floris_dropped_dynamic">צבעים התואמים לטפט המערכת לא הוגדרו. הפעל את Material You בערכות נושא לקבלת אפקט זהה.</string>
     <string name="import_floris_dropped_elevation">צלליות מקשים לא מוגדרות. אפליקציה זו מציירת מקשים ללא צל.</string>
     <string name="import_floris_dropped_font">הגופן אינו כלול. גופן הוא תוסף נפרד באפליקציה זו.</string>
-    <string name="import_floris_dropped_old">חלק מהקובץ משתמש בפורמט הישן של FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">המרווח סביב חלקים בודדים לא הוגדר. אפליקציה זו מגדירה את המרווח בין המקשים עבור כל המקלדת.</string>
     <string name="import_floris_dropped_unknown">חלקים מסוימים משם הקובץ הם רכיבי מקלדת שאין לאפליקציה זו.</string>
-    <string name="import_floris_old_body">ערכת נושא זו נכתבה עבור FlorisBoard 0.4. פורמט הסגנון הזה אינו זהה לזה שב-FlorisBoard 0.5 ומעלה, לכן האפליקציה לא יכולה לקרוא אותו. ערכת נושא שאפליקציה זו קראה רק בחלקה תיתן לך צבעים שהקובץ שלך מעולם לא הגדיר.</string>
-    <string name="import_floris_old_title">הערכת נושא מיועדת לגרסה ישנה יותר של FlorisBoard</string>
     <string name="import_floris_title">ערכת נושא מ-FlorisBoard</string>
     <string name="import_floris_unreadable_body">האפליקציה לא יכולה לקרוא את קובץ ה-FlorisBoard הזה. ייתכן שהוא פגום, או שהוא חבילת שפה או תוסף מקלדת במקום ערכת נושא.</string>
     <string name="import_icons_body">האפליקציה מתקינה את החבילה ומפעילה אותה. האייקונים שלה מחליפים את האייקונים המובנים. האפליקציה שומרת על האייקונים שהגדרת.</string>

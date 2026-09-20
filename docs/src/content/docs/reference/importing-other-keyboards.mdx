@@ -17,7 +17,7 @@ Conversion is honest about being lossy. A layout import always ends on a confirm
 |---|---|---|
 | `.json` layout | FlorisBoard, HeliBoard | A custom layout |
 | `.txt` layout | HeliBoard | A custom layout |
-| `.flex` theme | FlorisBoard 0.5 and later | One theme, one look per theme in the file |
+| `.flex` theme | FlorisBoard 0.4 and later | One theme, one look per theme in the file |
 | `.keyman-touch-layout` | Keyman | A custom layout, without the keyboard's rules |
 | `.kmp` package | Keyman | A custom layout **and** its typing rules |
 
@@ -86,20 +86,33 @@ A FlorisBoard extension that holds both a day and a night version becomes **one*
 
 Open the `.flex` from a file manager and the dialog puts a number on it: *"The app can use 34 of the 52 style rules in this file."* That dialog is also where the list below shows up, one line per thing that had nowhere to go.
 
-Colours mostly land. The board, the keys, the pressed key, the enter key, borders, popups, the glide trail, the suggestion text, and per-key colours all have somewhere to go, and so do a board background image and a key texture. FlorisBoard styles a much larger set of keyboard parts than this app draws, so the rest is reported rather than approximated:
+Colours mostly land. These all have somewhere to go:
+
+- The board, the keys, the pressed key, the enter key, the function keys, borders and per-key colours.
+- The key popup and its border, and the corner hint.
+- The toolbar: the tool icons, the circle behind them, and the active toggle.
+- The suggestion strip: the suggestion text, the clip chip, and a chip's selected colours.
+- The panel cards, the bottom sheets, the navigation bar band and the glide trail.
+- Key and hint text sizes, bold labels, and the corner shape of keys, popups, chips, cards and menus.
+- A board background image and a key texture.
+
+**Colours that follow the wallpaper are read too.** A FlorisBoard theme may name a Material You role, such as `dynamic-dark-color(surfaceContainerLow)`, instead of a fixed colour. On Android 12 and later the app resolves those against the same system palette FlorisBoard reads, so a theme written that way arrives with its colours rather than empty. Two of the most-used theme packs are written entirely this way.
+
+The catch is that the result is a snapshot. A theme here stores fixed colours, so a converted theme keeps the colours your wallpaper gave it at the moment you imported it and does not follow the next wallpaper. Re-import it after a wallpaper change, or turn on Material You in <SettingsPath path="Appearance / Keyboard themes" /> to have the app's own themes follow it.
+
+FlorisBoard styles a much larger set of keyboard parts than this app draws, so the rest is reported rather than approximated:
 
 - **Key shadows.** This app draws keys without one.
 - **Per-corner radii.** Keys here have a single corner size.
 - **Spacing on single elements.** The key gap is set for the whole keyboard.
 - **Fonts.** A theme here does name a font, but it names one that is already installed as a separate add-on, so there is nothing for a font file inside a `.flex` to become. The dialog says so. Install the font yourself and pick it in the theme editor.
-- **Wallpaper-following colours.** Turn on Material You in <SettingsPath path="Appearance / Keyboard themes" /> for the same effect.
-- **Elements this keyboard does not have.** FlorisBoard's suggestion bar is built from more parts than this one.
+- **Elements this keyboard does not have.** FlorisBoard has a floating window, a clipboard browser and a one-handed panel that this app either draws differently or does not have.
 
-If a key's text colour would be unreadable on its key colour, the app drops the imported colour and picks a readable one. That happens when a colour comes from a rule that meant a different part of the keyboard, and a theme whose keys cannot be read is the one thing the editor cannot fix for you.
+If a key's text colour would be genuinely unreadable on what sits behind it, the app drops the imported colour and picks a readable one, and says so. The test is made against what you actually see: a borderless theme's keys are transparent, so its labels are judged against the board showing through rather than against the empty key.
 
 ### FlorisBoard 0.4 themes
 
-FlorisBoard changed its style format in 0.5, and the two are not compatible. A 0.4 theme is refused with a message rather than read in part, because a partly-read theme gives you colours your file never set and no way to tell which ones.
+Both style formats are read. FlorisBoard renamed several parts in 0.5 (the board went from `keyboard` to `window`, the popup from `key-popup` to `key-popup-box`), but the colours and the way they are written did not change, so a 0.4 theme converts as well as a 0.5 one. Most themes still in circulation are the older format.
 
 ## Details & edge cases
 

@@ -1389,14 +1389,10 @@
     <string name="import_floris_done_family">Aplikacja zapisała %1$s z %2$d motywami. Otwórz Motywy, aby je zobaczyć.</string>
     <string name="import_floris_dropped_contrast">Kolor tekstu klawisza był zbyt zbliżony do koloru klawisza, aby był czytelny. Aplikacja wybrała kolor, który jest czytelny.</string>
     <string name="import_floris_dropped_corners">Klawisze mają jeden rozmiar narożnika. Plik ustawia inny rozmiar dla każdego narożnika.</string>
-    <string name="import_floris_dropped_dynamic">Kolory dopasowane do tapety systemowej nie są ustawione. Włącz Material You w motywach, aby uzyskać ten sam efekt.</string>
     <string name="import_floris_dropped_elevation">Cienie klawiszy nie są ustawione. Ta aplikacja rysuje klawisze bez cienia.</string>
     <string name="import_floris_dropped_font">Czcionka nie jest dołączona. Czcionka jest oddzielnym dodatkiem w tej aplikacji.</string>
-    <string name="import_floris_dropped_old">Część pliku używa starszego formatu stylu FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Odstępy wokół pojedynczych części nie są ustawione. Ta aplikacja ustawia odstępy między klawiszami dla całej klawiatury.</string>
     <string name="import_floris_dropped_unknown">Niektóre części pliku wskazują na elementy klawiatury, których ta aplikacja nie posiada.</string>
-    <string name="import_floris_old_body">Ten motyw został napisany dla FlorisBoard 0.4. Format stylu różni się od tego w FlorisBoard 0.5 i nowszych, więc aplikacja nie może go odczytać. Motyw, który ta aplikacja odczytała tylko częściowo, zapewniłby kolory, których Twój plik nigdy nie ustawił.</string>
-    <string name="import_floris_old_title">Motyw jest przeznaczony dla starszej wersji FlorisBoard</string>
     <string name="import_floris_title">Motyw z FlorisBoard</string>
     <string name="import_floris_unreadable_body">Aplikacja nie może odczytać tego pliku FlorisBoard. Może być uszkodzony lub może to być pakiet językowy albo rozszerzenie klawiatury zamiast motywu.</string>
     <string name="import_icons_body">Aplikacja instaluje pakiet i włącza go. Jego ikony zastępują wbudowane ikony. Aplikacja zachowuje ustawione przez Ciebie ikony.</string>

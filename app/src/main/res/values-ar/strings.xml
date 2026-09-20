@@ -1392,14 +1392,10 @@
     <string name="import_floris_done_family">حفظ التطبيق %1$s مع %2$d من المظاهر. افتح السمات لإلقاء نظرة عليها.</string>
     <string name="import_floris_dropped_contrast">كان لون نص المفتاح قريبًا جدًا من لون المفتاح بحيث يصعب قراءته. اختار التطبيق لونًا يمكنك قراءته.</string>
     <string name="import_floris_dropped_corners">للمفاتيح حجم زاوية واحد. يحدد الملف حجماً مختلفاً لكل زاوية.</string>
-    <string name="import_floris_dropped_dynamic">الألوان التي تتبع خلفية النظام غير مضبوطة. قم بتشغيل Material You في السمات للحصول على نفس التأثير.</string>
     <string name="import_floris_dropped_elevation">ظلال المفاتيح غير مضبوطة. يرسم هذا التطبيق المفاتيح بدون ظل.</string>
     <string name="import_floris_dropped_font">الخط غير مضمن. الخط هو إضافة منفصلة في هذا التطبيق.</string>
-    <string name="import_floris_dropped_old">جزء من الملف يستخدم تنسيق نمط FlorisBoard القديم.</string>
     <string name="import_floris_dropped_spacing">المسافة حول الأجزاء الفردية غير مضبوطة. يضبط هذا التطبيق فجوة المفاتيح للوحة المفاتيح بأكملها.</string>
     <string name="import_floris_dropped_unknown">بعض أجزاء الملف تسمي عناصر لوحة مفاتيح لا يمتلكها هذا التطبيق.</string>
-    <string name="import_floris_old_body">هذا المظهر مكتوب لـ FlorisBoard 0.4. تنسيق النمط هذا ليس هو نفسه الموجود في FlorisBoard 0.5 والإصدارات الأحدث، لذا لا يمكن للتطبيق قراءته. المظهر الذي قرأه هذا التطبيق جزئيًا فقط سيعطيك ألوانًا لم يحددها ملفك أبدًا.</string>
-    <string name="import_floris_old_title">السمة مخصصة لإصدار أقدم من FlorisBoard</string>
     <string name="import_floris_title">سمة من FlorisBoard</string>
     <string name="import_floris_unreadable_body">لا يمكن للتطبيق قراءة ملف FlorisBoard هذا. قد يكون تالفاً، أو قد يكون حزمة لغة أو إضافة لوحة مفاتيح بدلاً من سمة.</string>
     <string name="import_icons_body">يقوم التطبيق بتثبيت الحزمة وتشغيلها. تحل أيقوناتها محل الأيقونات المدمجة. يحتفظ التطبيق بالأيقونات التي قمت بتعيينها.</string>

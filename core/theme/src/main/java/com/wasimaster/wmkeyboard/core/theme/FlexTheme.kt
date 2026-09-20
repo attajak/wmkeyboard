@@ -76,11 +76,15 @@ object FlexTheme {
     /**
      * Reads [input] and converts every theme in it.
      *
-     * Never throws: a truncated archive, a manifest for some other kind of
-     * extension and a stylesheet in a dialect this build cannot read are all
-     * ordinary outcomes with their own answer.
+     * [palette] resolves the Material roles a stylesheet can name — see
+     * [SnyggPalette]. The default stands in off-device and below Android 12;
+     * `:app` passes the device's own palette so that a theme written against
+     * Material You converts to the colours FlorisBoard would have drawn.
+     *
+     * Never throws: a truncated archive and a manifest for some other kind of
+     * extension are both ordinary outcomes with their own answer.
      */
-    fun read(input: InputStream): FlexResult {
+    fun read(input: InputStream, palette: SnyggPalette = SnyggPalette.Baseline): FlexResult {
         val files = runCatching { unpack(input) }.getOrNull() ?: return FlexResult.Unreadable
         val manifestText = files[MANIFEST]?.decodeToString() ?: return FlexResult.NotAFlex
         val manifest = runCatching { json.parseToJsonElement(manifestText) }.getOrNull() as? JsonObject
@@ -96,23 +100,20 @@ object FlexTheme {
         var mapped = 0
         val themes = entries.mapNotNull { entry ->
             val sheet = stylesheetOf(entry, files) ?: return@mapNotNull null
-            val style = Stylesheet.parse(sheet) ?: return@mapNotNull null
+            val night = entry.boolean("isNight") ?: true
+            val style = Stylesheet.parse(sheet, palette, night) ?: return@mapNotNull null
             rules += style.ruleCount
             mapped += style.mappedCount
             dropped += style.dropped
             SnyggMapper(style).convert(
                 name = themeName(meta, entry, entries.size),
                 id = entry.string("id").orEmpty(),
-                night = entry.boolean("isNight") ?: true,
+                night = night,
                 files = files,
                 dropped = dropped,
             )
         }
         return when {
-            // A stylesheet written for FlorisBoard 0.4. The two dialects are not
-            // compatible, and half of a theme is worse than a clear no: the user
-            // ends up hand-fixing values that never came from their file.
-            themes.isEmpty() && FlexUnsupported.SNYGG_V1 in dropped -> FlexResult.SnyggV1
             themes.isEmpty() -> FlexResult.NotAFlex
             else -> FlexResult.Converted(
                 themes = themes,
@@ -265,9 +266,6 @@ sealed interface FlexResult {
     /** A ZIP, but not a theme extension. */
     data object NotAFlex : FlexResult
 
-    /** A stylesheet in FlorisBoard 0.4's dialect, which is not the one below. */
-    data object SnyggV1 : FlexResult
-
     /** Truncated, not a ZIP at all, or past the size caps. */
     data object Unreadable : FlexResult
 }
@@ -288,12 +286,17 @@ data class ConvertedTheme(
 
 /** Something a stylesheet asked for that has nowhere to go here. */
 enum class FlexUnsupported {
-    /** FlorisBoard 0.4's dialect. Not read at all, rather than read badly. */
-    SNYGG_V1,
     ELEVATION,
     PER_CORNER_RADIUS,
     PER_ELEMENT_SPACING,
     FONT,
+
+    /**
+     * The sheet named a Material You role. It is resolved against the device's
+     * palette (see [SnyggPalette]) and stored as a literal colour, so the theme
+     * is a snapshot: it will not follow the next wallpaper the way FlorisBoard
+     * does.
+     */
     DYNAMIC_COLOR,
     UNKNOWN_ELEMENT,
 

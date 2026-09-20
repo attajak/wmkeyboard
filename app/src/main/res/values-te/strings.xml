@@ -1389,14 +1389,10 @@
     <string name="import_floris_done_family">యాప్ %1$sని %2$d లుక్స్‌తో సేవ్ చేసింది. దాన్ని చూడటానికి థీమ్‌లను తెరవండి.</string>
     <string name="import_floris_dropped_contrast">కీ టెక్స్ట్ రంగు, కీ రంగుకు చాలా దగ్గరగా ఉండటంతో చదవడం కష్టంగా ఉంది. మీరు చదవగలిగే రంగును యాప్ ఎంచుకుంది.</string>
     <string name="import_floris_dropped_corners">కీలకు ఒక మూల పరిమాణం ఉంటుంది. ఫైల్ ప్రతి మూలకు వేర్వేరు పరిమాణాన్ని సెట్ చేస్తుంది.</string>
-    <string name="import_floris_dropped_dynamic">సిస్టమ్ వాల్‌పేపర్‌ను అనుసరించే రంగులు సెట్ చేయబడలేదు. అదే ప్రభావాన్ని పొందడానికి థీమ్స్‌లో \'మెటీరియల్ యు\'ని ఆన్ చేయండి.</string>
     <string name="import_floris_dropped_elevation">కీ షాడోలు సెట్ చేయబడలేదు. ఈ యాప్ షాడో లేకుండా కీలను డ్రా చేస్తుంది.</string>
     <string name="import_floris_dropped_font">ఫాంట్ చేర్చబడలేదు. ఈ యాప్‌లో ఫాంట్ అనేది ఒక ప్రత్యేక యాడ్-ఆన్.</string>
-    <string name="import_floris_dropped_old">ఫైల్‌లోని కొంత భాగం పాత ఫ్లోరిస్‌బోర్డ్ స్టైల్ ఫార్మాట్‌ను ఉపయోగిస్తుంది.</string>
     <string name="import_floris_dropped_spacing">సింగిల్ పార్ట్‌ల చుట్టూ స్పేసింగ్ సెట్ చేయబడలేదు. ఈ యాప్ మొత్తం కీబోర్డ్ కోసం కీ గ్యాప్‌ను సెట్ చేస్తుంది.</string>
     <string name="import_floris_dropped_unknown">ఫైల్ పేరులోని కొన్ని భాగాలు ఈ యాప్‌లో లేని కీబోర్డ్ ఎలిమెంట్లను సూచిస్తున్నాయి.</string>
-    <string name="import_floris_old_body">ఈ థీమ్ FlorisBoard 0.4 కోసం వ్రాయబడింది. ఆ స్టైల్ ఫార్మాట్ FlorisBoard 0.5 మరియు తర్వాతి వెర్షన్లలో ఉన్న దానితో సమానంగా లేదు, కాబట్టి యాప్ దానిని చదవలేదు. ఈ యాప్ పాక్షికంగా మాత్రమే చదవగలిగే థీమ్, మీ ఫైల్ ఎప్పుడూ సెట్ చేయని రంగులను మీకు ఇస్తుంది.</string>
-    <string name="import_floris_old_title">థీమ్ పాత ఫ్లోరిస్ బోర్డ్ కోసం</string>
     <string name="import_floris_title">FlorisBoard నుండి థీమ్</string>
     <string name="import_floris_unreadable_body">యాప్ ఈ FlorisBoard ఫైల్‌ను చదవలేదు. ఇది పాడై ఉండవచ్చు లేదా ఇది థీమ్‌కు బదులుగా లాంగ్వేజ్ ప్యాక్ లేదా కీబోర్డ్ ఎక్స్‌టెన్షన్ కావచ్చు.</string>
     <string name="import_icons_body">యాప్ ప్యాక్‌ను ఇన్‌స్టాల్ చేసి ఆన్ చేస్తుంది. దీని చిహ్నాలు అంతర్నిర్మిత చిహ్నాలను భర్తీ చేస్తాయి. మీరు సెట్ చేసిన చిహ్నాలను యాప్ ఉంచుతుంది.</string>

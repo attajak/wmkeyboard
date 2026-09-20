@@ -133,17 +133,17 @@
     <!-- Shown when a file with more than one theme becomes one theme with
          several looks. %1$s is the theme's name, %2$d how many looks it has. -->
     <string name="import_floris_done_family" tools:ignore="PluralsCandidate">The app saved <xliff:g id="theme_name" example="Dusk">%1$s</xliff:g> with <xliff:g id="count" example="2">%2$d</xliff:g> looks. Open Themes to look at it.</string>
-    <string name="import_floris_old_title">Theme is for an older FlorisBoard</string>
-    <string name="import_floris_old_body">This theme is written for FlorisBoard 0.4. That style format is not the same as the one in FlorisBoard 0.5 and later, so the app cannot read it. A theme that this app read only in part would give you colours that your file never set.</string>
     <string name="import_floris_unreadable_body">The app cannot read this FlorisBoard file. It may be damaged, or it may be a language pack or a keyboard extension instead of a theme.</string>
 
     <!-- Lines in the "what the app changed" list of a FlorisBoard import. -->
-    <string name="import_floris_dropped_old">Part of the file uses the older FlorisBoard style format.</string>
     <string name="import_floris_dropped_elevation">Key shadows are not set. This app draws keys without a shadow.</string>
     <string name="import_floris_dropped_corners">Keys have one corner size. The file sets a different size for each corner.</string>
     <string name="import_floris_dropped_spacing">Space around single parts is not set. This app sets the key gap for the whole keyboard.</string>
     <string name="import_floris_dropped_font">The font is not included. A font is a separate add-on in this app.</string>
-    <string name="import_floris_dropped_dynamic">Colours that follow the system wallpaper are not set. Turn on Material You in Themes for the same effect.</string>
+    <!-- A stylesheet may name a Material You role instead of a colour. The app
+         resolves it against the palette in use at import and stores the result,
+         so the theme keeps those colours but stops following the wallpaper. -->
+    <string name="import_floris_dropped_dynamic_snapshot">Colours that follow the system wallpaper are set to the colours in use now. They do not change later when you change the wallpaper.</string>
     <string name="import_floris_dropped_unknown">Some parts of the file name keyboard elements that this app does not have.</string>
     <string name="import_floris_dropped_contrast">A key text colour was too close to the key colour to read. The app chose a colour that you can read.</string>
 

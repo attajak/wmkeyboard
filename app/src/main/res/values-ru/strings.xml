@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">Приложение сохранило %1$s с %2$d вариантами оформления. Откройте «Темы», чтобы просмотреть их.</string>
     <string name="import_floris_dropped_contrast">Цвет текста клавиши был слишком близок к цвету самой клавиши, что затрудняло чтение. Приложение выбрало цвет, который можно прочитать.</string>
     <string name="import_floris_dropped_corners">У клавиш один размер скругления углов. Файл задает разный размер для каждого угла.</string>
-    <string name="import_floris_dropped_dynamic">Цвета, соответствующие системным обоям, не заданы. Включите Material You в разделе «Темы» для достижения того же эффекта.</string>
     <string name="import_floris_dropped_elevation">Тени клавиш не заданы. Это приложение рисует клавиши без тени.</string>
     <string name="import_floris_dropped_font">Шрифт не включен. Шрифт является отдельным дополнением в этом приложении.</string>
-    <string name="import_floris_dropped_old">Часть файла использует устаревший формат стиля FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Отступы вокруг отдельных частей не заданы. Это приложение устанавливает межклавишный интервал для всей клавиатуры.</string>
     <string name="import_floris_dropped_unknown">Некоторые части файла содержат элементы клавиатуры, которых нет в этом приложении.</string>
-    <string name="import_floris_old_body">Эта тема написана для FlorisBoard 0.4. Формат стиля отличается от того, что используется во FlorisBoard 0.5 и более поздних версиях, поэтому приложение не может его прочитать. Тема, которую приложение прочитало лишь частично, может отображать цвета, которые не были заданы в вашем файле.</string>
-    <string name="import_floris_old_title">Тема для старой версии FlorisBoard</string>
     <string name="import_floris_title">Тема из FlorisBoard</string>
     <string name="import_floris_unreadable_body">Приложение не может прочитать этот файл FlorisBoard. Возможно, он поврежден, или это языковой пакет или расширение клавиатуры, а не тема.</string>
     <string name="import_icons_body">Приложение устанавливает набор и включает его. Его иконки заменяют встроенные иконки. Приложение сохраняет установленные вами иконки.</string>

@@ -1389,14 +1389,10 @@
     <string name="import_floris_done_family">Appen sparade %1$s med %2$d utseenden. Öppna teman för att titta på det.</string>
     <string name="import_floris_dropped_contrast">En tangenttextfärg var för lik tangentfärgen för att vara läsbar. Appen valde en färg som du kan läsa.</string>
     <string name="import_floris_dropped_corners">Tangenter har en hörnstorlek. Filen anger en annan storlek för varje hörn.</string>
-    <string name="import_floris_dropped_dynamic">Färger som följer systemets bakgrundsbild är inte inställda. Aktivera Material You i Teman för samma effekt.</string>
     <string name="import_floris_dropped_elevation">Tangent-skuggor är inte inställda. Denna app ritar tangenter utan skugga.</string>
     <string name="import_floris_dropped_font">Typsnittet ingår inte. Ett typsnitt är ett separat tillägg i den här appen.</string>
-    <string name="import_floris_dropped_old">En del av filen använder det äldre FlorisBoard-formatet.</string>
     <string name="import_floris_dropped_spacing">Mellanrum runt enskilda delar är inte inställt. Denna app ställer in tangentavståndet för hela tangentbordet.</string>
     <string name="import_floris_dropped_unknown">Vissa delar av filnamnet innehåller tangentbordselement som den här appen inte har.</string>
-    <string name="import_floris_old_body">Detta tema är skrivet för FlorisBoard 0.4. Det stilformatet är inte detsamma som det i FlorisBoard 0.5 och senare, så appen kan inte läsa det. Ett tema som appen bara läser delvis skulle ge dig färger som din fil aldrig ställde in.</string>
-    <string name="import_floris_old_title">Temat är för en äldre FlorisBoard</string>
     <string name="import_floris_title">Tema från FlorisBoard</string>
     <string name="import_floris_unreadable_body">Appen kan inte läsa denna FlorisBoard-fil. Den kan vara skadad, eller så kan det vara ett språkpaket eller ett tangentbordstillägg istället för ett tema.</string>
     <string name="import_icons_body">Appen installerar paketet och aktiverar det. Dess ikoner ersätter de inbyggda ikonerna. Appen behåller ikonerna som du ställer in.</string>

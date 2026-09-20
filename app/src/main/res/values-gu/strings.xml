@@ -1388,14 +1388,10 @@
     <string name="import_floris_done_family">એપે %2$d લુક્સ સાથે %1$s સેવ કર્યું છે. તેને જોવા માટે થીમ્સ ખોલો.</string>
     <string name="import_floris_dropped_contrast">કી ટેક્સ્ટનો રંગ કીના રંગની ખૂબ નજીક હોવાથી વાંચી શકાતો નહોતો. એપ દ્વારા એવો રંગ પસંદ કરવામાં આવ્યો છે જે તમે વાંચી શકો.</string>
     <string name="import_floris_dropped_corners">કીના ખૂણાનું કદ એકસરખું હોય છે. ફાઇલ દરેક ખૂણા માટે અલગ કદ સેટ કરે છે.</string>
-    <string name="import_floris_dropped_dynamic">સિસ્ટમ વૉલપેપરને અનુસરતા રંગો સેટ કરેલા નથી. સમાન અસર માટે થીમ્સમાં \'Material You\' ચાલુ કરો.</string>
     <string name="import_floris_dropped_elevation">કી શેડો સેટ નથી. આ એપ કીને શેડો વગર દોરે છે.</string>
     <string name="import_floris_dropped_font">ફોન્ટ સામેલ નથી. આ એપમાં ફોન્ટ એક અલગ એડ-ઓન છે.</string>
-    <string name="import_floris_dropped_old">ફાઇલનો અમુક ભાગ જૂના FlorisBoard સ્ટાઇલ ફોર્મેટનો ઉપયોગ કરે છે.</string>
     <string name="import_floris_dropped_spacing">સિંગલ ભાગોની આસપાસની જગ્યા સેટ નથી. આ એપ આખા કીબોર્ડ માટે કી ગેપ સેટ કરે છે.</string>
     <string name="import_floris_dropped_unknown">ફાઇલના કેટલાક ભાગો એવા કીબોર્ડ તત્વોના નામ આપે છે જે આ એપમાં નથી.</string>
-    <string name="import_floris_old_body">આ થીમ FlorisBoard 0.4 માટે લખાયેલ છે. તે સ્ટાઇલ ફોર્મેટ FlorisBoard 0.5 અને પછીના વર્ઝન જેવું નથી, તેથી એપ તેને વાંચી શકતી નથી. એક થીમ જે આ એપ માત્ર આંશિક રીતે વાંચી શકે છે તે તમને એવા રંગો આપશે જે તમારી ફાઇલે ક્યારેય સેટ કર્યા નથી.</string>
-    <string name="import_floris_old_title">થીમ જૂના FlorisBoard માટે છે</string>
     <string name="import_floris_title">FlorisBoard માંથી થીમ</string>
     <string name="import_floris_unreadable_body">એપ આ FlorisBoard ફાઇલ વાંચી શકતી નથી. તે ક્ષતિગ્રસ્ત હોઈ શકે છે, અથવા તે થીમને બદલે લેંગ્વેજ પેક અથવા કીબોર્ડ એક્સ્ટેંશન હોઈ શકે છે.</string>
     <string name="import_icons_body">એપ પેક ઇન્સ્ટોલ કરે છે અને તેને ચાલુ કરે છે. તેના આઇકન બિલ્ટ-ઇન આઇકનને બદલે છે. એપ તમે સેટ કરેલા આઇકનને રાખે છે.</string>

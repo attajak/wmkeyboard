@@ -1391,14 +1391,10 @@
     <string name="import_floris_done_family">Rakendus salvestas %1$s koos %2$d välimusega. Avage teemad, et seda vaadata.</string>
     <string name="import_floris_dropped_contrast">Klahvi teksti värv oli klahvi värvile liiga lähedal, et seda lugeda. Rakendus valis värvi, mida saate lugeda.</string>
     <string name="import_floris_dropped_corners">Klahvidel on üks nurgasuurus. Fail määrab iga nurga jaoks erineva suuruse.</string>
-    <string name="import_floris_dropped_dynamic">Süsteemi taustapilti järgivad värvid pole määratud. Sama efekti saavutamiseks lülitage teemades sisse Material You.</string>
     <string name="import_floris_dropped_elevation">Klahvide varjud pole määratud. See rakendus joonistab klahvid ilma varjuta.</string>
     <string name="import_floris_dropped_font">Fonti ei ole kaasatud. Font on selles rakenduses eraldi lisandmoodul.</string>
-    <string name="import_floris_dropped_old">Osa failist kasutab vanemat FlorisBoardi stiilivormingut.</string>
     <string name="import_floris_dropped_spacing">Üksikute osade ümber pole vahet seatud. See rakendus määrab klahvide vahe kogu klaviatuuri jaoks.</string>
     <string name="import_floris_dropped_unknown">Mõned faili osad nimetavad klaviatuurielemente, mida sellel rakendusel pole.</string>
-    <string name="import_floris_old_body">See teema on kirjutatud FlorisBoard 0.4 jaoks. See stiilivorming ei ole sama, mis FlorisBoard 0.5 ja uuemates versioonides, seega rakendus ei saa seda lugeda. Teema, mida see rakendus vaid osaliselt loeb, annaks sulle värve, mida sinu fail kunagi ei määranud.</string>
-    <string name="import_floris_old_title">Teema on mõeldud vanemale FlorisBoardile</string>
     <string name="import_floris_title">Teema FlorisBoardist</string>
     <string name="import_floris_unreadable_body">Rakendus ei suuda seda FlorisBoardi faili lugeda. See võib olla kahjustatud või tegemist võib olla keelepaketi või klaviatuurilaiendiga, mitte teemaga.</string>
     <string name="import_icons_body">Rakendus installib paki ja lülitab selle sisse. Selle ikoonid asendavad sisseehitatud ikoonid. Rakendus säilitab teie määratud ikoonid.</string>

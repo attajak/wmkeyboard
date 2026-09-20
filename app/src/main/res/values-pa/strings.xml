@@ -1389,14 +1389,10 @@
     <string name="import_floris_done_family">ਐਪ ਨੇ %2$d ਦਿੱਖਾਂ ਦੇ ਨਾਲ %1$s ਨੂੰ ਸੁਰੱਖਿਅਤ ਕੀਤਾ। ਇਸਨੂੰ ਦੇਖਣ ਲਈ ਥੀਮ ਖੋਲ੍ਹੋ।</string>
     <string name="import_floris_dropped_contrast">ਇੱਕ ਕੁੰਜੀ ਦਾ ਟੈਕਸਟ ਰੰਗ ਪੜ੍ਹਨ ਲਈ ਕੁੰਜੀ ਦੇ ਰੰਗ ਦੇ ਬਹੁਤ ਨੇੜੇ ਸੀ। ਐਪ ਨੇ ਇੱਕ ਅਜਿਹਾ ਰੰਗ ਚੁਣਿਆ ਹੈ ਜਿਸਨੂੰ ਤੁਸੀਂ ਪੜ੍ਹ ਸਕਦੇ ਹੋ।</string>
     <string name="import_floris_dropped_corners">ਕੁੰਜੀਆਂ ਦਾ ਇੱਕ ਕੋਨਾ ਆਕਾਰ ਹੁੰਦਾ ਹੈ। ਫਾਈਲ ਹਰੇਕ ਕੋਨੇ ਲਈ ਇੱਕ ਵੱਖਰਾ ਆਕਾਰ ਸੈੱਟ ਕਰਦੀ ਹੈ।</string>
-    <string name="import_floris_dropped_dynamic">ਸਿਸਟਮ ਵਾਲਪੇਪਰ ਦੀ ਪਾਲਣਾ ਕਰਨ ਵਾਲੇ ਰੰਗ ਸੈੱਟ ਨਹੀਂ ਕੀਤੇ ਗਏ ਹਨ। ਉਸੇ ਪ੍ਰਭਾਵ ਲਈ ਥੀਮ ਵਿੱਚ \'ਮਟੀਰੀਅਲ ਯੂ\' (Material You) ਨੂੰ ਚਾਲੂ ਕਰੋ।</string>
     <string name="import_floris_dropped_elevation">ਕੁੰਜੀ ਦੇ ਪਰਛਾਵੇਂ ਸੈੱਟ ਨਹੀਂ ਹਨ। ਇਹ ਐਪ ਬਿਨਾਂ ਪਰਛਾਵੇਂ ਦੇ ਕੁੰਜੀਆਂ ਖਿੱਚਦੀ ਹੈ।</string>
     <string name="import_floris_dropped_font">ਫੌਂਟ ਸ਼ਾਮਲ ਨਹੀਂ ਹੈ। ਇਸ ਐਪ ਵਿੱਚ ਫੌਂਟ ਇੱਕ ਵੱਖਰਾ ਐਡ-ਆਨ ਹੈ।</string>
-    <string name="import_floris_dropped_old">ਫਾਈਲ ਦਾ ਕੁਝ ਹਿੱਸਾ ਪੁਰਾਣੇ FlorisBoard ਸਟਾਈਲ ਫਾਰਮੈਟ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ।</string>
     <string name="import_floris_dropped_spacing">ਇਕੱਲੇ ਹਿੱਸਿਆਂ ਦੇ ਆਲੇ-ਦੁਆਲੇ ਦੀ ਥਾਂ ਸੈੱਟ ਨਹੀਂ ਹੈ। ਇਹ ਐਪ ਪੂਰੇ ਕੀਬੋਰਡ ਲਈ ਕੁੰਜੀ ਦਾ ਅੰਤਰ ਸੈੱਟ ਕਰਦੀ ਹੈ।</string>
     <string name="import_floris_dropped_unknown">ਫਾਈਲ ਨਾਮ ਦੇ ਕੁਝ ਹਿੱਸੇ ਕੀਬੋਰਡ ਤੱਤ ਹਨ ਜੋ ਇਸ ਐਪ ਕੋਲ ਨਹੀਂ ਹਨ।</string>
-    <string name="import_floris_old_body">ਇਹ ਥੀਮ FlorisBoard 0.4 ਲਈ ਲਿਖਿਆ ਗਿਆ ਹੈ। ਉਹ ਸਟਾਈਲ ਫਾਰਮੈਟ FlorisBoard 0.5 ਅਤੇ ਬਾਅਦ ਵਾਲੇ ਵਰਜਨਾਂ ਨਾਲੋਂ ਵੱਖਰਾ ਹੈ, ਇਸ ਲਈ ਐਪ ਇਸਨੂੰ ਪੜ੍ਹ ਨਹੀਂ ਸਕਦੀ। ਇੱਕ ਥੀਮ ਜਿਸਨੂੰ ਇਹ ਐਪ ਸਿਰਫ਼ ਅੰਸ਼ਕ ਤੌਰ \'ਤੇ ਪੜ੍ਹਦੀ ਹੈ, ਉਹ ਤੁਹਾਨੂੰ ਉਹ ਰੰਗ ਦੇਵੇਗੀ ਜੋ ਤੁਹਾਡੀ ਫਾਈਲ ਨੇ ਕਦੇ ਸੈੱਟ ਨਹੀਂ ਕੀਤੇ ਸਨ।</string>
-    <string name="import_floris_old_title">ਥੀਮ ਇੱਕ ਪੁਰਾਣੇ FlorisBoard ਲਈ ਹੈ</string>
     <string name="import_floris_title">FlorisBoard ਤੋਂ ਥੀਮ</string>
     <string name="import_floris_unreadable_body">ਐਪ ਇਸ FlorisBoard ਫਾਈਲ ਨੂੰ ਪੜ੍ਹ ਨਹੀਂ ਸਕਦੀ। ਇਹ ਖਰਾਬ ਹੋ ਸਕਦੀ ਹੈ, ਜਾਂ ਇਹ ਥੀਮ ਦੀ ਬਜਾਏ ਕੋਈ ਭਾਸ਼ਾ ਪੈਕ ਜਾਂ ਕੀਬੋਰਡ ਐਕਸਟੈਂਸ਼ਨ ਹੋ ਸਕਦੀ ਹੈ।</string>
     <string name="import_icons_body">ਐਪ ਪੈਕ ਨੂੰ ਸਥਾਪਿਤ ਕਰਦੀ ਹੈ ਅਤੇ ਇਸਨੂੰ ਚਾਲੂ ਕਰਦੀ ਹੈ। ਇਸਦੇ ਆਈਕਨ ਬਿਲਟ-ਇਨ ਆਈਕਨਾਂ ਦੀ ਥਾਂ ਲੈਂਦੇ ਹਨ। ਐਪ ਤੁਹਾਡੇ ਦੁਆਰਾ ਸੈੱਟ ਕੀਤੇ ਆਈਕਨਾਂ ਨੂੰ ਰੱਖਦੀ ਹੈ।</string>

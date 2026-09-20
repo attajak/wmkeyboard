@@ -1387,14 +1387,10 @@
     <string name="import_floris_done_family">O aplicativo salvou %1$s com %2$d visuais. Abra Temas para vê-lo.</string>
     <string name="import_floris_dropped_contrast">Uma cor de texto da tecla estava demasiado próxima da cor da tecla para ser lida. A aplicação escolheu uma cor que consegue ler.</string>
     <string name="import_floris_dropped_corners">As teclas têm um tamanho de canto. O arquivo define um tamanho diferente para cada canto.</string>
-    <string name="import_floris_dropped_dynamic">Cores que seguem o papel de parede do sistema não estão definidas. Ative o Material You em Temas para obter o mesmo efeito.</string>
     <string name="import_floris_dropped_elevation">As sombras das teclas não estão definidas. Este aplicativo desenha teclas sem sombra.</string>
     <string name="import_floris_dropped_font">A fonte não está incluída. Uma fonte é um complemento separado neste aplicativo.</string>
-    <string name="import_floris_dropped_old">Parte do arquivo usa o formato de estilo FlorisBoard mais antigo.</string>
     <string name="import_floris_dropped_spacing">O espaçamento ao redor de partes individuais não está definido. Este aplicativo define o espaçamento das teclas para todo o teclado.</string>
     <string name="import_floris_dropped_unknown">Algumas partes do arquivo nomeiam elementos de teclado que este aplicativo não possui.</string>
-    <string name="import_floris_old_body">Este tema foi escrito para o FlorisBoard 0.4. Esse formato de estilo não é o mesmo do FlorisBoard 0.5 e posterior, portanto, o aplicativo não consegue lê-lo. Um tema que este aplicativo leu apenas parcialmente forneceria cores que seu arquivo nunca definiu.</string>
-    <string name="import_floris_old_title">O tema é para uma versão mais antiga do FlorisBoard</string>
     <string name="import_floris_title">Tema do FlorisBoard</string>
     <string name="import_floris_unreadable_body">O aplicativo não consegue ler este arquivo FlorisBoard. Ele pode estar danificado, ou pode ser um pacote de idioma ou uma extensão de teclado em vez de um tema.</string>
     <string name="import_icons_body">O aplicativo instala o pacote e o ativa. Seus ícones substituem os ícones integrados. O aplicativo mantém os ícones que você definiu.</string>

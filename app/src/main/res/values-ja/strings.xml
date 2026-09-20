@@ -1386,14 +1386,10 @@
     <string name="import_floris_done_family">%1$s（%2$d個のルックス）を保存しました。「テーマ」から確認できます。</string>
     <string name="import_floris_dropped_contrast">キーの文字色がキーの色に近すぎて読み取れませんでした。読み取り可能な色が選択されました。</string>
     <string name="import_floris_dropped_corners">キーの角のサイズが統一されています。ファイル側では角ごとに異なるサイズが設定されています。</string>
-    <string name="import_floris_dropped_dynamic">システムの壁紙に連動するカラーが設定されていません。同じ効果を得るには、テーマ設定で「Material You」をオンにしてください。</string>
     <string name="import_floris_dropped_elevation">キーの影が設定されていません。このアプリは影なしでキーを描画します。</string>
     <string name="import_floris_dropped_font">フォントは含まれていません。フォントはこのアプリの別のアドオンです。</string>
-    <string name="import_floris_dropped_old">ファイルの一部で、古いFlorisBoard形式が使用されています。</string>
     <string name="import_floris_dropped_spacing">個々のパーツ周辺の間隔が設定されていません。このアプリはキーボード全体のキー間隔を設定します。</string>
     <string name="import_floris_dropped_unknown">ファイル名の一部に、このアプリには存在しないキーボード要素が含まれています。</string>
-    <string name="import_floris_old_body">このテーマはFlorisBoard 0.4向けに作成されています。スタイル形式がFlorisBoard 0.5以降と異なるため、読み込めません。一部のみ読み込まれた場合、ファイルで設定されていない色が適用される可能性があります。</string>
-    <string name="import_floris_old_title">古いFlorisBoard用のテーマです</string>
     <string name="import_floris_title">FlorisBoardのテーマ</string>
     <string name="import_floris_unreadable_body">このFlorisBoardファイルは読み込めません。破損しているか、テーマではなく言語パックやキーボード拡張機能である可能性があります。</string>
     <string name="import_icons_body">アプリがパックをインストールして有効にします。そのアイコンが組み込みのアイコンを置き換えます。アプリは設定したアイコンを保持します。</string>

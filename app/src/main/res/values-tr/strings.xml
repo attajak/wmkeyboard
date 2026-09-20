@@ -1386,14 +1386,10 @@
     <string name="import_floris_done_family">Uygulama %1$s öğesini %2$d görünümle kaydetti. İncelemek için Temalar\'ı açın.</string>
     <string name="import_floris_dropped_contrast">Bir tuş metni rengi, okunabilirlik için tuş rengine çok yakındı. Uygulama, okuyabileceğiniz bir renk seçti.</string>
     <string name="import_floris_dropped_corners">Tuşların tek bir köşe boyutu vardır. Dosya her köşe için farklı bir boyut ayarlıyor.</string>
-    <string name="import_floris_dropped_dynamic">Sistem duvar kağıdını takip eden renkler ayarlanmadı. Aynı etki için Temalar bölümünden Material You özelliğini açın.</string>
     <string name="import_floris_dropped_elevation">Tuş gölgeleri ayarlanmamış. Bu uygulama tuşları gölgesiz çizer.</string>
     <string name="import_floris_dropped_font">Font dahil edilmedi. Font, bu uygulamada ayrı bir eklentidir.</string>
-    <string name="import_floris_dropped_old">Dosyanın bir kısmı daha eski FlorisBoard stil biçimini kullanıyor.</string>
     <string name="import_floris_dropped_spacing">Tekil parçaların etrafındaki boşluk ayarlanmadı. Bu uygulama, tüm klavye için tuş boşluğunu ayarlar.</string>
     <string name="import_floris_dropped_unknown">Dosya adının bazı kısımları, bu uygulamanın sahip olmadığı klavye öğeleridir.</string>
-    <string name="import_floris_old_body">Bu tema FlorisBoard 0.4 için yazılmıştır. Bu stil formatı FlorisBoard 0.5 ve sonraki sürümlerdekiyle aynı değildir, bu nedenle uygulama bunu okuyamaz. Bu uygulamanın sadece kısmen okuduğu bir tema, size dosyanızın hiç ayarlamadığı renkleri verecektir.</string>
-    <string name="import_floris_old_title">Tema daha eski bir FlorisBoard içindir</string>
     <string name="import_floris_title">FlorisBoard\'dan tema</string>
     <string name="import_floris_unreadable_body">Uygulama bu FlorisBoard dosyasını okuyamıyor. Dosya hasarlı olabilir veya bir tema yerine dil paketi ya da klavye eklentisi olabilir.</string>
     <string name="import_icons_body">Uygulama paketi yükler ve açar. Simgeleri yerleşik simgelerin yerini alır. Uygulama, ayarladığınız simgeleri korur.</string>

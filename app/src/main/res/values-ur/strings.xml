@@ -1388,14 +1388,10 @@
     <string name="import_floris_done_family">ایپ نے %1$s کو %2$d شکلوں کے ساتھ محفوظ کر لیا ہے۔ اسے دیکھنے کے لیے تھیمز کھولیں۔</string>
     <string name="import_floris_dropped_contrast">کلید کے متن کا رنگ کلید کے رنگ سے بہت قریب تھا جسے پڑھنا مشکل تھا۔ ایپ نے ایسا رنگ منتخب کیا ہے جسے آپ پڑھ سکتے ہیں۔</string>
     <string name="import_floris_dropped_corners">کیز کے کونے کا ایک سائز ہوتا ہے۔ فائل ہر کونے کے لیے الگ سائز سیٹ کرتی ہے۔</string>
-    <string name="import_floris_dropped_dynamic">سسٹم وال پیپر کے مطابق رنگ سیٹ نہیں ہیں۔ اسی اثر کے لیے تھیمز میں میٹریل یو (Material You) کو آن کریں۔</string>
     <string name="import_floris_dropped_elevation">کلید کے سائے سیٹ نہیں ہیں۔ یہ ایپ کلیدوں کو بغیر سائے کے ڈرا کرتی ہے۔</string>
     <string name="import_floris_dropped_font">فونٹ شامل نہیں ہے۔ اس ایپ میں فونٹ ایک الگ ایڈ آن ہے۔</string>
-    <string name="import_floris_dropped_old">فائل کا کچھ حصہ پرانے FlorisBoard اسٹائل فارمیٹ کا استعمال کرتا ہے۔</string>
     <string name="import_floris_dropped_spacing">انفرادی حصوں کے ارد گرد کی جگہ سیٹ نہیں ہے۔ یہ ایپ پورے کی بورڈ کے لیے کلیدی خلا کو سیٹ کرتی ہے۔</string>
     <string name="import_floris_dropped_unknown">فائل کے کچھ حصے ان کی بورڈ عناصر کا نام لیتے ہیں جو اس ایپ میں نہیں ہیں۔</string>
-    <string name="import_floris_old_body">یہ تھیم FlorisBoard 0.4 کے لیے لکھی گئی ہے۔ اس کا اسٹائل فارمیٹ FlorisBoard 0.5 اور بعد کے ورژن جیسا نہیں ہے، اس لیے ایپ اسے پڑھ نہیں سکتی۔ ایسی تھیم جسے ایپ نے صرف جزوی طور پر پڑھا ہو، آپ کو ایسے رنگ دے گی جو آپ کی فائل میں کبھی سیٹ نہیں کیے گئے تھے۔</string>
-    <string name="import_floris_old_title">تھیم ایک پرانے FlorisBoard کے لیے ہے</string>
     <string name="import_floris_title">FlorisBoard سے تھیم</string>
     <string name="import_floris_unreadable_body">ایپ اس FlorisBoard فائل کو پڑھ نہیں سکتی۔ یہ خراب ہو سکتی ہے، یا یہ تھیم کے بجائے لینگویج پیک یا کی بورڈ ایکسٹینشن ہو سکتی ہے۔</string>
     <string name="import_icons_body">ایپ پیک انسٹال کرتی ہے اور اسے آن کر دیتی ہے۔ اس کے آئیکنز بلٹ ان آئیکنز کی جگہ لے لیتے ہیں۔ ایپ ان آئیکنز کو برقرار رکھتی ہے جو آپ سیٹ کرتے ہیں۔</string>

@@ -1388,14 +1388,10 @@
     <string name="import_floris_done_family">Додаток зберіг %1$s з %2$d виглядами. Відкрийте Теми, щоб переглянути їх.</string>
     <string name="import_floris_dropped_contrast">Колір тексту клавіші був занадто близьким до кольору самої клавіші, що ускладнювало читання. Додаток обрав колір, який ви зможете прочитати.</string>
     <string name="import_floris_dropped_corners">Клавіші мають один розмір кута. Файл встановлює різний розмір для кожного кута.</string>
-    <string name="import_floris_dropped_dynamic">Кольори, що відповідають шпалерам системи, не встановлені. Увімкніть Material You у темах для такого ж ефекту.</string>
     <string name="import_floris_dropped_elevation">Тіні клавіш не встановлено. Ця програма малює клавіші без тіні.</string>
     <string name="import_floris_dropped_font">Шрифт не включено. Шрифт — це окреме доповнення в цій програмі.</string>
-    <string name="import_floris_dropped_old">Частина файлу використовує старіший формат стилю FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Відступи навколо окремих частин не встановлені. Цей додаток встановлює проміжок між клавішами для всієї клавіатури.</string>
     <string name="import_floris_dropped_unknown">Деякі частини імені файлу містять елементи клавіатури, яких немає в цьому додатку.</string>
-    <string name="import_floris_old_body">Ця тема написана для FlorisBoard 0.4. Формат стилю відрізняється від того, що використовується у FlorisBoard 0.5 і новіших версіях, тому програма не може його прочитати. Тема, яку ця програма прочитала лише частково, надасть вам кольори, які ваш файл ніколи не встановлював.</string>
-    <string name="import_floris_old_title">Тема для старішої версії FlorisBoard</string>
     <string name="import_floris_title">Тема з FlorisBoard</string>
     <string name="import_floris_unreadable_body">Програма не може прочитати цей файл FlorisBoard. Можливо, він пошкоджений, або це мовний пакет чи розширення клавіатури, а не тема.</string>
     <string name="import_icons_body">Програма встановлює пакет і вмикає його. Його значки замінюють вбудовані. Програма зберігає встановлені вами значки.</string>

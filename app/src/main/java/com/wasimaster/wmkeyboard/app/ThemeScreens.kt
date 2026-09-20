@@ -978,16 +978,13 @@ fun ThemesScreen(
         scope.launch {
             val result = withContext(Dispatchers.IO) {
                 runCatching {
-                    context.contentResolver.requireInputStream(uri).use { FlexTheme.read(it) }
+                    context.contentResolver.requireInputStream(uri).use {
+                        FlexTheme.read(it, dynamicSnyggPalette(context))
+                    }
                 }.getOrElse { FlexResult.Unreadable }
             }
             if (result !is FlexResult.Converted) {
-                message = context.getString(
-                    when (result) {
-                        FlexResult.SnyggV1 -> R.string.import_floris_old_body
-                        else -> R.string.import_floris_unreadable_body
-                    },
-                )
+                message = context.getString(R.string.import_floris_unreadable_body)
                 return@launch
             }
             val dir = withContext(Dispatchers.IO) { themeImagesDir(context) }

@@ -1386,14 +1386,10 @@
     <string name="import_floris_done_family">Ứng dụng đã lưu %1$s với %2$d giao diện. Mở Chủ đề để xem.</string>
     <string name="import_floris_dropped_contrast">Màu văn bản của phím quá gần với màu của phím nên khó đọc. Ứng dụng đã chọn một màu mà bạn có thể đọc được.</string>
     <string name="import_floris_dropped_corners">Các phím có một kích thước góc. Tệp thiết lập kích thước khác nhau cho mỗi góc.</string>
-    <string name="import_floris_dropped_dynamic">Các màu sắc theo hình nền hệ thống chưa được thiết lập. Hãy bật Material You trong Chủ đề để có hiệu ứng tương tự.</string>
     <string name="import_floris_dropped_elevation">Đổ bóng phím chưa được thiết lập. Ứng dụng này vẽ các phím không có bóng.</string>
     <string name="import_floris_dropped_font">Phông chữ không được bao gồm. Phông chữ là một tiện ích bổ sung riêng biệt trong ứng dụng này.</string>
-    <string name="import_floris_dropped_old">Một phần của tệp sử dụng định dạng kiểu FlorisBoard cũ hơn.</string>
     <string name="import_floris_dropped_spacing">Khoảng cách xung quanh các phần đơn lẻ không được thiết lập. Ứng dụng này đặt khoảng cách phím cho toàn bộ bàn phím.</string>
     <string name="import_floris_dropped_unknown">Một số phần của tệp đặt tên cho các thành phần bàn phím mà ứng dụng này không có.</string>
-    <string name="import_floris_old_body">Chủ đề này được viết cho FlorisBoard 0.4. Định dạng kiểu đó không giống với định dạng trong FlorisBoard 0.5 trở lên, vì vậy ứng dụng không thể đọc được. Một chủ đề mà ứng dụng này chỉ đọc được một phần sẽ cung cấp cho bạn các màu sắc mà tệp của bạn chưa bao giờ thiết lập.</string>
-    <string name="import_floris_old_title">Chủ đề dành cho phiên bản FlorisBoard cũ hơn</string>
     <string name="import_floris_title">Chủ đề từ FlorisBoard</string>
     <string name="import_floris_unreadable_body">Ứng dụng không thể đọc tệp FlorisBoard này. Nó có thể bị hỏng, hoặc nó có thể là một gói ngôn ngữ hoặc tiện ích mở rộng bàn phím thay vì một chủ đề.</string>
     <string name="import_icons_body">Ứng dụng cài đặt gói và bật nó lên. Các biểu tượng của nó thay thế các biểu tượng tích hợp sẵn. Ứng dụng giữ lại các biểu tượng mà bạn đã đặt.</string>

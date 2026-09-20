@@ -1388,14 +1388,10 @@
     <string name="import_floris_done_family">ആപ്പ് %2$d ലുക്കുകളുള്ള %1$s സേവ് ചെയ്തു. അത് കാണാൻ തീമുകൾ തുറക്കുക.</string>
     <string name="import_floris_dropped_contrast">ഒരു കീ ടെക്സ്റ്റ് നിറം കീ നിറത്തോട് വളരെ അടുത്തായതിനാൽ വായിക്കാൻ പ്രയാസമായിരുന്നു. നിങ്ങൾക്ക് വായിക്കാൻ കഴിയുന്ന ഒരു നിറം ആപ്പ് തിരഞ്ഞെടുത്തു.</string>
     <string name="import_floris_dropped_corners">കീകൾക്ക് ഒരു കോർണർ വലിപ്പമേയുള്ളൂ. ഫയൽ ഓരോ കോർണറിനും വ്യത്യസ്ത വലിപ്പമാണ് സജ്ജീകരിക്കുന്നത്.</string>
-    <string name="import_floris_dropped_dynamic">സിസ്റ്റം വാൾപേപ്പർ പിന്തുടരുന്ന നിറങ്ങൾ സജ്ജീകരിച്ചിട്ടില്ല. അതേ ഫലത്തിനായി തീമുകളിൽ മെറ്റീരിയൽ യു (Material You) ഓണാക്കുക.</string>
     <string name="import_floris_dropped_elevation">കീ ഷാഡോകൾ സജ്ജീകരിച്ചിട്ടില്ല. ഈ ആപ്പ് ഷാഡോ ഇല്ലാതെയാണ് കീകൾ വരയ്ക്കുന്നത്.</string>
     <string name="import_floris_dropped_font">ഫോണ്ട് ഉൾപ്പെടുത്തിയിട്ടില്ല. ഈ ആപ്പിൽ ഫോണ്ട് ഒരു പ്രത്യേക ആഡ്-ഓൺ ആണ്.</string>
-    <string name="import_floris_dropped_old">ഫയലിന്റെ ഒരു ഭാഗം പഴയ ഫ്ലോറിസ്ബോർഡ് സ്റ്റൈൽ ഫോർമാറ്റ് ഉപയോഗിക്കുന്നു.</string>
     <string name="import_floris_dropped_spacing">ഭാഗങ്ങൾക്കിടയിലുള്ള അകലം സജ്ജീകരിച്ചിട്ടില്ല. ഈ ആപ്പ് മുഴുവൻ കീബോർഡിനുമുള്ള കീ ഗ്യാപ്പ് സജ്ജീകരിക്കുന്നു.</string>
     <string name="import_floris_dropped_unknown">ഈ ആപ്പിൽ ഇല്ലാത്ത കീബോർഡ് ഘടകങ്ങളെ ഫയലിന്റെ ചില ഭാഗങ്ങൾ സൂചിപ്പിക്കുന്നു.</string>
-    <string name="import_floris_old_body">ഈ തീം FlorisBoard 0.4-നായി എഴുതിയതാണ്. ആ ശൈലി ഫോർമാറ്റ് FlorisBoard 0.5-ലും അതിനുശേഷമുള്ളതിലും ഉള്ളതിൽ നിന്ന് വ്യത്യസ്തമാണ്, അതിനാൽ ആപ്പിന് അത് വായിക്കാൻ കഴിയില്ല. ഈ ആപ്പ് ഭാഗികമായി മാത്രം വായിച്ച ഒരു തീം നിങ്ങളുടെ ഫയൽ ഒരിക്കലും സജ്ജമാക്കാത്ത നിറങ്ങൾ നിങ്ങൾക്ക് നൽകും.</string>
-    <string name="import_floris_old_title">തീം പഴയ FlorisBoard-ന് വേണ്ടിയുള്ളതാണ്</string>
     <string name="import_floris_title">FlorisBoard-ൽ നിന്നുള്ള തീം</string>
     <string name="import_floris_unreadable_body">ഈ FlorisBoard ഫയൽ ആപ്പിന് വായിക്കാൻ കഴിയില്ല. ഇത് കേടായതാകാം, അല്ലെങ്കിൽ ഇതൊരു തീമിന് പകരം ഒരു ലാംഗ്വേജ് പാക്കോ കീബോർഡ് എക്സ്റ്റൻഷനോ ആകാം.</string>
     <string name="import_icons_body">ആപ്പ് പാക്ക് ഇൻസ്റ്റാൾ ചെയ്യുകയും അത് ഓണാക്കുകയും ചെയ്യുന്നു. ഇതിന്റെ ഐക്കണുകൾ ബിൽറ്റ്-ഇൻ ഐക്കണുകൾക്ക് പകരമായി വരുന്നു. നിങ്ങൾ സജ്ജമാക്കിയ ഐക്കണുകൾ ആപ്പ് നിലനിർത്തുന്നു.</string>

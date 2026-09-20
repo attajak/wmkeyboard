@@ -324,7 +324,9 @@ object WMFileTypes {
         }
         if (isFlexManifest(manifest)) {
             val result = runCatching {
-                context.contentResolver.requireInputStream(uri).use { FlexTheme.read(it) }
+                context.contentResolver.requireInputStream(uri).use {
+                    FlexTheme.read(it, dynamicSnyggPalette(context))
+                }
             }.getOrElse { FlexResult.Unreadable }
             return Opened.FlorisTheme(result)
         }
@@ -1061,12 +1063,6 @@ private fun florisProposal(
         },
     )
 
-    FlexResult.SnyggV1 -> ImportProposal(
-        titleRes = R.string.import_floris_old_title,
-        body = context.getString(R.string.import_floris_old_body),
-        apply = null,
-    )
-
     FlexResult.NotAFlex, FlexResult.Unreadable -> ImportProposal(
         titleRes = R.string.import_unrecognized_title,
         body = context.getString(R.string.import_floris_unreadable_body),
@@ -1096,12 +1092,11 @@ internal fun ConvertedTheme.stored(id: String, dir: File): ThemeSpec {
 
 @StringRes
 private fun florisDroppedRes(dropped: FlexUnsupported): Int = when (dropped) {
-    FlexUnsupported.SNYGG_V1 -> R.string.import_floris_dropped_old
     FlexUnsupported.ELEVATION -> R.string.import_floris_dropped_elevation
     FlexUnsupported.PER_CORNER_RADIUS -> R.string.import_floris_dropped_corners
     FlexUnsupported.PER_ELEMENT_SPACING -> R.string.import_floris_dropped_spacing
     FlexUnsupported.FONT -> R.string.import_floris_dropped_font
-    FlexUnsupported.DYNAMIC_COLOR -> R.string.import_floris_dropped_dynamic
+    FlexUnsupported.DYNAMIC_COLOR -> R.string.import_floris_dropped_dynamic_snapshot
     FlexUnsupported.UNKNOWN_ELEMENT -> R.string.import_floris_dropped_unknown
     FlexUnsupported.LOW_CONTRAST_FALLBACK -> R.string.import_floris_dropped_contrast
 }

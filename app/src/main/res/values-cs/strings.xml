@@ -1389,14 +1389,10 @@
     <string name="import_floris_done_family">Aplikace uložila %1$s s %2$d vzhledy. Otevřete Motivy a podívejte se na ně.</string>
     <string name="import_floris_dropped_contrast">Barva textu klávesy byla příliš blízká barvě klávesy, aby byla čitelná. Aplikace vybrala barvu, kterou můžete přečíst.</string>
     <string name="import_floris_dropped_corners">Klávesy mají jednu velikost rohu. Soubor nastavuje jinou velikost pro každý roh.</string>
-    <string name="import_floris_dropped_dynamic">Barvy, které následují systémovou tapetu, nejsou nastaveny. Pro stejný efekt zapněte v Motivech funkci Material You.</string>
     <string name="import_floris_dropped_elevation">Stíny kláves nejsou nastaveny. Tato aplikace vykresluje klávesy bez stínu.</string>
     <string name="import_floris_dropped_font">Písmo není zahrnuto. Písmo je v této aplikaci samostatný doplněk.</string>
-    <string name="import_floris_dropped_old">Část souboru používá starší formát stylu FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Mezery kolem jednotlivých částí nejsou nastaveny. Tato aplikace nastavuje mezeru mezi klávesami pro celou klávesnici.</string>
     <string name="import_floris_dropped_unknown">Některé části souboru odkazují na prvky klávesnice, které tato aplikace nemá.</string>
-    <string name="import_floris_old_body">Tento motiv je napsán pro FlorisBoard 0.4. Tento formát stylu není stejný jako ten ve FlorisBoard 0.5 a novějších, takže jej aplikace nemůže přečíst. Motiv, který tato aplikace přečetla pouze částečně, by vám poskytl barvy, které váš soubor nikdy nenastavil.</string>
-    <string name="import_floris_old_title">Motiv je pro starší verzi FlorisBoard</string>
     <string name="import_floris_title">Motiv z FlorisBoard</string>
     <string name="import_floris_unreadable_body">Aplikace nemůže tento soubor FlorisBoard přečíst. Může být poškozený, nebo se může jednat o jazykový balíček či rozšíření klávesnice namísto motivu.</string>
     <string name="import_icons_body">Aplikace nainstaluje balíček a aktivuje jej. Jeho ikony nahradí ty vestavěné. Aplikace zachová ikony, které jste nastavili.</string>

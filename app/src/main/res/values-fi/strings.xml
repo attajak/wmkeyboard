@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">Sovellus tallensi %1$s, jossa on %2$d ulkoasua. Avaa Teemat tarkastellaksesi sitä.</string>
     <string name="import_floris_dropped_contrast">Näppäimen tekstin väri oli liian lähellä näppäimen väriä luettavuuden kannalta. Sovellus valitsi värin, jota voit lukea.</string>
     <string name="import_floris_dropped_corners">Näppäimillä on yksi kulmakoko. Tiedosto asettaa eri koon jokaiselle kulmalle.</string>
-    <string name="import_floris_dropped_dynamic">Järjestelmän taustakuvaa seuraavia värejä ei ole asetettu. Ota Material You käyttöön Teemoissa saadaksesi saman vaikutuksen.</string>
     <string name="import_floris_dropped_elevation">Näppäinten varjoja ei ole asetettu. Tämä sovellus piirtää näppäimet ilman varjoa.</string>
     <string name="import_floris_dropped_font">Fontti ei sisälly. Fontti on erillinen lisäosa tässä sovelluksessa.</string>
-    <string name="import_floris_dropped_old">Osa tiedostosta käyttää vanhempaa FlorisBoard-tyylimuotoa.</string>
     <string name="import_floris_dropped_spacing">Yksittäisten osien välistä väliä ei ole asetettu. Tämä sovellus asettaa näppäinvälin koko näppäimistölle.</string>
     <string name="import_floris_dropped_unknown">Jotkin tiedoston osat nimeävät näppäimistöelementtejä, joita tällä sovelluksella ei ole.</string>
-    <string name="import_floris_old_body">Tämä teema on kirjoitettu FlorisBoard 0.4:lle. Tyylimuoto ei ole sama kuin FlorisBoard 0.5:ssä ja uudemmissa, joten sovellus ei voi lukea sitä. Teema, jonka tämä sovellus lukee vain osittain, antaisi värejä, joita tiedostosi ei koskaan asettanut.</string>
-    <string name="import_floris_old_title">Teema on tarkoitettu vanhemmalle FlorisBoard-versiolle</string>
     <string name="import_floris_title">Teema FlorisBoardista</string>
     <string name="import_floris_unreadable_body">Sovellus ei voi lukea tätä FlorisBoard-tiedostoa. Se saattaa olla vioittunut, tai se voi olla kielipaketti tai näppäimistölaajennus teeman sijaan.</string>
     <string name="import_icons_body">Sovellus asentaa paketin ja ottaa sen käyttöön. Sen kuvakkeet korvaavat sisäänrakennetut kuvakkeet. Sovellus säilyttää määrittämäsi kuvakkeet.</string>

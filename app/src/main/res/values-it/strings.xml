@@ -1387,14 +1387,10 @@
     <string name="import_floris_done_family">L\'app ha salvato %1$s con %2$d stili. Apri i Temi per visualizzarlo.</string>
     <string name="import_floris_dropped_contrast">Un colore del testo del tasto era troppo simile al colore del tasto per essere letto. L\'app ha scelto un colore leggibile.</string>
     <string name="import_floris_dropped_corners">I tasti hanno una dimensione d\'angolo. Il file imposta una dimensione diversa per ogni angolo.</string>
-    <string name="import_floris_dropped_dynamic">I colori che seguono lo sfondo del sistema non sono impostati. Attiva Material You in Temi per ottenere lo stesso effetto.</string>
     <string name="import_floris_dropped_elevation">Le ombre dei tasti non sono impostate. Questa app disegna i tasti senza ombra.</string>
     <string name="import_floris_dropped_font">Il font non è incluso. Un font è un componente aggiuntivo separato in questa app.</string>
-    <string name="import_floris_dropped_old">Parte del file utilizza il vecchio formato di stile di FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Lo spazio attorno alle singole parti non è impostato. Questa app imposta lo spazio tra i tasti per l\'intera tastiera.</string>
     <string name="import_floris_dropped_unknown">Alcune parti del file nominano elementi della tastiera che questa app non possiede.</string>
-    <string name="import_floris_old_body">Questo tema è scritto per FlorisBoard 0.4. Quel formato di stile non è lo stesso di quello in FlorisBoard 0.5 e successivi, quindi l\'app non può leggerlo. Un tema che questa app ha letto solo in parte ti darebbe colori che il tuo file non ha mai impostato.</string>
-    <string name="import_floris_old_title">Il tema è per una versione precedente di FlorisBoard</string>
     <string name="import_floris_title">Tema da FlorisBoard</string>
     <string name="import_floris_unreadable_body">L\'app non può leggere questo file di FlorisBoard. Potrebbe essere danneggiato, oppure potrebbe trattarsi di un pacchetto lingua o di un\'estensione della tastiera invece di un tema.</string>
     <string name="import_icons_body">L\'app installa il pacchetto e lo attiva. Le sue icone sostituiscono quelle integrate. L\'app mantiene le icone che hai impostato.</string>

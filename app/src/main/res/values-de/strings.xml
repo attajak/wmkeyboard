@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">Die App hat %1$s mit %2$d Looks gespeichert. Öffne die Themes, um sie dir anzusehen.</string>
     <string name="import_floris_dropped_contrast">Eine Tasten-Textfarbe war zu nah an der Tastenfarbe, um sie lesen zu können. Die App hat eine Farbe gewählt, die Sie lesen können.</string>
     <string name="import_floris_dropped_corners">Tasten haben eine Eckengröße. Die Datei legt für jede Ecke eine andere Größe fest.</string>
-    <string name="import_floris_dropped_dynamic">Farben, die dem Systemhintergrund folgen, sind nicht festgelegt. Aktivieren Sie \"Material You\" in den Designs für denselben Effekt.</string>
     <string name="import_floris_dropped_elevation">Tastenschatten sind nicht festgelegt. Diese App zeichnet Tasten ohne Schatten.</string>
     <string name="import_floris_dropped_font">Die Schriftart ist nicht enthalten. Eine Schriftart ist ein separates Add-on in dieser App.</string>
-    <string name="import_floris_dropped_old">Ein Teil der Datei verwendet das ältere FlorisBoard-Stilformat.</string>
     <string name="import_floris_dropped_spacing">Der Abstand um einzelne Teile ist nicht festgelegt. Diese App legt den Tastenabstand für die gesamte Tastatur fest.</string>
     <string name="import_floris_dropped_unknown">Einige Teile der Datei benennen Tastaturelemente, die diese App nicht hat.</string>
-    <string name="import_floris_old_body">Dieses Design wurde für FlorisBoard 0.4 geschrieben. Das Stilformat ist nicht dasselbe wie in FlorisBoard 0.5 und höher, daher kann die App es nicht lesen. Ein Design, das diese App nur teilweise gelesen hat, würde Ihnen Farben geben, die Ihre Datei nie festgelegt hat.</string>
-    <string name="import_floris_old_title">Das Design ist für ein älteres FlorisBoard</string>
     <string name="import_floris_title">Design von FlorisBoard</string>
     <string name="import_floris_unreadable_body">Die App kann diese FlorisBoard-Datei nicht lesen. Sie ist möglicherweise beschädigt oder es handelt sich um ein Sprachpaket oder eine Tastaturerweiterung anstelle eines Designs.</string>
     <string name="import_icons_body">Die App installiert das Paket und aktiviert es. Die Symbole ersetzen die integrierten Symbole. Die App behält die von Ihnen festgelegten Symbole bei.</string>

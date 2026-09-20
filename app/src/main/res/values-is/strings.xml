@@ -1391,14 +1391,10 @@
     <string name="import_floris_done_family">Forritið vistaði %1$s með %2$d útlitum. Opnaðu Þemu til að skoða það.</string>
     <string name="import_floris_dropped_contrast">Textalitur lykils var of líkur lit lykilsins til að vera læsilegur. Forritið valdi lit sem þú getur lesið.</string>
     <string name="import_floris_dropped_corners">Takkar hafa eina hornstærð. Skráin setur mismunandi stærð fyrir hvert horn.</string>
-    <string name="import_floris_dropped_dynamic">Litir sem fylgja veggfóðri kerfisins eru ekki stilltir. Kveiktu á Material You í Þemum til að fá sömu áhrif.</string>
     <string name="import_floris_dropped_elevation">Skuggar lykla eru ekki stilltir. Þetta forrit teiknar lykla án skugga.</string>
     <string name="import_floris_dropped_font">Leturgerðin er ekki innifalin. Leturgerð er sérstök viðbót í þessu forriti.</string>
-    <string name="import_floris_dropped_old">Hluti af skránni notar eldra FlorisBoard stílsnið.</string>
     <string name="import_floris_dropped_spacing">Bil í kringum staka hluta er ekki stillt. Þetta forrit stillir bil milli lykla fyrir allt lyklaborðið.</string>
     <string name="import_floris_dropped_unknown">Sumir hlutar skráarinnar nefna lyklaborðsþætti sem þetta forrit hefur ekki.</string>
-    <string name="import_floris_old_body">Þetta þema er skrifað fyrir FlorisBoard 0.4. Það stílsnið er ekki það sama og í FlorisBoard 0.5 og síðar, svo forritið getur ekki lesið það. Þema sem þetta forrit las aðeins að hluta myndi gefa þér liti sem skráin þín setti aldrei.</string>
-    <string name="import_floris_old_title">Þemað er fyrir eldri útgáfu af FlorisBoard</string>
     <string name="import_floris_title">Þema frá FlorisBoard</string>
     <string name="import_floris_unreadable_body">Forritið getur ekki lesið þessa FlorisBoard-skrá. Hún gæti verið skemmd, eða þetta gæti verið tungumálapakki eða lyklaborðsviðbót í stað þema.</string>
     <string name="import_icons_body">Forritið setur upp pakkann og kveikir á honum. Táknmyndir hans koma í stað innbyggðu táknmyndanna. Forritið heldur táknmyndunum sem þú stilltir.</string>

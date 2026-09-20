@@ -1389,14 +1389,10 @@
     <string name="import_floris_done_family">L\'aplicació ha desat %1$s amb %2$d aspectes. Obre els temes per veure-ho.</string>
     <string name="import_floris_dropped_contrast">Un color del text de la tecla era massa semblant al color de la tecla per llegir-lo. L\'aplicació ha triat un color que podeu llegir.</string>
     <string name="import_floris_dropped_corners">Les tecles tenen una mida de cantonada. El fitxer estableix una mida diferent per a cada cantonada.</string>
-    <string name="import_floris_dropped_dynamic">Els colors que segueixen el fons de pantalla del sistema no estan configurats. Activa Material You a Temes per obtenir el mateix efecte.</string>
     <string name="import_floris_dropped_elevation">Les ombres de les tecles no estan configurades. Aquesta aplicació dibuixa les tecles sense ombra.</string>
     <string name="import_floris_dropped_font">La tipografia no està inclosa. Una tipografia és un complement separat en aquesta aplicació.</string>
-    <string name="import_floris_dropped_old">Part del fitxer utilitza el format d\'estil antic de FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">L\'espai al voltant de les parts individuals no està definit. Aquesta aplicació estableix l\'espai entre tecles per a tot el teclat.</string>
     <string name="import_floris_dropped_unknown">Algunes parts del nom del fitxer fan referència a elements del teclat que aquesta aplicació no té.</string>
-    <string name="import_floris_old_body">Aquest tema està escrit per a FlorisBoard 0.4. Aquest format d\'estil no és el mateix que el de FlorisBoard 0.5 i posteriors, per la qual cosa l\'aplicació no el pot llegir. Un tema que aquesta aplicació només llegís en part et donaria colors que el teu fitxer mai no va establir.</string>
-    <string name="import_floris_old_title">El tema és per a una versió antiga de FlorisBoard</string>
     <string name="import_floris_title">Tema de FlorisBoard</string>
     <string name="import_floris_unreadable_body">L\'aplicació no pot llegir aquest fitxer de FlorisBoard. Pot estar danyat, o pot ser un paquet d\'idioma o una extensió de teclat en lloc d\'un tema.</string>
     <string name="import_icons_body">L\'aplicació instal·la el paquet i l\'activa. Les seves icones substitueixen les icones integrades. L\'aplicació manté les icones que hagis configurat.</string>

@@ -14,12 +14,24 @@ import kotlin.math.roundToInt
  * came from their file from one that was defaulted, and a wrong-but-plausible
  * value sends them to fix the wrong control.
  *
- * So the toolbar, the panels and the chips are mapped only from the elements
- * that genuinely correspond, and everything else is reported in `dropped`
- * rather than approximated.
+ * What changed, and why there is now so much more of it: the first version of
+ * this mapper read seven elements out of the ninety-odd a real stylesheet
+ * names, so a converted theme kept its keys and lost its toolbar, its
+ * suggestion chips, its panels and its emoji board. Every element below has a
+ * genuine counterpart in [ThemeSpec] — the ones that still do not (the window
+ * move handle, the clipboard's dialogs, the floating-window furniture) are
+ * still reported in `dropped` rather than approximated.
+ *
+ * ### Everything is judged against what is behind it
+ *
+ * Borderless themes are built out of transparent surfaces. A colour taken from
+ * one has to be composited onto the board before it can be asked whether it is
+ * readable or visible, or a perfectly good theme gets "corrected" into an
+ * unreadable one — see [composite].
  */
 internal class SnyggMapper(private val style: Stylesheet) {
 
+    @Suppress("LongMethod")
     fun convert(
         name: String,
         id: String,
@@ -27,10 +39,10 @@ internal class SnyggMapper(private val style: Stylesheet) {
         files: Map<String, ByteArray>,
         dropped: MutableSet<FlexUnsupported>,
     ): ConvertedTheme? {
-        val board = style.first(EL_BOARD)
-        val key = style.first(EL_KEY)
-        val boardBackground = snyggColor(board?.value(PROP_BACKGROUND))
-        val keyBackground = snyggColor(key?.value(PROP_BACKGROUND))
+        val board = style.base(EL_BOARD)
+        val key = style.base(EL_KEY)
+        val boardBackground = color(board, PROP_BACKGROUND)
+        val keyBackground = color(key, PROP_BACKGROUND)
         // A sheet that names neither surface has told us nothing worth calling
         // a theme, and an all-defaults ThemeSpec would look like the app lost
         // the file rather than like the file was empty.
@@ -38,7 +50,23 @@ internal class SnyggMapper(private val style: Stylesheet) {
 
         val resolvedBoard = boardBackground ?: ThemeSpec(id = "", name = "").boardBackground
         val resolvedKey = keyBackground ?: resolvedBoard
+        // What a key label actually sits on: the key where it is opaque, the
+        // board showing through where it is not.
+        val keySurface = composite(resolvedKey, resolvedBoard)
         val (shape, radius) = snyggShape(key?.value(PROP_SHAPE), dropped) ?: (null to null)
+
+        val modifier = modifierRule()
+        val enter = enterRule()
+        val enterBackground = color(enter, PROP_BACKGROUND) ?: resolvedKey
+        val popup = style.firstOf(EL_POPUP)
+        val hint = style.base(EL_HINT)
+        val tool = style.base(EL_TOOL)
+        val toolToggle = style.base(EL_TOOL_TOGGLE)
+        val candidate = style.base(EL_CANDIDATE)
+        val chip = chipRule()
+        val chipActive = style.withAttribute(EL_CHIP, ATTR_STATE, STATE_ACTIVE)
+        val card = style.base(EL_CARD)
+        val sheet = style.base(EL_SHEET)
 
         val images = buildMap {
             key?.value(PROP_IMAGE)?.let { path ->
@@ -55,40 +83,65 @@ internal class SnyggMapper(private val style: Stylesheet) {
             dark = night,
             boardBackground = resolvedBoard,
             keyBackground = resolvedKey,
-            keyText = textColorOn(key?.value(PROP_FOREGROUND), resolvedKey, dropped),
+            keyText = textColorOn(key?.value(PROP_FOREGROUND), keySurface, dropped),
             // Left to derive unless the sheet styles the pressed key itself.
-            pressedKeyBackground = snyggColor(style.first(EL_KEY, PRESSED)?.value(PROP_BACKGROUND)),
-            modifierKeyBackground = snyggColor(modifierRule()?.value(PROP_BACKGROUND)) ?: resolvedKey,
-            modifierKeyText = null,
-            enterKeyBackground = snyggColor(enterRule()?.value(PROP_BACKGROUND)) ?: resolvedKey,
-            enterKeyText = snyggColor(enterRule()?.value(PROP_FOREGROUND))
-                ?: onColorFor(snyggColor(enterRule()?.value(PROP_BACKGROUND)) ?: resolvedKey),
-            keyBorderColor = snyggColor(key?.value(PROP_BORDER_COLOR)),
+            pressedKeyBackground = color(style.base(EL_KEY, PRESSED), PROP_BACKGROUND),
+            modifierKeyBackground = color(modifier, PROP_BACKGROUND) ?: resolvedKey,
+            modifierKeyText = modifier?.value(PROP_FOREGROUND)?.let {
+                textColorOn(it, composite(color(modifier, PROP_BACKGROUND) ?: resolvedKey, resolvedBoard), dropped)
+            },
+            enterKeyBackground = enterBackground,
+            enterKeyText = enter?.value(PROP_FOREGROUND)
+                ?.let { textColorOn(it, composite(enterBackground, resolvedBoard), dropped) }
+                ?: onColorFor(composite(enterBackground, resolvedBoard)),
+            keyBorderColor = color(key, PROP_BORDER_COLOR),
             keyBorderWidthDp = snyggDp(key?.value(PROP_BORDER_WIDTH)) ?: 0f,
             keyShape = shape ?: KeyShapeKind.ROUNDED,
             keyCornerRadiusDp = radius,
             boldKeyLabels = key?.value(PROP_FONT_WEIGHT)?.contains(BOLD, ignoreCase = true),
-            // Popups and the glide trail have real counterparts, so they map.
-            popupBackground = snyggColor(style.first(EL_POPUP)?.value(PROP_BACKGROUND)),
-            popupText = snyggColor(style.first(EL_POPUP)?.value(PROP_FOREGROUND)),
-            hintText = snyggColor(style.first(EL_HINT)?.value(PROP_FOREGROUND)),
-            popupBorderColor = snyggColor(style.first(EL_POPUP)?.value(PROP_BORDER_COLOR)),
-            popupBorderWidthDp = snyggDp(style.first(EL_POPUP)?.value(PROP_BORDER_WIDTH)) ?: 0f,
-            gestureTrailColor = snyggColor(style.first(EL_GLIDE)?.value(PROP_BACKGROUND))
-                ?: snyggColor(style.first(EL_GLIDE)?.value(PROP_FOREGROUND)),
-            // The candidate row is the one smartbar element with an exact
-            // counterpart. The rest of that bar — the action toggles, the
-            // overflow, the incognito indicator — has none, so the toolbar and
-            // panel colours are left to derive rather than guessed at.
-            suggestionText = snyggColor(style.first(EL_CANDIDATE)?.value(PROP_FOREGROUND)),
-            chipBackground = snyggColor(style.first(EL_CANDIDATE)?.value(PROP_BACKGROUND)),
-            accent = snyggColor(enterRule()?.value(PROP_BACKGROUND))
-                ?: snyggColor(style.first(EL_CANDIDATE)?.value(PROP_FOREGROUND))
-                ?: ThemeSpec(id = "", name = "").accent,
-            keyOverrides = keyOverrides(resolvedKey, dropped),
+            fontScale = scaleFrom(key?.value(PROP_FONT_SIZE), DEFAULT_KEY_SP, KeyFontScaleBounds),
+            // The corner hint. A fully transparent hint colour is the sheet
+            // saying "no hint tint", which is the derived default here, so it
+            // is left null rather than written as an invisible colour.
+            hintText = color(hint, PROP_FOREGROUND)?.takeIf { it.isVisible() },
+            hintFontScale = scaleFrom(hint?.value(PROP_FONT_SIZE), DEFAULT_HINT_SP, HintFontScaleBounds),
+            // Popups.
+            popupBackground = color(popup, PROP_BACKGROUND),
+            popupText = color(popup, PROP_FOREGROUND),
+            popupBorderColor = color(popup, PROP_BORDER_COLOR),
+            popupBorderWidthDp = snyggDp(popup?.value(PROP_BORDER_WIDTH)) ?: 0f,
+            popupShape = shapeName(popup, dropped),
+            popupCornerRadiusDp = shapeRadius(popup, dropped),
+            // The bar above the keys. The tool icons and the toggle behind them
+            // are separate elements upstream and separate fields here, so they
+            // map one to one instead of collapsing onto the key colours.
+            suggestionBarBackground = color(style.base(EL_TOOLBAR), PROP_BACKGROUND),
+            navigationBarBackground = color(style.base(EL_NAV_BAR), PROP_BACKGROUND),
+            toolbarIcon = color(tool, PROP_FOREGROUND) ?: color(board, PROP_FOREGROUND),
+            toolCircleBackground = color(tool, PROP_BACKGROUND),
+            toolCircleActiveBackground = color(toolToggle, PROP_BACKGROUND),
+            toolShape = shapeName(tool ?: toolToggle, dropped),
+            toolCircleRadiusDp = shapeRadius(tool ?: toolToggle, dropped),
+            suggestionText = color(candidate, PROP_FOREGROUND),
+            // Chips and panel cards.
+            chipBackground = color(chip, PROP_BACKGROUND) ?: color(card, PROP_BACKGROUND),
+            chipText = color(chip, PROP_FOREGROUND) ?: color(card, PROP_FOREGROUND),
+            chipActiveBackground = color(chipActive, PROP_BACKGROUND),
+            chipActiveText = color(chipActive, PROP_FOREGROUND),
+            chipShape = shapeName(chip, dropped),
+            chipCornerRadiusDp = shapeRadius(chip, dropped),
+            cardShape = shapeName(card, dropped),
+            menuShape = shapeName(sheet, dropped),
+            accent = accentColor(enter, resolvedBoard),
+            gestureTrailColor = trailColor(),
+            keyOverrides = keyOverrides(resolvedKey, resolvedBoard, dropped),
         )
         return ConvertedTheme(theme, images)
     }
+
+    // ---- colour helpers ----
+
+    private fun color(rule: SnyggRule?, property: String): Long? = snyggColor(rule?.value(property))
 
     /**
      * A scraped text colour, unless it would be unreadable where it landed.
@@ -98,64 +151,185 @@ internal class SnyggMapper(private val style: Stylesheet) {
      * where text stops being legible, the derived colour is used instead and the
      * substitution is reported, because a theme whose keys cannot be read is the
      * one failure a user cannot work around in the editor.
+     *
+     * [background] must already be the opaque colour behind the text. Measuring
+     * against a transparent key is what used to reject the labels of every
+     * borderless theme and replace them with their opposite.
      */
     private fun textColorOn(raw: String?, background: Long, dropped: MutableSet<FlexUnsupported>): Long {
         val scraped = snyggColor(raw) ?: return onColorFor(background)
-        if (contrastRatio(scraped, background) >= MIN_CONTRAST) return scraped
+        // Text the sheet made transparent is not a colour to check, it is the
+        // sheet declining to set one.
+        if (!scraped.isVisible()) return onColorFor(background)
+        val seen = composite(scraped, background)
+        if (contrastRatio(seen, background) >= MIN_CONTRAST) return scraped
         dropped += FlexUnsupported.LOW_CONTRAST_FALLBACK
         return onColorFor(background)
     }
 
     /**
-     * Per-key styles, from the rules that name one key by its code.
+     * The theme's one accent: the shift tint, the glide trail, the active tool.
+     *
+     * Taken from the elements that genuinely carry a theme's highlight colour,
+     * in the order they are worth trusting — the glide trail is only ever the
+     * accent, the enter key is the accent on most themes, the focused emoji tab
+     * and the active toolbar toggle are the next best. Composited onto the
+     * board at the end: a transparent accent paints an invisible trail and an
+     * invisible armed shift, which is the one value here that must never be
+     * see-through.
+     */
+    private fun accentColor(enter: SnyggRule?, board: Long): Long {
+        val candidates = listOfNotNull(
+            color(style.base(EL_GLIDE), PROP_FOREGROUND),
+            color(enter, PROP_BACKGROUND),
+            color(style.base(EL_EMOJI_TAB, FOCUS), PROP_FOREGROUND),
+            color(style.base(EL_TOOL_TOGGLE), PROP_BACKGROUND),
+            color(style.base(EL_CANDIDATE), PROP_FOREGROUND),
+        )
+        val pick = candidates.firstOrNull { it.isVisible() }
+            ?: return ThemeSpec(id = "", name = "").accent
+        return composite(pick, board)
+    }
+
+    /**
+     * The rule that says what a chip looks like here.
+     *
+     * One field covers several things that snygg styles separately: the clip
+     * suggestion, the tool tiles, the clipboard's filter pills and its cards.
+     * They rarely disagree about colour, but they do disagree about being
+     * *there* — the clip suggestion sits on the bar and is usually transparent,
+     * while the clipboard card is a real surface. Taking whichever came first
+     * meant the transparent one won and every clipboard card went see-through.
+     *
+     * So the first rule that paints something visible wins, and a rule that
+     * only declares transparency is the fallback rather than the answer.
+     */
+    private fun chipRule(): SnyggRule? {
+        val candidates = listOfNotNull(
+            style.base(EL_CHIP),
+            style.base(EL_TILE),
+            style.base(EL_CARD),
+        )
+        return candidates.firstOrNull { color(it, PROP_BACKGROUND)?.isVisible() == true }
+            ?: candidates.firstOrNull()
+    }
+
+    /** The glide trail's own colour, when the sheet gives it one. */
+    private fun trailColor(): Long? {
+        val glide = style.base(EL_GLIDE) ?: return null
+        return (color(glide, PROP_FOREGROUND) ?: color(glide, PROP_BACKGROUND))?.takeIf { it.isVisible() }
+    }
+
+    // ---- shape helpers ----
+
+    private fun shapeName(rule: SnyggRule?, dropped: MutableSet<FlexUnsupported>): String? =
+        snyggShape(rule?.value(PROP_SHAPE), dropped)?.first?.name
+
+    private fun shapeRadius(rule: SnyggRule?, dropped: MutableSet<FlexUnsupported>): Int? =
+        snyggShape(rule?.value(PROP_SHAPE), dropped)?.second
+
+    /**
+     * A font size as the multiplier this app stores, against the size
+     * FlorisBoard's own themes use for that element.
+     *
+     * Clamped rather than dropped when it lands outside the range: a theme
+     * asking for 40sp labels means "big", and the biggest this keyboard offers
+     * is closer to that than the default is.
+     */
+    private fun scaleFrom(raw: String?, defaultSp: Float, bounds: ClosedFloatingPointRange<Float>): Float? {
+        val size = snyggDp(raw)?.takeIf { it > 0f } ?: return null
+        val scale = size / defaultSp
+        // Within a rounding step of 1 is the default, and writing it would turn
+        // the global slider off for no gain.
+        if (kotlin.math.abs(scale - 1f) < SCALE_EPSILON) return null
+        return scale.coerceIn(bounds)
+    }
+
+    // ---- per-key styles ----
+
+    /**
+     * Per-key styles, from the rules that name keys by their codes.
      *
      * This is where snygg's `key[code=…]` selectors belong: without it they
      * would all collapse onto the one modifier colour, and a theme that paints
      * six keys differently would come across painting one.
+     *
+     * Only the resting style of a key is read. A rule carrying a state
+     * (`key[code=10]:pressed`) or another attribute (`key[code=-11][shiftstate=
+     * `caps_lock`]`) describes a moment, not a key — see [Stylesheet.byCode].
      */
-    private fun keyOverrides(background: Long, dropped: MutableSet<FlexUnsupported>): Map<String, KeyOverride> =
-        style.attributed(EL_KEY).mapNotNull { rule ->
-            val code = codeOf(rule.attribute) ?: return@mapNotNull null
+    private fun keyOverrides(
+        keyBackground: Long,
+        board: Long,
+        dropped: MutableSet<FlexUnsupported>,
+    ): Map<String, KeyOverride> =
+        style.styledCodes(EL_KEY).mapNotNull { code ->
+            val rule = style.forCode(EL_KEY, code) ?: return@mapNotNull null
             val id = overrideIdFor(code) ?: return@mapNotNull null
-            val fill = snyggColor(rule.value(PROP_BACKGROUND))
-            val text = rule.value(PROP_FOREGROUND)?.let { textColorOn(it, fill ?: background, dropped) }
+            val fill = color(rule, PROP_BACKGROUND)
+            val surface = composite(fill ?: keyBackground, board)
             val override = KeyOverride(
                 background = fill,
-                text = text,
-                border = snyggColor(rule.value(PROP_BORDER_COLOR)),
+                text = rule.value(PROP_FOREGROUND)?.let { textColorOn(it, surface, dropped) },
+                border = color(rule, PROP_BORDER_COLOR),
+                labelScale = scaleFrom(rule.value(PROP_FONT_SIZE), DEFAULT_KEY_SP, KEY_OVERRIDE_LABEL_SCALE_RANGE),
+                bold = rule.value(PROP_FONT_WEIGHT)?.contains(BOLD, ignoreCase = true),
             )
             if (override.isEmpty) null else id to override
         }.toMap()
 
-    /** `code=32` out of `[code=32]`, and nothing else. */
-    private fun codeOf(attribute: String?): Int? =
-        attribute?.split(',')
-            ?.firstOrNull { it.substringBefore('=').trim() == CODE }
-            ?.substringAfter('=')
-            ?.trim()
-            ?.toIntOrNull()
-
+    /**
+     * The rule that styles the function keys, or null.
+     *
+     * Shift first, then delete, then the layout-switch keys: a sheet that gives
+     * the function keys a colour of their own nearly always names shift in the
+     * same rule, and the first one that carries a background is the one that
+     * answers what a modifier key looks like.
+     */
     private fun modifierRule(): SnyggRule? =
-        style.attributed(EL_KEY).firstOrNull { codeOf(it.attribute) in MODIFIER_CODES }
+        MODIFIER_CODES.firstNotNullOfOrNull { code ->
+            style.forCode(EL_KEY, code)?.takeIf {
+                it.value(PROP_BACKGROUND) != null || it.value(PROP_FOREGROUND) != null
+            }
+        }
 
     private fun enterRule(): SnyggRule? =
-        style.attributed(EL_KEY).firstOrNull { codeOf(it.attribute) in ENTER_CODES }
+        ENTER_CODES.firstNotNullOfOrNull { style.forCode(EL_KEY, it) }
 
     private companion object {
 
         const val PRESSED = "pressed"
+        const val FOCUS = "focus"
         const val BOLD = "bold"
-        const val CODE = "code"
+        const val ATTR_STATE = "state"
+        const val STATE_ACTIVE = "active"
 
         /**
-         * Below this a label stops being readable on its key. The WCAG large-text
-         * floor: key labels are large and bold-ish, and holding them to the
-         * body-text ratio would reject themes that are perfectly legible.
+         * Below this a label stops being readable on its key.
+         *
+         * [Readability.POOR_CONTRAST], which is this app's own line for "a user
+         * genuinely cannot read that", and deliberately below the WCAG
+         * large-text floor of 3:1. FlorisBoard does no contrast correction at
+         * all, so every colour this replaces is a colour the theme's author saw
+         * and shipped; holding them to 3:1 rewrote the enter-key labels of
+         * themes that read perfectly well, and reported the rewrite each time.
+         * The guard is here for a file that is actually broken, not to second-
+         * guess a designer.
          */
-        const val MIN_CONTRAST = 3f
+        const val MIN_CONTRAST = Readability.POOR_CONTRAST
 
-        val MODIFIER_CODES = setOf(-11, -13, -7, -202, -201)
-        val ENTER_CODES = setOf(10, 13)
+        /** The sizes FlorisBoard's own themes give these elements. */
+        const val DEFAULT_KEY_SP = 22f
+        const val DEFAULT_HINT_SP = 12f
+        const val SCALE_EPSILON = 0.03f
+
+        /** Mirrors `KeyFontScaleRange` in `:core:settings`, which this module cannot see. */
+        val KeyFontScaleBounds = 0.7f..2.0f
+        val HintFontScaleBounds = 0.5f..2.0f
+
+        /** In the order a sheet is worth asking what a function key looks like. */
+        val MODIFIER_CODES = listOf(-11, -7, -201, -202, -203, -13)
+        val ENTER_CODES = listOf(10, 13)
 
         /**
          * The name a [ThemeSpec.keyOverrides] entry uses, for a foreign key code.
@@ -163,19 +337,23 @@ internal class SnyggMapper(private val style: Stylesheet) {
          * A small table rather than a shared one: the layout converter's code
          * table lives in `:core:language`, which this module cannot see, and the
          * two answer different questions anyway — that one asks what a key
-         * *does*, this one asks what a style rule is *called*. Only the keys
-         * worth styling individually are here.
+         * *does*, this one asks what a style rule is *called*. The names are the
+         * ones `keyOverrideId` produces, which is the action class's name in
+         * uppercase.
          */
+        @Suppress("CyclomaticComplexMethod")
         fun overrideIdFor(code: Int): String? = when (code) {
             -11 -> "SHIFT"
             -13 -> "CAPSLOCK"
-            -7 -> "DELETE"
+            -7, -8 -> "DELETE"
             -201 -> "LETTERS"
             -202, -203 -> "SYMBOLS"
+            -204, -205 -> "NUMPAD"
             -212 -> "EMOJI"
+            -221 -> "INPUTMETHODPICKER"
             -227 -> "LANGUAGESWITCH"
             32 -> "SPACE"
-            10, 13 -> "ENTER"
+            10, 13, -10005 -> "ENTER"
             // A printable character styles the letter it types, so the override
             // follows that letter across every layout.
             in 0x21..0x10FFFF -> String(Character.toChars(code)).lowercase()
@@ -183,6 +361,9 @@ internal class SnyggMapper(private val style: Stylesheet) {
         }
     }
 }
+
+/** Whether a colour will actually show, rather than being fully transparent. */
+internal fun Long.isVisible(): Boolean = ((this ushr 24) and 0xFFL) > 0L
 
 /** Rounds a float dp to the whole number the theme fields store. */
 internal fun Float.toDpInt(): Int = roundToInt()

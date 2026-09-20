@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">Aplikacija je spremila %1$s s %2$d izgleda. Otvorite Teme da biste ih pogledali.</string>
     <string name="import_floris_dropped_contrast">Boja teksta tipke bila je previše slična boji tipke za čitanje. Aplikacija je odabrala boju koju možete pročitati.</string>
     <string name="import_floris_dropped_corners">Tipke imaju jednu veličinu kuta. Datoteka postavlja različitu veličinu za svaki kut.</string>
-    <string name="import_floris_dropped_dynamic">Boje koje prate pozadinu sustava nisu postavljene. Uključite Material You u Temama za isti efekt.</string>
     <string name="import_floris_dropped_elevation">Sjene tipki nisu postavljene. Ova aplikacija crta tipke bez sjene.</string>
     <string name="import_floris_dropped_font">Font nije uključen. Font je zaseban dodatak u ovoj aplikaciji.</string>
-    <string name="import_floris_dropped_old">Dio datoteke koristi stariji format stila FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Razmak oko pojedinačnih dijelova nije postavljen. Ova aplikacija postavlja razmak tipki za cijelu tipkovnicu.</string>
     <string name="import_floris_dropped_unknown">Neki dijelovi datoteke imenuju elemente tipkovnice koje ova aplikacija nema.</string>
-    <string name="import_floris_old_body">Ova je tema napisana za FlorisBoard 0.4. Taj format stila nije isti kao onaj u FlorisBoard 0.5 i novijim verzijama, pa ga aplikacija ne može pročitati. Tema koju ova aplikacija čita samo djelomično dala bi vam boje koje vaša datoteka nikada nije postavila.</string>
-    <string name="import_floris_old_title">Tema je za stariju verziju FlorisBoarda</string>
     <string name="import_floris_title">Tema iz FlorisBoarda</string>
     <string name="import_floris_unreadable_body">Aplikacija ne može pročitati ovu FlorisBoard datoteku. Možda je oštećena ili je riječ o jezičnom paketu ili proširenju tipkovnice, a ne o temi.</string>
     <string name="import_icons_body">Aplikacija instalira paket i uključuje ga. Njegove ikone zamjenjuju ugrađene ikone. Aplikacija zadržava ikone koje ste postavili.</string>

@@ -1389,14 +1389,10 @@
     <string name="import_floris_done_family">செயலி %1$s-ஐ %2$d தோற்றங்களுடன் சேமித்தது. அதைப் பார்க்க தீம்களைத் திறக்கவும்.</string>
     <string name="import_floris_dropped_contrast">ஒரு முக்கிய உரை நிறம் விசை நிறத்திற்கு மிக அருகில் இருந்ததால் படிக்க முடியவில்லை. ஆப்ஸ் நீங்கள் படிக்கக்கூடிய ஒரு நிறத்தைத் தேர்ந்தெடுத்தது.</string>
     <string name="import_floris_dropped_corners">விசைகள் ஒரு மூலை அளவைக் கொண்டுள்ளன. கோப்பு ஒவ்வொரு மூலைக்கும் வெவ்வேறு அளவை அமைக்கிறது.</string>
-    <string name="import_floris_dropped_dynamic">சிஸ்டம் வால்பேப்பரைப் பின்பற்றும் வண்ணங்கள் அமைக்கப்படவில்லை. அதே விளைவைப் பெற தீம்களில் Material You-ஐ ஆன் செய்யவும்.</string>
     <string name="import_floris_dropped_elevation">விசை நிழல்கள் அமைக்கப்படவில்லை. இந்த ஆப்ஸ் நிழல் இல்லாமல் விசைகளை வரைகிறது.</string>
     <string name="import_floris_dropped_font">எழுத்துரு சேர்க்கப்படவில்லை. இந்த ஆப்பில் எழுத்துரு என்பது தனி ஆட்-ஆன் ஆகும்.</string>
-    <string name="import_floris_dropped_old">கோப்பின் ஒரு பகுதி பழைய FlorisBoard பாணி வடிவமைப்பைப் பயன்படுத்துகிறது.</string>
     <string name="import_floris_dropped_spacing">தனித்தனி பாகங்களைச் சுற்றியுள்ள இடைவெளி அமைக்கப்படவில்லை. இந்த ஆப் முழு விசைப்பலகைக்கும் விசை இடைவெளியை அமைக்கிறது.</string>
     <string name="import_floris_dropped_unknown">கோப்பு பெயரின் சில பகுதிகள் இந்த ஆப்பில் இல்லாத விசைப்பலகை கூறுகளைக் குறிக்கின்றன.</string>
-    <string name="import_floris_old_body">இந்த தீம் FlorisBoard 0.4 க்காக எழுதப்பட்டது. அந்த ஸ்டைல் வடிவம் FlorisBoard 0.5 மற்றும் அதற்குப் பிந்தைய பதிப்புகளில் உள்ளதைப் போன்றது அல்ல, எனவே பயன்பாட்டால் அதை வாசிக்க முடியாது. இந்த ஆப்ஸ் ஓரளவு மட்டுமே வாசித்த தீம், உங்கள் கோப்பு ஒருபோதும் அமைக்காத வண்ணங்களை உங்களுக்கு வழங்கும்.</string>
-    <string name="import_floris_old_title">தீம் பழைய FlorisBoard-க்கானது</string>
     <string name="import_floris_title">FlorisBoard-லிருந்து தீம்</string>
     <string name="import_floris_unreadable_body">இந்த FlorisBoard கோப்பை ஆப்பால் படிக்க முடியவில்லை. இது சேதமடைந்திருக்கலாம் அல்லது இது தீமுக்கு பதிலாக மொழிப் பொதி அல்லது விசைப்பலகை நீட்டிப்பாக இருக்கலாம்.</string>
     <string name="import_icons_body">இந்த ஆப் பேக்கை நிறுவி அதை இயக்குகிறது. அதன் ஐகான்கள் உள்ளமைக்கப்பட்ட ஐகான்களுக்குப் பதிலாக மாற்றப்படும். நீங்கள் அமைத்த ஐகான்களை இந்த ஆப் வைத்திருக்கும்.</string>

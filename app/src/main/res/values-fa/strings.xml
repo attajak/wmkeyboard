@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">برنامه %1$s را با %2$d ظاهر ذخیره کرد. برای مشاهده آن، «تم‌ها» را باز کنید.</string>
     <string name="import_floris_dropped_contrast">رنگ متن کلید برای خواندن بیش از حد به رنگ کلید نزدیک بود. برنامه رنگی را انتخاب کرد که بتوانید آن را بخوانید.</string>
     <string name="import_floris_dropped_corners">کلیدها یک اندازه گوشه دارند. فایل برای هر گوشه اندازه متفاوتی تعیین می‌کند.</string>
-    <string name="import_floris_dropped_dynamic">رنگ‌هایی که از تصویر زمینه سیستم پیروی می‌کنند تنظیم نشده‌اند. برای اثر مشابه، Material You را در تم‌ها روشن کنید.</string>
     <string name="import_floris_dropped_elevation">سایه‌های کلید تنظیم نشده‌اند. این برنامه کلیدها را بدون سایه ترسیم می‌کند.</string>
     <string name="import_floris_dropped_font">فونت گنجانده نشده است. فونت یک افزونه جداگانه در این برنامه است.</string>
-    <string name="import_floris_dropped_old">بخشی از فایل از فرمت قدیمی سبک FlorisBoard استفاده می‌کند.</string>
     <string name="import_floris_dropped_spacing">فاصله اطراف بخش‌های تکی تنظیم نشده است. این برنامه فاصله کلید را برای کل صفحه‌کلید تنظیم می‌کند.</string>
     <string name="import_floris_dropped_unknown">برخی از بخش‌های فایل به عناصری از صفحه‌کلید اشاره دارند که این برنامه ندارد.</string>
-    <string name="import_floris_old_body">این تم برای FlorisBoard 0.4 نوشته شده است. آن فرمت سبک با فرمت FlorisBoard 0.5 و نسخه‌های بعدی متفاوت است، بنابراین برنامه نمی‌تواند آن را بخواند. تمی که این برنامه فقط بخشی از آن را بخواند، رنگ‌هایی به شما می‌دهد که فایل شما هرگز تنظیم نکرده است.</string>
-    <string name="import_floris_old_title">تم برای نسخه قدیمی FlorisBoard است</string>
     <string name="import_floris_title">تم از FlorisBoard</string>
     <string name="import_floris_unreadable_body">برنامه نمی‌تواند این فایل FlorisBoard را بخواند. ممکن است آسیب دیده باشد، یا ممکن است به جای تم، یک بسته زبانی یا افزونه صفحه‌کلید باشد.</string>
     <string name="import_icons_body">برنامه بسته را نصب و فعال می‌کند. آیکون‌های آن جایگزین آیکون‌های پیش‌فرض می‌شوند. برنامه آیکون‌هایی که تنظیم کرده‌اید را حفظ می‌کند.</string>

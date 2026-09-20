@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">ऐप ने %2$d लुक्स के साथ %1$s को सेव कर लिया है। इसे देखने के लिए थीम्स खोलें।</string>
     <string name="import_floris_dropped_contrast">कुंजी का टेक्स्ट रंग कुंजी के रंग के बहुत करीब था जिसे पढ़ा नहीं जा सकता था। ऐप ने एक ऐसा रंग चुना है जिसे आप पढ़ सकते हैं।</string>
     <string name="import_floris_dropped_corners">कुंजियों का एक कोना आकार होता है। फ़ाइल प्रत्येक कोने के लिए एक अलग आकार सेट करती है।</string>
-    <string name="import_floris_dropped_dynamic">सिस्टम वॉलपेपर का अनुसरण करने वाले रंग सेट नहीं हैं। समान प्रभाव के लिए थीम्स में \'मटेरियल यू\' चालू करें।</string>
     <string name="import_floris_dropped_elevation">कुंजी की परछाई सेट नहीं है। यह ऐप बिना परछाई के कुंजियाँ बनाता है।</string>
     <string name="import_floris_dropped_font">फ़ॉन्ट शामिल नहीं है। इस ऐप में फ़ॉन्ट एक अलग ऐड-ऑन है।</string>
-    <string name="import_floris_dropped_old">फ़ाइल का एक हिस्सा पुराने FlorisBoard स्टाइल फ़ॉर्मेट का उपयोग करता है।</string>
     <string name="import_floris_dropped_spacing">अलग-अलग हिस्सों के आसपास की जगह सेट नहीं है। यह ऐप पूरे कीबोर्ड के लिए की गैप सेट करता है।</string>
     <string name="import_floris_dropped_unknown">फ़ाइल के कुछ हिस्से उन कीबोर्ड तत्वों का नाम बताते हैं जो इस ऐप में नहीं हैं।</string>
-    <string name="import_floris_old_body">यह थीम FlorisBoard 0.4 के लिए लिखी गई है। वह स्टाइल प्रारूप FlorisBoard 0.5 और बाद के संस्करणों जैसा नहीं है, इसलिए ऐप इसे पढ़ नहीं सकता है। एक थीम जिसे यह ऐप केवल आंशिक रूप से पढ़ता है, वह आपको ऐसे रंग देगा जो आपकी फ़ाइल ने कभी सेट नहीं किए थे।</string>
-    <string name="import_floris_old_title">थीम पुराने FlorisBoard के लिए है</string>
     <string name="import_floris_title">FlorisBoard से थीम</string>
     <string name="import_floris_unreadable_body">ऐप इस FlorisBoard फ़ाइल को नहीं पढ़ सकता। यह क्षतिग्रस्त हो सकती है, या यह थीम के बजाय भाषा पैक या कीबोर्ड एक्सटेंशन हो सकती है।</string>
     <string name="import_icons_body">ऐप पैक इंस्टॉल करता है और उसे चालू करता है। इसके आइकन इन-बिल्ट आइकन की जगह ले लेते हैं। ऐप आपके द्वारा सेट किए गए आइकन को बनाए रखता है।</string>

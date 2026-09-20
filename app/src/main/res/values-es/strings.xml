@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">La aplicación guardó %1$s con %2$d estilos. Abre Temas para verlo.</string>
     <string name="import_floris_dropped_contrast">Un color de texto de tecla estaba demasiado cerca del color de la tecla para leerlo. La aplicación eligió un color que puedes leer.</string>
     <string name="import_floris_dropped_corners">Las teclas tienen un tamaño de esquina. El archivo establece un tamaño diferente para cada esquina.</string>
-    <string name="import_floris_dropped_dynamic">Los colores que siguen al fondo de pantalla del sistema no están configurados. Activa Material You en Temas para obtener el mismo efecto.</string>
     <string name="import_floris_dropped_elevation">Las sombras de las teclas no están configuradas. Esta aplicación dibuja las teclas sin sombra.</string>
     <string name="import_floris_dropped_font">La fuente no está incluida. Una fuente es un complemento separado en esta aplicación.</string>
-    <string name="import_floris_dropped_old">Parte del archivo utiliza el formato de estilo antiguo de FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">El espacio alrededor de partes individuales no está configurado. Esta aplicación establece el espacio entre teclas para todo el teclado.</string>
     <string name="import_floris_dropped_unknown">Algunas partes del nombre del archivo hacen referencia a elementos del teclado que esta aplicación no tiene.</string>
-    <string name="import_floris_old_body">Este tema está escrito para FlorisBoard 0.4. Ese formato de estilo no es el mismo que el de FlorisBoard 0.5 y versiones posteriores, por lo que la aplicación no puede leerlo. Un tema que esta aplicación leyera solo en parte te daría colores que tu archivo nunca configuró.</string>
-    <string name="import_floris_old_title">El tema es para una versión anterior de FlorisBoard</string>
     <string name="import_floris_title">Tema de FlorisBoard</string>
     <string name="import_floris_unreadable_body">La aplicación no puede leer este archivo de FlorisBoard. Puede estar dañado, o puede ser un paquete de idioma o una extensión de teclado en lugar de un tema.</string>
     <string name="import_icons_body">La aplicación instala el paquete y lo activa. Sus iconos reemplazan a los integrados. La aplicación mantiene los iconos que configures.</string>

@@ -1386,14 +1386,10 @@
     <string name="import_floris_done_family">应用已保存 %1$s，包含 %2$d 种外观。打开“主题”即可查看。</string>
     <string name="import_floris_dropped_contrast">按键文字颜色与按键颜色过于接近，难以阅读。应用已为您选择了一种可读的颜色。</string>
     <string name="import_floris_dropped_corners">按键具有统一的圆角大小。该文件为每个圆角设置了不同的大小。</string>
-    <string name="import_floris_dropped_dynamic">未设置跟随系统壁纸的颜色。在“主题”中开启 Material You 即可获得相同效果。</string>
     <string name="import_floris_dropped_elevation">未设置按键阴影。此应用绘制的按键没有阴影。</string>
     <string name="import_floris_dropped_font">未包含该字体。字体在此应用中是单独的插件。</string>
-    <string name="import_floris_dropped_old">该文件的一部分使用了旧版 FlorisBoard 样式格式。</string>
     <string name="import_floris_dropped_spacing">未设置单个部件周围的间距。此应用将设置整个键盘的按键间隙。</string>
     <string name="import_floris_dropped_unknown">该文件的某些部分命名了此应用不具备的键盘元素。</string>
-    <string name="import_floris_old_body">此主题是为 FlorisBoard 0.4 编写的。该样式格式与 FlorisBoard 0.5 及更高版本中的格式不同，因此应用无法读取它。如果强制读取，可能会导致主题颜色显示异常。</string>
-    <string name="import_floris_old_title">主题适用于旧版 FlorisBoard</string>
     <string name="import_floris_title">来自 FlorisBoard 的主题</string>
     <string name="import_floris_unreadable_body">应用无法读取此 FlorisBoard 文件。它可能已损坏，或者它可能是一个语言包或键盘扩展，而不是主题。</string>
     <string name="import_icons_body">该应用会安装并启用该图标包。其图标将替换内置图标。应用会保留您设置的图标。</string>

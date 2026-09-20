@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">De app heeft %1$s opgeslagen met %2$d uiterlijken. Open Thema\'s om het te bekijken.</string>
     <string name="import_floris_dropped_contrast">Een belangrijke tekstkleur was te dicht bij de kleur van de toets om leesbaar te zijn. De app heeft een kleur gekozen die je wel kunt lezen.</string>
     <string name="import_floris_dropped_corners">Toetsen hebben één hoekgrootte. Het bestand stelt een andere grootte in voor elke hoek.</string>
-    <string name="import_floris_dropped_dynamic">Kleuren die de systeemachtergrond volgen zijn niet ingesteld. Schakel Material You in bij Thema\'s voor hetzelfde effect.</string>
     <string name="import_floris_dropped_elevation">Toetsschaduwen zijn niet ingesteld. Deze app tekent toetsen zonder schaduw.</string>
     <string name="import_floris_dropped_font">Het lettertype is niet inbegrepen. Een lettertype is een afzonderlijke add-on in deze app.</string>
-    <string name="import_floris_dropped_old">Een deel van het bestand gebruikt het oudere FlorisBoard-stijlformaat.</string>
     <string name="import_floris_dropped_spacing">De ruimte rondom losse onderdelen is niet ingesteld. Deze app stelt de toetsafstand in voor het hele toetsenbord.</string>
     <string name="import_floris_dropped_unknown">Sommige delen van het bestand benoemen toetsenbordelementen die deze app niet heeft.</string>
-    <string name="import_floris_old_body">Dit thema is geschreven voor FlorisBoard 0.4. Dat stijlformaat is niet hetzelfde als dat in FlorisBoard 0.5 en later, dus de app kan het niet lezen. Een thema dat deze app slechts gedeeltelijk heeft gelezen, zou je kleuren geven die je bestand nooit heeft ingesteld.</string>
-    <string name="import_floris_old_title">Thema is voor een oudere FlorisBoard</string>
     <string name="import_floris_title">Thema van FlorisBoard</string>
     <string name="import_floris_unreadable_body">De app kan dit FlorisBoard-bestand niet lezen. Het is mogelijk beschadigd, of het is een taalpakket of toetsenbordextensie in plaats van een thema.</string>
     <string name="import_icons_body">De app installeert het pakket en schakelt het in. De iconen vervangen de ingebouwde iconen. De app behoudt de iconen die je instelt.</string>

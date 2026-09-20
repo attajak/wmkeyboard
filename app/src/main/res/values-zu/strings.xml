@@ -1390,14 +1390,10 @@
     <string name="import_floris_done_family">Uhlelo lokusebenza lulondoloze %1$s ngokubukeka okungu-%2$d. Vula Izimu ukuze uyibuke.</string>
     <string name="import_floris_dropped_contrast">Umbala wombhalo wokhiye wawusondele kakhulu kumbala wokhiye ukuze ufundeke. Uhlelo lokusebenza lukhethe umbala ongawufunda.</string>
     <string name="import_floris_dropped_corners">Okhiye banosayizi wekhona owodwa. Ifayela libeka usayizi ohlukile wekhona ngalinye.</string>
-    <string name="import_floris_dropped_dynamic">Imibala elandela isithombe sangemuva sesistimu ayisethiwe. Vula i-Material You kuzindikimba ukuze uthole umphumela ofanayo.</string>
     <string name="import_floris_dropped_elevation">Izithunzi zokhiye azisethwanga. Lolu hlelo lokusebenza ludweba okhiye ngaphandle kwesithunzi.</string>
     <string name="import_floris_dropped_font">Ifonti ayifakiwe. Ifonti iyisengezo esihlukile kulolu hlelo lokusebenza.</string>
-    <string name="import_floris_dropped_old">Ingxenye yefayela isebenzisa ifomethi yesitayela se-FlorisBoard endala.</string>
     <string name="import_floris_dropped_spacing">Isikhala esizungeze izingxenye ezilodwa asisethiwe. Lolu hlelo lokusebenza lusetha igebe lokhiye kuyo yonke ikhibhodi.</string>
     <string name="import_floris_dropped_unknown">Ezinye izingxenye zefayela ziqamba izakhi zekhibhodi lolu hlelo lokusebenza olungenazo.</string>
-    <string name="import_floris_old_body">Le timu ibhalelwe i-FlorisBoard 0.4. Leyo fomethi yesitayela ayifani naleyo eseku-FlorisBoard 0.5 nangaphezulu, ngakho uhlelo lokusebenza alukwazi ukuyifunda. Itimu lolu hlelo lokusebenza oluyifunde kancane kuphela ingakunika imibala ifayela lakho elingakaze liyisethe.</string>
-    <string name="import_floris_old_title">Itimu yeyebhodi le-FlorisBoard elidala</string>
     <string name="import_floris_title">Itimu evela ku-FlorisBoard</string>
     <string name="import_floris_unreadable_body">Uhlelo lokusebenza alukwazi ukufunda leli fayela le-FlorisBoard. Kungenzeka lonakele, noma kungenzeka kube yiphakethe lolimi noma isandiso sekhibhodi esikhundleni setimu.</string>
     <string name="import_icons_body">Uhlelo lokusebenza lufaka iphakethe bese liyilivula. Izithonjana zalo zithatha indawo yezithonjana ezakhelwe ngaphakathi. Uhlelo lokusebenza lugcina izithonjana ozibekile.</string>

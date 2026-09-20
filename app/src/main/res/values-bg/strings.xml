@@ -1391,14 +1391,10 @@
     <string name="import_floris_done_family">Приложението запази %1$s с %2$d облика. Отворете „Теми“, за да ги разгледате.</string>
     <string name="import_floris_dropped_contrast">Цветът на текста на клавиша беше твърде близък до цвета на самия клавиш, за да бъде четлив. Приложението избра цвят, който можете да прочетете.</string>
     <string name="import_floris_dropped_corners">Клавишите имат един размер на ъгъла. Файлът задава различен размер за всеки ъгъл.</string>
-    <string name="import_floris_dropped_dynamic">Цветовете, които следват тапета на системата, не са зададени. Включете Material You в „Теми“ за същия ефект.</string>
     <string name="import_floris_dropped_elevation">Сенките на клавишите не са зададени. Това приложение чертае клавишите без сянка.</string>
     <string name="import_floris_dropped_font">Шрифтът не е включен. Шрифтът е отделна добавка в това приложение.</string>
-    <string name="import_floris_dropped_old">Част от файла използва по-стария формат за стил на FlorisBoard.</string>
     <string name="import_floris_dropped_spacing">Разстоянието около отделните части не е зададено. Това приложение задава разстоянието между клавишите за цялата клавиатура.</string>
     <string name="import_floris_dropped_unknown">Някои части от името на файла посочват елементи на клавиатурата, които това приложение няма.</string>
-    <string name="import_floris_old_body">Тази тема е написана за FlorisBoard 0.4. Този формат на стила не е същият като този във FlorisBoard 0.5 и по-нови версии, така че приложението не може да го прочете. Тема, която това приложение е прочело само частично, би ви дала цветове, които вашият файл никога не е задавал.</string>
-    <string name="import_floris_old_title">Темата е за по-стара версия на FlorisBoard</string>
     <string name="import_floris_title">Тема от FlorisBoard</string>
     <string name="import_floris_unreadable_body">Приложението не може да прочете този файл на FlorisBoard. Възможно е да е повреден или да е езиков пакет или разширение за клавиатура, вместо тема.</string>
     <string name="import_icons_body">Приложението инсталира пакета и го активира. Неговите икони заменят вградените. Приложението запазва иконите, които сте задали.</string>

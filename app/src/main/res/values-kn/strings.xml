@@ -1392,14 +1392,10 @@
     <string name="import_floris_done_family">ಆಪ್ %2$d ನೋಟಗಳೊಂದಿಗೆ %1$s ಅನ್ನು ಉಳಿಸಿದೆ. ಅದನ್ನು ನೋಡಲು ಥೀಮ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ.</string>
     <string name="import_floris_dropped_contrast">ಕೀ ಪಠ್ಯದ ಬಣ್ಣವು ಕೀ ಬಣ್ಣಕ್ಕೆ ತುಂಬಾ ಹತ್ತಿರದಲ್ಲಿದ್ದ ಕಾರಣ ಓದಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಅಪ್ಲಿಕೇಶನ್ ನೀವು ಓದಬಲ್ಲ ಬಣ್ಣವನ್ನು ಆಯ್ಕೆ ಮಾಡಿದೆ.</string>
     <string name="import_floris_dropped_corners">ಕೀಲಿಗಳು ಒಂದು ಮೂಲೆಯ ಗಾತ್ರವನ್ನು ಹೊಂದಿವೆ. ಫೈಲ್ ಪ್ರತಿ ಮೂಲೆಗೆ ವಿಭಿನ್ನ ಗಾತ್ರವನ್ನು ಹೊಂದಿಸುತ್ತದೆ.</string>
-    <string name="import_floris_dropped_dynamic">ಸಿಸ್ಟಮ್ ವಾಲ್‌ಪೇಪರ್ ಅನ್ನು ಅನುಸರಿಸುವ ಬಣ್ಣಗಳನ್ನು ಹೊಂದಿಸಲಾಗಿಲ್ಲ. ಅದೇ ಪರಿಣಾಮಕ್ಕಾಗಿ ಥೀಮ್‌ಗಳಲ್ಲಿ ಮೆಟೀರಿಯಲ್ ಯೂ (Material You) ಅನ್ನು ಆನ್ ಮಾಡಿ.</string>
     <string name="import_floris_dropped_elevation">ಕೀ ನೆರಳುಗಳನ್ನು ಹೊಂದಿಸಲಾಗಿಲ್ಲ. ಈ ಆಪ್ ನೆರಳು ಇಲ್ಲದೆ ಕೀಗಳನ್ನು ಸೆಳೆಯುತ್ತದೆ.</string>
     <string name="import_floris_dropped_font">ಫಾಂಟ್ ಅನ್ನು ಸೇರಿಸಲಾಗಿಲ್ಲ. ಈ ಆಪ್‌ನಲ್ಲಿ ಫಾಂಟ್ ಒಂದು ಪ್ರತ್ಯೇಕ ಆಡ್-ಆನ್ ಆಗಿದೆ.</string>
-    <string name="import_floris_dropped_old">ಫೈಲ್‌ನ ಭಾಗವು ಹಳೆಯ FlorisBoard ಶೈಲಿಯ ಸ್ವರೂಪವನ್ನು ಬಳಸುತ್ತದೆ.</string>
     <string name="import_floris_dropped_spacing">ಪ್ರತ್ಯೇಕ ಭಾಗಗಳ ಸುತ್ತಲಿನ ಅಂತರವನ್ನು ಹೊಂದಿಸಲಾಗಿಲ್ಲ. ಈ ಆ್ಯಪ್ ಇಡೀ ಕೀಬೋರ್ಡ್‌ಗಾಗಿ ಕೀ ಅಂತರವನ್ನು ಹೊಂದಿಸುತ್ತದೆ.</string>
     <string name="import_floris_dropped_unknown">ಫೈಲ್‌ನ ಕೆಲವು ಭಾಗಗಳು ಈ ಅಪ್ಲಿಕೇಶನ್ ಹೊಂದಿರದ ಕೀಬೋರ್ಡ್ ಅಂಶಗಳನ್ನು ಹೆಸರಿಸುತ್ತವೆ.</string>
-    <string name="import_floris_old_body">ಈ ಥೀಮ್ ಅನ್ನು FlorisBoard 0.4 ಗಾಗಿ ಬರೆಯಲಾಗಿದೆ. ಆ ಶೈಲಿಯ ಸ್ವರೂಪವು FlorisBoard 0.5 ಮತ್ತು ನಂತರದ ಆವೃತ್ತಿಯಲ್ಲಿರುವಂತೆಯೇ ಇಲ್ಲ, ಆದ್ದರಿಂದ ಅಪ್ಲಿಕೇಶನ್ ಅದನ್ನು ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ. ಈ ಅಪ್ಲಿಕೇಶನ್ ಭಾಗಶಃ ಮಾತ್ರ ಓದಿದ ಥೀಮ್ ನಿಮ್ಮ ಫೈಲ್ ಎಂದಿಗೂ ಹೊಂದಿಸದ ಬಣ್ಣಗಳನ್ನು ನಿಮಗೆ ನೀಡುತ್ತದೆ.</string>
-    <string name="import_floris_old_title">ಥೀಮ್ ಹಳೆಯ ಫ್ಲೋರಿಸ್ ಬೋರ್ಡ್‌ಗಾಗಿ ಇದೆ</string>
     <string name="import_floris_title">FlorisBoard ನಿಂದ ಥೀಮ್</string>
     <string name="import_floris_unreadable_body">ಈ ಅಪ್ಲಿಕೇಶನ್ ಈ FlorisBoard ಫೈಲ್ ಅನ್ನು ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ. ಇದು ಹಾನಿಗೊಳಗಾಗಿರಬಹುದು, ಅಥವಾ ಇದು ಥೀಮ್‌ಗೆ ಬದಲಾಗಿ ಭಾಷಾ ಪ್ಯಾಕ್ ಅಥವಾ ಕೀಬೋರ್ಡ್ ವಿಸ್ತರಣೆಯಾಗಿರಬಹುದು.</string>
     <string name="import_icons_body">ಅಪ್ಲಿಕೇಶನ್ ಪ್ಯಾಕ್ ಅನ್ನು ಸ್ಥಾಪಿಸುತ್ತದೆ ಮತ್ತು ಅದನ್ನು ಆನ್ ಮಾಡುತ್ತದೆ. ಇದರ ಐಕಾನ್‌ಗಳು ಅಂತರ್ನಿರ್ಮಿತ ಐಕಾನ್‌ಗಳನ್ನು ಬದಲಾಯಿಸುತ್ತವೆ. ಅಪ್ಲಿಕೇಶನ್ ನೀವು ಹೊಂದಿಸಿದ ಐಕಾನ್‌ಗಳನ್ನು ಇರಿಸುತ್ತದೆ.</string>
