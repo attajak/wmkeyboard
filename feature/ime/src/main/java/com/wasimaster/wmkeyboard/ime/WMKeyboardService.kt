@@ -5066,6 +5066,15 @@ open class WMKeyboardService : InputMethodService() {
             }
         }
         if (composingReplaced) {
+            // The buffer goes and the region behind it goes with it. The
+            // editor reported none — that is the branch's own condition — but
+            // an editor that restyles as you type is exactly the one that
+            // stops reporting a region it still holds, and a span nothing is
+            // tracking silently moves the next positional edit somewhere else
+            // (#267, and see [onSuggestionTapped]). Finishing a composition
+            // never changes the text, only the span, so where the report was
+            // honest this costs nothing.
+            currentInputConnection?.finishComposingText()
             composing = StringBuilder()
             suggestionJob?.cancel()
             _uiState.update {
@@ -14313,6 +14322,24 @@ open class WMKeyboardService : InputMethodService() {
         stopVoiceForManualInput()
         vibrate()
         val ic = currentInputConnection ?: return
+        // Every path below edits by position: a delete counted back from the
+        // caret, or a commit that means "here". Neither is measured from the
+        // caret while the field holds a composing region —
+        // `deleteSurroundingText` widens its span to swallow the region before
+        // it counts, and `commitText` replaces the region rather than the
+        // selection — so a region the keyboard is not tracking moves the edit
+        // somewhere else entirely: the old word keeps the half the widened
+        // delete missed, and the new one lands over whatever the region
+        // covered (#267).
+        //
+        // An empty buffer means no region in the field is the keyboard's: an
+        // app can arm one over text it was just handed (#113), and an editor
+        // that restyles as you type can leave one of ours behind. So drop it
+        // before anything below measures a thing — the same rule
+        // [dropComposingForSelectionEdit] applies to every other positional
+        // edit in the service. A live buffer keeps its region, which is the
+        // one the ordinary pick is *supposed* to replace.
+        if (composing.isEmpty()) ic.finishComposingText()
         // Email-field completion: no composing region backs the tapped address,
         // so the partial token the user typed is removed by hand before the full
         // address is committed. Not learned — an address is not a dictionary word,
