@@ -42,8 +42,11 @@ import android.view.inputmethod.InlineSuggestionsResponse
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.graphics.drawable.toBitmap
@@ -53,6 +56,7 @@ import android.content.ClipDescription
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
@@ -504,6 +508,9 @@ import com.wasimaster.wmkeyboard.ime.ui.IconDefaults
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardFonts
 import com.wasimaster.wmkeyboard.ime.ui.emojiStickerJobId
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardScreen
+import com.wasimaster.wmkeyboard.ime.ui.LocalSystemNavBarPainter
+import com.wasimaster.wmkeyboard.ime.ui.SystemNavBarPainter
+import com.wasimaster.wmkeyboard.ime.ui.navigationBarWantsDarkIcons
 import android.inputmethodservice.InputMethodService
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -3712,8 +3719,70 @@ open class WMKeyboardService : InputMethodService() {
         // A named composable, not an inline lambda: the argument list below
         // compiles to one method, and inside setContent's lambda it crossed
         // the JVM's 64K method-size ceiling.
-        view.setContent { ServiceKeyboardContent() }
+        view.setContent {
+            // Provided out here rather than inside ServiceKeyboardContent: that
+            // one method is already up against the JVM's 64K ceiling.
+            CompositionLocalProvider(
+                LocalSystemNavBarPainter provides systemNavBarPainter,
+            ) {
+                ServiceKeyboardContent()
+            }
+        }
         return view
+    }
+
+    /**
+     * Stable across recompositions so the keyboard's effect only re-runs when
+     * the colour itself moves.
+     */
+    private val systemNavBarPainter = SystemNavBarPainter { color -> paintSystemNavBar(color) }
+
+    /** What the IME window's navigation bar looked like before we touched it. */
+    private var defaultNavBarColor: Int? = null
+    private var defaultNavBarLightIcons: Boolean? = null
+
+    /**
+     * Paints the system navigation bar under the keyboard in the keyboard's own
+     * colour (issue #255).
+     *
+     * Only Android 14 and below need this. From 15 the IME window is laid out
+     * edge to edge and the board draws the band itself; below 15 the window
+     * stops above the bar and the bar takes this window's `navigationBarColor`,
+     * which — never set — stayed the platform's. On stock Android that default
+     * is close enough to go unnoticed; on some OEM light-mode builds it is
+     * opaque white under a coloured keyboard.
+     *
+     * `setNavigationBarColor` is a no-op from API 35 on, where the board is
+     * already drawing there, so the call needs no version gate of its own.
+     *
+     * @param color the opaque colour to paint, or null to restore the default.
+     */
+    private fun paintSystemNavBar(color: Color?) {
+        val imeWindow = window?.window ?: return
+        val decor = imeWindow.decorView
+        val controller = WindowInsetsControllerCompat(imeWindow, decor)
+        if (defaultNavBarColor == null) {
+            defaultNavBarColor = imeWindow.navigationBarColor
+            defaultNavBarLightIcons = controller.isAppearanceLightNavigationBars
+        }
+        if (color == null) {
+            imeWindow.navigationBarColor = defaultNavBarColor ?: return
+            controller.isAppearanceLightNavigationBars = defaultNavBarLightIcons ?: false
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                imeWindow.isNavigationBarContrastEnforced = true
+            }
+            return
+        }
+        imeWindow.navigationBarColor = color.toArgb()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // The colour we just set is opaque, so the system's own contrast
+            // scrim can only wash it out.
+            imeWindow.isNavigationBarContrastEnforced = false
+        }
+        // "Light navigation bar" means a light bar with dark icons on it — the
+        // hide-keyboard chevron and the language-switch glyph, which the system
+        // draws, not us.
+        controller.isAppearanceLightNavigationBars = navigationBarWantsDarkIcons(color)
     }
 
     @androidx.compose.runtime.Composable

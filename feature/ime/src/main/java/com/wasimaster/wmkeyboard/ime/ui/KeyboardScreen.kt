@@ -1725,6 +1725,10 @@ private fun DockedKeyboardFrame(
                 // Under the keys and over the board, so a theme that gives the
                 // gesture bar a colour of its own paints only that band (#109).
                 NavigationBarBackground(LocalKbTheme.current)
+                // Below Android 15 the band above is never reached -- the IME
+                // window stops short of the bar -- so the window itself is
+                // asked for the colour instead (#255).
+                SystemNavigationBarColor(LocalKbTheme.current)
                 // navigationBarsPadding keeps the bottom key row clear of the
                 // gesture-navigation bar on edge-to-edge (SDK 35+) IME windows.
                 val oneHanded = state.settings.oneHandedMode
