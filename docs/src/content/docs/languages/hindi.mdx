@@ -57,6 +57,12 @@ None of this is part of autocorrect and the autocorrect toggle doesn't control i
 
 Swiping over this layout draws a romanization, not a Hindi word, so the stroke is decoded against romanized spellings and the result is turned into Devanagari. The known-spellings list is always there for that. The **Hinglish** word list (about a million romanized spellings, under Hinglish in the language catalogue) widens it a lot if you download it, and each spelling a swipe decodes goes through the same three layers above. See [Glide typing](/typing/glide-typing/).
 
+## Converting text you already have
+
+With the layout on, selecting text puts two more chips on the [selection bar](/smart/selection-actions/). **Hindi** rewrites selected Hinglish in Devanagari, word by word, through the same three layers. **Hinglish** goes the other way and writes Devanagari back in Latin letters the way it's said, so करना comes out `karna` and नमस्ते comes out `namaste`.
+
+The [typing test](/tools/utilities/) has a Hindi word list and quotations of its own, so it works before you've downloaded anything.
+
 ## Editing
 
 Backspace inside a word you're still typing removes one Latin letter per press, and the Devanagari redraws. Over text that's already committed it removes one code point, or a whole conjunct if you turn on <SettingsPath path="Languages & layouts / Hindi / Clusters / Conjunct-aware backspace" />. That toggle is off by default and applies to all three Hindi layouts.

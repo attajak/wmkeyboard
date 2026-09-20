@@ -1,7 +1,10 @@
 package com.wasimaster.wmkeyboard.core.prediction
 
 import com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic
+import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.BengaliRomanizer
+import com.wasimaster.wmkeyboard.core.transliteration.DevanagariRomanizer
 import com.wasimaster.wmkeyboard.core.transliteration.HindiPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.HindiPhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
@@ -37,6 +40,12 @@ class PhoneticScheme(
     val variants: (String) -> List<String>,
     /** The lenient index over `word to frequency` entries of the language's list. */
     val buildIndex: (List<Pair<String, Int>>) -> PhoneticIndex,
+    /** Whether [Char] belongs to a word of the script — letters and signs, not digits or the danda. */
+    val isNative: (Char) -> Boolean,
+    /** The script's spelling variants folded to the one the word lists use, before [romanizeWord]. */
+    val normalize: (String) -> String,
+    /** The other direction: one native word as people would spell it in Latin letters. */
+    val romanizeWord: (String) -> String,
 )
 
 /** The phonetic schemes that ship, by language. */
@@ -49,6 +58,9 @@ object PhoneticSchemes {
         transliterate = AvroPhonetic::transliterate,
         variants = { listOf(AvroPhonetic.transliterate(it)) },
         buildIndex = ::BengaliPhoneticIndex,
+        isNative = BengaliGraphemes::isBengali,
+        normalize = BengaliRomanizer::normalize,
+        romanizeWord = BengaliRomanizer::romanizeWord,
     )
 
     /**
@@ -64,6 +76,9 @@ object PhoneticSchemes {
         transliterate = HindiPhonetic::transliterate,
         variants = HindiPhonetic::variants,
         buildIndex = ::HindiPhoneticIndex,
+        isNative = DevanagariRomanizer::isDevanagari,
+        normalize = DevanagariRomanizer::normalize,
+        romanizeWord = DevanagariRomanizer::romanizeWord,
     )
 
     val all: List<PhoneticScheme> = listOf(BENGALI, HINDI)

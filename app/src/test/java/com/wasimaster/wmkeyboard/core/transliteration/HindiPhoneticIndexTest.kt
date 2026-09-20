@@ -105,6 +105,26 @@ class HindiPhoneticIndexTest {
         assertEquals("लंबा", top("lamba"))
     }
 
+    @Test fun aClosingAThatIsSaidAndNotWritten() {
+        val tatsama = HindiPhoneticIndex(
+            listOf("मित्र" to 900, "मित्रा" to 100, "सत्य" to 500, "खर्च" to 900, "खर्चा" to 200, "कम" to 900),
+        )
+        assertEquals("मित्र", tatsama.lookup("mitra").first())
+        assertEquals("सत्य", tatsama.lookup("satya").first())
+        // खर्च is said "kharch": its conjunct needs no vowel, so the typed one is real.
+        assertEquals(listOf("खर्चा"), tatsama.lookup("kharcha"))
+        assertTrue(tatsama.lookup("kama").isEmpty())
+        // A doubled one asked for आ outright.
+        assertEquals(listOf("मित्रा"), tatsama.lookup("mitraa"))
+    }
+
+    @Test fun tokensThatAreNotWordsAreLeftOut() {
+        // Scraped lists carry है। with its danda attached, and commoner than है.
+        val scraped = HindiPhoneticIndex(listOf("है।" to 9000, "है" to 7000, "2024" to 50, "OK" to 40))
+        assertEquals(listOf("है"), scraped.lookup("hai"))
+        assertEquals(0, scraped.frequencyOf("है।"))
+    }
+
     @Test fun frequenciesAndEmptiness() {
         assertEquals(900, index.frequencyOf("करना"))
         assertEquals(0, index.frequencyOf("कर्ना"))

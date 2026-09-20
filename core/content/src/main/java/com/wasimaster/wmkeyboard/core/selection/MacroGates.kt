@@ -16,6 +16,8 @@ data class ContentFlags(
     val multiLine: Boolean = false,
     val hasLatin: Boolean = false,
     val hasBengali: Boolean = false,
+    /** Devanagari letters or signs; its digits and the danda do not count. */
+    val hasDevanagari: Boolean = false,
     val hasForeignDigits: Boolean = false,
     val colour: Colour? = null,
     val dateTime: DateTimeHit? = null,
@@ -62,6 +64,8 @@ data class MacroGates(
     val aiAvailable: Boolean = false,
     /** The Bengali dictionary and spelling map are loaded. */
     val bengaliLoaded: Boolean = false,
+    /** The Hindi phonetic backend is loaded, which it is while that layout is enabled. */
+    val hindiLoaded: Boolean = false,
     /** The host app is in [ChatSyntax]'s table. */
     val chatSyntax: ChatMarkup? = null,
     val ttsAvailable: Boolean = true,

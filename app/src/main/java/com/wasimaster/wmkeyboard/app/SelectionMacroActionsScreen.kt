@@ -248,6 +248,8 @@ internal fun macroDescription(macro: SelectionMacro): Int = when (macro) {
     SelectionMacro.AI -> R.string.selection_macros_desc_ai
     SelectionMacro.TO_BANGLA -> R.string.selection_macros_desc_to_bangla
     SelectionMacro.TO_BANGLISH -> R.string.selection_macros_desc_to_banglish
+    SelectionMacro.TO_HINDI -> R.string.selection_macros_desc_to_hindi
+    SelectionMacro.TO_HINGLISH -> R.string.selection_macros_desc_to_hinglish
     SelectionMacro.DIGITS_LATIN -> R.string.selection_macros_desc_digits_latin
     SelectionMacro.COLOUR -> R.string.selection_macros_desc_colour
     SelectionMacro.JSON_FORMAT -> R.string.selection_macros_desc_json

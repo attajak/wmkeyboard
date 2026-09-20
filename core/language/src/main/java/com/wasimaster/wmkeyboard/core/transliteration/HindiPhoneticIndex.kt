@@ -56,6 +56,11 @@ class HindiPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
 
     init {
         for ((word, frequency) in entries) {
+            // Scraped lists carry tokens that are not words — है। with its
+            // danda still attached outranks है in the list this was written
+            // against — and the fold would file them under the real word's key,
+            // where the commoner token wins and the danda gets committed.
+            if (!word.all(::isWordChar)) continue
             val slots = devanagariSlots(word)
             if (slots.isEmpty()) continue
             val seen = HashSet<String>(4)
@@ -76,11 +81,36 @@ class HindiPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
 
     override fun lookup(input: String): List<String> {
         val typed = foldRoman(input)
-        val bucket = byKey[typed.key] ?: return emptyList()
-        if (bucket.size == 1) return listOf(bucket[0].word)
-        return bucket
-            .sortedByDescending { it.frequency.toLong() * SCALE / handicap(it, typed.detail) }
-            .map { it.word }
+        val bucket = byKey[typed.key].orEmpty()
+        val spoken = spokenFinalA(typed)
+        if (spoken.isEmpty()) {
+            if (bucket.size <= 1) return bucket.map { it.word }
+            return bucket
+                .sortedByDescending { it.frequency.toLong() * SCALE / handicap(it, typed.detail) }
+                .map { it.word }
+        }
+        val bare = typed.detail.dropLast(1)
+        val scored = bucket.map { it.word to it.frequency.toLong() * SCALE / handicap(it, typed.detail) } +
+            spoken.map { it.word to it.frequency.toLong() * SCALE / (handicap(it, bare) * SPOKEN_FINAL_A) }
+        return scored.sortedByDescending { it.second }.map { it.first }.distinct()
+    }
+
+    /**
+     * Words a closing "a" was typed for that the key has no closing "a" in:
+     * "mitra" for मित्र, "satya" for सत्य, "dharma" for धर्म. Hindi writes no
+     * final vowel there and says one all the same, because the word ends on a
+     * conjunct that cannot be said without it. Only a conjunct closing on य, र
+     * or व is like that: खर्च is said "kharch", so "kharcha" stays खर्चा, and
+     * "kama" does not start finding कम.
+     */
+    private fun spokenFinalA(typed: Folded): List<Entry> {
+        val key = typed.key
+        if (key.length < 3 || key.last() != 'a') return emptyList()
+        if ((typed.detail.last().code - DETAIL_BASE) and TAIL_MASK == TAIL_LONG) return emptyList()
+        return byKey[key.dropLast(1)].orEmpty().filter { entry ->
+            val word = entry.word
+            word.length >= 3 && word[word.length - 2] == VIRAMA && word.last() in "यरव"
+        }
     }
 
     override fun frequencyOf(word: String): Int = freqByWord[word] ?: 0
@@ -116,6 +146,10 @@ class HindiPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
                 // it is how everyone writes "ladki".
                 w == TAIL_LONG && last -> 1L
                 w == TAIL_LONG && t == TAIL_NONE -> LONG_NOT_HINTED
+                // One "a" typed, आ found. Casual, but dearer than the other
+                // casual omissions, because here there is usually a rival that
+                // matches exactly: "namak" is नमक before it is नामक.
+                w == TAIL_LONG && t == TAIL_SHORT -> LONG_TYPED_SINGLE
                 w == TAIL_LONG || w == TAIL_DIPHTHONG -> FOUND_NOT_TYPED
                 // An "a" typed where the word has a conjunct: "dharam" for धर्म.
                 t == TAIL_SHORT && w == TAIL_JOINED -> SCHWA_IN_CONJUNCT
@@ -139,6 +173,11 @@ class HindiPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
 
         /** Left a detail out that the word has — ordinary casual spelling. */
         private const val FOUND_NOT_TYPED = 2L
+
+        private const val LONG_TYPED_SINGLE = 4L
+
+        /** A closing "a" that the word says and does not write. See [spokenFinalA]. */
+        private const val SPOKEN_FINAL_A = 2L
 
         /** The word has आ where not even a single "a" was typed. */
         private const val LONG_NOT_HINTED = 8L
@@ -164,6 +203,10 @@ class HindiPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
         private const val NUKTA = '़'
         private const val ANUSVARA = 'ं'
         private const val CANDRABINDU = 'ँ'
+
+        /** Devanagari letters and signs, and the joiners: not its digits, not the danda. */
+        private fun isWordChar(c: Char): Boolean =
+            c.code in 0x0900..0x0963 || c.code in 0x0970..0x097F || c == '‍' || c == '‌'
 
         /** A canonical key and, char for char, the detail the fold threw away. */
         class Folded(val key: String, val detail: String)

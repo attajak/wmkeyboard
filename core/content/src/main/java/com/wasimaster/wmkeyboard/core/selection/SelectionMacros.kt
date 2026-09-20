@@ -66,6 +66,10 @@ enum class SelectionMacro {
     AI,
     TO_BANGLA,
     TO_BANGLISH,
+    /** Romanized Hindi in the selection rewritten in Devanagari, as the Hindi phonetic layout would have typed it. */
+    TO_HINDI,
+    /** Devanagari in the selection written back in Latin letters. */
+    TO_HINGLISH,
     /** Digits of another script rewritten as `0-9`. */
     DIGITS_LATIN,
     /** A colour code: a swatch on the chip, and a ladder of its other spellings. */
@@ -138,6 +142,8 @@ enum class SelectionMacro {
             AI -> R.string.core_content_selection_macro_ai
             TO_BANGLA -> R.string.core_content_selection_macro_to_bangla
             TO_BANGLISH -> R.string.core_content_selection_macro_to_banglish
+            TO_HINDI -> R.string.core_content_selection_macro_to_hindi
+            TO_HINGLISH -> R.string.core_content_selection_macro_to_hinglish
             DIGITS_LATIN -> R.string.core_content_selection_macro_digits_latin
             COLOUR -> R.string.core_content_selection_macro_colour
             JSON_FORMAT -> R.string.core_content_selection_macro_json
@@ -178,7 +184,7 @@ enum class SelectionMacro {
             CASE_LOWER, CASE_TITLE, CASE_UPPER, CASE_SENTENCE,
             CASE_CAMEL, CASE_SNAKE, CASE_KEBAB, CASE_CONSTANT -> MacroCategory.FORMAT
             DIGITS_LATIN, COLOUR, JSON_FORMAT, BASE64_DECODE, URL_DECODE -> MacroCategory.CONVERT
-            TRANSLATE, GRAMMAR_FIX, AI, TO_BANGLA, TO_BANGLISH -> MacroCategory.LANGUAGE
+            TRANSLATE, GRAMMAR_FIX, AI, TO_BANGLA, TO_BANGLISH, TO_HINDI, TO_HINGLISH -> MacroCategory.LANGUAGE
             SEARCH, READ_ALOUD, TIME_ZONES -> MacroCategory.LOOKUP
             SHARE, CALL, SMS, WHATSAPP, EMAIL, OPEN, QR, ADD_CONTACT, MAP, CALENDAR -> MacroCategory.OPEN_IN
         }
@@ -327,6 +333,7 @@ object SelectionMacros {
         SelectionMacro.FORMAT, SelectionMacro.FIND, SelectionMacro.REPLACE,
         SelectionMacro.LINES_SORT, SelectionMacro.LINES_DEDUPE, SelectionMacro.LINES_NUMBER, SelectionMacro.LINES_BULLET,
         SelectionMacro.GRAMMAR_FIX, SelectionMacro.AI, SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
+        SelectionMacro.TO_HINDI, SelectionMacro.TO_HINGLISH,
         SelectionMacro.DIGITS_LATIN, SelectionMacro.COLOUR, SelectionMacro.FANCY,
         SelectionMacro.CHAT_BOLD, SelectionMacro.CHAT_ITALIC, SelectionMacro.CHAT_STRIKE, SelectionMacro.CHAT_MONO,
         SelectionMacro.JSON_FORMAT, SelectionMacro.BASE64_DECODE, SelectionMacro.URL_DECODE,
@@ -346,6 +353,7 @@ object SelectionMacros {
         SelectionMacro.FIND, SelectionMacro.REPLACE,
         SelectionMacro.LINES_SORT, SelectionMacro.LINES_DEDUPE, SelectionMacro.LINES_NUMBER, SelectionMacro.LINES_BULLET,
         SelectionMacro.GRAMMAR_FIX, SelectionMacro.AI, SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
+        SelectionMacro.TO_HINDI, SelectionMacro.TO_HINGLISH,
         SelectionMacro.DIGITS_LATIN, SelectionMacro.COLOUR,
         SelectionMacro.CALL, SelectionMacro.SMS, SelectionMacro.WHATSAPP, SelectionMacro.EMAIL,
         SelectionMacro.OPEN, SelectionMacro.QR, SelectionMacro.ADD_CONTACT, SelectionMacro.FANCY,
@@ -458,6 +466,11 @@ object SelectionMacros {
         SelectionMacro.AI -> gates.aiAvailable
         SelectionMacro.TO_BANGLA -> gates.bengaliLoaded && gates.content.hasLatin && !gates.content.hasBengali
         SelectionMacro.TO_BANGLISH -> gates.content.hasBengali
+        // Both ways need Hindi to be a language this keyboard is typing: Devanagari
+        // is a dozen languages' script, and a Marathi selection is not asking to
+        // be read as Hindi by someone who never enabled it.
+        SelectionMacro.TO_HINDI -> gates.hindiLoaded && gates.content.hasLatin && !gates.content.hasDevanagari
+        SelectionMacro.TO_HINGLISH -> gates.hindiLoaded && gates.content.hasDevanagari
         SelectionMacro.DIGITS_LATIN -> gates.content.hasForeignDigits
         SelectionMacro.COLOUR -> gates.content.colour != null
         SelectionMacro.MAP -> gates.content.place != null
@@ -673,6 +686,7 @@ object SelectionMacros {
     fun detectContent(text: String, options: DetectOptions = DetectOptions()): ContentFlags {
         var hasLatin = false
         var hasBengali = false
+        var hasDevanagari = false
         var hasForeignDigits = false
         var hasDigit = false
         var lines = 0
@@ -689,6 +703,7 @@ object SelectionMacros {
                     when {
                         c in 'a'..'z' || c in 'A'..'Z' -> hasLatin = true
                         c in '0'..'9' -> hasDigit = true
+                        c.code in 0x0900..0x0963 || c.code in 0x0970..0x097F -> hasDevanagari = true
                         c.code in 0x0980..0x09FF -> {
                             hasBengali = true
                             if (c in '০'..'৯') {
@@ -731,6 +746,7 @@ object SelectionMacros {
             multiLine = lines >= 2,
             hasLatin = hasLatin,
             hasBengali = hasBengali,
+            hasDevanagari = hasDevanagari,
             hasForeignDigits = hasForeignDigits,
             colour = colour,
             dateTime = dateTime,

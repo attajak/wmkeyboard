@@ -162,7 +162,6 @@ import com.wasimaster.wmkeyboard.core.prediction.CompositeWordSource
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
 import com.wasimaster.wmkeyboard.core.prediction.MappedNgramPack
 import com.wasimaster.wmkeyboard.core.prediction.MappedTrie
-import com.wasimaster.wmkeyboard.core.prediction.BanglishConverter
 import com.wasimaster.wmkeyboard.core.prediction.SpellingMap
 import com.wasimaster.wmkeyboard.core.prediction.KeyProximity
 import com.wasimaster.wmkeyboard.core.prediction.OctopusCandidate
@@ -197,6 +196,7 @@ import com.wasimaster.wmkeyboard.core.prediction.PendingLearn
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticBackend
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticScheme
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
+import com.wasimaster.wmkeyboard.core.prediction.RomanizedConverter
 import com.wasimaster.wmkeyboard.core.prediction.Revision
 import com.wasimaster.wmkeyboard.core.prediction.SecondaryDictionary
 import com.wasimaster.wmkeyboard.core.prediction.SeedBigrams
@@ -22664,6 +22664,7 @@ open class WMKeyboardService : InputMethodService() {
                 (grammarAvailable || grammarProbePending()),
             aiAvailable = aiReady,
             bengaliLoaded = suggestionEngine != null && bengaliAssetEntries.isNotEmpty(),
+            hindiLoaded = suggestionEngine?.extraPhonetic?.containsKey(PhoneticSchemes.HINDI.languageId) == true,
             chatSyntax = ChatSyntax.forPackage(currentPackage),
             content = content,
         )
@@ -22727,9 +22728,17 @@ open class WMKeyboardService : InputMethodService() {
     private var macroSeq = 0
     private var macroJob: Job? = null
 
-    /** The Banglish converter, rebuilt when the engine or its Bengali sources change. */
-    private var banglish: BanglishConverter? = null
-    private var banglishSources: Pair<Any, Any>? = null
+    /**
+     * The romanized converters by language, each beside what it was built
+     * over, so one is rebuilt when the engine or its sources change — the
+     * inverted spelling map inside is the expensive part.
+     */
+    private val romanizedConverters = HashMap<String, Pair<PhoneticBackendKey, RomanizedConverter>>()
+
+    /** Identity of what a converter was built from: the spelling map and the index. */
+    private class PhoneticBackendKey(val spellings: Any, val index: Any) {
+        fun sameAs(other: PhoneticBackendKey) = spellings === other.spellings && index === other.index
+    }
 
     /**
      * A macro chip was tapped.
@@ -22781,7 +22790,9 @@ open class WMKeyboardService : InputMethodService() {
             SelectionMacro.GRAMMAR_FIX -> fixGrammarInSelection(offer)
             SelectionMacro.AI -> onPanelChange(PanelMode.AI)
             SelectionMacro.READ_ALOUD -> toggleReadAloud(offer)
-            SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH -> convertBengali(offer, macro)
+            SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
+            SelectionMacro.TO_HINDI, SelectionMacro.TO_HINGLISH,
+            -> convertRomanized(offer, macro)
             SelectionMacro.SEARCH -> openMacroSearch(PanelMode.WEB_SEARCH, text)
             SelectionMacro.TRANSLATE -> openMacroSearch(PanelMode.TRANSLATE, text)
             SelectionMacro.QR -> onPanelChange(PanelMode.QR_GEN)
@@ -23240,7 +23251,12 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val speaker = vocabSpeaker ?: VocabSpeaker(this).also { vocabSpeaker = it }
-        val locale = if (offer.content.hasBengali) Locale("bn", "BD") else Locale.getDefault()
+        val locale = when {
+            offer.content.hasBengali -> Locale("bn", "BD")
+            // Devanagari is not only Hindi, but Hindi is the voice every device has.
+            offer.content.hasDevanagari -> Locale("hi", "IN")
+            else -> Locale.getDefault()
+        }
         val vocab = _uiState.value.settings.vocabulary
         setSpeaking(true)
         speaker.speak(offer.text, null, vocab.ttsRate, vocab.ttsPitch, locale) {
@@ -23254,27 +23270,42 @@ open class WMKeyboardService : InputMethodService() {
         if (_uiState.value.selectionMacros?.speaking == true) setSpeaking(false)
     }
 
-    /** The converter for the engine's current Bengali sources, built when they change. */
-    private fun banglishConverter(): BanglishConverter? {
+    /**
+     * The converter for [languageId]'s current sources, built when they change,
+     * or null while that language is not loaded: Bengali with no word list at
+     * all, or a phonetic language whose layout is not enabled.
+     */
+    private fun romanizedConverter(languageId: String): RomanizedConverter? {
         val engine = suggestionEngine ?: return null
-        if (bengaliAssetEntries.isEmpty()) return null
-        val sources = engine.spellingMap to engine.bengaliIndex
-        if (banglishSources !== null && banglishSources!!.first === sources.first && banglishSources!!.second === sources.second) {
-            return banglish
-        }
-        banglishSources = sources
-        return BanglishConverter(engine.spellingMap, engine.bengaliIndex).also { banglish = it }
+        val bengali = languageId == PhoneticSchemes.BENGALI.languageId
+        if (bengali && bengaliAssetEntries.isEmpty()) return null
+        if (!bengali && languageId !in engine.extraPhonetic) return null
+        val backend = engine.phoneticBackend(languageId) ?: return null
+        val key = PhoneticBackendKey(backend.spellings, backend.index)
+        romanizedConverters[languageId]?.let { (builtFrom, converter) -> if (builtFrom.sameAs(key)) return converter }
+        return RomanizedConverter(backend.scheme, backend.spellings, backend.index)
+            .also { romanizedConverters[languageId] = key to it }
     }
 
-    private fun convertBengali(offer: SelectionMacroOffer, macro: SelectionMacro) {
-        val converter = banglishConverter() ?: return toast(R.string.ime_selection_macro_bengali_unavailable_toast)
+    /** Both directions of both languages: [macro] says which. */
+    private fun convertRomanized(offer: SelectionMacroOffer, macro: SelectionMacro) {
+        val hindi = macro == SelectionMacro.TO_HINDI || macro == SelectionMacro.TO_HINGLISH
+        val scheme = if (hindi) PhoneticSchemes.HINDI else PhoneticSchemes.BENGALI
+        val converter = romanizedConverter(scheme.languageId) ?: return toast(
+            if (hindi) {
+                R.string.ime_selection_macro_hindi_unavailable_toast
+            } else {
+                R.string.ime_selection_macro_bengali_unavailable_toast
+            },
+        )
+        val toNative = macro == SelectionMacro.TO_BANGLA || macro == SelectionMacro.TO_HINDI
         if (offer.busy != null) return
         val seq = ++macroSeq
         setMacroBusy(macro)
         macroJob?.cancel()
         macroJob = serviceScope.launch {
             val out = withContext(Dispatchers.Default) {
-                if (macro == SelectionMacro.TO_BANGLA) converter.toBengali(offer.text) else converter.toBanglish(offer.text)
+                if (toNative) converter.toNative(offer.text) else converter.toRoman(offer.text)
             }
             if (!offerStillLive(offer, seq)) return@launch
             setMacroBusy(null)

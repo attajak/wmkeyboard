@@ -175,6 +175,25 @@ class SelectionMacrosTest {
     }
 
     @Test
+    fun `the hindi pair is for someone typing hindi phonetically, both ways`() {
+        val all = SelectionMacros.configurable.toSet()
+        val latin = ContentFlags(hasLatin = true)
+        val devanagari = ContentFlags(hasDevanagari = true)
+        val mixed = ContentFlags(hasLatin = true, hasDevanagari = true)
+        fun offer(loaded: Boolean, content: ContentFlags) =
+            SelectionMacros.offer(SelectionKind.TEXT, all, MacroGates(hindiLoaded = loaded, content = content))
+        assertTrue(SelectionMacro.TO_HINDI in offer(true, latin))
+        assertTrue(SelectionMacro.TO_HINDI !in offer(false, latin))
+        assertTrue(SelectionMacro.TO_HINDI !in offer(true, mixed))
+        assertTrue(SelectionMacro.TO_HINGLISH in offer(true, devanagari))
+        assertTrue(SelectionMacro.TO_HINGLISH in offer(true, mixed))
+        // Devanagari is Marathi and Nepali too: no Hindi, no offer to read it as Hindi.
+        assertTrue(SelectionMacro.TO_HINGLISH !in offer(false, devanagari))
+        // Loading Hindi says nothing about Bengali, and the other way round.
+        assertTrue(SelectionMacro.TO_BANGLA !in offer(true, latin))
+    }
+
+    @Test
     fun `the lists agree with each other`() {
         assertEquals(SelectionMacros.configurable.toSet() - SelectionMacros.ladderOnly, SelectionMacros.defaultOrder.toSet())
         assertEquals(SelectionMacros.defaultOrder.size, SelectionMacros.defaultOrder.distinct().size)
@@ -203,6 +222,11 @@ class SelectionMacrosTest {
     fun `content flags read what is there`() {
         assertTrue(SelectionMacros.detectContent("ami valo asi").hasLatin)
         assertTrue(SelectionMacros.detectContent("আমি ভালো").hasBengali)
+        assertTrue(SelectionMacros.detectContent("कैसे हो").hasDevanagari)
+        assertFalse(SelectionMacros.detectContent("আমি ভালো").hasDevanagari)
+        // Its digits and the danda are not words, and the digits still count as foreign.
+        assertFalse(SelectionMacros.detectContent("२०२४ ।").hasDevanagari)
+        assertTrue(SelectionMacros.detectContent("२०२४").hasForeignDigits)
         assertTrue(SelectionMacros.detectContent("০১৭").hasForeignDigits)
         assertTrue(SelectionMacros.detectContent("a\nb").multiLine)
         assertFalse(SelectionMacros.detectContent("a\n\n").multiLine)

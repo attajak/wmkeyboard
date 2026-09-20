@@ -647,6 +647,7 @@
     <string name="ime_selection_macro_grammar_unavailable_toast">The grammar checker is not available</string>
     <string name="ime_selection_macro_find_none_toast">No other match</string>
     <string name="ime_selection_macro_bengali_unavailable_toast">Bengali is not loaded</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi phonetic is not loaded</string>
     <string name="ime_selection_macro_no_app_toast">No app can open this</string>
     <string name="ime_find_not_addressable">This field cannot be searched</string>
     <!-- The Find and replace panel. -->

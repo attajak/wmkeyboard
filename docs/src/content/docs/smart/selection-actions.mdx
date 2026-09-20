@@ -61,6 +61,8 @@ Two things sit outside the order. **Undo** is always first while there is someth
 | AI, and the AI buttons | Text, with the [AI](/tools/ai/) tool on and set up | On |
 | Bangla | Latin text, with Bengali among your languages | On |
 | Banglish | Bengali text | On |
+| Hindi | Latin text, with the [Hindi phonetic](/languages/hindi/) layout enabled | On |
+| Hinglish | Devanagari text, with the Hindi phonetic layout enabled | On |
 | Digits | Digits in another script | On |
 | Colour | A colour code | On |
 | Call, Message, WhatsApp | A phone number | On |
@@ -157,6 +159,8 @@ Mono on several lines uses the app's fenced block where it has one. These four a
 
 - **Bangla** turns Banglish into Bengali script, word by word: the spelling map first (`tmr` to তোমার), then the same phonetic reading the suggestion strip uses, which is what lets `asi`, `achi` and `achhi` all land on আছি, and only then a literal transliteration. Digits and punctuation stay as they were. It appears on Latin text while Bengali is one of your languages.
 - **Banglish** goes the other way, writing Bengali script back in Latin letters by pronunciation (তোমার to `tomar`, ধন্যবাদ to `dhonnobad`, কী to `ki`), with the most readable spelling from the map for words it knows.
+- **Hindi** does the same for Hinglish: the known-spellings list first (`theek` to ठीक, `nhi` to नहीं), then the downloaded Hindi word list through the same phonetic match the strip uses, then the rules. It needs the Hindi phonetic layout switched on, because that is what loads all three. On Latin text with both Bangla and Hindi available you get both chips, and you pick the language you wrote.
+- **Hinglish** writes Devanagari back in Latin letters the way it is said, not the way it is spelled: करना is `karna` and नमस्ते is `namaste`, because spoken Hindi drops the inherent vowel in the first and keeps it in the second. Long vowels are doubled inside a word and single at its end (`naam`, `theek`, `mera`, `ladki`).
 - **Grammar** runs the [Grammar](/smart/grammar/) checker over the selection alone and commits every suggestion at once, offline. It shows a spinner while it works and says so when there is nothing to fix.
 - **AI** opens the [AI](/tools/ai/) tool on the selection. Under **AI buttons** you can give any AI action a chip of its own (Formal, Shorter, Friendly and Summarize are made for it): one tap runs it on the selection and the result lands in the AI panel, ready to apply. Applying replaces the selection, not the field around it.
 - **Translate** sends the selection to the [translate](/tools/translate/) tool.

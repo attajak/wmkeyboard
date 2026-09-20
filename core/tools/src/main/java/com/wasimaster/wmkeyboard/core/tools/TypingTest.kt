@@ -109,10 +109,18 @@ object TypingWordPools {
         )
     }
 
+    val hindi: TypingWordPool by lazy {
+        TypingWordPool(
+            HindiCommonWords.map(::decomposeDevanagariNukta),
+            HindiQuotes.map(::decomposeDevanagariNukta),
+        )
+    }
+
     /** The pool that ships for [languageId], or null when it has to come from a dictionary. */
     fun bundled(languageId: String): TypingWordPool? = when (languageId) {
         "en" -> english
         "bn" -> bengali
+        "hi" -> hindi
         else -> null
     }
 
@@ -150,6 +158,26 @@ object TypingWordPools {
         text.replace("\u09AF\u09BC", "\u09DF")
             .replace("\u09A1\u09BC", "\u09DC")
             .replace("\u09A2\u09BC", "\u09DD")
+
+    /**
+     * Devanagari goes the other way. Its nukta letters (क़ ख़ ग़ ज़ ड़ ढ़ फ़ य़) have
+     * precomposed code points that NFC itself takes apart, so base letter plus
+     * nukta is what the layouts type, what the phonetic transliterator writes
+     * and what the word lists carry — and a prompt an editor saved precomposed
+     * would miss on every one of them.
+     */
+    fun decomposeDevanagariNukta(text: String): String {
+        if (text.none { it in '\u0958'..'\u095F' }) return text
+        val out = StringBuilder(text.length + 4)
+        for (c in text) {
+            val base = DEVANAGARI_NUKTA_BASES.getOrNull(c - '\u0958')
+            if (c in '\u0958'..'\u095F' && base != null) out.append(base).append('\u093C') else out.append(c)
+        }
+        return out.toString()
+    }
+
+    /** Bases of U+0958..U+095F, in code point order. */
+    private const val DEVANAGARI_NUKTA_BASES = "\u0915\u0916\u0917\u091C\u0921\u0922\u092B\u092F"
 }
 
 /**
@@ -241,6 +269,44 @@ private val BengaliQuotes: List<String> = listOf(
     "একটা ভালো কীবোর্ড হাতের নিচে হারিয়ে যায়, তখন অক্ষর নয়, বাক্য নিয়ে ভাবা যায়।",
     "ধীরে কিন্তু নিয়মিত লিখলে গতি নিজে থেকেই আসে, তাড়াহুড়ো করে কিছু হয় না।",
     "প্রতিদিন একটু একটু করে লিখলে হাত নিজেই পথ চিনে নেয়।",
+)
+
+/**
+ * Common Hindi words, chosen the same way as the Bengali list: short,
+ * everyday, hand-picked — Hindi ships no word list to rank by, and a prompt
+ * built from a downloaded one only exists once the download does.
+ */
+private val HindiCommonWords: List<String> = listOf(
+    "मैं", "तुम", "आप", "हम", "वह", "यह", "वे", "ये", "कौन", "क्या",
+    "कब", "कहाँ", "क्यों", "कैसे", "कितना", "और", "या", "लेकिन", "पर", "तो",
+    "भी", "ही", "नहीं", "हाँ", "मत", "अब", "तब", "जब", "फिर", "अभी",
+    "कभी", "आज", "कल", "दिन", "रात", "सुबह", "शाम", "समय", "साल", "महीना",
+    "घर", "काम", "नाम", "बात", "लोग", "देश", "शहर", "गाँव", "पानी", "खाना",
+    "दूध", "चाय", "रोटी", "फल", "हाथ", "पैर", "आँख", "मन", "दिल", "सिर",
+    "माँ", "पिता", "भाई", "बहन", "बेटा", "बेटी", "दोस्त", "बच्चा", "आदमी", "औरत",
+    "एक", "दो", "तीन", "चार", "पाँच", "छह", "सात", "आठ", "नौ", "दस",
+    "है", "हैं", "था", "थी", "थे", "हो", "होना", "करना", "जाना", "आना",
+    "देना", "लेना", "कहना", "देखना", "सुनना", "बोलना", "लिखना", "चलना", "रहना", "मिलना",
+    "खाना", "पीना", "सोना", "उठना", "बैठना", "सोचना", "समझना", "जानना", "मानना", "रखना",
+    "किया", "गया", "आया", "दिया", "लिया", "कहा", "देखा", "सुना", "मिला", "रहा",
+    "अच्छा", "बुरा", "बड़ा", "छोटा", "नया", "पुराना", "लंबा", "सुंदर", "सही", "गलत",
+    "बहुत", "कम", "थोड़ा", "सब", "कुछ", "कोई", "हर", "दूसरा", "पहला", "साथ",
+    "बाद", "पहले", "ऊपर", "नीचे", "अंदर", "बाहर", "पास", "दूर", "यहाँ", "वहाँ",
+    "मेरा", "तेरा", "उसका", "हमारा", "अपना", "किसी", "जैसे", "ऐसे", "वैसे", "इसलिए",
+    "प्यार", "खुशी", "दुख", "डर", "आशा", "सच", "झूठ", "शांति", "मदद", "कोशिश",
+    "सवाल", "जवाब", "किताब", "कहानी", "गाना", "खेल", "रास्ता", "गाड़ी", "पैसा", "दुकान",
+    "बारिश", "धूप", "हवा", "आग", "पेड़", "फूल", "नदी", "पहाड़", "आसमान", "धरती",
+    "भाषा", "हिंदी", "भारत", "दुनिया", "जीवन", "मौसम", "गर्मी", "सर्दी", "जल्दी", "धीरे",
+)
+
+/** Hindi passages for quote mode: two old and out of copyright, the rest written for this. */
+private val HindiQuotes: List<String> = listOf(
+    "सारे जहाँ से अच्छा हिंदोस्ताँ हमारा, हम बुलबुलें हैं इसकी, ये गुलसिताँ हमारा।",
+    "करत करत अभ्यास के जड़मति होत सुजान, रसरी आवत जात ते सिल पर परत निसान।",
+    "जहाँ चाह वहाँ राह, और बूँद बूँद से ही सागर भरता है।",
+    "एक अच्छा कीबोर्ड हाथों के नीचे खो जाता है, तब अक्षर नहीं, वाक्य सोचे जाते हैं।",
+    "धीरे लेकिन रोज़ लिखो तो रफ़्तार अपने आप आती है, जल्दबाज़ी से कुछ नहीं होता।",
+    "रोज़ थोड़ा थोड़ा लिखने से हाथ अपने आप रास्ता पहचान लेते हैं।",
 )
 
 /** Punctuation marks sprinkled in when the punctuation option is on. */
