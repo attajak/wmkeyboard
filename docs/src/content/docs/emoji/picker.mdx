@@ -54,6 +54,12 @@ Search understands more than an exact keyword match, layered in this order, wher
 
 English and Bangla keywords are merged into the same index, so a query never needs to name a language. বিড়াল and "cat" surface the same set of cat emoji, and that holds for every cat-family emoji in the catalog, not only the smiley ones. Typing in a language you haven't installed a keyword pack for still works for anything carrying English or Bangla tags. To download a pack for another language, see [Emoji search in your language](/emoji/customization/#emoji-search-in-your-language).
 
+### The strip completes your query
+
+While the search box has the keys, the suggestion strip sits in the row directly above them, and what it offers comes from the emoji catalogue rather than from your language's word list. Type `ca` and it offers `car`, `cat`, `card`, `cash` — not `cable` or `cathedral`, which are perfectly good words that no emoji is tagged with and that would leave you staring at an empty grid. Everything on the strip finds at least one emoji.
+
+It completes against everything the search itself understands: keywords in every language you've got a pack for, shortcode names like `tada`, and the curated synonyms above. A second word narrows to terms that share an emoji with the first, so `red hea` offers `heart` ahead of `headphone`. Tapping a term replaces the word at the caret and leaves a space, ready for the next one.
+
 ## Picking a skin tone
 
 <SettingsPath path="Emoji / Skin tone / Default skin tone" />

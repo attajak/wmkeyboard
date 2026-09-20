@@ -89,6 +89,70 @@ class EmojiSearch(
             .map { entries[it.key] }
     }
 
+    /**
+     * Query terms this index can actually answer, to complete the word being
+     * typed in the emoji panel's search box (#161).
+     *
+     * The box searches the emoji catalog, so completing its text against the
+     * *language's* word list offers spellings no emoji is filed under —
+     * "cathedral", "catalogue", "catastrophe" while the user is typing "cat" —
+     * and every one of them lands on an empty grid. These are the terms the
+     * index holds instead: the catalog's keywords in every language merged
+     * into it, the shortcode names, and the synonyms [search] expands. Each
+     * one finds at least one emoji.
+     *
+     * [context] is the rest of the query, so a second word narrows to terms
+     * that share an emoji with the first: "red hea" offers "heart", which 💗
+     * carries both of, ahead of "headphone", which nothing red is. Terms
+     * already in the query are dropped — they would score nothing new — and so
+     * is [typed] itself, since it is in the box already and a query box has no
+     * autocorrect for a chip to hold off.
+     */
+    fun completions(typed: String, context: List<String> = emptyList(), limit: Int = 6): List<String> {
+        val prefix = typed.trim().lowercase()
+        if (prefix.isEmpty() || limit <= 0) return emptyList()
+        val already = context.mapTo(HashSet()) { it.trim().lowercase() }.apply { add(prefix) }
+        // Which emoji the rest of the query is already about, so a completion
+        // can be judged on whether it points at the same ones.
+        val narrowed = HashSet<Int>()
+        for (token in already) if (token != prefix) tokenIndex[token]?.let(narrowed::addAll)
+
+        /** Term to the number of catalog entries it reaches. */
+        val reach = HashMap<String, Int>()
+        /** ...of which the rest of the query names too. */
+        val shared = HashMap<String, Int>()
+        for ((keyword, indices) in tokenIndex) {
+            if (keyword.length <= prefix.length || !keyword.startsWith(prefix)) continue
+            if (keyword in already) continue
+            reach[keyword] = indices.size
+            if (narrowed.isNotEmpty()) shared[keyword] = indices.count { it in narrowed }
+        }
+        // Shortcodes carry the names the keywords do not — `tada`, `joy`. The
+        // underscored ones are left out: `search` already spells them as
+        // spaces, so they reach the catalog through the keywords above, and a
+        // strip offering `face_with_monocle` reads as nothing anyone types.
+        for (code in shortcodes.namesWithPrefix(prefix, limit * SHORTCODE_OVERDRAW)) {
+            if ('_' in code || code in already) continue
+            reach.putIfAbsent(code, 1)
+        }
+        for ((word, expansions) in SYNONYMS) {
+            if (word.length <= prefix.length || !word.startsWith(prefix)) continue
+            if (word in already || word in reach) continue
+            val expanded = expansions.sumOf { tokenIndex[it]?.size ?: 0 }
+            if (expanded > 0) reach[word] = expanded
+        }
+
+        return reach.entries
+            .sortedWith(
+                compareByDescending<Map.Entry<String, Int>> { shared[it.key] ?: 0 }
+                    .thenByDescending { it.value }
+                    .thenBy { it.key.length }
+                    .thenBy { it.key },
+            )
+            .take(limit)
+            .map { it.key }
+    }
+
     private fun score(token: String, weight: Int, scores: HashMap<Int, Int>) {
         tokenIndex[token]?.forEach { scores.merge(it, weight, Int::plus) }
     }
@@ -129,6 +193,14 @@ class EmojiSearch(
     }
 
     companion object {
+
+        /**
+         * How many shortcode names [completions] pulls per strip slot, before
+         * the underscored ones are dropped. Most of the table is underscored,
+         * so asking for exactly the slots on offer would usually leave none.
+         */
+        private const val SHORTCODE_OVERDRAW = 8
+
         /**
          * Concept expansion for common searches. Keys are query tokens,
          * values are additional index tokens to look up. Deliberately small

@@ -33,8 +33,27 @@ class EmojiShortcodes private constructor(
      * reached by more than one alias appear once.
      */
     fun prefix(code: String, limit: Int): List<String> {
-        val query = normalize(code)
-        if (query.isEmpty() || limit <= 0) return emptyList()
+        if (limit <= 0) return emptyList()
+        return names(normalize(code))
+            .mapNotNull { byCode[it] }
+            .distinct()
+            .take(limit)
+    }
+
+    /**
+     * The shortcode *names* starting with [prefix], shortest first — what
+     * [prefix] looks up, before it trades each one for its emoji.
+     *
+     * The emoji search box completes a half-typed query against these (see
+     * `EmojiSearch.completions`): `tad` offers `tada`, which is a name the
+     * search can answer, where the keyword index alone has never heard of it.
+     */
+    fun namesWithPrefix(prefix: String, limit: Int): List<String> =
+        if (limit <= 0) emptyList() else names(normalize(prefix)).take(limit)
+
+    /** Every code starting with [query], shortest first. */
+    private fun names(query: String): List<String> {
+        if (query.isEmpty()) return emptyList()
         // binarySearch returns the insertion point (negated, minus one) for a
         // miss; either way that index is the first code >= the query.
         val found = codes.binarySearch(query)
@@ -44,11 +63,7 @@ class EmojiShortcodes private constructor(
             matches.add(codes[i])
             i++
         }
-        return matches
-            .sortedWith(compareBy({ it.length }, { it }))
-            .mapNotNull { byCode[it] }
-            .distinct()
-            .take(limit)
+        return matches.sortedWith(compareBy({ it.length }, { it }))
     }
 
     companion object {

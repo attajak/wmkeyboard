@@ -156,4 +156,54 @@ class EmojiSearchTest {
         assertTrue("😺" in r)
         assertTrue("🐈" in r)
     }
+
+    // ---- Query completions for the panel's search box (#161) ----
+
+    private fun completions(typed: String, vararg rest: String) =
+        search.completions(typed, rest.toList(), limit = 6)
+
+    /** Every term offered has to find something; that is the whole point. */
+    @Test fun everyCompletionFindsEmoji() {
+        for (prefix in listOf("ca", "hap", "fi", "part", "he", "tad", "roc")) {
+            for (term in completions(prefix)) {
+                assertTrue("\"$term\" (from \"$prefix\") should find emoji", results(term).isNotEmpty())
+            }
+        }
+    }
+
+    @Test fun completionsCompleteTheTypedWord() {
+        val terms = completions("cat")
+        assertTrue("expected completions of 'cat', got $terms", terms.isNotEmpty())
+        assertTrue(terms.all { it.startsWith("cat") })
+        // The word already in the box is not offered back to it.
+        assertTrue("cat" !in terms)
+    }
+
+    /** The word list's "cathedral" is not an emoji keyword, so it is not here. */
+    @Test fun completionsAreNotDictionaryWords() {
+        val terms = completions("cat")
+        assertTrue("cathedral" !in terms)
+        assertTrue("catastrophe" !in terms)
+    }
+
+    /** `tada` is a shortcode name the keyword index has never heard of. */
+    @Test fun shortcodeNamesAreOffered() {
+        assertTrue("tada" in completions("tad"))
+        // ...but not the underscored ones, which read as keywords anyway.
+        assertTrue(completions("face_wi").isEmpty())
+    }
+
+    @Test fun contextNarrowsToTermsThatShareAnEmoji() {
+        val terms = completions("hea", "red")
+        assertTrue("expected 'heart' first for 'red hea', got $terms", terms.first() == "heart")
+    }
+
+    @Test fun aTermAlreadyInTheQueryIsNotOfferedAgain() {
+        assertTrue("heart" !in completions("hea", "heart"))
+    }
+
+    @Test fun emptyPrefixOffersNothing() {
+        assertTrue(completions("").isEmpty())
+        assertTrue(completions("   ").isEmpty())
+    }
 }

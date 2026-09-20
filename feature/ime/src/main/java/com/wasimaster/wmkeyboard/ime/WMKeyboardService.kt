@@ -6695,31 +6695,74 @@ open class WMKeyboardService : InputMethodService() {
             }
             return
         }
-        val engine = suggestionEngine ?: return
         val word = caret.wordAtCaret()
         val previous = caret.wordBeforeCaret()
         val phonetic = state.composer.phoneticLanguage
         val slots = state.settings.suggestionStrip.slotCount
         val key = state.captureKey()
         val snapshot = caret
+        val ask = captureSuggestSource(target, caret, word, previous, phonetic, slots) ?: return
         captureSuggestJob = serviceScope.launch {
             delay(CAPTURE_SUGGEST_DEBOUNCE_MS)
-            val words = withContext(Dispatchers.Default) {
-                // An empty word in front of the caret is the between-words
-                // case, and `suggest` answers that with next-word predictions
-                // itself — the same split the field's own strip makes.
-                engine.suggest(
-                    composing = word.typed,
-                    previousWord = previous,
-                    phoneticLanguage = phonetic,
-                    limit = slots,
-                )
-            }
+            val words = withContext(Dispatchers.Default) { ask() }
             _uiState.update { s ->
                 // Only for the buffer and the caret it was asked about.
                 if (s.captureKey() != key || s.captureCaretText() != snapshot) s
                 else s.copy(captureSuggestions = words)
             }
+        }
+    }
+
+    /**
+     * Where [refreshCaptureSuggestions] gets [target]'s words from, or null
+     * when that source has not loaded yet.
+     *
+     * Two sources, because two of these boxes are searching two different
+     * things. Everything that holds prose — the AI prompt, a plugin's field,
+     * Find and replace — is completed against the language's word list, which
+     * is what its text is going to be read as. The emoji panel's search box is
+     * not: it queries the emoji catalog, so the word list would offer it
+     * spellings no emoji is filed under ("cathedral" for "cat"), and every one
+     * of those picks lands on an empty grid. It gets the catalog's own query
+     * terms instead — keywords in every language merged into it, shortcode
+     * names, the synonyms the search expands — so a chip always has results
+     * behind it.
+     *
+     * The other three searches stay on the word list: the clipboard and the
+     * personal dictionary are searched over the user's own text, and a media
+     * query is a phrase for a remote service, so prose is what all three want.
+     */
+    private fun captureSuggestSource(
+        target: CaptureTarget,
+        caret: CaretText,
+        // Qualified: this class carries a private `CaretWord` of its own, for
+        // the strip's view of the word around the field's caret.
+        word: com.wasimaster.wmkeyboard.ime.CaretWord,
+        previous: String?,
+        phonetic: String?,
+        slots: Int,
+    ): (() -> List<String>)? {
+        if (target == CaptureTarget.EMOJI_SEARCH) {
+            val index = emojiSearch ?: return null
+            // The rest of the query, the word being typed aside: emoji search
+            // accumulates over the query's words, so those are what a
+            // completion has to share an emoji with.
+            val rest = (caret.text.take(word.start) + " " + caret.text.drop(word.end))
+                .split(' ', '\t', '\n')
+                .filter { it.isNotBlank() }
+            return { index.completions(word.typed, context = rest, limit = slots) }
+        }
+        val engine = suggestionEngine ?: return null
+        return {
+            // An empty word in front of the caret is the between-words case,
+            // and `suggest` answers that with next-word predictions itself —
+            // the same split the field's own strip makes.
+            engine.suggest(
+                composing = word.typed,
+                previousWord = previous,
+                phoneticLanguage = phonetic,
+                limit = slots,
+            )
         }
     }
 
