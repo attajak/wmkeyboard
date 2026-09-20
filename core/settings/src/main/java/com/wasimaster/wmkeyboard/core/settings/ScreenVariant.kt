@@ -33,6 +33,16 @@ enum class ScreenVariant(val suffix: String, @StringRes val labelRes: Int) {
     /** Everything except [PORTRAIT], which is stored as the base values. */
     val isOverride: Boolean get() = this != PORTRAIT
 
+    /**
+     * The one shape [applyScreenDefaults] sizes: a *phone* turned sideways.
+     *
+     * Not [LANDSCAPE_UNFOLDED]. "Unfolded" is decided by the smallest screen
+     * dimension, so a tablet sideways is still at least [UNFOLDED_MIN_DP] tall
+     * — it has the room, and [applyDeviceForm] has already given it a shorter
+     * key than a phone's.
+     */
+    val wantsLandscapePhoneSizing: Boolean get() = this == LANDSCAPE
+
     companion object {
         /** Width in dp at or above which a device counts as unfolded. */
         const val UNFOLDED_MIN_DP = 600
@@ -95,6 +105,95 @@ data class SizingOverride(
 }
 
 /**
+ * The settings as a screen shape would have shipped them, before the user, the
+ * theme or a per-shape override has said anything.
+ *
+ * Only landscape has anything to say, and it is the shape that needs it. A
+ * phone turned sideways keeps its width and loses more than half its height: a
+ * 362dp-tall window against the 750dp it had upright. The portrait board — six
+ * rows of 48dp keys with 4dp of air above and below each — is about 465dp tall,
+ * so it did not merely look cramped there, it did not fit at all. The bottom
+ * rows were laid out past the window's edge and clipped away, which is issue
+ * #251.
+ *
+ * ## The numbers
+ *
+ * Measured off Gboard on the same screen, which is the bar users judge this
+ * against: a 32.5dp key face on a 41dp row pitch, four rows, no digit row, for
+ * a board of roughly 202dp — a little over half the window. [KeyHeightDp] of 33
+ * on this keyboard's own 4dp gap is the same 41dp pitch, and the digit row's
+ * height is scaled by the same ratio for the users who keep it.
+ *
+ * ## Where it sits in the overlay chain
+ *
+ * First, beside [applyDeviceForm] and before everything else:
+ * `applyDeviceForm` → `applyScreenDefaults` → `applyMode` →
+ * [applyThemeOverrides] → [resolvedFor]. Being first is what makes these
+ * defaults rather than overrides — a theme's authored key height beats them,
+ * and a number the user set for this shape beats that. `ThemeOverridesTest`
+ * pins the ordering.
+ *
+ * ## What is gated and what is not
+ *
+ * The heights are not gated on the user having left portrait alone, which is
+ * where this parts company with [applyDeviceForm]. A tablet is a
+ * normal-proportioned screen and a user who dialled in a key height meant it
+ * there; a landscape phone is short whatever anyone prefers upright, and
+ * carrying a 64dp portrait key across would put the board back through the
+ * bottom of the window. The per-shape editor is where they say otherwise.
+ *
+ * The digit row is gated, because it is a row the user asked for rather than a
+ * size the screen dictates. Someone who turned digits on means them sideways
+ * too; someone who never touched the switch gets Gboard's landscape, which is
+ * four rows.
+ *
+ * The toolbar is scaled rather than replaced, for a third reason again: unlike
+ * the key heights it has no per-shape override to escape to, so a number the
+ * user picked has to survive the rotation in proportion instead of being
+ * overwritten by one of ours.
+ */
+fun KeyboardSettings.applyScreenDefaults(variant: ScreenVariant): KeyboardSettings {
+    if (!variant.wantsLandscapePhoneSizing) return this
+    val digits = if (layoutBehavior.numberRowUntouched) false else numberRow
+    val barHeight = (toolbarHeightDp * LandscapeChromeScale).roundToInt()
+    val toolWidth = (toolbarBehavior.toolWidthDp * LandscapeChromeScale).roundToInt()
+    // Hand back the same instance when there is nothing to say: the service
+    // caches this and the composable remembers on it by identity, so a
+    // fresh-but-equal copy would re-resolve the theme and the screen variant on
+    // every unrelated preference write. [applyDeviceForm]'s bargain exactly.
+    val boardSized = keyHeightDp == LandscapeKeyHeightDp &&
+        numberRowHeightDp == LandscapeNumberRowHeightDp
+    val chromeSized = barHeight == toolbarHeightDp &&
+        toolWidth == toolbarBehavior.toolWidthDp
+    if (boardSized && chromeSized && digits == numberRow) return this
+    return copy(
+        keyHeightDp = LandscapeKeyHeightDp,
+        numberRowHeightDp = LandscapeNumberRowHeightDp,
+        numberRow = digits,
+        toolbarHeightDp = barHeight,
+        toolbarBehavior = toolbarBehavior.copy(toolWidthDp = toolWidth),
+    )
+}
+
+/** Gboard's landscape key face, to the dp; see [applyScreenDefaults]. */
+private const val LandscapeKeyHeightDp = 33
+
+/** The digit row, kept in proportion for the users who switch it back on. */
+private const val LandscapeNumberRowHeightDp = 29
+
+/**
+ * How much of its upright size the bar chrome keeps sideways: [LandscapeKeyHeightDp]
+ * over the 48dp key it replaces, near enough.
+ *
+ * The toolbar is sized in dp of its own and so did not shrink with the board.
+ * At the shipped numbers that left a 38dp tool circle sitting on a bar above a
+ * 33dp key — chrome drawn larger than the keys it serves, which is the one
+ * proportion a keyboard cannot get away with. Upright the same circle is 38dp
+ * against a 48dp key and reads correctly, which is why this only shows sideways.
+ */
+private const val LandscapeChromeScale = 0.7f
+
+/**
  * The settings as they apply on [variant]: the base values with that
  * variant's overrides layered on top.
  *
@@ -151,19 +250,23 @@ fun KeyboardSettings.resolvedFor(variant: ScreenVariant): KeyboardSettings {
  * it must not fold the scale into the height the way the render path does.
  */
 fun KeyboardSettings.sizingValuesFor(variant: ScreenVariant): SizingOverride {
+    // Read off the shape-defaulted base, not the raw one, or the editor would
+    // show a landscape phone the portrait numbers while the board is drawn at
+    // the landscape ones (see [applyScreenDefaults]).
+    val base = applyScreenDefaults(variant)
     val override = sizingOverrides[variant]
     return SizingOverride(
-        keyHeightDp = override?.keyHeightDp ?: keyHeightDp,
-        numberRowHeightDp = override?.numberRowHeightDp ?: numberRowHeightDp,
-        bottomPaddingDp = override?.bottomPaddingDp ?: bottomPaddingDp,
-        keyboardWidthPercent = override?.keyboardWidthPercent ?: keyboardWidthPercent,
-        fontScale = override?.fontScale ?: fontScale,
-        keyboardAlignment = override?.keyboardAlignment ?: keyboardAlignment,
+        keyHeightDp = override?.keyHeightDp ?: base.keyHeightDp,
+        numberRowHeightDp = override?.numberRowHeightDp ?: base.numberRowHeightDp,
+        bottomPaddingDp = override?.bottomPaddingDp ?: base.bottomPaddingDp,
+        keyboardWidthPercent = override?.keyboardWidthPercent ?: base.keyboardWidthPercent,
+        fontScale = override?.fontScale ?: base.fontScale,
+        keyboardAlignment = override?.keyboardAlignment ?: base.keyboardAlignment,
         keyboardScale = override?.keyboardScale ?: 1f,
-        keyGapScale = override?.keyGapScale ?: keyGapScale,
-        sidePadLeftScale = override?.sidePadLeftScale ?: layoutBehavior.sidePadLeftScale,
-        sidePadRightScale = override?.sidePadRightScale ?: layoutBehavior.sidePadRightScale,
-        bottomRowHeightDp = override?.bottomRowHeightDp ?: layoutBehavior.bottomRowHeightDp,
-        numberRow = override?.numberRow ?: numberRow,
+        keyGapScale = override?.keyGapScale ?: base.keyGapScale,
+        sidePadLeftScale = override?.sidePadLeftScale ?: base.layoutBehavior.sidePadLeftScale,
+        sidePadRightScale = override?.sidePadRightScale ?: base.layoutBehavior.sidePadRightScale,
+        bottomRowHeightDp = override?.bottomRowHeightDp ?: base.layoutBehavior.bottomRowHeightDp,
+        numberRow = override?.numberRow ?: base.numberRow,
     )
 }

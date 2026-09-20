@@ -9,7 +9,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 
-Every height, width and gap on WM Keyboard is a slider rather than a fixed number. Shrink the keyboard toward one thumb, split it down the middle for a wide screen, or detach it into a floating panel. Sizing you set for portrait carries everywhere by default, and landscape and unfolded screens can each override it, right down to scaling the whole keyboard at once.
+Every height, width and gap on WM Keyboard is a slider rather than a fixed number. Shrink the keyboard toward one thumb, split it down the middle for a wide screen, or detach it into a floating panel. Sizing you set for portrait carries to the unfolded shapes by default, landscape starts from its own shorter board, and all three can override any of it, right down to scaling the whole keyboard at once.
 
 <PhoneFrame caption="The Size & position group: key height, key spacing, width and position sliders.">
   ![The Size & position group: key height, key spacing, width and position sliders.](@assets/screens/typing/size-position-settings-overview.webp)
@@ -49,20 +49,41 @@ Each padding is claimed at its own edge before **Keyboard position** gets a say,
 
 Portrait is the base size: everything in the two sections above. Three other screen shapes can each override any of it, namely **Landscape**, **Portrait, unfolded** and **Landscape, unfolded**. Whatever you leave untouched on an override follows portrait, so tuning one shape never means setting up the rest.
 
+Landscape is the one exception, and it starts shorter rather than following portrait. A phone turned sideways keeps its width but has less than half the height, so a portrait-sized board would take the whole screen. See [what landscape starts at](#what-landscape-starts-at) below.
+
 "Unfolded" isn't read from a fold sensor. It's decided by the screen's smallest dimension being at least 600dp, checked live as the configuration changes. That deliberately reads a phone turned sideways as still "not unfolded", since it's wide but still a phone. A genuinely large screen counts as "unfolded" however it's held, whether that's an opened foldable's inner display or a tablet that never folded at all. There's no separate "folded" state in the code. Portrait's values are what a folded or ordinary phone always used, which is why the settings screen's own caption calls portrait your "folded" size.
 
 Tap a shape's row to expand its editor:
 
 - **Keyboard scale**, a whole-keyboard multiplier from 50% to 150%. It exists only on these three override shapes; portrait has no base scale of its own. It multiplies key height and number row height together, so a foldable's roomy inner display can run a smaller keyboard than its cover screen, or the reverse, without re-dialing each height by hand.
 - **Key height**, **Number row height** (if the number row is on), **Bottom padding**, **Keyboard width**, **Font size**, **Key spacing**, **Left padding**, **Right padding**, **Bottom row height**, and, when width is under 100%, **Keyboard position**. Same ranges as their portrait counterparts above.
-- **Number row**, the one override that isn't a number at all. Landscape is what it's there for: it has the least room for a sixth row and the most need for the keys underneath it, so plenty of people run the digits in portrait and turn them off sideways.
-- **Follow portrait again**, which appears only once a shape has at least one override set. It clears every override for that shape in one tap.
+- **Number row**, the one override that isn't a number at all. Landscape is what it's there for: it has the least room for a sixth row and the most need for the keys underneath it, which is why sideways starts without it unless you've set the digit row by hand.
+- **Follow portrait again**, which appears only once a shape has at least one override set. It clears every override for that shape in one tap. On landscape that returns it to the landscape defaults below, not to your portrait numbers.
 
 <PhoneFrame caption="Per-screen sizing: Landscape expanded, showing the Keyboard scale slider.">
   {/* shot: typing/size-position-per-screen */}
 </PhoneFrame>
 
 Everything in [one-handed, split and floating](#one-handed-mode) below is global instead. It applies the same whichever screen shape you're on.
+
+## What landscape starts at
+
+A phone turned sideways has roughly 360dp of height where portrait has 750dp. Left to follow portrait, the board came out taller than the window it had to fit in, and the bottom rows — the shift row and the spacebar — were drawn past the bottom of the screen and cut off. So landscape starts from its own numbers instead, measured against what Gboard does on the same screen:
+
+| | Portrait | Landscape |
+| --- | --- | --- |
+| Key height | 48dp | 33dp |
+| Number row height | 42dp | 29dp |
+| Number row | On | Off, unless you set it yourself |
+| Toolbar height and tool width | 44dp / 38dp | 70% of whatever you've set |
+
+That lands the whole board at a little over half the screen, leaving the app you're typing into the rest. The digits aren't lost with the row switched off: they stay as the small hint labels on the top letter row, and a long press still types them.
+
+These are defaults, not limits. Anything you set for landscape in the per-screen editor above wins over all of them, and a theme that authors its own key height wins over them too. Turning the number row on by hand anywhere keeps it on sideways as well.
+
+The toolbar is scaled rather than replaced, because it has no per-screen override of its own to escape to: a tool width you picked survives the rotation in proportion. Without it the tool circles stayed at their portrait size and ended up drawn larger than the keys underneath them.
+
+A tablet in landscape isn't affected by any of this. "Unfolded" is decided by the screen's smallest dimension, so a tablet on its side is still at least 600dp tall and has the height to spare.
 
 ## On a tablet
 
@@ -175,6 +196,9 @@ Pin the **Keep on screen** tool to your toolbar to toggle this directly. That to
 | Keyboard width | 100% |
 | Keyboard position | Centre |
 | Keyboard scale (per screen shape) | 100% |
+| Key height (landscape) | 33 dp |
+| Number row height (landscape) | 29 dp |
+| Number row (landscape) | Off |
 | One-handed mode | Off |
 | One-handed width | 78% portrait / 55% landscape |
 | One-handed height | 100% |
@@ -194,6 +218,8 @@ Accessibility settings has its own **Key size and spacing** shortcut that opens 
 ## Details & edge cases
 
 - **Keyboard scale has no portrait equivalent.** It exists only on the three override screen shapes. Portrait is sized entirely by its own key-height and number-row-height sliders, with no multiplier on top.
+- **Landscape's defaults ignore your portrait key height, deliberately.** A landscape phone is short whatever you like upright, so carrying a 64dp portrait key across would put the board back through the bottom of the window. The digit row is the one that does carry: it's a row you asked for rather than a size the screen dictates.
+- **The key preview bubble gives way to the keys.** The empty band the keyboard holds above itself for a top-row preview is taken out of the screen's leftover space, never out of the board. On a screen too short for both, the board wins and the bubble gets whatever is left.
 - **"Unfolded" is a screen-size check, not a fold-sensor read.** Any device with a smallest dimension of 600dp or more counts, a tablet that never folds included. The label describes what the screen currently looks like, not the hardware.
 - **One-handed mode's width setting is a live override, not a rewrite.** Turning it on temporarily overrides the keyboard-width and position settings while active. Turning it off returns to whatever those were set to.
 - **A very wide screen can let the floating panel's resize grip briefly exceed 500dp mid-drag.** It snaps back to the 500dp maximum once you release it.

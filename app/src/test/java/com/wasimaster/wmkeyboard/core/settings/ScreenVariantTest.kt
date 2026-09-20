@@ -1,7 +1,9 @@
 package com.wasimaster.wmkeyboard.core.settings
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ScreenVariantTest {
@@ -88,6 +90,89 @@ class ScreenVariantTest {
             sizingOverrides = mapOf(ScreenVariant.LANDSCAPE to SizingOverride()),
         )
         assertSame(settings, settings.resolvedFor(ScreenVariant.LANDSCAPE))
+    }
+
+    /**
+     * Issue #251: a phone in landscape keeps its width and loses over half its
+     * height, so a board built from the portrait numbers overflowed the window
+     * and its bottom rows were clipped away. The shape has its own defaults
+     * now, sized to Gboard's landscape board on the same screen.
+     */
+    @Test fun aLandscapePhoneStartsAtALandscapeSizedBoard() {
+        val phone = KeyboardSettings(keyHeightDp = 48, numberRowHeightDp = 42)
+            .applyScreenDefaults(ScreenVariant.LANDSCAPE)
+        // 33dp of key on this keyboard's 4dp gap is Gboard's 41dp row pitch.
+        assertEquals(33, phone.keyHeightDp)
+        assertEquals(29, phone.numberRowHeightDp)
+        // Gboard's landscape is four rows; the switch here is untouched.
+        assertFalse(phone.numberRow)
+    }
+
+    /**
+     * The bar is sized in dp of its own, so it did not shrink with the board:
+     * a 38dp tool circle above a 33dp key is chrome drawn bigger than the keys
+     * it serves. Scaled, not replaced — it has no per-shape override to escape
+     * to, so a width the user picked survives in proportion.
+     */
+    @Test fun theToolbarShrinksWithTheLandscapeBoard() {
+        val phone = KeyboardSettings().applyScreenDefaults(ScreenVariant.LANDSCAPE)
+        assertEquals(31, phone.toolbarHeightDp)
+        assertEquals(27, phone.toolbarBehavior.toolWidthDp)
+
+        val wide = KeyboardSettings(
+            toolbarBehavior = ToolbarBehavior(toolWidthDp = 60),
+        ).applyScreenDefaults(ScreenVariant.LANDSCAPE)
+        assertEquals(42, wide.toolbarBehavior.toolWidthDp)
+    }
+
+    @Test fun theOtherShapesAreLeftAlone() {
+        val settings = KeyboardSettings(keyHeightDp = 48)
+        for (variant in ScreenVariant.entries - ScreenVariant.LANDSCAPE) {
+            assertSame(variant.name, settings, settings.applyScreenDefaults(variant))
+        }
+    }
+
+    /**
+     * A tablet reaches [ScreenVariant.LANDSCAPE_UNFOLDED], never [LANDSCAPE]:
+     * sideways it is still 600dp-plus tall, so it has the room and
+     * `applyDeviceForm` has already picked its key height.
+     */
+    @Test fun aTabletSidewaysIsNotALandscapePhone() {
+        val tablet = KeyboardSettings().applyDeviceForm(DeviceForm.LARGE_TABLET)
+        assertEquals(44, tablet.applyScreenDefaults(ScreenVariant.LANDSCAPE_UNFOLDED).keyHeightDp)
+    }
+
+    /** A digit row the user switched on by hand survives the rotation. */
+    @Test fun anAskedForDigitRowIsKeptInLandscape() {
+        val asked = KeyboardSettings(
+            numberRow = true,
+            layoutBehavior = LayoutBehaviorSettings(numberRowUntouched = false),
+        )
+        assertTrue(asked.applyScreenDefaults(ScreenVariant.LANDSCAPE).numberRow)
+    }
+
+    /** A number the user set for this shape still beats the shape's default. */
+    @Test fun theUsersLandscapeValueBeatsTheDefault() {
+        val settings = KeyboardSettings(
+            keyHeightDp = 48,
+            sizingOverrides = mapOf(
+                ScreenVariant.LANDSCAPE to SizingOverride(keyHeightDp = 52),
+            ),
+        )
+        val landscape = settings
+            .applyScreenDefaults(ScreenVariant.LANDSCAPE)
+            .resolvedFor(ScreenVariant.LANDSCAPE)
+        assertEquals(52, landscape.keyHeightDp)
+        // Field by field: the rest of the shape's defaults still stand.
+        assertEquals(29, landscape.numberRowHeightDp)
+    }
+
+    /** The shape's editor reads the same numbers its board is drawn at. */
+    @Test fun theEditorShowsTheShapesDefaults() {
+        val values = KeyboardSettings(keyHeightDp = 48, numberRowHeightDp = 42)
+            .sizingValuesFor(ScreenVariant.LANDSCAPE)
+        assertEquals(33, values.keyHeightDp)
+        assertEquals(29, values.numberRowHeightDp)
     }
 
     @Test fun everyFieldCanBeOverridden() {

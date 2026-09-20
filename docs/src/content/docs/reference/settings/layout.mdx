@@ -105,8 +105,8 @@ The Size & position values above are your portrait sizes, and the in-app caption
 | Field | Range | Falls back to |
 |---|---|---|
 | Keyboard scale | 50–150% | 100% |
-| Key height | 32–100 dp | this screen's base Key height (48 dp) |
-| Number row height *(only if Number row is on)* | 32–100 dp | base Number row height (42 dp) |
+| Key height | 32–100 dp | this screen's base Key height (48 dp); **33 dp** on landscape |
+| Number row height *(only if Number row is on)* | 32–100 dp | base Number row height (42 dp); **29 dp** on landscape |
 | Bottom padding | 0–160 dp | base Bottom padding |
 | Keyboard width | 50–100% | base Keyboard width (100%) |
 | Font size | 0.7×–2.0× | global Key label font size (1.0×) |
@@ -114,16 +114,18 @@ The Size & position values above are your portrait sizes, and the in-app caption
 | Left padding | 0–30% | base Left padding (0%) |
 | Right padding | 0–30% | base Right padding (0%) |
 | Bottom row height | 0–96 dp | base Bottom row height (0, "Follow keys") |
-| Number row | On / Off | base Number row (On) |
+| Number row | On / Off | base Number row (On); **Off** on landscape unless you set the base toggle yourself |
 | Keyboard position *(only if resolved width < 100%)* | Left / Centre / Right | base Keyboard position |
 
-A **Follow portrait again** row appears at the bottom of the editor once any field is set, clearing the whole override back to "Follows portrait" in one tap.
+A **Follow portrait again** row appears at the bottom of the editor once any field is set, clearing the whole override back to "Follows portrait" in one tap. On landscape that returns the shape to its own defaults rather than to your portrait numbers.
 
 <PhoneFrame caption="A Per-screen sizing row expanded, with Keyboard scale and the other override sliders.">
   {/* shot: reference/settings/layout-per-screen-editor */}
 </PhoneFrame>
 
 **Keyboard scale** has no portrait equivalent. It's a whole-keyboard multiplier that only exists on these three override shapes. It earns its keep on a foldable, whose roomy inner display often wants a smaller keyboard than the cover screen. **Font size** here is the same field as **Key label font size** under [Appearance settings](/reference/settings/appearance/). This screen doesn't own it, but you can still give it a different value per screen shape from here. **Number row** is the one override that isn't a number, and landscape is what it's for: least room for a sixth row, most need for the keys under it.
+
+Landscape is also the one shape that doesn't fall back to portrait for the three fields marked above. A phone on its side has under half the height it has upright, so a portrait-sized board overflowed the window and had its bottom rows cut off; sideways starts from its own shorter numbers instead, and the toolbar is scaled to 70% to keep the tool circles smaller than the keys. See [What landscape starts at](/typing/size-position/#what-landscape-starts-at). Setting a field here still wins over all of it.
 
 ### One-handed, split and floating
 

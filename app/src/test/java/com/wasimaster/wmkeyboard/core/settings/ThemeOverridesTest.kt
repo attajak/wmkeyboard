@@ -300,6 +300,25 @@ class ThemeOverridesTest {
         assertEquals(1.2f, resolved.fontScale, 0f)
     }
 
+    /**
+     * The shape's own defaults are the least specific step of the four, beside
+     * the device form's: a theme that authors a key height beats them, and a
+     * number the user set for that shape beats the theme.
+     */
+    @Test
+    fun `a theme's key height beats the landscape default`() {
+        val base = KeyboardSettings(keyHeightDp = 48)
+            .applyScreenDefaults(ScreenVariant.LANDSCAPE)
+        assertEquals(33, base.keyHeightDp)
+        assertEquals(60, base.applyThemeOverrides(wide).keyHeightDp)
+
+        val perScreen = base
+            .applyThemeOverrides(wide)
+            .copy(sizingOverrides = mapOf(ScreenVariant.LANDSCAPE to SizingOverride(keyHeightDp = 50)))
+            .resolvedFor(ScreenVariant.LANDSCAPE)
+        assertEquals(50, perScreen.keyHeightDp)
+    }
+
     @Test
     fun `the variant's keyboard scale multiplies the theme's key height`() {
         val base = KeyboardSettings(

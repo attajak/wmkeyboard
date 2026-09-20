@@ -178,6 +178,7 @@ import com.wasimaster.wmkeyboard.core.settings.sizingValuesFor
 import com.wasimaster.wmkeyboard.core.settings.activeThemeSpec
 import com.wasimaster.wmkeyboard.core.settings.applyLayoutTheme
 import com.wasimaster.wmkeyboard.core.settings.applyThemeOverrides
+import com.wasimaster.wmkeyboard.core.settings.applyScreenDefaults
 import com.wasimaster.wmkeyboard.core.settings.resolvedFor
 import com.wasimaster.wmkeyboard.core.input.MorseCode
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -1184,8 +1185,9 @@ fun KeyboardScreen(
     // settings object on every keystroke whenever the variant had an override,
     // which is enough on its own to stop every key from skipping.
     //
-    // Overlay order: the active theme's layout overrides first, then the
-    // screen-variant sizing — a per-screen override the user set by hand is
+    // Overlay order: the shape's own defaults first (a landscape phone starts
+    // at a landscape-sized board, not a portrait one -- issue #251), then the
+    // active theme's layout overrides, then the screen-variant sizing — a per-screen override the user set by hand is
     // more specific than the theme and wins. The spec here is resolved by the
     // same helpers KeyboardThemeProvider uses, so the theme that paints the
     // board and the one that reshapes it are always the same theme.
@@ -1204,7 +1206,7 @@ fun KeyboardScreen(
         baseSettings.activeThemeSpec(darkSlot)
     }
     val settings = remember(baseSettings, variant, activeSpec) {
-        baseSettings.applyThemeOverrides(activeSpec).resolvedFor(variant)
+        baseSettings.applyScreenDefaults(variant).applyThemeOverrides(activeSpec).resolvedFor(variant)
     }
     // The layout's own font, which is deliberately NOT part of that chain. The
     // chain produces one KeyboardSettings for the whole board, and a layout's
@@ -1657,8 +1659,11 @@ private fun DockedKeyboardFrame(
     // entry and the keyboard's own box is the only thing that changes size
     // frame to frame — the drag never moves its own origin.
     val density = LocalDensity.current
-    // The empty band above the board where a top-row bubble goes.
+    // The empty band above the board where a top-row bubble goes: the height
+    // the bubbles ask for, and — once the measure pass has weighed it against
+    // the window — the height they actually got.
     val previewHeadroomPx = keyPreviewHeadroomPx(state.settings)
+    val previewBand = remember { KeyPreviewBand() }
     var frameOrigin by remember { mutableStateOf(Offset.Zero) }
     var frameSize by remember { mutableStateOf(IntSize.Zero) }
     val configuration = LocalConfiguration.current
@@ -1681,8 +1686,8 @@ private fun DockedKeyboardFrame(
     // the whole frame on the very frame the row starts moving. A snapshot flow
     // sees the write from the layout pass that made it and delivers after the
     // frame, which is also where the service's requestLayout belongs.
-    LaunchedEffect(revealHeadroom, previewHeadroomPx, onWindowHeadroom) {
-        snapshotFlow { previewHeadroomPx + revealHeadroom.reservedPx }
+    LaunchedEffect(revealHeadroom, previewBand, onWindowHeadroom) {
+        snapshotFlow { previewBand.heldPx + revealHeadroom.reservedPx }
             .collect { onWindowHeadroom(it) }
     }
     // Two boxes: the frame proper under its band, and the bubbles over the
@@ -1701,7 +1706,7 @@ private fun DockedKeyboardFrame(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .keyPreviewHeadroom(previewHeadroomPx)
+                .keyPreviewHeadroom(previewHeadroomPx, previewBand)
                 .then(
                     if (resize == null) {
                         Modifier.rowRevealHeadroom(revealHeadroom)
@@ -1839,22 +1844,58 @@ private fun DockedKeyboardFrame(
 }
 
 /**
- * Holds [px] of empty space above the frame's content: the band a top-row
+ * The band the frame is actually holding above the board right now, decided in
+ * the measure pass ([keyPreviewHeadroom]) rather than asked for in composition.
+ *
+ * A measure-written piece of snapshot state, like [RowReveal]'s two: the
+ * service has to be told the band it really got, because that is the part of
+ * the window it keeps out of the host app's insets. Telling it the band the
+ * settings *wanted* would lay the app out as if the keyboard were the
+ * difference shorter, and hide that much of the app behind the keys.
+ */
+internal class KeyPreviewBand {
+    var heldPx by mutableIntStateOf(0)
+}
+
+/**
+ * Holds up to [px] of empty space above the frame's content: the band a top-row
  * bubble is drawn in. Window height, not keyboard height — the service
  * subtracts it from the app's insets (see [keyPreviewHeadroomPx]).
+ *
+ * "Up to", because the band is held out of the window's *leftover* and never
+ * out of the board's own room (issue #251). The child is measured against the
+ * whole window and the band is whatever is still free afterwards, capped at the
+ * height the bubbles asked for.
+ *
+ * Taking the band first was the bug. It is a fixed dp figure — a 34sp on-key
+ * label plus its gaps, around 130dp — which is a comfortable slice of a phone
+ * held upright and better than a third of the same phone turned sideways. The
+ * board was handed the window minus that slice, had no way to say it did not
+ * fit, and simply overflowed: on a landscape phone the bottom two key rows were
+ * measured, drawn past the window's edge and clipped away.
+ *
+ * Still one measure pass, not two: a child given the whole window reports the
+ * height it actually wants whenever it fits, and when it does not fit there is
+ * no leftover to hold anyway, so the same number answers both.
  */
-private fun Modifier.keyPreviewHeadroom(px: Int): Modifier =
-    if (px <= 0) this else layout { measurable, constraints ->
-        val inner = constraints.copy(
-            minHeight = (constraints.minHeight - px).coerceAtLeast(0),
-            maxHeight = if (constraints.hasBoundedHeight) {
-                (constraints.maxHeight - px).coerceAtLeast(0)
+private fun Modifier.keyPreviewHeadroom(px: Int, band: KeyPreviewBand): Modifier =
+    if (px <= 0) {
+        band.heldPx = 0
+        this
+    } else {
+        layout { measurable, constraints ->
+            val inner = constraints.copy(
+                minHeight = (constraints.minHeight - px).coerceAtLeast(0),
+            )
+            val placeable = measurable.measure(inner)
+            val held = if (constraints.hasBoundedHeight) {
+                (constraints.maxHeight - placeable.height).coerceIn(0, px)
             } else {
-                Constraints.Infinity
-            },
-        )
-        val placeable = measurable.measure(inner)
-        layout(placeable.width, placeable.height + px) { placeable.place(0, px) }
+                px
+            }
+            band.heldPx = held
+            layout(placeable.width, placeable.height + held) { placeable.place(0, held) }
+        }
     }
 
 /**
