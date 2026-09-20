@@ -17617,8 +17617,9 @@ open class WMKeyboardService : InputMethodService() {
         VoiceSpacing.format(text, voiceNeedsLeadingSpace, voiceNeedsTrailingSpace)
 
     /**
-     * The recognizer's automatic capital kept only where the keys would shift
-     * for one; never in plain voice typing, which wants the words as said.
+     * The recognizer's automatic capital kept only where the text in front of
+     * the caret opens a sentence; never in plain voice typing, which wants the
+     * words as said.
      */
     private fun casedVoiceText(text: String): String =
         VoiceCasing.apply(text, sentenceStart = !plainVoice() && voiceSentenceStart)
@@ -17630,14 +17631,24 @@ open class WMKeyboardService : InputMethodService() {
      * and again after an edit made from the panel's own rail — a space typed
      * there must not turn into two once the transcription lands, and a full
      * stop typed there means the next phrase does start a sentence.
+     *
+     * The capital is a question about the text, not about the shift key:
+     * [VoiceCasing.startsSentence] reads what is written in front of the
+     * caret. Asking [shouldAutoCapitalize] instead answered no in every field
+     * that never requests sentence capitals — a plain `inputType="text"`, a
+     * terminal's null field — and whenever Automatic capitals is off, which
+     * took the capital off the first word of a dictation into an empty field.
+     * It also spends a [InputConnection.getCursorCapsMode] round-trip into the
+     * focused app that this no longer needs.
      */
     private fun refreshVoiceContext() {
         val ic = currentInputConnection ?: return
-        val beforeChar = ic.getTextBeforeCursor(1, 0)?.lastOrNull()
+        val before = ic.getTextBeforeCursor(VoiceCasing.CONTEXT_CHARS, 0)
+        val beforeChar = before?.lastOrNull()
         val afterChar = ic.getTextAfterCursor(1, 0)?.firstOrNull()
         voiceNeedsLeadingSpace = VoiceSpacing.needsLeadingSpace(beforeChar, afterChar)
         voiceNeedsTrailingSpace = VoiceSpacing.needsTrailingSpace(beforeChar, afterChar)
-        voiceSentenceStart = shouldAutoCapitalize()
+        voiceSentenceStart = VoiceCasing.startsSentence(before)
     }
 
     /**
