@@ -15,7 +15,15 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.input.pointer.AwaitPointerEventScope
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerInputChange
@@ -25,6 +33,7 @@ import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
 import androidx.compose.ui.input.pointer.isOutOfBounds
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import kotlin.math.abs
@@ -44,11 +53,12 @@ import kotlin.math.min
  * with a little sideways drift, and then the page stays put while the setting
  * under the thumb changes.
  *
- * Material's drawing, semantics (TalkBack's adjust gestures) and key handling
- * are kept as they are. Its touch handling never runs: a layer over the slider
- * takes every touch instead, because Compose hands a touch to the topmost of
- * overlapping siblings only, and moves the value itself — see
- * [detectSliderTouches].
+ * Material's drawing, semantics (TalkBack's adjust gestures) and horizontal
+ * key handling are kept as they are. Its touch handling never runs: a layer
+ * over the slider takes every touch instead, because Compose hands a touch to
+ * the topmost of overlapping siblings only, and moves the value itself — see
+ * [detectSliderTouches]. Up and down leave the row rather than moving the
+ * value — see [moveFocusOffSlider].
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,9 +76,13 @@ fun WmSlider(
     // under a finger depends on the thumb's width. Measured rather than assumed:
     // the thumb narrows while it is dragged.
     val thumbWidth = remember { mutableIntStateOf(0) }
+    val focus = LocalFocusManager.current
     // Min constraints reach the slider as they did when the caller's modifier
     // sat on it directly, so a fixed height or a weight sizes it the same.
-    Box(modifier, propagateMinConstraints = true) {
+    Box(
+        modifier.onPreviewKeyEvent { event -> moveFocusOffSlider(event, focus) },
+        propagateMinConstraints = true,
+    ) {
         Slider(
             value = value,
             onValueChange = onValueChange,
@@ -108,6 +122,33 @@ fun WmSlider(
             )
         }
     }
+}
+
+/**
+ * Answers a D-pad's up or down on a focused slider by leaving the row, and says
+ * whether it took the key.
+ *
+ * Material's slider reads the vertical arrows as well as the horizontal ones —
+ * up raises the value, down lowers it — and consumes both the press and the
+ * release. On a television that is the whole of the remote's way down a
+ * settings page, so the first slider the focus reaches keeps it: every press
+ * down slides the thumb and nothing below the row can be reached again without
+ * Back (issue #259). Left and right still slide it, which is the pair a remote
+ * has to spare.
+ *
+ * The key is taken either way, including at the ends of a list where there is
+ * nothing to move to: passing it on would hand it straight back to Material.
+ */
+internal fun moveFocusOffSlider(event: KeyEvent, focus: FocusManager): Boolean {
+    val direction = when (event.key) {
+        Key.DirectionUp -> FocusDirection.Up
+        Key.DirectionDown -> FocusDirection.Down
+        else -> return false
+    }
+    // The release is consumed too, because Material consumes that as well, but
+    // only the press moves: a press and its release are one button, one step.
+    if (event.type == KeyEventType.KeyDown) focus.moveFocus(direction)
+    return true
 }
 
 /**

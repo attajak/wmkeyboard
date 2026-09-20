@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,16 +17,25 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertIsNotFocused
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 import kotlinx.coroutines.CoroutineScope
@@ -75,6 +85,7 @@ class WmSliderTest {
     private var slop = 0f
     private lateinit var scroll: ScrollState
     private lateinit var scope: CoroutineScope
+    private lateinit var focusSlider: () -> Unit
 
     @Test
     fun `a mostly vertical flick that starts on the slider scrolls the page and leaves the value alone`() {
@@ -182,6 +193,60 @@ class WmSliderTest {
         assertEquals("no room for a track", 10f, sliderValueAt(1f, 2, 4, rtl = false, range = 10f..50f), 0f)
     }
 
+    @Test
+    fun `d-pad down off a focused slider reaches the row below instead of moving the thumb`() {
+        // Issue #259: Material answers the vertical arrows as well as the
+        // horizontal ones and consumes them, so on a television the first
+        // slider the remote reaches keeps the focus for good.
+        remoteControlPage()
+        compose.onNodeWithTag(SLIDER).performKeyInput { pressKey(Key.DirectionDown) }
+        compose.waitForIdle()
+        assertEquals(0f, value, 0f)
+        assertEquals(0, finishes)
+        compose.onNodeWithTag(BELOW).assertIsFocused()
+    }
+
+    @Test
+    fun `d-pad up off a focused slider reaches the row above`() {
+        remoteControlPage()
+        compose.onNodeWithTag(SLIDER).performKeyInput { pressKey(Key.DirectionUp) }
+        compose.waitForIdle()
+        assertEquals(0f, value, 0f)
+        compose.onNodeWithTag(ABOVE).assertIsFocused()
+    }
+
+    @Test
+    fun `d-pad right still moves the value and keeps the focus`() {
+        // The pair the remote has to spare: sideways is how a slider is set.
+        remoteControlPage()
+        compose.onNodeWithTag(SLIDER).performKeyInput { pressKey(Key.DirectionRight) }
+        compose.waitForIdle()
+        assertTrue("the value did not move: was $value", value > 0f)
+        compose.onNodeWithTag(ABOVE).assertIsNotFocused()
+        compose.onNodeWithTag(BELOW).assertIsNotFocused()
+    }
+
+    /** A focusable row, the slider, another focusable row, with the slider focused. */
+    @OptIn(ExperimentalTestApi::class)
+    private fun remoteControlPage() {
+        compose.setContent {
+            slop = LocalViewConfiguration.current.touchSlop
+            scroll = rememberScrollState()
+            scope = rememberCoroutineScope()
+            val requester = remember { FocusRequester() }
+            focusSlider = { requester.requestFocus() }
+            Column(Modifier.height(PAGE_DP.dp).verticalScroll(scroll)) {
+                Box(Modifier.fillMaxWidth().height(ROW_DP.dp).testTag(ABOVE).focusable())
+                Box(Modifier.fillMaxWidth().focusRequester(requester).testTag(SLIDER)) {
+                    WmSlider(value = value, onValueChange = { value = it }, onValueChangeFinished = { finishes++ })
+                }
+                Box(Modifier.fillMaxWidth().height(ROW_DP.dp).testTag(BELOW).focusable())
+            }
+        }
+        compose.runOnIdle { focusSlider() }
+        compose.waitForIdle()
+    }
+
     /** A column taller than its window, at the top, with the slider in view near the top. */
     private fun page(slider: @Composable () -> Unit) {
         compose.setContent {
@@ -213,6 +278,9 @@ class WmSliderTest {
 }
 
 private const val SLIDER = "slider"
+private const val ABOVE = "above"
+private const val BELOW = "below"
+private const val ROW_DP = 48
 private const val PAGE_DP = 300
 private const val ABOVE_DP = 100
 private const val BELOW_DP = 600
