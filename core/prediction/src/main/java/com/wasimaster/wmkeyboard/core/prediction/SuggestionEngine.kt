@@ -1196,20 +1196,7 @@ class SuggestionEngine(
                 sources.add(FuzzyBeamSearch.WalkSource(walker, logWeight, tier))
             }
         }
-        // ln(1.0) = 0 while the field mix is neutral, keeping the primary's
-        // weights bit-identical to the pre-detection engine.
-        val primaryShift = ln(fieldFactorFor(primaryLanguageId))
-        add(activeDictionary, primaryShift, FuzzyBeamSearch.Tier.DICTIONARY)
-        add(customDictionary, LOG_CUSTOM_WORD_WEIGHT + primaryShift, FuzzyBeamSearch.Tier.DICTIONARY)
-        if (englishAsSecondary && !englishSources) {
-            val factor = englishSecondaryFactor()
-            if (factor > 0) add(dictionary, ln(factor), FuzzyBeamSearch.Tier.DICTIONARY)
-        }
-        for (t in secondaryDictionaries) {
-            val weight = SECONDARY_WORD_WEIGHT * mixConfidence.confidenceFor(t.langId) *
-                fieldFactorFor(t.langId)
-            if (weight > 0) add(t.source, ln(weight), FuzzyBeamSearch.Tier.DICTIONARY)
-        }
+        sources.addAll(dictionarySources(null))
         for (walker in userLexicon.walkers()) {
             sources.add(
                 FuzzyBeamSearch.WalkSource(walker, LOG_USER_WORD_WEIGHT, FuzzyBeamSearch.Tier.USER)
@@ -1222,6 +1209,42 @@ class SuggestionEngine(
             sources.add(
                 FuzzyBeamSearch.WalkSource(walker, LOG_USER_WORD_WEIGHT, FuzzyBeamSearch.Tier.USER)
             )
+        }
+        return sources
+    }
+
+    /**
+     * The dictionary tier of [walkSources], at the weights the mix gives it,
+     * narrowed to [onlyLang] when that is not null.
+     *
+     * One place owns those weights so a narrowed lookup and the full walk
+     * cannot drift apart: an elision's ratio weighs the word after the prefix
+     * against the fused spelling, and the two have to be measured on the same
+     * scale or a secondary language's reading quietly outranks a primary's.
+     */
+    private fun dictionarySources(onlyLang: String?): List<FuzzyBeamSearch.WalkSource> {
+        val sources = ArrayList<FuzzyBeamSearch.WalkSource>()
+        fun add(wordSource: WordSource, logWeight: Double) {
+            for (walker in wordSource.walkers()) {
+                sources.add(FuzzyBeamSearch.WalkSource(walker, logWeight, FuzzyBeamSearch.Tier.DICTIONARY))
+            }
+        }
+        // ln(1.0) = 0 while the field mix is neutral, keeping the primary's
+        // weights bit-identical to the pre-detection engine.
+        val primaryShift = ln(fieldFactorFor(primaryLanguageId))
+        if (onlyLang == null || onlyLang == primaryLanguageId) {
+            add(activeDictionary, primaryShift)
+            add(customDictionary, LOG_CUSTOM_WORD_WEIGHT + primaryShift)
+        }
+        if (englishAsSecondary && !englishSources && (onlyLang == null || onlyLang == EN)) {
+            val factor = englishSecondaryFactor()
+            if (factor > 0) add(dictionary, ln(factor))
+        }
+        for (t in secondaryDictionaries) {
+            if (onlyLang != null && t.langId != onlyLang) continue
+            val weight = SECONDARY_WORD_WEIGHT * mixConfidence.confidenceFor(t.langId) *
+                fieldFactorFor(t.langId)
+            if (weight > 0) add(t.source, ln(weight))
         }
         return sources
     }
@@ -2664,12 +2687,28 @@ class SuggestionEngine(
     }
 
     /**
+     * Just [langId]'s own dictionary sources, out of the mix's.
+     *
+     * An elision is a fact about one language: `d'` in front of an Italian
+     * word. Asked against every list at once, the Italian grammar reads the
+     * English *dart* as `d'art`, because the mix happens to hold an English
+     * *art* for it to point at. So the word after the prefix is looked up
+     * here, in the language whose grammar admitted the split, while whether
+     * the fused spelling is a *word* stays a question for the whole mix —
+     * English knowing `dart` is exactly the reason not to rewrite it (#240).
+     */
+    private fun languageSources(langId: String): List<FuzzyBeamSearch.WalkSource> =
+        dictionarySources(langId)
+
+    /**
      * [lower]'s best score in the dictionary-tier walk sources, on the walk's
      * own scale; NEGATIVE_INFINITY when no list holds it.
      */
-    private fun dictionaryScore(lower: String): Double {
+    private fun dictionaryScore(lower: String): Double = dictionaryScore(lower, walkSources())
+
+    private fun dictionaryScore(lower: String, sources: List<FuzzyBeamSearch.WalkSource>): Double {
         var best = Double.NEGATIVE_INFINITY
-        for (src in walkSources()) {
+        for (src in sources) {
             if (src.tier != FuzzyBeamSearch.Tier.DICTIONARY) continue
             val walker = src.walker
             var node = walker.root
@@ -2692,12 +2731,15 @@ class SuggestionEngine(
      * keystroke for the word after an elided prefix, and the only branching
      * is a letter's accented twins.
      */
-    private fun accentedLookup(lower: String): Pair<String, Double>? {
+    private fun accentedLookup(
+        lower: String,
+        sources: List<FuzzyBeamSearch.WalkSource> = walkSources(),
+    ): Pair<String, Double>? {
         var bestWord: String? = null
         var best = Double.NEGATIVE_INFINITY
         val children = ChildBuffer()
         val spelled = StringBuilder(lower.length)
-        for (src in walkSources()) {
+        for (src in sources) {
             if (src.tier != FuzzyBeamSearch.Tier.DICTIONARY) continue
             val walker = src.walker
             fun descend(node: Int, pos: Int) {
@@ -2746,7 +2788,12 @@ class SuggestionEngine(
      */
     private fun apostropheReading(lower: String): ElisionReading? {
         if (!apostropheFixes) return null
-        return contractionReading(lower) ?: elisionReading(lower)
+        var best: ElisionReading? = null
+        for (langId in mixLanguageIds()) {
+            val reading = contractionReading(lower, langId) ?: elisionReading(lower, langId)
+            if (reading != null && (best == null || reading.score > best.score)) best = reading
+        }
+        return best
     }
 
     /**
@@ -2763,8 +2810,8 @@ class SuggestionEngine(
      * it at commit. A strip that disagreed with the space bar would be the
      * bug this fixes.
      */
-    private fun contractionReading(lower: String): ElisionReading? {
-        if (!Apostrophes.servesLanguage(primaryLanguageId)) return null
+    private fun contractionReading(lower: String, langId: String): ElisionReading? {
+        if (!Apostrophes.servesLanguage(langId)) return null
         val fixed = Apostrophes.fix(lower) ?: return null
         val scored = maxOf(finiteScore(fixed.lowercase()), finiteScore(lower))
         return ElisionReading(fixed, scored + CONTRACTION_LEAD, shadowed = true)
@@ -2789,17 +2836,24 @@ class SuggestionEngine(
      * word that happens to split (`tas`, `lune`) leads its elided reading in
      * the strip by the same margin that keeps it from being corrected.
      */
-    private fun elisionReading(lower: String): ElisionReading? {
-        val rules = Elisions.rulesFor(primaryLanguageId) ?: return null
+    private fun elisionReading(lower: String, langId: String): ElisionReading? {
+        val rules = Elisions.rulesFor(langId) ?: return null
         val splits = rules.splits(lower)
         if (splits.isEmpty()) return null
+        // The word after the prefix has to be a word of *this* language; the
+        // fused spelling being a word is a question for the whole mix. See
+        // [languageSources].
+        val own = languageSources(langId)
+        if (own.isEmpty()) return null
         val typed = dictionaryScore(lower)
         val price = ln(ELISION_SHADOW_RATIO)
         var best: ElisionReading? = null
         for (split in splits) {
             val (word, score) = rules.respelled(split)
-                ?.let { spelled -> dictionaryScore(spelled).takeIf { it > Double.NEGATIVE_INFINITY }?.let { spelled to it } }
-                ?: accentedLookup(split.rest)
+                ?.let { spelled ->
+                    dictionaryScore(spelled, own).takeIf { it > Double.NEGATIVE_INFINITY }?.let { spelled to it }
+                }
+                ?: accentedLookup(split.rest, own)
                 ?: continue
             if (suppressed(word)) continue
             // A spelling no word begins with is an elision whatever a list
