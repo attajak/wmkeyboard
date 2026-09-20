@@ -26,6 +26,17 @@ import android.widget.LinearLayout
  * own remedy — [View.setClipBounds], which `InlineContentView` forwards to its
  * surface. The visible slice of each chip changes as the row moves, so it is
  * re-applied on every scroll and every layout.
+ *
+ * AOSP's `InlineContentClipView` re-clips on every *draw* instead, from a
+ * rectangle walked down with `offsetRectIntoDescendantCoords`, and that is the
+ * more obviously complete answer: a translation animation moves a chip without
+ * either a scroll or a layout. Both were tried here and both put chip text
+ * over the chevron and the emoji key on a scrolled row — the arithmetic agrees
+ * with AOSP's to the pixel, so the difference is elsewhere, most likely the
+ * transparent z-ordered SurfaceView that container also carries and this one
+ * does not. Until that is understood, this keeps the shape that was actually
+ * verified on a device: scroll and layout, horizontally. Anything that moves
+ * the row without either is the known gap.
  */
 class InlineChipScroller(context: Context) : HorizontalScrollView(context) {
 
@@ -43,6 +54,9 @@ class InlineChipScroller(context: Context) : HorizontalScrollView(context) {
 
     init {
         isHorizontalScrollBarEnabled = false
+        // No stretch or glow: the row is a few chips inside a strip, and an
+        // overscroll effect there reads as the keyboard itself coming loose.
+        overScrollMode = OVER_SCROLL_NEVER
         addView(
             row,
             LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT),

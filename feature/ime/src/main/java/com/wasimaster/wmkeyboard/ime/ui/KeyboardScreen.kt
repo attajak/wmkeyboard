@@ -1735,6 +1735,10 @@ private fun DockedKeyboardFrame(
                 // window stops short of the bar -- so the window itself is
                 // asked for the colour instead (#255).
                 SystemNavigationBarColor(LocalKbTheme.current)
+                // Same trick for the inline-autofill chips: the service builds
+                // their presentation spec long before this composition runs, so
+                // the resolved colours are reported out to it (#250).
+                InlineChipPaletteReport(LocalKbTheme.current)
                 // navigationBarsPadding keeps the bottom key row clear of the
                 // gesture-navigation bar on edge-to-edge (SDK 35+) IME windows.
                 val oneHanded = state.settings.oneHandedMode

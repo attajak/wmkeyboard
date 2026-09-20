@@ -1,6 +1,8 @@
 package com.wasimaster.wmkeyboard.ime
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
 import android.util.Size
@@ -12,7 +14,11 @@ import android.view.inputmethod.InlineSuggestionsRequest
 import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.RequiresApi
 import androidx.autofill.inline.UiVersions
+import androidx.autofill.inline.common.TextViewStyle
+import androidx.autofill.inline.common.ViewStyle
 import androidx.autofill.inline.v1.InlineSuggestionUi
+import com.wasimaster.wmkeyboard.ime.ui.InlineChipPalette
+import com.wasimaster.wmkeyboard.ime.ui.InlineChipPaletteReport
 
 /**
  * Inline suggestions: the chips another process draws inside the suggestion
@@ -106,25 +112,43 @@ object InlineAutofill {
      * the way in, in [split]. A lane whose toggle is off passes 0, so the
      * request never asks for chips the strip would then throw away.
      *
-     * Deliberately no colour styling. The keyboard's theme is resolved in
-     * Compose and is not reachable from the service, so any colours set here
-     * would be a guess — and a wrong guess renders someone's credentials
-     * unreadable. The sending app's own chip styling is always legible, which
-     * matters more than matching the keys.
+     * [palette] carries the strip's own chip colours, reported out of the
+     * composition by [InlineChipPaletteReport] because the theme is resolved
+     * there and this runs on the service. Only the colours are named, and only
+     * when they are actually known: a guess at a credential's colours is a
+     * credential nobody can read, and the renderer's own chip is always
+     * legible. See [chipStyle].
      */
     @RequiresApi(Build.VERSION_CODES.R)
     fun request(
+        context: Context,
         uiExtras: Bundle,
         stripHeightPx: Int,
         maxWidthPx: Int,
         autofillBudget: Int,
         platformBudget: Int,
+        palette: InlineChipPalette?,
     ): InlineSuggestionsRequest? {
         val total = autofillBudget + platformBudget
         if (total <= 0) return null
 
+        // uiExtras is the renderer describing itself — which inline UI
+        // versions it can draw. It is read here rather than passed on: the
+        // request's own extras are documented as data the *IME* sends the
+        // autofill service, and the renderer's capabilities are neither ours
+        // nor the service's business.
+        //
+        // Silence is not refusal. The bundle comes back empty on every device
+        // tested, and v1 is the only version the API has ever had, so an
+        // undeclared renderer is taken at v1 and only an explicit list without
+        // it drops the styling. Gating the other way round meant no chip was
+        // ever themed.
+        val declared = runCatching { UiVersions.getVersions(uiExtras) }.getOrDefault(emptyList())
+        val rendererSupportsV1 =
+            declared.isEmpty() || declared.contains(UiVersions.INLINE_UI_VERSION_1)
+
         val style = UiVersions.newStylesBuilder()
-            .addStyle(InlineSuggestionUi.newStyleBuilder().build())
+            .addStyle(chipStyle(context, palette.takeIf { rendererSupportsV1 }))
             .build()
 
         val spec = InlinePresentationSpec
@@ -137,7 +161,46 @@ object InlineAutofill {
 
         return InlineSuggestionsRequest.Builder(List(total) { spec })
             .setMaxSuggestionCount(total)
-            .setExtras(uiExtras)
+            .build()
+    }
+
+    /**
+     * The chip's appearance, in the strip's own colours when [palette] is
+     * known and the renderer's defaults when it is not.
+     *
+     * Only colours are set. The background is the androidx chip drawable
+     * *tinted*, not a flat fill, because the drawable is what gives the chip
+     * its rounded pill shape — [ViewStyle.Builder.setBackgroundColor] would
+     * square it off. Text sizes and padding are left alone: the renderer sizes
+     * a chip to fit the height the spec asks for, and second-guessing that is
+     * how a chip ends up with its descenders clipped.
+     *
+     * A null palette is the honest answer for the first request after a cold
+     * start, before the board has drawn once and there is any resolved theme
+     * to report. The renderer's own chip is always legible, which is the
+     * property that matters for something holding a credential.
+     */
+    @SuppressLint("RestrictedApi")
+    private fun chipStyle(context: Context, palette: InlineChipPalette?): InlineSuggestionUi.Style {
+        val builder = InlineSuggestionUi.newStyleBuilder()
+        if (palette == null) return builder.build()
+        // Resolved against our own context: the androidx drawable is compiled
+        // into this app, and an Icon built with a bare package name would be
+        // looked up in whichever process draws it.
+        val background = Icon
+            .createWithResource(
+                context,
+                androidx.autofill.R.drawable.autofill_inline_suggestion_chip_background,
+            )
+            .setTint(palette.background)
+        return builder
+            .setChipStyle(ViewStyle.Builder().setBackground(background).build())
+            // A chip with an icon and no text is a separate slot in the v1 UI
+            // and keeps its own background; left out it stays the default pill
+            // beside the themed ones.
+            .setSingleIconChipStyle(ViewStyle.Builder().setBackground(background).build())
+            .setTitleStyle(TextViewStyle.Builder().setTextColor(palette.title).build())
+            .setSubtitleStyle(TextViewStyle.Builder().setTextColor(palette.subtitle).build())
             .build()
     }
 
@@ -207,7 +270,6 @@ object InlineAutofill {
     fun inflateAll(
         context: Context,
         lanes: Lanes,
-        stripHeightPx: Int,
         onReady: (Chips) -> Unit,
     ) {
         if (lanes.autofill.isEmpty() && lanes.platform.isEmpty()) {
@@ -218,14 +280,23 @@ object InlineAutofill {
         val platformViews = arrayOfNulls<View>(lanes.platform.size)
         var outstanding = lanes.autofill.size + lanes.platform.size
         val executor = context.mainExecutor
-        // WRAP_CONTENT, not the cap: the cap is the ceiling the sender lays
-        // out against, and asking for an exact width would render every chip
-        // at that width — one fat chip per screen, whatever is written on it.
-        // The platform documents WRAP_CONTENT as valid for either dimension
-        // and passes it straight to the remote view's LayoutParams, so each
-        // chip comes back its own natural size and the row scrolls. Height
-        // stays exact so the chips sit on the strip's baseline.
-        val size = Size(ViewGroup.LayoutParams.WRAP_CONTENT, stripHeightPx)
+        // WRAP_CONTENT in both axes, not the cap: the cap is the ceiling the
+        // sender lays out against, and asking for an exact width would render
+        // every chip at that width — one fat chip per screen, whatever is
+        // written on it. The platform documents WRAP_CONTENT as valid for
+        // either dimension and passes it straight to the remote view's
+        // LayoutParams, so each chip comes back its own natural size and the
+        // row scrolls.
+        //
+        // The height wraps too, though the spec pins it. An exact size outside
+        // the spec's range makes `inflate` throw, and the throw is swallowed
+        // below — so the day the request's height and this one stop agreeing,
+        // every chip would vanish with nothing to say why. WRAP_CONTENT is
+        // always in range, so that failure cannot happen.
+        val size = Size(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+        )
 
         val finish = {
             if (--outstanding == 0) {

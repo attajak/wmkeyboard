@@ -2165,16 +2165,20 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Separate chip budgets — 6 credential chips, 3 platform chips
     - Separate toggles — Password-manager chips on by default; system smart replies on by default
     - A lane that is off requests 0 chips rather than discarding them later
+    - Password-manager chips off closes *both* lanes — one request per field serves both, so asking for replies also diverts credentials out of the manager's dropdown and into a lane that would drop them; the boolean `onInlineSuggestionsResponse` returns is wired to a Consumer and discarded, so they cannot be handed back (#250)
     - Reply chips ranked ahead of action chips within the platform lane
     - Autofill order left exactly as the manager sent it
   - Rendering and safety `uncommon`
     - Declared with `supportsInlineSuggestions` in method.xml — without it the platform never calls onCreateInlineSuggestionsRequest and the manager draws its own dropdown (#250)
     - Per-chip width capped at half the screen — the spec max is what the sender lays out against, so an uncapped one fills the strip and hides the rest
-    - Inflated at WRAP_CONTENT width so chips size to their own content
     - Hosted in an Android HorizontalScrollView, not a Compose one — chips are remote surfaces that ignore a Compose clip and keep their full width off screen, so they painted over the chevron, emoji key and dismiss cross and stole their touches
     - Each chip clipped to its visible slice on every scroll and layout (View.setClipBounds)
+    - Not on every draw, and not via offsetRectIntoDescendantCoords — AOSP's InlineContentClipView does both and both put chip text over the chevron here; the arithmetic matches AOSP's, so the difference is elsewhere (likely its transparent z-ordered SurfaceView). A translation that moves the row without a scroll or a layout is the known gap
+    - Inflated at WRAP_CONTENT in both axes — chips size to their own content, and an exact height outside the spec's range would make inflate throw into a swallowed catch, vanishing every chip silently
+    - Measured and inflated against the display context on Android 11–12, where the service's own resources still describe the built-in panel
     - Chips are remote-rendered; the keyboard never sees their contents
-    - No colour styling passed deliberately — A wrong theme guess would render someone's credentials unreadable
+    - Chip background and text colours follow the theme — the strip's own chip colours, reported out of the composition because the request is built on the service; the first request after process start carries none, since nothing has resolved a theme yet
+    - Renderer version read off the request's uiExtras, not echoed back into the request's own extras — an undeclared renderer is taken at v1, since the bundle is empty on every device tested and v1 is the only version there is
     - Both lanes inflated and delivered in one callback — Stops a reply landing a frame before a credential chip and moving the row
     - A chip that fails to inflate is dropped, not fatal
     - Both lanes closed in incognito

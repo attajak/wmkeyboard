@@ -34,6 +34,7 @@ import android.text.style.SuggestionSpan
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.View
+import android.view.WindowManager
 import android.net.Uri
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
@@ -512,6 +513,9 @@ import com.wasimaster.wmkeyboard.ime.ui.IconDefaults
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardFonts
 import com.wasimaster.wmkeyboard.ime.ui.emojiStickerJobId
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardScreen
+import com.wasimaster.wmkeyboard.ime.ui.InlineChipPalette
+import com.wasimaster.wmkeyboard.ime.ui.InlineChipPaletteReporter
+import com.wasimaster.wmkeyboard.ime.ui.LocalInlineChipPaletteReporter
 import com.wasimaster.wmkeyboard.ime.ui.LocalSystemNavBarPainter
 import com.wasimaster.wmkeyboard.ime.ui.SystemNavBarPainter
 import com.wasimaster.wmkeyboard.ime.ui.navigationBarWantsDarkIcons
@@ -3830,6 +3834,7 @@ open class WMKeyboardService : InputMethodService() {
             // one method is already up against the JVM's 64K ceiling.
             CompositionLocalProvider(
                 LocalSystemNavBarPainter provides systemNavBarPainter,
+                LocalInlineChipPaletteReporter provides inlineChipPaletteReporter,
             ) {
                 ServiceKeyboardContent()
             }
@@ -5124,29 +5129,84 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun inlineChipBudgets(): Pair<Int, Int> {
         val settings = _uiState.value.settings
-        val autofill = if (settings.suggestionSources.inlineAutofill) InlineAutofill.MAX_AUTOFILL_CHIPS else 0
+        // Password-manager chips off closes *both* lanes, not just its own.
+        //
+        // There is one inline request per field and it covers the two lanes
+        // together, so asking for replies also opts the field into the inline
+        // path — and the manager then sends its credentials down it instead of
+        // drawing its dropdown. The keyboard would drop them (this lane is
+        // off) and the user would be left with neither the chips nor the
+        // dropdown the setting promises them. The platform gives no way to
+        // take one and decline the other: onInlineSuggestionsResponse returns
+        // a boolean the framework wires to a Consumer and discards, so there
+        // is no handing them back either.
+        //
+        // Replies are the smaller loss, and only in the configuration where
+        // someone has said they want their manager's own UI (#250).
+        if (!settings.suggestionSources.inlineAutofill) return 0 to 0
         val platform = if (settings.suggestionStrip.systemSmartReplies && !incognitoForAutofillRequest()) {
             InlineAutofill.MAX_PLATFORM_CHIPS
         } else {
             0
         }
-        return autofill to platform
+        return InlineAutofill.MAX_AUTOFILL_CHIPS to platform
     }
 
     override fun onCreateInlineSuggestionsRequest(uiExtras: Bundle): InlineSuggestionsRequest? {
         if (!InlineAutofill.supported) return null
         val (autofillBudget, platformBudget) = inlineChipBudgets()
-        val density = resources.displayMetrics
+        val context = inlineChipContext()
+        val density = context.resources.displayMetrics
         val stripHeightPx = (INLINE_CHIP_HEIGHT_DP * density.density).toInt()
         return runCatching {
             InlineAutofill.request(
+                context = context,
                 uiExtras = uiExtras,
                 stripHeightPx = stripHeightPx,
                 maxWidthPx = density.widthPixels,
                 autofillBudget = autofillBudget,
                 platformBudget = platformBudget,
+                palette = inlineChipPalette,
             )
         }.getOrNull()
+    }
+
+    /**
+     * The context the chips are measured and inflated against: the display the
+     * keyboard is actually on, not the service's own.
+     *
+     * They differ the moment the keyboard is not on the default display — a
+     * desktop-mode window, an external screen — where the service's resources
+     * still describe the built-in panel. Sizing a chip by the wrong metrics is
+     * the visible half; the surface belongs to the other process and is handed
+     * a display too, which is the half that does not merely look wrong.
+     *
+     * Only Android 11 and 12 need the detour. From 12L the IME context is a
+     * window-provider context that re-resolves its own resources when the
+     * window moves, so it already *is* the display context; before 11 none of
+     * this code runs at all.
+     */
+    @Suppress("DEPRECATION")
+    private fun inlineChipContext(): Context {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) return this
+        return runCatching {
+            val windows = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            createDisplayContext(windows.defaultDisplay)
+        }.getOrDefault(this)
+    }
+
+    /**
+     * The strip's chip colours as the composition last resolved them, or null
+     * before it has drawn once. Written from the keyboard's own composition
+     * (see [InlineChipPaletteReport]) because the autofill request is built
+     * during onStartInput, with no composition in reach.
+     */
+    @Volatile
+    private var inlineChipPalette: InlineChipPalette? = null
+
+    /** Stable across recompositions, as [systemNavBarPainter] is. */
+    private val inlineChipPaletteReporter = InlineChipPaletteReporter { palette ->
+        inlineChipPalette = palette
     }
 
     /**
@@ -5163,11 +5223,9 @@ open class WMKeyboardService : InputMethodService() {
             autofillBudget = autofillBudget,
             platformBudget = platformBudget,
         )
-        val density = resources.displayMetrics
         InlineAutofill.inflateAll(
-            context = this,
+            context = inlineChipContext(),
             lanes = lanes,
-            stripHeightPx = (INLINE_CHIP_HEIGHT_DP * density.density).toInt(),
         ) { chips ->
             _uiState.update {
                 it.copy(autofillChips = chips.autofill, smartReplyChips = chips.platform)
