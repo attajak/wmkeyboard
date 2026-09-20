@@ -21,17 +21,29 @@ class FileAssociationTest {
         // Comments in this manifest quote the patterns they explain.
         .replace(Regex("<!--.*?-->", RegexOption.DOT_MATCHES_ALL), "")
 
+    /**
+     * The two import activities' own blocks. The file associations and the
+     * link filter are checked separately, because they claim deliberately
+     * different things: the file one claims the types our own exports arrive
+     * as, the link one claims text/plain and nothing else.
+     */
+    private fun activityBlock(name: String): String =
+        manifest.split("<activity").first { it.contains(name) }
+
+    private val fileActivity = activityBlock("ImportFileActivity")
+    private val linkActivity = activityBlock("ImportLinkActivity")
+
     private val patterns: List<String> =
         Regex("""android:pathPattern="([^"]+)"""")
-            .findAll(manifest).map { it.groupValues[1] }.toList()
+            .findAll(fileActivity).map { it.groupValues[1] }.toList()
 
-    /** Every MIME type the manifest claims, across all of its filters. */
+    /** Every MIME type the file associations claim, across their filters. */
     private val claimedTypes: List<String> =
         Regex("""android:mimeType="([^"]+)"""")
-            .findAll(manifest).map { it.groupValues[1] }.toList()
+            .findAll(fileActivity).map { it.groupValues[1] }.toList()
 
     /** The filters that match on a type rather than on a file name. */
-    private val typedFilters: List<String> = manifest.split("<intent-filter")
+    private val typedFilters: List<String> = fileActivity.split("<intent-filter")
         .filter { it.contains("android:mimeType") && !it.contains("pathPattern") }
 
     /**
@@ -107,12 +119,41 @@ class FileAssociationTest {
     fun `the share sheet reaches the import activity`() {
         // Sharing a theme out of a chat app reached FlorisBoard and not this
         // app, because only one of the two declared ACTION_SEND.
-        val send = manifest.split("<intent-filter")
+        val send = fileActivity.split("<intent-filter")
             .filter { it.contains("android.intent.action.SEND\"") }
         assertEquals(1, send.size)
         // No scheme: a share sheet matches on the type alone, and a declared
         // content:// would drop every app that shares its stream some other way.
         assertTrue("the share filter declares a scheme", !send.single().contains("android:scheme"))
+    }
+
+    @Test
+    fun `a shared link reaches the link importer, and nothing else does`() {
+        // A browser shares a page as text/plain and nothing else, so this is
+        // the only filter a shared address can match. It is a wide claim and
+        // it belongs to one activity: text with no address in it opens that
+        // activity, says so, and closes. The file importer must never claim
+        // text/plain, or every shared message would offer to be imported as a
+        // theme.
+        val send = linkActivity.split("<intent-filter")
+            .filter { it.contains("android.intent.action.SEND\"") }
+        assertEquals(1, send.size)
+        assertTrue(
+            "the link share filter does not claim text/plain",
+            send.single().contains("""android:mimeType="text/plain""""),
+        )
+        assertTrue("the link share filter declares a scheme", !send.single().contains("android:scheme"))
+        assertTrue(
+            "the file importer claims text/plain",
+            !fileActivity.contains("""android:mimeType="text/plain""""),
+        )
+        // The written form, for a README or a support reply. Browsable for the
+        // same reason the addon links are: following one only ever opens a
+        // dialog, and the fetch waits for the user.
+        assertTrue(
+            "the wmkeyboard://import link is not declared",
+            linkActivity.contains("""android:scheme="wmkeyboard" android:host="import""""),
+        )
     }
 
     @Test

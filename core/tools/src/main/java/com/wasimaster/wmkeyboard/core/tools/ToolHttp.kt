@@ -224,6 +224,7 @@ object ToolHttp {
         timeoutMs: Int = 20_000,
         maxBytes: Long = Long.MAX_VALUE,
         onProgress: ((Long, Long) -> Unit)? = null,
+        headers: Map<String, String> = emptyMap(),
     ) {
         target.parentFile?.mkdirs()
         val connection = URL(url).openConnection() as HttpURLConnection
@@ -231,6 +232,7 @@ object ToolHttp {
             connection.connectTimeout = timeoutMs
             connection.readTimeout = timeoutMs
             connection.setRequestProperty("User-Agent", USER_AGENT)
+            for ((name, value) in headers) connection.setRequestProperty(name, value)
             connection.instanceFollowRedirects = true
             val status = connection.responseCode
             if (status !in 200..299) throw httpFailure(status, null)

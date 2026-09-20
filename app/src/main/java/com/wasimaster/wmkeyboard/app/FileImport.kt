@@ -637,7 +637,7 @@ private fun proposalTitle(proposal: ImportProposal): String {
 }
 
 @Composable
-private fun ImportFileDialog(
+internal fun ImportFileDialog(
     repository: SettingsRepository,
     uri: Uri,
     onClose: () -> Unit,

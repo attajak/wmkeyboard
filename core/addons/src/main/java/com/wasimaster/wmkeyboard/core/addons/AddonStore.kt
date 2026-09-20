@@ -91,6 +91,10 @@ class AddonStore(private var baseDir: File?) {
         // written under: fetch on every visit, over any connection.
         val autoRefresh: Boolean = true,
         val refreshUnmeteredOnly: Boolean = false,
+        /**
+         * An optional GitHub token, for link imports only. See [forgeToken].
+         */
+        val forgeToken: String = "",
     )
 
     @Serializable
@@ -102,6 +106,7 @@ class AddonStore(private var baseDir: File?) {
     private val repoList = ArrayList<AddonRepoRef>()
     private var refreshOnOpen = true
     private var unmeteredRefresh = false
+    private var token = ""
     private val installedMap = LinkedHashMap<String, InstalledAddon>()
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 
@@ -219,6 +224,31 @@ class AddonStore(private var baseDir: File?) {
     fun setRefreshUnmeteredOnly(enabled: Boolean) {
         if (unmeteredRefresh == enabled) return
         unmeteredRefresh = enabled
+        save()
+    }
+
+    /**
+     * The user's own GitHub token, or blank, which is the normal case.
+     *
+     * Only ever sent to api.github.com, and only for what an address alone
+     * cannot fetch: an Actions artifact, whose download endpoint refuses an
+     * anonymous request even on a public repository, and a file in a private
+     * repository. Without one, an artifact link goes through nightly.link
+     * instead and everything else works unauthenticated.
+     *
+     * Kept here rather than in `KeyboardSettings` for a reason the other two
+     * fields on this snapshot do not have: a settings backup is a file people
+     * share, and a credential must not travel in one. Nothing under
+     * `filesDir/addons/` is exported.
+     */
+    @Synchronized
+    fun forgeToken(): String = token
+
+    @Synchronized
+    fun setForgeToken(value: String) {
+        val trimmed = value.trim()
+        if (token == trimmed) return
+        token = trimmed
         save()
     }
 
@@ -390,6 +420,7 @@ class AddonStore(private var baseDir: File?) {
                         repos = repoList.toList(),
                         autoRefresh = refreshOnOpen,
                         refreshUnmeteredOnly = unmeteredRefresh,
+                        forgeToken = token,
                     ),
                 ),
             )
@@ -426,6 +457,7 @@ class AddonStore(private var baseDir: File?) {
         repoList.clear()
         refreshOnOpen = true
         unmeteredRefresh = false
+        token = ""
         installedMap.clear()
         val dir = baseDir ?: run { _revision.value++; return }
 
@@ -436,6 +468,7 @@ class AddonStore(private var baseDir: File?) {
                 repoList.addAll(snapshot.repos.take(MAX_REPOS))
                 refreshOnOpen = snapshot.autoRefresh
                 unmeteredRefresh = snapshot.refreshUnmeteredOnly
+                token = snapshot.forgeToken
             }
         }
 

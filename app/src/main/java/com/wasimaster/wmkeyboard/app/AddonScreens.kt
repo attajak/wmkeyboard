@@ -562,6 +562,11 @@ internal fun AddonsScreen(
         }
     }
 
+    // A link is the other way in, and it needs no repository at all: an
+    // address shared from a browser or pasted here reaches the same importer
+    // that a downloaded file does. See app/ImportFromLink.kt.
+    LinkImportGroup(store)
+
     // Only worth showing once there is a repository to fetch from; with none,
     // the auto-fetch has nothing to do and the rows explain nothing.
     if (repos.isNotEmpty()) {

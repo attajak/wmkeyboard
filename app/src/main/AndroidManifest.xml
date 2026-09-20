@@ -595,6 +595,50 @@
         </activity>
 
         <!--
+             The other way in: a link instead of a file.
+
+             A theme, a layout, a pack or an add-on repository is nearly always
+             published as a page rather than as a file somebody already has on
+             their phone, so sharing that page's address has to lead somewhere.
+             ImportLinkActivity reads the address, works out what is behind it
+             (a raw file, a release asset, a gist, a folder, a build artifact,
+             an add-on repository), fetches it and hands it to the same import
+             dialog a file opened from the Files app goes through.
+
+             text/plain is a wide claim, and it is the whole point: a browser's
+             share sheet sends a link as text and nothing else. The price is
+             being listed whenever anybody shares any text, which is why the
+             filter carries its own label, "Import from a link", rather than the
+             app name. It is paid back the same way the typed file filter is:
+             text with no web address in it says so and closes, so being offered
+             is never a dead end.
+
+             The wmkeyboard://import form is for a link written on a page, in a
+             README or in a support reply. It is browsable for the same reason
+             the addon links are, and is safe to be for the same reason: it
+             fetches nothing until the dialog it opens is confirmed.
+        -->
+        <activity
+            android:name="com.wasimaster.wmkeyboard.app.ImportLinkActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="@string/import_link_label"
+            android:theme="@style/Theme.WMKeyboard.Import">
+            <intent-filter android:label="@string/import_link_label">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wmkeyboard" android:host="import" />
+            </intent-filter>
+        </activity>
+
+        <!--
              Where a file that is none of the keyboard's formats lands: the code
              editor, over whatever text the file holds. Not exported — only
              ImportFileActivity starts it, and it reads the URI under the grant

@@ -339,6 +339,8 @@ internal object SettingsRowIcons {
         // ---- Add-ons ----
         put(R.string.addon_auto_refresh_title) { Icons.Outlined.Autorenew }
         put(R.string.addon_refresh_unmetered_title) { Icons.Outlined.Wifi }
+        put(R.string.import_link_row_title) { Icons.Outlined.Link }
+        put(R.string.import_link_token_title) { Icons.Outlined.Key }
 
         // ---- Appearance ----
         put(R.string.appearance_themes_title) { Icons.Outlined.Palette }

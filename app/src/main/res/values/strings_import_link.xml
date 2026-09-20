@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Importing from a web address rather than from a file: the share sheet,
+     the wmkeyboard://import link, and the row on the Addons screen.
+     See app/ImportFromLink.kt.
+-->
+<resources>
+    <string name="import_link_label">Import from a link</string>
+    <string name="import_link_title">Import from a link?</string>
+
+    <!-- %1$s is a file name, %2$s the host it comes from. -->
+    <string name="import_link_confirm_file">WM Keyboard will download %1$s from %2$s.</string>
+    <!-- %1$s is a host name. -->
+    <string name="import_link_confirm_lookup">WM Keyboard will ask %1$s what this link holds. Nothing is imported until you confirm it.</string>
+    <string name="import_link_confirm_artifact">This link is a build artifact.</string>
+    <!-- %1$s is the host of the service used to get the artifact. -->
+    <string name="import_link_confirm_artifact_nightly">GitHub does not let an app download an artifact without an account, so this goes through %1$s, a service WM Keyboard does not operate. To use GitHub directly, add a token on the Addons screen.</string>
+
+    <string name="import_link_confirm_artifact_token">WM Keyboard will use your GitHub token to get it.</string>
+
+    <string name="import_link_progress_title">Getting the file</string>
+    <!-- %1$s is the bytes received, %2$s the total. Both are already formatted. -->
+    <string name="import_link_progress_bytes">%1$s of %2$s</string>
+
+    <string name="import_link_pick_title">Choose a file</string>
+    <string name="import_link_pick_other_body">None of these is one of WM Keyboard\'s own formats. You can still choose one, and WM Keyboard will read it to see what it is.</string>
+
+    <string name="import_link_archive_title">Choose a file from the archive</string>
+    <string name="import_link_archive_body">This link is an archive with more than one file that WM Keyboard can import.</string>
+
+    <string name="import_link_repo_title">Add-on repository</string>
+    <!-- %1$s is the repository name. -->
+    <string name="import_link_repo_body">This link is the add-on repository %1$s. Open it to see what it holds and to add it.</string>
+    <string name="import_link_repo_action">Open</string>
+
+    <string name="import_link_error_not_a_link">There is no web address in what you shared.</string>
+    <string name="import_link_error_insecure">WM Keyboard imports from https addresses only.</string>
+    <string name="import_link_error_nothing">This link holds nothing WM Keyboard can import.</string>
+    <string name="import_link_error_network">WM Keyboard cannot reach this link.</string>
+    <string name="import_link_error_download">The download did not finish.</string>
+
+    <!-- The row on the Addons screen, and the dialog it opens. -->
+    <string name="import_link_row_title">Import from a link</string>
+    <string name="import_link_row_subtitle">Paste the address of a theme, a layout, a pack or a repository</string>
+    <string name="import_link_field_label">Link</string>
+
+    <!-- The optional GitHub token, on the Addons screen. -->
+    <string name="import_link_token_title">GitHub token</string>
+    <string name="import_link_token_set">Set</string>
+    <string name="import_link_token_unset">Not set</string>
+    <string name="import_link_token_body">A token is optional. WM Keyboard needs one only for build artifacts and for files in a private repository. It is sent to GitHub only, it is never put in a backup, and you can remove it here at any time.</string>
+    <string name="import_link_token_label">Token</string>
+</resources>
