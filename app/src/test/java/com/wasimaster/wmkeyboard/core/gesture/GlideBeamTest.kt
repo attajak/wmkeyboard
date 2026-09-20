@@ -148,6 +148,51 @@ class GlideBeamTest {
         return out
     }
 
+    /**
+     * The same stroke with the finger rubbed back and forth across [letter]'s
+     * key: a window with a loop's worth of path and none of its turning, which
+     * is the other mark people draw for a doubled letter. No clock, like
+     * [loopedAt], so only the geometry can say anything.
+     */
+    private fun wiggledAt(path: List<GesturePoint>, letter: Char): List<GesturePoint> {
+        val key = centers.getValue(letter.code)
+        var nearest = 0
+        var best = Float.MAX_VALUE
+        path.forEachIndexed { i, p ->
+            val d = (p.x - key.x) * (p.x - key.x) + (p.y - key.y) * (p.y - key.y)
+            if (d < best) {
+                best = d
+                nearest = i
+            }
+        }
+        val at = path[nearest]
+        val before = path[(nearest - 1).coerceAtLeast(0)]
+        val after = path[(nearest + 1).coerceAtMost(path.lastIndex)]
+        var dx = after.x - before.x
+        var dy = after.y - before.y
+        val len = sqrt(dx * dx + dy * dy).takeIf { it > 0f } ?: 1f
+        dx /= len
+        dy /= len
+        // Across the line of travel, so the rub is not simply more of the
+        // stroke: out, back past the start, and out again.
+        val out = ArrayList<GesturePoint>(path.size + WIGGLE_POINTS * WIGGLE_STEPS + 1)
+        path.forEachIndexed { i, p ->
+            out.add(p)
+            if (i == nearest) {
+                for (s in 1..WIGGLE_POINTS) {
+                    val swing = if (s % 2 == 0) -WIGGLE_REACH_PX else WIGGLE_REACH_PX
+                    for (step in 1..WIGGLE_STEPS) {
+                        val t = step.toFloat() / WIGGLE_STEPS
+                        val d = swing * t + (if (s == 1) 0f else -swing * (1f - t))
+                        out.add(GesturePoint(at.x - dy * d, at.y + dx * d, p.t))
+                    }
+                }
+                out.add(GesturePoint(at.x, at.y, p.t))
+            }
+        }
+        return out
+    }
+
     /** The alignment cost [beam] charges [word] for [path]. */
     private fun costOf(word: String, path: List<GesturePoint>, beam: GlideBeam): Double =
         beam.decode(path, grid, keyWidth, sources, workspace, 8).first { it.word == word }.shapeCost
@@ -296,6 +341,50 @@ class GlideBeamTest {
         val stroke = loopedAt(gestureFor("god"), 'o')
         val default = GlideBeam.Tuning().unclaimedLoop
         assertEquals(if (default > 0f) "good" else "god", decode(stroke, from = src).first())
+    }
+
+    @Test
+    fun `a loop only marks the key its centre sits on`() {
+        // The setting behind "Loop centring" (#270). The circle is drawn
+        // through the o and centres about a third of a key off it, so a reach
+        // tighter than that leaves the loop belonging to no letter at all, and
+        // the doubled spelling loses the waiver that was carrying it.
+        val stroke = loopedAt(gestureFor("god"), 'o')
+        val tight = GlideBeam(GlideBeam.Tuning(loopRadius = 0.05f))
+        assertEquals("god", tight.decode(stroke, grid, keyWidth, sources, workspace, 4).first().word)
+        assertEquals("good", decode(stroke).first())
+    }
+
+    @Test
+    fun `asking for a longer pause makes a doubled letter dearer`() {
+        // The setting behind "Pause to double a letter" (#270). The hold is
+        // the only evidence the o is written twice, so what the weight moves
+        // is how much of the doubling the hold pays for. Read against the
+        // stroke's own pace, which is why the test is about the charge and
+        // not about a threshold in milliseconds: this hold is some twenty
+        // times the stroke's mean step, so it is a full stop at every value
+        // the setting can reach, and only an unreachable one leaves it as
+        // ordinary travel.
+        val stroke = pausedAt(gestureFor("god"), 'o')
+        val prompt = costOf("good", stroke, GlideBeam(GlideBeam.Tuning(dwellFull = 1f)))
+        val shipped = costOf("good", stroke, beam)
+        val patient = costOf("good", stroke, GlideBeam(GlideBeam.Tuning(dwellFull = NO_PAUSE_COUNTS)))
+        assertTrue("$prompt then $shipped then $patient", prompt <= shipped)
+        assertTrue("$shipped then $patient", shipped < patient)
+        // And the stroke still reads as the doubled word throughout: the
+        // weight decides what a hold is worth, not whether one was drawn.
+        assertEquals("good", decode(stroke).first())
+    }
+
+    @Test
+    fun `a rub on a key is a doubled letter only with wiggles on`() {
+        // The setting behind "Wiggle to double a letter" (#270). The stroke
+        // carries a back-and-forth on the o and no clock, so the shipped
+        // tuning, which reads wiggles not at all, has nothing to go on.
+        val stroke = wiggledAt(gestureFor("god"), 'o')
+        assertEquals("god", decode(stroke).first())
+        val reading = GlideBeam(GlideBeam.Tuning.WIGGLES_ON.copy(wiggleWeight = 1f))
+        assertEquals("good", reading.decode(stroke, grid, keyWidth, sources, workspace, 4).first().word)
     }
 
     @Test
@@ -477,5 +566,17 @@ class GlideBeamTest {
         /** A loop a third of a key wide, drawn as two dozen points. */
         const val LOOP_RADIUS_PX = 18f
         const val LOOP_POINTS = 24
+
+        /**
+         * A rub across a quarter of a key either way, drawn as four swings of
+         * six points: two thirds of a key of extent and four times that in
+         * path, which is a loop's ratio with none of a loop's turning.
+         */
+        const val WIGGLE_REACH_PX = 13f
+        const val WIGGLE_POINTS = 4
+        const val WIGGLE_STEPS = 6
+
+        /** A pause reading no hold in a stroke this short can reach. */
+        const val NO_PAUSE_COUNTS = 64f
     }
 }

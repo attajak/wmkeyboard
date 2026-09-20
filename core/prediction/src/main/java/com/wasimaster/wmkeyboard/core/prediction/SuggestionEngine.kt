@@ -819,14 +819,28 @@ class SuggestionEngine(
     private var deepGlideBeam = GlideBeam(glideTuning.copy(vocabularyRank = 0))
 
     /**
-     * Point both decoders at new weights, rebuilding them only when something
+     * Point both decoders at [next], rebuilding them only when something
      * actually moved.
      *
-     * Every argument defaults to what the engine is already using, so a caller
-     * that knows about one setting does not have to know about the others. The
-     * three radii are the decoder's tolerances, exposed as settings by #222;
-     * [vocabularyRank] is how much of the dictionary a swipe may answer with,
-     * and is the one weight the deep decoder deliberately ignores.
+     * The whole tuning at once, because the settings that reach here arrive
+     * together: the caller reads one `GestureSettings` and turns it into one
+     * set of weights (`GestureSettings.glideTuning()` in :core:settings). The
+     * deep decoder takes the same weights with the vocabulary cap dropped,
+     * which is the one thing it deliberately ignores.
+     */
+    fun tuneGlide(next: GlideBeam.Tuning) {
+        if (next == glideTuning) return
+        glideTuning = next
+        glideBeam = GlideBeam(next)
+        deepGlideBeam = GlideBeam(next.copy(vocabularyRank = 0))
+    }
+
+    /**
+     * The same, one weight at a time: every argument defaults to what the
+     * engine is already using, so a caller that knows about one setting does
+     * not have to know about the others. The three radii are the decoder's
+     * tolerances, exposed as settings by #222; [vocabularyRank] is how much of
+     * the dictionary a swipe may answer with.
      */
     fun tuneGlide(
         startRadius: Float = glideTuning.startRadius,
@@ -834,16 +848,14 @@ class SuggestionEngine(
         nearRadius: Float = glideTuning.nearRadius,
         vocabularyRank: Int = glideTuning.vocabularyRank,
     ) {
-        val next = glideTuning.copy(
-            startRadius = startRadius,
-            endRadius = endRadius,
-            nearRadius = nearRadius,
-            vocabularyRank = vocabularyRank,
+        tuneGlide(
+            glideTuning.copy(
+                startRadius = startRadius,
+                endRadius = endRadius,
+                nearRadius = nearRadius,
+                vocabularyRank = vocabularyRank,
+            ),
         )
-        if (next == glideTuning) return
-        glideTuning = next
-        glideBeam = GlideBeam(next)
-        deepGlideBeam = GlideBeam(next.copy(vocabularyRank = 0))
     }
 
     /**

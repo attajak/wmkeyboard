@@ -8,6 +8,9 @@
     <string name="typing_group_smart_chips_title">Smart chips</string>
     <string name="typing_group_gestures_title">Gestures</string>
     <string name="typing_group_glide_title">Glide typing</string>
+    <string name="typing_group_glide_tuning_title">Advanced tuning</string>
+    <string name="typing_group_glide_tuning_summary">Error radius, pause, loop and wiggle</string>
+    <string name="typing_group_glide_tuning_info">These values are how the keyboard reads a glide: how near the keys your finger has to go for a word to be offered at all, and what tells it that you wrote a letter twice. They ship at the values the keyboard was measured with. Move one, glide a few sentences, and press the reset on the row if it was worse. Nothing here can break the keyboard.</string>
     <string name="typing_group_glide_trail_title">Glide trail and preview</string>
     <string name="typing_group_spacebar_title">Spacebar gestures</string>
     <string name="typing_group_backspace_title">Delete keys</string>
@@ -521,6 +524,40 @@
     <string name="typing_glide_near_radius_title">Path error radius</string>
     <string name="typing_glide_near_radius_subtitle">How far a glide can pass from a letter on the way</string>
     <string name="typing_glide_near_radius_info">Measured in key widths. A letter is available to a word only when the glide passed this close to its key. A high value lets you cut corners and still get the letter. A low value keeps the keyboard to the keys you touched, which is faster and more exact, but a cut corner then loses the word. Move this up if long words come out with a letter missing.</string>
+
+    <!-- The three marks a stroke can carry for a doubled letter: a pause on
+         the key, a circle on it, a back and forth on it. -->
+    <string name="typing_glide_dwell_title">Pause to double a letter</string>
+    <string name="typing_glide_dwell_subtitle">How long to stay on a key to write the letter twice</string>
+    <string name="typing_glide_dwell_info">A glide draws \"good\" and \"god\" the same way, because the o is one key and your finger crosses it one time. Stay on the key for a moment to say that the letter is there twice. The value is a multiple of your own speed in that same glide, not a number of seconds, so it works in a quick glide and a slow one alike. A low value accepts a short stop, but a careful glide that slows down everywhere then writes letters twice by itself. A high value asks for a clear stop.</string>
+
+    <string name="typing_glide_loop_title">Loop to double a letter</string>
+    <string name="typing_glide_loop_subtitle">Draw a small circle on a key to write the letter twice</string>
+    <string name="typing_glide_loop_info">This is the mark Swype taught. Glide to the letter, go around on it one time, and carry on. The circle costs the word nothing, because the keyboard takes the loop out of the distance your finger travelled. Turn this off if your glides curl on the way and you get letters written twice that you did not ask for.</string>
+
+    <string name="typing_glide_loop_arc_title">Loop sensitivity</string>
+    <string name="typing_glide_loop_arc_subtitle">How much of a circle a curl must be to count as one</string>
+    <string name="typing_glide_loop_arc_info">Measured in key widths of drawn path. A low value reads a small curl as a mark, which is less work to draw but also catches the shake of a slow turn. A high value asks for a circle you drew on purpose.</string>
+
+    <string name="typing_glide_loop_extent_title">Biggest loop that counts</string>
+    <string name="typing_glide_loop_extent_subtitle">Wider circles are a path through keys, not a mark on one</string>
+    <string name="typing_glide_loop_extent_info">Measured in key widths. A mark has to be small enough to sit on one key. A word such as \"murderer\" goes around a ring of keys next to each other and draws a wide circle that means nothing of the sort, so keep this under the width of one key. A low value counts only a tight circle and keeps the letters around it out of it.</string>
+
+    <string name="typing_glide_loop_radius_title">Loop centring</string>
+    <string name="typing_glide_loop_radius_subtitle">How near the letter the middle of a circle must be</string>
+    <string name="typing_glide_loop_radius_info">Measured in key widths. The keyboard gives a circle to the key nearest its middle. A circle drawn through a key sits about a third of a key to one side, so a very low value finds no letter for it and the mark does nothing. A high value can give the mark to the key next door.</string>
+
+    <string name="typing_glide_wiggle_title">Wiggle to double a letter</string>
+    <string name="typing_glide_wiggle_subtitle">Rub back and forth on a key to write the letter twice</string>
+    <string name="typing_glide_wiggle_info">The other mark people use for a letter written twice: instead of a circle, they scrub over the key. This is off, because a slow turn drawn with an unsteady finger looks much the same, and the keyboard then writes letters twice that you wrote one time. Turn it on if this is the mark you make.</string>
+
+    <string name="typing_glide_wiggle_strength_title">Wiggle strength</string>
+    <string name="typing_glide_wiggle_strength_subtitle">How much a rub counts as evidence of two letters</string>
+    <string name="typing_glide_wiggle_strength_info">A value of 100 percent makes the mark as good as a circle. A lower value leaves it as a hint, which a much more common word can still win against. Used only while the switch above is on.</string>
+
+    <string name="typing_glide_wiggle_extent_title">Biggest wiggle that counts</string>
+    <string name="typing_glide_wiggle_extent_subtitle">How far the finger can go in a rub</string>
+    <string name="typing_glide_wiggle_extent_info">Measured in key widths. Keep this under the width of one key, or a word that goes from one key to the key next door and back reads as one letter written twice. Used only while the switch above is on.</string>
 
     <string name="typing_swipe_start_distance_title">Swipe start distance</string>
     <string name="typing_swipe_start_distance_subtitle">How far to move before a glide starts. A low value is more sensitive</string>

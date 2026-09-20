@@ -298,6 +298,7 @@ import com.wasimaster.wmkeyboard.core.settings.GLIDE_OUTCOMES_FILE
 import com.wasimaster.wmkeyboard.core.settings.GLIDE_SHAPES_FILE
 import com.wasimaster.wmkeyboard.core.settings.GLIDE_SANDBOX_FILE
 import com.wasimaster.wmkeyboard.core.settings.GestureSettings
+import com.wasimaster.wmkeyboard.core.settings.glideTuning
 import com.wasimaster.wmkeyboard.core.settings.GlideCommitColor
 import com.wasimaster.wmkeyboard.core.settings.GlideCommitColorScope
 import com.wasimaster.wmkeyboard.core.settings.GlideLookAhead
@@ -3294,15 +3295,10 @@ open class WMKeyboardService : InputMethodService() {
                     loadedWordPairsOff = wordPairsOff
                     suggestionEngine?.ngramPack = loadNgramPack(_uiState.value.language.id)
                 }
-                // What a swipe may answer with, and how far off the keys it
-                // may be drawn. Cheap to set — the engine rebuilds nothing
-                // for values it already has.
-                suggestionEngine?.tuneGlide(
-                    startRadius = settings.gesture.startRadius,
-                    endRadius = settings.gesture.endRadius,
-                    nearRadius = settings.gesture.nearRadius,
-                    vocabularyRank = settings.gesture.vocabulary.rank,
-                )
+                // What a swipe may answer with, how far off the keys it may be
+                // drawn, and what marks a doubled letter. Cheap to set — the
+                // engine rebuilds nothing for weights it already has.
+                suggestionEngine?.tuneGlide(settings.gesture.glideTuning())
                 // The offensive-word filter is per language and reads only the
                 // enabled ones, so switching a language on has to widen it.
                 // Cheap enough to do here rather than through a full reload:
@@ -3704,14 +3700,7 @@ open class WMKeyboardService : InputMethodService() {
                 phoneticAutoEnglish = _uiState.value.settings.suggestionStrip.phoneticAutoEnglish
                 scriptChoices = this@WMKeyboardService.scriptChoices
                 fieldDetectionShift = fieldDetectionShift(_uiState.value.settings)
-                _uiState.value.settings.gesture.let { gesture ->
-                    tuneGlide(
-                        startRadius = gesture.startRadius,
-                        endRadius = gesture.endRadius,
-                        nearRadius = gesture.nearRadius,
-                        vocabularyRank = gesture.vocabulary.rank,
-                    )
-                }
+                tuneGlide(_uiState.value.settings.gesture.glideTuning())
                 ngramReranker = NgramReranker(
                     userLexicon,
                     seedBigrams,

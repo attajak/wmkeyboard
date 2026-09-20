@@ -122,6 +122,25 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
          */
         val dwellPenalty: Float = 0.4f,
         /**
+         * How many times the stroke's own even pace a step has to take for the
+         * finger to read as having stopped dead there.
+         *
+         * The pause reading is relative rather than a count of milliseconds,
+         * and has to be: the same hesitation that is a deliberate mark in a
+         * quick stroke is how a slow, careful one moves throughout. A step
+         * taking `1 + this` times the stroke's mean step scores a full 1, and
+         * everything between the mean and that scores in proportion, so
+         * lowering this makes a shorter hesitation count for a whole pause and
+         * raising it asks for a longer one.
+         *
+         * Read by both halves of the pause model — [dwellPenalty], which waives
+         * a doubled letter's charge, and [unclaimedDwell], which charges the
+         * words that ignore the pause — so one number decides what counts as a
+         * pause at all. Floored where it is used (see [dwellScale]): at zero
+         * every step of an evenly drawn stroke is 0/0.
+         */
+        val dwellFull: Float = 3.0f,
+        /**
          * Charge per unit of pause a finished word leaves unexplained.
          *
          * [dwellPenalty] reads a pause as evidence *for* a doubled letter. This
@@ -202,6 +221,19 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         val loopExtent: Float = 0.8f,
         /** Least arc a window must hold to be a loop rather than tremor, in key widths. */
         val loopMinArc: Float = 1.0f,
+        /**
+         * How near a key a loop's centre has to sit, in key widths, for the
+         * loop to be a mark on that key.
+         *
+         * Tighter than the pause's own reach (`DWELL_RADIUS_SQ`), and for a
+         * reason the two readings do not share: a circle drawn through a key
+         * centres about a third of a key off it, so the reach has to cover
+         * that, and the next key along must not be credited for the same
+         * circle. Both halves of the loop model read it — the waiver a doubled
+         * letter gets, and the [unclaimedLoop] every word that ignores the loop
+         * pays — so one number decides which key a loop is about.
+         */
+        val loopRadius: Float = 0.6f,
         /**
          * Widest a *wiggle* may be — a window with a loop's arc for its extent
          * but no net turning, the back-and-forth some people draw for a
@@ -360,6 +392,10 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         val startRadiusSq: Float get() = startRadius * startRadius
         val endRadiusSq: Float get() = endRadius * endRadius
         val nearCost: Float get() = nearRadius * nearRadius * invTwoSigmaSq
+        val loopRadiusSq: Float get() = loopRadius * loopRadius
+
+        /** [dwellFull] as the divisor it is used as, floored off zero. */
+        val dwellScale: Float get() = if (dwellFull > MIN_DWELL_FULL) dwellFull else MIN_DWELL_FULL
 
         companion object {
             /**
@@ -369,6 +405,23 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
              * invisible until someone presses the row's reset.
              */
             val DEFAULT = Tuning()
+
+            /**
+             * What the wiggle reading is worth *when someone switches it on*.
+             *
+             * [wiggleExtent] and [wiggleWeight] ship at zero, which is the
+             * reading switched off, so a setting that offers it needs a pair of
+             * live numbers to start from and they belong here with the weights
+             * rather than retyped beside a slider. These are the middle of the
+             * band the sweep covered (`GlideTuningSweepTest`): an extent under
+             * one key pitch, so a word crossing two adjacent keys can never
+             * read as one, and half a loop's worth of doubling evidence, since
+             * a back-and-forth is the weaker of the two marks.
+             */
+            val WIGGLES_ON = DEFAULT.copy(wiggleExtent = 0.5f, wiggleWeight = 0.5f)
+
+            /** Floor on [dwellScale]: at zero an evenly drawn step is 0/0. */
+            private const val MIN_DWELL_FULL = 0.1f
         }
     }
 
@@ -1069,10 +1122,11 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         val span = (ws.pathT[n - 1] - ws.pathT[0]).toFloat()
         if (span <= 0f) return
         val evenStep = span / (n - 1)
+        val dwellScale = tuning.dwellScale
         var runEnd = -1
         for (j in 1 until n) {
             val step = (ws.pathT[j] - ws.pathT[j - 1]).toFloat()
-            val lingering = ((step / evenStep) - 1f) / DWELL_FULL
+            val lingering = ((step / evenStep) - 1f) / dwellScale
             if (lingering <= 0f) continue
             val score = if (lingering > 1f) 1f else lingering
             recordPause(j, score, runEnd, ws)
@@ -1335,7 +1389,7 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
      * Files the fine window `[from, to]` as a loop event of strength [score]:
      * its centroid, the alignment samples it covers, and how much of its
      * path its chord is — what the collapse leaves of it. Credits every key
-     * within `LOOP_RADIUS_SQ` of the centroid.
+     * within [Tuning.loopRadius] of the centroid.
      */
     private fun recordLoop(from: Int, to: Int, score: Float, keys: GlideKeyMap, ws: GlideWorkspace) {
         val xs = ws.fineX
@@ -1377,10 +1431,11 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         ws.loopY[e] = cy
         ws.loopScore[e] = score
         ws.loopCount = e + 1
+        val radiusSq = tuning.loopRadiusSq
         for (k in 0 until keys.keyCount) {
             val kx = cx - keys.keyX[k]
             val ky = cy - keys.keyY[k]
-            if (kx * kx + ky * ky > LOOP_RADIUS_SQ) continue
+            if (kx * kx + ky * ky > radiusSq) continue
             if (score > ws.keyLoop[k]) ws.keyLoop[k] = score
         }
     }
@@ -1435,6 +1490,7 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
     private fun unclaimedLoop(s: Int, keys: GlideKeyMap, ws: GlideWorkspace): Float {
         val weight = tuning.unclaimedLoop
         if (weight <= 0f || ws.loopCount == 0) return 0f
+        val radiusSq = tuning.loopRadiusSq
         var charge = 0f
         for (e in 0 until ws.loopCount) {
             val lx = ws.loopX[e]
@@ -1449,7 +1505,7 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
                     val key = ws.lastKey[cur]
                     val dx = lx - keys.keyX[key]
                     val dy = ly - keys.keyY[key]
-                    claimed = dx * dx + dy * dy <= LOOP_RADIUS_SQ
+                    claimed = dx * dx + dy * dy <= radiusSq
                 }
                 cur = parent
             }
@@ -1744,9 +1800,6 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
 
         private const val SHAPE_BYTE_LIMIT = 127
 
-        /** How many times the even pace a step must take to count as a full stop. */
-        private const val DWELL_FULL = 3.0f
-
         /** How near a key a pause has to happen to count as a pause on it. */
         private const val DWELL_RADIUS_SQ = 0.8f * 0.8f
 
@@ -1777,14 +1830,6 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
 
         /** Below this extent a window is tremor, whatever its path: a loop a finger means is wider than a third of a key. */
         private const val MIN_LOOP_EXTENT_SQ = 0.3f * 0.3f
-
-        /**
-         * How near a key a loop's centre must sit to be a loop on that key.
-         * Tighter than [DWELL_RADIUS_SQ]: a circle drawn through a key centres
-         * a third of a key off it, and the next key along must not be credited
-         * for it too.
-         */
-        private const val LOOP_RADIUS_SQ = 0.6f * 0.6f
 
         /** Runaway backstop; floor pruning ends healthy walks far earlier. */
         const val MAX_POPS = 2000

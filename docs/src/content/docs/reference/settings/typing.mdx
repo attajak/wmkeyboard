@@ -249,9 +249,6 @@ Full writeup: [One-time codes](/smart/one-time-codes/), and [Permissions](/priva
 | Finish long words early | Choice: Off / When sure / Eager | Off | Glide typing on and swipe mode is Type words |
 | Color the word a lift will type | Choice: Never / When sure / Any early word / Always | When sure | Glide typing on and swipe mode is Type words |
 | Where the color shows | Choice: Strip / Strip and pill / Strip, pill and keys | Strip and pill | Glide typing on and swipe mode is Type words |
-| Start error radius | Slider, 0.5×–4× | 1.6× | Glide typing on and swipe mode is Type words |
-| End error radius | Slider, 0.5×–4× | 1.6× | Glide typing on and swipe mode is Type words |
-| Path error radius | Slider, 0.5×–4× | 1.5× | Glide typing on and swipe mode is Type words |
 | Space after a glided word | Toggle | On | Glide typing on and swipe mode is Type words |
 | Apostrophe in a glide | Choice: Off / Comma / Full stop / Spacebar / Apostrophe key | Off | Glide typing on and swipe mode is Type words |
 | Swipe start distance | Slider, 0.5×–4× | 2.0× | Glide typing on |
@@ -293,6 +290,28 @@ Full writeup: [One-time codes](/smart/one-time-codes/), and [Permissions](/priva
 </PhoneFrame>
 
 Full writeup: [Gestures](/typing/gestures/) for the spacebar/backspace/volume-key drags, [Glide typing](/typing/glide-typing/) for the glide sub-settings, and [Handwriting](/tools/handwriting/#handwriting-without-opening-the-panel) for handwrite mode.
+
+### Advanced tuning
+
+A fold further down the same screen, closed until you open it. Every row in it is a weight the glide decoder reads a stroke with, and the whole group is hidden unless glide typing is on and the swipe mode is Type words. Each row keeps its own reset, so nothing here is a one-way door.
+
+| Setting | Type | Default | Shown when |
+| --- | --- | --- | --- |
+| Start error radius | Slider, 0.5×–4× | 1.6× | always |
+| End error radius | Slider, 0.5×–4× | 1.6× | always |
+| Path error radius | Slider, 0.5×–4× | 1.5× | always |
+| Pause to double a letter | Slider, 1×–8× | 3.0× | always |
+| Loop to double a letter | Toggle | On | always |
+| Loop sensitivity | Slider, 0.5×–2× | 1.0× | Loop to double a letter on |
+| Biggest loop that counts | Slider, 0.4×–1.2× | 0.8× | Loop to double a letter on |
+| Loop centring | Slider, 0.35×–1× | 0.60× | Loop to double a letter on |
+| Wiggle to double a letter | Toggle | Off | always |
+| Wiggle strength | Slider, 10%–100% | 50% | Wiggle to double a letter on |
+| Biggest wiggle that counts | Slider, 0.2×–0.9× | 0.50× | Wiggle to double a letter on |
+
+The first three decide which words a stroke may be read as at all. The rest decide how a stroke says a letter is written twice, which shape alone cannot: a pause on the key, a small circle on it, or a rub back and forth over it. Every value is in key widths except the pause, which is a multiple of your own speed in that same stroke, and the wiggle's strength, which is a percentage of what a circle is worth.
+
+Full writeup: [Telling the keyboard a letter is doubled](/typing/glide-typing/#telling-the-keyboard-a-letter-is-doubled).
 
 ## Enter key
 

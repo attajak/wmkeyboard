@@ -4739,6 +4739,50 @@ val GlidePickerDwellMsRange = 150..1000
  */
 val GlideRadiusRange = 0.5f..4f
 
+/**
+ * Bounds for [GestureSettings.dwellFull], as multiples of a stroke's own mean
+ * step. The floor is above zero because the weight is a divisor, and the
+ * ceiling is a hesitation so long that only a deliberate stop reaches it.
+ */
+val GlideDwellFullRange = 1f..8f
+
+/**
+ * Bounds for [GestureSettings.loopMinArc], in key widths: the least path a
+ * curl has to hold before it is a loop rather than tremor. Covers the band
+ * `GlideTuningSweepTest` swept, 0.7 to 1.6, with room either side.
+ */
+val GlideLoopMinArcRange = 0.5f..2f
+
+/**
+ * Bounds for [GestureSettings.loopExtent], in key widths. The ceiling is
+ * deliberately near one key pitch: three neighbouring keys visited in a ring
+ * draw a real loop of extent about one, so a limit far above that reads a
+ * word like `murderer` as a doubled letter.
+ */
+val GlideLoopExtentRange = 0.4f..1.2f
+
+/**
+ * Bounds for [GestureSettings.loopRadius], in key widths: how near a key the
+ * loop's centre has to sit for the loop to be about that key. A circle drawn
+ * through a key centres about a third of a key off it, so the floor has to
+ * clear that, and the ceiling stops short of the next key along.
+ */
+val GlideLoopRadiusRange = 0.35f..1f
+
+/**
+ * Bounds for [GestureSettings.wiggleExtent], in key widths. The ceiling stays
+ * under one key pitch: a wider wiggle would read a word that goes back and
+ * forth across two adjacent keys as one doubled letter.
+ */
+val GlideWiggleExtentRange = 0.2f..0.9f
+
+/**
+ * Bounds for [GestureSettings.wiggleWeight]: what a wiggle is worth as a
+ * doubled-letter mark, against a loop's 1. The floor is above zero because
+ * zero is the reading switched off, which is what the toggle is for.
+ */
+val GlideWiggleWeightRange = 0.1f..1f
+
 /** Glide-typing behaviour and swipe-trail appearance. See [KeyboardSettings.gesture]. */
 data class GestureSettings(
     /**
@@ -5018,6 +5062,75 @@ data class GestureSettings(
      */
     val nearRadius: Float = GlideBeam.Tuning.DEFAULT.nearRadius,
     /**
+     * How long the finger has to linger on a key, as a multiple of the
+     * stroke's own mean step, for the pause to read as a deliberate one
+     * (#270).
+     *
+     * This and the six below are the decoder's three *intents*: the marks a
+     * stroke can carry that say a letter is written twice. A pause on the key
+     * is one, a small circle on it is the second, and a back-and-forth on it
+     * is the third. Shape alone cannot tell `good` from `god` (the o is one
+     * key, crossed once), so these are the only evidence there is, and how
+     * readily each one registers depends on the hand: a slow, careful glide
+     * pauses everywhere, and a quick one barely pauses at all.
+     *
+     * Relative rather than in milliseconds, on purpose. See
+     * [GlideBeam.Tuning.dwellFull], whose default this is; range
+     * [GlideDwellFullRange].
+     */
+    val dwellFull: Float = GlideBeam.Tuning.DEFAULT.dwellFull,
+    /**
+     * Read a small circle drawn on a key as that letter twice, the way Swype
+     * taught. On, which is what the decoder always did: off is
+     * [GlideBeam.Tuning.loopExtent] at zero, which stops the search looking
+     * for loops at all. See [dwellFull].
+     */
+    val loopDouble: Boolean = GlideBeam.Tuning.DEFAULT.loopExtent > 0f,
+    /**
+     * Least path a curl has to hold, in key widths, before it counts as a
+     * loop rather than the tremor of a slow pivot. Lower catches a smaller
+     * circle and reads more curls as marks; higher asks for a circle drawn on
+     * purpose. Does nothing while [loopDouble] is off. Range
+     * [GlideLoopMinArcRange].
+     */
+    val loopMinArc: Float = GlideBeam.Tuning.DEFAULT.loopMinArc,
+    /**
+     * Widest a loop may be, in key widths, and still be a mark on one key.
+     * This is what keeps the letters around it out of it: a word whose keys
+     * are visited in a ring draws a real loop, and a limit above a key pitch
+     * would read that as a doubled letter. Range [GlideLoopExtentRange].
+     */
+    val loopExtent: Float = GlideBeam.Tuning.DEFAULT.loopExtent,
+    /**
+     * How near a key's centre the loop's own centre has to sit for the loop
+     * to be about that letter, in key widths. Range [GlideLoopRadiusRange].
+     */
+    val loopRadius: Float = GlideBeam.Tuning.DEFAULT.loopRadius,
+    /**
+     * Read a back-and-forth on a key — a scribble with no turn to it, which
+     * is how some people mark a doubled letter — as that letter twice.
+     *
+     * Off, as it shipped: at the sloppy end of the corpus a slow pivot with
+     * tremor on it looks the same, so this costs accuracy on strokes that
+     * meant nothing by it. Switching it on takes the sliders below from
+     * [GlideBeam.Tuning.WIGGLES_ON] rather than from the shipped zeroes,
+     * which are the reading switched off.
+     */
+    val wiggleDouble: Boolean = GlideBeam.Tuning.DEFAULT.wiggleExtent > 0f,
+    /**
+     * Widest a wiggle may be, in key widths. Stays under one key pitch, or a
+     * word drawn back and forth across two neighbouring keys reads as one
+     * letter twice. Does nothing while [wiggleDouble] is off. Range
+     * [GlideWiggleExtentRange].
+     */
+    val wiggleExtent: Float = GlideBeam.Tuning.WIGGLES_ON.wiggleExtent,
+    /**
+     * What a wiggle is worth as a doubled-letter mark, against a loop's 1.
+     * Lower leaves a wiggle as a hint that frequency can still overrule;
+     * higher makes it as good as a circle. Range [GlideWiggleWeightRange].
+     */
+    val wiggleWeight: Float = GlideBeam.Tuning.WIGGLES_ON.wiggleWeight,
+    /**
      * Learn this user's swipe style from the swipes they keep, and read later
      * swipes by it (issue #52): where their finger actually lands on each
      * key, so a thumb that always cuts the far keys short stops paying for
@@ -5046,6 +5159,33 @@ data class GestureSettings(
      * forgetting a swipe style never touches which words were learned.
      */
     val swipeStyleVersion: Int = 0,
+)
+
+/**
+ * The glide decoder's weights as these settings ask for them.
+ *
+ * One place, rather than a named argument per weight at each call site: the
+ * settings arrive together and the decoder takes them together, and a weight
+ * wired in one call site and forgotten in the other is a setting that works
+ * until the keyboard reloads its dictionaries. Everything not on this screen
+ * stays at [GlideBeam.Tuning.DEFAULT].
+ *
+ * The two toggles are what turns their reading off: a loop or a wiggle is
+ * switched off by an extent of zero, which is also how the decoder ships the
+ * wiggle, so a switch is a clearer way to say it than a slider with an off
+ * position at one end.
+ */
+fun GestureSettings.glideTuning(): GlideBeam.Tuning = GlideBeam.Tuning.DEFAULT.copy(
+    startRadius = startRadius,
+    endRadius = endRadius,
+    nearRadius = nearRadius,
+    vocabularyRank = vocabulary.rank,
+    dwellFull = dwellFull,
+    loopExtent = if (loopDouble) loopExtent else 0f,
+    loopMinArc = loopMinArc,
+    loopRadius = loopRadius,
+    wiggleExtent = if (wiggleDouble) wiggleExtent else 0f,
+    wiggleWeight = if (wiggleDouble) wiggleWeight else 0f,
 )
 
 /**
@@ -6393,6 +6533,14 @@ class SettingsRepository(private val context: Context) {
         private val GESTURE_START_RADIUS = floatPreferencesKey("gesture_start_radius")
         private val GESTURE_END_RADIUS = floatPreferencesKey("gesture_end_radius")
         private val GESTURE_NEAR_RADIUS = floatPreferencesKey("gesture_near_radius")
+        private val GESTURE_DWELL_FULL = floatPreferencesKey("gesture_dwell_full")
+        private val GESTURE_LOOP_DOUBLE = booleanPreferencesKey("gesture_loop_double")
+        private val GESTURE_LOOP_MIN_ARC = floatPreferencesKey("gesture_loop_min_arc")
+        private val GESTURE_LOOP_EXTENT = floatPreferencesKey("gesture_loop_extent")
+        private val GESTURE_LOOP_RADIUS = floatPreferencesKey("gesture_loop_radius")
+        private val GESTURE_WIGGLE_DOUBLE = booleanPreferencesKey("gesture_wiggle_double")
+        private val GESTURE_WIGGLE_EXTENT = floatPreferencesKey("gesture_wiggle_extent")
+        private val GESTURE_WIGGLE_WEIGHT = floatPreferencesKey("gesture_wiggle_weight")
         private val GESTURE_START_THRESHOLD_SLOP = floatPreferencesKey("gesture_start_threshold_slop")
         private val GESTURE_POST_TYPE_COOLDOWN_MS = intPreferencesKey("gesture_post_type_cooldown_ms")
         private val GESTURE_HANDWRITE_DOT_COOLDOWN_MS = intPreferencesKey("gesture_handwrite_dot_cooldown_ms")
@@ -7542,6 +7690,14 @@ class SettingsRepository(private val context: Context) {
                 startRadius = p[GESTURE_START_RADIUS] ?: defaults.gesture.startRadius,
                 endRadius = p[GESTURE_END_RADIUS] ?: defaults.gesture.endRadius,
                 nearRadius = p[GESTURE_NEAR_RADIUS] ?: defaults.gesture.nearRadius,
+                dwellFull = p[GESTURE_DWELL_FULL] ?: defaults.gesture.dwellFull,
+                loopDouble = p[GESTURE_LOOP_DOUBLE] ?: defaults.gesture.loopDouble,
+                loopMinArc = p[GESTURE_LOOP_MIN_ARC] ?: defaults.gesture.loopMinArc,
+                loopExtent = p[GESTURE_LOOP_EXTENT] ?: defaults.gesture.loopExtent,
+                loopRadius = p[GESTURE_LOOP_RADIUS] ?: defaults.gesture.loopRadius,
+                wiggleDouble = p[GESTURE_WIGGLE_DOUBLE] ?: defaults.gesture.wiggleDouble,
+                wiggleExtent = p[GESTURE_WIGGLE_EXTENT] ?: defaults.gesture.wiggleExtent,
+                wiggleWeight = p[GESTURE_WIGGLE_WEIGHT] ?: defaults.gesture.wiggleWeight,
                 learnSwipeStyle = p[GESTURE_LEARN_SWIPE_STYLE] ?: defaults.gesture.learnSwipeStyle,
                 searchAllChip = p[GESTURE_SEARCH_ALL_CHIP] ?: defaults.gesture.searchAllChip,
                 swipeStyleVersion = p[GESTURE_SWIPE_STYLE_VERSION] ?: defaults.gesture.swipeStyleVersion,
@@ -12069,6 +12225,38 @@ class SettingsRepository(private val context: Context) {
     /** @see GestureSettings.nearRadius */
     suspend fun setGestureNearRadius(value: Float) =
         editPrefs { it[GESTURE_NEAR_RADIUS] = value.coerceIn(GlideRadiusRange) }
+
+    /** @see GestureSettings.dwellFull; the bounds match the slider's. */
+    suspend fun setGestureDwellFull(value: Float) =
+        editPrefs { it[GESTURE_DWELL_FULL] = value.coerceIn(GlideDwellFullRange) }
+
+    /** @see GestureSettings.loopDouble */
+    suspend fun setGestureLoopDouble(value: Boolean) =
+        editPrefs { it[GESTURE_LOOP_DOUBLE] = value }
+
+    /** @see GestureSettings.loopMinArc */
+    suspend fun setGestureLoopMinArc(value: Float) =
+        editPrefs { it[GESTURE_LOOP_MIN_ARC] = value.coerceIn(GlideLoopMinArcRange) }
+
+    /** @see GestureSettings.loopExtent */
+    suspend fun setGestureLoopExtent(value: Float) =
+        editPrefs { it[GESTURE_LOOP_EXTENT] = value.coerceIn(GlideLoopExtentRange) }
+
+    /** @see GestureSettings.loopRadius */
+    suspend fun setGestureLoopRadius(value: Float) =
+        editPrefs { it[GESTURE_LOOP_RADIUS] = value.coerceIn(GlideLoopRadiusRange) }
+
+    /** @see GestureSettings.wiggleDouble */
+    suspend fun setGestureWiggleDouble(value: Boolean) =
+        editPrefs { it[GESTURE_WIGGLE_DOUBLE] = value }
+
+    /** @see GestureSettings.wiggleExtent */
+    suspend fun setGestureWiggleExtent(value: Float) =
+        editPrefs { it[GESTURE_WIGGLE_EXTENT] = value.coerceIn(GlideWiggleExtentRange) }
+
+    /** @see GestureSettings.wiggleWeight */
+    suspend fun setGestureWiggleWeight(value: Float) =
+        editPrefs { it[GESTURE_WIGGLE_WEIGHT] = value.coerceIn(GlideWiggleWeightRange) }
 
     suspend fun setGestureStartThresholdSlop(value: Float) =
         editPrefs { it[GESTURE_START_THRESHOLD_SLOP] = value.coerceIn(0.5f, 4f) }

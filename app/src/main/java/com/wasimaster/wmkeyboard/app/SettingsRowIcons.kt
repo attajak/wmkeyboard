@@ -141,6 +141,7 @@ import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.LineWeight
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Loop
 import androidx.compose.material.icons.outlined.Memory
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.MicNone
@@ -245,6 +246,7 @@ import androidx.compose.material.icons.outlined.ViewWeek
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Wallpaper
+import androidx.compose.material.icons.outlined.Waves
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.Weekend
 import androidx.compose.material.icons.outlined.Widgets
@@ -800,6 +802,14 @@ internal object SettingsRowIcons {
         put(R.string.typing_glide_start_radius_title) { Icons.Outlined.TripOrigin }
         put(R.string.typing_glide_end_radius_title) { Icons.Outlined.Adjust }
         put(R.string.typing_glide_near_radius_title) { Icons.Outlined.AltRoute }
+        put(R.string.typing_glide_dwell_title) { Icons.Outlined.Timer }
+        put(R.string.typing_glide_loop_title) { Icons.Outlined.Loop }
+        put(R.string.typing_glide_loop_arc_title) { Icons.Outlined.Tune }
+        put(R.string.typing_glide_loop_extent_title) { Icons.Outlined.ZoomOutMap }
+        put(R.string.typing_glide_loop_radius_title) { Icons.Outlined.CenterFocusStrong }
+        put(R.string.typing_glide_wiggle_title) { Icons.Outlined.Waves }
+        put(R.string.typing_glide_wiggle_strength_title) { Icons.Outlined.LineWeight }
+        put(R.string.typing_glide_wiggle_extent_title) { Icons.Outlined.Straighten }
         put(R.string.typing_swipe_start_distance_title) { Icons.Outlined.Straighten }
         put(R.string.typing_trail_width_title) { Icons.Outlined.LineWeight }
         put(R.string.typing_trail_length_title) { Icons.Outlined.Timeline }

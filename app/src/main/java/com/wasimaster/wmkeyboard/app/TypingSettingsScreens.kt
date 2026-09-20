@@ -73,6 +73,12 @@ import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
 import com.wasimaster.wmkeyboard.core.settings.ShiftGlideMode
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerChoicesRange
 import com.wasimaster.wmkeyboard.core.settings.GlideRadiusRange
+import com.wasimaster.wmkeyboard.core.settings.GlideDwellFullRange
+import com.wasimaster.wmkeyboard.core.settings.GlideLoopMinArcRange
+import com.wasimaster.wmkeyboard.core.settings.GlideLoopExtentRange
+import com.wasimaster.wmkeyboard.core.settings.GlideLoopRadiusRange
+import com.wasimaster.wmkeyboard.core.settings.GlideWiggleExtentRange
+import com.wasimaster.wmkeyboard.core.settings.GlideWiggleWeightRange
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerDwellMsRange
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerSensitivity
 import com.wasimaster.wmkeyboard.core.settings.GlideCommitColor
@@ -1725,8 +1731,6 @@ internal fun TypingGesturesSettings(
                 // kept together and out of line: this screen's body is already
                 // past its length budget and these belong to one another.
                 glideVocabularyRows(settings, repository, scope)
-                // The three tolerances the decoder reads a stroke with (#222).
-                glideRadiusRows(settings, repository, scope)
                 item {
                     ToggleSetting(
                         R.string.typing_space_after_glide_title,
@@ -1810,6 +1814,21 @@ internal fun TypingGesturesSettings(
                     ) { scope.launch { repository.setGestureHandwriteDotCooldownMs(it.roundToInt()) } }
                 }
             }
+        }
+    }
+    // How the decoder reads a stroke: the three tolerances (#222) and the
+    // three marks for a doubled letter (#270). A fold, because they are for
+    // the people who want to tune and measure, and a screen that opens on
+    // eleven sliders buries the switches everyone else came for.
+    SettingsGroup(
+        stringResource(R.string.typing_group_glide_tuning_title),
+        foldKey = "typing/glide_tuning",
+        info = stringResource(R.string.typing_group_glide_tuning_info),
+        foldSummary = { stringResource(R.string.typing_group_glide_tuning_summary) },
+    ) {
+        if (settings.gestureTyping && settings.letterSwipeAction == LetterSwipeAction.TYPE_WORDS) {
+            glideRadiusRows(settings, repository, scope)
+            glideIntentRows(settings, repository, scope)
         }
     }
     SettingsGroup(stringResource(R.string.typing_group_glide_trail_title)) {
@@ -2846,5 +2865,126 @@ private fun SettingsGroupScope.glideRadiusRows(
             info = stringResource(R.string.typing_glide_near_radius_info),
             default = SettingsDefaults.gesture.nearRadius,
         ) { scope.launch { repository.setGestureNearRadius(it) } }
+    }
+}
+
+/**
+ * The three marks a stroke can carry for a doubled letter, and what each one
+ * has to look like before the decoder reads it (#270).
+ *
+ * A glide draws "good" and "god" identically, so shape has nothing to say and
+ * only an intent mark can: a pause on the key, a circle on it, or a rub back
+ * and forth over it. How readily each registers is a property of the hand, not
+ * of the layout, which is why they are worth moving at all. The pause is
+ * always on and has one number; the other two are readings that can be
+ * switched off, and their sliders are hidden while they are.
+ *
+ * Out of line beside [glideRadiusRows] for the same reason: the screen body is
+ * past its length budget. Every range is shared with the setter that stores it,
+ * so a value the slider reaches is always one that is kept (#241).
+ */
+private fun SettingsGroupScope.glideIntentRows(
+    settings: KeyboardSettings,
+    repository: SettingsRepository,
+    scope: CoroutineScope,
+) {
+    // The pause. No switch: a pause is also read as evidence against the words
+    // that have no letter where the finger stopped, so it is never off.
+    item {
+        val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
+        SliderSetting(
+            R.string.typing_glide_dwell_title,
+            subtitle = stringResource(R.string.typing_glide_dwell_subtitle),
+            value = settings.gesture.dwellFull,
+            range = GlideDwellFullRange,
+            display = { valueFormat.format("%.1f".format(it)) },
+            info = stringResource(R.string.typing_glide_dwell_info),
+            default = SettingsDefaults.gesture.dwellFull,
+        ) { scope.launch { repository.setGestureDwellFull(it) } }
+    }
+    // The circle, and the three things that decide whether a curl is one.
+    item {
+        ToggleSetting(
+            R.string.typing_glide_loop_title,
+            stringResource(R.string.typing_glide_loop_subtitle),
+            settings.gesture.loopDouble,
+            info = stringResource(R.string.typing_glide_loop_info),
+            default = SettingsDefaults.gesture.loopDouble,
+        ) { scope.launch { repository.setGestureLoopDouble(it) } }
+    }
+    if (settings.gesture.loopDouble) {
+        item {
+            val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
+            SliderSetting(
+                R.string.typing_glide_loop_arc_title,
+                subtitle = stringResource(R.string.typing_glide_loop_arc_subtitle),
+                value = settings.gesture.loopMinArc,
+                range = GlideLoopMinArcRange,
+                display = { valueFormat.format("%.1f".format(it)) },
+                info = stringResource(R.string.typing_glide_loop_arc_info),
+                default = SettingsDefaults.gesture.loopMinArc,
+            ) { scope.launch { repository.setGestureLoopMinArc(it) } }
+        }
+        item {
+            val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
+            SliderSetting(
+                R.string.typing_glide_loop_extent_title,
+                subtitle = stringResource(R.string.typing_glide_loop_extent_subtitle),
+                value = settings.gesture.loopExtent,
+                range = GlideLoopExtentRange,
+                display = { valueFormat.format("%.1f".format(it)) },
+                info = stringResource(R.string.typing_glide_loop_extent_info),
+                default = SettingsDefaults.gesture.loopExtent,
+            ) { scope.launch { repository.setGestureLoopExtent(it) } }
+        }
+        item {
+            val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
+            SliderSetting(
+                R.string.typing_glide_loop_radius_title,
+                subtitle = stringResource(R.string.typing_glide_loop_radius_subtitle),
+                value = settings.gesture.loopRadius,
+                range = GlideLoopRadiusRange,
+                display = { valueFormat.format("%.2f".format(it)) },
+                info = stringResource(R.string.typing_glide_loop_radius_info),
+                default = SettingsDefaults.gesture.loopRadius,
+            ) { scope.launch { repository.setGestureLoopRadius(it) } }
+        }
+    }
+    // The rub, which ships off: at the sloppy end of a stroke a slow pivot
+    // with tremor on it looks the same.
+    item {
+        ToggleSetting(
+            R.string.typing_glide_wiggle_title,
+            stringResource(R.string.typing_glide_wiggle_subtitle),
+            settings.gesture.wiggleDouble,
+            info = stringResource(R.string.typing_glide_wiggle_info),
+            default = SettingsDefaults.gesture.wiggleDouble,
+        ) { scope.launch { repository.setGestureWiggleDouble(it) } }
+    }
+    if (settings.gesture.wiggleDouble) {
+        item {
+            val percentFormat = stringResource(R.string.typing_value_percent)
+            SliderSetting(
+                R.string.typing_glide_wiggle_strength_title,
+                subtitle = stringResource(R.string.typing_glide_wiggle_strength_subtitle),
+                value = settings.gesture.wiggleWeight,
+                range = GlideWiggleWeightRange,
+                display = { percentFormat.format((it * 100).roundToInt()) },
+                info = stringResource(R.string.typing_glide_wiggle_strength_info),
+                default = SettingsDefaults.gesture.wiggleWeight,
+            ) { scope.launch { repository.setGestureWiggleWeight(it) } }
+        }
+        item {
+            val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
+            SliderSetting(
+                R.string.typing_glide_wiggle_extent_title,
+                subtitle = stringResource(R.string.typing_glide_wiggle_extent_subtitle),
+                value = settings.gesture.wiggleExtent,
+                range = GlideWiggleExtentRange,
+                display = { valueFormat.format("%.2f".format(it)) },
+                info = stringResource(R.string.typing_glide_wiggle_extent_info),
+                default = SettingsDefaults.gesture.wiggleExtent,
+            ) { scope.launch { repository.setGestureWiggleExtent(it) } }
+        }
     }
 }
