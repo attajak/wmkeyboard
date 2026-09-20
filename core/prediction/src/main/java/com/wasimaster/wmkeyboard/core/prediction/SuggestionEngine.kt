@@ -7,8 +7,7 @@ import com.wasimaster.wmkeyboard.core.gesture.GlideCoverage
 import com.wasimaster.wmkeyboard.core.gesture.GlideKeyMap
 import com.wasimaster.wmkeyboard.core.gesture.GlideWorkspace
 import com.wasimaster.wmkeyboard.core.gesture.RomanizedIndex
-import com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic
-import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
 import kotlin.math.exp
 import kotlin.math.ln
 
@@ -34,9 +33,9 @@ data class SecondaryDictionary(val langId: String, val source: WordSource)
  */
 class SuggestionEngine(
     dictionary: WordSource,
-    bengaliIndex: BengaliPhoneticIndex,
+    bengaliIndex: PhoneticIndex,
     private val userLexicon: UserLexicon,
-    private val spellings: BengaliSpellingMap = BengaliSpellingMap.EMPTY,
+    private val spellings: SpellingMap = SpellingMap.EMPTY,
     private val seedBigrams: SeedBigrams = SeedBigrams.EMPTY,
     private val mixConfidence: LanguageMixConfidence = LanguageMixConfidence(),
 ) {
@@ -335,11 +334,43 @@ class SuggestionEngine(
     var ngramPack: NgramPack = NgramPack.EMPTY
 
     /**
+     * Avro's backend. Bengali is the one phonetic language whose index and
+     * spelling map arrive through the constructor, which is history rather than
+     * design: every other scheme lives in [extraPhonetic].
+     */
+    private val bengaliBackend = PhoneticBackend(PhoneticSchemes.BENGALI, bengaliIndex, spellings)
+
+    /**
      * Bengali index, rebuilt when an imported Bengali list arrives so its
      * words become reachable by transliteration too.
      */
+    var bengaliIndex: PhoneticIndex
+        get() = bengaliBackend.index
+        set(value) {
+            bengaliBackend.index = value
+        }
+
+    /**
+     * Backends of the phonetic languages other than Bengali that are loaded,
+     * by language id. Replaced whole when one is added, dropped or rebuilt; a
+     * backend's own index can also be swapped in place when only its word list
+     * changed.
+     */
     @Volatile
-    var bengaliIndex: BengaliPhoneticIndex = bengaliIndex
+    var extraPhonetic: Map<String, PhoneticBackend> = emptyMap()
+
+    /**
+     * What a buffer typed on [languageId]'s phonetic layout is resolved
+     * through, or null when [languageId] names no phonetic scheme. A scheme
+     * whose data has not been loaded still answers — with its rules alone —
+     * because a phonetic layout that commits Latin is never what was asked for.
+     */
+    fun phoneticBackend(languageId: String?): PhoneticBackend? = when (languageId) {
+        null -> null
+        bengaliBackend.scheme.languageId -> bengaliBackend
+        else -> extraPhonetic[languageId]
+            ?: PhoneticSchemes.forLanguage(languageId)?.let { PhoneticBackend(it, PhoneticIndex.EMPTY) }
+    }
 
     /**
      * How much the winning candidate must outscore the runner-up before
@@ -797,7 +828,7 @@ class SuggestionEngine(
 
     /** The curated Bengali spelling map this engine was built with, so the IME
      * can rebuild the romanization without reloading the assets behind it. */
-    val spellingMap: BengaliSpellingMap get() = spellings
+    val spellingMap: SpellingMap get() = spellings
 
     /**
      * Whether [alphabet] can spell enough of the language now being typed for a
@@ -1758,8 +1789,9 @@ class SuggestionEngine(
     /**
      * @param composing the word currently being typed (may be empty)
      * @param previousWord last committed word, used for next-word prediction
-     * @param avroMode when true, [composing] is romanized Bengali and the
-     *        top suggestion is its transliteration
+     * @param phoneticLanguage the language of the phonetic layout [composing]
+     *        was typed on (`"bn"` for Avro), when there is one: [composing] is
+     *        then a romanization and the suggestions are that language's words
      * @param limit how many candidates to return
      * @param touch per-character tap positions (null entries fall back to
      *        the discrete adjacency model)
@@ -1776,7 +1808,7 @@ class SuggestionEngine(
     fun suggest(
         composing: String,
         previousWord: String?,
-        avroMode: Boolean = false,
+        phoneticLanguage: String? = null,
         limit: Int = 5,
         touch: List<TouchPoint?>? = null,
         previousWord2: String? = null,
@@ -1788,9 +1820,7 @@ class SuggestionEngine(
         if (composing.isEmpty()) {
             return nextWords(previousWord, previousWord2, limit, previousWord3)
         }
-        if (avroMode) {
-            return bengaliSuggestions(composing, limit)
-        }
+        phoneticBackend(phoneticLanguage)?.let { return phoneticSuggestions(it, composing, limit) }
 
         val lower = composing.lowercase()
         // On an ambiguous board the buffer holds anchor letters, not what the
@@ -2297,14 +2327,18 @@ class SuggestionEngine(
      * space. Only the map layer, deliberately: it is keyed on the whole buffer,
      * so it either hits or it doesn't and the preview never flickers between
      * dictionary siblings on its way to the end of a word. It is also the layer
-     * that wins [bengaliSuggestions] outright, so what the preview shows is
+     * that wins [phoneticSuggestions] outright, so what the preview shows is
      * what a space would commit.
+     *
+     * @param languageId the language of the phonetic layout being typed on
      */
-    fun bengaliSpelling(composing: String): String? =
-        spellings.lookup(composing).firstOrNull { !suppressed(it) }
+    fun phoneticSpelling(languageId: String, composing: String): String? =
+        phoneticBackend(languageId)?.spellings?.lookup(composing)?.firstOrNull { !suppressed(it) }
 
-    private fun bengaliSuggestions(composing: String, limit: Int): List<String> {
-        val phonetic = AvroPhonetic.transliterate(composing)
+    private fun phoneticSuggestions(backend: PhoneticBackend, composing: String, limit: Int): List<String> {
+        val spellings = backend.spellings
+        val index = backend.index
+        val phonetic = backend.scheme.transliterate(composing)
         val ordered = LinkedHashSet<String>()
         // Listed spellings win outright — loanwords like "keyboard" → কিবোর্ড,
         // and chat shorthand like "tmr" → তোমার whose vowels were never typed.
@@ -2316,14 +2350,20 @@ class SuggestionEngine(
         // a near-tie sibling silently replacing it reads as a bug (হলো
         // becoming হল). A literal that isn't a dictionary word at all always
         // yields to siblings.
-        val siblings = bengaliIndex.lookup(composing)
-        val literalFreq = bengaliIndex.frequencyOf(phonetic)
-        val topSiblingFreq = siblings.firstOrNull()?.let { bengaliIndex.frequencyOf(it) } ?: 0
+        val siblings = index.lookup(composing)
+        val literalFreq = index.frequencyOf(phonetic)
+        val topSiblingFreq = siblings.firstOrNull()?.let { index.frequencyOf(it) } ?: 0
         if (literalFreq > 0 && topSiblingFreq < literalFreq * SIBLING_CONFIDENCE) {
             ordered.add(phonetic)
         }
         ordered.addAll(siblings)
+        // The literal reading, then whatever else the rules think the spelling
+        // could mean. For a scheme whose rules are never undecided (Avro) that
+        // is the literal again and adds nothing; for one that may be running
+        // with no word list behind it, the other readings are all there is to
+        // offer in place of the siblings a dictionary would have found.
         ordered.add(phonetic)
+        ordered.addAll(backend.scheme.variants(composing))
         return ordered.asSequence().filterNot(::suppressed).take(limit).toList()
     }
 

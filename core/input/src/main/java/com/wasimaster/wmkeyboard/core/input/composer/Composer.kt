@@ -28,11 +28,13 @@ interface Composer {
     val isTransliterating: Boolean get() = false
 
     /**
-     * Specifically the Bengali phonetic transliterator (Avro): its commit and
-     * suggestions route through the Bengali dictionary path. Other
-     * transliterators (Hangul) compose but do not, so this stays false for them.
+     * The language whose dictionary a phonetic transliterator is ranked against
+     * (`"bn"` for Avro), by `LanguageDef.id`: its commit and suggestions route
+     * through that language's phonetic index and spelling map rather than
+     * committing the rules' output as it stands. Null for every transliterator
+     * that composes but has no such dictionary pass (Hangul, Telex).
      */
-    val isBengaliPhonetic: Boolean get() = false
+    val phoneticLanguage: String? get() = null
 
     /**
      * A fixed complex-script layout (Probhat, and later Devanagari, Tamil …):
@@ -197,6 +199,7 @@ fun composerFor(script: ScriptDef, type: ComposerType): Composer = when (type) {
     ComposerType.INDIC_CLUSTER -> IndicClusterComposer(script)
     ComposerType.TRANSLITERATE -> when (script.id) {
         ScriptId.BENGALI -> BengaliTransliterateComposer
+        ScriptId.DEVANAGARI -> HindiTransliterateComposer
         else -> NoComposer
     }
     ComposerType.HANGUL -> HangulComposer

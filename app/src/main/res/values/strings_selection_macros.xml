@@ -65,6 +65,8 @@
     <string name="selection_macros_desc_ai">Open the AI tool on the selection</string>
     <string name="selection_macros_desc_to_bangla">Banglish to Bangla, when Bengali is one of your languages</string>
     <string name="selection_macros_desc_to_banglish">Bangla back to Banglish</string>
+    <string name="selection_macros_desc_to_hindi">Hinglish to Hindi, when the Hindi phonetic layout is one of yours</string>
+    <string name="selection_macros_desc_to_hinglish">Hindi back to Hinglish, when the Hindi phonetic layout is one of yours</string>
     <string name="selection_macros_desc_digits_latin">Bengali or other digits to 0 to 9</string>
     <string name="selection_macros_desc_colour">A colour code: a swatch, and its other spellings</string>
     <string name="selection_macros_desc_json">Pretty-print or minify JSON</string>

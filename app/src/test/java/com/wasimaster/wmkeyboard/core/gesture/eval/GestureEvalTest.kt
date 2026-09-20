@@ -10,7 +10,7 @@ import com.wasimaster.wmkeyboard.core.gesture.GlideKeyMap
 import com.wasimaster.wmkeyboard.core.gesture.GlideWorkspace
 import com.wasimaster.wmkeyboard.core.gesture.RomanizedIndex
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
-import com.wasimaster.wmkeyboard.core.prediction.BengaliSpellingMap
+import com.wasimaster.wmkeyboard.core.prediction.SpellingMap
 import com.wasimaster.wmkeyboard.core.prediction.DictionaryLoader
 import com.wasimaster.wmkeyboard.core.prediction.FuzzyBeamSearch
 import com.wasimaster.wmkeyboard.core.prediction.Trie
@@ -151,9 +151,9 @@ class GestureEvalTest {
         val bengali = load("bn.txt")
         val phonetic = BengaliPhoneticIndex(bengali)
         val spellings = asset("en_bn.tsv").use { en ->
-            asset("bn_rom.tsv").use { rom -> BengaliSpellingMap.load(en, rom) }
+            asset("bn_rom.tsv").use { rom -> SpellingMap.load(en, rom) }
         }
-        val romanization = RomanizedIndex.bengali(
+        val romanization = RomanizedIndex.of(
             spellings = spellings,
             phonetic = phonetic,
             nativeFrequency = phonetic::frequencyOf,

@@ -166,8 +166,7 @@ import com.wasimaster.wmkeyboard.core.prediction.CompositeWordSource
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
 import com.wasimaster.wmkeyboard.core.prediction.MappedNgramPack
 import com.wasimaster.wmkeyboard.core.prediction.MappedTrie
-import com.wasimaster.wmkeyboard.core.prediction.BanglishConverter
-import com.wasimaster.wmkeyboard.core.prediction.BengaliSpellingMap
+import com.wasimaster.wmkeyboard.core.prediction.SpellingMap
 import com.wasimaster.wmkeyboard.core.prediction.KeyProximity
 import com.wasimaster.wmkeyboard.core.prediction.OctopusCandidate
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
@@ -198,6 +197,10 @@ import com.wasimaster.wmkeyboard.core.prediction.LearningBuffer
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
 import com.wasimaster.wmkeyboard.core.prediction.topWords
 import com.wasimaster.wmkeyboard.core.prediction.PendingLearn
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticBackend
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticScheme
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
+import com.wasimaster.wmkeyboard.core.prediction.RomanizedConverter
 import com.wasimaster.wmkeyboard.core.prediction.Revision
 import com.wasimaster.wmkeyboard.core.prediction.SecondaryDictionary
 import com.wasimaster.wmkeyboard.core.prediction.SeedBigrams
@@ -1409,9 +1412,9 @@ open class WMKeyboardService : InputMethodService() {
 
     private class CommitResolution(
         val typed: String,
-        val isBengali: Boolean,
-        /** Transliteration top for Bengali phonetic mode; null otherwise. */
-        val bengaliTop: String?,
+        val isPhonetic: Boolean,
+        /** Transliteration top on a phonetic layout (Avro); null otherwise. */
+        val phoneticTop: String?,
         /** English autocorrect target, or null when the word stands as typed. */
         val correction: String?,
         /** Near miss: not applied, but worth a chip. See [correctionOffer]. */
@@ -1691,6 +1694,97 @@ open class WMKeyboardService : InputMethodService() {
     private fun bengaliEnabled(): Boolean =
         _uiState.value.settings.enabledLanguages.any { it.id == "bn" }
 
+    /**
+     * What [loadExtraPhonetic] last built, as [extraPhoneticWanted] spells it,
+     * so a settings save that changed none of it rebuilds nothing.
+     */
+    private var loadedExtraPhonetic: Set<String> = emptySet()
+
+    /**
+     * The phonetic languages other than Bengali that an enabled layout types
+     * through, each with whether its spelling map is switched on.
+     *
+     * Asked of the layouts rather than of the languages: Hindi turned on for
+     * its InScript layout has no use for a phonetic index, and the index is a
+     * fold of the whole downloaded word list — not something to build for a
+     * layout nobody enabled. Bengali is left out because its backend is the
+     * engine's own ([bengaliEnabled]).
+     */
+    private fun extraPhoneticWanted(): Set<String> {
+        val settings = _uiState.value.settings
+        val wanted = HashSet<String>()
+        for (id in settings.enabledLayoutIds) {
+            val spec = resolveLayout(settings.customLayouts, id)
+            val language = composerFor(spec.script(), spec.composerType()).phoneticLanguage ?: continue
+            if (language == PhoneticSchemes.BENGALI.languageId) continue
+            val map = settings.suggestionStrip.spellingMapEnabledFor(language)
+            wanted.add(if (map) "$language$WITH_SPELLING_MAP" else language)
+        }
+        return wanted
+    }
+
+    /**
+     * Builds the backend of every phonetic language [extraPhoneticWanted]
+     * names and hands them to the engine, with the romanization a swipe over
+     * each is decoded through.
+     *
+     * The index is a fold over the language's whole word list — the downloaded
+     * one and anything imported — and is empty when there is neither, which is
+     * the ordinary first-run state for a language that ships no list: the
+     * spelling map and the rules carry the layout until a download lands, and
+     * [reloadDownloadedDictionaries] calls back here when it does.
+     */
+    private suspend fun loadExtraPhonetic() {
+        val engine = suggestionEngine ?: return
+        val wanted = extraPhoneticWanted()
+        loadedExtraPhonetic = wanted
+        val backends = withContext(Dispatchers.Default) {
+            wanted.mapNotNull { token ->
+                val scheme = PhoneticSchemes.forLanguage(token.removeSuffix(WITH_SPELLING_MAP))
+                    ?: return@mapNotNull null
+                val spellings = if (token.endsWith(WITH_SPELLING_MAP)) loadSpellingMap(scheme) else SpellingMap.EMPTY
+                val index = scheme.buildIndex(phoneticEntries(scheme.languageId))
+                scheme.languageId to PhoneticBackend(scheme, index, spellings)
+            }.toMap()
+        }
+        engine.extraPhonetic = backends
+        romanizedGlides = romanizedGlides.filterKeys { it == PhoneticSchemes.BENGALI.languageId } +
+            backends.mapValues { (_, backend) ->
+                RomanizedIndex.of(
+                    spellings = backend.spellings,
+                    phonetic = backend.index,
+                    downloadedRomanized = customDictionaries[backend.scheme.romanizedListId] ?: PackedTrie.EMPTY,
+                    nativeFrequency = backend.index::frequencyOf,
+                )
+            }
+        glideSourcesEpoch.update { it + 1 }
+    }
+
+    /** A scheme's `spelling<TAB>native` assets, most trusted first. */
+    private fun loadSpellingMap(scheme: PhoneticScheme): SpellingMap {
+        val streams = scheme.spellingAssets.map { assets.open(it) }
+        return try {
+            SpellingMap.load(*streams.toTypedArray())
+        } finally {
+            streams.forEach { runCatching { it.close() } }
+        }
+    }
+
+    /**
+     * Every word of [langId]'s lists with its frequency: the download, unless
+     * the language is set to its imported lists alone (#28), and the imports.
+     * Both live in credential-encrypted storage, so a locked boot has neither.
+     */
+    private fun phoneticEntries(langId: String): List<Pair<String, Int>> {
+        if (!userUnlocked) return emptyList()
+        val downloaded = if (shippedDictionaryEnabled(langId)) {
+            MappedTrie.open(DictionaryStore.downloadedFile(filesDir, langId))?.entries().orEmpty()
+        } else {
+            emptyList()
+        }
+        return downloaded + CustomDictionaries.entries(filesDir, langId)
+    }
+
     /** Whether Bengali is on *and* has kept its fixed-spelling map switched on. */
     private fun spellingMapEnabled(): Boolean =
         bengaliEnabled() &&
@@ -1902,11 +1996,13 @@ open class WMKeyboardService : InputMethodService() {
     private val glideSourcesEpoch = MutableStateFlow(0)
 
     /**
-     * How a swipe over a phonetic layout is read: Latin keys in, Bengali out.
-     * Built with the Bengali dictionaries and handed to the engine only while
-     * such a layout is showing — see [startGlideReadinessWatcher].
+     * How a swipe over a phonetic layout is read: Latin keys in, another script
+     * out. One per loaded phonetic language, by language id, built with that
+     * language's dictionaries and handed to the engine only while such a layout
+     * is showing — see [startGlideReadinessWatcher].
      */
-    private var romanizedGlide: RomanizedIndex = RomanizedIndex.EMPTY
+    @Volatile
+    private var romanizedGlides: Map<String, RomanizedIndex> = emptyMap()
 
     /**
      * One resolved letter grid per (key list, key width). Building it sorts the
@@ -3126,6 +3222,12 @@ open class WMKeyboardService : InputMethodService() {
                 ) {
                     loadDictionariesAndEmoji()
                 }
+                // The other phonetic languages hang off the engine rather than
+                // being built into it, so turning one's layout on (or its
+                // spelling map off) rebuilds that backend and nothing else.
+                if (suggestionEngine != null && extraPhoneticWanted() != loadedExtraPhonetic) {
+                    loadExtraPhonetic()
+                }
                 // Switching a language to its imported lists alone (#28)
                 // changes which tries the engine is built over, so it needs the
                 // same rebuild — and the imported-list map too, which is where
@@ -3455,11 +3557,11 @@ open class WMKeyboardService : InputMethodService() {
                 val lw = if (spellingMapOn) {
                     assets.open("dictionaries/en_bn.tsv").use { en ->
                         assets.open("dictionaries/bn_rom.tsv").use { rom ->
-                            BengaliSpellingMap.load(en, rom)
+                            SpellingMap.load(en, rom)
                         }
                     }
                 } else {
-                    BengaliSpellingMap.EMPTY
+                    SpellingMap.EMPTY
                 }
                 val v = runCatching {
                     assets.open("emoji/variants.tsv").use { EmojiVariantIndex.load(it) }
@@ -3581,8 +3683,8 @@ open class WMKeyboardService : InputMethodService() {
             // setting the user can turn off, and the romanized word list is a
             // download they may not have — in which case Avro simply does not
             // glide rather than guessing.
-            romanizedGlide = withContext(Dispatchers.Default) {
-                RomanizedIndex.bengali(
+            val bengaliGlide = withContext(Dispatchers.Default) {
+                RomanizedIndex.of(
                     spellings = loanwords,
                     phonetic = suggestionEngine?.bengaliIndex ?: buildBengaliIndex(),
                     downloadedRomanized = customTries["bn_rom"] ?: PackedTrie.EMPTY,
@@ -3591,6 +3693,9 @@ open class WMKeyboardService : InputMethodService() {
                     },
                 )
             }
+            romanizedGlides = romanizedGlides + ("bn" to bengaliGlide)
+            // Every other phonetic language an enabled layout types through.
+            loadExtraPhonetic()
             // A new engine means new word sources; re-ask whether this
             // language and layout can be glided.
             glideSourcesEpoch.update { it + 1 }
@@ -6483,7 +6588,7 @@ open class WMKeyboardService : InputMethodService() {
         val engine = suggestionEngine ?: return
         val word = caret.wordAtCaret()
         val previous = caret.wordBeforeCaret()
-        val avro = state.composer.isBengaliPhonetic
+        val phonetic = state.composer.phoneticLanguage
         val slots = state.settings.suggestionStrip.slotCount
         val key = state.captureKey()
         val snapshot = caret
@@ -6496,7 +6601,7 @@ open class WMKeyboardService : InputMethodService() {
                 engine.suggest(
                     composing = word.typed,
                     previousWord = previous,
-                    avroMode = avro,
+                    phoneticLanguage = phonetic,
                     limit = slots,
                 )
             }
@@ -9474,8 +9579,8 @@ open class WMKeyboardService : InputMethodService() {
             return reading
         }
         if (!state.composer.isTransliterating) return buffer
-        if (state.composer.isBengaliPhonetic) {
-            suggestionEngine?.bengaliSpelling(buffer)?.let { return it }
+        state.composer.phoneticLanguage?.let { language ->
+            suggestionEngine?.phoneticSpelling(language, buffer)?.let { return it }
         }
         return state.composer.composeBuffer(buffer)
     }
@@ -9834,9 +9939,11 @@ open class WMKeyboardService : InputMethodService() {
         // corrects nothing at all.
         var obviousness = 1.0
         val output = when {
-            state.composer.isBengaliPhonetic ->
-                (if (pre != null && pre.isBengali) pre.bengaliTop
-                else suggestionEngine?.suggest(typed, previousWord = null, avroMode = true)?.firstOrNull())
+            state.composer.phoneticLanguage != null ->
+                (if (pre != null && pre.isPhonetic) pre.phoneticTop
+                else suggestionEngine
+                    ?.suggest(typed, previousWord = null, phoneticLanguage = state.composer.phoneticLanguage)
+                    ?.firstOrNull())
                     ?: state.composer.composeBuffer(typed)
             // Other transliterators (Hangul, Vietnamese) commit the composed text
             // directly, with no dictionary pass.
@@ -9854,7 +9961,7 @@ open class WMKeyboardService : InputMethodService() {
                 (pre?.ambiguousTop ?: ambiguousDecode(typed)) ?: typed
             apostrophized != null -> apostrophized
             autocorrect && state.allowsTypingIntelligence && !gluedToWord -> {
-                val decision = if (pre != null && !pre.isBengali) {
+                val decision = if (pre != null && !pre.isPhonetic) {
                     SuggestionEngine.CorrectionDecision(
                         pre.correction, pre.offer, pre.certainty, pre.complexity,
                     )
@@ -13486,7 +13593,7 @@ open class WMKeyboardService : InputMethodService() {
                 val deep = engine.suggest(
                     composing = typed,
                     previousWord = previousWord,
-                    avroMode = state.composer.isBengaliPhonetic,
+                    phoneticLanguage = state.composer.phoneticLanguage,
                     limit = askFor,
                     touch = touchFrame,
                     previousWord2 = previousWord2,
@@ -13544,10 +13651,10 @@ open class WMKeyboardService : InputMethodService() {
                 // main thread. commitComposing consumes it only on a typed match.
                 commitResolution = when {
                     typed.isEmpty() -> null
-                    state.composer.isBengaliPhonetic -> CommitResolution(
+                    state.composer.phoneticLanguage != null -> CommitResolution(
                         typed = typed,
-                        isBengali = true,
-                        bengaliTop = words.firstOrNull(),
+                        isPhonetic = true,
+                        phoneticTop = words.firstOrNull(),
                         correction = null,
                     )
                     // An ambiguous board's commit takes the reading rather than
@@ -13556,8 +13663,8 @@ open class WMKeyboardService : InputMethodService() {
                     // that the decode has not already said better.
                     state.layouts.ambiguousKeys -> CommitResolution(
                         typed = typed,
-                        isBengali = false,
-                        bengaliTop = null,
+                        isPhonetic = false,
+                        phoneticTop = null,
                         correction = null,
                         ambiguousTop = words.firstOrNull(),
                     )
@@ -13567,8 +13674,8 @@ open class WMKeyboardService : InputMethodService() {
                         )
                         CommitResolution(
                             typed = typed,
-                            isBengali = false,
-                            bengaliTop = null,
+                            isPhonetic = false,
+                            phoneticTop = null,
                             correction = decision.apply?.takeIf { it != typed },
                             offer = decision.offer?.takeIf { it != typed },
                             certainty = decision.certainty,
@@ -14535,6 +14642,19 @@ open class WMKeyboardService : InputMethodService() {
         return state.language
     }
 
+    /**
+     * The same chip for a phonetic layout running on its rules alone (#239).
+     * Glide has nothing to do with it, so the glide switch is not asked; the
+     * once-per-language memory is shared but keyed apart, since a user told
+     * about glide has not been told about this.
+     */
+    private fun phoneticWordListOffer(languageId: String): LanguageDef? {
+        val state = _uiState.value
+        if (state.language.id != languageId) return null
+        if (!glideWordListNoticed.add("phonetic:$languageId")) return null
+        return state.language
+    }
+
     /** The chip was tapped: the language's own page, where its list downloads. */
     private fun acceptGlideWordListOffer() {
         val language = _uiState.value.glideWordListOffer ?: return
@@ -15121,8 +15241,9 @@ open class WMKeyboardService : InputMethodService() {
          * such a grid spells a reading, not a word. */
         val converts: Boolean,
         /** Avro: it converts, but into a script the keyboard has a romanization
-         * for, so the reading a stroke spells can be turned back into words. */
-        val phonetic: Boolean,
+         * for, so the reading a stroke spells can be turned back into words.
+         * The language that romanization belongs to, null on every other layout. */
+        val phonetic: String?,
         val alphabet: Set<Int>,
         /** Bumped when the word sources change under us, so a finished
          * dictionary download re-asks the coverage question. */
@@ -15146,7 +15267,7 @@ open class WMKeyboardService : InputMethodService() {
                 GlideGate(
                     languageId = state.language.id,
                     converts = state.composer.isTransliterating || state.composer.isConversion,
-                    phonetic = state.composer.isBengaliPhonetic,
+                    phonetic = state.composer.phoneticLanguage,
                     alphabet = state.layouts.letterAlphabet,
                     sources = epoch,
                 )
@@ -15158,8 +15279,8 @@ open class WMKeyboardService : InputMethodService() {
                     // romanization rather than about the Bengali word list.
                     val engine = suggestionEngine
                     engine?.glideRomanization =
-                        if (gate.phonetic) romanizedGlide else RomanizedIndex.EMPTY
-                    val allowed = gate.phonetic || !gate.converts
+                        gate.phonetic?.let { romanizedGlides[it] } ?: RomanizedIndex.EMPTY
+                    val allowed = gate.phonetic != null || !gate.converts
                     val ready = allowed && engine != null && withContext(Dispatchers.Default) {
                         engine.glideCoverage(gate.alphabet) >= GlideCoverage.THRESHOLD
                     }
@@ -15171,14 +15292,34 @@ open class WMKeyboardService : InputMethodService() {
                     // and that is exactly when the chip is needed. A list that
                     // does not cover the layout is the other silent case, and
                     // the docs are what explain that one.
-                    val missingList = allowed && !gate.phonetic &&
+                    val missingList = allowed && gate.phonetic == null &&
                         engine != null && !engine.hasLanguageWords()
-                    val offer = if (missingList) glideWordListOffer(gate.languageId) else null
+                    // A phonetic layout with no word list behind it still types —
+                    // the rules and the spelling map see to that — but it is
+                    // guessing at every word the map does not list, and nothing
+                    // on screen says a download would stop the guessing (#239).
+                    // Only once the backend is really loaded: before that an
+                    // empty index means "not yet", not "nothing to load". And
+                    // not for a language the user set to its own lists alone.
+                    val phoneticBare = gate.phonetic != null && engine != null &&
+                        engine.extraPhonetic[gate.phonetic]?.index?.isEmpty == true &&
+                        shippedDictionaryEnabled(gate.phonetic)
+                    val offer = when {
+                        missingList -> glideWordListOffer(gate.languageId)
+                        phoneticBare -> phoneticWordListOffer(gate.languageId)
+                        else -> null
+                    }
                     _uiState.update {
-                        if (it.glideReady == ready && it.glideWordListOffer == offer) {
+                        if (it.glideReady == ready && it.glideWordListOffer == offer &&
+                            it.wordListOfferIsPhonetic == (offer != null && phoneticBare)
+                        ) {
                             it
                         } else {
-                            it.copy(glideReady = ready, glideWordListOffer = offer)
+                            it.copy(
+                                glideReady = ready,
+                                glideWordListOffer = offer,
+                                wordListOfferIsPhonetic = offer != null && phoneticBare,
+                            )
                         }
                     }
                 }
@@ -19497,7 +19638,8 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val engine = suggestionEngine ?: return
-        val avro = state.composer.isBengaliPhonetic
+        val phonetic = state.composer.phoneticLanguage
+        val avro = phonetic != null
         // The engine takes the romanised keystrokes on Avro and the word
         // itself everywhere else — the same split the field path makes.
         val typed = if (avro) test.buffer else test.current
@@ -19513,7 +19655,7 @@ open class WMKeyboardService : InputMethodService() {
                 engine.suggest(
                     composing = typed,
                     previousWord = previous,
-                    avroMode = avro,
+                    phoneticLanguage = phonetic,
                     limit = suggestionSlots,
                     previousWord2 = previous2,
                 )
@@ -22591,6 +22733,7 @@ open class WMKeyboardService : InputMethodService() {
                 (grammarAvailable || grammarProbePending()),
             aiAvailable = aiReady,
             bengaliLoaded = suggestionEngine != null && bengaliAssetEntries.isNotEmpty(),
+            hindiLoaded = suggestionEngine?.extraPhonetic?.containsKey(PhoneticSchemes.HINDI.languageId) == true,
             chatSyntax = ChatSyntax.forPackage(currentPackage),
             content = content,
         )
@@ -22654,9 +22797,17 @@ open class WMKeyboardService : InputMethodService() {
     private var macroSeq = 0
     private var macroJob: Job? = null
 
-    /** The Banglish converter, rebuilt when the engine or its Bengali sources change. */
-    private var banglish: BanglishConverter? = null
-    private var banglishSources: Pair<Any, Any>? = null
+    /**
+     * The romanized converters by language, each beside what it was built
+     * over, so one is rebuilt when the engine or its sources change — the
+     * inverted spelling map inside is the expensive part.
+     */
+    private val romanizedConverters = HashMap<String, Pair<PhoneticBackendKey, RomanizedConverter>>()
+
+    /** Identity of what a converter was built from: the spelling map and the index. */
+    private class PhoneticBackendKey(val spellings: Any, val index: Any) {
+        fun sameAs(other: PhoneticBackendKey) = spellings === other.spellings && index === other.index
+    }
 
     /**
      * A macro chip was tapped.
@@ -22708,7 +22859,9 @@ open class WMKeyboardService : InputMethodService() {
             SelectionMacro.GRAMMAR_FIX -> fixGrammarInSelection(offer)
             SelectionMacro.AI -> onPanelChange(PanelMode.AI)
             SelectionMacro.READ_ALOUD -> toggleReadAloud(offer)
-            SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH -> convertBengali(offer, macro)
+            SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
+            SelectionMacro.TO_HINDI, SelectionMacro.TO_HINGLISH,
+            -> convertRomanized(offer, macro)
             SelectionMacro.SEARCH -> openMacroSearch(PanelMode.WEB_SEARCH, text)
             SelectionMacro.TRANSLATE -> openMacroSearch(PanelMode.TRANSLATE, text)
             SelectionMacro.QR -> onPanelChange(PanelMode.QR_GEN)
@@ -23167,7 +23320,12 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val speaker = vocabSpeaker ?: VocabSpeaker(this).also { vocabSpeaker = it }
-        val locale = if (offer.content.hasBengali) Locale("bn", "BD") else Locale.getDefault()
+        val locale = when {
+            offer.content.hasBengali -> Locale("bn", "BD")
+            // Devanagari is not only Hindi, but Hindi is the voice every device has.
+            offer.content.hasDevanagari -> Locale("hi", "IN")
+            else -> Locale.getDefault()
+        }
         val vocab = _uiState.value.settings.vocabulary
         setSpeaking(true)
         speaker.speak(offer.text, null, vocab.ttsRate, vocab.ttsPitch, locale) {
@@ -23181,27 +23339,42 @@ open class WMKeyboardService : InputMethodService() {
         if (_uiState.value.selectionMacros?.speaking == true) setSpeaking(false)
     }
 
-    /** The converter for the engine's current Bengali sources, built when they change. */
-    private fun banglishConverter(): BanglishConverter? {
+    /**
+     * The converter for [languageId]'s current sources, built when they change,
+     * or null while that language is not loaded: Bengali with no word list at
+     * all, or a phonetic language whose layout is not enabled.
+     */
+    private fun romanizedConverter(languageId: String): RomanizedConverter? {
         val engine = suggestionEngine ?: return null
-        if (bengaliAssetEntries.isEmpty()) return null
-        val sources = engine.spellingMap to engine.bengaliIndex
-        if (banglishSources !== null && banglishSources!!.first === sources.first && banglishSources!!.second === sources.second) {
-            return banglish
-        }
-        banglishSources = sources
-        return BanglishConverter(engine.spellingMap, engine.bengaliIndex).also { banglish = it }
+        val bengali = languageId == PhoneticSchemes.BENGALI.languageId
+        if (bengali && bengaliAssetEntries.isEmpty()) return null
+        if (!bengali && languageId !in engine.extraPhonetic) return null
+        val backend = engine.phoneticBackend(languageId) ?: return null
+        val key = PhoneticBackendKey(backend.spellings, backend.index)
+        romanizedConverters[languageId]?.let { (builtFrom, converter) -> if (builtFrom.sameAs(key)) return converter }
+        return RomanizedConverter(backend.scheme, backend.spellings, backend.index)
+            .also { romanizedConverters[languageId] = key to it }
     }
 
-    private fun convertBengali(offer: SelectionMacroOffer, macro: SelectionMacro) {
-        val converter = banglishConverter() ?: return toast(R.string.ime_selection_macro_bengali_unavailable_toast)
+    /** Both directions of both languages: [macro] says which. */
+    private fun convertRomanized(offer: SelectionMacroOffer, macro: SelectionMacro) {
+        val hindi = macro == SelectionMacro.TO_HINDI || macro == SelectionMacro.TO_HINGLISH
+        val scheme = if (hindi) PhoneticSchemes.HINDI else PhoneticSchemes.BENGALI
+        val converter = romanizedConverter(scheme.languageId) ?: return toast(
+            if (hindi) {
+                R.string.ime_selection_macro_hindi_unavailable_toast
+            } else {
+                R.string.ime_selection_macro_bengali_unavailable_toast
+            },
+        )
+        val toNative = macro == SelectionMacro.TO_BANGLA || macro == SelectionMacro.TO_HINDI
         if (offer.busy != null) return
         val seq = ++macroSeq
         setMacroBusy(macro)
         macroJob?.cancel()
         macroJob = serviceScope.launch {
             val out = withContext(Dispatchers.Default) {
-                if (macro == SelectionMacro.TO_BANGLA) converter.toBengali(offer.text) else converter.toBanglish(offer.text)
+                if (toNative) converter.toNative(offer.text) else converter.toRoman(offer.text)
             }
             if (!offerStillLive(offer, seq)) return@launch
             setMacroBusy(null)
@@ -24301,7 +24474,7 @@ open class WMKeyboardService : InputMethodService() {
         fun blocked(candidate: String?) = candidate != null && candidate.lowercase() == lower
         if (blocked(commitResolution?.correction) ||
             blocked(commitResolution?.offer) ||
-            blocked(commitResolution?.bengaliTop) ||
+            blocked(commitResolution?.phoneticTop) ||
             blocked(commitResolution?.ambiguousTop)
         ) {
             commitResolution = null
@@ -26621,14 +26794,20 @@ open class WMKeyboardService : InputMethodService() {
         engine.secondaryDictionaries = secondaryIds.filter { it != "en" }
             .mapNotNull { id -> customDictionaries[id]?.let { SecondaryDictionary(id, it) } }
         if ("bn_rom" in langIds) {
-            romanizedGlide = RomanizedIndex.bengali(
+            romanizedGlides = romanizedGlides + ("bn" to RomanizedIndex.of(
                 spellings = engine.spellingMap,
                 phonetic = engine.bengaliIndex,
                 downloadedRomanized = customDictionaries["bn_rom"] ?: PackedTrie.EMPTY,
                 nativeFrequency = engine.bengaliIndex::frequencyOf,
-            )
+            ))
         }
-        glideSourcesEpoch.update { it + 1 }
+        // An imported list, native or romanized, is part of what a phonetic
+        // language's index and glide are built over.
+        val phoneticTouched = loadedExtraPhonetic.any { token ->
+            val scheme = PhoneticSchemes.forLanguage(token.removeSuffix(WITH_SPELLING_MAP))
+            scheme != null && (scheme.languageId in langIds || scheme.romanizedListId in langIds)
+        }
+        if (phoneticTouched) loadExtraPhonetic() else glideSourcesEpoch.update { it + 1 }
     }
 
     /**
@@ -26704,16 +26883,19 @@ open class WMKeyboardService : InputMethodService() {
                 .mapNotNull { id -> customDictionaries[id]?.let { SecondaryDictionary(id, it) } }
             // A romanized-Bengali download is what turns Avro from unglidable
             // into glidable, so the romanization is rebuilt alongside.
-            romanizedGlide = RomanizedIndex.bengali(
+            romanizedGlides = romanizedGlides + ("bn" to RomanizedIndex.of(
                 spellings = engine.spellingMap,
                 phonetic = engine.bengaliIndex,
                 downloadedRomanized = customDictionaries["bn_rom"] ?: PackedTrie.EMPTY,
                 nativeFrequency = engine.bengaliIndex::frequencyOf,
-            )
+            ))
             // A download can be the thing that makes a language glidable, and
             // neither the language nor the layout moved to say so.
             glideSourcesEpoch.update { it + 1 }
         }
+        // A phonetic language with no bundled list is ranked against its
+        // download and nothing else, so this is the moment it gets an index.
+        if (loadedExtraPhonetic.isNotEmpty()) loadExtraPhonetic()
         // A list that just arrived (or left) is a chip the bar should show (or
         // drop), and the settings did not move to say so.
         refreshDictionaryBar(_uiState.value.settings)
@@ -27425,6 +27607,9 @@ open class WMKeyboardService : InputMethodService() {
 
         /** The same, for a keyboard-owned field's own suggestion row (#161). */
         private const val CAPTURE_SUGGEST_DEBOUNCE_MS = 24L
+
+        /** Marks an [extraPhoneticWanted] token whose spelling map is switched on. */
+        private const val WITH_SPELLING_MAP = "+map"
 
         /**
          * …and how many words it asks for: the strip's own slot count, since

@@ -83,7 +83,7 @@ class GlideTriggerDecodeTest {
     fun `a trigger is not a word the typing path completes to`() {
         val e = engine()
         e.glideTriggers = SuggestionEngine.triggerSource(listOf("omw"))
-        assertFalse(e.suggest("om", previousWord = null, avroMode = false).contains("omw"))
+        assertFalse(e.suggest("om", previousWord = null).contains("omw"))
     }
 
     @Test

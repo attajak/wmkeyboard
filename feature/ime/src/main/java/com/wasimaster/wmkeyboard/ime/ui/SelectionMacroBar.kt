@@ -514,7 +514,9 @@ private fun macroIcon(macro: SelectionMacro): ImageVector? = when (macro) {
     SelectionMacro.TRANSLATE -> Icons.Outlined.Translate
     SelectionMacro.GRAMMAR_FIX -> Icons.Outlined.Spellcheck
     SelectionMacro.AI -> Icons.Outlined.AutoFixHigh
-    SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH -> Icons.Outlined.Language
+    SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
+    SelectionMacro.TO_HINDI, SelectionMacro.TO_HINGLISH,
+    -> Icons.Outlined.Language
     SelectionMacro.DIGITS_LATIN -> Icons.Outlined.Pin
     SelectionMacro.COLOUR -> Icons.Outlined.Palette
     SelectionMacro.JSON_FORMAT -> Icons.Outlined.DataObject

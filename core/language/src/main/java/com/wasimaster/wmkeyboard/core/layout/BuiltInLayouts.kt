@@ -41,6 +41,7 @@ object BuiltInLayouts {
     const val GREEK_ID = "builtin_greek"
     const val HEBREW_ID = "builtin_hebrew"
     const val HINDI_ID = "builtin_hindi"
+    const val HINDI_PHONETIC_ID = "builtin_hindi_phonetic"
     const val T9_ID = "builtin_t9"
     const val COMPACT_ID = "builtin_compact"
 
@@ -274,6 +275,20 @@ object BuiltInLayouts {
     )
 
     /**
+     * Hindi typed the way it is written in a chat — "kaise ho" → कैसे हो — on
+     * the QWERTY grid unchanged, as Avro is for Bengali. The composer override
+     * is what makes it phonetic: the script's own default is the cluster
+     * shaping [HINDI] uses.
+     */
+    val HINDI_PHONETIC = LayoutSpec(
+        id = HINDI_PHONETIC_ID,
+        name = "Hindi phonetic",
+        langId = "hi",
+        composer = ComposerType.TRANSLITERATE,
+        layers = mapOf(LayoutLayer.LETTERS.key to LayerSpec(qwertyRows)),
+    )
+
+    /**
      * T9: the phone keypad, three or four letters to a key, decoded by the
      * language model rather than by multi-tap (discussion #103).
      *
@@ -343,7 +358,7 @@ object BuiltInLayouts {
      */
     val all: List<LayoutSpec> = listOf(
         QWERTY, AZERTY, DVORAK, COLEMAK, WORKMAN, HALMAK, AVRO, PROBHAT, JATIYA, FRENCH,
-        GERMAN, SPANISH, KOREAN, RUSSIAN, ARABIC, GREEK, HEBREW, HINDI, T9, COMPACT,
+        GERMAN, SPANISH, KOREAN, RUSSIAN, ARABIC, GREEK, HEBREW, HINDI, HINDI_PHONETIC, T9, COMPACT,
     )
 
     fun byId(id: String): LayoutSpec? = all.firstOrNull { it.id == id }

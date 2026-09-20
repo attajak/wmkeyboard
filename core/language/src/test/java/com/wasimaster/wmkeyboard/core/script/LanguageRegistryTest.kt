@@ -105,6 +105,10 @@ class LanguageRegistryTest {
         assertEquals("en", LanguageRegistry.languageOf(BuiltInLayouts.QWERTY_ID).id)
         assertEquals("en", LanguageRegistry.languageOf(BuiltInLayouts.AZERTY_ID).id)
         assertEquals("bn", LanguageRegistry.languageOf(BuiltInLayouts.AVRO_ID).id)
+        assertEquals("hi", LanguageRegistry.languageOf(BuiltInLayouts.HINDI_ID).id)
+        assertEquals("hi", LanguageRegistry.languageOf(BuiltInLayouts.HINDI_PHONETIC_ID).id)
+        // InScript leads: enabling Hindi must not hand anyone a Latin grid.
+        assertEquals(BuiltInLayouts.HINDI_ID, LanguageRegistry.byId("hi").layoutIds.first())
         assertEquals("de", LanguageRegistry.languageOf(BuiltInLayouts.GERMAN_ID).id)
     }
 

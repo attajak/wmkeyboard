@@ -30,7 +30,7 @@ package com.wasimaster.wmkeyboard.core.transliteration
  *     is a whole word's worth of meaning ("also"). [endsWithO] keeps the two
  *     apart again, so "kotha" answers কথা and only "kothao" answers কথাও.
  */
-class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) {
+class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
 
     private val byKey = HashMap<String, MutableList<Entry>>()
     private val freqByWord = HashMap<String, Int>()
@@ -54,8 +54,10 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) {
         byKey.values.forEach { list -> list.sortByDescending { it.frequency } }
     }
 
+    override val isEmpty: Boolean get() = byKey.isEmpty()
+
     /** Dictionary words phonetically matching the romanized [input], best first. */
-    fun lookup(input: String): List<String> {
+    override fun lookup(input: String): List<String> {
         val folded = foldRomanFull(input)
         val bucket = byKey[folded.key] ?: return emptyList()
         // One sibling is the overwhelmingly common case; skip the comparator.
@@ -85,7 +87,7 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) {
     }
 
     /** Dictionary frequency of a Bengali [word], 0 when unknown. */
-    fun frequencyOf(word: String): Int = freqByWord[word] ?: 0
+    override fun frequencyOf(word: String): Int = freqByWord[word] ?: 0
 
     companion object {
 

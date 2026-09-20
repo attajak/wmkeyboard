@@ -182,7 +182,13 @@ object LanguageRegistry {
             englishName = "Hindi",
             script = ScriptId.DEVANAGARI,
             localeTag = "hi-IN",
-            layoutIds = listOf(BuiltInLayouts.HINDI_ID, AssetLayouts.HI_REMINGTON_GAIL_ID),
+            // InScript leads, so it is still what enabling Hindi gives; the
+            // phonetic layout is a choice made on the language's screen.
+            layoutIds = listOf(
+                BuiltInLayouts.HINDI_ID,
+                BuiltInLayouts.HINDI_PHONETIC_ID,
+                AssetLayouts.HI_REMINGTON_GAIL_ID,
+            ),
             numeralSystem = NumeralSystem.DEVANAGARI,
         ),
         // Layouts delivered as JSON assets (see AssetLayouts). The language is
