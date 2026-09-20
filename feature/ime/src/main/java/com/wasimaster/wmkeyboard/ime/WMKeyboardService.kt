@@ -8003,6 +8003,14 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         if (composing.isNotEmpty()) commitComposing(ic, autocorrect = false)
+        // A TYPE_NULL editor reads back as empty however much it holds, so the
+        // lookahead below would call every ⌦ a no-op. The key event is the only
+        // forward delete such an editor hears, exactly as backspace already
+        // sends one there (issue #268).
+        if (isNullField()) {
+            sendDownUpKeyEvents(KeyEvent.KEYCODE_FORWARD_DEL)
+            return
+        }
         // The lookahead has to outrun the longest emoji ZWJ/tag sequence, the
         // same way backspace's lookback does.
         val after = ic.getTextAfterCursor(64, 0)
@@ -8050,6 +8058,12 @@ open class WMKeyboardService : InputMethodService() {
         // underline. Committed as it stands, never autocorrected: the user did
         // not signal the word was finished.
         if (composing.isNotEmpty()) commitComposing(ic, autocorrect = false)
+        // The mirror of the word backspace above: no readable text, no word to
+        // measure, so one character goes instead of none (issue #268).
+        if (isNullField()) {
+            sendDownUpKeyEvents(KeyEvent.KEYCODE_FORWARD_DEL)
+            return
+        }
         val after = ic.getTextAfterCursor(96, 0) ?: return
         val length = WordDelete.lengthAfter(after)
         if (length <= 0) return
@@ -8086,6 +8100,9 @@ open class WMKeyboardService : InputMethodService() {
         }
         val ic = currentInputConnection ?: return false
         if (hasSelection(ic)) return true
+        // Same blind buffer as in [canDeleteField] (issue #268): a TYPE_NULL
+        // editor's "" is not an end of text, so the held key keeps going.
+        if (isNullField()) return true
         // A null answer means the editor can't say — keep deleting rather than
         // stopping a working key; only a definite "" stops it.
         val after = ic.getTextAfterCursor(1, 0) ?: return true
@@ -8469,6 +8486,13 @@ open class WMKeyboardService : InputMethodService() {
             refreshSuggestions()
             return
         }
+        // Nothing readable behind the cursor in a TYPE_NULL editor, so there is
+        // no word boundary to find: the step degrades to the one character the
+        // key event can delete rather than to nothing at all (issue #268).
+        if (isNullField()) {
+            sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+            return
+        }
         val before = ic.getTextBeforeCursor(96, 0) ?: return
         val length = WordDelete.lengthBefore(before)
         if (length > 0) {
@@ -8666,6 +8690,12 @@ open class WMKeyboardService : InputMethodService() {
         // differently by every editor, and the preview has to show exactly
         // what the release will take.
         dropComposingForSelectionEdit(ic)
+        // A TYPE_NULL editor answers every read with an empty buffer sitting at
+        // offset 0 — convincing enough to pass the checks below, and then every
+        // step of the swipe covers nothing. Refusing the preview outright sends
+        // the gesture down the delete-as-you-go path, whose key events are the
+        // only edits such an editor hears (issue #268).
+        if (isNullField()) return false
         val extracted = ic.getExtractedText(ExtractedTextRequest(), 0) ?: return false
         val start = extracted.selectionStart
         val end = extracted.selectionEnd
@@ -24546,6 +24576,14 @@ open class WMKeyboardService : InputMethodService() {
         if (composing.isNotEmpty()) return true
         val ic = currentInputConnection ?: return false
         if (hasSelection(ic)) return true
+        // A TYPE_NULL editor holds no text to read back (issue #268): Termux
+        // runs a bare BaseInputConnection over an empty dummy buffer, so it
+        // answers "" however much is on the command line. Taking that at face
+        // value stopped the held backspace before its first repeat, which is
+        // why a hold there deleted exactly one character. Such a field only
+        // ever hears the key events we send it, so let the key keep firing and
+        // let the terminal decide when there is nothing left.
+        if (isNullField()) return true
         // A null answer means the editor can't say — keep deleting rather
         // than stopping a working backspace; only a definite "" stops it.
         val before = ic.getTextBeforeCursor(1, 0) ?: return true
