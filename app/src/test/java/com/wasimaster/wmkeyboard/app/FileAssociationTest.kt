@@ -122,7 +122,7 @@ class FileAssociationTest {
         // formats actually arrive as. Anything wider — text/*, or */* outside
         // the name-matched filters — would put this app in the chooser for
         // documents it has nothing to say about.
-        val loose = claimedTypes.toSet() - NAMELESS_TYPES - "*/*"
+        val loose = claimedTypes.toSet() - NAMELESS_TYPES - YAML_TYPES - "*/*"
         assertTrue("the manifest claims $loose", loose.isEmpty())
         for (filter in typedFilters) {
             assertTrue("a type-matched filter claims */*", !filter.contains("""android:mimeType="*/*""""))
@@ -166,6 +166,20 @@ class FileAssociationTest {
             "application/octet-stream",
             "application/zip",
             "application/x-zip-compressed",
+        )
+
+        /**
+         * YAML, in the four spellings providers use for it. Two formats this
+         * app reads arrive as YAML — a FUTO Keyboard layout and an Espanso
+         * snippet file — and claiming the type is how they are offered to this
+         * app at all. Deliberately not claimed by `pathPattern`: a `.yaml` name
+         * pattern would offer the app for every YAML file on the device.
+         */
+        val YAML_TYPES = setOf(
+            "application/yaml",
+            "application/x-yaml",
+            "text/yaml",
+            "text/x-yaml",
         )
     }
 }

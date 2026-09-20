@@ -557,6 +557,20 @@
                 <data android:mimeType="application/octet-stream" />
                 <data android:mimeType="application/zip" />
                 <data android:mimeType="application/x-zip-compressed" />
+                <!--
+                     YAML, which two formats this app reads arrive as: a FUTO
+                     Keyboard layout and an Espanso snippet file. Claimed by
+                     type rather than by a `.yaml` pathPattern on purpose —
+                     a name pattern would offer this app for every YAML on the
+                     device, which is exactly what the compound extensions
+                     above exist to avoid. A provider that says nothing more
+                     precise than octet-stream is already covered by the line
+                     above it.
+                -->
+                <data android:mimeType="application/yaml" />
+                <data android:mimeType="application/x-yaml" />
+                <data android:mimeType="text/yaml" />
+                <data android:mimeType="text/x-yaml" />
             </intent-filter>
 
             <!--
@@ -573,6 +587,10 @@
                 <data android:mimeType="application/octet-stream" />
                 <data android:mimeType="application/zip" />
                 <data android:mimeType="application/x-zip-compressed" />
+                <data android:mimeType="application/yaml" />
+                <data android:mimeType="application/x-yaml" />
+                <data android:mimeType="text/yaml" />
+                <data android:mimeType="text/x-yaml" />
             </intent-filter>
         </activity>
 

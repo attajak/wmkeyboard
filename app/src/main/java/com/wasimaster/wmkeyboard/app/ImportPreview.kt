@@ -35,7 +35,7 @@ import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.core.addons.AddonPreviewContent
 import com.wasimaster.wmkeyboard.core.addons.AddonPreviewReader
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
-import com.wasimaster.wmkeyboard.core.snippets.ImportedSnippets
+import com.wasimaster.wmkeyboard.core.snippets.Snippet
 import com.wasimaster.wmkeyboard.core.theme.FlexResult
 import com.wasimaster.wmkeyboard.core.theme.ThemeSpec
 import com.wasimaster.wmkeyboard.core.theme.withExtractedImages
@@ -80,10 +80,14 @@ internal fun ImportFilePreview(state: WMFileTypes.Opened, uri: Uri) {
 
         is WMFileTypes.Opened.Layout -> LayoutFilePreview(state.layout.layout)
 
+        is WMFileTypes.Opened.FutoLayout -> LayoutFilePreview(state.converted.layout)
+
         is WMFileTypes.Opened.KeymanPackageFile ->
             keymanLayoutOf(state.contents)?.let { LayoutFilePreview(it.layout) }
 
-        is WMFileTypes.Opened.Snippets -> SnippetsFilePreview(state.snippets)
+        is WMFileTypes.Opened.Snippets -> SnippetsFilePreview(state.snippets.snippets)
+
+        is WMFileTypes.Opened.EspansoSnippets -> SnippetsFilePreview(state.parsed.snippets)
 
         is WMFileTypes.Opened.Vocabulary -> VocabularyFilePreview(state.pack)
 
@@ -152,8 +156,8 @@ private fun LayoutFilePreview(spec: LayoutSpec) {
 
 /** The first few snippets: what each is called, and what it types. */
 @Composable
-private fun SnippetsFilePreview(snippets: ImportedSnippets) {
-    val shown = snippets.snippets.take(MAX_ROWS)
+private fun SnippetsFilePreview(snippets: List<Snippet>) {
+    val shown = snippets.take(MAX_ROWS)
     if (shown.isEmpty()) return
     Column(Modifier.fillMaxWidth().padding(bottom = PREVIEW_GAP)) {
         for (snippet in shown) {
@@ -162,7 +166,7 @@ private fun SnippetsFilePreview(snippets: ImportedSnippets) {
                 detail = snippet.text,
             )
         }
-        MoreLine(snippets.snippets.size - shown.size)
+        MoreLine(snippets.size - shown.size)
     }
 }
 

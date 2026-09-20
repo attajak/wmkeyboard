@@ -378,8 +378,15 @@ private fun composerDescRes(type: ComposerType?): Int = when (type) {
     ComposerType.JYUTPING -> R.string.layout_editor_composer_jyutping_desc
 }
 
+/**
+ * The language picker a converted foreign layout has to go through.
+ *
+ * Internal rather than private: the file-association import dialog shows the
+ * same step for a layout opened from a file manager, and two pickers that could
+ * drift apart is how the two paths end up disagreeing about what a language is.
+ */
 @Composable
-private fun ForeignLanguageDialog(
+internal fun ForeignLanguageDialog(
     selected: String,
     onPick: (String) -> Unit,
     onDismiss: () -> Unit,

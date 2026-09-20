@@ -56,6 +56,8 @@ import com.wasimaster.wmkeyboard.core.keyman.TouchLayoutConverter
 import com.wasimaster.wmkeyboard.core.layout.KeymanBinding
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.keyman.KeymanPackage
+import com.wasimaster.wmkeyboard.core.layout.ConvertedLayout
+import com.wasimaster.wmkeyboard.core.layout.FutoLayouts
 import com.wasimaster.wmkeyboard.core.layout.ImportedLayout
 import com.wasimaster.wmkeyboard.core.layout.LayoutFile
 import com.wasimaster.wmkeyboard.core.plugins.PluginFile
@@ -70,6 +72,7 @@ import com.wasimaster.wmkeyboard.core.settings.SettingsBackup
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.snippets.ImportedSnippets
 import com.wasimaster.wmkeyboard.core.snippets.SnippetFile
+import com.wasimaster.wmkeyboard.core.snippets.SnippetPayload
 import com.wasimaster.wmkeyboard.core.snippets.SnippetStore
 import com.wasimaster.wmkeyboard.core.stickers.StickerImportResult
 import com.wasimaster.wmkeyboard.core.stickers.StickerPackFile
@@ -168,6 +171,27 @@ object WMFileTypes {
         data class Config(val text: String, val parsed: ConfigBackup.Parsed) : Opened
         data class Snippets(val snippets: ImportedSnippets) : Opened
         data class Vocabulary(val pack: VocabPack) : Opened
+
+        /**
+         * A FUTO Keyboard layout, already converted.
+         *
+         * Its own case rather than a [Layout], for the same reason a
+         * [FlorisTheme] is not a [Theme]: the file came from another keyboard,
+         * only the letters came across, and the language is a guess that has to
+         * be settled before the grid is stored.
+         */
+        data class FutoLayout(val converted: ConvertedLayout) : Opened
+
+        /**
+         * An Espanso match file: somebody else's text expander, read into
+         * snippets of ours.
+         *
+         * Carries the whole [SnippetPayload.Parsed] rather than the snippets
+         * alone, because the notes are the point of the dialog — an Espanso file
+         * can say things this app has no equivalent for, and finding that out
+         * after the import is worse than being told and deciding.
+         */
+        data class EspansoSnippets(val parsed: SnippetPayload.Parsed) : Opened
 
         /** The older standalone `wmsettings.json`. */
         data class Settings(val text: String, val parsed: SettingsBackup.Parsed) : Opened
@@ -332,12 +356,33 @@ object WMFileTypes {
         // A theme has no tag and every field has a default, so decoding any JSON
         // object at all succeeds and yields an all-defaults theme. The file name
         // is the only evidence there is that this one was meant to be a theme.
-        // Nothing untagged may be added after this line: the name check is what
-        // stops the branch claiming every JSON file, and a second untagged
-        // format would have nothing left to be told apart by.
+        // No untagged *JSON* format may be added after this line: the name check
+        // is what stops the branch claiming every JSON file, and a second
+        // untagged one would have nothing left to be told apart by.
         if (name.endsWith(".${ThemeCodec.FILE_EXTENSION}", ignoreCase = true)) {
             ThemeCodec.decode(text)?.let { return Opened.Theme(it) }
         }
+
+        // The two YAML formats, which are the two that can follow the branch
+        // above safely. Both are somebody else's and neither carries a tag of
+        // ours, but each is recognised by a key at the start of a line — `rows:`
+        // for FUTO, `matches:` for Espanso — and a JSON document cannot have
+        // one, because every key in it is inside quotes. That is the whole
+        // reason they can sit here rather than needing a file name.
+        //
+        // FUTO first: it is the narrower test of the two, wanting both `name:`
+        // and `rows:`.
+        if (FutoLayouts.looksLikeFutoLayout(text)) {
+            FutoLayouts.convert(text, name)?.let { return Opened.FutoLayout(it) }
+        }
+        // Espanso's half of SnippetPayload. The native half of it already
+        // answered above, so an Espanso file is all that can still come back —
+        // and asking the shared reader rather than repeating its sniff here is
+        // what keeps this screen and the Text Expander screen from disagreeing
+        // about what a snippet file is.
+        SnippetPayload.readText(text, name)
+            ?.takeIf { it.isEspanso }
+            ?.let { return Opened.EspansoSnippets(it) }
         return Opened.Unrecognized
     }
 
@@ -553,9 +598,24 @@ private data class ImportProposal(
      * result message to show, because the screen is the result.
      */
     val open: (() -> Unit)? = null,
+    /**
+     * The language a converted foreign layout is guessed to be in, and the seed
+     * for the row the dialog draws to change it. Set together with
+     * [applyWithLanguage].
+     *
+     * A step rather than a guess applied silently, exactly as the in-app import
+     * makes it: the language decides the dictionary, the autocorrect, the script
+     * rules, dictation and how shift behaves, and no foreign layout file states
+     * one.
+     */
+    val language: String? = null,
+    /** Set instead of [apply] by a proposal that has a [language] to settle. */
+    val applyWithLanguage: (suspend (String) -> String)? = null,
 ) {
     /** Whether there is anything to press the confirm button for. */
-    val actionable: Boolean get() = apply != null || applyWithPassphrase != null || open != null
+    val actionable: Boolean
+        get() = apply != null || applyWithPassphrase != null ||
+            applyWithLanguage != null || open != null
 }
 
 /** The proposal's heading, resolved against the screen's resources. */
@@ -627,6 +687,8 @@ private fun ImportFileDialog(
 
     val proposal = rememberProposal(state, repository, context, uri)
     var passphrase by remember { mutableStateOf("") }
+    var language by remember(proposal) { mutableStateOf(proposal.language.orEmpty()) }
+    var pickingLanguage by remember { mutableStateOf(false) }
     val needsPassphrase = proposal.applyWithPassphrase != null
     AlertDialog(
         onDismissRequest = onClose,
@@ -642,6 +704,14 @@ private fun ImportFileDialog(
                     Spacer(Modifier.height(8.dp))
                     Text(stringResource(R.string.import_repairs_title), fontWeight = FontWeight.Medium)
                     for (line in proposal.repairs) Text("• $line")
+                }
+                if (proposal.language != null) {
+                    Spacer(Modifier.height(8.dp))
+                    WmRow(
+                        title = stringResource(R.string.layout_editor_foreign_language_title),
+                        subtitle = LanguageRegistry.byId(language).displayName,
+                        onClick = { pickingLanguage = true },
+                    )
                 }
                 if (needsPassphrase) {
                     Spacer(Modifier.height(16.dp))
@@ -661,6 +731,7 @@ private fun ImportFileDialog(
         confirmButton = {
             val apply = proposal.apply
             val applyWithPassphrase = proposal.applyWithPassphrase
+            val applyWithLanguage = proposal.applyWithLanguage
             val open = proposal.open
             when {
                 // Closes on the way out: the screen it opens is the result, and
@@ -668,6 +739,11 @@ private fun ImportFileDialog(
                 open != null -> TextButton(onClick = {
                     open()
                     onClose()
+                }) { Text(stringResource(proposal.confirmLabelRes)) }
+
+                applyWithLanguage != null -> TextButton(onClick = {
+                    working = true
+                    scope.launch { message = applyWithLanguage(language); working = false }
                 }) { Text(stringResource(proposal.confirmLabelRes)) }
 
                 applyWithPassphrase != null -> TextButton(
@@ -694,6 +770,19 @@ private fun ImportFileDialog(
             }
         },
     )
+
+    // Over the dialog above, the same picker the layout editor's own foreign
+    // import opens.
+    if (pickingLanguage) {
+        ForeignLanguageDialog(
+            selected = language,
+            onPick = {
+                language = it
+                pickingLanguage = false
+            },
+            onDismiss = { pickingLanguage = false },
+        )
+    }
 }
 
 /**
@@ -835,6 +924,27 @@ private fun rememberProposal(
                 context.getString(R.string.import_done_name, state.layout.layout.name)
             },
         )
+
+        is WMFileTypes.Opened.FutoLayout -> ImportProposal(
+            titleRes = R.string.import_name_title,
+            titleArg = state.converted.layout.name,
+            body = context.getString(R.string.import_futo_body),
+            repairs = state.converted.notes.map { it.format(context.resources) },
+            language = state.converted.guessedLangId,
+            applyWithLanguage = { langId ->
+                // withLanguage is the only supported way out of a conversion,
+                // for the reason its own comment gives: a blank langId is
+                // migrated to English on the next read, which would give a
+                // Georgian grid an English dictionary with nothing to say why.
+                repository.upsertCustomLayout(
+                    state.converted.withLanguage(langId)
+                        .copy(id = "custom_${System.currentTimeMillis()}"),
+                )
+                context.getString(R.string.import_done_name, state.converted.layout.name)
+            },
+        )
+
+        is WMFileTypes.Opened.EspansoSnippets -> espansoProposal(state.parsed, context)
 
         is WMFileTypes.Opened.Config -> {
             val counts = repository.describeConfig(state.parsed)
@@ -1117,7 +1227,10 @@ private fun rememberProposal(
         )
 
         WMFileTypes.Opened.Text -> ImportProposal(
-            titleRes = R.string.import_unrecognized_title,
+            // Its own title rather than the unrecognised one: the file *can* be
+            // opened, and a heading saying it is not a WM Keyboard file read as
+            // a dead end sitting above a button that is not one.
+            titleRes = R.string.import_text_title,
             body = context.getString(R.string.import_text_body, WMFileTypes.displayName(context, uri)),
             confirmLabelRes = R.string.import_open_editor_action,
             open = { FileEditorActivity.start(context, uri) },
@@ -1135,6 +1248,60 @@ private fun rememberProposal(
             apply = null,
         )
     }
+}
+
+/**
+ * The confirmation for an Espanso match file.
+ *
+ * Worded as a conversion, like the FlorisBoard one below and unlike the app's
+ * own snippet file: Espanso can say things this app has no equivalent for, and
+ * the notes listing what did not survive are the reason the dialog exists.
+ *
+ * The snippets land in one folder named after the file, which is what gives an
+ * imported pack a single off switch — the same rule the Text Expander screen's
+ * own Espanso import follows.
+ */
+private fun espansoProposal(
+    parsed: SnippetPayload.Parsed,
+    context: android.content.Context,
+): ImportProposal {
+    val folderName = parsed.suggestedName.trim()
+    if (parsed.snippets.isEmpty()) {
+        return ImportProposal(
+            titleRes = R.string.import_espanso_title,
+            body = context.getString(R.string.import_espanso_none),
+            repairs = parsed.notes.map { it.resolve(context) },
+            apply = null,
+        )
+    }
+    return ImportProposal(
+        titlePluralRes = R.plurals.import_snippets_title,
+        titleQuantity = parsed.snippets.size,
+        body = context.getString(
+            R.string.import_espanso_body,
+            folderName.ifEmpty { context.getString(R.string.import_espanso_folder_fallback) },
+        ),
+        repairs = parsed.notes.map { it.resolve(context) },
+        apply = {
+            val store = withContext(Dispatchers.IO) {
+                SnippetStore(File(context.filesDir, "snippets/snippets.json"))
+            }
+            withContext(Dispatchers.IO) {
+                val target = folderName.takeIf { it.isNotEmpty() }?.let { store.addFolder(it).id } ?: 0L
+                // Whole snippets, not a handful of named fields, and fresh ids
+                // from the store: importing the same pack twice gives two
+                // independent sets rather than silently overwriting the first.
+                store.addAll(parsed.snippets, parsed.folders, fallbackFolderId = target)
+                // The adds are in-memory only; save() is what writes the file.
+                store.save()
+            }
+            context.resources.getQuantityString(
+                R.plurals.import_snippets_done,
+                parsed.snippets.size,
+                parsed.snippets.size,
+            )
+        },
+    )
 }
 
 /**

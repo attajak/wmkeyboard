@@ -105,7 +105,7 @@ The rest of the flags ask for a text style this keyboard has no form of, such as
 
 ### FUTO layouts
 
-FUTO Keyboard writes its layouts in YAML, and publishes its own as a repository of them. Pick one with the same **Import from another keyboard** button; the app tells a YAML layout from a JSON one by the document itself, not by the file name.
+FUTO Keyboard writes its layouts in YAML, and publishes its own as a repository of them. Pick one with the same **Import from another keyboard** button; the app tells a YAML layout from a JSON one by the document itself, not by the file name. Tapping one in a file manager works too — `.yaml` is not claimed by name, because that would offer WM Keyboard for every YAML file on your phone, but the YAML content types are, and the same `name:`-and-`rows:` test recognizes the file. Either way the language is confirmed before the layout is saved.
 
 Most of that format reads straight across, because FUTO's keyboard descends from AOSP's and so its key specs are the ones already read here: `a|b`, `!code/`, `!icon/` and the same `!autoColumnOrder!4` popup markers. A row written as `q w e r t`, as `[[a, ą], b]`, or as a list of `{type: base, spec: …}` objects all work, and so does `type: case`, which keeps both cases the way a FlorisBoard case selector does.
 

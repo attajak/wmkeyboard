@@ -27,6 +27,9 @@
     <string name="import_keyman_no_grid_body">This Keyman package holds no on-screen keyboard, so there is no layout to add. Packages built for desktop computers only are like this.</string>
     <!-- Languages is the name of a screen in the settings app. -->
     <string name="import_layout_body">The app adds the layout to your layouts. The layout stays off. To type with it, turn it on in Languages.</string>
+    <!-- FUTO Keyboard is the name of another keyboard app; leave it as it is.
+         Languages is the name of a screen in the settings app. -->
+    <string name="import_futo_body">This is a FUTO Keyboard layout. The app adds its letter keys as a layout of yours; the symbol and number keys stay the ones you have. The layout stays off. To type with it, turn it on in Languages.</string>
 
     <!-- ==== Backup files. ==== -->
 
@@ -89,6 +92,17 @@
         <item quantity="one">The app imported %1$d snippet.</item>
         <item quantity="other">The app imported %1$d snippets.</item>
     </plurals>
+
+    <!-- ==== Espanso files. Espanso is a text expander for computers; its
+         snippet files are one of the formats this app reads. ==== -->
+
+    <!-- %1$s is the name of the folder the snippets land in. -->
+    <string name="import_espanso_body">This is an Espanso file. The app adds its snippets to yours, in a folder called <xliff:g id="folder_name" example="Emoji shortcuts">%1$s</xliff:g>, so you can turn all of them off at once.</string>
+    <!-- Stands in for the folder name when the file gives nothing to name it
+         after. It goes into import_espanso_body. -->
+    <string name="import_espanso_folder_fallback">Espanso</string>
+    <string name="import_espanso_title">Nothing to import</string>
+    <string name="import_espanso_none">This is an Espanso file, but the app could read no snippets from it.</string>
 
     <!-- ==== Sticker pack files. ==== -->
 
@@ -179,6 +193,7 @@
     <!-- Shown for a file that is readable text but none of the app's formats.
          The app is offered for any JSON file and for files of unknown type, so
          landing here is normal rather than a mistake. %1$s is the file name. -->
+    <string name="import_text_title">Open in the editor?</string>
     <string name="import_text_body">The keyboard has no use for <xliff:g id="file_name" example="settings.json">%1$s</xliff:g>. It is not a theme, a layout, a snippet pack, a sticker pack, an icon pack, a plugin or a backup. You can still read and edit it here.</string>
     <string name="import_open_editor_action">Open editor</string>
 

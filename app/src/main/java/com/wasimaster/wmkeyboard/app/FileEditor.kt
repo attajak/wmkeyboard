@@ -2,8 +2,10 @@ package com.wasimaster.wmkeyboard.app
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Process
 import androidx.activity.compose.BackHandler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -147,22 +149,42 @@ class FileEditorActivity : ComponentActivity() {
 
     companion object {
         /**
-         * Opens [uri] in the editor, handing on the read and write access this
-         * process was given. The write flag is carried even when the opener
-         * granted none: a flag for access the app does not hold is ignored
-         * rather than refused, and Save finds out for real by trying.
+         * Opens [uri] in the editor, handing on the access this process was
+         * actually given — and only that.
+         *
+         * A grant cannot be passed on unless it is held. Carrying the write
+         * flag over a read-only grant is not a flag quietly ignored: the
+         * activity manager throws `SecurityException` out of `startActivity`,
+         * which killed the app on the way to the editor for every file opened
+         * from a file manager that shares read-only. Google's Files does.
+         *
+         * Each flag is therefore asked about first. Whether Save can really
+         * write is still found out by trying — a provider may answer this check
+         * and refuse the write anyway.
          */
         fun start(context: Context, uri: Uri) {
-            context.startActivity(
-                Intent(context, FileEditorActivity::class.java)
-                    .setData(uri)
-                    .addFlags(
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
-                            Intent.FLAG_ACTIVITY_NEW_TASK,
-                    ),
-            )
+            var flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            if (context.holdsUriAccess(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)) {
+                flags = flags or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+            if (context.holdsUriAccess(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)) {
+                flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            }
+            val intent = Intent(context, FileEditorActivity::class.java).setData(uri)
+            runCatching { context.startActivity(Intent(intent).addFlags(flags)) }
+                .onFailure {
+                    // The check above is the same one the activity manager
+                    // makes, so this is the provider changing its mind between
+                    // the two calls. The editor opens without the grant and
+                    // says it cannot read the file, which beats a crash.
+                    context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                }
         }
+
+        /** Whether this process may exercise [flag] on [uri]. */
+        private fun Context.holdsUriAccess(uri: Uri, flag: Int): Boolean =
+            checkUriPermission(uri, Process.myPid(), Process.myUid(), flag) ==
+                PackageManager.PERMISSION_GRANTED
     }
 }
 
