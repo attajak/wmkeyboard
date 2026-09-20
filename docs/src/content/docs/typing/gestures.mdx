@@ -143,9 +143,11 @@ The words come off exactly as a swipe step takes them, so the whitespace next to
 
 <SettingsPath path="Key press / Delete keys" />
 
-<KeyCap>⌦</KeyCap> is not on any built-in layout. Add one to a row, or to a key's press-and-hold alternates, in the [layout editor](/languages/custom-layouts/), and it gets the same three gestures backspace has, each pointed the other way: a press deletes the character *after* the cursor, a hold repeats, and **Swipe on forward delete** (on by default) lets a **rightward** drag take whole words or characters ahead of the cursor.
+<KeyCap>⌦</KeyCap> is not on any built-in typing layout. Add one to a row, to a key's press-and-hold alternates, or to the [text-editing pad](/tools/text-editing/) in the [layout editor](/languages/custom-layouts/), and it gets the same three gestures backspace has, each pointed the other way: a press deletes the character *after* the cursor, a hold repeats, and **Swipe on forward delete** (on by default) lets a **rightward** drag take whole words or characters ahead of the cursor.
 
 The finger travels the way the deletion travels, which is the only difference in the gesture. Everything that shapes it is shared with backspace rather than doubled: **Swipe deletes**, **Show what you will delete**, **Word delete distance** and **Character delete distance** all govern both keys, so tuning the pull on one tunes it on the other. **Holding delete clears words** covers <KeyCap>⌦</KeyCap> too, clearing the words after the cursor.
+
+Where you put a delete key does not change what it is. The text-editing pad's own <KeyCap>⌫</KeyCap> and <KeyCap>⌦</KeyCap> are these keys, not a weaker copy of them: the swipe, the preview, the word-clearing hold and the delete repeat interval all apply there exactly as they do on the letters row.
 
 One step deletes any trailing whitespace plus the run of same-kind characters behind the cursor, where letters and digits count as one kind and punctuation as another. That's what stops a step from stalling on a run like `...` or a string of dashes. It also means a word glued to punctuation (a contraction, a trailing comma) can take more than one step to clear, since the letters and the punctuation are different kinds and each gets its own step.
 

@@ -1604,7 +1604,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - ReDoS step budget — A pathologically slow pattern is stopped rather than stalling typing
     - Skipped mid-transliteration — Composing buffer holds an input spelling, so expansion would misfire
     - Import/export .wmsnippets.json — Repairs rather than rejects rows; 500-snippet and 20k-char import caps
-  - Text editing — D-pad cursor panel with selection mode; twenty operations including Cut and the start and end of the whole text (#59)
+  - Text editing — D-pad cursor panel with selection mode; twenty-one operations including Cut, the start and end of the whole text (#59) and a forward delete that swipes like the key on the letters row (#226)
     - Real key events, not computed moves — Arrows, Home, End, Backspace sent as the events a hardware key would send
     - Select mode wraps moves in a real Shift press — Some editors only read Shift from the key events themselves
     - Select all / Copy / Paste column — Select all turns selection mode on; Copy turns it off

@@ -57,6 +57,9 @@ fun textEditIcon(op: TextEditAction): ImageVector? = when (op) {
     TextEditAction.COPY -> Icons.Outlined.ContentCopy
     TextEditAction.PASTE -> Icons.Outlined.ContentPaste
     TextEditAction.BACKSPACE -> Icons.AutoMirrored.Outlined.Backspace
+    // The typing grid's own ⌦ glyph, so the two forward delete keys wear the
+    // same face wherever an author puts them (issue #226).
+    TextEditAction.FORWARD_DELETE -> KeyboardIcons.ForwardDelete
     TextEditAction.DOC_START -> Icons.Outlined.VerticalAlignTop
     TextEditAction.DOC_END -> Icons.Outlined.VerticalAlignBottom
     TextEditAction.CUT -> Icons.Outlined.ContentCut
@@ -96,6 +99,7 @@ internal fun textEditDescription(op: TextEditAction): Int = when (op) {
     TextEditAction.COPY -> CommonR.string.common_copy
     TextEditAction.PASTE -> CommonR.string.common_paste
     TextEditAction.BACKSPACE -> CommonR.string.common_delete
+    TextEditAction.FORWARD_DELETE -> R.string.ime_key_forward_delete
     TextEditAction.DOC_START -> R.string.ime_textedit_doc_start_desc
     TextEditAction.DOC_END -> R.string.ime_textedit_doc_end_desc
     TextEditAction.CUT -> CommonR.string.common_cut

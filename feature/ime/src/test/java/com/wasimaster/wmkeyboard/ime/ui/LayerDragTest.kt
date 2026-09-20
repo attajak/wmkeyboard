@@ -5,6 +5,12 @@ import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.layout.KeyRole
 import com.wasimaster.wmkeyboard.core.layout.ModifierKey
+import com.wasimaster.wmkeyboard.core.layout.deletesBackward
+import com.wasimaster.wmkeyboard.core.layout.deletesForward
+import com.wasimaster.wmkeyboard.core.layout.holdIsSpokenFor
+import com.wasimaster.wmkeyboard.core.layout.holdRepeats
+import com.wasimaster.wmkeyboard.core.settings.TextEditAction
+import com.wasimaster.wmkeyboard.core.settings.repeats
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.ime.LayoutMode
 import org.junit.Assert.assertEquals
@@ -146,6 +152,48 @@ class LayerDragTest {
         assertFalse(forward.startsDeleteSwipe(backspace = true, forward = false))
         assertFalse(Key("m").startsDeleteSwipe(backspace = true, forward = true))
         assertFalse(null.startsDeleteSwipe(backspace = true, forward = true))
+    }
+
+    /**
+     * And the text-editing pad's own delete keys are delete keys (#226): they
+     * carry an `Edit` action rather than [KeyAction.Delete], which is why a ⌫
+     * placed on a panel used to tap and repeat and never swipe.
+     */
+    @Test
+    fun `the pad's delete keys start the same swipes`() {
+        val backspace = Key("", action = KeyAction.Edit(TextEditAction.BACKSPACE))
+        val forward = Key("", action = KeyAction.Edit(TextEditAction.FORWARD_DELETE))
+        assertTrue(backspace.startsDeleteSwipe(backspace = true, forward = false))
+        assertFalse(backspace.startsDeleteSwipe(backspace = false, forward = true))
+        assertTrue(forward.startsDeleteSwipe(backspace = false, forward = true))
+        assertFalse(forward.startsDeleteSwipe(backspace = true, forward = false))
+        assertFalse(
+            Key("", action = KeyAction.Edit(TextEditAction.LEFT))
+                .startsDeleteSwipe(backspace = true, forward = true),
+        )
+    }
+
+    /** Both spellings of each delete key answer the direction question alike. */
+    @Test
+    fun `the direction of a delete key does not depend on how it was spelled`() {
+        assertTrue(KeyAction.Delete.deletesBackward())
+        assertTrue(KeyAction.Edit(TextEditAction.BACKSPACE).deletesBackward())
+        assertFalse(KeyAction.Delete.deletesForward())
+        assertFalse(KeyAction.Edit(TextEditAction.BACKSPACE).deletesForward())
+        assertTrue(KeyAction.ForwardDelete.deletesForward())
+        assertTrue(KeyAction.Edit(TextEditAction.FORWARD_DELETE).deletesForward())
+        assertFalse(KeyAction.ForwardDelete.deletesBackward())
+        assertFalse(KeyAction.Edit(TextEditAction.FORWARD_DELETE).deletesBackward())
+        assertFalse(KeyAction.Edit(TextEditAction.LEFT).deletesBackward())
+        assertFalse(KeyAction.Text.deletesBackward())
+    }
+
+    /** A held ⌦ on the pad repeats, so its hold is not free for alternates. */
+    @Test
+    fun `the pad's forward delete repeats while held`() {
+        assertTrue(TextEditAction.FORWARD_DELETE.repeats)
+        assertTrue(Key("", action = KeyAction.Edit(TextEditAction.FORWARD_DELETE)).holdRepeats())
+        assertTrue(KeyAction.Edit(TextEditAction.FORWARD_DELETE).holdIsSpokenFor())
     }
 
     // ---- commitsFromLayerDrag -----------------------------------------------

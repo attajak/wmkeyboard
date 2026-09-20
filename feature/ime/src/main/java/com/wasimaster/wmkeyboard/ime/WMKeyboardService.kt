@@ -24024,6 +24024,17 @@ open class WMKeyboardService : InputMethodService() {
         // first, and before the input-connection check, so it works in a
         // window with no editor focused at all.
         if (captureTextEdit(action, extendSelection, haptic)) return
+        // A delete key is the delete key, whichever action an author reached
+        // for (issue #226). Straight to the real deletions rather than to a
+        // bare key event: that is where the autocorrect undo, the emoji
+        // cluster, the morse buffer and the ink-in-progress all live, and a ⌫
+        // on the pad that skipped them behaved unlike the one on the letters.
+        // Ahead of the input-connection check because both cope without one.
+        if (action == TextEditAction.BACKSPACE || action == TextEditAction.FORWARD_DELETE) {
+            if (haptic) vibrate()
+            if (action == TextEditAction.BACKSPACE) onDelete() else onForwardDelete()
+            return
+        }
         val ic = currentInputConnection ?: return
         if (haptic) vibrate()
         commitComposing(ic, autocorrect = false)
@@ -24072,7 +24083,8 @@ open class WMKeyboardService : InputMethodService() {
                 ic.performContextMenuAction(android.R.id.paste)
                 purgeAfterPasswordPaste()
             }
-            TextEditAction.BACKSPACE -> sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+            // Handled above, before the composing text was committed.
+            TextEditAction.BACKSPACE, TextEditAction.FORWARD_DELETE -> Unit
             // Ctrl+Home / Ctrl+End are the editor's whole-text moves, the same
             // way Ctrl+Arrow is its word move; with select mode on they carry
             // shift too and extend to the end.

@@ -474,6 +474,8 @@ import com.wasimaster.wmkeyboard.core.layout.KeyRole
 import com.wasimaster.wmkeyboard.core.layout.ModifierKey
 import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.letterSet
+import com.wasimaster.wmkeyboard.core.layout.deletesBackward
+import com.wasimaster.wmkeyboard.core.layout.deletesForward
 import com.wasimaster.wmkeyboard.core.layout.drawnFontScale
 import com.wasimaster.wmkeyboard.core.layout.drawnLabel
 import com.wasimaster.wmkeyboard.core.layout.drawnLabelScale
@@ -11232,8 +11234,8 @@ internal fun Key?.startsPossessiveSwipe(possessiveChar: Char?): Boolean =
  * glide typed a word on top of it (#243).
  */
 internal fun Key?.startsDeleteSwipe(backspace: Boolean, forward: Boolean): Boolean =
-    (backspace && this?.action == KeyAction.Delete) ||
-        (forward && this?.action == KeyAction.ForwardDelete)
+    (backspace && this?.action?.deletesBackward() == true) ||
+        (forward && this?.action?.deletesForward() == true)
 
 /**
  * Whether a short flick down off this key types its corner hint (issue #178).
@@ -19122,8 +19124,8 @@ private fun Modifier.pointerInputKey(
             }
         }
     } else if (
-        (key.action == KeyAction.Delete && backspaceSwipeDelete) ||
-        (key.action == KeyAction.ForwardDelete && textEditing.forwardDeleteSwipe)
+        (key.action.deletesBackward() && backspaceSwipeDelete) ||
+        (key.action.deletesForward() && textEditing.forwardDeleteSwipe)
     ) {
         // A delete key owns its whole gesture rather than bolting a drag onto
         // the shared press handler: tap, hold-to-repeat and the delete swipe
@@ -19136,7 +19138,10 @@ private fun Modifier.pointerInputKey(
             // ⌦ runs the identical machine pointed the other way (issue #226):
             // the finger travels the way the deletion travels, so every step is
             // measured along [dir] and nothing else about the gesture forks.
-            val forward = key.action == KeyAction.ForwardDelete
+            // Asked of the action rather than compared to [KeyAction.ForwardDelete],
+            // so the text-editing pad's own delete keys — which are `Edit`
+            // actions, not these — run this machine too (issue #226).
+            val forward = key.action.deletesForward()
             val dir = if (forward) 1f else -1f
             fun canDeleteHere(): Boolean = if (forward) canForwardDelete() else canDelete()
             // The repeat clears whole words instead of characters (issue #216),
@@ -19454,24 +19459,25 @@ private fun Modifier.pointerInputKey(
                                         // Space and the two deletes each hold to
                                         // a different purpose, so each has its
                                         // own cadence.
+                                        val deletesBack = key.action.deletesBackward()
+                                        val deletesFwd = key.action.deletesForward()
                                         // A held delete key can clear whole
                                         // words (issue #216), which is slower
                                         // on purpose and so keeps its own
-                                        // number. The text-edit pad's own
-                                        // backspace is left out: it belongs to
-                                        // that tool's cadence.
+                                        // number. The text-edit pad's delete
+                                        // keys are delete keys too (issue
+                                        // #226), so they count here as well.
                                         val holdWords = textEditing.deleteHoldDeletesWords &&
-                                            (
-                                                key.action == KeyAction.Delete ||
-                                                    key.action == KeyAction.ForwardDelete
-                                                )
+                                            (deletesBack || deletesFwd)
                                         val intervalMs = when {
                                             key.action == KeyAction.Space -> keyRepeat.spaceMs
-                                            editOp != null -> textEditing.repeatMs
                                             holdWords -> keyRepeat.wordDeleteMs
-                                            key.action == KeyAction.Delete ||
-                                                key.action == KeyAction.ForwardDelete ->
-                                                keyRepeat.deleteMs
+                                            // Before the edit-key cadence, so a
+                                            // delete key on the pad repeats at
+                                            // the delete interval like every
+                                            // other delete key (issue #226).
+                                            deletesBack || deletesFwd -> keyRepeat.deleteMs
+                                            editOp != null -> textEditing.repeatMs
                                             // Everything left is a key an author
                                             // turned the repeat on for.
                                             else -> keyRepeat.customKeyMs
@@ -19483,9 +19489,8 @@ private fun Modifier.pointerInputKey(
                                         // so it polls its own predicate.
                                         while (
                                             when {
-                                                key.action == KeyAction.Delete -> canDelete()
-                                                key.action == KeyAction.ForwardDelete -> canForwardDelete()
-                                                editOp == TextEditAction.BACKSPACE -> canDelete()
+                                                deletesBack -> canDelete()
+                                                deletesFwd -> canForwardDelete()
                                                 else -> true
                                             }
                                         ) {
@@ -19498,10 +19503,7 @@ private fun Modifier.pointerInputKey(
                                             // itself only ever takes one
                                             // character.
                                             if (holdWords) {
-                                                deleteSwipe.onDeleteUnit(
-                                                    true,
-                                                    key.action == KeyAction.ForwardDelete,
-                                                )
+                                                deleteSwipe.onDeleteUnit(true, deletesFwd)
                                             } else {
                                                 onKeyRepeat(key)
                                             }

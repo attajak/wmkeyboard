@@ -9,6 +9,7 @@ import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.settings.HapticSettings
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
+import com.wasimaster.wmkeyboard.core.settings.TextEditAction
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -123,6 +124,25 @@ class TerminalDeleteTest {
             editor.keys,
         )
         assertEquals(emptyList<Pair<Int, Int>>(), editor.deletions)
+    }
+
+    /**
+     * The text-editing pad's delete keys are `Edit` actions rather than
+     * [KeyAction.Delete], and used to go out as a bare key event from
+     * `onTextEdit` — with no forward one to send at all (#226). Both are the
+     * real deletions now, which is also why each lands the right way round.
+     */
+    @Test
+    fun `the pad's delete keys run the real deletions`() {
+        val (service, editor) = terminal()
+
+        service.onKey(Key(label = "", action = KeyAction.Edit(TextEditAction.BACKSPACE)))
+        service.onKey(Key(label = "", action = KeyAction.Edit(TextEditAction.FORWARD_DELETE)))
+
+        assertEquals(
+            listOf(KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_FORWARD_DEL),
+            editor.keys,
+        )
     }
 
     @Test

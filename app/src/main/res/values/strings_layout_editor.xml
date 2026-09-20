@@ -600,6 +600,7 @@
     <string name="textedit_action_copy">Copy</string>
     <string name="textedit_action_paste">Paste</string>
     <string name="textedit_action_backspace">Delete</string>
+    <string name="textedit_action_forward_delete">Forward delete</string>
 
     <!-- Chevron on a layout's row that opens or closes the list of its layers. %1$s is the layout's name. -->
     <string name="layout_editor_layers_expand_desc">Show the layers of <xliff:g id="layout" example="QWERTY">%1$s</xliff:g></string>

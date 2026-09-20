@@ -468,6 +468,24 @@ data class KeyAlternate(
 fun KeyAlternate.drawnLabel(): String = label.ifBlank { action.fallbackLabel() }
 
 /**
+ * Whether this key deletes behind the cursor: the backspace key, and the
+ * text-editing pad's own backspace, which is the same key wearing a different
+ * action (issue #226).
+ *
+ * The pad's `Edit` keys grew up beside the delete key rather than out of it, so
+ * for a while a ⌫ placed on a panel could only tap and repeat: the swipe, the
+ * word-clearing hold and the "stop at the start of the text" test all asked for
+ * [KeyAction.Delete] by name and a pad key is not that. Asking this instead is
+ * what makes a delete key a delete key wherever the author put it.
+ */
+fun KeyAction.deletesBackward(): Boolean =
+    this == KeyAction.Delete || (this as? KeyAction.Edit)?.op == TextEditAction.BACKSPACE
+
+/** The mirror of [deletesBackward]: ⌦, on the typing grid or on a pad. */
+fun KeyAction.deletesForward(): Boolean =
+    this == KeyAction.ForwardDelete || (this as? KeyAction.Edit)?.op == TextEditAction.FORWARD_DELETE
+
+/**
  * Whether a press and hold on this key is already spoken for by something other
  * than the alternates popup, so alternates on it would never be reachable.
  *
@@ -585,6 +603,7 @@ private fun TextEditAction.fallbackGlyph(): String = when (this) {
     TextEditAction.COPY -> "⎘"
     TextEditAction.PASTE -> "⎗"
     TextEditAction.BACKSPACE -> "⌫"
+    TextEditAction.FORWARD_DELETE -> "⌦"
     TextEditAction.DOC_START -> "⇱"
     TextEditAction.DOC_END -> "⇲"
     TextEditAction.CUT -> "✂"

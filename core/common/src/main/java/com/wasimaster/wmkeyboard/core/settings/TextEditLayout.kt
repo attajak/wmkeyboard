@@ -18,6 +18,12 @@ enum class TextEditAction {
     WORD_LEFT, WORD_RIGHT, SELECT_WORD, SELECT_LINE,
     SELECT, SELECT_ALL, COPY, PASTE, BACKSPACE,
 
+    // Issue #226. The pad had a backspace and no way to delete the other way,
+    // so an author who wanted one had to reach for the typing grid's own
+    // forward delete key. Both of these are the real delete keys now, gestures
+    // and all — see `KeyAction.deletesBackward`.
+    FORWARD_DELETE,
+
     // Issue #59. The start and end of the whole text (Ctrl+Home / Ctrl+End),
     // as distinct from the line ([HOME]/[END]) and from a page ([PAGE_UP]/
     // [PAGE_DOWN], which used to be labelled as these and are not: a page key
@@ -30,7 +36,7 @@ enum class TextEditAction {
  * The actions whose second press does something the first did not, so holding the
  * key is worth repeating.
  *
- * The moves, and backspace. Home, End and the two selection commands are left out
+ * The moves, and the two deletes. Home, End and the two selection commands are left out
  * for the reason [HoldRepeatCursorTools] leaves them out of the toolbar's repeat:
  * the caret is already there, so a repeat would buzz away doing nothing. Those are
  * exactly the keys whose hold is free for a second action — see
@@ -40,7 +46,7 @@ val RepeatingTextEditActions: Set<TextEditAction> = setOf(
     TextEditAction.UP, TextEditAction.DOWN, TextEditAction.LEFT, TextEditAction.RIGHT,
     TextEditAction.PAGE_UP, TextEditAction.PAGE_DOWN,
     TextEditAction.WORD_LEFT, TextEditAction.WORD_RIGHT,
-    TextEditAction.BACKSPACE,
+    TextEditAction.BACKSPACE, TextEditAction.FORWARD_DELETE,
 )
 
 /** Whether a hold on a key running [action] repeats it. */

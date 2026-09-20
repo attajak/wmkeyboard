@@ -147,6 +147,7 @@ internal fun textEditActionTitle(op: TextEditAction): Int = when (op) {
     TextEditAction.COPY -> R.string.textedit_action_copy
     TextEditAction.PASTE -> R.string.textedit_action_paste
     TextEditAction.BACKSPACE -> R.string.textedit_action_backspace
+    TextEditAction.FORWARD_DELETE -> R.string.textedit_action_forward_delete
     TextEditAction.DOC_START -> R.string.textedit_action_doc_start
     TextEditAction.DOC_END -> R.string.textedit_action_doc_end
     TextEditAction.CUT -> R.string.textedit_action_cut
