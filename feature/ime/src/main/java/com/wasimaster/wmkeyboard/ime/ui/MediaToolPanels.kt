@@ -241,9 +241,21 @@ private fun CaretQueryText(
             overflow = TextOverflow.Clip,
             onTextLayout = { layout = it },
         )
-        val result = layout
+        // Only a layout of *this* text can say where the caret goes. `Text`
+        // reports its layout during the layout phase, which runs after the
+        // composition that changed the text, so the first composition to see a
+        // new query still holds the layout of the old one — and asking that one
+        // for an offset past its end threw `offset(2) is out of bounds [0, 1]`
+        // on the second keystroke in every one of these boxes (#252). The
+        // caret waits the one frame instead: writing `layout` in `onTextLayout`
+        // schedules the recomposition that draws it.
+        val result = layout?.takeIf { it.layoutInput.text.text == query }
         if (caret >= 0 && result != null) {
-            val x = result.getHorizontalPosition(caret.coerceIn(0, query.length), usePrimaryDirection = true)
+            // Clamped against the layout's own text and not against [query]:
+            // they are the same string here, and it is the layout that defines
+            // the legal range.
+            val offset = caret.coerceIn(0, result.layoutInput.text.length)
+            val x = result.getHorizontalPosition(offset, usePrimaryDirection = true)
             Box(Modifier.offset { IntOffset(x.roundToInt(), 0) }) {
                 SearchCaret(textColor, fontSize, caret to query)
             }
