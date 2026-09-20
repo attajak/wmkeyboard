@@ -116,6 +116,9 @@ data class KbTheme(
     val suggestionBar: Color?,
     /** Fill for the system navigation bar's band; null inherits the board. */
     val navigationBar: Color?,
+    /** One-handed side rail: its fill, and the two glyphs on it. */
+    val oneHandedPanel: Color,
+    val oneHandedPanelIcon: Color,
     val backgroundImage: String?,
     /** Landscape override for [backgroundImage]; null falls back to it. */
     val backgroundImageLandscape: String?,
@@ -180,6 +183,8 @@ data class KbTheme(
     val pressedKey: Color,
     val keyBorder: Color?,
     val keyBorderWidthDp: Float,
+    /** Lift under each key; already 0 for a shape that must not cast one. */
+    val keyElevation: Dp,
     val accent: Color,
     /** Colour of the glide-typing trail; defaults to [accent] when a theme leaves it unset. */
     val gestureTrail: Color,
@@ -190,6 +195,10 @@ data class KbTheme(
     /** Outline around the preview bubble; null draws none. */
     val popupBorder: Color?,
     val popupBorderWidthDp: Float,
+    val popupElevation: Dp,
+    /** Highlight under a focused alternate or a selected menu row. */
+    val popupSelected: Color,
+    val popupSelectedText: Color,
     /** Image painted inside the preview bubble, clipped to its shape. */
     val popupTexture: String?,
     val toolbarIcon: Color,
@@ -199,6 +208,7 @@ data class KbTheme(
     /** Outline around a tool's background; null draws none. */
     val toolBorder: Color?,
     val toolBorderWidthDp: Float,
+    val toolElevation: Dp,
     val chip: Color,
     /** Text on an unselected chip. */
     val chipText: Color,
@@ -208,6 +218,7 @@ data class KbTheme(
     /** Outline around every chip; null draws none. */
     val chipBorder: Color?,
     val chipBorderWidthDp: Float,
+    val cardElevation: Dp,
     val suggestionText: Color,
     val secondaryText: Color,
     val divider: Color,
@@ -303,6 +314,25 @@ fun KbTheme.cardShape() = keyShapeFor(cardShapeKind, chipRadiusDp)
  */
 fun elevationFor(kind: KeyShapeKind, elevation: Dp): Dp =
     if (castsElevationShadow(kind)) elevation else 0.dp
+
+/** The most a theme may lift anything. Past this a shadow reads as a blur. */
+const val MAX_ELEVATION_DP = 16f
+
+/** What every popup drew before a theme could say otherwise. */
+const val DEFAULT_POPUP_ELEVATION_DP = 6f
+val DEFAULT_POPUP_ELEVATION = DEFAULT_POPUP_ELEVATION_DP.dp
+
+/**
+ * Whether a key is solid enough to cast a shadow.
+ *
+ * A borderless theme's keys are transparent and its board shows through, so a
+ * shadow would be a smudge with nothing above it. A theme with no key shape
+ * draws no face at all, same reasoning.
+ */
+private fun keyCastsShadow(spec: ThemeSpec): Boolean =
+    spec.keyShape != KeyShapeKind.NONE && ((spec.keyBackground ushr 24) and 0xFFL) > 0x20L
+
+private fun lerpDp(a: Dp, b: Dp, t: Float): Dp = a + (b - a) * t
 
 /**
  * The popup outline a theme asked for, as a Surface border; null draws none.
@@ -510,6 +540,8 @@ internal fun defaultKbTheme(
         // are the board, which is exactly what null means.
         suggestionBar = null,
         navigationBar = null,
+        oneHandedPanel = board,
+        oneHandedPanelIcon = scheme.onSurfaceVariant,
         backgroundImage = null,
         backgroundImageLandscape = null,
         backgroundImageOpacity = 1f,
@@ -547,6 +579,7 @@ internal fun defaultKbTheme(
         pressedKey = pressed,
         keyBorder = null,
         keyBorderWidthDp = 0f,
+        keyElevation = 0.dp,
         accent = scheme.primary,
         gestureTrail = scheme.primary,
         popup = popup,
@@ -554,6 +587,9 @@ internal fun defaultKbTheme(
         popupOnKey = null,
         popupBorder = null,
         popupBorderWidthDp = 0f,
+        popupElevation = DEFAULT_POPUP_ELEVATION,
+        popupSelected = scheme.primary,
+        popupSelectedText = scheme.onSurface,
         popupTexture = null,
         toolbarIcon = scheme.onSurfaceVariant,
         toolCircle = toolCircle,
@@ -567,6 +603,7 @@ internal fun defaultKbTheme(
         ),
         toolBorder = null,
         toolBorderWidthDp = 0f,
+        toolElevation = 0.dp,
         chip = chip,
         chipText = scheme.onSurface,
         chipActive = scheme.primaryContainer,
@@ -576,6 +613,7 @@ internal fun defaultKbTheme(
         ),
         chipBorder = null,
         chipBorderWidthDp = 0f,
+        cardElevation = 0.dp,
         suggestionText = scheme.onSurface,
         secondaryText = scheme.onSurfaceVariant,
         divider = scheme.outlineVariant,
@@ -633,6 +671,9 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
         boardGradient = spec.boardGradient,
         suggestionBar = spec.suggestionBarBackground?.let(::colorOf),
         navigationBar = spec.navigationBarBackground?.let(::colorOf),
+        oneHandedPanel = spec.oneHandedPanelBackground?.let(::colorOf) ?: board,
+        oneHandedPanelIcon = spec.oneHandedPanelIcon?.let(::colorOf)
+            ?: spec.toolbarIcon?.let(::colorOf) ?: secondary,
         backgroundImage = spec.backgroundImage,
         backgroundImageLandscape = spec.backgroundImageLandscape,
         backgroundImageOpacity = spec.backgroundImageOpacity,
@@ -681,6 +722,12 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
         pressedKey = pressed,
         keyBorder = spec.keyBorderColor?.let(::colorOf),
         keyBorderWidthDp = spec.keyBorderWidthDp,
+        // Guarded twice: a shape that cannot tessellate a shadow gets none,
+        // and a key with no face or a see-through fill has nothing to lift.
+        keyElevation = elevationFor(
+            spec.keyShape,
+            spec.keyElevationDp.coerceIn(0f, MAX_ELEVATION_DP).dp,
+        ).takeIf { keyCastsShadow(spec) } ?: 0.dp,
         accent = accent,
         gestureTrail = spec.gestureTrailColor?.let(::colorOf) ?: accent,
         // A light theme's keyText is dark, so a heavy blend produced a dark
@@ -693,6 +740,11 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
         popupOnKey = popupOnKey,
         popupBorder = spec.popupBorderColor?.let(::colorOf),
         popupBorderWidthDp = spec.popupBorderWidthDp,
+        popupElevation = (spec.popupElevationDp?.coerceIn(0f, MAX_ELEVATION_DP)?.dp
+            ?: DEFAULT_POPUP_ELEVATION),
+        popupSelected = spec.popupSelectedBackground?.let(::colorOf) ?: accent,
+        popupSelectedText = spec.popupSelectedText?.let(::colorOf)
+            ?: legibleOn(spec.popupSelectedBackground?.let(::colorOf) ?: accent, listOf(keyText)),
         popupTexture = spec.popupTexture,
         toolbarIcon = spec.toolbarIcon?.let(::colorOf) ?: secondary,
         toolCircle = spec.toolCircleBackground?.let(::colorOf)
@@ -702,6 +754,7 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
             ?: legibleOn(toolActive, listOf(accent, keyText)),
         toolBorder = spec.toolBorderColor?.let(::colorOf),
         toolBorderWidthDp = spec.toolBorderWidthDp,
+        toolElevation = spec.toolElevationDp.coerceIn(0f, MAX_ELEVATION_DP).dp,
         chip = spec.chipBackground?.let(::colorOf) ?: colorOf(spec.modifierKeyBackground),
         chipText = spec.chipText?.let(::colorOf)
             ?: spec.modifierKeyText?.let(::colorOf) ?: keyText,
@@ -710,6 +763,7 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
             ?: legibleOn(chipActive, listOf(accent, keyText)),
         chipBorder = spec.chipBorderColor?.let(::colorOf),
         chipBorderWidthDp = spec.chipBorderWidthDp,
+        cardElevation = spec.cardElevationDp.coerceIn(0f, MAX_ELEVATION_DP).dp,
         suggestionText = stripText,
         secondaryText = spec.secondaryText?.let(::colorOf) ?: secondary,
         divider = spec.dividerColor?.let(::colorOf) ?: stripText.copy(alpha = 0.25f),
@@ -1298,6 +1352,7 @@ private fun lerpKbTheme(a: KbTheme, b: KbTheme, t: Float): KbTheme {
         pressedKey = lerp(a.pressedKey, b.pressedKey, t),
         keyBorder = lerpColorOrNull(a.keyBorder, b.keyBorder, t),
         keyBorderWidthDp = lerpF(a.keyBorderWidthDp, b.keyBorderWidthDp, t),
+        keyElevation = lerpDp(a.keyElevation, b.keyElevation, t),
         accent = lerp(a.accent, b.accent, t),
         gestureTrail = lerp(a.gestureTrail, b.gestureTrail, t),
         popup = lerp(a.popup, b.popup, t),
@@ -1306,6 +1361,9 @@ private fun lerpKbTheme(a: KbTheme, b: KbTheme, t: Float): KbTheme {
         popupOnKey = if (past) b.popupOnKey else a.popupOnKey,
         popupBorder = lerpColorOrNull(a.popupBorder, b.popupBorder, t),
         popupBorderWidthDp = lerpF(a.popupBorderWidthDp, b.popupBorderWidthDp, t),
+        popupElevation = lerpDp(a.popupElevation, b.popupElevation, t),
+        popupSelected = lerp(a.popupSelected, b.popupSelected, t),
+        popupSelectedText = lerp(a.popupSelectedText, b.popupSelectedText, t),
         popupTexture = if (past) b.popupTexture else a.popupTexture,
         toolbarIcon = lerp(a.toolbarIcon, b.toolbarIcon, t),
         toolCircle = lerp(a.toolCircle, b.toolCircle, t),
@@ -1313,15 +1371,19 @@ private fun lerpKbTheme(a: KbTheme, b: KbTheme, t: Float): KbTheme {
         toolCircleActiveIcon = lerp(a.toolCircleActiveIcon, b.toolCircleActiveIcon, t),
         toolBorder = lerpColorOrNull(a.toolBorder, b.toolBorder, t),
         toolBorderWidthDp = lerpF(a.toolBorderWidthDp, b.toolBorderWidthDp, t),
+        toolElevation = lerpDp(a.toolElevation, b.toolElevation, t),
         chip = lerp(a.chip, b.chip, t),
         chipText = lerp(a.chipText, b.chipText, t),
         chipActive = lerp(a.chipActive, b.chipActive, t),
         chipActiveText = lerp(a.chipActiveText, b.chipActiveText, t),
         chipBorder = lerpColorOrNull(a.chipBorder, b.chipBorder, t),
         chipBorderWidthDp = lerpF(a.chipBorderWidthDp, b.chipBorderWidthDp, t),
+        cardElevation = lerpDp(a.cardElevation, b.cardElevation, t),
         suggestionText = lerp(a.suggestionText, b.suggestionText, t),
         secondaryText = lerp(a.secondaryText, b.secondaryText, t),
         divider = lerp(a.divider, b.divider, t),
+        oneHandedPanel = lerp(a.oneHandedPanel, b.oneHandedPanel, t),
+        oneHandedPanelIcon = lerp(a.oneHandedPanelIcon, b.oneHandedPanelIcon, t),
         keyRadiusDp = lerpI(a.keyRadiusDp, b.keyRadiusDp, t),
         popupRadiusDp = lerpI(a.popupRadiusDp, b.popupRadiusDp, t),
         popupShapeKind = if (past) b.popupShapeKind else a.popupShapeKind,

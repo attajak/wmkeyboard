@@ -2392,8 +2392,13 @@ private fun OneHandedRail(
     onExit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // The rail used to draw in MaterialTheme colours, which are the *settings
+    // app's*, so it ignored the keyboard theme entirely and sat as a grey strip
+    // beside a themed board. It wears the board's own fill and the toolbar's
+    // glyph colour now, which is also what a FlorisBoard theme states for it.
+    val kb = LocalKbTheme.current
     Column(
-        modifier = modifier,
+        modifier = modifier.background(kb.oneHandedPanel),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -2405,14 +2410,14 @@ private fun OneHandedRail(
                     Icons.AutoMirrored.Outlined.ArrowBack
                 },
                 contentDescription = stringResource(R.string.ime_one_handed_flip_desc),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = kb.oneHandedPanelIcon,
             )
         }
         IconButton(onClick = onExit) {
             Icon(
                 Icons.Outlined.Fullscreen,
                 contentDescription = stringResource(R.string.ime_one_handed_exit_desc),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = kb.oneHandedPanelIcon,
             )
         }
     }
@@ -12449,7 +12454,7 @@ private fun KeyPreviewBubble(
     // The next tap has to reach that row through it.
     Box(
         modifier = Modifier
-            .shadow(elevationFor(kb.popupShapeKind, 6.dp), shape, clip = false)
+            .shadow(elevationFor(kb.popupShapeKind, kb.popupElevation), shape, clip = false)
             .then(if (border != null) Modifier.border(border, shape) else Modifier)
             // A per-key style first, then the user's own bubble colour, then the
             // theme: narrowest wins, and the theme is the one nobody picked by hand.
@@ -16362,6 +16367,11 @@ internal fun KeyButton(
     // into: a slanted key then leans across the gap rather than out of its own
     // width, and neighbouring keys interlock instead of thinning out.
     val keyShape = kb.keyShape(bleedDp = keyGapH(settings).value, kind = visual.shapeKind)
+    // A key the theme gave its own shape re-runs the shadow guard for that
+    // shape: a round enter key may cast one on a board whose own shape cannot.
+    val keyElevation = visual.shapeKind
+        ?.let { elevationFor(it, kb.keyElevation) }
+        ?: kb.keyElevation
 
     // Outer box = full grid cell and the touch target; inner box = the
     // visible key, inset by the gap. Presses in the gap between keys land
@@ -16598,6 +16608,17 @@ internal fun KeyButton(
                 )
             )
             .padding(horizontal = keyGapH(settings), vertical = keyGapV(settings))
+            // The theme's lift, under the fill and the border so both ride it.
+            // Modifier.shadow is a no-op at 0 dp with clip off, so a flat theme
+            // pays nothing for this being in the chain; kb.keyElevation is
+            // already 0 for a shape or a fill that must not cast one.
+            .then(
+                if (keyElevation > 0.dp) {
+                    Modifier.shadow(keyElevation, keyShape, clip = false)
+                } else {
+                    Modifier
+                }
+            )
             // The face and its sheen are painted here rather than by
             // Modifier.background, because both depend on the press: read inside
             // the draw lambda, a press invalidates only the draw, so pressing a
@@ -17500,7 +17521,7 @@ private fun BoxScope.FlickCell(
             .align(align)
             .padding(3.dp)
             .background(
-                if (highlighted) kb.accent else kb.popup,
+                if (highlighted) kb.popupSelected else kb.popup,
                 RoundedCornerShape(kb.popupRadiusDp.dp),
             )
             .padding(horizontal = 12.dp, vertical = 8.dp),
@@ -17509,7 +17530,7 @@ private fun BoxScope.FlickCell(
         Text(
             text = text,
             fontSize = (20 * fontScale).sp,
-            color = if (highlighted) kb.keyText else kb.popupText,
+            color = if (highlighted) kb.popupSelectedText else kb.popupText,
         )
     }
 }
@@ -17597,7 +17618,7 @@ private fun LanguagePickerPopup(
                         val dragged = index == highlightIndex
                         Text(
                             text = layoutSwitchLabel(layoutId, enabledLayoutIds, customLayouts, displayMode),
-                            color = if (selected) kb.accent else kb.popupText,
+                            color = if (selected) kb.popupSelectedText else kb.popupText,
                             fontWeight = if (selected || dragged) FontWeight.Bold else FontWeight.Normal,
                             fontSize = 15.sp,
                             maxLines = 1,
@@ -17607,7 +17628,13 @@ private fun LanguagePickerPopup(
                                 // Fixed row height — the hold-drag gesture steps its
                                 // highlight by this exact amount of finger travel.
                                 .height(PickerRowHeightDp.dp)
-                                .background(if (dragged || (selected && highlightIndex == null)) kb.pressedKey else Color.Transparent)
+                                .background(
+                                    if (dragged || (selected && highlightIndex == null)) {
+                                        kb.popupSelected
+                                    } else {
+                                        Color.Transparent
+                                    },
+                                )
                                 .clickable { onPick(layoutId) }
                                 .padding(horizontal = 16.dp)
                                 .wrapContentHeight(Alignment.CenterVertically),
@@ -17712,7 +17739,7 @@ private fun LanguageCarouselPopup(
                         val dragged = index == highlightIndex
                         Text(
                             text = layoutSwitchLabel(layoutId, enabledLayoutIds, customLayouts, displayMode),
-                            color = if (selected) kb.accent else kb.popupText,
+                            color = if (selected) kb.popupSelectedText else kb.popupText,
                             fontWeight = if (selected || dragged) FontWeight.Bold else FontWeight.Normal,
                             fontSize = 15.sp,
                             maxLines = 1,

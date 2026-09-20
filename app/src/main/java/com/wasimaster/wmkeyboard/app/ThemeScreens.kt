@@ -184,6 +184,8 @@ import com.wasimaster.wmkeyboard.core.theme.findThemeFamily
 import com.wasimaster.wmkeyboard.core.theme.flattenedThemes
 import com.wasimaster.wmkeyboard.core.theme.groupAsFamily
 import com.wasimaster.wmkeyboard.core.theme.onColorFor
+import com.wasimaster.wmkeyboard.ime.ui.DEFAULT_POPUP_ELEVATION_DP
+import com.wasimaster.wmkeyboard.ime.ui.MAX_ELEVATION_DP
 import com.wasimaster.wmkeyboard.core.theme.replacingMember
 import com.wasimaster.wmkeyboard.core.theme.reseeded
 import com.wasimaster.wmkeyboard.core.theme.selfAndVariants
@@ -2196,6 +2198,26 @@ fun ThemeEditorScreen(
             )
         }
         item {
+            // The rail beside the board in one-handed mode. It used to draw in
+            // the settings app's colours and ignore the theme entirely.
+            NullableColorRow(
+                stringResource(R.string.theme_one_handed_title),
+                theme.oneHandedPanelBackground,
+                fallback = theme.boardBackground,
+                supportsAlpha = true,
+                info = stringResource(R.string.theme_one_handed_body),
+                onChange = { update { t -> t.copy(oneHandedPanelBackground = it) } },
+            )
+        }
+        item {
+            NullableColorRow(
+                stringResource(R.string.theme_one_handed_icon_title),
+                theme.oneHandedPanelIcon,
+                fallback = theme.toolbarIcon ?: theme.keyText,
+                onChange = { update { t -> t.copy(oneHandedPanelIcon = it) } },
+            )
+        }
+        item {
             ListItem(
                 headlineContent = { Text(stringResource(R.string.theme_background_image_title)) },
                 supportingContent = {
@@ -2589,6 +2611,18 @@ fun ThemeEditorScreen(
                 ) { update { t -> t.copy(keyBorderWidthDp = (it * 10).toInt() / 10f) } }
             }
         }
+        item {
+            // A lift, not a colour: the shadow is drawn by the platform from
+            // the key's own outline. Shapes that cannot cast one stay flat
+            // however far this is pushed, and so does a see-through key.
+            SliderRow(
+                stringResource(R.string.theme_key_elevation_title),
+                value = theme.keyElevationDp,
+                range = 0f..MAX_ELEVATION_DP,
+                display = { "%.1f dp".format(it) },
+                info = stringResource(R.string.theme_key_elevation_body),
+            ) { update { t -> t.copy(keyElevationDp = (it * 10).toInt() / 10f) } }
+        }
     }
 
     var texturePickerSlot by remember(theme.id) { mutableStateOf<KeyTextureSlot?>(null) }
@@ -2953,6 +2987,33 @@ fun ThemeEditorScreen(
             }
         }
         item {
+            SliderRow(
+                stringResource(R.string.theme_popup_elevation_title),
+                value = theme.popupElevationDp ?: DEFAULT_POPUP_ELEVATION_DP,
+                range = 0f..MAX_ELEVATION_DP,
+                display = { "%.1f dp".format(it) },
+            ) { update { t -> t.copy(popupElevationDp = (it * 10).toInt() / 10f) } }
+        }
+        item {
+            // The highlight under the alternate your finger is on, and under
+            // the selected row of the language picker.
+            NullableColorRow(
+                stringResource(R.string.theme_popup_selected_title),
+                theme.popupSelectedBackground, fallback = theme.accent,
+                supportsAlpha = true,
+                info = stringResource(R.string.theme_popup_selected_body),
+                onChange = { update { t -> t.copy(popupSelectedBackground = it) } },
+            )
+        }
+        item {
+            NullableColorRow(
+                stringResource(R.string.theme_popup_selected_text_title),
+                theme.popupSelectedText,
+                fallback = onColorFor(theme.popupSelectedBackground ?: theme.accent),
+                onChange = { update { t -> t.copy(popupSelectedText = it) } },
+            )
+        }
+        item {
             // The list menus (language picker, clipboard and emoji menus)
             // derive a safe shape from the popup shape unless named here — a
             // slanted bubble is charming, a slanted menu clips its rows.
@@ -3059,6 +3120,14 @@ fun ThemeEditorScreen(
                 ) { update { t -> t.copy(toolBorderWidthDp = (it * 10).toInt() / 10f) } }
             }
         }
+        item {
+            SliderRow(
+                stringResource(R.string.theme_tool_elevation_title),
+                value = theme.toolElevationDp,
+                range = 0f..MAX_ELEVATION_DP,
+                display = { "%.1f dp".format(it) },
+            ) { update { t -> t.copy(toolElevationDp = (it * 10).toInt() / 10f) } }
+        }
     }
 
     SettingsGroup(stringResource(R.string.theme_panels_section_title), foldKey = "theme/panels") {
@@ -3146,6 +3215,14 @@ fun ThemeEditorScreen(
                     display = { "%.1f dp".format(it) },
                 ) { update { t -> t.copy(chipBorderWidthDp = (it * 10).toInt() / 10f) } }
             }
+        }
+        item {
+            SliderRow(
+                stringResource(R.string.theme_card_elevation_title),
+                value = theme.cardElevationDp,
+                range = 0f..MAX_ELEVATION_DP,
+                display = { "%.1f dp".format(it) },
+            ) { update { t -> t.copy(cardElevationDp = (it * 10).toInt() / 10f) } }
         }
         item {
             val chipShape = keyShapeKindOrNull(theme.chipShape) ?: KeyShapeKind.ROUNDED

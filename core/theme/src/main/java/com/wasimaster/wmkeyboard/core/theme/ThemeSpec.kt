@@ -233,6 +233,16 @@ data class ThemeSpec(
      */
     val suggestionBarBackground: Long? = null,
     /**
+     * Fill of the side rail shown in one-handed mode, and the colour of the two
+     * buttons on it. Null follows the board and the toolbar icon.
+     *
+     * The rail used to draw in the settings app's Material colours, so it
+     * ignored the keyboard theme completely; these are what let a theme say
+     * what it should look like.
+     */
+    val oneHandedPanelBackground: Long? = null,
+    val oneHandedPanelIcon: Long? = null,
+    /**
      * Fill for the band the system navigation bar sits on, below the bottom key
      * row. Null inherits the board, as above. Only the gesture bar's own inset
      * is painted, not the extra breathing room the bottom-padding setting adds:
@@ -284,6 +294,17 @@ data class ThemeSpec(
     val pressedKeyBackground: Long? = null,
     val keyBorderColor: Long? = null,
     val keyBorderWidthDp: Float = 0f,
+    /**
+     * How far each key is lifted off the board, in dp; 0 draws no shadow.
+     *
+     * The bordered variants of nearly every popular FlorisBoard theme lift
+     * their keys 2 dp, and a converted theme without it reads as flatter than
+     * the one the user picked. A shape that cannot cast a shadow without
+     * hanging the RenderThread draws none whatever this says — see
+     * [castsElevationShadow], and a key whose fill is see-through draws none
+     * either, since a shadow under nothing is just a smudge.
+     */
+    val keyElevationDp: Float = 0f,
     // Accent (shift-on tint, gesture trail, active tools, links/buttons in panels)
     val accent: Long = 0xFF8AB4F8,
     /**
@@ -304,6 +325,23 @@ data class ThemeSpec(
     /** Outline around the preview bubble; null draws none, like [keyBorderColor]. */
     val popupBorderColor: Long? = null,
     val popupBorderWidthDp: Float = 0f,
+    /**
+     * How far the preview bubble and the long-press alternates are lifted, in
+     * dp. Null keeps the 6 dp every popup drew before this field existed.
+     */
+    val popupElevationDp: Float? = null,
+    /**
+     * The highlight under the alternate your finger is on, and under the
+     * selected row of a menu. Null follows [accent], which is what every popup
+     * did before this field existed.
+     *
+     * Its own field because a stylesheet states it outright, as the focus state
+     * of the popup's items, and a theme whose accent is loud often wants the
+     * highlight quieter than it.
+     */
+    val popupSelectedBackground: Long? = null,
+    /** Text on that highlight; null derives a legible colour from its fill. */
+    val popupSelectedText: Long? = null,
     /**
      * Image painted inside the preview bubble, over [popupBackground] and
      * under the label, clipped to the popup shape. Fit and alpha follow
@@ -340,6 +378,8 @@ data class ThemeSpec(
      */
     val toolBorderColor: Long? = null,
     val toolBorderWidthDp: Float = 0f,
+    /** How far the background behind a toolbar tool is lifted, in dp; 0 is flat. */
+    val toolElevationDp: Float = 0f,
     // Panels (clipboard/snippet cards, emoji search bar)
     val chipBackground: Long? = null,
     val suggestionText: Long? = null,
@@ -366,6 +406,8 @@ data class ThemeSpec(
     /** Outline around every chip; null draws none, like [keyBorderColor]. */
     val chipBorderColor: Long? = null,
     val chipBorderWidthDp: Float = 0f,
+    /** How far a panel card is lifted off the panel, in dp; 0 is flat. */
+    val cardElevationDp: Float = 0f,
     /**
      * Chip outline shape, as a [KeyShapeKind] name; null keeps the soft
      * rectangle every chip has always drawn. A string for the same reason

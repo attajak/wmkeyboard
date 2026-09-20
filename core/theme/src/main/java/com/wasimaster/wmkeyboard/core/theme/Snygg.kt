@@ -293,8 +293,9 @@ internal class Stylesheet(
 
         private fun noteUnsupported(property: String, dropped: MutableSet<FlexUnsupported>) {
             when {
-                property.contains("elevation") || property.contains("shadow") ->
-                    dropped += FlexUnsupported.ELEVATION
+                // The lift itself now lands; only a shadow *colour* has nowhere
+                // to go, and below Android 9 the platform ignores one anyway.
+                property.contains("shadow color") -> dropped += FlexUnsupported.ELEVATION
                 property.contains("margin") || property.contains("padding") ->
                     dropped += FlexUnsupported.PER_ELEMENT_SPACING
                 property.contains("font family") -> dropped += FlexUnsupported.FONT
@@ -323,11 +324,28 @@ internal class Stylesheet(
             // The board itself. `keyboard` is the 0.4 name, `window` the 0.5 one.
             for (name in listOf("window", "keyboard", "root")) put(name, EL_BOARD)
             put("system nav bar", EL_NAV_BAR)
+            for (name in listOf("one handed panel", "one handed panel button")) put(name, EL_ONE_HANDED)
+            // The floating keyboard's own furniture. This keyboard draws its
+            // handle bar out of the toolbar's colours, so that is where these
+            // land rather than in fields of their own.
+            for (name in listOf(
+                "window move handle", "window resize handle", "window resize action",
+                "floating dock to fixed indicator",
+            )) {
+                put(name, EL_TOOL_TOGGLE)
+            }
 
             // Keys.
             for (name in listOf("key", "key background")) put(name, EL_KEY)
             for (name in listOf("key hint", "key hint text", "keyhint")) put(name, EL_HINT)
             for (name in listOf("key popup box", "key popup", "popup")) put(name, EL_POPUP)
+            // The item inside a long-press row. Its `:focus` state is the
+            // highlight under the finger, which this keyboard draws too.
+            for (name in listOf(
+                "key popup element", "media emoji key popup element", "subtype panel list item",
+            )) {
+                put(name, EL_POPUP_ITEM)
+            }
 
             // The bar above the keys. 0.4 called the tool buttons `smartbar-key`
             // and `smartbar-quick-action`; 0.5 calls them `smartbar-action-key`.
@@ -404,10 +422,34 @@ internal class Stylesheet(
             // usually a shade lighter, and merging the two let that lighter
             // shade become the resting card colour.
             put("clipboard item", EL_CARD)
+            // The same card lifted, and the strip of actions that slides out of
+            // it. A shade lighter as a rule, so they answer only where the card
+            // itself said nothing.
+            for (name in listOf(
+                "clipboard item popup", "clipboard item actions", "clipboard item popup action",
+            )) {
+                put(name, EL_CARD_LIFTED)
+            }
+            put("incognito mode indicator", EL_INCOGNITO)
+            for (name in listOf(
+                "key popup extended indicator", "media emoji key popup extended indicator",
+            )) {
+                put(name, EL_POPUP_MORE)
+            }
+            put("media emoji subheader", EL_SECONDARY_TEXT)
             for (name in listOf(
                 "smartbar actions editor", "subtype panel", "clipboard grid", "clipboard filter row",
+                "clipboard content",
             )) {
                 put(name, EL_SHEET)
+            }
+            // A panel's own heading. This keyboard draws panel chrome with the
+            // suggestion strip's colour, so that is what these answer for.
+            for (name in listOf(
+                "clipboard header", "clipboard header text",
+                "smartbar actions editor header", "subtype panel header",
+            )) {
+                put(name, EL_PANEL_HEADER)
             }
 
             // The emoji board. Its long-press bubble is the same bubble the
@@ -428,6 +470,7 @@ internal class Stylesheet(
             for (name in listOf("border width", "outline width")) put(name, PROP_BORDER_WIDTH)
             put("font weight", PROP_FONT_WEIGHT)
             put("font size", PROP_FONT_SIZE)
+            for (name in listOf("shadow elevation", "elevation")) put(name, PROP_ELEVATION)
             for (name in listOf("background image", "image")) put(name, PROP_IMAGE)
         }
     }
@@ -488,9 +531,12 @@ internal const val ATTR_CODE = "code"
 
 internal const val EL_BOARD = "board"
 internal const val EL_NAV_BAR = "navBar"
+internal const val EL_ONE_HANDED = "oneHanded"
 internal const val EL_KEY = "key"
 internal const val EL_HINT = "hint"
 internal const val EL_POPUP = "popup"
+internal const val EL_POPUP_ITEM = "popupItem"
+internal const val EL_PANEL_HEADER = "panelHeader"
 internal const val EL_TOOLBAR = "toolbar"
 internal const val EL_TOOL = "tool"
 internal const val EL_TOOL_TOGGLE = "toolToggle"
@@ -500,6 +546,9 @@ internal const val EL_DIVIDER = "divider"
 internal const val EL_CHIP = "chip"
 internal const val EL_TILE = "tile"
 internal const val EL_CARD = "card"
+internal const val EL_CARD_LIFTED = "cardLifted"
+internal const val EL_INCOGNITO = "incognito"
+internal const val EL_POPUP_MORE = "popupMore"
 internal const val EL_SHEET = "sheet"
 internal const val EL_EMOJI_POPUP = "emojiPopup"
 internal const val EL_EMOJI_TAB = "emojiTab"
@@ -512,6 +561,7 @@ internal const val PROP_BORDER_COLOR = "borderColor"
 internal const val PROP_BORDER_WIDTH = "borderWidth"
 internal const val PROP_FONT_WEIGHT = "fontWeight"
 internal const val PROP_FONT_SIZE = "fontSize"
+internal const val PROP_ELEVATION = "elevation"
 internal const val PROP_IMAGE = "image"
 
 /**

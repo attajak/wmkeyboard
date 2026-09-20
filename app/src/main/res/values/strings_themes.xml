@@ -250,6 +250,7 @@
     <string name="theme_tool_circles_title">Tool circles</string>
     <string name="theme_tool_circle_active_title">Active tool circle</string>
     <string name="theme_tool_circle_active_icon_title">Active tool icon</string>
+    <string name="theme_tool_elevation_title">Tool shadow</string>
     <string name="theme_tool_border_title">Tool outline</string>
     <string name="theme_tool_border_width_title">Tool outline width</string>
 
@@ -257,10 +258,22 @@
     <string name="theme_panels_section_title">Panels and suggestions</string>
     <string name="theme_cards_title">Cards and search bar</string>
     <string name="theme_suggestion_text_title">Suggestion text</string>
+    <string name="theme_card_elevation_title">Card shadow</string>
     <string name="theme_secondary_text_title">Secondary text</string>
     <string name="theme_secondary_text_body">The quieter text beside the main text: the second word of a suggestion, and the kind and time of a clipboard entry.</string>
     <string name="theme_divider_title">Dividers</string>
     <string name="theme_divider_body">The thin lines between the parts of a panel, and between suggestions.</string>
+
+    <!-- Theme editor: shadows, the popup selection and the one-handed rail. -->
+    <string name="theme_key_elevation_title">Key shadow</string>
+    <string name="theme_key_elevation_body">How far the keys are lifted off the board. Some key shapes cannot draw a shadow and stay flat, and so does a key whose colour you can see through.</string>
+    <string name="theme_popup_elevation_title">Popup shadow</string>
+    <string name="theme_popup_selected_title">Selected highlight</string>
+    <string name="theme_popup_selected_body">The colour behind the letter your finger is on when you hold a key, and behind the selected row of the language list.</string>
+    <string name="theme_popup_selected_text_title">Selected text</string>
+    <string name="theme_one_handed_title">One-handed rail</string>
+    <string name="theme_one_handed_body">The strip beside the keyboard in one-handed mode.</string>
+    <string name="theme_one_handed_icon_title">One-handed rail icons</string>
 
     <!-- Theme editor: corners. -->
     <string name="theme_corners_section_title">Corners</string>

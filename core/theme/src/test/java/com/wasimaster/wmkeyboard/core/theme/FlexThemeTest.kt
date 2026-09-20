@@ -280,10 +280,12 @@ class FlexThemeTest {
         )
         val result = converted(read(manifest(dayEntry), "stylesheets/day.json" to fancy))
         assertTrue(FlexUnsupported.FONT in result.dropped)
-        assertTrue(FlexUnsupported.ELEVATION in result.dropped)
         assertTrue(FlexUnsupported.PER_ELEMENT_SPACING in result.dropped)
         assertTrue(FlexUnsupported.PER_CORNER_RADIUS in result.dropped)
         assertTrue(FlexUnsupported.UNKNOWN_ELEMENT in result.dropped)
+        // The lift itself is carried now, so it is no longer reported as lost.
+        assertEquals(4f, result.themes[0].theme.keyElevationDp, 0.001f)
+        assertTrue(FlexUnsupported.ELEVATION !in result.dropped)
     }
 
     @Test

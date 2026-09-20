@@ -518,6 +518,106 @@ class SnyggParityTest {
         assertNull(t.keyOverrides["SPACE"]?.shape)
     }
 
+    // ---- surfaces this keyboard could not draw at all ----
+
+    /**
+     * The lift under a key. The bordered variant of nearly every popular pack
+     * sets `shadow-elevation: 2dp`, and without a field for it a converted
+     * theme read flatter than the one the user picked (issue #266 follow-up).
+     */
+    @Test
+    fun `a key shadow comes across`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF", "shadow-elevation": "2dp" },
+              "key-popup-box": { "background": "#20202A", "shadow-elevation": "4dp" },
+              "clipboard-item": { "background": "#22222A", "shadow-elevation": "1dp" },
+              "smartbar-shared-actions-toggle": { "background": "#333340", "shadow-elevation": "3dp" }
+            }
+            """,
+        )
+        assertEquals(2f, t.keyElevationDp, 0.001f)
+        assertEquals(4f, t.popupElevationDp!!, 0.001f)
+        assertEquals(1f, t.cardElevationDp, 0.001f)
+        assertEquals(3f, t.toolElevationDp, 0.001f)
+    }
+
+    /** `shadow-elevation: inherit` means "keep the default", not "no shadow". */
+    @Test
+    fun `an inherited elevation is left alone`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "key-popup-box": { "background": "#20202A", "shadow-elevation": "inherit" }
+            }
+            """,
+        )
+        assertNull(t.popupElevationDp)
+    }
+
+    /**
+     * The highlight under the alternate a finger is on. This keyboard drew it
+     * in the accent colour with no way for a theme to say otherwise, and a
+     * stylesheet states it outright as the popup item's focus state.
+     */
+    @Test
+    fun `the popup selection highlight comes across`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "key-popup-box": { "background": "#20202A" },
+              "key-popup-element:focus": { "background": "#4CAF50", "foreground": "#0B1220" }
+            }
+            """,
+        )
+        assertEquals(0xFF4CAF50, t.popupSelectedBackground)
+        assertEquals(0xFF0B1220, t.popupSelectedText)
+    }
+
+    /**
+     * The one-handed rail used to draw in the settings app's Material colours,
+     * so it ignored the keyboard theme completely.
+     */
+    @Test
+    fun `the one-handed rail comes across`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "one-handed-panel": { "background": "#15151A", "foreground": "#9AA0A6" }
+            }
+            """,
+        )
+        assertEquals(0xFF15151A, t.oneHandedPanelBackground)
+        assertEquals(0xFF9AA0A6, t.oneHandedPanelIcon)
+    }
+
+    /**
+     * The floating keyboard's handle draws out of the toolbar's colours here,
+     * so a theme that styles only the handle still dresses the toolbar.
+     */
+    @Test
+    fun `the floating window handle lands on the toolbar colours`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "window-move-handle": { "background": "#22222A", "foreground": "#4CAF50" }
+            }
+            """,
+        )
+        assertEquals(0xFF22222A, t.toolCircleActiveBackground)
+        assertEquals(0xFF4CAF50, t.toolCircleActiveIcon)
+    }
+
     // ---- what the user is told ----
 
     /**
@@ -599,6 +699,12 @@ class SnyggParityTest {
             EL_CHIP to "smartbar-candidate-clip",
             EL_TILE to "smartbar-action-tile",
             EL_CARD to "clipboard-item",
+            EL_CARD_LIFTED to "clipboard-item-popup",
+            EL_INCOGNITO to "incognito-mode-indicator",
+            EL_POPUP_MORE to "key-popup-extended-indicator",
+            EL_POPUP_ITEM to "key-popup-element",
+            EL_PANEL_HEADER to "clipboard-header",
+            EL_ONE_HANDED to "one-handed-panel",
             EL_SHEET to "subtype-panel",
             EL_EMOJI_TAB to "media-emoji-tab",
             EL_GLIDE to "glide-trail",

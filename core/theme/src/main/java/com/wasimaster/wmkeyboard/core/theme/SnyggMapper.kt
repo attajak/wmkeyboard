@@ -68,6 +68,7 @@ internal class SnyggMapper(private val style: Stylesheet) {
         val chip = chipRule()
         val chipActive = style.withAttribute(EL_CHIP, ATTR_STATE, STATE_ACTIVE)
         val card = style.base(EL_CARD)
+        val cardLifted = style.base(EL_CARD_LIFTED)
         val sheet = style.base(EL_SHEET)
 
         val images = buildMap {
@@ -98,6 +99,7 @@ internal class SnyggMapper(private val style: Stylesheet) {
                 ?: onColorFor(composite(enterBackground, resolvedBoard)),
             keyBorderColor = color(key, PROP_BORDER_COLOR),
             keyBorderWidthDp = snyggDp(key?.value(PROP_BORDER_WIDTH)) ?: 0f,
+            keyElevationDp = elevationOf(key) ?: 0f,
             keyShape = shape ?: KeyShapeKind.ROUNDED,
             keyCornerRadiusDp = radius,
             boldKeyLabels = key?.value(PROP_FONT_WEIGHT)?.contains(BOLD, ignoreCase = true),
@@ -109,9 +111,15 @@ internal class SnyggMapper(private val style: Stylesheet) {
             hintFontScale = scaleFrom(hint?.value(PROP_FONT_SIZE), DEFAULT_HINT_SP, HintFontScaleBounds),
             // Popups.
             popupBackground = color(popup, PROP_BACKGROUND),
-            popupText = color(popup, PROP_FOREGROUND),
+            popupText = color(popup, PROP_FOREGROUND)
+                ?: color(style.base(EL_POPUP_MORE), PROP_FOREGROUND),
             popupBorderColor = color(popup, PROP_BORDER_COLOR),
             popupBorderWidthDp = snyggDp(popup?.value(PROP_BORDER_WIDTH)) ?: 0f,
+            popupElevationDp = elevationOf(popup),
+            // The focus state of a popup's items: the highlight under the
+            // alternate your finger is on, and under a selected menu row.
+            popupSelectedBackground = color(style.firstOf(EL_POPUP_ITEM, state = FOCUS), PROP_BACKGROUND),
+            popupSelectedText = color(style.firstOf(EL_POPUP_ITEM, state = FOCUS), PROP_FOREGROUND),
             popupShape = shapeName(popup, dropped),
             popupCornerRadiusDp = shapeRadius(popup, dropped),
             // The bar above the keys. The tool icons and the toggle behind them
@@ -119,22 +127,35 @@ internal class SnyggMapper(private val style: Stylesheet) {
             // map one to one instead of collapsing onto the key colours.
             suggestionBarBackground = color(style.base(EL_TOOLBAR), PROP_BACKGROUND),
             navigationBarBackground = color(style.base(EL_NAV_BAR), PROP_BACKGROUND),
-            toolbarIcon = color(tool, PROP_FOREGROUND) ?: color(board, PROP_FOREGROUND),
+            oneHandedPanelBackground = color(style.base(EL_ONE_HANDED), PROP_BACKGROUND),
+            oneHandedPanelIcon = color(style.base(EL_ONE_HANDED), PROP_FOREGROUND),
+            toolbarIcon = color(tool, PROP_FOREGROUND)
+                ?: color(style.base(EL_INCOGNITO), PROP_FOREGROUND)
+                ?: color(board, PROP_FOREGROUND),
             toolCircleBackground = color(tool, PROP_BACKGROUND),
             toolCircleActiveBackground = color(toolToggle, PROP_BACKGROUND),
             toolCircleActiveIcon = color(toolToggle, PROP_FOREGROUND),
+            toolElevationDp = elevationOf(toolToggle ?: tool) ?: 0f,
             toolShape = shapeName(tool ?: toolToggle, dropped),
             toolCircleRadiusDp = shapeRadius(tool ?: toolToggle, dropped),
-            suggestionText = color(candidate, PROP_FOREGROUND),
+            // A panel heading draws with the strip's colour here, so it is the
+            // fallback rather than a field of its own.
+            suggestionText = color(candidate, PROP_FOREGROUND)
+                ?: color(style.base(EL_PANEL_HEADER), PROP_FOREGROUND),
             secondaryText = color(style.base(EL_SECONDARY_TEXT), PROP_FOREGROUND)?.takeIf { it.isVisible() },
             dividerColor = color(style.base(EL_DIVIDER), PROP_FOREGROUND)?.takeIf { it.isVisible() },
             // Chips and panel cards.
-            chipBackground = color(chip, PROP_BACKGROUND) ?: color(card, PROP_BACKGROUND),
-            chipText = color(chip, PROP_FOREGROUND) ?: color(card, PROP_FOREGROUND),
+            chipBackground = color(chip, PROP_BACKGROUND)
+                ?: color(card, PROP_BACKGROUND)
+                ?: color(cardLifted, PROP_BACKGROUND),
+            chipText = color(chip, PROP_FOREGROUND)
+                ?: color(card, PROP_FOREGROUND)
+                ?: color(cardLifted, PROP_FOREGROUND),
             chipActiveBackground = color(chipActive, PROP_BACKGROUND),
             chipActiveText = color(chipActive, PROP_FOREGROUND),
             chipShape = shapeName(chip, dropped),
             chipCornerRadiusDp = shapeRadius(chip, dropped),
+            cardElevationDp = elevationOf(card) ?: 0f,
             cardShape = shapeName(card, dropped),
             menuShape = shapeName(sheet, dropped),
             accent = accentColor(enter, resolvedBoard),
@@ -226,6 +247,16 @@ internal class SnyggMapper(private val style: Stylesheet) {
     }
 
     // ---- shape helpers ----
+
+    /**
+     * A surface's lift, in dp.
+     *
+     * `shadow-elevation: inherit` is a real value in the wild and means "keep
+     * whatever the parent had", which here is the default, so it reads as
+     * nothing rather than as zero.
+     */
+    private fun elevationOf(rule: SnyggRule?): Float? =
+        snyggDp(rule?.value(PROP_ELEVATION))?.takeIf { it.isFinite() && it >= 0f }
 
     private fun shapeName(rule: SnyggRule?, dropped: MutableSet<FlexUnsupported>): String? =
         snyggShape(rule?.value(PROP_SHAPE), dropped)?.first?.name
@@ -391,27 +422,35 @@ internal class SnyggMapper(private val style: Stylesheet) {
 internal val SNYGG_CONSUMED: Map<String, Set<String>> = mapOf(
     EL_BOARD to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_IMAGE),
     EL_NAV_BAR to setOf(PROP_BACKGROUND),
+    EL_ONE_HANDED to setOf(PROP_BACKGROUND, PROP_FOREGROUND),
     EL_KEY to setOf(
         PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE, PROP_BORDER_COLOR,
-        PROP_BORDER_WIDTH, PROP_FONT_WEIGHT, PROP_FONT_SIZE, PROP_IMAGE,
+        PROP_BORDER_WIDTH, PROP_FONT_WEIGHT, PROP_FONT_SIZE, PROP_IMAGE, PROP_ELEVATION,
     ),
     EL_HINT to setOf(PROP_FOREGROUND, PROP_FONT_SIZE),
     EL_POPUP to setOf(
         PROP_BACKGROUND, PROP_FOREGROUND, PROP_BORDER_COLOR, PROP_BORDER_WIDTH, PROP_SHAPE,
+        PROP_ELEVATION,
     ),
     EL_EMOJI_POPUP to setOf(
         PROP_BACKGROUND, PROP_FOREGROUND, PROP_BORDER_COLOR, PROP_BORDER_WIDTH, PROP_SHAPE,
+        PROP_ELEVATION,
     ),
     EL_TOOLBAR to setOf(PROP_BACKGROUND),
     EL_TOOL to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
-    EL_TOOL_TOGGLE to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
+    EL_TOOL_TOGGLE to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE, PROP_ELEVATION),
     EL_CANDIDATE to setOf(PROP_FOREGROUND),
     EL_SECONDARY_TEXT to setOf(PROP_FOREGROUND),
     EL_DIVIDER to setOf(PROP_FOREGROUND),
     EL_CHIP to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
     EL_TILE to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
-    EL_CARD to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE),
+    EL_CARD to setOf(PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE, PROP_ELEVATION),
+    EL_CARD_LIFTED to setOf(PROP_BACKGROUND, PROP_FOREGROUND),
+    EL_INCOGNITO to setOf(PROP_FOREGROUND),
+    EL_POPUP_MORE to setOf(PROP_FOREGROUND),
     EL_SHEET to setOf(PROP_SHAPE),
+    EL_POPUP_ITEM to setOf(PROP_BACKGROUND, PROP_FOREGROUND),
+    EL_PANEL_HEADER to setOf(PROP_FOREGROUND),
     EL_EMOJI_TAB to setOf(PROP_FOREGROUND),
     EL_GLIDE to setOf(PROP_FOREGROUND, PROP_BACKGROUND),
 )
