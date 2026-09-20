@@ -283,10 +283,16 @@ object DebugLog {
     }
 
     /**
-     * The whole report, ready to share: a header saying what build and device
-     * this is, then the crashes, then the session's entries.
+     * Which build and which device — the four lines every report starts with.
+     *
+     * Separate from [exportText] because a report is often not shared whole.
+     * Someone copies the crash out of the viewer and pastes that alone, and
+     * without these lines nothing downstream can tell an F-Droid build from a
+     * Play one, or 0.5.8 from 0.5.9 — which is exactly what deciding whether a
+     * stack trace can be read at all depends on. So whatever hands out a piece
+     * of a report puts this in front of it.
      */
-    fun exportText(): String = buildString {
+    fun headerText(): String = buildString {
         appendLine("WM Keyboard diagnostics")
         appendLine(
             "version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) " +
@@ -295,6 +301,14 @@ object DebugLog {
         appendLine("android: ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})")
         appendLine("device: ${Build.MANUFACTURER} ${Build.MODEL}")
         appendLine("taken: ${timestamp(System.currentTimeMillis())}")
+    }
+
+    /**
+     * The whole report, ready to share: a header saying what build and device
+     * this is, then the crashes, then the session's entries.
+     */
+    fun exportText(): String = buildString {
+        append(headerText())
         appendLine()
         val crashes = crashes()
         if (crashes.isNotBlank()) {

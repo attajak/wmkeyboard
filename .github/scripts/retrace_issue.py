@@ -68,9 +68,6 @@ FALLBACK_R8_VERSION = "9.3.16"
 R8_JAR_URL = "https://dl.google.com/dl/android/maven2/com/android/tools/r8/{v}/r8-{v}.jar"
 
 # --- what an obfuscated frame looks like --------------------------------------
-# Any stack frame at all.
-FRAME_RE = re.compile(r"^[^\S\n]*at\s+[\w$.<>\[\]]+\(.*\)[^\S\n]*$", re.MULTILINE)
-
 # A frame that is worth retracing. Two independent tells, either is enough:
 #
 #  * `(SourceFile:123)` — `-renamesourcefileattribute SourceFile` in
@@ -126,6 +123,31 @@ FLAVOR_TO_SUFFIX = {
 # The flavours that name the build outright, so the mapping is a lookup and
 # not a competition between candidates.
 EXACT_FLAVORS = frozenset({"fullintl", "fullen", "liteintl", "liteen"})
+
+# One obfuscated frame, split into the parts a mapping is checked against.
+OBF_FRAME_RE = re.compile(
+    r"^[^\S\n]*at\s+([\w$.]+)\.([\w$<>]+)\((?:SourceFile|Unknown Source):(\d+)\)",
+    re.MULTILINE,
+)
+
+# How much of a trace a mapping has to account for before its output is worth
+# posting. **Measured, not guessed** (issues #252, #253, #237, #271): the right
+# mapping accounts for 100% of the frames, and every wrong one for 0-20%. There
+# is nothing in between, because a mapping either was or was not written by the
+# R8 run that produced the code in the trace.
+#
+# Without this gate a wrong mapping still renames every frame, into names that
+# read perfectly and mean nothing — issue #271 was retraced into WmSlider and
+# SoundPack because a 57-frame count beat a 56-frame one. Counting renamed
+# frames measures nothing; this measures whether the mapping fits.
+MIN_FIT = 0.6
+
+# Below this, say which mapping was used and that the lines are a lead.
+SURE_FIT = 0.9
+
+# A reporter saying where they got the app, when the record's own header is
+# missing. Only ever used to explain a failure, never to pick a mapping.
+FDROID_PROSE_RE = re.compile(r"\bf[\s-]?droid\b", re.IGNORECASE)
 
 MARKER_PREFIX = "<!-- retrace-bot:"
 
@@ -285,6 +307,47 @@ def r8_jar(version: str, cache: Path) -> Path:
     raise SystemExit("no R8 jar available to retrace with")
 
 
+def mapping_fit(mapping: Path, frames: list[tuple[str, str, int]]) -> float:
+    """How much of the trace this mapping actually accounts for, 0 to 1.
+
+    For each frame `a.b(SourceFile:12)` the mapping has to hold class `a`, a
+    member renamed to `b` inside it, and a line range around 12. The class
+    alone proves nothing — every mapping of this app holds thousands of
+    two-letter class names, so a wrong one matches on class name constantly.
+    The method-and-line pair is what a different R8 run cannot fake.
+    """
+    if not frames:
+        return 0.0
+    wanted = {cls for cls, _, _ in frames}
+    members: dict[str, dict[str, list[tuple[int, int] | None]]] = {}
+    current: str | None = None
+    with open(mapping, encoding="utf-8", errors="replace") as f:
+        for line in f:
+            if line[:1] not in (" ", "#"):
+                parts = line.rstrip("\n").rsplit(" -> ", 1)
+                obf = parts[1][:-1] if len(parts) == 2 and parts[1].endswith(":") else None
+                current = obf if obf in wanted else None
+                if current is not None:
+                    members.setdefault(current, {})
+                continue
+            if current is None:
+                continue
+            stripped = line.strip()
+            if stripped.startswith("#") or " -> " not in stripped:
+                continue
+            body, name = stripped.rsplit(" -> ", 1)
+            span = re.match(r"^(\d+):(\d+):", body)
+            members[current].setdefault(name, []).append(
+                (int(span.group(1)), int(span.group(2))) if span else None
+            )
+    hits = 0
+    for cls, method, line_no in frames:
+        ranges = members.get(cls, {}).get(method)
+        if ranges and any(r is None or r[0] <= line_no <= r[1] for r in ranges):
+            hits += 1
+    return hits / len(frames)
+
+
 def retrace(jar: Path, mapping: Path, body: str, workdir: Path) -> str:
     """Run R8's retrace over the whole body.
 
@@ -313,16 +376,6 @@ def retrace(jar: Path, mapping: Path, body: str, workdir: Path) -> str:
         print(f"retrace failed: {result.stderr[-2000:]}", file=sys.stderr)
         return ""
     return result.stdout
-
-
-def resolved_frames(before: str, after: str) -> int:
-    """How many frames the mapping actually rewrote.
-
-    Retrace expands one inlined frame into several, so the outputs do not line
-    up; count frame lines that are new instead.
-    """
-    old = {line.strip() for line in FRAME_RE.findall(before)}
-    return sum(1 for line in FRAME_RE.findall(after) if line.strip() not in old)
 
 
 # --- the comment ---------------------------------------------------------------
@@ -432,9 +485,11 @@ def main() -> int:
         post(
             args.repo,
             args.issue,
-            f"{mark}\nThis looks like a stack trace from a release build, but there is no version "
-            "in it to pick a mapping with. **Settings › About › Diagnostics › Share diagnostics** exports the "
-            "crash with the header the retracer needs.",
+            f"{mark}\nThis looks like a stack trace from a release build, but it carries no "
+            "`version:` line, and which build it came from is what decides which mapping can "
+            "read it. In the app, **Settings › About › Diagnostics** → hold the crash text "
+            "copies it with the `version:` and `android:` lines in front, or **Share "
+            "diagnostics** exports the whole report.",
             args.dry_run,
         )
         return 0
@@ -475,48 +530,64 @@ def main() -> int:
         )
         return 0
 
-    best: tuple[int, str, str] | None = None  # (frames resolved, asset name, output)
-    runner_up = 0
-    for suffix, name in by_suffix.items():
+    frames = [(cls, method, int(line)) for cls, method, line in OBF_FRAME_RE.findall(body)]
+    if not frames:
+        print("frames carry no line numbers, so no mapping can be checked against them")
+        return 0
+
+    # Check every candidate against the trace before retracing anything. The
+    # check is cheap next to being wrong, and a mapping that does not fit is
+    # not a worse answer than another one — it is not an answer.
+    best: tuple[float, str, Path] | None = None
+    for name in by_suffix.values():
         archive = download_asset(args.repo, tag, name, workdir)
         if archive is None:
             continue
         mapping = gunzip(archive)
-        out = retrace(r8_jar(compiler_version(mapping), cache), mapping, body, workdir)
-        if not out:
-            continue
-        score = resolved_frames(body, out)
-        if best is None or score > best[0]:
-            if best is not None:
-                runner_up = best[0]
-            best = (score, name, out)
-        else:
-            runner_up = max(runner_up, score)
-        # An exact flavour match is not a competition; stop at the first one.
-        if build.exact or build.channel == "Play Store":
+        fit = mapping_fit(mapping, frames)
+        print(f"{name}: fits {fit:.0%} of {len(frames)} frames")
+        if best is None or fit > best[0]:
+            best = (fit, name, mapping)
+        if fit >= 0.95:
             break
 
-    if best is None or best[0] == 0:
-        print("nothing resolved")
+    if best is None or best[0] < MIN_FIT:
+        best_line = f" The closest, `{best[1]}`, accounts for {best[0]:.0%} of it." if best else ""
+        fdroid = (
+            " The report says this came from F-Droid, which would explain it: F-Droid compiles "
+            "the app on their own machines, so its mapping never existed here."
+            if FDROID_PROSE_RE.search(body)
+            else " That usually means the build did not come from this release — an F-Droid build, "
+            "a different version, or a build made locally."
+        )
+        post(
+            args.repo,
+            args.issue,
+            f"{mark}\nNo mapping published for {tag} fits this trace, so retracing it would "
+            f"produce names that read well and mean nothing.{best_line}{fdroid}\n\n"
+            "If the app is from this release, **Settings › About › Diagnostics** → hold the "
+            "crash text copies it with the `version:` and `android:` lines, which say exactly "
+            "which build it is.",
+            args.dry_run,
+        )
         return 0
 
-    score, name, out = best
+    fit, name, mapping = best
+    out = retrace(r8_jar(compiler_version(mapping), cache), mapping, body, workdir)
+    if not out:
+        print("retrace produced nothing")
+        return 0
+
     lines = [
         mark,
-        f"**Retraced** — {score} frame{'s' if score != 1 else ''} resolved with "
-        f"[`{name}`](https://github.com/{args.repo}/releases/download/{tag}/{name}).",
+        f"**Retraced** — [`{name}`]"
+        f"(https://github.com/{args.repo}/releases/download/{tag}/{name}) accounts for "
+        f"{fit:.0%} of the {len(frames)} obfuscated frames.",
     ]
-    if not build.exact:
+    if fit < SURE_FIT:
         lines.append(
-            "\n> The record did not name the build, so the mapping was picked by how much of the "
-            "trace it resolved"
-            + (
-                f" ({score} frames, against {runner_up} for the next best). Treat the line numbers "
-                "as a lead, not a fact"
-                if runner_up
-                else ""
-            )
-            + ".",
+            "\n> Not every frame is covered by this mapping, so treat the line numbers as a lead "
+            "rather than a fact.",
         )
     lines.append("")
     lines.append("<details><summary>Retraced trace</summary>\n")

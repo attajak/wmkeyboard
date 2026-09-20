@@ -157,9 +157,17 @@ internal fun DebugLogScreen() {
     }
 
     if (crashes.isNotBlank()) {
-        SettingsGroup(stringResource(R.string.shell_debug_log_crashes_title)) {
+        SettingsGroup(
+            stringResource(R.string.shell_debug_log_crashes_title),
+            info = stringResource(R.string.shell_debug_log_crashes_body),
+        ) {
             item {
-                LogBlock(crashes)
+                // Holding it copies the crashes *with* the header. Someone
+                // reporting a crash copies this block and pastes that alone,
+                // and a stack trace with no build line behind it cannot be
+                // retraced by anyone — see issue #271, where the version had
+                // to be guessed and the guess was wrong.
+                LogBlock(crashes, copyText = DebugLog.headerText() + "\n" + crashes)
             }
             item {
                 Row(
@@ -233,7 +241,10 @@ internal fun DebugLogScreen() {
         SettingsGroup(stringResource(R.string.shell_debug_log_system_log_title)) {
             item {
                 val unavailable = stringResource(R.string.shell_debug_log_system_unavailable)
-                LogBlock(systemLog.ifBlank { unavailable })
+                LogBlock(
+                    systemLog.ifBlank { unavailable },
+                    copyText = DebugLog.headerText() + "\n" + systemLog,
+                )
             }
         }
     }
@@ -309,9 +320,18 @@ private fun LogRow(entry: LogEntry, onCopy: (String) -> Unit) {
     }
 }
 
-/** A block of pre-formatted log text: monospaced, and scrolling both ways. */
+/**
+ * A block of pre-formatted log text: monospaced, scrolling both ways, and
+ * holding it puts [copyText] on the clipboard.
+ *
+ * The long press is the same gesture a single log line above already answers
+ * to. Selecting text inside a box that scrolls in both directions is a fight
+ * on a phone, and the thing anyone actually wants is the whole block.
+ */
 @Composable
-private fun LogBlock(text: String) {
+private fun LogBlock(text: String, copyText: String = text) {
+    val context = LocalContext.current
+    val haptics = LocalHapticFeedback.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -320,6 +340,13 @@ private fun LogBlock(text: String) {
             .background(
                 MaterialTheme.colorScheme.surfaceContainerHighest,
                 RoundedCornerShape(8.dp),
+            )
+            .combinedClickable(
+                onClick = {},
+                onLongClick = {
+                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                    copyBlock(context, copyText)
+                },
             )
             .padding(8.dp)
             .verticalScroll(rememberScrollState()),
@@ -356,6 +383,20 @@ private fun copyLine(context: Context, line: String) {
     Toast.makeText(
         context,
         context.getString(R.string.shell_debug_log_line_copied_info),
+        Toast.LENGTH_SHORT,
+    ).show()
+}
+
+/** Puts a whole block — crashes, or the system log — on the clipboard. */
+private fun copyBlock(context: Context, text: String) {
+    val label = context.getString(R.string.shell_debug_log_report_subject)
+    runCatching {
+        (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+            .setPrimaryClip(ClipData.newPlainText(label, text))
+    }
+    Toast.makeText(
+        context,
+        context.getString(R.string.shell_debug_log_block_copied_info),
         Toast.LENGTH_SHORT,
     ).show()
 }

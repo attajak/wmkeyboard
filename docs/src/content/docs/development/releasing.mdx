@@ -149,8 +149,27 @@ log on startup — `:core:common` compiles against `:core:config`, whose
 `BuildConfig.FLAVOR` carries the `capabilities` dimension alone and would say
 just `full`. A record from an F-Droid install is refused with a note instead:
 F-Droid compiles the app on their own machines, so its mapping never existed
-here. An older record that names no language build is retraced against both
-candidates and the comment says which one resolved more frames.
+here.
+
+### Why a mapping is checked before it is used
+
+A wrong mapping does not fail. It renames every frame, into names that read
+perfectly and mean nothing — [#271](https://github.com/wasi-master/wmkeyboard/issues/271)
+was a crash in the translate panel, from an F-Droid install, and the first
+version of this workflow retraced it into `WmSlider` and `SoundPack` because
+it picked whichever mapping renamed *more* frames, 57 against 56.
+
+So before anything is retraced, each candidate mapping is checked against the
+trace: for a frame `a.b(SourceFile:12)`, the mapping has to hold class `a`, a
+member renamed to `b` inside it, and a line range around 12. Matching the
+class alone proves nothing, because every mapping of this app holds thousands
+of two-letter class names. The method and line together are what a different
+R8 run cannot fake.
+
+The separation is absolute, and measured rather than assumed — across #252,
+#253, #237 and #271 the correct mapping accounts for **100%** of the frames
+and every wrong one for **0–20%**, with nothing in between. Below 60% nothing
+is posted but a note saying so, which is what #271 gets now.
 
 Commenting `/retrace` on an issue re-runs it against the issue body, which is
 what to do when a trace was pasted before its release was published.

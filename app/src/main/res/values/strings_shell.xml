@@ -54,6 +54,7 @@
 
     <!-- Debug log screen: the Crashes group. -->
     <string name="shell_debug_log_crashes_title">Crashes</string>
+    <string name="shell_debug_log_crashes_body">Hold the text to copy it. The version and device lines are copied with it. Keep those lines when you paste the crash somewhere: they say which build it came from, and without them the crash cannot be read back.</string>
     <string name="shell_debug_log_delete_crashes_action">Delete crashes</string>
 
     <!-- Debug log screen: the App log group. -->
@@ -74,6 +75,7 @@
     <string name="shell_debug_log_copied_info">The app copied the report.</string>
     <!-- Shown after the user presses and holds one line of the log. -->
     <string name="shell_debug_log_line_copied_info">The app copied that line.</string>
+    <string name="shell_debug_log_block_copied_info">The app copied the text, with the version and device lines in front.</string>
     <string name="shell_debug_log_write_error">The app cannot write the report.</string>
 
     <!-- ================================================================== -->
