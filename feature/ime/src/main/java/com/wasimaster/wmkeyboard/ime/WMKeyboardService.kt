@@ -5168,7 +5168,6 @@ open class WMKeyboardService : InputMethodService() {
             context = this,
             lanes = lanes,
             stripHeightPx = (INLINE_CHIP_HEIGHT_DP * density.density).toInt(),
-            maxWidthPx = density.widthPixels,
         ) { chips ->
             _uiState.update {
                 it.copy(autofillChips = chips.autofill, smartReplyChips = chips.platform)

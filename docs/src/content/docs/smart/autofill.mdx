@@ -24,7 +24,9 @@ They look similar, but the keyboard keeps them well apart. Each lane has its own
 
 Focus a login field with a password manager set as your system autofill service, and its saved entries (if it has any for that app or site) appear as chips across the suggestion strip. The chips take over the strip completely while they're up, so word suggestions don't share the row with them. That's deliberate: a saved login answers the field directly, which beats anything the dictionary could offer. Tap one to fill the field the same way you would from the manager's own dropdown.
 
-There's a dismiss button (✕) at the end of the row if you'd rather ignore the chips and type or search normally. Tapping it clears the chips until the next response comes in, which in practice usually means the next field you focus. The strip can show up to six of them at once, sized to match the strip's height, and scrolls horizontally if your manager offers more than fit on screen.
+There's a dismiss button (✕) at the end of the row if you'd rather ignore the chips and type or search normally. Tapping it clears the chips until the next response comes in, which in practice usually means the next field you focus.
+
+The keyboard asks for up to six chips and sizes them to the strip's height, and no single chip may be wider than half the screen — a long address is ellipsized rather than taking the whole row, so you can always see that there's another entry beside it. The row scrolls horizontally for the rest.
 
 <PhoneFrame caption="Dismissing the chip row to type normally instead.">
   {/* shot: smart/autofill-dismiss */}
@@ -37,6 +39,8 @@ Chips are also cleared automatically the moment you leave the field, so a login 
 There's no allowlist of specific apps. Inline autofill chips use Android's standard inline-suggestions API, so any password manager that supports it and is set as your device's autofill service can offer chips this way: Google's built-in password manager, Bitwarden, 1Password, Dashlane, and others that implement the same platform API. The keyboard requests a chip size and count from whatever service is active. It doesn't know or care which one it's talking to.
 
 The feature needs Android 11 (API 30) or newer. On older versions, the setting doesn't appear and the suggestion strip behaves exactly as it always has. Your password manager's own autofill dropdown still works, it just isn't drawn inline.
+
+Both sides have to opt in. The keyboard declares that it can host inline suggestions, and your password manager has to support them too — if either half is missing, Android falls back to the manager's own dropdown drawn over the keyboard.
 
 ## Smart replies
 

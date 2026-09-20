@@ -3851,24 +3851,16 @@ private fun InlineChipRow(
     chips: List<android.view.View>,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier.horizontalScroll(rememberScrollState()),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        for (chip in chips) {
-            AndroidView(
-                // The same chip view can be re-hosted — a reply moves between
-                // the idle row and the tail row as candidates come and go — and
-                // a view that still remembers its old container throws on the
-                // way in, so detach it first.
-                factory = {
-                    (chip.parent as? android.view.ViewGroup)?.removeView(chip)
-                    chip
-                },
-                modifier = Modifier.padding(horizontal = 2.dp),
-            )
-        }
-    }
+    val gapPx = with(LocalDensity.current) { 2.dp.roundToPx() }
+    // An Android scroller rather than a Compose one, deliberately: these views
+    // are remote surfaces that ignore a Compose clip and keep their full width
+    // off screen, so a horizontalScroll let them paint over the strip's own
+    // controls and steal their touches. See [InlineChipScroller].
+    AndroidView(
+        factory = { InlineChipScroller(it) },
+        update = { it.setChips(chips, gapPx) },
+        modifier = modifier,
+    )
 }
 
 /**

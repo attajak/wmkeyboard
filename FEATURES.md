@@ -2168,6 +2168,11 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Reply chips ranked ahead of action chips within the platform lane
     - Autofill order left exactly as the manager sent it
   - Rendering and safety `uncommon`
+    - Declared with `supportsInlineSuggestions` in method.xml — without it the platform never calls onCreateInlineSuggestionsRequest and the manager draws its own dropdown (#250)
+    - Per-chip width capped at half the screen — the spec max is what the sender lays out against, so an uncapped one fills the strip and hides the rest
+    - Inflated at WRAP_CONTENT width so chips size to their own content
+    - Hosted in an Android HorizontalScrollView, not a Compose one — chips are remote surfaces that ignore a Compose clip and keep their full width off screen, so they painted over the chevron, emoji key and dismiss cross and stole their touches
+    - Each chip clipped to its visible slice on every scroll and layout (View.setClipBounds)
     - Chips are remote-rendered; the keyboard never sees their contents
     - No colour styling passed deliberately — A wrong theme guess would render someone's credentials unreadable
     - Both lanes inflated and delivered in one callback — Stops a reply landing a frame before a credential chip and moving the row

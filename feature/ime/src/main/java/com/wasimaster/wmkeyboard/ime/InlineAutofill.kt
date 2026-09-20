@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Size
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InlineSuggestion
 import android.view.inputmethod.InlineSuggestionInfo
 import android.view.inputmethod.InlineSuggestionsRequest
@@ -42,6 +43,25 @@ object InlineAutofill {
 
     /** Chips are sized to the strip, so they line up with word suggestions. */
     private const val MIN_CHIP_WIDTH_PX = 100
+
+    /**
+     * The widest a single chip may be rendered, as a fraction of the screen.
+     *
+     * The cap is the whole reason more than one chip is ever visible. The
+     * presentation spec's max size is what the sending process lays its chip
+     * out against, so handing it the full screen width means the first saved
+     * login fills the strip and the other five are a scroll away — the budget
+     * of six says a manager with several logins should be able to *show* them
+     * (#250).
+     *
+     * Measured against the screen, not the row, because the request is built
+     * in onStartInput — before there is any keyboard UI to ask. The row is the
+     * narrower of the two (the chevron, the emoji key and the dismiss cross
+     * come out of it first), so half the screen lands at roughly two thirds of
+     * the row: a long address ellipsized, with a clear slice of the next chip
+     * beside it saying there are more.
+     */
+    private const val MAX_CHIP_WIDTH_FRACTION = 0.5f
 
     /**
      * Credential chips take the whole strip while they are up, so they get the
@@ -110,7 +130,7 @@ object InlineAutofill {
         val spec = InlinePresentationSpec
             .Builder(
                 Size(MIN_CHIP_WIDTH_PX, stripHeightPx),
-                Size(maxWidthPx, stripHeightPx),
+                Size(chipWidthCapPx(maxWidthPx), stripHeightPx),
             )
             .setStyle(style)
             .build()
@@ -163,6 +183,14 @@ object InlineAutofill {
         runCatching { suggestion.info.type }.getOrNull()
 
     /**
+     * The per-chip width ceiling on a screen [screenWidthPx] wide, never below
+     * [MIN_CHIP_WIDTH_PX] — a spec whose max is under its own min is rejected
+     * by the platform, which would cost the user every chip.
+     */
+    private fun chipWidthCapPx(screenWidthPx: Int): Int =
+        (screenWidthPx * MAX_CHIP_WIDTH_FRACTION).toInt().coerceAtLeast(MIN_CHIP_WIDTH_PX)
+
+    /**
      * Inflates both lanes of [lanes] into views, calling [onReady] once with
      * those that succeeded.
      *
@@ -180,7 +208,6 @@ object InlineAutofill {
         context: Context,
         lanes: Lanes,
         stripHeightPx: Int,
-        maxWidthPx: Int,
         onReady: (Chips) -> Unit,
     ) {
         if (lanes.autofill.isEmpty() && lanes.platform.isEmpty()) {
@@ -191,7 +218,14 @@ object InlineAutofill {
         val platformViews = arrayOfNulls<View>(lanes.platform.size)
         var outstanding = lanes.autofill.size + lanes.platform.size
         val executor = context.mainExecutor
-        val size = Size(maxWidthPx, stripHeightPx)
+        // WRAP_CONTENT, not the cap: the cap is the ceiling the sender lays
+        // out against, and asking for an exact width would render every chip
+        // at that width — one fat chip per screen, whatever is written on it.
+        // The platform documents WRAP_CONTENT as valid for either dimension
+        // and passes it straight to the remote view's LayoutParams, so each
+        // chip comes back its own natural size and the row scrolls. Height
+        // stays exact so the chips sit on the strip's baseline.
+        val size = Size(ViewGroup.LayoutParams.WRAP_CONTENT, stripHeightPx)
 
         val finish = {
             if (--outstanding == 0) {
