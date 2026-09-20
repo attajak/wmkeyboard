@@ -132,6 +132,13 @@
 
     <string name="languages_secondary_title">Also suggest from</string>
     <!-- %1$s is the English name of the language this screen is about. -->
+    <string name="languages_phonetic_english_group">English words</string>
+    <string name="languages_phonetic_english_title">Type English words as English</string>
+    <string name="languages_phonetic_english_subtitle">On the phonetic layout, hello stays hello</string>
+    <string name="languages_phonetic_english_info">With English picked above, the phonetic layout\'s strip already carries the word exactly as you typed it, in Latin letters, and leans English once the text around it is English.\n\nThis goes one step further: a word that reads as English and not as <xliff:g id="language" example="Bengali">%1$s</xliff:g> is written in English when you press space, and shows that way while you type it. Words both languages have follow the language of the words around them, and the word just before counts most: am after I is English, and the same letters on their own are not. A capital I on its own is always the English word. A capital letter anywhere after the first always means the phonetic layout.\n\nWhen the keyboard picks wrong, press backspace straight after the word to flip it to the other script, or tap the other one on the strip. It remembers, and after two flips it stops asking about that spelling.</string>
+    <string name="languages_phonetic_english_switch_title">Switch on the suggestion strip</string>
+    <string name="languages_phonetic_english_switch_subtitle">A small button beside the suggestions turns English words on and off as you type</string>
+    <string name="languages_phonetic_english_switch_info">The button shows on this language\'s phonetic layout and is lit while English words are on. It is for the moment a word keeps coming out in the wrong script: tap it in the middle of the word and the word turns back before you press space.\n\nOff takes the button away and leaves the setting above exactly as you set it, so English words simply stay on. Shared by every language with a phonetic layout.</string>
     <string name="languages_secondary_info">The keyboard offers words from these languages while you type <xliff:g id="language" example="Bengali">%1$s</xliff:g>. Autocorrect never changes them.</string>
     <!-- Toast after adding a romanized language pairs it with a same-script
          language. %1$s and %2$s are English names of the two languages. -->

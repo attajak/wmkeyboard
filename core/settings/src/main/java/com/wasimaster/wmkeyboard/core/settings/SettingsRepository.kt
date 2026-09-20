@@ -6022,15 +6022,26 @@ data class SuggestionStripSettings(
      */
     val languageDetectionByApp: Boolean = true,
     /**
-     * On a phonetic layout (Avro, Hindi phonetic) with English among the
-     * language's secondary suggestion languages: commit a buffer that reads as
-     * an English word, and not as one of the layout's own, in Latin letters —
-     * `hello` stays hello where it used to come out হ্যালো. Words both
-     * languages have follow the language the field is being written in (see
-     * `PhoneticScriptVerdict`). Off, English is only ever offered on the strip.
-     * Also the toolbar's English words switch.
+     * The languages whose phonetic layout (Avro, Hindi phonetic) commits a
+     * buffer that reads as an English word, and not as one of the layout's
+     * own, in Latin letters — `hello` stays hello where it used to come out
+     * হ্যালো. Words both languages have follow the language the field is being
+     * written in (see `PhoneticScriptVerdict`). Only does anything with English
+     * among that language's secondary suggestion languages, which is also the
+     * only time its row is shown. Per language because its row lives on the
+     * language's own screen, and a switch on Bangla's screen that also changed
+     * Hindi would be one nobody could find again. Empty: English is only ever
+     * offered on the strip.
      */
-    val phoneticAutoEnglish: Boolean = false,
+    val phoneticEnglishLangs: Set<String> = emptySet(),
+    /**
+     * Whether the strip carries the small switch that turns the above on and
+     * off for the language being typed. On by default, because the moment the
+     * switch is wanted is the middle of a word that came out in the wrong
+     * script; off for whoever never wants it off and would rather have the
+     * room for a word.
+     */
+    val phoneticEnglishSwitch: Boolean = true,
     /**
      * Which optional items the held-word menu shows (#99). An item missing
      * from the set is never drawn; "Edit" is drawn regardless. All three by
@@ -6065,6 +6076,9 @@ data class SuggestionStripSettings(
 ) {
     /** Whether the fixed-spelling map applies to [langId]. */
     fun spellingMapEnabledFor(langId: String): Boolean = langId !in spellingMapOffLangs
+
+    /** Whether [langId]'s phonetic layout commits English words as English; null is no phonetic layout. */
+    fun phoneticEnglishFor(langId: String?): Boolean = langId != null && langId in phoneticEnglishLangs
 
     /**
      * Whether [langId] still reads the bundled and downloaded dictionaries, as
@@ -6463,7 +6477,13 @@ class SettingsRepository(private val context: Context) {
         private val CONTEXT_RERANK = booleanPreferencesKey("context_rerank")
         private val LANGUAGE_DETECTION = booleanPreferencesKey("language_detection")
         private val LANGUAGE_DETECTION_BY_APP = booleanPreferencesKey("language_detection_by_app")
+        /** Read only: the one switch for every language that [PHONETIC_ENGLISH_LANGS] replaced. */
         private val PHONETIC_AUTO_ENGLISH = booleanPreferencesKey("phonetic_auto_english")
+        private val PHONETIC_ENGLISH_LANGS = stringSetPreferencesKey("phonetic_english_langs")
+        private val PHONETIC_ENGLISH_SWITCH = booleanPreferencesKey("phonetic_english_switch")
+
+        /** What the old single switch meant while it was on: every language with a phonetic layout. */
+        private val LEGACY_PHONETIC_ENGLISH_LANGS = setOf("bn", "hi")
         private val LANGUAGE_DETECTION_STRENGTH =
             stringPreferencesKey("language_detection_strength")
         private val NUMBER_ROW_CORRECTIONS = booleanPreferencesKey("number_row_corrections")
@@ -7990,8 +8010,11 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.suggestionStrip.languageDetectionStrength,
                 languageDetectionByApp = p[LANGUAGE_DETECTION_BY_APP]
                     ?: defaults.suggestionStrip.languageDetectionByApp,
-                phoneticAutoEnglish = p[PHONETIC_AUTO_ENGLISH]
-                    ?: defaults.suggestionStrip.phoneticAutoEnglish,
+                phoneticEnglishLangs = p[PHONETIC_ENGLISH_LANGS]
+                    ?: LEGACY_PHONETIC_ENGLISH_LANGS.takeIf { p[PHONETIC_AUTO_ENGLISH] == true }
+                    ?: defaults.suggestionStrip.phoneticEnglishLangs,
+                phoneticEnglishSwitch = p[PHONETIC_ENGLISH_SWITCH]
+                    ?: defaults.suggestionStrip.phoneticEnglishSwitch,
                 // An item name this build does not know is dropped, not kept
                 // as a stale string.
                 wordMenuItems = p[WORD_MENU_ITEMS]
@@ -11828,8 +11851,16 @@ class SettingsRepository(private val context: Context) {
     suspend fun setLanguageDetectionByApp(value: Boolean) =
         editPrefs { it[LANGUAGE_DETECTION_BY_APP] = value }
 
-    suspend fun setPhoneticAutoEnglish(value: Boolean) =
-        editPrefs { it[PHONETIC_AUTO_ENGLISH] = value }
+    suspend fun setPhoneticEnglish(langId: String, enabled: Boolean) =
+        editPrefs {
+            val on = it[PHONETIC_ENGLISH_LANGS]
+                ?: LEGACY_PHONETIC_ENGLISH_LANGS.takeIf { _ -> it[PHONETIC_AUTO_ENGLISH] == true }
+                ?: emptySet()
+            it[PHONETIC_ENGLISH_LANGS] = if (enabled) on + langId else on - langId
+        }
+
+    suspend fun setPhoneticEnglishSwitch(value: Boolean) =
+        editPrefs { it[PHONETIC_ENGLISH_SWITCH] = value }
 
     suspend fun setNumberRowCorrections(value: Boolean) =
         editPrefs { it[NUMBER_ROW_CORRECTIONS] = value }

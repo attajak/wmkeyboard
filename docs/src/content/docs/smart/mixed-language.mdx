@@ -64,7 +64,7 @@ Add English under **Also suggest from** on Bangla's or Hindi's own screen and th
 
 **The strip always carries what you typed.** The word exactly as you typed it, in Latin letters, sits on the last visible chip of the strip. The Bangla or Hindi suggestions keep their usual places in front of it, so nothing you reach for moves. Tap the chip and the word is written in English. Once the field has turned English (you tapped that chip, or the text already there is English) the strip leans the same way: the Bangla word stays first, because that is still what the space bar writes, and English completions take the rest.
 
-**Type English words as English** under <SettingsPath path="Typing / Automatic corrections" /> goes one step further, and is off until you turn it on. With it on, the space bar itself writes an English word in English:
+**Type English words as English** goes one step further, and is off until you turn it on. It sits on the language's own screen, in an **English words** group that appears under Also suggest from once English is picked there (<SettingsPath path="Languages & layouts / Bangla / English words / Type English words as English" />), and it is set per language. With it on, the space bar itself writes an English word in English:
 
 | You type | You get | Why |
 | --- | --- | --- |
@@ -72,9 +72,13 @@ Add English under **Also suggest from** on Bangla's or Hindi's own screen and th
 | `because` | because | only English knows it |
 | `hello`, `keyboard` | hello, keyboard | listed as English loanwords, so the spelling is English |
 | `to`, `are`, `man` | তো, আরে, মান in a Bangla or empty field; to, are, man once the field is English | both languages have the word, so the field decides |
+| `am` after `I`, `are` after `how` | am, are | the word before counts most: a pair English writes settles a close call, and so does a pair Bangla writes |
+| `I` on its own | I | on Avro a lone capital I spells the letter ঈ, which is never a word |
 | a name neither list has | the layout's own script | unless the last couple of words were English |
 
 The text in the field shows the same answer while you are still typing, so `hell` already reads hell and nothing changes under you at the space. An English word at the start of a sentence gets its capital if the field asks for one, since a script with no capitals never arms shift for you. A capital letter anywhere after the first always means Avro, because `T`, `D`, `N` and `O` are letters of their own there.
+
+What counts as "the field is English" is the same reading described at the top of this page, with one difference: a listed loanword like `ok` or `phone` counts for both languages, since it is as much Banglish as English. Writing `ok` does not turn the তো after it into "to".
 
 When the keyboard picks the wrong script for a word both languages have:
 
@@ -82,7 +86,11 @@ When the keyboard picks the wrong script for a word both languages have:
 - Or tap the other script's word on the strip, before or after the space. The undo chip offers it after the space.
 - Either way the keyboard remembers the spelling. After two flips it stops weighing that spelling at all and writes it your way, until you flip it back.
 
-The **English words** tool puts the switch on the toolbar, lit while it is on. It is there for the moment a Bangla word keeps coming out in English: tap it mid-word and the word in the field turns back before you press space. Tapped on a layout that is not phonetic, or with English missing from Also suggest from, it says so and changes nothing.
+The **English words** tool puts the switch on the toolbar, lit while it is on. It is there for the moment a Bangla word keeps coming out in English: tap it mid-word and the word in the field turns back before you press space. It switches the language you are typing at that moment. Tapped on a layout that is not phonetic, or with English missing from Also suggest from, it says so and changes nothing.
+
+The same switch also sits on the suggestion strip itself, as a small button beside the candidates, a size down from the toolbar's buttons and lit the same way. That is where it is actually needed: a word coming out in the wrong script is something you notice while it is being typed, which is exactly when the suggestions have taken the row and the toolbar is behind the chevron. It shows on a phonetic layout with English picked under **Also suggest from** for that language, and goes away on every other layout. Put the **English words** tool on a toolbar row of its own and the strip drops its copy, rather than showing you the same button twice.
+
+The strip's button is pinned, so it cannot be dragged off the way a tool can. **Switch on the suggestion strip**, the second row of the same group, takes it away instead. English words then simply stay the way you set them, with nothing on the keyboard to turn them off by accident.
 
 After an English word, the next-word predictions come from English too (your own pairs, the bundled ones, and the English word-pair pack if you downloaded it). Which language each app's fields start out leaning towards is the same per-app tally described above. Glide typing on these layouts still decodes Bangla or Hindi only.
 
@@ -95,7 +103,6 @@ After an English word, the next-word predictions come from English too (your own
 | Detect the language you type | On | Autocorrect on |
 | Detection strength | Balanced | Autocorrect on, and Detect the language you type on |
 | Remember each app's language | On | Autocorrect on, and Detect the language you type on |
-| Type English words as English | Off | Bangla or Hindi is enabled |
 
 Both rows sit under Automatic corrections rather than Suggestions, because detection moves autocorrect's targets as well as the strip's order. That also means both are hidden by the **Autocorrect** master switch: turn autocorrect off and the two rows disappear from the screen. The switch you set stays set, though, so detection carries on reordering the strip. It's only autocorrect's half of the effect that goes away, and that goes away with autocorrect anyway. See [Typing settings](/reference/settings/typing/#automatic-corrections) for the rest of that group.
 

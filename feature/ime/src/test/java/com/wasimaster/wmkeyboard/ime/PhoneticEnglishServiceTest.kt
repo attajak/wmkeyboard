@@ -7,9 +7,11 @@ import com.wasimaster.wmkeyboard.core.input.composer.composerFor
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
+import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.composerType
 import com.wasimaster.wmkeyboard.core.layout.language
 import com.wasimaster.wmkeyboard.core.layout.script
+import com.wasimaster.wmkeyboard.core.prediction.SeedBigrams
 import com.wasimaster.wmkeyboard.core.prediction.SpellingMap
 import com.wasimaster.wmkeyboard.core.prediction.SuggestionEngine
 import com.wasimaster.wmkeyboard.core.prediction.Trie
@@ -50,16 +52,19 @@ class PhoneticEnglishServiceTest {
         Trie().apply {
             insert("the", 10000)
             insert("to", 9800)
+            insert("i", 9100)
+            insert("am", 4750)
             insert("hello", 830)
             insert("hell", 600)
         },
-        BengaliPhoneticIndex(listOf("তো" to 5200, "কেমন" to 5000, "হ্যালো" to 1900)),
+        BengaliPhoneticIndex(listOf("তো" to 5200, "কেমন" to 5000, "হ্যালো" to 1900, "আম" to 1566, "ই" to 1530)),
         UserLexicon(null),
         SpellingMap.load(
             "hello\tহ্যালো\n".byteInputStream(Charsets.UTF_8),
             "to\tতো\nkemon\tকেমন\n".byteInputStream(Charsets.UTF_8),
             loanwordStreams = 1,
         ),
+        SeedBigrams.load("i am 94\n".byteInputStream(Charsets.UTF_8)),
     ).apply {
         primaryLanguageId = "bn"
         englishSources = false
@@ -81,7 +86,9 @@ class PhoneticEnglishServiceTest {
                     learnFromTyping = false,
                     haptics = HapticSettings(enabled = false),
                     secondaryLanguages = mapOf("bn" to listOf("en")),
-                    suggestionStrip = SuggestionStripSettings(phoneticAutoEnglish = autoEnglish),
+                    suggestionStrip = SuggestionStripSettings(
+                        phoneticEnglishLangs = if (autoEnglish) setOf("bn") else emptySet(),
+                    ),
                 ),
                 fieldNoSuggestions = false,
             ).copy(
@@ -165,13 +172,28 @@ class PhoneticEnglishServiceTest {
 
         // The settings collector's half of the toggle, once the write lands.
         val sync = WMKeyboardService::class.java
-            .getDeclaredMethod("syncPhoneticAutoEnglish", KeyboardSettings::class.java)
+            .getDeclaredMethod("syncPhoneticAutoEnglish", KeyboardSettings::class.java, LayoutSpec::class.java)
         sync.isAccessible = true
-        sync.invoke(service, KeyboardSettings(suggestionStrip = SuggestionStripSettings(phoneticAutoEnglish = false)))
+        sync.invoke(service, KeyboardSettings(), BuiltInLayouts.AVRO)
 
         assertEquals("হ্যালো", service.uiState.value.composingPreview)
         space(service)
         assertEquals("হ্যালো ", editor.text.toString())
+    }
+
+    @Test
+    fun `the word before is part of the question`() {
+        // "hello I am" as reported: the capital on its own is the pronoun, and
+        // `am` follows it, where `am` alone is আম.
+        val editor = RecordingEditor()
+        val service = keyboardOn(editor)
+
+        for (word in listOf("hello", "I", "am")) {
+            type(service, word)
+            space(service)
+        }
+
+        assertEquals("hello I am ", editor.text.toString())
     }
 
     @Test

@@ -3217,6 +3217,39 @@ private fun TopBar(
                     wide = true,
                 ) { onToolTap(ToolbarTool.EMOJI) }
             }
+            // The English-words switch, kept beside the words it decides.
+            // A phonetic layout reading a Bangla word as English is only ever
+            // noticed while the word is on the strip, and that is precisely
+            // when the toolbar the switch otherwise lives on is off the row —
+            // so the one moment it is wanted is the one moment it could not be
+            // reached. It stays for as long as it can do something: a phonetic
+            // layout with English among that language's secondary suggestion
+            // languages, which is the gate the toggle itself refuses outside
+            // of. Lit while the switch is on, exactly as the toolbar copy is.
+            // Pinned rather than dragged here, so it cannot be dragged away
+            // either: the language's own screen has the setting that takes it
+            // off the strip for whoever never turns the thing off.
+            val phoneticEnglishLanguage = state.composer.phoneticLanguage?.takeIf {
+                state.settings.suggestionStrip.phoneticEnglishSwitch &&
+                    "en" in state.settings.secondaryLanguages[it].orEmpty()
+            }
+            // With the tools on a row of their own the switch is already in
+            // reach up there; a second copy beside the suggestions is the same
+            // button twice, the way the pinned emoji is above.
+            val phoneticEnglishOnToolsRow = toolsRowVisible &&
+                ToolbarTool.PHONETIC_ENGLISH in visibleToolbarTools(state)
+            if (phoneticEnglishLanguage != null && !phoneticEnglishOnToolsRow) {
+                ToolCircle(
+                    slot = IconSlots.forTool(ToolbarTool.PHONETIC_ENGLISH),
+                    description = stringResource(R.string.ime_tool_phonetic_english),
+                    active = state.settings.suggestionStrip.phoneticEnglishFor(phoneticEnglishLanguage),
+                    longPressLabel = stringResource(R.string.ime_tool_phonetic_english),
+                    // A switch beside the words, not a tool among tools: a
+                    // step down from the emoji button it sits next to, so the
+                    // row reads as words first.
+                    compact = true,
+                ) { onToolTap(ToolbarTool.PHONETIC_ENGLISH) }
+            }
             // Autofill chips take the whole strip while they are up: they
             // answer the field directly ("use this saved login"), which beats
             // any word the dictionary could offer, and they are transient —
@@ -6295,7 +6328,8 @@ private fun toolActive(tool: ToolbarTool, state: KeyboardUiState): Boolean = whe
     ToolbarTool.CALENDAR -> state.panel == PanelMode.CALENDAR
     ToolbarTool.INCOGNITO -> state.incognitoOn
     ToolbarTool.SELECTION_ACTIONS -> state.settings.selectionMacros.enabled
-    ToolbarTool.PHONETIC_ENGLISH -> state.settings.suggestionStrip.phoneticAutoEnglish
+    ToolbarTool.PHONETIC_ENGLISH ->
+        state.settings.suggestionStrip.phoneticEnglishFor(state.composer.phoneticLanguage)
     ToolbarTool.POWER_SAVING -> state.powerSavingOn
     ToolbarTool.THEMES -> state.panel == PanelMode.THEMES
     ToolbarTool.AUTOCORRECT -> state.settings.correction.enabled
@@ -7326,6 +7360,10 @@ internal fun ToolCircle(
     // the picker arms, and a button that grew a row then would shove the whole
     // keyboard down under the user's hands.
     hint: String? = null,
+    // A smaller button for a switch that lives beside something else (the
+    // suggestion strip) rather than on the toolbar. Bare-icon form only: a
+    // labelled button already has its own, shorter box.
+    compact: Boolean = false,
     onClick: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
@@ -7417,9 +7455,10 @@ internal fun ToolCircle(
         }
         return
     }
+    val side = if (compact) CompactToolSide else 38
     Box(
         modifier = modifier
-            .size(width = (if (wide) kb.toolWidthDp else 38).dp, height = 38.dp)
+            .size(width = (if (wide && !compact) kb.toolWidthDp else side).dp, height = side.dp)
             .clip(shape)
             .background(background, shape)
             .then(outline)
@@ -7430,7 +7469,7 @@ internal fun ToolCircle(
             slot,
             contentDescription = description,
             modifier = Modifier
-                .size(ToolIconSize)
+                .size(if (compact) CompactToolIconSize else ToolIconSize)
                 // The icon steps up by half the badge's height so the badge sits
                 // under it rather than across it. The button's own 38 dp box is
                 // untouched, so nothing on the bar moves.
@@ -7546,6 +7585,10 @@ private fun ToolsRow(
         }
     }
 }
+
+/** A [ToolCircle] drawn `compact`: the box's side in dp, and the glyph in it. */
+private const val CompactToolSide = 30
+private val CompactToolIconSize = 18.dp
 
 /**
  * The toolbar itself: fixed toolbox launcher, then the user's tools —

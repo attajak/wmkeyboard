@@ -35,6 +35,15 @@ object PhoneticScriptVerdict {
      *        its words are English, negative when they are the layout's
      * @param choice what the user has overruled this spelling to before
      *        ([PhoneticScriptChoices]): positive for Latin, negative for native
+     * @param pair what the word before says: +1 when English knows the two as
+     *        a pair (`i am`, `how are`), -1 when the layout's language knows
+     *        its own reading after that word, 0 for neither or both
+     * @param afterEnglish the word before is an English word and not also a
+     *        listed loanword: people do not change language every word, so the
+     *        one that follows leans English before the field as a whole does
+     * @param pronoun the buffer is a lone capital `I`. On Avro that spells ঈ,
+     *        which is a letter and never a word, and in English it is the
+     *        commonest word there is
      */
     class Evidence(
         val latinCommonness: Double?,
@@ -42,6 +51,9 @@ object PhoneticScriptVerdict {
         val loanword: Boolean = false,
         val contextDelta: Double = 0.0,
         val choice: Int = 0,
+        val pair: Int = 0,
+        val afterEnglish: Boolean = false,
+        val pronoun: Boolean = false,
     )
 
     /**
@@ -59,14 +71,16 @@ object PhoneticScriptVerdict {
         if (evidence.choice <= -PhoneticScriptChoices.FIXED) {
             return Verdict(PhoneticScript.NATIVE, contested = latin != null)
         }
+        if (evidence.pronoun) return Verdict(PhoneticScript.LATIN, contested = true)
+        val lean = W_CONTEXT * evidence.contextDelta + CHOICE_STEP * evidence.choice +
+            PAIR_BOOST * evidence.pair + if (evidence.afterEnglish) AFTER_ENGLISH else 0.0
         return when {
             // Nobody knows it: a name, a typo, a word neither list has. The
             // layout's own script, which is what the layout is for — unless the
             // field is plainly being written in English, where the unknown word
             // is far likelier a name in an English sentence.
             latin == null && native == null -> {
-                val score = W_CONTEXT * evidence.contextDelta + CHOICE_STEP * evidence.choice
-                if (score >= UNKNOWN_LATIN_BAR) {
+                if (lean >= UNKNOWN_LATIN_BAR) {
                     Verdict(PhoneticScript.LATIN, contested = true)
                 } else {
                     Verdict(PhoneticScript.NATIVE, contested = false)
@@ -79,8 +93,7 @@ object PhoneticScriptVerdict {
             latin == null -> Verdict(PhoneticScript.NATIVE, contested = false)
             else -> {
                 val prior = if (evidence.loanword) LOANWORD_PRIOR else NATIVE_PRIOR
-                val score = W_COMMON * (latin - native) + W_CONTEXT * evidence.contextDelta +
-                    CHOICE_STEP * evidence.choice - prior
+                val score = W_COMMON * (latin - native) + lean - prior
                 Verdict(if (score > 0) PhoneticScript.LATIN else PhoneticScript.NATIVE, contested = true)
             }
         }
@@ -144,14 +157,24 @@ object PhoneticScriptVerdict {
      */
     private const val LOANWORD_PRIOR = -0.35
 
+    /**
+     * A pair one language knows and the other does not. Worth about what the
+     * native prior is: `am` after `i` is English in a field that says nothing,
+     * and তো after আমি is not moved by one English word earlier in the line.
+     */
+    private const val PAIR_BOOST = 0.3
+
+    /** The word before was English. Half a pair: a hint, where a pair is a fact. */
+    private const val AFTER_ENGLISH = 0.15
+
     /** One overruling, short of [PhoneticScriptChoices.FIXED]: a thumb on the scale. */
     private const val CHOICE_STEP = 0.2
 
     /**
-     * How far the field has to lean English before an unknown word stays Latin.
-     * Past what one English word is worth: a name after `hello` is still far
-     * likelier the layout's own language than the second word of an English
-     * sentence. Two in a row clear it.
+     * How far things have to lean English before an unknown word stays Latin.
+     * Past what one English word somewhere in the field is worth (0.3), and
+     * within reach of one directly in front of it (0.45): `hey wasi` is a name
+     * in an English greeting, `because ... wasi` three words later is not.
      */
-    private const val UNKNOWN_LATIN_BAR = 0.45
+    private const val UNKNOWN_LATIN_BAR = 0.4
 }

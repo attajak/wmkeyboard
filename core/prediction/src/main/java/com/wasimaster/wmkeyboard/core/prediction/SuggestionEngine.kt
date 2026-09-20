@@ -699,13 +699,28 @@ class SuggestionEngine(
         if (englishAsSecondary && !englishSources && dictionary.contains(lower)) owners.add(EN)
         for (t in secondaryDictionaries) if (t.source.contains(lower)) owners.add(t.langId)
         userLexicon.languageOf(lower)?.let { owners.add(it) }
-        // A word in the script a phonetic layout writes is that language's
-        // whether or not a list has it: a name, or any word at all while the
-        // language runs on its rules with nothing downloaded. Without this the
-        // field could only ever be seen leaning towards English.
         if (primaryLanguageId.isNotEmpty() && primaryLanguageId !in owners) {
-            val scheme = PhoneticSchemes.forLanguage(primaryLanguageId)
-            if (scheme != null && lower.any(scheme.isNative)) owners.add(primaryLanguageId)
+            val backend = phoneticBackend(primaryLanguageId)
+            when {
+                backend == null -> Unit
+                // The language's own list. For Bangla and Hindi that list
+                // reaches the engine as the phonetic index and as nothing
+                // else — there is no trie of it among the walk sources — so
+                // without this no Bangla word typed on Avro was ever counted
+                // as Bangla, and the field could only be seen leaning English.
+                backend.index.frequencyOf(lower) > 0 -> owners.add(primaryLanguageId)
+                // A listed loanword is a word of both: `ok` and `phone` are as
+                // much Banglish as English, so writing one says nothing about
+                // which language the sentence is in. Counted for English alone,
+                // `ok to bolo` had তো coming out as "to".
+                backend.spellings.isLoanword(lower) -> owners.add(primaryLanguageId)
+                // A language running on its rules with nothing downloaded has
+                // no list to know its own words by, so its script stands in.
+                // Only then: with a list, a native word the list does not have
+                // is as likely a collision the keyboard just got wrong (ঈ for
+                // "I"), and counting it would have the mistake vote for itself.
+                backend.index.isEmpty && lower.any(backend.scheme.isNative) -> owners.add(primaryLanguageId)
+            }
         }
         return owners
     }
@@ -1914,7 +1929,7 @@ class SuggestionEngine(
         }
         phoneticBackend(phoneticLanguage)?.let { backend ->
             if (!phoneticMixing) return phoneticSuggestions(backend, composing, limit)
-            return phoneticStrip(backend, composing, limit, phoneticSlots) {
+            return phoneticStrip(backend, composing, previousWord, limit, phoneticSlots) {
                 suggest(
                     composing, previousWord, phoneticLanguage = null, limit = limit, touch = touch,
                     previousWord2 = previousWord2, recentWords = recentWords, keys = keys,
@@ -2485,13 +2500,13 @@ class SuggestionEngine(
      * The head of [suggest]'s list for the same buffer is always [PhoneticCommit.output]
      * — both ask [scriptVerdict] — which is what lets the preview show it early.
      */
-    fun phoneticCommit(languageId: String, composing: String): PhoneticCommit? {
+    fun phoneticCommit(languageId: String, composing: String, previousWord: String? = null): PhoneticCommit? {
         val backend = phoneticBackend(languageId) ?: return null
         if (composing.isEmpty()) return null
         val native = phoneticSuggestions(backend, composing, 1).firstOrNull()
             ?: backend.scheme.transliterate(composing)
         if (!phoneticMixing) return PhoneticCommit(native, PhoneticScript.NATIVE, alternate = null)
-        val verdict = scriptVerdict(backend, composing)
+        val verdict = scriptVerdict(backend, composing, previousWord)
         val latin = latinForm(composing)
         return if (verdict.script == PhoneticScript.LATIN) {
             PhoneticCommit(latin, PhoneticScript.LATIN, native.takeIf { verdict.contested })
@@ -2501,10 +2516,10 @@ class SuggestionEngine(
     }
 
     /** Which script a space would commit [composing] in; see [phoneticCommit]. */
-    fun phoneticScript(languageId: String, composing: String): PhoneticScript {
+    fun phoneticScript(languageId: String, composing: String, previousWord: String? = null): PhoneticScript {
         val backend = phoneticBackend(languageId) ?: return PhoneticScript.NATIVE
         if (!phoneticMixing || composing.isEmpty()) return PhoneticScript.NATIVE
-        return scriptVerdict(backend, composing).script
+        return scriptVerdict(backend, composing, previousWord).script
     }
 
     /**
@@ -2513,8 +2528,12 @@ class SuggestionEngine(
      * on the main thread at every keystroke, so it stops at the verdict and
      * never builds the native list [phoneticCommit] needs for its alternate.
      */
-    fun phoneticLatinPreview(languageId: String, composing: String): String? =
-        if (phoneticScript(languageId, composing) == PhoneticScript.LATIN) latinForm(composing) else null
+    fun phoneticLatinPreview(languageId: String, composing: String, previousWord: String? = null): String? =
+        if (phoneticScript(languageId, composing, previousWord) == PhoneticScript.LATIN) {
+            latinForm(composing)
+        } else {
+            null
+        }
 
     /**
      * The user took [script] for [spelling] where the verdict had chosen the
@@ -2532,7 +2551,11 @@ class SuggestionEngine(
     @Volatile
     private var scriptVerdictCache: Pair<String, PhoneticScriptVerdict.Verdict>? = null
 
-    private fun scriptVerdict(backend: PhoneticBackend, composing: String): PhoneticScriptVerdict.Verdict {
+    private fun scriptVerdict(
+        backend: PhoneticBackend,
+        composing: String,
+        previousWord: String?,
+    ): PhoneticScriptVerdict.Verdict {
         if (!phoneticAutoEnglish) return NATIVE_UNCONTESTED
         // A romanization is letters. Anything else in the buffer is the
         // scheme's own notation, and so is a capital past the first: Avro's T,
@@ -2540,14 +2563,18 @@ class SuggestionEngine(
         // shift in the middle of an English word.
         if (!composing.all { it in 'a'..'z' || it in 'A'..'Z' }) return NATIVE_UNCONTESTED
         if (composing.drop(1).any { it.isUpperCase() }) return NATIVE_UNCONTESTED
-        val cacheKey = "${backend.scheme.languageId}:${generation.get()}:$composing"
+        val cacheKey = "${backend.scheme.languageId}:${generation.get()}:$composing:${previousWord.orEmpty()}"
         scriptVerdictCache?.let { (key, verdict) -> if (key == cacheKey) return verdict }
-        val verdict = PhoneticScriptVerdict.decide(scriptEvidence(backend, composing))
+        val verdict = PhoneticScriptVerdict.decide(scriptEvidence(backend, composing, previousWord))
         scriptVerdictCache = cacheKey to verdict
         return verdict
     }
 
-    private fun scriptEvidence(backend: PhoneticBackend, composing: String): PhoneticScriptVerdict.Evidence {
+    private fun scriptEvidence(
+        backend: PhoneticBackend,
+        composing: String,
+        previousWord: String?,
+    ): PhoneticScriptVerdict.Evidence {
         val lower = composing.lowercase()
         val languageId = backend.scheme.languageId
         val index = backend.index
@@ -2583,14 +2610,41 @@ class SuggestionEngine(
             (it.shareOf(EN) - it.shareOf(languageId)) * it.ramp *
                 (fieldDetectionShift / FIELD_SHIFT_BALANCED).coerceAtMost(1.0)
         } ?: 0.0
+        val prev = previousWord?.lowercase()?.takeIf { it.isNotEmpty() }
+        // Which way the word before pulls. A pair English writes (`i am`,
+        // `how are`) against a pair the language's own context knows for the
+        // reading it would commit; both known and they cancel. The sentence
+        // start counts only through the user's own habit: the bundled openers
+        // list `Are` and `So`, and আরে opens a Bangla message as readily.
+        var pair = 0
+        if (prev != null && latin != null && englishPair(prev, lower)) pair++
+        if (prev != null && native != null) {
+            val reading = phoneticSuggestions(backend, composing, 1).firstOrNull()
+            if (reading != null && nativePair(prev, reading)) pair--
+        }
         return PhoneticScriptVerdict.Evidence(
             latinCommonness = latin,
             nativeCommonness = native,
             loanword = loanword,
             contextDelta = context,
             choice = scriptChoices.choiceFor(languageId, lower),
+            pair = pair,
+            afterEnglish = prev != null && !WordContext.isSentinel(prev) &&
+                dictionary.contains(prev) && !backend.spellings.isLoanword(prev),
+            pronoun = composing == "I",
         )
     }
+
+    private fun englishPair(prev: String, word: String): Boolean {
+        if (userLexicon.bigramCount(prev, word) > 0) return true
+        if (WordContext.isSentinel(prev)) return false
+        return seedBigrams.nextWords(prev).any { it.equals(word, ignoreCase = true) } ||
+            secondaryEnglishNgramPack.bigramCount(prev, word) > 0
+    }
+
+    private fun nativePair(prev: String, reading: String): Boolean =
+        userLexicon.bigramCount(prev, reading) > 0 ||
+            (!WordContext.isSentinel(prev) && ngramPack.bigramCount(prev, reading) > 0)
 
     @Volatile
     private var englishMaxCache: Pair<WordSource, Int>? = null
@@ -2625,6 +2679,7 @@ class SuggestionEngine(
     private fun phoneticStrip(
         backend: PhoneticBackend,
         composing: String,
+        previousWord: String?,
         limit: Int,
         slots: Int,
         latinCompletions: () -> List<String>,
@@ -2634,7 +2689,7 @@ class SuggestionEngine(
         val native = phoneticSuggestions(backend, composing, limit)
             .ifEmpty { listOf(backend.scheme.transliterate(composing)) }
         val literal = latinForm(composing)
-        val latinLeads = scriptVerdict(backend, composing).script == PhoneticScript.LATIN
+        val latinLeads = scriptVerdict(backend, composing, previousWord).script == PhoneticScript.LATIN
         val pin = (slots - 1).coerceIn(1, maxOf(1, limit - 1))
         if (!latinLeads && detectedLanguageId() != EN) {
             return pinned(native, literal, pin).take(limit)

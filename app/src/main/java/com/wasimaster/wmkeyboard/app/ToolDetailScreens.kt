@@ -26,6 +26,7 @@ import com.wasimaster.wmkeyboard.app.media.MusicApps
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.media.hasNotificationAccess
 import com.wasimaster.wmkeyboard.core.notify.DownloadKeys
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
 import com.wasimaster.wmkeyboard.core.settings.AppSortOrder
 import com.wasimaster.wmkeyboard.core.settings.LauncherIconShape
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
@@ -1323,22 +1324,21 @@ internal fun ToolDetailSettings(
                 )
             }
         }
-        ToolbarTool.PHONETIC_ENGLISH -> SettingsGroup(stringResource(R.string.tooldetail_options_group)) {
-            item {
-                ToggleSetting(
-                    R.string.typing_phonetic_english_title,
-                    stringResource(R.string.typing_phonetic_english_subtitle),
-                    settings.suggestionStrip.phoneticAutoEnglish,
-                    info = stringResource(R.string.typing_phonetic_english_info),
-                    default = SettingsDefaults.suggestionStrip.phoneticAutoEnglish,
-                ) { scope.launch { repository.setPhoneticAutoEnglish(it) } }
-            }
-            item {
-                NavRow(
-                    R.string.tooldetail_typing_nav_title,
-                    stringResource(R.string.tooldetail_typing_nav_subtitle),
-                    onClick = { onNavigate("typing") },
-                )
+        // The setting is each language's own, on that language's screen, so
+        // this page is the way there rather than a second copy of the switch.
+        ToolbarTool.PHONETIC_ENGLISH -> SettingsGroup(
+            stringResource(R.string.tooldetail_options_group),
+            info = stringResource(R.string.tooldetail_phonetic_english_info),
+        ) {
+            for (language in settings.enabledLanguages.filter { PhoneticSchemes.forLanguage(it.id) != null }) {
+                item {
+                    NavRow(
+                        language.displayName,
+                        stringResource(R.string.tooldetail_phonetic_english_nav_subtitle),
+                        route = "language/${language.id}",
+                        onClick = { onNavigate("language/${language.id}") },
+                    )
+                }
             }
         }
         ToolbarTool.SELECTION_ACTIONS -> SettingsGroup(stringResource(R.string.tooldetail_options_group)) {

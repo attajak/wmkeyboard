@@ -14,7 +14,11 @@ class PhoneticEnglishMixTest {
     private val english = Trie().apply {
         insert("the", 10000)
         insert("to", 9800)
+        insert("i", 9100)
         insert("you", 9000)
+        insert("am", 4750)
+        insert("ok", 3450)
+        insert("hey", 2500)
         insert("are", 8250)
         insert("how", 5000)
         insert("because", 3000)
@@ -34,11 +38,21 @@ class PhoneticEnglishMixTest {
             "আসি" to 2300,
             "হ্যালো" to 1900,
             "আরে" to 2200,
+            "আম" to 1566,
+            "ই" to 1530,
+            "ওকে" to 1500,
+            // A scraped list counts letters as tokens, and this one is how
+            // "I" came out ঈ on a phone with the big Bangla list installed.
+            "ঈ" to 4000,
         ),
     )
 
+    private val seeds = SeedBigrams.load(
+        "i am 94\nhow are 94\nare you 92\n<s> Are 60\n".byteInputStream(Charsets.UTF_8),
+    )
+
     private val spellings = SpellingMap.load(
-        "hello\tহ্যালো\nkeyboard\tকিবোর্ড\n".byteInputStream(Charsets.UTF_8),
+        "hello\tহ্যালো\nkeyboard\tকিবোর্ড\nok\tওকে\n".byteInputStream(Charsets.UTF_8),
         "to\tতো\nare\tআরে\nkemon\tকেমন\n".byteInputStream(Charsets.UTF_8),
         loanwordStreams = 1,
     )
@@ -47,7 +61,7 @@ class PhoneticEnglishMixTest {
         autoEnglish: Boolean = true,
         mixing: Boolean = true,
         lexicon: UserLexicon = UserLexicon(null),
-    ) = SuggestionEngine(english, bengali, lexicon, spellings).apply {
+    ) = SuggestionEngine(english, bengali, lexicon, spellings, seeds).apply {
         primaryLanguageId = "bn"
         englishSources = false
         englishAsSecondary = mixing
@@ -57,6 +71,17 @@ class PhoneticEnglishMixTest {
 
     private fun SuggestionEngine.avro(buffer: String, slots: Int = 3) =
         suggest(buffer, previousWord = null, phoneticLanguage = "bn", phoneticSlots = slots)
+
+    /** Types [words] one after another, each committed and counted the way the keyboard does it. */
+    private fun SuggestionEngine.sentence(vararg words: String): List<String> {
+        var previous: String? = null
+        return words.map { buffer ->
+            val out = suggest(buffer, previousWord = previous, phoneticLanguage = "bn").first()
+            recordUsage(out)
+            previous = out.lowercase()
+            out
+        }
+    }
 
     private fun isLatin(word: String) = word.all { it in 'a'..'z' || it in 'A'..'Z' }
 
@@ -164,7 +189,7 @@ class PhoneticEnglishMixTest {
         val e = engine()
         for (context in listOf(emptyList(), listOf("how", "you"), listOf("আমি", "কেমন"))) {
             e.seedFieldContext(context)
-            for (buffer in listOf("hello", "to", "are", "kemon", "because", "wasi", "hel", "asi")) {
+            for (buffer in listOf("hello", "to", "are", "kemon", "because", "wasi", "hel", "asi", "I", "am")) {
                 assertEquals("$buffer in $context", e.phoneticCommit("bn", buffer)!!.output, e.avro(buffer).first())
             }
         }
@@ -180,11 +205,48 @@ class PhoneticEnglishMixTest {
         assertEquals(native, e.phoneticCommit("bn", "wasi")!!.alternate)
     }
 
-    @Test fun aNativeWordNoListHasStillCountsForItsLanguage() {
+    @Test fun aNativeWordNoListHasCountsForItsLanguageOnlyWithNoListAtAll() {
+        val name = AvroPhonetic.transliterate("wasi")
+        // With a list behind the language, a native word it does not have may
+        // just be a collision the keyboard got wrong, and must not vote.
+        assertFalse("bn" in engine().owningLanguages(name))
+        // Running on the rules alone there is nothing else to know Bangla by.
+        val bare = SuggestionEngine(english, BengaliPhoneticIndex(emptyList()), UserLexicon(null)).apply {
+            primaryLanguageId = "bn"
+            englishSources = false
+            englishAsSecondary = true
+        }
+        assertTrue("bn" in bare.owningLanguages(name))
+    }
+
+    @Test fun anEnglishSentenceStaysEnglishWordByWord() {
+        // The report: "hello I am wasi" came out "hello ঈ আম wasi". The lone
+        // capital is the pronoun, `am` follows `i`, and once ঈ stopped being
+        // written it stopped voting the field Bangla for the word after it.
+        assertEquals(listOf("hello", "I", "am", "wasi"), engine().sentence("hello", "I", "am", "wasi"))
+        assertEquals(listOf("hey", "how", "are", "you"), engine().sentence("hey", "how", "are", "you"))
+    }
+
+    @Test fun aLoanwordSaysNothingAboutTheLanguageOfTheSentence() {
+        // `ok` is as much Banglish as English: the তো after it stays তো.
+        assertEquals(listOf("ok", "তো", "কেমন"), engine().sentence("ok", "to", "kemon"))
+        assertEquals(setOf("en", "bn"), engine().owningLanguages("ok"))
+    }
+
+    @Test fun thePairBeforeAWordDecidesACloseCall() {
         val e = engine()
-        // ওয়াসি is in no dictionary; the field is Bengali all the same.
-        e.seedFieldContext(listOf(AvroPhonetic.transliterate("wasi"), AvroPhonetic.transliterate("rafi")))
-        assertEquals("হ্যালো", e.avro("hello").first())
+        // `am` alone is আম; after `i` it is the verb.
+        assertEquals("আম", e.suggest("am", previousWord = null, phoneticLanguage = "bn").first())
+        assertEquals("am", e.suggest("am", previousWord = "i", phoneticLanguage = "bn").first())
+        // The bundled openers do not count: আরে opens a Bangla message too.
+        assertEquals("আরে", e.suggest("are", previousWord = WordContext.SENTENCE_START, phoneticLanguage = "bn").first())
+        // The user's own habit of opening with it does.
+        val lexicon = UserLexicon(null).apply { learnBigram(WordContext.SENTENCE_START, "are") }
+        val taught = engine(lexicon = lexicon)
+        assertEquals(
+            "are",
+            taught.suggest("are", previousWord = WordContext.SENTENCE_START, phoneticLanguage = "bn").first(),
+        )
     }
 
     @Test fun englishFollowsAnEnglishWord() {

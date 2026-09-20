@@ -261,6 +261,8 @@
     <!-- Selection actions tool. -->
     <string name="tooldetail_selection_actions_title">Selection actions</string>
     <string name="tooldetail_selection_actions_subtitle">The tool uses this same switch. You can also find it under Advanced</string>
+    <string name="tooldetail_phonetic_english_info">Turns English words on and off for the phonetic layout you are typing on (Avro, Hindi phonetic). The setting itself is on each language\'s own screen, next to Also suggest from, and needs English picked there.</string>
+    <string name="tooldetail_phonetic_english_nav_subtitle">Type English words as English, and the switch on the suggestion strip</string>
     <string name="tooldetail_selection_actions_nav_title">All selection action settings</string>
     <string name="tooldetail_selection_actions_nav_subtitle">Where the bar appears, which actions it offers, and their order</string>
 

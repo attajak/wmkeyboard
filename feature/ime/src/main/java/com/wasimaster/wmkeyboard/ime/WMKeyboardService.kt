@@ -3349,7 +3349,7 @@ open class WMKeyboardService : InputMethodService() {
                 // the saved mode's.
                 bindEngineToLayout(activeSpec, settings)
                 suggestionEngine?.fieldDetectionShift = fieldDetectionShift(settings)
-                syncPhoneticAutoEnglish(settings)
+                syncPhoneticAutoEnglish(settings, activeSpec)
                 glideSourcesEpoch.update { it + 1 }
             }
         }
@@ -3697,7 +3697,9 @@ open class WMKeyboardService : InputMethodService() {
                     .mapNotNull { id -> customTries[id]?.let { SecondaryDictionary(id, it) } }
                 englishAsSecondary = "en" in secondaryIds && !lang.isEnglish
                 secondaryEnglishNgramPack = if (englishAsSecondary) loadNgramPack("en") else NgramPack.EMPTY
-                phoneticAutoEnglish = _uiState.value.settings.suggestionStrip.phoneticAutoEnglish
+                phoneticAutoEnglish = _uiState.value.let {
+                    it.settings.suggestionStrip.phoneticEnglishFor(it.composer.phoneticLanguage)
+                }
                 scriptChoices = this@WMKeyboardService.scriptChoices
                 fieldDetectionShift = fieldDetectionShift(_uiState.value.settings)
                 tuneGlide(_uiState.value.settings.gesture.glideTuning())
@@ -8030,7 +8032,7 @@ open class WMKeyboardService : InputMethodService() {
         val engine = suggestionEngine ?: return
         val typed = composing.toString()
         if (typed.isEmpty() || !engine.phoneticAutoEnglish) return
-        val commit = engine.phoneticCommit(language, typed) ?: return
+        val commit = engine.phoneticCommit(language, typed, previousWord) ?: return
         if (suggestion != commit.alternate) return
         val to = if (commit.script == PhoneticScript.LATIN) PhoneticScript.NATIVE else PhoneticScript.LATIN
         noteScriptFlip(ScriptFlip(language, typed, to))
@@ -8044,13 +8046,18 @@ open class WMKeyboardService : InputMethodService() {
 
     /**
      * Pushes the English-words switch to the engine, and redraws the word
-     * being typed when it has just changed: the toolbar's toggle is reached for
+     * being typed when it has just changed: the strip's toggle is reached for
      * exactly when the preview has gone Latin under a word that was not
      * English, and it has to come back before the space bar is pressed.
+     *
+     * The switch is per language, so it is read for the layout now on screen
+     * ([spec]) — here rather than in [bindEngineToLayout], which would set the
+     * flag quietly and leave this nothing to notice.
      */
-    private fun syncPhoneticAutoEnglish(settings: KeyboardSettings) {
+    private fun syncPhoneticAutoEnglish(settings: KeyboardSettings, spec: LayoutSpec) {
         val engine = suggestionEngine ?: return
-        val next = settings.suggestionStrip.phoneticAutoEnglish
+        val language = composerFor(spec.script(), spec.composerType()).phoneticLanguage
+        val next = settings.suggestionStrip.phoneticEnglishFor(language)
         if (engine.phoneticAutoEnglish == next) return
         engine.phoneticAutoEnglish = next
         commitResolution = null
@@ -9646,6 +9653,7 @@ open class WMKeyboardService : InputMethodService() {
         // just left, so the strip offered its words until the next keystroke
         // moved it (#233).
         bindEngineToLayout(spec, _uiState.value.settings)
+        syncPhoneticAutoEnglish(_uiState.value.settings, spec)
         refreshSuggestions()
         // The typing test follows the language: a prompt dealt in one
         // language cannot be typed on another's keys, so the switch re-deals.
@@ -9803,7 +9811,7 @@ open class WMKeyboardService : InputMethodService() {
         state.composer.phoneticLanguage?.let { language ->
             // An English word the space bar is about to commit as English
             // shows as English, for the reason the map's spelling shows early.
-            suggestionEngine?.phoneticLatinPreview(language, buffer)?.let {
+            suggestionEngine?.phoneticLatinPreview(language, buffer, previousWord)?.let {
                 return sentenceCasedLatin(it, buffer, state)
             }
             suggestionEngine?.phoneticSpelling(language, buffer)?.let { return it }
@@ -10174,7 +10182,7 @@ open class WMKeyboardService : InputMethodService() {
                     scriptAlternate = pre.phoneticAlternate
                     pre.phoneticTop
                 } else {
-                    val commit = suggestionEngine?.phoneticCommit(language, typed)
+                    val commit = suggestionEngine?.phoneticCommit(language, typed, previousWord)
                     scriptAlternate = commit?.alternate
                     commit?.output
                 } ?: state.composer.composeBuffer(typed)
@@ -14023,7 +14031,7 @@ open class WMKeyboardService : InputMethodService() {
                         // answer; a shortcut expansion in front of it was never
                         // a choice between scripts.
                         phoneticAlternate = engine
-                            .phoneticCommit(state.composer.phoneticLanguage.orEmpty(), typed)
+                            .phoneticCommit(state.composer.phoneticLanguage.orEmpty(), typed, previousWord)
                             ?.takeIf { it.output == words.firstOrNull() }
                             ?.alternate,
                         correction = null,
@@ -18725,8 +18733,8 @@ open class WMKeyboardService : InputMethodService() {
     fun onPhoneticEnglishToggle() {
         vibrate()
         val state = _uiState.value
-        val next = !state.settings.suggestionStrip.phoneticAutoEnglish
         val language = state.composer.phoneticLanguage
+        val next = !state.settings.suggestionStrip.phoneticEnglishFor(language)
         val message = when {
             language == null -> getString(R.string.ime_service_phonetic_english_needs_layout_toast)
             next && "en" !in state.settings.secondaryLanguages[language].orEmpty() ->
@@ -18737,7 +18745,9 @@ open class WMKeyboardService : InputMethodService() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         val blocked = language == null ||
             (next && "en" !in state.settings.secondaryLanguages[language].orEmpty())
-        if (!blocked) serviceScope.launch { settingsRepository.setPhoneticAutoEnglish(next) }
+        if (!blocked && language != null) {
+            serviceScope.launch { settingsRepository.setPhoneticEnglish(language, next) }
+        }
     }
 
     /**

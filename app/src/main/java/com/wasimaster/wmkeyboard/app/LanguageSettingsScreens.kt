@@ -67,6 +67,7 @@ import com.wasimaster.wmkeyboard.core.layout.KeymanBinding
 import com.wasimaster.wmkeyboard.core.layout.composerType
 import com.wasimaster.wmkeyboard.core.layout.language
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
 import com.wasimaster.wmkeyboard.core.prediction.SpellingMap
 import com.wasimaster.wmkeyboard.core.script.ComposerType
 import com.wasimaster.wmkeyboard.core.script.DeviceLocales
@@ -1097,6 +1098,31 @@ internal fun LanguageDetailScreen(
                             )
                         }
                     }
+                }
+            }
+        }
+        // English typed on this language's phonetic layout (Avro, Hindi
+        // phonetic). Only with English picked just above: without it the rule
+        // has no English to weigh, and these would be switches that do nothing.
+        if (PhoneticSchemes.forLanguage(langId) != null && "en" in secondaries) {
+            SettingsGroup(stringResource(R.string.languages_phonetic_english_group)) {
+                item {
+                    ToggleSetting(
+                        R.string.languages_phonetic_english_title,
+                        stringResource(R.string.languages_phonetic_english_subtitle),
+                        settings.suggestionStrip.phoneticEnglishFor(langId),
+                        info = stringResource(R.string.languages_phonetic_english_info, lang.englishName),
+                        default = SettingsDefaults.suggestionStrip.phoneticEnglishFor(langId),
+                    ) { scope.launch { repository.setPhoneticEnglish(langId, it) } }
+                }
+                item {
+                    ToggleSetting(
+                        R.string.languages_phonetic_english_switch_title,
+                        stringResource(R.string.languages_phonetic_english_switch_subtitle),
+                        settings.suggestionStrip.phoneticEnglishSwitch,
+                        info = stringResource(R.string.languages_phonetic_english_switch_info),
+                        default = SettingsDefaults.suggestionStrip.phoneticEnglishSwitch,
+                    ) { scope.launch { repository.setPhoneticEnglishSwitch(it) } }
                 }
             }
         }
