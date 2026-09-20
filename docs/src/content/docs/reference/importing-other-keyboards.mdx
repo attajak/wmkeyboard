@@ -181,6 +181,7 @@ Colours mostly land. These all have somewhere to go:
 - The floating keyboard's handle, which takes the toolbar's own colours here.
 - **The panels.** A clipboard notice's heading and body, the buttons inside a panel, the icon buttons on a panel's header, the rows of the language list, the emoji keys, and the clipboard's dialogs. None of these is a separate colour here, so each lands on the one the keyboard already draws it with.
 - A board background image and a key texture.
+- **A font the theme ships with itself.** A `.flex` can carry its own typeface, declared as `@font \`ndot\`` and pointed at with `font-family`. Two of the six themes on the FlorisBoard addon store do exactly that, and for one of them the dot-matrix face *is* the theme. The file is installed as a font add-on of its own, under the name the stylesheet gave it, and the converted theme is set to use it. It then appears in <SettingsPath path="Appearance / Keyboard font" /> like any other installed font, and other themes can use it too.
 
 **Colours that follow the wallpaper are read too.** A FlorisBoard theme may name a Material You role, such as `dynamic-dark-color(surfaceContainerLow)`, instead of a fixed colour. On Android 12 and later the app resolves those against the same system palette FlorisBoard reads, so a theme written that way arrives with its colours rather than empty. Two of the most-used theme packs are written entirely this way.
 
@@ -192,7 +193,7 @@ FlorisBoard styles a much larger set of keyboard parts than this app draws, so t
 
 - **Per-corner radii.** Keys here have a single corner size.
 - **Spacing on single elements.** The key gap is set for the whole keyboard.
-- **Fonts named by a theme.** A `.flex` names a font family rather than carrying the file, and a font here is a separate add-on, so there is nothing to install from the file itself. Install the font yourself and pick it in the theme editor. A theme that sets `font-family: inherit`, which is what both of the big theme packs do on every rule, is asking for no font change at all, so nothing is reported for it.
+- **A font the theme only names.** Some themes name a font family without shipping it. There is nothing to install in that case, so install the font yourself and pick it in the theme editor. A theme that sets `font-family: inherit`, which is what both of the big theme packs do on every rule, is asking for no font change at all, so nothing is reported for it.
 - **Shadow colours.** The lift carries, the colour it is drawn in does not, and Android ignores one below version 9 anyway.
 - **Text wrapping and alignment.** How many lines a label may take, where it is cut and how it is aligned are set by this app, not by the theme.
 - **The landscape text editor.** When a field fills the screen in landscape, Android draws that editor, not this app, so a theme cannot colour it here. The dialog names the parts it could not use rather than saying only that there were some, and for the usual theme packs this editor is most of that list.

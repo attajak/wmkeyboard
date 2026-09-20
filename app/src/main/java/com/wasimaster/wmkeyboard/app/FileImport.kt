@@ -80,6 +80,10 @@ import com.wasimaster.wmkeyboard.core.stickers.StickerPackStore
 import com.wasimaster.wmkeyboard.core.theme.ConvertedTheme
 import com.wasimaster.wmkeyboard.core.theme.FlexResult
 import com.wasimaster.wmkeyboard.core.theme.FlexTheme
+import com.wasimaster.wmkeyboard.core.fonts.FontFile
+import com.wasimaster.wmkeyboard.core.fonts.FontImportResult
+import com.wasimaster.wmkeyboard.core.fonts.FontStore
+import com.wasimaster.wmkeyboard.core.theme.ConvertedFont
 import com.wasimaster.wmkeyboard.core.theme.FlexUnsupported
 import com.wasimaster.wmkeyboard.core.theme.ThemeCodec
 import com.wasimaster.wmkeyboard.core.theme.ThemeSpec
@@ -1361,7 +1365,11 @@ private fun florisProposal(
                     // One id per theme, and distinct: a day and night pair would
                     // otherwise write their images over each other, since the
                     // extracted file names are keyed on the id.
-                    converted.stored(if (index == 0) base else "${base}_v$index", dir)
+                    converted.stored(
+                        if (index == 0) base else "${base}_v$index",
+                        dir,
+                        FontStore.get(context),
+                    )
                 }
             }
             // One entry, not N: an extension's themes are the looks of one
@@ -1401,14 +1409,44 @@ private fun florisProposal(
  * may only ever point inside our own storage. Going around it would mean a
  * second place that decides where a theme's images live.
  */
-internal fun ConvertedTheme.stored(id: String, dir: File): ThemeSpec {
+internal fun ConvertedTheme.stored(
+    id: String,
+    dir: File,
+    fontStore: FontStore? = null,
+): ThemeSpec {
     fun encode(bytes: ByteArray) = Base64.encodeToString(bytes, Base64.NO_WRAP)
-    return theme.copy(
+    val spec = theme.copy(
         id = id,
         backgroundImageBase64 = images[FlexTheme.IMAGE_BACKGROUND]?.let(::encode),
         assets = images.filterKeys { it != FlexTheme.IMAGE_BACKGROUND }
             .mapValues { (_, bytes) -> encode(bytes) },
     ).withExtractedImages(dir)
+    val installed = fontStore?.let { installConvertedFont(font, it) } ?: return spec
+    return spec.copy(fontId = installed)
+}
+
+/**
+ * Installs a typeface a `.flex` carried, and gives back the id a theme names it
+ * by, or null when there was none or it would not load.
+ *
+ * A font cannot ride inside a [ThemeSpec] the way an image can: here a font is
+ * an add-on in its own right, listed on the fonts screen and shared between
+ * themes, and [ThemeSpec.fontId] is only a reference to one. So it is installed
+ * through the same call the fonts screen uses, which is also what checks that
+ * Android can actually load the file.
+ *
+ * A failure is deliberately quiet. The theme still converted, and every other
+ * thing about it is worth having; a dialog about a typeface would be the only
+ * thing standing between the user and a theme they asked for.
+ */
+private fun installConvertedFont(font: ConvertedFont?, store: FontStore): String? {
+    if (font == null) return null
+    val result = runCatching {
+        font.bytes.inputStream().use { input ->
+            FontFile.import(input = input, store = store, name = font.name)
+        }
+    }.getOrNull()
+    return (result as? FontImportResult.Imported)?.font?.id?.let(FontStore::fontIdFor)
 }
 
 @StringRes

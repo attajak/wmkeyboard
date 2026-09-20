@@ -1000,7 +1000,11 @@ fun ThemesScreen(
                     // A day and night pair need distinct ids: the extracted
                     // image file names are keyed on the id, so a shared one
                     // would have the second theme overwrite the first's images.
-                    converted.stored(if (index == 0) base else "${base}_v$index", dir)
+                    converted.stored(
+                        if (index == 0) base else "${base}_v$index",
+                        dir,
+                        FontStore.get(context),
+                    )
                 }
             }
             // One entry, not N: an extension's themes are the looks of one

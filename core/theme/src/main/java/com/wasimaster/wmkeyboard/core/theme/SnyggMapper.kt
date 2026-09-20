@@ -171,7 +171,30 @@ internal class SnyggMapper(private val style: Stylesheet) {
             gestureTrailColor = trailColor(),
             keyOverrides = keyOverrides(resolvedKey, resolvedBoard, dropped),
         )
-        return ConvertedTheme(theme, images)
+        return ConvertedTheme(theme, images, fontOf(files, dropped))
+    }
+
+    /**
+     * The typeface the sheet asks for, when the archive actually carries it.
+     *
+     * Reported as lost only when it does *not*: a theme that names a family it
+     * does not ship is asking for something this keyboard has no way to find,
+     * while one that ships the file has lost nothing once it is installed. The
+     * two used to read the same, and the message claimed the file "does not
+     * contain it" of archives that plainly did.
+     */
+    private fun fontOf(
+        files: Map<String, ByteArray>,
+        dropped: MutableSet<FlexUnsupported>,
+    ): ConvertedFont? {
+        val name = style.requestedFont ?: return null
+        val path = style.fontSources[name]
+        val bytes = path?.let { FlexTheme.lookUp(files, it) }
+        if (bytes == null || bytes.isEmpty()) {
+            dropped += FlexUnsupported.FONT
+            return null
+        }
+        return ConvertedFont(name = name, fileName = path.substringAfterLast('/'), bytes = bytes)
     }
 
     // ---- colour helpers ----

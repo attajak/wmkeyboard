@@ -172,7 +172,7 @@
     <string name="import_floris_dropped_shadow_color">The file picks a colour for the shadows under the keys. The shadows come across, but this app draws them in its own colour.</string>
     <string name="import_floris_dropped_corners">The file rounds some corners more than others. This app uses one corner size per key, and takes the first of them.</string>
     <string name="import_floris_dropped_spacing">The file sets its own spacing around single keys and panels. This app uses one gap between keys for the whole keyboard, so those spacings are not used.</string>
-    <string name="import_floris_dropped_font">The file asks for a font by name but does not contain it. In this app a font is a separate add-on: install the font yourself, then pick it in the theme editor.</string>
+    <string name="import_floris_dropped_font">The file asks for a font by name but does not contain it. A theme that carries its font is installed with it; this one does not, so install the font yourself and pick it in the theme editor.</string>
     <!-- A stylesheet may name a Material You role instead of a colour. The app
          resolves it against the palette in use at import and stores the result,
          so the theme keeps those colours but stops following the wallpaper. -->

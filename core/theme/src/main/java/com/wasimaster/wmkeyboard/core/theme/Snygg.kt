@@ -53,6 +53,18 @@ internal class Stylesheet(
      * this app, and FlorisBoard's own smartbar actions editor.
      */
     val unknownElements: Set<String> = emptySet(),
+    /**
+     * The fonts the sheet declares, family name to the path inside the archive.
+     *
+     * A theme that ships its own typeface writes `"@font `ndot`": [{"src":
+     * "uri(`flex:/fonts/Ndot57-Regular.otf`)"}]` and then points a rule at it
+     * with `font-family: `ndot``. Two of the six themes on the addon store do
+     * exactly that, and one of them is a dot-matrix face the whole theme is
+     * built around.
+     */
+    val fontSources: Map<String, String> = emptyMap(),
+    /** The family a rule asks for, if any; the key to [fontSources]. */
+    val requestedFont: String? = null,
 ) {
 
     /**
@@ -126,15 +138,26 @@ internal class Stylesheet(
 
             val dropped = linkedSetOf<FlexUnsupported>()
             val unknown = linkedSetOf<String>()
+            val fontSources = linkedMapOf<String, String>()
+            var requestedFont: String? = null
             val rules = mutableListOf<SnyggRule>()
             var count = 0
             for ((raw, value) in root) {
                 if (raw.startsWith('@')) {
-                    if (raw.equals(FONT_RULE, ignoreCase = true)) dropped += FlexUnsupported.FONT
+                    // `@font `ndot`` — the name is in the rule, the file in its
+                    // body. Matching the bare word `@font` never fired, because
+                    // no sheet writes one: the family name is always part of
+                    // the rule, so a theme that shipped a typeface said nothing.
+                    if (raw.normalizeName().startsWith(FONT_RULE)) {
+                        fontNameOf(raw)?.let { name ->
+                            fontPathOf(value)?.let { path -> fontSources[name] = path }
+                        }
+                    }
                     continue
                 }
                 val declarations = (value as? JsonObject) ?: continue
                 count++
+                requestedFont = requestedFont ?: fontFamilyOf(declarations)
                 val rule = ruleOf(raw, declarations, defines, palette, night, dropped)
                 if (rule == null) {
                     dropped += FlexUnsupported.UNKNOWN_ELEMENT
@@ -150,7 +173,15 @@ internal class Stylesheet(
             // not the true one: a rule setting only `text-overflow` names an
             // element this app has and still changes nothing it draws. See
             // [SNYGG_CONSUMED], which is the same contract the mapper keeps.
-            return Stylesheet(rules, count, rules.count { it.lands() }, dropped, unknown)
+            return Stylesheet(
+                rules,
+                count,
+                rules.count { it.lands() },
+                dropped,
+                unknown,
+                fontSources,
+                requestedFont,
+            )
         }
 
         @Suppress("LongParameterList")
@@ -312,6 +343,34 @@ internal class Stylesheet(
             return "#%08X".format(((resolved and 0xFFFFFFL) shl 8) or (resolved ushr 24))
         }
 
+        /** The family in `@font `ndot``, or null when the rule names none. */
+        private fun fontNameOf(raw: String): String? =
+            raw.substringAfter('`', "").substringBefore('`', "").trim().takeIf { it.isNotEmpty() }
+
+        /**
+         * The archive path in `[{"src": "uri(`flex:/fonts/X.otf`)"}]`.
+         *
+         * The body is an array of sources — a family may ship a face per
+         * weight — and the first is the one a single [ThemeSpec.fontId] can
+         * hold.
+         */
+        private fun fontPathOf(value: JsonElement): String? {
+            val first = (value as? JsonArray)?.firstOrNull() as? JsonObject ?: return null
+            val src = (first[FONT_SRC] as? JsonPrimitive)?.content ?: return null
+            val inside = src.substringAfter('`', "").substringBefore('`', "")
+            return inside.removePrefix(FLEX_SCHEME).trim('/').takeIf { it.isNotEmpty() }
+        }
+
+        /** The family a rule asks for, with the backticks taken off. */
+        private fun fontFamilyOf(declarations: JsonObject): String? {
+            for ((name, value) in declarations) {
+                if (!name.normalizeName().contains("font family")) continue
+                val text = (value as? JsonPrimitive)?.content?.trim()?.trim('`') ?: continue
+                if (text.isNotEmpty() && !text.equals(INHERIT, ignoreCase = true)) return text
+            }
+            return null
+        }
+
         private fun noteUnsupported(
             property: String,
             value: String?,
@@ -328,7 +387,9 @@ internal class Stylesheet(
                 property.contains("shadow color") -> dropped += FlexUnsupported.SHADOW_COLOR
                 property.contains("margin") || property.contains("padding") ->
                     dropped += FlexUnsupported.PER_ELEMENT_SPACING
-                property.contains("font family") -> dropped += FlexUnsupported.FONT
+                // `font family` is deliberately absent: whether the font is a
+                // loss depends on whether the archive carries it, which only
+                // the mapper can see. See `SnyggMapper.fontOf`.
             }
         }
 
@@ -340,6 +401,8 @@ internal class Stylesheet(
 
         private const val DEFINES = "@defines"
         private const val FONT_RULE = "@font"
+        private const val FONT_SRC = "src"
+        private const val FLEX_SCHEME = "flex:"
 
         /** A value that asks for whatever the element would have had anyway. */
         private const val INHERIT = "inherit"

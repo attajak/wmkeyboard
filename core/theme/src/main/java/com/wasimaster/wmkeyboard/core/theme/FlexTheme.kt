@@ -72,6 +72,9 @@ object FlexTheme {
     private const val MAX_TOTAL_BYTES = 16L * 1024 * 1024
     private const val MAX_MANIFEST_BYTES = 256 * 1024
     private const val MAX_IMAGE_BYTES = 4 * 1024 * 1024
+    private const val MAX_FONT_BYTES = 8 * 1024 * 1024
+    private const val TTF = ".ttf"
+    private const val OTF = ".otf"
 
     /**
      * Reads [input] and converts every theme in it.
@@ -190,8 +193,15 @@ object FlexTheme {
                         // one entry read before anything is known about the
                         // archive, so it must not be a way to spend the whole
                         // budget before the format has even been checked.
-                        val perEntry =
-                            if (entry.name == MANIFEST) MAX_MANIFEST_BYTES else MAX_IMAGE_BYTES
+                        val perEntry = when {
+                            entry.name == MANIFEST -> MAX_MANIFEST_BYTES
+                            // A font is bigger than an image by an order of
+                            // magnitude: the store's own Nothing theme ships an
+                            // 862 KB Inter and the whole archive is 464 KB
+                            // compressed, so the image cap would truncate it.
+                            entry.name.endsWith(TTF) || entry.name.endsWith(OTF) -> MAX_FONT_BYTES
+                            else -> MAX_IMAGE_BYTES
+                        }
                         val bytes = readCapped(zip, minOf(remaining, perEntry.toLong()).toInt())
                         total += bytes.size
                         files[entry.name] = bytes
@@ -294,7 +304,33 @@ data class ConvertedTheme(
     val theme: ThemeSpec,
     /** Keyed by [ThemeSpec] asset slot, or `background` for the board image. */
     val images: Map<String, ByteArray>,
+    /**
+     * The typeface this theme asks for, when the archive carries it.
+     *
+     * A font here is an installed add-on that [ThemeSpec.fontId] names, so the
+     * bytes cannot be stored in the theme the way an image can. They travel to
+     * the caller, which installs them and writes the id back — the same shape
+     * as [images], and for the same reason: installing needs a store and a
+     * files directory, neither of which belongs in a parser.
+     */
+    val font: ConvertedFont? = null,
 )
+
+/** A typeface lifted out of a `.flex`, ready to install. */
+data class ConvertedFont(
+    /** The family name the stylesheet gave it, for naming the installed font. */
+    val name: String,
+    /** The file name inside the archive, which carries the real extension. */
+    val fileName: String,
+    val bytes: ByteArray,
+) {
+    // Arrays compare by identity, and this class rides inside a data class the
+    // import screen holds in Compose state, where that difference is visible.
+    override fun equals(other: Any?): Boolean =
+        this === other || (other is ConvertedFont && name == other.name && fileName == other.fileName)
+
+    override fun hashCode(): Int = 31 * name.hashCode() + fileName.hashCode()
+}
 
 /** Something a stylesheet asked for that has nowhere to go here. */
 enum class FlexUnsupported {
