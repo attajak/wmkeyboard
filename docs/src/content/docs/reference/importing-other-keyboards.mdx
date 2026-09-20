@@ -49,6 +49,36 @@ Some keys in those formats do things WM Keyboard reaches another way: voice inpu
 
 A handful of keys convert to the closest match rather than an exact one, and the dialog counts those too. Delete-word becomes a plain delete; the second symbols page folds onto the symbols key.
 
+### Keys named by a word
+
+HeliBoard's text format has one field per key, so it spells everything in the label. A key that says `delete` is the delete key, `$$$` is the local currency, `aa|bb` shows `aa` and types `bb`, and `abc|!code/-7` names a code outright. The app reads all of it:
+
+| In the file | Becomes |
+| --- | --- |
+| `delete`, `shift`, `space`, `action`, `zwnj` | That key |
+| `alpha`, `symbol`, `numpad`, `emoji`, `language_switch` | The matching layer or switch key |
+| `period`, `comma` | The punctuation slots, with this keyboard's own popups and its email and URI behaviour |
+| `ctrl`, `alt`, `meta`, `fn` | The modifier keys |
+| `com` | A `.com` key. The other keyboard localises this one, so it is counted as approximated |
+| `$$$`, `$$$1` to `$$$5` | Currency signs. Also localised there, also counted |
+| `aa\|bb` | A key drawn `aa` that types `bb` |
+| `x\|!code/-7` | Whatever that code means, here delete |
+| `\space` | A key that draws the word "space". A backslash escapes the whole label |
+
+A name this keyboard has nothing for, such as `dpad`, is removed and named on the dialog. An icon name (`!icon/previous_key`) refers to the other keyboard's own drawable, so the key keeps whatever its action draws here and the dialog counts the loss.
+
+### Keys that change with the shift key or the field
+
+A JSON layout can make one key conditional: `case_selector` for the shift state, `variation_selector` for the field, `keyboard_state_selector`, `layout_direction_selector`. HeliBoard's own Dvorak layout is written this way.
+
+One slot here holds one key, so the app keeps the resting branch: unshifted, an ordinary text field, left to right. The dialog counts the keys that lost a branch.
+
+`case_selector` is the exception and loses nothing. Its two branches are exactly this keyboard's key and shift-label pair, so both cases come across, and a shifted letter that is only the plain uppercase is left for the keyboard to produce on its own.
+
+### Press-and-hold options
+
+The other keyboard writes a popup's *options* inside the popup list, wrapped in exclamation marks. `!fixedColumnOrder!4` and `!autoColumnOrder!4` become that key's **Alternate columns**, which you can change afterwards in the layout editor. `!hasLabels!`, `!needsDividers!` and `!noPanelAutoPopupKey!` ask for drawings this keyboard decides for itself and are dropped. None of them is a letter, so none ends up as a key you can type.
+
 ### Label flags become label sizes
 
 HeliBoard keys can carry a `labelFlags` number, which is how a layout says that one key's label is a word rather than a letter and should be drawn at a different size. Layouts with unusual key captions need it to look right.

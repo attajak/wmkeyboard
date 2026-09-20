@@ -173,6 +173,21 @@
         <item quantity="other">The app removed %1$d keys. This keyboard has no keys that do the same thing (codes <xliff:g id="codes" example="-233, -301">%2$s</xliff:g>).</item>
     </plurals>
 
+    <!-- %1$d is the number of keys, and picks the wording. %2$s is the list of
+         names the file used for them, such as "dpad". -->
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">The app removed %1$d key. This keyboard has no key called <xliff:g id="names" example="dpad">%2$s</xliff:g>.</item>
+        <item quantity="other">The app removed %1$d keys. This keyboard has no keys called <xliff:g id="names" example="dpad, undo">%2$s</xliff:g>.</item>
+    </plurals>
+
+    <!-- A key in the file that changes with the shift state, the field or the
+         writing direction. This keyboard draws one key per place, so it keeps
+         the resting one. %1$d is the number of keys, and picks the wording. -->
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d key changes with the shift state or the field in the other keyboard. The app kept the way it looks at rest.</item>
+        <item quantity="other">%1$d keys change with the shift state or the field in the other keyboard. The app kept the way they look at rest.</item>
+    </plurals>
+
     <!-- %1$d is the number of keys, and picks the wording. -->
     <plurals name="core_lang_foreign_keys_approximated">
         <item quantity="one">The app changed %1$d key to the closest key it has.</item>

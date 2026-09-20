@@ -141,7 +141,7 @@ object ForeignLayouts {
     fun fromSimpleText(text: String, name: String): ConvertedLayout? {
         val rows = mutableListOf<List<Key>>()
         val row = mutableListOf<Key>()
-        var normalized = 0
+        val report = Report()
         for (line in text.lineSequence()) {
             val trimmed = line.trim()
             if (trimmed.isEmpty()) {
@@ -151,16 +151,25 @@ object ForeignLayouts {
             }
             if (trimmed.startsWith(COMMENT_PREFIX)) continue
             val tokens = trimmed.split(' ', '\t').filter { it.isNotEmpty() }
-            val label = tokens.first().let { token ->
-                normalizeForScript(token).also { if (it != token) normalized++ }
-            }
-            row += Key(
-                label = label,
-                longPress = tokens.drop(1).map(::normalizeForScript),
+            val key = keyFromLabel(tokens.first(), report, obj = null) ?: continue
+            val popups = popupsFrom(
+                tokens.drop(1).map { token ->
+                    if (parseForeignPopupMarker(token) != null) {
+                        token
+                    } else {
+                        parseForeignLabel(token).let { normalizeForScript(it.output ?: it.label) }
+                    }
+                },
+            )
+            // The letters the line lists, or the ones the label itself implies
+            // (the currency key's other signs) when it lists none.
+            row += key.copy(
+                longPress = popups.letters.ifEmpty { key.longPress },
+                alternateColumns = popups.columns,
             )
         }
         if (row.isNotEmpty()) rows += row.toList()
-        return finish(rows, name, ForeignSource.HELIBOARD_TEXT, Report(normalized = normalized))
+        return finish(rows, name, ForeignSource.HELIBOARD_TEXT, report)
     }
 
     /**
@@ -235,9 +244,10 @@ object ForeignLayouts {
     private fun keyFrom(element: JsonElement, report: Report): Key? {
         if (element is JsonPrimitive) {
             val label = element.content.takeIf { element.isString } ?: return null
-            return textKey(label, output = null, report = report)
+            return keyFromLabel(label, report, obj = null)
         }
         val obj = element as? JsonObject ?: return null
+        selectorKindOf(obj)?.let { return resolveSelector(obj, it, report) }
         if (obj.string("type").equals(PLACEHOLDER_TYPE, ignoreCase = true)) {
             return Key(label = "", action = KeyAction.None, width = obj.width())
         }
@@ -255,6 +265,60 @@ object ForeignLayouts {
         }
     }
 
+    /**
+     * Which conditional key class [obj] is, or null for an ordinary key.
+     *
+     * Matched on the normalized class name so `case_selector` and
+     * `caseSelector` are the same thing, the way the rest of this file matches
+     * the dialect.
+     */
+    private fun selectorKindOf(obj: JsonObject): SelectorKind? {
+        val declared = obj.string(CLASS_FIELD) ?: return null
+        val normalized = declared.lowercase().filter { it.isLetterOrDigit() }
+        return SelectorKind.entries.firstOrNull { it.id == normalized }
+    }
+
+    /**
+     * A conditional key, flattened to the branch this keyboard would draw.
+     *
+     * A selector says "this key is one thing while shift is down, another in a
+     * password field, another in a right-to-left layout". Nothing here holds
+     * more than one key per slot, so one branch is chosen — the resting one, in
+     * the order the format lists its fallbacks — and the rest are counted.
+     *
+     * A `case_selector` is the exception, and the reason this is not simply a
+     * drop: its two branches are exactly [Key.shiftLabel], so the upper branch
+     * is *kept* rather than counted, and a Dvorak grid imports with both cases
+     * intact. The label is read straight off the branch rather than converted
+     * through [keyFrom], so the notes do not count the same letter twice.
+     *
+     * Before this, a selector key fell through the object reader with no label
+     * and no code and was dropped with nothing said — and HeliBoard's own
+     * `dvorak.json` is written with them.
+     */
+    private fun resolveSelector(obj: JsonObject, kind: SelectorKind, report: Report): Key? {
+        val name = kind.branches.firstOrNull { obj[it] != null } ?: return null
+        val resting = keyFrom(obj.getValue(name), report) ?: return null
+        val others = obj.keys.count { it != CLASS_FIELD && it != name }
+        if (kind != SelectorKind.CASE) {
+            if (others > 0) report.selectors++
+            return resting
+        }
+        val upper = CaseUpperBranches.firstNotNullOfOrNull { obj[it]?.let(::branchLabel) }
+            ?.let(::normalizeForScript)
+        val shifted = upper?.takeIf { it.isNotEmpty() && it != resting.label.uppercase() }
+        if (shifted == null && others > 0) report.selectors++
+        return resting.copy(shiftLabel = shifted)
+    }
+
+    /** The label a selector branch draws, without converting the whole key. */
+    private fun branchLabel(element: JsonElement): String? = when (element) {
+        is JsonPrimitive -> element.content.takeIf { element.isString }
+        is JsonObject -> element.string("label")
+            ?: element.int("code")?.takeIf { it > 0 }?.let { String(Character.toChars(it)) }
+        is JsonArray -> null
+    }?.let { parseForeignLabel(it).label.ifEmpty { null } }
+
     /** A key that commits text: a code point, a run of them, or its own label. */
     private fun characterKey(obj: JsonObject, code: Int?, report: Report): Key? {
         val points = obj.intList("codePoints")
@@ -264,7 +328,57 @@ object ForeignLayouts {
             else -> null
         }
         val label = obj.string("label") ?: output ?: return null
-        return textKey(label, output, report, obj)
+        // A declared code wins over anything the label spells — the format says
+        // so outright — so the label is only read for what it draws.
+        if (output != null) {
+            val drawn = parseForeignLabel(label).let { if (it.dropped) label else it.label }
+            return textKey(drawn.ifEmpty { output }, output, report, obj)
+        }
+        return keyFromLabel(label, report, obj)
+    }
+
+    /**
+     * A key from a HeliBoard label, with every special spelling resolved.
+     *
+     * The label field is the only field the simple text format has, and the
+     * format loads it accordingly: functional keys, the local currency, an
+     * explicit code and a label that differs from its output are all spelled
+     * there. See [parseForeignLabel].
+     */
+    private fun keyFromLabel(raw: String, report: Report, obj: JsonObject?): Key? {
+        val parsed = parseForeignLabel(raw)
+        if (parsed.dropped) {
+            report.droppedLabels += raw
+            return null
+        }
+        if (parsed.approximate) report.approximated++
+        if (parsed.restyled) report.restyled++
+        if (parsed.action != KeyAction.Text) return actionKeyOf(parsed, obj, report)
+        val key = textKey(
+            label = parsed.label.ifEmpty { parsed.output.orEmpty() },
+            output = parsed.output,
+            report = report,
+            obj = obj,
+        ) ?: return null
+        return key.copy(
+            role = parsed.role ?: key.role,
+            // The label's own letters only when the file gave none of its own:
+            // an explicit popup list is the author speaking, and the currency
+            // set below it is a default.
+            longPress = key.longPress.ifEmpty { parsed.longPress.map(::normalizeForScript) },
+        )
+    }
+
+    /** The action half of [keyFromLabel], sharing the object's width and flags. */
+    private fun actionKeyOf(parsed: ForeignLabel, obj: JsonObject?, report: Report): Key {
+        val flags = obj?.labelFlags(report) ?: LabelFlags.None
+        return Key(
+            label = labelFor(parsed.action, parsed.label.ifEmpty { null }),
+            action = parsed.action,
+            width = obj?.width() ?: 1f,
+            hideHint = flags.hideHint,
+            labelScale = flags.labelScale,
+        )
     }
 
     private fun textKey(
@@ -277,6 +391,7 @@ object ForeignLayouts {
         val cleanOutput = output?.let { normalizeForScript(it) }
         if (cleanLabel.isEmpty() && cleanOutput.isNullOrEmpty()) return null
         val flags = obj?.labelFlags(report) ?: LabelFlags.None
+        val popups = obj?.let { popupsOf(it, report) } ?: Popups.None
         return Key(
             label = cleanLabel,
             // Only when it differs: a key whose output repeats its label is the
@@ -288,10 +403,23 @@ object ForeignLayouts {
             // wrong case for every script that has none.
             shiftLabel = null,
             width = obj?.width() ?: 1f,
-            longPress = obj?.let { popupsOf(it, report) }.orEmpty(),
+            longPress = popups.letters,
+            alternateColumns = popups.columns,
+            // `groupId` names which of the other keyboard's automatic popup
+            // sets a key takes: 1 is the comma slot, 2 the period slot. Both
+            // are language-dependent over there and decided from the field
+            // here, so the slot is tagged and this keyboard fills it — copying
+            // one language's punctuation onto every layout would not.
+            role = roleForGroup(obj?.int("groupId")),
             hideHint = flags.hideHint,
             labelScale = flags.labelScale,
         )
+    }
+
+    private fun roleForGroup(groupId: Int?): KeyRole? = when (groupId) {
+        COMMA_GROUP -> KeyRole.Comma
+        PERIOD_GROUP -> KeyRole.Period
+        else -> null
     }
 
     /** A key that does something instead of typing. Null when nothing here does it. */
@@ -344,16 +472,47 @@ object ForeignLayouts {
      * missing popup for every key that had deliberately asked for none — a note
      * telling the user something went wrong when nothing had.
      */
-    private fun popupsOf(obj: JsonObject, report: Report): List<String> {
+    private fun popupsOf(obj: JsonObject, report: Report): Popups {
         val popup = obj["popup"]
         val entries = when (popup) {
             is JsonArray -> popup.toList()
             is JsonObject -> listOfNotNull(popup["main"]) + (popup["relevant"] as? JsonArray).orEmpty()
             is JsonPrimitive, null -> emptyList()
         }
-        val letters = entries.mapNotNull { popupLabel(it) }.filter { it.isNotEmpty() }.distinct()
-        if (letters.isEmpty() && (obj.int("groupId") ?: 0) > 0) report.lostPopups++
-        return letters
+        val popups = popupsFrom(entries.mapNotNull(::popupLabel))
+        val group = obj.int("groupId") ?: 0
+        if (popups.letters.isEmpty() && group > PERIOD_GROUP) report.lostPopups++
+        return popups
+    }
+
+    /**
+     * The press-and-hold letters of a popup list, with its markers taken out.
+     *
+     * HeliBoard puts the popup's *options* in the popup list itself, wrapped in
+     * exclamation marks: `!autoColumnOrder!4` asks for four columns,
+     * `!hasLabels!` for smaller text. Read as letters they became keys that
+     * typed `!hasLabels!`, which is what they used to do here. The one with a
+     * field on this side — the column count — is applied; the rest are
+     * swallowed. See [parseForeignPopupMarker].
+     */
+    private fun popupsFrom(raw: List<String>): Popups {
+        var columns = 0
+        val letters = mutableListOf<String>()
+        for (entry in raw) {
+            val marker = parseForeignPopupMarker(entry)
+            when {
+                marker != null -> if (marker.columns != 0) columns = marker.columns
+                entry.isNotEmpty() -> letters += entry
+            }
+        }
+        return Popups(letters.distinct(), columns)
+    }
+
+    /** A key's press-and-hold letters, and the shape the file asked them to take. */
+    private class Popups(val letters: List<String>, val columns: Int) {
+        companion object {
+            val None = Popups(emptyList(), 0)
+        }
     }
 
     /**
@@ -419,8 +578,16 @@ object ForeignLayouts {
             is JsonObject -> element.string("label")
                 ?: element.int("code")?.takeIf { it > 0 }?.let { String(Character.toChars(it)) }
             is JsonArray -> null
-        }
-        return raw?.let(::normalizeForScript)
+        } ?: return null
+        // Markers travel on as they are: they are read out one level up, where
+        // the column count has somewhere to go.
+        if (parseForeignPopupMarker(raw) != null) return raw
+        // A popup entry is a letter, so what it *types* is the whole of it: a
+        // `ä|a` entry that kept its label would draw ä and type ä anyway, since
+        // this keyboard has one string per alternate.
+        val parsed = parseForeignLabel(raw)
+        val text = parsed.output ?: parsed.label
+        return normalizeForScript(text)
     }
 
     /**
@@ -483,6 +650,20 @@ object ForeignLayouts {
     private const val COMMENT_PREFIX = "//"
     private const val PLACEHOLDER_TYPE = "placeholder"
 
+    /** The field naming a key's class, which is also what marks a selector. */
+    private const val CLASS_FIELD = "$"
+
+    /** The two automatic popup sets that are punctuation slots on this side. */
+    private const val COMMA_GROUP = 1
+    private const val PERIOD_GROUP = 2
+
+    /**
+     * Where a `case_selector` keeps the shifted letter. `upper` is the format's
+     * own name; `shifted` is what a file written as a shift-state selector and
+     * relabelled uses, and reading both costs one lookup.
+     */
+    private val CaseUpperBranches = listOf("upper", "shifted")
+
     /**
      * The code a `multi_text_key` always carries. It says "read codePoints
      * instead", not "do something", so it must not reach the action table.
@@ -508,6 +689,49 @@ object ForeignLayouts {
     private const val MinExpandWidth = 0.1f
 
     private const val HEX_RADIX = 16
+}
+
+/**
+ * The conditional key classes, and the branch order each one is read in.
+ *
+ * The branches are the format's own field names, listed resting state first:
+ * what the key looks like with no shift held, in an ordinary text field, in a
+ * left-to-right layout. A file that names only the later branches still
+ * converts, which is why every fallback is listed rather than just the first.
+ *
+ * [id] is the class name with its separators removed, so one entry matches both
+ * the `case_selector` the documentation writes and the `caseSelector` an editor
+ * emits.
+ */
+private enum class SelectorKind(val id: String, val branches: List<String>) {
+    CASE("caseselector", listOf("lower", "upper")),
+    SHIFT_STATE(
+        "shiftstateselector",
+        listOf(
+            "unshifted", "default", "shiftedAutomatic", "shiftedManual", "shifted",
+            "manualOrLocked", "capsLock",
+        ),
+    ),
+    VARIATION(
+        "variationselector",
+        listOf("normal", "default", "uri", "email", "datetime", "date", "time", "password"),
+    ),
+    KEYBOARD_STATE(
+        "keyboardstateselector",
+        listOf(
+            "default", "alphabet", "symbols", "moreSymbols",
+            "emojiKeyEnabled", "languageKeyEnabled", "dpad",
+        ),
+    ),
+    LAYOUT_DIRECTION("layoutdirectionselector", listOf("ltr", "rtl")),
+
+    /**
+     * FlorisBoard's two Japanese selectors. HeliBoard states it does not
+     * implement either; they are read here for the same reason the rest are,
+     * and the wide branch is the one a grid draws.
+     */
+    CHAR_WIDTH("charwidthselector", listOf("full", "half")),
+    KANA("kanaselector", listOf("hira", "kata")),
 }
 
 /** The part of a foreign key's `labelFlags` this keyboard can draw. */
@@ -730,9 +954,31 @@ private class Report(
     var lostPopups: Int = 0,
     /** Keys whose `labelFlags` asked for styling this keyboard has no form of. */
     var restyled: Int = 0,
+    /** Conditional keys that lost a branch this keyboard has no slot for. */
+    var selectors: Int = 0,
     val unmapped: MutableList<Int> = mutableListOf(),
+    /** Keys named by a label this keyboard has nothing for, such as `dpad`. */
+    val droppedLabels: MutableList<String> = mutableListOf(),
 ) {
     fun notes(scaled: Boolean): List<LayoutMessage> = buildList {
+        if (droppedLabels.isNotEmpty()) {
+            add(
+                LayoutMessage(
+                    pluralsRes = R.plurals.core_lang_foreign_labels_dropped,
+                    quantity = droppedLabels.size,
+                    args = listOf(droppedLabels.size, droppedLabels.distinct().joinToString(", ")),
+                ),
+            )
+        }
+        if (selectors > 0) {
+            add(
+                LayoutMessage(
+                    pluralsRes = R.plurals.core_lang_foreign_selectors_flattened,
+                    quantity = selectors,
+                    args = listOf(selectors),
+                ),
+            )
+        }
         if (unmapped.isNotEmpty()) {
             add(
                 LayoutMessage(
