@@ -35,12 +35,13 @@ fun resolveLayoutSelection(
     defaultActiveId: String = BuiltInLayouts.DEFAULT_ID,
     defaultEnabledIds: List<String> = BuiltInLayouts.defaultEnabledIds,
 ): LayoutSelection {
-    val activeId = canonicalLayoutId(
-        storedLayoutId
-            ?: storedInputMode?.let { LEGACY_MODE_LAYOUT[it] }
-            ?: defaultActiveId,
-        customLayouts,
-    )
+    // Null until the user picks a layout for the first time: nothing writes
+    // `active_layout_id` at install, at onboarding, or when a language is
+    // switched on, so on a fresh install this is the whole of what is known
+    // about the active layout — which is nothing. Kept separate from the
+    // resolved id below, because "never picked" is the case that has to follow
+    // the enabled list instead of the built-in default.
+    val pickedId = storedLayoutId ?: storedInputMode?.let { LEGACY_MODE_LAYOUT[it] }
 
     // Canonicalised before dedup: an install with several fancy styles
     // enabled collapses to the one fancy layout instead of listing it once
@@ -61,9 +62,26 @@ fun resolveLayoutSelection(
         .filter { it !in secondaryIds }
         .ifEmpty { defaultEnabledIds }
 
+    // A layout never explicitly picked follows the enabled list rather than the
+    // built-in default: the first stop in the switch order is the one that
+    // opens. Onboarding seeds the enabled list from the phone's locales (French
+    // first on a French phone) and writes no active id, so defaulting to QWERTY
+    // here opened an English keyboard — spacebar included — on an install whose
+    // Languages screen showed French, and the only way out was the 🌐 key.
+    // `defaultActiveId` is the fallback for an enabled list that resolved to
+    // nothing, which `ifEmpty` above already rules out but which no caller
+    // should have to rely on.
+    val activeId = canonicalLayoutId(
+        pickedId ?: enabledIds.firstOrNull() ?: defaultActiveId,
+        customLayouts,
+    )
+
     val active = resolveLayout(customLayouts, activeId).let { spec ->
         // Same rule for the active id: a secondary layout is shown *over* the
-        // language layout, never *as* it.
+        // language layout, never *as* it. A *picked* layout outside the cycle
+        // is left where it is — the typing test switches to a language it was
+        // given rather than one the 🌐 key cycles, and snapping that back would
+        // undo the switch on the next emission.
         if (spec.id in secondaryIds) resolveLayout(customLayouts, enabledIds.first()) else spec
     }
     return LayoutSelection(

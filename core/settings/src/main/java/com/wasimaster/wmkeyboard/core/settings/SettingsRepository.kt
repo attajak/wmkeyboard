@@ -9457,8 +9457,11 @@ class SettingsRepository(private val context: Context) {
             // Shrinking the cycle can strand the active layout outside it —
             // removing a language whose layout is current would otherwise keep
             // the keyboard typing in the language the user just removed. Snap
-            // to the first remaining stop. (A null active is a pre-registry
-            // install still translating `input_mode` on read; leave it alone.)
+            // to the first remaining stop. A null active is left null on
+            // purpose: nothing has been picked yet, and `resolveLayoutSelection`
+            // reads that as "the head of the cycle", which is already the stop
+            // this would snap to. Writing an id here instead would freeze the
+            // seeded language in place the first time the list is edited.
             val active = prefs[ACTIVE_LAYOUT_ID]
             if (active != null && active !in next) prefs[ACTIVE_LAYOUT_ID] = next.first()
         }

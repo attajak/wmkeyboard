@@ -54,6 +54,48 @@ class LayoutSelectionTest {
         assertEquals(BuiltInLayouts.defaultEnabledIds, s.enabledLayoutIds)
     }
 
+    /**
+     * Issue #249: a French phone whose onboarding seeded French first opened an
+     * English QWERTY — spacebar label, dictionary and all — because nothing
+     * writes an active layout id until the first explicit switch, and the read
+     * defaulted to the built-in instead of the head of the cycle.
+     */
+    @Test
+    fun `an install that never picked a layout opens the first enabled one`() {
+        val s = select(
+            enabledIds = "${BuiltInLayouts.FRENCH_ID},${BuiltInLayouts.QWERTY_ID}",
+        )
+        assertEquals(BuiltInLayouts.FRENCH_ID, s.active.id)
+        assertEquals("fr", s.active.language().id)
+    }
+
+    /** The harder half of #249: English removed, so the default is not even a stop. */
+    @Test
+    fun `a cycle without the built-in default never lands on it`() {
+        val s = select(enabledIds = BuiltInLayouts.FRENCH_ID)
+        assertEquals(BuiltInLayouts.FRENCH_ID, s.active.id)
+    }
+
+    /** Adding a language must not move the user off the one they were typing in. */
+    @Test
+    fun `an explicit pick still wins over the head of the cycle`() {
+        val s = select(
+            layoutId = BuiltInLayouts.QWERTY_ID,
+            enabledIds = "${BuiltInLayouts.FRENCH_ID},${BuiltInLayouts.QWERTY_ID}",
+        )
+        assertEquals(BuiltInLayouts.QWERTY_ID, s.active.id)
+    }
+
+    /** Same for a pre-registry install: its stored mode is a pick. */
+    @Test
+    fun `a legacy input mode counts as a pick, not as an unset active layout`() {
+        val s = select(
+            inputMode = "PROBHAT",
+            enabledIds = "${BuiltInLayouts.FRENCH_ID},${BuiltInLayouts.PROBHAT_ID}",
+        )
+        assertEquals(BuiltInLayouts.PROBHAT_ID, s.active.id)
+    }
+
     /** The migration case: an install typing Probhat before the registry existed. */
     @Test
     fun `a stored input mode translates to its built-in layout`() {
