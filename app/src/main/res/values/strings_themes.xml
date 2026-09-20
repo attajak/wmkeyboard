@@ -104,6 +104,9 @@
     <!-- Button that reads a FlorisBoard theme file (.flex). Keep it short: it
          sits beside Create theme and Import. -->
     <string name="theme_import_floris_action">FlorisBoard</string>
+    <!-- Button that reads a HeliBoard or LeanType colour theme. Keep it short:
+         it sits beside Import and FlorisBoard. -->
+    <string name="theme_import_heli_action">HeliBoard</string>
     <!-- Shown when the file the user selected is not a theme file. -->
     <string name="theme_import_wrong_file_error">That file is not a WM Keyboard theme.</string>
     <!-- Shown after a theme is imported. %1$s is the name of the theme. -->

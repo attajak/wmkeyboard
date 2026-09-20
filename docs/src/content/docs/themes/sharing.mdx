@@ -28,13 +28,13 @@ The exported file is the whole theme, written as plain JSON with no wrapper or f
 
 ## Importing a theme
 
-There are three ways a theme gets imported, and they don't all behave the same way: two apply the theme immediately, one doesn't. A third button on the same row, **FlorisBoard**, reads someone else's format rather than this one. It's covered separately below.
+There are three ways a theme gets imported, and they don't all behave the same way: two apply the theme immediately, one doesn't. Two more buttons on the same row, **FlorisBoard** and **HeliBoard**, read someone else's format rather than this one. They're covered separately below.
 
 ### From the Import button
 
 <SettingsPath path="Appearance / Keyboard themes" />
 
-The **Import** button, sitting between **Create theme** and **FlorisBoard** above the cards, opens a file picker scoped to JSON-ish files. It's intentionally permissive about the exact MIME type, since file providers report a `.json` file as `text/plain` or `application/octet-stream` about as often as they get it right. Pick a `.wmtheme.json` file and it's added to Your themes under a freshly generated ID. The ID stored inside the file itself is discarded, so importing the same file twice creates two separate custom themes rather than updating one in place. Any embedded background image is written back out to local storage as part of the import.
+The **Import** button, first of the row above the cards, opens a file picker scoped to JSON-ish files. It's intentionally permissive about the exact MIME type, since file providers report a `.json` file as `text/plain` or `application/octet-stream` about as often as they get it right. Pick a `.wmtheme.json` file and it's added to Your themes under a freshly generated ID. The ID stored inside the file itself is discarded, so importing the same file twice creates two separate custom themes rather than updating one in place. Any embedded background image is written back out to local storage as part of the import.
 
 Importing this way both adds the theme **and switches the keyboard to it immediately**: there's no separate confirmation step for "use it now."
 
@@ -59,6 +59,10 @@ A theme listing in a repository also isn't previewable in the addon browser the 
 ### From a FlorisBoard file
 
 The gallery's **FlorisBoard** button reads FlorisBoard's own `.flex` theme packages instead of `.wmtheme.json`, and converts every theme inside one into a custom theme here. A converted theme is saved without being switched on, so you can look at it before wearing it. You can open a `.flex` straight from a file manager too. A file that carries both a day and a night version becomes one theme with two looks rather than two entries. Both FlorisBoard style formats are read, the 0.4 one and the 0.5 one. What converts cleanly and what gets reported instead of guessed at are in [Importing other keyboards](/reference/importing-other-keyboards/).
+
+### From a HeliBoard or LeanType theme
+
+The **HeliBoard** button reads the colour themes those two keyboards share. They have no theme file at all: a theme is a line of JSON copied out of the menu at the top of their colour screen, which is why their themes circulate as forum posts. So the button asks where yours is, **Paste** or **Open a file**, and reads either. Both of that keyboard's export shapes work, the ten named colours and the forty-odd internal roles of its *all colours* mode. Like a FlorisBoard import, the theme is saved without being switched on, and the result message says how many of its colours landed. See [Importing other keyboards](/reference/importing-other-keyboards/).
 
 ## Publishing a theme
 

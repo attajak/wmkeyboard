@@ -135,6 +135,21 @@
     <string name="import_floris_done_family" tools:ignore="PluralsCandidate">The app saved <xliff:g id="theme_name" example="Dusk">%1$s</xliff:g> with <xliff:g id="count" example="2">%2$d</xliff:g> looks. Open Themes to look at it.</string>
     <string name="import_floris_unreadable_body">The app cannot read this FlorisBoard file. It may be damaged, or it may be a language pack or a keyboard extension instead of a theme.</string>
 
+    <!-- ==== HeliBoard and LeanType colour themes. Those keyboards share a
+         theme as a line of text rather than as a file, so the app takes it
+         from a file or from the clipboard. ==== -->
+
+    <string name="import_heli_title">Theme from HeliBoard</string>
+    <string name="import_heli_body">HeliBoard and LeanType share a theme as a line of text. Copy it from the colour screen of that keyboard, or pick the file that you saved it in.</string>
+    <string name="import_heli_paste_action">Paste</string>
+    <string name="import_heli_file_action">Open a file</string>
+    <!-- %1$s is the name of the theme. %2$d is the number of colours the app
+         used, %3$d the number of colours in the theme. Not a plural: the word
+         "colours" agrees with the third number, which is never one. -->
+    <string name="import_heli_done" tools:ignore="PluralsCandidate">The app saved <xliff:g id="theme_name" example="Midnight">%1$s</xliff:g> and used %2$d of its %3$d colours. Open Themes to look at it.</string>
+    <string name="import_heli_unreadable_body">The app cannot read that as a HeliBoard theme. Copy the whole line of text from the menu at the top of the colour screen in HeliBoard or LeanType.</string>
+    <string name="import_heli_clipboard_empty_body">The clipboard is empty.</string>
+
     <!-- Lines in the "what the app changed" list of a FlorisBoard import. -->
     <string name="import_floris_dropped_elevation">Key shadows are not set. This app draws keys without a shadow.</string>
     <string name="import_floris_dropped_corners">Keys have one corner size. The file sets a different size for each corner.</string>
