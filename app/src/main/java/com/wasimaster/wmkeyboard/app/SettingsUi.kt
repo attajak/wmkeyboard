@@ -4,14 +4,30 @@ import android.os.Build
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.BoundsTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.SharedTransitionScope.ResizeMode.Companion.scaleToBounds
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector2D
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -20,6 +36,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -45,6 +63,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -99,14 +118,21 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.Velocity
+import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
@@ -353,6 +379,17 @@ internal val LocalSharedTransition = compositionLocalOf<SharedTransitionScope?> 
 
 /** The current destination's own animation scope; null outside the graph. */
 internal val LocalNavAnimatedScope = compositionLocalOf<AnimatedVisibilityScope?> { null }
+
+/**
+ * Whether the settings app is drawing itself still, from **Reduce motion** on
+ * the Accessibility screen.
+ *
+ * Published at the root beside the shared-transition scope, because the small
+ * animations far down the tree — a row growing a control, say — have no
+ * settings object to read and no business collecting one per row. False
+ * outside the settings host, which is what a preview or a test wants.
+ */
+internal val LocalReduceMotion = compositionLocalOf { false }
 
 /**
  * The folds the user has opened, by "<route>/<key>", and the way to change
@@ -893,6 +930,11 @@ internal fun Modifier.focusOncePlaced(
  * *text*: those rows already budget its width with `fitsBesideTitle` and drop
  * it under the title themselves when it will not fit.
  *
+ * [titleReflows] draws the name with [ReflowingText], for a row whose
+ * trailing furniture changes width under the user — one that can grow a reset
+ * control, in practice. It costs a layout node per word, so it is off by
+ * default and the helpers that know a row has a default turn it on.
+ *
  * [flightTo] names the screen the row opens. It tags the row's name — and its
  * tile, when it has one — as the take-off end of the flight into that screen's
  * heading, and tells the screen where it was opened from.
@@ -917,6 +959,7 @@ internal fun WmRow(
     trailing: (@Composable () -> Unit)? = null,
     supporting: (@Composable () -> Unit)? = null,
     trailingOnTitleLine: Boolean = false,
+    titleReflows: Boolean = false,
     flightTo: String? = null,
     subtitleFlies: Boolean = false,
     enabled: Boolean = true,
@@ -937,6 +980,7 @@ internal fun WmRow(
                 trailing = trailing,
                 supporting = supporting,
                 trailingOnTitleLine = trailingOnTitleLine,
+                titleReflows = titleReflows,
                 flightTo = flightTo,
                 subtitleFlies = subtitleFlies,
                 enabled = enabled,
@@ -951,7 +995,8 @@ internal fun WmRow(
     val screen = LocalScreenRoute.current
     val headline: @Composable () -> Unit = titleContent ?: {
         val tag = if (titleKey == null) Modifier else Modifier.wmSharedBounds(titleKey)
-        if (titleStyle != null) Text(title, modifier = tag, style = titleStyle)
+        if (titleReflows) ReflowingText(title, modifier = tag, style = titleStyle)
+        else if (titleStyle != null) Text(title, modifier = tag, style = titleStyle)
         else Text(title, modifier = tag)
     }
     val onTitleLine = trailingOnTitleLine && trailing != null
@@ -1178,6 +1223,140 @@ internal fun rememberSettingsHaptics(): SettingsHaptics {
     return remember(view) { SettingsHaptics(view) }
 }
 
+// ---- a name that re-wraps without jumping ----
+
+/**
+ * How a word travels to the line it has just been pushed onto, and how the
+ * name's own height follows it.
+ *
+ * Slower and softer than [ResetSizeSpring]: the control's width is being
+ * pushed by the finger that tapped, and reads as a direct response, while a
+ * word changing lines is a consequence of it and wants to look like one.
+ */
+private val TitleReflowSpring = spring<IntOffset>(
+    dampingRatio = Spring.DampingRatioNoBouncy,
+    stiffness = Spring.StiffnessLow,
+)
+
+/** The same, for the height the wrapped name reports to its row. */
+private val TitleHeightSpring = spring<IntSize>(
+    dampingRatio = Spring.DampingRatioNoBouncy,
+    stiffness = Spring.StiffnessLow,
+)
+
+/**
+ * Animates this element from wherever it was last placed to wherever its
+ * parent has just put it.
+ *
+ * `onPlaced` reports the new position after layout has already happened, so
+ * the element is offset *back* to where it was and allowed to travel forward
+ * from there. Nothing about the layout changes — the parent has already
+ * measured and placed everything, and this only paints the child somewhere
+ * else on the way — so a word crossing to another line does not drag the words
+ * after it along with it.
+ */
+@Composable
+private fun Modifier.animatePlacement(): Modifier {
+    val scope = rememberCoroutineScope()
+    // Null until this element has been placed once. The two callbacks run in
+    // that order within a frame — the offset is asked for while the parent is
+    // placing the element, and `onPlaced` only answers afterwards — so on the
+    // very first frame there is no position to have travelled from. Seeding
+    // the animation with the zero that stands in for "not placed yet" is what
+    // made a name arrive clumped in its own top-left corner and spread out
+    // from there every time a screen was opened.
+    var target by remember { mutableStateOf<IntOffset?>(null) }
+    var travel by remember { mutableStateOf<Animatable<IntOffset, AnimationVector2D>?>(null) }
+    return this
+        .onPlaced { target = it.positionInParent().round() }
+        .offset {
+            // Before that first answer, no offset at all: the element is drawn
+            // exactly where the parent put it, which is where it belongs.
+            val goal = target ?: return@offset IntOffset.Zero
+            // Seeded at the first real position, so an element that has only
+            // just appeared has nowhere to travel from and does not move.
+            val moving = travel ?: Animatable(goal, IntOffset.VectorConverter).also { travel = it }
+            if (moving.targetValue != goal) {
+                scope.launch { moving.animateTo(goal, TitleReflowSpring) }
+            }
+            moving.value - goal
+        }
+}
+
+/**
+ * The width of one space in [style], which is what a name's words have to be
+ * set apart by once they are laid out one at a time.
+ *
+ * Measured as the difference two letters make with and without a space between
+ * them rather than by measuring `" "` on its own: a lone space is trailing
+ * whitespace, and text measurement is entitled to give trailing whitespace no
+ * width at all.
+ */
+@Composable
+private fun rememberSpaceWidth(style: TextStyle): Dp {
+    val measurer = rememberTextMeasurer()
+    val density = LocalDensity.current
+    return remember(style, density) {
+        val apart = measurer.measure("x x", style, maxLines = 1).size.width
+        val together = measurer.measure("xx", style, maxLines = 1).size.width
+        with(density) { (apart - together).coerceAtLeast(0).toDp() }
+    }
+}
+
+/**
+ * A row's name, drawn so that it re-wraps by moving rather than by jumping.
+ *
+ * A name shares its line with the row's furniture — the reset control, the
+ * "?", a switch — and that furniture changes width while the row is being
+ * used. Ordinary text answers a narrower line by re-breaking it, which is a
+ * single frame in which a word is in one place and the next frame in another.
+ * The width it is answering moves smoothly; only the answer jumps.
+ *
+ * So the words are laid out one at a time in a `FlowRow` — which breaks lines
+ * exactly where `Text` would — and each one animates from its old place to its
+ * new one. A word pushed onto a second line travels down and back to the left
+ * instead of being redrawn there, and the block's own height follows it, so
+ * the rows below slide down rather than snapping.
+ *
+ * Falls back to a plain [Text] when there is nothing to animate:
+ *
+ * - **Reduce motion** is on, and the point of the whole thing is the motion.
+ * - The name has no spaces in it, which is one word in a script that writes
+ *   them separately and a whole sentence in one that does not. Chinese,
+ *   Japanese, Thai, Lao, Khmer and Burmese break lines between characters, not
+ *   between words, and cutting those on spaces would produce one enormous
+ *   "word" that never re-wraps at all. They get today's behaviour rather than
+ *   a wrong one.
+ *
+ * Screen readers get the whole name as one node, not one per word.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+internal fun ReflowingText(
+    text: String,
+    modifier: Modifier = Modifier,
+    style: TextStyle? = null,
+) {
+    val resolved = style ?: LocalTextStyle.current
+    val words = remember(text) { text.split(' ').filter { it.isNotEmpty() } }
+    if (LocalReduceMotion.current || words.size < 2) {
+        Text(text, modifier = modifier, style = resolved)
+        return
+    }
+    FlowRow(
+        modifier = modifier
+            .animateContentSize(animationSpec = TitleHeightSpring)
+            .clearAndSetSemantics { this.text = AnnotatedString(text) },
+        horizontalArrangement = Arrangement.spacedBy(rememberSpaceWidth(resolved)),
+    ) {
+        for (word in words) {
+            // A word is never broken across lines by `Text` either, so it is
+            // not allowed to wrap inside itself here.
+            Text(word, style = resolved, softWrap = false, modifier = Modifier.animatePlacement())
+        }
+    }
+}
+
 // ---- reset to default ----
 
 /**
@@ -1191,6 +1370,21 @@ private val ResetTargetSize = 36.dp
 
 /** The glyph inside that target. */
 private val ResetGlyphSize = 18.dp
+
+/**
+ * How the control grows into its row and how it leaves again.
+ *
+ * A spring rather than a duration: the width it animates is the row's, and the
+ * title beside it re-wraps against whatever that width is on each frame. A
+ * spring lands on the final width without overshooting past it, so the title
+ * settles once instead of re-wrapping back and forth at the end of the move.
+ */
+private val ResetSizeSpring: FiniteAnimationSpec<IntSize> =
+    spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow)
+
+/** The same spring, for the glyph's own fade and scale. */
+private val ResetGlyphSpring: FiniteAnimationSpec<Float> =
+    spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMediumLow)
 
 /**
  * The control a settings row grows once its value stops matching the default
@@ -1207,11 +1401,22 @@ private val ResetGlyphSize = 18.dp
  * rather than into anything drawn: the glyph is the same on every row, so
  * "Reset" alone would leave a screen reader with a dozen identical buttons.
  *
- * The control's slot is reserved while it is not drawn (#136): a row whose
- * value can be reset keeps the same width for it whether or not it is changed
- * right now, so the switch or the value beside it never shifts when the glyph
- * comes and goes. [possible] is false on a row that could never reset — one
- * with no shipped default — and such a row reserves nothing.
+ * The control takes no width while it is not drawn. It used to hold an empty
+ * 36 dp slot open (#136) so that nothing shifted when the glyph appeared, but
+ * that spends the width of a control on every resettable row of every screen
+ * in order to avoid one frame of movement — and on a row whose title is
+ * already wrapping, that gap is what pushed it onto a second line. Instead the
+ * width itself animates: the control expands from nothing to its target while
+ * the glyph fades and scales up inside it, so the switch, the readout or the
+ * value beside it slides to its new place rather than jumping there. Going
+ * away is the same move backwards.
+ *
+ * The animation runs on a change, not on arrival: `AnimatedVisibility` does
+ * not animate its first composition, so opening a screen that already has ten
+ * changed rows draws ten reset controls, not ten of them growing at once.
+ *
+ * [possible] is false on a row that could never reset — one with no shipped
+ * default — and such a row composes nothing at all.
  */
 @Composable
 internal fun ResetSetting(
@@ -1221,20 +1426,38 @@ internal fun ResetSetting(
     onReset: () -> Unit,
 ) {
     if (!possible) return
-    if (!changed) {
-        Spacer(Modifier.size(ResetTargetSize))
-        return
-    }
-    IconButton(
-        onClick = onReset,
-        modifier = Modifier.size(ResetTargetSize),
+    val still = LocalReduceMotion.current
+    AnimatedVisibility(
+        visible = changed,
+        // Anchored at the end: the control grows out of the edge it shares
+        // with the switch or the value, which is the direction the row's other
+        // furniture is being pushed in anyway.
+        enter = if (still) {
+            EnterTransition.None
+        } else {
+            expandHorizontally(ResetSizeSpring, Alignment.End) +
+                fadeIn(ResetGlyphSpring) +
+                scaleIn(ResetGlyphSpring, initialScale = 0.7f)
+        },
+        exit = if (still) {
+            ExitTransition.None
+        } else {
+            shrinkHorizontally(ResetSizeSpring, Alignment.End) +
+                fadeOut(ResetGlyphSpring) +
+                scaleOut(ResetGlyphSpring, targetScale = 0.7f)
+        },
     ) {
-        Icon(
-            Icons.Outlined.Restore,
-            contentDescription = stringResource(CommonR.string.common_reset_setting_desc, name),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(ResetGlyphSize),
-        )
+        IconButton(
+            onClick = onReset,
+            modifier = Modifier.size(ResetTargetSize),
+        ) {
+            Icon(
+                Icons.Outlined.Restore,
+                contentDescription = stringResource(CommonR.string.common_reset_setting_desc, name),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(ResetGlyphSize),
+            )
+        }
     }
 }
 
@@ -1297,10 +1520,11 @@ internal fun ColorSetting(
             subtitle = subtitle,
             icon = icon,
             trailingOnTitleLine = true,
+            titleReflows = true,
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (info != null) InfoButton(title, info)
                     ResetSetting(title, color != null) { onChange(null) }
+                    if (info != null) InfoButton(title, info)
                     if (color == null) {
                         Text(
                             stringResource(CommonR.string.common_auto),

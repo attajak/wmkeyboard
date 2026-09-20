@@ -513,6 +513,10 @@ private fun SettingsNavHost(
             LocalSettingsCrumbTrail provides crumbs,
             LocalAdvancedFolds provides folds,
             LocalTwoPane provides twoPane,
+            // Published here rather than threaded through, so that the small
+            // motions deep in a row can be still without every row being
+            // handed the settings.
+            LocalReduceMotion provides settings.reduceMotion,
         ) {
             if (twoPane) {
                 SettingsTwoPane(
@@ -3178,12 +3182,15 @@ internal fun ToggleSetting(
             // The switch, the "?" and the reset are the title's furniture, not
             // a second column beside the whole row: see [trailingOnTitleLine].
             trailingOnTitleLine = true,
+            // Only a row that can grow a reset control has a title line that
+            // changes width, so only that row pays for the word-by-word name.
+            titleReflows = default != null,
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (info != null) InfoButton(title, info)
                     ResetSetting(title, default != null && checked != default, possible = default != null) {
                         change(default == true)
                     }
+                    if (info != null) InfoButton(title, info)
                     Switch(
                         checked = checked,
                         onCheckedChange = change,
@@ -3227,12 +3234,13 @@ internal fun ToggleNavRow(
             icon = SettingsRowIcons[title],
             flightTo = route,
             trailingOnTitleLine = true,
+            titleReflows = default != null,
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (info != null) InfoButton(name, info)
                     ResetSetting(name, default != null && checked != default, possible = default != null) {
                         onChange(default == true)
                     }
+                    if (info != null) InfoButton(name, info)
                     Switch(
                         checked = checked,
                         onCheckedChange = onChange,
@@ -3383,7 +3391,18 @@ internal fun SliderSetting(
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(title, style = MaterialTheme.typography.bodyLarge)
+                    // Weighted so that the reset and the "?" are measured
+                    // first and a long name wraps around what they leave. The
+                    // other way round the name takes the whole line and the
+                    // controls it is sharing it with are squeezed to nothing.
+                    ReflowingText(
+                        title,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.weight(1f, fill = false),
+                    )
+                    ResetSetting(title, default != null && value != default, possible = default != null) {
+                        onChange(default ?: 0f)
+                    }
                     if (info != null) InfoButton(title, info)
                 }
                 Text(
@@ -3391,9 +3410,6 @@ internal fun SliderSetting(
                     style = MaterialTheme.typography.labelLarge,
                     maxLines = 1,
                 )
-                ResetSetting(title, default != null && value != default, possible = default != null) {
-                    onChange(default ?: 0f)
-                }
             },
         ) {
             WmSlider(
@@ -3477,11 +3493,15 @@ internal fun StepperSetting(
                     modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(title, style = MaterialTheme.typography.bodyLarge)
+                    ReflowingText(
+                        title,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.weight(1f, fill = false),
+                    )
+                    ResetSetting(title, default != null && value != default, possible = default != null) {
+                        onChange(default ?: 0)
+                    }
                     if (info != null) InfoButton(title, info)
-                }
-                ResetSetting(title, default != null && value != default, possible = default != null) {
-                    onChange(default ?: 0)
                 }
             },
         ) {
@@ -3700,15 +3720,15 @@ internal fun <T> ChoiceSetting(
                     icon = icon,
                     subtitle = subtitle,
                     header = {
-                        Text(title, style = MaterialTheme.typography.bodyLarge)
-                        if (info != null) InfoButton(title, info)
-                        Spacer(Modifier.weight(1f))
+                        ReflowingText(title, style = MaterialTheme.typography.bodyLarge)
                         // The same `default != null` that draws the control at all is what
                         // makes the let non-empty; there is no fallback option to reset to
                         // on a row that shipped without a default.
                         ResetSetting(title, default != null && selected != default, possible = default != null) {
                             default?.let(onChange)
                         }
+                        if (info != null) InfoButton(title, info)
+                        Spacer(Modifier.weight(1f))
                     },
                 ) {
                     ChoiceControl(
@@ -3757,12 +3777,13 @@ internal fun <T> ChoiceSetting(
                     },
                 ),
                 icon = icon,
+                titleReflows = default != null,
                 trailing = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (info != null) InfoButton(title, info)
                         ResetSetting(title, default != null && selected != default, possible = default != null) {
                             default?.let(onChange)
                         }
+                        if (info != null) InfoButton(title, info)
                         // The same glyph the sheet puts on this option, small
                         // enough to sit in a value's lane: the row and the
                         // sheet then agree at a glance about what is chosen.
@@ -4137,12 +4158,12 @@ internal fun <T> MultiChoiceSetting(
             icon = icon,
             subtitle = subtitle,
             header = {
-                Text(name, style = MaterialTheme.typography.bodyLarge)
-                if (info != null) InfoButton(name, info)
-                Spacer(Modifier.weight(1f))
+                ReflowingText(name, style = MaterialTheme.typography.bodyLarge)
                 ResetSetting(name, default != null && selected != default, possible = default != null) {
                     default?.let(onChange)
                 }
+                if (info != null) InfoButton(name, info)
+                Spacer(Modifier.weight(1f))
             },
         ) {
             FlowRow(
