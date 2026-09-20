@@ -19,6 +19,7 @@ object PinyinComposer : Composer {
 
     override val isTransliterating: Boolean get() = true
     override val isConversion: Boolean get() = true
+    override val missingPack: String? get() = CjkDictionaries.missingPinyin
 
     /** Reading space for learned picks: pinyin letters, whatever scheme typed them. */
     private const val NAMESPACE = "pinyin"

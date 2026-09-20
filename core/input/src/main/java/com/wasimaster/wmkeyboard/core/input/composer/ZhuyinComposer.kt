@@ -17,6 +17,7 @@ object ZhuyinComposer : Composer {
 
     override val isTransliterating: Boolean get() = true
     override val isConversion: Boolean get() = true
+    override val missingPack: String? get() = CjkDictionaries.missingPinyin
 
     /** Reading space for learned picks: bopomofo is its own notation. */
     private const val NAMESPACE = "zhuyin"

@@ -266,6 +266,14 @@
     <string name="ime_phonetic_word_list_offer">Get the %1$s word list for better words</string>
     <!-- The ✕ on that chip: screen reader text. -->
     <string name="ime_glide_word_list_offer_dismiss_desc">Dismiss</string>
+    <!-- The chip shown when a conversion keyboard (Chinese Pinyin, Japanese,
+         Cantonese, stroke, Cangjie) has no dictionary pack, so typing a reading
+         offers no characters. %1$s is the pack's name, e.g. "Chinese Pinyin
+         dictionary". Tapping the chip opens that language's page, where the
+         pack downloads. -->
+    <string name="ime_conversion_pack_offer">Download the %1$s to type characters</string>
+    <!-- The ✕ on that chip: screen reader text. -->
+    <string name="ime_conversion_pack_offer_dismiss_desc">Dismiss</string>
     <!-- The chip offering to decode a swiped word's stroke against every word
          list, shown while the cursor rests inside a word a swipe wrote. -->
     <string name="ime_glide_search_all_offer">Search all words for this swipe</string>

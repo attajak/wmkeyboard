@@ -57,4 +57,23 @@ object CjkDictionaries {
     @Volatile
     var ngrams: CjkNgrams = CjkNgrams.EMPTY
         set(value) { field = value; invalidate() }
+
+    // What each composer answers [Composer.missingPack] with: the
+    // [CjkDictCatalog] id of the pack behind its table while that table is
+    // still empty, else null. Here rather than in the composers so a pack id
+    // is spelled once, beside the table it fills — several composers share one
+    // table (pinyin serves full pinyin, T9 and Zhuyin; cangjie serves Cangjie
+    // and Quick), and a typo in one of them would have gone unnoticed.
+
+    /** Pinyin, T9 pinyin and Zhuyin all convert through [pinyin]. */
+    val missingPinyin: String? get() = "pinyin".takeIf { pinyin.isEmpty }
+
+    val missingJapanese: String? get() = "ja_kana".takeIf { japanese.isEmpty }
+
+    val missingStroke: String? get() = "stroke".takeIf { stroke.isEmpty }
+
+    /** Cangjie 倉頡 and Quick 速成 share [cangjie]. */
+    val missingCangjie: String? get() = "cangjie".takeIf { cangjie.isEmpty }
+
+    val missingJyutping: String? get() = "jyutping".takeIf { jyutping.isEmpty }
 }

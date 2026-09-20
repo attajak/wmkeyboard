@@ -14,6 +14,7 @@ object StrokeComposer : Composer {
 
     override val isTransliterating: Boolean get() = true
     override val isConversion: Boolean get() = true
+    override val missingPack: String? get() = CjkDictionaries.missingStroke
 
     /**
      * Key/character → canonical stroke digit. The on-screen keys type the stroke

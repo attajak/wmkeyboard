@@ -2351,6 +2351,19 @@ data class KeyboardUiState(
      */
     val wordListOfferIsPhonetic: Boolean = false,
     /**
+     * The [com.wasimaster.wmkeyboard.core.input.composer.CjkDictCatalog] pack a
+     * conversion IME needs and does not have, while the strip is saying so
+     * (#260), or null.
+     *
+     * The conversion tables are too big to bundle, so Chinese and Japanese
+     * convert nothing until their pack is downloaded: the reading keeps
+     * composing and no character is ever offered for it, which on screen is a
+     * keyboard that does not work. Put up by the strip refresh once a reading
+     * has actually been typed, once per pack per process; tapping it opens the
+     * language's page, where the pack downloads.
+     */
+    val conversionPackOffer: String? = null,
+    /**
      * The word the caret is sitting in that a swipe wrote, while the strip is
      * offering to search that swipe's path against every word list (#135), or
      * null. Only ever set with `GestureSettings.searchAllChip` on: without it

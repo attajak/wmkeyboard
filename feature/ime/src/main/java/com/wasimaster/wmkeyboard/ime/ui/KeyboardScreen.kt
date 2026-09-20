@@ -181,6 +181,7 @@ import com.wasimaster.wmkeyboard.core.settings.applyThemeOverrides
 import com.wasimaster.wmkeyboard.core.settings.applyScreenDefaults
 import com.wasimaster.wmkeyboard.core.settings.resolvedFor
 import com.wasimaster.wmkeyboard.core.input.MorseCode
+import com.wasimaster.wmkeyboard.core.input.composer.CjkDictCatalog
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Stable
@@ -3413,6 +3414,35 @@ private fun TopBar(
                     },
                 )
                 if (!wordListShares) return@Row
+            }
+            // The same chip for the other missing download: a conversion IME
+            // whose pack was never fetched types the reading and offers no
+            // character for it, which reads as a broken keyboard exactly the
+            // way a swipe going nowhere does (#260). The two cannot both be up
+            // — the one above is only raised for a composer that does not
+            // convert — so they share the row's precedence slot.
+            val packOffer = state.conversionPackOffer?.let { CjkDictCatalog.byId(it) }
+            if (snippetOffer == null && learnOffer == null && sandboxOffer == null &&
+                wordListOffer == null && packOffer != null
+            ) {
+                val packShares = suggestionsShowing || state.smart != null
+                OfferChip(
+                    label = stringResource(
+                        R.string.ime_conversion_pack_offer,
+                        stringResource(packOffer.displayNameRes),
+                    ),
+                    icon = Icons.Outlined.Download,
+                    declineDescription = stringResource(R.string.ime_conversion_pack_offer_dismiss_desc),
+                    onAccept = { onStripOfferAction(StripOfferAction.Accept()) },
+                    onDecline = { onStripOfferAction(StripOfferAction.Decline) },
+                    stretch = !packShares,
+                    modifier = if (packShares) {
+                        Modifier.widthIn(max = 260.dp).padding(horizontal = 4.dp)
+                    } else {
+                        Modifier.weight(1f).padding(horizontal = 4.dp)
+                    },
+                )
+                if (!packShares) return@Row
             }
             // A word a swipe wrote, being read back: the chip hands that
             // stroke to every word list at once, which is what the sandbox

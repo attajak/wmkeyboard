@@ -6,6 +6,8 @@ import com.wasimaster.wmkeyboard.core.script.ScriptRegistry
 import java.io.File
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -29,6 +31,7 @@ class CjkComposerTest {
         T9Pinyin.index = emptyMap()
         ZhuyinSyllables.table = emptyMap()
         CjkDictionaries.cangjie = CodeTableDictionary.EMPTY
+        CjkDictionaries.stroke = CodeTableDictionary.EMPTY
         CjkDictionaries.jyutping = ConversionDictionary.EMPTY
         JyutpingSyllables.valid = emptySet()
         CjkConfig.fuzzyPinyin = false
@@ -49,6 +52,46 @@ class CjkComposerTest {
         assertSame(CangjieComposer, composerFor(han, ComposerType.CANGJIE))
         assertSame(CangjieQuickComposer, composerFor(han, ComposerType.CANGJIE_QUICK))
         assertSame(JyutpingComposer, composerFor(han, ComposerType.JYUTPING))
+    }
+
+    /**
+     * Every composer that converts has to be able to say which pack it is
+     * waiting for, and it has to name one the catalog really carries — that
+     * string is what the strip chip looks the pack's title up by, and a typo
+     * would simply show no chip at all (#260).
+     */
+    @Test
+    fun `a conversion composer names the catalog pack it is missing`() {
+        for (type in ComposerType.entries) {
+            val script = if (type == ComposerType.ROMAJI) japanese else han
+            val composer = composerFor(script, type)
+            if (!composer.isConversion) {
+                assertNull("$type converts nothing and must ask for no pack", composer.missingPack)
+                continue
+            }
+            val pack = composer.missingPack
+            assertNotNull("$type converts but names no pack while its table is empty", pack)
+            assertNotNull("$type names a pack the catalog does not have: $pack", CjkDictCatalog.byId(pack!!))
+        }
+    }
+
+    /**
+     * And it has to stop asking once the table is there. Pinyin, T9 and Zhuyin
+     * read the same table, so one download answers for all three; Japanese
+     * reads its own and keeps asking.
+     */
+    @Test
+    fun `a loaded table stops naming its pack`() {
+        CjkDictionaries.pinyin = ConversionDictionary.parse(sequenceOf("ni\tN1\t100"))
+
+        assertNull(PinyinComposer.missingPack)
+        assertNull(T9PinyinComposer.missingPack)
+        assertNull(ZhuyinComposer.missingPack)
+        assertEquals("ja_kana", JapaneseComposer.missingPack)
+        assertEquals("cangjie", CangjieComposer.missingPack)
+        assertEquals("cangjie", CangjieQuickComposer.missingPack)
+        assertEquals("stroke", StrokeComposer.missingPack)
+        assertEquals("jyutping", JyutpingComposer.missingPack)
     }
 
     @Test

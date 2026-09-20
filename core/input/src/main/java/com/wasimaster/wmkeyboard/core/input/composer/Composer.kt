@@ -95,6 +95,22 @@ interface Composer {
     val isConversion: Boolean get() = false
 
     /**
+     * The [CjkDictCatalog] pack this composer converts with, when that pack is
+     * not loaded — else null, which is also the answer for every composer that
+     * needs no pack at all.
+     *
+     * The conversion tables are far too big to bundle, so a fresh install has
+     * none of them and a conversion composer starts out able to convert
+     * nothing: it keeps typing, committing the raw reading, and no character is
+     * ever offered. That is indistinguishable on screen from a keyboard that
+     * does not work, so the service names the missing pack in a strip chip
+     * instead of leaving the user to find the row in Settings (issue #260).
+     *
+     * Asked per keystroke, so it stays a field read and a size check.
+     */
+    val missingPack: String? get() = null
+
+    /**
      * The candidate conversions of [buffer] for a conversion IME, best first
      * (Pinyin → Hanzi words, kana → kanji). Empty for every non-conversion
      * composer. The composing region still shows [composeBuffer].

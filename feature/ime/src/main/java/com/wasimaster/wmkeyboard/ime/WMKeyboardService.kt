@@ -474,6 +474,7 @@ import com.wasimaster.wmkeyboard.core.layout.repair
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.input.composer.composerFor
 import com.wasimaster.wmkeyboard.core.input.composer.CjkConfig
+import com.wasimaster.wmkeyboard.core.input.composer.CjkDictCatalog
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictionaries
 import com.wasimaster.wmkeyboard.core.input.composer.HanVariant
 import com.wasimaster.wmkeyboard.core.input.composer.Kana
@@ -10641,6 +10642,17 @@ open class WMKeyboardService : InputMethodService() {
             }
             return
         }
+        // The other download chip, and it cannot share the strip with the one
+        // above: that one is only ever raised for a composer that does not
+        // convert, this one only for one that does.
+        if (_uiState.value.conversionPackOffer != null) {
+            when (action) {
+                is StripOfferAction.Accept -> acceptConversionPackOffer()
+                StripOfferAction.Decline -> clearConversionPackOffer()
+                else -> Unit
+            }
+            return
+        }
         // Last of the chips: it is about a word already in the field, so
         // anything asking about what is being typed right now comes first.
         _uiState.value.glideSearchChip?.let { word ->
@@ -13467,6 +13479,84 @@ open class WMKeyboardService : InputMethodService() {
             .map { applyEmojiTone(it) }
     }
 
+    /**
+     * The strip for a conversion IME: the composer's own reading→character
+     * candidates, plus the chip that says when the pack behind them is not on
+     * the device.
+     *
+     * Split out of [refreshSuggestions] because it runs *ahead* of that
+     * method's strip gates rather than inside them — see the comment at the
+     * call for why a conversion IME cannot be silenced the way the strip is.
+     */
+    private fun refreshConversionCandidates(state: KeyboardUiState) {
+        suggestionJob?.cancel()
+        commitResolution = null
+        val typed = composing.toString()
+        val cands = state.composer.candidates(typed)
+        // The grid is a widening of the same ranking, so it only costs
+        // anything while it is actually open.
+        val expanded = if (state.panel == PanelMode.CANDIDATES) {
+            state.composer.candidates(typed, CANDIDATE_GRID_LIMIT)
+        } else {
+            emptyList()
+        }
+        _uiState.update {
+            it.copy(
+                suggestions = cands,
+                autocorrectWord = null,
+                expandedCandidates = expanded,
+                emojiSuggestions = emptyList(),
+                punctuationSuggestions = emptyList(),
+                inlineEmoji = false,
+            )
+        }
+        refreshConversionPackOffer(_uiState.value, typed)
+    }
+
+    /**
+     * Puts up — or takes down — the chip naming the conversion pack the
+     * keyboard is missing.
+     *
+     * The conversion tables are too big to bundle, so a fresh install has none:
+     * the composer still types, committing the raw reading, and no character is
+     * ever offered for it. Nothing on screen said why, and the pack's own row
+     * is several screens into Settings, so Chinese looked simply broken
+     * (issue #260). Asked here because this is the moment it matters — a
+     * reading has been typed and nothing came back.
+     *
+     * Once per pack per process, the same as the missing-word-list chip, and
+     * never in a password field: a download offer is not what that field is
+     * for.
+     */
+    private fun refreshConversionPackOffer(state: KeyboardUiState, typed: String) {
+        val pack = state.composer.missingPack
+        if (pack == null) {
+            // Downloaded since, or the layout moved to one that needs no pack.
+            clearConversionPackOffer()
+            return
+        }
+        if (typed.isEmpty() || state.secureField) return
+        if (state.conversionPackOffer != null || !conversionPackNoticed.add(pack)) return
+        _uiState.update { it.copy(conversionPackOffer = pack) }
+    }
+
+    /** The chip was tapped: the pack's own language page, where it downloads. */
+    private fun acceptConversionPackOffer() {
+        val pack = _uiState.value.conversionPackOffer?.let(CjkDictCatalog::byId) ?: return
+        clearConversionPackOffer()
+        openRoute("language/${pack.langId}")
+    }
+
+    /** Takes the missing-pack chip down, answered or overtaken by typing. */
+    private fun clearConversionPackOffer() {
+        if (_uiState.value.conversionPackOffer != null) {
+            _uiState.update { it.copy(conversionPackOffer = null) }
+        }
+    }
+
+    /** The packs already named once, so the chip asks and then stays out of the way. */
+    private val conversionPackNoticed = mutableSetOf<String>()
+
     private fun refreshSuggestions() {
         val state = _uiState.value
         if (emailFieldForceActive(state)) {
@@ -13483,6 +13573,30 @@ open class WMKeyboardService : InputMethodService() {
         // where the strip is being rebuilt anyway and a chip has somewhere to
         // land.
         maybeOfferFirstSandboxRung()
+
+        // Conversion IMEs (Chinese Pinyin, Japanese) show the composer's own
+        // reading→character candidates in the strip, not dictionary word
+        // suggestions. The lookup is a cheap map read, so it runs inline, and
+        // it needs no lexicon — hence ahead of the engine check.
+        //
+        // Ahead of the strip gates below too, and that is the point: for a
+        // conversion IME the candidate list *is* the input method, the way a
+        // transliterator's composing buffer is (see [Composer.isConversion]).
+        // Silencing it the way the strip is silenced does not hide a guess, it
+        // makes the language untypeable — which is what a field carrying
+        // NO_SUGGESTIONS, or a FILTER/URI/email variation, or the suggestion
+        // strip simply switched off, used to do to every Chinese and Japanese
+        // field in the app: the pinyin kept composing (it transliterates) and
+        // no Hanzi was ever offered for it (issue #260). A password field is
+        // included for the same reason — people whose language needs
+        // conversion also have to type it into one — and learning stays out of
+        // all of them through [learningAllowed], which never covers a secure
+        // field.
+        if (state.composer.isConversion) {
+            refreshConversionCandidates(state)
+            return
+        }
+
         val engine = suggestionEngine ?: return
         if (!state.settings.suggestions || state.secureField || state.fieldNoSuggestions) return
 
@@ -13524,33 +13638,6 @@ open class WMKeyboardService : InputMethodService() {
         val caret = caretWord
         if (typed.isEmpty() && caret != null && !state.composer.isTransliterating) {
             publishCaretWordSuggestions(engine, caret)
-            return
-        }
-
-        // Conversion IMEs (Chinese Pinyin, Japanese) show the composer's own
-        // reading→character candidates in the strip, not dictionary word
-        // suggestions. The lookup is a cheap map read, so it runs inline.
-        if (state.composer.isConversion) {
-            suggestionJob?.cancel()
-            commitResolution = null
-            val cands = state.composer.candidates(typed)
-            // The grid is a widening of the same ranking, so it only costs
-            // anything while it is actually open.
-            val expanded = if (state.panel == PanelMode.CANDIDATES) {
-                state.composer.candidates(typed, CANDIDATE_GRID_LIMIT)
-            } else {
-                emptyList()
-            }
-            _uiState.update {
-                it.copy(
-                    suggestions = cands,
-                    autocorrectWord = null,
-                    expandedCandidates = expanded,
-                    emojiSuggestions = emptyList(),
-                    punctuationSuggestions = emptyList(),
-                    inlineEmoji = false,
-                )
-            }
             return
         }
 

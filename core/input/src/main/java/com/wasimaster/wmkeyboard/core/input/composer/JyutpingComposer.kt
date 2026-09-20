@@ -17,6 +17,7 @@ object JyutpingComposer : Composer {
 
     override val isTransliterating: Boolean get() = true
     override val isConversion: Boolean get() = true
+    override val missingPack: String? get() = CjkDictionaries.missingJyutping
 
     /**
      * Tones are digits 1–6, so a digit typed mid-syllable feeds the buffer

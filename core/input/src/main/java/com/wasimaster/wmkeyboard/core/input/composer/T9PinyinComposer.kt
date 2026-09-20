@@ -21,6 +21,7 @@ object T9PinyinComposer : Composer {
 
     override val isTransliterating: Boolean get() = true
     override val isConversion: Boolean get() = true
+    override val missingPack: String? get() = CjkDictionaries.missingPinyin
 
     /** The whole input alphabet is digits, and they must be able to *start* a buffer. */
     override val bufferDigits: Boolean get() = true
