@@ -1674,7 +1674,12 @@ sealed interface WordCardAction {
  * only, never a trie walk.
  */
 data class WordMenuFacts(
-    /** The word being typed, when it is not in the personal dictionary; else null. */
+    /**
+     * The word the user is working on — the one being typed, or the one the
+     * caret is parked inside while proofreading (#263) — when it is not in
+     * the personal dictionary; else null. Deliberately not about the *held*
+     * word, like [searchableStroke] below: the chips are known words already.
+     */
     val typedAddable: String? = null,
     /** Whether the held word is somewhere the keyboard can forget it from. */
     val deletable: Boolean = false,
@@ -1701,7 +1706,7 @@ data class WordMenuFacts(
 data class WordCard(
     /** The word as the chip showed it. */
     val word: String,
-    /** The composing word, when the card may add it; else null. */
+    /** The word being typed or read back, when the card may add it; else null. */
     val typed: String? = null,
     val facts: WordFacts? = null,
     /** Language id -> the name of that language's word list, for the sources. */

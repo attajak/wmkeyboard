@@ -14198,9 +14198,18 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
-     * The strip for a caret sitting inside a word: completions and corrections
-     * for the whole word, the word itself dropped because tapping it would
-     * replace it with itself.
+     * The strip for a caret sitting inside a word: the word itself, then
+     * completions and corrections for it.
+     *
+     * The word leads because the strip is *about* it — proofreading is reading
+     * a word back, and a chip is the only way to reach the held-word menu that
+     * adds, opens or forgets it (#263). Tapping it changes nothing, which is
+     * why it used to be dropped here; the hold is what it is for, and the tap
+     * stands down in [onSuggestionTapped] rather than splicing the word over
+     * itself. It is put in front rather than left wherever the engine ranked
+     * it so that a word no dictionary knows — the one case where "add" is the
+     * whole point — gets a chip at all, and it goes under the same setting
+     * that governs the typed word's slot on the composing strip.
      *
      * Its own small path rather than a detour through the composing one. There
      * is no keystroke behind this, so there is no touch frame to rank against
@@ -14212,8 +14221,9 @@ open class WMKeyboardService : InputMethodService() {
         suggestionJob?.cancel()
         commitResolution = null
         val recentSnapshot = recentWords.toList()
+        val skipWord = _uiState.value.settings.suggestionStrip.skipTypedWord
         suggestionJob = serviceScope.launch {
-            val suggested = withContext(Dispatchers.Default) {
+            val others = withContext(Dispatchers.Default) {
                 engine.suggest(
                     composing = word,
                     previousWord = previousWord,
@@ -14223,9 +14233,13 @@ open class WMKeyboardService : InputMethodService() {
                     previousWord3 = previousWord3,
                 ).filterNot { it.equals(word, ignoreCase = true) }
             }
+            // Filtered out above and put back here, so the word holds one slot
+            // however the engine ranked it — or whether it ranked it at all.
+            val suggested = if (skipWord) others else listOf(word) + others
             // A caret dropped on a swiped word is the user reading it back, and
             // what they want there is the swipe's other readings rather than
-            // respellings of the one it picked (#115).
+            // respellings of the one it picked (#115). Those still lead: the
+            // word standing in the field is the one being doubted.
             val results = withGlideReadings(word, caret.start, suggested)
             // And when the readings were not enough — the sandbox had one
             // answer and it was wrong — the chip offers the stroke to the
@@ -14339,6 +14353,20 @@ open class WMKeyboardService : InputMethodService() {
         // about text that is no longer there, and committing the word at the
         // caret instead would be a worse guess than none.
         caretWord?.let { caret ->
+            // The word the strip is about is on the strip (#263), and it is
+            // there for the hold, not the tap. Splicing it over itself would
+            // be a real delete-and-commit — one the app sees in its undo
+            // stack and its text watchers, and one that snaps the caret to the
+            // word's end — to change nothing, and it would count as a pick
+            // that teaches the word it was already spelling. Take the strip
+            // down instead, the same as any other pick leaves it.
+            if (suggestion == caret.word) {
+                clearCaretWord()
+                _uiState.update {
+                    it.copy(suggestions = emptyList(), emojiSuggestions = emptyList(), octopus = emptyMap())
+                }
+                return
+            }
             // Read before [clearCaretWord] takes it down with the word it is
             // about (#135).
             val search = glideSearchOffer
@@ -24938,15 +24966,27 @@ open class WMKeyboardService : InputMethodService() {
         )
     }
 
-    /** The composing word as the learn path would see it, or "" when nothing is typed. */
-    private fun typedWord(): String = composing.toString().trim { !WordContext.isWordChar(it) }
+    /**
+     * The word the user is working on as the learn path would see it, or ""
+     * when there is none.
+     *
+     * The composing buffer, and when nothing is composing the word the caret
+     * is sitting inside ([caretWord]). A caret parked mid-word is the user
+     * reading that word back, and proofreading is exactly when they find the
+     * spelling the dictionary is missing — without the fall-through the menu
+     * offered no way to add it, because nothing was being typed (#263). Same
+     * rule as [WordMenuFacts.searchableStroke], which is about that word too.
+     */
+    private fun typedWord(): String = composing.toString()
+        .ifEmpty { caretWord?.word.orEmpty() }
+        .trim { !WordContext.isWordChar(it) }
 
     /**
-     * The word being typed when it could be added to the personal dictionary:
-     * long enough to be a word and not in there yet. About the composing
-     * word rather than the held chip, because the chips are known words by
-     * construction and the one the user wants in is the one they are typing
-     * (#100). Null otherwise.
+     * The word being typed, or read back, when it could be added to the
+     * personal dictionary: long enough to be a word and not in there yet.
+     * About that word rather than the held chip, because the chips are known
+     * words by construction and the one the user wants in is the one they are
+     * working on (#100). Null otherwise.
      */
     private fun addableTypedWord(): String? = typedWord().takeIf {
         // The menu proposes it, so it has to be a word (#185); a spelling the

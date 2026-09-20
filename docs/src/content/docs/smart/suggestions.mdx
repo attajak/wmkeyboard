@@ -64,6 +64,16 @@ Tap a candidate to insert it (see [Options](#options) for the space that follows
 
 When the chip is replacing a word that's already sitting in the field, it takes that word's capitals instead. This is the strip after a swipe or after handwriting, where the chips are other readings of the word that just landed, and it's also a word you tapped back into mid-sentence. So if auto-capitalization gave you "Van" at the start of a sentence and you swap it for "can" off the strip, you get "Can", and swapping a shouted "VAN" gets you "CAN".
 
+## When the cursor lands in a word
+
+Put the cursor inside a word you have already written, by tapping it or by walking the caret back with the spacebar, and the strip stops predicting the next word and answers about that one instead. You get its completions and corrections, the same as if you were typing it, plus the word itself as the top candidate, which with **Best suggestion in the middle** on is the middle chip.
+
+That chip is there for the hold, not the tap. Tapping it would replace the word with itself, so it does nothing but put the strip away. Holding it opens the [word menu](/smart/personal-dictionary/#from-the-suggestion-strip), which is how you add the word to your dictionary, open its card to respell or re-rank it, delete it, or block it, all without leaving the sentence. Holding any other chip reaches the same menu, and its **Add** and **Search all words** items are about the word the cursor is in rather than the chip you held.
+
+**Only offer new words** (<SettingsPath path="Typing / Suggestions" />, off) takes that chip away, the same way it takes away the slot the word you are typing normally holds. With it on, every slot offers something different from what is already there, and the word menu is then only a hold on some other chip away.
+
+A word a swipe wrote gets one thing more: the strip leads with that stroke's other readings instead of respellings of the letters standing in the field. See [Going back to a misread swipe](/typing/glide-typing/#going-back-to-a-misread-swipe).
+
 ## Punctuation chips
 
 Turn on **Punctuation suggestions** (off by default) and a short row of marks (<KeyCap>.</KeyCap> <KeyCap>,</KeyCap> <KeyCap>?</KeyCap> <KeyCap>!</KeyCap> <KeyCap>'</KeyCap>) rides after the word candidates, set off by a thin divider. Tap one and it commits exactly as typing that key would, so a full stop or comma is one tap away without switching to the symbols layout. Those five marks are only the default. A **Punctuation marks** text field appears under the toggle and takes up to twelve characters, one chip per character, so a Bengali danda or the Spanish inverted marks can sit here instead. Clearing the field puts the five back.
@@ -98,10 +108,9 @@ If you type in more than one language, the keyboard separately tracks which seco
 
 ## Removing an unwanted suggestion
 
-There's no long-press gesture on a suggestion chip. Every chip in the strip responds to a tap and nothing else. To get rid of a word the keyboard keeps offering, use one of two settings screens, depending on what you want:
+Press and hold the word on the strip. The menu that opens has **Never suggest "word"**, which puts it on the [suggestion blacklist](/smart/blacklist/), and **Delete "word"** for a word the keyboard can forget: one you learned, one still waiting to be learned, one in Android's dictionary, one you adjusted the rank of, or one from a word list you imported. **Edit** opens the word card, which carries both of those and the rank controls besides. The [Personal dictionary](/smart/personal-dictionary/#from-the-suggestion-strip) page describes the menu and the card in full, and **Word menu** under <SettingsPath path="Typing / Suggestions" /> picks which of the optional items it shows.
 
-- To stop a *learned* word from being offered, delete it from the [Personal dictionary](/smart/personal-dictionary/) screen.
-- To make sure a word is *never* offered or auto-corrected to, whether or not it's ever been learned, add it to the [suggestion blacklist](/smart/blacklist/) instead. That screen wants the word typed into an "Add word" dialog by hand. There's no way to seed it from a suggestion you just saw.
+The same two lists are editable from settings, if you would rather not chase the word on the strip: the [Personal dictionary](/smart/personal-dictionary/) screen for learned words, and the [suggestion blacklist](/smart/blacklist/) screen for words that should never be offered or corrected to, whether or not they were ever learned.
 
 ## Options
 
