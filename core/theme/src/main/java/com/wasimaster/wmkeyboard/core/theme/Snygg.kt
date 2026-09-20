@@ -412,6 +412,8 @@ internal class Stylesheet(
                 "smartbar actions editor tile",
                 "smartbar action tile icon",
                 "smartbar action tile text",
+                "smartbar actions editor tile grid",
+                "media bottom row button",
             )) {
                 put(name, EL_TILE)
             }
@@ -427,6 +429,7 @@ internal class Stylesheet(
             // itself said nothing.
             for (name in listOf(
                 "clipboard item popup", "clipboard item actions", "clipboard item popup action",
+                "clipboard item action", "clipboard item action icon", "clipboard item action text",
             )) {
                 put(name, EL_CARD_LIFTED)
             }
@@ -439,18 +442,53 @@ internal class Stylesheet(
             put("media emoji subheader", EL_SECONDARY_TEXT)
             for (name in listOf(
                 "smartbar actions editor", "subtype panel", "clipboard grid", "clipboard filter row",
-                "clipboard content",
+                "clipboard content", "clipboard clear all dialog", "clipboard clear all dialog buttons",
+                "media", "media bottom row",
             )) {
                 put(name, EL_SHEET)
             }
             // A panel's own heading. This keyboard draws panel chrome with the
             // suggestion strip's colour, so that is what these answer for.
+            // Panel headings and the titles of the clipboard's own notices.
+            // This keyboard draws all of them with the strip's colour, through
+            // the Material scheme it builds from the theme (`onSurface`).
             for (name in listOf(
                 "clipboard header", "clipboard header text",
                 "smartbar actions editor header", "subtype panel header",
+                "clipboard history disabled title", "clipboard history locked title",
             )) {
                 put(name, EL_PANEL_HEADER)
             }
+            // The body of those notices is the quieter text (`onSurfaceVariant`).
+            for (name in listOf(
+                "clipboard history disabled message", "clipboard history locked message",
+                "clipboard clear all dialog message",
+            )) {
+                put(name, EL_SECONDARY_TEXT)
+            }
+            // A button inside a panel draws in the accent (`primary`).
+            for (name in listOf(
+                "clipboard history disabled button", "clipboard clear all dialog button",
+                "smartbar actions overflow customize button",
+            )) {
+                put(name, EL_PANEL_BUTTON)
+            }
+            // Icon buttons on a panel's own chrome take the toolbar's colours.
+            for (name in listOf(
+                "clipboard header button", "smartbar actions editor header button",
+                "clipboard filter chip icon",
+            )) {
+                put(name, EL_PANEL_TOOL)
+            }
+            // The rows of the language picker draw with the popup's text.
+            for (name in listOf(
+                "subtype panel list", "subtype panel list item",
+                "subtype panel list item text", "subtype panel list item icon leading",
+            )) {
+                put(name, EL_MENU_ROW)
+            }
+            // The emoji board's keys sit on the board and take its text colour.
+            for (name in listOf("media emoji key", "emoji key")) put(name, EL_EMOJI_KEY)
 
             // The emoji board. Its long-press bubble is the same bubble the
             // keys use, so it stands in where a sheet styles one and not the
@@ -537,6 +575,10 @@ internal const val EL_HINT = "hint"
 internal const val EL_POPUP = "popup"
 internal const val EL_POPUP_ITEM = "popupItem"
 internal const val EL_PANEL_HEADER = "panelHeader"
+internal const val EL_PANEL_BUTTON = "panelButton"
+internal const val EL_PANEL_TOOL = "panelTool"
+internal const val EL_MENU_ROW = "menuRow"
+internal const val EL_EMOJI_KEY = "emojiKey"
 internal const val EL_TOOLBAR = "toolbar"
 internal const val EL_TOOL = "tool"
 internal const val EL_TOOL_TOGGLE = "toolToggle"

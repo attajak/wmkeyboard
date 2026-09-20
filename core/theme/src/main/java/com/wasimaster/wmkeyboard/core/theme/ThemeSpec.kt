@@ -234,11 +234,12 @@ data class ThemeSpec(
     val suggestionBarBackground: Long? = null,
     /**
      * Fill of the side rail shown in one-handed mode, and the colour of the two
-     * buttons on it. Null follows the board and the toolbar icon.
+     * buttons on it.
      *
-     * The rail used to draw in the settings app's Material colours, so it
-     * ignored the keyboard theme completely; these are what let a theme say
-     * what it should look like.
+     * Null leaves the fill transparent, so the board runs on behind the rail,
+     * and draws the glyphs in [secondaryText] — which is what the rail already
+     * did. The rail was never unthemed; it simply had no way to differ from the
+     * board, and a stylesheet states it as its own element.
      */
     val oneHandedPanelBackground: Long? = null,
     val oneHandedPanelIcon: Long? = null,

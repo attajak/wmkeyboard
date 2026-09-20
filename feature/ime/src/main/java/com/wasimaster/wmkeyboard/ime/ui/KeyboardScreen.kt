@@ -2392,10 +2392,11 @@ private fun OneHandedRail(
     onExit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // The rail used to draw in MaterialTheme colours, which are the *settings
-    // app's*, so it ignored the keyboard theme entirely and sat as a grey strip
-    // beside a themed board. It wears the board's own fill and the toolbar's
-    // glyph colour now, which is also what a FlorisBoard theme states for it.
+    // The rail already followed the theme, through the Material scheme the
+    // keyboard builds from it (see schemeFor), so this is not a fix for an
+    // unthemed surface. What it could not do was differ from the board, which
+    // is what a stylesheet states for it as its own element. The defaults are
+    // the colours it already drew.
     val kb = LocalKbTheme.current
     Column(
         modifier = modifier.background(kb.oneHandedPanel),

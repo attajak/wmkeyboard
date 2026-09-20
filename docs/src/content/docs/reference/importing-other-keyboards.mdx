@@ -97,8 +97,9 @@ Colours mostly land. These all have somewhere to go:
 - **The shape of a single key.** A theme that makes only the enter key round keeps it round here.
 - **Shadows.** The lift under the keys, the popup, the panel cards and the toolbar tools. Nearly every bordered theme raises its keys 2 dp, and without this they came across flat.
 - **The selected highlight** in a popup: the colour behind the letter your finger is on when you hold a key, and behind the selected row of the language list.
-- **The one-handed rail** beside the keyboard, which used to ignore the theme completely.
+- **The one-handed rail** beside the keyboard, which had no way to differ from the board before.
 - The floating keyboard's handle, which takes the toolbar's own colours here.
+- **The panels.** A clipboard notice's heading and body, the buttons inside a panel, the icon buttons on a panel's header, the rows of the language list, the emoji keys, and the clipboard's dialogs. None of these is a separate colour here, so each lands on the one the keyboard already draws it with.
 - A board background image and a key texture.
 
 **Colours that follow the wallpaper are read too.** A FlorisBoard theme may name a Material You role, such as `dynamic-dark-color(surfaceContainerLow)`, instead of a fixed colour. On Android 12 and later the app resolves those against the same system palette FlorisBoard reads, so a theme written that way arrives with its colours rather than empty. Two of the most-used theme packs are written entirely this way.
@@ -112,7 +113,7 @@ FlorisBoard styles a much larger set of keyboard parts than this app draws, so t
 - **Fonts.** A theme here does name a font, but it names one that is already installed as a separate add-on, so there is nothing for a font file inside a `.flex` to become. The dialog says so. Install the font yourself and pick it in the theme editor.
 - **Shadow colours.** The lift carries, the colour it is drawn in does not, and Android ignores one below version 9 anyway.
 - **Text wrapping and alignment.** How many lines a label may take, where it is cut and how it is aligned are set by this app, not by the theme.
-- **Elements this keyboard does not have.** FlorisBoard's clipboard browser has dialogs and a landscape editor that this app either draws differently or does not have.
+- **The landscape text editor.** When a field fills the screen in landscape, Android draws that editor, not this app, so a theme cannot colour it here.
 
 If a key's text colour would be genuinely unreadable on what sits behind it, the app drops the imported colour and picks a readable one, and says so. The test is made against what you actually see: a borderless theme's keys are transparent, so its labels are judged against the board showing through rather than against the empty key.
 

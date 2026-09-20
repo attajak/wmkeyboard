@@ -116,7 +116,12 @@ data class KbTheme(
     val suggestionBar: Color?,
     /** Fill for the system navigation bar's band; null inherits the board. */
     val navigationBar: Color?,
-    /** One-handed side rail: its fill, and the two glyphs on it. */
+    /**
+     * One-handed side rail: its fill, and the two glyphs on it.
+     *
+     * The fill is transparent unless a theme names one, so the board's own
+     * gradient, image or animation runs on behind the rail as it always did.
+     */
     val oneHandedPanel: Color,
     val oneHandedPanelIcon: Color,
     val backgroundImage: String?,
@@ -540,7 +545,7 @@ internal fun defaultKbTheme(
         // are the board, which is exactly what null means.
         suggestionBar = null,
         navigationBar = null,
-        oneHandedPanel = board,
+        oneHandedPanel = Color.Transparent,
         oneHandedPanelIcon = scheme.onSurfaceVariant,
         backgroundImage = null,
         backgroundImageLandscape = null,
@@ -671,9 +676,13 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
         boardGradient = spec.boardGradient,
         suggestionBar = spec.suggestionBarBackground?.let(::colorOf),
         navigationBar = spec.navigationBarBackground?.let(::colorOf),
-        oneHandedPanel = spec.oneHandedPanelBackground?.let(::colorOf) ?: board,
-        oneHandedPanelIcon = spec.oneHandedPanelIcon?.let(::colorOf)
-            ?: spec.toolbarIcon?.let(::colorOf) ?: secondary,
+        // Transparent, not the board colour: the rail sits *on* the board, and
+        // painting a flat fill over it would cover a board gradient, image or
+        // animation. Only a theme that asks for a fill gets one.
+        oneHandedPanel = spec.oneHandedPanelBackground?.let(::colorOf) ?: Color.Transparent,
+        // `secondary`, which is exactly what the rail drew through the Material
+        // bridge before it had a field of its own.
+        oneHandedPanelIcon = spec.oneHandedPanelIcon?.let(::colorOf) ?: secondary,
         backgroundImage = spec.backgroundImage,
         backgroundImageLandscape = spec.backgroundImageLandscape,
         backgroundImageOpacity = spec.backgroundImageOpacity,

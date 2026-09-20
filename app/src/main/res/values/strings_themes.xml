@@ -272,7 +272,7 @@
     <string name="theme_popup_selected_body">The colour behind the letter your finger is on when you hold a key, and behind the selected row of the language list.</string>
     <string name="theme_popup_selected_text_title">Selected text</string>
     <string name="theme_one_handed_title">One-handed rail</string>
-    <string name="theme_one_handed_body">The strip beside the keyboard in one-handed mode.</string>
+    <string name="theme_one_handed_body">The strip beside the keyboard in one-handed mode. On Auto it stays clear, so the board shows through it.</string>
     <string name="theme_one_handed_icon_title">One-handed rail icons</string>
 
     <!-- Theme editor: corners. -->

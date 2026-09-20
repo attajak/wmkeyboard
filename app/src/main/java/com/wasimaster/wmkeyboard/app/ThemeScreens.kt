@@ -2198,8 +2198,8 @@ fun ThemeEditorScreen(
             )
         }
         item {
-            // The rail beside the board in one-handed mode. It used to draw in
-            // the settings app's colours and ignore the theme entirely.
+            // The rail beside the board in one-handed mode. Auto leaves it
+            // transparent, so the board runs on behind it.
             NullableColorRow(
                 stringResource(R.string.theme_one_handed_title),
                 theme.oneHandedPanelBackground,
@@ -2209,13 +2209,17 @@ fun ThemeEditorScreen(
                 onChange = { update { t -> t.copy(oneHandedPanelBackground = it) } },
             )
         }
-        item {
-            NullableColorRow(
-                stringResource(R.string.theme_one_handed_icon_title),
-                theme.oneHandedPanelIcon,
-                fallback = theme.toolbarIcon ?: theme.keyText,
-                onChange = { update { t -> t.copy(oneHandedPanelIcon = it) } },
-            )
+        // Nested: the glyphs only need their own colour once the rail has a
+        // fill of its own to sit on.
+        if (theme.oneHandedPanelBackground != null) {
+            item {
+                NullableColorRow(
+                    stringResource(R.string.theme_one_handed_icon_title),
+                    theme.oneHandedPanelIcon,
+                    fallback = theme.secondaryText ?: theme.suggestionText ?: theme.keyText,
+                    onChange = { update { t -> t.copy(oneHandedPanelIcon = it) } },
+                )
+            }
         }
         item {
             ListItem(
@@ -3005,13 +3009,15 @@ fun ThemeEditorScreen(
                 onChange = { update { t -> t.copy(popupSelectedBackground = it) } },
             )
         }
-        item {
-            NullableColorRow(
-                stringResource(R.string.theme_popup_selected_text_title),
-                theme.popupSelectedText,
-                fallback = onColorFor(theme.popupSelectedBackground ?: theme.accent),
-                onChange = { update { t -> t.copy(popupSelectedText = it) } },
-            )
+        theme.popupSelectedBackground?.let { highlight ->
+            item {
+                NullableColorRow(
+                    stringResource(R.string.theme_popup_selected_text_title),
+                    theme.popupSelectedText,
+                    fallback = onColorFor(highlight),
+                    onChange = { update { t -> t.copy(popupSelectedText = it) } },
+                )
+            }
         }
         item {
             // The list menus (language picker, clipboard and emoji menus)

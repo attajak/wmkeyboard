@@ -618,6 +618,64 @@ class SnyggParityTest {
         assertEquals(0xFF4CAF50, t.toolCircleActiveIcon)
     }
 
+    /**
+     * The clipboard's own notices, its dialogs and the language picker's rows.
+     * None of these is a field of its own here: the keyboard builds a Material
+     * scheme out of the theme (`schemeFor`), so a panel's heading is the strip
+     * colour, its body is the quieter text and its buttons are the accent.
+     * Mapping them onto those is what makes a theme dress the panels.
+     */
+    @Test
+    fun `panel notices, dialogs and menu rows land on the colours that draw them`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "clipboard-history-disabled-title": { "foreground": "#E4E4EC" },
+              "clipboard-history-disabled-message": { "foreground": "#8A8A94" },
+              "clipboard-history-disabled-button": { "background": "#4CAF50" },
+              "clipboard-header-button": { "background": "#22222A", "foreground": "#9AA0A6" },
+              "subtype-panel": { "background": "#1A1A22", "foreground": "#DDDDE4" }
+            }
+            """,
+        )
+        assertEquals(0xFFE4E4EC, t.suggestionText)
+        assertEquals(0xFF8A8A94, t.secondaryText)
+        assertEquals(0xFF4CAF50, t.accent)
+        assertEquals(0xFF9AA0A6, t.toolbarIcon)
+        assertEquals(0xFF22222A, t.toolCircleBackground)
+        // The picker and the bottom sheets draw with the bubble's colours.
+        assertEquals(0xFF1A1A22, t.popupBackground)
+        assertEquals(0xFFDDDDE4, t.popupText)
+    }
+
+    /**
+     * A fallback must never beat a rule that names the surface outright. The
+     * panel chrome answers only where the real element said nothing.
+     */
+    @Test
+    fun `a panel fallback never overrides the element that means that surface`() {
+        val t = theme(
+            """
+            {
+              "window": { "background": "#101014" },
+              "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+              "key-popup-box": { "background": "#20202A", "foreground": "#F0F0F4" },
+              "smartbar-candidate-word": { "foreground": "#CCCCD4" },
+              "smartbar-action-key": { "foreground": "#AAAAB4" },
+              "clipboard-header": { "foreground": "#010101" },
+              "clipboard-header-button": { "foreground": "#020202" },
+              "subtype-panel": { "background": "#030303", "foreground": "#040404" }
+            }
+            """,
+        )
+        assertEquals(0xFFCCCCD4, t.suggestionText)
+        assertEquals(0xFFAAAAB4, t.toolbarIcon)
+        assertEquals(0xFF20202A, t.popupBackground)
+        assertEquals(0xFFF0F0F4, t.popupText)
+    }
+
     // ---- what the user is told ----
 
     /**
@@ -705,6 +763,10 @@ class SnyggParityTest {
             EL_POPUP_ITEM to "key-popup-element",
             EL_PANEL_HEADER to "clipboard-header",
             EL_ONE_HANDED to "one-handed-panel",
+            EL_PANEL_BUTTON to "clipboard-history-disabled-button",
+            EL_PANEL_TOOL to "clipboard-header-button",
+            EL_MENU_ROW to "subtype-panel-list-item-text",
+            EL_EMOJI_KEY to "media-emoji-key",
             EL_SHEET to "subtype-panel",
             EL_EMOJI_TAB to "media-emoji-tab",
             EL_GLIDE to "glide-trail",

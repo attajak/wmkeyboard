@@ -110,9 +110,15 @@ internal class SnyggMapper(private val style: Stylesheet) {
             hintText = color(hint, PROP_FOREGROUND)?.takeIf { it.isVisible() },
             hintFontScale = scaleFrom(hint?.value(PROP_FONT_SIZE), DEFAULT_HINT_SP, HintFontScaleBounds),
             // Popups.
-            popupBackground = color(popup, PROP_BACKGROUND),
+            // The bottom sheets and the language picker are drawn with the
+            // popup's own colours here, so a sheet that styles only those still
+            // dresses the bubble.
+            popupBackground = color(popup, PROP_BACKGROUND)
+                ?: color(sheet, PROP_BACKGROUND),
             popupText = color(popup, PROP_FOREGROUND)
-                ?: color(style.base(EL_POPUP_MORE), PROP_FOREGROUND),
+                ?: color(style.base(EL_POPUP_MORE), PROP_FOREGROUND)
+                ?: color(style.base(EL_MENU_ROW), PROP_FOREGROUND)
+                ?: color(sheet, PROP_FOREGROUND),
             popupBorderColor = color(popup, PROP_BORDER_COLOR),
             popupBorderWidthDp = snyggDp(popup?.value(PROP_BORDER_WIDTH)) ?: 0f,
             popupElevationDp = elevationOf(popup),
@@ -130,9 +136,11 @@ internal class SnyggMapper(private val style: Stylesheet) {
             oneHandedPanelBackground = color(style.base(EL_ONE_HANDED), PROP_BACKGROUND),
             oneHandedPanelIcon = color(style.base(EL_ONE_HANDED), PROP_FOREGROUND),
             toolbarIcon = color(tool, PROP_FOREGROUND)
+                ?: color(style.base(EL_PANEL_TOOL), PROP_FOREGROUND)
                 ?: color(style.base(EL_INCOGNITO), PROP_FOREGROUND)
                 ?: color(board, PROP_FOREGROUND),
-            toolCircleBackground = color(tool, PROP_BACKGROUND),
+            toolCircleBackground = color(tool, PROP_BACKGROUND)
+                ?: color(style.base(EL_PANEL_TOOL), PROP_BACKGROUND),
             toolCircleActiveBackground = color(toolToggle, PROP_BACKGROUND),
             toolCircleActiveIcon = color(toolToggle, PROP_FOREGROUND),
             toolElevationDp = elevationOf(toolToggle ?: tool) ?: 0f,
@@ -141,7 +149,8 @@ internal class SnyggMapper(private val style: Stylesheet) {
             // A panel heading draws with the strip's colour here, so it is the
             // fallback rather than a field of its own.
             suggestionText = color(candidate, PROP_FOREGROUND)
-                ?: color(style.base(EL_PANEL_HEADER), PROP_FOREGROUND),
+                ?: color(style.base(EL_PANEL_HEADER), PROP_FOREGROUND)
+                ?: color(style.base(EL_EMOJI_KEY), PROP_FOREGROUND),
             secondaryText = color(style.base(EL_SECONDARY_TEXT), PROP_FOREGROUND)?.takeIf { it.isVisible() },
             dividerColor = color(style.base(EL_DIVIDER), PROP_FOREGROUND)?.takeIf { it.isVisible() },
             // Chips and panel cards.
@@ -211,6 +220,8 @@ internal class SnyggMapper(private val style: Stylesheet) {
             color(style.base(EL_EMOJI_TAB, FOCUS), PROP_FOREGROUND),
             color(style.base(EL_TOOL_TOGGLE), PROP_BACKGROUND),
             color(style.base(EL_CANDIDATE), PROP_FOREGROUND),
+            color(style.base(EL_PANEL_BUTTON), PROP_BACKGROUND),
+            color(style.base(EL_PANEL_BUTTON), PROP_FOREGROUND),
         )
         val pick = candidates.firstOrNull { it.isVisible() }
             ?: return ThemeSpec(id = "", name = "").accent
@@ -448,9 +459,13 @@ internal val SNYGG_CONSUMED: Map<String, Set<String>> = mapOf(
     EL_CARD_LIFTED to setOf(PROP_BACKGROUND, PROP_FOREGROUND),
     EL_INCOGNITO to setOf(PROP_FOREGROUND),
     EL_POPUP_MORE to setOf(PROP_FOREGROUND),
-    EL_SHEET to setOf(PROP_SHAPE),
+    EL_SHEET to setOf(PROP_SHAPE, PROP_BACKGROUND, PROP_FOREGROUND),
     EL_POPUP_ITEM to setOf(PROP_BACKGROUND, PROP_FOREGROUND),
     EL_PANEL_HEADER to setOf(PROP_FOREGROUND),
+    EL_PANEL_BUTTON to setOf(PROP_BACKGROUND, PROP_FOREGROUND),
+    EL_PANEL_TOOL to setOf(PROP_BACKGROUND, PROP_FOREGROUND),
+    EL_MENU_ROW to setOf(PROP_FOREGROUND),
+    EL_EMOJI_KEY to setOf(PROP_FOREGROUND),
     EL_EMOJI_TAB to setOf(PROP_FOREGROUND),
     EL_GLIDE to setOf(PROP_FOREGROUND, PROP_BACKGROUND),
 )
