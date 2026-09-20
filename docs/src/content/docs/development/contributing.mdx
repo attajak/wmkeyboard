@@ -140,11 +140,11 @@ A few things worth knowing before you start on any of these:
   (`generate_gemoji.py`, `export_keyword_pack.py`, `generate_catalog.py`,
   `add_names.py`, `generate_dict_catalog.py`, `generate_animated.py`).
 - **Built-in themes are Kotlin, not data files.** There are eleven built-in
-  theme families, 28 themes once the colour variants nested inside them are
+  theme families, 29 themes once the colour variants nested inside them are
   counted. Most are `themeFromSeed(...).copy(...)` calls in the
   `BuiltInThemes` list in `core/theme/.../ThemeSpec.kt`. Six more sit in
   `core/theme/.../PaletteThemes.kt`. Five are ports of well-known editor
-  palettes (Dracula, Nord, Solarized, Catppuccin, Tokyo Night) that carry
+  palettes (Dracula with Alucard, Nord, Solarized, Catppuccin, Tokyo Night) that carry
   their own attribution rules. The sixth is the original Cyberpunk palette,
   which has no upstream to attribute. Either way, contributing one means a
   Kotlin change to `:core:theme`. The

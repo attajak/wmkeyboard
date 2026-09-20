@@ -62,6 +62,15 @@ class BuiltInThemeFamilyTest {
     }
 
     @Test
+    fun `Alucard is Dracula's light look`() {
+        val dracula = BuiltInThemes.first { it.id == "builtin_dracula" }
+        val alucard = dracula.variants.single()
+        assertEquals("builtin_alucard", alucard.id)
+        assertEquals(false, alucard.dark)
+        assertEquals(true, dracula.dark)
+    }
+
+    @Test
     fun `built-ins never carry a familyName`() {
         // Built-in family labels come from resources so they translate; the
         // stored field is the custom themes' mechanism.

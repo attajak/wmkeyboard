@@ -77,6 +77,7 @@
     <!-- ================================================================== -->
 
     <string name="core_theme_builtin_dracula_label" translatable="false">Dracula</string>
+    <string name="core_theme_builtin_alucard_label" translatable="false">Alucard</string>
     <string name="core_theme_builtin_nord_label" translatable="false">Nord</string>
     <string name="core_theme_builtin_solarized_dark_label" translatable="false">Solarized Dark</string>
     <string name="core_theme_builtin_solarized_light_label" translatable="false">Solarized Light</string>
@@ -100,7 +101,8 @@
     <string name="core_theme_family_snow_label">Pastel</string>
     <!-- The family of the themes that paint a gradient behind the keys. -->
     <string name="core_theme_family_gradient_label">Gradients</string>
-    <!-- The names of these two families are project names. Keep in English. -->
+    <!-- The names of these three families are project names. Keep in English. -->
+    <string name="core_theme_family_dracula_label" translatable="false">Dracula</string>
     <string name="core_theme_family_solarized_label" translatable="false">Solarized</string>
     <string name="core_theme_family_catppuccin_label" translatable="false">Catppuccin</string>
 

@@ -7,7 +7,8 @@ import com.wasimaster.wmkeyboard.theme.R
  * original neon theme.
  *
  * Every hex here is copied verbatim from the upstream palette definition —
- * Dracula's spec, Nord's `nord0..nord15`, Solarized's `base03..base3` +
+ * Dracula's spec (both halves of it, Dracula and Alucard), Nord's
+ * `nord0..nord15`, Solarized's `base03..base3` +
  * accents, Catppuccin's `palette.json`, Tokyo Night's theme JSON — so a user
  * who knows the scheme from their editor sees the same colours on the
  * keyboard. Where a keyboard needs a background step the source palette does
@@ -28,6 +29,45 @@ import com.wasimaster.wmkeyboard.theme.R
  * is; nothing here claims endorsement by those projects. "Cyberpunk" is our
  * own palette with no upstream, so it carries no attribution.
  */
+// ---- Alucard ----------------------------------------------------------
+// Dracula's own light counterpart, from the same spec page ("Alucard
+// Classic"): cream Background for the board, Selection for the key faces,
+// Foreground for the labels, Purple for the accent. Its UI background
+// variants supply the recessed and floating steps the keyboard needs, the
+// way Dracula's BGDark/BGLight do.
+private val Alucard = ThemeSpec(
+    id = "builtin_alucard",
+    name = "Alucard",
+    dark = false,
+    boardBackground = 0xFFFFFBEB, // Background
+    keyBackground = 0xFFCFCFDE, // Selection
+    keyText = 0xFF1F1F1F, // Foreground
+    // Background Darker rather than the Background Dark rung that mirrors
+    // Dracula's BGDark: Selection already sits at Background Dark's
+    // lightness, so that rung leaves modifiers and letter keys 1.05:1 apart.
+    modifierKeyBackground = 0xFFBCBAB3, // Background Darker
+    modifierKeyText = 0xFF1F1F1F, // Foreground
+    enterKeyBackground = 0xFF644AC9, // Purple
+    // Pale label on purple, the mirror of Dracula's dark one: Alucard's
+    // purple is the dark end of its palette, and the board reads 6:1 on it.
+    enterKeyText = 0xFFFFFBEB,
+    // Selection pulled 45% toward Comment, not Comment itself: Comment is
+    // dark enough to drop the Foreground label to 2.8:1, the same trap
+    // Solarized hits from the other side.
+    pressedKeyBackground = 0xFFA2A09C,
+    accent = 0xFF644AC9, // Purple
+    gestureTrailColor = 0xFFA3144D, // Pink
+    popupBackground = 0xFFEFEDDC, // the palette's floating-element background
+    popupText = 0xFF1F1F1F,
+    toolbarIcon = 0xFF1F1F1F,
+    toolCircleBackground = 0xFFCFCFDE, // Selection
+    // Purple reads at 3.2:1 here, so the active circle keeps the accent icon
+    // instead of falling back to black.
+    toolCircleActiveBackground = 0xFFBCBAB3, // Background Darker
+    chipBackground = 0xFFDEDCCF, // Background Light
+    suggestionText = 0xFF1F1F1F,
+)
+
 // ---- Solarized light --------------------------------------------------
 // Same palette inverted the way Solarized itself inverts: base3 board,
 // base2 key "highlights", base01 text. Same outline trick, same reason as
@@ -169,6 +209,10 @@ val PaletteThemes: List<ThemeSpec> = listOf(
         toolCircleActiveBackground = 0xFF6272A4,
         chipBackground = 0xFF21222C,
         suggestionText = 0xFFF8F8F2,
+        // Alucard is the palette's own light half — Dracula spelled
+        // backwards — so it travels as this family's one variant, the way
+        // Solarized Light does.
+        variants = listOf(Alucard),
     ),
 
     // ---- Nord ---------------------------------------------------------
@@ -341,7 +385,7 @@ val PaletteThemes: List<ThemeSpec> = listOf(
  * The name resource of every theme in [PaletteThemes], keyed by the id of the
  * theme. [builtInThemeNameRes] reads this table.
  *
- * The seven ported schemes keep the name of the upstream project, so those
+ * The ported schemes keep the name of the upstream project, so those
  * resources are marked as not translatable. The `name` in each [ThemeSpec]
  * above stays in English on purpose: that value goes into an exported
  * `.wmtheme.json` file and into the name of a copy the user makes, while the
@@ -349,6 +393,7 @@ val PaletteThemes: List<ThemeSpec> = listOf(
  */
 internal val PaletteThemeNameRes: Map<String, Int> = mapOf(
     "builtin_dracula" to R.string.core_theme_builtin_dracula_label,
+    "builtin_alucard" to R.string.core_theme_builtin_alucard_label,
     "builtin_nord" to R.string.core_theme_builtin_nord_label,
     "builtin_solarized_dark" to R.string.core_theme_builtin_solarized_dark_label,
     "builtin_solarized_light" to R.string.core_theme_builtin_solarized_light_label,
@@ -361,11 +406,12 @@ internal val PaletteThemeNameRes: Map<String, Int> = mapOf(
 )
 
 /**
- * The family labels of the two palette families, keyed by the parent's id.
+ * The family labels of the three palette families, keyed by the parent's id.
  * [builtInThemeFamilyNameRes] reads this table; the labels are the upstream
  * projects' names, so they are not translatable, same as the theme names.
  */
 internal val PaletteThemeFamilyNameRes: Map<String, Int> = mapOf(
+    "builtin_dracula" to R.string.core_theme_family_dracula_label,
     "builtin_solarized_dark" to R.string.core_theme_family_solarized_label,
     "builtin_catppuccin_mocha" to R.string.core_theme_family_catppuccin_label,
 )

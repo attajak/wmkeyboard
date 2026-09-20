@@ -992,10 +992,11 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Nebula — 3-stop linear board gradient, translucent keys
     - Shape showcases — Bubble (pill keys, radial glow) and Facet (cut corners, 1dp border, key sheen)
     - Animated built-ins — Sunset drift (FLOW), Aurora (HUE_CYCLE at 0.6x), Cyberpunk (FLOW at 0.7x)
-  - Editor colour-scheme ports `RARE` — 10 palette themes in 6 entries, hexes copied verbatim from upstream specs
+  - Editor colour-scheme ports `RARE` — 11 palette themes in 6 entries, hexes copied verbatim from upstream specs
     - Catppuccin family — All 4 upstream flavours: Mocha, Latte, Frappé, Macchiato
     - Solarized family — Dark + Light; both draw a base01/base1 outline because the spec's tones are 1.2:1
-    - Dracula, Nord, Tokyo Night — Surface ramps mapped to board/key/modifier/pressed roles
+    - Dracula family — Dracula plus Alucard, its upstream light half; Alucard presses to a Selection/Comment blend because Comment alone leaves the label at 2.8:1
+    - Nord, Tokyo Night — Surface ramps mapped to board/key/modifier/pressed roles
     - Cyberpunk — Original neon palette; cut keys, translucent faces, neon outline, animated gradient
     - Per-theme WCAG check — Contrast checked per element; deviations from upstream documented in code comments
     - MIT notices shipped — assets/licenses/mit-color-themes.txt listed in the About screen

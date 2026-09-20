@@ -5,7 +5,7 @@ The built-in themes named below reproduce the colour palettes of the
 following projects. Each is distributed under the MIT License, reproduced
 once at the end of this file; the copyright notices are listed here.
 
-  Dracula  ("Dracula" theme)
+  Dracula  ("Dracula" and "Alucard" themes)
   Copyright (c) 2023 Dracula Theme
   https://github.com/dracula/dracula-theme
 
