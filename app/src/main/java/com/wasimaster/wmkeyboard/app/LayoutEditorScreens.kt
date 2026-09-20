@@ -1580,31 +1580,29 @@ internal fun KeyLayoutEditorScreen(
         }
         // A secondary layout types with the language of the layout under it,
         // so neither of these means anything on one.
-        if (!secondary) {
-            item {
-                WmRow(
-                    title = stringResource(R.string.layout_editor_language_title),
-                    subtitle = layout.langId.takeIf { it.isNotBlank() }
-                        ?.let { LanguageRegistry.byId(it).displayName }
-                        ?: stringResource(R.string.layout_editor_language_unset),
-                    onClick = { languagePickerOpen = true },
-                )
-            }
-            item {
-                // Null is "whatever this script normally uses", which is the right
-                // answer for almost every layout; the override exists because a
-                // phonetic and a direct grid for the same language differ only here.
-                val inheritLabel = stringResource(R.string.layout_editor_composer_inherit)
-                ChoiceSetting(
-                    title = R.string.layout_editor_composer_title,
-                    subtitle = stringResource(R.string.layout_editor_composer_subtitle),
-                    options = listOf<Pair<ComposerType?, String>>(null to inheritLabel) +
-                        ComposerType.entries.map { it to composerLabel(it) },
-                    selected = layout.composer,
-                    info = stringResource(R.string.layout_editor_composer_info),
-                    detail = { type -> ChoiceDetail(stringResource(composerDescRes(type))) },
-                ) { chosen -> edit { it.copy(composer = chosen) } }
-            }
+        item(visible = !secondary) {
+            WmRow(
+                title = stringResource(R.string.layout_editor_language_title),
+                subtitle = layout.langId.takeIf { it.isNotBlank() }
+                    ?.let { LanguageRegistry.byId(it).displayName }
+                    ?: stringResource(R.string.layout_editor_language_unset),
+                onClick = { languagePickerOpen = true },
+            )
+        }
+        item(visible = !secondary) {
+            // Null is "whatever this script normally uses", which is the right
+            // answer for almost every layout; the override exists because a
+            // phonetic and a direct grid for the same language differ only here.
+            val inheritLabel = stringResource(R.string.layout_editor_composer_inherit)
+            ChoiceSetting(
+                title = R.string.layout_editor_composer_title,
+                subtitle = stringResource(R.string.layout_editor_composer_subtitle),
+                options = listOf<Pair<ComposerType?, String>>(null to inheritLabel) +
+                    ComposerType.entries.map { it to composerLabel(it) },
+                selected = layout.composer,
+                info = stringResource(R.string.layout_editor_composer_info),
+                detail = { type -> ChoiceDetail(stringResource(composerDescRes(type))) },
+            ) { chosen -> edit { it.copy(composer = chosen) } }
         }
     }
 
@@ -1963,38 +1961,36 @@ internal fun KeyLayoutEditorScreen(
             }
         }
         selection?.let { ref ->
-            if (ref.row in rows.indices && rows[ref.row].size > 1) {
-                item {
-                    ReorderSetting(
-                        title = stringResource(
-                            R.string.layout_editor_reorder_keys_title,
-                            ref.row + 1,
-                        ),
-                        dialogTitle = stringResource(R.string.layout_editor_key_order_dialog_title),
-                        // Positions, not the keys themselves — the same shape the
-                        // row reorder above uses, and for the stronger of its two
-                        // reasons: a list of keys carries this composition's copy
-                        // of them, so writing it back would put a key edited a
-                        // frame ago back the way it was. It also disambiguates a
-                        // row holding two identical keys.
-                        items = rows[ref.row].indices.toList(),
-                        label = { keyReorderLabel(context, rows[ref.row][it]) },
-                    ) { order ->
-                        editRows { r ->
-                            r.mapIndexed { i, row ->
-                                // Guarded because the stored row may have gained
-                                // or lost a key since the dialog opened; a
-                                // permutation that no longer fits it is dropped
-                                // rather than allowed to delete keys.
-                                if (i == ref.row && order.size == row.size) {
-                                    order.map { row[it] }
-                                } else {
-                                    row
-                                }
+            item(visible = ref.row in rows.indices && rows[ref.row].size > 1) {
+                ReorderSetting(
+                    title = stringResource(
+                        R.string.layout_editor_reorder_keys_title,
+                        ref.row + 1,
+                    ),
+                    dialogTitle = stringResource(R.string.layout_editor_key_order_dialog_title),
+                    // Positions, not the keys themselves — the same shape the
+                    // row reorder above uses, and for the stronger of its two
+                    // reasons: a list of keys carries this composition's copy
+                    // of them, so writing it back would put a key edited a
+                    // frame ago back the way it was. It also disambiguates a
+                    // row holding two identical keys.
+                    items = rows[ref.row].indices.toList(),
+                    label = { keyReorderLabel(context, rows[ref.row][it]) },
+                ) { order ->
+                    editRows { r ->
+                        r.mapIndexed { i, row ->
+                            // Guarded because the stored row may have gained
+                            // or lost a key since the dialog opened; a
+                            // permutation that no longer fits it is dropped
+                            // rather than allowed to delete keys.
+                            if (i == ref.row && order.size == row.size) {
+                                order.map { row[it] }
+                            } else {
+                                row
                             }
                         }
-                        selection = null
                     }
+                    selection = null
                 }
             }
         }
@@ -2018,38 +2014,34 @@ internal fun KeyLayoutEditorScreen(
         // keyboard lands anyway. The subtitle carries the warning the issue
         // asked for, and the Problems list repeats it while the flag is on.
         // `edit`, not coalesced: one deliberate flip is one undo step.
-        if (layer != LayoutLayer.LETTERS || secondary) {
-            item {
-                ToggleSetting(
-                    R.string.layout_editor_persist_title,
-                    stringResource(R.string.layout_editor_persist_subtitle),
-                    layout.layer(layer)?.persistent ?: false,
-                    info = stringResource(R.string.layout_editor_persist_info),
-                ) { on -> editLayer { it.copy(persistent = on) } }
-            }
+        item(visible = layer != LayoutLayer.LETTERS || secondary) {
+            ToggleSetting(
+                R.string.layout_editor_persist_title,
+                stringResource(R.string.layout_editor_persist_subtitle),
+                layout.layer(layer)?.persistent ?: false,
+                info = stringResource(R.string.layout_editor_persist_info),
+            ) { on -> editLayer { it.copy(persistent = on) } }
         }
         // Issue #61 again, one layer down: a symbols page in its own colours.
         // Not on a secondary layout, whose one grid is the layout.
-        if (!secondary) {
-            item {
-                val layerThemeId = layout.layer(layer)?.themeId
-                WmRow(
-                    title = stringResource(
-                        R.string.layout_editor_layer_theme_title,
-                        stringResource(layerTitleRes(layer)),
-                    ),
-                    subtitle = layerThemeId?.let { themeDisplayName(settings, it) }
-                        ?: stringResource(R.string.layout_editor_layer_theme_inherit_subtitle),
-                    trailing = {
-                        if (layerThemeId != null) {
-                            TextButton(onClick = { editLayer { it.copy(themeId = null) } }) {
-                                Text(clearLabel)
-                            }
+        item(visible = !secondary) {
+            val layerThemeId = layout.layer(layer)?.themeId
+            WmRow(
+                title = stringResource(
+                    R.string.layout_editor_layer_theme_title,
+                    stringResource(layerTitleRes(layer)),
+                ),
+                subtitle = layerThemeId?.let { themeDisplayName(settings, it) }
+                    ?: stringResource(R.string.layout_editor_layer_theme_inherit_subtitle),
+                trailing = {
+                    if (layerThemeId != null) {
+                        TextButton(onClick = { editLayer { it.copy(themeId = null) } }) {
+                            Text(clearLabel)
                         }
-                    },
-                    onClick = { layerThemePickerOpen = true },
-                )
-            }
+                    }
+                },
+                onClick = { layerThemePickerOpen = true },
+            )
         }
         item {
             // Layer-scoped, and it sits above the layout-wide size deliberately:

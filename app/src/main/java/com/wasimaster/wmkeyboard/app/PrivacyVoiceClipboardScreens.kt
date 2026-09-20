@@ -505,47 +505,43 @@ internal fun ClipboardSettings(
                 default = SettingsDefaults.clipboard.suggestRecent,
             ) { scope.launch { repository.setClipboardSuggestRecent(it) } }
         }
-        if (settings.clipboard.suggestRecent) {
-            item {
-                val untilDismissed =
-                    stringResource(R.string.clipboard_chip_until_dismissed)
-                val chipMinutesFormat = stringResource(R.string.values_minutes)
-                val secondsFormat = stringResource(R.string.values_seconds)
-                SliderSetting(
-                    R.string.clipboard_chip_life_title,
-                    subtitle = stringResource(R.string.clipboard_chip_life_subtitle),
-                    value = settings.clipboard.pasteChipSeconds.toFloat(),
-                    // Steps of 30 s to 30 min, with 0 at the top of the
-                    // range reading as a word rather than a duration.
-                    range = 0f..1800f,
-                    display = { value ->
-                        val secs = (value / 30f).roundToInt() * 30
-                        when {
-                            secs <= 0 -> untilDismissed
-                            secs < 60 -> secondsFormat.format(secs)
-                            else -> chipMinutesFormat.format(secs / 60)
-                        }
-                    },
-                    info = stringResource(R.string.clipboard_chip_life_info),
-                    default = SettingsDefaults.clipboard.pasteChipSeconds.toFloat(),
-                ) { value ->
+        item(visible = settings.clipboard.suggestRecent) {
+            val untilDismissed =
+                stringResource(R.string.clipboard_chip_until_dismissed)
+            val chipMinutesFormat = stringResource(R.string.values_minutes)
+            val secondsFormat = stringResource(R.string.values_seconds)
+            SliderSetting(
+                R.string.clipboard_chip_life_title,
+                subtitle = stringResource(R.string.clipboard_chip_life_subtitle),
+                value = settings.clipboard.pasteChipSeconds.toFloat(),
+                // Steps of 30 s to 30 min, with 0 at the top of the
+                // range reading as a word rather than a duration.
+                range = 0f..1800f,
+                display = { value ->
                     val secs = (value / 30f).roundToInt() * 30
-                    scope.launch { repository.setPasteChipSeconds(secs) }
-                }
+                    when {
+                        secs <= 0 -> untilDismissed
+                        secs < 60 -> secondsFormat.format(secs)
+                        else -> chipMinutesFormat.format(secs / 60)
+                    }
+                },
+                info = stringResource(R.string.clipboard_chip_life_info),
+                default = SettingsDefaults.clipboard.pasteChipSeconds.toFloat(),
+            ) { value ->
+                val secs = (value / 30f).roundToInt() * 30
+                scope.launch { repository.setPasteChipSeconds(secs) }
             }
         }
-        if (settings.clipboard.suggestRecent) {
-            item {
-                ChoiceSetting(
-                    title = R.string.clipboard_suggest_codes_title,
-                    subtitle = stringResource(R.string.clipboard_suggest_codes_subtitle),
-                    info = stringResource(R.string.clipboard_suggest_codes_info),
-                    options = CopiedCodeChip.entries.map { it to stringResource(it.labelRes) },
-                    selected = settings.clipboard.copiedCodeChip,
-                    default = SettingsDefaults.clipboard.copiedCodeChip,
-                    detail = { chip -> ChoiceDetail(stringResource(copiedCodeChipDescRes(chip))) },
-                ) { scope.launch { repository.setClipboardCopiedCodeChip(it) } }
-            }
+        item(visible = settings.clipboard.suggestRecent) {
+            ChoiceSetting(
+                title = R.string.clipboard_suggest_codes_title,
+                subtitle = stringResource(R.string.clipboard_suggest_codes_subtitle),
+                info = stringResource(R.string.clipboard_suggest_codes_info),
+                options = CopiedCodeChip.entries.map { it to stringResource(it.labelRes) },
+                selected = settings.clipboard.copiedCodeChip,
+                default = SettingsDefaults.clipboard.copiedCodeChip,
+                detail = { chip -> ChoiceDetail(stringResource(copiedCodeChipDescRes(chip))) },
+            ) { scope.launch { repository.setClipboardCopiedCodeChip(it) } }
         }
         item {
             ToggleSetting(
@@ -559,24 +555,22 @@ internal fun ClipboardSettings(
         // The number chips are the ones that go wrong, because a phone
         // number is the one fragment with no shape of its own. This row
         // is where the user gives it one.
-        if (settings.clipboard.detectEntities) {
-            item {
-                val count = settings.clipboard.phoneFormats.size
-                NavRow(
-                    R.string.clipboard_phone_formats_title,
-                    subtitle = if (count == 0) {
-                        stringResource(R.string.clipboard_phone_formats_subtitle)
-                    } else {
-                        pluralStringResource(
-                            R.plurals.clipboard_phone_formats_count_subtitle,
-                            count,
-                            count,
-                        )
-                    },
-                    route = "phoneformats",
-                    onClick = { onNavigate("phoneformats") },
-                )
-            }
+        item(visible = settings.clipboard.detectEntities) {
+            val count = settings.clipboard.phoneFormats.size
+            NavRow(
+                R.string.clipboard_phone_formats_title,
+                subtitle = if (count == 0) {
+                    stringResource(R.string.clipboard_phone_formats_subtitle)
+                } else {
+                    pluralStringResource(
+                        R.plurals.clipboard_phone_formats_count_subtitle,
+                        count,
+                        count,
+                    )
+                },
+                route = "phoneformats",
+                onClick = { onNavigate("phoneformats") },
+            )
         }
     }
     SettingsGroup(stringResource(R.string.clipboard_panel_group)) {
@@ -660,20 +654,18 @@ internal fun ClipboardSettings(
                 ) { scope.launch { repository.setClipboardDetectSensitive(it) } }
             }
         }
-        if (settings.clipboard.sensitiveHandling == SensitiveClipHandling.SHORT_LIVED) {
-            item {
-                SliderSetting(
-                    R.string.clipboard_sensitive_expiry_title,
-                    subtitle = stringResource(
-                        R.string.clipboard_sensitive_expiry_subtitle,
-                    ),
-                    value = settings.clipboard.sensitiveExpiryMinutes.toFloat(),
-                    range = 1f..120f,
-                    display = { minutesFormat.format(it.toInt()) },
-                    default = SettingsDefaults.clipboard.sensitiveExpiryMinutes.toFloat(),
-                ) {
-                    scope.launch { repository.setClipboardSensitiveExpiryMinutes(it.toInt()) }
-                }
+        item(visible = settings.clipboard.sensitiveHandling == SensitiveClipHandling.SHORT_LIVED) {
+            SliderSetting(
+                R.string.clipboard_sensitive_expiry_title,
+                subtitle = stringResource(
+                    R.string.clipboard_sensitive_expiry_subtitle,
+                ),
+                value = settings.clipboard.sensitiveExpiryMinutes.toFloat(),
+                range = 1f..120f,
+                display = { minutesFormat.format(it.toInt()) },
+                default = SettingsDefaults.clipboard.sensitiveExpiryMinutes.toFloat(),
+            ) {
+                scope.launch { repository.setClipboardSensitiveExpiryMinutes(it.toInt()) }
             }
         }
     }

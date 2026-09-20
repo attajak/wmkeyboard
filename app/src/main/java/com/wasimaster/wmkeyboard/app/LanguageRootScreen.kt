@@ -94,27 +94,25 @@ internal fun LanguageSettings(
             }
         } else null,
     ) {
-        if (editing) {
-            item {
-                ReorderableColumn(
-                    settings.enabledLayoutIds,
-                    label = layoutLabel,
-                    onReorder = { scope.launch { repository.setEnabledLayoutIds(it) } },
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    // The same pencil is the way out of the list: a language
-                    // added by mistake is dropped here rather than through its
-                    // own screen. The bin takes the layout it sits on, so a
-                    // language with two of them loses one and stays; losing its
-                    // last one is what removes the language. The column itself
-                    // refuses the last row, so the keyboard always has a layout.
-                    onDelete = { layoutId ->
-                        scope.launch {
-                            val next = settings.enabledLayoutIds - layoutId
-                            if (next.isNotEmpty()) repository.setEnabledLayoutIds(next)
-                        }
-                    },
-                )
-            }
+        item(visible = editing) {
+            ReorderableColumn(
+                settings.enabledLayoutIds,
+                label = layoutLabel,
+                onReorder = { scope.launch { repository.setEnabledLayoutIds(it) } },
+                modifier = Modifier.padding(horizontal = 16.dp),
+                // The same pencil is the way out of the list: a language
+                // added by mistake is dropped here rather than through its
+                // own screen. The bin takes the layout it sits on, so a
+                // language with two of them loses one and stays; losing its
+                // last one is what removes the language. The column itself
+                // refuses the last row, so the keyboard always has a layout.
+                onDelete = { layoutId ->
+                    scope.launch {
+                        val next = settings.enabledLayoutIds - layoutId
+                        if (next.isNotEmpty()) repository.setEnabledLayoutIds(next)
+                    }
+                },
+            )
         }
         for (language in settings.enabledLanguages) {
             if (editing) break
@@ -218,26 +216,24 @@ internal fun LanguageSettings(
                 default = SettingsDefaults.osLanguageSwitcher,
             ) { scope.launch { repository.setOsLanguageSwitcher(it) } }
         }
-        if (settings.osLanguageSwitcher) {
-            item {
-                ToggleSetting(
-                    R.string.langemoji_lang_app_name_first_title,
-                    stringResource(R.string.langemoji_lang_app_name_first_subtitle),
-                    settings.subtypeAppNameFirst,
-                    info = stringResource(R.string.langemoji_lang_app_name_first_info),
-                    default = SettingsDefaults.subtypeAppNameFirst,
-                ) { scope.launch { repository.setSubtypeAppNameFirst(it) } }
-            }
-            item {
-                NavRow(
-                    R.string.langemoji_lang_subtype_enabler_title,
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                        stringResource(R.string.langemoji_lang_subtype_enabler_subtitle)
-                    } else {
-                        stringResource(R.string.langemoji_lang_subtype_enabler_legacy_subtitle)
-                    },
-                ) { openSubtypeEnabler(context) }
-            }
+        item(visible = settings.osLanguageSwitcher) {
+            ToggleSetting(
+                R.string.langemoji_lang_app_name_first_title,
+                stringResource(R.string.langemoji_lang_app_name_first_subtitle),
+                settings.subtypeAppNameFirst,
+                info = stringResource(R.string.langemoji_lang_app_name_first_info),
+                default = SettingsDefaults.subtypeAppNameFirst,
+            ) { scope.launch { repository.setSubtypeAppNameFirst(it) } }
+        }
+        item(visible = settings.osLanguageSwitcher) {
+            NavRow(
+                R.string.langemoji_lang_subtype_enabler_title,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    stringResource(R.string.langemoji_lang_subtype_enabler_subtitle)
+                } else {
+                    stringResource(R.string.langemoji_lang_subtype_enabler_legacy_subtitle)
+                },
+            ) { openSubtypeEnabler(context) }
         }
     }
     // Conjunct-aware backspace used to live here as one switch across every

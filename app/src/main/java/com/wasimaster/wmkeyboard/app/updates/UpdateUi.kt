@@ -442,19 +442,17 @@ internal fun UpdateSettings(settings: KeyboardSettings) {
                 },
             )
         }
-        if (updater.supportsPrereleases) {
-            item {
-                ToggleSetting(
-                    R.string.update_row_prereleases_title,
-                    stringResource(R.string.update_row_prereleases_subtitle),
-                    checked = prereleases.value,
-                    default = UpdatePrefs.DEFAULT_PRERELEASES,
-                    onChange = {
-                        prereleases.value = it
-                        updater.includePrereleases = it
-                    },
-                )
-            }
+        item(visible = updater.supportsPrereleases) {
+            ToggleSetting(
+                R.string.update_row_prereleases_title,
+                stringResource(R.string.update_row_prereleases_subtitle),
+                checked = prereleases.value,
+                default = UpdatePrefs.DEFAULT_PRERELEASES,
+                onChange = {
+                    prereleases.value = it
+                    updater.includePrereleases = it
+                },
+            )
         }
     }
 }

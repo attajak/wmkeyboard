@@ -108,16 +108,14 @@ internal fun PluginsScreen(onNavigate: (String) -> Unit) {
                 )
             }
         }
-        if (enabled) {
-            item {
-                ToggleSetting(
-                    R.string.plugins_auto_disable_title,
-                    stringResource(R.string.plugins_auto_disable_subtitle),
-                    autoDisable,
-                    info = stringResource(R.string.plugins_auto_disable_info),
-                    default = true,
-                ) { store.setAutoDisableOnAbandon(it) }
-            }
+        item(visible = enabled) {
+            ToggleSetting(
+                R.string.plugins_auto_disable_title,
+                stringResource(R.string.plugins_auto_disable_subtitle),
+                autoDisable,
+                info = stringResource(R.string.plugins_auto_disable_info),
+                default = true,
+            ) { store.setAutoDisableOnAbandon(it) }
         }
     }
 

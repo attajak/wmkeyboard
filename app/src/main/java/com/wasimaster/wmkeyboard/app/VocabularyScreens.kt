@@ -355,64 +355,62 @@ internal fun VocabularyToolSettings(
                 scope.launch { repository.setVocabNudges(it) }
             }
         }
-        if (v.nudges) {
-            item {
-                ToggleSetting(
-                    R.string.tooldetail_vocab_nudge_self_title,
-                    stringResource(R.string.tooldetail_vocab_nudge_self_subtitle),
-                    v.nudgeOnVocabWord,
-                    default = d.nudgeOnVocabWord,
-                ) { scope.launch { repository.setVocabNudgeOnVocabWord(it) } }
-            }
-            item {
-                ChoiceSetting(
-                    R.string.tooldetail_vocab_tap_title,
-                    subtitle = stringResource(R.string.tooldetail_vocab_tap_subtitle),
-                    options = listOf(
-                        VocabChipTap.OPEN to stringResource(R.string.tooldetail_vocab_tap_open_label),
-                        VocabChipTap.REPLACE to stringResource(R.string.tooldetail_vocab_tap_replace_label),
-                    ),
-                    selected = v.chipTapAction,
-                    default = d.chipTapAction,
-                ) { scope.launch { repository.setVocabChipTapAction(it) } }
-            }
-            item {
-                ChoiceSetting(
-                    R.string.tooldetail_vocab_scope_title,
-                    options = listOf(
-                        VocabNudgeScope.UNLEARNT to stringResource(R.string.tooldetail_vocab_scope_unlearnt_label),
-                        VocabNudgeScope.ALL to stringResource(R.string.tooldetail_vocab_scope_all_label),
-                        VocabNudgeScope.LEARNT_ONLY to stringResource(R.string.tooldetail_vocab_scope_learnt_label),
-                    ),
-                    selected = v.nudgeScope,
-                    default = d.nudgeScope,
-                ) { scope.launch { repository.setVocabNudgeScope(it) } }
-            }
-            item {
-                ChoiceSetting(
-                    R.string.tooldetail_vocab_level_title,
-                    subtitle = stringResource(R.string.tooldetail_vocab_level_subtitle),
-                    options = listOf(
-                        VocabNudgeLevel.LOW to stringResource(R.string.tooldetail_vocab_level_low_label),
-                        VocabNudgeLevel.MEDIUM to stringResource(R.string.tooldetail_vocab_level_medium_label),
-                        VocabNudgeLevel.HIGH to stringResource(R.string.tooldetail_vocab_level_high_label),
-                    ),
-                    selected = v.nudgeLevel,
-                    default = d.nudgeLevel,
-                ) { scope.launch { repository.setVocabNudgeLevel(it) } }
-            }
-            item {
-                ChoiceSetting(
-                    R.string.tooldetail_vocab_cooldown_title,
-                    options = listOf(
-                        VocabCooldown.EVERY_TIME to stringResource(R.string.tooldetail_vocab_cooldown_every_label),
-                        VocabCooldown.ONCE_PER_FIELD to stringResource(R.string.tooldetail_vocab_cooldown_field_label),
-                        VocabCooldown.ONCE_PER_DAY to stringResource(R.string.tooldetail_vocab_cooldown_day_label),
-                    ),
-                    selected = v.cooldown,
-                    default = d.cooldown,
-                ) { scope.launch { repository.setVocabCooldown(it) } }
-            }
+        item(visible = v.nudges) {
+            ToggleSetting(
+                R.string.tooldetail_vocab_nudge_self_title,
+                stringResource(R.string.tooldetail_vocab_nudge_self_subtitle),
+                v.nudgeOnVocabWord,
+                default = d.nudgeOnVocabWord,
+            ) { scope.launch { repository.setVocabNudgeOnVocabWord(it) } }
+        }
+        item(visible = v.nudges) {
+            ChoiceSetting(
+                R.string.tooldetail_vocab_tap_title,
+                subtitle = stringResource(R.string.tooldetail_vocab_tap_subtitle),
+                options = listOf(
+                    VocabChipTap.OPEN to stringResource(R.string.tooldetail_vocab_tap_open_label),
+                    VocabChipTap.REPLACE to stringResource(R.string.tooldetail_vocab_tap_replace_label),
+                ),
+                selected = v.chipTapAction,
+                default = d.chipTapAction,
+            ) { scope.launch { repository.setVocabChipTapAction(it) } }
+        }
+        item(visible = v.nudges) {
+            ChoiceSetting(
+                R.string.tooldetail_vocab_scope_title,
+                options = listOf(
+                    VocabNudgeScope.UNLEARNT to stringResource(R.string.tooldetail_vocab_scope_unlearnt_label),
+                    VocabNudgeScope.ALL to stringResource(R.string.tooldetail_vocab_scope_all_label),
+                    VocabNudgeScope.LEARNT_ONLY to stringResource(R.string.tooldetail_vocab_scope_learnt_label),
+                ),
+                selected = v.nudgeScope,
+                default = d.nudgeScope,
+            ) { scope.launch { repository.setVocabNudgeScope(it) } }
+        }
+        item(visible = v.nudges) {
+            ChoiceSetting(
+                R.string.tooldetail_vocab_level_title,
+                subtitle = stringResource(R.string.tooldetail_vocab_level_subtitle),
+                options = listOf(
+                    VocabNudgeLevel.LOW to stringResource(R.string.tooldetail_vocab_level_low_label),
+                    VocabNudgeLevel.MEDIUM to stringResource(R.string.tooldetail_vocab_level_medium_label),
+                    VocabNudgeLevel.HIGH to stringResource(R.string.tooldetail_vocab_level_high_label),
+                ),
+                selected = v.nudgeLevel,
+                default = d.nudgeLevel,
+            ) { scope.launch { repository.setVocabNudgeLevel(it) } }
+        }
+        item(visible = v.nudges) {
+            ChoiceSetting(
+                R.string.tooldetail_vocab_cooldown_title,
+                options = listOf(
+                    VocabCooldown.EVERY_TIME to stringResource(R.string.tooldetail_vocab_cooldown_every_label),
+                    VocabCooldown.ONCE_PER_FIELD to stringResource(R.string.tooldetail_vocab_cooldown_field_label),
+                    VocabCooldown.ONCE_PER_DAY to stringResource(R.string.tooldetail_vocab_cooldown_day_label),
+                ),
+                selected = v.cooldown,
+                default = d.cooldown,
+            ) { scope.launch { repository.setVocabCooldown(it) } }
         }
     }
 
@@ -521,25 +519,23 @@ internal fun VocabularyToolSettings(
                 default = d.accent,
             ) { scope.launch { repository.setVocabAccent(it) } }
         }
-        if (v.audioSource != VocabAudioSource.WIKTIONARY) {
-            item {
-                SliderSetting(
-                    R.string.tooldetail_vocab_tts_rate_title,
-                    value = v.ttsRate,
-                    range = VocabularySettings.MIN_TTS..VocabularySettings.MAX_TTS,
-                    display = { speedFormat.format(it) },
-                    default = d.ttsRate,
-                ) { scope.launch { repository.setVocabTtsRate(it) } }
-            }
-            item {
-                SliderSetting(
-                    R.string.tooldetail_vocab_tts_pitch_title,
-                    value = v.ttsPitch,
-                    range = VocabularySettings.MIN_TTS..VocabularySettings.MAX_TTS,
-                    display = { speedFormat.format(it) },
-                    default = d.ttsPitch,
-                ) { scope.launch { repository.setVocabTtsPitch(it) } }
-            }
+        item(visible = v.audioSource != VocabAudioSource.WIKTIONARY) {
+            SliderSetting(
+                R.string.tooldetail_vocab_tts_rate_title,
+                value = v.ttsRate,
+                range = VocabularySettings.MIN_TTS..VocabularySettings.MAX_TTS,
+                display = { speedFormat.format(it) },
+                default = d.ttsRate,
+            ) { scope.launch { repository.setVocabTtsRate(it) } }
+        }
+        item(visible = v.audioSource != VocabAudioSource.WIKTIONARY) {
+            SliderSetting(
+                R.string.tooldetail_vocab_tts_pitch_title,
+                value = v.ttsPitch,
+                range = VocabularySettings.MIN_TTS..VocabularySettings.MAX_TTS,
+                display = { speedFormat.format(it) },
+                default = d.ttsPitch,
+            ) { scope.launch { repository.setVocabTtsPitch(it) } }
         }
         item {
             val speaker = rememberVocabSpeaker()
@@ -627,17 +623,15 @@ internal fun VocabularyToolSettings(
                 default = d.wordInterval,
             ) { scope.launch { repository.setVocabWordInterval(it) } }
         }
-        if (v.wordOfTheDayChip) {
-            item {
-                SliderSetting(
-                    R.string.tooldetail_vocab_wotd_chip_times_title,
-                    subtitle = stringResource(R.string.tooldetail_vocab_wotd_chip_times_subtitle),
-                    value = v.chipTimesPerWord.toFloat(),
-                    range = VocabularySettings.MIN_CHIP_TIMES.toFloat()..VocabularySettings.MAX_CHIP_TIMES.toFloat(),
-                    display = { numberFormat.format(it.roundToInt()) },
-                    default = d.chipTimesPerWord.toFloat(),
-                ) { scope.launch { repository.setVocabChipTimesPerWord(it.roundToInt()) } }
-            }
+        item(visible = v.wordOfTheDayChip) {
+            SliderSetting(
+                R.string.tooldetail_vocab_wotd_chip_times_title,
+                subtitle = stringResource(R.string.tooldetail_vocab_wotd_chip_times_subtitle),
+                value = v.chipTimesPerWord.toFloat(),
+                range = VocabularySettings.MIN_CHIP_TIMES.toFloat()..VocabularySettings.MAX_CHIP_TIMES.toFloat(),
+                display = { numberFormat.format(it.roundToInt()) },
+                default = d.chipTimesPerWord.toFloat(),
+            ) { scope.launch { repository.setVocabChipTimesPerWord(it.roundToInt()) } }
         }
     }
 }
@@ -1744,13 +1738,11 @@ internal fun VocabBrowseScreen(
                 )
             }
         }
-        if (rows.size > shown) {
-            item {
-                WmRow(
-                    title = pluralStringResource(R.plurals.vocab_browse_show_more, rows.size - shown, rows.size - shown),
-                    onClick = { shown += PAGE },
-                )
-            }
+        item(visible = rows.size > shown) {
+            WmRow(
+                title = pluralStringResource(R.plurals.vocab_browse_show_more, rows.size - shown, rows.size - shown),
+                onClick = { shown += PAGE },
+            )
         }
     }
     Spacer(Modifier.height(16.dp))
@@ -1847,14 +1839,12 @@ internal fun VocabWordScreen(
                 },
             )
         }
-        if (state.seen) {
-            item {
-                WmRow(title = stringResource(R.string.vocab_word_reset_action), icon = Icons.Outlined.Refresh, onClick = {
-                    progress.reset(word.word)
-                    progress.save()
-                    tick++
-                })
-            }
+        item(visible = state.seen) {
+            WmRow(title = stringResource(R.string.vocab_word_reset_action), icon = Icons.Outlined.Refresh, onClick = {
+                progress.reset(word.word)
+                progress.save()
+                tick++
+            })
         }
         item {
             WmRow(title = stringResource(R.string.vocab_word_add_list_action), icon = Icons.Outlined.PlaylistAdd, onClick = {

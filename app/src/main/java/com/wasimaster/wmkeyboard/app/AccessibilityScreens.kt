@@ -154,29 +154,27 @@ internal fun AccessibilitySettings(
                 detail = { mode -> ChoiceDetail(stringResource(screenReaderDescRes(mode))) },
             ) { scope.launch { repository.setScreenReaderMode(it) } }
         }
-        if (settings.accessibility.screenReader == ScreenReaderMode.PASSTHROUGH) {
-            item {
-                val granted = rememberGrantState(KeyboardPassthrough::isServiceEnabled)
-                // Disclosure before the accessibility screen: Play scrutinises
-                // this API harder than any permission, and the system's own
-                // warning there describes powers this service never asks for.
-                val accessibility = rememberDisclosedSpecialAccess(SpecialAccess.ACCESSIBILITY)
-                NavRow(
-                    if (granted) {
-                        stringResource(R.string.accessibility_passthrough_service_title)
-                    } else {
-                        stringResource(R.string.accessibility_passthrough_service_title_required)
-                    },
-                    if (granted) {
-                        stringResource(R.string.accessibility_passthrough_service_on)
-                    } else {
-                        stringResource(
-                            R.string.accessibility_passthrough_service_off,
-                            stringResource(R.string.passthrough_service_label),
-                        )
-                    },
-                ) { accessibility() }
-            }
+        item(visible = settings.accessibility.screenReader == ScreenReaderMode.PASSTHROUGH) {
+            val granted = rememberGrantState(KeyboardPassthrough::isServiceEnabled)
+            // Disclosure before the accessibility screen: Play scrutinises
+            // this API harder than any permission, and the system's own
+            // warning there describes powers this service never asks for.
+            val accessibility = rememberDisclosedSpecialAccess(SpecialAccess.ACCESSIBILITY)
+            NavRow(
+                if (granted) {
+                    stringResource(R.string.accessibility_passthrough_service_title)
+                } else {
+                    stringResource(R.string.accessibility_passthrough_service_title_required)
+                },
+                if (granted) {
+                    stringResource(R.string.accessibility_passthrough_service_on)
+                } else {
+                    stringResource(
+                        R.string.accessibility_passthrough_service_off,
+                        stringResource(R.string.passthrough_service_label),
+                    )
+                },
+            ) { accessibility() }
         }
     }
 

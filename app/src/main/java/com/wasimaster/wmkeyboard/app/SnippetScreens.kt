@@ -483,28 +483,26 @@ internal fun SnippetSettings(
             }
         } else null,
     ) {
-        if (editingFolders && canEditFolders) {
-            item {
-                ReorderableColumn(
-                    folders,
-                    label = { it.name },
-                    onReorder = { ordered -> mutate { s -> s.reorderFolders(ordered.map { it.id }) } },
-                    onDelete = { folder -> deletingFolder = folder },
-                    // A folder list is perfectly good empty, so the last one
-                    // goes the same way as the rest.
-                    keepLast = false,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                ) { folder ->
-                    Icon(folderIcon(folder), contentDescription = null)
-                    Spacer(Modifier.width(12.dp))
-                    Text(
-                        folder.name,
-                        style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f),
-                    )
-                }
+        item(visible = editingFolders && canEditFolders) {
+            ReorderableColumn(
+                folders,
+                label = { it.name },
+                onReorder = { ordered -> mutate { s -> s.reorderFolders(ordered.map { it.id }) } },
+                onDelete = { folder -> deletingFolder = folder },
+                // A folder list is perfectly good empty, so the last one
+                // goes the same way as the rest.
+                keepLast = false,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            ) { folder ->
+                Icon(folderIcon(folder), contentDescription = null)
+                Spacer(Modifier.width(12.dp))
+                Text(
+                    folder.name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f),
+                )
             }
         }
         for (folder in folders) {

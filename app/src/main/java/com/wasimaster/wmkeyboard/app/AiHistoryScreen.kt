@@ -121,26 +121,24 @@ internal fun AiHistoryScreen(repository: SettingsRepository, settings: KeyboardS
                 }
             }
         }
-        if (settings.ai.historyEnabled) {
-            item {
-                SliderSetting(
-                    R.string.toolai_ai_history_max_title,
-                    subtitle = stringResource(R.string.toolai_ai_history_max_subtitle),
-                    value = settings.ai.historyMax.toFloat(),
-                    range = AiHistoryStore.MIN_MAX_ITEMS.toFloat()..
-                        AiHistoryStore.MAX_ITEMS_CEILING.toFloat(),
-                    display = { it.toInt().toString() },
-                    default = SettingsDefaults.ai.historyMax.toFloat(),
-                ) { picked ->
-                    scope.launch {
-                        repository.setAiHistoryMax(picked.toInt())
-                        withContext(Dispatchers.IO) {
-                            store.reload()
-                            store.trimTo(picked.toInt())
-                            store.save()
-                        }
-                        revision++
+        item(visible = settings.ai.historyEnabled) {
+            SliderSetting(
+                R.string.toolai_ai_history_max_title,
+                subtitle = stringResource(R.string.toolai_ai_history_max_subtitle),
+                value = settings.ai.historyMax.toFloat(),
+                range = AiHistoryStore.MIN_MAX_ITEMS.toFloat()..
+                    AiHistoryStore.MAX_ITEMS_CEILING.toFloat(),
+                display = { it.toInt().toString() },
+                default = SettingsDefaults.ai.historyMax.toFloat(),
+            ) { picked ->
+                scope.launch {
+                    repository.setAiHistoryMax(picked.toInt())
+                    withContext(Dispatchers.IO) {
+                        store.reload()
+                        store.trimTo(picked.toInt())
+                        store.save()
                     }
+                    revision++
                 }
             }
         }

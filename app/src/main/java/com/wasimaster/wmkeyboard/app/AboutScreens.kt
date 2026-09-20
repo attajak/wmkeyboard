@@ -549,32 +549,28 @@ internal fun AboutSettings(
     val bugReportSubject = stringResource(R.string.about_bug_report_email_subject)
 
     SettingsGroup(stringResource(CommonR.string.common_share)) {
-        if (!BuildConfig.ENABLE_FDROID) {
-            item {
-                NavRow(
-                    R.string.about_share_play_link,
-                    PLAY_STORE_URL.removePrefix("https://"),
-                ) {
-                    shareLink(context, PLAY_STORE_URL)
-                }
+        item(visible = !BuildConfig.ENABLE_FDROID) {
+            NavRow(
+                R.string.about_share_play_link,
+                PLAY_STORE_URL.removePrefix("https://"),
+            ) {
+                shareLink(context, PLAY_STORE_URL)
             }
         }
-        if (!BuildConfig.ENABLE_PLAY_STORE) {
-            item {
-                NavRow(
-                    R.string.about_share_fdroid_link,
-                    FDROID_URL.removePrefix("https://"),
-                ) {
-                    shareLink(context, FDROID_URL)
-                }
+        item(visible = !BuildConfig.ENABLE_PLAY_STORE) {
+            NavRow(
+                R.string.about_share_fdroid_link,
+                FDROID_URL.removePrefix("https://"),
+            ) {
+                shareLink(context, FDROID_URL)
             }
-            item {
-                NavRow(
-                    R.string.about_share_github_link,
-                    SOURCE_URL.removePrefix("https://"),
-                ) {
-                    shareLink(context, SOURCE_URL)
-                }
+        }
+        item(visible = !BuildConfig.ENABLE_PLAY_STORE) {
+            NavRow(
+                R.string.about_share_github_link,
+                SOURCE_URL.removePrefix("https://"),
+            ) {
+                shareLink(context, SOURCE_URL)
             }
         }
     }

@@ -558,21 +558,19 @@ internal fun PanelEditorBody(
             }
         }
         selection?.let { ref ->
-            if (ref.row in rows.indices && rows[ref.row].size > 1) {
-                item {
-                    ReorderSetting(
-                        title = stringResource(R.string.layout_editor_reorder_keys_title, ref.row + 1),
-                        dialogTitle = stringResource(R.string.layout_editor_key_order_dialog_title),
-                        items = rows[ref.row].indices.toList(),
-                        label = { keyReorderLabel(context, rows[ref.row][it]) },
-                    ) { order ->
-                        editRows { r ->
-                            r.mapIndexed { i, row ->
-                                if (i == ref.row && order.size == row.size) order.map { row[it] } else row
-                            }
+            item(visible = ref.row in rows.indices && rows[ref.row].size > 1) {
+                ReorderSetting(
+                    title = stringResource(R.string.layout_editor_reorder_keys_title, ref.row + 1),
+                    dialogTitle = stringResource(R.string.layout_editor_key_order_dialog_title),
+                    items = rows[ref.row].indices.toList(),
+                    label = { keyReorderLabel(context, rows[ref.row][it]) },
+                ) { order ->
+                    editRows { r ->
+                        r.mapIndexed { i, row ->
+                            if (i == ref.row && order.size == row.size) order.map { row[it] } else row
                         }
-                        onSelectionChange(null)
                     }
+                    onSelectionChange(null)
                 }
             }
         }

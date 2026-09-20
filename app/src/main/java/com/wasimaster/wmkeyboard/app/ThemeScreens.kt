@@ -1168,24 +1168,22 @@ fun ThemesScreen(
                     value = autoSlotSummary(settings, darkSlot = true),
                 ) { pickerForLight = false }
             }
-            if (auto.usesRandomSlot) {
-                item {
-                    ChoiceSetting(
-                        title = R.string.theme_shuffle_interval_title,
-                        subtitle = stringResource(R.string.theme_shuffle_interval_subtitle),
-                        options = RotationInterval.entries
-                            .map { it to stringResource(it.labelRes) },
-                        selected = auto.shuffleInterval,
-                        default = SettingsDefaults.autoTheme.shuffleInterval,
-                    ) { value -> scope.launch { repository.setAutoThemeShuffleInterval(value) } }
-                }
-                item {
-                    ActionRow(
-                        title = R.string.theme_shuffle_now_title,
-                        subtitle = stringResource(R.string.theme_shuffle_now_subtitle),
-                        action = stringResource(R.string.theme_shuffle_now_action),
-                    ) { scope.launch { repository.shuffleAutoThemeNow() } }
-                }
+            item(visible = auto.usesRandomSlot) {
+                ChoiceSetting(
+                    title = R.string.theme_shuffle_interval_title,
+                    subtitle = stringResource(R.string.theme_shuffle_interval_subtitle),
+                    options = RotationInterval.entries
+                        .map { it to stringResource(it.labelRes) },
+                    selected = auto.shuffleInterval,
+                    default = SettingsDefaults.autoTheme.shuffleInterval,
+                ) { value -> scope.launch { repository.setAutoThemeShuffleInterval(value) } }
+            }
+            item(visible = auto.usesRandomSlot) {
+                ActionRow(
+                    title = R.string.theme_shuffle_now_title,
+                    subtitle = stringResource(R.string.theme_shuffle_now_subtitle),
+                    action = stringResource(R.string.theme_shuffle_now_action),
+                ) { scope.launch { repository.shuffleAutoThemeNow() } }
             }
             item {
                 ChoiceControl(
@@ -2419,32 +2417,28 @@ fun ThemeEditorScreen(
         // Only offered once there is something to rotate. Most people set one
         // photo and stop, and a row for a feature they have not started is
         // clutter in the one screen they do use.
-        if (showRotation) {
-            item {
-                NavRow(
-                    R.string.photo_rotation_title,
-                    subtitle = stringResource(R.string.photo_rotation_subtitle),
-                    value = stringResource(
-                        if (settings.photoBackground.rotateEnabled) {
-                            CommonR.string.common_on
-                        } else {
-                            CommonR.string.common_off
-                        },
-                    ),
-                    route = PHOTO_ROTATION_ROUTE,
-                ) { onNavigate(PHOTO_ROTATION_ROUTE) }
-            }
+        item(visible = showRotation) {
+            NavRow(
+                R.string.photo_rotation_title,
+                subtitle = stringResource(R.string.photo_rotation_subtitle),
+                value = stringResource(
+                    if (settings.photoBackground.rotateEnabled) {
+                        CommonR.string.common_on
+                    } else {
+                        CommonR.string.common_off
+                    },
+                ),
+                route = PHOTO_ROTATION_ROUTE,
+            ) { onNavigate(PHOTO_ROTATION_ROUTE) }
         }
         // Likewise: somebody who never opens the online picker has no key to
         // manage. The picker's own "add a key" action reaches this screen.
-        if (showServices) {
-            item {
-                NavRow(
-                    R.string.photo_services_title,
-                    subtitle = stringResource(R.string.photo_services_subtitle),
-                    route = PHOTO_HUB_ROUTE,
-                ) { onNavigate(PHOTO_HUB_ROUTE) }
-            }
+        item(visible = showServices) {
+            NavRow(
+                R.string.photo_services_title,
+                subtitle = stringResource(R.string.photo_services_subtitle),
+                route = PHOTO_HUB_ROUTE,
+            ) { onNavigate(PHOTO_HUB_ROUTE) }
         }
     }
 
@@ -2929,19 +2923,17 @@ fun ThemeEditorScreen(
                 )
             }
         }
-        if (theme.decals.size < MAX_DECALS) {
-            item {
-                OutlinedButton(
-                    onClick = {
-                        decalPicker.launch(
-                            PickVisualMediaRequest(
-                                ActivityResultContracts.PickVisualMedia.ImageOnly,
-                            ),
-                        )
-                    },
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                ) { Text(stringResource(R.string.theme_decal_add_action)) }
-            }
+        item(visible = theme.decals.size < MAX_DECALS) {
+            OutlinedButton(
+                onClick = {
+                    decalPicker.launch(
+                        PickVisualMediaRequest(
+                            ActivityResultContracts.PickVisualMedia.ImageOnly,
+                        ),
+                    )
+                },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            ) { Text(stringResource(R.string.theme_decal_add_action)) }
         }
     }
     decalEditorId?.let { id ->
@@ -3394,31 +3386,29 @@ fun ThemeEditorScreen(
                 }
             }
         }
-        if (hasCustomRadii) {
-            item {
-                SliderRow(
-                    stringResource(R.string.theme_key_radius_title),
-                    value = (theme.keyCornerRadiusDp ?: 8).toFloat(),
-                    range = 0f..28f,
-                    display = { "${it.toInt()} dp" },
-                ) { update { t -> t.copy(keyCornerRadiusDp = it.toInt()) } }
-            }
-            item {
-                SliderRow(
-                    stringResource(R.string.theme_popup_radius_title),
-                    value = (theme.popupCornerRadiusDp ?: settings.popup.cornerRadiusDp).toFloat(),
-                    range = 0f..40f,
-                    display = { "${it.toInt()} dp" },
-                ) { update { t -> t.copy(popupCornerRadiusDp = it.toInt()) } }
-            }
-            item {
-                SliderRow(
-                    stringResource(R.string.theme_tool_circle_radius_title),
-                    value = (theme.toolCircleRadiusDp ?: 20).toFloat(),
-                    range = 0f..20f,
-                    display = { if (it.toInt() == 0) offLabel else "${it.toInt()} dp" },
-                ) { update { t -> t.copy(toolCircleRadiusDp = it.toInt()) } }
-            }
+        item(visible = hasCustomRadii) {
+            SliderRow(
+                stringResource(R.string.theme_key_radius_title),
+                value = (theme.keyCornerRadiusDp ?: 8).toFloat(),
+                range = 0f..28f,
+                display = { "${it.toInt()} dp" },
+            ) { update { t -> t.copy(keyCornerRadiusDp = it.toInt()) } }
+        }
+        item(visible = hasCustomRadii) {
+            SliderRow(
+                stringResource(R.string.theme_popup_radius_title),
+                value = (theme.popupCornerRadiusDp ?: settings.popup.cornerRadiusDp).toFloat(),
+                range = 0f..40f,
+                display = { "${it.toInt()} dp" },
+            ) { update { t -> t.copy(popupCornerRadiusDp = it.toInt()) } }
+        }
+        item(visible = hasCustomRadii) {
+            SliderRow(
+                stringResource(R.string.theme_tool_circle_radius_title),
+                value = (theme.toolCircleRadiusDp ?: 20).toFloat(),
+                range = 0f..20f,
+                display = { if (it.toInt() == 0) offLabel else "${it.toInt()} dp" },
+            ) { update { t -> t.copy(toolCircleRadiusDp = it.toInt()) } }
         }
     }
 
@@ -3619,15 +3609,13 @@ fun ThemeEditorScreen(
                 detail = { anim -> ChoiceDetail(stringResource(themeAnimationDescRes(anim))) },
             ) { anim -> update { t -> t.copy(animation = anim) } }
         }
-        if (theme.animation != ThemeAnimation.NONE) {
-            item {
-                SliderRow(
-                    stringResource(R.string.theme_animation_speed_title),
-                    value = theme.animationSpeed,
-                    range = 0.25f..3f,
-                    display = { "%.2f×".format(it) },
-                ) { update { t -> t.copy(animationSpeed = (it * 20).toInt() / 20f) } }
-            }
+        item(visible = theme.animation != ThemeAnimation.NONE) {
+            SliderRow(
+                stringResource(R.string.theme_animation_speed_title),
+                value = theme.animationSpeed,
+                range = 0.25f..3f,
+                display = { "%.2f×".format(it) },
+            ) { update { t -> t.copy(animationSpeed = (it * 20).toInt() / 20f) } }
         }
     }
 
@@ -3682,28 +3670,26 @@ fun ThemeEditorScreen(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             ) { kind -> update { t -> t.copy(keyEffect = kind?.name) } }
         }
-        if (keyEffectKindOrNull(theme.keyEffect) == KeyEffectKind.EMOJI) {
-            item {
-                // Local state is the source of truth while typing: a field
-                // bound straight to the async theme write scrambles input when
-                // the DataStore emission echoes back mid-edit.
-                var emojiParam by remember(theme.id) {
-                    mutableStateOf(theme.keyEffectParam.orEmpty())
-                }
-                OutlinedTextField(
-                    value = emojiParam,
-                    onValueChange = { text ->
-                        val clipped = text.take(16)
-                        emojiParam = clipped
-                        update { t -> t.copy(keyEffectParam = clipped) }
-                    },
-                    singleLine = true,
-                    label = { Text(stringResource(R.string.theme_effect_emoji_field_label)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                )
+        item(visible = keyEffectKindOrNull(theme.keyEffect) == KeyEffectKind.EMOJI) {
+            // Local state is the source of truth while typing: a field
+            // bound straight to the async theme write scrambles input when
+            // the DataStore emission echoes back mid-edit.
+            var emojiParam by remember(theme.id) {
+                mutableStateOf(theme.keyEffectParam.orEmpty())
             }
+            OutlinedTextField(
+                value = emojiParam,
+                onValueChange = { text ->
+                    val clipped = text.take(16)
+                    emojiParam = clipped
+                    update { t -> t.copy(keyEffectParam = clipped) }
+                },
+                singleLine = true,
+                label = { Text(stringResource(R.string.theme_effect_emoji_field_label)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            )
         }
         if (keyEffectKindOrNull(theme.keyEffect) == KeyEffectKind.CUSTOM_IMAGE) {
             theme.keyEffectImages.forEachIndexed { index, path ->
@@ -3743,19 +3729,17 @@ fun ThemeEditorScreen(
                     )
                 }
             }
-            if (theme.keyEffectImages.size < MAX_EFFECT_IMAGES) {
-                item {
-                    OutlinedButton(
-                        onClick = {
-                            effectImagePicker.launch(
-                                PickVisualMediaRequest(
-                                    ActivityResultContracts.PickVisualMedia.ImageOnly,
-                                ),
-                            )
-                        },
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    ) { Text(stringResource(R.string.theme_effect_image_add_action)) }
-                }
+            item(visible = theme.keyEffectImages.size < MAX_EFFECT_IMAGES) {
+                OutlinedButton(
+                    onClick = {
+                        effectImagePicker.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly,
+                            ),
+                        )
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                ) { Text(stringResource(R.string.theme_effect_image_add_action)) }
             }
         }
         if (keyEffectKindOrNull(theme.keyEffect) != null) {
@@ -3817,14 +3801,12 @@ fun ThemeEditorScreen(
                     selected = mode,
                 ) { picked -> update { t -> t.copy(keyEffectColor = picked.name) } }
             }
-            if (keyEffectColorMode(theme.keyEffectColor) == KeyEffectColorMode.CUSTOM) {
-                item {
-                    NullableColorRow(
-                        stringResource(R.string.theme_effect_color_custom_label),
-                        theme.keyEffectCustomColor, fallback = theme.accent,
-                        onChange = { update { t -> t.copy(keyEffectCustomColor = it) } },
-                    )
-                }
+            item(visible = keyEffectColorMode(theme.keyEffectColor) == KeyEffectColorMode.CUSTOM) {
+                NullableColorRow(
+                    stringResource(R.string.theme_effect_color_custom_label),
+                    theme.keyEffectCustomColor, fallback = theme.accent,
+                    onChange = { update { t -> t.copy(keyEffectCustomColor = it) } },
+                )
             }
             item {
                 SliderRow(

@@ -969,15 +969,13 @@ private fun RefreshSettingsGroup(
                 default = true,
             ) { store.setAutoRefresh(it) }
         }
-        if (autoRefresh) {
-            item {
-                ToggleSetting(
-                    R.string.addon_refresh_unmetered_title,
-                    stringResource(R.string.addon_refresh_unmetered_subtitle),
-                    refreshUnmeteredOnly,
-                    default = false,
-                ) { store.setRefreshUnmeteredOnly(it) }
-            }
+        item(visible = autoRefresh) {
+            ToggleSetting(
+                R.string.addon_refresh_unmetered_title,
+                stringResource(R.string.addon_refresh_unmetered_subtitle),
+                refreshUnmeteredOnly,
+                default = false,
+            ) { store.setRefreshUnmeteredOnly(it) }
         }
     }
 }
@@ -1862,13 +1860,11 @@ private fun InstalledAddonDetail(
                 stringResource(R.string.addon_status_installed),
             )
         }
-        if (record.repoName.isNotBlank()) {
-            item {
-                DetailRow(
-                    stringResource(R.string.addon_detail_repository_label),
-                    record.repoName,
-                )
-            }
+        item(visible = record.repoName.isNotBlank()) {
+            DetailRow(
+                stringResource(R.string.addon_detail_repository_label),
+                record.repoName,
+            )
         }
     }
     StateBanner(stringResource(R.string.addon_detail_offline_body))
@@ -2275,11 +2271,9 @@ private fun AddonPreviewSection(manifestUrl: String, entry: AddonEntry) {
                     )
                 }
             }
-            if (shown.total > shown.entries.size) {
-                item {
-                    val more = shown.total - shown.entries.size
-                    CaptionText(pluralStringResource(R.plurals.addon_preview_more_count, more, more))
-                }
+            item(visible = shown.total > shown.entries.size) {
+                val more = shown.total - shown.entries.size
+                CaptionText(pluralStringResource(R.plurals.addon_preview_more_count, more, more))
             }
         }
 

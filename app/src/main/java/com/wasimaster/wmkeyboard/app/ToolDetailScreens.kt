@@ -345,17 +345,15 @@ internal fun ToolDetailSettings(
                     onChange = { scope.launch { repository.setToolColor(tool, it) } },
                 )
             }
-            if (gradient) {
-                item {
-                    ColorSetting(
-                        title = R.string.tooldetail_icon_colour_end_title,
-                        color = settings.toolColorEndOverrides[tool],
-                        // Derived from whichever colour the near end currently
-                        // is, so the pair moves together until it is pinned.
-                        fallback = toolAccentEndColorArgb(tool, settings.toolColorOverrides),
-                        onChange = { scope.launch { repository.setToolColorEnd(tool, it) } },
-                    )
-                }
+            item(visible = gradient) {
+                ColorSetting(
+                    title = R.string.tooldetail_icon_colour_end_title,
+                    color = settings.toolColorEndOverrides[tool],
+                    // Derived from whichever colour the near end currently
+                    // is, so the pair moves together until it is pinned.
+                    fallback = toolAccentEndColorArgb(tool, settings.toolColorOverrides),
+                    onChange = { scope.launch { repository.setToolColorEnd(tool, it) } },
+                )
             }
         }
         item { ToolHoldRow(repository, settings, tool) }
@@ -381,16 +379,14 @@ internal fun ToolDetailSettings(
                         default = SettingsDefaults.mediaControl.pinWhilePlaying,
                     ) { scope.launch { repository.setMediaPinWhilePlaying(it) } }
                 }
-                if (settings.mediaControl.pinWhilePlaying) {
-                    item {
-                        NavRow(
-                            title = R.string.tooldetail_mediactl_apps_title,
-                            subtitle = stringResource(
-                                R.string.tooldetail_mediactl_apps_subtitle,
-                                settings.mediaControl.musicApps.size,
-                            ),
-                        ) { onNavigate(MusicApps.ROUTE) }
-                    }
+                item(visible = settings.mediaControl.pinWhilePlaying) {
+                    NavRow(
+                        title = R.string.tooldetail_mediactl_apps_title,
+                        subtitle = stringResource(
+                            R.string.tooldetail_mediactl_apps_subtitle,
+                            settings.mediaControl.musicApps.size,
+                        ),
+                    ) { onNavigate(MusicApps.ROUTE) }
                 }
                 item {
                     // Not a toggle: notification access is granted on a system
@@ -486,22 +482,20 @@ internal fun ToolDetailSettings(
                         default = SettingsDefaults.launcher.recentsEnabled,
                     ) { scope.launch { repository.setLauncherRecentsEnabled(it) } }
                 }
-                if (settings.launcher.recentsEnabled) {
-                    item {
-                        val appsFormat = stringResource(R.string.values_number)
-                        SliderSetting(
-                            R.string.tooldetail_launcher_recents_count_title,
-                            subtitle = stringResource(
-                                R.string.tooldetail_launcher_recents_count_subtitle,
-                            ),
-                            value = settings.launcher.maxRecents.toFloat(),
-                            range = LauncherToolSettings.RECENTS_RANGE.first.toFloat()..
-                                LauncherToolSettings.RECENTS_RANGE.last.toFloat(),
-                            display = { appsFormat.format(it.roundToInt()) },
-                            info = stringResource(R.string.tooldetail_launcher_recents_count_info),
-                            default = SettingsDefaults.launcher.maxRecents.toFloat(),
-                        ) { scope.launch { repository.setLauncherMaxRecents(it.roundToInt()) } }
-                    }
+                item(visible = settings.launcher.recentsEnabled) {
+                    val appsFormat = stringResource(R.string.values_number)
+                    SliderSetting(
+                        R.string.tooldetail_launcher_recents_count_title,
+                        subtitle = stringResource(
+                            R.string.tooldetail_launcher_recents_count_subtitle,
+                        ),
+                        value = settings.launcher.maxRecents.toFloat(),
+                        range = LauncherToolSettings.RECENTS_RANGE.first.toFloat()..
+                            LauncherToolSettings.RECENTS_RANGE.last.toFloat(),
+                        display = { appsFormat.format(it.roundToInt()) },
+                        info = stringResource(R.string.tooldetail_launcher_recents_count_info),
+                        default = SettingsDefaults.launcher.maxRecents.toFloat(),
+                    ) { scope.launch { repository.setLauncherMaxRecents(it.roundToInt()) } }
                 }
                 item {
                     ToggleSetting(
@@ -758,21 +752,19 @@ internal fun ToolDetailSettings(
                         scope.launch { repository.setCalendarWeekend(it) }
                     }
                 }
-                if (showsHijri) {
-                    item {
-                        SliderSetting(
-                            R.string.tooldetail_calendar_hijri_title,
-                            subtitle = stringResource(R.string.tooldetail_calendar_hijri_subtitle),
-                            value = settings.calendarTool.hijriAdjustDays.toFloat(),
-                            range = -2f..2f,
-                            display = { days ->
-                                val d = days.roundToInt()
-                                if (d > 0) daysAheadFormat.format(d) else daysFormat.format(d)
-                            },
-                            info = stringResource(R.string.tooldetail_calendar_hijri_info),
-                            default = SettingsDefaults.calendarTool.hijriAdjustDays.toFloat(),
-                        ) { scope.launch { repository.setHijriAdjustDays(it.roundToInt()) } }
-                    }
+                item(visible = showsHijri) {
+                    SliderSetting(
+                        R.string.tooldetail_calendar_hijri_title,
+                        subtitle = stringResource(R.string.tooldetail_calendar_hijri_subtitle),
+                        value = settings.calendarTool.hijriAdjustDays.toFloat(),
+                        range = -2f..2f,
+                        display = { days ->
+                            val d = days.roundToInt()
+                            if (d > 0) daysAheadFormat.format(d) else daysFormat.format(d)
+                        },
+                        info = stringResource(R.string.tooldetail_calendar_hijri_info),
+                        default = SettingsDefaults.calendarTool.hijriAdjustDays.toFloat(),
+                    ) { scope.launch { repository.setHijriAdjustDays(it.roundToInt()) } }
                 }
             }
         }
@@ -1177,16 +1169,14 @@ internal fun ToolDetailSettings(
                         ) { scope.launch { repository.setPowerSavingBatteryPercent(it.toInt()) } }
                     }
                 }
-                if (ps.trigger != PowerSavingTrigger.OFF) {
-                    item {
-                        ToggleSetting(
-                            R.string.tooldetail_power_charging_title,
-                            stringResource(R.string.tooldetail_power_charging_subtitle),
-                            ps.offWhileCharging,
-                            info = stringResource(R.string.tooldetail_power_charging_info),
-                            default = SettingsDefaults.powerSaving.offWhileCharging,
-                        ) { scope.launch { repository.setPowerSavingOffWhileCharging(it) } }
-                    }
+                item(visible = ps.trigger != PowerSavingTrigger.OFF) {
+                    ToggleSetting(
+                        R.string.tooldetail_power_charging_title,
+                        stringResource(R.string.tooldetail_power_charging_subtitle),
+                        ps.offWhileCharging,
+                        info = stringResource(R.string.tooldetail_power_charging_info),
+                        default = SettingsDefaults.powerSaving.offWhileCharging,
+                    ) { scope.launch { repository.setPowerSavingOffWhileCharging(it) } }
                 }
             }
             SettingsGroup(
@@ -1818,18 +1808,16 @@ internal fun ToolDetailSettings(
                         default = SettingsDefaults.webSearch.resultCount.toFloat(),
                     ) { scope.launch { repository.setSearchResultCount(it.roundToInt()) } }
                 }
-                if (tool == ToolbarTool.IMAGE_SEARCH) {
-                    item {
-                        SliderSetting(
-                            R.string.tooldetail_image_columns_title,
-                            subtitle = stringResource(R.string.tooldetail_image_columns_subtitle),
-                            value = settings.emoji.mediaGridColumns.toFloat(),
-                            range = 2f..5f,
-                            display = { numberFormat.format(it.roundToInt()) },
-                            info = stringResource(R.string.tooldetail_image_columns_info),
-                            default = SettingsDefaults.emoji.mediaGridColumns.toFloat(),
-                        ) { scope.launch { repository.setMediaGridColumns(it.roundToInt()) } }
-                    }
+                item(visible = tool == ToolbarTool.IMAGE_SEARCH) {
+                    SliderSetting(
+                        R.string.tooldetail_image_columns_title,
+                        subtitle = stringResource(R.string.tooldetail_image_columns_subtitle),
+                        value = settings.emoji.mediaGridColumns.toFloat(),
+                        range = 2f..5f,
+                        display = { numberFormat.format(it.roundToInt()) },
+                        info = stringResource(R.string.tooldetail_image_columns_info),
+                        default = SettingsDefaults.emoji.mediaGridColumns.toFloat(),
+                    ) { scope.launch { repository.setMediaGridColumns(it.roundToInt()) } }
                 }
             }
         }
@@ -1989,21 +1977,19 @@ internal fun ToolDetailSettings(
                             onClick = { openSpellCheckerSettings(context) },
                         )
                     }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        item {
-                            ToggleSetting(
-                                stringResource(
-                                    R.string.tooldetail_grammar_no_suggestions_title,
-                                ),
-                                stringResource(
-                                    R.string.tooldetail_grammar_no_suggestions_subtitle,
-                                ),
-                                settings.spellCheckerNoSuggestions,
-                                default = SettingsDefaults.spellCheckerNoSuggestions,
-                            ) {
-                                scope.launch {
-                                    repository.setSpellCheckerNoSuggestions(it)
-                                }
+                    item(visible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        ToggleSetting(
+                            stringResource(
+                                R.string.tooldetail_grammar_no_suggestions_title,
+                            ),
+                            stringResource(
+                                R.string.tooldetail_grammar_no_suggestions_subtitle,
+                            ),
+                            settings.spellCheckerNoSuggestions,
+                            default = SettingsDefaults.spellCheckerNoSuggestions,
+                        ) {
+                            scope.launch {
+                                repository.setSpellCheckerNoSuggestions(it)
                             }
                         }
                     }
@@ -2347,15 +2333,13 @@ internal fun ToolDetailSettings(
                         default = SettingsDefaults.passwordGenerator.pwSymbols,
                     ) { scope.launch { repository.setPwSymbols(it) } }
                 }
-                if (settings.passwordGenerator.pwSymbols) {
-                    item {
-                        TextFieldSetting(
-                            label = stringResource(R.string.tooldetail_password_pool_label),
-                            value = settings.toolLimits.passwordSymbols,
-                            hint = stringResource(R.string.tooldetail_password_pool_hint),
-                            default = SettingsDefaults.toolLimits.passwordSymbols,
-                        ) { repository.setPasswordSymbols(it) }
-                    }
+                item(visible = settings.passwordGenerator.pwSymbols) {
+                    TextFieldSetting(
+                        label = stringResource(R.string.tooldetail_password_pool_label),
+                        value = settings.toolLimits.passwordSymbols,
+                        hint = stringResource(R.string.tooldetail_password_pool_hint),
+                        default = SettingsDefaults.toolLimits.passwordSymbols,
+                    ) { repository.setPasswordSymbols(it) }
                 }
                 item {
                     ToggleSetting(
@@ -2856,17 +2840,15 @@ private fun ToolKeywordSetting(
                 ),
             ) { scope.launch { repository.setToolKeywordCaseSensitive(tool, it) } }
         }
-        if (saved != defaults) {
-            item {
-                WmRow(
-                    title = stringResource(CommonR.string.common_reset_defaults),
-                    subtitle = defaults.joinToString(", "),
-                    onClick = {
-                        text = defaults.joinToString(", ")
-                        scope.launch { repository.setToolKeywords(tool, defaults) }
-                    },
-                )
-            }
+        item(visible = saved != defaults) {
+            WmRow(
+                title = stringResource(CommonR.string.common_reset_defaults),
+                subtitle = defaults.joinToString(", "),
+                onClick = {
+                    text = defaults.joinToString(", ")
+                    scope.launch { repository.setToolKeywords(tool, defaults) }
+                },
+            )
         }
     }
     if (!settings.smartSuggestions || !settings.smartToolKeywords) {

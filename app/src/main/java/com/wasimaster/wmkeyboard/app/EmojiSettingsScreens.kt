@@ -121,23 +121,21 @@ internal fun EmojiSettings(
                 default = SettingsDefaults.emojiPrediction,
             ) { scope.launch { repository.setEmojiPrediction(it) } }
         }
-        if (settings.emojiPrediction) {
-            item {
-                ChoiceSetting(
-                    title = R.string.langemoji_emoji_insert_mode_title,
-                    subtitle = stringResource(R.string.langemoji_emoji_insert_mode_subtitle),
-                    info = stringResource(R.string.langemoji_emoji_insert_mode_info),
-                    options = listOf(
-                        EmojiInsertMode.REPLACE to
-                            stringResource(R.string.langemoji_emoji_insert_replace_label),
-                        EmojiInsertMode.APPEND to
-                            stringResource(R.string.langemoji_emoji_insert_append_label),
-                    ),
-                    selected = settings.emojiInsertMode,
-                    default = SettingsDefaults.emojiInsertMode,
-                    detail = { mode -> ChoiceDetail(stringResource(emojiInsertDescRes(mode))) },
-                ) { scope.launch { repository.setEmojiInsertMode(it) } }
-            }
+        item(visible = settings.emojiPrediction) {
+            ChoiceSetting(
+                title = R.string.langemoji_emoji_insert_mode_title,
+                subtitle = stringResource(R.string.langemoji_emoji_insert_mode_subtitle),
+                info = stringResource(R.string.langemoji_emoji_insert_mode_info),
+                options = listOf(
+                    EmojiInsertMode.REPLACE to
+                        stringResource(R.string.langemoji_emoji_insert_replace_label),
+                    EmojiInsertMode.APPEND to
+                        stringResource(R.string.langemoji_emoji_insert_append_label),
+                ),
+                selected = settings.emojiInsertMode,
+                default = SettingsDefaults.emojiInsertMode,
+                detail = { mode -> ChoiceDetail(stringResource(emojiInsertDescRes(mode))) },
+            ) { scope.launch { repository.setEmojiInsertMode(it) } }
         }
     }
     SettingsGroup(stringResource(R.string.langemoji_emoji_row_title)) {
@@ -158,44 +156,42 @@ internal fun EmojiSettings(
                 detail = { mode -> ChoiceDetail(stringResource(emojiBarModeDescRes(mode))) },
             ) { scope.launch { repository.setEmojiBarMode(it) } }
         }
-        if (settings.emojiBarMode != EmojiBarMode.OFF) {
-            item {
-                ChoiceSetting(
-                    title = R.string.langemoji_emoji_bar_content_title,
-                    subtitle = stringResource(R.string.langemoji_emoji_bar_content_subtitle),
-                    options = listOf(
-                        EmojiBarContent.MOST_USED to
-                            stringResource(R.string.langemoji_emoji_most_used_label),
-                        EmojiBarContent.RECENTS to
-                            stringResource(R.string.langemoji_emoji_recent_label),
-                        EmojiBarContent.FAVOURITES to
-                            stringResource(R.string.langemoji_emoji_favourites_label),
-                    ),
-                    selected = settings.emojiBarContent,
-                    default = SettingsDefaults.emojiBarContent,
-                    detail = { content -> ChoiceDetail(stringResource(emojiBarContentDescRes(content))) },
-                ) { scope.launch { repository.setEmojiBarContent(it) } }
-            }
-            item {
-                SliderSetting(
-                    title = R.string.langemoji_emoji_bar_count_title,
-                    subtitle = stringResource(R.string.langemoji_emoji_bar_count_subtitle),
-                    value = settings.emoji.barCount.toFloat(),
-                    range = EmojiBarCountRange.first.toFloat()..EmojiBarCountRange.last.toFloat(),
-                    display = { numberFormat.format(it.roundToInt()) },
-                    info = stringResource(R.string.langemoji_emoji_bar_count_info),
-                    default = SettingsDefaults.emoji.barCount.toFloat(),
-                ) { scope.launch { repository.setEmojiBarCount(it.roundToInt()) } }
-            }
-            item {
-                ToggleSetting(
-                    R.string.langemoji_emoji_bar_scroll_title,
-                    stringResource(R.string.langemoji_emoji_bar_scroll_subtitle),
-                    settings.emoji.barScrollable,
-                    info = stringResource(R.string.langemoji_emoji_bar_scroll_info),
-                    default = SettingsDefaults.emoji.barScrollable,
-                ) { scope.launch { repository.setEmojiBarScrollable(it) } }
-            }
+        item(visible = settings.emojiBarMode != EmojiBarMode.OFF) {
+            ChoiceSetting(
+                title = R.string.langemoji_emoji_bar_content_title,
+                subtitle = stringResource(R.string.langemoji_emoji_bar_content_subtitle),
+                options = listOf(
+                    EmojiBarContent.MOST_USED to
+                        stringResource(R.string.langemoji_emoji_most_used_label),
+                    EmojiBarContent.RECENTS to
+                        stringResource(R.string.langemoji_emoji_recent_label),
+                    EmojiBarContent.FAVOURITES to
+                        stringResource(R.string.langemoji_emoji_favourites_label),
+                ),
+                selected = settings.emojiBarContent,
+                default = SettingsDefaults.emojiBarContent,
+                detail = { content -> ChoiceDetail(stringResource(emojiBarContentDescRes(content))) },
+            ) { scope.launch { repository.setEmojiBarContent(it) } }
+        }
+        item(visible = settings.emojiBarMode != EmojiBarMode.OFF) {
+            SliderSetting(
+                title = R.string.langemoji_emoji_bar_count_title,
+                subtitle = stringResource(R.string.langemoji_emoji_bar_count_subtitle),
+                value = settings.emoji.barCount.toFloat(),
+                range = EmojiBarCountRange.first.toFloat()..EmojiBarCountRange.last.toFloat(),
+                display = { numberFormat.format(it.roundToInt()) },
+                info = stringResource(R.string.langemoji_emoji_bar_count_info),
+                default = SettingsDefaults.emoji.barCount.toFloat(),
+            ) { scope.launch { repository.setEmojiBarCount(it.roundToInt()) } }
+        }
+        item(visible = settings.emojiBarMode != EmojiBarMode.OFF) {
+            ToggleSetting(
+                R.string.langemoji_emoji_bar_scroll_title,
+                stringResource(R.string.langemoji_emoji_bar_scroll_subtitle),
+                settings.emoji.barScrollable,
+                info = stringResource(R.string.langemoji_emoji_bar_scroll_info),
+                default = SettingsDefaults.emoji.barScrollable,
+            ) { scope.launch { repository.setEmojiBarScrollable(it) } }
         }
     }
     // Where the row sits among the bars is decided on Rows & bars; a row

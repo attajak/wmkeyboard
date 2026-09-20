@@ -1421,19 +1421,17 @@ private fun CjkDictPackManager(
         // Cangjie and stroke packs above do, so somebody arriving with one can
         // fill them without a download. Only offered for the language whose
         // packs those are.
-        if (CjkDictCatalog.forLang(langId).any { it.id in FLEX_FILLABLE_PACKS }) {
-            item {
-                WmRow(
-                    title = stringResource(R.string.languages_cjk_flex_import_title),
-                    subtitle = flexMessage ?: stringResource(R.string.languages_cjk_flex_import_subtitle),
-                    trailing = {
-                        TextButton(
-                            enabled = !flexBusy,
-                            onClick = { flexLauncher.launch(FlexLanguagePack.IMPORT_MIME_TYPES) },
-                        ) { Text(stringResource(CommonR.string.common_import)) }
-                    },
-                )
-            }
+        item(visible = CjkDictCatalog.forLang(langId).any { it.id in FLEX_FILLABLE_PACKS }) {
+            WmRow(
+                title = stringResource(R.string.languages_cjk_flex_import_title),
+                subtitle = flexMessage ?: stringResource(R.string.languages_cjk_flex_import_subtitle),
+                trailing = {
+                    TextButton(
+                        enabled = !flexBusy,
+                        onClick = { flexLauncher.launch(FlexLanguagePack.IMPORT_MIME_TYPES) },
+                    ) { Text(stringResource(CommonR.string.common_import)) }
+                },
+            )
         }
 
         // Traditional output suits both Chinese (Taiwan) and Cantonese (Hong Kong),
@@ -1451,31 +1449,27 @@ private fun CjkDictPackManager(
         // Traditional characters are only half of writing Traditional: Taipei
         // says 計程車 where the mainland says 出租車, and no character map
         // reaches that. Only worth showing once the toggle above is on.
-        if (settings.cjk.traditionalOutput) {
-            item {
-                ChoiceSetting(
-                    R.string.languages_cjk_region_title,
-                    info = stringResource(R.string.languages_cjk_region_info),
-                    options = HanVariant.HanRegion.entries.map { it to stringResource(cjkRegionLabelRes(it)) },
-                    selected = settings.cjk.hanRegion,
-                    default = SettingsDefaults.cjk.hanRegion,
-                    detail = { region -> ChoiceDetail(stringResource(cjkRegionDescRes(region))) },
-                ) { region -> scope.launch { repository.setCjkHanRegion(region) } }
-            }
+        item(visible = settings.cjk.traditionalOutput) {
+            ChoiceSetting(
+                R.string.languages_cjk_region_title,
+                info = stringResource(R.string.languages_cjk_region_info),
+                options = HanVariant.HanRegion.entries.map { it to stringResource(cjkRegionLabelRes(it)) },
+                selected = settings.cjk.hanRegion,
+                default = SettingsDefaults.cjk.hanRegion,
+                detail = { region -> ChoiceDetail(stringResource(cjkRegionDescRes(region))) },
+            ) { region -> scope.launch { repository.setCjkHanRegion(region) } }
         }
 
         // Cantonese-only: the sound mergers most Hong Kong speakers have, and
         // therefore spell — without this, someone who says 你 as lei5 types `lei`
         // and the dictionary (which files it under nei5) offers nothing at all.
-        if (langId == "yue") {
-            item {
-                ToggleSetting(
-                    R.string.languages_cjk_lazy_title,
-                    stringResource(R.string.languages_cjk_lazy_subtitle),
-                    settings.cjk.jyutpingLazy,
-                    default = SettingsDefaults.cjk.jyutpingLazy,
-                ) { on -> scope.launch { repository.setJyutpingLazy(on) } }
-            }
+        item(visible = langId == "yue") {
+            ToggleSetting(
+                R.string.languages_cjk_lazy_title,
+                stringResource(R.string.languages_cjk_lazy_subtitle),
+                settings.cjk.jyutpingLazy,
+                default = SettingsDefaults.cjk.jyutpingLazy,
+            ) { on -> scope.launch { repository.setJyutpingLazy(on) } }
         }
 
     }
@@ -1525,14 +1519,12 @@ private fun CjkDictPackManager(
                         )
                     }
                 }
-                if (settings.cjk.pinyinFuzzyPairs != PinyinFuzzy.ALL_PAIRS) {
-                    item {
-                        ActionRow(
-                            title = R.string.languages_cjk_fuzzy_pairs_reset_title,
-                            subtitle = null,
-                            action = stringResource(CommonR.string.common_reset),
-                        ) { scope.launch { repository.resetPinyinFuzzyPairs() } }
-                    }
+                item(visible = settings.cjk.pinyinFuzzyPairs != PinyinFuzzy.ALL_PAIRS) {
+                    ActionRow(
+                        title = R.string.languages_cjk_fuzzy_pairs_reset_title,
+                        subtitle = null,
+                        action = stringResource(CommonR.string.common_reset),
+                    ) { scope.launch { repository.resetPinyinFuzzyPairs() } }
                 }
             }
             item {

@@ -355,15 +355,13 @@ internal fun AiToolSettings(
                 default = SettingsDefaults.ai.diffView,
             ) { scope.launch { repository.setAiDiffView(it) } }
         }
-        if (settings.ai.diffView) {
-            item {
-                ToggleSetting(
-                    R.string.toolai_ai_diff_first_title,
-                    stringResource(R.string.toolai_ai_diff_first_subtitle),
-                    settings.ai.diffOpensFirst,
-                    default = SettingsDefaults.ai.diffOpensFirst,
-                ) { scope.launch { repository.setAiDiffOpensFirst(it) } }
-            }
+        item(visible = settings.ai.diffView) {
+            ToggleSetting(
+                R.string.toolai_ai_diff_first_title,
+                stringResource(R.string.toolai_ai_diff_first_subtitle),
+                settings.ai.diffOpensFirst,
+                default = SettingsDefaults.ai.diffOpensFirst,
+            ) { scope.launch { repository.setAiDiffOpensFirst(it) } }
         }
     }
     SettingsGroup(stringResource(R.string.toolai_ai_chat_group_title)) {
@@ -511,15 +509,13 @@ internal fun AiActionsSettings(
             }
         } else null,
     ) {
-        if (reordering) {
-            item {
-                ReorderableColumn(
-                    ordered,
-                    label = { names[it.id].orEmpty() },
-                    onReorder = { next -> scope.launch { repository.setAiActionOrder(next.map { it.id }) } },
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                )
-            }
+        item(visible = reordering) {
+            ReorderableColumn(
+                ordered,
+                label = { names[it.id].orEmpty() },
+                onReorder = { next -> scope.launch { repository.setAiActionOrder(next.map { it.id }) } },
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
         }
         for (action in ordered) {
             if (reordering) break
@@ -649,42 +645,40 @@ internal fun AiActionEditor(
                     .padding(horizontal = 16.dp, vertical = 4.dp),
             )
         }
-        if (showPromptField) {
-            item {
-                OutlinedTextField(
-                    value = task,
-                    onValueChange = { task = it },
-                    label = {
-                        Text(
-                            stringResource(
-                                if (askEachRun) {
-                                    R.string.toolai_ai_action_prefill_label
-                                } else {
-                                    R.string.toolai_ai_action_task_label
-                                },
-                            ),
-                        )
-                    },
-                    supportingText = {
-                        Text(
-                            stringResource(
-                                when {
-                                    askEachRun -> R.string.toolai_ai_action_prefill_hint
-                                    rawPrompt -> R.string.toolai_ai_action_task_raw_hint
-                                    else -> R.string.toolai_ai_action_task_hint
-                                },
-                                AiPrompts.TRANSLATE_TOKEN,
-                            ),
-                        )
-                    },
-                    // No maxLines on purpose: the field grows with the prompt
-                    // instead of scrolling a paragraph through four lines.
-                    minLines = 8,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
-                )
-            }
+        item(visible = showPromptField) {
+            OutlinedTextField(
+                value = task,
+                onValueChange = { task = it },
+                label = {
+                    Text(
+                        stringResource(
+                            if (askEachRun) {
+                                R.string.toolai_ai_action_prefill_label
+                            } else {
+                                R.string.toolai_ai_action_task_label
+                            },
+                        ),
+                    )
+                },
+                supportingText = {
+                    Text(
+                        stringResource(
+                            when {
+                                askEachRun -> R.string.toolai_ai_action_prefill_hint
+                                rawPrompt -> R.string.toolai_ai_action_task_raw_hint
+                                else -> R.string.toolai_ai_action_task_hint
+                            },
+                            AiPrompts.TRANSLATE_TOKEN,
+                        ),
+                    )
+                },
+                // No maxLines on purpose: the field grows with the prompt
+                // instead of scrolling a paragraph through four lines.
+                minLines = 8,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+            )
         }
     }
     SettingsGroup(stringResource(R.string.toolai_ai_action_behaviour_title)) {
@@ -695,14 +689,12 @@ internal fun AiActionEditor(
                 askEachRun,
             ) { askEachRun = it }
         }
-        if (askEachRun) {
-            item {
-                ToggleSetting(
-                    R.string.toolai_ai_action_prefill_title,
-                    stringResource(R.string.toolai_ai_action_prefill_subtitle),
-                    prefillPrompt,
-                ) { prefillPrompt = it }
-            }
+        item(visible = askEachRun) {
+            ToggleSetting(
+                R.string.toolai_ai_action_prefill_title,
+                stringResource(R.string.toolai_ai_action_prefill_subtitle),
+                prefillPrompt,
+            ) { prefillPrompt = it }
         }
         item {
             ToggleSetting(

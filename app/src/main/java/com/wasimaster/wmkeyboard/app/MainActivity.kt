@@ -169,6 +169,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -2343,11 +2344,9 @@ internal fun AdvancedSettings(onNavigate: (String) -> Unit) {
             ) { onNavigate("datasaver") }
         }
         // Only the F-Droid build reads the server settings, so only it links them.
-        if (BuildConfig.ENABLE_FDROID) {
-            item {
-                NavRow(R.string.servers_title, stringResource(R.string.servers_subtitle), route = "servers") {
-                    onNavigate("servers")
-                }
+        item(visible = BuildConfig.ENABLE_FDROID) {
+            NavRow(R.string.servers_title, stringResource(R.string.servers_subtitle), route = "servers") {
+                onNavigate("servers")
             }
         }
         item {
@@ -2476,9 +2475,44 @@ private fun AnimatedVisibilityScope.SettingsScreen(
  * small ones inside.
  */
 internal class SettingsGroupScope {
-    val items = mutableListOf<@Composable () -> Unit>()
+    /**
+     * One row of the group.
+     *
+     * [conditional] is what separates a row that is simply there from one the
+     * caller hands a [visible] to. Only the second kind is wrapped in a
+     * reveal, so the ordinary group — which is nearly all of them — pays
+     * nothing for the machinery.
+     */
+    class Entry(
+        val visible: Boolean,
+        val conditional: Boolean,
+        val content: @Composable () -> Unit,
+    )
+
+    val items = mutableListOf<Entry>()
+
+    /** A row that is always part of the group. */
     fun item(content: @Composable () -> Unit) {
-        items += content
+        items += Entry(visible = true, conditional = false, content = content)
+    }
+
+    /**
+     * A row that belongs to the group but is only showing while [visible].
+     *
+     * Prefer this over wrapping the `item` call in an `if`. Both draw the same
+     * thing, but a row that is never added simply is not there, so the row
+     * a switch reveals appears and disappears in a single frame and the rows
+     * under it jump. Declared this way it expands into place and pushes them
+     * down instead, and the card corners either side of it follow.
+     *
+     * The body is not composed while the row is hidden, exactly as it is not
+     * inside an `if`. It *is* composed while the row is on its way out, so a
+     * body that would crash once [visible] has gone false — one that reads
+     * through a null check the condition is doing, say — wants the `if` after
+     * all.
+     */
+    fun item(visible: Boolean, content: @Composable () -> Unit) {
+        items += Entry(visible = visible, conditional = true, content = content)
     }
 }
 
@@ -2519,13 +2553,18 @@ internal fun SettingsGroup(
     // conditionally on snapshot state (e.g. sliders that appear only
     // while their feature's toggle is on).
     val scope = SettingsGroupScope().apply(builder)
-    if (scope.items.isEmpty()) return
+    // What the group is showing right now, which is what every count below is
+    // about: a hidden conditional row is not a row the reader can see, so it
+    // is not a slab in the skeleton and not one of the rows a closed fold
+    // says it is holding.
+    val shown = scope.items.count { it.visible }
+    if (shown == 0) return
     // Below the fold while the screen is still animating in: come back for
     // the rows once the entrance can spare them — see [rememberGroupRevealed].
     // Until then the group holds its place as slabs the size of its rows, so
     // the screen opens at its full height instead of growing under the reader.
-    if (!rememberGroupRevealed(scope.items.size)) {
-        GroupSkeleton(scope.items.size, hasTitle = title != null)
+    if (!rememberGroupRevealed(shown)) {
+        GroupSkeleton(shown, hasTitle = title != null)
         return
     }
     val folds = LocalAdvancedFolds.current
@@ -2542,7 +2581,7 @@ internal fun SettingsGroup(
         if (foldId != null && title != null) {
             FoldHeader(
                 title,
-                count = scope.items.size,
+                count = shown,
                 open = open,
                 info = info,
                 summary = if (open) null else foldSummary?.invoke(),
@@ -2553,22 +2592,37 @@ internal fun SettingsGroup(
             SectionHeader(title, info = info, action = action, modifier = GroupHeadingPadding)
         }
         val cards: @Composable () -> Unit = {
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(3.dp),
-            ) {
-                scope.items.forEachIndexed { index, row ->
-                    val top = if (index == 0) 24.dp else 6.dp
-                    val bottom = if (index == scope.items.lastIndex) 24.dp else 6.dp
-                    Surface(
-                        shape = RoundedCornerShape(
-                            topStart = top, topEnd = top,
-                            bottomStart = bottom, bottomEnd = bottom,
-                        ),
-                        color = MaterialTheme.colorScheme.surfaceContainer,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Column(modifier = Modifier.padding(vertical = 4.dp)) { row() }
+            // The 3 dp between two cards is drawn by the card below rather
+            // than by the column's arrangement (#136): an arrangement puts a
+            // gap between every pair of children, including a conditional row
+            // that has collapsed to nothing, and the group would keep a sliver
+            // of air where a row used to be. Carried by the row, the gap goes
+            // away with it.
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                val first = scope.items.indexOfFirst { it.visible }
+                val last = scope.items.indexOfLast { it.visible }
+                scope.items.forEachIndexed { index, entry ->
+                    val card: @Composable () -> Unit = {
+                        Column {
+                            if (index > 0) Spacer(Modifier.height(3.dp))
+                            GroupCard(
+                                top = if (index == first) GroupEndCorner else GroupInnerCorner,
+                                bottom = if (index == last) GroupEndCorner else GroupInnerCorner,
+                                content = entry.content,
+                            )
+                        }
+                    }
+                    when {
+                        !entry.conditional -> card()
+                        // Reduced motion has no still version of a reveal, so
+                        // the row is or is not there.
+                        LocalReduceMotion.current -> if (entry.visible) card()
+                        else -> AnimatedVisibility(
+                            visible = entry.visible,
+                            enter = expandVertically() + fadeIn(),
+                            exit = shrinkVertically() + fadeOut(),
+                            content = { card() },
+                        )
                     }
                 }
             }
@@ -2591,6 +2645,35 @@ internal fun SettingsGroup(
             }
         }
         Spacer(Modifier.height(GroupTail))
+    }
+}
+
+/** The radius at the two ends of a group's stack of cards. */
+private val GroupEndCorner = 24.dp
+
+/** The radius where one card meets the next. */
+private val GroupInnerCorner = 6.dp
+
+/**
+ * One row's card.
+ *
+ * The corners animate, because which card is the group's first and which its
+ * last changes when a conditional row appears above or below them, and a
+ * corner that snapped from 6 dp to 24 dp would undo the reveal that moved it.
+ */
+@Composable
+private fun GroupCard(top: Dp, bottom: Dp, content: @Composable () -> Unit) {
+    val topCorner by animateDpAsState(top, label = "groupCardTop")
+    val bottomCorner by animateDpAsState(bottom, label = "groupCardBottom")
+    Surface(
+        shape = RoundedCornerShape(
+            topStart = topCorner, topEnd = topCorner,
+            bottomStart = bottomCorner, bottomEnd = bottomCorner,
+        ),
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(modifier = Modifier.padding(vertical = 4.dp)) { content() }
     }
 }
 

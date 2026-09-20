@@ -257,18 +257,16 @@ fun PhotoRotationScreen(
                 )
             }
             // Without this the "Themes I select" choice would select nothing.
-            if (photos.scope == RotationScope.SELECTED_THEMES) {
-                item {
-                    NavRow(
-                        title = R.string.photo_rotation_scope_pick_title,
-                        value = pluralStringResource(
-                            R.plurals.photo_rotation_topics_value,
-                            photos.scopeThemeIds.size,
-                            photos.scopeThemeIds.size,
-                        ),
-                        onClick = { scopeThemesOpen = true },
-                    )
-                }
+            item(visible = photos.scope == RotationScope.SELECTED_THEMES) {
+                NavRow(
+                    title = R.string.photo_rotation_scope_pick_title,
+                    value = pluralStringResource(
+                        R.plurals.photo_rotation_topics_value,
+                        photos.scopeThemeIds.size,
+                        photos.scopeThemeIds.size,
+                    ),
+                    onClick = { scopeThemesOpen = true },
+                )
             }
         }
 
@@ -355,15 +353,13 @@ fun PhotoRotationScreen(
                         default = SettingsDefaults.photoBackground.fetchOnMetered,
                     ) { scope.launch { repository.setPhotoFetchOnMetered(it) } }
                 }
-                if (saverStops) {
-                    item {
-                        NavRow(
-                            title = R.string.home_datasaver_title,
-                            subtitle = stringResource(R.string.photo_rotation_metered_saver_nav_subtitle),
-                            route = "datasaver",
-                            onClick = { onNavigate("datasaver") },
-                        )
-                    }
+                item(visible = saverStops) {
+                    NavRow(
+                        title = R.string.home_datasaver_title,
+                        subtitle = stringResource(R.string.photo_rotation_metered_saver_nav_subtitle),
+                        route = "datasaver",
+                        onClick = { onNavigate("datasaver") },
+                    )
                 }
                 item {
                     NavRow(

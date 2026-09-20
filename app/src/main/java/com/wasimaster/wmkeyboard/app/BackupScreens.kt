@@ -752,22 +752,20 @@ private fun AutoBackupGroup(
             }
             // A folder is storage on this device, so a network requirement there
             // would only ever stop a backup that costs nothing.
-            if (auto.destination.needsNetwork) {
-                item {
-                    ToggleSetting(
-                        R.string.backup_auto_unmetered_title,
-                        stringResource(R.string.backup_auto_unmetered_subtitle),
-                        auto.requireUnmetered,
-                        info = stringResource(R.string.backup_auto_unmetered_info),
-                        default = SettingsDefaults.autoBackup.requireUnmetered,
-                    ) { on ->
-                        scope.launch {
-                            repository.setAutoBackupRequireUnmetered(on)
-                            AutoBackupScheduler.sync(
-                                context,
-                                repository.settings.first().autoBackup,
-                            )
-                        }
+            item(visible = auto.destination.needsNetwork) {
+                ToggleSetting(
+                    R.string.backup_auto_unmetered_title,
+                    stringResource(R.string.backup_auto_unmetered_subtitle),
+                    auto.requireUnmetered,
+                    info = stringResource(R.string.backup_auto_unmetered_info),
+                    default = SettingsDefaults.autoBackup.requireUnmetered,
+                ) { on ->
+                    scope.launch {
+                        repository.setAutoBackupRequireUnmetered(on)
+                        AutoBackupScheduler.sync(
+                            context,
+                            repository.settings.first().autoBackup,
+                        )
                     }
                 }
             }
@@ -788,15 +786,13 @@ private fun AutoBackupGroup(
                 default = SettingsDefaults.autoBackup.encrypt,
             ) { on -> scope.launch { repository.setAutoBackupEncrypt(on) } }
         }
-        if (configured && auto.encrypt) {
-            item {
-                StoredTextField(
-                    label = stringResource(R.string.backup_auto_passphrase_label),
-                    value = auto.passphrase,
-                    supporting = "",
-                    password = true,
-                ) { entered -> scope.launch { repository.setAutoBackupPassphrase(entered) } }
-            }
+        item(visible = configured && auto.encrypt) {
+            StoredTextField(
+                label = stringResource(R.string.backup_auto_passphrase_label),
+                value = auto.passphrase,
+                supporting = "",
+                password = true,
+            ) { entered -> scope.launch { repository.setAutoBackupPassphrase(entered) } }
         }
     }
 
@@ -1235,16 +1231,14 @@ internal fun BackupContentsSettings(repository: SettingsRepository, settings: Ke
                     AutoBackupSettings.DEFAULT_SECTIONS,
             ) { setSection(ConfigBackup.Section.SETTINGS, it) }
         }
-        if (ConfigBackup.Section.SETTINGS in sections) {
-            item {
-                ToggleSetting(
-                    R.string.backup_include_secrets_title,
-                    stringResource(R.string.backup_include_secrets_subtitle),
-                    includeSecrets,
-                    info = stringResource(R.string.backup_include_secrets_info),
-                    default = SettingsDefaults.autoBackup.includeSecrets,
-                ) { on -> scope.launch { repository.setAutoBackupIncludeSecrets(on) } }
-            }
+        item(visible = ConfigBackup.Section.SETTINGS in sections) {
+            ToggleSetting(
+                R.string.backup_include_secrets_title,
+                stringResource(R.string.backup_include_secrets_subtitle),
+                includeSecrets,
+                info = stringResource(R.string.backup_include_secrets_info),
+                default = SettingsDefaults.autoBackup.includeSecrets,
+            ) { on -> scope.launch { repository.setAutoBackupIncludeSecrets(on) } }
         }
         item {
             ToggleSetting(

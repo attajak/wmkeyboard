@@ -543,32 +543,30 @@ internal fun SymbolRowSettings(
                 ) { scope.launch { repository.setSymbolRowLines(it) } }
             }
             // Only a stack has a way to scroll; one line scrolls the one way.
-            if (settings.rows.symbolRowLines > 1) {
-                item {
-                    ChoiceSetting(
-                        R.string.rows_symbol_row_scroll_title,
-                        subtitle = stringResource(R.string.rows_symbol_row_scroll_subtitle),
-                        options = listOf(
-                            SymbolRowScroll.TOGETHER to
-                                stringResource(R.string.rows_symbol_row_scroll_together_label),
-                            SymbolRowScroll.SEPARATE to
-                                stringResource(R.string.rows_symbol_row_scroll_separate_label),
-                        ),
-                        selected = settings.rows.symbolRowScroll,
-                        default = SettingsDefaults.rows.symbolRowScroll,
-                        detail = { scroll ->
-                            ChoiceDetail(
-                                stringResource(
-                                    if (scroll == SymbolRowScroll.SEPARATE) {
-                                        R.string.rows_symbol_row_scroll_separate_desc
-                                    } else {
-                                        R.string.rows_symbol_row_scroll_together_desc
-                                    },
-                                ),
-                            )
-                        },
-                    ) { scope.launch { repository.setSymbolRowScroll(it) } }
-                }
+            item(visible = settings.rows.symbolRowLines > 1) {
+                ChoiceSetting(
+                    R.string.rows_symbol_row_scroll_title,
+                    subtitle = stringResource(R.string.rows_symbol_row_scroll_subtitle),
+                    options = listOf(
+                        SymbolRowScroll.TOGETHER to
+                            stringResource(R.string.rows_symbol_row_scroll_together_label),
+                        SymbolRowScroll.SEPARATE to
+                            stringResource(R.string.rows_symbol_row_scroll_separate_label),
+                    ),
+                    selected = settings.rows.symbolRowScroll,
+                    default = SettingsDefaults.rows.symbolRowScroll,
+                    detail = { scroll ->
+                        ChoiceDetail(
+                            stringResource(
+                                if (scroll == SymbolRowScroll.SEPARATE) {
+                                    R.string.rows_symbol_row_scroll_separate_desc
+                                } else {
+                                    R.string.rows_symbol_row_scroll_together_desc
+                                },
+                            ),
+                        )
+                    },
+                ) { scope.launch { repository.setSymbolRowScroll(it) } }
             }
         }
     }

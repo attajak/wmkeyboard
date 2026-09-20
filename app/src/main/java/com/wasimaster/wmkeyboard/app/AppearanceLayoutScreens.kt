@@ -228,15 +228,13 @@ internal fun AppearanceSettings(
             settings.fontScale != d.fontScale ||
             settings.layoutBehavior.hintFontScale != d.layoutBehavior.hintFontScale ||
             settings.layoutBehavior.hintOffsetDp != d.layoutBehavior.hintOffsetDp
-        if (appearanceMoved) {
-            item {
-                ActionRow(
-                    title = R.string.appearance_reset_title,
-                    subtitle = stringResource(R.string.appearance_reset_subtitle),
-                    action = stringResource(CommonR.string.common_reset),
-                    confirm = stringResource(R.string.appearance_reset_confirm),
-                ) { scope.launch { repository.resetAppearance() } }
-            }
+        item(visible = appearanceMoved) {
+            ActionRow(
+                title = R.string.appearance_reset_title,
+                subtitle = stringResource(R.string.appearance_reset_subtitle),
+                action = stringResource(CommonR.string.common_reset),
+                confirm = stringResource(R.string.appearance_reset_confirm),
+            ) { scope.launch { repository.resetAppearance() } }
         }
     }
 
@@ -451,17 +449,15 @@ internal fun AppearanceToolbarSettings(
         }
         // The toolbox reads this as its own fallback, but it has a slider of
         // its own further down, so nothing is stranded by hiding the pair.
-        if (settings.toolbarBehavior.enabled && settings.toolbarLabels) {
-            item {
-                SliderSetting(
-                    R.string.appearance_toolbar_label_size_title,
-                    subtitle = stringResource(R.string.appearance_toolbar_label_size_subtitle),
-                    value = settings.toolbarLabelSize.toFloat(),
-                    range = 7f..14f,
-                    display = { spFormat.format(it.roundToInt()) },
-                    default = SettingsDefaults.toolbarLabelSize.toFloat(),
-                ) { scope.launch { repository.setToolbarLabelSize(it.roundToInt()) } }
-            }
+        item(visible = settings.toolbarBehavior.enabled && settings.toolbarLabels) {
+            SliderSetting(
+                R.string.appearance_toolbar_label_size_title,
+                subtitle = stringResource(R.string.appearance_toolbar_label_size_subtitle),
+                value = settings.toolbarLabelSize.toFloat(),
+                range = 7f..14f,
+                display = { spFormat.format(it.roundToInt()) },
+                default = SettingsDefaults.toolbarLabelSize.toFloat(),
+            ) { scope.launch { repository.setToolbarLabelSize(it.roundToInt()) } }
         }
         item {
             SliderSetting(
@@ -514,15 +510,13 @@ internal fun AppearanceToolbarSettings(
         }
         // The same shapes the keys and the popups use. It draws nothing while
         // the radius above is at 0, which is the setting for "no background".
-        if (settings.toolCircleRadiusDp > 0) {
-            item {
-                NavRow(
-                    R.string.appearance_tool_shape_title,
-                    subtitle = stringResource(R.string.appearance_tool_shape_subtitle),
-                    value = keyShapeName(settings.toolShape),
-                    onClick = { toolShapePickerOpen = true },
-                )
-            }
+        item(visible = settings.toolCircleRadiusDp > 0) {
+            NavRow(
+                R.string.appearance_tool_shape_title,
+                subtitle = stringResource(R.string.appearance_tool_shape_subtitle),
+                value = keyShapeName(settings.toolShape),
+                onClick = { toolShapePickerOpen = true },
+            )
         }
         // Only the wide tools honour it — panel headers and grids keep the
         // fixed circle — and every wide one is drawn by the toolbar.
@@ -551,15 +545,13 @@ internal fun AppearanceToolbarSettings(
             settings.suggestionStrip.primaryColor != d.suggestionStrip.primaryColor ||
             settings.toolCircleRadiusDp != d.toolCircleRadiusDp ||
             settings.toolShape != d.toolShape
-        if (toolbarMoved) {
-            item {
-                ActionRow(
-                    title = R.string.appearance_toolbar_reset_title,
-                    subtitle = stringResource(R.string.appearance_toolbar_reset_subtitle),
-                    action = stringResource(CommonR.string.common_reset),
-                    confirm = stringResource(R.string.appearance_toolbar_reset_confirm),
-                ) { scope.launch { repository.resetToolbar() } }
-            }
+        item(visible = toolbarMoved) {
+            ActionRow(
+                title = R.string.appearance_toolbar_reset_title,
+                subtitle = stringResource(R.string.appearance_toolbar_reset_subtitle),
+                action = stringResource(CommonR.string.common_reset),
+                confirm = stringResource(R.string.appearance_toolbar_reset_confirm),
+            ) { scope.launch { repository.resetToolbar() } }
         }
     }
 }
@@ -575,15 +567,13 @@ internal fun AppearanceToolboxSettings(
         // The grid's own order. "Reset pinned tools" restored the bar and
         // nothing restored the grid, so a bad drag session there had no way
         // back. Drawn only once the order has actually been changed.
-        if (settings.toolboxOrder != SettingsDefaults.toolboxOrder) {
-            item {
-                ActionRow(
-                    title = R.string.appearance_reset_toolbox_order_title,
-                    subtitle = stringResource(R.string.appearance_reset_toolbox_order_subtitle),
-                    action = stringResource(CommonR.string.common_reset),
-                    confirm = stringResource(R.string.appearance_reset_toolbox_order_confirm),
-                ) { scope.launch { repository.resetToolboxOrder() } }
-            }
+        item(visible = settings.toolboxOrder != SettingsDefaults.toolboxOrder) {
+            ActionRow(
+                title = R.string.appearance_reset_toolbox_order_title,
+                subtitle = stringResource(R.string.appearance_reset_toolbox_order_subtitle),
+                action = stringResource(CommonR.string.common_reset),
+                confirm = stringResource(R.string.appearance_reset_toolbox_order_confirm),
+            ) { scope.launch { repository.resetToolboxOrder() } }
         }
         item {
             ChoiceSetting(
@@ -645,19 +635,17 @@ internal fun AppearanceToolboxSettings(
                 default = SettingsDefaults.toolbox.paginate,
             ) { scope.launch { repository.setToolboxPaginate(it) } }
         }
-        if (settings.toolbox.paginate) {
-            item {
-                val perPage = stringResource(R.string.appearance_slider_per_page_value)
-                SliderSetting(
-                    R.string.appearance_toolbox_page_size_title,
-                    subtitle = stringResource(R.string.appearance_toolbox_page_size_subtitle),
-                    value = settings.toolbox.pageSize.toFloat(),
-                    range = ToolboxPageSizeRange.first.toFloat()..ToolboxPageSizeRange.last.toFloat(),
-                    display = { perPage.format(it.roundToInt()) },
-                    info = stringResource(R.string.appearance_toolbox_page_size_info),
-                    default = SettingsDefaults.toolbox.pageSize.toFloat(),
-                ) { scope.launch { repository.setToolboxPageSize(it.roundToInt()) } }
-            }
+        item(visible = settings.toolbox.paginate) {
+            val perPage = stringResource(R.string.appearance_slider_per_page_value)
+            SliderSetting(
+                R.string.appearance_toolbox_page_size_title,
+                subtitle = stringResource(R.string.appearance_toolbox_page_size_subtitle),
+                value = settings.toolbox.pageSize.toFloat(),
+                range = ToolboxPageSizeRange.first.toFloat()..ToolboxPageSizeRange.last.toFloat(),
+                display = { perPage.format(it.roundToInt()) },
+                info = stringResource(R.string.appearance_toolbox_page_size_info),
+                default = SettingsDefaults.toolbox.pageSize.toFloat(),
+            ) { scope.launch { repository.setToolboxPageSize(it.roundToInt()) } }
         }
         item {
             val followToolbar = stringResource(R.string.appearance_toolbox_label_size_follow)
@@ -679,15 +667,13 @@ internal fun AppearanceToolboxSettings(
         // Layout & size. The order of the tools has its own reset above.
         val d = SettingsDefaults
         val toolboxMoved = settings.toolbox != d.toolbox || settings.toolboxColumns != d.toolboxColumns
-        if (toolboxMoved) {
-            item {
-                ActionRow(
-                    title = R.string.appearance_toolbox_reset_title,
-                    subtitle = stringResource(R.string.appearance_toolbox_reset_subtitle),
-                    action = stringResource(CommonR.string.common_reset),
-                    confirm = stringResource(R.string.appearance_toolbox_reset_confirm),
-                ) { scope.launch { repository.resetToolbox() } }
-            }
+        item(visible = toolboxMoved) {
+            ActionRow(
+                title = R.string.appearance_toolbox_reset_title,
+                subtitle = stringResource(R.string.appearance_toolbox_reset_subtitle),
+                action = stringResource(CommonR.string.common_reset),
+                confirm = stringResource(R.string.appearance_toolbox_reset_confirm),
+            ) { scope.launch { repository.resetToolbox() } }
         }
     }
 }
@@ -792,36 +778,34 @@ internal fun LayoutSettings(
                 default = SettingsDefaults.numberRow,
             ) { scope.launch { repository.setNumberRow(it) } }
         }
-        if (settings.numberRow) {
-            item {
-                SliderSetting(
-                    R.string.layout_number_row_height_title,
-                    subtitle = stringResource(R.string.layout_number_row_height_subtitle),
-                    value = settings.numberRowHeightDp.toFloat(),
-                    range = 32f..100f,
-                    display = { dpFormat.format(it.toInt()) },
-                    info = stringResource(R.string.layout_number_row_height_info),
-                    default = SettingsDefaults.numberRowHeightDp.toFloat(),
-                ) { scope.launch { repository.setNumberRowHeightDp(it.toInt()) } }
-            }
-            item {
-                ToggleSetting(
-                    R.string.layout_number_row_shift_symbols_title,
-                    stringResource(R.string.layout_number_row_shift_symbols_subtitle),
-                    settings.layoutBehavior.numberRowShiftSymbols,
-                    info = stringResource(R.string.layout_number_row_shift_symbols_info),
-                    default = SettingsDefaults.layoutBehavior.numberRowShiftSymbols,
-                ) { scope.launch { repository.setNumberRowShiftSymbols(it) } }
-            }
-            item {
-                ToggleSetting(
-                    R.string.layout_number_row_in_symbols_title,
-                    stringResource(R.string.layout_number_row_in_symbols_subtitle),
-                    settings.layoutBehavior.numberRowInSymbols,
-                    info = stringResource(R.string.layout_number_row_in_symbols_info),
-                    default = SettingsDefaults.layoutBehavior.numberRowInSymbols,
-                ) { scope.launch { repository.setNumberRowInSymbols(it) } }
-            }
+        item(visible = settings.numberRow) {
+            SliderSetting(
+                R.string.layout_number_row_height_title,
+                subtitle = stringResource(R.string.layout_number_row_height_subtitle),
+                value = settings.numberRowHeightDp.toFloat(),
+                range = 32f..100f,
+                display = { dpFormat.format(it.toInt()) },
+                info = stringResource(R.string.layout_number_row_height_info),
+                default = SettingsDefaults.numberRowHeightDp.toFloat(),
+            ) { scope.launch { repository.setNumberRowHeightDp(it.toInt()) } }
+        }
+        item(visible = settings.numberRow) {
+            ToggleSetting(
+                R.string.layout_number_row_shift_symbols_title,
+                stringResource(R.string.layout_number_row_shift_symbols_subtitle),
+                settings.layoutBehavior.numberRowShiftSymbols,
+                info = stringResource(R.string.layout_number_row_shift_symbols_info),
+                default = SettingsDefaults.layoutBehavior.numberRowShiftSymbols,
+            ) { scope.launch { repository.setNumberRowShiftSymbols(it) } }
+        }
+        item(visible = settings.numberRow) {
+            ToggleSetting(
+                R.string.layout_number_row_in_symbols_title,
+                stringResource(R.string.layout_number_row_in_symbols_subtitle),
+                settings.layoutBehavior.numberRowInSymbols,
+                info = stringResource(R.string.layout_number_row_in_symbols_info),
+                default = SettingsDefaults.layoutBehavior.numberRowInSymbols,
+            ) { scope.launch { repository.setNumberRowInSymbols(it) } }
         }
     }
 
@@ -835,36 +819,34 @@ internal fun LayoutSettings(
                 default = SettingsDefaults.layoutBehavior.symbolsReturnToLetters,
             ) { scope.launch { repository.setSymbolsReturnToLetters(it) } }
         }
-        if (settings.layoutBehavior.symbolsReturnToLetters) {
-            item {
-                // Saves as it is typed, like the currency keys field; blank
-                // restores the default set. Seeded once rather than re-read on
-                // every keystroke: the repository drops spaces and duplicates,
-                // and feeding that back would move the caret while typing.
-                var returnChars by remember {
-                    mutableStateOf(settings.layoutBehavior.symbolsReturnCharSet())
-                }
-                Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            stringResource(R.string.layout_symbols_return_chars_title),
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                        InfoButton(
-                            stringResource(R.string.layout_symbols_return_chars_title),
-                            stringResource(R.string.layout_symbols_return_chars_info),
-                        )
-                    }
-                    OutlinedTextField(
-                        value = returnChars,
-                        onValueChange = {
-                            returnChars = it
-                            scope.launch { repository.setSymbolsReturnChars(it) }
-                        },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
+        item(visible = settings.layoutBehavior.symbolsReturnToLetters) {
+            // Saves as it is typed, like the currency keys field; blank
+            // restores the default set. Seeded once rather than re-read on
+            // every keystroke: the repository drops spaces and duplicates,
+            // and feeding that back would move the caret while typing.
+            var returnChars by remember {
+                mutableStateOf(settings.layoutBehavior.symbolsReturnCharSet())
+            }
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        stringResource(R.string.layout_symbols_return_chars_title),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    InfoButton(
+                        stringResource(R.string.layout_symbols_return_chars_title),
+                        stringResource(R.string.layout_symbols_return_chars_info),
                     )
                 }
+                OutlinedTextField(
+                    value = returnChars,
+                    onValueChange = {
+                        returnChars = it
+                        scope.launch { repository.setSymbolsReturnChars(it) }
+                    },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
     }
@@ -1065,18 +1047,16 @@ internal fun LayoutSizeSettings(
                 default = SettingsDefaults.keyboardWidthPercent.toFloat(),
             ) { scope.launch { repository.setKeyboardWidthPercent(it.toInt()) } }
         }
-        if (settings.keyboardWidthPercent < 100) {
-            item {
-                ChoiceSetting(
-                    title = R.string.layout_keyboard_position_title,
-                    info = stringResource(R.string.layout_keyboard_position_info),
-                    options = KeyboardAlignment.entries.map { alignment ->
-                        alignment to stringResource(layoutAlignmentLabelRes(alignment))
-                    },
-                    selected = settings.keyboardAlignment,
-                    default = SettingsDefaults.keyboardAlignment,
-                ) { scope.launch { repository.setKeyboardAlignment(it) } }
-            }
+        item(visible = settings.keyboardWidthPercent < 100) {
+            ChoiceSetting(
+                title = R.string.layout_keyboard_position_title,
+                info = stringResource(R.string.layout_keyboard_position_info),
+                options = KeyboardAlignment.entries.map { alignment ->
+                    alignment to stringResource(layoutAlignmentLabelRes(alignment))
+                },
+                selected = settings.keyboardAlignment,
+                default = SettingsDefaults.keyboardAlignment,
+            ) { scope.launch { repository.setKeyboardAlignment(it) } }
         }
         // Drawn only once something in the group has actually moved, like the
         // per-row reset controls: on an untouched screen it would be a button
@@ -1094,15 +1074,13 @@ internal fun LayoutSizeSettings(
             SettingsDefaults.layoutBehavior.sidePadRightScale ||
             settings.layoutBehavior.bottomRowHeightDp !=
             SettingsDefaults.layoutBehavior.bottomRowHeightDp
-        if (sizingMoved) {
-            item {
-                ActionRow(
-                    title = R.string.layout_reset_sizing_title,
-                    subtitle = stringResource(R.string.layout_reset_sizing_subtitle),
-                    action = stringResource(CommonR.string.common_reset),
-                    confirm = stringResource(R.string.layout_reset_sizing_confirm),
-                ) { scope.launch { repository.resetSizeAndPosition() } }
-            }
+        item(visible = sizingMoved) {
+            ActionRow(
+                title = R.string.layout_reset_sizing_title,
+                subtitle = stringResource(R.string.layout_reset_sizing_subtitle),
+                action = stringResource(CommonR.string.common_reset),
+                confirm = stringResource(R.string.layout_reset_sizing_confirm),
+            ) { scope.launch { repository.resetSizeAndPosition() } }
         }
     }
     SettingsGroup(
@@ -1151,17 +1129,15 @@ internal fun LayoutSizeSettings(
                 // and that override is what decides whether the row is drawn
                 // on this screen shape — so it, not the global switch, is what
                 // makes the height mean something here.
-                if (values.numberRow ?: settings.numberRow) {
-                    item {
-                        SliderSetting(
-                            R.string.layout_number_row_height_title,
-                            value = (values.numberRowHeightDp ?: settings.numberRowHeightDp).toFloat(),
-                            range = 32f..100f,
-                            display = { dpFormat.format(it.toInt()) },
-                        ) {
-                            scope.launch {
-                                repository.setVariantNumberRowHeightDp(variant, it.toInt())
-                            }
+                item(visible = values.numberRow ?: settings.numberRow) {
+                    SliderSetting(
+                        R.string.layout_number_row_height_title,
+                        value = (values.numberRowHeightDp ?: settings.numberRowHeightDp).toFloat(),
+                        range = 32f..100f,
+                        display = { dpFormat.format(it.toInt()) },
+                    ) {
+                        scope.launch {
+                            repository.setVariantNumberRowHeightDp(variant, it.toInt())
                         }
                     }
                 }
@@ -1240,16 +1216,14 @@ internal fun LayoutSizeSettings(
                         values.numberRow ?: settings.numberRow,
                     ) { scope.launch { repository.setVariantNumberRow(variant, it) } }
                 }
-                if ((values.keyboardWidthPercent ?: settings.keyboardWidthPercent) < 100) {
-                    item {
-                        ChoiceSetting(
-                            title = R.string.layout_keyboard_position_title,
-                            options = KeyboardAlignment.entries.map { alignment ->
-                                alignment to stringResource(layoutAlignmentLabelRes(alignment))
-                            },
-                            selected = values.keyboardAlignment ?: settings.keyboardAlignment,
-                        ) { scope.launch { repository.setVariantAlignment(variant, it) } }
-                    }
+                item(visible = (values.keyboardWidthPercent ?: settings.keyboardWidthPercent) < 100) {
+                    ChoiceSetting(
+                        title = R.string.layout_keyboard_position_title,
+                        options = KeyboardAlignment.entries.map { alignment ->
+                            alignment to stringResource(layoutAlignmentLabelRes(alignment))
+                        },
+                        selected = values.keyboardAlignment ?: settings.keyboardAlignment,
+                    ) { scope.launch { repository.setVariantAlignment(variant, it) } }
                 }
                 if (override != null && !override.isEmpty) {
                     item {
@@ -1359,27 +1333,25 @@ internal fun LayoutOneHandedSettings(
                 default = SettingsDefaults.splitKeyboard,
             ) { scope.launch { repository.setSplitKeyboard(it) } }
         }
-        if (settings.splitKeyboard) {
-            item {
-                ToggleSetting(
-                    R.string.layout_split_large_only_title,
-                    stringResource(R.string.layout_split_large_only_subtitle),
-                    settings.layoutBehavior.splitOnlyOnLargeScreens,
-                    info = stringResource(R.string.layout_split_large_only_info),
-                    default = SettingsDefaults.layoutBehavior.splitOnlyOnLargeScreens,
-                ) { scope.launch { repository.setSplitOnlyOnLargeScreens(it) } }
-            }
-            item {
-                SliderSetting(
-                    R.string.layout_split_gap_title,
-                    subtitle = stringResource(R.string.layout_split_gap_subtitle),
-                    value = settings.splitGapPercent.toFloat(),
-                    range = 5f..40f,
-                    display = { percentFormat.format(it.toInt()) },
-                    info = stringResource(R.string.layout_split_gap_info),
-                    default = SettingsDefaults.splitGapPercent.toFloat(),
-                ) { scope.launch { repository.setSplitGapPercent(it.toInt()) } }
-            }
+        item(visible = settings.splitKeyboard) {
+            ToggleSetting(
+                R.string.layout_split_large_only_title,
+                stringResource(R.string.layout_split_large_only_subtitle),
+                settings.layoutBehavior.splitOnlyOnLargeScreens,
+                info = stringResource(R.string.layout_split_large_only_info),
+                default = SettingsDefaults.layoutBehavior.splitOnlyOnLargeScreens,
+            ) { scope.launch { repository.setSplitOnlyOnLargeScreens(it) } }
+        }
+        item(visible = settings.splitKeyboard) {
+            SliderSetting(
+                R.string.layout_split_gap_title,
+                subtitle = stringResource(R.string.layout_split_gap_subtitle),
+                value = settings.splitGapPercent.toFloat(),
+                range = 5f..40f,
+                display = { percentFormat.format(it.toInt()) },
+                info = stringResource(R.string.layout_split_gap_info),
+                default = SettingsDefaults.splitGapPercent.toFloat(),
+            ) { scope.launch { repository.setSplitGapPercent(it.toInt()) } }
         }
         item {
             ToggleSetting(
@@ -1390,41 +1362,39 @@ internal fun LayoutOneHandedSettings(
                 default = SettingsDefaults.floatingKeyboard,
             ) { scope.launch { repository.setFloatingKeyboard(it) } }
         }
-        if (settings.floatingKeyboard) {
-            item {
-                SliderSetting(
-                    R.string.layout_floating_width_title,
-                    subtitle = stringResource(R.string.layout_floating_width_subtitle),
-                    value = settings.floatingWidthDp.toFloat(),
-                    range = 240f..500f,
-                    display = { dpFormat.format(it.toInt()) },
-                    info = stringResource(R.string.layout_floating_width_info),
-                    default = SettingsDefaults.floatingWidthDp.toFloat(),
-                ) { scope.launch { repository.setFloatingWidthDp(it.toInt()) } }
-            }
-            item {
-                SliderSetting(
-                    R.string.layout_floating_height_title,
-                    subtitle = stringResource(R.string.layout_floating_height_subtitle),
-                    value = settings.floatingHeightScale,
-                    range = 0.6f..1.6f,
-                    display = { percentFormat.format((it * 100).toInt()) },
-                    info = stringResource(R.string.layout_floating_height_info),
-                    default = SettingsDefaults.floatingHeightScale,
-                ) { scope.launch { repository.setFloatingHeightScale(it) } }
-            }
-            item {
-                val movedFloating = settings.floatingWidthDp != SettingsDefaults.floatingWidthDp ||
-                    settings.floatingHeightScale != SettingsDefaults.floatingHeightScale ||
-                    settings.floatingXFraction != SettingsDefaults.floatingXFraction ||
-                    settings.floatingYFraction != SettingsDefaults.floatingYFraction
-                if (movedFloating) {
-                    ActionRow(
-                        title = R.string.layout_floating_reset_title,
-                        subtitle = stringResource(R.string.layout_floating_reset_subtitle),
-                        action = stringResource(CommonR.string.common_reset),
-                    ) { scope.launch { repository.resetFloatingGeometry() } }
-                }
+        item(visible = settings.floatingKeyboard) {
+            SliderSetting(
+                R.string.layout_floating_width_title,
+                subtitle = stringResource(R.string.layout_floating_width_subtitle),
+                value = settings.floatingWidthDp.toFloat(),
+                range = 240f..500f,
+                display = { dpFormat.format(it.toInt()) },
+                info = stringResource(R.string.layout_floating_width_info),
+                default = SettingsDefaults.floatingWidthDp.toFloat(),
+            ) { scope.launch { repository.setFloatingWidthDp(it.toInt()) } }
+        }
+        item(visible = settings.floatingKeyboard) {
+            SliderSetting(
+                R.string.layout_floating_height_title,
+                subtitle = stringResource(R.string.layout_floating_height_subtitle),
+                value = settings.floatingHeightScale,
+                range = 0.6f..1.6f,
+                display = { percentFormat.format((it * 100).toInt()) },
+                info = stringResource(R.string.layout_floating_height_info),
+                default = SettingsDefaults.floatingHeightScale,
+            ) { scope.launch { repository.setFloatingHeightScale(it) } }
+        }
+        item(visible = settings.floatingKeyboard) {
+            val movedFloating = settings.floatingWidthDp != SettingsDefaults.floatingWidthDp ||
+                settings.floatingHeightScale != SettingsDefaults.floatingHeightScale ||
+                settings.floatingXFraction != SettingsDefaults.floatingXFraction ||
+                settings.floatingYFraction != SettingsDefaults.floatingYFraction
+            if (movedFloating) {
+                ActionRow(
+                    title = R.string.layout_floating_reset_title,
+                    subtitle = stringResource(R.string.layout_floating_reset_subtitle),
+                    action = stringResource(CommonR.string.common_reset),
+                ) { scope.launch { repository.resetFloatingGeometry() } }
             }
         }
         item {
