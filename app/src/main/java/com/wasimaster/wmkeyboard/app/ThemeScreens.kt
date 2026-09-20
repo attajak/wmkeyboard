@@ -105,6 +105,7 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -206,6 +207,8 @@ import kotlin.math.roundToInt
 import androidx.compose.material.icons.outlined.SwapHoriz
 import com.wasimaster.wmkeyboard.core.theme.FlexResult
 import com.wasimaster.wmkeyboard.core.theme.FlexTheme
+import com.wasimaster.wmkeyboard.core.theme.HeliResult
+import com.wasimaster.wmkeyboard.core.theme.HeliTheme
 import androidx.compose.material.icons.outlined.Crop169
 import androidx.compose.material.icons.outlined.CropFree
 import androidx.compose.material.icons.outlined.CropSquare
@@ -1021,6 +1024,46 @@ fun ThemesScreen(
             }
         }
     }
+    // HeliBoard and LeanType have no theme file: a theme is a line of JSON,
+    // copied out of their colour screen and pasted into a forum post. So this
+    // import takes text from either source, and the button opens a two-way
+    // chooser rather than a file picker.
+    var heliChooser by remember { mutableStateOf(false) }
+    suspend fun applyHeliTheme(text: String?) {
+        if (text.isNullOrBlank()) {
+            message = context.getString(R.string.import_heli_clipboard_empty_body)
+            return
+        }
+        val result = withContext(Dispatchers.Default) { HeliTheme.read(text) }
+        if (result !is HeliResult.Converted) {
+            message = context.getString(R.string.import_heli_unreadable_body)
+            return
+        }
+        val stored = result.theme.copy(id = "custom_${System.currentTimeMillis()}")
+        repository.upsertCustomTheme(stored)
+        // Saved, not switched to, for the reason the FlorisBoard import is:
+        // a converted theme is the thing worth looking at first.
+        message = context.getString(
+            R.string.import_heli_done,
+            stored.name,
+            result.coloursUsed,
+            result.coloursRead,
+        )
+    }
+    val heliLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            val text = withContext(Dispatchers.IO) {
+                runCatching {
+                    context.contentResolver.requireInputStream(uri)
+                        .use { it.readBytes().decodeToString() }
+                }.getOrNull()
+            }
+            applyHeliTheme(text)
+        }
+    }
     fun export(theme: ThemeSpec) {
         pendingExport = theme
         exportLauncher.launch("${theme.name.ifBlank { "theme" }}.${ThemeCodec.FILE_EXTENSION}")
@@ -1270,6 +1313,32 @@ fun ThemesScreen(
             Spacer(Modifier.width(6.dp))
             Text(stringResource(R.string.theme_import_floris_action))
         }
+        OutlinedButton(onClick = { heliChooser = true }) {
+            Icon(Icons.Outlined.SwapHoriz, contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(6.dp))
+            Text(stringResource(R.string.theme_import_heli_action))
+        }
+    }
+    if (heliChooser) {
+        val clipboard = LocalClipboardManager.current
+        AlertDialog(
+            onDismissRequest = { heliChooser = false },
+            title = { Text(stringResource(R.string.import_heli_title)) },
+            text = { Text(stringResource(R.string.import_heli_body)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    heliChooser = false
+                    val pasted = clipboard.getText()?.text
+                    scope.launch { applyHeliTheme(pasted) }
+                }) { Text(stringResource(R.string.import_heli_paste_action)) }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    heliChooser = false
+                    heliLauncher.launch(HeliTheme.IMPORT_MIME_TYPES)
+                }) { Text(stringResource(R.string.import_heli_file_action)) }
+            },
+        )
     }
     Spacer(Modifier.height(8.dp))
 

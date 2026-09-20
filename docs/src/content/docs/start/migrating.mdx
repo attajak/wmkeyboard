@@ -52,10 +52,11 @@ For seeding a large vocabulary at once (brand names, jargon, a whole word list y
 
 - Import a plain text file, or pull one from an `http://` or `https://` URL.
 - Format: one word per line, optionally followed by a space and a frequency number; lines starting with `#` are ignored.
+- A `.combined` word list or a compiled `.dict` dictionary from an AOSP-derived keyboard (HeliBoard, LeanType, FUTO, OpenBoard, or one pulled from a GApps package) imports as it is, with nothing to convert first.
 - Words imported this way are never autocorrected away.
 - Files are capped at 32 MiB per import.
 
-So if your old keyboard can export a plain word list, reformat it this way and import it here. WM Keyboard ships no converter for any other keyboard's proprietary export format. That reformatting step is on you. See [Dictionaries & words](/reference/settings/dictionaries/) for the full screen reference.
+So if your old keyboard can export a word list, import it here. See [Dictionaries & words](/reference/settings/dictionaries/) for the full screen reference and for the two `.dict` shapes that are turned down.
 
 :::note
 Android's own system dictionary (the one some keyboards share words through) isn't a bridge here either. WM Keyboard can optionally *write* learned words into it for other apps to see, but it never *reads* plain words back out of it to seed its own suggestions; only dictionary-shortcut expansions (like "omw" → "on my way") round-trip that way.

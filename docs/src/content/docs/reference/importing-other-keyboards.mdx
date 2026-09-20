@@ -1,13 +1,13 @@
 ---
 title: "Importing from other keyboards"
-description: "Bring layouts and themes over from FlorisBoard and HeliBoard: what converts, what doesn't, and why."
+description: "Bring layouts, themes and dictionaries over from FlorisBoard, HeliBoard, LeanType and FUTO: what converts, what doesn't, and why."
 sidebar:
   order: 6
 ---
 
 import SettingsPath from '@components/SettingsPath.astro';
 
-Switching keyboards usually means leaving your layouts and themes behind. WM Keyboard reads FlorisBoard and HeliBoard files directly and converts them into its own, so the grid you built and the theme you picked come with you.
+Switching keyboards usually means leaving your layouts, themes and dictionaries behind. WM Keyboard reads FlorisBoard, HeliBoard, LeanType and FUTO files directly and converts them into its own, so the grid you built, the theme you picked and the word list you collected come with you.
 
 Conversion is honest about being lossy. A layout import always ends on a confirm dialog that lists what changed and what could not be carried, and nothing is written until you accept it. A `.flex` theme opened from a file manager gets the same treatment. The **FlorisBoard** button inside Settings is the one route without a confirm step: it saves the theme straight away and then tells you what it saved. Saved is not switched on, so you still get to look first.
 
@@ -17,11 +17,16 @@ Conversion is honest about being lossy. A layout import always ends on a confirm
 |---|---|---|
 | `.json` layout | FlorisBoard, HeliBoard | A custom layout |
 | `.txt` layout | HeliBoard | A custom layout |
+| `.yaml` layout | FUTO Keyboard | A custom layout |
 | `.flex` theme | FlorisBoard 0.4 and later | One theme, one look per theme in the file |
+| `.flex` language pack | FlorisBoard | A Cangjie or stroke table for Chinese |
+| Colour theme text | HeliBoard, LeanType | One theme, from a file or from the clipboard |
 | `.keyman-touch-layout` | Keyman | A custom layout, without the keyboard's rules |
 | `.kmp` package | Keyman | A custom layout **and** its typing rules |
+| `.combined` word list | HeliBoard, LeanType, FUTO, any AOSP keyboard | A custom dictionary |
+| `.dict` dictionary | HeliBoard, LeanType, FUTO, OpenBoard, GApps | A custom dictionary |
 
-HeliBoard's JSON layouts use FlorisBoard's format, so one reader handles both.
+HeliBoard's JSON layouts use FlorisBoard's format, so one reader handles both. LeanType is a HeliBoard fork, so its layouts and themes are HeliBoard's.
 
 **Keyman is a different story.** 862 Keyman key grids are already built into the app, so for most of them there's nothing to import. You can still open a `.keyman-touch-layout` file or a full `.kmp` package yourself, which is how you'd add a keyboard that isn't bundled or one you're writing. A `.kmp` brings its typing rules with it; a touch layout file does not. See [Keyman layouts](/languages/keyman/).
 
@@ -33,7 +38,7 @@ Pick the file. The app reads it, then puts one dialog in front of you before it 
 
 ### It asks for the language
 
-Neither format records one. In FlorisBoard and HeliBoard a layout is a grid and the language comes from the keyboard's own settings, so the file itself cannot say whether a Cyrillic grid is Russian or Ukrainian.
+The FlorisBoard and HeliBoard formats do not record one. There a layout is a grid and the language comes from the keyboard's own settings, so the file itself cannot say whether a Cyrillic grid is Russian or Ukrainian. A FUTO layout does state its languages, and the picker starts from that instead of from a guess.
 
 That matters more here than it sounds. The language picks the dictionary, the autocorrect, the script rules, dictation, and how the shift key behaves. The app guesses from the letters on the keys and shows you the guess, and you can change it before you import. There is no silent default.
 
@@ -48,6 +53,36 @@ The bottom row gets the same treatment, one key at a time. A delete, space or en
 Some keys in those formats do things WM Keyboard reaches another way: voice input, the clipboard panel, the settings screen, the suggestion-bar toggles. Those are tools here rather than keys, so they are removed and the dialog names the codes it removed. A key that looked right and quietly did nothing would be worse.
 
 A handful of keys convert to the closest match rather than an exact one, and the dialog counts those too. Delete-word becomes a plain delete; the second symbols page folds onto the symbols key.
+
+### Keys named by a word
+
+HeliBoard's text format has one field per key, so it spells everything in the label. A key that says `delete` is the delete key, `$$$` is the local currency, `aa|bb` shows `aa` and types `bb`, and `abc|!code/-7` names a code outright. The app reads all of it:
+
+| In the file | Becomes |
+| --- | --- |
+| `delete`, `shift`, `space`, `action`, `zwnj` | That key |
+| `alpha`, `symbol`, `numpad`, `emoji`, `language_switch` | The matching layer or switch key |
+| `period`, `comma` | The punctuation slots, with this keyboard's own popups and its email and URI behaviour |
+| `ctrl`, `alt`, `meta`, `fn` | The modifier keys |
+| `com` | A `.com` key. The other keyboard localises this one, so it is counted as approximated |
+| `$$$`, `$$$1` to `$$$5` | Currency signs. Also localised there, also counted |
+| `aa\|bb` | A key drawn `aa` that types `bb` |
+| `x\|!code/-7` | Whatever that code means, here delete |
+| `\space` | A key that draws the word "space". A backslash escapes the whole label |
+
+A name this keyboard has nothing for, such as `dpad`, is removed and named on the dialog. An icon name (`!icon/previous_key`) refers to the other keyboard's own drawable, so the key keeps whatever its action draws here and the dialog counts the loss.
+
+### Keys that change with the shift key or the field
+
+A JSON layout can make one key conditional: `case_selector` for the shift state, `variation_selector` for the field, `keyboard_state_selector`, `layout_direction_selector`. HeliBoard's own Dvorak layout is written this way.
+
+One slot here holds one key, so the app keeps the resting branch: unshifted, an ordinary text field, left to right. The dialog counts the keys that lost a branch.
+
+`case_selector` is the exception and loses nothing. Its two branches are exactly this keyboard's key and shift-label pair, so both cases come across, and a shifted letter that is only the plain uppercase is left for the keyboard to produce on its own.
+
+### Press-and-hold options
+
+The other keyboard writes a popup's *options* inside the popup list, wrapped in exclamation marks. `!fixedColumnOrder!4` and `!autoColumnOrder!4` become that key's **Alternate columns**, which you can change afterwards in the layout editor. `!hasLabels!`, `!needsDividers!` and `!noPanelAutoPopupKey!` ask for drawings this keyboard decides for itself and are dropped. None of them is a letter, so none ends up as a key you can type.
 
 ### Label flags become label sizes
 
@@ -68,9 +103,53 @@ Write the number in decimal or in hex (`"labelFlags": 320` and `"labelFlags": "0
 
 The rest of the flags ask for a text style this keyboard has no form of, such as a monospaced or an off-centre label. Those keys keep their size and lose the style, and the dialog counts them.
 
+### FUTO layouts
+
+FUTO Keyboard writes its layouts in YAML, and publishes its own as a repository of them. Pick one with the same **Import from another keyboard** button; the app tells a YAML layout from a JSON one by the document itself, not by the file name.
+
+Most of that format reads straight across, because FUTO's keyboard descends from AOSP's and so its key specs are the ones already read here: `a|b`, `!code/`, `!icon/` and the same `!autoColumnOrder!4` popup markers. A row written as `q w e r t`, as `[[a, ą], b]`, or as a list of `{type: base, spec: …}` objects all work, and so does `type: case`, which keeps both cases the way a FlorisBoard case selector does.
+
+Four things are worth knowing:
+
+- **It is the one format that states its language.** `languages: [lt]` seeds the language picker with a fact rather than a guess from the letters. A language this app does not have falls back to the guess.
+- **The number row is dropped**, because this app adds one from a setting and keeping the file's would give the layout two. A layout that sets `numberRowMode: AlwaysEnabled`, which is how the PC-style arrangements carry their backtick and bracket keys, keeps its own.
+- **`$space` takes what is left of its row**, measured against the widest row of ordinary keys in the same layout, so a ten-key grid and a twelve-key one both end up with a spacebar spanning the middle.
+- **The alternate pages are dropped and named.** `$alt0` and its siblings switch to a whole second grid, which has no slot here, and a key that switched to nothing would strand you on it. The symbols and number layers are this app's own for the same reason, and `layoutSetOverrides` names layouts by ids that mean nothing here.
+
+`$contextual` becomes the comma slot, which does the same job from the same signal: `/` in a web address, `@` in an email field.
+
 ### Letters are rewritten to one spelling
 
 Some letters can be written two ways in Unicode: a base letter plus a mark, or a single character that means the same thing. Bengali, Devanagari, Gurmukhi and Oriya all have letters like this. WM Keyboard's cluster shaping and its backspace rules use the single-character spelling, so the app rewrites the other one on the way in. Without it a key looks correct and then deletes half a letter at a time.
+
+## Dictionaries
+
+<SettingsPath path="Typing / Suggestions / Custom dictionaries / Import word list" />
+
+Every AOSP-derived keyboard shares one dictionary ecosystem, and for most languages a compiled `.dict` is the only form the word list exists in. Both halves of it import here as they are: the `.combined` source lists a dictionary repository publishes, and the compiled `.dict` files HeliBoard, LeanType and FUTO download (including the ones pulled out of a GApps package).
+
+A `.dict` is unpacked into an ordinary text list at import, so everything the Custom dictionaries screen does to a list you wrote yourself works on it too: the word count, the switch, the trash icon, and taking a single word out from the suggestion strip.
+
+Frequencies are 0 to 255 over there and 0 to 10000 here, so they are scaled rather than copied. Copying them would drop every imported word below every bundled one.
+
+Two shapes are refused rather than half-read: a version 4 `.dict`, which is a folder of files rather than one file, and a file whose header carries a `codePointTable`, because that table changes what the rest of the file's bytes mean. Bigrams and shortcut expansions are skipped in both formats. A list here is a flat set of words, and a shortcut is an expansion rather than a word anybody typed.
+
+See [Dictionaries & words](/reference/settings/dictionaries/) for the screen itself.
+
+## Chinese code tables
+
+<SettingsPath path="Languages / Chinese / Chinese options / Import from FlorisBoard" />
+
+FlorisBoard's other kind of `.flex` is a language pack: an SQLite database of the shape-based Chinese tables, where a code spells a character by how it looks rather than how it sounds. Those are the same tables this app's own **Cangjie** and **Stroke** packs hold, so a pack you already have fills one without a download.
+
+The rows are written exactly where a download would have put them, so everything else on that screen keeps working on it: the row says Downloaded, the keyboard picks the table up at the next field you tap, and the trash icon removes it.
+
+Two things are worth knowing:
+
+- **Only Cangjie and stroke land.** A pack often holds Wubi, Zhengma, Boshiamy and others as well, and this keyboard has no way to type those, so a table for one would be a large file that changed nothing. The app names the tables it found back to you instead. Cangjie Quick needs no table of its own: it is the same codes queried differently.
+- **A stroke table is rewritten as it is read.** Those tables spell the five strokes as the letters `h s p n z`; a stored code here is always 1 to 5. Without that translation every row would be dropped for having a code no key can produce.
+
+Pick the wrong `.flex` and the app says so rather than failing: a theme file is named as a theme, with Themes as the place to take it.
 
 ## Themes
 
@@ -116,6 +195,25 @@ FlorisBoard styles a much larger set of keyboard parts than this app draws, so t
 - **The landscape text editor.** When a field fills the screen in landscape, Android draws that editor, not this app, so a theme cannot colour it here.
 
 If a key's text colour would be genuinely unreadable on what sits behind it, the app drops the imported colour and picks a readable one, and says so. The test is made against what you actually see: a borderless theme's keys are transparent, so its labels are judged against the board showing through rather than against the empty key.
+
+### HeliBoard and LeanType themes
+
+<SettingsPath path="Appearance / Keyboard themes / HeliBoard" />
+
+Those keyboards have no theme file. A theme is a line of JSON that you copy out of the menu at the top of their colour screen, which is why their theme collections and their whole sharing culture live in forum posts rather than in downloads. So the **HeliBoard** button asks where the theme is: **Paste** takes it off the clipboard, **Open a file** takes a `.json` somebody saved it into. LeanType is a HeliBoard fork whose colour screen is unchanged, so its themes are the same thing.
+
+Both of that keyboard's export shapes are read:
+
+- **The ten named colours**, which is what its *few colours* and *more colours* modes export. The board, keys, functional keys, spacebar, key text, hint text, suggestion text, spacebar text, accent and glide trail.
+- **Every internal colour role**, which is what its *all colours* mode exports: forty-odd values covering the popups, the suggestion strip, the toolbar, the emoji board, the clipboard chips and the navigation bar. This is the richer of the two and is what a carefully built theme is usually in.
+
+A colour that keyboard worked out for itself stays worked out. Its export marks each of the ten as chosen or derived, and a derived one is left unset here so this app derives it in turn. Freezing it in would leave you unable to tell a colour you picked from one that was guessed.
+
+Two colours land on single keys rather than on the board: the spacebar's own background and label, and the shift key's icon colour, all of which become per-key styles you can see and change in the theme editor.
+
+The result message counts what landed: *"The app saved Midnight and used 19 of its 19 colours."* A colour with nowhere to go here, such as the emoji search field's own text colour, is counted as read and not used.
+
+A theme is saved rather than switched on, the same as a FlorisBoard one, so you get to look at it first. Day or night is decided from the board colour, since neither shape records it.
 
 ### FlorisBoard 0.4 themes
 

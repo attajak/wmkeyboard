@@ -119,9 +119,25 @@ class ForeignLayoutTest {
     }
 
     @Test
-    fun `a key that points at a popup group it did not ship is reported`() {
+    fun `the comma and period popup groups become punctuation slots`() {
         val converted = checkNotNull(ForeignLayouts.fromFlorisJson(fixture("floris_qwerty.json"), "f.json"))
-        assertTrue(converted.keys().first { it.label == "r" }.longPress.isEmpty())
+        // Group 1 is the other keyboard's comma set, which it picks from the
+        // layout's language. Tagging the slot hands that job to this keyboard's
+        // own field adaptation instead of copying one language's punctuation in.
+        val r = converted.keys().first { it.label == "r" }
+        assertEquals(KeyRole.Comma, r.role)
+        assertTrue(r.longPress.isEmpty())
+        assertFalse(converted.notes.any { it.pluralsRes == R.plurals.core_lang_foreign_popups_missing })
+    }
+
+    @Test
+    fun `a key that points at a popup group it did not ship is reported`() {
+        // Group 3 is the action key's own popups, which live in a file this
+        // import never saw and have no slot on this side.
+        val converted = checkNotNull(
+            ForeignLayouts.fromFlorisJson("""[[{"label":"a","groupId":3}]]""", "x.json"),
+        )
+        assertTrue(converted.keys().first { it.label == "a" }.longPress.isEmpty())
         assertTrue(converted.notes.any { it.pluralsRes == R.plurals.core_lang_foreign_popups_missing })
     }
 
@@ -365,11 +381,154 @@ class ForeignLayoutTest {
             ForeignLayouts.fromFlorisJson("""[[{"label":"a","groupId":-1}]]""", "x.json"),
         )
         assertFalse(converted.notes.any { it.pluralsRes == R.plurals.core_lang_foreign_popups_missing })
-        // A real group id still reports, because those letters live in a file
-        // this import never saw.
+        // A group this keyboard has no slot for still reports, because those
+        // letters live in a file this import never saw.
         val grouped = checkNotNull(
-            ForeignLayouts.fromFlorisJson("""[[{"label":"a","groupId":1}]]""", "x.json"),
+            ForeignLayouts.fromFlorisJson("""[[{"label":"a","groupId":3}]]""", "x.json"),
         )
         assertTrue(grouped.notes.any { it.pluralsRes == R.plurals.core_lang_foreign_popups_missing })
+    }
+
+    // ---- conditional keys ----
+
+    @Test
+    fun `a case selector keeps both cases`() {
+        val key = oneKey("""{"$":"case_selector","lower":"ß","upper":"ẞ"}""")
+        assertEquals("ß", key.label)
+        assertEquals("ẞ", key.shiftLabel)
+    }
+
+    @Test
+    fun `a case selector whose upper is the plain uppercase writes no shift label`() {
+        // A null shiftLabel already uppercases at commit time, so writing one
+        // in would only freeze what already happens.
+        val key = oneKey("""{"$":"case_selector","lower":"a","upper":"A"}""")
+        assertNull(key.shiftLabel)
+    }
+
+    @Test
+    fun `a shift state selector keeps the resting key and says so`() {
+        val converted = checkNotNull(
+            ForeignLayouts.fromFlorisJson(
+                """[[{"$":"shift_state_selector","unshifted":"a","capsLock":"Z"}]]""",
+                "x.json",
+            ),
+        )
+        assertEquals("a", converted.keys().first().label)
+        assertTrue(
+            converted.notes.any { it.pluralsRes == R.plurals.core_lang_foreign_selectors_flattened },
+        )
+    }
+
+    @Test
+    fun `a selector that names only a later branch still converts`() {
+        assertEquals("a", oneKey("""{"$":"variation_selector","default":"a"}""").label)
+        assertEquals("b", oneKey("""{"$":"layout_direction_selector","ltr":"b","rtl":"c"}""").label)
+    }
+
+    @Test
+    fun `a selector key used to be dropped with nothing said`() {
+        // The regression this exists for: no code and no label of its own, so
+        // the object reader returned null and the key vanished silently.
+        val converted = checkNotNull(
+            ForeignLayouts.fromFlorisJson(
+                """[["q",{"$":"case_selector","lower":"w","upper":"W"},"e"]]""",
+                "x.json",
+            ),
+        )
+        assertEquals(listOf("q", "w", "e"), converted.letters()[0].take(3).map { it.label })
+    }
+
+    // ---- label sugar ----
+
+    @Test
+    fun `a functional label becomes the key it names`() {
+        val converted = checkNotNull(ForeignLayouts.fromSimpleText("a\ndelete\nalpha", "x.txt"))
+        val keys = converted.letters()[0]
+        assertEquals(KeyAction.Delete, keys[1].action)
+        assertEquals(KeyAction.Letters, keys[2].action)
+        // And the word is not left on the key.
+        assertFalse(keys.any { it.label == "delete" })
+    }
+
+    @Test
+    fun `a functional label does not make repair add a second key`() {
+        // The old reader drew a text key saying "space" and repair then added a
+        // real spacebar beside it.
+        val converted = checkNotNull(ForeignLayouts.fromSimpleText("a\n\nshift space action", "x.txt"))
+        assertEquals(1, converted.keys().count { it.action == KeyAction.Space })
+        assertEquals(1, converted.keys().count { it.action == KeyAction.Enter })
+    }
+
+    @Test
+    fun `a backslash escapes a functional label`() {
+        val converted = checkNotNull(ForeignLayouts.fromSimpleText("""\space""", "x.txt"))
+        val key = converted.letters()[0].first()
+        assertEquals("space", key.label)
+        assertEquals(KeyAction.Text, key.action)
+    }
+
+    @Test
+    fun `a label and its output are split on the pipe`() {
+        val key = oneKey("""{"label":"aa|bb"}""")
+        assertEquals("aa", key.label)
+        assertEquals("bb", key.output)
+    }
+
+    @Test
+    fun `a code written in the label becomes the action`() {
+        assertEquals(KeyAction.Delete, oneKey("""{"label":"x|!code/-7"}""").action)
+    }
+
+    @Test
+    fun `a declared code beats the sugar in the label`() {
+        // The format says so outright: with both, the label is only a drawing.
+        val key = oneKey("""{"code":97,"label":"space"}""")
+        assertEquals(KeyAction.Text, key.action)
+        assertEquals("a", key.output ?: key.label)
+    }
+
+    @Test
+    fun `a label this keyboard has no key for is dropped and reported`() {
+        val converted = checkNotNull(ForeignLayouts.fromSimpleText("a\ndpad", "x.txt"))
+        assertFalse(converted.keys().any { it.label == "dpad" })
+        val note = converted.notes.first {
+            it.pluralsRes == R.plurals.core_lang_foreign_labels_dropped
+        }
+        assertTrue(note.args.contains("dpad"))
+    }
+
+    @Test
+    fun `the currency labels become signs rather than dollars of text`() {
+        val converted = checkNotNull(ForeignLayouts.fromSimpleText("\$\$\$\n\$\$\$1", "x.txt"))
+        val local = converted.keys().first { it.label == "$" }
+        assertTrue(local.longPress.contains("€"))
+        assertTrue(converted.keys().any { it.label == "€" })
+        assertTrue(
+            converted.notes.any { it.pluralsRes == R.plurals.core_lang_foreign_keys_approximated },
+        )
+    }
+
+    // ---- popup markers ----
+
+    @Test
+    fun `a popup marker is not a letter`() {
+        val key = oneKey("""{"label":"a","popup":["b","!hasLabels!","c"]}""")
+        assertEquals(listOf("b", "c"), key.longPress)
+    }
+
+    @Test
+    fun `a column marker sets the popup columns`() {
+        assertEquals(4, oneKey("""{"label":"a","popup":["b","!fixedColumnOrder!4"]}""").alternateColumns)
+        // Out of range is no opinion rather than a value repair has to clamp.
+        assertEquals(0, oneKey("""{"label":"a","popup":["b","!autoColumnOrder!99"]}""").alternateColumns)
+    }
+
+    @Test
+    fun `a marker in the text format is read too`() {
+        val converted = checkNotNull(ForeignLayouts.fromSimpleText("a b !fixedColumnOrder!3", "x.txt"))
+        val key = converted.letters()[0].first()
+        assertEquals(listOf("b"), key.longPress)
+        assertEquals(3, key.alternateColumns)
     }
 }

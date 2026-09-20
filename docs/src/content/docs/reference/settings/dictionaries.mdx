@@ -56,6 +56,15 @@ A language you've since switched off keeps its group, headed "*language* (langua
 
 The format, per the screen's own description: one word per line, optionally followed by a space and a frequency number. Lines starting with `#` are ignored. Imported words are never autocorrected away.
 
+Two formats from other keyboards import as they are, with nothing to reformat first:
+
+- **`.combined` word lists**, the source format every AOSP-derived keyboard's dictionary is built from. The header line is recognised and the indented `word=the,f=222` records are read as words and frequencies. Bigram and shortcut records are skipped, since neither is a word in its own right.
+- **Compiled `.dict` dictionaries**, which is what HeliBoard, LeanType and FUTO download and what comes out of a GApps package. The app unpacks one into an ordinary text list at import, so the word count, the switch, the trash icon and removing a single word all work on it afterwards exactly as they do on a list you wrote yourself.
+
+Frequencies in both are 0 to 255, and are scaled onto the 0 to 10000 range this app's own lists use, so an imported word keeps its rank against the bundled dictionary rather than sinking below all of it.
+
+A `.dict` in the newer version 4 format is a folder of files rather than one file, and is turned down. So is one whose header carries a `codePointTable`: that table changes what the file's bytes mean, and reading it without applying the table would not fail, it would quietly produce different words. Both report the same "The app found no words in that file" as any other unreadable pick.
+
 A local-file import over 32 MiB is turned down before it's even read, with "That file is too large to import." A URL import enforces the same 32 MiB cap mid-download, but every failure there, oversized file or dead link or network error alike, surfaces as "The app cannot download that list. Check the URL and try again." Only `http://` and `https://` URLs are accepted, and anything else is caught before the download starts with its own message, "The app accepts only http:// and https:// links." A successful import reports "The app added N words to `<language>`." An empty file reports "The app found no words in that file. Make sure that it is a word list." Every successful import or removal signals a running keyboard session to reload.
 
 Lists are additive, so several can sit under one language, and for English and Bangla they stack on top of the bundled dictionary rather than replacing it. That's a different mechanism from the downloadable wordlists reached from a language's own Dictionary section, which *do* replace the built-in English or Bangla list. See [Downloadable dictionaries](/languages/dictionaries/) for that pipeline, its size tiers, and the full list of every available wordlist.

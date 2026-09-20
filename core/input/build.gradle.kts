@@ -50,4 +50,10 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
+
+    // This module's first test source set. The language-pack reader opens an
+    // SQLite database, which is an Android API, so its test needs Robolectric
+    // rather than a plain JVM run.
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
 }

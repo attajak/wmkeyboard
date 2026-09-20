@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
+    // FUTO Keyboard's layouts are YAML. The same parser `:core:content` uses
+    // for Espanso snippets, so this adds a dependency edge and not a library.
+    implementation(libs.snakeyaml)
 
     testImplementation(libs.junit)
 }
