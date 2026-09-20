@@ -1,9 +1,11 @@
 package com.wasimaster.wmkeyboard.core.input.composer
 
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import java.io.File
 import java.io.InputStream
 import java.util.zip.ZipInputStream
+import kotlin.math.roundToInt
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -238,7 +240,7 @@ object FlexLanguagePack {
                     while (cursor.moveToNext() && written < MAX_ROWS) {
                         val code = target.normalize(cursor.getString(CODE_COLUMN).orEmpty())
                         val text = cursor.getString(TEXT_COLUMN).orEmpty().trim()
-                        val weight = runCatching { cursor.getInt(WEIGHT_COLUMN) }.getOrDefault(0)
+                        val weight = weightOf(cursor)
                         if (code.isEmpty() || text.isEmpty() || !pack.isValidCode(code)) continue
                         out.write(code)
                         out.write("\t")
@@ -262,6 +264,32 @@ object FlexLanguagePack {
             return 0
         }
         return written
+    }
+
+    /**
+     * The row's weight as the integer frequency this app ranks on.
+     *
+     * The column is declared `INT` by the converter that builds these packs,
+     * and the pack FlorisBoard actually ships stores **fractions** in it: every
+     * weight in its Cangjie table is between 0.03 and 1.0. SQLite does not
+     * enforce a column's declared type, so `getInt` on those rows returns 0 —
+     * which imported a real pack with every frequency flattened to nothing, and
+     * `CodeTableDictionary` ranks a prefix's characters by exactly this number.
+     *
+     * So the stored type decides. A fraction is spread over the same 0..10000
+     * range the app's own lists use; anything else is already a count.
+     */
+    private fun weightOf(cursor: Cursor): Int {
+        val raw = runCatching {
+            when (cursor.getType(WEIGHT_COLUMN)) {
+                Cursor.FIELD_TYPE_FLOAT -> {
+                    val value = cursor.getDouble(WEIGHT_COLUMN)
+                    if (value <= 1.0) value * MAX_WEIGHT else value
+                }
+                else -> cursor.getInt(WEIGHT_COLUMN).toDouble()
+            }
+        }.getOrDefault(0.0)
+        return raw.roundToInt().coerceIn(0, MAX_WEIGHT)
     }
 
     private fun openRead(database: File): SQLiteDatabase? = runCatching {
@@ -356,5 +384,8 @@ object FlexLanguagePack {
     private const val MAX_MANIFEST_BYTES = 256 * 1024
     private const val MAX_DATABASE_BYTES = 64L * 1024 * 1024
     private const val MAX_ROWS = 500_000
+
+    /** The top of this app's own frequency range, which a fraction maps onto. */
+    private const val MAX_WEIGHT = 10_000
     private const val BUFFER_BYTES = 8 * 1024
 }

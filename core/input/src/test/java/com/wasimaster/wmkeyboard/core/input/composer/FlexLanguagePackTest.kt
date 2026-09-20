@@ -145,6 +145,44 @@ class FlexLanguagePackTest {
     }
 
     @Test
+    fun `a fractional weight keeps its ranking`() {
+        // The pack FlorisBoard ships stores weights as fractions, in a column
+        // its own converter declares INT. Read as an integer every one of them
+        // is 0, and `CodeTableDictionary` ranks a prefix's characters by
+        // exactly this number, so a real pack imported with no ranking at all.
+        val database = File(cacheDir, "weights.sqlite3").apply { delete() }
+        SQLiteDatabase.openOrCreateDatabase(database, null).use { db ->
+            db.execSQL("create table cangjie5(code VARCHAR(5), text TEXT, weight INT)")
+            db.execSQL("insert into cangjie5 values('a', '日', 0.0625)")
+            db.execSQL("insert into cangjie5 values('a', '曰', 0.03125)")
+        }
+        val out = ByteArrayOutputStream()
+        ZipOutputStream(out).use { zip ->
+            zip.putNextEntry(ZipEntry("extension.json"))
+            zip.write("""{"${'$'}":"${FlexLanguagePack.FORMAT}"}""".toByteArray())
+            zip.closeEntry()
+            zip.putNextEntry(ZipEntry("han.sqlite3"))
+            zip.write(database.readBytes())
+            zip.closeEntry()
+        }
+        assertTrue(import(out.toByteArray()) is FlexLanguagePack.Result.Imported)
+        assertEquals(listOf("a\t日\t625", "a\t曰\t313"), packLines("cangjie"))
+        // And the more common character leads its prefix, which is the point.
+        val table = CodeTableDictionary.parse(
+            packLines("cangjie").asSequence(),
+            CodeTableDictionary.CANGJIE_CODE,
+        )
+        assertEquals(listOf("日", "曰"), table.candidates("a"))
+    }
+
+    @Test
+    fun `an integer weight is left as it is`() {
+        val result = import(pack(tables = mapOf("cangjie5" to listOf(Triple("a", "日", 4200)))))
+        assertTrue(result is FlexLanguagePack.Result.Imported)
+        assertEquals(listOf("a\t日\t4200"), packLines("cangjie"))
+    }
+
+    @Test
     fun `a pack of schemes this app cannot type names them back`() {
         val result = import(
             pack(
