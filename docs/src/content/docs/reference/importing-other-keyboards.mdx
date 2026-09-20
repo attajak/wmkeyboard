@@ -20,6 +20,8 @@ Conversion is honest about being lossy. A layout import always ends on a confirm
 | `.flex` theme | FlorisBoard 0.4 and later | One theme, one look per theme in the file |
 | `.keyman-touch-layout` | Keyman | A custom layout, without the keyboard's rules |
 | `.kmp` package | Keyman | A custom layout **and** its typing rules |
+| `.combined` word list | HeliBoard, LeanType, FUTO, any AOSP keyboard | A custom dictionary |
+| `.dict` dictionary | HeliBoard, LeanType, FUTO, OpenBoard, GApps | A custom dictionary |
 
 HeliBoard's JSON layouts use FlorisBoard's format, so one reader handles both.
 
@@ -101,6 +103,20 @@ The rest of the flags ask for a text style this keyboard has no form of, such as
 ### Letters are rewritten to one spelling
 
 Some letters can be written two ways in Unicode: a base letter plus a mark, or a single character that means the same thing. Bengali, Devanagari, Gurmukhi and Oriya all have letters like this. WM Keyboard's cluster shaping and its backspace rules use the single-character spelling, so the app rewrites the other one on the way in. Without it a key looks correct and then deletes half a letter at a time.
+
+## Dictionaries
+
+<SettingsPath path="Typing / Suggestions / Custom dictionaries / Import word list" />
+
+Every AOSP-derived keyboard shares one dictionary ecosystem, and for most languages a compiled `.dict` is the only form the word list exists in. Both halves of it import here as they are: the `.combined` source lists a dictionary repository publishes, and the compiled `.dict` files HeliBoard, LeanType and FUTO download (including the ones pulled out of a GApps package).
+
+A `.dict` is unpacked into an ordinary text list at import, so everything the Custom dictionaries screen does to a list you wrote yourself works on it too: the word count, the switch, the trash icon, and taking a single word out from the suggestion strip.
+
+Frequencies are 0 to 255 over there and 0 to 10000 here, so they are scaled rather than copied. Copying them would drop every imported word below every bundled one.
+
+Two shapes are refused rather than half-read: a version 4 `.dict`, which is a folder of files rather than one file, and a file whose header carries a `codePointTable`, because that table changes what the rest of the file's bytes mean. Bigrams and shortcut expansions are skipped in both formats. A list here is a flat set of words, and a shortcut is an expansion rather than a word anybody typed.
+
+See [Dictionaries & words](/reference/settings/dictionaries/) for the screen itself.
 
 ## Themes
 

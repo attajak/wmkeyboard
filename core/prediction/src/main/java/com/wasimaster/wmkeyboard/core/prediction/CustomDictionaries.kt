@@ -130,11 +130,60 @@ object CustomDictionaries {
         val dir = languageDir(filesDir, langId).apply { mkdirs() }
         val target = uniqueFile(dir, displayName)
         target.outputStream().use { stream.copyTo(it) }
+        if (isBinaryDictionary(target)) unpackBinary(target)
         val count = runCatching {
             target.inputStream().use { DictionaryLoader.loadEntries(it).size }
         }.getOrDefault(0)
         if (count == 0) target.delete()
         return count
+    }
+
+    /** Cheap enough to run on every import: four bytes off the front. */
+    private fun isBinaryDictionary(file: File): Boolean = runCatching {
+        file.inputStream().use { input ->
+            val head = ByteArray(AospDictionary.MAGIC_BYTES)
+            var read = 0
+            while (read < head.size) {
+                val n = input.read(head, read, head.size - read)
+                if (n <= 0) break
+                read += n
+            }
+            read == head.size && AospDictionary.looksLikeDictionary(head)
+        }
+    }.getOrDefault(false)
+
+    /**
+     * Rewrites a compiled `.dict` in place as the text format.
+     *
+     * Converting at import rather than teaching the reader a second format is
+     * deliberate. Everything downstream of this folder — the word count in
+     * settings, switching a list off, taking a single word out of one (#190),
+     * a user opening the file to check it — works on lines of text, and all of
+     * it would need a second path for a format that cannot be edited anyway.
+     * One conversion, once, and the file is an ordinary list from then on.
+     *
+     * A file this reader will not read is left exactly as it was. It then
+     * parses to nothing, and [import] deletes it and reports 0, which is the
+     * same answer a picked PDF gets.
+     */
+    private fun unpackBinary(file: File) {
+        if (file.length() > MAX_BYTES) return
+        val result = runCatching { AospDictionary.read(file.readBytes()) }.getOrNull()
+        val entries = (result as? AospDictionary.Result.Words)?.entries ?: return
+        val temp = File(file.parentFile, file.name + ".tmp")
+        val written = runCatching {
+            temp.bufferedWriter().use { writer ->
+                for ((word, frequency) in entries) {
+                    writer.write(word)
+                    writer.write(" ")
+                    writer.write(frequency.toString())
+                    writer.newLine()
+                }
+            }
+            true
+        }.getOrDefault(false)
+        if (written && temp.renameTo(file)) return
+        temp.delete()
     }
 
     fun remove(file: File): Boolean = file.delete()
