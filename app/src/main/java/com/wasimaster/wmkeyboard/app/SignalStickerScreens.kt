@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.app
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material3.AlertDialog
@@ -48,6 +51,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.stickers.StickerPack
 import com.wasimaster.wmkeyboard.core.stickers.StickerPackStore
+import com.wasimaster.wmkeyboard.core.stickers.signal.SignalBuiltInPacks
 import com.wasimaster.wmkeyboard.core.stickers.signal.SignalPackManifest
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import com.wasimaster.wmkeyboard.ime.ui.rememberMediaImageLoader
@@ -59,6 +63,13 @@ import java.io.IOException
 
 /** The Signal sticker packs screen. */
 internal const val SIGNAL_STICKERS_ROUTE = "signal_stickers"
+
+/**
+ * The community's gallery of Signal packs. Opened in the browser and never
+ * read by the app: its terms ask that it is not built into other software, and
+ * Signal and Molly send their users to it the same way.
+ */
+private const val SIGNAL_GALLERY_URL = "https://signalstickers.org/"
 
 /**
  * The preview of one Signal pack. Both halves are lowercase hex, so neither
@@ -79,6 +90,9 @@ internal fun signalPackRoute(packId: String, packKey: String): String = "signal_
  */
 @Composable
 internal fun SignalStickersScreen(onNavigate: (String) -> Unit) {
+    val context = LocalContext.current
+    val store = remember { StickerPackStore.get(context) }
+    val mine = remember { store.packs().mapTo(HashSet()) { it.source } }
     var showLink by remember { mutableStateOf(false) }
 
     SettingsGroup(
@@ -94,6 +108,48 @@ internal fun SignalStickersScreen(onNavigate: (String) -> Unit) {
                 highlightKey = R.string.import_signal_link_title,
                 onClick = { showLink = true },
             )
+        }
+        // The gallery is looked through where it lives. Its own "Add to
+        // Signal" button opens a sgnl://addstickers link, which this app
+        // answers beside Signal (see ImportLinkActivity in the manifest), so
+        // the way back from the browser is one press.
+        item {
+            WmRow(
+                title = stringResource(R.string.import_signal_gallery_title),
+                subtitle = stringResource(R.string.import_signal_gallery_subtitle),
+                icon = Icons.AutoMirrored.Outlined.OpenInNew,
+                accent = routeAccent("sticker_packs"),
+                highlightKey = R.string.import_signal_gallery_title,
+                onClick = {
+                    runCatching {
+                        context.startActivity(
+                            Intent(Intent.ACTION_VIEW, Uri.parse(SIGNAL_GALLERY_URL))
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                        )
+                    }
+                },
+            )
+        }
+    }
+
+    // Drawn from names the app carries, so that nothing is fetched until one
+    // of them is opened.
+    SettingsGroup(
+        stringResource(R.string.import_signal_builtin_title),
+        info = stringResource(R.string.import_signal_builtin_caption),
+    ) {
+        for (pack in SignalBuiltInPacks.all) {
+            item {
+                WmRow(
+                    title = pack.title,
+                    subtitle = if (StickerPack.signalSource(pack.packId) in mine) {
+                        stringResource(R.string.import_signal_added_title)
+                    } else {
+                        stringResource(R.string.import_signal_author, pack.author)
+                    },
+                    onClick = { onNavigate(signalPackRoute(pack.packId, pack.packKey)) },
+                )
+            }
         }
     }
 

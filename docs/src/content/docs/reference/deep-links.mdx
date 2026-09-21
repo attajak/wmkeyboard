@@ -362,6 +362,14 @@ it lands you on. See [Installing addons](/addons/installing/) for what
 happens after that.
 :::
 
+### Signal sticker pack links
+
+One link that isn't WM Keyboard's own is answered as well: `sgnl://addstickers?pack_id=...&pack_key=...`, the form Signal and Molly open a sticker pack with. It is what the "Add to Signal" button on a pack's web page fires, so with it you can look through packs in a browser and bring one into the keyboard in a press. With Signal or Molly installed, Android asks which app to use, and WM Keyboard is listed as "Add stickers to WM Keyboard". Without them, the link opens WM Keyboard directly.
+
+Only the `addstickers` host of that scheme is claimed. The rest of `sgnl://` (chats, device linking, group invites) is Signal's and stays Signal's. The `https://signal.art/addstickers/` form of the same link is not claimed either, because that domain isn't this app's to verify. Paste or share that one instead, as described under [Signal sticker packs](/emoji/stickers/#signal-sticker-packs).
+
+Like every other link, this one only navigates. It opens a confirm naming the server the pack comes from, then a preview of the pack, and nothing is added until you press **Add this pack**.
+
 ## Opening files WM Keyboard made
 
 WM Keyboard registers a file association for thirteen extensions. Most are

@@ -24,6 +24,20 @@
     <string name="import_signal_link_error">That is not the link of a Signal sticker pack.</string>
     <string name="import_signal_open_pack">Show the pack</string>
 
+    <!-- signalstickers.org is a web address. Keep it as it is. -->
+    <string name="import_signal_gallery_title">Find packs on signalstickers.org</string>
+    <!-- "Add to Signal" is the text of a button on that website. The website
+         is in English, so keep the text of the button in English. -->
+    <string name="import_signal_gallery_subtitle">Opens the community gallery in your browser. Press \"Add to Signal\" on a pack there, then select WM Keyboard.</string>
+
+    <!-- The title of the list of the packs that Signal itself gives to a new user. -->
+    <string name="import_signal_builtin_title">Packs from Signal</string>
+    <string name="import_signal_builtin_caption">Signal gives these packs to a new user. The app gets nothing until you open a pack.</string>
+
+    <!-- What the list of apps shows for WM Keyboard when the user opens the
+         link of a Signal sticker pack. Keep it short. -->
+    <string name="import_signal_chooser_label">Add stickers to WM Keyboard</string>
+
     <!-- The title of the screen that shows one pack before the app adds it. -->
     <string name="import_signal_pack_title">Signal sticker pack</string>
     <string name="import_signal_loading">Getting the pack…</string>

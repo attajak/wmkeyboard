@@ -47,9 +47,6 @@ enum class ServiceEndpoint(
      * own authority, which only Signal's apps trust.
      */
     SIGNAL_STICKER_CDN("signal_sticker_cdn", "https://cdn-ca.signal.org", ServiceGroup.MEDIA),
-
-    /** signalstickers.org, the community's list of Signal packs. Not run by Signal. */
-    SIGNAL_STICKER_DIRECTORY("signal_sticker_directory", "https://api.signalstickers.org", ServiceGroup.MEDIA),
     UNSPLASH("unsplash", "https://api.unsplash.com", ServiceGroup.PHOTOS),
     PEXELS("pexels", "https://api.pexels.com", ServiceGroup.PHOTOS),
     WIKIPEDIA("wikipedia", "https://{lang}.wikipedia.org", ServiceGroup.WIKIPEDIA),

@@ -305,7 +305,6 @@ internal val ServiceEndpoint.labelRes: Int
         ServiceEndpoint.KLIPY -> R.string.servers_klipy
         ServiceEndpoint.GIPHY -> R.string.servers_giphy
         ServiceEndpoint.SIGNAL_STICKER_CDN -> R.string.servers_signal_sticker_cdn
-        ServiceEndpoint.SIGNAL_STICKER_DIRECTORY -> R.string.servers_signal_sticker_directory
         ServiceEndpoint.UNSPLASH -> R.string.servers_unsplash
         ServiceEndpoint.PEXELS -> R.string.servers_pexels
         ServiceEndpoint.WIKIPEDIA -> R.string.servers_wikipedia
