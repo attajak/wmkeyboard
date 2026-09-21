@@ -156,6 +156,12 @@ sealed interface OfflineTranslateResult {
     /** Nothing could say what language the text is in; the user has to pick. */
     data object Undetermined : OfflineTranslateResult
 
+    /**
+     * The engine itself is not on this install yet: a Play build, where it is
+     * an on-demand module. The state to draw is [TranslateModule.gate]'s.
+     */
+    data object ModuleMissing : OfflineTranslateResult
+
     /** The engine itself failed: not initialised, out of memory, a corrupt model. */
     data class Failed(val cause: Throwable) : OfflineTranslateResult
 }

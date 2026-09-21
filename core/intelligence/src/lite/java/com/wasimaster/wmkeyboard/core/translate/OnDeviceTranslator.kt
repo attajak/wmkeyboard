@@ -16,6 +16,10 @@ object OnDeviceTranslator {
 
     val models: StateFlow<Map<String, OfflineModelState>> = MutableStateFlow(emptyMap())
 
+    val moduleState get() = TranslateModule.gate.state
+
+    fun requestModule() = Unit
+
     suspend fun refresh(context: Context): Set<String> = emptySet()
 
     fun download(context: Context, code: String) = Unit

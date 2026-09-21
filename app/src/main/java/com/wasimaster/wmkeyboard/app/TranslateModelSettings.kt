@@ -33,6 +33,7 @@ import com.wasimaster.wmkeyboard.core.tools.TranslateClient
 import com.wasimaster.wmkeyboard.core.translate.OfflineModelState
 import com.wasimaster.wmkeyboard.core.translate.OfflineTranslateLanguages
 import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
+import com.wasimaster.wmkeyboard.core.translate.TranslateModuleState
 import com.wasimaster.wmkeyboard.core.translate.downloadNotified
 import kotlinx.coroutines.launch
 
@@ -55,11 +56,41 @@ internal fun TranslateModelManager(settings: KeyboardSettings) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val models by OnDeviceTranslator.models.collectAsState()
-    LaunchedEffect(Unit) { OnDeviceTranslator.refresh(context.applicationContext) }
+    val module by OnDeviceTranslator.moduleState.collectAsState()
+    // Keyed on the module: on Play the first refresh finds no engine to ask,
+    // and the one that matters is the one after it arrives.
+    LaunchedEffect(module) { OnDeviceTranslator.refresh(context.applicationContext) }
 
     val downloadDecision = rememberDownloadDecision(settings)
     var confirmMetered by remember { mutableStateOf<String?>(null) }
     var blockedMetered by remember { mutableStateOf(false) }
+
+    // A Play install carries the engine as an on-demand module. Until it is
+    // here there are no models to list, only the one thing to fetch first.
+    if (module != TranslateModuleState.Installed) {
+        TranslateModuleBanner(
+            module = module,
+            onDownload = {
+                when (downloadDecision()) {
+                    MeteredDecision.ALLOWED -> OnDeviceTranslator.requestModule()
+                    MeteredDecision.ASK -> confirmMetered = MODULE_CONFIRM
+                    MeteredDecision.BLOCKED -> blockedMetered = true
+                }
+            },
+        )
+        if (confirmMetered == MODULE_CONFIRM) {
+            MeteredDownloadDialog(
+                detail = stringResource(R.string.tooldetail_translate_module_metered_body),
+                onConfirm = {
+                    confirmMetered = null
+                    OnDeviceTranslator.requestModule()
+                },
+                onDismiss = { confirmMetered = null },
+            )
+        }
+        if (blockedMetered) MeteredBlockedDialog { blockedMetered = false }
+        return
+    }
     val offerPermission = rememberNotificationPermissionOffer()
     val start: (String) -> Unit = { code ->
         offerPermission()
@@ -136,6 +167,46 @@ internal fun TranslateModelManager(settings: KeyboardSettings) {
         )
     }
     if (blockedMetered) MeteredBlockedDialog { blockedMetered = false }
+}
+
+/** Stands in for a model code in the metered confirm, for the module itself. */
+private const val MODULE_CONFIRM = "\u0000module"
+
+/**
+ * The engine's own download, on a Play install that has not fetched it. Live
+ * state with the button that fixes it, which is what a banner is for.
+ */
+@Composable
+private fun TranslateModuleBanner(module: TranslateModuleState, onDownload: () -> Unit) {
+    val context = LocalContext.current
+    when (module) {
+        is TranslateModuleState.Installing -> StateBanner(
+            if (module.totalBytes > 0L) {
+                stringResource(
+                    R.string.tooldetail_translate_module_installing_sized_info,
+                    Formatter.formatShortFileSize(context, module.bytes),
+                    Formatter.formatShortFileSize(context, module.totalBytes),
+                )
+            } else {
+                stringResource(R.string.tooldetail_translate_module_installing_info)
+            },
+        )
+        is TranslateModuleState.Missing -> StateBanner(
+            stringResource(
+                if (module.failed) {
+                    R.string.tooldetail_translate_module_failed_info
+                } else {
+                    R.string.tooldetail_translate_module_missing_info
+                },
+            ),
+            action = stringResource(
+                if (module.failed) CommonR.string.common_retry else CommonR.string.common_download,
+            ),
+            tone = if (module.failed) BannerTone.WARNING else BannerTone.INFO,
+            onAction = onDownload,
+        )
+        TranslateModuleState.Installed -> Unit
+    }
 }
 
 @Composable

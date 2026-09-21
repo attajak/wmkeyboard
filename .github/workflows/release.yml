@@ -316,8 +316,8 @@ jobs:
           fi
           echo "$KEYSTORE_BASE64" | base64 -d > release.keystore
 
-      # Play channel on: unbundled ML Kit, in-app updates, and :feature:llm as
-      # an on-demand module. bundle<Variant> ignores the ABI split block.
+      # Play channel on: unbundled ML Kit, in-app updates, and :feature:llm and
+      # :feature:translate as on-demand modules. bundle<Variant> ignores the ABI split block.
       #
       # The `en` language build, by its real name. Play translates the app
       # strings itself and injects them into the bundle at upload, so the 48

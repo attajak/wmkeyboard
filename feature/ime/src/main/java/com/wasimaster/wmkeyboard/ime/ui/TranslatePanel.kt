@@ -53,6 +53,7 @@ import com.wasimaster.wmkeyboard.core.tools.TranslateClient
 import com.wasimaster.wmkeyboard.core.translate.OfflineModelState
 import com.wasimaster.wmkeyboard.core.translate.OfflineTranslateLanguages
 import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
+import com.wasimaster.wmkeyboard.core.translate.TranslateModuleState
 import com.wasimaster.wmkeyboard.core.ui.ScrollRail
 import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 import com.wasimaster.wmkeyboard.ime.FocusRegion
@@ -126,7 +127,7 @@ internal fun TranslatePanel(
     val target = state.settings.translateTargetLang
     val engine = if (OnDeviceTranslator.AVAILABLE) state.settings.translate.engine else TranslateEngine.ONLINE
     var menu by remember { mutableStateOf<TranslateMenu?>(null) }
-    val offerDownload = translate.missingModels.isNotEmpty()
+    val offerDownload = translate.missingModels.isNotEmpty() || translate.moduleMissing
 
     val rows = menu?.let { translateMenuRows(it, translate, target, engine) }.orEmpty()
     val pick: (TranslateMenu, String) -> Unit = { which, key ->
@@ -304,16 +305,20 @@ internal fun TranslatePanel(
             val focusedAction = state.focusedIndex(FocusRegion.ACTIONS)
             if (offerDownload) {
                 val downloading = translate.missingModels.any { translate.models[it] is OfflineModelState.Downloading }
+                // Play cancels a module by session and the panel holds none,
+                // so while the module is on its way the button only reports.
+                val moduleComing = translate.moduleMissing && translate.module is TranslateModuleState.Installing
                 TranslateAction(
                     label = stringResource(
                         when {
+                            moduleComing -> R.string.ime_translate_module_installing_action
                             downloading -> CommonR.string.common_cancel
                             translate.meteredAsk -> R.string.ime_metered_allow_action
                             else -> CommonR.string.common_download
                         },
                     ),
-                    icon = if (downloading) null else Icons.Outlined.Download,
-                    enabled = true,
+                    icon = if (downloading || moduleComing) null else Icons.Outlined.Download,
+                    enabled = !moduleComing,
                     modifier = Modifier
                         .weight(1f)
                         .focusRing(focusedAction == 0, kb.chipShape()),
@@ -460,6 +465,10 @@ private fun TranslateChip(
 private fun TranslateDownloadOffer(translate: TranslateUi, modifier: Modifier = Modifier) {
     val kb = LocalKbTheme.current
     val context = LocalContext.current
+    if (translate.moduleMissing) {
+        TranslateModuleOffer(translate, modifier)
+        return
+    }
     val states = translate.missingModels.map { translate.models[it] }
     val running = states.filterIsInstance<OfflineModelState.Downloading>()
     val waiting = translate.missingModels.filter { translate.models[it] !is OfflineModelState.Downloaded }
@@ -526,6 +535,73 @@ private fun TranslateDownloadOffer(translate: TranslateUi, modifier: Modifier = 
             )
             states.any { (it as? OfflineModelState.Missing)?.failed == true } -> Text(
                 stringResource(R.string.ime_translate_download_failed_error),
+                color = kb.accent,
+                fontSize = 13.sp,
+            )
+        }
+    }
+}
+
+/**
+ * The same offer one step earlier, on a Play install: the engine is an
+ * on-demand module and has not been fetched. Play reports the real size once
+ * the fetch starts, so none is promised before that.
+ */
+@Composable
+private fun TranslateModuleOffer(translate: TranslateUi, modifier: Modifier = Modifier) {
+    val kb = LocalKbTheme.current
+    val context = LocalContext.current
+    val module = translate.module
+    Column(
+        modifier = modifier
+            .padding(vertical = 4.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        translate.error?.let { Text(it, color = kb.accent, fontSize = 13.sp) }
+        Text(
+            stringResource(R.string.ime_translate_module_missing_body),
+            color = kb.suggestionText,
+            fontSize = 14.sp,
+        )
+        when {
+            module is TranslateModuleState.Installing -> {
+                val fraction = if (module.totalBytes > 0L) {
+                    (module.bytes.toFloat() / module.totalBytes).coerceIn(0f, 1f)
+                } else {
+                    null
+                }
+                if (fraction != null) {
+                    LinearProgressIndicator(
+                        progress = { fraction },
+                        modifier = Modifier.fillMaxWidth(),
+                        color = kb.accent,
+                        trackColor = kb.chip,
+                    )
+                    Text(
+                        stringResource(
+                            R.string.ime_translate_download_of_total_progress,
+                            Formatter.formatShortFileSize(context, module.bytes),
+                            Formatter.formatShortFileSize(context, module.totalBytes),
+                        ),
+                        color = kb.secondaryText,
+                        fontSize = 12.sp,
+                    )
+                } else {
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = kb.accent,
+                        trackColor = kb.chip,
+                    )
+                }
+            }
+            translate.meteredAsk -> Text(
+                stringResource(R.string.ime_metered_ask_body),
+                color = kb.accent,
+                fontSize = 13.sp,
+            )
+            (module as? TranslateModuleState.Missing)?.failed == true -> Text(
+                stringResource(R.string.ime_translate_module_failed_error),
                 color = kb.accent,
                 fontSize = 13.sp,
             )

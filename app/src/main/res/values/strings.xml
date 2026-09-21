@@ -20,6 +20,8 @@
          surfaces in Play's download UI and settings. Lives here because a
          dist:title must resolve from the BASE module's resources. -->
     <string name="llm_module_title">On-device AI</string>
+    <!-- The same for the on-demand translator module (:feature:translate). -->
+    <string name="translate_module_title">On-device translation</string>
     <!-- Shown in Settings › Notification access for the listener that the
          media-control tool and the one-time code chip share. It is the whole
          sentence the user reads before granting, so it names both features:

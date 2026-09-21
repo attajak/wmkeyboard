@@ -204,3 +204,13 @@
     <init>();
     *;
 }
+
+# --- On-device translation bridge ---------------------------------------------
+# The same arrangement and the same reason: MlKitTranslateRuntime is reached
+# ONLY by reflection (OnDeviceTranslator's facade), from the base APK in
+# sideload builds and from the on-demand :feature:translate split in Play
+# builds.
+-keep class com.wasimaster.wmkeyboard.core.translate.bridge.MlKitTranslateRuntime {
+    <init>();
+    *;
+}

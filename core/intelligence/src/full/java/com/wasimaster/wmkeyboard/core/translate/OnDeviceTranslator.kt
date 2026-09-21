@@ -4,21 +4,9 @@ import android.app.DownloadManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.SystemClock
-import com.google.android.gms.tasks.Task
-import com.google.mlkit.common.model.DownloadConditions
-import com.google.mlkit.common.model.RemoteModelManager
-import com.google.mlkit.nl.languageid.LanguageIdentification
-import com.google.mlkit.nl.languageid.LanguageIdentificationOptions
-import com.google.mlkit.nl.languageid.LanguageIdentifier
-import com.google.mlkit.nl.translate.TranslateRemoteModel
-import com.google.mlkit.nl.translate.Translation
-import com.google.mlkit.nl.translate.Translator
-import com.google.mlkit.nl.translate.TranslatorOptions
 import com.wasimaster.wmkeyboard.core.mlkit.MlKitInit
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import java.io.IOException
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,18 +17,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-
-/** Awaits a Play-services Task without the coroutines-play-services artifact. */
-private suspend fun <T> Task<T>.await(): T = suspendCancellableCoroutine { cont ->
-    addOnSuccessListener { if (cont.isActive) cont.resume(it) }
-    addOnFailureListener { if (cont.isActive) cont.resumeWithException(it) }
-    addOnCanceledListener { if (cont.isActive) cont.cancel() }
-}
 
 /**
  * ML Kit's on-device translator behind the translate tool: the model store,
@@ -52,6 +32,12 @@ private suspend fun <T> Task<T>.await(): T = suspendCancellableCoroutine { cont 
  * downloading in the panel, and a model the panel is translating with must not
  * be deleted out from under it by the list. Both read [models] and both go
  * through the same lock.
+ *
+ * Nothing here imports ML Kit's translate or language-id libraries. Those
+ * calls sit behind [TranslateRuntime], reached by reflection, because on Play
+ * the libraries ship in an on-demand module the base APK is built without. See
+ * [TranslateRuntime] for the split and [TranslateModule.gate] for how a
+ * missing module is fetched.
  */
 object OnDeviceTranslator {
 
@@ -61,16 +47,7 @@ object OnDeviceTranslator {
     /** Longest text translated in one go, the same cut the online clients make. */
     private const val MAX_CHARS = 2500
 
-    /**
-     * The identifier is asked for everything it considers possible, however
-     * unlikely, because a weak candidate that agrees with the keyboard's own
-     * language is worth more than a refusal. The confident cut is made in
-     * [OfflineTranslatePlan.resolveSource], not here.
-     */
-    private const val IDENTIFY_FLOOR = 0.01f
-
     private const val STATUS_TIMEOUT_MS = 20_000L
-    private const val TRANSLATE_TIMEOUT_MS = 30_000L
     private const val PROGRESS_POLL_MS = 700L
 
     /** How long a download may bring in nothing before it is called off. */
@@ -85,12 +62,34 @@ object OnDeviceTranslator {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
+    @Volatile
+    private var loaded: TranslateRuntime? = null
+
     /**
-     * Lazy for the reason the ink catalogue's is: `getInstance` throws when ML
-     * Kit's init provider was skipped (a process started before first unlock),
-     * and a throw out of an object initializer poisons the class for good.
+     * The runtime, or null while its module is not on this install (Play
+     * only). Never throws: a bridge that will not load is the same "not here"
+     * to every caller, and each of them already has something to say for it.
+     *
+     * No restart is needed after the module arrives. SplitCompat (installed at
+     * startup in Play builds) lets this process load the split's classes and
+     * native libraries as soon as the install completes, and ML Kit's
+     * dynamic-feature support library in the base registers the split's
+     * components with the ML Kit context that is already running.
      */
-    private val manager: RemoteModelManager by lazy { RemoteModelManager.getInstance() }
+    private fun runtime(context: Context): TranslateRuntime? {
+        loaded?.let { return it }
+        if (TranslateModule.gate.state.value != TranslateModuleState.Installed) return null
+        MlKitInit.ensure(context)
+        return runCancellable { TranslateModule.load(context) }
+            .onSuccess { loaded = it }
+            .getOrNull()
+    }
+
+    /** Whether the engine is on this install. False only on Play before the module is fetched. */
+    val moduleState get() = TranslateModule.gate.state
+
+    /** Asks Play for the module. A no-op where it is compiled in. */
+    fun requestModule() = TranslateModule.gate.requestInstall()
 
     private val _models = MutableStateFlow<Map<String, OfflineModelState>>(emptyMap())
 
@@ -110,26 +109,14 @@ object OnDeviceTranslator {
      */
     private val engineLock = Mutex()
 
-    private var translator: Translator? = null
-    private var translatorPair: Pair<String, String>? = null
-
-    private var identifier: LanguageIdentifier? = null
-
-    private fun remoteModel(code: String): TranslateRemoteModel =
-        TranslateRemoteModel.Builder(code).build()
-
     /**
      * Re-reads which models are on the device. Cheap, and safe to call on every
      * panel open: it never touches a language that is mid-download.
      */
     suspend fun refresh(context: Context): Set<String> {
-        MlKitInit.ensure(context)
-        val onDevice = withTimeoutOrNull(STATUS_TIMEOUT_MS) {
-            runCancellable {
-                manager.getDownloadedModels(TranslateRemoteModel::class.java).await()
-                    .map { it.language }
-                    .toSet()
-            }.getOrNull()
+        val engine = runtime(context)
+        val onDevice = engine?.let {
+            withTimeoutOrNull(STATUS_TIMEOUT_MS) { runCancellable { it.downloadedModels() }.getOrNull() }
         }
         if (onDevice == null) {
             // ML Kit did not answer: not initialised, or wedged. "Checking…"
@@ -192,13 +179,12 @@ object OnDeviceTranslator {
     }
 
     private suspend fun fetch(context: Context, code: String) {
-        MlKitInit.ensure(context)
+        val engine = runtime(context) ?: throw IOException("The translation module is not installed")
         // ML Kit hands the fetch to the system DownloadManager, which treats
         // "no network" as a reason to wait, indefinitely and in silence. A
         // button that spins forever on a plane is worse than one that says no.
         if (!hasNetwork(context)) throw IOException("No network for the $code translation model")
-        val model = remoteModel(code)
-        val task = manager.download(model, DownloadConditions.Builder().build())
+        val task = engine.startDownload(code)
         val startedAt = SystemClock.elapsedRealtime()
         var lastBytes = 0L
         var lastMovedAt = startedAt
@@ -247,7 +233,7 @@ object OnDeviceTranslator {
     }
 
     private suspend fun withdraw(context: Context, code: String) {
-        runCancellable { manager.deleteDownloadedModel(remoteModel(code)).await() }
+        runCancellable { runtime(context)?.deleteModel(code) }
         withContext(Dispatchers.IO) {
             runCancellable {
                 val dm = context.getSystemService(DownloadManager::class.java) ?: return@runCancellable
@@ -272,12 +258,12 @@ object OnDeviceTranslator {
     /** Removes [code]'s model from the device. English cannot be removed. */
     suspend fun delete(context: Context, code: String) {
         if (code == OfflineTranslateLanguages.PIVOT) return
-        MlKitInit.ensure(context)
+        val engine = runtime(context) ?: return
         engineLock.withLock {
             // A translator holds its model files open. Close first, or the
             // delete succeeds on paper and the next translate reads a ghost.
-            if (translatorPair?.let { code == it.first || code == it.second } == true) closeTranslator()
-            runCancellable { manager.deleteDownloadedModel(remoteModel(code)).await() }
+            if (engine.loadedPair()?.let { code == it.first || code == it.second } == true) engine.closeTranslator()
+            runCancellable { engine.deleteModel(code) }
         }
         refresh(context)
         _models.update { current ->
@@ -302,9 +288,9 @@ object OnDeviceTranslator {
         val input = text.take(MAX_CHARS)
         val targetCode = OfflineTranslateLanguages.modelCode(target)
             ?: return OfflineTranslateResult.Unsupported(target, romanized = false)
+        val engine = runtime(context) ?: return OfflineTranslateResult.ModuleMissing
         return try {
-            MlKitInit.ensure(context)
-            val candidates = if (sourceOverride.isBlank()) identify(input) else emptyList()
+            val candidates = if (sourceOverride.isBlank()) identify(engine, input) else emptyList()
             when (
                 val source = OfflineTranslatePlan.resolveSource(sourceOverride, candidates, hints, target)
             ) {
@@ -312,7 +298,7 @@ object OnDeviceTranslator {
                 is OfflineTranslatePlan.Source.Unreadable ->
                     OfflineTranslateResult.Unsupported(source.tag, source.romanized)
                 is OfflineTranslatePlan.Source.Known ->
-                    translateKnown(context, input, source.code, targetCode, source.guessed)
+                    translateKnown(context, engine, input, source.code, targetCode, source.guessed)
             }
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
@@ -325,6 +311,7 @@ object OnDeviceTranslator {
 
     private suspend fun translateKnown(
         context: Context,
+        engine: TranslateRuntime,
         text: String,
         source: String,
         target: String,
@@ -344,14 +331,16 @@ object OnDeviceTranslator {
 
         val segments = OfflineTranslatePlan.segments(text)
         val translated = try {
-            translateSegments(segments, source, target)
+            engineLock.withLock {
+                engine.translate(source, target, segments.filter { it.body.isNotEmpty() }.map { it.body })
+            }
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
             // The map can be stale: a model removed behind its back (storage
             // cleared, another process) fails here rather than above. Ask ML
             // Kit itself before calling it an engine failure.
-            engineLock.withLock { closeTranslator() }
+            engineLock.withLock { engine.closeTranslator() }
             val fresh = refresh(context)
             val stillMissing = needed.filter { it !in fresh }
             if (stillMissing.isEmpty()) throw e
@@ -360,49 +349,12 @@ object OnDeviceTranslator {
         return OfflineTranslateResult.Success(OfflineTranslatePlan.join(segments, translated), source, guessed)
     }
 
-    private suspend fun translateSegments(
-        segments: List<OfflineTranslatePlan.Segment>,
-        source: String,
-        target: String,
-    ): List<String> = engineLock.withLock {
-        val engine = translatorFor(source, target)
-        segments.filter { it.body.isNotEmpty() }.map { segment ->
-            withTimeoutOrNull(TRANSLATE_TIMEOUT_MS) { engine.translate(segment.body).await() }
-                ?: throw IOException("On-device translation timed out")
-        }
-    }
-
-    /** Callers hold [engineLock]. One pair at a time: each holds tens of megabytes. */
-    private fun translatorFor(source: String, target: String): Translator {
-        translator?.takeIf { translatorPair == source to target }?.let { return it }
-        closeTranslator()
-        val created = Translation.getClient(
-            TranslatorOptions.Builder().setSourceLanguage(source).setTargetLanguage(target).build(),
-        )
-        translator = created
-        translatorPair = source to target
-        return created
-    }
-
-    private fun closeTranslator() {
-        runCatching { translator?.close() }
-        translator = null
-        translatorPair = null
-    }
-
-    private suspend fun identify(text: String): List<OfflineTranslatePlan.Candidate> {
-        val client = identifier ?: LanguageIdentification.getClient(
-            LanguageIdentificationOptions.Builder().setConfidenceThreshold(IDENTIFY_FLOOR).build(),
-        ).also { identifier = it }
-        // Identification failing is not translation failing: the hints can
-        // still settle the source, and the user can always pick it.
-        return withTimeoutOrNull(STATUS_TIMEOUT_MS) {
-            runCancellable {
-                client.identifyPossibleLanguages(text).await()
-                    .map { OfflineTranslatePlan.Candidate(it.languageTag, it.confidence) }
-            }.getOrNull()
-        }.orEmpty()
-    }
+    /**
+     * Identification failing is not translation failing: the hints can still
+     * settle the source, and the user can always pick it.
+     */
+    private suspend fun identify(engine: TranslateRuntime, text: String): List<OfflineTranslatePlan.Candidate> =
+        withTimeoutOrNull(STATUS_TIMEOUT_MS) { runCancellable { engine.identify(text) }.getOrNull() }.orEmpty()
 
     /**
      * Lets go of the loaded models. The panel calls this when it closes: a
@@ -410,13 +362,8 @@ object OnDeviceTranslator {
      * nobody has open is first in line when Android wants memory back.
      */
     fun release() {
-        scope.launch {
-            engineLock.withLock {
-                closeTranslator()
-                runCatching { identifier?.close() }
-                identifier = null
-            }
-        }
+        val engine = loaded ?: return
+        scope.launch { engineLock.withLock { engine.release() } }
     }
 
     private fun hasNetwork(context: Context): Boolean {

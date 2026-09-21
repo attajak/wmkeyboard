@@ -421,6 +421,7 @@ import com.wasimaster.wmkeyboard.core.translate.OfflineModelState
 import com.wasimaster.wmkeyboard.core.translate.OfflineTranslateLanguages
 import com.wasimaster.wmkeyboard.core.translate.OfflineTranslateResult
 import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
+import com.wasimaster.wmkeyboard.core.translate.TranslateModuleState
 import com.wasimaster.wmkeyboard.core.translate.downloadNotified
 import com.wasimaster.wmkeyboard.core.settings.TranslateEngine
 import com.wasimaster.wmkeyboard.core.tools.TypedWord
@@ -22473,10 +22474,13 @@ open class WMKeyboardService : InputMethodService() {
                             offlineTranslateUi(source, offline)
                         } else {
                             val online = translateOnline(state.settings, source, target, sourceLang)
-                            // Both failed. A pair that only needs its models is
-                            // the one failure the user can fix from here, so
-                            // that offer outranks "no connection".
-                            if (online.isFailure && offline is OfflineTranslateResult.NeedsModels) {
+                            // Both failed. A pair that only needs its models
+                            // (or the engine its module) is the one failure
+                            // the user can fix from here, so that offer
+                            // outranks "no connection".
+                            val fixable = offline is OfflineTranslateResult.NeedsModels ||
+                                offline is OfflineTranslateResult.ModuleMissing
+                            if (online.isFailure && fixable) {
                                 offlineTranslateUi(source, offline)
                             } else {
                                 onlineTranslateUi(source, online)
@@ -22550,6 +22554,7 @@ open class WMKeyboardService : InputMethodService() {
                     current.copy(
                         translating = false,
                         missingModels = emptyList(),
+                        moduleMissing = false,
                         error = requestErrorText(e, R.string.ime_service_translate_error),
                     )
                 },
@@ -22588,6 +22593,7 @@ open class WMKeyboardService : InputMethodService() {
                 )
                 OfflineTranslateResult.Undetermined ->
                     base.copy(error = getString(R.string.ime_translate_offline_undetermined_error))
+                OfflineTranslateResult.ModuleMissing -> base.copy(moduleMissing = true)
                 is OfflineTranslateResult.Failed -> {
                     DebugLog.w("translate", "on-device engine failed: ${result.cause}")
                     base.copy(error = getString(R.string.ime_translate_offline_failed_error))
@@ -22612,6 +22618,19 @@ open class WMKeyboardService : InputMethodService() {
         translateModelsJob = serviceScope.launch {
             if (translateEngine(_uiState.value.settings) != TranslateEngine.ONLINE) {
                 launch { OnDeviceTranslator.refresh(applicationContext) }
+            }
+            // The engine's own module, where there is one to wait for (Play).
+            // It landing is the same event as a model landing: whatever was
+            // waiting on it gets translated, or gets its next offer.
+            launch {
+                OnDeviceTranslator.moduleState.collect { module ->
+                    val waiting = _uiState.value.translate.moduleMissing
+                    _uiState.update { it.copy(translate = it.translate.copy(module = module)) }
+                    if (waiting && module == TranslateModuleState.Installed) {
+                        OnDeviceTranslator.refresh(applicationContext)
+                        scheduleTranslate(immediate = true, force = true)
+                    }
+                }
             }
             OnDeviceTranslator.models.collect { models ->
                 val waitingOn = _uiState.value.translate.missingModels
@@ -22657,6 +22676,10 @@ open class WMKeyboardService : InputMethodService() {
         serviceScope.launch { settingsRepository.setTranslateEngine(engine) }
         _uiState.update { it.copy(translate = it.translate.cleared()) }
         if (engine != TranslateEngine.ONLINE) {
+            // Picking an engine that needs the module is asking for the
+            // module. Held only by data saver, in which case the panel's own
+            // offer does the asking.
+            if (dataSaverStatus.allows(MeteredFeature.DOWNLOADS)) OnDeviceTranslator.requestModule()
             serviceScope.launch { OnDeviceTranslator.refresh(applicationContext) }
         }
         scheduleTranslate(immediate = true, engineOverride = engine, force = true)
@@ -22692,7 +22715,10 @@ open class WMKeyboardService : InputMethodService() {
     fun onTranslateDownload() {
         vibrate()
         val ui = _uiState.value.translate
-        if (ui.missingModels.isEmpty()) return
+        if (ui.missingModels.isEmpty() && !ui.moduleMissing) return
+        // Play cancels a module by session, and the panel holds none; the
+        // button is simply inert while the module is on its way.
+        if (ui.moduleMissing && ui.module is TranslateModuleState.Installing) return
         val running = ui.missingModels.filter { ui.models[it] is OfflineModelState.Downloading }
         if (running.isNotEmpty()) {
             running.forEach { OnDeviceTranslator.cancelDownload(applicationContext, it) }
@@ -22715,6 +22741,10 @@ open class WMKeyboardService : InputMethodService() {
             }
         }
         _uiState.update { it.copy(translate = it.translate.copy(meteredAsk = false, error = null)) }
+        if (ui.moduleMissing) {
+            OnDeviceTranslator.requestModule()
+            return
+        }
         for (code in ui.missingModels) {
             if (ui.models[code] is OfflineModelState.Downloaded) continue
             OnDeviceTranslator.downloadNotified(

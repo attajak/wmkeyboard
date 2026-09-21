@@ -20,9 +20,9 @@ The repository is a single Gradle build of 20 Android library modules plus
 `keyman`, `prediction`, `emoji`, `theme`, `icons`, `tools`, `content`,
 `addons`, `voice`, `settings`, `feedback`, `plugins`, `intelligence`) and 3
 under `:feature:*` (`tools`, `addons`, `ime`). Two more sit outside that count:
-the host-side `:tools:dictc` (see below), and `:feature:llm`, a dynamic
-feature module `settings.gradle.kts` only includes when the Play channel flag
-is on. A class's module is visible from its file path, not its package.
+the host-side `:tools:dictc` (see below), and `:feature:llm` and
+`:feature:translate`, dynamic feature modules `settings.gradle.kts` only
+includes when the Play channel flag is on. A class's module is visible from its file path, not its package.
 Everything still lives under `com.wasimaster.wmkeyboard.*`.
 
 Dependencies only point downward, and that's a real Gradle project graph rather
@@ -210,7 +210,8 @@ instead, per the "Picking a first contribution" section above.
   `:core:*`/`:feature:*` library modules gate `allWarningsAsErrors` in their
   `build.gradle.kts` on a `warningsAsErrors` Gradle project property
   (`./gradlew build -PwarningsAsErrors=true`), off by default. The two modules
-  outside that set, `:tools:dictc` and the Play-only `:feature:llm`, don't
+  outside that set, `:tools:dictc` and the Play-only `:feature:llm` and
+  `:feature:translate`, don't
   read it. Android Lint's own `warningsAsErrors` flag is hardcoded to `false`
   in `app/build.gradle.kts` and doesn't read that property. The two are
   separate switches that happen to share a name.

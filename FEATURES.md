@@ -1688,6 +1688,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - 63 languages — TranslateClient.languages; source is detected, or picked from the source chip for the visit
     - Swap — Result becomes the text, its language the source, the detected language the new target
     - Two online providers behind one switch — Google's free public endpoint, or Cloud Translation v2 with your key
+    - On-demand on Play — The translator's ~16 MB/ABI lives in the :feature:translate split, fetched through SplitInstall when an on-device engine is first picked; sideload builds compile the same bridge into :core:intelligence
     - On-device engine (full) — ML Kit Translate, 59 languages, one ~30 MB model each, pivots through English; Online / On device / Automatic from the panel's engine chip or the tool page
     - Automatic falls back — On device when both models are here, online for a missing model, an online-only language or romanised text; the chip's icon says which one answered
     - Download offer in the panel — A query that needs a model turns the result area into the offer and the action row into Download/Cancel; retranslates the moment the models land

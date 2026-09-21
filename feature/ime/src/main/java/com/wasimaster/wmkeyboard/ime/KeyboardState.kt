@@ -1152,6 +1152,15 @@ data class TranslateUi(
     val meteredAsk: Boolean = false,
     /** The on-device models' states, mirrored here while the panel is open. */
     val models: Map<String, com.wasimaster.wmkeyboard.core.translate.OfflineModelState> = emptyMap(),
+    /**
+     * The on-device engine itself is what the query is waiting for: a Play
+     * install that has not fetched the on-demand module yet. Puts the same
+     * download offer on screen as [missingModels], one step earlier.
+     */
+    val moduleMissing: Boolean = false,
+    /** Where that module stands, mirrored from its gate while the panel is open. */
+    val module: com.wasimaster.wmkeyboard.core.translate.TranslateModuleState =
+        com.wasimaster.wmkeyboard.core.translate.TranslateModuleState.Installed,
 )
 
 /**
@@ -1161,7 +1170,7 @@ data class TranslateUi(
  * would quietly put the source chip back on detect.
  */
 fun TranslateUi.cleared(): TranslateUi =
-    TranslateUi(sourceOverride = sourceOverride, models = models)
+    TranslateUi(sourceOverride = sourceOverride, models = models, module = module)
 
 /**
  * Grammar strip state. Like translate, the strip follows the focused field:

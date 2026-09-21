@@ -101,6 +101,7 @@ import com.wasimaster.wmkeyboard.core.tools.TypingHistory
 import com.wasimaster.wmkeyboard.core.tools.TypingTestMode
 import com.wasimaster.wmkeyboard.core.tools.TranslateClient
 import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
+import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.TranslateEngine
 import com.wasimaster.wmkeyboard.core.tools.WeatherClient
 import kotlinx.coroutines.flow.first
@@ -1556,6 +1557,7 @@ internal fun ToolDetailSettings(
                 item { TranslateLanguageSetting(repository, settings) }
                 if (onDevice) {
                     item {
+                        val context = LocalContext.current
                         ChoiceSetting(
                             R.string.tooldetail_translate_engine_title,
                             subtitle = stringResource(R.string.tooldetail_translate_engine_subtitle),
@@ -1563,7 +1565,18 @@ internal fun ToolDetailSettings(
                             options = TranslateEngine.entries.map { it to stringResource(it.labelRes) },
                             selected = settings.translate.engine,
                             default = SettingsDefaults.translate.engine,
-                        ) { scope.launch { repository.setTranslateEngine(it) } }
+                        ) { engine ->
+                            scope.launch { repository.setTranslateEngine(engine) }
+                            // Picking an engine that needs the on-demand
+                            // module is asking for it (Play only; a no-op
+                            // elsewhere). Data saver holding downloads leaves
+                            // it to the banner below, which asks properly.
+                            if (engine != TranslateEngine.ONLINE &&
+                                downloadDecisionNow(context, settings) == MeteredDecision.ALLOWED
+                            ) {
+                                OnDeviceTranslator.requestModule()
+                            }
+                        }
                     }
                 }
             }

@@ -217,6 +217,9 @@
     <string name="ime_translate_offline_unsupported_error"><xliff:g id="language" example="Malayalam">%1$s</xliff:g> is not available on the device. Select the online engine for this language.</string>
     <string name="ime_translate_offline_romanized_error"><xliff:g id="language" example="Hindi">%1$s</xliff:g> in Latin letters is not supported on the device. Select the online engine for this text.</string>
     <string name="ime_translate_offline_undetermined_error">The language is not clear from this text. Select it with the first chip.</string>
+    <string name="ime_translate_module_missing_body">On-device translation is an extra part of the keyboard that comes from Google Play. Download it to translate with no connection.</string>
+    <string name="ime_translate_module_installing_action">Downloading…</string>
+    <string name="ime_translate_module_failed_error">Google Play did not deliver the download. Check the connection, then try again. If it fails again, download it from Settings, Tools, Translate.</string>
     <string name="ime_translate_offline_failed_error">On-device translation did not start. Try again, or select the online engine.</string>
 
     <!-- Plugins panel. -->

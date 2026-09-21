@@ -328,6 +328,11 @@
     <string name="tooldetail_translate_models_group">Languages on the device</string>
     <string name="tooldetail_translate_models_info">Each language is one download. A translation needs the models of the two languages, and goes through English when neither of them is English. The list starts with the language you translate into and the languages you type in.</string>
     <string name="tooldetail_translate_models_more_group">More languages</string>
+    <string name="tooldetail_translate_module_missing_info">On-device translation is an extra part of the keyboard that comes from Google Play. Download it, then select the languages.</string>
+    <string name="tooldetail_translate_module_installing_info">Google Play is downloading the on-device translation part…</string>
+    <string name="tooldetail_translate_module_installing_sized_info">Google Play is downloading the on-device translation part: <xliff:g id="done" example="4.1 MB">%1$s</xliff:g> of <xliff:g id="total" example="9 MB">%2$s</xliff:g></string>
+    <string name="tooldetail_translate_module_failed_info">Google Play did not deliver the download. Check the connection and that the Play Store works, then try again.</string>
+    <string name="tooldetail_translate_module_metered_body">The on-device translation part comes from Google Play.</string>
     <string name="tooldetail_translate_model_builtin_label">Part of the engine. No download is necessary</string>
     <string name="tooldetail_translate_model_cancel_desc">Cancel the download for %1$s</string>
     <string name="tooldetail_translate_model_metered_body">The <xliff:g id="language" example="Bengali">%1$s</xliff:g> translation model is about <xliff:g id="size" example="30 MB">%2$s</xliff:g>.</string>

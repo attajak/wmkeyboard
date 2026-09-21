@@ -55,6 +55,8 @@ androidComponents {
         // which a flavour folder cannot be.
         if (!playStoreChannel && variant.flavorName == "full") {
             variant.sources.kotlin?.addStaticSourceDirectory("src/llmbridge/java")
+            // The same arrangement for ML Kit's translator: see TranslateRuntime.kt.
+            variant.sources.kotlin?.addStaticSourceDirectory("src/translatebridge/java")
         }
     }
 }
@@ -84,14 +86,21 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
     "fullImplementation"(libs.mlkit.digital.ink)
-    // On-device translation for the translate tool, and the bundled language
-    // identifier that stands in for the online services' "detect language":
-    // ML Kit's translator has to be told what it is reading.
-    "fullImplementation"(libs.mlkit.translate)
-    "fullImplementation"(libs.mlkit.language.id)
     if (!playStoreChannel) {
         "fullImplementation"(libs.litertlm.android)
+        // On-device translation for the translate tool, and the bundled
+        // language identifier that stands in for the online services' "detect
+        // language": ML Kit's translator has to be told what it is reading.
+        // Play builds leave both out of the base APK; the on-demand
+        // :feature:translate module carries them instead, so the translator's
+        // ~16 MB per ABI of native code only reaches devices that use it.
+        "fullImplementation"(libs.mlkit.translate)
+        "fullImplementation"(libs.mlkit.language.id)
     }
+    // Always, whatever the channel: OnDeviceTranslatorCatalogueTest pins the
+    // hand-written language table to the library's own, and the table is
+    // compiled into every build whether or not the library is.
+    "testFullImplementation"(libs.mlkit.translate)
 
     testImplementation(libs.junit)
 }

@@ -72,6 +72,8 @@ val playStoreChannel: Boolean = run {
 }
 if (playStoreChannel) {
     include(":feature:llm")
+    // The same arrangement for ML Kit's on-device translator.
+    include(":feature:translate")
 }
 // Host-side dictionary compiler: turns dictionaries-src/*.txt into the .wmdict
 // binary assets at build time, sharing the app's own trie/codec sources so the

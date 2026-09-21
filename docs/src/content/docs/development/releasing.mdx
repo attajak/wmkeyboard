@@ -25,6 +25,7 @@ of it, so nothing here needs a branch or a patched source tree.
 | Artifact | one APK per ABI, for all four flavor combinations, plus R8 mappings, native symbols and `SHA256SUMS.txt` | one APK, built by F-Droid, carrying our signature once it matches the release's `-fdroid.apk` | one AAB, with its R8 mapping and native symbols inside |
 | ML Kit | bundled in the APK | absent | unbundled, fetched from Play services |
 | Local LLM | bundled | absent | on-demand `:feature:llm` module |
+| On-device translation (ML Kit) | bundled | absent | on-demand `:feature:translate` module |
 | In-app updates | GitHub releases, downloads and installs | checks F-Droid, links out | Play In-App Updates |
 
 The flags read from a `-P` Gradle property first, then `local.properties`, then
@@ -74,7 +75,7 @@ changes about 41 MB of what a user downloads.
 
 | Directory | Compiled when | Holds |
 |---|---|---|
-| `app/src/play/java` | `enablePlayStore` | `PlayAppUpdater`, and SplitInstall for `:feature:llm` |
+| `app/src/play/java` | `enablePlayStore` | `PlayAppUpdater`, and SplitInstall for `:feature:llm` and `:feature:translate` |
 | `app/src/noplay/java` | otherwise | the no-op SplitInstall stub |
 | `app/src/github/java` | neither flag | the release check, the download, and the package installer |
 | `app/src/fdroid/java` | `enableFdroid` | the F-Droid index check |
@@ -595,7 +596,7 @@ non-UTF-8 locale otherwise raises rather than counting.
    ```
 
    Go to internal first, always. Play's own device catalogue tells you within
-   minutes if the on-demand `:feature:llm` module or the unbundled ML Kit path
+   minutes if an on-demand module (`:feature:llm`, `:feature:translate`) or the unbundled ML Kit path
    is misconfigured, and that is far cheaper to learn there than in
    production.
 

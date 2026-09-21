@@ -5,6 +5,7 @@ import android.content.Context
 import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.app.drive.installDriveAuth
 import com.wasimaster.wmkeyboard.app.llm.installLlmDelivery
+import com.wasimaster.wmkeyboard.app.translate.installTranslateDelivery
 import com.wasimaster.wmkeyboard.app.llm.llmSplitCompat
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupClients
@@ -62,6 +63,8 @@ class WMApplication : Application() {
         // delivers the AI runtime on demand at all. A no-op elsewhere: those
         // builds compile the runtime in, and the default gate already says so.
         installLlmDelivery(this)
+        // The same for ML Kit's translator and OnDeviceTranslator.
+        installTranslateDelivery(this)
         // The Dropbox and OneDrive client ids, which live in BuildConfig and
         // so cannot be read from the library module that needs them.
         BackupClients.install(

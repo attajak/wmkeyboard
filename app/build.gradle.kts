@@ -294,6 +294,9 @@ android {
     // the module is not even part of the build graph.
     if (playStoreChannel) {
         dynamicFeatures += ":feature:llm"
+        // ML Kit's translator, the same way: ~16 MB per ABI that only the
+        // people who turn on-device translation on ever download.
+        dynamicFeatures += ":feature:translate"
     }
 
     // See the splitApks flag at the top of this file. Splits shape APK
@@ -788,8 +791,14 @@ dependencies {
     // Google binary is linked into an F-Droid or direct-download APK.
     if (playStoreChannel) {
         implementation(libs.play.app.update)
-        // SplitInstall + SplitCompat for the on-demand :feature:llm module.
+        // SplitInstall + SplitCompat for the on-demand :feature:llm and
+        // :feature:translate modules.
         implementation(libs.play.feature.delivery)
+        // ML Kit's own half of running from an on-demand module. It has to be
+        // in the base: it is what lets the ML Kit context that started with
+        // the process find a library that arrived after it. Full flavour only,
+        // since lite has no ML Kit for it to serve.
+        "fullImplementation"(libs.mlkit.dynamic.feature.support)
     }
     // Only for the Drive backup destination's OAuth token. The Drive calls
     // themselves are plain HTTP and need nothing from Google.

@@ -40,7 +40,7 @@ The auto-provisioned JDK 21 toolchain is not the project's bytecode target. Ever
 
 ## Building full vs. lite
 
-WM Keyboard ships as two build flavors on the same `capabilities` flavor dimension, declared identically in `:app` and all 20 `:core:*`/`:feature:*` modules. A 21st, `:feature:llm`, declares the same dimension but only joins the build for Play-channel releases. The standalone `:tools:dictc` compiler is a plain JVM module and carries no flavors at all.
+WM Keyboard ships as two build flavors on the same `capabilities` flavor dimension, declared identically in `:app` and all 20 `:core:*`/`:feature:*` modules. Two more, `:feature:llm` and `:feature:translate`, declare the same dimension but only join the build for Play-channel releases. The standalone `:tools:dictc` compiler is a plain JVM module and carries no flavors at all.
 
 - **`full`** builds every feature: ML Kit handwriting recognition, ML Kit OCR/QR/document scanning, the Harper grammar checker (and the Harper spell-checker service it registers with Android), the local LLM tool, offline Whisper dictation, and one-tap background removal in the sticker editor.
 - **`lite`** switches all of those off. That drops roughly 100 MB of ML Kit models and the Harper native library from the install, which is what makes it useful on a low-storage device.
