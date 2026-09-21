@@ -33,7 +33,8 @@ SIDELOAD_PROPS = {
 # Play's tree is the one below, chosen with supply's `metadata_path`. Only the
 # three text files diverge. Images and changelogs stay in the shared tree and
 # are uploaded by the `graphics` and `internal` lanes, which read the default
-# path, so there is one copy of each and nothing to keep in step.
+# path, so there is one copy of each and nothing to keep in step. The one
+# exception is a Play-only changelog, see play_changelog_override below.
 PLAY_METADATA_PATH = File.expand_path("play/metadata/android", __dir__)
 PLAY_LISTING_DIR = File.join(PLAY_METADATA_PATH, "en-US")
 FDROID_LISTING_DIR = File.expand_path("metadata/android/en-US", __dir__)
@@ -107,6 +108,16 @@ def ensure_changelog!
   ) unless File.exist?(changelog)
 end
 
+# A changelog under the Play tree, when there is one, is what Play gets for that
+# version, and the shared one stays F-Droid's. For a note only F-Droid users
+# need: 0.5.10 tells F-Droid installs to reinstall once for the switch to
+# reproducible builds, which would only confuse a Play user. Most versions have
+# no override and Play reads the shared file as before.
+def play_changelog_override
+  path = File.join(PLAY_LISTING_DIR, "changelogs", "#{version_code}.txt")
+  File.exist?(path) ? path : nil
+end
+
 platform :android do
   desc "Verify version, changelog and signing are consistent before a release"
   lane :preflight do
@@ -165,7 +176,7 @@ platform :android do
       bundle_play
       aab = lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]
     end
-    upload_to_play_store(
+    upload = {
       track: "internal",
       aab: aab,
       release_status: "completed",
@@ -177,7 +188,15 @@ platform :android do
       # First uploads and some policy states cannot be auto-submitted for
       # review; land the change in the Console instead of failing the lane.
       rescue_changes_not_sent_for_review: true,
-    )
+    }
+    # Only changelogs are read from metadata_path here (metadata, images and
+    # screenshots are all skipped above), so pointing it at the Play tree swaps
+    # the release notes and nothing else.
+    if (override = play_changelog_override)
+      UI.message("Release notes from the Play-only #{override}")
+      upload[:metadata_path] = PLAY_METADATA_PATH
+    end
+    upload_to_play_store(**upload)
     UI.success("#{version_name} (#{version_code}) is on the internal track")
   end
 

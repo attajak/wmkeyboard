@@ -217,8 +217,12 @@ inside a fence long enough that no backtick run in it can escape.
    to match.
 
 2. **Write the store changelog.** `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
-   F-Droid and Play both read this file, so it is the only place you write it.
-   Play caps it at 500 characters.
+   F-Droid and Play both read this file, so it is usually the only place you write it.
+   Play caps it at 500 characters. When Play needs different notes from F-Droid,
+   put Play's under `fastlane/play/metadata/android/en-US/changelogs/<versionCode>.txt`:
+   the `internal` lane uploads that one instead, and F-Droid keeps the shared
+   file. 0.5.10 does this, because its F-Droid notes open with the one-time
+   reinstall for [reproducible builds](#reproducible-builds).
 
 3. **Write the release notes.** `release-notes/<versionName>.md`, in the repo
    root. This is the prose at the top of the GitHub release: what changed, in
@@ -495,7 +499,9 @@ Play is the side that can be redirected, so Play is the side that moved.
 
 Only the three text files diverge. Images and changelogs stay in the shared
 tree, uploaded by `graphics` and `internal`, which read the default path. One
-copy of each, nothing to keep in step.
+copy of each, nothing to keep in step. The exception is a changelog placed
+under the Play tree for a version whose Play notes must differ, which
+`internal` prefers when it exists.
 
 :::caution[The lite description must not promise what lite does not ship]
 The lite flavour has no ML Kit, no Whisper and no Harper, so it has no
