@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">స్పెల్లింగ్‌ను అలాగే వదిలేయండి</string>
     <string name="ime_word_spell_hint">\"%1$s\" కోసం కొత్త స్పెల్లింగ్‌ను టైప్ చేయండి</string>
     <string name="subtype_app_label">WM కీబోర్డ్ · %s</string>
+    <string name="ime_ai_chat_new">కొత్త చాట్</string>
+    <string name="ime_ai_chat_untitled">కొత్త చాట్</string>
+    <string name="ime_ai_chat_list_empty">ఇంకా చాట్‌లు లేవు. ఒకదాన్ని ప్రారంభించండి, అది ఇక్కడ కనిపిస్తుంది.</string>
+    <string name="ime_ai_chat_empty_hint">చాట్‌ను ప్రారంభించడానికి సందేశాన్ని పంపండి. సంభాషణ మీ పరికరంలోనే ఉంటుంది.</string>
+    <string name="ime_ai_chat_composer_hint">సందేశం</string>
+    <string name="ime_ai_chat_send">పంపు</string>
+    <string name="ime_ai_chat_stop">ఆపు</string>
+    <string name="ime_ai_chat_stopped">ఆపివేయబడింది</string>
+    <string name="ime_ai_chat_retry">మళ్ళీ ప్రయత్నించు</string>
+    <string name="ime_ai_chat_report_action">రిపోర్ట్ చేయండి</string>
+    <string name="ime_ai_chat_thinking">ఆలోచిస్తోంది…</string>
+    <string name="ime_ai_chat_no_backend_title">ఇంకా చాట్ చేయడానికి ఏమీ లేదు</string>
+    <string name="ime_ai_chat_no_backend_body">ఆన్-డివైస్ మోడల్‌ను డౌన్‌లోడ్ చేయండి లేదా AI టూల్ సెట్టింగ్‌లలో ప్రొవైడర్‌ను సెటప్ చేయండి.</string>
+    <string name="ime_ai_chat_setup_button">AI టూల్ సెట్టింగ్‌లను తెరవండి</string>
+    <string name="ime_ai_chat_error_no_model">ఎంచుకున్న మోడల్ మీ పరికరంలో లేదు. మరొక మోడల్‌ను ఎంచుకోండి.</string>
+    <string name="ime_ai_chat_error_generic">మోడల్ సమాధానం ఇవ్వలేదు. మళ్ళీ ప్రయత్నించండి.</string>
 </resources>

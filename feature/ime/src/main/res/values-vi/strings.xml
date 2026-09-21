@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Giữ nguyên cách viết</string>
     <string name="ime_word_spell_hint">Nhập cách viết mới cho \"%1$s\"</string>
     <string name="subtype_app_label">Bàn phím WM · %s</string>
+    <string name="ime_ai_chat_new">Trò chuyện mới</string>
+    <string name="ime_ai_chat_untitled">Trò chuyện mới</string>
+    <string name="ime_ai_chat_list_empty">Chưa có cuộc trò chuyện nào. Hãy bắt đầu một cuộc trò chuyện và nó sẽ xuất hiện ở đây.</string>
+    <string name="ime_ai_chat_empty_hint">Gửi tin nhắn để bắt đầu trò chuyện. Cuộc trò chuyện được lưu trên thiết bị của bạn.</string>
+    <string name="ime_ai_chat_composer_hint">Tin nhắn</string>
+    <string name="ime_ai_chat_send">Gửi</string>
+    <string name="ime_ai_chat_stop">Dừng</string>
+    <string name="ime_ai_chat_stopped">Đã dừng</string>
+    <string name="ime_ai_chat_retry">Thử lại</string>
+    <string name="ime_ai_chat_report_action">Báo cáo</string>
+    <string name="ime_ai_chat_thinking">Đang suy luận…</string>
+    <string name="ime_ai_chat_no_backend_title">Chưa có gì để trò chuyện</string>
+    <string name="ime_ai_chat_no_backend_body">Tải xuống mô hình trên thiết bị hoặc thiết lập nhà cung cấp trong cài đặt công cụ AI.</string>
+    <string name="ime_ai_chat_setup_button">Mở cài đặt công cụ AI</string>
+    <string name="ime_ai_chat_error_no_model">Mô hình đã chọn không còn trên thiết bị của bạn nữa. Hãy chọn mô hình khác.</string>
+    <string name="ime_ai_chat_error_generic">Mô hình không phản hồi. Hãy thử lại.</string>
 </resources>

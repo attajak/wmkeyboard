@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">ہجے کو ویسے ہی رہنے دیں</string>
     <string name="ime_word_spell_hint">\"%1$s\" کے لیے ایک نیا ہجے ٹائپ کریں</string>
     <string name="subtype_app_label">WM کی بورڈ · %s</string>
+    <string name="ime_ai_chat_new">نئی چیٹ</string>
+    <string name="ime_ai_chat_untitled">نئی چیٹ</string>
+    <string name="ime_ai_chat_list_empty">ابھی تک کوئی چیٹ نہیں ہے۔ ایک شروع کریں اور یہ یہاں ظاہر ہو جائے گی۔</string>
+    <string name="ime_ai_chat_empty_hint">چیٹ شروع کرنے کے لیے پیغام بھیجیں۔ گفتگو آپ کے آلے پر ہی رہتی ہے۔</string>
+    <string name="ime_ai_chat_composer_hint">پیغام</string>
+    <string name="ime_ai_chat_send">بھیجیں</string>
+    <string name="ime_ai_chat_stop">روکیں</string>
+    <string name="ime_ai_chat_stopped">روک دیا گیا</string>
+    <string name="ime_ai_chat_retry">دوبارہ کوشش کریں</string>
+    <string name="ime_ai_chat_report_action">رپورٹ کریں</string>
+    <string name="ime_ai_chat_thinking">سوچ رہا ہے...</string>
+    <string name="ime_ai_chat_no_backend_title">ابھی تک چیٹ کرنے کے لیے کچھ نہیں ہے</string>
+    <string name="ime_ai_chat_no_backend_body">آن ڈیوائس ماڈل ڈاؤن لوڈ کریں یا AI ٹول کی ترتیبات میں کوئی فراہم کنندہ سیٹ اپ کریں۔</string>
+    <string name="ime_ai_chat_setup_button">AI ٹول کی ترتیبات کھولیں</string>
+    <string name="ime_ai_chat_error_no_model">منتخب کردہ ماڈل اب آپ کے آلے پر نہیں ہے۔ کوئی دوسرا ماڈل منتخب کریں۔</string>
+    <string name="ime_ai_chat_error_generic">ماڈل نے جواب نہیں دیا۔ دوبارہ کوشش کریں۔</string>
 </resources>

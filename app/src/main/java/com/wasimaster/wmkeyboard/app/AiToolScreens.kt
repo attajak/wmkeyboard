@@ -373,6 +373,16 @@ internal fun AiToolSettings(
                 onClick = { onNavigate("ai_chat") },
             )
         }
+        // The chat on the keyboard's AI panel (#280). Off by default: a prompt
+        // is often more than one line, and the panel has a Send button.
+        item {
+            ToggleSetting(
+                R.string.toolai_chat_enter_sends_title,
+                stringResource(R.string.toolai_chat_enter_sends_subtitle),
+                settings.ai.chatEnterSends,
+                default = SettingsDefaults.ai.chatEnterSends,
+            ) { scope.launch { repository.setAiChatEnterSends(it) } }
+        }
     }
     SettingsGroup(stringResource(R.string.toolai_ai_actions_group_title)) {
         item {

@@ -980,4 +980,20 @@
     <string name="ime_word_spell_cancel_desc">Αφήστε την ορθογραφία ως έχει</string>
     <string name="ime_word_spell_hint">Πληκτρολογήστε μια νέα ορθογραφία για το \"%1$s\"</string>
     <string name="subtype_app_label">Πληκτρολόγιο WM · %s</string>
+    <string name="ime_ai_chat_new">Νέα συνομιλία</string>
+    <string name="ime_ai_chat_untitled">Νέα συνομιλία</string>
+    <string name="ime_ai_chat_list_empty">Δεν υπάρχουν ακόμη συνομιλίες. Ξεκινήστε μία και θα εμφανιστεί εδώ.</string>
+    <string name="ime_ai_chat_empty_hint">Στείλτε ένα μήνυμα για να ξεκινήσετε τη συνομιλία. Η συνομιλία παραμένει στη συσκευή σας.</string>
+    <string name="ime_ai_chat_composer_hint">Μήνυμα</string>
+    <string name="ime_ai_chat_send">Αποστολή</string>
+    <string name="ime_ai_chat_stop">Διακοπή</string>
+    <string name="ime_ai_chat_stopped">Διακόπηκε</string>
+    <string name="ime_ai_chat_retry">Επανάληψη</string>
+    <string name="ime_ai_chat_report_action">Αναφορά</string>
+    <string name="ime_ai_chat_thinking">Σκέψη…</string>
+    <string name="ime_ai_chat_no_backend_title">Δεν υπάρχει τίποτα για συνομιλία ακόμα</string>
+    <string name="ime_ai_chat_no_backend_body">Κατεβάστε ένα μοντέλο στη συσκευή ή ρυθμίστε έναν πάροχο στις ρυθμίσεις του εργαλείου AI.</string>
+    <string name="ime_ai_chat_setup_button">Άνοιγμα των ρυθμίσεων του εργαλείου AI</string>
+    <string name="ime_ai_chat_error_no_model">Το επιλεγμένο μοντέλο δεν βρίσκεται πλέον στη συσκευή σας. Επιλέξτε άλλο μοντέλο.</string>
+    <string name="ime_ai_chat_error_generic">Το μοντέλο δεν απάντησε. Προσπαθήστε ξανά.</string>
 </resources>

@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">বানানটি যেমন আছে তেমনই রাখুন</string>
     <string name="ime_word_spell_hint">\"%1$s\"-এর জন্য একটি নতুন বানান টাইপ করুন</string>
     <string name="subtype_app_label">WM কিবোর্ড · %s</string>
+    <string name="ime_ai_chat_new">নতুন চ্যাট</string>
+    <string name="ime_ai_chat_untitled">নতুন চ্যাট</string>
+    <string name="ime_ai_chat_list_empty">এখনও কোনো চ্যাট নেই। একটি শুরু করুন এবং এটি এখানে প্রদর্শিত হবে।</string>
+    <string name="ime_ai_chat_empty_hint">চ্যাট শুরু করতে একটি বার্তা পাঠান। কথোপকথনটি আপনার ডিভাইসেই থাকে।</string>
+    <string name="ime_ai_chat_composer_hint">মেসেজ</string>
+    <string name="ime_ai_chat_send">পাঠান</string>
+    <string name="ime_ai_chat_stop">বন্ধ করুন</string>
+    <string name="ime_ai_chat_stopped">বন্ধ করা হয়েছে</string>
+    <string name="ime_ai_chat_retry">পুনরায় চেষ্টা করুন</string>
+    <string name="ime_ai_chat_report_action">রিপোর্ট করুন</string>
+    <string name="ime_ai_chat_thinking">ভাবছে…</string>
+    <string name="ime_ai_chat_no_backend_title">চ্যাট করার মতো কিছু নেই</string>
+    <string name="ime_ai_chat_no_backend_body">একটি অন-ডিভাইস মডেল ডাউনলোড করুন অথবা এআই টুলের সেটিংসে গিয়ে একটি প্রোভাইডার সেট আপ করুন।</string>
+    <string name="ime_ai_chat_setup_button">এআই টুলের সেটিংস খুলুন</string>
+    <string name="ime_ai_chat_error_no_model">নির্বাচিত মডেলটি আর আপনার ডিভাইসে নেই। অন্য একটি মডেল বেছে নিন।</string>
+    <string name="ime_ai_chat_error_generic">মডেলটি উত্তর দেয়নি। আবার চেষ্টা করুন।</string>
 </resources>

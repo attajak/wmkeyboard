@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">Jäta õigekiri muutmata</string>
     <string name="ime_word_spell_hint">Sisesta uus õigekiri sõnale \"%1$s\"</string>
     <string name="subtype_app_label">WM-klaviatuur · %s</string>
+    <string name="ime_ai_chat_new">Uus vestlus</string>
+    <string name="ime_ai_chat_untitled">Uus vestlus</string>
+    <string name="ime_ai_chat_list_empty">Vestlusi veel pole. Alusta vestlust ja see ilmub siia.</string>
+    <string name="ime_ai_chat_empty_hint">Vestluse alustamiseks saatke sõnum. Vestlus jääb teie seadmesse.</string>
+    <string name="ime_ai_chat_composer_hint">Sõnum</string>
+    <string name="ime_ai_chat_send">Saada</string>
+    <string name="ime_ai_chat_stop">Peata</string>
+    <string name="ime_ai_chat_stopped">Peatatud</string>
+    <string name="ime_ai_chat_retry">Proovi uuesti</string>
+    <string name="ime_ai_chat_report_action">Teata</string>
+    <string name="ime_ai_chat_thinking">Mõtlen...</string>
+    <string name="ime_ai_chat_no_backend_title">Pole veel kellegagi vestelda</string>
+    <string name="ime_ai_chat_no_backend_body">Laadige alla seadmesisene mudel või seadistage pakkuja AI-tööriista seadetes.</string>
+    <string name="ime_ai_chat_setup_button">Ava AI-tööriista seaded</string>
+    <string name="ime_ai_chat_error_no_model">Valitud mudelit pole enam teie seadmes. Valige mõni muu mudel.</string>
+    <string name="ime_ai_chat_error_generic">Mudel ei vastanud. Proovige uuesti.</string>
 </resources>

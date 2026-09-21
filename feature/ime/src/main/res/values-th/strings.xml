@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">ปล่อยการสะกดคำไว้ตามเดิม</string>
     <string name="ime_word_spell_hint">พิมพ์ตัวสะกดใหม่สำหรับ \"%1$s\"</string>
     <string name="subtype_app_label">WM Keyboard · %s</string>
+    <string name="ime_ai_chat_new">แชทใหม่</string>
+    <string name="ime_ai_chat_untitled">แชทใหม่</string>
+    <string name="ime_ai_chat_list_empty">ยังไม่มีการแชท เริ่มการแชทแล้วแชทจะปรากฏที่นี่</string>
+    <string name="ime_ai_chat_empty_hint">ส่งข้อความเพื่อเริ่มแชท การสนทนาจะถูกเก็บไว้ในอุปกรณ์ของคุณ</string>
+    <string name="ime_ai_chat_composer_hint">ข้อความ</string>
+    <string name="ime_ai_chat_send">ส่ง</string>
+    <string name="ime_ai_chat_stop">หยุด</string>
+    <string name="ime_ai_chat_stopped">หยุดแล้ว</string>
+    <string name="ime_ai_chat_retry">ลองใหม่</string>
+    <string name="ime_ai_chat_report_action">รายงาน</string>
+    <string name="ime_ai_chat_thinking">กำลังคิด...</string>
+    <string name="ime_ai_chat_no_backend_title">ยังไม่มีอะไรให้แชทด้วย</string>
+    <string name="ime_ai_chat_no_backend_body">ดาวน์โหลดโมเดลบนอุปกรณ์หรือตั้งค่าผู้ให้บริการในการตั้งค่าเครื่องมือ AI</string>
+    <string name="ime_ai_chat_setup_button">เปิดการตั้งค่าเครื่องมือ AI</string>
+    <string name="ime_ai_chat_error_no_model">โมเดลที่เลือกไม่อยู่ในอุปกรณ์ของคุณแล้ว โปรดเลือกโมเดลอื่น</string>
+    <string name="ime_ai_chat_error_generic">โมเดลไม่ตอบกลับ ลองใหม่อีกครั้ง</string>
 </resources>

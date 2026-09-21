@@ -190,6 +190,8 @@ enum class CaptureTarget(
 ) {
     TYPING_TEST(takesWords = false, movableCaret = false),
     AI_CUSTOM(takesWords = true),
+    /** The AI panel's chat composer (#280): free text, newlines and all. */
+    AI_CHAT(takesWords = true),
     PLUGIN(takesWords = true),
     FIND_QUERY(takesWords = true),
     FIND_REPLACEMENT(takesWords = true),

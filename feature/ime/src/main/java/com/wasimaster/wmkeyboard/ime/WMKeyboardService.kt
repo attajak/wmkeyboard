@@ -368,6 +368,9 @@ import com.wasimaster.wmkeyboard.core.tools.KlipyClient
 import com.wasimaster.wmkeyboard.core.tools.MediaCategories
 import com.wasimaster.wmkeyboard.core.tools.MediaCategory
 import com.wasimaster.wmkeyboard.core.tools.MediaCategoryCache
+import com.wasimaster.wmkeyboard.core.aichat.AiChatMessage
+import com.wasimaster.wmkeyboard.core.aichat.AiChatStore
+import com.wasimaster.wmkeyboard.ime.aichat.AiChatController
 import com.wasimaster.wmkeyboard.core.aihistory.AiHistoryEntry
 import com.wasimaster.wmkeyboard.core.aihistory.AiHistoryGuard
 import com.wasimaster.wmkeyboard.core.aihistory.AiHistoryStore
@@ -5414,6 +5417,14 @@ open class WMKeyboardService : InputMethodService() {
         if (_uiState.value.wordCard != null || _uiState.value.wordSpell != null) {
             _uiState.update { it.copy(wordCard = null, wordSpell = null) }
         }
+        // The chat composer gives the keys back with the window: a keyboard
+        // that came up in the next field already swallowing keystrokes would
+        // be a trap. The draft stays. The on-device session is left alone — the
+        // chat screen in the settings app may be the one holding it, and this
+        // keyboard hides and shows under that screen all the time.
+        if (_uiState.value.aiChat.composing) {
+            _uiState.update { it.copy(aiChat = it.aiChat.copy(composing = false)) }
+        }
         // A word still composing settles into the field as typed. Leaving the
         // editor's region active while our mirror is wiped on the next
         // onStartInputView meant the first keystroke after a hide→reshow
@@ -6557,6 +6568,14 @@ open class WMKeyboardService : InputMethodService() {
             CaptureTarget.WORD_SPELL -> commitWordSpell()
             // Enter runs the Custom action rather than dropping a newline.
             CaptureTarget.AI_CUSTOM -> onAiRunCustom()
+            // A chat message is free text, so Enter is a line break unless the
+            // user asked for it to send (#280); the Send button always sends.
+            CaptureTarget.AI_CHAT ->
+                if (state.settings.ai.chatEnterSends) {
+                    onAiChatAction(AiChatAction.Send)
+                } else {
+                    captureTyped("\n")
+                }
             // Enter finishes typing into a plugin's box: it gives the keys
             // back to the field.
             CaptureTarget.PLUGIN -> onPluginInputFocus(null)
@@ -6675,6 +6694,7 @@ open class WMKeyboardService : InputMethodService() {
             when (target) {
                 CaptureTarget.TYPING_TEST, CaptureTarget.WORD_SPELL -> return
                 CaptureTarget.AI_CUSTOM -> aiCustomInputEdit { after.text }
+                CaptureTarget.AI_CHAT -> aiChatDraft(after.text)
                 CaptureTarget.PLUGIN -> pluginInputEdit { after.text }
                 CaptureTarget.FIND_QUERY, CaptureTarget.FIND_REPLACEMENT -> findReplaceEdit { after.text }
                 CaptureTarget.LEARN_EDIT -> learnEdit { after.text }
@@ -17138,6 +17158,7 @@ open class WMKeyboardService : InputMethodService() {
                 currentInputConnection?.let { commitComposing(it, autocorrect = false) }
                 _uiState.update { it.copy(ai = aiInitialState(it.settings)) }
                 refreshAiHasText()
+                prepareAiChat()
             }
             PanelMode.PLUGINS -> openPluginList()
             PanelMode.APP_LAUNCHER -> loadLauncherApps()
@@ -19715,6 +19736,7 @@ open class WMKeyboardService : InputMethodService() {
         com.wasimaster.wmkeyboard.ime.ui.CaptureCallbacks(
             onCaretTap = ::onCaptureCaretTap,
             onSuggestion = ::onCaptureSuggestion,
+            onAiChat = ::onAiChatAction,
         )
     }
 
@@ -20804,6 +20826,242 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update { it.copy(ai = AiUi.CustomInput(ai.action, transform(ai.instruction))) }
     }
 
+    // ---- AI chat (#280) ----
+    //
+    // The panel's chat mode. The conversation itself is AiChatController's: the
+    // same object, store and live run the chat screen in the settings app
+    // draws, so everything here is only what the keyboard adds — a composer its
+    // own keys write into, and the field behind it to quote from and insert to.
+
+    /** The composer's text, written by the capture ladder. */
+    private fun aiChatDraft(text: String) {
+        _uiState.update { it.copy(aiChat = it.aiChat.copy(draft = text.take(AiChatStore.MAX_TEXT))) }
+    }
+
+    /** The model the next message goes to: the one picked, else the last used. */
+    private fun aiChatChoice(): AiChatController.ModelChoice? {
+        val state = _uiState.value
+        val available = AiChatController.choices(this, state.settings.ai)
+        return available.firstOrNull { it.key == state.aiChat.modelKey }
+            ?: AiChatController.initialChoice(AiChatController.store(this), available)
+    }
+
+    /**
+     * Puts the chat mode in order as the AI panel opens: whether it may be
+     * offered at all, which mode the panel was left in, and a conversation that
+     * still exists. The composer never opens with the keys — a panel that
+     * swallowed the first keystroke after opening would be a trap.
+     */
+    private fun prepareAiChat() {
+        // Conversations are in credential-encrypted storage, and a transcript
+        // is not something to draw over a keyguard.
+        val offered = userUnlocked && !isDeviceLocked()
+        if (!offered) {
+            _uiState.update { it.copy(aiChat = it.aiChat.copy(available = false, composing = false)) }
+            return
+        }
+        val store = AiChatController.store(this)
+        // An answer still forming is the conversation to come back to, whichever
+        // of the two surfaces started it.
+        val live = AiChatController.run.value?.conversationId
+        _uiState.update {
+            val chat = it.aiChat
+            val id = live ?: chat.conversationId.takeIf { id -> id >= 0 && store.get(id) != null } ?: -1L
+            it.copy(
+                aiChat = chat.copy(
+                    available = true,
+                    open = it.settings.ai.panelChat,
+                    conversationId = id,
+                    composing = false,
+                    showSessions = false,
+                ),
+            )
+        }
+        val keep = _uiState.value.settings.ai.keepChats
+        serviceScope.launch { AiChatController.applyPersistSetting(this@WMKeyboardService, keep) }
+    }
+
+    /** The selection, or else the field's text, for quoting along with a message. */
+    private fun aiChatAttachmentFromField(): AiChatAttachment? {
+        // Never out of a password field, whatever the user pressed.
+        if (_uiState.value.secureField) return null
+        val ic = currentInputConnection ?: return null
+        commitComposing(ic, autocorrect = false)
+        val selected = ic.getSelectedText(0)?.toString()?.takeIf { it.isNotBlank() }
+        val text = (selected ?: extractFieldText()).trim()
+        if (text.isEmpty()) return null
+        return AiChatAttachment(text.take(AiChatStore.MAX_TEXT), fromSelection = selected != null)
+    }
+
+    /** The key a conversation's last model has in the picker. */
+    private fun aiChatModelKeyOf(conversationId: Long): String? {
+        val conversation = AiChatController.store(this).get(conversationId) ?: return null
+        return when {
+            conversation.provider.isEmpty() -> null
+            conversation.provider == AiProvider.ON_DEVICE.name ->
+                AiChatStore.ON_DEVICE_KEY_PREFIX + conversation.localModelId
+            else -> conversation.provider
+        }
+    }
+
+    fun onAiChatAction(action: AiChatAction) {
+        val state = _uiState.value
+        val chat = state.aiChat
+        if (!chat.available) return
+        // openRoute buzzes on its own.
+        if (action !is AiChatAction.OpenInApp) vibrate()
+        when (action) {
+            is AiChatAction.SetMode -> {
+                _uiState.update {
+                    it.copy(
+                        aiChat = it.aiChat.copy(open = action.chat, composing = false, showSessions = false),
+                        // One field with the keys at a time: a half-typed
+                        // instruction does not keep them under the chat.
+                        ai = if (action.chat && it.ai is AiUi.CustomInput) AiUi.Idle else it.ai,
+                    )
+                }
+                serviceScope.launch { settingsRepository.setAiPanelChat(action.chat) }
+            }
+            AiChatAction.FocusComposer ->
+                _uiState.update { it.copy(aiChat = it.aiChat.copy(composing = true)) }
+            AiChatAction.BlurComposer ->
+                _uiState.update { it.copy(aiChat = it.aiChat.copy(composing = false)) }
+            AiChatAction.Send -> aiChatSend()
+            AiChatAction.Stop -> AiChatController.stop(this)
+            AiChatAction.Retry -> aiChatChoice()?.let {
+                AiChatController.retry(this, state.settings.ai, chat.conversationId, it)
+            }
+            AiChatAction.Regenerate -> aiChatChoice()?.let {
+                AiChatController.regenerate(this, state.settings.ai, chat.conversationId, it)
+            }
+            AiChatAction.EditLast -> {
+                val taken = AiChatController.editLast(this, chat.conversationId) ?: return
+                _uiState.update {
+                    it.copy(
+                        aiChat = it.aiChat.copy(
+                            draft = taken.content,
+                            attachment = taken.attachment.takeIf(String::isNotEmpty)
+                                ?.let { text -> AiChatAttachment(text, fromSelection = false) },
+                            composing = true,
+                        ),
+                    )
+                }
+            }
+            AiChatAction.NewChat ->
+                _uiState.update {
+                    it.copy(aiChat = it.aiChat.copy(conversationId = -1L, showSessions = false, composing = true))
+                }
+            is AiChatAction.Open ->
+                _uiState.update {
+                    it.copy(
+                        aiChat = it.aiChat.copy(
+                            conversationId = action.conversationId,
+                            showSessions = false,
+                            composing = false,
+                            // A conversation comes back on the model it was
+                            // last had with, when that model is still here.
+                            modelKey = aiChatModelKeyOf(action.conversationId) ?: it.aiChat.modelKey,
+                        ),
+                    )
+                }
+            is AiChatAction.Delete -> {
+                AiChatController.deleteConversation(this, action.conversationId)
+                if (chat.conversationId == action.conversationId) {
+                    _uiState.update { it.copy(aiChat = it.aiChat.copy(conversationId = -1L)) }
+                }
+            }
+            AiChatAction.ToggleSessions ->
+                _uiState.update {
+                    it.copy(aiChat = it.aiChat.copy(showSessions = !it.aiChat.showSessions, composing = false))
+                }
+            is AiChatAction.PickModel ->
+                _uiState.update { it.copy(aiChat = it.aiChat.copy(modelKey = action.key)) }
+            AiChatAction.ToggleAttachment -> {
+                val next = if (chat.attachment != null) null else aiChatAttachmentFromField()
+                _uiState.update { it.copy(aiChat = it.aiChat.copy(attachment = next)) }
+            }
+            AiChatAction.Paste -> {
+                if (!isClipboardAccessible()) return
+                val clip = clipboardStore.latestText().orEmpty()
+                if (clip.isEmpty()) return
+                // Through the ladder, so it lands at the caret like typed text.
+                _uiState.update { it.copy(aiChat = it.aiChat.copy(composing = true)) }
+                captureTyped(clip)
+            }
+            is AiChatAction.Insert -> commitToField(
+                if (action.raw) action.text else AiMarkdown.strip(action.text).ifBlank { action.text },
+            )
+            is AiChatAction.Copy -> runCatching {
+                (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                    .setPrimaryClip(android.content.ClipData.newPlainText("", action.text))
+            }
+            is AiChatAction.Starter -> {
+                // Read outside the update: it flushes the composing word, and
+                // an update's block can run more than once.
+                val quoted = chat.attachment ?: if (action.attach) aiChatAttachmentFromField() else null
+                _uiState.update {
+                    it.copy(aiChat = it.aiChat.copy(draft = action.text, attachment = quoted, composing = true))
+                }
+            }
+            is AiChatAction.OpenInApp ->
+                openRoute(
+                    if (action.list || chat.conversationId < 0) "ai_chat" else "ai_chat/${chat.conversationId}",
+                )
+            is AiChatAction.Report -> aiChatReport(action.index)
+        }
+    }
+
+    private fun aiChatSend() {
+        val state = _uiState.value
+        val chat = state.aiChat
+        val text = chat.draft.trim()
+        if (text.isEmpty() || AiChatController.isGenerating) return
+        val choice = aiChatChoice() ?: return
+        val store = AiChatController.store(this)
+        // Written on the first send and not before, like the chat screen: a
+        // chat opened and left leaves no row behind.
+        val id = chat.conversationId.takeIf { it >= 0 && store.get(it) != null }
+            ?: store.newConversation(System.currentTimeMillis(), ephemeral = state.incognitoOn).id
+        AiChatController.send(this, state.settings.ai, id, choice, text, chat.attachment?.text.orEmpty())
+        _uiState.update {
+            it.copy(
+                aiChat = it.aiChat.copy(
+                    conversationId = id,
+                    draft = "",
+                    attachment = null,
+                    modelKey = choice.key,
+                ),
+            )
+        }
+    }
+
+    /** The chat's form of [onAiReport]: the same draft, quoting the answer at [index]. */
+    private fun aiChatReport(index: Int) {
+        val messages = AiChatController.store(this).get(_uiState.value.aiChat.conversationId)
+            ?.messages ?: return
+        val answer = messages.getOrNull(index) ?: return
+        val prompt = messages.take(index).lastOrNull { it.role == AiChatMessage.ROLE_USER }
+        val provider = AiProvider.entries.firstOrNull { it.name == answer.provider }
+        val sent = Support.email(
+            this,
+            "WM Keyboard: AI chat report",
+            Support.aiGenerationReport(
+                action = "Chat",
+                provider = provider?.let { getString(it.labelRes) } ?: answer.provider.ifBlank { "(unknown)" },
+                model = answer.model,
+                input = prompt?.promptText().orEmpty(),
+                output = answer.content,
+            ),
+        )
+        if (!sent) {
+            Toast.makeText(
+                this,
+                getString(R.string.ime_service_no_email_app_toast, Support.EMAIL),
+                Toast.LENGTH_LONG,
+            ).show()
+        }
+    }
+
     /** Runs an ask-each-run action with the instruction the user just typed. */
     fun onAiRunCustom() {
         val ai = _uiState.value.ai as? AiUi.CustomInput ?: return
@@ -20865,7 +21123,14 @@ open class WMKeyboardService : InputMethodService() {
         val seq = ++aiRunSeq
         val startedAt = SystemClock.uptimeMillis()
         _uiState.update {
-            it.copy(ai = AiUi.Loading(action, startedAtMs = startedAt))
+            it.copy(
+                ai = AiUi.Loading(action, startedAtMs = startedAt),
+                // An action can start from outside the panel (the selection
+                // bar's AI buttons) while the panel was left on its chat (#280).
+                // Its result has to be seen, so the panel shows the actions for
+                // this opening; what the user chose stays saved.
+                aiChat = if (it.aiChat.open) it.aiChat.copy(open = false, composing = false) else it.aiChat,
+            )
         }
         aiJob = serviceScope.launch {
             val settings = _uiState.value.settings
@@ -26979,6 +27244,12 @@ open class WMKeyboardService : InputMethodService() {
             // half-typed AI instruction backs out to the action list, and a
             // focused plugin box gives the keys back, both leaving the panel up.
             state.aiCustomInputActive -> ::dismissAiCustomInput
+            // The chat has two inner layers of its own (#280): the composer
+            // gives the keys back, and the conversation list closes onto the
+            // transcript it was opened over.
+            state.aiChatComposing -> ({ onAiChatAction(AiChatAction.BlurComposer) })
+            state.aiChatShown && state.aiChat.showSessions ->
+                ({ onAiChatAction(AiChatAction.ToggleSessions) })
             state.pluginTypingActive -> ({ onPluginInputFocus(null) })
             // Same shape one level down, twice: back leaves a snippet's own
             // list of expansions, then the folder that snippet sits in, then

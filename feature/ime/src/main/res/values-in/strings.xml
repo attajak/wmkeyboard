@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Biarkan ejaan apa adanya</string>
     <string name="ime_word_spell_hint">Ketik ejaan baru untuk \"%1$s\"</string>
     <string name="subtype_app_label">Keyboard WM · %s</string>
+    <string name="ime_ai_chat_new">Obrolan baru</string>
+    <string name="ime_ai_chat_untitled">Obrolan baru</string>
+    <string name="ime_ai_chat_list_empty">Belum ada obrolan. Mulai satu dan obrolan akan muncul di sini.</string>
+    <string name="ime_ai_chat_empty_hint">Kirim pesan untuk memulai obrolan. Percakapan tetap ada di perangkat Anda.</string>
+    <string name="ime_ai_chat_composer_hint">Pesan</string>
+    <string name="ime_ai_chat_send">Kirim</string>
+    <string name="ime_ai_chat_stop">Berhenti</string>
+    <string name="ime_ai_chat_stopped">Dihentikan</string>
+    <string name="ime_ai_chat_retry">Coba lagi</string>
+    <string name="ime_ai_chat_report_action">Laporkan</string>
+    <string name="ime_ai_chat_thinking">Sedang berpikir…</string>
+    <string name="ime_ai_chat_no_backend_title">Belum ada yang bisa diajak mengobrol</string>
+    <string name="ime_ai_chat_no_backend_body">Unduh model di perangkat atau atur penyedia di pengaturan alat AI.</string>
+    <string name="ime_ai_chat_setup_button">Buka pengaturan alat AI</string>
+    <string name="ime_ai_chat_error_no_model">Model yang dipilih tidak ada lagi di perangkat Anda. Pilih model lain.</string>
+    <string name="ime_ai_chat_error_generic">Model tidak menjawab. Coba lagi.</string>
 </resources>

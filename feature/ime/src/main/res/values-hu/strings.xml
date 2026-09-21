@@ -976,4 +976,20 @@
     <string name="ime_word_spell_cancel_desc">Helyesírás változatlanul hagyása</string>
     <string name="ime_word_spell_hint">Írjon be egy új helyesírást a(z) „%1$s” szóhoz</string>
     <string name="subtype_app_label">WM Billentyűzet · %s</string>
+    <string name="ime_ai_chat_new">Új csevegés</string>
+    <string name="ime_ai_chat_untitled">Új csevegés</string>
+    <string name="ime_ai_chat_list_empty">Még nincsenek csevegések. Indítson egyet, és megjelenik itt.</string>
+    <string name="ime_ai_chat_empty_hint">Küldjön üzenetet a csevegés megkezdéséhez. A beszélgetés az eszközén marad.</string>
+    <string name="ime_ai_chat_composer_hint">Üzenet</string>
+    <string name="ime_ai_chat_send">Küldés</string>
+    <string name="ime_ai_chat_stop">Leállítás</string>
+    <string name="ime_ai_chat_stopped">Leállítva</string>
+    <string name="ime_ai_chat_retry">Újra</string>
+    <string name="ime_ai_chat_report_action">Jelentés</string>
+    <string name="ime_ai_chat_thinking">Gondolkodás…</string>
+    <string name="ime_ai_chat_no_backend_title">Még nincs kivel csevegni</string>
+    <string name="ime_ai_chat_no_backend_body">Töltsön le egy eszközön futó modellt, vagy állítson be egy szolgáltatót az AI-eszköz beállításaiban.</string>
+    <string name="ime_ai_chat_setup_button">Az AI-eszköz beállításainak megnyitása</string>
+    <string name="ime_ai_chat_error_no_model">A kiválasztott modell már nincs az eszközödön. Válassz egy másik modellt.</string>
+    <string name="ime_ai_chat_error_generic">A modell nem válaszolt. Próbálja újra.</string>
 </resources>

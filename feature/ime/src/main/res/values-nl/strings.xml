@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Laat de spelling ongewijzigd</string>
     <string name="ime_word_spell_hint">Typ een nieuwe spelling voor \"%1$s\"</string>
     <string name="subtype_app_label">WM-toetsenbord · %s</string>
+    <string name="ime_ai_chat_new">Nieuwe chat</string>
+    <string name="ime_ai_chat_untitled">Nieuwe chat</string>
+    <string name="ime_ai_chat_list_empty">Nog geen chats. Start er een en deze verschijnt hier.</string>
+    <string name="ime_ai_chat_empty_hint">Stuur een bericht om de chat te starten. Het gesprek blijft op je apparaat.</string>
+    <string name="ime_ai_chat_composer_hint">Bericht</string>
+    <string name="ime_ai_chat_send">Verzenden</string>
+    <string name="ime_ai_chat_stop">Stop</string>
+    <string name="ime_ai_chat_stopped">Gestopt</string>
+    <string name="ime_ai_chat_retry">Opnieuw proberen</string>
+    <string name="ime_ai_chat_report_action">Rapporteren</string>
+    <string name="ime_ai_chat_thinking">Aan het nadenken…</string>
+    <string name="ime_ai_chat_no_backend_title">Nog niets om mee te chatten</string>
+    <string name="ime_ai_chat_no_backend_body">Download een on-device model of stel een provider in bij de AI-toolinstellingen.</string>
+    <string name="ime_ai_chat_setup_button">Open de instellingen voor de AI-tool</string>
+    <string name="ime_ai_chat_error_no_model">Het geselecteerde model staat niet meer op je apparaat. Kies een ander model.</string>
+    <string name="ime_ai_chat_error_generic">Het model gaf geen antwoord. Probeer het opnieuw.</string>
 </resources>

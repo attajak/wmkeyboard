@@ -3496,6 +3496,19 @@ data class AiSettings(
      */
     val keepChats: Boolean = true,
     /**
+     * Enter sends the message in the chat on the keyboard's AI panel (#280).
+     *
+     * Off: Enter adds a line and only the Send button sends, which is what a
+     * prompt of more than one line needs and what messaging apps do.
+     */
+    val chatEnterSends: Boolean = false,
+    /**
+     * The AI panel was last left in its chat mode, so it opens there again.
+     * Remembered for the user, not set by them: there is no row for it, the
+     * switch on the panel's header is the control.
+     */
+    val panelChat: Boolean = false,
+    /**
      * How much text before the cursor a "carry this on" action sends, in
      * characters.
      *
@@ -7342,6 +7355,8 @@ class SettingsRepository(private val context: Context) {
         private val AI_HISTORY_ENABLED = booleanPreferencesKey("ai_history_enabled")
         private val AI_HISTORY_MAX = intPreferencesKey("ai_history_max")
         private val AI_KEEP_CHATS = booleanPreferencesKey("ai_keep_chats")
+        private val AI_CHAT_ENTER_SENDS = booleanPreferencesKey("ai_chat_enter_sends")
+        private val AI_PANEL_CHAT = booleanPreferencesKey("ai_panel_chat")
         private val AI_DOWNLOAD_UNMETERED = booleanPreferencesKey("ai_download_unmetered_only")
         private val AI_BEFORE_CURSOR_CHARS = intPreferencesKey("ai_before_cursor_chars")
         private val AI_DIFF_VIEW = booleanPreferencesKey("ai_diff_view")
@@ -8784,6 +8799,8 @@ class SettingsRepository(private val context: Context) {
                 historyEnabled = p[AI_HISTORY_ENABLED] ?: defaults.ai.historyEnabled,
                 historyMax = p[AI_HISTORY_MAX] ?: defaults.ai.historyMax,
                 keepChats = p[AI_KEEP_CHATS] ?: defaults.ai.keepChats,
+                chatEnterSends = p[AI_CHAT_ENTER_SENDS] ?: defaults.ai.chatEnterSends,
+                panelChat = p[AI_PANEL_CHAT] ?: defaults.ai.panelChat,
                 beforeCursorChars = p[AI_BEFORE_CURSOR_CHARS]
                     ?: defaults.ai.beforeCursorChars,
             ),
@@ -12139,6 +12156,11 @@ class SettingsRepository(private val context: Context) {
     }
 
     suspend fun setAiKeepChats(value: Boolean) = editPrefs { it[AI_KEEP_CHATS] = value }
+
+    suspend fun setAiChatEnterSends(value: Boolean) =
+        editPrefs { it[AI_CHAT_ENTER_SENDS] = value }
+
+    suspend fun setAiPanelChat(value: Boolean) = editPrefs { it[AI_PANEL_CHAT] = value }
 
     suspend fun setAiBeforeCursorChars(value: Int) =
         editPrefs { it[AI_BEFORE_CURSOR_CHARS] = value.coerceIn(500, 32_000) }

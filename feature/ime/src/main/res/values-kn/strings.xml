@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">ಸ್ಪೆಲ್ಲಿಂಗ್ ಅನ್ನು ಹಾಗೆಯೇ ಬಿಡಿ</string>
     <string name="ime_word_spell_hint">\"%1$s\" ಗಾಗಿ ಹೊಸ ಕಾಗುಣಿತವನ್ನು ಟೈಪ್ ಮಾಡಿ</string>
     <string name="subtype_app_label">WM ಕೀಬೋರ್ಡ್ · %s</string>
+    <string name="ime_ai_chat_new">ಹೊಸ ಚಾಟ್</string>
+    <string name="ime_ai_chat_untitled">ಹೊಸ ಚಾಟ್</string>
+    <string name="ime_ai_chat_list_empty">ಇನ್ನೂ ಯಾವುದೇ ಚಾಟ್‌ಗಳಿಲ್ಲ. ಒಂದನ್ನು ಪ್ರಾರಂಭಿಸಿ ಮತ್ತು ಅದು ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತದೆ.</string>
+    <string name="ime_ai_chat_empty_hint">ಚಾಟ್ ಪ್ರಾರಂಭಿಸಲು ಸಂದೇಶವನ್ನು ಕಳುಹಿಸಿ. ಸಂಭಾಷಣೆಯು ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿಯೇ ಉಳಿಯುತ್ತದೆ.</string>
+    <string name="ime_ai_chat_composer_hint">ಸಂದೇಶ</string>
+    <string name="ime_ai_chat_send">ಕಳುಹಿಸಿ</string>
+    <string name="ime_ai_chat_stop">ನಿಲ್ಲಿಸಿ</string>
+    <string name="ime_ai_chat_stopped">ನಿಲ್ಲಿಸಲಾಗಿದೆ</string>
+    <string name="ime_ai_chat_retry">ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ</string>
+    <string name="ime_ai_chat_report_action">ವರದಿ ಮಾಡಿ</string>
+    <string name="ime_ai_chat_thinking">ಯೋಚಿಸುತ್ತಿದೆ…</string>
+    <string name="ime_ai_chat_no_backend_title">ಇನ್ನೂ ಚಾಟ್ ಮಾಡಲು ಏನೂ ಇಲ್ಲ</string>
+    <string name="ime_ai_chat_no_backend_body">ಆನ್-ಡಿವೈಸ್ ಮಾದರಿಯನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ ಅಥವಾ AI ಟೂಲ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಪ್ರೊವೈಡರ್ ಅನ್ನು ಹೊಂದಿಸಿ.</string>
+    <string name="ime_ai_chat_setup_button">AI ಟೂಲ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</string>
+    <string name="ime_ai_chat_error_no_model">ಆಯ್ಕೆಮಾಡಿದ ಮಾದರಿಯು ಇನ್ನು ಮುಂದೆ ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿಲ್ಲ. ಮತ್ತೊಂದು ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="ime_ai_chat_error_generic">ಮಾದರಿಯು ಉತ್ತರಿಸಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</string>
 </resources>

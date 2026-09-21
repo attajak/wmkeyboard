@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The AI chat. Drawn by the keyboard's AI panel and by the chat screen
+      in the settings app, which is why these live here and not in :app.
+    -->
+    <string name="ime_ai_chat_new">New chat</string>
+    <string name="ime_ai_chat_untitled">New chat</string>
+    <string name="ime_ai_chat_list_empty">No chats yet. Start one and it appears here.</string>
+    <string name="ime_ai_chat_empty_hint">Send a message to start the chat. The conversation stays on your device.</string>
+    <string name="ime_ai_chat_composer_hint">Message</string>
+    <string name="ime_ai_chat_send">Send</string>
+    <string name="ime_ai_chat_stop">Stop</string>
+    <string name="ime_ai_chat_stopped">Stopped</string>
+    <string name="ime_ai_chat_retry">Retry</string>
+    <string name="ime_ai_chat_report_action">Report</string>
+    <string name="ime_ai_chat_thinking">Reasoning…</string>
+    <string name="ime_ai_chat_no_backend_title">Nothing to chat with yet</string>
+    <string name="ime_ai_chat_no_backend_body">Download an on-device model or set up a provider in the AI tool settings.</string>
+    <string name="ime_ai_chat_setup_button">Open the AI tool settings</string>
+    <string name="ime_ai_chat_error_no_model">The selected model is not on your device any more. Pick another model.</string>
+    <string name="ime_ai_chat_error_generic">The model did not answer. Try again.</string>
+
+    <!-- The two modes of the keyboard's AI panel, on its header. -->
+    <string name="ime_ai_mode_actions">Actions</string>
+    <string name="ime_ai_mode_chat">Chat</string>
+
+    <!-- The chat mode of the keyboard's AI panel, and the chat screen where it has the same control. -->
+    <string name="ime_ai_chat_sessions_desc">Your chats</string>
+    <string name="ime_ai_chat_open_in_app">Open in the app</string>
+    <string name="ime_ai_chat_open_in_app_desc">Open this chat in the app</string>
+    <string name="ime_ai_chat_regenerate">Write again</string>
+    <string name="ime_ai_chat_copied">Copied</string>
+    <string name="ime_ai_chat_latest">Latest</string>
+    <string name="ime_ai_chat_delete_confirm">Delete?</string>
+    <string name="ime_ai_chat_code_label">Code</string>
+    <string name="ime_ai_chat_attach_desc">Send the text of the field with the message</string>
+    <string name="ime_ai_chat_attach_remove_desc">Do not send the text of the field</string>
+    <plurals name="ime_ai_chat_attached_selection">
+        <item quantity="one">Your selection goes with the message: %1$d character</item>
+        <item quantity="other">Your selection goes with the message: %1$d characters</item>
+    </plurals>
+    <plurals name="ime_ai_chat_attached_field">
+        <item quantity="one">The text of the field goes with the message: %1$d character</item>
+        <item quantity="other">The text of the field goes with the message: %1$d characters</item>
+    </plurals>
+    <plurals name="ime_ai_chat_attachment_sent">
+        <item quantity="one">With %1$d character of text</item>
+        <item quantity="other">With %1$d characters of text</item>
+    </plurals>
+    <!-- Suggested openings on an empty chat. The label is on the chip; the prompt goes into the composer. -->
+    <string name="ime_ai_chat_starter_reply">Reply to this</string>
+    <string name="ime_ai_chat_starter_reply_prompt">Write a reply to this message.</string>
+    <string name="ime_ai_chat_starter_explain">Explain this</string>
+    <string name="ime_ai_chat_starter_explain_prompt">Explain this text in simple words.</string>
+    <string name="ime_ai_chat_starter_write">Help me write</string>
+    <string name="ime_ai_chat_starter_write_prompt">Help me write </string>
+</resources>

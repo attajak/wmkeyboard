@@ -662,7 +662,7 @@ private fun PanelCheckbox(
  * the streaming cases: an unclosed block grays to the end, and a close tag
  * with the opener still in the prompt (Qwen 3 style) grays from the start.
  */
-private fun grayThinking(text: String, gray: Color): AnnotatedString {
+internal fun grayThinking(text: String, gray: Color): AnnotatedString {
     val open = text.indexOf("<think>")
     // Search for the closer only after the opener so grayEnd can never precede
     // grayStart (which would crash substring). Still handles the opener-in-

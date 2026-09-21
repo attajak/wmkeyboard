@@ -153,38 +153,16 @@
     <string name="toolai_ai_diff_first_subtitle">The panel starts on the changes instead of the plain result</string>
 
     <!--
-      The chat screen: a full conversation with the model that the user set up
-      in the AI tool, in the settings app rather than on the keyboard.
+      The chat screen in the settings app. The words it shares with the chat on
+      the keyboard's AI panel are in :feature:ime (ime_ai_chat_*); these are the
+      ones only this screen draws.
     -->
     <string name="toolai_ai_chat_group_title">Chat</string>
     <string name="toolai_ai_chat_nav_title">Chat with the model</string>
     <string name="toolai_ai_chat_nav_subtitle">Have a conversation with a model that you downloaded or set up</string>
-    <string name="toolai_ai_chat_new">New chat</string>
-    <string name="toolai_ai_chat_untitled">New chat</string>
-    <string name="toolai_ai_chat_list_empty">No chats yet. Start one and it appears here.</string>
-    <string name="toolai_ai_chat_empty_hint">Send a message to start the chat. The conversation stays on your device.</string>
-    <string name="toolai_ai_chat_composer_hint">Message</string>
-    <string name="toolai_ai_chat_send">Send</string>
-    <string name="toolai_ai_chat_stop">Stop</string>
-    <string name="toolai_ai_chat_stopped">Stopped</string>
-    <string name="toolai_ai_chat_retry">Retry</string>
-    <!--
-         Reporting a model answer. Play asks for a route like this on any
-         surface that shows generated content, and the chat screen is the one
-         place in the settings app that does. Mirrors the keyboard AI panel's
-         ime_ai_report_action.
-    -->
-    <string name="toolai_ai_chat_report_action">Report</string>
-    <!-- Progress caption while a reasoning model thinks before it answers. -->
-    <string name="toolai_ai_chat_thinking">Reasoning…</string>
     <string name="toolai_ai_chat_delete_title">Delete this chat?</string>
     <!-- %1$s is the name of the conversation. -->
     <string name="toolai_ai_chat_delete_body">This deletes "%1$s". You cannot undo this.</string>
-    <string name="toolai_ai_chat_no_backend_title">Nothing to chat with yet</string>
-    <string name="toolai_ai_chat_no_backend_body">Download an on-device model or set up a provider in the AI tool settings.</string>
-    <string name="toolai_ai_chat_setup_button">Open the AI tool settings</string>
-    <string name="toolai_ai_chat_error_no_model">The selected model is not on your device any more. Pick another model.</string>
-    <string name="toolai_ai_chat_error_generic">The model did not answer. Try again.</string>
 
     <string name="toolai_ai_history_group_title">History</string>
     <string name="toolai_ai_history_title">Keep a history of the results</string>
@@ -295,6 +273,8 @@
 
 
     <string name="toolai_chats_group_title">Chats</string>
+    <string name="toolai_chat_enter_sends_title">Enter sends the message</string>
+    <string name="toolai_chat_enter_sends_subtitle">In the chat on the keyboard, the Enter key sends. When this is off, Enter starts a new line and the Send button sends.</string>
     <string name="toolai_keep_chats_title">Keep your conversations</string>
     <string name="toolai_keep_chats_subtitle">Save chats on this device so you can come back to them</string>
     <string name="toolai_keep_chats_info">A chat is a back and forth, so it holds more of what you wrote than a single AI action does. Turn this off and your conversations live only until you close the app, and what is already saved is deleted. Nothing is sent anywhere either way that you did not send by chatting.</string>

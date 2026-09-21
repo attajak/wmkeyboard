@@ -241,6 +241,25 @@ class CaptureFieldTest {
     }
 
     @Test
+    fun `the chat composer has the keys only while it is up and focused`() {
+        val composing = KeyboardUiState(
+            panel = PanelMode.AI,
+            aiChat = AiChatUi(open = true, composing = true, draft = "hello"),
+        )
+        assertEquals(CaptureTarget.AI_CHAT, composing.captureTarget())
+        assertEquals("hello", composing.captureBuffer())
+        assertTrue(CaptureTarget.AI_CHAT.takesWords)
+        // Every one of its conditions alone gives the keys back: the panel
+        // closed, the actions showing, the composer not focused, the list of
+        // conversations up over it, and a chat that may not be offered at all.
+        assertNull(composing.copy(panel = PanelMode.NONE).captureTarget())
+        assertNull(composing.copy(aiChat = composing.aiChat.copy(open = false)).captureTarget())
+        assertNull(composing.copy(aiChat = composing.aiChat.copy(composing = false)).captureTarget())
+        assertNull(composing.copy(aiChat = composing.aiChat.copy(showSessions = true)).captureTarget())
+        assertNull(composing.copy(aiChat = composing.aiChat.copy(available = false)).captureTarget())
+    }
+
+    @Test
     fun `the numeric fields take no words`() {
         assertFalse(CaptureTarget.CALC.takesWords)
         assertFalse(CaptureTarget.CONVERTER.takesWords)

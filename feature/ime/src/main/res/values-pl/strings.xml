@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Pozostaw pisownię bez zmian</string>
     <string name="ime_word_spell_hint">Wpisz nową pisownię dla „%1$s”</string>
     <string name="subtype_app_label">Klawiatura WM · %s</string>
+    <string name="ime_ai_chat_new">Nowy czat</string>
+    <string name="ime_ai_chat_untitled">Nowy czat</string>
+    <string name="ime_ai_chat_list_empty">Brak czatów. Rozpocznij jeden, a pojawi się tutaj.</string>
+    <string name="ime_ai_chat_empty_hint">Wyślij wiadomość, aby rozpocząć czat. Konwersacja pozostaje na Twoim urządzeniu.</string>
+    <string name="ime_ai_chat_composer_hint">Wiadomość</string>
+    <string name="ime_ai_chat_send">Wyślij</string>
+    <string name="ime_ai_chat_stop">Zatrzymaj</string>
+    <string name="ime_ai_chat_stopped">Zatrzymano</string>
+    <string name="ime_ai_chat_retry">Ponów</string>
+    <string name="ime_ai_chat_report_action">Zgłoś</string>
+    <string name="ime_ai_chat_thinking">Myślenie…</string>
+    <string name="ime_ai_chat_no_backend_title">Jeszcze nie ma z czym czatować</string>
+    <string name="ime_ai_chat_no_backend_body">Pobierz model działający na urządzeniu lub skonfiguruj dostawcę w ustawieniach narzędzi AI.</string>
+    <string name="ime_ai_chat_setup_button">Otwórz ustawienia narzędzia AI</string>
+    <string name="ime_ai_chat_error_no_model">Wybrany model nie znajduje się już na Twoim urządzeniu. Wybierz inny model.</string>
+    <string name="ime_ai_chat_error_generic">Model nie odpowiedział. Spróbuj ponownie.</string>
 </resources>

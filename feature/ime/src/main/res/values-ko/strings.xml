@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">맞춤법 수정 무시</string>
     <string name="ime_word_spell_hint">\"%1$s\"에 대한 새 철자 입력</string>
     <string name="subtype_app_label">WM Keyboard · %s</string>
+    <string name="ime_ai_chat_new">새 채팅</string>
+    <string name="ime_ai_chat_untitled">새 채팅</string>
+    <string name="ime_ai_chat_list_empty">아직 채팅이 없습니다. 채팅을 시작하면 여기에 나타납니다.</string>
+    <string name="ime_ai_chat_empty_hint">메시지를 보내 대화를 시작하세요. 대화 내용은 기기에 저장됩니다.</string>
+    <string name="ime_ai_chat_composer_hint">메시지</string>
+    <string name="ime_ai_chat_send">전송</string>
+    <string name="ime_ai_chat_stop">중지</string>
+    <string name="ime_ai_chat_stopped">중지됨</string>
+    <string name="ime_ai_chat_retry">재시도</string>
+    <string name="ime_ai_chat_report_action">신고</string>
+    <string name="ime_ai_chat_thinking">추론 중…</string>
+    <string name="ime_ai_chat_no_backend_title">아직 채팅할 대상이 없습니다</string>
+    <string name="ime_ai_chat_no_backend_body">기기 내 모델을 다운로드하거나 AI 도구 설정에서 제공업체를 설정하세요.</string>
+    <string name="ime_ai_chat_setup_button">AI 도구 설정 열기</string>
+    <string name="ime_ai_chat_error_no_model">선택한 모델이 더 이상 기기에 없습니다. 다른 모델을 선택하세요.</string>
+    <string name="ime_ai_chat_error_generic">모델이 응답하지 않았습니다. 다시 시도하세요.</string>
 </resources>

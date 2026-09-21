@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Laisser l\'orthographe telle quelle</string>
     <string name="ime_word_spell_hint">Saisissez une nouvelle orthographe pour \"%1$s\"</string>
     <string name="subtype_app_label">Clavier WM · %s</string>
+    <string name="ime_ai_chat_new">Nouveau chat</string>
+    <string name="ime_ai_chat_untitled">Nouvelle discussion</string>
+    <string name="ime_ai_chat_list_empty">Aucune discussion pour le moment. Commencez-en une et elle apparaîtra ici.</string>
+    <string name="ime_ai_chat_empty_hint">Envoyez un message pour démarrer la discussion. La conversation reste sur votre appareil.</string>
+    <string name="ime_ai_chat_composer_hint">Message</string>
+    <string name="ime_ai_chat_send">Envoyer</string>
+    <string name="ime_ai_chat_stop">Arrêter</string>
+    <string name="ime_ai_chat_stopped">Arrêté</string>
+    <string name="ime_ai_chat_retry">Réessayer</string>
+    <string name="ime_ai_chat_report_action">Signaler</string>
+    <string name="ime_ai_chat_thinking">Réflexion…</string>
+    <string name="ime_ai_chat_no_backend_title">Rien pour discuter pour le moment</string>
+    <string name="ime_ai_chat_no_backend_body">Téléchargez un modèle sur l\'appareil ou configurez un fournisseur dans les paramètres de l\'outil IA.</string>
+    <string name="ime_ai_chat_setup_button">Ouvrir les paramètres de l\'outil IA</string>
+    <string name="ime_ai_chat_error_no_model">Le modèle sélectionné n\'est plus sur votre appareil. Choisissez un autre modèle.</string>
+    <string name="ime_ai_chat_error_generic">Le modèle n\'a pas répondu. Réessayez.</string>
 </resources>

@@ -1330,6 +1330,79 @@ sealed interface AiUi {
     ) : AiUi
 }
 
+/**
+ * The AI panel's chat mode (#280): which conversation is up and what is in the
+ * composer.
+ *
+ * Deliberately small. The transcript and the answer that is forming are not
+ * here: the panel reads those from
+ * [com.wasimaster.wmkeyboard.ime.aichat.AiChatController], the same object the
+ * chat screen in the settings app reads, which is what lets a chat move between
+ * the two with nothing to hand over. What is here is only what the keyboard
+ * alone knows: the draft its keys are writing, and whether they are writing it.
+ */
+data class AiChatUi(
+    /**
+     * Chat can be offered at all. False on the lock screen and before the first
+     * unlock: the conversations are in credential-encrypted storage, and a
+     * transcript is not something to show over a keyguard.
+     */
+    val available: Boolean = true,
+    /** The panel is in its chat mode rather than showing the actions. */
+    val open: Boolean = false,
+    /** Below zero is a chat not started yet; the first send creates it. */
+    val conversationId: Long = -1L,
+    val draft: String = "",
+    /** The composer has the keys, so the key rows are up under the panel. */
+    val composing: Boolean = false,
+    /** The conversation list is up in place of the transcript. */
+    val showSessions: Boolean = false,
+    val attachment: AiChatAttachment? = null,
+    /** [com.wasimaster.wmkeyboard.ime.aichat.AiChatController.ModelChoice.key]. */
+    val modelKey: String = "",
+)
+
+/**
+ * Text from the field, quoted along with the next message. A snapshot taken
+ * when the user asked for it: while the composer has the keys nothing can type
+ * into the field, so it cannot go stale under them.
+ */
+data class AiChatAttachment(val text: String, val fromSelection: Boolean)
+
+/**
+ * Everything the chat mode can ask of the service, as one type.
+ *
+ * One callback rather than twenty for the reason [TypingTestAction] gives, and
+ * a harder one: the composable that passes the service's callbacks down is at
+ * the JVM's 64K method ceiling, where a parameter is not free.
+ */
+sealed interface AiChatAction {
+    data class SetMode(val chat: Boolean) : AiChatAction
+    data object FocusComposer : AiChatAction
+    data object BlurComposer : AiChatAction
+    data object Send : AiChatAction
+    data object Stop : AiChatAction
+    data object Retry : AiChatAction
+    data object Regenerate : AiChatAction
+    data object EditLast : AiChatAction
+    data object NewChat : AiChatAction
+    data class Open(val conversationId: Long) : AiChatAction
+    data class Delete(val conversationId: Long) : AiChatAction
+    data object ToggleSessions : AiChatAction
+    data class PickModel(val key: String) : AiChatAction
+    data object ToggleAttachment : AiChatAction
+    data object Paste : AiChatAction
+    /** [raw] is for code, which goes in as written; an answer loses its markdown. */
+    data class Insert(val text: String, val raw: Boolean = false) : AiChatAction
+    data class Copy(val text: String) : AiChatAction
+    /** A suggested opening: puts [text] in the composer, with the field's text if [attach]. */
+    data class Starter(val text: String, val attach: Boolean) : AiChatAction
+    /** The chat screen in the settings app: this conversation, or the list. */
+    data class OpenInApp(val list: Boolean = false) : AiChatAction
+    /** The answer at [index] of the conversation, reported (Play builds). */
+    data class Report(val index: Int) : AiChatAction
+}
+
 /** Weather panel state, owned by the service (it does the fetching). */
 sealed interface WeatherUi {
     /** No location configured in the weather tool's settings. */
@@ -2697,6 +2770,7 @@ data class KeyboardUiState(
      * else reads it.
      */
     val aiHasText: Boolean = false,
+    val aiChat: AiChatUi = AiChatUi(),
     val typingTest: TypingTestUi = TypingTestUi(),
     /** Launchable apps for the app-launcher panel; empty until first opened. */
     val launcherApps: List<LauncherApp> = emptyList(),
@@ -2896,6 +2970,18 @@ data class KeyboardUiState(
     val aiCustomInputActive: Boolean
         get() = panel == PanelMode.AI && ai is AiUi.CustomInput
 
+    /** The AI panel is showing its chat mode rather than its actions (#280). */
+    val aiChatShown: Boolean
+        get() = panel == PanelMode.AI && aiChat.open && aiChat.available
+
+    /**
+     * Whether keystrokes belong to the chat composer on the AI panel. Panel
+     * *and* mode *and* a focused composer, the [findReplaceTypingActive]
+     * contract: no one of them alone can keep the keys from the app behind.
+     */
+    val aiChatComposing: Boolean
+        get() = aiChatShown && aiChat.composing && !aiChat.showSessions
+
     /**
      * Whether keystrokes belong to a plugin's own text box rather than to the
      * text field.
@@ -2980,6 +3066,7 @@ data class KeyboardUiState(
     fun captureTarget(): CaptureTarget? = when {
         typingTestActive -> CaptureTarget.TYPING_TEST
         aiCustomInputActive -> CaptureTarget.AI_CUSTOM
+        aiChatComposing -> CaptureTarget.AI_CHAT
         pluginTypingActive -> CaptureTarget.PLUGIN
         findReplaceTypingActive ->
             if (findReplace?.focused == FindReplaceField.REPLACE) {
@@ -3015,6 +3102,7 @@ data class KeyboardUiState(
         null -> ""
         CaptureTarget.TYPING_TEST -> typingTest.current
         CaptureTarget.AI_CUSTOM -> (ai as? AiUi.CustomInput)?.instruction.orEmpty()
+        CaptureTarget.AI_CHAT -> aiChat.draft
         CaptureTarget.PLUGIN -> pluginFocusedInput?.let { pluginInputs[it] }.orEmpty()
         CaptureTarget.FIND_QUERY -> findReplace?.query.orEmpty()
         CaptureTarget.FIND_REPLACEMENT -> findReplace?.replacement.orEmpty()

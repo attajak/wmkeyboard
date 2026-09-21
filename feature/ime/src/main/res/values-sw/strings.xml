@@ -980,4 +980,20 @@
     <string name="ime_word_spell_cancel_desc">Acha tahajia kama ilivyo</string>
     <string name="ime_word_spell_hint">Andika tahajia mpya ya \"%1$s\"</string>
     <string name="subtype_app_label">Kibodi ya WM · %s</string>
+    <string name="ime_ai_chat_new">Gumzo jipya</string>
+    <string name="ime_ai_chat_untitled">Gumzo jipya</string>
+    <string name="ime_ai_chat_list_empty">Hakuna gumzo bado. Anzisha moja na litaonekana hapa.</string>
+    <string name="ime_ai_chat_empty_hint">Tuma ujumbe ili kuanza gumzo. Mazungumzo yanabaki kwenye kifaa chako.</string>
+    <string name="ime_ai_chat_composer_hint">Ujumbe</string>
+    <string name="ime_ai_chat_send">Tuma</string>
+    <string name="ime_ai_chat_stop">Simamisha</string>
+    <string name="ime_ai_chat_stopped">Imesimamishwa</string>
+    <string name="ime_ai_chat_retry">Jaribu tena</string>
+    <string name="ime_ai_chat_report_action">Ripoti</string>
+    <string name="ime_ai_chat_thinking">Inafikiri…</string>
+    <string name="ime_ai_chat_no_backend_title">Hakuna cha kuzungumza nacho bado</string>
+    <string name="ime_ai_chat_no_backend_body">Pakua modeli ya kwenye kifaa au usanidi mtoa huduma katika mipangilio ya zana ya AI.</string>
+    <string name="ime_ai_chat_setup_button">Fungua mipangilio ya zana ya AI</string>
+    <string name="ime_ai_chat_error_no_model">Muundo uliochaguliwa haupo kwenye kifaa chako tena. Chagua muundo mwingine.</string>
+    <string name="ime_ai_chat_error_generic">Mfano haukujibu. Jaribu tena.</string>
 </resources>

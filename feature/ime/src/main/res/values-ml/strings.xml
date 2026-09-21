@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">സ്പെല്ലിംഗ് മാറ്റമില്ലാതെ തുടരുക</string>
     <string name="ime_word_spell_hint">\"%1$s\" എന്നതിനായി പുതിയൊരു അക്ഷരവിന്യാസം ടൈപ്പ് ചെയ്യുക</string>
     <string name="subtype_app_label">WM കീബോർഡ് · %s</string>
+    <string name="ime_ai_chat_new">പുതിയ ചാറ്റ്</string>
+    <string name="ime_ai_chat_untitled">പുതിയ ചാറ്റ്</string>
+    <string name="ime_ai_chat_list_empty">ചാറ്റുകളൊന്നുമില്ല. ഒന്ന് തുടങ്ങൂ, അത് ഇവിടെ ദൃശ്യമാകും.</string>
+    <string name="ime_ai_chat_empty_hint">ചാറ്റ് ആരംഭിക്കാൻ ഒരു സന്ദേശം അയക്കുക. സംഭാഷണം നിങ്ങളുടെ ഉപകരണത്തിൽ തന്നെ തുടരും.</string>
+    <string name="ime_ai_chat_composer_hint">സന്ദേശം</string>
+    <string name="ime_ai_chat_send">അയയ്ക്കുക</string>
+    <string name="ime_ai_chat_stop">നിർത്തുക</string>
+    <string name="ime_ai_chat_stopped">നിർത്തി</string>
+    <string name="ime_ai_chat_retry">വീണ്ടും ശ്രമിക്കുക</string>
+    <string name="ime_ai_chat_report_action">റിപ്പോർട്ട് ചെയ്യുക</string>
+    <string name="ime_ai_chat_thinking">ചിന്തിക്കുന്നു...</string>
+    <string name="ime_ai_chat_no_backend_title">ചാറ്റ് ചെയ്യാൻ ഒന്നുമില്ല</string>
+    <string name="ime_ai_chat_no_backend_body">ഒരു ഓൺ-ഡിവൈസ് മോഡൽ ഡൗൺലോഡ് ചെയ്യുക അല്ലെങ്കിൽ AI ടൂൾ ക്രമീകരണങ്ങളിൽ ഒരു പ്രൊവൈഡറെ സജ്ജമാക്കുക.</string>
+    <string name="ime_ai_chat_setup_button">AI ടൂൾ ക്രമീകരണങ്ങൾ തുറക്കുക</string>
+    <string name="ime_ai_chat_error_no_model">തിരഞ്ഞെടുത്ത മോഡൽ ഇനി നിങ്ങളുടെ ഉപകരണത്തിലില്ല. മറ്റൊരു മോഡൽ തിരഞ്ഞെടുക്കുക.</string>
+    <string name="ime_ai_chat_error_generic">മോഡൽ മറുപടി നൽകിയില്ല. വീണ്ടും ശ്രമിക്കുക.</string>
 </resources>

@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">اترك التهجئة كما هي</string>
     <string name="ime_word_spell_hint">اكتب تهجئة جديدة لـ \"%1$s\"</string>
     <string name="subtype_app_label">لوحة مفاتيح WM · %s</string>
+    <string name="ime_ai_chat_new">محادثة جديدة</string>
+    <string name="ime_ai_chat_untitled">دردشة جديدة</string>
+    <string name="ime_ai_chat_list_empty">لا توجد محادثات بعد. ابدأ محادثة وستظهر هنا.</string>
+    <string name="ime_ai_chat_empty_hint">أرسل رسالة لبدء الدردشة. تبقى المحادثة على جهازك.</string>
+    <string name="ime_ai_chat_composer_hint">رسالة</string>
+    <string name="ime_ai_chat_send">إرسال</string>
+    <string name="ime_ai_chat_stop">إيقاف</string>
+    <string name="ime_ai_chat_stopped">متوقف</string>
+    <string name="ime_ai_chat_retry">إعادة المحاولة</string>
+    <string name="ime_ai_chat_report_action">إبلاغ</string>
+    <string name="ime_ai_chat_thinking">يفكر...</string>
+    <string name="ime_ai_chat_no_backend_title">لا يوجد شيء للدردشة معه بعد</string>
+    <string name="ime_ai_chat_no_backend_body">قم بتنزيل نموذج على الجهاز أو قم بإعداد مزود في إعدادات أداة الذكاء الاصطناعي.</string>
+    <string name="ime_ai_chat_setup_button">فتح إعدادات أداة الذكاء الاصطناعي</string>
+    <string name="ime_ai_chat_error_no_model">النموذج المحدد لم يعد موجوداً على جهازك. اختر نموذجاً آخر.</string>
+    <string name="ime_ai_chat_error_generic">لم يجب النموذج. حاول مجددًا.</string>
 </resources>

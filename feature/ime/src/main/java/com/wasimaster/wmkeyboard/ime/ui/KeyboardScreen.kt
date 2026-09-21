@@ -413,6 +413,7 @@ import com.wasimaster.wmkeyboard.core.tools.GifSource
 import com.wasimaster.wmkeyboard.core.tools.symbolChipLabel
 import com.wasimaster.wmkeyboard.core.tools.ImageResult
 import com.wasimaster.wmkeyboard.core.tools.WebResult
+import com.wasimaster.wmkeyboard.ime.AiChatAction
 import com.wasimaster.wmkeyboard.ime.AiUi
 import com.wasimaster.wmkeyboard.ime.EnterAction
 import com.wasimaster.wmkeyboard.ime.FieldKind
@@ -10151,51 +10152,81 @@ private fun KeyboardBody(
                 ) { TypingTestPanel(state, onTypingTestAction) }
                 PanelMode.AI -> FullBleedTool(
                     state = state,
-                    title = stringResource(R.string.ime_tool_ai),
+                    // With the chat on offer the header holds the mode switch,
+                    // and that is the panel's name: there is no room for both.
+                    title = if (state.aiChat.available) "" else stringResource(R.string.ime_tool_ai),
                     onClose = { onPanelChange(PanelMode.AI) },
                     // Reasoning models stream their think block into the same
-                    // box as the answer, so that mode — and only that mode —
-                    // needs the taller window; otherwise the panel stays at
-                    // the normal keyboard height.
-                    extraHeight = if (state.settings.ai.showThinking) 160.dp else 0.dp,
-                    // The Custom instruction types on the key rows, so the
-                    // panel collapses to leave room for them below.
-                    compact = state.aiCustomInputActive,
-                    compactHeight = 132.dp,
+                    // box as the answer, so that mode needs the taller window,
+                    // and so does a conversation, which is read more than it is
+                    // glanced at (#280); otherwise the panel stays at the
+                    // normal keyboard height.
+                    extraHeight = when {
+                        state.aiChatShown -> 120.dp
+                        state.settings.ai.showThinking -> 160.dp
+                        else -> 0.dp
+                    },
+                    // The Custom instruction and the chat's composer both type
+                    // on the key rows, so the panel collapses to leave room for
+                    // them below. The chat keeps more: the newest messages stay
+                    // in sight above the composer while the next one is typed.
+                    compact = state.aiCustomInputActive || state.aiChatComposing,
+                    compactHeight = if (state.aiChatComposing) AiChatCompactHeight else 132.dp,
                     headerActions = {
                         val ai = state.ai
-                        val ready = ai is AiUi.Ready && !ai.generating
-                        // The ring's ACTIONS region: Replace/Insert/Retry when
-                        // there is a result, always the settings circle last.
+                        val chatMode = state.aiChatShown
+                        val ready = !chatMode && ai is AiUi.Ready && !ai.generating
+                        // The mode switch takes the ring's first two slots
+                        // whenever it is drawn, and everything after it moves up.
+                        val base = if (state.aiChat.available) 2 else 0
+                        val own = when {
+                            chatMode -> AiChatHeaderActionCount
+                            ready -> 3
+                            else -> 0
+                        }
+                        // The ring's ACTIONS region: the switch, then the
+                        // chat's three or Replace/Insert/Retry when there is a
+                        // result, and always the settings circle last.
                         PanelFocusTarget(
                             panel = PanelMode.AI,
                             region = FocusRegion.ACTIONS,
-                            count = if (ready) 4 else 1,
-                            columns = if (ready) 4 else 1,
+                            count = base + own + 1,
+                            columns = base + own + 1,
                         ) { index ->
+                            val slot = index - base
                             when {
-                                !ready || index == 3 -> onOpenToolSettings(ToolbarTool.AI)
-                                index == 0 -> onAiReplace()
-                                index == 1 -> onAiInsert()
-                                index == 2 -> onAiRetry()
+                                index < base -> capture.onAiChat(AiChatAction.SetMode(chat = index == 1))
+                                slot >= own -> onOpenToolSettings(ToolbarTool.AI)
+                                chatMode -> activateAiChatHeader(slot, capture.onAiChat)
+                                slot == 0 -> onAiReplace()
+                                slot == 1 -> onAiInsert()
+                                slot == 2 -> onAiRetry()
                             }
                         }
                         val focusedAction = state.focusedIndex(FocusRegion.ACTIONS)
+                        if (state.aiChat.available) AiModeSwitch(state, focusedAction, capture.onAiChat)
+                        if (chatMode) {
+                            AiChatHeaderActions(state, focusedAction, base, capture.onAiChat)
+                        } else if (state.aiChat.available) {
+                            // No title to push them there, so the actions'
+                            // own controls are sent to the right by hand.
+                            Spacer(Modifier.weight(1f))
+                        }
                         if (ready) {
                             ToolPanelChip(
                                 stringResource(R.string.ime_ai_replace),
                                 selected = true,
-                                modifier = Modifier.focusRing(focusedAction == 0),
+                                modifier = Modifier.focusRing(focusedAction == base),
                             ) { onAiReplace() }
                             Spacer(Modifier.width(5.dp))
                             ToolPanelChip(
                                 stringResource(R.string.ime_ai_insert),
-                                modifier = Modifier.focusRing(focusedAction == 1),
+                                modifier = Modifier.focusRing(focusedAction == base + 1),
                             ) { onAiInsert() }
                             Spacer(Modifier.width(5.dp))
                             ToolPanelChip(
                                 "↻",
-                                modifier = Modifier.focusRing(focusedAction == 2),
+                                modifier = Modifier.focusRing(focusedAction == base + 2),
                             ) { onAiRetry() }
                             Spacer(Modifier.width(5.dp))
                         }
@@ -10203,14 +10234,13 @@ private fun KeyboardBody(
                             slot = IconSlots.forTool(ToolbarTool.SETTINGS),
                             description = stringResource(R.string.ime_ai_settings_desc),
                             active = false,
-                            modifier = Modifier.focusRing(
-                                focusedAction == if (ready) 3 else 0,
-                                CircleShape,
-                            ),
+                            modifier = Modifier.focusRing(focusedAction == base + own, CircleShape),
                         ) { onOpenToolSettings(ToolbarTool.AI) }
                     },
                 ) {
-                    AiPanel(
+                    if (state.aiChatShown) {
+                        AiChatPanel(state, capture.onAiChat, onOpenToolSettings)
+                    } else AiPanel(
                         state = state,
                         onAction = onAiAction,
                         onRetry = onAiRetry,

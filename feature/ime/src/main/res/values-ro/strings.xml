@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">Nu modificați ortografia</string>
     <string name="ime_word_spell_hint">Introduceți o nouă ortografie pentru \"%1$s\"</string>
     <string name="subtype_app_label">Tastatură WM · %s</string>
+    <string name="ime_ai_chat_new">Chat nou</string>
+    <string name="ime_ai_chat_untitled">Chat nou</string>
+    <string name="ime_ai_chat_list_empty">Niciun chat încă. Începe unul și va apărea aici.</string>
+    <string name="ime_ai_chat_empty_hint">Trimite un mesaj pentru a începe conversația. Conversația rămâne pe dispozitivul tău.</string>
+    <string name="ime_ai_chat_composer_hint">Mesaj</string>
+    <string name="ime_ai_chat_send">Trimite</string>
+    <string name="ime_ai_chat_stop">Stop</string>
+    <string name="ime_ai_chat_stopped">Oprit</string>
+    <string name="ime_ai_chat_retry">Reîncearcă</string>
+    <string name="ime_ai_chat_report_action">Raportează</string>
+    <string name="ime_ai_chat_thinking">Raționament…</string>
+    <string name="ime_ai_chat_no_backend_title">Nu există încă nimic cu care să discuți</string>
+    <string name="ime_ai_chat_no_backend_body">Descărcați un model pe dispozitiv sau configurați un furnizor în setările instrumentului AI.</string>
+    <string name="ime_ai_chat_setup_button">Deschide setările instrumentului AI</string>
+    <string name="ime_ai_chat_error_no_model">Modelul selectat nu mai este pe dispozitivul tău. Alege un alt model.</string>
+    <string name="ime_ai_chat_error_generic">Modelul nu a răspuns. Încearcă din nou.</string>
 </resources>

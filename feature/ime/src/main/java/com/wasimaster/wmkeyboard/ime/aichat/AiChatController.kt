@@ -1,9 +1,9 @@
-package com.wasimaster.wmkeyboard.app
+package com.wasimaster.wmkeyboard.ime.aichat
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.wasimaster.wmkeyboard.BuildConfig
-import com.wasimaster.wmkeyboard.R
+import com.wasimaster.wmkeyboard.config.BuildConfig
+import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.core.aichat.AiChatMessage
 import com.wasimaster.wmkeyboard.core.aichat.AiChatStore
 import com.wasimaster.wmkeyboard.core.localllm.ChatReplay
@@ -29,10 +29,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 /**
- * Drives the AI chat screen's generations. An object with its own scope, like
+ * Drives the AI chat's generations. An object with its own scope, like
  * LocalLlmDownloadManager, so a running answer survives every navigation and
  * the screen only ever renders state: the saved transcript from [store] plus
  * the one live [run].
+ *
+ * Two surfaces draw it: the chat screen in the settings app and the chat mode
+ * of the keyboard's AI panel (#280). It lives in this module because both can
+ * see it here, and the two share one process, so they share this object, its
+ * store and its live run. That is the whole of how a chat begun on the keyboard
+ * carries on in the app: there is nothing to hand over.
  *
  * The same stale-sequence pattern as the keyboard's AI panel: an on-device
  * generation is a blocking native call that outlives any cancellation, so a
@@ -50,6 +56,22 @@ object AiChatController {
                 provider.name
             }
     }
+
+    /** Everything that can answer right now, in the order the pickers draw it. */
+    fun choices(context: Context, settings: AiSettings): List<ModelChoice> =
+        downloadedLocalModels(context).map { ModelChoice(AiProvider.ON_DEVICE, it) } +
+            AiClient.configuredRemoteProviders(settings).map { ModelChoice(it) }
+
+    /** The model to preselect: last used if still available, else the first. */
+    fun initialChoice(store: AiChatStore, available: List<ModelChoice>): ModelChoice? {
+        val lastKey = store.lastModelKey()
+        return available.firstOrNull { it.key == lastKey } ?: available.firstOrNull()
+    }
+
+    /** A local model's name as a picker shows it. */
+    fun localModelLabel(id: String): String =
+        LocalLlmCatalog.byId(id)?.displayName
+            ?: id.removePrefix(LocalLlmStore.CUSTOM_PREFIX).substringBeforeLast('.')
 
     /** One in-flight generation, as the screen renders it. */
     data class ChatRun(
@@ -141,6 +163,8 @@ object AiChatController {
         conversationId: Long,
         choice: ModelChoice,
         text: String,
+        /** Text quoted along with the message: a selection, or a field's text. */
+        attachment: String = "",
     ) {
         if (isGenerating) return
         val appContext = context.applicationContext
@@ -149,14 +173,17 @@ object AiChatController {
         if (user.isEmpty()) return
 
         val now = System.currentTimeMillis()
-        store.appendMessage(
-            conversationId,
-            AiChatMessage(role = AiChatMessage.ROLE_USER, content = user, timestamp = now),
-        ) ?: return
+        val message = AiChatMessage(
+            role = AiChatMessage.ROLE_USER,
+            content = user,
+            timestamp = now,
+            attachment = attachment.trim(),
+        )
+        val stored = store.appendMessage(conversationId, message)?.messages?.lastOrNull() ?: return
         store.setLastModelKey(choice.key)
         store.save()
         touchStore()
-        launchGeneration(appContext, settings, conversationId, choice, user)
+        launchGeneration(appContext, settings, conversationId, choice, stored.promptText())
     }
 
     /**
@@ -169,15 +196,61 @@ object AiChatController {
         settings: AiSettings,
         conversationId: Long,
         choice: ModelChoice,
-        userText: String,
     ) {
         if (isGenerating) return
         val appContext = context.applicationContext
         val store = store(appContext)
         store.dropLastFailedMessage(conversationId)
+        val user = store.get(conversationId)?.messages
+            ?.lastOrNull { it.role == AiChatMessage.ROLE_USER } ?: return
         store.save()
         touchStore()
-        launchGeneration(appContext, settings, conversationId, choice, userText)
+        launchGeneration(appContext, settings, conversationId, choice, user.promptText())
+    }
+
+    /**
+     * Writes the newest answer again. The old answer leaves the transcript
+     * first, and the on-device session with it: its native cache still holds
+     * the answer that is going, so the next send builds a session from the
+     * transcript as it now stands.
+     */
+    fun regenerate(
+        context: Context,
+        settings: AiSettings,
+        conversationId: Long,
+        choice: ModelChoice,
+    ) {
+        if (isGenerating) return
+        val appContext = context.applicationContext
+        val store = store(appContext)
+        val messages = store.get(conversationId)?.messages ?: return
+        val lastUser = messages.indexOfLast { it.role == AiChatMessage.ROLE_USER }
+        // Nothing after the question means there is no answer to write again.
+        if (lastUser < 0 || lastUser == messages.lastIndex) return
+        closeSessionFor(conversationId)
+        store.dropFrom(conversationId, lastUser + 1)
+        store.setLastModelKey(choice.key)
+        store.save()
+        touchStore()
+        launchGeneration(appContext, settings, conversationId, choice, messages[lastUser].promptText())
+    }
+
+    /**
+     * Takes the user's newest message back out of the transcript, with whatever
+     * answered it, and returns it for the composer: edit, then send again.
+     * Null when there is nothing to take back or an answer is still forming.
+     */
+    fun editLast(context: Context, conversationId: Long): AiChatMessage? {
+        if (isGenerating) return null
+        val store = store(context.applicationContext)
+        val messages = store.get(conversationId)?.messages ?: return null
+        val lastUser = messages.indexOfLast { it.role == AiChatMessage.ROLE_USER }
+        if (lastUser < 0) return null
+        closeSessionFor(conversationId)
+        store.dropFrom(conversationId, lastUser)
+        store.save()
+        touchStore()
+        return messages[lastUser]
     }
 
     fun deleteConversation(context: Context, conversationId: Long) {
@@ -267,7 +340,7 @@ object AiChatController {
     ): String {
         val modelFile = LocalLlmStore.selectedModelFile(context.filesDir, choice.localModelId)
             ?: throw java.io.IOException(
-                context.getString(R.string.toolai_ai_chat_error_no_model),
+                context.getString(R.string.ime_ai_chat_error_no_model),
             )
         val chat = obtainSession(context, settings, conversationId, choice, modelFile)
         var lastPartialAt = 0L
@@ -323,7 +396,7 @@ object AiChatController {
             messages
         }
         return settled.map {
-            ChatReplay.Turn(fromUser = it.role == AiChatMessage.ROLE_USER, text = it.content)
+            ChatReplay.Turn(fromUser = it.role == AiChatMessage.ROLE_USER, text = it.promptText())
         }
     }
 
@@ -349,7 +422,7 @@ object AiChatController {
                     } else {
                         AiClient.ChatRole.ASSISTANT
                     },
-                    it.content,
+                    it.promptText(),
                 )
             }
         var lastPartialAt = 0L
@@ -437,7 +510,7 @@ object AiChatController {
         return when {
             t is ToolHttpException -> ToolHttp.friendlyMessage(context, t)
             !message.isNullOrBlank() -> message
-            else -> context.getString(R.string.toolai_ai_chat_error_generic)
+            else -> context.getString(R.string.ime_ai_chat_error_generic)
         }
     }
 

@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.app
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.text.format.DateUtils
 import android.widget.Toast
@@ -58,7 +60,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.annotation.StringRes
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -67,15 +72,16 @@ import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.core.aichat.AiChatConversation
 import com.wasimaster.wmkeyboard.core.aichat.AiChatMessage
 import com.wasimaster.wmkeyboard.core.aichat.AiChatStore
-import com.wasimaster.wmkeyboard.core.localllm.LocalLlmCatalog
-import com.wasimaster.wmkeyboard.core.localllm.LocalLlmStore
 import com.wasimaster.wmkeyboard.core.settings.AiProvider
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.support.Support
-import com.wasimaster.wmkeyboard.core.tools.AiClient
 import com.wasimaster.wmkeyboard.core.tools.AiThinking
-import com.wasimaster.wmkeyboard.app.AiChatController.ModelChoice
+import com.wasimaster.wmkeyboard.ime.aichat.AiChatController
+import com.wasimaster.wmkeyboard.ime.aichat.AiChatController.ModelChoice
+import com.wasimaster.wmkeyboard.ime.ui.ChatMarkdown
+import com.wasimaster.wmkeyboard.ime.ui.ChatMarkdownColors
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.ime.R as ImeR
 
 /**
  * The chat conversation list: Tools > AI > Chat, and the launcher shortcut's
@@ -113,7 +119,7 @@ internal fun AiChatListScreen(
             IconButton(onClick = onNewChat) {
                 Icon(
                     Icons.Outlined.Add,
-                    contentDescription = stringResource(R.string.toolai_ai_chat_new),
+                    contentDescription = stringResource(ImeR.string.ime_ai_chat_new),
                 )
             }
         },
@@ -137,13 +143,13 @@ internal fun AiChatListScreen(
                 ) {
                     Icon(Icons.Outlined.Add, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.toolai_ai_chat_new))
+                    Text(stringResource(ImeR.string.ime_ai_chat_new))
                 }
             }
             if (conversations.isEmpty()) {
                 item {
                     Text(
-                        stringResource(R.string.toolai_ai_chat_list_empty),
+                        stringResource(ImeR.string.ime_ai_chat_list_empty),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
@@ -169,7 +175,7 @@ internal fun AiChatListScreen(
                     stringResource(
                         R.string.toolai_ai_chat_delete_body,
                         doomed.title.ifBlank {
-                            stringResource(R.string.toolai_ai_chat_untitled)
+                            stringResource(ImeR.string.ime_ai_chat_untitled)
                         },
                     ),
                 )
@@ -197,7 +203,7 @@ private fun ConversationRow(
 ) {
     WmRow(
         title = conversation.title.ifBlank {
-            stringResource(R.string.toolai_ai_chat_untitled)
+            stringResource(ImeR.string.ime_ai_chat_untitled)
         },
         subtitle = DateUtils.getRelativeTimeSpanString(conversation.updatedAt).toString(),
         trailing = {
@@ -243,15 +249,16 @@ internal fun AiChatScreen(
     // Everything usable right now: downloaded local models + configured
     // remote providers. Keyed on version so a chat opened right after a
     // download sees the new model.
-    val localModels = remember(version) { AiChatController.downloadedLocalModels(context) }
-    val remoteProviders = remember(settings.ai) {
-        AiClient.configuredRemoteProviders(settings.ai)
-    }
-    var choice by remember(localModels, remoteProviders) {
-        mutableStateOf(initialChoice(store, localModels, remoteProviders))
+    val choices = remember(version, settings.ai) { AiChatController.choices(context, settings.ai) }
+    var choice by remember(choices) {
+        mutableStateOf(AiChatController.initialChoice(store, choices))
     }
 
     var draft by rememberSaveable { mutableStateOf("") }
+    // Text that came with a message from the keyboard's chat, where the field
+    // being written in can be quoted (#280). This screen has no field to quote
+    // from, but a message taken back for editing keeps what it carried.
+    var draftAttachment by rememberSaveable { mutableStateOf("") }
     val listState = rememberLazyListState()
 
     // The session mirrors the native KV cache; keep it only while some chat
@@ -306,17 +313,20 @@ internal fun AiChatScreen(
                 .imePadding()
                 .fillMaxSize(),
         ) {
-            if (localModels.isEmpty() && remoteProviders.isEmpty()) {
+            if (choices.isEmpty()) {
                 NoBackendState(onOpenAiSettings)
                 return@Column
             }
             ModelChips(
-                localModels = localModels,
-                remoteProviders = remoteProviders,
+                choices = choices,
                 choice = choice,
                 enabled = run == null,
                 onPick = { choice = it },
             )
+            // Only the newest turn can be redone or taken back: doing either
+            // mid-transcript would answer out of order.
+            val idle = run == null
+            val lastUser = messages.indexOfLast { it.role == AiChatMessage.ROLE_USER }
             LazyColumn(
                 state = listState,
                 modifier = Modifier
@@ -330,34 +340,68 @@ internal fun AiChatScreen(
                     item(key = "live") { StreamingBubble(live, settings.ai.showThinking) }
                 }
                 itemsIndexed(messages.asReversed()) { reversedIndex, message ->
+                    // asReversed() is a view, so the position in the stored
+                    // transcript is the mirror of this one.
+                    val index = messages.lastIndex - reversedIndex
+                    val newest = index == messages.lastIndex
+                    val regenerate: () -> Unit = {
+                        choice?.let { picked ->
+                            AiChatController.regenerate(context, settings.ai, activeId, picked)
+                        }
+                    }
+                    val edit: () -> Unit = {
+                        AiChatController.editLast(context, activeId)?.let { taken ->
+                            draft = taken.content
+                            draftAttachment = taken.attachment
+                        }
+                    }
                     MessageBubble(
                         message = message,
-                        onRetry = retryFor(message, messages) { userText ->
+                        onRetry = retryFor(message, messages) {
                             choice?.let { picked ->
-                                AiChatController.retry(
-                                    context, settings.ai, activeId, picked, userText,
-                                )
+                                AiChatController.retry(context, settings.ai, activeId, picked)
                             }
                         },
+                        onRegenerate = regenerate.takeIf {
+                            idle && newest && !message.failed &&
+                                message.role == AiChatMessage.ROLE_ASSISTANT
+                        },
+                        onEdit = edit.takeIf { idle && index == lastUser },
                         onReport = reportFor(
                             context = context,
                             message = message,
                             messages = messages,
-                            // asReversed() is a view, so the position in the
-                            // stored transcript is the mirror of this one.
-                            index = messages.lastIndex - reversedIndex,
+                            index = index,
                         ),
                     )
                 }
                 if (messages.isEmpty() && run == null) {
                     item {
                         Text(
-                            stringResource(R.string.toolai_ai_chat_empty_hint),
+                            stringResource(ImeR.string.ime_ai_chat_empty_hint),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(16.dp),
                         )
                     }
+                }
+            }
+            if (draftAttachment.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.padding(start = 16.dp, end = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        pluralStringResource(
+                            ImeR.plurals.ime_ai_chat_attachment_sent,
+                            draftAttachment.length,
+                            draftAttachment.length,
+                        ),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(1f),
+                    )
+                    BubbleAction(CommonR.string.common_delete) { draftAttachment = "" }
                 }
             }
             Composer(
@@ -370,31 +414,14 @@ internal fun AiChatScreen(
                     val id = activeId.takeIf { it >= 0 }
                         ?: store.newConversation(System.currentTimeMillis()).id
                             .also { activeId = it }
-                    AiChatController.send(context, settings.ai, id, picked, draft)
+                    AiChatController.send(context, settings.ai, id, picked, draft, draftAttachment)
                     draft = ""
+                    draftAttachment = ""
                 },
                 onStop = { AiChatController.stop(context) },
             )
         }
     }
-}
-
-/** The model to preselect: last used if still available, else the first. */
-private fun initialChoice(
-    store: AiChatStore,
-    localModels: List<String>,
-    remoteProviders: List<AiProvider>,
-): ModelChoice? {
-    val lastKey = store.lastModelKey()
-    if (lastKey.startsWith(AiChatStore.ON_DEVICE_KEY_PREFIX)) {
-        val id = lastKey.removePrefix(AiChatStore.ON_DEVICE_KEY_PREFIX)
-        if (id in localModels) return ModelChoice(AiProvider.ON_DEVICE, id)
-    } else if (lastKey.isNotEmpty()) {
-        remoteProviders.firstOrNull { it.name == lastKey }?.let { return ModelChoice(it) }
-    }
-    localModels.firstOrNull()?.let { return ModelChoice(AiProvider.ON_DEVICE, it) }
-    remoteProviders.firstOrNull()?.let { return ModelChoice(it) }
-    return null
 }
 
 /**
@@ -405,12 +432,11 @@ private fun initialChoice(
 private fun retryFor(
     message: AiChatMessage,
     messages: List<AiChatMessage>,
-    onRetry: (String) -> Unit,
+    onRetry: () -> Unit,
 ): (() -> Unit)? {
     if (!message.failed || message !== messages.lastOrNull()) return null
-    val user = messages.asReversed()
-        .firstOrNull { it.role == AiChatMessage.ROLE_USER } ?: return null
-    return { onRetry(user.content) }
+    if (messages.none { it.role == AiChatMessage.ROLE_USER }) return null
+    return onRetry
 }
 
 /**
@@ -469,7 +495,7 @@ private fun promptFor(messages: List<AiChatMessage>, index: Int): String =
     (index - 1 downTo 0).asSequence()
         .map(messages::get)
         .firstOrNull { it.role == AiChatMessage.ROLE_USER }
-        ?.content
+        ?.promptText()
         .orEmpty()
 
 /**
@@ -484,50 +510,54 @@ private fun providerLabel(context: Context, stored: String): String =
 
 @Composable
 private fun ModelChips(
-    localModels: List<String>,
-    remoteProviders: List<AiProvider>,
+    choices: List<ModelChoice>,
     choice: ModelChoice?,
     enabled: Boolean,
     onPick: (ModelChoice) -> Unit,
 ) {
-    if (localModels.size + remoteProviders.size < 2) return
+    if (choices.size < 2) return
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        items(localModels, key = { "local:$it" }) { id ->
+        items(choices, key = { it.key }) { option ->
             FilterChip(
-                selected = choice?.provider == AiProvider.ON_DEVICE &&
-                    choice.localModelId == id,
+                selected = choice == option,
                 enabled = enabled,
-                onClick = { onPick(ModelChoice(AiProvider.ON_DEVICE, id)) },
-                label = { Text(localModelLabel(id), maxLines = 1) },
-            )
-        }
-        items(remoteProviders, key = { "remote:${it.name}" }) { provider ->
-            FilterChip(
-                selected = choice?.provider == provider,
-                enabled = enabled,
-                onClick = { onPick(ModelChoice(provider)) },
-                label = { Text(stringResource(provider.labelRes), maxLines = 1) },
+                onClick = { onPick(option) },
+                label = {
+                    Text(
+                        if (option.provider == AiProvider.ON_DEVICE) {
+                            AiChatController.localModelLabel(option.localModelId)
+                        } else {
+                            stringResource(option.provider.labelRes)
+                        },
+                        maxLines = 1,
+                    )
+                },
             )
         }
     }
 }
 
-private fun localModelLabel(id: String): String =
-    LocalLlmCatalog.byId(id)?.displayName
-        ?: id.removePrefix(LocalLlmStore.CUSTOM_PREFIX).substringBeforeLast('.')
-
 @Composable
 private fun MessageBubble(
     message: AiChatMessage,
     onRetry: (() -> Unit)?,
+    onRegenerate: (() -> Unit)? = null,
+    onEdit: (() -> Unit)? = null,
     onReport: (() -> Unit)? = null,
 ) {
     val fromUser = message.role == AiChatMessage.ROLE_USER
+    val context = LocalContext.current
+    val copy: (String) -> Unit = { text ->
+        runCatching {
+            (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                .setPrimaryClip(ClipData.newPlainText("", text))
+        }
+    }
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = if (fromUser) Arrangement.End else Arrangement.Start,
@@ -560,31 +590,78 @@ private fun MessageBubble(
                                 contentDescription = null,
                                 modifier = Modifier.padding(end = 4.dp),
                             )
-                            Text(stringResource(R.string.toolai_ai_chat_retry))
+                            Text(stringResource(ImeR.string.ime_ai_chat_retry))
                         }
                     }
                 } else {
-                    Text(message.content, style = MaterialTheme.typography.bodyMedium)
+                    val ink = if (fromUser) {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                    // Selectable here, where the keyboard's own chat cannot be:
+                    // an activity window can hold selection handles, an IME
+                    // window cannot.
+                    SelectionContainer {
+                        if (fromUser) {
+                            // The user's own words are drawn as written.
+                            Text(message.content, style = MaterialTheme.typography.bodyMedium)
+                        } else {
+                            // The same renderer the keyboard's chat draws with,
+                            // so an answer looks the same on both.
+                            ChatMarkdown(
+                                message.content,
+                                ChatMarkdownColors(
+                                    text = ink,
+                                    dim = ink.copy(alpha = 0.65f),
+                                    codeBackground = ink.copy(alpha = 0.10f),
+                                ),
+                                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                            ) { block ->
+                                BubbleAction(CommonR.string.common_copy) { copy(block.code) }
+                            }
+                        }
+                    }
+                    if (message.attachment.isNotEmpty()) {
+                        Text(
+                            pluralStringResource(
+                                ImeR.plurals.ime_ai_chat_attachment_sent,
+                                message.attachment.length,
+                                message.attachment.length,
+                            ),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = ink.copy(alpha = 0.65f),
+                        )
+                    }
                     if (message.stopped) {
                         Text(
-                            stringResource(R.string.toolai_ai_chat_stopped),
+                            stringResource(ImeR.string.ime_ai_chat_stopped),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-                    // Only ever on an answer in a Play Store build; reportFor
-                    // returns null for everything else.
-                    onReport?.let {
-                        TextButton(onClick = it, modifier = Modifier.align(Alignment.End)) {
-                            Text(
-                                stringResource(R.string.toolai_ai_chat_report_action),
-                                style = MaterialTheme.typography.labelSmall,
-                            )
-                        }
+                    Row(modifier = Modifier.align(Alignment.End)) {
+                        BubbleAction(CommonR.string.common_copy) { copy(message.content) }
+                        onRegenerate?.let { BubbleAction(ImeR.string.ime_ai_chat_regenerate, it) }
+                        onEdit?.let { BubbleAction(CommonR.string.common_edit, it) }
+                        // Only ever on an answer in a Play Store build;
+                        // reportFor returns null for everything else.
+                        onReport?.let { BubbleAction(ImeR.string.ime_ai_chat_report_action, it) }
                     }
                 }
             }
         }
+    }
+}
+
+/** One of the small text buttons under a message. */
+@Composable
+private fun BubbleAction(@StringRes label: Int, onClick: () -> Unit) {
+    TextButton(
+        onClick = onClick,
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+    ) {
+        Text(stringResource(label), style = MaterialTheme.typography.labelSmall)
     }
 }
 
@@ -626,7 +703,7 @@ private fun StreamingBubble(run: AiChatController.ChatRun, showThinking: Boolean
                         Text(
                             stringResource(
                                 if (split.thinking) {
-                                    R.string.toolai_ai_chat_thinking
+                                    ImeR.string.ime_ai_chat_thinking
                                 } else {
                                     run.phase.labelRes
                                 },
@@ -659,7 +736,7 @@ private fun Composer(
         OutlinedTextField(
             value = draft,
             onValueChange = onDraft,
-            placeholder = { Text(stringResource(R.string.toolai_ai_chat_composer_hint)) },
+            placeholder = { Text(stringResource(ImeR.string.ime_ai_chat_composer_hint)) },
             modifier = Modifier.weight(1f),
             maxLines = 5,
         )
@@ -668,14 +745,14 @@ private fun Composer(
             FilledIconButton(onClick = onStop) {
                 Icon(
                     Icons.Outlined.Stop,
-                    contentDescription = stringResource(R.string.toolai_ai_chat_stop),
+                    contentDescription = stringResource(ImeR.string.ime_ai_chat_stop),
                 )
             }
         } else {
             FilledIconButton(onClick = onSend, enabled = canSend) {
                 Icon(
                     Icons.AutoMirrored.Outlined.Send,
-                    contentDescription = stringResource(R.string.toolai_ai_chat_send),
+                    contentDescription = stringResource(ImeR.string.ime_ai_chat_send),
                 )
             }
         }
@@ -691,18 +768,18 @@ private fun NoBackendState(onOpenAiSettings: () -> Unit) {
             modifier = Modifier.padding(24.dp),
         ) {
             Text(
-                stringResource(R.string.toolai_ai_chat_no_backend_title),
+                stringResource(ImeR.string.ime_ai_chat_no_backend_title),
                 style = MaterialTheme.typography.titleMedium,
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                stringResource(R.string.toolai_ai_chat_no_backend_body),
+                stringResource(ImeR.string.ime_ai_chat_no_backend_body),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(Modifier.height(16.dp))
             Button(onClick = onOpenAiSettings) {
-                Text(stringResource(R.string.toolai_ai_chat_setup_button))
+                Text(stringResource(ImeR.string.ime_ai_chat_setup_button))
             }
         }
     }

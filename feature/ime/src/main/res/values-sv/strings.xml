@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">Lämna stavningen som den är</string>
     <string name="ime_word_spell_hint">Skriv en ny stavning för \"%1$s\"</string>
     <string name="subtype_app_label">WM Keyboard · %s</string>
+    <string name="ime_ai_chat_new">Ny chatt</string>
+    <string name="ime_ai_chat_untitled">Ny chatt</string>
+    <string name="ime_ai_chat_list_empty">Inga chattar än. Starta en så visas den här.</string>
+    <string name="ime_ai_chat_empty_hint">Skicka ett meddelande för att starta chatten. Konversationen stannar på din enhet.</string>
+    <string name="ime_ai_chat_composer_hint">Meddelande</string>
+    <string name="ime_ai_chat_send">Skicka</string>
+    <string name="ime_ai_chat_stop">Stopp</string>
+    <string name="ime_ai_chat_stopped">Stoppad</string>
+    <string name="ime_ai_chat_retry">Försök igen</string>
+    <string name="ime_ai_chat_report_action">Rapportera</string>
+    <string name="ime_ai_chat_thinking">Resonerar…</string>
+    <string name="ime_ai_chat_no_backend_title">Inget att chatta med än</string>
+    <string name="ime_ai_chat_no_backend_body">Ladda ner en lokal modell eller ställ in en leverantör i AI-verktygets inställningar.</string>
+    <string name="ime_ai_chat_setup_button">Öppna inställningarna för AI-verktyget</string>
+    <string name="ime_ai_chat_error_no_model">Den valda modellen finns inte längre på din enhet. Välj en annan modell.</string>
+    <string name="ime_ai_chat_error_generic">Modellen svarade inte. Försök igen.</string>
 </resources>

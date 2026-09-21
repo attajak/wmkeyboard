@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">Оставить написание как есть</string>
     <string name="ime_word_spell_hint">Введите новое написание для \"%1$s\"</string>
     <string name="subtype_app_label">WM Keyboard · %s</string>
+    <string name="ime_ai_chat_new">Новый чат</string>
+    <string name="ime_ai_chat_untitled">Новый чат</string>
+    <string name="ime_ai_chat_list_empty">Чатов пока нет. Начните один, и он появится здесь.</string>
+    <string name="ime_ai_chat_empty_hint">Отправьте сообщение, чтобы начать чат. Разговор остается на вашем устройстве.</string>
+    <string name="ime_ai_chat_composer_hint">Сообщение</string>
+    <string name="ime_ai_chat_send">Отправить</string>
+    <string name="ime_ai_chat_stop">Стоп</string>
+    <string name="ime_ai_chat_stopped">Остановлено</string>
+    <string name="ime_ai_chat_retry">Повторить</string>
+    <string name="ime_ai_chat_report_action">Пожаловаться</string>
+    <string name="ime_ai_chat_thinking">Размышление…</string>
+    <string name="ime_ai_chat_no_backend_title">Пока не с кем общаться</string>
+    <string name="ime_ai_chat_no_backend_body">Загрузите модель для работы на устройстве или настройте провайдера в настройках ИИ-инструмента.</string>
+    <string name="ime_ai_chat_setup_button">Открыть настройки ИИ-инструмента</string>
+    <string name="ime_ai_chat_error_no_model">Выбранная модель больше не находится на вашем устройстве. Выберите другую модель.</string>
+    <string name="ime_ai_chat_error_generic">Модель не ответила. Попробуйте еще раз.</string>
 </resources>

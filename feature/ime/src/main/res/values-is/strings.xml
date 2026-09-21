@@ -979,4 +979,20 @@
     <string name="ime_word_spell_cancel_desc">Ekki breyta stafsetningunni</string>
     <string name="ime_word_spell_hint">Sláðu inn nýja stafsetningu fyrir \"%1$s\"</string>
     <string name="subtype_app_label">WM lyklaborð · %s</string>
+    <string name="ime_ai_chat_new">Nýtt spjall</string>
+    <string name="ime_ai_chat_untitled">Nýtt spjall</string>
+    <string name="ime_ai_chat_list_empty">Engin spjall ennþá. Byrjaðu eitt og það birtist hér.</string>
+    <string name="ime_ai_chat_empty_hint">Sendu skilaboð til að hefja spjallið. Samtalið helst á tækinu þínu.</string>
+    <string name="ime_ai_chat_composer_hint">Skilaboð</string>
+    <string name="ime_ai_chat_send">Senda</string>
+    <string name="ime_ai_chat_stop">Stöðva</string>
+    <string name="ime_ai_chat_stopped">Stöðvað</string>
+    <string name="ime_ai_chat_retry">Reyna aftur</string>
+    <string name="ime_ai_chat_report_action">Tilkynna</string>
+    <string name="ime_ai_chat_thinking">Hugsa…</string>
+    <string name="ime_ai_chat_no_backend_title">Ekkert til að spjalla við ennþá</string>
+    <string name="ime_ai_chat_no_backend_body">Sæktu líkan fyrir tækið eða settu upp veitu í stillingum gervigreindarverkfæra.</string>
+    <string name="ime_ai_chat_setup_button">Opna stillingar gervigreindarverkfæra</string>
+    <string name="ime_ai_chat_error_no_model">Valda líkanið er ekki lengur á tækinu þínu. Veldu annað líkan.</string>
+    <string name="ime_ai_chat_error_generic">Líkanið svaraði ekki. Reyndu aftur.</string>
 </resources>

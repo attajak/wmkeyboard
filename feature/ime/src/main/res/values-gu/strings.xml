@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">સ્પેલિંગ જેમ છે તેમ રહેવા દો</string>
     <string name="ime_word_spell_hint">\"%1$s\" માટે નવી જોડણી લખો</string>
     <string name="subtype_app_label">WM કીબોર્ડ · %s</string>
+    <string name="ime_ai_chat_new">નવી ચેટ</string>
+    <string name="ime_ai_chat_untitled">નવી ચેટ</string>
+    <string name="ime_ai_chat_list_empty">હજુ સુધી કોઈ ચેટ નથી. એક શરૂ કરો અને તે અહીં દેખાશે.</string>
+    <string name="ime_ai_chat_empty_hint">ચેટ શરૂ કરવા માટે મેસેજ મોકલો. વાતચીત તમારા ઉપકરણ પર જ રહે છે.</string>
+    <string name="ime_ai_chat_composer_hint">મેસેજ</string>
+    <string name="ime_ai_chat_send">મોકલો</string>
+    <string name="ime_ai_chat_stop">બંધ કરો</string>
+    <string name="ime_ai_chat_stopped">અટકી ગયું</string>
+    <string name="ime_ai_chat_retry">ફરી પ્રયાસ કરો</string>
+    <string name="ime_ai_chat_report_action">રિપોર્ટ કરો</string>
+    <string name="ime_ai_chat_thinking">વિચારી રહ્યા છીએ...</string>
+    <string name="ime_ai_chat_no_backend_title">હજુ સુધી ચેટ કરવા માટે કંઈ નથી</string>
+    <string name="ime_ai_chat_no_backend_body">ઓન-ડિવાઇસ મોડેલ ડાઉનલોડ કરો અથવા AI ટૂલ સેટિંગ્સમાં પ્રોવાઇડર સેટઅપ કરો.</string>
+    <string name="ime_ai_chat_setup_button">AI ટૂલ સેટિંગ્સ ખોલો</string>
+    <string name="ime_ai_chat_error_no_model">પસંદ કરેલ મોડેલ હવે તમારા ઉપકરણ પર નથી. બીજું મોડેલ પસંદ કરો.</string>
+    <string name="ime_ai_chat_error_generic">મોડેલે જવાબ આપ્યો નથી. ફરી પ્રયાસ કરો.</string>
 </resources>

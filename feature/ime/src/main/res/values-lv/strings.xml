@@ -979,4 +979,20 @@
     <string name="ime_word_spell_cancel_desc">Atstāt pareizrakstību neskartu</string>
     <string name="ime_word_spell_hint">Ievadiet jaunu pareizrakstību vārdam \"%1$s\"</string>
     <string name="subtype_app_label">WM tastatūra · %s</string>
+    <string name="ime_ai_chat_new">Jauna tērzēšana</string>
+    <string name="ime_ai_chat_untitled">Jauna tērzēšana</string>
+    <string name="ime_ai_chat_list_empty">Pagaidām nav tērzēšanas sarunu. Sāciet jaunu, un tā parādīsies šeit.</string>
+    <string name="ime_ai_chat_empty_hint">Nosūtiet ziņojumu, lai sāktu tērzēšanu. Saruna paliek jūsu ierīcē.</string>
+    <string name="ime_ai_chat_composer_hint">Ziņojums</string>
+    <string name="ime_ai_chat_send">Sūtīt</string>
+    <string name="ime_ai_chat_stop">Apturēt</string>
+    <string name="ime_ai_chat_stopped">Apturēts</string>
+    <string name="ime_ai_chat_retry">Mēģināt vēlreiz</string>
+    <string name="ime_ai_chat_report_action">Ziņot</string>
+    <string name="ime_ai_chat_thinking">Domā…</string>
+    <string name="ime_ai_chat_no_backend_title">Vēl nav ar ko tērzēt</string>
+    <string name="ime_ai_chat_no_backend_body">Lejupielādējiet ierīcē esošu modeli vai iestatiet pakalpojumu sniedzēju AI rīka iestatījumos.</string>
+    <string name="ime_ai_chat_setup_button">Atvērt AI rīka iestatījumus</string>
+    <string name="ime_ai_chat_error_no_model">Atlasītais modelis vairs nav jūsu ierīcē. Izvēlieties citu modeli.</string>
+    <string name="ime_ai_chat_error_generic">Modelis neatbildēja. Mēģiniet vēlreiz.</string>
 </resources>

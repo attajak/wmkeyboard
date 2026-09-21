@@ -1,6 +1,6 @@
 ---
 title: "AI chat"
-description: "A full back-and-forth conversation with whichever model you set up, in the settings app rather than on the keyboard."
+description: "A full back-and-forth conversation with whichever model you set up, on the keyboard's AI panel or in the settings app, as one shared list of chats."
 sidebar:
   order: 11.5
 ---
@@ -9,11 +9,59 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
 
-The [AI tool](/tools/ai/) runs one-shot actions against the text in a field. Chat is the other half: a normal back-and-forth conversation with the same model, kept on your device, in the settings app rather than on the keyboard.
+The [AI tool](/tools/ai/) runs one-shot actions against the text in a field. Chat is the other half: a normal back-and-forth conversation with the same model, kept on your device.
 
-The keyboard itself never chats. It has no room for a transcript and no reason to hold one, so the whole feature lives in the app, where a conversation gets a proper screen.
+You can chat in two places, and they're the same chats. The keyboard's AI panel has a **Chat** mode, for asking something and dropping the answer straight into whatever you're writing. The settings app has a full-screen version, for longer conversations. Start one on the keyboard, carry it on in the app, come back: there's one list, and an answer that's still streaming in shows up on both.
 
-## Getting there
+## Chatting on the keyboard
+
+Open the AI tool from the toolbar. The panel's header has two chips, **Actions** and **Chat**. Tap **Chat**. The panel remembers which one you left it on, so if chat is what you use, the AI button opens chat from then on.
+
+<PhoneFrame caption="Chat mode on the AI panel: the conversation, the newest answer's buttons, and the composer.">
+  {/* shot: tools/ai-chat-keyboard */}
+</PhoneFrame>
+
+Tap the message box and the keys come up underneath, with the last few messages still in view above it. The keyboard gets taller while you type so the conversation doesn't disappear. Tap the conversation, or press Back, and the keys step aside again so you can read. Your half-typed message stays where it was, even if you close the panel.
+
+Glide typing, suggestions and the caret all work in the message box the way they do in any of the keyboard's own fields. Nothing you type there reaches the app behind the keyboard.
+
+### Getting an answer into your text
+
+The newest answer always shows its buttons. Tap any older bubble to bring out its own.
+
+- **Insert** puts the answer in the field at the cursor, with markdown markers stripped, since a text field won't render them.
+- **Copy** copies the answer as written. Long-pressing a bubble copies it too, in one move.
+- **Write again** throws the newest answer away and asks for another.
+- **Edit**, on your own newest message, pulls it back into the message box along with the answer it got, so you can fix the question and send it again.
+- A code block gets its own **Copy** and **Insert**, which take just the code, exactly as written.
+
+Answers are drawn with their formatting: headings, lists, bold, inline code and code blocks. While an answer is still streaming, a code block waits for its closing fence before it offers its buttons.
+
+### Sending your text along
+
+The paperclip beside the message box quotes what you're working on. With text selected in the field, it takes the selection; otherwise it takes the whole field. A line above the message box says which, and how long it is. The model gets your message followed by that text, clearly marked off, and the bubble notes that text went with it. Tap the paperclip again to drop it.
+
+It's greyed out over an empty field, and it never reads a password field.
+
+The clipboard button next to it pastes your latest clip at the caret.
+
+An empty chat offers a few openers: **Reply to this** and **Explain this** quote the field for you, **Help me write** starts the sentence. They only fill the message box. Nothing is sent until you send it.
+
+### Switching chats
+
+The chip in the header with the chat's title opens your list of chats: tap one to open it, **New chat** to start fresh, **Delete** twice to remove one. The plus button starts a new chat from anywhere. The arrow button opens the current chat in the settings app, which is the place to go when you'd like a full screen or selectable text.
+
+### The Enter key
+
+By default Enter starts a new line, and the send button sends. If you'd rather Enter sent the message, turn on <SettingsPath path="Tools / AI writing tools / Enter sends the message" />.
+
+### When chat isn't offered
+
+On the lock screen the panel shows only its actions. Chats are stored encrypted behind your unlock, and a transcript isn't something to draw over a lock screen.
+
+A chat started while [incognito](/privacy/incognito/) is on is never saved. You can read it and carry it on until the keyboard's process ends, and then it's gone.
+
+## Chatting in the app
 
 <SettingsPath path="Tools / AI writing tools / Chat with the model" />
 
@@ -52,7 +100,9 @@ Type in the box and hit send. While the answer streams, the send button becomes 
 - **A failed turn** shows the error in its own bubble with a **Retry** button. Only the newest failed message gets one, because retrying something from the middle of a transcript would answer out of order. Retry re-sends the message the failure was answering, so nothing is duplicated.
 - **Leaving doesn't cancel anything.** Navigate away mid-answer and the generation carries on. Come back and it's either still streaming or already in the transcript.
 
-A Play Store build adds a **Report** button along the bottom edge of every finished answer. It follows the same route the panel offers under [Reporting a result](/tools/ai/#reporting-a-result): a draft opens in your own mail app holding the provider, the model, the message the answer replied to, and the answer itself, with a blank line at the top for what went wrong. Nothing is uploaded when you tap it, so a report only exists once you send the mail. Your own messages carry no button, and neither does a failed turn, because neither one is a generated answer. With no mail app installed, a message says so instead. GitHub and F-Droid builds show no Report button here at all, since Play's AI-generated-content policy is the only reason for it. The keyboard panel's own Report button has no such restriction.
+Every message has a **Copy** button under it, and the text itself is selectable, which the keyboard's version can't offer. The newest answer adds **Write again**, and your own newest message adds **Edit**, both exactly as on the keyboard. Answers render the same formatting on both, and a code block has a **Copy** of its own. There's no Insert here, because there's no field behind this screen to insert into.
+
+A Play Store build adds a **Report** button along the bottom edge of every finished answer. It follows the same route the panel offers under [Reporting a result](/tools/ai/#reporting-a-result): a draft opens in your own mail app holding the provider, the model, the message the answer replied to, and the answer itself, with a blank line at the top for what went wrong. Nothing is uploaded when you tap it, so a report only exists once you send the mail. Your own messages carry no Report button, and neither does a failed turn, because neither one is a generated answer. With no mail app installed, a message says so instead. GitHub and F-Droid builds show no Report button here at all, since Play's AI-generated-content policy is the only reason for it. The keyboard panel's own Report button has no such restriction.
 
 Reasoning models follow the same **Show model reasoning** setting the keyboard panel uses. With it on, the raw stream renders with the thinking part dimmed. With it off, you get a "Reasoning…" line until real answer text starts arriving.
 
@@ -81,6 +131,8 @@ Three caps keep the file from growing without limit:
 | Messages per conversation | 200 | The oldest messages drop off the front |
 | Characters per message | 20,000 | The rest is cut |
 
+Text you attached from a field is saved with its message, under the same 20,000-character cap, because the conversation wouldn't make sense to the model without it on the next turn.
+
 Deleting a conversation from the list removes it for good. There's no undo, which is why the dialog names the chat first.
 
 ## What leaves your phone
@@ -88,7 +140,7 @@ Deleting a conversation from the list removes it for good. There's no undo, whic
 Exactly what the AI tool sends, and only when you hit send:
 
 - **An on-device model** sends nothing. The whole conversation stays on the phone.
-- **Any other provider** gets the conversation so far, because that's what makes a reply follow on from the last one. A fixed instruction rides along with it: answer in plain text, and keep it as short as the question allows. Your API keys stay on the device.
+- **Any other provider** gets the conversation so far, because that's what makes a reply follow on from the last one. That includes any field text you attached with the paperclip, and only the text you attached: the keyboard's chat never reads the field on its own. A fixed instruction rides along with it: answer in plain text, and keep it as short as the question allows. Your API keys stay on the device.
 - **The transcript itself** goes nowhere. It's deliberately left out of settings backups, the same as the [AI history](/tools/ai/#history) and for the same reason: your own conversations shouldn't ride along in a file you export and mail to yourself. See [Your data](/privacy/data/).
 
 ## Details & edge cases

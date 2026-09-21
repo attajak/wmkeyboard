@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Yazımı olduğu gibi bırak</string>
     <string name="ime_word_spell_hint">\"%1$s\" için yeni bir yazım girin</string>
     <string name="subtype_app_label">WM Klavye · %s</string>
+    <string name="ime_ai_chat_new">Yeni sohbet</string>
+    <string name="ime_ai_chat_untitled">Yeni sohbet</string>
+    <string name="ime_ai_chat_list_empty">Henüz sohbet yok. Bir tane başlatın, burada görünecektir.</string>
+    <string name="ime_ai_chat_empty_hint">Sohbeti başlatmak için bir mesaj gönderin. Konuşma cihazınızda kalır.</string>
+    <string name="ime_ai_chat_composer_hint">Mesaj</string>
+    <string name="ime_ai_chat_send">Gönder</string>
+    <string name="ime_ai_chat_stop">Durdur</string>
+    <string name="ime_ai_chat_stopped">Durduruldu</string>
+    <string name="ime_ai_chat_retry">Yeniden dene</string>
+    <string name="ime_ai_chat_report_action">Bildir</string>
+    <string name="ime_ai_chat_thinking">Düşünüyor…</string>
+    <string name="ime_ai_chat_no_backend_title">Henüz sohbet edilecek bir şey yok</string>
+    <string name="ime_ai_chat_no_backend_body">Cihaz içi bir model indirin veya AI aracı ayarlarından bir sağlayıcı kurun.</string>
+    <string name="ime_ai_chat_setup_button">Yapay zeka aracı ayarlarını aç</string>
+    <string name="ime_ai_chat_error_no_model">Seçilen model artık cihazınızda değil. Başka bir model seçin.</string>
+    <string name="ime_ai_chat_error_generic">Model yanıt vermedi. Tekrar deneyin.</string>
 </resources>

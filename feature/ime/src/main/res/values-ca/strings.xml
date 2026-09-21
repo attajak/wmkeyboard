@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Deixa l\'ortografia tal com està</string>
     <string name="ime_word_spell_hint">Escriu una nova ortografia per a \"%1$s\"</string>
     <string name="subtype_app_label">Teclat WM · %s</string>
+    <string name="ime_ai_chat_new">Xat nou</string>
+    <string name="ime_ai_chat_untitled">Xat nou</string>
+    <string name="ime_ai_chat_list_empty">Encara no hi ha xats. Comença\'n un i apareixerà aquí.</string>
+    <string name="ime_ai_chat_empty_hint">Envieu un missatge per començar el xat. La conversa es queda al vostre dispositiu.</string>
+    <string name="ime_ai_chat_composer_hint">Missatge</string>
+    <string name="ime_ai_chat_send">Envia</string>
+    <string name="ime_ai_chat_stop">Atura</string>
+    <string name="ime_ai_chat_stopped">Aturat</string>
+    <string name="ime_ai_chat_retry">Reintenta</string>
+    <string name="ime_ai_chat_report_action">Informa</string>
+    <string name="ime_ai_chat_thinking">Raonant...</string>
+    <string name="ime_ai_chat_no_backend_title">Encara no hi ha res amb què xatejar</string>
+    <string name="ime_ai_chat_no_backend_body">Descarrega un model al dispositiu o configura un proveïdor a la configuració de l\'eina d\'IA.</string>
+    <string name="ime_ai_chat_setup_button">Obre la configuració de l\'eina d\'IA</string>
+    <string name="ime_ai_chat_error_no_model">El model seleccionat ja no és al vostre dispositiu. Trieu un altre model.</string>
+    <string name="ime_ai_chat_error_generic">El model no ha respost. Torna-ho a provar.</string>
 </resources>

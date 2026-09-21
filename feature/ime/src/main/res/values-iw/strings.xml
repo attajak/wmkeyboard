@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">השאר את האיות כפי שהוא</string>
     <string name="ime_word_spell_hint">הקלד איות חדש עבור \"%1$s\"</string>
     <string name="subtype_app_label">מקלדת WM · %s</string>
+    <string name="ime_ai_chat_new">צ\'אט חדש</string>
+    <string name="ime_ai_chat_untitled">צ\'אט חדש</string>
+    <string name="ime_ai_chat_list_empty">אין עדיין צ\'אטים. התחל אחד והוא יופיע כאן.</string>
+    <string name="ime_ai_chat_empty_hint">שלח הודעה כדי להתחיל את הצ\'אט. השיחה נשארת במכשיר שלך.</string>
+    <string name="ime_ai_chat_composer_hint">הודעה</string>
+    <string name="ime_ai_chat_send">שלח</string>
+    <string name="ime_ai_chat_stop">עצור</string>
+    <string name="ime_ai_chat_stopped">עצר</string>
+    <string name="ime_ai_chat_retry">נסה שוב</string>
+    <string name="ime_ai_chat_report_action">דווח</string>
+    <string name="ime_ai_chat_thinking">חושב...</string>
+    <string name="ime_ai_chat_no_backend_title">עדיין אין עם מה לשוחח</string>
+    <string name="ime_ai_chat_no_backend_body">הורד מודל על המכשיר או הגדר ספק בהגדרות כלי ה-AI.</string>
+    <string name="ime_ai_chat_setup_button">פתח את הגדרות כלי ה-AI</string>
+    <string name="ime_ai_chat_error_no_model">המודל שנבחר אינו נמצא עוד במכשיר שלך. בחר מודל אחר.</string>
+    <string name="ime_ai_chat_error_generic">המודל לא ענה. נסה שוב.</string>
 </resources>

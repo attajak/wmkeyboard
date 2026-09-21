@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">ਸਪੈਲਿੰਗ ਨੂੰ ਨਾ ਛੇੜੋ</string>
     <string name="ime_word_spell_hint">\"%1$s\" ਲਈ ਇੱਕ ਨਵਾਂ ਸਪੈਲਿੰਗ ਟਾਈਪ ਕਰੋ</string>
     <string name="subtype_app_label">WM ਕੀਬੋਰਡ · %s</string>
+    <string name="ime_ai_chat_new">ਨਵੀਂ ਚੈਟ</string>
+    <string name="ime_ai_chat_untitled">ਨਵੀਂ ਚੈਟ</string>
+    <string name="ime_ai_chat_list_empty">ਅਜੇ ਕੋਈ ਚੈਟ ਨਹੀਂ ਹੈ। ਇੱਕ ਸ਼ੁਰੂ ਕਰੋ ਅਤੇ ਇਹ ਇੱਥੇ ਦਿਖਾਈ ਦੇਵੇਗੀ।</string>
+    <string name="ime_ai_chat_empty_hint">ਚੈਟ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਕ ਸੁਨੇਹਾ ਭੇਜੋ। ਗੱਲਬਾਤ ਤੁਹਾਡੀ ਡਿਵਾਈਸ \'ਤੇ ਹੀ ਰਹਿੰਦੀ ਹੈ।</string>
+    <string name="ime_ai_chat_composer_hint">ਸੁਨੇਹਾ</string>
+    <string name="ime_ai_chat_send">ਭੇਜੋ</string>
+    <string name="ime_ai_chat_stop">ਰੋਕੋ</string>
+    <string name="ime_ai_chat_stopped">ਰੋਕਿਆ ਗਿਆ</string>
+    <string name="ime_ai_chat_retry">ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ</string>
+    <string name="ime_ai_chat_report_action">ਰਿਪੋਰਟ ਕਰੋ</string>
+    <string name="ime_ai_chat_thinking">ਸੋਚ ਰਿਹਾ ਹੈ...</string>
+    <string name="ime_ai_chat_no_backend_title">ਅਜੇ ਗੱਲਬਾਤ ਕਰਨ ਲਈ ਕੁਝ ਨਹੀਂ ਹੈ</string>
+    <string name="ime_ai_chat_no_backend_body">ਇੱਕ ਆਨ-ਡਿਵਾਈਸ ਮਾਡਲ ਡਾਊਨਲੋਡ ਕਰੋ ਜਾਂ AI ਟੂਲ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਇੱਕ ਪ੍ਰੋਵਾਈਡਰ ਸੈੱਟਅੱਪ ਕਰੋ।</string>
+    <string name="ime_ai_chat_setup_button">AI ਟੂਲ ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ</string>
+    <string name="ime_ai_chat_error_no_model">ਚੁਣਿਆ ਗਿਆ ਮਾਡਲ ਹੁਣ ਤੁਹਾਡੀ ਡਿਵਾਈਸ \'ਤੇ ਨਹੀਂ ਹੈ। ਕੋਈ ਹੋਰ ਮਾਡਲ ਚੁਣੋ।</string>
+    <string name="ime_ai_chat_error_generic">ਮਾਡਲ ਨੇ ਜਵਾਬ ਨਹੀਂ ਦਿੱਤਾ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
 </resources>

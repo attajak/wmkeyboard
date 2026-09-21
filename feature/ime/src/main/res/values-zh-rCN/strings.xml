@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">保持拼写不变</string>
     <string name="ime_word_spell_hint">为“%1$s”输入新的拼写</string>
     <string name="subtype_app_label">WM 键盘 · %s</string>
+    <string name="ime_ai_chat_new">新对话</string>
+    <string name="ime_ai_chat_untitled">新聊天</string>
+    <string name="ime_ai_chat_list_empty">暂无聊天记录。开始聊天后，记录将显示在此处。</string>
+    <string name="ime_ai_chat_empty_hint">发送消息以开始聊天。对话将保留在您的设备上。</string>
+    <string name="ime_ai_chat_composer_hint">消息</string>
+    <string name="ime_ai_chat_send">发送</string>
+    <string name="ime_ai_chat_stop">停止</string>
+    <string name="ime_ai_chat_stopped">已停止</string>
+    <string name="ime_ai_chat_retry">重试</string>
+    <string name="ime_ai_chat_report_action">举报</string>
+    <string name="ime_ai_chat_thinking">正在思考…</string>
+    <string name="ime_ai_chat_no_backend_title">暂无可聊天的对象</string>
+    <string name="ime_ai_chat_no_backend_body">请下载设备端模型，或在 AI 工具设置中配置提供程序。</string>
+    <string name="ime_ai_chat_setup_button">打开 AI 工具设置</string>
+    <string name="ime_ai_chat_error_no_model">所选模型已不在您的设备上。请选择其他模型。</string>
+    <string name="ime_ai_chat_error_generic">模型未响应。请重试。</string>
 </resources>

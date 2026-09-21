@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Оставете правописа непроменен</string>
     <string name="ime_word_spell_hint">Въведете нов правопис за \"%1$s\"</string>
     <string name="subtype_app_label">Клавиатура WM · %s</string>
+    <string name="ime_ai_chat_new">Нов чат</string>
+    <string name="ime_ai_chat_untitled">Нов чат</string>
+    <string name="ime_ai_chat_list_empty">Все още няма чатове. Започнете такъв и той ще се появи тук.</string>
+    <string name="ime_ai_chat_empty_hint">Изпратете съобщение, за да започнете чата. Разговорът остава на вашето устройство.</string>
+    <string name="ime_ai_chat_composer_hint">Съобщение</string>
+    <string name="ime_ai_chat_send">Изпращане</string>
+    <string name="ime_ai_chat_stop">Спиране</string>
+    <string name="ime_ai_chat_stopped">Спряно</string>
+    <string name="ime_ai_chat_retry">Опитайте отново</string>
+    <string name="ime_ai_chat_report_action">Докладвай</string>
+    <string name="ime_ai_chat_thinking">Разсъждавам…</string>
+    <string name="ime_ai_chat_no_backend_title">Все още няма с кого да чатите</string>
+    <string name="ime_ai_chat_no_backend_body">Изтеглете модел за използване на устройството или настройте доставчик в настройките на AI инструмента.</string>
+    <string name="ime_ai_chat_setup_button">Отваряне на настройките на AI инструмента</string>
+    <string name="ime_ai_chat_error_no_model">Избраният модел вече не е на вашето устройство. Изберете друг модел.</string>
+    <string name="ime_ai_chat_error_generic">Моделът не отговори. Опитайте отново.</string>
 </resources>

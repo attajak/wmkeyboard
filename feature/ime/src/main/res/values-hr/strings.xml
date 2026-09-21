@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">Ostavi pravopis kakav jest</string>
     <string name="ime_word_spell_hint">Upišite novi pravopis za \"%1$s\"</string>
     <string name="subtype_app_label">WM tipkovnica · %s</string>
+    <string name="ime_ai_chat_new">Novi razgovor</string>
+    <string name="ime_ai_chat_untitled">Novi razgovor</string>
+    <string name="ime_ai_chat_list_empty">Još nema razgovora. Započnite jedan i pojavit će se ovdje.</string>
+    <string name="ime_ai_chat_empty_hint">Pošaljite poruku za početak razgovora. Razgovor ostaje na vašem uređaju.</string>
+    <string name="ime_ai_chat_composer_hint">Poruka</string>
+    <string name="ime_ai_chat_send">Pošalji</string>
+    <string name="ime_ai_chat_stop">Zaustavi</string>
+    <string name="ime_ai_chat_stopped">Zaustavljeno</string>
+    <string name="ime_ai_chat_retry">Pokušaj ponovo</string>
+    <string name="ime_ai_chat_report_action">Prijavi</string>
+    <string name="ime_ai_chat_thinking">Razmišljanje...</string>
+    <string name="ime_ai_chat_no_backend_title">Još nema ničega za razgovor</string>
+    <string name="ime_ai_chat_no_backend_body">Preuzmite model na uređaju ili postavite pružatelja usluga u postavkama AI alata.</string>
+    <string name="ime_ai_chat_setup_button">Otvori postavke AI alata</string>
+    <string name="ime_ai_chat_error_no_model">Odabrani model više nije na vašem uređaju. Odaberite drugi model.</string>
+    <string name="ime_ai_chat_error_generic">Model nije odgovorio. Pokušajte ponovno.</string>
 </resources>

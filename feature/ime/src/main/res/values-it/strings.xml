@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">Lascia invariata l\'ortografia</string>
     <string name="ime_word_spell_hint">Digita una nuova ortografia per \"%1$s\"</string>
     <string name="subtype_app_label">Tastiera WM · %s</string>
+    <string name="ime_ai_chat_new">Nuova chat</string>
+    <string name="ime_ai_chat_untitled">Nuova chat</string>
+    <string name="ime_ai_chat_list_empty">Nessuna chat ancora. Avviane una e apparirà qui.</string>
+    <string name="ime_ai_chat_empty_hint">Invia un messaggio per iniziare la chat. La conversazione rimane sul tuo dispositivo.</string>
+    <string name="ime_ai_chat_composer_hint">Messaggio</string>
+    <string name="ime_ai_chat_send">Invia</string>
+    <string name="ime_ai_chat_stop">Interrompi</string>
+    <string name="ime_ai_chat_stopped">Interrotto</string>
+    <string name="ime_ai_chat_retry">Riprova</string>
+    <string name="ime_ai_chat_report_action">Segnala</string>
+    <string name="ime_ai_chat_thinking">Ragionamento in corso…</string>
+    <string name="ime_ai_chat_no_backend_title">Ancora nulla con cui chattare</string>
+    <string name="ime_ai_chat_no_backend_body">Scarica un modello sul dispositivo o configura un provider nelle impostazioni dello strumento AI.</string>
+    <string name="ime_ai_chat_setup_button">Apri le impostazioni dello strumento AI</string>
+    <string name="ime_ai_chat_error_no_model">Il modello selezionato non è più presente sul tuo dispositivo. Scegline un altro.</string>
+    <string name="ime_ai_chat_error_generic">Il modello non ha risposto. Riprova.</string>
 </resources>

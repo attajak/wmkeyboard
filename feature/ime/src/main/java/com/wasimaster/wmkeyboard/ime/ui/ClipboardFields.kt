@@ -758,13 +758,18 @@ internal fun ClipEditDialog(
  * The one-line [SearchQueryText] asks the layout for an x; this asks it for
  * the caret's whole rectangle, which is what finds the right line. Both only
  * ever ask a layout of *this* text, never one a frame stale (#252).
+ *
+ * Shared with the AI panel's chat composer (#280), the keyboard's other
+ * free-text field. That one passes a [modifier] that wraps its lines up to a
+ * cap, where the clip editor fills the room it is given.
  */
 @Composable
-private fun ClipEditText(
+internal fun ClipEditText(
     text: String,
     placeholder: String,
     textColor: Color,
     placeholderColor: Color,
+    modifier: Modifier = Modifier.fillMaxSize(),
 ) {
     val handle = LocalCaptureCaret.current
     val caret = handle.at.coerceIn(0, text.length)
@@ -772,7 +777,7 @@ private fun ClipEditText(
     var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
     val density = LocalDensity.current
     val fontSize = 14.sp
-    Box(modifier = Modifier.fillMaxSize().verticalScroll(scroll)) {
+    Box(modifier = modifier.verticalScroll(scroll)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()

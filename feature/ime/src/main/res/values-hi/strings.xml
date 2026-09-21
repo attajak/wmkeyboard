@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">वर्तनी को वैसे ही रहने दें</string>
     <string name="ime_word_spell_hint">\"%1$s\" के लिए एक नई वर्तनी टाइप करें</string>
     <string name="subtype_app_label">WM कीबोर्ड · %s</string>
+    <string name="ime_ai_chat_new">नई चैट</string>
+    <string name="ime_ai_chat_untitled">नई चैट</string>
+    <string name="ime_ai_chat_list_empty">अभी तक कोई चैट नहीं है। एक शुरू करें और यह यहाँ दिखाई देगा।</string>
+    <string name="ime_ai_chat_empty_hint">चैट शुरू करने के लिए एक संदेश भेजें। बातचीत आपके डिवाइस पर ही रहती है।</string>
+    <string name="ime_ai_chat_composer_hint">संदेश</string>
+    <string name="ime_ai_chat_send">भेजें</string>
+    <string name="ime_ai_chat_stop">रोकें</string>
+    <string name="ime_ai_chat_stopped">बंद कर दिया गया</string>
+    <string name="ime_ai_chat_retry">पुनः प्रयास करें</string>
+    <string name="ime_ai_chat_report_action">रिपोर्ट करें</string>
+    <string name="ime_ai_chat_thinking">तर्क कर रहा है…</string>
+    <string name="ime_ai_chat_no_backend_title">अभी तक चैट करने के लिए कुछ नहीं है</string>
+    <string name="ime_ai_chat_no_backend_body">ऑन-डिवाइस मॉडल डाउनलोड करें या AI टूल सेटिंग में कोई प्रदाता सेट करें।</string>
+    <string name="ime_ai_chat_setup_button">AI टूल सेटिंग खोलें</string>
+    <string name="ime_ai_chat_error_no_model">चुना गया मॉडल अब आपके डिवाइस पर नहीं है। दूसरा मॉडल चुनें।</string>
+    <string name="ime_ai_chat_error_generic">मॉडल ने उत्तर नहीं दिया। पुनः प्रयास करें।</string>
 </resources>

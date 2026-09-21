@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Rechtschreibung unverändert lassen</string>
     <string name="ime_word_spell_hint">Geben Sie eine neue Schreibweise für \"%1$s\" ein</string>
     <string name="subtype_app_label">WM Tastatur · %s</string>
+    <string name="ime_ai_chat_new">Neuer Chat</string>
+    <string name="ime_ai_chat_untitled">Neuer Chat</string>
+    <string name="ime_ai_chat_list_empty">Noch keine Chats. Starten Sie einen, dann erscheint er hier.</string>
+    <string name="ime_ai_chat_empty_hint">Sende eine Nachricht, um den Chat zu starten. Die Unterhaltung bleibt auf deinem Gerät.</string>
+    <string name="ime_ai_chat_composer_hint">Nachricht</string>
+    <string name="ime_ai_chat_send">Senden</string>
+    <string name="ime_ai_chat_stop">Stopp</string>
+    <string name="ime_ai_chat_stopped">Gestoppt</string>
+    <string name="ime_ai_chat_retry">Wiederholen</string>
+    <string name="ime_ai_chat_report_action">Melden</string>
+    <string name="ime_ai_chat_thinking">Denke nach…</string>
+    <string name="ime_ai_chat_no_backend_title">Noch nichts zum Chatten vorhanden</string>
+    <string name="ime_ai_chat_no_backend_body">Lade ein lokales Modell herunter oder richte einen Anbieter in den KI-Tool-Einstellungen ein.</string>
+    <string name="ime_ai_chat_setup_button">KI-Werkzeugeinstellungen öffnen</string>
+    <string name="ime_ai_chat_error_no_model">Das ausgewählte Modell befindet sich nicht mehr auf Ihrem Gerät. Wählen Sie ein anderes Modell.</string>
+    <string name="ime_ai_chat_error_generic">Das Modell hat nicht geantwortet. Versuche es erneut.</string>
 </resources>

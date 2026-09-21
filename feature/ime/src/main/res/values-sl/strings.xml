@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Pusti črkovanje pri miru</string>
     <string name="ime_word_spell_hint">Vnesite novo črkovanje za \"%1$s\"</string>
     <string name="subtype_app_label">Tipkovnica WM · %s</string>
+    <string name="ime_ai_chat_new">Nov klepet</string>
+    <string name="ime_ai_chat_untitled">Nov klepet</string>
+    <string name="ime_ai_chat_list_empty">Še ni klepetov. Začnite enega in pojavil se bo tukaj.</string>
+    <string name="ime_ai_chat_empty_hint">Pošljite sporočilo za začetek klepeta. Pogovor ostane v vaši napravi.</string>
+    <string name="ime_ai_chat_composer_hint">Sporočilo</string>
+    <string name="ime_ai_chat_send">Pošlji</string>
+    <string name="ime_ai_chat_stop">Ustavi</string>
+    <string name="ime_ai_chat_stopped">Ustavljeno</string>
+    <string name="ime_ai_chat_retry">Poskusi znova</string>
+    <string name="ime_ai_chat_report_action">Prijavi</string>
+    <string name="ime_ai_chat_thinking">Razmišljanje…</string>
+    <string name="ime_ai_chat_no_backend_title">Še ni ničesar za klepet</string>
+    <string name="ime_ai_chat_no_backend_body">Prenesite model za uporabo v napravi ali nastavite ponudnika v nastavitvah orodja AI.</string>
+    <string name="ime_ai_chat_setup_button">Odpri nastavitve orodja AI</string>
+    <string name="ime_ai_chat_error_no_model">Izbrani model ni več na vaši napravi. Izberite drug model.</string>
+    <string name="ime_ai_chat_error_generic">Model ni odgovoril. Poskusite znova.</string>
 </resources>

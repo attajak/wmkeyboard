@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Ponechať pravopis tak, ako je</string>
     <string name="ime_word_spell_hint">Napíšte nový pravopis pre \"%1$s\"</string>
     <string name="subtype_app_label">Klávesnica WM · %s</string>
+    <string name="ime_ai_chat_new">Nový chat</string>
+    <string name="ime_ai_chat_untitled">Nový chat</string>
+    <string name="ime_ai_chat_list_empty">Zatiaľ žiadne čety. Začnite jeden a zobrazí sa tu.</string>
+    <string name="ime_ai_chat_empty_hint">Pošlite správu a začnite chat. Konverzácia zostáva vo vašom zariadení.</string>
+    <string name="ime_ai_chat_composer_hint">Správa</string>
+    <string name="ime_ai_chat_send">Odoslať</string>
+    <string name="ime_ai_chat_stop">Zastaviť</string>
+    <string name="ime_ai_chat_stopped">Zastavené</string>
+    <string name="ime_ai_chat_retry">Skúsiť znova</string>
+    <string name="ime_ai_chat_report_action">Nahlásiť</string>
+    <string name="ime_ai_chat_thinking">Uvažujem…</string>
+    <string name="ime_ai_chat_no_backend_title">Zatiaľ nie je s kým chatovať</string>
+    <string name="ime_ai_chat_no_backend_body">Stiahnite si model pre zariadenie alebo nastavte poskytovateľa v nastaveniach nástroja AI.</string>
+    <string name="ime_ai_chat_setup_button">Otvoriť nastavenia nástroja AI</string>
+    <string name="ime_ai_chat_error_no_model">Vybraný model už nie je vo vašom zariadení. Vyberte iný model.</string>
+    <string name="ime_ai_chat_error_generic">Model neodpovedal. Skúste to znova.</string>
 </resources>

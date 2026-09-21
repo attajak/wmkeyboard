@@ -979,4 +979,20 @@
     <string name="ime_word_spell_cancel_desc">Jätä oikeinkirjoitus ennalleen</string>
     <string name="ime_word_spell_hint">Kirjoita uusi oikeinkirjoitus sanalle \"%1$s\"</string>
     <string name="subtype_app_label">WM-näppäimistö · %s</string>
+    <string name="ime_ai_chat_new">Uusi keskustelu</string>
+    <string name="ime_ai_chat_untitled">Uusi keskustelu</string>
+    <string name="ime_ai_chat_list_empty">Ei vielä keskusteluja. Aloita yksi, niin se näkyy tässä.</string>
+    <string name="ime_ai_chat_empty_hint">Aloita keskustelu lähettämällä viesti. Keskustelu pysyy laitteellasi.</string>
+    <string name="ime_ai_chat_composer_hint">Viesti</string>
+    <string name="ime_ai_chat_send">Lähetä</string>
+    <string name="ime_ai_chat_stop">Pysäytä</string>
+    <string name="ime_ai_chat_stopped">Pysäytetty</string>
+    <string name="ime_ai_chat_retry">Yritä uudelleen</string>
+    <string name="ime_ai_chat_report_action">Ilmoita</string>
+    <string name="ime_ai_chat_thinking">Päättelyä…</string>
+    <string name="ime_ai_chat_no_backend_title">Ei vielä mitään, minkä kanssa keskustella</string>
+    <string name="ime_ai_chat_no_backend_body">Lataa laitteessa toimiva malli tai määritä palveluntarjoaja tekoälytyökalun asetuksista.</string>
+    <string name="ime_ai_chat_setup_button">Avaa tekoälytyökalun asetukset</string>
+    <string name="ime_ai_chat_error_no_model">Valittua mallia ei enää löydy laitteeltasi. Valitse toinen malli.</string>
+    <string name="ime_ai_chat_error_generic">Malli ei vastannut. Yritä uudelleen.</string>
 </resources>

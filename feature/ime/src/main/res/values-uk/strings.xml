@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">Залишити правопис без змін</string>
     <string name="ime_word_spell_hint">Введіть новий варіант написання для \"%1$s\"</string>
     <string name="subtype_app_label">Клавіатура WM · %s</string>
+    <string name="ime_ai_chat_new">Новий чат</string>
+    <string name="ime_ai_chat_untitled">Новий чат</string>
+    <string name="ime_ai_chat_list_empty">Поки що немає чатів. Почніть один, і він з\'явиться тут.</string>
+    <string name="ime_ai_chat_empty_hint">Надішліть повідомлення, щоб почати чат. Розмова залишається на вашому пристрої.</string>
+    <string name="ime_ai_chat_composer_hint">Повідомлення</string>
+    <string name="ime_ai_chat_send">Надіслати</string>
+    <string name="ime_ai_chat_stop">Зупинити</string>
+    <string name="ime_ai_chat_stopped">Зупинено</string>
+    <string name="ime_ai_chat_retry">Повторити</string>
+    <string name="ime_ai_chat_report_action">Поскаржитися</string>
+    <string name="ime_ai_chat_thinking">Міркую...</string>
+    <string name="ime_ai_chat_no_backend_title">Ще немає з ким спілкуватися</string>
+    <string name="ime_ai_chat_no_backend_body">Завантажте локальну модель або налаштуйте провайдера в налаштуваннях інструментів ШІ.</string>
+    <string name="ime_ai_chat_setup_button">Відкрити налаштування інструмента ШІ</string>
+    <string name="ime_ai_chat_error_no_model">Вибрана модель більше не знаходиться на вашому пристрої. Виберіть іншу модель.</string>
+    <string name="ime_ai_chat_error_generic">Модель не відповіла. Спробуйте ще раз.</string>
 </resources>

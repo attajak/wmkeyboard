@@ -1119,6 +1119,7 @@ internal object SettingsRowIcons {
         put(R.string.toolai_ai_history_max_title) { Icons.Outlined.Numbers }
         put(R.string.toolai_continue_context_title) { Icons.AutoMirrored.Outlined.TextSnippet }
         put(R.string.toolai_keep_chats_title) { Icons.AutoMirrored.Outlined.Chat }
+        put(R.string.toolai_chat_enter_sends_title) { Icons.AutoMirrored.Outlined.KeyboardReturn }
         put(R.string.toolai_delete_chats_title) { Icons.Outlined.DeleteSweep }
         put(R.string.toolai_ai_action_raw_title) { Icons.Outlined.Code }
         put(R.string.toolai_ai_action_ask_title) { Icons.Outlined.QuestionAnswer }

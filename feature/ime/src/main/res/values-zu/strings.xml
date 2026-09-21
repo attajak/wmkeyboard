@@ -979,4 +979,20 @@
     <string name="ime_word_spell_cancel_desc">Shiya isipelingi njengoba sinjalo</string>
     <string name="ime_word_spell_hint">Thayipha isipelingi esisha se-\"%1$s\"</string>
     <string name="subtype_app_label">Ikhibhodi ye-WM · %s</string>
+    <string name="ime_ai_chat_new">Ingxoxo entsha</string>
+    <string name="ime_ai_chat_untitled">Ingxoxo entsha</string>
+    <string name="ime_ai_chat_list_empty">Azikho izingxoxo okwamanje. Qala eyodwa futhi izovela lapha.</string>
+    <string name="ime_ai_chat_empty_hint">Thumela umlayezo ukuze uqale ingxoxo. Ingxoxo ihlala kudivayisi yakho.</string>
+    <string name="ime_ai_chat_composer_hint">Umlayezo</string>
+    <string name="ime_ai_chat_send">Thumela</string>
+    <string name="ime_ai_chat_stop">Misa</string>
+    <string name="ime_ai_chat_stopped">Kumisiwe</string>
+    <string name="ime_ai_chat_retry">Zama futhi</string>
+    <string name="ime_ai_chat_report_action">Bika</string>
+    <string name="ime_ai_chat_thinking">Iyacabanga…</string>
+    <string name="ime_ai_chat_no_backend_title">Akukho okungaxoxwa nakho okwamanje</string>
+    <string name="ime_ai_chat_no_backend_body">Landa imodeli esedivayisini noma usethe umhlinzeki kuzilungiselelo zethuluzi le-AI.</string>
+    <string name="ime_ai_chat_setup_button">Vula izilungiselelo zethuluzi le-AI</string>
+    <string name="ime_ai_chat_error_no_model">Imodeli ekhethiwe ayisekho kudivayisi yakho. Khetha enye imodeli.</string>
+    <string name="ime_ai_chat_error_generic">Imodeli ayiphendulanga. Zama futhi.</string>
 </resources>

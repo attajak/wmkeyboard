@@ -979,4 +979,20 @@
     <string name="ime_word_spell_cancel_desc">املا را تغییر نده</string>
     <string name="ime_word_spell_hint">املای جدیدی برای \"%1$s\" تایپ کنید</string>
     <string name="subtype_app_label">صفحه‌کلید WM · %s</string>
+    <string name="ime_ai_chat_new">چت جدید</string>
+    <string name="ime_ai_chat_untitled">چت جدید</string>
+    <string name="ime_ai_chat_list_empty">هنوز چتی وجود ندارد. یکی را شروع کنید تا اینجا ظاهر شود.</string>
+    <string name="ime_ai_chat_empty_hint">برای شروع چت پیامی ارسال کنید. مکالمه در دستگاه شما باقی می‌ماند.</string>
+    <string name="ime_ai_chat_composer_hint">پیام</string>
+    <string name="ime_ai_chat_send">ارسال</string>
+    <string name="ime_ai_chat_stop">توقف</string>
+    <string name="ime_ai_chat_stopped">متوقف شد</string>
+    <string name="ime_ai_chat_retry">تلاش مجدد</string>
+    <string name="ime_ai_chat_report_action">گزارش</string>
+    <string name="ime_ai_chat_thinking">در حال استدلال...</string>
+    <string name="ime_ai_chat_no_backend_title">هنوز چیزی برای چت وجود ندارد</string>
+    <string name="ime_ai_chat_no_backend_body">یک مدل روی دستگاه دانلود کنید یا یک ارائه‌دهنده در تنظیمات ابزار هوش مصنوعی تنظیم کنید.</string>
+    <string name="ime_ai_chat_setup_button">باز کردن تنظیمات ابزار هوش مصنوعی</string>
+    <string name="ime_ai_chat_error_no_model">مدل انتخاب‌شده دیگر روی دستگاه شما نیست. مدل دیگری را انتخاب کنید.</string>
+    <string name="ime_ai_chat_error_generic">مدل پاسخ نداد. دوباره تلاش کنید.</string>
 </resources>

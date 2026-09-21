@@ -977,4 +977,20 @@
     <string name="ime_word_spell_cancel_desc">スペルをそのままにする</string>
     <string name="ime_word_spell_hint">\"%1$s\" の新しいスペルを入力してください</string>
     <string name="subtype_app_label">WM Keyboard · %s</string>
+    <string name="ime_ai_chat_new">新しいチャット</string>
+    <string name="ime_ai_chat_untitled">新しいチャット</string>
+    <string name="ime_ai_chat_list_empty">チャットはまだありません。開始するとここに表示されます。</string>
+    <string name="ime_ai_chat_empty_hint">メッセージを送信してチャットを開始します。会話はデバイス上にのみ保存されます。</string>
+    <string name="ime_ai_chat_composer_hint">メッセージ</string>
+    <string name="ime_ai_chat_send">送信</string>
+    <string name="ime_ai_chat_stop">停止</string>
+    <string name="ime_ai_chat_stopped">停止中</string>
+    <string name="ime_ai_chat_retry">再試行</string>
+    <string name="ime_ai_chat_report_action">報告</string>
+    <string name="ime_ai_chat_thinking">推論中…</string>
+    <string name="ime_ai_chat_no_backend_title">まだチャットする相手がいません</string>
+    <string name="ime_ai_chat_no_backend_body">デバイス上のモデルをダウンロードするか、AIツール設定でプロバイダーを設定してください。</string>
+    <string name="ime_ai_chat_setup_button">AIツール設定を開く</string>
+    <string name="ime_ai_chat_error_no_model">選択したモデルはデバイス上に存在しません。別のモデルを選択してください。</string>
+    <string name="ime_ai_chat_error_generic">モデルが回答しませんでした。もう一度試してください。</string>
 </resources>

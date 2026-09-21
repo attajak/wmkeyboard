@@ -26,8 +26,22 @@ data class AiChatMessage(
     val error: String = "",
     /** The user pressed Stop, so [content] is the partial answer. */
     val stopped: Boolean = false,
+    /**
+     * Text the user attached to this message: the selection, or the text of the
+     * field they were writing in. Kept apart from [content] so the screen can
+     * draw a short chip and not the whole text. Defaulted, so a file written
+     * before attachments existed still decodes.
+     */
+    val attachment: String = "",
 ) {
     val failed: Boolean get() = error.isNotEmpty()
+
+    /**
+     * What the model reads for this message: [content], then the attachment
+     * inside tags so the model can tell the question from the quoted text.
+     */
+    fun promptText(): String =
+        if (attachment.isBlank()) content else "$content\n\n<text>\n$attachment\n</text>"
 
     companion object {
         const val ROLE_USER = "USER"
@@ -52,9 +66,11 @@ data class AiChatConversation(
 /**
  * The chat screen's conversations, kept on the device only. Same
  * offline-first shape as AiHistoryStore: a JSON file in app-private storage.
- * Only the settings app opens this one — the keyboard never chats — so there
- * is no cross-process reload dance and no direct-boot special case; the file
- * lives in normal credential-encrypted storage.
+ * The settings app and the keyboard's AI panel both chat (#280), but they run
+ * in one process and share one instance through the chat controller, so there
+ * is no cross-process reload dance. The file lives in normal
+ * credential-encrypted storage, which is why the keyboard hides its chat mode
+ * until the user has unlocked the device.
  *
  * A null [storageFile] holds everything in memory, which is what tests pass.
  *
@@ -71,6 +87,9 @@ class AiChatStore(private val storageFile: File?) {
     )
 
     private val conversations = ArrayList<AiChatConversation>()
+
+    /** Conversations [save] leaves out; see [newConversation]. */
+    private val ephemeralIds = HashSet<Long>()
     private val json = Json { ignoreUnknownKeys = true }
     private var nextId = 1L
     private var lastModelKeyValue = ""
@@ -99,10 +118,18 @@ class AiChatStore(private val storageFile: File?) {
         lastModelKeyValue = key
     }
 
-    /** Creates an empty conversation, assigning its id. */
+    /**
+     * Creates an empty conversation, assigning its id.
+     *
+     * An [ephemeral] one is never written to the file: it is there to read and
+     * carry on for as long as the process lives, and then it is gone. What a
+     * chat started in incognito is, since incognito promises that nothing of
+     * the session is kept.
+     */
     @Synchronized
-    fun newConversation(now: Long): AiChatConversation {
+    fun newConversation(now: Long, ephemeral: Boolean = false): AiChatConversation {
         val conversation = AiChatConversation(id = nextId++, createdAt = now, updatedAt = now)
+        if (ephemeral) ephemeralIds += conversation.id
         conversations.add(conversation)
         trim()
         return conversation
@@ -120,7 +147,10 @@ class AiChatStore(private val storageFile: File?) {
         val index = conversations.indexOfFirst { it.id == conversationId }
         if (index < 0) return null
         val old = conversations[index]
-        val stored = message.copy(content = message.content.cut())
+        val stored = message.copy(
+            content = message.content.cut(),
+            attachment = message.attachment.cut(),
+        )
         val title = old.title.ifEmpty {
             if (stored.role == AiChatMessage.ROLE_USER) titleFrom(stored.content) else ""
         }
@@ -158,6 +188,22 @@ class AiChatStore(private val storageFile: File?) {
         )
         conversations[index] = updated
         return updated
+    }
+
+    /**
+     * Cuts the conversation back to before the message at [index], returning
+     * the messages that went. How "edit and send again" and "write this answer
+     * again" make room: the message and everything after it leave together, so
+     * the transcript never holds an answer to a question that is gone.
+     */
+    @Synchronized
+    fun dropFrom(conversationId: Long, index: Int): List<AiChatMessage> {
+        val at = conversations.indexOfFirst { it.id == conversationId }
+        if (at < 0) return emptyList()
+        val old = conversations[at]
+        if (index !in old.messages.indices) return emptyList()
+        conversations[at] = old.copy(messages = old.messages.take(index))
+        return old.messages.drop(index)
     }
 
     /** Removes a trailing failed answer, making room for its retry. */
@@ -203,7 +249,9 @@ class AiChatStore(private val storageFile: File?) {
         runCatching {
             file.parentFile?.mkdirs()
             file.writeText(
-                json.encodeToString(Snapshot(conversations.toList(), lastModelKeyValue)),
+                json.encodeToString(
+                    Snapshot(conversations.filter { it.id !in ephemeralIds }, lastModelKeyValue),
+                ),
             )
         }
     }
@@ -211,6 +259,7 @@ class AiChatStore(private val storageFile: File?) {
     @Synchronized
     fun reload() {
         conversations.clear()
+        ephemeralIds.clear()
         lastModelKeyValue = ""
         val file = storageFile ?: return
         if (file.exists()) {

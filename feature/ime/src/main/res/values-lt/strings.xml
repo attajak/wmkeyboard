@@ -978,4 +978,20 @@
     <string name="ime_word_spell_cancel_desc">Palikti rašybą ramybėje</string>
     <string name="ime_word_spell_hint">Įveskite naują „%1$s“ rašybą</string>
     <string name="subtype_app_label">WM klaviatūra · %s</string>
+    <string name="ime_ai_chat_new">Naujas pokalbis</string>
+    <string name="ime_ai_chat_untitled">Naujas pokalbis</string>
+    <string name="ime_ai_chat_list_empty">Kol kas nėra pokalbių. Pradėkite vieną ir jis pasirodys čia.</string>
+    <string name="ime_ai_chat_empty_hint">Norėdami pradėti pokalbį, išsiųskite žinutę. Pokalbis lieka jūsų įrenginyje.</string>
+    <string name="ime_ai_chat_composer_hint">Žinutė</string>
+    <string name="ime_ai_chat_send">Siųsti</string>
+    <string name="ime_ai_chat_stop">Stabdyti</string>
+    <string name="ime_ai_chat_stopped">Sustabdyta</string>
+    <string name="ime_ai_chat_retry">Bandyti dar kartą</string>
+    <string name="ime_ai_chat_report_action">Pranešti</string>
+    <string name="ime_ai_chat_thinking">Mąstoma…</string>
+    <string name="ime_ai_chat_no_backend_title">Dar nėra su kuo kalbėtis</string>
+    <string name="ime_ai_chat_no_backend_body">Atsisiųskite įrenginyje veikiantį modelį arba nustatykite teikėją DI įrankių nustatymuose.</string>
+    <string name="ime_ai_chat_setup_button">Atidaryti DI įrankių nustatymus</string>
+    <string name="ime_ai_chat_error_no_model">Pasirinkto modelio jūsų įrenginyje nebėra. Pasirinkite kitą modelį.</string>
+    <string name="ime_ai_chat_error_generic">Modelis neatsakė. Bandykite dar kartą.</string>
 </resources>
