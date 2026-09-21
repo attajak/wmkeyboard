@@ -63,18 +63,61 @@ class DictionaryCatalogTest {
             )
             assertTrue("${entry.id} gz size", entry.approxGzBytes > 0)
         }
-        // The pt special case: two entries, one language, distinct variants.
-        // The variant label is a string resource now, so the two are told apart
-        // by which resource each names — the point being that they name two
-        // different ones, whatever those two happen to say.
-        val pt = DictionaryCatalog.forLanguage("pt")
-        assertEquals(2, pt.size)
+        // The pt special case: two entries per source, one language, distinct
+        // variants. The variant label is a string resource now, so the two are
+        // told apart by which resource each names — the point being that they
+        // name two different ones, whatever those two happen to say.
+        for (source in WordlistSource.entries) {
+            val pt = DictionaryCatalog.forLanguage("pt").filter { it.source == source }
+            assertEquals(2, pt.size)
+            assertEquals(
+                setOf(
+                    R.string.core_pred_wordlist_variant_europe_label,
+                    R.string.core_pred_wordlist_variant_brazil_label,
+                ),
+                pt.mapNotNull { it.variantRes }.toSet(),
+            )
+        }
+    }
+
+    @Test
+    fun everyAospListHasACountedListBesideIt() {
+        // "Use ours instead" has to be possible wherever AOSP is the default.
+        val aosp = DictionaryCatalog.entries.filter { it.source == WordlistSource.AOSP }
+        assertEquals(25, aosp.size)
+        for (entry in aosp) {
+            assertTrue(
+                "${entry.id} has no counted list to switch to",
+                DictionaryCatalog.forLanguage(entry.languageId).any { it.source == WordlistSource.FREQUENCY },
+            )
+            // A list downloaded before AOSP lists existed carries no source
+            // marker and is taken for the entry whose id is the language's.
+            // That has to stay the counted one it really is.
+            assertTrue(entry.id != entry.languageId)
+            assertTrue(entry.url.endsWith("_aosp.txt.gz"))
+        }
+    }
+
+    @Test
+    fun aospIsPreferredWhereItExists() {
+        assertEquals("en_aosp", DictionaryCatalog.preferred("en")?.id)
+        assertEquals("de_aosp", DictionaryCatalog.preferred("de")?.id)
+        assertEquals("he_aosp", DictionaryCatalog.preferred("he")?.id)
+        // Europe first, as it was before there were two sources.
+        assertEquals("pt_aosp", DictionaryCatalog.preferred("pt")?.id)
+        assertEquals("th", DictionaryCatalog.preferred("th")?.id)
+        assertEquals(null, DictionaryCatalog.preferred("zzz"))
+    }
+
+    @Test
+    fun englishAospListsAreTheTwoSpellings() {
+        val en = DictionaryCatalog.forLanguage("en").filter { it.source == WordlistSource.AOSP }
         assertEquals(
-            setOf(
-                R.string.core_pred_wordlist_variant_europe_label,
-                R.string.core_pred_wordlist_variant_brazil_label,
+            listOf(
+                "https://raw.githubusercontent.com/wasi-master/wmkeyboard-data/HEAD/data/en/en_aosp.txt.gz",
+                "https://raw.githubusercontent.com/wasi-master/wmkeyboard-data/HEAD/data/en/en_gb_aosp.txt.gz",
             ),
-            pt.mapNotNull { it.variantRes }.toSet(),
+            en.map { it.url },
         )
     }
 }

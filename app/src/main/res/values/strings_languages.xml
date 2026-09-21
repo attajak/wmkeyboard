@@ -165,6 +165,11 @@
     <!-- Dialog that opens from Download on the word list. -->
     <string name="languages_words_download_title">Download a word list</string>
     <string name="languages_words_download_variant_label">Variant</string>
+    <!-- Heading over the choice between the AOSP list and the counted list. -->
+    <string name="languages_words_download_source_label">Source</string>
+    <!-- Tells one of a language's lists from its others, inside the row title.
+         %1$s is the source ("AOSP"), %2$s the region ("Brazil"). -->
+    <string name="languages_words_label_source_variant"><xliff:g id="source" example="AOSP">%1$s</xliff:g>, <xliff:g id="variant" example="Brazil">%2$s</xliff:g></string>
     <string name="languages_words_download_size_label">Size</string>
     <!-- Detail under one size in the dialog. %1$d is the most words the size
          keeps, %2$s about how much it downloads, like "1.4 MB". -->
@@ -177,6 +182,8 @@
     <!-- The same dialog, opened from the arrows on a word list that is already
          on the device, to swap it for a bigger or a smaller one. -->
     <string name="languages_words_resize_title">Change the size</string>
+    <!-- The same, for a language with more than one list to pick from. -->
+    <string name="languages_words_change_title">Change the word list</string>
     <string name="languages_words_resize_note">The list on your device stays in place until the new one has finished downloading, and is then replaced by it.</string>
 
     <!-- Emoji keywords row when the only keywords are ones the user imported. -->
@@ -217,6 +224,7 @@
          arrow when only bigger sizes are left, a down arrow when only smaller
          ones are, and both arrows in between. -->
     <string name="languages_wordlist_resize_desc">Change the word list size</string>
+    <string name="languages_wordlist_change_desc">Change the word list</string>
     <string name="languages_wordlist_resize_bigger_desc">Download a bigger word list</string>
     <string name="languages_wordlist_resize_smaller_desc">Download a smaller word list</string>
 

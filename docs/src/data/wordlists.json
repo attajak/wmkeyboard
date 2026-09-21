@@ -5,7 +5,8 @@
   "name": "Аҧсуа · Abkhaz",
   "english": "Abkhaz",
   "words": 81433,
-  "gzBytes": 380406
+  "gzBytes": 380406,
+  "source": "Frequency"
  },
  {
   "id": "ady",
@@ -13,7 +14,8 @@
   "name": "Адыгабзэ · Adyghe",
   "english": "Adyghe",
   "words": 20195,
-  "gzBytes": 94516
+  "gzBytes": 94516,
+  "source": "Frequency"
  },
  {
   "id": "af",
@@ -21,7 +23,8 @@
   "name": "Afrikaans · Afrikaans",
   "english": "Afrikaans",
   "words": 288488,
-  "gzBytes": 1390628
+  "gzBytes": 1390628,
+  "source": "Frequency"
  },
  {
   "id": "ak",
@@ -29,7 +32,8 @@
   "name": "Akan · Akan",
   "english": "Akan",
   "words": 3893,
-  "gzBytes": 15910
+  "gzBytes": 15910,
+  "source": "Frequency"
  },
  {
   "id": "am",
@@ -37,7 +41,8 @@
   "name": "አማርኛ · Amharic",
   "english": "Amharic",
   "words": 91579,
-  "gzBytes": 412108
+  "gzBytes": 412108,
+  "source": "Frequency"
  },
  {
   "id": "ar",
@@ -45,7 +50,8 @@
   "name": "العربية · Arabic",
   "english": "Arabic",
   "words": 2487447,
-  "gzBytes": 9706359
+  "gzBytes": 9706359,
+  "source": "Frequency"
  },
  {
   "id": "av",
@@ -53,7 +59,8 @@
   "name": "МагӀарул мацӀ · Avar",
   "english": "Avar",
   "words": 53036,
-  "gzBytes": 241190
+  "gzBytes": 241190,
+  "source": "Frequency"
  },
  {
   "id": "ay",
@@ -61,7 +68,8 @@
   "name": "Aymar aru · Aymara",
   "english": "Aymara",
   "words": 34729,
-  "gzBytes": 132886
+  "gzBytes": 132886,
+  "source": "Frequency"
  },
  {
   "id": "az",
@@ -69,7 +77,8 @@
   "name": "Azərbaycan · Azerbaijani",
   "english": "Azerbaijani",
   "words": 814123,
-  "gzBytes": 3616285
+  "gzBytes": 3616285,
+  "source": "Frequency"
  },
  {
   "id": "ba",
@@ -77,7 +86,8 @@
   "name": "Башҡортса · Bashkir",
   "english": "Bashkir",
   "words": 159186,
-  "gzBytes": 790316
+  "gzBytes": 790316,
+  "source": "Frequency"
  },
  {
   "id": "be",
@@ -85,7 +95,8 @@
   "name": "Беларуская · Belarusian",
   "english": "Belarusian",
   "words": 349962,
-  "gzBytes": 1737920
+  "gzBytes": 1737920,
+  "source": "Frequency"
  },
  {
   "id": "bg",
@@ -93,7 +104,8 @@
   "name": "Български · Bulgarian",
   "english": "Bulgarian",
   "words": 1055844,
-  "gzBytes": 4924294
+  "gzBytes": 4924294,
+  "source": "Frequency"
  },
  {
   "id": "bho",
@@ -101,7 +113,8 @@
   "name": "भोजपुरी · Bhojpuri",
   "english": "Bhojpuri",
   "words": 7304,
-  "gzBytes": 49129
+  "gzBytes": 49129,
+  "source": "Frequency"
  },
  {
   "id": "bi",
@@ -109,7 +122,8 @@
   "name": "Bislama · Bislama",
   "english": "Bislama",
   "words": 6558,
-  "gzBytes": 25592
+  "gzBytes": 25592,
+  "source": "Frequency"
  },
  {
   "id": "bm",
@@ -117,7 +131,8 @@
   "name": "Bamanankan · Bambara",
   "english": "Bambara",
   "words": 13745,
-  "gzBytes": 56151
+  "gzBytes": 56151,
+  "source": "Frequency"
  },
  {
   "id": "bn",
@@ -125,7 +140,8 @@
   "name": "বাংলা · Bangla",
   "english": "Bangla",
   "words": 451348,
-  "gzBytes": 1675761
+  "gzBytes": 1675761,
+  "source": "Frequency"
  },
  {
   "id": "bo",
@@ -133,7 +149,8 @@
   "name": "བོད་སྐད་ · Tibetan",
   "english": "Tibetan",
   "words": 19157,
-  "gzBytes": 309528
+  "gzBytes": 309528,
+  "source": "Frequency"
  },
  {
   "id": "br",
@@ -141,7 +158,8 @@
   "name": "Brezhoneg · Breton",
   "english": "Breton",
   "words": 128028,
-  "gzBytes": 558000
+  "gzBytes": 558000,
+  "source": "Frequency"
  },
  {
   "id": "brx",
@@ -149,7 +167,8 @@
   "name": "बड़ो · Bodo",
   "english": "Bodo",
   "words": 10900,
-  "gzBytes": 74842
+  "gzBytes": 74842,
+  "source": "Frequency"
  },
  {
   "id": "bua",
@@ -157,7 +176,8 @@
   "name": "Буряад · Buryat",
   "english": "Buryat",
   "words": 60442,
-  "gzBytes": 263262
+  "gzBytes": 263262,
+  "source": "Frequency"
  },
  {
   "id": "ca",
@@ -165,7 +185,8 @@
   "name": "Català · Catalan",
   "english": "Catalan",
   "words": 184216,
-  "gzBytes": 669028
+  "gzBytes": 669028,
+  "source": "Frequency"
  },
  {
   "id": "ce",
@@ -173,7 +194,8 @@
   "name": "Нохчийн · Chechen",
   "english": "Chechen",
   "words": 73434,
-  "gzBytes": 332281
+  "gzBytes": 332281,
+  "source": "Frequency"
  },
  {
   "id": "ceb",
@@ -181,7 +203,8 @@
   "name": "Cebuano · Cebuano",
   "english": "Cebuano",
   "words": 383771,
-  "gzBytes": 1344763
+  "gzBytes": 1344763,
+  "source": "Frequency"
  },
  {
   "id": "chr",
@@ -189,7 +212,8 @@
   "name": "ᏣᎳᎩ · Cherokee",
   "english": "Cherokee",
   "words": 6500,
-  "gzBytes": 28870
+  "gzBytes": 28870,
+  "source": "Frequency"
  },
  {
   "id": "ckb",
@@ -197,7 +221,8 @@
   "name": "کوردی · Kurdish (Sorani)",
   "english": "Kurdish (Sorani)",
   "words": 201528,
-  "gzBytes": 863815
+  "gzBytes": 863815,
+  "source": "Frequency"
  },
  {
   "id": "co",
@@ -205,7 +230,8 @@
   "name": "Corsu · Corsican",
   "english": "Corsican",
   "words": 30522,
-  "gzBytes": 119761
+  "gzBytes": 119761,
+  "source": "Frequency"
  },
  {
   "id": "crh",
@@ -213,7 +239,8 @@
   "name": "Qırımtatar · Crimean Tatar",
   "english": "Crimean Tatar",
   "words": 1486,
-  "gzBytes": 7819
+  "gzBytes": 7819,
+  "source": "Frequency"
  },
  {
   "id": "cs",
@@ -221,7 +248,8 @@
   "name": "Čeština · Czech",
   "english": "Czech",
   "words": 1719446,
-  "gzBytes": 6998615
+  "gzBytes": 6998615,
+  "source": "Frequency"
  },
  {
   "id": "csb",
@@ -229,7 +257,8 @@
   "name": "Kaszëbsczi · Kashubian",
   "english": "Kashubian",
   "words": 63525,
-  "gzBytes": 255227
+  "gzBytes": 255227,
+  "source": "Frequency"
  },
  {
   "id": "cv",
@@ -237,7 +266,8 @@
   "name": "Чӑвашла · Chuvash",
   "english": "Chuvash",
   "words": 35945,
-  "gzBytes": 172438
+  "gzBytes": 172438,
+  "source": "Frequency"
  },
  {
   "id": "cy",
@@ -245,7 +275,8 @@
   "name": "Cymraeg · Welsh",
   "english": "Welsh",
   "words": 123099,
-  "gzBytes": 545010
+  "gzBytes": 545010,
+  "source": "Frequency"
  },
  {
   "id": "da",
@@ -253,7 +284,8 @@
   "name": "Dansk · Danish",
   "english": "Danish",
   "words": 685713,
-  "gzBytes": 3082306
+  "gzBytes": 3082306,
+  "source": "Frequency"
  },
  {
   "id": "de",
@@ -261,7 +293,8 @@
   "name": "Deutsch · German",
   "english": "German",
   "words": 1153001,
-  "gzBytes": 5474930
+  "gzBytes": 5474930,
+  "source": "Frequency"
  },
  {
   "id": "doi",
@@ -269,7 +302,8 @@
   "name": "डोगरी · Dogri",
   "english": "Dogri",
   "words": 2539,
-  "gzBytes": 17410
+  "gzBytes": 17410,
+  "source": "Frequency"
  },
  {
   "id": "dsb",
@@ -277,7 +311,8 @@
   "name": "Dolnoserbski · Lower Sorbian",
   "english": "Lower Sorbian",
   "words": 46802,
-  "gzBytes": 187995
+  "gzBytes": 187995,
+  "source": "Frequency"
  },
  {
   "id": "dv",
@@ -285,7 +320,8 @@
   "name": "ދިވެހި · Dhivehi",
   "english": "Dhivehi",
   "words": 100368,
-  "gzBytes": 493127
+  "gzBytes": 493127,
+  "source": "Frequency"
  },
  {
   "id": "ee",
@@ -293,7 +329,8 @@
   "name": "Eʋegbe · Ewe",
   "english": "Ewe",
   "words": 14882,
-  "gzBytes": 48645
+  "gzBytes": 48645,
+  "source": "Frequency"
  },
  {
   "id": "el",
@@ -301,7 +338,8 @@
   "name": "Ελληνικά · Greek",
   "english": "Greek",
   "words": 1168400,
-  "gzBytes": 5726781
+  "gzBytes": 5726781,
+  "source": "Frequency"
  },
  {
   "id": "en",
@@ -309,7 +347,8 @@
   "name": "English",
   "english": "English",
   "words": 1636178,
-  "gzBytes": 6753423
+  "gzBytes": 6753423,
+  "source": "Frequency"
  },
  {
   "id": "eo",
@@ -317,7 +356,8 @@
   "name": "Esperanto · Esperanto",
   "english": "Esperanto",
   "words": 386958,
-  "gzBytes": 1630975
+  "gzBytes": 1630975,
+  "source": "Frequency"
  },
  {
   "id": "es",
@@ -325,7 +365,8 @@
   "name": "Español · Spanish",
   "english": "Spanish",
   "words": 1190537,
-  "gzBytes": 4833505
+  "gzBytes": 4833505,
+  "source": "Frequency"
  },
  {
   "id": "et",
@@ -333,7 +374,8 @@
   "name": "Eesti · Estonian",
   "english": "Estonian",
   "words": 1000180,
-  "gzBytes": 4084505
+  "gzBytes": 4084505,
+  "source": "Frequency"
  },
  {
   "id": "eu",
@@ -341,7 +383,8 @@
   "name": "Euskara · Basque",
   "english": "Basque",
   "words": 389587,
-  "gzBytes": 1584930
+  "gzBytes": 1584930,
+  "source": "Frequency"
  },
  {
   "id": "fa",
@@ -349,7 +392,8 @@
   "name": "فارسی · Persian",
   "english": "Persian",
   "words": 442333,
-  "gzBytes": 1756622
+  "gzBytes": 1756622,
+  "source": "Frequency"
  },
  {
   "id": "fi",
@@ -357,7 +401,8 @@
   "name": "Suomi · Finnish",
   "english": "Finnish",
   "words": 2488573,
-  "gzBytes": 10584625
+  "gzBytes": 10584625,
+  "source": "Frequency"
  },
  {
   "id": "fj",
@@ -365,7 +410,8 @@
   "name": "Vosa Vakaviti · Fijian",
   "english": "Fijian",
   "words": 10583,
-  "gzBytes": 44024
+  "gzBytes": 44024,
+  "source": "Frequency"
  },
  {
   "id": "fo",
@@ -373,7 +419,8 @@
   "name": "Føroyskt · Faroese",
   "english": "Faroese",
   "words": 231427,
-  "gzBytes": 1049407
+  "gzBytes": 1049407,
+  "source": "Frequency"
  },
  {
   "id": "fr",
@@ -381,7 +428,8 @@
   "name": "Français · French",
   "english": "French",
   "words": 825643,
-  "gzBytes": 3464732
+  "gzBytes": 3464732,
+  "source": "Frequency"
  },
  {
   "id": "fur",
@@ -389,7 +437,8 @@
   "name": "Furlan · Friulian",
   "english": "Friulian",
   "words": 53308,
-  "gzBytes": 200165
+  "gzBytes": 200165,
+  "source": "Frequency"
  },
  {
   "id": "fy",
@@ -397,7 +446,8 @@
   "name": "Frysk · Frisian",
   "english": "Western Frisian",
   "words": 138753,
-  "gzBytes": 633511
+  "gzBytes": 633511,
+  "source": "Frequency"
  },
  {
   "id": "ga",
@@ -405,7 +455,8 @@
   "name": "Gaeilge · Irish",
   "english": "Irish",
   "words": 188674,
-  "gzBytes": 810882
+  "gzBytes": 810882,
+  "source": "Frequency"
  },
  {
   "id": "gd",
@@ -413,7 +464,8 @@
   "name": "Gàidhlig · Scottish Gaelic",
   "english": "Scottish Gaelic",
   "words": 71344,
-  "gzBytes": 291138
+  "gzBytes": 291138,
+  "source": "Frequency"
  },
  {
   "id": "gl",
@@ -421,7 +473,8 @@
   "name": "Galego · Galician",
   "english": "Galician",
   "words": 268205,
-  "gzBytes": 1164344
+  "gzBytes": 1164344,
+  "source": "Frequency"
  },
  {
   "id": "gn",
@@ -429,7 +482,8 @@
   "name": "Avañeʼẽ · Guarani",
   "english": "Guarani",
   "words": 30178,
-  "gzBytes": 127355
+  "gzBytes": 127355,
+  "source": "Frequency"
  },
  {
   "id": "gu",
@@ -437,7 +491,8 @@
   "name": "ગુજરાતી · Gujarati",
   "english": "Gujarati",
   "words": 172335,
-  "gzBytes": 834724
+  "gzBytes": 834724,
+  "source": "Frequency"
  },
  {
   "id": "gv",
@@ -445,7 +500,8 @@
   "name": "Gaelg · Manx",
   "english": "Manx",
   "words": 20491,
-  "gzBytes": 87175
+  "gzBytes": 87175,
+  "source": "Frequency"
  },
  {
   "id": "ha",
@@ -453,7 +509,8 @@
   "name": "Hausa · Hausa",
   "english": "Hausa",
   "words": 38571,
-  "gzBytes": 200967
+  "gzBytes": 200967,
+  "source": "Frequency"
  },
  {
   "id": "haw",
@@ -461,7 +518,8 @@
   "name": "ʻŌlelo Hawaiʻi · Hawaiian",
   "english": "Hawaiian",
   "words": 19109,
-  "gzBytes": 79128
+  "gzBytes": 79128,
+  "source": "Frequency"
  },
  {
   "id": "he",
@@ -469,7 +527,8 @@
   "name": "עברית · Hebrew",
   "english": "Hebrew",
   "words": 1053149,
-  "gzBytes": 4291295
+  "gzBytes": 4291295,
+  "source": "Frequency"
  },
  {
   "id": "hi",
@@ -477,7 +536,8 @@
   "name": "हिन्दी · Hindi",
   "english": "Hindi",
   "words": 242911,
-  "gzBytes": 1313058
+  "gzBytes": 1313058,
+  "source": "Frequency"
  },
  {
   "id": "hr",
@@ -485,7 +545,8 @@
   "name": "Hrvatski · Croatian",
   "english": "Croatian",
   "words": 1497358,
-  "gzBytes": 5787914
+  "gzBytes": 5787914,
+  "source": "Frequency"
  },
  {
   "id": "hsb",
@@ -493,7 +554,8 @@
   "name": "Hornjoserbsce · Upper Sorbian",
   "english": "Upper Sorbian",
   "words": 110141,
-  "gzBytes": 451823
+  "gzBytes": 451823,
+  "source": "Frequency"
  },
  {
   "id": "ht",
@@ -501,7 +563,8 @@
   "name": "Kreyòl · Haitian Creole",
   "english": "Haitian Creole",
   "words": 36690,
-  "gzBytes": 159068
+  "gzBytes": 159068,
+  "source": "Frequency"
  },
  {
   "id": "hu",
@@ -509,7 +572,8 @@
   "name": "Magyar · Hungarian",
   "english": "Hungarian",
   "words": 3138382,
-  "gzBytes": 13176302
+  "gzBytes": 13176302,
+  "source": "Frequency"
  },
  {
   "id": "hy",
@@ -517,7 +581,8 @@
   "name": "Հայերեն · Armenian",
   "english": "Armenian",
   "words": 394817,
-  "gzBytes": 1782177
+  "gzBytes": 1782177,
+  "source": "Frequency"
  },
  {
   "id": "ia",
@@ -525,7 +590,8 @@
   "name": "Interlingua · Interlingua",
   "english": "Interlingua",
   "words": 50502,
-  "gzBytes": 208771
+  "gzBytes": 208771,
+  "source": "Frequency"
  },
  {
   "id": "id",
@@ -533,7 +599,8 @@
   "name": "Indonesia · Indonesian",
   "english": "Indonesian",
   "words": 354661,
-  "gzBytes": 1444041
+  "gzBytes": 1444041,
+  "source": "Frequency"
  },
  {
   "id": "ig",
@@ -541,7 +608,8 @@
   "name": "Igbo · Igbo",
   "english": "Igbo",
   "words": 13929,
-  "gzBytes": 78042
+  "gzBytes": 78042,
+  "source": "Frequency"
  },
  {
   "id": "is",
@@ -549,7 +617,8 @@
   "name": "Íslenska · Icelandic",
   "english": "Icelandic",
   "words": 256264,
-  "gzBytes": 1094639
+  "gzBytes": 1094639,
+  "source": "Frequency"
  },
  {
   "id": "it",
@@ -557,7 +626,8 @@
   "name": "Italiano · Italian",
   "english": "Italian",
   "words": 791470,
-  "gzBytes": 3240903
+  "gzBytes": 3240903,
+  "source": "Frequency"
  },
  {
   "id": "iu",
@@ -565,7 +635,8 @@
   "name": "ᐃᓄᒃᑎᑐᑦ · Inuktitut",
   "english": "Inuktitut",
   "words": 9978,
-  "gzBytes": 53532
+  "gzBytes": 53532,
+  "source": "Frequency"
  },
  {
   "id": "ja",
@@ -573,7 +644,8 @@
   "name": "日本語 · Japanese",
   "english": "Japanese",
   "words": 213393,
-  "gzBytes": 922434
+  "gzBytes": 922434,
+  "source": "Frequency"
  },
  {
   "id": "jbo",
@@ -581,7 +653,8 @@
   "name": "la .lojban. · Lojban",
   "english": "Lojban",
   "words": 2412,
-  "gzBytes": 6319
+  "gzBytes": 6319,
+  "source": "Frequency"
  },
  {
   "id": "jv",
@@ -589,7 +662,8 @@
   "name": "Basa Jawa · Javanese",
   "english": "Javanese",
   "words": 144058,
-  "gzBytes": 591696
+  "gzBytes": 591696,
+  "source": "Frequency"
  },
  {
   "id": "ka",
@@ -597,7 +671,8 @@
   "name": "ქართული · Georgian",
   "english": "Georgian",
   "words": 335324,
-  "gzBytes": 1639061
+  "gzBytes": 1639061,
+  "source": "Frequency"
  },
  {
   "id": "kbd",
@@ -605,7 +680,8 @@
   "name": "Адыгэбзэ · Kabardian",
   "english": "Kabardian",
   "words": 43188,
-  "gzBytes": 193415
+  "gzBytes": 193415,
+  "source": "Frequency"
  },
  {
   "id": "ki",
@@ -613,7 +689,8 @@
   "name": "Gĩkũyũ · Kikuyu",
   "english": "Kikuyu",
   "words": 86175,
-  "gzBytes": 329664
+  "gzBytes": 329664,
+  "source": "Frequency"
  },
  {
   "id": "kk",
@@ -621,7 +698,8 @@
   "name": "Қазақша · Kazakh",
   "english": "Kazakh",
   "words": 361083,
-  "gzBytes": 1788094
+  "gzBytes": 1788094,
+  "source": "Frequency"
  },
  {
   "id": "km",
@@ -629,7 +707,8 @@
   "name": "ខ្មែរ · Khmer",
   "english": "Khmer",
   "words": 9427,
-  "gzBytes": 155670
+  "gzBytes": 155670,
+  "source": "Frequency"
  },
  {
   "id": "kn",
@@ -637,7 +716,8 @@
   "name": "ಕನ್ನಡ · Kannada",
   "english": "Kannada",
   "words": 549589,
-  "gzBytes": 2884310
+  "gzBytes": 2884310,
+  "source": "Frequency"
  },
  {
   "id": "ko",
@@ -645,7 +725,8 @@
   "name": "한국어 · Korean",
   "english": "Korean",
   "words": 675331,
-  "gzBytes": 2838560
+  "gzBytes": 2838560,
+  "source": "Frequency"
  },
  {
   "id": "kok",
@@ -653,7 +734,8 @@
   "name": "कोंकणी · Konkani",
   "english": "Konkani",
   "words": 58449,
-  "gzBytes": 220459
+  "gzBytes": 220459,
+  "source": "Frequency"
  },
  {
   "id": "ku",
@@ -661,7 +743,8 @@
   "name": "Kurdî · Kurdish",
   "english": "Kurdish",
   "words": 75880,
-  "gzBytes": 340422
+  "gzBytes": 340422,
+  "source": "Frequency"
  },
  {
   "id": "kv",
@@ -669,7 +752,8 @@
   "name": "Коми · Komi",
   "english": "Komi",
   "words": 49462,
-  "gzBytes": 228954
+  "gzBytes": 228954,
+  "source": "Frequency"
  },
  {
   "id": "kw",
@@ -677,7 +761,8 @@
   "name": "Kernewek · Cornish",
   "english": "Cornish",
   "words": 49355,
-  "gzBytes": 194052
+  "gzBytes": 194052,
+  "source": "Frequency"
  },
  {
   "id": "ky",
@@ -685,7 +770,8 @@
   "name": "Кыргызча · Kyrgyz",
   "english": "Kyrgyz",
   "words": 336397,
-  "gzBytes": 1691959
+  "gzBytes": 1691959,
+  "source": "Frequency"
  },
  {
   "id": "la",
@@ -693,7 +779,8 @@
   "name": "Latina · Latin",
   "english": "Latin",
   "words": 184648,
-  "gzBytes": 716296
+  "gzBytes": 716296,
+  "source": "Frequency"
  },
  {
   "id": "lb",
@@ -701,7 +788,8 @@
   "name": "Lëtzebuergesch · Luxembourgish",
   "english": "Luxembourgish",
   "words": 152991,
-  "gzBytes": 734198
+  "gzBytes": 734198,
+  "source": "Frequency"
  },
  {
   "id": "lez",
@@ -709,7 +797,8 @@
   "name": "Лезги · Lezgian",
   "english": "Lezgian",
   "words": 59601,
-  "gzBytes": 267993
+  "gzBytes": 267993,
+  "source": "Frequency"
  },
  {
   "id": "lg",
@@ -717,7 +806,8 @@
   "name": "Luganda · Ganda",
   "english": "Ganda",
   "words": 187969,
-  "gzBytes": 735891
+  "gzBytes": 735891,
+  "source": "Frequency"
  },
  {
   "id": "lij",
@@ -725,7 +815,8 @@
   "name": "Ligure · Ligurian",
   "english": "Ligurian",
   "words": 147785,
-  "gzBytes": 567240
+  "gzBytes": 567240,
+  "source": "Frequency"
  },
  {
   "id": "lld",
@@ -733,7 +824,8 @@
   "name": "Ladin · Ladin",
   "english": "Ladin",
   "words": 163062,
-  "gzBytes": 632585
+  "gzBytes": 632585,
+  "source": "Frequency"
  },
  {
   "id": "ln",
@@ -741,7 +833,8 @@
   "name": "Lingála · Lingala",
   "english": "Lingala",
   "words": 4865,
-  "gzBytes": 17803
+  "gzBytes": 17803,
+  "source": "Frequency"
  },
  {
   "id": "lo",
@@ -749,7 +842,8 @@
   "name": "ລາວ · Lao",
   "english": "Lao",
   "words": 33334,
-  "gzBytes": 333101
+  "gzBytes": 333101,
+  "source": "Frequency"
  },
  {
   "id": "lt",
@@ -757,7 +851,8 @@
   "name": "Lietuvių · Lithuanian",
   "english": "Lithuanian",
   "words": 321660,
-  "gzBytes": 1204167
+  "gzBytes": 1204167,
+  "source": "Frequency"
  },
  {
   "id": "lv",
@@ -765,7 +860,8 @@
   "name": "Latviešu · Latvian",
   "english": "Latvian",
   "words": 330323,
-  "gzBytes": 1403969
+  "gzBytes": 1403969,
+  "source": "Frequency"
  },
  {
   "id": "mai",
@@ -773,7 +869,8 @@
   "name": "मैथिली · Maithili",
   "english": "Maithili",
   "words": 49795,
-  "gzBytes": 354711
+  "gzBytes": 354711,
+  "source": "Frequency"
  },
  {
   "id": "mg",
@@ -781,7 +878,8 @@
   "name": "Malagasy · Malagasy",
   "english": "Malagasy",
   "words": 184155,
-  "gzBytes": 728748
+  "gzBytes": 728748,
+  "source": "Frequency"
  },
  {
   "id": "chm",
@@ -789,7 +887,8 @@
   "name": "Марий · Mari",
   "english": "Mari",
   "words": 62439,
-  "gzBytes": 285836
+  "gzBytes": 285836,
+  "source": "Frequency"
  },
  {
   "id": "mi",
@@ -797,7 +896,8 @@
   "name": "Māori · Maori",
   "english": "Maori",
   "words": 16654,
-  "gzBytes": 67366
+  "gzBytes": 67366,
+  "source": "Frequency"
  },
  {
   "id": "mk",
@@ -805,7 +905,8 @@
   "name": "Македонски · Macedonian",
   "english": "Macedonian",
   "words": 293121,
-  "gzBytes": 1298185
+  "gzBytes": 1298185,
+  "source": "Frequency"
  },
  {
   "id": "ml",
@@ -813,7 +914,8 @@
   "name": "മലയാളം · Malayalam",
   "english": "Malayalam",
   "words": 250542,
-  "gzBytes": 1275671
+  "gzBytes": 1275671,
+  "source": "Frequency"
  },
  {
   "id": "mn",
@@ -821,7 +923,8 @@
   "name": "Монгол · Mongolian",
   "english": "Mongolian",
   "words": 137799,
-  "gzBytes": 641531
+  "gzBytes": 641531,
+  "source": "Frequency"
  },
  {
   "id": "mr",
@@ -829,7 +932,8 @@
   "name": "मराठी · Marathi",
   "english": "Marathi",
   "words": 331817,
-  "gzBytes": 1721372
+  "gzBytes": 1721372,
+  "source": "Frequency"
  },
  {
   "id": "ms",
@@ -837,7 +941,8 @@
   "name": "Melayu · Malay",
   "english": "Malay",
   "words": 242279,
-  "gzBytes": 1118799
+  "gzBytes": 1118799,
+  "source": "Frequency"
  },
  {
   "id": "mt",
@@ -845,7 +950,8 @@
   "name": "Malti · Maltese",
   "english": "Maltese",
   "words": 79257,
-  "gzBytes": 341653
+  "gzBytes": 341653,
+  "source": "Frequency"
  },
  {
   "id": "my",
@@ -853,7 +959,8 @@
   "name": "မြန်မာ · Burmese",
   "english": "Burmese",
   "words": 49585,
-  "gzBytes": 340725
+  "gzBytes": 340725,
+  "source": "Frequency"
  },
  {
   "id": "myv",
@@ -861,7 +968,8 @@
   "name": "Эрзянь · Erzya",
   "english": "Erzya",
   "words": 71985,
-  "gzBytes": 320352
+  "gzBytes": 320352,
+  "source": "Frequency"
  },
  {
   "id": "nb",
@@ -869,7 +977,8 @@
   "name": "Norsk · Norwegian",
   "english": "Norwegian",
   "words": 387768,
-  "gzBytes": 1734759
+  "gzBytes": 1734759,
+  "source": "Frequency"
  },
  {
   "id": "nd",
@@ -877,7 +986,8 @@
   "name": "isiNdebele · Ndebele",
   "english": "Ndebele",
   "words": 36656,
-  "gzBytes": 126306
+  "gzBytes": 126306,
+  "source": "Frequency"
  },
  {
   "id": "ne",
@@ -885,7 +995,8 @@
   "name": "नेपाली · Nepali",
   "english": "Nepali",
   "words": 163948,
-  "gzBytes": 818119
+  "gzBytes": 818119,
+  "source": "Frequency"
  },
  {
   "id": "nl",
@@ -893,7 +1004,8 @@
   "name": "Nederlands · Dutch",
   "english": "Dutch",
   "words": 1099506,
-  "gzBytes": 5009575
+  "gzBytes": 5009575,
+  "source": "Frequency"
  },
  {
   "id": "nqo",
@@ -901,7 +1013,8 @@
   "name": "ߒߞߏ · N’Ko",
   "english": "N’Ko",
   "words": 51467,
-  "gzBytes": 230261
+  "gzBytes": 230261,
+  "source": "Frequency"
  },
  {
   "id": "nrf",
@@ -909,7 +1022,8 @@
   "name": "Nourmand · Norman",
   "english": "Norman",
   "words": 33765,
-  "gzBytes": 128026
+  "gzBytes": 128026,
+  "source": "Frequency"
  },
  {
   "id": "nso",
@@ -917,7 +1031,8 @@
   "name": "Sesotho sa Leboa · Northern Sotho",
   "english": "Northern Sotho",
   "words": 26865,
-  "gzBytes": 103682
+  "gzBytes": 103682,
+  "source": "Frequency"
  },
  {
   "id": "ny",
@@ -925,7 +1040,8 @@
   "name": "Chichewa · Chichewa",
   "english": "Chichewa",
   "words": 4020,
-  "gzBytes": 16541
+  "gzBytes": 16541,
+  "source": "Frequency"
  },
  {
   "id": "oc",
@@ -933,7 +1049,8 @@
   "name": "Occitan · Occitan",
   "english": "Occitan",
   "words": 154753,
-  "gzBytes": 623673
+  "gzBytes": 623673,
+  "source": "Frequency"
  },
  {
   "id": "om",
@@ -941,7 +1058,8 @@
   "name": "Afaan Oromoo · Oromo",
   "english": "Oromo",
   "words": 11941,
-  "gzBytes": 46241
+  "gzBytes": 46241,
+  "source": "Frequency"
  },
  {
   "id": "or",
@@ -949,7 +1067,8 @@
   "name": "ଓଡ଼ିଆ · Odia",
   "english": "Odia",
   "words": 72978,
-  "gzBytes": 401802
+  "gzBytes": 401802,
+  "source": "Frequency"
  },
  {
   "id": "os",
@@ -957,7 +1076,8 @@
   "name": "Ирон · Ossetian",
   "english": "Ossetian",
   "words": 12863,
-  "gzBytes": 62079
+  "gzBytes": 62079,
+  "source": "Frequency"
  },
  {
   "id": "pa",
@@ -965,7 +1085,8 @@
   "name": "ਪੰਜਾਬੀ · Punjabi",
   "english": "Punjabi",
   "words": 226706,
-  "gzBytes": 1148074
+  "gzBytes": 1148074,
+  "source": "Frequency"
  },
  {
   "id": "pl",
@@ -973,7 +1094,8 @@
   "name": "Polski · Polish",
   "english": "Polish",
   "words": 1481466,
-  "gzBytes": 6171710
+  "gzBytes": 6171710,
+  "source": "Frequency"
  },
  {
   "id": "pms",
@@ -981,7 +1103,8 @@
   "name": "Piemontèis · Piedmontese",
   "english": "Piedmontese",
   "words": 47916,
-  "gzBytes": 200183
+  "gzBytes": 200183,
+  "source": "Frequency"
  },
  {
   "id": "ps",
@@ -989,7 +1112,8 @@
   "name": "پښتو · Pashto",
   "english": "Pashto",
   "words": 146694,
-  "gzBytes": 626376
+  "gzBytes": 626376,
+  "source": "Frequency"
  },
  {
   "id": "pt",
@@ -997,7 +1121,8 @@
   "name": "Português · Portuguese",
   "english": "Portuguese",
   "words": 763183,
-  "gzBytes": 3138081
+  "gzBytes": 3138081,
+  "source": "Frequency"
  },
  {
   "id": "pt_br",
@@ -1005,7 +1130,8 @@
   "name": "Português · Portuguese",
   "english": "Portuguese",
   "words": 847162,
-  "gzBytes": 3384245
+  "gzBytes": 3384245,
+  "source": "Frequency"
  },
  {
   "id": "qu",
@@ -1013,7 +1139,8 @@
   "name": "Runa Simi · Quechua",
   "english": "Quechua",
   "words": 20435,
-  "gzBytes": 83225
+  "gzBytes": 83225,
+  "source": "Frequency"
  },
  {
   "id": "rm",
@@ -1021,7 +1148,8 @@
   "name": "Rumantsch · Romansh",
   "english": "Romansh",
   "words": 49238,
-  "gzBytes": 204904
+  "gzBytes": 204904,
+  "source": "Frequency"
  },
  {
   "id": "ro",
@@ -1029,7 +1157,8 @@
   "name": "Română · Romanian",
   "english": "Romanian",
   "words": 1218883,
-  "gzBytes": 5040931
+  "gzBytes": 5040931,
+  "source": "Frequency"
  },
  {
   "id": "rup",
@@ -1037,7 +1166,8 @@
   "name": "Armãneashti · Aromanian",
   "english": "Aromanian",
   "words": 25337,
-  "gzBytes": 100417
+  "gzBytes": 100417,
+  "source": "Frequency"
  },
  {
   "id": "ru",
@@ -1045,7 +1175,8 @@
   "name": "Русский · Russian",
   "english": "Russian",
   "words": 1236328,
-  "gzBytes": 5940540
+  "gzBytes": 5940540,
+  "source": "Frequency"
  },
  {
   "id": "rw",
@@ -1053,7 +1184,8 @@
   "name": "Kinyarwanda · Kinyarwanda",
   "english": "Kinyarwanda",
   "words": 143158,
-  "gzBytes": 552327
+  "gzBytes": 552327,
+  "source": "Frequency"
  },
  {
   "id": "sa",
@@ -1061,7 +1193,8 @@
   "name": "संस्कृतम् · Sanskrit",
   "english": "Sanskrit",
   "words": 219660,
-  "gzBytes": 1356999
+  "gzBytes": 1356999,
+  "source": "Frequency"
  },
  {
   "id": "sah",
@@ -1069,7 +1202,8 @@
   "name": "Саха · Yakut",
   "english": "Yakut",
   "words": 197782,
-  "gzBytes": 912422
+  "gzBytes": 912422,
+  "source": "Frequency"
  },
  {
   "id": "sc",
@@ -1077,7 +1211,8 @@
   "name": "Sardu · Sardinian",
   "english": "Sardinian",
   "words": 38576,
-  "gzBytes": 151283
+  "gzBytes": 151283,
+  "source": "Frequency"
  },
  {
   "id": "scn",
@@ -1085,7 +1220,8 @@
   "name": "Sicilianu · Sicilian",
   "english": "Sicilian",
   "words": 142482,
-  "gzBytes": 539216
+  "gzBytes": 539216,
+  "source": "Frequency"
  },
  {
   "id": "sd",
@@ -1093,7 +1229,8 @@
   "name": "سنڌي · Sindhi",
   "english": "Sindhi",
   "words": 92822,
-  "gzBytes": 369930
+  "gzBytes": 369930,
+  "source": "Frequency"
  },
  {
   "id": "se",
@@ -1101,7 +1238,8 @@
   "name": "Sámegiella · Northern Sami",
   "english": "Northern Sami",
   "words": 27671,
-  "gzBytes": 126224
+  "gzBytes": 126224,
+  "source": "Frequency"
  },
  {
   "id": "si",
@@ -1109,7 +1247,8 @@
   "name": "සිංහල · Sinhala",
   "english": "Sinhala",
   "words": 163154,
-  "gzBytes": 811027
+  "gzBytes": 811027,
+  "source": "Frequency"
  },
  {
   "id": "sk",
@@ -1117,7 +1256,8 @@
   "name": "Slovenčina · Slovak",
   "english": "Slovak",
   "words": 746834,
-  "gzBytes": 2988084
+  "gzBytes": 2988084,
+  "source": "Frequency"
  },
  {
   "id": "sl",
@@ -1125,7 +1265,8 @@
   "name": "Slovenščina · Slovenian",
   "english": "Slovenian",
   "words": 842678,
-  "gzBytes": 3236603
+  "gzBytes": 3236603,
+  "source": "Frequency"
  },
  {
   "id": "sm",
@@ -1133,7 +1274,8 @@
   "name": "Gagana Sāmoa · Samoan",
   "english": "Samoan",
   "words": 12149,
-  "gzBytes": 48536
+  "gzBytes": 48536,
+  "source": "Frequency"
  },
  {
   "id": "sn",
@@ -1141,7 +1283,8 @@
   "name": "chiShona · Shona",
   "english": "Shona",
   "words": 81621,
-  "gzBytes": 318116
+  "gzBytes": 318116,
+  "source": "Frequency"
  },
  {
   "id": "so",
@@ -1149,7 +1292,8 @@
   "name": "Soomaali · Somali",
   "english": "Somali",
   "words": 34258,
-  "gzBytes": 133508
+  "gzBytes": 133508,
+  "source": "Frequency"
  },
  {
   "id": "sq",
@@ -1157,7 +1301,8 @@
   "name": "Shqip · Albanian",
   "english": "Albanian",
   "words": 240759,
-  "gzBytes": 901232
+  "gzBytes": 901232,
+  "source": "Frequency"
  },
  {
   "id": "sr",
@@ -1165,7 +1310,8 @@
   "name": "Српски · Serbian",
   "english": "Serbian",
   "words": 225229,
-  "gzBytes": 950408
+  "gzBytes": 950408,
+  "source": "Frequency"
  },
  {
   "id": "ss",
@@ -1173,7 +1319,8 @@
   "name": "siSwati · Swati",
   "english": "Swati",
   "words": 43023,
-  "gzBytes": 172299
+  "gzBytes": 172299,
+  "source": "Frequency"
  },
  {
   "id": "st",
@@ -1181,7 +1328,8 @@
   "name": "Sesotho · Sesotho",
   "english": "Sesotho",
   "words": 16704,
-  "gzBytes": 53082
+  "gzBytes": 53082,
+  "source": "Frequency"
  },
  {
   "id": "su",
@@ -1189,7 +1337,8 @@
   "name": "Basa Sunda · Sundanese",
   "english": "Sundanese",
   "words": 173735,
-  "gzBytes": 689687
+  "gzBytes": 689687,
+  "source": "Frequency"
  },
  {
   "id": "sv",
@@ -1197,7 +1346,8 @@
   "name": "Svenska · Swedish",
   "english": "Swedish",
   "words": 900975,
-  "gzBytes": 4079684
+  "gzBytes": 4079684,
+  "source": "Frequency"
  },
  {
   "id": "sw",
@@ -1205,7 +1355,8 @@
   "name": "Kiswahili · Swahili",
   "english": "Swahili",
   "words": 128718,
-  "gzBytes": 527814
+  "gzBytes": 527814,
+  "source": "Frequency"
  },
  {
   "id": "ta",
@@ -1213,7 +1364,8 @@
   "name": "தமிழ் · Tamil",
   "english": "Tamil",
   "words": 1874722,
-  "gzBytes": 7756983
+  "gzBytes": 7756983,
+  "source": "Frequency"
  },
  {
   "id": "te",
@@ -1221,7 +1373,8 @@
   "name": "తెలుగు · Telugu",
   "english": "Telugu",
   "words": 393342,
-  "gzBytes": 2061715
+  "gzBytes": 2061715,
+  "source": "Frequency"
  },
  {
   "id": "tet",
@@ -1229,7 +1382,8 @@
   "name": "Tetun · Tetum",
   "english": "Tetum",
   "words": 22227,
-  "gzBytes": 87799
+  "gzBytes": 87799,
+  "source": "Frequency"
  },
  {
   "id": "tg",
@@ -1237,7 +1391,8 @@
   "name": "Тоҷикӣ · Tajik",
   "english": "Tajik",
   "words": 144177,
-  "gzBytes": 692345
+  "gzBytes": 692345,
+  "source": "Frequency"
  },
  {
   "id": "th",
@@ -1245,7 +1400,8 @@
   "name": "ไทย · Thai",
   "english": "Thai",
   "words": 4024497,
-  "gzBytes": 41176795
+  "gzBytes": 41176795,
+  "source": "Frequency"
  },
  {
   "id": "ti",
@@ -1253,7 +1409,8 @@
   "name": "ትግርኛ · Tigrinya",
   "english": "Tigrinya",
   "words": 5411,
-  "gzBytes": 23047
+  "gzBytes": 23047,
+  "source": "Frequency"
  },
  {
   "id": "tk",
@@ -1261,7 +1418,8 @@
   "name": "Türkmen · Turkmen",
   "english": "Turkmen",
   "words": 79436,
-  "gzBytes": 320667
+  "gzBytes": 320667,
+  "source": "Frequency"
  },
  {
   "id": "tl",
@@ -1269,7 +1427,8 @@
   "name": "Filipino · Filipino",
   "english": "Filipino",
   "words": 144149,
-  "gzBytes": 631911
+  "gzBytes": 631911,
+  "source": "Frequency"
  },
  {
   "id": "tlh",
@@ -1277,7 +1436,8 @@
   "name": "tlhIngan Hol · Klingon",
   "english": "Klingon",
   "words": 2428,
-  "gzBytes": 6843
+  "gzBytes": 6843,
+  "source": "Frequency"
  },
  {
   "id": "tok",
@@ -1285,7 +1445,8 @@
   "name": "toki pona · Toki Pona",
   "english": "Toki Pona",
   "words": 178,
-  "gzBytes": 695
+  "gzBytes": 695,
+  "source": "Frequency"
  },
  {
   "id": "tn",
@@ -1293,7 +1454,8 @@
   "name": "Setswana · Tswana",
   "english": "Tswana",
   "words": 33977,
-  "gzBytes": 108600
+  "gzBytes": 108600,
+  "source": "Frequency"
  },
  {
   "id": "to",
@@ -1301,7 +1463,8 @@
   "name": "lea faka-Tonga · Tongan",
   "english": "Tongan",
   "words": 10181,
-  "gzBytes": 41437
+  "gzBytes": 41437,
+  "source": "Frequency"
  },
  {
   "id": "tr",
@@ -1309,7 +1472,8 @@
   "name": "Türkçe · Turkish",
   "english": "Turkish",
   "words": 2027282,
-  "gzBytes": 8051955
+  "gzBytes": 8051955,
+  "source": "Frequency"
  },
  {
   "id": "ts",
@@ -1317,7 +1481,8 @@
   "name": "Xitsonga · Tsonga",
   "english": "Tsonga",
   "words": 16508,
-  "gzBytes": 54430
+  "gzBytes": 54430,
+  "source": "Frequency"
  },
  {
   "id": "tt",
@@ -1325,7 +1490,8 @@
   "name": "Татарча · Tatar",
   "english": "Tatar",
   "words": 142022,
-  "gzBytes": 702178
+  "gzBytes": 702178,
+  "source": "Frequency"
  },
  {
   "id": "ty",
@@ -1333,7 +1499,8 @@
   "name": "Reo Tahiti · Tahitian",
   "english": "Tahitian",
   "words": 5164,
-  "gzBytes": 21116
+  "gzBytes": 21116,
+  "source": "Frequency"
  },
  {
   "id": "tyv",
@@ -1341,7 +1508,8 @@
   "name": "Тыва · Tuvan",
   "english": "Tuvan",
   "words": 98879,
-  "gzBytes": 451744
+  "gzBytes": 451744,
+  "source": "Frequency"
  },
  {
   "id": "udm",
@@ -1349,7 +1517,8 @@
   "name": "Удмурт · Udmurt",
   "english": "Udmurt",
   "words": 43500,
-  "gzBytes": 202058
+  "gzBytes": 202058,
+  "source": "Frequency"
  },
  {
   "id": "ug",
@@ -1357,7 +1526,8 @@
   "name": "ئۇيغۇرچە · Uyghur",
   "english": "Uyghur",
   "words": 83651,
-  "gzBytes": 374285
+  "gzBytes": 374285,
+  "source": "Frequency"
  },
  {
   "id": "uk",
@@ -1365,7 +1535,8 @@
   "name": "Українська · Ukrainian",
   "english": "Ukrainian",
   "words": 409369,
-  "gzBytes": 1835322
+  "gzBytes": 1835322,
+  "source": "Frequency"
  },
  {
   "id": "ur",
@@ -1373,7 +1544,8 @@
   "name": "اردو · Urdu",
   "english": "Urdu",
   "words": 154781,
-  "gzBytes": 541600
+  "gzBytes": 541600,
+  "source": "Frequency"
  },
  {
   "id": "uz",
@@ -1381,7 +1553,8 @@
   "name": "Oʻzbek · Uzbek",
   "english": "Uzbek",
   "words": 176272,
-  "gzBytes": 741660
+  "gzBytes": 741660,
+  "source": "Frequency"
  },
  {
   "id": "ve",
@@ -1389,7 +1562,8 @@
   "name": "Tshivenḓa · Venda",
   "english": "Venda",
   "words": 13743,
-  "gzBytes": 45724
+  "gzBytes": 45724,
+  "source": "Frequency"
  },
  {
   "id": "vec",
@@ -1397,7 +1571,8 @@
   "name": "Vèneto · Venetian",
   "english": "Venetian",
   "words": 205090,
-  "gzBytes": 766850
+  "gzBytes": 766850,
+  "source": "Frequency"
  },
  {
   "id": "vi",
@@ -1405,7 +1580,8 @@
   "name": "Tiếng Việt · Vietnamese",
   "english": "Vietnamese",
   "words": 605499,
-  "gzBytes": 3056250
+  "gzBytes": 3056250,
+  "source": "Frequency"
  },
  {
   "id": "wa",
@@ -1413,7 +1589,8 @@
   "name": "Walon · Walloon",
   "english": "Walloon",
   "words": 43783,
-  "gzBytes": 178143
+  "gzBytes": 178143,
+  "source": "Frequency"
  },
  {
   "id": "wo",
@@ -1421,7 +1598,8 @@
   "name": "Wolof · Wolof",
   "english": "Wolof",
   "words": 20916,
-  "gzBytes": 68267
+  "gzBytes": 68267,
+  "source": "Frequency"
  },
  {
   "id": "xal",
@@ -1429,7 +1607,8 @@
   "name": "Хальмг · Kalmyk",
   "english": "Kalmyk",
   "words": 10333,
-  "gzBytes": 46484
+  "gzBytes": 46484,
+  "source": "Frequency"
  },
  {
   "id": "xh",
@@ -1437,7 +1616,8 @@
   "name": "isiXhosa · Xhosa",
   "english": "Xhosa",
   "words": 87838,
-  "gzBytes": 325602
+  "gzBytes": 325602,
+  "source": "Frequency"
  },
  {
   "id": "yi",
@@ -1445,7 +1625,8 @@
   "name": "ייִדיש · Yiddish",
   "english": "Yiddish",
   "words": 46500,
-  "gzBytes": 212440
+  "gzBytes": 212440,
+  "source": "Frequency"
  },
  {
   "id": "yo",
@@ -1453,7 +1634,8 @@
   "name": "Yorùbá · Yoruba",
   "english": "Yoruba",
   "words": 27710,
-  "gzBytes": 124495
+  "gzBytes": 124495,
+  "source": "Frequency"
  },
  {
   "id": "zgh",
@@ -1461,7 +1643,8 @@
   "name": "ⵜⴰⵎⴰⵣⵉⵖⵜ · Tamazight",
   "english": "Tamazight (Tifinagh)",
   "words": 58474,
-  "gzBytes": 243558
+  "gzBytes": 243558,
+  "source": "Frequency"
  },
  {
   "id": "zu",
@@ -1469,7 +1652,8 @@
   "name": "isiZulu · Zulu",
   "english": "Zulu",
   "words": 367932,
-  "gzBytes": 1490853
+  "gzBytes": 1490853,
+  "source": "Frequency"
  },
  {
   "id": "as",
@@ -1477,7 +1661,8 @@
   "name": "অসমীয়া · Assamese",
   "english": "Assamese",
   "words": 142052,
-  "gzBytes": 708124
+  "gzBytes": 708124,
+  "source": "Frequency"
  },
  {
   "id": "bpy",
@@ -1485,7 +1670,8 @@
   "name": "বিষ্ণুপ্রিয়া মণিপুরী · Bishnupriya Manipuri",
   "english": "Bishnupriya Manipuri",
   "words": 36838,
-  "gzBytes": 181959
+  "gzBytes": 181959,
+  "source": "Frequency"
  },
  {
   "id": "syl",
@@ -1493,7 +1679,8 @@
   "name": "সিলেটি · Sylheti",
   "english": "Sylheti",
   "words": 17135,
-  "gzBytes": 73917
+  "gzBytes": 73917,
+  "source": "Frequency"
  },
  {
   "id": "ar_rom",
@@ -1501,7 +1688,8 @@
   "name": "Arabizi · Arabic (Romanized)",
   "english": "Arabic (Romanized)",
   "words": 211291,
-  "gzBytes": 867223
+  "gzBytes": 867223,
+  "source": "Frequency"
  },
  {
   "id": "bn_rom",
@@ -1509,7 +1697,8 @@
   "name": "Banglish · Bangla (Romanized)",
   "english": "Bangla (Romanized)",
   "words": 187030,
-  "gzBytes": 708388
+  "gzBytes": 708388,
+  "source": "Frequency"
  },
  {
   "id": "gu_rom",
@@ -1517,7 +1706,8 @@
   "name": "Roman Gujarati · Gujarati (Romanized)",
   "english": "Gujarati (Romanized)",
   "words": 994681,
-  "gzBytes": 2988542
+  "gzBytes": 2988542,
+  "source": "Frequency"
  },
  {
   "id": "hi_rom",
@@ -1525,7 +1715,8 @@
   "name": "Hinglish · Hindi (Romanized)",
   "english": "Hindi (Romanized)",
   "words": 1052827,
-  "gzBytes": 3357284
+  "gzBytes": 3357284,
+  "source": "Frequency"
  },
  {
   "id": "kn_rom",
@@ -1533,7 +1724,8 @@
   "name": "Kanglish · Kannada (Romanized)",
   "english": "Kannada (Romanized)",
   "words": 2717878,
-  "gzBytes": 8658966
+  "gzBytes": 8658966,
+  "source": "Frequency"
  },
  {
   "id": "ml_rom",
@@ -1541,7 +1733,8 @@
   "name": "Manglish · Malayalam (Romanized)",
   "english": "Malayalam (Romanized)",
   "words": 237194,
-  "gzBytes": 954305
+  "gzBytes": 954305,
+  "source": "Frequency"
  },
  {
   "id": "mr_rom",
@@ -1549,7 +1742,8 @@
   "name": "Roman Marathi · Marathi (Romanized)",
   "english": "Marathi (Romanized)",
   "words": 1317776,
-  "gzBytes": 4118825
+  "gzBytes": 4118825,
+  "source": "Frequency"
  },
  {
   "id": "ne_rom",
@@ -1557,7 +1751,8 @@
   "name": "Roman Nepali · Nepali (Romanized)",
   "english": "Nepali (Romanized)",
   "words": 170679,
-  "gzBytes": 566063
+  "gzBytes": 566063,
+  "source": "Frequency"
  },
  {
   "id": "pa_rom",
@@ -1565,7 +1760,8 @@
   "name": "Roman Punjabi · Punjabi (Romanized)",
   "english": "Punjabi (Romanized)",
   "words": 426465,
-  "gzBytes": 1293538
+  "gzBytes": 1293538,
+  "source": "Frequency"
  },
  {
   "id": "ru_rom",
@@ -1573,7 +1769,8 @@
   "name": "Translit · Russian (Romanized)",
   "english": "Russian (Romanized)",
   "words": 1313808,
-  "gzBytes": 5393212
+  "gzBytes": 5393212,
+  "source": "Frequency"
  },
  {
   "id": "si_rom",
@@ -1581,7 +1778,8 @@
   "name": "Roman Sinhala · Sinhala (Romanized)",
   "english": "Sinhala (Romanized)",
   "words": 989853,
-  "gzBytes": 5401632
+  "gzBytes": 5401632,
+  "source": "Frequency"
  },
  {
   "id": "ta_rom",
@@ -1589,7 +1787,8 @@
   "name": "Tanglish · Tamil (Romanized)",
   "english": "Tamil (Romanized)",
   "words": 3134887,
-  "gzBytes": 10185068
+  "gzBytes": 10185068,
+  "source": "Frequency"
  },
  {
   "id": "te_rom",
@@ -1597,7 +1796,8 @@
   "name": "Tenglish · Telugu (Romanized)",
   "english": "Telugu (Romanized)",
   "words": 2270502,
-  "gzBytes": 7234058
+  "gzBytes": 7234058,
+  "source": "Frequency"
  },
  {
   "id": "ur_rom",
@@ -1605,7 +1805,8 @@
   "name": "Roman Urdu · Urdu (Romanized)",
   "english": "Urdu (Romanized)",
   "words": 110489,
-  "gzBytes": 507828
+  "gzBytes": 507828,
+  "source": "Frequency"
  },
  {
   "id": "ace",
@@ -1613,7 +1814,8 @@
   "name": "Bahsa Acèh · Acehnese",
   "english": "Acehnese",
   "words": 27984,
-  "gzBytes": 109003
+  "gzBytes": 109003,
+  "source": "Frequency"
  },
  {
   "id": "ami",
@@ -1621,7 +1823,8 @@
   "name": "Pangcah · Amis",
   "english": "Amis",
   "words": 58883,
-  "gzBytes": 219840
+  "gzBytes": 219840,
+  "source": "Frequency"
  },
  {
   "id": "an",
@@ -1629,7 +1832,8 @@
   "name": "Aragonés · Aragonese",
   "english": "Aragonese",
   "words": 65018,
-  "gzBytes": 263253
+  "gzBytes": 263253,
+  "source": "Frequency"
  },
  {
   "id": "ann",
@@ -1637,7 +1841,8 @@
   "name": "Obolo · Obolo",
   "english": "Obolo",
   "words": 8692,
-  "gzBytes": 34130
+  "gzBytes": 34130,
+  "source": "Frequency"
  },
  {
   "id": "ast",
@@ -1645,7 +1850,8 @@
   "name": "Asturianu · Asturian",
   "english": "Asturian",
   "words": 292283,
-  "gzBytes": 1268893
+  "gzBytes": 1268893,
+  "source": "Frequency"
  },
  {
   "id": "atj",
@@ -1653,7 +1859,8 @@
   "name": "Nehirâmowin · Atikamekw",
   "english": "Atikamekw",
   "words": 18322,
-  "gzBytes": 72257
+  "gzBytes": 72257,
+  "source": "Frequency"
  },
  {
   "id": "ban",
@@ -1661,7 +1868,8 @@
   "name": "Basa Bali · Balinese",
   "english": "Balinese",
   "words": 2674,
-  "gzBytes": 11436
+  "gzBytes": 11436,
+  "source": "Frequency"
  },
  {
   "id": "bar",
@@ -1669,7 +1877,8 @@
   "name": "Boarisch · Bavarian",
   "english": "Bavarian",
   "words": 339781,
-  "gzBytes": 1429264
+  "gzBytes": 1429264,
+  "source": "Frequency"
  },
  {
   "id": "sgs",
@@ -1677,7 +1886,8 @@
   "name": "Žemaitėška · Samogitian",
   "english": "Samogitian",
   "words": 96808,
-  "gzBytes": 372118
+  "gzBytes": 372118,
+  "source": "Frequency"
  },
  {
   "id": "bbc",
@@ -1685,7 +1895,8 @@
   "name": "Hata Batak · Batak Toba",
   "english": "Batak Toba",
   "words": 17392,
-  "gzBytes": 67610
+  "gzBytes": 67610,
+  "source": "Frequency"
  },
  {
   "id": "bcl",
@@ -1693,7 +1904,8 @@
   "name": "Bikol Sentral · Central Bikol",
   "english": "Central Bikol",
   "words": 35209,
-  "gzBytes": 126306
+  "gzBytes": 126306,
+  "source": "Frequency"
  },
  {
   "id": "bew",
@@ -1701,7 +1913,8 @@
   "name": "Bahasa Betawi · Betawi",
   "english": "Betawi",
   "words": 31897,
-  "gzBytes": 123046
+  "gzBytes": 123046,
+  "source": "Frequency"
  },
  {
   "id": "bjn",
@@ -1709,7 +1922,8 @@
   "name": "Bahasa Banjar · Banjar",
   "english": "Banjar",
   "words": 66129,
-  "gzBytes": 252069
+  "gzBytes": 252069,
+  "source": "Frequency"
  },
  {
   "id": "btm",
@@ -1717,7 +1931,8 @@
   "name": "Hata Mandailing · Batak Mandailing",
   "english": "Batak Mandailing",
   "words": 22089,
-  "gzBytes": 84664
+  "gzBytes": 84664,
+  "source": "Frequency"
  },
  {
   "id": "bug",
@@ -1725,7 +1940,8 @@
   "name": "Basa Ugi · Buginese",
   "english": "Buginese",
   "words": 1694,
-  "gzBytes": 7487
+  "gzBytes": 7487,
+  "source": "Frequency"
  },
  {
   "id": "cbk",
@@ -1733,7 +1949,8 @@
   "name": "Chavacano · Chavacano",
   "english": "Chavacano",
   "words": 25598,
-  "gzBytes": 102880
+  "gzBytes": 102880,
+  "source": "Frequency"
  },
  {
   "id": "ch",
@@ -1741,7 +1958,8 @@
   "name": "Fino' CHamoru · Chamorro",
   "english": "Chamorro",
   "words": 4149,
-  "gzBytes": 17307
+  "gzBytes": 17307,
+  "source": "Frequency"
  },
  {
   "id": "chy",
@@ -1749,7 +1967,8 @@
   "name": "Tsėhésenėstsestȯtse · Cheyenne",
   "english": "Cheyenne",
   "words": 4519,
-  "gzBytes": 20370
+  "gzBytes": 20370,
+  "source": "Frequency"
  },
  {
   "id": "dag",
@@ -1757,7 +1976,8 @@
   "name": "Dagbanli · Dagbani",
   "english": "Dagbani",
   "words": 91863,
-  "gzBytes": 353385
+  "gzBytes": 353385,
+  "source": "Frequency"
  },
  {
   "id": "dga",
@@ -1765,7 +1985,8 @@
   "name": "Dagaare · Dagaare",
   "english": "Dagaare",
   "words": 55297,
-  "gzBytes": 212817
+  "gzBytes": 212817,
+  "source": "Frequency"
  },
  {
   "id": "diq",
@@ -1773,7 +1994,8 @@
   "name": "Zazaki · Zazaki",
   "english": "Zazaki",
   "words": 108534,
-  "gzBytes": 412484
+  "gzBytes": 412484,
+  "source": "Frequency"
  },
  {
   "id": "din",
@@ -1781,7 +2003,8 @@
   "name": "Thuɔŋjäŋ · Dinka",
   "english": "Dinka",
   "words": 15231,
-  "gzBytes": 59924
+  "gzBytes": 59924,
+  "source": "Frequency"
  },
  {
   "id": "dtp",
@@ -1789,7 +2012,8 @@
   "name": "Boros Dusun · Central Dusun",
   "english": "Central Dusun",
   "words": 52898,
-  "gzBytes": 204225
+  "gzBytes": 204225,
+  "source": "Frequency"
  },
  {
   "id": "eml",
@@ -1797,7 +2021,8 @@
   "name": "Emiliàn-Rumagnòl · Emiliano-Romagnolo",
   "english": "Emiliano-Romagnolo",
   "words": 24148,
-  "gzBytes": 93431
+  "gzBytes": 93431,
+  "source": "Frequency"
  },
  {
   "id": "ext",
@@ -1805,7 +2030,8 @@
   "name": "Estremeñu · Extremaduran",
   "english": "Extremaduran",
   "words": 110945,
-  "gzBytes": 421806
+  "gzBytes": 421806,
+  "source": "Frequency"
  },
  {
   "id": "fat",
@@ -1813,7 +2039,8 @@
   "name": "Mfantse · Fanti",
   "english": "Fanti",
   "words": 33116,
-  "gzBytes": 128544
+  "gzBytes": 128544,
+  "source": "Frequency"
  },
  {
   "id": "ff",
@@ -1821,7 +2048,8 @@
   "name": "Fulfulde · Fula",
   "english": "Fula",
   "words": 5110,
-  "gzBytes": 18023
+  "gzBytes": 18023,
+  "source": "Frequency"
  },
  {
   "id": "vro",
@@ -1829,7 +2057,8 @@
   "name": "Võro kiil · Võro",
   "english": "Võro",
   "words": 76541,
-  "gzBytes": 307812
+  "gzBytes": 307812,
+  "source": "Frequency"
  },
  {
   "id": "fon",
@@ -1837,7 +2066,8 @@
   "name": "Fɔ̀ngbè · Fon",
   "english": "Fon",
   "words": 23847,
-  "gzBytes": 99570
+  "gzBytes": 99570,
+  "source": "Frequency"
  },
  {
   "id": "frp",
@@ -1845,7 +2075,8 @@
   "name": "Arpitan · Franco-Provençal",
   "english": "Franco-Provençal",
   "words": 36673,
-  "gzBytes": 141948
+  "gzBytes": 141948,
+  "source": "Frequency"
  },
  {
   "id": "frr",
@@ -1853,7 +2084,8 @@
   "name": "Frasch · North Frisian",
   "english": "North Frisian",
   "words": 101843,
-  "gzBytes": 460004
+  "gzBytes": 460004,
+  "source": "Frequency"
  },
  {
   "id": "gag",
@@ -1861,7 +2093,8 @@
   "name": "Gagauz dili · Gagauz",
   "english": "Gagauz",
   "words": 29359,
-  "gzBytes": 114575
+  "gzBytes": 114575,
+  "source": "Frequency"
  },
  {
   "id": "gcr",
@@ -1869,7 +2102,8 @@
   "name": "Kriyòl gwiyanè · Guianese Creole",
   "english": "Guianese Creole",
   "words": 18341,
-  "gzBytes": 75496
+  "gzBytes": 75496,
+  "source": "Frequency"
  },
  {
   "id": "gor",
@@ -1877,7 +2111,8 @@
   "name": "Bahasa Hulontalo · Gorontalo",
   "english": "Gorontalo",
   "words": 39484,
-  "gzBytes": 151130
+  "gzBytes": 151130,
+  "source": "Frequency"
  },
  {
   "id": "gpe",
@@ -1885,7 +2120,8 @@
   "name": "Pidgin English · Ghanaian Pidgin English",
   "english": "Ghanaian Pidgin English",
   "words": 76922,
-  "gzBytes": 313884
+  "gzBytes": 313884,
+  "source": "Frequency"
  },
  {
   "id": "gsw",
@@ -1893,7 +2129,8 @@
   "name": "Schwiizerdütsch · Swiss German",
   "english": "Swiss German",
   "words": 229834,
-  "gzBytes": 1039744
+  "gzBytes": 1039744,
+  "source": "Frequency"
  },
  {
   "id": "guc",
@@ -1901,7 +2138,8 @@
   "name": "Wayuunaiki · Wayuu",
   "english": "Wayuu",
   "words": 33436,
-  "gzBytes": 123431
+  "gzBytes": 123431,
+  "source": "Frequency"
  },
  {
   "id": "guw",
@@ -1909,7 +2147,8 @@
   "name": "Gungbe · Gun",
   "english": "Gun",
   "words": 26981,
-  "gzBytes": 113162
+  "gzBytes": 113162,
+  "source": "Frequency"
  },
  {
   "id": "gur",
@@ -1917,7 +2156,8 @@
   "name": "Gurenɛ · Farefare",
   "english": "Farefare",
   "words": 32867,
-  "gzBytes": 127842
+  "gzBytes": 127842,
+  "source": "Frequency"
  },
  {
   "id": "hif",
@@ -1925,7 +2165,8 @@
   "name": "Fiji Baat · Fiji Hindi",
   "english": "Fiji Hindi",
   "words": 62360,
-  "gzBytes": 242071
+  "gzBytes": 242071,
+  "source": "Frequency"
  },
  {
   "id": "iba",
@@ -1933,7 +2174,8 @@
   "name": "Jaku Iban · Iban",
   "english": "Iban",
   "words": 29575,
-  "gzBytes": 115578
+  "gzBytes": 115578,
+  "source": "Frequency"
  },
  {
   "id": "ik",
@@ -1941,7 +2183,8 @@
   "name": "Iñupiaq · Inupiaq",
   "english": "Inupiaq",
   "words": 6243,
-  "gzBytes": 28270
+  "gzBytes": 28270,
+  "source": "Frequency"
  },
  {
   "id": "ilo",
@@ -1949,7 +2192,8 @@
   "name": "Ilokano · Ilocano",
   "english": "Ilocano",
   "words": 26907,
-  "gzBytes": 117561
+  "gzBytes": 117561,
+  "source": "Frequency"
  },
  {
   "id": "jam",
@@ -1957,7 +2201,8 @@
   "name": "Patwa · Jamaican Patois",
   "english": "Jamaican Patois",
   "words": 18737,
-  "gzBytes": 73165
+  "gzBytes": 73165,
+  "source": "Frequency"
  },
  {
   "id": "kab",
@@ -1965,7 +2210,8 @@
   "name": "Taqbaylit · Kabyle",
   "english": "Kabyle",
   "words": 19417,
-  "gzBytes": 70675
+  "gzBytes": 70675,
+  "source": "Frequency"
  },
  {
   "id": "kaj",
@@ -1973,7 +2219,8 @@
   "name": "Jju · Jju",
   "english": "Jju",
   "words": 16359,
-  "gzBytes": 62910
+  "gzBytes": 62910,
+  "source": "Frequency"
  },
  {
   "id": "kbp",
@@ -1981,7 +2228,8 @@
   "name": "Kabɩyɛ · Kabiye",
   "english": "Kabiye",
   "words": 40305,
-  "gzBytes": 157881
+  "gzBytes": 157881,
+  "source": "Frequency"
  },
  {
   "id": "kcg",
@@ -1989,7 +2237,8 @@
   "name": "Tyap · Tyap",
   "english": "Tyap",
   "words": 23260,
-  "gzBytes": 92008
+  "gzBytes": 92008,
+  "source": "Frequency"
  },
  {
   "id": "kg",
@@ -1997,7 +2246,8 @@
   "name": "Kikongo · Kongo",
   "english": "Kongo",
   "words": 1205,
-  "gzBytes": 4591
+  "gzBytes": 4591,
+  "source": "Frequency"
  },
  {
   "id": "kl",
@@ -2005,7 +2255,8 @@
   "name": "Kalaallisut · Greenlandic",
   "english": "Greenlandic",
   "words": 110455,
-  "gzBytes": 492788
+  "gzBytes": 492788,
+  "source": "Frequency"
  },
  {
   "id": "knc",
@@ -2013,7 +2264,8 @@
   "name": "Kanuri · Central Kanuri",
   "english": "Central Kanuri",
   "words": 59207,
-  "gzBytes": 228592
+  "gzBytes": 228592,
+  "source": "Frequency"
  },
  {
   "id": "ksh",
@@ -2021,7 +2273,8 @@
   "name": "Kölsch · Kölsch",
   "english": "Kölsch",
   "words": 58956,
-  "gzBytes": 240412
+  "gzBytes": 240412,
+  "source": "Frequency"
  },
  {
   "id": "kus",
@@ -2029,7 +2282,8 @@
   "name": "Kʋsaal · Kusaal",
   "english": "Kusaal",
   "words": 39693,
-  "gzBytes": 150720
+  "gzBytes": 150720,
+  "source": "Frequency"
  },
  {
   "id": "lad",
@@ -2037,7 +2291,8 @@
   "name": "Djudeo-Espanyol · Ladino",
   "english": "Ladino",
   "words": 61092,
-  "gzBytes": 239763
+  "gzBytes": 239763,
+  "source": "Frequency"
  },
  {
   "id": "li",
@@ -2045,7 +2300,8 @@
   "name": "Limburgs · Limburgish",
   "english": "Limburgish",
   "words": 156869,
-  "gzBytes": 695607
+  "gzBytes": 695607,
+  "source": "Frequency"
  },
  {
   "id": "ltg",
@@ -2053,7 +2309,8 @@
   "name": "Latgaļu volūda · Latgalian",
   "english": "Latgalian",
   "words": 21574,
-  "gzBytes": 86061
+  "gzBytes": 86061,
+  "source": "Frequency"
  },
  {
   "id": "mad",
@@ -2061,7 +2318,8 @@
   "name": "Basa Madhurâ · Madurese",
   "english": "Madurese",
   "words": 39176,
-  "gzBytes": 151027
+  "gzBytes": 151027,
+  "source": "Frequency"
  },
  {
   "id": "min",
@@ -2069,7 +2327,8 @@
   "name": "Baso Minangkabau · Minangkabau",
   "english": "Minangkabau",
   "words": 145708,
-  "gzBytes": 723717
+  "gzBytes": 723717,
+  "source": "Frequency"
  },
  {
   "id": "mos",
@@ -2077,7 +2336,8 @@
   "name": "Mòoré · Mossi",
   "english": "Mossi",
   "words": 44193,
-  "gzBytes": 168731
+  "gzBytes": 168731,
+  "source": "Frequency"
  },
  {
   "id": "mwl",
@@ -2085,7 +2345,8 @@
   "name": "Mirandés · Mirandese",
   "english": "Mirandese",
   "words": 63640,
-  "gzBytes": 259934
+  "gzBytes": 259934,
+  "source": "Frequency"
  },
  {
   "id": "nah",
@@ -2093,7 +2354,8 @@
   "name": "Nāhuatl · Nahuatl",
   "english": "Nahuatl",
   "words": 19578,
-  "gzBytes": 85816
+  "gzBytes": 85816,
+  "source": "Frequency"
  },
  {
   "id": "nds",
@@ -2101,7 +2363,8 @@
   "name": "Plattdüütsch · Low German",
   "english": "Low German",
   "words": 377047,
-  "gzBytes": 1639474
+  "gzBytes": 1639474,
+  "source": "Frequency"
  },
  {
   "id": "nia",
@@ -2109,7 +2372,8 @@
   "name": "Li Niha · Nias",
   "english": "Nias",
   "words": 22160,
-  "gzBytes": 85502
+  "gzBytes": 85502,
+  "source": "Frequency"
  },
  {
   "id": "nn",
@@ -2117,7 +2381,8 @@
   "name": "Nynorsk · Norwegian Nynorsk",
   "english": "Norwegian Nynorsk",
   "words": 338726,
-  "gzBytes": 1573832
+  "gzBytes": 1573832,
+  "source": "Frequency"
  },
  {
   "id": "nr",
@@ -2125,7 +2390,8 @@
   "name": "isiNdebele · Southern Ndebele",
   "english": "Southern Ndebele",
   "words": 2596,
-  "gzBytes": 10264
+  "gzBytes": 10264,
+  "source": "Frequency"
  },
  {
   "id": "nup",
@@ -2133,7 +2399,8 @@
   "name": "Nupe · Nupe",
   "english": "Nupe",
   "words": 13289,
-  "gzBytes": 51124
+  "gzBytes": 51124,
+  "source": "Frequency"
  },
  {
   "id": "nv",
@@ -2141,7 +2408,8 @@
   "name": "Diné bizaad · Navajo",
   "english": "Navajo",
   "words": 9653,
-  "gzBytes": 50254
+  "gzBytes": 50254,
+  "source": "Frequency"
  },
  {
   "id": "pag",
@@ -2149,7 +2417,8 @@
   "name": "Pangasinan · Pangasinan",
   "english": "Pangasinan",
   "words": 13489,
-  "gzBytes": 53247
+  "gzBytes": 53247,
+  "source": "Frequency"
  },
  {
   "id": "pap",
@@ -2157,7 +2426,8 @@
   "name": "Papiamentu · Papiamento",
   "english": "Papiamento",
   "words": 53695,
-  "gzBytes": 222161
+  "gzBytes": 222161,
+  "source": "Frequency"
  },
  {
   "id": "pcd",
@@ -2165,7 +2435,8 @@
   "name": "Picard · Picard",
   "english": "Picard",
   "words": 53163,
-  "gzBytes": 201164
+  "gzBytes": 201164,
+  "source": "Frequency"
  },
  {
   "id": "pcm",
@@ -2173,7 +2444,8 @@
   "name": "Naijá · Nigerian Pidgin",
   "english": "Nigerian Pidgin",
   "words": 34014,
-  "gzBytes": 130317
+  "gzBytes": 130317,
+  "source": "Frequency"
  },
  {
   "id": "pdc",
@@ -2181,7 +2453,8 @@
   "name": "Deitsch · Pennsylvania Dutch",
   "english": "Pennsylvania Dutch",
   "words": 19805,
-  "gzBytes": 79005
+  "gzBytes": 79005,
+  "source": "Frequency"
  },
  {
   "id": "pfl",
@@ -2189,7 +2462,8 @@
   "name": "Pälzisch · Palatine German",
   "english": "Palatine German",
   "words": 70928,
-  "gzBytes": 294017
+  "gzBytes": 294017,
+  "source": "Frequency"
  },
  {
   "id": "ppl",
@@ -2197,7 +2471,8 @@
   "name": "Nawat · Pipil",
   "english": "Pipil",
   "words": 20450,
-  "gzBytes": 84413
+  "gzBytes": 84413,
+  "source": "Frequency"
  },
  {
   "id": "pwn",
@@ -2205,7 +2480,8 @@
   "name": "Paiwan · Paiwan",
   "english": "Paiwan",
   "words": 14079,
-  "gzBytes": 55742
+  "gzBytes": 55742,
+  "source": "Frequency"
  },
  {
   "id": "rmy",
@@ -2213,7 +2489,8 @@
   "name": "Rromani ćhib · Vlax Romani",
   "english": "Vlax Romani",
   "words": 14039,
-  "gzBytes": 56735
+  "gzBytes": 56735,
+  "source": "Frequency"
  },
  {
   "id": "sco",
@@ -2221,7 +2498,8 @@
   "name": "Scots · Scots",
   "english": "Scots",
   "words": 123333,
-  "gzBytes": 526632
+  "gzBytes": 526632,
+  "source": "Frequency"
  },
  {
   "id": "sg",
@@ -2229,7 +2507,8 @@
   "name": "Sängö · Sango",
   "english": "Sango",
   "words": 3064,
-  "gzBytes": 12643
+  "gzBytes": 12643,
+  "source": "Frequency"
  },
  {
   "id": "srn",
@@ -2237,7 +2516,8 @@
   "name": "Sranantongo · Sranan Tongo",
   "english": "Sranan Tongo",
   "words": 6716,
-  "gzBytes": 27344
+  "gzBytes": 27344,
+  "source": "Frequency"
  },
  {
   "id": "stq",
@@ -2245,7 +2525,8 @@
   "name": "Seeltersk · Saterland Frisian",
   "english": "Saterland Frisian",
   "words": 53855,
-  "gzBytes": 225866
+  "gzBytes": 225866,
+  "source": "Frequency"
  },
  {
   "id": "szl",
@@ -2253,7 +2534,8 @@
   "name": "ślōnsko gŏdka · Silesian",
   "english": "Silesian",
   "words": 146204,
-  "gzBytes": 617678
+  "gzBytes": 617678,
+  "source": "Frequency"
  },
  {
   "id": "szy",
@@ -2261,7 +2543,8 @@
   "name": "Sakizaya · Sakizaya",
   "english": "Sakizaya",
   "words": 92948,
-  "gzBytes": 332214
+  "gzBytes": 332214,
+  "source": "Frequency"
  },
  {
   "id": "tay",
@@ -2269,7 +2552,8 @@
   "name": "Tayal · Atayal",
   "english": "Atayal",
   "words": 26311,
-  "gzBytes": 95342
+  "gzBytes": 95342,
+  "source": "Frequency"
  },
  {
   "id": "tdd",
@@ -2277,7 +2561,8 @@
   "name": "Tai Nuea · Tai Nuea",
   "english": "Tai Nuea",
   "words": 4795,
-  "gzBytes": 21062
+  "gzBytes": 21062,
+  "source": "Frequency"
  },
  {
   "id": "tly",
@@ -2285,7 +2570,8 @@
   "name": "tolışi zıvon · Talysh",
   "english": "Talysh",
   "words": 2294,
-  "gzBytes": 12199
+  "gzBytes": 12199,
+  "source": "Frequency"
  },
  {
   "id": "trv",
@@ -2293,7 +2579,8 @@
   "name": "Seediq · Seediq",
   "english": "Seediq",
   "words": 53084,
-  "gzBytes": 193302
+  "gzBytes": 193302,
+  "source": "Frequency"
  },
  {
   "id": "tum",
@@ -2301,7 +2588,8 @@
   "name": "Chitumbuka · Tumbuka",
   "english": "Tumbuka",
   "words": 77785,
-  "gzBytes": 313644
+  "gzBytes": 313644,
+  "source": "Frequency"
  },
  {
   "id": "vep",
@@ -2309,7 +2597,8 @@
   "name": "vepsän kel' · Veps",
   "english": "Veps",
   "words": 113585,
-  "gzBytes": 469155
+  "gzBytes": 469155,
+  "source": "Frequency"
  },
  {
   "id": "vls",
@@ -2317,7 +2606,8 @@
   "name": "West-Vlaams · West Flemish",
   "english": "West Flemish",
   "words": 114628,
-  "gzBytes": 476895
+  "gzBytes": 476895,
+  "source": "Frequency"
  },
  {
   "id": "war",
@@ -2325,7 +2615,8 @@
   "name": "Winaray · Waray",
   "english": "Waray",
   "words": 99224,
-  "gzBytes": 433779
+  "gzBytes": 433779,
+  "source": "Frequency"
  },
  {
   "id": "za",
@@ -2333,7 +2624,8 @@
   "name": "Vahcuengh · Zhuang",
   "english": "Zhuang",
   "words": 4549,
-  "gzBytes": 19311
+  "gzBytes": 19311,
+  "source": "Frequency"
  },
  {
   "id": "zea",
@@ -2341,7 +2633,8 @@
   "name": "Zeêuws · Zeelandic",
   "english": "Zeelandic",
   "words": 54082,
-  "gzBytes": 219023
+  "gzBytes": 219023,
+  "source": "Frequency"
  },
  {
   "id": "alt",
@@ -2349,7 +2642,8 @@
   "name": "Алтай тили · Southern Altai",
   "english": "Southern Altai",
   "words": 41282,
-  "gzBytes": 193700
+  "gzBytes": 193700,
+  "source": "Frequency"
  },
  {
   "id": "inh",
@@ -2357,7 +2651,8 @@
   "name": "ГӀалгӀай мотт · Ingush",
   "english": "Ingush",
   "words": 41800,
-  "gzBytes": 184176
+  "gzBytes": 184176,
+  "source": "Frequency"
  },
  {
   "id": "kaa",
@@ -2365,7 +2660,8 @@
   "name": "Қарақалпақ тили · Karakalpak",
   "english": "Karakalpak",
   "words": 2057,
-  "gzBytes": 10803
+  "gzBytes": 10803,
+  "source": "Frequency"
  },
  {
   "id": "koi",
@@ -2373,7 +2669,8 @@
   "name": "Коми-пермяцкӧй кыв · Komi-Permyak",
   "english": "Komi-Permyak",
   "words": 24466,
-  "gzBytes": 116125
+  "gzBytes": 116125,
+  "source": "Frequency"
  },
  {
   "id": "krc",
@@ -2381,7 +2678,8 @@
   "name": "Къарачай-малкъар тил · Karachay-Balkar",
   "english": "Karachay-Balkar",
   "words": 57441,
-  "gzBytes": 258680
+  "gzBytes": 258680,
+  "source": "Frequency"
  },
  {
   "id": "lbe",
@@ -2389,7 +2687,8 @@
   "name": "Лакку маз · Lak",
   "english": "Lak",
   "words": 7013,
-  "gzBytes": 32751
+  "gzBytes": 32751,
+  "source": "Frequency"
  },
  {
   "id": "mdf",
@@ -2397,7 +2696,8 @@
   "name": "Мокшень кяль · Moksha",
   "english": "Moksha",
   "words": 26421,
-  "gzBytes": 120445
+  "gzBytes": 120445,
+  "source": "Frequency"
  },
  {
   "id": "mrj",
@@ -2405,7 +2705,8 @@
   "name": "Кырык мары йӹлмӹ · Hill Mari",
   "english": "Hill Mari",
   "words": 39362,
-  "gzBytes": 182978
+  "gzBytes": 182978,
+  "source": "Frequency"
  },
  {
   "id": "rsk",
@@ -2413,7 +2714,8 @@
   "name": "Руски язик · Pannonian Rusyn",
   "english": "Pannonian Rusyn",
   "words": 70061,
-  "gzBytes": 305125
+  "gzBytes": 305125,
+  "source": "Frequency"
  },
  {
   "id": "rue",
@@ -2421,7 +2723,8 @@
   "name": "Русиньскый язык · Rusyn",
   "english": "Rusyn",
   "words": 165745,
-  "gzBytes": 723521
+  "gzBytes": 723521,
+  "source": "Frequency"
  },
  {
   "id": "anp",
@@ -2429,7 +2732,8 @@
   "name": "अंगिका · Angika",
   "english": "Angika",
   "words": 42532,
-  "gzBytes": 206500
+  "gzBytes": 206500,
+  "source": "Frequency"
  },
  {
   "id": "awa",
@@ -2437,7 +2741,8 @@
   "name": "अवधी · Awadhi",
   "english": "Awadhi",
   "words": 37606,
-  "gzBytes": 180271
+  "gzBytes": 180271,
+  "source": "Frequency"
  },
  {
   "id": "dty",
@@ -2445,7 +2750,8 @@
   "name": "डोटेली · Doteli",
   "english": "Doteli",
   "words": 68505,
-  "gzBytes": 321580
+  "gzBytes": 321580,
+  "source": "Frequency"
  },
  {
   "id": "new",
@@ -2453,7 +2759,8 @@
   "name": "नेपाल भाषा · Newar",
   "english": "Newar",
   "words": 199375,
-  "gzBytes": 1085868
+  "gzBytes": 1085868,
+  "source": "Frequency"
  },
  {
   "id": "ary",
@@ -2461,7 +2768,8 @@
   "name": "الدارجة · Moroccan Arabic",
   "english": "Moroccan Arabic",
   "words": 158198,
-  "gzBytes": 643894
+  "gzBytes": 643894,
+  "source": "Frequency"
  },
  {
   "id": "azb",
@@ -2469,7 +2777,8 @@
   "name": "تۆرکجه · South Azerbaijani",
   "english": "South Azerbaijani",
   "words": 340066,
-  "gzBytes": 1386976
+  "gzBytes": 1386976,
+  "source": "Frequency"
  },
  {
   "id": "glk",
@@ -2477,7 +2786,8 @@
   "name": "گیلکی · Gilaki",
   "english": "Gilaki",
   "words": 69089,
-  "gzBytes": 275870
+  "gzBytes": 275870,
+  "source": "Frequency"
  },
  {
   "id": "mzn",
@@ -2485,7 +2795,8 @@
   "name": "مازرونی · Mazanderani",
   "english": "Mazanderani",
   "words": 88550,
-  "gzBytes": 351940
+  "gzBytes": 351940,
+  "source": "Frequency"
  },
  {
   "id": "pnb",
@@ -2493,7 +2804,8 @@
   "name": "پنجابی · Western Punjabi",
   "english": "Western Punjabi",
   "words": 491982,
-  "gzBytes": 2050264
+  "gzBytes": 2050264,
+  "source": "Frequency"
  },
  {
   "id": "skr",
@@ -2501,7 +2813,8 @@
   "name": "سرائیکی · Saraiki",
   "english": "Saraiki",
   "words": 223837,
-  "gzBytes": 913730
+  "gzBytes": 913730,
+  "source": "Frequency"
  },
  {
   "id": "blk",
@@ -2509,7 +2822,8 @@
   "name": "ပအိုဝ် · Pa'O",
   "english": "Pa'O",
   "words": 393462,
-  "gzBytes": 2821064
+  "gzBytes": 2821064,
+  "source": "Frequency"
  },
  {
   "id": "mnw",
@@ -2517,7 +2831,8 @@
   "name": "မွန် · Mon",
   "english": "Mon",
   "words": 538957,
-  "gzBytes": 4152310
+  "gzBytes": 4152310,
+  "source": "Frequency"
  },
  {
   "id": "rki",
@@ -2525,7 +2840,8 @@
   "name": "ရခိုင် · Rakhine",
   "english": "Rakhine",
   "words": 254879,
-  "gzBytes": 1717041
+  "gzBytes": 1717041,
+  "source": "Frequency"
  },
  {
   "id": "shn",
@@ -2533,7 +2849,8 @@
   "name": "တႆး · Shan",
   "english": "Shan",
   "words": 239802,
-  "gzBytes": 1856358
+  "gzBytes": 1856358,
+  "source": "Frequency"
  },
  {
   "id": "hyw",
@@ -2541,7 +2858,8 @@
   "name": "Արեւմտահայերէն · Western Armenian",
   "english": "Western Armenian",
   "words": 275125,
-  "gzBytes": 1221053
+  "gzBytes": 1221053,
+  "source": "Frequency"
  },
  {
   "id": "pnt",
@@ -2549,7 +2867,8 @@
   "name": "Ποντιακά · Pontic Greek",
   "english": "Pontic Greek",
   "words": 8208,
-  "gzBytes": 39993
+  "gzBytes": 39993,
+  "source": "Frequency"
  },
  {
   "id": "shi",
@@ -2557,7 +2876,8 @@
   "name": "ⵜⴰⵛⵍⵃⵉⵢⵜ · Tachelhit",
   "english": "Tachelhit",
   "words": 51501,
-  "gzBytes": 190037
+  "gzBytes": 190037,
+  "source": "Frequency"
  },
  {
   "id": "tig",
@@ -2565,7 +2885,8 @@
   "name": "ትግራይት · Tigre",
   "english": "Tigre",
   "words": 68240,
-  "gzBytes": 278849
+  "gzBytes": 278849,
+  "source": "Frequency"
  },
  {
   "id": "tcy",
@@ -2573,7 +2894,8 @@
   "name": "ತುಳು · Tulu",
   "english": "Tulu",
   "words": 33567,
-  "gzBytes": 160325
+  "gzBytes": 160325,
+  "source": "Frequency"
  },
  {
   "id": "xmf",
@@ -2581,7 +2903,8 @@
   "name": "მარგალური ნინა · Mingrelian",
   "english": "Mingrelian",
   "words": 175039,
-  "gzBytes": 795383
+  "gzBytes": 795383,
+  "source": "Frequency"
  },
  {
   "id": "dz",
@@ -2589,7 +2912,8 @@
   "name": "རྫོང་ཁ · Dzongkha",
   "english": "Dzongkha",
   "words": 9167,
-  "gzBytes": 36081
+  "gzBytes": 36081,
+  "source": "Frequency"
  },
  {
   "id": "avk",
@@ -2597,7 +2921,8 @@
   "name": "Kotava · Kotava",
   "english": "Kotava",
   "words": 84354,
-  "gzBytes": 336013
+  "gzBytes": 336013,
+  "source": "Frequency"
  },
  {
   "id": "ie",
@@ -2605,7 +2930,8 @@
   "name": "Interlingue · Interlingue",
   "english": "Interlingue",
   "words": 18253,
-  "gzBytes": 78009
+  "gzBytes": 78009,
+  "source": "Frequency"
  },
  {
   "id": "io",
@@ -2613,7 +2939,8 @@
   "name": "Ido · Ido",
   "english": "Ido",
   "words": 84056,
-  "gzBytes": 339090
+  "gzBytes": 339090,
+  "source": "Frequency"
  },
  {
   "id": "lfn",
@@ -2621,7 +2948,8 @@
   "name": "Lingua Franca Nova · Lingua Franca Nova",
   "english": "Lingua Franca Nova",
   "words": 57197,
-  "gzBytes": 223971
+  "gzBytes": 223971,
+  "source": "Frequency"
  },
  {
   "id": "nov",
@@ -2629,7 +2957,8 @@
   "name": "Novial · Novial",
   "english": "Novial",
   "words": 17163,
-  "gzBytes": 65549
+  "gzBytes": 65549,
+  "source": "Frequency"
  },
  {
   "id": "qya",
@@ -2637,7 +2966,8 @@
   "name": "Quenya · Quenya",
   "english": "Quenya",
   "words": 7443,
-  "gzBytes": 21303
+  "gzBytes": 21303,
+  "source": "Frequency"
  },
  {
   "id": "vo",
@@ -2645,7 +2975,8 @@
   "name": "Volapük · Volapük",
   "english": "Volapük",
   "words": 55046,
-  "gzBytes": 254064
+  "gzBytes": 254064,
+  "source": "Frequency"
  },
  {
   "id": "sat",
@@ -2653,7 +2984,8 @@
   "name": "ᱥᱟᱱᱛᱟᱲᱤ · Santali",
   "english": "Santali",
   "words": 200195,
-  "gzBytes": 874570
+  "gzBytes": 874570,
+  "source": "Frequency"
  },
  {
   "id": "mni",
@@ -2661,6 +2993,232 @@
   "name": "ꯃꯩꯇꯩꯂꯣꯟ · Manipuri",
   "english": "Manipuri",
   "words": 61810,
-  "gzBytes": 275608
+  "gzBytes": 275608,
+  "source": "Frequency"
+ },
+ {
+  "id": "cs_aosp",
+  "lang": "cs",
+  "name": "Čeština · Czech",
+  "english": "Czech",
+  "words": 171544,
+  "gzBytes": 813469,
+  "source": "AOSP"
+ },
+ {
+  "id": "da_aosp",
+  "lang": "da",
+  "name": "Dansk · Danish",
+  "english": "Danish",
+  "words": 178449,
+  "gzBytes": 869312,
+  "source": "AOSP"
+ },
+ {
+  "id": "de_aosp",
+  "lang": "de",
+  "name": "Deutsch · German",
+  "english": "German",
+  "words": 205888,
+  "gzBytes": 1101134,
+  "source": "AOSP"
+ },
+ {
+  "id": "el_aosp",
+  "lang": "el",
+  "name": "Ελληνικά · Greek",
+  "english": "Greek",
+  "words": 184303,
+  "gzBytes": 981672,
+  "source": "AOSP"
+ },
+ {
+  "id": "en_aosp",
+  "lang": "en",
+  "name": "English",
+  "english": "English",
+  "words": 160668,
+  "gzBytes": 748505,
+  "source": "AOSP"
+ },
+ {
+  "id": "en_gb_aosp",
+  "lang": "en",
+  "name": "English",
+  "english": "English",
+  "words": 157423,
+  "gzBytes": 734107,
+  "source": "AOSP"
+ },
+ {
+  "id": "es_aosp",
+  "lang": "es",
+  "name": "Español · Spanish",
+  "english": "Spanish",
+  "words": 236193,
+  "gzBytes": 977769,
+  "source": "AOSP"
+ },
+ {
+  "id": "fi_aosp",
+  "lang": "fi",
+  "name": "Suomi · Finnish",
+  "english": "Finnish",
+  "words": 223363,
+  "gzBytes": 1093376,
+  "source": "AOSP"
+ },
+ {
+  "id": "fr_aosp",
+  "lang": "fr",
+  "name": "Français · French",
+  "english": "French",
+  "words": 190113,
+  "gzBytes": 950440,
+  "source": "AOSP"
+ },
+ {
+  "id": "he_aosp",
+  "lang": "he",
+  "name": "עברית · Hebrew",
+  "english": "Hebrew",
+  "words": 94799,
+  "gzBytes": 389909,
+  "source": "AOSP"
+ },
+ {
+  "id": "hr_aosp",
+  "lang": "hr",
+  "name": "Hrvatski · Croatian",
+  "english": "Croatian",
+  "words": 210081,
+  "gzBytes": 858496,
+  "source": "AOSP"
+ },
+ {
+  "id": "it_aosp",
+  "lang": "it",
+  "name": "Italiano · Italian",
+  "english": "Italian",
+  "words": 172831,
+  "gzBytes": 802881,
+  "source": "AOSP"
+ },
+ {
+  "id": "lt_aosp",
+  "lang": "lt",
+  "name": "Lietuvių · Lithuanian",
+  "english": "Lithuanian",
+  "words": 198160,
+  "gzBytes": 837749,
+  "source": "AOSP"
+ },
+ {
+  "id": "lv_aosp",
+  "lang": "lv",
+  "name": "Latviešu · Latvian",
+  "english": "Latvian",
+  "words": 200570,
+  "gzBytes": 813274,
+  "source": "AOSP"
+ },
+ {
+  "id": "nb_aosp",
+  "lang": "nb",
+  "name": "Norsk · Norwegian",
+  "english": "Norwegian",
+  "words": 171008,
+  "gzBytes": 817188,
+  "source": "AOSP"
+ },
+ {
+  "id": "nl_aosp",
+  "lang": "nl",
+  "name": "Nederlands · Dutch",
+  "english": "Dutch",
+  "words": 178444,
+  "gzBytes": 900291,
+  "source": "AOSP"
+ },
+ {
+  "id": "pl_aosp",
+  "lang": "pl",
+  "name": "Polski · Polish",
+  "english": "Polish",
+  "words": 195099,
+  "gzBytes": 934477,
+  "source": "AOSP"
+ },
+ {
+  "id": "pt_aosp",
+  "lang": "pt",
+  "name": "Português · Portuguese",
+  "english": "Portuguese",
+  "words": 218456,
+  "gzBytes": 952642,
+  "source": "AOSP"
+ },
+ {
+  "id": "pt_br_aosp",
+  "lang": "pt",
+  "name": "Português · Portuguese",
+  "english": "Portuguese",
+  "words": 170043,
+  "gzBytes": 756696,
+  "source": "AOSP"
+ },
+ {
+  "id": "ro_aosp",
+  "lang": "ro",
+  "name": "Română · Romanian",
+  "english": "Romanian",
+  "words": 1125204,
+  "gzBytes": 3229839,
+  "source": "AOSP"
+ },
+ {
+  "id": "ru_aosp",
+  "lang": "ru",
+  "name": "Русский · Russian",
+  "english": "Russian",
+  "words": 220485,
+  "gzBytes": 1195780,
+  "source": "AOSP"
+ },
+ {
+  "id": "sl_aosp",
+  "lang": "sl",
+  "name": "Slovenščina · Slovenian",
+  "english": "Slovenian",
+  "words": 59998,
+  "gzBytes": 260336,
+  "source": "AOSP"
+ },
+ {
+  "id": "sr_aosp",
+  "lang": "sr",
+  "name": "Српски · Serbian",
+  "english": "Serbian",
+  "words": 191608,
+  "gzBytes": 895311,
+  "source": "AOSP"
+ },
+ {
+  "id": "sv_aosp",
+  "lang": "sv",
+  "name": "Svenska · Swedish",
+  "english": "Swedish",
+  "words": 196739,
+  "gzBytes": 969689,
+  "source": "AOSP"
+ },
+ {
+  "id": "tr_aosp",
+  "lang": "tr",
+  "name": "Türkçe · Turkish",
+  "english": "Turkish",
+  "words": 180841,
+  "gzBytes": 792381,
+  "source": "AOSP"
  }
 ]

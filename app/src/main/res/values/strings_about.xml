@@ -123,6 +123,8 @@
 
     <!-- What the app uses each downloadable data pack for. -->
     <string name="about_pack_wordlists_used">The prediction word lists for more than 300 languages, from FrequencyWords (OpenSubtitles), Leipzig Corpora, Wikimedia, wordfreq and others</string>
+    <!-- AOSP is the Android Open Source Project and stays as it is. -->
+    <string name="about_pack_aosp_wordlists_used">The curated word lists for 23 languages that Android\'s own keyboard uses, preferred where a language has one</string>
     <string name="about_pack_offensive_used">The optional filter lists for the suggestions in the languages you download</string>
     <string name="about_pack_emoji_keywords_used">The emoji search keywords in 141 languages, from KDE\'s kemoji</string>
     <!-- "Noto Animated Emoji" is the name of the image set. Keep it as it is. -->

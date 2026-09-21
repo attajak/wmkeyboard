@@ -355,6 +355,13 @@ private val dataPackAttributions: List<Attribution> = listOf(
         "https://github.com/wasi-master/wmkeyboard-data",
     ),
     Attribution(
+        "AOSP LatinIME dictionaries",
+        R.string.about_pack_aosp_wordlists_used,
+        "Copyright (C) The Android Open Source Project",
+        "Apache-2.0", "apache-2.0.txt",
+        "https://android.googlesource.com/platform/packages/inputmethods/LatinIME/+/refs/heads/main/dictionaries/",
+    ),
+    Attribution(
         "Offensive word lists",
         R.string.about_pack_offensive_used,
         "Aggregated from LDNOOBW V2, profanity-list and other open lists",

@@ -57,12 +57,13 @@ by_id = {l["id"]: l for l in langs}
 
 dict_src = DICT_KT.read_text(encoding="utf-8")
 lists = []
+# `entry(` is a counted list, `aosp(` one of AOSP LatinIME's.
 entry_re = re.compile(
-    r'entry\(\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*([\d_]+),\s*([\d_]+)L'
+    r'\b(entry|aosp)\(\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*([\d_]+),\s*([\d_]+)L'
     r'(?:,\s*variant\s*=\s*"([^"]+)")?'
 )
 for m in entry_re.finditer(dict_src):
-    ident, lang_id, _repo, words, gz, variant = m.groups()
+    kind, ident, lang_id, _repo, words, gz, variant = m.groups()
     lang = by_id.get(lang_id)
     name = (lang["name"] if lang else lang_id) + (f" ({variant})" if variant else "")
     english = (lang["english"] if lang else lang_id) + (f" ({variant})" if variant else "")
@@ -73,6 +74,7 @@ for m in entry_re.finditer(dict_src):
         "english": english,
         "words": int(words.replace("_", "")),
         "gzBytes": int(gz.replace("_", "")),
+        "source": "AOSP" if kind == "aosp" else "Frequency",
     })
 assert len(lists) > 300, f"suspiciously few wordlists parsed: {len(lists)}"
 

@@ -29,6 +29,16 @@
          Portuguese has a European list and a Brazilian list. -->
     <string name="core_pred_wordlist_variant_europe_label">Europe</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brazil</string>
+    <!-- English has a list for American and a list for British spelling. -->
+    <string name="core_pred_wordlist_variant_us_label">United States</string>
+    <string name="core_pred_wordlist_variant_uk_label">United Kingdom</string>
+
+    <!-- Where a word list comes from, when a language has two. AOSP is the
+         Android Open Source Project and stays as it is. -->
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_aosp_detail">The curated list Android\'s own keyboard uses. Fewer words, with fewer names and typos among them.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Frequency</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Counted from subtitles and web text. Many more words, with more names, slang and typos.</string>
 
     <!-- ================================================================== -->
     <!-- Word list download errors. Shown under the row that failed.        -->

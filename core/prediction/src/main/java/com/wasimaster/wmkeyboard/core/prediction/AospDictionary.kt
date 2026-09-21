@@ -539,7 +539,28 @@ object AospScores {
         return DictionaryLoader.scaleAospFrequency(probability.coerceIn(0, MAX_PROBABILITY))
     }
 
+    /**
+     * A word's 0..255 probability as the count a counted list would give it,
+     * for an AOSP list downloaded in place of one.
+     *
+     * Not [DictionaryLoader.scaleAospFrequency]. That maps linearly onto the
+     * bundled lists' 0..10000, which is right for a list imported beside them
+     * but squeezes a whole downloaded list into about two nats once the
+     * engine weighs it as `ln(1 + f)` against edit costs: every word nearly
+     * as likely as every other, so one slip would trade a common word for a
+     * rare one. The scale is logarithmic, [ENCODING_SCALE] steps to a
+     * doubling, so undoing it gives back counts with a counted list's spread.
+     * [LIST_TOP_LOG2] sets where they sit: en_US rates `the` 222, which lands
+     * near 19 million, beside the counted English list's top words.
+     */
+    fun listCount(probability: Int): Int {
+        val p = probability.coerceIn(0, MAX_PROBABILITY)
+        val log2 = LIST_TOP_LOG2 + (p - MAX_PROBABILITY) / ENCODING_SCALE
+        return Math.pow(2.0, log2).toInt().coerceAtLeast(1)
+    }
+
     private const val MAX_PROBABILITY = 255
+    private const val LIST_TOP_LOG2 = 28.0
     private const val MAX_BIGRAM_STRENGTH = 15
     private const val BIGRAM_STEPS = 1.5
     private const val PAIR_MIDPOINT = 128.0

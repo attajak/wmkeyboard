@@ -66,11 +66,12 @@ import kotlinx.coroutines.launch
  *
  * Every row works the same way. Something on the device has a checkbox, which
  * is the "use it" switch, and a Delete. Something that is not has a Download.
- * The word list asks which size (and, for Portuguese, which variant) in a
- * dialog, because that is the one choice a download here has. A downloaded
- * word list keeps that choice open: the arrows beside its Delete reopen the
- * same dialog on the size it is at now, so trading a 50,000-word list for a
- * 300,000-word one is one press rather than a delete and a fresh download.
+ * The word list asks which size (and, where a language has more than one
+ * list, which source and which region) in a dialog, because that is the one
+ * choice a download here has. A downloaded word list keeps that choice open:
+ * the arrows beside its Delete reopen the same dialog on the list it is now,
+ * so trading a 50,000-word list for a 300,000-word one, or an AOSP list for
+ * the counted one, is one press rather than a delete and a fresh download.
  * The heading carries a Download all while anything is still missing, and
  * loses it once nothing is.
  *
@@ -102,12 +103,12 @@ internal fun DictionariesGroup(
         NgramPackDownloadManager.refresh(filesDir)
     }
 
-    // Portuguese has two lists in one slot: the row speaks for whichever is
-    // doing something, else whichever is on the device, else the default one.
+    // A language can have several lists in one slot (an AOSP and a counted
+    // one, and for some two regions of each): the row speaks for whichever is
+    // doing something, else whichever is on the device, else the preferred one.
     val wordEntry = wordlists.firstOrNull { wordStates[it.id].isActive() }
         ?: wordlists.firstOrNull { wordStates[it.id] is WordlistDownloadManager.DownloadStatus.Downloaded }
-        ?: wordlists.firstOrNull { it.id == langId }
-        ?: wordlists.firstOrNull()
+        ?: DictionaryCatalog.preferred(langId)
     val wordStatus = wordEntry?.let { wordStates[it.id] }
         ?: WordlistDownloadManager.DownloadStatus.NotDownloaded
     val emojiStatus = emojiEntry?.let { emojiStates[it.languageId] }
@@ -171,6 +172,7 @@ internal fun DictionariesGroup(
                 WordListRow(
                     lang = lang,
                     entry = wordEntry,
+                    alternatives = wordlists.size > 1,
                     status = wordStatus,
                     checked = settings.suggestionStrip.shippedDictionaryEnabledFor(langId),
                     onChecked = { scope.launch { repository.setShippedDictionaryEnabled(langId, it) } },
@@ -306,15 +308,16 @@ private fun DictionaryItemRow(
 /**
  * The word list row.
  *
- * [onResize] reopens the download dialog on the size the list is at now. It is
- * offered only while one is actually on the device and the language has more
- * than one size worth offering — a list whose whole vocabulary fits inside
- * Small has nothing to trade.
+ * [onResize] reopens the download dialog on the list that is on the device. It
+ * is offered only while one actually is, and only when there is something to
+ * trade it for: another size, or another list ([alternatives]). A language
+ * with one list whose whole vocabulary fits inside Small has neither.
  */
 @Composable
 private fun WordListRow(
     lang: LanguageDef,
     entry: DictionaryEntry?,
+    alternatives: Boolean,
     status: WordlistDownloadManager.DownloadStatus,
     checked: Boolean,
     onChecked: (Boolean) -> Unit,
@@ -325,9 +328,9 @@ private fun WordListRow(
     val onDevice = lang.bundledDictionary ||
         status is WordlistDownloadManager.DownloadStatus.Downloaded ||
         (status as? WordlistDownloadManager.DownloadStatus.Failed)?.kept == true
-    val title = entry?.variantRes
-        ?.takeIf { status is WordlistDownloadManager.DownloadStatus.Downloaded || status.isActive() }
-        ?.let { stringResource(R.string.languages_words_title_variant, stringResource(it)) }
+    val title = entry
+        ?.takeIf { alternatives && (status is WordlistDownloadManager.DownloadStatus.Downloaded || status.isActive()) }
+        ?.let { stringResource(R.string.languages_words_title_variant, entryLabel(it)) }
         ?: stringResource(R.string.languages_words_title)
     val supporting = when (status) {
         is WordlistDownloadManager.DownloadStatus.Downloaded -> pluralStringResource(
@@ -364,7 +367,7 @@ private fun WordListRow(
             is WordlistDownloadManager.DownloadStatus.Downloaded ->
                 if (entry != null) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        ResizeButton(entry, status.size, onResize)
+                        ResizeButton(entry, status.size, alternatives, onResize)
                         DeleteWordListButton(filesDir, entry)
                     }
                 }
@@ -421,35 +424,39 @@ private fun DeleteWordListButton(filesDir: File, entry: DictionaryEntry) {
 }
 
 /**
- * Trade the downloaded list for another size. The arrows say which way the
- * trade can go from [current]: up at the smallest size, down at the largest,
- * both in between — so the icon answers "is there a bigger one?" without
- * opening the dialog. Nothing is drawn when the language has only one size,
- * which is every language whose whole list fits inside Small.
+ * Trade the downloaded list for another size, or for another of the language's
+ * lists when it has [alternatives]. The arrows say which way a size trade can
+ * go from [current]: up at the smallest size, down at the largest, both in
+ * between — so the icon answers "is there a bigger one?" without opening the
+ * dialog. Nothing is drawn when there is nothing to trade: one list, whose
+ * whole vocabulary fits inside Small.
  */
 @Composable
 private fun ResizeButton(
     entry: DictionaryEntry,
     current: DictionaryCatalog.DictionarySize,
+    alternatives: Boolean,
     onClick: () -> Unit,
 ) {
     val tiers = remember(entry) {
         DictionaryCatalog.DictionarySize.entries.distinctBy { DictionaryCatalog.wordCap(entry, it) }
     }
-    if (tiers.size >= 2) {
+    if (tiers.size >= 2 || alternatives) {
         // The tier on disk may be one the collapse dropped (ALL and Large keep
         // the same words on a 200,000-word list), so match on what it keeps.
         val index = tiers.indexOfFirst {
             DictionaryCatalog.wordCap(entry, it) == DictionaryCatalog.wordCap(entry, current)
         }.coerceAtLeast(0)
-        val icon = when (index) {
-            0 -> Icons.Outlined.KeyboardDoubleArrowUp
-            tiers.lastIndex -> Icons.Outlined.KeyboardDoubleArrowDown
+        val icon = when {
+            tiers.size < 2 -> Icons.Outlined.SwapVert
+            index == 0 -> Icons.Outlined.KeyboardDoubleArrowUp
+            index == tiers.lastIndex -> Icons.Outlined.KeyboardDoubleArrowDown
             else -> Icons.Outlined.SwapVert
         }
-        val description = when (index) {
-            0 -> R.string.languages_wordlist_resize_bigger_desc
-            tiers.lastIndex -> R.string.languages_wordlist_resize_smaller_desc
+        val description = when {
+            alternatives -> R.string.languages_wordlist_change_desc
+            index == 0 -> R.string.languages_wordlist_resize_bigger_desc
+            index == tiers.lastIndex -> R.string.languages_wordlist_resize_smaller_desc
             else -> R.string.languages_wordlist_resize_desc
         }
         IconButton(onClick = onClick, enabled = !WordlistDownloadManager.isBusy) {
@@ -617,13 +624,14 @@ private fun WordPairsRow(
 
 /**
  * What Download on the word list asks: which size, and for a language with
- * more than one list, which variant. Each size says how many words it keeps
- * and roughly what it costs to fetch. [pairsBytes] is the word-pair data that
- * comes along with it, when the language has some that is not on the device.
+ * more than one list, which source (AOSP or counted) and which region. Each
+ * size says how many words it keeps and roughly what it costs to fetch.
+ * [pairsBytes] is the word-pair data that comes along with it, when the
+ * language has some that is not on the device.
  *
  * [resizing] is the same question asked of a list already on the device: same
- * choices, opened on the size it is at, and a line saying the old list stays
- * until the new one has finished.
+ * choices, opened on the list and size it is at, and a line saying the old
+ * list stays until the new one has finished.
  */
 @Composable
 private fun WordListDownloadDialog(
@@ -636,6 +644,8 @@ private fun WordListDownloadDialog(
     onDownload: (DictionaryEntry, DictionaryCatalog.DictionarySize) -> Unit,
 ) {
     var entry by remember { mutableStateOf(initial) }
+    val sources = remember(entries) { entries.map { it.source }.distinct().sorted() }
+    val variants = entries.filter { it.source == entry.source }
     // Tiers past the end of a short list all keep the same words, so only the
     // first one that reaches the whole list is worth offering.
     val sizes = remember(entry) {
@@ -650,22 +660,44 @@ private fun WordListDownloadDialog(
         title = {
             Text(
                 stringResource(
-                    if (resizing) R.string.languages_words_resize_title
-                    else R.string.languages_words_download_title,
+                    when {
+                        !resizing -> R.string.languages_words_download_title
+                        entries.size > 1 -> R.string.languages_words_change_title
+                        else -> R.string.languages_words_resize_title
+                    },
                 ),
             )
         },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                if (entries.size > 1) {
+                if (sources.size > 1) {
+                    DialogLabel(stringResource(R.string.languages_words_download_source_label))
+                    for (source in sources) {
+                        ChoiceLine(
+                            selected = source == entry.source,
+                            label = stringResource(source.labelRes),
+                            detail = stringResource(source.detailRes),
+                        ) {
+                            // Keep the region across the switch where the other
+                            // source has it: Brazil stays Brazil.
+                            if (source != entry.source) {
+                                entry = entries.firstOrNull { it.source == source && it.variantRes == entry.variantRes }
+                                    ?: entries.first { it.source == source }
+                            }
+                        }
+                    }
+                }
+                if (variants.size > 1) {
                     DialogLabel(stringResource(R.string.languages_words_download_variant_label))
-                    for (option in entries) {
+                    for (option in variants) {
                         ChoiceLine(
                             selected = option == entry,
                             label = option.variantRes?.let { stringResource(it) }
                                 ?: LanguageRegistry.byId(option.languageId).displayName,
                         ) { entry = option }
                     }
+                }
+                if (entries.size > 1) {
                     DialogLabel(stringResource(R.string.languages_words_download_size_label))
                 }
                 for (option in sizes) {
@@ -708,6 +740,19 @@ private fun WordListDownloadDialog(
             TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_cancel)) }
         },
     )
+}
+
+/**
+ * What tells one of a language's lists from its others: the source, and the
+ * region where that source has more than one. "AOSP, Brazil"; "Frequency".
+ */
+@Composable
+private fun entryLabel(entry: DictionaryEntry): String {
+    val source = stringResource(entry.source.labelRes)
+    val variant = entry.variantRes
+        ?.takeIf { DictionaryCatalog.forLanguage(entry.languageId).count { it.source == entry.source } > 1 }
+        ?: return source
+    return stringResource(R.string.languages_words_label_source_variant, source, stringResource(variant))
 }
 
 @Composable

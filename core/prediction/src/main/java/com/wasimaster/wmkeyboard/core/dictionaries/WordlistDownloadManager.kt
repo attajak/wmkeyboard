@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.core.dictionaries
 import android.os.StatFs
 import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.prediction.AospScores
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrieCodec
 import com.wasimaster.wmkeyboard.prediction.R
@@ -304,7 +305,11 @@ object WordlistDownloadManager {
             // as unreadable. A list whose *most frequent* word is already under
             // the floor has no frequencies to rank by, so there is no noise
             // tail to trim and every word is kept.
-            var ranked: Boolean? = null
+            //
+            // An AOSP list has no noise tail to cut either: it is curated, and
+            // its bottom is real words AOSP rated rare, down to 0.
+            val aosp = entry.source == WordlistSource.AOSP
+            var ranked: Boolean? = if (aosp) false else null
             GZIPInputStream(counting, 32 * 1024).bufferedReader().useLines { lines ->
                 for (line in lines) {
                     currentCoroutineContext().ensureActive()
@@ -313,7 +318,8 @@ object WordlistDownloadManager {
                     val separator = trimmed.lastIndexOf(' ')
                     if (separator <= 0) continue
                     val word = trimmed.substring(0, separator).trim()
-                    val frequency = trimmed.substring(separator + 1).toIntOrNull() ?: continue
+                    val raw = trimmed.substring(separator + 1).toIntOrNull() ?: continue
+                    val frequency = if (aosp) AospScores.listCount(raw) else raw
                     if (ranked == null) ranked = frequency >= MIN_FREQUENCY
                     // Sorted desc, so on a ranked list only noise follows.
                     if (ranked == true && frequency < MIN_FREQUENCY) break

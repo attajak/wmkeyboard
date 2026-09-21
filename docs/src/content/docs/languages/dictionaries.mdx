@@ -27,6 +27,21 @@ Bangla's built-in list, its phonetic index, and the English→Bangla translitera
 
 A downloaded dictionary does two things at once: it adds its words as completions while you type, and it stops autocorrect from "fixing" any word that's in it. For English and Bangla, downloading replaces the built-in list outright, since the bigger file becomes the one the keyboard actually uses. Every other language has no built-in list to replace, so the download's words are combined with anything you've imported yourself. A word in either list gets completions and autocorrect protection, and downloading one doesn't clear the other. That's why French, German, or Spanish, none of which ship anything built in, can still get real completions once you fetch a list. [Glide typing](/typing/glide-typing/) needs the list too, since a swipe is decoded against it, and the keyboard puts a chip on the strip pointing here when a language has none.
 
+## Two sources: AOSP and Frequency
+
+23 languages have two word lists to choose from: Czech, Danish, Dutch, English, Finnish, French, German, Greek, Hebrew, Croatian, Italian, Latvian, Lithuanian, Norwegian Bokmål, Polish, Portuguese, Romanian, Russian, Serbian, Slovenian, Spanish, Swedish and Turkish.
+
+| Source | What it is |
+|---|---|
+| **AOSP** (default) | The curated list that Android's own open source keyboard (AOSP LatinIME) ships, under the Apache 2.0 license. Usually 150,000 to 240,000 words, with far fewer names, typos and subtitle noise than a counted list |
+| **Frequency** | The list this app uses for every other language, counted from subtitles and web text. Many more words, including more names, slang and misspellings |
+
+For these languages the download dialog opens on **AOSP**, with a **Source** choice above the sizes, so you can pick **Frequency** instead. English's AOSP list comes in **United States** and **United Kingdom** spellings, and Portuguese has **Europe** and **Brazil** for both sources. Switching source keeps the region where the other source has it.
+
+To change sources after a download, use the arrow button on the downloaded row. For these languages it opens **Change the word list**, the same dialog, and the list you have stays in use until the new one has finished. The row title says which list is on the device, for example "Word list (AOSP, United States)". A list you downloaded before AOSP lists existed stays what it is (a Frequency list) until you change it.
+
+AOSP rates each word on its own 0 to 255 scale. That scale is logarithmic, and the keyboard turns it back into counts on the same scale as a Frequency list, so the two rank words alike. AOSP's lowest-rated words are kept: the list is curated, so there's no noise tail to cut. Records AOSP marks as not being words (misspellings it keeps only to correct, like "aint") are left out.
+
 ## Choosing a size
 
 Download on the Word list row opens a dialog that asks how many of the most frequent words to keep. Each size says how many words it keeps and about how much it downloads:
@@ -42,7 +57,7 @@ The source lists are sorted by frequency and downloaded over a streaming connect
 
 Every count in the picker is an **upper bound**, which is why each one reads "up to". Two things can stop a download before its tier does, and both are deliberate:
 
-- **The one-timers are dropped.** The transfer stops at the first word that occurs only once in the source text. Those are overwhelmingly typos, names, and OCR noise, and letting them in would tell autocorrect that every misspelling is a real word.
+- **The one-timers are dropped** (Frequency lists only). The transfer stops at the first word that occurs only once in the source text. Those are overwhelmingly typos, names, and OCR noise, and letting them in would tell autocorrect that every misspelling is a real word.
 - **Some words are skipped**: anything over 48 characters, and anything containing a space.
 
 The gap can be wide on a smaller language. Welsh's list is 123,099 lines, but only the first 50,637 occur more than once, and 47,596 of those survive the other filters. So every tier from Small upward gives Welsh the same 47,596 words, and the number you see afterward is smaller than the number the tier promised. That's the list, not a failed download.
@@ -53,8 +68,8 @@ The tier you pick is remembered, so the dialog opens on it for the next language
 
 When the language also has word pairs (English, Bangla and Banglish do), they download together with the word list, and the dialog says how much they add.
 
-:::note[Portuguese has two lists, not two dictionaries]
-Portuguese is the one language with two downloadable entries (European and Brazilian), picked in the same dialog as the size, but they share a single download slot. Fetching the Brazilian list after the European one replaces it. Only one variant can be active for Portuguese at a time, and the row for the other one goes back to showing "Download."
+:::note[Several lists, one slot]
+A language with more than one list (the two sources above, and Portuguese's European and Brazilian lists or English's American and British ones) still has a single download slot. Fetching one replaces whichever is on the device, so only one list is active for a language at a time.
 :::
 
 ## Changing the size of a list you already have
@@ -137,7 +152,7 @@ A few related settings live elsewhere:
 import FilterTable from '@components/FilterTable.astro';
 import wordlists from '@data/wordlists.json';
 
-All {wordlists.length} downloadable wordlists. Word counts are the full list;
+All {wordlists.length} downloadable wordlists, AOSP and Frequency. Word counts are the full list;
 the Small/Medium/Large tiers keep the most frequent 50k/150k/300k words, and
 Everything keeps them all.
 
@@ -145,17 +160,19 @@ Everything keeps them all.
 	columns={[
 		{ label: 'Id' },
 		{ label: 'Language' },
+		{ label: 'Source' },
 		{ label: 'Words', numeric: true },
 		{ label: 'Download', numeric: true },
 	]}
 	rows={wordlists.map((w) => [
 		w.id,
 		w.name,
+		w.source,
 		w.words.toLocaleString('en-US'),
 		`${(w.gzBytes / 1024 / 1024).toFixed(w.gzBytes < 1024 * 1024 ? 2 : 1)} MB`,
 	])}
 	extras={wordlists.map((w) => w.english)}
-	placeholder="Filter 333 wordlists…"
+	placeholder="Filter 358 wordlists…"
 	caption="Generated from the app's dictionary catalog; sizes are the gzipped downloads."
 />
 {/* keep it */}

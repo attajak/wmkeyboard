@@ -6,7 +6,27 @@ import com.wasimaster.wmkeyboard.core.endpoints.ServiceRepo
 import com.wasimaster.wmkeyboard.prediction.R
 
 /**
- * One downloadable frequency wordlist from the wmkeyboard-data repo
+ * Where a downloadable word list comes from. A language can have one of each,
+ * and the one listed first here is the one it downloads unless the user picks
+ * the other ([DictionaryCatalog.preferred]).
+ */
+enum class WordlistSource(@StringRes val labelRes: Int, @StringRes val detailRes: Int) {
+    /**
+     * AOSP LatinIME's own lists (Apache-2.0), for the 23 languages Android's
+     * keyboard shipped one for. Curated rather than counted: a couple of
+     * hundred thousand words with the names, typos and subtitle noise of a
+     * counted list mostly gone. Their frequencies are AOSP's 0..255 log scale,
+     * which the downloader turns back into counts
+     * ([com.wasimaster.wmkeyboard.core.prediction.AospScores.listCount]).
+     */
+    AOSP(R.string.core_pred_wordlist_source_aosp_label, R.string.core_pred_wordlist_source_aosp_detail),
+
+    /** Counted from subtitles and web text: every language the repo covers, and far more words each. */
+    FREQUENCY(R.string.core_pred_wordlist_source_frequency_label, R.string.core_pred_wordlist_source_frequency_detail),
+}
+
+/**
+ * One downloadable wordlist from the wmkeyboard-data repo
  * (https://github.com/wasi-master/wmkeyboard-data). Each is a gzipped
  * `word<space>count` list sorted by descending frequency, which is what lets
  * the downloader stop reading after the user's chosen word cap instead of
@@ -39,6 +59,8 @@ data class DictionaryEntry(
      * romanized list lives at `data/ru/russian_rom.txt.gz`, not `ru_rom.txt.gz`.
      */
     val fileStem: String? = null,
+    /** Which kind of list this is, and so how its frequencies read. */
+    val source: WordlistSource = WordlistSource.FREQUENCY,
 ) {
     /** Where the list is fetched from: the data repository, wherever [ServiceRepo.DATA] points. */
     val url: String
@@ -47,7 +69,7 @@ data class DictionaryEntry(
 }
 
 /**
- * The downloadable wordlist for every language the registry knows and the data
+ * The downloadable wordlists for every language the registry knows and the data
  * repo covers (over 300 of them; identity mapping except Wikipedia-style codes:
  * `roa_rup`->`rup`, `mhr`->`chm`, `bxr`->`bua`, `nrm`->`nrf`, and `pt`/`pt_br`
  * both feeding `pt`). Regenerate the table against a fresh repo checkout with
@@ -82,6 +104,25 @@ object DictionaryCatalog {
         suffix: String = "full",
         fileStem: String? = null,
     ) = DictionaryEntry(id, languageId, repoCode, totalWordCount, approxGzBytes, variantRes, suffix, fileStem)
+
+    /**
+     * An AOSP list, `data/<repoCode>/<repoCode>_aosp.txt.gz` beside the
+     * language's counted one. Its id is never the language id, so a list
+     * downloaded before AOSP lists existed, which has no source marker, still
+     * reads as the counted list it is.
+     */
+    private fun aosp(
+        id: String,
+        languageId: String,
+        repoCode: String,
+        totalWordCount: Int,
+        approxGzBytes: Long,
+        @StringRes variantRes: Int? = null,
+        fileStem: String? = null,
+    ) = DictionaryEntry(
+        id, languageId, repoCode, totalWordCount, approxGzBytes, variantRes,
+        suffix = "aosp", fileStem = fileStem, source = WordlistSource.AOSP,
+    )
 
     val entries: List<DictionaryEntry> = listOf(
         entry("ab", "ab", "ab", 81_433, 380_406L),
@@ -428,6 +469,45 @@ object DictionaryCatalog {
         entry("vo", "vo", "vo", 55046, 254064L),
         entry("sat", "sat", "sat", 200195, 874570L),
         entry("mni", "mni", "mni", 61810, 275608L),
+        // --- AOSP LatinIME's lists, preferred over the counted ones above. ---
+        // Where a language has two regions, the first listed is its default.
+        aosp("cs_aosp", "cs", "cs", 171_544, 813_469L),
+        aosp("da_aosp", "da", "da", 178_449, 869_312L),
+        aosp("de_aosp", "de", "de", 205_888, 1_101_134L),
+        aosp("el_aosp", "el", "el", 184_303, 981_672L),
+        aosp(
+            "en_aosp", "en", "en", 160_668, 748_505L,
+            variantRes = R.string.core_pred_wordlist_variant_us_label,
+        ),
+        aosp(
+            "en_gb_aosp", "en", "en", 157_423, 734_107L,
+            variantRes = R.string.core_pred_wordlist_variant_uk_label, fileStem = "en_gb_aosp",
+        ),
+        aosp("es_aosp", "es", "es", 236_193, 977_769L),
+        aosp("fi_aosp", "fi", "fi", 223_363, 1_093_376L),
+        aosp("fr_aosp", "fr", "fr", 190_113, 950_440L),
+        aosp("he_aosp", "he", "he", 94_799, 389_909L),
+        aosp("hr_aosp", "hr", "hr", 210_081, 858_496L),
+        aosp("it_aosp", "it", "it", 172_831, 802_881L),
+        aosp("lt_aosp", "lt", "lt", 198_160, 837_749L),
+        aosp("lv_aosp", "lv", "lv", 200_570, 813_274L),
+        aosp("nb_aosp", "nb", "nb", 171_008, 817_188L),
+        aosp("nl_aosp", "nl", "nl", 178_444, 900_291L),
+        aosp("pl_aosp", "pl", "pl", 195_099, 934_477L),
+        aosp(
+            "pt_aosp", "pt", "pt", 218_456, 952_642L,
+            variantRes = R.string.core_pred_wordlist_variant_europe_label,
+        ),
+        aosp(
+            "pt_br_aosp", "pt", "pt_br", 170_043, 756_696L,
+            variantRes = R.string.core_pred_wordlist_variant_brazil_label,
+        ),
+        aosp("ro_aosp", "ro", "ro", 1_125_204, 3_229_839L),
+        aosp("ru_aosp", "ru", "ru", 220_485, 1_195_780L),
+        aosp("sl_aosp", "sl", "sl", 59_998, 260_336L),
+        aosp("sr_aosp", "sr", "sr", 191_608, 895_311L),
+        aosp("sv_aosp", "sv", "sv", 196_739, 969_689L),
+        aosp("tr_aosp", "tr", "tr", 180_841, 792_381L),
     )
 
     init {
@@ -438,4 +518,12 @@ object DictionaryCatalog {
 
     fun forLanguage(langId: String): List<DictionaryEntry> =
         entries.filter { it.languageId == langId }
+
+    /**
+     * The list [langId] downloads unless the user picks another: its AOSP list
+     * where it has one, else its counted list, and of either the first region
+     * listed (Europe for Portuguese, the US for English).
+     */
+    fun preferred(langId: String): DictionaryEntry? =
+        forLanguage(langId).minByOrNull { it.source.ordinal }
 }
