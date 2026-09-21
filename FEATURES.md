@@ -2189,6 +2189,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Inflated at WRAP_CONTENT in both axes — chips size to their own content, and an exact height outside the spec's range would make inflate throw into a swallowed catch, vanishing every chip silently
     - Measured and inflated against the display context on Android 11–12, where the service's own resources still describe the built-in panel
     - Chips are remote-rendered; the keyboard never sees their contents
+    - Chip taps buzz and click like a key — the tap never reaches the keyboard (the renderer sends it straight to the autofill system), so it is read from the empty response that withdraws the row just before the fill, unless a keypress, a field edit or a new field in the last 400 ms explains it; a focus change up to 60 ms later cancels it. A locked vault's tap sends no withdrawal and stays silent (#250)
     - Chip background and text colours follow the theme — the strip's own chip colours, reported out of the composition because the request is built on the service; the first request after process start carries none, since nothing has resolved a theme yet
     - Renderer version read off the request's uiExtras, not echoed back into the request's own extras — an undeclared renderer is taken at v1, since the bundle is empty on every device tested and v1 is the only version there is
     - Both lanes inflated and delivered in one callback — Stops a reply landing a frame before a credential chip and moving the row

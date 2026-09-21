@@ -4517,6 +4517,8 @@ open class WMKeyboardService : InputMethodService() {
         // changed under it; nothing about it can be trusted from here.
         revision = null
         if (!restarting) {
+            // Chips withdrawn because focus moved here were not tapped.
+            inlineFieldStartedAt = SystemClock.uptimeMillis()
             // The rewrites the bar remembered were about the old field, and a
             // conversion still running was for it too.
             macroUndo.clear()
@@ -4994,6 +4996,7 @@ open class WMKeyboardService : InputMethodService() {
         candidatesEnd: Int,
     ) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        lastSelectionUpdateAt = SystemClock.uptimeMillis()
         expectedSelStart = newSelStart
         expectedSelEnd = newSelEnd
         trackCaretAtFieldStart(newSelStart, newSelEnd)
@@ -5326,6 +5329,7 @@ open class WMKeyboardService : InputMethodService() {
         if (!InlineAutofill.supported) return false
         val (autofillBudget, platformBudget) = inlineChipBudgets()
         if (autofillBudget + platformBudget == 0) return false
+        if (response.inlineSuggestions.isEmpty()) onInlineChipsWithdrawn()
         val lanes = InlineAutofill.split(
             suggestions = response.inlineSuggestions,
             autofillBudget = autofillBudget,
@@ -5340,6 +5344,50 @@ open class WMKeyboardService : InputMethodService() {
             }
         }
         return true
+    }
+
+    /**
+     * When the keyboard last did something that can make the platform filter
+     * its chips down to nothing: a keypress (every one of those goes through
+     * [vibrate]) or any edit reaching the field, including a glide, a paste or
+     * a hardware key, all of which arrive here as a selection update.
+     */
+    private var lastSelectionUpdateAt = 0L
+
+    /** The last onStartInput for a different field than the one before it. */
+    private var inlineFieldStartedAt = 0L
+
+    private val inlineChipTapFeedback = Runnable {
+        if (inlineFieldStartedAt < inlineChipsWithdrawnAt) vibrate()
+    }
+    private var inlineChipsWithdrawnAt = 0L
+
+    /**
+     * The chips were taken back — the keyboard's only sign that one of them was
+     * tapped, which is why it is the one place a chip tap can buzz (#250).
+     *
+     * A chip is a surface the other process draws and owns, and its touch never
+     * enters this window: the renderer hands the click straight to the
+     * autofill system, and the only thing sent back is this, the empty
+     * response that hides the row just before the manager fills the field. So
+     * a tap is read from the withdrawal, less the other things that also
+     * withdraw them: typing that the chips no longer match (the keyboard or
+     * the field moved first), and focus going to another field (a new start,
+     * before this or just after, which is why the buzz waits a moment for one).
+     *
+     * A manager whose vault is locked answers a tap by opening its unlock
+     * screen instead, with no withdrawal, and that tap stays silent.
+     */
+    private fun onInlineChipsWithdrawn() {
+        val state = _uiState.value
+        if (state.autofillChips.isEmpty() && state.smartReplyChips.isEmpty()) return
+        if (!windowOnScreen) return
+        val now = SystemClock.uptimeMillis()
+        val lastLocal = maxOf(lastVibrateAt, lastSelectionUpdateAt, inlineFieldStartedAt)
+        if (now - lastLocal < INLINE_CHIP_QUIET_MS) return
+        inlineChipsWithdrawnAt = now
+        feedbackHandler.removeCallbacks(inlineChipTapFeedback)
+        feedbackHandler.postDelayed(inlineChipTapFeedback, INLINE_CHIP_TAP_CONFIRM_MS)
     }
 
     /**
@@ -29136,6 +29184,21 @@ open class WMKeyboardService : InputMethodService() {
 
         /** Height offered to autofill chips, matching the suggestion strip. */
         private const val INLINE_CHIP_HEIGHT_DP = 44
+
+        /**
+         * How long the keyboard and the field must have been still for chips
+         * being withdrawn to count as a tap on one. Typing withdraws them too,
+         * once the text stops matching, and the platform's answer to a
+         * keystroke lands well inside this.
+         */
+        private const val INLINE_CHIP_QUIET_MS = 400L
+
+        /**
+         * How long a chip tap's buzz waits for a focus change that would say
+         * the chips went for that instead. Short enough to still feel like the
+         * tap's own.
+         */
+        private const val INLINE_CHIP_TAP_CONFIRM_MS = 60L
 
         /**
          * How long switching the dictation engine from the voice panel waits for
