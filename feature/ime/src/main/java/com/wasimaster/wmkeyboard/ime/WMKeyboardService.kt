@@ -2164,6 +2164,12 @@ open class WMKeyboardService : InputMethodService() {
     private var voiceSentenceStart = false
     /** User tapped stop: the pending final must not chain another utterance. */
     private var voiceStopRequested = false
+    /**
+     * The voice tool was pressed over a running dictation (#283): the phrase is
+     * being finished, and the strip or panel it ran on goes once the words have
+     * landed. See [endVoiceFromTool].
+     */
+    private var voiceToolEnding = false
     /** Consecutive empty utterances in continuous mode; give up after a few. */
     private var voiceSilentRetries = 0
     /** Last dictated commit, so the undo chip can take it back whole. */
@@ -16934,7 +16940,7 @@ open class WMKeyboardService : InputMethodService() {
             ToolbarTool.QR_SCAN -> onPanelChange(PanelMode.QR_SCAN)
             // Not a panel: the scanner is a full-screen Google activity.
             ToolbarTool.DOC_SCAN -> onDocScanStart()
-            ToolbarTool.VOICE -> onPanelChange(PanelMode.VOICE)
+            ToolbarTool.VOICE -> if (!endVoiceFromTool()) onPanelChange(PanelMode.VOICE)
             ToolbarTool.GRAMMAR -> onPanelChange(PanelMode.GRAMMAR)
             ToolbarTool.WIKIPEDIA -> onPanelChange(PanelMode.WIKIPEDIA)
             ToolbarTool.SYMBOLS -> onPanelChange(PanelMode.SYMBOLS)
@@ -17369,16 +17375,7 @@ open class WMKeyboardService : InputMethodService() {
     fun onVoiceToggle() {
         vibrate()
         when (_uiState.value.voice.status) {
-            VoiceStatus.LISTENING -> {
-                voiceStopRequested = true
-                if (whisperRecorder != null) {
-                    // Whisper: stop recording and transcribe this clip.
-                    finishWhisper(userStopped = true)
-                } else {
-                    _uiState.update { it.copy(voice = it.voice.copy(status = VoiceStatus.FINISHING)) }
-                    voiceEngine.finish()
-                }
-            }
+            VoiceStatus.LISTENING -> finishVoiceUtterance()
             // Ignore taps while finishing or transcribing — the result is coming.
             VoiceStatus.FINISHING, VoiceStatus.TRANSCRIBING -> {}
             else -> {
@@ -17386,6 +17383,64 @@ open class WMKeyboardService : InputMethodService() {
                 voiceSilentRetries = 0
                 startVoice()
             }
+        }
+    }
+
+    /** The user is done talking: what was heard so far becomes the result. */
+    private fun finishVoiceUtterance() {
+        voiceStopRequested = true
+        if (whisperRecorder != null) {
+            // Whisper: stop recording and transcribe this clip.
+            finishWhisper(userStopped = true)
+        } else {
+            _uiState.update { it.copy(voice = it.voice.copy(status = VoiceStatus.FINISHING)) }
+            voiceEngine.finish()
+        }
+    }
+
+    /**
+     * The voice tool pressed while a dictation runs on the strip or the panel:
+     * there it is the stop button (#283). The phrase is finished the way the
+     * surface's own microphone finishes it, and the surface closes once the
+     * words have landed ([settleVoiceToolEnding]), so the one button that
+     * starts a dictation also ends it.
+     *
+     * The press used to close the surface through [cancelVoice]. A clip engine
+     * has nothing in the field until its clip is transcribed, so for Whisper
+     * and the server that threw away everything just said. Abandoning a
+     * session is still there to be had: the strip's close button and the
+     * panel's keyboard key. False when no dictation is running, and the press
+     * opens or closes the tool as it always did.
+     */
+    private fun endVoiceFromTool(): Boolean {
+        val state = _uiState.value
+        if (!state.voice.strip && state.panel != PanelMode.VOICE) return false
+        if (!voiceActive()) return false
+        vibrate()
+        voiceToolEnding = true
+        // Also for a clip already finishing on its own (the 30 s cap): the
+        // press asked for the end of the session, not for the next clip.
+        voiceStopRequested = true
+        if (state.voice.status == VoiceStatus.LISTENING) finishVoiceUtterance()
+        return true
+    }
+
+    /**
+     * A session has come to rest. If the voice tool is what ended it
+     * ([endVoiceFromTool]) and the words are in the field, the surface goes
+     * too. Anything else it came to rest on, an error or a blocked microphone,
+     * is something the surface has to stay up to say.
+     */
+    private fun settleVoiceToolEnding() {
+        if (!voiceToolEnding) return
+        voiceToolEnding = false
+        val state = _uiState.value
+        if (state.voice.status != VoiceStatus.IDLE) return
+        if (state.voice.strip) {
+            _uiState.update { it.copy(voice = it.voice.copy(strip = false, canUndo = false)) }
+        } else if (state.panel == PanelMode.VOICE) {
+            // The finger left the tool a while ago: no second buzz.
+            onPanelChange(PanelMode.VOICE, haptic = false)
         }
     }
 
@@ -17610,6 +17665,7 @@ open class WMKeyboardService : InputMethodService() {
                                 ),
                             )
                         }
+                        settleVoiceToolEnding()
                     }
                 }
 
@@ -17653,6 +17709,9 @@ open class WMKeyboardService : InputMethodService() {
                             ),
                         )
                     }
+                    // Nothing heard after the tool's stop is still a finished
+                    // session; a real error keeps the surface up to say so.
+                    settleVoiceToolEnding()
                 }
             },
         )
@@ -17799,6 +17858,7 @@ open class WMKeyboardService : InputMethodService() {
         if (model == null) {
             serviceScope.launch(Dispatchers.IO) { runCatching { recorder.stop() } }
             _uiState.update { it.copy(voice = it.voice.copy(status = VoiceStatus.IDLE, level = 0f)) }
+            settleVoiceToolEnding()
             return
         }
         _uiState.update {
@@ -17924,6 +17984,7 @@ open class WMKeyboardService : InputMethodService() {
                 serviceScope.launch(Dispatchers.Main) { startVoice() }
             } else {
                 _uiState.update { it.copy(voice = it.voice.copy(status = VoiceStatus.IDLE, partial = "", level = 0f)) }
+                settleVoiceToolEnding()
             }
             return
         }
@@ -17936,6 +17997,7 @@ open class WMKeyboardService : InputMethodService() {
             _uiState.update {
                 it.copy(voice = it.voice.copy(status = VoiceStatus.IDLE, partial = "", level = 0f, canUndo = true))
             }
+            settleVoiceToolEnding()
         }
     }
 
@@ -18078,6 +18140,7 @@ open class WMKeyboardService : InputMethodService() {
                     )
                 }
             is VoiceBarAction.SwitchSurface -> switchVoiceSurface(action.mode)
+            VoiceBarAction.CloseStrip -> closeVoiceStrip()
             is VoiceBarAction.Bounds -> onVoiceBarBounds(action)
         }
     }
@@ -18137,6 +18200,8 @@ open class WMKeyboardService : InputMethodService() {
         val status = _uiState.value.voice.status
         // Bumping first invalidates any in-flight Whisper transcription.
         voiceGeneration++
+        // An abandoned session has no landing for the tool's stop to wait on.
+        voiceToolEnding = false
         micBlockWatcher.stop()
         whisperRecorder?.let { rec ->
             whisperRecorder = null
@@ -18234,7 +18299,11 @@ open class WMKeyboardService : InputMethodService() {
         if (panel != PanelMode.VOICE && voiceBarShowing()) cancelVoice()
     }
 
-    /** Voice tool tap in strip mode: dictate over the keys, no panel. */
+    /**
+     * Voice tool tap in strip mode: dictate over the keys, no panel. A tap over
+     * a running dictation is taken by [endVoiceFromTool] first, so the close
+     * below is an idle strip being put away.
+     */
     private fun toggleVoiceStrip() {
         if (_uiState.value.voice.strip) {
             closeVoiceStrip()

@@ -1003,6 +1003,13 @@ sealed interface VoiceBarAction {
     data class SwitchSurface(val mode: String) : VoiceBarAction
 
     /**
+     * The strip's close button: the session is abandoned and the strip goes.
+     * It used to be a press of the voice tool, until that press over a running
+     * dictation became the stop button (#283) and the two had to part.
+     */
+    data object CloseStrip : VoiceBarAction
+
+    /**
      * The collapsed bar's on-screen rectangle in window coordinates — the
      * service's touchable region, so touches beside the bar reach the app.
      */

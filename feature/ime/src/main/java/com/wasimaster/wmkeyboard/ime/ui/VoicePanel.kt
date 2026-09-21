@@ -161,6 +161,17 @@ internal fun VoicePanel(
     val languageRingIndex = undoRingIndex + (if (undoVisible) 1 else 0)
     val collapseRingIndex = languageRingIndex + (if (languageChipVisible) 1 else 0)
 
+    // While the mic is open, this whole side of the panel is the stop button,
+    // not only the 64dp circle in the middle of it (#283). The stop press is
+    // made mid-sentence without looking, and a clip engine types nothing until
+    // it is made. The chips and the mic take their own presses first, so this
+    // only ever hears the ones that missed. pointerInput, not clickable:
+    // TalkBack and the focus ring already have the mic, and a second node that
+    // does the same thing is noise. The tint says where the button now ends.
+    val listening = voice.status == VoiceStatus.LISTENING
+    val stopAnywhere by rememberUpdatedState(listening)
+    val stop by rememberUpdatedState(onToggle)
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -171,7 +182,15 @@ internal fun VoicePanel(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .padding(2.dp),
+                .padding(2.dp)
+                .then(
+                    if (listening) {
+                        Modifier.background(kb.accent.copy(alpha = 0.08f), kb.keyShape())
+                    } else {
+                        Modifier
+                    },
+                )
+                .pointerInput(Unit) { detectTapGestures(onTap = { if (stopAnywhere) stop() }) },
         ) {
             when {
                 state.secureField -> VoiceNotice(
@@ -676,9 +695,17 @@ internal fun VoiceStripBar(
     val transcribing = voice.status == VoiceStatus.TRANSCRIBING
     val busy = finishing || transcribing
     val feedback = LocalKeyPressFeedback.current
+    // Same as the panel, and more needed: the mic here is 30dp. While it is
+    // open, everywhere on the bar that is not another button stops it (#283).
+    // Only while it is open. An idle bar that opened the mic for any stray
+    // touch on the way to the top row of keys would be a worse trade.
+    val stopAnywhere by rememberUpdatedState(listening)
+    val stop by rememberUpdatedState(onToggle)
 
     Row(
-        modifier = modifier.fillMaxHeight(),
+        modifier = modifier
+            .fillMaxHeight()
+            .pointerInput(Unit) { detectTapGestures(onTap = { if (stopAnywhere) stop() }) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(

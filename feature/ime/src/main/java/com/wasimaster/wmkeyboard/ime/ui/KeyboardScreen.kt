@@ -2639,8 +2639,8 @@ private fun TopBar(
     onVoiceUndo: () -> Unit = {},
     onVoicePermissionRequest: () -> Unit = {},
     onOpenVoiceSettings: () -> Unit = {},
-    /** Strip's collapse button: switch dictation to the collapsed bar. */
-    onVoiceCollapse: () -> Unit = {},
+    /** The strip's collapse and close buttons; the one slot [VoiceBarAction] rides. */
+    onVoiceAction: (VoiceBarAction) -> Unit = {},
     onDismissInlineSuggestions: () -> Unit = {},
     onSmartAccept: () -> Unit = {},
     onSmartOpen: () -> Unit = {},
@@ -3039,9 +3039,12 @@ private fun TopBar(
                     onUndo = onVoiceUndo,
                     onRequestPermission = onVoicePermissionRequest,
                     onOpenVoiceSettings = onOpenVoiceSettings,
-                    onCollapse = onVoiceCollapse,
-                    // The tool tap toggles the strip, so it also closes it.
-                    onClose = { onToolTap(ToolbarTool.VOICE) },
+                    onCollapse = {
+                        onVoiceAction(VoiceBarAction.SwitchSurface(VoiceBarSettings.MODE_BAR))
+                    },
+                    // Not the tool tap: over a running dictation that finishes
+                    // the phrase (#283), and this button is the way to drop it.
+                    onClose = { onVoiceAction(VoiceBarAction.CloseStrip) },
                     modifier = Modifier.weight(1f),
                 )
                 return@Row
@@ -9423,11 +9426,7 @@ private fun KeyboardBody(
                                 onVoiceUndo = onVoiceUndo,
                                 onVoicePermissionRequest = onVoicePermissionRequest,
                                 onOpenVoiceSettings = onOpenVoiceSettings,
-                                onVoiceCollapse = {
-                                    onVoiceRailKey(
-                                        VoiceBarAction.SwitchSurface(VoiceBarSettings.MODE_BAR),
-                                    )
-                                },
+                                onVoiceAction = onVoiceRailKey,
                                 onDismissInlineSuggestions = onDismissInlineSuggestions,
                                 onSmartAccept = onSmartAccept,
                                 onSmartOpen = onSmartOpen,

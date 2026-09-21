@@ -2353,7 +2353,10 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Rail keys are Delete, Space, context-aware Enter, back-to-keys
     - Hold-to-talk — past 600 ms the mic is walkie-talkie: listens while held, stops on release; a tap still toggles
     - Rail keys do not end the recording — except when a system partial is sitting in the editor as composing text
+    - Stop anywhere while listening (#283) — the whole side left of the rail takes the stop press, tinted while it does; chips and the mic keep their own presses, pointerInput so TalkBack still has one mic node
   - Compact strip over the keys `uncommon` — replaces the suggestion strip, keys stay usable underneath
+    - Stop anywhere while listening (#283) — everywhere on the bar that is not another button finishes the phrase; listening only, an idle bar never opens the mic for a stray touch
+  - Voice tool is the stop button (#283) — pressed over a dictation running on the strip or panel it finishes the phrase (endVoiceFromTool) and the surface closes once the words land (settleVoiceToolEnding); it used to cancel, which threw a Whisper or server clip away. The strip's close button (VoiceBarAction.CloseStrip) and the panel's keyboard key still abandon; an error keeps the surface up
   - Floating collapsed bar `RARE` — Gboard-style voice toolbar: the keyboard gives its whole window to a draggable pill so the app behind is visible
     - Touchable region shrunk to the pill — everything around it falls through to the app
     - Horizontal pill snaps to 3 rests and keeps its height

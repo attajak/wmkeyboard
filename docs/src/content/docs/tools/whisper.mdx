@@ -22,7 +22,7 @@ Offline Whisper is a second dictation engine that runs entirely on your phone. I
 
 The system recognizer, covered in [Voice typing](/tools/voice/), is fast and shows words as you speak. It also leans on your OS and its installed languages, and without the on-device language pack it sends audio to a recognizer service. Offline Whisper trades all of that away for a hard guarantee: it works across many languages and never sends audio anywhere.
 
-You feel that trade every time you dictate, because Whisper doesn't stream. It records into a buffer and transcribes the whole clip once you stop talking, or once you hit the 30-second cap (see [Details & edge cases](#details--edge-cases)). The panel shows "Listening. Press when you are done." rather than live partial words.
+You feel that trade every time you dictate, because Whisper doesn't stream. It records into a buffer and transcribes the whole clip once you stop talking, or once you hit the 30-second cap (see [Details & edge cases](#details--edge-cases)). The panel shows "Listening. Press when you are done." rather than live partial words. That press doesn't need aim: the whole panel left of the action rail takes it, so does anywhere on the compact bar, and so does the Voice tool on the toolbar (see [Starting dictation](/tools/voice/#starting-dictation)).
 
 Bigger models trade download size and speed for accuracy:
 
