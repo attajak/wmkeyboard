@@ -62,6 +62,13 @@ into `META-INF/version-control-info.textproto`, and in a git worktree (where
 `.git` is a file) it cannot read it and writes `NO_VALID_GIT_FOUND`. Build a
 reference APK from a real clone.
 
+The reference APK must also carry no "Dependency metadata" signing block, the
+Google-encrypted dependency list AGP adds by default. fdroiddata's `check apk`
+job fails on it even when the comparison passes, since it sits in the
+signature and not in the files compared. `dependenciesInfo { includeInApk =
+false }` in `app/build.gradle.kts` keeps it out from 0.5.11; 0.5.10's APK was
+re-signed with `apksigner sign --alignment-preserved` to remove it.
+
 Installs from F-Droid up to 0.5.9 carry F-Droid's key, and Android refuses an
 update signed with a different one, so those users reinstall once. Dual signing
 (signature files under `metadata/<appid>/signatures/<vc>/`, F-Droid publishing

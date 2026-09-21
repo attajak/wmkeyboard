@@ -322,6 +322,15 @@ android {
             // three ABIs), so keeping them was buying nothing.
         }
     }
+    // AGP signs a dependency list into every APK's signing block, encrypted
+    // with a key only Google can read. F-Droid's `check apk` job rejects an APK
+    // carrying it, and the F-Droid reference APK on each GitHub release is one
+    // of ours. It lives only in the signing block, so dropping it changes no
+    // file inside the APK. The bundle keeps it: Play is who reads it.
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = true
+    }
 
     buildFeatures {
         compose = true

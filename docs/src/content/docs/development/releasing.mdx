@@ -467,6 +467,13 @@ The rules that follow from this:
   tarball it cannot read the repository and writes `NO_VALID_GIT_FOUND`
   instead, and that one file fails the comparison. The `fdroid` job checks
   the hash is there.
+- **No dependency metadata in the signature.** AGP signs a Google-encrypted
+  dependency list into an APK's signing block by default, and fdroiddata's
+  `check apk` job rejects the reference APK for it. `dependenciesInfo {
+  includeInApk = false }` in `app/build.gradle.kts` turns it off. It sits
+  outside the files F-Droid compares, which is why the comparison itself
+  still passed on 0.5.10's first upload. That APK was re-signed with
+  `apksigner sign --alignment-preserved` to drop the block.
 - **Keep the certificate check in the `fdroid` job in step with the recipe**
   if the signing key ever changes.
 
