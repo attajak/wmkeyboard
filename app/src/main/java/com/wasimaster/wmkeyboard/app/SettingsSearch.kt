@@ -9,6 +9,7 @@ import com.wasimaster.wmkeyboard.app.updates.UpdateChannel
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.settings.isSupportedTool
+import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
 
 /**
  * How much an entry is worth next to the others, as a percentage applied to
@@ -1411,7 +1412,26 @@ private fun SearchStrings.toolPageRowsB(): List<SettingsSearchEntry> = listOf(
         screenParent = R.string.home_tools_title,
     ),
     toolEntry(ToolbarTool.TRANSLATE, R.string.toolai_translate_into_title, R.string.toolai_translate_into_subtitle),
-)
+) + translateEngineRows()
+
+/**
+ * The translate page's engine row and model list. Only where the on-device
+ * engine exists: on any other build the page does not draw them, and a result
+ * that lands on a row that is not there flashes nothing.
+ */
+private fun SearchStrings.translateEngineRows(): List<SettingsSearchEntry> =
+    if (!OnDeviceTranslator.AVAILABLE) {
+        emptyList()
+    } else {
+        listOf(
+            toolEntry(
+                ToolbarTool.TRANSLATE,
+                R.string.tooldetail_translate_engine_title,
+                R.string.tooldetail_translate_engine_subtitle,
+            ),
+            toolEntry(ToolbarTool.TRANSLATE, R.string.tooldetail_translate_models_group),
+        )
+    }
 
 /**
  * Rows on Backup, on the sticker and plugin screens, and on Privacy, Rows &

@@ -43,6 +43,8 @@ navigationCompose = "2.9.0"
 # for 35, so it is as far as this line goes until compileSdk moves.
 composeAdaptive = "1.2.0"
 mlkitDigitalInk = "19.0.0"
+mlkitTranslate = "17.0.3"
+mlkitLanguageId = "17.0.6"
 mlkitTextRecognition = "16.0.1"
 mlkitBarcode = "17.3.0"
 # Unbundled twins of the two bundled ML Kit artifacts above, used by
@@ -148,6 +150,8 @@ androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycl
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
 mlkit-digital-ink = { group = "com.google.mlkit", name = "digital-ink-recognition", version.ref = "mlkitDigitalInk" }
+mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslate" }
+mlkit-language-id = { group = "com.google.mlkit", name = "language-id", version.ref = "mlkitLanguageId" }
 mlkit-text-recognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkitTextRecognition" }
 mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkitBarcode" }
 mlkit-text-recognition-unbundled = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "mlkitTextRecognitionUnbundled" }

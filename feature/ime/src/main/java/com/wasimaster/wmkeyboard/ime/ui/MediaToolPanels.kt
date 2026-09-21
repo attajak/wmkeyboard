@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,10 +40,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
-import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -74,7 +71,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
 import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
 import coil3.ImageLoader
@@ -93,7 +89,6 @@ import com.wasimaster.wmkeyboard.core.tools.GifSources
 import com.wasimaster.wmkeyboard.core.tools.MediaCategory
 import com.wasimaster.wmkeyboard.core.tools.ToolApiKeys
 import com.wasimaster.wmkeyboard.core.tools.ImageResult
-import com.wasimaster.wmkeyboard.core.tools.TranslateClient
 import com.wasimaster.wmkeyboard.core.tools.WebResult
 import com.wasimaster.wmkeyboard.ime.ImageSearchUi
 import com.wasimaster.wmkeyboard.ime.FocusRegion
@@ -102,8 +97,6 @@ import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.MediaUi
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.WebSearchUi
-import com.wasimaster.wmkeyboard.core.ui.ScrollRail
-import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
 
 // ---- shared bits ----
 
@@ -1435,274 +1428,6 @@ private fun ImageGrid(
                 )
                 if (downloadingId == result.imageUrl) MediaDownloadOverlay(progress)
             }
-        }
-    }
-}
-
-// ---- translate panel ----
-
-/**
- * Translation window: the query types into the panel's own search bar
- * (media-search key rerouting — the focused field is never read) and the
- * result follows live. Insert types the translation at the cursor; Replace
- * swaps the whole field for it. Source language is auto-detected; the chip
- * picks the target.
- */
-@Composable
-internal fun TranslatePanel(
-    state: KeyboardUiState,
-    onTarget: (String) -> Unit,
-    onReplace: () -> Unit,
-    onInsert: () -> Unit,
-) {
-    val kb = LocalKbTheme.current
-    val translate = state.translate
-    val target = state.settings.translateTargetLang
-    var pickerOpen by remember { mutableStateOf(false) }
-    // The ring's regions. CHIPS is the one target-language chip; RESULTS is
-    // the picker's rows, published only while it is open (zero rows closed,
-    // so Tab skips it); ACTIONS is Replace/Insert, no-ops while there is
-    // nothing translated — mirroring the chips' own enabled state. Known
-    // v1 gap: Esc while the picker Popup is open closes the whole panel
-    // (the open flag is composable-local, invisible to the service);
-    // Enter on the CHIPS region reopens it cheaply.
-    PanelFocusTarget(
-        panel = PanelMode.TRANSLATE,
-        region = FocusRegion.CHIPS,
-        count = 1,
-        columns = 1,
-        onActivate = { pickerOpen = true },
-    )
-    val pickerLanguages = TranslateClient.languages
-    PanelFocusTarget(
-        panel = PanelMode.TRANSLATE,
-        region = FocusRegion.RESULTS,
-        count = if (pickerOpen) pickerLanguages.size else 0,
-        columns = 1,
-        onActivate = { index ->
-            pickerLanguages.getOrNull(index)?.let { (code, _) ->
-                pickerOpen = false
-                onTarget(code)
-            }
-        },
-    )
-    PanelFocusTarget(
-        panel = PanelMode.TRANSLATE,
-        region = FocusRegion.ACTIONS,
-        count = 2,
-        columns = 2,
-        onActivate = { index ->
-            if (translate.translated.isNotEmpty()) {
-                if (index == 0) onReplace() else onInsert()
-            }
-        },
-    )
-    // The panel is its own translation window: the query types into the
-    // header search bar (field text is never read). The FullBleedTool
-    // wrapper collapses the panel while typing — the keys sit right below
-    // and the live result still fits above them.
-    Column(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
-        ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            val detected = translate.detectedSource
-                .takeIf { it.isNotBlank() && translate.translated.isNotEmpty() }
-            val sourceName = detected?.let { TranslateClient.languageName(it) }
-                ?: stringResource(R.string.ime_translate_auto_detect_label)
-            Text(
-                "$sourceName  →",
-                color = kb.secondaryText,
-                fontSize = 12.sp,
-                maxLines = 1,
-            )
-            Spacer(Modifier.width(6.dp))
-            Box {
-                Row(
-                    modifier = Modifier
-                        .clip(kb.chipShape())
-                        .background(kb.chip)
-                        .chipBorder(kb, kb.chipShape())
-                        .focusRing(
-                            state.focusedIndex(FocusRegion.CHIPS) == 0,
-                            kb.chipShape(),
-                        )
-                        .clickable { pickerOpen = true }
-                        .padding(horizontal = 10.dp, vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        TranslateClient.languageName(target),
-                        color = kb.chipText,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        maxLines = 1,
-                    )
-                    Icon(
-                        Icons.Outlined.ArrowDropDown,
-                        contentDescription =
-                            stringResource(R.string.ime_translate_select_language_desc),
-                        modifier = Modifier.size(18.dp),
-                        tint = kb.toolbarIcon,
-                    )
-                }
-                if (pickerOpen) {
-                    TranslateLanguagePicker(
-                        current = target,
-                        focused = state.focusedIndex(FocusRegion.RESULTS),
-                        onPick = {
-                            pickerOpen = false
-                            onTarget(it)
-                        },
-                        onDismiss = { pickerOpen = false },
-                    )
-                }
-            }
-            Spacer(Modifier.weight(1f))
-            if (translate.translating) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(14.dp),
-                    strokeWidth = 2.dp,
-                    color = kb.accent,
-                )
-            }
-        }
-        Text(
-            text = when {
-                translate.error != null -> translate.error
-                translate.translated.isNotEmpty() -> translate.translated
-                translate.translating -> stringResource(R.string.ime_translate_progress)
-                else -> stringResource(R.string.ime_translate_idle)
-            },
-            color = when {
-                translate.error != null -> kb.accent
-                translate.translated.isEmpty() -> kb.secondaryText
-                else -> kb.suggestionText
-            },
-            fontSize = if (state.mediaSearchActive) 14.sp else 16.sp,
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(vertical = 4.dp)
-                .verticalScroll(rememberScrollState()),
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            val focusedAction = state.focusedIndex(FocusRegion.ACTIONS)
-            TranslateAction(
-                label = stringResource(R.string.ime_translate_replace_action),
-                icon = Icons.Outlined.SwapVert,
-                enabled = translate.translated.isNotEmpty(),
-                modifier = Modifier
-                    .weight(1f)
-                    .focusRing(focusedAction == 0, kb.chipShape()),
-            ) { onReplace() }
-            TranslateAction(
-                label = stringResource(R.string.ime_insert_action),
-                icon = null,
-                enabled = translate.translated.isNotEmpty(),
-                modifier = Modifier
-                    .weight(1f)
-                    .focusRing(focusedAction == 1, kb.chipShape()),
-            ) { onInsert() }
-        }
-        }
-    }
-}
-
-@Composable
-private fun TranslateAction(
-    label: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector?,
-    enabled: Boolean,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
-    val kb = LocalKbTheme.current
-    val shape = kb.chipShape()
-    Row(
-        modifier = modifier
-            .clip(shape)
-            .background(if (enabled) kb.chipActive else kb.chip)
-            .chipBorder(kb, shape)
-            .clickable(enabled = enabled) { onClick() }
-            .padding(vertical = 7.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (icon != null) {
-            Icon(
-                icon,
-                contentDescription = null,
-                modifier = Modifier.size(15.dp),
-                tint = if (enabled) kb.chipActiveText else kb.secondaryText,
-            )
-            Spacer(Modifier.width(5.dp))
-        }
-        Text(
-            label,
-            color = if (enabled) kb.chipActiveText else kb.secondaryText,
-            fontSize = 13.sp,
-            fontWeight = FontWeight.SemiBold,
-            maxLines = 1,
-        )
-    }
-}
-
-@Composable
-private fun TranslateLanguagePicker(
-    current: String,
-    onPick: (String) -> Unit,
-    onDismiss: () -> Unit,
-    focused: Int? = null,
-) {
-    val kb = LocalKbTheme.current
-    val scroll = rememberScrollState()
-    // A hundred languages behind a 260 dp window: the rail is the only thing
-    // saying the list runs past the third one.
-    val rail = rememberScrollRailState(scroll)
-    Popup(onDismissRequest = onDismiss) {
-        ScrollRail(
-            state = rail,
-            modifier = Modifier
-                .widthIn(min = 180.dp, max = 240.dp)
-                .heightIn(max = 260.dp)
-                .clip(kb.menuShape())
-                .background(kb.popup)
-                .popupBorder(kb, kb.menuShape())
-                .padding(vertical = 4.dp),
-            fadeColor = kb.popup,
-            colors = kbRailColors(kb),
-        ) {
-            for ((index, entry) in TranslateClient.languages.withIndex()) {
-                val (code, name) = entry
-                Text(
-                    name,
-                    color = if (code == current) kb.accent else kb.popupText,
-                    fontWeight = if (code == current) FontWeight.Bold else FontWeight.Normal,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRing(index == focused, RoundedCornerShape(0.dp))
-                        .clickable { onPick(code) }
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                )
-            }
-        }
-        // Rows are one fixed height, so the ring's offset is index arithmetic.
-        ScrollFocusIntoView(focused) { index ->
-            val row = if (TranslateClient.languages.isEmpty()) {
-                0
-            } else {
-                scroll.maxValue / TranslateClient.languages.size + 1
-            }
-            scroll.animateScrollTo((index * row - row).coerceAtLeast(0))
         }
     }
 }

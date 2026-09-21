@@ -416,6 +416,13 @@ import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import com.wasimaster.wmkeyboard.core.tools.ToolHttpException
 import com.wasimaster.wmkeyboard.core.tools.CharState
 import com.wasimaster.wmkeyboard.core.tools.TranslateClient
+import com.wasimaster.wmkeyboard.core.tools.Translation
+import com.wasimaster.wmkeyboard.core.translate.OfflineModelState
+import com.wasimaster.wmkeyboard.core.translate.OfflineTranslateLanguages
+import com.wasimaster.wmkeyboard.core.translate.OfflineTranslateResult
+import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
+import com.wasimaster.wmkeyboard.core.translate.downloadNotified
+import com.wasimaster.wmkeyboard.core.settings.TranslateEngine
 import com.wasimaster.wmkeyboard.core.tools.TypedWord
 import com.wasimaster.wmkeyboard.core.tools.TypingAchievements
 import com.wasimaster.wmkeyboard.core.tools.TypingBests
@@ -4068,9 +4075,7 @@ open class WMKeyboardService : InputMethodService() {
                 onWebResultOpen = ::onWebResultOpen,
                 onImageResult = ::onImageResultSelect,
                 onImageResultLink = ::onImageResultLink,
-                onTranslateTarget = ::onTranslateTargetChange,
-                onTranslateReplace = ::onTranslateReplace,
-                onTranslateInsert = ::onTranslateInsert,
+                translateCallbacks = translateCallbacks,
                 onGrammarFix = ::onGrammarFix,
                 onGrammarFixAll = ::onGrammarFixAll,
                 onGrammarDismiss = ::onGrammarDismiss,
@@ -5535,6 +5540,7 @@ open class WMKeyboardService : InputMethodService() {
         whisperRecorder?.let { rec -> whisperRecorder = null; runCatching { rec.stop() } }
         mediaController.stop()
         hwRecognizer.close()
+        releaseTranslateEngine()
         LocalLlmEngine.release()
         WhisperEngine.release()
         serviceScope.cancel()
@@ -5700,6 +5706,8 @@ open class WMKeyboardService : InputMethodService() {
         if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) {
             LocalLlmEngine.release()
             WhisperEngine.release()
+            // Reloads on the next translation; the panel's state is untouched.
+            if (translateEngineLoaded) OnDeviceTranslator.release()
         }
     }
 
@@ -17003,6 +17011,7 @@ open class WMKeyboardService : InputMethodService() {
         // this is where a ranking moved by earlier taps lands.
         publishEmojiHistory()
         translateJob?.cancel()
+        if (_uiState.value.panel == PanelMode.TRANSLATE) watchTranslateModels() else releaseTranslateEngine()
         grammarJob?.cancel()
         learnJob?.cancel()
         mediaFetchJob?.cancel()
@@ -22362,13 +22371,28 @@ open class WMKeyboardService : InputMethodService() {
         return before + after
     }
 
+    /** The engine in force. A build without ML Kit has only the one. */
+    private fun translateEngine(settings: KeyboardSettings): TranslateEngine =
+        if (OnDeviceTranslator.AVAILABLE) settings.translate.engine else TranslateEngine.ONLINE
+
     /**
      * Translates the panel's typed query after a short debounce, so the
      * result follows the typing without a request per keystroke. The query
      * lives in [KeyboardUiState.mediaQuery] — the panel is its own window
      * and never reads the focused field.
+     *
+     * [targetOverride] and [engineOverride] carry a choice the user has just
+     * made in the panel: the settings flow catches up asynchronously, and a
+     * retranslate that read the old value would undo the tap on screen.
+     * [force] retranslates text that already has a result, for the changes
+     * that make the same text come out differently.
      */
-    private fun scheduleTranslate(immediate: Boolean = false, targetOverride: String? = null) {
+    private fun scheduleTranslate(
+        immediate: Boolean = false,
+        targetOverride: String? = null,
+        engineOverride: TranslateEngine? = null,
+        force: Boolean = false,
+    ) {
         translateJob?.cancel()
         translateJob = serviceScope.launch {
             if (!immediate) delay(400)
@@ -22376,62 +22400,307 @@ open class WMKeyboardService : InputMethodService() {
             if (state.panel != PanelMode.TRANSLATE) return@launch
             val source = state.mediaQuery.trim()
             if (source.isEmpty()) {
-                _uiState.update { it.copy(translate = TranslateUi()) }
+                _uiState.update { it.copy(translate = it.translate.cleared()) }
                 return@launch
             }
-            if (source == state.translate.sourceText &&
+            if (!force && source == state.translate.sourceText &&
                 state.translate.translated.isNotEmpty() && state.translate.error == null
             ) {
                 return@launch
             }
             _uiState.update {
-                it.copy(translate = it.translate.copy(sourceText = source, translating = true, error = null))
+                it.copy(
+                    translate = it.translate.copy(
+                        sourceText = source,
+                        translating = true,
+                        error = null,
+                        meteredAsk = false,
+                    ),
+                )
             }
             val target = targetOverride ?: state.settings.translateTargetLang
-            val key = ToolApiKeys.translate(state.settings)
-            val result = withContext(Dispatchers.IO) {
-                runCatching {
-                    // Configured instance wins. Without one the F-Droid build
-                    // still translates through the keyless public endpoint,
-                    // which is a working feature and not worth removing.
-                    if (state.settings.selfHosted.libreTranslateUrl.isNotBlank()) {
-                        LibreTranslateClient.translate(
-                            text = source,
-                            target = target,
-                            endpoint = state.settings.selfHosted.libreTranslateUrl,
-                            apiKey = state.settings.selfHosted.libreTranslateApiKey,
-                        )
-                    } else {
-                        TranslateClient.translate(source, target, key)
+            val sourceLang = state.translate.sourceOverride
+            val outcome: (TranslateUi) -> TranslateUi =
+                when (engineOverride ?: translateEngine(state.settings)) {
+                    TranslateEngine.ONLINE ->
+                        onlineTranslateUi(source, translateOnline(state.settings, source, target, sourceLang))
+                    TranslateEngine.ON_DEVICE ->
+                        offlineTranslateUi(source, translateOnDevice(state, source, target, sourceLang))
+                    TranslateEngine.AUTO -> {
+                        val offline = translateOnDevice(state, source, target, sourceLang)
+                        if (offline is OfflineTranslateResult.Success) {
+                            offlineTranslateUi(source, offline)
+                        } else {
+                            val online = translateOnline(state.settings, source, target, sourceLang)
+                            // Both failed. A pair that only needs its models is
+                            // the one failure the user can fix from here, so
+                            // that offer outranks "no connection".
+                            if (online.isFailure && offline is OfflineTranslateResult.NeedsModels) {
+                                offlineTranslateUi(source, offline)
+                            } else {
+                                onlineTranslateUi(source, online)
+                            }
+                        }
                     }
                 }
-            }
             if (_uiState.value.panel != PanelMode.TRANSLATE) return@launch
-            _uiState.update {
-                it.copy(
-                    translate = result.fold(
-                        onSuccess = { t ->
-                            TranslateUi(sourceText = source, translated = t.text, detectedSource = t.detectedSource)
-                        },
-                        onFailure = { e ->
-                            it.translate.copy(
-                                translating = false,
-                                error = requestErrorText(e, R.string.ime_service_translate_error),
-                            )
-                        },
-                    ),
+            _uiState.update { it.copy(translate = outcome(it.translate)) }
+        }
+    }
+
+    private suspend fun translateOnline(
+        settings: KeyboardSettings,
+        source: String,
+        target: String,
+        sourceLang: String,
+    ): Result<Translation> = withContext(Dispatchers.IO) {
+        runCancellable {
+            // Configured instance wins. Without one the F-Droid build
+            // still translates through the keyless public endpoint,
+            // which is a working feature and not worth removing.
+            if (settings.selfHosted.libreTranslateUrl.isNotBlank()) {
+                LibreTranslateClient.translate(
+                    text = source,
+                    target = target,
+                    endpoint = settings.selfHosted.libreTranslateUrl,
+                    apiKey = settings.selfHosted.libreTranslateApiKey,
+                    source = sourceLang.ifBlank { TranslateClient.AUTO },
+                )
+            } else {
+                TranslateClient.translate(
+                    text = source,
+                    targetLang = target,
+                    apiKey = ToolApiKeys.translate(settings),
+                    sourceLang = sourceLang.ifBlank { TranslateClient.AUTO },
                 )
             }
         }
     }
 
+    private suspend fun translateOnDevice(
+        state: KeyboardUiState,
+        source: String,
+        target: String,
+        sourceLang: String,
+    ): OfflineTranslateResult {
+        translateEngineLoaded = true
+        return OnDeviceTranslator.translate(
+            context = applicationContext,
+            text = source,
+            target = target,
+            sourceOverride = sourceLang,
+            // What the identifier falls back on when a word or two is not
+            // enough to go by: the language being typed in, then the others.
+            hints = listOf(state.language.id) + state.settings.enabledLanguages.map { it.id },
+        )
+    }
+
+    private fun onlineTranslateUi(source: String, result: Result<Translation>): (TranslateUi) -> TranslateUi =
+        { current ->
+            result.fold(
+                onSuccess = { t ->
+                    current.cleared().copy(
+                        sourceText = source,
+                        translated = t.text,
+                        detectedSource = t.detectedSource,
+                    )
+                },
+                onFailure = { e ->
+                    current.copy(
+                        translating = false,
+                        missingModels = emptyList(),
+                        error = requestErrorText(e, R.string.ime_service_translate_error),
+                    )
+                },
+            )
+        }
+
+    private fun offlineTranslateUi(source: String, result: OfflineTranslateResult): (TranslateUi) -> TranslateUi =
+        { current ->
+            val base = current.cleared().copy(sourceText = source)
+            when (result) {
+                is OfflineTranslateResult.Success -> base.copy(
+                    translated = result.text,
+                    detectedSource = result.source,
+                    sourceGuessed = result.guessed,
+                    onDevice = true,
+                )
+                is OfflineTranslateResult.NeedsModels -> base.copy(
+                    detectedSource = result.source,
+                    missingModels = result.missing,
+                )
+                is OfflineTranslateResult.Unsupported -> base.copy(
+                    error = getString(
+                        if (result.romanized) {
+                            R.string.ime_translate_offline_romanized_error
+                        } else {
+                            R.string.ime_translate_offline_unsupported_error
+                        },
+                        TranslateClient.languageName(
+                            if (result.romanized) {
+                                OfflineTranslateLanguages.baseLanguage(result.language)
+                            } else {
+                                result.language
+                            },
+                        ),
+                    ),
+                )
+                OfflineTranslateResult.Undetermined ->
+                    base.copy(error = getString(R.string.ime_translate_offline_undetermined_error))
+                is OfflineTranslateResult.Failed -> {
+                    DebugLog.w("translate", "on-device engine failed: ${result.cause}")
+                    base.copy(error = getString(R.string.ime_translate_offline_failed_error))
+                }
+            }
+        }
+
+    /** Whether an on-device translator may be sitting in memory. See [releaseTranslateEngine]. */
+    private var translateEngineLoaded = false
+
+    private var translateModelsJob: Job? = null
+
+    /**
+     * Mirrors the on-device models' states into the panel while it is open,
+     * and retranslates the moment the models a query was waiting on are all
+     * here, so a download ends in a translation rather than in a button that
+     * has quietly become pressable.
+     */
+    private fun watchTranslateModels() {
+        translateModelsJob?.cancel()
+        if (!OnDeviceTranslator.AVAILABLE) return
+        translateModelsJob = serviceScope.launch {
+            if (translateEngine(_uiState.value.settings) != TranslateEngine.ONLINE) {
+                launch { OnDeviceTranslator.refresh(applicationContext) }
+            }
+            OnDeviceTranslator.models.collect { models ->
+                val waitingOn = _uiState.value.translate.missingModels
+                _uiState.update { it.copy(translate = it.translate.copy(models = models)) }
+                if (waitingOn.isNotEmpty() && waitingOn.all { models[it] is OfflineModelState.Downloaded }) {
+                    scheduleTranslate(immediate = true, force = true)
+                }
+            }
+        }
+    }
+
+    /**
+     * Lets the translators go. Each loaded pair is tens of megabytes, and a
+     * keyboard holding that for a panel nobody has open is first in line when
+     * Android wants memory back.
+     */
+    private fun releaseTranslateEngine() {
+        translateModelsJob?.cancel()
+        translateModelsJob = null
+        if (!translateEngineLoaded) return
+        translateEngineLoaded = false
+        OnDeviceTranslator.release()
+    }
+
     fun onTranslateTargetChange(code: String) {
         vibrate()
         serviceScope.launch { settingsRepository.setTranslateTargetLang(code) }
-        _uiState.update { it.copy(translate = TranslateUi()) }
+        _uiState.update { it.copy(translate = it.translate.cleared()) }
         // The settings flow updates asynchronously; pass the new target
         // directly so this retranslate can't race it.
         scheduleTranslate(immediate = true, targetOverride = code)
+    }
+
+    /** The source chip: a picker code, or "" to go back to detecting it. */
+    fun onTranslateSourceChange(code: String) {
+        vibrate()
+        _uiState.update { it.copy(translate = it.translate.cleared().copy(sourceOverride = code)) }
+        scheduleTranslate(immediate = true, force = true)
+    }
+
+    fun onTranslateEngineChange(engine: TranslateEngine) {
+        vibrate()
+        serviceScope.launch { settingsRepository.setTranslateEngine(engine) }
+        _uiState.update { it.copy(translate = it.translate.cleared()) }
+        if (engine != TranslateEngine.ONLINE) {
+            serviceScope.launch { OnDeviceTranslator.refresh(applicationContext) }
+        }
+        scheduleTranslate(immediate = true, engineOverride = engine, force = true)
+    }
+
+    /**
+     * Turns the translation round: what came out becomes the text, its
+     * language the source, and the language it was read as the new target.
+     */
+    fun onTranslateSwap() {
+        val state = _uiState.value
+        val ui = state.translate
+        if (ui.translated.isEmpty()) return
+        val newTarget = TranslateClient.pickerCode(ui.detectedSource) ?: return
+        val oldTarget = state.settings.translateTargetLang
+        if (newTarget.equals(oldTarget, ignoreCase = true)) return
+        vibrate()
+        serviceScope.launch { settingsRepository.setTranslateTargetLang(newTarget) }
+        _uiState.update {
+            it.copy(
+                mediaQuery = ui.translated.take(TranslateClient.MAX_CHARS),
+                translate = it.translate.cleared().copy(sourceOverride = oldTarget),
+            )
+        }
+        scheduleTranslate(immediate = true, targetOverride = newTarget, force = true)
+    }
+
+    /**
+     * The panel's download button. It fetches every model the current query
+     * is waiting for, and while any of them is on its way it is the way back
+     * out: one control, as under the handwriting canvas.
+     */
+    fun onTranslateDownload() {
+        vibrate()
+        val ui = _uiState.value.translate
+        if (ui.missingModels.isEmpty()) return
+        val running = ui.missingModels.filter { ui.models[it] is OfflineModelState.Downloading }
+        if (running.isNotEmpty()) {
+            running.forEach { OnDeviceTranslator.cancelDownload(applicationContext, it) }
+            return
+        }
+        when (dataSaverStatus.decide(MeteredFeature.DOWNLOADS)) {
+            MeteredDecision.ALLOWED -> Unit
+            MeteredDecision.BLOCKED -> {
+                _uiState.update {
+                    it.copy(translate = it.translate.copy(error = getString(R.string.ime_metered_off_body)))
+                }
+                return
+            }
+            // Asked once, on the button itself; pressing it again is the yes.
+            MeteredDecision.ASK -> if (ui.meteredAsk) {
+                grantMetered(MeteredFeature.DOWNLOADS)
+            } else {
+                _uiState.update { it.copy(translate = it.translate.copy(meteredAsk = true)) }
+                return
+            }
+        }
+        _uiState.update { it.copy(translate = it.translate.copy(meteredAsk = false, error = null)) }
+        for (code in ui.missingModels) {
+            if (ui.models[code] is OfflineModelState.Downloaded) continue
+            OnDeviceTranslator.downloadNotified(
+                context = this,
+                code = code,
+                title = getString(
+                    CommonR.string.common_notify_download_translate,
+                    TranslateClient.languageName(code),
+                ),
+            )
+        }
+    }
+
+    /**
+     * One stable bundle for the translate panel, built outside
+     * [ServiceKeyboardContent] for the reason [converterCallbacks] is.
+     */
+    private val translateCallbacks by lazy {
+        com.wasimaster.wmkeyboard.ime.ui.TranslateCallbacks(
+            onTarget = ::onTranslateTargetChange,
+            onSource = ::onTranslateSourceChange,
+            onEngine = ::onTranslateEngineChange,
+            onSwap = ::onTranslateSwap,
+            onDownload = ::onTranslateDownload,
+            onReplace = ::onTranslateReplace,
+            onInsert = ::onTranslateInsert,
+        )
     }
 
     /** Replaces the whole field with the translation. */

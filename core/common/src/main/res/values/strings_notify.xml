@@ -27,6 +27,7 @@
     <!-- Names for the two downloads both the settings app and the keyboard can
          start, so one wording serves both. %1$s is a language name. -->
     <string name="common_notify_download_handwriting"><xliff:g id="language" example="Bangla">%1$s</xliff:g> handwriting</string>
+    <string name="common_notify_download_translate"><xliff:g id="language" example="Bangla">%1$s</xliff:g> offline translation</string>
     <string name="common_notify_download_voice"><xliff:g id="language" example="Bangla">%1$s</xliff:g> offline voice</string>
     <!-- %1$s is what was being downloaded, e.g. "Bangla dictionary". -->
     <string name="common_notify_download_failed">

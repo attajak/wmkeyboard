@@ -1098,9 +1098,7 @@ fun KeyboardScreen(
     onWebResultOpen: (WebResult) -> Unit = {},
     onImageResult: (ImageResult) -> Unit = {},
     onImageResultLink: (ImageResult) -> Unit = {},
-    onTranslateTarget: (String) -> Unit = {},
-    onTranslateReplace: () -> Unit = {},
-    onTranslateInsert: () -> Unit = {},
+    translateCallbacks: TranslateCallbacks = TranslateCallbacks(),
     onGrammarFix: (GrammarLint, GrammarFix) -> Unit = { _, _ -> },
     onGrammarFixAll: () -> Unit = {},
     onGrammarDismiss: (GrammarLint) -> Unit = {},
@@ -1443,9 +1441,7 @@ fun KeyboardScreen(
                 onWebResultOpen = onWebResultOpen,
                 onImageResult = onImageResult,
                 onImageResultLink = onImageResultLink,
-                onTranslateTarget = onTranslateTarget,
-                onTranslateReplace = onTranslateReplace,
-                onTranslateInsert = onTranslateInsert,
+                translateCallbacks = translateCallbacks,
                 onGrammarFix = onGrammarFix,
                 onGrammarFixAll = onGrammarFixAll,
                 onGrammarDismiss = onGrammarDismiss,
@@ -9223,9 +9219,7 @@ private fun KeyboardBody(
     onWebResultOpen: (WebResult) -> Unit,
     onImageResult: (ImageResult) -> Unit,
     onImageResultLink: (ImageResult) -> Unit,
-    onTranslateTarget: (String) -> Unit,
-    onTranslateReplace: () -> Unit,
-    onTranslateInsert: () -> Unit,
+    translateCallbacks: TranslateCallbacks,
     onGrammarFix: (GrammarLint, GrammarFix) -> Unit,
     onGrammarFixAll: () -> Unit,
     onGrammarDismiss: (GrammarLint) -> Unit,
@@ -9886,12 +9880,7 @@ private fun KeyboardBody(
                         )
                     },
                 ) {
-                    TranslatePanel(
-                        state = state,
-                        onTarget = onTranslateTarget,
-                        onReplace = onTranslateReplace,
-                        onInsert = onTranslateInsert,
-                    )
+                    TranslatePanel(state = state, callbacks = translateCallbacks)
                 }
                 PanelMode.GRAMMAR -> if (BuildConfig.ENABLE_GRAMMAR) {
                     GrammarPanel(

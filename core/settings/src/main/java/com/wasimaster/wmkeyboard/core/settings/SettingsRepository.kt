@@ -594,6 +594,35 @@ enum class LocalLlmBackend(@StringRes val labelRes: Int) {
 enum class QrEccLevel { L, M, Q, H }
 
 /**
+ * Where the translate tool gets its translations.
+ *
+ * Stored by name. [ONLINE] is first and the default because it is what the
+ * tool has always done and it needs nothing downloaded; the other two only
+ * mean anything in a build that carries ML Kit.
+ */
+enum class TranslateEngine(@StringRes val labelRes: Int) {
+    /** The online service: Google's endpoint, a Cloud key, or a LibreTranslate server. */
+    ONLINE(R.string.core_settings_translate_engine_online_label),
+
+    /** ML Kit on the device, and nothing else: text never leaves the phone. */
+    ON_DEVICE(R.string.core_settings_translate_engine_on_device_label),
+
+    /**
+     * On the device whenever both languages are downloaded, online for the
+     * rest: a language with no model, romanised text, a pair not fetched yet.
+     */
+    AUTO(R.string.core_settings_translate_engine_auto_label),
+}
+
+/**
+ * The translate tool's own settings. A nested bag for the usual reason: one
+ * slot on [KeyboardSettings] however many settings end up inside.
+ */
+data class TranslateSettings(
+    val engine: TranslateEngine = TranslateEngine.ONLINE,
+)
+
+/**
  * English dialect the offline grammar tool lints against. Ordinals are the
  * contract with the native Harper library — append only, never reorder.
  */
@@ -2747,6 +2776,8 @@ data class KeyboardSettings(
     val toolboxColumns: Int = 4,
     /** ISO 639-1 code the translate tool translates into (source is auto-detected). */
     val translateTargetLang: String = "en",
+    /** Which engine the translate tool uses (see [TranslateSettings]). */
+    val translate: TranslateSettings = TranslateSettings(),
     /** English dialect the offline grammar tool checks against. */
     val grammarDialect: GrammarDialect = GrammarDialect.AMERICAN,
     /**
@@ -7138,6 +7169,7 @@ class SettingsRepository(private val context: Context) {
         private val CORRECTIONS_VERSION = intPreferencesKey("corrections_version")
         private val EMOJI_ROW_ABOVE_TOOLBAR = booleanPreferencesKey("emoji_row_above_toolbar")
         private val TRANSLATE_TARGET_LANG = stringPreferencesKey("translate_target_lang")
+        private val TRANSLATE_ENGINE = stringPreferencesKey("translate_engine")
         private val GRAMMAR_DIALECT = stringPreferencesKey("grammar_dialect")
         private val GRAMMAR_HIDDEN_KINDS = stringSetPreferencesKey("grammar_hidden_kinds")
         private val SPELL_CHECKER_NO_SUGGESTIONS =
@@ -8544,6 +8576,11 @@ class SettingsRepository(private val context: Context) {
             compoundUnits = p[COMPOUND_UNITS] ?: defaults.compoundUnits,
             toolboxColumns = p[TOOLBOX_COLUMNS] ?: defaults.toolboxColumns,
             translateTargetLang = p[TRANSLATE_TARGET_LANG] ?: defaults.translateTargetLang,
+            translate = TranslateSettings(
+                engine = p[TRANSLATE_ENGINE]
+                    ?.let { name -> TranslateEngine.entries.firstOrNull { it.name == name } }
+                    ?: defaults.translate.engine,
+            ),
             grammarDialect = p[GRAMMAR_DIALECT]
                 ?.let { runCatching { GrammarDialect.valueOf(it) }.getOrNull() }
                 ?: defaults.grammarDialect,
@@ -13322,6 +13359,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setTranslateTargetLang(value: String) =
         editPrefs { it[TRANSLATE_TARGET_LANG] = value }
+
+    suspend fun setTranslateEngine(value: TranslateEngine) =
+        editPrefs { it[TRANSLATE_ENGINE] = value.name }
 
     suspend fun setGrammarDialect(value: GrammarDialect) =
         editPrefs { it[GRAMMAR_DIALECT] = value.name }

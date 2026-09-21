@@ -1,0 +1,227 @@
+package com.wasimaster.wmkeyboard.app
+
+import android.text.format.Formatter
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.wasimaster.wmkeyboard.R
+import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
+import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
+import com.wasimaster.wmkeyboard.core.tools.TranslateClient
+import com.wasimaster.wmkeyboard.core.translate.OfflineModelState
+import com.wasimaster.wmkeyboard.core.translate.OfflineTranslateLanguages
+import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
+import com.wasimaster.wmkeyboard.core.translate.downloadNotified
+import kotlinx.coroutines.launch
+
+/**
+ * The on-device translation models: what is on the phone, what is coming, and
+ * a button for the rest.
+ *
+ * Two groups rather than one list of sixty. The first holds what this user is
+ * likely to want: every model already here or on its way, the language they
+ * translate into, and the languages they type in. The second is a fold with
+ * everything else, because the language somebody translates *from* is, often
+ * enough, exactly one they cannot type.
+ *
+ * State comes from [OnDeviceTranslator.models], which the keyboard reads too,
+ * so a download started in the panel shows as running here and the other way
+ * round. Nothing on this screen owns a download; leaving it cancels nothing.
+ */
+@Composable
+internal fun TranslateModelManager(settings: KeyboardSettings) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val models by OnDeviceTranslator.models.collectAsState()
+    LaunchedEffect(Unit) { OnDeviceTranslator.refresh(context.applicationContext) }
+
+    val downloadDecision = rememberDownloadDecision(settings)
+    var confirmMetered by remember { mutableStateOf<String?>(null) }
+    var blockedMetered by remember { mutableStateOf(false) }
+    val offerPermission = rememberNotificationPermissionOffer()
+    val start: (String) -> Unit = { code ->
+        offerPermission()
+        OnDeviceTranslator.downloadNotified(
+            context = context.applicationContext,
+            code = code,
+            title = context.getString(
+                CommonR.string.common_notify_download_translate,
+                TranslateClient.languageName(code),
+            ),
+        )
+    }
+
+    // Picker order, so the two groups read the way every other language list
+    // in the tool does. The picker's zh-CN is the model's zh.
+    val all = remember {
+        TranslateClient.languages.mapNotNull { (code, name) ->
+            OfflineTranslateLanguages.modelCode(code)?.let { it to name }
+        }.distinctBy { it.first }
+    }
+    val wanted = remember(settings.enabledLanguages, settings.translateTargetLang) {
+        (listOf(settings.translateTargetLang) + settings.enabledLanguages.map { it.id })
+            .mapNotNull { OfflineTranslateLanguages.modelCode(it) }
+            .toSet()
+    }
+    val (near, far) = all.partition { (code, _) ->
+        code in wanted || code == OfflineTranslateLanguages.PIVOT ||
+            models[code].let { it is OfflineModelState.Downloaded || it is OfflineModelState.Downloading }
+    }
+
+    val row: @Composable (String, String) -> Unit = { code, name ->
+        TranslateModelRow(
+            code = code,
+            name = name,
+            state = models[code],
+            onDownload = {
+                when (downloadDecision()) {
+                    MeteredDecision.ALLOWED -> start(code)
+                    MeteredDecision.ASK -> confirmMetered = code
+                    MeteredDecision.BLOCKED -> blockedMetered = true
+                }
+            },
+            onCancel = { OnDeviceTranslator.cancelDownload(context.applicationContext, code) },
+            onDelete = { scope.launch { OnDeviceTranslator.delete(context.applicationContext, code) } },
+        )
+    }
+    SettingsGroup(
+        stringResource(R.string.tooldetail_translate_models_group),
+        info = stringResource(R.string.tooldetail_translate_models_info),
+    ) {
+        for ((code, name) in near) item { row(code, name) }
+    }
+    if (far.isNotEmpty()) {
+        SettingsGroup(
+            stringResource(R.string.tooldetail_translate_models_more_group),
+            foldKey = "translate_models_more",
+        ) {
+            for ((code, name) in far) item { row(code, name) }
+        }
+    }
+
+    confirmMetered?.let { code ->
+        MeteredDownloadDialog(
+            detail = stringResource(
+                R.string.tooldetail_translate_model_metered_body,
+                TranslateClient.languageName(code),
+                Formatter.formatShortFileSize(context, OfflineTranslateLanguages.APPROX_MODEL_BYTES),
+            ),
+            onConfirm = {
+                confirmMetered = null
+                start(code)
+            },
+            onDismiss = { confirmMetered = null },
+        )
+    }
+    if (blockedMetered) MeteredBlockedDialog { blockedMetered = false }
+}
+
+@Composable
+private fun TranslateModelRow(
+    code: String,
+    name: String,
+    state: OfflineModelState?,
+    onDownload: () -> Unit,
+    onCancel: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    val context = LocalContext.current
+    val builtIn = code == OfflineTranslateLanguages.PIVOT
+    WmRow(
+        title = name,
+        subtitle = when {
+            // Every model translates through English, so English is part of
+            // the engine and not a thing to fetch or remove.
+            builtIn -> stringResource(R.string.tooldetail_translate_model_builtin_label)
+            state == null -> stringResource(R.string.privacy_handwriting_status_checking)
+            state is OfflineModelState.Downloaded ->
+                stringResource(R.string.privacy_handwriting_status_downloaded)
+            state is OfflineModelState.Downloading -> when {
+                state.bytes <= 0L -> stringResource(R.string.privacy_handwriting_status_preparing)
+                state.totalBytes > 0L -> stringResource(
+                    R.string.privacy_handwriting_status_downloading_of_total,
+                    Formatter.formatShortFileSize(context, state.bytes),
+                    Formatter.formatShortFileSize(context, state.totalBytes),
+                )
+                else -> stringResource(
+                    R.string.privacy_handwriting_status_downloading,
+                    Formatter.formatShortFileSize(context, state.bytes),
+                )
+            }
+            state is OfflineModelState.Missing && state.failed ->
+                stringResource(R.string.privacy_handwriting_status_failed)
+            else -> stringResource(
+                R.string.privacy_handwriting_status_missing_sized,
+                Formatter.formatShortFileSize(context, OfflineTranslateLanguages.APPROX_MODEL_BYTES),
+            )
+        },
+        trailing = {
+            when {
+                builtIn -> Unit
+                state == null -> CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
+                state is OfflineModelState.Downloading -> Row(verticalAlignment = Alignment.CenterVertically) {
+                    val fraction = state.fraction
+                    if (fraction != null) {
+                        CircularProgressIndicator(
+                            progress = { fraction },
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
+                    }
+                    IconButton(onClick = onCancel) {
+                        Icon(
+                            Icons.Outlined.Close,
+                            contentDescription = stringResource(
+                                R.string.tooldetail_translate_model_cancel_desc,
+                                name,
+                            ),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                state is OfflineModelState.Downloaded -> IconButton(onClick = onDelete) {
+                    Icon(
+                        Icons.Outlined.Delete,
+                        contentDescription = stringResource(R.string.privacy_handwriting_delete_desc, name),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                else -> TextButton(onClick = onDownload) {
+                    Text(
+                        stringResource(
+                            if ((state as? OfflineModelState.Missing)?.failed == true) {
+                                CommonR.string.common_retry
+                            } else {
+                                CommonR.string.common_download
+                            },
+                        ),
+                    )
+                }
+            }
+        },
+    )
+}

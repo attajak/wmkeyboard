@@ -79,9 +79,13 @@ internal fun rememberDownloadStarter(): (String, String) -> DownloadNotification
     }
 }
 
-/** The once-ever ask both of the above make when a download would have shown something. */
+/**
+ * The once-ever ask both of the above make when a download would have shown
+ * something. Internal for the screens whose downloads post through a manager
+ * of their own and so have no handle to be given.
+ */
 @Composable
-private fun rememberNotificationPermissionOffer(): () -> Unit {
+internal fun rememberNotificationPermissionOffer(): () -> Unit {
     val context = LocalContext.current
     val ask = rememberNotificationPermissionRequest()
     return {

@@ -35,6 +35,7 @@ it.
 | Tool | Endpoint | Sends | Fires when |
 |---|---|---|---|
 | Translate | `translate.googleapis.com` (no key) or `translation.googleapis.com` (with a key) | the text you typed into the panel, up to 2,500 characters, plus the target language | as you type, about 400ms after you stop, only while the panel is open |
+| Translate, on-device models | `dl.google.com` (through Android's download manager), full edition only | nothing you typed: the request names the language model | when you press Download for a language, in the panel or under Tools / Translate |
 | GIF search | `api.klipy.com`, `api.giphy.com` | your search text, or nothing for the trending feed | immediately when you open the panel (trending), then live as you type |
 | Sticker search | same clients as GIF search | same | same |
 | Reporting a GIF or sticker result | none of the app's own | nothing: it builds a mail draft naming the provider, your search term, and the result's id and URL | only when you tap Report in the long-press menu, and only your mail app sends it |
@@ -250,7 +251,7 @@ choice is whether to use the feature.
 
 | Component | In which build | Reaches Google when | What it sends |
 |---|---|---|---|
-| **ML Kit** (handwriting, OCR, QR/barcode scanning, document scanning, sticker background removal) | full edition only | when you use one of those features | Per [Google's own disclosure](https://developers.google.com/ml-kit/android-data-disclosure): device make, model, OS build and available ML accelerators; the app's package name and version; a per-install identifier; latency figures, the API settings and input/output sizes; the SDK version, the kind of event (init, model download, detection) and any error codes. Google describes this as diagnostics and usage analytics, says it's encrypted in transit and not passed to third parties, and provides no switch to disable it. |
+| **ML Kit** (handwriting, OCR, QR/barcode scanning, document scanning, sticker background removal, on-device translation) | full edition only | when you use one of those features | Per [Google's own disclosure](https://developers.google.com/ml-kit/android-data-disclosure): device make, model, OS build and available ML accelerators; the app's package name and version; a per-install identifier; latency figures, the API settings and input/output sizes; the SDK version, the kind of event (init, model download, detection) and any error codes. Google describes this as diagnostics and usage analytics, says it's encrypted in transit and not passed to third parties, and provides no switch to disable it. |
 | **Downloadable fonts** | every build with Play services present | the first time a script's default keyboard font is needed, and whenever you pick a Google font in the theme editor | the font family name and this app's package name, asked of the Play services font provider. Play services makes the actual request, not this app. |
 | **Play Store libraries** (in-app updates, and the on-demand download of the on-device AI runtime) | Play Store builds only | on the update check, and when you first use an on-device AI model | the app's package and version, handled by the Play Store app that installed it |
 

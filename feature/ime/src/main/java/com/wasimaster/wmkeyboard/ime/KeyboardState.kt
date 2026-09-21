@@ -1127,7 +1127,41 @@ data class TranslateUi(
     val detectedSource: String = "",
     val translating: Boolean = false,
     val error: String? = null,
+    /**
+     * The source language the user picked for this visit to the panel, as a
+     * picker code, or "" to detect it. Session state on purpose: a wrong
+     * detection is a fact about one piece of text, not a preference.
+     */
+    val sourceOverride: String = "",
+    /**
+     * [detectedSource] is a guess taken from the keyboard's own language,
+     * because the on-device identifier could not tell. Drawn with a "?".
+     */
+    val sourceGuessed: Boolean = false,
+    /** [translated] came from the on-device engine, not from a server. */
+    val onDevice: Boolean = false,
+    /**
+     * Model codes the on-device engine needs before it can translate the
+     * current query. Non-empty is what puts the download offer on screen.
+     */
+    val missingModels: List<String> = emptyList(),
+    /**
+     * The download was held by data saver and the panel is asking. The next
+     * press of the same button is the yes.
+     */
+    val meteredAsk: Boolean = false,
+    /** The on-device models' states, mirrored here while the panel is open. */
+    val models: Map<String, com.wasimaster.wmkeyboard.core.translate.OfflineModelState> = emptyMap(),
 )
+
+/**
+ * The panel with its result wiped and everything that outlives a result kept:
+ * the user's source pick and the mirrored model states. What every "start
+ * over" in the translate flow wants instead of a bare `TranslateUi()`, which
+ * would quietly put the source chip back on detect.
+ */
+fun TranslateUi.cleared(): TranslateUi =
+    TranslateUi(sourceOverride = sourceOverride, models = models)
 
 /**
  * Grammar strip state. Like translate, the strip follows the focused field:

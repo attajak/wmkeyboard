@@ -100,6 +100,8 @@ import com.wasimaster.wmkeyboard.core.tools.typingConfigLanguage
 import com.wasimaster.wmkeyboard.core.tools.TypingHistory
 import com.wasimaster.wmkeyboard.core.tools.TypingTestMode
 import com.wasimaster.wmkeyboard.core.tools.TranslateClient
+import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
+import com.wasimaster.wmkeyboard.core.settings.TranslateEngine
 import com.wasimaster.wmkeyboard.core.tools.WeatherClient
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Dispatchers
@@ -1547,9 +1549,25 @@ internal fun ToolDetailSettings(
             }
         }
         ToolbarTool.TRANSLATE -> {
+            // The engine row and the model list exist only where the engine
+            // does. On a build without ML Kit both would be a choice of one.
+            val onDevice = OnDeviceTranslator.AVAILABLE
             SettingsGroup(stringResource(R.string.tooldetail_options_group)) {
                 item { TranslateLanguageSetting(repository, settings) }
+                if (onDevice) {
+                    item {
+                        ChoiceSetting(
+                            R.string.tooldetail_translate_engine_title,
+                            subtitle = stringResource(R.string.tooldetail_translate_engine_subtitle),
+                            info = stringResource(R.string.tooldetail_translate_engine_info),
+                            options = TranslateEngine.entries.map { it to stringResource(it.labelRes) },
+                            selected = settings.translate.engine,
+                            default = SettingsDefaults.translate.engine,
+                        ) { scope.launch { repository.setTranslateEngine(it) } }
+                    }
+                }
             }
+            if (onDevice) TranslateModelManager(settings)
             if (BuildConfig.ENABLE_FDROID) {
                 // This build translates against a LibreTranslate server the
                 // user runs or trusts, so the field is an address rather than

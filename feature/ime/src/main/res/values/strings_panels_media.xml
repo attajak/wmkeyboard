@@ -200,6 +200,24 @@
     <string name="ime_translate_progress">Translating…</string>
     <string name="ime_translate_select_language_desc">Select the language</string>
     <string name="ime_translate_replace_action">Replace text</string>
+    <string name="ime_translate_select_source_desc">Select the source language</string>
+    <string name="ime_translate_select_engine_desc">Select where the translation comes from</string>
+    <string name="ime_translate_swap_desc">Swap the languages</string>
+    <!-- The source language was guessed, not detected. The question mark says so. -->
+    <string name="ime_translate_source_guessed_label"><xliff:g id="language" example="Bengali">%1$s</xliff:g>?</string>
+    <string name="ime_translate_engine_online_info">Uses the online service.</string>
+    <string name="ime_translate_engine_on_device_info">Private. Works with no connection.</string>
+    <string name="ime_translate_engine_auto_info">On device when the languages are downloaded. Online for the rest.</string>
+    <string name="ime_translate_online_only_label">Online only</string>
+    <string name="ime_translate_downloaded_desc">Downloaded</string>
+    <string name="ime_translate_need_models_body">To translate on the device, download: <xliff:g id="languages" example="Bengali, German">%1$s</xliff:g>. About <xliff:g id="size" example="60 MB">%2$s</xliff:g>.</string>
+    <string name="ime_translate_downloading_progress">Downloading: <xliff:g id="languages" example="Bengali, German">%1$s</xliff:g>…</string>
+    <string name="ime_translate_download_of_total_progress"><xliff:g id="done" example="9.1 MB">%1$s</xliff:g> of <xliff:g id="total" example="30 MB">%2$s</xliff:g></string>
+    <string name="ime_translate_download_failed_error">The download did not finish. Check the connection, then try again.</string>
+    <string name="ime_translate_offline_unsupported_error"><xliff:g id="language" example="Malayalam">%1$s</xliff:g> is not available on the device. Select the online engine for this language.</string>
+    <string name="ime_translate_offline_romanized_error"><xliff:g id="language" example="Hindi">%1$s</xliff:g> in Latin letters is not supported on the device. Select the online engine for this text.</string>
+    <string name="ime_translate_offline_undetermined_error">The language is not clear from this text. Select it with the first chip.</string>
+    <string name="ime_translate_offline_failed_error">On-device translation did not start. Try again, or select the online engine.</string>
 
     <!-- Plugins panel. -->
     <string name="ime_plugin_empty_title">No plugins yet</string>

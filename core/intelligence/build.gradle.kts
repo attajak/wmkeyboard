@@ -84,6 +84,11 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
     "fullImplementation"(libs.mlkit.digital.ink)
+    // On-device translation for the translate tool, and the bundled language
+    // identifier that stands in for the online services' "detect language":
+    // ML Kit's translator has to be told what it is reading.
+    "fullImplementation"(libs.mlkit.translate)
+    "fullImplementation"(libs.mlkit.language.id)
     if (!playStoreChannel) {
         "fullImplementation"(libs.litertlm.android)
     }

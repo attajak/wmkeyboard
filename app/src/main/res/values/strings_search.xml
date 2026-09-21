@@ -175,6 +175,8 @@
     <string name="search_kw_typing_wrap_selection">surround parentheses quotes auto braces</string>
     <string name="search_kw_update_row_check">upgrade latest release</string>
     <string name="search_kw_voice_engine">offline whisper device model</string>
+    <string name="search_kw_translate_engine">offline private internet airplane local device ml kit google model download cloud</string>
+    <string name="search_kw_translate_models">offline translation model download delete storage ml kit google</string>
 
     <string-array name="search_word_groups">
         <item>haptics haptic vibration vibrate vibrations vibrator buzz rumble</item>

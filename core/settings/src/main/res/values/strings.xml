@@ -52,6 +52,14 @@
     <!-- they live beside the code that resolves it.                          -->
 
     <!-- ================================================================== -->
+    <!-- Translate tool: where the translation comes from.                  -->
+    <!-- ================================================================== -->
+
+    <string name="core_settings_translate_engine_online_label">Online</string>
+    <string name="core_settings_translate_engine_on_device_label">On device</string>
+    <string name="core_settings_translate_engine_auto_label">Automatic</string>
+
+    <!-- ================================================================== -->
     <!-- Grammar tool: which English the offline checker reads against.     -->
     <!-- ================================================================== -->
 

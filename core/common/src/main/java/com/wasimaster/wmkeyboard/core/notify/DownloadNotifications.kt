@@ -54,6 +54,9 @@ object DownloadKeys {
     fun handwriting(languageTag: String): String = "handwriting/$languageTag"
     fun voiceModel(languageTag: String): String = "voice-model/$languageTag"
     fun keymanRules(keyboardId: String): String = "keyman/$keyboardId"
+
+    /** ML Kit's on-device translation model for one language, by model code. */
+    fun translateModel(code: String): String = "translate-model/$code"
 }
 
 /**

@@ -1,6 +1,6 @@
 ---
 title: "Translate"
-description: "Type in one language, read the translation live, and drop it into the field without switching apps."
+description: "Type in one language, read the translation live, and drop it into the field without switching apps. Online, or on the device with no connection."
 sidebar:
   order: 8
 ---
@@ -8,10 +8,11 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Flavor from '@components/Flavor.astro';
 
 Translate opens a small typing window right above the keys. Type a sentence, watch the translation appear as you go, then send it to your field with a tap. It never reads what's already in the field. It translates whatever you type into the panel itself, so it works the same in a chat app, a note, or a search bar.
 
-<PhoneFrame caption="The Translate panel mid-translation, target-language chip and the Insert/Replace actions below it.">
+<PhoneFrame caption="The Translate panel mid-translation: source chip, swap, target chip and engine chip on top, the Insert/Replace actions below.">
 {/* shot: tools/translate-panel */}
 </PhoneFrame>
 
@@ -21,8 +22,12 @@ Open **Translate** from the toolbar, or from the toolbox if you haven't pinned i
 
 The panel has its own search bar at the top. What you type there is what gets translated, not the text already in your field. It's the same key-rerouting trick the GIF, sticker, and Wikipedia panels use: while the panel is focused, your keystrokes go to its search bar instead of the app behind the keyboard. Opening Translate over a chat you're mid-way through never touches what you already wrote. The panel always starts empty and pre-fills from nothing.
 
-- **Source language** is always auto-detected. There's no source picker. The header reads "Detect language →" until the first result comes back, then switches to the language it found, for example "Bengali →".
-- **Target language** is the chip next to it. Tap it to open a dropdown of all 33 supported languages and pick one.
+The header reads left to right like a sentence: *from* this language, *to* that one, *using* this engine.
+
+- **Source language** is the first chip. It starts on **Detect language** and switches to the language it found once a result comes back, for example "Bengali". Tap it to pick the source yourself when the detection is wrong, which mostly happens with a word or two. Your pick lasts until you close the panel. Pick **Detect language** to hand it back.
+- **Swap** is the arrows between the chips. It turns the translation round: the result becomes the text, its language the source, and the language it was read as the new target. It lights up once there is a result to swap.
+- **Target language** is the second chip. Tap it to open a dropdown of all 63 languages and pick one.
+- **Engine** is the chip on the right, <Flavor edition="full" /> only: **Online**, **On device** or **Automatic**. See [On-device translation](#on-device-translation) below.
 - The translation updates automatically about 400 milliseconds after you stop typing. Pressing return translates immediately, and changing the target language re-translates what's already in the box right away.
 - Once a translation is showing, two actions light up below it:
   - **Insert** types the translation into your field at the cursor, leaving whatever was already there in place.
@@ -31,8 +36,24 @@ The panel has its own search bar at the top. What you type there is what gets tr
 Long input is capped: anything past 2,500 characters is silently cut off before it's sent, with no on-screen warning that it happened.
 
 :::note
-Hardware-keyboard focus-ring navigation reaches the whole panel: <KeyCap>Tab</KeyCap> and arrow-key cycling take in the target-language chip, the picker's rows while it's open, and both action buttons, the same way they do in the GIF or search panels. One rough edge is left. <KeyCap>Esc</KeyCap> while the language picker is open closes the whole panel rather than just the picker, so press <KeyCap>Enter</KeyCap> on the chip to bring the list back.
+Hardware-keyboard focus-ring navigation reaches the whole panel: <KeyCap>Tab</KeyCap> and arrow-key cycling take in the header chips and the swap button, the open menu's rows, and the action buttons (or the download button while that is the offer), the same way they do in the GIF or search panels. One rough edge is left. <KeyCap>Esc</KeyCap> while a menu is open closes the whole panel rather than just the menu, so press <KeyCap>Enter</KeyCap> on the chip to bring the list back.
 :::
+
+## On-device translation
+
+<Flavor edition="full" /> The Full edition can translate on the phone with Google's ML Kit, with no connection and without the text leaving the device. Pick the engine from the chip on the panel or under Options:
+
+- **Online** (the default) is what Translate has always done: Google's endpoint, your Cloud key, or your LibreTranslate server. It knows the most languages and gives the best translations.
+- **On device** never sends the text anywhere. It needs a model for each language, about 30 MB each, downloaded once.
+- **Automatic** uses the device whenever the languages are downloaded, and the online service for everything else: a language with no model, a pair you have not downloaded, text the device cannot read. The engine chip's icon shows which one produced the result on screen.
+
+**Models.** Each language is one download, and every model translates to and from English. Bengali to German therefore needs both the Bengali and the German model and goes through English on the way, which costs some accuracy. English itself is part of the engine and is never downloaded. When a translation needs a model you do not have, the result area says which and how big, and the action row becomes a **Download** button. The same button cancels while the download runs. When the models arrive, the text you typed is translated at once. Downloads also show in the notification shade, and they carry on if you close the panel. With [data saver](/reference/settings/data-saver/) holding downloads on a metered connection, the button asks first and a second press is the yes.
+
+**Which languages.** 59 of the 63: everything in the list except Malayalam, Nepali, Punjabi and Traditional Chinese (the Chinese model is Simplified). With the engine on **On device** or **Automatic**, the language menus mark downloaded languages with a tick and the ones the device cannot do with **Online only**.
+
+**Detecting the source.** ML Kit's translator has to be told what it is reading, so a separate on-device language identifier (bundled, no download) does the detecting. It is reliable on a sentence and shaky on a word or two. When it is not sure, the keyboard falls back on the languages you type in, the active one first, and shows the source with a question mark, as in "French?". Tap the chip to correct it. Hindi, Japanese, Russian, Arabic, Greek, Bulgarian or Chinese typed in Latin letters is recognised for what it is and refused on the device, because no model reads it; Automatic sends it online instead.
+
+**What to expect.** On-device translation is good for messages and short text and noticeably less exact than the online service on long, technical or idiomatic text. Line breaks and blank lines survive: each line is translated on its own. The translators are unloaded when you close the panel, since a loaded language pair holds tens of megabytes of memory.
 
 ## Options
 
@@ -41,7 +62,9 @@ Hardware-keyboard focus-ring navigation reaches the whole panel: <KeyCap>Tab</Ke
 - **Turn on**: already on, like every tool. Switching it off removes Translate from both the toolbar and the toolbox.
 - **Icon colour**: only shown if [colorful tool icons](/tools/overview/) are turned on globally. It overrides Translate's icon color.
 - **Keyword shortcut**: a **Trigger words** field pre-filled with "translate", plus a **Match capitals** switch that's off by default. Type the word on its own and the suggestion strip offers to open the tool. See [smart suggestion chips](/smart/chips/).
-- **Translate into**: the target language, from the same 33-language list as the panel's picker. Defaults to **English**. Changing it here also changes what the panel opens to next time.
+- **Translate into**: the target language, from the same 63-language list as the panel's picker. Defaults to **English**. Changing it here also changes what the panel opens to next time.
+- **Translation engine**: <Flavor edition="full" /> **Online** (default), **On device** or **Automatic**. The same choice as the panel's engine chip.
+- **Languages on the device**: <Flavor edition="full" /> the on-device models. The list starts with English (built in), the language you translate into, the languages you type in, and anything already downloaded or on its way. **More languages** below it folds out the rest. Each row downloads, cancels or deletes one model and shows its progress. A download started here shows as running in the panel, and the other way round.
 - **LibreTranslate server**: F-Droid build only, blank by default. Paste the address of a LibreTranslate server, your own or one you trust. Translation goes there instead of Google, even if a Cloud Translation key is also set. An optional key field sits below it, for instances that ask for one. See [Servers](/reference/settings/servers/) for the same field shared across tools.
 - **Cloud Translation API key (optional)**: blank by default. Paste a Google Cloud Translation API key here to use the official API instead of the free endpoint (see below). The field saves as you type, with no separate save button. Under it you'll read "The app uses your key" once you've typed one, "This field is blank. The app uses the key that is built into the app." if this build ships one, or "Without a key, translation uses the free public endpoint of Google" otherwise.
 
@@ -53,12 +76,14 @@ If you back up your settings with **Include API keys** turned on, a Translate ke
 
 ## Details & edge cases
 
-- **Google, or LibreTranslate on the F-Droid build.** With no key, WM Keyboard calls Google's free public translation endpoint. It's the same unofficial one browser translate extensions use: fine for personal typing volumes, with no uptime guarantee and its own rate limits. With a key, it calls the official Cloud Translation v2 API instead, billed to your Google Cloud project and reliable. The F-Droid build adds a third path: paste a LibreTranslate server's address under Options. Every translation then goes there instead of either Google option, even with a Cloud Translation key also set. Whichever is active, only the text you type into the panel is sent. Nothing else in the field is.
-- **Sent, precisely:** the text currently in the panel's search box (truncated to 2,500 characters), the target language code, and your key where one applies. The free Google endpoint receives the text as part of the request URL. The official Google API and a configured LibreTranslate server both send it in a POST body, LibreTranslate's carrying its optional key alongside.
+- **On the device, nothing is sent.** With the engine on **On device**, the text you type is translated by ML Kit on the phone and goes nowhere. The only network use is the model downloads, which come from Google's servers (`dl.google.com`) through Android's download manager, plus ML Kit's own [diagnostics](/privacy/network/). On **Automatic**, text goes online only when the device cannot translate it.
+- **Google, or LibreTranslate on the F-Droid build.** On the online engine, with no key, WM Keyboard calls Google's free public translation endpoint. It's the same unofficial one browser translate extensions use: fine for personal typing volumes, with no uptime guarantee and its own rate limits. With a key, it calls the official Cloud Translation v2 API instead, billed to your Google Cloud project and reliable. The F-Droid build adds a third path: paste a LibreTranslate server's address under Options. Every translation then goes there instead of either Google option, even with a Cloud Translation key also set. Whichever is active, only the text you type into the panel is sent. Nothing else in the field is.
+- **Sent, precisely:** the text currently in the panel's search box (truncated to 2,500 characters), the target language code, the source language code if you picked one, and your key where one applies. The free Google endpoint receives the text as part of the request URL. The official Google API and a configured LibreTranslate server both send it in a POST body, LibreTranslate's carrying its optional key alongside.
 - **When it's sent:** automatically ~400ms after you stop typing, immediately on return or retry, and immediately again if you change the target language, all only while the panel is open. Closing the panel cancels any translation in flight.
 - **Power Saving mode's "Background network" toggle doesn't touch this.** That toggle only stops fetches that happen without you asking: link previews, QR auto-scan, dictionary look-ups. Tools you open yourself, translate included, keep working even with it on.
-- **Not available before your phone is unlocked once after a restart.** Translate needs the network, and it isn't on the short list of tools that work on a locked device. It won't appear if you're typing on the lock screen before that first unlock.
-- **Works the same in both editions.** Translate isn't gated to Full. There's nothing Lite is missing here.
+- **Not available before your phone is unlocked once after a restart.** Translate isn't on the short list of tools that work on a locked device, and the on-device models live in storage that is locked until then. It won't appear if you're typing on the lock screen before that first unlock.
+- **Online translation works the same in both editions.** The on-device engine is Full only, because ML Kit is. Lite and the F-Droid build have no engine chip and no model list, and translate online exactly as before.
+- **Deleting a model** frees its space at once. If the panel was using it, the next translation asks for it again.
 - If a request fails outright, from no connection, a bad key, or a timeout, the panel shows the raw error message rather than a simplified one. An offline failure can read as a technical exception string instead of "No internet connection."
 
 Looking for something different named "translate"? The [AI tool](/tools/ai/) has its own Translate action, which uses an LLM for more natural phrasing than a literal translation. [Offline voice dictation](/tools/whisper/) has a separate "Translate to English" toggle for what you *say* rather than what you type. Both are configured on their own settings screens, independent of this one. For the full picture of what leaves your device and when, see [network policy](/privacy/network/).

@@ -1685,8 +1685,16 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Save to gallery — Off by default; writes to Pictures/WM Keyboard
 - **Online tools** `uncommon` — 8 tools in the Online group
   - Translate — Type-and-translate panel with its own search bar
-    - 32 target languages — TranslateClient.languages; source is always auto-detected
-    - Two providers behind one switch — Google's free public endpoint, or Cloud Translation v2 with your key
+    - 63 languages — TranslateClient.languages; source is detected, or picked from the source chip for the visit
+    - Swap — Result becomes the text, its language the source, the detected language the new target
+    - Two online providers behind one switch — Google's free public endpoint, or Cloud Translation v2 with your key
+    - On-device engine (full) — ML Kit Translate, 59 languages, one ~30 MB model each, pivots through English; Online / On device / Automatic from the panel's engine chip or the tool page
+    - Automatic falls back — On device when both models are here, online for a missing model, an online-only language or romanised text; the chip's icon says which one answered
+    - Download offer in the panel — A query that needs a model turns the result area into the offer and the action row into Download/Cancel; retranslates the moment the models land
+    - One model store for keyboard and settings — OnDeviceTranslator.models; progress read off the system DownloadManager row ML Kit enqueues, shade notification, data-saver ask
+    - Source detection on device — Bundled ML Kit language-id; a weak answer falls back on the typed languages and shows as a guess ("French?")
+    - Line structure survives — Each line translated on its own, blank lines and indentation put back
+    - Translators released with the panel — And on memory pressure; a loaded pair is tens of MB
     - Insert vs Replace text — Replace swaps the whole field's contents
     - Debounced re-translate — ~400ms after typing stops; immediate on return or target change
     - 2500-character cap — Silently truncated before sending
