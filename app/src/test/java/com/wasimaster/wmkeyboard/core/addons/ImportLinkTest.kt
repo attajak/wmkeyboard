@@ -195,4 +195,57 @@ class ImportLinkTest {
             ImportLink.nightlyLinkUrl(artifact),
         )
     }
+
+    // ---- Signal sticker packs ------------------------------------------
+
+    private val packId = "fb535407d2f6497ec074df8b9c51dd1d"
+    private val packKey = "17e971c134035622781d2ee249e6473b774583750b68c11bb82b7509c68b6dfd"
+
+    @Test
+    fun `a signal art link is a sticker pack and not a web page to download`() {
+        assertEquals(
+            ImportLink.Target.SignalStickers(packId, packKey),
+            target("https://signal.art/addstickers/#pack_id=$packId&pack_key=$packKey"),
+        )
+    }
+
+    @Test
+    fun `the form Signal itself opens is the same pack`() {
+        assertEquals(
+            ImportLink.Target.SignalStickers(packId, packKey),
+            target("sgnl://addstickers?pack_id=$packId&pack_key=$packKey"),
+        )
+    }
+
+    @Test
+    fun `a pack link is found inside a shared message, in either order and any case`() {
+        assertEquals(
+            ImportLink.Target.SignalStickers(packId, packKey),
+            target("Try these! https://signal.art/addstickers/#pack_key=${packKey.uppercase()}&pack_id=$packId."),
+        )
+    }
+
+    @Test
+    fun `a pack link with a half of the wrong length is not a pack link`() {
+        val short = target("https://signal.art/addstickers/#pack_id=abc123&pack_key=$packKey")
+        assertTrue("$short", short !is ImportLink.Target.SignalStickers)
+        val noKey = target("https://signal.art/addstickers/#pack_id=$packId")
+        assertTrue("$noKey", noKey !is ImportLink.Target.SignalStickers)
+        val notHex = target("https://signal.art/addstickers/#pack_id=${packId.replaceRange(0, 1, "z")}&pack_key=$packKey")
+        assertTrue("$notHex", notHex !is ImportLink.Target.SignalStickers)
+    }
+
+    @Test
+    fun `a pack link over plain http is refused like any other`() {
+        assertEquals(
+            ImportLink.Target.Insecure,
+            target("http://signal.art/addstickers/#pack_id=$packId&pack_key=$packKey"),
+        )
+    }
+
+    @Test
+    fun `a lookalike host is not Signal`() {
+        val resolved = target("https://signal.art.example.com/addstickers/#pack_id=$packId&pack_key=$packKey")
+        assertTrue("$resolved", resolved !is ImportLink.Target.SignalStickers)
+    }
 }

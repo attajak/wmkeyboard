@@ -118,11 +118,14 @@ alongside it the screen still opens, and on its own the link goes nowhere.
 
 ### Every route
 
-104 screens. Three more exist and are deliberately not addressable, because they
-have nowhere to land: the first-run wizard (`onboarding`), the sticker editor
+105 screens. Four more exist and are deliberately not addressable. Three have
+nowhere to land: the first-run wizard (`onboarding`), the sticker editor
 (`sticker_editor`), and a single photo's page (`photo_detail`). Each of those
 three draws from something the screen before it handed over, so opened cold it
-would show nothing.
+would show nothing. The fourth is the preview of one Signal sticker pack
+(`signal_pack/{packId}/{packKey}`). It carries a pack key and asks Signal's
+servers for the pack as it opens, so it only opens from a pack link you pasted
+or shared into the app yourself.
 
 #### Getting in
 
@@ -210,6 +213,7 @@ would show nothing.
 | `clipboard` | Clipboard. |
 | `phoneformats` | Phone number formats. |
 | `sticker_packs` | Sticker packs. |
+| `signal_stickers` | Signal sticker packs. |
 | `sticker_pack/{packId}` | One of your sticker packs. |
 
 #### Tools

@@ -48,7 +48,7 @@ Long-pressing a sticker from **My stickers** shows "Manage packs" (which jumps s
 
 Building and managing packs happens in the app, not the keyboard, under <SettingsPath path="Tools / Stickers / Your stickers / Sticker packs" />.
 
-- **New pack** starts one empty. **Import a pack** reads a `.wmstickers` file.
+- **New pack** starts one empty. **Import a pack** reads a `.wmstickers` file. **Signal sticker packs** adds a pack made for Signal from its link, as described [below](#signal-sticker-packs).
 - Inside a pack, **Add stickers** opens the photo picker for up to 30 images in one trip. Each one is processed automatically. A still image is resized to 512×512 and re-encoded as WebP, trying progressively lower quality (90 down to 50) until it lands under 100 KB, matching WhatsApp's static sticker spec. An animated source, GIF or animated WebP, is stored byte-for-byte instead, since Android has no animated-WebP encoder to re-compress it with. Those are capped at 2 MB rather than the 100 KB still budget. Any single source file over 12 MB is refused before processing even starts.
 - Pick exactly **one** still image and it opens in the [sticker editor](#the-sticker-editor) first, instead of being added as-is. Pick several and they're all added the old way, because an editor thirty times over isn't a flow anyone wants. Either way the photo behind each sticker is kept for later editing, as described below.
 - Per sticker, you can set its **search words**, reorder it within the pack, move it to a different pack, or delete it. Search words are one space-separated list of anything you'd want to type to find that sticker later, emoji included ("cat 😂 happy"). The first word doubles as the sticker's name, which is what a screen reader reads out for it.
@@ -91,6 +91,18 @@ A `.wmstickers` file is a ZIP with a `pack.json` manifest and one image per stic
 - "You already have 50 sticker packs. Delete one first." if you're at the pack limit.
 
 An import is also capped against oversized or booby-trapped files: at most 500 entries and 64 MB total per archive.
+
+### Signal sticker packs
+
+Packs made for Signal (and for Molly, which is Signal under another name) can become packs of your own. Signal has no sticker shop. A pack is public to whoever holds its link, and the link is all there is: `https://signal.art/addstickers/#pack_id=...&pack_key=...`. The second half of that link is the key the stickers are encrypted with, so the link is both the address and the way in.
+
+Open <SettingsPath path="Tools / Stickers / Your stickers / Sticker packs / Signal sticker packs" />, press **Add a pack from a link** and paste the link. The `sgnl://addstickers?...` form that Signal itself opens works too. You can also share a pack link to WM Keyboard from a browser or a chat, or paste it into **Import from a link** on the Add-ons screen. Both end up in the same place. The field never fills itself from the clipboard.
+
+What opens next is a preview and not an import: the pack's name, who made it, how many stickers it holds, and the stickers themselves. Nothing is kept until you press **Add this pack**. After that the pack sits in **Your packs** like any other. You can rename it, edit its stickers, export it as a `.wmstickers` file, and send from it in every app, not only in Signal. Each sticker keeps the emoji its maker gave it as a search word, so typing 😂 in **My stickers** finds the ones tagged with it. Open the same link again and the preview offers to open your copy instead of adding a second one.
+
+The stickers come from Signal's sticker storage, the same place a Signal client gets them from when you tap a pack link there. No Signal account is involved and nothing about you is sent, only the pack's id. Every file is checked against the key from the link before it is opened, so a file that was changed on the way is refused. A link whose key doesn't fit says so, and so does a pack that Signal no longer has. While [Data saver](/privacy/data-saver/) is on, the preview asks before its first request. That one answer covers the pictures and the import.
+
+Stickers are made to fit the same way as any other you add: a still that is already a 512×512 WebP under 100 KB is kept as it is, and anything else is resized and re-encoded.
 
 :::note[Sticker packs are excluded from backups by default]
 Sticker packs are an optional section of the app's full settings backup. They're off by default, because images make the backup file large. Turn them on in the Backup screen if you want packs included, or export a pack individually from its own screen instead.

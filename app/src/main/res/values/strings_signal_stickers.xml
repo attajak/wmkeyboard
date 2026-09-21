@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ================================================================== -->
+    <!-- Signal sticker packs. Signal is the name of a messaging app, and   -->
+    <!-- Molly is the name of another app made from it. A Signal sticker    -->
+    <!-- pack has no shop: it is shared as a link, and the link holds the   -->
+    <!-- key that opens the stickers. Do not translate Signal, Molly,       -->
+    <!-- signal.art or signalstickers.org.                                  -->
+    <!-- ================================================================== -->
+
+    <!-- The row on the Sticker packs screen, and the title of the screen it opens. -->
+    <string name="import_signal_row_title">Signal sticker packs</string>
+    <string name="import_signal_row_subtitle">Adds a pack made for Signal or Molly to your packs</string>
+
+    <string name="import_signal_section_title">Add a Signal pack</string>
+    <string name="import_signal_caption">Signal has no sticker shop. A person shares a pack as a link, and the link holds the key that opens the stickers. The app gets the pack from the sticker storage of Signal. The app does not use a Signal account, and Signal does not learn who you are. A pack that you add becomes one of your own packs, so you can send its stickers in every app.</string>
+
+    <string name="import_signal_link_title">Add a pack from a link</string>
+    <!-- signal.art is a web address. Keep it as it is. -->
+    <string name="import_signal_link_subtitle">Paste a signal.art link that someone shared</string>
+    <!-- signal.art is a web address. Keep it as it is. -->
+    <string name="import_signal_link_body">Paste the link of the pack. A pack link starts with signal.art/addstickers. The app shows the pack before it adds the pack.</string>
+    <string name="import_signal_link_error">That is not the link of a Signal sticker pack.</string>
+    <string name="import_signal_open_pack">Show the pack</string>
+
+    <!-- The title of the screen that shows one pack before the app adds it. -->
+    <string name="import_signal_pack_title">Signal sticker pack</string>
+    <string name="import_signal_loading">Getting the pack…</string>
+    <!-- The name for a pack that gives no name. -->
+    <string name="import_signal_untitled">Pack with no name</string>
+    <!-- %1$s is the name of the person who made the pack. -->
+    <string name="import_signal_author">By %1$s</string>
+    <string name="import_signal_add_title">Add this pack</string>
+    <string name="import_signal_add_subtitle">Downloads the stickers and keeps them on your device</string>
+    <string name="import_signal_added_title">You have this pack</string>
+    <!-- %1$s is the name of the pack in the list of the user. -->
+    <string name="import_signal_added_subtitle">Press to open %1$s</string>
+    <!-- %1$d is how many stickers the app has, %2$d is how many the pack holds.
+         "of" follows the first number, not the counted noun, so the wording
+         never changes with the count: this is a ratio, not a plural. -->
+    <string name="import_signal_downloading" tools:ignore="PluralsCandidate">Downloading %1$d of %2$d</string>
+    <string name="import_signal_adding" tools:ignore="PluralsCandidate">Adding %1$d of %2$d</string>
+    <string name="import_signal_error_not_found">Signal has no pack with this link. The pack was removed, or the link is not complete.</string>
+    <string name="import_signal_error_bad_key">The key in this link does not open the pack. Ask for the link again.</string>
+
+</resources>

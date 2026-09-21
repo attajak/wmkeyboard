@@ -32,7 +32,19 @@ data class StickerPack(
     val name: String,
     val stickers: List<CustomSticker> = emptyList(),
     val createdAt: Long = 0L,
-)
+    /**
+     * Where the pack was imported from, or blank for one the user built.
+     * `signal:<pack id>` for a Signal pack, which is what lets the Signal
+     * browser mark the packs already added. Never the pack key.
+     */
+    val source: String = "",
+) {
+    companion object {
+        const val MAX_SOURCE_LENGTH = 64
+
+        fun signalSource(packId: String): String = "signal:$packId"
+    }
+}
 
 /**
  * Sticker bytes ready to be written to disk, as produced by [StickerImage].

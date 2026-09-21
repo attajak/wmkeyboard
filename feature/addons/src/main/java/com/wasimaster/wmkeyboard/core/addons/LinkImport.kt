@@ -99,6 +99,9 @@ object LinkImport {
             is ImportLink.Target.File -> Outcome.One(Candidate(target.name, target.url))
             is ImportLink.Target.Artifact -> Outcome.One(artifactCandidate(target, token))
             is ImportLink.Target.Listing -> listing(target, importable, token, cacheDir)
+            // Not a file at an address. The link importer hands a pack link to
+            // the pack preview before it ever asks this.
+            is ImportLink.Target.SignalStickers -> Outcome.Failed(Failure.NOTHING_FOUND)
         }
 
     /**

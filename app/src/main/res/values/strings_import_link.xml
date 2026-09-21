@@ -13,6 +13,8 @@
     <!-- %1$s is a host name. -->
     <string name="import_link_confirm_lookup">WM Keyboard will ask %1$s what this link holds. Nothing is imported until you confirm it.</string>
     <string name="import_link_confirm_artifact">This link is a build artifact.</string>
+    <!-- Signal is the name of a messaging app. %1$s is a host name. -->
+    <string name="import_link_confirm_signal">This link is a Signal sticker pack. WM Keyboard will get the pack from %1$s and show it to you. Nothing is added until you confirm it.</string>
     <!-- %1$s is the host of the service used to get the artifact. -->
     <string name="import_link_confirm_artifact_nightly">GitHub does not let an app download an artifact without an account, so this goes through %1$s, a service WM Keyboard does not operate. To use GitHub directly, add a token on the Addons screen.</string>
 
