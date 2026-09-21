@@ -2958,6 +2958,15 @@ open class WMKeyboardService : InputMethodService() {
                     } else {
                         0L
                     }
+                // "Keep it like any other clip" means the mark is ignored, so
+                // clips marked while hiding was on unmask rather than staying
+                // dots forever with no short timer left to sweep them.
+                if (settings.clipboard.sensitiveHandling == SensitiveClipHandling.KEEP &&
+                    clipboardStore.clearSensitive()
+                ) {
+                    clipboardStore.save()
+                    _uiState.update { it.copy(clipboardItems = clipboardStore.items()) }
+                }
                 // Flipping pinned-first/last re-sorts the store, so refresh the
                 // panel's snapshot when the choice actually changes.
                 if (pinnedLastEnabled != settings.clipboard.pinnedLast) {

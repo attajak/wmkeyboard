@@ -149,8 +149,8 @@ a longer mix of cases, digits and symbols. A code quoted inside a message,
 or a copied link, is left alone.
 
 <SettingsPath path="Clipboard / Sensitive clips" /> decides what
-happens to a flagged clip: keep it like any other, hide it and delete it
-quickly (the default), or never save it at all. A hidden clip renders as a row
+happens to a flagged clip: keep it like any other (the default), hide it and
+delete it quickly, or never save it at all. A hidden clip renders as a row
 of dots behind a lock icon, with a character count under them. Tap it and
 it pastes straight into the field, the same as any other clip, so there's no
 reveal-in-place. Pinning one overrides all of that, because pinning is an
@@ -168,13 +168,13 @@ and the keyboard deletes that entry from history *and* clears the system
 clipboard behind it. Nothing is left sitting there for every other app on
 the device to read. This only fires for pastes the keyboard itself makes, so
 a paste through the field's own long-press menu isn't covered. It's
-controlled by **Forget after you paste a password**, on by default, under
+controlled by **Forget after you paste a password**, off by default, under
 <SettingsPath path="Clipboard / Passwords and codes" />. That switch sits
 beside the sensitive-clip options below rather than with the rest of
 clipboard history.
 
-<PhoneFrame caption="Sensitive-clip handling under Passwords & codes, both on by default.">
-  ![Passwords & codes: sensitive-clip handling and the paste-time purge, both on by default.](@assets/screens/privacy/clipboard-settings-passwords.webp)
+<PhoneFrame caption="Sensitive-clip handling under Passwords & codes, both turned on.">
+  ![Passwords & codes: sensitive-clip handling and the paste-time purge, both turned on.](@assets/screens/privacy/clipboard-settings-passwords.webp)
 </PhoneFrame>
 
 Neither of these depends on incognito being on. They run any time the
@@ -231,11 +231,11 @@ incognito or secure fields at all.
 
 <SettingsPath path="Clipboard / Passwords and codes" />
 
-- **Forget after you paste a password** (default **on**). Deletes a clip from
+- **Forget after you paste a password** (default **off**). Deletes a clip from
   history and from the system clipboard the moment it's pasted into a
   password field.
-- **Sensitive clips** (default **Hide it and delete it quickly**). The other
-  options are "Keep it like any other clip" and "Never save it".
+- **Sensitive clips** (default **Keep it like any other clip**). The other
+  options are "Hide it and delete it quickly" and "Never save it".
 - **Let the keyboard find them** (default **on**). Only shown once Sensitive
   clips isn't set to "Keep it like any other clip". Extends the app's own
   sensitive-clip flag with an on-device shape check.

@@ -409,6 +409,24 @@ class ClipboardStore(
         if (index >= 0) items[index] = items[index].copy(linkPreview = preview)
     }
 
+    /**
+     * Clears the sensitive mark from every clip, for when the user stops
+     * treating secrets specially. Without it, the clips marked while hiding was
+     * on would stay masked (and uneditable) with no short timer left to take
+     * them away. Returns whether anything changed, so the caller saves only then.
+     */
+    @Synchronized
+    fun clearSensitive(): Boolean {
+        var changed = false
+        for (index in items.indices) {
+            if (items[index].sensitive) {
+                items[index] = items[index].copy(sensitive = false)
+                changed = true
+            }
+        }
+        return changed
+    }
+
     /** Drops every fetched preview, e.g. when the user turns previews off. */
     @Synchronized
     fun clearLinkPreviews() {

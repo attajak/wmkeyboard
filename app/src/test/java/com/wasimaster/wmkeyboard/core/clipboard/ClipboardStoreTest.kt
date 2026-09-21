@@ -110,6 +110,15 @@ class ClipboardStoreTest {
         assertTrue(store.editText(secret.id, "hunter3")!!.sensitive)
     }
 
+    @Test fun clearSensitiveUnmasksAndReportsChange() {
+        val store = ClipboardStore(null)
+        store.add("hunter2", now = 1000, sensitive = true)
+        store.add("plain", now = 2000)
+        assertTrue(store.clearSensitive())
+        assertTrue(store.items(now = 3000).none { it.sensitive })
+        assertFalse(store.clearSensitive())
+    }
+
     @Test fun panelOffersEditingForVisibleTextOnly() {
         val store = ClipboardStore(null)
         assertTrue(store.add("plain", now = 1000)!!.clipEditable)

@@ -60,7 +60,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -474,7 +474,7 @@ private fun ClipNumberBadge(number: Int, modifier: Modifier = Modifier) {
             .widthIn(min = 20.dp)
             .clip(RoundedCornerShape(6.dp))
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .semantics { contentDescription = description }
+            .clearAndSetSemantics { contentDescription = description }
             .padding(horizontal = 5.dp),
         contentAlignment = Alignment.Center,
     ) {

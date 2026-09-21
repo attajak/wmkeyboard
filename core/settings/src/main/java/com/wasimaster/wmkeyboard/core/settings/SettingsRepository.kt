@@ -4488,8 +4488,12 @@ data class ClipboardSettings(
      * What to do with a clip the copying app marked sensitive (Android 13's
      * `ClipDescription.EXTRA_IS_SENSITIVE`, which is what a password manager
      * sets on a copied password).
+     *
+     * [SensitiveClipHandling.KEEP] by default: hiding and expiring secrets is
+     * an opt-in for the privacy-minded, not something every user pays for with
+     * masked clips they cannot read or edit.
      */
-    val sensitiveHandling: SensitiveClipHandling = SensitiveClipHandling.SHORT_LIVED,
+    val sensitiveHandling: SensitiveClipHandling = SensitiveClipHandling.KEEP,
     /**
      * Also apply [sensitiveHandling] to clips that *look* like a password or a
      * bare one-time code, not just the ones flagged by their source. Most
@@ -4532,10 +4536,11 @@ data class ClipboardSettings(
      * Delete a clip from history *and* from the system clipboard the moment it
      * is pasted into a password field. A password pasted out of a manager is
      * the single most sensitive thing the clipboard ever holds, and it would
-     * otherwise sit there — readable by every app — until it expired. On by
-     * default; turning it off keeps the clip like any other paste.
+     * otherwise sit there — readable by every app — until it expired. Off by
+     * default, like the rest of the password handling: an opt-in for the
+     * privacy-minded.
      */
-    val clearAfterPasswordPaste: Boolean = true,
+    val clearAfterPasswordPaste: Boolean = false,
     /**
      * Pull one-time codes, phone numbers and links out of clips and offer them
      * as their own chips above the history, so the six digits inside a

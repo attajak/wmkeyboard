@@ -98,11 +98,11 @@ This entity strip is a different mechanism from [Smart chips](/smart/chips/), wh
 
 ## Passwords are handled deliberately
 
-The clipboard tool treats a copied password or code as sensitive in two independent ways: at copy time, and at paste time.
+The clipboard tool can treat a copied password or code as sensitive in two independent ways: at copy time, and at paste time. Both are off out of the box, so a password you copy is kept, shown and pasted like any other clip. They're here for when you'd rather it wasn't.
 
-**At copy time**, <SettingsPath path="Clipboard / Passwords and codes" /> chooses what happens to a clip Android itself marks sensitive. That's the flag a password manager sets when you copy a login. You can keep it like any other clip, hide it and forget it quickly, or never save it at all. The default hides and forgets. Never saving would trade away the everyday "I pasted a password into the wrong field" recovery, and it closes a risk a short timer already closes. Turn on recognizing sensitive clips yourself and the same handling covers anything that merely *looks* like a password or a bare code. That's for managers older than the flag, or a code you copied by hand, and it's narrow enough that a sentence, a link or an email address never qualifies.
+**At copy time**, <SettingsPath path="Clipboard / Passwords and codes" /> chooses what happens to a clip Android itself marks sensitive. That's the flag a password manager sets when you copy a login. You can keep it like any other clip (the default), hide it and forget it quickly, or never save it at all. Hiding and forgetting is the one to pick if you want this at all. Never saving would trade away the everyday "I pasted a password into the wrong field" recovery, and it closes a risk a short timer already closes. Turn on recognizing sensitive clips yourself and the same handling covers anything that merely *looks* like a password or a bare code. That's for managers older than the flag, or a code you copied by hand, and it's narrow enough that a sentence, a link or an email address never qualifies.
 
-A hidden clip shows as a row of dots and a character count in the panel, and it's never revealable there. It's also left out of the strip's paste chip, the entity strip and the settings backup. It expires on its own timer, independent of the ordinary history expiry above and not capped by it. Pinning a sensitive clip overrides all of that, the same as pinning anything else.
+A hidden clip shows as a row of dots and a character count in the panel, and it's never revealable there. It's also left out of the strip's paste chip, the entity strip and the settings backup. It expires on its own timer, independent of the ordinary history expiry above and not capped by it. Pinning a sensitive clip overrides all of that, the same as pinning anything else. Switch back to keeping them like any other clip and the clips that were hidden turn back into ordinary ones.
 
 **At paste time**, turn on forgetting after a password paste. The clip is then deleted from history the moment you paste into a password field, and from the system clipboard too if that still holds exactly what you pasted. Every paste route fires it: a tap on a card, the strip's paste chip, a pasted entity chip, a long-pressed <KeyCap>V</KeyCap>, the text-editing panel's Paste, and a hardware <KeyCap>Ctrl</KeyCap>+<KeyCap>V</KeyCap>. So the rest of an SMS can't sit on the clipboard after you've pasted only its code.
 
@@ -137,14 +137,14 @@ Everything below lives on the Clipboard screen, under Features on the settings h
 - **Search bar**: enables the [search pill](#finding-a-clip-again) described above; off by default.
 - **Detect codes, numbers and links**: enables the [entity chips](#pulling-codes-and-links-out-of-a-clip); on by default. Detection runs entirely on the device.
 - **Phone number formats**: a nav row, shown only while detection is on, opening the mask editor covered in [Phone number formats](/reference/settings/phone-formats/). Its subtitle counts your saved formats, and says every number becomes a chip once you have deleted them all.
-- **Forget after you paste a password**: the paste-time purge described [above](#passwords-are-handled-deliberately); on by default.
+- **Forget after you paste a password**: the paste-time purge described [above](#passwords-are-handled-deliberately); off by default.
 - **Link previews**: fetches a copied link's page title and description directly from the linked site; off by default, and the toggle's own description says so plainly.
 - **Your screenshots**: shows device screenshots in the panel alongside copied text and images; off by default. While it's on without the photos permission granted, a row appears underneath to open system settings.
 - **Show the source app**: records which app a clip was copied from, for the long-press info popup; off by default, and needs the Usage Access permission. It's a best-effort guess of the foreground app at copy time, not a precise log. It gets the same "grant this" row underneath until you do.
 
 **Passwords and codes**
 
-- **Sensitive clips**: keep, hide-and-forget (default), or never save. See [above](#passwords-are-handled-deliberately).
+- **Sensitive clips**: keep (default), hide-and-forget, or never save. See [above](#passwords-are-handled-deliberately).
 - **Let the keyboard find them**: extends sensitive handling to clips that merely look like a password or code; on by default, shown only when sensitive handling isn't set to "keep."
 - **Forget sensitive clips after**: the hidden-clip timer, 1–120 minutes, default 5; shown only under the hide-and-forget option.
 
