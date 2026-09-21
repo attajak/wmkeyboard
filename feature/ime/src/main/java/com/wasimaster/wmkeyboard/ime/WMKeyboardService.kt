@@ -23245,13 +23245,19 @@ open class WMKeyboardService : InputMethodService() {
         } else {
             SelectionKind.TEXT
         }
-        // Plain text always has the case ladder behind Format; an entity offers
-        // it only when the rewrite would actually change something.
-        val formattable = kind == SelectionKind.TEXT || SelectionMacros.format(text, kind, masks) != null
         // A macro that opens a tool is only offered while that tool exists:
         // the same enabled-tools list power saving and direct boot have
         // already taken their entries out of.
         val allowed = prefs.macros.filterTo(mutableSetOf()) { macroToolAvailable(it, settings) }
+        // Plain text always has the case ladder behind Format; an entity offers
+        // it only when the rewrite would actually change something. On a link
+        // whose whole rewrite is dropping trackers, Remove trackers already
+        // says that, and two chips doing one thing is one too many.
+        val formatted = if (kind == SelectionKind.TEXT) null else SelectionMacros.format(text, kind, masks)
+        val formattable = kind == SelectionKind.TEXT || (
+            formatted != null &&
+                !(SelectionMacro.STRIP_TRACKERS in allowed && formatted == SelectionMacros.stripTrackers(text))
+            )
         // The dearer detectors run only while a macro that needs them is on.
         val content = SelectionMacros.detectContent(
             text,
@@ -23392,6 +23398,7 @@ open class WMKeyboardService : InputMethodService() {
             SelectionMacro.JSON_FORMAT -> JsonReformat.toggle(text)?.let(::rewriteSelection)
             SelectionMacro.BASE64_DECODE -> TextCodecs.base64Decode(text)?.let(::rewriteSelection)
             SelectionMacro.URL_DECODE -> TextCodecs.urlDecode(text)?.let(::rewriteSelection)
+            SelectionMacro.STRIP_TRACKERS -> SelectionMacros.stripTrackers(text)?.let(::rewriteSelection)
             SelectionMacro.CHAT_BOLD -> chatToggle(text, ChatStyle.BOLD)
             SelectionMacro.CHAT_ITALIC -> chatToggle(text, ChatStyle.ITALIC)
             SelectionMacro.CHAT_STRIKE -> chatToggle(text, ChatStyle.STRIKE)

@@ -255,6 +255,7 @@ internal fun macroDescription(macro: SelectionMacro): Int = when (macro) {
     SelectionMacro.JSON_FORMAT -> R.string.selection_macros_desc_json
     SelectionMacro.BASE64_DECODE -> R.string.selection_macros_desc_base64
     SelectionMacro.URL_DECODE -> R.string.selection_macros_desc_url_decode
+    SelectionMacro.STRIP_TRACKERS -> R.string.selection_macros_desc_strip_trackers
     SelectionMacro.CHAT_BOLD -> R.string.selection_macros_desc_chat_bold
     SelectionMacro.CHAT_ITALIC -> R.string.selection_macros_desc_chat_italic
     SelectionMacro.CHAT_STRIKE -> R.string.selection_macros_desc_chat_strike

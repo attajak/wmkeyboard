@@ -365,6 +365,27 @@ class SelectionMacrosTest {
     }
 
     @Test
+    fun `remove trackers keeps the link's own shape and only offers itself when there is something to take`() {
+        assertEquals(
+            "example.com/watch?v=abc#t",
+            SelectionMacros.stripTrackers("example.com/watch?v=abc&si=XyZ&UTM_Source=share#t"),
+        )
+        assertEquals("https://shop.example/p", SelectionMacros.stripTrackers("https://shop.example/p?mtm_campaign=a&hsa_ad=1"))
+        assertNull(SelectionMacros.stripTrackers("https://example.com/a?id=7&ref=home"))
+        assertNull(SelectionMacros.stripTrackers("https://example.com/a"))
+        assertNull(SelectionMacros.stripTrackers("https://example.com/a?"))
+
+        assertTrue(SelectionMacros.detectContent("https://x.com/a?fbclid=1").hasTrackers)
+        assertTrue(!SelectionMacros.detectContent("https://x.com/a?id=1").hasTrackers)
+
+        val all = SelectionMacros.configurable.toSet()
+        val tracked = MacroGates(content = ContentFlags(hasTrackers = true))
+        assertTrue(SelectionMacro.STRIP_TRACKERS in SelectionMacros.offer(SelectionKind.URL, all, tracked))
+        assertTrue(SelectionMacro.STRIP_TRACKERS !in SelectionMacros.offer(SelectionKind.URL, all))
+        assertTrue(SelectionMacro.STRIP_TRACKERS !in SelectionMacros.offer(SelectionKind.TEXT, all, tracked))
+    }
+
+    @Test
     fun `an address is lower-cased`() {
         assertEquals("example@gmail.com", SelectionMacros.format("Example@Gmail.COM", SelectionKind.EMAIL))
     }

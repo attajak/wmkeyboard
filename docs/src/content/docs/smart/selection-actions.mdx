@@ -68,6 +68,7 @@ Two things sit outside the order. **Undo** is always first while there is someth
 | Call, Message, WhatsApp | A phone number | On |
 | Email | An address | On |
 | Open | A link or an address | On |
+| Remove trackers | A link with tracking parameters | On |
 | QR | A link, with the QR generator on | On |
 | Contact | A phone number or an address | On |
 | Fancy | Text | On |
@@ -153,6 +154,7 @@ Mono on several lines uses the app's fenced block where it has one. These four a
 - **Digits** turns figures in another script into `0` to `9`: `০১৭১২` becomes `01712`, and Devanagari, Arabic-Indic or Persian figures the same.
 - **Colour** appears on a colour code (`#336699`, `#f00`, `0xFF336699`, `rgb(51, 102, 153)`, `hsl(210, 50%, 40%)`), wears a swatch of the colour, and opens its other spellings; tap one to write it in place.
 - **JSON** pretty-prints a minified object or array with two-space indents, or minifies a pretty one. Key order and number literals survive either way.
+- **Remove trackers** appears on a link that carries tracking parameters (`utm_source`, `fbclid`, `gclid`, `si` and the like) and takes them off, leaving everything that says which page it is. `youtu.be/abc?si=XyZ` becomes `youtu.be/abc`. It is on to start with; if you have already picked your own set of actions, switch it on under Actions.
 - **Base64** decodes Base64 text, and **Decode** a percent-encoded link (`hello%20world` to `hello world`). Both are careful about what counts: an ordinary word is never mistaken for Base64, and `50% off` is not encoded.
 
 ## Language

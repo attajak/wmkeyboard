@@ -25,6 +25,8 @@ data class ContentFlags(
     val jsonShape: JsonReformat.Shape = JsonReformat.Shape.NONE,
     val base64: Boolean = false,
     val urlEncoded: Boolean = false,
+    /** A query parameter [SelectionMacros.stripTrackers] would take away. */
+    val hasTrackers: Boolean = false,
 ) {
     companion object {
         val NONE = ContentFlags()

@@ -77,6 +77,15 @@ enum class SelectionMacro {
     JSON_FORMAT,
     BASE64_DECODE,
     URL_DECODE,
+    /**
+     * Take the tracking parameters off a link, in place.
+     *
+     * Only offered on a link that carries one, so it never shows up to do
+     * nothing. Format on a link does the same and adds a missing scheme; this
+     * is the chip that says what it is for, and the one that leaves a bare
+     * domain bare.
+     */
+    STRIP_TRACKERS,
     CHAT_BOLD,
     CHAT_ITALIC,
     CHAT_STRIKE,
@@ -149,6 +158,7 @@ enum class SelectionMacro {
             JSON_FORMAT -> R.string.core_content_selection_macro_json
             BASE64_DECODE -> R.string.core_content_selection_macro_base64
             URL_DECODE -> R.string.core_content_selection_macro_url_decode
+            STRIP_TRACKERS -> R.string.core_content_selection_macro_strip_trackers
             CHAT_BOLD -> R.string.core_content_selection_macro_chat_bold
             CHAT_ITALIC -> R.string.core_content_selection_macro_chat_italic
             CHAT_STRIKE -> R.string.core_content_selection_macro_chat_strike
@@ -183,7 +193,7 @@ enum class SelectionMacro {
             FORMAT, FANCY, CHAT_BOLD, CHAT_ITALIC, CHAT_STRIKE, CHAT_MONO,
             CASE_LOWER, CASE_TITLE, CASE_UPPER, CASE_SENTENCE,
             CASE_CAMEL, CASE_SNAKE, CASE_KEBAB, CASE_CONSTANT -> MacroCategory.FORMAT
-            DIGITS_LATIN, COLOUR, JSON_FORMAT, BASE64_DECODE, URL_DECODE -> MacroCategory.CONVERT
+            DIGITS_LATIN, COLOUR, JSON_FORMAT, BASE64_DECODE, URL_DECODE, STRIP_TRACKERS -> MacroCategory.CONVERT
             TRANSLATE, GRAMMAR_FIX, AI, TO_BANGLA, TO_BANGLISH, TO_HINDI, TO_HINGLISH -> MacroCategory.LANGUAGE
             SEARCH, READ_ALOUD, TIME_ZONES -> MacroCategory.LOOKUP
             SHARE, CALL, SMS, WHATSAPP, EMAIL, OPEN, QR, ADD_CONTACT, MAP, CALENDAR -> MacroCategory.OPEN_IN
@@ -288,17 +298,24 @@ object SelectionMacros {
     private const val PHONE_SEPARATORS = " -().[]/"
 
     /**
-     * Query parameters stripped by [formatUrl]: campaign trackers and the
+     * Query parameters stripped by [stripTrackers]: campaign trackers and the
      * per-click ids the big platforms staple on. Matched case-insensitively,
-     * and `utm_*` by prefix, because the family keeps growing.
+     * and the campaign families by prefix, because they keep growing.
+     *
+     * Only names that are never about the page itself. `ref` and `source`
+     * stay: plenty of sites route on them, and a cleaned link that no longer
+     * opens the right page is worse than a tracked one.
      */
     private val TRACKING_PARAMS = setOf(
         "fbclid", "gclid", "dclid", "gbraid", "wbraid", "msclkid", "mc_eid", "mc_cid",
         "igshid", "igsh", "ttclid", "twclid", "yclid", "si", "ref_src", "ref_url",
         "_openstat", "vero_id", "vero_conv", "oly_enc_id", "oly_anon_id", "spm",
+        "_hsenc", "_hsmi", "mkt_tok", "srsltid", "epik", "rb_clickid", "s_cid", "sc_cid",
+        "pk_campaign", "pk_kwd", "pk_source", "pk_medium", "pk_content",
     )
 
-    private const val TRACKING_PREFIX = "utm_"
+    /** Google Analytics, Matomo and HubSpot ad campaigns: a family each. */
+    private val TRACKING_PREFIXES = listOf("utm_", "mtm_", "hsa_")
 
     /** The four fixed cases: never configurable, always inside the Format ladder. */
     val fixedCaseMacros: List<SelectionMacro> = listOf(
@@ -328,7 +345,7 @@ object SelectionMacros {
     val defaultOrder: List<SelectionMacro> = listOf(
         SelectionMacro.UNDO, SelectionMacro.SELECT_ALL,
         SelectionMacro.CALL, SelectionMacro.SMS, SelectionMacro.WHATSAPP, SelectionMacro.EMAIL,
-        SelectionMacro.OPEN, SelectionMacro.QR, SelectionMacro.ADD_CONTACT,
+        SelectionMacro.OPEN, SelectionMacro.STRIP_TRACKERS, SelectionMacro.QR, SelectionMacro.ADD_CONTACT,
         SelectionMacro.COPY, SelectionMacro.CUT, SelectionMacro.PASTE, SelectionMacro.DELETE, SelectionMacro.SHARE,
         SelectionMacro.FORMAT, SelectionMacro.FIND, SelectionMacro.REPLACE,
         SelectionMacro.LINES_SORT, SelectionMacro.LINES_DEDUPE, SelectionMacro.LINES_NUMBER, SelectionMacro.LINES_BULLET,
@@ -357,6 +374,7 @@ object SelectionMacros {
         SelectionMacro.DIGITS_LATIN, SelectionMacro.COLOUR,
         SelectionMacro.CALL, SelectionMacro.SMS, SelectionMacro.WHATSAPP, SelectionMacro.EMAIL,
         SelectionMacro.OPEN, SelectionMacro.QR, SelectionMacro.ADD_CONTACT, SelectionMacro.FANCY,
+        SelectionMacro.STRIP_TRACKERS,
     )
 
     /**
@@ -441,7 +459,7 @@ object SelectionMacros {
     private fun eligible(macro: SelectionMacro, kind: SelectionKind): Boolean = when (macro) {
         SelectionMacro.CALL, SelectionMacro.SMS, SelectionMacro.WHATSAPP -> kind == SelectionKind.PHONE
         SelectionMacro.EMAIL -> kind == SelectionKind.EMAIL
-        SelectionMacro.QR -> kind == SelectionKind.URL
+        SelectionMacro.QR, SelectionMacro.STRIP_TRACKERS -> kind == SelectionKind.URL
         SelectionMacro.OPEN -> kind == SelectionKind.URL || kind == SelectionKind.EMAIL
         SelectionMacro.ADD_CONTACT -> kind == SelectionKind.PHONE || kind == SelectionKind.EMAIL
         SelectionMacro.URL_DECODE -> kind == SelectionKind.URL || kind == SelectionKind.TEXT
@@ -481,6 +499,7 @@ object SelectionMacros {
         SelectionMacro.JSON_FORMAT -> gates.content.jsonShape != JsonReformat.Shape.NONE
         SelectionMacro.BASE64_DECODE -> gates.content.base64
         SelectionMacro.URL_DECODE -> gates.content.urlEncoded
+        SelectionMacro.STRIP_TRACKERS -> gates.content.hasTrackers
         SelectionMacro.READ_ALOUD -> gates.ttsAvailable
         else -> true
     }
@@ -554,30 +573,40 @@ object SelectionMacros {
     /** How a hand-written mask can spell "any digit"; canonical form is `X`. */
     private const val MASK_WILDCARDS = "x#"
 
+    /** [url] with its tracking parameters removed, and a scheme added when it had none. */
+    fun formatUrl(url: String): String? {
+        val withScheme = if (url.contains("://")) url else "https://$url"
+        return stripTrackers(withScheme) ?: withScheme
+    }
+
     /**
-     * [url] with its tracking parameters removed, and a scheme added when it
-     * had none.
+     * [url] without its tracking parameters, or null when it carries none.
      *
      * Only the query is touched. Rewriting a path, a fragment or a host is how
      * a "clean this link" feature quietly breaks the link, and the parameters
-     * are the part that is provably not about where the page is.
+     * are the part that is provably not about where the page is. Nor is a
+     * scheme added: the link keeps the shape it was written in.
      */
-    fun formatUrl(url: String): String? {
-        val withScheme = if (url.contains("://")) url else "https://$url"
-        val queryStart = withScheme.indexOf('?')
-        if (queryStart < 0) return withScheme
-        val fragmentStart = withScheme.indexOf('#', queryStart)
+    fun stripTrackers(url: String): String? {
+        val trimmed = url.trim()
+        val queryStart = trimmed.indexOf('?')
+        if (queryStart < 0) return null
+        val fragmentStart = trimmed.indexOf('#', queryStart)
         val query = if (fragmentStart < 0) {
-            withScheme.substring(queryStart + 1)
+            trimmed.substring(queryStart + 1)
         } else {
-            withScheme.substring(queryStart + 1, fragmentStart)
+            trimmed.substring(queryStart + 1, fragmentStart)
         }
-        val fragment = if (fragmentStart < 0) "" else withScheme.substring(fragmentStart)
-        val kept = query.split('&').filter { part ->
+        val fragment = if (fragmentStart < 0) "" else trimmed.substring(fragmentStart)
+        val parts = query.split('&')
+        val kept = parts.filter { part ->
             val name = part.substringBefore('=').lowercase()
-            name.isNotEmpty() && !name.startsWith(TRACKING_PREFIX) && name !in TRACKING_PARAMS
+            name.isNotEmpty() && TRACKING_PREFIXES.none { name.startsWith(it) } && name !in TRACKING_PARAMS
         }
-        val base = withScheme.substring(0, queryStart)
+        // Empty pieces (`a=1&&b=2`, a trailing `?`) go too, but on their own
+        // they are not trackers and do not make a link worth offering to clean.
+        if (kept.size == parts.count { it.substringBefore('=').isNotEmpty() }) return null
+        val base = trimmed.substring(0, queryStart)
         return if (kept.isEmpty()) base + fragment else "$base?${kept.joinToString("&")}$fragment"
     }
 
@@ -726,6 +755,7 @@ object SelectionMacros {
         val jsonShape = if (JsonReformat.looksStructured(trimmed)) JsonReformat.shape(trimmed) else JsonReformat.Shape.NONE
         val base64 = single && trimmed.length >= 8 && TextCodecs.looksBase64(trimmed)
         val urlEncoded = TextCodecs.isUrlEncoded(trimmed)
+        val hasTrackers = single && trimmed.contains('?') && stripTrackers(trimmed) != null
         val couldBeMoment = single && trimmed.length <= DateTimes.MAX_LENGTH &&
             (hasDigit || trimmed.firstOrNull()?.isLetter() == true)
         val dateTime = if (options.dateTime && couldBeMoment) {
@@ -754,6 +784,7 @@ object SelectionMacros {
             jsonShape = jsonShape,
             base64 = base64,
             urlEncoded = urlEncoded,
+            hasTrackers = hasTrackers,
         )
     }
 }

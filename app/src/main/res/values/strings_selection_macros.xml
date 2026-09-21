@@ -72,6 +72,7 @@
     <string name="selection_macros_desc_json">Pretty-print or minify JSON</string>
     <string name="selection_macros_desc_base64">Decode Base64 text</string>
     <string name="selection_macros_desc_url_decode">Decode a percent-encoded link</string>
+    <string name="selection_macros_desc_strip_trackers">Take the tracking parameters off a link</string>
     <string name="selection_macros_desc_chat_bold">Bold, in the chat app\'s own syntax. Only in apps the keyboard knows</string>
     <string name="selection_macros_desc_chat_italic">Italic, in the chat app\'s own syntax</string>
     <string name="selection_macros_desc_chat_strike">Strikethrough, in the chat app\'s own syntax</string>

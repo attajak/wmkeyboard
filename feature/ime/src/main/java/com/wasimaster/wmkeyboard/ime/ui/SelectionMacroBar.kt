@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.AutoFixHigh
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.Chat
+import androidx.compose.material.icons.outlined.CleaningServices
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.ContentCut
@@ -550,6 +551,7 @@ private fun macroIcon(macro: SelectionMacro): ImageVector? = when (macro) {
     SelectionMacro.JSON_FORMAT -> Icons.Outlined.DataObject
     SelectionMacro.BASE64_DECODE -> Icons.Outlined.LockOpen
     SelectionMacro.URL_DECODE -> Icons.Outlined.LinkOff
+    SelectionMacro.STRIP_TRACKERS -> Icons.Outlined.CleaningServices
     SelectionMacro.CHAT_BOLD -> Icons.Outlined.FormatBold
     SelectionMacro.CHAT_ITALIC -> Icons.Outlined.FormatItalic
     SelectionMacro.CHAT_STRIKE -> Icons.Outlined.FormatStrikethrough
