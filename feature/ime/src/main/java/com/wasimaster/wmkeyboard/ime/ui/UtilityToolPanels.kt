@@ -420,11 +420,14 @@ internal fun CalculatorPanel(
                 modifier = Modifier.focusRing(focusedChip == sciTokens.size + 1),
             ) { callbacks.onCalcToggleDegrees() }
         }
-        // Keypad.
+        // Keypad. Desk-calculator order by default; the phone layout puts
+        // 1 2 3 on top to match the numpad's dialer order (issue #294).
+        // Only the digits swap — the operator columns stay where they are.
+        val phone = state.settings.calcPhoneLayout
         val rows = listOf(
-            listOf("7", "8", "9", "÷", "⌫"),
+            listOf(if (phone) "1" else "7", if (phone) "2" else "8", if (phone) "3" else "9", "÷", "⌫"),
             listOf("4", "5", "6", "×", "("),
-            listOf("1", "2", "3", "−", ")"),
+            listOf(if (phone) "7" else "1", if (phone) "8" else "2", if (phone) "9" else "3", "−", ")"),
             listOf("0", ".", "%", "+", "="),
         )
         Column(Modifier.weight(1f)) {

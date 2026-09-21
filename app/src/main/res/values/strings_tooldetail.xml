@@ -477,6 +477,8 @@
     <!-- Calculator tool. -->
     <string name="tooldetail_calc_degrees_title">Degrees</string>
     <string name="tooldetail_calc_degrees_subtitle">Trigonometry functions use degrees. Off uses radians</string>
+    <string name="tooldetail_calc_phone_layout_title">Phone layout</string>
+    <string name="tooldetail_calc_phone_layout_subtitle">1 2 3 on the top row, like a dialer and the numpad. Off puts 7 8 9 on top, like a desk calculator</string>
     <string name="tooldetail_calc_precision_title">Result precision</string>
     <string name="tooldetail_calc_precision_subtitle">Maximum number of decimal places. The unit converter uses it too</string>
 

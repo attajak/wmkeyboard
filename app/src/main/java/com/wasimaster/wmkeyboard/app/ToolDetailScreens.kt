@@ -2107,6 +2107,14 @@ internal fun ToolDetailSettings(
                 ) { scope.launch { repository.setCalcDegrees(it) } }
             }
             item {
+                ToggleSetting(
+                    R.string.tooldetail_calc_phone_layout_title,
+                    stringResource(R.string.tooldetail_calc_phone_layout_subtitle),
+                    settings.calcPhoneLayout,
+                    default = SettingsDefaults.calcPhoneLayout,
+                ) { scope.launch { repository.setCalcPhoneLayout(it) } }
+            }
+            item {
                 SliderSetting(
                     R.string.tooldetail_calc_precision_title,
                     subtitle = stringResource(R.string.tooldetail_calc_precision_subtitle),

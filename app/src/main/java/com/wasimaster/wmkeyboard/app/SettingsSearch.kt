@@ -1332,6 +1332,7 @@ private fun SearchStrings.toolPageRowsB(): List<SettingsSearchEntry> = listOf(
     toolEntry(ToolbarTool.WIKIPEDIA, R.string.tooldetail_wiki_language_label, R.string.tooldetail_wiki_language_hint),
     toolEntry(ToolbarTool.WIKIPEDIA, R.string.tooldetail_wiki_markdown_title, R.string.tooldetail_wiki_markdown_subtitle),
     toolEntry(ToolbarTool.CALCULATOR, R.string.tooldetail_calc_degrees_title, R.string.tooldetail_calc_degrees_subtitle),
+    toolEntry(ToolbarTool.CALCULATOR, R.string.tooldetail_calc_phone_layout_title, R.string.tooldetail_calc_phone_layout_subtitle),
     toolEntry(ToolbarTool.CALCULATOR, R.string.tooldetail_calc_precision_title, R.string.tooldetail_calc_precision_subtitle),
     toolEntry(
         ToolbarTool.UNIT_CONVERT,

@@ -1074,6 +1074,7 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_wiki_link_limit_title) { Icons.Outlined.Numbers }
         put(R.string.tooldetail_chips_nav_title) { Icons.Outlined.Calculate }
         put(R.string.tooldetail_calc_degrees_title) { Icons.Outlined.Architecture }
+        put(R.string.tooldetail_calc_phone_layout_title) { Icons.Outlined.Dialpad }
         put(R.string.tooldetail_calc_precision_title) { Icons.Outlined.Numbers }
         put(R.string.tooldetail_units_compound_title) { Icons.Outlined.Height }
         put(R.string.tooldetail_currency_auto_fetch_title) { Icons.Outlined.CloudDownload }

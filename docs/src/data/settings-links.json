@@ -687,6 +687,7 @@
   {"title":"Wikipedia language","name":"tooldetail_wiki_language_label","route":"tool/WIKIPEDIA","screens":["Tools","Wikipedia"],"screen":false},
   {"title":"Markdown links","name":"tooldetail_wiki_markdown_title","route":"tool/WIKIPEDIA","screens":["Tools","Wikipedia"],"screen":false},
   {"title":"Degrees","name":"tooldetail_calc_degrees_title","route":"tool/CALCULATOR","screens":["Tools","Calculator"],"screen":false},
+  {"title":"Phone layout","name":"tooldetail_calc_phone_layout_title","route":"tool/CALCULATOR","screens":["Tools","Calculator"],"screen":false},
   {"title":"Result precision","name":"tooldetail_calc_precision_title","route":"tool/CALCULATOR","screens":["Tools","Calculator"],"screen":false},
   {"title":"Feet and inches","name":"tooldetail_units_compound_title","route":"tool/UNIT_CONVERT","screens":["Tools","Unit converter"],"screen":false},
   {"title":"Fetch rates as you type","name":"tooldetail_currency_auto_fetch_title","route":"tool/CURRENCY","screens":["Tools","Currency converter"],"screen":false},

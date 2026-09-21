@@ -2878,6 +2878,8 @@ data class KeyboardSettings(
     val toolKeywordCase: String = "",
     /** Trig in degrees (off = radians) for the calculator tool. */
     val calcDegrees: Boolean = true,
+    /** Calculator keypad with 1 2 3 on the top row, like a dialer (issue #294). */
+    val calcPhoneLayout: Boolean = false,
     /** Decimal places in calculator/converter results. */
     val calcPrecision: Int = 8,
     /** Currency codes the converter starts on. */
@@ -7304,6 +7306,7 @@ class SettingsRepository(private val context: Context) {
         private val TOOL_KEYWORDS = stringPreferencesKey("tool_keywords")
         private val TOOL_KEYWORD_CASE = stringPreferencesKey("tool_keyword_case")
         private val CALC_DEGREES = booleanPreferencesKey("calc_degrees")
+        private val CALC_PHONE_LAYOUT = booleanPreferencesKey("calc_phone_layout")
         private val CALC_PRECISION = intPreferencesKey("calc_precision")
         private val CURRENCY_FROM = stringPreferencesKey("currency_from")
         private val CURRENCY_TO = stringPreferencesKey("currency_to")
@@ -8714,6 +8717,7 @@ class SettingsRepository(private val context: Context) {
             toolKeywords = p[TOOL_KEYWORDS] ?: defaults.toolKeywords,
             toolKeywordCase = p[TOOL_KEYWORD_CASE] ?: defaults.toolKeywordCase,
             calcDegrees = p[CALC_DEGREES] ?: defaults.calcDegrees,
+            calcPhoneLayout = p[CALC_PHONE_LAYOUT] ?: defaults.calcPhoneLayout,
             calcPrecision = p[CALC_PRECISION] ?: defaults.calcPrecision,
             currencyFrom = p[CURRENCY_FROM] ?: defaults.currencyFrom,
             currencyTo = p[CURRENCY_TO] ?: defaults.currencyTo,
@@ -13817,6 +13821,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setCalcDegrees(value: Boolean) =
         editPrefs { it[CALC_DEGREES] = value }
+
+    suspend fun setCalcPhoneLayout(value: Boolean) =
+        editPrefs { it[CALC_PHONE_LAYOUT] = value }
 
     suspend fun setCalcPrecision(value: Int) =
         editPrefs { it[CALC_PRECISION] = value.coerceIn(0, 12) }
