@@ -1409,6 +1409,18 @@ private fun SettingsNavGraph(
                 StickerPackScreen(packId) { route -> navController.navigate(route) }
             }
         }
+        composable("sticker_pack/{packId}/add") { backStackEntry ->
+            // The keyboard's add button: the same page, with the photo picker
+            // already up, so adding one sticker is a pick and not a hunt.
+            val packId = backStackEntry.arguments?.getString("packId").orEmpty()
+            SettingsScreen(
+                stringResource(R.string.home_screen_sticker_pack_edit_title),
+                { navController.popBackStack() },
+                route = stickerPackRoute(packId),
+            ) {
+                StickerPackScreen(packId, openPicker = true) { route -> navController.navigate(route) }
+            }
+        }
         composable(STICKER_EDITOR_ROUTE) {
             // Captured once for this back-stack entry, so clearing the handoff
             // on the way out cannot make the exit animation pop a second time.

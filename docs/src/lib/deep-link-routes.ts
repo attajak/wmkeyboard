@@ -150,6 +150,12 @@ export const ROUTES: RouteSpec[] = [
 		group: 'Emoji, clipboard and stickers',
 		args: [{ name: 'packId', hint: 'The id of one of your sticker packs' }],
 	},
+	{
+		pattern: 'sticker_pack/{packId}/add',
+		label: 'Add stickers to one of your packs',
+		group: 'Emoji, clipboard and stickers',
+		args: [{ name: 'packId', hint: 'The id of one of your sticker packs' }],
+	},
 
 	{ pattern: 'tools', label: 'Tools', group: 'Tools' },
 	{

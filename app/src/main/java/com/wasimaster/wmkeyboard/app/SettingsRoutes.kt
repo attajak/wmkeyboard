@@ -123,6 +123,7 @@ internal object SettingsRoutes {
         "addon_repo/{repoUrl}",
         "addon/{repoUrl}/{addonId}",
         "sticker_pack/{packId}",
+        "sticker_pack/{packId}/add",
         "keymap_edit/{layoutId}",
         "keymap_json/{layoutId}",
         "panel_edit/{panel}",

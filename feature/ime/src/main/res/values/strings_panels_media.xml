@@ -176,6 +176,8 @@
     <!-- Chip that shows the stickers of every pack together. -->
     <string name="ime_sticker_pack_all_label">All</string>
     <string name="ime_sticker_manage_packs_action">Manage packs</string>
+    <string name="ime_sticker_add_desc">Add stickers</string>
+    <string name="ime_sticker_add_to_pack_action">Add to <xliff:g id="pack" example="My stickers">%1$s</xliff:g></string>
     <string name="ime_sticker_save_new_pack_action">Save to a new pack</string>
     <!-- %1$s is the name the user gave the pack. -->
     <string name="ime_sticker_save_to_pack_action">Save to <xliff:g id="pack" example="My stickers">%1$s</xliff:g></string>

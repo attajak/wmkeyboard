@@ -40,6 +40,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -686,6 +687,9 @@ internal fun GifPanel(
             .fillMaxWidth()
             .height(height)
     }
+    // "Add to which pack?", up when the add chip is pressed under All with
+    // more than one pack to choose from. Panel-local: nothing else reads it.
+    var choosingAddPack by remember { mutableStateOf(false) }
     Box(modifier = sizing) {
         Column(modifier = Modifier.fillMaxSize()) {
             PanelFocusTarget(
@@ -721,11 +725,21 @@ internal fun GifPanel(
                     focused = state.focusedIndex(FocusRegion.CHIPS),
                 )
             }
-            if (localGrid && state.stickerPacks.size > 1 && !state.mediaSearchActive) {
+            // With no packs at all the empty grid has its own way in, so the
+            // row waits for the first one.
+            if (localGrid && state.stickerPacks.isNotEmpty() && !state.mediaSearchActive) {
                 StickerPackChips(
                     packs = state.stickerPacks,
                     selected = state.stickerPackId,
                     onSelect = onPackFilter,
+                    onAdd = {
+                        val target = stickerAddTarget(state.stickerPacks, state.stickerPackId)
+                        if (target == null) {
+                            choosingAddPack = true
+                        } else {
+                            onOpenRoute(stickerPackAddRoute(target))
+                        }
+                    },
                 )
             }
             if (showMediaCategories(state, localGrid, fullBleed, state.acceptsRichMedia)) {
@@ -805,6 +819,16 @@ internal fun GifPanel(
                 }
             }
         }
+        if (choosingAddPack) {
+            StickerAddPackSheet(
+                packs = state.stickerPacks,
+                onPick = { packId ->
+                    choosingAddPack = false
+                    onOpenRoute(stickerPackAddRoute(packId))
+                },
+                onDismiss = { choosingAddPack = false },
+            )
+        }
         val action = state.mediaAction
         if (action != null) {
             MediaActionSheet(
@@ -855,6 +879,26 @@ private fun LocalStickerEmptyNotice(
 
 /** Settings route hosting the sticker pack manager. */
 internal const val STICKER_PACKS_ROUTE = "sticker_packs"
+
+/**
+ * Settings route that opens one pack with the photo picker already up. The
+ * app's nav graph declares it as `sticker_pack/{packId}/add`.
+ */
+internal fun stickerPackAddRoute(packId: String): String =
+    "sticker_pack/${android.net.Uri.encode(packId)}/add"
+
+/**
+ * Which pack the add chip adds to, or null when the user has to say.
+ *
+ * The pack the grid is filtered to, if one is; otherwise the only pack there
+ * is. Under All with several packs any pick would be a guess, and a sticker
+ * filed in the wrong pack is a second trip to move it.
+ */
+internal fun stickerAddTarget(
+    packs: List<com.wasimaster.wmkeyboard.core.stickers.StickerPack>,
+    selected: String?,
+): String? =
+    selected?.takeIf { id -> packs.any { it.id == id } } ?: packs.singleOrNull()?.id
 
 /** Source chips: Klipy / GIPHY / My stickers, or Online / My stickers when mixed. */
 @Composable
@@ -946,12 +990,18 @@ private fun GifCategoryChips(
 private fun categoryLabel(category: MediaCategory): String =
     if (category.labelRes != 0) stringResource(category.labelRes) else category.label
 
-/** Pack chips under the "My stickers" tab: All, then one per pack. */
+/**
+ * Pack chips under the "My stickers" tab: the add chip, then All and one per
+ * pack. A single pack has nothing to filter, so it gets the add chip alone.
+ *
+ * Add comes first so a long row of packs cannot scroll it out of reach.
+ */
 @Composable
 private fun StickerPackChips(
     packs: List<com.wasimaster.wmkeyboard.core.stickers.StickerPack>,
     selected: String?,
     onSelect: (String?) -> Unit,
+    onAdd: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
     Row(
@@ -960,10 +1010,28 @@ private fun StickerPackChips(
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 8.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
+        val shape = kb.chipShape()
+        Box(
+            modifier = Modifier
+                .clip(shape)
+                .background(kb.chip)
+                .chipBorder(kb, shape)
+                .clickable { onAdd() }
+                .padding(horizontal = 10.dp, vertical = 2.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                Icons.Outlined.Add,
+                contentDescription = stringResource(R.string.ime_sticker_add_desc),
+                modifier = Modifier.size(16.dp),
+                tint = kb.chipText,
+            )
+        }
+        if (packs.size < 2) return@Row
         val allLabel = stringResource(R.string.ime_sticker_pack_all_label)
         val entries = listOf<Pair<String?, String>>(null to allLabel) + packs.map { it.id to it.name }
-        val shape = kb.chipShape()
         for ((id, label) in entries) {
             val active = id == selected
             Text(
@@ -1060,6 +1128,44 @@ private fun MediaActionSheet(
             MediaActionRow(stringResource(CommonR.string.common_copy)) { onCopy(item) }
             if (!local) {
                 MediaActionRow(stringResource(R.string.ime_media_report_action)) { onReport(item) }
+            }
+        }
+    }
+}
+
+/**
+ * "Add to which pack?" for the add chip under All. The same scrim and surface
+ * as [MediaActionSheet], for the same reason: an IME has no dialog.
+ */
+@Composable
+private fun StickerAddPackSheet(
+    packs: List<com.wasimaster.wmkeyboard.core.stickers.StickerPack>,
+    onPick: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val kb = LocalKbTheme.current
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.45f))
+            .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                onDismiss()
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .widthIn(max = 320.dp)
+                .clip(RoundedCornerShape(14.dp))
+                .background(kb.popup)
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 6.dp),
+        ) {
+            for (pack in packs) {
+                MediaActionRow(stringResource(R.string.ime_sticker_add_to_pack_action, pack.name)) {
+                    onPick(pack.id)
+                }
             }
         }
     }

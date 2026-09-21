@@ -37,11 +37,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -347,9 +349,19 @@ private fun StickerPackRow(
     )
 }
 
-/** One pack: rename it, add stickers from photos, edit or remove each one. */
+/**
+ * One pack: rename it, add stickers from photos, edit or remove each one.
+ *
+ * @param openPicker put the photo picker up as the page opens, for the
+ *   keyboard's add button (#281). Once per visit: coming back from the editor
+ *   or from a rotation lands on the page, not on a second picker.
+ */
 @Composable
-internal fun StickerPackScreen(packId: String, onNavigate: (String) -> Unit) {
+internal fun StickerPackScreen(
+    packId: String,
+    openPicker: Boolean = false,
+    onNavigate: (String) -> Unit,
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val store = remember { StickerPackStore.get(context) }
@@ -426,6 +438,16 @@ internal fun StickerPackScreen(packId: String, onNavigate: (String) -> Unit) {
             busy = false
             revision++
             message = outcome.describe(context)
+        }
+    }
+
+    // Saved with the back-stack entry, so the editor's pop back to this page
+    // finds it already spent.
+    var pickerOpened by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if (openPicker && !pickerOpened && pack != null) {
+            pickerOpened = true
+            pickLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
     }
 
