@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.app
 
 import android.net.Uri
 import com.wasimaster.wmkeyboard.core.addons.AddonRepoCodec
+import com.wasimaster.wmkeyboard.core.stickers.signal.SignalStickerCrypto
 import java.net.URI
 import java.net.URLDecoder
 
@@ -14,6 +15,7 @@ import java.net.URLDecoder
  * | `wmkeyboard://addons` | the Addons screen |
  * | `wmkeyboard://repo?url=<repo>` | Addons, with the add-repository sheet pre-filled |
  * | `wmkeyboard://addon?repo=<repo>&id=<addonId>` | that addon's detail page |
+ * | `wmkeyboard://signalpack?id=<pack id>&key=<pack key>` | the preview of that Signal sticker pack |
  *
  * A custom scheme rather than https App Links: no domain to verify, no
  * `assetlinks.json` to host, and nothing about this needs a real web page to
@@ -72,9 +74,24 @@ object AddonDeepLink {
                 addonDetailRoute(resolved, id)
             }
 
+            // Only ever sent by the app to itself, from the link importer: the
+            // manifest declares no `signalpack` host, so nothing outside can
+            // open it. Still read as untrusted, which costs nothing.
+            SIGNAL_PACK_HOST -> {
+                val id = query.param("id")?.let(SignalStickerCrypto::packIdOrNull) ?: return null
+                val key = query.param("key")?.let(SignalStickerCrypto::packKeyOrNull) ?: return null
+                signalPackRoute(id, key)
+            }
+
             else -> null
         }
     }
+
+    private const val SIGNAL_PACK_HOST = "signalpack"
+
+    /** The link [routeFor] turns back into [signalPackRoute]. Both halves are hex. */
+    fun signalPackLink(packId: String, packKey: String): String =
+        "$SCHEME://$SIGNAL_PACK_HOST?id=$packId&key=$packKey"
 
     /** One query parameter out of a raw `a=1&b=2` string, percent-decoded. */
     private fun String.param(name: String): String? = split('&')

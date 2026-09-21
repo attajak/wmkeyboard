@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.StickyNote2
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FileOpen
@@ -147,50 +148,7 @@ internal fun StickerPacksScreen(onNavigate: (String) -> Unit) {
                 }.getOrDefault(StickerImportResult.Failed)
             }
             revision++
-            message = when (result) {
-                is StickerImportResult.Imported -> buildString {
-                    append(
-                        context.resources.getQuantityString(
-                            R.plurals.import_stickers_done,
-                            result.pack.stickers.size,
-                            result.pack.name,
-                            result.pack.stickers.size,
-                        ),
-                    )
-                    if (result.repairs.isNotEmpty()) {
-                        append("\n\n").append(context.getString(R.string.import_repairs_title))
-                        // The reader hands back a resource and its arguments,
-                        // so the note is worded here.
-                        for (line in result.repairs) append("\n• ${line.resolve(context)}")
-                    }
-                }
-                StickerImportResult.NotAStickerPack ->
-                    context.getString(R.string.import_not_a_sticker_pack)
-                is StickerImportResult.NoStickers -> buildString {
-                    append(context.getString(R.string.import_stickers_none_read))
-                    for (line in result.repairs.take(MAX_SHOWN_REPAIRS)) {
-                        append("\n• ${line.resolve(context)}")
-                    }
-                    val extra = result.repairs.size - MAX_SHOWN_REPAIRS
-                    if (extra > 0) {
-                        append("\n• ")
-                        append(
-                            context.resources.getQuantityString(
-                                R.plurals.import_repairs_more,
-                                extra,
-                                extra,
-                            ),
-                        )
-                    }
-                }
-                StickerImportResult.TooManyPacks ->
-                    context.resources.getQuantityString(
-                        R.plurals.import_stickers_too_many,
-                        StickerPackStore.MAX_PACKS,
-                        StickerPackStore.MAX_PACKS,
-                    )
-                StickerImportResult.Failed -> context.getString(R.string.import_file_unreadable)
-            }
+            message = result.describe(context)
         }
     }
 
@@ -228,6 +186,16 @@ internal fun StickerPacksScreen(onNavigate: (String) -> Unit) {
     RegisterAddFab(stringResource(R.string.import_sticker_pack_new_title)) { newPackName = "" }
     SettingsGroup {
         item { AddonStoreRow(AddonType.Stickers, onNavigate) }
+        item {
+            WmRow(
+                title = stringResource(R.string.import_signal_row_title),
+                subtitle = stringResource(R.string.import_signal_row_subtitle),
+                icon = Icons.AutoMirrored.Outlined.StickyNote2,
+                accent = routeAccent("sticker_packs"),
+                highlightKey = R.string.import_signal_row_title,
+                onClick = { onNavigate(SIGNAL_STICKERS_ROUTE) },
+            )
+        }
         item {
             WmRow(
                 title = stringResource(R.string.import_sticker_pack_import_title),
@@ -636,6 +604,45 @@ internal fun StickerPackScreen(packId: String, onNavigate: (String) -> Unit) {
             },
         )
     }
+}
+
+/** What came of an import, as the one message the screen shows for it. */
+internal fun StickerImportResult.describe(context: Context): String = when (this) {
+    is StickerImportResult.Imported -> buildString {
+        append(
+            context.resources.getQuantityString(
+                R.plurals.import_stickers_done,
+                pack.stickers.size,
+                pack.name,
+                pack.stickers.size,
+            ),
+        )
+        if (repairs.isNotEmpty()) {
+            append("\n\n").append(context.getString(R.string.import_repairs_title))
+            // The reader hands back a resource and its arguments, so the note
+            // is worded here.
+            for (line in repairs.take(MAX_SHOWN_REPAIRS)) append("\n• ${line.resolve(context)}")
+            appendMoreRepairs(context, repairs.size - MAX_SHOWN_REPAIRS)
+        }
+    }
+    StickerImportResult.NotAStickerPack -> context.getString(R.string.import_not_a_sticker_pack)
+    is StickerImportResult.NoStickers -> buildString {
+        append(context.getString(R.string.import_stickers_none_read))
+        for (line in repairs.take(MAX_SHOWN_REPAIRS)) append("\n• ${line.resolve(context)}")
+        appendMoreRepairs(context, repairs.size - MAX_SHOWN_REPAIRS)
+    }
+    StickerImportResult.TooManyPacks -> context.resources.getQuantityString(
+        R.plurals.import_stickers_too_many,
+        StickerPackStore.MAX_PACKS,
+        StickerPackStore.MAX_PACKS,
+    )
+    StickerImportResult.Failed -> context.getString(R.string.import_file_unreadable)
+}
+
+private fun StringBuilder.appendMoreRepairs(context: Context, extra: Int) {
+    if (extra <= 0) return
+    append("\n• ")
+    append(context.resources.getQuantityString(R.plurals.import_repairs_more, extra, extra))
 }
 
 /** How many photos one trip through the picker may add. */

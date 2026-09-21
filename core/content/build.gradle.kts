@@ -55,6 +55,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
+    // Reads the frames of an APNG, which is what an animated Signal sticker
+    // is. Android decodes only the first one. See ApngFrames.
+    implementation(libs.apng4android.apng)
     // Background removal in the sticker editor. Full only: lite ships a stub
     // with the same signatures, and its editor simply has no cutout button.
     "fullImplementation"(libs.mlkit.subject.segmentation)

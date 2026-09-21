@@ -99,6 +99,8 @@
     <string name="about_bundled_kotlin_used">The language runtime, concurrency and settings serialisation</string>
     <string name="about_bundled_coil_used">Loads the images in the GIF, sticker and search panels</string>
     <string name="about_bundled_okhttp_used">The HTTP client for Coil and the network tools</string>
+    <!-- APNG is an image format. Keep it as it is. -->
+    <string name="about_bundled_apng_used">Reads animated PNG stickers</string>
     <string name="about_bundled_zxing_used">Makes the QR codes</string>
     <string name="about_bundled_luaj_used">The Lua interpreter that runs the plugins in their sandbox</string>
     <string name="about_bundled_harper_used">Checks the grammar and the style offline (native library)</string>

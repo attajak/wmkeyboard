@@ -156,6 +156,15 @@ private val bundledAttributions: List<Attribution> = buildList {
     )
     add(
         Attribution(
+            "APNG4Android",
+            R.string.about_bundled_apng_used,
+            "Copyright Pengfei Zhou",
+            "Apache-2.0", "apache-2.0.txt",
+            "https://github.com/penfeizhou/APNG4Android",
+        ),
+    )
+    add(
+        Attribution(
             "ZXing",
             R.string.about_bundled_zxing_used,
             "Copyright ZXing authors",

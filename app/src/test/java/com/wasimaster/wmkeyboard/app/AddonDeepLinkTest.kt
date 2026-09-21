@@ -111,4 +111,29 @@ class AddonDeepLinkTest {
         assertNull(AddonDeepLink.routeFor("   "))
         assertNull(AddonDeepLink.routeFor("wmkeyboard://"))
     }
+
+    // ---- Signal sticker packs ------------------------------------------
+
+    private val signalId = "fb535407d2f6497ec074df8b9c51dd1d"
+    private val signalKey = "17e971c134035622781d2ee249e6473b774583750b68c11bb82b7509c68b6dfd"
+
+    @Test
+    fun `a signal pack link opens that pack's preview`() {
+        assertEquals(
+            signalPackRoute(signalId, signalKey),
+            AddonDeepLink.routeFor(AddonDeepLink.signalPackLink(signalId, signalKey)),
+        )
+        // Hex in capitals is the same pack, and the route carries one spelling.
+        assertEquals(
+            signalPackRoute(signalId, signalKey),
+            AddonDeepLink.routeFor("wmkeyboard://signalpack?id=${signalId.uppercase()}&key=$signalKey"),
+        )
+    }
+
+    @Test
+    fun `a signal pack link with a bad half opens nothing`() {
+        assertNull(AddonDeepLink.routeFor("wmkeyboard://signalpack?id=abc&key=$signalKey"))
+        assertNull(AddonDeepLink.routeFor("wmkeyboard://signalpack?id=../../../../etc/passwd/0000000000&key=$signalKey"))
+        assertNull(AddonDeepLink.routeFor("wmkeyboard://signalpack"))
+    }
 }

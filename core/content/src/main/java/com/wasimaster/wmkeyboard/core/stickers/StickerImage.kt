@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.AnimatedImageDrawable
 import android.os.Build
+import com.wasimaster.wmkeyboard.core.media.AnimatedWebpWriter
 import com.wasimaster.wmkeyboard.core.media.MediaMime
 import java.io.ByteArrayOutputStream
 
@@ -19,10 +20,15 @@ import java.io.ByteArrayOutputStream
  * `image/webp.wasticker` rather than a plain image (see
  * [com.wasimaster.wmkeyboard.core.media.MediaMime]).
  *
- * Animated sources are stored byte for byte instead: Android ships no
- * animated-WebP encoder, so re-encoding one would flatten it to a single
- * frame. An animated WebP that already meets the spec therefore still goes out
- * as a sticker; an animated GIF can only ever be sent as an image.
+ * Animated GIF and WebP sources are stored byte for byte instead: re-encoding
+ * one would cost a generation of quality for nothing. An animated WebP that
+ * already meets the spec therefore still goes out as a sticker; an animated
+ * GIF can only ever be sent as an image.
+ *
+ * An animated PNG is the exception, because nothing on Android plays one and
+ * no app takes one as a sticker. Its frames are read with [ApngFrames], each
+ * is encoded as a still WebP by the platform, and [AnimatedWebpWriter] wraps
+ * those into one animated WebP, which is both.
  */
 object StickerImage {
 
@@ -58,6 +64,22 @@ object StickerImage {
 
     private val QUALITY_LADDER = intArrayOf(90, 80, 70, 60, 50)
 
+    /** WhatsApp's animated sticker budget, which an APNG is re-encoded towards. */
+    const val ANIMATED_TARGET_BYTES = 500 * 1024
+
+    /**
+     * Each rung is a whole pass over the frames, so there are few of them and
+     * they fall fast. An animated PNG is lossless and small to begin with; the
+     * first rung is nearly always the only one.
+     */
+    private val ANIMATED_QUALITY_LADDER = intArrayOf(75, 50, 30)
+
+    /**
+     * More frames than this is not a sticker (Signal stops at three seconds),
+     * and every frame is a 512×512 encode. Such a file is kept as a still.
+     */
+    private const val MAX_ANIMATED_FRAMES = 150
+
     sealed interface Result {
         data class Ok(val sticker: ProcessedSticker) : Result
 
@@ -76,6 +98,15 @@ object StickerImage {
         // sticker that was built to the same spec): re-encoding it would only
         // cost a generation of lossy quality.
         conforming(bytes)?.let { return Result.Ok(it) }
+
+        // An animated PNG, which becomes an animated WebP. When that fails the
+        // file is still a PNG any decoder reads, so it falls through to the
+        // still path below and is kept as its first frame, marked as such.
+        val apng = ApngFrames.isAnimated(bytes)
+        if (apng) {
+            if (bytes.size > MAX_ANIMATED_BYTES) return Result.TooLarge
+            animatedFromApng(bytes)?.let { return Result.Ok(it) }
+        }
 
         val animation = detectAnimation(bytes)
         if (animation != null) {
@@ -97,8 +128,48 @@ object StickerImage {
         val encoded = encodeWebp(canvas)
         canvas.recycle()
         return if (encoded == null) Result.NotAnImage else Result.Ok(
-            ProcessedSticker(bytes = encoded, mime = MediaMime.WEBP, animated = false, aspectRatio = 1f)
+            ProcessedSticker(
+                bytes = encoded,
+                mime = MediaMime.WEBP,
+                animated = false,
+                aspectRatio = 1f,
+                flattened = apng,
+            )
         )
+    }
+
+    /**
+     * [bytes], an animated PNG, as an animated WebP on the sticker canvas, or
+     * null when it cannot be read or does not fit under [MAX_ANIMATED_BYTES]
+     * at any quality.
+     */
+    private fun animatedFromApng(bytes: ByteArray): ProcessedSticker? {
+        if (ApngFrames.frameCount(bytes) > MAX_ANIMATED_FRAMES) return null
+        var best: ByteArray? = null
+        for (quality in ANIMATED_QUALITY_LADDER) {
+            val encoded = encodeApngAt(bytes, quality) ?: return null
+            best = encoded
+            if (encoded.size <= ANIMATED_TARGET_BYTES) break
+        }
+        return best?.takeIf { it.size <= MAX_ANIMATED_BYTES }?.let {
+            ProcessedSticker(bytes = it, mime = MediaMime.WEBP, animated = true, aspectRatio = 1f)
+        }
+    }
+
+    /** One pass over the frames of [bytes] at [quality]. Null when any frame fails. */
+    private fun encodeApngAt(bytes: ByteArray, quality: Int): ByteArray? {
+        val writer = AnimatedWebpWriter(TARGET_SIZE, TARGET_SIZE)
+        var failed = false
+        val delivered = ApngFrames.forEach(bytes) { frame, durationMs ->
+            if (failed) return@forEach
+            // The frame belongs to the decoder, which draws the next one over
+            // it; only a canvas made here is this function's to recycle.
+            val canvas = square(frame)
+            val still = encodeWebpAt(canvas, quality)
+            if (canvas !== frame) canvas.recycle()
+            if (still == null || !writer.addFrame(still, durationMs)) failed = true
+        }
+        return if (failed || delivered < 2 || writer.frameCount != delivered) null else writer.build()
     }
 
     /**
@@ -106,7 +177,8 @@ object StickerImage {
      * animated source is stored frame for frame, and re-encoding it would
      * flatten it to one frame.
      */
-    fun isAnimatedSource(bytes: ByteArray): Boolean = detectAnimation(bytes) != null
+    fun isAnimatedSource(bytes: ByteArray): Boolean =
+        detectAnimation(bytes) != null || ApngFrames.isAnimated(bytes)
 
     /**
      * Decodes a still for the editor, at up to [maxSide] on its long edge.

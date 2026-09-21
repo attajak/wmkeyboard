@@ -778,6 +778,7 @@
   {"title":"Emoji history","name":"backup_section_emoji_label","route":"backup/contents","screens":["Backup & restore","Include in export"],"screen":false},
   {"title":"New pack","name":"import_sticker_pack_new_title","route":"sticker_packs","screens":["Tools","Stickers","Sticker packs"],"screen":false},
   {"title":"Import a pack","name":"import_sticker_pack_import_title","route":"sticker_packs","screens":["Tools","Stickers","Sticker packs"],"screen":false},
+  {"title":"Signal sticker packs","name":"import_signal_row_title","route":"sticker_packs","screens":["Tools","Stickers","Sticker packs"],"screen":false},
   {"title":"Edit image","name":"import_sticker_editor_title","route":"sticker_packs","screens":["Tools","Stickers","Sticker packs"],"screen":false},
   {"title":"Allow plugins","name":"plugins_allow_title","route":"plugins","screens":["Tools","Plugins"],"screen":false},
   {"title":"Manage plugins","name":"tooldetail_plugins_manage_title","route":"plugins","screens":["Tools","Plugins"],"screen":false},

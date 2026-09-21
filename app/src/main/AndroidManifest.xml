@@ -650,6 +650,31 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="wmkeyboard" android:host="import" />
             </intent-filter>
+
+            <!--
+                 A Signal sticker pack link, in the form Signal and Molly open:
+                 sgnl://addstickers?pack_id=…&pack_key=…. It is what the "Add to
+                 Signal" button on a pack's web page fires, so answering it is
+                 what lets somebody look through packs in a browser and bring
+                 one here in a press. Beside Signal the system asks which app
+                 to use; without Signal this is the one that answers.
+
+                 Only this host of the scheme. sgnl:// is also how Signal opens
+                 a chat, links a device and joins a group, and none of that is
+                 this app's to take. Labelled, because in the chooser "Import
+                 from a link" says nothing about stickers.
+
+                 The https form of the same link (signal.art/addstickers) is not
+                 claimed: the domain is not this app's to verify, so Android
+                 would not route it here anyway, and the page it opens carries
+                 the button that fires the form above.
+            -->
+            <intent-filter android:label="@string/import_signal_chooser_label">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="sgnl" android:host="addstickers" />
+            </intent-filter>
         </activity>
 
         <!--

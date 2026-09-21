@@ -40,6 +40,13 @@ enum class ServiceEndpoint(
     BRAVE_SEARCH("brave_search", "https://api.search.brave.com", ServiceGroup.SEARCH),
     KLIPY("klipy", "https://api.klipy.com", ServiceGroup.MEDIA),
     GIPHY("giphy", "https://api.giphy.com", ServiceGroup.MEDIA),
+
+    /**
+     * Signal's sticker storage. `cdn-ca` and not `cdn`: the two serve the same
+     * objects, and `cdn.signal.org` answers with a certificate from Signal's
+     * own authority, which only Signal's apps trust.
+     */
+    SIGNAL_STICKER_CDN("signal_sticker_cdn", "https://cdn-ca.signal.org", ServiceGroup.MEDIA),
     UNSPLASH("unsplash", "https://api.unsplash.com", ServiceGroup.PHOTOS),
     PEXELS("pexels", "https://api.pexels.com", ServiceGroup.PHOTOS),
     WIKIPEDIA("wikipedia", "https://{lang}.wikipedia.org", ServiceGroup.WIKIPEDIA),

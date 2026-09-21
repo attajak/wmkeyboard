@@ -79,6 +79,7 @@ private data class ReadEnvelope(
 private data class ReadPack(
     val id: String = "",
     val name: String = "",
+    val source: String = "",
     val stickers: List<ReadSticker> = emptyList(),
 )
 
@@ -229,10 +230,6 @@ object StickerPackFile {
         },
     ): StickerImportResult {
         val staging = store.stagingDir() ?: return StickerImportResult.Failed
-        // Cleared once the pack is registered; until then any exit path —
-        // including a normalizer that throws — takes the half-filled
-        // directory with it.
-        var unadopted: File? = null
         try {
             val unpacked = unpack(input, staging)
             if (!unpacked.read && unpacked.manifest == null) return StickerImportResult.Failed
@@ -243,87 +240,31 @@ object StickerPackFile {
                 ?: return StickerImportResult.NotAStickerPack
             if (envelope.format != FORMAT) return StickerImportResult.NotAStickerPack
 
-            val repairs = ArrayList<ContentText>()
-            val declared = envelope.declared
-            if (declared.size > StickerPackStore.MAX_STICKERS_PER_PACK) {
-                repairs += ContentText(
-                    pluralsRes = R.plurals.core_content_sticker_repair_kept_first,
-                    quantity = declared.size,
-                    args = listOf(declared.size, StickerPackStore.MAX_STICKERS_PER_PACK),
-                )
-            }
-            val packId = store.freePackId(now)
-            val packDir = store.packDir(packId) ?: return StickerImportResult.Failed
-            unadopted = packDir
-            val kept = ArrayList<CustomSticker>()
-            for (declaredSticker in declared.take(StickerPackStore.MAX_STICKERS_PER_PACK)) {
-                val source = declaredSticker.source
-                if (source.isEmpty()) {
-                    repairs += ContentText(R.string.core_content_sticker_repair_no_image_named)
-                    continue
-                }
-                val bytes = staged.lookUp(source)
-                if (bytes == null) {
-                    repairs += ContentText(
-                        R.string.core_content_sticker_repair_image_missing,
-                        args = listOf(declaredSticker.label()),
-                    )
-                    continue
-                }
-                val processed = normalize(bytes.readBytes())
-                if (processed == null) {
-                    repairs += ContentText(
-                        R.string.core_content_sticker_repair_image_unreadable,
-                        args = listOf(declaredSticker.label()),
-                    )
-                    continue
-                }
-                val id = StickerPackStore.newStickerId()
-                val fileName = StickerPackStore.fileNameFor(id, processed.mime)
-                val ok = runCatching { File(packDir, fileName).writeBytes(processed.bytes); true }
-                    .getOrDefault(false)
-                if (!ok) {
-                    repairs += ContentText(
-                        R.string.core_content_sticker_repair_not_saved,
-                        args = listOf(declaredSticker.label()),
-                    )
-                    continue
-                }
-                kept += CustomSticker(
-                    id = id,
-                    fileName = fileName,
-                    mime = processed.mime,
-                    name = declaredSticker.name.trim(),
-                    emojis = declaredSticker.emojis,
-                    animated = processed.animated,
-                    aspectRatio = processed.aspectRatio,
-                    addedAt = if (declaredSticker.addedAt > 0) declaredSticker.addedAt else now,
-                )
-            }
-            // An empty pack is not a successful import. It installs, it appears
-            // in the list, and it holds nothing — which looks like the app threw
-            // the images away rather than like a manifest that didn't match its
-            // own archive. The repairs say which it was.
-            if (kept.isEmpty()) {
-                return StickerImportResult.NoStickers(
-                    repairs.ifEmpty {
-                        listOf(ContentText(R.string.core_content_sticker_repair_none_listed))
+            val incoming = envelope.declared.map { declared ->
+                val source = declared.source
+                StickerPackAdoption.Incoming(
+                    label = declared.label(),
+                    name = declared.name,
+                    emojis = declared.emojis,
+                    addedAt = declared.addedAt,
+                    problem = if (source.isEmpty()) {
+                        ContentText(R.string.core_content_sticker_repair_no_image_named)
+                    } else {
+                        null
                     },
+                    read = { staged.lookUp(source)?.readBytes() },
                 )
             }
-
-            val pack = StickerPack(
-                id = packId,
+            return StickerPackAdoption.adopt(
+                store = store,
                 name = envelope.pack.name.trim().ifBlank { defaultName },
-                stickers = kept,
-                createdAt = now,
+                incoming = incoming,
+                now = now,
+                source = envelope.pack.source.trim().take(StickerPack.MAX_SOURCE_LENGTH),
+                normalize = normalize,
             )
-            val adopted = store.adoptPack(pack) ?: return StickerImportResult.TooManyPacks
-            unadopted = null
-            return StickerImportResult.Imported(adopted, repairs)
         } finally {
             staging.deleteRecursively()
-            unadopted?.deleteRecursively()
         }
     }
 

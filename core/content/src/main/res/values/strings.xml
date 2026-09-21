@@ -117,6 +117,13 @@
 
     <string name="core_content_sticker_repair_none_listed">The pack file lists no stickers.</string>
 
+    <!-- %1$d is how many animated stickers the app could keep only as a
+         picture that does not move. -->
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">The app kept %1$d animated sticker as a still image.</item>
+        <item quantity="other">The app kept %1$d animated stickers as still images.</item>
+    </plurals>
+
     <!-- ================================================================== -->
     <!-- Snippet import. The same repair notes, for a .wmsnippets.json file. -->
     <!-- ================================================================== -->

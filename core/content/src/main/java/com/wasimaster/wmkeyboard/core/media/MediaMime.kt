@@ -34,9 +34,9 @@ object MediaMime {
      *
      * A sticker MIME may only be offered for bytes that really are WebP —
      * declaring it for a GIF would hand the app a file that doesn't match
-     * its own MIME. Android ships no animated-WebP encoder, so an animated
-     * GIF genuinely cannot be sent as a sticker; in that case this returns
-     * the plain type and the send behaves as [MediaSendMode.IMAGE].
+     * its own MIME. A GIF is stored and sent as the GIF it is (only an
+     * animated PNG is re-encoded, see [AnimatedWebpWriter]), so for one this
+     * returns the plain type and the send behaves as [MediaSendMode.IMAGE].
      */
     fun candidates(mimeType: String, mode: MediaSendMode): List<String> =
         if (mode == MediaSendMode.STICKER && mimeType == WEBP) {

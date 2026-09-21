@@ -37,6 +37,7 @@ import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.addons.AddonStore
 import com.wasimaster.wmkeyboard.core.addons.ImportLink
 import com.wasimaster.wmkeyboard.core.addons.LinkImport
+import com.wasimaster.wmkeyboard.core.addons.SignalStickerDownloads
 import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
@@ -270,7 +271,17 @@ internal fun ImportLinkFlow(
         is LinkStage.Confirm -> LinkConfirmDialog(
             target = current.target,
             hasToken = remember(store) { store.forgeToken().isNotBlank() },
-            onConfirm = { start(::lookUp) },
+            onConfirm = {
+                val pack = current.target as? ImportLink.Target.SignalStickers
+                if (pack == null) {
+                    start(::lookUp)
+                } else {
+                    // A pack is looked at before it is added, and the screen
+                    // that shows it asks about data saving itself.
+                    context.startActivity(signalPackIntent(context, pack.packId, pack.packKey))
+                    onClose()
+                }
+            },
             onDismiss = onClose,
         )
 
@@ -385,6 +396,10 @@ private fun LinkConfirmDialog(
             hostOf(target.manifestProbe ?: target.apiUrl),
         )
         is ImportLink.Target.Artifact -> stringResource(R.string.import_link_confirm_artifact)
+        is ImportLink.Target.SignalStickers -> stringResource(
+            R.string.import_link_confirm_signal,
+            hostOf(SignalStickerDownloads.manifestUrl(target.packId)),
+        )
         else -> ""
     }
     // nightly.link is a service this app does not run, and an artifact cannot
@@ -414,7 +429,15 @@ private fun LinkConfirmDialog(
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text(stringResource(CommonR.string.common_download))
+                Text(
+                    stringResource(
+                        if (target is ImportLink.Target.SignalStickers) {
+                            R.string.import_signal_open_pack
+                        } else {
+                            CommonR.string.common_download
+                        },
+                    ),
+                )
             }
         },
         dismissButton = {
@@ -467,6 +490,13 @@ private fun MessageDialog(text: String, onClose: () -> Unit) {
 }
 
 // ---- plumbing ----------------------------------------------------------
+
+/** Opens the preview of a Signal pack in the settings app. Nothing is fetched until it is on screen. */
+internal fun signalPackIntent(context: android.content.Context, packId: String, packKey: String): Intent =
+    Intent(context, MainActivity::class.java)
+        .setAction(Intent.ACTION_VIEW)
+        .setData(Uri.parse(AddonDeepLink.signalPackLink(packId, packKey)))
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
 /** The `wmkeyboard://repo` link that opens the add-repository dialog. */
 private fun repoLinkFor(manifestUrl: String): String =

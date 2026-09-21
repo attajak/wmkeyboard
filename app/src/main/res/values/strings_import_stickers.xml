@@ -304,7 +304,7 @@
     <!-- ==== One sticker pack: rename it, and add or edit its stickers. ==== -->
 
     <!-- 512×512 WebP is an image format and a size in pixels. -->
-    <string name="import_sticker_pack_caption">The app changes still images to 512×512 WebP files below 100 KB. This is the sticker format that WhatsApp asks for. The app keeps animated GIF files as they are, because Android cannot write animated WebP. Those files always send as images.</string>
+    <string name="import_sticker_pack_caption">The app changes still images to 512×512 WebP files below 100 KB. This is the sticker format that WhatsApp asks for. The app keeps animated GIF files as they are. Those files always send as images. The app changes animated PNG files to animated WebP files, which send as stickers.</string>
     <string name="import_sticker_pack_section_title">Pack</string>
     <string name="import_sticker_pack_rename_subtitle">Press to rename</string>
     <string name="import_sticker_pack_rename_title">Rename pack</string>

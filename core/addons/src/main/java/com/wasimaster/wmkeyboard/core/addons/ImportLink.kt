@@ -65,6 +65,16 @@ object ImportLink {
          */
         data class Artifact(val owner: String, val repo: String, val id: String) : Target
 
+        /**
+         * A Signal sticker pack. Not a file at an address: the link carries the
+         * pack's id and the key its stickers are encrypted under
+         * (`https://signal.art/addstickers/#pack_id=…&pack_key=…`, or the
+         * `sgnl://addstickers?…` form Signal itself opens), and the pack is
+         * fetched from Signal's sticker CDN with them. Both are lowercase hex,
+         * already checked for length.
+         */
+        data class SignalStickers(val packId: String, val packKey: String) : Target
+
         /** A plain http address. Its own case so the refusal can say why. */
         data object Insecure : Target
 
@@ -118,6 +128,19 @@ object ImportLink {
     private val URL_IN_TEXT = Regex("""https?://[^\s<>"'\\]+""", RegexOption.IGNORE_CASE)
 
     /**
+     * A Signal pack link, in the form it is shared in and the form Signal
+     * opens. Group 1 is the `pack_id=…&pack_key=…` tail, which the first keeps
+     * in the fragment (so that it never reaches signal.art's server) and the
+     * second in the query.
+     */
+    private val SIGNAL_PACK = Regex(
+        """(?:https://signal\.art/addstickers/?#|sgnl://addstickers/?\?)([A-Za-z0-9_=&]+)""",
+        RegexOption.IGNORE_CASE,
+    )
+    private const val SIGNAL_ID_LENGTH = 32
+    private const val SIGNAL_KEY_LENGTH = 64
+
+    /**
      * The first web address in [text].
      *
      * A share sheet rarely sends the address on its own: a browser sends the
@@ -147,8 +170,15 @@ object ImportLink {
      * anything this has no opinion about at all comes back as a
      * [Target.File] to be downloaded and identified by its bytes, which is what
      * the file importer does with every file anyway.
+     *
+     * A Signal pack is looked for before anything else: its `sgnl:` form is not
+     * a web address, so [urlIn] would never find it, and its `signal.art` form
+     * would otherwise be downloaded as a web page.
      */
-    fun resolve(shared: String): Target {
+    fun resolve(shared: String): Target = signalStickers(shared) ?: resolveAddress(shared)
+
+    /** [resolve] for everything that is an address on the web. */
+    private fun resolveAddress(shared: String): Target {
         val url = urlIn(shared) ?: return Target.None
         if (url.startsWith("http://", ignoreCase = true)) return Target.Insecure
 
@@ -191,6 +221,25 @@ object ImportLink {
     /** GitHub's own artifact download, which needs a token. */
     fun artifactApiUrl(target: Target.Artifact): String =
         "https://api.github.com/repos/${target.owner}/${target.repo}/actions/artifacts/${target.id}/zip"
+
+    /**
+     * The Signal pack [shared] links to, or null when it links to none.
+     *
+     * Both halves have an exact length (16 and 32 bytes of hex) and a link with
+     * either one wrong is not a pack link, so it falls through to be read as
+     * whatever else it may be.
+     */
+    fun signalStickers(shared: String): Target.SignalStickers? {
+        val match = SIGNAL_PACK.find(shared) ?: return null
+        val params = match.groupValues[1].split('&').associate {
+            it.substringBefore('=').lowercase() to it.substringAfter('=', "")
+        }
+        val id = params["pack_id"]?.lowercase()?.takeIf { it.length == SIGNAL_ID_LENGTH && it.isHex() }
+        val key = params["pack_key"]?.lowercase()?.takeIf { it.length == SIGNAL_KEY_LENGTH && it.isHex() }
+        return if (id != null && key != null) Target.SignalStickers(id, key) else null
+    }
+
+    private fun String.isHex(): Boolean = all { it in '0'..'9' || it in 'a'..'f' }
 
     // ---- per-forge shapes ------------------------------------------------
 

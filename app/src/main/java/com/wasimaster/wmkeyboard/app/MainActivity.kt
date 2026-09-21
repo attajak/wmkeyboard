@@ -1263,6 +1263,32 @@ private fun SettingsNavGraph(
                 StickerPacksScreen { route -> navController.navigate(route) }
             }
         }
+        composable(SIGNAL_STICKERS_ROUTE) {
+            SettingsScreen(
+                stringResource(R.string.import_signal_row_title),
+                { navController.popBackStack() },
+                route = SIGNAL_STICKERS_ROUTE,
+            ) {
+                SignalStickersScreen { route -> navController.navigate(route) }
+            }
+        }
+        composable("signal_pack/{packId}/{packKey}") { backStackEntry ->
+            val packId = backStackEntry.arguments?.getString("packId").orEmpty()
+            val packKey = backStackEntry.arguments?.getString("packKey").orEmpty()
+            SettingsScreen(
+                stringResource(R.string.import_signal_pack_title),
+                { navController.popBackStack() },
+                route = signalPackRoute(packId, packKey),
+            ) {
+                SignalPackScreen(
+                    packId = packId,
+                    packKey = packKey,
+                    settings = settings,
+                    onNavigate = { route -> navController.navigate(route) },
+                    onBack = { navController.popBackStack() },
+                )
+            }
+        }
         composable("plugins") {
             SettingsScreen(
                 stringResource(R.string.home_screen_plugins_title),
