@@ -11226,17 +11226,21 @@ internal fun Key?.startsPossessiveSwipe(possessiveChar: Char?): Boolean =
         (output ?: label).singleOrNull() == possessiveChar
 
 /**
- * Whether a drag off this key is a delete swipe (#36, #226): backspace while
- * "Swipe to delete" is on, forward delete while its own swipe is. Refused at
- * the down by glide typing, handwriting and the octopus for the reason
+ * Whether a stroke that starts on this key belongs to it as a delete key
+ * (#36, #226): backspace or forward delete, in either spelling. Refused at the
+ * down by glide typing, handwriting and the octopus for the reason
  * [startsPossessiveSwipe] gives: backspace sits beside the bottom letter row,
  * so a stroke from its inner half was inside a letter's radius and started a
  * glide. The glide loop runs first, so both happened: the swipe deleted and the
  * glide typed a word on top of it (#243).
+ *
+ * Not gated on "Swipe to delete". With the swipe off, a held backspace is
+ * repeating, and a finger that wanders off it mid-repeat glided a word in
+ * among the deletions just the same (#274). No stroke from a delete key is
+ * ever meant as a word.
  */
-internal fun Key?.startsDeleteSwipe(backspace: Boolean, forward: Boolean): Boolean =
-    (backspace && this?.action?.deletesBackward() == true) ||
-        (forward && this?.action?.deletesForward() == true)
+internal fun Key?.ownsDeleteStroke(): Boolean =
+    this?.action?.let { it.deletesBackward() || it.deletesForward() } == true
 
 /**
  * Whether a short flick down off this key types its corner hint (issue #178).
@@ -12889,10 +12893,7 @@ private fun KeyRows(
     // the loop below restarts when the choice changes and never otherwise.
     val possessiveFlickTaken = LocalPossessiveFlick.current
     val possessiveChar = state.settings.gesture.possessiveKey.sourceChar
-    // The delete keys' swipes (#36, #226) own their strokes the same way; see
-    // [startsDeleteSwipe].
-    val backspaceSwipes = state.settings.backspaceSwipeDelete
-    val forwardDeleteSwipes = state.settings.textEditing.forwardDeleteSwipe
+    // The delete keys own their strokes the same way; see [ownsDeleteStroke].
     // With glide typing on, the stroke belongs to the glide loop, which asks
     // the same question at its own lift and calls the same function to answer
     // it. Only a board without glide needs its own flick detector.
@@ -13226,7 +13227,6 @@ private fun KeyRows(
             .pointerInput(
                 octopusArmed, octopusTapHere, octopusFlickHere,
                 octopusSettings.flickSensitivity, startSlop, cooldownMs,
-                backspaceSwipes, forwardDeleteSwipes,
             ) {
                 if (!octopusArmed) return@pointerInput
                 awaitEachGesture {
@@ -13243,7 +13243,7 @@ private fun KeyRows(
                     // (#243): backspace sits against the bottom letter row.
                     val downKey = liveRects.value.keyAt(down.position + boxOrigin)
                     if (downKey.ownsDrag() ||
-                        downKey.startsDeleteSwipe(backspaceSwipes, forwardDeleteSwipes)
+                        downKey.ownsDeleteStroke()
                     ) {
                         return@awaitEachGesture
                     }
@@ -13333,7 +13333,7 @@ private fun KeyRows(
             }
             .pointerInput(
                 gestureEnabled, spaceGlide, startSlop, cooldownMs, trailMs,
-                possessiveChar, backspaceSwipes, forwardDeleteSwipes,
+                possessiveChar,
             ) {
                 if (!gestureEnabled) return@pointerInput
                 awaitEachGesture {
@@ -13358,7 +13358,7 @@ private fun KeyRows(
                     // otherwise start a glide from either.
                     val downKey = liveRects.value.keyAt(down.position + boxOrigin)
                     if (downKey.ownsDrag() || downKey.startsPossessiveSwipe(possessiveChar) ||
-                        downKey.startsDeleteSwipe(backspaceSwipes, forwardDeleteSwipes)
+                        downKey.ownsDeleteStroke()
                     ) {
                         return@awaitEachGesture
                     }
@@ -13772,7 +13772,7 @@ private fun KeyRows(
             // `gestureEnabled` is false whenever `handwriteSwipe` is true. A
             // press that never travels past the slop stays unconsumed and
             // falls through to the key, so taps still type.
-            .pointerInput(handwriteSwipe, dotCooldownMs, possessiveChar, backspaceSwipes, forwardDeleteSwipes) {
+            .pointerInput(handwriteSwipe, dotCooldownMs, possessiveChar) {
                 if (!handwriteSwipe) return@pointerInput
                 awaitEachGesture {
                     val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
@@ -13783,7 +13783,7 @@ private fun KeyRows(
                     // drawn as ink either.
                     val downKey = liveRects.value.keyAt(down.position + boxOrigin)
                     if (downKey.ownsDrag() || downKey.startsPossessiveSwipe(possessiveChar) ||
-                        downKey.startsDeleteSwipe(backspaceSwipes, forwardDeleteSwipes)
+                        downKey.ownsDeleteStroke()
                     ) {
                         return@awaitEachGesture
                     }

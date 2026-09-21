@@ -139,38 +139,28 @@ class LayerDragTest {
 
     /**
      * The delete keys keep glide, ink and the octopus off their drags (#243),
-     * each only while its own swipe is on: backspace beside the bottom letter
-     * row started a glide that typed a word on top of the swipe's deletion.
+     * whether or not their swipe is on (#274): backspace beside the bottom
+     * letter row started a glide that typed a word on top of the deletions,
+     * from a swipe or from a held, repeating key alike.
      */
     @Test
-    fun `a delete key starts its swipe only while that swipe is on`() {
-        val backspace = Key("", action = KeyAction.Delete)
-        val forward = Key("", action = KeyAction.ForwardDelete)
-        assertTrue(backspace.startsDeleteSwipe(backspace = true, forward = false))
-        assertFalse(backspace.startsDeleteSwipe(backspace = false, forward = true))
-        assertTrue(forward.startsDeleteSwipe(backspace = false, forward = true))
-        assertFalse(forward.startsDeleteSwipe(backspace = true, forward = false))
-        assertFalse(Key("m").startsDeleteSwipe(backspace = true, forward = true))
-        assertFalse(null.startsDeleteSwipe(backspace = true, forward = true))
+    fun `a stroke from a delete key never starts a glide`() {
+        assertTrue(Key("", action = KeyAction.Delete).ownsDeleteStroke())
+        assertTrue(Key("", action = KeyAction.ForwardDelete).ownsDeleteStroke())
+        assertFalse(Key("m").ownsDeleteStroke())
+        assertFalse(null.ownsDeleteStroke())
     }
 
     /**
      * And the text-editing pad's own delete keys are delete keys (#226): they
      * carry an `Edit` action rather than [KeyAction.Delete], which is why a ⌫
-     * placed on a panel used to tap and repeat and never swipe.
+     * placed on a panel used to tap and repeat and never swipe, and glided.
      */
     @Test
-    fun `the pad's delete keys start the same swipes`() {
-        val backspace = Key("", action = KeyAction.Edit(TextEditAction.BACKSPACE))
-        val forward = Key("", action = KeyAction.Edit(TextEditAction.FORWARD_DELETE))
-        assertTrue(backspace.startsDeleteSwipe(backspace = true, forward = false))
-        assertFalse(backspace.startsDeleteSwipe(backspace = false, forward = true))
-        assertTrue(forward.startsDeleteSwipe(backspace = false, forward = true))
-        assertFalse(forward.startsDeleteSwipe(backspace = true, forward = false))
-        assertFalse(
-            Key("", action = KeyAction.Edit(TextEditAction.LEFT))
-                .startsDeleteSwipe(backspace = true, forward = true),
-        )
+    fun `the pad's delete keys own their strokes too`() {
+        assertTrue(Key("", action = KeyAction.Edit(TextEditAction.BACKSPACE)).ownsDeleteStroke())
+        assertTrue(Key("", action = KeyAction.Edit(TextEditAction.FORWARD_DELETE)).ownsDeleteStroke())
+        assertFalse(Key("", action = KeyAction.Edit(TextEditAction.LEFT)).ownsDeleteStroke())
     }
 
     /** Both spellings of each delete key answer the direction question alike. */
