@@ -53,7 +53,14 @@ internal interface KdePluginHost {
      * Announces [header] with a payload and streams [source] to the peer when
      * it fetches. Blocks until the transfer ends; call from [launch].
      */
-    fun upload(deviceId: String, header: KdePacket, size: Long, source: InputStream, cancelled: () -> Boolean, onProgress: (Long) -> Unit): Boolean
+    fun upload(
+        deviceId: String,
+        header: KdePacket,
+        size: Long,
+        source: InputStream,
+        cancelled: () -> Boolean,
+        onProgress: (Long) -> Unit,
+    ): Boolean
 
     /** Fetches [packet]'s payload into [sink]. Blocks; call from [launch]. */
     fun download(deviceId: String, packet: KdePacket, sink: OutputStream, cancelled: () -> Boolean, onProgress: (Long) -> Unit): Boolean

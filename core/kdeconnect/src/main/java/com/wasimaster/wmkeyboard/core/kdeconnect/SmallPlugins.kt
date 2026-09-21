@@ -46,7 +46,11 @@ class BatteryPlugin internal constructor(host: KdePluginHost) : KdePlugin(host) 
     override fun onPacket(deviceId: String, packet: KdePacket) {
         val charge = packet.int("currentCharge") ?: return
         // -1 is a desktop with no battery at all.
-        val battery = if (charge < 0) null else KdeBattery(charge.coerceIn(0, 100), packet.bool("isCharging"), packet.int("thresholdEvent") == 1)
+        val battery = if (charge < 0) {
+            null
+        } else {
+            KdeBattery(charge.coerceIn(0, 100), packet.bool("isCharging"), low = packet.int("thresholdEvent") == 1)
+        }
         host.update(deviceId) { it.copy(battery = battery) }
     }
 

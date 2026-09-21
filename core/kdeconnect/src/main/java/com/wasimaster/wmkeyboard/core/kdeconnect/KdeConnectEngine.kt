@@ -485,14 +485,24 @@ class KdeConnectEngine(
                             lastSeenMs = now(),
                         ),
                     )
-                    update(deviceId) { it.copy(paired = true, pairFailure = null) }
+                    // One update, so no observer ever sees "paired" with the
+                    // pairing code still on screen.
+                    update(deviceId) {
+                        it.copy(
+                            paired = true,
+                            pairState = KdePairState.PAIRED,
+                            verificationKey = null,
+                            pairDeadlineMs = 0,
+                            pairFailure = null,
+                        )
+                    }
                     _events.tryEmit(KdeEvent.Paired(deviceId, link.info.name))
                     plugins.forEach { p -> runCatching { p.onConnected(deviceId) } }
                 }
                 KdePairing.Effect.Distrust -> {
                     trust.remove(deviceId)
                     plugins.forEach { p -> runCatching { p.onDisconnected(deviceId) } }
-                    update(deviceId) { it.copy(paired = false) }
+                    update(deviceId) { it.copy(paired = false, pairState = record.pairing.state) }
                     _events.tryEmit(KdeEvent.Unpaired(deviceId))
                     // No longer ours to hold a socket to, unless the user is browsing.
                     if (!discovering) record.link?.close()
@@ -633,7 +643,7 @@ class KdeConnectEngine(
                 return false
             }
             return runCatching { transfer.serve(server, link.certificate, source, cancelled, onProgress) }
-                .onFailure { log("upload to $deviceId failed: ${it.message}") }
+                .onFailure { log("upload to $deviceId failed: ${it.brief()}") }
                 .isSuccess
         }
 
@@ -650,7 +660,7 @@ class KdeConnectEngine(
             if (packet.payloadPort !in 1..65535) return false
             return runCatching {
                 transfer.fetch(link.address, packet.payloadPort, link.certificate, packet.payloadSize, sink, cancelled, onProgress)
-            }.onFailure { log("download from $deviceId failed: ${it.message}") }.isSuccess
+            }.onFailure { log("download from $deviceId failed: ${it.brief()}") }.isSuccess
         }
 
         override fun launch(block: suspend () -> Unit) {

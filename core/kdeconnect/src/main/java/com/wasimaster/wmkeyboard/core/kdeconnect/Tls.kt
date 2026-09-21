@@ -45,9 +45,11 @@ class KdeTls(
     /**
      * Upgrades the connected [socket] and completes the handshake.
      *
+     * @param socket an open TCP connection, closed along with the returned socket
      * @param clientMode our TLS role on this socket
      * @param pinned the certificate the peer must present, or null to accept
      *   whatever it shows (an unpaired device)
+     * @param handshakeTimeoutMs how long the peer gets to finish the handshake
      * @throws java.io.IOException when the handshake fails, which includes a
      *   paired device showing the wrong certificate
      */

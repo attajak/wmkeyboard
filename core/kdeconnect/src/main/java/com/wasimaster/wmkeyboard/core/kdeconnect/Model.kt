@@ -35,7 +35,7 @@ data class KdeState(
     val listening: Boolean = true,
     val devices: List<KdeDevice> = emptyList(),
 ) {
-    fun device(id: String?): KdeDevice? = if (id == null) null else devices.firstOrNull { it.id == id }
+    fun device(id: String?): KdeDevice? = id?.let { wanted -> devices.firstOrNull { it.id == wanted } }
 
     val paired: List<KdeDevice> get() = devices.filter { it.paired }
     val connected: List<KdeDevice> get() = devices.filter { it.paired && it.reachable }

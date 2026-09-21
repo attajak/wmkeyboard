@@ -30,15 +30,17 @@ object RemoteTextDiff {
         var common = 0
         val limit = minOf(sent.length, now.length)
         while (common < limit && sent[common] == now[common]) common++
-        if (common > 0 && Character.isHighSurrogate(sent[common - 1]) &&
-            (common < sent.length && Character.isLowSurrogate(sent[common]) ||
-                common < now.length && Character.isLowSurrogate(now[common]))
-        ) {
-            common--
-        }
+        // A shared high surrogate followed by differing low ones: the pair
+        // differs as a whole, so the prefix ends before it.
+        val splitsPair = common > 0 && Character.isHighSurrogate(sent[common - 1]) &&
+            (startsWithLowSurrogate(sent, common) || startsWithLowSurrogate(now, common))
+        if (splitsPair) common--
         val removed = sent.substring(common)
         return RemoteEdit(removed.codePointCount(0, removed.length), now.substring(common))
     }
+
+    private fun startsWithLowSurrogate(text: String, at: Int): Boolean =
+        at < text.length && Character.isLowSurrogate(text[at])
 }
 
 /**

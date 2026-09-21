@@ -102,7 +102,13 @@ class SharePlugin internal constructor(host: KdePluginHost) : KdePlugin(host) {
         if (!packet.hasPayload || !host.config.receiveFiles) return
         val sink = host.fileSink ?: return
         val fileName = safeFileName(packet.string("filename"), host.now())
-        val transfer = KdeTransfer(ids.getAndIncrement(), fileName, outgoing = false, size = packet.payloadSize, state = KdeTransferState.RUNNING)
+        val transfer = KdeTransfer(
+            id = ids.getAndIncrement(),
+            fileName = fileName,
+            outgoing = false,
+            size = packet.payloadSize,
+            state = KdeTransferState.RUNNING,
+        )
         host.update(deviceId) { it.copy(transfers = (it.transfers + transfer).takeLast(MAX_TRANSFERS)) }
         host.launch {
             val target = runCatching { sink.create(deviceName, fileName, packet.payloadSize) }.getOrNull()

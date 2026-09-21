@@ -117,7 +117,7 @@ internal class LanTransport(
                 bind(InetSocketAddress(ports.udp))
             }
         }.onSuccess { listening = true }.getOrElse {
-            log("UDP ${ports.udp} unavailable (${it.message}); announce-only")
+            log("UDP ${ports.udp} unavailable (${it.brief()}); announce-only")
             listening = false
             DatagramSocket().apply { broadcast = true }
         }
@@ -197,18 +197,22 @@ internal class LanTransport(
             } catch (_: IOException) {
                 continue
             }
-            val sender = datagram.address ?: continue
-            if (sender.isLoopbackAddress && !allowLoopback) continue
-            val text = String(datagram.data, datagram.offset, datagram.length, Charsets.UTF_8)
-            val packet = KdePacket.parse(text) ?: continue
-            val info = KdeDeviceInfo.fromPacket(packet) ?: continue
-            if (info.id == self().id) continue
-            val port = packet.int("tcpPort") ?: continue
-            if (ports.strict && port !in ports.tcpMin..ports.tcpMax) continue
-            if (!ports.strict && port !in 1..65535) continue
-            if (!wantsDial(info.id)) continue
-            scope.launch(Dispatchers.IO) { dialOut(sender, port, info.id, info.protocolVersion, announced = info) }
+            onAnnouncement(datagram)
         }
+    }
+
+    /** One identity datagram: dial its sender back, if it is someone we want a link to. */
+    private fun onAnnouncement(datagram: DatagramPacket) {
+        val sender = datagram.address ?: return
+        if (sender.isLoopbackAddress && !allowLoopback) return
+        val text = String(datagram.data, datagram.offset, datagram.length, Charsets.UTF_8)
+        val packet = KdePacket.parse(text) ?: return
+        val info = KdeDeviceInfo.fromPacket(packet) ?: return
+        if (info.id == self().id) return
+        val port = packet.int("tcpPort") ?: return
+        val allowed = if (ports.strict) ports.tcpMin..ports.tcpMax else 1..65535
+        if (port !in allowed || !wantsDial(info.id)) return
+        scope.launch(Dispatchers.IO) { dialOut(sender, port, info.id, info.protocolVersion, announced = info) }
     }
 
     private fun dialOut(address: InetAddress, port: Int, deviceId: String, version: Int, announced: KdeDeviceInfo?) {
@@ -232,7 +236,7 @@ internal class LanTransport(
             val ssl = tls.wrap(socket, clientMode = false, pinned = trust.get(deviceId)?.x509(), HANDSHAKE_TIMEOUT_MS)
             finishHandshake(ssl, deviceId, version, announced, how = "dialled")
         } catch (e: Exception) {
-            log("dial $deviceId@${address.hostAddress}:$port failed: ${e.message}")
+            log("dial $deviceId@${address.hostAddress}:$port failed: ${e.brief()}")
             runCatching { socket.close() }
         }
     }
@@ -286,7 +290,7 @@ internal class LanTransport(
             val ssl = tls.wrap(socket, clientMode = true, pinned = trust.get(info.id)?.x509(), HANDSHAKE_TIMEOUT_MS)
             finishHandshake(ssl, info.id, info.protocolVersion, info, how = "answered")
         } catch (e: Exception) {
-            log("incoming connection failed: ${e.message}")
+            log("incoming connection failed: ${e.brief()}")
             runCatching { socket.close() }
         }
     }
@@ -320,13 +324,13 @@ internal class LanTransport(
             }
             val commonName = DerCertificate.commonName(certificate)
             if (commonName == null || normalizeId(commonName) != normalizeId(info.id)) {
-                throw IOException("certificate is for '$commonName', not '${info.id}'")
+                throw IOException("certificate is for '${commonName.orEmpty()}', not '${info.id}'")
             }
             ssl.soTimeout = 0
             log("linked to ${info.id} ($how, ${ssl.session.protocol})")
             onLink(info, certificate, ssl)
         } catch (e: Exception) {
-            log("handshake with $deviceId failed: ${e.message}")
+            log("handshake with $deviceId failed: ${e.brief()}")
             runCatching { ssl.close() }
         }
     }
@@ -390,6 +394,9 @@ internal class LanTransport(
         fun normalizeId(id: String): String = id.replace(Regex("[^A-Za-z0-9_]"), "_")
     }
 }
+
+/** Why something failed, for a log line: the message, or the exception's name when it has none. */
+internal fun Throwable.brief(): String = message ?: javaClass.simpleName
 
 /**
  * One line from [input], without its `\n`, read a byte at a time so nothing
