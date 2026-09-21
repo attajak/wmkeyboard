@@ -15,6 +15,15 @@ interface WordSource {
     /** Walkers over the underlying tries; empty when node-level traversal is
      * unsupported (flat or delegating sources). */
     fun walkers(): List<TrieWalker> = emptyList()
+
+    /**
+     * The [walkers] that are the language's own list, bundled or downloaded,
+     * and not something the user imported on top of it. Every source is its
+     * own unless it knows better ([CompositeWordSource.ofLanguage]). Asked
+     * where a list has to speak for the language rather than merely be
+     * searched: whether a layout can glide it (#288).
+     */
+    fun ownWalkers(): List<TrieWalker> = walkers()
 }
 
 /**

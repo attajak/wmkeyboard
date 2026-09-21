@@ -132,10 +132,27 @@ object CustomDictionaries {
     /** Every entry across every list for one language, in file order. */
     fun entries(filesDir: File, langId: String): List<Pair<String, Int>> {
         val all = ArrayList<Pair<String, Int>>()
-        for (file in lists(filesDir, langId)) {
-            runCatching { file.inputStream().use { all += DictionaryLoader.loadEntries(it) } }
-        }
+        for (file in lists(filesDir, langId)) all += wordsOf(file)
         return all
+    }
+
+    /**
+     * The words of one list, switched on or not; none for a file that is not
+     * text.
+     *
+     * The one reader of a list on disk, for the tries and for the count the
+     * settings screen shows. [DictionaryLoader] takes any line as a word, so a
+     * binary put through it does not fail: a compiled dictionary comes back as
+     * a hundred thousand words nobody can type, which then complete, correct
+     * and vote (#288). [inspect] has always refused such a file at the door;
+     * this is the same test for the files that got in before there was one
+     * ([repairUnreadImports]).
+     */
+    fun wordsOf(list: File): List<Pair<String, Int>> {
+        val head = head(list) ?: return emptyList()
+        if (!readsAsList(head)) return emptyList()
+        return runCatching { list.inputStream().use { DictionaryLoader.loadEntries(it) } }
+            .getOrDefault(emptyList())
     }
 
     fun trie(filesDir: File, langId: String): WordSource =
@@ -324,7 +341,11 @@ object CustomDictionaries {
      */
     fun write(filesDir: File, langId: String, candidate: ImportCandidate, parts: ImportParts): Written {
         val dir = languageDir(filesDir, langId).apply { mkdirs() }
-        val target = uniqueFile(dir, candidate.name)
+        return writeParts(uniqueFile(dir, candidate.name), candidate, parts)
+    }
+
+    /** [write], to a list file already chosen: a new one, or one being read again in place. */
+    private fun writeParts(target: File, candidate: ImportCandidate, parts: ImportParts): Written {
         val words = if (parts.words) candidate.words.size else 0
         val pairs = if (parts.pairs) writePairs(pairsFile(target), candidate.ngrams) else 0
         val shortcuts = if (parts.shortcuts) writeShortcuts(shortcutsFile(target), candidate.shortcuts) else 0
@@ -545,6 +566,24 @@ object CustomDictionaries {
         return true
     }
 
+    /** The same question of a list already on disk, asked of its [head]. */
+    private fun readsAsList(head: ByteArray): Boolean =
+        looksLikeText(head) && !AospDictionary.looksLikeDictionary(head)
+
+    /** As much of [file] as the sniffs look at, or null when it cannot be read. */
+    private fun head(file: File): ByteArray? = runCatching {
+        file.inputStream().use { stream ->
+            val buffer = ByteArray(TEXT_SNIFF_BYTES)
+            var filled = 0
+            while (filled < buffer.size) {
+                val n = stream.read(buffer, filled, buffer.size - filled)
+                if (n < 0) break
+                filled += n
+            }
+            buffer.copyOf(filled)
+        }
+    }.getOrNull()
+
     /** Deletes a list and the pairs and shortcuts beside it. */
     fun remove(file: File): Boolean {
         pairsFile(file).delete()
@@ -638,6 +677,53 @@ object CustomDictionaries {
                 oldDir.renameTo(newDir)
             }
         }
+    }
+
+    /** What [repairUnreadImports] did: lists read again as text, and lists switched off. */
+    data class Repaired(val unpacked: Int, val switchedOff: Int)
+
+    /**
+     * Reads the lists an older version copied in without reading them.
+     *
+     * Up to 0.5.9 an import was a byte-for-byte copy of whatever was picked,
+     * named `<name>.txt`. A compiled `.dict` from HeliBoard or FUTO therefore
+     * sits in the language folder as the binary it is, and updating does not
+     * change that: only a new import is unpacked. Such a file is unpacked here
+     * the way [import] would have, in place, so it keeps its name and whether
+     * it was switched on, and gains the pairs and shortcuts beside it.
+     *
+     * A file that is not text and cannot be unpacked, one half of a version 4
+     * dictionary or a revision the reader does not know, is switched off.
+     * [wordsOf] already reads nothing out of it; off is what says so on the
+     * settings screen, where the list can be deleted and imported again.
+     *
+     * Runs on every load rather than once behind a flag: a backup made on the
+     * old version restores the old files. A folder of text lists costs one
+     * short read a file, and nothing is written.
+     */
+    @Synchronized
+    fun repairUnreadImports(filesDir: File): Repaired {
+        var unpacked = 0
+        var switchedOff = 0
+        for (langId in languagesWithLists(filesDir)) {
+            for (list in allLists(filesDir, langId)) {
+                val head = head(list) ?: continue
+                if (readsAsList(head)) continue
+                if (unpackInPlace(list, head)) {
+                    unpacked++
+                } else if (isEnabled(list) && setEnabled(list, false) != list) {
+                    switchedOff++
+                }
+            }
+        }
+        return Repaired(unpacked, switchedOff)
+    }
+
+    private fun unpackInPlace(list: File, head: ByteArray): Boolean {
+        if (!AospDictionary.looksLikeDictionary(head) || list.length() > MAX_BYTES) return false
+        val bytes = runCatching { list.readBytes() }.getOrNull() ?: return false
+        val contents = AospDictionary.read(bytes) as? AospDictionary.Result.Contents ?: return false
+        return writeParts(list, candidate(baseName(list), contents), ImportParts.ALL).total > 0
     }
 
     /**

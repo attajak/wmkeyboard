@@ -924,6 +924,18 @@ class SuggestionEngine(
      * draw are simply not decoded, which is all it costs. The secondaries are
      * asked only when the language has no list of its own, where readiness
      * earned on their words is what lets the missing-list chip say so (#219).
+     *
+     * Nor the lists the user imported, while the language has a bundled or
+     * downloaded list to answer for it (#288). An import voted the same way a
+     * secondary did, with 1,500 words of its own: a compiled dictionary an
+     * older version had copied in unread, or an English list kept under
+     * Arabic, put that many words no Arabic grid can draw beside a list the
+     * grid spells 99.7 % of, and glide went off with nothing on screen to say
+     * why. It cuts both ways on purpose: a handful of imported Latin words
+     * does not switch glide on for a grid that cannot spell the language
+     * either. With no list of its own, or set to its imported lists alone
+     * (#28), the imports are all that is known of the language and they
+     * answer, as before. See [GlideCoverage] for the rule in one place.
      */
     fun glideCoverage(alphabet: Set<Int>): Float {
         val romanization = glideRomanization
@@ -931,12 +943,17 @@ class SuggestionEngine(
         // whether the Latin grid spells the *romanized* vocabulary, and asking
         // it of the Bengali word list would answer zero and switch off a layout
         // that decodes perfectly well.
-        val sources = when {
-            !romanization.isEmpty -> romanization.walkSources()
-            hasLanguageWords() -> dictionarySources(primaryLanguageId)
-            else -> dictionarySources(null)
+        if (!romanization.isEmpty) {
+            return GlideCoverage.measure(romanization.walkSources().map { it.walker }, alphabet)
         }
-        return GlideCoverage.measure(sources.map { it.walker }, alphabet)
+        val own = (activeDictionary.ownWalkers() + customDictionary.ownWalkers())
+            .filter { it.maxSubtree(it.root) > 0 }
+        val voters = when {
+            own.isNotEmpty() -> own
+            hasLanguageWords() -> dictionarySources(primaryLanguageId).map { it.walker }
+            else -> dictionarySources(null).map { it.walker }
+        }
+        return GlideCoverage.measure(voters, alphabet)
     }
 
     /**

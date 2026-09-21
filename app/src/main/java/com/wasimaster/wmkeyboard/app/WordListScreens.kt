@@ -62,7 +62,6 @@ import com.wasimaster.wmkeyboard.core.emoji.EmojiKeywordPack
 import com.wasimaster.wmkeyboard.core.emoji.EmojiKeywordPacks
 import com.wasimaster.wmkeyboard.core.emoji.EmojiSearchExamples
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
-import com.wasimaster.wmkeyboard.core.prediction.DictionaryLoader
 import kotlinx.coroutines.launch
 
 // ---- custom dictionaries ----
@@ -113,12 +112,9 @@ internal fun CustomDictionarySettings(
                 // allLists, not lists: a switched-off list still has to be
                 // shown, or there is no way to switch it back on.
                 CustomDictionaries.allLists(context.filesDir, langId).map { file ->
-                    val words = runCatching {
-                        file.inputStream().use { DictionaryLoader.loadEntries(it).size }
-                    }.getOrDefault(0)
                     WordListEntry(
                         file,
-                        words,
+                        CustomDictionaries.wordsOf(file).size,
                         CustomDictionaries.pairCount(file),
                         CustomDictionaries.shortcutCount(file),
                     )

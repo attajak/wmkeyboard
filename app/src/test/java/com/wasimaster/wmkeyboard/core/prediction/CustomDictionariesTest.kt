@@ -177,6 +177,86 @@ class CustomDictionariesTest {
         assertEquals(CustomDictionaries.Inspection.Refused(CustomDictionaries.Refusal.NothingReadable), result)
     }
 
+    /**
+     * A version 2 `.dict` of two words, `omw` offering `on my way` and `the`,
+     * assembled from the published format like every fixture here.
+     */
+    private val compiled: ByteArray = AospFixtures.header(202, attributes = listOf("locale" to "ar")) +
+        AospFixtures.bytes(
+            listOf(
+                0x02,
+                0x38, // several characters, terminal, has shortcuts
+                'o'.code, 'm'.code, 'w'.code, AospFixtures.TERMINATOR,
+                0x80,
+                0x00, 0x0D, // the shortcut list is thirteen bytes, these two included
+                0x00, // last shortcut, strength 0
+            ) + AospFixtures.string("on my way") + listOf(
+                0x30, // several characters, terminal
+                't'.code, 'h'.code, 'e'.code, AospFixtures.TERMINATOR,
+                0xFF,
+            ),
+        )
+
+    private fun leftover(langId: String, name: String, bytes: ByteArray): File {
+        val dir = CustomDictionaries.languageDir(temp.root, langId).apply { mkdirs() }
+        return File(dir, name).apply { writeBytes(bytes) }
+    }
+
+    @Test
+    fun aCompiledDictionaryAnOlderVersionCopiedInIsUnpackedInPlace() {
+        // 0.5.9 copied whatever was picked to <name>.txt, byte for byte (#288).
+        val file = leftover("ar", "main_ar.txt", compiled)
+        // Never read as lines, repaired or not.
+        assertTrue(CustomDictionaries.wordsOf(file).isEmpty())
+        assertTrue(CustomDictionaries.entries(temp.root, "ar").isEmpty())
+
+        assertEquals(CustomDictionaries.Repaired(unpacked = 1, switchedOff = 0), CustomDictionaries.repairUnreadImports(temp.root))
+        assertEquals("main_ar.txt", CustomDictionaries.lists(temp.root, "ar").single().name)
+        assertEquals(listOf("omw" to 5019, "the" to 10000), CustomDictionaries.entries(temp.root, "ar"))
+        // As a new import of the same file would have: what it carries besides words, beside it.
+        assertEquals(mapOf("omw" to "on my way"), CustomDictionaries.shortcuts(temp.root, "ar"))
+        assertFalse(File(file.parentFile, file.name + ".tmp").exists())
+
+        // And then it is a text list like any other.
+        val before = file.lastModified()
+        assertEquals(CustomDictionaries.Repaired(0, 0), CustomDictionaries.repairUnreadImports(temp.root))
+        assertEquals(before, file.lastModified())
+    }
+
+    @Test
+    fun aSwitchedOffLeftoverIsUnpackedAndStaysOff() {
+        val file = leftover("ar", "main_ar.txt${CustomDictionaries.DISABLED_SUFFIX}", compiled)
+        assertEquals(CustomDictionaries.Repaired(1, 0), CustomDictionaries.repairUnreadImports(temp.root))
+        assertTrue(CustomDictionaries.lists(temp.root, "ar").isEmpty())
+        assertEquals(listOf("omw", "the"), CustomDictionaries.wordsOf(file).map { it.first })
+        // Its shortcuts wait beside it for the list to be switched on.
+        assertTrue(CustomDictionaries.shortcuts(temp.root, "ar").isEmpty())
+        assertEquals(1, CustomDictionaries.shortcutCount(file))
+    }
+
+    @Test
+    fun aLeftoverThatCannotBeUnpackedIsSwitchedOffRatherThanReadAsWords() {
+        // Each half of a version 4 dictionary, which 0.5.9 took one at a time.
+        val header = leftover("en", "main_dict.txt", AospFixtures.header(403))
+        val body = leftover(
+            "en",
+            "main_dict (2).txt",
+            AospFixtures.body(listOf("yo"), listOf(AospFixtures.Entry(0, AospFixtures.probability(99)))),
+        )
+        val mine = list("en", "mine.txt", "hello 5\n")
+        assertEquals(CustomDictionaries.Repaired(0, 2), CustomDictionaries.repairUnreadImports(temp.root))
+        assertEquals(listOf(mine), CustomDictionaries.lists(temp.root, "en"))
+        assertEquals(3, CustomDictionaries.allLists(temp.root, "en").size)
+        assertFalse(header.exists())
+        assertFalse(body.exists())
+        assertEquals(listOf("hello" to 5), CustomDictionaries.entries(temp.root, "en"))
+        // Switched back on by hand it still reads as nothing, and goes off again.
+        val off = CustomDictionaries.allLists(temp.root, "en").first { !CustomDictionaries.isEnabled(it) }
+        val on = CustomDictionaries.setEnabled(off, true)
+        assertTrue(CustomDictionaries.wordsOf(on).isEmpty())
+        assertEquals(CustomDictionaries.Repaired(0, 1), CustomDictionaries.repairUnreadImports(temp.root))
+    }
+
     @Test
     fun aVersion4DictionaryNeedsBothOfItsFiles() {
         val header = AospFixtures.header(403, attributes = listOf("locale" to "en_US"))

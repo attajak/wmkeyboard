@@ -27896,6 +27896,9 @@ open class WMKeyboardService : InputMethodService() {
             return emptyMap()
         }
         CustomDictionaries.migrateLegacyFolders(filesDir)
+        // Before anything reads the lists: a compiled dictionary an older
+        // version copied in unread is unpacked here, shortcuts included.
+        CustomDictionaries.repairUnreadImports(filesDir)
         importedShortcuts = CustomDictionaries.languagesWithLists(filesDir)
             .associateWith { CustomDictionaries.shortcuts(filesDir, it) }
             .filterValues { it.isNotEmpty() }
@@ -27924,7 +27927,9 @@ open class WMKeyboardService : InputMethodService() {
         } else {
             MappedTrie.open(DictionaryStore.downloadedFile(filesDir, langId))
         }
-        return CompositeWordSource.of(listOfNotNull(downloaded, lists))
+        // Kept apart inside the union, so the imports are searched like the
+        // download but do not vote on whether the layout can glide (#288).
+        return CompositeWordSource.ofLanguage(downloaded, lists)
     }
 
     /**
