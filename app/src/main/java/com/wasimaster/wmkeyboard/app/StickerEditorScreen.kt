@@ -220,7 +220,11 @@ internal fun StickerEditorScreen(request: StickerEditRequest, onDone: () -> Unit
     var modelReady by remember { mutableStateOf(false) }
     LaunchedEffect(cutoutSupported) {
         if (cutoutSupported) {
-            MlKitInit.ensure(context.applicationContext)
+            // Only the Play services engine is ML Kit. Where the app runs its
+            // own model there is nothing of Google's to wake up.
+            if (SubjectCutout.downloadsFromPlayServices(context)) {
+                MlKitInit.ensure(context.applicationContext)
+            }
             modelReady = SubjectCutout.modelReady(context)
         }
     }
@@ -424,11 +428,16 @@ internal fun StickerEditorScreen(request: StickerEditRequest, onDone: () -> Unit
             item {
                 WmRow(
                     title = stringResource(R.string.import_sticker_editor_cutout_action),
-                    subtitle = if (modelReady) {
-                        stringResource(R.string.import_sticker_editor_cutout_subtitle)
-                    } else {
-                        stringResource(R.string.import_sticker_editor_cutout_download_subtitle)
-                    },
+                    subtitle = stringResource(
+                        when {
+                            modelReady -> R.string.import_sticker_editor_cutout_subtitle
+                            SubjectCutout.downloadsFromPlayServices(context) ->
+                                R.string.import_sticker_editor_cutout_download_subtitle
+                            // No Play services to ask, so the app gets its own
+                            // model, and can say how much it is about to fetch.
+                            else -> R.string.import_sticker_editor_cutout_download_own_subtitle
+                        },
+                    ),
                     enabled = busy == null,
                     onClick = { runCutout() },
                 )

@@ -2,32 +2,26 @@ package com.wasimaster.wmkeyboard.core.stickers
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.google.android.gms.common.moduleinstall.ModuleInstall
-import com.google.android.gms.common.moduleinstall.ModuleInstallRequest
-import com.google.android.gms.common.moduleinstall.ModuleInstallStatusUpdate
-import com.google.android.gms.common.moduleinstall.InstallStatusListener
-import com.google.android.gms.tasks.Task
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.segmentation.subject.SubjectSegmentation
-import com.google.mlkit.vision.segmentation.subject.SubjectSegmenterOptions
-import com.wasimaster.wmkeyboard.core.util.runCancellable
-import kotlin.coroutines.resume
-import kotlinx.coroutines.suspendCancellableCoroutine
+import com.wasimaster.wmkeyboard.core.util.PlayServices
 
 /**
- * One-tap background removal for the sticker editor, over ML Kit's subject
- * segmentation.
+ * One-tap background removal for the sticker editor.
  *
- * The model is not in the APK. It is a Play services module, downloaded on
- * demand, which is why this exposes [modelReady] and [ensureModel] separately
- * from [cutOut]: the editor asks first and offers the download as a visible
- * choice, rather than declaring the model in the manifest and making every
- * user of the full build pay for it at install time whether or not they ever
- * open a sticker pack.
+ * Two engines sit behind it and the editor never learns which one ran.
+ * [GmsSubjectCutout] is ML Kit's subject segmentation, a Play services module.
+ * [LocalSubjectCutout] is a small network the app downloads and runs itself,
+ * for a device with no Play services, or with a stand-in for them that has no
+ * such module (#278). Google's is the better model, so it goes first wherever
+ * it can be had; the app's own is what makes the button work everywhere else.
+ *
+ * Neither model is in the APK, which is why this exposes [modelReady] and
+ * [ensureModel] separately from [cutOut]: the editor asks first and offers the
+ * download as a visible choice, so a user of the full build who never opens a
+ * sticker pack pays nothing for either.
  *
  * Callers must have run `MlKitInit.ensure(context)` first — after a reboot
  * into the lock screen, ML Kit's own ContentProvider never ran, and every
- * entry point throws for the life of the process without it.
+ * ML Kit entry point throws for the life of the process without it.
  *
  * The lite flavor ships the same object with the same signatures, reporting
  * [supported] = false.
@@ -49,7 +43,7 @@ object SubjectCutout {
         /** The model ran and found nothing worth keeping. */
         data object NoSubject : Result
 
-        /** Play services could not give us the model. */
+        /** No engine could give us a model. */
         data object ModelUnavailable : Result
 
         data object Failed : Result
@@ -58,81 +52,58 @@ object SubjectCutout {
         data object Unsupported : Result
     }
 
-    private fun options() = SubjectSegmenterOptions.Builder()
-        .enableForegroundBitmap()
-        .build()
+    /**
+     * Whether [ensureModel] would ask Play services for the model, so the
+     * editor can say where the download comes from before it starts one.
+     */
+    fun downloadsFromPlayServices(context: Context): Boolean = PlayServices.isInstalled(context)
 
-    /** Whether the module is already on the device. Never asks to install. */
-    suspend fun modelReady(context: Context): Boolean = runCancellable {
-        val client = ModuleInstall.getClient(context)
-        val segmenter = SubjectSegmentation.getClient(options())
-        try {
-            client.areModulesAvailable(segmenter).await().areModulesAvailable()
-        } finally {
-            segmenter.close()
-        }
-    }.getOrDefault(false)
+    /** Whether either engine's model is already on the device. Never downloads. */
+    suspend fun modelReady(context: Context): Boolean =
+        LocalSubjectCutout.modelReady(context) ||
+            (PlayServices.isInstalled(context) && GmsSubjectCutout.modelReady(context))
 
     /**
-     * Requests the module, reporting progress from 0 to 1. False when it
-     * cannot be had at all — no Play services, no network, device policy —
-     * in which case the editor keeps its brushes and says so.
+     * Gets a model, reporting progress from 0 to 1: the Play services module
+     * where there are Play services, and the app's own where there are none
+     * or where they turn out not to have it. False when neither could be had —
+     * no network, no room, device policy — in which case the editor keeps its
+     * brushes and says so.
      */
-    suspend fun ensureModel(context: Context, onProgress: (Float) -> Unit = {}): Boolean =
-        runCancellable {
-            val client = ModuleInstall.getClient(context)
-            val segmenter = SubjectSegmentation.getClient(options())
-            try {
-                val listener = InstallStatusListener { update: ModuleInstallStatusUpdate ->
-                    val progress = update.progressInfo ?: return@InstallStatusListener
-                    val total = progress.totalBytesToDownload
-                    if (total > 0) {
-                        onProgress((progress.bytesDownloaded.toFloat() / total).coerceIn(0f, 1f))
-                    }
-                }
-                val request = ModuleInstallRequest.newBuilder()
-                    .addApi(segmenter)
-                    .setListener(listener)
-                    .build()
-                client.installModules(request).await()
-                client.areModulesAvailable(segmenter).await().areModulesAvailable()
-            } finally {
-                segmenter.close()
-            }
-        }.getOrDefault(false)
+    suspend fun ensureModel(context: Context, onProgress: (Float) -> Unit = {}): Boolean {
+        if (PlayServices.isInstalled(context) && GmsSubjectCutout.ensureModel(context, onProgress)) {
+            return true
+        }
+        return LocalSubjectCutout.ensureModel(context, onProgress)
+    }
 
     /**
      * The subject of [image] as an alpha mask.
      *
-     * `enableForegroundBitmap` gives back the input's own pixels with the
-     * background cleared, so the mask is one `extractAlpha` away and there is
-     * no confidence threshold to guess at.
-     *
      * A mask that keeps almost nothing, or almost everything, comes back as
      * [Result.NoSubject]: applying the first would erase the sticker, and
-     * since the edit is destructive there would be nothing to recover.
+     * within a session the edit is destructive.
      */
-    @Suppress("UnusedParameter")
     suspend fun cutOut(context: Context, image: Bitmap): Result {
-        val segmenter = runCatching { SubjectSegmentation.getClient(options()) }.getOrNull()
-            ?: return Result.ModelUnavailable
-        return try {
-            val result = runCancellable {
-                segmenter.process(InputImage.fromBitmap(image, 0)).await()
-            }.getOrNull() ?: return Result.Failed
-            val foreground = result.foregroundBitmap ?: return Result.Failed
-            val alpha = foreground.extractAlpha()
-            if (foreground != image) foreground.recycle()
-            val coverage = coverageOf(alpha)
-            if (coverage < MIN_COVERAGE || coverage > MAX_COVERAGE) {
-                alpha.recycle()
-                Result.NoSubject
-            } else {
-                Result.Ok(alpha)
-            }
-        } finally {
-            segmenter.close()
+        val local = LocalSubjectCutout.modelReady(context)
+        val fromGms = if (PlayServices.isInstalled(context) && GmsSubjectCutout.modelReady(context)) {
+            GmsSubjectCutout.cutOut(image)
+        } else {
+            null
         }
+        val result = when {
+            fromGms is Result.Ok -> fromGms
+            local -> LocalSubjectCutout.cutOut(context, image)
+            else -> fromGms ?: Result.ModelUnavailable
+        }
+        return if (result is Result.Ok) judged(result) else result
+    }
+
+    private fun judged(result: Result.Ok): Result {
+        val coverage = coverageOf(result.alpha)
+        if (coverage >= MIN_COVERAGE && coverage <= MAX_COVERAGE) return result
+        result.alpha.recycle()
+        return Result.NoSubject
     }
 
     /** Share of [alpha]'s pixels the mask keeps, sampled on a coarse grid. */
@@ -151,10 +122,5 @@ object SubjectCutout {
             y += step
         }
         return if (seen == 0) 0f else kept.toFloat() / seen
-    }
-
-    private suspend fun <T> Task<T>.await(): T = suspendCancellableCoroutine { cont ->
-        addOnSuccessListener { cont.resume(it) }
-        addOnFailureListener { if (cont.isActive) cont.cancel(it) }
     }
 }

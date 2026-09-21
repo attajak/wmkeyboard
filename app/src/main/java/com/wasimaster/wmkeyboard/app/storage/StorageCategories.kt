@@ -56,6 +56,7 @@ import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.settings.LockedSettings
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
+import com.wasimaster.wmkeyboard.core.stickers.CutoutModel
 import com.wasimaster.wmkeyboard.core.stickers.StickerPackStore
 import com.wasimaster.wmkeyboard.core.tools.PhotoBackgroundManager
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperCatalog
@@ -214,6 +215,13 @@ internal object StorageCategories {
      * `pack_<millis>` — so deleting this row cannot delete a pack.
      */
     private const val STICKER_ORIGINALS_ITEM = "sticker_originals"
+
+    /**
+     * The background remover the sticker editor downloads for itself where
+     * there are no Play services to supply one. It is listed with the stickers
+     * because that is the only thing it is for.
+     */
+    private const val STICKER_CUTOUT_ITEM = "sticker_cutout_model"
 
     fun byId(id: String): StorageCategory? = all.firstOrNull { it.id == id }
 
@@ -464,7 +472,7 @@ internal object StorageCategories {
             group = StorageGroup.LOOKS,
             danger = Danger.PERSONAL,
             manageRoute = "sticker_packs",
-            pathsOf = { listOf(File(it.files, "stickers")) },
+            pathsOf = { listOf(File(it.files, "stickers"), CutoutModel.dir(it.files)) },
             itemsOf = { env ->
                 val store = StickerPackStore.get(env.context)
                 val packs = store.packs().map { pack ->
@@ -480,18 +488,35 @@ internal object StorageCategories {
                 // also the only way the sum of the rows matches the category.
                 val originals = store.originalsDir()?.takeIf { it.isDirectory }
                 val keptBytes = originals?.let { diskUsage(it, env.roots.blockSize) } ?: 0L
-                if (keptBytes <= 0L) packs else packs + StorageItem(
-                    id = STICKER_ORIGINALS_ITEM,
-                    label = env.context.getString(R.string.storage_stickers_originals_label),
-                    detail = env.context.getString(R.string.storage_stickers_originals_detail),
-                    bytes = keptBytes,
-                    files = listOfNotNull(originals),
+                val kept = if (keptBytes <= 0L) emptyList() else listOf(
+                    StorageItem(
+                        id = STICKER_ORIGINALS_ITEM,
+                        label = env.context.getString(R.string.storage_stickers_originals_label),
+                        detail = env.context.getString(R.string.storage_stickers_originals_detail),
+                        bytes = keptBytes,
+                        files = listOfNotNull(originals),
+                    ),
                 )
+                val cutoutDir = CutoutModel.dir(env.roots.files)
+                val cutoutBytes = diskUsage(cutoutDir, env.roots.blockSize)
+                val cutout = if (cutoutBytes <= 0L) emptyList() else listOf(
+                    StorageItem(
+                        id = STICKER_CUTOUT_ITEM,
+                        label = env.context.getString(R.string.storage_stickers_cutout_label),
+                        detail = env.context.getString(R.string.storage_stickers_cutout_detail),
+                        bytes = cutoutBytes,
+                        files = listOf(cutoutDir),
+                    ),
+                )
+                packs + kept + cutout
             },
             deleteOne = { env, item ->
                 val store = StickerPackStore.get(env.context)
-                if (item.id == STICKER_ORIGINALS_ITEM) store.clearOriginals()
-                else store.deletePack(item.id)
+                when (item.id) {
+                    STICKER_ORIGINALS_ITEM -> store.clearOriginals()
+                    STICKER_CUTOUT_ITEM -> emptyOut(CutoutModel.dir(env.roots.files))
+                    else -> store.deletePack(item.id)
+                }
             },
             clearOf = { env ->
                 val store = StickerPackStore.get(env.context)
@@ -501,6 +526,7 @@ internal object StorageCategories {
                 // version left behind.
                 store.clearOriginals()
                 sweepLeftovers(File(env.roots.files, "stickers"))
+                emptyOut(CutoutModel.dir(env.roots.files))
             },
         ),
         StorageCategory(

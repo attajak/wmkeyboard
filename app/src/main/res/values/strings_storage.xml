@@ -61,6 +61,8 @@
     <string name="storage_stickers_subtitle">Stickers you made or imported</string>
     <string name="storage_stickers_originals_label">Images you made stickers from</string>
     <string name="storage_stickers_originals_detail">The app opens these when you edit a sticker again. It does not put them in an export.</string>
+    <string name="storage_stickers_cutout_label">Background remover</string>
+    <string name="storage_stickers_cutout_detail">The sticker editor uses this to remove a background. The app can download it again.</string>
     <string name="storage_icon_packs_title">Icon packs</string>
     <string name="storage_icon_packs_subtitle">Key icons you made or imported</string>
     <string name="storage_fonts_title">Fonts</string>

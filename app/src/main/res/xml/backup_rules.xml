@@ -8,6 +8,7 @@
 <full-backup-content>
     <exclude domain="file" path="models" />
     <exclude domain="file" path="whisper" />
+    <exclude domain="file" path="cutout" />
     <exclude domain="file" path="dict" />
     <exclude domain="file" path="cjk_dicts" />
     <exclude domain="file" path="emoji_dict" />
