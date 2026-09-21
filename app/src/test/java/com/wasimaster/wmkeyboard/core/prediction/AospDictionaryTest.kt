@@ -25,23 +25,15 @@ class AospDictionaryTest {
         optionFlags: Int = 0,
         attributes: List<Pair<String, String>> = emptyList(),
         body: List<Int>,
-    ): ByteArray {
-        val attributeBytes = attributes.flatMap { (key, value) ->
-            key.map { it.code } + TERMINATOR + value.map { it.code } + TERMINATOR
-        }
-        val headerSize = HEADER_FIXED_BYTES + attributeBytes.size
-        val head = listOf(0x9B, 0xC1, 0x3A, 0xFE) +
-            listOf((version shr 8) and 0xFF, version and 0xFF) +
-            listOf((optionFlags shr 8) and 0xFF, optionFlags and 0xFF) +
-            listOf(0, 0, (headerSize shr 8) and 0xFF, headerSize and 0xFF)
-        return (head + attributeBytes + body).map { it.toByte() }.toByteArray()
+    ): ByteArray = AospFixtures.header(version, optionFlags, attributes) + AospFixtures.bytes(body)
+
+    private fun contents(bytes: ByteArray): AospDictionary.Result.Contents {
+        val result = AospDictionary.read(bytes)
+        assertTrue("expected contents, got $result", result is AospDictionary.Result.Contents)
+        return result as AospDictionary.Result.Contents
     }
 
-    private fun words(bytes: ByteArray): Map<String, Int> {
-        val result = AospDictionary.read(bytes)
-        assertTrue("expected words, got $result", result is AospDictionary.Result.Words)
-        return (result as AospDictionary.Result.Words).entries.toMap()
-    }
+    private fun words(bytes: ByteArray): Map<String, Int> = contents(bytes).words.toMap()
 
     @Test
     fun `a two-node trie reads both words`() {
@@ -100,10 +92,10 @@ class AospDictionaryTest {
     }
 
     @Test
-    fun `a shortcut list is stepped over, not read`() {
-        // A shortcut is an expansion, not a word somebody typed, and getting
-        // its length wrong would put the reader out of step for the rest of
-        // the file. The node after it proves the position survived.
+    fun `a shortcut list is read, and the node after it still is`() {
+        // Getting the list's length wrong would put the reader out of step
+        // for the rest of the file. The node after it proves the position
+        // survived.
         val body = listOf(
             0x02,
             0x58, // terminal, one-byte children address, has shortcuts
@@ -111,29 +103,109 @@ class AospDictionaryTest {
             0xFF,
             0x00, // no children
             0x00, 0x06, // shortcut list is six bytes including these two
-            0x00, // last shortcut, frequency 0
+            0x00, // last shortcut, strength 0
             'b'.code, 'c'.code, TERMINATOR,
             0x10,
             'z'.code,
             0xFF,
         )
-        assertEquals(setOf("a", "z"), words(dictionary(body = body)).keys)
+        val read = contents(dictionary(body = body))
+        assertEquals(setOf("a", "z"), read.words.toMap().keys)
+        assertEquals(listOf(AospDictionary.Shortcut("a", "bc", whitelist = false)), read.shortcuts)
     }
 
     @Test
-    fun `a bigram chain is stepped over, not read`() {
+    fun `a whitelist shortcut is marked as one`() {
+        val body = listOf(
+            0x01,
+            0x18, // terminal, has shortcuts
+            'a'.code,
+            0xFF,
+            0x00, 0x05,
+            0x0F, // last shortcut, strength 15: the source applied it on its own
+            'b'.code, TERMINATOR,
+        )
+        assertEquals(
+            listOf(AospDictionary.Shortcut("a", "b", whitelist = true)),
+            contents(dictionary(body = body)).shortcuts,
+        )
+    }
+
+    @Test
+    fun `a not-a-word entry carries its shortcut without becoming a word`() {
+        val body = listOf(
+            0x02,
+            0x1A, // terminal, has shortcuts, not a word
+            'x'.code,
+            0xFF,
+            0x00, 0x05, 0x00, 'y'.code, TERMINATOR,
+            0x10, 'z'.code, 0xFF,
+        )
+        val read = contents(dictionary(body = body))
+        assertEquals(setOf("z"), read.words.toMap().keys)
+        assertEquals(listOf("x" to "y"), read.shortcuts.map { it.trigger to it.expansion })
+    }
+
+    @Test
+    fun `a pair resolves its address to the word it points at`() {
+        // The address counts from where the address field starts: the flags
+        // byte is behind it, the node it names ahead of it.
         val body = listOf(
             0x02,
             0x14, // terminal, has bigrams
             'a'.code,
             0xFF,
-            0x90, 0x04, // one-byte address, another follows
-            0x10, 0x08, // one-byte address, the last one
+            0x10, // one-byte address, the last one, strength 0
+            0x01, // the next node starts one byte on
             0x10,
             'z'.code,
             0xFF,
         )
-        assertEquals(setOf("a", "z"), words(dictionary(body = body)).keys)
+        val read = contents(dictionary(body = body))
+        assertEquals(setOf("a", "z"), read.words.toMap().keys)
+        assertEquals(listOf(listOf("a") to "z"), read.ngrams.map { it.context to it.word })
+        // The second word is at the top of the scale and so is the pair.
+        assertEquals(AospScores.pairCount(255), read.ngrams.single().count)
+    }
+
+    @Test
+    fun `a pair can point backwards`() {
+        val body = listOf(
+            0x02,
+            0x10, 'z'.code, 0xFF, // "z" starts at body byte 1
+            0x14, 'a'.code, 0x80,
+            0x50, // negative, one-byte address, the last one
+            0x07, // from body byte 8 back to body byte 1
+        )
+        assertEquals(
+            listOf(listOf("a") to "z"),
+            contents(dictionary(body = body)).ngrams.map { it.context to it.word },
+        )
+    }
+
+    @Test
+    fun `a chain of pairs is read to its end`() {
+        val body = listOf(
+            0x04,
+            0x14, 'a'.code, 0xFF,
+            0x90, 0x06, // one-byte address, another follows: body 5 + 6 is "y"
+            0x10, 0x07, // the last: body 7 + 7 is "z"
+            0x10, 'x'.code, 0xFF,
+            0x10, 'y'.code, 0xFF,
+            0x10, 'z'.code, 0xFF,
+        )
+        assertEquals(
+            listOf("y", "z"),
+            contents(dictionary(body = body)).ngrams.map { it.word },
+        )
+    }
+
+    @Test
+    fun `a stronger pair counts for more`() {
+        val weak = AospScores.pairCount(AospScores.bigramProbability(100, 0))
+        val strong = AospScores.pairCount(AospScores.bigramProbability(100, 15))
+        assertTrue("$weak vs $strong", strong > weak)
+        assertTrue(weak >= 1)
     }
 
     @Test
@@ -149,36 +221,55 @@ class AospDictionaryTest {
     }
 
     @Test
-    fun `header attributes are stepped over`() {
-        val body = listOf(0x01, 0x10, 'a'.code, 0xFF)
+    fun `the header's own attributes come back`() {
         val bytes = dictionary(
-            attributes = listOf("locale" to "en_US", "description" to "English (US)"),
-            body = body,
+            attributes = listOf("locale" to "fr", "description" to "Français"),
+            body = listOf(0x01, 0x10, 'a'.code, 0xFF),
         )
         assertEquals(setOf("a"), words(bytes).keys)
+        assertEquals("fr", contents(bytes).attributes["locale"])
+        assertEquals("Français", contents(bytes).attributes["description"])
     }
 
     @Test
-    fun `a code point table is refused rather than misread`() {
-        // The table re-points the one-byte encoding. Reading the file without
-        // applying it does not fail, it produces different words, which is the
-        // one failure a user could never spot.
-        val result = AospDictionary.read(
-            dictionary(
-                version = VERSION203,
-                attributes = listOf("codePointTable" to "abc"),
-                body = listOf(0x01, 0x10, 'a'.code, 0xFF),
-            ),
+    fun `a code point table re-points the one-byte characters`() {
+        // Byte 0x20 + n is the n-th character of the table. Reading the file
+        // without applying it would not fail, it would produce different
+        // words, which is the one failure a user could never spot.
+        val body = listOf(
+            0x02,
+            0x10, 0x20, 0xFF, // the table's first character
+            0x30, 0x21, 'z'.code, TERMINATOR, 0xFF, // the second, then a byte past the table's end
         )
-        assertTrue(result is AospDictionary.Result.Unsupported)
+        val bytes = dictionary(
+            version = VERSION203,
+            attributes = listOf("codePointTable" to "жa"),
+            body = body,
+        )
+        assertEquals(setOf("ж", "az"), words(bytes).keys)
     }
 
     @Test
-    fun `version 4 is refused`() {
-        val result = AospDictionary.read(
-            dictionary(version = VERSION403, body = listOf(0x01, 0x10, 'a'.code, 0xFF)),
+    fun `the table does not apply to shortcut targets`() {
+        val body = listOf(
+            0x01,
+            0x18, 0x20, 0xFF,
+            0x00, 0x05, 0x00, 0x20, TERMINATOR, // a space, not the table's first character
         )
-        assertEquals(AospDictionary.Result.Unsupported(VERSION403), result)
+        val bytes = dictionary(attributes = listOf("codePointTable" to "ж"), body = body)
+        assertEquals(listOf("ж" to " "), contents(bytes).shortcuts.map { it.trigger to it.expansion })
+    }
+
+    @Test
+    fun `a version 4 header alone asks for its body`() {
+        val header = dictionary(version = VERSION403, body = emptyList())
+        assertEquals(AospDictionary.Result.HeaderOnly(VERSION403), AospDictionary.read(header))
+    }
+
+    @Test
+    fun `version 402 is refused`() {
+        val header = dictionary(version = VERSION402, body = emptyList())
+        assertEquals(AospDictionary.Result.Unsupported(VERSION402), AospDictionary.read(header))
     }
 
     @Test
@@ -208,8 +299,9 @@ class AospDictionaryTest {
         val file = File(path)
         if (!file.isFile) return
         val result = AospDictionary.read(file.readBytes())
-        assertTrue("$path did not read: $result", result is AospDictionary.Result.Words)
-        val entries = (result as AospDictionary.Result.Words).entries
+        assertTrue("$path did not read: $result", result is AospDictionary.Result.Contents)
+        val read = result as AospDictionary.Result.Contents
+        val entries = read.words
         assertTrue("only ${entries.size} words", entries.size > REAL_DICTIONARY_MIN_WORDS)
         assertTrue(entries.all { it.first.isNotEmpty() })
         assertTrue(entries.all { it.second in 1..10000 })
@@ -217,13 +309,20 @@ class AospDictionaryTest {
         // one byte out of step produces neither.
         val words = entries.toMap()
         assertTrue("no common words at all", words.keys.containsAll(setOf("the", "and")))
+        // Every pair names two words the file spells.
+        assertTrue(read.ngrams.all { it.word.isNotEmpty() && it.context.all(String::isNotEmpty) })
+        println("$path: ${entries.size} words, ${read.ngrams.size} pairs, ${read.shortcuts.size} shortcuts")
+        for (head in listOf("of", "I", "thank", "going")) {
+            println("pairs after '$head': " + read.ngrams.filter { it.context == listOf(head) }.sortedByDescending { it.count }.take(8).map { it.word to it.count })
+        }
+        println("shortcuts: " + read.shortcuts.take(8))
     }
 
     private companion object {
-        const val TERMINATOR = 0x1F
-        const val HEADER_FIXED_BYTES = 12
+        const val TERMINATOR = AospFixtures.TERMINATOR
         const val VERSION202 = 202
         const val VERSION203 = 203
+        const val VERSION402 = 402
         const val VERSION403 = 403
         const val REAL_DICTIONARY_MIN_WORDS = 1000
     }

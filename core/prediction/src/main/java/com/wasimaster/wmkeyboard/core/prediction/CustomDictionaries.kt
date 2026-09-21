@@ -1,7 +1,10 @@
 package com.wasimaster.wmkeyboard.core.prediction
 
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
+import java.io.OutputStream
+import java.util.zip.ZipInputStream
 
 /**
  * User-supplied word lists, one folder per language.
@@ -24,11 +27,34 @@ import java.io.InputStream
  * Format is [DictionaryLoader]'s: `word<space>frequency`, frequency
  * optional. `#` comments and junk lines are skipped, so most word lists
  * found in the wild import as-is.
+ *
+ * An AOSP dictionary brings more than words, and each extra part sits beside
+ * its list under the same name: `<name>.wmng` holds its word pairs as an
+ * n-gram pack, `<name>.shortcuts` its shortcuts. Both are read only while the
+ * list is switched on and go when it is deleted, so the list stays the one
+ * thing a user manages. Which parts are written is the user's choice at
+ * import ([inspect], then [write]).
  */
 object CustomDictionaries {
 
     /** Refuse absurd files outright rather than spending a minute parsing one. */
     const val MAX_BYTES = 32L * 1024 * 1024
+
+    /** A HeliBoard backup is a few megabytes; this is for a zip bomb, not for it. */
+    private const val MAX_ZIP_BYTES = 128L * 1024 * 1024
+    private const val MAX_ZIP_ENTRIES = 4096
+    private const val COPY_BUFFER = 64 * 1024
+    private const val TEXT_SNIFF_BYTES = 4096
+    private val ZIP_MAGIC = byteArrayOf(0x50, 0x4B, 0x03, 0x04)
+    private val LINE_BREAKERS = Regex("[\\t\\r\\n]")
+
+    private const val PAIRS_SUFFIX = ".wmng"
+    private const val SHORTCUTS_SUFFIX = ".shortcuts"
+    private const val HEADER_SUFFIX = ".header"
+    private const val BODY_SUFFIX = ".body"
+
+    /** What a list holds in place of words when only its pairs or shortcuts were imported. */
+    private const val NO_WORDS_LINE = "# Only word pairs or shortcuts were imported with this list.\n"
 
     /**
      * Folder names written before languages were keyed by id: the old
@@ -116,10 +142,14 @@ object CustomDictionaries {
         PackedTrie.of(entries(filesDir, langId))
 
     /**
-     * Copies [stream] in as a list named after [displayName], returning how
-     * many words it parsed to. A file that yields nothing usable is deleted
-     * again and reported as 0, so a wrong pick (a PDF, an image) fails
-     * visibly instead of sitting in the list contributing nothing.
+     * Imports everything in [stream] as a list named after [displayName], and
+     * returns how many entries landed: words, word pairs and shortcuts
+     * together. The route for callers with no one to ask (an addon install); the
+     * settings screen asks first, through [inspect] and [write].
+     *
+     * A file that yields nothing usable writes nothing and reports 0, so a
+     * wrong pick (a PDF, an image) fails visibly instead of sitting in the list
+     * contributing nothing.
      */
     fun import(
         filesDir: File,
@@ -127,66 +157,400 @@ object CustomDictionaries {
         displayName: String,
         stream: InputStream,
     ): Int {
-        val dir = languageDir(filesDir, langId).apply { mkdirs() }
-        val target = uniqueFile(dir, displayName)
-        target.outputStream().use { stream.copyTo(it) }
-        if (isBinaryDictionary(target)) unpackBinary(target)
-        val count = runCatching {
-            target.inputStream().use { DictionaryLoader.loadEntries(it).size }
-        }.getOrDefault(0)
-        if (count == 0) target.delete()
-        return count
+        val bytes = readCapped(stream) ?: return 0
+        val found = inspect(listOf(ImportFile(displayName, bytes))) as? Inspection.Found ?: return 0
+        return found.dictionaries.sumOf { write(filesDir, langId, it, ImportParts.ALL).total }
     }
 
-    /** Cheap enough to run on every import: four bytes off the front. */
-    private fun isBinaryDictionary(file: File): Boolean = runCatching {
-        file.inputStream().use { input ->
-            val head = ByteArray(AospDictionary.MAGIC_BYTES)
-            var read = 0
-            while (read < head.size) {
-                val n = input.read(head, read, head.size - read)
-                if (n <= 0) break
-                read += n
-            }
-            read == head.size && AospDictionary.looksLikeDictionary(head)
-        }
-    }.getOrDefault(false)
+    // ---- importing, in two steps ----
+
+    /** One file the user picked, read into memory. */
+    class ImportFile(val name: String, val bytes: ByteArray)
 
     /**
-     * Rewrites a compiled `.dict` in place as the text format.
-     *
-     * Converting at import rather than teaching the reader a second format is
-     * deliberate. Everything downstream of this folder — the word count in
-     * settings, switching a list off, taking a single word out of one (#190),
-     * a user opening the file to check it — works on lines of text, and all of
-     * it would need a second path for a format that cannot be edited anyway.
-     * One conversion, once, and the file is an ordinary list from then on.
-     *
-     * A file this reader will not read is left exactly as it was. It then
-     * parses to nothing, and [import] deletes it and reports 0, which is the
-     * same answer a picked PDF gets.
+     * One dictionary found in the picked files, before anything is written.
+     * [words] are on this app's scale. A plain word list keeps its own bytes,
+     * so its comments and spacing survive the import.
      */
-    private fun unpackBinary(file: File) {
-        if (file.length() > MAX_BYTES) return
-        val result = runCatching { AospDictionary.read(file.readBytes()) }.getOrNull()
-        val entries = (result as? AospDictionary.Result.Words)?.entries ?: return
-        val temp = File(file.parentFile, file.name + ".tmp")
-        val written = runCatching {
-            temp.bufferedWriter().use { writer ->
-                for ((word, frequency) in entries) {
-                    writer.write(word)
-                    writer.write(" ")
-                    writer.write(frequency.toString())
-                    writer.newLine()
+    class ImportCandidate(
+        val name: String,
+        val words: List<Pair<String, Int>>,
+        val ngrams: List<AospDictionary.Ngram>,
+        val shortcuts: List<AospDictionary.Shortcut>,
+        val locale: String?,
+        val description: String?,
+        internal val verbatim: ByteArray? = null,
+    ) {
+        /** Whether there is anything to ask about beyond the words. */
+        val hasExtras: Boolean get() = ngrams.isNotEmpty() || shortcuts.isNotEmpty()
+    }
+
+    /** Which parts of a candidate to write. */
+    data class ImportParts(val words: Boolean, val pairs: Boolean, val shortcuts: Boolean) {
+        companion object {
+            val ALL = ImportParts(words = true, pairs = true, shortcuts = true)
+        }
+    }
+
+    /** What [write] put on disk. */
+    data class Written(val words: Int, val pairs: Int, val shortcuts: Int) {
+        val total: Int get() = words + pairs + shortcuts
+    }
+
+    /** Why [inspect] found nothing to import. */
+    sealed interface Refusal {
+        /** Nothing in the files reads as a word list or a dictionary. */
+        data object NothingReadable : Refusal
+
+        /** A file is larger than [MAX_BYTES]. */
+        data object TooLarge : Refusal
+
+        /** A version 4 `.header` came without the `.body` that holds its words. */
+        data object MissingBody : Refusal
+
+        /** A version 4 `.body` came without its `.header`. */
+        data object MissingHeader : Refusal
+
+        /** A dictionary in a revision the reader does not know. */
+        data class UnsupportedVersion(val version: Int) : Refusal
+    }
+
+    sealed interface Inspection {
+        data class Found(val dictionaries: List<ImportCandidate>) : Inspection
+        data class Refused(val reason: Refusal) : Inspection
+    }
+
+    /**
+     * Reads [files] and says what they hold, writing nothing.
+     *
+     * What counts as a file:
+     *
+     * - a word list, in this app's format or AOSP's `.combined`;
+     * - a compiled `.dict` (version 2);
+     * - a version 4 dictionary, which is two files: its `.header` and its
+     *   `.body`, picked together;
+     * - a `.zip` holding any number of `.dict` files and version 4 pairs, which
+     *   is what a HeliBoard backup is. Only dictionaries are taken out of a zip:
+     *   the other text files in a backup (layouts, blacklists) would read as
+     *   word lists, and are not taken.
+     */
+    fun inspect(files: List<ImportFile>): Inspection {
+        val picked = ArrayList<ImportFile>()
+        val unzipped = ArrayList<ImportFile>()
+        for (file in files) {
+            if (file.bytes.size > MAX_BYTES) return Inspection.Refused(Refusal.TooLarge)
+            if (isZip(file.bytes)) {
+                unzipped.addAll(unzip(file.bytes) ?: return Inspection.Refused(Refusal.TooLarge))
+            } else {
+                picked.add(file)
+            }
+        }
+        val items = picked + unzipped
+        val bodies = items.filter { it.name.endsWith(BODY_SUFFIX) }
+            .associateBy { it.name.removeSuffix(BODY_SUFFIX) }
+        val usedBodies = HashSet<String>()
+        val candidates = ArrayList<ImportCandidate>()
+        var refusal: Refusal? = null
+        for (item in items) {
+            if (item.name.endsWith(BODY_SUFFIX)) continue
+            if (!AospDictionary.looksLikeDictionary(item.bytes)) {
+                // Inside a zip only a combined list is a dictionary; a picked
+                // file may be any word list.
+                val candidate = if (item in picked) textCandidate(item) else combinedCandidate(item)
+                candidate?.let(candidates::add)
+                continue
+            }
+            when (val result = AospDictionary.read(item.bytes)) {
+                is AospDictionary.Result.Contents -> candidates.add(candidate(item.name, result))
+                is AospDictionary.Result.HeaderOnly -> {
+                    val stem = item.name.removeSuffix(HEADER_SUFFIX)
+                    val body = bodies[stem]
+                    if (body == null) {
+                        refusal = refusal ?: Refusal.MissingBody
+                        continue
+                    }
+                    usedBodies.add(stem)
+                    when (val v4 = AospDictionaryV4.read(item.bytes, body.bytes)) {
+                        is AospDictionary.Result.Contents -> candidates.add(candidate(stem, v4))
+                        is AospDictionary.Result.Unsupported -> refusal = Refusal.UnsupportedVersion(v4.version)
+                        else -> Unit
+                    }
+                }
+                is AospDictionary.Result.Unsupported -> refusal = Refusal.UnsupportedVersion(result.version)
+                AospDictionary.Result.NotADictionary -> Unit
+            }
+        }
+        if (refusal == null && bodies.keys.any { it !in usedBodies }) refusal = Refusal.MissingHeader
+        val found = candidates.filter { it.words.isNotEmpty() || it.hasExtras }
+        return if (found.isNotEmpty()) {
+            Inspection.Found(found)
+        } else {
+            Inspection.Refused(refusal ?: Refusal.NothingReadable)
+        }
+    }
+
+    private fun candidate(name: String, contents: AospDictionary.Result.Contents) = ImportCandidate(
+        name = name,
+        words = contents.words,
+        ngrams = contents.ngrams,
+        shortcuts = contents.shortcuts,
+        locale = contents.attributes["locale"]?.takeIf { it.isNotBlank() },
+        description = contents.attributes["description"]?.takeIf { it.isNotBlank() },
+    )
+
+    private fun combinedCandidate(item: ImportFile): ImportCandidate? {
+        val first = firstLine(item.bytes) ?: return null
+        if (!AospCombined.looksLikeCombined(first)) return null
+        val result = AospCombined.read(item.bytes.inputStream())
+        return (result as? AospDictionary.Result.Contents)?.let { candidate(item.name, it) }
+    }
+
+    private fun textCandidate(item: ImportFile): ImportCandidate? {
+        combinedCandidate(item)?.let { return it }
+        if (!looksLikeText(item.bytes)) return null
+        val words = runCatching { DictionaryLoader.loadEntries(item.bytes.inputStream()) }.getOrDefault(emptyList())
+        if (words.isEmpty()) return null
+        return ImportCandidate(item.name, words, emptyList(), emptyList(), null, null, verbatim = item.bytes)
+    }
+
+    /**
+     * Writes the [parts] of [candidate] as one list in [langId], and says what
+     * landed. Nothing is left behind when nothing was chosen, or when nothing
+     * of what was chosen exists.
+     *
+     * The list's text file is written even when its words were not chosen, as
+     * a single comment line: it is what the settings screen lists, switches
+     * and deletes, and the pairs and shortcuts beside it follow it.
+     */
+    fun write(filesDir: File, langId: String, candidate: ImportCandidate, parts: ImportParts): Written {
+        val dir = languageDir(filesDir, langId).apply { mkdirs() }
+        val target = uniqueFile(dir, candidate.name)
+        val words = if (parts.words) candidate.words.size else 0
+        val pairs = if (parts.pairs) writePairs(pairsFile(target), candidate.ngrams) else 0
+        val shortcuts = if (parts.shortcuts) writeShortcuts(shortcutsFile(target), candidate.shortcuts) else 0
+        val wrote = words + pairs + shortcuts > 0 && writeAtomically(target) { out ->
+            val verbatim = candidate.verbatim
+            when {
+                words == 0 -> out.write(NO_WORDS_LINE.toByteArray())
+                verbatim != null -> out.write(verbatim)
+                else -> {
+                    val writer = out.bufferedWriter()
+                    for ((word, frequency) in candidate.words) {
+                        writer.write(word)
+                        writer.write(" ")
+                        writer.write(frequency.toString())
+                        writer.newLine()
+                    }
+                    writer.flush()
+                }
+            }
+        }
+        if (!wrote) {
+            pairsFile(target).delete()
+            shortcutsFile(target).delete()
+            return Written(0, 0, 0)
+        }
+        return Written(words, pairs, shortcuts)
+    }
+
+    /**
+     * The pairs and triples as a `.wmng` pack, keyed the way every pack is
+     * ([WordKey]). A pair listed twice keeps its stronger count.
+     */
+    private fun writePairs(file: File, ngrams: List<AospDictionary.Ngram>): Int {
+        if (ngrams.isEmpty()) return 0
+        val bigrams = HashMap<Pair<String, String>, Int>()
+        val trigrams = HashMap<Triple<String, String, String>, Int>()
+        for (ngram in ngrams) {
+            val word = WordKey.of(ngram.word)
+            val context = ngram.context.map(WordKey::of)
+            if (word.isEmpty() || context.any { it.isEmpty() }) continue
+            when (context.size) {
+                1 -> bigrams.merge(context[0] to word, ngram.count, ::maxOf)
+                2 -> trigrams.merge(Triple(context[0], context[1], word), ngram.count, ::maxOf)
+                else -> Unit
+            }
+        }
+        if (bigrams.isEmpty() && trigrams.isEmpty()) return 0
+        val builder = NgramPackBuilder()
+        for ((key, count) in bigrams) builder.addBigram(key.first, key.second, count)
+        for ((key, count) in trigrams) builder.addTrigram(key.first, key.second, key.third, count)
+        val data = runCatching { builder.build() }.getOrNull() ?: return 0
+        val wrote = writeAtomically(file) { NgramPackCodec.write(data, it) }
+        return if (wrote) bigrams.size + trigrams.size else 0
+    }
+
+    /**
+     * One `trigger<TAB>expansion` line each. A trigger listed more than once
+     * keeps the one the source keyboard applied on its own, then the first.
+     */
+    private fun writeShortcuts(file: File, shortcuts: List<AospDictionary.Shortcut>): Int {
+        val chosen = LinkedHashMap<String, AospDictionary.Shortcut>()
+        for (shortcut in shortcuts) {
+            val trigger = clean(shortcut.trigger)
+            val expansion = clean(shortcut.expansion)
+            if (trigger.isEmpty() || expansion.isEmpty()) continue
+            val key = trigger.lowercase()
+            val held = chosen[key]
+            if (held == null || (shortcut.whitelist && !held.whitelist)) {
+                chosen[key] = AospDictionary.Shortcut(trigger, expansion, shortcut.whitelist)
+            }
+        }
+        if (chosen.isEmpty()) return 0
+        val wrote = writeAtomically(file) { out ->
+            val writer = out.bufferedWriter()
+            for (shortcut in chosen.values) {
+                writer.write(shortcut.trigger)
+                writer.write("\t")
+                writer.write(shortcut.expansion)
+                writer.newLine()
+            }
+            writer.flush()
+        }
+        return if (wrote) chosen.size else 0
+    }
+
+    /** A tab or a line break inside either half would break the line format. */
+    private fun clean(text: String): String = text.replace(LINE_BREAKERS, " ").trim()
+
+    /** Written beside the target and renamed over it, so a crash leaves nothing half written. */
+    private fun writeAtomically(target: File, body: (OutputStream) -> Unit): Boolean {
+        val temp = File(target.parentFile, target.name + ".tmp")
+        val ok = runCatching { temp.outputStream().use(body) }.isSuccess
+        if (ok && temp.renameTo(target)) return true
+        temp.delete()
+        return false
+    }
+
+    // ---- what sits beside a list ----
+
+    /**
+     * The file holding a list's word pairs: `<name>.wmng` beside `<name>.txt`.
+     * Read only while the list is switched on, and deleted with it.
+     */
+    fun pairsFile(list: File): File = File(list.parentFile, baseName(list) + PAIRS_SUFFIX)
+
+    /** The file holding a list's shortcuts, one `trigger<TAB>expansion` a line. */
+    fun shortcutsFile(list: File): File = File(list.parentFile, baseName(list) + SHORTCUTS_SUFFIX)
+
+    /** The list and whatever sits beside it, for the storage screen. */
+    fun filesOf(list: File): List<File> =
+        listOf(list, pairsFile(list), shortcutsFile(list)).filter { it.exists() }
+
+    private fun baseName(list: File): String = displayName(list).removeSuffix(".txt")
+
+    /** The word-pair packs of the switched-on lists for [langId]. */
+    fun pairPacks(filesDir: File, langId: String): List<File> =
+        lists(filesDir, langId).map(::pairsFile).filter { it.isFile }
+
+    /**
+     * Shortcuts from the switched-on lists for [langId], keyed by the
+     * lowercased trigger. An older list wins a trigger two lists share, the
+     * same order [lists] reads them in.
+     */
+    fun shortcuts(filesDir: File, langId: String): Map<String, String> {
+        val out = LinkedHashMap<String, String>()
+        for (list in lists(filesDir, langId)) {
+            val file = shortcutsFile(list)
+            if (!file.isFile) continue
+            runCatching {
+                file.forEachLine { line ->
+                    val tab = line.indexOf('\t')
+                    if (tab <= 0) return@forEachLine
+                    val trigger = line.substring(0, tab).trim().lowercase()
+                    val expansion = line.substring(tab + 1).trim()
+                    if (trigger.isNotEmpty() && expansion.isNotEmpty()) out.putIfAbsent(trigger, expansion)
+                }
+            }
+        }
+        return out
+    }
+
+    /** How many pairs and triples [list] carries, read off its pack's header. */
+    fun pairCount(list: File): Int = NgramPackCodec.entryCount(pairsFile(list))
+
+    /** How many shortcuts [list] carries. */
+    fun shortcutCount(list: File): Int {
+        val file = shortcutsFile(list)
+        if (!file.isFile) return 0
+        return runCatching { file.useLines { lines -> lines.count { '\t' in it } } }.getOrDefault(0)
+    }
+
+    // ---- reading what was picked ----
+
+    /** [stream] whole, or null past [MAX_BYTES]. */
+    fun readCapped(stream: InputStream): ByteArray? {
+        val out = ByteArrayOutputStream()
+        val buffer = ByteArray(COPY_BUFFER)
+        var total = 0L
+        while (true) {
+            val n = stream.read(buffer)
+            if (n < 0) break
+            total += n
+            if (total > MAX_BYTES) return null
+            out.write(buffer, 0, n)
+        }
+        return out.toByteArray()
+    }
+
+    private fun isZip(bytes: ByteArray): Boolean =
+        bytes.size >= ZIP_MAGIC.size && ZIP_MAGIC.indices.all { bytes[it] == ZIP_MAGIC[it] }
+
+    /**
+     * The dictionary-shaped entries of a zip, named by their full path so a
+     * `.header` still finds the `.body` beside it. Null when the zip unpacks
+     * past [MAX_ZIP_BYTES] in total, which is the only defence a phone has
+     * against a zip bomb.
+     */
+    private fun unzip(bytes: ByteArray): List<ImportFile>? {
+        val out = ArrayList<ImportFile>()
+        var total = 0L
+        val complete = runCatching {
+            ZipInputStream(bytes.inputStream()).use { zip ->
+                var entries = 0
+                while (entries++ < MAX_ZIP_ENTRIES) {
+                    val entry = zip.nextEntry ?: break
+                    if (entry.isDirectory || !looksLikeDictionaryEntry(entry.name)) continue
+                    val data = readCapped(zip) ?: return@runCatching false
+                    total += data.size
+                    if (total > MAX_ZIP_BYTES) return@runCatching false
+                    out.add(ImportFile(entry.name, data))
                 }
             }
             true
-        }.getOrDefault(false)
-        if (written && temp.renameTo(file)) return
-        temp.delete()
+        }.getOrDefault(true)
+        return if (complete) out else null
     }
 
-    fun remove(file: File): Boolean = file.delete()
+    /** Names worth unpacking: a backup also holds images, fonts and settings. */
+    private fun looksLikeDictionaryEntry(name: String): Boolean {
+        val lower = name.lowercase()
+        return lower.endsWith(".dict") || lower.endsWith(HEADER_SUFFIX) || lower.endsWith(BODY_SUFFIX) ||
+            lower.endsWith(".combined")
+    }
+
+    private fun firstLine(bytes: ByteArray): String? = runCatching {
+        bytes.inputStream().bufferedReader().useLines { lines ->
+            lines.map { it.trim() }.firstOrNull { it.isNotEmpty() && !it.startsWith("#") }
+        }
+    }.getOrNull()
+
+    /**
+     * A plain list is text. The loader takes any line as a word, so without
+     * this a picked image would import as a list of binary junk.
+     */
+    private fun looksLikeText(bytes: ByteArray): Boolean {
+        val sample = bytes.size.coerceAtMost(TEXT_SNIFF_BYTES)
+        for (i in 0 until sample) if (bytes[i] == 0.toByte()) return false
+        return true
+    }
+
+    /** Deletes a list and the pairs and shortcuts beside it. */
+    fun remove(file: File): Boolean {
+        pairsFile(file).delete()
+        shortcutsFile(file).delete()
+        return file.delete()
+    }
 
     /**
      * Takes [word] out of every imported list for [langId], switched on or
@@ -284,17 +648,23 @@ object CustomDictionaries {
     private fun uniqueFile(dir: File, displayName: String): File {
         val base = displayName
             .substringAfterLast('/')
+            .removeSuffix(HEADER_SUFFIX)
+            .removeSuffix(BODY_SUFFIX)
             .substringBeforeLast('.')
             .replace(Regex("[^A-Za-z0-9 _-]"), "_")
             .trim()
             .take(48)
             .ifEmpty { "wordlist" }
-        var candidate = File(dir, "$base.txt")
+        // A name is taken while anything of a list by that name is there: a
+        // switched-off list, or the pairs of one, would otherwise be adopted.
+        fun taken(name: String) = listOf(".txt", ".txt$DISABLED_SUFFIX", PAIRS_SUFFIX, SHORTCUTS_SUFFIX)
+            .any { File(dir, name + it).exists() }
+        var name = base
         var n = 2
-        while (candidate.exists()) {
-            candidate = File(dir, "$base ($n).txt")
+        while (taken(name)) {
+            name = "$base ($n)"
             n++
         }
-        return candidate
+        return File(dir, "$name.txt")
     }
 }

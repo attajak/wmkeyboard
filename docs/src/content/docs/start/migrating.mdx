@@ -40,7 +40,7 @@ There's no built-in comparison against FUTO Keyboard here, because the two proje
 
 ## Bringing your dictionary across
 
-There's no one-click "import my personal dictionary" button. No keyboard exposes its learned-word list in a format another app can read, and WM Keyboard is no exception. Here's what actually happens, and your two real options.
+There's no one-click "import my personal dictionary" button. Most keyboards keep their learned words in a format no other app can read. The exception is the AOSP family (HeliBoard, LeanType), whose backup file can be imported here, learned words and word pairs included. Here's what actually happens, and your real options.
 
 Words you've typed build up in an on-device dictionary automatically, the same way any predictive keyboard learns your vocabulary. There's nothing to migrate beyond typing normally with [Learn from typing](#options) switched on. You can also add words one at a time from the personal dictionary screen. Anything added that way reads "You added this word." Words the keyboard picked up from typing read "Seen 4 times" instead.
 
@@ -52,11 +52,12 @@ For seeding a large vocabulary at once (brand names, jargon, a whole word list y
 
 - Import a plain text file, or pull one from an `http://` or `https://` URL.
 - Format: one word per line, optionally followed by a space and a frequency number; lines starting with `#` are ignored.
-- A `.combined` word list or a compiled `.dict` dictionary from an AOSP-derived keyboard (HeliBoard, LeanType, FUTO, OpenBoard, or one pulled from a GApps package) imports as it is, with nothing to convert first.
+- A `.combined` word list or a compiled `.dict` dictionary from an AOSP-derived keyboard (HeliBoard, LeanType, FUTO, OpenBoard, or one pulled from a GApps package) imports as it is, with nothing to convert first. Its word pairs and shortcuts can come too: a dialog asks which parts you want.
+- A HeliBoard or LeanType backup `.zip` imports its dictionaries, including the user history: the words that keyboard learned from you and the word pairs it saw you type.
 - Words imported this way are never autocorrected away.
 - Files are capped at 32 MiB per import.
 
-So if your old keyboard can export a word list, import it here. See [Dictionaries & words](/reference/settings/dictionaries/) for the full screen reference and for the two `.dict` shapes that are turned down.
+So if your old keyboard can export a word list, import it here. See [Dictionaries & words](/reference/settings/dictionaries/) for the full screen reference, and [Importing from other keyboards](/reference/importing-other-keyboards/#dictionaries) for what each part of a dictionary becomes.
 
 :::note
 Android's own system dictionary (the one some keyboards share words through) isn't a bridge here either. WM Keyboard can optionally *write* learned words into it for other apps to see, but it never *reads* plain words back out of it to seed its own suggestions; only dictionary-shortcut expansions (like "omw" → "on my way") round-trip that way.

@@ -126,13 +126,36 @@ Some letters can be written two ways in Unicode: a base letter plus a mark, or a
 
 <SettingsPath path="Typing / Suggestions / Custom dictionaries / Import word list" />
 
-Every AOSP-derived keyboard shares one dictionary ecosystem, and for most languages a compiled `.dict` is the only form the word list exists in. Both halves of it import here as they are: the `.combined` source lists a dictionary repository publishes, and the compiled `.dict` files HeliBoard, LeanType and FUTO download (including the ones pulled out of a GApps package).
+Every AOSP-derived keyboard shares one dictionary ecosystem, and for most languages a compiled `.dict` is the only form the word list exists in. All of it imports here as it is: the `.combined` source lists a dictionary repository publishes, the compiled `.dict` files HeliBoard, LeanType and FUTO download (including the ones pulled out of a GApps package), and the version 4 dictionaries those keyboards write on the device.
+
+### What each part becomes
+
+An AOSP dictionary holds three things, and each goes where this app keeps that kind of thing:
+
+| In the dictionary | Here |
+|---|---|
+| Words and their frequencies | An ordinary text word list |
+| Word pairs (bigrams), and word triples in a version 4 file | Next-word predictions, like a downloaded **Word pairs** pack |
+| Shortcuts, such as `omw` for "on my way" | The first suggestion when you type the short form in full, and a trigger for glide typing |
+
+When the file has more than words, a dialog asks which of the three to import. The pairs and shortcuts are stored beside the word list and follow it: switch the list off and they stop, delete it and they go. A list imported for its pairs alone still shows on the Custom dictionaries screen, with no words in it, so there is something to switch and delete.
 
 A `.dict` is unpacked into an ordinary text list at import, so everything the Custom dictionaries screen does to a list you wrote yourself works on it too: the word count, the switch, the trash icon, and taking a single word out from the suggestion strip.
 
-Frequencies are 0 to 255 over there and 0 to 10000 here, so they are scaled rather than copied. Copying them would drop every imported word below every bundled one.
+Frequencies are 0 to 255 over there and 0 to 10000 here, so they are scaled rather than copied. Copying them would drop every imported word below every bundled one. A pair's strength is scaled onto the counts of a downloaded pack, where the strongest pairs weigh about as much as a pair you typed a few dozen times yourself.
 
-Two shapes are refused rather than half-read: a version 4 `.dict`, which is a folder of files rather than one file, and a file whose header carries a `codePointTable`, because that table changes what the rest of the file's bytes mean. Bigrams and shortcut expansions are skipped in both formats. A list here is a flat set of words, and a shortcut is an expansion rather than a word anybody typed.
+A shortcut the source keyboard applied on its own (a "whitelist" shortcut) is offered here, never applied. A file built with a `codePointTable`, which spells the most common letters of a language in one byte each, is read through that table.
+
+### Your learned words from HeliBoard or LeanType
+
+Those keyboards keep what they learned from your typing in a user history dictionary, in the version 4 format. That format is a folder of two files, `NAME.header` and `NAME.body`, so there are two ways in:
+
+- Make a backup in HeliBoard or LeanType and import the `.zip`. The app takes out every dictionary in it, one list each, and ignores the layouts, blacklists and images a backup also holds. Each dictionary shows the language code it was written for, so you can leave out the ones for another language.
+- Or select the `.header` and the `.body` together in the file picker.
+
+A user history keeps counts rather than frequencies, so a word you typed often there arrives ranked higher, and a pair you typed twelve times weighs twelve times the pair typed once. Words that keyboard had blacklisted do not come across.
+
+Only one shape is refused: revision 402 of version 4, which no current keyboard writes.
 
 See [Dictionaries & words](/reference/settings/dictionaries/) for the screen itself.
 

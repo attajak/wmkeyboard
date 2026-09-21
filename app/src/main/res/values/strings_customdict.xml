@@ -45,6 +45,55 @@
         <item quantity="other">The app added %1$d words to %2$s.</item>
     </plurals>
 
+    <!-- Subtitle parts of a word-list row that came from an AOSP dictionary
+         (HeliBoard, LeanType, FUTO), after the word count. %1$d is a count. -->
+    <plurals name="customdict_pair_count">
+        <item quantity="one">%1$d word pair</item>
+        <item quantity="other">%1$d word pairs</item>
+    </plurals>
+    <plurals name="customdict_shortcut_count">
+        <item quantity="one">%1$d shortcut</item>
+        <item quantity="other">%1$d shortcuts</item>
+    </plurals>
+
+    <!-- Dialog after the user picks a dictionary that holds more than words.
+         The user ticks which parts to import. -->
+    <string name="customdict_choose_title">Choose what to import</string>
+    <!-- Line under a dictionary's name in that dialog. %1$s is the language
+         code that the file says it is for, for example en_US. -->
+    <string name="customdict_choose_locale">The file is for <xliff:g id="locale" example="en_US">%1$s</xliff:g></string>
+    <string name="customdict_choose_words">Words</string>
+    <!-- %1$d is how many words the file holds. -->
+    <plurals name="customdict_choose_words_detail">
+        <item quantity="one">%1$d word, for suggestions and autocorrect</item>
+        <item quantity="other">%1$d words, for suggestions and autocorrect</item>
+    </plurals>
+    <string name="customdict_choose_pairs">Word pairs</string>
+    <!-- %1$d is how many pairs of words (a word and the word that often comes after it) the file holds. -->
+    <plurals name="customdict_choose_pairs_detail">
+        <item quantity="one">%1$d pair, for next-word predictions</item>
+        <item quantity="other">%1$d pairs, for next-word predictions</item>
+    </plurals>
+    <string name="customdict_choose_shortcuts">Shortcuts</string>
+    <!-- %1$d is how many shortcuts the file holds. A shortcut is a short form,
+         like "omw", that offers a longer text, like "on my way". -->
+    <plurals name="customdict_choose_shortcuts_detail">
+        <item quantity="one">%1$d shortcut. When you type the short form, the long form shows as the first suggestion.</item>
+        <item quantity="other">%1$d shortcuts. When you type the short form, the long form shows as the first suggestion.</item>
+    </plurals>
+
+    <!-- Shown after an import that added more than words. %1$s is a list such as
+         "1,200 words, 300 word pairs", made from the count strings above.
+         %2$s is the English name of the language. -->
+    <string name="customdict_import_added_parts">The app added <xliff:g id="parts" example="1,200 words, 300 word pairs">%1$s</xliff:g> to <xliff:g id="language" example="French">%2$s</xliff:g>.</string>
+
+    <!-- Import errors for AOSP dictionaries in version 4, which are two files:
+         NAME.header and NAME.body. -->
+    <string name="customdict_import_missing_body_error">This is the header of a dictionary that has two files. Its words are in the .body file that has the same name. Select the two files together.</string>
+    <string name="customdict_import_missing_header_error">This is the body of a dictionary that has two files. Select it together with the .header file that has the same name.</string>
+    <!-- %1$d is the format version number written in the file. -->
+    <string name="customdict_import_unsupported_error">This dictionary uses format version <xliff:g id="version" example="402">%1$d</xliff:g>. The app cannot read this version.</string>
+
     <!-- Settings > Emoji > Emoji keyword packs. Per-language keyword files that
          make emoji search and emoji suggestions work in more languages. -->
 
