@@ -14,6 +14,10 @@ import com.wasimaster.wmkeyboard.core.addons.AddonType
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.semantics.Role
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -66,8 +70,17 @@ import kotlinx.coroutines.launch
 /** Human name for a language id, used as the word-list group header. */
 private fun languageLabel(langId: String): String =
     LanguageRegistry.byId(langId).englishName
-/** One imported list: the file plus how many words it parsed to. */
-private data class WordListEntry(val file: java.io.File, val words: Int)
+/**
+ * One imported list: the file, how many words it parsed to, and the word pairs
+ * and shortcuts an imported dictionary left beside it.
+ */
+private data class WordListEntry(val file: java.io.File, val words: Int, val pairs: Int, val shortcuts: Int)
+
+/** Dictionaries found in a pick that holds more than words, waiting for the user to choose. */
+private class PendingDictionaryImport(val langId: String, val candidates: List<CustomDictionaries.ImportCandidate>)
+
+private operator fun CustomDictionaries.Written.plus(other: CustomDictionaries.Written) =
+    CustomDictionaries.Written(words + other.words, pairs + other.pairs, shortcuts + other.shortcuts)
 @Composable
 internal fun CustomDictionarySettings(
     repository: SettingsRepository,
@@ -83,6 +96,7 @@ internal fun CustomDictionarySettings(
     var busy by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     var urlDialogFor by remember { mutableStateOf<String?>(null) }
+    var choosing by remember { mutableStateOf<PendingDictionaryImport?>(null) }
 
     // Counting words means reading every list, so it never runs on the main
     // thread — the screen draws empty for a moment and fills in.
@@ -102,7 +116,12 @@ internal fun CustomDictionarySettings(
                     val words = runCatching {
                         file.inputStream().use { DictionaryLoader.loadEntries(it).size }
                     }.getOrDefault(0)
-                    WordListEntry(file, words)
+                    WordListEntry(
+                        file,
+                        words,
+                        CustomDictionaries.pairCount(file),
+                        CustomDictionaries.shortcutCount(file),
+                    )
                 }
             }
         }
@@ -110,85 +129,151 @@ internal fun CustomDictionarySettings(
 
     LaunchedEffect(Unit) { refresh() }
 
+    suspend fun finishImport(langId: String, written: CustomDictionaries.Written) {
+        busy = false
+        val res = context.resources
+        message = when {
+            written.total == 0 -> context.getString(R.string.customdict_import_empty_error)
+            written.pairs == 0 && written.shortcuts == 0 -> res.getQuantityString(
+                R.plurals.customdict_import_added_words,
+                written.words,
+                written.words,
+                languageLabel(langId),
+            )
+            else -> context.getString(
+                R.string.customdict_import_added_parts,
+                listOfNotNull(
+                    written.words.takeIf { it > 0 }
+                        ?.let { res.getQuantityString(R.plurals.customdict_word_count, it, it) },
+                    written.pairs.takeIf { it > 0 }
+                        ?.let { res.getQuantityString(R.plurals.customdict_pair_count, it, it) },
+                    written.shortcuts.takeIf { it > 0 }
+                        ?.let { res.getQuantityString(R.plurals.customdict_shortcut_count, it, it) },
+                ).joinToString(", "),
+                languageLabel(langId),
+            )
+        }
+        if (written.total > 0) {
+            refresh()
+            repository.bumpCustomDictVersion()
+        }
+    }
+
+    fun refusalMessage(reason: CustomDictionaries.Refusal): String = when (reason) {
+        CustomDictionaries.Refusal.NothingReadable -> context.getString(R.string.customdict_import_empty_error)
+        CustomDictionaries.Refusal.TooLarge -> context.getString(R.string.customdict_import_too_large_error)
+        CustomDictionaries.Refusal.MissingBody -> context.getString(R.string.customdict_import_missing_body_error)
+        CustomDictionaries.Refusal.MissingHeader -> context.getString(R.string.customdict_import_missing_header_error)
+        is CustomDictionaries.Refusal.UnsupportedVersion ->
+            context.getString(R.string.customdict_import_unsupported_error, reason.version)
+    }
+
+    // What was picked is read before anything is written. Words alone import
+    // straight away, as they always did; a dictionary that brings word pairs
+    // or shortcuts too asks which of them to keep.
+    suspend fun importPicked(langId: String, files: List<CustomDictionaries.ImportFile>) {
+        val inspection = withContext(Dispatchers.IO) { CustomDictionaries.inspect(files) }
+        when (inspection) {
+            is CustomDictionaries.Inspection.Refused -> {
+                busy = false
+                message = refusalMessage(inspection.reason)
+            }
+            is CustomDictionaries.Inspection.Found -> {
+                val found = inspection.dictionaries
+                if (found.none { it.hasExtras }) {
+                    val written = withContext(Dispatchers.IO) {
+                        found.map {
+                            CustomDictionaries.write(
+                                context.filesDir,
+                                langId,
+                                it,
+                                CustomDictionaries.ImportParts.ALL,
+                            )
+                        }.reduce { a, b -> a + b }
+                    }
+                    finishImport(langId, written)
+                } else {
+                    busy = false
+                    choosing = PendingDictionaryImport(langId, found)
+                }
+            }
+        }
+    }
+
     fun importFromUrl(langId: String, url: String) {
         busy = true
         scope.launch {
-            val result = withContext(Dispatchers.IO) {
+            val uri = android.net.Uri.parse(url.trim())
+            if (uri.scheme != "http" && uri.scheme != "https") {
+                busy = false
+                message = context.getString(R.string.customdict_url_scheme_error)
+                return@launch
+            }
+            val file = withContext(Dispatchers.IO) {
                 runCatching {
-                    val uri = android.net.Uri.parse(url.trim())
-                    if (uri.scheme != "http" && uri.scheme != "https") {
-                        return@runCatching -2
-                    }
                     val name = uri.lastPathSegment?.substringAfterLast('/')?.ifBlank { null }
                         ?: "wordlist"
                     val temp = java.io.File.createTempFile("dict_url_", ".tmp", context.cacheDir)
                     try {
                         ToolHttp.download(url.trim(), temp, maxBytes = CustomDictionaries.MAX_BYTES)
-                        temp.inputStream().use { CustomDictionaries.import(context.filesDir, langId, name, it) }
+                        CustomDictionaries.ImportFile(name, temp.readBytes())
                     } finally {
                         temp.delete()
                     }
-                }.getOrElse { -1 }
+                }.getOrNull()
             }
-            busy = false
-            message = when {
-                result == -2 -> context.getString(R.string.customdict_url_scheme_error)
-                result < 0 -> context.getString(R.string.customdict_url_download_error)
-                result == 0 -> context.getString(R.string.customdict_import_empty_error)
-                else -> context.resources.getQuantityString(
-                    R.plurals.customdict_import_added_words,
-                    result,
-                    result,
-                    languageLabel(langId),
-                )
+            if (file == null) {
+                busy = false
+                message = context.getString(R.string.customdict_url_download_error)
+                return@launch
             }
-            if (result > 0) {
-                refresh()
-                repository.bumpCustomDictVersion()
-            }
+            importPicked(langId, listOf(file))
         }
     }
 
+    // Several files at once: a version 4 dictionary is a .header and a .body,
+    // and they have to be picked together.
     val importList = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocument(),
-    ) { uri ->
+        ActivityResultContracts.OpenMultipleDocuments(),
+    ) { uris ->
         val language = pending
         pending = null
-        if (uri == null || language == null) return@rememberLauncherForActivityResult
+        if (uris.isEmpty() || language == null) return@rememberLauncherForActivityResult
         busy = true
         scope.launch {
-            val result = withContext(Dispatchers.IO) {
+            // Null for a file past the size cap; an empty list for one that
+            // could not be read at all.
+            val files = withContext(Dispatchers.IO) {
                 runCatching {
-                    val name = context.contentResolver
-                        .query(uri, null, null, null, null)?.use { cursor ->
-                            val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                            if (index >= 0 && cursor.moveToFirst()) cursor.getString(index) else null
-                        } ?: "wordlist"
-                    val size = context.contentResolver
-                        .query(uri, null, null, null, null)?.use { cursor ->
-                            val index = cursor.getColumnIndex(OpenableColumns.SIZE)
-                            if (index >= 0 && cursor.moveToFirst()) cursor.getLong(index) else -1L
-                        } ?: -1L
-                    if (size > CustomDictionaries.MAX_BYTES) return@runCatching -1
-                    val stream = context.contentResolver.openInputStream(uri)
-                        ?: return@runCatching 0
-                    stream.use { CustomDictionaries.import(context.filesDir, language, name, it) }
-                }.getOrDefault(0)
+                    uris.map { uri ->
+                        val name = context.contentResolver
+                            .query(uri, null, null, null, null)?.use { cursor ->
+                                val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                                if (index >= 0 && cursor.moveToFirst()) cursor.getString(index) else null
+                            } ?: "wordlist"
+                        val size = context.contentResolver
+                            .query(uri, null, null, null, null)?.use { cursor ->
+                                val index = cursor.getColumnIndex(OpenableColumns.SIZE)
+                                if (index >= 0 && cursor.moveToFirst()) cursor.getLong(index) else -1L
+                            } ?: -1L
+                        if (size > CustomDictionaries.MAX_BYTES) return@runCatching null
+                        val bytes = context.contentResolver.openInputStream(uri)
+                            ?.use { CustomDictionaries.readCapped(it) }
+                            ?: return@runCatching null
+                        CustomDictionaries.ImportFile(name, bytes)
+                    }
+                }.getOrDefault(emptyList())
             }
-            busy = false
-            message = when {
-                result < 0 -> context.getString(R.string.customdict_import_too_large_error)
-                result == 0 -> context.getString(R.string.customdict_import_empty_error)
-                else -> context.resources.getQuantityString(
-                    R.plurals.customdict_import_added_words,
-                    result,
-                    result,
-                    languageLabel(language),
-                )
-            }
-            if (result > 0) {
-                refresh()
-                repository.bumpCustomDictVersion()
+            when {
+                files == null -> {
+                    busy = false
+                    message = context.getString(R.string.customdict_import_too_large_error)
+                }
+                files.isEmpty() -> {
+                    busy = false
+                    message = context.getString(R.string.customdict_import_empty_error)
+                }
+                else -> importPicked(language, files)
             }
         }
     }
@@ -227,11 +312,16 @@ internal fun CustomDictionarySettings(
                             subtitle = if (!enabled) {
                                 stringResource(R.string.customdict_list_off_subtitle)
                             } else {
-                                pluralStringResource(
-                                    R.plurals.customdict_word_count,
-                                    entry.words,
-                                    entry.words,
-                                )
+                                // A list imported for its pairs alone has no
+                                // words, and "0 words" first would say it is empty.
+                                listOfNotNull(
+                                    entry.words.takeIf { it > 0 || (entry.pairs == 0 && entry.shortcuts == 0) }
+                                        ?.let { pluralStringResource(R.plurals.customdict_word_count, it, it) },
+                                    entry.pairs.takeIf { it > 0 }
+                                        ?.let { pluralStringResource(R.plurals.customdict_pair_count, it, it) },
+                                    entry.shortcuts.takeIf { it > 0 }
+                                        ?.let { pluralStringResource(R.plurals.customdict_shortcut_count, it, it) },
+                                ).joinToString(" · ")
                             },
                             trailing = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -400,6 +490,25 @@ internal fun CustomDictionarySettings(
         )
     }
 
+    val pendingImport = choosing
+    if (pendingImport != null) {
+        ImportChoiceDialog(
+            candidates = pendingImport.candidates,
+            onDismiss = { choosing = null },
+        ) { parts ->
+            choosing = null
+            busy = true
+            scope.launch {
+                val written = withContext(Dispatchers.IO) {
+                    pendingImport.candidates.zip(parts).map { (candidate, chosen) ->
+                        CustomDictionaries.write(context.filesDir, pendingImport.langId, candidate, chosen)
+                    }.reduce { a, b -> a + b }
+                }
+                finishImport(pendingImport.langId, written)
+            }
+        }
+    }
+
     val urlLanguage = urlDialogFor
     if (urlLanguage != null) {
         var url by remember { mutableStateOf("") }
@@ -432,6 +541,120 @@ internal fun CustomDictionarySettings(
         )
     }
 }
+/**
+ * Asks which parts of each dictionary in a pick to import: its words, its
+ * word pairs, its shortcuts. Only the parts a dictionary has are offered, all
+ * checked, and Import stays off while nothing is.
+ */
+@Composable
+private fun ImportChoiceDialog(
+    candidates: List<CustomDictionaries.ImportCandidate>,
+    onDismiss: () -> Unit,
+    onImport: (List<CustomDictionaries.ImportParts>) -> Unit,
+) {
+    val parts = remember(candidates) {
+        mutableStateListOf(
+            *candidates.map {
+                CustomDictionaries.ImportParts(
+                    words = it.words.isNotEmpty(),
+                    pairs = it.ngrams.isNotEmpty(),
+                    shortcuts = it.shortcuts.isNotEmpty(),
+                )
+            }.toTypedArray(),
+        )
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.customdict_choose_title)) },
+        text = {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                candidates.forEachIndexed { index, candidate ->
+                    if (index > 0) Spacer(Modifier.height(16.dp))
+                    Text(
+                        candidate.name.substringAfterLast('/'),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                    candidate.description?.let {
+                        Text(it, style = MaterialTheme.typography.bodySmall)
+                    }
+                    candidate.locale?.let {
+                        Text(
+                            stringResource(R.string.customdict_choose_locale, it),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
+                    val chosen = parts[index]
+                    if (candidate.words.isNotEmpty()) {
+                        ImportPartRow(
+                            stringResource(R.string.customdict_choose_words),
+                            pluralStringResource(
+                                R.plurals.customdict_choose_words_detail,
+                                candidate.words.size,
+                                candidate.words.size,
+                            ),
+                            chosen.words,
+                        ) { parts[index] = chosen.copy(words = it) }
+                    }
+                    if (candidate.ngrams.isNotEmpty()) {
+                        ImportPartRow(
+                            stringResource(R.string.customdict_choose_pairs),
+                            pluralStringResource(
+                                R.plurals.customdict_choose_pairs_detail,
+                                candidate.ngrams.size,
+                                candidate.ngrams.size,
+                            ),
+                            chosen.pairs,
+                        ) { parts[index] = chosen.copy(pairs = it) }
+                    }
+                    if (candidate.shortcuts.isNotEmpty()) {
+                        ImportPartRow(
+                            stringResource(R.string.customdict_choose_shortcuts),
+                            pluralStringResource(
+                                R.plurals.customdict_choose_shortcuts_detail,
+                                candidate.shortcuts.size,
+                                candidate.shortcuts.size,
+                            ),
+                            chosen.shortcuts,
+                        ) { parts[index] = chosen.copy(shortcuts = it) }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                enabled = parts.any { it.words || it.pairs || it.shortcuts },
+                onClick = { onImport(parts.toList()) },
+            ) { Text(stringResource(CommonR.string.common_import)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_cancel)) }
+        },
+    )
+}
+
+/** One checkbox of [ImportChoiceDialog]: the whole row toggles it. */
+@Composable
+private fun ImportPartRow(title: String, detail: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .toggleable(value = checked, role = Role.Checkbox, onValueChange = onChange)
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Checkbox(checked = checked, onCheckedChange = null)
+        Spacer(Modifier.width(12.dp))
+        Column {
+            Text(title, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                detail,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
 // ---- emoji keyword packs ----
 
 /** One imported emoji pack: the file plus how many emoji it names. */

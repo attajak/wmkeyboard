@@ -719,7 +719,21 @@ internal object StorageCategories {
             pathsOf = { listOf(CustomDictionaries.root(it.files)) },
             itemsOf = { env ->
                 childrenOf(CustomDictionaries.root(env.roots.files)).flatMap { dir ->
-                    childrenOf(dir).map { file ->
+                    // A list and the word pairs and shortcuts beside it are one
+                    // item: deleting the list alone would strand them.
+                    val lists = CustomDictionaries.allLists(env.roots.files, dir.name)
+                    val owned = lists.associateWith { CustomDictionaries.filesOf(it) }
+                    val claimed = owned.values.flatten().toSet()
+                    val grouped = owned.map { (list, files) ->
+                        StorageItem(
+                            id = list.absolutePath,
+                            label = CustomDictionaries.displayName(list).substringBeforeLast('.'),
+                            detail = LanguageRegistry.byId(dir.name).displayName,
+                            bytes = files.sumOf { diskUsage(it, env.roots.blockSize) },
+                            files = files,
+                        )
+                    }
+                    grouped + childrenOf(dir).filter { it !in claimed }.map { file ->
                         StorageItem(
                             id = file.absolutePath,
                             label = file.nameWithoutExtension,

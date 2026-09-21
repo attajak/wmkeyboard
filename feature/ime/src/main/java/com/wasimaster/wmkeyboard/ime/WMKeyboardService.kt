@@ -1294,12 +1294,24 @@ open class WMKeyboardService : InputMethodService() {
      */
     @Volatile private var userDictShortcuts: Map<String, String> = emptyMap()
     /**
+     * Shortcuts that came with imported dictionaries, per language: lowercased
+     * trigger → expansion, from the switched-on lists only. Loaded with the
+     * lists in [loadCustomDictionaries]; not tied to
+     * [SuggestionStripSettings.expandUserDictShortcuts], because the user
+     * chose them at import and a list's own switch turns them off.
+     */
+    @Volatile private var importedShortcuts: Map<String, Map<String, String>> = emptyMap()
+    /** [activeImportedShortcuts]'s last answer and what it was built from. */
+    @Volatile private var activeShortcutsMemo: Triple<Map<String, Map<String, String>>, List<String>, Map<String, String>>? =
+        null
+    /**
      * What [syncGlideTriggers] last built [SuggestionEngine.glideTriggers]
      * from, compared by identity. Main thread only.
      */
     private var glideTriggersEngine: SuggestionEngine? = null
     private var glideTriggerSnippets: Set<String>? = null
     private var glideTriggerShortcuts: Map<String, String>? = null
+    private var glideTriggerImported: Map<String, String>? = null
     /**
      * [glideExpansionOf] for the words the current stroke has read, misses
      * included, so a snippet with choices is rolled once a stroke rather than
@@ -3337,6 +3349,11 @@ open class WMKeyboardService : InputMethodService() {
                     withContext(Dispatchers.Default) {
                         customDictionaries = loadCustomDictionaries()
                         suggestionEngine?.bengaliIndex = buildBengaliIndex()
+                        // A list's word pairs come and go with it.
+                        suggestionEngine?.let { engine ->
+                            engine.ngramPack = loadNgramPack(_uiState.value.language.id)
+                            if (engine.englishAsSecondary) engine.secondaryEnglishNgramPack = loadNgramPack("en")
+                        }
                     }
                 }
                 customDictVersion = settings.customDictVersion
@@ -14055,13 +14072,8 @@ open class WMKeyboardService : InputMethodService() {
                 // A28: a personal-dictionary shortcut typed in full offers its
                 // expansion as the top chip (e.g. "omw" → "on my way"). Prepended
                 // so it wins the primary slot; deduped against the word list.
-                val shortcut = if (
-                    state.settings.suggestionStrip.expandUserDictShortcuts && typed.isNotEmpty()
-                ) {
-                    userDictShortcuts[typed.lowercase()]
-                } else {
-                    null
-                }
+                // An imported dictionary's shortcuts ride the same chip.
+                val shortcut = if (typed.isNotEmpty()) shortcutExpansion(state, typed) else null
                 fun withShortcut(list: List<String>) = shortcut
                     ?.let { listOf(it) + list.filterNot { w -> w == it } }
                     ?: list
@@ -16356,15 +16368,17 @@ open class WMKeyboardService : InputMethodService() {
         } else {
             emptyMap()
         }
+        val imported = activeImportedShortcuts()
         if (engine === glideTriggersEngine && snippets === glideTriggerSnippets &&
-            shortcuts === glideTriggerShortcuts
+            shortcuts === glideTriggerShortcuts && imported === glideTriggerImported
         ) {
             return
         }
         glideTriggersEngine = engine
         glideTriggerSnippets = snippets
         glideTriggerShortcuts = shortcuts
-        engine.glideTriggers = SuggestionEngine.triggerSource(snippets + shortcuts.keys)
+        glideTriggerImported = imported
+        engine.glideTriggers = SuggestionEngine.triggerSource(snippets + shortcuts.keys + imported.keys)
     }
 
     /** Whether a glided trigger expands at all: not under a transliterating or converting composer. */
@@ -16375,10 +16389,37 @@ open class WMKeyboardService : InputMethodService() {
     private fun glidedSnippet(word: String): Snippet? =
         snippetStore.matchTrigger(word)?.takeIf { !snippetStore.offers(it) }
 
-    /** The personal-dictionary phrase a glided [word] expands to, or null. */
-    private fun glidedShortcut(state: KeyboardUiState, word: String): String? =
-        userDictShortcuts[word.lowercase()]
-            ?.takeIf { state.settings.suggestionStrip.expandUserDictShortcuts }
+    /** The shortcut phrase a glided [word] expands to, or null. */
+    private fun glidedShortcut(state: KeyboardUiState, word: String): String? = shortcutExpansion(state, word)
+
+    /**
+     * What typing [word] in full offers as a shortcut: the personal
+     * dictionary's (A28) when that setting is on, else an imported
+     * dictionary's for a language feeding the strip.
+     */
+    private fun shortcutExpansion(state: KeyboardUiState, word: String): String? {
+        val key = word.lowercase()
+        if (state.settings.suggestionStrip.expandUserDictShortcuts) userDictShortcuts[key]?.let { return it }
+        return activeImportedShortcuts()[key]
+    }
+
+    /**
+     * [importedShortcuts] for the languages feeding the strip, merged with the
+     * one on screen winning. The same object comes back until either input
+     * changes, which is what lets [syncGlideTriggers] skip its rebuild.
+     */
+    private fun activeImportedShortcuts(): Map<String, String> {
+        val all = importedShortcuts
+        if (all.isEmpty()) return emptyMap()
+        val langs = stripListLanguages()
+        activeShortcutsMemo?.let { (from, forLangs, merged) ->
+            if (from === all && forLangs == langs) return merged
+        }
+        val merged = HashMap<String, String>()
+        for (id in langs.asReversed()) all[id]?.let(merged::putAll)
+        activeShortcutsMemo = Triple(all, langs, merged)
+        return merged
+    }
 
     /**
      * What a lift would type for each of [words] that is a trigger, keyed by
@@ -27700,9 +27741,13 @@ open class WMKeyboardService : InputMethodService() {
         // the words that shipped with the app.
         if (!userUnlocked) {
             importedLists = emptyMap()
+            importedShortcuts = emptyMap()
             return emptyMap()
         }
         CustomDictionaries.migrateLegacyFolders(filesDir)
+        importedShortcuts = CustomDictionaries.languagesWithLists(filesDir)
+            .associateWith { CustomDictionaries.shortcuts(filesDir, it) }
+            .filterValues { it.isNotEmpty() }
         val imported = HashMap<String, WordSource>()
         val sources = LanguageRegistry.all.associate { lang ->
             lang.id to loadCustomDictionary(lang.id, imported)
@@ -27958,18 +28003,24 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
-     * The downloaded n-gram pack for [langId], or EMPTY while locked or not
-     * yet downloaded. mmap-backed: opening is one map call, no heap.
+     * The downloaded n-gram pack for [langId] with the word pairs of its
+     * switched-on imported lists, or EMPTY while locked or when there is
+     * neither. mmap-backed: opening is one map call a pack, no heap.
      */
     /** The word-pair switches [loadNgramPack] last answered for. */
     private var loadedWordPairsOff: Set<String> = emptySet()
 
     private fun loadNgramPack(langId: String): NgramPack {
         if (!userUnlocked) return NgramPack.EMPTY
-        if (!_uiState.value.settings.suggestionStrip.wordPairsEnabledFor(langId)) return NgramPack.EMPTY
-        return NgramPack.of(
-            MappedNgramPack.open(NgramPackDownloadManager.packFile(filesDir, langId)),
-        )
+        // The checkbox is the download's. The word pairs an imported
+        // dictionary brought follow that list's own switch instead.
+        val downloaded = if (_uiState.value.settings.suggestionStrip.wordPairsEnabledFor(langId)) {
+            MappedNgramPack.open(NgramPackDownloadManager.packFile(filesDir, langId))
+        } else {
+            null
+        }
+        val imported = CustomDictionaries.pairPacks(filesDir, langId).map { MappedNgramPack.open(it) }
+        return NgramPack.of(listOf(downloaded) + imported)
     }
 
     /**

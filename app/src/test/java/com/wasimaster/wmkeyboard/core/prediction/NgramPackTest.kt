@@ -47,6 +47,30 @@ class NgramPackTest {
     private fun pack(): NgramPack = NgramPack.of(mapped())
 
     @Test
+    fun severalPacksReadAsOneWithTheStrongestCountWinning() {
+        // A download plus an imported dictionary's pairs: the same pair in
+        // both is the same evidence twice, so the count is the larger, not
+        // the sum, and followers are ranked across both.
+        val download = compile("download.wmng") {
+            addBigram("of", "the", 5000)
+            addBigram("of", "a", 3000)
+        }
+        val imported = compile("imported.wmng") {
+            addBigram("of", "the", 800)
+            addBigram("of", "course", 4000)
+            addTrigram("one", "of", "us", 70)
+        }
+        val p = NgramPack.of(listOf(download, null, imported))
+        assertFalse(p.isEmpty)
+        assertEquals(5000.0, p.bigramCount("of", "the").toDouble(), 5000 * 0.001)
+        assertEquals(4000.0, p.bigramCount("of", "course").toDouble(), 4000 * 0.001)
+        assertEquals(listOf("the", "course", "a"), p.nextWords("of", 5))
+        assertEquals(listOf("the", "course"), p.nextWords("of", 2))
+        assertEquals(listOf("us"), p.nextWordsAfter("one", "of", 5))
+        assertTrue(NgramPack.of(listOf<MappedNgramPack?>(null)).isEmpty)
+    }
+
+    @Test
     fun countsAndFollowersRoundTrip() {
         val p = pack()
         // Counts are stored as minifloats, so they come back within 0.1% of

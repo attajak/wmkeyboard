@@ -111,7 +111,7 @@ object DictionaryLoader {
      * survive the move — a straight copy would sink every imported word below
      * every bundled one.
      */
-    internal fun scaleAospFrequency(f: Int): Int =
+    fun scaleAospFrequency(f: Int): Int =
         (f.coerceIn(0, MAX_COMBINED_FREQUENCY) * MAX_LOCAL_FREQUENCY / MAX_COMBINED_FREQUENCY)
             .coerceAtLeast(1)
 
