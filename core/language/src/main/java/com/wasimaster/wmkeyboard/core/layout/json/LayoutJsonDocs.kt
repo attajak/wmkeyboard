@@ -60,6 +60,8 @@ object LayoutJsonDocs {
         "LayerSpec.rows" to "The rows of keys, top to bottom. Each row is a list of keys, left to right.",
         "LayerSpec.numberRow" to
             "The number row above this grid, when that setting is on. Leave it out for the digits the layer always shows.",
+        "LayerSpec.fillRow" to
+            "On the symbols layer, the row shown in place of the digit row while the number row is on. Leave it out for = \\ < > [ ] { } | ~.",
         "LayerSpec.rowHeights" to "A height for each row, in the order of rows. 1 is the standard height, and a row with no entry is 1.",
         "LayerSpec.fontScale" to
             "This layer's own label size, in place of the layout's. Useful for a symbols page that stays small while the letters grow.",

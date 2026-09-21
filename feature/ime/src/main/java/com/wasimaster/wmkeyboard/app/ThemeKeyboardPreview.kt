@@ -65,6 +65,7 @@ import com.wasimaster.wmkeyboard.core.layout.compile
 import com.wasimaster.wmkeyboard.core.layout.composerType
 import com.wasimaster.wmkeyboard.core.layout.expandForTablet
 import com.wasimaster.wmkeyboard.core.layout.language
+import com.wasimaster.wmkeyboard.core.layout.fillRowFor
 import com.wasimaster.wmkeyboard.core.layout.numberRowFor
 import com.wasimaster.wmkeyboard.core.layout.panelLayers
 import com.wasimaster.wmkeyboard.core.layout.repair
@@ -395,6 +396,7 @@ private fun previewLayoutSet(
             safe.numberRowFor(LayoutLayer.SYMBOLS_SHIFTED)?.let { put(LayoutMode.SYMBOLS_SHIFTED, it) }
             safe.numberRowFor(LayoutLayer.FN)?.let { put(LayoutMode.FN, it) }
         },
+        symbolsFillRow = safe.fillRowFor(LayoutLayer.SYMBOLS),
         gridWidth = gridWidth,
         themeId = safe.themeId,
         secondaries = secondaryLayouts(customs).associate { secondary ->

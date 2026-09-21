@@ -473,6 +473,7 @@ import com.wasimaster.wmkeyboard.core.layout.ModifierKey
 import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.commitsNoText
+import com.wasimaster.wmkeyboard.core.layout.fillRowFor
 import com.wasimaster.wmkeyboard.core.layout.numberRowFor
 import com.wasimaster.wmkeyboard.core.layout.opensAlternatesPopup
 import com.wasimaster.wmkeyboard.core.layout.repair
@@ -9548,6 +9549,7 @@ open class WMKeyboardService : InputMethodService() {
                     ?.let { put(LayoutMode.SYMBOLS_SHIFTED, it) }
                 safe.numberRowFor(LayoutLayer.FN)?.let { put(LayoutMode.FN, it) }
             },
+            symbolsFillRow = safe.fillRowFor(LayoutLayer.SYMBOLS),
             gridWidth = gridWidth,
             secondaries = secondaries,
             themeId = safe.themeId,

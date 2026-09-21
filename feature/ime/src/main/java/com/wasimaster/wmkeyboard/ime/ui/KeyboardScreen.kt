@@ -491,7 +491,8 @@ import com.wasimaster.wmkeyboard.core.layout.rowScaledKeyHeight
 import com.wasimaster.wmkeyboard.core.layout.sidePadFor
 import com.wasimaster.wmkeyboard.core.layout.spanBands
 import com.wasimaster.wmkeyboard.core.layout.spanSlots
-import com.wasimaster.wmkeyboard.core.layout.Layouts
+import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
+import com.wasimaster.wmkeyboard.core.layout.leadsWithDigitRow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -11756,33 +11757,6 @@ internal fun DrawScope.drawTrailBand(
 }
 
 /**
- * Takes the place of the `?123` layer's own digit row when the number row is
- * on and already supplies those digits one row above. Carries the symbols
- * that layer has nowhere else to put.
- */
-private val SymbolsFillRow = listOf("=", "\\", "<", ">", "[", "]", "{", "}", "|", "~")
-    .map { Key(it) }
-
-/**
- * Replaces the digit number row while the symbols-2 (`=\<`) layer is showing.
- * The digits are one tap away on the symbols-1 layer, so this slot carries an
- * extra set of arrow and comparison symbols the symbol layers have no room for
- * rather than a second copy of the numbers.
- */
-private val SymbolsShiftedFillRow = listOf(
-    Key("←", longPress = listOf("⟵", "↔")),
-    Key("→", longPress = listOf("⟶", "↦")),
-    Key("↑", longPress = listOf("↕")),
-    Key("↓"),
-    Key("±", longPress = listOf("∓")),
-    Key("∞"),
-    Key("≈", longPress = listOf("≅", "≡")),
-    Key("≠"),
-    Key("≤", longPress = listOf("≪")),
-    Key("≥", longPress = listOf("≫")),
-)
-
-/**
  * Marks the key grid so a UI test can ask whether it is on screen at all.
  *
  * Several panels take the keys away from the user's field and are expected to
@@ -14161,16 +14135,14 @@ private fun KeyRows(
                         }
                     }
                 }
-            val bodyRows = remember(layout, mode, symbolsGiveUpDigits) {
+            val fillRow = state.layouts.symbolsFillRow ?: BuiltInLayouts.SYMBOLS_FILL_ROW
+            val bodyRows = remember(layout, mode, symbolsGiveUpDigits, fillRow) {
                 // Only when that first row really is the digits. A custom
                 // symbols layer that leads with something else would otherwise
                 // lose its top row outright, with nothing on screen to explain
                 // where it went.
-                val leadsWithDigits = layout.rows.firstOrNull()
-                    ?.all { it.action == KeyAction.Text && (it.output ?: it.label).isSingleDigit() }
-                    ?: false
-                if (symbolsGiveUpDigits && mode == LayoutMode.SYMBOLS && leadsWithDigits) {
-                    listOf(SymbolsFillRow) + layout.rows.drop(1)
+                if (symbolsGiveUpDigits && mode == LayoutMode.SYMBOLS && leadsWithDigitRow(layout.rows)) {
+                    listOf(fillRow) + layout.rows.drop(1)
                 } else {
                     layout.rows
                 }
@@ -14203,6 +14175,7 @@ private fun KeyRows(
                     state.layoutMode,
                     state.shiftState,
                     shiftSymbols,
+                    fillRow,
                     tabletRow,
                 ) {
                     val base = authored ?: when {
@@ -14217,15 +14190,15 @@ private fun KeyRows(
                                 .map { Key(it) }
                         // Symbols-2 reuses the number-row slot for the arrow and
                         // comparison symbols it has nowhere else to put.
-                        state.layoutMode == LayoutMode.SYMBOLS_SHIFTED -> SymbolsShiftedFillRow
+                        state.layoutMode == LayoutMode.SYMBOLS_SHIFTED ->
+                            BuiltInLayouts.defaultNumberRow(LayoutLayer.SYMBOLS_SHIFTED)
                         // Opt-in: holding shift on the letters layer turns the
                         // digits into the symbol layer's bracket/math fill row,
                         // so symbols are reachable without switching layers.
                         state.layoutMode == LayoutMode.LETTERS &&
-                            state.shiftState != ShiftState.OFF && shiftSymbols -> SymbolsFillRow
-                        // Borrowed from the symbol layer so the digits carry
-                        // their fraction and superscript long-presses here too.
-                        else -> Layouts.SYMBOLS.rows.first()
+                            state.shiftState != ShiftState.OFF && shiftSymbols -> fillRow
+                        // The digits, with the symbol layer's long-presses.
+                        else -> BuiltInLayouts.defaultNumberRow(LayoutLayer.LETTERS)
                     }
                     if (tabletRow) base.expandNumberRowForTablet() else base
                 }

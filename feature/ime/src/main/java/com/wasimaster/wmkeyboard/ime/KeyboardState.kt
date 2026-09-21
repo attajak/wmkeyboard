@@ -274,6 +274,12 @@ data class LayoutSet(
      */
     val numberRows: Map<LayoutMode, List<Key>> = emptyMap(),
     /**
+     * The row the symbols layer draws in place of its own digit row while the
+     * number row is on, when this layout authored one; null takes
+     * [com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts.SYMBOLS_FILL_ROW].
+     */
+    val symbolsFillRow: List<Key>? = null,
+    /**
      * The column count these grids were laid out against, when the tablet
      * expansion widened them; null on a phone and on any layout that declined it.
      *

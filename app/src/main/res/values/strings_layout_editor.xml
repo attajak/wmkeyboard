@@ -133,6 +133,15 @@
 
     <string name="layout_editor_add_row_title">Add a row</string>
     <string name="layout_editor_add_row_subtitle">Adds an empty row at the end of this layer</string>
+    <string name="layout_editor_number_row_title">Number row</string>
+    <string name="layout_editor_number_row_caption">The keyboard shows this row above this layer. Tap a key to change it. Hold a key and drag it to move it.</string>
+    <string name="layout_editor_number_row_off_caption">The keyboard shows this row above this layer when Number row is on in Layout and size. Number row is off now.</string>
+    <string name="layout_editor_number_row_hidden_caption">The keyboard shows this row above this layer when Number row in symbols is on in Layout and size. It is off now.</string>
+    <string name="layout_editor_fill_row_title">Row in place of the digits</string>
+    <string name="layout_editor_fill_row_caption">The number row already shows the digits, so the keyboard shows this row in place of the first row of this layer.</string>
+    <string name="layout_editor_fill_row_off_caption">When Number row is on, the keyboard shows this row in place of the first row of this layer, because the number row already shows the digits. Number row is off now.</string>
+    <string name="layout_editor_extra_row_add_key_desc">Add a key to this row</string>
+    <string name="layout_editor_extra_row_reset">Use the standard row</string>
     <string name="layout_editor_reorder_rows_title">Reorder rows</string>
     <string name="layout_editor_row_order_dialog_title">Row order</string>
     <!-- %1$d is the number of the row, counted from 1. -->

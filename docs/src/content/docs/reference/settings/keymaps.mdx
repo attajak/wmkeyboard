@@ -100,6 +100,12 @@ Below the grid:
 | Edit as JSON | Opens [Layout JSON](#the-raw-json-editor) for this same layout |
 | Reset this layer | Only shown once the current layer is authored. Drops it back to the built-in grid |
 
+#### The number row and the row in place of the digits
+
+The keyboard draws one row above the grid rather than in it: the **number row**. On Letters and Symbols it holds the digits; on Symbols 2 it holds arrows and comparison signs (`← → ↑ ↓ ± ∞ ≈ ≠ ≤ ≥`). While the number row is on, the Symbols layer also gives up its own digit row, which would be a second copy directly under it, and shows `= \ < > [ ] { } | ~` there instead.
+
+Neither row is part of the grid, so each gets a small preview of its own under the row settings: **Number row** on Letters, Symbols, Symbols 2 and an authored Fn layer, and **Row in place of the digits** on Symbols (only while that layer's first row is the digits). Tap a key to open the same edit sheet, hold and drag a key to move it along the row, and use the **+** button to add a key. The first change stores the row in this layer (`numberRow`, and `fillRow` for the Symbols stand-in), and **Use the standard row** puts it back. A caption under each title says when the keyboard shows the row, and says so if [Number row or Number row in symbols](/reference/settings/layout/#number-row) is off.
+
 A closing caption sits under the whole screen, and which one you get depends on the layout. A layout that isn't switched on yet gets "Your changes here do not affect typing until you turn the layout on under Languages." A secondary layout gets "This layout is live as soon as a key or the Secondary layout tool opens it. It does not appear under Languages." A layout that *is* on gets the opposite. It's live while you edit it, so your changes reach typing straight away, and the caption adds that the keyboard puts a delete, space or enter key back if you remove the last one.
 
 ### The key edit sheet

@@ -70,6 +70,21 @@ private fun LayoutSpec.appearanceFor(layer: LayerSpec): LayoutAppearance? {
 /** The number row this layout shows above [layer], or null to use the default. */
 fun LayoutSpec.numberRowFor(layer: LayoutLayer): List<Key>? = layer(layer)?.numberRow
 
+/** The row this layout draws in place of [layer]'s digit row, or null for the default. */
+fun LayoutSpec.fillRowFor(layer: LayoutLayer): List<Key>? = layer(layer)?.fillRow
+
+/**
+ * Whether [rows] opens with a row of plain digit keys: the row the symbols
+ * layer gives up to its fill row while the number row shows the same digits.
+ * Only then, so a custom symbols layer that leads with something else keeps
+ * its top row.
+ */
+fun leadsWithDigitRow(rows: List<List<Key>>): Boolean =
+    rows.firstOrNull()?.all { key ->
+        val text = key.output ?: key.label
+        key.action == KeyAction.Text && text.length == 1 && text[0].isDigit()
+    } ?: false
+
 private val compileCache =
     HashMap<Pair<String, LayoutLayer>, Pair<LayoutSpec, KeyboardLayout>>()
 

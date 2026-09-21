@@ -151,6 +151,7 @@ import com.wasimaster.wmkeyboard.core.layout.panelLayer
 import com.wasimaster.wmkeyboard.core.layout.resolvePanelLayout
 import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
+import com.wasimaster.wmkeyboard.core.layout.leadsWithDigitRow
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.json.LayoutJsonRoot
 import com.wasimaster.wmkeyboard.core.layout.language
@@ -2215,6 +2216,71 @@ internal fun KeyLayoutEditorScreen(
         }
     }
 
+    // Issue #273: the rows the keyboard draws around this grid rather than in
+    // it. The number row above every cycled layer, and on the symbols layer
+    // the row that stands in for its digits while the number row shows them.
+    // Both were built into the keyboard, so they typed and could not be
+    // changed; now they are this layer's own, edited like any other row.
+    // Not on an unauthored Fn layer: there is no grid there to sit above, and
+    // the first edit would author an empty one.
+    val extraRows = panelKind == null && !secondary && layer.isCycled &&
+        (layer != LayoutLayer.FN || layout.layer(layer) != null)
+    if (extraRows) {
+        val layerSpec = layout.layer(layer)
+        val shownHere = (layer != LayoutLayer.SYMBOLS && layer != LayoutLayer.SYMBOLS_SHIFTED) ||
+            settings.layoutBehavior.numberRowInSymbols
+        ExtraRowEditor(
+            title = stringResource(R.string.layout_editor_number_row_title),
+            caption = stringResource(
+                when {
+                    !settings.numberRow -> R.string.layout_editor_number_row_off_caption
+                    !shownHere -> R.string.layout_editor_number_row_hidden_caption
+                    else -> R.string.layout_editor_number_row_caption
+                },
+            ),
+            row = layerSpec?.numberRow ?: BuiltInLayouts.defaultNumberRow(layer),
+            authored = layerSpec?.numberRow != null,
+            layout = compiled,
+            settings = settings,
+            selectionKey = "number/$layoutId/${layer.key}",
+            edit = { transform ->
+                editLayer { it.copy(numberRow = transform(it.numberRow ?: BuiltInLayouts.defaultNumberRow(layer))) }
+            },
+            editCoalesced = { transform ->
+                editLayerCoalesced {
+                    it.copy(numberRow = transform(it.numberRow ?: BuiltInLayouts.defaultNumberRow(layer)))
+                }
+            },
+            onReset = { editLayer { it.copy(numberRow = null) } },
+            secondaryLayouts = secondaryLayouts(settings.customLayouts),
+        )
+        if (layer == LayoutLayer.SYMBOLS && leadsWithDigitRow(rows)) {
+            ExtraRowEditor(
+                title = stringResource(R.string.layout_editor_fill_row_title),
+                caption = stringResource(
+                    if (settings.numberRow) {
+                        R.string.layout_editor_fill_row_caption
+                    } else {
+                        R.string.layout_editor_fill_row_off_caption
+                    },
+                ),
+                row = layerSpec?.fillRow ?: BuiltInLayouts.SYMBOLS_FILL_ROW,
+                authored = layerSpec?.fillRow != null,
+                layout = compiled,
+                settings = settings,
+                selectionKey = "fill/$layoutId",
+                edit = { transform ->
+                    editLayer { it.copy(fillRow = transform(it.fillRow ?: BuiltInLayouts.SYMBOLS_FILL_ROW)) }
+                },
+                editCoalesced = { transform ->
+                    editLayerCoalesced { it.copy(fillRow = transform(it.fillRow ?: BuiltInLayouts.SYMBOLS_FILL_ROW)) }
+                },
+                onReset = { editLayer { it.copy(fillRow = null) } },
+                secondaryLayouts = secondaryLayouts(settings.customLayouts),
+            )
+        }
+    }
+
     val findings = validateLayout(layout)
     if (findings.isNotEmpty()) {
         SettingsGroup(stringResource(R.string.layout_editor_problems_title)) {
@@ -2337,6 +2403,128 @@ internal fun KeyLayoutEditorScreen(
             },
             onDismiss = { sheetOpen = false },
             secondaryLayouts = secondaryLayouts(settings.customLayouts),
+        )
+    }
+}
+
+/**
+ * One row the keyboard draws next to a layer's grid rather than in it — the
+ * number row, or the symbols layer's stand-in for its digits (issue #273) —
+ * previewed and edited on its own.
+ *
+ * A grid of its own rather than extra rows in the main preview, because every
+ * row tool up there (add, duplicate, delete, reorder, a key moved across rows)
+ * addresses the layer's rows by index, and none of them means anything for a
+ * row the layer does not hold. Here a key can be changed, moved along the row,
+ * duplicated and deleted, and the row can gain a key or go back to the one the
+ * keyboard ships.
+ *
+ * [edit] and [editCoalesced] hand over the row as stored — the layer's own, or
+ * the default it still follows — for the same staleness reason the main grid's
+ * edits do.
+ */
+@Composable
+private fun ExtraRowEditor(
+    title: String,
+    caption: String,
+    row: List<Key>,
+    authored: Boolean,
+    layout: KeyboardLayout,
+    settings: KeyboardSettings,
+    selectionKey: String,
+    edit: ((List<Key>) -> List<Key>) -> Unit,
+    editCoalesced: ((List<Key>) -> List<Key>) -> Unit,
+    onReset: () -> Unit,
+    secondaryLayouts: List<LayoutSpec>,
+) {
+    var selectedCol by remember(selectionKey) { mutableStateOf<Int?>(null) }
+    var sheetOpen by remember(selectionKey) { mutableStateOf(false) }
+    val rows = listOf(row)
+    SectionHeaderPublic(title)
+    CaptionText(caption)
+    EditorGrid(
+        layout = layout.copy(rows = rows, rowHeights = null),
+        settings = settings,
+        selection = selectedCol?.let { KeyRef(0, it) },
+        showShift = false,
+        actualSize = false,
+        onSelect = { ref ->
+            selectedCol = ref.col
+            sheetOpen = true
+        },
+        onKeyDragged = { from, to ->
+            edit { moveKeyIn(listOf(it), from, to).first() }
+            selectedCol = to.col
+        },
+    )
+    Row(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(onClick = { edit { it + Key("new") } }) {
+            Icon(
+                Icons.Outlined.Add,
+                contentDescription = stringResource(R.string.layout_editor_extra_row_add_key_desc),
+            )
+        }
+        Spacer(Modifier.weight(1f))
+        if (authored) {
+            TextButton(
+                onClick = {
+                    onReset()
+                    selectedCol = null
+                    sheetOpen = false
+                },
+            ) {
+                Text(stringResource(R.string.layout_editor_extra_row_reset))
+            }
+        }
+    }
+
+    val col = selectedCol
+    val key = col?.let { row.getOrNull(it) }
+    if (sheetOpen && col != null && key != null) {
+        KeyEditSheet(
+            key = key,
+            ref = KeyRef(0, col),
+            rowSize = row.size,
+            rowCount = 1,
+            gridWeight = gridWeightOf(rows),
+            otherWidthsInRow = row.sumOf { it.width.toDouble() }.toFloat() - key.width,
+            onChange = { change ->
+                editCoalesced { stored -> stored.mapIndexed { c, k -> if (c == col) change(k) else k } }
+            },
+            onMove = { delta ->
+                val target = col + delta
+                if (target in row.indices) {
+                    edit { stored ->
+                        if (col in stored.indices && target in stored.indices) {
+                            stored.toMutableList().apply { add(target, removeAt(col)) }
+                        } else {
+                            stored
+                        }
+                    }
+                    selectedCol = target
+                }
+            },
+            // One row: the sheet's up and down arrows are off at rowCount 1.
+            onMoveRow = {},
+            onDuplicate = {
+                edit { stored ->
+                    if (col in stored.indices) {
+                        stored.subList(0, col + 1) + stored[col] + stored.drop(col + 1)
+                    } else {
+                        stored
+                    }
+                }
+            },
+            onDelete = {
+                edit { stored -> stored.filterIndexed { c, _ -> c != col } }
+                selectedCol = null
+                sheetOpen = false
+            },
+            onDismiss = { sheetOpen = false },
+            secondaryLayouts = secondaryLayouts,
         )
     }
 }

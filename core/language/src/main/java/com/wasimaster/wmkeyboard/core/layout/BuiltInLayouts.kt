@@ -399,6 +399,44 @@ object BuiltInLayouts {
     )
 
     /**
+     * Takes the place of the `?123` layer's own digit row when the number row
+     * is on and already supplies those digits one row above. Carries the
+     * symbols that layer has nowhere else to put. A layout overrides it with
+     * [LayerSpec.fillRow].
+     */
+    val SYMBOLS_FILL_ROW: List<Key> = listOf("=", "\\", "<", ">", "[", "]", "{", "}", "|", "~")
+        .map { Key(it) }
+
+    /**
+     * The number row while the symbols-2 (`=\<`) layer is showing. The digits
+     * are one tap away on the symbols-1 layer, so this slot carries an extra
+     * set of arrow and comparison symbols the symbol layers have no room for
+     * rather than a second copy of the numbers.
+     */
+    val SYMBOLS_2_NUMBER_ROW: List<Key> = listOf(
+        Key("←", longPress = listOf("⟵", "↔")),
+        Key("→", longPress = listOf("⟶", "↦")),
+        Key("↑", longPress = listOf("↕")),
+        Key("↓"),
+        Key("±", longPress = listOf("∓")),
+        Key("∞"),
+        Key("≈", longPress = listOf("≅", "≡")),
+        Key("≠"),
+        Key("≤", longPress = listOf("≪")),
+        Key("≥", longPress = listOf("≫")),
+    )
+
+    /**
+     * The number row [layer] shows when the layout has not authored one
+     * ([LayerSpec.numberRow]). The digits are borrowed from the symbol layer
+     * so they carry its fraction and superscript long-presses.
+     */
+    fun defaultNumberRow(layer: LayoutLayer): List<Key> = when (layer) {
+        LayoutLayer.SYMBOLS_SHIFTED -> SYMBOLS_2_NUMBER_ROW
+        else -> default.compile(LayoutLayer.SYMBOLS).rows.first()
+    }
+
+    /**
      * What a fresh install starts with before onboarding or the language screen
      * has said otherwise: one layout per language, English and Bengali.
      *

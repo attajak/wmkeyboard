@@ -55,13 +55,23 @@ enum class LayoutLayer(val key: String) {
  * `{"letters": {"rows": [...]}}` is readable where `{"letters": [[...]]}` is
  * three levels of anonymous brackets.
  *
- * A null [numberRow] takes the digits the layer has always shown — see
- * `KeyRows`, which owns the per-layer defaults.
+ * A null [numberRow] takes the row the layer has always shown there — see
+ * [BuiltInLayouts.defaultNumberRow].
  */
 @Serializable
 data class LayerSpec(
     val rows: List<List<Key>>,
     val numberRow: List<Key>? = null,
+    /**
+     * The row drawn in place of this grid's own leading digit row while the
+     * number row is on, when that row already shows the same digits one row
+     * up. Only the symbols layer does this; the field is ignored elsewhere.
+     *
+     * Null takes [BuiltInLayouts.SYMBOLS_FILL_ROW]. Stored rather than left
+     * built in because the swap put a row on the keyboard that no editor
+     * could reach (issue #273).
+     */
+    val fillRow: List<Key>? = null,
     /**
      * Optional per-row height multipliers, one per entry in [rows] (index
      * aligned). Null — the normal case — keeps every row at the standard key
