@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">Múi giờ</string>
     <string name="core_content_selection_macro_to_bangla">Tiếng Bengal</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_to_hindi">Tiếng Hindi</string>
+    <string name="core_content_selection_macro_to_hinglish">Hinglish</string>
     <string name="core_content_selection_macro_translate">Dịch</string>
     <string name="core_content_selection_macro_url_decode">Giải mã</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

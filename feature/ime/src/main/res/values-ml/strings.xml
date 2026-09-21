@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">കീബോർഡ് മാറ്റുക</string>
     <string name="ime_controls_title">കീബോർഡ് നിയന്ത്രണങ്ങൾ</string>
     <string name="ime_controls_unpin">അൺപിൻ ചെയ്യുക</string>
+    <string name="ime_conversion_pack_offer">അക്ഷരങ്ങൾ ടൈപ്പ് ചെയ്യാൻ %1$s ഡൗൺലോഡ് ചെയ്യുക</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">ഒഴിവാക്കുക</string>
     <string name="ime_converter_from_label">ഇതിൽ നിന്ന്</string>
     <string name="ime_converter_to_label">ലേക്ക്</string>
     <string name="ime_currency_insert_action">ഇൻസേർട്ട് ചെയ്യുക</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">സെപ്പറേറ്റർ: %1$s</string>
     <string name="ime_password_tab_passphrase">പാസ്‌ഫ്രെയ്‌സ്</string>
     <string name="ime_password_words_label">വാക്കുകൾ</string>
+    <string name="ime_phonetic_word_list_offer">മികച്ച വാക്കുകൾക്കായി %1$s വേഡ് ലിസ്റ്റ് നേടുക</string>
     <string name="ime_plugin_empty_body">ഒരു പ്ലഗിൻ എന്നത് ഒരു സാൻഡ്‌ബോക്സിലെ ചെറിയൊരു ടൂളാണ്. നിങ്ങൾക്ക് ഒരു ആഡ്-ഓൺ റിപ്പോസിറ്ററിയിൽ നിന്നോ .wmplugin ഫയലിൽ നിന്നോ പ്ലഗിനുകൾ ചേർക്കാം. നിങ്ങൾ ടൈപ്പ് ചെയ്യുന്നത് കാണാൻ ഒരു പ്ലഗിന്നിന് കഴിയില്ല.</string>
     <string name="ime_plugin_empty_title">പ്ലഗിനുകളൊന്നുമില്ല</string>
     <string name="ime_plugin_manage_action">പ്ലഗിനുകൾ നിയന്ത്രിക്കുക</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">മറ്റ് പൊരുത്തങ്ങളൊന്നുമില്ല</string>
     <string name="ime_selection_macro_grammar_clean_toast">ശരിയാക്കാൻ ഒന്നുമില്ല</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">ഗ്രാമർ ചെക്കർ ലഭ്യമല്ല</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">ഹിന്ദി ഫോണറ്റിക് ലോഡ് ചെയ്തിട്ടില്ല</string>
     <string name="ime_selection_macro_no_app_toast">ഇത് തുറക്കാൻ ഒരു ആപ്പും ലഭ്യമല്ല</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">അൺഡൂ ചെയ്യാൻ ഒന്നുമില്ല</string>
     <string name="ime_selection_macro_stop_label">നിർത്തുക</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">കീബോർഡിന് ഫലങ്ങൾ ലഭിക്കുന്നില്ല</string>
     <string name="ime_service_mode_tool_order_toast">%1$s മോഡിനായി കീബോർഡ് ടൂൾ ക്രമം സംരക്ഷിച്ചു. മറ്റ് ആപ്പുകൾ അവരുടേതായ ക്രമം നിലനിർത്തുന്നു.</string>
     <string name="ime_service_no_email_app_toast">ഈ ഉപകരണത്തിൽ ഇമെയിൽ ആപ്പ് ഇല്ല. %1$s-ലേക്ക് റിപ്പോർട്ടുകൾ അയക്കുക.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">അവ്‌റോ (Avro), ഹിന്ദി ഫോണറ്റിക് എന്നിവയ്ക്ക് മാത്രം</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">ഭാഷകൾക്ക് കീഴിൽ ഇംഗ്ലീഷ് ഓൺ ചെയ്യുക, %1$s, കൂടാതെ ഇതിൽ നിന്നും നിർദ്ദേശിക്കുക</string>
+    <string name="ime_service_phonetic_english_off_toast">ഇംഗ്ലീഷ് വാക്കുകൾ നിർദ്ദേശിക്കപ്പെടുക മാത്രം ചെയ്യുന്നു</string>
+    <string name="ime_service_phonetic_english_on_toast">ഇംഗ്ലീഷ് വാക്കുകൾ ഇംഗ്ലീഷായി തന്നെ തുടരുന്നു</string>
     <string name="ime_service_plugins_all_off_notice">നിങ്ങൾ ഇൻസ്റ്റാൾ ചെയ്ത എല്ലാ പ്ലഗിനുകളും ഓഫാണ്. പ്ലഗിനുകൾ നിയന്ത്രിക്കുക എന്നതിൽ പോയി ഒരെണ്ണം ഓണാക്കുക.</string>
     <string name="ime_service_plugins_off_notice">പ്ലഗിനുകൾ ഓഫാണ്. അവ ഇൻസ്റ്റാൾ ചെയ്യാനും പ്രവർത്തിപ്പിക്കാനും ക്രമീകരണങ്ങളിൽ (Settings) പോയി ഓണാക്കുക.</string>
     <string name="ime_service_power_saving_off_toast">പവർ സേവിംഗ് ഓഫാണ്</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">പാസ്‌വേഡ്</string>
     <string name="ime_tool_paste">ഒട്ടിക്കുക</string>
     <string name="ime_tool_persistent">സ്ക്രീനിൽ നിലനിർത്തുക</string>
+    <string name="ime_tool_phonetic_english">ഇംഗ്ലീഷ് വാക്കുകൾ</string>
     <string name="ime_tool_picker_close_desc">കീകളുടെ പട്ടിക അടയ്ക്കുക</string>
     <string name="ime_tool_picker_help">എല്ലാ കീകൾക്കും %1$s</string>
     <string name="ime_tool_picker_leader">%1$s, തുടർന്ന്:</string>

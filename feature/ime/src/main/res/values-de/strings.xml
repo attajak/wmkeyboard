@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Tastatur wechseln</string>
     <string name="ime_controls_title">Tastatursteuerung</string>
     <string name="ime_controls_unpin">Lösen</string>
+    <string name="ime_conversion_pack_offer">Laden Sie das %1$s herunter, um Zeichen zu schreiben</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Ablehnen</string>
     <string name="ime_converter_from_label">Von</string>
     <string name="ime_converter_to_label">Zu</string>
     <string name="ime_currency_insert_action">Einfügen</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Trennzeichen: %1$s</string>
     <string name="ime_password_tab_passphrase">Passphrase</string>
     <string name="ime_password_words_label">Wörter</string>
+    <string name="ime_phonetic_word_list_offer">Holen Sie sich die %1$s-Wortliste für bessere Wörter</string>
     <string name="ime_plugin_empty_body">Ein Plugin ist ein kleines Werkzeug in einer Sandbox. Du kannst Plugins aus einem Add-on-Repository oder über eine .wmplugin-Datei hinzufügen. Ein Plugin kann nicht sehen, was du tippst.</string>
     <string name="ime_plugin_empty_title">Noch keine Plugins</string>
     <string name="ime_plugin_manage_action">Plugins verwalten</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Keine weitere Übereinstimmung</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nichts zu korrigieren</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Die Grammatikprüfung ist nicht verfügbar</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi-Phonetik ist nicht geladen</string>
     <string name="ime_selection_macro_no_app_toast">Keine App kann dies öffnen</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Nichts mehr zum Rückgängigmachen</string>
     <string name="ime_selection_macro_stop_label">Stopp</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Die Tastatur kann keine Ergebnisse abrufen</string>
     <string name="ime_service_mode_tool_order_toast">Die Tastatur hat die Werkzeugreihenfolge für den Modus %1$s gespeichert. Andere Apps behalten ihre eigene Reihenfolge bei.</string>
     <string name="ime_service_no_email_app_toast">Dieses Gerät hat keine E-Mail-App. Senden Sie Berichte an %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Nur für Avro und Hindi-Phonetik</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Aktivieren Sie Englisch unter Sprachen, %1$s, Vorschläge auch von</string>
+    <string name="ime_service_phonetic_english_off_toast">Englische Wörter werden nur vorgeschlagen</string>
+    <string name="ime_service_phonetic_english_on_toast">Englische Wörter bleiben Englisch</string>
     <string name="ime_service_plugins_all_off_notice">Jedes installierte Plugin ist deaktiviert. Aktivieren Sie eines unter Plugins verwalten.</string>
     <string name="ime_service_plugins_off_notice">Plugins sind deaktiviert. Aktivieren Sie sie in den Einstellungen, um sie zu installieren und auszuführen.</string>
     <string name="ime_service_power_saving_off_toast">Energiesparmodus ist aus</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Passwort</string>
     <string name="ime_tool_paste">Einfügen</string>
     <string name="ime_tool_persistent">Auf dem Bildschirm behalten</string>
+    <string name="ime_tool_phonetic_english">Englische Wörter</string>
     <string name="ime_tool_picker_close_desc">Liste der Tasten schließen</string>
     <string name="ime_tool_picker_help">%1$s für alle Tasten</string>
     <string name="ime_tool_picker_leader">%1$s, dann:</string>

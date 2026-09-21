@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Promijeni tipkovnicu</string>
     <string name="ime_controls_title">Kontrole tipkovnice</string>
     <string name="ime_controls_unpin">Otkvači</string>
+    <string name="ime_conversion_pack_offer">Preuzmite %1$s za upisivanje znakova</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Odbaci</string>
     <string name="ime_converter_from_label">Iz</string>
     <string name="ime_converter_to_label">U</string>
     <string name="ime_currency_insert_action">Umetni</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Razdjelnik: %1$s</string>
     <string name="ime_password_tab_passphrase">Lozinka</string>
     <string name="ime_password_words_label">Riječi</string>
+    <string name="ime_phonetic_word_list_offer">Preuzmite %1$s popis riječi za bolje riječi</string>
     <string name="ime_plugin_empty_body">Dodatak je mali alat u izoliranom okruženju. Dodatke možete dodati iz repozitorija dodataka ili iz .wmplugin datoteke. Dodatak ne može vidjeti što tipkate.</string>
     <string name="ime_plugin_empty_title">Još nema dodataka</string>
     <string name="ime_plugin_manage_action">Upravljanje dodacima</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Nema drugog podudaranja</string>
     <string name="ime_selection_macro_grammar_clean_toast">Ništa za popraviti</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Provjera gramatike nije dostupna</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindski fonetski nije učitan</string>
     <string name="ime_selection_macro_no_app_toast">Nijedna aplikacija ne može otvoriti ovo</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Nema više radnji za poništavanje</string>
     <string name="ime_selection_macro_stop_label">Zaustavi</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Tipkovnica ne može dohvatiti rezultate</string>
     <string name="ime_service_mode_tool_order_toast">Tipkovnica je spremila redoslijed alata samo za %1$s način rada. Druge aplikacije zadržavaju svoj redoslijed.</string>
     <string name="ime_service_no_email_app_toast">Ovaj uređaj nema aplikaciju za e-poštu. Pošaljite izvješća na %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Samo za Avro i hindski fonetski raspored</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Uključite engleski pod Jezici, %1$s, Također predloži iz</string>
+    <string name="ime_service_phonetic_english_off_toast">Engleske riječi se samo predlažu</string>
+    <string name="ime_service_phonetic_english_on_toast">Engleske riječi ostaju engleske</string>
     <string name="ime_service_plugins_all_off_notice">Svaki dodatak koji ste instalirali je isključen. Uključite jedan pod Upravljanje dodacima.</string>
     <string name="ime_service_plugins_off_notice">Dodaci su isključeni. Uključite ih u postavkama kako biste ih instalirali i pokrenuli.</string>
     <string name="ime_service_power_saving_off_toast">Ušteda energije je isključena</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Lozinka</string>
     <string name="ime_tool_paste">Zalijepi</string>
     <string name="ime_tool_persistent">Zadrži na zaslonu</string>
+    <string name="ime_tool_phonetic_english">Engleske riječi</string>
     <string name="ime_tool_picker_close_desc">Zatvori popis tipki</string>
     <string name="ime_tool_picker_help">%1$s za sve tipke</string>
     <string name="ime_tool_picker_leader">%1$s, zatim:</string>

@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Vaihda näppäimistöä</string>
     <string name="ime_controls_title">Näppäimistön hallinta</string>
     <string name="ime_controls_unpin">Irrota</string>
+    <string name="ime_conversion_pack_offer">Lataa %1$s kirjoittaaksesi merkkejä</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Hylkää</string>
     <string name="ime_converter_from_label">Alkuperäinen</string>
     <string name="ime_converter_to_label">Kohde</string>
     <string name="ime_currency_insert_action">Lisää</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">Erotin: %1$s</string>
     <string name="ime_password_tab_passphrase">Salasana</string>
     <string name="ime_password_words_label">Sanat</string>
+    <string name="ime_phonetic_word_list_offer">Hanki %1$s-sanasto parempia sanoja varten</string>
     <string name="ime_plugin_empty_body">Liitännäinen on pieni työkalu hiekkalaatikossa. Voit lisätä liitännäisiä lisäosavarastosta tai .wmplugin-tiedostosta. Liitännäinen ei näe, mitä kirjoitat.</string>
     <string name="ime_plugin_empty_title">Ei vielä liitännäisiä</string>
     <string name="ime_plugin_manage_action">Hallitse liitännäisiä</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">Ei muuta vastaavuutta</string>
     <string name="ime_selection_macro_grammar_clean_toast">Ei korjattavaa</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Kieliopin tarkistus ei ole käytettävissä</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi-foneettinen näppäimistö ei ole ladattu</string>
     <string name="ime_selection_macro_no_app_toast">Mikään sovellus ei voi avata tätä</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Ei kumottavaa</string>
     <string name="ime_selection_macro_stop_label">Pysäytä</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">Näppäimistö ei saa tuloksia</string>
     <string name="ime_service_mode_tool_order_toast">Näppäimistö tallensi työkalujärjestyksen vain %1$s-tilaa varten. Muut sovellukset säilyttävät oman järjestyksensä.</string>
     <string name="ime_service_no_email_app_toast">Laitteessa ei ole sähköpostisovellusta. Lähetä raportit osoitteeseen %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Vain Avro- ja foneettiselle hindin näppäimistölle</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Kytke englanti päälle kohdasta Kielet, %1$s, Ehdota myös kielestä</string>
+    <string name="ime_service_phonetic_english_off_toast">Englanninkielisiä sanoja vain ehdotetaan</string>
+    <string name="ime_service_phonetic_english_on_toast">Englanninkieliset sanat pysyvät englanninkielisinä</string>
     <string name="ime_service_plugins_all_off_notice">Kaikki asentamasi laajennukset on kytketty pois päältä. Kytke jokin päälle kohdasta Hallitse laajennuksia.</string>
     <string name="ime_service_plugins_off_notice">Liitännäiset on kytketty pois päältä. Kytke ne päälle asetuksista asentaaksesi ja käyttääksesi niitä.</string>
     <string name="ime_service_power_saving_off_toast">Virransäästö on pois päältä</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">Salasana</string>
     <string name="ime_tool_paste">Liitä</string>
     <string name="ime_tool_persistent">Pidä näytöllä</string>
+    <string name="ime_tool_phonetic_english">Englanninkieliset sanat</string>
     <string name="ime_tool_picker_close_desc">Sulje näppäinluettelo</string>
     <string name="ime_tool_picker_help">%1$s kaikille näppäimille</string>
     <string name="ime_tool_picker_leader">%1$s, sitten:</string>

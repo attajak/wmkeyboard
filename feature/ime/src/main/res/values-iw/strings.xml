@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">החלף מקלדת</string>
     <string name="ime_controls_title">בקרות מקלדת</string>
     <string name="ime_controls_unpin">בטל הצמדה</string>
+    <string name="ime_conversion_pack_offer">הורד את %1$s כדי להקליד תווים</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">בטל</string>
     <string name="ime_converter_from_label">מ-</string>
     <string name="ime_converter_to_label">אל</string>
     <string name="ime_currency_insert_action">הכנס</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">מפריד: %1$s</string>
     <string name="ime_password_tab_passphrase">סיסמת ביטוי</string>
     <string name="ime_password_words_label">מילים</string>
+    <string name="ime_phonetic_word_list_offer">קבל את רשימת המילים %1$s למילים טובות יותר</string>
     <string name="ime_plugin_empty_body">תוסף הוא כלי קטן בסביבת ארגז חול. ניתן להוסיף תוספים ממאגר תוספות או מקובץ .wmplugin. תוסף אינו יכול לראות מה אתה מקליד.</string>
     <string name="ime_plugin_empty_title">אין עדיין תוספים</string>
     <string name="ime_plugin_manage_action">נהל תוספים</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">אין התאמה אחרת</string>
     <string name="ime_selection_macro_grammar_clean_toast">אין מה לתקן</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">בודק הדקדוק אינו זמין</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">הינדי פונטית לא טעונה</string>
     <string name="ime_selection_macro_no_app_toast">אף אפליקציה לא יכולה לפתוח את זה</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">לא נותר מה לבטל</string>
     <string name="ime_selection_macro_stop_label">עצור</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">המקלדת לא מצליחה לקבל תוצאות</string>
     <string name="ime_service_mode_tool_order_toast">המקלדת שמרה את סדר הכלים רק עבור מצב %1$s. אפליקציות אחרות שומרות על סדר משלהן.</string>
     <string name="ime_service_no_email_app_toast">במכשיר זה אין אפליקציית אימייל. שלח דוחות אל %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">רק עבור Avro ופונטיקה בהינדית</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">הפעל אנגלית תחת שפות, %1$s, וגם הצעות מתוך</string>
+    <string name="ime_service_phonetic_english_off_toast">מילים באנגלית מוצעות בלבד</string>
+    <string name="ime_service_phonetic_english_on_toast">מילים באנגלית נשארות באנגלית</string>
     <string name="ime_service_plugins_all_off_notice">כל התוספים שהתקנת כבויים. הפעל אחד תחת \'ניהול תוספים\'.</string>
     <string name="ime_service_plugins_off_notice">תוספים כבויים. הפעל אותם בהגדרות כדי להתקין ולהריץ אותם.</string>
     <string name="ime_service_power_saving_off_toast">חיסכון בחשמל כבוי</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">סיסמה</string>
     <string name="ime_tool_paste">הדבק</string>
     <string name="ime_tool_persistent">השאר על המסך</string>
+    <string name="ime_tool_phonetic_english">מילים באנגלית</string>
     <string name="ime_tool_picker_close_desc">סגירת רשימת המקשים</string>
     <string name="ime_tool_picker_help">%1$s עבור כל המקשים</string>
     <string name="ime_tool_picker_leader">%1$s, לאחר מכן:</string>

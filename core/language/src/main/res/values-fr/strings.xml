@@ -10,6 +10,10 @@
         <item quantity="one">L\'application a supprimé %1$d touche. Ce clavier ne possède aucune touche effectuant la même action (code %2$s).</item>
         <item quantity="other">L\'application a supprimé %1$d touches. Ce clavier ne possède aucune touche effectuant la même action (codes %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">L\'application a supprimé %1$d touche. Ce clavier n\'a aucune touche appelée %2$s.</item>
+        <item quantity="other">L\'application a supprimé %1$d touches. Ce clavier n\'a aucune touche appelée %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">L\'application a conservé la taille d\'étiquette de %1$d touche mais pas son style de texte. Ce clavier dessine les étiquettes dans un seul style.</item>
         <item quantity="other">L\'application a conservé la taille d\'étiquette de %1$d touches mais pas leur style de texte. Ce clavier dessine les étiquettes dans un seul style.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">L\'application a modifié %1$d lettre pour la forme utilisée par ce clavier.</item>
         <item quantity="other">L\'application a modifié %1$d lettres pour la forme utilisée par ce clavier.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">L\'application a supprimé la rangée de chiffres. Activez la rangée de chiffres dans Disposition et taille pour en obtenir une.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d touche n\'a pas de lettres accessibles par appui long. Le fichier les conserve dans un second fichier que vous n\'avez pas ouvert.</item>
         <item quantity="other">%1$d touches n\'ont pas de lettres accessibles par appui long. Le fichier les conserve dans un second fichier que vous n\'avez pas ouvert.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d touche change avec l\'état de la majuscule ou le champ dans l\'autre clavier. L\'application a conservé son apparence au repos.</item>
+        <item quantity="other">%1$d touches changent avec l\'état de la majuscule ou le champ dans l\'autre clavier. L\'application a conservé leur apparence au repos.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">L\'autre clavier mesure les largeurs de touches différemment. L\'application a modifié les largeurs pour s\'adapter à cette grille.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

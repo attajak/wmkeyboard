@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Skipta um lyklaborð</string>
     <string name="ime_controls_title">Stýringar lyklaborðs</string>
     <string name="ime_controls_unpin">Losa</string>
+    <string name="ime_conversion_pack_offer">Sæktu %1$s til að slá inn stafi</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Hætta við</string>
     <string name="ime_converter_from_label">Frá</string>
     <string name="ime_converter_to_label">Til</string>
     <string name="ime_currency_insert_action">Setja inn</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">Aðskilnaðartákn: %1$s</string>
     <string name="ime_password_tab_passphrase">Aðgangsorð</string>
     <string name="ime_password_words_label">Orð</string>
+    <string name="ime_phonetic_word_list_offer">Sæktu %1$s orðalistann fyrir betri orð</string>
     <string name="ime_plugin_empty_body">Viðbót er lítið verkfæri í sandkassa. Þú getur bætt við viðbótum úr viðbótageymslu eða úr .wmplugin-skrá. Viðbót getur ekki séð hvað þú skrifar.</string>
     <string name="ime_plugin_empty_title">Engin viðbót ennþá</string>
     <string name="ime_plugin_manage_action">Stjórna viðbótum</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">Engin önnur samsvörun</string>
     <string name="ime_selection_macro_grammar_clean_toast">Ekkert til að laga</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Málfræðileiðrétting er ekki tiltæk</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindí hljóðritun er ekki hlaðin</string>
     <string name="ime_selection_macro_no_app_toast">Ekkert forrit getur opnað þetta</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Ekkert eftir til að afturkalla</string>
     <string name="ime_selection_macro_stop_label">Stöðva</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">Lyklaborðið getur ekki sótt niðurstöður</string>
     <string name="ime_service_mode_tool_order_toast">Lyklaborðið vistaði verkfæraröðina aðeins fyrir %1$s haminn. Önnur forrit halda sinni eigin röð.</string>
     <string name="ime_service_no_email_app_toast">Þetta tæki er ekki með neitt tölvupóstforrit. Sendu skýrslur á %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Aðeins fyrir Avro og hindí hljóðfræði</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Kveiktu á ensku undir Tungumál, %1$s, Einnig stinga upp á frá</string>
+    <string name="ime_service_phonetic_english_off_toast">Ensk orð eru aðeins lögð til</string>
+    <string name="ime_service_phonetic_english_on_toast">Ensk orð haldast ensk</string>
     <string name="ime_service_plugins_all_off_notice">Öll viðbætur sem þú settir upp eru slökktar. Kveiktu á einni undir Stjórna viðbótum.</string>
     <string name="ime_service_plugins_off_notice">Viðbætur eru óvirkar. Kveiktu á þeim í stillingum til að setja þær upp og keyra.</string>
     <string name="ime_service_power_saving_off_toast">Orkusparnaður er óvirkur</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">Lykilorð</string>
     <string name="ime_tool_paste">Líma</string>
     <string name="ime_tool_persistent">Halda á skjánum</string>
+    <string name="ime_tool_phonetic_english">Ensk orð</string>
     <string name="ime_tool_picker_close_desc">Loka listanum yfir lykla</string>
     <string name="ime_tool_picker_help">%1$s fyrir alla lykla</string>
     <string name="ime_tool_picker_leader">%1$s, síðan:</string>

@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Przełącz klawiaturę</string>
     <string name="ime_controls_title">Sterowanie klawiaturą</string>
     <string name="ime_controls_unpin">Odepnij</string>
+    <string name="ime_conversion_pack_offer">Pobierz %1$s, aby wpisywać znaki</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Odrzuć</string>
     <string name="ime_converter_from_label">Z</string>
     <string name="ime_converter_to_label">Do</string>
     <string name="ime_currency_insert_action">Wstaw</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Separator: %1$s</string>
     <string name="ime_password_tab_passphrase">Hasło</string>
     <string name="ime_password_words_label">Słowa</string>
+    <string name="ime_phonetic_word_list_offer">Pobierz listę słów %1$s, aby uzyskać lepsze słowa</string>
     <string name="ime_plugin_empty_body">Wtyczka to małe narzędzie w piaskownicy. Możesz dodawać wtyczki z repozytorium dodatków lub z pliku .wmplugin. Wtyczka nie widzi tego, co wpisujesz.</string>
     <string name="ime_plugin_empty_title">Brak wtyczek</string>
     <string name="ime_plugin_manage_action">Zarządzaj wtyczkami</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Brak innych dopasowań</string>
     <string name="ime_selection_macro_grammar_clean_toast">Brak błędów do poprawienia</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Sprawdzanie gramatyki jest niedostępne</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Układ fonetyczny hindi nie jest załadowany</string>
     <string name="ime_selection_macro_no_app_toast">Żadna aplikacja nie może tego otworzyć</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Brak operacji do cofnięcia</string>
     <string name="ime_selection_macro_stop_label">Zatrzymaj</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Klawiatura nie może pobrać wyników</string>
     <string name="ime_service_mode_tool_order_toast">Klawiatura zapisała kolejność narzędzi tylko dla trybu %1$s. Inne aplikacje zachowują własną kolejność.</string>
     <string name="ime_service_no_email_app_toast">To urządzenie nie ma aplikacji e-mail. Wyślij raporty na adres %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Tylko dla układów fonetycznych Avro i Hindi</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Włącz angielski w sekcji Języki, %1$s, Sugeruj również z</string>
+    <string name="ime_service_phonetic_english_off_toast">Słowa angielskie są tylko sugerowane</string>
+    <string name="ime_service_phonetic_english_on_toast">Angielskie słowa pozostają angielskie</string>
     <string name="ime_service_plugins_all_off_notice">Wszystkie zainstalowane wtyczki są wyłączone. Włącz jedną z nich w sekcji Zarządzaj wtyczkami.</string>
     <string name="ime_service_plugins_off_notice">Wtyczki są wyłączone. Włącz je w Ustawieniach, aby je zainstalować i uruchomić.</string>
     <string name="ime_service_power_saving_off_toast">Oszczędzanie energii wyłączone</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">Hasło</string>
     <string name="ime_tool_paste">Wklej</string>
     <string name="ime_tool_persistent">Pozostaw na ekranie</string>
+    <string name="ime_tool_phonetic_english">Angielskie słowa</string>
     <string name="ime_tool_picker_close_desc">Zamknij listę klawiszy</string>
     <string name="ime_tool_picker_help">%1$s dla wszystkich klawiszy</string>
     <string name="ime_tool_picker_leader">%1$s, a następnie:</string>

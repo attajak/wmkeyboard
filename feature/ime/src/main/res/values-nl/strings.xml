@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Toetsenbord wisselen</string>
     <string name="ime_controls_title">Toetsenbordbediening</string>
     <string name="ime_controls_unpin">Losmaken</string>
+    <string name="ime_conversion_pack_offer">Download de %1$s om tekens te typen</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Sluiten</string>
     <string name="ime_converter_from_label">Van</string>
     <string name="ime_converter_to_label">Naar</string>
     <string name="ime_currency_insert_action">Invoegen</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Scheidingsteken: %1$s</string>
     <string name="ime_password_tab_passphrase">Wachtwoordzin</string>
     <string name="ime_password_words_label">Woorden</string>
+    <string name="ime_phonetic_word_list_offer">Haal de %1$s woordenlijst voor betere woorden</string>
     <string name="ime_plugin_empty_body">Een plug-in is een klein hulpmiddel in een sandbox. Je kunt plug-ins toevoegen vanuit een add-on-repository of vanuit een .wmplugin-bestand. Een plug-in kan niet zien wat je typt.</string>
     <string name="ime_plugin_empty_title">Nog geen plug-ins</string>
     <string name="ime_plugin_manage_action">Plugins beheren</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Geen andere overeenkomst</string>
     <string name="ime_selection_macro_grammar_clean_toast">Niets om te herstellen</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">De grammaticacontrole is niet beschikbaar</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi fonetisch is niet geladen</string>
     <string name="ime_selection_macro_no_app_toast">Geen enkele app kan dit openen</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Niets meer om ongedaan te maken</string>
     <string name="ime_selection_macro_stop_label">Stop</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Het toetsenbord kan geen resultaten ophalen</string>
     <string name="ime_service_mode_tool_order_toast">Het toetsenbord heeft de volgorde van de tools alleen opgeslagen voor de %1$s-modus. Andere apps behouden hun eigen volgorde.</string>
     <string name="ime_service_no_email_app_toast">Dit apparaat heeft geen e-mailapp. Stuur rapporten naar %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Alleen voor Avro en Hindi fonetisch</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Schakel Engels in onder Talen, %1$s, Suggesties van</string>
+    <string name="ime_service_phonetic_english_off_toast">Engelse woorden worden alleen gesuggereerd</string>
+    <string name="ime_service_phonetic_english_on_toast">Engelse woorden blijven Engels</string>
     <string name="ime_service_plugins_all_off_notice">Elke geïnstalleerde plug-in is uitgeschakeld. Schakel er een in onder Plug-ins beheren.</string>
     <string name="ime_service_plugins_off_notice">Plugins zijn uitgeschakeld. Schakel ze in via Instellingen om ze te installeren en uit te voeren.</string>
     <string name="ime_service_power_saving_off_toast">Energiebesparing is uitgeschakeld</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Wachtwoord</string>
     <string name="ime_tool_paste">Plakken</string>
     <string name="ime_tool_persistent">Op scherm houden</string>
+    <string name="ime_tool_phonetic_english">Engelse woorden</string>
     <string name="ime_tool_picker_close_desc">De lijst met toetsen sluiten</string>
     <string name="ime_tool_picker_help">%1$s voor alle toetsen</string>
     <string name="ime_tool_picker_leader">%1$s, dan:</string>

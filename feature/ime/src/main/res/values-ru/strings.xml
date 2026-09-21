@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Переключить клавиатуру</string>
     <string name="ime_controls_title">Управление клавиатурой</string>
     <string name="ime_controls_unpin">Открепить</string>
+    <string name="ime_conversion_pack_offer">Скачайте %1$s для ввода символов</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Отклонить</string>
     <string name="ime_converter_from_label">Из</string>
     <string name="ime_converter_to_label">В</string>
     <string name="ime_currency_insert_action">Вставить</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Разделитель: %1$s</string>
     <string name="ime_password_tab_passphrase">Парольная фраза</string>
     <string name="ime_password_words_label">Слова</string>
+    <string name="ime_phonetic_word_list_offer">Получите список слов %1$s для лучших слов</string>
     <string name="ime_plugin_empty_body">Плагин — это небольшой инструмент в «песочнице». Вы можете добавлять плагины из репозитория дополнений или из файла .wmplugin. Плагин не может видеть, что вы печатаете.</string>
     <string name="ime_plugin_empty_title">Плагинов пока нет</string>
     <string name="ime_plugin_manage_action">Управление плагинами</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Других совпадений нет</string>
     <string name="ime_selection_macro_grammar_clean_toast">Нечего исправлять</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Проверка грамматики недоступна</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Фонетическая раскладка хинди не загружена</string>
     <string name="ime_selection_macro_no_app_toast">Ни одно приложение не может это открыть</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Больше нечего отменять</string>
     <string name="ime_selection_macro_stop_label">Стоп</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Клавиатура не может получить результаты</string>
     <string name="ime_service_mode_tool_order_toast">Клавиатура сохранила порядок инструментов для режима %1$s. Другие приложения сохраняют свой собственный порядок.</string>
     <string name="ime_service_no_email_app_toast">На этом устройстве нет почтового приложения. Отправляйте отчеты на %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Только для Avro и фонетической раскладки хинди</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Включите английский в разделе «Языки», %1$s, «Также предлагать из»</string>
+    <string name="ime_service_phonetic_english_off_toast">Английские слова только предлагаются</string>
+    <string name="ime_service_phonetic_english_on_toast">Английские слова остаются английскими</string>
     <string name="ime_service_plugins_all_off_notice">Все установленные вами плагины отключены. Включите один из них в разделе «Управление плагинами».</string>
     <string name="ime_service_plugins_off_notice">Плагины отключены. Включите их в настройках, чтобы устанавливать и запускать их.</string>
     <string name="ime_service_power_saving_off_toast">Энергосбережение выключено</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Пароль</string>
     <string name="ime_tool_paste">Вставить</string>
     <string name="ime_tool_persistent">Оставлять на экране</string>
+    <string name="ime_tool_phonetic_english">Английские слова</string>
     <string name="ime_tool_picker_close_desc">Закрыть список клавиш</string>
     <string name="ime_tool_picker_help">%1$s для всех клавиш</string>
     <string name="ime_tool_picker_leader">%1$s, затем:</string>

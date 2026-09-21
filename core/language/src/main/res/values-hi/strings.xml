@@ -10,6 +10,10 @@
         <item quantity="one">ऐप ने %1$d कुंजी हटा दी। इस कीबोर्ड में ऐसा कोई बटन नहीं है जो वही काम करता हो (कोड %2$s)।</item>
         <item quantity="other">ऐप ने %1$d कुंजियाँ हटा दीं। इस कीबोर्ड में ऐसी कोई कुंजियाँ नहीं हैं जो वही काम करती हों (कोड %2$s)।</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">ऐप ने %1$d कुंजी हटा दी। इस कीबोर्ड में %2$s नाम की कोई कुंजी नहीं है।</item>
+        <item quantity="other">ऐप ने %1$d कुंजियाँ हटा दीं। इस कीबोर्ड में %2$s नाम की कोई कुंजियाँ नहीं हैं।</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">ऐप ने %1$d कुंजी का लेबल आकार तो रखा लेकिन उसका टेक्स्ट स्टाइल नहीं। यह कीबोर्ड लेबल को एक ही स्टाइल में दिखाता है।</item>
         <item quantity="other">ऐप ने %1$d कुंजियों का लेबल आकार तो रखा लेकिन उनका टेक्स्ट स्टाइल नहीं। यह कीबोर्ड लेबल को एक ही स्टाइल में दिखाता है।</item>
@@ -18,9 +22,14 @@
         <item quantity="one">ऐप ने %1$d अक्षर को उस रूप में बदल दिया जिसे यह कीबोर्ड लिखता है।</item>
         <item quantity="other">ऐप ने %1$d अक्षरों को उस रूप में बदल दिया जिसे यह कीबोर्ड लिखता है।</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">ऐप ने संख्याओं की पंक्ति हटा दी। संख्या पंक्ति प्राप्त करने के लिए लेआउट और आकार में संख्या पंक्ति चालू करें।</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d कुंजी में कोई प्रेस-एंड-होल्ड अक्षर नहीं है। फ़ाइल उन्हें एक दूसरी फ़ाइल में रखती है जिसे आपने नहीं खोला है।</item>
         <item quantity="other">%1$d कुंजियों में कोई प्रेस-एंड-होल्ड अक्षर नहीं है। फ़ाइल उन्हें एक दूसरी फ़ाइल में रखती है जिसे आपने नहीं खोला है।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d कुंजी शिफ्ट स्थिति या दूसरे कीबोर्ड के फ़ील्ड के साथ बदलती है। ऐप ने इसके स्थिर स्वरूप को बनाए रखा है।</item>
+        <item quantity="other">%1$d कुंजियाँ शिफ्ट स्थिति या दूसरे कीबोर्ड के फ़ील्ड के साथ बदलती हैं। ऐप ने उनके स्थिर स्वरूप को बनाए रखा है।</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">दूसरा कीबोर्ड कुंजी की चौड़ाई को अलग तरह से मापता है। ऐप ने इस ग्रिड में फिट होने के लिए चौड़ाई बदल दी है।</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

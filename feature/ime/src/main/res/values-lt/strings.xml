@@ -136,6 +136,8 @@
     <string name="ime_controls_switch">Perjungti klaviatūrą</string>
     <string name="ime_controls_title">Klaviatūros valdikliai</string>
     <string name="ime_controls_unpin">Atsegti</string>
+    <string name="ime_conversion_pack_offer">Atsisiųskite %1$s, kad galėtumėte įvesti simbolius</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Atmesti</string>
     <string name="ime_converter_from_label">Nuo</string>
     <string name="ime_converter_to_label">Į</string>
     <string name="ime_currency_insert_action">Įterpti</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">Skirtukas: %1$s</string>
     <string name="ime_password_tab_passphrase">Slaptažodžio frazė</string>
     <string name="ime_password_words_label">Žodžiai</string>
+    <string name="ime_phonetic_word_list_offer">Gaukite %1$s žodžių sąrašą geresniems žodžiams</string>
     <string name="ime_plugin_empty_body">Papildinys yra nedidelis įrankis smėlio dėžėje. Galite pridėti papildinių iš priedų saugyklos arba iš .wmplugin failo. Papildinys nemato, ką rašote.</string>
     <string name="ime_plugin_empty_title">Kol kas nėra papildinių</string>
     <string name="ime_plugin_manage_action">Tvarkyti papildinius</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">Daugiau atitikmenų nėra</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nėra ką taisyti</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Gramatikos tikrintuvas nepasiekiamas</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi fonetinė klaviatūra neįkelta</string>
     <string name="ime_selection_macro_no_app_toast">Jokia programa negali to atidaryti</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Nebėra ką anuliuoti</string>
     <string name="ime_selection_macro_stop_label">Stabdyti</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">Klaviatūra negali gauti rezultatų</string>
     <string name="ime_service_mode_tool_order_toast">Klaviatūra įrašė įrankių tvarką tik %1$s režimui. Kitos programėlės išlaiko savo tvarką.</string>
     <string name="ime_service_no_email_app_toast">Šiame įrenginyje nėra el. pašto programos. Siųskite ataskaitas adresu %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Tik „Avro“ ir hindi fonetiniam išdėstymui</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Įjunkite anglų kalbą skiltyje „Kalbos“, %1$s, „Taip pat siūlyti iš“</string>
+    <string name="ime_service_phonetic_english_off_toast">Siūlomi tik angliški žodžiai</string>
+    <string name="ime_service_phonetic_english_on_toast">Angliški žodžiai lieka angliški</string>
     <string name="ime_service_plugins_all_off_notice">Visi įdiegti papildiniai išjungti. Įjunkite vieną iš jų skiltyje „Tvarkyti papildinius“.</string>
     <string name="ime_service_plugins_off_notice">Papildiniai išjungti. Įjunkite juos nustatymuose, kad galėtumėte juos įdiegti ir paleisti.</string>
     <string name="ime_service_power_saving_off_toast">Energijos taupymas išjungtas</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">Slaptažodis</string>
     <string name="ime_tool_paste">Įklijuoti</string>
     <string name="ime_tool_persistent">Palikti ekrane</string>
+    <string name="ime_tool_phonetic_english">Angliški žodžiai</string>
     <string name="ime_tool_picker_close_desc">Uždaryti klavišų sąrašą</string>
     <string name="ime_tool_picker_help">%1$s visiems klavišams</string>
     <string name="ime_tool_picker_leader">%1$s, tada:</string>

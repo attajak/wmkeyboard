@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">ਕੀਬੋਰਡ ਬਦਲੋ</string>
     <string name="ime_controls_title">ਕੀਬੋਰਡ ਨਿਯੰਤਰਣ</string>
     <string name="ime_controls_unpin">ਅਨਪਿਨ ਕਰੋ</string>
+    <string name="ime_conversion_pack_offer">ਅੱਖਰ ਟਾਈਪ ਕਰਨ ਲਈ %1$s ਡਾਊਨਲੋਡ ਕਰੋ</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">ਖਾਰਜ ਕਰੋ</string>
     <string name="ime_converter_from_label">ਤੋਂ</string>
     <string name="ime_converter_to_label">ਤੱਕ</string>
     <string name="ime_currency_insert_action">ਦਾਖਲ ਕਰੋ</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">ਵੱਖ ਕਰਨ ਵਾਲਾ: %1$s</string>
     <string name="ime_password_tab_passphrase">ਪਾਸਫਰੇਜ਼</string>
     <string name="ime_password_words_label">ਸ਼ਬਦ</string>
+    <string name="ime_phonetic_word_list_offer">ਬਿਹਤਰ ਸ਼ਬਦਾਂ ਲਈ %1$s ਸ਼ਬਦ ਸੂਚੀ ਪ੍ਰਾਪਤ ਕਰੋ</string>
     <string name="ime_plugin_empty_body">ਇੱਕ ਪਲੱਗਇਨ ਇੱਕ ਸੈਂਡਬੌਕਸ ਵਿੱਚ ਇੱਕ ਛੋਟਾ ਟੂਲ ਹੈ। ਤੁਸੀਂ ਐਡ-ਆਨ ਰਿਪੋਜ਼ਟਰੀ ਤੋਂ ਜਾਂ .wmplugin ਫਾਈਲ ਤੋਂ ਪਲੱਗਇਨ ਜੋੜ ਸਕਦੇ ਹੋ। ਇੱਕ ਪਲੱਗਇਨ ਇਹ ਨਹੀਂ ਦੇਖ ਸਕਦਾ ਕਿ ਤੁਸੀਂ ਕੀ ਟਾਈਪ ਕਰਦੇ ਹੋ।</string>
     <string name="ime_plugin_empty_title">ਅਜੇ ਕੋਈ ਪਲੱਗਇਨ ਨਹੀਂ ਹੈ</string>
     <string name="ime_plugin_manage_action">ਪਲੱਗਇਨ ਪ੍ਰਬੰਧਿਤ ਕਰੋ</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">ਕੋਈ ਹੋਰ ਮੇਲ ਨਹੀਂ</string>
     <string name="ime_selection_macro_grammar_clean_toast">ਠੀਕ ਕਰਨ ਲਈ ਕੁਝ ਨਹੀਂ ਹੈ</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">ਵਿਆਕਰਣ ਚੈਕਰ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">ਹਿੰਦੀ ਫੋਨੇਟਿਕ ਲੋਡ ਨਹੀਂ ਹੈ</string>
     <string name="ime_selection_macro_no_app_toast">ਕੋਈ ਵੀ ਐਪ ਇਸਨੂੰ ਖੋਲ੍ਹ ਨਹੀਂ ਸਕਦੀ</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">ਅਨਡੂ ਕਰਨ ਲਈ ਕੁਝ ਨਹੀਂ ਬਚਿਆ</string>
     <string name="ime_selection_macro_stop_label">ਰੋਕੋ</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">ਕੀਬੋਰਡ ਨਤੀਜੇ ਪ੍ਰਾਪਤ ਨਹੀਂ ਕਰ ਸਕਦਾ</string>
     <string name="ime_service_mode_tool_order_toast">ਕੀਬੋਰਡ ਨੇ %1$s ਮੋਡ ਲਈ ਟੂਲ ਆਰਡਰ ਨੂੰ ਸੁਰੱਖਿਅਤ ਕੀਤਾ ਹੈ। ਹੋਰ ਐਪਸ ਆਪਣਾ ਆਰਡਰ ਖੁਦ ਰੱਖਦੀਆਂ ਹਨ।</string>
     <string name="ime_service_no_email_app_toast">ਇਸ ਡਿਵਾਈਸ ਵਿੱਚ ਕੋਈ ਈਮੇਲ ਐਪ ਨਹੀਂ ਹੈ। ਰਿਪੋਰਟਾਂ %1$s ਨੂੰ ਭੇਜੋ।</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">ਸਿਰਫ਼ ਐਵਰੋ (Avro) ਅਤੇ ਹਿੰਦੀ ਫੋਨੇਟਿਕ ਲਈ</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">ਭਾਸ਼ਾਵਾਂ ਦੇ ਅਧੀਨ ਅੰਗਰੇਜ਼ੀ ਚਾਲੂ ਕਰੋ, %1$s, ਇਸ ਤੋਂ ਸੁਝਾਅ ਵੀ ਦਿਓ</string>
+    <string name="ime_service_phonetic_english_off_toast">ਸਿਰਫ਼ ਅੰਗਰੇਜ਼ੀ ਸ਼ਬਦਾਂ ਦਾ ਸੁਝਾਅ ਦਿੱਤਾ ਜਾਂਦਾ ਹੈ</string>
+    <string name="ime_service_phonetic_english_on_toast">ਅੰਗਰੇਜ਼ੀ ਸ਼ਬਦ ਅੰਗਰੇਜ਼ੀ ਹੀ ਰਹਿੰਦੇ ਹਨ</string>
     <string name="ime_service_plugins_all_off_notice">ਤੁਹਾਡੇ ਦੁਆਰਾ ਸਥਾਪਿਤ ਕੀਤਾ ਗਿਆ ਹਰ ਪਲੱਗਇਨ ਬੰਦ ਹੈ। ਪਲੱਗਇਨ ਪ੍ਰਬੰਧਿਤ ਕਰੋ ਦੇ ਅਧੀਨ ਇੱਕ ਨੂੰ ਚਾਲੂ ਕਰੋ।</string>
     <string name="ime_service_plugins_off_notice">ਪਲੱਗਇਨ ਬੰਦ ਹਨ। ਉਹਨਾਂ ਨੂੰ ਸਥਾਪਿਤ ਕਰਨ ਅਤੇ ਚਲਾਉਣ ਲਈ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਉਹਨਾਂ ਨੂੰ ਚਾਲੂ ਕਰੋ।</string>
     <string name="ime_service_power_saving_off_toast">ਪਾਵਰ ਸੇਵਿੰਗ ਬੰਦ ਹੈ</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">ਪਾਸਵਰਡ</string>
     <string name="ime_tool_paste">ਪੇਸਟ ਕਰੋ</string>
     <string name="ime_tool_persistent">ਸਕ੍ਰੀਨ \'ਤੇ ਰੱਖੋ</string>
+    <string name="ime_tool_phonetic_english">ਅੰਗਰੇਜ਼ੀ ਸ਼ਬਦ</string>
     <string name="ime_tool_picker_close_desc">ਕੁੰਜੀਆਂ ਦੀ ਸੂਚੀ ਬੰਦ ਕਰੋ</string>
     <string name="ime_tool_picker_help">ਸਾਰੀਆਂ ਕੁੰਜੀਆਂ ਲਈ %1$s</string>
     <string name="ime_tool_picker_leader">%1$s, ਫਿਰ:</string>

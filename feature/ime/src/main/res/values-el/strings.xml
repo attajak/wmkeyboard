@@ -136,6 +136,8 @@
     <string name="ime_controls_switch">Εναλλαγή πληκτρολογίου</string>
     <string name="ime_controls_title">Έλεγχοι πληκτρολογίου</string>
     <string name="ime_controls_unpin">Αποκαρφίτσωμα</string>
+    <string name="ime_conversion_pack_offer">Κατεβάστε το %1$s για να πληκτρολογήσετε χαρακτήρες</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Απόρριψη</string>
     <string name="ime_converter_from_label">Από</string>
     <string name="ime_converter_to_label">Προς</string>
     <string name="ime_currency_insert_action">Εισαγωγή</string>
@@ -441,6 +443,7 @@
     <string name="ime_password_separator_label">Διαχωριστικό: %1$s</string>
     <string name="ime_password_tab_passphrase">Φράση πρόσβασης</string>
     <string name="ime_password_words_label">Λέξεις</string>
+    <string name="ime_phonetic_word_list_offer">Λάβετε τη λίστα λέξεων %1$s για καλύτερες λέξεις</string>
     <string name="ime_plugin_empty_body">Ένα πρόσθετο είναι ένα μικρό εργαλείο σε ένα sandbox. Μπορείτε να προσθέσετε πρόσθετα από ένα αποθετήριο πρόσθετων ή από ένα αρχείο .wmplugin. Ένα πρόσθετο δεν μπορεί να δει τι πληκτρολογείτε.</string>
     <string name="ime_plugin_empty_title">Δεν υπάρχουν ακόμη πρόσθετα</string>
     <string name="ime_plugin_manage_action">Διαχείριση πρόσθετων</string>
@@ -512,6 +515,7 @@
     <string name="ime_selection_macro_find_none_toast">Δεν υπάρχει άλλη αντιστοιχία</string>
     <string name="ime_selection_macro_grammar_clean_toast">Δεν υπάρχει τίποτα προς διόρθωση</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Ο ορθογραφικός έλεγχος δεν είναι διαθέσιμος</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Η φωνητική διάταξη Χίντι δεν έχει φορτωθεί</string>
     <string name="ime_selection_macro_no_app_toast">Καμία εφαρμογή δεν μπορεί να το ανοίξει αυτό</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Δεν υπάρχει τίποτα άλλο για αναίρεση</string>
     <string name="ime_selection_macro_stop_label">Διακοπή</string>
@@ -540,6 +544,10 @@
     <string name="ime_service_media_fetch_error">Το πληκτρολόγιο δεν μπορεί να λάβει αποτελέσματα</string>
     <string name="ime_service_mode_tool_order_toast">Το πληκτρολόγιο αποθήκευσε τη σειρά των εργαλείων μόνο για τη λειτουργία %1$s. Οι άλλες εφαρμογές διατηρούν τη δική τους σειρά.</string>
     <string name="ime_service_no_email_app_toast">Αυτή η συσκευή δεν διαθέτει εφαρμογή email. Στείλτε αναφορές στο %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Μόνο για φωνητική πληκτρολόγηση Avro και Χίντι</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Ενεργοποιήστε τα Αγγλικά στις Γλώσσες, %1$s, Επίσης προτάσεις από</string>
+    <string name="ime_service_phonetic_english_off_toast">Προτείνονται μόνο αγγλικές λέξεις</string>
+    <string name="ime_service_phonetic_english_on_toast">Οι αγγλικές λέξεις παραμένουν αγγλικές</string>
     <string name="ime_service_plugins_all_off_notice">Κάθε πρόσθετο που εγκαταστήσατε είναι απενεργοποιημένο. Ενεργοποιήστε ένα από τη Διαχείριση πρόσθετων.</string>
     <string name="ime_service_plugins_off_notice">Τα πρόσθετα είναι απενεργοποιημένα. Ενεργοποιήστε τα στις Ρυθμίσεις για να τα εγκαταστήσετε και να τα εκτελέσετε.</string>
     <string name="ime_service_power_saving_off_toast">Η εξοικονόμηση ενέργειας είναι απενεργοποιημένη</string>
@@ -712,6 +720,7 @@
     <string name="ime_tool_password_gen">Κωδικός πρόσβασης</string>
     <string name="ime_tool_paste">Επικόλληση</string>
     <string name="ime_tool_persistent">Διατήρηση στην οθόνη</string>
+    <string name="ime_tool_phonetic_english">Αγγλικές λέξεις</string>
     <string name="ime_tool_picker_close_desc">Κλείσιμο της λίστας πλήκτρων</string>
     <string name="ime_tool_picker_help">%1$s για όλα τα πλήκτρα</string>
     <string name="ime_tool_picker_leader">%1$s, μετά:</string>

@@ -10,6 +10,10 @@
         <item quantity="one">แอปได้ลบคีย์ %1$d คีย์ แป้นพิมพ์นี้ไม่มีคีย์ที่ทำหน้าที่เดียวกัน (รหัส %2$s)</item>
         <item quantity="other">แอปได้ลบคีย์ %1$d คีย์ แป้นพิมพ์นี้ไม่มีคีย์ที่ทำหน้าที่เดียวกัน (รหัส %2$s)</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">แอปได้ลบคีย์ %1$d คีย์ คีย์บอร์ดนี้ไม่มีคีย์ที่ชื่อ %2$s</item>
+        <item quantity="other">แอปได้ลบคีย์ %1$d คีย์ คีย์บอร์ดนี้ไม่มีคีย์ที่ชื่อ %2$s</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">แอปคงขนาดป้ายกำกับของปุ่ม %1$d ปุ่มไว้ แต่ไม่ได้คงรูปแบบข้อความไว้ คีย์บอร์ดนี้วาดป้ายกำกับในรูปแบบเดียว</item>
         <item quantity="other">แอปคงขนาดป้ายกำกับของปุ่ม %1$d ปุ่มไว้ แต่ไม่ได้คงรูปแบบข้อความไว้ คีย์บอร์ดนี้วาดป้ายกำกับในรูปแบบเดียว</item>
@@ -18,9 +22,14 @@
         <item quantity="one">แอปเปลี่ยนตัวอักษร %1$d ตัวเป็นรูปแบบที่แป้นพิมพ์นี้เขียน</item>
         <item quantity="other">แอปเปลี่ยนตัวอักษร %1$d ตัวเป็นรูปแบบที่แป้นพิมพ์นี้เขียน</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">แอปได้ลบแถวตัวเลขออกแล้ว เปิดแถวตัวเลขในส่วนเค้าโครงและขนาดเพื่อใช้งาน</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d ปุ่มไม่มีตัวอักษรสำหรับการกดค้างไว้ ไฟล์เก็บข้อมูลเหล่านั้นไว้ในไฟล์ที่สองที่คุณไม่ได้เปิด</item>
         <item quantity="other">%1$d ปุ่มไม่มีตัวอักษรสำหรับการกดค้างไว้ ไฟล์เก็บข้อมูลเหล่านั้นไว้ในไฟล์ที่สองที่คุณไม่ได้เปิด</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d ปุ่มเปลี่ยนตามสถานะ Shift หรือฟิลด์ในคีย์บอร์ดอื่น แอปคงรูปแบบที่แสดงในสถานะปกติไว้</item>
+        <item quantity="other">%1$d ปุ่มเปลี่ยนตามสถานะ Shift หรือฟิลด์ในคีย์บอร์ดอื่น แอปคงรูปแบบที่แสดงในสถานะปกติไว้</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">แป้นพิมพ์อื่นวัดความกว้างของคีย์ต่างออกไป แอปได้ปรับความกว้างให้พอดีกับตารางนี้</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

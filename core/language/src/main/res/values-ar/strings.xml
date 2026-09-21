@@ -10,6 +10,10 @@
         <item quantity="one">أزال التطبيق مفتاحًا واحدًا (%1$d). لا تحتوي لوحة المفاتيح هذه على مفتاح يقوم بنفس الوظيفة (الرمز %2$s).</item>
         <item quantity="other">أزال التطبيق %1$d مفاتيح. لا تحتوي لوحة المفاتيح هذه على مفاتيح تقوم بنفس الوظيفة (الرموز %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">أزال التطبيق %1$d مفتاح. لا تحتوي لوحة المفاتيح هذه على مفتاح يسمى %2$s.</item>
+        <item quantity="other">أزال التطبيق %1$d مفاتيح. لا تحتوي لوحة المفاتيح هذه على مفاتيح تسمى %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">احتفظ التطبيق بحجم تسمية %1$d مفتاح ولكن ليس بنمط النص الخاص به. ترسم لوحة المفاتيح هذه التسميات بنمط واحد.</item>
         <item quantity="other">احتفظ التطبيق بحجم تسمية %1$d مفاتيح ولكن ليس بنمط النص الخاص بها. ترسم لوحة المفاتيح هذه التسميات بنمط واحد.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">قام التطبيق بتغيير %1$d حرف إلى الشكل الذي تكتبه لوحة المفاتيح هذه.</item>
         <item quantity="other">قام التطبيق بتغيير %1$d حرف إلى الشكل الذي تكتبه لوحة المفاتيح هذه.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">قام التطبيق بإزالة صف الأرقام. قم بتشغيل صف الأرقام في \"التخطيط والحجم\" للحصول على واحد.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">مفتاح واحد %1$d ليس له أحرف عند الضغط المطول. يحتفظ الملف بها في ملف ثانٍ لم تقم بفتحه.</item>
         <item quantity="other">%1$d مفاتيح ليس لها أحرف عند الضغط المطول. يحتفظ الملف بها في ملف ثانٍ لم تقم بفتحه.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">يتغير %1$d مفتاح مع حالة العالي (Shift) أو الحقل في لوحة المفاتيح الأخرى. احتفظ التطبيق بمظهره في حالة السكون.</item>
+        <item quantity="other">تتغير %1$d مفاتيح مع حالة العالي (Shift) أو الحقل في لوحة المفاتيح الأخرى. احتفظ التطبيق بمظهرها في حالة السكون.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">تقيس لوحة المفاتيح الأخرى عرض المفاتيح بشكل مختلف. قام التطبيق بتغيير العرض ليتناسب مع هذه الشبكة.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

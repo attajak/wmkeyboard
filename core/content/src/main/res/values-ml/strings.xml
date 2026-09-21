@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">സോണുകൾ</string>
     <string name="core_content_selection_macro_to_bangla">ബംഗ്ലാ</string>
     <string name="core_content_selection_macro_to_banglish">ബാംഗ്ലിഷ്</string>
+    <string name="core_content_selection_macro_to_hindi">ഹിന്ദി</string>
+    <string name="core_content_selection_macro_to_hinglish">ഹിംഗ്ലീഷ്</string>
     <string name="core_content_selection_macro_translate">വിവർത്തനം ചെയ്യുക</string>
     <string name="core_content_selection_macro_url_decode">ഡീകോഡ് ചെയ്യുക</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

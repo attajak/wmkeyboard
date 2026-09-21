@@ -136,6 +136,8 @@
     <string name="ime_controls_switch">Shintsha ikhibhodi</string>
     <string name="ime_controls_title">Izilawuli zekhibhodi</string>
     <string name="ime_controls_unpin">Khipha iphini</string>
+    <string name="ime_conversion_pack_offer">Landa i-%1$s ukuze uthayiphe izinhlamvu</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Chitha</string>
     <string name="ime_converter_from_label">Kusuka</string>
     <string name="ime_converter_to_label">Kuya ku</string>
     <string name="ime_currency_insert_action">Faka</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">Isihlukanisi: %1$s</string>
     <string name="ime_password_tab_passphrase">Iphasiwedi</string>
     <string name="ime_password_words_label">Amagama</string>
+    <string name="ime_phonetic_word_list_offer">Thola uhlu lwamagama %1$s ukuze uthole amagama angcono</string>
     <string name="ime_plugin_empty_body">I-plugin iyithuluzi elincane elisendaweni evaliwe. Ungangeza ama-plugin kusuka endaweni yokugcina yezengezo noma kusuka kufayela le-.wmplugin. I-plugin ayikwazi ukubona lokho okuthayiphayo.</string>
     <string name="ime_plugin_empty_title">Azikho ama-plugin okwamanje</string>
     <string name="ime_plugin_manage_action">Phatha ama-plugin</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">Akukho okunye okufanayo</string>
     <string name="ime_selection_macro_grammar_clean_toast">Akukho okudinga ukulungiswa</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Isihloli solimi asitholakali</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">I-Hindi phonetic ayilayishiwe</string>
     <string name="ime_selection_macro_no_app_toast">Ayikho uhlelo lokusebenza olungavula lokhu</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Akukho okunye okungahlehliswa</string>
     <string name="ime_selection_macro_stop_label">Misa</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">Ikhibhodi ayikwazi ukuthola imiphumela</string>
     <string name="ime_service_mode_tool_order_toast">Ikhibhodi ilondoloze ukulandelana kwethuluzi kwimodi ye-%1$s. Ezinye izinhlelo zokusebenza zigcina ezazo izindlela.</string>
     <string name="ime_service_no_email_app_toast">Le divayisi ayinayo uhlelo lokusebenza lwe-imeyili. Thumela imibiko ku-%1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Okwe-Avro ne-Hindi phonetic kuphela</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Vula isiNgisi ngaphansi kwezilimi, %1$s, Futhi phakamisa kusuka ku</string>
+    <string name="ime_service_phonetic_english_off_toast">Amagama esiNgisi aphakanyiswa kuphela</string>
+    <string name="ime_service_phonetic_english_on_toast">Amagama esiNgisi ahlala engesiNgisi</string>
     <string name="ime_service_plugins_all_off_notice">Yonke i-plugin oyifakile icishiwe. Vula eyodwa ngaphansi kokuphatha ama-plugin.</string>
     <string name="ime_service_plugins_off_notice">Ama-plugin acishiwe. Avule kuzilungiselelo ukuze uwafake futhi uwasebenzise.</string>
     <string name="ime_service_power_saving_off_toast">Ukonga amandla kucishiwe</string>
@@ -711,6 +719,7 @@
     <string name="ime_tool_password_gen">Iphasiwedi</string>
     <string name="ime_tool_paste">Namathisela</string>
     <string name="ime_tool_persistent">Gcina esikrinini</string>
+    <string name="ime_tool_phonetic_english">Amagama esiNgisi</string>
     <string name="ime_tool_picker_close_desc">Vala uhlu lwezikhiye</string>
     <string name="ime_tool_picker_help">%1$s kuzo zonke izinkinobho</string>
     <string name="ime_tool_picker_leader">%1$s, bese:</string>

@@ -136,6 +136,8 @@
     <string name="ime_controls_switch">สลับแป้นพิมพ์</string>
     <string name="ime_controls_title">การควบคุมแป้นพิมพ์</string>
     <string name="ime_controls_unpin">เลิกปักหมุด</string>
+    <string name="ime_conversion_pack_offer">ดาวน์โหลด %1$s เพื่อพิมพ์ตัวอักษร</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">ปิด</string>
     <string name="ime_converter_from_label">จาก</string>
     <string name="ime_converter_to_label">ถึง</string>
     <string name="ime_currency_insert_action">แทรก</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">ตัวคั่น: %1$s</string>
     <string name="ime_password_tab_passphrase">วลีรหัสผ่าน</string>
     <string name="ime_password_words_label">คำ</string>
+    <string name="ime_phonetic_word_list_offer">รับรายการคำศัพท์ %1$s เพื่อคำที่ดียิ่งขึ้น</string>
     <string name="ime_plugin_empty_body">ปลั๊กอินเป็นเครื่องมือขนาดเล็กที่ทำงานในแซนด์บ็อกซ์ คุณสามารถเพิ่มปลั๊กอินจากที่เก็บส่วนเสริมหรือจากไฟล์ .wmplugin ปลั๊กอินไม่สามารถมองเห็นสิ่งที่คุณพิมพ์ได้</string>
     <string name="ime_plugin_empty_title">ยังไม่มีปลั๊กอิน</string>
     <string name="ime_plugin_manage_action">จัดการปลั๊กอิน</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">ไม่มีรายการอื่นที่ตรงกัน</string>
     <string name="ime_selection_macro_grammar_clean_toast">ไม่มีอะไรต้องแก้ไข</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">ตัวตรวจสอบไวยากรณ์ไม่พร้อมใช้งาน</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">ไม่ได้โหลดการออกเสียงภาษาฮินดี</string>
     <string name="ime_selection_macro_no_app_toast">ไม่มีแอปใดเปิดสิ่งนี้ได้</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">ไม่มีอะไรให้เลิกทำแล้ว</string>
     <string name="ime_selection_macro_stop_label">หยุด</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">คีย์บอร์ดไม่สามารถดึงผลลัพธ์ได้</string>
     <string name="ime_service_mode_tool_order_toast">แป้นพิมพ์บันทึกลำดับเครื่องมือสำหรับโหมด %1$s แล้ว แอปอื่นจะคงลำดับของตนเองไว้</string>
     <string name="ime_service_no_email_app_toast">อุปกรณ์นี้ไม่มีแอปอีเมล โปรดส่งรายงานไปที่ %1$s</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">สำหรับ Avro และการออกเสียงภาษาฮินดีเท่านั้น</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">เปิดใช้งานภาษาอังกฤษภายใต้หัวข้อภาษา %1$s และแนะนำจาก</string>
+    <string name="ime_service_phonetic_english_off_toast">คำภาษาอังกฤษจะถูกแนะนำเท่านั้น</string>
+    <string name="ime_service_phonetic_english_on_toast">คำภาษาอังกฤษยังคงเป็นภาษาอังกฤษ</string>
     <string name="ime_service_plugins_all_off_notice">ปลั๊กอินทั้งหมดที่คุณติดตั้งไว้ถูกปิดใช้งาน โปรดเปิดใช้งานหนึ่งรายการในส่วนจัดการปลั๊กอิน</string>
     <string name="ime_service_plugins_off_notice">ปลั๊กอินถูกปิดอยู่ โปรดเปิดใช้งานในการตั้งค่าเพื่อติดตั้งและเรียกใช้งาน</string>
     <string name="ime_service_power_saving_off_toast">โหมดประหยัดพลังงานปิดอยู่</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">รหัสผ่าน</string>
     <string name="ime_tool_paste">วาง</string>
     <string name="ime_tool_persistent">คงไว้บนหน้าจอ</string>
+    <string name="ime_tool_phonetic_english">คำภาษาอังกฤษ</string>
     <string name="ime_tool_picker_close_desc">ปิดรายการปุ่ม</string>
     <string name="ime_tool_picker_help">%1$s สำหรับทุกปุ่ม</string>
     <string name="ime_tool_picker_leader">%1$s จากนั้น:</string>

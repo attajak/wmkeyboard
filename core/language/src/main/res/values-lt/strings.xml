@@ -10,6 +10,10 @@
         <item quantity="one">Programa pašalino %1$d klavišą. Ši klaviatūra neturi klavišo, atliekančio tą patį veiksmą (kodas %2$s).</item>
         <item quantity="other">Programa pašalino %1$d klavišų. Ši klaviatūra neturi klavišų, atliekančių tą patį veiksmą (kodai %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Programėlė pašalino %1$d klavišą. Ši klaviatūra neturi klavišo, vadinamo %2$s.</item>
+        <item quantity="other">Programėlė pašalino %1$d klavišų. Ši klaviatūra neturi klavišų, vadinamų %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Programa išlaikė %1$d klavišo etiketės dydį, bet ne jos teksto stilių. Ši klaviatūra etiketes piešia vienu stiliumi.</item>
         <item quantity="other">Programa išlaikė %1$d klavišų etiketės dydį, bet ne jų teksto stilių. Ši klaviatūra etiketes piešia vienu stiliumi.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Programa pakeitė %1$d raidę į formą, kurią rašo ši klaviatūra.</item>
         <item quantity="other">Programa pakeitė %1$d raides į formą, kurią rašo ši klaviatūra.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Programa pašalino skaičių eilutę. Įjunkite skaičių eilutę skiltyje „Išdėstymas ir dydis“, kad ją gautumėte.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d klavišas neturi paspaudžiamų ir palaikomų raidžių. Failas jas saugo antrame faile, kurio neatidarėte.</item>
         <item quantity="other">%1$d klavišai neturi paspaudžiamų ir palaikomų raidžių. Failas jas saugo antrame faile, kurio neatidarėte.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d klavišas keičiasi priklausomai nuo didžiosios raidės būsenos arba lauko kitoje klaviatūroje. Programa išlaikė jų išvaizdą ramybės būsenoje.</item>
+        <item quantity="other">%1$d klavišai keičiasi priklausomai nuo didžiosios raidės būsenos arba lauko kitoje klaviatūroje. Programa išlaikė jų išvaizdą ramybės būsenoje.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Kita klaviatūra klavišų plotį matuoja kitaip. Programa pakeitė plotį, kad jis atitiktų šį tinklelį.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

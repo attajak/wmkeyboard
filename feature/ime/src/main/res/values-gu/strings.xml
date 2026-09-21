@@ -136,6 +136,8 @@
     <string name="ime_controls_switch">કીબોર્ડ બદલો</string>
     <string name="ime_controls_title">કીબોર્ડ નિયંત્રણો</string>
     <string name="ime_controls_unpin">અનપિન કરો</string>
+    <string name="ime_conversion_pack_offer">અક્ષરો ટાઈપ કરવા માટે %1$s ડાઉનલોડ કરો</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">રદ કરો</string>
     <string name="ime_converter_from_label">માંથી</string>
     <string name="ime_converter_to_label">સુધી</string>
     <string name="ime_currency_insert_action">દાખલ કરો</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">વિભાજક: %1$s</string>
     <string name="ime_password_tab_passphrase">પાસફ્રેઝ</string>
     <string name="ime_password_words_label">શબ્દો</string>
+    <string name="ime_phonetic_word_list_offer">વધુ સારા શબ્દો માટે %1$s શબ્દ સૂચિ મેળવો</string>
     <string name="ime_plugin_empty_body">પ્લગિન એ સેન્ડબોક્સમાં એક નાનું સાધન છે. તમે એડ-ઓન રિપોઝિટરીમાંથી અથવા .wmplugin ફાઇલમાંથી પ્લગિન ઉમેરી શકો છો. પ્લગિન તમે શું ટાઇપ કરો છો તે જોઈ શકતું નથી.</string>
     <string name="ime_plugin_empty_title">હજુ સુધી કોઈ પ્લગઈન નથી</string>
     <string name="ime_plugin_manage_action">પ્લગઈન્સ મેનેજ કરો</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">બીજી કોઈ મેચ નથી</string>
     <string name="ime_selection_macro_grammar_clean_toast">સુધારવા માટે કંઈ નથી</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">વ્યાકરણ તપાસનાર ઉપલબ્ધ નથી</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">હિન્દી ફોનેટિક લોડ થયેલ નથી</string>
     <string name="ime_selection_macro_no_app_toast">કોઈ એપ આને ખોલી શકતી નથી</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">અનડૂ કરવા માટે કંઈ બાકી નથી</string>
     <string name="ime_selection_macro_stop_label">બંધ કરો</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">કીબોર્ડ પરિણામો મેળવી શકતું નથી</string>
     <string name="ime_service_mode_tool_order_toast">કીબોર્ડે %1$s મોડ માટે ટૂલ ઓર્ડર સાચવ્યો છે. અન્ય એપ્સ તેમનો પોતાનો ઓર્ડર રાખે છે.</string>
     <string name="ime_service_no_email_app_toast">આ ઉપકરણમાં કોઈ ઇમેઇલ એપ નથી. રિપોર્ટ્સ %1$s પર મોકલો.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">ફક્ત Avro અને હિન્દી ફોનેટિક માટે</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">ભાષાઓ હેઠળ અંગ્રેજી ચાલુ કરો, %1$s, આમાંથી પણ સૂચવો</string>
+    <string name="ime_service_phonetic_english_off_toast">અંગ્રેજી શબ્દો ફક્ત સૂચવવામાં આવે છે</string>
+    <string name="ime_service_phonetic_english_on_toast">અંગ્રેજી શબ્દો અંગ્રેજી જ રહેશે</string>
     <string name="ime_service_plugins_all_off_notice">તમે ઇન્સ્ટોલ કરેલ દરેક પ્લગિન બંધ છે. પ્લગિન્સ મેનેજ કરો હેઠળ એક ચાલુ કરો.</string>
     <string name="ime_service_plugins_off_notice">પ્લગઈન્સ બંધ છે. તેમને ઇન્સ્ટોલ અને રન કરવા માટે સેટિંગ્સમાં ચાલુ કરો.</string>
     <string name="ime_service_power_saving_off_toast">પાવર સેવિંગ બંધ છે</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">પાસવર્ડ</string>
     <string name="ime_tool_paste">પેસ્ટ કરો</string>
     <string name="ime_tool_persistent">સ્ક્રીન પર રાખો</string>
+    <string name="ime_tool_phonetic_english">અંગ્રેજી શબ્દો</string>
     <string name="ime_tool_picker_close_desc">કીઓની સૂચિ બંધ કરો</string>
     <string name="ime_tool_picker_help">બધી કી માટે %1$s</string>
     <string name="ime_tool_picker_leader">%1$s, પછી:</string>

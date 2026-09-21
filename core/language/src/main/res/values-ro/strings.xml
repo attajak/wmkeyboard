@@ -10,6 +10,10 @@
         <item quantity="one">Aplicația a eliminat %1$d tastă. Această tastatură nu are nicio tastă care să facă același lucru (cod %2$s).</item>
         <item quantity="other">Aplicația a eliminat %1$d taste. Această tastatură nu are taste care să facă același lucru (coduri %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Aplicația a eliminat %1$d tastă. Această tastatură nu are nicio tastă numită %2$s.</item>
+        <item quantity="other">Aplicația a eliminat %1$d taste. Această tastatură nu are taste numite %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Aplicația a păstrat dimensiunea etichetei pentru %1$d tastă, dar nu și stilul textului acesteia. Această tastatură desenează etichetele într-un singur stil.</item>
         <item quantity="other">Aplicația a păstrat dimensiunea etichetei pentru %1$d taste, dar nu și stilul textului acestora. Această tastatură desenează etichetele într-un singur stil.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Aplicația a schimbat %1$d literă în forma pe care o scrie această tastatură.</item>
         <item quantity="other">Aplicația a schimbat %1$d litere în forma pe care o scrie această tastatură.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Aplicația a eliminat rândul de numere. Activează rândul de numere în Aspect și dimensiune pentru a obține unul.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d tastă nu are litere pentru apăsare lungă. Fișierul le păstrează într-un al doilea fișier pe care nu l-ați deschis.</item>
         <item quantity="other">%1$d taste nu au litere pentru apăsare lungă. Fișierul le păstrează într-un al doilea fișier pe care nu l-ați deschis.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d tastă se modifică în funcție de starea tastei Shift sau de câmpul din cealaltă tastatură. Aplicația a păstrat aspectul acesteia în repaus.</item>
+        <item quantity="other">%1$d taste se modifică în funcție de starea tastei Shift sau de câmpul din cealaltă tastatură. Aplicația a păstrat aspectul acestora în repaus.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Cealaltă tastatură măsoară lățimile tastelor diferit. Aplicația a modificat lățimile pentru a se potrivi acestei grile.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">کی بورڈ تبدیل کریں</string>
     <string name="ime_controls_title">کی بورڈ کنٹرولز</string>
     <string name="ime_controls_unpin">پن ہٹائیں</string>
+    <string name="ime_conversion_pack_offer">حروف ٹائپ کرنے کے لیے %1$s ڈاؤن لوڈ کریں</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">خارج کریں</string>
     <string name="ime_converter_from_label">سے</string>
     <string name="ime_converter_to_label">تک</string>
     <string name="ime_currency_insert_action">درج کریں</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">علیحدہ کرنے والا: %1$s</string>
     <string name="ime_password_tab_passphrase">پاس فریز</string>
     <string name="ime_password_words_label">الفاظ</string>
+    <string name="ime_phonetic_word_list_offer">بہتر الفاظ کے لیے %1$s ورڈ لسٹ حاصل کریں</string>
     <string name="ime_plugin_empty_body">پلگ ان سینڈ باکس میں ایک چھوٹا ٹول ہے۔ آپ ایڈ آن ریپوزٹری یا .wmplugin فائل سے پلگ ان شامل کر سکتے ہیں۔ پلگ ان یہ نہیں دیکھ سکتا کہ آپ کیا ٹائپ کر رہے ہیں۔</string>
     <string name="ime_plugin_empty_title">ابھی تک کوئی پلگ ان نہیں</string>
     <string name="ime_plugin_manage_action">پلگ انز کا نظم کریں</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">کوئی اور مماثلت نہیں</string>
     <string name="ime_selection_macro_grammar_clean_toast">درست کرنے کے لیے کچھ نہیں ہے</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">گرائمر چیکر دستیاب نہیں ہے</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">ہندی صوتی (phonetic) لوڈ نہیں ہے</string>
     <string name="ime_selection_macro_no_app_toast">کوئی ایپ اسے نہیں کھول سکتی</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">ان ڈو کرنے کے لیے کچھ نہیں بچا</string>
     <string name="ime_selection_macro_stop_label">روکیں</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">کی بورڈ نتائج حاصل نہیں کر سکتا</string>
     <string name="ime_service_mode_tool_order_toast">کی بورڈ نے %1$s موڈ کے لیے ٹول آرڈر محفوظ کر لیا ہے۔ دوسری ایپس اپنا آرڈر برقرار رکھتی ہیں۔</string>
     <string name="ime_service_no_email_app_toast">اس ڈیوائس میں کوئی ای میل ایپ نہیں ہے۔ رپورٹس %1$s پر بھیجیں۔</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">صرف Avro اور ہندی صوتی کے لیے</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">زبانوں کے تحت انگریزی کو آن کریں، %1$s، اس کے علاوہ تجویز کریں</string>
+    <string name="ime_service_phonetic_english_off_toast">انگریزی الفاظ صرف تجویز کیے جاتے ہیں</string>
+    <string name="ime_service_phonetic_english_on_toast">انگریزی الفاظ انگریزی ہی رہتے ہیں</string>
     <string name="ime_service_plugins_all_off_notice">آپ کا ہر انسٹال کردہ پلگ ان بند ہے۔ پلگ انز کا نظم کریں کے تحت کسی ایک کو آن کریں۔</string>
     <string name="ime_service_plugins_off_notice">پلگ انز بند ہیں۔ انہیں انسٹال اور چلانے کے لیے ترتیبات میں آن کریں۔</string>
     <string name="ime_service_power_saving_off_toast">پاور سیونگ بند ہے</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">پاس ورڈ</string>
     <string name="ime_tool_paste">پیسٹ کریں</string>
     <string name="ime_tool_persistent">اسکرین پر رکھیں</string>
+    <string name="ime_tool_phonetic_english">انگریزی الفاظ</string>
     <string name="ime_tool_picker_close_desc">کیز کی فہرست بند کریں</string>
     <string name="ime_tool_picker_help">تمام کیز کے لیے %1$s</string>
     <string name="ime_tool_picker_leader">%1$s، پھر:</string>

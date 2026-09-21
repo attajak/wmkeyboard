@@ -10,6 +10,10 @@
         <item quantity="one">Aplikácia odstránila %1$d kláves. Táto klávesnica nemá kláves, ktorý robí to isté (kód %2$s).</item>
         <item quantity="other">Aplikácia odstránila %1$d klávesov. Táto klávesnica nemá klávesy, ktoré robia to isté (kódy %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Aplikácia odstránila %1$d klávesu. Táto klávesnica nemá klávesu s názvom %2$s.</item>
+        <item quantity="other">Aplikácia odstránila %1$d kláves. Táto klávesnica nemá klávesy s názvami %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Aplikácia zachovala veľkosť štítku %1$d klávesu, ale nie jeho štýl textu. Táto klávesnica vykresľuje štítky v jednom štýle.</item>
         <item quantity="other">Aplikácia zachovala veľkosť štítkov %1$d klávesov, ale nie ich štýl textu. Táto klávesnica vykresľuje štítky v jednom štýle.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Aplikácia zmenila %1$d písmeno na tvar, ktorý táto klávesnica používa.</item>
         <item quantity="other">Aplikácia zmenila %1$d písmen na tvar, ktorý táto klávesnica používa.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Aplikácia odstránila číselný riadok. Ak ho chcete získať, zapnite číselný riadok v časti Rozloženie a veľkosť.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d kláves nemá žiadne písmená pri dlhom stlačení. Súbor ich uchováva v druhom súbore, ktorý ste neotvorili.</item>
         <item quantity="other">%1$d klávesov nemá žiadne písmená pri dlhom stlačení. Súbor ich uchováva v druhom súbore, ktorý ste neotvorili.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d kláves sa mení podľa stavu klávesy Shift alebo poľa v inej klávesnici. Aplikácia zachovala ich vzhľad v pokoji.</item>
+        <item quantity="other">%1$d klávesov sa mení podľa stavu klávesy Shift alebo poľa v inej klávesnici. Aplikácia zachovala ich vzhľad v pokoji.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Ostatné klávesnice merajú šírku klávesov inak. Aplikácia zmenila šírky tak, aby vyhovovali tejto mriežke.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

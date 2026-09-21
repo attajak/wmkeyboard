@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">تبديل لوحة المفاتيح</string>
     <string name="ime_controls_title">عناصر تحكم لوحة المفاتيح</string>
     <string name="ime_controls_unpin">إلغاء التثبيت</string>
+    <string name="ime_conversion_pack_offer">قم بتنزيل %1$s لكتابة الأحرف</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">رفض</string>
     <string name="ime_converter_from_label">من</string>
     <string name="ime_converter_to_label">إلى</string>
     <string name="ime_currency_insert_action">إدراج</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">الفاصل: %1$s</string>
     <string name="ime_password_tab_passphrase">عبارة المرور</string>
     <string name="ime_password_words_label">الكلمات</string>
+    <string name="ime_phonetic_word_list_offer">احصل على قائمة كلمات %1$s للحصول على كلمات أفضل</string>
     <string name="ime_plugin_empty_body">الإضافة هي أداة صغيرة في بيئة معزولة. يمكنك إضافة إضافات من مستودع إضافات أو من ملف .wmplugin. لا يمكن للإضافة رؤية ما تكتبه.</string>
     <string name="ime_plugin_empty_title">لا توجد إضافات بعد</string>
     <string name="ime_plugin_manage_action">إدارة الإضافات</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">لا توجد مطابقة أخرى</string>
     <string name="ime_selection_macro_grammar_clean_toast">لا يوجد شيء للإصلاح</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">مدقق القواعد غير متاح</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">نظام الكتابة الصوتية الهندية غير محمل</string>
     <string name="ime_selection_macro_no_app_toast">لا يوجد تطبيق يمكنه فتح هذا</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">لا يوجد شيء للتراجع عنه</string>
     <string name="ime_selection_macro_stop_label">إيقاف</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">لا يمكن للوحة المفاتيح الحصول على نتائج</string>
     <string name="ime_service_mode_tool_order_toast">حفظت لوحة المفاتيح ترتيب الأدوات لوضع %1$s. تحتفظ التطبيقات الأخرى بترتيبها الخاص.</string>
     <string name="ime_service_no_email_app_toast">لا يحتوي هذا الجهاز على تطبيق بريد إلكتروني. أرسل التقارير إلى %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">فقط لـ Avro والهندية الصوتية</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">قم بتفعيل الإنجليزية تحت اللغات، %1$s، واقتراح أيضاً من</string>
+    <string name="ime_service_phonetic_english_off_toast">يتم اقتراح الكلمات الإنجليزية فقط</string>
+    <string name="ime_service_phonetic_english_on_toast">الكلمات الإنجليزية تبقى بالإنجليزية</string>
     <string name="ime_service_plugins_all_off_notice">تم إيقاف تشغيل كل إضافة قمت بتثبيتها. قم بتفعيل إحداها من خلال إدارة الإضافات.</string>
     <string name="ime_service_plugins_off_notice">الإضافات متوقفة. قم بتشغيلها من الإعدادات لتثبيتها وتشغيلها.</string>
     <string name="ime_service_power_saving_off_toast">تم إيقاف توفير الطاقة</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">كلمة المرور</string>
     <string name="ime_tool_paste">لصق</string>
     <string name="ime_tool_persistent">البقاء على الشاشة</string>
+    <string name="ime_tool_phonetic_english">كلمات إنجليزية</string>
     <string name="ime_tool_picker_close_desc">إغلاق قائمة المفاتيح</string>
     <string name="ime_tool_picker_help">%1$s لجميع المفاتيح</string>
     <string name="ime_tool_picker_leader">%1$s، ثم:</string>

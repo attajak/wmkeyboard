@@ -134,6 +134,8 @@
     <string name="ime_controls_switch">Billentyűzet váltása</string>
     <string name="ime_controls_title">Billentyűzetvezérlők</string>
     <string name="ime_controls_unpin">Kitűzés megszüntetése</string>
+    <string name="ime_conversion_pack_offer">Töltse le a %1$s-t a karakterek gépeléséhez</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Elvetés</string>
     <string name="ime_converter_from_label">Ebből</string>
     <string name="ime_converter_to_label">Cél</string>
     <string name="ime_currency_insert_action">Beszúrás</string>
@@ -438,6 +440,7 @@
     <string name="ime_password_separator_label">Elválasztó: %1$s</string>
     <string name="ime_password_tab_passphrase">Jelszó</string>
     <string name="ime_password_words_label">Szavak</string>
+    <string name="ime_phonetic_word_list_offer">Szerezze be a(z) %1$s szójegyzéket a jobb szavakért</string>
     <string name="ime_plugin_empty_body">A bővítmény egy kis eszköz egy homokozóban. Bővítményeket hozzáadhat egy bővítménytárból vagy egy .wmplugin fájlból. Egy bővítmény nem látja, mit gépel.</string>
     <string name="ime_plugin_empty_title">Még nincsenek bővítmények</string>
     <string name="ime_plugin_manage_action">Bővítmények kezelése</string>
@@ -509,6 +512,7 @@
     <string name="ime_selection_macro_find_none_toast">Nincs más találat</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nincs javítanivaló</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">A nyelvhelyesség-ellenőrző nem érhető el</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">A hindi fonetikus nincs betöltve</string>
     <string name="ime_selection_macro_no_app_toast">Egyetlen alkalmazás sem tudja megnyitni ezt</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Nincs mit visszavonni</string>
     <string name="ime_selection_macro_stop_label">Leállítás</string>
@@ -537,6 +541,10 @@
     <string name="ime_service_media_fetch_error">A billentyűzet nem tud eredményeket lekérni</string>
     <string name="ime_service_mode_tool_order_toast">A billentyűzet csak a %1$s módhoz mentette el az eszközök sorrendjét. Más alkalmazások megtartják a saját sorrendjüket.</string>
     <string name="ime_service_no_email_app_toast">Ezen az eszközön nincs e-mail alkalmazás. Küldje a jelentéseket a %1$s címre.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Csak Avro és hindi fonetikus kiosztáshoz</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Kapcsolja be az angolt a Nyelvek alatt, %1$s, Javaslatok innen is</string>
+    <string name="ime_service_phonetic_english_off_toast">Csak angol szavak javasoltak</string>
+    <string name="ime_service_phonetic_english_on_toast">Az angol szavak angolok maradnak</string>
     <string name="ime_service_plugins_all_off_notice">Minden telepített bővítmény ki van kapcsolva. Kapcsoljon be egyet a Bővítmények kezelése menüpontban.</string>
     <string name="ime_service_plugins_off_notice">A bővítmények ki vannak kapcsolva. A telepítéshez és futtatáshoz kapcsolja be őket a Beállításokban.</string>
     <string name="ime_service_power_saving_off_toast">Energiatakarékos üzemmód kikapcsolva</string>
@@ -708,6 +716,7 @@
     <string name="ime_tool_password_gen">Jelszó</string>
     <string name="ime_tool_paste">Beillesztés</string>
     <string name="ime_tool_persistent">Tartsa a képernyőn</string>
+    <string name="ime_tool_phonetic_english">Angol szavak</string>
     <string name="ime_tool_picker_close_desc">Billentyűlista bezárása</string>
     <string name="ime_tool_picker_help">%1$s minden billentyűhöz</string>
     <string name="ime_tool_picker_leader">%1$s, majd:</string>

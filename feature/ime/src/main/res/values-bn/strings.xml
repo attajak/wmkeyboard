@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">কিবোর্ড পরিবর্তন করুন</string>
     <string name="ime_controls_title">কীবোর্ড কন্ট্রোল</string>
     <string name="ime_controls_unpin">আনপিন করুন</string>
+    <string name="ime_conversion_pack_offer">অক্ষর টাইপ করতে %1$s ডাউনলোড করুন</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">বাতিল করুন</string>
     <string name="ime_converter_from_label">থেকে</string>
     <string name="ime_converter_to_label">থেকে</string>
     <string name="ime_currency_insert_action">ইনসার্ট করুন</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">বিভাজক: %1$s</string>
     <string name="ime_password_tab_passphrase">পাসফ্রেজ</string>
     <string name="ime_password_words_label">শব্দ</string>
+    <string name="ime_phonetic_word_list_offer">আরও ভালো শব্দের জন্য %1$s শব্দ তালিকাটি পান</string>
     <string name="ime_plugin_empty_body">একটি প্লাগইন হলো স্যান্ডবক্সের একটি ছোট টুল। আপনি অ্যাড-অন রিপোজিটরি বা .wmplugin ফাইল থেকে প্লাগইন যোগ করতে পারেন। একটি প্লাগইন আপনি কী টাইপ করছেন তা দেখতে পারে না।</string>
     <string name="ime_plugin_empty_title">এখনও কোনো প্লাগইন নেই</string>
     <string name="ime_plugin_manage_action">প্লাগইন পরিচালনা করুন</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">আর কোনো মিল নেই</string>
     <string name="ime_selection_macro_grammar_clean_toast">ঠিক করার মতো কিছু নেই</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">গ্রামার চেকার উপলব্ধ নেই</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">হিন্দি ফোনেটিক লোড করা নেই</string>
     <string name="ime_selection_macro_no_app_toast">কোনো অ্যাপ এটি খুলতে পারে না</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">আনডু করার মতো আর কিছু নেই</string>
     <string name="ime_selection_macro_stop_label">থামুন</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">কীবোর্ডটি ফলাফল পেতে পারছে না</string>
     <string name="ime_service_mode_tool_order_toast">কীবোর্ড %1$s মোডের জন্য টুলের ক্রম সংরক্ষণ করেছে। অন্যান্য অ্যাপ তাদের নিজস্ব ক্রম বজায় রাখে।</string>
     <string name="ime_service_no_email_app_toast">এই ডিভাইসে কোনো ইমেইল অ্যাপ নেই। রিপোর্টগুলো %1$s-এ পাঠান।</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">শুধুমাত্র Avro এবং হিন্দি ফোনেটিকের জন্য</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">ভাষা (Languages), %1$s, এবং \'এখান থেকে সাজেস্ট করুন\' (Also suggest from) এর অধীনে ইংরেজি চালু করুন</string>
+    <string name="ime_service_phonetic_english_off_toast">শুধুমাত্র ইংরেজি শব্দ সাজেস্ট করা হয়</string>
+    <string name="ime_service_phonetic_english_on_toast">ইংরেজি শব্দ ইংরেজিই থাকে</string>
     <string name="ime_service_plugins_all_off_notice">আপনার ইনস্টল করা প্রতিটি প্লাগইন বন্ধ আছে। প্লাগইন ম্যানেজ করুন-এ গিয়ে একটি চালু করুন।</string>
     <string name="ime_service_plugins_off_notice">প্লাগইন বন্ধ আছে। ইনস্টল এবং চালানোর জন্য সেটিংসে গিয়ে সেগুলো চালু করুন।</string>
     <string name="ime_service_power_saving_off_toast">পাওয়ার সেভিং বন্ধ আছে</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">পাসওয়ার্ড</string>
     <string name="ime_tool_paste">পেস্ট করুন</string>
     <string name="ime_tool_persistent">স্ক্রিনে রাখুন</string>
+    <string name="ime_tool_phonetic_english">ইংরেজি শব্দ</string>
     <string name="ime_tool_picker_close_desc">কী-এর তালিকা বন্ধ করুন</string>
     <string name="ime_tool_picker_help">সব কী-এর জন্য %1$s</string>
     <string name="ime_tool_picker_leader">%1$s, তারপর:</string>

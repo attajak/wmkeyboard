@@ -10,6 +10,10 @@
         <item quantity="one">Die App hat %1$d Taste entfernt. Diese Tastatur hat keine Taste, die dasselbe bewirkt (Code %2$s).</item>
         <item quantity="other">Die App hat %1$d Tasten entfernt. Diese Tastatur hat keine Tasten, die dasselbe bewirken (Codes %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Die App hat %1$d Taste entfernt. Diese Tastatur hat keine Taste namens %2$s.</item>
+        <item quantity="other">Die App hat %1$d Tasten entfernt. Diese Tastatur hat keine Tasten namens %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Die App hat die Beschriftungsgröße von %1$d Taste beibehalten, aber nicht ihren Textstil. Diese Tastatur zeichnet Beschriftungen in einem Stil.</item>
         <item quantity="other">Die App hat die Beschriftungsgröße von %1$d Tasten beibehalten, aber nicht ihren Textstil. Diese Tastatur zeichnet Beschriftungen in einem Stil.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Die App hat %1$d Buchstaben in die Form geändert, die diese Tastatur schreibt.</item>
         <item quantity="other">Die App hat %1$d Buchstaben in die Form geändert, die diese Tastatur schreibt.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Die App hat die Zahlenreihe entfernt. Schalten Sie die Zahlenreihe unter Layout und Größe ein, um eine zu erhalten.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d Taste hat keine Buchstaben beim Gedrückthalten. Die Datei bewahrt sie in einer zweiten Datei auf, die Sie nicht geöffnet haben.</item>
         <item quantity="other">%1$d Tasten haben keine Buchstaben beim Gedrückthalten. Die Datei bewahrt sie in einer zweiten Datei auf, die Sie nicht geöffnet haben.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d Taste ändert sich mit dem Umschaltzustand oder dem Feld in der anderen Tastatur. Die App hat das Aussehen im Ruhezustand beibehalten.</item>
+        <item quantity="other">%1$d Tasten ändern sich mit dem Umschaltzustand oder dem Feld in der anderen Tastatur. Die App hat das Aussehen im Ruhezustand beibehalten.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Die andere Tastatur misst die Tastenbreiten anders. Die App hat die Breiten angepasst, um in dieses Raster zu passen.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

@@ -10,6 +10,10 @@
         <item quantity="one">অ্যাপটি %1$d কী সরিয়েছে। এই কিবোর্ডে একই কাজ করে এমন কোনো কী নেই (কোড %2$s)।</item>
         <item quantity="other">অ্যাপটি %1$d কী সরিয়েছে। এই কিবোর্ডে একই কাজ করে এমন কোনো কী নেই (কোড %2$s)।</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">অ্যাপটি %1$dটি কি মুছে ফেলেছে। এই কিবোর্ডে %2$s নামে কোনো কি নেই।</item>
+        <item quantity="other">অ্যাপটি %1$dটি কি মুছে ফেলেছে। এই কিবোর্ডে %2$s নামে কোনো কি নেই।</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">অ্যাপটি %1$d টি কী-এর লেবেলের আকার বজায় রেখেছে কিন্তু টেক্সট স্টাইল রাখেনি। এই কিবোর্ডটি লেবেলগুলোকে একটি স্টাইলে আঁকে।</item>
         <item quantity="other">অ্যাপটি %1$d টি কী-এর লেবেলের আকার বজায় রেখেছে কিন্তু তাদের টেক্সট স্টাইল রাখেনি। এই কিবোর্ডটি লেবেলগুলোকে একটি স্টাইলে আঁকে।</item>
@@ -18,9 +22,14 @@
         <item quantity="one">অ্যাপটি %1$d টি অক্ষরকে এমন রূপে পরিবর্তন করেছে যা এই কিবোর্ড লেখে।</item>
         <item quantity="other">অ্যাপটি %1$d টি অক্ষরকে এমন রূপে পরিবর্তন করেছে যা এই কিবোর্ড লেখে।</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">অ্যাপটি সংখ্যার সারিটি সরিয়ে দিয়েছে। একটি পেতে লেআউট এবং সাইজ (Layout and size) সেকশনে গিয়ে সংখ্যার সারি চালু করুন।</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d কী-তে কোনো প্রেস-অ্যান্ড-হোল্ড অক্ষর নেই। ফাইলটি সেগুলোকে দ্বিতীয় একটি ফাইলে রাখে যা আপনি খোলেননি।</item>
         <item quantity="other">%1$d কী-তে কোনো প্রেস-অ্যান্ড-হোল্ড অক্ষর নেই। ফাইলটি সেগুলোকে দ্বিতীয় একটি ফাইলে রাখে যা আপনি খোলেননি।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d টি কী শিফট স্টেট বা অন্য কিবোর্ডের ফিল্ডের সাথে পরিবর্তিত হয়। অ্যাপটি সেটিকে স্থির অবস্থায় যেভাবে দেখায় সেভাবেই রেখেছে।</item>
+        <item quantity="other">%1$d টি কী শিফট স্টেট বা অন্য কিবোর্ডের ফিল্ডের সাথে পরিবর্তিত হয়। অ্যাপটি সেগুলোকে স্থির অবস্থায় যেভাবে দেখায় সেভাবেই রেখেছে।</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">অন্য কিবোর্ডগুলো কি-এর প্রস্থ ভিন্নভাবে পরিমাপ করে। অ্যাপটি এই গ্রিডের সাথে মানানসই করার জন্য প্রস্থ পরিবর্তন করেছে।</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

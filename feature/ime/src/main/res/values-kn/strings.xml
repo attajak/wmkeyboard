@@ -136,6 +136,8 @@
     <string name="ime_controls_switch">ಕೀಬೋರ್ಡ್ ಬದಲಾಯಿಸಿ</string>
     <string name="ime_controls_title">ಕೀಬೋರ್ಡ್ ನಿಯಂತ್ರಣಗಳು</string>
     <string name="ime_controls_unpin">ಅನ್‌ಪಿನ್ ಮಾಡಿ</string>
+    <string name="ime_conversion_pack_offer">ಅಕ್ಷರಗಳನ್ನು ಟೈಪ್ ಮಾಡಲು %1$s ಅನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">ವಜಾಗೊಳಿಸಿ</string>
     <string name="ime_converter_from_label">ಇಲ್ಲಿಂದ</string>
     <string name="ime_converter_to_label">ಗೆ</string>
     <string name="ime_currency_insert_action">ಸೇರಿಸಿ</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">ವಿಭಜಕ: %1$s</string>
     <string name="ime_password_tab_passphrase">ಪಾಸ್‌ಫ್ರೇಸ್</string>
     <string name="ime_password_words_label">ಪದಗಳು</string>
+    <string name="ime_phonetic_word_list_offer">ಉತ್ತಮ ಪದಗಳಿಗಾಗಿ %1$s ಪದಗಳ ಪಟ್ಟಿಯನ್ನು ಪಡೆಯಿರಿ</string>
     <string name="ime_plugin_empty_body">ಪ್ಲಗಿನ್ ಎನ್ನುವುದು ಸ್ಯಾಂಡ್‌ಬಾಕ್ಸ್‌ನಲ್ಲಿರುವ ಒಂದು ಸಣ್ಣ ಸಾಧನವಾಗಿದೆ. ನೀವು ಆಡ್-ಆನ್ ರೆಪೊಸಿಟರಿಯಿಂದ ಅಥವಾ .wmplugin ಫೈಲ್‌ನಿಂದ ಪ್ಲಗಿನ್‌ಗಳನ್ನು ಸೇರಿಸಬಹುದು. ಪ್ಲಗಿನ್ ನೀವು ಏನು ಟೈಪ್ ಮಾಡುತ್ತಿದ್ದೀರಿ ಎಂಬುದನ್ನು ನೋಡಲು ಸಾಧ್ಯವಿಲ್ಲ.</string>
     <string name="ime_plugin_empty_title">ಇನ್ನೂ ಯಾವುದೇ ಪ್ಲಗಿನ್‌ಗಳಿಲ್ಲ</string>
     <string name="ime_plugin_manage_action">ಪ್ಲಗಿನ್‌ಗಳನ್ನು ನಿರ್ವಹಿಸಿ</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">ಬೇರೆ ಯಾವುದೇ ಹೊಂದಾಣಿಕೆ ಇಲ್ಲ</string>
     <string name="ime_selection_macro_grammar_clean_toast">ಸರಿಪಡಿಸಲು ಏನೂ ಇಲ್ಲ</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">ವ್ಯಾಕರಣ ಪರಿಶೀಲಕ ಲಭ್ಯವಿಲ್ಲ</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">ಹಿಂದಿ ಫೋನೆಟಿಕ್ ಲೋಡ್ ಆಗಿಲ್ಲ</string>
     <string name="ime_selection_macro_no_app_toast">ಯಾವುದೇ ಆಪ್ ಇದನ್ನು ತೆರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">ಅನ್-ಡೂ ಮಾಡಲು ಏನೂ ಉಳಿದಿಲ್ಲ</string>
     <string name="ime_selection_macro_stop_label">ನಿಲ್ಲಿಸಿ</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">ಕೀಬೋರ್ಡ್ ಫಲಿತಾಂಶಗಳನ್ನು ಪಡೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
     <string name="ime_service_mode_tool_order_toast">ಕೀಬೋರ್ಡ್ %1$s ಮೋಡ್‌ಗಾಗಿ ಟೂಲ್ ಆರ್ಡರ್ ಅನ್ನು ಉಳಿಸಿದೆ. ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ತಮ್ಮದೇ ಆದ ಕ್ರಮವನ್ನು ಇರಿಸಿಕೊಳ್ಳುತ್ತವೆ.</string>
     <string name="ime_service_no_email_app_toast">ಈ ಸಾಧನದಲ್ಲಿ ಯಾವುದೇ ಇಮೇಲ್ ಅಪ್ಲಿಕೇಶನ್ ಇಲ್ಲ. ವರದಿಗಳನ್ನು %1$s ಗೆ ಕಳುಹಿಸಿ.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">ಅವ್ರೋ (Avro) ಮತ್ತು ಹಿಂದಿ ಫೋನೆಟಿಕ್‌ಗಾಗಿ ಮಾತ್ರ</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">ಭಾಷೆಗಳ ಅಡಿಯಲ್ಲಿ ಇಂಗ್ಲಿಷ್ ಅನ್ನು ಆನ್ ಮಾಡಿ, %1$s, ಇವರಿಂದಲೂ ಸೂಚಿಸಿ</string>
+    <string name="ime_service_phonetic_english_off_toast">ಇಂಗ್ಲಿಷ್ ಪದಗಳನ್ನು ಮಾತ್ರ ಸೂಚಿಸಲಾಗುತ್ತದೆ</string>
+    <string name="ime_service_phonetic_english_on_toast">ಇಂಗ್ಲಿಷ್ ಪದಗಳು ಇಂಗ್ಲಿಷ್ ಆಗಿಯೇ ಉಳಿಯುತ್ತವೆ</string>
     <string name="ime_service_plugins_all_off_notice">ನೀವು ಸ್ಥಾಪಿಸಿದ ಪ್ರತಿಯೊಂದು ಪ್ಲಗಿನ್ ಅನ್ನು ಆಫ್ ಮಾಡಲಾಗಿದೆ. ಪ್ಲಗಿನ್‌ಗಳನ್ನು ನಿರ್ವಹಿಸಿ ಅಡಿಯಲ್ಲಿ ಒಂದನ್ನು ಆನ್ ಮಾಡಿ.</string>
     <string name="ime_service_plugins_off_notice">ಪ್ಲಗಿನ್‌ಗಳನ್ನು ಆಫ್ ಮಾಡಲಾಗಿದೆ. ಅವುಗಳನ್ನು ಸ್ಥಾಪಿಸಲು ಮತ್ತು ರನ್ ಮಾಡಲು ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಆನ್ ಮಾಡಿ.</string>
     <string name="ime_service_power_saving_off_toast">ಪವರ್ ಸೇವಿಂಗ್ ಆಫ್ ಆಗಿದೆ</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">ಗುಪ್ತಪದ</string>
     <string name="ime_tool_paste">ಅಂಟಿಸಿ</string>
     <string name="ime_tool_persistent">ಪರದೆಯ ಮೇಲೆ ಇರಿಸಿ</string>
+    <string name="ime_tool_phonetic_english">ಇಂಗ್ಲಿಷ್ ಪದಗಳು</string>
     <string name="ime_tool_picker_close_desc">ಕೀಗಳ ಪಟ್ಟಿಯನ್ನು ಮುಚ್ಚಿ</string>
     <string name="ime_tool_picker_help">ಎಲ್ಲಾ ಕೀಲಿಗಳಿಗೆ %1$s</string>
     <string name="ime_tool_picker_leader">%1$s, ನಂತರ:</string>

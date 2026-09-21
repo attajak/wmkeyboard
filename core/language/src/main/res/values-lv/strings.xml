@@ -10,6 +10,10 @@
         <item quantity="one">Lietotne noņēma %1$d taustiņu. Šajā tastatūrā nav taustiņa, kas veic to pašu darbību (kods %2$s).</item>
         <item quantity="other">Lietotne noņēma %1$d taustiņus. Šajā tastatūrā nav taustiņu, kas veic to pašu darbību (kodi %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Lietotne noņēma %1$d taustiņu. Šajā tastatūrā nav taustiņa ar nosaukumu %2$s.</item>
+        <item quantity="other">Lietotne noņēma %1$d taustiņus. Šajā tastatūrā nav taustiņu ar nosaukumu %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Lietotne saglabāja %1$d taustiņa etiķetes izmēru, bet ne tās teksta stilu. Šī tastatūra zīmē etiķetes vienā stilā.</item>
         <item quantity="other">Lietotne saglabāja %1$d taustiņu etiķešu izmēru, bet ne to teksta stilu. Šī tastatūra zīmē etiķetes vienā stilā.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Lietotne mainīja %1$d burtu uz formu, kādā raksta šī tastatūra.</item>
         <item quantity="other">Lietotne mainīja %1$d burtus uz formu, kādā raksta šī tastatūra.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Lietotne noņēma skaitļu rindu. Lai to iegūtu, ieslēdziet skaitļu rindu sadaļā Izkārtojums un izmērs.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d taustiņam nav nospiežamu un turamu burtu. Fails tos glabā otrajā failā, kuru jūs neatvērāt.</item>
         <item quantity="other">%1$d taustiņiem nav nospiežamu un turamu burtu. Fails tos glabā otrajā failā, kuru jūs neatvērāt.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d taustiņš mainās atkarībā no reģistra stāvokļa vai lauka citā tastatūrā. Lietotne saglabāja tā izskatu miera stāvoklī.</item>
+        <item quantity="other">%1$d taustiņi mainās atkarībā no reģistra stāvokļa vai lauka citā tastatūrā. Lietotne saglabāja to izskatu miera stāvoklī.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Otra tastatūra mēra taustiņu platumu atšķirīgi. Lietotne mainīja platumus, lai tie atbilstu šim režģim.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

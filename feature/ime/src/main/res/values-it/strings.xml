@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Cambia tastiera</string>
     <string name="ime_controls_title">Controlli tastiera</string>
     <string name="ime_controls_unpin">Sblocca</string>
+    <string name="ime_conversion_pack_offer">Scarica %1$s per digitare i caratteri</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Ignora</string>
     <string name="ime_converter_from_label">Da</string>
     <string name="ime_converter_to_label">A</string>
     <string name="ime_currency_insert_action">Inserisci</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Separatore: %1$s</string>
     <string name="ime_password_tab_passphrase">Passphrase</string>
     <string name="ime_password_words_label">Parole</string>
+    <string name="ime_phonetic_word_list_offer">Ottieni l\'elenco di parole %1$s per parole migliori</string>
     <string name="ime_plugin_empty_body">Un plugin è un piccolo strumento in una sandbox. Puoi aggiungere plugin da un repository di componenti aggiuntivi o da un file .wmplugin. Un plugin non può vedere ciò che scrivi.</string>
     <string name="ime_plugin_empty_title">Nessun plugin ancora</string>
     <string name="ime_plugin_manage_action">Gestisci plugin</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Nessun\'altra corrispondenza</string>
     <string name="ime_selection_macro_grammar_clean_toast">Niente da correggere</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Il correttore grammaticale non è disponibile</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi fonetico non è caricato</string>
     <string name="ime_selection_macro_no_app_toast">Nessuna app può aprire questo</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Niente più da annullare</string>
     <string name="ime_selection_macro_stop_label">Interrompi</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">La tastiera non riesce a ottenere risultati</string>
     <string name="ime_service_mode_tool_order_toast">La tastiera ha salvato l\'ordine degli strumenti per la modalità %1$s. Altre app mantengono il proprio ordine.</string>
     <string name="ime_service_no_email_app_toast">Questo dispositivo non ha un\'app email. Invia i rapporti a %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Solo per Avro e fonetica hindi</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Attiva l\'inglese in Lingue, %1$s, Suggerisci anche da</string>
+    <string name="ime_service_phonetic_english_off_toast">Le parole inglesi vengono solo suggerite</string>
+    <string name="ime_service_phonetic_english_on_toast">Le parole inglesi rimangono inglesi</string>
     <string name="ime_service_plugins_all_off_notice">Tutti i plugin installati sono disattivati. Attivane uno in Gestisci plugin.</string>
     <string name="ime_service_plugins_off_notice">I plugin sono disattivati. Attivali nelle Impostazioni per installarli ed eseguirli.</string>
     <string name="ime_service_power_saving_off_toast">Risparmio energetico disattivato</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Password</string>
     <string name="ime_tool_paste">Incolla</string>
     <string name="ime_tool_persistent">Mantieni sullo schermo</string>
+    <string name="ime_tool_phonetic_english">Parole inglesi</string>
     <string name="ime_tool_picker_close_desc">Chiudi l\'elenco dei tasti</string>
     <string name="ime_tool_picker_help">%1$s per tutti i tasti</string>
     <string name="ime_tool_picker_leader">%1$s, poi:</string>

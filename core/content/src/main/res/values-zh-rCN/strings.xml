@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">时区</string>
     <string name="core_content_selection_macro_to_bangla">孟加拉语</string>
     <string name="core_content_selection_macro_to_banglish">孟加拉语拼音 (Banglish)</string>
+    <string name="core_content_selection_macro_to_hindi">印地语</string>
+    <string name="core_content_selection_macro_to_hinglish">印地语-英语混合语 (Hinglish)</string>
     <string name="core_content_selection_macro_translate">翻译</string>
     <string name="core_content_selection_macro_url_decode">解码</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

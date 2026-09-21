@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">జోన్‌లు</string>
     <string name="core_content_selection_macro_to_bangla">బంగ్లా</string>
     <string name="core_content_selection_macro_to_banglish">బాంగ్లిష్</string>
+    <string name="core_content_selection_macro_to_hindi">హిందీ</string>
+    <string name="core_content_selection_macro_to_hinglish">హింగ్లీష్</string>
     <string name="core_content_selection_macro_translate">అనువదించు</string>
     <string name="core_content_selection_macro_url_decode">డీకోడ్</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

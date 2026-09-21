@@ -136,6 +136,8 @@
     <string name="ime_controls_switch">Badilisha kibodi</string>
     <string name="ime_controls_title">Vidhibiti vya kibodi</string>
     <string name="ime_controls_unpin">Ondoa pini</string>
+    <string name="ime_conversion_pack_offer">Pakua %1$s ili kuandika herufi</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Ondoa</string>
     <string name="ime_converter_from_label">Kutoka</string>
     <string name="ime_converter_to_label">Kwenda</string>
     <string name="ime_currency_insert_action">Ingiza</string>
@@ -441,6 +443,7 @@
     <string name="ime_password_separator_label">Kitenganishi: %1$s</string>
     <string name="ime_password_tab_passphrase">Neno la siri</string>
     <string name="ime_password_words_label">Maneno</string>
+    <string name="ime_phonetic_word_list_offer">Pata orodha ya maneno ya %1$s kwa maneno bora zaidi</string>
     <string name="ime_plugin_empty_body">Programu jalizi ni zana ndogo iliyo kwenye sandbox. Unaweza kuongeza programu jalizi kutoka kwenye hifadhi ya programu jalizi au kutoka kwenye faili ya .wmplugin. Programu jalizi haiwezi kuona unachoandika.</string>
     <string name="ime_plugin_empty_title">Hakuna programu jalizi bado</string>
     <string name="ime_plugin_manage_action">Dhibiti programu jalizi</string>
@@ -512,6 +515,7 @@
     <string name="ime_selection_macro_find_none_toast">Hakuna mechi nyingine</string>
     <string name="ime_selection_macro_grammar_clean_toast">Hakuna cha kurekebisha</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Kikagua sarufi hakipatikani</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi ya fonetiki haijapakiwa</string>
     <string name="ime_selection_macro_no_app_toast">Hakuna programu inayoweza kufungua hii</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Hakuna cha kutendua</string>
     <string name="ime_selection_macro_stop_label">Simamisha</string>
@@ -540,6 +544,10 @@
     <string name="ime_service_media_fetch_error">Kibodi haiwezi kupata matokeo</string>
     <string name="ime_service_mode_tool_order_toast">Kibodi imehifadhi mpangilio wa zana kwa ajili ya hali ya %1$s pekee. Programu nyingine huweka mpangilio wake.</string>
     <string name="ime_service_no_email_app_toast">Kifaa hiki hakina programu ya barua pepe. Tuma ripoti kwa %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Kwa ajili ya Avro na fonetiki ya Kihindi pekee</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Washa Kiingereza chini ya Lugha, %1$s, Pia pendekeza kutoka</string>
+    <string name="ime_service_phonetic_english_off_toast">Maneno ya Kiingereza yanapendekezwa tu</string>
+    <string name="ime_service_phonetic_english_on_toast">Maneno ya Kiingereza hubaki ya Kiingereza</string>
     <string name="ime_service_plugins_all_off_notice">Kila programu-jalizi uliyosakinisha imezimwa. Washa moja chini ya Dhibiti programu-jalizi.</string>
     <string name="ime_service_plugins_off_notice">Programu jalizi zimezimwa. Ziwashe kwenye Mipangilio ili usakinishe na kuziendesha.</string>
     <string name="ime_service_power_saving_off_toast">Kuokoa nishati kumezimwa</string>
@@ -711,6 +719,7 @@
     <string name="ime_tool_password_gen">Nenosiri</string>
     <string name="ime_tool_paste">Bandika</string>
     <string name="ime_tool_persistent">Weka kwenye skrini</string>
+    <string name="ime_tool_phonetic_english">Maneno ya Kiingereza</string>
     <string name="ime_tool_picker_close_desc">Funga orodha ya funguo</string>
     <string name="ime_tool_picker_help">%1$s kwa funguo zote</string>
     <string name="ime_tool_picker_leader">%1$s, kisha:</string>

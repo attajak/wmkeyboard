@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Vaheta klaviatuuri</string>
     <string name="ime_controls_title">Klaviatuuri juhtnupud</string>
     <string name="ime_controls_unpin">Eemalda kinnitus</string>
+    <string name="ime_conversion_pack_offer">Laadi alla %1$s märkide sisestamiseks</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Loobu</string>
     <string name="ime_converter_from_label">Alates</string>
     <string name="ime_converter_to_label">Kuhu</string>
     <string name="ime_currency_insert_action">Sisesta</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Eraldaja: %1$s</string>
     <string name="ime_password_tab_passphrase">Paroolifraas</string>
     <string name="ime_password_words_label">Sõnad</string>
+    <string name="ime_phonetic_word_list_offer">Hangi %1$s sõnaloend paremate sõnade jaoks</string>
     <string name="ime_plugin_empty_body">Plugin on väike tööriist liivakastis. Saate lisada pluginaid lisandmoodulite hoidlast või .wmplugin-failist. Plugin ei näe, mida te kirjutate.</string>
     <string name="ime_plugin_empty_title">Pistikprogramme veel pole</string>
     <string name="ime_plugin_manage_action">Halda pluginaid</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Rohkem vasteid pole</string>
     <string name="ime_selection_macro_grammar_clean_toast">Pole midagi parandada</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Grammatika kontrollija pole saadaval</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi foneetiline klaviatuur pole laaditud</string>
     <string name="ime_selection_macro_no_app_toast">Ükski rakendus ei saa seda avada</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Rohkem pole midagi tagasi võtta</string>
     <string name="ime_selection_macro_stop_label">Peata</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Klaviatuur ei saa tulemusi hankida</string>
     <string name="ime_service_mode_tool_order_toast">Klaviatuur salvestas tööriistade järjestuse ainult %1$s režiimi jaoks. Teised rakendused säilitavad oma järjestuse.</string>
     <string name="ime_service_no_email_app_toast">Selles seadmes pole e-posti rakendust. Saatke aruanded aadressile %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Ainult Avro ja hindi foneetilise jaoks</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Lülita inglise keel sisse Keelte, %1$s, Soovita ka keelest all</string>
+    <string name="ime_service_phonetic_english_off_toast">Ingliskeelseid sõnu ainult soovitatakse</string>
+    <string name="ime_service_phonetic_english_on_toast">Ingliskeelsed sõnad jäävad ingliskeelseteks</string>
     <string name="ime_service_plugins_all_off_notice">Kõik installitud pistikprogrammid on välja lülitatud. Lülitage mõni neist sisse jaotises „Halda pistikprogramme“.</string>
     <string name="ime_service_plugins_off_notice">Pluginad on välja lülitatud. Nende installimiseks ja käivitamiseks lülitage need seadetes sisse.</string>
     <string name="ime_service_power_saving_off_toast">Energiasääst on välja lülitatud</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Parool</string>
     <string name="ime_tool_paste">Kleebi</string>
     <string name="ime_tool_persistent">Hoia ekraanil</string>
+    <string name="ime_tool_phonetic_english">Ingliskeelsed sõnad</string>
     <string name="ime_tool_picker_close_desc">Sulge klahvide loend</string>
     <string name="ime_tool_picker_help">%1$s kõigi klahvide jaoks</string>
     <string name="ime_tool_picker_leader">%1$s, seejärel:</string>

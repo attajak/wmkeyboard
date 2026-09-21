@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">영역</string>
     <string name="core_content_selection_macro_to_bangla">벵골어</string>
     <string name="core_content_selection_macro_to_banglish">뱅글리시</string>
+    <string name="core_content_selection_macro_to_hindi">힌디어</string>
+    <string name="core_content_selection_macro_to_hinglish">힌글리시</string>
     <string name="core_content_selection_macro_translate">번역</string>
     <string name="core_content_selection_macro_url_decode">디코딩</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

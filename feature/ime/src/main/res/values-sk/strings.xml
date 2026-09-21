@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Prepnúť klávesnicu</string>
     <string name="ime_controls_title">Ovládanie klávesnice</string>
     <string name="ime_controls_unpin">Odopnúť</string>
+    <string name="ime_conversion_pack_offer">Stiahnite si %1$s na písanie znakov</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Zrušiť</string>
     <string name="ime_converter_from_label">Z</string>
     <string name="ime_converter_to_label">Do</string>
     <string name="ime_currency_insert_action">Vložiť</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Oddeľovač: %1$s</string>
     <string name="ime_password_tab_passphrase">Prístupové heslo</string>
     <string name="ime_password_words_label">Slová</string>
+    <string name="ime_phonetic_word_list_offer">Získajte zoznam slov %1$s pre lepšie slová</string>
     <string name="ime_plugin_empty_body">Doplnok je malý nástroj v izolovanom prostredí. Doplnky môžete pridávať z úložiska doplnkov alebo zo súboru .wmplugin. Doplnok nemôže vidieť, čo píšete.</string>
     <string name="ime_plugin_empty_title">Zatiaľ žiadne doplnky</string>
     <string name="ime_plugin_manage_action">Spravovať doplnky</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Žiadna ďalšia zhoda</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nič na opravu</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Kontrola gramatiky nie je k dispozícii</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindská fonetika nie je načítaná</string>
     <string name="ime_selection_macro_no_app_toast">Žiadna aplikácia to nedokáže otvoriť</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Už nie je čo vrátiť späť</string>
     <string name="ime_selection_macro_stop_label">Zastaviť</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Klávesnica nemôže získať výsledky</string>
     <string name="ime_service_mode_tool_order_toast">Klávesnica uložila poradie nástrojov iba pre režim %1$s. Ostatné aplikácie si zachovávajú vlastné poradie.</string>
     <string name="ime_service_no_email_app_toast">Toto zariadenie nemá žiadnu e-mailovú aplikáciu. Správy posielajte na %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Iba pre fonetickú klávesnicu Avro a hindčinu</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Zapnite angličtinu v časti Jazyky, %1$s, Tiež navrhovať z</string>
+    <string name="ime_service_phonetic_english_off_toast">Navrhujú sa iba anglické slová</string>
+    <string name="ime_service_phonetic_english_on_toast">Anglické slová zostávajú anglickými</string>
     <string name="ime_service_plugins_all_off_notice">Všetky nainštalované doplnky sú vypnuté. Zapnite niektorý z nich v časti Správa doplnkov.</string>
     <string name="ime_service_plugins_off_notice">Doplnky sú vypnuté. Zapnite ich v Nastaveniach, aby ste ich mohli nainštalovať a spustiť.</string>
     <string name="ime_service_power_saving_off_toast">Úspora energie je vypnutá</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">Heslo</string>
     <string name="ime_tool_paste">Prilepiť</string>
     <string name="ime_tool_persistent">Ponechať na obrazovke</string>
+    <string name="ime_tool_phonetic_english">Anglické slová</string>
     <string name="ime_tool_picker_close_desc">Zavrieť zoznam klávesov</string>
     <string name="ime_tool_picker_help">%1$s pre všetky klávesy</string>
     <string name="ime_tool_picker_leader">%1$s, potom:</string>

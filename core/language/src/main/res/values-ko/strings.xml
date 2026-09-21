@@ -10,6 +10,10 @@
         <item quantity="one">앱이 키 %1$d개를 제거했습니다. 이 키보드에는 동일한 기능을 하는 키가 없습니다(코드 %2$s).</item>
         <item quantity="other">앱이 키 %1$d개를 제거했습니다. 이 키보드에는 동일한 기능을 하는 키가 없습니다(코드 %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">앱이 %1$d개의 키를 제거했습니다. 이 키보드에는 %2$s라는 이름의 키가 없습니다.</item>
+        <item quantity="other">앱이 %1$d개의 키를 제거했습니다. 이 키보드에는 %2$s라는 이름의 키가 없습니다.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">앱이 %1$d개 키의 라벨 크기는 유지했지만 텍스트 스타일은 유지하지 않았습니다. 이 키보드는 라벨을 단일 스타일로 그립니다.</item>
         <item quantity="other">앱이 %1$d개 키의 라벨 크기는 유지했지만 텍스트 스타일은 유지하지 않았습니다. 이 키보드는 라벨을 단일 스타일로 그립니다.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">앱이 %1$d개의 문자를 이 키보드에서 사용하는 형식으로 변경했습니다.</item>
         <item quantity="other">앱이 %1$d개의 문자를 이 키보드에서 사용하는 형식으로 변경했습니다.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">앱이 숫자 행을 제거했습니다. 숫자 행을 사용하려면 레이아웃 및 크기 설정에서 켜십시오.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d개의 키에 길게 누르기 문자가 없습니다. 해당 문자는 열지 않은 두 번째 파일에 보관되어 있습니다.</item>
         <item quantity="other">%1$d개의 키에 길게 누르기 문자가 없습니다. 해당 문자는 열지 않은 두 번째 파일에 보관되어 있습니다.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">다른 키보드의 시프트 상태나 필드에 따라 %1$d개의 키가 변경됩니다. 앱은 기본 상태의 모양을 유지했습니다.</item>
+        <item quantity="other">다른 키보드의 시프트 상태나 필드에 따라 %1$d개의 키가 변경됩니다. 앱은 기본 상태의 모양을 유지했습니다.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">다른 키보드는 키 너비를 다르게 측정합니다. 앱이 이 그리드에 맞게 너비를 변경했습니다.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

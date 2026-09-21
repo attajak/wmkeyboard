@@ -10,6 +10,10 @@
         <item quantity="one">应用已移除 %1$d 个按键。此键盘没有执行相同功能的按键（代码 %2$s）。</item>
         <item quantity="other">应用已移除 %1$d 个按键。此键盘没有执行相同功能的按键（代码 %2$s）。</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">应用已移除 %1$d 个按键。此键盘没有名为 %2$s 的按键。</item>
+        <item quantity="other">应用已移除 %1$d 个按键。此键盘没有名为 %2$s 的按键。</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">应用保留了 %1$d 个按键的标签大小，但未保留其文本样式。此键盘以统一样式绘制标签。</item>
         <item quantity="other">应用保留了 %1$d 个按键的标签大小，但未保留其文本样式。此键盘以统一样式绘制标签。</item>
@@ -18,9 +22,14 @@
         <item quantity="one">应用已将 %1$d 个字母更改为此键盘所使用的格式。</item>
         <item quantity="other">应用已将 %1$d 个字母更改为此键盘所使用的格式。</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">应用已移除数字行。请在“布局与尺寸”中开启数字行以获取该功能。</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d 个按键没有长按字母。该文件将它们保存在您未打开的第二个文件中。</item>
         <item quantity="other">%1$d 个按键没有长按字母。该文件将它们保存在您未打开的第二个文件中。</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">有 %1$d 个按键会随 Shift 状态或另一键盘中的字段而改变。应用保留了其静止时的外观。</item>
+        <item quantity="other">有 %1$d 个按键会随 Shift 状态或另一键盘中的字段而改变。应用保留了它们静止时的外观。</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">其他键盘的按键宽度测量方式不同。应用已调整宽度以适应此网格。</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

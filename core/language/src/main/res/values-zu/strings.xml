@@ -10,6 +10,10 @@
         <item quantity="one">Uhlelo lokusebenza lususe inkinobho engu-%1$d. Le khibhodi ayinayo inkinobho eyenza into efanayo (ikhodi %2$s).</item>
         <item quantity="other">Uhlelo lokusebenza lususe izinkinobho ezingu-%1$d. Le khibhodi ayinazo izinkinobho ezenza into efanayo (amakhodi %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Uhlelo lokusebenza lususe ukhiye ongu-%1$d. Le khibhodi ayinawo ukhiye obizwa ngokuthi %2$s.</item>
+        <item quantity="other">Uhlelo lokusebenza lususe okhiye abangu-%1$d. Le khibhodi ayinawo okhiye ababizwa ngokuthi %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Uhlelo lokusebenza lugcine usayizi welebula wokhiye ongu-%1$d kodwa hhayi isitayela sawo sombhalo. Le ikhibhodi idweba amalebula ngesitayela esisodwa.</item>
         <item quantity="other">Uhlelo lokusebenza lugcine usayizi welebula wokhiye abangu-%1$d kodwa hhayi isitayela sabo sombhalo. Le ikhibhodi idweba amalebula ngesitayela esisodwa.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Uhlelo lokusebenza lushintshe uhlamvu olu-%1$d lwaya efomini elibhalwa yile khibhodi.</item>
         <item quantity="other">Uhlelo lokusebenza lushintshe izinhlamvu ezi-%1$d zaya efomini elibhalwa yile khibhodi.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Uhlelo lokusebenza lususe umugqa wezinombolo. Vula umugqa wezinombolo kokuthi Isakhiwo nosayizi ukuze uthole owodwa.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d ukhiye awunazo izinhlamvu zokucindezela nokubamba. Ifayela lizigcina kwelinye ifayela ongalivulanga.</item>
         <item quantity="other">%1$d okhiye abanazo izinhlamvu zokucindezela nokubamba. Ifayela lizigcina kwelinye ifayela ongalivulanga.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">Ukhiye ongu-%1$d ushintsha ngesimo sokushintsha noma inkambu ekhibhodi enye. Uhlelo lokusebenza lugcine indlela obukeka ngayo uma uphumule.</item>
+        <item quantity="other">Okhiye abangu-%1$d bashintsha ngesimo sokushintsha noma inkambu ekhibhodi enye. Uhlelo lokusebenza lugcine indlela ababukeka ngayo uma bephumule.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Enye ikhibhodi ilinganisa ububanzi bokhiye ngokuhlukile. Uhlelo lokusebenza lushintshe ububanzi ukuze bulingane nale gridi.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

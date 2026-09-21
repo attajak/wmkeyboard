@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">مناطق</string>
     <string name="core_content_selection_macro_to_bangla">بنگالی</string>
     <string name="core_content_selection_macro_to_banglish">بنگلیش</string>
+    <string name="core_content_selection_macro_to_hindi">هندی</string>
+    <string name="core_content_selection_macro_to_hinglish">هینگلیش</string>
     <string name="core_content_selection_macro_translate">ترجمه</string>
     <string name="core_content_selection_macro_url_decode">رمزگشایی</string>
     <string name="core_content_selection_macro_whatsapp">واتس‌اپ</string>

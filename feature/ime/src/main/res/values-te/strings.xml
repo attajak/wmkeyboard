@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">కీబోర్డ్‌ను మార్చండి</string>
     <string name="ime_controls_title">కీబోర్డ్ నియంత్రణలు</string>
     <string name="ime_controls_unpin">అన్‌పిన్ చేయి</string>
+    <string name="ime_conversion_pack_offer">అక్షరాలను టైప్ చేయడానికి %1$sని డౌన్‌లోడ్ చేయండి</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">తీసివేయి</string>
     <string name="ime_converter_from_label">నుండి</string>
     <string name="ime_converter_to_label">కు</string>
     <string name="ime_currency_insert_action">చొప్పించు</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">సెపరేటర్: %1$s</string>
     <string name="ime_password_tab_passphrase">పాస్‌ఫ్రేజ్</string>
     <string name="ime_password_words_label">పదాలు</string>
+    <string name="ime_phonetic_word_list_offer">మరింత మెరుగైన పదాల కోసం %1$s పదాల జాబితాను పొందండి</string>
     <string name="ime_plugin_empty_body">ప్లగిన్ అనేది శాండ్‌బాక్స్‌లోని ఒక చిన్న సాధనం. మీరు యాడ్-ఆన్ రిపోజిటరీ నుండి లేదా .wmplugin ఫైల్ నుండి ప్లగిన్‌లను జోడించవచ్చు. ప్లగిన్ మీరు ఏమి టైప్ చేస్తున్నారో చూడలేదు.</string>
     <string name="ime_plugin_empty_title">ఇంకా ప్లగిన్‌లు లేవు</string>
     <string name="ime_plugin_manage_action">ప్లగిన్‌లను నిర్వహించండి</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">మరే ఇతర సరిపోలిక లేదు</string>
     <string name="ime_selection_macro_grammar_clean_toast">సరిచేయడానికి ఏమీ లేదు</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">గ్రామర్ చెకర్ అందుబాటులో లేదు</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">హిందీ ఫోనెటిక్ లోడ్ కాలేదు</string>
     <string name="ime_selection_macro_no_app_toast">దీనిని ఏ యాప్ తెరవలేదు</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">అన్‌డూ చేయడానికి ఏమీ లేదు</string>
     <string name="ime_selection_macro_stop_label">ఆపు</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">కీబోర్డ్ ఫలితాలను పొందలేకపోతోంది</string>
     <string name="ime_service_mode_tool_order_toast">కీబోర్డ్ %1$s మోడ్ కోసం టూల్ ఆర్డర్‌ను సేవ్ చేసింది. ఇతర యాప్‌లు వాటి స్వంత ఆర్డర్‌ను కలిగి ఉంటాయి.</string>
     <string name="ime_service_no_email_app_toast">ఈ పరికరంలో ఇమెయిల్ యాప్ లేదు. నివేదికలను %1$sకి పంపండి.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Avro మరియు హిందీ ఫోనెటిక్ కోసం మాత్రమే</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">భాషల కింద ఆంగ్లాన్ని ఆన్ చేయండి, %1$s, దీని నుండి కూడా సూచించండి</string>
+    <string name="ime_service_phonetic_english_off_toast">ఇంగ్లీష్ పదాలు మాత్రమే సూచించబడతాయి</string>
+    <string name="ime_service_phonetic_english_on_toast">ఆంగ్ల పదాలు ఆంగ్లంలోనే ఉంటాయి</string>
     <string name="ime_service_plugins_all_off_notice">మీరు ఇన్‌స్టాల్ చేసిన ప్రతి ప్లగిన్ ఆఫ్ చేయబడింది. ప్లగిన్‌లను నిర్వహించు విభాగంలో ఒకదాన్ని ఆన్ చేయండి.</string>
     <string name="ime_service_plugins_off_notice">ప్లగిన్‌లు ఆపివేయబడ్డాయి. వాటిని ఇన్‌స్టాల్ చేయడానికి మరియు రన్ చేయడానికి సెట్టింగ్‌లలో ఆన్ చేయండి.</string>
     <string name="ime_service_power_saving_off_toast">పవర్ సేవింగ్ ఆఫ్ చేయబడింది</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">పాస్‌వర్డ్</string>
     <string name="ime_tool_paste">పేస్ట్ చేయి</string>
     <string name="ime_tool_persistent">స్క్రీన్‌పై ఉంచండి</string>
+    <string name="ime_tool_phonetic_english">ఆంగ్ల పదాలు</string>
     <string name="ime_tool_picker_close_desc">కీల జాబితాను మూసివేయి</string>
     <string name="ime_tool_picker_help">అన్ని కీలకు %1$s</string>
     <string name="ime_tool_picker_leader">%1$s, ఆపై:</string>

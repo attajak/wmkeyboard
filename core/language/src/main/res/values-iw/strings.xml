@@ -10,6 +10,10 @@
         <item quantity="one">האפליקציה הסירה %1$d מקש. למקלדת זו אין מקש שמבצע את אותה פעולה (קוד %2$s).</item>
         <item quantity="other">האפליקציה הסירה %1$d מקשים. למקלדת זו אין מקשים שמבצעים את אותה פעולה (קודים %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">האפליקציה הסירה %1$d מקש. במקלדת זו אין מקש בשם %2$s.</item>
+        <item quantity="other">האפליקציה הסירה %1$d מקשים. במקלדת זו אין מקשים בשם %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">האפליקציה שמרה על גודל התווית של %1$d מקש אך לא על סגנון הטקסט שלה. מקלדת זו מציירת תוויות בסגנון אחד.</item>
         <item quantity="other">האפליקציה שמרה על גודל התווית של %1$d מקשים אך לא על סגנון הטקסט שלהם. מקלדת זו מציירת תוויות בסגנון אחד.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">האפליקציה שינתה אות %1$d לצורה שהמקלדת הזו כותבת.</item>
         <item quantity="other">האפליקציה שינתה %1$d אותיות לצורה שהמקלדת הזו כותבת.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">האפליקציה הסירה את שורת המספרים. הפעל את שורת המספרים ב\'פריסה וגודל\' כדי לקבל אחת.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">ל-%1$d מקש אין אותיות בלחיצה ארוכה. הקובץ שומר אותן בקובץ שני שלא פתחת.</item>
         <item quantity="other">ל-%1$d מקשים אין אותיות בלחיצה ארוכה. הקובץ שומר אותן בקובץ שני שלא פתחת.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d מקש משתנה עם מצב ה-Shift או השדה במקלדת השנייה. האפליקציה שמרה על המראה שלו במצב מנוחה.</item>
+        <item quantity="other">%1$d מקשים משתנים עם מצב ה-Shift או השדה במקלדת השנייה. האפליקציה שמרה על המראה שלהם במצב מנוחה.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">המקלדת האחרת מודדת רוחב מקשים בצורה שונה. האפליקציה שינתה את הרוחב כדי להתאים לרשת זו.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Превключване на клавиатурата</string>
     <string name="ime_controls_title">Контроли на клавиатурата</string>
     <string name="ime_controls_unpin">Откачване</string>
+    <string name="ime_conversion_pack_offer">Изтеглете %1$s, за да пишете знаци</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Отхвърляне</string>
     <string name="ime_converter_from_label">От</string>
     <string name="ime_converter_to_label">Към</string>
     <string name="ime_currency_insert_action">Вмъкване</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Разделител: %1$s</string>
     <string name="ime_password_tab_passphrase">Парола</string>
     <string name="ime_password_words_label">Думи</string>
+    <string name="ime_phonetic_word_list_offer">Вземете списъка с думи %1$s за по-добри думи</string>
     <string name="ime_plugin_empty_body">Плъгинът е малък инструмент в пясъчна среда. Можете да добавяте плъгини от хранилище за добавки или от .wmplugin файл. Плъгинът не може да вижда какво пишете.</string>
     <string name="ime_plugin_empty_title">Все още няма добавки</string>
     <string name="ime_plugin_manage_action">Управление на плъгини</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Няма друго съвпадение</string>
     <string name="ime_selection_macro_grammar_clean_toast">Няма нищо за коригиране</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Проверката на граматиката не е налична</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Фонетичната клавиатура за хинди не е заредена</string>
     <string name="ime_selection_macro_no_app_toast">Няма приложение, което да отвори това</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Няма нищо за отмяна</string>
     <string name="ime_selection_macro_stop_label">Стоп</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Клавиатурата не може да получи резултати</string>
     <string name="ime_service_mode_tool_order_toast">Клавиатурата запази реда на инструментите само за режима %1$s. Другите приложения запазват свой собствен ред.</string>
     <string name="ime_service_no_email_app_toast">Това устройство няма приложение за имейл. Изпращайте отчети на %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Само за фонетични подредби Avro и хинди</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Включете английски език в „Езици“, %1$s, „Също предлагай от“</string>
+    <string name="ime_service_phonetic_english_off_toast">Английските думи се предлагат само</string>
+    <string name="ime_service_phonetic_english_on_toast">Английските думи остават английски</string>
     <string name="ime_service_plugins_all_off_notice">Всички инсталирани от вас приставки са изключени. Включете някоя от „Управление на приставки“.</string>
     <string name="ime_service_plugins_off_notice">Приставките са изключени. Включете ги в настройките, за да ги инсталирате и стартирате.</string>
     <string name="ime_service_power_saving_off_toast">Пестенето на енергия е изключено</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Парола</string>
     <string name="ime_tool_paste">Поставяне</string>
     <string name="ime_tool_persistent">Задържане на екрана</string>
+    <string name="ime_tool_phonetic_english">Английски думи</string>
     <string name="ime_tool_picker_close_desc">Затваряне на списъка с клавиши</string>
     <string name="ime_tool_picker_help">%1$s за всички клавиши</string>
     <string name="ime_tool_picker_leader">%1$s, след това:</string>

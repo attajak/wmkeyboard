@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">ਜ਼ੋਨ</string>
     <string name="core_content_selection_macro_to_bangla">ਬੰਗਲਾ</string>
     <string name="core_content_selection_macro_to_banglish">ਬੈਂਗਲਿਸ਼</string>
+    <string name="core_content_selection_macro_to_hindi">ਹਿੰਦੀ</string>
+    <string name="core_content_selection_macro_to_hinglish">ਹਿੰਗਲਿਸ਼</string>
     <string name="core_content_selection_macro_translate">ਅਨੁਵਾਦ ਕਰੋ</string>
     <string name="core_content_selection_macro_url_decode">ਡੀਕੋਡ ਕਰੋ</string>
     <string name="core_content_selection_macro_whatsapp">ਵਟਸਐਪ</string>

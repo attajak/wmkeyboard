@@ -10,6 +10,10 @@
         <item quantity="one">Rakendus eemaldas %1$d klahvi. Sellel klaviatuuril pole klahvi, mis teeb sama asja (kood %2$s).</item>
         <item quantity="other">Rakendus eemaldas %1$d klahvi. Sellel klaviatuuril pole klahve, mis teevad sama asja (koodid %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Rakendus eemaldas %1$d klahvi. Sellel klaviatuuril pole klahvi nimega %2$s.</item>
+        <item quantity="other">Rakendus eemaldas %1$d klahvi. Sellel klaviatuuril pole klahve nimega %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Rakendus säilitas %1$d klahvi sildi suuruse, kuid mitte selle tekstistiili. See klaviatuur joonistab sildid ühes stiilis.</item>
         <item quantity="other">Rakendus säilitas %1$d klahvi sildi suuruse, kuid mitte nende tekstistiili. See klaviatuur joonistab sildid ühes stiilis.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Rakendus muutis %1$d tähe selliseks, mida see klaviatuur kirjutab.</item>
         <item quantity="other">Rakendus muutis %1$d tähte selliseks, mida see klaviatuur kirjutab.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Rakendus eemaldas numbrirea. Numbrirea saamiseks lülita see sisse Paigutuse ja suuruse all.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d klahvil pole vajutades-ja-hoides tähti. Fail hoiab neid teises failis, mida te ei avanud.</item>
         <item quantity="other">%1$d klahvil pole vajutades-ja-hoides tähti. Fail hoiab neid teises failis, mida te ei avanud.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d klahv muutub koos tõstuklahvi olekuga või väljaga teises klaviatuuris. Rakendus säilitas selle välimuse puhkeolekus.</item>
+        <item quantity="other">%1$d klahvi muutuvad koos tõstuklahvi olekuga või väljaga teises klaviatuuris. Rakendus säilitas nende välimuse puhkeolekus.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Teine klaviatuur mõõdab klahvide laiust teisiti. Rakendus muutis laiused selle ruudustikuga sobivaks.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

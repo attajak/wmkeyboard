@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Ganti papan ketik</string>
     <string name="ime_controls_title">Kontrol papan ketik</string>
     <string name="ime_controls_unpin">Lepas sematan</string>
+    <string name="ime_conversion_pack_offer">Unduh %1$s untuk mengetik karakter</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Tutup</string>
     <string name="ime_converter_from_label">Dari</string>
     <string name="ime_converter_to_label">Ke</string>
     <string name="ime_currency_insert_action">Sisipkan</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">Pemisah: %1$s</string>
     <string name="ime_password_tab_passphrase">Frasa sandi</string>
     <string name="ime_password_words_label">Kata</string>
+    <string name="ime_phonetic_word_list_offer">Dapatkan daftar kata %1$s untuk kata-kata yang lebih baik</string>
     <string name="ime_plugin_empty_body">Plugin adalah alat kecil di dalam sandbox. Anda dapat menambahkan plugin dari repositori add-on atau dari file .wmplugin. Plugin tidak dapat melihat apa yang Anda ketik.</string>
     <string name="ime_plugin_empty_title">Belum ada plugin</string>
     <string name="ime_plugin_manage_action">Kelola plugin</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">Tidak ada kecocokan lain</string>
     <string name="ime_selection_macro_grammar_clean_toast">Tidak ada yang perlu diperbaiki</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Pemeriksa tata bahasa tidak tersedia</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Fonetik Hindi tidak dimuat</string>
     <string name="ime_selection_macro_no_app_toast">Tidak ada aplikasi yang dapat membuka ini</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Tidak ada lagi yang bisa dibatalkan</string>
     <string name="ime_selection_macro_stop_label">Berhenti</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">Papan ketik tidak dapat memperoleh hasil</string>
     <string name="ime_service_mode_tool_order_toast">Papan ketik menyimpan urutan alat untuk mode %1$s. Aplikasi lain menyimpan urutannya sendiri.</string>
     <string name="ime_service_no_email_app_toast">Perangkat ini tidak memiliki aplikasi email. Kirim laporan ke %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Hanya untuk fonetik Avro dan Hindi</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Aktifkan bahasa Inggris di bawah Bahasa, %1$s, Juga sarankan dari</string>
+    <string name="ime_service_phonetic_english_off_toast">Kata-kata bahasa Inggris hanya disarankan</string>
+    <string name="ime_service_phonetic_english_on_toast">Kata bahasa Inggris tetap dalam bahasa Inggris</string>
     <string name="ime_service_plugins_all_off_notice">Setiap plugin yang Anda instal dinonaktifkan. Aktifkan salah satu di bawah Kelola plugin.</string>
     <string name="ime_service_plugins_off_notice">Plugin dimatikan. Nyalakan di Pengaturan untuk menginstal dan menjalankannya.</string>
     <string name="ime_service_power_saving_off_toast">Penghemat daya nonaktif</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">Kata sandi</string>
     <string name="ime_tool_paste">Tempel</string>
     <string name="ime_tool_persistent">Tetap di layar</string>
+    <string name="ime_tool_phonetic_english">Kata bahasa Inggris</string>
     <string name="ime_tool_picker_close_desc">Tutup daftar tombol</string>
     <string name="ime_tool_picker_help">%1$s untuk semua tombol</string>
     <string name="ime_tool_picker_leader">%1$s, lalu:</string>

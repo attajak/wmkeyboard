@@ -10,6 +10,10 @@
         <item quantity="one">యాప్ %1$d కీని తొలగించింది. ఈ కీబోర్డ్‌లో అదే పని చేసే కీ లేదు (కోడ్ %2$s).</item>
         <item quantity="other">యాప్ %1$d కీలను తొలగించింది. ఈ కీబోర్డ్‌లో అదే పని చేసే కీలు లేవు (కోడ్‌లు %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">యాప్ %1$d కీని తొలగించింది. ఈ కీబోర్డ్‌లో %2$s అనే పేరుతో కీ లేదు.</item>
+        <item quantity="other">యాప్ %1$d కీలను తొలగించింది. ఈ కీబోర్డ్‌లో %2$s అనే పేరుతో కీలు లేవు.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">యాప్ %1$d కీ యొక్క లేబుల్ పరిమాణాన్ని ఉంచింది కానీ దాని టెక్స్ట్ శైలిని కాదు. ఈ కీబోర్డ్ లేబుల్‌లను ఒకే శైలిలో గీస్తుంది.</item>
         <item quantity="other">యాప్ %1$d కీలలో లేబుల్ పరిమాణాన్ని ఉంచింది కానీ వాటి టెక్స్ట్ శైలిని కాదు. ఈ కీబోర్డ్ లేబుల్‌లను ఒకే శైలిలో గీస్తుంది.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">యాప్ %1$d అక్షరాన్ని ఈ కీబోర్డ్ రాసే రూపానికి మార్చింది.</item>
         <item quantity="other">యాప్ %1$d అక్షరాలను ఈ కీబోర్డ్ రాసే రూపానికి మార్చింది.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">యాప్ నంబర్ల వరుసను తొలగించింది. నంబర్ వరుసను పొందడానికి లేఅవుట్ మరియు సైజులో దాన్ని ఆన్ చేయండి.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d కీకి ప్రెస్-అండ్-హోల్డ్ అక్షరాలు లేవు. ఫైల్ వాటిని మీరు తెరవని రెండవ ఫైల్‌లో ఉంచుతుంది.</item>
         <item quantity="other">%1$d కీలకు ప్రెస్-అండ్-హోల్డ్ అక్షరాలు లేవు. ఫైల్ వాటిని మీరు తెరవని రెండవ ఫైల్‌లో ఉంచుతుంది.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">షిఫ్ట్ స్టేట్ లేదా ఇతర కీబోర్డ్‌లోని ఫీల్డ్‌తో %1$d కీ మారుతుంది. యాప్ అది విశ్రాంతిగా ఉన్నప్పుడు ఎలా కనిపిస్తుందో అలాగే ఉంచింది.</item>
+        <item quantity="other">షిఫ్ట్ స్టేట్ లేదా ఇతర కీబోర్డ్‌లోని ఫీల్డ్‌తో %1$d కీలు మారుతాయి. యాప్ అవి విశ్రాంతిగా ఉన్నప్పుడు ఎలా కనిపిస్తాయో అలాగే ఉంచింది.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">ఇతర కీబోర్డ్ కీ వెడల్పులను భిన్నంగా కొలుస్తుంది. ఈ గ్రిడ్‌కు సరిపోయేలా యాప్ వెడల్పులను మార్చింది.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

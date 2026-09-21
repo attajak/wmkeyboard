@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">تغییر صفحه‌کلید</string>
     <string name="ime_controls_title">کنترل‌های صفحه‌کلید</string>
     <string name="ime_controls_unpin">برداشتن سنجاق</string>
+    <string name="ime_conversion_pack_offer">برای تایپ نویسه‌ها، %1$s را دانلود کنید</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">رد کردن</string>
     <string name="ime_converter_from_label">از</string>
     <string name="ime_converter_to_label">به</string>
     <string name="ime_currency_insert_action">درج</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">جداکننده: %1$s</string>
     <string name="ime_password_tab_passphrase">عبارت عبور</string>
     <string name="ime_password_words_label">کلمات</string>
+    <string name="ime_phonetic_word_list_offer">فهرست کلمات %1$s را برای کلمات بهتر دریافت کنید</string>
     <string name="ime_plugin_empty_body">افزونه یک ابزار کوچک در یک محیط ایزوله است. می‌توانید افزونه‌ها را از مخزن افزودنی‌ها یا از یک فایل .wmplugin اضافه کنید. افزونه نمی‌تواند آنچه را که تایپ می‌کنید ببیند.</string>
     <string name="ime_plugin_empty_title">هنوز افزونه‌ای وجود ندارد</string>
     <string name="ime_plugin_manage_action">مدیریت افزونه‌ها</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">مطابقت دیگری وجود ندارد</string>
     <string name="ime_selection_macro_grammar_clean_toast">چیزی برای اصلاح وجود ندارد</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">بررسی‌کننده دستور زبان در دسترس نیست</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">آوا‌نویسی هندی بارگذاری نشده است</string>
     <string name="ime_selection_macro_no_app_toast">هیچ برنامه‌ای نمی‌تواند این را باز کند</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">چیزی برای بازگرداندن باقی نمانده است</string>
     <string name="ime_selection_macro_stop_label">توقف</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">صفحه‌کلید نمی‌تواند نتایج را دریافت کند</string>
     <string name="ime_service_mode_tool_order_toast">کیبورد ترتیب ابزار را برای حالت %1$s ذخیره کرد. سایر برنامه‌ها ترتیب خاص خود را حفظ می‌کنند.</string>
     <string name="ime_service_no_email_app_toast">این دستگاه هیچ برنامه ایمیلی ندارد. گزارش‌ها را به %1$s ارسال کنید.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">فقط برای آواشناسی Avro و هندی</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">انگلیسی را در بخش زبان‌ها، %1$s، و همچنین پیشنهاد از، فعال کنید</string>
+    <string name="ime_service_phonetic_english_off_toast">کلمات انگلیسی فقط پیشنهاد می‌شوند</string>
+    <string name="ime_service_phonetic_english_on_toast">کلمات انگلیسی، انگلیسی می‌مانند</string>
     <string name="ime_service_plugins_all_off_notice">تمام افزونه‌هایی که نصب کرده‌اید خاموش هستند. یکی را از بخش مدیریت افزونه‌ها روشن کنید.</string>
     <string name="ime_service_plugins_off_notice">افزونه‌ها خاموش هستند. برای نصب و اجرای آن‌ها، آن‌ها را در تنظیمات روشن کنید.</string>
     <string name="ime_service_power_saving_off_toast">صرفه‌جویی در مصرف انرژی خاموش است</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">رمز عبور</string>
     <string name="ime_tool_paste">چسباندن</string>
     <string name="ime_tool_persistent">روی صفحه بماند</string>
+    <string name="ime_tool_phonetic_english">کلمات انگلیسی</string>
     <string name="ime_tool_picker_close_desc">بستن لیست کلیدها</string>
     <string name="ime_tool_picker_help">%1$s برای همه کلیدها</string>
     <string name="ime_tool_picker_leader">%1$s، سپس:</string>

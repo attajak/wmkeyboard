@@ -10,6 +10,10 @@
         <item quantity="one">Aplikacja usunęła %1$d klawisz. Ta klawiatura nie ma klawisza, który wykonuje tę samą funkcję (kod %2$s).</item>
         <item quantity="other">Aplikacja usunęła %1$d klawiszy. Ta klawiatura nie ma klawiszy, które wykonują tę samą funkcję (kody %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Aplikacja usunęła %1$d klawisz. Ta klawiatura nie ma klawisza o nazwie %2$s.</item>
+        <item quantity="other">Aplikacja usunęła %1$d klawiszy. Ta klawiatura nie ma klawiszy o nazwach %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Aplikacja zachowała rozmiar etykiety %1$d klawisza, ale nie jego styl tekstu. Ta klawiatura rysuje etykiety w jednym stylu.</item>
         <item quantity="other">Aplikacja zachowała rozmiar etykiety %1$d klawiszy, ale nie ich styl tekstu. Ta klawiatura rysuje etykiety w jednym stylu.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Aplikacja zmieniła %1$d literę na formę, którą zapisuje ta klawiatura.</item>
         <item quantity="other">Aplikacja zmieniła %1$d liter na formę, którą zapisuje ta klawiatura.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Aplikacja usunęła wiersz liczb. Włącz wiersz liczb w Układzie i rozmiarze, aby go uzyskać.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d klawisz nie ma liter dostępnych po przytrzymaniu. Plik przechowuje je w drugim pliku, którego nie otworzyłeś.</item>
         <item quantity="other">%1$d klawiszy nie ma liter dostępnych po przytrzymaniu. Plik przechowuje je w drugim pliku, którego nie otworzyłeś.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d klawisz zmienia się wraz ze stanem klawisza Shift lub polem w drugiej klawiaturze. Aplikacja zachowała jego wygląd w stanie spoczynku.</item>
+        <item quantity="other">%1$d klawiszy zmienia się wraz ze stanem klawisza Shift lub polem w drugiej klawiaturze. Aplikacja zachowała ich wygląd w stanie spoczynku.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Inna klawiatura mierzy szerokość klawiszy inaczej. Aplikacja zmieniła szerokości, aby dopasować je do tej siatki.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

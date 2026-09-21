@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Changer de clavier</string>
     <string name="ime_controls_title">Contrôles du clavier</string>
     <string name="ime_controls_unpin">Détacher</string>
+    <string name="ime_conversion_pack_offer">Téléchargez le %1$s pour saisir des caractères</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Ignorer</string>
     <string name="ime_converter_from_label">De</string>
     <string name="ime_converter_to_label">Vers</string>
     <string name="ime_currency_insert_action">Insérer</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">Séparateur : %1$s</string>
     <string name="ime_password_tab_passphrase">Phrase secrète</string>
     <string name="ime_password_words_label">Mots</string>
+    <string name="ime_phonetic_word_list_offer">Obtenez la liste de mots %1$s pour de meilleurs mots</string>
     <string name="ime_plugin_empty_body">Un plugin est un petit outil dans un bac à sable. Vous pouvez ajouter des plugins à partir d\'un dépôt d\'extensions ou d\'un fichier .wmplugin. Un plugin ne peut pas voir ce que vous tapez.</string>
     <string name="ime_plugin_empty_title">Aucun plugin pour le moment</string>
     <string name="ime_plugin_manage_action">Gérer les plugins</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">Aucune autre correspondance</string>
     <string name="ime_selection_macro_grammar_clean_toast">Rien à corriger</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Le correcteur grammatical n\'est pas disponible</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Le phonétique hindi n\'est pas chargé</string>
     <string name="ime_selection_macro_no_app_toast">Aucune application ne peut ouvrir ceci</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Rien à annuler</string>
     <string name="ime_selection_macro_stop_label">Arrêter</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">Le clavier ne peut pas obtenir de résultats</string>
     <string name="ime_service_mode_tool_order_toast">Le clavier a enregistré l\'ordre des outils pour le mode %1$s. Les autres applications conservent leur propre ordre.</string>
     <string name="ime_service_no_email_app_toast">Cet appareil n\'a pas d\'application e-mail. Envoyez les rapports à %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Uniquement pour le phonétique Avro et Hindi</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Activez l\'anglais sous Langues, %1$s, Suggérer également à partir de</string>
+    <string name="ime_service_phonetic_english_off_toast">Les mots anglais sont seulement suggérés</string>
+    <string name="ime_service_phonetic_english_on_toast">Les mots anglais restent en anglais</string>
     <string name="ime_service_plugins_all_off_notice">Tous les plugins installés sont désactivés. Activez-en un dans Gérer les plugins.</string>
     <string name="ime_service_plugins_off_notice">Les plugins sont désactivés. Activez-les dans les paramètres pour les installer et les exécuter.</string>
     <string name="ime_service_power_saving_off_toast">L\'économie d\'énergie est désactivée</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">Mot de passe</string>
     <string name="ime_tool_paste">Coller</string>
     <string name="ime_tool_persistent">Garder à l\'écran</string>
+    <string name="ime_tool_phonetic_english">Mots anglais</string>
     <string name="ime_tool_picker_close_desc">Fermer la liste des touches</string>
     <string name="ime_tool_picker_help">%1$s pour toutes les touches</string>
     <string name="ime_tool_picker_leader">%1$s, puis :</string>

@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Перемкнути клавіатуру</string>
     <string name="ime_controls_title">Керування клавіатурою</string>
     <string name="ime_controls_unpin">Відкріпити</string>
+    <string name="ime_conversion_pack_offer">Завантажте %1$s, щоб вводити символи</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Відхилити</string>
     <string name="ime_converter_from_label">З</string>
     <string name="ime_converter_to_label">До</string>
     <string name="ime_currency_insert_action">Вставити</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Розділювач: %1$s</string>
     <string name="ime_password_tab_passphrase">Парольна фраза</string>
     <string name="ime_password_words_label">Слова</string>
+    <string name="ime_phonetic_word_list_offer">Отримайте список слів %1$s для кращих варіантів</string>
     <string name="ime_plugin_empty_body">Плагін — це невеликий інструмент у пісочниці. Ви можете додавати плагіни з репозиторію доповнень або з файлу .wmplugin. Плагін не може бачити, що ви вводите.</string>
     <string name="ime_plugin_empty_title">Плагінів поки немає</string>
     <string name="ime_plugin_manage_action">Керування плагінами</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Більше немає збігів</string>
     <string name="ime_selection_macro_grammar_clean_toast">Немає що виправляти</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Перевірка граматики недоступна</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Фонетична розкладка гінді не завантажена</string>
     <string name="ime_selection_macro_no_app_toast">Жодна програма не може це відкрити</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Більше нічого скасувати</string>
     <string name="ime_selection_macro_stop_label">Зупинити</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Клавіатура не може отримати результати</string>
     <string name="ime_service_mode_tool_order_toast">Клавіатура зберегла порядок інструментів для режиму %1$s. Інші програми зберігають власний порядок.</string>
     <string name="ime_service_no_email_app_toast">На цьому пристрої немає поштового додатка. Надсилайте звіти на %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Тільки для фонетичних розкладок Avro та гінді</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Увімкніть англійську в розділі Мови, %1$s, Також пропонувати з</string>
+    <string name="ime_service_phonetic_english_off_toast">Пропонуються лише англійські слова</string>
+    <string name="ime_service_phonetic_english_on_toast">Англійські слова залишаються англійськими</string>
     <string name="ime_service_plugins_all_off_notice">Усі встановлені вами плагіни вимкнено. Увімкніть один із них у розділі \"Керування плагінами\".</string>
     <string name="ime_service_plugins_off_notice">Плагіни вимкнено. Увімкніть їх у налаштуваннях, щоб інсталювати та запускати.</string>
     <string name="ime_service_power_saving_off_toast">Енергозбереження вимкнено</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Пароль</string>
     <string name="ime_tool_paste">Вставити</string>
     <string name="ime_tool_persistent">Тримати на екрані</string>
+    <string name="ime_tool_phonetic_english">Англійські слова</string>
     <string name="ime_tool_picker_close_desc">Закрити список клавіш</string>
     <string name="ime_tool_picker_help">%1$s для всіх клавіш</string>
     <string name="ime_tool_picker_leader">%1$s, потім:</string>

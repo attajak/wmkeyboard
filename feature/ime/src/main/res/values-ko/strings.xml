@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">키보드 전환</string>
     <string name="ime_controls_title">키보드 컨트롤</string>
     <string name="ime_controls_unpin">고정 해제</string>
+    <string name="ime_conversion_pack_offer">문자를 입력하려면 %1$s을(를) 다운로드하세요</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">닫기</string>
     <string name="ime_converter_from_label">시작</string>
     <string name="ime_converter_to_label">대상</string>
     <string name="ime_currency_insert_action">삽입</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">구분 기호: %1$s</string>
     <string name="ime_password_tab_passphrase">암호 문구</string>
     <string name="ime_password_words_label">단어</string>
+    <string name="ime_phonetic_word_list_offer">더 나은 단어 추천을 위해 %1$s 단어 목록을 받으세요</string>
     <string name="ime_plugin_empty_body">플러그인은 샌드박스 내의 작은 도구입니다. 추가 기능 저장소나 .wmplugin 파일에서 플러그인을 추가할 수 있습니다. 플러그인은 사용자가 입력하는 내용을 볼 수 없습니다.</string>
     <string name="ime_plugin_empty_title">플러그인이 없습니다</string>
     <string name="ime_plugin_manage_action">플러그인 관리</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">일치하는 항목 없음</string>
     <string name="ime_selection_macro_grammar_clean_toast">수정할 내용 없음</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">문법 검사기를 사용할 수 없습니다</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">힌디어 음성 입력이 로드되지 않았습니다</string>
     <string name="ime_selection_macro_no_app_toast">이 항목을 열 수 있는 앱이 없습니다.</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">취소할 작업이 없습니다</string>
     <string name="ime_selection_macro_stop_label">중지</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">키보드가 결과를 가져올 수 없습니다</string>
     <string name="ime_service_mode_tool_order_toast">키보드가 %1$s 모드의 도구 순서를 저장했습니다. 다른 앱은 각자의 순서를 유지합니다.</string>
     <string name="ime_service_no_email_app_toast">이 기기에 이메일 앱이 없습니다. %1$s로 보고서를 보내주세요.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Avro 및 힌디어 음성 입력 전용</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">언어, %1$s, 다음에서 추천 설정 아래의 영어를 켜세요</string>
+    <string name="ime_service_phonetic_english_off_toast">영어 단어만 제안됩니다</string>
+    <string name="ime_service_phonetic_english_on_toast">영어 단어는 영어로 유지됩니다</string>
     <string name="ime_service_plugins_all_off_notice">설치된 모든 플러그인이 꺼져 있습니다. 플러그인 관리에서 하나를 켜세요.</string>
     <string name="ime_service_plugins_off_notice">플러그인이 꺼져 있습니다. 설치 및 실행하려면 설정에서 켜세요.</string>
     <string name="ime_service_power_saving_off_toast">절전 모드가 꺼졌습니다</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">비밀번호</string>
     <string name="ime_tool_paste">붙여넣기</string>
     <string name="ime_tool_persistent">화면에 유지</string>
+    <string name="ime_tool_phonetic_english">영어 단어</string>
     <string name="ime_tool_picker_close_desc">키 목록 닫기</string>
     <string name="ime_tool_picker_help">모든 키에 대해 %1$s</string>
     <string name="ime_tool_picker_leader">%1$s, 다음:</string>

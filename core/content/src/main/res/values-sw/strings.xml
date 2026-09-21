@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">Kanda</string>
     <string name="core_content_selection_macro_to_bangla">Bangla</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_to_hindi">Kihindi</string>
+    <string name="core_content_selection_macro_to_hinglish">Hinglish</string>
     <string name="core_content_selection_macro_translate">Tafsiri</string>
     <string name="core_content_selection_macro_url_decode">Decode</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

@@ -10,6 +10,10 @@
         <item quantity="one">L\'aplicació ha eliminat %1$d tecla. Aquest teclat no té cap tecla que faci la mateixa funció (codi %2$s).</item>
         <item quantity="other">L\'aplicació ha eliminat %1$d tecles. Aquest teclat no té cap tecla que faci la mateixa funció (codis %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">L\'aplicació ha eliminat %1$d tecla. Aquest teclat no té cap tecla anomenada %2$s.</item>
+        <item quantity="other">L\'aplicació ha eliminat %1$d tecles. Aquest teclat no té cap tecla anomenada %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">L\'aplicació ha mantingut la mida de l\'etiqueta de %1$d tecla però no el seu estil de text. Aquest teclat dibuixa les etiquetes amb un sol estil.</item>
         <item quantity="other">L\'aplicació ha mantingut la mida de l\'etiqueta de %1$d tecles però no el seu estil de text. Aquest teclat dibuixa les etiquetes amb un sol estil.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">L\'aplicació ha canviat %1$d lletra a la forma que escriu aquest teclat.</item>
         <item quantity="other">L\'aplicació ha canviat %1$d lletres a la forma que escriu aquest teclat.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">L\'aplicació ha eliminat la fila de números. Activa la fila de números a Disposició i mida per obtenir-ne una.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d tecla no té lletres en mantenir premut. El fitxer les guarda en un segon fitxer que no has obert.</item>
         <item quantity="other">%1$d tecles no tenen lletres en mantenir premut. El fitxer les guarda en un segon fitxer que no has obert.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d tecla canvia amb l\'estat de majúscules o el camp de l\'altre teclat. L\'aplicació ha mantingut l\'aspecte que té en repòs.</item>
+        <item quantity="other">%1$d tecles canvien amb l\'estat de majúscules o el camp de l\'altre teclat. L\'aplicació ha mantingut l\'aspecte que tenen en repòs.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">L\'altre teclat mesura les amplades de les tecles de manera diferent. L\'aplicació ha canviat les amplades per ajustar-se a aquesta graella.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

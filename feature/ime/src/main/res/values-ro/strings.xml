@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Schimbă tastatura</string>
     <string name="ime_controls_title">Comenzi tastatură</string>
     <string name="ime_controls_unpin">Anulează fixarea</string>
+    <string name="ime_conversion_pack_offer">Descărcați %1$s pentru a tasta caractere</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Închide</string>
     <string name="ime_converter_from_label">De la</string>
     <string name="ime_converter_to_label">Către</string>
     <string name="ime_currency_insert_action">Inserează</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Separator: %1$s</string>
     <string name="ime_password_tab_passphrase">Fraza de acces</string>
     <string name="ime_password_words_label">Cuvinte</string>
+    <string name="ime_phonetic_word_list_offer">Obține lista de cuvinte %1$s pentru cuvinte mai bune</string>
     <string name="ime_plugin_empty_body">Un plugin este un instrument mic într-un sandbox. Poți adăuga plugin-uri dintr-un depozit de extensii sau dintr-un fișier .wmplugin. Un plugin nu poate vedea ce tastezi.</string>
     <string name="ime_plugin_empty_title">Nu există încă pluginuri</string>
     <string name="ime_plugin_manage_action">Gestionare pluginuri</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Nicio altă potrivire</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nimic de corectat</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Verificatorul gramatical nu este disponibil</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Fonetica hindi nu este încărcată</string>
     <string name="ime_selection_macro_no_app_toast">Nicio aplicație nu poate deschide acest lucru</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Nimic de anulat</string>
     <string name="ime_selection_macro_stop_label">Stop</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Tastatura nu poate obține rezultate</string>
     <string name="ime_service_mode_tool_order_toast">Tastatura a salvat ordinea instrumentelor doar pentru modul %1$s. Alte aplicații își păstrează propria ordine.</string>
     <string name="ime_service_no_email_app_toast">Acest dispozitiv nu are nicio aplicație de e-mail. Trimite rapoarte către %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Doar pentru Avro și fonetică Hindi</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Activați engleza la Limbi, %1$s, De asemenea, sugerați din</string>
+    <string name="ime_service_phonetic_english_off_toast">Sunt sugerate doar cuvinte în engleză</string>
+    <string name="ime_service_phonetic_english_on_toast">Cuvintele englezești rămân englezești</string>
     <string name="ime_service_plugins_all_off_notice">Fiecare plugin instalat este oprit. Activează unul din Gestionare pluginuri.</string>
     <string name="ime_service_plugins_off_notice">Pluginurile sunt oprite. Activează-le din Setări pentru a le instala și rula.</string>
     <string name="ime_service_power_saving_off_toast">Economisirea energiei este oprită</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Parolă</string>
     <string name="ime_tool_paste">Lipește</string>
     <string name="ime_tool_persistent">Păstrează pe ecran</string>
+    <string name="ime_tool_phonetic_english">Cuvinte în engleză</string>
     <string name="ime_tool_picker_close_desc">Închide lista de taste</string>
     <string name="ime_tool_picker_help">%1$s pentru toate tastele</string>
     <string name="ime_tool_picker_leader">%1$s, apoi:</string>

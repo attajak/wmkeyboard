@@ -10,6 +10,10 @@
         <item quantity="one">Appen tog bort %1$d tangent. Det här tangentbordet har ingen tangent som gör samma sak (kod %2$s).</item>
         <item quantity="other">Appen tog bort %1$d tangenter. Det här tangentbordet har inga tangenter som gör samma sak (koder %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Appen tog bort %1$d tangent. Detta tangentbord har ingen tangent som heter %2$s.</item>
+        <item quantity="other">Appen tog bort %1$d tangenter. Detta tangentbord har inga tangenter som heter %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Appen behöll etikettstorleken för %1$d tangent men inte dess textstil. Detta tangentbord ritar etiketter i en stil.</item>
         <item quantity="other">Appen behöll etikettstorleken för %1$d tangenter men inte deras textstil. Detta tangentbord ritar etiketter i en stil.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Appen ändrade %1$d bokstav till den form som detta tangentbord skriver.</item>
         <item quantity="other">Appen ändrade %1$d bokstäver till den form som detta tangentbord skriver.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Appen tog bort sifferraden. Slå på sifferraden under Layout och storlek för att få en.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d tangent saknar bokstäver vid långtryck. Filen sparar dem i en andra fil som du inte öppnade.</item>
         <item quantity="other">%1$d tangenter saknar bokstäver vid långtryck. Filen sparar dem i en andra fil som du inte öppnade.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d tangent ändras med skiftläget eller fältet i det andra tangentbordet. Appen behöll hur den ser ut i viloläge.</item>
+        <item quantity="other">%1$d tangenter ändras med skiftläget eller fältet i det andra tangentbordet. Appen behöll hur de ser ut i viloläge.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Det andra tangentbordet mäter tangentbredder annorlunda. Appen ändrade bredderna för att passa detta rutnät.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

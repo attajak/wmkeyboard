@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">Časovni pasovi</string>
     <string name="core_content_selection_macro_to_bangla">Bengalščina</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_to_hindi">hindijščina</string>
+    <string name="core_content_selection_macro_to_hinglish">Hinglish</string>
     <string name="core_content_selection_macro_translate">Prevedi</string>
     <string name="core_content_selection_macro_url_decode">Dekodiraj</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

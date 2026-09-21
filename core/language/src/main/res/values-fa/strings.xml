@@ -10,6 +10,10 @@
         <item quantity="one">برنامه %1$d کلید را حذف کرد. این صفحه‌کلید کلیدی که همان کار را انجام دهد ندارد (کد %2$s).</item>
         <item quantity="other">برنامه %1$d کلید را حذف کرد. این صفحه‌کلید کلیدهایی که همان کار را انجام دهند ندارد (کدها %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">برنامه %1$d کلید را حذف کرد. این صفحه‌کلید کلیدی به نام %2$s ندارد.</item>
+        <item quantity="other">برنامه %1$d کلید را حذف کرد. این صفحه‌کلید کلیدهایی به نام %2$s ندارد.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">برنامه اندازه برچسب %1$d کلید را حفظ کرد اما سبک متن آن را نه. این صفحه‌کلید برچسب‌ها را با یک سبک ترسیم می‌کند.</item>
         <item quantity="other">برنامه اندازه برچسب %1$d کلید را حفظ کرد اما سبک متن آن‌ها را نه. این صفحه‌کلید برچسب‌ها را با یک سبک ترسیم می‌کند.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">برنامه %1$d حرف را به شکلی که این صفحه‌کلید می‌نویسد تغییر داد.</item>
         <item quantity="other">برنامه %1$d حرف را به شکلی که این صفحه‌کلید می‌نویسد تغییر داد.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">برنامه ردیف اعداد را حذف کرد. برای داشتن آن، ردیف اعداد را در بخش «طرح‌بندی و اندازه» روشن کنید.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d کلید هیچ حرفی برای فشار طولانی ندارد. فایل آن‌ها را در فایل دومی نگه می‌دارد که شما باز نکردید.</item>
         <item quantity="other">%1$d کلید هیچ حرفی برای فشار طولانی ندارند. فایل آن‌ها را در فایل دومی نگه می‌دارد که شما باز نکردید.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d کلید با وضعیت شیفت یا فیلد در صفحه‌کلید دیگر تغییر می‌کند. برنامه ظاهر آن را در حالت استراحت حفظ کرد.</item>
+        <item quantity="other">%1$d کلید با وضعیت شیفت یا فیلد در صفحه‌کلید دیگر تغییر می‌کنند. برنامه ظاهر آن‌ها را در حالت استراحت حفظ کرد.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">صفحه‌کلید دیگر عرض کلیدها را متفاوت اندازه‌گیری می‌کند. برنامه عرض‌ها را تغییر داد تا با این شبکه مطابقت داشته باشد.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

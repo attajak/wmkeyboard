@@ -10,6 +10,10 @@
         <item quantity="one">Programu imeondoa ufunguo %1$d. Kibodi hii haina ufunguo unaofanya kitu kilekile (kodi %2$s).</item>
         <item quantity="other">Programu imeondoa funguo %1$d. Kibodi hii haina funguo zinazofanya kitu kilekile (kodi %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Programu imeondoa ufunguo %1$d. Kibodi hii haina ufunguo unaoitwa %2$s.</item>
+        <item quantity="other">Programu imeondoa funguo %1$d. Kibodi hii haina funguo zinazoitwa %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Programu ilihifadhi ukubwa wa lebo ya kitufe %1$d lakini si mtindo wake wa maandishi. Kibodi hii huchora lebo katika mtindo mmoja.</item>
         <item quantity="other">Programu ilihifadhi ukubwa wa lebo ya vitufe %1$d lakini si mtindo wao wa maandishi. Kibodi hii huchora lebo katika mtindo mmoja.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Programu imebadilisha herufi %1$d kuwa umbo ambalo kibodi hii huandika.</item>
         <item quantity="other">Programu imebadilisha herufi %1$d kuwa umbo ambalo kibodi hii huandika.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Programu imeondoa safu ya nambari. Washa safu ya nambari katika Mpangilio na ukubwa ili kupata moja.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">Ufunguo %1$d hauna herufi za kubonyeza na kushikilia. Faili linazihifadhi katika faili la pili ambalo hukulifungua.</item>
         <item quantity="other">Funguo %1$d hazina herufi za kubonyeza na kushikilia. Faili linazihifadhi katika faili la pili ambalo hukulifungua.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">Ufunguo %1$d hubadilika kulingana na hali ya shift au sehemu kwenye kibodi nyingine. Programu imehifadhi jinsi inavyoonekana wakati wa utulivu.</item>
+        <item quantity="other">Funguo %1$d hubadilika kulingana na hali ya shift au sehemu kwenye kibodi nyingine. Programu imehifadhi jinsi zinavyoonekana wakati wa utulivu.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Kibodi nyingine hupima upana wa vitufe kwa njia tofauti. Programu imebadilisha upana ili kutoshea gridi hii.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

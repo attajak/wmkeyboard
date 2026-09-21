@@ -10,6 +10,10 @@
         <item quantity="one">L\'app ha rimosso %1$d tasto. Questa tastiera non ha alcun tasto che esegue la stessa funzione (codice %2$s).</item>
         <item quantity="other">L\'app ha rimosso %1$d tasti. Questa tastiera non ha alcun tasto che esegue la stessa funzione (codici %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">L\'app ha rimosso %1$d tasto. Questa tastiera non ha alcun tasto chiamato %2$s.</item>
+        <item quantity="other">L\'app ha rimosso %1$d tasti. Questa tastiera non ha tasti chiamati %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">L\'app ha mantenuto la dimensione dell\'etichetta di %1$d tasto ma non il suo stile di testo. Questa tastiera disegna le etichette con un unico stile.</item>
         <item quantity="other">L\'app ha mantenuto la dimensione dell\'etichetta di %1$d tasti ma non il loro stile di testo. Questa tastiera disegna le etichette con un unico stile.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">L\'app ha cambiato %1$d lettera nella forma scritta da questa tastiera.</item>
         <item quantity="other">L\'app ha cambiato %1$d lettere nella forma scritta da questa tastiera.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">L\'app ha rimosso la riga dei numeri. Attiva la riga dei numeri in Layout e dimensioni per ottenerne una.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d tasto non ha lettere con pressione prolungata. Il file le conserva in un secondo file che non hai aperto.</item>
         <item quantity="other">%1$d tasti non hanno lettere con pressione prolungata. Il file le conserva in un secondo file che non hai aperto.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d tasto cambia con lo stato del maiusc o il campo nell\'altra tastiera. L\'app ha mantenuto il suo aspetto a riposo.</item>
+        <item quantity="other">%1$d tasti cambiano con lo stato del maiusc o il campo nell\'altra tastiera. L\'app ha mantenuto il loro aspetto a riposo.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">L\'altra tastiera misura le larghezze dei tasti in modo diverso. L\'app ha modificato le larghezze per adattarle a questa griglia.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

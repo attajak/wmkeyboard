@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Bytt tastatur</string>
     <string name="ime_controls_title">Tastaturkontroller</string>
     <string name="ime_controls_unpin">Løsne</string>
+    <string name="ime_conversion_pack_offer">Last ned %1$s for å skrive tegn</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Avvis</string>
     <string name="ime_converter_from_label">Fra</string>
     <string name="ime_converter_to_label">Til</string>
     <string name="ime_currency_insert_action">Sett inn</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Skilletegn: %1$s</string>
     <string name="ime_password_tab_passphrase">Passordfrase</string>
     <string name="ime_password_words_label">Ord</string>
+    <string name="ime_phonetic_word_list_offer">Hent %1$s-ordlisten for bedre ord</string>
     <string name="ime_plugin_empty_body">En utvidelse er et lite verktøy i en sandkasse. Du kan legge til utvidelser fra et utvidelseslager eller fra en .wmplugin-fil. En utvidelse kan ikke se hva du skriver.</string>
     <string name="ime_plugin_empty_title">Ingen utvidelser ennå</string>
     <string name="ime_plugin_manage_action">Administrer utvidelser</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Ingen andre treff</string>
     <string name="ime_selection_macro_grammar_clean_toast">Ingenting å fikse</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Grammatikkontrollen er ikke tilgjengelig</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi fonetisk er ikke lastet inn</string>
     <string name="ime_selection_macro_no_app_toast">Ingen app kan åpne dette</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Ingenting mer å angre</string>
     <string name="ime_selection_macro_stop_label">Stopp</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Tastaturet kan ikke hente resultater</string>
     <string name="ime_service_mode_tool_order_toast">Tastaturet lagret verktøy-rekkefølgen kun for %1$s-modus. Andre apper beholder sin egen rekkefølge.</string>
     <string name="ime_service_no_email_app_toast">Denne enheten har ingen e-postapp. Send rapporter til %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Bare for Avro og hindi-fonetisk</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Slå på engelsk under Språk, %1$s, Foreslå også fra</string>
+    <string name="ime_service_phonetic_english_off_toast">Engelske ord blir bare foreslått</string>
+    <string name="ime_service_phonetic_english_on_toast">Engelske ord forblir engelske</string>
     <string name="ime_service_plugins_all_off_notice">Alle tilleggene du har installert er slått av. Slå på ett under Administrer tillegg.</string>
     <string name="ime_service_plugins_off_notice">Programtillegg er slått av. Slå dem på i Innstillinger for å installere og kjøre dem.</string>
     <string name="ime_service_power_saving_off_toast">Strømsparing er av</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Passord</string>
     <string name="ime_tool_paste">Lim inn</string>
     <string name="ime_tool_persistent">Behold på skjermen</string>
+    <string name="ime_tool_phonetic_english">Engelske ord</string>
     <string name="ime_tool_picker_close_desc">Lukk listen over taster</string>
     <string name="ime_tool_picker_help">%1$s for alle taster</string>
     <string name="ime_tool_picker_leader">%1$s, deretter:</string>

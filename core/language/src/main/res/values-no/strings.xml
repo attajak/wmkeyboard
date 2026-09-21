@@ -10,6 +10,10 @@
         <item quantity="one">Appen fjernet %1$d tast. Dette tastaturet har ingen tast som gjør det samme (kode %2$s).</item>
         <item quantity="other">Appen fjernet %1$d taster. Dette tastaturet har ingen taster som gjør det samme (koder %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Appen fjernet %1$d tast. Dette tastaturet har ingen tast kalt %2$s.</item>
+        <item quantity="other">Appen fjernet %1$d taster. Dette tastaturet har ingen taster kalt %2$s.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Appen beholdt etikettstørrelsen for %1$d tast, men ikke tekststilen. Dette tastaturet tegner etiketter i én stil.</item>
         <item quantity="other">Appen beholdt etikettstørrelsen for %1$d taster, men ikke tekststilen deres. Dette tastaturet tegner etiketter i én stil.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Appen endret %1$d bokstav til formen som dette tastaturet skriver.</item>
         <item quantity="other">Appen endret %1$d bokstaver til formen som dette tastaturet skriver.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Appen fjernet tallraden. Slå på tallraden under Oppsett og størrelse for å få en.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d tast har ingen trykk-og-hold-bokstaver. Filen beholder dem i en annen fil som du ikke åpnet.</item>
         <item quantity="other">%1$d taster har ingen trykk-og-hold-bokstaver. Filen beholder dem i en annen fil som du ikke åpnet.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d tast endres med skift-tilstand eller feltet i det andre tastaturet. Appen beholdt hvordan den ser ut i hvile.</item>
+        <item quantity="other">%1$d taster endres med skift-tilstand eller feltet i det andre tastaturet. Appen beholdt hvordan de ser ut i hvile.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Det andre tastaturet måler tastbredder annerledes. Appen endret breddene for å passe til dette rutenettet.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

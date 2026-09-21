@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">Tidszoner</string>
     <string name="core_content_selection_macro_to_bangla">Bengali</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
+    <string name="core_content_selection_macro_to_hindi">Hindi</string>
+    <string name="core_content_selection_macro_to_hinglish">Hinglish</string>
     <string name="core_content_selection_macro_translate">Oversæt</string>
     <string name="core_content_selection_macro_url_decode">Afkod</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

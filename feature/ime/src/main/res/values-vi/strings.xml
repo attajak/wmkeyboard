@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Chuyển đổi bàn phím</string>
     <string name="ime_controls_title">Điều khiển bàn phím</string>
     <string name="ime_controls_unpin">Bỏ ghim</string>
+    <string name="ime_conversion_pack_offer">Tải xuống %1$s để gõ ký tự</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Bỏ qua</string>
     <string name="ime_converter_from_label">Từ</string>
     <string name="ime_converter_to_label">Đến</string>
     <string name="ime_currency_insert_action">Chèn</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Dấu phân cách: %1$s</string>
     <string name="ime_password_tab_passphrase">Cụm mật khẩu</string>
     <string name="ime_password_words_label">Từ</string>
+    <string name="ime_phonetic_word_list_offer">Tải danh sách từ %1$s để có các từ tốt hơn</string>
     <string name="ime_plugin_empty_body">Plugin là một công cụ nhỏ trong môi trường sandbox. Bạn có thể thêm plugin từ kho lưu trữ tiện ích bổ sung hoặc từ tệp .wmplugin. Plugin không thể thấy những gì bạn nhập.</string>
     <string name="ime_plugin_empty_title">Chưa có plugin nào</string>
     <string name="ime_plugin_manage_action">Quản lý plugin</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Không có kết quả khớp khác</string>
     <string name="ime_selection_macro_grammar_clean_toast">Không có gì để sửa</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Trình kiểm tra ngữ pháp không khả dụng</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Tiếng Hindi ngữ âm chưa được tải</string>
     <string name="ime_selection_macro_no_app_toast">Không có ứng dụng nào có thể mở mục này</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Không còn gì để hoàn tác</string>
     <string name="ime_selection_macro_stop_label">Dừng</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Bàn phím không thể lấy kết quả</string>
     <string name="ime_service_mode_tool_order_toast">Bàn phím đã lưu thứ tự công cụ cho chế độ %1$s. Các ứng dụng khác giữ thứ tự riêng của chúng.</string>
     <string name="ime_service_no_email_app_toast">Thiết bị này không có ứng dụng email. Gửi báo cáo đến %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Chỉ dành cho Avro và phiên âm tiếng Hindi</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Bật tiếng Anh trong phần Ngôn ngữ, %1$s, Cũng gợi ý từ</string>
+    <string name="ime_service_phonetic_english_off_toast">Các từ tiếng Anh chỉ được gợi ý</string>
+    <string name="ime_service_phonetic_english_on_toast">Từ tiếng Anh vẫn giữ nguyên tiếng Anh</string>
     <string name="ime_service_plugins_all_off_notice">Mọi plugin bạn đã cài đặt đều bị tắt. Hãy bật một plugin trong phần Quản lý plugin.</string>
     <string name="ime_service_plugins_off_notice">Các plugin đã bị tắt. Hãy bật chúng trong phần Cài đặt để cài đặt và chạy chúng.</string>
     <string name="ime_service_power_saving_off_toast">Chế độ tiết kiệm pin đã tắt</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Mật khẩu</string>
     <string name="ime_tool_paste">Dán</string>
     <string name="ime_tool_persistent">Luôn hiển thị trên màn hình</string>
+    <string name="ime_tool_phonetic_english">Từ tiếng Anh</string>
     <string name="ime_tool_picker_close_desc">Đóng danh sách phím</string>
     <string name="ime_tool_picker_help">%1$s cho tất cả các phím</string>
     <string name="ime_tool_picker_leader">%1$s, sau đó:</string>

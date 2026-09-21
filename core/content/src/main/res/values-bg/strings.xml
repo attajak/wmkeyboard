@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">Часови зони</string>
     <string name="core_content_selection_macro_to_bangla">Бенгалски</string>
     <string name="core_content_selection_macro_to_banglish">Банглийски</string>
+    <string name="core_content_selection_macro_to_hindi">Хинди</string>
+    <string name="core_content_selection_macro_to_hinglish">Хинглиш</string>
     <string name="core_content_selection_macro_translate">Превод</string>
     <string name="core_content_selection_macro_url_decode">Декодиране</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

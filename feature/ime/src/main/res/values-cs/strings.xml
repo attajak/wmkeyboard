@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Přepnout klávesnici</string>
     <string name="ime_controls_title">Ovládání klávesnice</string>
     <string name="ime_controls_unpin">Odepnout</string>
+    <string name="ime_conversion_pack_offer">Stáhněte si %1$s pro psaní znaků</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Zahodit</string>
     <string name="ime_converter_from_label">Z</string>
     <string name="ime_converter_to_label">Na</string>
     <string name="ime_currency_insert_action">Vložit</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Oddělovač: %1$s</string>
     <string name="ime_password_tab_passphrase">Heslová fráze</string>
     <string name="ime_password_words_label">Slova</string>
+    <string name="ime_phonetic_word_list_offer">Získejte seznam slov %1$s pro lepší slova</string>
     <string name="ime_plugin_empty_body">Plugin je malý nástroj v izolovaném prostředí. Pluginy můžete přidat z repozitáře doplňků nebo ze souboru .wmplugin. Plugin nevidí, co píšete.</string>
     <string name="ime_plugin_empty_title">Zatím žádné pluginy</string>
     <string name="ime_plugin_manage_action">Správa pluginů</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Žádná další shoda</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nic k opravě</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Kontrola gramatiky není k dispozici</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindské fonetické rozložení není načteno</string>
     <string name="ime_selection_macro_no_app_toast">Žádná aplikace to nemůže otevřít</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Není co vrátit zpět</string>
     <string name="ime_selection_macro_stop_label">Zastavit</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Klávesnice nemůže získat výsledky</string>
     <string name="ime_service_mode_tool_order_toast">Klávesnice uložila pořadí nástrojů pouze pro režim %1$s. Ostatní aplikace si udržují vlastní pořadí.</string>
     <string name="ime_service_no_email_app_toast">Toto zařízení nemá žádnou e-mailovou aplikaci. Hlášení posílejte na %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Pouze pro Avro a hindské fonetické rozložení</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Zapněte angličtinu v části Jazyky, %1$s, Nabízet také z</string>
+    <string name="ime_service_phonetic_english_off_toast">Anglická slova jsou pouze navrhována</string>
+    <string name="ime_service_phonetic_english_on_toast">Anglická slova zůstávají anglická</string>
     <string name="ime_service_plugins_all_off_notice">Všechny nainstalované moduly plug-in jsou vypnuté. Zapněte některý z nich v části Správa modulů plug-in.</string>
     <string name="ime_service_plugins_off_notice">Pluginy jsou vypnuté. Zapněte je v Nastavení, abyste je mohli nainstalovat a spustit.</string>
     <string name="ime_service_power_saving_off_toast">Úspora energie je vypnutá</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Heslo</string>
     <string name="ime_tool_paste">Vložit</string>
     <string name="ime_tool_persistent">Ponechat na obrazovce</string>
+    <string name="ime_tool_phonetic_english">Anglická slova</string>
     <string name="ime_tool_picker_close_desc">Zavřít seznam kláves</string>
     <string name="ime_tool_picker_help">%1$s pro všechny klávesy</string>
     <string name="ime_tool_picker_leader">%1$s, poté:</string>

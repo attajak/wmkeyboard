@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Canvia el teclat</string>
     <string name="ime_controls_title">Controls del teclat</string>
     <string name="ime_controls_unpin">Desancorar</string>
+    <string name="ime_conversion_pack_offer">Baixeu el %1$s per escriure caràcters</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Ignora</string>
     <string name="ime_converter_from_label">De</string>
     <string name="ime_converter_to_label">A</string>
     <string name="ime_currency_insert_action">Insereix</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">Separador: %1$s</string>
     <string name="ime_password_tab_passphrase">Frase de contrasenya</string>
     <string name="ime_password_words_label">Paraules</string>
+    <string name="ime_phonetic_word_list_offer">Obtén la llista de paraules %1$s per a millors paraules</string>
     <string name="ime_plugin_empty_body">Un connector és una petita eina en un entorn aïllat. Podeu afegir connectors des d\'un repositori de complements o des d\'un fitxer .wmplugin. Un connector no pot veure el que escriviu.</string>
     <string name="ime_plugin_empty_title">Encara no hi ha connectors</string>
     <string name="ime_plugin_manage_action">Gestiona els connectors</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">Cap altra coincidència</string>
     <string name="ime_selection_macro_grammar_clean_toast">Res a corregir</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">El corrector gramatical no està disponible</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">El fonètic hindi no està carregat</string>
     <string name="ime_selection_macro_no_app_toast">Cap aplicació pot obrir això</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">No hi ha res per desfer</string>
     <string name="ime_selection_macro_stop_label">Atura</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">El teclat no pot obtenir resultats</string>
     <string name="ime_service_mode_tool_order_toast">El teclat ha desat l\'ordre de les eines només per al mode %1$s. Altres aplicacions mantenen el seu propi ordre.</string>
     <string name="ime_service_no_email_app_toast">Aquest dispositiu no té cap aplicació de correu electrònic. Envia els informes a %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Només per a fonètica Avro i hindi</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Activa l\'anglès a Idiomes, %1$s, També suggerir des de</string>
+    <string name="ime_service_phonetic_english_off_toast">Les paraules en anglès només es suggereixen</string>
+    <string name="ime_service_phonetic_english_on_toast">Les paraules en anglès es mantenen en anglès</string>
     <string name="ime_service_plugins_all_off_notice">Tots els connectors que heu instal·lat estan desactivats. Activeu-ne un a Gestiona els connectors.</string>
     <string name="ime_service_plugins_off_notice">Els connectors estan desactivats. Activeu-los a Configuració per instal·lar-los i executar-los.</string>
     <string name="ime_service_power_saving_off_toast">L\'estalvi d\'energia està desactivat</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">Contrasenya</string>
     <string name="ime_tool_paste">Enganxa</string>
     <string name="ime_tool_persistent">Mantingues a la pantalla</string>
+    <string name="ime_tool_phonetic_english">Paraules en anglès</string>
     <string name="ime_tool_picker_close_desc">Tanca la llista de tecles</string>
     <string name="ime_tool_picker_help">%1$s per a totes les tecles</string>
     <string name="ime_tool_picker_leader">%1$s, llavors:</string>

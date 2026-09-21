@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Klavyeyi değiştir</string>
     <string name="ime_controls_title">Klavye kontrolleri</string>
     <string name="ime_controls_unpin">Sabitlemeyi kaldır</string>
+    <string name="ime_conversion_pack_offer">Karakterleri yazmak için %1$s dosyasını indirin</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Kapat</string>
     <string name="ime_converter_from_label">Kimden</string>
     <string name="ime_converter_to_label">Hedef</string>
     <string name="ime_currency_insert_action">Ekle</string>
@@ -440,6 +442,7 @@
     <string name="ime_password_separator_label">Ayırıcı: %1$s</string>
     <string name="ime_password_tab_passphrase">Parola</string>
     <string name="ime_password_words_label">Kelimeler</string>
+    <string name="ime_phonetic_word_list_offer">Daha iyi kelimeler için %1$s kelime listesini alın</string>
     <string name="ime_plugin_empty_body">Eklenti, korumalı alanda çalışan küçük bir araçtır. Eklentileri bir eklenti deposundan veya .wmplugin dosyasından ekleyebilirsiniz. Bir eklenti ne yazdığınızı göremez.</string>
     <string name="ime_plugin_empty_title">Henüz eklenti yok</string>
     <string name="ime_plugin_manage_action">Eklentileri yönet</string>
@@ -511,6 +514,7 @@
     <string name="ime_selection_macro_find_none_toast">Başka eşleşme yok</string>
     <string name="ime_selection_macro_grammar_clean_toast">Düzeltilecek bir şey yok</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Dil bilgisi denetleyicisi kullanılamıyor</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hintçe fonetik yüklü değil</string>
     <string name="ime_selection_macro_no_app_toast">Bunu açabilecek bir uygulama yok</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Geri alınacak bir şey kalmadı</string>
     <string name="ime_selection_macro_stop_label">Durdur</string>
@@ -539,6 +543,10 @@
     <string name="ime_service_media_fetch_error">Klavye sonuçları alamıyor</string>
     <string name="ime_service_mode_tool_order_toast">Klavye, %1$s modu için araç sırasını kaydetti. Diğer uygulamalar kendi sıralarını korur.</string>
     <string name="ime_service_no_email_app_toast">Bu cihazda e-posta uygulaması yok. Raporları %1$s adresine gönderin.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Sadece Avro ve Hintçe fonetik için</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Diller, %1$s, Şuradan öner altında İngilizce\'yi açın</string>
+    <string name="ime_service_phonetic_english_off_toast">İngilizce kelimeler sadece önerilir</string>
+    <string name="ime_service_phonetic_english_on_toast">İngilizce kelimeler İngilizce kalır</string>
     <string name="ime_service_plugins_all_off_notice">Yüklediğiniz tüm eklentiler kapalı. Eklentileri yönet kısmından birini açın.</string>
     <string name="ime_service_plugins_off_notice">Eklentiler kapalı. Yüklemek ve çalıştırmak için Ayarlar\'dan açın.</string>
     <string name="ime_service_power_saving_off_toast">Güç tasarrufu kapalı</string>
@@ -710,6 +718,7 @@
     <string name="ime_tool_password_gen">Parola</string>
     <string name="ime_tool_paste">Yapıştır</string>
     <string name="ime_tool_persistent">Ekranda tut</string>
+    <string name="ime_tool_phonetic_english">İngilizce kelimeler</string>
     <string name="ime_tool_picker_close_desc">Tuş listesini kapat</string>
     <string name="ime_tool_picker_help">Tüm tuşlar için %1$s</string>
     <string name="ime_tool_picker_leader">%1$s, ardından:</string>

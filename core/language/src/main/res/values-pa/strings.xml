@@ -10,6 +10,10 @@
         <item quantity="one">ਐਪ ਨੇ %1$d ਕੁੰਜੀ ਹਟਾ ਦਿੱਤੀ ਹੈ। ਇਸ ਕੀਬੋਰਡ ਵਿੱਚ ਕੋਈ ਅਜਿਹੀ ਕੁੰਜੀ ਨਹੀਂ ਹੈ ਜੋ ਉਹੀ ਕੰਮ ਕਰਦੀ ਹੋਵੇ (ਕੋਡ %2$s)।</item>
         <item quantity="other">ਐਪ ਨੇ %1$d ਕੁੰਜੀਆਂ ਹਟਾ ਦਿੱਤੀਆਂ ਹਨ। ਇਸ ਕੀਬੋਰਡ ਵਿੱਚ ਕੋਈ ਅਜਿਹੀ ਕੁੰਜੀ ਨਹੀਂ ਹੈ ਜੋ ਉਹੀ ਕੰਮ ਕਰਦੀ ਹੋਵੇ (ਕੋਡ %2$s)।</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">ਐਪ ਨੇ %1$d ਕੁੰਜੀ ਹਟਾ ਦਿੱਤੀ ਹੈ। ਇਸ ਕੀਬੋਰਡ ਵਿੱਚ %2$s ਨਾਮ ਦੀ ਕੋਈ ਕੁੰਜੀ ਨਹੀਂ ਹੈ।</item>
+        <item quantity="other">ਐਪ ਨੇ %1$d ਕੁੰਜੀਆਂ ਹਟਾ ਦਿੱਤੀਆਂ ਹਨ। ਇਸ ਕੀਬੋਰਡ ਵਿੱਚ %2$s ਨਾਮ ਦੀਆਂ ਕੋਈ ਕੁੰਜੀਆਂ ਨਹੀਂ ਹਨ।</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">ਐਪ ਨੇ %1$d ਕੁੰਜੀ ਦਾ ਲੇਬਲ ਆਕਾਰ ਰੱਖਿਆ ਪਰ ਇਸਦੀ ਟੈਕਸਟ ਸ਼ੈਲੀ ਨਹੀਂ। ਇਹ ਕੀਬੋਰਡ ਇੱਕ ਸ਼ੈਲੀ ਵਿੱਚ ਲੇਬਲ ਖਿੱਚਦਾ ਹੈ।</item>
         <item quantity="other">ਐਪ ਨੇ %1$d ਕੁੰਜੀਆਂ ਦਾ ਲੇਬਲ ਆਕਾਰ ਰੱਖਿਆ ਪਰ ਉਹਨਾਂ ਦੀ ਟੈਕਸਟ ਸ਼ੈਲੀ ਨਹੀਂ। ਇਹ ਕੀਬੋਰਡ ਇੱਕ ਸ਼ੈਲੀ ਵਿੱਚ ਲੇਬਲ ਖਿੱਚਦਾ ਹੈ।</item>
@@ -18,9 +22,14 @@
         <item quantity="one">ਐਪ ਨੇ %1$d ਅੱਖਰ ਨੂੰ ਉਸ ਰੂਪ ਵਿੱਚ ਬਦਲ ਦਿੱਤਾ ਹੈ ਜੋ ਇਹ ਕੀਬੋਰਡ ਲਿਖਦਾ ਹੈ।</item>
         <item quantity="other">ਐਪ ਨੇ %1$d ਅੱਖਰਾਂ ਨੂੰ ਉਸ ਰੂਪ ਵਿੱਚ ਬਦਲ ਦਿੱਤਾ ਹੈ ਜੋ ਇਹ ਕੀਬੋਰਡ ਲਿਖਦਾ ਹੈ।</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">ਐਪ ਨੇ ਨੰਬਰਾਂ ਦੀ ਕਤਾਰ ਹਟਾ ਦਿੱਤੀ ਹੈ। ਨੰਬਰ ਕਤਾਰ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ \'ਲੇਆਉਟ ਅਤੇ ਆਕਾਰ\' ਵਿੱਚ ਨੰਬਰ ਕਤਾਰ ਨੂੰ ਚਾਲੂ ਕਰੋ।</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d ਕੁੰਜੀ ਵਿੱਚ ਕੋਈ ਪ੍ਰੈਸ-ਐਂਡ-ਹੋਲਡ ਅੱਖਰ ਨਹੀਂ ਹਨ। ਫਾਈਲ ਉਹਨਾਂ ਨੂੰ ਇੱਕ ਦੂਜੀ ਫਾਈਲ ਵਿੱਚ ਰੱਖਦੀ ਹੈ ਜੋ ਤੁਸੀਂ ਨਹੀਂ ਖੋਲ੍ਹੀ ਹੈ।</item>
         <item quantity="other">%1$d ਕੁੰਜੀਆਂ ਵਿੱਚ ਕੋਈ ਪ੍ਰੈਸ-ਐਂਡ-ਹੋਲਡ ਅੱਖਰ ਨਹੀਂ ਹਨ। ਫਾਈਲ ਉਹਨਾਂ ਨੂੰ ਇੱਕ ਦੂਜੀ ਫਾਈਲ ਵਿੱਚ ਰੱਖਦੀ ਹੈ ਜੋ ਤੁਸੀਂ ਨਹੀਂ ਖੋਲ੍ਹੀ ਹੈ।</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d ਕੁੰਜੀ ਸ਼ਿਫਟ ਸਥਿਤੀ ਜਾਂ ਦੂਜੇ ਕੀਬੋਰਡ ਵਿੱਚ ਖੇਤਰ ਦੇ ਨਾਲ ਬਦਲਦੀ ਹੈ। ਐਪ ਨੇ ਇਸਦੇ ਆਮ ਦਿੱਖ ਨੂੰ ਬਰਕਰਾਰ ਰੱਖਿਆ ਹੈ।</item>
+        <item quantity="other">%1$d ਕੁੰਜੀਆਂ ਸ਼ਿਫਟ ਸਥਿਤੀ ਜਾਂ ਦੂਜੇ ਕੀਬੋਰਡ ਵਿੱਚ ਖੇਤਰ ਦੇ ਨਾਲ ਬਦਲਦੀਆਂ ਹਨ। ਐਪ ਨੇ ਉਹਨਾਂ ਦੀ ਆਮ ਦਿੱਖ ਨੂੰ ਬਰਕਰਾਰ ਰੱਖਿਆ ਹੈ।</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">ਦੂਜਾ ਕੀਬੋਰਡ ਕੁੰਜੀ ਦੀ ਚੌੜਾਈ ਨੂੰ ਵੱਖਰੇ ਤਰੀਕੇ ਨਾਲ ਮਾਪਦਾ ਹੈ। ਐਪ ਨੇ ਇਸ ਗਰਿੱਡ ਵਿੱਚ ਫਿੱਟ ਕਰਨ ਲਈ ਚੌੜਾਈ ਨੂੰ ਬਦਲ ਦਿੱਤਾ ਹੈ।</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

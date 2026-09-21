@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Cambiar teclado</string>
     <string name="ime_controls_title">Controles del teclado</string>
     <string name="ime_controls_unpin">Desanclar</string>
+    <string name="ime_conversion_pack_offer">Descarga el %1$s para escribir caracteres</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Descartar</string>
     <string name="ime_converter_from_label">Desde</string>
     <string name="ime_converter_to_label">A</string>
     <string name="ime_currency_insert_action">Insertar</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Separador: %1$s</string>
     <string name="ime_password_tab_passphrase">Frase de contraseña</string>
     <string name="ime_password_words_label">Palabras</string>
+    <string name="ime_phonetic_word_list_offer">Obtén la lista de palabras %1$s para mejores sugerencias</string>
     <string name="ime_plugin_empty_body">Un complemento es una pequeña herramienta en un entorno aislado. Puedes añadir complementos desde un repositorio de complementos o desde un archivo .wmplugin. Un complemento no puede ver lo que escribes.</string>
     <string name="ime_plugin_empty_title">Aún no hay complementos</string>
     <string name="ime_plugin_manage_action">Gestionar complementos</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">No hay otra coincidencia</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nada que corregir</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">El corrector gramatical no está disponible</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">La fonética hindi no está cargada</string>
     <string name="ime_selection_macro_no_app_toast">Ninguna aplicación puede abrir esto</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">No queda nada por deshacer</string>
     <string name="ime_selection_macro_stop_label">Detener</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">El teclado no puede obtener resultados</string>
     <string name="ime_service_mode_tool_order_toast">El teclado guardó el orden de herramientas para el modo %1$s. Otras aplicaciones mantienen su propio orden.</string>
     <string name="ime_service_no_email_app_toast">Este dispositivo no tiene ninguna aplicación de correo electrónico. Envía los informes a %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Solo para Avro y fonética hindi</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Activa el inglés en Idiomas, %1$s, También sugerir desde</string>
+    <string name="ime_service_phonetic_english_off_toast">Solo se sugieren palabras en inglés</string>
+    <string name="ime_service_phonetic_english_on_toast">Las palabras en inglés permanecen en inglés</string>
     <string name="ime_service_plugins_all_off_notice">Todos los complementos que instalaste están desactivados. Activa uno en Gestionar complementos.</string>
     <string name="ime_service_plugins_off_notice">Los complementos están desactivados. Actívalos en Ajustes para instalarlos y ejecutarlos.</string>
     <string name="ime_service_power_saving_off_toast">El ahorro de energía está desactivado</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Contraseña</string>
     <string name="ime_tool_paste">Pegar</string>
     <string name="ime_tool_persistent">Mantener en pantalla</string>
+    <string name="ime_tool_phonetic_english">Palabras en inglés</string>
     <string name="ime_tool_picker_close_desc">Cerrar la lista de teclas</string>
     <string name="ime_tool_picker_help">%1$s para todas las teclas</string>
     <string name="ime_tool_picker_leader">%1$s, luego:</string>

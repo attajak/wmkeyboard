@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">切换键盘</string>
     <string name="ime_controls_title">键盘控制</string>
     <string name="ime_controls_unpin">取消固定</string>
+    <string name="ime_conversion_pack_offer">下载 %1$s 以输入字符</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">忽略</string>
     <string name="ime_converter_from_label">从</string>
     <string name="ime_converter_to_label">至</string>
     <string name="ime_currency_insert_action">插入</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">分隔符：%1$s</string>
     <string name="ime_password_tab_passphrase">密码短语</string>
     <string name="ime_password_words_label">单词</string>
+    <string name="ime_phonetic_word_list_offer">获取 %1$s 词库以获得更好的词汇建议</string>
     <string name="ime_plugin_empty_body">插件是沙盒中的一个小工具。您可以从插件存储库或 .wmplugin 文件中添加插件。插件无法查看您的输入内容。</string>
     <string name="ime_plugin_empty_title">暂无插件</string>
     <string name="ime_plugin_manage_action">管理插件</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">没有其他匹配项</string>
     <string name="ime_selection_macro_grammar_clean_toast">无需修复</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">语法检查器不可用</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">印地语拼音未加载</string>
     <string name="ime_selection_macro_no_app_toast">没有应用可以打开此内容</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">没有可撤销的操作</string>
     <string name="ime_selection_macro_stop_label">停止</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">键盘无法获取结果</string>
     <string name="ime_service_mode_tool_order_toast">键盘已保存 %1$s 模式的工具顺序。其他应用将保留其各自的顺序。</string>
     <string name="ime_service_no_email_app_toast">此设备没有电子邮件应用。请将报告发送至 %1$s。</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">仅适用于 Avro 和印地语拼音</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">请在“语言”中开启英语，%1$s，以及“建议来源”</string>
+    <string name="ime_service_phonetic_english_off_toast">仅建议英语单词</string>
+    <string name="ime_service_phonetic_english_on_toast">英语单词保持为英语</string>
     <string name="ime_service_plugins_all_off_notice">您安装的所有插件均已关闭。请在“管理插件”中开启一个。</string>
     <string name="ime_service_plugins_off_notice">插件已关闭。请在设置中开启以安装并运行它们。</string>
     <string name="ime_service_power_saving_off_toast">省电模式已关闭</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">密码</string>
     <string name="ime_tool_paste">粘贴</string>
     <string name="ime_tool_persistent">保持在屏幕上</string>
+    <string name="ime_tool_phonetic_english">英语单词</string>
     <string name="ime_tool_picker_close_desc">关闭按键列表</string>
     <string name="ime_tool_picker_help">所有按键使用 %1$s</string>
     <string name="ime_tool_picker_leader">%1$s，然后：</string>

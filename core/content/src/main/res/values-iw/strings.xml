@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">אזורי זמן</string>
     <string name="core_content_selection_macro_to_bangla">בנגלית</string>
     <string name="core_content_selection_macro_to_banglish">בנגליש</string>
+    <string name="core_content_selection_macro_to_hindi">הינדי</string>
+    <string name="core_content_selection_macro_to_hinglish">הינגליש</string>
     <string name="core_content_selection_macro_translate">תרגם</string>
     <string name="core_content_selection_macro_url_decode">פענוח</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>

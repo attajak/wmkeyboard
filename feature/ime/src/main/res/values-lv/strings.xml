@@ -136,6 +136,8 @@
     <string name="ime_controls_switch">Pārslēgt tastatūru</string>
     <string name="ime_controls_title">Tastatūras vadīklas</string>
     <string name="ime_controls_unpin">Atspraust</string>
+    <string name="ime_conversion_pack_offer">Lejupielādējiet %1$s, lai rakstītu rakstzīmes</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Noraidīt</string>
     <string name="ime_converter_from_label">No</string>
     <string name="ime_converter_to_label">Uz</string>
     <string name="ime_currency_insert_action">Ievietot</string>
@@ -441,6 +443,7 @@
     <string name="ime_password_separator_label">Atdalītājs: %1$s</string>
     <string name="ime_password_tab_passphrase">Parole</string>
     <string name="ime_password_words_label">Vārdi</string>
+    <string name="ime_phonetic_word_list_offer">Iegūstiet %1$s vārdu sarakstu labākiem vārdiem</string>
     <string name="ime_plugin_empty_body">Spraudnis ir neliels rīks smilškastē. Varat pievienot spraudņus no papildinājumu krātuves vai no .wmplugin faila. Spraudnis nevar redzēt, ko jūs rakstāt.</string>
     <string name="ime_plugin_empty_title">Pagaidām nav spraudņu</string>
     <string name="ime_plugin_manage_action">Pārvaldīt spraudņus</string>
@@ -512,6 +515,7 @@
     <string name="ime_selection_macro_find_none_toast">Nav citu atbilstību</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nav ko labot</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Gramatikas pārbaudītājs nav pieejams</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi fonētiskā tastatūra nav ielādēta</string>
     <string name="ime_selection_macro_no_app_toast">Neviena lietotne nevar to atvērt</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Vairs nav ko atsaukt</string>
     <string name="ime_selection_macro_stop_label">Apturēt</string>
@@ -540,6 +544,10 @@
     <string name="ime_service_media_fetch_error">Tastatūra nevar iegūt rezultātus</string>
     <string name="ime_service_mode_tool_order_toast">Tastatūra saglabāja rīku secību tikai %1$s režīmam. Citas lietotnes saglabā savu secību.</string>
     <string name="ime_service_no_email_app_toast">Šajā ierīcē nav e-pasta lietotnes. Sūtiet ziņojumus uz %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Tikai Avro un hindi fonētiskajai tastatūrai</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Ieslēdziet angļu valodu sadaļā Valodas, %1$s, Ieteikt arī no</string>
+    <string name="ime_service_phonetic_english_off_toast">Tiek ieteikti tikai angļu valodas vārdi</string>
+    <string name="ime_service_phonetic_english_on_toast">Angļu vārdi paliek angļu valodā</string>
     <string name="ime_service_plugins_all_off_notice">Visi instalētie spraudņi ir izslēgti. Ieslēdziet kādu no tiem sadaļā Pārvaldīt spraudņus.</string>
     <string name="ime_service_plugins_off_notice">Spraudņi ir izslēgti. Ieslēdziet tos Iestatījumos, lai instalētu un palaistu tos.</string>
     <string name="ime_service_power_saving_off_toast">Enerģijas taupīšana ir izslēgta</string>
@@ -711,6 +719,7 @@
     <string name="ime_tool_password_gen">Parole</string>
     <string name="ime_tool_paste">Ielīmēt</string>
     <string name="ime_tool_persistent">Paturēt uz ekrāna</string>
+    <string name="ime_tool_phonetic_english">Angļu vārdi</string>
     <string name="ime_tool_picker_close_desc">Aizvērt taustiņu sarakstu</string>
     <string name="ime_tool_picker_help">%1$s visiem taustiņiem</string>
     <string name="ime_tool_picker_leader">%1$s, tad:</string>

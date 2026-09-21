@@ -10,6 +10,10 @@
         <item quantity="one">ॲपने %1$d की काढली. या कीबोर्डवर अशी कोणतीही की नाही जी तेच काम करते (कोड %2$s).</item>
         <item quantity="other">ॲपने %1$d की काढल्या. या कीबोर्डवर अशा कोणत्याही की नाहीत ज्या तेच काम करतात (कोड %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">ॲपने %1$d की काढून टाकली. या कीबोर्डवर %2$s नावाची कोणतीही की नाही.</item>
+        <item quantity="other">ॲपने %1$d की काढून टाकल्या. या कीबोर्डवर %2$s नावाच्या कोणत्याही की नाहीत.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">ॲपने %1$d कीचा लेबल आकार ठेवला पण त्याची मजकूर शैली नाही. हा कीबोर्ड लेबल्स एकाच शैलीत काढतो.</item>
         <item quantity="other">ॲपने %1$d कीजचा लेबल आकार ठेवला पण त्यांची मजकूर शैली नाही. हा कीबोर्ड लेबल्स एकाच शैलीत काढतो.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">ॲपने %1$d अक्षर अशा स्वरूपात बदलले आहे जे हा कीबोर्ड लिहितो.</item>
         <item quantity="other">ॲपने %1$d अक्षरे अशा स्वरूपात बदलली आहेत जी हा कीबोर्ड लिहितो.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">ॲपने अंकांची ओळ काढून टाकली आहे. ती मिळवण्यासाठी \'लेआउट आणि आकार\' (Layout and size) मध्ये अंकांची ओळ चालू करा.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d की ला प्रेस-अँड-होल्ड अक्षरे नाहीत. फाईल त्यांना दुसऱ्या फाईलमध्ये ठेवते जी तुम्ही उघडली नाही.</item>
         <item quantity="other">%1$d की ला प्रेस-अँड-होल्ड अक्षरे नाहीत. फाईल त्यांना दुसऱ्या फाईलमध्ये ठेवते जी तुम्ही उघडली नाही.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d की शिफ्ट स्थिती किंवा इतर कीबोर्डमधील फील्डसह बदलते. ॲपने ते स्थिर असताना कसे दिसते ते कायम ठेवले आहे.</item>
+        <item quantity="other">%1$d कीज शिफ्ट स्थिती किंवा इतर कीबोर्डमधील फील्डसह बदलतात. ॲपने त्या स्थिर असताना कशा दिसतात ते कायम ठेवले आहे.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">दुसरा कीबोर्ड कीची रुंदी वेगळ्या प्रकारे मोजतो. ॲपने या ग्रिडमध्ये बसण्यासाठी रुंदी बदलली आहे.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

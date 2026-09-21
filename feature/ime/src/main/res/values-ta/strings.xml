@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">விசைப்பலகையை மாற்றவும்</string>
     <string name="ime_controls_title">விசைப்பலகை கட்டுப்பாடுகள்</string>
     <string name="ime_controls_unpin">பின் நீக்கு</string>
+    <string name="ime_conversion_pack_offer">எழுத்துகளைத் தட்டச்சு செய்ய %1$s-ஐப் பதிவிறக்கவும்</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">நீக்கு</string>
     <string name="ime_converter_from_label">இருந்து</string>
     <string name="ime_converter_to_label">இதற்கு</string>
     <string name="ime_currency_insert_action">உட்செருகு</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">பிரிப்பான்: %1$s</string>
     <string name="ime_password_tab_passphrase">கடவுச்சொல் (Passphrase)</string>
     <string name="ime_password_words_label">சொற்கள்</string>
+    <string name="ime_phonetic_word_list_offer">சிறந்த சொற்களுக்கு %1$s சொல் பட்டியலைப் பெறவும்</string>
     <string name="ime_plugin_empty_body">செருகுநிரல் என்பது சாண்ட்பாக்ஸில் உள்ள ஒரு சிறிய கருவியாகும். நீங்கள் ஆட்-ஆன் களஞ்சியத்திலிருந்தோ அல்லது .wmplugin கோப்பிலிருந்தோ செருகுநிரல்களைச் சேர்க்கலாம். ஒரு செருகுநிரலால் நீங்கள் தட்டச்சு செய்வதைப் பார்க்க முடியாது.</string>
     <string name="ime_plugin_empty_title">இதுவரை செருகுநிரல்கள் இல்லை</string>
     <string name="ime_plugin_manage_action">செருகுநிரல்களை நிர்வகிக்கவும்</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">வேறு பொருத்தம் இல்லை</string>
     <string name="ime_selection_macro_grammar_clean_toast">சரிசெய்ய எதுவும் இல்லை</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">இலக்கணச் சரிபார்ப்பு கருவி தற்போது கிடைக்கவில்லை</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">இந்தி ஒலிப்பு முறை ஏற்றப்படவில்லை</string>
     <string name="ime_selection_macro_no_app_toast">இதை திறக்க எந்த ஆப்பும் இல்லை</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">மீண்டும் செய்ய எதுவும் இல்லை</string>
     <string name="ime_selection_macro_stop_label">நிறுத்து</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">விசைப்பலகையால் முடிவுகளைப் பெற முடியவில்லை</string>
     <string name="ime_service_mode_tool_order_toast">விசைப்பலகை %1$s பயன்முறைக்கான கருவி வரிசையைச் சேமித்தது. பிற செயலிகள் அவற்றின் சொந்த வரிசையைப் பராமரிக்கின்றன.</string>
     <string name="ime_service_no_email_app_toast">இந்தச் சாதனத்தில் மின்னஞ்சல் செயலி இல்லை. அறிக்கைகளை %1$s-க்கு அனுப்பவும்.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Avro மற்றும் இந்தி ஒலிப்பு முறைக்கு மட்டும்</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">மொழிகள் என்பதன் கீழ் ஆங்கிலத்தை இயக்கவும், %1$s, இதிலிருந்தும் பரிந்துரைக்கவும்</string>
+    <string name="ime_service_phonetic_english_off_toast">ஆங்கில வார்த்தைகள் மட்டுமே பரிந்துரைக்கப்படுகின்றன</string>
+    <string name="ime_service_phonetic_english_on_toast">ஆங்கிலச் சொற்கள் ஆங்கிலத்திலேயே இருக்கும்</string>
     <string name="ime_service_plugins_all_off_notice">நீங்கள் நிறுவிய ஒவ்வொரு செருகுநிரலும் அணைக்கப்பட்டுள்ளது. செருகுநிரல்களை நிர்வகி என்பதில் ஒன்றை இயக்கவும்.</string>
     <string name="ime_service_plugins_off_notice">செருகுநிரல்கள் அணைக்கப்பட்டுள்ளன. அவற்றை நிறுவவும் இயக்கவும் அமைப்புகளில் அவற்றை ஆன் செய்யவும்.</string>
     <string name="ime_service_power_saving_off_toast">மின் சேமிப்பு முடக்கப்பட்டுள்ளது</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">கடவுச்சொல்</string>
     <string name="ime_tool_paste">ஒட்டு</string>
     <string name="ime_tool_persistent">திரையில் வைத்திருங்கள்</string>
+    <string name="ime_tool_phonetic_english">ஆங்கில வார்த்தைகள்</string>
     <string name="ime_tool_picker_close_desc">விசைகளின் பட்டியலை மூடு</string>
     <string name="ime_tool_picker_help">அனைத்து விசைகளுக்கும் %1$s</string>
     <string name="ime_tool_picker_leader">%1$s, பிறகு:</string>

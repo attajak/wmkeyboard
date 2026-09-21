@@ -135,6 +135,8 @@
     <string name="ime_controls_switch">Byt tangentbord</string>
     <string name="ime_controls_title">Tangentbordskontroller</string>
     <string name="ime_controls_unpin">Lossa</string>
+    <string name="ime_conversion_pack_offer">Ladda ner %1$s för att skriva tecken</string>
+    <string name="ime_conversion_pack_offer_dismiss_desc">Avvisa</string>
     <string name="ime_converter_from_label">Från</string>
     <string name="ime_converter_to_label">Till</string>
     <string name="ime_currency_insert_action">Infoga</string>
@@ -439,6 +441,7 @@
     <string name="ime_password_separator_label">Separator: %1$s</string>
     <string name="ime_password_tab_passphrase">Lösenfras</string>
     <string name="ime_password_words_label">Ord</string>
+    <string name="ime_phonetic_word_list_offer">Hämta ordlistan %1$s för bättre ord</string>
     <string name="ime_plugin_empty_body">Ett plugin är ett litet verktyg i en sandlåda. Du kan lägga till plugins från ett tilläggsarkiv eller från en .wmplugin-fil. Ett plugin kan inte se vad du skriver.</string>
     <string name="ime_plugin_empty_title">Inga insticksprogram ännu</string>
     <string name="ime_plugin_manage_action">Hantera insticksprogram</string>
@@ -510,6 +513,7 @@
     <string name="ime_selection_macro_find_none_toast">Ingen annan matchning</string>
     <string name="ime_selection_macro_grammar_clean_toast">Inget att fixa</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">Grammatikkontrollen är inte tillgänglig</string>
+    <string name="ime_selection_macro_hindi_unavailable_toast">Hindi fonetiskt är inte laddat</string>
     <string name="ime_selection_macro_no_app_toast">Ingen app kan öppna detta</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Inget kvar att ångra</string>
     <string name="ime_selection_macro_stop_label">Stopp</string>
@@ -538,6 +542,10 @@
     <string name="ime_service_media_fetch_error">Tangentbordet kan inte hämta resultat</string>
     <string name="ime_service_mode_tool_order_toast">Tangentbordet sparade verktygsordningen endast för läget %1$s. Andra appar behåller sin egen ordning.</string>
     <string name="ime_service_no_email_app_toast">Den här enheten har ingen e-postapp. Skicka rapporter till %1$s.</string>
+    <string name="ime_service_phonetic_english_needs_layout_toast">Endast för Avro och hindi-fonetisk</string>
+    <string name="ime_service_phonetic_english_needs_secondary_toast">Aktivera engelska under Språk, %1$s, Föreslå även från</string>
+    <string name="ime_service_phonetic_english_off_toast">Engelska ord föreslås endast</string>
+    <string name="ime_service_phonetic_english_on_toast">Engelska ord förblir engelska</string>
     <string name="ime_service_plugins_all_off_notice">Alla insticksprogram du installerat är avstängda. Aktivera ett under Hantera insticksprogram.</string>
     <string name="ime_service_plugins_off_notice">Insticksprogram är avstängda. Aktivera dem i Inställningar för att installera och köra dem.</string>
     <string name="ime_service_power_saving_off_toast">Energisparläge är avstängt</string>
@@ -709,6 +717,7 @@
     <string name="ime_tool_password_gen">Lösenord</string>
     <string name="ime_tool_paste">Klistra in</string>
     <string name="ime_tool_persistent">Behåll på skärmen</string>
+    <string name="ime_tool_phonetic_english">Engelska ord</string>
     <string name="ime_tool_picker_close_desc">Stäng listan med tangenter</string>
     <string name="ime_tool_picker_help">%1$s för alla tangenter</string>
     <string name="ime_tool_picker_leader">%1$s, sedan:</string>

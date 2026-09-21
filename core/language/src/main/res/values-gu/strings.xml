@@ -10,6 +10,10 @@
         <item quantity="one">એપે %1$d કી દૂર કરી છે. આ કીબોર્ડમાં એવી કોઈ કી નથી જે સમાન કામ કરે (કોડ %2$s).</item>
         <item quantity="other">એપે %1$d કીઓ દૂર કરી છે. આ કીબોર્ડમાં એવી કોઈ કીઓ નથી જે સમાન કામ કરે (કોડ %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">એપે %1$d કી દૂર કરી. આ કીબોર્ડમાં %2$s નામની કોઈ કી નથી.</item>
+        <item quantity="other">એપે %1$d કીઓ દૂર કરી. આ કીબોર્ડમાં %2$s નામની કોઈ કીઓ નથી.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">એપે %1$d કીનું લેબલ કદ જાળવી રાખ્યું છે પણ તેની ટેક્સ્ટ શૈલી નહીં. આ કીબોર્ડ લેબલ્સને એક શૈલીમાં દોરે છે.</item>
         <item quantity="other">એપે %1$d કીનું લેબલ કદ જાળવી રાખ્યું છે પણ તેમની ટેક્સ્ટ શૈલી નહીં. આ કીબોર્ડ લેબલ્સને એક શૈલીમાં દોરે છે.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">એપ્લિકેશને %1$d અક્ષરને તે સ્વરૂપમાં બદલ્યો છે જે આ કીબોર્ડ લખે છે.</item>
         <item quantity="other">એપ્લિકેશને %1$d અક્ષરોને તે સ્વરૂપમાં બદલ્યા છે જે આ કીબોર્ડ લખે છે.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">એપે નંબરની લાઇન દૂર કરી છે. નંબરની લાઇન મેળવવા માટે લેઆઉટ અને સાઇઝમાં તેને ચાલુ કરો.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d કીમાં પ્રેસ-એન્ડ-હોલ્ડ અક્ષરો નથી. ફાઇલ તેમને બીજી ફાઇલમાં રાખે છે જે તમે ખોલી નથી.</item>
         <item quantity="other">%1$d કીમાં પ્રેસ-એન્ડ-હોલ્ડ અક્ષરો નથી. ફાઇલ તેમને બીજી ફાઇલમાં રાખે છે જે તમે ખોલી નથી.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d કી શિફ્ટ સ્ટેટ અથવા અન્ય કીબોર્ડના ફીલ્ડ સાથે બદલાય છે. એપે તે સ્થિર હોય ત્યારે જેવું દેખાય છે તે જાળવી રાખ્યું છે.</item>
+        <item quantity="other">%1$d કીઓ શિફ્ટ સ્ટેટ અથવા અન્ય કીબોર્ડના ફીલ્ડ સાથે બદલાય છે. એપે તે સ્થિર હોય ત્યારે જેવું દેખાય છે તે જાળવી રાખ્યું છે.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">બીજું કીબોર્ડ કીની પહોળાઈને અલગ રીતે માપે છે. એપ્લિકેશને આ ગ્રીડમાં ફિટ કરવા માટે પહોળાઈ બદલી છે.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

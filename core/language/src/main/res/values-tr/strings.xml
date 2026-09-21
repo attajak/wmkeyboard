@@ -10,6 +10,10 @@
         <item quantity="one">Uygulama %1$d tuşu kaldırdı. Bu klavyede aynı işi yapan bir tuş yok (kod %2$s).</item>
         <item quantity="other">Uygulama %1$d tuşu kaldırdı. Bu klavyede aynı işi yapan tuşlar yok (kodlar %2$s).</item>
     </plurals>
+    <plurals name="core_lang_foreign_labels_dropped">
+        <item quantity="one">Uygulama %1$d tuşu kaldırdı. Bu klavyede %2$s adında bir tuş yok.</item>
+        <item quantity="other">Uygulama %1$d tuşu kaldırdı. Bu klavyede %2$s adında tuşlar yok.</item>
+    </plurals>
     <plurals name="core_lang_foreign_labels_restyled">
         <item quantity="one">Uygulama %1$d tuşun etiket boyutunu korudu ancak metin stilini korumadı. Bu klavye etiketleri tek bir stilde çizer.</item>
         <item quantity="other">Uygulama %1$d tuşun etiket boyutunu korudu ancak metin stillerini korumadı. Bu klavye etiketleri tek bir stilde çizer.</item>
@@ -18,9 +22,14 @@
         <item quantity="one">Uygulama %1$d harfi bu klavyenin yazdığı biçime dönüştürdü.</item>
         <item quantity="other">Uygulama %1$d harfi bu klavyenin yazdığı biçime dönüştürdü.</item>
     </plurals>
+    <string name="core_lang_foreign_number_row_dropped">Uygulama sayı satırını kaldırdı. Bir tane edinmek için Düzen ve boyut ayarlarından sayı satırını açın.</string>
     <plurals name="core_lang_foreign_popups_missing">
         <item quantity="one">%1$d tuşun basılı tutma harfi yok. Dosya bunları açmadığınız ikinci bir dosyada tutuyor.</item>
         <item quantity="other">%1$d tuşun basılı tutma harfi yok. Dosya bunları açmadığınız ikinci bir dosyada tutuyor.</item>
+    </plurals>
+    <plurals name="core_lang_foreign_selectors_flattened">
+        <item quantity="one">%1$d tuş, shift durumu veya diğer klavyedeki alan ile değişir. Uygulama, tuşların boşta durduğu görünümü korudu.</item>
+        <item quantity="other">%1$d tuş, shift durumu veya diğer klavyedeki alan ile değişir. Uygulama, tuşların boşta durduğu görünümü korudu.</item>
     </plurals>
     <string name="core_lang_foreign_widths_scaled">Diğer klavye, tuş genişliklerini farklı ölçer. Uygulama, bu ızgaraya uyması için genişlikleri değiştirdi.</string>
     <plurals name="core_lang_layout_bad_braille_dots_error">

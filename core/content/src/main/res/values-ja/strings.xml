@@ -136,6 +136,8 @@
     <string name="core_content_selection_macro_time_zones">タイムゾーン</string>
     <string name="core_content_selection_macro_to_bangla">ベンガル語</string>
     <string name="core_content_selection_macro_to_banglish">バングリッシュ</string>
+    <string name="core_content_selection_macro_to_hindi">ヒンディー語</string>
+    <string name="core_content_selection_macro_to_hinglish">ヒングリッシュ</string>
     <string name="core_content_selection_macro_translate">翻訳</string>
     <string name="core_content_selection_macro_url_decode">デコード</string>
     <string name="core_content_selection_macro_whatsapp">WhatsApp</string>
