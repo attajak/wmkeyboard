@@ -89,6 +89,7 @@ internal object SettingsRoutes {
         "blacklist",
         "learnedcorrections",
         "musicapps",
+        "kdeconnect/devices",
         "phoneformats",
         "hwshortcuts",
         "appearance",

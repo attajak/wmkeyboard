@@ -996,6 +996,16 @@ private fun SettingsNavGraph(
                 MusicAppsScreen(repository, settings)
             }
         }
+        composable("kdeconnect/devices") {
+            SettingsScreen(
+                stringResource(R.string.kdeconnect_devices_title),
+                { navController.popBackStack() },
+                route = "kdeconnect/devices",
+                subtitle = stringResource(R.string.kdeconnect_devices_screen_subtitle),
+            ) {
+                com.wasimaster.wmkeyboard.app.kdeconnect.KdeDevicesScreen(repository, settings)
+            }
+        }
         composable("phoneformats") {
             SettingsScreen(
                 stringResource(R.string.home_screen_phoneformats_title),

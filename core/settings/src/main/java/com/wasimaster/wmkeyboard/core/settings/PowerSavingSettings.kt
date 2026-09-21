@@ -212,6 +212,14 @@ fun KeyboardSettings.underPowerSaving(): KeyboardSettings {
         } else {
             mediaControl
         },
+        // A link held while the keyboard is hidden is background network work
+        // in the plainest sense. The link itself survives: it just goes back
+        // to living only while the keyboard is up.
+        kdeConnect = if (ps.dropBackgroundNetwork && kdeConnect.lifetime == KdeLinkLifetime.ALWAYS) {
+            kdeConnect.copy(lifetime = KdeLinkLifetime.KEYBOARD)
+        } else {
+            kdeConnect
+        },
         whisper = if (ps.dropOnDeviceModels) whisper.copy(engine = "system") else whisper,
         letterSwipeAction = if (ps.dropOnDeviceModels &&
             letterSwipeAction == LetterSwipeAction.HANDWRITE

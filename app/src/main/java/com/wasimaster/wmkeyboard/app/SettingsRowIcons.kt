@@ -2,6 +2,12 @@ package com.wasimaster.wmkeyboard.app
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.BatteryStd
+import androidx.compose.material.icons.outlined.Devices
+import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Phonelink
+import androidx.compose.material.icons.outlined.SwipeVertical
+import androidx.compose.material.icons.outlined.Sync
 import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material.icons.automirrored.outlined.Chat
@@ -987,6 +993,27 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_mediactl_pin_title) { Icons.Outlined.PushPin }
         put(R.string.tooldetail_mediactl_apps_title) { Icons.Outlined.MusicNote }
         put(R.string.tooldetail_mediactl_access_title) { Icons.Outlined.Notifications }
+        // KDE Connect (#285)
+        put(R.string.kdeconnect_enabled_title) { Icons.Outlined.Phonelink }
+        put(R.string.kdeconnect_devices_title) { Icons.Outlined.Devices }
+        put(R.string.kdeconnect_lifetime_title) { Icons.Outlined.Link }
+        put(R.string.kdeconnect_auto_connect_title) { Icons.Outlined.Sync }
+        put(R.string.kdeconnect_clipboard_receive_title) { Icons.Outlined.ContentPaste }
+        put(R.string.kdeconnect_clipboard_send_title) { Icons.Outlined.ContentCopy }
+        put(R.string.kdeconnect_remote_typing_title) { Icons.Outlined.Keyboard }
+        put(R.string.kdeconnect_pipeline_title) { Icons.Outlined.Translate }
+        put(R.string.kdeconnect_pad_speed_title) { Icons.Outlined.Speed }
+        put(R.string.kdeconnect_pad_accel_title) { Icons.Outlined.Mouse }
+        put(R.string.kdeconnect_scroll_speed_title) { Icons.Outlined.SwapVert }
+        put(R.string.kdeconnect_natural_scroll_title) { Icons.Outlined.SwipeVertical }
+        put(R.string.kdeconnect_tap_click_title) { Icons.Outlined.TouchApp }
+        put(R.string.kdeconnect_pad_haptics_title) { Icons.Outlined.Vibration }
+        put(R.string.kdeconnect_receive_files_title) { Icons.Outlined.Download }
+        put(R.string.kdeconnect_share_sheet_title) { Icons.Outlined.Share }
+        put(R.string.kdeconnect_battery_title) { Icons.Outlined.BatteryStd }
+        put(R.string.kdeconnect_media_title) { Icons.Outlined.MusicNote }
+        put(R.string.kdeconnect_media_access_title) { Icons.Outlined.Notifications }
+        put(R.string.kdeconnect_notify_title) { Icons.Outlined.Phonelink }
         put(R.string.musicapps_reset_title) { Icons.Outlined.Restore }
 
         // ---- Selection actions ----

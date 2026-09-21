@@ -417,6 +417,7 @@
     <string name="ime_tool_password_gen">Password</string>
     <string name="ime_tool_typing_test">Typing speed</string>
     <string name="ime_tool_media_control">Media</string>
+    <string name="ime_tool_kde_connect" translatable="false">KDE Connect</string>
     <string name="ime_tool_plugins">Plugins</string>
     <string name="ime_tool_app_launcher">Apps</string>
     <!-- Artificial intelligence. Keep the short form the toolbar can fit. -->

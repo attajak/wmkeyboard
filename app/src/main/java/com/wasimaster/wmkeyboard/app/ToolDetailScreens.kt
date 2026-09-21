@@ -363,6 +363,8 @@ internal fun ToolDetailSettings(
     }
     ToolKeywordSetting(repository, settings, tool)
     when (tool) {
+        ToolbarTool.KDE_CONNECT ->
+            com.wasimaster.wmkeyboard.app.kdeconnect.KdeConnectToolSettings(repository, settings, onNavigate)
         ToolbarTool.MEDIA_CONTROL -> {
             // Re-read whenever this screen comes back to the foreground: the
             // grant is made on a system screen, so the user leaves, ticks the

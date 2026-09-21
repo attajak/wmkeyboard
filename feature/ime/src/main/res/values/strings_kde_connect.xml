@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The KDE Connect tool's panel (issue #285). "KDE Connect" itself is a name and is not translated. -->
+<resources>
+    <!-- Off -->
+    <string name="ime_kde_intro_title">Use your computer from here</string>
+    <string name="ime_kde_intro_body">Pair a computer that runs KDE Connect, GSConnect or Valent. Then move its mouse, type on it, control its music, and share the clipboard and files. It can type into your phone too.</string>
+    <string name="ime_kde_intro_network">Only your local network is used. Nothing is sent before you turn this on.</string>
+    <string name="ime_kde_turn_on">Turn on</string>
+    <string name="ime_kde_locked">Unlock your phone to use KDE Connect</string>
+
+    <!-- Devices -->
+    <string name="ime_kde_devices">Devices</string>
+    <string name="ime_kde_searching">Looking for computers on this network…</string>
+    <string name="ime_kde_section_paired">Paired</string>
+    <string name="ime_kde_section_nearby">Nearby</string>
+    <string name="ime_kde_status_connected">Connected</string>
+    <string name="ime_kde_status_unreachable">Not reachable</string>
+    <string name="ime_kde_pair">Pair</string>
+    <string name="ime_kde_refresh">Refresh</string>
+    <string name="ime_kde_add_by_address">Add by address</string>
+    <string name="ime_kde_address_placeholder">IP address or host name</string>
+    <string name="ime_kde_address_add">Add</string>
+    <string name="ime_kde_help_title">Nothing shows up?</string>
+    <string name="ime_kde_help_body">Both devices must be on the same Wi-Fi. The computer\'s firewall must allow ports 1714 to 1764, TCP and UDP. Guest networks often keep devices apart: add the computer by its address.</string>
+    <string name="ime_kde_not_listening">Another app on this phone uses the KDE Connect port. Computers can still find this keyboard, but press Refresh on this side.</string>
+
+    <!-- Pairing -->
+    <string name="ime_kde_pair_waiting">Waiting for %1$s to accept</string>
+    <string name="ime_kde_pair_incoming">%1$s wants to pair</string>
+    <string name="ime_kde_pair_code_hint">The same code must show on the computer</string>
+    <string name="ime_kde_pair_accept">Accept</string>
+    <string name="ime_kde_pair_reject">Reject</string>
+    <string name="ime_kde_pair_cancel">Cancel</string>
+    <string name="ime_kde_pair_failed_timeout">No answer. Try again</string>
+    <string name="ime_kde_pair_failed_rejected">The computer refused</string>
+    <string name="ime_kde_pair_failed_clock">The two clocks differ by more than 30 minutes</string>
+    <string name="ime_kde_pair_failed_lost">The connection dropped</string>
+    <string name="ime_kde_pair_failed_unreachable">The computer is not reachable</string>
+
+    <!-- Tabs -->
+    <string name="ime_kde_tab_input">Input</string>
+    <string name="ime_kde_tab_media">Media</string>
+    <string name="ime_kde_tab_send">Send</string>
+    <string name="ime_kde_tab_run">Run</string>
+    <string name="ime_kde_tab_slides">Slides</string>
+    <string name="ime_kde_tab_device">Device</string>
+
+    <!-- Input -->
+    <string name="ime_kde_pad_hint">Drag to move. Tap to click</string>
+    <string name="ime_kde_pad_hint_gestures">Two fingers: scroll, tap for right click. Hold, then drag, to drag</string>
+    <string name="ime_kde_pad_desc">Touchpad for the computer</string>
+    <string name="ime_kde_click_left">Left click</string>
+    <string name="ime_kde_click_right">Right click</string>
+    <string name="ime_kde_click_middle">Middle click</string>
+    <string name="ime_kde_type_on_pc">Type on computer</string>
+    <string name="ime_kde_type_stop">Stop typing on computer</string>
+    <string name="ime_kde_type_placeholder">Type. It goes to the computer</string>
+    <string name="ime_kde_compose_placeholder">Write a line, then send it</string>
+    <string name="ime_kde_compose">Compose</string>
+    <string name="ime_kde_compose_send">Send</string>
+    <string name="ime_kde_input_unsupported">This computer does not accept remote input</string>
+    <string name="ime_kde_key_esc" translatable="false">Esc</string>
+    <string name="ime_kde_key_tab" translatable="false">Tab</string>
+    <string name="ime_kde_key_ctrl" translatable="false">Ctrl</string>
+    <string name="ime_kde_key_alt" translatable="false">Alt</string>
+    <string name="ime_kde_key_super" translatable="false">Super</string>
+    <string name="ime_kde_key_shift" translatable="false">Shift</string>
+    <string name="ime_kde_key_del" translatable="false">Del</string>
+    <string name="ime_kde_key_home" translatable="false">Home</string>
+    <string name="ime_kde_key_end" translatable="false">End</string>
+    <string name="ime_kde_key_pgup" translatable="false">PgUp</string>
+    <string name="ime_kde_key_pgdn" translatable="false">PgDn</string>
+
+    <!-- Media -->
+    <string name="ime_kde_media_empty_title">Nothing is playing on the computer</string>
+    <string name="ime_kde_media_empty_body">Start a player there and it shows up here</string>
+    <string name="ime_kde_volume_mute">Mute</string>
+    <string name="ime_kde_volume_unmute">Unmute</string>
+    <string name="ime_kde_shuffle">Shuffle</string>
+    <string name="ime_kde_loop">Repeat</string>
+
+    <!-- Send -->
+    <string name="ime_kde_send_clipboard">Clipboard</string>
+    <string name="ime_kde_send_field">Text in the field</string>
+    <string name="ime_kde_send_files">Files…</string>
+    <string name="ime_kde_send_empty">Send the clipboard, what you wrote, or files. What the computer sends lands here and in Downloads</string>
+    <string name="ime_kde_transfer_sending">Sending</string>
+    <string name="ime_kde_transfer_receiving">Receiving</string>
+    <string name="ime_kde_transfer_waiting">Waiting</string>
+    <string name="ime_kde_transfer_done_sent">Sent</string>
+    <string name="ime_kde_transfer_done_received">Received</string>
+    <string name="ime_kde_transfer_failed">Failed</string>
+    <string name="ime_kde_transfer_cancelled">Cancelled</string>
+    <string name="ime_kde_transfer_open">Open</string>
+    <string name="ime_kde_transfer_cancel">Cancel</string>
+    <string name="ime_kde_transfer_clear">Clear</string>
+
+    <!-- Run -->
+    <string name="ime_kde_run_empty_title">No commands yet</string>
+    <string name="ime_kde_run_empty_body">Commands are made on the computer, in the KDE Connect settings there</string>
+    <string name="ime_kde_run_setup">Set up on computer</string>
+    <string name="ime_kde_run_stop">Stop</string>
+    <string name="ime_kde_run_close">Close</string>
+    <string name="ime_kde_run_running">Running…</string>
+    <string name="ime_kde_run_done">Finished</string>
+    <string name="ime_kde_run_failed">Finished with an error</string>
+
+    <!-- Slides -->
+    <string name="ime_kde_slides_previous">Previous slide</string>
+    <string name="ime_kde_slides_next">Next slide</string>
+    <string name="ime_kde_slides_start">Start</string>
+    <string name="ime_kde_slides_end">End</string>
+    <string name="ime_kde_slides_pointer">Hold and drag for the pointer</string>
+
+    <!-- Device -->
+    <string name="ime_kde_ping">Ping</string>
+    <string name="ime_kde_ring">Ring it</string>
+    <string name="ime_kde_lock">Lock</string>
+    <string name="ime_kde_unlock">Unlock</string>
+    <string name="ime_kde_unpair">Unpair</string>
+    <string name="ime_kde_settings">Settings</string>
+    <string name="ime_kde_battery">%1$d%%</string>
+    <string name="ime_kde_battery_charging">%1$d%%, charging</string>
+    <string name="ime_kde_fingerprint">Fingerprint %1$s</string>
+
+    <!-- Notices -->
+    <string name="ime_kde_notice_clipboard_sent">Clipboard sent</string>
+    <string name="ime_kde_notice_clipboard_empty">Nothing on the clipboard to send</string>
+    <string name="ime_kde_notice_text_sent">Text sent</string>
+    <string name="ime_kde_notice_nothing_to_send">Nothing to send</string>
+    <string name="ime_kde_notice_file_received">Received %1$s</string>
+    <string name="ime_kde_notice_ping">%1$s: %2$s</string>
+    <string name="ime_kde_notice_ping_sent">Ping sent</string>
+    <string name="ime_kde_notice_ringing">Ringing</string>
+    <string name="ime_kde_notice_locked">Locked</string>
+    <string name="ime_kde_notice_lock_failed">The computer could not lock</string>
+    <string name="ime_kde_notice_failed">Could not reach the computer</string>
+    <string name="ime_kde_ping_default">Ping!</string>
+    <string name="ime_kde_pc_typing">Typing from %1$s</string>
+
+    <!-- Notifications -->
+    <string name="ime_kde_notify_pair_title">%1$s wants to pair</string>
+    <string name="ime_kde_notify_pair_body">Code %1$s. Accept only if the computer shows the same one</string>
+    <string name="ime_kde_notify_file_title">File from %1$s</string>
+    <string name="ime_kde_notify_ping_title">Ping from %1$s</string>
+</resources>

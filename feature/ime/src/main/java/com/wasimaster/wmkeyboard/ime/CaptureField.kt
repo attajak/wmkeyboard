@@ -192,6 +192,20 @@ enum class CaptureTarget(
     AI_CUSTOM(takesWords = true),
     /** The AI panel's chat composer (#280): free text, newlines and all. */
     AI_CHAT(takesWords = true),
+
+    /** The KDE Connect panel's "add by address" box: an IP address or a host name. */
+    KDE_HOST(takesWords = false),
+
+    /**
+     * Typing on the paired computer, live (#285). The buffer is the line the
+     * computer has been sent, and every change to it is replayed there as
+     * backspaces and text — which only works while changes happen at the end,
+     * so the caret does not move: arrow keys go to the computer instead.
+     */
+    KDE_REMOTE(takesWords = true, movableCaret = false),
+
+    /** The same panel in compose mode: a line edited here and sent whole on Enter. */
+    KDE_COMPOSE(takesWords = true),
     PLUGIN(takesWords = true),
     FIND_QUERY(takesWords = true),
     FIND_REPLACEMENT(takesWords = true),

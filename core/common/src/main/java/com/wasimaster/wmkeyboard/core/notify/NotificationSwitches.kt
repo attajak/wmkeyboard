@@ -49,6 +49,13 @@ object NotificationSwitches {
      */
     const val DEFAULT_KEYBOARD = false
 
+    /**
+     * A paired computer asking to pair, sending a file, pinging. On: each is
+     * something the user or their own computer just did, and none can happen
+     * at all until the KDE Connect tool has been switched on and paired.
+     */
+    const val DEFAULT_CONNECT = true
+
     /** Whether [kind] may be posted at all. */
     fun isOn(context: Context, kind: NotificationKind): Boolean =
         runCatching { prefs(context).getBoolean(kind.key, kind.default) }
@@ -85,6 +92,7 @@ object NotificationSwitches {
             NotificationKind.UPDATES -> DEFAULT_UPDATES
             NotificationKind.BACKUP -> DEFAULT_BACKUP
             NotificationKind.KEYBOARD -> DEFAULT_KEYBOARD
+            NotificationKind.CONNECT -> DEFAULT_CONNECT
         }
 
     private fun prefs(context: Context) =

@@ -78,6 +78,7 @@ internal fun NotificationSettingsScreen(settings: KeyboardSettings) {
     val updates = remember { mutableStateOf(NotificationSwitches.isOn(context, NotificationKind.UPDATES)) }
     val backup = remember { mutableStateOf(NotificationSwitches.isOn(context, NotificationKind.BACKUP)) }
     val controls = remember { mutableStateOf(NotificationSwitches.isOn(context, NotificationKind.KEYBOARD)) }
+    val connect = remember { mutableStateOf(NotificationSwitches.isOn(context, NotificationKind.CONNECT)) }
 
     SettingsGroup(
         stringResource(R.string.notify_kinds_group),
@@ -114,6 +115,20 @@ internal fun NotificationSettingsScreen(settings: KeyboardSettings) {
             ) {
                 backup.value = it
                 NotificationSwitches.set(context, NotificationKind.BACKUP, it)
+            }
+        }
+        // Only while the KDE Connect tool is on: before that nothing can ever
+        // post one, and a switch for an event that cannot happen is noise.
+        item(visible = settings.kdeConnect.enabled) {
+            ToggleSetting(
+                R.string.kdeconnect_notify_title,
+                stringResource(R.string.kdeconnect_notify_subtitle),
+                checked = connect.value,
+                default = NotificationSwitches.DEFAULT_CONNECT,
+            ) {
+                connect.value = it
+                NotificationSwitches.set(context, NotificationKind.CONNECT, it)
+                if (it && !WmNotifications.canPost(context)) ask()
             }
         }
         item {

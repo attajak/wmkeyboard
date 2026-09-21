@@ -178,6 +178,18 @@ enum class NotificationKind(
         importance = NotificationManager.IMPORTANCE_LOW,
         category = NotificationCompat.CATEGORY_SERVICE,
     ),
+
+    /**
+     * What a paired computer did while the keyboard was not on screen to show
+     * it: asked to pair, sent a file, pinged (issue #285).
+     */
+    CONNECT(
+        channelId = "connect",
+        channelNameRes = R.string.common_notify_channel_connect_title,
+        channelBodyRes = R.string.common_notify_channel_connect_body,
+        importance = NotificationManager.IMPORTANCE_DEFAULT,
+        category = NotificationCompat.CATEGORY_EVENT,
+    ),
 }
 
 /** Stable notification ids, so two features cannot overwrite each other. */
@@ -194,6 +206,12 @@ object NotificationIds {
 
     /** The automatic backup that failed. */
     const val BACKUP = 4
+
+    /** A computer asking to pair over KDE Connect. One at a time is all the protocol allows anyway. */
+    const val CONNECT_PAIR = 5
+
+    /** The last file, ping or text a paired computer sent. */
+    const val CONNECT_EVENT = 6
 
     /**
      * One id per download, derived from its key.

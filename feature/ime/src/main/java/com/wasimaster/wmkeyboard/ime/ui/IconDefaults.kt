@@ -69,6 +69,7 @@ import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Password
 import androidx.compose.material.icons.outlined.Pets
+import androidx.compose.material.icons.outlined.Phonelink
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.AspectRatio
 import androidx.compose.material.icons.outlined.PictureInPictureAlt
@@ -171,6 +172,7 @@ object IconDefaults {
         ToolbarTool.PASSWORD_GEN -> Icons.Outlined.Password
         ToolbarTool.TYPING_TEST -> Icons.Outlined.Speed
         ToolbarTool.MEDIA_CONTROL -> Icons.Outlined.MusicNote
+        ToolbarTool.KDE_CONNECT -> Icons.Outlined.Phonelink
         ToolbarTool.PLUGINS -> Icons.Outlined.Extension
         ToolbarTool.APP_LAUNCHER -> Icons.Outlined.Apps
         ToolbarTool.AI -> Icons.Outlined.AutoAwesome

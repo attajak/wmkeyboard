@@ -130,6 +130,7 @@ import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.Pets
 import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Phonelink
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.PictureAsPdf
 import androidx.compose.material.icons.outlined.PictureInPictureAlt
@@ -330,6 +331,7 @@ object BuiltinIcons {
         "PersonOutline" to Icons.Outlined.PersonOutline,
         "Pets" to Icons.Outlined.Pets,
         "Phone" to Icons.Outlined.Phone,
+        "Phonelink" to Icons.Outlined.Phonelink,
         "PhotoCamera" to Icons.Outlined.PhotoCamera,
         "PictureAsPdf" to Icons.Outlined.PictureAsPdf,
         "PictureInPictureAlt" to Icons.Outlined.PictureInPictureAlt,

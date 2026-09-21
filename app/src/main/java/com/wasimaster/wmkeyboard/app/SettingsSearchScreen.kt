@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Devices
 import androidx.compose.material.icons.outlined.Dns
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.AutoStories
@@ -530,6 +531,7 @@ internal object SettingsRouteIcons {
         "phoneformats" to { Icons.Outlined.Phone },
         "hwshortcuts" to { Icons.Outlined.Keyboard },
         "musicapps" to { Icons.Outlined.MusicNote },
+        "kdeconnect/devices" to { Icons.Outlined.Devices },
     )
 
     operator fun get(route: String): ImageVector? = map[route]?.invoke()

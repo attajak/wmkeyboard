@@ -85,6 +85,10 @@ fun KeyboardSettings.restrictedToDirectBoot(): KeyboardSettings {
         // *content* — a chip printing a code out of one would put on the
         // keyboard exactly what the shade is redacting.
         otp = otp.copy(enabled = false),
+        // The device's key and its paired computers' certificates are under
+        // filesDir; and a computer typing into a lock screen, or reading what
+        // was copied behind one, is not something a pairing should reach.
+        kdeConnect = kdeConnect.copy(enabled = false),
         // Every selection macro that hands the text to another app starts an
         // activity, and nothing can be started before the first unlock; a
         // paste reads a clipboard that is behind the lock, and reading aloud

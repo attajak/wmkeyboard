@@ -371,6 +371,11 @@ import com.wasimaster.wmkeyboard.core.tools.MediaCategoryCache
 import com.wasimaster.wmkeyboard.core.aichat.AiChatMessage
 import com.wasimaster.wmkeyboard.core.aichat.AiChatStore
 import com.wasimaster.wmkeyboard.ime.aichat.AiChatController
+import com.wasimaster.wmkeyboard.ime.kdeconnect.KdeConnectHub
+import com.wasimaster.wmkeyboard.core.kdeconnect.KdeEvent
+import com.wasimaster.wmkeyboard.core.kdeconnect.KdeModifiers
+import com.wasimaster.wmkeyboard.core.kdeconnect.KdeSpecialKey
+import com.wasimaster.wmkeyboard.core.kdeconnect.RemoteTextDiff
 import com.wasimaster.wmkeyboard.core.aihistory.AiHistoryEntry
 import com.wasimaster.wmkeyboard.core.aihistory.AiHistoryGuard
 import com.wasimaster.wmkeyboard.core.aihistory.AiHistoryStore
@@ -2268,8 +2273,33 @@ open class WMKeyboardService : InputMethodService() {
     /** Show the "download a model" hint at most once per keyboard session. */
     private var hwModelHintShown = false
 
+    /**
+     * A copy on the phone, offered to the paired computer (#285). Ahead of the
+     * history's own gates on purpose: clipboard sync is a separate switch from
+     * clipboard history, and turning the history off must not silence it. What
+     * it shares with the history is what must never leave: nothing from a
+     * password field, nothing while incognito pauses the clipboard — and a clip
+     * that looks like a secret is remembered by the engine but not sent.
+     */
+    private fun kdeClipboardChanged(state: KeyboardUiState) {
+        val kde = state.settings.kdeConnect
+        if (!kde.enabled || !kde.clipboardSend) return
+        val engine = KdeConnectHub.engine ?: return
+        if (!isClipboardAccessible() || state.secureField ||
+            (state.incognitoOn && state.settings.incognitoPausesClipboard)
+        ) return
+        val clip = (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip
+            ?.takeIf { it.itemCount > 0 } ?: return
+        // Text only, and only text that is really there: coercing would turn
+        // a copied image into its content:// address and send that.
+        val text = clip.getItemAt(0)?.text?.toString().orEmpty()
+        if (text.isEmpty()) return
+        engine.clipboard.localChanged(text, isSensitive = clipMarkedSensitive(clip) || ClipSensitivity.looksSensitive(text))
+    }
+
     private val clipboardListener = ClipboardManager.OnPrimaryClipChangedListener {
         val state = _uiState.value
+        kdeClipboardChanged(state)
         if (!isClipboardAccessible() ||
             !state.settings.clipboard.history ||
             (state.incognitoOn && state.settings.incognitoPausesClipboard) ||
@@ -3257,6 +3287,7 @@ open class WMKeyboardService : InputMethodService() {
                 // The auto-pin's switch, its allowlist and the tool's own
                 // enable state all live in the settings that just landed.
                 syncMediaTracking()
+                syncKdeConnect()
                 // Switching the swipe action to handwriting (or turning the
                 // gesture on) while the keyboard is up checks the model now, so
                 // the first swipe writes rather than nagging.
@@ -4600,6 +4631,7 @@ open class WMKeyboardService : InputMethodService() {
         // Starts the media-session listener the toolbar's auto-pin needs, and
         // catches music that began while the keyboard was away.
         syncMediaTracking()
+        syncKdeConnect()
         refreshHardwareKeyboardState()
         // The battery level is read here rather than subscribed to: this is the
         // moment it can start mattering, and a keyboard that wakes on every
@@ -5456,6 +5488,7 @@ open class WMKeyboardService : InputMethodService() {
         lifecycleOwner.onPause()
         // The window is gone, so the media-session listener goes with it.
         syncMediaTracking()
+        syncKdeConnect()
         // Refilling the pool waits until the keyboard is going away, so a
         // download can never race the first frame of a session.
         topUpBackgroundPool()
@@ -5616,6 +5649,11 @@ open class WMKeyboardService : InputMethodService() {
         // The deferred buzz used to be cancelled by serviceScope.cancel() below;
         // on a Handler it has to be taken off the queue by hand.
         feedbackHandler.removeCallbacks(deferredVibrate)
+        // The link to a paired computer is this service's to hold; the hub
+        // outlives it only for as long as a settings screen still wants it.
+        KdeConnectHub.release(KdeConnectHub.Reason.PANEL)
+        KdeConnectHub.release(KdeConnectHub.Reason.KEYBOARD)
+        KdeConnectHub.release(KdeConnectHub.Reason.SERVICE)
         finishRevisionOnLeave()
         flushLearningBuffer()
         userLexicon.save()
@@ -5870,6 +5908,13 @@ open class WMKeyboardService : InputMethodService() {
             key.action !is KeyAction.Mod &&
             key.action != KeyAction.Shift
         if (isShortcut) {
+            // While the keys are typing on a paired computer, a chord is the
+            // computer's chord: Ctrl+C there copies there (#285).
+            if (kdeSendChord(key, modifiers)) {
+                consumeModifiers()
+                consumeShift()
+                return
+            }
             // The result is deliberately ignored: a character with no keycode
             // has no event to send, and the latch is spent either way so the
             // user can see the modifier was used up rather than left armed.
@@ -6520,6 +6565,7 @@ open class WMKeyboardService : InputMethodService() {
             }
             else -> Unit
         }
+        if (kdeTypedUnderModifiers(target, text)) return true
         val before = state.captureCaretText() ?: return false
         // What each field will take of what was typed. The two numeric ones
         // filter rather than accept, and the cluster-shaping scripts need to
@@ -6555,7 +6601,12 @@ open class WMKeyboardService : InputMethodService() {
             else -> Unit
         }
         val before = state.captureCaretText() ?: return false
-        if (before.at <= 0) return true
+        if (before.at <= 0) {
+            // Nothing left of this line to take back, but the computer's field
+            // may well hold more: the key goes there as itself.
+            if (target == CaptureTarget.KDE_REMOTE) kdeSendSpecial(KdeSpecialKey.BACKSPACE)
+            return true
+        }
         val length = charDeleteLength(before.text.substring(0, before.at))
         captureWrite(target, before, before.deletedBackward(length))
         return true
@@ -6568,6 +6619,9 @@ open class WMKeyboardService : InputMethodService() {
         when (target) {
             CaptureTarget.TYPING_TEST -> return true
             CaptureTarget.WORD_SPELL -> { wordSpellEdit { it.deletedForward() }; return true }
+            // The caret here is always at the end of the line; what is after
+            // it is on the computer.
+            CaptureTarget.KDE_REMOTE -> { kdeSendSpecial(KdeSpecialKey.DELETE, keepLine = true); return true }
             else -> Unit
         }
         val before = state.captureCaretText() ?: return false
@@ -6630,6 +6684,10 @@ open class WMKeyboardService : InputMethodService() {
                 } else {
                     captureTyped("\n")
                 }
+            CaptureTarget.KDE_HOST -> onKdeAction(KdeAction.SubmitHost)
+            // Enter is the computer's Enter, and the line starts over.
+            CaptureTarget.KDE_REMOTE -> kdeSendSpecial(KdeSpecialKey.ENTER)
+            CaptureTarget.KDE_COMPOSE -> kdeSendComposed(withEnter = true)
             // Enter finishes typing into a plugin's box: it gives the keys
             // back to the field.
             CaptureTarget.PLUGIN -> onPluginInputFocus(null)
@@ -6665,6 +6723,17 @@ open class WMKeyboardService : InputMethodService() {
     fun onCaptureCaretMove(delta: Int, extend: Boolean = false): Boolean {
         val state = _uiState.value
         val target = state.captureTarget() ?: return false
+        if (target == CaptureTarget.KDE_REMOTE) {
+            // This line has no caret to move; the computer's field does.
+            if (delta != 0) {
+                kdeSendSpecial(
+                    if (delta < 0) KdeSpecialKey.LEFT else KdeSpecialKey.RIGHT,
+                    KdeModifiers(shift = extend),
+                    times = kotlin.math.abs(delta),
+                )
+            }
+            return true
+        }
         if (!target.movableCaret) return true
         if (target == CaptureTarget.WORD_SPELL) {
             wordSpellEdit { it.caretMoved(delta, extend) }
@@ -6749,6 +6818,11 @@ open class WMKeyboardService : InputMethodService() {
                 CaptureTarget.TYPING_TEST, CaptureTarget.WORD_SPELL -> return
                 CaptureTarget.AI_CUSTOM -> aiCustomInputEdit { after.text }
                 CaptureTarget.AI_CHAT -> aiChatDraft(after.text)
+                CaptureTarget.KDE_HOST ->
+                    _uiState.update { it.copy(kde = it.kde.copy(hostDraft = after.text.take(KDE_HOST_MAX))) }
+                CaptureTarget.KDE_REMOTE -> kdeRemoteLine(after.text)
+                CaptureTarget.KDE_COMPOSE ->
+                    _uiState.update { it.copy(kde = it.kde.copy(line = after.text.take(KdeConnectHub.LINE_MAX))) }
                 CaptureTarget.PLUGIN -> pluginInputEdit { after.text }
                 CaptureTarget.FIND_QUERY, CaptureTarget.FIND_REPLACEMENT -> findReplaceEdit { after.text }
                 CaptureTarget.LEARN_EDIT -> learnEdit { after.text }
@@ -16952,6 +17026,7 @@ open class WMKeyboardService : InputMethodService() {
             ToolbarTool.TYPING_TEST -> onPanelChange(PanelMode.TYPING_TEST)
             ToolbarTool.LEARN_FROM_TEXT -> onPanelChange(PanelMode.LEARN_FROM_TEXT)
             ToolbarTool.MEDIA_CONTROL -> onPanelChange(PanelMode.MEDIA_CONTROL)
+            ToolbarTool.KDE_CONNECT -> onPanelChange(PanelMode.KDE_CONNECT)
             ToolbarTool.PLUGINS -> onPanelChange(PanelMode.PLUGINS)
             ToolbarTool.APP_LAUNCHER -> onPanelChange(PanelMode.APP_LAUNCHER)
             ToolbarTool.AI -> onPanelChange(PanelMode.AI)
@@ -17246,6 +17321,366 @@ open class WMKeyboardService : InputMethodService() {
             cancelVoice()
         }
         syncMediaTracking()
+        syncKdeConnect()
+    }
+
+    // ---- KDE Connect (issue #285) ----
+
+    private var kdeEventsJob: Job? = null
+
+    /**
+     * Tells [KdeConnectHub] what this service currently amounts to — alive,
+     * on screen, showing the panel — and lets it decide whether a link should
+     * exist. The one owner of those holds, called from the same four places
+     * [syncMediaTracking] is, for the same reason: each of them changes the
+     * answer, and none of them should have to know the rule.
+     */
+    private fun syncKdeConnect() {
+        val state = _uiState.value
+        val kde = state.settings.kdeConnect
+        KdeConnectHub.attach(this)
+        KdeConnectHub.applySettings(kde)
+        val panelOpen = keyboardVisible && state.panel == PanelMode.KDE_CONNECT
+        fun hold(reason: KdeConnectHub.Reason, on: Boolean) =
+            if (on) KdeConnectHub.hold(reason) else KdeConnectHub.release(reason)
+        hold(KdeConnectHub.Reason.SERVICE, kde.enabled)
+        hold(KdeConnectHub.Reason.KEYBOARD, kde.enabled && keyboardVisible)
+        hold(KdeConnectHub.Reason.PANEL, kde.enabled && panelOpen)
+        // The list of nearby devices is up when nothing is paired yet, or when
+        // the user opened it: only then are strangers on the network linked.
+        KdeConnectHub.setBrowsing(
+            KdeConnectHub.Reason.PANEL,
+            kde.enabled && panelOpen && (state.kde.showDevices || !KdeConnectHub.hasPairedDevices()),
+        )
+        // A computer may type only into a keyboard that is on screen, over a
+        // device that is unlocked.
+        KdeConnectHub.engine?.setKeyboardShown(kde.enabled && keyboardVisible && !state.deviceLocked)
+        if (!panelOpen && (state.kde.typing || state.kde.hostEntry || state.kde.line.isNotEmpty())) {
+            _uiState.update { it.copy(kde = it.kde.copy(typing = false, hostEntry = false, hostDraft = "", line = "")) }
+        }
+        if (kde.enabled && kdeEventsJob == null) {
+            kdeEventsJob = serviceScope.launch { KdeConnectHub.events.collect(::onKdeEvent) }
+        } else if (!kde.enabled) {
+            kdeEventsJob?.cancel()
+            kdeEventsJob = null
+        }
+    }
+
+    /** The paired computer the panel is about: the one picked, else the first connected. */
+    private fun kdeDeviceId(): String? {
+        val hub = KdeConnectHub.state.value
+        val picked = _uiState.value.kde.deviceId
+        return hub.device(picked)?.takeIf { it.paired && it.reachable }?.id ?: hub.connected.firstOrNull()?.id
+    }
+
+    private fun kdeNotice(text: String) {
+        _uiState.update { it.copy(kde = it.kde.copy(notice = text, noticeAtMs = SystemClock.uptimeMillis())) }
+    }
+
+    fun onKdeAction(action: KdeAction) {
+        when (action) {
+            KdeAction.TurnOn -> serviceScope.launch { settingsRepository.setKdeEnabled(true) }
+            is KdeAction.SetTab -> {
+                _uiState.update { it.copy(kde = it.kde.copy(tab = action.tab, typing = false, line = "")) }
+                serviceScope.launch { settingsRepository.setKdeLastTab(action.tab.name) }
+            }
+            is KdeAction.SelectDevice ->
+                _uiState.update { it.copy(kde = it.kde.copy(deviceId = action.deviceId, showDevices = false)) }
+            is KdeAction.ShowDevices -> {
+                _uiState.update { it.copy(kde = it.kde.copy(showDevices = action.show, hostEntry = false, hostDraft = "")) }
+                syncKdeConnect()
+                if (action.show) KdeConnectHub.refresh()
+            }
+            is KdeAction.SetTyping -> {
+                // Whatever was half-typed for the app goes to the app first:
+                // the keys are about to belong to someone else.
+                if (action.on) currentInputConnection?.let { commitComposing(it, autocorrect = false) }
+                _uiState.update { it.copy(kde = it.kde.copy(typing = action.on, line = "")) }
+            }
+            is KdeAction.SetCompose -> {
+                _uiState.update { it.copy(kde = it.kde.copy(line = "")) }
+                serviceScope.launch { settingsRepository.setKdeComposeMode(action.on) }
+            }
+            is KdeAction.ToggleModifier -> _uiState.update {
+                val m = it.kde.mods
+                it.copy(
+                    kde = it.kde.copy(
+                        mods = when (action.key) {
+                            KdeModKey.SHIFT -> m.copy(shift = !m.shift)
+                            KdeModKey.CTRL -> m.copy(ctrl = !m.ctrl)
+                            KdeModKey.ALT -> m.copy(alt = !m.alt)
+                            KdeModKey.META -> m.copy(meta = !m.meta)
+                        },
+                    ),
+                )
+            }
+            is KdeAction.HostEntry ->
+                _uiState.update { it.copy(kde = it.kde.copy(hostEntry = action.open, hostDraft = "")) }
+            KdeAction.SubmitHost -> {
+                val host = _uiState.value.kde.hostDraft.trim()
+                if (host.isNotEmpty()) {
+                    serviceScope.launch { settingsRepository.addKdeHost(host) }
+                    KdeConnectHub.engine?.announceTo(host)
+                }
+                _uiState.update { it.copy(kde = it.kde.copy(hostEntry = false, hostDraft = "")) }
+            }
+            KdeAction.SendClipboard -> {
+                val text = if (isClipboardAccessible()) {
+                    (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                        .primaryClip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.coerceToText(this)?.toString().orEmpty()
+                } else {
+                    ""
+                }
+                val sent = if (text.isEmpty()) 0 else KdeConnectHub.engine?.clipboard?.push(text, kdeDeviceId()) ?: 0
+                kdeNotice(getString(if (sent > 0) R.string.ime_kde_notice_clipboard_sent else R.string.ime_kde_notice_clipboard_empty))
+            }
+            KdeAction.SendFieldText -> {
+                val ic = currentInputConnection
+                val text = ic?.getSelectedText(0)?.toString()?.takeIf { it.isNotEmpty() }
+                    ?: ic?.getExtractedText(ExtractedTextRequest(), 0)?.text?.toString().orEmpty()
+                val id = kdeDeviceId()
+                val ok = text.isNotEmpty() && id != null && KdeConnectHub.engine?.share?.sendText(id, text) == true
+                kdeNotice(getString(if (ok) R.string.ime_kde_notice_text_sent else R.string.ime_kde_notice_nothing_to_send))
+            }
+            KdeAction.PickFiles -> kdeDeviceId()?.let { id ->
+                runCatching {
+                    startActivity(
+                        Intent().setClassName(packageName, KdeConnectHub.PICKER_ACTIVITY)
+                            .putExtra(KdeConnectHub.EXTRA_DEVICE, id)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                    )
+                }
+            }
+            is KdeAction.Insert -> commitToField(action.text)
+            is KdeAction.Copy -> {
+                (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                    .setPrimaryClip(android.content.ClipData.newPlainText("", action.text))
+                maybeToastCopied()
+            }
+            is KdeAction.Open -> runCatching {
+                startActivity(
+                    Intent(Intent.ACTION_VIEW)
+                        .setDataAndType(
+                            android.net.Uri.parse(action.location),
+                            com.wasimaster.wmkeyboard.ime.kdeconnect.KdeReceivedFiles.mimeOf(action.fileName) ?: "*/*",
+                        )
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION),
+                )
+            }
+            is KdeAction.Notice -> kdeNotice(action.text)
+            KdeAction.OpenSettings -> openToolSettings(ToolbarTool.KDE_CONNECT)
+            KdeAction.OpenDevices -> openRoute(KdeConnectHub.DEVICES_ROUTE)
+        }
+    }
+
+    /**
+     * The line the computer has been sent became [next]: replay the difference
+     * there. This is the whole of "type on the computer with this keyboard" —
+     * a glide, a strip pick and an autocorrection are all just a new [next].
+     */
+    private fun kdeRemoteLine(next: String) {
+        val sent = _uiState.value.kde.line
+        val edit = RemoteTextDiff.between(sent, next)
+        val id = kdeDeviceId()
+        val pad = KdeConnectHub.engine?.mousepad
+        if (id != null && pad != null && !edit.isEmpty) {
+            if (edit.backspaces > 0) pad.special(id, KdeSpecialKey.BACKSPACE, times = edit.backspaces)
+            if (edit.insert.isNotEmpty()) pad.text(id, edit.insert)
+        }
+        // Only the tail is ever diffed, so the head can go once it is long.
+        _uiState.update { it.copy(kde = it.kde.copy(line = next.takeLast(KdeConnectHub.LINE_MAX))) }
+    }
+
+    /** A key that is not text, sent to the computer; the local line no longer describes what is before its caret. */
+    private fun kdeSendSpecial(key: KdeSpecialKey, modifiers: KdeModifiers = KdeModifiers.None, times: Int = 1, keepLine: Boolean = false) {
+        val id = kdeDeviceId() ?: return
+        KdeConnectHub.engine?.mousepad?.special(id, key, modifiers, times)
+        if (!keepLine && _uiState.value.kde.line.isNotEmpty()) {
+            _uiState.update { it.copy(kde = it.kde.copy(line = ""), captureCaret = null) }
+        }
+    }
+
+    /** From the panel's special-key strip: the key, under whatever is armed there, which it spends. */
+    fun onKdeSpecialKey(key: KdeSpecialKey, modifiers: KdeModifiers) {
+        kdeSendSpecial(key, modifiers)
+        if (_uiState.value.kde.mods.any) _uiState.update { it.copy(kde = it.kde.copy(mods = KdeModifiers.None)) }
+    }
+
+    /**
+     * Text typed while the panel's strip has Ctrl, Alt or Super armed: a chord
+     * for the computer rather than a character for the line. True when spent.
+     */
+    private fun kdeTypedUnderModifiers(target: CaptureTarget, text: String): Boolean {
+        if (target != CaptureTarget.KDE_REMOTE && target != CaptureTarget.KDE_COMPOSE) return false
+        val mods = _uiState.value.kde.mods
+        if (!mods.ctrl && !mods.alt && !mods.meta) return false
+        kdeDeviceId()?.let { id -> KdeConnectHub.engine?.mousepad?.chord(id, text, mods) }
+        _uiState.update { it.copy(kde = it.kde.copy(mods = KdeModifiers.None, line = ""), captureCaret = null) }
+        return true
+    }
+
+    /**
+     * A key pressed with Ctrl, Alt or Meta armed while the keys belong to the
+     * computer: sent there as the chord it is. False when they do not, so the
+     * shortcut goes to the app as it always has.
+     */
+    private fun kdeSendChord(key: Key, modifiers: Modifiers): Boolean {
+        val target = _uiState.value.captureTarget()
+        if (target != CaptureTarget.KDE_REMOTE && target != CaptureTarget.KDE_COMPOSE) return false
+        val id = kdeDeviceId() ?: return true
+        val label = (key.output ?: key.label)
+        val held = KdeModifiers(
+            shift = _uiState.value.shiftState != ShiftState.OFF,
+            ctrl = modifiers.ctrl != ModifierState.OFF,
+            alt = modifiers.alt != ModifierState.OFF,
+            meta = modifiers.meta != ModifierState.OFF,
+        )
+        val pad = KdeConnectHub.engine?.mousepad ?: return true
+        when (key.action) {
+            KeyAction.Delete -> pad.special(id, KdeSpecialKey.BACKSPACE, held)
+            KeyAction.Enter -> pad.special(id, KdeSpecialKey.ENTER, held)
+            KeyAction.Space -> pad.chord(id, " ", held)
+            else -> if (label.isNotEmpty()) pad.chord(id, label, held)
+        }
+        // A chord moves things on the computer; the line no longer describes them.
+        _uiState.update { it.copy(kde = it.kde.copy(line = ""), captureCaret = null) }
+        return true
+    }
+
+    /** Compose mode's Enter, and its Send button ([withEnter] false). */
+    fun kdeSendComposed(withEnter: Boolean) {
+        val id = kdeDeviceId() ?: return
+        val line = _uiState.value.kde.line
+        val pad = KdeConnectHub.engine?.mousepad ?: return
+        if (line.isNotEmpty()) pad.text(id, line)
+        if (withEnter) pad.special(id, KdeSpecialKey.ENTER)
+        _uiState.update { it.copy(kde = it.kde.copy(line = ""), captureCaret = null) }
+    }
+
+    private fun onKdeEvent(event: KdeEvent) {
+        val state = _uiState.value
+        when (event) {
+            is KdeEvent.RemoteKey -> onKdeRemoteKey(event)
+            is KdeEvent.ClipboardReceived -> kdeClipboardArrived(event.text, event.deviceName)
+            // Shared text is a clipboard delivery with a different name on the
+            // desktop's menu; the desktops treat it the same way.
+            is KdeEvent.TextReceived -> kdeClipboardArrived(event.text, event.deviceName)
+            is KdeEvent.UrlReceived -> kdeClipboardArrived(event.url, event.deviceName)
+            is KdeEvent.FileReceived -> {
+                runCatching {
+                    clipboardStore.addUri(
+                        uriString = event.location,
+                        displayName = event.fileName,
+                        mimeType = com.wasimaster.wmkeyboard.ime.kdeconnect.KdeReceivedFiles.mimeOf(event.fileName) ?: "application/octet-stream",
+                        isDirectory = false,
+                        size = 0,
+                        sourceApp = event.deviceName,
+                    )
+                    clipboardStore.save()
+                    _uiState.update { it.copy(clipboardItems = clipboardStore.items()) }
+                }
+                if (state.panel == PanelMode.KDE_CONNECT) kdeNotice(getString(R.string.ime_kde_notice_file_received, event.fileName))
+            }
+            is KdeEvent.Ping -> if (keyboardVisible) {
+                val text = event.message.ifBlank { getString(R.string.ime_kde_ping_default) }
+                if (state.panel == PanelMode.KDE_CONNECT) {
+                    kdeNotice(getString(R.string.ime_kde_notice_ping, event.deviceName, text))
+                } else {
+                    Toast.makeText(this, getString(R.string.ime_kde_notice_ping, event.deviceName, text), Toast.LENGTH_SHORT).show()
+                }
+            }
+            is KdeEvent.LockResult -> if (state.panel == PanelMode.KDE_CONNECT) {
+                kdeNotice(getString(if (event.success) R.string.ime_kde_notice_locked else R.string.ime_kde_notice_lock_failed))
+            }
+            is KdeEvent.Paired -> {
+                _uiState.update { it.copy(kde = it.kde.copy(deviceId = event.deviceId, showDevices = false)) }
+                syncKdeConnect()
+            }
+            is KdeEvent.Unpaired -> syncKdeConnect()
+            else -> Unit
+        }
+    }
+
+    /**
+     * Text from the computer's clipboard. The engine has already recorded it as
+     * the current content, so the listener that fires for the write below finds
+     * nothing new to send back.
+     */
+    private fun kdeClipboardArrived(text: String, from: String) {
+        if (text.isEmpty() || !isClipboardAccessible()) return
+        runCatching {
+            (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                .setPrimaryClip(android.content.ClipData.newPlainText(from, text))
+        }
+    }
+
+    /**
+     * The computer's keyboard, typing here. Literal by default: what was sent
+     * is what lands. With the pipeline switch on it takes the path a hardware
+     * keyboard's keys take, so a Latin keyboard on the desk writes Bengali
+     * through Avro the way the one on the glass does.
+     */
+    private fun onKdeRemoteKey(key: KdeEvent.RemoteKey) {
+        val state = _uiState.value
+        if (!keyboardVisible || state.deviceLocked || !state.settings.kdeConnect.remoteTyping) return
+        val special = key.special
+        if (special == null) {
+            if (key.ctrl && !key.alt) {
+                when (key.text.lowercase()) {
+                    "a" -> { onTextEdit(TextEditAction.SELECT_ALL, haptic = false); return }
+                    "c" -> { onTextEdit(TextEditAction.COPY, haptic = false); return }
+                    "v" -> { onTextEdit(TextEditAction.PASTE, haptic = false); return }
+                    "x" -> { onClipboardKey(ClipboardKeyAction.CUT, selectAllIfEmpty = false); return }
+                    "z" -> { onUndoRedo(redo = key.shift); return }
+                    "y" -> { onUndoRedo(redo = true); return }
+                }
+            }
+            if (key.ctrl || key.alt) {
+                // Any other chord goes to the app as the key event it is.
+                val code = key.text.singleOrNull()?.let(::keyCodeForChar) ?: return
+                val ic = currentInputConnection ?: return
+                commitComposing(ic, autocorrect = false)
+                var meta = 0
+                if (key.ctrl) meta = meta or KeyEvent.META_CTRL_ON or KeyEvent.META_CTRL_LEFT_ON
+                if (key.alt) meta = meta or KeyEvent.META_ALT_ON or KeyEvent.META_ALT_LEFT_ON
+                if (key.shift) meta = meta or KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON
+                val time = SystemClock.uptimeMillis()
+                ic.sendKeyEvent(shortcutEvent(time, KeyEvent.ACTION_DOWN, code, meta))
+                ic.sendKeyEvent(shortcutEvent(time, KeyEvent.ACTION_UP, code, meta))
+                return
+            }
+            when {
+                state.captureTarget() != null -> captureTyped(key.text)
+                state.settings.kdeConnect.remoteTypingPipeline -> for (ch in key.text.codePoints().toArray()) {
+                    val s = String(Character.toChars(ch))
+                    if (s == " ") onSpace() else processTypedText(s, applyDeadKeys = false)
+                }
+                else -> commitToField(key.text)
+            }
+            return
+        }
+        val action = when (special) {
+            KdeSpecialKey.LEFT -> if (key.ctrl) TextEditAction.WORD_LEFT else TextEditAction.LEFT
+            KdeSpecialKey.RIGHT -> if (key.ctrl) TextEditAction.WORD_RIGHT else TextEditAction.RIGHT
+            KdeSpecialKey.UP -> TextEditAction.UP
+            KdeSpecialKey.DOWN -> TextEditAction.DOWN
+            KdeSpecialKey.HOME -> if (key.ctrl) TextEditAction.DOC_START else TextEditAction.HOME
+            KdeSpecialKey.END -> if (key.ctrl) TextEditAction.DOC_END else TextEditAction.END
+            KdeSpecialKey.PAGE_UP -> TextEditAction.PAGE_UP
+            KdeSpecialKey.PAGE_DOWN -> TextEditAction.PAGE_DOWN
+            else -> null
+        }
+        when {
+            action != null -> onTextEdit(action, extendSelection = key.shift, haptic = false)
+            special == KdeSpecialKey.BACKSPACE -> if (key.ctrl) onDeleteWord() else onDelete()
+            special == KdeSpecialKey.DELETE -> onForwardDelete()
+            special == KdeSpecialKey.ENTER -> onEnter()
+            special == KdeSpecialKey.TAB -> sendDownUpKeyEvents(KeyEvent.KEYCODE_TAB)
+            special == KdeSpecialKey.ESCAPE -> sendDownUpKeyEvents(KeyEvent.KEYCODE_ESCAPE)
+            special.code in KdeSpecialKey.F1.code..KdeSpecialKey.F12.code ->
+                sendDownUpKeyEvents(KeyEvent.KEYCODE_F1 + (special.code - KdeSpecialKey.F1.code))
+            else -> Unit
+        }
     }
 
     // ---- media control ----
@@ -19854,6 +20289,9 @@ open class WMKeyboardService : InputMethodService() {
             onCaretTap = ::onCaptureCaretTap,
             onSuggestion = ::onCaptureSuggestion,
             onAiChat = ::onAiChatAction,
+            onKde = ::onKdeAction,
+            onKdeKey = ::onKdeSpecialKey,
+            onKdeSend = ::kdeSendComposed,
         )
     }
 
@@ -25038,6 +25476,32 @@ open class WMKeyboardService : InputMethodService() {
     ): Boolean {
         if (_uiState.value.captureTarget() == null) return false
         val extend = extendSelection || _uiState.value.selectingText
+        if (_uiState.value.captureTarget() == CaptureTarget.KDE_REMOTE) {
+            // Every caret key has an exact counterpart on the computer, so
+            // they are sent as themselves rather than folded into "the ends".
+            val shift = KdeModifiers(shift = extend)
+            val ctrl = KdeModifiers(shift = extend, ctrl = true)
+            val sent = when (action) {
+                TextEditAction.LEFT -> KdeSpecialKey.LEFT to shift
+                TextEditAction.RIGHT -> KdeSpecialKey.RIGHT to shift
+                TextEditAction.UP -> KdeSpecialKey.UP to shift
+                TextEditAction.DOWN -> KdeSpecialKey.DOWN to shift
+                TextEditAction.HOME -> KdeSpecialKey.HOME to shift
+                TextEditAction.END -> KdeSpecialKey.END to shift
+                TextEditAction.PAGE_UP -> KdeSpecialKey.PAGE_UP to shift
+                TextEditAction.PAGE_DOWN -> KdeSpecialKey.PAGE_DOWN to shift
+                TextEditAction.WORD_LEFT -> KdeSpecialKey.LEFT to ctrl
+                TextEditAction.WORD_RIGHT -> KdeSpecialKey.RIGHT to ctrl
+                TextEditAction.DOC_START -> KdeSpecialKey.HOME to ctrl
+                TextEditAction.DOC_END -> KdeSpecialKey.END to ctrl
+                else -> null
+            }
+            if (sent != null) {
+                kdeSendSpecial(sent.first, sent.second)
+                if (haptic) vibrate()
+                return true
+            }
+        }
         val handled = when (action) {
             TextEditAction.LEFT -> onCaptureCaretMove(-1, extend)
             TextEditAction.RIGHT -> onCaptureCaretMove(1, extend)
@@ -29152,6 +29616,9 @@ open class WMKeyboardService : InputMethodService() {
 
         /** Cap on the converters' typed amount — mirrors their soft keypad. */
         private const val CONVERTER_VALUE_MAX = 14
+
+        /** The KDE Connect panel's address box: an IPv6 literal with a zone, or a host name, and no more. */
+        private const val KDE_HOST_MAX = 64
 
         /**
          * Packages that host input fields on behalf of other apps — in

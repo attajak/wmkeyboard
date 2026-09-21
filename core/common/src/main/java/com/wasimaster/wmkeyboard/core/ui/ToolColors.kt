@@ -71,6 +71,8 @@ fun toolAccentColor(tool: ToolbarTool): Color = when (tool) {
     ToolbarTool.PASSWORD_GEN -> Color(0xFFEF5350)
     ToolbarTool.TYPING_TEST -> Color(0xFFFF7043)
     ToolbarTool.MEDIA_CONTROL -> Color(0xFFAB47BC)
+    // KDE's own blue.
+    ToolbarTool.KDE_CONNECT -> Color(0xFF1D99F3)
     ToolbarTool.PLUGINS -> Color(0xFF06B6D4)
     ToolbarTool.APP_LAUNCHER -> Color(0xFF7E57C2)
 

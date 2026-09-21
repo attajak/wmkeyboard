@@ -45,6 +45,13 @@
            edit. A sticker pack the user exports never carries them either.
         -->
         <exclude domain="file" path="stickers/.originals" />
+        <!--
+           The KDE Connect identity: this device's private key and certificate,
+           and the certificates of paired computers. Restored onto another
+           phone they would put two devices on the network under one identity,
+           and hand the second one every pairing the first ever made.
+        -->
+        <exclude domain="file" path="kdeconnect" />
     </cloud-backup>
 
     <device-transfer>
@@ -59,5 +66,6 @@
         <exclude domain="file" path="docscan" />
         <exclude domain="file" path="clipboard/images" />
         <exclude domain="file" path="stickers/.originals" />
+        <exclude domain="file" path="kdeconnect" />
     </device-transfer>
 </data-extraction-rules>

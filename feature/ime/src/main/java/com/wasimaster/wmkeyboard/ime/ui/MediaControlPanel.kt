@@ -146,8 +146,14 @@ internal fun MediaControlPanel(
     }
 }
 
+/**
+ * One playing track, drawn: art, titles, seek bar, transport. Internal rather
+ * than private because the KDE Connect panel draws a computer's player with it
+ * too (#285) — a [MediaSnapshot] is plain data, and says nothing about where
+ * the music is.
+ */
 @Composable
-private fun NowPlaying(
+internal fun NowPlaying(
     kb: KbTheme,
     track: MediaSnapshot,
     onPlayPause: () -> Unit,

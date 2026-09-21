@@ -1908,12 +1908,28 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Eight phase names — Plus percent illuminated and days into the cycle
     - Next full and new moon dates — From a synodic-month constant and a reference new moon
     - Southern-hemisphere mirroring — Changes only the drawing, not the name or dates
-- **Other tools** `uncommon` — 2 tools the group list doesn't claim, caught by the Other section
+- **Other tools** `uncommon` — 3 tools the group list doesn't claim, caught by the Other section
   - Media controls `uncommon` — Transport for the active media session
     - Album art, title, artist, album — Music-note placeholder when the app publishes none
     - Seek bar when the session reports duration — Disabled the same way skip buttons are when unsupported
     - Skip buttons dim on unsupported actions — Reflects what the session actually advertises
     - Empty listener service — MediaNotificationListener exists only to satisfy the access check; reads no notifications
+  - KDE Connect tool (issue #285) `RARE` — A paired computer from the keyboard, and the computer typing back: a from-scratch client for the KDE Connect LAN protocol (version 8) in `:core:kdeconnect`, owned per process by KdeConnectHub. Works with kdeconnect-kde, GSConnect and Valent; the KDE Connect Android app is not needed
+    - Own protocol engine, no GPL code — UDP discovery on 1716 plus mDNS (`_kdeconnect._udp` through NsdManager), the inverted-role TLS handshake with the encrypted identity re-exchange, trust-on-first-use then an exact certificate pin, pairing with the shared 8-character verification code (KdeVerificationKey), payload sockets on 1739–1764. The certificate is DER written by hand (DerCertificate), so there is no BouncyCastle
+    - Nothing under `:core:kdeconnect` names an Android class — two whole engines pair and exchange files over localhost in plain JUnit (LoopbackTest), and InteropTest drives a real kdeconnect-kde daemon through its own CLI (`-Pkde.interop=1`)
+    - Off until Turn on is pressed — KdeConnectSettings.enabled defaults false; the hub opens no socket before it, and none without a paired device unless a device list is on screen
+    - Link lifetime — KdeLinkLifetime PANEL / KEYBOARD (default, 60 s linger) / ALWAYS, decided by KdeConnectHub from the reasons held (SERVICE, KEYBOARD, PANEL, SETTINGS, SHARE); no foreground service; power saving's background-network switch turns ALWAYS into KEYBOARD
+    - Strangers only while browsing — an unpaired device is linked only while a device list is up (engine.setDiscovering), in the panel or on the settings screen
+    - Input tab — KdeRemotePad: drag moves, tap clicks, two and three finger taps are right and middle click, two fingers scroll (ScrollAccumulator releases a step at a time, since X11 reads every packet as a wheel click), hold-then-drag and tap-then-drag hold the button; PointerAcceleration is ours, nothing about feel is on the wire; queued pure moves are summed by the link's writer rather than replayed
+    - Type on computer — CaptureTarget.KDE_REMOTE: the whole keyboard types there, glide and strip picks included, because every buffer change is replayed as backspaces plus text (RemoteTextDiff, counted in code points); arrows, Home/End and page keys go to the computer as special keys; Ctrl/Alt/Super armed on the panel's strip or the board turn the next key into a chord. KDE_COMPOSE edits a line locally and sends it on Enter
+    - The computer types here — `mousepad.request` with `key`/`specialKey` lands in the field through commitToField (literal) or the hardware-keyboard path (remoteTypingPipeline); only while the keyboard view is shown and the device is unlocked, which is also when `keyboardstate: true` is sent, without which Plasma's remote-keyboard box never appears; echoes always carry `key` and `isAck` or kdeconnect-kde drops them
+    - Clipboard both ways — hooked ahead of the clipboard history's own gate so sync works with history off; sensitive clips (EXTRA_IS_SENSITIVE or ClipSensitivity) are never auto-sent, nothing from a secure field or while incognito pauses the clipboard; the engine records received text before the system clipboard is written, which is what stops the echo
+    - Media, volume, run, slides, device tabs — MPRIS players with partial-packet merge and art over payload or HTTP, the computer's sinks in raw units against maxVolume, run commands with live output (`commandList` is JSON inside JSON), presenter pointer in screen fractions kept alive every 250 ms, ping, ring, lock
+    - Files — sent from the panel's picker (KdeFilePickerActivity) or another app's share sheet (KdeShareAlias, an activity-alias enabled only once something is paired); received into Downloads/WM Keyboard through MediaStore (app files behind the clipboard FileProvider below API 29) and added to the clipboard history; file names from the peer are reduced to a bare name
+    - Phone side — battery report, and the phone's media as an MPRIS player for the computer (a second MediaControlManager; needs the notification-listener grant)
+    - Not built, on purpose — SMS and telephony, notification mirroring, SFTP, contacts, find-my-phone, mouse receiver
+    - Identity out of every backup — `filesDir/kdeconnect` (key.pk8, cert.der, devices.json) is excluded in backup_rules and data_extraction_rules: a restored key would clone the device id onto a second phone
+    - Nested KdeConnectSettings — one KeyboardSettings slot, flat `kde_*` keys; hidden in direct boot (restrictedToDirectBoot turns it off); NotificationKind.CONNECT for a pair request, file or ping that arrives while the keyboard is hidden
   - Plugins `RARE` — Runs installed .wmplugin Lua plugins in a panel
     - List then running view — Cards for installed plugins, Manage row at the end
     - Plugin-owned input field — Panel takes keystrokes; copy/paste/insert callbacks are host-mediated

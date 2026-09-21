@@ -2702,6 +2702,8 @@ data class KeyboardSettings(
     val launcher: LauncherToolSettings = LauncherToolSettings(),
     /** Media-control tool settings, grouped (see [MediaControlSettings]). */
     val mediaControl: MediaControlSettings = MediaControlSettings(),
+    /** The KDE Connect tool: the link to a paired computer (see [KdeConnectSettings]). */
+    val kdeConnect: KdeConnectSettings = KdeConnectSettings(),
     /** Free-software service endpoints for the F-Droid build (see [SelfHostedSettings]). */
     val selfHosted: SelfHostedSettings = SelfHostedSettings(),
     /** How sticker-tool picks are sent. WhatsApp shows real stickers for these. */
@@ -7270,6 +7272,27 @@ class SettingsRepository(private val context: Context) {
         // Absent means "never chosen", which takes the seeded defaults; an
         // empty set is a real choice (nothing counts as music) and is kept.
         private val MEDIA_MUSIC_APPS = stringSetPreferencesKey("media_music_apps")
+        private val KDE_ENABLED = booleanPreferencesKey("kde_enabled")
+        private val KDE_DEVICE_NAME = stringPreferencesKey("kde_device_name")
+        private val KDE_LIFETIME = stringPreferencesKey("kde_lifetime")
+        private val KDE_AUTO_CONNECT = booleanPreferencesKey("kde_auto_connect")
+        private val KDE_CLIPBOARD_RECEIVE = booleanPreferencesKey("kde_clipboard_receive")
+        private val KDE_CLIPBOARD_SEND = booleanPreferencesKey("kde_clipboard_send")
+        private val KDE_REMOTE_TYPING = booleanPreferencesKey("kde_remote_typing")
+        private val KDE_REMOTE_TYPING_PIPELINE = booleanPreferencesKey("kde_remote_typing_pipeline")
+        private val KDE_PAD_SENSITIVITY = floatPreferencesKey("kde_pad_sensitivity")
+        private val KDE_PAD_ACCELERATION = booleanPreferencesKey("kde_pad_acceleration")
+        private val KDE_SCROLL_SPEED = floatPreferencesKey("kde_scroll_speed")
+        private val KDE_NATURAL_SCROLL = booleanPreferencesKey("kde_natural_scroll")
+        private val KDE_TAP_TO_CLICK = booleanPreferencesKey("kde_tap_to_click")
+        private val KDE_PAD_HAPTICS = booleanPreferencesKey("kde_pad_haptics")
+        private val KDE_BATTERY_REPORT = booleanPreferencesKey("kde_battery_report")
+        private val KDE_EXPOSE_MEDIA = booleanPreferencesKey("kde_expose_media")
+        private val KDE_SHARE_SHEET = booleanPreferencesKey("kde_share_sheet")
+        private val KDE_RECEIVE_FILES = booleanPreferencesKey("kde_receive_files")
+        private val KDE_COMPOSE_MODE = booleanPreferencesKey("kde_compose_mode")
+        private val KDE_LAST_TAB = stringPreferencesKey("kde_last_tab")
+        private val KDE_HOSTS = stringSetPreferencesKey("kde_hosts")
         private val SMART_SUGGESTIONS = booleanPreferencesKey("smart_suggestions")
         private val SMART_CALC = booleanPreferencesKey("smart_calc")
         private val SMART_CURRENCY = booleanPreferencesKey("smart_currency")
@@ -8836,6 +8859,32 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.mediaControl.pinWhilePlaying,
                 musicApps = p[MEDIA_MUSIC_APPS] ?: defaults.mediaControl.musicApps,
             ),
+            kdeConnect = KdeConnectSettings(
+                enabled = p[KDE_ENABLED] ?: defaults.kdeConnect.enabled,
+                deviceName = p[KDE_DEVICE_NAME] ?: defaults.kdeConnect.deviceName,
+                lifetime = p[KDE_LIFETIME]
+                    ?.let { runCatching { KdeLinkLifetime.valueOf(it) }.getOrNull() }
+                    ?: defaults.kdeConnect.lifetime,
+                autoConnect = p[KDE_AUTO_CONNECT] ?: defaults.kdeConnect.autoConnect,
+                clipboardReceive = p[KDE_CLIPBOARD_RECEIVE] ?: defaults.kdeConnect.clipboardReceive,
+                clipboardSend = p[KDE_CLIPBOARD_SEND] ?: defaults.kdeConnect.clipboardSend,
+                remoteTyping = p[KDE_REMOTE_TYPING] ?: defaults.kdeConnect.remoteTyping,
+                remoteTypingPipeline = p[KDE_REMOTE_TYPING_PIPELINE]
+                    ?: defaults.kdeConnect.remoteTypingPipeline,
+                padSensitivity = p[KDE_PAD_SENSITIVITY] ?: defaults.kdeConnect.padSensitivity,
+                padAcceleration = p[KDE_PAD_ACCELERATION] ?: defaults.kdeConnect.padAcceleration,
+                scrollSpeed = p[KDE_SCROLL_SPEED] ?: defaults.kdeConnect.scrollSpeed,
+                naturalScroll = p[KDE_NATURAL_SCROLL] ?: defaults.kdeConnect.naturalScroll,
+                tapToClick = p[KDE_TAP_TO_CLICK] ?: defaults.kdeConnect.tapToClick,
+                padHaptics = p[KDE_PAD_HAPTICS] ?: defaults.kdeConnect.padHaptics,
+                batteryReport = p[KDE_BATTERY_REPORT] ?: defaults.kdeConnect.batteryReport,
+                exposeMedia = p[KDE_EXPOSE_MEDIA] ?: defaults.kdeConnect.exposeMedia,
+                shareSheet = p[KDE_SHARE_SHEET] ?: defaults.kdeConnect.shareSheet,
+                receiveFiles = p[KDE_RECEIVE_FILES] ?: defaults.kdeConnect.receiveFiles,
+                composeMode = p[KDE_COMPOSE_MODE] ?: defaults.kdeConnect.composeMode,
+                lastTab = p[KDE_LAST_TAB] ?: defaults.kdeConnect.lastTab,
+                hosts = p[KDE_HOSTS] ?: defaults.kdeConnect.hosts,
+            ),
             selfHosted = SelfHostedSettings(
                 libreTranslateUrl = p[SELF_HOSTED_LIBRETRANSLATE_URL]
                     ?: defaults.selfHosted.libreTranslateUrl,
@@ -9028,6 +9077,52 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setMediaPinWhilePlaying(value: Boolean) =
         editPrefs { it[MEDIA_PIN_WHILE_PLAYING] = value }
+
+    // ---- KDE Connect (issue #285) ----
+
+    suspend fun setKdeEnabled(value: Boolean) = editPrefs { it[KDE_ENABLED] = value }
+
+    // Stored as typed, minus the edges; the engine strips what no desktop
+    // would show. Blank falls back to the phone's model.
+    suspend fun setKdeDeviceName(value: String) = editPrefs { it[KDE_DEVICE_NAME] = value.trim().take(64) }
+    suspend fun setKdeLifetime(value: KdeLinkLifetime) = editPrefs { it[KDE_LIFETIME] = value.name }
+    suspend fun setKdeAutoConnect(value: Boolean) = editPrefs { it[KDE_AUTO_CONNECT] = value }
+    suspend fun setKdeClipboardReceive(value: Boolean) = editPrefs { it[KDE_CLIPBOARD_RECEIVE] = value }
+    suspend fun setKdeClipboardSend(value: Boolean) = editPrefs { it[KDE_CLIPBOARD_SEND] = value }
+    suspend fun setKdeRemoteTyping(value: Boolean) = editPrefs { it[KDE_REMOTE_TYPING] = value }
+    suspend fun setKdeRemoteTypingPipeline(value: Boolean) =
+        editPrefs { it[KDE_REMOTE_TYPING_PIPELINE] = value }
+
+    suspend fun setKdePadSensitivity(value: Float) = editPrefs {
+        it[KDE_PAD_SENSITIVITY] = value.coerceIn(KdeConnectSettings.PAD_SPEED_RANGE)
+    }
+
+    suspend fun setKdePadAcceleration(value: Boolean) = editPrefs { it[KDE_PAD_ACCELERATION] = value }
+
+    suspend fun setKdeScrollSpeed(value: Float) = editPrefs {
+        it[KDE_SCROLL_SPEED] = value.coerceIn(KdeConnectSettings.PAD_SPEED_RANGE)
+    }
+
+    suspend fun setKdeNaturalScroll(value: Boolean) = editPrefs { it[KDE_NATURAL_SCROLL] = value }
+    suspend fun setKdeTapToClick(value: Boolean) = editPrefs { it[KDE_TAP_TO_CLICK] = value }
+    suspend fun setKdePadHaptics(value: Boolean) = editPrefs { it[KDE_PAD_HAPTICS] = value }
+    suspend fun setKdeBatteryReport(value: Boolean) = editPrefs { it[KDE_BATTERY_REPORT] = value }
+    suspend fun setKdeExposeMedia(value: Boolean) = editPrefs { it[KDE_EXPOSE_MEDIA] = value }
+    suspend fun setKdeShareSheet(value: Boolean) = editPrefs { it[KDE_SHARE_SHEET] = value }
+    suspend fun setKdeReceiveFiles(value: Boolean) = editPrefs { it[KDE_RECEIVE_FILES] = value }
+    suspend fun setKdeComposeMode(value: Boolean) = editPrefs { it[KDE_COMPOSE_MODE] = value }
+    suspend fun setKdeLastTab(value: String) = editPrefs { it[KDE_LAST_TAB] = value }
+
+    suspend fun addKdeHost(host: String) = editPrefs { prefs ->
+        val clean = host.trim()
+        if (clean.isEmpty()) return@editPrefs
+        val current = prefs[KDE_HOSTS].orEmpty()
+        if (current.size < KdeConnectSettings.MAX_HOSTS) prefs[KDE_HOSTS] = current + clean
+    }
+
+    suspend fun removeKdeHost(host: String) = editPrefs { prefs ->
+        prefs[KDE_HOSTS] = prefs[KDE_HOSTS].orEmpty() - host
+    }
 
     // Endpoints are stored trimmed: a URL pasted from a README arrives with
     // whitespace often enough, and the clients would otherwise build a request

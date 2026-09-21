@@ -27,6 +27,13 @@
          without this line ConnectivityManager.isActiveNetworkMetered throws a
          SecurityException on lite builds. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- KDE Connect (issue #285) finds computers by broadcast and mDNS, and
+         most phones silently drop both for an app that does not hold a
+         multicast lock. Both are normal permissions, granted at install, and
+         neither is touched until the user switches the tool on: the lock is
+         taken only while its engine is running. -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- Only used by the optional camera tool (photo into the chat). -->
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- Only used by the optional voice input tool; audio goes to the
@@ -707,6 +714,48 @@
             android:noHistory="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- KDE Connect (issue #285). The keyboard cannot show a document
+             picker, so "Files…" on its Send tab opens this transparent
+             trampoline, which does, and hands what was picked to the engine
+             both live in. No noHistory: the picker's result has to come back. -->
+        <activity
+            android:name="com.wasimaster.wmkeyboard.app.kdeconnect.KdeFilePickerActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- "Send to computer" from another app's share sheet. The activity is
+             never exported by itself: the alias below is the door, and it ships
+             disabled. KdeConnectHub enables it once a computer is paired (and
+             the setting allows), so nobody who does not use the tool ever sees
+             a WM Keyboard entry in their share sheet. Never rename the alias —
+             share targets are remembered by component name. -->
+        <activity
+            android:name="com.wasimaster.wmkeyboard.app.kdeconnect.KdeShareActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity-alias
+            android:name="com.wasimaster.wmkeyboard.app.KdeShareAlias"
+            android:enabled="false"
+            android:exported="true"
+            android:label="@string/kdeconnect_share_label"
+            android:targetActivity="com.wasimaster.wmkeyboard.app.kdeconnect.KdeShareActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Accept / Reject on a pair-request notification. -->
+        <receiver
+            android:name="com.wasimaster.wmkeyboard.ime.kdeconnect.KdeActionReceiver"
+            android:exported="false" />
 
         <!-- Same trampoline pattern for the voice input tool's
              android.permission.RECORD_AUDIO. -->

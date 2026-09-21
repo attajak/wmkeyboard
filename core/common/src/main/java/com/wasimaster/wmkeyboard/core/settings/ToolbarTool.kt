@@ -81,6 +81,9 @@ enum class ToolbarTool {
     // The same setting as Typing → Type English words as English: the switch is
     // reached for mid-word, when a Bengali word has just been read as English.
     PHONETIC_ENGLISH,
+    // A paired computer over KDE Connect: its mouse, keyboard, media, clipboard
+    // and files, and the computer typing back into the phone (issue #285).
+    KDE_CONNECT,
 }
 
 /** The cursor tools, in the order they read on the toolbar. */
@@ -243,7 +246,7 @@ val PowerTools: Set<ToolbarTool> = RecommendedTools + setOf(
     ToolbarTool.NUMPAD,
     ToolbarTool.SYMBOLS, ToolbarTool.CALCULATOR, ToolbarTool.UNIT_CONVERT, ToolbarTool.CURRENCY,
     ToolbarTool.PASSWORD_GEN, ToolbarTool.CALENDAR, ToolbarTool.WEATHER,
-    ToolbarTool.MEDIA_CONTROL, ToolbarTool.APP_LAUNCHER, ToolbarTool.HIDE_KEYBOARD,
+    ToolbarTool.MEDIA_CONTROL, ToolbarTool.KDE_CONNECT, ToolbarTool.APP_LAUNCHER, ToolbarTool.HIDE_KEYBOARD,
 )
 
 /**

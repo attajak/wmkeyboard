@@ -1678,6 +1678,7 @@ object SmartSuggest {
         ToolbarTool.CAMERA to listOf("camera"),
         ToolbarTool.TEXT_EDIT to listOf("edit"),
         ToolbarTool.TRACKPAD to listOf("trackpad"),
+        ToolbarTool.KDE_CONNECT to listOf("kdeconnect", "kde"),
         ToolbarTool.APP_LAUNCHER to listOf("apps", "launch"),
     )
 

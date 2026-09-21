@@ -1,0 +1,141 @@
+---
+title: "KDE Connect"
+description: "Pair the keyboard with a computer: use its mouse and keys from your phone, control its music, share the clipboard and files, and let the computer type into your phone."
+sidebar:
+  order: 16
+---
+
+import PhoneFrame from '@components/PhoneFrame.astro';
+import SettingsPath from '@components/SettingsPath.astro';
+import KeyCap from '@components/KeyCap.astro';
+
+[KDE Connect](https://kdeconnect.kde.org/) links a phone to a computer over your home network. The **KDE Connect** tool speaks that protocol from inside the keyboard, so you can reach your computer from whatever app you are typing in, and the computer can type back. It works with KDE Connect on Linux, Windows and macOS, with GSConnect on GNOME, and with Valent.
+
+You do **not** need the KDE Connect app on the phone. The keyboard shows up on the computer as a device of its own. If you do have the app, both keep working side by side, as two devices.
+
+<PhoneFrame caption="The Input tab: a touchpad for the computer, the three mouse buttons, and the switch that sends your typing there.">
+  {/* shot: tools/kde-connect-input */}
+</PhoneFrame>
+
+## Turning it on
+
+Open **KDE Connect** from the toolbox and press **Turn on**. Until you do, the tool does nothing at all on your network: it sends nothing and listens for nothing.
+
+After that the panel lists the computers it can see. On the computer, KDE Connect (or GSConnect, or Valent) has to be running.
+
+## Pairing
+
+1. Press **Pair** next to the computer's name.
+2. An eight character code appears on the phone. The same code appears on the computer.
+3. If the two match, accept on the computer. You have 30 seconds.
+
+You can also start from the computer: pick the phone there, press pair, and accept on the phone. That only works while the keyboard's device list is open, because that is the only time the keyboard talks to computers it has not paired with.
+
+The code is what makes pairing safe. It is calculated from both devices' keys, so a match means the computer on your screen is the one in front of you and not something else on the Wi-Fi. After pairing, the computer's certificate is remembered and nothing else is accepted under its name.
+
+### If the computer does not show up
+
+- Both devices have to be on the same network. Mobile data does not work, and many guest networks keep devices apart.
+- The computer's firewall has to allow ports **1714 to 1764**, for both TCP and UDP.
+- Press **Add by address** and type the computer's IP address. The phone then announces itself to that address directly, which gets through on networks that block discovery.
+- If another KDE Connect app on the phone is already using the discovery port, the keyboard can still be found. Press **Refresh** on the phone rather than waiting for the computer.
+
+## The tabs
+
+Tap the device name in the panel's header at any time to switch computers, pair another one, or unpair.
+
+### Input
+
+The big area is a **touchpad** for the computer.
+
+| Gesture | What it does |
+|---|---|
+| One finger drag | Move the pointer |
+| Tap | Left click. Tap twice for a double click |
+| Two finger tap | Right click |
+| Three finger tap | Middle click |
+| Two finger drag | Scroll |
+| Hold still, then drag | Drag with the button held. Lift to drop |
+| Tap, then drag straight away | The same drag, without the wait |
+
+The <KeyCap>L</KeyCap> <KeyCap>M</KeyCap> <KeyCap>R</KeyCap> buttons beside it are the mouse buttons, for when a tap is not precise enough.
+
+Press **Type on computer** and the keys come back under a smaller panel. Now everything you type goes to the computer instead of the app: letters, glide typing, suggestions you pick, autocorrections, emoji, and any language the keyboard has. A strip of keys a phone layout does not have sits on top: <KeyCap>Esc</KeyCap>, <KeyCap>Tab</KeyCap>, the arrows, <KeyCap>Del</KeyCap>, <KeyCap>Home</KeyCap>, <KeyCap>End</KeyCap>, page keys and <KeyCap>F1</KeyCap> to <KeyCap>F12</KeyCap>. <KeyCap>Ctrl</KeyCap>, <KeyCap>Alt</KeyCap>, <KeyCap>Super</KeyCap> and <KeyCap>Shift</KeyCap> stay lit until the next key, so <KeyCap>Ctrl</KeyCap> then <KeyCap>c</KeyCap> copies on the computer.
+
+**Compose** changes how typing is sent. Normally each keystroke goes out as you make it. With Compose on you write a whole line on the phone, fix it, and send it with <KeyCap>Enter</KeyCap>. The **Send** button sends the line without pressing Enter on the computer.
+
+### Media
+
+Whatever is playing on the computer: artwork, title, a seek bar, previous, play or pause, next. Shuffle and repeat appear for players that have them. If several players are open you can switch between them. The slider at the bottom is the computer's own volume, with a mute button.
+
+### Send
+
+- **Clipboard** sends what is on the phone's clipboard right now.
+- **Text in the field** sends your selection, or the whole field if nothing is selected.
+- **Files…** opens a file picker and sends what you choose.
+
+Transfers are listed with their progress and can be cancelled. Files the computer sends to the phone are listed here too, with an **Open** button.
+
+### Run
+
+The commands you have set up on the computer, as buttons. Output shows up live while a command runs, and **Stop** ends it. Commands are created on the computer, in its KDE Connect settings. **Set up on computer** opens that screen there.
+
+### Slides
+
+Big **previous** and **next** buttons for a presentation, **Start** (F5) and **End** (Esc). Hold and drag on the pad between them to show the computer's pointer dot and move it around. Let go and it disappears.
+
+### Device
+
+**Ping** the computer, **Ring it** to find a laptop in a bag, and **Lock** or **Unlock** its session where the desktop supports it. The device's address, battery and certificate fingerprint are here, along with **Unpair**.
+
+## What the computer can do
+
+- **Type into the phone.** On the computer, open the phone in KDE Connect and use its remote keyboard box. What you type lands in the field on the phone. Arrows, <KeyCap>Home</KeyCap>, <KeyCap>End</KeyCap>, selection with <KeyCap>Shift</KeyCap>, word moves with <KeyCap>Ctrl</KeyCap>, <KeyCap>Ctrl</KeyCap>+<KeyCap>A</KeyCap> <KeyCap>C</KeyCap> <KeyCap>X</KeyCap> <KeyCap>V</KeyCap> <KeyCap>Z</KeyCap>, and <KeyCap>Enter</KeyCap> all do what you expect. This works only while the keyboard is on screen and the phone is unlocked.
+- **Share its clipboard.** Text copied on the computer is ready to paste on the phone, and shows up as the paste suggestion.
+- **Send text, links and files.** Text and links arrive on the clipboard. Files are saved to **Downloads/WM Keyboard** and added to the [clipboard history](/tools/clipboard/), so you can paste a picture from the computer straight into a chat.
+- **See the phone's battery**, and **control the phone's media** if you allow it.
+
+## Options
+
+<SettingsPath path="Tools / KDE Connect" />
+
+**Use KDE Connect**: off by default. The master switch.
+
+**Devices**: paired computers and the ones nearby, with a switch per computer for clipboard, typing, files, phone media and battery. Also the list of addresses added by hand, and this phone's certificate fingerprint.
+
+**Name shown on the computer**: blank uses the phone's model. Up to 32 characters, and the protocol does not allow punctuation.
+
+**Stay connected**: default **Keyboard showing**.
+- *Panel open*: only while the KDE Connect panel is open.
+- *Keyboard showing*: while the keyboard is on screen and for a minute after, so switching apps does not reconnect every time.
+- *Always*: whenever WM Keyboard is the active keyboard, shown or not. The clipboard stays in sync while you are not typing. There is no background service behind this. The link lives inside the keyboard, so it ends when Android closes the keyboard, and power saving, with its *Background network* switch on, puts it back to *Keyboard showing*.
+
+**Connect automatically**: default on. Reconnect to paired computers when they are found.
+
+**Receive the computer's clipboard** and **Send this phone's clipboard**: both default on.
+
+**Let the computer type here**: default on.
+
+**Use the keyboard language**: default off. Off, what the computer sends is typed exactly. On, its keys go through the keyboard's layout the way a [hardware keyboard's](/typing/hardware-keyboard/) do, so a Latin keyboard on your desk can write Bengali through Avro, with suggestions and autocorrect.
+
+**Pointer speed**, **Acceleration**, **Scroll speed**, **Natural scrolling**, **Tap to click**, **Vibrate on clicks**: how the touchpad feels. Speeds go from 0.3× to 3×.
+
+**Receive files**: default on.
+
+**Show in the share menu**: default on. Adds **Send to computer** to other apps' share sheets. The entry only exists once a computer is paired, so it never appears for someone who does not use the tool.
+
+**Report battery level** and **Offer this phone's media**: both default on. Media needs the same notification access as the [media controls](/tools/media/) tool, and does nothing without it.
+
+Notifications for a pair request, a file or a ping that arrives while the keyboard is hidden have their own switch under <SettingsPath path="Notifications" />.
+
+## Details and edge cases
+
+- Everything stays on your local network. There is no account and no server. Both ends encrypt the connection with TLS, and each side pins the other's certificate at pairing.
+- Passwords and one-time codes are never sent on their own, even with clipboard sending on. Nothing is sent from a password field, or while [incognito](/privacy/incognito/) pauses the clipboard. **Send › Clipboard** still sends whatever is there, because you asked.
+- Clipboard sync is separate from clipboard history. Turning history off does not stop the sync, and the other way round.
+- Computers you have not paired with are only contacted while a device list is open, in the panel or in settings. The rest of the time the keyboard only talks to computers it already knows.
+- The tool is hidden on the lock screen and before the first unlock after a restart. A computer cannot type into a locked phone.
+- The phone's key and the paired computers' certificates are left out of backups on purpose. Restored onto another phone they would put two devices on your network under one identity. Pair again on a new phone.
+- The scroll direction and speed can differ between desktops, because the protocol does not define a scale. Both are settings for that reason.
+- Text, links and clipboard only. Images on the clipboard are not synced. Send them as files.
+- Not supported: SMS and calls, notification mirroring, browsing the phone's files from the computer, and ringing the phone. Those need permissions a keyboard should not hold. The KDE Connect app does them well, and the two can run together.

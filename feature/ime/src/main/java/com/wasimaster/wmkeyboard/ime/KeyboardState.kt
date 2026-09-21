@@ -583,6 +583,9 @@ enum class PanelMode {
     WIKIPEDIA, SYMBOLS, CALCULATOR, UNIT_CONVERT, CURRENCY, QR_GEN, PASSWORD_GEN, AI,
     MODES, TYPING_TEST, MEDIA_CONTROL, PLUGINS, APP_LAUNCHER,
 
+    /** A paired computer over KDE Connect (issue #285). See [KdeUi]. */
+    KDE_CONNECT,
+
     /** The CJK candidate grid: the strip's overflow, opened from its chevron. */
     CANDIDATES,
 
@@ -755,6 +758,9 @@ fun panelFocusRegions(panel: PanelMode): List<FocusRegion> = when (panel) {
     // so its ring only needs Send. The typing test's ACTIONS is the results
     // screen's Restart — during a run the keys are the test.
     PanelMode.MEDIA_CONTROL, PanelMode.PLUGINS -> listOf(FocusRegion.RESULTS)
+    // The tab rail, then whatever the open tab offers to press. The touchpad
+    // itself publishes nothing: it is a pointing surface.
+    PanelMode.KDE_CONNECT -> listOf(FocusRegion.CHIPS, FocusRegion.RESULTS)
     PanelMode.QR_GEN, PanelMode.TYPING_TEST -> listOf(FocusRegion.ACTIONS)
     // The two fields, the three toggles, then the buttons.
     PanelMode.FIND_REPLACE -> listOf(FocusRegion.SEARCH, FocusRegion.CHIPS, FocusRegion.ACTIONS)
@@ -1408,6 +1414,78 @@ sealed interface AiChatAction {
     data class OpenInApp(val list: Boolean = false) : AiChatAction
     /** The answer at [index] of the conversation, reported (Play builds). */
     data class Report(val index: Int) : AiChatAction
+}
+
+/** The KDE Connect panel's tabs, in rail order. */
+enum class KdeTab { INPUT, MEDIA, SEND, RUN, SLIDES, DEVICE }
+
+/**
+ * The KDE Connect panel (issue #285): what only the keyboard knows.
+ *
+ * Deliberately small, for the reason [AiChatUi] is. Devices, pairing, players,
+ * volumes, transfers — everything that arrives over the network — is read by
+ * the panel straight from `KdeConnectHub.state`, so a pointer drag or a
+ * position tick from the computer never enters the state the key rows compare
+ * on every keystroke. What is here is what the keys need: which buffer they are
+ * writing, and what is in it.
+ */
+data class KdeUi(
+    val tab: KdeTab = KdeTab.INPUT,
+    /** The computer the panel is about; null follows the first one connected. */
+    val deviceId: String? = null,
+    /** The list of nearby and paired devices is up over the tabs. */
+    val showDevices: Boolean = false,
+    /** The keys type on the computer instead of into the app. */
+    val typing: Boolean = false,
+    /**
+     * Live mode: the text the computer has been sent on this line, which the
+     * next keystroke is diffed against. Compose mode: the draft.
+     */
+    val line: String = "",
+    /** The "add by address" box has the keys. */
+    val hostEntry: Boolean = false,
+    val hostDraft: String = "",
+    /** One line of feedback under the header — "Clipboard sent", "Ping from Desk" — that fades. */
+    val notice: String = "",
+    val noticeAtMs: Long = 0,
+    /**
+     * Ctrl / Alt / Super / Shift armed on the panel's key strip, for the next
+     * key sent to the computer and no further. The board's own modifier keys
+     * work too, where a layout has them; most phone layouts do not.
+     */
+    val mods: com.wasimaster.wmkeyboard.core.kdeconnect.KdeModifiers =
+        com.wasimaster.wmkeyboard.core.kdeconnect.KdeModifiers.None,
+)
+
+enum class KdeModKey { SHIFT, CTRL, ALT, META }
+
+/**
+ * What the KDE Connect panel asks of the service. Only what touches the
+ * keyboard's own state, the field, or the settings comes through here; remote
+ * control (pointer, media, volume, commands) goes from the panel straight to the
+ * hub, which keeps a touchpad drag off the main state path entirely.
+ */
+sealed interface KdeAction {
+    data object TurnOn : KdeAction
+    data class SetTab(val tab: KdeTab) : KdeAction
+    data class SelectDevice(val deviceId: String) : KdeAction
+    data class ShowDevices(val show: Boolean) : KdeAction
+    data class SetTyping(val on: Boolean) : KdeAction
+    data class SetCompose(val on: Boolean) : KdeAction
+    data class ToggleModifier(val key: KdeModKey) : KdeAction
+    data class HostEntry(val open: Boolean) : KdeAction
+    data object SubmitHost : KdeAction
+    data object SendClipboard : KdeAction
+
+    /** The selection if there is one, otherwise the whole field. */
+    data object SendFieldText : KdeAction
+    data object PickFiles : KdeAction
+    data class Insert(val text: String) : KdeAction
+    data class Copy(val text: String) : KdeAction
+    data class Open(val location: String, val fileName: String) : KdeAction
+    data class Notice(val text: String) : KdeAction
+    data object OpenSettings : KdeAction
+    data object OpenDevices : KdeAction
 }
 
 /** Weather panel state, owned by the service (it does the fetching). */
@@ -2703,6 +2781,8 @@ data class KeyboardUiState(
      * detects itself (like the voice panel checks the mic permission).
      */
     val mediaControl: MediaSnapshot? = null,
+    /** The KDE Connect panel: tab, and the buffers its keys write (see [KdeUi]). */
+    val kde: KdeUi = KdeUi(),
     /**
      * Whether the media tool is currently auto-pinned to the toolbar because
      * music is playing (see [KeyboardSettings.mediaControl]).
@@ -2990,6 +3070,23 @@ data class KeyboardUiState(
         get() = aiChatShown && aiChat.composing && !aiChat.showSessions
 
     /**
+     * Whether keystrokes belong to the KDE Connect panel's "add by address"
+     * box. Panel *and* an open box, the [findReplaceTypingActive] contract.
+     */
+    val kdeHostEntryActive: Boolean
+        get() = panel == PanelMode.KDE_CONNECT && kde.hostEntry
+
+    /**
+     * Whether keystrokes are being typed on the paired computer instead of
+     * into the app behind the keyboard (issue #285). Panel *and* the Input tab
+     * *and* the switch: closing the panel, changing tab or opening the device
+     * list each hand the keys back on their own.
+     */
+    val kdeTypingActive: Boolean
+        get() = panel == PanelMode.KDE_CONNECT && kde.typing && kde.tab == KdeTab.INPUT &&
+            !kde.showDevices && !kde.hostEntry
+
+    /**
      * Whether keystrokes belong to a plugin's own text box rather than to the
      * text field.
      *
@@ -3074,6 +3171,9 @@ data class KeyboardUiState(
         typingTestActive -> CaptureTarget.TYPING_TEST
         aiCustomInputActive -> CaptureTarget.AI_CUSTOM
         aiChatComposing -> CaptureTarget.AI_CHAT
+        kdeHostEntryActive -> CaptureTarget.KDE_HOST
+        kdeTypingActive ->
+            if (settings.kdeConnect.composeMode) CaptureTarget.KDE_COMPOSE else CaptureTarget.KDE_REMOTE
         pluginTypingActive -> CaptureTarget.PLUGIN
         findReplaceTypingActive ->
             if (findReplace?.focused == FindReplaceField.REPLACE) {
@@ -3110,6 +3210,8 @@ data class KeyboardUiState(
         CaptureTarget.TYPING_TEST -> typingTest.current
         CaptureTarget.AI_CUSTOM -> (ai as? AiUi.CustomInput)?.instruction.orEmpty()
         CaptureTarget.AI_CHAT -> aiChat.draft
+        CaptureTarget.KDE_HOST -> kde.hostDraft
+        CaptureTarget.KDE_REMOTE, CaptureTarget.KDE_COMPOSE -> kde.line
         CaptureTarget.PLUGIN -> pluginFocusedInput?.let { pluginInputs[it] }.orEmpty()
         CaptureTarget.FIND_QUERY -> findReplace?.query.orEmpty()
         CaptureTarget.FIND_REPLACEMENT -> findReplace?.replacement.orEmpty()

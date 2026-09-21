@@ -17,4 +17,5 @@
     <exclude domain="file" path="docscan" />
     <exclude domain="file" path="clipboard/images" />
     <exclude domain="file" path="stickers/.originals" />
+    <exclude domain="file" path="kdeconnect" />
 </full-backup-content>

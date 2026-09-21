@@ -339,6 +339,7 @@ internal val SettingsRouteColors: Map<String, Color> = mapOf(
     "emojicategories" to Color(0xFFFFB300),
     // A child of the media control tool, so it keeps that tool's purple.
     "musicapps" to Color(0xFFAB47BC),
+    "kdeconnect/devices" to Color(0xFF1D99F3),
 )
 
 /** The accent for a route with no colour of its own. */

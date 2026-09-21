@@ -750,6 +750,7 @@ dependencies {
     implementation(project(":core:theme"))
     implementation(project(":core:icons"))
     implementation(project(":core:tools"))
+    implementation(project(":core:kdeconnect"))
     implementation(project(":core:content"))
     implementation(project(":core:addons"))
     implementation(project(":core:voice"))

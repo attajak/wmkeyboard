@@ -6384,6 +6384,7 @@ internal fun toolLabelRes(tool: ToolbarTool): Int = when (tool) {
     ToolbarTool.PASSWORD_GEN -> R.string.ime_tool_password_gen
     ToolbarTool.TYPING_TEST -> R.string.ime_tool_typing_test
     ToolbarTool.MEDIA_CONTROL -> R.string.ime_tool_media_control
+    ToolbarTool.KDE_CONNECT -> R.string.ime_tool_kde_connect
     ToolbarTool.PLUGINS -> R.string.ime_tool_plugins
     ToolbarTool.APP_LAUNCHER -> R.string.ime_tool_app_launcher
     ToolbarTool.AI -> R.string.ime_tool_ai
@@ -6467,6 +6468,7 @@ private fun toolActive(tool: ToolbarTool, state: KeyboardUiState): Boolean = whe
     ToolbarTool.PASSWORD_GEN -> state.panel == PanelMode.PASSWORD_GEN
     ToolbarTool.TYPING_TEST -> state.panel == PanelMode.TYPING_TEST
     ToolbarTool.MEDIA_CONTROL -> state.panel == PanelMode.MEDIA_CONTROL
+    ToolbarTool.KDE_CONNECT -> state.panel == PanelMode.KDE_CONNECT
     ToolbarTool.PLUGINS -> state.panel == PanelMode.PLUGINS
     ToolbarTool.APP_LAUNCHER -> state.panel == PanelMode.APP_LAUNCHER
     ToolbarTool.AI -> state.panel == PanelMode.AI
@@ -8881,7 +8883,7 @@ private val FullBleedPanels = setOf(
     PanelMode.OCR, PanelMode.QR_SCAN, PanelMode.CALCULATOR, PanelMode.CURRENCY,
     PanelMode.UNIT_CONVERT, PanelMode.CALENDAR, PanelMode.AI,
     PanelMode.TRANSLATE, PanelMode.WEB_SEARCH, PanelMode.IMAGE_SEARCH,
-    PanelMode.DICTIONARY, PanelMode.SYMBOLS, PanelMode.MEDIA_CONTROL,
+    PanelMode.DICTIONARY, PanelMode.SYMBOLS, PanelMode.MEDIA_CONTROL, PanelMode.KDE_CONNECT,
     PanelMode.VOCABULARY, PanelMode.LEARN_FROM_TEXT,
     PanelMode.APP_LAUNCHER, PanelMode.THEMES, PanelMode.SNIPPETS,
 )
@@ -9837,6 +9839,18 @@ private fun KeyboardBody(
                         onResume = onMediaResume,
                     )
                 }
+                // A paired computer (#285). While its keys are typing there, or
+                // into the address box, the panel collapses over the key rows
+                // the way the chat composer's does — and keeps enough height
+                // for the key strip, the echo line and a sliver of touchpad.
+                PanelMode.KDE_CONNECT -> FullBleedTool(
+                    state,
+                    title = stringResource(R.string.ime_tool_kde_connect),
+                    onClose = { onPanelChange(PanelMode.KDE_CONNECT) },
+                    compact = state.kdeTypingActive || state.kdeHostEntryActive,
+                    compactHeight = if (state.kdeHostEntryActive) 96.dp else KdeTypingCompactHeight,
+                    headerActions = { KdeHeaderActions(state, capture.onKde) },
+                ) { KdeConnectPanel(state, capture) }
                 PanelMode.DICTIONARY -> FullBleedTool(
                     state, title = "",
                     onClose = { onPanelChange(PanelMode.DICTIONARY) },
