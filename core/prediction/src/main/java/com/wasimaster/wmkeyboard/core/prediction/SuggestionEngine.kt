@@ -898,13 +898,6 @@ class SuggestionEngine(
     val spellingMap: SpellingMap get() = spellings
 
     /**
-     * Whether [alphabet] can spell enough of the language now being typed for a
-     * glide to mean anything. Only the dictionary tier is asked: the personal
-     * lexicon is small and can hold words from whatever the user typed last, so
-     * letting it vote would have a handful of leftover English words decide
-     * whether Bengali is glidable.
-     */
-    /**
      * Whether the language being typed has a word list at all — bundled or
      * downloaded and imported — as opposed to enough of one for a layout. A
      * language without one cannot glide whatever the grid, and the keyboard
@@ -915,16 +908,33 @@ class SuggestionEngine(
     fun hasLanguageWords(): Boolean =
         (activeDictionary.walkers() + customDictionary.walkers()).any { it.maxSubtree(it.root) > 0 }
 
+    /**
+     * Whether [alphabet] can spell enough of the language now being typed for a
+     * glide to mean anything. Only the dictionary tier is asked: the personal
+     * lexicon is small and can hold words from whatever the user typed last, so
+     * letting it vote would have a handful of leftover English words decide
+     * whether Bengali is glidable.
+     *
+     * And only the language's own lists, not its secondaries' (#272). Each
+     * source is sampled at its own top, so a secondary language used to vote
+     * with as many words as the primary: Polish riding on English put 1,500
+     * words full of ł, ą and ż in front of a grid with no keys for them, the
+     * share fell under the threshold, and a swipe on a layout that spells
+     * English perfectly came out as a tap. A secondary's words the grid cannot
+     * draw are simply not decoded, which is all it costs. The secondaries are
+     * asked only when the language has no list of its own, where readiness
+     * earned on their words is what lets the missing-list chip say so (#219).
+     */
     fun glideCoverage(alphabet: Set<Int>): Float {
         val romanization = glideRomanization
         // Through the romanization when there is one: on Avro the question is
         // whether the Latin grid spells the *romanized* vocabulary, and asking
         // it of the Bengali word list would answer zero and switch off a layout
         // that decodes perfectly well.
-        val sources = if (romanization.isEmpty) {
-            walkSources().filter { it.tier == FuzzyBeamSearch.Tier.DICTIONARY }
-        } else {
-            romanization.walkSources()
+        val sources = when {
+            !romanization.isEmpty -> romanization.walkSources()
+            hasLanguageWords() -> dictionarySources(primaryLanguageId)
+            else -> dictionarySources(null)
         }
         return GlideCoverage.measure(sources.map { it.walker }, alphabet)
     }
