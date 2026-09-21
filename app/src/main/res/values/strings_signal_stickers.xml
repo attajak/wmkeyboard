@@ -14,7 +14,7 @@
     <string name="import_signal_row_subtitle">Adds a pack made for Signal or Molly to your packs</string>
 
     <string name="import_signal_section_title">Add a Signal pack</string>
-    <string name="import_signal_caption">Signal has no sticker shop. A person shares a pack as a link, and the link holds the key that opens the stickers. The app gets the pack from the sticker storage of Signal. The app does not use a Signal account, and Signal does not learn who you are. A pack that you add becomes one of your own packs, so you can send its stickers in every app.</string>
+    <string name="import_signal_caption">Signal has no sticker shop. A person shares a pack as a link, and the link holds the key that opens the stickers. The app gets the pack from the sticker storage of Signal. The app does not use a Signal account, and Signal does not learn who you are. A pack that you add becomes one of your own packs. The stickers stay the work of the person who made them, so add only packs that you may use.</string>
 
     <string name="import_signal_link_title">Add a pack from a link</string>
     <!-- signal.art is a web address. Keep it as it is. -->
@@ -29,10 +29,6 @@
     <!-- "Add to Signal" is the text of a button on that website. The website
          is in English, so keep the text of the button in English. -->
     <string name="import_signal_gallery_subtitle">Opens the community gallery in your browser. Press \"Add to Signal\" on a pack there, then select WM Keyboard.</string>
-
-    <!-- The title of the list of the packs that Signal itself gives to a new user. -->
-    <string name="import_signal_builtin_title">Packs from Signal</string>
-    <string name="import_signal_builtin_caption">Signal gives these packs to a new user. The app gets nothing until you open a pack.</string>
 
     <!-- What the list of apps shows for WM Keyboard when the user opens the
          link of a Signal sticker pack. Keep it short. -->

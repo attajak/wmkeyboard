@@ -51,7 +51,6 @@ import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.stickers.StickerPack
 import com.wasimaster.wmkeyboard.core.stickers.StickerPackStore
-import com.wasimaster.wmkeyboard.core.stickers.signal.SignalBuiltInPacks
 import com.wasimaster.wmkeyboard.core.stickers.signal.SignalPackManifest
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import com.wasimaster.wmkeyboard.ime.ui.rememberMediaImageLoader
@@ -87,12 +86,15 @@ internal fun signalPackRoute(packId: String, packKey: String): String = "signal_
  * filled from the clipboard, for the reason the link importer gives: this app
  * is a keyboard, and reading the clipboard to be helpful is the one thing it
  * must not do on its own.
+ *
+ * There is no list of packs of the app's own choosing, on purpose. The packs
+ * Signal ships with are art Signal commissioned, and its terms keep every right
+ * to it, so a keyboard has no business offering them. A pack gets here because
+ * whoever holds its link brought it, like any picture they add to a pack.
  */
 @Composable
 internal fun SignalStickersScreen(onNavigate: (String) -> Unit) {
     val context = LocalContext.current
-    val store = remember { StickerPackStore.get(context) }
-    val mine = remember { store.packs().mapTo(HashSet()) { it.source } }
     var showLink by remember { mutableStateOf(false) }
 
     SettingsGroup(
@@ -129,27 +131,6 @@ internal fun SignalStickersScreen(onNavigate: (String) -> Unit) {
                     }
                 },
             )
-        }
-    }
-
-    // Drawn from names the app carries, so that nothing is fetched until one
-    // of them is opened.
-    SettingsGroup(
-        stringResource(R.string.import_signal_builtin_title),
-        info = stringResource(R.string.import_signal_builtin_caption),
-    ) {
-        for (pack in SignalBuiltInPacks.all) {
-            item {
-                WmRow(
-                    title = pack.title,
-                    subtitle = if (StickerPack.signalSource(pack.packId) in mine) {
-                        stringResource(R.string.import_signal_added_title)
-                    } else {
-                        stringResource(R.string.import_signal_author, pack.author)
-                    },
-                    onClick = { onNavigate(signalPackRoute(pack.packId, pack.packKey)) },
-                )
-            }
         }
     }
 
