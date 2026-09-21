@@ -104,6 +104,7 @@ object SettingsBackup {
         "ai_xai_key",
         "ai_deepseek_key",
         "ai_compatible_key",
+        "voice_server_key",
         "hf_token",
         "photo_unsplash_key",
         "photo_pexels_key",

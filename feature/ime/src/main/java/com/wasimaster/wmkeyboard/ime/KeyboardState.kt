@@ -843,9 +843,9 @@ data class HandwritingUi(
 
 /**
  * Where the voice input panel is in a dictation session. TRANSCRIBING is the
- * offline-Whisper-only state after recording stops while the model turns the
- * captured audio into text (the system recognizer streams instead, so it never
- * enters it). MIC_BLOCKED is a session Android fed silence: the Microphone
+ * state after recording stops while offline Whisper or the transcription
+ * server turns the captured audio into text (the system recognizer streams
+ * instead, so it never enters it). MIC_BLOCKED is a session Android fed silence: the Microphone
  * access or Sensors off tile in Quick Settings is on (see MicBlockWatcher).
  */
 enum class VoiceStatus { IDLE, LISTENING, FINISHING, TRANSCRIBING, NEED_PERMISSION, MIC_BLOCKED, UNAVAILABLE, ERROR }
@@ -899,7 +899,18 @@ data class VoiceUi(
     val translate: Boolean = false,
     /** Offline Whisper is selected but no model is downloaded — panel prompts to get one. */
     val whisperNeedsModel: Boolean = false,
+    /**
+     * The transcription server engine runs this session (#286). Like [whisper]
+     * it records a clip and transcribes it after the user stops, so the
+     * surfaces show the same "tap to finish" hint for both.
+     */
+    val remote: Boolean = false,
+    /** The server engine is selected but has no address yet — panel points to settings. */
+    val serverNeedsSetup: Boolean = false,
 )
+
+/** The session records a whole clip and transcribes it after the stop tap. */
+val VoiceUi.clipBased: Boolean get() = whisper || remote
 
 /** The persisted settings say the collapsed voice bar should be up. */
 fun VoiceBarSettings.armed(): Boolean = mode == VoiceBarSettings.MODE_BAR && active
@@ -917,6 +928,7 @@ fun KeyboardUiState.voiceChipOnly(): Boolean =
     settings.voiceBar.interactiveTyping() &&
         !secureField &&
         !voice.whisperNeedsModel &&
+        !voice.serverNeedsSetup &&
         voice.status != VoiceStatus.NEED_PERMISSION &&
         voice.status != VoiceStatus.MIC_BLOCKED &&
         voice.status != VoiceStatus.UNAVAILABLE &&

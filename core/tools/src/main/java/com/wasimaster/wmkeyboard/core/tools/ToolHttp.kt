@@ -152,6 +152,69 @@ object ToolHttp {
         }
     }
 
+    /** One file part of a [postMultipart] upload. */
+    class FilePart(val field: String, val fileName: String, val mimeType: String, val bytes: ByteArray)
+
+    /**
+     * POSTs a `multipart/form-data` body: the text [fields] in order, then [file].
+     * Built for the OpenAI-style audio upload, which is the only shape the
+     * transcription servers agree on. Fails the same way [postJson] does.
+     */
+    fun postMultipart(
+        url: String,
+        fields: List<Pair<String, String>>,
+        file: FilePart,
+        timeoutMs: Int = 60_000,
+        headers: Map<String, String> = emptyMap(),
+    ): String {
+        val boundary = "----wmkb" + java.util.UUID.randomUUID().toString().replace("-", "")
+        val body = multipartBody(boundary, fields, file)
+        val connection = URL(url).openConnection() as HttpURLConnection
+        try {
+            connection.connectTimeout = 10_000
+            connection.readTimeout = timeoutMs
+            connection.setRequestProperty("User-Agent", USER_AGENT)
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.setFixedLengthStreamingMode(body.size)
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
+            for ((name, value) in headers) connection.setRequestProperty(name, value)
+            connection.outputStream.use { it.write(body) }
+            val status = connection.responseCode
+            if (status !in 200..299) {
+                val error = connection.errorStream?.bufferedReader()?.use { it.readText() }
+                throw httpFailure(status, error)
+            }
+            return connection.inputStream.bufferedReader().use { it.readText() }
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+    /** The bytes [postMultipart] sends; separate so a test can read them. */
+    internal fun multipartBody(
+        boundary: String,
+        fields: List<Pair<String, String>>,
+        file: FilePart,
+    ): ByteArray {
+        val out = java.io.ByteArrayOutputStream(file.bytes.size + 1024)
+        fun line(text: String) = out.write("$text\r\n".toByteArray(Charsets.UTF_8))
+        for ((name, value) in fields) {
+            line("--$boundary")
+            line("Content-Disposition: form-data; name=\"$name\"")
+            line("")
+            line(value)
+        }
+        line("--$boundary")
+        line("Content-Disposition: form-data; name=\"${file.field}\"; filename=\"${file.fileName}\"")
+        line("Content-Type: ${file.mimeType}")
+        line("")
+        out.write(file.bytes)
+        line("")
+        line("--$boundary--")
+        return out.toByteArray()
+    }
+
     /**
      * POSTs [body], then hands each response line to [onLine] as it arrives —
      * for the streaming shapes the AI providers use (SSE, or the newline-

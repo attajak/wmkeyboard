@@ -165,6 +165,13 @@ data class DataSaverSettings(
      * about bytes — and the roaming trigger is the place to say so.
      */
     val cloudAi: MeteredPolicy = MeteredPolicy.ALLOW,
+    /**
+     * Dictation sent to a transcription server (#286): about 32 KB per second
+     * of speech, up to a megabyte a clip. Allowed by default like [cloudAi] —
+     * the user picked the server engine on purpose, and a mic that silently
+     * stops working on mobile data reads as broken.
+     */
+    val cloudVoice: MeteredPolicy = MeteredPolicy.ALLOW,
 ) {
     /** Whether data saving should be in force given the device's [state]. */
     fun appliesTo(state: DeviceNetworkState): Boolean {
@@ -184,7 +191,7 @@ data class DataSaverSettings(
         get() = listOf(
             linkPreviews, dictionaryLookup, photoBackgrounds, weatherChip,
             currencyRates, addonRefresh, mediaSearch, webSearch, animatedEmoji,
-            downloads, cloudAi,
+            downloads, cloudAi, cloudVoice,
             vocabAudio,
         ).any { it != MeteredPolicy.ALLOW }
 }
@@ -213,6 +220,9 @@ enum class MeteredFeature {
 
     /** The vocabulary card's Wiktionary recording. */
     VOCAB_AUDIO,
+
+    /** A dictation clip uploaded to the user's transcription server. */
+    CLOUD_VOICE,
 }
 
 /** What may happen to one [MeteredFeature] right now. */
@@ -251,6 +261,7 @@ data class DataSaverStatus(
         MeteredFeature.ADDON_REFRESH -> settings.addonRefresh
         MeteredFeature.DICTIONARY_LOOKUP -> settings.dictionaryLookup
         MeteredFeature.VOCAB_AUDIO -> settings.vocabAudio
+        MeteredFeature.CLOUD_VOICE -> settings.cloudVoice
     }
 
     fun decide(feature: MeteredFeature): MeteredDecision = when {

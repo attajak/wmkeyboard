@@ -150,7 +150,7 @@ Everything below lives on the Voice typing screen, under Features on the setting
 | Keep listening | On | Starts the next sentence automatically after each one commits. |
 | Spoken punctuation | On | Saying "comma", "question mark" or "দাঁড়ি" types the mark. |
 
-All six sit in a group headed **Dictation**. An edition with the offline engine built in adds an **Engine** group above it, holding the **Recognition engine** choice (see [Offline voice (Whisper)](/tools/whisper/) for what that adds). With the system recognizer in use, the screen ends with this note about what it sends:
+All six sit in a group headed **Dictation**. An **Engine** group above it holds the **Recognition engine** choice: **System recognizer** (the default), **Offline Whisper** in an edition with the offline engine built in (see [Offline voice (Whisper)](/tools/whisper/)), and **Transcription server** in every edition, which sends each phrase to a speech-to-text server you run (see [Transcription server](/tools/transcription-server/)). With the system recognizer in use, the screen ends with this note about what it sends:
 
 > Recognition uses the speech recognizer of your device. On Android 12 and later it runs on your device when the language model is installed. If it is not, the audio goes to the recognizer service while you speak. Press and hold the microphone to speak in walkie-talkie style. It stops when you let go.
 
@@ -168,6 +168,8 @@ The tool page carries only what belongs to the button:
 On-device recognition (Android 12+, once the language's model is installed) never sends audio anywhere. Without that model installed, dictating with the system recognizer sends your audio to the OS's speech recognition service while you talk (the same behavior any app using Android's standard speech APIs has). See [Network policy](/privacy/network/) for the fuller picture of what WM Keyboard can and can't send.
 
 Want a hard guarantee that audio never leaves the device, whichever model is installed? [Offline voice typing with Whisper](/tools/whisper/) is a second dictation engine that transcribes entirely on-device. It's a bigger download and it doesn't stream words live the way the system recognizer does. In exchange it makes no network calls at all, beyond the one-time model download.
+
+Want the phone to do less work instead? A [transcription server](/tools/transcription-server/) sends each phrase to a server you choose, on your own network or a hosted service, and types what comes back. The audio goes to that address and nowhere else.
 
 ## Details & edge cases
 

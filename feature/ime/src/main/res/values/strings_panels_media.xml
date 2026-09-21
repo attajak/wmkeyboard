@@ -36,6 +36,8 @@
          microphone can do nothing. Keep this to one short line: the two chips
          directly below it are what name the ways forward. -->
     <string name="ime_voice_status_no_model">Offline voice typing has no model yet</string>
+    <string name="ime_voice_status_no_server">The transcription server has no address yet</string>
+    <string name="ime_voice_server_setup_action">Set up the server</string>
     <string name="ime_voice_status_error">Speech recognition did not work. Try again.</string>
     <!-- Android gave the microphone only silence. "Microphone access" is the
          name of the Quick Settings tile on Android 12 and later. -->
@@ -69,6 +71,7 @@
     <!-- The compact bar fits one short line beside its Settings button, which is
          where both the model downloads and the engine choice are. -->
     <string name="ime_voice_strip_no_model">No offline voice model yet</string>
+    <string name="ime_voice_strip_no_server">No transcription server set</string>
     <string name="ime_voice_strip_allow_action">Allow</string>
     <!-- Opens the voice typing settings from the compact bar. -->
     <string name="ime_voice_strip_settings_action">Settings</string>

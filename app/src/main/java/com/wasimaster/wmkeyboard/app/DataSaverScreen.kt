@@ -189,6 +189,14 @@ internal fun DataSaverSettingsScreen(
                 SettingsDefaults.dataSaver.cloudAi,
             ) { scope.launch { repository.setDataSaverCloudAi(it) } }
         }
+        item {
+            policyRow(
+                R.string.datasaver_voice_title,
+                R.string.datasaver_voice_subtitle,
+                ds.cloudVoice,
+                SettingsDefaults.dataSaver.cloudVoice,
+            ) { scope.launch { repository.setDataSaverCloudVoice(it) } }
+        }
     }
 }
 

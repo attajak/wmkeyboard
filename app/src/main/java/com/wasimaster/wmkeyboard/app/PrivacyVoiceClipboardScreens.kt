@@ -15,6 +15,9 @@ import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +42,7 @@ import androidx.compose.material.icons.outlined.Memory
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.outlined.Dns
 import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.TouchApp
@@ -203,9 +207,13 @@ internal fun VoiceSettings(repository: SettingsRepository, settings: KeyboardSet
     val scope = rememberCoroutineScope()
     val whisperEnabled = com.wasimaster.wmkeyboard.core.settings.isWhisperEnabled()
     val usingWhisper = whisperEnabled && settings.whisper.engine == "whisper"
-    if (whisperEnabled) {
+    val usingServer = settings.whisper.engine == "server"
+    // Every build has the picker now: the server engine needs no model and no
+    // native runtime, so the lite build offers system and server.
+    run {
         val systemEngine = stringResource(R.string.voice_engine_system)
         val whisperEngine = stringResource(R.string.voice_engine_whisper)
+        val serverEngine = stringResource(R.string.voice_engine_server)
         SettingsGroup(stringResource(R.string.voice_engine_group)) {
             item {
                 ChoiceSetting(
@@ -216,20 +224,24 @@ internal fun VoiceSettings(repository: SettingsRepository, settings: KeyboardSet
                         stringResource(R.string.voice_engine_info),
                         stringResource(R.string.voice_system_info).takeIf { settings.whisper.engine == "system" },
                     ).joinToString("\n\n"),
-                    options = listOf(
+                    options = listOfNotNull(
                         "system" to systemEngine,
-                        "whisper" to whisperEngine,
+                        ("whisper" to whisperEngine).takeIf { whisperEnabled },
+                        "server" to serverEngine,
                     ),
                     selected = settings.whisper.engine,
                     default = SettingsDefaults.whisper.engine,
                     detail = { engine ->
-                        if (engine == "whisper") {
-                            ChoiceDetail(
+                        when (engine) {
+                            "whisper" -> ChoiceDetail(
                                 stringResource(R.string.voice_engine_whisper_desc),
                                 Icons.Outlined.Memory,
                             )
-                        } else {
-                            ChoiceDetail(
+                            "server" -> ChoiceDetail(
+                                stringResource(R.string.voice_engine_server_desc),
+                                Icons.Outlined.Dns,
+                            )
+                            else -> ChoiceDetail(
                                 stringResource(R.string.voice_engine_system_desc),
                                 Icons.Outlined.PhoneAndroid,
                             )
@@ -356,6 +368,96 @@ internal fun VoiceSettings(repository: SettingsRepository, settings: KeyboardSet
             }
         }
         WhisperModelManager(repository, settings)
+    }
+    if (usingServer) VoiceServerSettings(repository, settings)
+}
+
+/**
+ * The transcription server behind the "server" engine (#286): where it is,
+ * the model and key it wants, and a button that proves the three work before
+ * the user finds out mid-sentence. The server is any that speaks OpenAI's
+ * `/audio/transcriptions`; the docs page carries the recipes.
+ */
+@Composable
+private fun VoiceServerSettings(repository: SettingsRepository, settings: KeyboardSettings) {
+    val scope = rememberCoroutineScope()
+    SettingsGroup(stringResource(R.string.voice_server_group)) {
+        item {
+            TextFieldSetting(
+                label = stringResource(R.string.voice_server_url_label),
+                value = settings.whisper.serverUrl,
+                hint = stringResource(R.string.voice_server_url_hint),
+                default = SettingsDefaults.whisper.serverUrl,
+            ) { repository.setVoiceServerUrl(it) }
+        }
+        item {
+            // No default model: speaches wants a model id, whisper.cpp ignores
+            // the field, and a blank one lets each server pick its own.
+            TextFieldSetting(
+                label = stringResource(R.string.voice_server_model_label),
+                value = settings.whisper.serverModel,
+                hint = stringResource(R.string.voice_server_model_hint),
+                default = SettingsDefaults.whisper.serverModel,
+            ) { repository.setVoiceServerModel(it) }
+        }
+        item {
+            ApiKeyField(
+                label = stringResource(R.string.voice_server_key_label),
+                value = settings.whisper.serverKey,
+                builtInAvailable = false,
+                emptyHint = stringResource(R.string.voice_server_key_hint),
+            ) { repository.setVoiceServerKey(it) }
+        }
+        item {
+            ToggleSetting(
+                R.string.voice_server_language_title,
+                stringResource(R.string.voice_server_language_subtitle),
+                settings.whisper.serverSendLanguage,
+                default = SettingsDefaults.whisper.serverSendLanguage,
+            ) { scope.launch { repository.setVoiceServerSendLanguage(it) } }
+        }
+        item { VoiceServerTestRow(settings) }
+    }
+}
+
+/**
+ * Sends one second of silence to the server and says what came back. Silence
+ * transcribes to nothing, so success is simply "it answered"; a failure shows
+ * the same line the keyboard would show mid-dictation.
+ */
+@Composable
+private fun VoiceServerTestRow(settings: KeyboardSettings) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var status by remember { mutableStateOf<String?>(null) }
+    var running by remember { mutableStateOf(false) }
+    val w = settings.whisper
+    val testing = stringResource(R.string.voice_server_test_running)
+    val ok = stringResource(R.string.voice_server_test_ok)
+    ActionRow(
+        R.string.voice_server_test_title,
+        subtitle = status ?: stringResource(R.string.voice_server_test_subtitle),
+        action = stringResource(R.string.voice_server_test_action),
+        enabled = !running && w.serverUrl.isNotBlank(),
+    ) {
+        running = true
+        status = testing
+        scope.launch {
+            status = runCatching {
+                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    val silence = com.wasimaster.wmkeyboard.core.voice.WavEncoder.encode(
+                        FloatArray(com.wasimaster.wmkeyboard.core.voice.whisper.WhisperMel.SAMPLE_RATE),
+                    )
+                    com.wasimaster.wmkeyboard.core.tools.TranscriptionClient.transcribe(
+                        w.serverUrl, w.serverKey, w.serverModel, null, silence,
+                    )
+                }
+            }.fold(
+                onSuccess = { ok },
+                onFailure = { com.wasimaster.wmkeyboard.core.tools.ToolHttp.friendlyMessage(context, it) },
+            )
+            running = false
+        }
     }
 }
 // ---- clipboard ----

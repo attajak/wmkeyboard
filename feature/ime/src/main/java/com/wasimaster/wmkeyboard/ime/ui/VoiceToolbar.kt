@@ -83,6 +83,7 @@ import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.VoiceBarAction
 import com.wasimaster.wmkeyboard.ime.VoiceStatus
+import com.wasimaster.wmkeyboard.ime.clipBased
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -676,7 +677,8 @@ private fun VoiceBarStatus(
         voice.status == VoiceStatus.UNAVAILABLE -> 2
         voice.status == VoiceStatus.MIC_BLOCKED -> 10
         voice.whisperNeedsModel -> 3
-        listening && voice.whisper -> 4
+        voice.serverNeedsSetup -> 11
+        listening && voice.clipBased -> 4
         listening -> 5
         transcribing -> 6
         voice.status == VoiceStatus.FINISHING -> 7
@@ -699,6 +701,7 @@ private fun VoiceBarStatus(
         2 -> stringResource(R.string.ime_voice_strip_unavailable)
         10 -> stringResource(R.string.ime_voice_strip_mic_blocked)
         3 -> stringResource(R.string.ime_voice_strip_no_model)
+        11 -> stringResource(R.string.ime_voice_strip_no_server)
         4 -> stringResource(R.string.ime_voice_strip_listening_hint)
         5 -> voice.partial.ifEmpty { speakNow }
         6 -> stringResource(R.string.ime_voice_status_transcribing)
@@ -726,7 +729,7 @@ private fun VoiceBarStatus(
         )
         val action = when (statusKind) {
             1 -> stringResource(R.string.ime_voice_strip_allow_action) to onRequestPermission
-            3 -> stringResource(R.string.ime_voice_strip_settings_action) to onOpenVoiceSettings
+            3, 11 -> stringResource(R.string.ime_voice_strip_settings_action) to onOpenVoiceSettings
             else -> null
         }
         if (action != null) {

@@ -909,6 +909,8 @@ private fun SearchStrings.voiceRows(): List<SettingsSearchEntry> {
         row(R.string.voice_continuous_title, R.string.voice_continuous_subtitle),
         row(R.string.voice_punctuation_title, R.string.voice_punctuation_subtitle),
         row(R.string.voice_translate_title, R.string.voice_translate_subtitle),
+        row(R.string.voice_server_language_title, R.string.voice_server_language_subtitle),
+        row(R.string.voice_server_test_title, R.string.voice_server_test_subtitle),
     )
 }
 
@@ -1555,6 +1557,7 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         ),
         dataSaver(R.string.datasaver_downloads_title, R.string.datasaver_downloads_subtitle),
         dataSaver(R.string.datasaver_ai_title, R.string.datasaver_ai_subtitle),
+        dataSaver(R.string.datasaver_voice_title, R.string.datasaver_voice_subtitle),
         // The four kinds of notification, each one a thing someone will come
         // looking for by name the first time it arrives or stops arriving.
         notifications(R.string.notify_downloads_title, R.string.notify_downloads_subtitle),

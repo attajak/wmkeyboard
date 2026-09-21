@@ -43,6 +43,8 @@
     <string name="datasaver_downloads_subtitle">Language data, dictionaries, add-ons and the on-device models</string>
     <string name="datasaver_ai_title">Cloud AI</string>
     <string name="datasaver_ai_subtitle">Chat and AI actions that run on a provider\'s servers. On-device models are never held.</string>
+    <string name="datasaver_voice_title">Transcription server</string>
+    <string name="datasaver_voice_subtitle">Voice typing that sends each phrase to your transcription server. About a megabyte for every 30 seconds of speech.</string>
 
     <string name="datasaver_info">Data saving never changes your settings. It hides features while the connection costs money, and everything you chose is back the moment you are on Wi-Fi again.</string>
 

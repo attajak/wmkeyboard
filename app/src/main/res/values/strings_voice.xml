@@ -10,12 +10,14 @@
     <string name="voice_engine_group">Engine</string>
     <string name="voice_engine_title">Recognition engine</string>
     <string name="voice_engine_subtitle">How the keyboard turns speech into text</string>
-    <string name="voice_engine_info">The system recognizer is fast and shows the words while you speak, but it depends on the operating system and its languages. Offline Whisper runs fully on your device across many languages and sends no audio anywhere. It transcribes each phrase after you stop speaking.</string>
+    <string name="voice_engine_info">The system recognizer is fast and shows the words while you speak, but it depends on the operating system and its languages. Offline Whisper runs fully on your device across many languages and sends no audio anywhere. It transcribes each phrase after you stop speaking. A transcription server does the same work on a computer you choose, so your phone spends less battery. The recording of each phrase goes to that server and nowhere else.</string>
     <string name="voice_engine_system">System recognizer</string>
     <string name="voice_engine_whisper">Offline Whisper</string>
     <!-- One line under each option in the recognition engine picker. -->
     <string name="voice_engine_system_desc">Fast, and it shows the words while you speak. It depends on your device and its languages</string>
     <string name="voice_engine_whisper_desc">Runs on your device and sends no audio anywhere. Each phrase arrives after you stop</string>
+    <string name="voice_engine_server">Transcription server</string>
+    <string name="voice_engine_server_desc">Sends each phrase to a server you run, which saves battery. Each phrase arrives after you stop</string>
     <string name="voice_dictation_group">Dictation</string>
     <string name="voice_ui_title">Voice typing view</string>
     <string name="voice_ui_subtitle">What the microphone button opens</string>
@@ -45,6 +47,23 @@
     <string name="voice_offline_group">Offline transcription</string>
     <string name="voice_translate_title">Translate to English</string>
     <string name="voice_translate_subtitle">Speak any language and type its English translation</string>
+    <!-- The transcription server engine (#286). Any server that speaks OpenAI's audio transcription API. -->
+    <string name="voice_server_group">Transcription server</string>
+    <string name="voice_server_url_label">Server address</string>
+    <!-- Keep the example address as it is. -->
+    <string name="voice_server_url_hint">For example http://192.168.1.10:8000/v1. The keyboard adds /audio/transcriptions</string>
+    <string name="voice_server_model_label">Model</string>
+    <!-- Keep the model names as they are. -->
+    <string name="voice_server_model_hint">Optional. For example Systran/faster-whisper-small or whisper-large-v3-turbo</string>
+    <string name="voice_server_key_label">API key</string>
+    <string name="voice_server_key_hint">Optional. Leave it empty for a server that needs no key</string>
+    <string name="voice_server_language_title">Send the keyboard language</string>
+    <string name="voice_server_language_subtitle">Tell the server which language you are typing in. Turn this off to let the server detect it</string>
+    <string name="voice_server_test_title">Test the server</string>
+    <string name="voice_server_test_subtitle">Send one second of silence and check that the server answers</string>
+    <string name="voice_server_test_action">Test</string>
+    <string name="voice_server_test_running">Waiting for the server…</string>
+    <string name="voice_server_test_ok">The server answered. Voice typing is ready</string>
     <string name="voice_system_info">Recognition uses the speech recognizer of your device. On Android 12 and later it runs on your device when the language model is installed. If it is not, the audio goes to the recognizer service while you speak. Press and hold the microphone to speak in walkie-talkie style. It stops when you let go.</string>
 
     <!-- The line between a tap and a walkie-talkie hold. -->

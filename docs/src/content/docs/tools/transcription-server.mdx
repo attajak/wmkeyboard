@@ -1,0 +1,121 @@
+---
+title: "Transcription server"
+description: "Dictate through a speech-to-text server you run: speaches, whisper.cpp, or any OpenAI-compatible service."
+sidebar:
+  order: 4.5
+---
+
+import SettingsPath from '@components/SettingsPath.astro';
+
+The transcription server is a third dictation engine, next to the system recognizer and [offline Whisper](/tools/whisper/). The keyboard records what you say and sends the recording to a server you choose. The server sends back the text. The heavy work runs on a computer on your desk or in your rack, not on your phone's battery, and you choose the model.
+
+It works in every edition, Lite included. There is nothing to download on the phone.
+
+## Setting it up
+
+<SettingsPath path="Voice typing" />
+
+1. Under **Engine**, set **Recognition engine** to **Transcription server**.
+2. In the **Transcription server** group that appears, fill in **Server address**. For a server on your own network it looks like `http://192.168.1.10:8000/v1`.
+3. Fill in **Model** if your server needs one (see the recipes below). Fill in **API key** if it asks for one.
+4. Press **Test** on **Test the server**. The keyboard sends one second of silence and says whether the server answered. If it fails, it shows the same message a failed dictation would show.
+
+Dictation then works the way it does with offline Whisper. Speak, then press the microphone when you are done (or let the 30-second clip fill). The phrase lands a moment later, with [spoken punctuation](/tools/voice/), spacing and undo applied as usual. **Keep listening** chains the next phrase the same way.
+
+**Send the keyboard language** is on by default. It tells the server the language of your active layout, which is faster and more accurate than letting it guess from a short clip. Turn it off if you dictate in two languages on one layout and want the server to detect which one you are speaking.
+
+## The address
+
+Type the server's API root, up to and including the version segment, the same way the AI tool's [Other service](/tools/ai/#any-other-openai-compatible-service) asks for it. The keyboard adds `/audio/transcriptions` itself.
+
+| You type | The keyboard sends to |
+|---|---|
+| `http://192.168.1.10:8000/v1` | `http://192.168.1.10:8000/v1/audio/transcriptions` |
+| `http://192.168.1.10:8000` | `http://192.168.1.10:8000/v1/audio/transcriptions` (a bare address gets `/v1`) |
+| `https://api.groq.com/openai/v1` | `https://api.groq.com/openai/v1/audio/transcriptions` |
+| `http://192.168.1.10:8080/inference` | used as it is (whisper.cpp's own endpoint) |
+
+An address that already ends in `/transcriptions` or `/inference` is used as typed.
+
+## Running a server
+
+The keyboard does not use a protocol of its own. It speaks OpenAI's audio transcription API, which most speech-to-text servers already support. Any of these works.
+
+### speaches (faster-whisper)
+
+[speaches](https://github.com/speaches-ai/speaches) runs faster-whisper behind an OpenAI-compatible API. On a machine with Docker:
+
+```bash
+docker run --detach --publish 8000:8000 --name speaches \
+  --volume hf-hub-cache:/home/ubuntu/.cache/huggingface/hub \
+  ghcr.io/speaches-ai/speaches:latest-cpu
+```
+
+Use the `latest-cuda` image with `--gpus=all` on a machine with an NVIDIA GPU. speaches only runs models you have downloaded, so fetch one once:
+
+```bash
+curl -X POST http://localhost:8000/v1/models/Systran/faster-whisper-small
+```
+
+Then set:
+
+- **Server address**: `http://<computer's address>:8000/v1`
+- **Model**: the id you downloaded, here `Systran/faster-whisper-small`. For English only, `Systran/faster-distil-whisper-small.en` is faster.
+
+### whisper.cpp
+
+[whisper.cpp](https://github.com/ggml-org/whisper.cpp) ships `whisper-server`, a single binary with no Python. Download a model and start it on all interfaces:
+
+```bash
+whisper-server -m models/ggml-base.bin -l auto --host 0.0.0.0 --port 8080 \
+  --inference-path /v1/audio/transcriptions
+```
+
+With `--inference-path` as above, set **Server address** to `http://<computer's address>:8080/v1`. Without it, point the keyboard at `http://<computer's address>:8080/inference`. Leave **Model** empty: whisper-server uses the model it was started with. `-l auto` matters when **Send the keyboard language** is off. Without it whisper-server assumes English.
+
+### Cloud services
+
+The same engine reaches the hosted APIs, if you would rather pay per minute than run a machine:
+
+| Service | Server address | Model |
+|---|---|---|
+| Groq | `https://api.groq.com/openai/v1` | `whisper-large-v3-turbo` |
+| OpenAI | `https://api.openai.com/v1` | `whisper-1` or `gpt-4o-mini-transcribe` |
+
+Both need an **API key**. LocalAI and other OpenAI-compatible gateways work too.
+
+## The protocol
+
+This is everything the keyboard sends and expects, so you can build or proxy a server of your own.
+
+**Request.** `POST <endpoint>` with `Content-Type: multipart/form-data`, and these parts:
+
+| Part | Sent | Contents |
+|---|---|---|
+| `file` | always | the clip, `speech.wav`, `audio/wav`: 16-bit PCM, 16 kHz, mono, up to 30 seconds (under 1 MB) |
+| `model` | when **Model** is filled in | the text of the field |
+| `language` | when **Send the keyboard language** is on and Whisper knows the language | an ISO-639-1 code such as `en`, `bn` or `de` |
+| `response_format` | always | `json` |
+
+An `Authorization: Bearer <key>` header is added when **API key** is filled in. Clips shorter than 0.3 seconds are never sent.
+
+**Reply.** HTTP 200 with `{"text": "the words"}`. Other fields are ignored. A plain-text body is accepted too, and is used as the transcript.
+
+**Errors.** Any status outside 200–299 fails the phrase. When the body is `{"error": {"message": "…"}}`, that message is what the voice panel shows. Otherwise the panel shows the keyboard's own wording for the status (401 and 403 read as a rejected key, 429 as a rate limit).
+
+Timeouts are 10 seconds to connect and 60 seconds for the reply.
+
+## Privacy
+
+With this engine, the recording of each phrase leaves your phone. It goes to the address you typed and nowhere else, and only after you start dictating. Nothing is sent in the background. The API key is stored with your other settings and is left out of backups unless you choose to include API keys. See [Network policy](/privacy/network/).
+
+An `http://` address sends the audio unencrypted. That is fine on your own network. Use `https://` for anything reached over the internet.
+
+Voice typing stays off in password fields, whichever engine is chosen.
+
+## Details & edge cases
+
+- **Mobile data.** [Data saver](/privacy/data-saver/) has a **Transcription server** row. It is allowed by default. Set it to **Ask each time** and the first phrase on mobile data is held with a note. Pressing the microphone again sends it and allows the rest of that session. **Turn off** stops the engine on mobile data.
+- **No address yet.** Choosing the engine without filling in the address makes the voice panel say so, with a shortcut to these settings and a button that switches back to the system recognizer.
+- **Server unreachable.** The panel shows why: no connection, a timeout, or a server that refused the connection. Nothing is typed and the rest of your text is untouched. Press the microphone to try again.
+- **No live words.** Like offline Whisper, the server gets the whole phrase at once, so nothing appears in the field while you speak.

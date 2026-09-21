@@ -1012,6 +1012,7 @@ internal object SettingsRowIcons {
         put(R.string.datasaver_animated_emoji_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.datasaver_downloads_title) { Icons.Outlined.CloudDownload }
         put(R.string.datasaver_ai_title) { Icons.Outlined.AutoAwesome }
+        put(R.string.datasaver_voice_title) { Icons.Outlined.Dns }
         // The signpost left behind on the languages screen, where the metered
         // download confirmation used to live.
         put(R.string.langemoji_lang_metered_title) { Icons.Outlined.DataSaverOn }
@@ -1056,6 +1057,8 @@ internal object SettingsRowIcons {
         put(R.string.voice_punctuation_title) { Icons.Outlined.MoreHoriz }
         put(R.string.voice_engine_title) { Icons.Outlined.GraphicEq }
         put(R.string.voice_translate_title) { Icons.Outlined.Translate }
+        put(R.string.voice_server_language_title) { Icons.Outlined.Language }
+        put(R.string.voice_server_test_title) { Icons.Outlined.Dns }
         put(R.string.voice_hold_title) { Icons.Outlined.TouchApp }
         put(R.string.models_whisper_fallback_title) { Icons.Outlined.Memory }
         put(R.string.tooldetail_grammar_dialect_title) { Icons.Outlined.Language }

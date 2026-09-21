@@ -413,6 +413,7 @@ import com.wasimaster.wmkeyboard.tools.R as ToolsR
 import java.util.Locale
 import java.util.TimeZone
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
+import com.wasimaster.wmkeyboard.core.tools.TranscriptionClient
 import com.wasimaster.wmkeyboard.core.tools.ToolHttpException
 import com.wasimaster.wmkeyboard.core.tools.CharState
 import com.wasimaster.wmkeyboard.core.tools.TranslateClient
@@ -459,7 +460,9 @@ import com.wasimaster.wmkeyboard.core.voice.VoiceInputEngine
 import com.wasimaster.wmkeyboard.core.voice.VoicePunctuation
 import com.wasimaster.wmkeyboard.core.voice.VoiceCasing
 import com.wasimaster.wmkeyboard.core.voice.VoiceSpacing
+import com.wasimaster.wmkeyboard.core.voice.WavEncoder
 import com.wasimaster.wmkeyboard.core.voice.WhisperRecorder
+import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperLanguages
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperEngine
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperException
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperModel
@@ -2173,6 +2176,17 @@ open class WMKeyboardService : InputMethodService() {
      * whatever [whisperModel] resolves to when the clip finishes.
      */
     private var whisperCapture: Pair<WhisperModel, String>? = null
+    /**
+     * The language id [whisperRecorder] was started against when the clip is
+     * for the transcription server (#286) rather than a local model. Null for
+     * any other capture. Pinned for the same reason as [whisperCapture].
+     */
+    private var serverCapture: String? = null
+    /**
+     * Data saving held the last server clip back with an ASK: the next mic tap
+     * is the user's "go ahead", and grants [MeteredFeature.CLOUD_VOICE].
+     */
+    private var voiceMeteredAsked = false
     /**
      * True while a key from the voice panel's own action rail is being
      * dispatched, so it does not end the dictation session the way typing on the
@@ -17297,6 +17311,7 @@ open class WMKeyboardService : InputMethodService() {
             // Ignore taps while finishing or transcribing — the result is coming.
             VoiceStatus.FINISHING, VoiceStatus.TRANSCRIBING -> {}
             else -> {
+                if (voiceMeteredAsked) grantMetered(MeteredFeature.CLOUD_VOICE)
                 voiceSilentRetries = 0
                 startVoice()
             }
@@ -17380,6 +17395,39 @@ open class WMKeyboardService : InputMethodService() {
             fail(VoiceStatus.NEED_PERMISSION)
             return
         }
+        val server = serverVoiceSelected()
+        if (server && _uiState.value.settings.whisper.serverUrl.isBlank()) {
+            // The server engine is chosen but has no address: say so, with the
+            // same way out the missing Whisper model gets.
+            _uiState.update {
+                it.copy(
+                    voice = it.voice.copy(
+                        status = VoiceStatus.IDLE, languageTag = tag, remote = true,
+                        serverNeedsSetup = true, whisper = false, whisperNeedsModel = false,
+                        partial = "", level = 0f, errorMessage = null,
+                    ),
+                )
+            }
+            return
+        }
+        voiceMeteredAsked = false
+        if (server) {
+            val decision = dataSaverStatus.decide(MeteredFeature.CLOUD_VOICE)
+            if (decision != MeteredDecision.ALLOWED) {
+                voiceMeteredAsked = decision == MeteredDecision.ASK
+                fail(
+                    VoiceStatus.ERROR,
+                    getString(
+                        if (voiceMeteredAsked) {
+                            R.string.ime_voice_server_metered_ask
+                        } else {
+                            R.string.ime_voice_server_metered_blocked
+                        },
+                    ),
+                )
+                return
+            }
+        }
         val whisperModel = whisperModel()
         val whisperSelected = isWhisperEnabled() && _uiState.value.settings.whisper.engine == "whisper"
         if (whisperSelected && whisperModel == null) {
@@ -17389,13 +17437,14 @@ open class WMKeyboardService : InputMethodService() {
                 it.copy(
                     voice = it.voice.copy(
                         status = VoiceStatus.IDLE, languageTag = tag, whisper = true,
-                        whisperNeedsModel = true, partial = "", level = 0f, errorMessage = null,
+                        whisperNeedsModel = true, remote = false, serverNeedsSetup = false,
+                        partial = "", level = 0f, errorMessage = null,
                     ),
                 )
             }
             return
         }
-        if (whisperModel == null && !voiceEngine.isAvailable()) {
+        if (!server && whisperModel == null && !voiceEngine.isAvailable()) {
             fail(VoiceStatus.UNAVAILABLE)
             return
         }
@@ -17414,12 +17463,14 @@ open class WMKeyboardService : InputMethodService() {
                     status = VoiceStatus.LISTENING, languageTag = tag,
                     partial = "", level = 0f, errorMessage = null,
                     whisper = whisperModel != null,
+                    remote = server,
                     translate = _uiState.value.settings.whisper.translate,
                     whisperNeedsModel = false,
+                    serverNeedsSetup = false,
                 ),
             )
         }
-        if (whisperModel != null) {
+        if (whisperModel != null || server) {
             startWhisperCapture(whisperModel, generation)
             return
         }
@@ -17545,6 +17596,10 @@ open class WMKeyboardService : InputMethodService() {
      * the layout the way the system recognizer's locale does: switching to the
      * German layout switches to whatever model handles German.
      */
+    /** The transcription server is the chosen engine (#286). Every flavour has it. */
+    private fun serverVoiceSelected(): Boolean =
+        _uiState.value.settings.whisper.engine == "server"
+
     private fun whisperModel(): WhisperModel? {
         val s = _uiState.value.settings
         if (!isWhisperEnabled() || s.whisper.engine != "whisper") return null
@@ -17561,9 +17616,14 @@ open class WMKeyboardService : InputMethodService() {
      * Whisper transcribes a whole clip, so nothing commits until recording stops
      * (a mic tap, or the 30-second window filling). The pulse ring follows the
      * mic level while recording.
+     *
+     * A null [model] records the clip for the transcription server instead:
+     * the capture is the same, only [finishWhisper] sends it somewhere else.
      */
-    private fun startWhisperCapture(model: WhisperModel, generation: Int) {
-        whisperCapture = model to _uiState.value.language.id
+    private fun startWhisperCapture(model: WhisperModel?, generation: Int) {
+        val languageId = _uiState.value.language.id
+        whisperCapture = model?.let { it to languageId }
+        serverCapture = if (model == null) languageId else null
         val recorder = WhisperRecorder(
             onLevel = { level ->
                 if (generation != voiceGeneration) return@WhisperRecorder
@@ -17608,6 +17668,12 @@ open class WMKeyboardService : InputMethodService() {
         micBlockWatcher.stop()
         val capture = whisperCapture
         whisperCapture = null
+        val serverLanguage = serverCapture
+        serverCapture = null
+        if (serverLanguage != null) {
+            finishServerClip(recorder, serverLanguage, userStopped)
+            return
+        }
         val model = capture?.first
         val languageId = capture?.second ?: _uiState.value.language.id
         val gen = voiceGeneration
@@ -17662,6 +17728,59 @@ open class WMKeyboardService : InputMethodService() {
                                 voice = it.voice.copy(
                                     status = VoiceStatus.ERROR, partial = "", level = 0f,
                                     errorMessage = text,
+                                ),
+                            )
+                        }
+                    }
+            }
+        }
+    }
+
+    /**
+     * Sends a finished clip to the transcription server (#286) and commits what
+     * comes back through [commitWhisperResult], so it is punctuated, spaced,
+     * learned and undoable exactly like an offline Whisper phrase. The request
+     * runs on IO and is dropped if the session moved on meanwhile; a network
+     * failure lands as the panel's error line.
+     */
+    private fun finishServerClip(recorder: WhisperRecorder, languageId: String, userStopped: Boolean) {
+        val gen = voiceGeneration
+        val tag = _uiState.value.voice.languageTag
+        val server = _uiState.value.settings.whisper
+        // The server detects the language itself when told nothing, and a code
+        // Whisper does not know would get the request refused.
+        val language = if (server.serverSendLanguage) WhisperLanguages.codeForLanguage(languageId) else null
+        _uiState.update {
+            it.copy(voice = it.voice.copy(status = VoiceStatus.TRANSCRIBING, partial = "", level = 0f))
+        }
+        serviceScope.launch(Dispatchers.IO) {
+            val pcm = runCatching { recorder.stop() }.getOrDefault(FloatArray(0))
+            if (gen != voiceGeneration) return@launch
+            // A tap-and-release is not speech; uploading it only earns a
+            // server's filler text ("Thank you.") for a phrase nobody said.
+            val result = if (pcm.size < MIN_SERVER_CLIP_SAMPLES) {
+                Result.success("")
+            } else {
+                runCatching {
+                    TranscriptionClient.transcribe(
+                        server.serverUrl,
+                        server.serverKey,
+                        server.serverModel,
+                        language,
+                        WavEncoder.encode(pcm),
+                    )
+                }
+            }
+            withContext(Dispatchers.Main) {
+                if (gen != voiceGeneration) return@withContext
+                result
+                    .onSuccess { commitWhisperResult(it, tag, userStopped) }
+                    .onFailure { e ->
+                        _uiState.update {
+                            it.copy(
+                                voice = it.voice.copy(
+                                    status = VoiceStatus.ERROR, partial = "", level = 0f,
+                                    errorMessage = ToolHttp.friendlyMessage(this@WMKeyboardService, e),
                                 ),
                             )
                         }
@@ -17868,6 +17987,7 @@ open class WMKeyboardService : InputMethodService() {
         if (generation != voiceGeneration) return
         voiceGeneration++
         whisperCapture = null
+        serverCapture = null
         whisperRecorder?.let { rec ->
             whisperRecorder = null
             serviceScope.launch(Dispatchers.IO) { runCatching { rec.stop() } }
@@ -18262,6 +18382,7 @@ open class WMKeyboardService : InputMethodService() {
             withTimeoutOrNull(ENGINE_SWITCH_TIMEOUT_MS) {
                 _uiState.first { it.settings.whisper.engine == "system" }
             }
+            _uiState.update { it.copy(voice = it.voice.copy(serverNeedsSetup = false, remote = false)) }
             // The panel could have been closed while that landed, and a mic opened
             // with no dictation surface on screen is a privacy dot nobody asked for.
             if (!voiceSessionAlive()) return@launch
@@ -28610,6 +28731,9 @@ open class WMKeyboardService : InputMethodService() {
          * visible delay.
          */
         private const val ENGINE_SWITCH_TIMEOUT_MS = 1_000L
+
+        /** 0.3 s at 16 kHz: shorter than any word, so never worth an upload. */
+        private const val MIN_SERVER_CLIP_SAMPLES = 4_800
 
         /** See [voiceBarDockSlopPx]. */
         private const val VOICE_BAR_DOCK_SLOP_DP = 72

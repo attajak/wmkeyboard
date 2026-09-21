@@ -3970,7 +3970,10 @@ fun VoiceBarSettings.plainTyping(): Boolean = typingMode == VoiceBarSettings.TYP
  * DataStore keys stay flat.
  */
 data class WhisperSettings(
-    /** Dictation backend: "system" = OS SpeechRecognizer, "whisper" = offline LiteRT. */
+    /**
+     * Dictation backend: "system" = OS SpeechRecognizer, "whisper" = offline
+     * LiteRT, "server" = a transcription server the user runs (#286).
+     */
     val engine: String = "system",
     /**
      * The fallback Whisper catalog id — the model used for any language without
@@ -3987,6 +3990,21 @@ data class WhisperSettings(
     val modelByLang: Map<String, String> = emptyMap(),
     /** Force Whisper to translate speech to English instead of transcribing verbatim. */
     val translate: Boolean = false,
+    /**
+     * The transcription server's API root for the "server" engine, e.g.
+     * `http://192.168.1.10:8000/v1`. Any server that speaks OpenAI's
+     * `/audio/transcriptions` works; see `TranscriptionClient.endpoint`.
+     */
+    val serverUrl: String = "",
+    /** Bearer token for the server; blank sends no Authorization header. */
+    val serverKey: String = "",
+    /** The `model` field; blank leaves it out so the server uses its default. */
+    val serverModel: String = "",
+    /**
+     * Send the active layout's language with each clip. Off lets the server
+     * detect it, which suits people who dictate two languages on one layout.
+     */
+    val serverSendLanguage: Boolean = true,
 )
 
 /**
@@ -6753,6 +6771,7 @@ class SettingsRepository(private val context: Context) {
         private val DS_ANIMATED_EMOJI = stringPreferencesKey("data_saver_animated_emoji")
         private val DS_DOWNLOADS = stringPreferencesKey("data_saver_downloads")
         private val DS_CLOUD_AI = stringPreferencesKey("data_saver_cloud_ai")
+        private val DS_CLOUD_VOICE = stringPreferencesKey("data_saver_cloud_voice")
         private val BACKSPACE_SWIPE_DELETE = booleanPreferencesKey("backspace_swipe_delete")
         private val HARDWARE_KEYBOARD_INPUT = booleanPreferencesKey("hardware_keyboard_input")
         private val HW_SHORTCUTS_ENABLED = booleanPreferencesKey("hw_shortcuts_enabled")
@@ -7054,6 +7073,10 @@ class SettingsRepository(private val context: Context) {
         private val WHISPER_MODEL_ID = stringPreferencesKey("whisper_model_id")
         private val WHISPER_MODEL_BY_LANG = stringPreferencesKey("whisper_model_by_lang")
         private val WHISPER_TRANSLATE = booleanPreferencesKey("whisper_translate")
+        private val VOICE_SERVER_URL = stringPreferencesKey("voice_server_url")
+        private val VOICE_SERVER_KEY = stringPreferencesKey("voice_server_key")
+        private val VOICE_SERVER_MODEL = stringPreferencesKey("voice_server_model")
+        private val VOICE_SERVER_SEND_LANGUAGE = booleanPreferencesKey("voice_server_send_language")
         private val CAMERA_PREFER_FRONT = booleanPreferencesKey("camera_prefer_front")
         private val CAMERA_TIMER_SECONDS = intPreferencesKey("camera_timer_seconds")
         private val CAMERA_CAPTURE_MAX_PX = intPreferencesKey("camera_capture_max_px")
@@ -8399,6 +8422,11 @@ class SettingsRepository(private val context: Context) {
                 modelByLang = p[WHISPER_MODEL_BY_LANG]?.let { decodeWhisperModelByLang(it) }
                     ?: defaults.whisper.modelByLang,
                 translate = p[WHISPER_TRANSLATE] ?: defaults.whisper.translate,
+                serverUrl = p[VOICE_SERVER_URL] ?: defaults.whisper.serverUrl,
+                serverKey = p[VOICE_SERVER_KEY] ?: defaults.whisper.serverKey,
+                serverModel = p[VOICE_SERVER_MODEL] ?: defaults.whisper.serverModel,
+                serverSendLanguage = p[VOICE_SERVER_SEND_LANGUAGE]
+                    ?: defaults.whisper.serverSendLanguage,
             ),
             camera = CameraSettings(
                 preferFront = p[CAMERA_PREFER_FRONT] ?: defaults.camera.preferFront,
@@ -9248,6 +9276,18 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setWhisperTranslate(value: Boolean) =
         editPrefs { it[WHISPER_TRANSLATE] = value }
+
+    suspend fun setVoiceServerUrl(value: String) =
+        editPrefs { it[VOICE_SERVER_URL] = value.trim().trimEnd('/') }
+
+    suspend fun setVoiceServerKey(value: String) =
+        editPrefs { it[VOICE_SERVER_KEY] = value.trim() }
+
+    suspend fun setVoiceServerModel(value: String) =
+        editPrefs { it[VOICE_SERVER_MODEL] = value.trim() }
+
+    suspend fun setVoiceServerSendLanguage(value: Boolean) =
+        editPrefs { it[VOICE_SERVER_SEND_LANGUAGE] = value }
 
     suspend fun setCameraPreferFront(value: Boolean) =
         editPrefs { it[CAMERA_PREFER_FRONT] = value }
@@ -10689,6 +10729,7 @@ class SettingsRepository(private val context: Context) {
             animatedEmoji = p.policy(DS_ANIMATED_EMOJI, d.animatedEmoji),
             downloads = p.policy(DS_DOWNLOADS, legacyDownloads),
             cloudAi = p.policy(DS_CLOUD_AI, d.cloudAi),
+            cloudVoice = p.policy(DS_CLOUD_VOICE, d.cloudVoice),
         )
     }
 
@@ -12644,6 +12685,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setDataSaverCloudAi(value: MeteredPolicy) =
         editPrefs { it[DS_CLOUD_AI] = value.name }
+
+    suspend fun setDataSaverCloudVoice(value: MeteredPolicy) =
+        editPrefs { it[DS_CLOUD_VOICE] = value.name }
 
     /**
      * Picks [value] as [langId]'s numeral system. [NumeralSystem.AUTO] drops the
