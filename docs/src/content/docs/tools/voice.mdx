@@ -108,7 +108,7 @@ That last paragraph describes the default mode. If you want the mic to survive t
 
 <SettingsPath path="Voice typing / Spoken punctuation" />
 
-With this on (the default), saying certain words types the punctuation mark instead of the word itself. It only applies to finished phrases, never to the live partial text, and it knows two sets of words: English and Bangla.
+With this on (the default), saying certain words types the punctuation mark instead of the word itself. It only applies to finished phrases, never to the live partial text, and it knows two sets of words: English and Bangla. The sentence marks come first:
 
 | Say (English) | Types | Say (Bangla) | Types |
 |---|---|---|---|
@@ -122,6 +122,40 @@ With this on (the default), saying certain words types the punctuation mark inst
 | "semicolon" | `;` | "সেমিকোলন" | `;` |
 
 Punctuation attaches straight to the word before it with no space. The trade-off is deliberate. While this is on, a sentence that genuinely uses one of these words as a word types the symbol instead. Turn it off if you want to say "period" or "comma" out loud and have it come out as a word.
+
+English also knows the marks past the end of a sentence. Each one sits against its neighbours the way it would if you had typed it: an opening mark closes up to the word after it, a joining mark closes up on both sides, and an operator keeps a space on each side.
+
+| Say | Types | Spacing |
+|---|---|---|
+| "ellipsis" / "dot dot dot" | `…` | after the word: `wait…` |
+| "open quote", "close quote" | `"` | around the words: `said "hi" twice` |
+| "open parenthesis", "close parenthesis" | `(` `)` | around the words: `see (page two) now` |
+| "open bracket", "close bracket" | `[` `]` | same |
+| "open brace", "close brace" | `{` `}` | same |
+| "apostrophe" | `'` | joins: `rock'n` |
+| "hyphen" | `-` | joins: `well-known` |
+| "dash" | `-` | stands apart: `one - two` |
+| "en dash", "em dash" | `–` `—` | joins |
+| "slash" / "forward slash" | `/` | joins: `and/or` |
+| "backslash" | `\` | joins |
+| "underscore" | `_` | joins: `snake_case` |
+| "at sign" | `@` | joins: `me@example` |
+| "caret" | `^` | joins |
+| "hashtag" / "hash sign" / "pound sign" | `#` | before the word: `#blessed` |
+| "dollar sign" | `$` | before the word: `$5` |
+| "tilde" | `~` | before the word |
+| "percent sign" | `%` | after the word: `50%` |
+| "degree sign" | `°` | after the word |
+| "asterisk" | `*` | after the word |
+| "copyright sign", "registered sign", "trademark sign" | `©` `®` `™` | after the word |
+| "ampersand" | `&` | stands apart: `salt & pepper` |
+| "plus sign", "equals sign" | `+` `=` | stands apart: `two + two = four` |
+| "greater than sign", "less than sign" | `>` `<` | stands apart |
+| "vertical bar" | `\|` | stands apart |
+
+A symbol whose plain name is an everyday word only answers to its longer name, which is why so many of these end in "sign". "Fifty percent is greater than ten plus one" stays a sentence; "fifty percent sign" is `50%`.
+
+A language other than English or Bangla has no table, so its dictation is typed exactly as it was heard.
 
 ## Language and engine
 
