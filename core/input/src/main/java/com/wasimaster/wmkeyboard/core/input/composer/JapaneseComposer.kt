@@ -34,6 +34,23 @@ object JapaneseComposer : Composer {
     /** Mora count past which the lattice gives way; nobody types this far uncommitted. */
     private const val MAX_LATTICE_UNITS = 24
 
+    /**
+     * Log-penalty for each kana read with a mark the user did not type.
+     *
+     * Far smaller than the ln(0.15) a Fuzzy Pinyin guess pays, for two reasons.
+     * Leaving marks off is how these layouts get typed, not a slip, so a guess
+     * here is much likelier to be right. And `ja_kana` carries `30000 - cost`
+     * from Mozc rather than a count, which is already a logarithm: 学校 and the
+     * given name 葛洪 sit at 26742 and 23287, 0.14 apart once the lattice takes
+     * its own log. Measured against the real pack, ln(0.15) left かつこう
+     * answering 葛洪, 勝幸 and buried 学校 off the strip; at this weight it leads
+     * with 学校, しゆきよう with 授業, こはん with ご飯, while かき still opens 書き,
+     * 描き, 下記 before 鍵 arrives. So: an exact reading wins a near tie and a
+     * clearly commoner marked word wins otherwise. A pack rebuilt on real counts
+     * needs this re-measured.
+     */
+    private const val LOOSE_PENALTY = -0.035
+
     override fun composeBuffer(buffer: String): String = Kana.toHiragana(buffer)
 
     override fun candidates(buffer: String): List<String> = candidates(buffer, LIMIT)
@@ -85,12 +102,21 @@ object JapaneseComposer : Composer {
             // to consumed *romaji* by the spans the transducer already tracked.
             // charPerUnit is off: a kanji takes however many mora it takes, so the
             // one-character-per-unit rule that sorts Chinese out is simply false.
-            val input = Lattice.input(spans.map { it.kana }, spans.map { it.romajiLen })
+            val input = latticeInput(buffer, spans)
+            // A missing mark can sit on any kana of a word, not just its first
+            // two, and leaving it off is how the pad is typed rather than a slip
+            // — so the guess cap that suits Fuzzy Pinyin is lifted, and the
+            // dictionary prune bounds the cost the way it does for T9.
+            val loose = input.options.any { it.size > 1 }
             val decoded = Lattice.decode(
                 input,
                 CjkDictionaries.japanese,
                 CjkDictionaries.ngrams,
-                Lattice.Opts(limit = LOOKUP_LIMIT, charPerUnit = false),
+                Lattice.Opts(
+                    limit = LOOKUP_LIMIT,
+                    charPerUnit = false,
+                    maxAmbiguousSpan = if (loose) Int.MAX_VALUE else 2,
+                ),
             )
             for (cand in decoded) out.getOrPut(cand.text) { Cand(cand.text, cand.consumed, cand.reading) }
         }
@@ -106,6 +132,38 @@ object JapaneseComposer : Composer {
         // trailing kana inflection (…って, …した) back onto a stem reading before
         // dict lookup here, so 食べた converts from `tabeta`. Needs a conjugation
         // table + stem index in the pack.
+    }
+
+    /**
+     * The lattice input for [spans]: one unit per transducer step, and — with
+     * [CjkConfig.looseKanaMarks] on — each plain kana also offered as the forms
+     * the 小゛゜ key would have made of it (か as が, つ as っ or づ, や as ゃ),
+     * behind [LOOSE_PENALTY], so かつこう still finds 学校 under がっこう.
+     *
+     * Only a kana the user typed *as kana* is widened. On the flick pad and the
+     * JIS kana layout a mark is an extra key, which is what makes skipping it
+     * worth anything; in romaji `ga` costs exactly what `ka` does, so reading `ka`
+     * as が would only crowd the strip. An identity span is how the two are told
+     * apart: kana passes through [Kana.transduce] unchanged, one char for one.
+     *
+     * And only in that direction. A が or a っ was asked for by name, and is
+     * never read back as か or つ.
+     */
+    private fun latticeInput(buffer: String, spans: List<Kana.KanaSpan>): Lattice.Input {
+        val readings = spans.map { it.kana }
+        val inputLens = spans.map { it.romajiLen }
+        if (!CjkConfig.looseKanaMarks) return Lattice.input(readings, inputLens)
+        val options = ArrayList<Array<String>>(spans.size)
+        var pos = 0
+        for (span in spans) {
+            val typedAsKana = span.romajiLen == 1 && span.kana.length == 1 && buffer[pos] == span.kana[0]
+            val marked = if (typedAsKana) Kana.markedForms(span.kana[0]) else ""
+            options.add(Array(1 + marked.length) { o -> if (o == 0) span.kana else marked[o - 1].toString() })
+            pos += span.romajiLen
+        }
+        val input = Lattice.options(options, inputLens)
+        for (unit in input.penalties) for (o in 1 until unit.size) unit[o] = LOOSE_PENALTY
+        return input
     }
 
     private val cache = RankCache<List<Cand>>()
@@ -174,6 +232,13 @@ object Kana {
      * (な, ん, …) maps to itself, so cycling it is a no-op.
      */
     fun cycleVariant(kana: Char): Char = VARIANT_NEXT[kana] ?: kana
+
+    /**
+     * The small, dakuten and handakuten forms of a plain kana — everything the
+     * 小゛゜ key would cycle it through (か→"が", は→"ばぱ", つ→"っづ") — or empty
+     * when [kana] has none or already carries a mark of its own.
+     */
+    fun markedForms(kana: Char): String = MARKED_FORMS[kana].orEmpty()
 
     /** Hiragana → katakana (the two blocks differ by a fixed 0x60 offset). */
     fun toKatakana(hiragana: String): String = buildString {
@@ -265,6 +330,10 @@ object Kana {
             for (i in ring.indices) put(ring[i], ring[(i + 1) % ring.length])
         }
     }
+
+    /** [VARIANT_CYCLES] keyed by each ring's plain kana: か → "が", は → "ばぱ". */
+    private val MARKED_FORMS: Map<Char, String> =
+        VARIANT_CYCLES.associate { ring -> ring[0] to ring.substring(1) }
 
     /** Base (undakuten) full-width katakana → half-width; dakuten handled via NFD. */
     private val HALF_KATAKANA: Map<Char, Char> = buildMap {

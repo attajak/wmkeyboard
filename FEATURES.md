@@ -878,6 +878,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Japanese — Romaji, 12-key Flick, and Kana JIS layouts all feeding one composer
     - Romaji to kana transduction — Tracks the romaji span behind every kana unit so consumed lengths report keystrokes, not morae
     - Flick pad — Per-key four-direction flick map in the layout data (あ flicks to い/う/え/お)
+    - Kana without marks — かつこう finds 学校 (がっこう): a plain kana typed on Flick or Kana JIS also reads as its small, dakuten or handakuten form behind a small per-mark penalty tuned against the real pack; marks are only ever added, and romaji is never widened
     - Kana-variant key — 小゛゜ cycles the last kana through dakuten/handakuten/small forms (か to が, は to ば to ぱ, つ to っ to づ)
     - Always usable as a bare kana keyboard — With no pack downloaded the reading still commits as hiragana, katakana or half-width katakana
     - Tap resolved by index, not text — ja_kana lists 行 under い, いき, ゆき and こう, so matching by string would eat a mora the user never chose

@@ -457,6 +457,7 @@
   {"title":"Word pairs","name":"languages_word_pairs_title","route":"languages","screens":["Languages & layouts"],"screen":false},
   {"title":"Traditional characters","name":"languages_cjk_traditional_title","route":"languages","screens":["Languages & layouts"],"screen":false},
   {"title":"Lazy pronunciation (懶音)","name":"languages_cjk_lazy_title","route":"languages","screens":["Languages & layouts"],"screen":false},
+  {"title":"Match kana without marks","name":"languages_cjk_loose_marks_title","route":"languages","screens":["Languages & layouts"],"screen":false},
   {"title":"Fuzzy Pinyin","name":"languages_cjk_fuzzy_title","route":"languages","screens":["Languages & layouts"],"screen":false},
   {"title":"Emoji button in toolbar","name":"langemoji_emoji_toolbar_title","route":"emoji","screens":["Emoji"],"screen":false},
   {"title":"Full-screen emoji panel","name":"langemoji_emoji_full_bleed_title","route":"emoji","screens":["Emoji"],"screen":false},

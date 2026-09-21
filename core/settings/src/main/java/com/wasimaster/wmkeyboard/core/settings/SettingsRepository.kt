@@ -3822,6 +3822,14 @@ data class CjkSettings(
      * nothing back from a dictionary that files it under nei5.
      */
     val jyutpingLazy: Boolean = true,
+    /**
+     * Japanese: on the flick pad and the JIS kana layout, read a plain kana as
+     * its small, dakuten or handakuten form too, so かつこう finds 学校 (#293).
+     * On by default, as it is in Google Japanese Input: every mark there is an
+     * extra key, an exactly-typed reading still wins a near tie, and romaji
+     * typing never sees it.
+     */
+    val kanaLooseMarks: Boolean = true,
     /** Which region's vocabulary Traditional output should prefer. */
     val hanRegion: HanVariant.HanRegion = HanVariant.HanRegion.GENERIC,
 )
@@ -6829,6 +6837,7 @@ class SettingsRepository(private val context: Context) {
         private val PINYIN_DOUBLE_PINYIN = stringPreferencesKey("pinyin_double_pinyin")
         private val CJK_TRADITIONAL_OUTPUT = booleanPreferencesKey("cjk_traditional_output")
         private val JYUTPING_LAZY = booleanPreferencesKey("jyutping_lazy")
+        private val KANA_LOOSE_MARKS = booleanPreferencesKey("kana_loose_marks")
         private val CJK_HAN_REGION = stringPreferencesKey("cjk_han_region")
         private val ONE_HANDED_MODE = stringPreferencesKey("one_handed_mode")
         // One-handed width leaves room for the rail on the inner edge, so it is
@@ -7930,6 +7939,7 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.cjk.pinyinDoublePinyin,
                 traditionalOutput = p[CJK_TRADITIONAL_OUTPUT] ?: defaults.cjk.traditionalOutput,
                 jyutpingLazy = p[JYUTPING_LAZY] ?: defaults.cjk.jyutpingLazy,
+                kanaLooseMarks = p[KANA_LOOSE_MARKS] ?: defaults.cjk.kanaLooseMarks,
                 hanRegion = p[CJK_HAN_REGION]
                     ?.let { runCatching { HanVariant.HanRegion.valueOf(it) }.getOrNull() }
                     ?: defaults.cjk.hanRegion,
@@ -12928,6 +12938,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setJyutpingLazy(value: Boolean) =
         context.dataStore.edit { it[JYUTPING_LAZY] = value }
+
+    suspend fun setKanaLooseMarks(value: Boolean) =
+        context.dataStore.edit { it[KANA_LOOSE_MARKS] = value }
 
     suspend fun setCjkHanRegion(value: HanVariant.HanRegion) =
         context.dataStore.edit { it[CJK_HAN_REGION] = value.name }

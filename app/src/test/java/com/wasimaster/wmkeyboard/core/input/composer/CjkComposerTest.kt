@@ -37,6 +37,7 @@ class CjkComposerTest {
         CjkConfig.fuzzyPinyin = false
         CjkConfig.doublePinyin = DoublePinyinScheme.OFF
         CjkConfig.traditionalOutput = false
+        CjkConfig.looseKanaMarks = false
         HanVariant.s2t = emptyMap()
     }
 
@@ -236,6 +237,89 @@ class CjkComposerTest {
         // A plain-kana or unknown choice consumes the whole buffer.
         assertEquals(5, JapaneseComposer.consumedFor("nihon", "にほん"))
         assertEquals(5, JapaneseComposer.consumedFor("nihon", "??"))
+    }
+
+    // --- Kana without marks (#293) ----------------------------------------------
+
+    @Test
+    fun `a plain kana lists the forms the variant key would make of it`() {
+        assertEquals("が", Kana.markedForms('か'))
+        assertEquals("ばぱ", Kana.markedForms('は'))
+        assertEquals("っづ", Kana.markedForms('つ'))
+        assertEquals("ゃ", Kana.markedForms('や'))
+        // Nothing to add to a kana with no variant, or to one already marked.
+        assertEquals("", Kana.markedForms('な'))
+        assertEquals("", Kana.markedForms('が'))
+        assertEquals("", Kana.markedForms('っ'))
+    }
+
+    /**
+     * A table on the real pack's scale. `ja_kana` frequencies are `30000 - cost`,
+     * so ordinary words sit between 22000 and 27000, and the pack's total is in
+     * the billions — which is what makes a second word expensive. The filler row
+     * supplies that total; three toy rows on their own would make 勝つ + 乞う
+     * nearly free and say nothing about what a device does.
+     */
+    private fun kanaPack(vararg rows: String): ConversionDictionary =
+        ConversionDictionary.parse(rows.asSequence() + "ん\tん\t2000000000")
+
+    @Test
+    fun `kana typed without marks finds the marked reading`() {
+        CjkDictionaries.japanese = kanaPack(
+            "がっこう\t学校\t26742", "かつこう\t葛洪\t23287", "かつ\t勝つ\t25000", "こう\t乞う\t25000",
+        )
+        assertTrue("off by default here", "学校" !in JapaneseComposer.candidates("かつこう"))
+
+        CjkConfig.looseKanaMarks = true
+        // The everyday word leads the given name spelled exactly, and it eats
+        // the whole buffer: four kana, four input chars.
+        val cands = JapaneseComposer.candidates("かつこう")
+        assertEquals("学校", cands.first())
+        assertEquals(4, JapaneseComposer.consumedFor("かつこう", "学校"))
+        // Nothing the exact spelling offered has gone anywhere.
+        assertTrue("葛洪" in cands)
+        assertEquals(2, JapaneseComposer.consumedFor("かつこう", "勝つ"))
+    }
+
+    @Test
+    fun `a missing mark is found anywhere in the word`() {
+        // The fourth kana, past the two-unit cap a spelling guess gets elsewhere.
+        CjkDictionaries.japanese = kanaPack("とうきょう\t東京\t26000")
+        CjkConfig.looseKanaMarks = true
+        assertEquals("東京", JapaneseComposer.candidates("とうきよう").first())
+        assertEquals(5, JapaneseComposer.consumedFor("とうきよう", "東京"))
+    }
+
+    @Test
+    fun `a reading typed exactly wins a near tie and loses a clear one`() {
+        CjkConfig.looseKanaMarks = true
+        CjkDictionaries.japanese = kanaPack("かき\t柿\t25000", "かぎ\t鍵\t25300")
+        var cands = JapaneseComposer.candidates("かき")
+        assertTrue("the exact reading leads", cands.indexOf("柿") < cands.indexOf("鍵"))
+
+        CjkDictionaries.japanese = kanaPack("かき\t柿\t25000", "かぎ\t鍵\t26500")
+        cands = JapaneseComposer.candidates("かき")
+        assertTrue("the much commoner word leads", cands.indexOf("鍵") in 0 until cands.indexOf("柿"))
+    }
+
+    @Test
+    fun `a typed mark is never taken back off`() {
+        CjkDictionaries.japanese = ConversionDictionary.parse(sequenceOf("かき\t柿\t100"))
+        CjkConfig.looseKanaMarks = true
+        assertTrue("柿" !in JapaneseComposer.candidates("がき"))
+        assertTrue("柿" !in JapaneseComposer.candidates("かぎ"))
+    }
+
+    @Test
+    fun `romaji is never widened`() {
+        // `ga` costs what `ka` does on a QWERTY layout, so `kaki` means かき.
+        CjkDictionaries.japanese = ConversionDictionary.parse(
+            sequenceOf("かき\t柿\t100", "かぎ\t鍵\t300"),
+        )
+        CjkConfig.looseKanaMarks = true
+        val cands = JapaneseComposer.candidates("kaki")
+        assertTrue("柿" in cands)
+        assertTrue("鍵" !in cands)
     }
 
     @Test

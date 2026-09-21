@@ -57,7 +57,7 @@ Two independent toggles relax reading matching for imprecise typing:
 - **Fuzzy Pinyin** treats commonly-confused sounds as equivalent, so a syllable typed loosely still finds its characters. It's eleven switches rather than one: six initial groups (zh↔z, ch↔c, sh↔s, n↔l, r↔l, f↔h) and five nasal-ending groups (an↔ang, en↔eng, in↔ing, ian↔iang, uan↔uang), each with a row of its own and all on once the master switch is on. That way you can take the regional nasal endings without paying for n↔l on every syllable that starts with either. Switch one off and a **Match every pair again** row appears to put them all back.
 - **Lazy pronunciation (懶音)**, Cantonese-only, matches the sound mergers common in Hong Kong speech: n↔l, an initial ng- that can drop entirely (我 *ngo5* → *o5*), gw→g and kw→k before a rounded final only (國 *gwok3* → *gok3*, but never 誇 *kwaa1* → *kaa1*), and the coda mergers toward the alveolar place (-ng/-n, -m/-n, -k/-t and -p/-t). It also takes z↔j and c↔ch, which aren't 懶音 at all but Yale-era romanization habit. Every merger works in both directions, because hypercorrection is as common as the merger itself.
 
-Both are off by default, and they change ranking rather than what you can type. A precisely-typed reading still works exactly as before.
+Fuzzy Pinyin is off by default and lazy pronunciation is on, and they change ranking rather than what you can type. A precisely-typed reading still works exactly as before. Japanese has a matching of its own for the flick pad, covered under [Kana without marks](#kana-without-marks).
 
 ## Traditional characters and regional wording
 
@@ -80,6 +80,14 @@ Japanese ships three layouts, all feeding the same composer:
 </PhoneFrame>
 
 All three read the same kana or romaji into `JapaneseComposer`, which converts kana readings to kanji/word candidates using a Mozc-derived dictionary. If nothing in the dictionary matches (or before you've downloaded the pack at all), the reading still commits as plain hiragana, katakana, or half-width katakana, so every Japanese layout works as a bare kana keyboard with zero setup.
+
+### Kana without marks
+
+On Flick and Kana JIS, every small kana, ゛ and ゜ is an extra key. **Match kana without marks** lets you leave them off: type かつこう and the candidates still offer 学校, which the dictionary files under がっこう. Each plain kana is also read as the forms the 小゛゜ key would cycle it through (か as が, は as ば or ぱ, つ as っ or づ, や as ゃ, a vowel as its small form), anywhere in the word and as many times as the word needs, so しゆきよう reaches 授業.
+
+It only ever adds marks. A が or a っ you typed was asked for by name and is never read back as か or つ. Each guessed mark costs the candidate a little, so between two words of about the same frequency the one spelled exactly as you typed it comes first, while a clearly more common marked word leads: かつこう opens with 学校 ahead of the given name 葛洪, and かき still opens with 書き, 描き and 下記 before 鍵 arrives. Nothing the exact spelling offered is removed, so expect a longer list rather than a different one. What's left in the field while you compose is the kana you typed; the marks arrive with the candidate you pick. Picks are learned against the dictionary's reading, so 学校 moves up whether you next type it with its marks or without.
+
+Romaji is never widened. `ga` costs exactly what `ka` does on a QWERTY layout, so `kaki` means かき and nothing else, which keeps the strip as tight as it was.
 
 ## The candidate bar
 
@@ -119,6 +127,7 @@ Opening a Chinese, Cantonese, or Japanese entry from the Languages screen shows 
 | Traditional characters | Off | Shown for Chinese, Cantonese, and Japanese; only has an effect on Chinese and Cantonese |
 | Regional wording (Standard / Taiwan / Hong Kong) | Standard | Same, only shown once Traditional is on |
 | Lazy pronunciation (懶音) | On | Cantonese only |
+| Match kana without marks | On | Japanese only, and only kana typed on Flick or Kana JIS |
 | Fuzzy Pinyin | Off | Chinese only |
 | The eleven fuzzy pairs, one row each | All on | Chinese only, shown while Fuzzy Pinyin is on |
 | Double Pinyin scheme | Off (full Pinyin) | Chinese only |

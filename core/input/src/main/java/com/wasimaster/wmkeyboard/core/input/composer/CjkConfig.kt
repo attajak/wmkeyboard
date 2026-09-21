@@ -62,6 +62,15 @@ object CjkConfig {
     @Volatile
     var lazyJyutping: Boolean = false
         set(value) { field = value; CjkDictionaries.invalidate() }
+
+    /**
+     * Japanese: read a plain kana typed on a kana layout as its small, dakuten or
+     * handakuten form too, so かつこう finds 学校 (がっこう) without the extra
+     * 小゛゜ presses. See [JapaneseComposer].
+     */
+    @Volatile
+    var looseKanaMarks: Boolean = false
+        set(value) { field = value; CjkDictionaries.invalidate() }
 }
 
 /**

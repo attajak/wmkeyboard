@@ -1469,6 +1469,18 @@ private fun CjkDictPackManager(
             ) { on -> scope.launch { repository.setJyutpingLazy(on) } }
         }
 
+        // Japanese-only: on the flick pad every ゛, ゜ and small kana is an extra
+        // key, so かつこう is how がっこう gets typed. Romaji never sees this.
+        item(visible = langId == "ja") {
+            ToggleSetting(
+                R.string.languages_cjk_loose_marks_title,
+                stringResource(R.string.languages_cjk_loose_marks_subtitle),
+                settings.cjk.kanaLooseMarks,
+                info = stringResource(R.string.languages_cjk_loose_marks_info),
+                default = SettingsDefaults.cjk.kanaLooseMarks,
+            ) { on -> scope.launch { repository.setKanaLooseMarks(on) } }
+        }
+
     }
     // Chinese-only: fuzzy pinyin + Double Pinyin scheme, in a card of their own.
     if (langId == "zh") {
