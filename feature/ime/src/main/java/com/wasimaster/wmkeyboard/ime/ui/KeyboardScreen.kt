@@ -4483,7 +4483,7 @@ private fun RowScope.CandidateStrip(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        itemsIndexed(candidates, key = { index, text -> "$index $text" }) { index, suggestion ->
+        itemsIndexed(candidates, key = { index, text -> "$index\u0000$text" }) { index, suggestion ->
             if (index > 0) {
                 VerticalDivider(
                     modifier = Modifier.height(20.dp),
@@ -19849,7 +19849,7 @@ internal fun TextArtGrid(kaomoji: Boolean, onTap: (String) -> Unit) {
             }
             // Keyed by group + entry: a handful of faces appear in more than
             // one mood, and a bare entry key would collide across groups.
-            items(group.items, key = { "${group.name} $it" }) { art ->
+            items(group.items, key = { "${group.name}\u0000$it" }) { art ->
                 TextArtCell(art = art, onTap = onTap)
             }
         }
