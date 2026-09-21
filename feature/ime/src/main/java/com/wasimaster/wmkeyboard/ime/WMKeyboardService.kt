@@ -523,6 +523,7 @@ import com.wasimaster.wmkeyboard.ime.ui.InlineChipPaletteReporter
 import com.wasimaster.wmkeyboard.ime.ui.LocalInlineChipPaletteReporter
 import com.wasimaster.wmkeyboard.ime.ui.LocalSystemNavBarPainter
 import com.wasimaster.wmkeyboard.ime.ui.SystemNavBarPainter
+import com.wasimaster.wmkeyboard.ime.ui.macroOpenIntents
 import com.wasimaster.wmkeyboard.ime.ui.navigationBarWantsDarkIcons
 import android.inputmethodservice.InputMethodService
 import java.io.ByteArrayOutputStream
@@ -23414,16 +23415,8 @@ open class WMKeyboardService : InputMethodService() {
                 Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/" + SelectionMacros.dialDigits(text, masks))),
             )
             SelectionMacro.EMAIL -> startMacroActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$text")))
-            // An address is opened by whatever claims `mailto:`, and plenty of
-            // mail apps claim it only for SENDTO, so that is the second try.
-            SelectionMacro.OPEN -> if (offer.kind == SelectionKind.EMAIL) {
-                startMacroActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse("mailto:$text")),
-                    Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$text")),
-                )
-            } else {
-                startMacroActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SelectionMacros.openableUrl(text))))
-            }
+            // The bar resolves the same list to draw the target app's icon.
+            SelectionMacro.OPEN -> startMacroActivity(*macroOpenIntents(offer.kind, text).toTypedArray())
             SelectionMacro.ADD_CONTACT -> addContact(offer)
             SelectionMacro.MAP -> openMap(offer)
             SelectionMacro.CALENDAR -> addCalendarEvent(offer)

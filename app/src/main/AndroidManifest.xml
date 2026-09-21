@@ -127,6 +127,20 @@
             <action android:name="android.intent.action.SENDTO" />
             <data android:scheme="mailto" />
         </intent>
+        <!-- Web links, so the selection bar's Open chip can tell which app a
+             link lands in (and whether that app is only a browser) and wear
+             its icon. Without it API 30+ hides the handlers that have no
+             launcher entry, and the answer comes back wrong. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+        </intent>
         <!-- Play services, so the two features that need it can be left out on
              a device that does not have it: the document scanner is a Play
              services activity, and the Google Fonts choices come from the font

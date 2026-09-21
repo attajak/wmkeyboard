@@ -650,6 +650,7 @@
          that picks them; only the bar's own furniture is here. -->
     <string name="ime_selection_macro_back_desc">Back to the selection actions</string>
     <string name="ime_selection_macro_stop_label">Stop</string>
+    <string name="ime_selection_macro_open_in_desc">Open in %1$s</string>
     <string name="ime_selection_macro_busy_desc">Working</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Nothing left to undo</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nothing to fix</string>

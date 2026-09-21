@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
 import android.text.format.DateFormat
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.outlined.Undo
 import androidx.compose.material.icons.automirrored.outlined.VolumeUp
+import androidx.compose.material.icons.outlined.ArrowOutward
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.AutoFixHigh
 import androidx.compose.material.icons.outlined.Call
@@ -172,6 +174,7 @@ internal fun SelectionMacroBar(
     var ladder by remember(offer.kind) { mutableStateOf<MacroLadder?>(null) }
     val feedback = LocalKeyPressFeedback.current
     val context = LocalContext.current
+    val linkApp = rememberMacroLinkApp(offer.kind, offer.text, wanted = SelectionMacro.OPEN in offer.macros)
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -233,6 +236,7 @@ internal fun SelectionMacroBar(
                             speaking = macro == SelectionMacro.READ_ALOUD && offer.speaking,
                             swatch = if (macro == SelectionMacro.COLOUR) offer.content.colour?.let { Color(it.argb) } else null,
                             reduceMotion = state.settings.reduceMotion,
+                            app = if (macro == SelectionMacro.OPEN) linkApp else null,
                             onClick = {
                                 feedback()
                                 // The doors the service never sees: on prose
@@ -367,6 +371,11 @@ private fun MacroBackButton(onClick: () -> Unit) {
  * bar appears rarely enough that nobody builds muscle memory for it. A chip
  * whose work is still running ([busy]) shows a spinner in the glyph's place
  * and takes no taps; the colour chip wears a puck of its colour.
+ *
+ * Open wears the icon of the [app] its link lands in, when that is one app
+ * and not a browser, with an outward arrow after the word: the tap leaves
+ * the keyboard for that app, and the arrow says so where the app's own icon
+ * cannot.
  */
 @Composable
 private fun MacroChip(
@@ -375,13 +384,18 @@ private fun MacroChip(
     speaking: Boolean,
     swatch: Color?,
     reduceMotion: Boolean,
+    app: MacroLinkApp? = null,
     onClick: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
     val shape = kb.chipShape()
     val label = if (speaking) stringResource(R.string.ime_selection_macro_stop_label) else stringResource(macro.labelRes)
     val icon = if (speaking) Icons.Outlined.StopCircle else macroIcon(macro)
-    val description = if (busy) stringResource(R.string.ime_selection_macro_busy_desc) else label
+    val description = when {
+        busy -> stringResource(R.string.ime_selection_macro_busy_desc)
+        app != null -> stringResource(R.string.ime_selection_macro_open_in_desc, app.name)
+        else -> label
+    }
     Row(
         modifier = Modifier
             .clip(shape)
@@ -411,6 +425,11 @@ private fun MacroChip(
                     .background(swatch)
                     .border(1.dp, kb.chipActiveText.copy(alpha = 0.4f), CircleShape),
             )
+            app != null -> Image(
+                bitmap = app.icon,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+            )
             icon != null -> Icon(
                 icon,
                 contentDescription = null,
@@ -418,13 +437,22 @@ private fun MacroChip(
                 tint = kb.chipActiveText,
             )
         }
-        if (busy || swatch != null || icon != null) Spacer(Modifier.width(6.dp))
+        if (busy || swatch != null || app != null || icon != null) Spacer(Modifier.width(6.dp))
         Text(
             text = label,
             fontSize = 14.sp,
             color = kb.chipActiveText,
             maxLines = 1,
         )
+        if (app != null && !busy) {
+            Spacer(Modifier.width(3.dp))
+            Icon(
+                Icons.Outlined.ArrowOutward,
+                contentDescription = null,
+                modifier = Modifier.size(12.dp),
+                tint = kb.chipActiveText.copy(alpha = 0.7f),
+            )
+        }
     }
 }
 
