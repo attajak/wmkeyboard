@@ -26565,17 +26565,23 @@ open class WMKeyboardService : InputMethodService() {
             "commit ${file.name} as ${chosen ?: "(no match)"} " +
                 "mode=$sendMode field=${accepted.joinToString()}",
         )
-        if (chosen != null && tryCommit(file, chosen)) return
-
-        // Nothing matched. An animated WebP the field won't take goes as a
-        // GIF where the field takes those: a worse picture, but one that still
-        // moves. Asked before the PNG below, which would make one frame of it.
-        if (chosen == null && mimeType == MediaMime.WEBP &&
-            accepted.any { ClipDescription.compareMimeTypes(MediaMime.GIF, it) } &&
-            commitAnimatedAsGif(file, editorInfo)
+        // An animated WebP goes as itself only under WhatsApp's sticker type,
+        // which is the one place the animation is sure to play. Everywhere
+        // else that takes a GIF it goes as a GIF: Messenger and Telegram both
+        // accept image/webp and draw one frame of it, and no field says which
+        // kind it is. Asked before the WebP is offered, and before the PNG
+        // below, which would make one frame of it for certain.
+        if (mimeType == MediaMime.WEBP &&
+            MediaMime.animatedGoesAsGif(
+                chosen,
+                fieldTakesGif = accepted.any { ClipDescription.compareMimeTypes(MediaMime.GIF, it) },
+            ) &&
+            commitAnimatedAsGif(file, editorInfo, otherwise = chosen)
         ) {
             return
         }
+
+        if (chosen != null && tryCommit(file, chosen)) return
 
         // A still WebP the field won't take can usually go through as PNG;
         // an animated one would lose its animation that way, so those are
@@ -26612,17 +26618,28 @@ open class WMKeyboardService : InputMethodService() {
      * The conversion costs a palette and a compression pass per frame, so it
      * runs off the main thread and its result is kept in the media cache under
      * the sticker's name: the second send of the same sticker is immediate.
-     * (An edited sticker gets a new file name, so a stale GIF is never found.)
+     * (An edited sticker gets a new file name, so a stale GIF is never found,
+     * and the size is in the name so that changing it retires the old ones.)
      * By the time a first conversion is done the user may have moved to
      * another field, and a sticker landing in a field it was not sent to is
      * worse than one not landing, so the field is checked again before the
-     * commit, and the clipboard takes whatever can no longer be delivered.
+     * commit.
+     *
+     * [otherwise] is the type the field would have taken the WebP under, when
+     * there was one. A GIF that cannot be made, or that the field refuses
+     * after all, falls back to it: a still sticker is better than none. With
+     * no such type the clipboard takes the file, as it did before.
      */
-    private fun commitAnimatedAsGif(file: File, editorInfo: EditorInfo?): Boolean {
+    private fun commitAnimatedAsGif(file: File, editorInfo: EditorInfo?, otherwise: String?): Boolean {
         if (editorInfo == null || !isAnimatedWebp(file)) return false
-        val gif = File(File(cacheDir, "media").apply { mkdirs() }, "${file.nameWithoutExtension}_gif.gif")
+        val side = com.wasimaster.wmkeyboard.core.media.AnimatedWebpToGif.MAX_SIDE
+        val gif = File(File(cacheDir, "media").apply { mkdirs() }, "${file.nameWithoutExtension}_$side.gif")
+
+        fun sendAsItIs() {
+            if (otherwise == null || !tryCommit(file, otherwise)) copyRefusedImage(file)
+        }
         if (gif.isFile && gif.length() > 0L) {
-            if (!tryCommit(gif, MediaMime.GIF)) copyRefusedImage(file)
+            if (!tryCommit(gif, MediaMime.GIF)) sendAsItIs()
             return true
         }
         val sentToPackage = editorInfo.packageName
@@ -26634,7 +26651,12 @@ open class WMKeyboardService : InputMethodService() {
             }
             val now = currentInputEditorInfo
             val sameField = now != null && now.packageName == sentToPackage && now.fieldId == sentToField
-            if (!converted || !sameField || !tryCommit(gif, MediaMime.GIF)) copyRefusedImage(file)
+            when {
+                // Not this field's sticker any more. The clipboard keeps it
+                // within reach without putting it anywhere it was not sent.
+                !sameField -> copyRefusedImage(file)
+                !converted || !tryCommit(gif, MediaMime.GIF) -> sendAsItIs()
+            }
         }
         return true
     }

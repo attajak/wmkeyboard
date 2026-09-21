@@ -112,12 +112,12 @@ class AnimatedWebpToGifTest {
     }
 
     @Test
-    fun `a big sticker is scaled down to the GIF's long edge`() {
-        // Sixteen-pixel stills on a 512 canvas would not decode to the frame
-        // size they claim, so this one is built from the ground up: two frames
-        // the writer wraps at the canvas's own size.
-        val frame = android.graphics.Bitmap.createBitmap(512, 512, android.graphics.Bitmap.Config.ARGB_8888)
-        val writer = AnimatedWebpWriter(512, 512)
+    fun `a sticker goes out at its own size, and anything larger is scaled down to it`() {
+        // Built from the ground up, because a still has to decode to the size
+        // its frame claims: two frames the writer wraps at the canvas's size,
+        // which is twice the sticker canvas.
+        val frame = android.graphics.Bitmap.createBitmap(1024, 1024, android.graphics.Bitmap.Config.ARGB_8888)
+        val writer = AnimatedWebpWriter(1024, 1024)
         for (colour in listOf(red, blue)) {
             frame.eraseColor(colour)
             val out = java.io.ByteArrayOutputStream()
@@ -131,6 +131,7 @@ class AnimatedWebpToGifTest {
 
         val gif = reader(target)
         assertEquals(2, gif.getNumImages(true))
+        assertEquals(512, AnimatedWebpToGif.MAX_SIDE)
         assertEquals(AnimatedWebpToGif.MAX_SIDE, gif.getWidth(0))
         assertEquals(AnimatedWebpToGif.MAX_SIDE, gif.getHeight(0))
     }

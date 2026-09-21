@@ -58,6 +58,8 @@ dependencies {
     // Reads the frames of an APNG, which is what an animated Signal sticker
     // is. Android decodes only the first one. See ApngFrames.
     implementation(libs.apng4android.apng)
+    // A supertype of that library's drawable. See the version catalog.
+    compileOnly(libs.androidx.vectordrawable.animated)
     // Background removal in the sticker editor. Full only: lite ships a stub
     // with the same signatures, and its editor simply has no cutout button.
     "fullImplementation"(libs.mlkit.subject.segmentation)

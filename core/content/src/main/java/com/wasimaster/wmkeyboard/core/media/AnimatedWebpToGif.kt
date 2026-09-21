@@ -11,25 +11,32 @@ import android.graphics.Rect
 import java.io.File
 
 /**
- * An animated WebP as an animated GIF, for the field that takes pictures and
- * no WebP.
+ * An animated WebP as an animated GIF, for every field that does not speak
+ * WhatsApp's sticker type.
  *
- * Without this such a field gets nothing: an animated sticker cannot go
- * through as a PNG (that would be one frame of it), so it ended up on the
- * clipboard with a toast. A GIF is a worse picture (see [GifEncoder]) and
- * still a far better answer than that.
+ * Taking `image/webp` and playing an animated one are two different things,
+ * and nearly every chat app does only the first: Messenger and Telegram both
+ * accept the file and draw one frame of it. A field cannot be asked which
+ * kind it is, but a GIF moves everywhere. It is a worse picture (see
+ * [GifEncoder]) and the better answer all the same, because a sticker that
+ * was picked for its animation and arrives still is the wrong sticker. See
+ * [MediaMime.animatedGoesAsGif] for where the line is drawn.
  *
  * [AnimatedWebpReader] hands over the frames as stills and this draws them the
  * way a player would: each onto the canvas at its offset, blended or not,
  * with the rectangle of the one before cleared first when that one asked for
- * it. The finished canvas is what goes to the encoder, scaled down to
- * [MAX_SIDE], because GIF pays for every pixel and a chat shows a sticker
- * small.
+ * it. The finished canvas is what goes to the encoder, scaled down only when it
+ * is larger than [MAX_SIDE].
  */
 object AnimatedWebpToGif {
 
-    /** Long edge of the GIF. A sticker is drawn around this size in a chat bubble. */
-    const val MAX_SIDE = 320
+    /**
+     * Long edge of the GIF: the sticker canvas, so a sticker goes out at the
+     * size it is. That costs bytes GIF is not good with, and is kept anyway
+     * because 512×512 is what chat apps go by when they decide to draw a
+     * picture from a keyboard as a sticker and not as a photo in a bubble.
+     */
+    const val MAX_SIDE = 512
 
     /** Past this many frames, or this big a canvas, it is not a sticker and is left alone. */
     private const val MAX_FRAMES = 200
