@@ -1,8 +1,11 @@
 package com.wasimaster.wmkeyboard.core.stickers
 
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import com.github.penfeizhou.animation.apng.APNGDrawable
 import com.github.penfeizhou.animation.apng.decode.APNGDecoder
 import com.github.penfeizhou.animation.loader.ByteBufferLoader
+import java.io.File
 import java.nio.ByteBuffer
 
 /**
@@ -56,6 +59,18 @@ object ApngFrames {
 
     /** True for an APNG with more than one frame; a one-frame APNG is a still. */
     fun isAnimated(bytes: ByteArray): Boolean = frameCount(bytes) > 1
+
+    /**
+     * A drawable that plays the animated PNG in [file], for showing one before
+     * it has been turned into anything else: the preview of a Signal pack is
+     * the files as Signal serves them, and drawn any other way an animated
+     * one is its first frame and no hint that there are more.
+     *
+     * It starts when the view it is set on becomes visible and stops with it,
+     * and it decodes at the size it is drawn at rather than the file's own. A
+     * plain `Drawable` comes back so that no caller has to know the library.
+     */
+    fun drawable(file: File): Drawable = APNGDrawable.fromFile(file.path)
 
     /**
      * Calls [onFrame] with each composed frame of [bytes] and how long it

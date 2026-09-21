@@ -2,12 +2,14 @@ package com.wasimaster.wmkeyboard.app
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.ImageView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import coil3.compose.AsyncImage
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
@@ -49,6 +52,7 @@ import com.wasimaster.wmkeyboard.core.addons.ImportLink
 import com.wasimaster.wmkeyboard.core.addons.SignalStickerDownloads
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
+import com.wasimaster.wmkeyboard.core.stickers.ApngFrames
 import com.wasimaster.wmkeyboard.core.stickers.StickerPack
 import com.wasimaster.wmkeyboard.core.stickers.StickerPackStore
 import com.wasimaster.wmkeyboard.core.stickers.signal.SignalPackManifest
@@ -409,9 +413,13 @@ private fun LoadedPack(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(manifest.stickers, key = { it.id }) { sticker ->
-            val file by produceState<File?>(null, packId, sticker.id) {
+            val preview by produceState<PreviewSticker?>(null, packId, sticker.id) {
                 value = withContext(Dispatchers.IO) {
-                    runCatching { SignalStickerDownloads.sticker(packId, packKey, sticker.id, cacheDir) }.getOrNull()
+                    runCatching {
+                        SignalStickerDownloads.sticker(packId, packKey, sticker.id, cacheDir)?.let { file ->
+                            PreviewSticker(file, animated = ApngFrames.isAnimated(file.readBytes()))
+                        }
+                    }.getOrNull()
                 }
             }
             Box(
@@ -420,14 +428,50 @@ private fun LoadedPack(
                     .clip(RoundedCornerShape(10.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
             ) {
-                AsyncImage(
-                    model = file,
-                    contentDescription = sticker.emoji.ifBlank { unnamed },
-                    imageLoader = loader,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                val shown = preview
+                val label = sticker.emoji.ifBlank { unnamed }
+                if (shown != null && shown.animated) {
+                    AnimatedPngPreview(shown.file, label)
+                } else {
+                    AsyncImage(
+                        model = shown?.file,
+                        contentDescription = label,
+                        imageLoader = loader,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
             }
         }
     }
+}
+
+/** A sticker of the pack being looked at: the decrypted file, and whether it moves. */
+private class PreviewSticker(val file: File, val animated: Boolean)
+
+/**
+ * An animated Signal sticker, playing.
+ *
+ * It is an animated PNG until it has been added (that is when it becomes an
+ * animated WebP), and nothing on Android plays one: an image loader draws its
+ * first frame, which made a pack of animations look like a pack of stills and
+ * left no way to tell which a pack was before adding it. So a preview cell
+ * that holds one hands it to the decoder library's own drawable, in a plain
+ * `ImageView`, which starts and stops it with the cell.
+ */
+@Composable
+private fun AnimatedPngPreview(file: File, label: String) {
+    val drawable = remember(file) { runCatching { ApngFrames.drawable(file) }.getOrNull() }
+    AndroidView(
+        factory = { context ->
+            ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
+        },
+        update = { view ->
+            view.contentDescription = label
+            if (view.drawable !== drawable) view.setImageDrawable(drawable)
+        },
+        // Lets go of the drawable, which is what stops its decoder thread.
+        onRelease = { view -> view.setImageDrawable(null) },
+        modifier = Modifier.fillMaxSize(),
+    )
 }
