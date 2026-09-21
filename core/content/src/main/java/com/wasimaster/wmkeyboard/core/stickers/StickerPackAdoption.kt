@@ -70,11 +70,24 @@ object StickerPackAdoption {
         try {
             val taken = incoming.take(StickerPackStore.MAX_STICKERS_PER_PACK)
             val kept = ArrayList<CustomSticker>()
+            var flattened = 0
+            // Wraps the caller's normalizer only to count: which stickers lost
+            // their animation is not worth a line each, how many is.
+            val counting: (ByteArray) -> ProcessedSticker? = { bytes ->
+                normalize(bytes)?.also { if (it.flattened) flattened++ }
+            }
             taken.forEachIndexed { index, item ->
                 onProgress(index, taken.size)
-                keep(item, packDir, now, normalize, repairs)?.let { kept += it }
+                keep(item, packDir, now, counting, repairs)?.let { kept += it }
             }
             onProgress(taken.size, taken.size)
+            if (flattened > 0) {
+                repairs += ContentText(
+                    pluralsRes = R.plurals.core_content_sticker_repair_flattened,
+                    quantity = flattened,
+                    args = listOf(flattened),
+                )
+            }
             // An empty pack is not a successful import. It installs, it appears
             // in the list, and it holds nothing, which looks like the app threw
             // the images away rather than like a source that didn't match its

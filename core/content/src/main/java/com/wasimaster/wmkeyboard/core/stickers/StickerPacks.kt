@@ -57,6 +57,12 @@ data class ProcessedSticker(
     val mime: String,
     val animated: Boolean,
     val aspectRatio: Float,
+    /**
+     * True when the source was an animation and these bytes are only its
+     * first frame: an animated PNG whose frames could not be re-encoded. The
+     * sticker is good, so this is a thing to tell the user, not a failure.
+     */
+    val flattened: Boolean = false,
 ) {
     // Identity equality is what callers want (these wrap a fresh byte array
     // each time); the data-class default would compare arrays by reference

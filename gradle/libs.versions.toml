@@ -67,6 +67,9 @@ coil = "3.2.0"
 # backup sink can use it directly. HttpURLConnection cannot: it validates the
 # request method against a fixed list and rejects PROPFIND and MOVE outright.
 okhttp = "4.12.0"
+# APNG decoding, for animated Signal stickers. Pure Java, Apache-2.0. Its one
+# runtime dependency is appcompat, which the app already carries.
+apng4android = "3.0.5"
 zxing = "3.5.3"
 litertlm = "0.14.0"
 # 2.x splits into litert + litert-api sharing one namespace, which AGP's
@@ -164,6 +167,7 @@ coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref 
 coil-gif = { group = "io.coil-kt.coil3", name = "coil-gif", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+apng4android-apng = { group = "com.github.penfeizhou.android.animation", name = "apng", version.ref = "apng4android" }
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 litertlm-android = { group = "com.google.ai.edge.litertlm", name = "litertlm-android", version.ref = "litertlm" }
 litert = { group = "com.google.ai.edge.litert", name = "litert", version.ref = "litert" }
