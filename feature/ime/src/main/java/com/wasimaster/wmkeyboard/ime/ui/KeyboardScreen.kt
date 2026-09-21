@@ -14153,8 +14153,6 @@ private fun KeyRows(
                 // Follows the same guard as the pad itself, so a search box
                 // opened over a number field gets its digit row back.
                 val kind = if (numericPadActive(state)) state.fieldKind else FieldKind.TEXT
-                // A layout can supply its own row for this layer; the built-in
-                // choices below are the fallback rather than the rule.
                 val authored = state.authoredNumberRow(state.layoutMode)
                 // The digit row tracks the active layer (and, optionally, shift)
                 // so the same slot serves more symbols the deeper the user goes:
@@ -14178,7 +14176,11 @@ private fun KeyRows(
                     fillRow,
                     tabletRow,
                 ) {
-                    val base = authored ?: when {
+                    // The field's own rows and the shift-symbols option come
+                    // before a row the layout authored: a number row edited in
+                    // the layout editor is for typing text, and must not put a
+                    // second set of digits over a keypad or turn the option off.
+                    val base = when {
                         // A keypad already leads with digits, so the row
                         // carries what the pad lacks rather than a second set
                         // of the same numbers.
@@ -14188,15 +14190,17 @@ private fun KeyRows(
                         kind.isNumericPad ->
                             listOf("+", "-", "*", "/", "=", "(", ")", "%", ":", ".")
                                 .map { Key(it) }
-                        // Symbols-2 reuses the number-row slot for the arrow and
-                        // comparison symbols it has nowhere else to put.
-                        state.layoutMode == LayoutMode.SYMBOLS_SHIFTED ->
-                            BuiltInLayouts.defaultNumberRow(LayoutLayer.SYMBOLS_SHIFTED)
                         // Opt-in: holding shift on the letters layer turns the
                         // digits into the symbol layer's bracket/math fill row,
                         // so symbols are reachable without switching layers.
                         state.layoutMode == LayoutMode.LETTERS &&
                             state.shiftState != ShiftState.OFF && shiftSymbols -> fillRow
+                        // A layout can supply its own row for this layer.
+                        authored != null -> authored
+                        // Symbols-2 reuses the number-row slot for the arrow and
+                        // comparison symbols it has nowhere else to put.
+                        state.layoutMode == LayoutMode.SYMBOLS_SHIFTED ->
+                            BuiltInLayouts.defaultNumberRow(LayoutLayer.SYMBOLS_SHIFTED)
                         // The digits, with the symbol layer's long-presses.
                         else -> BuiltInLayouts.defaultNumberRow(LayoutLayer.LETTERS)
                     }

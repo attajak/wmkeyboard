@@ -2227,6 +2227,22 @@ internal fun KeyLayoutEditorScreen(
         (layer != LayoutLayer.FN || layout.layer(layer) != null)
     if (extraRows) {
         val layerSpec = layout.layer(layer)
+        // Putting a row back to the standard one also drops the layer copy the
+        // first edit made, when nothing else in it differs from what it
+        // inherits, so the layer follows the built-in grid again.
+        fun resetExtraRow(clear: (LayerSpec) -> LayerSpec) {
+            edit { spec ->
+                val current = spec.layer(layer) ?: return@edit spec
+                val cleared = clear(current)
+                val without = spec.copy(layers = spec.layers - layer.key)
+                val inherited = without.compile(layer)
+                if (cleared == LayerSpec(rows = inherited.rows, rowHeights = inherited.rowHeights)) {
+                    without
+                } else {
+                    spec.copy(layers = spec.layers + (layer.key to cleared))
+                }
+            }
+        }
         val shownHere = (layer != LayoutLayer.SYMBOLS && layer != LayoutLayer.SYMBOLS_SHIFTED) ||
             settings.layoutBehavior.numberRowInSymbols
         ExtraRowEditor(
@@ -2251,7 +2267,7 @@ internal fun KeyLayoutEditorScreen(
                     it.copy(numberRow = transform(it.numberRow ?: BuiltInLayouts.defaultNumberRow(layer)))
                 }
             },
-            onReset = { editLayer { it.copy(numberRow = null) } },
+            onReset = { resetExtraRow { it.copy(numberRow = null) } },
             secondaryLayouts = secondaryLayouts(settings.customLayouts),
         )
         if (layer == LayoutLayer.SYMBOLS && leadsWithDigitRow(rows)) {
@@ -2275,7 +2291,7 @@ internal fun KeyLayoutEditorScreen(
                 editCoalesced = { transform ->
                     editLayerCoalesced { it.copy(fillRow = transform(it.fillRow ?: BuiltInLayouts.SYMBOLS_FILL_ROW)) }
                 },
-                onReset = { editLayer { it.copy(fillRow = null) } },
+                onReset = { resetExtraRow { it.copy(fillRow = null) } },
                 secondaryLayouts = secondaryLayouts(settings.customLayouts),
             )
         }
