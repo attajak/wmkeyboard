@@ -369,6 +369,7 @@
     <string name="import_sticker_editor_cutout_action">Remove the background</string>
     <string name="import_sticker_editor_cutout_subtitle">Find the subject and erase all of the other parts</string>
     <string name="import_sticker_editor_cutout_download_subtitle">Get the background remover from Google Play services first</string>
+    <string name="import_sticker_editor_cutout_download_own_subtitle">Get the background remover first. It is a 5 MB download.</string>
     <string name="import_sticker_editor_cutout_progress">The app removes the background…</string>
     <string name="import_sticker_editor_cutout_download_progress">The app gets the background remover…</string>
     <string name="import_sticker_editor_cutout_none_error">The app found no subject in this image. Use the eraser.</string>

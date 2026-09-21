@@ -58,4 +58,7 @@ dependencies {
     // Background removal in the sticker editor. Full only: lite ships a stub
     // with the same signatures, and its editor simply has no cutout button.
     "fullImplementation"(libs.mlkit.subject.segmentation)
+    // The same removal without Play services: U2-Net-P on the interpreter
+    // :core:voice already links for Whisper, so this adds nothing to the APK.
+    "fullImplementation"(libs.litert)
 }

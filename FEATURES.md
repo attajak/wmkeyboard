@@ -1457,7 +1457,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Undo 12 strokes deep — One alpha snapshot per step; raster work only
     - Border 0–24px, white or black — Stamped from the subject's own alpha in a ring of up to 104 offsets behind it
     - Letterboxed, never stretched — A non-square crop gets transparent bars inside the square canvas
-  - One-tap background removal `RARE` — ML Kit subject segmentation; model arrives from Play services on demand with a progress bar.
+  - One-tap background removal `RARE` — ML Kit subject segmentation where there are Play services (module on demand), the app's own U²-Net-P on LiteRT where there are none (#278); either way the model arrives on the first tap with a progress bar.
+    - Own model — 4.6 MB `u2netp.tflite` from wmkeyboard-data `models/cutout/`, SHA-256 pinned, resumable, kept in `files/cutout`, listed under Stickers on the storage screen, excluded from Android backup
     - Refuses degenerate masks — Under 1% or over 99% coverage reports "no subject" rather than erasing the picture
     - Brushes still work without it — Lite builds and un-fetchable models just lose the button
   - Edits resume across sessions `RARE` — Reopens the source photo with the crop, mask, border and brush size still applied.
@@ -1481,8 +1482,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 
 | Feature | Needs |
 |---|---|
-| Sticker editor: one-tap background removal | full flavour only (ML Kit subject segmentation); lite ships a stub reporting supported=false |
-| Sticker editor: segmentation model | needs Google Play services on-demand module download (network); button offers the download and falls back to brushes if it cannot be fetched |
+| Sticker editor: one-tap background removal | full flavour only (ML Kit subject segmentation, or U²-Net-P on the LiteRT interpreter without Play services); lite ships a stub reporting supported=false |
+| Sticker editor: segmentation model | needs a one-time download (network): the Play services on-demand module, or without Play services (or when they lack the module) the app's own 4.6 MB model from the data repository; button offers the download and falls back to brushes if neither can be fetched |
 | GIF search and send (Klipy, GIPHY) | needs a user-supplied API key for at least one provider, plus network |
 | Sticker search and send (Klipy, GIPHY) | needs a user-supplied API key for at least one provider, plus network; keys shared with the GIF tool |
 | Animated emoji preview and send | network fetch from fonts.gstatic.com on long press (no key, no query, no identifier) |

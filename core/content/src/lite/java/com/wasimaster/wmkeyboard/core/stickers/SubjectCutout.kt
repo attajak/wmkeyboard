@@ -24,7 +24,7 @@ object SubjectCutout {
         /** The model ran and found nothing worth keeping. */
         data object NoSubject : Result
 
-        /** Play services could not give us the model. */
+        /** No engine could give us a model. */
         data object ModelUnavailable : Result
 
         data object Failed : Result
@@ -32,6 +32,9 @@ object SubjectCutout {
         /** This build has no segmenter at all. */
         data object Unsupported : Result
     }
+
+    @Suppress("UnusedParameter")
+    fun downloadsFromPlayServices(context: Context): Boolean = false
 
     @Suppress("UnusedParameter")
     suspend fun modelReady(context: Context): Boolean = false
