@@ -2,8 +2,8 @@
 <!--
    GitHub-channel builds only. Added by `channelManifests` in build.gradle.kts,
    so none of it reaches a Play APK (where a self-updater is against policy) or
-   an F-Droid APK (where it could not work: F-Droid signs its own builds, so an
-   APK from our release can never install over one).
+   an F-Droid APK (F-Droid's own client installs those, and installs up to
+   0.5.9 carry F-Droid's key, which an APK from our release cannot replace).
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 

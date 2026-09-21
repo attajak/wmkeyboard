@@ -40,6 +40,37 @@ the channel line on bug reports and diagnostics, and which suppresses the "get i
 on F-Droid" row in About that would otherwise point an F-Droid user at their own
 install.
 
+**`Binaries` and `AllowedAPKSigningKeys`** — a reproducible build, from 0.5.10.
+After building a version, F-Droid downloads
+`wmkeyboard-<version>-vc<code>-fdroid.apk` from that version's GitHub release,
+compares it with its own unsigned build, and if the two are identical apart from
+the signature, copies our signature onto its build and publishes that. So an
+F-Droid install carries the same key as the GitHub APKs. A mismatch fails the
+version on F-Droid instead of shipping it. `AllowedAPKSigningKeys` is the SHA-256
+of the release certificate (`apksigner verify --print-certs`, "certificate
+SHA-256 digest"), and the reference APK has to carry a v2 signature or better.
+
+The reference APK is built by the `fdroid` job in `.github/workflows/release.yml`,
+which copies this recipe exactly: `assembleLiteRelease` from `app/`, the three
+`gradleprops`, no API keys, no ABI split. It does not run the `prebuild` seds,
+since they only delete lines a lite build never reads. Before the switch, 0.5.9
+was rebuilt that way and compared with the APK F-Droid had published for it,
+with `apksigcopier compare`: identical apart from the signature, built on macOS
+with the JetBrains Runtime 21 against F-Droid's Debian OpenJDK 21. The first try
+did not match, and the one difference is worth knowing. AGP writes the commit
+into `META-INF/version-control-info.textproto`, and in a git worktree (where
+`.git` is a file) it cannot read it and writes `NO_VALID_GIT_FOUND`. Build a
+reference APK from a real clone.
+
+Installs from F-Droid up to 0.5.9 carry F-Droid's key, and Android refuses an
+update signed with a different one, so those users reinstall once. Dual signing
+(signature files under `metadata/<appid>/signatures/<vc>/`, F-Droid publishing
+both) would have spared them, and was turned down: it takes an fdroiddata merge
+request for every release, because the bot cannot write signature files.
+
+`Binaries` is wrapped onto a second line by `rewritemeta`, with a trailing space
+after the colon. That is its output; leave it.
+
 **`scandelete`** — prebuilt native libraries belonging to variants this build
 does not produce. The Harper grammar engine lives in the full source set (its
 Rust sources are under `native/harper-jni`), and the LLM module is only assembled

@@ -108,6 +108,10 @@ Opening the app for the first time drops you straight into a short setup wizard 
 
 Installing a new build over an existing install (same package, same signing key) works like any Android app update. Your settings, themes, learned words, snippets and everything else stay exactly as they were, automatically.
 
+F-Droid builds and the GitHub APKs share a key from 0.5.10 on, so you can move between them the same way. F-Droid still compiles its copy from source, and it publishes one only after checking it is identical to the `-fdroid.apk` on the same GitHub release.
+
+The exception is an install from F-Droid of 0.5.9 or older. Those were signed with F-Droid's own key, and Android will not update an app to a build signed with a different one, so F-Droid can't update it to 0.5.10. To move over once: export a backup (see below), uninstall, install WM Keyboard from F-Droid again, and import the backup. Every update after that is ordinary.
+
 Reinstalling from scratch or moving to a new phone is different. Nothing carries over on its own unless you set one of these up beforehand.
 
 <SettingsPath path="Data / Backup & restore" />

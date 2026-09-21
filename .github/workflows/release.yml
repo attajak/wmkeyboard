@@ -183,6 +183,107 @@ jobs:
           path: dist/
           retention-days: 30
 
+  # The reference APK for F-Droid's reproducible build. F-Droid builds each tag
+  # from source itself, compares its unsigned APK with this one, and if they
+  # match apart from the signature it copies this signature onto its build and
+  # publishes that, so F-Droid users get an APK signed with our key. The recipe
+  # points at this file through `Binaries:` (fdroid/com.wasimaster.wmkeyboard.yml).
+  #
+  # It has to be the build F-Droid makes, byte for byte, so it copies the
+  # recipe: the lite+intl variant through the `assembleLiteRelease` alias, run
+  # from app/ as fdroidserver does, with the recipe's three flags and nothing
+  # else. No API keys (the recipe passes none, and a key is a BuildConfig
+  # string), no ABI split. Its own runner, so no flag from the `apks` job leaks
+  # in through a shared Gradle daemon or configuration cache.
+  #
+  # Built without the recipe's prebuild seds. They delete lines the lite build
+  # never resolves, so the output is the same with or without them; checked by
+  # rebuilding 0.5.9 and comparing it with the APK F-Droid published.
+  fdroid:
+    name: F-Droid reference APK
+    needs: verify
+    if: needs.verify.outputs.buildable == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      # F-Droid's builder uses Debian's OpenJDK 21. The major version is what
+      # matters: Kotlin, D8 and R8 ship with the build and do not depend on it.
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Restore keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::KEYSTORE_BASE64 is not set. Release builds must be signed."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > release.keystore
+
+      - name: Build the F-Droid APK
+        working-directory: app
+        env:
+          RELEASE_STORE_FILE: release.keystore
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: |
+          ../gradlew \
+            -Pwmkb.enablePlayStore=false \
+            -Pwmkb.enableGms=false \
+            -Pwmkb.enableFdroid=true \
+            assembleLiteRelease --stacktrace
+
+      - name: Wipe keystore
+        if: always()
+        run: rm -f release.keystore
+
+      # AllowedAPKSigningKeys in the recipe pins this certificate, and F-Droid
+      # refuses a reference APK signed by anything else, or signed with v1
+      # alone. Better to find out here than from a failed build on their side
+      # a few days after the release.
+      - name: Collect and check
+        run: |
+          version=$(grep '^wmkb.versionName=' gradle.properties | cut -d= -f2)
+          code=$(grep '^wmkb.versionCode=' gradle.properties | cut -d= -f2)
+          shopt -s nullglob
+          apks=(app/build/outputs/apk/lite/release/*.apk)
+          if [ ${#apks[@]} -ne 1 ]; then
+            echo "::error::Expected one APK in apk/lite/release, found ${#apks[@]}"
+            exit 1
+          fi
+          mkdir -p dist
+          out="dist/wmkeyboard-${version}-vc${code}-fdroid.apk"
+          cp "${apks[0]}" "$out"
+          apksigner=$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          certs=$("$apksigner" verify --print-certs -v "$out")
+          echo "$certs"
+          echo "$certs" | grep -q 'Verified using v2 scheme (APK Signature Scheme v2): true' \
+            || { echo "::error::$out has no v2 signature"; exit 1; }
+          echo "$certs" | grep -q 'certificate SHA-256 digest: d6c1f30a6116d33e4e778b372f335faa91dad35f657a84e4e7077b29641e7cad' \
+            || { echo "::error::$out is not signed with the key AllowedAPKSigningKeys pins"; exit 1; }
+          # AGP writes the commit into the APK. F-Droid builds from a real
+          # clone, so it records the hash; a checkout AGP cannot read (a git
+          # worktree, a tarball) writes NO_VALID_GIT_FOUND instead, and that
+          # one file is enough to fail the comparison.
+          unzip -p "$out" META-INF/version-control-info.textproto | grep -q "revision: \"$GITHUB_SHA\"" \
+            || { echo "::error::$out does not record commit $GITHUB_SHA"; exit 1; }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fdroid-apk
+          path: dist/
+          retention-days: 30
+
   bundle:
     name: Play bundle (artifact only)
     needs: verify
@@ -328,8 +429,10 @@ jobs:
     name: Publish GitHub release
     # `bundle` as well as `apks`: the Play mapping is a release asset now, and
     # both jobs carry the same `buildable` gate, so nothing that used to
-    # publish is held back by waiting for it.
-    needs: [verify, apks, bundle]
+    # publish is held back by waiting for it. `fdroid` because F-Droid fetches
+    # its reference APK from this release, and a release without it fails their
+    # build of this version.
+    needs: [verify, apks, bundle, fdroid]
     if: github.ref_type == 'tag' && !inputs.dry_run
     runs-on: ubuntu-latest
     steps:
@@ -351,12 +454,17 @@ jobs:
           name: play-mapping
           path: dist
 
-      # SHA256SUMS.txt was written by the apks job, before this file existed.
-      - name: Check-sum the Play mapping
+      - uses: actions/download-artifact@v4
+        with:
+          name: fdroid-apk
+          path: dist
+
+      # SHA256SUMS.txt was written by the apks job, before these files existed.
+      - name: Check-sum the Play mapping and the F-Droid APK
         run: |
           shopt -s nullglob
           cd dist
-          for f in *-play-mapping.txt.gz; do
+          for f in *-play-mapping.txt.gz *-fdroid.apk; do
             grep -q " $f$" SHA256SUMS.txt || sha256sum "$f" >> SHA256SUMS.txt
           done
           cat SHA256SUMS.txt

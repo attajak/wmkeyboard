@@ -125,6 +125,7 @@ row() { # <file> <what it is>
 "
 }
 row SHA256SUMS.txt 'Checksums for everything above'
+row "${prefix}-fdroid.apk" 'The F-Droid build, **lite · all languages**. F-Droid rebuilds it from source and publishes it only if the two match, so it is the same APK F-Droid serves, byte for byte. Installs over an F-Droid install from 0.5.10 on'
 row "${prefix}-full-intl-mapping.txt.gz" 'R8 mapping, **full · all languages**. Retraces a stack trace'
 row "${prefix}-full-en-mapping.txt.gz" 'R8 mapping, **full · English**'
 row "${prefix}-lite-intl-mapping.txt.gz" 'R8 mapping, **lite · all languages**'

@@ -12,11 +12,13 @@ AutoName: WM Keyboard
 
 RepoType: git
 Repo: https://github.com/wasi-master/wmkeyboard.git
+Binaries: 
+  https://github.com/wasi-master/wmkeyboard/releases/download/v%v/wmkeyboard-%v-vc%c-fdroid.apk
 
 Builds:
-  - versionName: 0.5.8
-    versionCode: 19
-    commit: db4b8b9dcded0cf219f9f8cbf6999546db59864d
+  - versionName: 0.5.7
+    versionCode: 18
+    commit: b6d719c2383e4335117d8e7c913956af3fe112e8
     subdir: app
     gradle:
       - lite
@@ -31,6 +33,25 @@ Builds:
       - wmkb.enablePlayStore=false
       - wmkb.enableGms=false
       - wmkb.enableFdroid=true
+
+  - versionName: 0.5.8
+    versionCode: 19
+    commit: 146515f75c7753e61719bd9fbec32d722acd62da
+    subdir: app
+    gradle:
+      - lite
+    prebuild:
+      - sed -i -e '/org.gradle.toolchains.foojay-resolver-convention/d' ../settings.gradle.kts
+      - sed -i -e '/libs.play.app.update/d' -e '/libs.play.feature.delivery/d' -e
+        '/libs.play.services.auth/d' build.gradle.kts
+    scandelete:
+      - core/intelligence/src/full/jniLibs
+      - feature/llm/src/main/jniLibs
+    gradleprops:
+      - wmkb.enablePlayStore=false
+      - wmkb.enableGms=false
+      - wmkb.enableFdroid=true
+
   - versionName: 0.5.9
     versionCode: 20
     commit: 651bf6a0f1eea0eff6c231de1c4b1bd144896864
@@ -48,6 +69,8 @@ Builds:
       - wmkb.enablePlayStore=false
       - wmkb.enableGms=false
       - wmkb.enableFdroid=true
+
+AllowedAPKSigningKeys: d6c1f30a6116d33e4e778b372f335faa91dad35f657a84e4e7077b29641e7cad
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags

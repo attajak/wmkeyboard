@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.StateFlow
  * - `src/github/java` reads this project's GitHub releases, downloads the APK
  *   that matches the device, and hands it to Android's package installer.
  * - `src/fdroid/java` asks F-Droid what F-Droid has and opens F-Droid. It
- *   downloads nothing: F-Droid signs its own builds, so a file from our
- *   release could never install over an F-Droid install anyway.
+ *   downloads nothing: F-Droid's client installs F-Droid builds, and
+ *   installs up to 0.5.9 carry F-Droid's key, which our file cannot replace.
  *
  * Exactly one of those directories is on the compile path, picked by
  * `app/build.gradle.kts`. That is what keeps Play Core out of an F-Droid APK,

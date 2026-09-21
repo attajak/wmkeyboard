@@ -22,7 +22,7 @@ of it, so nothing here needs a branch or a patched source tree.
 | `wmkb.enableGms` | `true` | `false` | `true` |
 | `wmkb.enableFdroid` | `false` | `true` | `false` |
 | `wmkb.splitApks` | `true` | not used | ignored by `bundle*` |
-| Artifact | one APK per ABI, for all four flavor combinations, plus R8 mappings, native symbols and `SHA256SUMS.txt` | one APK, built by F-Droid | one AAB, with its R8 mapping and native symbols inside |
+| Artifact | one APK per ABI, for all four flavor combinations, plus R8 mappings, native symbols and `SHA256SUMS.txt` | one APK, built by F-Droid, carrying our signature once it matches the release's `-fdroid.apk` | one AAB, with its R8 mapping and native symbols inside |
 | ML Kit | bundled in the APK | absent | unbundled, fetched from Play services |
 | Local LLM | bundled | absent | on-demand `:feature:llm` module |
 | In-app updates | GitHub releases, downloads and installs | checks F-Droid, links out | Play In-App Updates |
@@ -58,7 +58,8 @@ different key, and the app checks for that itself so the refusal at least
 arrives as a sentence rather than a silent failure.
 
 `wmkb.enableFdroid=true` gets a checker that asks F-Droid and opens F-Droid,
-and no installer at all, since F-Droid signs its own builds.
+and no installer at all. F-Droid's own client installs F-Droid builds, and
+installs up to 0.5.9 carry F-Droid's key rather than ours.
 :::
 
 ## Where the updater code lives
@@ -147,9 +148,9 @@ names its build. `DebugLog` writes `version: 0.5.9 (24) fullEn (Play Store)`,
 and the flavor there is the whole two-dimension name, which `:app` hands the
 log on startup — `:core:common` compiles against `:core:config`, whose
 `BuildConfig.FLAVOR` carries the `capabilities` dimension alone and would say
-just `full`. A record from an F-Droid install is refused with a note instead:
-F-Droid compiles the app on their own machines, so its mapping never existed
-here.
+just `full`. A record from an F-Droid install is refused with a note instead: the
+F-Droid build's mapping is not published. From 0.5.10 that build is
+identical to the release's `-fdroid.apk`, so its mapping could be.
 
 ### Why a mapping is checked before it is used
 
@@ -308,8 +309,10 @@ builds and uploads as workflow artifacts, and no release is created.
 
 ## Getting into F-Droid
 
-F-Droid does not take your APK. It builds from source on its own machines and
-signs with its own key, which is why the `lite` flavor exists. Every
+F-Droid does not take your APK as it is. It builds from source on its own
+machines, and publishes our signature only after its build turns out
+identical to ours (see [Reproducible builds](#reproducible-builds) below).
+Building from source is why the `lite` flavor exists. Every
 proprietary dependency in the tree (ML Kit, LiteRT, Play's update and feature
 delivery libraries, `play-services-auth`) is declared `fullImplementation` or
 sits behind a channel flag, so `lite` has no Google artifact on its compile
@@ -345,8 +348,8 @@ F-Droid gets `intl` on purpose. It ships one APK to everybody and nothing
 downstream of the build adds a language, so the APK is the only place an
 F-Droid user can get the translations from. That is worth about 41 MB on a
 `lite` build that is otherwise around 12 MB. The small `lite-en` APK is on the
-GitHub release, but F-Droid signs with its own key, so moving to it from an
-F-Droid install means uninstalling first.
+GitHub release, and from 0.5.10 it installs over an F-Droid install like any
+update, because both carry the same key.
 
 The build recipe is staged in the repo at `fdroid/com.wasimaster.wmkeyboard.yml`.
 F-Droid never reads it from there; it is versioned next to the code so the
@@ -426,6 +429,49 @@ instead.
    entry their bot writes.
 
 </Steps>
+
+### Reproducible builds
+
+From 0.5.10 the F-Droid build is signed with the same key as the GitHub
+APKs. F-Droid still compiles it: the recipe's `Binaries:` line points at
+`wmkeyboard-<version>-vc<code>-fdroid.apk` on the GitHub release, and after
+F-Droid's own build finishes it downloads that file and compares the two.
+If they are identical apart from the signature, it copies our signature onto
+its build and publishes that. If they are not, that version fails and does
+not ship on F-Droid. `AllowedAPKSigningKeys` pins the certificate, so a
+reference APK signed with anything else is refused as well.
+
+The `fdroid` job in the release workflow builds that file. It is the recipe
+copied exactly: `assembleLiteRelease` run from `app/`, the recipe's three
+`-P` flags, no API keys, no ABI split, on its own runner so nothing leaks in
+from the other builds. It skips the recipe's `prebuild` seds, because they
+only delete lines a `lite` build never reads. That was checked before the
+switch by rebuilding 0.5.9 and comparing it with the APK F-Droid had
+published.
+
+The rules that follow from this:
+
+- **Never re-upload the `-fdroid.apk`** of a release that is already out.
+  F-Droid fetches it days after the tag, and a file built from anything
+  other than the tagged commit fails the comparison.
+- **Anything that makes two builds of one commit differ breaks F-Droid.**
+  A timestamp or a random value in `BuildConfig`, a dependency pulled by a
+  version range, a JDK toolchain other than the one their image carries.
+  When a build fails the comparison, their build log holds the diff.
+- **Build it from a real clone.** AGP writes the commit hash into
+  `META-INF/version-control-info.textproto`. From a git worktree or a
+  tarball it cannot read the repository and writes `NO_VALID_GIT_FOUND`
+  instead, and that one file fails the comparison. The `fdroid` job checks
+  the hash is there.
+- **Keep the certificate check in the `fdroid` job in step with the recipe**
+  if the signing key ever changes.
+
+The switch cost one reinstall. Installs from F-Droid up to 0.5.9 were signed
+with F-Droid's key, and Android will not update an app to a build signed with
+a different one. Those users had to export a backup, uninstall, and install
+0.5.10 again. Dual signing (F-Droid publishes both signatures for each
+version, as Liseur does) would have spared them, at the price of a hand-made
+fdroiddata merge request for every release. It was turned down.
 
 :::note[Screenshots and description come from this repo]
 F-Droid reads `fastlane/metadata/android/en-US/` directly out of the source

@@ -22,11 +22,12 @@ import kotlinx.coroutines.launch
 /**
  * The updater of an F-Droid install: it looks, and it points.
  *
- * F-Droid signs every build with its own key, so an APK from this project's
- * GitHub release could never install over an F-Droid install however carefully
- * it was downloaded. Anything past "there is a new version, here is where it
- * is" would end at Android refusing the file. So this channel checks and links
- * out, and downloads nothing.
+ * F-Droid's own client is what installs and updates an F-Droid build, and
+ * installs up to 0.5.9 carry F-Droid's key, so an APK from this project's
+ * GitHub release would end at Android refusing the file. From 0.5.10 the
+ * F-Droid build carries our key (a reproducible build), but installing
+ * behind F-Droid's back would still leave its client out of step. So this
+ * channel checks and links out, and downloads nothing.
  *
  * It asks **F-Droid**, not GitHub, and that is the whole reason it is a
  * separate driver rather than the GitHub one with its buttons hidden. F-Droid
