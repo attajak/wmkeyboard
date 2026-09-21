@@ -56,4 +56,32 @@ class WhisperMelTest {
         val first = mel[0]
         assertTrue(mel.all { kotlin.math.abs(it - first) < 1e-4f })
     }
+
+    @Test
+    fun `a short clip is the same spectrogram as that clip padded to the window`() {
+        // The frames past the end of the audio are filled in rather than
+        // transformed, which must not show in the output.
+        val nFft = 1 + WhisperMel.N_FFT / 2
+        val filters = flatFilters(WhisperMel.N_MEL, nFft)
+        val short = FloatArray(WhisperMel.SAMPLE_RATE * 2 + 37) {
+            (0.3 * sin(2.0 * PI * 310.0 * it / WhisperMel.SAMPLE_RATE)).toFloat()
+        }
+        val padded = short.copyOf(WhisperMel.N_SAMPLES)
+        assertTrue(WhisperMel.compute(short, filters, nFft).contentEquals(WhisperMel.compute(padded, filters, nFft)))
+    }
+
+    @Test
+    fun `a tone lands in the band over its own frequency`() {
+        // One band per fft bin, so the transform is checked against where the
+        // energy of a known tone has to be: 1 kHz is bin 1000 / (16000 / 400) = 25.
+        val nFft = 1 + WhisperMel.N_FFT / 2
+        val identity = FloatArray(nFft * nFft) { if (it / nFft == it % nFft) 1f else 0f }
+        val samples = FloatArray(WhisperMel.SAMPLE_RATE) {
+            (0.5 * sin(2.0 * PI * 1000.0 * it / WhisperMel.SAMPLE_RATE)).toFloat()
+        }
+        val mel = WhisperMel.compute(samples, identity, nFft, nFft)
+        val frame = 10
+        val loudest = (0 until nFft).maxByOrNull { mel[it * WhisperMel.MEL_LEN + frame] }
+        assertEquals(25, loudest)
+    }
 }

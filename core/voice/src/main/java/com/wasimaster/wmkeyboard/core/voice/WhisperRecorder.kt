@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.os.Process
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperMel
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -13,6 +14,9 @@ import kotlin.math.sqrt
  * 30-second float buffer (Whisper's window). Reports a smoothed input level for
  * the panel's pulse ring and fires [onMaxReached] when the buffer fills so the
  * service can transcribe and, in continuous mode, start the next utterance.
+ * [onLost] fires instead when the microphone stops delivering mid-clip — the
+ * audio server died, or the capture was torn down under it — and what was
+ * recorded up to then is still there for [stop] to return.
  *
  * The caller must hold RECORD_AUDIO before [start]. [stop] is idempotent and
  * returns exactly the samples captured so far; it blocks briefly while the
@@ -21,6 +25,7 @@ import kotlin.math.sqrt
 class WhisperRecorder(
     private val onLevel: (Float) -> Unit,
     private val onMaxReached: () -> Unit,
+    private val onLost: () -> Unit = {},
 ) {
     private val maxSamples = WhisperMel.N_SAMPLES // 16 kHz * 30 s
     private val buffer = FloatArray(maxSamples)
@@ -34,6 +39,9 @@ class WhisperRecorder(
 
     /** The capture's audio session, for [MicBlockWatcher]; 0 when not recording. */
     val audioSessionId: Int get() = record?.audioSessionId ?: 0
+
+    /** How much has been captured so far, in samples. */
+    val sampleCount: Int get() = count
 
     @SuppressLint("MissingPermission") // caller verifies RECORD_AUDIO
     fun start(): Boolean {
@@ -72,10 +80,21 @@ class WhisperRecorder(
     }
 
     private fun readLoop(r: AudioRecord) {
+        // A reader that loses the CPU to background work drops samples once
+        // the capture buffer overruns, and a gap in the audio is a wrong word.
+        runCatching { Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO) }
         val chunk = ShortArray(1600) // ~100 ms
         while (running) {
             val n = r.read(chunk, 0, chunk.size)
-            if (n <= 0) continue
+            if (n < 0) {
+                // An error code, not a short read, and it does not clear by
+                // itself: asking again returns at once with the same answer,
+                // so carrying on would spin here until somebody called stop.
+                running = false
+                onLost()
+                break
+            }
+            if (n == 0) continue
             var sumSq = 0.0
             val room = min(n, maxSamples - count)
             for (i in 0 until room) {

@@ -21,5 +21,8 @@ object WhisperEngine {
         langToken: Int? = null,
     ): String = error("Offline Whisper is not available in the lite build")
 
+    @Suppress("UNUSED_PARAMETER")
+    fun warm(modelFile: File, vocabFile: File) = Unit
+
     fun release() = Unit
 }

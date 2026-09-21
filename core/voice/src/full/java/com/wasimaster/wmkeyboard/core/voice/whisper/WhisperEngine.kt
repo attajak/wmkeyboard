@@ -116,6 +116,26 @@ object WhisperEngine {
         }
     }
 
+    /**
+     * Loads the interpreter and the vocabulary ahead of [transcribe]. Mapping a
+     * graph and building its interpreter takes about as long as a short phrase
+     * takes to say, so done while the phrase is being recorded it costs the user
+     * nothing, and done after it they wait for it. Best effort: whatever goes
+     * wrong here goes wrong again in [transcribe], which is where it is reported.
+     * Call on a background dispatcher only.
+     */
+    fun warm(modelFile: File, vocabFile: File) {
+        lock.lock()
+        try {
+            runCatching {
+                obtainVocab(vocabFile)
+                obtainInterpreter(modelFile)
+            }.onFailure { releaseLocked() }
+        } finally {
+            lock.unlock()
+        }
+    }
+
     /** Frees the cached interpreter. Non-blocking, so IME trim-memory never waits. */
     fun release() {
         if (!lock.tryLock()) return

@@ -97,7 +97,7 @@ This is everything the keyboard sends and expects, so you can build or proxy a s
 | `language` | when **Send the keyboard language** is on and Whisper knows the language | an ISO-639-1 code such as `en`, `bn` or `de` |
 | `response_format` | always | `json` |
 
-An `Authorization: Bearer <key>` header is added when **API key** is filled in. Clips shorter than 0.3 seconds are never sent.
+An `Authorization: Bearer <key>` header is added when **API key** is filled in. Clips shorter than 0.3 seconds, and clips with nothing louder than a quiet room in them, are never sent. See [A silent clip types nothing](/tools/whisper/#details--edge-cases).
 
 **Reply.** HTTP 200 with `{"text": "the words"}`. Other fields are ignored. A plain-text body is accepted too, and is used as the transcript.
 

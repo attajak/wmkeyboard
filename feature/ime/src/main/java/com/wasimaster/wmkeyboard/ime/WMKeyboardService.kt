@@ -457,6 +457,7 @@ import com.wasimaster.wmkeyboard.core.otp.NotificationOtpBus
 import com.wasimaster.wmkeyboard.core.otp.NotificationOtpCapture
 import com.wasimaster.wmkeyboard.core.voice.MicBlockWatcher
 import com.wasimaster.wmkeyboard.core.voice.VoiceInputEngine
+import com.wasimaster.wmkeyboard.core.voice.VoiceClipGate
 import com.wasimaster.wmkeyboard.core.voice.VoicePunctuation
 import com.wasimaster.wmkeyboard.core.voice.VoiceCasing
 import com.wasimaster.wmkeyboard.core.voice.VoiceSpacing
@@ -17638,6 +17639,7 @@ open class WMKeyboardService : InputMethodService() {
                 // starts the next one on its own.
                 finishWhisper(userStopped = false)
             },
+            onLost = { onWhisperCaptureLost(generation) },
         )
         if (!recorder.start()) {
             _uiState.update {
@@ -17654,6 +17656,44 @@ open class WMKeyboardService : InputMethodService() {
         // A blocked mic records zeros, and Whisper turns a silent clip into
         // confident filler text, so catch it before anything is transcribed.
         micBlockWatcher.start(recorder.audioSessionId) { onMicBlocked(generation) }
+        // The graph loads while the phrase is being said rather than after it.
+        if (model != null) {
+            serviceScope.launch(Dispatchers.Default) {
+                WhisperEngine.warm(WhisperStore.modelFile(filesDir, model), WhisperStore.vocabFile(filesDir, model))
+            }
+        }
+    }
+
+    /**
+     * The microphone stopped delivering in the middle of a clip. Whatever was
+     * said before it went is still worth typing, so a clip with anything in it
+     * is transcribed as if the user had pressed stop; one that died at the start
+     * has nothing to offer and says the microphone failed. Called from the
+     * recorder's own thread.
+     */
+    private fun onWhisperCaptureLost(generation: Int) {
+        serviceScope.launch(Dispatchers.Main) {
+            if (generation != voiceGeneration) return@launch
+            val recorder = whisperRecorder ?: return@launch
+            if (recorder.sampleCount >= VoiceClipGate.MIN_SAMPLES) {
+                finishWhisper(userStopped = true)
+                return@launch
+            }
+            voiceGeneration++
+            whisperRecorder = null
+            whisperCapture = null
+            serverCapture = null
+            micBlockWatcher.stop()
+            serviceScope.launch(Dispatchers.IO) { runCatching { recorder.stop() } }
+            _uiState.update {
+                it.copy(
+                    voice = it.voice.copy(
+                        status = VoiceStatus.ERROR, partial = "", level = 0f,
+                        errorMessage = getString(R.string.ime_service_voice_mic_error),
+                    ),
+                )
+            }
+        }
     }
 
     /**
@@ -17697,14 +17737,21 @@ open class WMKeyboardService : InputMethodService() {
         serviceScope.launch(Dispatchers.Default) {
             val pcm = runCatching { recorder.stop() }.getOrDefault(FloatArray(0))
             if (gen != voiceGeneration) return@launch
-            val result = runCatching {
-                WhisperEngine.transcribe(
-                    WhisperStore.modelFile(filesDir, model),
-                    WhisperStore.vocabFile(filesDir, model),
-                    pcm,
-                    translate,
-                    langToken,
-                )
+            // Whisper has no way to say "nothing": a silent window comes back
+            // as "Thank you." So a clip with nothing in it is never shown to it.
+            val faint = VoiceClipGate.isFaint(pcm)
+            val result = if (!VoiceClipGate.hasSpeech(pcm)) {
+                Result.success("")
+            } else {
+                runCatching {
+                    WhisperEngine.transcribe(
+                        WhisperStore.modelFile(filesDir, model),
+                        WhisperStore.vocabFile(filesDir, model),
+                        pcm,
+                        translate,
+                        langToken,
+                    )
+                }
             }
             // A graph told which language to use, or built for exactly one, cannot
             // answer in the wrong script. Only the auto-detecting ones can, and
@@ -17714,6 +17761,7 @@ open class WMKeyboardService : InputMethodService() {
                 if (gen != voiceGeneration) return@withContext
                 result
                     .map { if (detected) WhisperScript.rescue(it.trim(), languageId) else it.trim() }
+                    .map { VoiceClipGate.clean(it, faint) }
                     .onSuccess { commitWhisperResult(it, tag, userStopped) }
                     .onFailure { e ->
                         // A WhisperException carries a resource id instead of a
@@ -17756,9 +17804,11 @@ open class WMKeyboardService : InputMethodService() {
         serviceScope.launch(Dispatchers.IO) {
             val pcm = runCatching { recorder.stop() }.getOrDefault(FloatArray(0))
             if (gen != voiceGeneration) return@launch
-            // A tap-and-release is not speech; uploading it only earns a
-            // server's filler text ("Thank you.") for a phrase nobody said.
-            val result = if (pcm.size < MIN_SERVER_CLIP_SAMPLES) {
+            // A tap-and-release or a silent clip is not speech; uploading it
+            // only earns a server's filler text ("Thank you.") for a phrase
+            // nobody said.
+            val faint = VoiceClipGate.isFaint(pcm)
+            val result = if (!VoiceClipGate.hasSpeech(pcm)) {
                 Result.success("")
             } else {
                 runCatching {
@@ -17774,6 +17824,7 @@ open class WMKeyboardService : InputMethodService() {
             withContext(Dispatchers.Main) {
                 if (gen != voiceGeneration) return@withContext
                 result
+                    .map { VoiceClipGate.clean(it, faint) }
                     .onSuccess { commitWhisperResult(it, tag, userStopped) }
                     .onFailure { e ->
                         _uiState.update {
@@ -17794,8 +17845,11 @@ open class WMKeyboardService : InputMethodService() {
         val chain = !userStopped && voiceChains() &&
             !voiceStopRequested && voiceSessionAlive()
         if (text.isBlank()) {
-            // Nothing heard. In continuous mode keep listening; otherwise idle.
-            if (chain) {
+            // Nothing heard. In continuous mode keep listening — but not
+            // forever, so an abandoned open mic winds down the way it does
+            // for the system recognizer; otherwise idle.
+            if (chain && voiceSilentRetries < voiceSilentRetryLimit()) {
+                voiceSilentRetries++
                 _uiState.update { it.copy(voice = it.voice.copy(partial = "", level = 0f)) }
                 serviceScope.launch(Dispatchers.Main) { startVoice() }
             } else {
@@ -17803,6 +17857,7 @@ open class WMKeyboardService : InputMethodService() {
             }
             return
         }
+        voiceSilentRetries = 0
         commitVoiceUtterance(text, tag)
         if (chain) {
             _uiState.update { it.copy(voice = it.voice.copy(partial = "", level = 0f, canUndo = true)) }
@@ -28795,9 +28850,6 @@ open class WMKeyboardService : InputMethodService() {
          * visible delay.
          */
         private const val ENGINE_SWITCH_TIMEOUT_MS = 1_000L
-
-        /** 0.3 s at 16 kHz: shorter than any word, so never worth an upload. */
-        private const val MIN_SERVER_CLIP_SAMPLES = 4_800
 
         /** See [voiceBarDockSlopPx]. */
         private const val VOICE_BAR_DOCK_SLOP_DP = 72
