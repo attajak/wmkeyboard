@@ -170,6 +170,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.node.LayoutModifierNode
+import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.platform.LocalConfiguration
 import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxPolicy
 import com.wasimaster.wmkeyboard.core.settings.ScreenVariant
@@ -223,7 +225,12 @@ import androidx.compose.ui.input.pointer.changedToDownIgnoreConsumed
 import androidx.compose.ui.input.pointer.changedToUp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.IntrinsicMeasurable
+import androidx.compose.ui.layout.IntrinsicMeasureScope
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
@@ -263,7 +270,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.constrain
+import androidx.compose.ui.unit.constrainHeight
+import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.isSpecified
+import androidx.compose.ui.unit.offset
 import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toOffset
@@ -17232,19 +17242,24 @@ private fun AlternatesPopup(
     // hold-drag needs the entries in. So the provider is wrapped rather than the
     // arithmetic being repeated on the other side, where it would go quietly
     // stale the first time the clamping changed.
-    val provider = remember(popupPosition, hold) {
-        if (hold == null) {
-            popupPosition
-        } else {
-            object : PopupPositionProvider {
-                override fun calculatePosition(
-                    anchorBounds: IntRect,
-                    windowSize: IntSize,
-                    layoutDirection: LayoutDirection,
-                    popupContentSize: IntSize,
-                ): IntOffset = popupPosition
+    //
+    // The wrap also keeps the side margin the width budget above set aside. The
+    // anchor's provider only keeps the popup on the display, so a popup as wide
+    // as that budget, over a key right of centre (the spacebar), sat flush
+    // against the right edge with twice the margin on the left (#298).
+    val marginPx = with(LocalDensity.current) { PopupSideMarginDp.dp.roundToPx() }
+    val provider = remember(popupPosition, hold, marginPx) {
+        object : PopupPositionProvider {
+            override fun calculatePosition(
+                anchorBounds: IntRect,
+                windowSize: IntSize,
+                layoutDirection: LayoutDirection,
+                popupContentSize: IntSize,
+            ): IntOffset {
+                val at = popupPosition
                     .calculatePosition(anchorBounds, windowSize, layoutDirection, popupContentSize)
-                    .also { hold.popupOffset = it }
+                val x = alternatesPopupX(at.x, windowSize.width - popupContentSize.width, marginPx)
+                return IntOffset(x, at.y).also { hold?.popupOffset = it }
             }
         }
     }
@@ -17285,7 +17300,7 @@ private fun AlternatesPopup(
                                 .alternateHighlight(
                                     index, hold, kb.pressedKey, kb.popupRadiusDp.dp,
                                 )
-                                .padding(entryPadding),
+                                .alternatePadding(entryPadding),
                             fontSize = (18 * fontScale).sp,
                             color = kb.popupText,
                         )
@@ -17326,7 +17341,9 @@ private fun AlternatesPopup(
  * down to centring a part-full row under the ones it shares the popup with. Any
  * other value is a fixed column count: every entry takes the width of the widest,
  * so the columns line up down the popup, and a part-full row keeps its place on
- * that grid rather than being centred off it.
+ * that grid rather than being centred off it. The count is a ceiling rather than
+ * a promise: when the display cannot fit that many of the widest glyph across,
+ * the grid lays out as many as it can ([fittedAlternateColumns]).
  *
  * [nearestFirst] flips which end of the popup the first entry lands on. Off, the
  * rows are placed in order and the popup fills like a paragraph — first entry
@@ -17353,18 +17370,30 @@ private fun AlternatesGrid(
         val bounded = constraints.maxWidth != Constraints.Infinity
         val limit = if (bounded) constraints.maxWidth else Int.MAX_VALUE
         // A fixed-column entry is measured against its share of the width rather
-        // than the whole of it, so a long one ellipsises inside its cell instead
-        // of pushing the grid off the screen.
-        val cell = if (columns > 0) (limit / columns).coerceAtLeast(1) else limit
+        // than the whole of it, so a long one wraps inside its cell instead of
+        // pushing the grid off the screen. Only down to its longest unbreakable
+        // run, though: squeezed past that, an emoji still draws at full width,
+        // spilling out of its cell to the right while the finger is matched
+        // against the cell (#298). So a count that cannot hold every entry's
+        // glyph drops to one that can. The entries' side padding has already
+        // given way by then ([alternatePadding]), which is why the width asked
+        // of them here is the glyph's alone.
+        val fitted = if (columns > 0) {
+            val floor = measurables.maxOfOrNull { it.minIntrinsicWidth(Constraints.Infinity) } ?: 0
+            fittedAlternateColumns(columns, floor, limit)
+        } else {
+            columns
+        }
+        val cell = if (fitted > 0) (limit / fitted).coerceAtLeast(1) else limit
         val placeables = measurables.map { it.measure(Constraints(maxWidth = cell)) }
         var taken = 0
-        val rows = alternateRowSizes(placeables.map { it.width }, columns, limit).map { count ->
+        val rows = alternateRowSizes(placeables.map { it.width }, fitted, limit).map { count ->
             placeables.subList(taken, taken + count).also { taken += count }
         }
         val heights = rows.map { row -> row.maxOfOrNull { it.height } ?: 0 }
         val cellWidth = (placeables.maxOfOrNull { it.width } ?: 0).coerceAtMost(cell)
-        val widest = if (columns > 0) {
-            cellWidth * minOf(columns, placeables.size)
+        val widest = if (fitted > 0) {
+            cellWidth * minOf(fitted, placeables.size)
         } else {
             rows.maxOfOrNull { row -> row.sumOf { it.width } } ?: 0
         }
@@ -17379,12 +17408,12 @@ private fun AlternatesGrid(
             for (index in if (nearestFirst) rows.indices.reversed() else rows.indices) {
                 val row = rows[index]
                 val rowHeight = heights[index]
-                var x = if (columns > 0) 0 else (width - row.sumOf { it.width }) / 2
+                var x = if (fitted > 0) 0 else (width - row.sumOf { it.width }) / 2
                 // Where this row starts in the content, which is what the rows
                 // were cut from and so is the sum of every earlier row's size.
                 var slot = rows.take(index).sumOf { it.size }
                 for (placeable in row) {
-                    val lane = if (columns > 0) cellWidth else placeable.width
+                    val lane = if (fitted > 0) cellWidth else placeable.width
                     val left = x + (lane - placeable.width) / 2
                     val top = y + (rowHeight - placeable.height) / 2
                     placeable.place(left, top)
@@ -17445,6 +17474,93 @@ internal fun alternateRowSizes(widths: List<Int>, columns: Int, limit: Int): Lis
 }
 
 /**
+ * The column count [AlternatesGrid] actually lays out: the one asked for, or
+ * fewer when a share of [limit] that small is narrower than [floor], the widest
+ * any entry can be squeezed to. Never below one column. [columns] of 0 is the
+ * automatic wrap and passes through untouched.
+ */
+internal fun fittedAlternateColumns(columns: Int, floor: Int, limit: Int): Int =
+    if (columns <= 0 || floor <= 0) {
+        columns
+    } else {
+        columns.coerceAtMost((limit / floor).coerceAtLeast(1))
+    }
+
+/**
+ * How much of [padding] each side of an alternate keeps when the entry is
+ * offered [maxWidth] and its content cannot go narrower than [content]: all of
+ * it while there is room, then an equal share of what is left, down to none.
+ */
+internal fun alternateSidePadding(maxWidth: Int, content: Int, padding: Int): Int =
+    ((maxWidth - content) / 2).coerceIn(0, padding)
+
+/**
+ * Where the alternates popup's left edge goes: [x] as the anchor's provider
+ * placed it, held [margin] clear of both sides of the display. [room] is the
+ * display's width less the popup's. A popup too wide for both margins is
+ * centred instead, which is still the most room it can have on each side.
+ */
+internal fun alternatesPopupX(x: Int, room: Int, margin: Int): Int =
+    if (room >= margin * 2) x.coerceIn(margin, room - margin) else (room / 2).coerceAtLeast(0)
+
+/**
+ * An alternate's padding, whose sides give way before its content does.
+ *
+ * The padding is both the gap between entries and their touch target
+ * ([KeyPopupSettings.alternatesPaddingDp]), and a fixed column count
+ * ([AlternatesGrid]) can offer an entry less than its glyph plus both sides.
+ * Plain padding keeps its sides and hands the squeeze to the text, but an emoji
+ * cannot wrap: it drew at full width from the left inset, off-centre in its cell
+ * and out past it (#298). Here the sides shrink evenly to what the content's
+ * longest unbreakable run leaves, so the glyph stays whole and centred, and the
+ * cell the hold-drag matches the finger against is the cell the glyph is in.
+ * Top and bottom keep the full padding; nothing squeezes a row's height.
+ *
+ * For the same reason the entry's minimum intrinsic width is its content's alone:
+ * the sides can go to nothing, and that is the width [AlternatesGrid] fits its
+ * column count to.
+ */
+private fun Modifier.alternatePadding(padding: Dp): Modifier = this then AlternatePaddingElement(padding)
+
+private data class AlternatePaddingElement(val padding: Dp) : ModifierNodeElement<AlternatePaddingNode>() {
+    override fun create() = AlternatePaddingNode(padding)
+
+    override fun update(node: AlternatePaddingNode) {
+        node.padding = padding
+    }
+}
+
+private class AlternatePaddingNode(var padding: Dp) : Modifier.Node(), LayoutModifierNode {
+    override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {
+        val pad = padding.roundToPx()
+        val side = if (constraints.hasBoundedWidth) {
+            alternateSidePadding(constraints.maxWidth, measurable.minIntrinsicWidth(constraints.maxHeight), pad)
+        } else {
+            pad
+        }
+        val placeable = measurable.measure(constraints.offset(-side * 2, -pad * 2))
+        return layout(
+            constraints.constrainWidth(placeable.width + side * 2),
+            constraints.constrainHeight(placeable.height + pad * 2),
+        ) {
+            placeable.place(side, pad)
+        }
+    }
+
+    override fun IntrinsicMeasureScope.minIntrinsicWidth(measurable: IntrinsicMeasurable, height: Int): Int =
+        measurable.minIntrinsicWidth(height)
+
+    override fun IntrinsicMeasureScope.maxIntrinsicWidth(measurable: IntrinsicMeasurable, height: Int): Int =
+        measurable.maxIntrinsicWidth(height) + padding.roundToPx() * 2
+
+    override fun IntrinsicMeasureScope.minIntrinsicHeight(measurable: IntrinsicMeasurable, width: Int): Int =
+        measurable.minIntrinsicHeight(width) + padding.roundToPx() * 2
+
+    override fun IntrinsicMeasureScope.maxIntrinsicHeight(measurable: IntrinsicMeasurable, width: Int): Int =
+        measurable.maxIntrinsicHeight(width) + padding.roundToPx() * 2
+}
+
+/**
  * One action entry of the alternates popup: the tool's own icon, a named icon,
  * or the action's glyph — in that order, which is the order that answers "what
  * will this do" fastest.
@@ -17499,7 +17615,7 @@ private fun AlternateAction(
         modifier = Modifier
             .clickable(onClick = onClick)
             .then(modifier)
-            .padding(padding),
+            .alternatePadding(padding),
         contentAlignment = Alignment.Center,
     ) {
         when {

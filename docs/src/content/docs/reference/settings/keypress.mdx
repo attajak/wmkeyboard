@@ -144,6 +144,8 @@ This group is about the press-and-hold popup, not the preview bubble above it. T
 
 **Alternate key columns** is Auto by default, which fits as many per row as the screen allows and lets the popup's shape follow the width of the characters. Pick a number instead and every row gets that many equal columns, so a key with a dozen alternates reads as a block and each character stays where you last found it. The stepper walks Auto, 3, 4 and up to 11 one press at a time.
 
+The number you pick is a ceiling. If that many columns at your spacing don't fit across the screen, the spacing on either side of each character shrinks first, evenly, so every character stays whole and centred in its column. If even the bare characters don't fit, for example 11 columns at a big **Alternate key size**, the popup uses as many columns as do fit. Either way the popup keeps a small margin from both edges of the screen, so one as wide as the screen sits centred rather than pushed against a side.
+
 This one is the keyboard-wide default. A single key can carry a count of its own, set on **Columns in the popup** in the [layout editor's key sheet](/languages/custom-layouts/#editing-a-key), and where it does, that wins. Keys start at "From settings", so this row is what they all follow until you say otherwise.
 
 **Closest to the key first** decides which end of a multi-row popup the first alternate goes to. Off, the popup fills like lines of text: first alternate top left, and on a tall popup that's the corner furthest from your thumb. On, it fills from the key outward, so the first alternate sits on the row nearest your finger and the overflow climbs away. That's the AOSP behaviour, and it's the shorter reach on keys with long lists. On a one-row popup the two look identical.
