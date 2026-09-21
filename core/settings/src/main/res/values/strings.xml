@@ -127,6 +127,8 @@
     <!-- ================================================================== -->
 
     <string name="core_settings_copied_code_chip_off_label">Never</string>
+    <string name="core_settings_clipboard_view_grid_label">Grid</string>
+    <string name="core_settings_clipboard_view_list_label">List</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Code boxes only</string>
     <string name="core_settings_copied_code_chip_any_field_label">Any field</string>
 

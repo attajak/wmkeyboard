@@ -34,6 +34,12 @@
     <string name="clipboard_full_bleed_title">Full-screen clipboard panel</string>
     <string name="clipboard_full_bleed_subtitle">Hide the toolbar behind a back button so the history gets the whole keyboard</string>
     <string name="clipboard_full_bleed_info">The clipboard panel takes the whole keyboard. The toolbar, the emoji row and the symbol row step aside, and a slim back header takes their place. The history then shows more clips at once. While you search the history, the panel returns to its compact form so the keys fit below it. This setting is on by default.</string>
+    <string name="clipboard_view_title">History layout</string>
+    <string name="clipboard_view_subtitle">Cards in two columns, or one clip per row</string>
+    <string name="clipboard_view_info">The grid packs two columns of cards, which suits pictures. The list gives each clip a whole row, which suits long text. The switch beside the panel\'s search bar changes the same setting. The grid is the default.</string>
+    <string name="clipboard_numbers_title">Number the clips</string>
+    <string name="clipboard_numbers_subtitle">Show a number beside each clip, so you tap the one you mean</string>
+    <string name="clipboard_numbers_info">Each clip keeps its own number while you search. The results show the numbers the clips had, and the count does not start again from 1. The numbers follow the order of the panel, from the top. This setting is off by default.</string>
     <string name="clipboard_pinned_last_title">Pinned entries last</string>
     <string name="clipboard_pinned_last_subtitle">List pinned clips at the end of the panel instead of the top</string>
     <string name="clipboard_search_title">Search bar</string>

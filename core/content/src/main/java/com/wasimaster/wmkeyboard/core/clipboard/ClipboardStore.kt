@@ -121,6 +121,12 @@ fun ClipItem.matchesQuery(query: String): Boolean {
     return trimmed.isEmpty() || searchHaystack().contains(trimmed, ignoreCase = true)
 }
 
+/**
+ * Whether the clipboard panel offers to edit this clip: text of any kind,
+ * unless it is a secret, whose text the panel never puts on screen.
+ */
+val ClipItem.clipEditable: Boolean get() = kind.isTextual && !sensitive
+
 /** Recognises clips that are a bare URL, so they can be shown as links. */
 object ClipLinks {
 
@@ -415,6 +421,50 @@ class ClipboardStore(
     fun setPinned(id: Long, pinned: Boolean) {
         val index = items.indexOfFirst { it.id == id }
         if (index >= 0) items[index] = items[index].copy(pinned = pinned)
+    }
+
+    /**
+     * Rewrites a textual clip's text, as the user edited it in the panel.
+     *
+     * The clip keeps its id, its place and its timestamp — an edit is not a
+     * fresh copy, and a clip that jumped to the top on being corrected would
+     * change every number the panel shows beside the others. It keeps its pin
+     * and its sensitivity too. What it loses is whatever the old text implied:
+     * rich text's markup (the edit is plain text, so pasting the old markup
+     * would paste the old words) and a link's fetched preview. Whether it is a
+     * link at all is decided again from the new text.
+     *
+     * An edit that lands on the text of another clip merges into this one,
+     * the way copying the same text twice never makes two entries, keeping
+     * the other's pin if it had one.
+     *
+     * Returns the clip as stored, or null when there is nothing to edit: no
+     * such clip, a clip that is not text, or blank text — deleting is what
+     * the delete button is for.
+     */
+    @Synchronized
+    fun editText(id: Long, text: String): ClipItem? {
+        val index = items.indexOfFirst { it.id == id }
+        if (index < 0) return null
+        val item = items[index]
+        if (!item.kind.isTextual) return null
+        val trimmed = text.trim()
+        if (trimmed.isEmpty()) return null
+        // Saved without a change: nothing to lose, so rich text keeps its markup.
+        if (trimmed == item.text) return item
+        val duplicate = items.firstOrNull { it.id != id && it.kind.isTextual && it.text == trimmed }
+        val edited = item.copy(
+            text = trimmed,
+            kind = if (ClipLinks.asUrl(trimmed) != null) ClipKind.LINK else ClipKind.TEXT,
+            htmlText = null,
+            mimeType = "text/plain",
+            linkPreview = null,
+            pinned = item.pinned || duplicate?.pinned == true,
+            sensitive = item.sensitive || duplicate?.sensitive == true,
+        )
+        items[index] = edited
+        if (duplicate != null) removeWhere { it === duplicate }
+        return edited
     }
 
     @Synchronized

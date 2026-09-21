@@ -64,8 +64,8 @@ object BuiltInPanelLayouts {
     )
 
     /**
-     * The clipboard: search pill, the fragment chips pulled out of the
-     * history, the history itself. [bottomRow] adds the abc / space / backspace
+     * The clipboard: search pill and the grid / list switch, the fragment
+     * chips pulled out of the history, the history itself. [bottomRow] adds the abc / space / backspace
      * row the old `clipboard.bottomRow` setting used to switch on; the
      * settings store seeds a user's layout from this when that flag was set.
      */
@@ -73,7 +73,7 @@ object BuiltInPanelLayouts {
         panel = PanelKind.CLIPBOARD,
         grid = LayerSpec(
             rows = buildList {
-                add(listOf(field(PanelFieldKind.CLIPBOARD_SEARCH, 10f)))
+                add(listOf(field(PanelFieldKind.CLIPBOARD_SEARCH, 9f), field(PanelFieldKind.CLIPBOARD_VIEW, 1f)))
                 add(listOf(field(PanelFieldKind.CLIPBOARD_ENTITIES, 10f)))
                 add(listOf(field(PanelFieldKind.CLIPBOARD_LIST, 10f)))
                 if (bottomRow) add(this@BuiltInPanelLayouts.bottomRow)

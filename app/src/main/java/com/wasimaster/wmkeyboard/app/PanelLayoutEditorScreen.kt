@@ -120,6 +120,7 @@ internal fun fieldTitleRes(kind: PanelFieldKind): Int = when (kind) {
     PanelFieldKind.CLIPBOARD_SEARCH -> R.string.field_name_clipboard_search
     PanelFieldKind.CLIPBOARD_ENTITIES -> R.string.field_name_clipboard_entities
     PanelFieldKind.CLIPBOARD_LIST -> R.string.field_name_clipboard_list
+    PanelFieldKind.CLIPBOARD_VIEW -> R.string.field_name_clipboard_view
     PanelFieldKind.TRACKPAD -> R.string.field_name_trackpad
     PanelFieldKind.UNKNOWN -> R.string.field_name_unknown
 }

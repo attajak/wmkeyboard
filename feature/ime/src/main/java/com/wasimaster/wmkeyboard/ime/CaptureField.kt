@@ -201,6 +201,8 @@ enum class CaptureTarget(
     MEDIA_SEARCH(takesWords = true),
     DICTIONARY_SEARCH(takesWords = true),
     CLIPBOARD_SEARCH(takesWords = true),
+    /** The clipboard panel's clip editor: free text, newlines and all. */
+    CLIP_EDIT(takesWords = true),
     ;
 
     /**

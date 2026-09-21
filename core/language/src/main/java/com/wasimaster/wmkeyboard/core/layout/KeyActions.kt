@@ -629,6 +629,8 @@ enum class PanelFieldKind(val panel: PanelKind) {
     @SerialName("clipboard_search") CLIPBOARD_SEARCH(PanelKind.CLIPBOARD),
     @SerialName("clipboard_entities") CLIPBOARD_ENTITIES(PanelKind.CLIPBOARD),
     @SerialName("clipboard_list") CLIPBOARD_LIST(PanelKind.CLIPBOARD),
+    /** The grid / list switch for the clipboard history. */
+    @SerialName("clipboard_view") CLIPBOARD_VIEW(PanelKind.CLIPBOARD),
     @SerialName("trackpad") TRACKPAD(PanelKind.TRACKPAD),
     @SerialName("unknown") UNKNOWN(PanelKind.EMOJI),
     ;

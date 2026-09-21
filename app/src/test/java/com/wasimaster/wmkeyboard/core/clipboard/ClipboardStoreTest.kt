@@ -57,6 +57,69 @@ class ClipboardStoreTest {
         assertEquals(listOf("fresh", "pinned"), store.items(now = 3000).map { it.text })
     }
 
+    @Test fun editKeepsIdPlaceAndTimestamp() {
+        val store = ClipboardStore(null)
+        val a = store.add("teh answer", now = 1000)!!
+        store.add("newer", now = 2000)
+        val edited = store.editText(a.id, "  the answer \n")!!
+        assertEquals(a.id, edited.id)
+        assertEquals(1000, edited.timestamp)
+        assertEquals("the answer", edited.text)
+        assertEquals(listOf("newer", "the answer"), store.items(now = 3000).map { it.text })
+    }
+
+    @Test fun editRejectsBlankMissingAndNonText() {
+        val store = ClipboardStore(null)
+        val a = store.add("hello", now = 1000)!!
+        assertNull(store.editText(a.id, "   "))
+        assertNull(store.editText(999, "x"))
+        assertEquals("hello", store.items(now = 2000).single().text)
+        val file = store.addUri(
+            "content://files/1", "report.pdf", "application/pdf", isDirectory = false, now = 1500,
+        )!!
+        assertNull(store.editText(file.id, "renamed"))
+        assertEquals("report.pdf", store.items(now = 2000).first { it.id == file.id }.text)
+    }
+
+    @Test fun editDropsMarkupAndRedecidesLink() {
+        val store = ClipboardStore(null)
+        val rich = store.addHtml("bold", "<b>bold</b>", now = 1000)!!
+        // Unchanged text keeps the markup: saving without an edit loses nothing.
+        assertEquals(ClipKind.HTML, store.editText(rich.id, "bold")!!.kind)
+        val plain = store.editText(rich.id, "https://example.com")!!
+        assertEquals(ClipKind.LINK, plain.kind)
+        assertNull(plain.htmlText)
+        assertEquals("text/plain", plain.mimeType)
+        assertEquals(ClipKind.TEXT, store.editText(rich.id, "no longer a link")!!.kind)
+    }
+
+    @Test fun editOntoAnotherClipMerges() {
+        val store = ClipboardStore(null)
+        val keep = store.add("one", now = 1000)!!
+        val other = store.add("two", now = 2000)!!
+        store.setPinned(other.id, true)
+        val merged = store.editText(keep.id, "two")!!
+        assertEquals(keep.id, merged.id)
+        assertTrue(merged.pinned)
+        assertEquals(listOf(keep.id), store.items(now = 3000).map { it.id })
+    }
+
+    @Test fun editKeepsSensitivity() {
+        val store = ClipboardStore(null)
+        val secret = store.add("hunter2", now = 1000, sensitive = true)!!
+        assertTrue(store.editText(secret.id, "hunter3")!!.sensitive)
+    }
+
+    @Test fun panelOffersEditingForVisibleTextOnly() {
+        val store = ClipboardStore(null)
+        assertTrue(store.add("plain", now = 1000)!!.clipEditable)
+        assertTrue(store.add("https://example.com", now = 1000)!!.clipEditable)
+        assertFalse(store.add("hunter2", now = 1000, sensitive = true)!!.clipEditable)
+        assertFalse(
+            store.addUri("content://f/1", "a.pdf", "application/pdf", isDirectory = false, now = 1000)!!.clipEditable,
+        )
+    }
+
     @Test fun unpinnedExpires() {
         val store = ClipboardStore(null, expiryMillis = 100)
         store.add("ephemeral", now = 0)

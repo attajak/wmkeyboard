@@ -565,6 +565,15 @@
     <!-- Button in the press-and-hold details for an image clip. The image is
          fitted into a transparent 512 × 512 sticker canvas before sending. -->
     <string name="ime_clip_send_as_sticker">Send as sticker</string>
+    <string name="ime_clip_edit">Edit</string>
+    <string name="ime_clip_edit_title">Edit clip</string>
+    <string name="ime_clip_edit_save">Save</string>
+    <string name="ime_clip_edit_placeholder">Type the clip’s text</string>
+    <string name="ime_clip_edit_rich_note">Saving a change drops the formatting</string>
+    <string name="ime_clipboard_view_list_desc">Show clips as a list</string>
+    <string name="ime_clipboard_view_grid_desc">Show clips as a grid</string>
+    <!-- Spoken before a clip's content when clip numbers are on. %1$d is the clip's number in the history. -->
+    <string name="ime_clip_number_desc">Clip <xliff:g id="number" example="3">%1$d</xliff:g></string>
     <string name="ime_clip_entity_hint">Found in your clips. Press to paste only this part</string>
     <!-- Title of the popup for one part of a clip. %1$s names the kind of
          part, such as a phone number or a one-time code. -->

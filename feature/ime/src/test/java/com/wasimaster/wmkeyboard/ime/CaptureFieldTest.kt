@@ -192,6 +192,43 @@ class CaptureFieldTest {
     }
 
     @Test
+    fun `the clip editor has the keys only with its panel open`() {
+        val editing = KeyboardUiState(
+            panel = PanelMode.CLIPBOARD,
+            clipEdit = ClipEdit(id = 7, original = "teh", draft = "the"),
+        )
+        assertEquals(CaptureTarget.CLIP_EDIT, editing.captureTarget())
+        assertEquals("the", editing.captureBuffer())
+        assertTrue(editing.clipboardTakesKeys)
+        // An edit left behind by a panel that closed some other way must not
+        // keep typing into a buffer nothing is drawing.
+        val closed = editing.copy(panel = PanelMode.NONE)
+        assertNull(closed.captureTarget())
+        assertFalse(closed.clipboardTakesKeys)
+    }
+
+    @Test
+    fun `the clip editor outranks the clipboard search`() {
+        val state = KeyboardUiState(
+            panel = PanelMode.CLIPBOARD,
+            clipboardSearchActive = true,
+            clipboardQuery = "x",
+            clipEdit = ClipEdit(id = 1, original = "a"),
+        )
+        assertEquals(CaptureTarget.CLIP_EDIT, state.captureTarget())
+        assertTrue(CaptureTarget.CLIP_EDIT.takesWords)
+        assertTrue(CaptureTarget.CLIP_EDIT.movableCaret)
+    }
+
+    @Test
+    fun `a clip edit saves only a real change`() {
+        assertFalse(ClipEdit(1, "same").canSave)
+        assertFalse(ClipEdit(1, "same", draft = " same\n").canSave)
+        assertFalse(ClipEdit(1, "text", draft = "   ").canSave)
+        assertTrue(ClipEdit(1, "text", draft = "text!").canSave)
+    }
+
+    @Test
     fun `a media search only counts on a panel that has one`() {
         val searching = KeyboardUiState(
             panel = PanelMode.TRANSLATE,

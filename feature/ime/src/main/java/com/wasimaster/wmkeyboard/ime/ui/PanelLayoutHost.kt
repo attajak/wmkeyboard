@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
@@ -107,18 +108,32 @@ internal fun screenThemeId(state: KeyboardUiState): String? {
 }
 
 /**
- * The first row of an emoji layout when it is nothing but the tab strip and
- * the search pill — the row full-bleed lifts into its header — or null.
+ * The first row of a panel layout when it is nothing but [strip] components —
+ * the emoji panel's tabs and search pill, the clipboard's search pill and view
+ * switch — the row full-bleed lifts into its header; or null.
  */
-internal fun PanelLayoutSpec.leadingStrip(): List<Key>? {
+internal fun PanelLayoutSpec.leadingStrip(
+    strip: Set<PanelFieldKind> = EmojiHeaderFields,
+): List<Key>? {
     val row = grid.rows.firstOrNull() ?: return null
     if (grid.rows.size < 2 || row.isEmpty()) return null
-    val strip = row.all { key ->
-        val kind = (key.action as? KeyAction.Field)?.kind
-        kind == PanelFieldKind.EMOJI_TABS || kind == PanelFieldKind.EMOJI_SEARCH
-    }
-    return if (strip) row else null
+    val isStrip = row.all { key -> (key.action as? KeyAction.Field)?.kind in strip }
+    return if (isStrip) row else null
 }
+
+/** This layout without its first row, for when full-bleed has lifted that row into the header. */
+private fun PanelLayoutSpec.withoutLeadingRow(): PanelLayoutSpec = copy(
+    grid = grid.copy(
+        rows = grid.rows.drop(1),
+        rowHeights = grid.rowHeights?.drop(1),
+    ),
+)
+
+/** The emoji components a full-bleed header can carry. */
+private val EmojiHeaderFields = setOf(PanelFieldKind.EMOJI_TABS, PanelFieldKind.EMOJI_SEARCH)
+
+/** The clipboard components a full-bleed header can carry. */
+private val ClipboardHeaderFields = setOf(PanelFieldKind.CLIPBOARD_SEARCH, PanelFieldKind.CLIPBOARD_VIEW)
 
 /**
  * The emoji panel. Search mode keeps its compact form — the key rows return
@@ -145,12 +160,7 @@ internal fun EmojiPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCallba
             // in its first row keeps the plain header with the panel's name.
             val strip = spec.leadingStrip()
             if (strip != null) {
-                val rest = spec.copy(
-                    grid = spec.grid.copy(
-                        rows = spec.grid.rows.drop(1),
-                        rowHeights = spec.grid.rowHeights?.drop(1),
-                    ),
-                )
+                val rest = spec.withoutLeadingRow()
                 FullBleedTool(
                     state, title = "", onClose = onClose,
                     headerActions = {
@@ -199,14 +209,26 @@ internal fun EmojiPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCallba
 }
 
 /**
- * The clipboard panel. Searching hands the key rows back and steps out of
- * full-bleed, as before; otherwise the layout fills the key area, inside the
- * full-bleed chrome when that setting is on.
+ * The clipboard panel. Searching or editing a clip hands the key rows back
+ * and steps out of full-bleed, as before; otherwise the layout fills the key
+ * area, inside the full-bleed chrome when that setting is on.
  */
 @Composable
 internal fun ClipboardPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCallbacks) {
     val session = rememberClipboardPanelSession(state)
     val onClose = { callbacks.onPanelChange(PanelMode.CLIPBOARD) }
+    val edit = state.clipEdit
+    if (edit != null && state.clipEditActive) {
+        // The editor takes the search's compact height, for the same reason:
+        // the keys are back underneath, and the window must not move.
+        ClipEditDialog(
+            state, edit, callbacks.clipboard.actions,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(ClipboardSearchHeight + topBarHeight(state.settings) - captureStripHeight(state)),
+        )
+        return
+    }
     if (state.clipboardSearchActive) {
         // The panel shrinks to its search field plus a couple of result rows.
         // The toolbar row is hidden too (see KeyboardBody), so the panel
@@ -230,12 +252,52 @@ internal fun ClipboardPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCa
     val collapsed = buildSet {
         if (!session.showSearch) add(PanelFieldKind.CLIPBOARD_SEARCH)
         if (session.entities.isEmpty()) add(PanelFieldKind.CLIPBOARD_ENTITIES)
+        // Nothing to lay out either way until there is a clip.
+        if (state.clipboardItems.isEmpty()) add(PanelFieldKind.CLIPBOARD_VIEW)
     }
     if (state.settings.clipboard.fullBleed) {
-        // Full-bleed (opt-in): the toolbar row becomes the back header and the
-        // reclaimed rows go to the history.
-        FullBleedTool(state, stringResource(R.string.ime_tool_clipboard), onClose = onClose) {
-            PanelLayoutGrid(state, spec, callbacks, onClose, fields, Modifier.fillMaxSize(), collapsed)
+        // Full-bleed: the toolbar row becomes the back header and the
+        // reclaimed rows go to the history. A first row of nothing but the
+        // search pill and the view switch moves up into that header, as the
+        // emoji panel's tabs do, so the history starts right under it. With
+        // the pill hidden the header keeps the panel's name, and the switch
+        // sits at its end.
+        val strip = spec.leadingStrip(ClipboardHeaderFields)
+        if (strip != null) {
+            val shown = strip.filter { (it.action as KeyAction.Field).kind !in collapsed }
+            val searchShown = shown.any { (it.action as KeyAction.Field).kind == PanelFieldKind.CLIPBOARD_SEARCH }
+            FullBleedTool(
+                state,
+                title = if (searchShown) "" else stringResource(R.string.ime_tool_clipboard),
+                onClose = onClose,
+                headerActions = if (shown.isEmpty()) null else {
+                    {
+                        for (key in shown) {
+                            val kind = (key.action as KeyAction.Field).kind
+                            // The pill takes its share of the width; the switch
+                            // is a fixed square beside it, or alone at the end.
+                            val cell = if (kind == PanelFieldKind.CLIPBOARD_SEARCH) {
+                                Modifier.weight(key.width)
+                            } else {
+                                Modifier.width(HeaderToggleWidth)
+                            }
+                            Box(
+                                modifier = cell
+                                    .fillMaxHeight()
+                                    .padding(horizontal = 2.dp),
+                            ) { fields(kind) }
+                        }
+                    }
+                },
+            ) {
+                PanelLayoutGrid(
+                    state, spec.withoutLeadingRow(), callbacks, onClose, fields, Modifier.fillMaxSize(), collapsed,
+                )
+            }
+        } else {
+            FullBleedTool(state, stringResource(R.string.ime_tool_clipboard), onClose = onClose) {
+                PanelLayoutGrid(state, spec, callbacks, onClose, fields, Modifier.fillMaxSize(), collapsed)
+            }
         }
     } else {
         Box(
@@ -308,6 +370,9 @@ internal fun TrackpadPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCal
         )
     }
 }
+
+/** The clipboard's view switch in a full-bleed header: its square plus a little air. */
+private val HeaderToggleWidth = 44.dp
 
 /** Panel height while the clipboard search bar is capturing the keys. */
 internal val ClipboardSearchHeight = 132.dp

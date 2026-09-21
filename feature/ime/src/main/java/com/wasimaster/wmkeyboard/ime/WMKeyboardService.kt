@@ -101,8 +101,10 @@ import com.wasimaster.wmkeyboard.core.clipboard.ClipKind
 import com.wasimaster.wmkeyboard.core.clipboard.ClipLinks
 import com.wasimaster.wmkeyboard.core.clipboard.ClipSensitivity
 import com.wasimaster.wmkeyboard.core.clipboard.ClipboardStore
+import com.wasimaster.wmkeyboard.core.clipboard.clipEditable
 import com.wasimaster.wmkeyboard.core.settings.AutoThemeTrigger
 import com.wasimaster.wmkeyboard.core.settings.ManualModeDuration
+import com.wasimaster.wmkeyboard.core.settings.ClipboardView
 import com.wasimaster.wmkeyboard.core.settings.CopiedCodeChip
 import com.wasimaster.wmkeyboard.core.settings.SensitiveClipHandling
 import com.wasimaster.wmkeyboard.core.settings.activeThemeSpec
@@ -4820,6 +4822,9 @@ open class WMKeyboardService : InputMethodService() {
                 dictionarySearchActive = false,
                 clipboardSearchActive = false,
                 clipboardQuery = "",
+                // A clip half-edited survives the same field restarting, the
+                // way a selection mode does; another field closes the editor.
+                clipEdit = if (restarting) it.clipEdit else null,
                 mediaSearchActive = false,
                 mediaQuery = "",
                 mediaDownloadingId = null,
@@ -6521,6 +6526,9 @@ open class WMKeyboardService : InputMethodService() {
                 // searching. Every other media box runs the search.
                 if (state.panel == PanelMode.QR_GEN) captureTyped("\n") else runMediaSearch()
             CaptureTarget.EMOJI_SEARCH, CaptureTarget.CLIPBOARD_SEARCH -> Unit
+            // A clip is free text, so Enter is a line break in it; saving is
+            // the editor's own button.
+            CaptureTarget.CLIP_EDIT -> captureTyped("\n")
         }
         return true
     }
@@ -6634,6 +6642,7 @@ open class WMKeyboardService : InputMethodService() {
                 }
                 CaptureTarget.DICTIONARY_SEARCH -> updateQuery { it.copy(dictionaryQuery = after.text) }
                 CaptureTarget.CLIPBOARD_SEARCH -> updateQuery { it.copy(clipboardQuery = after.text) }
+                CaptureTarget.CLIP_EDIT -> clipEditDraft { after.text }
             }
         }
         val written = _uiState.value.captureBuffer()
@@ -16916,6 +16925,8 @@ open class WMKeyboardService : InputMethodService() {
                 dictionarySearchActive = false,
                 clipboardSearchActive = false,
                 clipboardQuery = "",
+                // An edit belongs to the panel it was opened in.
+                clipEdit = null,
                 // GIF/sticker reopen on their last search — unless a
                 // celebration chip staged one, which outranks it; everything
                 // else starts blank. A Wikipedia lookup chip seeds the search
@@ -22867,6 +22878,7 @@ open class WMKeyboardService : InputMethodService() {
                 onReplaceAll = ::onFindReplaceAll,
                 onUndo = ::onFindReplaceUndo,
             ),
+            clipboard = clipboardPanelActions(),
             learnFromText = com.wasimaster.wmkeyboard.ime.ui.LearnFromTextCallbacks(
                 onToggle = ::onLearnToggle,
                 onToggleAll = ::onLearnToggleAll,
@@ -26107,6 +26119,106 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update { it.copy(clipboardItems = clipboardStore.items()) }
     }
 
+    /**
+     * The clipboard panel's own actions, bundled into [ToolHoldCallbacks] for
+     * the reason [snippetPanelCallbacks] exists: [ServiceKeyboardContent] sits
+     * against the JVM's 64K ceiling and cannot take four more parameters.
+     */
+    private fun clipboardPanelActions() = com.wasimaster.wmkeyboard.ime.ui.ClipboardPanelActions(
+        onEdit = ::onClipEditStart,
+        onEditSave = ::onClipEditSave,
+        onEditCancel = ::onClipEditCancel,
+        onViewToggle = ::onClipboardViewToggle,
+    )
+
+    /** The panel's grid / list switch: the same setting the settings screen writes. */
+    fun onClipboardViewToggle() {
+        vibrate()
+        val next = when (_uiState.value.settings.clipboard.view) {
+            ClipboardView.GRID -> ClipboardView.LIST
+            ClipboardView.LIST -> ClipboardView.GRID
+        }
+        serviceScope.launch { settingsRepository.setClipboardView(next) }
+    }
+
+    /**
+     * Opens a clip in the panel's editor, and the keys with it. Only text is
+     * editable: an image or a file has no words of its own to change. Nor is a
+     * masked secret — the panel never shows one's text (see
+     * `ClipSensitiveBody`), and an editor is a way to show it.
+     *
+     * Read back from the store rather than trusted from the card, because the
+     * card is a frame old and a clip can expire under the finger.
+     */
+    fun onClipEditStart(item: com.wasimaster.wmkeyboard.core.clipboard.ClipItem) {
+        if (!isClipboardAccessible() || !item.clipEditable) return
+        val current = clipboardStore.items().firstOrNull { it.id == item.id } ?: return
+        if (!current.clipEditable) return
+        vibrate()
+        _uiState.update {
+            it.copy(
+                clipEdit = ClipEdit(
+                    id = current.id,
+                    original = current.text,
+                    rich = current.kind == ClipKind.HTML,
+                ),
+                // One field has the keys at a time: the editor takes them from
+                // the search, which gives its filter up with them.
+                clipboardSearchActive = false,
+                clipboardQuery = "",
+                panelFocus = null,
+            )
+        }
+    }
+
+    /** The editor's buffer; the keys type here while [KeyboardUiState.clipEditActive]. */
+    private fun clipEditDraft(transform: (String) -> String) {
+        _uiState.update { state ->
+            val edit = state.clipEdit ?: return@update state
+            state.copy(clipEdit = edit.copy(draft = transform(edit.draft).take(ClipEdit.MAX_LENGTH)))
+        }
+    }
+
+    /**
+     * Saves the draft over the clip and closes the editor.
+     *
+     * A blank draft saves nothing — the Save button is disabled for it, and a
+     * hardware path that got here anyway must not empty a clip. An unchanged
+     * one just closes. And a clip that expired while it was open is added
+     * back as a new one: the words typed into it are the user's, and losing
+     * them to a timer they could not see would be the worse surprise.
+     */
+    fun onClipEditSave() {
+        val edit = _uiState.value.clipEdit ?: return
+        if (edit.draft.isBlank()) return
+        vibrate()
+        if (!edit.canSave) {
+            _uiState.update { it.copy(clipEdit = null) }
+            return
+        }
+        val saved = clipboardStore.editText(edit.id, edit.draft)
+            ?: clipboardStore.add(edit.draft)
+        clipboardStore.save()
+        _uiState.update { state ->
+            state.copy(
+                clipEdit = null,
+                clipboardItems = clipboardStore.items(),
+                // The strip's paste chip holds its own copy of the clip; one
+                // left on the old text would paste what was just corrected.
+                clipboardSuggestion = state.clipboardSuggestion?.let { chip ->
+                    if (chip.id == edit.id) saved else chip
+                },
+            )
+        }
+    }
+
+    /** Leaves the editor with the clip as it was. */
+    fun onClipEditCancel() {
+        if (_uiState.value.clipEdit == null) return
+        vibrate()
+        _uiState.update { it.copy(clipEdit = null) }
+    }
+
     fun onOneHandedChange(mode: OneHandedMode) {
         vibrate()
         serviceScope.launch { settingsRepository.setOneHandedMode(mode) }
@@ -26273,6 +26385,8 @@ open class WMKeyboardService : InputMethodService() {
                 ({ onSnippetFolderOpen(null) })
             // The spelling editor closes before the Learn from text panel under it.
             state.learnEditActive -> ::onLearnEditCancel
+            // And the clip editor before the clipboard panel it opened over.
+            state.clipEditActive -> ::onClipEditCancel
             // The one layer Back leaves alone: a panel layout whose author
             // switched "Keep this layer open" on. The nav bar's chevron is how
             // people put a keyboard away, and eating it to close the very panel

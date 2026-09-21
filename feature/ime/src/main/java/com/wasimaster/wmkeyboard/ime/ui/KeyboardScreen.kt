@@ -9610,6 +9610,7 @@ private fun KeyboardBody(
                     onDelete = onClipboardDelete,
                     onSearchToggle = onClipboardSearchToggle,
                     onEntity = onClipboardEntity,
+                    actions = toolHold.clipboard,
                 ),
                 trackpad = TrackpadFieldCallbacks(
                     onKey = onKey,
@@ -10266,7 +10267,7 @@ private fun KeyboardBody(
                 // The emoji and clipboard panels reroute their search pills;
                 // the rest are only ever up with their own panel open.
                 CaptureTarget.EMOJI_SEARCH -> state.panel == PanelMode.EMOJI
-                CaptureTarget.CLIPBOARD_SEARCH -> clipboardSearching
+                CaptureTarget.CLIPBOARD_SEARCH, CaptureTarget.CLIP_EDIT -> clipboardSearching
                 CaptureTarget.DICTIONARY_SEARCH -> state.panel == PanelMode.DICTIONARY
                 CaptureTarget.MEDIA_SEARCH -> state.panel.hasMediaSearch
                 else -> true
@@ -16092,9 +16093,12 @@ internal fun numberRowShown(state: KeyboardUiState): Boolean =
 internal fun barLockHidden(state: KeyboardUiState): Boolean =
     state.deviceLocked && state.settings.toolbarBehavior.hideWhenLocked
 
-/** The clipboard panel has traded its full-bleed height for a search field. */
+/**
+ * The clipboard panel has traded its full-bleed height for one of its own
+ * fields — the search pill or the clip editor — with the keys back beneath.
+ */
 internal fun barClipboardSearching(state: KeyboardUiState): Boolean =
-    state.panel == PanelMode.CLIPBOARD && state.clipboardSearchActive && !barLockHidden(state)
+    state.clipboardTakesKeys && !barLockHidden(state)
 
 /** A panel is claiming the strip's height, so the rows above the keys are gone. */
 internal fun barFullBleed(state: KeyboardUiState): Boolean =
@@ -20656,6 +20660,8 @@ data class ToolHoldCallbacks(
     val findReplace: FindReplaceCallbacks = FindReplaceCallbacks(),
     /** The Learn from text panel's callbacks (#174); here for the same reason as [dictionaryBar]. */
     val learnFromText: LearnFromTextCallbacks = LearnFromTextCallbacks(),
+    /** The clipboard panel's editor and view switch; here for the same reason as [dictionaryBar]. */
+    val clipboard: ClipboardPanelActions = ClipboardPanelActions(),
 )
 
 // ---- snippets panel ----
@@ -21398,6 +21404,8 @@ internal fun ClipActionCircle(
 internal fun ClipInfoPopup(
     item: ClipItem,
     onSendSticker: (() -> Unit)? = null,
+    /** Opens the clip in the panel's editor; null for a clip that has no text to edit. */
+    onEdit: (() -> Unit)? = null,
     onDismiss: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
@@ -21460,6 +21468,16 @@ internal fun ClipInfoPopup(
                 ClipInfoRow(stringResource(R.string.ime_clip_info_type), typeLabel, kb.popupText)
                 sizeLabel?.let {
                     ClipInfoRow(stringResource(R.string.ime_clip_info_size), it, kb.popupText)
+                }
+                if (onEdit != null) {
+                    TextButton(
+                        onClick = onEdit,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(Icons.Outlined.Edit, contentDescription = null)
+                        Spacer(Modifier.width(6.dp))
+                        Text(stringResource(R.string.ime_clip_edit))
+                    }
                 }
                 if (onSendSticker != null) {
                     TextButton(

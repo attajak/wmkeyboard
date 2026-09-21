@@ -21,6 +21,27 @@ Tap **Clipboard** on the toolbar. If you unpinned it, open the toolbox and tap i
 
 Cards lay out in a staggered two-column grid rather than a fixed one, so a short text clip doesn't get stretched to match a tall image beside it. Pinned clips sort first by default ([flip that](#options) to put them last instead). Tap any card to insert it. Copying the same content again moves the existing card back to the top rather than adding a duplicate.
 
+### Grid or list
+
+The square button beside the search box switches the history between the grid and a list. The list gives each clip a whole row: the text across the full width, up to three lines of it, with the pin and delete circles at the end, and a picture as a small thumbnail at the start of its row. It's the easier one to read when your clips are long text. The button shows the view a tap takes you to, and the choice sticks. It's the same setting as **History layout** under [Options](#options). The button is a cell of the [panel layout](/languages/custom-layouts/#panel-layouts) (**Grid or list switch** in the component picker), so you can move it or drop it. With the full-screen panel on, it sits at the right end of the header.
+
+### Numbered clips
+
+Turn on **Number the clips** and every clip gets a small number: at the start of its row in the list, and next to the pin in the grid, so a card never gets taller for it. The number belongs to the clip, not to the spot it's drawn in. Search the history and the results keep the numbers they had, so the third clip is still number 3 when it's the only match. Numbers follow the panel's order from the top, pinned clips included.
+
+### Editing a clip
+
+Press and hold a text clip and tap **Edit** in its popup. An editor opens where the history was, with the keys back underneath it, and your typing goes into the clip rather than into the app you're writing in. Enter starts a new line. Tap the text to move the cursor, or use the spacebar and arrow keys like anywhere else. **Save** keeps the change and **Cancel** (or Back) leaves the clip as it was.
+
+An edited clip keeps its place in the history, its number, its pin and its age, so it doesn't jump to the top and push the others around. A few things do change:
+
+- Rich text becomes plain text once you change it, since the old formatting was for the old words. The editor says so before you save. Saving without a change keeps the formatting.
+- A link's fetched preview is dropped, and whether the clip counts as a link at all is worked out again from the new text.
+- If the new text matches another clip, the two merge into the one you edited, the same way copying something twice never makes two entries.
+- If the clip expired while you had it open, saving adds your text back as a new clip instead of losing it.
+
+Images, files, folders and videos have no text to edit, so their popup has no **Edit**. Neither does a [hidden password or code](#passwords-are-handled-deliberately): the panel never shows its text, and an editor would. Editing only changes the history. What's on the system clipboard stays as it was.
+
 Every card carries two small circles along its bottom edge: a pin and a delete. Tap the pin to keep a clip out of reach of the expiry and the entry cap. Tap the bin to drop it. Swiping a card left or right until it slides off deletes it too, and a swipe has no confirmation and no undo, so a stray one is permanent.
 
 To see a clip's info popup instead, press and hold its card. The popup gives the time it was copied, its type and size, and (if [source tracking](#options) is on) the app it came from. An image clip gets one extra line there: **Send as sticker**, which runs the picture through the sticker processor before it goes.
@@ -108,8 +129,10 @@ Everything below lives on the Clipboard screen, under Features on the settings h
 - **Pop-up when you copy**: off by default. It lives in this group but it isn't a history setting at all, see [below](#details--edge-cases).
 - **Clipboard expiry**: hours before an unpinned clip is removed, 0–168, default 24 hours (0 means never).
 - **Maximum entries**: how many unpinned clips history keeps, 5–500, default 100.
-- **Panel layout**: opens the panel's [layout](/languages/custom-layouts/#panel-layouts) in the layout editor. The search box, the strip of copied fragments and the history are cells you can move and resize, and any key can join them: an abc, space and backspace row along the bottom, say, which is what the old "Bottom control row" switch used to add. A layout made with that switch on carries over.
+- **Panel layout**: opens the panel's [layout](/languages/custom-layouts/#panel-layouts) in the layout editor. The search box, the grid or list switch, the strip of copied fragments and the history are cells you can move and resize, and any key can join them: an abc, space and backspace row along the bottom, say, which is what the old "Bottom control row" switch used to add. A layout made with that switch on carries over.
 - **Full-screen clipboard panel**: on by default, so this is what the panel does unless you say otherwise. The history takes the whole keyboard, and a slim back header stands in for the toolbar, the emoji row and the symbol row. Picking the right clip gets easier the more of them are on screen, which is why that trade is the default. Start a search and the panel drops back to its compact size so the keys fit underneath. Turn it off to keep the toolbar visible while the panel is open.
+- **History layout**: **Grid** (default) or **List**, the same choice as the [switch in the panel](#grid-or-list).
+- **Number the clips**: puts a [number](#numbered-clips) beside every clip; off by default.
 - **Pinned entries last**: moves pinned clips to the end of the panel instead of the top; off by default.
 - **Search bar**: enables the [search pill](#finding-a-clip-again) described above; off by default.
 - **Detect codes, numbers and links**: enables the [entity chips](#pulling-codes-and-links-out-of-a-clip); on by default. Detection runs entirely on the device.

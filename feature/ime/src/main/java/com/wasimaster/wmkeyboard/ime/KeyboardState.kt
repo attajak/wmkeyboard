@@ -1733,6 +1733,38 @@ data class WordCard(
 )
 
 /**
+ * A clip being edited in the clipboard panel's editor dialog.
+ *
+ * The same shape as [WordSpell]: an IME has no text field of its own to raise,
+ * so the keys type into [draft], a buffer the service owns, and nothing
+ * reaches the app behind the keyboard while it exists. The caret is the shared
+ * capture caret, and Enter types a newline — a clip is free text, so saving is
+ * the dialog's own button rather than a key.
+ */
+data class ClipEdit(
+    /** The clip being edited, by [ClipItem.id]. */
+    val id: Long,
+    /** Its text when the editor opened, so an unchanged draft saves nothing. */
+    val original: String,
+    /** What the keys have made of it so far. */
+    val draft: String = original,
+    /** The clip was rich text, whose formatting a changed draft gives up. */
+    val rich: Boolean = false,
+) {
+    /** Whether saving would change anything. Blank never saves. */
+    val canSave: Boolean get() = draft.isNotBlank() && draft.trim() != original
+
+    companion object {
+        /**
+         * The editor's ceiling, in UTF-16 units. Generous for anything copied
+         * by hand, and small enough that one draft cannot make every
+         * keystroke re-lay-out a book.
+         */
+        const val MAX_LENGTH = 20_000
+    }
+}
+
+/**
  * The word card's spelling editor (#138): the word being respelled, and what
  * the keys have made of it so far.
  *
@@ -2306,6 +2338,8 @@ data class KeyboardUiState(
     val clipboardQuery: String = "",
     /** Typing edits [clipboardQuery] instead of the field, like emoji search. */
     val clipboardSearchActive: Boolean = false,
+    /** The clip open in the clipboard panel's editor; see [clipEditActive]. */
+    val clipEdit: ClipEdit? = null,
     /**
      * Most recently copied text, offered as a paste chip on the suggestion strip
      * (Gboard style). Null when nothing recent, the chip expired, was dismissed,
@@ -2845,6 +2879,25 @@ data class KeyboardUiState(
         get() = wordSpell != null
 
     /**
+     * Whether keystrokes belong to the clipboard panel's clip editor. Panel
+     * *and* an open edit, like [learnEditActive], so an edit left behind by a
+     * panel that closed some other way cannot keep the keys.
+     */
+    val clipEditActive: Boolean
+        get() = panel == PanelMode.CLIPBOARD && clipEdit != null
+
+    /**
+     * Whether the clipboard panel has handed the key rows back for one of its
+     * own fields — the search pill or the clip editor — and shrunk to make
+     * room for them.
+     */
+    val clipboardTakesKeys: Boolean
+        get() = when (captureTarget()) {
+            CaptureTarget.CLIPBOARD_SEARCH, CaptureTarget.CLIP_EDIT -> panel == PanelMode.CLIPBOARD
+            else -> false
+        }
+
+    /**
      * Whether some buffer inside the keyboard owns the keys, so nothing typed
      * may reach the app behind it.
      *
@@ -2883,6 +2936,7 @@ data class KeyboardUiState(
         calcTypingActive -> CaptureTarget.CALC
         converterTypingActive -> CaptureTarget.CONVERTER
         wordSpellActive -> CaptureTarget.WORD_SPELL
+        clipEditActive -> CaptureTarget.CLIP_EDIT
         emojiSearchActive -> CaptureTarget.EMOJI_SEARCH
         mediaSearchActive && panel.hasMediaSearch -> CaptureTarget.MEDIA_SEARCH
         dictionarySearchActive -> CaptureTarget.DICTIONARY_SEARCH
@@ -2917,6 +2971,7 @@ data class KeyboardUiState(
         CaptureTarget.MEDIA_SEARCH -> mediaQuery
         CaptureTarget.DICTIONARY_SEARCH -> dictionaryQuery
         CaptureTarget.CLIPBOARD_SEARCH -> clipboardQuery
+        CaptureTarget.CLIP_EDIT -> clipEdit?.draft.orEmpty()
     }
 
     /**

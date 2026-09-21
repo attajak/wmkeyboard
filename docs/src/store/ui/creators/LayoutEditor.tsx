@@ -84,7 +84,7 @@ const ACTION_PARAMS: Record<string, { key: string; label: string; kind: 'text' |
 	braille_dot: [{ key: 'dot', label: 'Dot (1–8)', kind: 'number' }],
 	keyman_key: [{ key: 'vkey', label: 'Virtual key', kind: 'number' }, { key: 'modifiers', label: 'Modifiers', kind: 'number' }, { key: 'nextLayer', label: 'Next layer', kind: 'text' }],
 	edit: [{ key: 'op', label: 'Operation', kind: 'select', options: ['UP', 'DOWN', 'LEFT', 'RIGHT', 'HOME', 'END', 'PAGE_UP', 'PAGE_DOWN', 'WORD_LEFT', 'WORD_RIGHT', 'SELECT_WORD', 'SELECT_LINE', 'SELECT', 'SELECT_ALL', 'COPY', 'PASTE', 'BACKSPACE', 'DOC_START', 'DOC_END', 'CUT'] }],
-	field: [{ key: 'kind', label: 'Panel field', kind: 'select', options: ['emoji_tabs', 'emoji_search', 'emoji_grid', 'clipboard_search', 'clipboard_entities', 'clipboard_list', 'trackpad', 'unknown'] }],
+	field: [{ key: 'kind', label: 'Panel field', kind: 'select', options: ['emoji_tabs', 'emoji_search', 'emoji_grid', 'clipboard_search', 'clipboard_entities', 'clipboard_list', 'clipboard_view', 'trackpad', 'unknown'] }],
 };
 
 export function LayoutEditor() {

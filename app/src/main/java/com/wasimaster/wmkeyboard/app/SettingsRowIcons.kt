@@ -111,6 +111,7 @@ import androidx.compose.material.icons.outlined.FormatColorFill
 import androidx.compose.material.icons.outlined.FormatQuote
 import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material.icons.outlined.FormatUnderlined
+import androidx.compose.material.icons.outlined.FormatListNumbered
 import androidx.compose.material.icons.outlined.Fullscreen
 import androidx.compose.material.icons.outlined.ControlCamera
 import androidx.compose.material.icons.outlined.Gamepad
@@ -881,6 +882,8 @@ internal object SettingsRowIcons {
         put(R.string.clipboard_sensitive_expiry_title) { Icons.Outlined.Timer }
         put(R.string.panel_layout_row_title) { Icons.Outlined.ViewAgenda }
         put(R.string.clipboard_full_bleed_title) { Icons.Outlined.Fullscreen }
+        put(R.string.clipboard_view_title) { Icons.Outlined.GridView }
+        put(R.string.clipboard_numbers_title) { Icons.Outlined.FormatListNumbered }
         put(R.string.clipboard_pinned_last_title) { Icons.Outlined.PushPin }
         put(R.string.clipboard_search_title) { Icons.Outlined.Search }
         put(R.string.clipboard_password_paste_title) { Icons.Outlined.Password }

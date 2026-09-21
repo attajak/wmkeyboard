@@ -28,6 +28,7 @@ import com.wasimaster.wmkeyboard.core.input.composer.CjkLearning
 import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.settings.HoldToTalkRange
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
+import com.wasimaster.wmkeyboard.core.settings.ClipboardView
 import com.wasimaster.wmkeyboard.core.settings.CopiedCodeChip
 import com.wasimaster.wmkeyboard.core.settings.SensitiveClipHandling
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
@@ -590,6 +591,25 @@ internal fun ClipboardSettings(
                 info = stringResource(R.string.clipboard_full_bleed_info),
                 default = SettingsDefaults.clipboard.fullBleed,
             ) { scope.launch { repository.setClipboardFullBleed(it) } }
+        }
+        item {
+            ChoiceSetting(
+                title = R.string.clipboard_view_title,
+                subtitle = stringResource(R.string.clipboard_view_subtitle),
+                info = stringResource(R.string.clipboard_view_info),
+                options = ClipboardView.entries.map { it to stringResource(it.labelRes) },
+                selected = settings.clipboard.view,
+                default = SettingsDefaults.clipboard.view,
+            ) { scope.launch { repository.setClipboardView(it) } }
+        }
+        item {
+            ToggleSetting(
+                R.string.clipboard_numbers_title,
+                stringResource(R.string.clipboard_numbers_subtitle),
+                settings.clipboard.showNumbers,
+                info = stringResource(R.string.clipboard_numbers_info),
+                default = SettingsDefaults.clipboard.showNumbers,
+            ) { scope.launch { repository.setClipboardShowNumbers(it) } }
         }
         item {
             ToggleSetting(

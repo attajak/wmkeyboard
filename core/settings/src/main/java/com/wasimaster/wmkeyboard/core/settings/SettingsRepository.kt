@@ -4438,6 +4438,26 @@ enum class CopiedCodeChip {
 }
 
 /**
+ * How the clipboard panel lays its history out.
+ */
+enum class ClipboardView {
+    /** Two columns of cards, packed independently: images read best this way. */
+    GRID,
+
+    /** One clip per row across the full width: long text reads best this way. */
+    LIST,
+    ;
+
+    /** Caption for this choice; resolve it where it is drawn. */
+    @get:StringRes
+    val labelRes: Int
+        get() = when (this) {
+            GRID -> R.string.core_settings_clipboard_view_grid_label
+            LIST -> R.string.core_settings_clipboard_view_list_label
+        }
+}
+
+/**
  * Clipboard-tool settings — history capture, the panel, and the paste chip on
  * the suggestion strip — grouped into their own object (see [CameraSettings]
  * for why). DataStore keys stay flat.
@@ -4542,6 +4562,18 @@ data class ClipboardSettings(
      * them are on screen at once. Turning it off keeps the toolbar in reach.
      */
     val fullBleed: Boolean = true,
+    /**
+     * Cards in two columns, or one clip per row. The panel's own toggle
+     * writes this too, so the choice survives the panel closing.
+     */
+    val view: ClipboardView = ClipboardView.GRID,
+    /**
+     * Number every clip by its place in the history, so the one meant is the
+     * one tapped. The number belongs to the clip, not to the row it lands in:
+     * a search keeps each clip's own number rather than counting from 1 again.
+     * Off by default.
+     */
+    val showNumbers: Boolean = false,
 )
 
 /**
@@ -6799,6 +6831,8 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_DETECT_ENTITIES = booleanPreferencesKey("clipboard_detect_entities")
         private val CLIPBOARD_PHONE_FORMATS = stringSetPreferencesKey("clipboard_phone_formats")
         private val CLIPBOARD_FULL_BLEED = booleanPreferencesKey("clipboard_full_bleed")
+        private val CLIPBOARD_VIEW = stringPreferencesKey("clipboard_view")
+        private val CLIPBOARD_SHOW_NUMBERS = booleanPreferencesKey("clipboard_show_numbers")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
         // Stored under its old name: the test behind it grew from "number
         // field" to "code box", but a user who turned it on meant the same
@@ -7879,6 +7913,10 @@ class SettingsRepository(private val context: Context) {
                 detectEntities = p[CLIPBOARD_DETECT_ENTITIES] ?: defaults.clipboard.detectEntities,
                 phoneFormats = p[CLIPBOARD_PHONE_FORMATS] ?: seededPhoneFormats(),
                 fullBleed = p[CLIPBOARD_FULL_BLEED] ?: defaults.clipboard.fullBleed,
+                view = p[CLIPBOARD_VIEW]
+                    ?.let { runCatching { ClipboardView.valueOf(it) }.getOrNull() }
+                    ?: defaults.clipboard.view,
+                showNumbers = p[CLIPBOARD_SHOW_NUMBERS] ?: defaults.clipboard.showNumbers,
             ),
             otp = OtpSettings(
                 enabled = p[OTP_CHIP_ENABLED] ?: defaults.otp.enabled,
@@ -12956,6 +12994,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setClipboardFullBleed(value: Boolean) =
         editPrefs { it[CLIPBOARD_FULL_BLEED] = value }
+
+    suspend fun setClipboardView(value: ClipboardView) =
+        editPrefs { it[CLIPBOARD_VIEW] = value.name }
+
+    suspend fun setClipboardShowNumbers(value: Boolean) =
+        editPrefs { it[CLIPBOARD_SHOW_NUMBERS] = value }
 
     suspend fun setOtpChipEnabled(value: Boolean) =
         editPrefs { it[OTP_CHIP_ENABLED] = value }

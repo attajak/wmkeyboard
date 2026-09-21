@@ -573,6 +573,7 @@
     <string name="field_name_clipboard_search">Clipboard search</string>
     <string name="field_name_clipboard_entities">Copied fragments</string>
     <string name="field_name_clipboard_list">Clipboard history</string>
+    <string name="field_name_clipboard_view">Grid or list switch</string>
     <string name="field_name_trackpad">Trackpad</string>
     <string name="field_name_unknown">Unknown component</string>
     <string name="layout_editor_action_group_panel">Panel</string>

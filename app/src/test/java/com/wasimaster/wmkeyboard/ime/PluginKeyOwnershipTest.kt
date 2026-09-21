@@ -50,6 +50,7 @@ class PluginKeyOwnershipTest {
         "findReplaceTypingActive", "learnEditActive", "calcTypingActive",
         "converterTypingActive", "wordSpellActive", "emojiSearchActive",
         "mediaSearchActive", "dictionarySearchActive", "clipboardSearchActive",
+        "clipEditActive",
     )
 
     /**
