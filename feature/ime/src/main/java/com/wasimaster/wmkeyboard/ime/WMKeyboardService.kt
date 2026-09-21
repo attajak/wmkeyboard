@@ -26512,9 +26512,19 @@ open class WMKeyboardService : InputMethodService() {
         )
         if (chosen != null && tryCommit(file, chosen)) return
 
-        // Nothing matched. A WebP the field won't take can usually go
-        // through as PNG; animated WebP would lose its animation that way,
-        // so leave those for the clipboard instead of silently flattening.
+        // Nothing matched. An animated WebP the field won't take goes as a
+        // GIF where the field takes those: a worse picture, but one that still
+        // moves. Asked before the PNG below, which would make one frame of it.
+        if (chosen == null && mimeType == MediaMime.WEBP &&
+            accepted.any { ClipDescription.compareMimeTypes(MediaMime.GIF, it) } &&
+            commitAnimatedAsGif(file, editorInfo)
+        ) {
+            return
+        }
+
+        // A still WebP the field won't take can usually go through as PNG;
+        // an animated one would lose its animation that way, so those are
+        // left for the clipboard instead of silently flattened.
         if (chosen == null && mimeType == MediaMime.WEBP &&
             accepted.any { ClipDescription.compareMimeTypes(MediaMime.PNG, it) }
         ) {
@@ -26522,6 +26532,11 @@ open class WMKeyboardService : InputMethodService() {
             if (png != null && tryCommit(png, MediaMime.PNG)) return
         }
 
+        copyRefusedImage(file)
+    }
+
+    /** The last resort for a picture no MIME got through: the clipboard, and a toast that says so. */
+    private fun copyRefusedImage(file: File) {
         val contentUri = runCatching {
             FileProvider.getUriForFile(this, clipboardFileProviderAuthority, file)
         }.getOrNull() ?: return
@@ -26533,6 +26548,47 @@ open class WMKeyboardService : InputMethodService() {
             Toast.LENGTH_SHORT,
         ).show()
     }
+
+    /**
+     * Sends an animated WebP as a GIF. True when the send is in hand, false
+     * when [file] is not animated and the caller should carry on down its
+     * own list.
+     *
+     * The conversion costs a palette and a compression pass per frame, so it
+     * runs off the main thread and its result is kept in the media cache under
+     * the sticker's name: the second send of the same sticker is immediate.
+     * (An edited sticker gets a new file name, so a stale GIF is never found.)
+     * By the time a first conversion is done the user may have moved to
+     * another field, and a sticker landing in a field it was not sent to is
+     * worse than one not landing, so the field is checked again before the
+     * commit, and the clipboard takes whatever can no longer be delivered.
+     */
+    private fun commitAnimatedAsGif(file: File, editorInfo: EditorInfo?): Boolean {
+        if (editorInfo == null || !isAnimatedWebp(file)) return false
+        val gif = File(File(cacheDir, "media").apply { mkdirs() }, "${file.nameWithoutExtension}_gif.gif")
+        if (gif.isFile && gif.length() > 0L) {
+            if (!tryCommit(gif, MediaMime.GIF)) copyRefusedImage(file)
+            return true
+        }
+        val sentToPackage = editorInfo.packageName
+        val sentToField = editorInfo.fieldId
+        Toast.makeText(this, getString(R.string.ime_service_converting_to_gif_toast), Toast.LENGTH_SHORT).show()
+        serviceScope.launch {
+            val converted = withContext(Dispatchers.Default) {
+                com.wasimaster.wmkeyboard.core.media.AnimatedWebpToGif.transcode(file, gif)
+            }
+            val now = currentInputEditorInfo
+            val sameField = now != null && now.packageName == sentToPackage && now.fieldId == sentToField
+            if (!converted || !sameField || !tryCommit(gif, MediaMime.GIF)) copyRefusedImage(file)
+        }
+        return true
+    }
+
+    private fun isAnimatedWebp(file: File): Boolean = runCatching {
+        val head = ByteArray(WEBP_HEADER_BYTES)
+        val read = file.inputStream().use { it.read(head) }
+        read == head.size && com.wasimaster.wmkeyboard.core.media.AnimatedWebpReader.isAnimated(head)
+    }.getOrDefault(false)
 
     /** One commitContent attempt with a settled MIME type. */
     private fun tryCommit(file: File, mimeType: String): Boolean {
@@ -28610,6 +28666,9 @@ open class WMKeyboardService : InputMethodService() {
     companion object {
         /** Minimum spacing between haptic clicks so rapid presses stay distinct. */
         private const val MIN_HAPTIC_GAP_MS = 45L
+
+        /** Enough of a WebP to read the header flag that says it is animated. */
+        private const val WEBP_HEADER_BYTES = 32
 
         /**
          * What a percentage counts up to. The system's voice-model download

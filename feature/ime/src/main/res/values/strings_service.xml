@@ -191,6 +191,10 @@
     <string name="ime_service_copied_paste_toast">Copied. You can paste it anywhere.</string>
     <string name="ime_service_file_copy_error_toast">The keyboard cannot copy that file</string>
     <string name="ime_service_file_not_accepted_toast">This app does not accept files here. The keyboard copied the file. Paste it instead.</string>
+    <!-- GIF is an image format. Keep it as it is. The keyboard shows this
+         while it changes an animated sticker to a GIF file, because the app
+         in use does not accept the sticker as it is. -->
+    <string name="ime_service_converting_to_gif_toast">This app takes no stickers here. The keyboard sends a GIF instead…</string>
     <string name="ime_service_image_not_accepted_toast">This app does not accept images here. The keyboard copied the image. Paste it instead.</string>
     <string name="ime_service_folder_insert_toast">The keyboard cannot insert a folder. It typed the name and copied the folder for you to paste.</string>
     <!-- Stands in for the name of a copied file when the file has no name. -->
