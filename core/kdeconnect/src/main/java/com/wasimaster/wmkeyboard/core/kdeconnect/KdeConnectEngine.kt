@@ -71,6 +71,7 @@ class KdeConnectEngine(
     fetchArt: ((String) -> ByteArray?)? = null,
     /** Loopback peers are ignored in production, as kdeconnect-kde does; tests are nothing but. */
     private val allowLoopback: Boolean = false,
+    private val tlsProtocols: List<String> = KdeTls.DEFAULT_PROTOCOLS,
     private val now: () -> Long = System::currentTimeMillis,
     private val log: (String) -> Unit = {},
 ) {
@@ -158,7 +159,7 @@ class KdeConnectEngine(
         // A new certificate is a new device as far as every peer is concerned.
         if (loaded.created) trust.clear()
         val me = loaded.identity
-        val secure = KdeTls(me)
+        val secure = KdeTls(me, tlsProtocols)
         identity = me
         tls = secure
         payloads = PayloadTransfer(secure, ports)

@@ -37,6 +37,7 @@ android {
             // and are skipped unless asked for: -Pkde.interop=1
             it.systemProperty("kde.interop", providers.gradleProperty("kde.interop").getOrElse(""))
             it.systemProperty("kde.interop.dir", providers.gradleProperty("kde.interop.dir").getOrElse(""))
+            it.systemProperty("kde.interop.tls", providers.gradleProperty("kde.interop.tls").getOrElse(""))
         }
     }
 }

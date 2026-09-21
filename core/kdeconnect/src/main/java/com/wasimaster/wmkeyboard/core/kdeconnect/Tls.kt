@@ -28,12 +28,16 @@ import javax.net.ssl.X509ExtendedTrustManager
  *   [LanTransport]), so [wrap] takes the role as a parameter.
  *
  * TLS 1.2 by default because that is where kdeconnect-android pins itself
- * ("1.3 seems to cause issues in some devices"), and being the odd one out is
- * a poor place for a client its author cannot test against every desktop.
+ * ("1.3 seems to cause issues in some devices"). `InteropTest` passes under 1.3
+ * as well, in both roles and on payload sockets, against kdeconnect-kde 26.08 —
+ * but that is the JDK's TLS stack, not Conscrypt on a phone, and the one
+ * combination known to work from Android against every desktop is the one the
+ * reference client ships. [protocols] is a parameter so that can change in one
+ * place once it has been seen working on a device.
  */
 class KdeTls(
     private val identity: KdeLocalIdentity,
-    private val protocols: List<String> = listOf("TLSv1.2"),
+    private val protocols: List<String> = DEFAULT_PROTOCOLS,
 ) {
     private val random = SecureRandom()
     private val keyManager = FixedKeyManager(identity.keys.private, identity.certificate)
@@ -130,7 +134,8 @@ class KdeTls(
         override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
     }
 
-    private companion object {
-        const val ALIAS = "kdeconnect"
+    companion object {
+        private const val ALIAS = "kdeconnect"
+        val DEFAULT_PROTOCOLS = listOf("TLSv1.2")
     }
 }

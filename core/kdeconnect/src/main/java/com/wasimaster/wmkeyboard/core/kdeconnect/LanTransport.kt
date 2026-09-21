@@ -230,7 +230,7 @@ internal class LanTransport(
             }
             // We dialled, so we are the TLS *server*.
             val ssl = tls.wrap(socket, clientMode = false, pinned = trust.get(deviceId)?.x509(), HANDSHAKE_TIMEOUT_MS)
-            finishHandshake(ssl, deviceId, version, announced)
+            finishHandshake(ssl, deviceId, version, announced, how = "dialled")
         } catch (e: Exception) {
             log("dial $deviceId@${address.hostAddress}:$port failed: ${e.message}")
             runCatching { socket.close() }
@@ -284,7 +284,7 @@ internal class LanTransport(
             }
             // They dialled, so we are the TLS *client*.
             val ssl = tls.wrap(socket, clientMode = true, pinned = trust.get(info.id)?.x509(), HANDSHAKE_TIMEOUT_MS)
-            finishHandshake(ssl, info.id, info.protocolVersion, info)
+            finishHandshake(ssl, info.id, info.protocolVersion, info, how = "answered")
         } catch (e: Exception) {
             log("incoming connection failed: ${e.message}")
             runCatching { socket.close() }
@@ -296,7 +296,7 @@ internal class LanTransport(
      * that tie the three things a peer has told us together — the id it was
      * contacted under, the id in its identity, and the name on its certificate.
      */
-    private fun finishHandshake(ssl: SSLSocket, deviceId: String, version: Int, plaintext: KdeDeviceInfo?) {
+    private fun finishHandshake(ssl: SSLSocket, deviceId: String, version: Int, plaintext: KdeDeviceInfo?, how: String) {
         try {
             val certificate = tls.peerCertificate(ssl) ?: throw IOException("peer presented no certificate")
             val info: KdeDeviceInfo
@@ -323,6 +323,7 @@ internal class LanTransport(
                 throw IOException("certificate is for '$commonName', not '${info.id}'")
             }
             ssl.soTimeout = 0
+            log("linked to ${info.id} ($how, ${ssl.session.protocol})")
             onLink(info, certificate, ssl)
         } catch (e: Exception) {
             log("handshake with $deviceId failed: ${e.message}")
