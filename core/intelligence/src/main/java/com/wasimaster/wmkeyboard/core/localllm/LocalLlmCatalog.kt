@@ -42,6 +42,14 @@ data class LocalLlmModel(
     val sizeBytes: Long,
     /** Gated repos need an accepted license + HF token to download. */
     val gated: Boolean,
+    /**
+     * The licence the weights are published under, as the repository's own
+     * model card names it: an SPDX identifier where there is one, or the
+     * name of the vendor's terms. A licence identifier, so never translated.
+     * Shown on the model row so the terms are in view before the download,
+     * gated or not. Checked against huggingface.co/api/models on 2026-09-22.
+     */
+    val license: String,
     val format: ModelFormat,
     val tier: ModelTier,
     /** Advisory total-device-RAM floor; the UI warns below this, never blocks. */
@@ -77,6 +85,7 @@ object LocalLlmCatalog {
             fileName = "gemma-4-E2B-it.litertlm",
             sizeBytes = 2_590_000_000L,
             gated = false,
+            license = "Apache-2.0",
             format = ModelFormat.LITERTLM,
             tier = ModelTier.RECOMMENDED,
             minRamMb = 6144,
@@ -90,6 +99,7 @@ object LocalLlmCatalog {
             fileName = "gemma-4-E4B-it.litertlm",
             sizeBytes = 3_660_000_000L,
             gated = false,
+            license = "Apache-2.0",
             format = ModelFormat.LITERTLM,
             tier = ModelTier.RECOMMENDED,
             minRamMb = 8192,
@@ -103,6 +113,7 @@ object LocalLlmCatalog {
             fileName = "gemma3-1b-it-int4.litertlm",
             sizeBytes = 584_000_000L,
             gated = true,
+            license = "Gemma Terms of Use",
             format = ModelFormat.LITERTLM,
             tier = ModelTier.UNTESTED,
             minRamMb = 4096,
@@ -116,6 +127,7 @@ object LocalLlmCatalog {
             fileName = "Qwen2.5-1.5B-Instruct_multi-prefill-seq_q8_ekv4096.litertlm",
             sizeBytes = 1_600_000_000L,
             gated = false,
+            license = "Apache-2.0",
             format = ModelFormat.LITERTLM,
             tier = ModelTier.STANDARD,
             minRamMb = 6144,
@@ -129,6 +141,7 @@ object LocalLlmCatalog {
             fileName = "qwen3_0.6b_q4_block32_ekv1280.litertlm",
             sizeBytes = 347_000_000L,
             gated = false,
+            license = "Apache-2.0",
             format = ModelFormat.LITERTLM,
             tier = ModelTier.EXPERIMENTAL,
             minRamMb = 3072,
@@ -143,6 +156,7 @@ object LocalLlmCatalog {
             fileName = "Qwen2.5-0.5B-Instruct_multi-prefill-seq_q8_ekv1280.task",
             sizeBytes = 546_000_000L,
             gated = false,
+            license = "Apache-2.0",
             format = ModelFormat.TASK,
             tier = ModelTier.EXPERIMENTAL,
             minRamMb = 3072,
@@ -156,6 +170,7 @@ object LocalLlmCatalog {
             fileName = "gemma3-270m-it-q8.litertlm",
             sizeBytes = 304_000_000L,
             gated = true,
+            license = "Gemma Terms of Use",
             format = ModelFormat.LITERTLM,
             tier = ModelTier.UNTESTED,
             minRamMb = 2048,
@@ -171,6 +186,7 @@ object LocalLlmCatalog {
             fileName = "SmolLM2_135M_Instruct.litertlm",
             sizeBytes = 143_000_000L,
             gated = false,
+            license = "Apache-2.0",
             format = ModelFormat.LITERTLM,
             tier = ModelTier.EXPERIMENTAL,
             minRamMb = 2048,
@@ -187,6 +203,6 @@ object LocalLlmCatalog {
     fun downloadUrl(model: LocalLlmModel): String =
         "https://huggingface.co/${model.repo}/resolve/main/${model.fileName}"
 
-    /** The repo page — where a gated model's license is accepted. */
+    /** The repo page: the licence text, and where a gated model's terms are accepted. */
     fun licenseUrl(model: LocalLlmModel): String = "https://huggingface.co/${model.repo}"
 }

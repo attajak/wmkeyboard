@@ -351,82 +351,103 @@ private val bundledAttributions: List<Attribution> = buildList {
 /**
  * Data the app downloads on demand rather than bundling: the CJK conversion
  * packs and the per-language wordlists, offensive lists and emoji keyword
- * dictionaries served from the wmkeyboard-data repository. Their licences
- * attach to the data itself, so they are listed with full notices exactly
- * like the bundled components.
+ * dictionaries served from the wmkeyboard-data repository, the sticker
+ * editor's own background remover, and the on-device AI models. Their
+ * licences attach to the data itself, so they are listed with full notices
+ * exactly like the bundled components.
  */
-private val dataPackAttributions: List<Attribution> = listOf(
-    Attribution(
+private val dataPackAttributions: List<Attribution> = buildList {
+    add(Attribution(
         "Frequency wordlists",
         R.string.about_pack_wordlists_used,
         "Copyright the respective corpus authors",
         "CC BY-SA 4.0 / CC BY 4.0 / MIT / others", "wordlist-sources.txt",
         "https://github.com/wasi-master/wmkeyboard-data",
-    ),
-    Attribution(
+    ))
+    add(Attribution(
         "AOSP LatinIME dictionaries",
         R.string.about_pack_aosp_wordlists_used,
         "Copyright (C) The Android Open Source Project",
         "Apache-2.0", "apache-2.0.txt",
         "https://android.googlesource.com/platform/packages/inputmethods/LatinIME/+/refs/heads/main/dictionaries/",
-    ),
-    Attribution(
+    ))
+    add(Attribution(
         "Offensive word lists",
         R.string.about_pack_offensive_used,
         "Aggregated from LDNOOBW V2, profanity-list and other open lists",
         "CC0 / Unlicense / MIT", "wordlist-sources.txt",
         "https://github.com/wasi-master/wmkeyboard-data",
-    ),
-    Attribution(
+    ))
+    add(Attribution(
         "Emoji keyword dictionaries",
         R.string.about_pack_emoji_keywords_used,
         "Copyright Unicode, Inc. (CLDR annotations and emoji data)",
         "Unicode License v3", "unicode-3.0.txt",
         "https://github.com/KDE/kemoji",
-    ),
-    Attribution(
+    ))
+    add(Attribution(
         "Noto Animated Emoji",
         R.string.about_pack_animated_emoji_used,
         "Copyright Google LLC",
         "CC BY 4.0", "cc-by-4.0-noto-animated.txt",
         "https://googlefonts.github.io/noto-emoji-animation/",
-    ),
-    Attribution(
+    ))
+    add(Attribution(
         "CC-CEDICT",
         R.string.about_pack_cedict_used,
         "Copyright MDBG and CC-CEDICT contributors",
         "CC BY-SA 4.0", "cc-by-sa-4.0.txt",
         "https://cc-cedict.org/",
-    ),
-    Attribution(
+    ))
+    add(Attribution(
         "mozc",
         R.string.about_pack_mozc_used,
         "Copyright 2010-2021 Google Inc.",
         "BSD-3-Clause", "bsd-3-clause.txt",
         "https://github.com/google/mozc",
-    ),
-    Attribution(
+    ))
+    add(Attribution(
         "rime-cantonese & CC-Canto",
         R.string.about_pack_cantonese_used,
         "Copyright CanCLID and Pleco Inc.",
         "CC BY 4.0 / CC BY-SA 3.0", "jyutping-sources.txt",
         "https://github.com/rime/rime-cantonese",
-    ),
-    Attribution(
+    ))
+    add(Attribution(
         "Chinese stroke code table",
         R.string.about_pack_stroke_used,
         "Copyright (c) 2021, FeiJiang Ye",
         "BSD-2-Clause", "bsd-2-clause-stroke.txt",
         "https://github.com/yefeijiang/Chinese-characters-code-table",
-    ),
-    Attribution(
+    ))
+    add(Attribution(
         "Unicode Unihan database",
         R.string.about_pack_unihan_used,
         "Copyright Unicode, Inc.",
         "Unicode License v3", "unicode-3.0.txt",
         "https://www.unicode.org/",
-    ),
-)
+    ))
+    // The two below are downloaded by full-edition features only, so a lite
+    // build does not list what it cannot fetch.
+    if (com.wasimaster.wmkeyboard.core.stickers.SubjectCutout.supported) {
+        add(Attribution(
+            "U\u00b2-Net-P background remover",
+            R.string.about_pack_cutout_used,
+            "Copyright the U\u00b2-Net authors (Xuebin Qin et al., 2020); rembg's u2netp.onnx, converted with onnx2tf",
+            "Apache-2.0", "apache-2.0.txt",
+            "https://github.com/xuebinqin/U-2-Net",
+        ))
+    }
+    if (BuildConfig.ENABLE_LOCAL_LLM) {
+        add(Attribution(
+            "On-device AI models (Gemma, Qwen, SmolLM2)",
+            R.string.about_pack_llm_used,
+            "Copyright Google LLC, Alibaba Cloud and Hugging Face; mobile builds by Google's litert-community",
+            "Apache-2.0 / Gemma Terms of Use", "apache-2.0.txt",
+            "https://huggingface.co/litert-community",
+        ))
+    }
+}
 
 /**
  * Services the tools call over the network. Nothing of theirs is bundled, so

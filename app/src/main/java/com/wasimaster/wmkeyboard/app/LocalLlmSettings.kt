@@ -388,6 +388,13 @@ private fun CatalogModelRow(
                         )
                     }
                     Text(subtitle)
+                    // The terms in view before the download, gated or not:
+                    // Gemma 3 has its own, the rest are Apache-2.0.
+                    Text(
+                        stringResource(R.string.models_llm_row_license, model.license),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             },
             leading = if (selected && downloaded) {
@@ -447,8 +454,17 @@ private fun CatalogModelRow(
         // doesn't snap the list.
         Column(modifier = Modifier.animateContentSize()) {
             when (status) {
-                is DownloadStatus.NotDownloaded -> if (model.gated && !hasToken) {
-                    CaptionText(stringResource(R.string.models_llm_needs_token))
+                is DownloadStatus.NotDownloaded -> {
+                    if (model.gated && !hasToken) {
+                        CaptionText(stringResource(R.string.models_llm_needs_token))
+                    }
+                    // Where the licence text lives, one tap from the Download
+                    // button that accepts it by downloading.
+                    Row(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        TextButton(onClick = onOpenLicense) {
+                            Text(stringResource(R.string.models_llm_license_action))
+                        }
+                    }
                 }
                 is DownloadStatus.Downloading -> DownloadProgress(status.bytes, status.total)
                 is DownloadStatus.Paused -> CaptionText(

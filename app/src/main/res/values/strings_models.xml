@@ -164,6 +164,9 @@
     <string name="models_llm_needs_token">Add your Hugging Face token above to download this model.</string>
     <!-- Opens the Hugging Face page of the model, where the licence is. -->
     <string name="models_llm_open_model_page_action">Open the model page</string>
+    <!-- The licence identifier is inserted as is (Apache-2.0, Gemma Terms of Use). -->
+    <string name="models_llm_row_license">Licence: <xliff:g id="license" example="Apache-2.0">%1$s</xliff:g></string>
+    <string name="models_llm_license_action">Licence and model page</string>
 
     <!-- Errors while the app imports a model file that the user selected. -->
     <string name="models_llm_import_error_no_name">The app cannot read the name of the file.</string>
