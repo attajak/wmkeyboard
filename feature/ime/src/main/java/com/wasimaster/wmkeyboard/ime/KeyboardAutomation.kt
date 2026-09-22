@@ -550,7 +550,7 @@ class KeyboardAutomationReceiver : BroadcastReceiver() {
             }
             KeyboardAutomation.ACTION_BACKUP_NOW -> {
                 if (!AutoBackupScheduler.runNow(context, settings.autoBackup)) {
-                    return fail("no backup destination is set up")
+                    return fail("no location is ticked for automatic backup")
                 }
                 ok("backup started")
             }
