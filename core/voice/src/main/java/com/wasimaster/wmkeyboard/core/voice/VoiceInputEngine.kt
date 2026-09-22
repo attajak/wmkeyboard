@@ -35,6 +35,13 @@ class VoiceInputEngine(private val context: Context) {
 
         fun onPartial(text: String)
 
+        /**
+         * The recognizer stopped listening by itself — a pause, or its own
+         * limit — and is working out the result. Anything said from here on
+         * is not heard (#315).
+         */
+        fun onEndOfSpeech() {}
+
         /** Terminal: the recognizer is already released when this fires. */
         fun onFinal(text: String)
 
@@ -96,7 +103,7 @@ class VoiceInputEngine(private val context: Context) {
 
             override fun onBufferReceived(buffer: ByteArray?) {}
 
-            override fun onEndOfSpeech() {}
+            override fun onEndOfSpeech() = listener.onEndOfSpeech()
 
             override fun onError(error: Int) {
                 release(session)

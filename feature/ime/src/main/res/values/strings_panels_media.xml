@@ -31,6 +31,13 @@
     <string name="ime_voice_status_listening">Listening…</string>
     <!-- Shown while an offline model listens. It gives no live text, so the user says when to stop. -->
     <string name="ime_voice_status_listening_hint">Listening. Press when you are done.</string>
+    <!-- Replaces the line above for the last seconds of a clip. The offline
+         model can hear only 30 seconds, and it stops by itself at the end, so
+         words said after that are lost (#315). -->
+    <plurals name="ime_voice_status_stops_in">
+        <item quantity="one">Stops in %d second. Press to finish now.</item>
+        <item quantity="other">Stops in %d seconds. Press to finish now.</item>
+    </plurals>
     <string name="ime_voice_status_transcribing">Transcribing…</string>
     <!-- Offline voice typing is selected, but no model is downloaded, so the
          microphone can do nothing. Keep this to one short line: the two chips

@@ -102,6 +102,8 @@ An **Undo** control appears (bottom-left in the panel, as a small icon on either
 
 With **Keep listening** on (the default), finishing one sentence doesn't stop dictation. The next listening session starts on its own, so you can keep talking sentence after sentence without re-tapping the mic. Turn it off and each session ends after one utterance. Tap the mic again for the next one.
 
+Between sentences the mic is really closed for a moment: the recognizer has stopped hearing and is working out the words. The pulse ring goes away and the line shows "…" for exactly that stretch, so you can see when to wait. It comes back when the next sentence is listening. Pressing the mic while it's working out the words makes that sentence the last one.
+
 Continuous mode is also patient with silence: a pause that would normally time out the recognizer just restarts listening quietly instead of surfacing an error, but only for two silent retries in a row. After that it gives up and goes idle, so an abandoned open mic doesn't sit there listening forever.
 
 Dictation ends completely the moment you type a key, swipe, or tap a suggestion. There's no pausing and picking up where you left off. Partial results build up as one continuous chunk, so typing in the middle of an utterance would corrupt it rather than interrupt it. Whichever view you're in stays open afterward, so you can tap the mic to resume. A tap on the Voice tool is the exception among the ways out: it finishes the phrase first (see [Starting dictation](#starting-dictation)). Dictation also stops when you close the panel, dismiss either bar, or switch to a different tool panel.

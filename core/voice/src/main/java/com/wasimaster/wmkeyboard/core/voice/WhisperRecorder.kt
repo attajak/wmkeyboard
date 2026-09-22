@@ -43,6 +43,10 @@ class WhisperRecorder(
     /** How much has been captured so far, in samples. */
     val sampleCount: Int get() = count
 
+    /** Whole seconds of room left in the clip, rounded up: 1 until the very end. */
+    val secondsLeft: Int
+        get() = (maxSamples - count + WhisperMel.SAMPLE_RATE - 1) / WhisperMel.SAMPLE_RATE
+
     @SuppressLint("MissingPermission") // caller verifies RECORD_AUDIO
     fun start(): Boolean {
         val minBuf = AudioRecord.getMinBufferSize(

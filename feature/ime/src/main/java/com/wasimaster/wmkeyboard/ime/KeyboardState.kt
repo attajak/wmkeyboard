@@ -913,6 +913,12 @@ data class VoiceUi(
     val remote: Boolean = false,
     /** The server engine is selected but has no address yet — panel points to settings. */
     val serverNeedsSetup: Boolean = false,
+    /**
+     * Seconds until a [clipBased] recording stops by itself, over its last
+     * few; 0 the rest of the time. The clip has a fixed length and anything
+     * said past it is lost, so the surfaces count it down (#315).
+     */
+    val secondsLeft: Int = 0,
 )
 
 /** The session records a whole clip and transcribes it after the stop tap. */

@@ -50,6 +50,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
@@ -486,6 +487,8 @@ private fun MicContent(
             voice.serverNeedsSetup -> stringResource(R.string.ime_voice_status_no_server)
             // Whisper and the server give no live partials, so guide the user
             // to press when done.
+            listening && voice.clipBased && voice.secondsLeft > 0 ->
+                pluralStringResource(R.plurals.ime_voice_status_stops_in, voice.secondsLeft, voice.secondsLeft)
             listening && voice.clipBased -> stringResource(R.string.ime_voice_status_listening_hint)
             listening -> voice.partial.ifEmpty { listeningLabel }
             transcribing -> stringResource(R.string.ime_voice_status_transcribing)
@@ -771,6 +774,8 @@ internal fun VoiceStripBar(
                 stringResource(R.string.ime_voice_strip_mic_blocked)
             voice.whisperNeedsModel -> stringResource(R.string.ime_voice_strip_no_model)
             voice.serverNeedsSetup -> stringResource(R.string.ime_voice_strip_no_server)
+            listening && voice.clipBased && voice.secondsLeft > 0 ->
+                pluralStringResource(R.plurals.ime_voice_status_stops_in, voice.secondsLeft, voice.secondsLeft)
             listening && voice.clipBased -> stringResource(R.string.ime_voice_strip_listening_hint)
             listening -> voice.partial.ifEmpty { listeningLabel }
             transcribing -> stringResource(R.string.ime_voice_status_transcribing)

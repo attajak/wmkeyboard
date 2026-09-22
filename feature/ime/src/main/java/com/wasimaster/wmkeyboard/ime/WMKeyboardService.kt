@@ -18208,8 +18208,12 @@ open class WMKeyboardService : InputMethodService() {
         vibrate()
         when (_uiState.value.voice.status) {
             VoiceStatus.LISTENING -> finishVoiceUtterance()
-            // Ignore taps while finishing or transcribing — the result is coming.
-            VoiceStatus.FINISHING, VoiceStatus.TRANSCRIBING -> {}
+            // The result is coming, so there is nothing to stop — but the
+            // recognizer now reaches FINISHING by itself at every pause (#315),
+            // and continuous dictation would start the next phrase after it.
+            // A press here means "that was the last one".
+            VoiceStatus.FINISHING -> voiceStopRequested = true
+            VoiceStatus.TRANSCRIBING -> {}
             else -> {
                 if (voiceMeteredAsked) grantMetered(MeteredFeature.CLOUD_VOICE)
                 voiceSilentRetries = 0
@@ -18428,7 +18432,7 @@ open class WMKeyboardService : InputMethodService() {
             it.copy(
                 voice = it.voice.copy(
                     status = VoiceStatus.LISTENING, languageTag = tag,
-                    partial = "", level = 0f, errorMessage = null,
+                    partial = "", level = 0f, errorMessage = null, secondsLeft = 0,
                     whisper = whisperModel != null,
                     remote = server,
                     translate = _uiState.value.settings.whisper.translate,
@@ -18464,6 +18468,20 @@ open class WMKeyboardService : InputMethodService() {
                     _uiState.update {
                         if (it.voice.level == quantized) it
                         else it.copy(voice = it.voice.copy(level = quantized))
+                    }
+                }
+
+                override fun onEndOfSpeech() {
+                    if (generation != voiceGeneration) return
+                    // The recognizer has stopped hearing and is only working
+                    // out the words now. Left on "listening", the mic kept
+                    // looking open while the user talked into nothing (#315).
+                    _uiState.update {
+                        if (it.voice.status != VoiceStatus.LISTENING) {
+                            it
+                        } else {
+                            it.copy(voice = it.voice.copy(status = VoiceStatus.FINISHING, level = 0f))
+                        }
                     }
                 }
 
@@ -18595,13 +18613,17 @@ open class WMKeyboardService : InputMethodService() {
         val languageId = _uiState.value.language.id
         whisperCapture = model?.let { it to languageId }
         serverCapture = if (model == null) languageId else null
-        val recorder = WhisperRecorder(
+        lateinit var recorder: WhisperRecorder
+        recorder = WhisperRecorder(
             onLevel = { level ->
                 if (generation != voiceGeneration) return@WhisperRecorder
                 val quantized = (level * 8).toInt() / 8f
+                // The clip ends by itself when the window fills, and words said
+                // after that are lost, so its last seconds count down (#315).
+                val left = recorder.secondsLeft.takeIf { it <= VOICE_COUNTDOWN_SECONDS } ?: 0
                 _uiState.update {
-                    if (it.voice.level == quantized) it
-                    else it.copy(voice = it.voice.copy(level = quantized))
+                    if (it.voice.level == quantized && it.voice.secondsLeft == left) it
+                    else it.copy(voice = it.voice.copy(level = quantized, secondsLeft = left))
                 }
             },
             onMaxReached = {
@@ -30083,6 +30105,9 @@ open class WMKeyboardService : InputMethodService() {
          * `R.string`: the title lives in `:app`, which this module cannot see.
          */
         private const val SANDBOX_SETTING = "typing_glide_sandbox_title"
+
+        /** How long before a clip's end the voice surfaces start counting down. */
+        private const val VOICE_COUNTDOWN_SECONDS = 5
 
         /** Enough of a WebP to read the header flag that says it is animated. */
         private const val WEBP_HEADER_BYTES = 32

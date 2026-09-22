@@ -64,6 +64,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -678,6 +679,7 @@ private fun VoiceBarStatus(
         voice.status == VoiceStatus.MIC_BLOCKED -> 10
         voice.whisperNeedsModel -> 3
         voice.serverNeedsSetup -> 11
+        listening && voice.clipBased && voice.secondsLeft > 0 -> 12
         listening && voice.clipBased -> 4
         listening -> 5
         transcribing -> 6
@@ -702,6 +704,7 @@ private fun VoiceBarStatus(
         10 -> stringResource(R.string.ime_voice_strip_mic_blocked)
         3 -> stringResource(R.string.ime_voice_strip_no_model)
         11 -> stringResource(R.string.ime_voice_strip_no_server)
+        12 -> pluralStringResource(R.plurals.ime_voice_status_stops_in, voice.secondsLeft, voice.secondsLeft)
         4 -> stringResource(R.string.ime_voice_strip_listening_hint)
         5 -> voice.partial.ifEmpty { speakNow }
         6 -> stringResource(R.string.ime_voice_status_transcribing)
