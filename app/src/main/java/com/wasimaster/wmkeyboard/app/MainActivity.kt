@@ -135,6 +135,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.offset
+import androidx.compose.ui.layout.layout
+import kotlin.math.roundToInt
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -566,6 +569,12 @@ private fun SettingsNavHost(
             // motions deep in a row can be still without every row being
             // handed the settings.
             LocalReduceMotion provides settings.reduceMotion,
+            // "Icons in settings", animated once here for every row and
+            // heading, so the screen the switch is on sees its tiles leave.
+            LocalIconReveal provides rememberIconReveal(
+                shown = settings.appUi.rowIcons,
+                still = settings.reduceMotion,
+            ),
         ) {
             if (twoPane) {
                 SettingsTwoPane(
@@ -3167,7 +3176,7 @@ internal fun NavRow(
         value,
         MaterialTheme.typography.labelLarge,
         furniture = TRAILING_ICON_WIDTH + 4.dp,
-        hasIcon = icon != null,
+        hasIcon = rowHasTile(icon),
     )
     val below = value.takeIf { it != null && !beside }
     HighlightableRow(title, highlightKey) {
@@ -3465,6 +3474,9 @@ private val RowIconLane = WmIconTileSize + RowIconGap
  * It is a control, not a line of text, and 56 dp is a sixth of a phone's width:
  * taking that off a row of segmented buttons is the difference between "After
  * the shortcut key" and "After the".
+ *
+ * The tile and the subtitle's indent leave together when "Icons in settings"
+ * is turned off, the lane closing as the tile shrinks — see [IconReveal].
  */
 @Composable
 private fun IconedRow(
@@ -3473,11 +3485,14 @@ private fun IconedRow(
     header: @Composable RowScope.() -> Unit,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val reveal = LocalIconReveal.current.takeIf { icon != null && it.present }
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (icon != null) {
-                WmIconTile(icon, currentRouteAccent())
-                Spacer(Modifier.width(RowIconGap))
+            if (icon != null && reveal != null) {
+                Row(Modifier.iconReveal(reveal)) {
+                    WmIconTile(icon, currentRouteAccent())
+                    Spacer(Modifier.width(RowIconGap))
+                }
             }
             header()
         }
@@ -3486,11 +3501,18 @@ private fun IconedRow(
                 subtitle,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = if (icon == null) 0.dp else RowIconLane),
+                modifier = if (reveal == null) Modifier else Modifier.revealInset(reveal),
             )
         }
         content()
     }
+}
+
+/** A subtitle's indent past the tile, closing as the tile leaves. */
+private fun Modifier.revealInset(reveal: IconReveal): Modifier = layout { measurable, constraints ->
+    val inset = (RowIconLane.toPx() * reveal.progress.value).roundToInt()
+    val placeable = measurable.measure(constraints.offset(horizontal = -inset))
+    layout(placeable.width + inset, placeable.height) { placeable.placeRelative(inset, 0) }
 }
 
 /** [SliderSetting] for a row named by a string resource. */
@@ -3784,7 +3806,7 @@ internal fun ActionRow(
         action,
         MaterialTheme.typography.labelLarge,
         furniture = BUTTON_FURNITURE,
-        hasIcon = icon != null,
+        hasIcon = rowHasTile(icon),
     )
     HighlightableRow(label, title) {
         WmRow(
@@ -3946,7 +3968,7 @@ internal fun <T> ChoiceSetting(
                 (if (info != null) INFO_BUTTON_WIDTH else 0.dp) +
                 (if (default != null) RESET_WIDTH else 0.dp) +
                 (if (glyph != null) ChoiceValueGlyphSize + ChoiceValueGlyphGap else 0.dp),
-            hasIcon = icon != null,
+            hasIcon = rowHasTile(icon),
             rowWidth = maxWidth,
         )
         HighlightableRow(title, highlightKey) {

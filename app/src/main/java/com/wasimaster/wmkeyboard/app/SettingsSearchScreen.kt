@@ -884,12 +884,16 @@ private fun ResultRow(
         WmRow(
             title = entry.title,
             titleContent = { Text(title) },
-            leading = {
-                ResultIcon(
-                    entry,
-                    settings,
-                    modifier = Modifier.wmSharedElement(takeOffKey("icon", entry.route)),
-                )
+            // Gone with the rows' own tiles when "Icons in settings" is off:
+            // the result would otherwise be the one tile left in the app.
+            leading = if (!LocalIconReveal.current.present) null else {
+                {
+                    ResultIcon(
+                        entry,
+                        settings,
+                        modifier = Modifier.wmSharedElement(takeOffKey("icon", entry.route)),
+                    )
+                }
             },
             supporting = {
                 Column {

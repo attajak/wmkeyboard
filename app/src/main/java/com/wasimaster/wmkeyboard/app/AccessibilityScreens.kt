@@ -134,6 +134,18 @@ internal fun AccessibilitySettings(
         }
     }
 
+    SettingsGroup(stringResource(R.string.accessibility_settings_app_title)) {
+        item {
+            ToggleSetting(
+                R.string.accessibility_row_icons_title,
+                stringResource(R.string.accessibility_row_icons_subtitle),
+                settings.appUi.rowIcons,
+                info = stringResource(R.string.accessibility_row_icons_info),
+                default = SettingsDefaults.appUi.rowIcons,
+            ) { scope.launch { repository.setSettingsRowIcons(it) } }
+        }
+    }
+
     SettingsGroup(stringResource(R.string.accessibility_screen_reader_title)) {
         item {
             ChoiceSetting(

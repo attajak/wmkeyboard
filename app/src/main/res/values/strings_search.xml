@@ -57,6 +57,7 @@
     <string name="search_kw_accessibility_color_vision">deuteranopia protanopia tritanopia daltonism</string>
     <string name="search_kw_accessibility_debounce">tremor shaky bounce accidental</string>
     <string name="search_kw_accessibility_readable_font">dyslexia dyslexic legible</string>
+    <string name="search_kw_accessibility_row_icons">plain classic old simple minimal clutter</string>
     <string name="search_kw_accessibility_talkback">blind voiceover</string>
     <string name="search_kw_appearance_key_corner_radius">rounded square rectangular pill</string>
     <string name="search_kw_appearance_themes">material monet dynamic skin</string>

@@ -4402,6 +4402,13 @@ data class AppUiSettings(
      * the keyboard reads it.
      */
     val dictionarySort: DictionarySort = DictionarySort.MOST_USED_FIRST,
+    /**
+     * Whether settings rows and screen headings carry their coloured icon
+     * tiles. Off is the plain list of words the app had before the tiles
+     * arrived, for readers who find a column of colour more noise than help.
+     * Only the settings app reads it; the keyboard's own icons are untouched.
+     */
+    val rowIcons: Boolean = true,
 )
 
 /** What the symbol row's height slider offers, matching the number row's. */
@@ -6901,6 +6908,7 @@ class SettingsRepository(private val context: Context) {
         private val ADVANCED_OPEN = stringSetPreferencesKey("advanced_open")
         private val DEFAULT_WORDLIST_SIZE = stringPreferencesKey("default_wordlist_size")
         private val DICTIONARY_SORT = stringPreferencesKey("dictionary_sort")
+        private val SETTINGS_ROW_ICONS = booleanPreferencesKey("settings_row_icons")
         private val SYMBOL_ROW_HEIGHT = intPreferencesKey("symbol_row_height")
         private val SYMBOL_ROW_LINES = intPreferencesKey("symbol_row_lines")
         private val SYMBOL_ROW_SCROLL = stringPreferencesKey("symbol_row_scroll")
@@ -8025,6 +8033,7 @@ class SettingsRepository(private val context: Context) {
                 dictionarySort = p[DICTIONARY_SORT]
                     ?.let { runCatching { DictionarySort.valueOf(it) }.getOrNull() }
                     ?: defaults.appUi.dictionarySort,
+                rowIcons = p[SETTINGS_ROW_ICONS] ?: defaults.appUi.rowIcons,
             ),
             toolLimits = ToolLimitSettings(
                 weatherRefreshMinutes = p[WEATHER_REFRESH_MINUTES]
@@ -13136,6 +13145,10 @@ class SettingsRepository(private val context: Context) {
     /** See [AppUiSettings.dictionarySort]. */
     suspend fun setDictionarySort(value: DictionarySort) =
         editPrefs { it[DICTIONARY_SORT] = value.name }
+
+    /** See [AppUiSettings.rowIcons]. */
+    suspend fun setSettingsRowIcons(value: Boolean) =
+        editPrefs { it[SETTINGS_ROW_ICONS] = value }
 
     suspend fun setWeatherRefreshMinutes(value: Int) =
         editPrefs { it[WEATHER_REFRESH_MINUTES] = value.coerceIn(1, 180) }

@@ -20,6 +20,8 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
@@ -85,6 +87,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
@@ -131,6 +136,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.dp
@@ -240,6 +246,101 @@ internal fun WmIconTile(
             content = content,
         )
     }
+}
+
+// ---- icon tiles, on and off ----
+
+/** How long the tiles take to leave or come back when "Icons in settings" flips. */
+private const val IconRevealMs = 320
+
+/**
+ * How much of its icon tile a settings row shows, from 1 (all of it) to 0 (none,
+ * the plain rows the app had before the tiles), after **Icons in settings** on
+ * the Accessibility screen.
+ *
+ * One animation for the whole app rather than one per row, published through
+ * [LocalIconReveal]. Only the rows on screen when the switch moves are there to
+ * see it travel, which is the screen the switch is on; anything opened later
+ * composes after the animation has finished and simply draws the answer.
+ *
+ * [progress] is read in layout and draw only, so the tiles' travel re-lays-out
+ * the rows it moves without recomposing them. [present] is the question
+ * composition asks — is there a tile to draw at all — and it changes once at
+ * each end of the travel.
+ */
+@Stable
+internal class IconReveal(val progress: State<Float>) {
+    val present: Boolean by derivedStateOf { progress.value > 0f }
+}
+
+/** The answer outside the settings host: every tile, always. */
+private val AllIconsShown = IconReveal(mutableFloatStateOf(1f))
+
+/** The app's [IconReveal]. Published at the settings root beside [LocalReduceMotion]. */
+internal val LocalIconReveal = compositionLocalOf { AllIconsShown }
+
+/** The [IconReveal] the settings root publishes: [shown] animated, unless [still]. */
+@Composable
+internal fun rememberIconReveal(shown: Boolean, still: Boolean): IconReveal {
+    val progress = animateFloatAsState(
+        targetValue = if (shown) 1f else 0f,
+        animationSpec = if (still) snap() else tween(IconRevealMs, easing = FastOutSlowInEasing),
+        label = "settingsIcons",
+    )
+    return remember(progress) { IconReveal(progress) }
+}
+
+/**
+ * Whether a row drawing [icon] currently gives it a tile. The rows that budget
+ * their own width ask this, so a value that had to go under the title for want
+ * of room can come back beside it once the tile has gone.
+ */
+@Composable
+internal fun rowHasTile(icon: ImageVector?): Boolean = icon != null && LocalIconReveal.current.present
+
+/**
+ * Draws a tile at [reveal]'s share of its width, shrunk and faded to match, so
+ * the lane it stands in closes as it goes rather than leaving a hole that snaps
+ * shut at the end. It shrinks towards the row's outer edge, where it sits.
+ */
+internal fun Modifier.iconReveal(reveal: IconReveal): Modifier = layout { measurable, constraints ->
+    val p = reveal.progress.value
+    val placeable = measurable.measure(constraints)
+    val width = (placeable.width * p).roundToInt().coerceIn(constraints.minWidth, constraints.maxWidth)
+    val originX = if (layoutDirection == LayoutDirection.Ltr) 0f else 1f
+    layout(width, placeable.height) {
+        placeable.placeRelativeWithLayer(0, 0) {
+            alpha = p
+            scaleX = p
+            scaleY = p
+            transformOrigin = TransformOrigin(originX, 0.5f)
+        }
+    }
+}
+
+/** The gap `ListItem` keeps after its leading slot whenever anything is in it. */
+private val ListItemLeadingGap = 16.dp
+
+/**
+ * Pays back `ListItem`'s leading gap as a tile leaves.
+ *
+ * The gap stays while the slot holds anything, however narrow, so a tile shrunk
+ * to nothing still leaves 16 dp of air before the words — and taking the slot
+ * away at the end would jerk them sideways by it. Instead the row is laid out
+ * that much wider and slid back past its start edge, by as much of the gap as
+ * the tile has lost. Only the leading side moves: the far end lands exactly
+ * where it was, so a switch or a chevron stays put.
+ */
+private fun Modifier.leadingGapReveal(reveal: IconReveal): Modifier = layout { measurable, constraints ->
+    val paid = if (!constraints.hasBoundedWidth) 0
+    else (ListItemLeadingGap.toPx() * (1f - reveal.progress.value)).roundToInt()
+    val placeable = measurable.measure(
+        constraints.copy(
+            minWidth = constraints.minWidth + paid,
+            maxWidth = constraints.maxWidth + paid,
+        ),
+    )
+    layout(placeable.width - paid, placeable.height) { placeable.placeRelative(-paid, 0) }
 }
 
 /**
@@ -392,6 +493,8 @@ internal val LocalNavAnimatedScope = compositionLocalOf<AnimatedVisibilityScope?
  * outside the settings host, which is what a preview or a test wants.
  */
 internal val LocalReduceMotion = compositionLocalOf { false }
+
+// LocalIconReveal, the other root-published look, sits with the icon tiles.
 
 /**
  * The folds the user has opened, by "<route>/<key>", and the way to change
@@ -603,6 +706,10 @@ internal fun GroupSkeleton(rowCount: Int, hasTitle: Boolean, modifier: Modifier 
     val ink = MaterialTheme.colorScheme.onSurface.copy(alpha = SkeletonInkAlpha)
     val density = LocalDensity.current
     val headingLane = if (hasTitle) SkeletonHeadingLane else 0.dp
+    // No tile slab when the rows it stands in for will have no tile either,
+    // and the words' bars move up to where the words will be.
+    val tiles = LocalIconReveal.current.present
+    val textStart = if (tiles) 72.dp else 16.dp
     val height = headingLane + SkeletonRowHeight * rowCount + SkeletonRowGap * (rowCount - 1)
     Spacer(
         modifier = modifier
@@ -637,21 +744,23 @@ internal fun GroupSkeleton(rowCount: Int, hasTitle: Boolean, modifier: Modifier 
                                 if (first || last) 24.dp.toPx() else 6.dp.toPx(),
                             ),
                         )
+                        if (tiles) {
+                            drawRoundRect(
+                                color = ink,
+                                topLeft = Offset(left + 16.dp.toPx(), top + 16.dp.toPx()),
+                                size = Size(WmIconTileSize.toPx(), WmIconTileSize.toPx()),
+                                cornerRadius = CornerRadius(13.dp.toPx()),
+                            )
+                        }
                         drawRoundRect(
                             color = ink,
-                            topLeft = Offset(left + 16.dp.toPx(), top + 16.dp.toPx()),
-                            size = Size(WmIconTileSize.toPx(), WmIconTileSize.toPx()),
-                            cornerRadius = CornerRadius(13.dp.toPx()),
-                        )
-                        drawRoundRect(
-                            color = ink,
-                            topLeft = Offset(left + 72.dp.toPx(), top + 20.dp.toPx()),
+                            topLeft = Offset(left + textStart.toPx(), top + 20.dp.toPx()),
                             size = Size((right - left) * 0.42f, 12.dp.toPx()),
                             cornerRadius = CornerRadius(6.dp.toPx()),
                         )
                         drawRoundRect(
                             color = ink,
-                            topLeft = Offset(left + 72.dp.toPx(), top + 40.dp.toPx()),
+                            topLeft = Offset(left + textStart.toPx(), top + 40.dp.toPx()),
                             size = Size((right - left) * 0.62f, 10.dp.toPx()),
                             cornerRadius = CornerRadius(5.dp.toPx()),
                         )
@@ -992,6 +1101,10 @@ internal fun WmRow(
         return
     }
     val tileAccent = accent ?: currentRouteAccent()
+    // Null once "Icons in settings" has taken the tile away altogether; while
+    // it is on its way out or back, the tile and the gap after it travel with
+    // it. A caller's own [leading] is content rather than decoration, and stays.
+    val reveal = LocalIconReveal.current.takeIf { leading == null && icon != null && it.present }
     val titleKey = flightTo?.let { takeOffKey("title", it) }
     val iconKey = flightTo?.let { takeOffKey("icon", it) }
     val screen = LocalScreenRoute.current
@@ -1032,13 +1145,14 @@ internal fun WmRow(
         },
         leadingContent = when {
             leading != null -> leading
-            icon != null -> {
+            icon != null && reveal != null -> {
                 {
                     WmIconTile(
                         icon,
                         tileAccent,
-                        modifier = if (iconKey == null) Modifier
-                        else Modifier.wmSharedElement(iconKey),
+                        modifier = Modifier.iconReveal(reveal).then(
+                            if (iconKey == null) Modifier else Modifier.wmSharedElement(iconKey),
+                        ),
                     )
                 }
             }
@@ -1054,7 +1168,9 @@ internal fun WmRow(
                     if (flightTo != null) FlightOrigin.leaving(screen)
                     onClick()
                 },
-            ),
+            )
+            // Inside the click target, so the ripple keeps the row's own bounds.
+            .then(if (reveal == null) Modifier else Modifier.leadingGapReveal(reveal)),
     )
 }
 
@@ -1823,7 +1939,8 @@ private fun BoxScope.HeadingBadge(
 /**
  * The heading's icon. [keepIcon] is the one that comes along into the collapsed
  * bar — shrunk to something the strip can hold beside the title — rather than
- * fading out with the rest of the heading.
+ * fading out with the rest of the heading. [share] is how much of it
+ * "Icons in settings" leaves showing — see [IconReveal].
  */
 @Composable
 private fun BoxScope.HeadingIcon(
@@ -1833,6 +1950,7 @@ private fun BoxScope.HeadingIcon(
     endX: Float,
     accent: Color,
     tile: Boolean,
+    share: Float,
     content: @Composable () -> Unit,
 ) {
     val moving = Modifier
@@ -1858,6 +1976,13 @@ private fun BoxScope.HeadingIcon(
                     lerp(startX, if (keepIcon) endX else startX, f).roundToInt(),
                     pose.offsetAt(0f).y,
                 )
+            }
+            // Leaving with "Icons in settings", towards the edge it sits on.
+            .graphicsLayer {
+                alpha = share
+                scaleX = share
+                scaleY = share
+                transformOrigin = TransformOrigin(0f, 0.5f)
             },
         contentAlignment = Alignment.CenterStart,
     ) {
@@ -1962,20 +2087,30 @@ internal fun WmCollapsingTopBar(
             { Icon(glyph, contentDescription = null, modifier = Modifier.size(WmIconTileGlyph)) }
         }
     val headerAccent = accent ?: routeAccent(route.orEmpty())
-    val keepIcon = headerIcon != null && iconInBar
+    // A tiled heading icon is the screen's own copy of its home row's tile, so
+    // it goes with the rows' tiles when "Icons in settings" is off, and the
+    // title slides back over the lane it leaves. A bare glyph names the page's
+    // subject — a tool, an addon, a mode — and stays, like the list it flew from.
+    // Read here rather than in a lambda: it only moves while the switch does.
+    val iconShare = when {
+        headerIcon == null -> 0f
+        iconTile -> LocalIconReveal.current.progress.value
+        else -> 1f
+    }
+    val keepIcon = iconShare > 0f && iconInBar
 
     val expandedSp = expandedTitleSp(title)
     val collapsedScale = CollapsedTitleSp / expandedSp
     // Where the expanded title's left edge sits: past the heading icon when
     // there is one, at the plain inset otherwise.
     val iconSize = if (iconTile) IconTileSize else HeaderBareIconSize
-    val startXDp = TitleInset + if (headerIcon != null) iconSize + HeaderIconGap else 0.dp
+    val startXDp = TitleInset + (iconSize + HeaderIconGap) * iconShare
     val startX = with(density) { startXDp.toPx() }
     // And where it settles: past the navigation icon, and past the heading icon
     // as well when that one is staying.
     val barIconLane = iconSize * BarIconScale + 8.dp
     val endXDp = (if (onBack != null) TitleInsetWithNav else TitleInset) +
-        (if (keepIcon) barIconLane else 0.dp) +
+        (if (keepIcon) barIconLane * iconShare else 0.dp) +
         (if (badge != null && badgeInBar) BadgeBarLane else 0.dp)
     val barStackSplitPx = with(density) { BarStackSplit.toPx() }
     val endX = with(density) { endXDp.toPx() }
@@ -2075,8 +2210,8 @@ internal fun WmCollapsingTopBar(
             expandedY = expandedY,
             centeredExpandedY = centeredExpandedY,
         )
-        if (headerIcon != null) {
-            HeadingIcon(pose, keepIcon, iconStartX, iconEndX, headerAccent, iconTile, headerIcon)
+        if (headerIcon != null && iconShare > 0f) {
+            HeadingIcon(pose, keepIcon, iconStartX, iconEndX, headerAccent, iconTile, iconShare, headerIcon)
         }
         if (badge != null) {
             HeadingBadge(

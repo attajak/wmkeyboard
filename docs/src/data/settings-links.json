@@ -879,6 +879,7 @@
   {"title":"Text size","name":"accessibility_text_size_title","route":"accessibility","screens":["Accessibility"],"screen":false},
   {"title":"Keyboard font","name":"accessibility_keyboard_font_title","route":"accessibility","screens":["Accessibility"],"screen":false},
   {"title":"Reduce motion","name":"accessibility_reduce_motion_title","route":"accessibility","screens":["Accessibility"],"screen":false},
+  {"title":"Icons in settings","name":"accessibility_row_icons_title","route":"accessibility","screens":["Accessibility"],"screen":false},
   {"title":"TalkBack support","name":"accessibility_talkback_title","route":"accessibility","screens":["Accessibility"],"screen":false},
   {"title":"Keyboard gestures service","name":"accessibility_passthrough_service_title","route":"accessibility","screens":["Accessibility"],"screen":false},
   {"title":"Ignore repeated presses","name":"accessibility_debounce_title","route":"accessibility","screens":["Accessibility"],"screen":false},
