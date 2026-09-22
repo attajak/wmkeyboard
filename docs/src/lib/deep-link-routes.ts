@@ -96,6 +96,7 @@ export const ROUTES: RouteSpec[] = [
 	{ pattern: 'layout/size', label: 'Size and position', group: 'Layout and size' },
 	{ pattern: 'layout/onehanded', label: 'One-handed, split and floating', group: 'Layout and size' },
 	{ pattern: 'rows', label: 'Rows and bars', group: 'Layout and size' },
+	{ pattern: 'rows/symbol', label: 'Symbol row', group: 'Layout and size' },
 	{ pattern: 'keymaps', label: 'Key layouts', group: 'Layout and size' },
 	{
 		pattern: 'keymap_edit/{layoutId}',
@@ -140,6 +141,13 @@ export const ROUTES: RouteSpec[] = [
 	{ pattern: 'emoji', label: 'Emoji', group: 'Emoji, clipboard and stickers' },
 	{ pattern: 'emoji/panel', label: 'Emoji panel', group: 'Emoji, clipboard and stickers' },
 	{ pattern: 'emojikeywords', label: 'Emoji keywords', group: 'Emoji, clipboard and stickers' },
+	{ pattern: 'emojicategories', label: 'Emoji categories', group: 'Emoji, clipboard and stickers' },
+	{
+		pattern: 'emojiorder/{category}',
+		label: 'The emoji inside one category, in their order',
+		group: 'Emoji, clipboard and stickers',
+		args: [{ name: 'category', hint: 'A category id in lowercase, smileys or flags' }],
+	},
 	{ pattern: 'clipboard', label: 'Clipboard', group: 'Emoji, clipboard and stickers' },
 	{ pattern: 'phoneformats', label: 'Phone number formats', group: 'Emoji, clipboard and stickers' },
 	{ pattern: 'sticker_packs', label: 'Sticker packs', group: 'Emoji, clipboard and stickers' },
@@ -204,6 +212,7 @@ export const ROUTES: RouteSpec[] = [
 		args: [{ name: 'snippetId', hint: 'A snippet number; 0 opens an empty new one' }],
 	},
 	{ pattern: 'musicapps', label: 'Music players', group: 'Tools' },
+	{ pattern: 'kdeconnect/devices', label: 'KDE Connect devices', group: 'Tools' },
 	{ pattern: 'ai_actions', label: 'AI actions', group: 'Tools' },
 	{
 		pattern: 'ai_action_edit/{actionId}',
@@ -274,6 +283,7 @@ export const ROUTES: RouteSpec[] = [
 
 	{ pattern: 'privacy', label: 'Privacy', group: 'Privacy and backup' },
 	{ pattern: 'permissions', label: 'Permissions', group: 'Privacy and backup' },
+	{ pattern: 'network_activity', label: 'Network activity', group: 'Privacy and backup' },
 	{ pattern: 'applock', label: 'Fingerprint lock', group: 'Privacy and backup' },
 	{ pattern: 'accessibility', label: 'Accessibility', group: 'Privacy and backup' },
 	{ pattern: 'backup', label: 'Backup and restore', group: 'Privacy and backup' },
@@ -311,6 +321,7 @@ export const TOOL_NAMES = [
 	'CURSOR_RIGHT', 'CURSOR_UP', 'CURSOR_DOWN', 'CURSOR_HOME', 'CURSOR_END', 'PAGE_UP', 'PAGE_DOWN',
 	'CURSOR_WORD_LEFT', 'CURSOR_WORD_RIGHT', 'SELECT_WORD', 'SELECT_LINE', 'SELECT_ALL', 'SELECT_MODE', 'COPY',
 	'CUT', 'PASTE', 'HIDE_KEYBOARD', 'PERSISTENT', 'SELECTION_ACTIONS', 'LEARN_FROM_TEXT',
+	'PHONETIC_ENGLISH', 'KDE_CONNECT',
 ];
 
 /** `PanelKind` entry names. */
@@ -329,9 +340,9 @@ export const SCRIPT_NAMES = [
 /** `StorageCategories` ids, the accepted values of `storage/{category}`. */
 export const STORAGE_IDS = [
 	'wordlists', 'bundled_dicts', 'emoji_dicts', 'vocab', 'voice_models', 'ai_models', 'addon_index', 'themes',
-	'stickers', 'icon_packs', 'fonts', 'key_sounds', 'plugins', 'learned', 'typing_stats', 'clipboard', 'snippets',
-	'ai_history', 'custom_wordlists', 'captures', 'settings_data', 'cache_images', 'cache_media', 'cache_addons',
-	'cache_temp', 'logs',
+	'stickers', 'icon_packs', 'fonts', 'key_sounds', 'plugins', 'learned', 'typing_stats', 'netlog', 'clipboard',
+	'snippets', 'ai_history', 'custom_wordlists', 'captures', 'settings_data', 'cache_images', 'cache_media',
+	'cache_addons', 'cache_temp', 'logs',
 ];
 
 /** The files under app/src/main/assets/licenses/. */

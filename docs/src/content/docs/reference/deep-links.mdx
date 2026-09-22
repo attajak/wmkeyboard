@@ -158,7 +158,7 @@ short.
 
 ### Every route
 
-105 screens. Four more exist and are deliberately not addressable. Three have
+111 screens. Four more exist and are deliberately not addressable. Three have
 nowhere to land: the first-run wizard (`onboarding`), the sticker editor
 (`sticker_editor`), and a single photo's page (`photo_detail`). Each of those
 three draws from something the screen before it handed over, so opened cold it
@@ -250,6 +250,8 @@ or shared into the app yourself.
 | `emoji` | Emoji. |
 | `emoji/panel` | Emoji panel. |
 | `emojikeywords` | Emoji keywords. |
+| `emojicategories` | Emoji categories: the order of the panel's tabs, and which ones it shows. |
+| `emojiorder/{category}` | The emoji inside one category, to drag into your own order. The category is its id in lowercase: `emojiorder/smileys`, `emojiorder/flags`. |
 | `clipboard` | Clipboard. |
 | `phoneformats` | Phone number formats. |
 | `sticker_packs` | Sticker packs. |
@@ -311,6 +313,7 @@ or shared into the app yourself.
 |---|---|
 | `privacy` | Privacy. |
 | `permissions` | Permissions. |
+| `network_activity` | Network activity: every request the keyboard makes, and where it went. |
 | `applock` | Fingerprint lock. |
 | `accessibility` | Accessibility. |
 | `backup` | Backup and restore. |
