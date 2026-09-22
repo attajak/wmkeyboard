@@ -1685,6 +1685,21 @@ class SuggestionEngine(
         private const val ELISION_SHADOW_RATIO = 200.0
 
         /**
+         * How many times commoner a hyphenated compound has to be than its
+         * fused spelling for the strip to offer it over a fused spelling some
+         * list holds; see [hyphenReading]. `что-то` against `чтото` is 1,800,
+         * `well-paid` against `wellpaid` about 64; `on-line` against `online` is far
+         * under 1 and is never offered.
+         */
+        private const val HYPHEN_SHADOW_RATIO = 50.0
+
+        /** Shortest fused spelling [hyphenReading] tries to split. */
+        private const val HYPHEN_READING_MIN_LENGTH = 4
+
+        /** Most parts [knownCompound] vouches for: `mother-in-law`, not a sentence of hyphens. */
+        private const val MAX_COMPOUND_PARTS = 4
+
+        /**
          * How many times commoner than the word after its prefix a fused
          * spelling may be and still have the elision offered on the strip.
          * `lune` at 20,000 keeps *l'une* (`une` at 2.7 million) and `deux`
@@ -1974,8 +1989,10 @@ class SuggestionEngine(
         val ambiguous = keys?.isAmbiguous == true
         // A typo the corpus kept is not known: the strip has to show the fix
         // the space bar is about to make (#244).
-        val known = !ambiguous && (inDictionaries(lower) || userLexicon.contains(lower)) &&
-            !typoShadowed(lower, touch, keys)
+        val known = !ambiguous && (
+            (inDictionaries(lower) || userLexicon.contains(lower)) && !typoShadowed(lower, touch, keys) ||
+                knownCompound(lower)
+            )
         val merged = HashMap<String, Double>()
 
         // One fuzzy walk covers completions AND corrections over every trie
@@ -1993,6 +2010,9 @@ class SuggestionEngine(
         // at all (#215, #240).
         if (!ambiguous) {
             apostropheReading(lower)?.let { merged.merge(it.spelling, it.score, ::maxOf) }
+            // The same for a compound typed without its hyphen: "чтото" is
+            // *что-то*, "wellpaid" is *well-paid*.
+            hyphenReading(lower)?.let { (spelling, score) -> merged.merge(spelling, score, ::maxOf) }
         }
         // The prefix sources read the buffer literally, so they sit out an
         // ambiguous decode: `adg` is not the start of anybody's name, and
@@ -3153,6 +3173,53 @@ class SuggestionEngine(
      * while the space bar was about to type `that's`, and the user — who
      * watches the strip — read that as the fix not working at all (#240).
      */
+    /**
+     * [lower] read as a compound typed without its hyphen — `чтото` for
+     * *что-то*, `wellpaid` for *well-paid* — with its score on the walk's
+     * scale, or null.
+     *
+     * The walk cannot be left to find it. It would, as a one-letter insertion,
+     * but only for a spelling no list holds, and the big lists hold the fused
+     * form as a word: the Russian one counts `чтото` 89 times against
+     * `что-то`'s 162,833, so the typed spelling was "known", corrections were
+     * never asked for, and the strip had nothing to offer but what was typed.
+     * So this asks for itself, one split at a time, and offers the compound
+     * when the fused spelling is unknown or a stand-in the compound outnumbers
+     * [HYPHEN_SHADOW_RATIO] times over — `online` stays itself, never
+     * *on-line*.
+     *
+     * The strip only. Whether the space bar rewrites it is the corrector's
+     * call, made the way it makes every other ([typoShadowed]).
+     */
+    private fun hyphenReading(lower: String): Pair<String, Double>? {
+        if (lower.length < HYPHEN_READING_MIN_LENGTH || lower.length > JOIN_MAX_LENGTH) return null
+        if (!lower.all { WordContext.isWordChar(it) }) return null
+        val typed = dictionaryScore(lower)
+        var best: Pair<String, Double>? = null
+        for (at in 1 until lower.length) {
+            val compound = lower.substring(0, at) + '-' + lower.substring(at)
+            val score = dictionaryScore(compound)
+            if (score == Double.NEGATIVE_INFINITY || suppressed(compound)) continue
+            if (typed != Double.NEGATIVE_INFINITY && score - typed < ln(HYPHEN_SHADOW_RATIO)) continue
+            if (best == null || score > best.second) best = compound to score
+        }
+        return best
+    }
+
+    /**
+     * Whether [lower] is a hyphenated compound every part of which is a word:
+     * `hello-world`, `красно-белый`. Not a typo to correct, whatever the lists
+     * say about the whole — they hold only the compounds common enough to
+     * have been counted, and a compound is made up on the spot far more often
+     * than it is looked up.
+     */
+    private fun knownCompound(lower: String): Boolean {
+        if ('-' !in lower) return false
+        val parts = lower.split('-')
+        return parts.size in 2..MAX_COMPOUND_PARTS &&
+            parts.all { it.isNotEmpty() && (inDictionaries(it) || userLexicon.contains(it)) }
+    }
+
     private fun apostropheReading(lower: String): ElisionReading? {
         if (!apostropheFixes) return null
         var best: ElisionReading? = null
@@ -3275,6 +3342,7 @@ class SuggestionEngine(
         if (known && !accentShadowed(lower, touch) && !typoShadowed(lower, touch)) {
             return NO_CORRECTION
         }
+        if (knownCompound(lower)) return NO_CORRECTION
         // Contact and app names are known words too — never "corrected" away.
         if (contacts.contains(lower) || apps.contains(lower)) return NO_CORRECTION
         // Digits: exactly one digit may be a number-row slip (when the IME

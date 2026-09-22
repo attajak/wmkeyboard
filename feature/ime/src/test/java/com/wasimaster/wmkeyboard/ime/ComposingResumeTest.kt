@@ -196,6 +196,12 @@ class ComposingResumeTest {
     @Test
     fun `an apostrophe belongs to the word it sits in`() {
         assertEquals("don't", resumableWordAt("i don't", ""))
+        // A compound resumes whole; a dash or a hyphen at an edge ends it.
+        assertEquals("well-paid", resumableWordAt("a well-paid", ""))
+        assertEquals("что-то", resumableWordAt("Скажи что-то", null))
+        assertEquals("paid", resumableWordAt("well--paid", ""))
+        assertEquals("paid", resumableWordAt("-paid", ""))
+        assertNull(resumableWordAt("well-", ""))
         assertEquals("don", resumableWordAt("i don", "'t"))
     }
 
