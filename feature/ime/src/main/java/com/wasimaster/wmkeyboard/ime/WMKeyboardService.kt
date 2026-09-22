@@ -15943,7 +15943,6 @@ open class WMKeyboardService : InputMethodService() {
             word.none { it == '\'' || it == '\u2019' } &&
             (letter != 't' || word.last().lowercaseChar() == 'n')
 
-    /** [suffix] in capitals after a word typed in capitals: "WHAT'S", not "WHAT's". */
     /** English is one of the layout language's secondaries. */
     private fun englishIsSecondary(state: KeyboardUiState): Boolean =
         "en" in state.settings.secondaryLanguages[state.language.id].orEmpty()
@@ -15958,6 +15957,7 @@ open class WMKeyboardService : InputMethodService() {
         state.language.isEnglish ||
             englishIsSecondary(state) && word.all { it in 'a'..'z' || it in 'A'..'Z' }
 
+    /** [suffix] in capitals after a word typed in capitals: "WHAT'S", not "WHAT's". */
     private fun contractionCased(word: CharSequence, suffix: String): String =
         if (word.length > 1 && word.all { !it.isLetter() || it.isUpperCase() }) suffix.uppercase() else suffix
 
