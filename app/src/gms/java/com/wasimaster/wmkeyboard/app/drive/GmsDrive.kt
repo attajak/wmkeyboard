@@ -8,8 +8,11 @@ import com.google.android.gms.auth.api.identity.AuthorizationResult
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
+import com.wasimaster.wmkeyboard.core.settings.sink.BackupSinkException
 import com.wasimaster.wmkeyboard.core.settings.sink.DriveAppDataSink
 import com.wasimaster.wmkeyboard.core.settings.sink.DriveTokenProvider
+import com.wasimaster.wmkeyboard.core.settings.sink.SinkError
+import java.util.concurrent.CancellationException
 import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
 
@@ -34,11 +37,13 @@ private val request: AuthorizationRequest
         .build()
 
 /** Suspends on a [Task] without pulling in kotlinx-coroutines-play-services. */
-private suspend fun <T> Task<T>.awaitOrNull(): T? = suspendCancellableCoroutine { cont ->
-    addOnSuccessListener { cont.resume(it) }
-    addOnFailureListener { cont.resume(null) }
-    addOnCanceledListener { cont.resume(null) }
+private suspend fun <T> Task<T>.awaitResult(): Result<T> = suspendCancellableCoroutine { cont ->
+    addOnSuccessListener { cont.resume(Result.success(it)) }
+    addOnFailureListener { cont.resume(Result.failure(it)) }
+    addOnCanceledListener { cont.resume(Result.failure(CancellationException("Task cancelled"))) }
 }
+
+private suspend fun <T> Task<T>.awaitOrNull(): T? = awaitResult().getOrNull()
 
 /**
  * The token the background job uses.
@@ -54,10 +59,14 @@ private class GmsDriveTokenProvider(context: Context) : DriveTokenProvider {
     private val appContext = context.applicationContext
 
     override suspend fun accessToken(): String? {
+        // A failed call is not a refusal. Refusal comes back as a *successful*
+        // answer carrying a resolution; a failure is Play services unable to ask
+        // at all, most often because the phone is offline, and saying "authorize
+        // again" for that sends the user to fix something that is not broken.
         val result = Identity.getAuthorizationClient(appContext)
             .authorize(request)
-            .awaitOrNull()
-            ?: return null
+            .awaitResult()
+            .getOrElse { throw BackupSinkException(SinkError.IO, it) }
         return if (result.hasResolution()) null else result.accessToken
     }
 }

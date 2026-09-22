@@ -46,6 +46,21 @@ object AutoBackupScheduler {
      * reaches the end of a single period, and the backup never runs at all.
      * So an already-correct job is left exactly where it is.
      */
+    /**
+     * Only the destinations that go over the wire wait for a network; a SAF
+     * folder is usually local storage, and an offline phone should still be
+     * able to back up to its own card.
+     *
+     * A network destination with "Wi-Fi only" off still waits for *some*
+     * network. Without that the job ran offline, the token refresh failed, and
+     * the run was recorded against the destination.
+     */
+    fun networkTypeFor(settings: AutoBackupSettings): Int = when {
+        !settings.destination.needsNetwork -> JobInfo.NETWORK_TYPE_NONE
+        settings.requireUnmetered -> JobInfo.NETWORK_TYPE_UNMETERED
+        else -> JobInfo.NETWORK_TYPE_ANY
+    }
+
     fun sync(context: Context, settings: AutoBackupSettings) {
         val scheduler = context.getSystemService(JobScheduler::class.java) ?: return
         val pending = runCatching { scheduler.getPendingJob(JOB_ID) }.getOrNull()
@@ -56,14 +71,7 @@ object AutoBackupScheduler {
         }
 
         val intervalMs = settings.intervalHours.coerceAtLeast(1) * HOUR_MS
-        // Only the destinations that go over the wire wait for a network; a SAF
-        // folder is usually local storage, and an offline phone should still be
-        // able to back up to its own card.
-        val networkType = if (settings.requireUnmetered && settings.destination.needsNetwork) {
-            JobInfo.NETWORK_TYPE_UNMETERED
-        } else {
-            JobInfo.NETWORK_TYPE_NONE
-        }
+        val networkType = networkTypeFor(settings)
         // The constraints belong in this comparison as much as the period does.
         // Left out, turning the charging requirement off would write the
         // setting, leave the old job in place, and change nothing the user can

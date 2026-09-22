@@ -47,7 +47,10 @@ interface DriveTokenProvider {
      * app, has revoked it, or this build has no way to ask.
      *
      * Called from a background job, so it must not try to show anything. If
-     * consent is needed, answer null and let the settings screen ask.
+     * consent is needed, answer null and let the settings screen ask. When the
+     * question could not be put at all (offline, Play services busy), throw
+     * [BackupSinkException] with [SinkError.IO] rather than answer null: null
+     * is reported to the user as a grant to renew.
      */
     suspend fun accessToken(): String?
 }
@@ -130,10 +133,6 @@ class DriveAppDataSink(
     ): Result<SinkEntry> = withContext(Dispatchers.IO) {
         runCancellable {
             val bytes = ByteArrayOutputStream().also(body).toByteArray()
-
-            // multipart/related, which is what uploadType=multipart means: the
-            // metadata as JSON in the first part, the file in the second. Not
-            // multipart/form-data, which is what a MultipartBody defaults to.
             val metadata = json.encodeToString(
                 JsonObject.serializer(),
                 buildJsonObject {
@@ -141,24 +140,66 @@ class DriveAppDataSink(
                     put("parents", JsonArray(listOf(JsonPrimitive(APP_DATA_FOLDER))))
                 },
             )
-            val multipart = MultipartBody.Builder()
-                .setType(RELATED)
-                .addPart(metadata.toRequestBody(JSON_MEDIA_TYPE))
-                .addPart(bytes.toRequestBody(mimeType.toMediaTypeOrNull()))
-                .build()
-
-            val url = UPLOAD_URL.toHttpUrl().newBuilder()
-                .addQueryParameter("uploadType", "multipart")
-                .addQueryParameter("fields", FILE_FIELDS)
-                .build()
-                .toString()
-
-            val created = call(authorized(url).post(multipart).build()) {
-                it.body?.string().orEmpty()
+            val created = if (bytes.size <= MULTIPART_MAX) {
+                uploadMultipart(metadata, mimeType, bytes)
+            } else {
+                uploadResumable(metadata, mimeType, bytes)
             }
             entryOf(runCatching { json.parseToJsonElement(created).jsonObject }.getOrNull())
                 ?: throw BackupSinkException(SinkError.IO)
         }
+    }
+
+    /**
+     * One request, metadata and bytes together.
+     *
+     * multipart/related, which is what uploadType=multipart means: the
+     * metadata as JSON in the first part, the file in the second. Not
+     * multipart/form-data, which is what a MultipartBody defaults to.
+     */
+    private suspend fun uploadMultipart(metadata: String, mimeType: String, bytes: ByteArray): String {
+        val multipart = MultipartBody.Builder()
+            .setType(RELATED)
+            .addPart(metadata.toRequestBody(JSON_MEDIA_TYPE))
+            .addPart(bytes.toRequestBody(mimeType.toMediaTypeOrNull()))
+            .build()
+        val url = UPLOAD_URL.toHttpUrl().newBuilder()
+            .addQueryParameter("uploadType", "multipart")
+            .addQueryParameter("fields", FILE_FIELDS)
+            .build()
+            .toString()
+        return call(authorized(url).post(multipart).build()) { it.body?.string().orEmpty() }
+    }
+
+    /**
+     * A resumable session, for anything over the 5 MB Drive accepts in a
+     * multipart upload. A bundle with stickers or icons embedded passes that
+     * easily.
+     *
+     * Sent as one chunk, as OneDrive's is: the session exists to allow
+     * resuming, and a backup that fails is retried whole on the next run.
+     */
+    private suspend fun uploadResumable(metadata: String, mimeType: String, bytes: ByteArray): String {
+        val start = UPLOAD_URL.toHttpUrl().newBuilder()
+            .addQueryParameter("uploadType", "resumable")
+            .addQueryParameter("fields", FILE_FIELDS)
+            .build()
+            .toString()
+        val session = call(
+            authorized(start)
+                .header("X-Upload-Content-Type", mimeType)
+                .header("X-Upload-Content-Length", bytes.size.toString())
+                .post(metadata.toRequestBody(JSON_MEDIA_TYPE))
+                .build(),
+        ) { it.header("Location") }
+            ?: throw BackupSinkException(SinkError.IO)
+        // The session URI is the credential for the rest of the upload, but
+        // Drive also accepts the bearer alongside it, unlike Graph.
+        return call(
+            authorized(session)
+                .put(bytes.toRequestBody(mimeType.toMediaTypeOrNull()))
+                .build(),
+        ) { it.body?.string().orEmpty() }
     }
 
     override suspend fun list(): Result<List<SinkEntry>> = withContext(Dispatchers.IO) {
@@ -235,24 +276,43 @@ class DriveAppDataSink(
         response.use {
             if (it.isSuccessful) return read(it)
             if (allowMissing && it.code == HTTP_NOT_FOUND) return read(it)
-            throw BackupSinkException(statusError(it.code))
+            val reason = if (it.code == HTTP_FORBIDDEN) errorReason(it) else null
+            throw BackupSinkException(statusError(it.code, reason))
         }
     }
 
-    private fun statusError(code: Int): SinkError = when (code) {
-        HTTP_UNAUTHORIZED, HTTP_FORBIDDEN -> SinkError.PERMISSION_LOST
-        HTTP_NOT_FOUND -> SinkError.TARGET_MISSING
-        // Drive answers 403 for quota too, but with a reason in the body this
-        // does not read; the storage case is the one worth naming separately.
-        HTTP_INSUFFICIENT_STORAGE -> SinkError.OUT_OF_SPACE
-        else -> SinkError.IO
-    }
+    /** The first `error.errors[].reason` of a Drive error body, if any. */
+    private fun errorReason(response: Response): String? = runCatching {
+        json.parseToJsonElement(response.body?.string().orEmpty()).jsonObject["error"]
+            ?.jsonObject?.get("errors")?.jsonArray?.firstOrNull()
+            ?.jsonObject?.get("reason")?.jsonPrimitive?.contentOrNull
+    }.getOrNull()
 
     companion object {
         const val ID = "drive"
 
         /** The scope this sink needs, and the only one it should ever ask for. */
         const val SCOPE = "https://www.googleapis.com/auth/drive.appdata"
+
+        /**
+         * Drive answers 403 for three unrelated things and names which in the
+         * body: a full account, a rate limit, and an actual refusal. Only the
+         * last is the user's grant, so only the last says so.
+         */
+        fun statusError(code: Int, reason: String? = null): SinkError = when {
+            code == HTTP_FORBIDDEN && reason in QUOTA_REASONS -> SinkError.OUT_OF_SPACE
+            code == HTTP_FORBIDDEN && reason in RATE_REASONS -> SinkError.IO
+            code == HTTP_UNAUTHORIZED || code == HTTP_FORBIDDEN -> SinkError.PERMISSION_LOST
+            code == HTTP_NOT_FOUND -> SinkError.TARGET_MISSING
+            code == HTTP_INSUFFICIENT_STORAGE -> SinkError.OUT_OF_SPACE
+            else -> SinkError.IO
+        }
+
+        private val QUOTA_REASONS = setOf("storageQuotaExceeded")
+        private val RATE_REASONS = setOf("userRateLimitExceeded", "rateLimitExceeded", "dailyLimitExceeded")
+
+        /** Drive's documented ceiling for uploadType=multipart. */
+        private const val MULTIPART_MAX = 5 * 1024 * 1024
 
         private const val APP_DATA_FOLDER = "appDataFolder"
         private const val FILES_URL = "https://www.googleapis.com/drive/v3/files"

@@ -58,6 +58,11 @@ class OAuthTokens(
      * their password, and no amount of retrying will help. The sink turns that
      * into [SinkError.PERMISSION_LOST], which is the one the settings screen
      * tells the user to act on.
+     *
+     * Not being able to *ask* is a different thing, and throws
+     * [BackupSinkException] with [SinkError.IO] instead: no network, a timeout,
+     * or the service having a bad minute. Folding those into null told a user
+     * whose phone was offline at backup time to sign in again.
      */
     fun accessToken(refreshToken: String, nowMs: Long = System.currentTimeMillis()): String? {
         if (refreshToken.isEmpty() || clientId.isEmpty()) return null
@@ -71,12 +76,21 @@ class OAuthTokens(
             .apply { for ((name, value) in extraParams) add(name, value) }
             .build()
 
-        val body = runCatching {
+        val response = try {
             client.newCall(Request.Builder().url(tokenUrl).post(form).build()).execute()
-                .use { if (it.isSuccessful) it.body?.string() else null }
-        }.getOrNull() ?: return null
+        } catch (failure: java.io.IOException) {
+            throw BackupSinkException(SinkError.IO, failure)
+        }
+        val body = response.use {
+            when {
+                it.isSuccessful -> it.body?.string()
+                isRefusal(it.code) -> return null
+                else -> throw BackupSinkException(SinkError.IO)
+            }
+        } ?: throw BackupSinkException(SinkError.IO)
 
-        val root = runCatching { json.parseToJsonElement(body).jsonObject }.getOrNull() ?: return null
+        val root = runCatching { json.parseToJsonElement(body).jsonObject }.getOrNull()
+            ?: throw BackupSinkException(SinkError.IO)
         val token = root["access_token"]?.jsonPrimitive?.contentOrNull ?: return null
         val lifetime = root["expires_in"]?.jsonPrimitive?.intOrNull ?: DEFAULT_LIFETIME_S
 
@@ -119,6 +133,15 @@ class OAuthTokens(
     }
 
     private companion object {
+        /**
+         * The answers that mean the grant itself is bad. OAuth reports
+         * `invalid_grant` and `invalid_client` as 400, some servers as 401;
+         * anything else, a 429 or a 5xx included, is worth another go later.
+         */
+        fun isRefusal(code: Int): Boolean = code == HTTP_BAD_REQUEST || code == HTTP_UNAUTHORIZED
+
+        const val HTTP_BAD_REQUEST = 400
+        const val HTTP_UNAUTHORIZED = 401
         const val TIMEOUT_S = 20L
         const val DEFAULT_LIFETIME_S = 3600
         const val SLACK_S = 60

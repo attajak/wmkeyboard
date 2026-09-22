@@ -200,21 +200,34 @@ class DropboxSink(
         }
         response.use {
             if (it.isSuccessful) return read(it)
-            throw BackupSinkException(statusError(it.code))
+            val summary = if (it.code == HTTP_CONFLICT) errorSummary(it) else null
+            throw BackupSinkException(statusError(it.code, summary))
         }
     }
 
-    private fun statusError(code: Int): SinkError = when (code) {
-        HTTP_UNAUTHORIZED, HTTP_FORBIDDEN -> SinkError.PERMISSION_LOST
-        // Dropbox answers 409 for "no such path" and for "out of space", with
-        // the difference only in the body. The commoner of the two wins.
-        HTTP_CONFLICT, HTTP_NOT_FOUND -> SinkError.TARGET_MISSING
-        HTTP_QUOTA -> SinkError.OUT_OF_SPACE
-        else -> SinkError.IO
-    }
+    private fun errorSummary(response: Response): String? = runCatching {
+        json.parseToJsonElement(response.body?.string().orEmpty())
+            .jsonObject["error_summary"]?.jsonPrimitive?.contentOrNull
+    }.getOrNull()
 
     companion object {
         const val ID = "dropbox"
+
+        /**
+         * Dropbox answers 409 for every endpoint-specific error and names which
+         * in `error_summary`, for example `path/insufficient_space/..`. A full
+         * account and a missing path are different sentences to the user, and
+         * `too_many_write_operations` is neither: it is contention, and passes.
+         */
+        fun statusError(code: Int, summary: String? = null): SinkError = when {
+            code == HTTP_UNAUTHORIZED || code == HTTP_FORBIDDEN -> SinkError.PERMISSION_LOST
+            code == HTTP_CONFLICT && summary?.contains("insufficient_space") == true -> SinkError.OUT_OF_SPACE
+            code == HTTP_CONFLICT && summary?.contains("not_found") == true -> SinkError.TARGET_MISSING
+            code == HTTP_CONFLICT && summary == null -> SinkError.TARGET_MISSING
+            code == HTTP_NOT_FOUND -> SinkError.TARGET_MISSING
+            code == HTTP_QUOTA -> SinkError.OUT_OF_SPACE
+            else -> SinkError.IO
+        }
 
         const val TOKEN_URL = "https://api.dropbox.com/oauth2/token"
         const val AUTHORIZE_URL = "https://www.dropbox.com/oauth2/authorize"

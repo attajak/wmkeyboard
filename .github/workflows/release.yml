@@ -106,6 +106,7 @@ jobs:
           WMKB_UNSPLASH_API_KEY: ${{ secrets.WMKB_UNSPLASH_API_KEY }}
           WMKB_PEXELS_API_KEY: ${{ secrets.WMKB_PEXELS_API_KEY }}
           WMKB_DROPBOX_APP_KEY: ${{ secrets.WMKB_DROPBOX_APP_KEY }}
+          WMKB_ONEDRIVE_CLIENT_ID: ${{ secrets.WMKB_ONEDRIVE_CLIENT_ID }}
         # All four flavour combinations compile at once and share one Kotlin
         # daemon, whose 2 GB heap (gradle.properties) is sized for a 16 GB
         # laptop next to an IDE. The runner has nothing else on it, so give the
@@ -342,6 +343,7 @@ jobs:
           WMKB_UNSPLASH_API_KEY: ${{ secrets.WMKB_UNSPLASH_API_KEY }}
           WMKB_PEXELS_API_KEY: ${{ secrets.WMKB_PEXELS_API_KEY }}
           WMKB_DROPBOX_APP_KEY: ${{ secrets.WMKB_DROPBOX_APP_KEY }}
+          WMKB_ONEDRIVE_CLIENT_ID: ${{ secrets.WMKB_ONEDRIVE_CLIENT_ID }}
         run: ./gradlew bundleFullEnRelease --stacktrace
 
       - name: Wipe keystore

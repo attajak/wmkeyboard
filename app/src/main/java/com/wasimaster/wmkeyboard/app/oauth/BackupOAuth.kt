@@ -1,12 +1,14 @@
 package com.wasimaster.wmkeyboard.app.oauth
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import com.wasimaster.wmkeyboard.core.settings.BackupDestination
 import com.wasimaster.wmkeyboard.core.settings.sink.DropboxSink
 import com.wasimaster.wmkeyboard.core.settings.sink.OneDriveSink
+import java.io.File
 import java.security.MessageDigest
 import java.security.SecureRandom
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +39,35 @@ object BackupOAuth {
     @Volatile
     private var pending: Pending? = null
 
+    private const val PENDING_FILE = "oauth_pending"
+
+    /**
+     * The pending sign-in also goes to disk, because the process does not
+     * reliably survive the trip. The browser is in front while the user types
+     * a password, and on a phone short of memory the settings process behind
+     * it is the one killed. Without this the redirect came back to an empty
+     * [pending] and was dropped with no word, and "Sign in" looked broken.
+     *
+     * `noBackupFilesDir`, so Android's own backup never copies it, and deleted
+     * as soon as the redirect arrives. The verifier is only proof for a code
+     * that has not been issued yet, and useless once it has been exchanged.
+     */
+    private fun pendingFile(context: Context) = File(context.noBackupFilesDir, PENDING_FILE)
+
+    private fun savePending(context: Context, value: Pending) {
+        runCatching { pendingFile(context).writeText("${value.destination.name}\n${value.verifier}") }
+    }
+
+    private fun takePending(context: Context): Pending? {
+        val file = pendingFile(context)
+        val saved = runCatching {
+            val (destination, verifier) = file.readText().split('\n', limit = 2)
+            Pending(BackupDestination.valueOf(destination), verifier)
+        }.getOrNull()
+        file.delete()
+        return saved
+    }
+
     private val _result = MutableStateFlow<Result?>(null)
 
     /** The code a redirect delivered, until something consumes it. */
@@ -64,7 +95,7 @@ object BackupOAuth {
     fun start(activity: Activity, destination: BackupDestination, clientId: String): Boolean {
         if (clientId.isEmpty()) return false
         val verifier = newVerifier()
-        pending = Pending(destination, verifier)
+        pending = Pending(destination, verifier).also { savePending(activity, it) }
 
         val url = when (destination) {
             BackupDestination.DROPBOX -> Uri.parse(DropboxSink.AUTHORIZE_URL)
@@ -98,8 +129,9 @@ object BackupOAuth {
     }
 
     /** Called by [OAuthRedirectActivity] when the browser comes back. */
-    internal fun deliver(uri: Uri?) {
-        val waiting = pending ?: return
+    internal fun deliver(context: Context, uri: Uri?) {
+        val saved = takePending(context)
+        val waiting = pending ?: saved ?: return
         pending = null
         _result.value = Result(
             destination = waiting.destination,
@@ -138,13 +170,13 @@ class OAuthRedirectActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        BackupOAuth.deliver(intent?.data)
+        BackupOAuth.deliver(this, intent?.data)
         finish()
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        BackupOAuth.deliver(intent?.data)
+        BackupOAuth.deliver(this, intent?.data)
         finish()
     }
 }
