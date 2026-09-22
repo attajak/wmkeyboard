@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Thời gian trong ngày</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Bình minh và hoàng hôn</string>
     <string name="core_settings_auto_theme_trigger_system_label">Hệ thống sáng hoặc tối</string>
+    <string name="core_settings_clipboard_view_grid_label">Lưới</string>
+    <string name="core_settings_clipboard_view_list_label">Danh sách</string>
     <string name="core_settings_copied_code_chip_any_field_label">Bất kỳ trường nào</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Chỉ các hộp mã</string>
     <string name="core_settings_copied_code_chip_off_label">Không bao giờ</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Bảng điều khiển ẩn nó đi và một bộ hẹn giờ ngắn sẽ xóa nó</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + số</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Sau phím tắt</string>
+    <string name="core_settings_translate_engine_auto_label">Tự động</string>
+    <string name="core_settings_translate_engine_on_device_label">Trên thiết bị</string>
+    <string name="core_settings_translate_engine_online_label">Trực tuyến</string>
 </resources>

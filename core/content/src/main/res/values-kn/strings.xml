@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">ಹುಡುಕಿ</string>
     <string name="core_content_selection_macro_share">ಹಂಚಿಕೊಳ್ಳಿ</string>
     <string name="core_content_selection_macro_sms">ಸಂದೇಶ</string>
+    <string name="core_content_selection_macro_strip_trackers">ಟ್ರ್ಯಾಕರ್‌ಗಳನ್ನು ತೆಗೆದುಹಾಕಿ</string>
     <string name="core_content_selection_macro_time_zones">ವಲಯಗಳು</string>
     <string name="core_content_selection_macro_to_bangla">ಬಾಂಗ್ಲಾ</string>
     <string name="core_content_selection_macro_to_banglish">ಬಾಂಗ್ಲಿಷ್</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">ವಾರದ ದಿನದ ಹೆಸರು, ಉದಾಹರಣೆಗೆ ಭಾನುವಾರ</string>
     <string name="core_content_snippet_var_year_info">ವರ್ಷ, ನಾಲ್ಕು ಅಂಕೆಗಳೊಂದಿಗೆ</string>
     <string name="core_content_sticker_pack_imported_label">ಆಮದು ಮಾಡಲಾದ ಸ್ಟಿಕ್ಕರ್‌ಗಳು</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">ಅಪ್ಲಿಕೇಶನ್ %1$d ಅನಿಮೇಟೆಡ್ ಸ್ಟಿಕ್ಕರ್ ಅನ್ನು ಸ್ಥಿರ ಚಿತ್ರವಾಗಿ ಇರಿಸಿದೆ.</item>
+        <item quantity="other">ಅಪ್ಲಿಕೇಶನ್ %1$d ಅನಿಮೇಟೆಡ್ ಸ್ಟಿಕ್ಕರ್‌ಗಳನ್ನು ಸ್ಥಿರ ಚಿತ್ರಗಳಾಗಿ ಇರಿಸಿದೆ.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">ಆ್ಯಪ್ \"%1$s\" ಅನ್ನು ತೆಗೆದುಹಾಕಿದೆ. ಅದರ ಚಿತ್ರ ಕಾಣೆಯಾಗಿದೆ.</string>
     <string name="core_content_sticker_repair_image_unreadable">ಆ್ಯಪ್ \"%1$s\" ಅನ್ನು ಕೈಬಿಟ್ಟಿದೆ. ಆ್ಯಪ್‌ಗೆ ಅದರ ಚಿತ್ರವನ್ನು ಓದಲು ಸಾಧ್ಯವಾಗುತ್ತಿಲ್ಲ.</string>
     <plurals name="core_content_sticker_repair_kept_first">

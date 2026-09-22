@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Поиск</string>
     <string name="core_content_selection_macro_share">Поделиться</string>
     <string name="core_content_selection_macro_sms">Сообщение</string>
+    <string name="core_content_selection_macro_strip_trackers">Удалить трекеры</string>
     <string name="core_content_selection_macro_time_zones">Часовые пояса</string>
     <string name="core_content_selection_macro_to_bangla">Бенгальский</string>
     <string name="core_content_selection_macro_to_banglish">Бангл</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Название дня недели, например, воскресенье</string>
     <string name="core_content_snippet_var_year_info">Год, состоящий из четырех цифр</string>
     <string name="core_content_sticker_pack_imported_label">Импортированные стикеры</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Приложение сохранило %1$d анимированный стикер как статичное изображение.</item>
+        <item quantity="other">Приложение сохранило %1$d анимированных стикеров как статичные изображения.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Приложение удалило \"%1$s\". Изображение отсутствует.</string>
     <string name="core_content_sticker_repair_image_unreadable">Приложение отбросило \"%1$s\". Приложение не может прочитать его изображение.</string>
     <plurals name="core_content_sticker_repair_kept_first">

@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">大</string>
     <string name="core_pred_wordlist_size_medium_label">中等</string>
     <string name="core_pred_wordlist_size_small_label">小</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Android 原生键盘使用的精选词库。词汇量较少，其中包含的名称和拼写错误也较少。</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">根据字幕和网页文本统计。包含更多词汇，包括更多人名、俚语和拼写错误。</string>
+    <string name="core_pred_wordlist_source_frequency_label">频率</string>
     <string name="core_pred_wordlist_variant_brazil_label">巴西</string>
     <string name="core_pred_wordlist_variant_europe_label">欧洲</string>
+    <string name="core_pred_wordlist_variant_uk_label">英国</string>
+    <string name="core_pred_wordlist_variant_us_label">美国</string>
 </resources>

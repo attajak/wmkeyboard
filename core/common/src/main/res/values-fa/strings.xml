@@ -46,6 +46,8 @@
     <string name="common_none">هیچ‌کدام</string>
     <string name="common_notify_channel_backup_body">فقط زمانی که پشتیبان‌گیری خودکار با شکست مواجه شود. پشتیبان‌گیری‌های موفق بی‌صدا هستند.</string>
     <string name="common_notify_channel_backup_title">مشکلات پشتیبان‌گیری</string>
+    <string name="common_notify_channel_connect_body">یک رایانه متصل از طریق KDE Connect درخواست جفت‌سازی کرده، فایلی ارسال کرده یا در زمانی که صفحه‌کلید مخفی بوده، پینگ فرستاده است.</string>
+    <string name="common_notify_channel_connect_title">رایانه‌های جفت‌شده</string>
     <string name="common_notify_channel_downloads_body">پیشرفت دانلود فرهنگ لغت‌ها، مدل‌های صوتی، افزونه‌ها و سایر فایل‌هایی که صفحه‌کلید دریافت می‌کند، و نمایش یک خط زمانی که یکی از آن‌ها تمام یا ناموفق شود.</string>
     <string name="common_notify_channel_downloads_title">دانلودها</string>
     <string name="common_notify_channel_keyboard_body">یک ورودی دائمی در سایه برای نمایش صفحه‌کلید و جدا کردن آن. فقط زمانی که آن را روشن می‌کنید.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s دانلود نشد</string>
     <string name="common_notify_download_handwriting">دست‌نویس %1$s</string>
     <string name="common_notify_download_progress">%1$s از %2$s</string>
+    <string name="common_notify_download_translate">ترجمه آفلاین %1$s</string>
     <string name="common_notify_download_voice">صدای آفلاین %1$s</string>
     <string name="common_off">خاموش</string>
     <string name="common_ok">تأیید</string>

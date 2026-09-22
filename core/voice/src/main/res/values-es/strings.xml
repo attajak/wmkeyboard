@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Recomendado</string>
     <string name="core_voice_whisper_mel_bins_error">Este modelo de voz necesita un espectrograma de banda %1$s, que no coincide con el archivo con el que se descargó. Elimina el modelo en los ajustes y descárgalo de nuevo.</string>
     <string name="core_voice_whisper_model_load_error">El modelo de voz no se cargó. Es posible que el archivo esté dañado. Elimina el modelo en los ajustes y descárgalo de nuevo.</string>
+    <string name="core_voice_whisper_module_downloading">La parte de escritura por voz sin conexión del teclado se está descargando desde Google Play. Inténtelo de nuevo en un momento.</string>
+    <string name="core_voice_whisper_module_restart">La parte de escritura por voz sin conexión acaba de terminar de instalarse. Cierra y vuelve a abrir el teclado para usarla.</string>
     <string name="core_voice_whisper_transcribe_error">La escritura por voz no funcionó. Inténtalo de nuevo o selecciona un modelo más pequeño.</string>
 </resources>

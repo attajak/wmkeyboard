@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Zoeken</string>
     <string name="core_content_selection_macro_share">Delen</string>
     <string name="core_content_selection_macro_sms">Bericht</string>
+    <string name="core_content_selection_macro_strip_trackers">Trackers verwijderen</string>
     <string name="core_content_selection_macro_time_zones">Tijdzones</string>
     <string name="core_content_selection_macro_to_bangla">Bengaals</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">De naam van de dag, bijvoorbeeld zondag</string>
     <string name="core_content_snippet_var_year_info">Het jaar, met vier cijfers</string>
     <string name="core_content_sticker_pack_imported_label">Geïmporteerde stickers</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">De app heeft %1$d geanimeerde sticker bewaard als stilstaande afbeelding.</item>
+        <item quantity="other">De app heeft %1$d geanimeerde stickers bewaard als stilstaande afbeeldingen.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">De app heeft \"%1$s\" verwijderd. De afbeelding ontbreekt.</string>
     <string name="core_content_sticker_repair_image_unreadable">De app heeft \"%1$s\" verwijderd. De app kan de afbeelding niet lezen.</string>
     <plurals name="core_content_sticker_repair_kept_first">

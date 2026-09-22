@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Szukaj</string>
     <string name="core_content_selection_macro_share">Udostępnij</string>
     <string name="core_content_selection_macro_sms">Wiadomość</string>
+    <string name="core_content_selection_macro_strip_trackers">Usuń trackery</string>
     <string name="core_content_selection_macro_time_zones">Strefy</string>
     <string name="core_content_selection_macro_to_bangla">Bengalski</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Nazwa dnia, na przykład niedziela</string>
     <string name="core_content_snippet_var_year_info">Rok w formacie czterocyfrowym</string>
     <string name="core_content_sticker_pack_imported_label">Zaimportowane naklejki</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Aplikacja zachowała %1$d animowaną naklejkę jako obraz statyczny.</item>
+        <item quantity="other">Aplikacja zachowała %1$d animowanych naklejek jako obrazy statyczne.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Aplikacja odrzuciła „%1$s”. Brakuje jej obrazu.</string>
     <string name="core_content_sticker_repair_image_unreadable">Aplikacja odrzuciła \"%1$s\". Aplikacja nie może odczytać jego obrazu.</string>
     <plurals name="core_content_sticker_repair_kept_first">

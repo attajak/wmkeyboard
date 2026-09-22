@@ -46,6 +46,8 @@
     <string name="common_none">Ništa</string>
     <string name="common_notify_channel_backup_body">Samo kada automatska sigurnosna kopija ne uspije. Uspješne sigurnosne kopije su tihe.</string>
     <string name="common_notify_channel_backup_title">Problemi sa sigurnosnom kopijom</string>
+    <string name="common_notify_channel_connect_body">Računalo upareno putem KDE Connecta zatražilo je uparivanje, poslalo datoteku ili poslalo ping dok je tipkovnica bila skrivena.</string>
+    <string name="common_notify_channel_connect_title">Uparena računala</string>
     <string name="common_notify_channel_downloads_body">Napredak za rječnike, glasovne modele, dodatke i druge datoteke koje tipkovnica dohvaća, te obavijest kada se preuzimanje završi ili ne uspije.</string>
     <string name="common_notify_channel_downloads_title">Preuzimanja</string>
     <string name="common_notify_channel_keyboard_body">Trajni unos u sjeni za prikaz tipkovnice i njezino otkvačivanje. Samo dok je uključite.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s se nije moglo preuzeti</string>
     <string name="common_notify_download_handwriting">%1$s rukopis</string>
     <string name="common_notify_download_progress">%1$s od %2$s</string>
+    <string name="common_notify_download_translate">%1$s izvanmrežni prijevod</string>
     <string name="common_notify_download_voice">%1$s izvanmrežni glas</string>
     <string name="common_off">Isključeno</string>
     <string name="common_ok">U redu</string>

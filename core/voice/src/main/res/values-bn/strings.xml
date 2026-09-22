@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">প্রস্তাবিত</string>
     <string name="core_voice_whisper_mel_bins_error">এই ভয়েস মডেলটির একটি %1$s ব্যান্ড স্পেকট্রোগ্রাম প্রয়োজন, যা এটি যে ফাইলের সাথে ডাউনলোড হয়েছে তার সাথে মেলে না। সেটিংস থেকে মডেলটি মুছে ফেলুন এবং পুনরায় ডাউনলোড করুন।</string>
     <string name="core_voice_whisper_model_load_error">ভয়েস মডেল লোড হয়নি। ফাইলটি সম্ভবত ক্ষতিগ্রস্ত। সেটিংসে মডেলটি মুছে ফেলুন এবং আবার ডাউনলোড করুন।</string>
+    <string name="core_voice_whisper_module_downloading">কীবোর্ডের অফলাইন ভয়েস টাইপিং অংশটি গুগল প্লে থেকে ডাউনলোড হচ্ছে। কিছুক্ষণ পর আবার চেষ্টা করুন।</string>
+    <string name="core_voice_whisper_module_restart">অফলাইন ভয়েস টাইপিং অংশটি ইনস্টল করা শেষ হয়েছে। এটি ব্যবহার করতে কীবোর্ডটি বন্ধ করে আবার খুলুন।</string>
     <string name="core_voice_whisper_transcribe_error">ভয়েস টাইপিং কাজ করেনি। আবার চেষ্টা করুন, অথবা ছোট কোনো মডেল নির্বাচন করুন।</string>
 </resources>

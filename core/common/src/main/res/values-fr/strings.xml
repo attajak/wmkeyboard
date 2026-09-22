@@ -46,6 +46,8 @@
     <string name="common_none">Aucun</string>
     <string name="common_notify_channel_backup_body">Uniquement lorsqu\'une sauvegarde automatique échoue. Les sauvegardes réussies restent silencieuses.</string>
     <string name="common_notify_channel_backup_title">Problèmes de sauvegarde</string>
+    <string name="common_notify_channel_connect_body">Un ordinateur appairé via KDE Connect a demandé à s\'appairer, a envoyé un fichier ou a envoyé un ping alors que le clavier était masqué.</string>
+    <string name="common_notify_channel_connect_title">Ordinateurs appairés</string>
     <string name="common_notify_channel_downloads_body">Progression pour les dictionnaires, les modèles vocaux, les extensions et autres fichiers récupérés par le clavier, et une ligne lorsqu\'un téléchargement se termine ou échoue.</string>
     <string name="common_notify_channel_downloads_title">Téléchargements</string>
     <string name="common_notify_channel_keyboard_body">Une entrée permanente dans la zone de notification pour afficher le clavier et le détacher. Uniquement lorsque vous l\'activez.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s n\'a pas pu être téléchargé</string>
     <string name="common_notify_download_handwriting">Écriture manuscrite %1$s</string>
     <string name="common_notify_download_progress">%1$s sur %2$s</string>
+    <string name="common_notify_download_translate">Traduction hors ligne %1$s</string>
     <string name="common_notify_download_voice">Voix hors ligne %1$s</string>
     <string name="common_off">Désactivé</string>
     <string name="common_ok">OK</string>

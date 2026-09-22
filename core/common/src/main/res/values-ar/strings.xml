@@ -46,6 +46,8 @@
     <string name="common_none">لا شيء</string>
     <string name="common_notify_channel_backup_body">فقط عند فشل النسخ الاحتياطي التلقائي. النسخ الاحتياطية الناجحة تتم بصمت.</string>
     <string name="common_notify_channel_backup_title">مشاكل النسخ الاحتياطي</string>
+    <string name="common_notify_channel_connect_body">طلب كمبيوتر مقترن عبر KDE Connect الاقتران، أو أرسل ملفاً، أو قام بإرسال إشارة (ping) أثناء إخفاء لوحة المفاتيح.</string>
+    <string name="common_notify_channel_connect_title">أجهزة الكمبيوتر المقترنة</string>
     <string name="common_notify_channel_downloads_body">تقدم القواميس، ونماذج الصوت، والإضافات، والملفات الأخرى التي تجلبها لوحة المفاتيح، مع سطر عند اكتمال أو فشل أي منها.</string>
     <string name="common_notify_channel_downloads_title">التنزيلات</string>
     <string name="common_notify_channel_keyboard_body">إدخال دائم في شريط الإشعارات لإظهار لوحة المفاتيح وإلغاء تثبيتها. فقط أثناء تفعيلها.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">تعذر تنزيل %1$s</string>
     <string name="common_notify_download_handwriting">%1$s خط يد</string>
     <string name="common_notify_download_progress">%1$s من %2$s</string>
+    <string name="common_notify_download_translate">%1$s ترجمة دون اتصال</string>
     <string name="common_notify_download_voice">%1$s صوت دون اتصال</string>
     <string name="common_off">إيقاف</string>
     <string name="common_ok">موافق</string>

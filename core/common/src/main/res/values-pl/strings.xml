@@ -46,6 +46,8 @@
     <string name="common_none">Brak</string>
     <string name="common_notify_channel_backup_body">Tylko gdy automatyczna kopia zapasowa nie powiedzie się. Udane kopie zapasowe są ciche.</string>
     <string name="common_notify_channel_backup_title">Problemy z kopią zapasową</string>
+    <string name="common_notify_channel_connect_body">Komputer sparowany przez KDE Connect poprosił o sparowanie, wysłał plik lub wysłał sygnał, gdy klawiatura była ukryta.</string>
+    <string name="common_notify_channel_connect_title">Sparowane komputery</string>
     <string name="common_notify_channel_downloads_body">Postęp pobierania słowników, modeli głosowych, dodatków i innych plików pobieranych przez klawiaturę oraz informacja o zakończeniu lub błędzie.</string>
     <string name="common_notify_channel_downloads_title">Pobieranie</string>
     <string name="common_notify_channel_keyboard_body">Stały wpis w panelu powiadomień do wyświetlania klawiatury i jej odpinania. Tylko gdy jest włączona.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Nie udało się pobrać %1$s</string>
     <string name="common_notify_download_handwriting">Pismo odręczne %1$s</string>
     <string name="common_notify_download_progress">%1$s z %2$s</string>
+    <string name="common_notify_download_translate">Tłumaczenie offline %1$s</string>
     <string name="common_notify_download_voice">Głos offline %1$s</string>
     <string name="common_off">Wyłączone</string>
     <string name="common_ok">OK</string>

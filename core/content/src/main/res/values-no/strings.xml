@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Søk</string>
     <string name="core_content_selection_macro_share">Del</string>
     <string name="core_content_selection_macro_sms">Melding</string>
+    <string name="core_content_selection_macro_strip_trackers">Fjern sporere</string>
     <string name="core_content_selection_macro_time_zones">Tidssoner</string>
     <string name="core_content_selection_macro_to_bangla">Bengali</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Navnet på dagen, for eksempel søndag</string>
     <string name="core_content_snippet_var_year_info">Året, med fire sifre</string>
     <string name="core_content_sticker_pack_imported_label">Importerte klistremerker</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Appen beholdt %1$d animert klistremerke som et stillbilde.</item>
+        <item quantity="other">Appen beholdt %1$d animerte klistremerker som stillbilder.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Appen fjernet \"%1$s\". Bildet mangler.</string>
     <string name="core_content_sticker_repair_image_unreadable">Appen mistet \"%1$s\". Appen kan ikke lese bildet.</string>
     <plurals name="core_content_sticker_repair_kept_first">

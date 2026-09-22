@@ -46,6 +46,8 @@
     <string name="common_none">Ei mitään</string>
     <string name="common_notify_channel_backup_body">Vain kun automaattinen varmuuskopiointi epäonnistuu. Onnistuneet varmuuskopiot ovat hiljaisia.</string>
     <string name="common_notify_channel_backup_title">Varmuuskopiointiongelmat</string>
+    <string name="common_notify_channel_connect_body">KDE Connectin kautta paritettu tietokone pyysi pariliitosta, lähetti tiedoston tai lähetti ping-kutsun näppäimistön ollessa piilotettuna.</string>
+    <string name="common_notify_channel_connect_title">Paritetut tietokoneet</string>
     <string name="common_notify_channel_downloads_body">Edistyminen sanakirjojen, äänimallien, lisäosien ja muiden näppäimistön hakemien tiedostojen kohdalla, sekä ilmoitus kun lataus valmistuu tai epäonnistuu.</string>
     <string name="common_notify_channel_downloads_title">Lataukset</string>
     <string name="common_notify_channel_keyboard_body">Pysyvä ilmoitus varjostimessa näppäimistön näyttämistä ja irrottamista varten. Vain kun se on käytössä.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Kohteen %1$s lataaminen epäonnistui</string>
     <string name="common_notify_download_handwriting">%1$s käsinkirjoitus</string>
     <string name="common_notify_download_progress">%1$s / %2$s</string>
+    <string name="common_notify_download_translate">%1$s offline-käännös</string>
     <string name="common_notify_download_voice">%1$s offline-ääni</string>
     <string name="common_off">Pois päältä</string>
     <string name="common_ok">OK</string>

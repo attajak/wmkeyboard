@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">శోధన</string>
     <string name="core_content_selection_macro_share">షేర్ చేయండి</string>
     <string name="core_content_selection_macro_sms">సందేశం</string>
+    <string name="core_content_selection_macro_strip_trackers">ట్రాకర్లను తొలగించండి</string>
     <string name="core_content_selection_macro_time_zones">జోన్‌లు</string>
     <string name="core_content_selection_macro_to_bangla">బంగ్లా</string>
     <string name="core_content_selection_macro_to_banglish">బాంగ్లిష్</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">రోజు పేరు, ఉదాహరణకు ఆదివారం</string>
     <string name="core_content_snippet_var_year_info">సంవత్సరం, నాలుగు అంకెలతో</string>
     <string name="core_content_sticker_pack_imported_label">దిగుమతి చేసుకున్న స్టిక్కర్లు</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">యాప్ %1$d యానిమేటెడ్ స్టిక్కర్‌ను స్టిల్ ఇమేజ్‌గా ఉంచింది.</item>
+        <item quantity="other">యాప్ %1$d యానిమేటెడ్ స్టిక్కర్‌లను స్టిల్ ఇమేజ్‌లుగా ఉంచింది.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">యాప్ \"%1$s\"ని తొలగించింది. దాని చిత్రం లేదు.</string>
     <string name="core_content_sticker_repair_image_unreadable">యాప్ \"%1$s\"ని తొలగించింది. యాప్ దాని చిత్రాన్ని చదవలేకపోతోంది.</string>
     <plurals name="core_content_sticker_repair_kept_first">

@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Hledat</string>
     <string name="core_content_selection_macro_share">Sdílet</string>
     <string name="core_content_selection_macro_sms">Zpráva</string>
+    <string name="core_content_selection_macro_strip_trackers">Odstranit sledovače</string>
     <string name="core_content_selection_macro_time_zones">Časová pásma</string>
     <string name="core_content_selection_macro_to_bangla">Bengálština</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Název dne, například neděle.</string>
     <string name="core_content_snippet_var_year_info">Rok, čtyřmístný</string>
     <string name="core_content_sticker_pack_imported_label">Importované nálepky</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Aplikace ponechala %1$d animovanou nálepku jako statický obrázek.</item>
+        <item quantity="other">Aplikace ponechala %1$d animovaných nálepek jako statické obrázky.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Aplikace odstranila „%1$s“. Chybí její obrázek.</string>
     <string name="core_content_sticker_repair_image_unreadable">Aplikace vyřadila „%1$s“. Aplikace nemůže přečíst její obrázek.</string>
     <plurals name="core_content_sticker_repair_kept_first">

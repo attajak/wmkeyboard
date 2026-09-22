@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Время суток</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Восход и закат</string>
     <string name="core_settings_auto_theme_trigger_system_label">Системная светлая или темная</string>
+    <string name="core_settings_clipboard_view_grid_label">Сетка</string>
+    <string name="core_settings_clipboard_view_list_label">Список</string>
     <string name="core_settings_copied_code_chip_any_field_label">Любое поле</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Только поля кода</string>
     <string name="core_settings_copied_code_chip_off_label">Никогда</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Панель скрывает его, а короткий таймер удаляет его</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + цифра</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">После клавиши быстрого доступа</string>
+    <string name="core_settings_translate_engine_auto_label">Автоматически</string>
+    <string name="core_settings_translate_engine_on_device_label">На устройстве</string>
+    <string name="core_settings_translate_engine_online_label">Онлайн</string>
 </resources>

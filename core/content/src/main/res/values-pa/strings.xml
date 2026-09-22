@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">ਖੋਜੋ</string>
     <string name="core_content_selection_macro_share">ਸਾਂਝਾ ਕਰੋ</string>
     <string name="core_content_selection_macro_sms">ਸੁਨੇਹਾ</string>
+    <string name="core_content_selection_macro_strip_trackers">ਟ੍ਰੈਕਰ ਹਟਾਓ</string>
     <string name="core_content_selection_macro_time_zones">ਜ਼ੋਨ</string>
     <string name="core_content_selection_macro_to_bangla">ਬੰਗਲਾ</string>
     <string name="core_content_selection_macro_to_banglish">ਬੈਂਗਲਿਸ਼</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">ਦਿਨ ਦਾ ਨਾਮ, ਉਦਾਹਰਨ ਲਈ ਐਤਵਾਰ</string>
     <string name="core_content_snippet_var_year_info">ਸਾਲ, ਚਾਰ ਅੰਕਾਂ ਵਾਲਾ</string>
     <string name="core_content_sticker_pack_imported_label">ਆਯਾਤ ਕੀਤੇ ਸਟਿੱਕਰ</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">ਐਪ ਨੇ %1$d ਐਨੀਮੇਟਡ ਸਟਿੱਕਰ ਨੂੰ ਇੱਕ ਸਥਿਰ ਚਿੱਤਰ ਵਜੋਂ ਰੱਖਿਆ।</item>
+        <item quantity="other">ਐਪ ਨੇ %1$d ਐਨੀਮੇਟਡ ਸਟਿੱਕਰਾਂ ਨੂੰ ਸਥਿਰ ਚਿੱਤਰਾਂ ਵਜੋਂ ਰੱਖਿਆ।</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">ਐਪ ਨੇ \"%1$s\" ਨੂੰ ਹਟਾ ਦਿੱਤਾ ਹੈ। ਇਸਦੀ ਤਸਵੀਰ ਗੁੰਮ ਹੈ।</string>
     <string name="core_content_sticker_repair_image_unreadable">ਐਪ ਨੇ \"%1$s\" ਨੂੰ ਹਟਾ ਦਿੱਤਾ ਹੈ। ਐਪ ਇਸਦੀ ਤਸਵੀਰ ਨੂੰ ਪੜ੍ਹ ਨਹੀਂ ਸਕਦੀ।</string>
     <plurals name="core_content_sticker_repair_kept_first">

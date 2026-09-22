@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">തിരയുക</string>
     <string name="core_content_selection_macro_share">പങ്കിടുക</string>
     <string name="core_content_selection_macro_sms">സന്ദേശം</string>
+    <string name="core_content_selection_macro_strip_trackers">ട്രാക്കറുകൾ നീക്കം ചെയ്യുക</string>
     <string name="core_content_selection_macro_time_zones">സോണുകൾ</string>
     <string name="core_content_selection_macro_to_bangla">ബംഗ്ലാ</string>
     <string name="core_content_selection_macro_to_banglish">ബാംഗ്ലിഷ്</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">ദിവസത്തിന്റെ പേര്, ഉദാഹരണത്തിന് ഞായറാഴ്ച</string>
     <string name="core_content_snippet_var_year_info">നാല് അക്കങ്ങളുള്ള വർഷം</string>
     <string name="core_content_sticker_pack_imported_label">ഇറക്കുമതി ചെയ്ത സ്റ്റിക്കറുകൾ</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">ആപ്പ് %1$d ആനിമേറ്റഡ് സ്റ്റിക്കർ ഒരു സ്റ്റിൽ ഇമേജായി സൂക്ഷിച്ചു.</item>
+        <item quantity="other">ആപ്പ് %1$d ആനിമേറ്റഡ് സ്റ്റിക്കറുകൾ സ്റ്റിൽ ഇമേജുകളായി സൂക്ഷിച്ചു.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">ആപ്പ് \"%1$s\" ഒഴിവാക്കി. ഇതിന്റെ ചിത്രം കാണാനില്ല.</string>
     <string name="core_content_sticker_repair_image_unreadable">ആപ്പ് \"%1$s\" ഒഴിവാക്കി. ആപ്പിന് അതിന്റെ ചിത്രം വായിക്കാൻ കഴിയില്ല.</string>
     <plurals name="core_content_sticker_repair_kept_first">

@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">تلاش کریں</string>
     <string name="core_content_selection_macro_share">شیئر کریں</string>
     <string name="core_content_selection_macro_sms">پیغام</string>
+    <string name="core_content_selection_macro_strip_trackers">ٹریکرز ہٹائیں</string>
     <string name="core_content_selection_macro_time_zones">زونز</string>
     <string name="core_content_selection_macro_to_bangla">بنگالی</string>
     <string name="core_content_selection_macro_to_banglish">بنگلش</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">دن کا نام، مثال کے طور پر اتوار</string>
     <string name="core_content_snippet_var_year_info">سال، چار ہندسوں کے ساتھ</string>
     <string name="core_content_sticker_pack_imported_label">درآمد شدہ اسٹیکرز</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">ایپ نے %1$d اینیمیٹڈ اسٹیکر کو بطور ساکن تصویر محفوظ رکھا۔</item>
+        <item quantity="other">ایپ نے %1$d اینیمیٹڈ اسٹیکرز کو بطور ساکن تصاویر محفوظ رکھا۔</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">ایپ نے \"%1$s\" کو ہٹا دیا ہے۔ اس کی تصویر غائب ہے۔</string>
     <string name="core_content_sticker_repair_image_unreadable">ایپ نے \"%1$s\" کو ہٹا دیا۔ ایپ اس کی تصویر نہیں پڑھ سکتی۔</string>
     <plurals name="core_content_sticker_repair_kept_first">

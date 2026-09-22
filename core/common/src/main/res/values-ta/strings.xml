@@ -46,6 +46,8 @@
     <string name="common_none">எதுவுமில்லை</string>
     <string name="common_notify_channel_backup_body">தானியங்கி காப்புப்பிரதி தோல்வியடையும் போது மட்டுமே. வெற்றிகரமான காப்புப்பிரதிகள் அமைதியாக இருக்கும்.</string>
     <string name="common_notify_channel_backup_title">காப்புப்பிரதி சிக்கல்கள்</string>
+    <string name="common_notify_channel_connect_body">KDE Connect வழியாக இணைக்கப்பட்ட கணினி ஒன்று, விசைப்பலகை மறைக்கப்பட்டிருந்தபோது இணைக்கக் கோரியது, கோப்பை அனுப்பியது அல்லது பிங் செய்தது.</string>
+    <string name="common_notify_channel_connect_title">இணைக்கப்பட்ட கணினிகள்</string>
     <string name="common_notify_channel_downloads_body">அகராதிகள், குரல் மாதிரிகள், கூடுதல் கூறுகள் மற்றும் விசைப்பலகை பெறும் பிற கோப்புகளுக்கான முன்னேற்றம், மற்றும் ஒன்று முடிவடையும் போது அல்லது தோல்வியடையும் போது ஒரு வரி.</string>
     <string name="common_notify_channel_downloads_title">பதிவிறக்கங்கள்</string>
     <string name="common_notify_channel_keyboard_body">விசைப்பலகையைக் காட்டவும் அதை அன்பின் செய்யவும் நிழலில் ஒரு நிரந்தர நுழைவு. நீங்கள் அதை ஆன் செய்யும் போது மட்டுமே.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s ஐப் பதிவிறக்க முடியவில்லை</string>
     <string name="common_notify_download_handwriting">%1$s கையெழுத்து</string>
     <string name="common_notify_download_progress">%2$s-இல் %1$s</string>
+    <string name="common_notify_download_translate">%1$s ஆஃப்லைன் மொழிபெயர்ப்பு</string>
     <string name="common_notify_download_voice">%1$s ஆஃப்லைன் குரல்</string>
     <string name="common_off">ஆஃப்</string>
     <string name="common_ok">சரி</string>

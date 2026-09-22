@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Kubwa</string>
     <string name="core_pred_wordlist_size_medium_label">Kati</string>
     <string name="core_pred_wordlist_size_small_label">Ndogo</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Orodha iliyochaguliwa inayotumiwa na kibodi ya Android yenyewe. Maneno machache, yakiwa na majina machache na makosa ya uchapaji machache kati yao.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Imehesabiwa kutoka kwa manukuu na maandishi ya wavuti. Maneno mengi zaidi, yenye majina mengi, misimu na makosa ya uchapaji.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Marudio</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brazili</string>
     <string name="core_pred_wordlist_variant_europe_label">Ulaya</string>
+    <string name="core_pred_wordlist_variant_uk_label">Uingereza</string>
+    <string name="core_pred_wordlist_variant_us_label">Marekani</string>
 </resources>

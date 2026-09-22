@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">推奨</string>
     <string name="core_voice_whisper_mel_bins_error">この音声モデルには%1$sバンドのスペクトログラムが必要ですが、ダウンロードされたファイルと一致しません。設定からモデルを削除し、再度ダウンロードしてください。</string>
     <string name="core_voice_whisper_model_load_error">音声モデルを読み込めませんでした。ファイルが破損している可能性があります。設定からモデルを削除し、再度ダウンロードしてください。</string>
+    <string name="core_voice_whisper_module_downloading">キーボードのオフライン音声入力コンポーネントをGoogle Playからダウンロードしています。しばらくしてからもう一度お試しください。</string>
+    <string name="core_voice_whisper_module_restart">オフライン音声入力機能のインストールが完了しました。キーボードを一度閉じてから再度開くと使用できます。</string>
     <string name="core_voice_whisper_transcribe_error">音声入力が機能しませんでした。もう一度試すか、より小さなモデルを選択してください。</string>
 </resources>

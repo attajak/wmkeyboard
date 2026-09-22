@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Okukhulu</string>
     <string name="core_pred_wordlist_size_medium_label">Phakathi</string>
     <string name="core_pred_wordlist_size_small_label">Encane</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Uhlu olukhethiwe olusetshenziswa ikhibhodi ye-Android uqobo. Amagama ambalwa, anamagama ambalwa namaphutha okuthayipha phakathi kwawo.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Kubalwe kusuka emibhalweni engezansi nakumbhalo wewebhu. Amagama amaningi kakhulu, anamagama amaningi, izinkulumo ezingajwayelekile kanye namaphutha okuthayipha.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Imvamisa</string>
     <string name="core_pred_wordlist_variant_brazil_label">IBrazil</string>
     <string name="core_pred_wordlist_variant_europe_label">Yurophu</string>
+    <string name="core_pred_wordlist_variant_uk_label">United Kingdom</string>
+    <string name="core_pred_wordlist_variant_us_label">United States</string>
 </resources>

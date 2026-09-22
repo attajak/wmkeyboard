@@ -46,6 +46,8 @@
     <string name="common_none">Nenhum</string>
     <string name="common_notify_channel_backup_body">Apenas quando um backup automático falha. Backups bem-sucedidos são silenciosos.</string>
     <string name="common_notify_channel_backup_title">Problemas de backup</string>
+    <string name="common_notify_channel_connect_body">Um computador pareado via KDE Connect solicitou pareamento, enviou um arquivo ou enviou um ping enquanto o teclado estava oculto.</string>
+    <string name="common_notify_channel_connect_title">Computadores emparelhados</string>
     <string name="common_notify_channel_downloads_body">Progresso para dicionários, modelos de voz, complementos e outros arquivos que o teclado busca, e uma linha quando um termina ou falha.</string>
     <string name="common_notify_channel_downloads_title">Downloads</string>
     <string name="common_notify_channel_keyboard_body">Uma entrada permanente na aba de notificações para mostrar o teclado e desafixá-lo. Apenas enquanto você o mantiver ativado.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s não pôde ser baixado</string>
     <string name="common_notify_download_handwriting">Caligrafia %1$s</string>
     <string name="common_notify_download_progress">%1$s de %2$s</string>
+    <string name="common_notify_download_translate">Tradução offline de %1$s</string>
     <string name="common_notify_download_voice">Voz offline %1$s</string>
     <string name="common_off">Desativado</string>
     <string name="common_ok">OK</string>

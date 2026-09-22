@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">검색</string>
     <string name="core_content_selection_macro_share">공유</string>
     <string name="core_content_selection_macro_sms">메시지</string>
+    <string name="core_content_selection_macro_strip_trackers">추적기 제거</string>
     <string name="core_content_selection_macro_time_zones">영역</string>
     <string name="core_content_selection_macro_to_bangla">벵골어</string>
     <string name="core_content_selection_macro_to_banglish">뱅글리시</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">요일 이름(예: 일요일)</string>
     <string name="core_content_snippet_var_year_info">연도, 4자리 숫자</string>
     <string name="core_content_sticker_pack_imported_label">가져온 스티커</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">앱이 애니메이션 스티커 %1$d개를 정지 이미지로 유지했습니다.</item>
+        <item quantity="other">앱이 애니메이션 스티커 %1$d개를 정지 이미지로 유지했습니다.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">앱이 \"%1$s\"을(를) 삭제했습니다. 이미지가 없습니다.</string>
     <string name="core_content_sticker_repair_image_unreadable">앱이 \"%1$s\"을(를) 삭제했습니다. 이미지를 읽을 수 없습니다.</string>
     <plurals name="core_content_sticker_repair_kept_first">

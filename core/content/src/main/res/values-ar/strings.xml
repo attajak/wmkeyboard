@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">بحث</string>
     <string name="core_content_selection_macro_share">مشاركة</string>
     <string name="core_content_selection_macro_sms">رسالة</string>
+    <string name="core_content_selection_macro_strip_trackers">إزالة أدوات التتبع</string>
     <string name="core_content_selection_macro_time_zones">المناطق</string>
     <string name="core_content_selection_macro_to_bangla">البنغالية</string>
     <string name="core_content_selection_macro_to_banglish">البنغليزية (Banglish)</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">اسم اليوم، على سبيل المثال الأحد</string>
     <string name="core_content_snippet_var_year_info">السنة، بأربعة أرقام</string>
     <string name="core_content_sticker_pack_imported_label">ملصقات مستوردة</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">احتفظ التطبيق بـ %1$d ملصق متحرك كصورة ثابتة.</item>
+        <item quantity="other">احتفظ التطبيق بـ %1$d ملصقات متحركة كصور ثابتة.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">أسقط التطبيق \"%1$s\". صورته مفقودة.</string>
     <string name="core_content_sticker_repair_image_unreadable">قام التطبيق بإسقاط \"%1$s\". لا يمكن للتطبيق قراءة صورته.</string>
     <plurals name="core_content_sticker_repair_kept_first">

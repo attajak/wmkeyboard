@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Suositeltu</string>
     <string name="core_voice_whisper_mel_bins_error">Tämä puhemalli vaatii %1$s-kaistaisen spektrogrammin, joka ei vastaa tiedostoa, jonka kanssa se ladattiin. Poista malli asetuksista ja lataa se uudelleen.</string>
     <string name="core_voice_whisper_model_load_error">Puhemallia ei voitu ladata. Tiedosto on mahdollisesti vioittunut. Poista malli asetuksista ja lataa se uudelleen.</string>
+    <string name="core_voice_whisper_module_downloading">Näppäimistön offline-puheentunnistusosaa ladataan Google Playsta. Yritä hetken kuluttua uudelleen.</string>
+    <string name="core_voice_whisper_module_restart">Offline-puhekirjoitusosan asennus on valmis. Sulje ja avaa näppäimistö uudelleen käyttääksesi sitä.</string>
     <string name="core_voice_whisper_transcribe_error">Puheella kirjoittaminen ei toiminut. Yritä uudelleen tai valitse pienempi malli.</string>
 </resources>

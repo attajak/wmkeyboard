@@ -46,6 +46,8 @@
     <string name="common_none">Ingen</string>
     <string name="common_notify_channel_backup_body">Endast när en automatisk säkerhetskopiering misslyckas. Lyckade säkerhetskopieringar är tysta.</string>
     <string name="common_notify_channel_backup_title">Säkerhetskopieringsproblem</string>
+    <string name="common_notify_channel_connect_body">En dator parkopplad via KDE Connect bad om parkoppling, skickade en fil eller pingade medan tangentbordet var dolt.</string>
+    <string name="common_notify_channel_connect_title">Parkopplade datorer</string>
     <string name="common_notify_channel_downloads_body">Förlopp för ordlistor, röstmodeller, tillägg och andra filer som tangentbordet hämtar, samt en notis när något slutförs eller misslyckas.</string>
     <string name="common_notify_channel_downloads_title">Nedladdningar</string>
     <string name="common_notify_channel_keyboard_body">En permanent post i aviseringsfältet för att visa tangentbordet och frigöra det. Endast när du har aktiverat det.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s kunde inte laddas ner</string>
     <string name="common_notify_download_handwriting">%1$s handskrift</string>
     <string name="common_notify_download_progress">%1$s av %2$s</string>
+    <string name="common_notify_download_translate">%1$s offlineöversättning</string>
     <string name="common_notify_download_voice">%1$s offline-röst</string>
     <string name="common_off">Av</string>
     <string name="common_ok">OK</string>

@@ -46,6 +46,8 @@
     <string name="common_none">Puudub</string>
     <string name="common_notify_channel_backup_body">Ainult siis, kui automaatne varundamine ebaõnnestub. Edukad varundamised on vaiksed.</string>
     <string name="common_notify_channel_backup_title">Varundamise probleemid</string>
+    <string name="common_notify_channel_connect_body">KDE Connecti kaudu seotud arvuti palus sidumist, saatis faili või tegi pingi ajal, mil klaviatuur oli peidetud.</string>
+    <string name="common_notify_channel_connect_title">Paaritatud arvutid</string>
     <string name="common_notify_channel_downloads_body">Sõnastike, häälemudelite, lisandmoodulite ja muude klaviatuuri hangitavate failide edenemine ning teavitus, kui üks neist lõpetab või ebaõnnestub.</string>
     <string name="common_notify_channel_downloads_title">Allalaadimised</string>
     <string name="common_notify_channel_keyboard_body">Püsiv kirje teavitusribal klaviatuuri kuvamiseks ja lahtikinnitamiseks. Ainult siis, kui lülitate selle sisse.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s allalaadimine ebaõnnestus</string>
     <string name="common_notify_download_handwriting">%1$s käekiri</string>
     <string name="common_notify_download_progress">%1$s / %2$s</string>
+    <string name="common_notify_download_translate">%1$s võrguühenduseta tõlge</string>
     <string name="common_notify_download_voice">%1$s võrguühenduseta hääl</string>
     <string name="common_off">Väljas</string>
     <string name="common_ok">OK</string>

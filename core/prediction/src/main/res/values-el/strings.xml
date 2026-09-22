@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Μεγάλο</string>
     <string name="core_pred_wordlist_size_medium_label">Μεσαίο</string>
     <string name="core_pred_wordlist_size_small_label">Μικρό</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Η επιμελημένη λίστα που χρησιμοποιεί το πληκτρολόγιο του Android. Λιγότερες λέξεις, με λιγότερα ονόματα και τυπογραφικά λάθη ανάμεσά τους.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Υπολογίστηκε από υπότιτλους και κείμενο ιστού. Πολύ περισσότερες λέξεις, με περισσότερα ονόματα, αργκό και τυπογραφικά λάθη.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Συχνότητα</string>
     <string name="core_pred_wordlist_variant_brazil_label">Βραζιλία</string>
     <string name="core_pred_wordlist_variant_europe_label">Ευρώπη</string>
+    <string name="core_pred_wordlist_variant_uk_label">Ηνωμένο Βασίλειο</string>
+    <string name="core_pred_wordlist_variant_us_label">Ηνωμένες Πολιτείες</string>
 </resources>

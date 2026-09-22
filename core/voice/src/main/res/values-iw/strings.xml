@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">מומלץ</string>
     <string name="core_voice_whisper_mel_bins_error">מודל קולי זה זקוק לספקטרוגרמה של %1$s להקות, שאינה תואמת את הקובץ שאיתו הוא הורד. מחק את המודל בהגדרות והורד אותו שוב.</string>
     <string name="core_voice_whisper_model_load_error">מודל הקול לא נטען. ייתכן שהקובץ פגום. מחק את המודל בהגדרות והורד אותו שוב.</string>
+    <string name="core_voice_whisper_module_downloading">רכיב הקלדת הקול הלא-מקוון של המקלדת יורד מ-Google Play. נסה שוב בעוד רגע.</string>
+    <string name="core_voice_whisper_module_restart">התקנת רכיב ההקלדה הקולית הלא-מקוונת הסתיימה. סגור ופתח מחדש את המקלדת כדי להשתמש בו.</string>
     <string name="core_voice_whisper_transcribe_error">הקלדה קולית לא עבדה. נסה שוב, או בחר מודל קטן יותר.</string>
 </resources>

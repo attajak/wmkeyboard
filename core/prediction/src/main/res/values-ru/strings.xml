@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Большой</string>
     <string name="core_pred_wordlist_size_medium_label">Средний</string>
     <string name="core_pred_wordlist_size_small_label">Маленький</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Курируемый список, используемый собственной клавиатурой Android. Меньше слов, меньше имен и опечаток среди них.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Подсчитано на основе субтитров и веб-текстов. Гораздо больше слов, включая имена, сленг и опечатки.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Частота</string>
     <string name="core_pred_wordlist_variant_brazil_label">Бразилия</string>
     <string name="core_pred_wordlist_variant_europe_label">Европа</string>
+    <string name="core_pred_wordlist_variant_uk_label">Великобритания</string>
+    <string name="core_pred_wordlist_variant_us_label">США</string>
 </resources>

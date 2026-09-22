@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">દિવસનો સમય</string>
     <string name="core_settings_auto_theme_trigger_sun_label">સૂર્યોદય અને સૂર્યાસ્ત</string>
     <string name="core_settings_auto_theme_trigger_system_label">સિસ્ટમ લાઇટ અથવા ડાર્ક</string>
+    <string name="core_settings_clipboard_view_grid_label">ગ્રીડ</string>
+    <string name="core_settings_clipboard_view_list_label">યાદી</string>
     <string name="core_settings_copied_code_chip_any_field_label">કોઈપણ ફીલ્ડ</string>
     <string name="core_settings_copied_code_chip_code_fields_label">માત્ર કોડ બોક્સ</string>
     <string name="core_settings_copied_code_chip_off_label">ક્યારેય નહીં</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">પેનલ તેને છુપાવે છે, અને એક ટૂંકો ટાઈમર તેને ડિલીટ કરે છે</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + નંબર</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">શોર્ટકટ કી પછી</string>
+    <string name="core_settings_translate_engine_auto_label">ઓટોમેટિક</string>
+    <string name="core_settings_translate_engine_on_device_label">ડિવાઇસ પર</string>
+    <string name="core_settings_translate_engine_online_label">ઓનલાઇન</string>
 </resources>

@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Pesquisar</string>
     <string name="core_content_selection_macro_share">Compartilhar</string>
     <string name="core_content_selection_macro_sms">Mensagem</string>
+    <string name="core_content_selection_macro_strip_trackers">Remover rastreadores</string>
     <string name="core_content_selection_macro_time_zones">Fusos horários</string>
     <string name="core_content_selection_macro_to_bangla">Bengali</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">O nome do dia, por exemplo, domingo</string>
     <string name="core_content_snippet_var_year_info">O ano, com quatro dígitos</string>
     <string name="core_content_sticker_pack_imported_label">Figurinhas importadas</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">O aplicativo manteve %1$d figurinha animada como uma imagem estática.</item>
+        <item quantity="other">O aplicativo manteve %1$d figurinhas animadas como imagens estáticas.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">O aplicativo descartou \"%1$s\". A imagem está faltando.</string>
     <string name="core_content_sticker_repair_image_unreadable">O aplicativo descartou \"%1$s\". O aplicativo não consegue ler sua imagem.</string>
     <plurals name="core_content_sticker_repair_kept_first">

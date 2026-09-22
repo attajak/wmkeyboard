@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Ώρα της ημέρας</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Ανατολή και δύση ηλίου</string>
     <string name="core_settings_auto_theme_trigger_system_label">Φωτεινό ή σκοτεινό θέμα συστήματος</string>
+    <string name="core_settings_clipboard_view_grid_label">Πλέγμα</string>
+    <string name="core_settings_clipboard_view_list_label">Λίστα</string>
     <string name="core_settings_copied_code_chip_any_field_label">Οποιοδήποτε πεδίο</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Μόνο πλαίσια κώδικα</string>
     <string name="core_settings_copied_code_chip_off_label">Ποτέ</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Ο πίνακας το αποκρύπτει και ένα σύντομο χρονόμετρο το διαγράφει</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + αριθμός</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Μετά το πλήκτρο συντόμευσης</string>
+    <string name="core_settings_translate_engine_auto_label">Αυτόματο</string>
+    <string name="core_settings_translate_engine_on_device_label">Στη συσκευή</string>
+    <string name="core_settings_translate_engine_online_label">Online</string>
 </resources>

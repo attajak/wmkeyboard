@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Προτεινόμενο</string>
     <string name="core_voice_whisper_mel_bins_error">Αυτό το μοντέλο φωνής χρειάζεται ένα φασματογράφημα ζώνης %1$s, το οποίο δεν ταιριάζει με το αρχείο που κατέβηκε. Διαγράψτε το μοντέλο στις ρυθμίσεις και κατεβάστε το ξανά.</string>
     <string name="core_voice_whisper_model_load_error">Το μοντέλο φωνής δεν φορτώθηκε. Το αρχείο είναι πιθανώς κατεστραμμένο. Διαγράψτε το μοντέλο στις ρυθμίσεις και κατεβάστε το ξανά.</string>
+    <string name="core_voice_whisper_module_downloading">Το τμήμα φωνητικής πληκτρολόγησης εκτός σύνδεσης του πληκτρολογίου κατεβαίνει από το Google Play. Δοκιμάστε ξανά σε λίγο.</string>
+    <string name="core_voice_whisper_module_restart">Η εγκατάσταση του στοιχείου πληκτρολόγησης φωνής εκτός σύνδεσης ολοκληρώθηκε. Κλείστε και ανοίξτε ξανά το πληκτρολόγιο για να το χρησιμοποιήσετε.</string>
     <string name="core_voice_whisper_transcribe_error">Η φωνητική πληκτρολόγηση δεν λειτούργησε. Δοκιμάστε ξανά ή επιλέξτε ένα μικρότερο μοντέλο.</string>
 </resources>

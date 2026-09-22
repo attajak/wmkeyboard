@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">రోజు సమయం</string>
     <string name="core_settings_auto_theme_trigger_sun_label">సూర్యోదయం మరియు సూర్యాస్తమయం</string>
     <string name="core_settings_auto_theme_trigger_system_label">సిస్టమ్ లైట్ లేదా డార్క్</string>
+    <string name="core_settings_clipboard_view_grid_label">గ్రిడ్</string>
+    <string name="core_settings_clipboard_view_list_label">జాబితా</string>
     <string name="core_settings_copied_code_chip_any_field_label">ఏదైనా ఫీల్డ్</string>
     <string name="core_settings_copied_code_chip_code_fields_label">కోడ్ బాక్స్‌లు మాత్రమే</string>
     <string name="core_settings_copied_code_chip_off_label">ఎప్పటికీ వద్దు</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">ప్యానెల్ దానిని దాచిపెడుతుంది మరియు తక్కువ సమయం ఉన్న టైమర్ దానిని తొలగిస్తుంది</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + సంఖ్య</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">షార్ట్‌కట్ కీ తర్వాత</string>
+    <string name="core_settings_translate_engine_auto_label">ఆటోమేటిక్</string>
+    <string name="core_settings_translate_engine_on_device_label">పరికరంలో</string>
+    <string name="core_settings_translate_engine_online_label">ఆన్‌లైన్</string>
 </resources>

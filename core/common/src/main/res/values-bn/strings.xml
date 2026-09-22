@@ -46,6 +46,8 @@
     <string name="common_none">কোনটিই নয়</string>
     <string name="common_notify_channel_backup_body">শুধুমাত্র যখন একটি স্বয়ংক্রিয় ব্যাকআপ ব্যর্থ হয়। সফল ব্যাকআপগুলি নীরব থাকে।</string>
     <string name="common_notify_channel_backup_title">ব্যাকআপ সমস্যা</string>
+    <string name="common_notify_channel_connect_body">কেডিই কানেক্টের মাধ্যমে পেয়ার করা একটি কম্পিউটার পেয়ার করার অনুরোধ করেছে, একটি ফাইল পাঠিয়েছে, অথবা কিবোর্ড লুকানো থাকা অবস্থায় পিং করেছে।</string>
+    <string name="common_notify_channel_connect_title">পেয়ার করা কম্পিউটার</string>
     <string name="common_notify_channel_downloads_body">ডিকশনারি, ভয়েস মডেল, অ্যাড-অন এবং অন্যান্য ফাইল যা কিবোর্ড ডাউনলোড করে তার অগ্রগতি, এবং কোনোটি সম্পন্ন বা ব্যর্থ হলে একটি লাইন।</string>
     <string name="common_notify_channel_downloads_title">ডাউনলোড</string>
     <string name="common_notify_channel_keyboard_body">কীবোর্ড দেখানো এবং আনপিন করার জন্য শেডে একটি স্থায়ী এন্ট্রি। শুধুমাত্র যখন আপনি এটি চালু করবেন।</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s ডাউনলোড করা যায়নি</string>
     <string name="common_notify_download_handwriting">%1$s হস্তলিপি</string>
     <string name="common_notify_download_progress">%2$s এর %1$s</string>
+    <string name="common_notify_download_translate">%1$s অফলাইন অনুবাদ</string>
     <string name="common_notify_download_voice">%1$s অফলাইন ভয়েস</string>
     <string name="common_off">বন্ধ</string>
     <string name="common_ok">ঠিক আছে</string>

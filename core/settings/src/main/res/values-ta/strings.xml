@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">நாளின் நேரம்</string>
     <string name="core_settings_auto_theme_trigger_sun_label">சூரிய உதயம் மற்றும் சூரிய அஸ்தமனம்</string>
     <string name="core_settings_auto_theme_trigger_system_label">சிஸ்டம் லைட் அல்லது டார்க்</string>
+    <string name="core_settings_clipboard_view_grid_label">கிரிட்</string>
+    <string name="core_settings_clipboard_view_list_label">பட்டியல்</string>
     <string name="core_settings_copied_code_chip_any_field_label">எந்தவொரு புலம்</string>
     <string name="core_settings_copied_code_chip_code_fields_label">குறியீடு பெட்டிகள் மட்டும்</string>
     <string name="core_settings_copied_code_chip_off_label">ஒருபோதும் இல்லை</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">பேனல் அதை மறைத்துவிடும், ஒரு குறுகிய கால டைமர் அதை நீக்கிவிடும்</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + எண்</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">குறுக்குவழி விசைக்கு பிறகு</string>
+    <string name="core_settings_translate_engine_auto_label">தானியங்கி</string>
+    <string name="core_settings_translate_engine_on_device_label">சாதனத்தில்</string>
+    <string name="core_settings_translate_engine_online_label">ஆன்லைன்</string>
 </resources>

@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Голям</string>
     <string name="core_pred_wordlist_size_medium_label">Средно</string>
     <string name="core_pred_wordlist_size_small_label">Малък</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Подбраният списък, който използва собствената клавиатура на Android. По-малко думи, с по-малко имена и печатни грешки сред тях.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Преброени от субтитри и уеб текст. Много повече думи, включително имена, жаргон и печатни грешки.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Честота</string>
     <string name="core_pred_wordlist_variant_brazil_label">Бразилия</string>
     <string name="core_pred_wordlist_variant_europe_label">Европа</string>
+    <string name="core_pred_wordlist_variant_uk_label">Обединено кралство</string>
+    <string name="core_pred_wordlist_variant_us_label">Съединени щати</string>
 </resources>

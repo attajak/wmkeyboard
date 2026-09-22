@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">แนะนำ</string>
     <string name="core_voice_whisper_mel_bins_error">โมเดลเสียงนี้ต้องการสเปกโทรแกรมแบบ %1$s แบนด์ ซึ่งไม่ตรงกับไฟล์ที่ดาวน์โหลดมา ให้ลบโมเดลในการตั้งค่าแล้วดาวน์โหลดใหม่อีกครั้ง</string>
     <string name="core_voice_whisper_model_load_error">ไม่สามารถโหลดโมเดลเสียงได้ ไฟล์อาจเสียหาย ให้ลบโมเดลในการตั้งค่าแล้วดาวน์โหลดใหม่อีกครั้ง</string>
+    <string name="core_voice_whisper_module_downloading">ส่วนการพิมพ์ด้วยเสียงแบบออฟไลน์ของแป้นพิมพ์กำลังดาวน์โหลดจาก Google Play โปรดลองอีกครั้งในภายหลัง</string>
+    <string name="core_voice_whisper_module_restart">ส่วนการพิมพ์ด้วยเสียงแบบออฟไลน์ติดตั้งเสร็จเรียบร้อยแล้ว โปรดปิดและเปิดแป้นพิมพ์ใหม่เพื่อใช้งาน</string>
     <string name="core_voice_whisper_transcribe_error">การพิมพ์ด้วยเสียงไม่ทำงาน โปรดลองใหม่อีกครั้ง หรือเลือกรุ่นที่เล็กลง</string>
 </resources>

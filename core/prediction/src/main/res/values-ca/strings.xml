@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Gran</string>
     <string name="core_pred_wordlist_size_medium_label">Mitjà</string>
     <string name="core_pred_wordlist_size_small_label">Petit</string>
+    <string name="core_pred_wordlist_source_aosp_detail">La llista comissariada que utilitza el propi teclat d\'Android. Menys paraules, amb menys noms i errades tipogràfiques entre elles.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Comptat a partir de subtítols i text web. Moltes més paraules, amb més noms, argot i errades tipogràfiques.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Freqüència</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brasil</string>
     <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Regne Unit</string>
+    <string name="core_pred_wordlist_variant_us_label">Estats Units</string>
 </resources>

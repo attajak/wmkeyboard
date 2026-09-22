@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">موصى به</string>
     <string name="core_voice_whisper_mel_bins_error">يحتاج نموذج الصوت هذا إلى مخطط طيفي بنطاق %1$s، وهو لا يتطابق مع الملف الذي تم تنزيله معه. احذف النموذج من الإعدادات وقم بتنزيله مرة أخرى.</string>
     <string name="core_voice_whisper_model_load_error">لم يتم تحميل نموذج الصوت. من المحتمل أن الملف تالف. احذف النموذج من الإعدادات وقم بتنزيله مرة أخرى.</string>
+    <string name="core_voice_whisper_module_downloading">يتم تنزيل جزء الكتابة الصوتية دون اتصال الخاص بلوحة المفاتيح من متجر Google Play. حاول مرة أخرى بعد قليل.</string>
+    <string name="core_voice_whisper_module_restart">انتهى للتو تثبيت جزء الكتابة الصوتية دون اتصال. أغلق لوحة المفاتيح وأعد فتحها لاستخدامها.</string>
     <string name="core_voice_whisper_transcribe_error">لم تنجح الكتابة بالصوت. حاول مرة أخرى، أو اختر نموذجًا أصغر.</string>
 </resources>

@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Ieteicams</string>
     <string name="core_voice_whisper_mel_bins_error">Šim balss modelim ir nepieciešama %1$s joslu spektrogramma, kas neatbilst failam, ar kuru tas tika lejupielādēts. Dzēsiet modeli iestatījumos un lejupielādējiet to vēlreiz.</string>
     <string name="core_voice_whisper_model_load_error">Balss modelis netika ielādēts. Fails, iespējams, ir bojāts. Izdzēsiet modeli iestatījumos un lejupielādējiet to vēlreiz.</string>
+    <string name="core_voice_whisper_module_downloading">Tastatūras bezsaistes balss ievades komponents tiek lejupielādēts no Google Play. Mēģiniet vēlreiz pēc brīža.</string>
+    <string name="core_voice_whisper_module_restart">Bezsaistes balss rakstīšanas modulis ir instalēts. Aizveriet un atveriet tastatūru, lai to izmantotu.</string>
     <string name="core_voice_whisper_transcribe_error">Balss ievade nedarbojās. Mēģiniet vēlreiz vai atlasiet mazāku modeli.</string>
 </resources>

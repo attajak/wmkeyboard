@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Stórt</string>
     <string name="core_pred_wordlist_size_medium_label">Miðlungs</string>
     <string name="core_pred_wordlist_size_small_label">Lítið</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Valinn listi sem lyklaborð Android notar. Færri orð, með færri nöfnum og ritvillum.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Talið úr texta í undirtexta og á vefnum. Mikið fleiri orð, með fleiri nöfnum, slangri og innsláttarvillum.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Tíðni</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brasilía</string>
     <string name="core_pred_wordlist_variant_europe_label">Evrópa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Bretland</string>
+    <string name="core_pred_wordlist_variant_us_label">Bandaríkin</string>
 </resources>

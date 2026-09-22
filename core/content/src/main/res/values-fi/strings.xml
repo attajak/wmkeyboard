@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Hae</string>
     <string name="core_content_selection_macro_share">Jaa</string>
     <string name="core_content_selection_macro_sms">Viesti</string>
+    <string name="core_content_selection_macro_strip_trackers">Poista seuranta</string>
     <string name="core_content_selection_macro_time_zones">Aikavyöhykkeet</string>
     <string name="core_content_selection_macro_to_bangla">Bengali</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Viikonpäivän nimi, esimerkiksi sunnuntai</string>
     <string name="core_content_snippet_var_year_info">Vuosi neljällä numerolla</string>
     <string name="core_content_sticker_pack_imported_label">Tuodut tarrat</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Sovellus säilytti %1$d animoidun tarran still-kuvana.</item>
+        <item quantity="other">Sovellus säilytti %1$d animoitua tarraa still-kuvina.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Sovellus hylkäsi kohteen \"%1$s\". Sen kuva puuttuu.</string>
     <string name="core_content_sticker_repair_image_unreadable">Sovellus hylkäsi kohteen \"%1$s\". Sovellus ei voi lukea sen kuvaa.</string>
     <plurals name="core_content_sticker_repair_kept_first">

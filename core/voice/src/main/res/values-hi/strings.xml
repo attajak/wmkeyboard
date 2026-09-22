@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">अनुशंसित</string>
     <string name="core_voice_whisper_mel_bins_error">इस वॉयस मॉडल को %1$s बैंड स्पेक्ट्रोग्राम की आवश्यकता है, जो उस फ़ाइल से मेल नहीं खाता जिसके साथ इसे डाउनलोड किया गया था। सेटिंग्स में मॉडल को हटाएं और इसे फिर से डाउनलोड करें।</string>
     <string name="core_voice_whisper_model_load_error">वॉयस मॉडल लोड नहीं हुआ। फ़ाइल संभवतः क्षतिग्रस्त है। सेटिंग्स में मॉडल को हटाएं और इसे फिर से डाउनलोड करें।</string>
+    <string name="core_voice_whisper_module_downloading">कीबोर्ड का ऑफ़लाइन वॉयस टाइपिंग हिस्सा Google Play से डाउनलोड हो रहा है। थोड़ी देर में फिर कोशिश करें।</string>
+    <string name="core_voice_whisper_module_restart">ऑफ़लाइन वॉयस टाइपिंग मॉड्यूल इंस्टॉल हो गया है। इसका उपयोग करने के लिए कीबोर्ड को बंद करके फिर से खोलें।</string>
     <string name="core_voice_whisper_transcribe_error">वॉयस टाइपिंग काम नहीं कर रही है। पुनः प्रयास करें, या छोटा मॉडल चुनें।</string>
 </resources>

@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Mælt með</string>
     <string name="core_voice_whisper_mel_bins_error">Þetta raddlíkan þarf %1$s band-rófrit, sem passar ekki við skrána sem það hlað niður með. Eyddu líkaninu í stillingum og hlað niður aftur.</string>
     <string name="core_voice_whisper_model_load_error">Raddlíkanið hlaðist ekki inn. Skráin er hugsanlega skemmd. Eyðtu líkaninu í stillingum og halaðu því niður aftur.</string>
+    <string name="core_voice_whisper_module_downloading">Raddinnsláttarhluti lyklaborðsins án nettengingar er að sækjast frá Google Play. Reyndu aftur eftir augnablik.</string>
+    <string name="core_voice_whisper_module_restart">Uppsetningu á eiginleika fyrir raddritun án nettengingar er lokið. Lokaðu lyklaborðinu og opnaðu það aftur til að nota hann.</string>
     <string name="core_voice_whisper_transcribe_error">Raddinnsláttur virkaði ekki. Reyndu aftur eða veldu minna líkan.</string>
 </resources>

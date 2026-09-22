@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Besar</string>
     <string name="core_pred_wordlist_size_medium_label">Sedang</string>
     <string name="core_pred_wordlist_size_small_label">Kecil</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Daftar terkurasi yang digunakan oleh papan ketik Android sendiri. Lebih sedikit kata, dengan lebih sedikit nama dan kesalahan ketik di antaranya.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Dihitung dari teks terjemahan dan teks web. Lebih banyak kata, dengan lebih banyak nama, bahasa gaul, dan kesalahan ketik.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Frekuensi</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brasil</string>
     <string name="core_pred_wordlist_variant_europe_label">Eropa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Britania Raya</string>
+    <string name="core_pred_wordlist_variant_us_label">Amerika Serikat</string>
 </resources>

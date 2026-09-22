@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Tafuta</string>
     <string name="core_content_selection_macro_share">Shiriki</string>
     <string name="core_content_selection_macro_sms">Ujumbe</string>
+    <string name="core_content_selection_macro_strip_trackers">Ondoa vifuatiliaji</string>
     <string name="core_content_selection_macro_time_zones">Kanda</string>
     <string name="core_content_selection_macro_to_bangla">Bangla</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Jina la siku, kwa mfano Jumapili</string>
     <string name="core_content_snippet_var_year_info">Mwaka, wenye tarakimu nne</string>
     <string name="core_content_sticker_pack_imported_label">Vibandiko vilivyoingizwa</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Programu imehifadhi stika %1$d iliyohuishwa kama picha tuli.</item>
+        <item quantity="other">Programu imehifadhi stika %1$d zilizohuishwa kama picha tuli.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Programu imeondoa \"%1$s\". Picha yake haipo.</string>
     <string name="core_content_sticker_repair_image_unreadable">Programu imeacha \"%1$s\". Programu haiwezi kusoma picha yake.</string>
     <plurals name="core_content_sticker_repair_kept_first">

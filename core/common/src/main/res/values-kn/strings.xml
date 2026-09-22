@@ -46,6 +46,8 @@
     <string name="common_none">ಯಾವುದೂ ಇಲ್ಲ</string>
     <string name="common_notify_channel_backup_body">ಸ್ವಯಂಚಾಲಿತ ಬ್ಯಾಕಪ್ ವಿಫಲವಾದಾಗ ಮಾತ್ರ. ಯಶಸ್ವಿ ಬ್ಯಾಕಪ್‌ಗಳು ಮೌನವಾಗಿರುತ್ತವೆ.</string>
     <string name="common_notify_channel_backup_title">ಬ್ಯಾಕಪ್ ಸಮಸ್ಯೆಗಳು</string>
+    <string name="common_notify_channel_connect_body">KDE ಕನೆಕ್ಟ್ ಮೂಲಕ ಜೋಡಿಸಲಾದ ಕಂಪ್ಯೂಟರ್ ಜೋಡಿಸಲು ಕೇಳಿದೆ, ಫೈಲ್ ಕಳುಹಿಸಿದೆ ಅಥವಾ ಕೀಬೋರ್ಡ್ ಮರೆಮಾಡಲ್ಪಟ್ಟಿದ್ದಾಗ ಪಿಂಗ್ ಮಾಡಿದೆ.</string>
+    <string name="common_notify_channel_connect_title">ಜೋಡಿಸಲಾದ ಕಂಪ್ಯೂಟರ್‌ಗಳು</string>
     <string name="common_notify_channel_downloads_body">ನಿಘಂಟುಗಳು, ಧ್ವನಿ ಮಾದರಿಗಳು, ಆಡ್-ಆನ್‌ಗಳು ಮತ್ತು ಕೀಬೋರ್ಡ್ ಪಡೆಯುವ ಇತರ ಫೈಲ್‌ಗಳ ಪ್ರಗತಿ, ಮತ್ತು ಒಂದು ಪೂರ್ಣಗೊಂಡಾಗ ಅಥವಾ ವಿಫಲವಾದಾಗ ಬರುವ ಸೂಚನೆ.</string>
     <string name="common_notify_channel_downloads_title">ಡೌನ್‌ಲೋಡ್‌ಗಳು</string>
     <string name="common_notify_channel_keyboard_body">ಕೀಬೋರ್ಡ್ ಅನ್ನು ತೋರಿಸಲು ಮತ್ತು ಅನ್‌ಪಿನ್ ಮಾಡಲು ಶೇಡ್‌ನಲ್ಲಿ ಶಾಶ್ವತ ನಮೂದು. ನೀವು ಅದನ್ನು ಆನ್ ಮಾಡಿದಾಗ ಮಾತ್ರ.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s ಅನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ</string>
     <string name="common_notify_download_handwriting">%1$s ಕೈಬರಹ</string>
     <string name="common_notify_download_progress">%2$s ರಲ್ಲಿ %1$s</string>
+    <string name="common_notify_download_translate">%1$s ಆಫ್‌ಲೈನ್ ಅನುವಾದ</string>
     <string name="common_notify_download_voice">%1$s ಆಫ್‌ಲೈನ್ ಧ್ವನಿ</string>
     <string name="common_off">ಆಫ್</string>
     <string name="common_ok">ಸರಿ</string>

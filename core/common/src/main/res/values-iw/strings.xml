@@ -46,6 +46,8 @@
     <string name="common_none">ללא</string>
     <string name="common_notify_channel_backup_body">רק כאשר גיבוי אוטומטי נכשל. גיבויים מוצלחים מתבצעים בשקט.</string>
     <string name="common_notify_channel_backup_title">בעיות בגיבוי</string>
+    <string name="common_notify_channel_connect_body">מחשב שזווג דרך KDE Connect ביקש להתחבר, שלח קובץ, או שלח פינג בזמן שהמקלדת הייתה מוסתרת.</string>
+    <string name="common_notify_channel_connect_title">מחשבים משויכים</string>
     <string name="common_notify_channel_downloads_body">התקדמות עבור מילונים, מודלים קוליים, תוספים וקבצים אחרים שהמקלדת מורידה, ושורה כאשר אחד מהם מסתיים או נכשל.</string>
     <string name="common_notify_channel_downloads_title">הורדות</string>
     <string name="common_notify_channel_keyboard_body">ערך קבוע בווילון ההתראות להצגת המקלדת וביטול הנעילה שלה. רק בזמן שהיא מופעלת.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">לא ניתן היה להוריד את %1$s</string>
     <string name="common_notify_download_handwriting">כתב יד %1$s</string>
     <string name="common_notify_download_progress">%1$s מתוך %2$s</string>
+    <string name="common_notify_download_translate">תרגום לא מקוון %1$s</string>
     <string name="common_notify_download_voice">%1$s קול לא מקוון</string>
     <string name="common_off">כבוי</string>
     <string name="common_ok">אישור</string>

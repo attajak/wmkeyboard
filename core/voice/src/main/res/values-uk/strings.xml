@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Рекомендовано</string>
     <string name="core_voice_whisper_mel_bins_error">Ця голосова модель потребує спектрограму з %1$s смугами, що не збігається з файлом, з яким вона була завантажена. Видаліть модель у налаштуваннях і завантажте її знову.</string>
     <string name="core_voice_whisper_model_load_error">Голосова модель не завантажилася. Можливо, файл пошкоджено. Видаліть модель у налаштуваннях і завантажте її знову.</string>
+    <string name="core_voice_whisper_module_downloading">Офлайн-модуль голосового введення завантажується з Google Play. Спробуйте ще раз за мить.</string>
+    <string name="core_voice_whisper_module_restart">Модуль офлайн-введення голосом щойно завершив встановлення. Закрийте та знову відкрийте клавіатуру, щоб почати ним користуватися.</string>
     <string name="core_voice_whisper_transcribe_error">Голосове введення не спрацювало. Спробуйте ще раз або виберіть меншу модель.</string>
 </resources>

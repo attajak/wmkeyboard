@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">बड़ा</string>
     <string name="core_pred_wordlist_size_medium_label">मध्यम</string>
     <string name="core_pred_wordlist_size_small_label">छोटा</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Android के अपने कीबोर्ड द्वारा उपयोग की जाने वाली क्यूरेटेड सूची। इसमें कम शब्द होते हैं और नामों व टाइपिंग संबंधी गलतियों की संभावना भी कम होती है।</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">सबटाइटल और वेब टेक्स्ट से गिना गया। बहुत सारे शब्द, अधिक नामों, स्लैंग और टाइपो के साथ।</string>
+    <string name="core_pred_wordlist_source_frequency_label">आवृत्ति</string>
     <string name="core_pred_wordlist_variant_brazil_label">ब्राज़ील</string>
     <string name="core_pred_wordlist_variant_europe_label">यूरोप</string>
+    <string name="core_pred_wordlist_variant_uk_label">यूनाइटेड किंगडम</string>
+    <string name="core_pred_wordlist_variant_us_label">संयुक्त राज्य अमेरिका</string>
 </resources>

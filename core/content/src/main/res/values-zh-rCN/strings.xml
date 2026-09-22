@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">搜索</string>
     <string name="core_content_selection_macro_share">分享</string>
     <string name="core_content_selection_macro_sms">短信</string>
+    <string name="core_content_selection_macro_strip_trackers">移除追踪器</string>
     <string name="core_content_selection_macro_time_zones">时区</string>
     <string name="core_content_selection_macro_to_bangla">孟加拉语</string>
     <string name="core_content_selection_macro_to_banglish">孟加拉语拼音 (Banglish)</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">星期几的名称，例如星期日</string>
     <string name="core_content_snippet_var_year_info">年份，四位数字</string>
     <string name="core_content_sticker_pack_imported_label">已导入的贴纸</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">应用已将 %1$d 个动态贴纸保留为静态图片。</item>
+        <item quantity="other">应用已将 %1$d 个动态贴纸保留为静态图片。</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">应用丢失了“%1$s”。其图像缺失。</string>
     <string name="core_content_sticker_repair_image_unreadable">应用已丢弃“%1$s”。应用无法读取其图像。</string>
     <plurals name="core_content_sticker_repair_kept_first">

@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">시간대</string>
     <string name="core_settings_auto_theme_trigger_sun_label">일출 및 일몰</string>
     <string name="core_settings_auto_theme_trigger_system_label">시스템 라이트/다크 모드</string>
+    <string name="core_settings_clipboard_view_grid_label">그리드</string>
+    <string name="core_settings_clipboard_view_list_label">목록</string>
     <string name="core_settings_copied_code_chip_any_field_label">모든 필드</string>
     <string name="core_settings_copied_code_chip_code_fields_label">코드 상자만</string>
     <string name="core_settings_copied_code_chip_off_label">안 함</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">패널이 이를 숨기고 짧은 타이머가 삭제합니다</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + 숫자</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">단축키 다음</string>
+    <string name="core_settings_translate_engine_auto_label">자동</string>
+    <string name="core_settings_translate_engine_on_device_label">기기 내</string>
+    <string name="core_settings_translate_engine_online_label">온라인</string>
 </resources>

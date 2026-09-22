@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Hora do dia</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Nascer e pôr do sol</string>
     <string name="core_settings_auto_theme_trigger_system_label">Claro ou escuro do sistema</string>
+    <string name="core_settings_clipboard_view_grid_label">Grade</string>
+    <string name="core_settings_clipboard_view_list_label">Lista</string>
     <string name="core_settings_copied_code_chip_any_field_label">Qualquer campo</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Apenas caixas de código</string>
     <string name="core_settings_copied_code_chip_off_label">Nunca</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">O painel a oculta, e um temporizador curto a exclui</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + número</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Após a tecla de atalho</string>
+    <string name="core_settings_translate_engine_auto_label">Automático</string>
+    <string name="core_settings_translate_engine_on_device_label">No dispositivo</string>
+    <string name="core_settings_translate_engine_online_label">Online</string>
 </resources>

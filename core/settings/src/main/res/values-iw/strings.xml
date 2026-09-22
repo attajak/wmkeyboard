@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">שעה ביום</string>
     <string name="core_settings_auto_theme_trigger_sun_label">זריחה ושקיעה</string>
     <string name="core_settings_auto_theme_trigger_system_label">מערכת בהירה או כהה</string>
+    <string name="core_settings_clipboard_view_grid_label">רשת</string>
+    <string name="core_settings_clipboard_view_list_label">רשימה</string>
     <string name="core_settings_copied_code_chip_any_field_label">כל שדה</string>
     <string name="core_settings_copied_code_chip_code_fields_label">תיבות קוד בלבד</string>
     <string name="core_settings_copied_code_chip_off_label">לעולם לא</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">הלוח מסתיר אותו, וטיימר קצר מוחק אותו</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + מספר</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">אחרי מקש הקיצור</string>
+    <string name="core_settings_translate_engine_auto_label">אוטומטי</string>
+    <string name="core_settings_translate_engine_on_device_label">על המכשיר</string>
+    <string name="core_settings_translate_engine_online_label">מקוון</string>
 </resources>

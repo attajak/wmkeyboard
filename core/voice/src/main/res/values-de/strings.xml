@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Empfohlen</string>
     <string name="core_voice_whisper_mel_bins_error">Dieses Sprachmodell benötigt ein %1$s-Band-Spektrogramm, das nicht mit der Datei übereinstimmt, mit der es heruntergeladen wurde. Löschen Sie das Modell in den Einstellungen und laden Sie es erneut herunter.</string>
     <string name="core_voice_whisper_model_load_error">Das Sprachmodell wurde nicht geladen. Die Datei ist möglicherweise beschädigt. Löschen Sie das Modell in den Einstellungen und laden Sie es erneut herunter.</string>
+    <string name="core_voice_whisper_module_downloading">Die Offline-Spracheingabekomponente der Tastatur wird von Google Play heruntergeladen. Versuchen Sie es in Kürze erneut.</string>
+    <string name="core_voice_whisper_module_restart">Die Installation der Offline-Spracheingabe wurde abgeschlossen. Schließen Sie die Tastatur und öffnen Sie sie erneut, um sie zu verwenden.</string>
     <string name="core_voice_whisper_transcribe_error">Die Spracheingabe hat nicht funktioniert. Versuchen Sie es erneut oder wählen Sie ein kleineres Modell.</string>
 </resources>

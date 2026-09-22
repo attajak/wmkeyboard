@@ -46,6 +46,8 @@
     <string name="common_none">Nav</string>
     <string name="common_notify_channel_backup_body">Tikai tad, ja automātiskā dublēšana neizdodas. Veiksmīgas dublēšanas notiek klusi.</string>
     <string name="common_notify_channel_backup_title">Dublēšanas problēmas</string>
+    <string name="common_notify_channel_connect_body">Dators, kas savienots pārī, izmantojot KDE Connect, pieprasīja savienojumu, nosūtīja failu vai veica ping, kamēr tastatūra bija paslēpta.</string>
+    <string name="common_notify_channel_connect_title">Sapārotie datori</string>
     <string name="common_notify_channel_downloads_body">Vārdnīcu, balss modeļu, papildinājumu un citu failu, ko tastatūra ielādē, lejupielādes gaita, kā arī paziņojums, kad kāds no tiem ir pabeigts vai neizdevies.</string>
     <string name="common_notify_channel_downloads_title">Lejupielādes</string>
     <string name="common_notify_channel_keyboard_body">Pastāvīgs ieraksts paziņojumu joslā tastatūras rādīšanai un atspraušanai. Tikai tad, kad to ieslēdzat.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Neizdevās lejupielādēt %1$s</string>
     <string name="common_notify_download_handwriting">%1$s rokraksts</string>
     <string name="common_notify_download_progress">%1$s no %2$s</string>
+    <string name="common_notify_download_translate">%1$s bezsaistes tulkošana</string>
     <string name="common_notify_download_voice">%1$s bezsaistes balss</string>
     <string name="common_off">Izslēgts</string>
     <string name="common_ok">Labi</string>

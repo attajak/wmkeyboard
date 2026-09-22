@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Препоръчително</string>
     <string name="core_voice_whisper_mel_bins_error">Този гласов модел се нуждае от %1$s-лентова спектрограма, която не съвпада с файла, с който е изтеглен. Изтрийте модела в настройките и го изтеглете отново.</string>
     <string name="core_voice_whisper_model_load_error">Гласовият модел не се зареди. Файлът вероятно е повреден. Изтрийте модела в настройките и го изтеглете отново.</string>
+    <string name="core_voice_whisper_module_downloading">Офлайн модулът за гласово въвеждане на клавиатурата се изтегля от Google Play. Опитайте отново след малко.</string>
+    <string name="core_voice_whisper_module_restart">Инсталирането на компонента за офлайн гласово въвеждане приключи. Затворете и отворете клавиатурата, за да го използвате.</string>
     <string name="core_voice_whisper_transcribe_error">Гласовото въвеждане не проработи. Опитайте отново или изберете по-малък модел.</string>
 </resources>

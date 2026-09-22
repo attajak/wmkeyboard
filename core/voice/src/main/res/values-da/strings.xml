@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Anbefalet</string>
     <string name="core_voice_whisper_mel_bins_error">Denne stemmemodel kræver et %1$s-bånds spektrogram, hvilket ikke matcher den fil, den blev downloadet med. Slet modellen i indstillingerne og download den igen.</string>
     <string name="core_voice_whisper_model_load_error">Stemmemodellen blev ikke indlæst. Filen er muligvis beskadiget. Slet modellen i indstillingerne og download den igen.</string>
+    <string name="core_voice_whisper_module_downloading">Den offline stemmeskrivningsdel af tastaturet downloades fra Google Play. Prøv igen om et øjeblik.</string>
+    <string name="core_voice_whisper_module_restart">Den offline stemmeskrivningsdel er færdig med at installere. Luk og genåbn tastaturet for at bruge det.</string>
     <string name="core_voice_whisper_transcribe_error">Stemmeskrivning virkede ikke. Prøv igen, eller vælg en mindre model.</string>
 </resources>

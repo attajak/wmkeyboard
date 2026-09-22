@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">दिन का समय</string>
     <string name="core_settings_auto_theme_trigger_sun_label">सूर्योदय और सूर्यास्त</string>
     <string name="core_settings_auto_theme_trigger_system_label">सिस्टम लाइट या डार्क</string>
+    <string name="core_settings_clipboard_view_grid_label">ग्रिड</string>
+    <string name="core_settings_clipboard_view_list_label">सूची</string>
     <string name="core_settings_copied_code_chip_any_field_label">कोई भी फ़ील्ड</string>
     <string name="core_settings_copied_code_chip_code_fields_label">केवल कोड बॉक्स</string>
     <string name="core_settings_copied_code_chip_off_label">कभी नहीं</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">पैनल इसे छिपा देता है, और एक छोटा टाइमर इसे हटा देता है</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + संख्या</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">शॉर्टकट कुंजी के बाद</string>
+    <string name="core_settings_translate_engine_auto_label">स्वचालित</string>
+    <string name="core_settings_translate_engine_on_device_label">डिवाइस पर</string>
+    <string name="core_settings_translate_engine_online_label">ऑनलाइन</string>
 </resources>

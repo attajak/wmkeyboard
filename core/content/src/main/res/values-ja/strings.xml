@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">検索</string>
     <string name="core_content_selection_macro_share">共有</string>
     <string name="core_content_selection_macro_sms">メッセージ</string>
+    <string name="core_content_selection_macro_strip_trackers">トラッカーを削除</string>
     <string name="core_content_selection_macro_time_zones">タイムゾーン</string>
     <string name="core_content_selection_macro_to_bangla">ベンガル語</string>
     <string name="core_content_selection_macro_to_banglish">バングリッシュ</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">曜日の名前（例：日曜日）</string>
     <string name="core_content_snippet_var_year_info">4桁の年</string>
     <string name="core_content_sticker_pack_imported_label">インポートされたステッカー</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">アプリは %1$d 個のアニメーションスタンプを静止画として保持しました。</item>
+        <item quantity="other">アプリは %1$d 個のアニメーションスタンプを静止画として保持しました。</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">アプリが \"%1$s\" を削除しました。画像が見つかりません。</string>
     <string name="core_content_sticker_repair_image_unreadable">アプリが「%1$s」を破棄しました。画像が読み取れません。</string>
     <plurals name="core_content_sticker_repair_kept_first">

@@ -46,6 +46,8 @@
     <string name="common_none">Немає</string>
     <string name="common_notify_channel_backup_body">Тільки коли автоматичне резервне копіювання не вдається. Успішні резервні копії виконуються тихо.</string>
     <string name="common_notify_channel_backup_title">Проблеми з резервним копіюванням</string>
+    <string name="common_notify_channel_connect_body">Комп\'ютер, підключений через KDE Connect, надіслав запит на з\'єднання, надіслав файл або подав сигнал, поки клавіатура була прихована.</string>
+    <string name="common_notify_channel_connect_title">Підключені комп\'ютери</string>
     <string name="common_notify_channel_downloads_body">Прогрес завантаження словників, голосових моделей, доповнень та інших файлів, які отримує клавіатура, а також сповіщення про завершення або помилку.</string>
     <string name="common_notify_channel_downloads_title">Завантаження</string>
     <string name="common_notify_channel_keyboard_body">Постійний запис у шторці для відображення клавіатури та її відкріплення. Тільки коли ви її вмикаєте.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Не вдалося завантажити %1$s</string>
     <string name="common_notify_download_handwriting">Рукописне введення %1$s</string>
     <string name="common_notify_download_progress">%1$s з %2$s</string>
+    <string name="common_notify_download_translate">Офлайн-переклад %1$s</string>
     <string name="common_notify_download_voice">Офлайн-голос %1$s</string>
     <string name="common_off">Вимк.</string>
     <string name="common_ok">OK</string>

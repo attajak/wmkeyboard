@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Otsi</string>
     <string name="core_content_selection_macro_share">Jaga</string>
     <string name="core_content_selection_macro_sms">Sõnum</string>
+    <string name="core_content_selection_macro_strip_trackers">Eemalda jälgijad</string>
     <string name="core_content_selection_macro_time_zones">Ajavööndid</string>
     <string name="core_content_selection_macro_to_bangla">Bengali</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Päeva nimi, näiteks pühapäev</string>
     <string name="core_content_snippet_var_year_info">Aasta nelja numbriga</string>
     <string name="core_content_sticker_pack_imported_label">Imporditud kleebised</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Rakendus jättis %1$d animeeritud kleebise alles staatilise pildina.</item>
+        <item quantity="other">Rakendus jättis %1$d animeeritud kleebist alles staatiliste piltidena.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Rakendus eemaldas \"%1$s\". Selle pilt on puudu.</string>
     <string name="core_content_sticker_repair_image_unreadable">Rakendus loobus \"%1$s\". Rakendus ei suuda selle pilti lugeda.</string>
     <plurals name="core_content_sticker_repair_kept_first">

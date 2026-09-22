@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Căutare</string>
     <string name="core_content_selection_macro_share">Distribuie</string>
     <string name="core_content_selection_macro_sms">Mesaj</string>
+    <string name="core_content_selection_macro_strip_trackers">Elimină trackerele</string>
     <string name="core_content_selection_macro_time_zones">Zone</string>
     <string name="core_content_selection_macro_to_bangla">Bengaleză</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Numele zilei, de exemplu Duminică</string>
     <string name="core_content_snippet_var_year_info">Anul, cu patru cifre</string>
     <string name="core_content_sticker_pack_imported_label">Stickere importate</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Aplicația a păstrat %1$d autocolant animat ca imagine statică.</item>
+        <item quantity="other">Aplicația a păstrat %1$d autocolante animate ca imagini statice.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Aplicația a eliminat \"%1$s\". Imaginea sa lipsește.</string>
     <string name="core_content_sticker_repair_image_unreadable">Aplicația a eliminat \"%1$s\". Aplicația nu poate citi imaginea.</string>
     <plurals name="core_content_sticker_repair_kept_first">

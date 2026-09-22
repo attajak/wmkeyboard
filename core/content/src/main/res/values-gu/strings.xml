@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">શોધો</string>
     <string name="core_content_selection_macro_share">શેર કરો</string>
     <string name="core_content_selection_macro_sms">મેસેજ</string>
+    <string name="core_content_selection_macro_strip_trackers">ટ્રેકર્સ દૂર કરો</string>
     <string name="core_content_selection_macro_time_zones">ઝોન</string>
     <string name="core_content_selection_macro_to_bangla">બંગાળી</string>
     <string name="core_content_selection_macro_to_banglish">બંગ્લિશ</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">દિવસનું નામ, ઉદાહરણ તરીકે રવિવાર</string>
     <string name="core_content_snippet_var_year_info">વર્ષ, ચાર અંકો સાથે</string>
     <string name="core_content_sticker_pack_imported_label">આયાત કરેલ સ્ટીકરો</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">એપ્લિકેશને %1$d એનિમેટેડ સ્ટીકરને સ્થિર છબી તરીકે રાખ્યું છે.</item>
+        <item quantity="other">એપ્લિકેશને %1$d એનિમેટેડ સ્ટીકરોને સ્થિર છબીઓ તરીકે રાખ્યા છે.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">એપે \"%1$s\" ને દૂર કર્યું. તેની છબી ખૂટે છે.</string>
     <string name="core_content_sticker_repair_image_unreadable">એપે \"%1$s\" ને છોડી દીધું. એપ તેની છબી વાંચી શકતી નથી.</string>
     <plurals name="core_content_sticker_repair_kept_first">

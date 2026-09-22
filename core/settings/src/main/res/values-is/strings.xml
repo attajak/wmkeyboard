@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Tími dags</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Sólarupprás og sólarlag</string>
     <string name="core_settings_auto_theme_trigger_system_label">Ljóst eða dökkt kerfisþema</string>
+    <string name="core_settings_clipboard_view_grid_label">Rist</string>
+    <string name="core_settings_clipboard_view_list_label">Listi</string>
     <string name="core_settings_copied_code_chip_any_field_label">Hvaða reitur sem er</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Aðeins kóðareitir</string>
     <string name="core_settings_copied_code_chip_off_label">Aldrei</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Spjaldið felur það og stuttur tímamælir eyðir því</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + tala</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Á eftir flýtilykli</string>
+    <string name="core_settings_translate_engine_auto_label">Sjálfvirkt</string>
+    <string name="core_settings_translate_engine_on_device_label">Á tæki</string>
+    <string name="core_settings_translate_engine_online_label">Á netinu</string>
 </resources>

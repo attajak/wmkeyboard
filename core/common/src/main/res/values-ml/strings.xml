@@ -46,6 +46,8 @@
     <string name="common_none">ഒന്നുമില്ല</string>
     <string name="common_notify_channel_backup_body">ഓട്ടോമാറ്റിക് ബാക്കപ്പ് പരാജയപ്പെടുമ്പോൾ മാത്രം. വിജയകരമായ ബാക്കപ്പുകൾ നിശബ്ദമായിരിക്കും.</string>
     <string name="common_notify_channel_backup_title">ബാക്കപ്പ് പ്രശ്നങ്ങൾ</string>
+    <string name="common_notify_channel_connect_body">കീബോർഡ് മറഞ്ഞിരിക്കുമ്പോൾ KDE കണക്ട് വഴി ഒരു കമ്പ്യൂട്ടർ പെയർ ചെയ്യാൻ ആവശ്യപ്പെടുകയോ, ഒരു ഫയൽ അയക്കുകയോ അല്ലെങ്കിൽ പിങ് ചെയ്യുകയോ ചെയ്തു.</string>
+    <string name="common_notify_channel_connect_title">പെയർ ചെയ്ത കമ്പ്യൂട്ടറുകൾ</string>
     <string name="common_notify_channel_downloads_body">നിഘണ്ടുക്കൾ, വോയ്‌സ് മോഡലുകൾ, ആഡ്-ഓണുകൾ, കീബോർഡ് എടുക്കുന്ന മറ്റ് ഫയലുകൾ എന്നിവയുടെ പുരോഗതി, കൂടാതെ ഒന്ന് പൂർത്തിയാകുമ്പോഴോ പരാജയപ്പെടുമ്പോഴോ ഉള്ള അറിയിപ്പ്.</string>
     <string name="common_notify_channel_downloads_title">ഡൗൺലോഡുകൾ</string>
     <string name="common_notify_channel_keyboard_body">കീബോർഡ് കാണിക്കുന്നതിനും അൺപിൻ ചെയ്യുന്നതിനുമായി നോട്ടിഫിക്കേഷൻ ഷേഡിലെ സ്ഥിരമായ എൻട്രി. നിങ്ങൾ ഇത് ഓൺ ചെയ്യുമ്പോൾ മാത്രം ലഭ്യമാണ്.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s ഡൗൺലോഡ് ചെയ്യാൻ സാധിച്ചില്ല</string>
     <string name="common_notify_download_handwriting">%1$s കൈയക്ഷരം</string>
     <string name="common_notify_download_progress">%2$s-ൽ %1$s</string>
+    <string name="common_notify_download_translate">%1$s ഓഫ്‌ലൈൻ വിവർത്തനം</string>
     <string name="common_notify_download_voice">%1$s ഓഫ്‌ലൈൻ വോയ്‌സ്</string>
     <string name="common_off">ഓഫ്</string>
     <string name="common_ok">ശരി</string>

@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">ભલામણ કરેલ</string>
     <string name="core_voice_whisper_mel_bins_error">આ વૉઇસ મોડેલને %1$s બેન્ડ સ્પેક્ટ્રોગ્રામની જરૂર છે, જે તે ફાઇલ સાથે મેળ ખાતું નથી જેની સાથે તે ડાઉનલોડ થયું હતું. સેટિંગ્સમાં મોડેલને ડિલીટ કરો અને તેને ફરીથી ડાઉનલોડ કરો.</string>
     <string name="core_voice_whisper_model_load_error">વોઇસ મોડેલ લોડ થયું નથી. ફાઇલ કદાચ ક્ષતિગ્રસ્ત છે. સેટિંગ્સમાં મોડેલ કાઢી નાખો અને તેને ફરીથી ડાઉનલોડ કરો.</string>
+    <string name="core_voice_whisper_module_downloading">કીબોર્ડનો ઓફલાઇન વૉઇસ ટાઇપિંગ ભાગ Google Play પરથી ડાઉનલોડ થઈ રહ્યો છે. થોડીવાર પછી ફરી પ્રયાસ કરો.</string>
+    <string name="core_voice_whisper_module_restart">ઓફલાઇન વૉઇસ ટાઇપિંગ પાર્ટ ઇન્સ્ટોલ કરવાનું પૂર્ણ થયું છે. તેનો ઉપયોગ કરવા માટે કીબોર્ડ બંધ કરીને ફરીથી ખોલો.</string>
     <string name="core_voice_whisper_transcribe_error">વોઇસ ટાઇપિંગ કામ કરતું નથી. ફરી પ્રયાસ કરો, અથવા નાનું મોડેલ પસંદ કરો.</string>
 </resources>

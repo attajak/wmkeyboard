@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">വലുത്</string>
     <string name="core_pred_wordlist_size_medium_label">മീഡിയം</string>
     <string name="core_pred_wordlist_size_small_label">ചെറുത്</string>
+    <string name="core_pred_wordlist_source_aosp_detail">ആൻഡ്രോയിഡിന്റെ സ്വന്തം കീബോർഡ് ഉപയോഗിക്കുന്ന ക്യൂറേറ്റ് ചെയ്ത ലിസ്റ്റ്. കുറച്ച് വാക്കുകൾ, അതിൽ കുറച്ച് പേരുകളും അക്ഷരത്തെറ്റുകളും മാത്രം.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">സബ്‌ടൈറ്റിലുകളിൽ നിന്നും വെബ് ടെക്സ്റ്റിൽ നിന്നും കണക്കാക്കിയത്. കൂടുതൽ പേരുകൾ, സ്ലാങ്, അക്ഷരത്തെറ്റുകൾ എന്നിവയുള്ള കൂടുതൽ വാക്കുകൾ.</string>
+    <string name="core_pred_wordlist_source_frequency_label">ആവൃത്തി</string>
     <string name="core_pred_wordlist_variant_brazil_label">ബ്രസീൽ</string>
     <string name="core_pred_wordlist_variant_europe_label">യൂറോപ്പ്</string>
+    <string name="core_pred_wordlist_variant_uk_label">യുണൈറ്റഡ് കിംഗ്ഡം</string>
+    <string name="core_pred_wordlist_variant_us_label">യുണൈറ്റഡ് സ്റ്റേറ്റ്സ്</string>
 </resources>

@@ -46,6 +46,8 @@
     <string name="common_none">Hiçbiri</string>
     <string name="common_notify_channel_backup_body">Sadece otomatik yedekleme başarısız olduğunda. Başarılı yedeklemeler sessizdir.</string>
     <string name="common_notify_channel_backup_title">Yedekleme sorunları</string>
+    <string name="common_notify_channel_connect_body">KDE Connect üzerinden eşleşen bir bilgisayar, klavye gizliyken eşleşme istedi, dosya gönderdi veya ping attı.</string>
+    <string name="common_notify_channel_connect_title">Eşleşmiş bilgisayarlar</string>
     <string name="common_notify_channel_downloads_body">Klavye tarafından getirilen sözlükler, ses modelleri, eklentiler ve diğer dosyalar için ilerleme durumu ve biri bittiğinde veya başarısız olduğunda bir satır.</string>
     <string name="common_notify_channel_downloads_title">İndirilenler</string>
     <string name="common_notify_channel_keyboard_body">Klavyeyi göstermek ve sabitlemesini kaldırmak için bildirim panelinde kalıcı bir giriş. Sadece siz açtığınızda görünür.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s indirilemedi</string>
     <string name="common_notify_download_handwriting">%1$s el yazısı</string>
     <string name="common_notify_download_progress">%2$s içinden %1$s</string>
+    <string name="common_notify_download_translate">%1$s çevrimdışı çeviri</string>
     <string name="common_notify_download_voice">%1$s çevrimdışı ses</string>
     <string name="common_off">Kapalı</string>
     <string name="common_ok">Tamam</string>

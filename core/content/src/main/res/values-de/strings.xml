@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Suche</string>
     <string name="core_content_selection_macro_share">Teilen</string>
     <string name="core_content_selection_macro_sms">Nachricht</string>
+    <string name="core_content_selection_macro_strip_trackers">Tracker entfernen</string>
     <string name="core_content_selection_macro_time_zones">Zeitzonen</string>
     <string name="core_content_selection_macro_to_bangla">Bangla</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Der Name des Tages, zum Beispiel Sonntag</string>
     <string name="core_content_snippet_var_year_info">Das Jahr, vierstellig</string>
     <string name="core_content_sticker_pack_imported_label">Importierte Sticker</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Die App hat %1$d animierten Sticker als Standbild behalten.</item>
+        <item quantity="other">Die App hat %1$d animierte Sticker als Standbilder behalten.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Die App hat \"%1$s\" verworfen. Das Bild fehlt.</string>
     <string name="core_content_sticker_repair_image_unreadable">Die App hat „%1$s“ verworfen. Die App kann das Bild nicht lesen.</string>
     <plurals name="core_content_sticker_repair_kept_first">

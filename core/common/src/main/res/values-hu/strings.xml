@@ -46,6 +46,8 @@
     <string name="common_none">Nincs</string>
     <string name="common_notify_channel_backup_body">Csak akkor, ha az automatikus biztonsági mentés sikertelen. A sikeres mentések csendesek.</string>
     <string name="common_notify_channel_backup_title">Biztonsági mentési problémák</string>
+    <string name="common_notify_channel_connect_body">A KDE Connecten keresztül párosított számítógép párosítást kért, fájlt küldött vagy jelzést adott le, miközben a billentyűzet el volt rejtve.</string>
+    <string name="common_notify_channel_connect_title">Párosított számítógépek</string>
     <string name="common_notify_channel_downloads_body">Szótárak, hangmodellek, kiegészítők és egyéb, a billentyűzet által letöltött fájlok folyamata, valamint értesítés, ha egy letöltés befejeződött vagy sikertelen.</string>
     <string name="common_notify_channel_downloads_title">Letöltések</string>
     <string name="common_notify_channel_keyboard_body">Egy állandó bejegyzés az értesítési területen a billentyűzet megjelenítéséhez és rögzítésének feloldásához. Csak akkor, ha bekapcsolja.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">A(z) %1$s letöltése sikertelen</string>
     <string name="common_notify_download_handwriting">%1$s kézírás</string>
     <string name="common_notify_download_progress">%1$s / %2$s</string>
+    <string name="common_notify_download_translate">%1$s offline fordítás</string>
     <string name="common_notify_download_voice">%1$s offline hang</string>
     <string name="common_off">Ki</string>
     <string name="common_ok">OK</string>

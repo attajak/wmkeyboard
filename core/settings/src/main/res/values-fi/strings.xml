@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Kellonaika</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Auringonnousu ja auringonlasku</string>
     <string name="core_settings_auto_theme_trigger_system_label">Järjestelmän vaalea tai tumma</string>
+    <string name="core_settings_clipboard_view_grid_label">Ruudukko</string>
+    <string name="core_settings_clipboard_view_list_label">Luettelo</string>
     <string name="core_settings_copied_code_chip_any_field_label">Mikä tahansa kenttä</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Vain koodikentät</string>
     <string name="core_settings_copied_code_chip_off_label">Ei koskaan</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Paneeli piilottaa sen, ja lyhyt ajastin poistaa sen</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + numero</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Pikanäppäimen jälkeen</string>
+    <string name="core_settings_translate_engine_auto_label">Automaattinen</string>
+    <string name="core_settings_translate_engine_on_device_label">Laitteessa</string>
+    <string name="core_settings_translate_engine_online_label">Verkossa</string>
 </resources>

@@ -46,6 +46,8 @@
     <string name="common_none">Niciunul</string>
     <string name="common_notify_channel_backup_body">Doar când o copie de rezervă automată eșuează. Copiile de rezervă reușite sunt silențioase.</string>
     <string name="common_notify_channel_backup_title">Probleme de backup</string>
+    <string name="common_notify_channel_connect_body">Un computer asociat prin KDE Connect a cerut asocierea, a trimis un fișier sau a trimis un ping în timp ce tastatura era ascunsă.</string>
+    <string name="common_notify_channel_connect_title">Computere asociate</string>
     <string name="common_notify_channel_downloads_body">Progresul pentru dicționare, modele vocale, add-on-uri și alte fișiere pe care tastatura le descarcă, și o notificare când unul se termină sau eșuează.</string>
     <string name="common_notify_channel_downloads_title">Descărcări</string>
     <string name="common_notify_channel_keyboard_body">O intrare permanentă în zona de notificări pentru a afișa tastatura și a o debloca. Doar în timp ce o pornești.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s nu a putut fi descărcat</string>
     <string name="common_notify_download_handwriting">Scriere de mână %1$s</string>
     <string name="common_notify_download_progress">%1$s din %2$s</string>
+    <string name="common_notify_download_translate">Traducere offline %1$s</string>
     <string name="common_notify_download_voice">Voce offline %1$s</string>
     <string name="common_off">Oprit</string>
     <string name="common_ok">OK</string>

@@ -46,6 +46,8 @@
     <string name="common_none">Ingen</string>
     <string name="common_notify_channel_backup_body">Bare når en automatisk sikkerhetskopi feiler. Vellykkede sikkerhetskopier er lydløse.</string>
     <string name="common_notify_channel_backup_title">Sikkerhetskopieringsproblemer</string>
+    <string name="common_notify_channel_connect_body">En datamaskin paret via KDE Connect ba om paring, sendte en fil eller pinget mens tastaturet var skjult.</string>
+    <string name="common_notify_channel_connect_title">Parede datamaskiner</string>
     <string name="common_notify_channel_downloads_body">Fremdrift for ordbøker, stemmemodeller, tillegg og andre filer tastaturet henter, samt en linje når noe er ferdig eller feiler.</string>
     <string name="common_notify_channel_downloads_title">Nedlastinger</string>
     <string name="common_notify_channel_keyboard_body">En permanent oppføring i varslingsfeltet for å vise tastaturet og løsne det. Kun mens du har det aktivert.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s kunne ikke lastes ned</string>
     <string name="common_notify_download_handwriting">%1$s håndskrift</string>
     <string name="common_notify_download_progress">%1$s av %2$s</string>
+    <string name="common_notify_download_translate">%1$s frakoblet oversettelse</string>
     <string name="common_notify_download_voice">%1$s offline-stemme</string>
     <string name="common_off">Av</string>
     <string name="common_ok">OK</string>

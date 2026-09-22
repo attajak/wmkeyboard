@@ -46,6 +46,8 @@
     <string name="common_none">Ninguno</string>
     <string name="common_notify_channel_backup_body">Solo cuando falla una copia de seguridad automática. Las copias de seguridad exitosas son silenciosas.</string>
     <string name="common_notify_channel_backup_title">Problemas de copia de seguridad</string>
+    <string name="common_notify_channel_connect_body">Un equipo vinculado a través de KDE Connect solicitó vincularse, envió un archivo o envió un ping mientras el teclado estaba oculto.</string>
+    <string name="common_notify_channel_connect_title">Ordenadores vinculados</string>
     <string name="common_notify_channel_downloads_body">Progreso de diccionarios, modelos de voz, complementos y otros archivos que el teclado descarga, y una línea cuando uno termina o falla.</string>
     <string name="common_notify_channel_downloads_title">Descargas</string>
     <string name="common_notify_channel_keyboard_body">Una entrada permanente en la cortina para mostrar el teclado y desanclarlo. Solo mientras lo tengas activado.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">No se pudo descargar %1$s</string>
     <string name="common_notify_download_handwriting">Escritura a mano %1$s</string>
     <string name="common_notify_download_progress">%1$s de %2$s</string>
+    <string name="common_notify_download_translate">Traducción sin conexión %1$s</string>
     <string name="common_notify_download_voice">Voz sin conexión %1$s</string>
     <string name="common_off">Desactivado</string>
     <string name="common_ok">Aceptar</string>

@@ -46,6 +46,8 @@
     <string name="common_none">કોઈ નહીં</string>
     <string name="common_notify_channel_backup_body">માત્ર ત્યારે જ જ્યારે સ્વયંસંચાલિત બેકઅપ નિષ્ફળ જાય. સફળ બેકઅપ સાયલન્ટ હોય છે.</string>
     <string name="common_notify_channel_backup_title">બેકઅપ સમસ્યાઓ</string>
+    <string name="common_notify_channel_connect_body">KDE કનેક્ટ દ્વારા પેર થયેલા કમ્પ્યુટરે પેર થવા માટે કહ્યું, ફાઇલ મોકલી, અથવા કીબોર્ડ છુપાયેલું હતું ત્યારે પિંગ કર્યું.</string>
+    <string name="common_notify_channel_connect_title">જોડાયેલા કમ્પ્યુટર્સ</string>
     <string name="common_notify_channel_downloads_body">શબ્દકોશો, વૉઇસ મોડલ્સ, ઍડ-ઑન્સ અને કીબોર્ડ દ્વારા મેળવેલી અન્ય ફાઇલો માટેની પ્રગતિ, અને જ્યારે કોઈ પૂર્ણ થાય અથવા નિષ્ફળ જાય ત્યારે એક લાઇન.</string>
     <string name="common_notify_channel_downloads_title">ડાઉનલોડ્સ</string>
     <string name="common_notify_channel_keyboard_body">કીબોર્ડ બતાવવા અને તેને અનપિન કરવા માટે શેડમાં એક કાયમી એન્ટ્રી. ફક્ત જ્યારે તમે તેને ચાલુ કરો ત્યારે જ.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s ડાઉનલોડ કરી શકાયું નથી</string>
     <string name="common_notify_download_handwriting">%1$s હસ્તલેખન</string>
     <string name="common_notify_download_progress">%2$s માંથી %1$s</string>
+    <string name="common_notify_download_translate">%1$s ઑફલાઇન અનુવાદ</string>
     <string name="common_notify_download_voice">%1$s ઑફલાઇન વૉઇસ</string>
     <string name="common_off">બંધ</string>
     <string name="common_ok">ઓકે</string>

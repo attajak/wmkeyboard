@@ -46,6 +46,8 @@
     <string name="common_none">Tidak ada</string>
     <string name="common_notify_channel_backup_body">Hanya saat pencadangan otomatis gagal. Pencadangan yang berhasil tidak akan memunculkan notifikasi.</string>
     <string name="common_notify_channel_backup_title">Masalah cadangan</string>
+    <string name="common_notify_channel_connect_body">Komputer yang dipasangkan melalui KDE Connect meminta untuk dipasangkan, mengirim file, atau melakukan ping saat papan tik disembunyikan.</string>
+    <string name="common_notify_channel_connect_title">Komputer yang dipasangkan</string>
     <string name="common_notify_channel_downloads_body">Progres untuk kamus, model suara, add-on, dan file lain yang diambil papan ketik, serta baris saat salah satu selesai atau gagal.</string>
     <string name="common_notify_channel_downloads_title">Unduhan</string>
     <string name="common_notify_channel_keyboard_body">Entri permanen di bayangan untuk menampilkan papan ketik dan melepas sematannya. Hanya saat Anda mengaktifkannya.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s tidak dapat diunduh</string>
     <string name="common_notify_download_handwriting">Tulisan tangan %1$s</string>
     <string name="common_notify_download_progress">%1$s dari %2$s</string>
+    <string name="common_notify_download_translate">Terjemahan luring %1$s</string>
     <string name="common_notify_download_voice">Suara offline %1$s</string>
     <string name="common_off">Mati</string>
     <string name="common_ok">OK</string>

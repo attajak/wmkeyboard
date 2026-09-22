@@ -46,6 +46,8 @@
     <string name="common_none">Hakuna</string>
     <string name="common_notify_channel_backup_body">Wakati tu hifadhi nakala ya kiotomatiki inaposhindwa. Hifadhi nakala zilizofanikiwa huwa kimya.</string>
     <string name="common_notify_channel_backup_title">Matatizo ya kuhifadhi nakala</string>
+    <string name="common_notify_channel_connect_body">Kompyuta iliyooanishwa kupitia KDE Connect iliomba kuoanisha, ilituma faili, au ilitoa ishara wakati kibodi ilikuwa imefichwa.</string>
+    <string name="common_notify_channel_connect_title">Kompyuta zilizooanishwa</string>
     <string name="common_notify_channel_downloads_body">Maendeleo ya kamusi, miundo ya sauti, viongezi na faili nyingine ambazo kibodi inapakua, na mstari wakati moja inapokamilika au kushindwa.</string>
     <string name="common_notify_channel_downloads_title">Vipakuliwa</string>
     <string name="common_notify_channel_keyboard_body">Ingizo la kudumu kwenye kivuli kwa ajili ya kuonyesha kibodi na kuiondoa kwenye pini. Wakati tu unapoiwasha.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s haikuweza kupakuliwa</string>
     <string name="common_notify_download_handwriting">Uandishi wa mkono wa %1$s</string>
     <string name="common_notify_download_progress">%1$s kati ya %2$s</string>
+    <string name="common_notify_download_translate">Tafsiri ya nje ya mtandao ya %1$s</string>
     <string name="common_notify_download_voice">Sauti ya nje ya mtandao ya %1$s</string>
     <string name="common_off">Imezimwa</string>
     <string name="common_ok">Sawa</string>

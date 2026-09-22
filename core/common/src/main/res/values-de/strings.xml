@@ -46,6 +46,8 @@
     <string name="common_none">Keine</string>
     <string name="common_notify_channel_backup_body">Nur wenn ein automatisches Backup fehlschlägt. Erfolgreiche Backups erfolgen lautlos.</string>
     <string name="common_notify_channel_backup_title">Backup-Probleme</string>
+    <string name="common_notify_channel_connect_body">Ein über KDE Connect gekoppelter Computer hat eine Kopplungsanfrage gesendet, eine Datei übertragen oder ein Signal gesendet, während die Tastatur ausgeblendet war.</string>
+    <string name="common_notify_channel_connect_title">Gekoppelte Computer</string>
     <string name="common_notify_channel_downloads_body">Fortschritt für Wörterbücher, Sprachmodelle, Add-ons und andere Dateien, die die Tastatur abruft, sowie eine Zeile, wenn ein Vorgang abgeschlossen ist oder fehlschlägt.</string>
     <string name="common_notify_channel_downloads_title">Downloads</string>
     <string name="common_notify_channel_keyboard_body">Ein permanenter Eintrag in der Benachrichtigungsleiste zum Anzeigen und Lösen der Tastatur. Nur solange diese aktiviert ist.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s konnte nicht heruntergeladen werden</string>
     <string name="common_notify_download_handwriting">%1$s Handschrift</string>
     <string name="common_notify_download_progress">%1$s von %2$s</string>
+    <string name="common_notify_download_translate">%1$s Offline-Übersetzung</string>
     <string name="common_notify_download_voice">%1$s Offline-Stimme</string>
     <string name="common_off">Aus</string>
     <string name="common_ok">OK</string>

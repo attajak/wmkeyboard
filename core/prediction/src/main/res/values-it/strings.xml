@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Grande</string>
     <string name="core_pred_wordlist_size_medium_label">Media</string>
     <string name="core_pred_wordlist_size_small_label">Piccolo</string>
+    <string name="core_pred_wordlist_source_aosp_detail">L\'elenco curato utilizzato dalla tastiera di Android. Meno parole, con meno nomi e refusi tra di esse.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Conteggiato da sottotitoli e testi web. Molte più parole, con più nomi, slang ed errori di battitura.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Frequenza</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brasile</string>
     <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Regno Unito</string>
+    <string name="core_pred_wordlist_variant_us_label">Stati Uniti</string>
 </resources>

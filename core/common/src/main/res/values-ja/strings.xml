@@ -46,6 +46,8 @@
     <string name="common_none">なし</string>
     <string name="common_notify_channel_backup_body">自動バックアップが失敗した場合のみ通知します。成功したバックアップは通知されません。</string>
     <string name="common_notify_channel_backup_title">バックアップの問題</string>
+    <string name="common_notify_channel_connect_body">キーボードが非表示の間に、KDE Connect経由でペアリングされたコンピュータから、ペアリング要求、ファイル送信、またはピング送信がありました。</string>
+    <string name="common_notify_channel_connect_title">ペアリング済みのコンピューター</string>
     <string name="common_notify_channel_downloads_body">辞書、音声モデル、アドオンなど、キーボードが取得するファイルの進捗状況を表示し、完了または失敗した際に通知します。</string>
     <string name="common_notify_channel_downloads_title">ダウンロード</string>
     <string name="common_notify_channel_keyboard_body">キーボードを表示および固定解除するための通知シェード内の常時表示エントリです。有効にしている間のみ表示されます。</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$sをダウンロードできませんでした</string>
     <string name="common_notify_download_handwriting">%1$s 手書き</string>
     <string name="common_notify_download_progress">%2$s 中の %1$s</string>
+    <string name="common_notify_download_translate">%1$s オフライン翻訳</string>
     <string name="common_notify_download_voice">%1$s オフライン音声</string>
     <string name="common_off">オフ</string>
     <string name="common_ok">OK</string>

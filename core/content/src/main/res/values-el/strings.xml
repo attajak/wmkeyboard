@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Αναζήτηση</string>
     <string name="core_content_selection_macro_share">Κοινοποίηση</string>
     <string name="core_content_selection_macro_sms">Μήνυμα</string>
+    <string name="core_content_selection_macro_strip_trackers">Αφαίρεση ιχνηλατών</string>
     <string name="core_content_selection_macro_time_zones">Ζώνες</string>
     <string name="core_content_selection_macro_to_bangla">Μπενγκάλι</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Το όνομα της ημέρας, για παράδειγμα Κυριακή</string>
     <string name="core_content_snippet_var_year_info">Το έτος, με τέσσερα ψηφία</string>
     <string name="core_content_sticker_pack_imported_label">Εισηγμένα αυτοκόλλητα</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Η εφαρμογή διατήρησε %1$d κινούμενο αυτοκόλλητο ως στατική εικόνα.</item>
+        <item quantity="other">Η εφαρμογή διατήρησε %1$d κινούμενα αυτοκόλλητα ως στατικές εικόνες.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Η εφαρμογή απέρριψε το \"%1$s\". Η εικόνα του λείπει.</string>
     <string name="core_content_sticker_repair_image_unreadable">Η εφαρμογή απέρριψε το \"%1$s\". Η εφαρμογή δεν μπορεί να διαβάσει την εικόνα του.</string>
     <plurals name="core_content_sticker_repair_kept_first">

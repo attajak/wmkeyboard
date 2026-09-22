@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Rechercher</string>
     <string name="core_content_selection_macro_share">Partager</string>
     <string name="core_content_selection_macro_sms">Message</string>
+    <string name="core_content_selection_macro_strip_trackers">Supprimer les traceurs</string>
     <string name="core_content_selection_macro_time_zones">Fuseaux horaires</string>
     <string name="core_content_selection_macro_to_bangla">Bengali</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Le nom du jour, par exemple dimanche</string>
     <string name="core_content_snippet_var_year_info">L\'année, avec quatre chiffres</string>
     <string name="core_content_sticker_pack_imported_label">Autocollants importés</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">L\'application a conservé %1$d autocollant animé comme image fixe.</item>
+        <item quantity="other">L\'application a conservé %1$d autocollants animés comme images fixes.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">L\'application a supprimé \"%1$s\". Son image est manquante.</string>
     <string name="core_content_sticker_repair_image_unreadable">L\'application a supprimé \"%1$s\". L\'application ne peut pas lire son image.</string>
     <plurals name="core_content_sticker_repair_kept_first">

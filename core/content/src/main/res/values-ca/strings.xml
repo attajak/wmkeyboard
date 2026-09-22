@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Cerca</string>
     <string name="core_content_selection_macro_share">Comparteix</string>
     <string name="core_content_selection_macro_sms">Missatge</string>
+    <string name="core_content_selection_macro_strip_trackers">Elimina els seguidors</string>
     <string name="core_content_selection_macro_time_zones">Zones</string>
     <string name="core_content_selection_macro_to_bangla">Bengalí</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">El nom del dia, per exemple diumenge</string>
     <string name="core_content_snippet_var_year_info">L\'any, amb quatre dígits</string>
     <string name="core_content_sticker_pack_imported_label">Adhesius importats</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">L\'aplicació ha mantingut %1$d adhesiu animat com a imatge estàtica.</item>
+        <item quantity="other">L\'aplicació ha mantingut %1$d adhesius animats com a imatges estàtiques.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">L\'aplicació ha descartat \"%1$s\". Falta la seva imatge.</string>
     <string name="core_content_sticker_repair_image_unreadable">L\'aplicació ha descartat \"%1$s\". L\'aplicació no pot llegir la seva imatge.</string>
     <plurals name="core_content_sticker_repair_kept_first">

@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Tìm kiếm</string>
     <string name="core_content_selection_macro_share">Chia sẻ</string>
     <string name="core_content_selection_macro_sms">Tin nhắn</string>
+    <string name="core_content_selection_macro_strip_trackers">Xóa trình theo dõi</string>
     <string name="core_content_selection_macro_time_zones">Múi giờ</string>
     <string name="core_content_selection_macro_to_bangla">Tiếng Bengal</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Tên của ngày, ví dụ: Chủ nhật</string>
     <string name="core_content_snippet_var_year_info">Năm, gồm bốn chữ số</string>
     <string name="core_content_sticker_pack_imported_label">Nhãn dán đã nhập</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Ứng dụng đã giữ lại %1$d nhãn dán động dưới dạng hình ảnh tĩnh.</item>
+        <item quantity="other">Ứng dụng đã giữ lại %1$d nhãn dán động dưới dạng hình ảnh tĩnh.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Ứng dụng đã loại bỏ \"%1$s\". Hình ảnh của nó bị thiếu.</string>
     <string name="core_content_sticker_repair_image_unreadable">Ứng dụng đã loại bỏ \"%1$s\". Ứng dụng không thể đọc hình ảnh của nó.</string>
     <plurals name="core_content_sticker_repair_kept_first">

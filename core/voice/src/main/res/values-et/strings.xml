@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Soovitatav</string>
     <string name="core_voice_whisper_mel_bins_error">See häälemudel vajab %1$s ribaga spektrogrammi, mis ei vasta failile, millega see alla laaditi. Kustutage mudel seadetes ja laadige see uuesti alla.</string>
     <string name="core_voice_whisper_model_load_error">Häälemudelit ei laaditud. Fail on tõenäoliselt kahjustatud. Kustutage mudel seadetes ja laadige see uuesti alla.</string>
+    <string name="core_voice_whisper_module_downloading">Klaviatuuri võrguühenduseta häälsisestuse osa laaditakse Google Playst alla. Proovige hetke pärast uuesti.</string>
+    <string name="core_voice_whisper_module_restart">Võrguühenduseta häälkestamise komponendi installimine lõpetati. Selle kasutamiseks sulgege klaviatuur ja avage see uuesti.</string>
     <string name="core_voice_whisper_transcribe_error">Häälsisestus ei töötanud. Proovi uuesti või vali väiksem mudel.</string>
 </resources>

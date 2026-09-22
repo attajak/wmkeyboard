@@ -46,6 +46,8 @@
     <string name="common_none">Nėra</string>
     <string name="common_notify_channel_backup_body">Tik tada, kai automatinė atsarginė kopija nepavyksta. Sėkmingos atsarginės kopijos yra tylios.</string>
     <string name="common_notify_channel_backup_title">Atsarginės kopijos problemos</string>
+    <string name="common_notify_channel_connect_body">Kompiuteris, susietas per „KDE Connect“, paprašė susieti, atsiuntė failą arba atsiuntė „ping“ signalą, kol klaviatūra buvo paslėpta.</string>
+    <string name="common_notify_channel_connect_title">Suporuoti kompiuteriai</string>
     <string name="common_notify_channel_downloads_body">Žodynų, balso modelių, priedų ir kitų klaviatūros atsisiunčiamų failų eiga, bei pranešimas, kai atsisiuntimas baigiamas arba nepavyksta.</string>
     <string name="common_notify_channel_downloads_title">Atsisiuntimai</string>
     <string name="common_notify_channel_keyboard_body">Nuolatinis įrašas skydelyje, skirtas klaviatūrai rodyti ir atsegti. Tik tada, kai ją įjungiate.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Nepavyko atsisiųsti %1$s</string>
     <string name="common_notify_download_handwriting">%1$s rašysena</string>
     <string name="common_notify_download_progress">%1$s iš %2$s</string>
+    <string name="common_notify_download_translate">%1$s vertimas neprisijungus</string>
     <string name="common_notify_download_voice">%1$s balsas neprisijungus</string>
     <string name="common_off">Išjungta</string>
     <string name="common_ok">Gerai</string>

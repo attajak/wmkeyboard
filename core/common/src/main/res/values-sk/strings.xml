@@ -46,6 +46,8 @@
     <string name="common_none">Žiadne</string>
     <string name="common_notify_channel_backup_body">Iba ak automatické zálohovanie zlyhá. Úspešné zálohy sú tiché.</string>
     <string name="common_notify_channel_backup_title">Problémy so zálohovaním</string>
+    <string name="common_notify_channel_connect_body">Počítač spárovaný cez KDE Connect požiadal o spárovanie, odoslal súbor alebo poslal ping, zatiaľ čo bola klávesnica skrytá.</string>
+    <string name="common_notify_channel_connect_title">Spárované počítače</string>
     <string name="common_notify_channel_downloads_body">Priebeh sťahovania slovníkov, hlasových modelov, doplnkov a iných súborov, ktoré klávesnica získava, a riadok po dokončení alebo zlyhaní.</string>
     <string name="common_notify_channel_downloads_title">Sťahovanie</string>
     <string name="common_notify_channel_keyboard_body">Trvalý záznam v tieni na zobrazenie klávesnice a jej odopnutie. Len keď ju zapnete.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Súbor %1$s sa nepodarilo stiahnuť</string>
     <string name="common_notify_download_handwriting">Rukopis %1$s</string>
     <string name="common_notify_download_progress">%1$s z %2$s</string>
+    <string name="common_notify_download_translate">%1$s offline preklad</string>
     <string name="common_notify_download_voice">Offline hlas %1$s</string>
     <string name="common_off">Vypnuté</string>
     <string name="common_ok">OK</string>

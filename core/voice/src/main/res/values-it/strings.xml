@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Consigliato</string>
     <string name="core_voice_whisper_mel_bins_error">Questo modello vocale richiede uno spettrogramma a banda %1$s, che non corrisponde al file con cui è stato scaricato. Elimina il modello nelle impostazioni e scaricalo di nuovo.</string>
     <string name="core_voice_whisper_model_load_error">Il modello vocale non è stato caricato. Il file è probabilmente danneggiato. Elimina il modello nelle impostazioni e scaricalo di nuovo.</string>
+    <string name="core_voice_whisper_module_downloading">Il componente per la digitazione vocale offline della tastiera è in fase di download da Google Play. Riprova tra un momento.</string>
+    <string name="core_voice_whisper_module_restart">L\'installazione del modulo di dettatura vocale offline è terminata. Chiudi e riapri la tastiera per utilizzarlo.</string>
     <string name="core_voice_whisper_transcribe_error">La digitazione vocale non ha funzionato. Riprova o seleziona un modello più piccolo.</string>
 </resources>

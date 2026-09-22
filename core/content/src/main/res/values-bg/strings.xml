@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Търсене</string>
     <string name="core_content_selection_macro_share">Споделяне</string>
     <string name="core_content_selection_macro_sms">Съобщение</string>
+    <string name="core_content_selection_macro_strip_trackers">Премахване на тракерите</string>
     <string name="core_content_selection_macro_time_zones">Часови зони</string>
     <string name="core_content_selection_macro_to_bangla">Бенгалски</string>
     <string name="core_content_selection_macro_to_banglish">Банглийски</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Името на деня, например неделя</string>
     <string name="core_content_snippet_var_year_info">Годината с четири цифри</string>
     <string name="core_content_sticker_pack_imported_label">Импортирани стикери</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Приложението запази %1$d анимиран стикер като статично изображение.</item>
+        <item quantity="other">Приложението запази %1$d анимирани стикера като статични изображения.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Приложението изтри \"%1$s\". Изображението му липсва.</string>
     <string name="core_content_sticker_repair_image_unreadable">Приложението изпусна \"%1$s\". Приложението не може да прочете изображението му.</string>
     <plurals name="core_content_sticker_repair_kept_first">

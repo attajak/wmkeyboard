@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Preporučeno</string>
     <string name="core_voice_whisper_mel_bins_error">Ovaj glasovni model treba spektrogram s %1$s pojaseva, što se ne podudara s datotekom s kojom je preuzet. Izbrišite model u postavkama i ponovno ga preuzmite.</string>
     <string name="core_voice_whisper_model_load_error">Glasovni model nije učitan. Datoteka je možda oštećena. Izbrišite model u postavkama i ponovno ga preuzmite.</string>
+    <string name="core_voice_whisper_module_downloading">Izvanmrežni dio tipkovnice za glasovno tipkanje preuzima se s Google Playa. Pokušajte ponovno za trenutak.</string>
+    <string name="core_voice_whisper_module_restart">Instalacija izvanmrežnog dijela za glasovno tipkanje je završena. Zatvorite i ponovno otvorite tipkovnicu kako biste je koristili.</string>
     <string name="core_voice_whisper_transcribe_error">Glasovno tipkanje nije uspjelo. Pokušajte ponovno ili odaberite manji model.</string>
 </resources>

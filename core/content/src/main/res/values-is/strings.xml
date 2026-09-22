@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Leita</string>
     <string name="core_content_selection_macro_share">Deila</string>
     <string name="core_content_selection_macro_sms">Skilaboð</string>
+    <string name="core_content_selection_macro_strip_trackers">Fjarlægja rakningu</string>
     <string name="core_content_selection_macro_time_zones">Tímabelti</string>
     <string name="core_content_selection_macro_to_bangla">Bengalska</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Nafn dagsins, til dæmis sunnudagur</string>
     <string name="core_content_snippet_var_year_info">Árið, með fjórum tölustöfum</string>
     <string name="core_content_sticker_pack_imported_label">Innfluttir límmiðar</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Forritið geymdi %1$d hreyfimyndamiða sem kyrrmynd.</item>
+        <item quantity="other">Forritið geymdi %1$d hreyfimyndamiða sem kyrrmyndir.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Forritið fjarlægði „%1$s“. Myndin vantar.</string>
     <string name="core_content_sticker_repair_image_unreadable">Forritið fjarlægði \"%1$s\". Forritið getur ekki lesið myndina.</string>
     <plurals name="core_content_sticker_repair_kept_first">

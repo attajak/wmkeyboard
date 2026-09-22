@@ -46,6 +46,8 @@
     <string name="common_none">कोई नहीं</string>
     <string name="common_notify_channel_backup_body">केवल तब जब स्वचालित बैकअप विफल हो जाता है। सफल बैकअप शांत रहते हैं।</string>
     <string name="common_notify_channel_backup_title">बैकअप समस्याएं</string>
+    <string name="common_notify_channel_connect_body">KDE Connect के माध्यम से पेयर किए गए कंप्यूटर ने पेयर करने के लिए कहा, फाइल भेजी, या कीबोर्ड छिपा होने पर पिंग किया।</string>
+    <string name="common_notify_channel_connect_title">पेयर किए गए कंप्यूटर</string>
     <string name="common_notify_channel_downloads_body">शब्दकोशों, वॉयस मॉडल, ऐड-ऑन और अन्य फ़ाइलों के लिए प्रगति जिन्हें कीबोर्ड फ़ेच करता है, और एक लाइन जब कोई पूरा हो जाता है या विफल हो जाता है।</string>
     <string name="common_notify_channel_downloads_title">डाउनलोड</string>
     <string name="common_notify_channel_keyboard_body">कीबोर्ड दिखाने और उसे अनपिन करने के लिए शेड में एक स्थायी प्रविष्टि। केवल तब जब आप इसे चालू करते हैं।</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s को डाउनलोड नहीं किया जा सका</string>
     <string name="common_notify_download_handwriting">%1$s लिखावट</string>
     <string name="common_notify_download_progress">%2$s में से %1$s</string>
+    <string name="common_notify_download_translate">%1$s ऑफ़लाइन अनुवाद</string>
     <string name="common_notify_download_voice">%1$s ऑफ़लाइन आवाज़</string>
     <string name="common_off">बंद</string>
     <string name="common_ok">ठीक है</string>

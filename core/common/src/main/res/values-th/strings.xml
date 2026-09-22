@@ -46,6 +46,8 @@
     <string name="common_none">ไม่มี</string>
     <string name="common_notify_channel_backup_body">เฉพาะเมื่อการสำรองข้อมูลอัตโนมัติล้มเหลว การสำรองข้อมูลที่สำเร็จจะไม่มีการแจ้งเตือน</string>
     <string name="common_notify_channel_backup_title">ปัญหาการสำรองข้อมูล</string>
+    <string name="common_notify_channel_connect_body">คอมพิวเตอร์ที่จับคู่ผ่าน KDE Connect ได้ขอจับคู่ ส่งไฟล์ หรือส่งสัญญาณเตือนในขณะที่แป้นพิมพ์ถูกซ่อนอยู่</string>
+    <string name="common_notify_channel_connect_title">คอมพิวเตอร์ที่จับคู่แล้ว</string>
     <string name="common_notify_channel_downloads_body">ความคืบหน้าสำหรับพจนานุกรม โมเดลเสียง ส่วนเสริม และไฟล์อื่นๆ ที่แป้นพิมพ์ดึงข้อมูลมา และแสดงบรรทัดเมื่อเสร็จสิ้นหรือล้มเหลว</string>
     <string name="common_notify_channel_downloads_title">การดาวน์โหลด</string>
     <string name="common_notify_channel_keyboard_body">รายการถาวรในแถบแจ้งเตือนสำหรับแสดงแป้นพิมพ์และเลิกปักหมุด เฉพาะในขณะที่คุณเปิดใช้งานเท่านั้น</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">ไม่สามารถดาวน์โหลด %1$s ได้</string>
     <string name="common_notify_download_handwriting">ลายมือ %1$s</string>
     <string name="common_notify_download_progress">%1$s จาก %2$s</string>
+    <string name="common_notify_download_translate">การแปลแบบออฟไลน์ %1$s</string>
     <string name="common_notify_download_voice">เสียงออฟไลน์ %1$s</string>
     <string name="common_off">ปิด</string>
     <string name="common_ok">ตกลง</string>

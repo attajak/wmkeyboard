@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Час от деня</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Изгрев и залез</string>
     <string name="core_settings_auto_theme_trigger_system_label">Системна светла или тъмна тема</string>
+    <string name="core_settings_clipboard_view_grid_label">Мрежа</string>
+    <string name="core_settings_clipboard_view_list_label">Списък</string>
     <string name="core_settings_copied_code_chip_any_field_label">Всяко поле</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Само полета с код</string>
     <string name="core_settings_copied_code_chip_off_label">Никога</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Панелът го скрива и кратък таймер го изтрива</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + цифра</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">След клавиша за пряк път</string>
+    <string name="core_settings_translate_engine_auto_label">Автоматично</string>
+    <string name="core_settings_translate_engine_on_device_label">На устройството</string>
+    <string name="core_settings_translate_engine_online_label">Онлайн</string>
 </resources>

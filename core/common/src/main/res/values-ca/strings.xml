@@ -46,6 +46,8 @@
     <string name="common_none">Cap</string>
     <string name="common_notify_channel_backup_body">Només quan una còpia de seguretat automàtica falla. Les còpies de seguretat reeixides són silencioses.</string>
     <string name="common_notify_channel_backup_title">Problemes de còpia de seguretat</string>
+    <string name="common_notify_channel_connect_body">Un ordinador vinculat mitjançant el KDE Connect ha demanat vincular-se, ha enviat un fitxer o ha fet un ping mentre el teclat estava ocult.</string>
+    <string name="common_notify_channel_connect_title">Ordinadors vinculats</string>
     <string name="common_notify_channel_downloads_body">Progrés per a diccionaris, models de veu, complements i altres fitxers que el teclat descarrega, i una línia quan un finalitza o falla.</string>
     <string name="common_notify_channel_downloads_title">Descàrregues</string>
     <string name="common_notify_channel_keyboard_body">Una entrada permanent a la cortina de notificacions per mostrar el teclat i desancorar-lo. Només mentre estigui activat.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">No s\'ha pogut descarregar %1$s</string>
     <string name="common_notify_download_handwriting">Escriptura a mà %1$s</string>
     <string name="common_notify_download_progress">%1$s de %2$s</string>
+    <string name="common_notify_download_translate">Traducció fora de línia de %1$s</string>
     <string name="common_notify_download_voice">Veu fora de línia %1$s</string>
     <string name="common_off">Desactivat</string>
     <string name="common_ok">D\'acord</string>

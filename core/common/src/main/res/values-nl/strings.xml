@@ -46,6 +46,8 @@
     <string name="common_none">Geen</string>
     <string name="common_notify_channel_backup_body">Alleen wanneer een automatische back-up mislukt. Succesvolle back-ups zijn stil.</string>
     <string name="common_notify_channel_backup_title">Back-upproblemen</string>
+    <string name="common_notify_channel_connect_body">Een computer gekoppeld via KDE Connect vroeg om koppeling, stuurde een bestand of gaf een ping terwijl het toetsenbord verborgen was.</string>
+    <string name="common_notify_channel_connect_title">Gekoppelde computers</string>
     <string name="common_notify_channel_downloads_body">Voortgang voor woordenboeken, stemmodellen, add-ons en andere bestanden die het toetsenbord ophaalt, en een melding wanneer er een klaar is of mislukt.</string>
     <string name="common_notify_channel_downloads_title">Downloads</string>
     <string name="common_notify_channel_keyboard_body">Een permanent item in het meldingenpaneel om het toetsenbord te tonen en los te koppelen. Alleen wanneer je dit inschakelt.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s kon niet worden gedownload</string>
     <string name="common_notify_download_handwriting">%1$s handschrift</string>
     <string name="common_notify_download_progress">%1$s van %2$s</string>
+    <string name="common_notify_download_translate">%1$s offline vertaling</string>
     <string name="common_notify_download_voice">%1$s offline stem</string>
     <string name="common_off">Uit</string>
     <string name="common_ok">OK</string>

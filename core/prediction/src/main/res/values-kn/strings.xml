@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">ದೊಡ್ಡದು</string>
     <string name="core_pred_wordlist_size_medium_label">ಮಧ್ಯಮ</string>
     <string name="core_pred_wordlist_size_small_label">ಸಣ್ಣ</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Android ನ ಸ್ವಂತ ಕೀಬೋರ್ಡ್ ಬಳಸುವ ಕ್ಯುರೇಟೆಡ್ ಪಟ್ಟಿ. ಕಡಿಮೆ ಪದಗಳು, ಅವುಗಳಲ್ಲಿ ಕಡಿಮೆ ಹೆಸರುಗಳು ಮತ್ತು ಅಕ್ಷರ ದೋಷಗಳು.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">ಸಬ್‌ಟೈಟಲ್‌ಗಳು ಮತ್ತು ವೆಬ್ ಪಠ್ಯದಿಂದ ಎಣಿಸಲಾಗಿದೆ. ಹೆಚ್ಚಿನ ಹೆಸರುಗಳು, ಆಡುಮಾತು ಮತ್ತು ಅಕ್ಷರ ದೋಷಗಳೊಂದಿಗೆ ಇನ್ನೂ ಅನೇಕ ಪದಗಳು.</string>
+    <string name="core_pred_wordlist_source_frequency_label">ಆವರ್ತನ</string>
     <string name="core_pred_wordlist_variant_brazil_label">ಬ್ರೆಜಿಲ್</string>
     <string name="core_pred_wordlist_variant_europe_label">ಯುರೋಪ್</string>
+    <string name="core_pred_wordlist_variant_uk_label">ಯುನೈಟೆಡ್ ಕಿಂಗ್‌ಡಮ್</string>
+    <string name="core_pred_wordlist_variant_us_label">ಯುನೈಟೆಡ್ ಸ್ಟೇಟ್ಸ್</string>
 </resources>

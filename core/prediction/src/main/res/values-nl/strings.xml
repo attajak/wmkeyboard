@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Groot</string>
     <string name="core_pred_wordlist_size_medium_label">Gemiddeld</string>
     <string name="core_pred_wordlist_size_small_label">Klein</string>
+    <string name="core_pred_wordlist_source_aosp_detail">De samengestelde lijst die het eigen toetsenbord van Android gebruikt. Minder woorden, met minder namen en typefouten daartussen.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Geteld op basis van ondertitels en webteksten. Veel meer woorden, met meer namen, straattaal en typefouten.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Frequentie</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brazilië</string>
     <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Verenigd Koninkrijk</string>
+    <string name="core_pred_wordlist_variant_us_label">Verenigde Staten</string>
 </resources>

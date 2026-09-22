@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Günün saati</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Gün doğumu ve gün batımı</string>
     <string name="core_settings_auto_theme_trigger_system_label">Sistem açık veya koyu</string>
+    <string name="core_settings_clipboard_view_grid_label">Izgara</string>
+    <string name="core_settings_clipboard_view_list_label">Liste</string>
     <string name="core_settings_copied_code_chip_any_field_label">Herhangi bir alan</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Yalnızca kod kutuları</string>
     <string name="core_settings_copied_code_chip_off_label">Asla</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Panel bunu gizler ve kısa bir zamanlayıcı ile siler</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + sayı</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Kısayol tuşundan sonra</string>
+    <string name="core_settings_translate_engine_auto_label">Otomatik</string>
+    <string name="core_settings_translate_engine_on_device_label">Cihaz üzerinde</string>
+    <string name="core_settings_translate_engine_online_label">Çevrimiçi</string>
 </resources>

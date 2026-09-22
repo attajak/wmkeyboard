@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">بزرگ</string>
     <string name="core_pred_wordlist_size_medium_label">متوسط</string>
     <string name="core_pred_wordlist_size_small_label">کوچک</string>
+    <string name="core_pred_wordlist_source_aosp_detail">فهرست منتخب که صفحه‌کلید خود اندروید استفاده می‌کند. کلمات کمتر، با نام‌ها و غلط‌های املایی کمتر در میان آن‌ها.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">شمرده شده از زیرنویس‌ها و متن‌های وب. کلمات بسیار بیشتر، با نام‌ها، اصطلاحات عامیانه و غلط‌های تایپی بیشتر.</string>
+    <string name="core_pred_wordlist_source_frequency_label">بسامد</string>
     <string name="core_pred_wordlist_variant_brazil_label">برزیل</string>
     <string name="core_pred_wordlist_variant_europe_label">اروپا</string>
+    <string name="core_pred_wordlist_variant_uk_label">بریتانیا</string>
+    <string name="core_pred_wordlist_variant_us_label">ایالات متحده</string>
 </resources>

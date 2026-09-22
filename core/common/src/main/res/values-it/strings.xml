@@ -46,6 +46,8 @@
     <string name="common_none">Nessuno</string>
     <string name="common_notify_channel_backup_body">Solo quando un backup automatico fallisce. I backup riusciti sono silenziosi.</string>
     <string name="common_notify_channel_backup_title">Problemi di backup</string>
+    <string name="common_notify_channel_connect_body">Un computer accoppiato tramite KDE Connect ha richiesto l\'accoppiamento, ha inviato un file o ha inviato un ping mentre la tastiera era nascosta.</string>
+    <string name="common_notify_channel_connect_title">Computer accoppiati</string>
     <string name="common_notify_channel_downloads_body">Avanzamento per dizionari, modelli vocali, componenti aggiuntivi e altri file recuperati dalla tastiera, e una riga quando uno termina o fallisce.</string>
     <string name="common_notify_channel_downloads_title">Download</string>
     <string name="common_notify_channel_keyboard_body">Una voce permanente nell\'area notifiche per mostrare la tastiera e sbloccarla. Solo mentre la tieni attiva.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Impossibile scaricare %1$s</string>
     <string name="common_notify_download_handwriting">Scrittura a mano %1$s</string>
     <string name="common_notify_download_progress">%1$s di %2$s</string>
+    <string name="common_notify_download_translate">Traduzione offline %1$s</string>
     <string name="common_notify_download_voice">Voce offline %1$s</string>
     <string name="common_off">Spento</string>
     <string name="common_ok">OK</string>

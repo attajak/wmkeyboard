@@ -46,6 +46,8 @@
     <string name="common_none">کوئی نہیں</string>
     <string name="common_notify_channel_backup_body">صرف تب جب خودکار بیک اپ ناکام ہو جائے۔ کامیاب بیک اپ خاموش ہوتے ہیں۔</string>
     <string name="common_notify_channel_backup_title">بیک اپ کے مسائل</string>
+    <string name="common_notify_channel_connect_body">KDE Connect کے ذریعے جوڑا گیا ایک کمپیوٹر جوڑا بنانے، فائل بھیجنے، یا کی بورڈ چھپے ہونے کے دوران پنگ کرنے کی درخواست کر رہا ہے۔</string>
+    <string name="common_notify_channel_connect_title">پیئرڈ کمپیوٹرز</string>
     <string name="common_notify_channel_downloads_body">لغتوں، صوتی ماڈلز، ایڈ آنز اور دیگر فائلوں کے لیے پیش رفت جنہیں کی بورڈ لاتا ہے، اور ایک لائن جب کوئی مکمل یا ناکام ہو جاتی ہے۔</string>
     <string name="common_notify_channel_downloads_title">ڈاؤن لوڈز</string>
     <string name="common_notify_channel_keyboard_body">کی بورڈ دکھانے اور اسے ان پن کرنے کے لیے شیڈ میں ایک مستقل اندراج۔ صرف تب جب آپ اسے آن کرتے ہیں۔</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s ڈاؤن لوڈ نہیں کیا جا سکا</string>
     <string name="common_notify_download_handwriting">%1$s ہینڈ رائٹنگ</string>
     <string name="common_notify_download_progress">%2$s میں سے %1$s</string>
+    <string name="common_notify_download_translate">%1$s آف لائن ترجمہ</string>
     <string name="common_notify_download_voice">%1$s آف لائن آواز</string>
     <string name="common_off">بند</string>
     <string name="common_ok">ٹھیک ہے</string>

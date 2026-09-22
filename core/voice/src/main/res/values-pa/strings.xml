@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">ਸਿਫਾਰਸ਼ੀ</string>
     <string name="core_voice_whisper_mel_bins_error">ਇਸ ਵੌਇਸ ਮਾਡਲ ਨੂੰ %1$s ਬੈਂਡ ਸਪੈਕਟ੍ਰੋਗ੍ਰਾਮ ਦੀ ਲੋੜ ਹੈ, ਜੋ ਉਸ ਫਾਈਲ ਨਾਲ ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ ਜਿਸ ਨਾਲ ਇਹ ਡਾਊਨਲੋਡ ਹੋਇਆ ਸੀ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਮਾਡਲ ਨੂੰ ਮਿਟਾਓ ਅਤੇ ਇਸਨੂੰ ਦੁਬਾਰਾ ਡਾਊਨਲੋਡ ਕਰੋ।</string>
     <string name="core_voice_whisper_model_load_error">ਵੌਇਸ ਮਾਡਲ ਲੋਡ ਨਹੀਂ ਹੋਇਆ। ਫ਼ਾਈਲ ਸ਼ਾਇਦ ਖਰਾਬ ਹੈ। ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਮਾਡਲ ਨੂੰ ਮਿਟਾਓ ਅਤੇ ਇਸਨੂੰ ਦੁਬਾਰਾ ਡਾਊਨਲੋਡ ਕਰੋ।</string>
+    <string name="core_voice_whisper_module_downloading">ਕੀਬੋਰਡ ਦਾ ਔਫਲਾਈਨ ਵੌਇਸ ਟਾਈਪਿੰਗ ਹਿੱਸਾ Google Play ਤੋਂ ਡਾਊਨਲੋਡ ਹੋ ਰਿਹਾ ਹੈ। ਥੋੜ੍ਹੀ ਦੇਰ ਬਾਅਦ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="core_voice_whisper_module_restart">ਔਫਲਾਈਨ ਵੌਇਸ ਟਾਈਪਿੰਗ ਭਾਗ ਇੰਸਟਾਲ ਹੋਣਾ ਪੂਰਾ ਹੋ ਗਿਆ ਹੈ। ਇਸਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ ਕੀਬੋਰਡ ਨੂੰ ਬੰਦ ਕਰਕੇ ਦੁਬਾਰਾ ਖੋਲ੍ਹੋ।</string>
     <string name="core_voice_whisper_transcribe_error">ਵੌਇਸ ਟਾਈਪਿੰਗ ਨੇ ਕੰਮ ਨਹੀਂ ਕੀਤਾ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ, ਜਾਂ ਇੱਕ ਛੋਟਾ ਮਾਡਲ ਚੁਣੋ।</string>
 </resources>

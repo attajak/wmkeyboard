@@ -46,6 +46,8 @@
     <string name="common_none">Brez</string>
     <string name="common_notify_channel_backup_body">Samo ko samodejno varnostno kopiranje ne uspe. Uspešne varnostne kopije so tihe.</string>
     <string name="common_notify_channel_backup_title">Težave z varnostnim kopiranjem</string>
+    <string name="common_notify_channel_connect_body">Računalnik, seznanjen prek KDE Connect, je zahteval seznanitev, poslal datoteko ali poslal signal, medtem ko je bila tipkovnica skrita.</string>
+    <string name="common_notify_channel_connect_title">Seznanjeni računalniki</string>
     <string name="common_notify_channel_downloads_body">Napredek za slovarje, glasovne modele, dodatke in druge datoteke, ki jih tipkovnica pridobi, ter vrstica, ko se eden konča ali ne uspe.</string>
     <string name="common_notify_channel_downloads_title">Prenosi</string>
     <string name="common_notify_channel_keyboard_body">Trajni vnos v obvestilih za prikaz tipkovnice in njeno odpenjanje. Samo ko jo vklopite.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Prenos %1$s ni uspel</string>
     <string name="common_notify_download_handwriting">Rokopis %1$s</string>
     <string name="common_notify_download_progress">%1$s od %2$s</string>
+    <string name="common_notify_download_translate">%1$s prevajanje brez povezave</string>
     <string name="common_notify_download_voice">%1$s glas brez povezave</string>
     <string name="common_off">Izklopljeno</string>
     <string name="common_ok">V redu</string>

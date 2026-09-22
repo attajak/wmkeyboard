@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Inayopendekezwa</string>
     <string name="core_voice_whisper_mel_bins_error">Muundo huu wa sauti unahitaji spectrogram ya bendi ya %1$s, ambayo hailingani na faili iliyopakuliwa nayo. Futa muundo katika mipangilio na uipakue tena.</string>
     <string name="core_voice_whisper_model_load_error">Muundo wa sauti haukupakia. Faili inaweza kuwa imeharibika. Futa muundo katika mipangilio na uipakue tena.</string>
+    <string name="core_voice_whisper_module_downloading">Sehemu ya kuandika kwa sauti nje ya mtandao ya kibodi inapakuliwa kutoka Google Play. Jaribu tena baada ya muda mfupi.</string>
+    <string name="core_voice_whisper_module_restart">Sehemu ya kuandika kwa sauti nje ya mtandao imemaliza kusakinishwa. Funga na ufungue tena kibodi ili kuitumia.</string>
     <string name="core_voice_whisper_transcribe_error">Kuandika kwa kutumia sauti hakufanya kazi. Jaribu tena, au chagua modeli ndogo zaidi.</string>
 </resources>

@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Pretraži</string>
     <string name="core_content_selection_macro_share">Dijeli</string>
     <string name="core_content_selection_macro_sms">Poruka</string>
+    <string name="core_content_selection_macro_strip_trackers">Ukloni pratilice</string>
     <string name="core_content_selection_macro_time_zones">Zone</string>
     <string name="core_content_selection_macro_to_bangla">Bengalski</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Naziv dana, na primjer nedjelja</string>
     <string name="core_content_snippet_var_year_info">Godina, s četiri znamenke</string>
     <string name="core_content_sticker_pack_imported_label">Uvezene naljepnice</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Aplikacija je zadržala %1$d animiranu naljepnicu kao statičnu sliku.</item>
+        <item quantity="other">Aplikacija je zadržala %1$d animiranih naljepnica kao statične slike.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Aplikacija je odbacila \"%1$s\". Slika nedostaje.</string>
     <string name="core_content_sticker_repair_image_unreadable">Aplikacija je odbacila \"%1$s\". Aplikacija ne može pročitati njezinu sliku.</string>
     <plurals name="core_content_sticker_repair_kept_first">

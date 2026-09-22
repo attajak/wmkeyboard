@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">ದಿನದ ಸಮಯ</string>
     <string name="core_settings_auto_theme_trigger_sun_label">ಸೂರ್ಯೋದಯ ಮತ್ತು ಸೂರ್ಯಾಸ್ತ</string>
     <string name="core_settings_auto_theme_trigger_system_label">ಸಿಸ್ಟಮ್ ಲೈಟ್ ಅಥವಾ ಡಾರ್ಕ್</string>
+    <string name="core_settings_clipboard_view_grid_label">ಗ್ರಿಡ್</string>
+    <string name="core_settings_clipboard_view_list_label">ಪಟ್ಟಿ</string>
     <string name="core_settings_copied_code_chip_any_field_label">ಯಾವುದೇ ಕ್ಷೇತ್ರ</string>
     <string name="core_settings_copied_code_chip_code_fields_label">ಕೋಡ್ ಬಾಕ್ಸ್‌ಗಳು ಮಾತ್ರ</string>
     <string name="core_settings_copied_code_chip_off_label">ಎಂದಿಗೂ ಇಲ್ಲ</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">ಪ್ಯಾನಲ್ ಅದನ್ನು ಮರೆಮಾಡುತ್ತದೆ ಮತ್ತು ಸಣ್ಣ ಟೈಮರ್ ಅದನ್ನು ಅಳಿಸುತ್ತದೆ</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + ಸಂಖ್ಯೆ</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">ಶಾರ್ಟ್‌ಕಟ್ ಕೀಯ ನಂತರ</string>
+    <string name="core_settings_translate_engine_auto_label">ಸ್ವಯಂಚಾಲಿತ</string>
+    <string name="core_settings_translate_engine_on_device_label">ಸಾಧನದಲ್ಲಿ</string>
+    <string name="core_settings_translate_engine_online_label">ಆನ್‌ಲೈನ್</string>
 </resources>

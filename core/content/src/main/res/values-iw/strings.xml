@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">חיפוש</string>
     <string name="core_content_selection_macro_share">שיתוף</string>
     <string name="core_content_selection_macro_sms">הודעה</string>
+    <string name="core_content_selection_macro_strip_trackers">הסר עוקבים</string>
     <string name="core_content_selection_macro_time_zones">אזורי זמן</string>
     <string name="core_content_selection_macro_to_bangla">בנגלית</string>
     <string name="core_content_selection_macro_to_banglish">בנגליש</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">שם היום, לדוגמה יום ראשון</string>
     <string name="core_content_snippet_var_year_info">השנה, עם ארבע ספרות</string>
     <string name="core_content_sticker_pack_imported_label">מדבקות מיובאות</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">האפליקציה שמרה %1$d מדבקה מונפשת כתמונה סטטית.</item>
+        <item quantity="other">האפליקציה שמרה %1$d מדבקות מונפשות כתמונות סטטיות.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">האפליקציה הסירה את \"%1$s\". התמונה שלו חסרה.</string>
     <string name="core_content_sticker_repair_image_unreadable">האפליקציה הסירה את \"%1$s\". האפליקציה לא יכולה לקרוא את התמונה שלו.</string>
     <plurals name="core_content_sticker_repair_kept_first">

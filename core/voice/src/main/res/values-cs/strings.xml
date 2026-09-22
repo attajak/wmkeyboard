@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Doporučeno</string>
     <string name="core_voice_whisper_mel_bins_error">Tento hlasový model vyžaduje %1$s pásmový spektrogram, který neodpovídá souboru, se kterým byl stažen. Odstraňte model v nastavení a stáhněte jej znovu.</string>
     <string name="core_voice_whisper_model_load_error">Hlasový model se nenačetl. Soubor je pravděpodobně poškozen. Odstraňte model v nastavení a stáhněte jej znovu.</string>
+    <string name="core_voice_whisper_module_downloading">Offline část hlasového psaní klávesnice se stahuje z Google Play. Zkuste to za chvíli znovu.</string>
+    <string name="core_voice_whisper_module_restart">Instalace offline hlasového psaní byla dokončena. Pro použití klávesnici zavřete a znovu otevřete.</string>
     <string name="core_voice_whisper_transcribe_error">Hlasové psaní nefunguje. Zkuste to znovu nebo vyberte menší model.</string>
 </resources>

@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">جستجو</string>
     <string name="core_content_selection_macro_share">اشتراک‌گذاری</string>
     <string name="core_content_selection_macro_sms">پیام</string>
+    <string name="core_content_selection_macro_strip_trackers">حذف ردیاب‌ها</string>
     <string name="core_content_selection_macro_time_zones">مناطق</string>
     <string name="core_content_selection_macro_to_bangla">بنگالی</string>
     <string name="core_content_selection_macro_to_banglish">بنگلیش</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">نام روز، برای مثال یکشنبه</string>
     <string name="core_content_snippet_var_year_info">سال، با چهار رقم</string>
     <string name="core_content_sticker_pack_imported_label">استیکرهای واردشده</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">برنامه %1$d استیکر متحرک را به عنوان تصویر ثابت نگه داشت.</item>
+        <item quantity="other">برنامه %1$d استیکر متحرک را به عنوان تصاویر ثابت نگه داشت.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">برنامه \"%1$s\" را حذف کرد. تصویر آن موجود نیست.</string>
     <string name="core_content_sticker_repair_image_unreadable">برنامه \"%1$s\" را حذف کرد. برنامه نمی‌تواند تصویر آن را بخواند.</string>
     <plurals name="core_content_sticker_repair_kept_first">

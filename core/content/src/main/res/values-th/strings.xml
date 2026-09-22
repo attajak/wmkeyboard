@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">ค้นหา</string>
     <string name="core_content_selection_macro_share">แชร์</string>
     <string name="core_content_selection_macro_sms">ข้อความ</string>
+    <string name="core_content_selection_macro_strip_trackers">ลบตัวติดตาม</string>
     <string name="core_content_selection_macro_time_zones">โซนเวลา</string>
     <string name="core_content_selection_macro_to_bangla">ภาษาเบงกาลี</string>
     <string name="core_content_selection_macro_to_banglish">บังกลิช</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">ชื่อของวัน เช่น วันอาทิตย์</string>
     <string name="core_content_snippet_var_year_info">ปีแบบสี่หลัก</string>
     <string name="core_content_sticker_pack_imported_label">สติกเกอร์ที่นำเข้า</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">แอปเก็บสติกเกอร์เคลื่อนไหว %1$d รายการไว้เป็นภาพนิ่ง</item>
+        <item quantity="other">แอปเก็บสติกเกอร์เคลื่อนไหว %1$d รายการไว้เป็นภาพนิ่ง</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">แอปได้ลบ \"%1$s\" ออกไปแล้ว เนื่องจากรูปภาพหายไป</string>
     <string name="core_content_sticker_repair_image_unreadable">แอปละทิ้ง \"%1$s\" เนื่องจากไม่สามารถอ่านรูปภาพได้</string>
     <plurals name="core_content_sticker_repair_kept_first">

@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Paros laikas</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Saulėtekis ir saulėlydis</string>
     <string name="core_settings_auto_theme_trigger_system_label">Sistemos šviesi arba tamsi</string>
+    <string name="core_settings_clipboard_view_grid_label">Tinklelis</string>
+    <string name="core_settings_clipboard_view_list_label">Sąrašas</string>
     <string name="core_settings_copied_code_chip_any_field_label">Bet koks laukas</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Tik kodo laukeliai</string>
     <string name="core_settings_copied_code_chip_off_label">Niekada</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Skydelis jį paslepia, o trumpas laikmatis jį ištrina</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + skaičius</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Po sparčiojo klavišo</string>
+    <string name="core_settings_translate_engine_auto_label">Automatinis</string>
+    <string name="core_settings_translate_engine_on_device_label">Įrenginyje</string>
+    <string name="core_settings_translate_engine_online_label">Prisijungęs</string>
 </resources>

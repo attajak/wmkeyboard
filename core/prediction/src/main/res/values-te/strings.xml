@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">పెద్దది</string>
     <string name="core_pred_wordlist_size_medium_label">మధ్యస్థం</string>
     <string name="core_pred_wordlist_size_small_label">చిన్నది</string>
+    <string name="core_pred_wordlist_source_aosp_detail">ఆండ్రాయిడ్ సొంత కీబోర్డ్ ఉపయోగించే క్యూరేటెడ్ జాబితా. తక్కువ పదాలు, వాటిలో తక్కువ పేర్లు మరియు టైపింగ్ తప్పులు ఉంటాయి.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">సబ్‌టైటిల్స్ మరియు వెబ్ టెక్స్ట్ నుండి లెక్కించబడింది. మరిన్ని పేర్లు, యాస మరియు టైపింగ్ తప్పులతో కూడిన మరిన్ని పదాలు.</string>
+    <string name="core_pred_wordlist_source_frequency_label">ఫ్రీక్వెన్సీ</string>
     <string name="core_pred_wordlist_variant_brazil_label">బ్రెజిల్</string>
     <string name="core_pred_wordlist_variant_europe_label">యూరప్</string>
+    <string name="core_pred_wordlist_variant_uk_label">యునైటెడ్ కింగ్‌డమ్</string>
+    <string name="core_pred_wordlist_variant_us_label">యునైటెడ్ స్టేట్స్</string>
 </resources>

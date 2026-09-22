@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Lớn</string>
     <string name="core_pred_wordlist_size_medium_label">Trung bình</string>
     <string name="core_pred_wordlist_size_small_label">Nhỏ</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Danh sách được chọn lọc mà bàn phím của Android sử dụng. Ít từ hơn, với ít tên riêng và lỗi chính tả hơn.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Được đếm từ phụ đề và văn bản trên web. Nhiều từ hơn, bao gồm nhiều tên riêng, tiếng lóng và lỗi chính tả.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Tần suất</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brazil</string>
     <string name="core_pred_wordlist_variant_europe_label">Châu Âu</string>
+    <string name="core_pred_wordlist_variant_uk_label">Vương quốc Anh</string>
+    <string name="core_pred_wordlist_variant_us_label">Hoa Kỳ</string>
 </resources>

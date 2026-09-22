@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Ajánlott</string>
     <string name="core_voice_whisper_mel_bins_error">Ehhez a hangmodellhez %1$s sávos spektrogram szükséges, ami nem egyezik meg a fájllal, amivel letöltődött. Töröld a modellt a beállításokban, és töltsd le újra.</string>
     <string name="core_voice_whisper_model_load_error">A hangmodell nem töltődött be. A fájl valószínűleg sérült. Törölje a modellt a beállításokban, majd töltse le újra.</string>
+    <string name="core_voice_whisper_module_downloading">A billentyűzet offline hangalapú gépelési összetevője letöltése folyamatban a Google Playről. Próbáld újra egy pillanat múlva.</string>
+    <string name="core_voice_whisper_module_restart">Az offline hangalapú gépelés modul telepítése befejeződött. A használatához zárd be, majd nyisd meg újra a billentyűzetet.</string>
     <string name="core_voice_whisper_transcribe_error">A hangalapú gépelés nem működött. Próbálja újra, vagy válasszon kisebb modellt.</string>
 </resources>

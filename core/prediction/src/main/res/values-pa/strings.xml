@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">ਵੱਡਾ</string>
     <string name="core_pred_wordlist_size_medium_label">ਮੱਧਮ</string>
     <string name="core_pred_wordlist_size_small_label">ਛੋਟਾ</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Android ਦੇ ਆਪਣੇ ਕੀਬੋਰਡ ਦੁਆਰਾ ਵਰਤੀ ਜਾਂਦੀ ਕਿਉਰੇਟਿਡ ਸੂਚੀ। ਘੱਟ ਸ਼ਬਦ, ਜਿਨ੍ਹਾਂ ਵਿੱਚ ਘੱਟ ਨਾਮ ਅਤੇ ਟਾਈਪੋ ਸ਼ਾਮਲ ਹਨ।</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">ਸਬਟਾਈਟਲਾਂ ਅਤੇ ਵੈੱਬ ਟੈਕਸਟ ਤੋਂ ਗਿਣਿਆ ਗਿਆ। ਹੋਰ ਬਹੁਤ ਸਾਰੇ ਸ਼ਬਦ, ਜਿਨ੍ਹਾਂ ਵਿੱਚ ਹੋਰ ਨਾਮ, ਸਲੈਂਗ ਅਤੇ ਟਾਈਪੋ ਸ਼ਾਮਲ ਹਨ।</string>
+    <string name="core_pred_wordlist_source_frequency_label">ਫ੍ਰੀਕੁਐਂਸੀ</string>
     <string name="core_pred_wordlist_variant_brazil_label">ਬ੍ਰਾਜ਼ੀਲ</string>
     <string name="core_pred_wordlist_variant_europe_label">ਯੂਰਪ</string>
+    <string name="core_pred_wordlist_variant_uk_label">ਯੂਨਾਈਟਿਡ ਕਿੰਗਡਮ</string>
+    <string name="core_pred_wordlist_variant_us_label">ਸੰਯੁਕਤ ਰਾਜ</string>
 </resources>

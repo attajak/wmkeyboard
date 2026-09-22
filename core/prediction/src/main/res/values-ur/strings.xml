@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">بڑا</string>
     <string name="core_pred_wordlist_size_medium_label">درمیانہ</string>
     <string name="core_pred_wordlist_size_small_label">چھوٹا</string>
+    <string name="core_pred_wordlist_source_aosp_detail">اینڈرائیڈ کے اپنے کی بورڈ کی تیار کردہ فہرست۔ کم الفاظ، جن میں کم نام اور ٹائپنگ کی غلطیاں ہیں۔</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">سب ٹائٹلز اور ویب ٹیکسٹ سے شمار کیا گیا۔ مزید الفاظ، مزید ناموں، بول چال اور ٹائپنگ کی غلطیوں کے ساتھ۔</string>
+    <string name="core_pred_wordlist_source_frequency_label">تکرار</string>
     <string name="core_pred_wordlist_variant_brazil_label">برازیل</string>
     <string name="core_pred_wordlist_variant_europe_label">یورپ</string>
+    <string name="core_pred_wordlist_variant_uk_label">برطانیہ</string>
+    <string name="core_pred_wordlist_variant_us_label">ریاستہائے متحدہ</string>
 </resources>

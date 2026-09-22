@@ -46,6 +46,8 @@
     <string name="common_none">Няма</string>
     <string name="common_notify_channel_backup_body">Само когато автоматичното архивиране е неуспешно. Успешните архивирания са тихи.</string>
     <string name="common_notify_channel_backup_title">Проблеми с архивирането</string>
+    <string name="common_notify_channel_connect_body">Компютър, сдвоен чрез KDE Connect, поиска сдвояване, изпрати файл или изпрати сигнал, докато клавиатурата е скрита.</string>
+    <string name="common_notify_channel_connect_title">Сдвоени компютри</string>
     <string name="common_notify_channel_downloads_body">Напредък за речници, гласови модели, добавки и други файлове, които клавиатурата изтегля, и известие при завършване или грешка.</string>
     <string name="common_notify_channel_downloads_title">Изтегляния</string>
     <string name="common_notify_channel_keyboard_body">Постоянен запис в панела за известия за показване и откачане на клавиатурата. Само докато е включена.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s не можа да бъде изтеглен</string>
     <string name="common_notify_download_handwriting">%1$s ръкописен текст</string>
     <string name="common_notify_download_progress">%1$s от %2$s</string>
+    <string name="common_notify_download_translate">%1$s офлайн превод</string>
     <string name="common_notify_download_voice">%1$s офлайн глас</string>
     <string name="common_off">Изключено</string>
     <string name="common_ok">OK</string>

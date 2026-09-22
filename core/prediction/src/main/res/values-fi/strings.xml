@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Suuri</string>
     <string name="core_pred_wordlist_size_medium_label">Keskikokoinen</string>
     <string name="core_pred_wordlist_size_small_label">Pieni</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Androidin oman näppäimistön käyttämä kuratoitu sanalista. Vähemmän sanoja, ja joukossa on vähemmän nimiä ja kirjoitusvirheitä.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Laskettu tekstityksistä ja verkkotekstistä. Paljon enemmän sanoja, mukaan lukien nimiä, slangia ja kirjoitusvirheitä.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Taajuus</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brasilia</string>
     <string name="core_pred_wordlist_variant_europe_label">Eurooppa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Yhdistynyt kuningaskunta</string>
+    <string name="core_pred_wordlist_variant_us_label">Yhdysvallat</string>
 </resources>

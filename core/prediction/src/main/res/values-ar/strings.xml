@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">كبير</string>
     <string name="core_pred_wordlist_size_medium_label">متوسط</string>
     <string name="core_pred_wordlist_size_small_label">صغير</string>
+    <string name="core_pred_wordlist_source_aosp_detail">القائمة المختارة التي تستخدمها لوحة مفاتيح أندرويد الخاصة. كلمات أقل، مع عدد أقل من الأسماء والأخطاء المطبعية بينها.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">تم احتسابها من الترجمات ونصوص الويب. المزيد من الكلمات، مع المزيد من الأسماء والعامية والأخطاء المطبعية.</string>
+    <string name="core_pred_wordlist_source_frequency_label">التكرار</string>
     <string name="core_pred_wordlist_variant_brazil_label">البرازيل</string>
     <string name="core_pred_wordlist_variant_europe_label">أوروبا</string>
+    <string name="core_pred_wordlist_variant_uk_label">المملكة المتحدة</string>
+    <string name="core_pred_wordlist_variant_us_label">الولايات المتحدة</string>
 </resources>

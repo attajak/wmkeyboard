@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Velké</string>
     <string name="core_pred_wordlist_size_medium_label">Střední</string>
     <string name="core_pred_wordlist_size_small_label">Malý</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Kurátorský seznam, který používá vlastní klávesnice Androidu. Méně slov, s méně jmény a překlepy mezi nimi.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Počítáno z titulků a textů na webu. Mnohem více slov, včetně jmen, slangu a překlepů.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Frekvence</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brazílie</string>
     <string name="core_pred_wordlist_variant_europe_label">Evropa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Spojené království</string>
+    <string name="core_pred_wordlist_variant_us_label">Spojené státy</string>
 </resources>

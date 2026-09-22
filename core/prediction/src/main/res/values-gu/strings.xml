@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">મોટું</string>
     <string name="core_pred_wordlist_size_medium_label">મધ્યમ</string>
     <string name="core_pred_wordlist_size_small_label">નાનું</string>
+    <string name="core_pred_wordlist_source_aosp_detail">એન્ડ્રોઇડના પોતાના કીબોર્ડ દ્વારા વપરાતી ક્યુરેટેડ સૂચિ. ઓછા શબ્દો, જેમાં ઓછા નામ અને ટાઇપો છે.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">સબટાઈટલ અને વેબ ટેક્સ્ટમાંથી ગણતરી કરેલ. વધુ શબ્દો, વધુ નામો, અશિષ્ટ ભાષા અને ટાઈપિંગની ભૂલો સાથે.</string>
+    <string name="core_pred_wordlist_source_frequency_label">આવર્તન</string>
     <string name="core_pred_wordlist_variant_brazil_label">બ્રાઝિલ</string>
     <string name="core_pred_wordlist_variant_europe_label">યુરોપ</string>
+    <string name="core_pred_wordlist_variant_uk_label">યુનાઇટેડ કિંગડમ</string>
+    <string name="core_pred_wordlist_variant_us_label">યુનાઇટેડ સ્ટેટ્સ</string>
 </resources>

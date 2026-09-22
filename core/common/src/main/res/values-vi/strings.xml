@@ -46,6 +46,8 @@
     <string name="common_none">Không có</string>
     <string name="common_notify_channel_backup_body">Chỉ khi sao lưu tự động thất bại. Các bản sao lưu thành công sẽ không có thông báo.</string>
     <string name="common_notify_channel_backup_title">Sự cố sao lưu</string>
+    <string name="common_notify_channel_connect_body">Một máy tính đã ghép nối qua KDE Connect yêu cầu ghép nối, gửi tệp hoặc đã ping trong khi bàn phím đang ẩn.</string>
+    <string name="common_notify_channel_connect_title">Máy tính đã ghép nối</string>
     <string name="common_notify_channel_downloads_body">Tiến trình tải xuống từ điển, mô hình giọng nói, tiện ích bổ sung và các tệp khác mà bàn phím tìm nạp, cùng với thông báo khi hoàn tất hoặc thất bại.</string>
     <string name="common_notify_channel_downloads_title">Tải xuống</string>
     <string name="common_notify_channel_keyboard_body">Một mục vĩnh viễn trong bóng thông báo để hiển thị bàn phím và bỏ ghim nó. Chỉ khi bạn bật nó lên.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Không thể tải xuống %1$s</string>
     <string name="common_notify_download_handwriting">Chữ viết tay %1$s</string>
     <string name="common_notify_download_progress">%1$s trên %2$s</string>
+    <string name="common_notify_download_translate">Dịch ngoại tuyến %1$s</string>
     <string name="common_notify_download_voice">Giọng nói ngoại tuyến %1$s</string>
     <string name="common_off">Tắt</string>
     <string name="common_ok">OK</string>

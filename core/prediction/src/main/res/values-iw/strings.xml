@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">גדול</string>
     <string name="core_pred_wordlist_size_medium_label">בינוני</string>
     <string name="core_pred_wordlist_size_small_label">קטן</string>
+    <string name="core_pred_wordlist_source_aosp_detail">הרשימה האוצרת שבה משתמשת המקלדת של אנדרואיד. פחות מילים, עם פחות שמות ושגיאות הקלדה ביניהן.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">נספר מכתוביות וטקסט מהאינטרנט. הרבה יותר מילים, עם יותר שמות, סלנג ושגיאות הקלדה.</string>
+    <string name="core_pred_wordlist_source_frequency_label">תדירות</string>
     <string name="core_pred_wordlist_variant_brazil_label">ברזיל</string>
     <string name="core_pred_wordlist_variant_europe_label">אירופה</string>
+    <string name="core_pred_wordlist_variant_uk_label">הממלכה המאוחדת</string>
+    <string name="core_pred_wordlist_variant_us_label">ארצות הברית</string>
 </resources>

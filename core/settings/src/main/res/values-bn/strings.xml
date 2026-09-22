@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">দিনের সময়</string>
     <string name="core_settings_auto_theme_trigger_sun_label">সূর্যোদয় এবং সূর্যাস্ত</string>
     <string name="core_settings_auto_theme_trigger_system_label">সিস্টেম লাইট বা ডার্ক</string>
+    <string name="core_settings_clipboard_view_grid_label">গ্রিড</string>
+    <string name="core_settings_clipboard_view_list_label">তালিকা</string>
     <string name="core_settings_copied_code_chip_any_field_label">যেকোনো ফিল্ড</string>
     <string name="core_settings_copied_code_chip_code_fields_label">শুধুমাত্র কোড বক্স</string>
     <string name="core_settings_copied_code_chip_off_label">কখনোই না</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">প্যানেলটি এটি লুকিয়ে রাখে এবং একটি ছোট টাইমার এটি মুছে ফেলে</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + সংখ্যা</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">শর্টকাট কী-এর পরে</string>
+    <string name="core_settings_translate_engine_auto_label">স্বয়ংক্রিয়</string>
+    <string name="core_settings_translate_engine_on_device_label">ডিভাইসে</string>
+    <string name="core_settings_translate_engine_online_label">অনলাইন</string>
 </resources>

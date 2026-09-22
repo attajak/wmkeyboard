@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">खोजें</string>
     <string name="core_content_selection_macro_share">साझा करें</string>
     <string name="core_content_selection_macro_sms">संदेश</string>
+    <string name="core_content_selection_macro_strip_trackers">ट्रैकर्स हटाएं</string>
     <string name="core_content_selection_macro_time_zones">ज़ोन</string>
     <string name="core_content_selection_macro_to_bangla">बंगाली</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">दिन का नाम, उदाहरण के लिए रविवार</string>
     <string name="core_content_snippet_var_year_info">वर्ष, चार अंकों के साथ</string>
     <string name="core_content_sticker_pack_imported_label">आयातित स्टिकर</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">ऐप ने %1$d एनिमेटेड स्टिकर को स्थिर छवि के रूप में रखा।</item>
+        <item quantity="other">ऐप ने %1$d एनिमेटेड स्टिकर को स्थिर छवियों के रूप में रखा।</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">ऐप ने \"%1$s\" को हटा दिया। इसकी छवि गायब है।</string>
     <string name="core_content_sticker_repair_image_unreadable">ऐप ने \"%1$s\" को हटा दिया। ऐप इसकी छवि को पढ़ नहीं सकता।</string>
     <plurals name="core_content_sticker_repair_kept_first">

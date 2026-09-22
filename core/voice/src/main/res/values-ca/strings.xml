@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Recomanat</string>
     <string name="core_voice_whisper_mel_bins_error">Aquest model de veu necessita un espectrograma de banda %1$s, que no coincideix amb el fitxer amb què s\'ha descarregat. Suprimeix el model a la configuració i torna\'l a descarregar.</string>
     <string name="core_voice_whisper_model_load_error">El model de veu no s\'ha carregat. És possible que el fitxer estigui danyat. Suprimeix el model a la configuració i torna-lo a descarregar.</string>
+    <string name="core_voice_whisper_module_downloading">La part d\'escriptura per veu fora de línia del teclat s\'està descarregant des de Google Play. Torneu-ho a provar en un moment.</string>
+    <string name="core_voice_whisper_module_restart">La part d\'escriptura per veu fora de línia s\'acaba d\'instal·lar. Tanqueu i torneu a obrir el teclat per utilitzar-la.</string>
     <string name="core_voice_whisper_transcribe_error">L\'escriptura per veu no ha funcionat. Torna-ho a provar o selecciona un model més petit.</string>
 </resources>

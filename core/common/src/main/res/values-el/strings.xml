@@ -46,6 +46,8 @@
     <string name="common_none">Κανένα</string>
     <string name="common_notify_channel_backup_body">Μόνο όταν αποτυγχάνει ένα αυτόματο αντίγραφο ασφαλείας. Τα επιτυχημένα αντίγραφα ασφαλείας είναι αθόρυβα.</string>
     <string name="common_notify_channel_backup_title">Προβλήματα αντιγράφων ασφαλείας</string>
+    <string name="common_notify_channel_connect_body">Ένας υπολογιστής συνδεδεμένος μέσω του KDE Connect ζήτησε σύζευξη, έστειλε ένα αρχείο ή έστειλε σήμα (ping) ενώ το πληκτρολόγιο ήταν κρυμμένο.</string>
+    <string name="common_notify_channel_connect_title">Συνδεδεμένοι υπολογιστές</string>
     <string name="common_notify_channel_downloads_body">Πρόοδος για λεξικά, φωνητικά μοντέλα, πρόσθετα και άλλα αρχεία που ανακτά το πληκτρολόγιο, και μια ειδοποίηση όταν ολοκληρώνεται ή αποτυγχάνει μια λήψη.</string>
     <string name="common_notify_channel_downloads_title">Λήψεις</string>
     <string name="common_notify_channel_keyboard_body">Μια μόνιμη καταχώριση στη σκιά ειδοποιήσεων για την εμφάνιση του πληκτρολογίου και την αποδέσμευσή του. Μόνο όσο είναι ενεργοποιημένο.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Η λήψη του %1$s απέτυχε</string>
     <string name="common_notify_download_handwriting">Χειρόγραφο %1$s</string>
     <string name="common_notify_download_progress">%1$s από %2$s</string>
+    <string name="common_notify_download_translate">%1$s μετάφραση εκτός σύνδεσης</string>
     <string name="common_notify_download_voice">%1$s φωνή εκτός σύνδεσης</string>
     <string name="common_off">Απενεργοποιημένο</string>
     <string name="common_ok">OK</string>

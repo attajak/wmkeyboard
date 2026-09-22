@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">शिफारस केलेले</string>
     <string name="core_voice_whisper_mel_bins_error">या व्हॉइस मॉडेलला %1$s बँड स्पेक्ट्रोग्रामची आवश्यकता आहे, जे डाउनलोड केलेल्या फाइलशी जुळत नाही. सेटिंग्जमध्ये मॉडेल हटवा आणि ते पुन्हा डाउनलोड करा.</string>
     <string name="core_voice_whisper_model_load_error">व्हॉइस मॉडेल लोड झाले नाही. फाईल कदाचित खराब झाली असावी. सेटिंग्जमध्ये मॉडेल हटवा आणि पुन्हा डाउनलोड करा.</string>
+    <string name="core_voice_whisper_module_downloading">कीबोर्डचा ऑफलाइन व्हॉइस टायपिंग भाग Google Play वरून डाउनलोड होत आहे. थोड्या वेळाने पुन्हा प्रयत्न करा.</string>
+    <string name="core_voice_whisper_module_restart">ऑफलाइन व्हॉइस टायपिंगचा भाग इन्स्टॉल होऊन पूर्ण झाला आहे. ते वापरण्यासाठी कीबोर्ड बंद करून पुन्हा उघडा.</string>
     <string name="core_voice_whisper_transcribe_error">व्हॉइस टायपिंग काम करत नाहीये. पुन्हा प्रयत्न करा किंवा लहान मॉडेल निवडा.</string>
 </resources>

@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Didelis</string>
     <string name="core_pred_wordlist_size_medium_label">Vidutinis</string>
     <string name="core_pred_wordlist_size_small_label">Mažas</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Kuruojamas sąrašas, kurį naudoja pati „Android“ klaviatūra. Mažiau žodžių, tarp jų mažiau vardų ir rašybos klaidų.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Suskaičiuota iš subtitrų ir žiniatinklio tekstų. Daug daugiau žodžių, įskaitant vardus, žargoną ir rašybos klaidas.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Dažnumas</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brazilija</string>
     <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Jungtinė Karalystė</string>
+    <string name="core_pred_wordlist_variant_us_label">Jungtinės Valstijos</string>
 </resources>

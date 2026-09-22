@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">Recommandé</string>
     <string name="core_voice_whisper_mel_bins_error">Ce modèle vocal nécessite un spectrogramme à %1$s bandes, ce qui ne correspond pas au fichier avec lequel il a été téléchargé. Supprimez le modèle dans les paramètres et téléchargez-le à nouveau.</string>
     <string name="core_voice_whisper_model_load_error">Le modèle vocal n\'a pas pu être chargé. Le fichier est peut-être endommagé. Supprimez le modèle dans les paramètres et téléchargez-le à nouveau.</string>
+    <string name="core_voice_whisper_module_downloading">Le composant de saisie vocale hors ligne du clavier est en cours de téléchargement depuis Google Play. Réessayez dans un instant.</string>
+    <string name="core_voice_whisper_module_restart">La saisie vocale hors ligne vient de terminer son installation. Fermez et rouvrez le clavier pour l\'utiliser.</string>
     <string name="core_voice_whisper_transcribe_error">La saisie vocale n\'a pas fonctionné. Réessayez ou sélectionnez un modèle plus petit.</string>
 </resources>

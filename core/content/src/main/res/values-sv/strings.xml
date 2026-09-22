@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Sök</string>
     <string name="core_content_selection_macro_share">Dela</string>
     <string name="core_content_selection_macro_sms">Meddelande</string>
+    <string name="core_content_selection_macro_strip_trackers">Ta bort spårare</string>
     <string name="core_content_selection_macro_time_zones">Zoner</string>
     <string name="core_content_selection_macro_to_bangla">Bengali</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Namnet på dagen, till exempel söndag</string>
     <string name="core_content_snippet_var_year_info">Året, med fyra siffror</string>
     <string name="core_content_sticker_pack_imported_label">Importerade klistermärken</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Appen behöll %1$d animerad dekal som en stillbild.</item>
+        <item quantity="other">Appen behöll %1$d animerade dekaler som stillbilder.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Appen tappade \"%1$s\". Dess bild saknas.</string>
     <string name="core_content_sticker_repair_image_unreadable">Appen tappade \"%1$s\". Appen kan inte läsa dess bild.</string>
     <plurals name="core_content_sticker_repair_kept_first">

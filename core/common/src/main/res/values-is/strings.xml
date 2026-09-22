@@ -46,6 +46,8 @@
     <string name="common_none">Ekkert</string>
     <string name="common_notify_channel_backup_body">Aðeins þegar sjálfvirkt afrit mistekst. Árangursrík afrit eru hljóðlaus.</string>
     <string name="common_notify_channel_backup_title">Vandamál við öryggisafritun</string>
+    <string name="common_notify_channel_connect_body">Tölva pöruð í gegnum KDE Connect bað um pörun, sendi skrá eða sendi ping á meðan lyklaborðið var falið.</string>
+    <string name="common_notify_channel_connect_title">Paraðar tölvur</string>
     <string name="common_notify_channel_downloads_body">Framvinda fyrir orðabækur, raddlíkön, viðbætur og aðrar skrár sem lyklaborðið sækir, og lína þegar einhver lýkur eða mistekst.</string>
     <string name="common_notify_channel_downloads_title">Niðurhal</string>
     <string name="common_notify_channel_keyboard_body">Varanleg færsla í skugganum til að sýna lyklaborðið og losa það. Aðeins á meðan þú kveikir á því.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Ekki tókst að hlaða niður %1$s</string>
     <string name="common_notify_download_handwriting">%1$s rithönd</string>
     <string name="common_notify_download_progress">%1$s af %2$s</string>
+    <string name="common_notify_download_translate">%1$s ótengd þýðing</string>
     <string name="common_notify_download_voice">%1$s raddpakki án nettengingar</string>
     <string name="common_off">Slökkt</string>
     <string name="common_ok">Í lagi</string>

@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Veliko</string>
     <string name="core_pred_wordlist_size_medium_label">Srednje</string>
     <string name="core_pred_wordlist_size_small_label">Malo</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Odabrani popis koji koristi Androidova vlastita tipkovnica. Manje riječi, s manje imena i tipfelera među njima.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Izbrojano iz titlova i web teksta. Puno više riječi, s više imena, žargona i tipfelera.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Učestalost</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brazil</string>
     <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Ujedinjeno Kraljevstvo</string>
+    <string name="core_pred_wordlist_variant_us_label">Sjedinjene Američke Države</string>
 </resources>

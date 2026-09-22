@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Hora del día</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Amanecer y atardecer</string>
     <string name="core_settings_auto_theme_trigger_system_label">Sistema claro u oscuro</string>
+    <string name="core_settings_clipboard_view_grid_label">Cuadrícula</string>
+    <string name="core_settings_clipboard_view_list_label">Lista</string>
     <string name="core_settings_copied_code_chip_any_field_label">Cualquier campo</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Solo cuadros de código</string>
     <string name="core_settings_copied_code_chip_off_label">Nunca</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">El panel lo oculta y un temporizador breve lo elimina</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + número</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Después de la tecla de acceso directo</string>
+    <string name="core_settings_translate_engine_auto_label">Automático</string>
+    <string name="core_settings_translate_engine_on_device_label">En el dispositivo</string>
+    <string name="core_settings_translate_engine_online_label">En línea</string>
 </resources>

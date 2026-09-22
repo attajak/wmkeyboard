@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">ദിവസത്തിലെ സമയം</string>
     <string name="core_settings_auto_theme_trigger_sun_label">സൂര്യോദയവും സൂര്യാസ്തമയവും</string>
     <string name="core_settings_auto_theme_trigger_system_label">സിസ്റ്റം ലൈറ്റ് അല്ലെങ്കിൽ ഡാർക്ക്</string>
+    <string name="core_settings_clipboard_view_grid_label">ഗ്രിഡ്</string>
+    <string name="core_settings_clipboard_view_list_label">പട്ടിക</string>
     <string name="core_settings_copied_code_chip_any_field_label">ഏതെങ്കിലും ഫീൽഡ്</string>
     <string name="core_settings_copied_code_chip_code_fields_label">കോഡ് ബോക്സുകൾ മാത്രം</string>
     <string name="core_settings_copied_code_chip_off_label">ഒരിക്കലും വേണ്ട</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">പാനൽ അത് മറയ്ക്കുന്നു, ഒരു ചെറിയ ടൈമർ അത് ഇല്ലാതാക്കുന്നു</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + നമ്പർ</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">ഷോർട്ട്കട്ട് കീയ്ക്ക് ശേഷം</string>
+    <string name="core_settings_translate_engine_auto_label">ഓട്ടോമാറ്റിക്</string>
+    <string name="core_settings_translate_engine_on_device_label">ഉപകരണത്തിൽ</string>
+    <string name="core_settings_translate_engine_online_label">ഓൺലൈൻ</string>
 </resources>

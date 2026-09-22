@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Büyük</string>
     <string name="core_pred_wordlist_size_medium_label">Orta</string>
     <string name="core_pred_wordlist_size_small_label">Küçük</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Android\'in kendi klavyesinin kullandığı derlenmiş liste. Daha az kelime, daha az isim ve yazım hatası içerir.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Altyazılardan ve web metinlerinden sayılmıştır. Daha fazla isim, argo ve yazım hatası içeren çok daha fazla kelime.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Sıklık</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brezilya</string>
     <string name="core_pred_wordlist_variant_europe_label">Avrupa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Birleşik Krallık</string>
+    <string name="core_pred_wordlist_variant_us_label">Amerika Birleşik Devletleri</string>
 </resources>

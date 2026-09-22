@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">Mare</string>
     <string name="core_pred_wordlist_size_medium_label">Mediu</string>
     <string name="core_pred_wordlist_size_small_label">Mică</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Lista selectată utilizată de tastatura proprie Android. Mai puține cuvinte, cu mai puține nume și greșeli de scriere printre ele.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">Numărate din subtitrări și text web. Mult mai multe cuvinte, cu mai multe nume, argou și greșeli de scriere.</string>
+    <string name="core_pred_wordlist_source_frequency_label">Frecvență</string>
     <string name="core_pred_wordlist_variant_brazil_label">Brazilia</string>
     <string name="core_pred_wordlist_variant_europe_label">Europa</string>
+    <string name="core_pred_wordlist_variant_uk_label">Regatul Unit</string>
+    <string name="core_pred_wordlist_variant_us_label">Statele Unite</string>
 </resources>

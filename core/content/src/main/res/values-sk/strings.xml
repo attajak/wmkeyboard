@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Hľadať</string>
     <string name="core_content_selection_macro_share">Zdieľať</string>
     <string name="core_content_selection_macro_sms">Správa</string>
+    <string name="core_content_selection_macro_strip_trackers">Odstrániť sledovacie parametre</string>
     <string name="core_content_selection_macro_time_zones">Časové pásma</string>
     <string name="core_content_selection_macro_to_bangla">Bengálčina</string>
     <string name="core_content_selection_macro_to_banglish">Bangličtina</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Názov dňa, napríklad nedeľa</string>
     <string name="core_content_snippet_var_year_info">Rok, štvormiestny</string>
     <string name="core_content_sticker_pack_imported_label">Importované nálepky</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Aplikácia ponechala %1$d animovanú nálepku ako statický obrázok.</item>
+        <item quantity="other">Aplikácia ponechala %1$d animovaných nálepiek ako statické obrázky.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Aplikácia vynechala „%1$s“. Chýba jej obrázok.</string>
     <string name="core_content_sticker_repair_image_unreadable">Aplikácia zahodila \"%1$s\". Aplikácia nedokáže prečítať jej obrázok.</string>
     <plurals name="core_content_sticker_repair_kept_first">

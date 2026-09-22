@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">অনুসন্ধান</string>
     <string name="core_content_selection_macro_share">শেয়ার করুন</string>
     <string name="core_content_selection_macro_sms">মেসেজ</string>
+    <string name="core_content_selection_macro_strip_trackers">ট্র্যাকারগুলি সরান</string>
     <string name="core_content_selection_macro_time_zones">জোনস</string>
     <string name="core_content_selection_macro_to_bangla">বাংলা</string>
     <string name="core_content_selection_macro_to_banglish">বাংলিশ</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">দিনের নাম, উদাহরণস্বরূপ রবিবার</string>
     <string name="core_content_snippet_var_year_info">বছর, চার অঙ্কের সংখ্যায়</string>
     <string name="core_content_sticker_pack_imported_label">ইমপোর্ট করা স্টিকার</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">অ্যাপটি %1$dটি অ্যানিমেটেড স্টিকারকে স্থির ছবি হিসেবে রেখেছে।</item>
+        <item quantity="other">অ্যাপটি %1$dটি অ্যানিমেটেড স্টিকারকে স্থির ছবি হিসেবে রেখেছে।</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">অ্যাপটি \"%1$s\" বাদ দিয়েছে। এর ছবি খুঁজে পাওয়া যাচ্ছে না।</string>
     <string name="core_content_sticker_repair_image_unreadable">অ্যাপটি \"%1$s\" ড্রপ করেছে। অ্যাপটি এর ছবি পড়তে পারছে না।</string>
     <plurals name="core_content_sticker_repair_kept_first">

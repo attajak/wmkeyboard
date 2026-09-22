@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">शोधा</string>
     <string name="core_content_selection_macro_share">शेअर करा</string>
     <string name="core_content_selection_macro_sms">संदेश</string>
+    <string name="core_content_selection_macro_strip_trackers">ट्रॅकर्स काढा</string>
     <string name="core_content_selection_macro_time_zones">झोन</string>
     <string name="core_content_selection_macro_to_bangla">बंगाली</string>
     <string name="core_content_selection_macro_to_banglish">बँग्लिश</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">दिवसाचे नाव, उदाहरणार्थ रविवार</string>
     <string name="core_content_snippet_var_year_info">वर्ष, चार अंकी</string>
     <string name="core_content_sticker_pack_imported_label">इम्पोर्ट केलेले स्टिकर्स</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">ॲपने %1$d ॲनिमेटेड स्टिकर स्थिर प्रतिमा म्हणून ठेवले आहे.</item>
+        <item quantity="other">ॲपने %1$d ॲनिमेटेड स्टिकर्स स्थिर प्रतिमा म्हणून ठेवले आहेत.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">ॲपने \"%1$s\" काढून टाकले आहे. त्याची प्रतिमा गहाळ आहे.</string>
     <string name="core_content_sticker_repair_image_unreadable">ॲपने \"%1$s\" काढून टाकले आहे. ॲप त्याची प्रतिमा वाचू शकत नाही.</string>
     <plurals name="core_content_sticker_repair_kept_first">

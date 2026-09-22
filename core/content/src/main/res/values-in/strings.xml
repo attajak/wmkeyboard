@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Cari</string>
     <string name="core_content_selection_macro_share">Bagikan</string>
     <string name="core_content_selection_macro_sms">Pesan</string>
+    <string name="core_content_selection_macro_strip_trackers">Hapus pelacak</string>
     <string name="core_content_selection_macro_time_zones">Zona</string>
     <string name="core_content_selection_macro_to_bangla">Bangla</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Nama hari, misalnya Minggu</string>
     <string name="core_content_snippet_var_year_info">Tahun, dengan empat digit</string>
     <string name="core_content_sticker_pack_imported_label">Stiker yang diimpor</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Aplikasi menyimpan %1$d stiker animasi sebagai gambar diam.</item>
+        <item quantity="other">Aplikasi menyimpan %1$d stiker animasi sebagai gambar diam.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Aplikasi menghapus \"%1$s\". Gambarnya hilang.</string>
     <string name="core_content_sticker_repair_image_unreadable">Aplikasi menjatuhkan \"%1$s\". Aplikasi tidak dapat membaca gambarnya.</string>
     <plurals name="core_content_sticker_repair_kept_first">

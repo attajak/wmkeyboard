@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Wakati wa siku</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Machweo na mapambazuko</string>
     <string name="core_settings_auto_theme_trigger_system_label">Mfumo mwepesi au mweusi</string>
+    <string name="core_settings_clipboard_view_grid_label">Grid</string>
+    <string name="core_settings_clipboard_view_list_label">Orodha</string>
     <string name="core_settings_copied_code_chip_any_field_label">Sehemu yoyote</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Masanduku ya msimbo pekee</string>
     <string name="core_settings_copied_code_chip_off_label">Kamwe</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Paneli inauficha, na kipima muda kifupi kinaufuta</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + nambari</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Baada ya kitufe cha mkato</string>
+    <string name="core_settings_translate_engine_auto_label">Otomatiki</string>
+    <string name="core_settings_translate_engine_on_device_label">Kwenye kifaa</string>
+    <string name="core_settings_translate_engine_online_label">Mtandaoni</string>
 </resources>

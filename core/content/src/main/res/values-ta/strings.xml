@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">தேடு</string>
     <string name="core_content_selection_macro_share">பகிரவும்</string>
     <string name="core_content_selection_macro_sms">செய்தி</string>
+    <string name="core_content_selection_macro_strip_trackers">கண்காணிப்பான்களை நீக்கவும்</string>
     <string name="core_content_selection_macro_time_zones">மண்டலங்கள்</string>
     <string name="core_content_selection_macro_to_bangla">பெங்காலி</string>
     <string name="core_content_selection_macro_to_banglish">பாங்க்லிஷ்</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">நாளின் பெயர், உதாரணமாக ஞாயிறு</string>
     <string name="core_content_snippet_var_year_info">ஆண்டு, நான்கு இலக்கங்களுடன்</string>
     <string name="core_content_sticker_pack_imported_label">இறக்குமதி செய்யப்பட்ட ஸ்டிக்கர்கள்</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">ஆப் %1$d அனிமேஷன் ஸ்டிக்கரை நிலையான படமாக வைத்திருந்தது.</item>
+        <item quantity="other">ஆப் %1$d அனிமேஷன் ஸ்டிக்கர்களை நிலையான படங்களாக வைத்திருந்தது.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">ஆப்ஸ் \"%1$s\"-ஐ நீக்கியது. அதன் படம் காணவில்லை.</string>
     <string name="core_content_sticker_repair_image_unreadable">ஆப் \"%1$s\"-ஐ நீக்கியது. அதன் படத்தை ஆப்பால் படிக்க முடியவில்லை.</string>
     <plurals name="core_content_sticker_repair_kept_first">

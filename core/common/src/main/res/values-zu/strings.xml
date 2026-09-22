@@ -46,6 +46,8 @@
     <string name="common_none">Akukho</string>
     <string name="common_notify_channel_backup_body">Kuphela uma isipele esizenzakalelayo sehluleka. Izipele eziphumelelayo zithule.</string>
     <string name="common_notify_channel_backup_title">Izinkinga zokwenza isipele</string>
+    <string name="common_notify_channel_connect_body">Ikhompyutha ebhangqwe nge-KDE Connect icele ukubhangqa, yathumela ifayela, noma yashaya uphondo ngenkathi ikhibhodi ifihliwe.</string>
+    <string name="common_notify_channel_connect_title">Amakhompyutha abhangqiwe</string>
     <string name="common_notify_channel_downloads_body">Inqubekelaphambili yezichazamazwi, amamodeli ezwi, izengezo namanye amafayela ikhibhodi ewalandayo, kanye nomugqa lapho okuthile kuqeda noma kwehluleka.</string>
     <string name="common_notify_channel_downloads_title">Okulandiwe</string>
     <string name="common_notify_channel_keyboard_body">Okufakiwe okuphakade emthunzini wokubonisa ikhibhodi nokuyikhipha. Kuphela ngenkathi uyivula.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s ayikwazanga ukulandwa</string>
     <string name="common_notify_download_handwriting">Ukubhala ngesandla %1$s</string>
     <string name="common_notify_download_progress">%1$s kwe-%2$s</string>
+    <string name="common_notify_download_translate">Ukuhumusha okungaxhunyiwe ku-inthanethi okungu-%1$s</string>
     <string name="common_notify_download_voice">%1$s izwi elingaxhunyiwe ku-inthanethi</string>
     <string name="common_off">Valiwe</string>
     <string name="common_ok">Kulungile</string>

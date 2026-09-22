@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Keresés</string>
     <string name="core_content_selection_macro_share">Megosztás</string>
     <string name="core_content_selection_macro_sms">Üzenet</string>
+    <string name="core_content_selection_macro_strip_trackers">Követők eltávolítása</string>
     <string name="core_content_selection_macro_time_zones">Időzónák</string>
     <string name="core_content_selection_macro_to_bangla">Bengáli</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">A nap neve, például vasárnap</string>
     <string name="core_content_snippet_var_year_info">Az év, négy számjeggyel</string>
     <string name="core_content_sticker_pack_imported_label">Importált matricák</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Az alkalmazás %1$d animált matricát állóképként tartott meg.</item>
+        <item quantity="other">Az alkalmazás %1$d animált matricát állóképként tartott meg.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Az alkalmazás eldobta a következőt: \"%1$s\". A kép hiányzik.</string>
     <string name="core_content_sticker_repair_image_unreadable">Az alkalmazás eldobta a(z) \"%1$s\" elemet. Az alkalmazás nem tudja olvasni a képét.</string>
     <plurals name="core_content_sticker_repair_kept_first">

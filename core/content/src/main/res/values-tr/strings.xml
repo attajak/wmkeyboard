@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Ara</string>
     <string name="core_content_selection_macro_share">Paylaş</string>
     <string name="core_content_selection_macro_sms">Mesaj</string>
+    <string name="core_content_selection_macro_strip_trackers">İzleyicileri kaldır</string>
     <string name="core_content_selection_macro_time_zones">Zaman Dilimleri</string>
     <string name="core_content_selection_macro_to_bangla">Bengalce</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Günün adı, örneğin Pazar</string>
     <string name="core_content_snippet_var_year_info">Dört haneli yıl</string>
     <string name="core_content_sticker_pack_imported_label">İçe aktarılan çıkartmalar</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Uygulama %1$d hareketli çıkartmayı sabit resim olarak tuttu.</item>
+        <item quantity="other">Uygulama %1$d hareketli çıkartmayı sabit resim olarak tuttu.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Uygulama \"%1$s\" öğesini bıraktı. Resmi eksik.</string>
     <string name="core_content_sticker_repair_image_unreadable">Uygulama \"%1$s\" öğesini bıraktı. Uygulama görselini okuyamıyor.</string>
     <plurals name="core_content_sticker_repair_kept_first">

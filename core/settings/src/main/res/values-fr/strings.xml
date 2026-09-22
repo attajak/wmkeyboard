@@ -7,6 +7,8 @@
     <string name="core_settings_auto_theme_trigger_schedule_label">Heure de la journée</string>
     <string name="core_settings_auto_theme_trigger_sun_label">Lever et coucher du soleil</string>
     <string name="core_settings_auto_theme_trigger_system_label">Système clair ou sombre</string>
+    <string name="core_settings_clipboard_view_grid_label">Grille</string>
+    <string name="core_settings_clipboard_view_list_label">Liste</string>
     <string name="core_settings_copied_code_chip_any_field_label">N\'importe quel champ</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Zones de code uniquement</string>
     <string name="core_settings_copied_code_chip_off_label">Jamais</string>
@@ -112,4 +114,7 @@
     <string name="core_settings_sensitive_clip_short_lived_subtitle">Le panneau le masque et une courte minuterie le supprime</string>
     <string name="core_settings_suggestion_hotkey_alt_digit_label">Alt + chiffre</string>
     <string name="core_settings_suggestion_hotkey_leader_digit_label">Après la touche de raccourci</string>
+    <string name="core_settings_translate_engine_auto_label">Automatique</string>
+    <string name="core_settings_translate_engine_on_device_label">Sur l\'appareil</string>
+    <string name="core_settings_translate_engine_online_label">En ligne</string>
 </resources>

@@ -46,6 +46,8 @@
     <string name="common_none">Нет</string>
     <string name="common_notify_channel_backup_body">Только в случае сбоя автоматического резервного копирования. Успешное выполнение резервного копирования не сопровождается уведомлениями.</string>
     <string name="common_notify_channel_backup_title">Проблемы с резервным копированием</string>
+    <string name="common_notify_channel_connect_body">Компьютер, сопряженный через KDE Connect, запросил сопряжение, отправил файл или подал сигнал, пока клавиатура была скрыта.</string>
+    <string name="common_notify_channel_connect_title">Сопряженные компьютеры</string>
     <string name="common_notify_channel_downloads_body">Ход загрузки словарей, голосовых моделей, дополнений и других файлов, которые скачивает клавиатура, а также уведомление о завершении или ошибке.</string>
     <string name="common_notify_channel_downloads_title">Загрузки</string>
     <string name="common_notify_channel_keyboard_body">Постоянная запись в шторке для отображения клавиатуры и её открепления. Только пока она включена.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">Не удалось загрузить %1$s</string>
     <string name="common_notify_download_handwriting">Рукописный ввод %1$s</string>
     <string name="common_notify_download_progress">%1$s из %2$s</string>
+    <string name="common_notify_download_translate">Офлайн-перевод %1$s</string>
     <string name="common_notify_download_voice">Офлайн-голос %1$s</string>
     <string name="common_off">Выкл.</string>
     <string name="common_ok">ОК</string>

@@ -46,6 +46,8 @@
     <string name="common_none">없음</string>
     <string name="common_notify_channel_backup_body">자동 백업이 실패할 때만 알립니다. 성공적인 백업은 조용히 처리됩니다.</string>
     <string name="common_notify_channel_backup_title">백업 문제</string>
+    <string name="common_notify_channel_connect_body">KDE Connect를 통해 페어링된 컴퓨터가 페어링을 요청하거나, 파일을 전송하거나, 키보드가 숨겨진 상태에서 핑을 보냈습니다.</string>
+    <string name="common_notify_channel_connect_title">페어링된 컴퓨터</string>
     <string name="common_notify_channel_downloads_body">키보드가 가져오는 사전, 음성 모델, 추가 기능 및 기타 파일의 진행 상태를 표시하며, 완료 또는 실패 시 알림을 보냅니다.</string>
     <string name="common_notify_channel_downloads_title">다운로드</string>
     <string name="common_notify_channel_keyboard_body">키보드를 표시하고 고정을 해제하기 위한 알림창의 영구 항목입니다. 켜져 있는 동안에만 표시됩니다.</string>
@@ -56,6 +58,7 @@
     <string name="common_notify_download_failed">%1$s을(를) 다운로드할 수 없습니다</string>
     <string name="common_notify_download_handwriting">%1$s 필기 인식</string>
     <string name="common_notify_download_progress">%2$s 중 %1$s</string>
+    <string name="common_notify_download_translate">%1$s 오프라인 번역</string>
     <string name="common_notify_download_voice">%1$s 오프라인 음성</string>
     <string name="common_off">끄기</string>
     <string name="common_ok">확인</string>

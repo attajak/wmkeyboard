@@ -133,6 +133,7 @@
     <string name="core_content_selection_macro_search">Meklēt</string>
     <string name="core_content_selection_macro_share">Kopīgot</string>
     <string name="core_content_selection_macro_sms">Ziņa</string>
+    <string name="core_content_selection_macro_strip_trackers">Noņemt izsekotājus</string>
     <string name="core_content_selection_macro_time_zones">Zonas</string>
     <string name="core_content_selection_macro_to_bangla">Bengāļu</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>
@@ -183,6 +184,10 @@
     <string name="core_content_snippet_var_weekday_info">Dienas nosaukums, piemēram, svētdiena</string>
     <string name="core_content_snippet_var_year_info">Gads ar četriem cipariem</string>
     <string name="core_content_sticker_pack_imported_label">Importētās uzlīmes</string>
+    <plurals name="core_content_sticker_repair_flattened">
+        <item quantity="one">Lietotne saglabāja %1$d animētu uzlīmi kā nekustīgu attēlu.</item>
+        <item quantity="other">Lietotne saglabāja %1$d animētas uzlīmes kā nekustīgus attēlus.</item>
+    </plurals>
     <string name="core_content_sticker_repair_image_missing">Lietotne izdzēsa \"%1$s\". Tā attēls trūkst.</string>
     <string name="core_content_sticker_repair_image_unreadable">Lietotne izlaida \"%1$s\". Lietotne nevar nolasīt tās attēlu.</string>
     <plurals name="core_content_sticker_repair_kept_first">

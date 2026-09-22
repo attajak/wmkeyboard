@@ -29,5 +29,7 @@
     <string name="core_voice_tier_recommended_label">பரிந்துரைக்கப்படுகிறது</string>
     <string name="core_voice_whisper_mel_bins_error">இந்தக் குரல் மாதிரிக்கு %1$s பேண்ட் ஸ்பெக்ட்ரோகிராம் தேவை, இது பதிவிறக்கம் செய்யப்பட்ட கோப்புடன் பொருந்தவில்லை. அமைப்புகளில் மாதிரியை நீக்கிவிட்டு மீண்டும் பதிவிறக்கவும்.</string>
     <string name="core_voice_whisper_model_load_error">குரல் மாதிரி ஏற்றப்படவில்லை. கோப்பு சேதமடைந்திருக்கலாம். அமைப்புகளில் மாதிரியை நீக்கிவிட்டு மீண்டும் பதிவிறக்கவும்.</string>
+    <string name="core_voice_whisper_module_downloading">விசைப்பலகையின் ஆஃப்லைன் குரல் தட்டச்சுப் பகுதி Google Play-யிலிருந்து பதிவிறக்கம் செய்யப்படுகிறது. சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="core_voice_whisper_module_restart">ஆஃப்லைன் குரல் தட்டச்சு பகுதி நிறுவுதல் முடிந்தது. இதைப் பயன்படுத்த விசைப்பலகையை மூடிவிட்டு மீண்டும் திறக்கவும்.</string>
     <string name="core_voice_whisper_transcribe_error">குரல் தட்டச்சு வேலை செய்யவில்லை. மீண்டும் முயற்சிக்கவும் அல்லது சிறிய மாடலைத் தேர்ந்தெடுக்கவும்.</string>
 </resources>

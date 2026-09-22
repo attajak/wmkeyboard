@@ -10,6 +10,12 @@
     <string name="core_pred_wordlist_size_large_label">பெரியது</string>
     <string name="core_pred_wordlist_size_medium_label">நடுத்தரம்</string>
     <string name="core_pred_wordlist_size_small_label">சிறியது</string>
+    <string name="core_pred_wordlist_source_aosp_detail">Android-இன் சொந்த விசைப்பலகை பயன்படுத்தும் தொகுக்கப்பட்ட பட்டியல். குறைவான சொற்கள், குறைவான பெயர்கள் மற்றும் எழுத்துப் பிழைகள் கொண்டவை.</string>
+    <string name="core_pred_wordlist_source_aosp_label">AOSP</string>
+    <string name="core_pred_wordlist_source_frequency_detail">துணைத்தலைப்புகள் மற்றும் இணைய உரையிலிருந்து கணக்கிடப்பட்டது. கூடுதல் பெயர்கள், பேச்சு வழக்கு மற்றும் தட்டச்சுப் பிழைகளுடன் பல கூடுதல் சொற்கள்.</string>
+    <string name="core_pred_wordlist_source_frequency_label">அதிர்வெண்</string>
     <string name="core_pred_wordlist_variant_brazil_label">பிரேசில்</string>
     <string name="core_pred_wordlist_variant_europe_label">ஐரோப்பா</string>
+    <string name="core_pred_wordlist_variant_uk_label">ஐக்கிய இராச்சியம்</string>
+    <string name="core_pred_wordlist_variant_us_label">அமெரிக்கா</string>
 </resources>
