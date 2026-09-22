@@ -149,7 +149,7 @@ class WebDavSink(
             ) { it.body?.string().orEmpty() }
 
             WebDavListing.parse(xml)
-                .filter { !it.isCollection && AutoBackupNaming.isOurs(it.name) }
+                .filter { !it.isCollection && AutoBackupNaming.isListed(it.name) }
                 .map { entry ->
                     SinkEntry(
                         // The href, resolved against the base, is what addresses

@@ -887,11 +887,17 @@ private fun ownHosts(settings: KeyboardSettings): Set<String> {
             add(compatibleUrl)
         }
         add(settings.whisper.serverUrl)
-        add(settings.autoBackup.webDavUrl)
-        add(settings.autoBackup.s3.endpoint)
+        // Every backup location's server, not only the one the screen had
+        // before there could be several.
+        for (location in settings.autoBackup.locations) {
+            add(location.webDavUrl)
+            add(location.s3.endpoint)
+        }
     }
-    return (urls.mapNotNull(::hostOf) + listOfNotNull(settings.autoBackup.ftp.host.trim().lowercase().takeIf { it.isNotEmpty() }))
-        .toSet()
+    val ftpHosts = settings.autoBackup.locations.mapNotNull { location ->
+        location.ftp.host.trim().lowercase().takeIf { it.isNotEmpty() }
+    }
+    return (urls.mapNotNull(::hostOf) + ftpHosts).toSet()
 }
 
 /** Plural quantity for a count that may exceed an Int. */

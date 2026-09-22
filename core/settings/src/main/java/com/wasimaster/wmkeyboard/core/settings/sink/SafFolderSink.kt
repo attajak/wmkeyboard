@@ -114,6 +114,7 @@ class SafFolderSink(
             val renameable = supportsRename(target)
             if (!renameable) {
                 deleteQuietly(target)
+                replaceExisting(name)
                 target = create(name, mimeType)
             }
 
@@ -121,7 +122,14 @@ class SafFolderSink(
                 resolver.requireOutputStream(target).use { raw ->
                     BufferedOutputStream(raw).use(body)
                 }
-                if (renameable) renameTo(target, name) else target
+                if (renameable) {
+                    // Only once the new file is whole: the old one stays until
+                    // there is something to take its place.
+                    replaceExisting(name)
+                    renameTo(target, name) ?: copyInto(target, name, mimeType)
+                } else {
+                    target
+                }
             } catch (failure: Throwable) {
                 // The partial is worse than nothing: it would sit in the folder
                 // looking like a generation. Take it back out.
@@ -136,7 +144,7 @@ class SafFolderSink(
     override suspend fun list(): Result<List<SinkEntry>> = withContext(Dispatchers.IO) {
         runCancellable {
             readiness().getOrThrow()
-            children().filter { AutoBackupNaming.isOurs(it.name) }
+            children().filter { AutoBackupNaming.isListed(it.name) }
         }
     }
 
@@ -186,8 +194,35 @@ class SafFolderSink(
      * it and the next sweep will collect it, which is the right outcome: the
      * generation is lost, nothing else is.
      */
-    private fun renameTo(uri: Uri, name: String): Uri =
-        runCatching { DocumentsContract.renameDocument(resolver, uri, name) }.getOrNull() ?: uri
+    /**
+     * Deletes a file already called [name], so writing that name again
+     * replaces it. Without this a provider renames the clash to
+     * `name (1).ext`, and a file sync rewrites in place would pile up under
+     * names nothing recognises. An automatic backup's name is unique to the
+     * second and never gets here with anything to delete.
+     */
+    private fun replaceExisting(name: String) {
+        children().filter { it.name == name }.forEach { entry -> deleteQuietly(docUri(entry)) }
+    }
+
+    /** The renamed document, or null when the provider refused after all. */
+    private fun renameTo(uri: Uri, name: String): Uri? =
+        runCatching { DocumentsContract.renameDocument(resolver, uri, name) }.getOrNull()
+
+    /**
+     * The fallback for a rename refused at the last step: copy the finished
+     * `.part` into a new file under [name], then drop the `.part`. By now the
+     * old file of that name may already be gone, so leaving the `.part` as it
+     * was would leave nothing under the name at all.
+     */
+    private fun copyInto(part: Uri, name: String, mimeType: String): Uri {
+        val target = create(name, mimeType)
+        resolver.requireInputStream(part).use { input ->
+            resolver.requireOutputStream(target).use { input.copyTo(it) }
+        }
+        deleteQuietly(part)
+        return target
+    }
 
     /**
      * Deletes our own half-written files older than [STALE_PART_AGE_MS].

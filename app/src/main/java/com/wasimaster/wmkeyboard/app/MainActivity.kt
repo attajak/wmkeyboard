@@ -988,9 +988,19 @@ private fun SettingsNavGraph(
                 BackupAutoSettings(repository, settings)
             }
         }
+        composable("backup/sync") {
+            SettingsScreen(
+                stringResource(R.string.backup_sync_title),
+                { navController.popBackStack() },
+                route = "backup/sync",
+                subtitle = stringResource(R.string.backup_sync_screen_subtitle),
+            ) {
+                BackupSyncSettings(repository, settings)
+            }
+        }
         composable("backup/contents") {
             SettingsScreen(
-                stringResource(R.string.backup_include_group_title),
+                stringResource(R.string.backup_files_contents_title),
                 { navController.popBackStack() },
                 route = "backup/contents",
             ) {

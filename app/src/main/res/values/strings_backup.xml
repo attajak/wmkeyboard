@@ -204,10 +204,8 @@
     <!-- Backup: what the export file holds.                                -->
     <!-- ================================================================== -->
 
-    <string name="backup_info">Save your keyboard to a file. You can keep the file, move it to another device, or restore from it after you install the app again. Choose what goes into the file under Include in export: the settings, the themes, your learned dictionary, the clipboard history and the snippets.</string>
-    <string name="backup_include_group_title">Include in export</string>
+    <string name="backup_info">Save your keyboard to a file. You can keep the file, move it to another device, or restore from it after you install the app again. Choose what goes into the file in What goes in an export.</string>
     <string name="backup_include_nav_subtitle">%1$d of %2$d parts included</string>
-    <string name="backup_export_group_title">Backup to a file</string>
 
     <string name="backup_include_settings_subtitle">Every keyboard setting</string>
     <string name="backup_include_secrets_title">Include API keys</string>
@@ -237,10 +235,6 @@
     <!-- ================================================================== -->
     <!-- Backup: export and import.                                         -->
     <!-- ================================================================== -->
-
-    <string name="backup_export_action">Export backup</string>
-    <string name="backup_import_group_title">Import</string>
-    <string name="backup_import_action">Import backup</string>
     <string name="backup_import_note">An import of settings changes only the settings that the file names. The other settings stay as they are. The dictionary, the clipboard and the snippets in the file replace the ones on your device.</string>
 
     <string name="backup_export_done">The app exported the backup.</string>
@@ -296,11 +290,8 @@
     <!-- ==== The backup that runs without being asked. ==== -->
 
     <string name="backup_auto_group_title">Automatic backup</string>
-    <string name="backup_auto_nav_subtitle">Schedule, destination and encryption</string>
     <string name="backup_auto_folder_title">Folder</string>
-    <string name="backup_auto_folder_subtitle">Where to put the backups. Choose a folder in a cloud app to keep copies off the device.</string>
     <string name="backup_auto_folder_none">Not set</string>
-    <string name="backup_auto_folder_denied">The app cannot write to that folder. Choose another one.</string>
     <string name="backup_auto_enabled_title">Back up automatically</string>
     <string name="backup_auto_enabled_subtitle">The app writes a backup on a timer.</string>
     <string name="backup_auto_enabled_needs_folder">Choose a folder first.</string>
@@ -316,14 +307,14 @@
         <item quantity="other">Every %d days</item>
     </plurals>
     <string name="backup_auto_keep_title">Backups to keep</string>
-    <string name="backup_auto_keep_subtitle">The app deletes the oldest backup when there are more than this. It keeps the newest one always.</string>
+    <string name="backup_auto_keep_subtitle">The app deletes the oldest backup when there are more than this. It always keeps the newest one. Each device counts only its own backups.</string>
     <plurals name="backup_auto_keep_value">
         <item quantity="one">%d backup</item>
         <item quantity="other">%d backups</item>
     </plurals>
     <string name="backup_auto_unmetered_title">Only on Wi-Fi</string>
     <string name="backup_auto_unmetered_subtitle">Wait for a connection that costs you nothing</string>
-    <string name="backup_auto_unmetered_info">A backup can be a few megabytes, and it goes out every time the timer comes round. With this on, the app waits for Wi-Fi, or for any other connection that Android does not count as metered. With it off, a backup goes out over mobile data as soon as it is due. This setting does nothing when you back up to a folder, because a folder is storage on your own device and needs no connection at all. This setting is on by default.</string>
+    <string name="backup_auto_unmetered_info">A backup can be a few megabytes, and it goes out every time the timer comes round. With this on, the app waits for Wi-Fi, or for any other connection that Android does not count as metered. With it off, a backup goes out over mobile data as soon as it is due. Folder locations need no connection at all, so this setting only shows when a backup goes to a server or a cloud account. This setting is on by default.</string>
     <string name="backup_auto_charging_title">Only while charging</string>
     <string name="backup_auto_charging_subtitle">Wait until your device is plugged in</string>
     <string name="backup_auto_charging_info">This is what the app always did. Turn it off if you rarely charge your device for long enough, because a backup that never finds a charger never runs, and nothing tells you that it did not. The work itself is a few seconds of copying, so it costs little battery.</string>
@@ -333,7 +324,7 @@
     <string name="backup_auto_passphrase_label">Passphrase</string>
     <string name="backup_auto_passphrase_show">Show the passphrase</string>
     <string name="backup_auto_passphrase_hide">Hide the passphrase</string>
-    <string name="backup_auto_personal_warning">This backup holds words that you typed, or text that you copied, and no passphrase protects it. The app writes it to your folder on a timer. Turn on a passphrase, or turn off the dictionary and the clipboard above.</string>
+    <string name="backup_auto_personal_warning">This backup holds words that you typed, or text that you copied, and no passphrase protects it. The app writes it to your locations on a timer. Turn on a passphrase, or turn off the dictionary, the clipboard and the swipe style in What goes in a backup.</string>
     <string name="backup_auto_now_action">Back up now</string>
     <string name="backup_auto_running">Backing up…</string>
     <!-- %1$s is the name of the file that the app wrote. -->
@@ -342,22 +333,19 @@
          out because the backup was too large, for example "stickers, icons". -->
     <string name="backup_auto_done_skipped">The app wrote %1$s. It left out %2$s, because the backup was too large.</string>
     <string name="backup_auto_locked">The app cannot back up while the device is locked. Unlock it and try again.</string>
-    <string name="backup_auto_skipped">There is nothing to back up. Choose at least one part above.</string>
+    <string name="backup_auto_skipped">There is nothing to back up. Choose at least one part in What goes in a backup.</string>
     <!-- %1$s is a relative time, for example "2 hours ago". -->
     <string name="backup_auto_last_run">Last backup: %1$s</string>
     <string name="backup_auto_never">The app has not made an automatic backup yet.</string>
     <string name="backup_auto_error_permission">The app can no longer write to your backup folder. Choose the folder again.</string>
     <string name="backup_auto_error_permission_account">The app lost access to your account. Sign in again.</string>
     <string name="backup_auto_error_permission_server">The server did not accept the sign-in details. Check them.</string>
-    <string name="backup_auto_error_target_remote">The app cannot find the backup location. Check the destination details.</string>
+    <string name="backup_auto_error_target_remote">The app cannot find the backup location. Check the details of this location.</string>
     <string name="backup_auto_error_target">The app cannot find your backup folder. It may be deleted, or the card may be out.</string>
     <string name="backup_auto_error_space">There is not enough space for a backup.</string>
     <string name="backup_auto_error_io">The last backup did not finish. The app tries again later.</string>
 
     <!-- ==== Where the automatic backup goes. ==== -->
-
-    <string name="backup_auto_dest_title">Where to put backups</string>
-    <string name="backup_auto_dest_subtitle">None of these send anything to a WM Keyboard server.</string>
     <!-- One line under each option in the backup destination picker. -->
     <string name="backup_auto_dest_folder_desc">A folder on your device, or one that another storage app gives you</string>
     <string name="backup_auto_dest_webdav_desc">Your own server, such as Nextcloud. It needs a URL, a user name and a password</string>
@@ -382,7 +370,7 @@
     <string name="backup_auto_drive_authorized">The app can write to its folder in your Drive.</string>
     <string name="backup_auto_drive_not_authorized">The app needs your permission first.</string>
     <string name="backup_auto_drive_authorize">Allow access to Drive</string>
-    <string name="backup_auto_drive_info">The app writes to a hidden folder of its own in your Drive. It cannot see your other files, and the folder does not show up beside your documents. To take this permission back, go to your Google account and open the list of apps with account access. Your Drive app can also show this folder: choose the folder in "Folder" above instead if you want to see the files.</string>
+    <string name="backup_auto_drive_info">The app writes to a hidden folder of its own in your Drive. It cannot see your other files, and the folder does not show up beside your documents. To take this permission back, go to your Google account and open the list of apps with account access. To keep backups you can see in the Drive app, add a Folder location that points at a Drive folder.</string>
 
     <!-- ==== The other four destinations. ==== -->
 
@@ -412,7 +400,7 @@
     <string name="backup_auto_ftp_path_hint">Leave this empty to use the directory you land in after you sign in.</string>
     <string name="backup_auto_ftp_secure_title">Use TLS</string>
     <string name="backup_auto_ftp_secure_subtitle">Encrypts the connection before the app signs in. Leave this on unless your server cannot do it.</string>
-    <string name="backup_auto_ftp_cleartext">Without TLS, your password and your backup both cross the network as plain text that anyone in between can read. Turn on a passphrase below if you must leave this off.</string>
+    <string name="backup_auto_ftp_cleartext">Without TLS, your password and your backup both cross the network as plain text that anyone in between can read. If you must leave this off, turn on Protect with a passphrase in Automatic backup.</string>
 
     <string name="backup_auto_oauth_signed_in">Signed in.</string>
     <string name="backup_auto_oauth_signed_out">Not signed in yet.</string>
@@ -423,12 +411,109 @@
     <string name="backup_auto_oauth_failed">The app could not finish signing in. Try again.</string>
     <string name="backup_auto_oauth_no_browser">The app could not open a browser to sign in.</string>
     <string name="backup_auto_dropbox_info">The app gets a folder of its own inside your Dropbox and can see nothing else. You can find the folder under Apps, and you can delete it. To take this permission back, open the connected apps list in your Dropbox account.</string>
-    <string name="backup_remote_restore_action">Restore from here</string>
-    <string name="backup_remote_restore_title">Restore a backup</string>
+    <!-- The Backup & restore hub. -->
+    <string name="backup_hub_backup_on">Automatic backup is on</string>
+    <string name="backup_hub_backup_off">Automatic backup is off</string>
+    <plurals name="backup_hub_backup_where">
+        <item quantity="one">%1$s, to one location</item>
+        <item quantity="other">%1$s, to %2$d locations</item>
+    </plurals>
+    <string name="backup_hub_no_locations">Add a location to start</string>
+    <string name="backup_hub_sync_on">Sync is on</string>
+    <string name="backup_hub_sync_now">Sync now</string>
+    <string name="backup_hub_syncing">Syncing…</string>
+    <string name="backup_hub_last_sync">Last sync: %1$s</string>
+    <string name="backup_hub_never_synced">This device has not synced yet</string>
+    <!-- %1$s is how often ("Every day"), %2$s how many are kept ("5 backups"). -->
+    <string name="backup_hub_auto_summary"><xliff:g id="interval">%1$s</xliff:g>, keeps <xliff:g id="count">%2$s</xliff:g></string>
+
+    <string name="backup_locations_title">Locations</string>
+    <string name="backup_locations_info">Each automatic backup goes to the locations that you tick in Automatic backup. Sync uses the locations that you tick in Sync devices. Nothing goes to a WM Keyboard server.</string>
+    <string name="backup_location_add">Add a location</string>
+    <string name="backup_location_add_subtitle">A folder, your own server, or a cloud account</string>
+    <string name="backup_location_type_title">Add a location</string>
+    <string name="backup_location_type_subtitle">Where should the backups go?</string>
+    <string name="backup_location_paused">Paused</string>
+    <string name="backup_location_last_backup">Last backup: %1$s</string>
+    <string name="backup_location_never">No backup here yet</string>
+    <string name="backup_location_more">More options for %1$s</string>
+    <string name="backup_location_restore">Restore from %1$s</string>
+    <string name="backup_location_remove">Remove</string>
+    <string name="backup_location_remove_title">Remove %1$s?</string>
+    <string name="backup_location_remove_body">The backups that are already there stay there. The app stops writing to this location and forgets how to sign in to it.</string>
+    <string name="backup_location_name_label">Name</string>
+    <!-- One example per kind of location, under the optional Name field. -->
+    <string name="backup_location_name_hint_folder">Optional. For example, SD card or Phone copies.</string>
+    <string name="backup_location_name_hint_webdav">Optional. For example, Nextcloud or Home server.</string>
+    <string name="backup_location_name_hint_s3">Optional. For example, R2 bucket or Work AWS.</string>
+    <string name="backup_location_name_hint_ftp">Optional. For example, NAS or Router storage.</string>
+    <string name="backup_location_name_hint_drive">Optional. For example, Personal Drive.</string>
+    <string name="backup_location_name_hint_dropbox">Optional. For example, Family Dropbox.</string>
+    <string name="backup_location_name_hint_onedrive">Optional. For example, Work OneDrive.</string>
+    <string name="backup_location_not_backed_up">Automatic backups do not go here</string>
+    <!-- %1$s is the location's backup state, such as "Last backup: 2 hours ago". -->
+    <string name="backup_location_state_syncs"><xliff:g id="state">%1$s</xliff:g>. Syncs here.</string>
+    <string name="backup_auto_targets_title">Back up to</string>
+    <string name="backup_auto_targets_info">Each automatic backup goes to every location that you tick here. A location that you untick keeps its settings, and gets no backups until you tick it again.</string>
+    <string name="backup_auto_targets_none">Add a location on the Backup &amp; restore screen first.</string>
+    <string name="backup_sync_targets_title">Sync through</string>
+    <string name="backup_sync_targets_info">Your devices must share at least one of these locations. If you tick more than one, the app writes the sync file to each of them, so sync keeps working while one service is down. That uses a little more data.</string>
+    <string name="backup_auto_needs_target">Tick a location in Back up to.</string>
+    <string name="backup_sync_needs_target">Tick a location in Sync through.</string>
+    <string name="backup_sync_secrets_unprotected">We strongly suggest that you turn on Protect with a passphrase in Automatic backup first</string>
+    <string name="backup_secrets_unprotected_subtitle">We strongly suggest that you turn on Protect with a passphrase first</string>
+    <string name="backup_secrets_warning_title">Include keys without a passphrase?</string>
+    <string name="backup_secrets_warning_body">No passphrase protects these files. Anyone who can open the location can read your API keys and passwords, and use them. We strongly suggest that you turn on Protect with a passphrase in Automatic backup first.</string>
+    <string name="backup_secrets_warning_confirm">Include them</string>
+    <string name="backup_location_folder_choose">Choose a folder</string>
+    <string name="backup_location_folder_change">Choose another folder</string>
+    <string name="backup_location_test">Test the connection</string>
+    <string name="backup_location_testing">Testing…</string>
+    <string name="backup_location_test_ok">It works. Backups can go here.</string>
+
+    <string name="backup_auto_needs_location">Add a location first.</string>
+    <string name="backup_auto_contents_title">What goes in a backup</string>
+    <string name="backup_auto_protect_title">Protection</string>
+    <string name="backup_auto_protect_info">One passphrase protects the automatic backups and the sync files. Use the same passphrase on every device that syncs.</string>
+
+    <string name="backup_files_title">Files</string>
+    <string name="backup_files_export_title">Export to a file</string>
+    <string name="backup_files_export_subtitle">Save a copy that you move yourself</string>
+    <string name="backup_files_import_title">Import a file</string>
+    <string name="backup_files_import_subtitle">Restore from a backup or a settings file</string>
+    <string name="backup_files_contents_title">What goes in an export</string>
+
+    <!-- Sync between devices. -->
+    <string name="backup_sync_title">Sync devices</string>
+    <string name="backup_sync_nav_subtitle">Keep your keyboard the same on all your devices</string>
+    <string name="backup_sync_screen_subtitle">Keep your devices the same</string>
+    <string name="backup_sync_enabled_title">Sync this device</string>
+    <string name="backup_sync_enabled_subtitle">Share changes with your other devices</string>
+    <string name="backup_sync_mode_title">When to sync</string>
+    <string name="backup_sync_mode_soon">Soon after a change</string>
+    <string name="backup_sync_mode_soon_desc">About a minute after you change something, and every hour for changes from other devices</string>
+    <string name="backup_sync_mode_schedule">On a schedule</string>
+    <string name="backup_sync_mode_schedule_desc">At a fixed interval. Uses the least data.</string>
+    <string name="backup_sync_mode_manual">Only when I ask</string>
+    <string name="backup_sync_mode_manual_desc">Only when you press Sync now</string>
+    <string name="backup_sync_interval_title">How often</string>
+    <string name="backup_sync_secrets_title">Sync API keys and passwords</string>
+    <string name="backup_sync_secrets_subtitle">A passphrase protects them</string>
+    <string name="backup_sync_contents_title">What syncs</string>
+    <string name="backup_sync_local_note">Some settings stay on each device, because they only fit that device: the keyboard size and position, one-handed mode, the hardware keyboard, paired computers and the app lock.</string>
+    <string name="backup_sync_first_note">Each device keeps one sync file at a location. Every device reads the files of the others, and the newest change to each setting wins. The first time a device syncs, the settings of your other devices win, and anything that only this device has goes to the others.</string>
+    <string name="backup_sync_error_passphrase">Another device uses a different passphrase. Use the same passphrase on every device.</string>
+    <string name="backup_sync_done_nothing">Synced. Nothing was new.</string>
+    <plurals name="backup_sync_done_changes">
+        <item quantity="one">Synced. %1$d change came from your other devices.</item>
+        <item quantity="other">Synced. %1$d changes came from your other devices.</item>
+    </plurals>
+    <string name="backup_sync_locked">The app cannot sync while the device is locked. Unlock it and try again.</string>
+    <string name="backup_sync_skipped">There is nothing to sync. Choose at least one location and one part on the Sync devices screen.</string>
     <string name="backup_remote_restore_loading">Looking for backups…</string>
     <string name="backup_remote_restore_downloading">Downloading the backup…</string>
     <string name="backup_remote_restore_empty">There are no automatic backups here yet.</string>
-    <string name="backup_remote_restore_note">This list shows the backups of every device that uses this destination. Each device keeps and deletes only its own backups.</string>
+    <string name="backup_remote_restore_note">This list shows the backups of every device that uses this location. Each device keeps and deletes only its own backups.</string>
     <string name="backup_remote_restore_this_device">This device</string>
     <string name="backup_remote_restore_unknown_device">A device that did not record its name</string>
     <!-- %1$s is a date and time, %2$s a file size such as "5.9 MB". -->

@@ -46,16 +46,6 @@ object AutoBackupScheduler {
     private const val BACKOFF_MS = 30L * 60L * 1000L
 
     /**
-     * Schedules, reschedules or cancels to match [settings].
-     *
-     * Safe to call as often as you like, and it is called from process start,
-     * which matters more than it looks: handing `JobScheduler` a periodic job
-     * restarts its period. Rescheduling unconditionally from the keyboard's
-     * `onCreate` would mean a keyboard used more often than once a day never
-     * reaches the end of a single period, and the backup never runs at all.
-     * So an already-correct job is left exactly where it is.
-     */
-    /**
      * Only the destinations that go over the wire wait for a network; a SAF
      * folder is usually local storage, and an offline phone should still be
      * able to back up to its own card.
@@ -65,20 +55,22 @@ object AutoBackupScheduler {
      * the run was recorded against the destination.
      */
     fun networkTypeFor(settings: AutoBackupSettings): Int = when {
-        !settings.destination.needsNetwork -> JobInfo.NETWORK_TYPE_NONE
+        // Mixed locations wait for the network: a run is one pass over all of
+        // them, and the folder copy costs nothing to delay.
+        settings.backupTargets.none { it.type.needsNetwork } -> JobInfo.NETWORK_TYPE_NONE
         settings.requireUnmetered -> JobInfo.NETWORK_TYPE_UNMETERED
         else -> JobInfo.NETWORK_TYPE_ANY
     }
 
     /**
-     * Backs up once, as soon as the destination's network rule allows, whether
+     * Backs up once, as soon as the ticked locations' network rule allows, whether
      * or not the automatic backup is on. A job rather than a coroutine because
      * the caller (an automation intent) has seconds to live, and a backup to a
      * cloud destination can take longer. False when there is nowhere to back
      * up to.
      */
     fun runNow(context: Context, settings: AutoBackupSettings): Boolean {
-        if (!settings.destinationConfigured) return false
+        if (settings.backupTargets.isEmpty()) return false
         val scheduler = context.getSystemService(JobScheduler::class.java) ?: return false
         val job = JobInfo.Builder(JOB_ID_NOW, ComponentName(context.packageName, SERVICE_CLASS))
             .setRequiredNetworkType(networkTypeFor(settings))
@@ -87,11 +79,21 @@ object AutoBackupScheduler {
         return runCatching { scheduler.schedule(job) == JobScheduler.RESULT_SUCCESS }.getOrDefault(false)
     }
 
+    /**
+     * Schedules, reschedules or cancels to match [settings].
+     *
+     * Safe to call as often as you like, and it is called from process start,
+     * which matters more than it looks: handing `JobScheduler` a periodic job
+     * restarts its period. Rescheduling unconditionally from the keyboard's
+     * `onCreate` would mean a keyboard used more often than once a day never
+     * reaches the end of a single period, and the backup never runs at all.
+     * So an already-correct job is left exactly where it is.
+     */
     fun sync(context: Context, settings: AutoBackupSettings) {
         val scheduler = context.getSystemService(JobScheduler::class.java) ?: return
         val pending = runCatching { scheduler.getPendingJob(JOB_ID) }.getOrNull()
 
-        if (!settings.enabled || !settings.destinationConfigured) {
+        if (!settings.enabled || settings.backupTargets.isEmpty()) {
             if (pending != null) runCatching { scheduler.cancel(JOB_ID) }
             return
         }

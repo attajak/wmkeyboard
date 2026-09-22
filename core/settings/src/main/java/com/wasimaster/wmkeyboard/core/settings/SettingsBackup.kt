@@ -58,6 +58,37 @@ object SettingsBackup {
     /** The WebDAV server password. A credential, so it follows the same rules. */
     const val AUTO_BACKUP_WEBDAV_PASSWORD = "auto_backup_webdav_password"
 
+    /**
+     * Every backup location, as one JSON list; see [BackupLocation]. Holds
+     * passwords and refresh tokens, so it is a secret: out of device-protected
+     * storage, and out of an export unless "Include API keys" is on. With it
+     * on, a phone restored from that file gets its sign-ins back. The switch
+     * that arms the automatic backup stays transient, so nothing starts
+     * writing until the user turns it on, and a folder grant that means
+     * nothing on the new phone shows up as a folder to choose again.
+     */
+    const val AUTO_BACKUP_LOCATIONS = "auto_backup_locations"
+
+    /** How the last run went at each location; see [LocationStatus]. */
+    const val AUTO_BACKUP_LOCATION_STATUS = "auto_backup_location_status"
+
+    /**
+     * Sync's own switches. Transient, all of them: whether this phone syncs,
+     * how often and where is a decision about this phone, and a restored
+     * bundle or a synced file must never switch sync on somewhere else.
+     */
+    const val SYNC_ENABLED = "sync_enabled"
+    const val SYNC_MODE = "sync_mode"
+    const val SYNC_INTERVAL_HOURS = "sync_interval_hours"
+    const val SYNC_SCOPE = "sync_scope"
+    /** Read once, for the move to [SYNC_LOCATION_IDS]; the single choice it was. */
+    const val SYNC_LOCATION_ID = "sync_location_id"
+    const val SYNC_LOCATION_IDS = "sync_location_ids"
+    const val SYNC_SECTIONS = "sync_sections"
+    const val SYNC_INCLUDE_SECRETS = "sync_include_secrets"
+    const val SYNC_LAST_RUN_AT = "sync_last_run_at"
+    const val SYNC_LAST_ERROR = "sync_last_error"
+
     /** S3 secret access key. */
     const val AUTO_BACKUP_S3_SECRET = "auto_backup_s3_secret"
 
@@ -108,6 +139,7 @@ object SettingsBackup {
         "hf_token",
         "photo_unsplash_key",
         "photo_pexels_key",
+        AUTO_BACKUP_LOCATIONS,
     )
 
     /**
@@ -143,6 +175,17 @@ object SettingsBackup {
         AUTO_BACKUP_KDF_SALT,
         AUTO_BACKUP_LAST_RUN_AT,
         AUTO_BACKUP_LAST_ERROR,
+        AUTO_BACKUP_LOCATION_STATUS,
+        SYNC_ENABLED,
+        SYNC_MODE,
+        SYNC_INTERVAL_HOURS,
+        SYNC_SCOPE,
+        SYNC_LOCATION_ID,
+        SYNC_LOCATION_IDS,
+        SYNC_SECTIONS,
+        SYNC_INCLUDE_SECRETS,
+        SYNC_LAST_RUN_AT,
+        SYNC_LAST_ERROR,
     )
 
     private val json = Json { prettyPrint = true }

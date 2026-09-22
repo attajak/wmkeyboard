@@ -7,6 +7,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import com.wasimaster.wmkeyboard.core.settings.BackupDestination
+import com.wasimaster.wmkeyboard.core.settings.AutoBackupScheduler
+import com.wasimaster.wmkeyboard.core.settings.BackupLocation
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupClients
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupLog
@@ -21,6 +23,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 
 /**
  * The browser half of signing in to Dropbox or OneDrive.
@@ -41,8 +44,11 @@ object BackupOAuth {
 
     private const val VERIFIER_BYTES = 64
 
-    /** The sign-in that is waiting for the browser to come back, if any. */
-    private data class Pending(val destination: BackupDestination, val verifier: String)
+    /**
+     * The sign-in that is waiting for the browser to come back, if any, and
+     * the location the token is for.
+     */
+    private data class Pending(val destination: BackupDestination, val verifier: String, val locationId: String)
 
     @Volatile
     private var pending: Pending? = null
@@ -63,14 +69,16 @@ object BackupOAuth {
     private fun pendingFile(context: Context) = File(context.noBackupFilesDir, PENDING_FILE)
 
     private fun savePending(context: Context, value: Pending) {
-        runCatching { pendingFile(context).writeText("${value.destination.name}\n${value.verifier}") }
+        runCatching {
+            pendingFile(context).writeText("${value.destination.name}\n${value.locationId}\n${value.verifier}")
+        }
     }
 
     private fun takePending(context: Context): Pending? {
         val file = pendingFile(context)
         val saved = runCatching {
-            val (destination, verifier) = file.readText().split('\n', limit = 2)
-            Pending(BackupDestination.valueOf(destination), verifier)
+            val (destination, locationId, verifier) = file.readText().split('\n', limit = 3)
+            Pending(BackupDestination.valueOf(destination), verifier, locationId)
         }.getOrNull()
         file.delete()
         return saved
@@ -81,18 +89,18 @@ object BackupOAuth {
     /** How the last sign-in ended, until the settings screen has said so. */
     val result: StateFlow<Result?> = _result
 
-    data class Result(val destination: BackupDestination, val outcome: Outcome)
+    data class Result(val locationId: String, val outcome: Outcome)
 
-    private val _exchanging = MutableStateFlow<BackupDestination?>(null)
+    private val _exchanging = MutableStateFlow<String?>(null)
 
     /**
-     * The destination whose code is being traded for a token right now.
+     * The location whose code is being traded for a token right now.
      *
      * The browser hands back before that trade is done, and it takes a round
      * trip or two: without something on screen, the row said "Not signed in
      * yet" for two or three seconds after the user had just signed in.
      */
-    val exchanging: StateFlow<BackupDestination?> = _exchanging
+    val exchanging: StateFlow<String?> = _exchanging
 
     enum class Outcome { SIGNED_IN, CANCELLED, FAILED }
 
@@ -117,10 +125,15 @@ object BackupOAuth {
      * app see the password being typed, which is exactly what an OAuth flow
      * exists to avoid, and both services are entitled to refuse it.
      */
-    fun start(activity: Activity, destination: BackupDestination, clientId: String): Boolean {
+    fun start(
+        activity: Activity,
+        destination: BackupDestination,
+        clientId: String,
+        locationId: String,
+    ): Boolean {
         if (clientId.isEmpty()) return false
         val verifier = newVerifier()
-        pending = Pending(destination, verifier).also { savePending(activity, it) }
+        pending = Pending(destination, verifier, locationId).also { savePending(activity, it) }
 
         val url = when (destination) {
             BackupDestination.DROPBOX -> Uri.parse(DropboxSink.AUTHORIZE_URL)
@@ -165,15 +178,16 @@ object BackupOAuth {
         val waiting = pending ?: saved ?: return
         pending = null
         val destination = waiting.destination
+        val locationId = waiting.locationId
         if (code == null) {
-            _result.value = Result(destination, Outcome.CANCELLED)
+            _result.value = Result(locationId, Outcome.CANCELLED)
             return
         }
         val appContext = context.applicationContext
-        _exchanging.value = destination
+        _exchanging.value = locationId
         scope.launch {
             try {
-                exchange(appContext, destination, code, waiting.verifier)
+                exchange(appContext, destination, locationId, code, waiting.verifier)
             } finally {
                 _exchanging.value = null
             }
@@ -183,6 +197,7 @@ object BackupOAuth {
     private suspend fun exchange(
         appContext: Context,
         destination: BackupDestination,
+        locationId: String,
         code: String,
         verifier: String,
     ) {
@@ -192,16 +207,22 @@ object BackupOAuth {
         }
         val refresh = tokens?.exchangeCode(code, verifier, REDIRECT_URI)
         if (refresh == null) {
-            _result.value = Result(destination, Outcome.FAILED)
+            _result.value = Result(locationId, Outcome.FAILED)
             return
         }
         val repository = SettingsRepository(appContext)
-        when (destination) {
-            BackupDestination.DROPBOX -> repository.setAutoBackupDropboxToken(refresh)
-            else -> repository.setAutoBackupOneDriveToken(refresh)
-        }
-        BackupLog.d("oauth $destination: refresh token stored")
-        _result.value = Result(destination, Outcome.SIGNED_IN)
+        // The location is made here if the screen had not saved it yet, or it
+        // was removed while the browser was open: the user did just sign in.
+        val existing = repository.settings.first().autoBackup.locations.firstOrNull { it.id == locationId }
+        repository.upsertBackupLocation(
+            (existing ?: BackupLocation(id = locationId, type = destination)).copy(refreshToken = refresh),
+        )
+        repository.setLocationStatus(locationId) { it.copy(backupError = "", syncError = "") }
+        // The location just became usable, which can start the backup job: the
+        // screen that would otherwise resync the schedule may not be showing.
+        AutoBackupScheduler.sync(appContext, repository.settings.first().autoBackup)
+        BackupLog.d("oauth $destination: refresh token stored for $locationId")
+        _result.value = Result(locationId, Outcome.SIGNED_IN)
     }
 
     /**

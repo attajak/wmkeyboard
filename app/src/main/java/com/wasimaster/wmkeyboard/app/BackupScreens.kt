@@ -29,6 +29,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -67,7 +68,6 @@ import com.wasimaster.wmkeyboard.core.settings.BackupDestination
 import com.wasimaster.wmkeyboard.core.settings.FtpConfig
 import com.wasimaster.wmkeyboard.core.settings.S3Config
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
-import com.wasimaster.wmkeyboard.core.settings.destinationConfigured
 import com.wasimaster.wmkeyboard.core.settings.needsNetwork
 import com.wasimaster.wmkeyboard.core.settings.signsIn
 import com.wasimaster.wmkeyboard.core.settings.sectionSet
@@ -81,6 +81,33 @@ import java.util.Locale
 import kotlin.math.roundToInt
 import com.wasimaster.wmkeyboard.core.util.requireOutputStream
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.outlined.CloudDone
+import androidx.compose.material.icons.outlined.CloudOff
+import androidx.compose.material.icons.outlined.CloudQueue
+import androidx.compose.material.icons.outlined.FileDownload
+import androidx.compose.material.icons.outlined.FileUpload
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.pluralStringResource
+import com.wasimaster.wmkeyboard.core.settings.SyncMode
+import com.wasimaster.wmkeyboard.core.settings.SyncSettings
+import com.wasimaster.wmkeyboard.core.settings.activeLocations
+import com.wasimaster.wmkeyboard.core.settings.backupTargets
+import com.wasimaster.wmkeyboard.core.settings.BackupLocation
+import androidx.compose.material3.Checkbox
+import com.wasimaster.wmkeyboard.core.settings.exportSectionSet
+import com.wasimaster.wmkeyboard.core.settings.sync.SyncRunner
+import com.wasimaster.wmkeyboard.core.settings.targets
 
 // ---- backup ----
 
@@ -219,7 +246,7 @@ internal fun autoBackupErrorText(
  * dictionary the backup is about to carry.
  */
 @Composable
-private fun StoredTextField(
+internal fun StoredTextField(
     label: String,
     value: String,
     supporting: String,
@@ -281,50 +308,10 @@ private fun StoredTextField(
  * that module's boundary. Needed here for the one thing on this screen that has
  * to launch a system consent screen.
  */
-private tailrec fun Context.hostActivity(): Activity? = when (this) {
+internal tailrec fun Context.hostActivity(): Activity? = when (this) {
     is Activity -> this
     is ContextWrapper -> baseContext.hostActivity()
     else -> null
-}
-/**
- * Which of the three destinations backups go to.
- *
- * Google Drive is left out of the list entirely on a build with no Play
- * services rather than shown and refused: on F-Droid there is nothing behind it
- * at all, and a choice that cannot be chosen is worse than no choice.
- */
-@Composable
-private fun DestinationRow(
-    selected: BackupDestination,
-    onChange: (BackupDestination) -> Unit,
-) {
-    val options = buildList {
-        add(BackupDestination.FOLDER to stringResource(R.string.backup_auto_dest_folder))
-        add(BackupDestination.WEBDAV to stringResource(R.string.backup_auto_dest_webdav))
-        add(BackupDestination.S3 to stringResource(R.string.backup_auto_dest_s3))
-        add(BackupDestination.FTP to stringResource(R.string.backup_auto_dest_ftp))
-        if (driveAuthorizer().available) {
-            add(BackupDestination.DRIVE to stringResource(R.string.backup_auto_dest_drive))
-        }
-        // Left out rather than shown and refused when this build has no client
-        // id compiled in: there is nothing behind them, and a choice that
-        // cannot be chosen is worse than no choice.
-        if (BackupClients.dropboxAvailable) {
-            add(BackupDestination.DROPBOX to stringResource(R.string.backup_auto_dest_dropbox))
-        }
-        if (BackupClients.oneDriveAvailable) {
-            add(BackupDestination.ONEDRIVE to stringResource(R.string.backup_auto_dest_onedrive))
-        }
-    }
-    ChoiceSetting(
-        R.string.backup_auto_dest_title,
-        subtitle = stringResource(R.string.backup_auto_dest_subtitle),
-        options = options,
-        selected = selected,
-        default = SettingsDefaults.autoBackup.destination,
-        detail = { dest -> ChoiceDetail(stringResource(destinationDescRes(dest))) },
-        onChange = onChange,
-    )
 }
 
 /**
@@ -332,7 +319,7 @@ private fun DestinationRow(
  * The list is brand names, and a brand name says nothing about whether the
  * choice wants a sign-in, a URL or a pair of keys.
  */
-private fun destinationDescRes(destination: BackupDestination): Int = when (destination) {
+internal fun destinationDescRes(destination: BackupDestination): Int = when (destination) {
     BackupDestination.FOLDER -> R.string.backup_auto_dest_folder_desc
     BackupDestination.WEBDAV -> R.string.backup_auto_dest_webdav_desc
     BackupDestination.DRIVE -> R.string.backup_auto_dest_drive_desc
@@ -341,565 +328,339 @@ private fun destinationDescRes(destination: BackupDestination): Int = when (dest
     BackupDestination.DROPBOX -> R.string.backup_auto_dest_dropbox_desc
     BackupDestination.ONEDRIVE -> R.string.backup_auto_dest_onedrive_desc
 }
-/** Server, user and password for a WebDAV collection. */
-@Composable
-private fun WebDavRows(repository: SettingsRepository, auto: AutoBackupSettings) {
-    val scope = rememberCoroutineScope()
-    Column {
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_webdav_url_label),
-            value = auto.webDavUrl,
-            supporting = stringResource(R.string.backup_auto_webdav_url_hint),
-            keyboardType = KeyboardType.Uri,
-        ) { entered -> scope.launch { repository.setAutoBackupWebDavUrl(entered) } }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_webdav_user_label),
-            value = auto.webDavUser,
-            supporting = "",
-        ) { entered -> scope.launch { repository.setAutoBackupWebDavUser(entered) } }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_webdav_password_label),
-            value = auto.webDavPassword,
-            supporting = stringResource(R.string.backup_auto_webdav_password_hint),
-            password = true,
-        ) { entered -> scope.launch { repository.setAutoBackupWebDavPassword(entered) } }
-        if (auto.webDavUrl.isNotEmpty() &&
-            !auto.webDavUrl.startsWith("https://", ignoreCase = true)
-        ) {
-            // The credentials go in an Authorization header, which is the
-            // password in base64. Over plain HTTP that is the password in the
-            // clear, so the sink refuses it and this says why before the user
-            // waits for a failed backup to find out.
-            StateBanner(stringResource(R.string.backup_auto_webdav_needs_https), tone = BannerTone.WARNING)
-        }
-    }
-}
-/** Endpoint, bucket and key pair for an S3-compatible service. */
-@Composable
-private fun S3Rows(repository: SettingsRepository, auto: AutoBackupSettings) {
-    val scope = rememberCoroutineScope()
-    val s3 = auto.s3
-    fun update(change: S3Config) = scope.launch { repository.setAutoBackupS3(change) }
 
-    Column {
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_s3_endpoint_label),
-            value = s3.endpoint,
-            supporting = stringResource(R.string.backup_auto_s3_endpoint_hint),
-            keyboardType = KeyboardType.Uri,
-        ) { update(s3.copy(endpoint = it)) }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_s3_bucket_label),
-            value = s3.bucket,
-            supporting = "",
-        ) { update(s3.copy(bucket = it)) }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_s3_region_label),
-            value = s3.region,
-            supporting = stringResource(R.string.backup_auto_s3_region_hint),
-        ) { update(s3.copy(region = it)) }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_s3_prefix_label),
-            value = s3.prefix,
-            supporting = stringResource(R.string.backup_auto_s3_prefix_hint),
-        ) { update(s3.copy(prefix = it)) }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_s3_key_label),
-            value = s3.accessKeyId,
-            supporting = "",
-        ) { update(s3.copy(accessKeyId = it)) }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_s3_secret_label),
-            value = s3.secretAccessKey,
-            supporting = "",
-            password = true,
-        ) { update(s3.copy(secretAccessKey = it)) }
-        ToggleSetting(
-            R.string.backup_auto_s3_path_style_title,
-            stringResource(R.string.backup_auto_s3_path_style_subtitle),
-            s3.pathStyle,
-            default = SettingsDefaults.autoBackup.s3.pathStyle,
-        ) { on -> update(s3.copy(pathStyle = on)) }
-        if (S3Sink.isCleartext(s3.endpoint)) {
-            StateBanner(stringResource(R.string.backup_auto_s3_cleartext), tone = BannerTone.WARNING)
-        }
-    }
-}
-/** Host, login and directory for an FTP server. */
-@Composable
-private fun FtpRows(repository: SettingsRepository, auto: AutoBackupSettings) {
-    val scope = rememberCoroutineScope()
-    val ftp = auto.ftp
-    fun update(change: FtpConfig) = scope.launch { repository.setAutoBackupFtp(change) }
-
-    Column {
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_ftp_host_label),
-            value = ftp.host,
-            supporting = "",
-            keyboardType = KeyboardType.Uri,
-        ) { update(ftp.copy(host = it)) }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_ftp_port_label),
-            value = ftp.port.toString(),
-            supporting = "",
-            keyboardType = KeyboardType.Number,
-        ) { entered -> entered.toIntOrNull()?.let { update(ftp.copy(port = it)) } }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_ftp_user_label),
-            value = ftp.user,
-            supporting = "",
-        ) { update(ftp.copy(user = it)) }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_ftp_password_label),
-            value = ftp.password,
-            supporting = "",
-            password = true,
-        ) { update(ftp.copy(password = it)) }
-        StoredTextField(
-            label = stringResource(R.string.backup_auto_ftp_path_label),
-            value = ftp.path,
-            supporting = stringResource(R.string.backup_auto_ftp_path_hint),
-        ) { update(ftp.copy(path = it)) }
-        ToggleSetting(
-            R.string.backup_auto_ftp_secure_title,
-            stringResource(R.string.backup_auto_ftp_secure_subtitle),
-            ftp.secure,
-            default = SettingsDefaults.autoBackup.ftp.secure,
-        ) { on -> update(ftp.copy(secure = on)) }
-        if (!ftp.secure) {
-            StateBanner(stringResource(R.string.backup_auto_ftp_cleartext), tone = BannerTone.WARNING)
-        }
-    }
-}
-/** Signing in to Dropbox or OneDrive, which is the same flow for both. */
-@Composable
-private fun OAuthRow(
-    repository: SettingsRepository,
-    destination: BackupDestination,
-    token: String,
-    clientId: String,
-    @StringRes titleRes: Int,
-    @StringRes infoRes: Int,
-    onMessage: (String) -> Unit,
-) {
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val pending by BackupOAuth.result.collectAsStateWithLifecycle()
-    val exchanging by BackupOAuth.exchanging.collectAsStateWithLifecycle()
-    val signingIn = exchanging == destination
-
-    // The browser comes back into a different activity, and the exchange
-    // itself happens in BackupOAuth, so all that reaches this row is how it
-    // ended. The token shows up through the settings flow like any other.
-    LaunchedEffect(pending) {
-        val delivered = pending ?: return@LaunchedEffect
-        if (delivered.destination != destination) return@LaunchedEffect
-        BackupOAuth.consume()
-        when (delivered.outcome) {
-            BackupOAuth.Outcome.SIGNED_IN -> Unit
-            BackupOAuth.Outcome.CANCELLED ->
-                onMessage(context.getString(R.string.backup_auto_oauth_cancelled))
-            BackupOAuth.Outcome.FAILED ->
-                onMessage(context.getString(R.string.backup_auto_oauth_failed))
-        }
-    }
-
-    Column {
-        WmRow(
-            title = stringResource(titleRes),
-            subtitle = stringResource(
-                when {
-                    signingIn -> R.string.backup_auto_oauth_signing_in
-                    token.isNotEmpty() -> R.string.backup_auto_oauth_signed_in
-                    else -> R.string.backup_auto_oauth_signed_out
-                },
-            ),
-        )
-        // The browser hands back before the code has been traded for a
-        // token, which is a round trip or two. Without this the row said
-        // "Not signed in yet" for the seconds right after signing in.
-        if (signingIn) {
-            LinearProgressIndicator(Modifier.fillMaxWidth().padding(horizontal = 16.dp))
-        }
-        OutlinedButton(
-            enabled = !signingIn,
-            onClick = {
-                val activity = context.hostActivity() ?: return@OutlinedButton
-                if (token.isNotEmpty()) {
-                    scope.launch {
-                        when (destination) {
-                            BackupDestination.DROPBOX -> repository.setAutoBackupDropboxToken("")
-                            else -> repository.setAutoBackupOneDriveToken("")
-                        }
-                    }
-                } else if (!BackupOAuth.start(activity, destination, clientId)) {
-                    onMessage(context.getString(R.string.backup_auto_oauth_no_browser))
-                }
-            },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        ) {
-            Text(
-                stringResource(
-                    if (token.isNotEmpty()) {
-                        R.string.backup_auto_oauth_sign_out
-                    } else {
-                        R.string.backup_auto_oauth_sign_in
-                    },
-                ),
-            )
-        }
-        StateBanner(stringResource(infoRes))
-    }
-}
-/** Authorizing this app's own hidden folder in the user's Google Drive. */
-@Composable
-@Suppress("UnusedParameter")
-private fun DriveRow(
-    repository: SettingsRepository,
-    auto: AutoBackupSettings,
-    onMessage: (String) -> Unit,
-) {
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    val authorizer = remember { driveAuthorizer() }
-    var authorized by remember { mutableStateOf<Boolean?>(null) }
-    var asking by remember { mutableStateOf(false) }
-
-    val consent = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartIntentSenderForResult(),
-    ) {
-        // Whatever the result says, the only trustworthy answer is to ask
-        // Google again. Still no after the consent screen closed is worth a
-        // sentence: a build whose signing key Google does not know gets the
-        // account picker and then nothing at all, which looked like a tap
-        // that did nothing.
-        scope.launch {
-            val granted = authorizer.authorized(context)
-            authorized = granted
-            if (!granted) onMessage(context.getString(R.string.backup_auto_oauth_failed))
-        }
-    }
-
-    LaunchedEffect(auto.destination) {
-        authorized = authorizer.authorized(context)
-    }
-
-    Column {
-        // Not a `ToggleSetting` or a `NavRow`: the row is a status line, and
-        // the button below is what acts. It still takes the glyph and the
-        // highlight key so search can land on it like any other row.
-        WmRow(
-            title = stringResource(R.string.backup_auto_drive_title),
-            subtitle = stringResource(
-                when (authorized) {
-                    true -> R.string.backup_auto_drive_authorized
-                    false -> R.string.backup_auto_drive_not_authorized
-                    null -> R.string.backup_auto_drive_checking
-                },
-            ),
-            icon = SettingsRowIcons[R.string.backup_auto_drive_title],
-            highlightKey = R.string.backup_auto_drive_title,
-        )
-        if (authorized != true) {
-            OutlinedButton(
-                enabled = !asking,
-                onClick = {
-                    val activity = context.hostActivity() ?: return@OutlinedButton
-                    asking = true
-                    scope.launch {
-                        val granted = authorizer.authorize(activity) { sender ->
-                            consent.launch(IntentSenderRequest.Builder(sender).build())
-                        }
-                        asking = false
-                        authorized = granted
-                        if (granted) {
-                            repository.setAutoBackupOutcome(ranAtMs = 0L, error = "")
-                        }
-                    }
-                },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            ) { Text(stringResource(R.string.backup_auto_drive_authorize)) }
-        }
-        StateBanner(stringResource(R.string.backup_auto_drive_info))
-    }
-}
-/**
- * The backup that runs without being asked.
- *
- * Every row here is inert until the chosen destination is usable, because there
- * is no default destination that would not be a place the user did not ask for.
- */
-@Composable
-private fun AutoBackupGroup(
-    repository: SettingsRepository,
-    auto: AutoBackupSettings,
-    onPickFolder: () -> Unit,
-    onMessage: (String) -> Unit,
-) {
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    var running by remember { mutableStateOf(false) }
-    var restoring by remember { mutableStateOf(false) }
-    val configured = auto.destinationConfigured
-    val encrypted = auto.encrypt && auto.passphrase.isNotEmpty()
-    // The swipe style counts as personal for the dictionary's reason: its
-    // shapes are filed under the words they were drawn for.
-    val personal = ConfigBackup.Section.DICTIONARY.id in auto.sections ||
-        ConfigBackup.Section.CLIPBOARD.id in auto.sections ||
-        ConfigBackup.Section.SWIPE.id in auto.sections
-
-    SettingsGroup(stringResource(R.string.backup_auto_group_title)) {
-        item {
-            DestinationRow(auto.destination) { picked ->
-                scope.launch {
-                    repository.setAutoBackupDestination(picked)
-                    AutoBackupScheduler.sync(context, repository.settings.first().autoBackup)
-                }
-            }
-        }
-        when (auto.destination) {
-            BackupDestination.FOLDER -> item {
-                NavRow(
-                    R.string.backup_auto_folder_title,
-                    subtitle = stringResource(R.string.backup_auto_folder_subtitle),
-                    value = if (auto.folderUri.isNotEmpty()) {
-                        Uri.decode(auto.folderUri.substringAfterLast('/'))
-                    } else {
-                        stringResource(R.string.backup_auto_folder_none)
-                    },
-                    onClick = onPickFolder,
-                )
-            }
-            BackupDestination.WEBDAV -> {
-                item { WebDavRows(repository, auto) }
-            }
-            BackupDestination.DRIVE -> {
-                item { DriveRow(repository, auto, onMessage) }
-            }
-            BackupDestination.S3 -> item { S3Rows(repository, auto) }
-            BackupDestination.FTP -> item { FtpRows(repository, auto) }
-            BackupDestination.DROPBOX -> item {
-                OAuthRow(
-                    repository = repository,
-                    destination = BackupDestination.DROPBOX,
-                    token = auto.dropboxRefreshToken,
-                    clientId = BackupClients.dropboxClientId,
-                    titleRes = R.string.backup_auto_dest_dropbox,
-                    infoRes = R.string.backup_auto_dropbox_info,
-                    onMessage = onMessage,
-                )
-            }
-            BackupDestination.ONEDRIVE -> item {
-                OAuthRow(
-                    repository = repository,
-                    destination = BackupDestination.ONEDRIVE,
-                    token = auto.oneDriveRefreshToken,
-                    clientId = BackupClients.oneDriveClientId,
-                    titleRes = R.string.backup_auto_dest_onedrive,
-                    infoRes = R.string.backup_auto_onedrive_info,
-                    onMessage = onMessage,
-                )
-            }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_auto_enabled_title,
-                stringResource(
-                    if (configured) {
-                        R.string.backup_auto_enabled_subtitle
-                    } else {
-                        needsSetupRes(auto.destination)
-                    },
-                ),
-                auto.enabled && configured,
-                default = SettingsDefaults.autoBackup.enabled && configured,
-            ) { on ->
-                scope.launch {
-                    repository.setAutoBackupEnabled(on)
-                    AutoBackupScheduler.sync(context, repository.settings.first().autoBackup)
-                }
-            }
-        }
-        if (auto.enabled && configured) {
-            item {
-                // The slider walks the ladder by index, so every stop is a value
-                // somebody would choose and one a drag can actually land on. A
-                // plain 1..168 range makes "once a day" a pixel-hunt.
-                SliderSetting(
-                    R.string.backup_auto_interval_title,
-                    value = intervalSliderIndex(auto.intervalHours).toFloat(),
-                    range = 0f..(AutoBackupIntervals.size - 1).toFloat(),
-                    display = { backupIntervalLabel(context, intervalAt(it)) },
-                    default = intervalSliderIndex(
-                        SettingsDefaults.autoBackup.intervalHours,
-                    ).toFloat(),
-                ) { index ->
-                    scope.launch {
-                        repository.setAutoBackupIntervalHours(intervalAt(index))
-                        AutoBackupScheduler.sync(context, repository.settings.first().autoBackup)
-                    }
-                }
-            }
-            item {
-                SliderSetting(
-                    R.string.backup_auto_keep_title,
-                    subtitle = stringResource(R.string.backup_auto_keep_subtitle),
-                    value = auto.keep.toFloat(),
-                    range = AutoBackupKeepRange.first.toFloat()..
-                        AutoBackupKeepRange.last.toFloat(),
-                    display = { kept ->
-                        context.resources.getQuantityString(
-                            R.plurals.backup_auto_keep_value,
-                            kept.roundToInt(),
-                            kept.roundToInt(),
-                        )
-                    },
-                    default = SettingsDefaults.autoBackup.keep.toFloat(),
-                ) { kept -> scope.launch { repository.setAutoBackupKeep(kept.roundToInt()) } }
-            }
-            item {
-                ToggleSetting(
-                    R.string.backup_auto_charging_title,
-                    stringResource(R.string.backup_auto_charging_subtitle),
-                    auto.requireCharging,
-                    info = stringResource(R.string.backup_auto_charging_info),
-                    default = SettingsDefaults.autoBackup.requireCharging,
-                ) { on ->
-                    scope.launch {
-                        repository.setAutoBackupRequireCharging(on)
-                        AutoBackupScheduler.sync(context, repository.settings.first().autoBackup)
-                    }
-                }
-            }
-            // A folder is storage on this device, so a network requirement there
-            // would only ever stop a backup that costs nothing.
-            item(visible = auto.destination.needsNetwork) {
-                ToggleSetting(
-                    R.string.backup_auto_unmetered_title,
-                    stringResource(R.string.backup_auto_unmetered_subtitle),
-                    auto.requireUnmetered,
-                    info = stringResource(R.string.backup_auto_unmetered_info),
-                    default = SettingsDefaults.autoBackup.requireUnmetered,
-                ) { on ->
-                    scope.launch {
-                        repository.setAutoBackupRequireUnmetered(on)
-                        AutoBackupScheduler.sync(
-                            context,
-                            repository.settings.first().autoBackup,
-                        )
-                    }
-                }
-            }
-        }
-        item {
-            // The runner skips before it reads this while no folder is picked.
-            // Drawn off rather than hidden, the way the enable row above is:
-            // encryption is a security choice worth seeing during setup.
-            ToggleSetting(
-                R.string.backup_auto_encrypt_title,
-                stringResource(
-                    if (configured) R.string.backup_auto_encrypt_subtitle
-                    else needsSetupRes(auto.destination),
-                ),
-                auto.encrypt,
-                info = stringResource(R.string.backup_auto_encrypt_info),
-                enabled = configured,
-                default = SettingsDefaults.autoBackup.encrypt,
-            ) { on -> scope.launch { repository.setAutoBackupEncrypt(on) } }
-        }
-        item(visible = configured && auto.encrypt) {
-            StoredTextField(
-                label = stringResource(R.string.backup_auto_passphrase_label),
-                value = auto.passphrase,
-                supporting = "",
-                password = true,
-            ) { entered -> scope.launch { repository.setAutoBackupPassphrase(entered) } }
-        }
-    }
-
-    // The one thing on this screen that has to be said out loud. Turning these
-    // sections on for an automatic backup sends words the user typed, and things
-    // they copied, off the device on a timer.
-    if (personal && !encrypted) {
-        StateBanner(stringResource(R.string.backup_auto_personal_warning), tone = BannerTone.WARNING)
-    }
-
-    SettingsGroup {
-        item {
-            OutlinedButton(
-                enabled = configured && !running,
-                onClick = {
-                    running = true
-                    scope.launch {
-                        val outcome = AutoBackupRunner.run(context, repository, force = true)
-                        running = false
-                        onMessage(autoBackupOutcomeText(context, outcome, auto.destination))
-                    }
-                },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            ) {
-                Text(
-                    stringResource(
-                        if (running) R.string.backup_auto_running else R.string.backup_auto_now_action,
-                    ),
-                )
-            }
-        }
-        item {
-            // The way back for everything above, and the only one for Google
-            // Drive, whose app folder no other app can open.
-            OutlinedButton(
-                enabled = configured && !running,
-                onClick = { restoring = true },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            ) { Text(stringResource(R.string.backup_remote_restore_action)) }
-        }
-    }
-    if (restoring) {
-        RemoteRestoreDialog(repository, auto) { restoring = false }
-    }
-
-    val error = autoBackupErrorText(context, auto.lastError, auto.destination)
-    StateBanner(
-        when {
-            error != null -> error
-            auto.lastRunAtMs > 0L -> stringResource(
-                R.string.backup_auto_last_run,
-                DateUtils.getRelativeTimeSpanString(auto.lastRunAtMs).toString(),
-            )
-            else -> stringResource(R.string.backup_auto_never)
-        },
-        tone = if (error != null) BannerTone.WARNING else BannerTone.INFO,
-    )
-}
-/** What an unusable destination is missing, in the words for its kind. */
-private fun needsSetupRes(destination: BackupDestination): Int = when {
-    destination == BackupDestination.FOLDER -> R.string.backup_auto_enabled_needs_folder
-    destination.signsIn -> R.string.backup_auto_enabled_needs_sign_in
-    else -> R.string.backup_auto_enabled_needs_details
-}
-/** One sentence for whatever a run turned out to be. */
+/** One sentence for whatever a backup run turned out to be. */
 private fun autoBackupOutcomeText(
     context: Context,
     outcome: AutoBackupRunner.Outcome,
-    destination: BackupDestination,
-): String = when (outcome) {
-    is AutoBackupRunner.Outcome.Done -> if (outcome.skipped.isEmpty()) {
-        context.getString(R.string.backup_auto_done, outcome.name)
+    auto: AutoBackupSettings,
+): String {
+    fun typeOf(id: String?) = auto.locations.firstOrNull { it.id == id }?.type ?: BackupDestination.FOLDER
+    return when (outcome) {
+        is AutoBackupRunner.Outcome.Done -> buildString {
+            append(
+                if (outcome.skipped.isEmpty()) {
+                    context.getString(R.string.backup_auto_done, outcome.name)
+                } else {
+                    context.getString(
+                        R.string.backup_auto_done_skipped,
+                        outcome.name,
+                        outcome.skipped.joinToString { sectionLabelLowercase(context, it) },
+                    )
+                },
+            )
+            for ((id, reason) in outcome.failed) {
+                val location = auto.locations.firstOrNull { it.id == id } ?: continue
+                append("\n\n")
+                append(location.title(context)).append(": ")
+                append(autoBackupErrorText(context, reason.name, location.type).orEmpty())
+            }
+        }
+        AutoBackupRunner.Outcome.Locked -> context.getString(R.string.backup_auto_locked)
+        AutoBackupRunner.Outcome.Skipped -> context.getString(R.string.backup_auto_skipped)
+        is AutoBackupRunner.Outcome.Failed ->
+            autoBackupErrorText(context, outcome.reason.name, typeOf(auto.activeLocations.firstOrNull()?.id))
+                ?: context.getString(R.string.backup_auto_error_io)
+    }
+}
+
+/** One sentence for a sync pass. */
+private fun syncOutcomeText(context: Context, outcome: SyncRunner.Outcome, auto: AutoBackupSettings): String =
+    when (outcome) {
+        is SyncRunner.Outcome.Done -> when {
+            SyncRunner.ERROR_PASSPHRASE in outcome.failed.values ->
+                context.getString(R.string.backup_sync_error_passphrase)
+            outcome.applied == 0 -> context.getString(R.string.backup_sync_done_nothing)
+            else -> context.resources.getQuantityString(
+                R.plurals.backup_sync_done_changes,
+                outcome.applied,
+                outcome.applied,
+            )
+        }
+        SyncRunner.Outcome.Locked -> context.getString(R.string.backup_sync_locked)
+        SyncRunner.Outcome.Skipped -> context.getString(R.string.backup_sync_skipped)
+        is SyncRunner.Outcome.Failed -> syncErrorText(context, outcome.reason, auto)
+    }
+
+/** A recorded sync failure in words, or null for none. */
+private fun syncErrorText(context: Context, reason: String, auto: AutoBackupSettings): String =
+    if (reason == SyncRunner.ERROR_PASSPHRASE) {
+        context.getString(R.string.backup_sync_error_passphrase)
     } else {
-        context.getString(
-            R.string.backup_auto_done_skipped,
-            outcome.name,
-            outcome.skipped.joinToString { sectionLabelLowercase(context, it) },
+        val type = auto.sync.targets(auto.locations).firstOrNull()?.type ?: BackupDestination.FOLDER
+        autoBackupErrorText(context, reason, type) ?: context.getString(R.string.backup_auto_error_io)
+    }
+
+/**
+ * The top of the Backup & restore screen: is the keyboard covered, and when
+ * was it last, with the two buttons that act on it. The one place on the
+ * screen that answers "am I safe?" without reading anything else.
+ */
+@Composable
+private fun BackupStatusCard(
+    repository: SettingsRepository,
+    auto: AutoBackupSettings,
+    onMessage: (String) -> Unit,
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var backingUp by remember { mutableStateOf(false) }
+    var syncing by remember { mutableStateOf(false) }
+    val active = auto.backupTargets
+    val backupOn = auto.enabled && active.isNotEmpty()
+    val error = autoBackupErrorText(context, auto.lastError, active.firstOrNull()?.type ?: BackupDestination.FOLDER)
+    val syncError = auto.sync.lastError.takeIf { it.isNotEmpty() }?.let { syncErrorText(context, it, auto) }
+    val problem = error != null || (auto.sync.enabled && syncError != null)
+    val colors = MaterialTheme.colorScheme
+    val container = when {
+        problem -> colors.errorContainer
+        backupOn || auto.sync.enabled -> colors.secondaryContainer
+        else -> colors.surfaceContainerHigh
+    }
+    val onContainer = when {
+        problem -> colors.onErrorContainer
+        backupOn || auto.sync.enabled -> colors.onSecondaryContainer
+        else -> colors.onSurface
+    }
+
+    Surface(
+        color = container,
+        contentColor = onContainer,
+        shape = RoundedCornerShape(28.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+    ) {
+        Column(Modifier.padding(horizontal = 20.dp, vertical = 18.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    when {
+                        problem -> Icons.Outlined.CloudOff
+                        backupOn -> Icons.Outlined.CloudDone
+                        else -> Icons.Outlined.CloudQueue
+                    },
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp),
+                )
+                Spacer(Modifier.width(16.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        stringResource(if (backupOn) R.string.backup_hub_backup_on else R.string.backup_hub_backup_off),
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                    Text(
+                        if (active.isEmpty()) {
+                            stringResource(R.string.backup_hub_no_locations)
+                        } else {
+                            pluralStringResource(
+                                R.plurals.backup_hub_backup_where,
+                                active.size,
+                                backupIntervalLabel(context, auto.intervalHours),
+                                active.size,
+                            )
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            Text(
+                error ?: if (auto.lastRunAtMs > 0L) {
+                    stringResource(
+                        R.string.backup_auto_last_run,
+                        DateUtils.getRelativeTimeSpanString(auto.lastRunAtMs).toString(),
+                    )
+                } else {
+                    stringResource(R.string.backup_auto_never)
+                },
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            if (auto.sync.enabled) {
+                Text(
+                    syncError ?: if (auto.sync.lastRunAtMs > 0L) {
+                        stringResource(
+                            R.string.backup_hub_last_sync,
+                            DateUtils.getRelativeTimeSpanString(auto.sync.lastRunAtMs).toString(),
+                        )
+                    } else {
+                        stringResource(R.string.backup_hub_never_synced)
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+            Spacer(Modifier.height(14.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                // Filled, not tonal: a tonal button on a container-coloured
+                // card is the card's own colour, and reads as a text link.
+                Button(
+                    enabled = active.isNotEmpty() && !backingUp,
+                    onClick = {
+                        backingUp = true
+                        scope.launch {
+                            val outcome = AutoBackupRunner.run(context, repository, force = true)
+                            backingUp = false
+                            onMessage(autoBackupOutcomeText(context, outcome, repository.settings.first().autoBackup))
+                        }
+                    },
+                ) {
+                    if (backingUp) {
+                        CircularProgressIndicator(
+                            Modifier.size(16.dp),
+                            strokeWidth = 2.dp,
+                            color = LocalContentColor.current,
+                        )
+                        Spacer(Modifier.width(8.dp))
+                    }
+                    Text(
+                        stringResource(if (backingUp) R.string.backup_auto_running else R.string.backup_auto_now_action),
+                    )
+                }
+                if (auto.sync.enabled) {
+                    OutlinedButton(
+                        enabled = !syncing,
+                        onClick = {
+                            syncing = true
+                            scope.launch {
+                                val outcome = SyncRunner.run(context, repository, force = true)
+                                syncing = false
+                                onMessage(syncOutcomeText(context, outcome, repository.settings.first().autoBackup))
+                            }
+                        },
+                    ) {
+                        if (syncing) {
+                            CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                            Spacer(Modifier.width(8.dp))
+                        }
+                        Text(stringResource(if (syncing) R.string.backup_hub_syncing else R.string.backup_hub_sync_now))
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** One section's row on a "what goes in" list: its subtitle and its "?". */
+private class SectionRow(
+    val section: ConfigBackup.Section,
+    @StringRes val subtitle: Int,
+    @StringRes val info: Int? = null,
+)
+
+private val SECTION_ROWS = listOf(
+    SectionRow(ConfigBackup.Section.SETTINGS, R.string.backup_include_settings_subtitle),
+    SectionRow(ConfigBackup.Section.THEMES, R.string.backup_include_themes_subtitle, R.string.backup_include_themes_info),
+    SectionRow(
+        ConfigBackup.Section.DICTIONARY,
+        R.string.backup_include_dictionary_subtitle,
+        R.string.backup_include_dictionary_info,
+    ),
+    SectionRow(
+        ConfigBackup.Section.CLIPBOARD,
+        R.string.backup_include_clipboard_subtitle,
+        R.string.backup_include_clipboard_info,
+    ),
+    SectionRow(ConfigBackup.Section.SNIPPETS, R.string.backup_include_snippets_subtitle),
+    SectionRow(
+        ConfigBackup.Section.STICKERS,
+        R.string.backup_include_stickers_subtitle,
+        R.string.backup_include_stickers_info,
+    ),
+    SectionRow(ConfigBackup.Section.ICONS, R.string.backup_include_icons_subtitle, R.string.backup_include_icons_info),
+    SectionRow(ConfigBackup.Section.WORDLISTS, R.string.backup_include_wordlists_subtitle),
+    SectionRow(ConfigBackup.Section.ADDONS, R.string.backup_include_addons_subtitle, R.string.backup_include_addons_info),
+    SectionRow(ConfigBackup.Section.EMOJI, R.string.backup_include_emoji_subtitle),
+    SectionRow(ConfigBackup.Section.STATISTICS, R.string.backup_include_statistics_subtitle),
+    SectionRow(ConfigBackup.Section.VOCAB, R.string.backup_include_vocab_subtitle),
+    SectionRow(ConfigBackup.Section.SWIPE, R.string.backup_include_swipe_subtitle),
+)
+
+/**
+ * The same thirteen switches for the three lists that pick sections: the
+ * export, the automatic backup and sync. [secrets] adds the API-key switch
+ * under Settings where the list has one.
+ */
+private fun SettingsGroupScope.sectionRows(
+    sections: Set<ConfigBackup.Section>,
+    defaults: Set<String>,
+    secrets: Pair<Boolean, (Boolean) -> Unit>?,
+    secretsEnabled: Boolean = true,
+    @StringRes secretsSubtitle: Int = R.string.backup_include_secrets_subtitle,
+    onToggle: (ConfigBackup.Section, Boolean) -> Unit,
+) {
+    for (row in SECTION_ROWS) {
+        item {
+            ToggleSetting(
+                sectionLabelRes(row.section),
+                stringResource(row.subtitle),
+                row.section in sections,
+                info = row.info?.let { stringResource(it) },
+                default = row.section.id in defaults,
+            ) { onToggle(row.section, it) }
+        }
+        if (row.section == ConfigBackup.Section.SETTINGS && secrets != null) {
+            item(visible = ConfigBackup.Section.SETTINGS in sections) {
+                ToggleSetting(
+                    R.string.backup_include_secrets_title,
+                    stringResource(secretsSubtitle),
+                    secrets.first,
+                    info = stringResource(R.string.backup_include_secrets_info),
+                    enabled = secretsEnabled,
+                    default = false,
+                ) { secrets.second(it) }
+            }
+        }
+    }
+}
+
+/**
+ * One location with a tick box, for the two lists that pick where things go:
+ * Back up to, and Sync through. The whole row toggles, as a switch row does.
+ */
+@Composable
+private fun LocationCheckRow(location: BackupLocation, checked: Boolean, onChange: (Boolean) -> Unit) {
+    val context = LocalContext.current
+    WmRow(
+        title = location.title(context),
+        subtitle = if (location.configured) {
+            location.detail(context)
+        } else {
+            stringResource(needsSetupRes(location.type))
+        },
+        leading = { WmIconTile(icon = destinationIcon(location.type), accent = location.type.accent) },
+        trailing = { Checkbox(checked = checked, onCheckedChange = onChange) },
+        onClick = { onChange(!checked) },
+    )
+}
+
+/**
+ * The "include API keys" switch, which asks before it goes on without a
+ * passphrase. It does not refuse: the keys and the storage are the user's.
+ * It says plainly what the file will then hold.
+ */
+@Composable
+private fun rememberKeysSwitch(encrypted: Boolean, onSet: (Boolean) -> Unit): (Boolean) -> Unit {
+    var asking by remember { mutableStateOf(false) }
+    if (asking) {
+        AlertDialog(
+            onDismissRequest = { asking = false },
+            title = { Text(stringResource(R.string.backup_secrets_warning_title)) },
+            text = { Text(stringResource(R.string.backup_secrets_warning_body)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    asking = false
+                    onSet(true)
+                }) { Text(stringResource(R.string.backup_secrets_warning_confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { asking = false }) { Text(stringResource(CommonR.string.common_cancel)) }
+            },
         )
     }
-    AutoBackupRunner.Outcome.Locked -> context.getString(R.string.backup_auto_locked)
-    AutoBackupRunner.Outcome.Skipped -> context.getString(R.string.backup_auto_skipped)
-    is AutoBackupRunner.Outcome.Failed ->
-        autoBackupErrorText(context, outcome.reason.name, destination)
-            ?: context.getString(R.string.backup_auto_error_io)
+    return { on -> if (on && !encrypted) asking = true else onSet(on) }
 }
+
+/**
+ * Backup & restore: where backups go, how the automatic backup and sync run,
+ * and the one-off file export and import.
+ */
 @Composable
 internal fun BackupSettings(
     repository: SettingsRepository,
@@ -908,25 +669,12 @@ internal fun BackupSettings(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-
-    // What a backup contains, stored rather than remembered. It used to be
-    // eleven `remember`s that reset on every visit, which was tolerable while
-    // the only way to make a backup was to press a button and pick a file. The
-    // automatic backup has nobody there to set them, so they have to persist.
     val auto = settings.autoBackup
-    val sections = auto.sectionSet
+    val exportSections = auto.exportSectionSet
     val includeSecrets = auto.includeSecrets
 
     var message by remember { mutableStateOf<String?>(null) }
     var confirmImport by remember { mutableStateOf<PendingImport?>(null) }
-
-    fun setSection(section: ConfigBackup.Section, on: Boolean) {
-        scope.launch {
-            repository.setAutoBackupSections(
-                if (on) sections + section else sections - section,
-            )
-        }
-    }
 
     val exportLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument(ConfigBackup.MIME_TYPE),
@@ -935,7 +683,7 @@ internal fun BackupSettings(
         scope.launch {
             val ok = runCancellable {
                 val text = repository.exportConfig(
-                    sections = sections,
+                    sections = exportSections,
                     includeSecrets = includeSecrets,
                     appVersion = BuildConfig.VERSION_CODE,
                     appVersionName = BuildConfig.VERSION_NAME,
@@ -948,7 +696,7 @@ internal fun BackupSettings(
             }.isSuccess
             message = when {
                 !ok -> context.getString(R.string.backup_export_write_error)
-                ConfigBackup.Section.SETTINGS in sections && includeSecrets ->
+                ConfigBackup.Section.SETTINGS in exportSections && includeSecrets ->
                     context.getString(R.string.backup_export_done_with_keys)
                 else -> context.getString(R.string.backup_export_done)
             }
@@ -981,67 +729,82 @@ internal fun BackupSettings(
             }
         }
     }
+    val exportGuarded = rememberLockGuard(AppLockTargets["action_export_settings"]) {
+        // Datestamped, Locale.US: see the automatic backup's names.
+        val stamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
+        exportLauncher.launch("wmkeyboard-backup-$stamp.${ConfigBackup.FILE_EXTENSION}")
+    }
 
-    // Picking a folder is what arms the automatic backup, so the grant is taken
-    // here and the switch is useless without it.
+    BackupStatusCard(repository, auto) { message = it }
 
+    LocationsGroup(repository, auto) { message = it }
 
     SettingsGroup {
         item {
             NavRow(
                 R.string.backup_auto_group_title,
-                stringResource(R.string.backup_auto_nav_subtitle),
+                subtitle = if (auto.enabled && auto.backupTargets.isNotEmpty()) {
+                    stringResource(
+                        R.string.backup_hub_auto_summary,
+                        backupIntervalLabel(context, auto.intervalHours),
+                        context.resources.getQuantityString(R.plurals.backup_auto_keep_value, auto.keep, auto.keep),
+                    )
+                } else {
+                    stringResource(R.string.backup_hub_backup_off)
+                },
                 route = "backup/auto",
             ) { onNavigate("backup/auto") }
         }
         item {
             NavRow(
-                R.string.backup_include_group_title,
-                stringResource(
+                R.string.backup_sync_title,
+                subtitle = stringResource(
+                    if (!auto.sync.enabled) {
+                        R.string.backup_sync_nav_subtitle
+                    } else {
+                        when (auto.sync.mode) {
+                            SyncMode.SOON -> R.string.backup_sync_mode_soon
+                            SyncMode.SCHEDULE -> R.string.backup_sync_mode_schedule
+                            SyncMode.MANUAL -> R.string.backup_sync_mode_manual
+                        }
+                    },
+                ),
+                route = "backup/sync",
+            ) { onNavigate("backup/sync") }
+        }
+    }
+
+    SettingsGroup(
+        stringResource(R.string.backup_files_title),
+        info = stringResource(R.string.backup_info),
+    ) {
+        item {
+            WmRow(
+                title = stringResource(R.string.backup_files_export_title),
+                subtitle = stringResource(R.string.backup_files_export_subtitle),
+                icon = Icons.Outlined.FileUpload,
+                enabled = exportSections.isNotEmpty(),
+                onClick = exportGuarded,
+            )
+        }
+        item {
+            NavRow(
+                R.string.backup_files_contents_title,
+                subtitle = stringResource(
                     R.string.backup_include_nav_subtitle,
-                    sections.size,
+                    exportSections.size,
                     ConfigBackup.Section.entries.size,
                 ),
                 route = "backup/contents",
             ) { onNavigate("backup/contents") }
         }
-    }
-
-    SettingsGroup(
-        stringResource(R.string.backup_export_group_title),
-        info = stringResource(R.string.backup_info),
-    ) {
         item {
-            OutlinedButton(
-                enabled = sections.isNotEmpty(),
-                // The one control here that copies the user's data out of the
-                // app, API keys included, so it is one of the things the
-                // fingerprint lock can be pointed at.
-                onClick = rememberLockGuard(AppLockTargets["action_export_settings"]) {
-                    // Datestamp the default name so successive backups don't
-                    // overwrite each other and each file self-labels when it was made.
-                    // Locale.US, not the default: on a Thai-Buddhist locale the
-                    // platform formatter stamps 2569 for 2026, and a filename that
-                    // sorts by date has to mean the same thing everywhere.
-                    val stamp = SimpleDateFormat("yyyyMMdd-HHmmss", Locale.US).format(Date())
-                    exportLauncher.launch(
-                        "wmkeyboard-backup-$stamp.${ConfigBackup.FILE_EXTENSION}",
-                    )
-                },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            ) { Text(stringResource(R.string.backup_export_action)) }
-        }
-    }
-
-    SettingsGroup(
-        stringResource(R.string.backup_import_group_title),
-        info = stringResource(R.string.backup_import_note),
-    ) {
-        item {
-            OutlinedButton(
+            WmRow(
+                title = stringResource(R.string.backup_files_import_title),
+                subtitle = stringResource(R.string.backup_files_import_subtitle),
+                icon = Icons.Outlined.FileDownload,
                 onClick = { importLauncher.launch(arrayOf("*/*")) },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            ) { Text(stringResource(R.string.backup_import_action)) }
+            )
         }
     }
     Spacer(Modifier.height(16.dp))
@@ -1194,41 +957,334 @@ internal fun BackupSettings(
 }
 
 /**
- * The automatic backup on a page of its own: schedule, destination and the
- * credentials the destination needs. Locked with the backup screen, since
- * the lock follows the route prefix.
+ * The automatic backup on a page of its own: the switch, the schedule, the
+ * passphrase and what goes in. Where the backups go is on the main screen,
+ * as the list of locations.
  */
 @Composable
 internal fun BackupAutoSettings(repository: SettingsRepository, settings: KeyboardSettings) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    var message by remember { mutableStateOf<String?>(null) }
+    val auto = settings.autoBackup
+    val active = auto.backupTargets
+    val configured = active.isNotEmpty()
+    val encrypted = auto.encrypt && auto.passphrase.isNotEmpty()
+    val setKeys = rememberKeysSwitch(encrypted) { on -> scope.launch { repository.setBackupIncludeSecrets(on) } }
+    val personal = ConfigBackup.Section.DICTIONARY.id in auto.sections ||
+        ConfigBackup.Section.CLIPBOARD.id in auto.sections ||
+        ConfigBackup.Section.SWIPE.id in auto.sections
 
-    val folderLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocumentTree(),
-    ) { uri ->
-        if (uri == null) return@rememberLauncherForActivityResult
-        val taken = runCatching {
-            context.contentResolver.takePersistableUriPermission(
-                uri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION,
-            )
-        }.isSuccess
-        if (!taken) {
-            message = context.getString(R.string.backup_auto_folder_denied)
-            return@rememberLauncherForActivityResult
+    fun resync() = scope.launch { AutoBackupScheduler.sync(context, repository.settings.first().autoBackup) }
+
+    SettingsGroup {
+        item {
+            ToggleSetting(
+                R.string.backup_auto_enabled_title,
+                stringResource(
+                    when {
+                        configured -> R.string.backup_auto_enabled_subtitle
+                        auto.locations.isEmpty() -> R.string.backup_auto_needs_location
+                        else -> R.string.backup_auto_needs_target
+                    },
+                ),
+                auto.enabled && configured,
+                enabled = configured,
+                default = SettingsDefaults.autoBackup.enabled && configured,
+            ) { on ->
+                scope.launch {
+                    repository.setAutoBackupEnabled(on)
+                    resync()
+                }
+            }
         }
-        scope.launch {
-            repository.setAutoBackupFolderUri(uri.toString())
-            AutoBackupScheduler.sync(context, repository.settings.first().autoBackup)
+        item(visible = auto.enabled && configured) {
+            // The ladder by index, so every stop is a value somebody would pick.
+            SliderSetting(
+                R.string.backup_auto_interval_title,
+                value = intervalSliderIndex(auto.intervalHours).toFloat(),
+                range = 0f..(AutoBackupIntervals.size - 1).toFloat(),
+                display = { backupIntervalLabel(context, intervalAt(it)) },
+                default = intervalSliderIndex(SettingsDefaults.autoBackup.intervalHours).toFloat(),
+            ) { index ->
+                scope.launch {
+                    repository.setAutoBackupIntervalHours(intervalAt(index))
+                    resync()
+                }
+            }
+        }
+        item(visible = auto.enabled && configured) {
+            SliderSetting(
+                R.string.backup_auto_keep_title,
+                subtitle = stringResource(R.string.backup_auto_keep_subtitle),
+                value = auto.keep.toFloat(),
+                range = AutoBackupKeepRange.first.toFloat()..AutoBackupKeepRange.last.toFloat(),
+                display = { kept ->
+                    context.resources.getQuantityString(
+                        R.plurals.backup_auto_keep_value,
+                        kept.roundToInt(),
+                        kept.roundToInt(),
+                    )
+                },
+                default = SettingsDefaults.autoBackup.keep.toFloat(),
+            ) { kept -> scope.launch { repository.setAutoBackupKeep(kept.roundToInt()) } }
+        }
+        item(visible = auto.enabled && configured) {
+            ToggleSetting(
+                R.string.backup_auto_charging_title,
+                stringResource(R.string.backup_auto_charging_subtitle),
+                auto.requireCharging,
+                info = stringResource(R.string.backup_auto_charging_info),
+                default = SettingsDefaults.autoBackup.requireCharging,
+            ) { on ->
+                scope.launch {
+                    repository.setAutoBackupRequireCharging(on)
+                    resync()
+                }
+            }
+        }
+        // A folder is storage on this device: a network condition there would
+        // only ever delay a backup that costs nothing.
+        item(visible = auto.enabled && configured && active.any { it.type.needsNetwork }) {
+            ToggleSetting(
+                R.string.backup_auto_unmetered_title,
+                stringResource(R.string.backup_auto_unmetered_subtitle),
+                auto.requireUnmetered,
+                info = stringResource(R.string.backup_auto_unmetered_info),
+                default = SettingsDefaults.autoBackup.requireUnmetered,
+            ) { on ->
+                scope.launch {
+                    repository.setAutoBackupRequireUnmetered(on)
+                    resync()
+                }
+            }
         }
     }
 
-    AutoBackupGroup(
-        repository = repository,
-        auto = settings.autoBackup,
-        onPickFolder = { folderLauncher.launch(null) },
-        onMessage = { message = it },
+    SettingsGroup(
+        stringResource(R.string.backup_auto_targets_title),
+        info = stringResource(R.string.backup_auto_targets_info),
+    ) {
+        if (auto.locations.isEmpty()) {
+            item { WmRow(title = stringResource(R.string.backup_auto_targets_none)) }
+        }
+        for (location in auto.locations) {
+            item {
+                LocationCheckRow(location, location.backup) { on ->
+                    scope.launch {
+                        repository.upsertBackupLocation(location.copy(backup = on))
+                        resync()
+                    }
+                }
+            }
+        }
+    }
+
+    SettingsGroup(
+        stringResource(R.string.backup_auto_protect_title),
+        info = stringResource(R.string.backup_auto_protect_info),
+    ) {
+        item {
+            ToggleSetting(
+                R.string.backup_auto_encrypt_title,
+                stringResource(R.string.backup_auto_encrypt_subtitle),
+                auto.encrypt,
+                info = stringResource(R.string.backup_auto_encrypt_info),
+                default = SettingsDefaults.autoBackup.encrypt,
+            ) { on -> scope.launch { repository.setAutoBackupEncrypt(on) } }
+        }
+        item(visible = auto.encrypt) {
+            StoredTextField(
+                label = stringResource(R.string.backup_auto_passphrase_label),
+                value = auto.passphrase,
+                supporting = "",
+                password = true,
+            ) { entered -> scope.launch { repository.setAutoBackupPassphrase(entered) } }
+        }
+    }
+
+    // The one thing here that has to be said out loud: these sections send
+    // words the user typed, and things they copied, off the device on a timer.
+    if (personal && !encrypted) {
+        StateBanner(stringResource(R.string.backup_auto_personal_warning), tone = BannerTone.WARNING)
+    }
+
+    SettingsGroup(stringResource(R.string.backup_auto_contents_title)) {
+        sectionRows(
+            sections = auto.sectionSet,
+            defaults = AutoBackupSettings.DEFAULT_SECTIONS,
+            secrets = auto.backupIncludeSecrets to setKeys,
+            secretsSubtitle = if (encrypted) {
+                R.string.backup_include_secrets_subtitle
+            } else {
+                R.string.backup_secrets_unprotected_subtitle
+            },
+        ) { section, on ->
+            scope.launch {
+                val current = repository.settings.first().autoBackup.sectionSet
+                repository.setAutoBackupSections(if (on) current + section else current - section)
+            }
+        }
+    }
+    Spacer(Modifier.height(16.dp))
+}
+
+/**
+ * Sync between devices: whether this device syncs, when, where, and what.
+ * The explanation of how it works is the screen's subtitle; the rules about
+ * what stays on one device sit behind the "What syncs" heading.
+ */
+@Composable
+internal fun BackupSyncSettings(repository: SettingsRepository, settings: KeyboardSettings) {
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val auto = settings.autoBackup
+    val sync = auto.sync
+    val active = auto.activeLocations
+    val targets = sync.targets(auto.locations)
+    val encrypted = auto.encrypt && auto.passphrase.isNotEmpty()
+    var message by remember { mutableStateOf<String?>(null) }
+    var syncing by remember { mutableStateOf(false) }
+    val setKeys = rememberKeysSwitch(encrypted) { on -> scope.launch { repository.setSyncIncludeSecrets(on) } }
+
+    fun runNow() {
+        syncing = true
+        scope.launch {
+            val outcome = SyncRunner.run(context, repository, force = true)
+            syncing = false
+            message = syncOutcomeText(context, outcome, repository.settings.first().autoBackup)
+        }
+    }
+
+    SettingsGroup {
+        item {
+            ToggleSetting(
+                R.string.backup_sync_enabled_title,
+                stringResource(
+                    when {
+                        active.isEmpty() -> R.string.backup_auto_needs_location
+                        sync.enabled && targets.isEmpty() -> R.string.backup_sync_needs_target
+                        else -> R.string.backup_sync_enabled_subtitle
+                    },
+                ),
+                sync.enabled && active.isNotEmpty(),
+                info = stringResource(R.string.backup_sync_first_note),
+                enabled = active.isNotEmpty(),
+                default = SettingsDefaults.autoBackup.sync.enabled,
+            ) { on ->
+                scope.launch {
+                    // Turned on with nothing ticked: tick the first usable
+                    // location, the focused default, rather than switch on a
+                    // sync that has nowhere to go.
+                    if (on && targets.isEmpty()) active.firstOrNull()?.let { repository.setSyncLocation(it.id, true) }
+                    repository.setSyncEnabled(on)
+                    // The first pass straight away, with the screen still
+                    // open to say how it went.
+                    if (on) runNow()
+                }
+            }
+        }
+        item(visible = sync.enabled) {
+            ChoiceSetting(
+                R.string.backup_sync_mode_title,
+                options = listOf(
+                    SyncMode.SOON to stringResource(R.string.backup_sync_mode_soon),
+                    SyncMode.SCHEDULE to stringResource(R.string.backup_sync_mode_schedule),
+                    SyncMode.MANUAL to stringResource(R.string.backup_sync_mode_manual),
+                ),
+                selected = sync.mode,
+                default = SettingsDefaults.autoBackup.sync.mode,
+                detail = { mode ->
+                    ChoiceDetail(
+                        stringResource(
+                            when (mode) {
+                                SyncMode.SOON -> R.string.backup_sync_mode_soon_desc
+                                SyncMode.SCHEDULE -> R.string.backup_sync_mode_schedule_desc
+                                SyncMode.MANUAL -> R.string.backup_sync_mode_manual_desc
+                            },
+                        ),
+                    )
+                },
+            ) { mode -> scope.launch { repository.setSyncMode(mode) } }
+        }
+        item(visible = sync.enabled && sync.mode == SyncMode.SCHEDULE) {
+            SliderSetting(
+                R.string.backup_sync_interval_title,
+                value = intervalSliderIndex(sync.intervalHours).toFloat(),
+                range = 0f..(AutoBackupIntervals.size - 1).toFloat(),
+                display = { backupIntervalLabel(context, intervalAt(it)) },
+                default = intervalSliderIndex(SettingsDefaults.autoBackup.sync.intervalHours).toFloat(),
+            ) { index -> scope.launch { repository.setSyncIntervalHours(intervalAt(index)) } }
+        }
+        item(visible = sync.enabled) {
+            ToggleSetting(
+                R.string.backup_sync_secrets_title,
+                stringResource(
+                    if (encrypted) R.string.backup_sync_secrets_subtitle else R.string.backup_sync_secrets_unprotected,
+                ),
+                sync.includeSecrets,
+                default = SettingsDefaults.autoBackup.sync.includeSecrets,
+            ) { on -> setKeys(on) }
+        }
+    }
+
+    SettingsGroup(
+        stringResource(R.string.backup_sync_targets_title),
+        info = stringResource(R.string.backup_sync_targets_info),
+    ) {
+        if (auto.locations.isEmpty()) {
+            item { WmRow(title = stringResource(R.string.backup_auto_targets_none)) }
+        }
+        for (location in auto.locations) {
+            item {
+                LocationCheckRow(location, location.id in sync.locationIds) { on ->
+                    scope.launch { repository.setSyncLocation(location.id, on) }
+                }
+            }
+        }
+    }
+
+    SettingsGroup(
+        stringResource(R.string.backup_sync_contents_title),
+        info = stringResource(R.string.backup_sync_local_note),
+    ) {
+        sectionRows(
+            sections = sync.sectionSet,
+            defaults = SyncSettings.DEFAULT_SECTIONS,
+            secrets = null,
+        ) { section, on ->
+            scope.launch {
+                val current = repository.settings.first().autoBackup.sync.sectionSet
+                repository.setSyncSections(if (on) current + section else current - section)
+            }
+        }
+    }
+
+    SettingsGroup {
+        item {
+            FilledTonalButton(
+                enabled = sync.enabled && targets.isNotEmpty() && !syncing,
+                onClick = { runNow() },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            ) {
+                if (syncing) {
+                    CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(stringResource(if (syncing) R.string.backup_hub_syncing else R.string.backup_hub_sync_now))
+            }
+        }
+    }
+    val syncError = sync.lastError.takeIf { it.isNotEmpty() }?.let { syncErrorText(context, it, auto) }
+    StateBanner(
+        syncError ?: if (sync.lastRunAtMs > 0L) {
+            stringResource(
+                R.string.backup_hub_last_sync,
+                DateUtils.getRelativeTimeSpanString(sync.lastRunAtMs).toString(),
+            )
+        } else {
+            stringResource(R.string.backup_hub_never_synced)
+        },
+        tone = if (syncError != null) BannerTone.WARNING else BannerTone.INFO,
     )
     Spacer(Modifier.height(16.dp))
 
@@ -1238,162 +1294,27 @@ internal fun BackupAutoSettings(repository: SettingsRepository, settings: Keyboa
             onDismissRequest = { message = null },
             text = { Text(messageText) },
             confirmButton = {
-                TextButton(onClick = { message = null }) {
-                    Text(stringResource(CommonR.string.common_ok))
-                }
+                TextButton(onClick = { message = null }) { Text(stringResource(CommonR.string.common_ok)) }
             },
         )
     }
 }
 
-/** What a backup contains, shared by the manual export and the automatic one. */
+/** What the one-off "Export to a file" puts in. The automatic backup and sync have their own lists. */
 @Composable
 internal fun BackupContentsSettings(repository: SettingsRepository, settings: KeyboardSettings) {
     val scope = rememberCoroutineScope()
     val auto = settings.autoBackup
-    val sections = auto.sectionSet
-    val includeSecrets = auto.includeSecrets
-
-    fun setSection(section: ConfigBackup.Section, on: Boolean) {
-        scope.launch {
-            repository.setAutoBackupSections(
-                if (on) sections + section else sections - section,
-            )
-        }
-    }
-
-    SettingsGroup(stringResource(R.string.backup_include_group_title)) {
-        item {
-            ToggleSetting(
-                R.string.backup_section_settings_label,
-                stringResource(R.string.backup_include_settings_subtitle),
-                ConfigBackup.Section.SETTINGS in sections,
-                default = ConfigBackup.Section.SETTINGS.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-            ) { setSection(ConfigBackup.Section.SETTINGS, it) }
-        }
-        item(visible = ConfigBackup.Section.SETTINGS in sections) {
-            ToggleSetting(
-                R.string.backup_include_secrets_title,
-                stringResource(R.string.backup_include_secrets_subtitle),
-                includeSecrets,
-                info = stringResource(R.string.backup_include_secrets_info),
-                default = SettingsDefaults.autoBackup.includeSecrets,
-            ) { on -> scope.launch { repository.setAutoBackupIncludeSecrets(on) } }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_themes_label,
-                stringResource(R.string.backup_include_themes_subtitle),
-                ConfigBackup.Section.THEMES in sections,
-                default = ConfigBackup.Section.THEMES.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-                info = stringResource(R.string.backup_include_themes_info),
-            ) { setSection(ConfigBackup.Section.THEMES, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_dictionary_label,
-                stringResource(R.string.backup_include_dictionary_subtitle),
-                ConfigBackup.Section.DICTIONARY in sections,
-                default = ConfigBackup.Section.DICTIONARY.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-                info = stringResource(R.string.backup_include_dictionary_info),
-            ) { setSection(ConfigBackup.Section.DICTIONARY, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_clipboard_label,
-                stringResource(R.string.backup_include_clipboard_subtitle),
-                ConfigBackup.Section.CLIPBOARD in sections,
-                default = ConfigBackup.Section.CLIPBOARD.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-                info = stringResource(R.string.backup_include_clipboard_info),
-            ) { setSection(ConfigBackup.Section.CLIPBOARD, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_snippets_label,
-                stringResource(R.string.backup_include_snippets_subtitle),
-                ConfigBackup.Section.SNIPPETS in sections,
-                default = ConfigBackup.Section.SNIPPETS.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-            ) { setSection(ConfigBackup.Section.SNIPPETS, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_stickers_label,
-                stringResource(R.string.backup_include_stickers_subtitle),
-                ConfigBackup.Section.STICKERS in sections,
-                default = ConfigBackup.Section.STICKERS.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-                info = stringResource(R.string.backup_include_stickers_info),
-            ) { setSection(ConfigBackup.Section.STICKERS, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_icons_label,
-                stringResource(R.string.backup_include_icons_subtitle),
-                ConfigBackup.Section.ICONS in sections,
-                default = ConfigBackup.Section.ICONS.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-                info = stringResource(R.string.backup_include_icons_info),
-            ) { setSection(ConfigBackup.Section.ICONS, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_wordlists_label,
-                stringResource(R.string.backup_include_wordlists_subtitle),
-                ConfigBackup.Section.WORDLISTS in sections,
-                default = ConfigBackup.Section.WORDLISTS.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-            ) { setSection(ConfigBackup.Section.WORDLISTS, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_addons_label,
-                stringResource(R.string.backup_include_addons_subtitle),
-                ConfigBackup.Section.ADDONS in sections,
-                default = ConfigBackup.Section.ADDONS.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-                info = stringResource(R.string.backup_include_addons_info),
-            ) { setSection(ConfigBackup.Section.ADDONS, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_emoji_label,
-                stringResource(R.string.backup_include_emoji_subtitle),
-                ConfigBackup.Section.EMOJI in sections,
-                default = ConfigBackup.Section.EMOJI.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-            ) { setSection(ConfigBackup.Section.EMOJI, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_statistics_label,
-                stringResource(R.string.backup_include_statistics_subtitle),
-                ConfigBackup.Section.STATISTICS in sections,
-                default = ConfigBackup.Section.STATISTICS.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-            ) { setSection(ConfigBackup.Section.STATISTICS, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_vocab_label,
-                stringResource(R.string.backup_include_vocab_subtitle),
-                ConfigBackup.Section.VOCAB in sections,
-                default = ConfigBackup.Section.VOCAB.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-            ) { setSection(ConfigBackup.Section.VOCAB, it) }
-        }
-        item {
-            ToggleSetting(
-                R.string.backup_section_swipe_label,
-                stringResource(R.string.backup_include_swipe_subtitle),
-                ConfigBackup.Section.SWIPE in sections,
-                default = ConfigBackup.Section.SWIPE.id in
-                    AutoBackupSettings.DEFAULT_SECTIONS,
-            ) { setSection(ConfigBackup.Section.SWIPE, it) }
+    SettingsGroup {
+        sectionRows(
+            sections = auto.exportSectionSet,
+            defaults = AutoBackupSettings.DEFAULT_SECTIONS,
+            secrets = auto.includeSecrets to { on -> scope.launch { repository.setAutoBackupIncludeSecrets(on) } },
+        ) { section, on ->
+            scope.launch {
+                val current = repository.settings.first().autoBackup.exportSectionSet
+                repository.setExportSections(if (on) current + section else current - section)
+            }
         }
     }
     Spacer(Modifier.height(16.dp))

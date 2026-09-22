@@ -10,7 +10,9 @@ import com.wasimaster.wmkeyboard.app.llm.llmSplitCompat
 import com.wasimaster.wmkeyboard.app.modules.installOnDemandDelivery
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupClients
+import com.wasimaster.wmkeyboard.core.settings.sync.SyncWatcher
 
 /**
  * Exists for one reason: to install the crash handler before anything else in
@@ -79,5 +81,10 @@ class WMApplication : Application() {
             dropbox = BuildConfig.DROPBOX_APP_KEY,
             oneDrive = BuildConfig.ONEDRIVE_CLIENT_ID,
         )
+        // Sync between devices: keeps its jobs in step with the settings and
+        // pushes shortly after a synced setting changes. Here because the
+        // keyboard and the settings app share this process, and either may be
+        // the one running. Does nothing while sync is off.
+        SyncWatcher.start(this, SettingsRepository(this))
     }
 }

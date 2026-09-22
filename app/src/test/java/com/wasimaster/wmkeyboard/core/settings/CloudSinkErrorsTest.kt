@@ -59,33 +59,53 @@ class CloudSinkErrorsTest {
         assertEquals(SinkError.IO, DropboxSink.statusError(500))
     }
 
+    private fun with(vararg types: BackupDestination, unmetered: Boolean) = AutoBackupSettings(
+        requireUnmetered = unmetered,
+        locations = types.mapIndexed { i, type ->
+            BackupLocation(
+                id = "0000000$i",
+                type = type,
+                folderUri = "content://x",
+                webDavUrl = "https://x/",
+                webDavUser = "u",
+                s3 = S3Config(bucket = "b", accessKeyId = "k", secretAccessKey = "s"),
+                ftp = FtpConfig(host = "h", user = "u"),
+                refreshToken = "t",
+            )
+        },
+    )
+
     @Test
-    fun `a network destination always waits for a network`() {
+    fun `a network location always waits for a network`() {
         for (destination in BackupDestination.entries - BackupDestination.FOLDER) {
             assertEquals(
                 JobInfo.NETWORK_TYPE_ANY,
-                AutoBackupScheduler.networkTypeFor(
-                    AutoBackupSettings(destination = destination, requireUnmetered = false),
-                ),
+                AutoBackupScheduler.networkTypeFor(with(destination, unmetered = false)),
             )
             assertEquals(
                 JobInfo.NETWORK_TYPE_UNMETERED,
-                AutoBackupScheduler.networkTypeFor(
-                    AutoBackupSettings(destination = destination, requireUnmetered = true),
-                ),
+                AutoBackupScheduler.networkTypeFor(with(destination, unmetered = true)),
             )
         }
     }
 
     @Test
-    fun `a folder needs no network either way`() {
+    fun `folders only need no network either way`() {
         for (unmetered in listOf(true, false)) {
             assertEquals(
                 JobInfo.NETWORK_TYPE_NONE,
-                AutoBackupScheduler.networkTypeFor(
-                    AutoBackupSettings(destination = BackupDestination.FOLDER, requireUnmetered = unmetered),
-                ),
+                AutoBackupScheduler.networkTypeFor(with(BackupDestination.FOLDER, unmetered = unmetered)),
             )
         }
+    }
+
+    @Test
+    fun `a folder beside a cloud location waits for the network`() {
+        assertEquals(
+            JobInfo.NETWORK_TYPE_ANY,
+            AutoBackupScheduler.networkTypeFor(
+                with(BackupDestination.FOLDER, BackupDestination.DROPBOX, unmetered = false),
+            ),
+        )
     }
 }

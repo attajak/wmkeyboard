@@ -1501,8 +1501,13 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
     fun backupAuto(@StringRes title: Int, @StringRes subtitle: Int) = entry(
         title, subtitle, R.string.backup_auto_group_title, "backup/auto", screenParent = R.string.home_backup_title,
     )
+    fun backupHub(@StringRes title: Int, @StringRes subtitle: Int) =
+        entry(title, subtitle, R.string.home_backup_title, "backup")
+    fun backupSync(@StringRes title: Int, @StringRes subtitle: Int) = entry(
+        title, subtitle, R.string.backup_sync_title, "backup/sync", screenParent = R.string.home_backup_title,
+    )
     fun backupContents(@StringRes title: Int, @StringRes subtitle: Int) = entry(
-        title, subtitle, R.string.backup_include_group_title, "backup/contents",
+        title, subtitle, R.string.backup_files_contents_title, "backup/contents",
         screenParent = R.string.home_backup_title, weight = EntryWeight.MIRROR,
     )
     fun stickerPack(@StringRes title: Int, @StringRes subtitle: Int) = entry(
@@ -1558,20 +1563,30 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         // Every switch that says what a backup holds. Each is named after the
         // feature it copies, never after the feature itself, which is why they
         // all weigh MIRROR: the search for "themes" wants the theme screen.
-        backupAuto(R.string.backup_auto_dest_title, R.string.backup_auto_dest_subtitle),
-        backupAuto(R.string.backup_auto_folder_title, R.string.backup_auto_folder_subtitle),
-        backupAuto(R.string.backup_auto_webdav_url_label, R.string.backup_auto_dest_subtitle),
-        backupAuto(R.string.backup_auto_drive_title, R.string.backup_auto_dest_subtitle),
-        backupAuto(R.string.backup_auto_s3_bucket_label, R.string.backup_auto_s3_endpoint_hint),
-        backupAuto(R.string.backup_auto_s3_path_style_title, R.string.backup_auto_s3_path_style_subtitle),
-        backupAuto(R.string.backup_auto_ftp_host_label, R.string.backup_auto_ftp_path_hint),
-        backupAuto(R.string.backup_auto_ftp_secure_title, R.string.backup_auto_ftp_secure_subtitle),
-        backupAuto(R.string.backup_auto_dest_dropbox, R.string.backup_auto_dropbox_info),
-        backupAuto(R.string.backup_auto_dest_onedrive, R.string.backup_auto_onedrive_info),
+        // Where backups go: the Locations card on the main Backup screen. Each
+        // kind of place is findable by name, and all of them land on the card.
+        backupHub(R.string.backup_locations_title, R.string.backup_location_add_subtitle),
+        backupHub(R.string.backup_auto_folder_title, R.string.backup_auto_dest_folder_desc),
+        backupHub(R.string.backup_auto_dest_webdav, R.string.backup_auto_dest_webdav_desc),
+        backupHub(R.string.backup_auto_drive_title, R.string.backup_auto_dest_drive_desc),
+        backupHub(R.string.backup_auto_dest_s3, R.string.backup_auto_dest_s3_desc),
+        backupHub(R.string.backup_auto_dest_ftp, R.string.backup_auto_dest_ftp_desc),
+        backupHub(R.string.backup_auto_dest_dropbox, R.string.backup_auto_dest_dropbox_desc),
+        backupHub(R.string.backup_auto_dest_onedrive, R.string.backup_auto_dest_onedrive_desc),
+        backupHub(R.string.backup_files_export_title, R.string.backup_files_export_subtitle),
+        backupHub(R.string.backup_files_import_title, R.string.backup_files_import_subtitle),
         backupAuto(R.string.backup_auto_enabled_title, R.string.backup_auto_enabled_subtitle),
         backupAuto(R.string.backup_auto_interval_title, R.string.backup_auto_enabled_subtitle),
         backupAuto(R.string.backup_auto_keep_title, R.string.backup_auto_keep_subtitle),
         backupAuto(R.string.backup_auto_encrypt_title, R.string.backup_auto_encrypt_subtitle),
+        backupAuto(R.string.backup_auto_contents_title, R.string.backup_include_settings_subtitle),
+        backupSync(R.string.backup_sync_enabled_title, R.string.backup_sync_enabled_subtitle),
+        backupSync(R.string.backup_sync_mode_title, R.string.backup_sync_mode_soon_desc),
+        backupSync(R.string.backup_sync_interval_title, R.string.backup_sync_mode_schedule_desc),
+        backupSync(R.string.backup_sync_targets_title, R.string.backup_sync_targets_info),
+        backupAuto(R.string.backup_auto_targets_title, R.string.backup_auto_targets_info),
+        backupSync(R.string.backup_sync_secrets_title, R.string.backup_sync_secrets_subtitle),
+        backupSync(R.string.backup_sync_contents_title, R.string.backup_sync_local_note),
         backupContents(R.string.backup_section_settings_label, R.string.backup_include_settings_subtitle),
         backupContents(R.string.backup_include_secrets_title, R.string.backup_include_secrets_subtitle),
         backupContents(R.string.backup_section_themes_label, R.string.backup_include_themes_subtitle),

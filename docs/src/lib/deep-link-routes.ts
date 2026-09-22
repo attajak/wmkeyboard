@@ -289,7 +289,8 @@ export const ROUTES: RouteSpec[] = [
 	{ pattern: 'accessibility', label: 'Accessibility', group: 'Privacy and backup' },
 	{ pattern: 'backup', label: 'Backup and restore', group: 'Privacy and backup' },
 	{ pattern: 'backup/auto', label: 'Automatic backup', group: 'Privacy and backup' },
-	{ pattern: 'backup/contents', label: 'What goes into a backup', group: 'Privacy and backup' },
+	{ pattern: 'backup/sync', label: 'Sync devices', group: 'Privacy and backup' },
+	{ pattern: 'backup/contents', label: 'What goes in an export', group: 'Privacy and backup' },
 
 	{ pattern: 'about', label: 'About', group: 'About' },
 	{ pattern: 'storage', label: 'Storage', group: 'About' },

@@ -86,7 +86,7 @@ private val themesTop = Shot("reference/settings/themes-gallery-overview", "them
 private val themeEditor = Shot("themes/editor-live-preview", "themes", steps = { tapIcon("Create theme") })
 
 // ---------------------------------------------------------------- backup
-private val backupScreen = Shot("privacy/backup-restore-screen", "backup/contents", setting = "backup_include_group_title")
+private val backupScreen = Shot("privacy/backup-restore-screen", "backup/contents", setting = "backup_files_contents_title")
 
 // ---------------------------------------------------------------- about
 private val diagnostics = Shot("development/diagnostics-screen", "debug_log", setting = "shell_debug_log_report_title")

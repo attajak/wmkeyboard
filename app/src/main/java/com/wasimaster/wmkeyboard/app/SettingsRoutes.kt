@@ -81,6 +81,7 @@ internal object SettingsRoutes {
         "dictionary",
         "backup",
         "backup/auto",
+        "backup/sync",
         "backup/contents",
         "customdictionaries",
         "emojicategories",

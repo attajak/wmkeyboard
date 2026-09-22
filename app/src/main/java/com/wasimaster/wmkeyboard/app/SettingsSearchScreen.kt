@@ -63,6 +63,7 @@ import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.Checklist
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Sync
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Fingerprint
 import androidx.compose.material.icons.outlined.Mic
@@ -537,6 +538,7 @@ internal object SettingsRouteIcons {
         "advanced" to { Icons.Outlined.Tune },
         "backup" to { Icons.Outlined.Save },
         "backup/auto" to { Icons.Outlined.Schedule },
+        "backup/sync" to { Icons.Outlined.Sync },
         "backup/contents" to { Icons.Outlined.Checklist },
         "about" to { Icons.Outlined.Info },
         "storage" to { Icons.Outlined.PieChart },

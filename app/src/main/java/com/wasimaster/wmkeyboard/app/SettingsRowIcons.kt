@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Phonelink
 import androidx.compose.material.icons.outlined.SwipeVertical
 import androidx.compose.material.icons.outlined.Sync
+import androidx.compose.material.icons.outlined.CloudQueue
 import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material.icons.automirrored.outlined.Chat
@@ -435,7 +436,14 @@ internal object SettingsRowIcons {
         put(R.string.backup_section_vocab_label) { Icons.Outlined.AutoStories }
         put(R.string.backup_blacklist_clear_title) { Icons.Outlined.DeleteSweep }
         put(R.string.backup_include_secrets_title) { Icons.Outlined.Key }
-        put(R.string.backup_auto_dest_title) { Icons.Outlined.CloudUpload }
+        put(R.string.backup_sync_title) { Icons.Outlined.Sync }
+        put(R.string.backup_sync_enabled_title) { Icons.Outlined.Sync }
+        put(R.string.backup_sync_mode_title) { Icons.Outlined.Schedule }
+        put(R.string.backup_sync_interval_title) { Icons.Outlined.Schedule }
+        put(R.string.backup_sync_targets_title) { Icons.Outlined.CloudQueue }
+        put(R.string.backup_auto_targets_title) { Icons.Outlined.CloudQueue }
+        put(R.string.backup_sync_secrets_title) { Icons.Outlined.Key }
+        put(R.string.backup_files_contents_title) { Icons.Outlined.Checklist }
         put(R.string.backup_auto_folder_title) { Icons.Outlined.Folder }
         put(R.string.backup_auto_webdav_url_label) { Icons.Outlined.Link }
         put(R.string.backup_auto_drive_title) { Icons.Outlined.CloudUpload }
@@ -1206,7 +1214,6 @@ internal object SettingsRowIcons {
         put(R.string.appearance_toolbox_reset_title) { Icons.Outlined.Restore }
         put(R.string.appearance_toolbox_section_title) { Icons.Outlined.Apps }
         put(R.string.backup_auto_group_title) { Icons.Outlined.Schedule }
-        put(R.string.backup_include_group_title) { Icons.Outlined.Checklist }
         put(R.string.customdict_add_language_title) { Icons.Outlined.Add }
         put(R.string.fonts_english_header) { Icons.Outlined.TextFields }
         put(R.string.home_addons_title) { Icons.Outlined.Extension }

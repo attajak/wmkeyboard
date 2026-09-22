@@ -73,6 +73,14 @@ interface BackupSink {
     val id: String
 
     /**
+     * Whether two files can share a name here, so writing a name again adds a
+     * file rather than replacing one. Only Google Drive does this. Sync
+     * rewrites one file per device and has to clear the older copies itself
+     * where this is true.
+     */
+    val allowsDuplicateNames: Boolean get() = false
+
+    /**
      * Whether a [write] could succeed right now.
      *
      * Cheap by contract: a permission check and at most one metadata query, no

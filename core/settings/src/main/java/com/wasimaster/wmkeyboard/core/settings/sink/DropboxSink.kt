@@ -133,7 +133,7 @@ class DropboxSink(
 
                 root["entries"]?.jsonArray?.forEach { element ->
                     entryOf(element.jsonObject)
-                        ?.takeIf { AutoBackupNaming.isOurs(it.name) }
+                        ?.takeIf { AutoBackupNaming.isListed(it.name) }
                         ?.let(out::add)
                 }
                 cursor = if (root["has_more"]?.jsonPrimitive?.contentOrNull == "true") {

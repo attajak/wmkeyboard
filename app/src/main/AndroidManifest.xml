@@ -1032,6 +1032,14 @@
             android:name="com.wasimaster.wmkeyboard.app.AutoBackupJobService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <!-- Runs a sync pass between devices. Scheduled by SyncScheduler in
+             :core:settings, which names this class as a string for the same
+             reason as the backup job above. -->
+        <service
+            android:name="com.wasimaster.wmkeyboard.app.SyncJobService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

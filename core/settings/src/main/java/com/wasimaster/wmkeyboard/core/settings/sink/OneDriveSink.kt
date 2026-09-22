@@ -128,7 +128,7 @@ class OneDriveSink(
                     ?: throw BackupSinkException(SinkError.IO)
                 root["value"]?.jsonArray?.forEach { element ->
                     entryOf(element.jsonObject)
-                        ?.takeIf { AutoBackupNaming.isOurs(it.name) }
+                        ?.takeIf { AutoBackupNaming.isListed(it.name) }
                         ?.let(out::add)
                 }
                 url = root["@odata.nextLink"]?.jsonPrimitive?.contentOrNull

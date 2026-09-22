@@ -392,7 +392,9 @@ class SnippetStore(private val storageFile: File?) {
      */
     @Synchronized
     fun add(snippet: Snippet, now: Long = System.currentTimeMillis()): Snippet {
-        val added = normalize(snippet, id = nextId++, createdAt = now)
+        val id = freshId(nextId, now)
+        nextId = id + 1
+        val added = normalize(snippet, id = id, createdAt = now)
         snippets.add(added)
         lookup = null
         return added
@@ -577,7 +579,7 @@ class SnippetStore(private val storageFile: File?) {
         now: Long = System.currentTimeMillis(),
     ): SnippetFolder {
         val added = SnippetFolder(
-            id = nextFolderId++,
+            id = freshId(nextFolderId, now).also { nextFolderId = it + 1 },
             name = name.trim(),
             enabled = enabled,
             createdAt = now,
@@ -1063,6 +1065,22 @@ class SnippetStore(private val storageFile: File?) {
     }
 
     companion object {
+
+        /**
+         * An id for something new, and one that another device is very
+         * unlikely to hand out too: the time in milliseconds times a thousand,
+         * plus a random part, and never below the running counter.
+         *
+         * Plain counting gave every phone the same ids, which was harmless
+         * while a store lived on one phone. Sync merges two phones' snippets
+         * by id, and two different snippets both numbered 6 would be one of
+         * them lost. Still below 2^53, so a JSON reader that goes through a
+         * double keeps it exact.
+         */
+        internal fun freshId(counter: Long, now: Long): Long =
+            maxOf(counter, now * ID_SPREAD + kotlin.random.Random.nextLong(ID_SPREAD))
+
+        private const val ID_SPREAD = 1000L
 
         /** Any run of whitespace, which a saved trigger spelling holds as one space. */
         private val WHITESPACE_RUN = Regex("\\s+")

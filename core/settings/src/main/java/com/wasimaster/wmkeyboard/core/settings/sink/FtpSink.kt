@@ -70,7 +70,7 @@ class FtpSink(private val config: FtpConfig) : BackupSink {
             connect().use { session ->
                 session.changeToBackupDirectory()
                 session.listing()
-                    .filter { !it.isDirectory && AutoBackupNaming.isOurs(it.name) }
+                    .filter { !it.isDirectory && AutoBackupNaming.isListed(it.name) }
                     .map {
                         SinkEntry(
                             id = it.name,

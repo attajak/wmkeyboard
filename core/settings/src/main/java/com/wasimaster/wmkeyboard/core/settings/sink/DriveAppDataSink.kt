@@ -95,6 +95,9 @@ class DriveAppDataSink(
 
     override val id: String get() = ID
 
+    /** Drive files are addressed by id; a name is only a label. */
+    override val allowsDuplicateNames: Boolean get() = true
+
     private val json = Json { ignoreUnknownKeys = true }
 
     private val client: OkHttpClient by lazy {
@@ -223,7 +226,7 @@ class DriveAppDataSink(
 
                 root["files"]?.jsonArray?.forEach { element ->
                     entryOf(element.jsonObject)
-                        ?.takeIf { AutoBackupNaming.isOurs(it.name) }
+                        ?.takeIf { AutoBackupNaming.isListed(it.name) }
                         ?.let(out::add)
                 }
                 pageToken = root["nextPageToken"]?.jsonPrimitive?.contentOrNull

@@ -24,7 +24,6 @@ import java.io.File
 import java.io.OutputStreamWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
@@ -71,13 +70,20 @@ object AutoBackupRunner {
 
     private const val STAGING_DIR = "backup"
 
-    private val gate = Mutex()
 
     /** What one run did, for the settings screen and for the job's retry choice. */
     sealed interface Outcome {
 
-        /** [name] is what the file ended up called, which is not always what we asked. */
-        data class Done(val name: String, val skipped: Set<ConfigBackup.Section>) : Outcome
+        /**
+         * At least one location has the backup. [name] is what the file ended
+         * up called at the first of them, which is not always what we asked.
+         * [failed] names the locations that did not get it, by id.
+         */
+        data class Done(
+            val name: String,
+            val skipped: Set<ConfigBackup.Section>,
+            val failed: Map<String, SinkError> = emptyMap(),
+        ) : Outcome
 
         /** Nothing to do: turned off, no folder, or the interval has not elapsed. */
         data object Skipped : Outcome
@@ -105,7 +111,7 @@ object AutoBackupRunner {
         repository: SettingsRepository,
         force: Boolean = false,
         nowMs: Long = System.currentTimeMillis(),
-    ): Outcome = gate.withLock {
+    ): Outcome = BackupGate.mutex.withLock {
         // Files this run's traffic as scheduled in the network activity log,
         // unless the user pressed "Back up now". The gate holds one run at a time.
         BackupTraffic.unattended = !force
@@ -124,62 +130,49 @@ object AutoBackupRunner {
     ): Outcome {
         val appContext = context.applicationContext
         val settings = repository.settings.first().autoBackup
+        val targets = settings.backupTargets
 
         if (!force && !settings.enabled) return Outcome.Skipped
-        if (!settings.destinationConfigured) return Outcome.Skipped
+        if (targets.isEmpty()) return Outcome.Skipped
         if (!force && !isDue(settings, nowMs)) return Outcome.Skipped
         // Before anything else. A locked device cannot produce a real bundle,
         // and an unreal one is worse than none.
         if (!DirectBoot.isUserUnlocked(appContext)) return Outcome.Locked
 
-        val sink = sinkFor(appContext, settings)
-            ?: return fail(
-                appContext,
-                repository,
-                BackupSinkException(SinkError.NOT_CONFIGURED),
-                nowMs,
-                announce = !force,
-            )
-        BackupLog.d("run force=$force destination=${settings.destination} sink=${sink.id}")
-        sink.readiness().exceptionOrNull()?.let { failure ->
-            BackupLog.w("readiness failed", failure)
-            return fail(appContext, repository, failure, nowMs, announce = !force)
-        }
-
+        BackupLog.d("run force=$force locations=${targets.map { "${it.type.id}:${it.id}" }}")
         val outcome = runCancellable {
-            backUp(appContext, repository, sink, settings, nowMs, announce = !force)
+            backUp(appContext, repository, targets, settings, nowMs, announce = !force)
         }
         return outcome.getOrElse { failure ->
-            fail(appContext, repository, failure, nowMs, announce = !force)
+            fail(appContext, repository, failure, nowMs, announce = !force, location = null)
         }
     }
 
     /**
-     * The sink for the chosen destination, or null when this build cannot
-     * reach it.
+     * The sink for [location], or null when this build cannot reach it.
      *
-     * Only Drive can be missing, and only on a build with no Play services
-     * compiled in: [DriveAuth.provider] is what `:app` fills in behind that
-     * seam, so a null there is the F-Droid case rather than a failure. The
-     * other two are ordinary code that every build has.
+     * Only Drive, Dropbox and OneDrive can be missing: Drive on a build with
+     * no Play services compiled in ([DriveAuth.provider] is what `:app` fills
+     * in behind that seam), the other two on a build with no client id. A null
+     * is that build, not a failure.
      */
-    fun sinkFor(context: Context, settings: AutoBackupSettings): BackupSink? =
-        when (settings.destination) {
+    fun sinkFor(context: Context, location: BackupLocation): BackupSink? =
+        when (location.type) {
             BackupDestination.FOLDER ->
-                SafFolderSink(context, Uri.parse(settings.folderUri))
+                SafFolderSink(context, Uri.parse(location.folderUri))
             BackupDestination.WEBDAV -> WebDavSink(
-                baseUrl = settings.webDavUrl,
-                user = settings.webDavUser,
-                password = settings.webDavPassword,
+                baseUrl = location.webDavUrl,
+                user = location.webDavUser,
+                password = location.webDavPassword,
             )
             BackupDestination.DRIVE -> DriveAuth.provider?.let(::DriveAppDataSink)
-            BackupDestination.S3 -> S3Sink(settings.s3)
-            BackupDestination.FTP -> FtpSink(settings.ftp)
+            BackupDestination.S3 -> S3Sink(location.s3)
+            BackupDestination.FTP -> FtpSink(location.ftp)
             BackupDestination.DROPBOX -> BackupClients.dropbox()?.let {
-                DropboxSink(settings.dropboxRefreshToken, it)
+                DropboxSink(location.refreshToken, it)
             }
             BackupDestination.ONEDRIVE -> BackupClients.oneDrive()?.let {
-                OneDriveSink(settings.oneDriveRefreshToken, it)
+                OneDriveSink(location.refreshToken, it)
             }
         }
 
@@ -202,7 +195,7 @@ object AutoBackupRunner {
     private suspend fun backUp(
         appContext: Context,
         repository: SettingsRepository,
-        sink: BackupSink,
+        targets: List<BackupLocation>,
         settings: AutoBackupSettings,
         nowMs: Long,
         announce: Boolean,
@@ -225,13 +218,22 @@ object AutoBackupRunner {
         val version = appVersion(appContext)
         val bundle = repository.exportConfig(
             sections = sections,
-            // A file nobody can read is not protected by withholding the keys,
-            // and a file anybody can read should not carry them.
-            includeSecrets = settings.includeSecrets && encrypt,
+            // The user's call, on the automatic backup's own switch. The screen
+            // strongly suggests a passphrase before it goes on, and warns when
+            // it is on without one; it does not quietly drop keys the user
+            // asked to keep.
+            includeSecrets = settings.backupIncludeSecrets,
             appVersion = version.first,
             appVersionName = version.second,
+            // Never the locations themselves. A backup at one location holding
+            // the passwords and sign-ins for all of them would hand every one
+            // of them to whoever can open that one.
+            excludeKeys = setOf(SettingsBackup.AUTO_BACKUP_LOCATIONS),
         )
 
+        // Staged and verified once, then copied to every location: the
+        // expensive part and the safety check do not scale with how many
+        // places the user wants a copy in.
         val staged = stage(appContext, bundle, settings, encrypt)
         try {
             if (!verify(staged, settings, encrypt)) {
@@ -246,19 +248,65 @@ object AutoBackupRunner {
             )
             val mime =
                 if (encrypt) ConfigBackup.ENCRYPTED_MIME_TYPE else ConfigBackup.MIME_TYPE
-            val written = sink.write(name, mime) { out -> staged.inputStream().use { it.copyTo(out) } }
-                .getOrElse { return fail(appContext, repository, it, nowMs, announce) }
 
-            // Last, and only now. Everything above can fail without costing the
-            // user a generation; this is the only step that destroys one.
-            rotate(sink, settings.keep, installId)
+            var firstName: String? = null
+            val failed = LinkedHashMap<String, SinkError>()
+            for (location in targets) {
+                val written = copyTo(appContext, location, name, mime, staged, settings.keep, installId)
+                written.onSuccess { entry ->
+                    if (firstName == null) firstName = entry.name
+                    repository.setLocationStatus(location.id) { it.copy(backupAtMs = nowMs, backupError = "") }
+                }.onFailure { failure ->
+                    val reason = (failure as? BackupSinkException)?.reason ?: SinkError.IO
+                    BackupLog.w("location ${location.id} failed: $reason", failure)
+                    failed[location.id] = reason
+                    repository.setLocationStatus(location.id) { it.copy(backupError = reason.name) }
+                    if (announce && reason != SinkError.NOT_CONFIGURED) {
+                        BackupNotification.post(appContext, reason, location.type)
+                    }
+                }
+            }
 
+            val landed = firstName
+                ?: return fail(
+                    appContext,
+                    repository,
+                    BackupSinkException(failed.values.firstOrNull() ?: SinkError.IO),
+                    nowMs,
+                    announce = false,
+                    location = null,
+                )
+            // The run counts as done when any location has it: the schedule is
+            // about whether a recent copy exists somewhere, and the failures are
+            // recorded per location for the screen to show.
             repository.setAutoBackupOutcome(ranAtMs = nowMs, error = "")
-            BackupLog.d("done ${written.name} (${staged.length()} B) skipped=$skipped")
-            return Outcome.Done(written.name, skipped)
+            BackupLog.d("done $landed (${staged.length()} B) skipped=$skipped failed=$failed")
+            return Outcome.Done(landed, skipped, failed)
         } finally {
             staged.delete()
         }
+    }
+
+    /**
+     * One location's share of a run: readiness, the copy, then rotation.
+     * Rotation only after the copy is confirmed, as ever: it is the one step
+     * that destroys a generation.
+     */
+    private suspend fun copyTo(
+        appContext: Context,
+        location: BackupLocation,
+        name: String,
+        mime: String,
+        staged: File,
+        keep: Int,
+        installId: String,
+    ): Result<com.wasimaster.wmkeyboard.core.settings.sink.SinkEntry> {
+        val sink = sinkFor(appContext, location)
+            ?: return Result.failure(BackupSinkException(SinkError.NOT_CONFIGURED))
+        sink.readiness().exceptionOrNull()?.let { return Result.failure(it) }
+        val written = sink.write(name, mime) { out -> staged.inputStream().use { it.copyTo(out) } }
+        if (written.isSuccess) rotate(sink, keep, installId)
+        return written
     }
 
     /**
@@ -332,7 +380,9 @@ object AutoBackupRunner {
     }.getOrDefault(0 to "")
 
     private suspend fun rotate(sink: BackupSink, keep: Int, installId: String) {
-        val entries = sink.list().getOrNull() ?: return
+        // Backups only. A sink lists sync files too, and a sync file counted
+        // here would be a generation to delete.
+        val entries = sink.list().getOrNull()?.filter { AutoBackupNaming.isOurs(it.name) } ?: return
         val doomed = AutoBackupNaming.rotation(entries, keep, installId)
         BackupLog.d("rotate: ${entries.size} listed, keep $keep, deleting ${doomed.map { it.name }}")
         for (entry in doomed) {
@@ -355,14 +405,13 @@ object AutoBackupRunner {
         failure: Throwable,
         nowMs: Long,
         announce: Boolean,
+        location: BackupLocation?,
     ): Outcome {
         val reason = (failure as? BackupSinkException)?.reason ?: SinkError.IO
         BackupLog.w("failed: $reason", failure)
         repository.setAutoBackupOutcome(ranAtMs = nowMs, error = reason.name)
         if (announce && reason != SinkError.NOT_CONFIGURED) {
-            val destination = runCatching { repository.settings.first().autoBackup.destination }
-                .getOrDefault(BackupDestination.FOLDER)
-            BackupNotification.post(context, reason, destination)
+            BackupNotification.post(context, reason, location?.type ?: BackupDestination.FOLDER)
         }
         return Outcome.Failed(reason)
     }

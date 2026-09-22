@@ -1,6 +1,6 @@
 ---
 title: "Backup & restore"
-description: "Export everything, restore anywhere, and control what Android's own backup may take."
+description: "Export everything, back up on a timer to places you choose, keep devices in sync, and control what Android's own backup may take."
 sidebar:
   order: 6
 ---
@@ -9,10 +9,12 @@ import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
 import Shot from '@components/Shot.astro';
 
-WM Keyboard backs itself up two ways. One is a config file you export and
-move yourself. The other is Android's own backup system, off until you turn
-it on. Both exist so a reinstall or a new phone doesn't mean retyping every
-setting and rebuilding every theme.
+WM Keyboard backs itself up three ways. One is a config file you export and
+move yourself. One is an automatic backup, on a timer, to places you choose.
+The third is Android's own backup system, off until you turn it on. All of
+them exist so a reinstall or a new phone doesn't mean retyping every setting
+and rebuilding every theme. Separately, [sync](#sync-between-devices) keeps
+two or more devices the same while you use them all.
 
 <PhoneFrame caption="Backup & restore: pick what to include, then export or import a file.">
   <Shot id="privacy/backup-restore-screen" alt="Backup & restore: pick what to include, then export or import a file." />
@@ -20,7 +22,7 @@ setting and rebuilding every theme.
 
 ## Exporting a config file
 
-Open **Backup & restore**. Choose which sections go in the file. Each one is
+Open **Backup & restore**, then **What goes in an export**. Each section is
 its own switch:
 
 | Section | Default | What it covers |
@@ -49,10 +51,11 @@ are personal too but default on, since both are small and neither can be
 downloaded again if you lose it. The statistics are counts only, never
 anything you typed.
 
-Tap **Export backup** to write a `wmkeyboard-backup-<date>-<time>.wmconfig.json`
+Tap **Export to a file** to write a `wmkeyboard-backup-<date>-<time>.wmconfig.json`
 file through Android's own save dialog. It goes wherever you choose, not to
-any WM Keyboard server. What you pick here is remembered, and it's the same
-list the automatic backup uses, so changing it changes both.
+any WM Keyboard server. What you pick is remembered. The automatic backup and
+sync each have a list of their own, because a file you hand to someone, a copy
+for yourself and what your devices share are three different decisions.
 
 :::note[Addon repositories, not addons]
 The addon repositories section is only the list of repository addresses
@@ -64,7 +67,7 @@ installed theme is in Themes, an installed icon pack is in Icon packs. See
 
 ## Importing a file
 
-Tap **Import backup**. A file picker opens, and the app reads your chosen
+Tap **Import a file**. A file picker opens, and the app reads your chosen
 file before it touches anything. A confirmation dialog lists exactly what's
 inside, for example "Themes: 3 custom themes". If the file isn't a WM
 Keyboard backup, the app refuses it outright.
@@ -107,7 +110,7 @@ keys**, which only appears while the Settings section itself is included.
 That's more than the tool keys: Translate, Klipy, GIPHY, Brave, Unsplash,
 Pexels, every AI provider key including Grok, DeepSeek and the
 OpenAI-compatible one, the Hugging Face token, and the passwords and tokens
-for your backup destinations (WebDAV, S3, FTP, Dropbox, OneDrive) plus your
+for your backup locations (WebDAV, S3, FTP, Dropbox, OneDrive) plus your
 backup passphrase.
 
 [AI history](/tools/ai/#history) never travels, with or without that switch,
@@ -132,10 +135,11 @@ one piece.
 ## Automatic backup
 
 Exporting by hand only helps if you remember to do it. **Automatic backup**
-writes the same file for you on a schedule, by default while your device
-charges and sits on Wi-Fi. You pick where it goes:
+writes the same kind of file for you on a schedule, by default while your
+device charges and sits on Wi-Fi, to the **locations** you choose. Add as many
+as you like, of any kind, on the Backup & restore screen:
 
-| Destination | What it needs | Works without Google |
+| Location | What it needs | Works without Google |
 |---|---|---|
 | **Folder** | A folder you pick, anywhere with a files app behind it: your device, an SD card, Drive, Dropbox, Nextcloud, OneDrive | Yes |
 | **WebDAV** | The address of a Nextcloud, ownCloud or other WebDAV folder, and a login | Yes |
@@ -146,7 +150,14 @@ charges and sits on Wi-Fi. You pick where it goes:
 | **OneDrive** | Signing in. The app gets a folder of its own under Apps | Yes |
 
 None of these send anything to a WM Keyboard server. There is no account with
-us, and nothing of yours passes through anything we run.
+us, and nothing of yours passes through anything we run. **Test the
+connection** in each location's sheet tells you straight away whether it
+works, rather than after the first night's backup fails.
+
+**You choose which locations get backups.** On the Automatic backup screen,
+**Back up to** has a tick box for each location. Each backup is built and
+checked once, then copied to every ticked location. One that fails says so on
+its card, and the others still get their copy.
 
 **Two conditions guard the scheduled job, and you own both.** **Only while
 charging** is on by default, so a backup waits for the charger. **Only on
@@ -154,11 +165,11 @@ Wi-Fi** is on by default too, so it waits for a connection Android doesn't
 count as metered. Most backups are small. One carrying sticker packs or icon
 packs is not, and it goes out every interval, which is why Wi-Fi is the
 default. Turn it off and a backup uploads over mobile data as soon as it's
-due. The Wi-Fi toggle only appears for destinations that need a connection.
-A **Folder** is storage on your own device, so it backs up offline either
-way. There is one ceiling you don't set: when the sticker packs, icon packs
-and imported word lists would push the file past 16 MB, an automatic run
-drops those three sections and backs up everything else. A manual export
+due. The Wi-Fi toggle only appears while a ticked location needs a
+connection. A **Folder** is storage on your own device, so it backs up offline
+either way. There is one ceiling you don't set: when the sticker packs, icon
+packs and imported word lists would push the file past 16 MB, an automatic
+run drops those three sections and backs up everything else. A manual export
 never does.
 
 Turning **Only while charging** off is worth knowing about for the opposite
@@ -169,19 +180,24 @@ and nothing tells you so.
 **The app keeps a few backups and deletes the oldest.** You choose how many. It
 never deletes the newest one, and it never deletes an older backup until the
 new one has been written, read back and checked. A backup that fails halfway
-costs you the new copy and never an old one.
+costs you the new copy and never an old one. Each backup's name says which
+device and which installation made it, and each device counts and deletes
+only its own, so several phones can share one Dropbox without eating each
+other's backups.
 
 **Backups can carry a passphrase.** Set one and the file is encrypted, and
 you need the passphrase to restore it. The app stores that passphrase on your
 device, because a backup that runs while you're asleep has nobody to type it.
 So it protects the file where it lands, in a cloud folder for instance, and
 not against a person holding your unlocked device. Write it down. Without it,
-a backup cannot be restored. It also decides one thing you might not expect:
-an automatic backup carries your API keys only when **Include API keys** is
-on *and* the file is encrypted, because a file anybody can read should not be
-carrying them. A manual export has no such rule, and puts them in plain.
+a backup cannot be restored. The same passphrase protects the sync files.
 
-**Some destinations send a credential with every upload.** WebDAV sends your
+**API keys are your call.** **What goes in a backup** has its own **Include
+API keys** switch. Without a passphrase, the switch strongly suggests turning
+one on first and asks you to confirm, because anyone who can open the location
+could read the keys. It doesn't refuse.
+
+**Some locations send a credential with every upload.** WebDAV sends your
 password on every request, so a WebDAV address on plain `http` is refused
 outright. FTP without TLS is allowed, because some older servers offer
 nothing else, and the screen says plainly what it costs. An S3 endpoint on
@@ -195,6 +211,50 @@ most, like your learned words, live in storage that only exists once you've
 unlocked the device after a restart. A backup taken before then would be
 nearly empty, and rotating that in would push out a real one, so the app
 waits.
+
+### Restoring from a location
+
+Each location's menu has **Restore from** followed by its name. It lists every
+automatic backup there, from every device that uses it, newest first, with
+"This device" marking this phone's. Pick one and the app downloads it and
+shows the same confirmation as importing a file, listing what's inside before
+anything changes. An encrypted backup opens with your stored passphrase, or
+asks for one when it doesn't. For Google Drive this is the only way back:
+the app's Drive folder is hidden from every other app, the Drive app included.
+
+## Sync between devices
+
+<SettingsPath path="Data / Backup & restore / Sync devices" />
+
+Sync keeps your devices the same while you use them all: change a setting or
+a theme on your phone, and your tablet has it soon after. It uses your
+locations, and nothing else. Each device keeps one sync file at every location
+you tick under **Sync through**, and reads the files of the others. For each
+setting, and for each theme, snippet or learned word, the newest change wins,
+and a deletion spreads like any other change.
+
+- **When:** **Soon after a change** (about a minute after you stop changing
+  things, plus a check every hour and when the app starts), **On a schedule**,
+  or **Only when I ask**.
+- **What:** **What syncs** has its own list of the same sections a backup
+  has. By default that's settings, themes and snippets. Learned words,
+  clipboard and the rest are there to turn on.
+- **Where:** your devices must share at least one ticked location. Tick more
+  and the file goes to each, so sync keeps working while one service is down.
+- **First sync:** a device that joins takes the settings your other devices
+  already agreed on, rather than pushing its own over them. Anything only it
+  has goes to the others.
+
+Some settings stay on each device, because they only fit that device: the
+keyboard size and position on each screen, one-handed mode, the floating
+keyboard, the hardware keyboard, paired KDE Connect computers, the app lock,
+and what's installed or downloaded on it. **Sync API keys and passwords** is
+off by default, and like the backup switch it strongly suggests a passphrase
+first without requiring one. Use the same passphrase on every device, or the
+others can't read this one's file, and the screen says so.
+
+Sync settings are never exported, backed up or synced themselves. A phone
+restored from a backup doesn't start syncing until you turn it on.
 
 ## Android's own backup
 
@@ -237,12 +297,11 @@ export:
 <SettingsPath path="Data / Backup & restore" />
 
 Reach it from the home screen, or search "Backup & restore" in settings
-search. Its export switches are the ones described in
+search. The export switches are the ones described in
 [Exporting a config file](#exporting-a-config-file) above, and they're
 ordinary stored settings, so what you tick stays ticked when you come back.
-They have to. The automatic backup reads the same list, and there's nobody
-there to set it. Field by field, they're on
-[Backup & restore settings](/reference/settings/backup/).
+The automatic backup and sync keep lists of their own. Field by field,
+everything is on [Backup & restore settings](/reference/settings/backup/).
 
 <SettingsPath path="Privacy / Android backup / Back up with Android" />
 
@@ -259,14 +318,19 @@ already has its own customizations in those categories and they're discarded
 in favor of what's in the file. Do this on a fresh install where you can, or
 go in expecting the overwrite.
 
-1. On the old phone, open **Backup & restore**. Choose the sections you want.
-   Export a `.wmconfig.json` file.
+1. On the old phone, open **Backup & restore**. Choose the sections you want
+   in **What goes in an export**, then tap **Export to a file**.
 2. Move that file to the new phone however you like. It's a plain file you
    control, so email, a cable or any file-sync app all work.
 3. Install WM Keyboard on the new phone. Open the file from a file manager,
-   or open **Backup & restore** and tap **Import backup**.
+   or open **Backup & restore** and tap **Import a file**.
 4. Optionally, turn on <SettingsPath path="Privacy / Android backup / Back up with Android" />
    for ongoing coverage between manual exports.
+
+If the old phone backs up automatically, you can skip the file. On the new
+phone, add the same location, open its menu and choose **Restore from**. To
+keep using both phones, turn on sync on each instead, ticking a location they
+share.
 
 A manual export is the more complete of the two paths for anything it
 includes. It isn't subject to Android's size quota or its encryption
@@ -289,8 +353,8 @@ moves fine as a file you export by hand.
 - **A failed write leaves nothing behind.** If the app can't write to the
   file you chose, you get "The app could not write that file." rather than a
   half-written export. An automatic backup goes further. It writes the file
-  locally, reads it back and parses it, and only copies it to your folder if
-  that worked. Nothing older is deleted until the new one is safely there, so
+  locally, reads it back and parses it, and only copies it to your locations
+  if that worked. Nothing older is deleted until the new one is safely there, so
   a backup that fails halfway costs you the new copy and never an old one.
 - **Backups don't cover installed addons directly.** What travels in the
   Addons section is the repository list, not the addon files themselves.

@@ -3302,6 +3302,34 @@ data class AutoBackupSettings(
      * the backups were for is gone.
      */
     val lastError: String = "",
+
+    /**
+     * Every place backups go. Replaces the single [destination] and its
+     * fields, which are still read once to seed this list (see
+     * [BackupLocation.fromLegacy]) and are otherwise left alone.
+     */
+    val locations: List<BackupLocation> = emptyList(),
+
+    /** How the last run went at each location, by [BackupLocation.id]. */
+    val locationStatus: Map<String, LocationStatus> = emptyMap(),
+
+    /**
+     * What the manual "Export to a file" puts in, as section ids. Its own
+     * list since the automatic backup and sync got theirs: the three are
+     * different decisions, a one-off file to hand to someone included.
+     */
+    val exportSections: Set<String> = DEFAULT_SECTIONS,
+
+    /** Keeping several devices the same. See [SyncSettings]. */
+    val sync: SyncSettings = SyncSettings(),
+
+    /**
+     * Whether the automatic backup carries API keys. Its own switch, off,
+     * rather than [includeSecrets], which belongs to the manual export: a key
+     * someone chose to put in one file they handed over must not start
+     * riding in every scheduled upload.
+     */
+    val backupIncludeSecrets: Boolean = false,
 ) {
     companion object {
 
@@ -3328,6 +3356,79 @@ data class AutoBackupSettings(
 /** [AutoBackupSettings.sections] as the sections themselves. */
 val AutoBackupSettings.sectionSet: Set<ConfigBackup.Section>
     get() = ConfigBackup.Section.entries.filterTo(LinkedHashSet()) { it.id in sections }
+
+/** [AutoBackupSettings.exportSections] as the sections themselves. */
+val AutoBackupSettings.exportSectionSet: Set<ConfigBackup.Section>
+    get() = ConfigBackup.Section.entries.filterTo(LinkedHashSet()) { it.id in exportSections }
+
+/** Locations that can be tried at all: enabled and configured. */
+val AutoBackupSettings.activeLocations: List<BackupLocation>
+    get() = locations.filter { it.active }
+
+/** Where an automatic backup goes: every usable location ticked for backups. */
+val AutoBackupSettings.backupTargets: List<BackupLocation>
+    get() = locations.filter { it.active && it.backup }
+
+/**
+ * How sync runs: shortly after a change, on a timer, or only when asked.
+ * Stored by [id]; never store an enum's name.
+ */
+enum class SyncMode(val id: String) { SOON("soon"), SCHEDULE("schedule"), MANUAL("manual") }
+
+/**
+ * Sync between devices.
+ *
+ * Off by default, like every trigger in this app. Everything here is per
+ * install (see [SettingsBackup.TRANSIENT_KEYS]): a phone restored from a
+ * bundle, or reached by another phone's sync file, does not start syncing
+ * by itself.
+ */
+data class SyncSettings(
+    val enabled: Boolean = false,
+    val mode: SyncMode = SyncMode.SOON,
+    /** Hours between runs for [SyncMode.SCHEDULE]. See [AutoBackupIntervals]. */
+    val intervalHours: Int = 6,
+    /**
+     * The locations sync reads and writes, by [BackupLocation.id]. Any number:
+     * devices only have to share one, and more copies mean sync still works
+     * while one service is down. Not every location by default, because sync
+     * files are small but frequent, and a folder on this phone is no use to
+     * another one.
+     */
+    val locationIds: Set<String> = emptySet(),
+    /** What syncs, as section ids. */
+    val sections: Set<String> = DEFAULT_SECTIONS,
+    /**
+     * Whether API keys and passwords sync. Off by default, and the screen
+     * warns before turning it on without a passphrase, but it is the user's
+     * call: their keys, their storage.
+     */
+    val includeSecrets: Boolean = false,
+    val lastRunAtMs: Long = 0L,
+    /** A `SinkError` name, a sync-specific reason, or empty. */
+    val lastError: String = "",
+) {
+    companion object {
+        /**
+         * The set-up keyboard, without the personal parts. What the owner of
+         * two phones most obviously wants to match, and nothing a person
+         * might not expect to cross over.
+         */
+        val DEFAULT_SECTIONS: Set<String> = setOf(
+            ConfigBackup.Section.SETTINGS.id,
+            ConfigBackup.Section.THEMES.id,
+            ConfigBackup.Section.SNIPPETS.id,
+        )
+    }
+}
+
+/** [SyncSettings.sections] as the sections themselves. */
+val SyncSettings.sectionSet: Set<ConfigBackup.Section>
+    get() = ConfigBackup.Section.entries.filterTo(LinkedHashSet()) { it.id in sections }
+
+/** The locations sync reads and writes: the ticked ones that can be tried. */
+fun SyncSettings.targets(locations: List<BackupLocation>): List<BackupLocation> =
+    locations.filter { it.active && it.id in locationIds }
 
 /**
  * What [KeyboardSettings.fontScale] can be set to, on the Accessibility screen
@@ -7097,6 +7198,20 @@ class SettingsRepository(private val context: Context) {
             stringPreferencesKey(SettingsBackup.AUTO_BACKUP_DROPBOX_TOKEN)
         private val AUTO_BACKUP_ONEDRIVE_TOKEN =
             stringPreferencesKey(SettingsBackup.AUTO_BACKUP_ONEDRIVE_TOKEN)
+        private val AUTO_BACKUP_LOCATIONS = stringPreferencesKey(SettingsBackup.AUTO_BACKUP_LOCATIONS)
+        private val AUTO_BACKUP_LOCATION_STATUS =
+            stringPreferencesKey(SettingsBackup.AUTO_BACKUP_LOCATION_STATUS)
+        private val EXPORT_SECTIONS = stringSetPreferencesKey("export_sections")
+        private val AUTO_BACKUP_INCLUDE_KEYS = booleanPreferencesKey("auto_backup_include_keys")
+        private val SYNC_ENABLED = booleanPreferencesKey(SettingsBackup.SYNC_ENABLED)
+        private val SYNC_MODE = stringPreferencesKey(SettingsBackup.SYNC_MODE)
+        private val SYNC_INTERVAL_HOURS = intPreferencesKey(SettingsBackup.SYNC_INTERVAL_HOURS)
+        private val SYNC_LOCATION_ID = stringPreferencesKey(SettingsBackup.SYNC_LOCATION_ID)
+        private val SYNC_LOCATION_IDS = stringSetPreferencesKey(SettingsBackup.SYNC_LOCATION_IDS)
+        private val SYNC_SECTIONS = stringSetPreferencesKey(SettingsBackup.SYNC_SECTIONS)
+        private val SYNC_INCLUDE_SECRETS = booleanPreferencesKey(SettingsBackup.SYNC_INCLUDE_SECRETS)
+        private val SYNC_LAST_RUN_AT = longPreferencesKey(SettingsBackup.SYNC_LAST_RUN_AT)
+        private val SYNC_LAST_ERROR = stringPreferencesKey(SettingsBackup.SYNC_LAST_ERROR)
         private val LONG_PRESS_DELAY = intPreferencesKey("long_press_delay")
         // The pre-split single interval. Still read, as the fallback for both
         // keys below, so a cadence tuned before the split survives the upgrade.
@@ -8245,7 +8360,39 @@ class SettingsRepository(private val context: Context) {
                 kdfSalt = p[AUTO_BACKUP_KDF_SALT] ?: defaults.autoBackup.kdfSalt,
                 lastRunAtMs = p[AUTO_BACKUP_LAST_RUN_AT] ?: defaults.autoBackup.lastRunAtMs,
                 lastError = p[AUTO_BACKUP_LAST_ERROR] ?: defaults.autoBackup.lastError,
-            ),
+                locationStatus = LocationStatus.decodeMap(p[AUTO_BACKUP_LOCATION_STATUS]),
+                // Until an export list is chosen, the one the manual export
+                // always used: the shared list it had before it got its own.
+                exportSections = p[EXPORT_SECTIONS] ?: p[AUTO_BACKUP_SECTIONS]
+                    ?: defaults.autoBackup.exportSections,
+                backupIncludeSecrets = p[AUTO_BACKUP_INCLUDE_KEYS] ?: defaults.autoBackup.backupIncludeSecrets,
+                sync = SyncSettings(
+                    enabled = p[SYNC_ENABLED] ?: defaults.autoBackup.sync.enabled,
+                    mode = p[SYNC_MODE]?.let { id -> SyncMode.entries.firstOrNull { it.id == id } }
+                        ?: defaults.autoBackup.sync.mode,
+                    intervalHours = p[SYNC_INTERVAL_HOURS] ?: defaults.autoBackup.sync.intervalHours,
+                    // The set, once written. Before that, the single location
+                    // the first version of this screen chose.
+                    locationIds = p[SYNC_LOCATION_IDS]
+                        ?: p[SYNC_LOCATION_ID]?.takeIf { it.isNotEmpty() }?.let { setOf(it) }
+                        ?: defaults.autoBackup.sync.locationIds,
+                    sections = p[SYNC_SECTIONS] ?: defaults.autoBackup.sync.sections,
+                    includeSecrets = p[SYNC_INCLUDE_SECRETS] ?: defaults.autoBackup.sync.includeSecrets,
+                    lastRunAtMs = p[SYNC_LAST_RUN_AT] ?: defaults.autoBackup.sync.lastRunAtMs,
+                    lastError = p[SYNC_LAST_ERROR] ?: defaults.autoBackup.sync.lastError,
+                ),
+            ).let { auto ->
+                // The list, once written, is the truth. Before that, the old
+                // single destination is shown as the one location it was.
+                val stored = p[AUTO_BACKUP_LOCATIONS]
+                auto.copy(
+                    locations = if (stored != null) {
+                        BackupLocation.decodeList(stored)
+                    } else {
+                        listOfNotNull(BackupLocation.fromLegacy(auto))
+                    },
+                )
+            },
             suggestionStrip = SuggestionStripSettings(
                 punctuation = p[PUNCTUATION_SUGGESTIONS] ?: defaults.suggestionStrip.punctuation,
                 punctuationChips = p[PUNCTUATION_CHIPS]?.takeIf { it.isNotBlank() }
@@ -11253,6 +11400,27 @@ class SettingsRepository(private val context: Context) {
         return buildJsonObject { put("items", JsonArray(kept)) }
     }
 
+    /**
+     * Takes synced clipboard [portable] (text clips only, the same view
+     * [portableClipboard] exports) into this phone's history without losing
+     * what never syncs: image, file and sensitive clips stay, and so does
+     * every other field of the file. The synced clips replace this phone's
+     * text clips, which the merge already accounted for.
+     */
+    suspend fun applySyncedClipboard(portable: JsonObject) {
+        val path = "clipboard/history.json"
+        val local = readStore(path) as? JsonObject ?: JsonObject(emptyMap())
+        val localItems = local["items"] as? JsonArray ?: JsonArray(emptyList())
+        val stays = localItems.filter { item ->
+            val entry = item as? JsonObject
+            val kind = (entry?.get("kind") as? JsonPrimitive)?.contentOrNull ?: "TEXT"
+            val sensitive = (entry?.get("sensitive") as? JsonPrimitive)?.booleanOrNull == true
+            sensitive || kind !in TEXTUAL_CLIP_KINDS
+        }
+        val incoming = portable["items"] as? JsonArray ?: JsonArray(emptyList())
+        writeStore(path, JsonObject(local + ("items" to JsonArray(incoming + stays))))
+    }
+
     /** Relative path of the sticker manifest, the one file that isn't binary. */
     private val stickerManifestPath =
         "${StickerPackStore.DIR_NAME}/packs.json"
@@ -11658,6 +11826,8 @@ class SettingsRepository(private val context: Context) {
         includeSecrets: Boolean,
         appVersion: Int,
         appVersionName: String,
+        /** Settings left out on top of the usual ones; see [AutoBackupRunner]. */
+        excludeKeys: Set<String> = emptySet(),
     ): String {
         val prefs = context.dataStore.data.first()
         val out = LinkedHashMap<ConfigBackup.Section, JsonElement>()
@@ -11666,7 +11836,7 @@ class SettingsRepository(private val context: Context) {
                 SettingsBackup.encodeSettings(
                     prefs,
                     includeSecrets,
-                    exclude = SettingsBackup.THEME_KEYS + SettingsBackup.TRANSIENT_KEYS,
+                    exclude = SettingsBackup.THEME_KEYS + SettingsBackup.TRANSIENT_KEYS + excludeKeys,
                 )
         }
         if (ConfigBackup.Section.THEMES in sections) {
@@ -13654,6 +13824,129 @@ class SettingsRepository(private val context: Context) {
     suspend fun setAutoBackupOutcome(ranAtMs: Long, error: String) = editPrefs {
         if (error.isEmpty()) it[AUTO_BACKUP_LAST_RUN_AT] = ranAtMs
         it[AUTO_BACKUP_LAST_ERROR] = error
+    }
+
+    /** The stored list, or the legacy single destination until one is written. */
+    private fun currentLocations(prefs: Preferences): List<BackupLocation> =
+        prefs[AUTO_BACKUP_LOCATIONS]?.let(BackupLocation::decodeList)
+            ?: mapPreferences(prefs).autoBackup.locations
+
+    /**
+     * Adds [location], or replaces the one with its id. Trims what the user
+     * typed the way the old per-field setters did, since a stray space in a
+     * host name is a failure that looks like a wrong password.
+     */
+    suspend fun upsertBackupLocation(location: BackupLocation) = editPrefs { prefs ->
+        val clean = location.copy(
+            name = location.name.trim(),
+            webDavUrl = location.webDavUrl.trim().let {
+                if (it.isEmpty() || it.endsWith("/")) it else "$it/"
+            },
+            webDavUser = location.webDavUser.trim(),
+            s3 = location.s3.copy(
+                endpoint = location.s3.endpoint.trim(),
+                region = S3Sink.normalizeRegion(location.s3.region),
+                bucket = location.s3.bucket.trim(),
+                prefix = location.s3.prefix.trim().trim('/'),
+                accessKeyId = location.s3.accessKeyId.trim(),
+            ),
+            ftp = location.ftp.copy(
+                host = location.ftp.host.trim(),
+                port = location.ftp.port.coerceIn(1, 65535),
+                user = location.ftp.user.trim(),
+                path = location.ftp.path.trim().trim('/'),
+            ),
+        )
+        val list = currentLocations(prefs)
+        val next = if (list.any { it.id == clean.id }) {
+            list.map { if (it.id == clean.id) clean else it }
+        } else {
+            list + clean
+        }
+        prefs[AUTO_BACKUP_LOCATIONS] = BackupLocation.encodeList(next)
+    }
+
+    /** Removes a location and its run record. */
+    suspend fun removeBackupLocation(id: String) = editPrefs { prefs ->
+        prefs[AUTO_BACKUP_LOCATIONS] =
+            BackupLocation.encodeList(currentLocations(prefs).filterNot { it.id == id })
+        val status = LocationStatus.decodeMap(prefs[AUTO_BACKUP_LOCATION_STATUS]) - id
+        prefs[AUTO_BACKUP_LOCATION_STATUS] = LocationStatus.encodeMap(status)
+    }
+
+    /** Changes one location in place, if it still exists. */
+    suspend fun updateBackupLocation(id: String, change: (BackupLocation) -> BackupLocation) {
+        val current = settings.first().autoBackup.locations.firstOrNull { it.id == id } ?: return
+        upsertBackupLocation(change(current))
+    }
+
+    /** Rewrites one location's run record. */
+    suspend fun setLocationStatus(id: String, change: (LocationStatus) -> LocationStatus) = editPrefs { prefs ->
+        val status = LocationStatus.decodeMap(prefs[AUTO_BACKUP_LOCATION_STATUS])
+        prefs[AUTO_BACKUP_LOCATION_STATUS] =
+            LocationStatus.encodeMap(status + (id to change(status[id] ?: LocationStatus())))
+    }
+
+    /** Writes the key even when [value] is empty: an empty set is a choice. */
+    suspend fun setExportSections(value: Set<ConfigBackup.Section>) =
+        editPrefs { prefs -> prefs[EXPORT_SECTIONS] = value.mapTo(HashSet()) { it.id } }
+
+    suspend fun setBackupIncludeSecrets(value: Boolean) = editPrefs { it[AUTO_BACKUP_INCLUDE_KEYS] = value }
+
+    suspend fun setSyncEnabled(value: Boolean) = editPrefs { it[SYNC_ENABLED] = value }
+
+    suspend fun setSyncMode(value: SyncMode) = editPrefs { it[SYNC_MODE] = value.id }
+
+    suspend fun setSyncIntervalHours(value: Int) =
+        editPrefs { it[SYNC_INTERVAL_HOURS] = value.coerceIn(1, 24 * 30) }
+
+    /** Ticks or unticks one location for sync. */
+    suspend fun setSyncLocation(id: String, on: Boolean) = editPrefs { prefs ->
+        val current = prefs[SYNC_LOCATION_IDS]
+            ?: prefs[SYNC_LOCATION_ID]?.takeIf { it.isNotEmpty() }?.let { setOf(it) }
+            ?: emptySet()
+        prefs[SYNC_LOCATION_IDS] = if (on) current + id else current - id
+    }
+
+    /** Writes the key even when [value] is empty: an empty set is a choice. */
+    suspend fun setSyncSections(value: Set<ConfigBackup.Section>) =
+        editPrefs { prefs -> prefs[SYNC_SECTIONS] = value.mapTo(HashSet()) { it.id } }
+
+    suspend fun setSyncIncludeSecrets(value: Boolean) = editPrefs { it[SYNC_INCLUDE_SECRETS] = value }
+
+    /**
+     * Writes settings another device changed, and removes ones it reset.
+     *
+     * [put] is the typed `{ key: { type, value } }` map the settings section
+     * uses. Unlike [importConfig] this can delete, because a sync carries
+     * resets and a restore does not.
+     */
+    suspend fun applySyncedSettings(put: JsonObject, remove: Set<String>) {
+        val (entries, _) = SettingsBackup.decodeSettings(put)
+        editPrefs { prefs ->
+            entries.forEach { prefs.put(it) }
+            if (remove.isNotEmpty()) {
+                prefs.asMap().keys.filter { it.name in remove }.forEach { prefs.remove(it) }
+            }
+        }
+    }
+
+    /**
+     * A cheap fingerprint of every setting that syncs, for noticing a change
+     * worth pushing. Not a hash of the whole store: the keyboard writes its
+     * own counters and state all day, and those must not wake a sync.
+     */
+    fun syncFingerprint(includeSecrets: Boolean): Flow<Int> =
+        context.dataStore.data.map { prefs ->
+            prefs.asMap().entries
+                .filter { com.wasimaster.wmkeyboard.core.settings.sync.SyncKeys.syncable(it.key.name, includeSecrets) }
+                .sumOf { (it.key.name to it.value.toString()).hashCode() }
+        }.distinctUntilChanged()
+
+    /** Records how a sync pass ended. [error] empty means it worked. */
+    suspend fun setSyncOutcome(ranAtMs: Long, error: String) = editPrefs {
+        if (error.isEmpty()) it[SYNC_LAST_RUN_AT] = ranAtMs
+        it[SYNC_LAST_ERROR] = error
     }
 
     suspend fun setLongPressDelayMs(value: Int) =

@@ -177,7 +177,7 @@ class S3Sink(private val config: S3Config) : BackupSink {
                 val page = S3Listing.parse(xml)
                 for (item in page.keys) {
                     val name = item.key.substringAfterLast('/')
-                    if (!AutoBackupNaming.isOurs(name)) continue
+                    if (!AutoBackupNaming.isListed(name)) continue
                     out += SinkEntry(
                         id = item.key,
                         name = name,

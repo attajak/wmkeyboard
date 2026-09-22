@@ -133,9 +133,21 @@ object AutoBackupNaming {
                     displayName.endsWith(".${ConfigBackup.ENCRYPTED_FILE_EXTENSION}")
                 )
 
-    /** Whether [displayName] is one of our half-written files, ours to sweep. */
+    /**
+     * Whether a sink's listing should return [displayName]: an automatic
+     * backup or a sync file. Every caller then takes the kind it wants;
+     * rotation and restore use [isOurs], sync uses
+     * [com.wasimaster.wmkeyboard.core.settings.sync.SyncNaming.isOurs].
+     */
+    fun isListed(displayName: String): Boolean =
+        isOurs(displayName) ||
+            com.wasimaster.wmkeyboard.core.settings.sync.SyncNaming.isOurs(displayName)
+
+    /** Whether [displayName] is one of our half-written files, backup or sync, ours to sweep. */
     fun isPart(displayName: String): Boolean =
-        displayName.startsWith(PREFIX) && displayName.endsWith(PART_SUFFIX)
+        (displayName.startsWith(PREFIX) ||
+            displayName.startsWith(com.wasimaster.wmkeyboard.core.settings.sync.SyncNaming.PREFIX)) &&
+            displayName.endsWith(PART_SUFFIX)
 
     /**
      * The entries to delete so that at most [keep] remain, oldest first.

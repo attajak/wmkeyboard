@@ -41,6 +41,7 @@ import com.wasimaster.wmkeyboard.core.settings.AutoBackupRunner
 import com.wasimaster.wmkeyboard.core.settings.AutoBackupSettings
 import com.wasimaster.wmkeyboard.core.settings.BackupCrypto
 import com.wasimaster.wmkeyboard.core.settings.BackupInstall
+import com.wasimaster.wmkeyboard.core.settings.BackupLocation
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.sink.AutoBackupNaming
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSinkException
@@ -96,18 +97,19 @@ private sealed interface RemoteStage {
 internal fun RemoteRestoreDialog(
     repository: SettingsRepository,
     auto: AutoBackupSettings,
+    location: BackupLocation,
     onClose: () -> Unit,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var stage by remember { mutableStateOf<RemoteStage>(RemoteStage.Loading) }
 
-    LaunchedEffect(Unit) { stage = list(context, auto) }
+    LaunchedEffect(Unit) { stage = list(context, location) }
 
     when (val current = stage) {
         RemoteStage.Loading, RemoteStage.Downloading -> AlertDialog(
             onDismissRequest = onClose,
-            title = { Text(stringResource(R.string.backup_remote_restore_title)) },
+            title = { Text(stringResource(R.string.backup_location_restore, location.title(context))) },
             text = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     CircularProgressIndicator(Modifier.size(24.dp))
@@ -130,7 +132,7 @@ internal fun RemoteRestoreDialog(
 
         is RemoteStage.Failed -> AlertDialog(
             onDismissRequest = onClose,
-            title = { Text(stringResource(R.string.backup_remote_restore_title)) },
+            title = { Text(stringResource(R.string.backup_location_restore, location.title(context))) },
             text = { Text(current.message) },
             confirmButton = {
                 TextButton(onClick = onClose) { Text(stringResource(CommonR.string.common_ok)) }
@@ -139,7 +141,7 @@ internal fun RemoteRestoreDialog(
 
         is RemoteStage.Listed -> AlertDialog(
             onDismissRequest = onClose,
-            title = { Text(stringResource(R.string.backup_remote_restore_title)) },
+            title = { Text(stringResource(R.string.backup_location_restore, location.title(context))) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
@@ -150,7 +152,7 @@ internal fun RemoteRestoreDialog(
                         items(current.backups, key = { it.entry.id }) { backup ->
                             RemoteBackupRow(context, backup) {
                                 stage = RemoteStage.Downloading
-                                scope.launch { stage = download(context, auto, backup) }
+                                scope.launch { stage = download(context, auto, location, backup) }
                             }
                         }
                     }
@@ -204,12 +206,14 @@ private fun RemoteBackupRow(context: Context, backup: RemoteBackup, onClick: () 
 }
 
 /** Every automatic backup at the destination, newest first. */
-private suspend fun list(context: Context, auto: AutoBackupSettings): RemoteStage {
-    val sink = AutoBackupRunner.sinkFor(context, auto)
-        ?: return RemoteStage.Failed(errorText(context, SinkError.NOT_CONFIGURED, auto))
+private suspend fun list(context: Context, location: BackupLocation): RemoteStage {
+    val sink = AutoBackupRunner.sinkFor(context, location)
+        ?: return RemoteStage.Failed(errorText(context, SinkError.NOT_CONFIGURED, location))
+    // Backups only: a location lists sync files too, and those are not
+    // something to restore from.
     val entries = sink.list().getOrElse { failure ->
-        return RemoteStage.Failed(errorText(context, (failure as? BackupSinkException)?.reason, auto))
-    }
+        return RemoteStage.Failed(errorText(context, (failure as? BackupSinkException)?.reason, location))
+    }.filter { AutoBackupNaming.isOurs(it.name) }
     if (entries.isEmpty()) {
         return RemoteStage.Failed(context.getString(R.string.backup_remote_restore_empty))
     }
@@ -245,10 +249,11 @@ private suspend fun list(context: Context, auto: AutoBackupSettings): RemoteStag
 private suspend fun download(
     context: Context,
     auto: AutoBackupSettings,
+    location: BackupLocation,
     backup: RemoteBackup,
 ): RemoteStage {
     val failed = RemoteStage.Failed(context.getString(R.string.backup_remote_restore_failed))
-    val sink = AutoBackupRunner.sinkFor(context, auto) ?: return failed
+    val sink = AutoBackupRunner.sinkFor(context, location) ?: return failed
     return withContext(Dispatchers.IO) {
         runCancellable {
             val bytes = sink.read(backup.entry).getOrThrow().use { it.readBytes() }
@@ -274,6 +279,6 @@ private suspend fun download(
     }
 }
 
-private fun errorText(context: Context, reason: SinkError?, auto: AutoBackupSettings): String =
-    autoBackupErrorText(context, (reason ?: SinkError.IO).name, auto.destination)
+private fun errorText(context: Context, reason: SinkError?, location: BackupLocation): String =
+    autoBackupErrorText(context, (reason ?: SinkError.IO).name, location.type)
         ?: context.getString(R.string.backup_auto_error_io)

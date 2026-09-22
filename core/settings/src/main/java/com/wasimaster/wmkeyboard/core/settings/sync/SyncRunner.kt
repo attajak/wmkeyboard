@@ -1,0 +1,356 @@
+package com.wasimaster.wmkeyboard.core.settings.sync
+
+import android.content.Context
+import android.util.Base64
+import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
+import com.wasimaster.wmkeyboard.core.net.BackupTraffic
+import com.wasimaster.wmkeyboard.core.settings.AutoBackupRunner
+import com.wasimaster.wmkeyboard.core.settings.AutoBackupSettings
+import com.wasimaster.wmkeyboard.core.settings.BackupCrypto
+import com.wasimaster.wmkeyboard.core.settings.BackupGate
+import com.wasimaster.wmkeyboard.core.settings.BackupInstall
+import com.wasimaster.wmkeyboard.core.settings.BackupLocation
+import com.wasimaster.wmkeyboard.core.settings.ConfigBackup
+import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
+import com.wasimaster.wmkeyboard.core.settings.sectionSet
+import com.wasimaster.wmkeyboard.core.settings.sink.BackupLog
+import com.wasimaster.wmkeyboard.core.settings.sink.BackupSink
+import com.wasimaster.wmkeyboard.core.settings.sink.BackupSinkException
+import com.wasimaster.wmkeyboard.core.settings.sink.SinkEntry
+import com.wasimaster.wmkeyboard.core.settings.sink.SinkError
+import com.wasimaster.wmkeyboard.core.settings.targets
+import com.wasimaster.wmkeyboard.core.util.runCancellable
+import java.io.ByteArrayOutputStream
+import java.io.File
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+
+/**
+ * One sync pass: read the other devices' files, merge, apply, write ours.
+ *
+ * Every location sync uses holds one file per device (see [SyncNaming]), and
+ * each file carries everything its device knows, not just what it changed. So
+ * two phones that never sync at the same moment still converge, and a third
+ * joining later learns everything from whichever file it reads first.
+ *
+ * The same safety rule as a backup: a locked phone does nothing, because the
+ * stores it would read are not there yet and would look like deletions.
+ */
+object SyncRunner {
+
+    private const val STATE_FILE = "sync_state.json"
+
+    /** A sync-only reason, beside the `SinkError` names, for a file sealed under another passphrase. */
+    const val ERROR_PASSPHRASE = "SYNC_PASSPHRASE"
+
+
+    sealed interface Outcome {
+        /** [applied] entries changed here; [devices] other devices were read. */
+        data class Done(val applied: Int, val devices: Int, val failed: Map<String, String>) : Outcome
+        data object Skipped : Outcome
+        data object Locked : Outcome
+        data class Failed(val reason: String) : Outcome
+    }
+
+    suspend fun run(
+        context: Context,
+        repository: SettingsRepository,
+        force: Boolean = false,
+        nowMs: Long = System.currentTimeMillis(),
+    ): Outcome = BackupGate.mutex.withLock {
+        BackupTraffic.unattended = !force
+        try {
+            runCancellable { runLocked(context.applicationContext, repository, force, nowMs) }
+                .getOrElse { failure ->
+                    val reason = (failure as? BackupSinkException)?.reason?.name ?: SinkError.IO.name
+                    BackupLog.w("sync failed: $reason", failure)
+                    repository.setSyncOutcome(nowMs, reason)
+                    Outcome.Failed(reason)
+                }
+        } finally {
+            BackupTraffic.unattended = false
+        }
+    }
+
+    private suspend fun runLocked(
+        context: Context,
+        repository: SettingsRepository,
+        force: Boolean,
+        nowMs: Long,
+    ): Outcome {
+        val auto = repository.settings.first().autoBackup
+        val sync = auto.sync
+        if (!force && !sync.enabled) return Outcome.Skipped
+        val targets = sync.targets(auto.locations)
+        val sections = sync.sectionSet
+        if (targets.isEmpty() || sections.isEmpty()) return Outcome.Skipped
+        if (!DirectBoot.isUserUnlocked(context)) return Outcome.Locked
+
+        val encrypt = auto.encrypt && auto.passphrase.isNotEmpty()
+        val includeSecrets = sync.includeSecrets
+        val me = BackupInstall.id(context)
+        val stateFile = File(context.noBackupFilesDir, STATE_FILE)
+        val remembered = SyncStateCodec.decode(runCatching { stateFile.readText() }.getOrNull())
+        val firstSync = remembered == null
+
+        // Every other device's newest file, from every target. The same device
+        // can turn up at two locations; its later file wins.
+        val remotes = LinkedHashMap<String, SyncFile>()
+        val failed = LinkedHashMap<String, String>()
+        val readable = ArrayList<Pair<BackupLocation, BackupSink>>()
+        // Locations that already hold this device's file under exactly the
+        // name it would write now. A changed passphrase or device name changes
+        // the name, and then the file has to be written again.
+        val name = SyncNaming.name(me, BackupInstall.deviceLabel(context), encrypt)
+        val hasMine = HashSet<String>()
+        for (location in targets) {
+            val sink = AutoBackupRunner.sinkFor(context, location)
+            if (sink == null) {
+                failed[location.id] = SinkError.NOT_CONFIGURED.name
+                continue
+            }
+            val read = runCancellable { readRemotes(sink, me, auto) }
+            read.onSuccess { (files, passphraseMiss, mine) ->
+                readable += location to sink
+                if (name in mine) hasMine += location.id
+                for (file in files) {
+                    val known = remotes[file.installId]
+                    if (known == null || file.writtenAtMs > known.writtenAtMs) remotes[file.installId] = file
+                }
+                if (passphraseMiss) failed[location.id] = ERROR_PASSPHRASE
+            }.onFailure { failure ->
+                failed[location.id] = ((failure as? BackupSinkException)?.reason ?: SinkError.IO).name
+            }
+        }
+        if (readable.isEmpty()) {
+            val reason = failed.values.firstOrNull() ?: SinkError.IO.name
+            recordLocations(repository, targets, failed, nowMs)
+            repository.setSyncOutcome(nowMs, reason)
+            return Outcome.Failed(reason)
+        }
+
+        // Read here, after the downloads rather than before them: whatever
+        // changed on this phone while those ran is in it, and the gap before
+        // [apply] writes is as short as it can be.
+        val local = localEntries(repository, sections, includeSecrets)
+
+        // Only what this phone would sync itself, from either side. A setting
+        // that is per-device here, or a key while keys are off, is neither
+        // taken from another phone nor, once it drops out of the local view,
+        // sent back to them as a deletion.
+        fun settingsOnly(table: Map<String, Map<String, Stamped>>) = table.mapValues { (section, entries) ->
+            if (section != ConfigBackup.Section.SETTINGS.id) entries
+            else entries.filterKeys { SyncKeys.syncable(it, includeSecrets) }
+        }
+        val rememberedHere = remembered.orEmpty().mapValues { (section, entries) ->
+            if (section != ConfigBackup.Section.SETTINGS.id) entries
+            else entries.filterKeys { SyncKeys.syncable(it, includeSecrets) }
+        }
+        val result = SyncMerge.merge(
+            local = local,
+            remembered = rememberedHere,
+            remotes = remotes.values.map { file -> settingsOnly(file.table.filterKeys { it in local }) },
+            me = me,
+            nowMs = nowMs,
+            firstSync = firstSync,
+        )
+        val applied = apply(repository, result, local)
+
+        // What is remembered is what this phone holds after applying, so the
+        // next pass does not mistake a store's own formatting of a value it was
+        // just given for a change made here.
+        val after = if (applied > 0) localEntries(repository, sections, includeSecrets) else local
+        val nextState = result.remembered.mapValues { (section, entries) ->
+            val now = after[section].orEmpty()
+            entries.mapValues { (key, r) ->
+                if (r.hash != null && key in now) r.copy(hash = SyncMerge.hash(now[key])) else r
+            }
+        }
+
+        // Nothing new anywhere: the file already there says all of it. This is
+        // the common pass, the one a synced change sets off on the phone that
+        // just received it, and it should cost a listing, not an upload.
+        val unchanged = remembered != null && nextState == rememberedHere
+        val file = SyncFile(me, BackupInstall.deviceLabel(context), nowMs, result.merged)
+        val bytes = encodeFile(file, auto, encrypt)
+        for ((location, sink) in readable) {
+            if (unchanged && location.id in hasMine) continue
+            writeOwn(sink, name, bytes, me)
+                .onFailure { failure ->
+                    failed[location.id] = ((failure as? BackupSinkException)?.reason ?: SinkError.IO).name
+                }
+        }
+        runCatching { stateFile.writeText(SyncStateCodec.encode(nextState)) }
+
+        recordLocations(repository, targets, failed, nowMs)
+        val wrote = readable.any { (location, _) -> location.id !in failed }
+        repository.setSyncOutcome(nowMs, if (wrote) "" else failed.values.firstOrNull().orEmpty())
+        BackupLog.d("sync: devices=${remotes.size} applied=$applied failed=$failed first=$firstSync")
+        return Outcome.Done(applied, remotes.size, failed)
+    }
+
+    /** Each synced section on this phone, as entries. A section with nothing in it is empty, not absent. */
+    private suspend fun localEntries(
+        repository: SettingsRepository,
+        sections: Set<ConfigBackup.Section>,
+        includeSecrets: Boolean,
+    ): Map<String, Map<String, JsonElement>> {
+        val bundle = repository.exportConfig(sections, includeSecrets, appVersion = 0, appVersionName = "")
+        val parsed = ConfigBackup.decode(bundle)?.sections.orEmpty()
+        return sections.associate { section ->
+            val element = parsed[section]
+            val entries = when {
+                element == null -> emptyMap()
+                section == ConfigBackup.Section.SETTINGS ->
+                    (element as? JsonObject).orEmpty().filterKeys { SyncKeys.syncable(it, includeSecrets) }
+                else -> SyncEntries.explode(element)
+            }
+            section.id to entries
+        }
+    }
+
+    /**
+     * Writes what the merge decided. Settings go straight into the store,
+     * deletions included; every other section is rebuilt whole from its
+     * merged entries and imported the way a restore would, which already knows
+     * how to put each store back.
+     */
+    private suspend fun apply(
+        repository: SettingsRepository,
+        result: SyncMerge.Result,
+        local: Map<String, Map<String, JsonElement>>,
+    ): Int {
+        var count = 0
+        val bundleSections = LinkedHashMap<ConfigBackup.Section, JsonElement>()
+        for ((sectionId, changes) in result.changes) {
+            val section = ConfigBackup.Section.entries.firstOrNull { it.id == sectionId } ?: continue
+            count += changes.size
+            if (section == ConfigBackup.Section.SETTINGS) {
+                val put = JsonObject(changes.filterValues { it != null }.mapValues { it.value!! })
+                val remove = changes.filterValues { it == null }.keys
+                repository.applySyncedSettings(put, remove)
+            } else {
+                val entries = result.merged[sectionId].orEmpty()
+                    .filterValues { !it.deleted }
+                    .mapValues { it.value.value!! }
+                val rootIsArray = section == ConfigBackup.Section.THEMES
+                // Everything in it deleted is still an answer: an empty store.
+                // Skipping it left this phone's copy in place, which the next
+                // pass read as fresh edits here and sent straight back.
+                val element = SyncEntries.implode(entries, rootIsArray)
+                    ?: if (rootIsArray) JsonArray(emptyList()) else JsonObject(emptyMap())
+                if (section == ConfigBackup.Section.CLIPBOARD) {
+                    // Merged into the clipboard rather than written over it:
+                    // the synced view is text clips only, and images, files and
+                    // sensitive clips never leave this phone.
+                    repository.applySyncedClipboard(element as? JsonObject ?: JsonObject(emptyMap()))
+                } else {
+                    bundleSections[section] = element
+                }
+            }
+        }
+        if (bundleSections.isNotEmpty()) {
+            repository.importConfig(ConfigBackup.encode(0, "", bundleSections))
+        }
+        return count
+    }
+
+    private data class Remote(val files: List<SyncFile>, val passphraseMiss: Boolean, val mine: Set<String>)
+
+    /**
+     * The other devices' newest files at one location, whether any would not
+     * open, and whether this device's own file is there.
+     */
+    private suspend fun readRemotes(
+        sink: BackupSink,
+        me: String,
+        auto: AutoBackupSettings,
+    ): Remote {
+        sink.readiness().getOrThrow()
+        val all = sink.list().getOrThrow().filter { SyncNaming.isOurs(it.name) }
+        val mine = all.filter { SyncNaming.installId(it.name) == me }.mapTo(HashSet()) { it.name }
+        val newest = all
+            .groupBy { SyncNaming.installId(it.name) }
+            .filterKeys { it != null && it != me }
+            .mapValues { (_, entries) -> entries.maxBy { it.modifiedAtMs } }
+            .values
+        var passphraseMiss = false
+        val files = newest.mapNotNull { entry ->
+            val bytes = sink.read(entry).getOrNull()?.use { it.readBytes() } ?: return@mapNotNull null
+            val text = if (BackupCrypto.looksEncrypted(bytes)) {
+                val opened = auto.passphrase.takeIf { it.isNotEmpty() }?.let {
+                    BackupCrypto.decrypt(bytes.inputStream(), it.toCharArray()) as? BackupCrypto.DecryptResult.Ok
+                }
+                if (opened == null) passphraseMiss = true
+                opened?.text
+            } else {
+                bytes.decodeToString()
+            }
+            text?.let(SyncFile::decode)
+        }
+        return Remote(files, passphraseMiss, mine)
+    }
+
+    private fun encodeFile(file: SyncFile, auto: AutoBackupSettings, encrypt: Boolean): ByteArray {
+        val text = SyncFile.encode(file)
+        if (!encrypt) return text.toByteArray()
+        val out = ByteArrayOutputStream()
+        BackupCrypto.encrypt(
+            out = out,
+            passphrase = auto.passphrase.toCharArray(),
+            salt = Base64.decode(auto.kdfSalt, Base64.NO_WRAP),
+            plaintext = text,
+        )
+        return out.toByteArray()
+    }
+
+    /**
+     * Writes this device's file, then removes its older copies, in that order:
+     * a failed write leaves the old file in place.
+     *
+     * Most sinks replace a file of the same name, and then the copies left are
+     * ones under another name: a folder's `… (1)` rename of a clash, or the
+     * name this device had before it was renamed. Drive keeps both files under
+     * one name, so there the same name counts too, told apart by id. Nowhere
+     * else is an id compared: a sink's write and its listing do not always
+     * spell one file's id the same way, and a mismatch would delete the file
+     * just written.
+     */
+    private suspend fun writeOwn(sink: BackupSink, name: String, bytes: ByteArray, me: String): Result<SinkEntry> {
+        val mime = if (SyncNaming.isEncrypted(name)) ConfigBackup.ENCRYPTED_MIME_TYPE else ConfigBackup.MIME_TYPE
+        val written = sink.write(name, mime) { it.write(bytes) }
+        written.onSuccess { entry ->
+            sink.list().getOrNull().orEmpty()
+                .filter { SyncNaming.installId(it.name) == me }
+                .filter { other ->
+                    other.name != entry.name || (sink.allowsDuplicateNames && other.id != entry.id)
+                }
+                .forEach { sink.delete(it) }
+        }
+        return written
+    }
+
+    private suspend fun recordLocations(
+        repository: SettingsRepository,
+        targets: List<BackupLocation>,
+        failed: Map<String, String>,
+        nowMs: Long,
+    ) {
+        for (location in targets) {
+            val error = failed[location.id].orEmpty()
+            repository.setLocationStatus(location.id) {
+                if (error.isEmpty()) it.copy(syncAtMs = nowMs, syncError = "") else it.copy(syncError = error)
+            }
+        }
+    }
+
+    /** Forgets what this phone agreed on, so the next pass is a first one again. */
+    suspend fun reset(context: Context) = withContext(Dispatchers.IO) {
+        File(context.noBackupFilesDir, STATE_FILE).delete()
+    }
+}
