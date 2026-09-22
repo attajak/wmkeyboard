@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -69,6 +70,7 @@ import com.wasimaster.wmkeyboard.core.settings.S3Config
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.destinationConfigured
 import com.wasimaster.wmkeyboard.core.settings.needsNetwork
+import com.wasimaster.wmkeyboard.core.settings.signsIn
 import com.wasimaster.wmkeyboard.core.settings.sectionSet
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupClients
 import com.wasimaster.wmkeyboard.core.settings.sink.S3Sink
@@ -174,11 +176,31 @@ private fun backupIntervalLabel(context: Context, hours: Int): String =
     } else {
         context.resources.getQuantityString(R.plurals.backup_auto_interval_hours, hours, hours)
     }
-/** One sentence for a recorded failure, or null when the last run was fine. */
-private fun autoBackupErrorText(context: Context, error: String): String? = when (error) {
+/**
+ * One sentence for a recorded failure, or null when the last run was fine.
+ * [destination] picks the advice: a lost folder grant, a lost account
+ * sign-in and a refused server password each need a different thing done.
+ */
+internal fun autoBackupErrorText(
+    context: Context,
+    error: String,
+    destination: BackupDestination = BackupDestination.FOLDER,
+): String? = when (error) {
     "" -> null
-    SinkError.PERMISSION_LOST.name -> context.getString(R.string.backup_auto_error_permission)
-    SinkError.TARGET_MISSING.name -> context.getString(R.string.backup_auto_error_target)
+    SinkError.PERMISSION_LOST.name -> context.getString(
+        when {
+            destination == BackupDestination.FOLDER -> R.string.backup_auto_error_permission
+            destination.signsIn -> R.string.backup_auto_error_permission_account
+            else -> R.string.backup_auto_error_permission_server
+        },
+    )
+    SinkError.TARGET_MISSING.name -> context.getString(
+        if (destination == BackupDestination.FOLDER) {
+            R.string.backup_auto_error_target
+        } else {
+            R.string.backup_auto_error_target_remote
+        },
+    )
     SinkError.OUT_OF_SPACE.name -> context.getString(R.string.backup_auto_error_space)
     else -> context.getString(R.string.backup_auto_error_io)
 }
@@ -465,6 +487,8 @@ private fun OAuthRow(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val pending by BackupOAuth.result.collectAsStateWithLifecycle()
+    val exchanging by BackupOAuth.exchanging.collectAsStateWithLifecycle()
+    val signingIn = exchanging == destination
 
     // The browser comes back into a different activity, and the exchange
     // itself happens in BackupOAuth, so all that reaches this row is how it
@@ -488,16 +512,23 @@ private fun OAuthRow(
             supportingContent = {
                 Text(
                     stringResource(
-                        if (token.isNotEmpty()) {
-                            R.string.backup_auto_oauth_signed_in
-                        } else {
-                            R.string.backup_auto_oauth_signed_out
+                        when {
+                            signingIn -> R.string.backup_auto_oauth_signing_in
+                            token.isNotEmpty() -> R.string.backup_auto_oauth_signed_in
+                            else -> R.string.backup_auto_oauth_signed_out
                         },
                     ),
                 )
             },
         )
+        // The browser hands back before the code has been traded for a
+        // token, which is a round trip or two. Without this the row said
+        // "Not signed in yet" for the seconds right after signing in.
+        if (signingIn) {
+            LinearProgressIndicator(Modifier.fillMaxWidth().padding(horizontal = 16.dp))
+        }
         OutlinedButton(
+            enabled = !signingIn,
             onClick = {
                 val activity = context.hostActivity() ?: return@OutlinedButton
                 if (token.isNotEmpty()) {
@@ -614,6 +645,7 @@ private fun AutoBackupGroup(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     var running by remember { mutableStateOf(false) }
+    var restoring by remember { mutableStateOf(false) }
     val configured = auto.destinationConfigured
     val encrypted = auto.encrypt && auto.passphrase.isNotEmpty()
     // The swipe style counts as personal for the dictionary's reason: its
@@ -682,7 +714,7 @@ private fun AutoBackupGroup(
                     if (configured) {
                         R.string.backup_auto_enabled_subtitle
                     } else {
-                        R.string.backup_auto_enabled_needs_folder
+                        needsSetupRes(auto.destination)
                     },
                 ),
                 auto.enabled && configured,
@@ -773,7 +805,7 @@ private fun AutoBackupGroup(
                 R.string.backup_auto_encrypt_title,
                 stringResource(
                     if (configured) R.string.backup_auto_encrypt_subtitle
-                    else R.string.backup_auto_enabled_needs_folder,
+                    else needsSetupRes(auto.destination),
                 ),
                 auto.encrypt,
                 info = stringResource(R.string.backup_auto_encrypt_info),
@@ -807,7 +839,7 @@ private fun AutoBackupGroup(
                     scope.launch {
                         val outcome = AutoBackupRunner.run(context, repository, force = true)
                         running = false
-                        onMessage(autoBackupOutcomeText(context, outcome))
+                        onMessage(autoBackupOutcomeText(context, outcome, auto.destination))
                     }
                 },
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -819,9 +851,21 @@ private fun AutoBackupGroup(
                 )
             }
         }
+        item {
+            // The way back for everything above, and the only one for Google
+            // Drive, whose app folder no other app can open.
+            OutlinedButton(
+                enabled = configured && !running,
+                onClick = { restoring = true },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            ) { Text(stringResource(R.string.backup_remote_restore_action)) }
+        }
+    }
+    if (restoring) {
+        RemoteRestoreDialog(repository, auto) { restoring = false }
     }
 
-    val error = autoBackupErrorText(context, auto.lastError)
+    val error = autoBackupErrorText(context, auto.lastError, auto.destination)
     StateBanner(
         when {
             error != null -> error
@@ -834,10 +878,17 @@ private fun AutoBackupGroup(
         tone = if (error != null) BannerTone.WARNING else BannerTone.INFO,
     )
 }
+/** What an unusable destination is missing, in the words for its kind. */
+private fun needsSetupRes(destination: BackupDestination): Int = when {
+    destination == BackupDestination.FOLDER -> R.string.backup_auto_enabled_needs_folder
+    destination.signsIn -> R.string.backup_auto_enabled_needs_sign_in
+    else -> R.string.backup_auto_enabled_needs_details
+}
 /** One sentence for whatever a run turned out to be. */
 private fun autoBackupOutcomeText(
     context: Context,
     outcome: AutoBackupRunner.Outcome,
+    destination: BackupDestination,
 ): String = when (outcome) {
     is AutoBackupRunner.Outcome.Done -> if (outcome.skipped.isEmpty()) {
         context.getString(R.string.backup_auto_done, outcome.name)
@@ -851,7 +902,7 @@ private fun autoBackupOutcomeText(
     AutoBackupRunner.Outcome.Locked -> context.getString(R.string.backup_auto_locked)
     AutoBackupRunner.Outcome.Skipped -> context.getString(R.string.backup_auto_skipped)
     is AutoBackupRunner.Outcome.Failed ->
-        autoBackupErrorText(context, outcome.reason.name)
+        autoBackupErrorText(context, outcome.reason.name, destination)
             ?: context.getString(R.string.backup_auto_error_io)
 }
 @Composable

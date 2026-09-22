@@ -109,4 +109,85 @@ class AutoBackupNamingTest {
         assertEquals(listOf("a"), AutoBackupNaming.rotation(entries, keep = 0).map { it.name })
         assertEquals(listOf("a"), AutoBackupNaming.rotation(entries, keep = -5).map { it.name })
     }
+
+    @Test
+    fun `a name can say which installation and device wrote it`() {
+        val stamp = 1_754_575_353_000L
+        val name = AutoBackupNaming.name(
+            stamp,
+            encrypted = true,
+            zone = utc,
+            installId = "a1b2c3d4",
+            device = "Wasi's Pixel 8 (work)",
+        )
+        assertEquals("wmkeyboard-auto-20250807-140233_a1b2c3d4_Wasi-s-Pixel-8-work.wmconfig.enc", name)
+        assertTrue(AutoBackupNaming.isOurs(name))
+        val parsed = AutoBackupNaming.parse(name, utc)!!
+        assertEquals(stamp, parsed.stampMs)
+        assertEquals("a1b2c3d4", parsed.installId)
+        assertEquals("Wasi-s-Pixel-8-work", parsed.device)
+        assertTrue(parsed.encrypted)
+    }
+
+    @Test
+    fun `a name from before owners still parses, with no owner`() {
+        val parsed = AutoBackupNaming.parse("wmkeyboard-auto-20250807-140233.wmconfig.json", utc)!!
+        assertEquals(1_754_575_353_000L, parsed.stampMs)
+        assertEquals(null, parsed.installId)
+        assertEquals(null, parsed.device)
+        assertFalse(parsed.encrypted)
+    }
+
+    @Test
+    fun `a device name with nothing usable leaves just the id`() {
+        assertEquals("", AutoBackupNaming.deviceSlug("ওয়াসির ফোন"))
+        val name = AutoBackupNaming.name(0L, false, utc, installId = "0badf00d", device = "ওয়াসির ফোন")
+        assertEquals("wmkeyboard-auto-19700101-000000_0badf00d.wmconfig.json", name)
+        assertEquals("0badf00d", AutoBackupNaming.parse(name, utc)!!.installId)
+    }
+
+    @Test
+    fun `a long device name is cut, not the id`() {
+        val slug = AutoBackupNaming.deviceSlug("A".repeat(80))
+        assertEquals(32, slug.length)
+        val name = AutoBackupNaming.name(0L, false, utc, installId = "12345678", device = "A".repeat(80))
+        assertEquals("12345678", AutoBackupNaming.parse(name, utc)!!.installId)
+    }
+
+    @Test
+    fun `strangers do not parse`() {
+        for (name in listOf(
+            "wmkeyboard-backup-20250807-140233.wmconfig.json",
+            "wmkeyboard-auto-20250807-140233_XYZ.wmconfig.json",
+            "wmkeyboard-auto-20250807-140233.wmconfig.json.bak",
+            "tax-return-2025.pdf",
+        )) {
+            assertEquals(name, null, AutoBackupNaming.parse(name, utc))
+        }
+    }
+
+    @Test
+    fun `rotation counts only this installation and the unowned ones`() {
+        fun owned(id: String?, at: Long) = entry(
+            AutoBackupNaming.name(at * 1000, false, utc, installId = id.orEmpty(), device = "Phone"),
+            at,
+        )
+        val mine = (1L..4L).map { owned("aaaaaaaa", it) }
+        val theirs = (5L..9L).map { owned("bbbbbbbb", it) }
+        val legacy = listOf(owned(null, 0L))
+        val doomed = AutoBackupNaming.rotation(mine + theirs + legacy, keep = 2, installId = "aaaaaaaa")
+        // Oldest of mine plus the unowned one go; the other phone's five stay,
+        // though every one of them is newer and there are more than two.
+        assertEquals((legacy + mine.take(2)).map { it.name }, doomed.map { it.name })
+        assertTrue(doomed.none { it in theirs })
+    }
+
+    @Test
+    fun `the other phone rotates its own the same way`() {
+        fun owned(id: String, at: Long) =
+            entry(AutoBackupNaming.name(at * 1000, false, utc, installId = id), at)
+        val all = (1L..3L).map { owned("aaaaaaaa", it) } + (4L..6L).map { owned("bbbbbbbb", it) }
+        val doomed = AutoBackupNaming.rotation(all, keep = 1, installId = "bbbbbbbb")
+        assertEquals(all.subList(3, 5).map { it.name }, doomed.map { it.name })
+    }
 }

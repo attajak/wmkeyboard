@@ -3456,6 +3456,16 @@ val BackupDestination.needsNetwork: Boolean
     get() = this != BackupDestination.FOLDER
 
 /**
+ * Whether access is an account sign-in rather than a folder grant or typed
+ * credentials. Decides the words for a lost permission: "choose the folder
+ * again" is the wrong advice for Dropbox.
+ */
+val BackupDestination.signsIn: Boolean
+    get() = this == BackupDestination.DRIVE ||
+        this == BackupDestination.DROPBOX ||
+        this == BackupDestination.ONEDRIVE
+
+/**
  * AI-tool settings, grouped rather than flat because [KeyboardSettings] sits against
  * the JVM's 255-slot method-argument limit: Kotlin's generated `copy$default` takes
  * every field plus its mask ints, so a flat class stops loading once the count creeps

@@ -27,10 +27,10 @@ import com.wasimaster.wmkeyboard.settings.R
  */
 internal object BackupNotification {
 
-    fun post(context: Context, reason: SinkError) {
+    fun post(context: Context, reason: SinkError, destination: BackupDestination = BackupDestination.FOLDER) {
         WmNotifications.post(context, NotificationKind.BACKUP, NotificationIds.BACKUP) {
             setContentTitle(context.getString(R.string.core_settings_notify_backup_title))
-            val body = context.getString(reason.bodyRes())
+            val body = context.getString(reason.bodyRes(destination))
             setContentText(body)
             setStyle(NotificationCompat.BigTextStyle().bigText(body))
             setAutoCancel(true)
@@ -52,9 +52,17 @@ internal object BackupNotification {
      * where they are read without a screen.
      */
     @StringRes
-    private fun SinkError.bodyRes(): Int = when (this) {
-        SinkError.PERMISSION_LOST -> R.string.core_settings_notify_backup_permission
-        SinkError.TARGET_MISSING -> R.string.core_settings_notify_backup_target
+    private fun SinkError.bodyRes(destination: BackupDestination): Int = when (this) {
+        SinkError.PERMISSION_LOST -> when {
+            destination == BackupDestination.FOLDER -> R.string.core_settings_notify_backup_permission
+            destination.signsIn -> R.string.core_settings_notify_backup_permission_account
+            else -> R.string.core_settings_notify_backup_permission_server
+        }
+        SinkError.TARGET_MISSING -> if (destination == BackupDestination.FOLDER) {
+            R.string.core_settings_notify_backup_target
+        } else {
+            R.string.core_settings_notify_backup_target_remote
+        }
         SinkError.OUT_OF_SPACE -> R.string.core_settings_notify_backup_space
         SinkError.NOT_CONFIGURED, SinkError.IO -> R.string.core_settings_notify_backup_io
     }

@@ -237,7 +237,13 @@ object AutoBackupRunner {
             if (!verify(staged, settings, encrypt)) {
                 return Outcome.Failed(SinkError.IO)
             }
-            val name = AutoBackupNaming.name(nowMs, encrypt)
+            val installId = BackupInstall.id(appContext)
+            val name = AutoBackupNaming.name(
+                stampMs = nowMs,
+                encrypted = encrypt,
+                installId = installId,
+                device = BackupInstall.deviceLabel(appContext),
+            )
             val mime =
                 if (encrypt) ConfigBackup.ENCRYPTED_MIME_TYPE else ConfigBackup.MIME_TYPE
             val written = sink.write(name, mime) { out -> staged.inputStream().use { it.copyTo(out) } }
@@ -245,7 +251,7 @@ object AutoBackupRunner {
 
             // Last, and only now. Everything above can fail without costing the
             // user a generation; this is the only step that destroys one.
-            rotate(sink, settings.keep)
+            rotate(sink, settings.keep, installId)
 
             repository.setAutoBackupOutcome(ranAtMs = nowMs, error = "")
             BackupLog.d("done ${written.name} (${staged.length()} B) skipped=$skipped")
@@ -325,9 +331,9 @@ object AutoBackupRunner {
         info.versionCode to info.versionName.orEmpty()
     }.getOrDefault(0 to "")
 
-    private suspend fun rotate(sink: BackupSink, keep: Int) {
+    private suspend fun rotate(sink: BackupSink, keep: Int, installId: String) {
         val entries = sink.list().getOrNull() ?: return
-        val doomed = AutoBackupNaming.rotation(entries, keep)
+        val doomed = AutoBackupNaming.rotation(entries, keep, installId)
         BackupLog.d("rotate: ${entries.size} listed, keep $keep, deleting ${doomed.map { it.name }}")
         for (entry in doomed) {
             sink.delete(entry)
@@ -354,7 +360,9 @@ object AutoBackupRunner {
         BackupLog.w("failed: $reason", failure)
         repository.setAutoBackupOutcome(ranAtMs = nowMs, error = reason.name)
         if (announce && reason != SinkError.NOT_CONFIGURED) {
-            BackupNotification.post(context, reason)
+            val destination = runCatching { repository.settings.first().autoBackup.destination }
+                .getOrDefault(BackupDestination.FOLDER)
+            BackupNotification.post(context, reason, destination)
         }
         return Outcome.Failed(reason)
     }

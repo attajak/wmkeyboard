@@ -304,6 +304,8 @@
     <string name="backup_auto_enabled_title">Back up automatically</string>
     <string name="backup_auto_enabled_subtitle">The app writes a backup on a timer.</string>
     <string name="backup_auto_enabled_needs_folder">Choose a folder first.</string>
+    <string name="backup_auto_enabled_needs_sign_in">Sign in first.</string>
+    <string name="backup_auto_enabled_needs_details">Fill in the connection details first.</string>
     <string name="backup_auto_interval_title">How often</string>
     <plurals name="backup_auto_interval_hours">
         <item quantity="one">Every hour</item>
@@ -345,6 +347,9 @@
     <string name="backup_auto_last_run">Last backup: %1$s</string>
     <string name="backup_auto_never">The app has not made an automatic backup yet.</string>
     <string name="backup_auto_error_permission">The app can no longer write to your backup folder. Choose the folder again.</string>
+    <string name="backup_auto_error_permission_account">The app lost access to your account. Sign in again.</string>
+    <string name="backup_auto_error_permission_server">The server did not accept the sign-in details. Check them.</string>
+    <string name="backup_auto_error_target_remote">The app cannot find the backup location. Check the destination details.</string>
     <string name="backup_auto_error_target">The app cannot find your backup folder. It may be deleted, or the card may be out.</string>
     <string name="backup_auto_error_space">There is not enough space for a backup.</string>
     <string name="backup_auto_error_io">The last backup did not finish. The app tries again later.</string>
@@ -411,12 +416,25 @@
 
     <string name="backup_auto_oauth_signed_in">Signed in.</string>
     <string name="backup_auto_oauth_signed_out">Not signed in yet.</string>
+    <string name="backup_auto_oauth_signing_in">Signing in…</string>
     <string name="backup_auto_oauth_sign_in">Sign in</string>
     <string name="backup_auto_oauth_sign_out">Sign out</string>
     <string name="backup_auto_oauth_cancelled">Sign in stopped. Nothing changed.</string>
     <string name="backup_auto_oauth_failed">The app could not finish signing in. Try again.</string>
     <string name="backup_auto_oauth_no_browser">The app could not open a browser to sign in.</string>
     <string name="backup_auto_dropbox_info">The app gets a folder of its own inside your Dropbox and can see nothing else. You can find the folder under Apps, and you can delete it. To take this permission back, open the connected apps list in your Dropbox account.</string>
+    <string name="backup_remote_restore_action">Restore from here</string>
+    <string name="backup_remote_restore_title">Restore a backup</string>
+    <string name="backup_remote_restore_loading">Looking for backups…</string>
+    <string name="backup_remote_restore_downloading">Downloading the backup…</string>
+    <string name="backup_remote_restore_empty">There are no automatic backups here yet.</string>
+    <string name="backup_remote_restore_note">This list shows the backups of every device that uses this destination. Each device keeps and deletes only its own backups.</string>
+    <string name="backup_remote_restore_this_device">This device</string>
+    <string name="backup_remote_restore_unknown_device">A device that did not record its name</string>
+    <!-- %1$s is a date and time, %2$s a file size such as "5.9 MB". -->
+    <string name="backup_remote_restore_entry"><xliff:g id="when">%1$s</xliff:g>, <xliff:g id="size">%2$s</xliff:g></string>
+    <string name="backup_remote_restore_encrypted">Protected with a passphrase</string>
+    <string name="backup_remote_restore_failed">The app could not download that backup. Try again.</string>
     <string name="backup_auto_onedrive_info">The app gets a folder of its own inside your OneDrive and can see nothing else. You can find the folder under Apps. To take this permission back, open the list of apps in your Microsoft account.</string>
     <string name="backup_blacklist_clear_title">Clear the blacklist</string>
     <plurals name="backup_blacklist_clear_subtitle">

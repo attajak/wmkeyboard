@@ -241,6 +241,9 @@
          no screen at all. -->
     <string name="core_settings_notify_backup_title">Automatic backup did not run</string>
     <string name="core_settings_notify_backup_permission">The keyboard no longer has access to the backup folder. Open Backup and choose it again.</string>
+    <string name="core_settings_notify_backup_permission_account">The keyboard lost access to your backup account. Open Backup and sign in again.</string>
+    <string name="core_settings_notify_backup_permission_server">The backup server did not accept the sign-in details. Open Backup and check them.</string>
+    <string name="core_settings_notify_backup_target_remote">The backup location is gone. Open Backup and check the destination.</string>
     <string name="core_settings_notify_backup_target">The backup folder is gone. Open Backup and choose another one.</string>
     <string name="core_settings_notify_backup_space">There was not enough room to write the backup.</string>
     <string name="core_settings_notify_backup_io">The backup could not be written. Open Backup to see the details.</string>

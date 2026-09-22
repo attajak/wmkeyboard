@@ -83,6 +83,17 @@ object BackupOAuth {
 
     data class Result(val destination: BackupDestination, val outcome: Outcome)
 
+    private val _exchanging = MutableStateFlow<BackupDestination?>(null)
+
+    /**
+     * The destination whose code is being traded for a token right now.
+     *
+     * The browser hands back before that trade is done, and it takes a round
+     * trip or two: without something on screen, the row said "Not signed in
+     * yet" for two or three seconds after the user had just signed in.
+     */
+    val exchanging: StateFlow<BackupDestination?> = _exchanging
+
     enum class Outcome { SIGNED_IN, CANCELLED, FAILED }
 
     /**
@@ -159,33 +170,48 @@ object BackupOAuth {
             return
         }
         val appContext = context.applicationContext
+        _exchanging.value = destination
         scope.launch {
-            val tokens = when (destination) {
-                BackupDestination.DROPBOX -> BackupClients.dropbox()
-                else -> BackupClients.oneDrive()
+            try {
+                exchange(appContext, destination, code, waiting.verifier)
+            } finally {
+                _exchanging.value = null
             }
-            val refresh = tokens?.exchangeCode(code, waiting.verifier, REDIRECT_URI)
-            if (refresh == null) {
-                _result.value = Result(destination, Outcome.FAILED)
-                return@launch
-            }
-            val repository = SettingsRepository(appContext)
-            when (destination) {
-                BackupDestination.DROPBOX -> repository.setAutoBackupDropboxToken(refresh)
-                else -> repository.setAutoBackupOneDriveToken(refresh)
-            }
-            BackupLog.d("oauth $destination: refresh token stored")
-            _result.value = Result(destination, Outcome.SIGNED_IN)
         }
+    }
+
+    private suspend fun exchange(
+        appContext: Context,
+        destination: BackupDestination,
+        code: String,
+        verifier: String,
+    ) {
+        val tokens = when (destination) {
+            BackupDestination.DROPBOX -> BackupClients.dropbox()
+            else -> BackupClients.oneDrive()
+        }
+        val refresh = tokens?.exchangeCode(code, verifier, REDIRECT_URI)
+        if (refresh == null) {
+            _result.value = Result(destination, Outcome.FAILED)
+            return
+        }
+        val repository = SettingsRepository(appContext)
+        when (destination) {
+            BackupDestination.DROPBOX -> repository.setAutoBackupDropboxToken(refresh)
+            else -> repository.setAutoBackupOneDriveToken(refresh)
+        }
+        BackupLog.d("oauth $destination: refresh token stored")
+        _result.value = Result(destination, Outcome.SIGNED_IN)
     }
 
     /**
      * Puts the settings screen back in front of the browser.
      *
-     * The redirect activity runs in a task of its own, so finishing it
-     * returns to whatever was under it, which is the browser tab that just
-     * said "you can close this". Moving the app's own task forward is what
-     * the user expects, and only the activity in front may do it.
+     * The redirect normally lands on the settings task already, since it
+     * shares the app's task affinity, and then this changes nothing. It is
+     * the fallback for when that task is gone, killed or swept away by an OEM
+     * task manager, where finishing would otherwise leave the browser tab or
+     * the launcher in front. Only the activity in front may move a task.
      */
     internal fun returnToApp(activity: Activity) {
         val manager = activity.getSystemService(ActivityManager::class.java)
