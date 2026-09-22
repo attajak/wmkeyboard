@@ -6635,6 +6635,12 @@ private class ToolDragController {
     var toolboxTools: List<ToolbarTool> = emptyList()
     /** Complete ordering over every tool; reorders rewrite this. */
     var toolboxOrder: List<ToolbarTool> = emptyList()
+    /**
+     * Tools the user hid from the grid. The grid is no drop target for them:
+     * it would show a slot and then never draw the tool in it. Dragged off the
+     * bar, one simply unpins, the way any off-bar drop does.
+     */
+    var toolboxHidden: Set<ToolbarTool> = emptySet()
     var onOrderCommit: (List<ToolbarTool>) -> Unit = {}
 
     /**
@@ -6735,6 +6741,7 @@ private class ToolDragController {
      */
     private fun toolboxSlotAt(at: Offset): Int? {
         val tool = dragging ?: return null
+        if (tool in toolboxHidden) return null
         val viewport = toolboxViewport ?: return null
         if (!viewport.contains(at)) return null
         val coords = toolboxContentCoords?.takeIf { it.isAttached } ?: return null
@@ -8225,6 +8232,7 @@ private fun ToolboxPanel(
         }
         drag.toolboxTools = available
         drag.toolboxOrder = state.settings.toolboxOrder
+        drag.toolboxHidden = toolbox.hiddenTools
         drag.toolboxColumns = columns
         // The grid takes the ambient direction (it has no script of its own to
         // follow), so under an RTL locale it fills from the right and the cell
@@ -16195,13 +16203,15 @@ internal fun mediaAutoPinned(state: KeyboardUiState): Boolean =
 /**
  * What the toolbox has to show: everything enabled that is not already pinned
  * — the transient media pin included, so the tool is never in both places at
- * once and a drag has one cell to start from.
+ * once and a drag has one cell to start from — less the tools the user hid
+ * from the grid ([ToolboxSettings.hiddenTools]), which stay on everywhere else.
  */
 internal fun visibleToolboxTools(state: KeyboardUiState): List<ToolbarTool> {
     val pinned = state.settings.toolbarTools.toSet() +
         if (mediaAutoPinned(state)) setOf(ToolbarTool.MEDIA_CONTROL) else emptySet()
+    val hidden = state.settings.toolbox.hiddenTools
     return state.settings.toolboxOrder.filter {
-        it !in pinned && it in state.settings.enabledTools &&
+        it !in pinned && it !in hidden && it in state.settings.enabledTools &&
             isSupportedTool(it) && isUsableTool(it, state.settings)
     }
 }

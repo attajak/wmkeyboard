@@ -806,6 +806,7 @@ internal object SettingsRowIcons {
         put(R.string.appearance_toolbar_placement_title) { Icons.Outlined.ViewAgenda }
         put(R.string.appearance_toolbar_show_strip_title) { Icons.AutoMirrored.Outlined.ShortText }
         put(R.string.tooldetail_hold_title) { Icons.Outlined.TouchApp }
+        put(R.string.tooldetail_show_in_toolbox_title) { Icons.Outlined.Apps }
         put(R.string.tooldetail_icon_colour_title) { Icons.Outlined.Colorize }
         put(R.string.tooldetail_icon_colour_start_title) { Icons.Outlined.Colorize }
         put(R.string.tooldetail_icon_colour_end_title) { Icons.Outlined.Gradient }

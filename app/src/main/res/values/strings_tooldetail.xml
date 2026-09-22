@@ -13,6 +13,10 @@
     <string name="tooldetail_enabled_needs_key_subtitle">Add the API key below to turn this tool on</string>
     <string name="tooldetail_enabled_needs_instance_subtitle">Needs a SearXNG instance. Add its address under Search settings.</string>
     <string name="tooldetail_enabled_needs_layout_subtitle">Make a secondary layout under Key layouts below to turn this tool on</string>
+    <!-- A switch under the one above. Off takes the tool out of the toolbox grid
+         (the panel that lists every tool) while it stays on everywhere else. -->
+    <string name="tooldetail_show_in_toolbox_title">Show in toolbox</string>
+    <string name="tooldetail_show_in_toolbox_subtitle">Off keeps it out of the toolbox. It still works from the toolbar, by typing its name and from selection actions.</string>
     <string name="tooldetail_icon_colour_title">Icon colour</string>
     <!-- The two ends of the icon gradient, shown instead of the row above
          while "Gradient tool colors" is on. -->

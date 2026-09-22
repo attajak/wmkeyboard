@@ -1592,6 +1592,16 @@ data class ToolboxSettings(
      * enlarged one was left with two label sizes that disagreed.
      */
     val labelSizeSp: Int = 0,
+    /**
+     * Tools left out of the toolbox grid while staying switched on everywhere
+     * else: the toolbar, a search by name, selection actions, hardware
+     * shortcuts. For someone who only ever reaches a tool one of those other
+     * ways and would rather the grid were one cell shorter. Empty by default.
+     *
+     * Separate from [KeyboardSettings.enabledTools], which turns a tool off
+     * outright. A hidden tool that is pinned stays on the bar.
+     */
+    val hiddenTools: Set<ToolbarTool> = emptySet(),
 ) {
     /** The caption size to draw at, resolving 0 against the toolbar's setting. */
     fun labelSizeOr(toolbarLabelSize: Int): Int =
@@ -7235,6 +7245,7 @@ class SettingsRepository(private val context: Context) {
         private val TOOLBOX_PAGINATE = booleanPreferencesKey("toolbox_paginate")
         private val TOOLBOX_PAGE_SIZE = intPreferencesKey("toolbox_page_size")
         private val TOOLBOX_LABEL_SIZE = intPreferencesKey("toolbox_label_size")
+        private val TOOLBOX_HIDDEN_TOOLS = stringPreferencesKey("toolbox_hidden_tools")
         private val SUGGESTION_TEXT_SCALE = floatPreferencesKey("suggestion_text_scale")
         private val LEARNED_WORD_MIN_COUNT = intPreferencesKey("learned_word_min_count")
         private val NEW_WORD_SIGHTINGS = intPreferencesKey("new_word_sightings")
@@ -8454,6 +8465,7 @@ class SettingsRepository(private val context: Context) {
                 pageSize = p[TOOLBOX_PAGE_SIZE]?.coerceIn(ToolboxPageSizeRange)
                     ?: defaults.toolbox.pageSize,
                 labelSizeSp = p[TOOLBOX_LABEL_SIZE] ?: defaults.toolbox.labelSizeSp,
+                hiddenTools = decodeToolNames(p[TOOLBOX_HIDDEN_TOOLS]).toSet(),
             ),
             sensorTools = SensorToolSettings(
                 flashlightAutoOff = p[FLASHLIGHT_AUTO_OFF]
@@ -8951,6 +8963,18 @@ class SettingsRepository(private val context: Context) {
             val disabled = decodeDisabledTools(prefs[DISABLED_TOOLS])
             val next = if (enabled) disabled - tool else (disabled + tool).distinct()
             prefs[DISABLED_TOOLS] = next.joinToString(",") { it.name }
+        }
+
+    /**
+     * Leaves one tool out of the toolbox grid, or puts it back, without
+     * touching whether it is on. See [ToolboxSettings.hiddenTools].
+     */
+    suspend fun setToolHiddenInToolbox(tool: ToolbarTool, hidden: Boolean) =
+        editPrefs { prefs ->
+            val current = decodeToolNames(prefs[TOOLBOX_HIDDEN_TOOLS])
+            val next = if (hidden) (current + tool).distinct() else current - tool
+            if (next.isEmpty()) prefs.remove(TOOLBOX_HIDDEN_TOOLS)
+            else prefs[TOOLBOX_HIDDEN_TOOLS] = next.joinToString(",") { it.name }
         }
 
     /** Replaces the whole enabled set at once (the onboarding tools page). */

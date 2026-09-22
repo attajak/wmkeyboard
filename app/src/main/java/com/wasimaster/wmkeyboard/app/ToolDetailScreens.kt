@@ -331,6 +331,17 @@ internal fun ToolDetailSettings(
                 default = usable && tool in SettingsDefaults.enabledTools,
             ) { scope.launch { repository.setToolEnabled(tool, it) } }
         }
+        // Off the grid, on everywhere else: for a tool someone only reaches by
+        // name, from a selection action or pinned on the bar. Meaningless while
+        // the tool is off, since then it is in no grid to leave.
+        item(visible = tool in settings.enabledTools) {
+            ToggleSetting(
+                R.string.tooldetail_show_in_toolbox_title,
+                stringResource(R.string.tooldetail_show_in_toolbox_subtitle),
+                tool !in settings.toolbox.hiddenTools,
+                default = tool !in SettingsDefaults.toolbox.hiddenTools,
+            ) { scope.launch { repository.setToolHiddenInToolbox(tool, !it) } }
+        }
         // Recolour just this tool's icon. Only meaningful while the global
         // "Colorful tool icons" switch is on, since it's what paints them.
         if (settings.coloredToolIcons) {
