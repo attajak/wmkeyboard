@@ -319,6 +319,44 @@ class SettingsDeepLinkTest {
     }
 
     @Test
+    fun `a row on one mode's editor is reached through that mode`() {
+        // The editor's rows are indexed on the mode list, which is all search
+        // can open, and a link naming one mode still finds them (#323).
+        val target = SettingsDeepLink.parse(
+            "wmkeyboard://settings/mode_edit/mode_browser?setting=modes_symbol_sets_title",
+        )
+        assertEquals("mode_edit/mode_browser", target?.route)
+        val entry = SettingsDeepLink.resolve(target!!) { index }
+        assertEquals("modes#modes_symbol_sets_title", entry?.key)
+        // A mode the user made is addressed the same way, by its own id.
+        assertNotNull(
+            SettingsDeepLink.resolve(
+                SettingsDeepLink.Target("mode_edit/mode_custom_1700000000000", "modes_autocorrect_title"),
+            ) { index },
+        )
+        // A row that is not on the editor is not found there.
+        assertNull(
+            SettingsDeepLink.resolve(
+                SettingsDeepLink.Target("mode_edit/mode_browser", "typing_autocorrect_title"),
+            ) { index },
+        )
+    }
+
+    @Test
+    fun `every screen pattern in the index is an addressable route`() {
+        val patterns = index.mapNotNull { it.screenPattern }.distinct()
+        assertTrue("no row names a screen pattern", patterns.isNotEmpty())
+        assertEquals(emptyList<String>(), patterns.filterNot { it in SettingsRoutes.all })
+    }
+
+    @Test
+    fun `a filled route knows its pattern`() {
+        assertEquals("mode_edit/{modeId}", SettingsRoutes.patternOf("mode_edit/mode_chat"))
+        assertEquals("themes", SettingsRoutes.patternOf("THEMES"))
+        assertNull(SettingsRoutes.patternOf("no/such/screen"))
+    }
+
+    @Test
     fun `an unknown row name resolves to nothing`() {
         assertNull(SettingsDeepLink.resolve(SettingsDeepLink.Target("", "no_such_row_title")) { index })
     }

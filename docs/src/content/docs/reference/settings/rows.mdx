@@ -123,6 +123,7 @@ Editing a built-in set doesn't overwrite the shipped version. Your edit is store
 - **Reordering is drag, with a handle.** Press and drag the handle on a row's right edge; it settles into the slot you drop it in, and every row it passes along the way shifts to make room.
 - **A hidden row keeps its slot.** Turning the emoji or symbol row back on after hiding it drops it back into the same position in the stack, not the top or bottom.
 - **You can't uncheck the last enabled symbol set.** The checkbox for the only remaining checked set silently does nothing when tapped: there's no error message, it just won't go to zero.
+- **Entries can be removed from the keyboard too.** Holding an entry on the symbol row opens a menu with **Remove**, and on a set you made, **Delete the set**, which asks first. On a built-in set a removal is stored as the same override the editor writes, so Reset set undoes it. See [Holding an entry](/typing/modes/#holding-an-entry).
 - **Editing a built-in set is non-destructive.** The edit is stored as an override under the built-in's own ID, so nothing else needs to be told about it, and Reset set removes the override cleanly.
 - **Leaving Name blank on save doesn't leave the set unnamed.** It falls back to the built-in's own name when you're editing a shipped set, or "My set" for a brand-new one.
 - **Saving a set also enables it.** If the set you just saved or created wasn't already checked in the picker, saving checks it for you so it shows up in the row right away.

@@ -21,6 +21,9 @@ on:
     paths:
       - 'app/src/main/java/com/wasimaster/wmkeyboard/app/SettingsSearch.kt'
       - 'app/src/main/java/com/wasimaster/wmkeyboard/app/SettingsRoutes.kt'
+      - 'app/src/main/java/com/wasimaster/wmkeyboard/app/SettingsDeepLink.kt'
+      - 'app/src/test/java/com/wasimaster/wmkeyboard/app/SettingsLinksDump.kt'
+      - 'core/settings/src/main/java/com/wasimaster/wmkeyboard/core/settings/KeyboardModes.kt'
       - '**/src/main/res/values/*.xml'
       - 'gradle.properties'
       - 'docs/scripts/extract_settings_links.sh'

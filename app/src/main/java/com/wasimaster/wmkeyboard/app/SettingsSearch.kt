@@ -113,6 +113,15 @@ internal data class SettingsSearchEntry(
      * row after an update.
      */
     val key: String = "$route#$title",
+    /**
+     * The route pattern of the screen the row is really drawn on, when that is
+     * not [route]: a screen that takes an argument the index cannot fill in.
+     * The mode editor's rows are the case. Search opens the mode list, since
+     * it cannot know which mode was meant, but a link can name one, and
+     * `wmkeyboard://settings/mode_edit/mode_browser?setting=…` finds its row
+     * through this. Null for every row drawn where [route] opens.
+     */
+    val screenPattern: String? = null,
 ) {
     /** The path as the result draws it under the row, e.g. "Tools › Camera". */
     val screen: String get() = screenPath.joinToString(CRUMB_SEPARATOR)
@@ -154,6 +163,12 @@ internal class ResourceSearchStrings(private val res: Resources) : SearchStrings
 /** What separates the parts of a breadcrumb. Punctuation, not words. */
 private const val CRUMB_SEPARATOR = " › "
 
+/**
+ * The mode editor's pattern in [SettingsRoutes.all], which its rows name as
+ * their [SettingsSearchEntry.screenPattern].
+ */
+internal const val MODE_EDIT_PATTERN = "mode_edit/{modeId}"
+
 /** The breadcrumb parts that are set, outermost first. */
 private fun SearchStrings.crumb(vararg parts: Int): List<String> =
     parts.filter { it != 0 }.map { getString(it) }
@@ -174,6 +189,7 @@ private fun SearchStrings.entry(
     @StringRes screenRoot: Int = 0,
     weight: EntryWeight = EntryWeight.NORMAL,
     @StringRes keywords: Int = 0,
+    screenPattern: String? = null,
 ): SettingsSearchEntry = SettingsSearchEntry(
     title = getString(title),
     subtitle = if (subtitle == 0) "" else getString(subtitle),
@@ -187,6 +203,7 @@ private fun SearchStrings.entry(
     keywords = (if (keywords != 0) keywords else searchKeywordsFor(title))
         .let { if (it == 0) "" else getString(it) },
     key = "$route#${resourceName(title)}",
+    screenPattern = screenPattern,
 )
 
 /**
@@ -1515,8 +1532,14 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         title, subtitle, R.string.privacy_lock_title, "applock",
         screenParent = R.string.home_privacy_title,
     )
-    fun mode(@StringRes title: Int, @StringRes subtitle: Int = 0) =
-        entry(title, subtitle, R.string.home_screen_mode_edit_title, "modes")
+    // Drawn on one mode's editor, found on the mode list: search cannot say
+    // which mode, and a link that does reaches the row by its screenPattern.
+    // The path stays the one crumb, since the trail a result seeds ends on
+    // the list it opens (see settingsCrumbSeed).
+    fun mode(@StringRes title: Int, @StringRes subtitle: Int = 0, weight: EntryWeight = EntryWeight.NORMAL) = entry(
+        title, subtitle, R.string.home_screen_mode_edit_title, "modes",
+        weight = weight, screenPattern = MODE_EDIT_PATTERN,
+    )
     fun access(@StringRes title: Int, @StringRes subtitle: Int = 0) =
         entry(title, subtitle, R.string.home_accessibility_title, "accessibility")
     fun about(@StringRes title: Int, @StringRes subtitle: Int = 0) =
@@ -1655,13 +1678,22 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         entry(R.string.modes_drag_edits_title, R.string.modes_drag_edits_subtitle, R.string.home_modes_title, "modes"),
         mode(R.string.modes_use_title, R.string.modes_use_subtitle),
         mode(R.string.modes_name_label, R.string.modes_name_hint),
+        mode(R.string.modes_icon_title, R.string.modes_icon_subtitle, EntryWeight.DETAIL),
         mode(R.string.modes_emoji_row_title, R.string.modes_active_subtitle),
         mode(R.string.modes_symbol_row_title),
+        // Named after the global feature each one only overrides, so DETAIL:
+        // a search for "autocorrect" means the Typing switch.
+        mode(R.string.modes_autocorrect_title, R.string.modes_active_subtitle, EntryWeight.DETAIL),
+        mode(R.string.modes_autocapitalize_title, weight = EntryWeight.DETAIL),
+        mode(R.string.modes_suggestions_title, weight = EntryWeight.DETAIL),
+        mode(R.string.modes_layout_title, R.string.modes_layout_subtitle, EntryWeight.DETAIL),
+        mode(R.string.modes_theme_title, R.string.modes_theme_inherit_subtitle, EntryWeight.DETAIL),
         mode(R.string.modes_pinned_tools_title, R.string.modes_pinned_tools_subtitle),
         mode(R.string.modes_pinned_behaviour_title, R.string.modes_pinned_behaviour_append_subtitle),
         mode(R.string.modes_toolbox_order_title, R.string.modes_toolbox_order_subtitle),
         mode(R.string.modes_symbol_sets_title, R.string.modes_symbol_sets_subtitle),
         mode(R.string.modes_autospace_title, R.string.modes_autospace_subtitle),
+        mode(R.string.modes_add_app_title, R.string.modes_add_app_subtitle_any),
         access(R.string.accessibility_color_vision_title, R.string.accessibility_color_vision_subtitle),
         access(R.string.accessibility_high_contrast_title, R.string.accessibility_high_contrast_subtitle),
         access(R.string.accessibility_key_outlines_title, R.string.accessibility_key_outlines_subtitle),

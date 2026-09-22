@@ -26,6 +26,15 @@ export const SINCE_AWARE: string = data.sinceAware;
 
 const routes = data.routes as Record<string, string>;
 const settings = data.settings as Record<string, string>;
+const modes = (data.modes ?? {}) as Record<string, string>;
+/**
+ * The first release that scrolls to a row on one keyboard mode's editor
+ * (`mode_edit/mode_browser?setting=…`). An older copy opens the mode and
+ * pulses nothing, so the row is not there for it yet (#323).
+ */
+export const MODE_ROWS_SINCE: string = data.modeRows ?? SINCE_FLOOR;
+
+const MODE_EDIT = 'mode_edit/{modeId}';
 
 /** Numeric, part by part, the way `AppVersion.compare` in the app does it. */
 export function compareVersions(a: string, b: string): number {
@@ -57,7 +66,16 @@ export interface Since {
 export function sinceOf(x: Explanation): Since | null {
 	let version: string;
 	if (x.kind === 'settings') {
-		version = newest(routes[x.pattern], x.setting ? settings[x.setting] : undefined, x.since);
+		// One mode's editor: that mode has to ship with the app, and a row on it
+		// needs the release that finds rows through the mode.
+		const mode = x.pattern === MODE_EDIT ? x.route.split('/')[1] : undefined;
+		version = newest(
+			routes[x.pattern],
+			x.setting ? settings[x.setting] : undefined,
+			mode ? modes[mode] : undefined,
+			mode && x.setting ? MODE_ROWS_SINCE : undefined,
+			x.since,
+		);
 	} else if (x.kind === 'setting') {
 		version = newest(settings[x.setting], x.since);
 	} else {

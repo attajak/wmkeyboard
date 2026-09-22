@@ -201,7 +201,17 @@ internal object SettingsRoutes {
      * may shout `THEMES` and still land on `themes` — and the link's own text
      * for every argument, whose case and encoding are the caller's to decide.
      */
-    fun resolve(path: String?): String? {
+    fun resolve(path: String?): String? = match(path)?.second
+
+    /**
+     * The pattern in [all] that [route] fills in, such as `mode_edit/{modeId}`
+     * for `mode_edit/mode_browser`, or null when it names no screen. A plain
+     * screen is its own pattern.
+     */
+    fun patternOf(route: String?): String? = match(route)?.first
+
+    /** The matching pattern and the route it resolves to, or null. */
+    private fun match(path: String?): Pair<String, String>? {
         val segments = path.orEmpty().trim('/').split('/')
         if (segments.isEmpty() || segments.any { it.isEmpty() }) return null
         // "." and ".." mean something to a URI resolver and nothing to the nav
@@ -222,7 +232,7 @@ internal object SettingsRoutes {
                     break
                 }
             }
-            if (matched) return filled.joinToString("/")
+            if (matched) return pattern.joinToString("/") to filled.joinToString("/")
         }
         return null
     }

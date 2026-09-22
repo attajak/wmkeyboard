@@ -8,7 +8,7 @@
  * Pure functions, no DOM: `npx esbuild src/lib/deep-links.ts --bundle
  * --platform=node --format=cjs` then `node` is enough to try one.
  */
-import { ROUTES } from './deep-link-routes';
+import { MODE_IDS, ROUTES } from './deep-link-routes';
 import { resolveManifestUrl } from '../store/lib/resolve';
 
 export const SCHEME = 'wmkeyboard';
@@ -160,9 +160,20 @@ export function resolveRoute(path: string): { route: string; pattern: string; la
 				break;
 			}
 		}
-		if (matched) return { route: filled.join('/'), pattern: spec.pattern, label: spec.label };
+		if (matched) return { route: filled.join('/'), pattern: spec.pattern, label: labelFor(spec.pattern, spec.label, filled) };
 	}
 	return null;
+}
+
+/**
+ * A shipped mode's editor by the mode's name, since its id is the same on
+ * every install: `mode_edit/mode_browser` is "The Browser mode". Everything
+ * else keeps its route's label.
+ */
+function labelFor(pattern: string, label: string, filled: string[]): string {
+	if (pattern !== 'mode_edit/{modeId}') return label;
+	const mode = MODE_IDS.find((m) => m.id === filled[1]);
+	return mode ? `The ${mode.name} mode` : label;
 }
 
 function count(pattern: string): number {

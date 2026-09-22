@@ -135,7 +135,9 @@ import androidx.compose.material.icons.outlined.Password
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.RemoveCircleOutline
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.outlined.AutoAwesome
@@ -1156,7 +1158,8 @@ fun KeyboardScreen(
     onWikiLoadLinks: () -> Unit = {},
     onWikiLoadFull: () -> Unit = {},
     onSymbolInsert: (String) -> Unit = {},
-    onSymbolSetSelect: (String) -> Unit = {},
+    /** The symbol row's set picker and its held-entry menu (#323), bundled. */
+    symbolRow: SymbolRowCallbacks = SymbolRowCallbacks(),
     onFancyStyleSelect: (String) -> Unit = {},
     onModeSelect: (String?) -> Unit = {},
     onToolInsert: (String) -> Unit = {},
@@ -1506,7 +1509,7 @@ fun KeyboardScreen(
                 onWikiLoadLinks = onWikiLoadLinks,
                 onWikiLoadFull = onWikiLoadFull,
                 onSymbolInsert = onSymbolInsert,
-                onSymbolSetSelect = onSymbolSetSelect,
+                symbolRow = symbolRow,
                 onFancyStyleSelect = onFancyStyleSelect,
                 onModeSelect = onModeSelect,
                 onToolInsert = onToolInsert,
@@ -5568,12 +5571,16 @@ private fun StripMenuScrim(onDismiss: () -> Unit) {
  * scrolls on its own. All three draw the same [SymbolCell], and the entry
  * order is [symbolRowLineEntries]'s in both stacked forms, so the row looks the
  * same in either until a line is actually scrolled.
+ *
+ * Holding an entry that has no popup of its own opens a menu instead (#323):
+ * remove that entry, hide the row in the active mode, delete the set, or open
+ * the settings behind the row. See [SymbolEntryMenu].
  */
 @Composable
 private fun SymbolRowStrip(
     state: KeyboardUiState,
     onInsert: (String) -> Unit,
-    onSetSelect: (String) -> Unit,
+    callbacks: SymbolRowCallbacks,
     modifier: Modifier = Modifier,
 ) {
     val settings = state.settings
@@ -5586,6 +5593,35 @@ private fun SymbolRowStrip(
     val active = activeSymbolSet(state)
     var pickerOpen by remember { mutableStateOf(false) }
     val feedback = LocalKeyPressFeedback.current
+    // What a held entry's menu may offer, worked out once for the whole row.
+    // The mode is the one the service applied; its own sets or an explicit
+    // "on" are what make the row part of it, as opposed to a row it inherits.
+    val mode = state.activeModeId?.let { id -> settings.keyboardModes.firstOrNull { it.id == id } }
+    val activeName = symbolSetName(active)
+    // Remembered so the cells, which take it, are skipped on an unrelated
+    // recomposition of the row.
+    val menu = remember(active, activeName, mode) {
+        SymbolEntryMenuSpec(
+            setName = activeName,
+            removable = active.chars.size > 1,
+            hideInMode = mode?.takeIf { it.symbolRowEnabled == true || it.symbolSetIds != null },
+            // A shipped set cannot be deleted, only reset from its editor.
+            deletable = BuiltInSymbolSets.byId(active.id) == null,
+        )
+    }
+    // Asked here rather than in the cell: the question has to outlive the
+    // menu that raised it, and the cell is a slot in a lazy list.
+    var confirmDelete by remember { mutableStateOf<SymbolSet?>(null) }
+    confirmDelete?.let { set ->
+        SymbolSetDeleteConfirm(
+            name = symbolSetName(set),
+            onConfirm = {
+                confirmDelete = null
+                callbacks.onAction(SymbolRowAction.DeleteSet(set.id))
+            },
+            onDismiss = { confirmDelete = null },
+        )
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -5641,7 +5677,7 @@ private fun SymbolRowStrip(
                         },
                         onClick = {
                             pickerOpen = false
-                            onSetSelect(set.id)
+                            callbacks.onSetSelect(set.id)
                         },
                     )
                 }
@@ -5652,12 +5688,17 @@ private fun SymbolRowStrip(
         val lineHeight = settings.rows.symbolRowHeightDp.dp
         val cell: @Composable (Int) -> Unit = { index ->
             SymbolCell(
+                index = index,
                 symbol = active.chars[index],
                 set = active,
                 settings = settings,
                 hint = hints?.label(HintSurface.SYMBOL_ROW, index),
                 onInsert = onInsert,
                 modifier = Modifier.height(lineHeight),
+                menu = menu,
+                onMenuAction = { action ->
+                    if (action == null) confirmDelete = active else callbacks.onAction(action)
+                },
             )
         }
         when {
@@ -5711,15 +5752,24 @@ private fun SymbolRowStrip(
  * and a drag reaches the list's scroll as before. Once it fires it owns the
  * finger: every later move steers the popup and is consumed, which is what
  * tells the clickable to give up its press and the scroll never to start.
+ *
+ * A cell with no popup holds to [SymbolEntryMenu] instead, through the same
+ * handler with no hold-to-select: the popup was there first, and an entry the
+ * user gave one keeps it.
  */
 @Composable
 private fun SymbolCell(
+    /** Where the entry sits in [set], so a repeated entry is removed where it was held. */
+    index: Int,
     symbol: String,
     set: SymbolSet,
     settings: KeyboardSettings,
     hint: String?,
     onInsert: (String) -> Unit,
     modifier: Modifier = Modifier,
+    menu: SymbolEntryMenuSpec? = null,
+    /** A menu item; null asks to delete the set, which the row confirms first. */
+    onMenuAction: (SymbolRowAction?) -> Unit = {},
 ) {
     val alternates = set.popupFor(symbol)
     val feedback = LocalKeyPressFeedback.current
@@ -5746,6 +5796,8 @@ private fun SymbolCell(
         hold.open()
         showPopup = true
     }
+    var showMenu by remember(symbol) { mutableStateOf(false) }
+    val openMenu = rememberUpdatedState { showMenu = true }
     val press = rememberUpdatedState(feedback)
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Box(
@@ -5760,7 +5812,21 @@ private fun SymbolCell(
                     .clickable { onInsert(symbol) }
                     .then(
                         if (alternates.isEmpty()) {
-                            Modifier
+                            if (menu == null) {
+                                Modifier
+                            } else {
+                                Modifier.symbolHoldInput(
+                                    delayMs = settings.longPressDelayMs,
+                                    hapticOnLongPress = settings.haptics.onLongPress,
+                                    // Nothing is typed on the lift: the menu
+                                    // stays up for a tap.
+                                    hapticOnLongPressRelease = false,
+                                    hold = null,
+                                    feedback = press,
+                                    scope = scope,
+                                    open = openMenu,
+                                )
+                            }
                         } else {
                             Modifier
                                 // Beside the pointer handler and before the
@@ -5822,10 +5888,80 @@ private fun SymbolCell(
                     onAction = {},
                 )
             }
+            if (showMenu && menu != null) {
+                SymbolEntryMenu(
+                    entry = SymbolRowAction.RemoveEntry(set.id, index, symbol),
+                    spec = menu,
+                    onDismiss = { showMenu = false },
+                    onAction = { action ->
+                        showMenu = false
+                        onMenuAction(action)
+                    },
+                )
+            }
         }
         if (hint != null) {
             HintBadge(hint, modifier = Modifier.align(Alignment.BottomCenter))
         }
+    }
+}
+
+/**
+ * What the menu on a held symbol row entry may offer, the same for every entry
+ * of the set on show. [hideInMode] is the active mode when the row is part of
+ * it (the mode turns the row on or names its own sets), else null.
+ */
+@Immutable
+private class SymbolEntryMenuSpec(
+    val setName: String,
+    val removable: Boolean,
+    val hideInMode: KeyboardMode?,
+    val deletable: Boolean,
+)
+
+/**
+ * The menu a held symbol row entry opens (#323), shaped like the held-word
+ * menu on the suggestion strip: non-focusable, over a [StripMenuScrim] so the
+ * dismissing tap types nothing. Removing the entry and hiding the row are
+ * single presses; deleting the set is handed back as a null action so the row
+ * can ask first. [entry] is the held entry, already in the form its Remove
+ * item sends.
+ */
+@Composable
+private fun SymbolEntryMenu(
+    entry: SymbolRowAction.RemoveEntry,
+    spec: SymbolEntryMenuSpec,
+    onDismiss: () -> Unit,
+    onAction: (SymbolRowAction?) -> Unit,
+) {
+    StripMenuScrim(onDismiss = onDismiss)
+    DropdownMenu(
+        expanded = true,
+        onDismissRequest = onDismiss,
+        properties = MenuPopupProperties,
+    ) {
+        if (spec.removable) {
+            WordMenuRow(
+                label = stringResource(R.string.ime_symbol_row_remove, symbolChipLabel(entry.entry)),
+                icon = Icons.Outlined.RemoveCircleOutline,
+            ) { onAction(entry) }
+        }
+        spec.hideInMode?.let { mode ->
+            WordMenuRow(
+                label = stringResource(R.string.ime_symbol_row_hide_in_mode, mode.name),
+                icon = Icons.Outlined.VisibilityOff,
+            ) { onAction(SymbolRowAction.HideInMode(mode.id)) }
+        }
+        if (spec.deletable) {
+            WordMenuRow(
+                label = stringResource(R.string.ime_symbol_row_delete_set, spec.setName),
+                icon = Icons.Outlined.Delete,
+            ) { onAction(null) }
+        }
+        WordMenuRow(
+            label = stringResource(R.string.ime_symbol_row_settings),
+            icon = Icons.Outlined.Settings,
+        ) { onAction(SymbolRowAction.OpenSettings) }
     }
 }
 
@@ -9361,7 +9497,7 @@ private fun KeyboardBody(
     onWikiLoadLinks: () -> Unit,
     onWikiLoadFull: () -> Unit,
     onSymbolInsert: (String) -> Unit,
-    onSymbolSetSelect: (String) -> Unit,
+    symbolRow: SymbolRowCallbacks,
     onFancyStyleSelect: (String) -> Unit,
     onModeSelect: (String?) -> Unit,
     onToolInsert: (String) -> Unit,
@@ -9583,7 +9719,7 @@ private fun KeyboardBody(
                             SymbolRowStrip(
                                 state = state,
                                 onInsert = onToolInsert,
-                                onSetSelect = onSymbolSetSelect,
+                                callbacks = symbolRow,
                             )
                         }
                         BarRow.FANCY -> if (!fullBleed && fancyStyle != null) {

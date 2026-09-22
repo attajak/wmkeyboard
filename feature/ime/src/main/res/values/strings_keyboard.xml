@@ -107,6 +107,22 @@
     <string name="ime_candidates_more_desc">More candidates</string>
     <string name="ime_emoji_panel_open_desc">Open the emoji panel</string>
     <string name="ime_symbol_set_switch_desc">Switch the symbol set</string>
+    <!-- Menu item on a held entry of the symbol row: takes that entry out of
+         its set. %1$s is the entry, such as https:// or .com. -->
+    <string name="ime_symbol_row_remove">Remove \"<xliff:g id="entry" example="https://">%1$s</xliff:g>\"</string>
+    <!-- Menu item on a held entry of the symbol row: switches the whole row
+         off while the named keyboard mode is on. %1$s is the mode's name. -->
+    <string name="ime_symbol_row_hide_in_mode">Hide the row in <xliff:g id="mode" example="Browser">%1$s</xliff:g></string>
+    <!-- Menu item on a held entry of the symbol row: deletes the set the entry
+         belongs to. %1$s is the set's name. -->
+    <string name="ime_symbol_row_delete_set">Delete the \"<xliff:g id="set" example="Links">%1$s</xliff:g>\" set</string>
+    <!-- Menu item on a held entry of the symbol row: opens the settings for
+         the row, or for the keyboard mode that is showing it. -->
+    <string name="ime_symbol_row_settings">Symbol row settings</string>
+    <!-- Title of the question asked before a symbol set is deleted. %1$s is
+         the set's name. -->
+    <string name="ime_symbol_row_delete_confirm_title">Delete \"<xliff:g id="set" example="Links">%1$s</xliff:g>\"?</string>
+    <string name="ime_symbol_row_delete_confirm_body">The set and all its entries go. A keyboard mode that offered it shows your other sets instead.</string>
 
     <!-- Screen reader name for pressing and holding a word on the suggestion
          strip, which opens the menu below. -->

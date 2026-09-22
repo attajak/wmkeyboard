@@ -2931,6 +2931,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - wmkeyboard://settings/<route> `uncommon` — 7-route allowlist parsed back to a NavHost destination; unknown routes navigate nowhere.
     - Both the authority and opaque URI forms accepted
     - A test reads the NavHost and fails if a shortcut names a screen that does not exist
+    - One keyboard mode's row, by the mode's id — settings/mode_edit/mode_browser?setting=modes_symbol_sets_title (#323); the editor's rows are indexed on `modes` for search and carry `screenPattern` mode_edit/{modeId} for links, and the docs dump lists them once per built-in mode
   - Addon store deep links `RARE` — 3 targets: wmkeyboard://addons, ://repo?url=, ://addon?repo=&id= — browsable, so a README or a message can open one.
     - A link never installs anything and never adds a repository — It only navigates; the resulting screen shows the address and author and the user taps Install.
   - OAuth redirect activity `uncommon` — wmkeyboard://oauth catches the Dropbox and OneDrive sign-in codes; PKCE verifier never leaves the device.
@@ -3265,6 +3266,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Custom sets creatable from scratch; at least one set must stay enabled
     - Row picks persist unless a mode prescribes its own sets — With a mode's list in force the pick is session-only and clears on field switch
     - Hardware-hotkey badges render on the row's chips
+    - Hold an entry with no popup for a menu (#323) — Remove it (a built-in set gets an override, so Reset undoes it; the last entry stays), Hide the row in <mode> (while a mode turns the row on or names its own sets; sets that mode's Symbol row to Off), Delete the set (own sets only, asks first), Symbol row settings (the mode's editor when the mode is why the row shows, else rows/symbol)
   - Emoji row — Three presentations: Off, Button (a toolbar toggle swaps the strip), Always-on row
     - Folds away automatically while the emoji panel is open
   - Fancy Text style strip — Rides with its layout rather than with barOrder, drawn closest to the keys

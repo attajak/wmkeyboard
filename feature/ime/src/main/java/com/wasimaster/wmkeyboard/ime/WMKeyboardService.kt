@@ -340,6 +340,7 @@ import com.wasimaster.wmkeyboard.core.tools.matches
 import com.wasimaster.wmkeyboard.core.tools.parseLeader
 import com.wasimaster.wmkeyboard.core.tools.pickerLetter
 import com.wasimaster.wmkeyboard.core.tools.toolbarHintButtons
+import com.wasimaster.wmkeyboard.ime.ui.SymbolRowAction
 import com.wasimaster.wmkeyboard.ime.ui.activeSymbolSet
 import com.wasimaster.wmkeyboard.ime.ui.keyboardHintPlan
 import com.wasimaster.wmkeyboard.ime.ui.suggestionDisplayOrder
@@ -4226,7 +4227,7 @@ open class WMKeyboardService : InputMethodService() {
                 onWikiLoadLinks = ::onWikiLoadLinks,
                 onWikiLoadFull = ::onWikiLoadFull,
                 onSymbolInsert = ::onSymbolInsert,
-                onSymbolSetSelect = ::onSymbolSetSelect,
+                symbolRow = symbolRowCallbacks,
                 onFancyStyleSelect = ::onFancyStyleSelect,
                 onModeSelect = ::onModeSelect,
                 onToolInsert = ::onToolTextInsert,
@@ -20618,6 +20619,61 @@ open class WMKeyboardService : InputMethodService() {
         if (modeSets == null) {
             serviceScope.launch { settingsRepository.setSymbolRowActiveSet(id) }
         }
+    }
+
+    /** The symbol row's picker and its held-entry menu, bundled (#323). */
+    private val symbolRowCallbacks by lazy {
+        com.wasimaster.wmkeyboard.ime.ui.SymbolRowCallbacks(
+            onSetSelect = ::onSymbolSetSelect,
+            onAction = ::onSymbolRowAction,
+        )
+    }
+
+    /**
+     * An item of the menu a held symbol row entry opens (#323). Every one of
+     * them is a settings write, and the row redraws from the settings flow, so
+     * nothing here touches the UI state directly.
+     */
+    private fun onSymbolRowAction(action: SymbolRowAction) {
+        vibrate()
+        when (action) {
+            is SymbolRowAction.RemoveEntry -> serviceScope.launch {
+                settingsRepository.removeSymbolSetEntry(action.setId, action.index, action.entry)
+            }
+            is SymbolRowAction.HideInMode -> {
+                // The stored mode, not the applied view of it: the write
+                // replaces the whole mode, and only the row switch changes.
+                val mode = baseSettings?.keyboardModes?.firstOrNull { it.id == action.modeId } ?: return
+                serviceScope.launch {
+                    settingsRepository.upsertKeyboardMode(mode.copy(symbolRowEnabled = false))
+                }
+            }
+            is SymbolRowAction.DeleteSet -> serviceScope.launch {
+                settingsRepository.deleteSymbolSet(action.setId)
+            }
+            SymbolRowAction.OpenSettings -> openSymbolRowSettings()
+        }
+    }
+
+    /**
+     * The settings behind the symbol row as it stands. The active mode's
+     * editor when the row is the mode's doing (the row is off globally, or
+     * the mode names its own sets), scrolled to the row that did it; the
+     * global Symbol row page otherwise.
+     */
+    private fun openSymbolRowSettings() {
+        val base = baseSettings
+        val mode = base?.keyboardModes?.firstOrNull { it.id == _uiState.value.activeModeId }
+        val intent = if (base != null && mode != null && (!base.symbolRowEnabled || mode.symbolSetIds != null)) {
+            MainActivityContract.intent(
+                this,
+                route = "mode_edit/${mode.id}",
+                setting = if (mode.symbolSetIds != null) "modes_symbol_sets_title" else "modes_symbol_row_title",
+            )
+        } else {
+            MainActivityContract.intent(this, route = com.wasimaster.wmkeyboard.ime.ui.SYMBOL_ROW_SETTINGS_ROUTE)
+        }
+        startActivity(intent)
     }
 
     /** Symbol cell tapped: type it and remember it under Recents. */

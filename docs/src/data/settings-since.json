@@ -3,6 +3,7 @@
 	"latest": "0.5.11",
 	"next": "0.5.12",
 	"sinceAware": "0.5.12",
+	"modeRows": "0.5.12",
 	"routes": {
 		"emojicategories": "0.5.9",
 		"emojiorder/{category}": "0.5.9",
@@ -167,5 +168,6 @@
 		"voice_hold_picks_title": "0.5.8",
 		"voice_server_language_title": "0.5.11",
 		"voice_server_test_title": "0.5.11"
-	}
+	},
+	"modes": {}
 }

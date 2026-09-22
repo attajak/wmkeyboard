@@ -10,6 +10,7 @@
  *   PANEL_NAMES   ↔ enum class PanelKind       (core/.../PanelLayoutSpec.kt)
  *   SCRIPT_NAMES  ↔ LATIN + KeyboardFonts.scriptFontChoices (feature/ime/.../KeyboardFonts.kt)
  *   STORAGE_IDS   ↔ StorageCategories id = ""  (app/.../StorageCategories.kt)
+ *   MODE_IDS      ↔ DefaultKeyboardModes       (core/.../KeyboardModes.kt), ids and names
  *   LICENSE_ASSETS↔ app/src/main/assets/licenses/
  *
  * Regex over the Kotlin, like scripts/extract_data.py: the lists are plain
@@ -45,6 +46,14 @@ function kotlinEnumEntries(source, name) {
 		.filter(Boolean);
 }
 
+/** `id` and `name` of each mode in `val DefaultKeyboardModes`, as "id name", in order. */
+function shippedModes(source) {
+	const start = source.indexOf('val DefaultKeyboardModes');
+	if (start < 0) throw new Error('no "val DefaultKeyboardModes" in KeyboardModes.kt');
+	const body = source.slice(start, source.indexOf('\n)', start));
+	return [...body.matchAll(/KeyboardMode\(\s*id = "([^"]+)",[\s\S]*?name = "([^"]+)"/g)].map((m) => `${m[1]} ${m[2]}`);
+}
+
 /** The scripts `KeyboardFonts.scriptFontChoices` lists, in order, each once. */
 function fontScripts(source) {
 	const start = source.indexOf('val scriptFontChoices');
@@ -60,10 +69,11 @@ async function tsLists() {
 	const src = read('docs/src/lib/deep-link-routes.ts')
 		.replace(/^export interface [\s\S]*?^}/gm, '')
 		.replace(/: RouteSpec\[\]/g, '')
+		.replace(/: \{ id: string; name: string \}\[\]/g, '')
 		.replace(/as const;/g, ';')
 		.replace(/^export function humanize[\s\S]*$/m, '')
 		.replace(/^export /gm, '');
-	const fn = new Function(`${src}\nreturn { ROUTES, TOOL_NAMES, PANEL_NAMES, SCRIPT_NAMES, STORAGE_IDS, LICENSE_ASSETS };`);
+	const fn = new Function(`${src}\nreturn { ROUTES, TOOL_NAMES, PANEL_NAMES, SCRIPT_NAMES, STORAGE_IDS, LICENSE_ASSETS, MODE_IDS };`);
 	return fn();
 }
 
@@ -92,6 +102,7 @@ ok &= diff('panels', docs.PANEL_NAMES, kotlinEnumEntries(read('core/language/src
 ok &= diff('scripts', docs.SCRIPT_NAMES, ['LATIN', ...fontScripts(read('feature/ime/src/main/java/com/wasimaster/wmkeyboard/ime/ui/KeyboardFonts.kt'))]);
 ok &= diff('storage', docs.STORAGE_IDS, [...read('app/src/main/java/com/wasimaster/wmkeyboard/app/storage/StorageCategories.kt').matchAll(/id = "([a-z_]+)"/g)].map((m) => m[1]));
 ok &= diff('licenses', docs.LICENSE_ASSETS, readdirSync(join(root, 'app/src/main/assets/licenses')).sort());
+ok &= diff('modes', docs.MODE_IDS.map((m) => `${m.id} ${m.name}`), shippedModes(read('core/settings/src/main/java/com/wasimaster/wmkeyboard/core/settings/KeyboardModes.kt')));
 
 // Every {arg} in a pattern must have an ArgSpec, and nothing else may.
 for (const r of docs.ROUTES) {

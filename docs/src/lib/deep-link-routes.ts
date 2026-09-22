@@ -15,7 +15,7 @@ export interface ArgSpec {
 	/** What to type, shown as the field's hint. */
 	hint: string;
 	/** Fixed choices when the app only accepts a known set. */
-	options?: 'tools' | 'panels' | 'scripts' | 'storage' | 'licenses' | 'languages';
+	options?: 'tools' | 'panels' | 'scripts' | 'storage' | 'licenses' | 'languages' | 'modes';
 	/** Whether the app compares the value case-sensitively (arguments always are). */
 	note?: string;
 }
@@ -241,7 +241,7 @@ export const ROUTES: RouteSpec[] = [
 		pattern: 'mode_edit/{modeId}',
 		label: 'One keyboard mode',
 		group: 'Advanced',
-		args: [{ name: 'modeId', hint: 'The id of one of your keyboard modes' }],
+		args: [{ name: 'modeId', hint: 'A built-in mode, or the id of one you made', options: 'modes' }],
 	},
 	{ pattern: 'addons', label: 'Add-ons', group: 'Advanced' },
 	{
@@ -322,6 +322,22 @@ export const TOOL_NAMES = [
 	'CURSOR_WORD_LEFT', 'CURSOR_WORD_RIGHT', 'SELECT_WORD', 'SELECT_LINE', 'SELECT_ALL', 'SELECT_MODE', 'COPY',
 	'CUT', 'PASTE', 'HIDE_KEYBOARD', 'PERSISTENT', 'SELECTION_ACTIONS', 'LEARN_FROM_TEXT',
 	'PHONETIC_ENGLISH', 'KDE_CONNECT',
+];
+
+/**
+ * The keyboard modes that ship with the app, `DefaultKeyboardModes` in
+ * core/settings/.../KeyboardModes.kt, in its order. Their ids are the same on
+ * every install, so `mode_edit/{modeId}` can name them in a link anyone can
+ * use. A mode the user made has an id of its own (`mode_custom_…`) that only
+ * their install knows. The names are the English ones a mode is stored with.
+ */
+export const MODE_IDS: { id: string; name: string }[] = [
+	{ id: 'mode_password', name: 'Passwords' },
+	{ id: 'mode_email', name: 'Email' },
+	{ id: 'mode_browser', name: 'Browser' },
+	{ id: 'mode_chat', name: 'Chat' },
+	{ id: 'mode_writing', name: 'Writing' },
+	{ id: 'mode_coding', name: 'Coding' },
 ];
 
 /** `PanelKind` entry names. */

@@ -66,6 +66,8 @@ Every override here defaults to **Inherit** (unset, so the mode falls through to
 
 **Custom toolbox order** works the same way minus the append/replace choice. Turning it on seeds an empty list, a chip picker adds tools, and **Change the toolbox order** reorders them. The picked tools lead the toolbox panel, and everything else keeps its usual place behind them.
 
+The symbol row itself can switch **Symbol row** to Off for the mode it's showing in: hold an entry on the row and pick **Hide the row in *name***. See [Holding an entry](/typing/modes/#holding-an-entry).
+
 **Custom symbol sets** seeds from your current symbol-row sets (or the built-in defaults if none are enabled), offers every set (built-in and custom) as toggle chips, guards against emptying the list to zero, and reorders with **Change the symbol set order**. The first set in that order is what the symbol row opens on while the mode is active.
 
 <PhoneFrame caption="A mode's Custom pinned tools turned on, with its own tool chips and reorder option.">
@@ -170,6 +172,29 @@ Tool order can differ per app: whichever mode an app resolves to decides the arr
 | Field types | Mode-specific |
 | Field hints | None on every built-in |
 | Apps | Mode-specific |
+
+## Linking to one mode
+
+<SettingsPath path="Advanced / Keyboard modes / Browser / Custom symbol sets" />
+
+The six built-in modes have the same ID on every install, so a link can open one mode's editor and scroll to one of its rows, such as the Browser mode's **Custom symbol sets** above:
+
+```
+wmkeyboard://settings/mode_edit/mode_browser?setting=modes_symbol_sets_title
+```
+
+| Mode | ID |
+| --- | --- |
+| Passwords | `mode_password` |
+| Email | `mode_email` |
+| Browser | `mode_browser` |
+| Chat | `mode_chat` |
+| Writing | `mode_writing` |
+| Coding | `mode_coding` |
+
+Scrolling to a row on one mode is new in version 0.5.12. An older version opens the mode's editor and pulses nothing, and the chips, the link builder and the `/open/` page say which version a link needs.
+
+A mode you made has an ID of its own that only your install knows, so a link to it works on your phone and nowhere else. The [link builder](/reference/link-builder/) offers the six in a list and every row of the editor to scroll to. A link to a built-in mode you deleted opens an empty editor for a new mode with that ID, the same as **New mode** does, and nothing is saved unless you edit it.
 
 ## Details & edge cases
 

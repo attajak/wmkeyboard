@@ -26,6 +26,13 @@
  * Only entries newer than `floor` are written. A reader treats a missing key
  * as `floor`. `sinceAware` is the first release that reads `since=` itself.
  *
+ * Keyboard modes get two more answers (#323). `modes` dates each built-in
+ * mode's id, the first tag whose KeyboardModes.kt ships it, since
+ * `mode_edit/mode_chat` opens nothing useful on a copy without a Chat mode.
+ * `modeRows` is the first release that scrolls to a row on one mode's editor:
+ * the first tag whose SettingsDeepLink.kt matches a row through its
+ * `screenPattern`. An older copy still opens the mode, but pulses nothing.
+ *
  * Run from docs/:  node scripts/extract-settings-since.mjs
  * Rerun after every release tag, and after scripts/extract_settings_links.sh.
  * Needs the tags: `git fetch --tags` first on a fresh clone.
@@ -116,7 +123,13 @@ const awareTag = linkTags.find((t) => (gitOrNull('show', `${t}:${DEEP_LINK_KT}`)
 const sinceAware = awareTag ? version(awareTag) : next;
 
 const wantedRoutes = routesIn(readFileSync(resolve(REPO, ROUTES_KT), 'utf8'));
-const wantedNames = new Set(JSON.parse(readFileSync(LINKS, 'utf8')).map((e) => e.name));
+// A shipped mode's editor is a screen named by the mode's id, not by a string
+// resource, so it has no name to date; its route pattern dates it instead.
+const wantedNames = new Set(
+	JSON.parse(readFileSync(LINKS, 'utf8'))
+		.filter((e) => !(e.screen && e.pattern))
+		.map((e) => e.name),
+);
 
 const routes = {};
 const settings = {};
@@ -140,13 +153,36 @@ for (const tag of linkTags) {
 for (const r of routesLeft) routes[r] = next;
 for (const n of namesLeft) settings[n] = next;
 
+// Built-in mode ids, from any KeyboardModes.kt at the tag: the file has moved
+// between modules, and a path-free grep follows it.
+function modeIdsAt(ref) {
+	const out = gitOrNull('grep', '-h', '-o', '-E', 'id = "mode_[a-z_]+"', ref, '--', '*KeyboardModes.kt') ?? '';
+	return new Set([...out.matchAll(/"(mode_[a-z_]+)"/g)].map((m) => m[1]));
+}
+const wantedModes = modeIdsAt('HEAD');
+const modes = {};
+const modesLeft = new Set(wantedModes);
+for (const tag of linkTags) {
+	const v = version(tag);
+	const tagModes = modeIdsAt(tag);
+	for (const m of [...modesLeft]) {
+		if (!tagModes.has(m)) continue;
+		modesLeft.delete(m);
+		if (v !== floor) modes[m] = v;
+	}
+}
+for (const m of modesLeft) modes[m] = next;
+const rowsTag = linkTags.find((t) => (gitOrNull('show', `${t}:${DEEP_LINK_KT}`) ?? '').includes('screenPattern'));
+const modeRows = rowsTag ? version(rowsTag) : next;
+
 const sorted = (o) => Object.fromEntries(Object.entries(o).sort(([a], [b]) => a.localeCompare(b)));
-writeFileSync(OUT, JSON.stringify({ floor, latest, next, sinceAware, routes: sorted(routes), settings: sorted(settings) }, null, '\t') + '\n');
+writeFileSync(OUT, JSON.stringify({ floor, latest, next, sinceAware, modeRows, routes: sorted(routes), settings: sorted(settings), modes: sorted(modes) }, null, '\t') + '\n');
 
 const count = (o, v) => Object.values(o).filter((x) => x === v).length;
 console.log(
 	`wrote ${OUT}\n` +
 		`  floor ${floor}, latest ${latest}, next ${next}, since= read from ${sinceAware}\n` +
 		`  routes: ${wantedRoutes.size} (${Object.keys(routes).length} newer than ${floor}, ${count(routes, next)} unreleased)\n` +
-		`  rows:   ${wantedNames.size} (${Object.keys(settings).length} newer than ${floor}, ${count(settings, next)} unreleased)`
+		`  rows:   ${wantedNames.size} (${Object.keys(settings).length} newer than ${floor}, ${count(settings, next)} unreleased)\n` +
+		`  modes:  ${wantedModes.size} (${Object.keys(modes).length} newer than ${floor}), a row on one mode from ${modeRows}`
 );

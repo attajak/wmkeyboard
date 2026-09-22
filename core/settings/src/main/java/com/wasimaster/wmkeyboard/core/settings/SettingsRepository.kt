@@ -13870,6 +13870,35 @@ class SettingsRepository(private val context: Context) {
             prefs[CUSTOM_SYMBOL_SETS] = SymbolSetCodec.encodeList(next)
         }
 
+    /**
+     * Takes one entry out of a set, from a hold on the symbol row (#323).
+     *
+     * [index] is where the row drew [entry]; it is only trusted while it still
+     * names that entry, so a set edited in the meantime loses the first copy
+     * of the text instead of whatever moved into the slot. A shipped set is
+     * edited the way its editor edits it, as an override under the same id,
+     * which the editor's Reset undoes. The last entry of a set stays: an empty
+     * set is a row with nothing on it.
+     */
+    suspend fun removeSymbolSetEntry(setId: String, index: Int, entry: String) =
+        editPrefs { prefs ->
+            val current = prefs[CUSTOM_SYMBOL_SETS]?.let { SymbolSetCodec.decodeList(it) }
+                .orEmpty()
+            val set = current.firstOrNull { it.id == setId } ?: BuiltInSymbolSets.byId(setId)
+                ?: return@editPrefs
+            val at = index.takeIf { set.chars.getOrNull(it) == entry } ?: set.chars.indexOf(entry)
+            if (at < 0 || set.chars.size <= 1) return@editPrefs
+            val chars = set.chars.toMutableList().apply { removeAt(at) }
+            val edited = set.copy(chars = chars, popups = sanitizeSymbolPopups(chars, set.popups))
+            // In place, so a custom set keeps its spot in the picker.
+            val next = if (current.any { it.id == setId }) {
+                current.map { if (it.id == setId) edited else it }
+            } else {
+                current + edited
+            }
+            prefs[CUSTOM_SYMBOL_SETS] = SymbolSetCodec.encodeList(next)
+        }
+
     /** Deletes a custom set and drops every reference to it. */
     suspend fun deleteSymbolSet(id: String) =
         editPrefs { prefs ->

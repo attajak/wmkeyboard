@@ -170,13 +170,24 @@ object SettingsDeepLink {
      * a toggle named after nearly every feature — so the entry with the
      * strongest claim wins, which is exactly the order
      * [EntryWeight] already declares for search results.
+     *
+     * A row drawn on a screen that takes an argument, such as one keyboard
+     * mode's editor, is indexed on the screen search can open and carries the
+     * real one as [SettingsSearchEntry.screenPattern]. A link naming that
+     * screen with its argument filled in (`mode_edit/mode_browser`) matches
+     * the row through the pattern, so any mode, built-in or the user's own,
+     * can be linked to one of its rows.
      */
     internal fun resolve(target: Target, index: () -> List<SettingsSearchEntry>): SettingsSearchEntry? {
         if (target.setting.isEmpty()) return null
         val suffix = "#${target.setting}"
+        val pattern = SettingsRoutes.patternOf(target.route)
         return index()
             .filter { entry -> entry.key.endsWith(suffix) }
-            .filter { entry -> target.route.isEmpty() || entry.route == target.route }
+            .filter { entry ->
+                target.route.isEmpty() || entry.route == target.route ||
+                    (entry.screenPattern != null && entry.screenPattern == pattern)
+            }
             .minByOrNull { entry -> entry.weight.ordinal }
     }
 

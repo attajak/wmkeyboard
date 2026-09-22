@@ -60,6 +60,19 @@ Enable or disable sets with the checkboxes in **Symbol sets**. At least one has 
 
 Any entry of a set can carry a popup of its own. Open the set's editor, and under **Press and hold** tap the entry's chip, then type the characters and snippets it should offer, space-separated the same way. A tap on the entry still types it; holding it opens the popup, and the popup behaves exactly like a key's alternates: the same column count, font size and padding from Key press settings, and the same hold-to-select, so you can slide onto an entry and let go. The first entry in the box is what a plain hold and release types. An entry with a popup shows its first alternate in the corner, the way a key does, under the same **Key hints** switch.
 
+### Holding an entry
+
+Hold an entry that has no popup of its own and a menu opens, the same way holding a word on the suggestion strip does. What it offers depends on the set and on the mode you're in:
+
+- **Remove "https://"** (or whichever entry you held) takes that entry out of its set. On a built-in set the change is saved as your edit of that set, so **Reset set** in the set's editor brings the entry back. A set's last entry stays.
+- **Hide the row in Browser** (or whichever mode is on) shows while a keyboard mode turns the row on or picks its own sets. It sets that mode's **Symbol row** to Off, so the row stays away whenever the mode is active. The global row and every other mode are untouched, and the mode keeps its set list for when you turn the row back on.
+- **Delete the "*name*" set** shows on a set you made yourself. It asks first. A mode that offered only that set shows your global sets instead. The five built-in sets can't be deleted: remove entries from them, hide the row, or uncheck the set on the Symbol row page.
+- **Symbol row settings** opens the settings behind what the row is showing. When a mode is why the row is there (the row is off globally, or the mode picks its own sets), that's the mode's editor, scrolled to its symbol row settings. Otherwise it's the Symbol row page.
+
+An entry that has a popup keeps its popup on a hold. Hold another entry of the same set to reach the menu.
+
+<SettingsPath path="Advanced / Keyboard modes / Browser / Custom symbol sets" />
+
 ### More than one line
 
 <SettingsPath path="Rows & bars / Lines of symbols" />

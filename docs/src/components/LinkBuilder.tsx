@@ -14,7 +14,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { ComponentChildren } from 'preact';
 import {
-	LICENSE_ASSETS, PANEL_NAMES, ROUTES, ROUTE_GROUPS, SCRIPT_NAMES, STORAGE_IDS, TOOL_NAMES, humanize,
+	LICENSE_ASSETS, MODE_IDS, PANEL_NAMES, ROUTES, ROUTE_GROUPS, SCRIPT_NAMES, STORAGE_IDS, TOOL_NAMES, humanize,
 	type ArgSpec, type RouteSpec,
 } from '../lib/deep-link-routes';
 import {
@@ -34,6 +34,17 @@ interface SettingRow {
 	route: string;
 	screens: string[];
 	screen: boolean;
+	/**
+	 * The pattern of the screen the row is drawn on, when that screen takes an
+	 * argument: `mode_edit/{modeId}` for a keyboard mode's editor. Absent on a
+	 * row drawn where `route` opens.
+	 */
+	pattern?: string;
+}
+
+/** Whether `row` is drawn on the screen `pattern` names. */
+function onScreen(row: SettingRow, pattern: string): boolean {
+	return (row.pattern ?? row.route) === pattern;
 }
 
 let settingsPromise: Promise<SettingRow[]> | null = null;
@@ -355,6 +366,8 @@ function optionsFor(kind: ArgSpec['options'], languages: Language[]): { value: s
 			return LICENSE_ASSETS.map((s) => ({ value: s, label: s.replace(/\.txt$/, '') }));
 		case 'languages':
 			return languages.map((l) => ({ value: l.id, label: `${l.english} (${l.id})` }));
+		case 'modes':
+			return MODE_IDS.map((m) => ({ value: m.id, label: `${m.name} (${m.id})` }));
 		default:
 			return null;
 	}
@@ -398,12 +411,14 @@ function ArgField({ spec, value, onChange, languages }: { spec: ArgSpec; value: 
 }
 
 function SettingPicker({
-	rows, route, value, onPick, placeholder,
+	rows, route, value, valueRoute, onPick, placeholder,
 }: {
 	rows: SettingRow[] | null;
-	/** Limit to rows on one screen, or undefined for every screen. */
+	/** Limit to rows on one screen, named by its pattern, or undefined for every screen. */
 	route?: string;
 	value: string;
+	/** The route of the picked row, when the same name is listed on several screens. */
+	valueRoute?: string | null;
 	onPick: (row: SettingRow | null) => void;
 	placeholder: string;
 }) {
@@ -411,7 +426,7 @@ function SettingPicker({
 	const [open, setOpen] = useState(false);
 	const candidates = useMemo(() => {
 		if (!rows) return [];
-		const pool = rows.filter((r) => !r.screen && (route === undefined || r.route === route));
+		const pool = route === undefined ? rows.filter((r) => !r.screen) : rowsOn(rows, route);
 		const q = query.trim().toLowerCase();
 		if (!q) return pool.slice(0, 40);
 		const words = q.split(/\s+/);
@@ -432,7 +447,10 @@ function SettingPicker({
 			.slice(0, 40)
 			.map((x) => x.r);
 	}, [rows, route, query]);
-	const picked = rows?.find((r) => r.name === value && (route === undefined || r.route === route)) ?? null;
+	const picked =
+		rows?.find(
+			(r) => !r.screen && r.name === value && (route === undefined || onScreen(r, route)) && (!valueRoute || r.route === valueRoute),
+		) ?? null;
 
 	return (
 		<div class="lb-picker">
@@ -471,7 +489,7 @@ function SettingPicker({
 							<button
 								type="button"
 								role="option"
-								aria-selected={r.name === value}
+								aria-selected={r.name === value && (!valueRoute || r.route === valueRoute)}
 								onClick={() => {
 									onPick(r);
 									setOpen(false);
@@ -489,6 +507,20 @@ function SettingPicker({
 	);
 }
 
+/**
+ * The rows drawn on the screen `pattern` names, each once. A shipped keyboard
+ * mode's rows are listed once per mode, so a screen with an argument would
+ * otherwise offer every row six times over.
+ */
+function rowsOn(rows: SettingRow[], pattern: string): SettingRow[] {
+	const seen = new Set<string>();
+	return rows.filter((r) => {
+		if (r.screen || !onScreen(r, pattern) || seen.has(r.name)) return false;
+		seen.add(r.name);
+		return true;
+	});
+}
+
 function ScreenMode({ rows, languages }: { rows: SettingRow[] | null; languages: Language[] }) {
 	const [pattern, setPattern] = useState('themes');
 	const [args, setArgs] = useState<Record<string, string>>({});
@@ -499,7 +531,7 @@ function ScreenMode({ rows, languages }: { rows: SettingRow[] | null; languages:
 	const raw = settingsLink({ route: pattern === 'home' ? '' : route, setting: setting || undefined });
 	// since= only when it says something: see SinceView.
 	const link = useMemo(() => withSince(explain(raw)) ?? raw, [raw]);
-	const rowsOnScreen = rows ? rows.filter((r) => !r.screen && r.route === pattern).length : 0;
+	const rowsOnScreen = rows ? rowsOn(rows, pattern).length : 0;
 
 	return (
 		<>
@@ -532,7 +564,7 @@ function ScreenMode({ rows, languages }: { rows: SettingRow[] | null; languages:
 					Fill in {missing.map((a) => a.name).join(' and ')}. An empty segment makes the whole address invalid.
 				</p>
 			)}
-			{!spec.args && (
+			{(!spec.args || rowsOnScreen > 0) && (
 				<Field
 					label="Scroll to one row on this screen (optional)"
 					hint={rows ? `${rowsOnScreen} rows on this screen can be named.` : undefined}
@@ -549,9 +581,13 @@ function ScreenMode({ rows, languages }: { rows: SettingRow[] | null; languages:
 
 function SettingMode({ rows }: { rows: SettingRow[] | null }) {
 	const [name, setName] = useState('typing_autocorrect_title');
+	// Which copy was picked, for a name listed on several screens: a keyboard
+	// mode's rows appear once per shipped mode.
+	const [pickedRoute, setPickedRoute] = useState<string | null>(null);
 	const [typed, setTyped] = useState(false);
 	const [withScreen, setWithScreen] = useState(false);
-	const picked = rows?.find((r) => r.name === name && !r.screen) ?? null;
+	const picked =
+		rows?.find((r) => r.name === name && !r.screen && (!pickedRoute || r.route === pickedRoute)) ?? null;
 	const valid = SETTING_NAME.test(name);
 	const raw = withScreen && picked ? settingsLink({ route: picked.route, setting: name }) : settingLink(name);
 	const link = useMemo(() => (valid ? withSince(explain(raw)) ?? raw : raw), [raw, valid]);
@@ -559,7 +595,20 @@ function SettingMode({ rows }: { rows: SettingRow[] | null }) {
 	return (
 		<>
 			<Field label="Find the setting" hint="Search by what the row says, the screen it is on, or its resource name.">
-				<SettingPicker rows={rows} value={name} onPick={(r) => { setName(r?.name ?? ''); setTyped(false); }} placeholder="Autocorrect, key popup, haptics…" />
+				<SettingPicker
+					rows={rows}
+					value={name}
+					valueRoute={pickedRoute}
+					onPick={(r) => {
+						setName(r?.name ?? '');
+						setPickedRoute(r?.route ?? null);
+						setTyped(false);
+						// One mode's row reaches that mode only with its screen named:
+						// on its own the name opens the list of modes.
+						if (r?.pattern && r.route.split('/').length === r.pattern.split('/').length) setWithScreen(true);
+					}}
+					placeholder="Autocorrect, key popup, haptics…"
+				/>
 			</Field>
 			<Field label="Or type the resource name" hint="Lowercase letters, digits and underscores, starting with a letter. Up to 128 characters.">
 				<input
@@ -568,6 +617,7 @@ function SettingMode({ rows }: { rows: SettingRow[] | null }) {
 					aria-invalid={!valid}
 					onInput={(e) => {
 						setName((e.target as HTMLInputElement).value.trim());
+						setPickedRoute(null);
 						setTyped(true);
 					}}
 				/>

@@ -169,6 +169,14 @@ what the link opens.
   nothing about where the link goes. It lets an older copy of the app name the
   version it needs. See
   [Links from a newer version](/reference/deep-links/#links-from-a-newer-version).
+- **A keyboard mode is named by its ID.** Pick **One keyboard mode** and the
+  modeId field lists the six built-in modes, whose IDs are the same on every
+  install; **Type another…** takes the ID of a mode you made. The row picker
+  then offers every row of the mode editor. In **One setting**, a mode
+  editor row is listed once per built-in mode, and picking one ticks
+  **Name the screen too**, since the name on its own opens the list of
+  modes rather than that mode. A link to a row on one mode needs version
+  0.5.12, which the version line says and `since=` carries.
 - **One name can live on several screens.** The backup screen carries a
   toggle for nearly every feature. On its own, `wmkeyboard://setting/<name>`
   goes to the screen with the strongest claim, which is the order settings
