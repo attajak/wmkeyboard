@@ -127,6 +127,33 @@ class CaptureFieldTest {
         assertEquals(CaretText("hello", 5), text.replacedWordAtCaret("hello", spaceAfter = false))
     }
 
+    @Test
+    fun `a second glide at the end of a query adds a word instead of replacing the first`() {
+        val first = CaretText("").glided("hello")
+        assertEquals(CaretText("hello", 5), first)
+        assertEquals(CaretText("hello world", 11), first.glided("world"))
+    }
+
+    @Test
+    fun `a glide after a space does not add another`() {
+        assertEquals(CaretText("hello world", 11), CaretText("hello ").glided("world"))
+    }
+
+    @Test
+    fun `a glide in front of a word spaces itself off it`() {
+        val next = CaretText("hello there", caret = 6).glided("big")
+        assertEquals("hello big there", next.text)
+        assertEquals(10, next.at)
+        val onGap = CaretText("hello there", caret = 5).glided("big")
+        assertEquals("hello big there", onGap.text)
+        assertEquals(10, onGap.at)
+    }
+
+    @Test
+    fun `a glide before punctuation leaves it attached`() {
+        assertEquals(CaretText("hello world?", 11), CaretText("hello?", caret = 5).glided("world"))
+    }
+
     // ---- the one ladder ----
 
     @Test

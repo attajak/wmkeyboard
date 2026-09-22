@@ -7040,12 +7040,12 @@ open class WMKeyboardService : InputMethodService() {
                 val state = _uiState.value
                 if (state.captureTarget() != target) return@launch
                 val before = state.captureCaretText() ?: return@launch
-                // A glide types a whole word and the space that ends it, the
-                // way it does in a field — except at the very end of a search
-                // query, where a trailing space would hold the results back a
-                // word. The space arrives with the next stroke instead.
-                val spaceAfter = before.at < before.text.length
-                captureWrite(target, before, before.replacedWordAtCaret(word, spaceAfter))
+                // A glide adds a word, spaced off whatever it lands next to —
+                // except at the very end of a search query, where a trailing
+                // space would hold the results back a word. The space arrives
+                // with the next stroke instead, which is why this must not
+                // replace the word at the caret the way a pick does (#300).
+                captureWrite(target, before, before.glided(word))
             }
             consumeShift()
         }
