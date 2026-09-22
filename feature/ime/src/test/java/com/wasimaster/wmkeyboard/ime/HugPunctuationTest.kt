@@ -20,6 +20,23 @@ class HugPunctuationTest {
     }
 
     @Test
+    fun `a full stop inside an email address belongs to the address`() {
+        assertTrue(markContinuesAddress("test@pm", '.'))
+        assertTrue(markContinuesAddress("write to jo.doe@mail", '.'))
+        assertTrue(markContinuesAddress("jo@mail.co", '.'))
+    }
+
+    @Test
+    fun `a mention, prose around an address, or another mark keeps its space`() {
+        assertFalse(markContinuesAddress("thanks @john", '.'))
+        assertFalse(markContinuesAddress("test@", '.'))
+        assertFalse(markContinuesAddress("a@b.com and then", '.'))
+        assertFalse(markContinuesAddress("mail a@b.com", ','))
+        assertFalse(markContinuesAddress("hello", '.'))
+        assertFalse(markContinuesAddress("", '.'))
+    }
+
+    @Test
     fun `the Arabic marks hug their words like every other mark`() {
         assertEquals(1, straySpacesBefore("كيف ", '؟', marks))
         assertEquals(1, straySpacesBefore("نعم ", '،', marks))
