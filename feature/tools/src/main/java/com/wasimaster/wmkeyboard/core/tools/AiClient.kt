@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
 import com.wasimaster.wmkeyboard.core.settings.AiProvider
@@ -35,6 +37,8 @@ object AiClient {
         val apiKey: String,
         val model: String,
         val baseUrl: String,
+        /** What the network activity log files this request under: the panel or the chat. */
+        val netSource: NetSource = NetSource.AI,
     )
 
     /** One prior message of a multi-turn chat, oldest first. */
@@ -475,6 +479,7 @@ object AiClient {
      * [fallback] parses the collected body instead of costing a second request.
      */
     private fun runStream(
+        source: NetSource,
         url: String,
         body: String,
         headers: Map<String, String>,
@@ -494,6 +499,9 @@ object AiClient {
             timeoutMs = timeoutMs,
             headers = headers,
             onRequestSent = { onPhase(AiPhase.WAITING) },
+            source = source,
+            // Provider paths name the model at most, never the prompt.
+            route = NetLog.pathOf(url),
         ) { line ->
             collected.append(line).append('\n')
             val before = buffer.partial
@@ -560,6 +568,7 @@ object AiClient {
     ): Completion {
         val body = anthropicBody(config, system, turns, maxTokens)
         return runStream(
+            source = config.netSource,
             url = ServiceEndpoints.base(ServiceEndpoint.ANTHROPIC) + "/v1/messages",
             body = body,
             headers = mapOf(
@@ -638,6 +647,7 @@ object AiClient {
             emptyMap()
         }
         return runStream(
+            source = config.netSource,
             url = url,
             body = body,
             headers = headers,
@@ -704,6 +714,7 @@ object AiClient {
     ): Completion {
         val body = geminiBody(system, turns, maxTokens)
         return runStream(
+            source = config.netSource,
             url = ServiceEndpoints.base(ServiceEndpoint.GEMINI) + "/v1beta/models/" +
                 "${config.model}:streamGenerateContent?alt=sse",
             body = body,
@@ -792,6 +803,7 @@ object AiClient {
     ): Completion {
         val body = ollamaBody(config, system, turns, maxTokens)
         return runStream(
+            source = config.netSource,
             url = "${config.baseUrl.trimEnd('/')}/api/chat",
             body = body,
             headers = emptyMap(),

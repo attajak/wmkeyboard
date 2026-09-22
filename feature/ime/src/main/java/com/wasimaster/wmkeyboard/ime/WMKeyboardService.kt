@@ -71,6 +71,7 @@ import com.wasimaster.wmkeyboard.app.MicPermissionActivity
 import com.wasimaster.wmkeyboard.app.SpecialAccess
 import com.wasimaster.wmkeyboard.app.SpecialAccessActivity
 import com.wasimaster.wmkeyboard.app.StoragePermissionActivity
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.media.GallerySaver
 import com.wasimaster.wmkeyboard.core.media.MediaMime
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
@@ -23261,6 +23262,7 @@ open class WMKeyboardService : InputMethodService() {
                         temp,
                         maxBytes = StickerImage.MAX_SOURCE_BYTES,
                         onProgress = ::publishMediaProgress,
+                        source = NetSource.MEDIA_IMAGES,
                     )
                     temp.readBytes().also { temp.delete() }
                 }.getOrNull() ?: return@withContext null
@@ -23375,6 +23377,7 @@ open class WMKeyboardService : InputMethodService() {
                 url,
                 target,
                 onProgress = if (trackProgress) ::publishMediaProgress else null,
+                source = NetSource.MEDIA_IMAGES,
             )
         }
         target

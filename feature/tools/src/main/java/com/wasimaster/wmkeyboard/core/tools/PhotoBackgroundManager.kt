@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import android.content.Context
 import android.net.Uri
 import android.os.SystemClock
@@ -111,10 +112,18 @@ object PhotoBackgroundManager {
      * because what "apply" means differs between the portrait slot, the
      * landscape slot and the saved library.
      */
-    private fun download(context: Context, photo: PhotoItem, target: PhotoTarget, into: File): File {
+    private fun download(
+        context: Context,
+        photo: PhotoItem,
+        target: PhotoTarget,
+        into: File,
+        background: Boolean = false,
+    ): File {
         requireSpace(context, target.maxBytes)
         val url = PhotoSizing.downloadUrl(photo, target)
-        ToolHttp.download(url, into, maxBytes = target.maxBytes)
+        // Image CDN paths are opaque ids, but they are the photo's address all
+        // the same; the host alone says enough.
+        ToolHttp.download(url, into, maxBytes = target.maxBytes, source = NetSource.PHOTOS, background = background)
         return into
     }
 
@@ -329,7 +338,7 @@ object PhotoBackgroundManager {
         for (photo in fetched) {
             val file = File(poolDir(context), fileNameFor(photo))
             val ok = runCatching {
-                if (!file.isFile) download(context, photo, PhotoSizing.LANDSCAPE_STRIP, file)
+                if (!file.isFile) download(context, photo, PhotoSizing.LANDSCAPE_STRIP, file, background = true)
             }.isSuccess
             if (!ok) continue
             addToPool(context, photo, file, RotationSourceKind.ONLINE, measure(file), nowMs)

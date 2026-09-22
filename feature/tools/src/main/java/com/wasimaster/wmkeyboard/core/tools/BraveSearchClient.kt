@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
 import kotlinx.serialization.json.Json
@@ -23,7 +24,7 @@ object BraveSearchClient {
             "?q=${ToolHttp.encode(query.trim())}" +
             "&count=${count.coerceIn(1, 20)}" +
             "&safesearch=${if (safe) "moderate" else "off"}"
-        return parseWeb(ToolHttp.get(url, headers = headers(apiKey)))
+        return parseWeb(ToolHttp.get(url, headers = headers(apiKey), source = NetSource.WEB_SEARCH, route = "/res/v1/web/search"))
     }
 
     /** Blocking; call on an IO dispatcher. Throws on failure. */
@@ -33,7 +34,9 @@ object BraveSearchClient {
             "?q=${ToolHttp.encode(query.trim())}" +
             "&count=${count.coerceIn(1, 20)}" +
             "&safesearch=${if (safe) "strict" else "off"}"
-        return parseImages(ToolHttp.get(url, headers = headers(apiKey)))
+        return parseImages(
+            ToolHttp.get(url, headers = headers(apiKey), source = NetSource.IMAGE_SEARCH, route = "/res/v1/images/search"),
+        )
     }
 
     private fun headers(apiKey: String) = mapOf(

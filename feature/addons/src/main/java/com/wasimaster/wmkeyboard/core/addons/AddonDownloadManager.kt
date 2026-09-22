@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.addons
 
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import android.content.Context
 import android.os.StatFs
 import androidx.annotation.StringRes
@@ -180,6 +182,8 @@ object AddonDownloadManager {
                 url = manifestUrl,
                 target = temp,
                 maxBytes = AddonRepoCodec.MAX_MANIFEST_BYTES,
+                source = NetSource.ADDONS,
+                route = NetLog.pathOf(manifestUrl),
             )
             val text = temp.readText()
             val manifest = AddonRepoCodec.decode(text) ?: return null
@@ -215,7 +219,10 @@ object AddonDownloadManager {
         // exactly the sort of thing a metered connection notices.
         if (target.isFile && target.length() > 0) return target
         return try {
-            ToolHttp.download(url, target, maxBytes = minOf(entry.type.maxBytes, PREVIEW_MAX_BYTES))
+            ToolHttp.download(
+                url, target, maxBytes = minOf(entry.type.maxBytes, PREVIEW_MAX_BYTES),
+                source = NetSource.ADDONS, route = NetLog.pathOf(url),
+            )
             target.takeIf { it.length() > 0 }
         } catch (_: Exception) {
             target.delete()
@@ -228,7 +235,7 @@ object AddonDownloadManager {
         val url = AddonRepoCodec.resolveAsset(manifestUrl, path) ?: return null
         val temp = File(cacheDir, "addon_text_${System.nanoTime()}.txt")
         return try {
-            ToolHttp.download(url, temp, maxBytes = MAX_TEXT_BYTES)
+            ToolHttp.download(url, temp, maxBytes = MAX_TEXT_BYTES, source = NetSource.ADDONS, route = NetLog.pathOf(url))
             temp.readText().takeIf { it.isNotBlank() }
         } catch (_: Exception) {
             null

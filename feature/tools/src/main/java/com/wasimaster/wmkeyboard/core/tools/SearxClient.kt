@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.tools.feature.R
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
@@ -26,12 +28,12 @@ object SearxClient {
 
     /** Blocking; call on an IO dispatcher. Throws on failure. */
     fun webSearch(query: String, instance: String, count: Int, safe: Boolean): List<WebResult> =
-        parseWeb(get(searchUrl(instance, query, categories = "general", safe = safe)))
+        parseWeb(get(searchUrl(instance, query, categories = "general", safe = safe), NetSource.WEB_SEARCH))
             .take(count.coerceIn(1, 50))
 
     /** Blocking; call on an IO dispatcher. Throws on failure. */
     fun imageSearch(query: String, instance: String, count: Int, safe: Boolean): List<ImageResult> =
-        parseImages(get(searchUrl(instance, query, categories = "images", safe = safe)))
+        parseImages(get(searchUrl(instance, query, categories = "images", safe = safe), NetSource.IMAGE_SEARCH))
             .take(count.coerceIn(1, 50))
 
     /**
@@ -40,8 +42,8 @@ object SearxClient {
      * reachable — it just has not enabled the JSON format, which is one line in
      * `settings.yml`. Say that instead.
      */
-    private fun get(url: String): String = try {
-        ToolHttp.get(url, headers = mapOf("Accept" to "application/json"))
+    private fun get(url: String, source: NetSource): String = try {
+        ToolHttp.get(url, headers = mapOf("Accept" to "application/json"), source = source, route = NetLog.pathOf(url))
     } catch (e: ToolHttpException) {
         if (e.status == HTTP_FORBIDDEN) {
             throw ToolHttpException(R.string.ftools_search_error_json_disabled)

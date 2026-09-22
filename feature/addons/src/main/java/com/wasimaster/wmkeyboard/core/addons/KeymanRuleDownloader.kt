@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.addons
 
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import android.content.Context
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
@@ -105,6 +107,8 @@ object KeymanRuleDownloader {
                 target = packageFile,
                 maxBytes = MAX_PACKAGE_BYTES,
                 onProgress = onProgress,
+                source = NetSource.KEYMAN,
+                route = NetLog.pathOf(packageUrl(keyboardId, meta.version, meta.packageFilename)),
             )
             val rules = packageFile.inputStream().use { KeymanPackage.rulesFrom(it, keyboardId) }
                 ?: return@withContext Outcome.Failed(KeymanFault.TRUNCATED)
@@ -161,7 +165,11 @@ object KeymanRuleDownloader {
      * would pin every user to whatever was current the day we ran the pipeline.
      */
     private fun keyboardMeta(keyboardId: String): Meta {
-        val body = ToolHttp.get("${ServiceEndpoints.base(ServiceEndpoint.KEYMAN_API)}/keyboard/$keyboardId")
+        val body = ToolHttp.get(
+            "${ServiceEndpoints.base(ServiceEndpoint.KEYMAN_API)}/keyboard/$keyboardId",
+            source = NetSource.KEYMAN,
+            route = "/keyboard/$keyboardId",
+        )
         val root = json.parseToJsonElement(body) as? JsonObject ?: return Meta("", "", "")
         val version = root["version"]?.jsonPrimitive?.contentOrNull().orEmpty()
         val packageFilename = root["packageFilename"]?.jsonPrimitive?.contentOrNull()

@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.addons
 
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
 import com.wasimaster.wmkeyboard.core.stickers.StickerImportResult
@@ -74,7 +75,11 @@ object SignalStickerDownloads {
         val id = SignalStickerCrypto.packIdOrNull(packId) ?: return ManifestOutcome.NotFound
         val temp = File(packDir(cacheDir, id), "manifest.enc")
         return try {
-            ToolHttp.download(manifestUrl(id), temp, maxBytes = MAX_MANIFEST_BYTES)
+            // The pack id is the path, so the route names it rather than showing it.
+            ToolHttp.download(
+                manifestUrl(id), temp, maxBytes = MAX_MANIFEST_BYTES,
+                source = NetSource.SIGNAL_STICKERS, route = "/stickers/{pack}/manifest.proto",
+            )
             val plain = SignalStickerCrypto.decrypt(temp.readBytes(), packKey)
                 ?: return ManifestOutcome.BadKey
             SignalPackManifest.parse(plain)?.let { ManifestOutcome.Ok(it) } ?: ManifestOutcome.BadKey
@@ -110,7 +115,10 @@ object SignalStickerDownloads {
         val encrypted = File(dir, "$tag.enc")
         val part = File(dir, "$tag.part")
         return try {
-            ToolHttp.download(stickerUrl(id, stickerId), encrypted, maxBytes = MAX_STICKER_BYTES)
+            ToolHttp.download(
+                stickerUrl(id, stickerId), encrypted, maxBytes = MAX_STICKER_BYTES,
+                source = NetSource.SIGNAL_STICKERS, route = "/stickers/{pack}/full/{sticker}",
+            )
             val plain = SignalStickerCrypto.decrypt(encrypted.readBytes(), packKey) ?: return null
             part.writeBytes(plain)
             if (part.renameTo(cached) || cached.isFile) cached else null

@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -55,6 +57,8 @@ object LibreTranslateClient {
             url = translateUrl(endpoint),
             body = payload.toString(),
             headers = mapOf("Accept" to "application/json"),
+            source = NetSource.TRANSLATE,
+            route = NetLog.pathOf(translateUrl(endpoint)),
         )
         val parsed = parse(body)
         return if (parsed.detectedSource.isBlank() && source.isNotBlank() && source != TranslateClient.AUTO) {

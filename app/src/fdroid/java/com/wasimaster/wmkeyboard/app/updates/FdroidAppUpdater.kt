@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.app.updates
 
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Composable
@@ -132,7 +134,9 @@ internal class FdroidAppUpdater(
 
     private fun fetch(userAsked: Boolean) {
         val url = FdroidIndex.apiUrl(context.packageName)
-        val body = runCatching { ToolHttp.get(url) }.getOrElse { error ->
+        val body = runCatching {
+            ToolHttp.get(url, source = NetSource.UPDATES, route = NetLog.pathOf(url), background = !userAsked)
+        }.getOrElse { error ->
             // A 404 is the ordinary answer while the app is not in F-Droid's
             // index yet, and is not something to report as a failure.
             DebugLog.d(TAG, "F-Droid index unavailable: ${error.message.orEmpty()}")

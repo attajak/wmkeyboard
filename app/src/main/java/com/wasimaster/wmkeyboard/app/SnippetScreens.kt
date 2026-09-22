@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.app
 
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -850,7 +852,9 @@ private fun fetchEspanso(pasted: String): SnippetPayload.Parsed? {
         is EspansoHub.Target.Direct -> target.url
         is EspansoHub.Target.HubPackage -> {
             val listingUrl = target.contentsUrl ?: return null
-            val listing = runCancellable { ToolHttp.get(listingUrl) }.getOrNull() ?: return null
+            val listing = runCancellable {
+                ToolHttp.get(listingUrl, source = NetSource.LINK_IMPORT, route = NetLog.pathOf(listingUrl))
+            }.getOrNull() ?: return null
             val version = EspansoHub.newestVersion(listing) ?: return null
             target.packageUrl(version)
         }
@@ -858,7 +862,10 @@ private fun fetchEspanso(pasted: String): SnippetPayload.Parsed? {
     val temp = java.io.File.createTempFile("espanso", null)
     return try {
         runCancellable {
-            ToolHttp.download(url, temp, maxBytes = EspansoFile.MAX_BYTES.toLong())
+            ToolHttp.download(
+                url, temp, maxBytes = EspansoFile.MAX_BYTES.toLong(),
+                source = NetSource.LINK_IMPORT, route = NetLog.pathOf(url),
+            )
         }.getOrNull() ?: return null
         SnippetPayload.read(temp, url.substringAfterLast('/'))
     } finally {

@@ -2,6 +2,10 @@ package com.wasimaster.wmkeyboard.core.tools
 
 import android.content.Context
 import androidx.annotation.StringRes
+import com.wasimaster.wmkeyboard.core.netlog.NetCall
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
+import com.wasimaster.wmkeyboard.core.netlog.track
 import com.wasimaster.wmkeyboard.tools.R
 import java.io.File
 import java.io.IOException
@@ -63,8 +67,14 @@ object ToolHttp {
         "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) " +
             "Chrome/124.0 Mobile Safari/537.36"
 
-    fun get(url: String, timeoutMs: Int = 10_000, headers: Map<String, String> = emptyMap()): String =
-        getWithHeaders(url, timeoutMs, headers).body
+    fun get(
+        url: String,
+        timeoutMs: Int = 10_000,
+        headers: Map<String, String> = emptyMap(),
+        source: NetSource? = null,
+        route: String? = null,
+        background: Boolean? = null,
+    ): String = getWithHeaders(url, timeoutMs, headers, source = source, route = route, background = background).body
 
     /**
      * [get] that also hands back the response headers named in [wantHeaders],
@@ -80,49 +90,46 @@ object ToolHttp {
         timeoutMs: Int = 10_000,
         headers: Map<String, String> = emptyMap(),
         wantHeaders: Set<String> = emptySet(),
-    ): HttpResponse {
-        val connection = URL(url).openConnection() as HttpURLConnection
-        try {
-            connection.connectTimeout = timeoutMs
-            connection.readTimeout = timeoutMs
-            connection.setRequestProperty("User-Agent", USER_AGENT)
-            for ((name, value) in headers) connection.setRequestProperty(name, value)
-            val status = connection.responseCode
-            val kept = wantHeaders.mapNotNull { name ->
-                connection.getHeaderField(name)?.let { name to it }
-            }.toMap()
-            if (status !in 200..299) {
-                val body = connection.errorStream?.bufferedReader()?.use { it.readText() }
-                throw httpFailure(status, body, kept)
-            }
-            return HttpResponse(connection.inputStream.bufferedReader().use { it.readText() }, kept)
-        } finally {
-            connection.disconnect()
+        source: NetSource? = null,
+        route: String? = null,
+        background: Boolean? = null,
+    ): HttpResponse = metered(url, "GET", source, route, background) { connection, call ->
+        connection.connectTimeout = timeoutMs
+        connection.readTimeout = timeoutMs
+        connection.setRequestProperty("User-Agent", USER_AGENT)
+        for ((name, value) in headers) connection.setRequestProperty(name, value)
+        val status = connection.responseCode
+        call.status = status
+        val kept = wantHeaders.mapNotNull { name ->
+            connection.getHeaderField(name)?.let { name to it }
+        }.toMap()
+        if (status !in 200..299) {
+            throw httpFailure(status, connection.readError(call), kept)
         }
+        HttpResponse(connection.readBody(call), kept)
     }
 
-    fun postForm(url: String, form: Map<String, String>, timeoutMs: Int = 10_000): String {
-        val connection = URL(url).openConnection() as HttpURLConnection
-        try {
-            connection.connectTimeout = timeoutMs
-            connection.readTimeout = timeoutMs
-            connection.setRequestProperty("User-Agent", USER_AGENT)
-            connection.requestMethod = "POST"
-            connection.doOutput = true
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-            val body = form.entries.joinToString("&") { (key, value) ->
-                "$key=${URLEncoder.encode(value, "UTF-8")}"
-            }
-            connection.outputStream.use { it.write(body.toByteArray()) }
-            val status = connection.responseCode
-            if (status !in 200..299) {
-                val error = connection.errorStream?.bufferedReader()?.use { it.readText() }
-                throw httpFailure(status, error)
-            }
-            return connection.inputStream.bufferedReader().use { it.readText() }
-        } finally {
-            connection.disconnect()
+    fun postForm(
+        url: String,
+        form: Map<String, String>,
+        timeoutMs: Int = 10_000,
+        source: NetSource? = null,
+        route: String? = null,
+    ): String = metered(url, "POST", source, route) { connection, call ->
+        connection.connectTimeout = timeoutMs
+        connection.readTimeout = timeoutMs
+        connection.setRequestProperty("User-Agent", USER_AGENT)
+        connection.requestMethod = "POST"
+        connection.doOutput = true
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+        val body = form.entries.joinToString("&") { (key, value) ->
+            "$key=${URLEncoder.encode(value, "UTF-8")}"
         }
+        connection.send(body.toByteArray(), call)
+        val status = connection.responseCode
+        call.status = status
+        if (status !in 200..299) throw httpFailure(status, connection.readError(call))
+        connection.readBody(call)
     }
 
     fun postJson(
@@ -130,26 +137,21 @@ object ToolHttp {
         body: String,
         timeoutMs: Int = 60_000,
         headers: Map<String, String> = emptyMap(),
-    ): String {
-        val connection = URL(url).openConnection() as HttpURLConnection
-        try {
-            connection.connectTimeout = 10_000
-            connection.readTimeout = timeoutMs
-            connection.setRequestProperty("User-Agent", USER_AGENT)
-            connection.requestMethod = "POST"
-            connection.doOutput = true
-            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
-            for ((name, value) in headers) connection.setRequestProperty(name, value)
-            connection.outputStream.use { it.write(body.toByteArray()) }
-            val status = connection.responseCode
-            if (status !in 200..299) {
-                val error = connection.errorStream?.bufferedReader()?.use { it.readText() }
-                throw httpFailure(status, error)
-            }
-            return connection.inputStream.bufferedReader().use { it.readText() }
-        } finally {
-            connection.disconnect()
-        }
+        source: NetSource? = null,
+        route: String? = null,
+    ): String = metered(url, "POST", source, route) { connection, call ->
+        connection.connectTimeout = 10_000
+        connection.readTimeout = timeoutMs
+        connection.setRequestProperty("User-Agent", USER_AGENT)
+        connection.requestMethod = "POST"
+        connection.doOutput = true
+        connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+        for ((name, value) in headers) connection.setRequestProperty(name, value)
+        connection.send(body.toByteArray(), call)
+        val status = connection.responseCode
+        call.status = status
+        if (status !in 200..299) throw httpFailure(status, connection.readError(call))
+        connection.readBody(call)
     }
 
     /** One file part of a [postMultipart] upload. */
@@ -166,11 +168,12 @@ object ToolHttp {
         file: FilePart,
         timeoutMs: Int = 60_000,
         headers: Map<String, String> = emptyMap(),
+        source: NetSource? = null,
+        route: String? = null,
     ): String {
         val boundary = "----wmkb" + java.util.UUID.randomUUID().toString().replace("-", "")
         val body = multipartBody(boundary, fields, file)
-        val connection = URL(url).openConnection() as HttpURLConnection
-        try {
+        return metered(url, "POST", source, route) { connection, call ->
             connection.connectTimeout = 10_000
             connection.readTimeout = timeoutMs
             connection.setRequestProperty("User-Agent", USER_AGENT)
@@ -179,15 +182,11 @@ object ToolHttp {
             connection.setFixedLengthStreamingMode(body.size)
             connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
             for ((name, value) in headers) connection.setRequestProperty(name, value)
-            connection.outputStream.use { it.write(body) }
+            connection.send(body, call)
             val status = connection.responseCode
-            if (status !in 200..299) {
-                val error = connection.errorStream?.bufferedReader()?.use { it.readText() }
-                throw httpFailure(status, error)
-            }
-            return connection.inputStream.bufferedReader().use { it.readText() }
-        } finally {
-            connection.disconnect()
+            call.status = status
+            if (status !in 200..299) throw httpFailure(status, connection.readError(call))
+            connection.readBody(call)
         }
     }
 
@@ -234,40 +233,35 @@ object ToolHttp {
         timeoutMs: Int = 120_000,
         headers: Map<String, String> = emptyMap(),
         onRequestSent: () -> Unit = {},
+        source: NetSource? = null,
+        route: String? = null,
         onLine: (String) -> Boolean,
-    ) {
-        val connection = URL(url).openConnection() as HttpURLConnection
-        try {
-            connection.connectTimeout = 10_000
-            connection.readTimeout = timeoutMs
-            connection.setRequestProperty("User-Agent", USER_AGENT)
-            connection.requestMethod = "POST"
-            connection.doOutput = true
-            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
-            for ((name, value) in headers) connection.setRequestProperty(name, value)
-            // Opens the socket as well as the stream.
-            connection.outputStream.use { it.write(body.toByteArray()) }
-            // The client has nothing left to do, so from here on the clock is
-            // the server's. This has to be reported *before* asking for the
-            // status: reading it blocks until the response headers arrive, and
-            // a streaming AI endpoint holds those until its model produces the
-            // first chunk. Reporting after it would mean the caller shows
-            // "connecting" for the whole wait and "waiting" for no time at all.
-            onRequestSent()
-            val status = connection.responseCode
-            if (status !in 200..299) {
-                val error = connection.errorStream?.bufferedReader()?.use { it.readText() }
-                throw httpFailure(status, error)
-            }
-            connection.inputStream.bufferedReader().use { reader ->
-                while (true) {
-                    val line = reader.readLine() ?: break
-                    if (!onLine(line)) break
+    ): Unit = metered(url, "POST", source, route) { connection, call ->
+        connection.connectTimeout = 10_000
+        connection.readTimeout = timeoutMs
+        connection.setRequestProperty("User-Agent", USER_AGENT)
+        connection.requestMethod = "POST"
+        connection.doOutput = true
+        connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+        for ((name, value) in headers) connection.setRequestProperty(name, value)
+        // Opens the socket as well as the stream.
+        connection.send(body.toByteArray(), call)
+        // The client has nothing left to do, so from here on the clock is
+        // the server's. This has to be reported *before* asking for the
+        // status: reading it blocks until the response headers arrive, and
+        // a streaming AI endpoint holds those until its model produces the
+        // first chunk. Reporting after it would mean the caller shows
+        // "connecting" for the whole wait and "waiting" for no time at all.
+        onRequestSent()
+        val status = connection.responseCode
+        call.status = status
+        if (status !in 200..299) throw httpFailure(status, connection.readError(call))
+        call.countIn(connection.inputStream).bufferedReader().use { reader ->
+            while (true) {
+                val line = reader.readLine() ?: break
+                if (!onLine(line)) break
                 }
             }
-        } finally {
-            connection.disconnect()
-        }
     }
 
     /**
@@ -288,49 +282,88 @@ object ToolHttp {
         maxBytes: Long = Long.MAX_VALUE,
         onProgress: ((Long, Long) -> Unit)? = null,
         headers: Map<String, String> = emptyMap(),
+        source: NetSource? = null,
+        route: String? = null,
+        background: Boolean? = null,
     ) {
         target.parentFile?.mkdirs()
-        val connection = URL(url).openConnection() as HttpURLConnection
         try {
-            connection.connectTimeout = timeoutMs
-            connection.readTimeout = timeoutMs
-            connection.setRequestProperty("User-Agent", USER_AGENT)
-            for ((name, value) in headers) connection.setRequestProperty(name, value)
-            connection.instanceFollowRedirects = true
-            val status = connection.responseCode
-            if (status !in 200..299) throw httpFailure(status, null)
-            // Only trustworthy for an identity transfer: with gzip or chunked
-            // encoding the header counts wire bytes, so a percentage from it
-            // would run past 100 or stall short of it.
-            val expected = if (connection.contentEncoding == null) {
-                connection.contentLengthLong.takeIf { it > 0L } ?: -1L
-            } else {
-                -1L
-            }
-            onProgress?.invoke(0L, expected)
-            connection.inputStream.use { input ->
-                target.outputStream().use { output ->
-                    val buffer = ByteArray(8192)
-                    var total = 0L
-                    while (true) {
-                        val read = input.read(buffer)
-                        if (read < 0) break
-                        total += read
-                        if (total > maxBytes) {
-                            throw ToolHttpException(R.string.core_tools_error_file_too_large)
+            metered(url, "GET", source, route, background) { connection, call ->
+                connection.connectTimeout = timeoutMs
+                connection.readTimeout = timeoutMs
+                connection.setRequestProperty("User-Agent", USER_AGENT)
+                for ((name, value) in headers) connection.setRequestProperty(name, value)
+                connection.instanceFollowRedirects = true
+                val status = connection.responseCode
+                call.status = status
+                if (status !in 200..299) throw httpFailure(status, null)
+                // Only trustworthy for an identity transfer: with gzip or chunked
+                // encoding the header counts wire bytes, so a percentage from it
+                // would run past 100 or stall short of it.
+                val expected = if (connection.contentEncoding == null) {
+                    connection.contentLengthLong.takeIf { it > 0L } ?: -1L
+                } else {
+                    -1L
+                }
+                onProgress?.invoke(0L, expected)
+                call.countIn(connection.inputStream).use { input ->
+                    target.outputStream().use { output ->
+                        val buffer = ByteArray(8192)
+                        var total = 0L
+                        while (true) {
+                            val read = input.read(buffer)
+                            if (read < 0) break
+                            total += read
+                            if (total > maxBytes) {
+                                throw ToolHttpException(R.string.core_tools_error_file_too_large)
+                            }
+                            output.write(buffer, 0, read)
+                            onProgress?.invoke(total, expected)
                         }
-                        output.write(buffer, 0, read)
-                        onProgress?.invoke(total, expected)
                     }
                 }
             }
         } catch (e: Exception) {
             target.delete()
             throw e
-        } finally {
-            connection.disconnect()
         }
     }
+
+    /**
+     * Opens [url] as one logged request: the connection is closed and the
+     * network activity log row written however [block] ends. [source] falls
+     * back to whatever service the host belongs to, and [background] to that
+     * source's own default.
+     */
+    private inline fun <T> metered(
+        url: String,
+        method: String,
+        source: NetSource?,
+        route: String?,
+        background: Boolean? = null,
+        block: (HttpURLConnection, NetCall) -> T,
+    ): T {
+        val resolved = source ?: NetLog.inferSource(url)
+        return NetLog.call(resolved, method, url, route, background ?: resolved.background).track { call ->
+            val connection = URL(url).openConnection() as HttpURLConnection
+            try {
+                block(connection, call)
+            } finally {
+                connection.disconnect()
+            }
+        }
+    }
+
+    private fun HttpURLConnection.send(bytes: ByteArray, call: NetCall) {
+        outputStream.use { it.write(bytes) }
+        call.sent(bytes.size.toLong())
+    }
+
+    private fun HttpURLConnection.readBody(call: NetCall): String =
+        call.countIn(inputStream).bufferedReader().use { it.readText() }
+
+    private fun HttpURLConnection.readError(call: NetCall): String? =
+        errorStream?.let(call::countIn)?.bufferedReader()?.use { it.readText() }
 
     fun encode(value: String): String = URLEncoder.encode(value, "UTF-8")
 

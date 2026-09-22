@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
 import kotlinx.serialization.json.Json
@@ -33,18 +35,28 @@ object UnsplashClient {
 
     /** Blocking; call on an IO dispatcher. Throws on failure. */
     fun search(query: PhotoQuery, apiKey: String): HttpResponse =
-        ToolHttp.getWithHeaders(searchUrl(query), headers = headers(apiKey), wantHeaders = RATE_HEADERS)
+        ToolHttp.getWithHeaders(
+            searchUrl(query), headers = headers(apiKey), wantHeaders = RATE_HEADERS,
+            source = NetSource.PHOTOS, route = "/search/photos",
+        )
 
     /** Blocking; call on an IO dispatcher. The curated feed, or one topic. */
     fun feed(query: PhotoQuery, apiKey: String): HttpResponse =
-        ToolHttp.getWithHeaders(feedUrl(query), headers = headers(apiKey), wantHeaders = RATE_HEADERS)
+        ToolHttp.getWithHeaders(
+            feedUrl(query), headers = headers(apiKey), wantHeaders = RATE_HEADERS,
+            source = NetSource.PHOTOS, route = NetLog.pathOf(feedUrl(query)),
+        )
 
     /**
      * Up to 30 photos for one request, which is what makes an unattended
      * prefetch affordable against a 50-per-hour budget.
      */
     fun random(query: PhotoQuery, apiKey: String, count: Int): HttpResponse =
-        ToolHttp.getWithHeaders(randomUrl(query, count), headers = headers(apiKey), wantHeaders = RATE_HEADERS)
+        ToolHttp.getWithHeaders(
+            randomUrl(query, count), headers = headers(apiKey), wantHeaders = RATE_HEADERS,
+            // Only the rotating pool asks for random photos, and it does so unattended.
+            source = NetSource.PHOTOS, route = "/photos/random", background = true,
+        )
 
     /**
      * The download ping their guidelines require whenever a user really takes a
@@ -55,7 +67,7 @@ object UnsplashClient {
      */
     fun triggerDownload(downloadLocation: String, apiKey: String) {
         if (downloadLocation.isBlank()) return
-        ToolHttp.get(downloadLocation, headers = headers(apiKey))
+        ToolHttp.get(downloadLocation, headers = headers(apiKey), source = NetSource.PHOTOS, route = "/photos/{id}/download")
     }
 
     private fun headers(apiKey: String) = mapOf(

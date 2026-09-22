@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -64,6 +66,8 @@ object TranscriptionClient {
             file = ToolHttp.FilePart("file", "speech.wav", "audio/wav", wav),
             timeoutMs = READ_TIMEOUT_MS,
             headers = headers,
+            source = NetSource.TRANSCRIPTION,
+            route = NetLog.pathOf(endpoint(url)),
         )
         return parseText(body)
     }

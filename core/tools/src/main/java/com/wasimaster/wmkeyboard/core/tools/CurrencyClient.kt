@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.config.BuildConfig
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
@@ -119,9 +121,9 @@ object CurrencyClient {
     }
 
     private fun fetchFiat(provider: Provider): Rates = when (provider) {
-        Provider.ER_API -> parseErApi(ToolHttp.get(url(ServiceEndpoint.ER_API, "/v6/latest/USD")))
-        Provider.FRANKFURTER -> parseFrankfurter(ToolHttp.get(url(ServiceEndpoint.FRANKFURTER, "/v1/latest?from=USD")))
-        Provider.COINBASE -> Rates("USD", parseCoinbase(ToolHttp.get(url(ServiceEndpoint.COINBASE, COINBASE_PATH))) + ("USD" to 1.0))
+        Provider.ER_API -> parseErApi(get(url(ServiceEndpoint.ER_API, "/v6/latest/USD")))
+        Provider.FRANKFURTER -> parseFrankfurter(get(url(ServiceEndpoint.FRANKFURTER, "/v1/latest?from=USD")))
+        Provider.COINBASE -> Rates("USD", parseCoinbase(get(url(ServiceEndpoint.COINBASE, COINBASE_PATH))) + ("USD" to 1.0))
         Provider.CURRENCY_API -> Rates("USD", currencyApi() + ("USD" to 1.0))
         Provider.COINGECKO -> error("CoinGecko has no fiat table")
     }
@@ -132,12 +134,12 @@ object CurrencyClient {
      * source down. The two serve the same file.
      */
     private fun currencyApi(): Map<String, Double> =
-        runCatching { parseCurrencyApi(ToolHttp.get(url(ServiceEndpoint.CURRENCY_API, CURRENCY_API_PATH))) }
-            .getOrElse { parseCurrencyApi(ToolHttp.get(url(ServiceEndpoint.CURRENCY_API_MIRROR, CURRENCY_API_PATH))) }
+        runCatching { parseCurrencyApi(get(url(ServiceEndpoint.CURRENCY_API, CURRENCY_API_PATH))) }
+            .getOrElse { parseCurrencyApi(get(url(ServiceEndpoint.CURRENCY_API_MIRROR, CURRENCY_API_PATH))) }
 
     private fun fetchCrypto(provider: Provider, codes: Set<String>): Map<String, Double> =
         when (provider) {
-            Provider.COINBASE -> parseCoinbase(ToolHttp.get(url(ServiceEndpoint.COINBASE, COINBASE_PATH))).filterKeys { it in codes }
+            Provider.COINBASE -> parseCoinbase(get(url(ServiceEndpoint.COINBASE, COINBASE_PATH))).filterKeys { it in codes }
             Provider.CURRENCY_API -> currencyApi().filterKeys { it in codes }
             Provider.COINGECKO -> {
                 val ids = CryptoCatalog.geckoIds(codes)
@@ -145,7 +147,7 @@ object CurrencyClient {
                     emptyMap()
                 } else {
                     parseCoinGecko(
-                        ToolHttp.get(geckoUrl(ids)),
+                        get(geckoUrl(ids)),
                         CryptoCatalog.geckoIdToCode(codes),
                     )
                 }
@@ -159,6 +161,10 @@ object CurrencyClient {
      * currency-api, open.er-api.com, api.coinbase.com and api.coingecko.com.
      */
     private fun url(endpoint: ServiceEndpoint, path: String): String = ServiceEndpoints.base(endpoint) + path
+
+    /** Every rate request carries no user input, so its whole path is the route. */
+    private fun get(url: String): String =
+        ToolHttp.get(url, source = NetSource.CURRENCY, route = NetLog.pathOf(url))
 
     private const val COINBASE_PATH = "/v2/exchange-rates?currency=USD"
     private const val CURRENCY_API_PATH = "/v1/currencies/usd.min.json"

@@ -6,6 +6,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.core.content.ContextCompat
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
+import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
+import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
+import com.wasimaster.wmkeyboard.core.endpoints.ServiceGroup
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -233,6 +236,40 @@ object NetLog {
     private fun changed() {
         versionFlow.value = versionFlow.value + 1
     }
+
+    /**
+     * The source for a request whose call site did not name one: the service
+     * the host belongs to ([ServiceEndpoint]), or [NetSource.OTHER]. A fallback
+     * only; call sites name their source, since one host can serve several
+     * features.
+     */
+    fun inferSource(url: String): NetSource {
+        val host = runCatching { URL(url).host }.getOrNull()?.lowercase() ?: return NetSource.OTHER
+        val endpoint = ServiceEndpoint.entries.firstOrNull { endpoint ->
+            val base = ServiceEndpoints.base(endpoint).replace("{lang}", "en")
+            runCatching { URL(base).host.lowercase() }.getOrNull()?.let { it == host || host.endsWith(".$it") } == true
+        } ?: return NetSource.OTHER
+        return when (endpoint.group) {
+            ServiceGroup.TRANSLATE -> NetSource.TRANSLATE
+            ServiceGroup.SEARCH -> NetSource.WEB_SEARCH
+            ServiceGroup.MEDIA -> NetSource.GIF
+            ServiceGroup.PHOTOS -> NetSource.PHOTOS
+            ServiceGroup.WIKIPEDIA -> NetSource.WIKIPEDIA
+            ServiceGroup.DICTIONARY -> NetSource.DICTIONARY
+            ServiceGroup.VOCABULARY -> NetSource.VOCABULARY
+            ServiceGroup.WEATHER -> NetSource.WEATHER
+            ServiceGroup.CURRENCY -> NetSource.CURRENCY
+            ServiceGroup.AI -> NetSource.AI
+            ServiceGroup.DOWNLOADS -> NetSource.ADDONS
+            ServiceGroup.UPDATES -> NetSource.UPDATES
+        }
+    }
+
+    /**
+     * The path of [url], for a call site whose path carries nothing the user
+     * typed (a fixed API route, a public file name) and so can be shown whole.
+     */
+    fun pathOf(url: String): String? = runCatching { URL(url).path }.getOrNull()?.takeIf { it.isNotEmpty() }
 
     internal fun cleanRoute(route: String?): String? {
         val path = route?.substringBefore('?')?.substringBefore('#')?.trim().orEmpty()
