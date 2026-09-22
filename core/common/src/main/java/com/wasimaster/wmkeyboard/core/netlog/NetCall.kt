@@ -40,6 +40,10 @@ class NetCall internal constructor(
     var error: String? = null
         private set
 
+    /** Whether the log was on when this call started; only then is it recorded. */
+    @Volatile
+    internal var accepted: Boolean = false
+
     /** Captured when the call starts, so a mid-request toggle does not split it. */
     val incognito: Boolean = NetLog.incognito
 

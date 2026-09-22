@@ -67,7 +67,7 @@ object NetLog {
 
     private val store = NetLogStore(null, null)
 
-    private val live = ArrayList<NetCall>()
+    private val underWay = ArrayList<NetCall>()
     private val inFlightFlow = MutableStateFlow<List<NetCall>>(emptyList())
 
     /** Requests under way right now. Drives the screen's live line and the keyboard dot. */
@@ -150,7 +150,14 @@ object NetLog {
         )
     }
 
-    /** [call] for a connection that is not a URL: an FTP session, a LAN link. */
+    /**
+     * [call] for a connection that is not a URL: an FTP session, a LAN link.
+     *
+     * [live] false keeps it out of [inFlight]: for a connection that stays up
+     * for hours (a KDE Connect link), which would otherwise pin the screen's
+     * live line on "talking to…" for as long as the device is paired. It is
+     * still recorded when it ends.
+     */
     fun callTo(
         source: NetSource,
         method: String,
@@ -159,6 +166,7 @@ object NetLog {
         port: Int = -1,
         route: String? = null,
         background: Boolean = source.background,
+        live: Boolean = true,
     ): NetCall {
         val call = NetCall(
             source = source,
@@ -172,26 +180,35 @@ object NetLog {
             startNanos = System.nanoTime(),
             sink = ::finished,
         )
-        if (enabled) {
-            synchronized(live) {
-                live.add(call)
-                inFlightFlow.value = ArrayList(live)
+        if (enabled) call.accepted = true
+        if (enabled && live) {
+            synchronized(underWay) {
+                underWay.add(call)
+                inFlightFlow.value = ArrayList(underWay)
             }
         }
         return call
     }
 
     private fun finished(call: NetCall) {
-        val wasLive = synchronized(live) {
-            live.remove(call).also { if (it) inFlightFlow.value = ArrayList(live) }
+        val (wasLive, nowIdle) = synchronized(underWay) {
+            val removed = underWay.remove(call)
+            if (removed) inFlightFlow.value = ArrayList(underWay)
+            removed to underWay.isEmpty()
         }
         // Checked against the start as well as now: a request that began while
         // the log was off is not recorded even if it was switched on meanwhile.
-        if (!enabled || !wasLive) return
+        if (!enabled || !call.accepted) return
+        if (wasLive && nowIdle) lastIdleAt = System.currentTimeMillis()
         store.add(call.toEntry(0))
         scheduleFlush()
         changed()
     }
+
+    /** When the last request under way finished; 0 before the first. */
+    @Volatile
+    var lastIdleAt: Long = 0L
+        private set
 
     /** Every row, newest first. */
     fun rows(): List<NetEntry> = store.rows().asReversed()

@@ -35,8 +35,11 @@ internal class KdeLink(
     private val now: () -> Long,
     private val onPacket: (KdeLink, KdePacket) -> Unit,
     private val onClosed: (KdeLink) -> Unit,
+    traffic: KdeTrafficMeter? = null,
 ) {
     val address: InetAddress = socket.inetAddress
+
+    private val tap: KdeTrafficTap? = traffic?.open(KdeTrafficKind.LINK, socket.inetAddress, socket.port)
 
     @Volatile var lastReceivedMs: Long = now()
         private set
@@ -63,6 +66,7 @@ internal class KdeLink(
         if (!closed.compareAndSet(false, true)) return
         outbox.close()
         runCatching { socket.close() }
+        tap?.close(null)
         onClosed(this)
     }
 
@@ -71,6 +75,7 @@ internal class KdeLink(
             val input = BufferedInputStream(socket.inputStream, 16 * 1024)
             while (!closed.get()) {
                 val line = readLineBounded(input, MAX_PACKET_BYTES) ?: break
+                tap?.received(line.toByteArray(Charsets.UTF_8).size + 1L)
                 if (line.isBlank()) continue
                 lastReceivedMs = now()
                 val packet = KdePacket.parse(line) ?: continue
@@ -108,8 +113,10 @@ internal class KdeLink(
     }
 
     private fun write(output: OutputStream, packet: KdePacket) {
-        output.write(packet.serialize(now()).toByteArray(Charsets.UTF_8))
+        val bytes = packet.serialize(now()).toByteArray(Charsets.UTF_8)
+        output.write(bytes)
         output.flush()
+        tap?.sent(bytes.size.toLong())
     }
 
     companion object {
@@ -134,6 +141,7 @@ internal class KdeLink(
 internal class PayloadTransfer(
     private val tls: KdeTls,
     private val ports: KdePorts,
+    private val traffic: KdeTrafficMeter? = null,
 ) {
     /** A listening socket for one upload. Closed by [serve] or by the caller on failure. */
     fun listen(): ServerSocket? {
@@ -165,12 +173,20 @@ internal class PayloadTransfer(
     ): Long {
         server.use { listening ->
             val raw = listening.accept()
-            val ssl = tls.wrap(raw, clientMode = false, pinned = peer)
-            ssl.use { secure ->
-                secure.soTimeout = IO_TIMEOUT_MS
-                return copy(source, secure.outputStream, limit = -1, cancelled, onProgress).also {
-                    secure.outputStream.flush()
+            val tap = traffic?.open(KdeTrafficKind.PAYLOAD_SEND, raw.inetAddress, raw.localPort)
+            try {
+                val ssl = tls.wrap(raw, clientMode = false, pinned = peer)
+                ssl.use { secure ->
+                    secure.soTimeout = IO_TIMEOUT_MS
+                    return copy(source, secure.outputStream, limit = -1, cancelled, onProgress).also {
+                        secure.outputStream.flush()
+                        tap?.sent(it)
+                        tap?.close(null)
+                    }
                 }
+            } catch (t: Throwable) {
+                tap?.close(t)
+                throw t
             }
         }
     }
@@ -190,16 +206,24 @@ internal class PayloadTransfer(
         cancelled: () -> Boolean,
         onProgress: (Long) -> Unit,
     ): Long {
-        val raw = Socket()
-        raw.connect(InetSocketAddress(address, port), LanTransport.CONNECT_TIMEOUT_MS)
-        val ssl = tls.wrap(raw, clientMode = true, pinned = peer)
-        ssl.use { secure ->
-            secure.soTimeout = IO_TIMEOUT_MS
-            val received = copy(secure.inputStream, sink, limit = size, cancelled, onProgress)
-            sink.flush()
-            // A sender may announce less than it sends, never more than it has.
-            if (size >= 0 && received < size) throw IOException("payload ended at $received of $size bytes")
-            return received
+        val tap = traffic?.open(KdeTrafficKind.PAYLOAD_RECEIVE, address, port)
+        try {
+            val raw = Socket()
+            raw.connect(InetSocketAddress(address, port), LanTransport.CONNECT_TIMEOUT_MS)
+            val ssl = tls.wrap(raw, clientMode = true, pinned = peer)
+            ssl.use { secure ->
+                secure.soTimeout = IO_TIMEOUT_MS
+                val received = copy(secure.inputStream, sink, limit = size, cancelled, onProgress)
+                sink.flush()
+                tap?.received(received)
+                // A sender may announce less than it sends, never more than it has.
+                if (size >= 0 && received < size) throw IOException("payload ended at $received of $size bytes")
+                tap?.close(null)
+                return received
+            }
+        } catch (t: Throwable) {
+            tap?.close(t)
+            throw t
         }
     }
 

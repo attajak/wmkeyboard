@@ -74,6 +74,8 @@ class KdeConnectEngine(
     private val tlsProtocols: List<String> = KdeTls.DEFAULT_PROTOCOLS,
     private val now: () -> Long = System::currentTimeMillis,
     private val log: (String) -> Unit = {},
+    /** Told about every connection and its bytes; the keyboard's network log. */
+    private val traffic: KdeTrafficMeter? = null,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val lock = Any()
@@ -162,7 +164,7 @@ class KdeConnectEngine(
         val secure = KdeTls(me, tlsProtocols)
         identity = me
         tls = secure
-        payloads = PayloadTransfer(secure, ports)
+        payloads = PayloadTransfer(secure, ports, traffic)
         val lan = LanTransport(
             scope = scope,
             self = ::selfInfo,
@@ -370,7 +372,7 @@ class KdeConnectEngine(
                 return
             }
             replaced = existing
-            val created = KdeLink(info, certificate, socket, scope, now, ::onPacket, ::onLinkClosed)
+            val created = KdeLink(info, certificate, socket, scope, now, ::onPacket, ::onLinkClosed, traffic)
             record.info = info
             record.link = created
             record.linkedAtMs = now()
