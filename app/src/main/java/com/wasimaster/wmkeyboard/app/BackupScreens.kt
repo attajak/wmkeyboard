@@ -466,31 +466,19 @@ private fun OAuthRow(
     val context = LocalContext.current
     val pending by BackupOAuth.result.collectAsStateWithLifecycle()
 
-    // The browser comes back into a different activity, so the code arrives
-    // here through a flow rather than an activity result.
+    // The browser comes back into a different activity, and the exchange
+    // itself happens in BackupOAuth, so all that reaches this row is how it
+    // ended. The token shows up through the settings flow like any other.
     LaunchedEffect(pending) {
         val delivered = pending ?: return@LaunchedEffect
         if (delivered.destination != destination) return@LaunchedEffect
         BackupOAuth.consume()
-        val code = delivered.code
-        if (code == null) {
-            onMessage(context.getString(R.string.backup_auto_oauth_cancelled))
-            return@LaunchedEffect
-        }
-        val tokens = when (destination) {
-            BackupDestination.DROPBOX -> BackupClients.dropbox()
-            else -> BackupClients.oneDrive()
-        }
-        val refresh = withContext(Dispatchers.IO) {
-            tokens?.exchangeCode(code, delivered.verifier, BackupOAuth.REDIRECT_URI)
-        }
-        if (refresh == null) {
-            onMessage(context.getString(R.string.backup_auto_oauth_failed))
-            return@LaunchedEffect
-        }
-        when (destination) {
-            BackupDestination.DROPBOX -> repository.setAutoBackupDropboxToken(refresh)
-            else -> repository.setAutoBackupOneDriveToken(refresh)
+        when (delivered.outcome) {
+            BackupOAuth.Outcome.SIGNED_IN -> Unit
+            BackupOAuth.Outcome.CANCELLED ->
+                onMessage(context.getString(R.string.backup_auto_oauth_cancelled))
+            BackupOAuth.Outcome.FAILED ->
+                onMessage(context.getString(R.string.backup_auto_oauth_failed))
         }
     }
 
@@ -556,8 +544,15 @@ private fun DriveRow(
         ActivityResultContracts.StartIntentSenderForResult(),
     ) {
         // Whatever the result says, the only trustworthy answer is to ask
-        // Google again.
-        scope.launch { authorized = authorizer.authorized(context) }
+        // Google again. Still no after the consent screen closed is worth a
+        // sentence: a build whose signing key Google does not know gets the
+        // account picker and then nothing at all, which looked like a tap
+        // that did nothing.
+        scope.launch {
+            val granted = authorizer.authorized(context)
+            authorized = granted
+            if (!granted) onMessage(context.getString(R.string.backup_auto_oauth_failed))
+        }
     }
 
     LaunchedEffect(auto.destination) {

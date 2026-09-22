@@ -931,13 +931,18 @@
              than an https App Link because there is no domain to verify and
              nothing to host. It carries only an authorization code, which is
              useless without the PKCE verifier that never left the device.
-             singleTask so a redirect reaches the existing instance. -->
+             singleTask so a redirect reaches the existing instance.
+             No taskAffinity="": with the app's own affinity the redirect
+             lands on top of the settings task, so finishing it shows the
+             screen that started the sign-in. In a task of its own it
+             returned to the browser, and ColorOS went further and removed
+             the settings task outright ("remove previous task"), leaving
+             the user on the launcher. -->
         <activity
             android:name="com.wasimaster.wmkeyboard.app.oauth.OAuthRedirectActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:noHistory="true"
-            android:taskAffinity=""
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

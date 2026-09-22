@@ -8,6 +8,8 @@ import com.google.android.gms.auth.api.identity.AuthorizationResult
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.common.api.ApiException
+import com.wasimaster.wmkeyboard.core.settings.sink.BackupLog
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSinkException
 import com.wasimaster.wmkeyboard.core.settings.sink.DriveAppDataSink
 import com.wasimaster.wmkeyboard.core.settings.sink.DriveTokenProvider
@@ -43,7 +45,9 @@ private suspend fun <T> Task<T>.awaitResult(): Result<T> = suspendCancellableCor
     addOnCanceledListener { cont.resume(Result.failure(CancellationException("Task cancelled"))) }
 }
 
-private suspend fun <T> Task<T>.awaitOrNull(): T? = awaitResult().getOrNull()
+/** ApiException carries the status that says why (10 = DEVELOPER_ERROR: no OAuth client for this package + SHA-1). */
+private fun describe(failure: Throwable): String =
+    (failure as? ApiException)?.let { "ApiException status=${it.statusCode} ${it.message}" } ?: failure.toString()
 
 /**
  * The token the background job uses.
@@ -66,7 +70,11 @@ private class GmsDriveTokenProvider(context: Context) : DriveTokenProvider {
         val result = Identity.getAuthorizationClient(appContext)
             .authorize(request)
             .awaitResult()
-            .getOrElse { throw BackupSinkException(SinkError.IO, it) }
+            .getOrElse {
+                BackupLog.w("drive authorize failed: ${describe(it)}", it)
+                throw BackupSinkException(SinkError.IO, it)
+            }
+        BackupLog.d("drive token: resolution=${result.hasResolution()} token=${result.accessToken != null} scopes=${result.grantedScopes}")
         return if (result.hasResolution()) null else result.accessToken
     }
 }
@@ -78,8 +86,11 @@ private object GmsDriveAuthorizer : DriveAuthorizer {
     override suspend fun authorized(context: Context): Boolean {
         val result = Identity.getAuthorizationClient(context.applicationContext)
             .authorize(request)
-            .awaitOrNull()
+            .awaitResult()
+            .onFailure { BackupLog.w("drive authorized? failed: ${describe(it)}", it) }
+            .getOrNull()
             ?: return false
+        BackupLog.d("drive authorized? resolution=${result.hasResolution()} token=${result.accessToken != null}")
         return !result.hasResolution() && result.accessToken != null
     }
 
@@ -89,8 +100,11 @@ private object GmsDriveAuthorizer : DriveAuthorizer {
     ): Boolean {
         val result: AuthorizationResult = Identity.getAuthorizationClient(activity)
             .authorize(request)
-            .awaitOrNull()
+            .awaitResult()
+            .onFailure { BackupLog.w("drive authorize (ui) failed: ${describe(it)}", it) }
+            .getOrNull()
             ?: return false
+        BackupLog.d("drive authorize (ui) resolution=${result.hasResolution()} token=${result.accessToken != null}")
         val pending = result.pendingIntent
         if (result.hasResolution() && pending != null) {
             onConsent(pending.intentSender)

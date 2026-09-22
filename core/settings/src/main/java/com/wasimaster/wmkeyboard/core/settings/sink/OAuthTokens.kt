@@ -79,9 +79,12 @@ class OAuthTokens(
         val response = try {
             client.newCall(Request.Builder().url(tokenUrl).post(form).build()).execute()
         } catch (failure: java.io.IOException) {
+            BackupLog.w("refresh at $tokenUrl failed to connect", failure)
             throw BackupSinkException(SinkError.IO, failure)
         }
         val body = response.use {
+            BackupLog.d("refresh at $tokenUrl -> ${it.code}")
+            if (!it.isSuccessful) BackupLog.w("refresh error body: ${it.peekBody(ERROR_PEEK).string()}")
             when {
                 it.isSuccessful -> it.body?.string()
                 isRefusal(it.code) -> return null
@@ -124,12 +127,16 @@ class OAuthTokens(
 
         val body = runCatching {
             client.newCall(Request.Builder().url(tokenUrl).post(form).build()).execute()
-                .use { if (it.isSuccessful) it.body?.string() else null }
-        }.getOrNull() ?: return null
+                .use {
+                    BackupLog.d("code exchange at $tokenUrl -> ${it.code}")
+                    if (!it.isSuccessful) BackupLog.w("code exchange error body: ${it.peekBody(ERROR_PEEK).string()}")
+                    if (it.isSuccessful) it.body?.string() else null
+                }
+        }.onFailure { BackupLog.w("code exchange failed to connect", it) }.getOrNull() ?: return null
 
         return runCatching {
             json.parseToJsonElement(body).jsonObject["refresh_token"]?.jsonPrimitive?.contentOrNull
-        }.getOrNull()
+        }.getOrNull().also { BackupLog.d("code exchange refresh token present=${it != null}") }
     }
 
     private companion object {
@@ -143,6 +150,7 @@ class OAuthTokens(
         const val HTTP_BAD_REQUEST = 400
         const val HTTP_UNAUTHORIZED = 401
         const val TIMEOUT_S = 20L
+        const val ERROR_PEEK = 512L
         const val DEFAULT_LIFETIME_S = 3600
         const val SLACK_S = 60
     }

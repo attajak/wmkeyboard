@@ -6,6 +6,7 @@ import android.util.Base64
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
 import com.wasimaster.wmkeyboard.core.net.BackupTraffic
 import com.wasimaster.wmkeyboard.core.settings.sink.AutoBackupNaming
+import com.wasimaster.wmkeyboard.core.settings.sink.BackupLog
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSink
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSinkException
 import com.wasimaster.wmkeyboard.core.settings.sink.DriveAppDataSink
@@ -139,7 +140,9 @@ object AutoBackupRunner {
                 nowMs,
                 announce = !force,
             )
+        BackupLog.d("run force=$force destination=${settings.destination} sink=${sink.id}")
         sink.readiness().exceptionOrNull()?.let { failure ->
+            BackupLog.w("readiness failed", failure)
             return fail(appContext, repository, failure, nowMs, announce = !force)
         }
 
@@ -245,6 +248,7 @@ object AutoBackupRunner {
             rotate(sink, settings.keep)
 
             repository.setAutoBackupOutcome(ranAtMs = nowMs, error = "")
+            BackupLog.d("done ${written.name} (${staged.length()} B) skipped=$skipped")
             return Outcome.Done(written.name, skipped)
         } finally {
             staged.delete()
@@ -323,7 +327,9 @@ object AutoBackupRunner {
 
     private suspend fun rotate(sink: BackupSink, keep: Int) {
         val entries = sink.list().getOrNull() ?: return
-        for (entry in AutoBackupNaming.rotation(entries, keep)) {
+        val doomed = AutoBackupNaming.rotation(entries, keep)
+        BackupLog.d("rotate: ${entries.size} listed, keep $keep, deleting ${doomed.map { it.name }}")
+        for (entry in doomed) {
             sink.delete(entry)
         }
     }
@@ -345,6 +351,7 @@ object AutoBackupRunner {
         announce: Boolean,
     ): Outcome {
         val reason = (failure as? BackupSinkException)?.reason ?: SinkError.IO
+        BackupLog.w("failed: $reason", failure)
         repository.setAutoBackupOutcome(ranAtMs = nowMs, error = reason.name)
         if (announce && reason != SinkError.NOT_CONFIGURED) {
             BackupNotification.post(context, reason)

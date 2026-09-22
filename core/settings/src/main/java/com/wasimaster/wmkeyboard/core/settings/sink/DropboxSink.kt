@@ -57,6 +57,7 @@ class DropboxSink(
 
     private fun bearer(): String = tokens.accessToken(refreshToken)
         ?: throw BackupSinkException(SinkError.PERMISSION_LOST)
+            .also { BackupLog.w("dropbox: refresh refused (token empty=${refreshToken.isEmpty()})") }
 
     private fun rpc(endpoint: String, body: JsonObject): Request = Request.Builder()
         .url("$API/$endpoint")
@@ -90,6 +91,7 @@ class DropboxSink(
     ): Result<SinkEntry> = withContext(Dispatchers.IO) {
         runCancellable {
             val bytes = ByteArrayOutputStream().also(body).toByteArray()
+            BackupLog.d("dropbox write $name ${bytes.size} B")
             val arg = json.encodeToString(
                 JsonObject.serializer(),
                 buildJsonObject {
@@ -193,15 +195,20 @@ class DropboxSink(
     }
 
     private fun <T> call(request: Request, read: (Response) -> T): T {
+        val what = request.url.encodedPath
         val response = try {
             client.newCall(request).execute()
         } catch (failure: Throwable) {
+            BackupLog.w("dropbox $what failed to connect", failure)
             throw BackupSinkException(SinkError.IO, failure)
         }
         response.use {
+            BackupLog.d("dropbox $what -> ${it.code}")
             if (it.isSuccessful) return read(it)
             val summary = if (it.code == HTTP_CONFLICT) errorSummary(it) else null
-            throw BackupSinkException(statusError(it.code, summary))
+            val error = statusError(it.code, summary)
+            BackupLog.w("dropbox $what -> ${it.code} summary=$summary => $error")
+            throw BackupSinkException(error)
         }
     }
 

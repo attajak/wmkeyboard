@@ -109,6 +109,7 @@ class DriveAppDataSink(
     private suspend fun authorized(url: String): Request.Builder {
         val token = tokens.accessToken()
             ?: throw BackupSinkException(SinkError.PERMISSION_LOST)
+                .also { BackupLog.w("drive: no token (not authorized)") }
         return Request.Builder().url(url).header("Authorization", "Bearer $token")
     }
 
@@ -140,6 +141,7 @@ class DriveAppDataSink(
                     put("parents", JsonArray(listOf(JsonPrimitive(APP_DATA_FOLDER))))
                 },
             )
+            BackupLog.d("drive write $name ${bytes.size} B via ${if (bytes.size <= MULTIPART_MAX) "multipart" else "resumable"}")
             val created = if (bytes.size <= MULTIPART_MAX) {
                 uploadMultipart(metadata, mimeType, bytes)
             } else {
@@ -192,7 +194,7 @@ class DriveAppDataSink(
                 .post(metadata.toRequestBody(JSON_MEDIA_TYPE))
                 .build(),
         ) { it.header("Location") }
-            ?: throw BackupSinkException(SinkError.IO)
+            ?: throw BackupSinkException(SinkError.IO).also { BackupLog.w("drive resumable: no Location header") }
         // The session URI is the credential for the rest of the upload, but
         // Drive also accepts the bearer alongside it, unlike Graph.
         return call(
@@ -268,16 +270,21 @@ class DriveAppDataSink(
         allowMissing: Boolean = false,
         read: (Response) -> T,
     ): T {
+        val what = "${request.method} ${request.url.encodedPath}"
         val response = try {
             client.newCall(request).execute()
         } catch (failure: Throwable) {
+            BackupLog.w("drive $what failed to connect", failure)
             throw BackupSinkException(SinkError.IO, failure)
         }
         response.use {
+            BackupLog.d("drive $what -> ${it.code}")
             if (it.isSuccessful) return read(it)
             if (allowMissing && it.code == HTTP_NOT_FOUND) return read(it)
             val reason = if (it.code == HTTP_FORBIDDEN) errorReason(it) else null
-            throw BackupSinkException(statusError(it.code, reason))
+            val error = statusError(it.code, reason)
+            BackupLog.w("drive $what -> ${it.code} reason=$reason => $error")
+            throw BackupSinkException(error)
         }
     }
 
