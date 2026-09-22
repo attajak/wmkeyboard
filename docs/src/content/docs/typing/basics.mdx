@@ -9,6 +9,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 import GestureDemo from '@components/GestureDemo.astro';
+import Shot from '@components/Shot.astro';
 
 Every key does more than the letter printed on it. A tap commits that letter. A hold opens accents, digits, symbols, or an editing command on six letters you can arm yourself. This page covers what one key does under your finger, before the gestures that travel across several.
 
@@ -33,7 +34,7 @@ Five settings under **Alternate keys** shape that popup. **Alternate key size** 
 The popup isn't only for characters. A key in a [custom layout](/languages/custom-layouts/) can carry action alternates too, so a hold on <KeyCap>Enter</KeyCap> can offer <KeyCap>Tab</KeyCap>, and a hold on any key can open voice typing or the editing pad. Every key can have alternates except the four that hold for something else already: <KeyCap>⌫</KeyCap>, <KeyCap>⌦</KeyCap> and <KeyCap>Space</KeyCap> hold to repeat, and a braille dot holds as part of its chord.
 
 <PhoneFrame caption="Holding a letter opens its accent and symbol alternates.">
-  ![Holding a letter opens its accent and symbol alternates.](@assets/screens/typing/long-press-popup.webp)
+  <Shot id="typing/long-press-popup" alt="Holding a letter opens its accent and symbol alternates." />
 </PhoneFrame>
 
 A few more long-press behaviors live under the same **Press and hold shortcuts** settings group:
@@ -86,7 +87,7 @@ The key's icon and behavior follow whatever the focused field asks for: Search, 
 A message box that asks for a line break gets one, even when the app also watches for the Enter key press itself. Discord's is the example: it declares Done and then asks the keyboard not to use it, so the key draws the newline symbol — and now types the break straight into the box rather than pressing a key the app would have read as Send.
 
 <PhoneFrame caption="Enter drawing a field's own action icon.">
-  ![Enter drawing a field's own action icon.](@assets/screens/typing/enter-action-icons.webp)
+  <Shot id="typing/enter-action-icons" alt="Enter drawing a field's own action icon." />
 </PhoneFrame>
 
 **Shift and Enter type a new line** (on by default) lets you press <KeyCap>Shift</KeyCap> then <KeyCap>Enter</KeyCap>, or hold Shift on a physical keyboard, to force a line break in a field that would otherwise send or search. The key itself changes to the newline symbol while Shift is armed, so it never promises a Send it isn't about to do. Only a Shift you pressed yourself counts. The one-shot Shift that auto-capitalize arms at the start of a message is ignored, so the first line of a chat still sends normally, and Caps Lock is ignored too.
@@ -102,7 +103,7 @@ There's a second way in that doesn't need the setting at all: in any field where
 **Number row** (on by default) gives the digits 1–0 a dedicated row above the letters, so they don't need a long-press. While it's there, the digit that would otherwise be the top row's first long-press alternate is dropped, since the row makes it redundant. A few sub-settings sit under it. **Number row height** runs 32–100&nbsp;dp. **Symbols on shift** (off by default) swaps the row to `= \ < > [ ] { } | ~` while Shift is held, instead of digits. **Number row in symbols** (on by default) keeps the digit row up on the ?123 layer too. The symbols layer's own second page carries its arrow and comparison symbols either way. You can change the keys of the number row on each layer, and the row that takes the place of the digits on the symbols layer, in the [layout editor](/reference/settings/keymaps/#the-number-row-and-the-row-in-place-of-the-digits).
 
 <PhoneFrame caption="The number row above the letters.">
-  ![The number row above the letters.](@assets/screens/typing/number-row.webp)
+  <Shot id="typing/number-row" alt="The number row above the letters." />
 </PhoneFrame>
 
 <SettingsPath path="Layout & size / Numerals" />

@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 This page covers seven tools that share a theme: arithmetic, conversion and generation. The toolbox draws every tool as one ranked grid with no sections, so the split shows up on the <SettingsPath path="Tools" /> screen instead. A scientific **Calculator**, a **Unit converter**, a **Special symbols** picker, a **QR code generator** and a **Password generator** sit under **Create and convert**, alongside **Typing speed test**, which measures rather than generates but lands in the same group. **Currency converter** is filed under **Online tools**, because it's the only one that has to touch the network for live exchange rates. The other six run their math or generation entirely on the device.
 
 <PhoneFrame caption="The Calculator panel: live expression and result, the scientific function row, and the custom digit keypad.">
-  {/* shot: tools/calculator-panel */}
+  <Shot id="tools/calculator-panel" alt="The Calculator panel: live expression and result, the scientific function row, and the custom digit keypad." />
 </PhoneFrame>
 
 For Wikipedia, web/image search, and the AI writing tools (also reachable from the toolbox but documented on their own pages), see [Search, Wikipedia & dictionary](/tools/search/) and [AI tools](/tools/ai/). For what the toolbar and toolbox are and how pinning works, see [The toolbar](/tools/overview/).
@@ -44,7 +45,7 @@ The custom keypad (`7 8 9 ÷ ⌫`, `4 5 6 × (`, `1 2 3 − )`, `0 . % + =`, or 
 **Unit converter** and **Currency converter** share a layout: category or currency chips up top, a swap icon between the two sides, a live result, and the same digit keypad. Only one of them touches the network. That keypad is simpler than Calculator's, just digits, a decimal point and backspace, because neither converter evaluates an expression.
 
 <PhoneFrame caption="The Unit converter panel: category chips, From/To unit rows, the swap icon, and the shared digit keypad.">
-  {/* shot: tools/unit-converter-panel */}
+  <Shot id="tools/unit-converter-panel" alt="The Unit converter panel: category chips, From/To unit rows, the swap icon, and the shared digit keypad." />
 </PhoneFrame>
 
 **Unit converter** covers 14 categories, all converted locally: length, mass, temperature, area, volume, speed, time, data, energy, power, pressure, angle, frequency, and fuel economy. Pick a category. Pick a From and a To unit. Type a value, then tap **Insert**. The panel remembers the unit pair you used last *per category*, so switching to Volume and back to Length restores each one's own last pair rather than sharing a single memory slot.
@@ -92,7 +93,7 @@ Both converters are also reachable inline. Typing `1 ft` or `150 usd` on the str
 **Special symbols** is a tap-to-type picker for characters that are otherwise a hunt to find: fractions, real math operators, Greek letters, arrows, currency signs, super/subscripts, punctuation marks, shapes and stars, and a Misc catch-all, nine categories in all. Tap a category chip, then tap a symbol to type it exactly like a regular key.
 
 <PhoneFrame caption="The Symbols panel: category chips over an adaptive grid, with a Recents chip once you've used a few.">
-  {/* shot: tools/symbols-panel */}
+  <Shot id="tools/symbols-panel" alt="The Symbols panel: category chips over an adaptive grid, with a Recents chip once you've used a few." />
 </PhoneFrame>
 
 Every symbol you tap is remembered under a **Recents** chip at the front of the category row, capped at 24 and most recent first. A repeat tap moves a symbol back to the front instead of duplicating it. A few characters render invisibly, so they get a text label instead of a blank cell: non-breaking space shows as "NBSP", zero-width space as "ZWSP", zero-width joiner as "ZWJ".
@@ -110,7 +111,7 @@ This tool is separate from the **symbol row** (off by default), a strip of one-t
 **QR code generator** turns whatever you type into a scannable code and sends it as an image. Like the typing test below, it keeps the letter rows on screen instead of replacing them, because you type into it. Opening it seeds its own editable buffer with the focused field's text as a starting point. From there it's independent: your keystrokes route into the QR content rather than the field, and the field itself is never touched until you send.
 
 <PhoneFrame caption="The QR generator panel: editable content line, live QR preview, and Send as image.">
-  {/* shot: tools/qr-generator-panel */}
+  <Shot id="tools/qr-generator-panel" alt="The QR generator panel: editable content line, live QR preview, and Send as image." />
 </PhoneFrame>
 
 The preview updates as you type, up to **Longest text** characters (500 to 4,000, default 2,000). Past that it replaces the code with "The text is too long for one QR code," followed by your current character count. A longer payload encodes at a lower error correction level, which is why the two rows sit together in settings. **Send as image** commits the PNG through the same `commitContent` path the clipboard and sticker tools use. If the receiving field or app doesn't advertise support for it, the code falls back to the system clipboard instead, with a toast telling you to paste it in.
@@ -130,7 +131,7 @@ The preview updates as you type, up to **Longest text** characters (500 to 4,000
 **Password generator** makes passwords or passphrases with `SecureRandom` entirely on the device. Nothing generated here is ever stored or logged, and there's no history to clear because none is kept.
 
 <PhoneFrame caption="The Password generator panel: generated result, entropy estimate, and the Password/Passphrase tabs.">
-  {/* shot: tools/password-generator-panel */}
+  <Shot id="tools/password-generator-panel" alt="The Password generator panel: generated result, entropy estimate, and the Password/Passphrase tabs." />
 </PhoneFrame>
 
 **Password mode** picks one character from every enabled class first, fills the rest at random, then shuffles the whole string so the guaranteed characters aren't front-loaded. **Passphrase mode** draws words from the keyboard's own bundled English dictionary, filtered down to short (4–8 letter), plain-lowercase, distinct words. That works regardless of which language you're actually typing in, with no separate wordlist to download. Both modes show a rough "≈N bits of entropy" estimate, and both have **Copy** and **Insert** chips plus a regenerate icon. Once in a long while the entropy line picks up a second caption. See [Easter eggs](/reference/easter-eggs/#read-your-password-generators-mind).
@@ -158,7 +159,7 @@ The preview updates as you type, up to **Longest text** characters (500 to 4,000
 **Typing speed test** leaves the key rows alone while a run is going, the same way the QR generator does. You type the prompt on the real keys while the panel scores it from above. The results screen needs no keys, so the panel takes their height back for the scores. Shift is forced off the moment a run starts, so a field's auto-capitalization can't turn your first keystroke into a false miss. The clock doesn't start until you type your first character either, so time spent reading the prompt costs you nothing.
 
 <PhoneFrame caption="A typing test in progress: the prompt with per-character correctness coloring, above the live key rows.">
-  {/* shot: tools/typing-test-panel */}
+  <Shot id="tools/typing-test-panel" alt="A typing test in progress: the prompt with per-character correctness coloring, above the live key rows." />
 </PhoneFrame>
 
 Three modes decide when a run ends: **Time** (the default, 30 seconds), **Word count** (default 25 words), and **Quote** (types out one short public-domain quotation, however long it runs). Time and Word-count prompts draw from the 200 most common words of the test's language, deliberately short and high-frequency so the test measures typing rather than vocabulary. Turning on **Punctuation** or **Numbers** sprinkles capitals, commas, full stops and the occasional numeral into the prompt. Both are off by default, and both are hidden entirely in Quote mode.

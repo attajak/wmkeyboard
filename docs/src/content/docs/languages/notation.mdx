@@ -18,7 +18,7 @@ import Shot from '@components/Shot.astro';
 Four entries in the language catalogue are notation systems rather than spoken languages: musical notation, chorded braille, Morse code, and the International Phonetic Alphabet. Each behaves exactly like a language (its own layout, its own switch-ring slot, its own settings screen), but what you're typing is notation, not prose. [Fancy text](/languages/fancy-text/) is the one other entry that isn't a language, and it gets its own page.
 
 <PhoneFrame caption="Musical notation active in a text field: note durations, rests, and clefs on the key grid.">
-  {/* shot: languages/notation-music-field */}
+  <Shot id="languages/notation-music-field" alt="Musical notation active in a text field: note durations, rests, and clefs on the key grid." />
 </PhoneFrame>
 
 ## Musical notation
@@ -44,7 +44,7 @@ Music notation is uncased, so there's no shift key, and it doesn't compose. Ever
 Press a dot key and it fires immediately. Braille dots have no long-press timer, unlike every other key in the app: the press itself is gathered into the chord, with no wait to see whether it turns into a hold. As you hold more dots down, they accumulate into a pending cell. The cell commits the instant your last finger lifts, however many dots you pressed and in whatever order.
 
 <PhoneFrame caption="Braille active: chording dots 1 and 4 together commits the letter c.">
-  {/* shot: languages/notation-braille-chord */}
+  <Shot id="languages/notation-braille-chord" alt="Braille active: chording dots 1 and 4 together commits the letter c." />
 </PhoneFrame>
 
 Decoding follows uncontracted Grade-1 English braille: the standard a–z cells, a punctuation set (comma, semicolon, colon, period, exclamation and question marks, apostrophe, hyphen), dot 6 alone as a capitalize-next-letter indicator, and dots 3-4-5-6 together as a number-mode indicator that turns the following cells into digits until a non-digit cell ends it. A cell that doesn't match any of those falls back to committing the raw Unicode braille pattern itself, so no chord you type is ever silently dropped. It's also a way to enter Braille Patterns block characters that Grade-1 doesn't otherwise cover.

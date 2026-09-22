@@ -917,7 +917,7 @@ if (docShots) {
             // Shots are independent, so two workers halve the run.
             it.maxParallelForks = 2
             // A shot that wedges must not hold the run forever.
-            it.timeout.set(Duration.ofMinutes(45))
+            it.timeout.set(Duration.ofMinutes(90))
         }
     }
 

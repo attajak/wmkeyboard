@@ -180,7 +180,7 @@
   {
     "id": "accessibility/high-contrast-live",
     "page": "docs/src/content/docs/accessibility/overview.mdx",
-    "file": "src/assets/screens/accessibility/high-contrast-live.webp",
+    "file": "src/assets/screens/accessibility/high-contrast-live.light.webp",
     "caption": "High contrast keys turned on: a flat board with maximum-contrast labels.",
     "host": "harness-field",
     "setup": [
@@ -190,12 +190,14 @@
     ],
     "status": "done",
     "notes": "Verify visually that gradients/background image/animation are absent per KbTheme.kt:427-453 (forces pure black/white board+key, kills gradients/bg image/animation, keeps theme accent).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/accessibility/high-contrast-live.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "accessibility/color-vision-live",
     "page": "docs/src/content/docs/accessibility/overview.mdx",
-    "file": "src/assets/screens/accessibility/color-vision-live.webp",
+    "file": "src/assets/screens/accessibility/color-vision-live.light.webp",
     "caption": "The Deutan colour vision filter applied to a keyboard theme.",
     "host": "harness-field",
     "setup": [
@@ -206,7 +208,9 @@
     ],
     "status": "done",
     "notes": "Daltonization pipeline in core/theme ColorVision.kt; a before/after pair (this shot vs the theme's normal screenshot elsewhere) would illustrate the effect best if the docs later want a comparison.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/accessibility/color-vision-live.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "accessibility/touch-group",
@@ -242,7 +246,7 @@
   {
     "id": "tools/ai-need-setup",
     "page": "docs/src/content/docs/tools/ai.mdx",
-    "file": "src/assets/screens/tools/ai-need-setup.webp",
+    "file": "src/assets/screens/tools/ai-need-setup.light.webp",
     "caption": "The empty state shown before any provider or local model is set up.",
     "host": "harness-field",
     "setup": [
@@ -251,7 +255,9 @@
     ],
     "status": "done",
     "notes": "This is the true out-of-the-box default state \u2014 no provider configured yet.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/ai-need-setup.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/ai-result-ready",
@@ -302,7 +308,7 @@
   {
     "id": "tools/calendar-month-grid",
     "page": "docs/src/content/docs/tools/calendar.mdx",
-    "file": "src/assets/screens/tools/calendar-month-grid.webp",
+    "file": "src/assets/screens/tools/calendar-month-grid.light.webp",
     "caption": "The Calendar panel: month grid with Bengali day numbers, today's events listed below.",
     "host": "harness-field",
     "setup": [
@@ -311,9 +317,11 @@
       "Focus the field to raise the keyboard, open the toolbox (or tap the pinned Calendar icon if pinned), tap Calendar to open the panel",
       "Leave today selected so the grid, Friday tint, and today's border/pill are all visible in one frame"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Default settings already show Bengali as First calendar and Hijri as Second, so no settings changes needed before shooting. Grant READ_CALENDAR ahead of time via adb so the panel shows the event list state (even if empty/'No events') rather than the Allow prompt \u2014 or leave ungranted if the intent is to show the Allow prompt instead; decide which state this shot is for.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/calendar-month-grid.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/calendar-day-events",
@@ -380,7 +388,7 @@
   {
     "id": "tools/camera-permission-gate",
     "page": "docs/src/content/docs/tools/camera.mdx",
-    "file": "src/assets/screens/tools/camera-permission-gate.webp",
+    "file": "src/assets/screens/tools/camera-permission-gate.light.webp",
     "caption": "The permission gate shown before camera access is granted, with the Allow camera pill.",
     "host": "harness-blank",
     "setup": [
@@ -388,9 +396,11 @@
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode blank",
       "Open the Camera tool from the toolbar or toolbox; screenshot the 'needs permission' message and Allow camera pill without tapping it"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Must run pm revoke first \u2014 a normal debug install after granting the permission once won't show this state again without explicitly revoking it.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/camera-permission-gate.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/camera-options",
@@ -412,7 +422,7 @@
   {
     "id": "tools/clipboard-panel",
     "page": "docs/src/content/docs/tools/clipboard.mdx",
-    "file": "src/assets/screens/tools/clipboard-panel.webp",
+    "file": "src/assets/screens/tools/clipboard-panel.light.webp",
     "caption": "The clipboard panel: staggered two-column cards, entity chips for a fresh code or link, and a search pill.",
     "host": "harness-field",
     "setup": [
@@ -421,9 +431,11 @@
       "In WM Keyboard settings, turn on Tools > Clipboard > Detect codes, numbers & links, and copy one more clip that is an SMS-shaped message containing a 6-digit code and a phone number, so the entity strip has something to show.",
       "Focus the text field and tap the Clipboard icon on the toolbar to open the panel."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs a populated, varied history (text/image/link/entity-bearing clip) to look representative \u2014 a fresh install's panel is empty. Capture with the search bar off (default) so the full grid + entity strip show together.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/clipboard-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/clipboard-info-popup",
@@ -458,7 +470,7 @@
   {
     "id": "tools/clipboard-entity-chips",
     "page": "docs/src/content/docs/tools/clipboard.mdx",
-    "file": "src/assets/screens/tools/clipboard-entity-chips.webp",
+    "file": "src/assets/screens/tools/clipboard-entity-chips.light.webp",
     "caption": "Entity chips above the history grid: an OTP and a phone number pulled out of a longer message.",
     "host": "harness-field",
     "setup": [
@@ -467,9 +479,11 @@
       "Copy an SMS-shaped text clip containing both a 6-digit verification code and a phone number, e.g. 'Your code is 482913. Call us at 555-201-4488 if you did not request this.'",
       "Open the Clipboard panel from the toolbar; the dashed-outline chip strip should appear above the history grid with an OTP chip and a phone chip."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Keep the sample message realistic but obviously synthetic (no real phone number/PII). The chip strip is hidden while the search bar is active, so make sure search is not open for this shot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/clipboard-entity-chips.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/clipboard-settings",
@@ -524,7 +538,7 @@
   {
     "id": "tools/text-edit-panel",
     "page": "docs/src/content/docs/tools/text-editing.mdx",
-    "file": "src/assets/screens/tools/text-edit-panel.webp",
+    "file": "src/assets/screens/tools/text-edit-panel.light.webp",
     "caption": "The text-editing panel: a d-pad for moving the cursor, Select/Select all/Copy/Paste on the right, and Home/End/Backspace along the bottom.",
     "host": "harness-field",
     "setup": [
@@ -532,14 +546,16 @@
       "Open the toolbar/toolbox and tap the Text editing tool.",
       "Optional: tap Select, then Right a couple of times, to also show the active Select state and a highlighted selection in the field behind the panel."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Text editing is not pinned to the toolbar by default (default pinned row is Emoji/Clipboard/Settings) \u2014 open it from the toolbox overflow, or pin it first via Settings > Tools.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/text-edit-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/numpad-panel",
     "page": "docs/src/content/docs/tools/text-editing.mdx",
-    "file": "src/assets/screens/tools/numpad-panel.webp",
+    "file": "src/assets/screens/tools/numpad-panel.light.webp",
     "caption": "The numpad panel: a 4\u00d74 grid in phone or calculator digit order, with Backspace repeating on hold.",
     "host": "harness-field",
     "setup": [
@@ -547,9 +563,11 @@
       "Open the toolbar/toolbox and tap the Numpad tool.",
       "Capture the default phone-style layout (1 2 3 on top). Calculator-style layout is opt-in under Settings > Tools > Numpad > Options."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Numpad is a manually-opened panel usable over any field, distinct from the automatic numeric layout that appears in genuinely numeric fields (field-adaptation, documented on typing/field-adaptation.mdx) \u2014 do not use kind=number for this shot, a plain text field better shows it's a manual override.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/numpad-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/translate-panel",
@@ -693,7 +711,7 @@
   {
     "id": "tools/media-access-prompt",
     "page": "docs/src/content/docs/tools/media.mdx",
-    "file": "src/assets/screens/tools/media-access-prompt.webp",
+    "file": "src/assets/screens/tools/media-access-prompt.light.webp",
     "caption": "The access prompt shown before notification-listener access is granted.",
     "host": "harness-blank",
     "setup": [
@@ -701,23 +719,27 @@
       "am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode blank --es theme dark",
       "Focus the field, open Media controls from the toolbox; the panel shows the notification-bell icon, explanatory text, and a 'Grant access' button since access hasn't been granted yet."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Must be captured with the grant revoked \u2014 re-revoke after capturing tools/media-now-playing if using the same device/session.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/media-access-prompt.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/toolbar-and-toolbox",
     "page": "docs/src/content/docs/tools/overview.mdx",
-    "file": "src/assets/screens/tools/toolbar-and-toolbox.webp",
+    "file": "src/assets/screens/tools/toolbar-and-toolbox.light.webp",
     "caption": "The toolbar's default row (Emoji, Clipboard, Settings) with the toolbox grid open below it.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Tap the toolbox (grid) button on the toolbar to expand it before capturing"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture with default pinned tools (Emoji, Clipboard, Settings) and the toolbox panel expanded beneath the toolbar so both pinned and unpinned tools are visible in one shot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/toolbar-and-toolbox.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/ocr-viewfinder",
@@ -808,7 +830,7 @@
   {
     "id": "tools/search-needs-key",
     "page": "docs/src/content/docs/tools/search.mdx",
-    "file": "src/assets/screens/tools/search-needs-key.webp",
+    "file": "src/assets/screens/tools/search-needs-key.light.webp",
     "caption": "The web search panel before a Brave API key is configured.",
     "host": "harness-field",
     "setup": [
@@ -816,9 +838,11 @@
       "Requires a build with no baked-in Brave key (BuildConfig.BRAVE_API_KEY blank) and no user key pasted into Tools / Web search settings.",
       "Open the toolbox, tap Web search \u2014 the panel should show the \"Web search needs an API key \u2014 Brave Search. Add one in the tool's settings.\" notice with an Open settings button."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Verify the debug/docs build variant actually ships without a baked Brave key before capturing, otherwise this state won't reproduce.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/search-needs-key.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/wikipedia-article",
@@ -936,7 +960,7 @@
   {
     "id": "emoji/word-suggestions",
     "page": "docs/src/content/docs/emoji/customization.mdx",
-    "file": "src/assets/screens/emoji/word-suggestions.webp",
+    "file": "src/assets/screens/emoji/word-suggestions.light.webp",
     "caption": "Emoji suggestions appended to the strip after typing a whole word.",
     "host": "harness-field",
     "setup": [
@@ -944,28 +968,32 @@
       "Switch to WM Keyboard as the active input method",
       "Type \"birthday\" and pause before hitting space so the suggestion strip shows the trailing emoji"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Requires Emoji suggestions on (default true) and English enabled (default). Expect roughly \ud83c\udf82\ud83c\udf89\ud83e\udd73\ud83c\udf81 appended after the word per EmojiSuggester's TRIGGERS map.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/word-suggestions.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/inline-colon-search",
     "page": "docs/src/content/docs/emoji/customization.mdx",
-    "file": "src/assets/screens/emoji/inline-colon-search.webp",
+    "file": "src/assets/screens/emoji/inline-colon-search.light.webp",
     "caption": "Typing a colon turns the suggestion strip into emoji search results.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Type \":cat\" and pause so the strip shows emoji search results in place of word suggestions"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Requires Inline emoji search on (default true, lives under Typing settings, not Emoji settings).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/inline-colon-search.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/emoji-row-own",
     "page": "docs/src/content/docs/emoji/customization.mdx",
-    "file": "src/assets/screens/emoji/emoji-row-own.webp",
+    "file": "src/assets/screens/emoji/emoji-row-own.light.webp",
     "caption": "The emoji row in Own row mode, above the key rows.",
     "host": "harness-field",
     "setup": [
@@ -973,9 +1001,11 @@
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Switch to WM Keyboard and let it render with the emoji row visible above the key rows"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Default emoji row mode is Button, not Own row \u2014 must switch it first. Revert to Button afterward if the test device is reused for other shots.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/emoji-row-own.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/gif-panel-trending",
@@ -1027,7 +1057,7 @@
   {
     "id": "emoji/kaomoji-tab",
     "page": "docs/src/content/docs/emoji/kaomoji.mdx",
-    "file": "src/assets/screens/emoji/kaomoji-tab.webp",
+    "file": "src/assets/screens/emoji/kaomoji-tab.light.webp",
     "caption": "The emoji panel's Kaomoji tab, grouped by mood.",
     "host": "harness-field",
     "setup": [
@@ -1037,9 +1067,11 @@
       "Swipe/scroll the tab strip to the end and tap the '^_^' tab (KAOMOJI_TAB)",
       "Scroll to the top so the Happy group header is visible"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "kaomojiTabs defaults to false (EmojiSettings.kaomojiTabs, SettingsRepository.kt:1541) so it must be enabled first. The tab strip label is a literal glyph '^_^', not an icon.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/kaomoji-tab.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/kaomoji-mood-groups",
@@ -1209,7 +1241,7 @@
   {
     "id": "start/editions-toolbox-full",
     "page": "docs/src/content/docs/start/editions.mdx",
-    "file": "src/assets/screens/start/editions-toolbox-full.webp",
+    "file": "src/assets/screens/start/editions-toolbox-full.light.webp",
     "caption": "The Tools panel on a Full build: Handwriting, Text scan, QR & barcode, Document scanner and Grammar check all appear.",
     "host": "harness-field",
     "setup": [
@@ -1218,9 +1250,11 @@
       "Focus the field to raise the keyboard, tap the toolbar's toolbox icon to open the Tools panel",
       "Screenshot the panel with the tool grid visible, including Handwriting/Text scan (OCR)/QR & barcode scanner/Document scanner/Grammar check"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Which tools show is compile-time (BuildConfig flags), not a runtime setting, so this shot and editions-toolbox-lite need two separate app installs, not two states of one install.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/editions-toolbox-full.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/editions-toolbox-lite",
@@ -1306,7 +1340,7 @@
   {
     "id": "start/migrating-suggestion-center",
     "page": "docs/src/content/docs/start/migrating.mdx",
-    "file": "src/assets/screens/start/migrating-suggestion-center.webp",
+    "file": "src/assets/screens/start/migrating-suggestion-center.light.webp",
     "caption": "Suggestions default to the top pick in the center slot, the same layout Gboard uses.",
     "host": "harness-field",
     "setup": [
@@ -1314,9 +1348,11 @@
       "Type a word that yields multiple candidates (e.g. \"hte\") so three suggestions appear with the top pick centered",
       "Capture before tapping any suggestion"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Confirms suggestionPrimaryCenter=true default (SettingsRepository.kt:1820), explicitly commented '(Gboard style)' in source.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/migrating-suggestion-center.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/migrating-tools-recommended",
@@ -1386,57 +1422,65 @@
   {
     "id": "tour/anatomy-default",
     "page": "docs/src/content/docs/start/tour.mdx",
-    "file": "src/assets/screens/start/anatomy-default.webp",
+    "file": "src/assets/screens/tour/anatomy-default.light.webp",
     "caption": "Fresh install: the top bar shows pinned tools, not an empty suggestion strip, until you type something.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Default state, no text typed yet, so TOPBAR resolves to toolbar (not suggestions). Symbol row and dedicated emoji row are both off by default in this shot; showToolbar=true because suggestionsFirst=false and there is nothing to suggest.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tour/anatomy-default.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tour/toolbar-pinned",
     "page": "docs/src/content/docs/start/tour.mdx",
-    "file": "src/assets/screens/start/toolbar-pinned.webp",
+    "file": "src/assets/screens/tour/toolbar-pinned.light.webp",
     "caption": "The toolbar: back-to-keyboard chevron, the Toolbox launcher, then your pinned tools.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "type a few characters so the back chevron is not needed, or crop to show the toolbar at rest with default pinned tools (Emoji, Clipboard, Settings) plus the Toolbox + button"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Default toolbarTools = [EMOJI, CLIPBOARD, SETTINGS]. No panel open so the back chevron should NOT show; capture the resting toolbar state.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tour/toolbar-pinned.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tour/toolbox-grid",
     "page": "docs/src/content/docs/start/tour.mdx",
-    "file": "src/assets/screens/start/toolbox-grid.webp",
+    "file": "src/assets/screens/tour/toolbox-grid.light.webp",
     "caption": "The Toolbox grid \u2014 every enabled tool, four to a row, drag to pin or reorder.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "tap the toolbar's Toolbox (+) button to open PanelMode.TOOLBOX"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "toolboxColumns=4. Capture with the first-run drag hint banner visible if easy (toolboxHintDismissed default false) since it's part of the real first-open experience.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tour/toolbox-grid.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tour/long-press-alternates",
     "page": "docs/src/content/docs/start/tour.mdx",
-    "file": "src/assets/screens/start/long-press-alternates.webp",
+    "file": "src/assets/screens/tour/long-press-alternates.light.webp",
     "caption": "Long-pressing a key with alternates pops up the accented and symbol variants.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "long-press a letter key with known alternates (e.g. 'e' or 'a') and hold until the alternates popup renders, then capture"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "longPressDelayMs default 300ms; longPressHints default true so the corner hint mark should also be visible on nearby keys in the same shot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tour/long-press-alternates.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tour/settings-entry",
@@ -1485,16 +1529,18 @@
   {
     "id": "languages/cjk-japanese-flick",
     "page": "docs/src/content/docs/languages/cjk.mdx",
-    "file": "src/assets/screens/languages/cjk-japanese-flick.webp",
+    "file": "src/assets/screens/languages/cjk-japanese-flick.light.webp",
     "caption": "Japanese Flick: kana glyphs sit on the keys themselves, with directional flicks for the rest of the row.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Enable Japanese, switch to the Flick layout, show the idle keyboard (12-key pad with kana glyphs on keys)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Static keyboard shot is fine; the flick gesture itself is better shown as a kind:anim companion if a future pass wants motion.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/cjk-japanese-flick.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/cjk-candidate-grid-expanded",
@@ -1606,7 +1652,7 @@
   {
     "id": "languages/fancy-text-bold-field",
     "page": "docs/src/content/docs/languages/fancy-text.mdx",
-    "file": "src/assets/screens/languages/fancy-text-bold-field.webp",
+    "file": "src/assets/screens/languages/fancy-text-bold-field.light.webp",
     "caption": "The Bold style active in a text field: typing hello commits \ud835\udc21\ud835\udc1e\ud835\udc25\ud835\udc25\ud835\udc28 directly.",
     "host": "harness-field",
     "setup": [
@@ -1614,9 +1660,11 @@
       "Enable Fancy Text and its Bold layout (Settings > Languages > Add language > search fancy > tap the row, which auto-enables Bold) or switch to it with the globe key if already enabled",
       "Type a short word, e.g. hello, so the composed \ud835\udc21\ud835\udc1e\ud835\udc25\ud835\udc25\ud835\udc28 is visible and legible in the field"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Keep the typed word short and common so the styled glyphs stay readable at field size; avoid characters from the 'hole' letters (C,H,I,N,P,Q,R,T,Z) since Bold itself has no holes anyway.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/fancy-text-bold-field.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/fancy-text-layout-toggles",
@@ -1638,21 +1686,23 @@
   {
     "id": "languages/notation-music-field",
     "page": "docs/src/content/docs/languages/notation.mdx",
-    "file": "src/assets/screens/languages/notation-music-field.webp",
+    "file": "src/assets/screens/languages/notation-music-field.light.webp",
     "caption": "Musical notation active in a text field: note durations, rests, and clefs on the key grid.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Enable Music notation via Settings > Languages > Add language > search 'music', switch to it with the globe key, tap the field, capture."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Show the main letters layer of music.wmlayout.json (durations/rests/clefs row) in dark theme default.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/notation-music-field.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/notation-braille-chord",
     "page": "docs/src/content/docs/languages/notation.mdx",
-    "file": "src/assets/screens/languages/notation-braille-chord.webp",
+    "file": "src/assets/screens/languages/notation-braille-chord.light.webp",
     "caption": "Braille active: chording dots 1 and 4 together commits the letter c.",
     "host": "harness-field",
     "setup": [
@@ -1660,9 +1710,11 @@
       "Enable Braille via Settings > Languages > Add language > search 'braille', switch to it, tap the field.",
       "Capture mid-chord if possible (two fingers held on dot1/dot4); if a live mid-press screenshot isn't practical, capture the idle six-key grid instead and adjust the caption."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Chord press-state may be hard to freeze for a still capture \u2014 a short screen recording cropped to a frame is an acceptable fallback for the capture agent.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/notation-braille-chord.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/notation-morse-strip",
@@ -1761,7 +1813,7 @@
   {
     "id": "languages/spacebar-resting-label",
     "page": "docs/src/content/docs/languages/switching.mdx",
-    "file": "src/assets/screens/languages/spacebar-resting-label.webp",
+    "file": "src/assets/screens/languages/spacebar-resting-label.light.webp",
     "caption": "The resting spacebar shows the current language's name, with switch-direction arrows on either side.",
     "host": "harness-field",
     "setup": [
@@ -1769,14 +1821,16 @@
       "Set WM Keyboard as the active IME and focus the field with default settings (4 layouts enabled, spacebarLanguageArrows on, spaceShortSwipe = Language).",
       "Capture the resting keyboard without touching the spacebar."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Arrows only draw when a swipe slot is set to Language and more than one layout is enabled \u2014 both true by default, so this should show them.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/spacebar-resting-label.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/spacebar-language-preview",
     "page": "docs/src/content/docs/languages/switching.mdx",
-    "file": "src/assets/screens/languages/spacebar-language-preview.webp",
+    "file": "src/assets/screens/languages/spacebar-language-preview.light.webp",
     "caption": "Mid-swipe: the language preview shows every enabled layout, current selection highlighted.",
     "host": "harness-field",
     "setup": [
@@ -1784,9 +1838,11 @@
       "Touch down on the spacebar and drag horizontally past the swipe threshold without lifting.",
       "Capture while the preview popup is visible above the spacebar, before releasing."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Default enabled set is 4 layouts (QWERTY/Avro/Probhat/Jatiya) so the preview shows all 4 chips, no sliding window needed. Current selection is bold, accent-tinted and pill-highlighted; others at ~45% opacity.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/spacebar-language-preview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/hold-drag-picker-list",
@@ -1920,7 +1976,7 @@
   {
     "id": "privacy/incognito-toolbar-badge",
     "page": "docs/src/content/docs/privacy/incognito.mdx",
-    "file": "src/assets/screens/privacy/incognito-toolbar-badge.webp",
+    "file": "src/assets/screens/privacy/incognito-toolbar-badge.light.webp",
     "caption": "The incognito badge next to the toolbar, and the toolbox tool that turns it on.",
     "host": "harness-field",
     "setup": [
@@ -1929,14 +1985,16 @@
       "Open the toolbox (grid button on the toolbar) and tap the Incognito tool to turn it on \u2014 it is not pinned to the toolbar by default (DefaultToolbarTools = EMOJI, CLIPBOARD, SETTINGS; ToolbarTool.kt:131-132), so find it in the toolbox grid",
       "Close the toolbox; the incognito badge (IconSlots.CHROME_INCOGNITO, KeyboardScreen.kt:3656-3665) now shows next to the toolbar and the Incognito tool cell reads as active"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Confirms onIncognitoToggle() (WMKeyboardService.kt:6277-6297) and the badge render condition state.incognitoOn.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/incognito-toolbar-badge.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/secure-field-no-suggestions",
     "page": "docs/src/content/docs/privacy/incognito.mdx",
-    "file": "src/assets/screens/privacy/secure-field-no-suggestions.webp",
+    "file": "src/assets/screens/privacy/secure-field-no-suggestions.light.webp",
     "caption": "A password field: no suggestion strip, no smart chips.",
     "host": "harness-field",
     "setup": [
@@ -1945,7 +2003,9 @@
     ],
     "status": "done",
     "notes": "isSecureField()/suppressesSuggestions() force this for password variations regardless of the 'Suggestions in every field' override \u2014 WMKeyboardService.kt:10494-10529.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/secure-field-no-suggestions.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/clipboard-sensitive-masked",
@@ -1983,7 +2043,7 @@
   {
     "id": "typing/long-press-popup",
     "page": "docs/src/content/docs/typing/basics.mdx",
-    "file": "src/assets/screens/typing/long-press-popup.webp",
+    "file": "src/assets/screens/typing/long-press-popup.light.webp",
     "caption": "Holding a letter opens its accent and symbol alternates.",
     "host": "harness-field",
     "setup": [
@@ -1992,7 +2052,9 @@
     ],
     "status": "done",
     "notes": "Pick a letter whose popup shows both a digit and accents (e/u/i/o) so the shot demonstrates both alternate kinds at once.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/long-press-popup.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/shift-states",
@@ -2026,7 +2088,7 @@
   {
     "id": "typing/enter-action-icons",
     "page": "docs/src/content/docs/typing/basics.mdx",
-    "file": "src/assets/screens/typing/enter-action-icons.webp",
+    "file": "src/assets/screens/typing/enter-action-icons.light.webp",
     "caption": "Enter drawing a field's own action icon.",
     "host": "harness-field",
     "setup": [
@@ -2034,12 +2096,14 @@
     ],
     "status": "done",
     "notes": "DocsShotActivity's --es action only covers send|search|go|done|next (5 of 7 EnterAction states). PREVIOUS and CUSTOM (an app-supplied label drawn as text, e.g. 'Reply') aren't reachable through the harness; if a CUSTOM/PREVIOUS shot is wanted, it needs a real third-party app field instead.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/enter-action-icons.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/number-row",
     "page": "docs/src/content/docs/typing/basics.mdx",
-    "file": "src/assets/screens/typing/number-row.webp",
+    "file": "src/assets/screens/typing/number-row.light.webp",
     "caption": "The number row above the letters.",
     "host": "harness-field",
     "setup": [
@@ -2048,7 +2112,9 @@
     ],
     "status": "done",
     "notes": "Optionally switch the active language to Bengali or Arabic first (per-language Numerals setting) to show native digits instead of 0-9 in the same shot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/number-row.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/keypress-settings-overview",
@@ -2100,7 +2166,7 @@
   {
     "id": "typing/sound-haptics-toolbar-panel",
     "page": "docs/src/content/docs/typing/feedback.mdx",
-    "file": "src/assets/screens/typing/sound-haptics-toolbar-panel.webp",
+    "file": "src/assets/screens/typing/sound-haptics-toolbar-panel.light.webp",
     "caption": "The Sound & haptics toolbar panel, with the ringer warning banner shown.",
     "host": "harness-field",
     "setup": [
@@ -2110,12 +2176,14 @@
     ],
     "status": "done",
     "notes": "Panel is SoundHapticsPanel in feature/ime/.../ui/ToolPanels.kt; only shows the ringer banner when Key sound is on and ringerMode != NORMAL.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/sound-haptics-toolbar-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/field-adaptation-email",
     "page": "docs/src/content/docs/typing/field-adaptation.mdx",
-    "file": "src/assets/screens/typing/field-adaptation-email.webp",
+    "file": "src/assets/screens/typing/field-adaptation-email.light.webp",
     "caption": "An email field: the bottom-row comma has become @, and the period key's long-press offers .com, .net, .org, .edu, .co.",
     "host": "harness-field",
     "setup": [
@@ -2125,12 +2193,14 @@
     ],
     "status": "done",
     "notes": "The swap only affects the last row's comma/period keys; keep the shot wide enough to show the full bottom row so the @ key and period long-press area are legible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/field-adaptation-email.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/field-adaptation-uri",
     "page": "docs/src/content/docs/typing/field-adaptation.mdx",
-    "file": "src/assets/screens/typing/field-adaptation-uri.webp",
+    "file": "src/assets/screens/typing/field-adaptation-uri.light.webp",
     "caption": "A URL field: the comma key has become /, with ? # & = on its long-press.",
     "host": "harness-field",
     "setup": [
@@ -2140,12 +2210,14 @@
     ],
     "status": "done",
     "notes": "Same bottom-row framing as the email shot; DocsShotActivity's field kind extra is 'uri'.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/field-adaptation-uri.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/field-adaptation-numpad",
     "page": "docs/src/content/docs/typing/field-adaptation.mdx",
-    "file": "src/assets/screens/typing/field-adaptation-numpad.webp",
+    "file": "src/assets/screens/typing/field-adaptation-numpad.light.webp",
     "caption": "A phone-number field: a 4-by-4 dial pad in phone order, not calculator order.",
     "host": "harness-field",
     "setup": [
@@ -2154,12 +2226,14 @@
     ],
     "status": "done",
     "notes": "Confirm the digit order reads 1-2-3 on top (phone-pad), not 7-8-9 (calculator) \u2014 this is the detail the caption calls out. kind=number or kind=date/time would also work if a different variant is preferred later; phone was chosen since DocsShotActivity explicitly supports it and it exercises the *, #, long-press set.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/field-adaptation-numpad.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/field-adaptation-password",
     "page": "docs/src/content/docs/typing/field-adaptation.mdx",
-    "file": "src/assets/screens/typing/field-adaptation-password.webp",
+    "file": "src/assets/screens/typing/field-adaptation-password.light.webp",
     "caption": "A password field: the suggestion strip stays hidden, and pasting into it wipes the clip afterward.",
     "host": "harness-field",
     "setup": [
@@ -2169,7 +2243,9 @@
     ],
     "status": "done",
     "notes": "Purely visual: the masked field plus an empty suggestion strip is the whole story here since the clipboard-purge and voice-block behaviors aren't visible in a single still.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/field-adaptation-password.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/glide-trail",
@@ -2320,7 +2396,7 @@
   {
     "id": "typing/symbols-page-open",
     "page": "docs/src/content/docs/typing/modes.mdx",
-    "file": "src/assets/screens/typing/symbols-page-open.webp",
+    "file": "src/assets/screens/typing/symbols-page-open.light.webp",
     "caption": "The symbol page open over a message field, with the second symbol page one tap away.",
     "host": "harness-field",
     "setup": [
@@ -2330,7 +2406,9 @@
     ],
     "status": "done",
     "notes": "Shows LayoutMode.SYMBOLS (BuiltInLayouts.kt symbolRows). Make sure the '=\\<' key (goes to page 2) is visible at 1.5x width in the bottom-left of the third row.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/symbols-page-open.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/symbol-row-picker",
@@ -2350,29 +2428,33 @@
   {
     "id": "typing/modes-tool-panel",
     "page": "docs/src/content/docs/typing/modes.mdx",
-    "file": "src/assets/screens/typing/modes-tool-panel.webp",
+    "file": "src/assets/screens/typing/modes-tool-panel.light.webp",
     "caption": "The Modes tool: Automatic at the top, then one row per mode with its auto-activation summary.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Tap the field, open the toolbox, and open the Modes tool"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "ModesPanel, KeyboardScreen.kt:2494-2570+. Shows the leading 'Automatic \u2014 Follow each mode's app and field bindings' row followed by the 6 seeded modes with icon/name/modeSummary subtitle.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/modes-tool-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/modes-manual-picker",
     "page": "docs/src/content/docs/typing/modes.mdx",
-    "file": "src/assets/screens/typing/modes-manual-picker.webp",
+    "file": "src/assets/screens/typing/modes-manual-picker.light.webp",
     "caption": "The Modes tool open, showing the manual override list.",
     "host": "harness-field",
     "setup": [
       "Same as typing/modes-tool-panel \u2014 this can reuse the same capture or a near-duplicate with a mode row highlighted/selected"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Duplicate/alternate framing of the Modes tool; consider merging with modes-tool-panel if the capture agent judges one shot covers both captions.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/modes-manual-picker.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/power-saving-toolbar-toggle",
@@ -2458,7 +2540,7 @@
   {
     "id": "typing/size-position-one-handed",
     "page": "docs/src/content/docs/typing/size-position.mdx",
-    "file": "src/assets/screens/typing/size-position-one-handed.webp",
+    "file": "src/assets/screens/typing/size-position-one-handed.light.webp",
     "caption": "One-handed mode docked to the right edge, with the flip and exit rail.",
     "host": "harness-field",
     "setup": [
@@ -2468,12 +2550,14 @@
     ],
     "status": "done",
     "notes": "Rail is OneHandedRail composable, KeyboardScreen.kt:1144-1174 \u2014 arrow-flip icon on top, Fullscreen exit icon below, fixed at ONE_HANDED_RAIL_WEIGHT=0.16f of the row width.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/size-position-one-handed.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/size-position-split",
     "page": "docs/src/content/docs/typing/size-position.mdx",
-    "file": "src/assets/screens/typing/size-position-split.webp",
+    "file": "src/assets/screens/typing/size-position-split.light.webp",
     "caption": "Split keyboard: each row divided into left and right halves with a center gap.",
     "host": "harness-blank",
     "setup": [
@@ -2483,12 +2567,14 @@
     ],
     "status": "done",
     "notes": "Split gap default 12%, range 5-40%; spacebar is divided between the two halves too.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/size-position-split.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/size-position-floating",
     "page": "docs/src/content/docs/typing/size-position.mdx",
-    "file": "src/assets/screens/typing/size-position-floating.webp",
+    "file": "src/assets/screens/typing/size-position-floating.light.webp",
     "caption": "The floating panel's handle bar: dock button, drag pill, and resize grip.",
     "host": "harness-blank",
     "setup": [
@@ -2498,7 +2584,9 @@
     ],
     "status": "done",
     "notes": "FloatingHandleBar composable, KeyboardScreen.kt:1049 on. Still fallback for the size-position-floating-resize anim below (reduced-motion pair).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/size-position-floating.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/size-position-floating-resize",
@@ -2517,7 +2605,7 @@
   {
     "id": "smart/autocorrect-confidence-fix",
     "page": "docs/src/content/docs/smart/autocorrect.mdx",
-    "file": "src/assets/screens/smart/autocorrect-confidence-fix.webp",
+    "file": "src/assets/screens/smart/autocorrect-confidence-fix.light.webp",
     "caption": "A mistyped word corrected inline as the next word begins.",
     "host": "harness-field",
     "setup": [
@@ -2525,14 +2613,16 @@
       "Focus the field, open WM Keyboard, type an unambiguous typo of a common word (e.g. 'wprld ') so autocorrect fires and the corrected word plus the next word-in-progress are both visible",
       "Capture right after the space commits the correction"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Want the corrected word visible in the field, ideally with the suggestion strip showing normal completions for the next word (not the correction itself, which is already committed).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/autocorrect-confidence-fix.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/autocorrect-skip-allcaps",
     "page": "docs/src/content/docs/smart/autocorrect.mdx",
-    "file": "src/assets/screens/smart/autocorrect-skip-allcaps.webp",
+    "file": "src/assets/screens/smart/autocorrect-skip-allcaps.light.webp",
     "caption": "ALL-CAPS words pass through untouched next to a corrected lowercase one.",
     "host": "harness-field",
     "setup": [
@@ -2540,14 +2630,16 @@
       "Type an ALL-CAPS acronym (e.g. 'ASAP ') followed by a lowercase typo that does get corrected (e.g. 'wprld '), so both the untouched capital word and the corrected word are visible together",
       "Capture after both words have committed"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Illustrates the ALL-CAPS skip rule by contrast with a normal correction in the same field.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/autocorrect-skip-allcaps.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/autocorrect-backspace-undo",
     "page": "docs/src/content/docs/smart/autocorrect.mdx",
-    "file": "src/assets/screens/smart/autocorrect-backspace-undo.webp",
+    "file": "src/assets/screens/smart/autocorrect-backspace-undo.light.webp",
     "caption": "Backspace right after a correction restores what you originally typed.",
     "host": "harness-field",
     "setup": [
@@ -2555,9 +2647,11 @@
       "Type a word that autocorrects (e.g. 'wprld ') so it commits as 'world ', then immediately press backspace once without moving the cursor or typing anything else",
       "Capture right after the backspace, with the field showing the original typed word restored (e.g. 'wprld ')"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "This is a discrete before/after state, not motion \u2014 a single still after the backspace is sufficient, no animation needed.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/autocorrect-backspace-undo.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/autocorrect-options",
@@ -2669,21 +2763,23 @@
   {
     "id": "smart/keyword-chip",
     "page": "docs/src/content/docs/smart/chips.mdx",
-    "file": "src/assets/screens/smart/keyword-chip.webp",
+    "file": "src/assets/screens/smart/keyword-chip.light.webp",
     "caption": "Typing wiki offers a narrow chip to open Wikipedia, leaving room for word candidates.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Type wiki (do not add a trailing space) and screenshot the strip \u2014 expect a narrow 'Open Wikipedia' chip beside word candidates, not filling the whole strip."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Tool keywords toggle (Typing > Smart chips > Tool keywords) must be on; default true.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/keyword-chip.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/clipboard-entity-strip",
     "page": "docs/src/content/docs/smart/chips.mdx",
-    "file": "src/assets/screens/smart/clipboard-entity-strip.webp",
+    "file": "src/assets/screens/smart/clipboard-entity-strip.light.webp",
     "caption": "The Clipboard panel: dashed entity chips above the history, pulled out of several different clips.",
     "host": "harness-field",
     "setup": [
@@ -2691,14 +2787,16 @@
       "Beforehand, copy 2-3 separate pieces of text into clipboard history containing distinct entity types, e.g. 'Your verification code is 483920', 'call me at 555-123-4567', and 'see https://example.com/docs' (as separate copy actions so they land as separate clips).",
       "Open the Clipboard tool from the toolbar or toolbox and screenshot the dashed-outline chip strip above the clip grid."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Detect codes, numbers & links (Tools > Clipboard) must be on; default true. Up to 12 chips shown, sorted OTP, then PHONE, then URL.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/clipboard-entity-strip.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/otp-fresh-copy-chip",
     "page": "docs/src/content/docs/smart/chips.mdx",
-    "file": "src/assets/screens/smart/otp-fresh-copy-chip.webp",
+    "file": "src/assets/screens/smart/otp-fresh-copy-chip.light.webp",
     "caption": "Copying a verification text offers just the code, not the whole message, right on the suggestion strip.",
     "host": "harness-field",
     "setup": [
@@ -2706,9 +2804,11 @@
       "Copy a message like 'Your verification code is 483920' from outside the harness (e.g. Messages or Notes) so it becomes the most recent clip.",
       "Switch to WM Keyboard and focus the field with no text typed yet; the idle suggestion strip should show a dashed CODE chip instead of the ordinary full-clip paste chip."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Requires both Suggest recent copy and Detect codes, numbers & links on (Tools > Clipboard); both default true. This fast path is OTP-only \u2014 a phone number or URL copy shows the ordinary full-clip chip instead.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/otp-fresh-copy-chip.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/options",
@@ -2760,7 +2860,7 @@
   {
     "id": "smart/grammar-toolbox-entry",
     "page": "docs/src/content/docs/smart/grammar.mdx",
-    "file": "src/assets/screens/smart/grammar-toolbox-entry.webp",
+    "file": "src/assets/screens/smart/grammar-toolbox-entry.light.webp",
     "caption": "Grammar check in the toolbox, with the dialect chip and a live issue count.",
     "host": "harness-field",
     "setup": [
@@ -2768,9 +2868,11 @@
       "Open the toolbox grid (not the panel itself) and capture with the Grammar check tile visible",
       "Full flavor build required"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Shows the entry point in the toolbox grid, distinct from the panel-open shot. If default toolbox order is used, Grammar check appears after AI, not near the top \u2014 may need to scroll the toolbox grid into view.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/grammar-toolbox-entry.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/grammar-fix-chips",
@@ -2930,44 +3032,50 @@
   {
     "id": "smart/suggestion-strip-anatomy",
     "page": "docs/src/content/docs/smart/suggestions.mdx",
-    "file": "src/assets/screens/smart/suggestion-strip-anatomy.webp",
+    "file": "src/assets/screens/smart/suggestion-strip-anatomy.light.webp",
     "caption": "Word candidates in the suggestion strip, mid-word.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text --es theme dark",
       "Focus the field and type a partial word with several real completions (e.g. \"cons\") without pressing space, so three word candidates fill the strip."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Used twice on the page (lead + anatomy section reuse the same shot id). Default settings are fine -- suggestions on, center-primary on.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/suggestion-strip-anatomy.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/suggestion-strip-emoji-tail",
     "page": "docs/src/content/docs/smart/suggestions.mdx",
-    "file": "src/assets/screens/smart/suggestion-strip-emoji-tail.webp",
+    "file": "src/assets/screens/smart/suggestion-strip-emoji-tail.light.webp",
     "caption": "Word candidates followed by predicted emoji.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text --es theme dark",
       "Type the whole word \"birthday\" (do not press space) -- emoji prediction is on by default and should append \ud83c\udf82\ud83c\udf89\ud83e\udd73\ud83c\udf81 after the word candidates."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Confirms the emoji tail rides after word chips, capped at 4 (shownEmojiSuggestions.take(4)).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/suggestion-strip-emoji-tail.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/suggestion-strip-ambiguous-correction",
     "page": "docs/src/content/docs/smart/suggestions.mdx",
-    "file": "src/assets/screens/smart/suggestion-strip-ambiguous-correction.webp",
+    "file": "src/assets/screens/smart/suggestion-strip-ambiguous-correction.light.webp",
     "caption": "A genuinely ambiguous typo offered as two tappable candidates instead of being auto-corrected.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text --es theme dark",
       "Type \"helo\" (do not press space) -- this typo is evenly split between \"hello\" and \"help\" per SuggestionEngine's edit-distance scoring, so autocorrect won't fire but both should appear as strip candidates."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Verify at capture time that both words actually appear as top candidates on the shipped dictionary -- if the scoring has since shifted, substitute another word documented as ambiguous in autocorrect.mdx (\"tesr\" -> \"test\"/\"tear\") instead of changing the claim without re-checking source.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/suggestion-strip-ambiguous-correction.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/punctuation-chips",
@@ -2988,7 +3096,7 @@
   {
     "id": "smart/suggestion-strip-shift-recase",
     "page": "docs/src/content/docs/smart/suggestions.mdx",
-    "file": "src/assets/screens/smart/suggestion-strip-shift-recase.webp",
+    "file": "src/assets/screens/smart/suggestion-strip-shift-recase.light.webp",
     "caption": "Suggestion chips re-cased to Title Case while Shift is held.",
     "host": "harness-field",
     "setup": [
@@ -2997,9 +3105,11 @@
       "Press and hold the Shift key without releasing, and capture the strip while held -- chips should show Title Case.",
       "For the caps-lock (UPPERCASE) state, double-tap Shift to lock it instead of holding, then capture again if a second variant is wanted."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "This is a live, hold-contingent state (reverts the instant Shift is released), so capture must happen while physically holding the key -- coordinate with whatever capture harness can hold a keypress. A single still of the Title Case state is sufficient; not registering an anim sibling since the feature is a stable held-state, not continuous motion.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/suggestion-strip-shift-recase.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/suggestions-settings-group",
@@ -3079,16 +3189,18 @@
   {
     "id": "tools/moon-phase-panel",
     "page": "docs/src/content/docs/tools/instruments.mdx",
-    "file": "src/assets/screens/tools/moon-phase-panel.webp",
+    "file": "src/assets/screens/tools/moon-phase-panel.light.webp",
     "caption": "Moon phase: the current lit fraction, phase name, and next full/new moon dates \u2014 computed on-device.",
     "host": "harness-blank",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode blank --es theme dark",
       "Focus the field, open the keyboard, open the toolbox, tap Moon phase."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "No network wait needed \u2014 this panel is pure arithmetic and renders instantly.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/moon-phase-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/weather-panel-ready",
@@ -3140,7 +3252,7 @@
   {
     "id": "languages/probhat-key-grid",
     "page": "docs/src/content/docs/languages/bengali.mdx",
-    "file": "src/assets/screens/languages/probhat-key-grid.webp",
+    "file": "src/assets/screens/languages/probhat-key-grid.light.webp",
     "caption": "\u09aa\u09cd\u09b0\u09ad\u09be\u09a4 (Probhat) active: Bengali letters typed directly, no phonetic conversion.",
     "host": "harness-field",
     "setup": [
@@ -3148,9 +3260,11 @@
       "Switch the active layout to \u09aa\u09cd\u09b0\u09ad\u09be\u09a4 (Probhat) \u2014 spacebar hold-drag picker or \ud83c\udf10 key cycle (it's enabled by default alongside Avro/Jatiya/QWERTY).",
       "Screenshot the idle keyboard's base (unshifted) letter grid \u2014 no need to type anything."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Base layer is enough for the page; do not confuse with Jatiya, which is a different grid.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/probhat-key-grid.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/bengali-language-screen",
@@ -3234,7 +3348,7 @@
   {
     "id": "tools/calculator-panel",
     "page": "docs/src/content/docs/tools/utilities.mdx",
-    "file": "src/assets/screens/tools/calculator-panel.webp",
+    "file": "src/assets/screens/tools/calculator-panel.light.webp",
     "caption": "The Calculator panel: live expression and result, the scientific function row, and the custom digit keypad.",
     "host": "harness-field",
     "setup": [
@@ -3242,14 +3356,16 @@
       "Open the toolbar/toolbox and tap Calculator (or type its keyword 'calc' and tap the smart chip's gear icon).",
       "Type an expression like '12*(4+1)' so the live result and the Insert chip both show; leave the scientific row and the deg/rad chip visible in frame."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Calculator is not pinned by default (default pinned row is Emoji/Clipboard/Settings) \u2014 reach it from the toolbox, or Settings > Tools > Calculator to pin it first. This shot doubles as the page's hero image, placed right after the lead paragraph.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/calculator-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/unit-converter-panel",
     "page": "docs/src/content/docs/tools/utilities.mdx",
-    "file": "src/assets/screens/tools/unit-converter-panel.webp",
+    "file": "src/assets/screens/tools/unit-converter-panel.light.webp",
     "caption": "The Unit converter panel: category chips, From/To unit rows, the swap icon, and the shared digit keypad.",
     "host": "harness-field",
     "setup": [
@@ -3257,9 +3373,11 @@
       "Open the toolbar/toolbox and tap Unit converter.",
       "Pick a recognizable category/pair (e.g. Length, feet to meters) and type a nonzero value so the converted result and Insert chip are visible."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Reopens on whichever category/unit pair was used last (unitConvertLast setting), so a fresh install starts on category index 0 with its default From/To pair.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/unit-converter-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/currency-converter-panel",
@@ -3279,7 +3397,7 @@
   {
     "id": "tools/symbols-panel",
     "page": "docs/src/content/docs/tools/utilities.mdx",
-    "file": "src/assets/screens/tools/symbols-panel.webp",
+    "file": "src/assets/screens/tools/symbols-panel.light.webp",
     "caption": "The Symbols panel: category chips over an adaptive grid, with a Recents chip once you've used a few.",
     "host": "harness-field",
     "setup": [
@@ -3287,14 +3405,16 @@
       "Open the toolbar/toolbox and tap Special symbols.",
       "Tap a couple of symbols first so a Recents chip appears at the front of the category row, then land on the Math or Greek category for the grid shot."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Nine categories total: Fractions, Math, Greek, Arrows, Currency, Superscript, Punctuation, Shapes & stars, Misc.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/symbols-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/qr-generator-panel",
     "page": "docs/src/content/docs/tools/utilities.mdx",
-    "file": "src/assets/screens/tools/qr-generator-panel.webp",
+    "file": "src/assets/screens/tools/qr-generator-panel.light.webp",
     "caption": "The QR generator panel: editable content line, live QR preview, and Send as image.",
     "host": "harness-field",
     "setup": [
@@ -3302,14 +3422,16 @@
       "Open the toolbar/toolbox and tap QR code generator \u2014 it seeds its editable buffer from the field text on open.",
       "Leave a short URL or short text in the buffer so the QR renders cleanly, with the Send as image chip visible."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Unlike the other five tools on this page, the key rows stay visible underneath this panel \u2014 keystrokes reroute into the panel's own buffer instead of replacing the keys.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/qr-generator-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/password-generator-panel",
     "page": "docs/src/content/docs/tools/utilities.mdx",
-    "file": "src/assets/screens/tools/password-generator-panel.webp",
+    "file": "src/assets/screens/tools/password-generator-panel.light.webp",
     "caption": "The Password generator panel: generated result, entropy estimate, and the Password/Passphrase tabs.",
     "host": "harness-field",
     "setup": [
@@ -3317,23 +3439,27 @@
       "Open the toolbar/toolbox and tap Password generator.",
       "Capture the default Password tab (Length 16, Uppercase/Digits/Symbols on) with the generated string, entropy estimate, Copy/Insert chips, and regenerate icon all visible."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "A second crop of the Passphrase tab (toggle in the tool's own Options) could be a useful companion shot but isn't required.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/password-generator-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/typing-test-panel",
     "page": "docs/src/content/docs/tools/utilities.mdx",
-    "file": "src/assets/screens/tools/typing-test-panel.webp",
+    "file": "src/assets/screens/tools/typing-test-panel.light.webp",
     "caption": "A typing test in progress: the prompt with per-character correctness coloring, above the live key rows.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Open the toolbar/toolbox and tap Typing speed test, start a run (default: Timed, 30s), and type a few words so correct/incorrect/pending characters are all visible in one frame."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "The only tool on this page whose panel does not replace the key rows \u2014 the prompt is typed on the real keys while the panel scores it from above.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/typing-test-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/typing-test-results",
@@ -3546,7 +3672,7 @@
   {
     "id": "reference/troubleshooting-panel-captures-input",
     "page": "docs/src/content/docs/reference/troubleshooting.mdx",
-    "file": "src/assets/screens/reference/troubleshooting-panel-captures-input.webp",
+    "file": "src/assets/screens/reference/troubleshooting-panel-captures-input.light.webp",
     "caption": "An open tool panel capturing input \u2014 the toolbox button has become a back arrow.",
     "host": "harness-field",
     "setup": [
@@ -3554,9 +3680,11 @@
       "Open WM Keyboard on the field, open the toolbox, and open a genuine input-capturing panel tool (e.g. Search or Snippets \u2014 not a sensor/generator tool like Calculator, which replaces the key rows instead per tools/overview.mdx)",
       "Screenshot with the panel open, confirming the toolbox button area now shows a back arrow instead of the grid icon"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Purpose is to show the visual cue (back arrow) that a panel has captured the keyboard, referenced from tools/overview.mdx#panels-and-captured-keys. Pick whichever panel tool is easiest to reach and has an uncluttered look.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/troubleshooting-panel-captures-input.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/troubleshooting-diagnostics-screen",
@@ -5015,7 +5143,7 @@
   {
     "id": "themes/amoled-default-theme",
     "page": "docs/src/content/docs/themes/overview.mdx",
-    "file": "src/assets/screens/themes/amoled-default-theme.webp",
+    "file": "src/assets/screens/themes/amoled-default-theme.light.webp",
     "caption": "Mode set to Amoled: a true-black board under the Default theme.",
     "host": "harness-field",
     "setup": [
@@ -5024,7 +5152,9 @@
     ],
     "status": "done",
     "notes": "Only visible when effective mode is dark (Mode=Amoled alone does nothing in light mode) and the active theme is Default (system) \u2014 built-in/custom themes ignore Mode.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/themes/amoled-default-theme.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/auto-theme-sun",

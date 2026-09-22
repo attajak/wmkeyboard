@@ -13,7 +13,7 @@ import Shot from '@components/Shot.astro';
 Autocorrect fixes typos as you finish typing a word, but only when one candidate is clearly the right fix. A fat-fingered slip that's obviously "world" gets corrected. A word that sits genuinely between two real words is left alone for the suggestion strip to offer instead. This page is about that confidence gate, and about everything built around it: reverting a correction, the words autocorrect never touches, and the auto-space rules that ride along with it.
 
 <PhoneFrame caption="A mistyped word corrected inline as the next word begins.">
-  {/* shot: smart/autocorrect-confidence-fix */}
+  <Shot id="smart/autocorrect-confidence-fix" alt="A mistyped word corrected inline as the next word begins." />
 </PhoneFrame>
 
 ## How a correction is chosen
@@ -41,7 +41,7 @@ A word is never a correction target, whatever the confidence factor is set to, i
 - **The field is a password field, or any structured field**: email, web address, number pad, phone pad. Autocorrect, like the rest of typing intelligence, is off in all of them.
 
 <PhoneFrame caption="ALL-CAPS words pass through untouched next to a corrected lowercase one.">
-  {/* shot: smart/autocorrect-skip-allcaps */}
+  <Shot id="smart/autocorrect-skip-allcaps" alt="ALL-CAPS words pass through untouched next to a corrected lowercase one." />
 </PhoneFrame>
 
 :::note
@@ -55,7 +55,7 @@ Hyphenated words are one word while you type them. A hyphen straight after a let
 <KeyCap>⌫</KeyCap> right after an autocorrected word undoes it, as long as nothing else has touched the text since. The cursor has to be sitting exactly where the correction left it, and the text right before it has to still read as the corrected word plus the space or line break that ended it. Backspace then deletes both and retypes what you originally typed instead. Move the cursor, tap elsewhere, or keep typing first and the undo is gone. Only the immediate next backspace can trigger it.
 
 <PhoneFrame caption="Backspace right after a correction restores what you originally typed.">
-  {/* shot: smart/autocorrect-backspace-undo */}
+  <Shot id="smart/autocorrect-backspace-undo" alt="Backspace right after a correction restores what you originally typed." />
 </PhoneFrame>
 
 The same word won't be "corrected" again next time either way: undoing a correction retires that exact pair on the spot, and a second undo of it blocks the pair for good. That part is unconditional, because a rejection has to hold even with learning switched off.

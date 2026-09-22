@@ -64,7 +64,7 @@ This chip is deliberately hard to trigger, since most long digit runs are not am
 Type a tool's keyword on its own (`wiki`, `calc`, and so on) and a narrower chip offers to open that tool, dropping the word you typed. The text-editing tool is the one exception: `edit` stays in the field, since that tool works on the text that's already there. This chip stays narrow instead of filling the strip, because the word you're typing might genuinely just be that word, and word candidates keep the rest of the row.
 
 <PhoneFrame caption="Typing wiki offers a narrow chip to open Wikipedia, leaving room for word candidates.">
-  {/* shot: smart/keyword-chip */}
+  <Shot id="smart/keyword-chip" alt="Typing wiki offers a narrow chip to open Wikipedia, leaving room for word candidates." />
 </PhoneFrame>
 
 Each tool's own settings list the words that open it, and let you change or clear them. Matching ignores capitals by default, and a per-tool **Match capitals** switch makes that tool compare literally instead, which is how `AI` can open the AI tool without every auto-capitalised "Ai" doing the same.
@@ -86,13 +86,13 @@ All five only fire when the tool they would open is switched on under Tools. If 
 Open the [Clipboard](/tools/clipboard/) tool and a row of dashed-outline chips sits above the grid of copied items. It surfaces one-time codes, phone numbers, and links found buried inside your clipboard history, not only in your latest copy. The scan covers your recent clips, sorts codes before phone numbers before links, and shows up to a dozen chips at once. Long-press a chip to see the fragment highlighted inside the clip it came from. Tap it to paste just that fragment, leaving the full clip in history untouched.
 
 <PhoneFrame caption="The Clipboard panel: dashed entity chips above the history, pulled out of several different clips.">
-  {/* shot: smart/clipboard-entity-strip */}
+  <Shot id="smart/clipboard-entity-strip" alt="The Clipboard panel: dashed entity chips above the history, pulled out of several different clips." />
 </PhoneFrame>
 
 One fast path doesn't need the panel at all. Copy a bare one-time code, then tap into a box that asks for a code, and the strip offers it as a dashed **Code** chip in place of the usual "paste your last copy" chip. It's deliberately that narrow. A copied code counts as a secret, so it stays off the strip in an ordinary message field, and a code quoted inside a longer message never becomes a chip there at all: pulling a fragment out of a message is what the Clipboard panel above is for. The fast path is also OTP-only, so a freshly copied phone number or link shows as the ordinary full-clip paste chip until you open the panel for the fragment version.
 
 <PhoneFrame caption="A copied verification code offered as a Code chip in a box that asks for a code.">
-  {/* shot: smart/otp-fresh-copy-chip */}
+  <Shot id="smart/otp-fresh-copy-chip" alt="Copying a verification text offers just the code, not the whole message, right on the suggestion strip." />
 </PhoneFrame>
 
 Both surfaces are covered by the same setting (see [Options](#options)), and neither one scans a clip you've marked sensitive, or an image or file clip.

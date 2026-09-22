@@ -41,6 +41,7 @@ FONT = os.path.join(REPO, "app", "src", "main", "res", "font", "inter_medium.ttf
 # Pixel 5 geometry, 440dpi: 2.75 px per dp.
 DP = 2.75
 BAR = 96
+NAV_DP = 20  # the gesture navigation band under a keyboard
 TIME = "12:00"
 SS = 3  # supersampling for the ring and scrim edges
 
@@ -55,13 +56,34 @@ def luminance(rgb):
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
 
-def add_chrome(shot):
+def ink(rgb):
+    return (28, 27, 31, 255) if luminance(rgb) > 0.5 else (236, 236, 242, 255)
+
+
+def add_chrome(shot, keyboard=False):
+    """The status bar on top and the gesture pill at the bottom.
+
+    A settings screen moves down under the status bar and loses its last
+    band, which is only more list. A keyboard shot keeps every key: the
+    status bar covers the host's empty top instead, and the frame moves up by
+    a navigation band drawn in the keyboard's own colour, the way the board
+    runs to the bottom edge on a phone with gesture navigation.
+    """
     w, h = shot.size
     band = shot.getpixel((w // 2, 2))
-    fg = (28, 27, 31, 255) if luminance(band) > 0.5 else (236, 236, 242, 255)
+    fg = ink(band)
 
     out = Image.new("RGBA", (w, h), band)
-    out.paste(shot.crop((0, 0, w, h - BAR)), (0, BAR))
+    if keyboard:
+        nav = round(NAV_DP * DP)
+        board = shot.getpixel((2, h - 2))
+        out.paste(shot.crop((0, nav, w, h)), (0, 0))
+        ImageDraw.Draw(out).rectangle((0, 0, w, BAR), fill=band)
+        ImageDraw.Draw(out).rectangle((0, h - nav, w, h), fill=board)
+        pill = ink(board)
+    else:
+        out.paste(shot.crop((0, 0, w, h - BAR)), (0, BAR))
+        pill = fg
     d = ImageDraw.Draw(out)
     cy = BAR // 2
 
@@ -90,8 +112,8 @@ def add_chrome(shot):
     d.pieslice((x - 2 * r, apex_y - r, x, apex_y + r), start=225, end=315, fill=fg)
 
     pw, ph = round(54 * DP), round(2 * DP)
-    py = h - round(10 * DP)
-    d.rounded_rectangle((w // 2 - pw, py - ph, w // 2 + pw, py + ph), radius=ph, fill=fg)
+    py = h - round(NAV_DP * DP) // 2 if keyboard else h - round(10 * DP)
+    d.rounded_rectangle((w // 2 - pw, py - ph, w // 2 + pw, py + ph), radius=ph, fill=pill)
     return out
 
 
@@ -151,10 +173,10 @@ def add_ring(img, box, dark, group):
     return Image.alpha_composite(out, ring_layer)
 
 
-def finish_one(shot_id, mode, screens=SCREENS):
+def finish_one(shot_id, mode, screens=SCREENS, keyboard=False):
     base = os.path.join(RENDERS, f"{shot_id}.{mode}")
     img = Image.open(base + ".png").convert("RGBA")
-    img = add_chrome(img)
+    img = add_chrome(img, keyboard)
     meta_path = base + ".json"
     meta = json.load(open(meta_path)) if os.path.exists(meta_path) else {}
     if meta.get("ring"):
@@ -235,7 +257,8 @@ def main():
         sizes = []
         for mode in ("light", "dark"):
             if os.path.exists(os.path.join(RENDERS, f"{shot_id}.{mode}.png")):
-                dest = finish_one(shot_id, mode, args.out or SCREENS)
+                keyboard = bool(entry) and entry["host"] != "settings"
+                dest = finish_one(shot_id, mode, args.out or SCREENS, keyboard)
                 sizes.append(f"{mode} {os.path.getsize(dest) // 1024} KB")
         note = ""
         if entry and not args.no_pages:

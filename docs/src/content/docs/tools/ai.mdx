@@ -29,7 +29,7 @@ The panel opens on a row of action chips. Eleven ship with the keyboard, and the
 If nothing is configured yet, the panel shows a short explanation in place of the chip row. You get an **Open settings** shortcut when no provider is set up, which is where a fresh install starts, or a **Download a model** shortcut when On-device is selected and nothing has come down yet. A model that's downloading right now takes over that empty state with its progress. Once you're past the empty state, a one-line progress strip sits above the chips, so a download you started in Settings stays visible while you carry on typing.
 
 <PhoneFrame caption="The empty state shown before any provider or local model is set up.">
-  ![The AI panel's empty state, before any provider or local model is set up.](@assets/screens/tools/ai-need-setup.webp)
+  <Shot id="tools/ai-need-setup" alt="The AI panel's empty state, before any provider or local model is set up." />
 </PhoneFrame>
 
 **What gets sent:** selected text wins if you've selected any, and otherwise the whole field goes. **Continue** is the exception. It always reads back from the cursor, since continuing needs to know what came before rather than what comes after, and **How much the AI reads back** sets how far: 500 to 32,000 characters, default 4,000. That limit only applies with nothing selected. A selection is always sent as it is. Tap a chip on a truly empty field with no selection and you get "There is nothing to work on. Type some text first." instead of a request.

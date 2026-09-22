@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Fixing a typo three lines up, selecting a whole paragraph, or nudging the cursor one character at a time is fiddly on a touchscreen with no physical arrow keys. WM Keyboard adds a dedicated text-editing panel, a set of one-tap cursor tools for the toolbar, and one-tap undo/redo. Together they stand in for the arrow keys and Ctrl-shortcuts a hardware keyboard would give you.
 
 <PhoneFrame caption="The text-editing panel: a d-pad for moving the cursor, Select/Select all/Copy/Paste on the right, and Home/End/Backspace along the bottom.">
-  {/* shot: tools/text-edit-panel */}
+  <Shot id="tools/text-edit-panel" alt="The text-editing panel: a d-pad for moving the cursor, Select/Select all/Copy/Paste on the right, and Home/End/Backspace along the bottom." />
 </PhoneFrame>
 
 ## Moving and selecting text
@@ -122,7 +123,7 @@ This isn't a typing history WM Keyboard keeps of its own. It has no way to reach
 **Numpad** opens a dedicated 4×4 number pad over whatever field you're in. Don't confuse it with the keyboard switching to a numeric layout on its own, which happens in a field already typed as a phone or number field. Numpad is a panel you open by hand, and it works over any field, numeric or not.
 
 <PhoneFrame caption="The numpad panel: a 4×4 grid in phone or calculator digit order, with Backspace repeating on hold.">
-  {/* shot: tools/numpad-panel */}
+  <Shot id="tools/numpad-panel" alt="The numpad panel: a 4×4 grid in phone or calculator digit order, with Backspace repeating on hold." />
 </PhoneFrame>
 
 It comes in two layouts, switched under [Options](#options):

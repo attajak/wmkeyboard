@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Media controls turns the keyboard into a transport for whatever is playing elsewhere on your phone: album art, track title, a seek bar, and play/pause/skip. It's the same session your lock screen and quick-settings tile already show, so it saves you from switching apps just to pause a song.
 
@@ -79,7 +80,7 @@ The Android API that hands over another app's media session is `MediaSessionMana
 > WM Keyboard needs notification access to show and control the media. This tool reads no notification content, only the media session. The same access powers the optional one-time code chip, which reads notification text only while you have that turned on.
 
 <PhoneFrame caption="The access prompt shown before notification-listener access is granted.">
-  {/* shot: tools/media-access-prompt */}
+  <Shot id="tools/media-access-prompt" alt="The access prompt shown before notification-listener access is granted." />
 </PhoneFrame>
 
 Tap **Allow access**. A short explanation appears first, restating what the access is for. Tap **Open system settings** on it. Your device's Notification access screen then opens on WM Keyboard's row. On Android 10 and older it opens the full list instead, so find WM Keyboard yourself. Look for **"WM Keyboard media controls and one-time codes."** That's the label the system lists it under, and it names both features because both ride on the one grant.

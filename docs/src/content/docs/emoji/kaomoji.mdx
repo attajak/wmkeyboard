@@ -7,11 +7,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 Kaomoji are Japanese-style faces built from CJK and box-drawing characters, like `(╯°□°）╯︵ ┻━┻`. Western ASCII emoticons like `:-D` and `<3` are the simpler cousin. Both live behind two optional tabs at the end of the emoji panel, off by default until you turn them on.
 
 <PhoneFrame caption="The emoji panel's Kaomoji tab, grouped by mood.">
-  {/* shot: emoji/kaomoji-tab */}
+  <Shot id="emoji/kaomoji-tab" alt="The emoji panel's Kaomoji tab, grouped by mood." />
 </PhoneFrame>
 
 ## Turning the tabs on

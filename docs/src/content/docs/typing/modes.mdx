@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 "Mode" means two different things on this page: the letters/symbols layer under your thumb, and the keyboard-wide profile (theme, tools, symbol row) that switches itself on for a given app or field. Both are covered here, along with the symbol row that sits between them.
 
 <PhoneFrame caption="The symbol page open over a message field, with the second symbol page one tap away.">
-  ![The symbol page open over a message field, with the second symbol page one tap away.](@assets/screens/typing/symbols-page-open.webp)
+  <Shot id="typing/symbols-page-open" alt="The symbol page open over a message field, with the second symbol page one tap away." />
 </PhoneFrame>
 
 ## Switching between letters and symbols
@@ -98,7 +99,7 @@ This is a global setting. A keyboard mode (below) can turn the symbol row on or 
 Beyond the global settings above, WM Keyboard can carry a different profile into different apps and fields, with its own theme, its own pinned toolbar tools and its own symbol row setup, switching automatically as you move between them.
 
 <PhoneFrame caption="The Modes tool: Automatic at the top, then one row per mode with its auto-activation summary.">
-  {/* shot: typing/modes-tool-panel */}
+  <Shot id="typing/modes-tool-panel" alt="The Modes tool: Automatic at the top, then one row per mode with its auto-activation summary." />
 </PhoneFrame>
 
 <SettingsPath path="Advanced / Keyboard modes" />
@@ -149,7 +150,7 @@ When more than one mode's bindings match, the one that names a field hint wins o
 You can also override the automatic pick from the keyboard itself. Open the **Modes** tool, from the toolbar or the toolbox, for a list starting with **Automatic** and its "Follow the app and field bindings of each mode" subtitle, then one row per mode. Tapping a mode pins it by hand. How long that pin lasts is **A mode you pick by hand**, under Keyboard modes: **Until you change app**, the default, or **Until you change it**, which keeps the mode on until you pick another or turn it off.
 
 <PhoneFrame caption="The Modes tool open, showing the manual override list.">
-  {/* shot: typing/modes-manual-picker */}
+  <Shot id="typing/modes-manual-picker" alt="The Modes tool open, showing the manual override list." />
 </PhoneFrame>
 
 ## Rearranging tools inside a mode

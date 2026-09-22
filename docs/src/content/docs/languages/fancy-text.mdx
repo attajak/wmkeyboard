@@ -10,11 +10,12 @@ import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
 import LayoutExplorer from '@components/LayoutExplorer.astro';
 import fancy from '../../../../../app/src/main/assets/layouts/fancy.wmlayout.json';
+import Shot from '@components/Shot.astro';
 
 Fancy Text isn't a language. It's 31 Unicode "font" styles on a single keyboard, plus a Normal style that types plain letters. Add it once, pick a style from the strip above the keys, and every letter key immediately shows the styled glyph. What you type is already 𝓯𝓪𝓷𝓬𝔂: there's no separate conversion step afterward.
 
 <PhoneFrame caption="The Bold style active in a text field: typing hello commits 𝐡𝐞𝐥𝐥𝐨 directly, and the style strip sits above the keys.">
-  {/* shot: languages/fancy-text-bold-field */}
+  <Shot id="languages/fancy-text-bold-field" alt="The Bold style active in a text field: typing hello commits 𝐡𝐞𝐥𝐥𝐨 directly." />
 </PhoneFrame>
 
 ## Turning it on

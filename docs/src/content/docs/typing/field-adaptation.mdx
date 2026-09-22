@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard reads what kind of field you've tapped into, email or phone number or password or five others, straight from the app's own field description. Then it quietly changes the keys on offer to match. None of this needs a setting. It's the same keyboard reacting to what's under your thumb.
 
 <PhoneFrame caption="An email field: the bottom-row comma has become @, and the period key's long-press offers .com, .net, .org, .edu, .co.">
-  ![An email field: the bottom-row comma has become @, and the period key's long-press offers .com, .net, .org, .edu, .co.](@assets/screens/typing/field-adaptation-email.webp)
+  <Shot id="typing/field-adaptation-email" alt="An email field: the bottom-row comma has become @, and the period key's long-press offers .com, .net, .org, .edu, .co." />
 </PhoneFrame>
 
 ## How the keyboard reads a field
@@ -26,7 +27,7 @@ A password field is a separate signal entirely. It doesn't get its own `FieldKin
 ## Typing in email and web address fields
 
 <PhoneFrame caption="A URL field: / ? # & = on the comma key's long-press.">
-  ![A URL field: / ? # & = on the comma key's long-press.](@assets/screens/typing/field-adaptation-uri.webp)
+  <Shot id="typing/field-adaptation-uri" alt="A URL field: / ? # & = on the comma key's long-press." />
 </PhoneFrame>
 
 Email and URL fields keep the ordinary letter layout, since you're typing words either way, but two keys on the **bottom row only** change to match:
@@ -39,7 +40,7 @@ The swap only touches the bottom row on purpose. A Dvorak layout has real `.` an
 ## Typing in number, phone, date, and time fields
 
 <PhoneFrame caption="A phone-number field: a 4-by-4 dial pad in phone order, not calculator order.">
-  ![A phone-number field: a 4-by-4 dial pad in phone order, not calculator order.](@assets/screens/typing/field-adaptation-numpad.webp)
+  <Shot id="typing/field-adaptation-numpad" alt="A phone-number field: a 4-by-4 dial pad in phone order, not calculator order." />
 </PhoneFrame>
 
 The five numeric-pad field kinds each get their own 4-column keypad. Digits are arranged phone-pad style, 1-2-3 on top rather than 7-8-9 like a calculator, with 0 sitting under the 8 and enter anchoring the bottom-right. Delete takes the top-right corner on four of the five. The Number pad swaps it down a row and puts space on top, since deleting is the frequent correction while typing a figure. The remaining keys are tailored to what that field type needs:
@@ -67,7 +68,7 @@ Don't confuse this with the standalone **Numpad** tool in the toolbox, which is 
 ## Typing in a password field
 
 <PhoneFrame caption="A password field: the suggestion strip stays hidden, and pasting into it wipes the clip afterward.">
-  ![A password field: the suggestion strip stays hidden, and pasting into it wipes the clip afterward.](@assets/screens/typing/field-adaptation-password.webp)
+  <Shot id="typing/field-adaptation-password" alt="A password field: the suggestion strip stays hidden, and pasting into it wipes the clip afterward." />
 </PhoneFrame>
 
 `secureField` drives a wider set of behavior than just hiding the suggestion strip:

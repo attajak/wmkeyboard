@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 This page covers four separate tools, each with its own panel and its own settings screen: **Web search** and **Image search** (backed by Brave, or by a SearXNG server you name on the F-Droid build), a three-tab **Wikipedia** reader, and an **English dictionary**. Web search, Image search, and Wikipedia never read what's already in your field. You type a query into the panel's own search bar, and nothing out of the field you're typing in is sent anywhere. Dictionary is the one exception. With its auto-lookup setting on, which is the default, opening the tool reads your current selection or the word at the cursor and looks that up. See [Looking up definitions](#looking-up-definitions) below.
 
@@ -31,7 +32,7 @@ Both tools run on the Brave Search API by default, or on a SearXNG instance you 
 Without something to search with, neither tool appears on the keyboard at all. There's no button that opens a panel with nothing behind it. Until then the two tools are off the toolbar, out of the toolbox, and out of the smart chips, and a hardware shortcut bound to either one does nothing. On the **Tools** screen they're still listed, with their switch greyed out and a reason in place of the usual description. Everywhere except the F-Droid build, that reads "Needs an API key. Press this row to add one." The F-Droid build reads "Needs a SearXNG instance" instead, since it offers a self-hosted server as another way in. Fill in whichever the screen is asking for and both tools come straight back.
 
 <PhoneFrame caption="The Tools screen before a Brave API key is configured: the switch is greyed out.">
-{/* shot: tools/search-needs-key */}
+<Shot id="tools/search-needs-key" alt="The web search panel before a Brave API key is configured." />
 </PhoneFrame>
 
 ### Options

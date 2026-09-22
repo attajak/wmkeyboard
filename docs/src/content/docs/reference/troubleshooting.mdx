@@ -73,7 +73,7 @@ None of the Camera, Voice typing, Calendar, or Media controls grants above are k
 This one is by design. Most tools that need typed input (search boxes, the AI prompt, the typing-test scorer, a plugin's own field) open a panel that **captures the keyboard**: what you type goes into the panel's own box, not into the app behind it. Backspace works the same way, deliberately, so it can't word-delete text in the field behind a panel you can't currently see.
 
 <PhoneFrame caption="An open tool panel capturing input. The toolbox button has become a back arrow.">
-  {/* shot: reference/troubleshooting-panel-captures-input */}
+  <Shot id="reference/troubleshooting-panel-captures-input" alt="An open tool panel capturing input — the toolbox button has become a back arrow." />
 </PhoneFrame>
 
 Sensor and generator tools don't capture keys at all: Compass, Level, Moon phase, Weather, Calendar, Password generator, Media controls, Camera and the scanners replace the key rows entirely, so there's no letter row to intercept in the first place.

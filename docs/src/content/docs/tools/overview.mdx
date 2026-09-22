@@ -10,11 +10,12 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard ships 75 tools (panels, sensors, generators, and one-tap actions), but only a handful sit on the toolbar at once. The rest wait one tap away in the toolbox, and you decide which is which by dragging tools between the two.
 
 <PhoneFrame caption="The toolbar's default row (Emoji, Clipboard, Settings) with the toolbox grid open below it.">
-  {/* shot: tools/toolbar-and-toolbox */}
+  <Shot id="tools/toolbar-and-toolbox" alt="The toolbar's default row (Emoji, Clipboard, Settings) with the toolbox grid open below it." />
 </PhoneFrame>
 
 ## Pinning and reordering

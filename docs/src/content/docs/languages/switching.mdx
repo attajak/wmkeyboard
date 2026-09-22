@@ -16,7 +16,7 @@ Once more than one layout is enabled, there are four ways to move between them o
 However you make it, the switch lands right away. A half-typed word is committed as it stands, the keys redraw, and the suggestion strip refills from the new language's dictionary immediately, so you don't have to type a letter first to stop being offered words from the language you just left.
 
 <PhoneFrame caption="The resting spacebar shows the current language's name, with switch-direction arrows on either side.">
-  {/* shot: languages/spacebar-resting-label */}
+  <Shot id="languages/spacebar-resting-label" alt="The resting spacebar shows the current language's name, with switch-direction arrows on either side." />
 </PhoneFrame>
 
 ## Swiping the spacebar
@@ -35,7 +35,7 @@ With exactly two layouts enabled, a swipe toggles to the other one. Dragging fur
 While a language swipe is in progress, a preview pops up above the spacebar showing every enabled layout as a row of chips: the current selection bold and highlighted, the rest dimmed. With more than five layouts enabled it shows a five-chip window centered on your selection instead of the whole list. Release to commit the highlighted layout. A tap with no movement always types a space.
 
 <PhoneFrame caption="Mid-swipe: the language preview shows every enabled layout, current selection highlighted.">
-  {/* shot: languages/spacebar-language-preview */}
+  <Shot id="languages/spacebar-language-preview" alt="Mid-swipe: the language preview shows every enabled layout, current selection highlighted." />
 </PhoneFrame>
 
 The resting spacebar label follows **The spacebar shows** (also under Typing → Gestures), which offers Language (the default), Layout, or Both. In Language mode, a transliterating layout such as Avro always shows its own name instead of the shared language name. Avro, Probhat and Jatiya all display as বাংলা, so the language name alone wouldn't say which method is under your fingers. In Both mode, a transliterating layout shows the combined form instead, such as বাংলা (Avro phonetic). That's the same as any other layout whose name differs from its language. Otherwise, whenever two enabled layouts share a language, the label adds the layout name alongside it so you can tell them apart. The ◀▶ hint arrows need three things at once: **Arrows on the spacebar** on (the default), one of the two swipe slots set to Language, and more than one layout enabled.

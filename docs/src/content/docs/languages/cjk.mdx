@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Chinese and Japanese aren't typed directly: you type a *reading* (pinyin, bopomofo, a radical code, romaji) and pick the character it means from a candidate bar. Korean is different: Hangul jamo assemble into syllable blocks on their own, so it types and suggests like any other language. This page covers both.
 
@@ -76,7 +77,7 @@ Japanese ships three layouts, all feeding the same composer:
 - **Kana JIS**: each key emits a kana glyph directly, matching the physical JIS Japanese keyboard layout.
 
 <PhoneFrame caption="Japanese Flick: kana glyphs sit on the keys themselves, with directional flicks for the rest of the row.">
-  {/* shot: languages/cjk-japanese-flick */}
+  <Shot id="languages/cjk-japanese-flick" alt="Japanese Flick: kana glyphs sit on the keys themselves, with directional flicks for the rest of the row." />
 </PhoneFrame>
 
 All three read the same kana or romaji into `JapaneseComposer`, which converts kana readings to kanji/word candidates using a Mozc-derived dictionary. If nothing in the dictionary matches (or before you've downloaded the pack at all), the reading still commits as plain hiragana, katakana, or half-width katakana, so every Japanese layout works as a bare kana keyboard with zero setup.

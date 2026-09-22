@@ -13,7 +13,7 @@ import Shot from '@components/Shot.astro';
 The clipboard tool keeps a running history of what you copy: text, images, files and more. A paste from ten minutes ago is still one tap away instead of gone the moment you copy something new. On a phone it's one of only three tools pinned to the toolbar out of the box, alongside Emoji and Settings. A tablet starts wider, because three icons across a twelve-inch bar is mostly empty space. A small tablet pins five (Emoji, GIF, Clipboard, Voice, Settings) and a large one pins seven, those five plus Translate and Text edit. Clipboard is in all three sets.
 
 <PhoneFrame caption="The clipboard panel: staggered two-column cards, entity chips for a fresh code or link, and a search pill.">
-  {/* shot: tools/clipboard-panel */}
+  <Shot id="tools/clipboard-panel" alt="The clipboard panel: staggered two-column cards, entity chips for a fresh code or link, and a search pill." />
 </PhoneFrame>
 
 ## Opening the panel
@@ -86,7 +86,7 @@ Matching is a case-insensitive substring search, and it reaches past a clip's ow
 Turn on entity detection and the panel scans your recent clips for one-time codes, phone numbers and links. Each one becomes a dashed-outline chip above the history grid, so the six digits inside a verification text are one tap away rather than a copy-select-paste. Tapping a chip pastes just that fragment and leaves the full clip in place. Press and hold a chip to see it highlighted inside the message it came from.
 
 <PhoneFrame caption="Entity chips above the history grid: an OTP and a phone number pulled out of a longer message.">
-  {/* shot: tools/clipboard-entity-chips */}
+  <Shot id="tools/clipboard-entity-chips" alt="Entity chips above the history grid: an OTP and a phone number pulled out of a longer message." />
 </PhoneFrame>
 
 Detection is conservative on purpose. A 4-digit year is never mistaken for a code, and a run of digits after a currency symbol or a `#` is never mistaken for a phone number. Google's `G-123456` verification prefix is stripped, so only the code itself pastes. Pulling a fragment out of a longer message is the panel's job alone. The suggestion strip only ever offers a copied code when the clip *is* the bare code, which is the **Suggest copied codes** rule under [Options](#options).

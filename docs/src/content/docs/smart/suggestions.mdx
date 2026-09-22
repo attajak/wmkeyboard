@@ -13,7 +13,7 @@ import Shot from '@components/Shot.astro';
 The suggestion strip is the row of tappable words above the keys. It offers completions while you're mid-word, corrections when what you typed doesn't look like a real word, and next-word predictions once you've finished one. All three come out of the same on-device engine, which also learns your own vocabulary and phrasing the more you type.
 
 <PhoneFrame caption="Word candidates in the suggestion strip, mid-word.">
-  {/* shot: smart/suggestion-strip-anatomy */}
+  <Shot id="smart/suggestion-strip-anatomy" alt="Word candidates in the suggestion strip, mid-word." />
 </PhoneFrame>
 
 This page covers the strip itself: its layout, the completion/correction/prediction engine, and how ranking adapts to you. A few things that also live in the strip have their own pages: [autocorrect](/smart/autocorrect/)'s confidence math, the [personal dictionary](/smart/personal-dictionary/) screen, the [suggestion blacklist](/smart/blacklist/), [smart chips](/smart/chips/) (calculator, currency, unit conversion), [password-manager chips and smart replies](/smart/autofill/), [contact and app-name suggestions](/smart/contacts/), and [emoji suggestions](/emoji/customization/). Each is linked from the relevant section below rather than repeated here. Everything on this page is about the Latin/English-style strip. A conversion IME like pinyin or kana&rarr;kanji draws a different, scrolling candidate row that isn't covered here.
@@ -29,7 +29,7 @@ If you'd rather the strip never shrank anything, turn on **Scroll the suggestion
 Up to four predicted emoji can ride after the word chips (see [Emoji in the strip](#emoji-in-the-strip)), and a row of punctuation marks can ride after that (see [Punctuation chips](#punctuation-chips)), but never both at once. The emoji tail always wins the shared space. Punctuation only appears when no emoji prediction is offered.
 
 <PhoneFrame caption="Word candidates followed by predicted emoji.">
-  {/* shot: smart/suggestion-strip-emoji-tail */}
+  <Shot id="smart/suggestion-strip-emoji-tail" alt="Word candidates followed by predicted emoji." />
 </PhoneFrame>
 
 When one of the keyboard's own text boxes has the keys — a panel's search bar, the AI prompt, Find and replace, a plugin's field — the strip moves to the row directly above the keys, since the panel has taken the toolbar's row. It shows the same words for the box's text that it would for your field, and tapping one replaces the word at the box's caret. The exception is the emoji panel's search box, which is querying the emoji catalogue rather than writing prose: its strip offers [emoji search terms](/emoji/picker/#searching-for-an-emoji) instead of dictionary words. See [Panels and captured keys](/tools/overview/#panels-and-captured-keys).
@@ -46,7 +46,7 @@ One engine produces everything in the word-candidate slots, drawing from several
 - **Openers.** An empty field, and the space just after a full stop, are both the start of a sentence, and the strip predicts from that the same way it predicts from a word: the openers you actually use come first, then a bundled set of common English ones, so there is something to tap before you have typed a letter. The word you pick is learned as an opener too, so the list becomes yours.
 
 <PhoneFrame caption="A genuinely ambiguous typo offered as two tappable candidates instead of being auto-corrected.">
-  {/* shot: smart/suggestion-strip-ambiguous-correction */}
+  <Shot id="smart/suggestion-strip-ambiguous-correction" alt="A genuinely ambiguous typo offered as two tappable candidates instead of being auto-corrected." />
 </PhoneFrame>
 
 Candidates from every source merge into one ranked list, and the sources don't count equally. Each is weighted well above plain dictionary frequency, so a source that's more clearly *you* (or more clearly what you're reaching for) dominates once it has anything to offer:
@@ -90,7 +90,7 @@ The row only appears while word candidates are already showing, and only when no
 Arm <KeyCap>Shift</KeyCap> and every chip in the strip re-cases in real time to match what would actually be typed if you tapped it right then. Shift is a latch rather than a hold, so one tap gives you Title Case, a double tap (caps lock) gives you UPPERCASE, and another tap goes back to lowercase. The chips follow the shift state, so they revert the moment it clears, which includes the letter or suggestion that spends it. The whole row follows, not only the top candidate. One thing is left alone: a contact-email suggestion, meaning anything containing `@`, since an address isn't meant to change case.
 
 <PhoneFrame caption="Suggestion chips re-cased to Title Case while Shift is armed.">
-  {/* shot: smart/suggestion-strip-shift-recase */}
+  <Shot id="smart/suggestion-strip-shift-recase" alt="Suggestion chips re-cased to Title Case while Shift is held." />
 </PhoneFrame>
 
 This is a display rule only. It doesn't reject or change which candidate is offered, and it's unrelated to [reverting an autocorrected word](/smart/autocorrect/#undoing-a-correction) with backspace.
