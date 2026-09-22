@@ -15091,6 +15091,31 @@ open class WMKeyboardService : InputMethodService() {
         return keyOffsets.observe(observations)
     }
 
+    /**
+     * What a kept glide teaches: the hand model, on the spot, and the shape
+     * for [word]'s settle. [drawn] is the part of [word] the stroke really
+     * covered when the word was finished early, and null otherwise (#262).
+     *
+     * An early finish teaches the hand only the letters the finger drew. Laying
+     * the whole word over a stroke that stopped at its fourth letter forces the
+     * rest onto keys the finger never reached, and every one of them near
+     * enough to its key reads as a miss of this hand. It teaches no shape at
+     * all: the store keeps shapes of whole words, which a prefix stroke is not,
+     * and each one filed would take a slot from a shape that is.
+     */
+    private fun learnGlideStroke(
+        points: List<GesturePoint>,
+        keys: List<KeyCenter>,
+        keyWidthPx: Float,
+        word: String,
+        drawn: String?,
+    ): Pair<KeyOffsets.Adjustment?, GlideShapeSample?> =
+        if (drawn != null) {
+            learnHand(points, keys, keyWidthPx, drawn) to null
+        } else {
+            learnHand(points, keys, keyWidthPx, word) to sampleGlideShape(points, keys, keyWidthPx, word)
+        }
+
     /** Takes back what the last kept glide taught the hand model, if anything. */
     private fun unlearnHand() {
         lastHandAdjustment?.let { keyOffsets.retract(it) }
@@ -16422,8 +16447,9 @@ open class WMKeyboardService : InputMethodService() {
             // The stroke's shape rides with the word in the learning buffer
             // and reaches the shape store only when the word settles; the
             // hand model learns on the spot and retracts on undo instead.
+            // A word finished early teaches only what was drawn (#262).
             val (hand, shape) = withContext(Dispatchers.Default) {
-                learnHand(points, keys, keyWidthPx, word) to sampleGlideShape(points, keys, keyWidthPx, word)
+                learnGlideStroke(points, keys, keyWidthPx, word, drawn)
             }
             if (shape != null) learningBuffer.attachGlide(word, shape)
             val stroke = GlideStroke(points, keys, keyWidthPx, shape)
@@ -16842,12 +16868,13 @@ open class WMKeyboardService : InputMethodService() {
                 // Decoded inside the loop, not before it: each word is committed
                 // and learned as it lands, so the next segment is decoded with
                 // the one before it as context.
-                val candidates = withContext(Dispatchers.Default) {
+                val reading = withContext(Dispatchers.Default) {
                     // Only the segment the finger lifted on may finish a word
                     // early: every earlier one ends at the space bar, drawn to
                     // its last letter (#121).
                     glideDecode(segment, keys, keyWidthPx, guessAhead = index == segments.lastIndex)
-                }.words
+                }
+                val candidates = reading.words
                 // The pick belongs to the last segment, and survives an empty
                 // decode of it the way a single glide's pick does.
                 val picked = chosen?.takeIf { index == segments.lastIndex }
@@ -16899,7 +16926,7 @@ open class WMKeyboardService : InputMethodService() {
                     origin = WordOrigin.GLIDE,
                 )
                 val (hand, shape) = withContext(Dispatchers.Default) {
-                    learnHand(segment, keys, keyWidthPx, word) to sampleGlideShape(segment, keys, keyWidthPx, word)
+                    learnGlideStroke(segment, keys, keyWidthPx, word, reading.guesses[leader])
                 }
                 if (shape != null) learningBuffer.attachGlide(word, shape)
                 val stroke = GlideStroke(segment, keys, keyWidthPx, shape)
