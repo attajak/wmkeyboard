@@ -484,6 +484,11 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Stale-caret guard — Verifies the reported selection is still live before setComposingRegion, and only mirrors into the buffer if the editor accepted the region
     - Blocked while a panel owns the screen — No resume behind Grammar/AI/Translate, on-keys handwriting, or an in-flight dictation
     - Caret-scrub window — A spacebar cursor drag suppresses resume mid-drag so the caret's landing spot does not churn
+  - Auto-close brackets `RARE` — Off by default; an opening bracket types its closer behind the caret and leaves the caret between the two
+    - 18 pairs — ( [ { （ ［ ｛ 〈 《 ⟨ ⟦ 「 『 ｢ 【 〔 〖 〘 〚 — brackets only; quotes and < are left alone, an apostrophe and a less-than sign being the commoner reading of those keys
+    - Types over its own closer — Pressing the closer when it is already the next character steps the caret past it instead of doubling it
+    - Backspace takes the pair — One press on an empty pair removes both halves; a pair with text in it deletes a character at a time
+    - Stands down in front of a word — A bracket typed immediately before a letter or digit is being put around it by hand; structured and secure fields are excluded like every other typing rule
   - Selection-aware key behaviour `RARE` — What a key does changes when text is selected
     - Shift re-cases the selection — lower → Title → UPPER → lower, keeping the text selected so presses walk the cycle; mixed case normalises to lower
     - Brackets and quotes wrap — 11 pairs — ( [ { < " ' ` “ ‘ « ｢ — wrap the selection and leave the inner text selected for another pass

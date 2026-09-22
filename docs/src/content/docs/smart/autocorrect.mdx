@@ -182,6 +182,20 @@ The joining marks work the same way, with one extra test. A slash, a backslash, 
 
 `#` and `@` are openers rather than joiners, because they attach to the word after them wherever they sit. `check this #` then a glided "cool" gives `check this #cool`.
 
+## Brackets close themselves
+
+**Close brackets for me** is off by default. Turn it on and an opening bracket types its closing half behind the cursor, with the cursor left between the two, so you carry straight on inside the pair: press `(` and you get `()` with the caret in the middle, ready for what goes in it.
+
+Three presses behave differently once it's on:
+
+- **The opening bracket** types the pair. `(` `[` `{` do it, and so do the CJK and fullwidth brackets: `（` `［` `｛` `〈` `《` `「` `『` `｢` `【` `〔` `〖` `〘` `〚` `⟨` `⟦`.
+- **The closing bracket**, pressed when that very character is already the next one in front of the cursor, steps over it instead of typing a second one. Typing both halves out of habit gives you `()`, not `())`.
+- **Backspace** on an empty pair takes both halves out in one press, so undoing the bracket undoes the closer that came with it. A pair with anything inside it deletes one character at a time, as always.
+
+Two kinds of character are deliberately left out. **Quotes** — `"`, `'`, `` ` ``, `«` — because the apostrophe in "don't" is the same key, and a keyboard that closed it would be wrong far more often than right; select some text and press the quote instead, which [wraps the selection](/tools/text-editing/) in the pair. **`<`** for the same sort of reason: outside code it is a less-than sign, and `5 <` is nobody opening a bracket.
+
+The rule also stands down when the bracket lands in front of a word — `(` typed immediately before `world` is you putting brackets around that word by hand, and a closer dropped into the middle of it would only have to be deleted again. A space, a mark, another bracket or the end of the text all leave room for the pair. Passwords, web addresses, email fields and number pads are untouched, the same hard gate every other rule on this page sits behind.
+
 ## Reducing typos before they happen
 
 Autopilot nudges which key a *borderline* tap resolves to, biasing toward whichever neighboring letter is more likely to continue the word you're typing. Fewer boundary mis-taps happen in the first place, before autocorrect would ever need to fix them. It has its own screen under the Suggestions settings group rather than sitting alongside autocorrect, since it needs suggestions on to have anything to bias toward. Its Strength slider sets how far a favoured letter reaches, and two optional views draw the touch areas it has claimed. See [Suggestions & prediction](/smart/suggestions/) for the rest of how the suggestion engine ranks candidates.
@@ -221,6 +235,7 @@ Autopilot nudges which key a *borderline* tap resolves to, biasing toward whiche
 | Remove a space before punctuation | On | always |
 | Marks that pull the space out | `.,?!;:।،؛؟۔` | Remove a space before punctuation on |
 | Space before French punctuation | On | always |
+| Close brackets for me | Off | always |
 
 The table covers the rows this page is about. The same group also carries **Adapt to app tone** and **Space after a suggestion** (both described on [Suggestions & prediction](/smart/suggestions/)), **Automatic capital letters**, and the two selection rules, wrap-with-a-pair and shift-re-cases-the-selection.
 

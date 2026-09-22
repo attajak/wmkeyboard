@@ -7401,6 +7401,14 @@ open class WMKeyboardService : InputMethodService() {
                 consumeShift()
                 return
             }
+            // A closer typed straight onto the one the auto-close rule put
+            // there steps over it instead of doubling it. Before every spacing
+            // rule below, because nothing is being typed: the caret moves and
+            // the field is left exactly as it stands.
+            if (typeOverCloser(ic, text, state)) {
+                consumeShift()
+                return
+            }
             // The user's own space in front of a mark, under the rule that asks
             // for it: "Hey ." is a slip, and the mark lands on the word. The
             // keyboard's own auto-space was already taken back above.
@@ -7452,6 +7460,10 @@ open class WMKeyboardService : InputMethodService() {
                 )
                 armRevertGuard()
             }
+            // The other half of an opening bracket, behind the caret. Last of
+            // the rules that touch the field, so it closes what actually
+            // landed after the spacing rules above have had their say.
+            autoCloseBracket(ic, text, state)
             // Second look, now that the mark is in the field. The commit above
             // matched over the word alone, and a pattern about the mark itself
             // ("hi ." to "hi.") has nothing to match until the mark has landed.
@@ -7624,6 +7636,72 @@ open class WMKeyboardService : InputMethodService() {
         }
         val openers = state.language.spacedOpeners
         return openers.isNotEmpty() && text.length == 1 && text[0] in openers
+    }
+
+    /**
+     * Types the other half of the opening bracket [text] behind the caret, so
+     * the next character lands inside the pair (issue #319).
+     *
+     * Called after [text] itself has landed. The membership test comes before
+     * the editor read, so every other keystroke — and every keystroke at all
+     * while the setting is off — pays nothing for this. Structured fields are
+     * excluded the way every other typing rule excludes them: a bracket in a
+     * password is a character, not a pair.
+     */
+    private fun autoCloseBracket(ic: InputConnection, text: String, state: KeyboardUiState) {
+        if (!state.settings.textEditing.autoCloseBrackets || !state.allowsTypingIntelligence) return
+        if (text.length != 1 || text[0] !in AUTO_CLOSE_PAIRS) return
+        val closer = autoCloseCloserFor(text[0], ic.getTextAfterCursor(1, 0)) ?: return
+        // A commit with newCursorPosition 0 leaves the caret at the *start* of
+        // what it inserted, which is the whole feature: the closer goes in
+        // front of the caret rather than taking it along.
+        ic.commitText(closer, 0)
+        invalidateExpectedSelection()
+    }
+
+    /**
+     * Whether this backspace is undoing an auto-closed pair, so it should take
+     * both halves rather than strand the closer. [before] is the text already
+     * read from behind the caret.
+     *
+     * The opener is tested before the field is read again, so an ordinary
+     * backspace — and every backspace at all while the setting is off — costs
+     * nothing here. Held repeats run this path many times a second.
+     */
+    private fun deletesAutoClosedPair(
+        ic: InputConnection,
+        before: CharSequence,
+        state: KeyboardUiState,
+    ): Boolean {
+        if (!state.settings.textEditing.autoCloseBrackets || !state.allowsTypingIntelligence) {
+            return false
+        }
+        val opener = before.lastOrNull() ?: return false
+        if (opener !in AUTO_CLOSE_PAIRS) return false
+        return deletesEmptyPair(before, ic.getTextAfterCursor(1, 0))
+    }
+
+    /**
+     * Steps the caret over the closing bracket already in front of it instead
+     * of typing a second one, and says whether it did.
+     *
+     * The habit of typing both halves is what this is for: with auto-close on,
+     * "(" then ")" would otherwise read "())". Nothing is inserted or deleted,
+     * so no spacing, pattern or learning rule has anything to act on — hence
+     * the early return at the call site.
+     */
+    private fun typeOverCloser(ic: InputConnection, text: String, state: KeyboardUiState): Boolean {
+        if (!state.settings.textEditing.autoCloseBrackets || !state.allowsTypingIntelligence) {
+            return false
+        }
+        if (text.length != 1 || text[0] !in AUTO_CLOSE_CLOSERS) return false
+        if (!typesOverCloser(text[0], ic.getTextAfterCursor(1, 0))) return false
+        // The caret's own position, which only the editor knows: expectedSel*
+        // is a mirror that any edit above may have invalidated.
+        val end = ic.getExtractedText(ExtractedTextRequest(), 0)?.selectionEnd ?: return false
+        invalidateExpectedSelection()
+        ic.setSelection(end + 1, end + 1)
+        return true
     }
 
     /**
@@ -8204,6 +8282,22 @@ open class WMKeyboardService : InputMethodService() {
             // Bengali conjunct cluster as one unit. The lookback has to
             // outrun the longest emoji ZWJ/tag sequence, not just a pair.
             val before = ic.getTextBeforeCursor(64, 0)
+            // An empty pair goes out whole (issue #319): the caret between an
+            // opening bracket and its own closer is the state auto-close left
+            // behind, so the backspace that undoes that press has to undo all
+            // of it rather than strand the closer.
+            if (before != null && deletesAutoClosedPair(ic, before, state)) {
+                revision?.expectDelete(1, 1)
+                if (expectedSelStart >= 0) {
+                    noteDeletedForLearning(expectedSelStart - 1, expectedSelStart + 1)
+                }
+                ic.deleteSurroundingText(1, 1)
+                val left = before.subSequence(0, before.length - 1)
+                setContextFrom(left)
+                rebuildRecentWords(left)
+                refreshSuggestions()
+                return
+            }
             // An editor that will not say what is behind the cursor still owes
             // the press a delete, so an unknown answer is one code unit.
             val deleteLength = charDeleteLength(before ?: "").coerceAtLeast(1)

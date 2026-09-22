@@ -289,6 +289,7 @@ private fun SearchStrings.typingCorrectionsRows(): List<SettingsSearchEntry> {
         ),
         row(R.string.typing_space_after_suggestion_title, R.string.typing_space_after_suggestion_subtitle),
         row(R.string.typing_wrap_selection_title, R.string.typing_wrap_selection_subtitle),
+        row(R.string.typing_auto_close_brackets_title, R.string.typing_auto_close_brackets_subtitle),
         row(R.string.typing_shift_recase_title, R.string.typing_shift_recase_subtitle),
     )
 }

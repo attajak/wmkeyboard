@@ -4159,6 +4159,20 @@ data class TextEditingSettings(
      */
     val wrapSelectionWithPair: Boolean = true,
     /**
+     * Typing an opening bracket with nothing selected types its closer too and
+     * leaves the caret between the two, so the next character lands inside the
+     * pair — "(" gives "(|)". Pressing the closer while it is the character in
+     * front of the caret steps over it instead of typing a second one, and one
+     * backspace on an empty pair takes both halves out.
+     *
+     * Off by default, because it changes what a bracket key types. Brackets
+     * only: quotes are left alone, since the apostrophe in "don't" is the same
+     * key and closing it would be wrong far more often than right. `<` is left
+     * alone too — outside code it is a less-than sign, and "5 <" is not a
+     * bracket anybody is opening.
+     */
+    val autoCloseBrackets: Boolean = false,
+    /**
      * Pressing shift with text selected cycles its case (lower → Title → UPPER)
      * instead of arming shift for the next character.
      */
@@ -6622,6 +6636,7 @@ class SettingsRepository(private val context: Context) {
         private val LANGUAGE_PUNCTUATION_SPACING =
             booleanPreferencesKey("language_punctuation_spacing")
         private val WRAP_SELECTION_WITH_PAIR = booleanPreferencesKey("wrap_selection_with_pair")
+        private val AUTO_CLOSE_BRACKETS = booleanPreferencesKey("auto_close_brackets")
         /**
          * Read only: the text-editing pad's grid from before panel layouts. Folded
          * into [customPanelLayouts] while no TEXT_EDIT layout is stored, and
@@ -8614,6 +8629,8 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.textEditing.selectionModeMultiTap,
                 wrapSelectionWithPair =
                     p[WRAP_SELECTION_WITH_PAIR] ?: defaults.textEditing.wrapSelectionWithPair,
+                autoCloseBrackets =
+                    p[AUTO_CLOSE_BRACKETS] ?: defaults.textEditing.autoCloseBrackets,
                 recapitalizeSelectionWithShift = p[RECAPITALIZE_SELECTION_WITH_SHIFT]
                     ?: defaults.textEditing.recapitalizeSelectionWithShift,
                 doubleSpaceWindowMs = p[DOUBLE_SPACE_WINDOW_MS]
@@ -12174,6 +12191,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setWrapSelectionWithPair(value: Boolean) =
         editPrefs { it[WRAP_SELECTION_WITH_PAIR] = value }
+
+    suspend fun setAutoCloseBrackets(value: Boolean) =
+        editPrefs { it[AUTO_CLOSE_BRACKETS] = value }
 
     suspend fun setRecapitalizeSelectionWithShift(value: Boolean) =
         editPrefs { it[RECAPITALIZE_SELECTION_WITH_SHIFT] = value }

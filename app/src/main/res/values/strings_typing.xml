@@ -151,6 +151,10 @@
     <string name="typing_wrap_selection_subtitle">Press ( [ { &lt; \" \' or ` to put the pair around the selected text</string>
     <string name="typing_wrap_selection_info">When you select text and press a bracket, a brace or a quote key, the keyboard puts the pair around the selection. It does not replace the selection. Example: select \"foo\", press ( and you get \"(foo)\". The wrapped text stays selected, so you can wrap it again. Turn this off to make these keys always replace the selection, like any other character.</string>
 
+    <string name="typing_auto_close_brackets_title">Close brackets for me</string>
+    <string name="typing_auto_close_brackets_subtitle">Press ( [ { and the keyboard types the closing half, with the cursor between them</string>
+    <string name="typing_auto_close_brackets_info">This setting is off by default. With it on, pressing an opening bracket types the closing one behind the cursor and leaves the cursor between the two, so you type straight inside the pair: press ( and you get (), ready for what goes in it. Pressing the closing bracket when it is already the next character steps over it instead of typing a second one, and one backspace on an empty pair takes both halves out. The CJK brackets are included, and so are the fullwidth ones. Quotes are not: the apostrophe in \"don\'t\" shares that key, and closing it would be wrong more often than right. Nor is &lt;, which outside code is a less-than sign. Passwords, web addresses and number pads are left alone.</string>
+
     <string name="typing_shift_recase_title">Shift changes the case of the selection</string>
     <string name="typing_shift_recase_subtitle">Shift with text selected steps through lowercase, Title Case and UPPERCASE</string>
     <string name="typing_shift_recase_info">When you select text and press shift, the keyboard changes the case of the selection. It does not arm shift for the next letter. Each press steps through lowercase, Title Case and UPPERCASE. Nothing changes for the scripts without case, such as Bengali. Turn this off to keep shift for the next character only, even while text is selected.</string>

@@ -578,6 +578,15 @@ internal fun TypingCorrectionsSettings(
         }
         item {
             ToggleSetting(
+                R.string.typing_auto_close_brackets_title,
+                stringResource(R.string.typing_auto_close_brackets_subtitle),
+                settings.textEditing.autoCloseBrackets,
+                info = stringResource(R.string.typing_auto_close_brackets_info),
+                default = SettingsDefaults.textEditing.autoCloseBrackets,
+            ) { scope.launch { repository.setAutoCloseBrackets(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.typing_shift_recase_title,
                 stringResource(R.string.typing_shift_recase_subtitle),
                 settings.textEditing.recapitalizeSelectionWithShift,

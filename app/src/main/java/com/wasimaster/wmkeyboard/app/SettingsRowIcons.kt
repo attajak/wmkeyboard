@@ -724,6 +724,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_auto_space_punctuation_title) { Icons.Outlined.SpaceBar }
         put(R.string.typing_space_after_suggestion_title) { Icons.Outlined.SpaceBar }
         put(R.string.typing_wrap_selection_title) { Icons.Outlined.DataArray }
+        put(R.string.typing_auto_close_brackets_title) { Icons.Outlined.DataArray }
         put(R.string.typing_shift_recase_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.typing_suggestions_title) { Icons.Outlined.Lightbulb }
         put(R.string.typing_suggestions_all_fields_title) { Icons.Outlined.Lightbulb }

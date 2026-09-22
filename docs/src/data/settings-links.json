@@ -175,6 +175,7 @@
   {"title":"Space before French punctuation","name":"typing_language_punctuation_spacing_title","route":"typing/corrections","screens":["Typing","Automatic corrections"],"screen":false},
   {"title":"Space after a suggestion","name":"typing_space_after_suggestion_title","route":"typing/corrections","screens":["Typing","Automatic corrections"],"screen":false},
   {"title":"Wrap the selection with brackets","name":"typing_wrap_selection_title","route":"typing/corrections","screens":["Typing","Automatic corrections"],"screen":false},
+  {"title":"Close brackets for me","name":"typing_auto_close_brackets_title","route":"typing/corrections","screens":["Typing","Automatic corrections"],"screen":false},
   {"title":"Shift changes the case of the selection","name":"typing_shift_recase_title","route":"typing/corrections","screens":["Typing","Automatic corrections"],"screen":false},
   {"title":"Suggestions","name":"typing_suggestions_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Number of suggestions","name":"typing_suggestion_slots_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},

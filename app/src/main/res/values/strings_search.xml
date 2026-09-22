@@ -175,6 +175,7 @@
     <string name="search_kw_typing_suggestions">candidates wordbar</string>
     <string name="search_kw_typing_swipe_start_distance">accidental unwanted stray</string>
     <string name="search_kw_typing_undo_autocorrect">revert original</string>
+    <string name="search_kw_typing_auto_close_brackets">autoclose pair parentheses braces parenthesis matching complete closing</string>
     <string name="search_kw_typing_wrap_selection">surround parentheses quotes auto braces</string>
     <string name="search_kw_update_row_check">upgrade latest release</string>
     <string name="search_kw_voice_engine">offline whisper device model server transcription selfhosted hosted speaches remote</string>
