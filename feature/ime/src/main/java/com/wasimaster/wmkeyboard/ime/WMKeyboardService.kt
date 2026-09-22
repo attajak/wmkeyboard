@@ -558,6 +558,8 @@ import java.io.IOException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.Job
@@ -595,6 +597,44 @@ import com.wasimaster.wmkeyboard.voice.R as VoiceR
 open class WMKeyboardService : InputMethodService() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+    /**
+     * The one thread a [SuggestionEngine] pass may run on (issue #313).
+     *
+     * [SuggestionEngine.suggest] is straight-line blocking code with no
+     * suspension point in it, so `suggestionJob.cancel()` cannot stop a pass
+     * that has already started — cancellation is only observed where a
+     * coroutine suspends. On plain [Dispatchers.Default] that meant one stale
+     * pass per keystroke could keep running, up to the pool's parallelism (a
+     * core per pass), and the keyboard's own measurements say a Bengali pass
+     * is the most expensive one there is: the biggest word list of any
+     * language (451k entries at the ALL tier), a phonetic index and sibling
+     * fold on top of the fuzzy walk, and n-gram packs behind that. Eight of
+     * those at once is eight `mmap`ed tries being faulted in at once and eight
+     * candidate sets being allocated at once, which is enough page-cache and
+     * GC pressure to stall every thread in the process — including the main
+     * thread, which is why work that never touched it showed up as keystrokes
+     * arriving seconds late.
+     *
+     * Serialising it fixes three separate things at once:
+     *
+     *  - **Only one pass ever runs.** A pass that is still *queued* when the
+     *    next keystroke cancels it never runs its body at all, because
+     *    `withContext` checks cancellation as it dispatches. So the worst case
+     *    is a single in-flight pass, not one per core.
+     *  - **[SuggestionEngine]'s single-slot `rankedWalk` memo starts working.**
+     *    It exists so the strip and the commit precompute share one walk;
+     *    concurrent passes for different buffers just overwrote each other's
+     *    entry and both re-walked.
+     *  - **One `BeamWorkspace` instead of one per pool thread.** It is a
+     *    `ThreadLocal`, and a thread-local on a pooled thread is retained for
+     *    the life of the process at its high-water mark.
+     *
+     * A view over [Dispatchers.Default], so it costs no thread of its own.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val suggestionDispatcher = Dispatchers.Default.limitedParallelism(1, "wmkb-suggest")
+
     private lateinit var lifecycleOwner: KeyboardViewLifecycleOwner
 
     private val _uiState = MutableStateFlow(KeyboardUiState())
@@ -14442,9 +14482,23 @@ open class WMKeyboardService : InputMethodService() {
         suggestionJob = serviceScope.launch {
             // Short adaptive debounce: fast bursts of keystrokes cancel the
             // job while it still sleeps here, so only the final state is
-            // computed. The window tracks half the average compute cost,
-            // clamped so it never becomes perceptible.
-            delay((suggestionCostMs / 2).coerceIn(16L, 40L))
+            // computed. The window tracks half the average compute cost.
+            //
+            // The ceiling used to be 40 ms, which quietly threw away the whole
+            // point of measuring (#313). A burst only collapses here if the
+            // next keystroke lands inside the window, so on a device where a
+            // pass costs 400 ms — the keyboard knows it does, it is sitting in
+            // [suggestionCostMs] — a 40 ms window let every single keystroke
+            // launch a full pass and the debounce did nothing at all. It is
+            // now allowed to grow with the cost it measures.
+            //
+            // The ceiling is what keeps it honest in the other direction: past
+            // it the strip is visibly late, and a word committed before its
+            // pass finishes falls back to resolving the commit synchronously
+            // on the main thread (see [commitResolution] in commitComposing),
+            // which is the cost this is trying to avoid. Devices that are fast
+            // enough for cost/2 to stay under the old 40 ms are unaffected.
+            delay((suggestionCostMs / 2).coerceIn(16L, MAX_SUGGESTION_DEBOUNCE_MS))
             val started = SystemClock.uptimeMillis()
             val touchFrame = composingTouchFrame()
             // Snapshot with the taps, for the same reason: the key sets belong
@@ -14473,7 +14527,7 @@ open class WMKeyboardService : InputMethodService() {
             } else {
                 SUGGEST_LIMIT
             }
-            val (results, emojis, bias, floating) = withContext(Dispatchers.Default) {
+            val (results, emojis, bias, floating) = withContext(suggestionDispatcher) {
                 val deep = engine.suggest(
                     composing = typed,
                     previousWord = previousWord,
@@ -14487,6 +14541,16 @@ open class WMKeyboardService : InputMethodService() {
                     previousWord3 = previousWord3,
                     phoneticSlots = state.settings.suggestionStrip.slotCount,
                 )
+                // The walk itself cannot be interrupted — the engine has no
+                // suspension point in it — but everything after it can be, and
+                // on a phonetic or autocorrecting board what follows is not
+                // cheap: [commitResolution] below runs a second engine pass
+                // (phoneticCommit, or decideCorrection), and the emoji and
+                // octopus blocks after it walk again. A pass the user has
+                // already typed past should pay for the walk it could not stop
+                // and nothing more, so the seams between those phases are where
+                // it is asked (#313).
+                ensureActive()
                 val suggested = deep.take(SUGGEST_LIMIT)
                 // A28: a personal-dictionary shortcut typed in full offers its
                 // expansion as the top chip (e.g. "omw" → "on my way"). Prepended
@@ -14533,6 +14597,7 @@ open class WMKeyboardService : InputMethodService() {
                 // resolve to, so the commit need not run the edit-distance
                 // search (English) or transliteration ranking (Bengali) on the
                 // main thread. commitComposing consumes it only on a typed match.
+                ensureActive()
                 commitResolution = when {
                     typed.isEmpty() -> null
                     state.composer.phoneticLanguage != null -> CommitResolution(
@@ -14575,6 +14640,7 @@ open class WMKeyboardService : InputMethodService() {
                     }
                     else -> null
                 }
+                ensureActive()
                 if (typed.isNotEmpty()) {
                     val emojis = if (state.settings.emojiPrediction) {
                         // The word before is passed for the two-word shortcodes
@@ -14732,7 +14798,7 @@ open class WMKeyboardService : InputMethodService() {
         val recentSnapshot = recentWords.toList()
         val skipWord = _uiState.value.settings.suggestionStrip.skipTypedWord
         suggestionJob = serviceScope.launch {
-            val others = withContext(Dispatchers.Default) {
+            val others = withContext(suggestionDispatcher) {
                 engine.suggest(
                     composing = word,
                     previousWord = previousWord,
@@ -21326,7 +21392,10 @@ open class WMKeyboardService : InputMethodService() {
             .coerceAtLeast(TYPING_TEST_SUGGESTION_SLOTS)
         typingSuggestJob = serviceScope.launch {
             delay(TYPING_TEST_SUGGEST_DEBOUNCE_MS)
-            val words = withContext(Dispatchers.Default) {
+            // The typing test's row is the field path's pile-up in miniature —
+            // a pass per keystroke, cancelled but unstoppable — so it shares
+            // the one thread the field path runs on (#313).
+            val words = withContext(suggestionDispatcher) {
                 engine.suggest(
                     composing = typed,
                     previousWord = previous,
@@ -30095,6 +30164,19 @@ open class WMKeyboardService : InputMethodService() {
             VoiceBarSettings.TYPING_INTERACTIVE,
             VoiceBarSettings.TYPING_PLAIN,
         )
+
+        /**
+         * How long the suggestion strip may wait for a keystroke burst to
+         * settle before it starts a pass, at most.
+         *
+         * The window itself is half the measured pass cost, so this only binds
+         * on a device slow enough for a pass to cost more than twice it — the
+         * devices the ceiling exists for. Raising it further would start
+         * pushing word commits onto the synchronous main-thread resolution
+         * path; lowering it back towards a pass cost stops bursts collapsing
+         * at all, which is what made #313 possible.
+         */
+        private const val MAX_SUGGESTION_DEBOUNCE_MS = 120L
 
         /** Inline emoji search is a local index lookup — no network wait. */
         private const val EMOJI_SEARCH_DEBOUNCE_MS = 24L

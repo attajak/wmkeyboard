@@ -35,6 +35,18 @@ One setting can also hide suggestions everywhere at once, which is worth ruling 
 
 Password fields and structured keypads (number, phone, and similar) never show suggestions, regardless of this setting.
 
+## Typing feels slow, or keystrokes arrive late
+
+Every letter you type kicks off one suggestion pass: a fuzzy walk over your dictionaries, the next-word context, emoji prediction, and a precomputed answer for what the space bar would commit. The keyboard measures how long that takes on your device and runs at most one pass at a time, so a fast burst of typing no longer leaves half a dozen of them running at once. It also waits a little longer for a burst to settle on a device where a pass is expensive, which is why the strip can fill in a beat after you stop on an older phone while staying instant on a newer one.
+
+If letters themselves are landing late rather than the strip just being slow to fill, the pass is costing more than your device can spare. Three things make it expensive, in roughly this order:
+
+- **A big dictionary.** The tier you picked is the main lever. Bangla's full list is over 450,000 words, and **Everything** keeps all of them. Dropping to Medium or Small is one press on a downloaded row, with no delete and re-download involved. See [Changing the size of a list you already have](/languages/dictionaries/#changing-the-size-of-a-list-you-already-have).
+- **Extras layered on top of the strip.** [Words on the keys](/typing/words-on-the-keys/) asks for a much deeper candidate list than the strip itself shows, and emoji prediction, [glide typing](/typing/glide-typing/) and an installed n-gram pack each add work per keystroke. Turning off the ones you don't use is cheaper than turning off suggestions entirely.
+- **Everything else the app is holding.** [Power saving mode](/typing/power-saving/) trims background work in one switch. The **Lite** edition leaves out the heavier optional subsystems altogether, which is worth trying on a phone that struggles with the Full build.
+
+To confirm it really is the suggestion pass before you start changing things, turn **Suggestions** off under <SettingsPath path="Typing / Suggestions" /> and type a line. If the lag goes away, it's the pass, and one of the levers above will help. If it doesn't, it's something else and worth [filing](#filing-a-useful-bug-report) with a diagnostics report attached.
+
 ## A permission prompt stopped appearing
 
 Camera, microphone, and calendar access all work the same way, because an IME service can't show Android's runtime-permission dialog itself. Tap **Allow** in a tool's panel and a small, invisible activity opens just long enough to show the system prompt. It closes itself the instant you answer. The keyboard then rechecks the grant the next time it's in the foreground, so you never need to reopen the panel. Each tool documents the pattern on its own page: [Camera](/tools/camera/), [Voice typing](/tools/voice/), and [Calendar](/tools/calendar/).
