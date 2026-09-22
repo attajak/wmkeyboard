@@ -15822,8 +15822,13 @@ open class WMKeyboardService : InputMethodService() {
      * takes `'s` the way a popup pick would, so the suggestion machinery sees
      * exactly the word it would have seen typed.
      *
-     * English only, like [Apostrophes]: every other language forms its
-     * possessive elsewhere.
+     * English words only, like [Apostrophes]: every other language forms its
+     * possessive elsewhere. That is English as the layout's language, or
+     * English among its secondaries and a word spelled in plain Latin letters
+     * — the English word typed on a Banglish layout, never the Bengali one
+     * beside it ([contractionLanguageAllows], #243). On a phonetic layout the
+     * buffer being typed is a reading, not the word, so it is judged by what
+     * a space would commit and committed first when that is English.
      *
      * [letter] is the key the swipe lifted on, and picks the suffix out of
      * [CONTRACTION_SUFFIXES] (issue #243): `s` for the possessive, `t` for
@@ -15835,10 +15840,19 @@ open class WMKeyboardService : InputMethodService() {
         val state = _uiState.value
         val key = state.settings.gesture.possessiveKey
         if (key == GlideApostropheKey.OFF || key == GlideApostropheKey.SPACE) return false
-        if (!state.language.isEnglish) return false
+        if (!state.language.isEnglish && !englishIsSecondary(state)) return false
         val suffix = CONTRACTION_SUFFIXES[letter] ?: return false
-        if (composing.isNotEmpty()) {
-            if (!takesContraction(composing, letter)) return false
+        if (composing.isNotEmpty() && state.composer.isTransliterating) {
+            // Avro's buffer is roman letters whichever script it becomes, so
+            // the preview (which is what a space would commit) is what is
+            // judged. An English one is committed, and extended below like any
+            // word behind the caret.
+            val shown = composedPreview(state, composing.toString())
+            if (!takesContraction(shown, letter) || !contractionLanguageAllows(shown, state)) return false
+            if (state.captureTarget() != null) return false
+            commitComposing(currentInputConnection ?: return false, autocorrect = false)
+        } else if (composing.isNotEmpty()) {
+            if (!takesContraction(composing, letter) || !contractionLanguageAllows(composing, state)) return false
             onText(contractionCased(composing, suffix))
             return true
         }
@@ -15852,7 +15866,7 @@ open class WMKeyboardService : InputMethodService() {
         val spaces = before.takeLastWhile { it == ' ' }.length
         val stem = before.dropLast(spaces)
         val word = stem.takeLastWhile(::isComposingWordChar)
-        if (!takesContraction(word, letter)) return false
+        if (!takesContraction(word, letter) || !contractionLanguageAllows(word, state)) return false
         val gestureWord = lastGestureWord?.takeIf { stem.endsWith(it) }
         val cased = contractionCased(word, suffix)
 
@@ -15897,6 +15911,20 @@ open class WMKeyboardService : InputMethodService() {
             (letter != 't' || word.last().lowercaseChar() == 'n')
 
     /** [suffix] in capitals after a word typed in capitals: "WHAT'S", not "WHAT's". */
+    /** English is one of the layout language's secondaries. */
+    private fun englishIsSecondary(state: KeyboardUiState): Boolean =
+        "en" in state.settings.secondaryLanguages[state.language.id].orEmpty()
+
+    /**
+     * Whether [word] is English enough to take an English contraction: any
+     * word on an English layout; on another layout with English among its
+     * secondaries, a word spelled in plain Latin letters only. Banglish types
+     * "What" and "কেমন" on one layout, and only the first is asking for 's.
+     */
+    private fun contractionLanguageAllows(word: CharSequence, state: KeyboardUiState): Boolean =
+        state.language.isEnglish ||
+            englishIsSecondary(state) && word.all { it in 'a'..'z' || it in 'A'..'Z' }
+
     private fun contractionCased(word: CharSequence, suffix: String): String =
         if (word.length > 1 && word.all { !it.isLetter() || it.isUpperCase() }) suffix.uppercase() else suffix
 

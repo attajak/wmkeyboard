@@ -16,11 +16,15 @@ import com.wasimaster.wmkeyboard.core.prediction.SpellingMap
 import com.wasimaster.wmkeyboard.core.prediction.SuggestionEngine
 import com.wasimaster.wmkeyboard.core.prediction.Trie
 import com.wasimaster.wmkeyboard.core.prediction.UserLexicon
+import com.wasimaster.wmkeyboard.core.settings.GestureSettings
+import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
 import com.wasimaster.wmkeyboard.core.settings.HapticSettings
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.SuggestionStripSettings
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -85,6 +89,7 @@ class PhoneticEnglishServiceTest {
                 settings = KeyboardSettings(
                     learnFromTyping = false,
                     haptics = HapticSettings(enabled = false),
+                    gesture = GestureSettings(possessiveKey = GlideApostropheKey.COMMA),
                     secondaryLanguages = mapOf("bn" to listOf("en")),
                     suggestionStrip = SuggestionStripSettings(
                         phoneticEnglishLangs = if (autoEnglish) setOf("bn") else emptySet(),
@@ -206,5 +211,45 @@ class PhoneticEnglishServiceTest {
         backspace(service)
 
         assertEquals("কেমন", editor.text.toString())
+    }
+
+    /** Issue #243: an English word typed on Banglish takes the swipe's 's. */
+    @Test
+    fun `the possessive swipe extends an english word`() {
+        val editor = RecordingEditor()
+        val service = keyboardOn(editor)
+
+        type(service, "hello")
+        space(service)
+        assertTrue(service.onPossessiveFlick('s'))
+
+        assertEquals("hello's ", editor.text.toString())
+    }
+
+    /** Mid-word: the buffer is committed as the English the preview showed, then extended. */
+    @Test
+    fun `the possessive swipe extends an english word still being typed`() {
+        val editor = RecordingEditor()
+        val service = keyboardOn(editor)
+
+        type(service, "hello")
+        assertTrue(service.onPossessiveFlick('s'))
+
+        assertEquals("hello's", editor.text.toString())
+    }
+
+    /** A Bengali word, committed or still a reading, is not an English one to extend. */
+    @Test
+    fun `the possessive swipe leaves a bengali word alone`() {
+        val editor = RecordingEditor()
+        val service = keyboardOn(editor)
+
+        type(service, "kemon")
+        assertFalse(service.onPossessiveFlick('s'))
+        assertEquals("কেমন", service.uiState.value.composingPreview)
+        space(service)
+        assertFalse(service.onPossessiveFlick('s'))
+
+        assertEquals("কেমন ", editor.text.toString())
     }
 }
