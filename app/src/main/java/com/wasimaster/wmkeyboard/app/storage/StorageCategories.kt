@@ -3,8 +3,10 @@ package com.wasimaster.wmkeyboard.app.storage
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.NetworkCheck
 import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material.icons.outlined.AutoStories
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.vocab.VocabDownloadManager
 import com.wasimaster.wmkeyboard.core.vocab.VocabPacks
 import androidx.compose.material.icons.automirrored.outlined.Article
@@ -694,6 +696,20 @@ internal object StorageCategories {
                 // emptied file instead of writing the old numbers back.
                 env.repository.bumpStatsVersion()
             },
+        ),
+        StorageCategory(
+            id = "netlog",
+            title = R.string.storage_netlog_title,
+            subtitle = R.string.storage_netlog_subtitle,
+            icon = Icons.Outlined.NetworkCheck,
+            accent = Color(0xFFEF5350),
+            group = StorageGroup.PERSONAL,
+            danger = Danger.PERSONAL,
+            manageRoute = "network_activity",
+            pathsOf = { listOf(File(it.files, NetLog.DIR)) },
+            // Through the log, not a raw delete: it holds the rows in memory
+            // and would write them straight back.
+            clearOf = { NetLog.clear() },
         ),
         StorageCategory(
             id = "clipboard",

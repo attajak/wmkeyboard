@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -59,6 +61,8 @@ object CommonsClient {
                 offset = offset,
                 thumbWidth = GRID_THUMB_WIDTH,
             ),
+            source = NetSource.PHOTOS,
+            route = NetLog.pathOf(apiUrl(endpoint)),
         )
     }
 
@@ -94,7 +98,7 @@ object CommonsClient {
             offset = 0,
             thumbWidth = GIF_THUMB_WIDTH,
         )
-        return parseGifs(ToolHttp.get(url))
+        return parseGifs(ToolHttp.get(url, source = NetSource.GIF, route = NetLog.pathOf(apiUrl(endpoint))))
     }
 
     /**

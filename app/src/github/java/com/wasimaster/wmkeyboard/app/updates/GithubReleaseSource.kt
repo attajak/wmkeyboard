@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.app.updates
 
 import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import com.wasimaster.wmkeyboard.core.tools.ToolHttpException
 import java.io.File
@@ -22,6 +24,8 @@ internal class GithubReleaseSource(
                 url = GithubReleases.LIST_URL,
                 headers = headers,
                 wantHeaders = WANTED_HEADERS,
+                source = NetSource.UPDATES,
+                route = NetLog.pathOf(GithubReleases.LIST_URL),
             ).let { it.body to it.headers }
         },
     private val now: () -> Long = System::currentTimeMillis,
@@ -134,11 +138,15 @@ internal fun fetchReleaseNotes(candidate: UpdateCandidate): String? =
     fetchNotesFrom(candidate.releaseNotesUrl) ?: fetchNotesFrom(candidate.changelogUrl)
 
 private fun fetchNotesFrom(url: String): String? = runCatching {
-    ToolHttp.get(url).trim().take(GithubReleases.MAX_NOTES_CHARS)
+    ToolHttp.get(url, source = NetSource.UPDATES, route = NetLog.pathOf(url), background = false)
+        .trim().take(GithubReleases.MAX_NOTES_CHARS)
 }.getOrNull()?.takeIf { it.isNotBlank() }
 
 /** The checksums file a release attaches, for a release whose asset has no digest. */
 internal fun fetchChecksum(candidate: UpdateCandidate): String? = runCatching {
     val url = candidate.url.substringBeforeLast('/') + "/" + GithubReleases.CHECKSUMS_ASSET
-    ReleaseAssets.sha256From(ToolHttp.get(url), candidate.assetName)
+    ReleaseAssets.sha256From(
+        ToolHttp.get(url, source = NetSource.UPDATES, route = NetLog.pathOf(url), background = false),
+        candidate.assetName,
+    )
 }.getOrNull()

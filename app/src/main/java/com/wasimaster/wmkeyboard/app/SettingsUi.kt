@@ -304,6 +304,7 @@ internal val SettingsRouteColors: Map<String, Color> = mapOf(
     "privacy" to Color(0xFFEF5350),
     // Children of Privacy, so they keep the parent's red.
     "permissions" to Color(0xFFEF5350),
+    "network_activity" to Color(0xFFEF5350),
     "applock" to Color(0xFFEF5350),
     "datasaver" to Color(0xFF00897B),
     // A child of Advanced, so it keeps the parent's brown.

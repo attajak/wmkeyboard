@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.core.tools
 
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.settings.GifContentFilter
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -36,7 +37,9 @@ object GiphyClient {
             if (query.isNotBlank()) append("&q=${ToolHttp.encode(query.trim())}")
             append("&limit=$limit&rating=${rating(filter)}")
         }
-        return parse(ToolHttp.get(url))
+        return parse(
+            ToolHttp.get(url, source = if (stickers) NetSource.STICKER else NetSource.GIF, route = "/v1/$type/$endpoint"),
+        )
     }
 
     /**
@@ -55,7 +58,9 @@ object GiphyClient {
             append("?api_key=${ToolHttp.encode(apiKey)}")
             if (!stickers) append("&limit=$limit")
         }
-        return parseCategories(ToolHttp.get(url))
+        return parseCategories(
+            ToolHttp.get(url, source = if (stickers) NetSource.STICKER else NetSource.GIF, route = "/v1/$path"),
+        )
     }
 
     /**

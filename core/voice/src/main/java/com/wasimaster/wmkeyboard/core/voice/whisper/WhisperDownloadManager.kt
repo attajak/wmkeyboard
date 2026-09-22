@@ -3,6 +3,8 @@ package com.wasimaster.wmkeyboard.core.voice.whisper
 import android.os.StatFs
 import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.voice.R
 import java.io.File
 import java.io.IOException
@@ -208,6 +210,7 @@ object WhisperDownloadManager {
     private suspend fun downloadPart(modelId: String, p: Part, baseBytes: Long, grandTotal: Long) {
         var resumeFrom = p.partFile.length()
         val connection = URL(p.url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.DOWNLOAD_WHISPER, "GET", p.url, route = NetLog.pathOf(p.url))
         try {
             connection.connectTimeout = 15_000
             connection.readTimeout = 30_000
@@ -215,6 +218,7 @@ object WhisperDownloadManager {
             connection.setRequestProperty("User-Agent", USER_AGENT)
             if (resumeFrom > 0) connection.setRequestProperty("Range", "bytes=$resumeFrom-")
 
+            netCall.status = connection.responseCode
             when (val status = connection.responseCode) {
                 HttpURLConnection.HTTP_PARTIAL -> Unit
                 HttpURLConnection.HTTP_OK -> resumeFrom = 0
@@ -230,7 +234,7 @@ object WhisperDownloadManager {
             var written = resumeFrom
             var lastUpdate = 0L
 
-            connection.inputStream.use { input ->
+            netCall.countIn(connection.inputStream).use { input ->
                 RandomAccessFile(p.partFile, "rw").use { out ->
                     out.setLength(resumeFrom)
                     out.seek(resumeFrom)
@@ -261,8 +265,12 @@ object WhisperDownloadManager {
             check(p.partFile.renameTo(p.finalFile)) {
                 "could not move the finished download into place"
             }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 }

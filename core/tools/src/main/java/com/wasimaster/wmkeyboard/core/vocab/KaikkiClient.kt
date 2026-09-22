@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.core.vocab
 
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -57,15 +59,17 @@ object KaikkiClient : VocabAutofill.Source {
     /** Blocking; call on an IO dispatcher. Null when kaikki has no page for the word; throws when it could not be asked. */
     override fun lookup(lemma: String, translationCodes: List<String>): VocabWord? {
         val connection = URL(url(lemma)).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.VOCABULARY, "GET", url(lemma), route = "/dictionary")
         try {
             connection.connectTimeout = 8_000
             connection.readTimeout = 12_000
             connection.instanceFollowRedirects = true
             connection.setRequestProperty("User-Agent", USER_AGENT)
+            netCall.status = connection.responseCode
             val status = connection.responseCode
             if (status == HttpURLConnection.HTTP_NOT_FOUND) return null
             if (status != HttpURLConnection.HTTP_OK) throw IOException("kaikki HTTP $status")
-            val body = connection.inputStream.bufferedReader().use { reader ->
+            val body = netCall.countIn(connection.inputStream).bufferedReader().use { reader ->
                 val text = StringBuilder()
                 val buffer = CharArray(16 * 1024)
                 while (true) {
@@ -77,8 +81,12 @@ object KaikkiClient : VocabAutofill.Source {
                 text.toString()
             }
             return parse(body, lemma, translationCodes)
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 

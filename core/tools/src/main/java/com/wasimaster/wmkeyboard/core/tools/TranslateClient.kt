@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.core.tools
 
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -152,7 +153,8 @@ object TranslateClient {
         val url = ServiceEndpoints.base(ServiceEndpoint.TRANSLATE_GOOGLE) + "/translate_a/single" +
             "?client=gtx&sl=${ToolHttp.encode(sourceLang)}&tl=${ToolHttp.encode(targetLang)}" +
             "&dt=t&ie=UTF-8&oe=UTF-8&q=${ToolHttp.encode(text)}"
-        return parseFree(ToolHttp.get(url)).withSourceIfUnknown(sourceLang)
+        return parseFree(ToolHttp.get(url, source = NetSource.TRANSLATE, route = "/translate_a/single"))
+            .withSourceIfUnknown(sourceLang)
     }
 
     private fun translateOfficial(
@@ -172,6 +174,8 @@ object TranslateClient {
         val body = ToolHttp.postForm(
             ServiceEndpoints.base(ServiceEndpoint.TRANSLATE_CLOUD) + "/language/translate/v2?key=${ToolHttp.encode(apiKey)}",
             form,
+            source = NetSource.TRANSLATE,
+            route = "/language/translate/v2",
         )
         return parseOfficial(body).withSourceIfUnknown(sourceLang)
     }

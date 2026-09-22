@@ -211,6 +211,7 @@ object KdeConnectHub {
             mdns = AndroidMdns(context),
             fileSink = KdeReceivedFiles(context),
             fetchArt = ::fetchAlbumArt,
+            traffic = KdeNetMeter,
         )
         engine = made
         collectors = listOf(

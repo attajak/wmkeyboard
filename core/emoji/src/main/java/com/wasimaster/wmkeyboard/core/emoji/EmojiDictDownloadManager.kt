@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.core.emoji
 
 import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.emoji.R
 import java.io.File
 import java.io.IOException
@@ -311,6 +313,7 @@ object EmojiDictDownloadManager {
 
     private suspend fun fetch(entry: EmojiDictEntry): EmojiKeywordPack {
         val connection = URL(entry.url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.DOWNLOAD_EMOJI, "GET", entry.url, route = NetLog.pathOf(entry.url))
         try {
             connection.connectTimeout = 15_000
             connection.readTimeout = 30_000
@@ -320,6 +323,7 @@ object EmojiDictDownloadManager {
             // transport-level re-encode would be inflated out from under the
             // GZIPInputStream below.
             connection.setRequestProperty("Accept-Encoding", "identity")
+            netCall.status = connection.responseCode
             val status = connection.responseCode
             if (status != HttpURLConnection.HTTP_OK) {
                 throw FailedException(
@@ -329,7 +333,7 @@ object EmojiDictDownloadManager {
                 )
             }
             val total = connection.contentLengthLong.takeIf { it > 0 } ?: entry.approxGzBytes
-            val counting = CountingInputStream(connection.inputStream)
+            val counting = CountingInputStream(netCall.countIn(connection.inputStream))
             val text = StringBuilder()
             val buffer = CharArray(16 * 1024)
             var lastUpdate = 0L
@@ -357,8 +361,12 @@ object EmojiDictDownloadManager {
                     FailReason.MALFORMED,
                     R.string.core_emoji_dict_error_not_a_list,
                 )
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 }

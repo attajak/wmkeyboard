@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:tools="http://schemas.android.com/tools">
+    <!-- Settings › Privacy › Network activity: every request the keyboard makes. -->
+    <string name="netlog_title">Network activity</string>
+    <string name="netlog_subtitle">Every request the keyboard makes, and where it went</string>
+
+    <!-- The live line under the title. %1$s is a relative time, for example "4 minutes ago". -->
+    <string name="netlog_live_idle">Idle. Last request <xliff:g id="when" example="4 minutes ago">%1$s</xliff:g></string>
+    <string name="netlog_live_never">Idle</string>
+    <!-- %1$s is a feature name such as "Translate", %2$s a server name. -->
+    <string name="netlog_live_busy"><xliff:g id="feature" example="Translate">%1$s</xliff:g> is contacting <xliff:g id="host" example="translate.googleapis.com">%2$s</xliff:g></string>
+    <!-- %1$d is how many requests are under way at the same time. -->
+    <plurals name="netlog_live_busy_many">
+        <item quantity="one">%1$d request is under way</item>
+        <item quantity="other">%1$d requests are under way</item>
+    </plurals>
+
+    <string name="netlog_period_label">Period</string>
+    <string name="netlog_period_today">Today</string>
+    <string name="netlog_period_week">7 days</string>
+    <string name="netlog_period_month">30 days</string>
+
+    <!-- %1$s is the number of requests, already formatted for the language. -->
+    <plurals name="netlog_requests_count">
+        <item quantity="one"><xliff:g id="count" example="1">%1$s</xliff:g> request</item>
+        <item quantity="other"><xliff:g id="count" example="142">%1$s</xliff:g> requests</item>
+    </plurals>
+    <!-- %1$s is the number of failed requests, already formatted. -->
+    <plurals name="netlog_failed_count">
+        <item quantity="one"><xliff:g id="count" example="1">%1$s</xliff:g> failed</item>
+        <item quantity="other"><xliff:g id="count" example="2">%1$s</xliff:g> failed</item>
+    </plurals>
+    <string name="netlog_received_desc">Received</string>
+    <string name="netlog_sent_desc">Sent</string>
+    <string name="netlog_typing_offline">Typing, prediction and glide typing make no requests. They have no network code.</string>
+    <!-- Read out for the chart. %1$s names the period, %2$s the number of requests, %3$s the data size. -->
+    <string name="netlog_chart_desc">Requests for <xliff:g id="period" example="today">%1$s</xliff:g>: <xliff:g id="requests" example="142 requests">%2$s</xliff:g>, <xliff:g id="size" example="3.4 MB">%3$s</xliff:g></string>
+    <!-- The label shown while a finger is on one bar. %1$s is a time or date range, %2$s a request count, %3$s a size. -->
+    <string name="netlog_chart_bucket"><xliff:g id="range" example="14:00 to 15:00">%1$s</xliff:g>: <xliff:g id="requests" example="31 requests">%2$s</xliff:g>, <xliff:g id="size" example="1.6 MB">%3$s</xliff:g></string>
+    <!-- %1$s and %2$s are two times of day. -->
+    <string name="netlog_chart_hour_range"><xliff:g id="start" example="14:00">%1$s</xliff:g> to <xliff:g id="end" example="15:00">%2$s</xliff:g></string>
+    <string name="netlog_chart_now">Now</string>
+
+    <string name="netlog_by_feature_section">By feature</string>
+    <string name="netlog_servers_section">Servers contacted</string>
+    <!-- %1$d is how many servers the list has. -->
+    <plurals name="netlog_servers_more">
+        <item quantity="one">Show %1$d more server</item>
+        <item quantity="other">Show %1$d more servers</item>
+    </plurals>
+    <!-- %1$d is how many more features the list has. -->
+    <plurals name="netlog_features_more">
+        <item quantity="one">Show %1$d more feature</item>
+        <item quantity="other">Show %1$d more features</item>
+    </plurals>
+    <string name="netlog_servers_less">Show fewer</string>
+    <!-- %1$s is a feature name, %2$s a request count text such as "96 requests". -->
+    <string name="netlog_server_subtitle"><xliff:g id="feature" example="GIFs">%1$s</xliff:g>, <xliff:g id="requests" example="96 requests">%2$s</xliff:g></string>
+    <string name="netlog_badge_auto">Automatic</string>
+    <string name="netlog_badge_new">New</string>
+    <string name="netlog_badge_own">Your server</string>
+    <string name="netlog_badge_lan">Local network</string>
+    <string name="netlog_badge_incognito">Incognito</string>
+
+    <string name="netlog_timeline_section">Requests</string>
+    <string name="netlog_filter_all">All</string>
+    <string name="netlog_filter_background">Automatic</string>
+    <string name="netlog_filter_failed">Failed</string>
+    <string name="netlog_filter_incognito">Incognito</string>
+    <!-- A filter chip that shows only one feature or one server. %1$s is its name. -->
+    <string name="netlog_filter_only">Only <xliff:g id="name" example="GIFs">%1$s</xliff:g></string>
+    <string name="netlog_filter_remove_desc">Show everything again</string>
+    <string name="netlog_filter_empty">No requests match these filters</string>
+    <string name="netlog_day_today">Today</string>
+    <string name="netlog_day_yesterday">Yesterday</string>
+    <!-- How many identical requests one row stands for. "×" is a symbol, not a word. -->
+    <string name="netlog_row_times" tools:ignore="PluralsCandidate">×<xliff:g id="count" example="12">%1$s</xliff:g></string>
+    <string name="netlog_show_more">Show more</string>
+    <!-- Read out for one row. %1$s is the action, %2$s the request count text, %3$s the server, %4$s the size, %5$s the time. -->
+    <string name="netlog_row_desc"><xliff:g id="action" example="GIF search">%1$s</xliff:g>, <xliff:g id="requests" example="12 requests">%2$s</xliff:g> to <xliff:g id="host" example="api.klipy.com">%3$s</xliff:g>, <xliff:g id="size" example="1.4 MB">%4$s</xliff:g>, <xliff:g id="time" example="14:21">%5$s</xliff:g></string>
+
+    <!-- Why a request failed, in a few words. -->
+    <string name="netlog_error_timeout">Timed out</string>
+    <string name="netlog_error_offline">No connection</string>
+    <string name="netlog_error_refused">Refused</string>
+    <string name="netlog_error_tls">Secure connection failed</string>
+    <string name="netlog_error_cancelled">Stopped</string>
+    <string name="netlog_error_failed">Failed</string>
+    <!-- %1$d is an HTTP status code such as 404. -->
+    <string name="netlog_status_code" tools:ignore="PluralsCandidate"><xliff:g id="code" example="404">%1$d</xliff:g></string>
+
+    <!-- The sheet that opens when a request row is pressed. -->
+    <string name="netlog_sheet_server">Server</string>
+    <string name="netlog_sheet_request">Request</string>
+    <string name="netlog_sheet_result">Result</string>
+    <string name="netlog_sheet_data">Data</string>
+    <string name="netlog_sheet_took">Time taken</string>
+    <string name="netlog_sheet_when">When</string>
+    <string name="netlog_sheet_count">Requests</string>
+    <!-- %1$s is the data received, %2$s the data sent. -->
+    <string name="netlog_sheet_data_value"><xliff:g id="down" example="1.4 MB">%1$s</xliff:g> received, <xliff:g id="up" example="5 KB">%2$s</xliff:g> sent</string>
+    <!-- %1$d is a duration in milliseconds. "ms" is a unit symbol. -->
+    <string name="netlog_sheet_took_value" tools:ignore="PluralsCandidate"><xliff:g id="ms" example="310">%1$d</xliff:g> ms</string>
+    <!-- %1$d is a duration in milliseconds. -->
+    <string name="netlog_sheet_took_mean" tools:ignore="PluralsCandidate"><xliff:g id="ms" example="310">%1$d</xliff:g> ms on average</string>
+    <!-- %1$s and %2$s are the times of the first and the last request of a burst. -->
+    <string name="netlog_sheet_when_range"><xliff:g id="first" example="14:02">%1$s</xliff:g> to <xliff:g id="last" example="14:21">%2$s</xliff:g></string>
+    <!-- %1$d is an HTTP status code. -->
+    <string name="netlog_result_ok" tools:ignore="PluralsCandidate">Completed (<xliff:g id="code" example="200">%1$d</xliff:g>)</string>
+    <!-- %1$d is an HTTP status code. -->
+    <string name="netlog_result_status" tools:ignore="PluralsCandidate">The server answered <xliff:g id="code" example="404">%1$d</xliff:g></string>
+    <string name="netlog_sheet_sent_title">What was sent</string>
+    <string name="netlog_sheet_why_user">You started this request</string>
+    <string name="netlog_sheet_why_auto">Automatic. Nobody pressed anything for this request.</string>
+    <string name="netlog_sheet_why_incognito">This request was made while incognito was on.</string>
+    <!-- %1$s is a feature name. -->
+    <string name="netlog_sheet_open_settings"><xliff:g id="feature" example="GIFs">%1$s</xliff:g> settings</string>
+    <string name="netlog_sheet_data_saver">Data saver</string>
+
+    <string name="netlog_invisible_title">What this screen cannot see</string>
+    <string name="netlog_invisible_body">Three Google parts of the app make their own requests, outside the code that fills this log. ML Kit (handwriting, text scan, QR scanning, sticker cut-outs and on-device translation, full edition only) reports usage to Google. Play services downloads fonts by name. Play Store builds ask the Play Store about updates and on-demand parts.</string>
+    <string name="netlog_invisible_link">Read what each one sends</string>
+
+    <string name="netlog_empty_title">Nothing has left your device</string>
+    <!-- %1$s is a date. -->
+    <string name="netlog_empty_body">The keyboard has made no requests since <xliff:g id="date" example="22 Sept 2026">%1$s</xliff:g>.</string>
+    <string name="netlog_off_body">The log is off. The keyboard does not record its requests.</string>
+
+    <string name="netlog_options_section">Log</string>
+    <string name="netlog_keep_title">Keep a network log</string>
+    <string name="netlog_keep_subtitle">Addresses and sizes only. Never what you type.</string>
+    <string name="netlog_keep_info">The log keeps up to 2,000 rows and 30 days of totals, on your device only. Each row holds the feature, the server, the address without its query, the size, the result and the time. It never holds what you typed, searched or sent, and it never holds API keys. Backups do not include it.</string>
+    <string name="netlog_keyboard_dot_title">Show activity on the keyboard</string>
+    <string name="netlog_keyboard_dot_subtitle">A small dot on the toolbar while a request is under way</string>
+    <string name="netlog_export_chooser">Share the network log</string>
+    <string name="netlog_cleared">Network log cleared</string>
+
+    <!-- Feature names, one per part of the keyboard that makes requests. -->
+    <string name="netlog_source_translate">Translate</string>
+    <string name="netlog_source_gif">GIFs</string>
+    <string name="netlog_source_sticker">Stickers</string>
+    <string name="netlog_source_web_search">Web search</string>
+    <string name="netlog_source_image_search">Image search</string>
+    <string name="netlog_source_ai">AI writing</string>
+    <string name="netlog_source_ai_chat">AI chat</string>
+    <string name="netlog_source_transcription">Transcription server</string>
+    <string name="netlog_source_wikipedia">Wikipedia</string>
+    <string name="netlog_source_dictionary">Dictionary</string>
+    <string name="netlog_source_vocabulary">Vocabulary</string>
+    <string name="netlog_source_weather">Weather</string>
+    <string name="netlog_source_currency">Currency rates</string>
+    <string name="netlog_source_photos">Photo backgrounds</string>
+    <string name="netlog_source_link_preview">Link previews</string>
+    <string name="netlog_source_media_images">Media previews</string>
+    <string name="netlog_source_download_wordlist">Word list downloads</string>
+    <string name="netlog_source_download_ngram">Word-pair downloads</string>
+    <string name="netlog_source_download_cjk">Conversion table downloads</string>
+    <string name="netlog_source_download_emoji">Emoji keyword downloads</string>
+    <string name="netlog_source_download_whisper">Voice model downloads</string>
+    <string name="netlog_source_download_llm">AI model downloads</string>
+    <string name="netlog_source_download_vocab">Vocabulary downloads</string>
+    <string name="netlog_source_download_font">Font downloads</string>
+    <string name="netlog_source_download_cutout">Background remover download</string>
+    <string name="netlog_source_addons">Add-ons</string>
+    <string name="netlog_source_keyman">Keyman keyboards</string>
+    <string name="netlog_source_signal_stickers">Signal sticker packs</string>
+    <string name="netlog_source_link_import">Import from a link</string>
+    <string name="netlog_source_backup">Backup</string>
+    <string name="netlog_source_updates">Update check</string>
+    <string name="netlog_source_kde_connect">KDE Connect</string>
+    <string name="netlog_source_other">Other</string>
+
+    <!-- What one feature sends with a request. Shown in the request sheet. -->
+    <string name="netlog_sent_translate">The text in the translate panel and the two languages.</string>
+    <string name="netlog_sent_gif">Your search words and the content filter, or nothing for the trending list.</string>
+    <string name="netlog_sent_sticker">Your search words and the content filter, or nothing for the trending list.</string>
+    <string name="netlog_sent_web_search">The search you submitted.</string>
+    <string name="netlog_sent_image_search">The search you submitted.</string>
+    <string name="netlog_sent_ai">The text you ran the action on, and the action\'s instructions.</string>
+    <string name="netlog_sent_ai_chat">The conversation so far, and your new message.</string>
+    <string name="netlog_sent_transcription">The recording of one phrase, the model name, and the language unless you turned that off.</string>
+    <string name="netlog_sent_wikipedia">Your search words or the title of the article.</string>
+    <string name="netlog_sent_dictionary">One word: your selection, or the word at the cursor.</string>
+    <string name="netlog_sent_vocabulary">The word on the card, or the name of a word pack.</string>
+    <string name="netlog_sent_weather">The saved location, or the place name you searched.</string>
+    <string name="netlog_sent_currency">Nothing about you. The keyboard downloads the whole rate table and converts on your device.</string>
+    <string name="netlog_sent_photos">Your search words and filters, or the name of the photo to download.</string>
+    <string name="netlog_sent_link_preview">A request for the page you copied or scanned. Nothing else.</string>
+    <string name="netlog_sent_media_images">A request for one preview picture. Nothing about you.</string>
+    <string name="netlog_sent_download">The name of the file. Nothing about you.</string>
+    <string name="netlog_sent_addons">The name of the file in the repository. Nothing about you.</string>
+    <string name="netlog_sent_keyman">The name of the Keyman keyboard.</string>
+    <string name="netlog_sent_signal_stickers">The pack\'s id. No Signal account takes part.</string>
+    <string name="netlog_sent_link_import">A request for the link you shared, and your access token when the link needs one.</string>
+    <string name="netlog_sent_backup">Your settings file, encrypted when you set a password, to the destination you selected.</string>
+    <string name="netlog_sent_updates">The app\'s version. Nothing about you.</string>
+    <string name="netlog_sent_kde_connect">What you use the tool for, to a computer you paired on your own network.</string>
+    <string name="netlog_sent_other">A request the log could not put under a feature.</string>
+</resources>

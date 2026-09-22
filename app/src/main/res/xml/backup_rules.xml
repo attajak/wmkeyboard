@@ -18,4 +18,5 @@
     <exclude domain="file" path="clipboard/images" />
     <exclude domain="file" path="stickers/.originals" />
     <exclude domain="file" path="kdeconnect" />
+    <exclude domain="file" path="netlog" />
 </full-backup-content>

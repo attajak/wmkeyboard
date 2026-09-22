@@ -1,9 +1,12 @@
 package com.wasimaster.wmkeyboard.core.dictionaries
 
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.prediction.NgramPackBuilder
 import com.wasimaster.wmkeyboard.core.prediction.NgramPackCodec
 import com.wasimaster.wmkeyboard.core.prediction.WordKey
 import java.io.File
+import java.io.FilterInputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -253,16 +256,36 @@ object NgramPackDownloadManager {
         }
     }
 
+    /**
+     * The stream outlives this function, so the network log's call ends when
+     * the caller closes it rather than here.
+     */
     private fun openStream(url: String): InputStream {
         val connection = URL(url).openConnection() as HttpURLConnection
-        connection.setRequestProperty("User-Agent", USER_AGENT)
-        connection.setRequestProperty("Accept-Encoding", "identity")
-        connection.connectTimeout = 15_000
-        connection.readTimeout = 30_000
-        if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-            connection.disconnect()
-            throw IOException("HTTP ${connection.responseCode} for $url")
+        val netCall = NetLog.call(NetSource.DOWNLOAD_NGRAM, "GET", url, route = NetLog.pathOf(url))
+        try {
+            connection.setRequestProperty("User-Agent", USER_AGENT)
+            connection.setRequestProperty("Accept-Encoding", "identity")
+            connection.connectTimeout = 15_000
+            connection.readTimeout = 30_000
+            netCall.status = connection.responseCode
+            if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                connection.disconnect()
+                throw IOException("HTTP ${connection.responseCode} for $url")
+            }
+            return object : FilterInputStream(netCall.countIn(connection.inputStream)) {
+                override fun close() {
+                    try {
+                        super.close()
+                    } finally {
+                        netCall.end()
+                    }
+                }
+            }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            netCall.end()
+            throw t
         }
-        return connection.inputStream
     }
 }

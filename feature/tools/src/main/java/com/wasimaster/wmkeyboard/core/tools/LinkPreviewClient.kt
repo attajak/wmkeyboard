@@ -1,6 +1,8 @@
 package com.wasimaster.wmkeyboard.core.tools
 
 import com.wasimaster.wmkeyboard.core.clipboard.LinkPreview
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -30,6 +32,7 @@ object LinkPreviewClient {
 
     private fun head(url: String, timeoutMs: Int): String {
         val connection = URL(url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.LINK_PREVIEW, "GET", url)
         try {
             connection.connectTimeout = timeoutMs
             connection.readTimeout = timeoutMs
@@ -39,6 +42,7 @@ object LinkPreviewClient {
             // Ask for only the head of the document; servers that ignore Range
             // are handled by the read cap below.
             connection.setRequestProperty("Range", "bytes=0-${HEAD_BYTES - 1}")
+            netCall.status = connection.responseCode
             val status = connection.responseCode
             if (status !in 200..299) throw IOException("HTTP $status")
             val type = connection.contentType.orEmpty()
@@ -47,7 +51,7 @@ object LinkPreviewClient {
                 .find(type)?.groupValues?.get(1) ?: "UTF-8"
             val buffer = ByteArray(HEAD_BYTES)
             var read = 0
-            connection.inputStream.use { input ->
+            netCall.countIn(connection.inputStream).use { input ->
                 while (read < HEAD_BYTES) {
                     val n = input.read(buffer, read, HEAD_BYTES - read)
                     if (n < 0) break
@@ -55,8 +59,12 @@ object LinkPreviewClient {
                 }
             }
             return String(buffer, 0, read, runCatching { charset(charset) }.getOrElse { Charsets.UTF_8 })
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 

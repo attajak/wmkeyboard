@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.wasimaster.wmkeyboard.core.modules.FeatureModules
 import com.wasimaster.wmkeyboard.core.modules.FeatureModules.awaitInstalled
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import java.io.File
 import java.io.RandomAccessFile
@@ -98,19 +100,26 @@ internal object LocalSubjectCutout {
         if (part.length() >= CutoutModel.SIZE_BYTES) part.delete()
         var resumeFrom = part.length()
         val connection = URL(CutoutModel.url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(
+            NetSource.DOWNLOAD_CUTOUT,
+            "GET",
+            CutoutModel.url,
+            route = NetLog.pathOf(CutoutModel.url),
+        )
         try {
             connection.connectTimeout = CONNECT_TIMEOUT_MS
             connection.readTimeout = READ_TIMEOUT_MS
             connection.instanceFollowRedirects = true
             connection.setRequestProperty("User-Agent", USER_AGENT)
             if (resumeFrom > 0) connection.setRequestProperty("Range", "bytes=$resumeFrom-")
+            netCall.status = connection.responseCode
             when (connection.responseCode) {
                 HttpURLConnection.HTTP_PARTIAL -> Unit
                 HttpURLConnection.HTTP_OK -> resumeFrom = 0
                 else -> return false
             }
             var written = resumeFrom
-            connection.inputStream.use { input ->
+            netCall.countIn(connection.inputStream).use { input ->
                 RandomAccessFile(part, "rw").use { out ->
                     out.setLength(resumeFrom)
                     out.seek(resumeFrom)
@@ -128,8 +137,12 @@ internal object LocalSubjectCutout {
                     }
                 }
             }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
         // Short means interrupted: keep the part, the next try resumes it.
         if (part.length() < CutoutModel.SIZE_BYTES) return false

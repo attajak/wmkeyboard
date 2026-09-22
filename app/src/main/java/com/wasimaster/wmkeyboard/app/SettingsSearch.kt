@@ -702,6 +702,7 @@ private fun SearchStrings.appearanceToolbarRows(): List<SettingsSearchEntry> {
     return listOf(
         row(R.string.appearance_toolbar_show_title, R.string.appearance_toolbar_show_subtitle),
         row(R.string.appearance_toolbar_placement_title, R.string.appearance_toolbar_placement_subtitle),
+        row(R.string.appearance_toolbar_show_strip_title, R.string.appearance_toolbar_show_strip_subtitle),
         row(R.string.appearance_toolbar_swipe_down_title, R.string.appearance_toolbar_swipe_down_subtitle),
         row(R.string.appearance_toolbar_drag_title, R.string.appearance_toolbar_drag_subtitle),
         row(R.string.appearance_toolbar_hardware_only_title, R.string.appearance_toolbar_hardware_only_subtitle),
@@ -1969,6 +1970,10 @@ private fun SearchStrings.sectionRows(): List<SettingsSearchEntry> {
         under(
             R.string.privacy_permissions_title, R.string.privacy_permissions_subtitle,
             R.string.home_privacy_title, "permissions", R.string.search_kw_permissions,
+        ),
+        under(
+            R.string.netlog_title, R.string.netlog_subtitle,
+            R.string.home_privacy_title, "network_activity", R.string.search_kw_netlog,
         ),
         under(
             R.string.privacy_lock_title, R.string.privacy_lock_subtitle,

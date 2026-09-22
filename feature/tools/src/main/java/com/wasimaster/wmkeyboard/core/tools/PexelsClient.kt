@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.core.tools
 
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
@@ -34,11 +36,17 @@ object PexelsClient {
 
     /** Blocking; call on an IO dispatcher. Throws on failure. */
     fun search(query: PhotoQuery, apiKey: String): HttpResponse =
-        ToolHttp.getWithHeaders(searchUrl(query), headers = headers(apiKey), wantHeaders = RATE_HEADERS)
+        ToolHttp.getWithHeaders(
+            searchUrl(query), headers = headers(apiKey), wantHeaders = RATE_HEADERS,
+            source = NetSource.PHOTOS, route = "/v1/search",
+        )
 
     /** Blocking; call on an IO dispatcher. Pexels' own editorial feed. */
     fun curated(query: PhotoQuery, apiKey: String): HttpResponse =
-        ToolHttp.getWithHeaders(curatedUrl(query), headers = headers(apiKey), wantHeaders = RATE_HEADERS)
+        ToolHttp.getWithHeaders(
+            curatedUrl(query), headers = headers(apiKey), wantHeaders = RATE_HEADERS,
+            source = NetSource.PHOTOS, route = NetLog.pathOf(curatedUrl(query)),
+        )
 
     internal fun headers(apiKey: String) = mapOf(
         "Authorization" to apiKey,

@@ -52,6 +52,12 @@
            and hand the second one every pairing the first ever made.
         -->
         <exclude domain="file" path="kdeconnect" />
+        <!--
+           The network activity log. A record of this device's requests, not a
+           setting: restored onto another phone it would describe traffic that
+           phone never made.
+        -->
+        <exclude domain="file" path="netlog" />
     </cloud-backup>
 
     <device-transfer>
@@ -67,5 +73,11 @@
         <exclude domain="file" path="clipboard/images" />
         <exclude domain="file" path="stickers/.originals" />
         <exclude domain="file" path="kdeconnect" />
+        <!--
+           The network activity log. A record of this device's requests, not a
+           setting: restored onto another phone it would describe traffic that
+           phone never made.
+        -->
+        <exclude domain="file" path="netlog" />
     </device-transfer>
 </data-extraction-rules>

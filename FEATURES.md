@@ -19,11 +19,11 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 | Toolbar and the tool set | 10 | 85 | 311 |
 | Clipboard, snippets, text expansion | 7 | 37 | 191 |
 | AI, voice, handwriting, scanning | 11 | 70 | 162 |
-| Privacy, backup, storage, statistics | 13 | 59 | 150 |
+| Privacy, backup, storage, statistics | 14 | 65 | 163 |
 | Accessibility, form factors, platform integration | 13 | 61 | 111 |
 | Extensibility: addons, plugins, imports, formats | 5 | 35 | 164 |
 | Modes, rows, field adaptation, runtime | 12 | 97 | 203 |
-| **Total** | **132** | **797** | **2206** |
+| **Total** | **133** | **803** | **2219** |
 
 ## Typing core: prediction, autocorrect, learning, spell check
 
@@ -1524,6 +1524,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Strip stops flipping — With a row of their own the strip is only ever candidates, so the surface swap, the emoji handoff and the settle beat all rest
     - Chevron changes job — Opens and closes the row on ON_DEMAND_ROW, and disappears on ALWAYS_ROW where it would do nothing
     - Same row, one renderer — The standalone row wraps the same ToolbarRow the strip hosts, so widths, labels, drag and RTL mirroring are identical
+    - Strip can go (#302) — showStrip off under ALWAYS_ROW drops the suggestion strip and its height, leaving only the tools row; compact dictation still takes the row, and full-bleed panels stop counting it
   - Press-and-hold actions on the toolbar `RARE` — Per-tool holdActions map: a hold runs another tool's tap instead of opening that tool's settings page
     - Any tool is a target — "Holding this does what tapping that does" needs no second action vocabulary; the bound tool goes through the same dispatcher a tap uses
     - Toolbar only — The toolbox hold keeps opening settings pages, so no page loses its way in
@@ -2702,6 +2703,22 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Typing-test achievements `RARE` — 4 badges stored as one comma-list preference; unlocks only accumulate.
     - The four — 100 WPM, a flawless run of 30+ chars, a pangram quote, 50 completed tests.
     - Unknown ids dropped on decode — Encoding is order-stable against the ALL list.
+- **Network activity log** `RARE` — Settings › Privacy › Network activity: every request the keyboard's own code makes, on the device only.
+  - Every network path recorded `RARE` — ToolHttp, the download managers, OkHttp (backup sinks, media loader), FTP and KDE Connect sockets all go through NetLog.
+    - Build-time guard — NetworkCallSitesTest fails when a file opens a connection, client or socket without the log.
+    - Honest about the gaps — ML Kit, Play services fonts, Play Store libraries and the system speech recognizer are named as outside it.
+  - Address without what was typed `RARE` — Host plus a route the call site names; no query strings, headers, bodies or error messages.
+    - Placeholders for secrets in paths — KLIPY's key and Signal's pack id show as {key} and {pack}; dictionary and Wikipedia routes stop before the word.
+    - Real byte counts — Counted off the streams, not Content-Length.
+  - Burst merging `RARE` — Identical requests within 60 s become one row with a count, summed bytes and a mean duration.
+  - Totals kept apart from rows `uncommon` — 2,000 rows or 30 days; per-day totals by feature, server and hour survive the row cap.
+    - Direct boot — Rows held in memory until the first unlock, then written.
+  - Screen `RARE` — Live "contacting…" line, Today / 7 days / 30 days card with a stacked, scrubbable chart in each tool's own colour, By feature and Servers contacted cards, filtered timeline, per-request sheet.
+    - Server badges — New (after the log is 7 days old), Your server (self-hosted and backup addresses), Local network (decided from the name, never resolved).
+    - Request sheet — Why it happened, result in words, data each way, time taken, what that feature sends, links to its settings and Data saver.
+    - Incognito marked, not paused — Rows made while incognito are badged and filterable.
+    - CSV export, clear with undo — Also listed on the Storage screen.
+  - Keyboard activity dot `RARE` — Off by default; a dot on the toolbar in the requesting tool's colour, hold to read the server.
 - **Permissions & disclosures** `uncommon` — Prominent-disclosure layer plus an in-app permission inventory screen.
   - Prominent disclosure before every prompt `uncommon` — 7 disclosure definitions covering 6 runtime permissions; refusable without granting.
     - Three sanctioned request paths only — IME trampoline activity, settings-side composable helper, special-access helper; no bare launch().

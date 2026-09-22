@@ -1,5 +1,8 @@
 package com.wasimaster.wmkeyboard.core.settings.sink
 
+import com.wasimaster.wmkeyboard.core.net.BackupTraffic
+import com.wasimaster.wmkeyboard.core.net.NetLogInterceptor
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import java.util.concurrent.TimeUnit
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
@@ -33,6 +36,7 @@ class OAuthTokens(
 
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
+            .addNetworkInterceptor(NetLogInterceptor(NetSource.BACKUP, NetLogInterceptor.PATH) { BackupTraffic.unattended })
             .connectTimeout(TIMEOUT_S, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_S, TimeUnit.SECONDS)
             .build()

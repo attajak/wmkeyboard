@@ -15,9 +15,15 @@ import com.wasimaster.wmkeyboard.core.kdeconnect.KdeFileSink
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdeIncomingFile
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdeMdns
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdeOutgoingFile
+import com.wasimaster.wmkeyboard.core.kdeconnect.KdeTrafficKind
+import com.wasimaster.wmkeyboard.core.kdeconnect.KdeTrafficMeter
+import com.wasimaster.wmkeyboard.core.kdeconnect.KdeTrafficTap
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import java.io.File
 import java.io.OutputStream
 import java.net.HttpURLConnection
+import java.net.InetAddress
 import java.net.URL
 import java.util.concurrent.ConcurrentHashMap
 
@@ -230,12 +236,14 @@ internal fun outgoingFile(context: Context, uri: Uri): KdeOutgoingFile? {
  */
 internal fun fetchAlbumArt(url: String): ByteArray? {
     val connection = (URL(url).openConnection() as? HttpURLConnection) ?: return null
+    val netCall = NetLog.call(NetSource.KDE_CONNECT, "GET", url)
     return try {
         connection.connectTimeout = 6_000
         connection.readTimeout = 8_000
         connection.instanceFollowRedirects = true
+        netCall.status = connection.responseCode
         if (connection.responseCode !in 200..299) return null
-        connection.inputStream.use { input ->
+        netCall.countIn(connection.inputStream).use { input ->
             val out = java.io.ByteArrayOutputStream()
             val buffer = ByteArray(16 * 1024)
             while (true) {
@@ -248,9 +256,47 @@ internal fun fetchAlbumArt(url: String): ByteArray? {
         }
     } catch (_: Exception) {
         null
+    } catch (t: Throwable) {
+        netCall.fail(t)
+        throw t
     } finally {
         connection.disconnect()
+        netCall.end()
     }
 }
 
 private const val MAX_ART_BYTES = 4 * 1024 * 1024
+
+/**
+ * KDE Connect's connections, as network activity log rows. Everything here is
+ * on the local network, to a device the user paired. The control link is one
+ * row per connection, written when it closes; each file sent or received is a
+ * row of its own.
+ */
+internal object KdeNetMeter : KdeTrafficMeter {
+    override fun open(kind: KdeTrafficKind, address: InetAddress, port: Int): KdeTrafficTap {
+        val call = NetLog.callTo(
+            source = NetSource.KDE_CONNECT,
+            method = when (kind) {
+                KdeTrafficKind.LINK -> "LINK"
+                KdeTrafficKind.PAYLOAD_SEND -> "SEND"
+                KdeTrafficKind.PAYLOAD_RECEIVE -> "RECEIVE"
+            },
+            scheme = "kdeconnect",
+            host = address.hostAddress.orEmpty(),
+            port = port,
+            live = kind != KdeTrafficKind.LINK,
+        )
+        return object : KdeTrafficTap {
+            override fun sent(bytes: Long) = call.sent(bytes)
+            override fun received(bytes: Long) = call.received(bytes)
+            override fun close(failure: Throwable?) {
+                if (failure != null) call.fail(failure) else call.status = OK
+                call.end()
+            }
+        }
+    }
+
+    /** Not HTTP, but "finished fine" reads the same on the screen. */
+    private const val OK = 200
+}

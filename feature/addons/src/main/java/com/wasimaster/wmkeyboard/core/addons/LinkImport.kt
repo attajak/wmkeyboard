@@ -1,6 +1,8 @@
 package com.wasimaster.wmkeyboard.core.addons
 
 import com.wasimaster.wmkeyboard.core.endpoints.RepoLocation
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import java.io.File
 import java.net.HttpURLConnection
@@ -246,6 +248,8 @@ object LinkImport {
                 target = target,
                 maxBytes = MAX_BYTES,
                 onProgress = onProgress,
+                source = NetSource.LINK_IMPORT,
+                route = NetLog.pathOf(candidate.url),
                 // A file in a private repository is served to the token and to
                 // nobody else. [authFor] is what keeps it off every other host.
                 headers = authFor(candidate.url, token),
@@ -270,19 +274,25 @@ object LinkImport {
         onProgress: ((Long, Long) -> Unit)?,
     ) {
         val connection = URL(url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.LINK_IMPORT, "GET", url, route = NetLog.pathOf(url))
         val location = try {
             connection.connectTimeout = TIMEOUT_MS
             connection.readTimeout = TIMEOUT_MS
             connection.instanceFollowRedirects = false
             connection.setRequestProperty("Authorization", "Bearer $token")
             connection.setRequestProperty("Accept", "application/vnd.github+json")
+            netCall.status = connection.responseCode
             when (val status = connection.responseCode) {
                 in 300..399 -> connection.getHeaderField("Location").orEmpty()
                 in 200..299 -> ""
                 else -> throw java.io.IOException("HTTP $status")
             }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
         if (location.isBlank()) {
             ToolHttp.download(
@@ -290,6 +300,8 @@ object LinkImport {
                 target = target,
                 maxBytes = MAX_BYTES,
                 onProgress = onProgress,
+                source = NetSource.LINK_IMPORT,
+                route = NetLog.pathOf(url),
                 headers = mapOf(
                     "Authorization" to "Bearer $token",
                     "Accept" to "application/vnd.github+json",
@@ -300,7 +312,10 @@ object LinkImport {
         if (!location.startsWith("https://", ignoreCase = true)) {
             throw java.io.IOException("insecure redirect")
         }
-        ToolHttp.download(location, target, maxBytes = MAX_BYTES, onProgress = onProgress)
+        ToolHttp.download(
+            location, target, maxBytes = MAX_BYTES, onProgress = onProgress,
+            source = NetSource.LINK_IMPORT, route = NetLog.pathOf(location),
+        )
     }
 
     /**
@@ -329,6 +344,8 @@ object LinkImport {
                 target = temp,
                 maxBytes = MAX_LIST_BYTES,
                 headers = authFor(url, token),
+                source = NetSource.LINK_IMPORT,
+                route = NetLog.pathOf(url),
             )
             temp.readText().takeIf { it.isNotBlank() }
         } catch (_: Exception) {

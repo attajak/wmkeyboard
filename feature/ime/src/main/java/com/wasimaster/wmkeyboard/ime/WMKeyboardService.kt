@@ -73,6 +73,8 @@ import com.wasimaster.wmkeyboard.app.SpecialAccessActivity
 import com.wasimaster.wmkeyboard.app.StoragePermissionActivity
 import com.wasimaster.wmkeyboard.core.media.GallerySaver
 import com.wasimaster.wmkeyboard.core.media.MediaMime
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
 import com.wasimaster.wmkeyboard.core.settings.BlacklistScope
 import android.provider.DocumentsContract
@@ -2777,6 +2779,11 @@ open class WMKeyboardService : InputMethodService() {
         // so this resumes inside the update rather than a frame later.
         serviceScope.launch {
             _uiState.collect { if (windowOnScreen) _shownState.value = it }
+        }
+        // Marks the network activity log's rows made while incognito is on,
+        // whether the switch or the field turned it on.
+        serviceScope.launch {
+            _uiState.map { it.incognitoOn }.distinctUntilChanged().collect { NetLog.incognito = it }
         }
         // Parks on an empty channel until the first glide; costs nothing until
         // then, and saves a job launch per preview once a finger is down.
@@ -15937,7 +15944,6 @@ open class WMKeyboardService : InputMethodService() {
             word.none { it == '\'' || it == '\u2019' } &&
             (letter != 't' || word.last().lowercaseChar() == 'n')
 
-    /** [suffix] in capitals after a word typed in capitals: "WHAT'S", not "WHAT's". */
     /** English is one of the layout language's secondaries. */
     private fun englishIsSecondary(state: KeyboardUiState): Boolean =
         "en" in state.settings.secondaryLanguages[state.language.id].orEmpty()
@@ -15952,6 +15958,7 @@ open class WMKeyboardService : InputMethodService() {
         state.language.isEnglish ||
             englishIsSecondary(state) && word.all { it in 'a'..'z' || it in 'A'..'Z' }
 
+    /** [suffix] in capitals after a word typed in capitals: "WHAT'S", not "WHAT's". */
     private fun contractionCased(word: CharSequence, suffix: String): String =
         if (word.length > 1 && word.all { !it.isLetter() || it.isUpperCase() }) suffix.uppercase() else suffix
 
@@ -23271,6 +23278,7 @@ open class WMKeyboardService : InputMethodService() {
                         temp,
                         maxBytes = StickerImage.MAX_SOURCE_BYTES,
                         onProgress = ::publishMediaProgress,
+                        source = NetSource.MEDIA_IMAGES,
                     )
                     temp.readBytes().also { temp.delete() }
                 }.getOrNull() ?: return@withContext null
@@ -23385,6 +23393,7 @@ open class WMKeyboardService : InputMethodService() {
                 url,
                 target,
                 onProgress = if (trackProgress) ::publishMediaProgress else null,
+                source = NetSource.MEDIA_IMAGES,
             )
         }
         target

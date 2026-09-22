@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
+import com.wasimaster.wmkeyboard.core.net.BackupTraffic
 import com.wasimaster.wmkeyboard.core.settings.sink.AutoBackupNaming
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSink
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSinkException
@@ -104,18 +105,34 @@ object AutoBackupRunner {
         force: Boolean = false,
         nowMs: Long = System.currentTimeMillis(),
     ): Outcome = gate.withLock {
+        // Files this run's traffic as scheduled in the network activity log,
+        // unless the user pressed "Back up now". The gate holds one run at a time.
+        BackupTraffic.unattended = !force
+        try {
+            runLocked(context, repository, force, nowMs)
+        } finally {
+            BackupTraffic.unattended = false
+        }
+    }
+
+    private suspend fun runLocked(
+        context: Context,
+        repository: SettingsRepository,
+        force: Boolean,
+        nowMs: Long,
+    ): Outcome {
         val appContext = context.applicationContext
         val settings = repository.settings.first().autoBackup
 
-        if (!force && !settings.enabled) return@withLock Outcome.Skipped
-        if (!settings.destinationConfigured) return@withLock Outcome.Skipped
-        if (!force && !isDue(settings, nowMs)) return@withLock Outcome.Skipped
+        if (!force && !settings.enabled) return Outcome.Skipped
+        if (!settings.destinationConfigured) return Outcome.Skipped
+        if (!force && !isDue(settings, nowMs)) return Outcome.Skipped
         // Before anything else. A locked device cannot produce a real bundle,
         // and an unreal one is worse than none.
-        if (!DirectBoot.isUserUnlocked(appContext)) return@withLock Outcome.Locked
+        if (!DirectBoot.isUserUnlocked(appContext)) return Outcome.Locked
 
         val sink = sinkFor(appContext, settings)
-            ?: return@withLock fail(
+            ?: return fail(
                 appContext,
                 repository,
                 BackupSinkException(SinkError.NOT_CONFIGURED),
@@ -123,13 +140,13 @@ object AutoBackupRunner {
                 announce = !force,
             )
         sink.readiness().exceptionOrNull()?.let { failure ->
-            return@withLock fail(appContext, repository, failure, nowMs, announce = !force)
+            return fail(appContext, repository, failure, nowMs, announce = !force)
         }
 
         val outcome = runCancellable {
             backUp(appContext, repository, sink, settings, nowMs, announce = !force)
         }
-        outcome.getOrElse { failure ->
+        return outcome.getOrElse { failure ->
             fail(appContext, repository, failure, nowMs, announce = !force)
         }
     }

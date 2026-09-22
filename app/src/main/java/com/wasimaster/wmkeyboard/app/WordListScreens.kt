@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import com.wasimaster.wmkeyboard.core.addons.AddonType
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
@@ -211,7 +213,10 @@ internal fun CustomDictionarySettings(
                         ?: "wordlist"
                     val temp = java.io.File.createTempFile("dict_url_", ".tmp", context.cacheDir)
                     try {
-                        ToolHttp.download(url.trim(), temp, maxBytes = CustomDictionaries.MAX_BYTES)
+                        ToolHttp.download(
+                            url.trim(), temp, maxBytes = CustomDictionaries.MAX_BYTES,
+                            source = NetSource.DOWNLOAD_WORDLIST, route = NetLog.pathOf(url.trim()),
+                        )
                         CustomDictionaries.ImportFile(name, temp.readBytes())
                     } finally {
                         temp.delete()
@@ -744,7 +749,10 @@ internal fun EmojiKeywordSettings(
                         ?: "emoji"
                     val temp = java.io.File.createTempFile("emoji_url_", ".tmp", context.cacheDir)
                     try {
-                        ToolHttp.download(url.trim(), temp, maxBytes = EmojiKeywordPack.MAX_BYTES)
+                        ToolHttp.download(
+                            url.trim(), temp, maxBytes = EmojiKeywordPack.MAX_BYTES,
+                            source = NetSource.DOWNLOAD_EMOJI, route = NetLog.pathOf(url.trim()),
+                        )
                         temp.inputStream().use {
                             EmojiKeywordPacks.import(context.filesDir, langId, name, it)
                         }

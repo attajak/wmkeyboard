@@ -106,6 +106,10 @@ internal object AppLockTargets {
             LockKind.SCREEN, LockGroup.CONTENT, route = "privacy",
         ),
         LockTarget(
+            "screen_network_activity", R.string.netlog_title,
+            LockKind.SCREEN, LockGroup.CONTENT, route = "network_activity",
+        ),
+        LockTarget(
             "screen_statistics", R.string.statistics_title,
             LockKind.SCREEN, LockGroup.CONTENT, route = "statistics",
         ),

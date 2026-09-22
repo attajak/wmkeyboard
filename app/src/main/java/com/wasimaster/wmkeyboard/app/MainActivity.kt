@@ -48,6 +48,7 @@ import androidx.compose.material.icons.outlined.Check
 import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.app.storage.StorageCategories
 import com.wasimaster.wmkeyboard.app.storage.StorageCategoryScreen
+import com.wasimaster.wmkeyboard.app.netlog.NetworkActivityScreen
 import com.wasimaster.wmkeyboard.app.statistics.StatisticsScreen
 import com.wasimaster.wmkeyboard.app.storage.StorageScreen
 import com.wasimaster.wmkeyboard.app.storage.storageRoute
@@ -1700,6 +1701,15 @@ private fun SettingsNavGraph(
                 route = "privacy",
             ) {
                 PrivacySettings(repository, settings) { navController.navigate(it) }
+            }
+        }
+        composable("network_activity") {
+            SettingsScreen(
+                stringResource(R.string.netlog_title),
+                { navController.popBackStack() },
+                route = "network_activity",
+            ) {
+                NetworkActivityScreen(repository, settings) { navController.navigate(it) }
             }
         }
         composable("permissions") {

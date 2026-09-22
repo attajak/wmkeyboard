@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.core.tools
 
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -34,7 +35,7 @@ object WikipediaClient {
     fun search(query: String, lang: String, limit: Int = 12): List<SearchResult> {
         val url = "${apiBase(lang)}/w/api.php?action=query&list=search&format=json" +
             "&srlimit=$limit&srprop=snippet&srsearch=${ToolHttp.encode(query)}"
-        return parseSearch(ToolHttp.get(url))
+        return parseSearch(ToolHttp.get(url, source = NetSource.WIKIPEDIA, route = "/w/api.php"))
     }
 
     fun parseSearch(body: String): List<SearchResult> {
@@ -50,7 +51,10 @@ object WikipediaClient {
     fun summary(title: String, lang: String): Summary {
         val url = "${apiBase(lang)}/api/rest_v1/page/summary/" +
             ToolHttp.encode(title.replace(' ', '_'))
-        return parseSummary(ToolHttp.get(url), fallbackUrl = articleUrl(title, lang))
+        return parseSummary(
+            // The title is a path segment here, so the route stops before it.
+            ToolHttp.get(url, source = NetSource.WIKIPEDIA, route = "/api/rest_v1/page/summary"),
+            fallbackUrl = articleUrl(title, lang))
     }
 
     fun parseSummary(body: String, fallbackUrl: String): Summary {
@@ -69,7 +73,7 @@ object WikipediaClient {
         val url = "${apiBase(lang)}/w/api.php?action=query&prop=links&format=json" +
             "&plnamespace=0&pllimit=${limit.coerceAtMost(500)}" +
             "&titles=${ToolHttp.encode(title)}"
-        return parseLinks(ToolHttp.get(url))
+        return parseLinks(ToolHttp.get(url, source = NetSource.WIKIPEDIA, route = "/w/api.php"))
     }
 
     fun parseLinks(body: String): List<String> {
@@ -86,7 +90,7 @@ object WikipediaClient {
     fun fullText(title: String, lang: String): String {
         val url = "${apiBase(lang)}/w/api.php?action=query&prop=extracts&format=json" +
             "&explaintext=1&redirects=1&titles=${ToolHttp.encode(title)}"
-        return parseFullText(ToolHttp.get(url))
+        return parseFullText(ToolHttp.get(url, source = NetSource.WIKIPEDIA, route = "/w/api.php"))
     }
 
     fun parseFullText(body: String): String {

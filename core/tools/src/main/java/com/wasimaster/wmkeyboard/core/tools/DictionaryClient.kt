@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.core.tools
 
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -53,14 +55,20 @@ object DictionaryClient {
         val url = ServiceEndpoints.base(ServiceEndpoint.DICTIONARY_API) + "/api/v2/entries/en/" +
             URLEncoder.encode(cleaned, "UTF-8").replace("+", "%20")
         val connection = URL(url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.DICTIONARY, "GET", url, route = "/api/v2/entries")
         try {
             connection.connectTimeout = 8000
             connection.readTimeout = 8000
+            netCall.status = connection.responseCode
             if (connection.responseCode == 404) throw NotFoundException(cleaned)
-            val body = connection.inputStream.bufferedReader().use { it.readText() }
+            val body = netCall.countIn(connection.inputStream).bufferedReader().use { it.readText() }
             return parse(body)
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 

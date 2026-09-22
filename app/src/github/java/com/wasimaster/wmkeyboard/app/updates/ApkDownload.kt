@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.app.updates
 
 import android.content.Context
 import android.os.StatFs
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlinx.coroutines.ensureActive
 import java.io.File
 import java.io.RandomAccessFile
@@ -103,6 +105,13 @@ internal object ApkDownload {
         part.parentFile?.mkdirs()
         val resumeFrom = if (part.exists()) part.length() else 0L
         val connection = URL(candidate.url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(
+            NetSource.UPDATES,
+            "GET",
+            candidate.url,
+            route = NetLog.pathOf(candidate.url),
+            background = false,
+        )
         try {
             connection.connectTimeout = TIMEOUT_MS
             connection.readTimeout = TIMEOUT_MS
@@ -110,6 +119,7 @@ internal object ApkDownload {
             connection.setRequestProperty("User-Agent", GithubReleaseSource.USER_AGENT)
             if (resumeFrom > 0) connection.setRequestProperty("Range", "bytes=$resumeFrom-")
 
+            netCall.status = connection.responseCode
             val status = connection.responseCode
             // A server that ignored the range sends 200 and the whole file, so
             // what is on disk is worthless and this starts again. 416 means the
@@ -124,7 +134,7 @@ internal object ApkDownload {
             val total = candidate.sizeBytes.takeIf { it > 0 }
                 ?: (already + connection.contentLengthLong.coerceAtLeast(0L))
 
-            connection.inputStream.use { input ->
+            netCall.countIn(connection.inputStream).use { input ->
                 RandomAccessFile(part, "rw").use { output ->
                     output.setLength(already)
                     output.seek(already)
@@ -151,8 +161,12 @@ internal object ApkDownload {
                     onProgress(written, maxOf(total, written))
                 }
             }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 

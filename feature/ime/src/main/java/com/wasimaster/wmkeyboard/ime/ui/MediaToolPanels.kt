@@ -72,6 +72,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import com.wasimaster.wmkeyboard.core.net.NetLogInterceptor
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
 import coil3.ImageLoader
@@ -98,6 +101,7 @@ import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.MediaUi
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.WebSearchUi
+import okhttp3.OkHttpClient
 
 // ---- shared bits ----
 
@@ -324,6 +328,18 @@ fun mediaImageLoader(context: Context): ImageLoader =
     sharedMediaLoader ?: synchronized(mediaLoaderLock) {
         sharedMediaLoader ?: ImageLoader.Builder(context.applicationContext)
             .components {
+                // Every thumbnail and animation goes in the network activity
+                // log. Image hosts are arbitrary third-party CDNs, so the rows
+                // show the host and no path.
+                add(
+                    OkHttpNetworkFetcherFactory(
+                        callFactory = {
+                            OkHttpClient.Builder()
+                                .addNetworkInterceptor(NetLogInterceptor(NetSource.MEDIA_IMAGES))
+                                .build()
+                        },
+                    ),
+                )
                 if (Build.VERSION.SDK_INT >= 28) {
                     add(AnimatedImageDecoder.Factory())
                 } else {

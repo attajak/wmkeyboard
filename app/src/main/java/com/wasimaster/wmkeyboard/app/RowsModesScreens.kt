@@ -103,6 +103,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.isSupportedTool
 import com.wasimaster.wmkeyboard.core.settings.isUsableTool
 import com.wasimaster.wmkeyboard.core.settings.isOwnRow
+import com.wasimaster.wmkeyboard.core.settings.stripHidden
 import com.wasimaster.wmkeyboard.core.settings.ModeField
 import com.wasimaster.wmkeyboard.core.tools.BuiltInSymbolSets
 import com.wasimaster.wmkeyboard.core.tools.resolveSymbolSets
@@ -161,7 +162,9 @@ private fun barRowTitle(row: BarRow, settings: KeyboardSettings): Int = when (ro
  */
 @StringRes
 private fun barRowStatus(row: BarRow, settings: KeyboardSettings): Int? = when (row) {
-    BarRow.TOPBAR -> CommonR.string.common_off.takeUnless { settings.toolbarBehavior.enabled }
+    BarRow.TOPBAR -> CommonR.string.common_off.takeIf {
+        !settings.toolbarBehavior.enabled || settings.toolbarBehavior.stripHidden
+    }
     BarRow.EMOJI -> when (settings.emojiBarMode) {
         EmojiBarMode.OFF -> R.string.rows_bar_emoji_off_subtitle
         EmojiBarMode.BUTTON -> R.string.rows_bar_emoji_button_subtitle
@@ -196,7 +199,7 @@ private fun barRowStatus(row: BarRow, settings: KeyboardSettings): Int? = when (
  * the slot is its.
  */
 private fun barRowShown(row: BarRow, settings: KeyboardSettings): Boolean = when (row) {
-    BarRow.TOPBAR -> settings.toolbarBehavior.enabled
+    BarRow.TOPBAR -> settings.toolbarBehavior.enabled && !settings.toolbarBehavior.stripHidden
     BarRow.EMOJI -> settings.emojiBarMode == EmojiBarMode.ALWAYS
     BarRow.SYMBOL -> settings.symbolRowEnabled
     BarRow.FANCY -> fancyTextOn(settings)

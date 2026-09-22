@@ -397,6 +397,7 @@ import com.wasimaster.wmkeyboard.core.settings.ToolbarPlacement
 import com.wasimaster.wmkeyboard.core.settings.ToolHoldAction
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.settings.isOwnRow
+import com.wasimaster.wmkeyboard.core.settings.stripHidden
 import com.wasimaster.wmkeyboard.core.settings.VoiceBarSettings
 import com.wasimaster.wmkeyboard.core.settings.ToolboxLayout
 import com.wasimaster.wmkeyboard.core.settings.ToolboxPageSizeRange
@@ -8909,7 +8910,8 @@ private fun isFullBleedPanel(panel: PanelMode, settings: KeyboardSettings): Bool
  * chrome instead of using [FullBleedTool].
  */
 internal fun fullBleedHiddenRows(state: KeyboardUiState): Dp =
-    topBarHeight(state.settings) +
+    // The strip, unless it has given its row up to the tools' (#302).
+    (if (state.settings.toolbarBehavior.stripHidden) 0.dp else topBarHeight(state.settings)) +
         // An always-open tools row is one more strip's worth hidden under the
         // panel. An on-demand row is not counted: whether it was open is
         // composable-local state this function cannot see, and a row the user
@@ -9418,7 +9420,14 @@ private fun KeyboardBody(
                             // Only with no panel open, because there the chevron on this
                             // row is the way back out of the panel.
                             stripMacros -> SelectionMacroBar(state, toolHold.selection)
-                            else -> TopBar(
+                            // The strip given up for the tools' own row (#302).
+                            // Compact dictation still takes it: that bar is the
+                            // session's only status and its only way out.
+                            state.settings.toolbarBehavior.stripHidden && !state.voice.strip -> {}
+                            else -> WithNetActivityDot(
+                                state.settings.networkLog.showOnKeyboard,
+                                state.settings.toolColorOverrides,
+                            ) { TopBar(
                                 state,
                                 toolsRowOpen = toolsRowOpen,
                                 onToolsRowToggle = { toolsRowOpen = !toolsRowOpen },
@@ -9451,7 +9460,7 @@ private fun KeyboardBody(
                                 onOtpDismiss = onOtpDismiss,
                                 onEmojiRowShown = onEmojiRowShown,
                                 onSwipeDownHide = onHideKeyboard,
-                            )
+                            ) }
                         }
                         BarRow.EMOJI -> if (showEmojiRow) {
                             EmojiBarStrip(

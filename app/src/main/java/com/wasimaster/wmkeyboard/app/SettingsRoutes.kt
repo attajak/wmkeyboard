@@ -146,6 +146,7 @@ internal object SettingsRoutes {
         "accessibility",
         "privacy",
         "permissions",
+        "network_activity",
         "applock",
         "datasaver",
         "servers",

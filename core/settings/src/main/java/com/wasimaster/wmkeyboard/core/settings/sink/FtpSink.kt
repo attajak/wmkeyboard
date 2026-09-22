@@ -1,5 +1,8 @@
 package com.wasimaster.wmkeyboard.core.settings.sink
 
+import com.wasimaster.wmkeyboard.core.net.BackupTraffic
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.settings.FtpConfig
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import java.io.BufferedReader
@@ -116,6 +119,23 @@ class FtpSink(private val config: FtpConfig) : BackupSink {
         private var writer: OutputStream
         private var sslFactory: SSLSocketFactory? = null
 
+        /**
+         * One network activity log row for the whole session. The files carry
+         * the bytes worth counting; the control chatter is left out.
+         */
+        private val netCall = NetLog.callTo(
+            source = NetSource.BACKUP,
+            method = "FTP",
+            scheme = if (config.secure) "ftps" else "ftp",
+            host = config.host,
+            port = config.port,
+            route = config.path.trim().ifEmpty { null },
+            background = BackupTraffic.unattended,
+        )
+
+        /** The first failing reply of the session, which becomes the row's status. */
+        private var failedCode = 0
+
         init {
             control = try {
                 Socket().apply {
@@ -123,17 +143,28 @@ class FtpSink(private val config: FtpConfig) : BackupSink {
                     connect(InetSocketAddress(config.host, config.port), CONNECT_TIMEOUT_MS)
                 }
             } catch (failure: Throwable) {
+                netCall.fail(failure)
+                netCall.end()
                 throw BackupSinkException(SinkError.IO, failure)
             }
             reader = control.getInputStream().bufferedReader()
             writer = control.getOutputStream()
 
-            expect(readReply(), 220)
-            if (config.secure) upgradeToTls()
-            login()
-            // Binary. The default is ASCII, which on some servers rewrites line
-            // endings inside the file and quietly corrupts an encrypted bundle.
-            command("TYPE I")
+            try {
+                expect(readReply(), 220)
+                if (config.secure) upgradeToTls()
+                login()
+                // Binary. The default is ASCII, which on some servers rewrites line
+                // endings inside the file and quietly corrupts an encrypted bundle.
+                command("TYPE I")
+            } catch (failure: Throwable) {
+                // Nobody will close a session that never finished opening.
+                runCatching { control.close() }
+                netCall.status = failedCode
+                netCall.fail(failure)
+                netCall.end()
+                throw failure
+            }
         }
 
         private fun upgradeToTls() {
@@ -193,6 +224,7 @@ class FtpSink(private val config: FtpConfig) : BackupSink {
                 val reply = command("STOR $name")
                 if (codeOf(reply) !in 100..199) throw BackupSinkException(statusError(reply))
                 data.getOutputStream().use { it.write(bytes) }
+                netCall.sent(bytes.size.toLong())
             }
             val done = readReply()
             if (codeOf(done) !in 200..299) throw BackupSinkException(statusError(done))
@@ -209,7 +241,7 @@ class FtpSink(private val config: FtpConfig) : BackupSink {
             val bytes = openDataConnection().use { data ->
                 val reply = command(request)
                 if (codeOf(reply) !in 100..199) throw BackupSinkException(statusError(reply))
-                data.getInputStream().readBytes()
+                data.getInputStream().readBytes().also { netCall.received(it.size.toLong()) }
             }
             val done = readReply()
             if (codeOf(done) !in 200..299) throw BackupSinkException(statusError(done))
@@ -264,6 +296,7 @@ class FtpSink(private val config: FtpConfig) : BackupSink {
          */
         private fun readReply(): String {
             val first = reader.readLine() ?: throw BackupSinkException(SinkError.IO)
+            if (failedCode == 0 && codeOf(first) >= 400) failedCode = codeOf(first)
             if (first.length < 4 || first[3] != '-') return first
             val code = first.substring(0, 3)
             val all = StringBuilder(first)
@@ -292,6 +325,9 @@ class FtpSink(private val config: FtpConfig) : BackupSink {
         override fun close() {
             runCatching { command("QUIT") }
             runCatching { control.close() }
+            // FTP's own codes are the status: 226 is "closing, transfer done".
+            netCall.status = if (failedCode != 0) failedCode else 226
+            netCall.end()
         }
     }
 

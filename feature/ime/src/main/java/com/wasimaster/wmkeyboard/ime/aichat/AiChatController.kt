@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.ime.aichat
 import android.annotation.SuppressLint
 import android.content.Context
 import com.wasimaster.wmkeyboard.config.BuildConfig
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.core.aichat.AiChatMessage
 import com.wasimaster.wmkeyboard.core.aichat.AiChatStore
@@ -412,7 +413,7 @@ object AiChatController {
         // The picker's provider stands in for the settings one, so chatting
         // with a different model never rewrites the keyboard's own selection.
         val chosen = settings.copy(provider = choice.provider)
-        val config = AiClient.config(chosen)
+        val config = AiClient.config(chosen).copy(netSource = NetSource.AI_CHAT)
         val turns = store(context).get(conversationId)?.messages.orEmpty()
             .filter { !it.failed }
             .map {
