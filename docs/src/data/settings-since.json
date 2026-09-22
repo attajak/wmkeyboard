@@ -25,6 +25,7 @@
 		"typing/octopus": "0.5.4"
 	},
 	"settings": {
+		"about_app_language_title": "0.5.12",
 		"about_launcher_name_title": "0.5.8",
 		"accessibility_row_icons_title": "0.5.12",
 		"appearance_key_hint_offset_title": "0.5.9",
