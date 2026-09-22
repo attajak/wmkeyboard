@@ -1,9 +1,13 @@
 package com.wasimaster.wmkeyboard.core.addons
 
 import android.content.Context
+import android.util.Log
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
+import com.wasimaster.wmkeyboard.core.endpoints.ServiceRepo
 import com.wasimaster.wmkeyboard.core.keyman.KeymanFault
+import com.wasimaster.wmkeyboard.core.keyman.KeymanLimits
+import com.wasimaster.wmkeyboard.core.keyman.KeymanMirror
 import com.wasimaster.wmkeyboard.core.keyman.KeymanPackage
 import com.wasimaster.wmkeyboard.core.keyman.KeymanResult
 import com.wasimaster.wmkeyboard.core.keyman.KeymanRuleStore
@@ -11,6 +15,7 @@ import com.wasimaster.wmkeyboard.core.keyman.KmxParser
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
+import com.wasimaster.wmkeyboard.core.tools.ToolHttpException
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -39,12 +44,15 @@ import kotlinx.serialization.json.jsonPrimitive
  * The bytes come off the network and go through a ZIP reader, so every step is
  * bounded and checked:
  *
- * - HTTPS only, and only the two Keyman hosts. A redirect to anywhere else is
- *   refused rather than followed, which is why [ToolHttp.download] is handed a
- *   URL this object built rather than one from the response.
+ * - HTTPS only, and only the two Keyman hosts plus the project's data
+ *   repository, which holds a copy of the rules for when keyman.com cannot
+ *   serve them ([KeymanMirror]). Every URL is one this object built from a
+ *   fixed base, never one taken from a response.
  * - The archive is read by [KeymanPackage], which compares entry names rather
  *   than using them as paths and caps what it reads as it reads it, so `../` has
  *   nothing to act on and a zip bomb runs out of budget instead of disk.
+ * - A copy from the data repository must match the SHA-256 its `meta.json`
+ *   names before anything else looks at it.
  * - The result must parse as a keyboard before it is installed. A truncated or
  *   hostile `.kmx` that reached the rules directory would be loaded on every
  *   keystroke.
@@ -75,6 +83,12 @@ object KeymanRuleDownloader {
      * Runs on [Dispatchers.IO]. Safe to call for a keyboard that already has
      * rules: it asks upstream for the current version first and does nothing
      * when they match.
+     *
+     * keyman.com is asked first, every time. Only when it cannot deliver (it
+     * does not answer, no longer knows the keyboard, or the download fails) are
+     * the rules read from the project's copy in the data repository instead,
+     * [KeymanMirror]. A copy installed that way is replaced by keyman.com's own
+     * the next time this runs with keyman.com reachable and a newer version.
      */
     suspend fun fetch(
         context: Context,
@@ -87,21 +101,54 @@ object KeymanRuleDownloader {
         val target = store.ruleFile(keyboardId)
             ?: return@withContext Outcome.Failed(KeymanFault.TRUNCATED)
 
-        val meta = runCatching { keyboardMeta(keyboardId) }.getOrNull()
-            ?: return@withContext Outcome.NotAvailable
-        if (meta.version.isEmpty()) return@withContext Outcome.NotAvailable
+        val upstream = try {
+            Result.success(keyboardMeta(keyboardId))
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            Result.failure(e)
+        }
+        val meta = upstream.getOrNull()
         // The bundled grids all come from the MIT release tree, so this should
         // never fire for them. It is here for everything else: the upstream
         // repository also holds freeware keyboards whose terms do not let us
-        // redistribute or repackage, and an id is just a string in a URL.
-        if (meta.license != LICENSE_MIT) return@withContext Outcome.NotAvailable
-        if (!force && target.isFile && store.installedVersion(keyboardId) == meta.version) {
-            return@withContext Outcome.AlreadyCurrent(meta.version)
+        // redistribute or repackage, and an id is just a string in a URL. An
+        // answer from keyman.com saying so is final; the copy is not asked.
+        if (meta != null && meta.version.isNotEmpty() && meta.license != LICENSE_MIT) {
+            return@withContext Outcome.NotAvailable
         }
 
+        var primary: Outcome? = null
+        if (meta != null && meta.version.isNotEmpty()) {
+            if (!force && target.isFile && store.installedVersion(keyboardId) == meta.version) {
+                return@withContext Outcome.AlreadyCurrent(meta.version)
+            }
+            primary = fromKeyman(context, store, target, keyboardId, meta, onProgress)
+            if (primary is Outcome.Installed) return@withContext primary
+        }
+
+        val fallback = fromMirror(context, store, target, keyboardId, force, onProgress)
+        when {
+            fallback is Outcome.Installed || fallback is Outcome.AlreadyCurrent -> fallback
+            // keyman.com's own failure says more than the copy's.
+            primary != null -> primary
+            fallback != null -> fallback
+            else -> upstreamFailure(context, upstream.exceptionOrNull())
+        }
+    }
+
+    /** Fetches the package from downloads.keyman.com and installs its rules. */
+    private fun fromKeyman(
+        context: Context,
+        store: KeymanRuleStore,
+        target: File,
+        keyboardId: String,
+        meta: Meta,
+        onProgress: ((Long, Long) -> Unit)?,
+    ): Outcome {
         val scratch = File(context.cacheDir, "keyman-rules").apply { mkdirs() }
         val packageFile = File(scratch, "$keyboardId.kmp")
-        try {
+        return try {
             ToolHttp.download(
                 url = packageUrl(keyboardId, meta.version, meta.packageFilename),
                 target = packageFile,
@@ -111,21 +158,8 @@ object KeymanRuleDownloader {
                 route = NetLog.pathOf(packageUrl(keyboardId, meta.version, meta.packageFilename)),
             )
             val rules = packageFile.inputStream().use { KeymanPackage.rulesFrom(it, keyboardId) }
-                ?: return@withContext Outcome.Failed(KeymanFault.TRUNCATED)
-
-            // Parse before installing. A file that reached the rules directory
-            // is opened on the typing path, where a failure is a dead keyboard
-            // rather than a message.
-            when (val parsed = KmxParser.parse(rules)) {
-                is KeymanResult.Failure -> return@withContext Outcome.Failed(parsed.fault)
-                is KeymanResult.Success -> Unit
-            }
-
-            target.parentFile?.mkdirs()
-            target.writeBytes(rules)
-            store.writeInstalledVersion(keyboardId, meta.version)
-            store.invalidate(keyboardId)
-            Outcome.Installed(meta.version)
+                ?: return Outcome.Failed(KeymanFault.TRUNCATED)
+            install(store, target, keyboardId, rules, meta.version)
         } catch (e: kotlinx.coroutines.CancellationException) {
             // Cancellation is the caller leaving the screen, not a failure, and
             // swallowing it would leave the coroutine looking like it finished.
@@ -140,6 +174,94 @@ object KeymanRuleDownloader {
         } finally {
             packageFile.delete()
         }
+    }
+
+    /**
+     * Installs the rules from the data repository's copy, or returns null when
+     * the copy has none for this keyboard or cannot be reached, so the caller
+     * reports keyman.com's failure rather than the fallback's.
+     *
+     * The copy's `meta.json` names the SHA-256 of the file, and the file must
+     * match it and parse before it is installed.
+     */
+    private fun fromMirror(
+        context: Context,
+        store: KeymanRuleStore,
+        target: File,
+        keyboardId: String,
+        force: Boolean,
+        onProgress: ((Long, Long) -> Unit)?,
+    ): Outcome? {
+        val repo = ServiceEndpoints.repo(ServiceRepo.DATA)
+        val scratch = File(context.cacheDir, "keyman-rules").apply { mkdirs() }
+        val packed = File(scratch, "$keyboardId.kmx.gz")
+        return try {
+            val metaPath = KeymanMirror.metaPath(keyboardId)
+            val meta = KeymanMirror.parseMeta(
+                ToolHttp.get(repo.rawUrl(metaPath), source = NetSource.KEYMAN, route = "/$metaPath"),
+                keyboardId,
+            ) ?: return null
+            if (!force && target.isFile && store.installedVersion(keyboardId) == meta.version) {
+                return Outcome.AlreadyCurrent(meta.version)
+            }
+            val rulesPath = KeymanMirror.rulesPath(keyboardId)
+            ToolHttp.download(
+                url = repo.rawUrl(rulesPath),
+                target = packed,
+                maxBytes = KeymanLimits.MAX_KMX_BYTES.toLong(),
+                onProgress = onProgress,
+                source = NetSource.KEYMAN,
+                route = "/$rulesPath",
+            )
+            val rules = packed.inputStream().use { KeymanMirror.unpack(it, meta) }
+                ?: return Outcome.Failed(KeymanFault.TRUNCATED)
+            install(store, target, keyboardId, rules, meta.version)
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            // Not having the copy is the ordinary answer for a keyboard that
+            // has no rules anywhere, and an unreachable copy says nothing the
+            // keyman.com failure did not already. Logged, not shown.
+            Log.i(TAG, "no mirrored rules for $keyboardId", e)
+            null
+        } finally {
+            packed.delete()
+        }
+    }
+
+    /**
+     * Parses [rules], then writes them with their version. Parse first: a file
+     * that reached the rules directory is opened on the typing path, where a
+     * failure is a dead keyboard rather than a message.
+     */
+    private fun install(
+        store: KeymanRuleStore,
+        target: File,
+        keyboardId: String,
+        rules: ByteArray,
+        version: String,
+    ): Outcome {
+        when (val parsed = KmxParser.parse(rules)) {
+            is KeymanResult.Failure -> return Outcome.Failed(parsed.fault)
+            is KeymanResult.Success -> Unit
+        }
+        target.parentFile?.mkdirs()
+        target.writeBytes(rules)
+        store.writeInstalledVersion(keyboardId, version)
+        store.invalidate(keyboardId)
+        return Outcome.Installed(version)
+    }
+
+    /**
+     * What to say when neither keyman.com nor the copy produced rules and no
+     * download was attempted. keyman.com answering "no such keyboard" (or
+     * answering with no version) means there are none; anything else, such as
+     * no network, is a failure the row offers to retry.
+     */
+    private fun upstreamFailure(context: Context, error: Throwable?): Outcome = when {
+        error == null -> Outcome.NotAvailable
+        error is ToolHttpException && error.status == HTTP_NOT_FOUND -> Outcome.NotAvailable
+        else -> Outcome.Failed(KeymanFault.TRUNCATED, ToolHttp.friendlyMessage(context, error))
     }
 
     /** Removes downloaded rules, so the layout goes back to typing its caps. */
@@ -208,4 +330,8 @@ object KeymanRuleDownloader {
     private const val LICENSE_MIT = "mit"
 
     private const val MAX_ID_LENGTH = 64
+
+    private const val HTTP_NOT_FOUND = 404
+
+    private const val TAG = "KeymanRules"
 }

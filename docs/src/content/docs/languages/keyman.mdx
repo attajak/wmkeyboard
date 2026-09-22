@@ -60,6 +60,8 @@ Until you do, the layout types its key caps. The grid is still right, the long-p
 
 Rules are only fetched for keyboards whose upstream licence permits it, and the downloaded file has to parse as a keyboard before it's kept.
 
+keyman.com is always asked first. If it doesn't answer, or no longer offers a keyboard, the rules come from a copy the project keeps in its [data repository](https://github.com/wasi-master/wmkeyboard-data/tree/HEAD/keyman) instead: the same files, unmodified, for the 812 bundled keyboards that have any. That copy is checked against the checksum listed beside it before it's used. It may be a version or two behind, and the next time keyman.com answers with something newer, pressing the row again replaces it.
+
 ### How closely it matches Keyman
 
 On a phone, Keyman types through KeymanWeb, and that is what the rules here are checked against: random typing on each keyboard's own touch layout, keys, long presses, flicks and page changes, fed to KeymanWeb and to WM Keyboard, compared after every keystroke. Of the 811 bundled keyboards whose rules can be downloaded, 800 type exactly what KeymanWeb types. The other 11 contain rules their authors marked for Keyman on computers only, or for KeymanWeb only, and the downloadable rules are the computer version, so those keyboards type what Keyman on a computer would.
