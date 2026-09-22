@@ -1,6 +1,9 @@
 package com.wasimaster.wmkeyboard.core.voice.whisper
 
+import com.wasimaster.wmkeyboard.core.modules.AlwaysInstalled
+import com.wasimaster.wmkeyboard.core.modules.ModuleState
 import java.io.File
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Lite-flavor stub — the LiteRT Whisper runtime is a full-build feature, so
@@ -11,6 +14,13 @@ import java.io.File
 object WhisperEngine {
 
     const val AVAILABLE = false
+
+    /** Nothing to deliver in lite; the state is a formality for shared callers. */
+    val moduleState: StateFlow<ModuleState> get() = AlwaysInstalled.state
+
+    val ready: Boolean get() = false
+
+    fun requestModule() = Unit
 
     @Suppress("UNUSED_PARAMETER")
     fun transcribe(

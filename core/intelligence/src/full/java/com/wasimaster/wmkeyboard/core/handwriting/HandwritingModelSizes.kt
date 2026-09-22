@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.core.handwriting
 
 import android.content.Context
 import android.util.JsonReader
+import com.wasimaster.wmkeyboard.core.modules.FeatureModules
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -61,7 +62,9 @@ object HandwritingModelSizes {
                 if (packs.isEmpty()) 0L else installedBytesOf(context, packs)
             }.getOrDefault(0L)
         }
-        synchronized(cache) { cache[tag] = bytes }
+        // On Play the two assets arrive with the recogniser's module, so an
+        // unknown size before it is here is not an answer worth remembering.
+        if (bytes > 0L || FeatureModules.handwriting.installed) synchronized(cache) { cache[tag] = bytes }
         return bytes
     }
 

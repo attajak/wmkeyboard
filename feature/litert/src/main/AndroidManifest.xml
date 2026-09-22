@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     On-demand delivery: nothing in this split is needed until the user picks
+     offline Whisper dictation, or removes a sticker's background on a phone
+     whose Play services cannot supply Google's model, so Play holds it back
+     until WhisperEngine or LocalSubjectCutout requests it via SplitInstall
+     (see OnDemandDelivery in :app's src/play).
+
+     fusing include="true" so a universal APK built from the Play AAB with
+     bundletool merges this split back in and behaves like the sideload build.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution">
+
+    <dist:module
+        dist:instant="false"
+        dist:title="@string/litert_module_title">
+        <dist:delivery>
+            <dist:on-demand />
+        </dist:delivery>
+        <dist:fusing dist:include="true" />
+    </dist:module>
+
+</manifest>

@@ -1,8 +1,28 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     id("wmkeyboard.detekt")
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+}
+
+// Same channel flag :app reads. It decides where the LiteRT interpreter that
+// runs Whisper lives: non-Play full builds compile src/whisperbridge (and the
+// litert dependency) straight into this module; Play builds leave both out of
+// the base APK — the on-demand :feature:litert module carries them instead,
+// so the interpreter only reaches devices that use offline dictation. See
+// WhisperRuntime.kt for the seam, and :core:intelligence for the same
+// arrangement this one copies.
+val playStoreChannel = run {
+    val localProperties = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) file.inputStream().use { load(it) }
+    }
+    (providers.gradleProperty("wmkb.enablePlayStore").orNull
+        ?: localProperties.getProperty("wmkb.enablePlayStore")
+        ?: System.getenv("WMKB_ENABLE_PLAY_STORE")
+        ?: "false").toBoolean()
 }
 
 android {
@@ -29,6 +49,17 @@ android {
     lint { lintConfig = rootProject.file("config/lint/lint.xml") }
 }
 
+androidComponents {
+    onVariants { variant ->
+        // Static-source-dir mechanism rather than a flavour folder for the
+        // same AGP 9 reason as the channel seams in :app — and conditional,
+        // which a flavour folder cannot be.
+        if (!playStoreChannel && variant.flavorName == "full") {
+            variant.sources.kotlin?.addStaticSourceDirectory("src/whisperbridge/java")
+        }
+    }
+}
+
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
@@ -50,5 +81,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
-    "fullImplementation"(libs.litert)
+    if (!playStoreChannel) {
+        "fullImplementation"(libs.litert)
+    }
 }

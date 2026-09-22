@@ -1484,7 +1484,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 | Feature | Needs |
 |---|---|
 | Sticker editor: one-tap background removal | full flavour only (ML Kit subject segmentation, or U²-Net-P on the LiteRT interpreter without Play services); lite ships a stub reporting supported=false |
-| Sticker editor: segmentation model | needs a one-time download (network): the Play services on-demand module, or without Play services (or when they lack the module) the app's own 4.6 MB model from the data repository; button offers the download and falls back to brushes if neither can be fetched |
+| Sticker editor: segmentation model | needs a one-time download (network): the Play services on-demand module, or without Play services (or when they lack the module) the app's own 4.6 MB model from the data repository (on Play the LiteRT interpreter that runs it is the on-demand :feature:litert split, fetched first under the same bar); button offers the download and falls back to brushes if neither can be fetched |
 | GIF search and send (Klipy, GIPHY) | needs a user-supplied API key for at least one provider, plus network |
 | Sticker search and send (Klipy, GIPHY) | needs a user-supplied API key for at least one provider, plus network; keys shared with the GIF tool |
 | Animated emoji preview and send | network fetch from fonts.gstatic.com on long press (no key, no query, no identifier) |
@@ -2955,6 +2955,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 | Play In-App Updates (card, About rows, flexible/immediate flows) | play-channel builds only (wmkb.enablePlayStore); also requires the install to have come from Play and a network call |
 | Document scanner tool | full flavour only (ML Kit) and hidden entirely on devices without Google Play services |
 | Handwriting, OCR, QR scan, grammar check, offline Whisper dictation, local LLM | full flavour only (ML Kit / LiteRT / Harper native) — power saving's 'drop on-device models' and the direct-boot restriction both fall back to system alternatives |
+| Offline Whisper dictation, the sticker editor's own background remover, handwriting recognition | on Play, each runtime is an on-demand split fetched on first use (:feature:litert for the LiteRT interpreter the first two share, :feature:handwriting for ML Kit's ink recogniser); the language-to-model mapping for handwriting is compiled in (InkModelTags) so the tool knows what it is offering before the split arrives; sideload builds compile the same bridges into :core:voice, :core:content and :core:intelligence |
 | Google Drive backup destination | GMS-enabled builds only (wmkb.enableGms); reports unavailable in F-Droid builds |
 | Servers screen (Advanced) and per-tool server fields | F-Droid builds only (wmkb.enableFdroid) |
 | Launcher shortcuts | API 25+; ignored on the minSdk 24 floor |

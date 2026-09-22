@@ -7,9 +7,18 @@
 
      fusing include="true" so a universal APK built from the Play AAB with
      bundletool merges this split back in and behaves like the sideload build.
+
+     The ML Kit discovery service that the translate and language-id
+     libraries' own manifests declare is removed here and its two registrars
+     are declared in the base instead (:app's src/play/AndroidManifest.xml).
+     See :feature:handwriting's manifest for why; the short version is that
+     AGP merges this split's copy of the service into the base manifest with
+     android:splitName="translate", and that one attribute would hide the
+     base's own ML Kit registrars until this split is installed.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:dist="http://schemas.android.com/apk/distribution">
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <dist:module
         dist:instant="false"
@@ -19,5 +28,11 @@
         </dist:delivery>
         <dist:fusing dist:include="true" />
     </dist:module>
+
+    <application>
+        <service
+            android:name="com.google.mlkit.common.internal.MlKitComponentDiscoveryService"
+            tools:node="remove" />
+    </application>
 
 </manifest>

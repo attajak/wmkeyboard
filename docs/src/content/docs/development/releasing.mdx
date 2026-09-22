@@ -26,6 +26,8 @@ of it, so nothing here needs a branch or a patched source tree.
 | ML Kit | bundled in the APK | absent | unbundled, fetched from Play services |
 | Local LLM | bundled | absent | on-demand `:feature:llm` module |
 | On-device translation (ML Kit) | bundled | absent | on-demand `:feature:translate` module |
+| LiteRT interpreter (offline Whisper, the sticker editor's own background remover) | bundled | absent | on-demand `:feature:litert` module |
+| Handwriting recognition (ML Kit) | bundled | absent | on-demand `:feature:handwriting` module |
 | In-app updates | GitHub releases, downloads and installs | checks F-Droid, links out | Play In-App Updates |
 
 The flags read from a `-P` Gradle property first, then `local.properties`, then
@@ -596,7 +598,8 @@ non-UTF-8 locale otherwise raises rather than counting.
    ```
 
    Go to internal first, always. Play's own device catalogue tells you within
-   minutes if an on-demand module (`:feature:llm`, `:feature:translate`) or the unbundled ML Kit path
+   minutes if an on-demand module (`:feature:llm`, `:feature:translate`,
+   `:feature:litert`, `:feature:handwriting`) or the unbundled ML Kit path
    is misconfigured, and that is far cheaper to learn there than in
    production.
 

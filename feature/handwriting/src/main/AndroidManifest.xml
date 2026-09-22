@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     On-demand delivery: nothing in this split is needed until the user opens
+     the handwriting tool or turns letter swipes into handwriting, so Play
+     holds it back until HandwritingModels requests it via SplitInstall (see
+     OnDemandDelivery in :app's src/play).
+
+     fusing include="true" so a universal APK built from the Play AAB with
+     bundletool merges this split back in and behaves like the sideload build.
+
+     The ML Kit discovery service that the digital-ink library's own manifest
+     declares is removed here and its registrar is declared in the base
+     instead (:app's src/play/AndroidManifest.xml). AGP merges every
+     component a feature module declares into the base manifest, marked with
+     android:splitName, and merging happens by component name: the one
+     MlKitComponentDiscoveryService element the base's own ML Kit libraries
+     declare would come out marked as this split's, and the platform hides a
+     component whose split is not installed. Every registrar under it, the
+     base's included, would vanish until this split arrived. Two features
+     declaring it with different splitName values do not even build.
+
+     Declared in the base instead, the registrar is visible from the first
+     process start. ML Kit reads the service's meta-data once, when its
+     context comes up, keeps a lazy provider per registrar, skips one whose
+     class is not loadable yet with a logged warning, and retries the ones it
+     kept when its dynamic-feature support library hears a split install
+     (ComponentRuntime.discoverComponents walks the providers it kept; it
+     never re-reads the manifest). Read off firebase-components 16.1.0 and
+     playstore-dynamic-feature-support 16.0.0-beta2.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <dist:module
+        dist:instant="false"
+        dist:title="@string/handwriting_module_title">
+        <dist:delivery>
+            <dist:on-demand />
+        </dist:delivery>
+        <dist:fusing dist:include="true" />
+    </dist:module>
+
+    <application>
+        <service
+            android:name="com.google.mlkit.common.internal.MlKitComponentDiscoveryService"
+            tools:node="remove" />
+    </application>
+
+</manifest>

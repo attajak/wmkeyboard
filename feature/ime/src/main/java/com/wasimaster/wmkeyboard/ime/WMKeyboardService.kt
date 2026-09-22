@@ -578,6 +578,7 @@ import java.util.Calendar
 import java.util.EnumMap
 import java.util.concurrent.atomic.AtomicInteger
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.voice.R as VoiceR
 
 /**
  * The WM Keyboard input method service.
@@ -18063,6 +18064,15 @@ open class WMKeyboardService : InputMethodService() {
         }
         if (!server && whisperModel == null && !voiceEngine.isAvailable()) {
             fail(VoiceStatus.UNAVAILABLE)
+            return
+        }
+        if (whisperModel != null && !WhisperEngine.ready) {
+            // Play only: the interpreter is an on-demand part that is not here
+            // yet. Said now rather than after the phrase, which would be
+            // recorded for nothing. Data saver holding downloads leaves the
+            // fetch to the settings screen, which asks properly.
+            if (dataSaverStatus.allows(MeteredFeature.DOWNLOADS)) WhisperEngine.requestModule()
+            fail(VoiceStatus.ERROR, getString(VoiceR.string.core_voice_whisper_module_downloading))
             return
         }
         val ic = currentInputConnection ?: return

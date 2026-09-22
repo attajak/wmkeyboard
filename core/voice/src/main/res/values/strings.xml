@@ -69,6 +69,11 @@
     <!-- ================================================================== -->
 
     <string name="core_voice_whisper_model_load_error">The voice model did not load. The file is possibly damaged. Delete the model in settings and download it again.</string>
+    <!-- Play builds only: the interpreter arrives as an on-demand module the
+         first time offline dictation is used. Same wording family as the AI
+         part's in :core:intelligence. -->
+    <string name="core_voice_whisper_module_downloading">The offline voice typing part of the keyboard is downloading from Google Play. Try again in a moment.</string>
+    <string name="core_voice_whisper_module_restart">The offline voice typing part just finished installing. Close and reopen the keyboard to use it.</string>
     <string name="core_voice_whisper_transcribe_error">Voice typing did not work. Try again, or select a smaller model.</string>
     <!-- %1$s is how many frequency bands the model asks for. The app makes the
          number of bands that the file downloaded with the model describes, so a

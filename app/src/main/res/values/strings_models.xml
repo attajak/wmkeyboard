@@ -41,6 +41,14 @@
     <!-- ===== Offline voice typing: the Whisper model screen ===== -->
 
     <string name="models_whisper_yours_title">Your voice models</string>
+    <!-- Play builds only: the interpreter that runs the models is an on-demand
+         part of the app. Same wording family as the translate tool's module
+         banner in strings_tooldetail.xml. -->
+    <string name="models_whisper_module_missing_info">Offline voice typing is an extra part of the keyboard that comes from Google Play. Download it, then select a model.</string>
+    <string name="models_whisper_module_installing_info">Google Play is downloading the offline voice typing part…</string>
+    <string name="models_whisper_module_installing_sized_info">Google Play is downloading the offline voice typing part: <xliff:g id="done" example="1.2 MB">%1$s</xliff:g> of <xliff:g id="total" example="1.8 MB">%2$s</xliff:g></string>
+    <string name="models_whisper_module_failed_info">Google Play did not deliver the download. Check the connection and that the Play Store works, then try again.</string>
+    <string name="models_whisper_module_metered_body">The offline voice typing part comes from Google Play.</string>
     <string name="models_whisper_empty">No model is downloaded yet. Select one below to use voice typing fully offline.</string>
     <string name="models_whisper_suggested_title">Suggested for your languages</string>
 

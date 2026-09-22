@@ -7,6 +7,7 @@ import com.wasimaster.wmkeyboard.app.drive.installDriveAuth
 import com.wasimaster.wmkeyboard.app.llm.installLlmDelivery
 import com.wasimaster.wmkeyboard.app.translate.installTranslateDelivery
 import com.wasimaster.wmkeyboard.app.llm.llmSplitCompat
+import com.wasimaster.wmkeyboard.app.modules.installOnDemandDelivery
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupClients
 
@@ -65,6 +66,9 @@ class WMApplication : Application() {
         installLlmDelivery(this)
         // The same for ML Kit's translator and OnDeviceTranslator.
         installTranslateDelivery(this)
+        // And for the LiteRT interpreter (WhisperEngine, LocalSubjectCutout)
+        // and ML Kit's ink recogniser (HandwritingModels).
+        installOnDemandDelivery(this)
         // The Dropbox and OneDrive client ids, which live in BuildConfig and
         // so cannot be read from the library module that needs them.
         BackupClients.install(

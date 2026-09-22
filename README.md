@@ -143,7 +143,10 @@ feature/
 ├── ime/              WMKeyboardService and the Compose keyboard UI (the keyboard itself)
 ├── addons/           Addon install, reconcile, download
 ├── tools/            Network tool clients: AI, GIF and sticker, search, link preview
-└── llm/              On-demand LiteRT-LM runtime (Play channel only)
+├── llm/              On-demand LiteRT-LM runtime (Play channel only)
+├── translate/        On-demand ML Kit translator (Play channel only)
+├── litert/           On-demand LiteRT interpreter: offline Whisper, sticker cutout (Play channel only)
+└── handwriting/      On-demand ML Kit ink recogniser (Play channel only)
 core/
 ├── settings/         SettingsRepository (DataStore), KeyboardSettings, modes, power saving
 ├── intelligence/     Grammar (Harper JNI), local LLM, handwriting, spell checker service

@@ -2,13 +2,13 @@ package com.wasimaster.wmkeyboard.core.stickers
 
 import android.content.Context
 import android.graphics.Bitmap
+import com.wasimaster.wmkeyboard.core.modules.FeatureModules
+import com.wasimaster.wmkeyboard.core.modules.FeatureModules.awaitInstalled
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import java.io.File
 import java.io.RandomAccessFile
 import java.net.HttpURLConnection
 import java.net.URL
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import java.security.MessageDigest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
@@ -16,18 +16,18 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.tensorflow.lite.Interpreter
 
 /**
  * [SubjectCutout] with nothing of Google's on the device: the [CutoutModel]
  * network, fetched over plain HTTPS from the data repository and run on the
- * LiteRT interpreter the full build already carries for Whisper, so it adds a
- * five megabyte download and not one byte of APK.
+ * LiteRT interpreter the full build carries for Whisper, so it adds a five
+ * megabyte download and not one byte of APK.
  *
- * The interpreter is built for one cutout and closed after it. Loading a graph
- * this small is quick next to running it, a cutout happens a few times in an
- * editing session and not at all in most, and the alternative is the settings
- * process holding the graph and its arena for as long as it lives.
+ * Nothing here imports LiteRT. The interpreter call sits behind
+ * [CutoutRuntime], reached by reflection, because on Play the library ships
+ * in the on-demand `:feature:litert` module the base APK is built without;
+ * [ensureModel] fetches that module before the network, so to the editor the
+ * two are one download with one bar.
  */
 internal object LocalSubjectCutout {
 
@@ -39,21 +39,55 @@ internal object LocalSubjectCutout {
     /** Two editors cannot be open at once, but two taps on one row can land. */
     private val downloading = Mutex()
 
-    fun modelReady(context: Context): Boolean = CutoutModel.isDownloaded(context.filesDir)
+    /**
+     * The share of the bar the interpreter's module takes when it has to be
+     * fetched first: it is about a third of the network's size.
+     */
+    private const val MODULE_SHARE = 0.25f
+
+    @Volatile
+    private var runtime: CutoutRuntime? = null
+
+    /** The model is here and so is what runs it. Never downloads either. */
+    fun modelReady(context: Context): Boolean =
+        CutoutModel.isDownloaded(context.filesDir) && FeatureModules.litert.installed
 
     /**
      * Downloads the model, reporting progress from 0 to 1, and resumes a
-     * download that was cut short. False when it could not be had: no network,
-     * no room, or a file at the address that is not the model.
+     * download that was cut short. On Play the interpreter's module comes
+     * first and takes the start of the bar. False when either could not be
+     * had: no network, no room, or a file at the address that is not the model.
      */
     suspend fun ensureModel(context: Context, onProgress: (Float) -> Unit = {}): Boolean {
         val filesDir = context.filesDir
         return downloading.withLock {
+            val moduleShare = if (FeatureModules.litert.installed) 0f else MODULE_SHARE
+            val moduleHere = FeatureModules.litert.awaitInstalled { bytes, total ->
+                if (total > 0L) onProgress((bytes.toFloat() / total * moduleShare).coerceIn(0f, moduleShare))
+            }
+            if (!moduleHere) return@withLock false
             if (CutoutModel.isDownloaded(filesDir)) return@withLock true
             withContext(Dispatchers.IO) {
-                runCancellable { download(filesDir, onProgress) }.getOrDefault(false)
+                runCancellable {
+                    download(filesDir) { onProgress(moduleShare + it * (1f - moduleShare)) }
+                }.getOrDefault(false)
             }
         }
+    }
+
+    /**
+     * The interpreter side, or null while its module is not on this install
+     * (Play only) or will not load yet. No restart is needed after the module
+     * arrives: SplitCompat (installed at startup in Play builds) lets this
+     * process load the split's classes and native libraries as soon as the
+     * install completes.
+     */
+    private fun runtime(context: Context): CutoutRuntime? {
+        runtime?.let { return it }
+        if (!FeatureModules.litert.installed) return null
+        return runCancellable {
+            FeatureModules.load<CutoutRuntime>(CutoutModule.BRIDGE_CLASS, context.classLoader)
+        }.onSuccess { runtime = it }.getOrNull()
     }
 
     private suspend fun download(filesDir: File, onProgress: (Float) -> Unit): Boolean {
@@ -122,60 +156,14 @@ internal object LocalSubjectCutout {
     /**
      * The subject of [image] as an alpha mask the size of [image], unjudged:
      * whether it is worth applying is [SubjectCutout]'s call.
-     *
-     * The network sees a 320 pixel square whatever the picture's shape, which
-     * is how it was trained, and the map it answers with is stretched back
-     * over the picture with filtering, so the step from 320 up to the sticker
-     * canvas softens the edge and does not staircase it.
      */
     suspend fun cutOut(context: Context, image: Bitmap): SubjectCutout.Result {
         val model = CutoutModel.file(context.filesDir)
         if (!CutoutModel.isDownloaded(context.filesDir)) return SubjectCutout.Result.ModelUnavailable
+        val engine = runtime(context) ?: return SubjectCutout.Result.ModelUnavailable
         return withContext(Dispatchers.Default) {
-            runCancellable { SubjectCutout.Result.Ok(segment(model, image)) }
+            runCancellable { SubjectCutout.Result.Ok(engine.segment(model, image)) }
                 .getOrDefault(SubjectCutout.Result.Failed)
         }
-    }
-
-    private fun segment(model: File, image: Bitmap): Bitmap {
-        val side = CutoutModel.INPUT_SIDE
-        // getPixels cannot read a hardware bitmap, and the editor's canvas is
-        // not one, but a caller's picture is the caller's business.
-        val readable = if (image.config == Bitmap.Config.ARGB_8888) image
-        else image.copy(Bitmap.Config.ARGB_8888, false)
-        val small = Bitmap.createScaledBitmap(readable, side, side, true)
-        val pixels = IntArray(side * side)
-        small.getPixels(pixels, 0, side, 0, 0, side, side)
-        if (small !== readable) small.recycle()
-        if (readable !== image) readable.recycle()
-
-        val input = ByteBuffer.allocateDirect(pixels.size * 3 * Float.SIZE_BYTES).order(ByteOrder.nativeOrder())
-        input.asFloatBuffer().put(CutoutMask.normalise(pixels))
-        val output = ByteBuffer.allocateDirect(pixels.size * Float.SIZE_BYTES).order(ByteOrder.nativeOrder())
-
-        val options = Interpreter.Options().apply {
-            numThreads = Runtime.getRuntime().availableProcessors().coerceIn(2, 4)
-        }
-        Interpreter(model, options).use { interpreter ->
-            interpreter.runSignature(
-                mapOf(CutoutModel.INPUT_NAME to input),
-                mapOf(CutoutModel.OUTPUT_NAME to output),
-                CutoutModel.SIGNATURE,
-            )
-        }
-
-        val map = FloatArray(pixels.size)
-        output.rewind()
-        output.asFloatBuffer().get(map)
-        val alpha = CutoutMask.alphaOf(map)
-        // White under the alpha, so the scaled copy's alpha channel is the
-        // filtered mask and extractAlpha lifts it straight out.
-        for (index in alpha.indices) pixels[index] = (alpha[index] shl 24) or 0x00FFFFFF
-        val coarse = Bitmap.createBitmap(pixels, side, side, Bitmap.Config.ARGB_8888)
-        val full = Bitmap.createScaledBitmap(coarse, image.width, image.height, true)
-        val mask = full.extractAlpha()
-        if (full !== coarse) full.recycle()
-        coarse.recycle()
-        return mask
     }
 }

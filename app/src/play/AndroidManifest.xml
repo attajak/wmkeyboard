@@ -2,7 +2,8 @@
 <!--
    Play-channel builds only, added by `channelManifests` in build.gradle.kts.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--
        PlayAppUpdater asks who installed the app before it touches Play Core,
@@ -13,5 +14,46 @@
     <queries>
         <package android:name="com.android.vending" />
     </queries>
+
+    <application>
+        <!--
+           The ML Kit registrars of the two on-demand ML Kit modules, declared
+           in the base while their classes ship in the :feature:translate and
+           :feature:handwriting splits. Each library's own manifest declares
+           the same MlKitComponentDiscoveryService with its registrar as
+           meta-data, and each feature's manifest removes that copy, because
+           AGP merges a feature's components into the base manifest under
+           android:splitName and the platform hides a component whose split
+           is not installed: merged from a split, the one shared service
+           element would take the base's own registrars (text recognition,
+           barcodes, subject segmentation) down with it until that split
+           arrived.
+
+           Declared here, every registrar is visible from the first process
+           start. ML Kit reads this service's meta-data once, when its context
+           comes up, keeps a lazy provider per registrar, skips one whose
+           class is not loadable yet with a logged warning ("Class ... is not
+           an found."), and retries the ones it kept when its dynamic-feature
+           support library hears a split install; SplitCompat has made the
+           class loadable by then. Read off firebase-components 16.1.0 and
+           playstore-dynamic-feature-support 16.0.0-beta2. tools:node="merge"
+           adds these entries to the service the base's other ML Kit
+           libraries declare.
+        -->
+        <service
+            android:name="com.google.mlkit.common.internal.MlKitComponentDiscoveryService"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="com.google.firebase.components:com.google.mlkit.nl.translate.NaturalLanguageTranslateRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.mlkit.nl.languageid.bundled.internal.ThickLanguageIdRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+            <meta-data
+                android:name="com.google.firebase.components:com.google.mlkit.vision.digitalink.recognition.internal.DigitalInkRecognitionRegistrar"
+                android:value="com.google.firebase.components.ComponentRegistrar" />
+        </service>
+    </application>
 
 </manifest>

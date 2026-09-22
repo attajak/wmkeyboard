@@ -1,8 +1,28 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     id("wmkeyboard.detekt")
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+}
+
+// Same channel flag :app reads. It decides where the LiteRT interpreter that
+// runs the sticker editor's own background remover lives: non-Play full
+// builds compile src/cutoutbridge (and the litert dependency) straight into
+// this module; Play builds leave both out of the base APK — the on-demand
+// :feature:litert module, shared with Whisper, carries them instead. See
+// CutoutRuntime.kt for the seam, and :core:intelligence for the arrangement
+// this one copies.
+val playStoreChannel = run {
+    val localProperties = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) file.inputStream().use { load(it) }
+    }
+    (providers.gradleProperty("wmkb.enablePlayStore").orNull
+        ?: localProperties.getProperty("wmkb.enablePlayStore")
+        ?: System.getenv("WMKB_ENABLE_PLAY_STORE")
+        ?: "false").toBoolean()
 }
 
 android {
@@ -27,6 +47,17 @@ android {
     }
     buildFeatures { compose = true }
     lint { lintConfig = rootProject.file("config/lint/lint.xml") }
+}
+
+androidComponents {
+    onVariants { variant ->
+        // Static-source-dir mechanism rather than a flavour folder for the
+        // same AGP 9 reason as the channel seams in :app — and conditional,
+        // which a flavour folder cannot be.
+        if (!playStoreChannel && variant.flavorName == "full") {
+            variant.sources.kotlin?.addStaticSourceDirectory("src/cutoutbridge/java")
+        }
+    }
 }
 
 kotlin {
@@ -64,6 +95,9 @@ dependencies {
     // with the same signatures, and its editor simply has no cutout button.
     "fullImplementation"(libs.mlkit.subject.segmentation)
     // The same removal without Play services: U2-Net-P on the interpreter
-    // :core:voice already links for Whisper, so this adds nothing to the APK.
-    "fullImplementation"(libs.litert)
+    // :core:voice links for Whisper, so this adds nothing to the APK. Play
+    // builds get it from the :feature:litert module instead.
+    if (!playStoreChannel) {
+        "fullImplementation"(libs.litert)
+    }
 }

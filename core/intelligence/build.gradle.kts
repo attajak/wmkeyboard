@@ -12,7 +12,9 @@ plugins {
 // straight into this module, exactly as before the split; Play builds leave
 // both out of the base APK — the on-demand :feature:llm module carries them
 // instead, so the ~20 MB per ABI runtime only reaches devices that use
-// On-device AI. See LlmRuntime.kt for the seam.
+// On-device AI. See LlmRuntime.kt for the seam. ML Kit's translator
+// (src/translatebridge, :feature:translate) and its ink recogniser
+// (src/inkbridge, :feature:handwriting) follow the same arrangement.
 val playStoreChannel = run {
     val localProperties = Properties().apply {
         val file = rootProject.file("local.properties")
@@ -57,6 +59,8 @@ androidComponents {
             variant.sources.kotlin?.addStaticSourceDirectory("src/llmbridge/java")
             // The same arrangement for ML Kit's translator: see TranslateRuntime.kt.
             variant.sources.kotlin?.addStaticSourceDirectory("src/translatebridge/java")
+            // And for its ink recogniser: see InkRuntime.kt.
+            variant.sources.kotlin?.addStaticSourceDirectory("src/inkbridge/java")
         }
     }
 }
@@ -85,8 +89,15 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
-    "fullImplementation"(libs.mlkit.digital.ink)
+    // ML Kit's shared core, named on its own: MlKitInit reaches into it, and
+    // on Play none of the libraries below that used to bring it along are in
+    // the base any more.
+    "fullImplementation"(libs.mlkit.common)
     if (!playStoreChannel) {
+        // Handwriting. Play builds leave it out of the base APK; the on-demand
+        // :feature:handwriting module carries it instead, so the recogniser's
+        // ~6.5 MB per ABI only reaches devices that write by hand.
+        "fullImplementation"(libs.mlkit.digital.ink)
         "fullImplementation"(libs.litertlm.android)
         // On-device translation for the translate tool, and the bundled
         // language identifier that stands in for the online services' "detect
@@ -99,8 +110,10 @@ dependencies {
     }
     // Always, whatever the channel: OnDeviceTranslatorCatalogueTest pins the
     // hand-written language table to the library's own, and the table is
-    // compiled into every build whether or not the library is.
+    // compiled into every build whether or not the library is. InkModelTagsTest
+    // does the same for the generated ink tag list.
     "testFullImplementation"(libs.mlkit.translate)
+    "testFullImplementation"(libs.mlkit.digital.ink)
 
     testImplementation(libs.junit)
 }

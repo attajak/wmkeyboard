@@ -1,59 +1,61 @@
 package com.wasimaster.wmkeyboard.core.voice.whisper
 
+import com.wasimaster.wmkeyboard.core.modules.FeatureModules
+import com.wasimaster.wmkeyboard.core.modules.ModuleState
 import com.wasimaster.wmkeyboard.voice.R
 import java.io.File
-import java.io.FileInputStream
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.nio.channels.FileChannel
-import java.util.concurrent.locks.ReentrantLock
-import org.tensorflow.lite.Interpreter
+import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Full-flavor on-device Whisper speech-to-text via the LiteRT/TF-Lite
- * [Interpreter]. The DocWolle `.tflite` graphs run the whole autoregressive
- * decode internally: feed the `[1, 80, 3000]` log-mel spectrogram, read back
- * the `sequences` token ids, detokenize.
+ * Full-flavor facade over offline Whisper. The interpreter side
+ * ([WhisperModule.BRIDGE_CLASS]) is reached by reflection because its home
+ * differs per channel — embedded in this module for sideload builds, in the
+ * on-demand `:feature:litert` split for Play builds; see [WhisperRuntime].
  *
- * Interpreter init memory-maps the model and is slow, so one interpreter and
- * one parsed vocab are cached and rebuilt only when the file paths change. The
- * lite flavor replaces this object with a stub that throws.
- *
- * Three graph shapes exist and the signature keys tell them apart: the plain
- * multilingual graphs auto-detect the language and offer transcribe/translate;
- * the grouped `TOP_WORLD`/`EUROPEAN_UNION` graphs add `serving_transcribe_lang`,
- * which takes a scalar `lang_token` so the caller forces one language; and the
- * single-language and `.en` graphs expose just `serving_default`.
- *
- * **No decoder prefix can be supplied.** Whisper itself takes an initial prompt,
- * a piece of text prepended to the decoder as `<|startofprev|>` tokens to bias
- * spelling and vocabulary, and Whisper's own language forcing works the same way.
- * Neither is reachable here: each of these graphs was exported with its whole
- * `generate()` call traced inside, `forced_decoder_ids` and all, and the exported
- * signature takes only `input_features` (plus `lang_token` where present). The
- * grouped graphs make this concrete — the language input selects between one
- * traced branch per language, so even a token they were not built with does
- * nothing. A prompt, or forcing a language no branch covers, needs graphs that
- * expose the encoder and the decoder as separate signatures and an autoregressive
- * loop written on this side; the published conversions do not.
+ * On a Play install where the split is not yet present, [transcribe] throws
+ * a [WhisperException] that says so, the same error shape the keyboard
+ * already renders for a damaged model, and [warm] asks Play for it, so the
+ * download starts while the first phrase is still being said. The lite
+ * flavor replaces this object with a stub that throws.
  */
 object WhisperEngine {
 
     const val AVAILABLE = true
 
-    private const val SIG_TRANSCRIBE = "serving_transcribe"
-    private const val SIG_TRANSCRIBE_LANG = "serving_transcribe_lang"
-    private const val SIG_TRANSLATE = "serving_translate"
-    private const val SIG_DEFAULT = "serving_default"
-    private const val INPUT_NAME = "input_features"
-    private const val INPUT_LANG = "lang_token"
-    private const val OUTPUT_NAME = "sequences"
+    @Volatile
+    private var runtime: WhisperRuntime? = null
 
-    private val lock = ReentrantLock()
-    private var interpreter: Interpreter? = null
-    private var loadedModelPath: String? = null
-    private var vocab: WhisperVocab? = null
-    private var loadedVocabPath: String? = null
+    /** Where the interpreter's module stands. Always installed outside Play. */
+    val moduleState: StateFlow<ModuleState> get() = FeatureModules.litert.state
+
+    /** Whether [transcribe] can run right now, without asking for anything. */
+    val ready: Boolean get() = runtime != null || FeatureModules.litert.installed
+
+    /** Asks Play for the module. A no-op where it is compiled in. */
+    fun requestModule() = FeatureModules.litert.requestInstall()
+
+    /**
+     * The loaded runtime, or the reason there is none yet as a
+     * [WhisperException]. No restart is needed after the module arrives:
+     * SplitCompat (installed at startup in Play builds) lets this process
+     * load the split's classes and native libraries as soon as the install
+     * completes.
+     */
+    private fun runtime(): WhisperRuntime {
+        runtime?.let { return it }
+        if (!FeatureModules.litert.installed) {
+            FeatureModules.litert.requestInstall()
+            throw WhisperException(R.string.core_voice_whisper_module_downloading)
+        }
+        return try {
+            FeatureModules.load<WhisperRuntime>(WhisperModule.BRIDGE_CLASS, WhisperEngine::class.java.classLoader!!)
+                .also { runtime = it }
+        } catch (e: Throwable) {
+            // Installed but not loadable — a split installed moments ago on a
+            // device where the classloader will only see it after a restart.
+            throw WhisperException(R.string.core_voice_whisper_module_restart, cause = e)
+        }
+    }
 
     /**
      * Transcribes one PCM utterance (16 kHz mono float in [-1, 1]) to text.
@@ -69,52 +71,7 @@ object WhisperEngine {
         pcm: FloatArray,
         translate: Boolean,
         langToken: Int? = null,
-    ): String {
-        lock.lock()
-        try {
-            val voc = obtainVocab(vocabFile)
-            val itp = try {
-                obtainInterpreter(modelFile)
-            } catch (e: Throwable) {
-                releaseLocked()
-                throw WhisperException(R.string.core_voice_whisper_model_load_error, cause = e)
-            }
-
-            requireMelBins(itp, voc.nMel)
-
-            val mel = WhisperMel.compute(pcm, voc.filters, voc.nFft, voc.nMel)
-            val input = ByteBuffer
-                .allocateDirect(voc.nMel * WhisperMel.MEL_LEN * Float.SIZE_BYTES)
-                .order(ByteOrder.nativeOrder())
-            for (v in mel) input.putFloat(v)
-            input.rewind()
-
-            val outLen = (itp.getOutputTensor(0)?.shape()?.lastOrNull() ?: 451).coerceAtLeast(1)
-            val output = Array(1) { IntArray(outLen) }
-
-            val signature = pickSignature(itp, translate, langToken != null)
-            try {
-                when {
-                    signature == SIG_TRANSCRIBE_LANG -> itp.runSignature(
-                        mapOf(INPUT_NAME to input, INPUT_LANG to scalarInt(requireNotNull(langToken))),
-                        mapOf(OUTPUT_NAME to output),
-                        signature,
-                    )
-                    signature != null -> itp.runSignature(
-                        mapOf(INPUT_NAME to input), mapOf(OUTPUT_NAME to output), signature,
-                    )
-                    else -> itp.run(input, output)
-                }
-            } catch (e: Throwable) {
-                releaseLocked()
-                throw WhisperException(R.string.core_voice_whisper_transcribe_error, cause = e)
-            }
-
-            return voc.decode(output[0]).trim()
-        } finally {
-            lock.unlock()
-        }
-    }
+    ): String = runtime().transcribe(modelFile, vocabFile, pcm, translate, langToken)
 
     /**
      * Loads the interpreter and the vocabulary ahead of [transcribe]. Mapping a
@@ -125,96 +82,11 @@ object WhisperEngine {
      * Call on a background dispatcher only.
      */
     fun warm(modelFile: File, vocabFile: File) {
-        lock.lock()
-        try {
-            runCatching {
-                obtainVocab(vocabFile)
-                obtainInterpreter(modelFile)
-            }.onFailure { releaseLocked() }
-        } finally {
-            lock.unlock()
-        }
+        runCatching { runtime().warm(modelFile, vocabFile) }
     }
 
     /** Frees the cached interpreter. Non-blocking, so IME trim-memory never waits. */
     fun release() {
-        if (!lock.tryLock()) return
-        try {
-            releaseLocked()
-        } finally {
-            lock.unlock()
-        }
-    }
-
-    /**
-     * Fails a model whose spectrogram input has a different band count from the
-     * filterbank shipped beside it. Whisper switched from 80 bands to 128 at
-     * large-v3, so a model paired with the wrong vocab binary would otherwise
-     * happily consume wrong-shaped features and decode confident nonsense
-     * instead of erroring.
-     */
-    private fun requireMelBins(itp: Interpreter, filterBins: Int) {
-        // A grouped graph's tensor 0 is the scalar lang_token, whose shape has no
-        // mel axis at all — nothing to check there.
-        val bins = runCatching { itp.getInputTensor(0)?.shape() }.getOrNull()
-            ?.takeIf { it.size >= 3 }?.get(1)
-            ?: return
-        if (bins > 0 && bins != filterBins) {
-            releaseLocked()
-            throw WhisperException(R.string.core_voice_whisper_mel_bins_error, bins.toString())
-        }
-    }
-
-    /**
-     * Translating always wins over forcing a language — the translate task
-     * detects the source itself, and no graph offers both at once.
-     */
-    private fun pickSignature(itp: Interpreter, translate: Boolean, forceLang: Boolean): String? {
-        val keys = runCatching { itp.signatureKeys }.getOrNull()?.toSet() ?: return null
-        if (keys.isEmpty()) return null
-        return when {
-            translate && SIG_TRANSLATE in keys -> SIG_TRANSLATE
-            forceLang && SIG_TRANSCRIBE_LANG in keys -> SIG_TRANSCRIBE_LANG
-            SIG_TRANSCRIBE in keys -> SIG_TRANSCRIBE
-            SIG_DEFAULT in keys -> SIG_DEFAULT
-            else -> keys.first()
-        }
-    }
-
-    /** The `lang_token` scalar as a raw 4-byte buffer, which fits its `()` int32 spec. */
-    private fun scalarInt(value: Int): ByteBuffer =
-        ByteBuffer.allocateDirect(Int.SIZE_BYTES).order(ByteOrder.nativeOrder()).apply {
-            putInt(value)
-            rewind()
-        }
-
-    private fun obtainVocab(vocabFile: File): WhisperVocab {
-        vocab?.let { if (loadedVocabPath == vocabFile.path) return it }
-        val multilingual = !vocabFile.name.contains("_en", ignoreCase = true)
-        return WhisperVocab.load(vocabFile, multilingual).also {
-            vocab = it
-            loadedVocabPath = vocabFile.path
-        }
-    }
-
-    private fun obtainInterpreter(modelFile: File): Interpreter {
-        interpreter?.let { if (loadedModelPath == modelFile.path) return it }
-        releaseLocked()
-        val buffer = FileInputStream(modelFile).use { fis ->
-            fis.channel.map(FileChannel.MapMode.READ_ONLY, 0, fis.channel.size())
-        }
-        val options = Interpreter.Options().apply {
-            numThreads = Runtime.getRuntime().availableProcessors().coerceIn(2, 4)
-        }
-        return Interpreter(buffer, options).also {
-            interpreter = it
-            loadedModelPath = modelFile.path
-        }
-    }
-
-    private fun releaseLocked() {
-        runCatching { interpreter?.close() }
-        interpreter = null
-        loadedModelPath = null
+        runtime?.release()
     }
 }

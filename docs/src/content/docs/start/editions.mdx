@@ -50,6 +50,8 @@ Two more features are Full-only without being toolbox tools of their own. Both a
 
 The build's own comment on the flavor split calls it out directly: Lite "removes roughly 100 MB of ML Kit + Harper native libraries for low-storage devices." That figure covers the handwriting, scanning, and grammar libraries specifically. The LiteRT and LiteRT-LM runtimes behind offline Whisper and the local LLM are also Full-only native dependencies and add to the same gap.
 
+On the Play Store build some of that library code is not in the initial install either: the LiteRT-LM runtime, ML Kit's translator, the LiteRT interpreter behind offline Whisper and the sticker editor's own background remover, and ML Kit's handwriting recogniser each arrive as an on-demand part the first time the feature is used.
+
 Most of what gets cut is runtime *library code*, not language data. The biggest models these features use (handwriting recognition per language, Whisper's transcription graphs, LLM weights) download on demand into app storage on Full, so none of those sit in the APK.
 
 Two do ship inside it, though. The direct-download builds pull in ML Kit's bundled text-recognition and barcode-scanning libraries, which carry their models with them, so OCR and QR scanning work on a phone with no Google services at all. Play builds swap both for the unbundled versions, which fetch their models through Play services instead. Either way it's a Full-only dependency, so Lite carries neither the libraries nor the models.

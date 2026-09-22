@@ -2,31 +2,18 @@ package com.wasimaster.wmkeyboard.core.handwriting
 
 import android.content.Context
 import android.os.SystemClock
-import com.google.android.gms.tasks.Task
-import com.google.mlkit.common.model.DownloadConditions
-import com.google.mlkit.common.model.RemoteModelManager
-import com.google.mlkit.common.sdkinternal.MlKitContext
-import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognition
-import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognitionModel
-import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognitionModelIdentifier
-import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognizer
-import com.google.mlkit.vision.digitalink.recognition.DigitalInkRecognizerOptions
-import com.google.mlkit.vision.digitalink.recognition.Ink
-import com.google.mlkit.vision.digitalink.recognition.RecognitionContext
-import com.google.mlkit.vision.digitalink.recognition.WritingArea
+import com.wasimaster.wmkeyboard.core.modules.FeatureModules
+import com.wasimaster.wmkeyboard.core.modules.FeatureModules.awaitInstalled
+import com.wasimaster.wmkeyboard.core.modules.ModuleState
 import com.wasimaster.wmkeyboard.core.script.LanguageDef
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import java.io.File
 import java.io.IOException
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -62,31 +49,84 @@ data class HandwritingDownloadProgress(
         get() = if (totalBytes > 0) (bytes.toFloat() / totalBytes).coerceIn(0f, 1f) else null
 }
 
-/** Awaits a Play-services Task without the coroutines-play-services artifact. */
-private suspend fun <T> Task<T>.await(): T = suspendCancellableCoroutine { cont ->
-    addOnSuccessListener { if (cont.isActive) cont.resume(it) }
-    addOnFailureListener { if (cont.isActive) cont.resumeWithException(it) }
-    addOnCanceledListener { if (cont.isActive) cont.cancel() }
+/**
+ * One of ML Kit's model tags, taken apart the way its own identifier does it:
+ * `sa-Deva-IN` is language `sa`, script `Deva`, region `IN`; `no` has neither
+ * a script nor a region. The script is the one the model reads whether or
+ * not the tag spells it (`af` is Latn), from [InkModelTags], as the library's
+ * identifier reports it. Parsed here rather than asked of the library so the
+ * mapping works before the library's module is on the device (Play).
+ * InkModelTagsTest pins all three parts to the library's own subtags.
+ */
+internal data class InkTag(val tag: String) {
+    private val parts = tag.split('-')
+    val language: String = parts[0]
+    val script: String? = parts.getOrNull(1)?.takeIf { it.length == SCRIPT_LENGTH && it.all(Char::isLetter) }
+        ?: InkModelTags.SCRIPTS[tag]
+    val region: String? = parts.drop(1).firstOrNull {
+        (it.length == REGION_ALPHA_LENGTH && it.all(Char::isLetter)) ||
+            (it.length == REGION_DIGIT_LENGTH && it.all(Char::isDigit))
+    }
+
+    private companion object {
+        const val SCRIPT_LENGTH = 4
+        const val REGION_ALPHA_LENGTH = 2
+        const val REGION_DIGIT_LENGTH = 3
+    }
 }
 
 /**
  * ML Kit Digital Ink model catalog and download management. Shared by the
  * IME (recognition, in-panel download) and the settings app (model manager),
  * so both always agree on which models exist and their language tags.
+ *
+ * Nothing here imports ML Kit. Those calls sit behind [InkRuntime], reached
+ * by reflection, because on Play the library ships in an on-demand module
+ * the base APK is built without; [download] fetches that module before the
+ * model, so to the panel the two are one download with one readout.
  */
 object HandwritingModels {
 
     /**
      * ML Kit's own catalogue, minus the non-language recognizers (autodraw,
      * emoji, shapes) and the gesture models, which all carry an `-x-` private
-     * subtag. Read once — it is a static table inside the library.
+     * subtag. Compiled in (see [InkModelTags]) rather than read off the
+     * library, which on Play may not be here yet.
      */
-    private val allIdentifiers: List<DigitalInkRecognitionModelIdentifier> by lazy {
-        runCatching {
-            DigitalInkRecognitionModelIdentifier.allModelIdentifiers()
-                .filter { !it.languageTag.contains("-x-") }
-        }.getOrDefault(emptyList())
+    private val allIdentifiers: List<InkTag> by lazy { InkModelTags.ALL.map(::InkTag) }
+
+    private val allTags: Set<String> by lazy { InkModelTags.ALL.toSet() }
+
+    /** Where the recogniser's module stands. Always installed outside Play. */
+    val moduleState: StateFlow<ModuleState> get() = FeatureModules.handwriting.state
+
+    /** Asks Play for the module. A no-op where it is compiled in. */
+    fun requestModule() = FeatureModules.handwriting.requestInstall()
+
+    @Volatile
+    private var loaded: InkRuntime? = null
+
+    /**
+     * The runtime, or null while its module is not on this install (Play
+     * only). Never throws: a bridge that will not load is the same "not here"
+     * to every caller, and each of them already has something to say for it.
+     *
+     * No restart is needed after the module arrives. SplitCompat (installed at
+     * startup in Play builds) lets this process load the split's classes and
+     * native libraries as soon as the install completes, and ML Kit's
+     * dynamic-feature support library in the base registers the split's
+     * components with the ML Kit context that is already running.
+     */
+    private fun runtime(): InkRuntime? {
+        loaded?.let { return it }
+        if (!FeatureModules.handwriting.installed) return null
+        return runCancellable {
+            FeatureModules.load<InkRuntime>(InkModule.BRIDGE_CLASS, HandwritingModels::class.java.classLoader!!)
+        }.onSuccess { loaded = it }.getOrNull()
     }
+
+    /** Recogniser side of the same runtime; null while the module is missing. */
+    internal fun runtimeForRecognition(): InkRuntime? = runtime()
 
     /**
      * Language ids whose ML Kit subtag is spelled differently. Only the ones
@@ -121,19 +161,19 @@ object HandwritingModels {
      */
     fun tagFor(language: LanguageDef): String? {
         val subtag = SUBTAG_ALIASES[language.id] ?: language.id
-        val candidates = allIdentifiers.filter { it.languageSubtag == subtag }
+        val candidates = allIdentifiers.filter { it.language == subtag }
         if (candidates.isEmpty()) return null
         val locale = language.localeTag.lowercase()
         val region = locale.substringAfter('-', "")
         val script = SCRIPT_CODES[language.script]
-        return candidates.firstOrNull { it.languageTag.lowercase() == locale }?.languageTag
-            ?: candidates.firstOrNull { it.languageTag.lowercase() == subtag }?.languageTag
-            ?: candidates.filter { it.scriptSubtag == script }
-                .minByOrNull { it.languageTag.length }?.languageTag
+        return candidates.firstOrNull { it.tag.lowercase() == locale }?.tag
+            ?: candidates.firstOrNull { it.tag.lowercase() == subtag }?.tag
+            ?: candidates.filter { it.script == script }
+                .minByOrNull { it.tag.length }?.tag
             ?: candidates.firstOrNull {
-                it.scriptSubtag.isNullOrEmpty() && it.regionSubtag.orEmpty().lowercase() == region
-            }?.languageTag
-            ?: candidates.minByOrNull { it.languageTag.length }?.languageTag
+                it.script == null && it.region.orEmpty().lowercase() == region
+            }?.tag
+            ?: candidates.minByOrNull { it.tag.length }?.tag
     }
 
     /** The recognition model tag for a language id; falls back to the id itself. */
@@ -167,69 +207,12 @@ object HandwritingModels {
     }
 
     /**
-     * Lazy, not eager: `getInstance` throws when ML Kit's init provider was
-     * skipped (see MlKitInit), and a throw out of this object's initializer
-     * poisons the class for the whole process — every later touch of the
-     * catalogue, even the parts that never go near ML Kit, would then fail
-     * with NoClassDefFoundError. Deferring it keeps the damage inside the
-     * three download calls that actually need the manager.
+     * The bridge's once-per-process reset of Mobile Data Download's group
+     * record, which every ink call has to follow; see `MlKitInkRuntime`.
+     * Recognition goes through it too, since the recogniser's model lookup
+     * waits on the same registration.
      */
-    private val manager: RemoteModelManager by lazy { RemoteModelManager.getInstance() }
-
-    /**
-     * Where Mobile Data Download keeps its record of every ink file group.
-     * ML Kit registers all 725 of them each time a process first touches ink;
-     * see [prepareMdd] for why that record has to go first.
-     */
-    private const val MDD_GROUPS_PREFS = "gms_icing_mdd_groupsmlkit_digital_ink_recognition"
-
-    private val mddLock = Mutex()
-
-    @Volatile
-    private var mddPrepared = false
-
-    /**
-     * Clears Mobile Data Download's file-group record, once per process and
-     * before ML Kit's first ink call. Every ink entry point here goes through it.
-     *
-     * ML Kit 19 re-registers all 725 ink file groups when a process first
-     * touches ink, and every Task it hands out — the status check, the
-     * download, the recogniser's model lookup — waits for that registration.
-     * In a process whose record already holds those groups, re-registering
-     * them finds nothing but duplicates, and the registration never finishes:
-     * no error, no thread working, just Tasks that never answer. Measured on a
-     * CPH2481 with a one-file app on digital-ink-recognition 19.0.0 and
-     * nothing else: the first process after install downloads and recognises;
-     * every later process hangs for as long as it lives (watched for eleven
-     * minutes), debug or release, interpreted or AOT-compiled. That is the
-     * "downloads forever" of #235 once the shrinker crash in front of it is
-     * gone, and it would stop recognition too after the keyboard restarts.
-     *
-     * With the record cleared the registration is a first one again and takes
-     * about ten seconds, after which a model that was already downloaded
-     * still reads as downloaded: MDD keeps the files and their checksums in a
-     * separate record and re-verifies the group against it, without fetching
-     * anything. Only the group record goes; the files record is what keeps a
-     * downloaded model downloaded.
-     */
-    private suspend fun prepareMdd() {
-        if (mddPrepared) return
-        mddLock.withLock {
-            if (mddPrepared) return
-            // Not initialised yet means ML Kit cannot run either; try again
-            // on the next call rather than marking a reset that never happened.
-            val context = runCatching { MlKitContext.getInstance().applicationContext }.getOrNull() ?: return
-            withContext(Dispatchers.IO) {
-                runCatching {
-                    context.getSharedPreferences(MDD_GROUPS_PREFS, Context.MODE_PRIVATE).edit().clear().commit()
-                }
-            }
-            mddPrepared = true
-        }
-    }
-
-    /** Recogniser side of [prepareMdd]; its model lookup waits on the same registration. */
-    internal suspend fun prepareForRecognition() = prepareMdd()
+    internal suspend fun prepare(engine: InkRuntime) = engine.prepare()
 
     /**
      * Mobile Data Download's instance directory for ink, under `filesDir`.
@@ -250,26 +233,27 @@ object HandwritingModels {
 
     /**
      * A "is it here?" check waits on ML Kit registering its file groups, which
-     * is about ten seconds the first time in a process (see [prepareMdd]) and
+     * is about ten seconds the first time in a process (see `MlKitInkRuntime.prepare`) and
      * instant after that. This is only a backstop for slower phones.
      */
     private const val STATUS_TIMEOUT_MS = 60_000L
 
-    fun model(tag: String): DigitalInkRecognitionModel? {
-        val identifier = runCatching {
-            DigitalInkRecognitionModelIdentifier.fromLanguageTag(tag)
-        }.getOrNull() ?: return null
-        return DigitalInkRecognitionModel.builder(identifier).build()
-    }
+    /** Whether ML Kit has a model for [tag] at all. */
+    fun hasModel(tag: String): Boolean = tag in allTags
 
+    /**
+     * Whether [tag]'s model is on the device. False on Play until the
+     * recogniser's module is here, since there is nothing to ask.
+     */
     suspend fun isDownloaded(tag: String): Boolean {
-        val model = model(tag) ?: return false
-        prepareMdd()
+        if (!hasModel(tag)) return false
+        val engine = runtime() ?: return false
+        engine.prepare()
         // Bounded for the same reason the download below is: this Task comes
         // out of the same machinery, and a status check that never answers
         // strands the panel on its "checking" spinner.
         return withTimeoutOrNull(STATUS_TIMEOUT_MS) {
-            runCancellable { manager.isModelDownloaded(model).await() }.getOrDefault(false)
+            runCancellable { engine.isDownloaded(tag) }.getOrDefault(false)
         } ?: false
     }
 
@@ -277,6 +261,10 @@ object HandwritingModels {
      * Downloads the model for [tag], reporting measured progress through
      * [onProgress] roughly once a second. Throws on failure (no network, no
      * space) and on a download that stops making progress.
+     *
+     * On Play the recogniser's own module comes first, with Play's byte
+     * counts on the same readout, so the panel's one Download button covers
+     * both and a cancelled wait leaves Play finishing the module on its own.
      *
      * ML Kit 19 fetches ink models through Mobile Data Download, whose future
      * can stay pending long after the bytes have arrived — and, when a fetch
@@ -289,14 +277,19 @@ object HandwritingModels {
         tag: String,
         onProgress: (HandwritingDownloadProgress) -> Unit = {},
     ) {
-        val model = model(tag) ?: throw IllegalArgumentException("No model for $tag")
-        prepareMdd()
+        require(hasModel(tag)) { "No model for $tag" }
+        val moduleHere = FeatureModules.handwriting.awaitInstalled { bytes, total ->
+            onProgress(HandwritingDownloadProgress(bytes = bytes, totalBytes = total))
+        }
+        if (!moduleHere) throw IOException("The handwriting module did not arrive from Google Play")
+        val engine = runtime() ?: throw IOException("The handwriting module is not loadable yet")
+        engine.prepare()
         val stores = modelStoreDirs(context)
         val total = HandwritingModelSizes.installedBytes(context, tag)
         // Everything already in there belongs to models downloaded before
         // this one, so measure the growth rather than the total.
         val baseline = bytesOnDisk(stores)
-        val task = manager.download(model, DownloadConditions.Builder().build())
+        val task = engine.startDownload(tag)
         val startedAt = SystemClock.elapsedRealtime()
         var lastBytes = 0L
         var lastGrewAt = startedAt
@@ -364,9 +357,10 @@ object HandwritingModels {
     }
 
     suspend fun delete(tag: String) {
-        val model = model(tag) ?: return
-        prepareMdd()
-        runCancellable { manager.deleteDownloadedModel(model).await() }
+        if (!hasModel(tag)) return
+        val engine = runtime() ?: return
+        engine.prepare()
+        engine.delete(tag)
     }
 }
 
@@ -379,18 +373,13 @@ data class HandwritingLanguage(val tag: String, val displayName: String)
  */
 class HandwritingRecognizerCache {
 
-    private var recognizer: DigitalInkRecognizer? = null
+    private var recognizer: InkRuntime.Recognizer? = null
     private var recognizerTag: String? = null
 
-    private fun recognizerFor(tag: String): DigitalInkRecognizer? {
+    private fun recognizerFor(engine: InkRuntime, tag: String): InkRuntime.Recognizer? {
         if (recognizerTag == tag) return recognizer
-        recognizer?.close()
-        recognizer = null
-        recognizerTag = null
-        val model = HandwritingModels.model(tag) ?: return null
-        recognizer = DigitalInkRecognition.getClient(
-            DigitalInkRecognizerOptions.builder(model).build()
-        )
+        close()
+        recognizer = engine.recognizer(tag) ?: return null
         recognizerTag = tag
         return recognizer
     }
@@ -411,26 +400,11 @@ class HandwritingRecognizerCache {
         maxCandidates: Int = 4,
     ): List<String> {
         if (strokes.isEmpty()) return emptyList()
-        HandwritingModels.prepareForRecognition()
-        val recognizer = recognizerFor(tag)
+        val engine = HandwritingModels.runtimeForRecognition() ?: error("Handwriting runtime is not here")
+        HandwritingModels.prepare(engine)
+        val recognizer = recognizerFor(engine, tag)
             ?: error("No recognizer for $tag")
-        val inkBuilder = Ink.builder()
-        for (stroke in strokes) {
-            val strokeBuilder = Ink.Stroke.builder()
-            for (point in stroke.points) {
-                strokeBuilder.addPoint(Ink.Point.create(point.x, point.y, point.t))
-            }
-            inkBuilder.addStroke(strokeBuilder.build())
-        }
-        val contextBuilder = RecognitionContext.builder()
-            // ML Kit caps pre-context at 20 chars; longer values throw.
-            .setPreContext(preContext.takeLast(20))
-        if (writingAreaWidth > 0f && writingAreaHeight > 0f) {
-            contextBuilder.setWritingArea(WritingArea(writingAreaWidth, writingAreaHeight))
-        }
-        val result = recognizer.recognize(inkBuilder.build(), contextBuilder.build()).await()
-        return result.candidates
-            .map { it.text }
+        return recognizer.recognize(strokes, preContext, writingAreaWidth, writingAreaHeight)
             .filter { it.isNotEmpty() }
             .distinct()
             .take(maxCandidates)

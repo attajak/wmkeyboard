@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.app
 
 import android.content.Context
+import android.text.format.Formatter
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -58,10 +59,12 @@ import com.wasimaster.wmkeyboard.core.script.LanguageDef
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
+import com.wasimaster.wmkeyboard.core.modules.ModuleState
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperCatalog
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperDownloadManager
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperDownloadManager.DownloadStatus
+import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperEngine
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperLanguages
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperModel
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperSize
@@ -189,6 +192,34 @@ internal fun WhisperModelManager(repository: SettingsRepository, settings: Keybo
                 }
             },
         )
+    }
+
+    // A Play install carries the interpreter as an on-demand module. The
+    // models below can be fetched without it, but nothing transcribes until
+    // it is here, so it is the first thing on the screen while it is not.
+    val module by WhisperEngine.moduleState.collectAsState()
+    var moduleMetered by remember { mutableStateOf(false) }
+    if (module != ModuleState.Installed) {
+        WhisperModuleBanner(
+            module = module,
+            onDownload = {
+                when (downloadDecisionNow(context, settings)) {
+                    MeteredDecision.ALLOWED -> WhisperEngine.requestModule()
+                    MeteredDecision.ASK -> moduleMetered = true
+                    MeteredDecision.BLOCKED -> meteredBlocked = true
+                }
+            },
+        )
+        if (moduleMetered) {
+            MeteredDownloadDialog(
+                detail = stringResource(R.string.models_whisper_module_metered_body),
+                onConfirm = {
+                    moduleMetered = false
+                    WhisperEngine.requestModule()
+                },
+                onDismiss = { moduleMetered = false },
+            )
+        }
     }
 
     WhisperRoutingCard(
@@ -859,5 +890,43 @@ private fun WhisperDownloadProgress(bytes: Long, total: Long) {
                 modifier = Modifier.padding(top = 4.dp),
             )
         }
+    }
+}
+
+/**
+ * The interpreter's own download, on a Play install that has not fetched it.
+ * Live state with the button that fixes it, the same shape as the translate
+ * screen's module banner.
+ */
+@Composable
+private fun WhisperModuleBanner(module: ModuleState, onDownload: () -> Unit) {
+    val context = LocalContext.current
+    when (module) {
+        is ModuleState.Installing -> StateBanner(
+            if (module.totalBytes > 0L) {
+                stringResource(
+                    R.string.models_whisper_module_installing_sized_info,
+                    Formatter.formatShortFileSize(context, module.bytes),
+                    Formatter.formatShortFileSize(context, module.totalBytes),
+                )
+            } else {
+                stringResource(R.string.models_whisper_module_installing_info)
+            },
+        )
+        is ModuleState.Missing -> StateBanner(
+            stringResource(
+                if (module.failed) {
+                    R.string.models_whisper_module_failed_info
+                } else {
+                    R.string.models_whisper_module_missing_info
+                },
+            ),
+            action = stringResource(
+                if (module.failed) CommonR.string.common_retry else CommonR.string.common_download,
+            ),
+            tone = if (module.failed) BannerTone.WARNING else BannerTone.INFO,
+            onAction = onDownload,
+        )
+        ModuleState.Installed -> Unit
     }
 }
