@@ -2856,6 +2856,8 @@ open class WMKeyboardService : InputMethodService() {
         // The shade's buttons reach the keyboard through this, and only while
         // there is a keyboard for them to reach. See [KeyboardControls].
         KeyboardControls.host = keyboardControlHost
+        // Same for adb and automation apps switching layout; see [KeyboardAutomation].
+        KeyboardAutomation.host = automationHost
         // Decode the synthesized key sounds up front so the first press plays,
         // and resolve the audio/vibrator services here rather than from the
         // pointer-down handler of whichever key the user hits first.
@@ -4500,6 +4502,17 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * What an automation intent switches through: the 🌐 key's own
+     * [onLayoutSelected], so a switch from Tasker or adb is recorded, mirrored
+     * and re-bound exactly like one made on the keys.
+     */
+    private val automationHost = object : KeyboardAutomation.Host {
+        override val settings: KeyboardSettings get() = _uiState.value.settings
+        override val layoutId: String get() = _uiState.value.layoutId
+        override fun selectLayout(layoutId: String) = onLayoutSelected(layoutId)
+    }
+
+    /**
      * Redraws the shade's controls for the current pin state, which decides
      * both the words and whether there is an "Unpin" button.
      */
@@ -5702,6 +5715,7 @@ open class WMKeyboardService : InputMethodService() {
         // they are three buttons that do nothing.
         KeyboardControls.host = null
         KeyboardControls.clear(this)
+        KeyboardAutomation.host = null
         pluginRuntime?.shutdown()
         pluginRuntime = null
         vocabSpeaker?.shutdown()

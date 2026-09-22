@@ -151,6 +151,10 @@ A separate, unrelated toggle, **Remember language per app** (under Per-app langu
 
 **Link romanized languages automatically** sits in the same group and is on by default. It pairs a romanized language such as Banglish with the languages that share its script, so suggestions come from both. Adding a language only makes that language's own links, so a link you removed by hand between two languages already on your list stays removed. Turn it off and adding a language links nothing.
 
+## Switching from another app or a computer
+
+Automation apps such as Tasker, and `adb` on a computer, can switch too. They send an intent that names a layout or a language, or asks for the next or previous one, and the keyboard switches as if you had pressed 🌐. Only layouts you turned on can be reached this way. See [Automation: adb and Tasker](/reference/automation/) for the intents and a Tasker example.
+
 ## Options
 
 <SettingsPath path="Languages & layouts" />

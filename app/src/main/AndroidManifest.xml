@@ -960,6 +960,25 @@
             android:name="com.wasimaster.wmkeyboard.ime.KeyboardControlReceiver"
             android:exported="false" />
 
+        <!-- Layout and language switching for adb and automation apps
+             (Tasker, MacroDroid, Automate). Exported with no permission on
+             purpose: those are the audience, and every action only picks
+             among the layouts the user already turned on, which is no more
+             than a spacebar swipe does. The filter is what lets a sender name
+             an action and this package without knowing the class. See
+             KeyboardAutomation in :feature:ime. -->
+        <receiver
+            android:name="com.wasimaster.wmkeyboard.ime.KeyboardAutomationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_LAYOUT" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_LANGUAGE" />
+                <action android:name="com.wasimaster.wmkeyboard.action.NEXT_LAYOUT" />
+                <action android:name="com.wasimaster.wmkeyboard.action.PREVIOUS_LAYOUT" />
+                <action android:name="com.wasimaster.wmkeyboard.action.LIST_LAYOUTS" />
+            </intent-filter>
+        </receiver>
+
         <!-- "Keep keyboard on screen" as a Quick Settings tile (issue #58).
              Needs no permission of its own, which is the point: it is the
              control that still works for someone who refused notifications. -->

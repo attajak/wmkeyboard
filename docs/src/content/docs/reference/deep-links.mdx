@@ -61,6 +61,10 @@ You can send the same link yourself, for example from `adb`:
 adb shell am start -a android.intent.action.VIEW -d "wmkeyboard://settings/typing/corrections"
 ```
 
+A link opens a screen and changes nothing on the keyboard. To switch the
+layout or language from `adb` or an automation app, send one of the broadcasts
+on [Automation: adb and Tasker](/reference/automation/) instead.
+
 Matching is case-insensitive for the screen name, so `wmkeyboard://settings/Themes`
 and `wmkeyboard://settings/themes` are the same address. Both URI forms parse:
 the regular `wmkeyboard://settings/themes` and the opaque
