@@ -9418,7 +9418,10 @@ private fun KeyboardBody(
                             // Only with no panel open, because there the chevron on this
                             // row is the way back out of the panel.
                             stripMacros -> SelectionMacroBar(state, toolHold.selection)
-                            else -> TopBar(
+                            else -> WithNetActivityDot(
+                                state.settings.networkLog.showOnKeyboard,
+                                state.settings.toolColorOverrides,
+                            ) { TopBar(
                                 state,
                                 toolsRowOpen = toolsRowOpen,
                                 onToolsRowToggle = { toolsRowOpen = !toolsRowOpen },
@@ -9451,7 +9454,7 @@ private fun KeyboardBody(
                                 onOtpDismiss = onOtpDismiss,
                                 onEmojiRowShown = onEmojiRowShown,
                                 onSwipeDownHide = onHideKeyboard,
-                            )
+                            ) }
                         }
                         BarRow.EMOJI -> if (showEmojiRow) {
                             EmojiBarStrip(

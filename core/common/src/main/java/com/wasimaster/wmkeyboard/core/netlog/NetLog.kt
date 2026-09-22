@@ -89,9 +89,10 @@ object NetLog {
 
     /**
      * Points the log at its files. Idempotent; called from `WMApplication`, the
-     * first app code in any process. Before the first unlock after boot those
-     * files cannot be read, so the log keeps what it records in memory and
-     * moves it into the files when the unlock comes.
+     * first app code in any process. The files are read on the log's own
+     * thread. Before the first unlock after boot they cannot be read at all, so
+     * the log keeps what it records in memory and moves it into the files when
+     * the unlock comes.
      */
     @Synchronized
     fun attach(context: Context) {
@@ -99,7 +100,10 @@ object NetLog {
         attached = true
         val app = context.applicationContext ?: context
         if (DirectBoot.isUserUnlocked(app)) {
-            attachFiles(app)
+            // Off the main thread: this runs on every process start, the
+            // keyboard's included, and the rows file can be a few hundred KB.
+            // Anything recorded before it lands is replayed on top.
+            writer.execute { attachFiles(app) }
             return
         }
         val receiver = object : BroadcastReceiver() {

@@ -692,5 +692,7 @@
     <string name="ime_find_regex_error">Pattern: %1$s</string>
     <string name="ime_find_timeout">The pattern takes too long on this text</string>
     <string name="ime_find_searching">Searching</string>
+    <!-- The network activity dot on the toolbar. %1$s is a server name. -->
+    <string name="ime_netlog_dot_desc">The keyboard is contacting <xliff:g id="host" example="translate.googleapis.com">%1$s</xliff:g></string>
 
 </resources>

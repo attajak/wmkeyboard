@@ -163,8 +163,12 @@ class NetLogStore(
         for (i in rows.indices.reversed()) {
             if (i < oldest) break
             val row = rows[i]
-            if (single.firstMillis - row.lastMillis > MERGE_WINDOW_MS) break
-            if (row.mergeKey == key) return i
+            // Both ways: a long download that started before the rows above
+            // it finishes after them, and must not join a burst from minutes
+            // (or days) away just because it arrived late.
+            val gap = single.firstMillis - row.lastMillis
+            if (gap > MERGE_WINDOW_MS) break
+            if (row.mergeKey == key && gap >= -MERGE_WINDOW_MS) return i
         }
         return -1
     }

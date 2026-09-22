@@ -74,6 +74,10 @@
 
     <string name="storage_learned_title">Learned words</string>
     <string name="storage_learned_subtitle">What the keyboard learned from your typing</string>
+    <string name="storage_file_netlog_rows_label">Requests</string>
+    <string name="storage_file_netlog_days_label">Daily totals</string>
+    <string name="storage_netlog_title">Network activity log</string>
+    <string name="storage_netlog_subtitle">Which servers the keyboard contacted, never what it sent</string>
     <string name="storage_typing_stats_title">Typing statistics</string>
     <string name="storage_typing_stats_subtitle">Your daily typing counts, kept on your device only</string>
     <string name="storage_clipboard_title">Clipboard</string>

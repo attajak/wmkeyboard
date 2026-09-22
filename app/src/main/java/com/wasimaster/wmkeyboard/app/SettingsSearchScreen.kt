@@ -54,6 +54,7 @@ import androidx.compose.material.icons.outlined.GridOn
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Key
+import androidx.compose.material.icons.outlined.NetworkCheck
 import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Palette
@@ -507,6 +508,7 @@ internal object SettingsRouteIcons {
         "accessibility" to { Icons.Outlined.Accessibility },
         "privacy" to { Icons.Outlined.Security },
         "permissions" to { Icons.Outlined.Key },
+        "network_activity" to { Icons.Outlined.NetworkCheck },
         "applock" to { Icons.Outlined.Fingerprint },
         "datasaver" to { Icons.Outlined.DataSaverOn },
         "servers" to { Icons.Outlined.Dns },

@@ -73,6 +73,7 @@ import com.wasimaster.wmkeyboard.app.SpecialAccessActivity
 import com.wasimaster.wmkeyboard.app.StoragePermissionActivity
 import com.wasimaster.wmkeyboard.core.media.GallerySaver
 import com.wasimaster.wmkeyboard.core.media.MediaMime
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
 import com.wasimaster.wmkeyboard.core.settings.BlacklistScope
@@ -2777,6 +2778,11 @@ open class WMKeyboardService : InputMethodService() {
         // so this resumes inside the update rather than a frame later.
         serviceScope.launch {
             _uiState.collect { if (windowOnScreen) _shownState.value = it }
+        }
+        // Marks the network activity log's rows made while incognito is on,
+        // whether the switch or the field turned it on.
+        serviceScope.launch {
+            _uiState.map { it.incognitoOn }.distinctUntilChanged().collect { NetLog.incognito = it }
         }
         // Parks on an empty channel until the first glide; costs nothing until
         // then, and saves a job launch per preview once a finger is down.

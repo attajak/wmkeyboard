@@ -37,7 +37,8 @@ enum class NetSource(
     VOCABULARY("vocabulary", ToolbarTool.VOCABULARY),
     WEATHER("weather", ToolbarTool.WEATHER),
     CURRENCY("currency", ToolbarTool.CURRENCY),
-    PHOTOS("photos", background = true),
+    /** Searching photos is asked for; refilling the rotation pool passes `background` itself. */
+    PHOTOS("photos"),
     LINK_PREVIEW("link_preview", ToolbarTool.CLIPBOARD, background = true),
 
     /** Thumbnails and animations drawn by the GIF, sticker and image panels. */

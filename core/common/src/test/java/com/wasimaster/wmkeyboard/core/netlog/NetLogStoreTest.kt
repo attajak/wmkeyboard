@@ -83,6 +83,15 @@ class NetLogStoreTest {
     }
 
     @Test
+    fun lateArrivalFromLongAgoDoesNotMerge() {
+        val s = store()
+        s.add(entry(at = BASE + 3 * HOUR))
+        // Started three hours earlier, recorded only now that it finished.
+        s.add(entry(at = BASE))
+        assertEquals(2, s.rows().size)
+    }
+
+    @Test
     fun interleavedSourcesStillMerge() {
         val s = store()
         repeat(5) { i ->

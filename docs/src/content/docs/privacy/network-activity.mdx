@@ -1,0 +1,91 @@
+---
+title: "Network activity"
+description: "A log of every request the keyboard makes: which feature, which server, how much data, and why. On your device only, never what you typed."
+sidebar:
+  order: 4
+---
+
+import SettingsPath from '@components/SettingsPath.astro';
+import PhoneFrame from '@components/PhoneFrame.astro';
+
+[Network policy](/privacy/network/) says what each feature sends. This screen lets you check it. Every request the keyboard's own code makes lands here as it happens: the feature that made it, the server it went to, how much data went each way, how it ended, and whether you asked for it or it happened by itself.
+
+<SettingsPath path="Privacy / Network activity" />
+
+<PhoneFrame caption="Network activity: the live line, today's totals with the chart split by feature, and the By feature and Servers contacted cards.">
+  {/* shot: privacy/network-activity-screen */}
+</PhoneFrame>
+
+## Reading the screen
+
+**The line under the title** is what's happening right now. While a request is under way it names the feature and the server, with a dot in that feature's colour. Otherwise it says how long ago the last request was.
+
+**The top card** covers **Today**, **7 days** or **30 days**. The big number is the data, received plus sent, with the two halves and any failures on the line under it. The chart has one bar per hour for today and one per day for the longer periods. Each bar is stacked by feature, in the same colour that feature's icon has on your toolbar, so a tall orange stack on a GIF afternoon looks like the GIF key. Press and drag along the chart to read one bar.
+
+The chart counts requests, not bytes. A failed request carries no data but it still happened, and that's what the chart is for. The card ends with a reminder that's true by construction: typing, prediction and glide typing make no requests, because they have no network code to make them with.
+
+**By feature** is the same period, one row per feature, largest first. The bar is that feature's share next to the busiest one. The features that only ever fetch by themselves, link previews and the update check, wear an **Automatic** badge there. The rest can go either way (a backup you pressed, or the scheduled one), so the timeline marks each of their requests on its own. Press a row to see only its requests.
+
+**Servers contacted** lists every server by name, with the feature that used it. There are no favicons, because fetching one would be a request of its own. Three badges can appear:
+
+- **New**: first contacted in the last 7 days, on a log that is older than that. On a fresh log nothing is new, so nothing says so.
+- **Your server**: an address you typed in yourself, such as a LibreTranslate, SearXNG or Ollama server, a transcription server, or a WebDAV, S3 or FTP backup.
+- **Local network**: a private address or a `.local`, `.lan` or `.home.arpa` name. The screen decides this from the name alone. It never looks the name up, since that would be a request too.
+
+Press a server to see only its requests.
+
+**Requests** is the timeline, newest first and grouped by day, 50 rows at a time. The chips narrow it to **Automatic**, **Failed** or **Incognito** requests, and a feature or server you picked above shows as its own chip with a cross to clear it. Each row shows the feature, the method and address, and the size and time on the right. A failed request shows why instead of a size: **Timed out**, **No connection**, **Refused**, **Secure connection failed**, **Stopped**, or the status code the server answered with.
+
+A burst of identical requests is one row. When the same feature asks the same server for the same thing more than once within a minute, the row counts them (**×12**) and adds up their data. The GIF panel fetches dozens of thumbnails as you scroll, and without this one GIF search would fill the timeline.
+
+**Press a row** to open everything about it: why it happened, the server, the request, the result in words, the data each way, the time it took (the average, for a burst), and when. The **What was sent** box says what that feature puts in its requests, the same wording as the [table on Network policy](/privacy/network/#what-each-tool-sends-and-when). Two buttons at the bottom lead to the feature's own settings and, where it has a row there, to [Data saver](/privacy/data-saver/).
+
+## What's recorded, and what never is
+
+Each row holds the feature, the method, the server, the port when it isn't the usual one, the path, the status or the kind of failure, the bytes each way, the time taken, and whether it was automatic or made while [incognito](/privacy/incognito/) was on.
+
+The path is the part worth being precise about. It's never cut out of the address the request used. Each feature says what its path is, and a feature whose path would carry something you typed stops before that part. The dictionary's request is shown as `/api/v2/entries`, not with your word on the end. Wikipedia's summary request stops before the article title. KLIPY puts its API key in the path, so the row shows `{key}` instead, and a Signal sticker pack shows `{pack}` instead of its id. Image thumbnails, link previews and KDE Connect album art go to whatever server the content names, so those rows show the server and nothing after it.
+
+The log never holds:
+
+- **Query strings.** Everything after a `?` is dropped, even when a feature names its own path. Search words, the text you translate and API keys often travel there.
+- **Headers or bodies.** No API keys, no tokens, nothing you sent or got back.
+- **Error messages.** A failure is recorded by its kind alone, because a connection error often quotes the whole address back, query and all.
+
+Sizes are the data carried, not the traffic on the wire. Headers aren't counted, and where Android decompresses a response before the app reads it, the size is what it decompressed to.
+
+Incognito doesn't pause the log. The log is the keyboard's record of itself, and incognito is exactly when you'd want to check it. Requests made while incognito was on are marked, and the **Incognito** chip shows only those.
+
+## Keeping it, clearing it, taking it with you
+
+The rows live on your device only, in the app's credential-protected storage: up to **2,000 rows** and **30 days**, whichever runs out first. The daily totals behind the top card are kept apart from the rows, for the same 30 days, so the charts stay right even after the oldest rows have gone. Before you unlock your device for the first time after it starts, the log keeps what it records in memory and writes it once the storage can be read.
+
+The log isn't part of a [settings backup](/privacy/backup/) or Android's own backup. Restored onto another phone it would describe traffic that phone never made.
+
+The **Log** group at the bottom of the screen:
+
+| Setting | What it does | Default |
+|---|---|---|
+| Keep a network log | Records requests. Off, nothing new is recorded, and what's already there stays until you clear it. | On |
+| Show activity on the keyboard | A small dot at the edge of the toolbar while a request is under way, in the colour of the tool making it. Press and hold it to read the server's name. | Off |
+| Export | Shares the rows as a CSV file, one line per row, with the times in ISO 8601. | n/a |
+| Clear | Empties the log. A bar at the bottom offers **Undo** for a few seconds. | n/a |
+
+<SettingsPath path="About / Storage / Network activity log" /> is the storage row for the same files, and clearing it there does the same thing.
+
+## What this screen can't see
+
+A few parts of the app are other people's code that make their own requests, outside the code that fills this log. They're listed at the bottom of the screen and in full under [Google components](/privacy/network/#google-components-and-what-they-report):
+
+- **ML Kit** (full edition only) reports usage to Google when you use handwriting, text scan, QR scanning, document scanning, sticker background removal or on-device translation. Its model downloads go through Google's own code too.
+- **Play services** downloads fonts by name when a script first needs one.
+- **Play Store builds** ask the Play Store about updates and about the parts of the app it delivers on demand.
+- **Voice typing** with Android's own recognizer is Android's request, not the keyboard's.
+
+Everything the keyboard's own code does is here. That isn't a promise made once: a test in the project fails the build if any file opens a connection, an HTTP client or a socket without going through the log. The two files it lets through are KDE Connect's plumbing. One wraps sockets that are already counted, and the other sends the small discovery announcements KDE Connect uses to find computers on your network. Those carry a device name and a random id, and they aren't logged.
+
+## Related pages
+
+- [Network policy](/privacy/network/): what each feature sends, and when.
+- [Data saver](/privacy/data-saver/): hold features back on mobile data.
+- [Privacy settings](/reference/settings/privacy/): the rest of the Privacy screen.

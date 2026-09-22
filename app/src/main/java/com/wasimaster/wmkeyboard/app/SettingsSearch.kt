@@ -1971,6 +1971,10 @@ private fun SearchStrings.sectionRows(): List<SettingsSearchEntry> {
             R.string.home_privacy_title, "permissions", R.string.search_kw_permissions,
         ),
         under(
+            R.string.netlog_title, R.string.netlog_subtitle,
+            R.string.home_privacy_title, "network_activity", R.string.search_kw_netlog,
+        ),
+        under(
             R.string.privacy_lock_title, R.string.privacy_lock_subtitle,
             R.string.home_privacy_title, "applock", R.string.search_kw_applock,
         ),

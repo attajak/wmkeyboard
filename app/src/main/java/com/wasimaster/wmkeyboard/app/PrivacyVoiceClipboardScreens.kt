@@ -78,6 +78,13 @@ internal fun PrivacySettings(
             ) { onNavigate("permissions") }
         }
         item {
+            NavRow(
+                R.string.netlog_title,
+                stringResource(R.string.netlog_subtitle),
+                route = "network_activity",
+            ) { onNavigate("network_activity") }
+        }
+        item {
             val lock = LocalAppLock.current
             val lockStatus by lock.status.collectAsStateWithLifecycle()
             val lockConfig by lock.config.collectAsStateWithLifecycle()
