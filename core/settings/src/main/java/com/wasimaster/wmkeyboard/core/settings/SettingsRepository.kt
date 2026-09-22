@@ -118,6 +118,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
@@ -132,6 +133,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import java.io.File
 import kotlin.random.Random
 import com.wasimaster.wmkeyboard.settings.R
@@ -12677,8 +12679,41 @@ class SettingsRepository(private val context: Context) {
     suspend fun setGestureVocabulary(value: GlideVocabulary) =
         editPrefs { it[GESTURE_VOCABULARY] = value.name }
 
-    suspend fun setGestureSandbox(value: GlideSandbox) =
-        editPrefs { it[GESTURE_SANDBOX] = value.name }
+    /**
+     * Leaving [GlideSandbox.AUTOMATIC] puts its ladder back at the bottom (#316).
+     * Otherwise a rung the user once accepted outlives the setting: picking
+     * "Every word" and then "Automatic" again would land straight back on
+     * "Only my words", with nothing on screen to say so.
+     */
+    suspend fun setGestureSandbox(value: GlideSandbox) {
+        var leftAutomatic = false
+        editPrefs {
+            leftAutomatic = it[GESTURE_SANDBOX] == GlideSandbox.AUTOMATIC.name &&
+                value != GlideSandbox.AUTOMATIC
+            it[GESTURE_SANDBOX] = value.name
+        }
+        // A running keyboard resets its own copy on the same change.
+        if (leftAutomatic) runCatching { File(context.filesDir, GLIDE_SANDBOX_FILE).delete() }
+    }
+
+    /**
+     * The rung [GlideSandbox.AUTOMATIC] has climbed to, as the option it
+     * behaves like: [GlideSandbox.NORMAL] until the user accepts an offer on the
+     * suggestion strip. Read off the keyboard's ladder file, whose `accepted`
+     * holds a `GlideSandboxPolicy` name from :core:prediction.
+     */
+    suspend fun glideSandboxRung(): GlideSandbox = withContext(Dispatchers.IO) {
+        val accepted = runCatching {
+            val file = File(context.filesDir, GLIDE_SANDBOX_FILE)
+            if (!file.exists()) return@runCatching null
+            Json.parseToJsonElement(file.readText()).jsonObject["accepted"]?.jsonPrimitive?.content
+        }.getOrNull()
+        when (accepted) {
+            "PREFER_LEARNED" -> GlideSandbox.PREFER_LEARNED
+            "LEARNED_ONLY" -> GlideSandbox.LEARNED_ONLY
+            else -> GlideSandbox.NORMAL
+        }
+    }
 
     suspend fun setGesturePreviewSteadiness(value: GlidePreviewSteadiness) =
         editPrefs { it[GESTURE_PREVIEW_STEADINESS] = value.name }

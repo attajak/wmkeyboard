@@ -3225,6 +3225,16 @@ open class WMKeyboardService : InputMethodService() {
                     withContext(Dispatchers.Default) { typingStats.reload() }
                 }
                 statsVersion = settings.statsVersion
+                // Leaving Automatic starts its ladder over (#316). The settings
+                // app deletes the file for a keyboard that is not running; this
+                // drops the copy of one that is, so it cannot save it back.
+                if (baseSettings?.gesture?.sandbox == GlideSandbox.AUTOMATIC &&
+                    settings.gesture.sandbox != GlideSandbox.AUTOMATIC
+                ) {
+                    glideSandbox.reset()
+                    glideSandbox.save()
+                    clearSandboxOffer()
+                }
                 baseSettings = settings
                 val mode = resolveKeyboardMode(
                     settings.keyboardModes, currentPackage, currentModeFields, manualModeId,

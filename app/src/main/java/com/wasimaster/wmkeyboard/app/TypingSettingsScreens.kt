@@ -50,6 +50,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -2674,9 +2675,16 @@ private fun SettingsGroupScope.glideVocabularyRows(
     // Whose words a swipe may answer with — the same question as
     // the row above, asked on the other axis.
     item {
+        // Automatic behaves like whichever rung the user has accepted on the
+        // strip, which the options alone cannot show (#316).
+        val rung by produceState<GlideSandbox?>(null, settings.gesture.sandbox) {
+            value = if (settings.gesture.sandbox == GlideSandbox.AUTOMATIC) repository.glideSandboxRung() else null
+        }
         ChoiceSetting(
             title = R.string.typing_glide_sandbox_title,
-            subtitle = stringResource(R.string.typing_glide_sandbox_subtitle),
+            subtitle = rung?.let {
+                stringResource(R.string.typing_glide_sandbox_automatic_subtitle, stringResource(it.labelRes))
+            } ?: stringResource(R.string.typing_glide_sandbox_subtitle),
             info = stringResource(R.string.typing_glide_sandbox_info),
             options = GlideSandbox.entries.map { it to stringResource(it.labelRes) },
             selected = settings.gesture.sandbox,
