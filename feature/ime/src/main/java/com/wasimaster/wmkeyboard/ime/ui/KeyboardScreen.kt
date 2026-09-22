@@ -15502,13 +15502,11 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
         state.fieldKind == FieldKind.URI -> "/" to listOf("?", "#", "&", "=")
         else -> null
     }
-    // The URI list ends on the comma the "/" key took: browser address bars
-    // are search boxes too, and "/" already has a key of its own there.
     val domainAlternates = when {
         !lettersLayer -> emptyList()
         state.fieldKind == FieldKind.EMAIL -> listOf(".com", ".net", ".org", ".edu", ".co")
         state.fieldKind == FieldKind.URI ->
-            listOf(".com", ".org", ".net", "www.", "https://", ",")
+            listOf(".com", ".org", ".net", "www.", "https://", "/")
         else -> emptyList()
     }
     // Bengali (and any other script that ends a sentence with something other
