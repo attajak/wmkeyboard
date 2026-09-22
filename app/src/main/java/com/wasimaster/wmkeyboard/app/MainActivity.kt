@@ -61,6 +61,8 @@ import com.wasimaster.wmkeyboard.app.lock.AppLockSettingsScreen
 import com.wasimaster.wmkeyboard.app.media.MusicApps
 import com.wasimaster.wmkeyboard.app.media.MusicAppsScreen
 import com.wasimaster.wmkeyboard.app.updates.LocalAppUpdater
+import com.wasimaster.wmkeyboard.app.updates.MissingLink
+import com.wasimaster.wmkeyboard.app.updates.NewerLinkDialog
 import com.wasimaster.wmkeyboard.app.updates.UpdateCard
 import com.wasimaster.wmkeyboard.app.updates.UpdatePromptDialog
 import com.wasimaster.wmkeyboard.app.updates.UpdatedCard
@@ -242,6 +244,14 @@ class MainActivity : FragmentActivity() {
      */
     private val pendingNav = MutableStateFlow<PendingNav?>(null)
 
+    /**
+     * A settings link this build could not follow, until its dialog is closed.
+     * Apart from [pendingNav] because it outlives the navigation: a link to a
+     * screen this build has and a row it does not both opens the screen and
+     * keeps the dialog up over it.
+     */
+    private val missingLink = MutableStateFlow<MissingLink?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Shares a process with the keyboard service when both are running, so
@@ -270,7 +280,12 @@ class MainActivity : FragmentActivity() {
         // Modes added since this install was first seeded — the settings
         // screen should list them even if the keyboard has not run yet.
         lifecycleScope.launch { repository.seedNewDefaultModes() }
-        pendingNav.value = navFor(intent)
+        val nav = navFor(intent)
+        pendingNav.value = nav
+        // A rotation rebuilds the activity from the same intent. The dialog
+        // comes back from the saved state, so one the user already closed
+        // stays closed.
+        missingLink.value = if (savedInstanceState != null) MissingLink.restore(savedInstanceState) else nav?.missing
         setContent {
             // Null until DataStore's first emission: rendering nothing for a
             // frame beats flashing onboarding at users who finished it.
@@ -309,7 +324,15 @@ class MainActivity : FragmentActivity() {
                         // Here rather than beside the card on the home screen,
                         // which is the one screen the user may not be on when
                         // the offer arrives.
-                        UpdatePromptDialog(loaded)
+                        val missing by missingLink.collectAsStateWithLifecycle()
+                        val link = missing
+                        if (link != null) {
+                            // Holds the update offer itself, so the ordinary
+                            // prompt waits rather than stacking a second dialog.
+                            NewerLinkDialog(link, loaded) { missingLink.value = null }
+                        } else {
+                            UpdatePromptDialog(loaded)
+                        }
                     }
                 }
             }
@@ -319,7 +342,15 @@ class MainActivity : FragmentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        navFor(intent)?.let { pendingNav.value = it }
+        navFor(intent)?.let { nav ->
+            pendingNav.value = nav
+            nav.missing?.let { missingLink.value = it }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        missingLink.value?.save(outState)
     }
 
     /**
@@ -344,6 +375,9 @@ class MainActivity : FragmentActivity() {
         val link = WebOpenLink.appLink(intent.data) ?: intent.data?.toString()
         AddonDeepLink.routeFor(link)?.let { return PendingNav(route = it) }
         SettingsDeepLink.parse(link)?.let { target -> return pendingFor(target) }
+        // One of ours, naming a screen this build does not have: most likely
+        // from a newer version, which the dialog then looks for.
+        SettingsDeepLink.unknown(link)?.let { return PendingNav(missing = MissingLink(it.since, row = false)) }
         // The extras are the same two addresses in intent form, for a caller
         // holding an Intent rather than writing a URL — the keyboard's own
         // "open settings", and any app that names the activity explicitly.
@@ -379,9 +413,19 @@ class MainActivity : FragmentActivity() {
      */
     private fun pendingFor(target: SettingsDeepLink.Target): PendingNav? {
         val entry = SettingsDeepLink.resolve(target) { searchIndex }
+        // A row this build has on another screen is a link that went stale,
+        // and still opens the screen it named. Only a row the index has
+        // nowhere is one this version is missing.
+        val missing = if (target.setting.isNotEmpty() && entry == null &&
+            SettingsDeepLink.resolve(target.copy(route = "")) { searchIndex } == null
+        ) {
+            MissingLink(target.since, row = true)
+        } else {
+            null
+        }
         val route = entry?.route?.takeIf { target.route.isEmpty() } ?: target.route
-        if (route.isEmpty()) return null
-        return PendingNav(route = route, highlight = entry?.titleRes ?: 0)
+        if (route.isEmpty()) return missing?.let { PendingNav(missing = it) }
+        return PendingNav(route = route, highlight = entry?.titleRes ?: 0, missing = missing)
     }
 }
 
@@ -390,12 +434,15 @@ class MainActivity : FragmentActivity() {
  *
  * Either a [route] or a [tool], never both. [highlight] rides along with a
  * route: the string resource of the one row on the arriving screen that should
- * scroll itself into view and pulse, or 0 for the whole screen.
+ * scroll itself into view and pulse, or 0 for the whole screen. [missing] is a
+ * settings link this build could not follow in full, alone or beside the
+ * [route] it could.
  */
 internal data class PendingNav(
     val route: String? = null,
     val tool: ToolbarTool? = null,
     @StringRes val highlight: Int = 0,
+    val missing: MissingLink? = null,
 )
 
 @Composable

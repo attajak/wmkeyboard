@@ -34,7 +34,8 @@ need: the plain link, Chrome's `intent://` form with a fallback page, an
 3. Read the line under the link. It says what the app does on arrival, in
    the same words the app's own checks use. A green line is a link that
    lands somewhere. A red one is a link the app refuses or opens nothing
-   for.
+   for. For a settings link, the next line says which version of the app it
+   needs, or that no release has it yet.
 
 4. Press **Copy**, or open **Other spellings** for the `intent://`, `adb`,
    Markdown and HTML forms. On an Android phone with WM Keyboard installed,
@@ -75,6 +76,14 @@ same check as the settings chips on this site, and shows what fits:
 | The app is missing | Where to install it, and a **Try to open anyway** button, because version 0.5.8 and earlier also read as missing. |
 | The browser cannot tell, as in Firefox | The **Open in WM Keyboard** button, with the install list one press away. |
 | You are not on Android | A QR code of the web address, to scan with a phone. |
+
+A settings link also shows which version first opens it, such as **Added in
+version 0.5.9**. When no release has it yet, the page says **Not released yet**
+and how to get it before then: wait for the official release, or
+[build the app yourself](/development/building/). The button carries that
+version as `since=`, so a copy of the app too old for the link says which
+version it needs. See
+[Links from a newer version](/reference/deep-links/#links-from-a-newer-version).
 
 The page never opens the link by itself. You press the button. It also reads
 the address the same way this builder does, so a link that goes nowhere says
@@ -139,9 +148,10 @@ has learned stay behind the [fingerprint lock](/reference/settings/app-lock/)
 when it is on, since the lock gates by screen and treats a link exactly as it
 treats a tap.
 
-A link the app cannot place opens nothing. It does not fall back to the home
+A link the app cannot place opens no screen. It does not fall back to the home
 screen, because landing you somewhere else would read as the link having
-worked.
+worked. For a settings link it says so, and looks for a newer version that has
+what the link opens.
 
 ## Details & edge cases
 
@@ -153,6 +163,12 @@ worked.
   starting with a letter, at most 128 characters. Anything else is ignored:
   with a screen named alongside it the screen still opens, and on its own
   the link goes nowhere.
+- **`since=` is added for you.** A settings link built here carries the
+  version that first has its screen or row, taken from the app's git tags,
+  when that is newer than the first version that opens links. It changes
+  nothing about where the link goes. It lets an older copy of the app name the
+  version it needs. See
+  [Links from a newer version](/reference/deep-links/#links-from-a-newer-version).
 - **One name can live on several screens.** The backup screen carries a
   toggle for nearly every feature. On its own, `wmkeyboard://setting/<name>`
   goes to the screen with the strongest claim, which is the order settings
@@ -169,6 +185,10 @@ worked.
 - **The addon id list comes from this site's snapshot** of the two seeded
   repositories. A repository you add by hand asks for the id as text, and
   the builder cannot check it, since it does not fetch anything.
+- **Versions come from `src/data/settings-since.json`.**
+  `node scripts/extract-settings-since.mjs` in `docs/` writes it from the git
+  tags. It is rerun after each release, so right after a tag a setting can
+  still read **Not released yet** until the file catches up.
 - **Route and value lists are checked against the app's source.**
   `node scripts/check-deep-link-routes.mjs` in `docs/` fails when a screen,
   tool, panel, script, storage category or licence file is added to the app

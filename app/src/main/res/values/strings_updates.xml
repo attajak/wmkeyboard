@@ -107,4 +107,35 @@
     </string>
     <string name="update_notify_updated_body">Tap to see what changed</string>
 
+
+    <!-- The dialog shown when a wmkeyboard:// settings link names a screen or a
+         setting that this version of the app does not have. Usually the link
+         is from a newer version, so the dialog checks for one. -->
+    <string name="link_update_title">This version cannot open this link</string>
+    <!-- %1$s is the version the link needs, from its since= part. -->
+    <string name="link_update_title_versioned">This link needs version <xliff:g id="version" example="0.5.12">%1$s</xliff:g></string>
+    <string name="link_update_title_unreleased">Not released yet</string>
+    <string name="link_update_title_missing">Nothing to open</string>
+    <!-- First sentence. %1$s is the installed version. -->
+    <string name="link_update_lead_row">This link opens a setting that WM Keyboard <xliff:g id="version" example="0.5.11">%1$s</xliff:g> does not have.</string>
+    <string name="link_update_lead_screen">This link opens a screen that WM Keyboard <xliff:g id="version" example="0.5.11">%1$s</xliff:g> does not have.</string>
+    <!-- Second sentence, one of the strings below. -->
+    <!-- %1$s is the version the link says has the setting. It is not newer than the installed one. -->
+    <string name="link_update_missing_body">The link says that version <xliff:g id="version" example="0.5.9">%1$s</xliff:g> has it, so an update does not help. The link can have a mistake in it, or the setting moved or was removed.</string>
+    <string name="link_update_ask">Check for a newer version?</string>
+    <string name="link_update_checking">Looking for a newer version…</string>
+    <!-- %1$s is the update source, from update_source_*. -->
+    <string name="link_update_available">A newer version is on <xliff:g id="source" example="the Play Store">%1$s</xliff:g>. Update, then open the link again.</string>
+    <!-- %1$s is the new version, %2$s the update source. -->
+    <string name="link_update_available_versioned">Version <xliff:g id="version" example="0.5.12">%1$s</xliff:g> is on <xliff:g id="source" example="GitHub">%2$s</xliff:g>. Update, then open the link again.</string>
+    <string name="link_update_not_released">You have the newest release. The link can be for a version that is not released yet, or it can have a mistake in it. To get a new version before its release, build the app from its source code on GitHub.</string>
+    <!-- %1$s is the version the link needs. -->
+    <string name="link_update_not_released_versioned">No release has version <xliff:g id="version" example="0.5.12">%1$s</xliff:g> yet. Wait for the official release, or build the app from its source code on GitHub.</string>
+    <string name="link_update_updating">An update is on its way. Open the link again after it is installed.</string>
+    <string name="link_update_check_failed">The check for a newer version failed.</string>
+    <string name="link_update_no_updater">This copy of the app cannot check for updates. Look for a newer version where you got the app, or in the releases on GitHub.</string>
+    <!-- %1$s is the version the link needs. -->
+    <string name="link_update_no_updater_versioned">This copy of the app cannot check for updates. Get version <xliff:g id="version" example="0.5.12">%1$s</xliff:g> or newer where you got the app, or from the releases on GitHub.</string>
+    <string name="link_update_action_source">Source code</string>
+    <string name="link_update_action_releases">Releases</string>
 </resources>

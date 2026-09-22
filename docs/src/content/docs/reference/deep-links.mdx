@@ -64,9 +64,10 @@ Matching is case-insensitive for the screen name, so `wmkeyboard://settings/Them
 and `wmkeyboard://settings/themes` are the same address. Both URI forms parse:
 the regular `wmkeyboard://settings/themes` and the opaque
 `wmkeyboard:settings/themes` with no slashes after the colon. A route the app
-doesn't have goes nowhere. Nothing crashes, and the app doesn't fall back to
+doesn't have opens no screen. Nothing crashes, and the app doesn't fall back to
 the home screen either, because landing you somewhere else would read as the
-link having worked.
+link having worked. It tells you instead, and looks for a newer version that
+has the screen. See [Links from a newer version](#links-from-a-newer-version).
 
 ### Screens that name one of your own things
 
@@ -113,8 +114,47 @@ find, around six hundred of them, across every screen. To get a row's name,
 search for it in the app and note which screen it lands on, then read the name
 off `app/src/main/res/values/strings.xml`, or off the
 [Settings reference](/reference/settings/typing/) pages, which are organized by
-the same screens. A name the app doesn't have is ignored: with a screen named
-alongside it the screen still opens, and on its own the link goes nowhere.
+the same screens. A name the app doesn't have on any screen gets the same
+answer as an unknown route: with a screen named alongside it the screen still
+opens, and either way the app says it doesn't have that setting and looks for a
+newer version. A name the app has on a different screen from the one the link
+names is not missing: the named screen opens, without the row flashing.
+
+### Links from a newer version
+
+A link can point at a screen or a setting that arrived after the version on
+your phone. That happens most with links from this site, which describes the
+newest code, and with links shared for a setting that is on GitHub but not in a
+release yet. So a settings link can say which version it needs:
+
+```
+wmkeyboard://settings/typing/corrections?setting=typing_auto_close_brackets_title&since=0.5.12
+wmkeyboard://setting/layout_globe_recent_title?since=0.5.12
+```
+
+`since=` changes nothing about where the link goes. A version that has the
+screen opens it and ignores the number. A version that does not has something
+to tell you now, instead of opening nothing. It shows a dialog, and the dialog
+asks the app's own update source, the same one as **Check for updates** on the
+About screen:
+
+| What the check finds | What the dialog says |
+|---|---|
+| A release at or past the link's version | Which version is out and where, with the same **Download**, **Update now** or **Open F-Droid** button as the update card. Open the link again after the update. |
+| No release that new yet | The version is not released yet. Wait for the official release, or build the app from its source code on GitHub. A **Source code** button opens the repository. |
+| The link says your version already has it | An update does not help: the link has a mistake in it, or the setting moved or was removed. |
+| No update source, as in a debug build | The version to look for, and a **Releases** button for GitHub's list. |
+
+A link without `since=` gets the same dialog. It just cannot say which version
+to wait for, so it says the link may be for an unreleased version or may be
+mistyped. An F-Droid build asks before it checks, because it never checks for
+updates on its own. On the other builds, opening the dialog is the check.
+
+Versions from before this dialog existed ignore `since=` and open nothing, as
+they always did. The [link builder](/reference/link-builder/) and the settings
+chips on this site add `since=` for you, and only when the screen or row is
+newer than the first version that opens links at all, so most links stay
+short.
 
 ### Every route
 

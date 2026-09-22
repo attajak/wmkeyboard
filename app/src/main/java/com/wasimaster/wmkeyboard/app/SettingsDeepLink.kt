@@ -17,6 +17,16 @@ import java.net.URLDecoder
  * | `wmkeyboard://settings/<route>?setting=<name>` | that screen, with one row scrolled to and flashed |
  * | `wmkeyboard://setting/<name>` | the same row, on whichever screen holds it |
  *
+ * Either form may carry `since=<version>`, the first release that has what the
+ * link opens (`…/typing?setting=typing_auto_close_brackets_title&since=0.5.12`).
+ * It changes nothing about where a link goes. It is there for the copy of the
+ * app that is too old to go anywhere: that copy cannot know about a screen
+ * added after it was built, but it can read a version number and say "update
+ * to 0.5.12" instead of opening nothing. See [unknown]. The documentation
+ * site's link builder and `/open/` page add it; a copy of the app from before
+ * this parameter existed ignores it, as it ignores every parameter it does not
+ * know.
+ *
  * [SettingsRoutes] is the allowlist for the first half and the settings search
  * index is the allowlist for the second, which is why this parses rather than
  * trusting what it was handed. `NavController.navigate` throws on a route it
@@ -51,6 +61,9 @@ object SettingsDeepLink {
     /** The query parameter naming one row on the screen the link opens. */
     const val SETTING_PARAM = "setting"
 
+    /** The query parameter naming the first version that has what the link opens. */
+    const val SINCE_PARAM = "since"
+
     /**
      * Where a link points.
      *
@@ -62,8 +75,18 @@ object SettingsDeepLink {
      * not the words "Autocorrect". A name survives translation and an app
      * update; the drawn text survives neither, and the numeric id the compiler
      * assigns survives even less.
+     *
+     * [since] is the link's `since=` version, or empty. Only read when [setting]
+     * turns out to be a row this build does not have.
      */
-    data class Target(val route: String, val setting: String = "")
+    data class Target(val route: String, val setting: String = "", val since: String = "")
+
+    /**
+     * A settings link this build cannot follow: its screen is not one this
+     * build has, or its row name is not a name at all. [since] is the version
+     * the link says it needs, or empty when it does not say.
+     */
+    data class Unknown(val since: String)
 
     /** Convenience for the intent's data. */
     fun parse(uri: Uri?): Target? = parse(uri?.toString())
@@ -73,31 +96,14 @@ object SettingsDeepLink {
      * names no screen at all.
      */
     fun parse(link: String?): Target? {
-        val text = link?.trim().orEmpty()
-        if (text.isEmpty()) return null
-        val uri = runCatching { URI(text) }.getOrNull() ?: return null
-        if (!uri.scheme.equals(SCHEME, ignoreCase = true)) return null
-
-        // "wmkeyboard://settings/themes" puts the host and path apart; the
-        // opaque "wmkeyboard:settings/themes" form carries both in one string.
-        // Accept either rather than making the XML care which it wrote.
-        val host: String
-        val path: String
-        if (uri.isOpaque) {
-            val body = uri.rawSchemeSpecificPart.orEmpty().substringBefore('?')
-            host = body.substringBefore('/')
-            path = body.substringAfter('/', "")
-        } else {
-            host = uri.host.orEmpty()
-            path = uri.rawPath.orEmpty()
-        }
-        val query = text.substringAfter('?', "")
+        val (host, path, query) = split(link) ?: return null
+        val since = version(query.param(SINCE_PARAM)).orEmpty()
 
         return when {
             host.equals(SETTING_HOST, ignoreCase = true) -> {
                 // The row is the whole address here; the screen it sits on is
                 // whatever the index says, so the route is filled in later.
-                settingName(path.trim('/'))?.let { Target(route = "", setting = it) }
+                settingName(path.trim('/'))?.let { Target(route = "", setting = it, since = since) }
             }
 
             host.equals(SCREEN_HOST, ignoreCase = true) -> {
@@ -108,16 +114,52 @@ object SettingsDeepLink {
                 // setting host: no screen named, so the index names one.
                 if (body.isEmpty()) {
                     when {
-                        setting.isNotEmpty() -> Target(route = "", setting = setting)
+                        setting.isNotEmpty() -> Target(route = "", setting = setting, since = since)
                         else -> Target(route = "home")
                     }
                 } else {
-                    SettingsRoutes.resolve(body)?.let { Target(it, setting) }
+                    SettingsRoutes.resolve(body)?.let { Target(it, setting, since) }
                 }
             }
 
             else -> null
         }
+    }
+
+    /**
+     * What to tell the user about a settings link [parse] refused, or null
+     * when [link] is not a settings link at all or [parse] took it.
+     *
+     * A refused settings link is most often a link from a newer version: a
+     * screen that was added after this build. It can also be a typo. Only the
+     * link's `since=` can tell the two apart, and only when it is there, so
+     * this hands that on and leaves the deciding to whoever draws the answer.
+     * An addon link or a stranger's scheme gets null, and is still nobody's
+     * business here.
+     */
+    fun unknown(link: String?): Unknown? {
+        val (host, _, query) = split(link) ?: return null
+        val ours = host.equals(SETTING_HOST, ignoreCase = true) || host.equals(SCREEN_HOST, ignoreCase = true)
+        if (!ours || parse(link) != null) return null
+        return Unknown(since = version(query.param(SINCE_PARAM)).orEmpty())
+    }
+
+    /** Host, raw path and raw query of one of our links, or null when [link] is not one. */
+    private fun split(link: String?): Triple<String, String, String>? {
+        val text = link?.trim().orEmpty()
+        if (text.isEmpty()) return null
+        val uri = runCatching { URI(text) }.getOrNull() ?: return null
+        if (!uri.scheme.equals(SCHEME, ignoreCase = true)) return null
+
+        // "wmkeyboard://settings/themes" puts the host and path apart; the
+        // opaque "wmkeyboard:settings/themes" form carries both in one string.
+        // Accept either rather than making the XML care which it wrote.
+        val query = text.substringAfter('?', "")
+        if (uri.isOpaque) {
+            val body = uri.rawSchemeSpecificPart.orEmpty().substringBefore('?')
+            return Triple(body.substringBefore('/'), body.substringAfter('/', ""), query)
+        }
+        return Triple(uri.host.orEmpty(), uri.rawPath.orEmpty(), query)
     }
 
     /**
@@ -148,6 +190,13 @@ object SettingsDeepLink {
     private fun settingName(name: String?): String? = name
         ?.let { runCatching { URLDecoder.decode(it, "UTF-8") }.getOrNull() }
         ?.takeIf { it.matches(Regex("[a-z][a-z0-9_]{0,127}")) }
+
+    /**
+     * [text] if it reads as a version name, `0.5.12` or `1.0`, else null. Same
+     * reason as [settingName]: the value ends up in a sentence on screen.
+     */
+    private fun version(text: String?): String? = text
+        ?.takeIf { it.matches(Regex("[0-9]{1,4}(\\.[0-9]{1,6}){0,3}")) }
 
     /** One query parameter out of a raw `a=1&b=2` string. */
     private fun String.param(name: String): String? = split('&')

@@ -23,6 +23,7 @@ import java.net.URLEncoder
  * | `…/open/?route=themes` | `wmkeyboard://settings/themes` |
  * | `…/open/?route=typing&setting=typing_autocorrect_title` | that screen, that row |
  * | `…/open/?setting=typing_autocorrect_title` | `wmkeyboard://setting/typing_autocorrect_title` |
+ * | `…/open/?route=typing&since=0.5.12` | `wmkeyboard://settings/typing?since=0.5.12` |
  * | `…/open/?repo=<url>` | `wmkeyboard://repo?url=<url>` |
  * | `…/open/?repo=<url>&id=<addon>` | `wmkeyboard://addon?repo=<url>&id=<addon>` |
  * | `…/open/?addons` | `wmkeyboard://addons` |
@@ -75,9 +76,14 @@ object WebOpenLink {
         // what counts, not its content. A setting on its own names no screen.
         val route = query.param("route")
         val setting = query.param("setting")?.takeIf { it.isNotEmpty() }
+        // Handed on as written: SettingsDeepLink reads it, and refuses
+        // anything that is not a version, so it needs no escaping either.
+        val since = query.param(SettingsDeepLink.SINCE_PARAM)?.takeIf { it.isNotEmpty() }
+            ?.let { "${SettingsDeepLink.SINCE_PARAM}=$it" }
         if (route != null || setting != null) {
             if (route.isNullOrEmpty() && setting != null) {
-                return "${SettingsDeepLink.SCHEME}://${SettingsDeepLink.SETTING_HOST}/$setting"
+                return "${SettingsDeepLink.SCHEME}://${SettingsDeepLink.SETTING_HOST}/$setting" +
+                    since?.let { "?$it" }.orEmpty()
             }
             return buildString {
                 append(SettingsDeepLink.SCHEME).append("://").append(SettingsDeepLink.SCREEN_HOST)
@@ -85,7 +91,8 @@ object WebOpenLink {
                 // The name is [a-z0-9_] or it is refused downstream, so it
                 // needs no escaping, and escaping it would only risk a '+'
                 // where the reader expects a space.
-                if (setting != null) append('?').append(SettingsDeepLink.SETTING_PARAM).append('=').append(setting)
+                val params = listOfNotNull(setting?.let { "${SettingsDeepLink.SETTING_PARAM}=$it" }, since)
+                if (params.isNotEmpty()) append('?').append(params.joinToString("&"))
             }
         }
 

@@ -25,6 +25,12 @@
  * `?route=`, `?setting=`, `?repo=` and `?id=` are shorthands so a hand-written
  * address stays readable.
  *
+ * A settings link also says which version of the app first opens it ("Added
+ * in version 0.5.9", from src/data/settings-since.json), and says so plainly
+ * when no release has it yet. The Open button carries that version as
+ * `since=`, so a copy of the app too old to know the screen can say "update"
+ * rather than open nothing.
+ *
  * The page never navigates on its own. A custom-scheme navigation needs a user
  * gesture in every browser that matters, and a page that jumps away as it
  * loads is what a phishing page does.
@@ -61,6 +67,12 @@ const head: { tag: 'meta'; attrs: Record<string, string> }[] = [
 			<p class="op-kicker" id="op-kicker"></p>
 			<h1 class="op-title" id="op-title">Open in WM Keyboard</h1>
 			<p class="op-detail" id="op-detail" aria-live="polite"></p>
+			<p class="op-since" id="op-since" hidden></p>
+			<p class="op-note op-unreleased" id="op-unreleased" hidden>
+				This is in the app's source code but not in a release yet. It arrives with version <span id="op-next"></span> or
+				later. Until then, wait for the official release, or <a href="/development/building/">build the app yourself</a> from
+				the source code on <a href="https://github.com/wasi-master/WMKeyboard" rel="noopener">GitHub</a>.
+			</p>
 
 			<!-- while the installed check is in flight -->
 			<div class="op-act" data-for="checking">
@@ -154,6 +166,7 @@ const head: { tag: 'meta'; attrs: Record<string, string> }[] = [
 
 <script>
 	import { explain, settingsLink, settingLink, repoLink, addonLink, addonsLink } from '../../lib/deep-links';
+	import { sinceOf, sinceLabel, withSince } from '../../lib/settings-since';
 	import { describeManifestUrl } from '../../store/lib/resolve';
 	import { PACKAGE } from '../../lib/install-links.mjs';
 
@@ -168,6 +181,9 @@ const head: { tag: 'meta'; attrs: Record<string, string> }[] = [
 	const getList = document.getElementById('op-get')!;
 	const getBtn = document.getElementById('op-get-btn')!;
 	const qrFallback = document.getElementById('op-qr-fallback')!;
+	const sincePill = document.getElementById('op-since')!;
+	const unreleased = document.getElementById('op-unreleased')!;
+	const nextVersion = document.getElementById('op-next')!;
 
 	/**
 	 * The address this page was asked to open, from the hash, ?link= or the
@@ -183,9 +199,10 @@ const head: { tag: 'meta'; attrs: Record<string, string> }[] = [
 		if (link) return link.trim();
 		const route = q.get('route');
 		const setting = q.get('setting');
+		const since = q.get('since') || undefined;
 		if (route !== null || setting) {
-			if (!route && setting) return settingLink(setting);
-			return settingsLink({ route: route ?? '', setting: setting || undefined });
+			if (!route && setting) return settingLink(setting, since);
+			return settingsLink({ route: route ?? '', setting: setting || undefined, since });
 		}
 		const repo = q.get('repo');
 		const id = q.get('id');
@@ -347,6 +364,9 @@ const head: { tag: 'meta'; attrs: Record<string, string> }[] = [
 		const token = ++runToken;
 		const link = requestedLink();
 
+		sincePill.hidden = true;
+		unreleased.hidden = true;
+
 		if (!link) {
 			kicker.textContent = '';
 			title.textContent = 'Open in WM Keyboard';
@@ -375,8 +395,19 @@ const head: { tag: 'meta'; attrs: Record<string, string> }[] = [
 			return;
 		}
 
-		(document.getElementById('op-open') as HTMLAnchorElement).href = link;
-		(document.getElementById('op-open-anyway') as HTMLAnchorElement).href = link;
+		// Which release first opens it. The buttons carry that as since=, so a
+		// copy of the app older than it says "update" instead of doing nothing.
+		const since = sinceOf(x);
+		if (since) {
+			sincePill.textContent = sinceLabel(since);
+			sincePill.dataset.released = String(since.released);
+			sincePill.hidden = false;
+			nextVersion.textContent = since.version;
+			unreleased.hidden = since.released;
+		}
+		const target = withSince(x) ?? link;
+		(document.getElementById('op-open') as HTMLAnchorElement).href = target;
+		(document.getElementById('op-open-anyway') as HTMLAnchorElement).href = target;
 		void nameTheSetting(head, x, token);
 
 		if (!onAndroid()) {
@@ -543,6 +574,29 @@ const head: { tag: 'meta'; attrs: Record<string, string> }[] = [
 	}
 	.op-detail:empty {
 		display: none;
+	}
+
+	/* Which version first opens the link. */
+	.op-since {
+		margin: 0.1rem 0 0;
+		padding: 0.2em 0.75em;
+		border: 1px solid var(--sl-color-accent);
+		border-radius: 999px;
+		background: var(--sl-color-accent-low);
+		color: var(--sl-color-white);
+		font-size: var(--sl-text-xs);
+		font-weight: 650;
+	}
+	.op-since[data-released='false'] {
+		border-color: var(--sl-color-orange);
+		background: var(--sl-color-orange-low);
+	}
+	.op-since[hidden],
+	.op-unreleased[hidden] {
+		display: none;
+	}
+	.op-unreleased {
+		max-width: 22rem;
 	}
 
 	/* One action area at a time. */

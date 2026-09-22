@@ -87,6 +87,19 @@ class WebOpenLinkTest {
     }
 
     @Test
+    fun `since is handed on with a route or a setting`() {
+        assertEquals(
+            "wmkeyboard://settings/typing?setting=typing_auto_close_brackets_title&since=0.5.12",
+            WebOpenLink.appLink("$site/open/?route=typing&setting=typing_auto_close_brackets_title&since=0.5.12"),
+        )
+        assertEquals(
+            "wmkeyboard://setting/typing_auto_close_brackets_title?since=0.5.12",
+            WebOpenLink.appLink("$site/open/?setting=typing_auto_close_brackets_title&since=0.5.12"),
+        )
+        assertEquals("wmkeyboard://settings/themes?since=0.5.12", WebOpenLink.appLink("$site/open/?route=themes&since=0.5.12"))
+    }
+
+    @Test
     fun `repo alone pre-fills the add dialog`() {
         assertEquals(
             "wmkeyboard://repo?url=https%3A%2F%2Fgithub.com%2Fwasi-master%2Fwmkeyboard-addon-repository",

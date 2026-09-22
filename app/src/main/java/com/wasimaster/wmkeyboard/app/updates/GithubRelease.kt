@@ -64,6 +64,12 @@ internal object GithubReleases {
      */
     const val LIST_URL = "https://api.github.com/repos/$REPO/releases?per_page=5"
 
+    /**
+     * Every release, newest first. Where a copy of the app with no update
+     * source of its own sends the user to look for a newer one.
+     */
+    const val LIST_PAGE = "https://github.com/$REPO/releases"
+
     /** The page a user is sent to when the app cannot install an update itself. */
     fun releasePage(tag: String): String = "https://github.com/$REPO/releases/tag/$tag"
 

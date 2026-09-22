@@ -9,8 +9,15 @@
  * address, and a small script sets it as the href once it knows the page is
  * being read on Android. Anywhere else the chip stays plain text, since only
  * a phone with WM Keyboard installed can open the address.
+ *
+ * The link carries `since=` when the screen or row is newer than the first
+ * release that opens links (src/lib/settings-since.ts), so an older copy of the
+ * app can say which version it needs. A setting no release has yet also gets a
+ * "Next release" tag, since the docs describe main.
  */
 import { resolveSettingsLink } from '../lib/settings-links.mjs';
+import { explain } from '../lib/deep-links';
+import { sinceOf, withSince } from '../lib/settings-since';
 
 interface Props {
 	path: string;
@@ -18,13 +25,18 @@ interface Props {
 const { path } = Astro.props;
 const crumbs = ['WM Keyboard', ...path.split('/').map((c) => c.trim())];
 const link = resolveSettingsLink(path);
+const x = link ? explain(link.href) : null;
+const since = x ? sinceOf(x) : null;
+const href = x ? (withSince(x) ?? link?.href) : undefined;
+const sinceNote = since ? (since.released ? ` (added in ${since.version})` : ` (not released yet, coming in ${since.version})`) : '';
 ---
 
 <a
 	class="settings-path"
-	title={`Settings location: ${crumbs.join(' → ')}`}
-	data-href={link?.href}
+	title={`Settings location: ${crumbs.join(' → ')}${sinceNote}`}
+	data-href={href}
 	data-exact={link ? String(link.exact) : undefined}
+	data-since={sinceNote || undefined}
 >
 	<svg
 		aria-hidden="true"
@@ -50,6 +62,7 @@ const link = resolveSettingsLink(path);
 			</>
 		))
 	}
+	{since && !since.released && <span class="unreleased">Next release</span>}
 	<svg
 		class="open"
 		aria-hidden="true"
@@ -101,9 +114,9 @@ const link = resolveSettingsLink(path);
 			chip.href = href;
 			chip.classList.add('is-link');
 			chip.title =
-				chip.dataset.exact === 'false'
+				(chip.dataset.exact === 'false'
 					? 'Open the screen that holds this setting in WM Keyboard'
-					: 'Open this setting in WM Keyboard';
+					: 'Open this setting in WM Keyboard') + (chip.dataset.since ?? '');
 		}
 	}
 
@@ -145,6 +158,15 @@ const link = resolveSettingsLink(path);
 	}
 	.crumb:last-of-type {
 		color: var(--sl-color-white);
+		font-weight: 600;
+	}
+	.unreleased {
+		padding: 0 0.55em;
+		border: 1px solid var(--sl-color-orange);
+		border-radius: 999px;
+		background: var(--sl-color-orange-low);
+		color: var(--sl-color-white);
+		font-size: var(--sl-text-xs);
 		font-weight: 600;
 	}
 	/* The open-in-app arrow only exists once the script has made a link. */

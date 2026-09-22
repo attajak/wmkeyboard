@@ -246,6 +246,13 @@ inside a fence long enough that no backtick run in it can escape.
    warning if the `PLAY_SERVICE_ACCOUNT_JSON` secret is not set. Promoting to
    production stays a decision you make by hand.
 
+6. **Date the settings links.** In `docs/`, run
+   `node scripts/extract-settings-since.mjs` and commit
+   `src/data/settings-since.json`. It reads the tags to find which release
+   first has each settings screen and row, which the `/open/` page, the link
+   builder and the settings chips show as "Added in version …". Until it runs,
+   what the new tag shipped still reads **Not released yet** on the site.
+
 </Steps>
 
 ### What the release body looks like

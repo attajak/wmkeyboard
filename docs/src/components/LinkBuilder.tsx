@@ -22,6 +22,7 @@ import {
 	opaqueForm, repoLink, settingLink, settingsLink, type Explanation,
 } from '../lib/deep-links';
 import { resolveManifestUrl } from '../store/lib/resolve';
+import { LATEST_RELEASE, SINCE_AWARE, sinceOf, sinceParamFor, withSince } from '../lib/settings-since';
 import { SITE_URL } from '../site.mjs';
 import './link-builder.css';
 
@@ -145,7 +146,40 @@ function Qr({ text }: { text: string }) {
 
 function Explain({ link }: { link: string }) {
 	const x = useMemo(() => explain(link), [link]);
-	return <ExplainView x={x} />;
+	return (
+		<>
+			<ExplainView x={x} />
+			<SinceView x={x} />
+		</>
+	);
+}
+
+/**
+ * Which release first opens a settings link, and what an older copy of the app
+ * does with it: from `SINCE_AWARE` on it reads `since=` and says which version
+ * to update to, and before that it opens nothing.
+ */
+function SinceView({ x }: { x: Explanation }) {
+	const since = sinceOf(x);
+	if (!since || (x.kind !== 'settings' && x.kind !== 'setting')) return null;
+	const param = sinceParamFor(since.version);
+	const older = param
+		? x.since
+			? <> An older copy says it needs an update, if it is {SINCE_AWARE} or newer.</>
+			: <> Without <code>since={param}</code> an older copy opens nothing and cannot say why.</>
+		: null;
+	if (!since.released) {
+		return (
+			<p class="lb-explain lb-warn">
+				Not in a release yet: no version up to {LATEST_RELEASE} has this, and it arrives with {since.version} or later.{older}
+			</p>
+		);
+	}
+	return (
+		<p class="lb-explain">
+			Works in WM Keyboard {since.version} and newer.{older}
+		</p>
+	);
 }
 
 /** "The theme editor…" reads as "the theme editor…" mid-sentence. */
@@ -175,7 +209,7 @@ function ExplainView({ x }: { x: Explanation }) {
 			return (
 				<p class="lb-explain lb-ok">
 					Looks up the row named <code>{x.setting}</code> in the settings index and opens whichever screen holds it, scrolled to
-					that row. A name the app does not have goes nowhere.
+					that row. A copy of the app that does not have the name opens no screen and says so.
 				</p>
 			);
 		case 'addons':
@@ -462,7 +496,9 @@ function ScreenMode({ rows, languages }: { rows: SettingRow[] | null; languages:
 	const spec = ROUTES.find((r) => r.pattern === pattern) as RouteSpec;
 	const route = fillRoute(pattern, args);
 	const missing = (spec.args ?? []).filter((a) => !(args[a.name] ?? '').trim());
-	const link = settingsLink({ route: pattern === 'home' ? '' : route, setting: setting || undefined });
+	const raw = settingsLink({ route: pattern === 'home' ? '' : route, setting: setting || undefined });
+	// since= only when it says something: see SinceView.
+	const link = useMemo(() => withSince(explain(raw)) ?? raw, [raw]);
 	const rowsOnScreen = rows ? rows.filter((r) => !r.screen && r.route === pattern).length : 0;
 
 	return (
@@ -517,7 +553,8 @@ function SettingMode({ rows }: { rows: SettingRow[] | null }) {
 	const [withScreen, setWithScreen] = useState(false);
 	const picked = rows?.find((r) => r.name === name && !r.screen) ?? null;
 	const valid = SETTING_NAME.test(name);
-	const link = withScreen && picked ? settingsLink({ route: picked.route, setting: name }) : settingLink(name);
+	const raw = withScreen && picked ? settingsLink({ route: picked.route, setting: name }) : settingLink(name);
+	const link = useMemo(() => (valid ? withSince(explain(raw)) ?? raw : raw), [raw, valid]);
 
 	return (
 		<>
@@ -689,7 +726,7 @@ function CustomMode() {
 						Add a parameter
 					</button>
 				</div>
-				<span class="lb-hint">Values are percent-encoded for you. The app reads only the parameters its host knows: setting, url, repo and id.</span>
+				<span class="lb-hint">Values are percent-encoded for you. The app reads only the parameters its host knows: setting, since, url, repo and id.</span>
 			</div>
 			<Output link={link} />
 		</>
@@ -708,6 +745,7 @@ function DecodeMode({ initial }: { initial: string }) {
 				<textarea class="lb-input lb-mono lb-textarea" value={text} onInput={(e) => setText((e.target as HTMLTextAreaElement).value)} spellcheck={false} />
 			</Field>
 			{text.trim() && <ExplainView x={x} />}
+			{text.trim() && <SinceView x={x} />}
 			{text.trim() && x.kind !== 'invalid' && (
 				<div class="lb-actions">
 					<CopyButton text={text.trim()} />

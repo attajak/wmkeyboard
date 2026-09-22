@@ -334,7 +334,7 @@ private fun UpdateCardFrame(
  * The check itself is never gated, being a few kilobytes of JSON.
  */
 @Composable
-private fun rememberUpdateDownloadRequest(
+internal fun rememberUpdateDownloadRequest(
     updater: AppUpdater,
     sizeBytes: Long,
     settings: KeyboardSettings,
@@ -370,7 +370,7 @@ private fun rememberUpdateDownloadRequest(
 
 /** What the button that starts an update says, which depends on where it goes. */
 @Composable
-private fun startActionLabel(updater: AppUpdater): String = when {
+internal fun startActionLabel(updater: AppUpdater): String = when {
     updater.startsExternally ->
         stringResource(R.string.update_action_open_source, stringResource(updater.sourceNameRes))
     updater.ownsDownload -> stringResource(R.string.update_action_download)

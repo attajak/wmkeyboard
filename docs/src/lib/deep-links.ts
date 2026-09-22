@@ -17,6 +17,9 @@ export const PACKAGE = 'com.wasimaster.wmkeyboard';
 /** `SettingsDeepLink.settingName`: the shape `aapt` gives a resource name. */
 export const SETTING_NAME = /^[a-z][a-z0-9_]{0,127}$/;
 
+/** `SettingsDeepLink.version`: what `since=` accepts. */
+export const VERSION_NAME = /^[0-9]{1,4}(\.[0-9]{1,6}){0,3}$/;
+
 /* ---------- building ---------- */
 
 /** Fill a route pattern's `{arg}` segments. Arguments are percent-encoded, since `navigate()` decodes them. */
@@ -44,18 +47,23 @@ export interface SettingsLinkInput {
 	route: string;
 	/** A row's resource name, optional. */
 	setting?: string;
+	/** The first version that has the screen or row, optional. See settings-since.ts. */
+	since?: string;
 }
 
-/** `wmkeyboard://settings/<route>[?setting=<name>]`. */
+/** `wmkeyboard://settings/<route>[?setting=<name>][&since=<version>]`. */
 export function settingsLink(input: SettingsLinkInput): string {
 	const route = input.route.replace(/^\/+|\/+$/g, '');
 	const base = `${SCHEME}://settings${route ? `/${route}` : ''}`;
-	return input.setting ? `${base}?setting=${encodeURIComponent(input.setting)}` : base;
+	const params: string[] = [];
+	if (input.setting) params.push(`setting=${encodeURIComponent(input.setting)}`);
+	if (input.since) params.push(`since=${input.since}`);
+	return params.length ? `${base}?${params.join('&')}` : base;
 }
 
-/** `wmkeyboard://setting/<name>`: the row, on whichever screen holds it. */
-export function settingLink(name: string): string {
-	return `${SCHEME}://setting/${encodeURIComponent(name)}`;
+/** `wmkeyboard://setting/<name>[?since=<version>]`: the row, on whichever screen holds it. */
+export function settingLink(name: string, since?: string): string {
+	return `${SCHEME}://setting/${encodeURIComponent(name)}${since ? `?since=${since}` : ''}`;
 }
 
 /** `wmkeyboard://addons`. */
@@ -125,8 +133,8 @@ function shellQuote(s: string): string {
 export type Explanation =
 	| { kind: 'invalid'; reason: string }
 	| { kind: 'nowhere'; reason: string }
-	| { kind: 'settings'; route: string; pattern: string; label: string; setting: string; note?: string }
-	| { kind: 'setting'; setting: string }
+	| { kind: 'settings'; route: string; pattern: string; label: string; setting: string; since: string; note?: string }
+	| { kind: 'setting'; setting: string; since: string }
 	| { kind: 'addons' }
 	| { kind: 'repo'; input: string; manifest: string }
 	| { kind: 'addon'; input: string; manifest: string; id: string }
@@ -188,6 +196,12 @@ function settingName(raw: string | null): string | null {
 	return decoded !== null && SETTING_NAME.test(decoded) ? decoded : null;
 }
 
+/** `SettingsDeepLink.version`: the raw value when it reads as a version, else empty. */
+function sinceParam(query: string): string {
+	const raw = rawParam(query, 'since');
+	return raw !== null && VERSION_NAME.test(raw) ? raw : '';
+}
+
 /**
  * What the app does with [link]. The order of checks and every refusal
  * mirror the two Kotlin parsers; the wording is this page's.
@@ -220,6 +234,7 @@ export function explain(link: string): Explanation {
 		path = slash < 0 ? '' : body.slice(slash + 1);
 	}
 	const hostLower = host.toLowerCase();
+	const since = sinceParam(query);
 
 	if (hostLower === 'setting') {
 		const name = settingName(path.replace(/^\/+|\/+$/g, ''));
@@ -229,7 +244,7 @@ export function explain(link: string): Explanation {
 				reason: 'The row name after wmkeyboard://setting/ is not a resource name (lowercase letters, digits and underscores, starting with a letter).',
 			};
 		}
-		return { kind: 'setting', setting: name };
+		return { kind: 'setting', setting: name, since };
 	}
 
 	if (hostLower === 'settings') {
@@ -238,14 +253,14 @@ export function explain(link: string): Explanation {
 		const body = path.replace(/^\/+|\/+$/g, '');
 		const note = rawSetting !== null && !setting ? 'The ?setting= value is not a resource name, so it is ignored.' : undefined;
 		if (!body) {
-			if (setting) return { kind: 'setting', setting };
-			return { kind: 'settings', route: 'home', pattern: 'home', label: 'The settings home list', setting: '', note };
+			if (setting) return { kind: 'setting', setting, since };
+			return { kind: 'settings', route: 'home', pattern: 'home', label: 'The settings home list', setting: '', since, note };
 		}
 		const resolved = resolveRoute(body);
 		if (!resolved) {
 			return { kind: 'nowhere', reason: `No screen is called "${body}". The app opens nothing rather than guessing.` };
 		}
-		return { kind: 'settings', ...resolved, setting, note };
+		return { kind: 'settings', ...resolved, setting, since, note };
 	}
 
 	if (hostLower === 'addons' || (hostLower === '' && path.replace(/\//g, '').toLowerCase() === 'addons')) {

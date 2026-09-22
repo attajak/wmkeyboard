@@ -322,4 +322,45 @@ class SettingsDeepLinkTest {
     fun `an unknown row name resolves to nothing`() {
         assertNull(SettingsDeepLink.resolve(SettingsDeepLink.Target("", "no_such_row_title")) { index })
     }
+
+    // ---- since= ----------------------------------------------------------------
+
+    @Test
+    fun `since rides along on both hosts and changes nothing about where a link goes`() {
+        val screen = SettingsDeepLink.parse("wmkeyboard://settings/typing?setting=typing_autocorrect_title&since=0.5.12")
+        assertEquals("typing", screen?.route)
+        assertEquals("typing_autocorrect_title", screen?.setting)
+        assertEquals("0.5.12", screen?.since)
+        val row = SettingsDeepLink.parse("wmkeyboard://setting/typing_autocorrect_title?since=0.5.12")
+        assertEquals("typing_autocorrect_title", row?.setting)
+        assertEquals("0.5.12", row?.since)
+        assertEquals("0.6", SettingsDeepLink.parse("wmkeyboard:settings/themes?since=0.6")?.since)
+    }
+
+    @Test
+    fun `a since that is not a version is dropped`() {
+        assertEquals("", SettingsDeepLink.parse("wmkeyboard://settings/themes?since=soon")?.since)
+        assertEquals("", SettingsDeepLink.parse("wmkeyboard://settings/themes?since=%3Cb%3E")?.since)
+        assertEquals("", SettingsDeepLink.parse("wmkeyboard://settings/themes")?.since)
+    }
+
+    @Test
+    fun `a screen this build does not have is reported with the version it needs`() {
+        assertEquals(
+            SettingsDeepLink.Unknown("0.9.0"),
+            SettingsDeepLink.unknown("wmkeyboard://settings/from_the_future?since=0.9.0"),
+        )
+        assertEquals(SettingsDeepLink.Unknown(""), SettingsDeepLink.unknown("wmkeyboard://settings/typing/nope"))
+        assertEquals(SettingsDeepLink.Unknown(""), SettingsDeepLink.unknown("wmkeyboard://setting/Not%20A%20Name"))
+    }
+
+    @Test
+    fun `only a refused settings link is unknown`() {
+        assertNull(SettingsDeepLink.unknown("wmkeyboard://settings/themes?since=0.9.0"))
+        assertNull(SettingsDeepLink.unknown("wmkeyboard://setting/no_such_row_title?since=0.9.0"))
+        assertNull(SettingsDeepLink.unknown("wmkeyboard://addons"))
+        assertNull(SettingsDeepLink.unknown("wmkeyboard://nothing/here"))
+        assertNull(SettingsDeepLink.unknown("https://example.com/settings/nope"))
+        assertNull(SettingsDeepLink.unknown(null))
+    }
 }
