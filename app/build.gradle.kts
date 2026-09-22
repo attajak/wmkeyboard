@@ -858,3 +858,56 @@ if (providers.gradleProperty("wmkb.skipBenchmarks").map(String::toBoolean).getOr
         }
     }
 }
+
+// ---------------------------------------------------------------------------
+// Docs screenshots: `-Pwmkb.docShots=true`
+//
+//   ./gradlew :app:testFullEnDebugUnitTest -Pwmkb.docShots=true
+//
+// Renders settings screens on the JVM (Robolectric native graphics +
+// Roborazzi) and writes PNGs to build/docshots/. Everything below exists only
+// under the flag: without it no dependency, source directory, resource link or
+// heap setting here reaches a normal build or test run, which is the point.
+// With it, the run is *only* the shots; the ordinary unit tests are filtered
+// out, since the resource linking this needs makes them slower for nothing.
+// ---------------------------------------------------------------------------
+val docShots = flag("wmkb.docShots", "WMKB_DOC_SHOTS")
+
+if (docShots) {
+    android {
+        // Robolectric needs the merged resources and manifest to inflate the
+        // real theme, strings and the activity. Off by default because it
+        // drags AAPT2 linking into every unit-test run.
+        testOptions.unitTests.isIncludeAndroidResources = true
+        // Native graphics plus a whole activity tree; 2g is the ordinary suite's.
+        testOptions.unitTests.all { it.maxHeapSize = "4g" }
+    }
+
+    androidComponents {
+        onVariants { variant ->
+            // Variant API for the same reason as the channel directories above:
+            // AGP 9 no longer mirrors an extra Java directory into Kotlin.
+            variant.hostTests[com.android.build.api.variant.HostTestBuilder.UNIT_TEST_TYPE]?.sources?.let {
+                it.kotlin?.addStaticSourceDirectory("src/docShots/java")
+                // robolectric.properties pins sdk=34: compileSdk is the minor
+                // level 36.1 and Robolectric has no android-all jar for it.
+                it.resources?.addStaticSourceDirectory("src/docShots/resources")
+            }
+        }
+    }
+
+    dependencies {
+        testImplementation(libs.robolectric)
+        testImplementation(libs.roborazzi)
+        testImplementation(libs.roborazzi.compose)
+        testImplementation(platform(libs.androidx.compose.bom))
+        testImplementation(libs.androidx.compose.ui.test.junit4)
+        testImplementation(libs.androidx.junit)
+    }
+
+    tasks.withType<Test>().configureEach {
+        filter { includeTestsMatching("com.wasimaster.wmkeyboard.docshots.*") }
+        systemProperty("roborazzi.test.record", "true")
+        systemProperty("wmkb.docShots.out", layout.buildDirectory.dir("docshots").get().asFile.absolutePath)
+    }
+}
