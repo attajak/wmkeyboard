@@ -187,8 +187,9 @@ what the link opens.
   the builder cannot check it, since it does not fetch anything.
 - **Versions come from `src/data/settings-since.json`.**
   `node scripts/extract-settings-since.mjs` in `docs/` writes it from the git
-  tags. It is rerun after each release, so right after a tag a setting can
-  still read **Not released yet** until the file catches up.
+  tags. The **Settings links** workflow reruns it on every release tag and
+  on every push that adds a setting, so right after a tag a setting can still
+  read **Not released yet** for the few minutes the workflow takes.
 - **Route and value lists are checked against the app's source.**
   `node scripts/check-deep-link-routes.mjs` in `docs/` fails when a screen,
   tool, panel, script, storage category or licence file is added to the app

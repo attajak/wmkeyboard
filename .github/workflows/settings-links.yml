@@ -1,0 +1,95 @@
+name: Settings links
+
+# Keeps the two generated files behind every settings link in the docs current,
+# so no setting ships without its "Added in" version:
+#
+#   docs/src/data/settings-links.json  every screen and row a link can name,
+#                                      dumped from the app's settings index;
+#   docs/src/data/settings-since.json  the first release that has each one,
+#                                      dated from the v* tags.
+#
+# Runs on a push to main that can change either, and on every release tag: a
+# tag is what turns this release's "Not released yet" rows into released ones,
+# with no source change at all. Commits the refresh back to main when anything
+# moved, so pull before pushing again after a run that did.
+
+on:
+  push:
+    branches: [main]
+    # Path filters are not evaluated for tag pushes, so every v* tag runs.
+    tags: ['v*']
+    paths:
+      - 'app/src/main/java/com/wasimaster/wmkeyboard/app/SettingsSearch.kt'
+      - 'app/src/main/java/com/wasimaster/wmkeyboard/app/SettingsRoutes.kt'
+      - '**/src/main/res/values/*.xml'
+      - 'gradle.properties'
+      - 'docs/scripts/extract_settings_links.sh'
+      - 'docs/scripts/extract-settings-since.mjs'
+      - '.github/workflows/settings-links.yml'
+  workflow_dispatch:
+
+# One refresh at a time, and never cancelled halfway through a push back.
+concurrency:
+  group: settings-links
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  WMKB_ENABLE_PLAY_STORE: "false"
+  WMKB_ENABLE_GMS: "false"
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false
+
+jobs:
+  refresh:
+    name: Refresh settings links and versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      # main rather than the pushed ref: on a tag push the result still has to
+      # land on the branch. Full history and tags, because the versions are
+      # read off the tags.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Dump the settings index
+        run: docs/scripts/extract_settings_links.sh
+
+      - name: Date every screen and row
+        run: node docs/scripts/extract-settings-since.mjs
+
+      # A push made with the workflow token starts no other workflow, so this
+      # commit cannot run this job again. Rebased first because main may have
+      # moved during the build.
+      - name: Commit the refresh
+        run: |
+          git add docs/src/data/settings-links.json docs/src/data/settings-since.json
+          if git diff --cached --quiet; then
+            echo "Already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(docs): refresh settings links and their versions"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1

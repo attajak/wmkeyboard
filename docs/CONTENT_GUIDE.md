@@ -197,8 +197,13 @@ code carries the doc edits it makes necessary, in the same commit.
    `reference/gestures.mdx`, `reference/shortcuts.mdx` and `start/faq.mdx`.
 4. Correct each claim the change makes false. Add coverage for new behaviour.
 5. After a registry change, run `python3 scripts/extract_data.py`. After a
-   settings title change, run `scripts/extract_settings_links.sh`, then
-   `node scripts/extract-settings-since.mjs`. After a
+   new, renamed or moved setting, run `scripts/extract_settings_links.sh`, then
+   `node scripts/extract-settings-since.mjs`, and commit both data files with
+   the change. The **Settings links** workflow
+   (`.github/workflows/settings-links.yml`) reruns both on every push that
+   touches the settings index or a string, and on every release tag, and
+   commits whatever you missed, so a setting never ships without its
+   "Added in" version. After a
    new settings screen, tool, panel, script, storage category or licence
    file, run `node scripts/check-deep-link-routes.mjs` and fix
    `src/lib/deep-link-routes.ts` until it passes; the link builder on
