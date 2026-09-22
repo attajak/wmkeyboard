@@ -407,6 +407,7 @@ internal val SettingsRouteColors: Map<String, Color> = mapOf(
     "permissions" to Color(0xFFEF5350),
     "network_activity" to Color(0xFFEF5350),
     "applock" to Color(0xFFEF5350),
+    "automation" to Color(0xFFEF5350),
     "datasaver" to Color(0xFF00897B),
     // A child of Advanced, so it keeps the parent's brown.
     "servers" to Color(0xFF8D6E63),

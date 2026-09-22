@@ -7334,6 +7334,12 @@ class SettingsRepository(private val context: Context) {
         private val APP_LOCK_TARGETS = stringSetPreferencesKey("app_lock_targets")
         private val APP_LOCK_RELOCK = stringPreferencesKey("app_lock_relock")
         private val APP_LOCK_ALLOW_CREDENTIAL = booleanPreferencesKey("app_lock_allow_credential")
+
+        // Automation intents; see [AutomationSettings]. One flag per
+        // [AutomationPermission], keyed by its stable [AutomationPermission.key].
+        private val AUTOMATION_ENABLED = booleanPreferencesKey("automation_enabled")
+        private fun automationKey(permission: AutomationPermission) =
+            booleanPreferencesKey("automation_allow_${permission.key}")
         private val CRYPTO_DECIMALS = intPreferencesKey("crypto_decimals")
         private val GRAMMAR_DEBOUNCE_MS = intPreferencesKey("grammar_debounce_ms")
         private val UNIT_CONVERT_LAST = stringPreferencesKey("unit_convert_last")
@@ -10566,6 +10572,39 @@ class SettingsRepository(private val context: Context) {
      * fail-open written into a security feature on the strength of somewhere
      * else's invariant is the kind of thing that stops being true quietly.
      */
+    /**
+     * Whether other apps may control the keyboard, and what they may do; see
+     * [AutomationSettings]. Its own flow rather than a [KeyboardSettings] field:
+     * the automation receiver is its main reader.
+     *
+     * Locked, it answers "off" rather than reading the direct-boot mirror,
+     * which does not carry these keys. The receiver cannot run before the
+     * first unlock anyway, and failing closed is the right way to be wrong.
+     */
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    val automation: Flow<AutomationSettings> = unlocked
+        .flatMapLatest { isUnlocked ->
+            if (isUnlocked) {
+                context.dataStore.data.map { p ->
+                    AutomationSettings(
+                        enabled = p[AUTOMATION_ENABLED] ?: false,
+                        allowed = AutomationPermission.entries.filterTo(LinkedHashSet()) {
+                            p[automationKey(it)] ?: it.defaultAllowed
+                        },
+                    )
+                }
+            } else {
+                flowOf(AutomationSettings())
+            }
+        }
+        .distinctUntilChanged()
+
+    suspend fun setAutomationEnabled(value: Boolean) =
+        editPrefs { it[AUTOMATION_ENABLED] = value }
+
+    suspend fun setAutomationAllowed(permission: AutomationPermission, value: Boolean) =
+        editPrefs { it[automationKey(permission)] = value }
+
     @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
     val appLock: Flow<AppLockSettings> = unlocked
         .flatMapLatest { isUnlocked ->

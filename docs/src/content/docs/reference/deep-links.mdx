@@ -62,8 +62,9 @@ adb shell am start -a android.intent.action.VIEW -d "wmkeyboard://settings/typin
 ```
 
 A link opens a screen and changes nothing on the keyboard. To switch the
-layout or language from `adb` or an automation app, send one of the broadcasts
-on [Automation: adb and Tasker](/reference/automation/) instead.
+layout, the theme or another setting from `adb` or an automation app, send one
+of the broadcasts on [Automation: adb and Tasker](/reference/automation/)
+instead.
 
 Matching is case-insensitive for the screen name, so `wmkeyboard://settings/Themes`
 and `wmkeyboard://settings/themes` are the same address. Both URI forms parse:
@@ -172,7 +173,7 @@ short.
 
 ### Every route
 
-111 screens. Four more exist and are deliberately not addressable. Three have
+112 screens. Four more exist and are deliberately not addressable. Three have
 nowhere to land: the first-run wizard (`onboarding`), the sticker editor
 (`sticker_editor`), and a single photo's page (`photo_detail`). Each of those
 three draws from something the screen before it handed over, so opened cold it
@@ -329,6 +330,7 @@ or shared into the app yourself.
 | `permissions` | Permissions. |
 | `network_activity` | Network activity: every request the keyboard makes, and where it went. |
 | `applock` | Fingerprint lock. |
+| `automation` | Allowed actions: which commands other apps may send the keyboard. See [Automation](/reference/automation/). |
 | `accessibility` | Accessibility. |
 | `backup` | Backup and restore. |
 | `backup/auto` | Automatic backup. |

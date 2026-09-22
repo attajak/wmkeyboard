@@ -1,57 +1,162 @@
 ---
 title: "Automation: adb and Tasker"
-description: "Switch layout or language from adb, Tasker, MacroDroid or any app that sends an Android intent, and read back which layouts are on."
+description: "Let adb, Tasker, MacroDroid or any app that sends an Android intent switch language, theme, mode and more, with a switch per action and nothing allowed until you turn it on."
 sidebar:
   order: 3.5
 ---
 
 import SettingsPath from '@components/SettingsPath.astro';
 
-WM Keyboard listens for five broadcast intents that change the layout from
-outside the keyboard. Send them from a computer with `adb`, or from an
-automation app such as Tasker, MacroDroid or Automate, to put French on when
-you open one app and Bengali when you open another, or to switch with a
+WM Keyboard accepts commands from other apps as broadcast intents. Send them
+from a computer with `adb`, or from an automation app such as Tasker,
+MacroDroid or Automate. Put French on when you open one app, switch to a dark
+theme at night, mute the key sound in a meeting, or show the keyboard from a
 home-screen shortcut.
 
-Every intent chooses among the layouts you already turned on under
-<SettingsPath path="Languages & layouts" />, the same set the 🌐 key and the
-spacebar swipe move through. An intent can't add a layout, remove one, or
-reach one you left off. It reads no text and types nothing.
+## Turning it on
 
-## The intents
+<SettingsPath path="Privacy / Let other apps control the keyboard" />
 
-All five go to the package `com.wasimaster.wmkeyboard`.
+Nothing works until you turn on **Let other apps control the keyboard**. It is
+off on a fresh install, and while it is off the keyboard ignores every command
+in this page, layout switching included.
 
-| Action | Extra | Does |
-|---|---|---|
-| `com.wasimaster.wmkeyboard.action.SET_LAYOUT` | `layout`: a layout id or name | Switches to that layout. |
-| `com.wasimaster.wmkeyboard.action.SET_LANGUAGE` | `language`: a language id, locale or name | Switches to a layout of that language. |
-| `com.wasimaster.wmkeyboard.action.NEXT_LAYOUT` | none | Moves one layout forward in your switch order. |
-| `com.wasimaster.wmkeyboard.action.PREVIOUS_LAYOUT` | none | Moves one layout back. |
-| `com.wasimaster.wmkeyboard.action.LIST_LAYOUTS` | none | Changes nothing. Answers with the layouts you have on. |
+When it is on, an **Allowed actions** row appears under it. That screen has one
+switch for each kind of command, in two groups:
 
-Both extras are strings.
+<SettingsPath path="Privacy / Allowed actions" />
 
-## Sending them with adb
+| Row | Group | Default | Commands |
+|---|---|---|---|
+| Switch language and layout | Keyboard controls | On | `SET_LAYOUT`, `SET_LANGUAGE`, `NEXT_LAYOUT`, `PREVIOUS_LAYOUT`, `LIST_LAYOUTS` |
+| Apply a keyboard mode | Keyboard controls | On | `SET_MODE` |
+| Change the theme | Keyboard controls | On | `SET_THEME` |
+| Show and pin the keyboard | Keyboard controls | On | `SHOW_KEYBOARD`, `SET_PINNED` |
+| Sound and haptics | Keyboard controls | On | `SET_KEY_SOUND`, `SET_HAPTICS` |
+| Power saving and data saver | Keyboard controls | On | `SET_POWER_SAVING`, `SET_DATA_SAVER` |
+| Size and position | Keyboard controls | On | `SET_POSITION` |
+| Open a tool | Keyboard controls | On | `OPEN_TOOL` |
+| Turn incognito on | Keyboard controls | On | `SET_INCOGNITO` with `enabled` true |
+| Turn incognito off | Needs more trust | Off | `SET_INCOGNITO` with `enabled` false |
+| Add and block words | Needs more trust | Off | `ADD_WORD`, `BLOCK_WORD` |
+| Back up now | Needs more trust | Off | `BACKUP_NOW` |
+| Announce layout changes | Needs more trust | Off | The `LAYOUT_CHANGED` event the keyboard sends |
+| Type text | Needs more trust | Off | `TYPE_TEXT` |
 
-Name the package with `-p`. Android 8 and newer do not deliver a broadcast to
-an app that the sender doesn't name.
+The **Keyboard controls** each do what a control on the keyboard does, and you
+can undo them. The **Needs more trust** rows change what the keyboard knows,
+type into other apps, or tell other apps what you do, so each one stays off
+until you turn it on by name. Turn one on only for an automation you set up
+yourself.
+
+A command whose row is off is refused, and the answer says which row to turn
+on. The switches take effect on the next command, with nothing to restart.
+
+## Sending a command
+
+Every command is a broadcast to the package `com.wasimaster.wmkeyboard`, with
+an action that starts `com.wasimaster.wmkeyboard.action.`. Name the package
+with `-p`: Android 8 and newer do not deliver a broadcast to an app that the
+sender doesn't name.
 
 ```sh
 adb shell am broadcast -a com.wasimaster.wmkeyboard.action.SET_LANGUAGE -p com.wasimaster.wmkeyboard --es language fr
-adb shell am broadcast -a com.wasimaster.wmkeyboard.action.SET_LAYOUT -p com.wasimaster.wmkeyboard --es layout builtin_avro
-adb shell am broadcast -a com.wasimaster.wmkeyboard.action.NEXT_LAYOUT -p com.wasimaster.wmkeyboard
+adb shell am broadcast -a com.wasimaster.wmkeyboard.action.SET_THEME -p com.wasimaster.wmkeyboard --es theme default
+adb shell am broadcast -a com.wasimaster.wmkeyboard.action.SET_KEY_SOUND -p com.wasimaster.wmkeyboard --ez enabled false
 ```
 
-`am broadcast` prints the keyboard's answer. A switch that worked reads
-`result=-1` and names the layout that is now active:
+`am broadcast` prints the keyboard's answer. A command that worked reads
+`result=-1` and says what it did:
 
 ```
 Broadcast completed: result=-1, data="builtin_french"
 ```
 
-A request the keyboard can't carry out reads `result=0` and says why, for
-example `no enabled layout is for the language "de"`.
+A command the keyboard can't carry out reads `result=0` and says why, for
+example `no enabled layout is for the language "de"` or
+`not allowed: turn on "theme" under Settings › Privacy › Allowed actions`.
+
+### From Tasker
+
+Tasker, MacroDroid and Automate each have an action that sends an intent. The
+fields are the same in each. In Tasker:
+
+1. Add the action **System › Send Intent**.
+2. Set **Action** to `com.wasimaster.wmkeyboard.action.SET_LANGUAGE`.
+3. Set **Extra** to `language:fr`.
+4. Set **Package** to `com.wasimaster.wmkeyboard`.
+5. Set **Target** to **Broadcast Receiver**.
+
+Put the action in a task that an **App** profile starts, and the keyboard
+changes language as that app opens. An automation app does not read the answer
+the way `adb` does, so test a new command from `adb` first.
+
+## Every command
+
+All extras are strings unless the table says otherwise. The on/off commands
+take `enabled` as a boolean (`--ez enabled true`) or as text (`true`, `false`,
+`on`, `off`, `1`, `0`), which is what Tasker sends. Leave `enabled` out and the
+command flips the current state.
+
+| Action | Extras | Does | Needs the keyboard running |
+|---|---|---|---|
+| `SET_LAYOUT` | `layout`: layout id or name | Switches to that layout. | No |
+| `SET_LANGUAGE` | `language`: language id, locale or name | Switches to a layout of that language. | No |
+| `NEXT_LAYOUT` | none | One layout forward in your switch order. | No |
+| `PREVIOUS_LAYOUT` | none | One layout back. | No |
+| `LIST_LAYOUTS` | none | Changes nothing. Answers with the layouts you have on. | No |
+| `SET_MODE` | `mode`: mode id or name, or `auto` | Applies a keyboard mode, as the Modes tool does. `auto` goes back to automatic. | Yes |
+| `SET_THEME` | `theme`: theme id or name, or `default` | Picks the keyboard theme. | No |
+| `SHOW_KEYBOARD` | none | Brings the keyboard up over the field in use. | Yes |
+| `SET_PINNED` | `enabled` | Keeps the keyboard on screen, or stops. | No |
+| `SET_KEY_SOUND` | `enabled` | Key sound on or off. | No |
+| `SET_HAPTICS` | `enabled` | Vibration on key press on or off. | No |
+| `SET_POWER_SAVING` | `enabled` | Power saving's manual switch. | No |
+| `SET_DATA_SAVER` | `enabled` | Data saver's manual switch. | No |
+| `SET_POSITION` | `position`: `normal`, `left`, `right`, `split` or `floating` | Puts the keyboard in that shape. Each one turns the others off. | No |
+| `OPEN_TOOL` | `tool`: a tool name such as `TRANSLATE` or `EMOJI` | Opens that tool's panel. | Yes |
+| `SET_INCOGNITO` | `enabled` | Incognito on or off. | No |
+| `ADD_WORD` | `word` | Adds one word to your personal dictionary, as adding it by hand does. | Yes |
+| `BLOCK_WORD` | `word`, and `language` if the block is for one language only | Stops the word being suggested. | No |
+| `BACKUP_NOW` | none | Starts a backup to the automatic backup's destination. | No |
+| `TYPE_TEXT` | `text`, or `snippet`: a snippet's trigger or label | Types into the field in use. | Yes |
+
+"Needs the keyboard running" means WM Keyboard is the keyboard you have
+selected. The other commands also work while a different keyboard is selected:
+they change the setting, and WM Keyboard opens with it next time.
+
+## How each one decides
+
+- **`SET_LAYOUT`** takes the layout's id, such as `builtin_qwerty`. Case does
+  not matter. It also takes the layout's name, such as `AZERTY`, but only when
+  exactly one of your layouts has that name. When two share it, the command is
+  refused, not guessed. Only layouts you turned on can be chosen.
+- **`SET_LANGUAGE`** takes a language id (`en`, `bn`, `bn_rom`), a locale
+  (`en-US`, `bn_BD`), or the language's name in English or in the language
+  itself (`French`, `Français`). A locale the keyboard has no exact match for
+  falls back to its first part, so `fr-CA` finds French. When you have several
+  layouts of the language on, the one you used last wins. When a layout of it
+  is already in use, nothing changes.
+- **`NEXT_LAYOUT` and `PREVIOUS_LAYOUT`** walk your switch order and wrap
+  around at either end. They always use the plain order, even with
+  **🌐 goes back to the last language** on, so an automation gets the same
+  result every time.
+- **`SET_MODE`** and **`SET_THEME`** match an id first and then a name, and
+  refuse a name that two modes or two themes share. A theme you made wins a
+  name it shares with a built-in theme. A mode applied this way lasts like one
+  picked from the Modes tool: until you change app, or until you change it,
+  depending on your setting for that.
+- **`SET_THEME` while the automatic light and dark pair is on** saves the pick,
+  but the pair still decides what you see. The answer says so.
+- **`OPEN_TOOL`** opens only tools that have a panel. Tools that act at once,
+  such as Paste, Select all, Undo or the flashlight, are refused, because
+  opening a tool should not change your text or your phone. The tool name is
+  the one on [Deep links](/reference/deep-links/) for `tool/{toolName}`, in any
+  case.
+- **`TYPE_TEXT`** types into the field that has the keyboard, never into a
+  password field, and at most 10,000 characters at once. A snippet is found by
+  its trigger first and its label second, and expands exactly as a tap on it
+  in the Snippets panel does.
 
 ### Finding the ids
 
@@ -69,54 +174,36 @@ Broadcast completed: result=-1, data="* builtin_qwerty	en	QWERTY
   builtin_avro	bn	Avro phonetic"
 ```
 
-## Sending them from Tasker
+For modes and themes, the name on screen works. It must be the name exactly as
+you gave it, or for a built-in theme, its English name.
 
-Tasker, MacroDroid and Automate each have an action that sends an intent. The
-fields are the same in each. In Tasker:
+## Hearing about layout changes
 
-1. Add the action **System › Send Intent**.
-2. Set **Action** to `com.wasimaster.wmkeyboard.action.SET_LANGUAGE`.
-3. Set **Extra** to `language:fr`.
-4. Set **Package** to `com.wasimaster.wmkeyboard`.
-5. Set **Target** to **Broadcast Receiver**.
+With **Announce layout changes** on, the keyboard sends a broadcast every time
+the layout on screen changes, whatever changed it:
 
-Put the action in a task that an **App** profile starts, and the keyboard
-changes language as that app opens. An automation app does not read the answer
-the way `adb` does, so test a new name from `adb` first, or use a name you can
-see on the Languages screen.
+| Action | Extras |
+|---|---|
+| `com.wasimaster.wmkeyboard.event.LAYOUT_CHANGED` | `layout` (id), `language` (language id), `name` (layout name) |
 
-## How each one decides
-
-- **`SET_LAYOUT`** takes the layout's id, such as `builtin_qwerty`. Case does
-  not matter. It also takes the layout's name, such as `AZERTY`, but only when
-  exactly one of your layouts has that name. When two share it, the request is
-  refused, not guessed.
-- **`SET_LANGUAGE`** takes a language id (`en`, `bn`, `bn_rom`), a locale
-  (`en-US`, `bn_BD`), or the language's name in English or in the language
-  itself (`French`, `Français`). A locale the keyboard has no exact match for
-  falls back to its first part, so `fr-CA` finds French. When you have several
-  layouts of the language on, the one you used last wins. When a layout of it is
-  already in use, nothing changes.
-- **`NEXT_LAYOUT` and `PREVIOUS_LAYOUT`** walk your switch order and wrap
-  around at either end. They always use the plain order, even with
-  **🌐 goes back to the last language** on, so an automation gets the same
-  result every time.
+In Tasker, use the **Intent Received** event with that action. Tasker then has
+`%layout`, `%language` and `%name` to work with. Any app on the phone that
+listens gets the same broadcast, which is why the row is off by default: it
+tells other apps which language you are typing in.
 
 ## Details & edge cases
 
-- **A switch is the same switch the 🌐 key makes.** A half-typed word is
+- **The switch is a switch, not a password.** Any app on the phone can send
+  these commands. What stops one is your setting, not who sent it. Android has
+  no permission that Tasker could hold and a stranger app could not.
+- **Nothing happens before the first unlock after a restart.** Android keeps
+  apps from receiving broadcasts until you unlock the phone once. From then on
+  the commands work on the lock screen too.
+- **A layout switch is the same switch the 🌐 key makes.** A half-typed word is
   committed first, the suggestions change language at once, and the layout goes
   on your recently-used list. With **Remember language per app** on, the app you
   are typing in remembers it too.
-- **The keyboard doesn't have to be open.** While WM Keyboard is your current
-  keyboard, the switch lands straight away, even with the keys hidden. While a
-  different keyboard is selected, the choice is saved and WM Keyboard opens on
-  it the next time you use it.
-- **Any app on the phone can send these.** They need no permission, because
-  they can do no more than a spacebar swipe. The worst another app can do is
-  change which of your layouts is showing.
-- **Nothing happens before the first unlock after a restart.** Android keeps
-  apps from receiving broadcasts until you unlock the phone once. From then on
-  the intents work on the lock screen too.
+- **A settings backup carries these switches.** Restore one on a new phone and
+  **Let other apps control the keyboard** comes back as it was.
 - **To open a settings screen instead,** use a `wmkeyboard://` link. See
   [Deep links & launcher shortcuts](/reference/deep-links/).

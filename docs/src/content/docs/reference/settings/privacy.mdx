@@ -1,6 +1,6 @@
 ---
 title: "Privacy"
-description: "Every row on the Privacy screen: learning on this device, incognito, Android backup, and the one button that clears learned data."
+description: "Every row on the Privacy screen: learning on this device, incognito, Android backup, other apps controlling the keyboard, and the one button that clears learned data."
 sidebar:
   order: 18
 ---
@@ -9,7 +9,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Shot from '@components/Shot.astro';
 
-The Privacy screen is four groups, in this order: the way into the permissions inventory, learning on this device and incognito, Android's own backup opt-in, and the one button that clears learned data. Nothing else. This page is the field reference. For the reasoning and the rest of the privacy story, start at [Privacy at a glance](/privacy/overview/).
+The Privacy screen is five groups, in this order: the way into the permissions inventory, learning on this device and incognito, Android's own backup opt-in, whether other apps may control the keyboard, and the one button that clears learned data. Nothing else. This page is the field reference. For the reasoning and the rest of the privacy story, start at [Privacy at a glance](/privacy/overview/).
 
 <PhoneFrame caption="The Privacy screen: the Permissions row, then the Learning on this device, Android backup and Your data groups.">
   <Shot id="reference/settings/privacy-screen-groups" alt="The Privacy screen: On-device learning, Android backup, and Your data groups." />
@@ -94,6 +94,19 @@ Worth knowing before you turn it on: the lock hides screens inside the settings 
 
 This is a different screen from the sibling **Backup & restore** item on the Settings home screen (route `backup`), which exports and imports a settings file by hand and never touches Google at all. See [Backup & restore](/privacy/backup/) for both paths side by side, and the [Backup & restore reference](/reference/settings/backup/) for that screen's own fields.
 
+### Other apps
+
+<SettingsPath path="Privacy / Other apps" />
+
+| Setting | Control | Default |
+|---|---|---|
+| Let other apps control the keyboard | Toggle | Off |
+| Allowed actions | Opens a sub-screen, shown only while the toggle is on | n/a |
+
+**Let other apps control the keyboard** decides whether the keyboard listens to commands from `adb`, Tasker, MacroDroid and other apps that send Android intents. While it is off, it ignores all of them. Turn it on and **Allowed actions** appears under it, with the number of actions that are on at the right.
+
+**Allowed actions** has one switch per kind of command, in two groups. The **Keyboard controls** are on by default: switch language and layout, apply a keyboard mode, change the theme, show and pin the keyboard, sound and haptics, power saving and data saver, size and position, open a tool, and turn incognito on. The **Needs more trust** group is off by default: turn incognito off, add and block words, back up now, announce layout changes, and type text. The commands behind each row, and how to send them, are on [Automation: adb and Tasker](/reference/automation/).
+
 ### Your data
 
 <SettingsPath path="Privacy / Your data" />
@@ -115,6 +128,7 @@ This is the only bulk clear on this screen. Personal dictionary entries, clipboa
 - **Saved API keys are included in an Android backup**, not excluded the way large downloads are. If that matters to you, use [Backup & restore](/privacy/backup/)'s manual export instead, which never leaves the device.
 - **A cloud backup needs an encryptable screen lock.** On a device without one, turning "Back up with Android" on has nothing to actually back up into: Android's own backup system requires it.
 - **The footer caption names the whole network side.** The screen's own note reads: "Typing works fully on this device. The word lists, prediction, autocorrect, transliteration and emoji search are part of the app, and none of them needs a network connection. The app collects nothing about you and has no analytics of its own. Handwriting, text scanning and QR scanning are built on Google's ML Kit, which reports its own diagnostics to Google while you use them. Only a tool uses the network, and only at the moment that you press it: translate, weather, web search, image search, GIFs, stickers, dictionary lookup and the AI tools. You can turn off each one of them on the Tools screen." See [Privacy at a glance](/privacy/overview/) for the same list with per-tool detail, plus the few fetches that happen without you pressing a tool.
+- **Allowed actions keeps its switches while the master toggle is off.** Turning **Let other apps control the keyboard** off hides the row and blocks every command, but the choices under it are kept for the next time you turn it on.
 - **No edition differences.** Every setting on this screen behaves the same on both the full and lite builds.
 
 ## Related pages
@@ -128,4 +142,5 @@ This is the only bulk clear on this screen. Personal dictionary entries, clipboa
 - [Network activity](/privacy/network-activity/): the log of every request the keyboard makes, on your device.
 - [Backup & restore](/privacy/backup/): the guide covering both this screen's "Back up with Android" and the separate manual export/import screen.
 - [Backup & restore reference](/reference/settings/backup/): the field list for that separate screen.
+- [Automation: adb and Tasker](/reference/automation/): every command the Other apps group lets through, with adb and Tasker examples.
 - [Tool settings reference](/reference/settings/tools/): the master tool list. The "Tools / Incognito" toggles that live outside this screen are covered above and in [Incognito & secure fields](/privacy/incognito/). Clipboard's own settings are on its [tool guide](/tools/clipboard/).

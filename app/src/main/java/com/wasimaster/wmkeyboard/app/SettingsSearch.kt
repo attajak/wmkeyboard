@@ -1516,6 +1516,10 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
     )
     fun privacy(@StringRes title: Int, @StringRes subtitle: Int, weight: EntryWeight = EntryWeight.NORMAL) =
         entry(title, subtitle, R.string.home_privacy_title, "privacy", weight = weight)
+    fun automation(@StringRes title: Int, @StringRes subtitle: Int) = entry(
+        title, subtitle, R.string.automation_actions_title, "automation",
+        screenParent = R.string.home_privacy_title, weight = EntryWeight.DETAIL,
+    )
     fun dataSaver(@StringRes title: Int, @StringRes subtitle: Int) =
         entry(title, subtitle, R.string.home_datasaver_title, "datasaver")
     fun notifications(@StringRes title: Int, @StringRes subtitle: Int) = entry(
@@ -1595,6 +1599,22 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         privacy(R.string.privacy_incognito_title, R.string.privacy_incognito_subtitle, weight = EntryWeight.PRIMARY),
         privacy(R.string.privacy_auto_incognito_title, R.string.privacy_auto_incognito_subtitle),
         privacy(R.string.privacy_backup_title, R.string.privacy_backup_subtitle),
+        privacy(R.string.automation_enabled_title, R.string.automation_enabled_subtitle),
+        // Every row on Allowed actions, under the Privacy screen it hangs off.
+        automation(R.string.automation_layout_title, R.string.automation_layout_subtitle),
+        automation(R.string.automation_mode_title, R.string.automation_mode_subtitle),
+        automation(R.string.automation_theme_title, R.string.automation_theme_subtitle),
+        automation(R.string.automation_show_pin_title, R.string.automation_show_pin_subtitle),
+        automation(R.string.automation_feedback_title, R.string.automation_feedback_subtitle),
+        automation(R.string.automation_savers_title, R.string.automation_savers_subtitle),
+        automation(R.string.automation_position_title, R.string.automation_position_subtitle),
+        automation(R.string.automation_open_tool_title, R.string.automation_open_tool_subtitle),
+        automation(R.string.automation_incognito_on_title, R.string.automation_incognito_on_subtitle),
+        automation(R.string.automation_incognito_off_title, R.string.automation_incognito_off_subtitle),
+        automation(R.string.automation_words_title, R.string.automation_words_subtitle),
+        automation(R.string.automation_backup_title, R.string.automation_backup_subtitle),
+        automation(R.string.automation_layout_events_title, R.string.automation_layout_events_subtitle),
+        automation(R.string.automation_type_text_title, R.string.automation_type_text_subtitle),
         // The fingerprint lock's own three settings. The per-target checkboxes
         // below them are deliberately absent: each is named after a screen or
         // a row that already has its own entry here, and a second result for
@@ -2026,6 +2046,10 @@ private fun SearchStrings.sectionRows(): List<SettingsSearchEntry> {
         under(
             R.string.privacy_lock_title, R.string.privacy_lock_subtitle,
             R.string.home_privacy_title, "applock", R.string.search_kw_applock,
+        ),
+        under(
+            R.string.automation_actions_title, R.string.automation_actions_subtitle,
+            R.string.home_privacy_title, "automation", R.string.search_kw_automation,
         ),
     )
 }

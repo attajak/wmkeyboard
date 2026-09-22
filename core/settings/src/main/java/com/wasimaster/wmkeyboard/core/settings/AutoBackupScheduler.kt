@@ -23,6 +23,15 @@ object AutoBackupScheduler {
     /** Arbitrary and permanent. Changing it orphans whatever is scheduled. */
     private const val JOB_ID = 20260807
 
+    /** The one-off run [runNow] asks for; its own id so it never replaces the periodic job. */
+    private const val JOB_ID_NOW = 20260923
+
+    /**
+     * The job extra that makes a run ignore the interval, as the Back up now
+     * button does. Read by the job service in `:app`.
+     */
+    const val EXTRA_FORCE = "force"
+
     /**
      * The job runs in `:app`, which a library module cannot name in code. Same
      * string-component approach `AppCatalog` uses for launching activities.
@@ -59,6 +68,23 @@ object AutoBackupScheduler {
         !settings.destination.needsNetwork -> JobInfo.NETWORK_TYPE_NONE
         settings.requireUnmetered -> JobInfo.NETWORK_TYPE_UNMETERED
         else -> JobInfo.NETWORK_TYPE_ANY
+    }
+
+    /**
+     * Backs up once, as soon as the destination's network rule allows, whether
+     * or not the automatic backup is on. A job rather than a coroutine because
+     * the caller (an automation intent) has seconds to live, and a backup to a
+     * cloud destination can take longer. False when there is nowhere to back
+     * up to.
+     */
+    fun runNow(context: Context, settings: AutoBackupSettings): Boolean {
+        if (!settings.destinationConfigured) return false
+        val scheduler = context.getSystemService(JobScheduler::class.java) ?: return false
+        val job = JobInfo.Builder(JOB_ID_NOW, ComponentName(context.packageName, SERVICE_CLASS))
+            .setRequiredNetworkType(networkTypeFor(settings))
+            .setExtras(android.os.PersistableBundle().apply { putBoolean(EXTRA_FORCE, true) })
+            .build()
+        return runCatching { scheduler.schedule(job) == JobScheduler.RESULT_SUCCESS }.getOrDefault(false)
     }
 
     fun sync(context: Context, settings: AutoBackupSettings) {

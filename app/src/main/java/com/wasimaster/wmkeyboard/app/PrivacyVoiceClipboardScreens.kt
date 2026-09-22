@@ -177,6 +177,7 @@ internal fun PrivacySettings(
             ) { scope.launch { repository.setCloudBackup(it) } }
         }
     }
+    OtherAppsGroup(repository, onNavigate)
     SettingsGroup(stringResource(R.string.privacy_data_group_title)) {
         item {
             ActionRow(

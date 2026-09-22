@@ -960,13 +960,15 @@
             android:name="com.wasimaster.wmkeyboard.ime.KeyboardControlReceiver"
             android:exported="false" />
 
-        <!-- Layout and language switching for adb and automation apps
-             (Tasker, MacroDroid, Automate). Exported with no permission on
-             purpose: those are the audience, and every action only picks
-             among the layouts the user already turned on, which is no more
-             than a spacebar swipe does. The filter is what lets a sender name
-             an action and this package without knowing the class. See
-             KeyboardAutomation in :feature:ime. -->
+        <!-- Control from adb and automation apps (Tasker, MacroDroid,
+             Automate). Exported with no permission on purpose: those are the
+             audience, and no platform permission is one Tasker could hold.
+             The gate is the user's own: nothing gets through until Privacy ›
+             "Let other apps control the keyboard" is on, and then only the
+             actions allowed on the screen under it. The filter is what lets a
+             sender name an action and this package without knowing the class,
+             and AutomationManifestTest keeps it equal to
+             KeyboardAutomation.actions in :feature:ime. -->
         <receiver
             android:name="com.wasimaster.wmkeyboard.ime.KeyboardAutomationReceiver"
             android:exported="true">
@@ -976,6 +978,21 @@
                 <action android:name="com.wasimaster.wmkeyboard.action.NEXT_LAYOUT" />
                 <action android:name="com.wasimaster.wmkeyboard.action.PREVIOUS_LAYOUT" />
                 <action android:name="com.wasimaster.wmkeyboard.action.LIST_LAYOUTS" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_MODE" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_THEME" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SHOW_KEYBOARD" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_PINNED" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_KEY_SOUND" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_HAPTICS" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_POWER_SAVING" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_DATA_SAVER" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_POSITION" />
+                <action android:name="com.wasimaster.wmkeyboard.action.OPEN_TOOL" />
+                <action android:name="com.wasimaster.wmkeyboard.action.SET_INCOGNITO" />
+                <action android:name="com.wasimaster.wmkeyboard.action.ADD_WORD" />
+                <action android:name="com.wasimaster.wmkeyboard.action.BLOCK_WORD" />
+                <action android:name="com.wasimaster.wmkeyboard.action.BACKUP_NOW" />
+                <action android:name="com.wasimaster.wmkeyboard.action.TYPE_TEXT" />
             </intent-filter>
         </receiver>
 

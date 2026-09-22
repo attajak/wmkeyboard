@@ -1802,6 +1802,16 @@ private fun SettingsNavGraph(
                 NetworkActivityScreen(repository, settings) { navController.navigate(it) }
             }
         }
+        composable(AUTOMATION_ROUTE) {
+            SettingsScreen(
+                stringResource(R.string.automation_actions_title),
+                { navController.popBackStack() },
+                subtitle = stringResource(R.string.automation_screen_subtitle),
+                route = AUTOMATION_ROUTE,
+            ) {
+                AutomationSettingsScreen(repository)
+            }
+        }
         composable("permissions") {
             SettingsScreen(
                 stringResource(R.string.privacy_permissions_title),

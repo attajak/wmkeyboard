@@ -285,6 +285,7 @@ export const ROUTES: RouteSpec[] = [
 	{ pattern: 'permissions', label: 'Permissions', group: 'Privacy and backup' },
 	{ pattern: 'network_activity', label: 'Network activity', group: 'Privacy and backup' },
 	{ pattern: 'applock', label: 'Fingerprint lock', group: 'Privacy and backup' },
+	{ pattern: 'automation', label: 'Allowed actions (automation)', group: 'Privacy and backup' },
 	{ pattern: 'accessibility', label: 'Accessibility', group: 'Privacy and backup' },
 	{ pattern: 'backup', label: 'Backup and restore', group: 'Privacy and backup' },
 	{ pattern: 'backup/auto', label: 'Automatic backup', group: 'Privacy and backup' },

@@ -659,6 +659,24 @@ internal object SettingsRowIcons {
         put(R.string.privacy_delete_learned_words_title) { Icons.Outlined.DeleteSweep }
         put(R.string.privacy_weather_location_title) { Icons.Outlined.LocationOn }
 
+        // ---- Privacy: other apps (automation) ----
+        put(R.string.automation_enabled_title) { Icons.Outlined.Apps }
+        put(R.string.automation_actions_title) { Icons.Outlined.Checklist }
+        put(R.string.automation_layout_title) { Icons.Outlined.Language }
+        put(R.string.automation_mode_title) { Icons.Outlined.Tune }
+        put(R.string.automation_theme_title) { Icons.Outlined.Palette }
+        put(R.string.automation_show_pin_title) { Icons.Outlined.PushPin }
+        put(R.string.automation_feedback_title) { Icons.Outlined.Vibration }
+        put(R.string.automation_savers_title) { Icons.Outlined.BatterySaver }
+        put(R.string.automation_position_title) { Icons.Outlined.OpenWith }
+        put(R.string.automation_open_tool_title) { Icons.Outlined.Widgets }
+        put(R.string.automation_incognito_on_title) { Icons.Outlined.VisibilityOff }
+        put(R.string.automation_incognito_off_title) { Icons.Outlined.Visibility }
+        put(R.string.automation_words_title) { Icons.Outlined.Spellcheck }
+        put(R.string.automation_backup_title) { Icons.Outlined.Backup }
+        put(R.string.automation_layout_events_title) { Icons.Outlined.Campaign }
+        put(R.string.automation_type_text_title) { Icons.Outlined.Keyboard }
+
         // ---- Privacy: the fingerprint lock ----
         // The per-target rows on the configurator are absent on purpose: each
         // borrows the glyph of the screen or row it guards, so the list reads

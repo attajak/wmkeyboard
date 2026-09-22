@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.app
 import android.app.job.JobParameters
 import android.app.job.JobService
 import com.wasimaster.wmkeyboard.core.settings.AutoBackupRunner
+import com.wasimaster.wmkeyboard.core.settings.AutoBackupScheduler
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +37,10 @@ class AutoBackupJobService : JobService() {
 
     override fun onStartJob(params: JobParameters?): Boolean {
         running = scope.launch {
-            AutoBackupRunner.run(applicationContext, SettingsRepository(applicationContext))
+            // A one-off run from an automation intent forces, as the Back up
+            // now button does; the periodic job keeps to its interval.
+            val force = params?.extras?.getBoolean(AutoBackupScheduler.EXTRA_FORCE, false) == true
+            AutoBackupRunner.run(applicationContext, SettingsRepository(applicationContext), force = force)
             // Always false: a periodic job comes round again on its own, and
             // asking for a reschedule on one is ignored. A failure worth showing
             // the user is already recorded in the settings by the runner.

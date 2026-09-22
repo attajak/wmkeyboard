@@ -233,6 +233,7 @@ import com.wasimaster.wmkeyboard.core.settings.isRotationDue
 import com.wasimaster.wmkeyboard.core.settings.isThemeShuffleDue
 import com.wasimaster.wmkeyboard.core.settings.rotates
 import com.wasimaster.wmkeyboard.core.tools.PhotoBackgroundManager
+import com.wasimaster.wmkeyboard.core.settings.AutomationPermission
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.theme.BackgroundBitmapCache
 import com.wasimaster.wmkeyboard.core.settings.ModeField
@@ -579,6 +580,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.delay
@@ -2859,8 +2861,24 @@ open class WMKeyboardService : InputMethodService() {
         // The shade's buttons reach the keyboard through this, and only while
         // there is a keyboard for them to reach. See [KeyboardControls].
         KeyboardControls.host = keyboardControlHost
-        // Same for adb and automation apps switching layout; see [KeyboardAutomation].
+        // Same for adb and automation apps; see [KeyboardAutomation].
         KeyboardAutomation.host = automationHost
+        // And the other direction: tell listening apps the layout changed,
+        // while the user allows it. The first value is the layout the keyboard
+        // started on, which is not a switch.
+        serviceScope.launch {
+            settingsRepository.automation
+                .map { it.allows(AutomationPermission.LAYOUT_EVENTS) }
+                .distinctUntilChanged()
+                .collect { announceLayouts = it }
+        }
+        serviceScope.launch {
+            _uiState.map { it.layoutId }.distinctUntilChanged().drop(1).collect { id ->
+                if (!announceLayouts) return@collect
+                val spec = resolveLayout(_uiState.value.settings.customLayouts, id)
+                runCatching { sendBroadcast(KeyboardAutomation.layoutChangedIntent(spec)) }
+            }
+        }
         // Decode the synthesized key sounds up front so the first press plays,
         // and resolve the audio/vibrator services here rather than from the
         // pointer-down handler of whichever key the user hits first.
@@ -4504,15 +4522,66 @@ open class WMKeyboardService : InputMethodService() {
         }
     }
 
+    /** Whether a layout switch is announced to other apps; see [KeyboardAutomation.EVENT_LAYOUT_CHANGED]. */
+    @Volatile
+    private var announceLayouts = false
+
     /**
-     * What an automation intent switches through: the 🌐 key's own
-     * [onLayoutSelected], so a switch from Tasker or adb is recorded, mirrored
-     * and re-bound exactly like one made on the keys.
+     * What an automation intent acts through: each is the path the keyboard's
+     * own control for the same thing takes (the 🌐 key's [onLayoutSelected],
+     * the Modes tool, the toolbar), so a change from Tasker or adb is recorded,
+     * mirrored and re-bound exactly like one made on the keys. Whether it is
+     * allowed at all was settled by the receiver before any of these runs.
      */
     private val automationHost = object : KeyboardAutomation.Host {
         override val settings: KeyboardSettings get() = _uiState.value.settings
         override val layoutId: String get() = _uiState.value.layoutId
         override fun selectLayout(layoutId: String) = onLayoutSelected(layoutId)
+        override fun selectMode(modeId: String?) = onModeSelect(modeId)
+        override fun showKeyboard() = keyboardControlHost.showKeyboard()
+        override fun setPinned(pinned: Boolean) = onPersistentChange(pinned)
+
+        override fun openTool(tool: ToolbarTool): String? {
+            if (!isSupportedTool(tool)) return "this build has no ${tool.name} tool"
+            val before = _uiState.value.panel
+            // onPanelChange toggles, so asking for the open panel would close it.
+            if (before.name == tool.name) return null
+            runToolFromKey(tool)
+            return if (_uiState.value.panel == before) "the ${tool.name} tool cannot open here" else null
+        }
+
+        override fun addWord(word: String) = addWordsByHand(listOf(word to false))
+
+        override fun typeText(text: String): String? {
+            automationFieldRefusal()?.let { return it }
+            insertSnippetText(text, text.length)
+            return null
+        }
+
+        override fun typeSnippet(name: String): String? {
+            automationFieldRefusal()?.let { return it }
+            if (!::snippetStore.isInitialized) return "snippets are not loaded yet"
+            val items = snippetStore.items()
+            val snippet = items.firstOrNull { it.trigger?.equals(name, ignoreCase = true) == true }
+                ?: items.firstOrNull { it.label.equals(name, ignoreCase = true) }
+                ?: return "no snippet is called \"$name\""
+            onSnippetTapped(snippet)
+            return null
+        }
+    }
+
+    /**
+     * Why automation may not type into the field in front of the user, or
+     * null when it may. A password field is refused outright: another app
+     * typing there is the one case where "the user allowed it" is not enough.
+     */
+    private fun automationFieldRefusal(): String? {
+        val info = currentInputEditorInfo
+        if (currentInputConnection == null || info == null || info.inputType == InputType.TYPE_NULL) {
+            return "no text field is focused"
+        }
+        if (info.isSecureField()) return "the focused field is a password field"
+        return null
     }
 
     /**

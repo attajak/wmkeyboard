@@ -280,6 +280,7 @@
     <string name="search_kw_tools">toolbar, toolbox, shortcuts, widgets, buttons</string>
     <string name="search_kw_privacy">incognito, permissions, tracking, learning, data</string>
     <string name="search_kw_permissions">grant, allow, revoke, access, microphone, camera, contacts, calendar, notification access, usage access</string>
+    <string name="search_kw_automation">automation, tasker, macrodroid, automate, adb, intent, broadcast, command, script, remote control</string>
     <string name="search_kw_applock">fingerprint, biometric, touch id, face unlock, app lock, lock, unlock, padlock, pin, passcode, protect, secure, privacy lock</string>
     <string name="search_kw_notifications">notification, notifications, shade, status bar, alerts, download finished, update installed, backup failed, keyboard controls, pin keyboard</string>
     <string name="search_kw_datasaver">mobile data, cellular, metered, roaming, wifi only, data usage, bandwidth, offline, save data</string>

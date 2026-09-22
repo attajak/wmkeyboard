@@ -1,14 +1,25 @@
 package com.wasimaster.wmkeyboard.ime
 
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
+import com.wasimaster.wmkeyboard.core.settings.AutomationPermission
+import com.wasimaster.wmkeyboard.core.settings.AutomationSettings
+import com.wasimaster.wmkeyboard.core.settings.KeyboardMode
+import com.wasimaster.wmkeyboard.core.settings.OneHandedMode
+import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
+import com.wasimaster.wmkeyboard.core.theme.BuiltInThemes
+import com.wasimaster.wmkeyboard.core.theme.DEFAULT_THEME_ID
 import com.wasimaster.wmkeyboard.ime.KeyboardAutomation.Outcome
+import com.wasimaster.wmkeyboard.ime.KeyboardAutomation.Position
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Where an automation intent sends the keyboard. Every answer has to be one of
- * the enabled layouts or a refusal; nothing else is reachable.
+ * What an automation intent resolves to, and what it needs. Every layout answer
+ * has to be one of the enabled layouts or a refusal; every action needs a
+ * permission the user can switch off.
  */
 class KeyboardAutomationTest {
 
@@ -128,5 +139,111 @@ class KeyboardAutomationTest {
         assertEquals(enabled.size, lines.size)
         assertTrue(lines[1].startsWith("* $avro\tbn\t"))
         assertTrue(lines[0].startsWith("  $qwerty\ten\t"))
+    }
+
+    @Test
+    fun `nothing is allowed until the master switch is on`() {
+        val off = AutomationSettings()
+        assertFalse(off.enabled)
+        assertTrue(AutomationPermission.entries.none(off::allows))
+        val on = off.copy(enabled = true)
+        assertTrue(on.allows(AutomationPermission.LAYOUT))
+        assertFalse(on.allows(AutomationPermission.TYPE_TEXT))
+    }
+
+    @Test
+    fun `the trusted group starts off and the keyboard controls start on`() {
+        val trusted = setOf(
+            AutomationPermission.INCOGNITO_OFF,
+            AutomationPermission.WORDS,
+            AutomationPermission.BACKUP,
+            AutomationPermission.LAYOUT_EVENTS,
+            AutomationPermission.TYPE_TEXT,
+        )
+        assertEquals(AutomationPermission.entries.toSet() - trusted, AutomationSettings.DEFAULT_ALLOWED)
+    }
+
+    @Test
+    fun `stored keys are unique`() {
+        val keys = AutomationPermission.entries.map { it.key }
+        assertEquals(keys.size, keys.toSet().size)
+    }
+
+    @Test
+    fun `every action needs a permission, incognito by direction`() {
+        assertEquals(KeyboardAutomation.actions - KeyboardAutomation.ACTION_SET_INCOGNITO, KeyboardAutomation.permissions.keys)
+        assertEquals(AutomationPermission.INCOGNITO_ON, KeyboardAutomation.incognitoPermission(true))
+        assertEquals(AutomationPermission.INCOGNITO_OFF, KeyboardAutomation.incognitoPermission(false))
+    }
+
+    private val modes = listOf(
+        KeyboardMode(id = "chat", name = "Chat"),
+        KeyboardMode(id = "code", name = "Code"),
+        KeyboardMode(id = "dup1", name = "Twin"),
+        KeyboardMode(id = "dup2", name = "Twin"),
+    )
+
+    @Test
+    fun `modes match by id, by name, and auto`() {
+        assertEquals("chat", KeyboardAutomation.matchMode("chat", modes))
+        assertEquals("code", KeyboardAutomation.matchMode("CODE", modes))
+        assertEquals("chat", KeyboardAutomation.matchMode("Chat", modes))
+        assertEquals(KeyboardAutomation.MODE_AUTO, KeyboardAutomation.matchMode("Auto", modes))
+        assertNull(KeyboardAutomation.matchMode("twin", modes))
+        assertNull(KeyboardAutomation.matchMode("nope", modes))
+    }
+
+    @Test
+    fun `themes match default, a built-in by id and by name`() {
+        val theme = BuiltInThemes.first()
+        assertEquals(DEFAULT_THEME_ID, KeyboardAutomation.matchTheme("Default", emptyList()))
+        assertEquals(theme.id, KeyboardAutomation.matchTheme(theme.id, emptyList()))
+        assertEquals(theme.id, KeyboardAutomation.matchTheme(theme.id.uppercase(), emptyList()))
+        assertNull(KeyboardAutomation.matchTheme("no such theme", emptyList()))
+    }
+
+    @Test
+    fun `a custom theme wins a name it shares with a built-in`() {
+        val builtIn = BuiltInThemes.first()
+        val custom = builtIn.copy(id = "mine", variants = emptyList())
+        assertEquals("mine", KeyboardAutomation.matchTheme(builtIn.name, listOf(custom)))
+    }
+
+    @Test
+    fun `positions parse and clear each other`() {
+        assertEquals(Position.SPLIT, Position.parse(" Split "))
+        assertNull(Position.parse("sideways"))
+        assertNull(Position.parse(null))
+        assertEquals(OneHandedMode.OFF, Position.FLOATING.oneHanded)
+        assertFalse(Position.LEFT.split || Position.LEFT.floating)
+        assertTrue(Position.entries.all { listOf(it.oneHanded != OneHandedMode.OFF, it.split, it.floating).count { on -> on } <= 1 })
+    }
+
+    @Test
+    fun `only tools with a panel can be opened`() {
+        assertEquals(ToolbarTool.EMOJI, KeyboardAutomation.panelTool("emoji"))
+        assertEquals(ToolbarTool.TRANSLATE, KeyboardAutomation.panelTool("TRANSLATE"))
+        assertNull(KeyboardAutomation.panelTool("PASTE"))
+        assertNull(KeyboardAutomation.panelTool("SELECT_ALL"))
+        assertNull(KeyboardAutomation.panelTool("FLASHLIGHT"))
+        assertNull(KeyboardAutomation.panelTool("nope"))
+    }
+
+    @Test
+    fun `switch extras read booleans and the strings automation apps send`() {
+        assertEquals(true, KeyboardAutomation.parseSwitch(true))
+        assertEquals(false, KeyboardAutomation.parseSwitch("off"))
+        assertEquals(true, KeyboardAutomation.parseSwitch(" TRUE "))
+        assertEquals(false, KeyboardAutomation.parseSwitch(0))
+        assertNull(KeyboardAutomation.parseSwitch("maybe"))
+        assertNull(KeyboardAutomation.parseSwitch(null))
+    }
+
+    @Test
+    fun `a word is one token`() {
+        assertEquals("hello", KeyboardAutomation.cleanWord("  hello "))
+        assertNull(KeyboardAutomation.cleanWord("two words"))
+        assertNull(KeyboardAutomation.cleanWord(""))
+        assertNull(KeyboardAutomation.cleanWord("x".repeat(65)))
     }
 }

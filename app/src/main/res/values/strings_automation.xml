@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Automation: other apps (adb, Tasker, MacroDroid, Automate) sending the
+        keyboard commands. The master switch sits on Privacy, the per-action
+        rows on their own screen under it. One row per AutomationPermission in
+        :core:settings; AutomationScreen.kt maps each one to its pair below.
+    -->
+    <string name="privacy_other_apps_group_title">Other apps</string>
+    <string name="automation_enabled_title">Let other apps control the keyboard</string>
+    <string name="automation_enabled_subtitle">Accept commands from adb, Tasker and other automation apps</string>
+    <string name="automation_enabled_info">When this is on, other apps on the phone can send the keyboard commands, for example to change the language or the theme. The Allowed actions screen sets which commands work. When this is off, the keyboard ignores all commands.</string>
+    <string name="automation_actions_title">Allowed actions</string>
+    <string name="automation_actions_subtitle">Choose what other apps can make the keyboard do</string>
+    <string name="automation_actions_count">%1$d on</string>
+    <string name="automation_screen_subtitle">Apps can send only the commands that are on</string>
+    <string name="automation_off_banner">Other apps cannot control the keyboard now. These choices apply only when Let other apps control the keyboard is on.</string>
+    <string name="automation_off_banner_action">Turn on</string>
+
+    <string name="automation_group_basic_title">Keyboard controls</string>
+    <string name="automation_group_basic_info">Each of these does the same thing as a control on the keyboard, and you can undo it. They are on by default.</string>
+    <string name="automation_group_trust_title">Needs more trust</string>
+    <string name="automation_group_trust_info">These change what the keyboard knows, type into apps, or tell other apps what you do. They are off by default. Turn one on only for an automation that you set up yourself.</string>
+
+    <string name="automation_layout_title">Switch language and layout</string>
+    <string name="automation_layout_subtitle">Set, cycle and list the layouts that you turned on</string>
+    <string name="automation_mode_title">Apply a keyboard mode</string>
+    <string name="automation_mode_subtitle">Choose a mode, or go back to automatic</string>
+    <string name="automation_theme_title">Change the theme</string>
+    <string name="automation_theme_subtitle">Choose one of your keyboard themes</string>
+    <string name="automation_show_pin_title">Show and pin the keyboard</string>
+    <string name="automation_show_pin_subtitle">Show the keyboard, and keep it on screen or stop</string>
+    <string name="automation_feedback_title">Sound and haptics</string>
+    <string name="automation_feedback_subtitle">Turn key sound and vibration on or off</string>
+    <string name="automation_savers_title">Power saving and data saver</string>
+    <string name="automation_savers_subtitle">Turn each saver on or off</string>
+    <string name="automation_position_title">Size and position</string>
+    <string name="automation_position_subtitle">Normal, one-handed, split or floating</string>
+    <string name="automation_open_tool_title">Open a tool</string>
+    <string name="automation_open_tool_subtitle">Open the panel of a tool on the keyboard</string>
+    <string name="automation_incognito_on_title">Turn incognito on</string>
+    <string name="automation_incognito_on_subtitle">Stop learning until incognito is off again</string>
+    <string name="automation_incognito_off_title">Turn incognito off</string>
+    <string name="automation_incognito_off_subtitle">Start learning from your typing again</string>
+    <string name="automation_words_title">Add and block words</string>
+    <string name="automation_words_subtitle">Add words to your dictionary, or stop words in suggestions</string>
+    <string name="automation_backup_title">Back up now</string>
+    <string name="automation_backup_subtitle">Start a backup to the automatic backup destination</string>
+    <string name="automation_layout_events_title">Announce layout changes</string>
+    <string name="automation_layout_events_subtitle">Tell all apps that listen when the language or layout changes</string>
+    <string name="automation_type_text_title">Type text</string>
+    <string name="automation_type_text_subtitle">Type text or a snippet into the field in use. Never into a password field</string>
+</resources>

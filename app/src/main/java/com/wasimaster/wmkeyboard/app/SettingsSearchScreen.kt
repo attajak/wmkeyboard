@@ -526,6 +526,7 @@ internal object SettingsRouteIcons {
         "permissions" to { Icons.Outlined.Key },
         "network_activity" to { Icons.Outlined.NetworkCheck },
         "applock" to { Icons.Outlined.Fingerprint },
+        "automation" to { Icons.Outlined.Checklist },
         "datasaver" to { Icons.Outlined.DataSaverOn },
         "servers" to { Icons.Outlined.Dns },
         "notifications" to { Icons.Outlined.Notifications },
