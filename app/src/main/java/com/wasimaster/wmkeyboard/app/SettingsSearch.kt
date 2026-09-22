@@ -1361,6 +1361,7 @@ private fun SearchStrings.toolPageRowsB(): List<SettingsSearchEntry> = listOf(
     ),
     toolEntry(ToolbarTool.CURRENCY, R.string.tooldetail_currency_auto_fetch_title, R.string.tooldetail_currency_auto_fetch_subtitle),
     toolEntry(ToolbarTool.CURRENCY, R.string.tooldetail_currency_decimals_title, R.string.tooldetail_currency_decimals_subtitle),
+    toolEntry(ToolbarTool.CURRENCY, R.string.tooldetail_currency_label_title, R.string.tooldetail_currency_label_subtitle),
     toolEntry(ToolbarTool.CURRENCY, R.string.tooldetail_currency_refresh_title, R.string.tooldetail_currency_refresh_subtitle),
     toolEntry(ToolbarTool.CURRENCY, R.string.tooldetail_currency_source_title, R.string.tooldetail_currency_source_subtitle),
     toolEntry(ToolbarTool.CURRENCY, R.string.tooldetail_crypto_enable_title, R.string.tooldetail_crypto_enable_subtitle),

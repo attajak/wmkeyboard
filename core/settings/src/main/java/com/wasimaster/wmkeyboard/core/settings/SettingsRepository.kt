@@ -61,6 +61,7 @@ import com.wasimaster.wmkeyboard.core.layout.resolveLayout
 import com.wasimaster.wmkeyboard.core.layout.script
 import com.wasimaster.wmkeyboard.core.tools.AltCalendar
 import com.wasimaster.wmkeyboard.core.tools.CurrencyClient
+import com.wasimaster.wmkeyboard.core.tools.CurrencyLabel
 import com.wasimaster.wmkeyboard.core.tools.SolarTimes
 import com.wasimaster.wmkeyboard.core.tools.Weekend
 import com.wasimaster.wmkeyboard.core.tools.defaultAltCalendars
@@ -2756,6 +2757,11 @@ data class KeyboardSettings(
     val cloudBackup: Boolean = false,
     /** Decimal places on currency conversion results. */
     val currencyDecimals: Int = 2,
+    /**
+     * How a currency chip names the currency it converted into: "96.04
+     * Rupee", "₹96.04" or "96.04 INR". Coins keep their ticker either way.
+     */
+    val currencyLabel: CurrencyLabel = CurrencyLabel.NAME,
     /** Hours exchange rates stay fresh before the panel refetches on open. */
     val currencyCacheHours: Int = 6,
     /** Where rates come from, and how cryptocurrency is handled. */
@@ -7179,6 +7185,7 @@ class SettingsRepository(private val context: Context) {
         private val QR_SCAN_AUTO_INSERT = booleanPreferencesKey("qr_scan_auto_insert")
         private val QR_SCAN_LINK_PREVIEWS = booleanPreferencesKey("qr_scan_link_previews")
         private val CURRENCY_DECIMALS = intPreferencesKey("currency_decimals")
+        private val CURRENCY_LABEL = stringPreferencesKey("currency_label")
         private val CURRENCY_CACHE_HOURS = intPreferencesKey("currency_cache_hours")
         private val FIAT_PROVIDERS = stringPreferencesKey("fiat_rate_providers")
         private val CRYPTO_ENABLED = booleanPreferencesKey("crypto_enabled")
@@ -8637,6 +8644,9 @@ class SettingsRepository(private val context: Context) {
             autoIncognito = p[AUTO_INCOGNITO] ?: defaults.autoIncognito,
             cloudBackup = p[CloudBackup.KEY] ?: defaults.cloudBackup,
             currencyDecimals = p[CURRENCY_DECIMALS] ?: defaults.currencyDecimals,
+            currencyLabel = p[CURRENCY_LABEL]
+                ?.let { runCatching { CurrencyLabel.valueOf(it) }.getOrNull() }
+                ?: defaults.currencyLabel,
             currencyCacheHours = p[CURRENCY_CACHE_HOURS] ?: defaults.currencyCacheHours,
             rateSources = RateSourceSettings(
                 fiatProviders = p[FIAT_PROVIDERS]?.split('\n')?.filter { it.isNotEmpty() }
@@ -9591,6 +9601,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setCurrencyDecimals(value: Int) =
         editPrefs { it[CURRENCY_DECIMALS] = value.coerceIn(0, 6) }
+
+    suspend fun setCurrencyLabel(value: CurrencyLabel) =
+        editPrefs { it[CURRENCY_LABEL] = value.name }
 
     suspend fun setCurrencyCacheHours(value: Int) =
         editPrefs { it[CURRENCY_CACHE_HOURS] = value.coerceIn(1, 48) }

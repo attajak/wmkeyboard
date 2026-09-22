@@ -711,6 +711,7 @@
   {"title":"Feet and inches","name":"tooldetail_units_compound_title","route":"tool/UNIT_CONVERT","screens":["Tools","Unit converter"],"screen":false},
   {"title":"Fetch rates as you type","name":"tooldetail_currency_auto_fetch_title","route":"tool/CURRENCY","screens":["Tools","Currency converter"],"screen":false},
   {"title":"Decimal places","name":"tooldetail_currency_decimals_title","route":"tool/CURRENCY","screens":["Tools","Currency converter"],"screen":false},
+  {"title":"Write the result as","name":"tooldetail_currency_label_title","route":"tool/CURRENCY","screens":["Tools","Currency converter"],"screen":false},
   {"title":"Refresh the rates every","name":"tooldetail_currency_refresh_title","route":"tool/CURRENCY","screens":["Tools","Currency converter"],"screen":false},
   {"title":"Currency rates from","name":"tooldetail_currency_source_title","route":"tool/CURRENCY","screens":["Tools","Currency converter"],"screen":false},
   {"title":"Convert coins","name":"tooldetail_crypto_enable_title","route":"tool/CURRENCY","screens":["Tools","Currency converter"],"screen":false},

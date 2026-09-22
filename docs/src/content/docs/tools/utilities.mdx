@@ -73,6 +73,7 @@ Both converters are also reachable inline. Typing `1 ft` or `150 usd` on the str
 - **Suggestion chip**: shows whether Convert as you type is on and opens [Smart chips](/smart/chips/), where the switch lives.
 - **Fetch rates as you type**: on by default, off in the F-Droid edition. On, a currency chip fetches the rates it needs as soon as you type an amount. Off, the chip reads **Get the rate** and fetches nothing until you tap it. The panel fetches when you open it either way, and rates the keyboard already has convert with no fetch.
 - **Decimal places**: a slider from 0 to 6, defaulting to **2**.
+- **Write the result as**: how a currency chip names the currency it converted into. **Name** (the default) writes `96.04 Rupee`, **Symbol** writes `₹96.04` and **Code** writes `96.04 INR`. A currency with no symbol of its own falls back to its code, and coins keep their ticker whichever you pick.
 - **Refresh rates every**: a slider from 1 to 48 hours, defaulting to **6**. Upstream rates only update about once a day, so anything under 24 hours mostly changes how soon a *failed* fetch gets retried.
 - **Currency rates from**: which source to fetch fiat rates from, either ExchangeRate-API (the default, or currency-api in the F-Droid edition), Frankfurter, Coinbase, or the jsDelivr currency-api. **Try the other sources** underneath decides whether the rest stand behind it as fallbacks.
 

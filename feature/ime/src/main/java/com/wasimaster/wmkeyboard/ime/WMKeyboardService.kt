@@ -13577,6 +13577,7 @@ open class WMKeyboardService : InputMethodService() {
             currencyFrom = state.settings.currencyFrom,
             currencyTo = state.settings.currencyTo,
             currencyDecimals = state.settings.currencyDecimals,
+            currencyLabel = state.settings.currencyLabel,
             cryptoEnabled = state.settings.rateSources.cryptoEnabled,
             cryptoTickers = state.settings.rateSources.cryptoTickers,
             cryptoDecimals = state.settings.rateSources.cryptoDecimals,

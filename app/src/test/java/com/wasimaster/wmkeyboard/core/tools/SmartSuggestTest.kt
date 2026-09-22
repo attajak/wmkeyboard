@@ -280,6 +280,30 @@ class SmartSuggestTest {
         }
     }
 
+    @Test
+    fun currencyResultFollowsTheLabelSetting() {
+        val inr = ctx.copy(currencyTo = "INR")
+        assertEquals("83.00 Rupee", hit("1 usd", inr)?.insert)
+        val symbol = hit("1 usd", inr.copy(currencyLabel = CurrencyLabel.SYMBOL))!!
+        assertEquals("₹83.00", symbol.insert)
+        assertEquals("₹83.00", symbol.tiers.first().result)
+        assertTrue("every tier keeps the symbol", symbol.tiers.all { it.result.contains('₹') })
+        assertEquals("83.00 INR", hit("1 usd", inr.copy(currencyLabel = CurrencyLabel.CODE))?.insert)
+    }
+
+    @Test
+    fun aSymbolLabelPutsTheTildeFirst() {
+        val tiers = hit("1.25 eur", ctx.copy(currencyTo = "GBP", currencyLabel = CurrencyLabel.SYMBOL))!!.tiers
+        assertTrue(tiers.map { it.result }.toString(), "~£1" in tiers.map { it.result })
+    }
+
+    @Test
+    fun aSymbolLabelFallsBackToTheCodeWithoutASymbol() {
+        val rates = CurrencyClient.Rates(base = "USD", rates = mapOf("USD" to 1.0, "SEK" to 10.0))
+        val h = hit("1 usd", ctx.copy(rates = rates, currencyTo = "SEK", currencyLabel = CurrencyLabel.SYMBOL))
+        assertEquals("10.00 SEK", h?.insert)
+    }
+
     // ---- display tiers ----
 
     @Test

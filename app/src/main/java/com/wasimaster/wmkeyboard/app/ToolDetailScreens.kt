@@ -32,6 +32,7 @@ import com.wasimaster.wmkeyboard.core.settings.LauncherIconShape
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.tools.CryptoCatalog
 import com.wasimaster.wmkeyboard.core.tools.CurrencyClient
+import com.wasimaster.wmkeyboard.core.tools.CurrencyLabel
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Delete
@@ -2184,6 +2185,20 @@ internal fun ToolDetailSettings(
                         display = { numberFormat.format(it.toInt()) },
                         default = SettingsDefaults.currencyDecimals.toFloat(),
                     ) { scope.launch { repository.setCurrencyDecimals(it.toInt()) } }
+                }
+                item {
+                    ChoiceSetting(
+                        R.string.tooldetail_currency_label_title,
+                        subtitle = stringResource(R.string.tooldetail_currency_label_subtitle),
+                        info = stringResource(R.string.tooldetail_currency_label_info),
+                        options = listOf(
+                            CurrencyLabel.NAME to stringResource(R.string.tooldetail_currency_label_name),
+                            CurrencyLabel.SYMBOL to stringResource(R.string.tooldetail_currency_label_symbol),
+                            CurrencyLabel.CODE to stringResource(R.string.tooldetail_currency_label_code),
+                        ),
+                        selected = settings.currencyLabel,
+                        default = SettingsDefaults.currencyLabel,
+                    ) { scope.launch { repository.setCurrencyLabel(it) } }
                 }
                 item {
                     SliderSetting(

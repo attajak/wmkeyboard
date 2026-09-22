@@ -173,6 +173,8 @@ object SmartSuggest {
         val currencyFrom: String = "USD",
         val currencyTo: String = "BDT",
         val currencyDecimals: Int = 2,
+        /** How a fiat result names its currency. See [CurrencyLabel]. */
+        val currencyLabel: CurrencyLabel = CurrencyLabel.NAME,
         val cryptoEnabled: Boolean = true,
         /** The coins that are on; empty means the catalogue defaults. */
         val cryptoTickers: Set<String> = emptySet(),
@@ -411,18 +413,18 @@ object SmartSuggest {
             return if (coinsMissing && !ctx.cryptoUnavailable) pendingHit(true) else null
         }
         val converted = CurrencyClient.convert(amount, from, to, rates) ?: return null
-        // The result side is the user's local currency: show and insert its
-        // name ("Taka") rather than the ISO code ("BDT"). Coins keep their
-        // ticker, since their names shorten badly.
-        val resultName = if (toCrypto) to else CurrencyClient.unitName(to)
-        val result = "${cryptoAware(converted, toCrypto, ctx)} $resultName"
+        // The result side is the user's local currency: by default show and
+        // insert its name ("Taka") rather than the ISO code ("BDT"). Coins
+        // keep their ticker, since their names shorten badly.
+        val amountText = cryptoAware(converted, toCrypto, ctx)
+        val result = if (toCrypto) "$amountText $to" else labelled(amountText, to, ctx.currencyLabel)
         return SmartHit(
             kind = Kind.CURRENCY, query = query, result = result, insert = result,
             replaceSpan = m.span, tool = ToolbarTool.CURRENCY, prefill = prefill,
             tiers = if (toCrypto) {
                 cryptoTiers(m, fromLabel, to, converted, ctx)
             } else {
-                currencyTiers(m, from, to, converted, ctx.currencyDecimals)
+                currencyTiers(m, from, to, converted, ctx.currencyDecimals, ctx.currencyLabel)
             },
         )
     }
@@ -477,8 +479,8 @@ object SmartSuggest {
         to: String,
         converted: Double,
         decimals: Int,
+        label: CurrencyLabel,
     ): List<ChipTier> {
-        val name = CurrencyClient.unitName(to)
         val full = money(converted, decimals)
         val rounded = kotlin.math.round(converted)
         // "~" only when the rounding visibly moved the number: nobody calls
@@ -502,12 +504,12 @@ object SmartSuggest {
         val qDigits = "$digits $from"
         val qCompact = symbolFor(from)?.let { "$it$digits" } ?: qDigits
         return buildList {
-            add(ChipTier(qTyped, "$full $name"))
+            add(ChipTier(qTyped, labelled(full, to, label)))
             if (decimals > 0 && full.endsWith("." + "0".repeat(decimals))) {
-                add(ChipTier(qTyped, "${money(converted, 0)} $name"))
+                add(ChipTier(qTyped, labelled(money(converted, 0), to, label)))
             }
-            add(ChipTier(qTyped, "$roundText $name"))
-            add(ChipTier(qCode, "$roundText $name"))
+            add(ChipTier(qTyped, labelled(roundText, to, label)))
+            add(ChipTier(qCode, labelled(roundText, to, label)))
             add(ChipTier(qCode, symbolResult))
             add(ChipTier(qDigits, symbolResult, lastResort = true))
             add(ChipTier(qCompact, symbolResult, lastResort = true))
@@ -595,6 +597,19 @@ object SmartSuggest {
     }
 
     private fun symbolFor(code: String): String? = symbolByCode[code]
+
+    /**
+     * A fiat [amount] named the way [label] asks. The symbol goes in front
+     * with no space ("₹96.04"), after any "~" the amount already carries so
+     * a rounded result reads "~₹96" rather than "₹~96".
+     */
+    private fun labelled(amount: String, code: String, label: CurrencyLabel): String = when (label) {
+        CurrencyLabel.NAME -> "$amount ${CurrencyClient.unitName(code)}"
+        CurrencyLabel.CODE -> "$amount $code"
+        CurrencyLabel.SYMBOL -> symbolFor(code)
+            ?.let { "${amount.takeWhile { it == '~' }}$it${amount.trimStart('~')}" }
+            ?: "$amount $code"
+    }
 
     // "pound(s)" is deliberately absent: it reads as mass far more often
     // than as sterling, and £/GBP/quid cover the currency.

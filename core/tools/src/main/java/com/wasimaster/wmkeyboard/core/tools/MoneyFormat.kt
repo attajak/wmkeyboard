@@ -54,3 +54,11 @@ object MoneyFormat {
             else -> significant(value)
         }
 }
+
+/**
+ * How a converted fiat amount names its currency on the smart chip and in
+ * the text the chip inserts: "96.04 Rupee", "₹96.04" or "96.04 INR". A
+ * currency with no symbol of its own falls back to its code under [SYMBOL].
+ * Coins keep their ticker whichever is picked.
+ */
+enum class CurrencyLabel { NAME, SYMBOL, CODE }

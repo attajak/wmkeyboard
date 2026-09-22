@@ -492,6 +492,12 @@
     <!-- %1$s is the currency code that the tool converts into, for example USD. -->
     <string name="tooldetail_currency_decimals_title">Decimal places</string>
     <string name="tooldetail_currency_decimals_subtitle">Rounding of the converted amount. Coins have their own setting</string>
+    <string name="tooldetail_currency_label_title">Write the result as</string>
+    <string name="tooldetail_currency_label_subtitle">How a currency chip names the currency that it converted into</string>
+    <string name="tooldetail_currency_label_info">Name writes \"96.04 Rupee\", Symbol writes \"₹96.04\" and Code writes \"96.04 INR\". A currency with no symbol of its own falls back to its code. Coins keep their ticker, such as BTC, with every choice.</string>
+    <string name="tooldetail_currency_label_name">Name</string>
+    <string name="tooldetail_currency_label_symbol">Symbol</string>
+    <string name="tooldetail_currency_label_code">Code</string>
     <string name="tooldetail_currency_refresh_title">Refresh the rates every</string>
     <string name="tooldetail_currency_refresh_subtitle">How long a fetched exchange rate stays fresh</string>
     <string name="tooldetail_currency_refresh_info">The upstream rates update about one time each day. A value below 24 hours mostly changes how soon the keyboard tries a failed fetch again.</string>

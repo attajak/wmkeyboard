@@ -1107,6 +1107,7 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_currency_auto_fetch_title) { Icons.Outlined.CloudDownload }
         put(R.string.servers_title) { Icons.Outlined.Dns }
         put(R.string.tooldetail_currency_decimals_title) { Icons.Outlined.Numbers }
+        put(R.string.tooldetail_currency_label_title) { Icons.Outlined.CurrencyExchange }
         put(R.string.tooldetail_currency_refresh_title) { Icons.Outlined.Refresh }
         put(R.string.tooldetail_currency_source_title) { Icons.Outlined.Cloud }
         put(R.string.tooldetail_crypto_enable_title) { Icons.Outlined.CurrencyBitcoin }
