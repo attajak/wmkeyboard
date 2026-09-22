@@ -967,6 +967,22 @@ internal fun LayoutSettings(
                 default = SettingsDefaults.swapCommaAndGlobe,
             ) { scope.launch { repository.setSwapCommaAndGlobe(it) } }
         }
+        item {
+            ToggleSetting(
+                R.string.layout_globe_in_one_place_title,
+                stringResource(
+                    if (settings.showGlobeKey) {
+                        R.string.layout_globe_in_one_place_subtitle
+                    } else {
+                        R.string.layout_globe_hidden_subtitle
+                    },
+                ),
+                settings.layoutBehavior.globeInOnePlace,
+                info = stringResource(R.string.layout_globe_in_one_place_info),
+                enabled = settings.showGlobeKey,
+                default = SettingsDefaults.layoutBehavior.globeInOnePlace,
+            ) { scope.launch { repository.setGlobeInOnePlace(it) } }
+        }
     }
 }
 

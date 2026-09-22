@@ -173,6 +173,7 @@ import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.PhotoLibrary
+import androidx.compose.material.icons.outlined.PinDrop
 import androidx.compose.material.icons.outlined.PhotoSizeSelectActual
 import androidx.compose.material.icons.outlined.PhotoSizeSelectLarge
 import androidx.compose.material.icons.outlined.PhotoSizeSelectSmall
@@ -577,6 +578,7 @@ internal object SettingsRowIcons {
         put(R.string.layout_globe_recent_title) { Icons.Outlined.History }
         put(R.string.layout_globe_emoji_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.layout_swap_comma_globe_title) { Icons.Outlined.SwapHoriz }
+        put(R.string.layout_globe_in_one_place_title) { Icons.Outlined.PinDrop }
         put(R.string.layout_editor_action_row_title) { Icons.AutoMirrored.Outlined.KeyboardReturn }
         put(R.string.layout_editor_hint_title) { Icons.Outlined.Subtitles }
         put(R.string.layout_editor_alternate_columns_title) { Icons.Outlined.ViewWeek }

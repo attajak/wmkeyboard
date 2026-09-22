@@ -5743,6 +5743,15 @@ data class LayoutBehaviorSettings(
      * different answers there.
      */
     val keyboardWidthUntouched: Boolean = true,
+    /**
+     * The 🌐 key sits in the same place on every layout (#310): the slot the
+     * built-in bottom row gives it, beside the spacebar, whatever the layout's
+     * own bottom row says. A layout imported from Keyman can put it at the far
+     * left, or after `?123`, and someone switching between three languages
+     * then chases it around the row. On by default: the built-in layouts
+     * already have it there, so they are left exactly as they were.
+     */
+    val globeInOnePlace: Boolean = true,
 ) {
     /** The characters that spring the symbols layer back, with the default applied. */
     fun symbolsReturnCharSet(): String =
@@ -6793,6 +6802,7 @@ class SettingsRepository(private val context: Context) {
         private val SPACEBAR_LABEL = stringPreferencesKey("spacebar_label")
         private val SYMBOLS_LONGPRESS_NUMPAD = booleanPreferencesKey("symbols_longpress_numpad")
         private val SPACE_SWIPE_DOWN_HIDE = booleanPreferencesKey("space_swipe_down_hide")
+        private val GLOBE_IN_ONE_PLACE = booleanPreferencesKey("globe_in_one_place")
         private val HINT_FLICK = booleanPreferencesKey("hint_flick")
         private val SPACE_CURSOR_2D = booleanPreferencesKey("space_cursor_2d")
         private val HINT_FONT_SCALE = floatPreferencesKey("hint_font_scale")
@@ -8326,6 +8336,7 @@ class SettingsRepository(private val context: Context) {
                     p[SYMBOLS_LONGPRESS_NUMPAD] ?: defaults.layoutBehavior.symbolsLongPressNumpad,
                 spaceSwipeDownHide =
                     p[SPACE_SWIPE_DOWN_HIDE] ?: defaults.layoutBehavior.spaceSwipeDownHide,
+                globeInOnePlace = p[GLOBE_IN_ONE_PLACE] ?: defaults.layoutBehavior.globeInOnePlace,
                 hintFlick = p[HINT_FLICK] ?: defaults.layoutBehavior.hintFlick,
                 spaceCursor2d = p[SPACE_CURSOR_2D] ?: defaults.layoutBehavior.spaceCursor2d,
                 spaceHoldKeys = p[SPACE_HOLD_KEYS]
@@ -12820,6 +12831,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpaceSwipeDownHide(value: Boolean) =
         editPrefs { it[SPACE_SWIPE_DOWN_HIDE] = value }
+
+    suspend fun setGlobeInOnePlace(value: Boolean) =
+        editPrefs { it[GLOBE_IN_ONE_PLACE] = value }
 
     suspend fun setHintFlick(value: Boolean) =
         editPrefs { it[HINT_FLICK] = value }
