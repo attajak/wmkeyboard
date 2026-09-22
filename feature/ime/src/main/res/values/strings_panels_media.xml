@@ -215,6 +215,8 @@
     <string name="ime_translate_engine_auto_info">On device when the languages are downloaded. Online for the rest.</string>
     <string name="ime_translate_online_only_label">Online only</string>
     <string name="ime_translate_downloaded_desc">Downloaded</string>
+    <string name="ime_translate_all_languages_label">All languages</string>
+    <string name="ime_translate_all_languages_info">Also the languages to download</string>
     <string name="ime_translate_need_models_body">To translate on the device, download: <xliff:g id="languages" example="Bengali, German">%1$s</xliff:g>. About <xliff:g id="size" example="60 MB">%2$s</xliff:g>.</string>
     <string name="ime_translate_downloading_progress">Downloading: <xliff:g id="languages" example="Bengali, German">%1$s</xliff:g>…</string>
     <string name="ime_translate_download_of_total_progress"><xliff:g id="done" example="9.1 MB">%1$s</xliff:g> of <xliff:g id="total" example="30 MB">%2$s</xliff:g></string>

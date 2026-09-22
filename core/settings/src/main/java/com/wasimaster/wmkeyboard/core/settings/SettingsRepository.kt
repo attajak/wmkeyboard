@@ -625,6 +625,20 @@ enum class TranslateEngine(@StringRes val labelRes: Int) {
  */
 data class TranslateSettings(
     val engine: TranslateEngine = TranslateEngine.ONLINE,
+    /**
+     * The panel's language menus list the languages whose model is on the
+     * device first, while the engine is On device or Automatic. On Online
+     * the models are not in play, so the menus keep their plain order.
+     */
+    val downloadedFirst: Boolean = true,
+    /**
+     * On the On device engine, the panel's language menus list only the
+     * languages it can translate without a new download, the languages the
+     * user types in and the current selection, then an "All languages" row
+     * that shows the rest. Automatic is left alone: every language works
+     * there, online if not on the device. Issue #324.
+     */
+    val onlyDownloaded: Boolean = true,
 )
 
 /**
@@ -7302,6 +7316,8 @@ class SettingsRepository(private val context: Context) {
         private val EMOJI_ROW_ABOVE_TOOLBAR = booleanPreferencesKey("emoji_row_above_toolbar")
         private val TRANSLATE_TARGET_LANG = stringPreferencesKey("translate_target_lang")
         private val TRANSLATE_ENGINE = stringPreferencesKey("translate_engine")
+        private val TRANSLATE_DOWNLOADED_FIRST = booleanPreferencesKey("translate_downloaded_first")
+        private val TRANSLATE_ONLY_DOWNLOADED = booleanPreferencesKey("translate_only_downloaded")
         private val GRAMMAR_DIALECT = stringPreferencesKey("grammar_dialect")
         private val GRAMMAR_HIDDEN_KINDS = stringSetPreferencesKey("grammar_hidden_kinds")
         private val SPELL_CHECKER_NO_SUGGESTIONS =
@@ -8762,6 +8778,8 @@ class SettingsRepository(private val context: Context) {
                 engine = p[TRANSLATE_ENGINE]
                     ?.let { name -> TranslateEngine.entries.firstOrNull { it.name == name } }
                     ?: defaults.translate.engine,
+                downloadedFirst = p[TRANSLATE_DOWNLOADED_FIRST] ?: defaults.translate.downloadedFirst,
+                onlyDownloaded = p[TRANSLATE_ONLY_DOWNLOADED] ?: defaults.translate.onlyDownloaded,
             ),
             grammarDialect = p[GRAMMAR_DIALECT]
                 ?.let { runCatching { GrammarDialect.valueOf(it) }.getOrNull() }
@@ -13719,6 +13737,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setTranslateEngine(value: TranslateEngine) =
         editPrefs { it[TRANSLATE_ENGINE] = value.name }
+
+    suspend fun setTranslateDownloadedFirst(value: Boolean) =
+        editPrefs { it[TRANSLATE_DOWNLOADED_FIRST] = value }
+
+    suspend fun setTranslateOnlyDownloaded(value: Boolean) =
+        editPrefs { it[TRANSLATE_ONLY_DOWNLOADED] = value }
 
     suspend fun setGrammarDialect(value: GrammarDialect) =
         editPrefs { it[GRAMMAR_DIALECT] = value.name }

@@ -1458,6 +1458,16 @@ private fun SearchStrings.translateEngineRows(): List<SettingsSearchEntry> =
                 R.string.tooldetail_translate_engine_title,
                 R.string.tooldetail_translate_engine_subtitle,
             ),
+            toolEntry(
+                ToolbarTool.TRANSLATE,
+                R.string.tooldetail_translate_downloaded_first_title,
+                R.string.tooldetail_translate_downloaded_first_subtitle,
+            ),
+            toolEntry(
+                ToolbarTool.TRANSLATE,
+                R.string.tooldetail_translate_only_downloaded_title,
+                R.string.tooldetail_translate_only_downloaded_subtitle,
+            ),
             toolEntry(ToolbarTool.TRANSLATE, R.string.tooldetail_translate_models_group),
         )
     }

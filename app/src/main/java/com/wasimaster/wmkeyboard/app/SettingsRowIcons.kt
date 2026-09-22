@@ -1165,6 +1165,8 @@ internal object SettingsRowIcons {
         put(R.string.toolai_ai_action_output_only_title) { Icons.AutoMirrored.Outlined.ShortText }
         put(R.string.toolai_translate_into_title) { Icons.Outlined.Translate }
         put(R.string.tooldetail_translate_engine_title) { Icons.Outlined.CloudSync }
+        put(R.string.tooldetail_translate_downloaded_first_title) { Icons.AutoMirrored.Outlined.Sort }
+        put(R.string.tooldetail_translate_only_downloaded_title) { Icons.Outlined.FilterAlt }
         put(R.string.customdict_emoji_auto_download_title) { Icons.Outlined.CloudDownload }
         put(R.string.customdict_only_my_lists_title) { Icons.Outlined.FilterAlt }
 

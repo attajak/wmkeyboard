@@ -1592,6 +1592,25 @@ internal fun ToolDetailSettings(
                             }
                         }
                     }
+                    // Both shape the panel's language menus, and only mean
+                    // something where models do; the subtitles say which
+                    // engine each one works with.
+                    item {
+                        ToggleSetting(
+                            R.string.tooldetail_translate_downloaded_first_title,
+                            stringResource(R.string.tooldetail_translate_downloaded_first_subtitle),
+                            settings.translate.downloadedFirst,
+                            default = SettingsDefaults.translate.downloadedFirst,
+                        ) { scope.launch { repository.setTranslateDownloadedFirst(it) } }
+                    }
+                    item {
+                        ToggleSetting(
+                            R.string.tooldetail_translate_only_downloaded_title,
+                            stringResource(R.string.tooldetail_translate_only_downloaded_subtitle),
+                            settings.translate.onlyDownloaded,
+                            default = SettingsDefaults.translate.onlyDownloaded,
+                        ) { scope.launch { repository.setTranslateOnlyDownloaded(it) } }
+                    }
                 }
             }
             if (onDevice) TranslateModelManager(settings)

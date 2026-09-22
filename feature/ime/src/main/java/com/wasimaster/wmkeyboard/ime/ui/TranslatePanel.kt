@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.TranslateEngine
 import com.wasimaster.wmkeyboard.core.tools.TranslateClient
 import com.wasimaster.wmkeyboard.core.translate.OfflineModelState
@@ -82,6 +83,9 @@ data class TranslateCallbacks(
 
 /** Which of the header's menus is open. One at a time: they share the ring's RESULTS region. */
 private enum class TranslateMenu { SOURCE, TARGET, ENGINE }
+
+/** Key of the menu row that shows the languages the short list left out. */
+private const val ALL_LANGUAGES_KEY = "\u0000all"
 
 /** One row of a header menu. */
 private data class TranslateMenuRow(
@@ -127,16 +131,23 @@ internal fun TranslatePanel(
     val target = state.settings.translateTargetLang
     val engine = if (OnDeviceTranslator.AVAILABLE) state.settings.translate.engine else TranslateEngine.ONLINE
     var menu by remember { mutableStateOf<TranslateMenu?>(null) }
+    // "All languages" opens the rest of one menu, once: the next menu starts
+    // short again, which is the point of the short list.
+    var showAll by remember(menu) { mutableStateOf(false) }
     val offerDownload = translate.missingModels.isNotEmpty() || translate.moduleMissing
 
-    val rows = menu?.let { translateMenuRows(it, translate, target, engine) }.orEmpty()
+    val rows = menu?.let { translateMenuRows(it, translate, target, engine, state.settings, showAll) }.orEmpty()
     val pick: (TranslateMenu, String) -> Unit = { which, key ->
-        menu = null
-        when (which) {
-            TranslateMenu.SOURCE -> callbacks.onSource(key)
-            TranslateMenu.TARGET -> callbacks.onTarget(key)
-            TranslateMenu.ENGINE ->
-                TranslateEngine.entries.firstOrNull { it.name == key }?.let(callbacks.onEngine)
+        if (key == ALL_LANGUAGES_KEY) {
+            showAll = true
+        } else {
+            menu = null
+            when (which) {
+                TranslateMenu.SOURCE -> callbacks.onSource(key)
+                TranslateMenu.TARGET -> callbacks.onTarget(key)
+                TranslateMenu.ENGINE ->
+                    TranslateEngine.entries.firstOrNull { it.name == key }?.let(callbacks.onEngine)
+            }
         }
     }
 
@@ -363,12 +374,36 @@ private fun sourceLabel(translate: TranslateUi): String = when {
     else -> TranslateClient.languageName(translate.detectedSource)
 }
 
+/**
+ * The languages of one menu, as picker codes, in the order they are drawn.
+ * Kept free of Compose so the rules can be tested alone.
+ *
+ * [ready] is a language the engine can take without a new download: its model
+ * is on the device or on its way. [downloadedFirst] puts those at the top,
+ * each group still in picker order. [shortList] leaves out the rest, except
+ * what [keep] holds on to (the selection, the languages the user types in).
+ */
+internal fun arrangeTranslateLanguages(
+    codes: List<String>,
+    ready: (String) -> Boolean,
+    keep: (String) -> Boolean,
+    downloadedFirst: Boolean,
+    shortList: Boolean,
+): List<String> {
+    val shown = if (shortList) codes.filter { ready(it) || keep(it) } else codes
+    if (!downloadedFirst) return shown
+    val (top, rest) = shown.partition(ready)
+    return top + rest
+}
+
 @Composable
 private fun translateMenuRows(
     menu: TranslateMenu,
     translate: TranslateUi,
     target: String,
     engine: TranslateEngine,
+    settings: KeyboardSettings,
+    showAll: Boolean,
 ): List<TranslateMenuRow> {
     if (menu == TranslateMenu.ENGINE) {
         return TranslateEngine.entries.map { entry ->
@@ -391,20 +426,49 @@ private fun translateMenuRows(
     val showModels = engine != TranslateEngine.ONLINE
     val onlineOnly = stringResource(R.string.ime_translate_online_only_label)
     val selected = if (menu == TranslateMenu.SOURCE) translate.sourceOverride else target
-    val languages = TranslateClient.languages.map { (code, name) ->
+    val names = TranslateClient.languages.toMap()
+    val downloaded: (String) -> Boolean = { code ->
+        val model = OfflineTranslateLanguages.modelCode(code)
+        model == OfflineTranslateLanguages.PIVOT || translate.models[model] is OfflineModelState.Downloaded
+    }
+    val typed = settings.enabledLanguages.mapNotNullTo(mutableSetOf()) { OfflineTranslateLanguages.modelCode(it.id) }
+    // An empty map is "not looked yet", not "nothing downloaded": a short
+    // list drawn off it would be English alone.
+    val shortList = engine == TranslateEngine.ON_DEVICE && settings.translate.onlyDownloaded &&
+        !showAll && translate.models.isNotEmpty()
+    val codes = TranslateClient.languages.map { it.first }
+    val arranged = arrangeTranslateLanguages(
+        codes = codes,
+        ready = { code ->
+            downloaded(code) ||
+                translate.models[OfflineTranslateLanguages.modelCode(code)] is OfflineModelState.Downloading
+        },
+        keep = { code ->
+            code.equals(selected, ignoreCase = true) || OfflineTranslateLanguages.modelCode(code) in typed
+        },
+        downloadedFirst = showModels && settings.translate.downloadedFirst,
+        shortList = shortList,
+    )
+    val languages = arranged.map { code ->
         val model = OfflineTranslateLanguages.modelCode(code)
         TranslateMenuRow(
             key = code,
-            label = name,
+            label = names[code] ?: code,
             selected = code.equals(selected, ignoreCase = true),
             note = onlineOnly.takeIf { showModels && model == null },
-            downloaded = showModels && model != null &&
-                (model == OfflineTranslateLanguages.PIVOT || translate.models[model] is OfflineModelState.Downloaded),
+            downloaded = showModels && model != null && downloaded(code),
             // Only a dead end when nothing else can take it: Automatic hands
             // these to the online service.
             dimmed = engine == TranslateEngine.ON_DEVICE && model == null,
         )
-    }
+    } + listOfNotNull(
+        TranslateMenuRow(
+            key = ALL_LANGUAGES_KEY,
+            label = stringResource(R.string.ime_translate_all_languages_label),
+            selected = false,
+            info = stringResource(R.string.ime_translate_all_languages_info),
+        ).takeIf { arranged.size < codes.size },
+    )
     if (menu == TranslateMenu.TARGET) return languages
     val detect = TranslateMenuRow(
         key = "",

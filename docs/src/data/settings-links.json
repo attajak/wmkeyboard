@@ -766,6 +766,8 @@
   {"title":"Number of records to keep","name":"toolai_ai_history_max_title","route":"ai_history","screens":["Tools","AI history"],"screen":false},
   {"title":"Translate into","name":"toolai_translate_into_title","route":"tool/TRANSLATE","screens":["Tools","Translate"],"screen":false},
   {"title":"Translation engine","name":"tooldetail_translate_engine_title","route":"tool/TRANSLATE","screens":["Tools","Translate"],"screen":false},
+  {"title":"Downloaded languages first","name":"tooldetail_translate_downloaded_first_title","route":"tool/TRANSLATE","screens":["Tools","Translate"],"screen":false},
+  {"title":"Only downloaded languages","name":"tooldetail_translate_only_downloaded_title","route":"tool/TRANSLATE","screens":["Tools","Translate"],"screen":false},
   {"title":"Languages on the device","name":"tooldetail_translate_models_group","route":"tool/TRANSLATE","screens":["Tools","Translate"],"screen":false},
   {"title":"Import a pack file","name":"vocab_packs_import_title","route":"vocab/packs","screens":["Tools","Vocabulary","Vocabulary packs"],"screen":false},
   {"title":"Available to download","name":"vocab_packs_available_title","route":"vocab/packs","screens":["Tools","Vocabulary","Vocabulary packs"],"screen":false},
