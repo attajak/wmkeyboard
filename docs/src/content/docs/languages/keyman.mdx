@@ -29,7 +29,7 @@ A Keyman keyboard is two things: the visual key grid, and a set of rules that de
 
 What comes across:
 
-- The key grid itself, including every layer the keyboard defines
+- The key grid itself: its letters layer and its number and symbol layers
 - Long-press alternates
 - Flicks, for the four directions WM Keyboard supports
 - The shift layer, folded into per-key shift labels where the two grids line up
@@ -38,6 +38,8 @@ What doesn't:
 
 - **Multi-tap keys.** WM Keyboard has no equivalent gesture, so those alternates are dropped.
 - **Diagonal flicks.** Keyman has eight flick directions and WM Keyboard has four. A flick aimed north-east isn't quietly remapped onto the north key, because typing the wrong character is worse than the gesture doing nothing.
+- **Extra layers.** Some keyboards keep more pages than letters, numbers and symbols: a right-Alt layer, or one page per consonant holding its vowel forms. WM Keyboard doesn't show those yet, so the keys on them are out of reach.
+- **Keys that exist for a rule to act on.** A key with no character of its own types the label printed on it rather than going through the rules, and so do flicks and long-press alternates.
 - **Fonts.** Keyman packages ship their own. WM Keyboard uses [its own font system](/themes/fonts/) instead, which already covers these scripts.
 
 ## Typing rules

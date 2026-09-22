@@ -105,4 +105,12 @@ interface KeyProcessor {
 
     /** True while a deadkey is pending, for the strip's pending-accent hint. */
     val deadKeyPending: Boolean
+
+    /**
+     * The touch layer now on screen, in Keyman's own names (`default`,
+     * `shift`, `numeric`, ...), for rules written `if(&layer = 'shift')`.
+     */
+    fun setLayer(name: String) {
+        // A processor with no layer-dependent rules has nothing to track.
+    }
 }

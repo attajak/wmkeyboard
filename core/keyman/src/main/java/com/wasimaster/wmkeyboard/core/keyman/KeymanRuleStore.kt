@@ -43,9 +43,12 @@ class KeymanRuleStore(private val context: Context) {
      * rules returns, and the caller's response is to leave the layout typing its
      * own key caps.
      */
-    fun processorFor(binding: KeymanBinding): KeyProcessor? {
+    fun processorFor(binding: KeymanBinding, tablet: Boolean = false): KeyProcessor? {
         val keyboard = keyboard(binding.keyboardId) ?: return null
-        return KmxProcessor(keyboard)
+        return KmxProcessor(
+            keyboard,
+            platform = if (tablet) KmxProcessor.PLATFORM_TOUCH_TABLET else KmxProcessor.PLATFORM_TOUCH_PHONE,
+        )
     }
 
     /** The parsed keyboard, cached. Null when absent, too large or malformed. */

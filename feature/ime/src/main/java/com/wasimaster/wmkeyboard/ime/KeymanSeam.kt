@@ -49,6 +49,18 @@ object KeymanSeam {
         if (capsLocked) mask = mask or KmxModifiers.CAPS
         return mask
     }
+
+    /**
+     * The grid on screen as the Keyman layer a rule would name in
+     * `if(&layer = ...)`. The converter folds Keyman's `shift` layer into our
+     * shift state and maps `default`, `numeric` and `symbol` onto our own
+     * three, so this is that mapping run backwards.
+     */
+    fun layerName(mode: LayoutMode, shifted: Boolean): String = when (mode) {
+        LayoutMode.SYMBOLS -> "numeric"
+        LayoutMode.SYMBOLS_SHIFTED -> "symbol"
+        else -> if (shifted) "shift" else "default"
+    }
 }
 
 /**

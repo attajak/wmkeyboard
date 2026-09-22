@@ -147,6 +147,28 @@ class KmxConformanceTest {
         )
     }
 
+    /**
+     * `platform('touch')` rules fire on a touch device and nowhere else. Khmer
+     * Angkor deletes a subscript consonant together with its coeng on touch,
+     * where the pair is one key, and one character at a time on a desktop.
+     */
+    @Test
+    fun `platform rules follow the device`() {
+        fun backspaceAfter(platform: String): String {
+            val engine = KmxProcessor(keyboard("khmer_angkor.kmx"), platform = platform)
+            val field = Field()
+            engine.resetContext("")
+            // ក ្ ក: a consonant, the coeng, and the subscript it introduces.
+            for (vk in listOf(75, 74, 75)) {
+                (engine.process(ProcessorKey(vk, 0)) as ProcessorResult.Edit).let(field::apply)
+            }
+            (engine.process(ProcessorKey(8, 0)) as ProcessorResult.Edit).let(field::apply)
+            return field.text.toString()
+        }
+        assertEquals("\u1780", backspaceAfter(KmxProcessor.PLATFORM_TOUCH_PHONE))
+        assertEquals("\u1780\u17D2", backspaceAfter("windows desktop hardware native"))
+    }
+
     /** No sequence may ever ask the host to delete more than the field holds. */
     @Test
     fun `no keyboard ever over-deletes`() {

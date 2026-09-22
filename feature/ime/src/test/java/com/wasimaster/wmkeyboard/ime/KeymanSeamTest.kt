@@ -200,4 +200,13 @@ class KeymanSeamTest {
         assertEquals(ProcessorResult.Declined, session.process(ProcessorKey(65, 0)))
         assertFalse(session.disabled)
     }
+
+    /** `if(&layer = ...)` sees Keyman's names for the grid we are showing. */
+    @Test
+    fun `layer names follow keyman's own`() {
+        assertEquals("default", KeymanSeam.layerName(LayoutMode.LETTERS, shifted = false))
+        assertEquals("shift", KeymanSeam.layerName(LayoutMode.LETTERS, shifted = true))
+        assertEquals("numeric", KeymanSeam.layerName(LayoutMode.SYMBOLS, shifted = false))
+        assertEquals("symbol", KeymanSeam.layerName(LayoutMode.SYMBOLS_SHIFTED, shifted = false))
+    }
 }

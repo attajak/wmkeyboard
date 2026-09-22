@@ -6352,17 +6352,29 @@ open class WMKeyboardService : InputMethodService() {
         if (state.keysTakenByKeyboard) return false
         val ic = currentInputConnection ?: return false
 
+        // A word our own path started — a long-press alternate, a key the
+        // engine passed on — is still a composing region. commitText replaces
+        // a region rather than inserting after it, so the engine's output
+        // would silently overwrite that word. End it as typed first; the
+        // caret move that follows is what marks the context stale.
+        if (composing.isNotEmpty()) {
+            commitComposing(ic, autocorrect = false)
+            session.markStale()
+        }
+
         // One read per caret move, none per keystroke: the flag is set by
         // onUpdateSelection and resolved here, lazily.
         session.syncIfNeeded(expectedSelStart) {
             ic.getTextBeforeCursor(KEYMAN_CONTEXT_UNITS, 0) ?: ""
         }
 
+        val shifted = state.shiftState != ShiftState.OFF
         val modifiers = keyman.modifiers or
             KeymanSeam.modifiersFor(
-                shifted = state.shiftState != ShiftState.OFF,
+                shifted = shifted,
                 capsLocked = state.shiftState == ShiftState.CAPS_LOCK,
             )
+        session.processor.setLayer(KeymanSeam.layerName(state.layoutMode, shifted))
         val result = session.process(ProcessorKey(keyman.vkey, modifiers)) ?: return false
 
         return when (result) {
@@ -6407,6 +6419,9 @@ open class WMKeyboardService : InputMethodService() {
         )
         if (!session.processor.matches(vkey, modifiers)) return false
 
+        session.processor.setLayer(
+            KeymanSeam.layerName(state.layoutMode, shifted = state.shiftState != ShiftState.OFF),
+        )
         session.syncIfNeeded(expectedSelStart) {
             ic.getTextBeforeCursor(KEYMAN_CONTEXT_UNITS, 0) ?: ""
         }
@@ -8919,6 +8934,11 @@ open class WMKeyboardService : InputMethodService() {
             // writing, and resuming it would compose into text they cannot see.
             state.captureTarget() == null &&
             !voiceBlocksResume &&
+            // A Keyman rule engine types committed text and keeps its own
+            // context. A word re-armed as composing behind it is a region the
+            // engine's next commitText replaces wholesale, so every key would
+            // overwrite the one before it.
+            keymanSession == null &&
             // Last, so the one term that asks the engine anything is only
             // reached once the screen and the field have already said yes.
             composingResumable(state.composer, suggestionEngine?.hasWordSources == true)
