@@ -32,7 +32,7 @@ A password field is a separate signal entirely. It doesn't get its own `FieldKin
 Email and URL fields keep the ordinary letter layout, since you're typing words either way, but two keys on the **bottom row only** change to match:
 
 - **Email fields** (`FieldKind.EMAIL`): the comma key becomes <KeyCap>@</KeyCap>, and the period key's long-press gains domain endings ahead of its usual alternates: `.com`, `.net`, `.org`, `.edu`, `.co`.
-- **URL fields** (`FieldKind.URI`): the comma key becomes <KeyCap>/</KeyCap> (long-press `?`, `#`, `&`, `=`), and the period key's long-press gains `.com`, `.org`, `.net`, `www.`, `https://`, `/`.
+- **URL fields** (`FieldKind.URI`): the comma key becomes <KeyCap>/</KeyCap> (long-press `?`, `#`, `&`, `=`), and the period key's long-press gains `.com`, `.org`, `.net`, `www.`, `https://`, and the `,` the comma key gave up, since a browser's address bar doubles as its search box.
 
 The swap only touches the bottom row on purpose. A Dvorak layout has real `.` and `,` letter keys elsewhere on the board, and those stay untouched. It's scoped to the letters layer as well, so switching to the symbols page shows the normal punctuation. Like field detection itself, this has no toggle in settings. It's on whenever the field kind matches.
 
