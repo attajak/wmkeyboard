@@ -180,6 +180,11 @@ platform :android do
       track: "internal",
       aab: aab,
       release_status: "completed",
+      # The gradle action reports every APK it finds under build/outputs as well
+      # as the bundle, and supply refuses "both apk(s) and aab". A machine that
+      # has ever assembled a release APK has one lying there, so 0.5.11's local
+      # upload died on it after a clean build. Only the bundle goes to Play.
+      skip_upload_apk: true,
       # Binary and release notes only. The listing (text, images) has its own
       # lanes below so a routine release can never half-rewrite the store page.
       skip_upload_metadata: true,
