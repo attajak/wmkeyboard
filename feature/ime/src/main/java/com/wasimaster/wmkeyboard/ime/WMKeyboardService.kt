@@ -527,6 +527,7 @@ import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.NumeralCommitScope
 import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.script.SpacedPunctuation
+import com.wasimaster.wmkeyboard.core.script.VERBATIM_DIGITS
 import com.wasimaster.wmkeyboard.core.script.mapDigits
 import com.wasimaster.wmkeyboard.core.script.resolveNumeralDigits
 import com.wasimaster.wmkeyboard.core.layout.composerType
@@ -6329,7 +6330,9 @@ open class WMKeyboardService : InputMethodService() {
         // already taken the digits away and there is nothing to read. Nothing
         // at all from a key whose hold is spoken for: the digit is a promise
         // the popup keeps, and a key that repeats instead never opens one.
-        pendingKeyHint = key.longPress.firstOrNull()?.takeIf { key.opensAlternatesPopup() }
+        pendingKeyHint = key.longPress.firstOrNull()
+            ?.removePrefix(VERBATIM_DIGITS)
+            ?.takeIf { key.opensAlternatesPopup() }
         // A converted Keyman layout owns its own dead keys, in its own context,
         // where its rules can match them. Running ours as well would apply an
         // accent twice.
@@ -7907,6 +7910,9 @@ open class WMKeyboardService : InputMethodService() {
 
     private fun keyOutput(key: Key, state: KeyboardUiState): String {
         val base = key.output ?: key.label
+        // The number row's other numeral system, picked from a hold (#309):
+        // typed as offered, not cased and not rewritten back.
+        if (base.startsWith(VERBATIM_DIGITS)) return base.substring(VERBATIM_DIGITS.length)
         val shiftLabel = key.shiftLabel
         val out = when {
             state.shiftState != ShiftState.OFF && shiftLabel != null -> shiftLabel

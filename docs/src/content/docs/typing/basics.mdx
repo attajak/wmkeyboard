@@ -111,6 +111,8 @@ Separately, **numeral system** decides which *glyphs* the number row and keypad 
 
 This screen's **Type native digits in** setting answers a different question: whether those native glyphs are what actually gets *committed* when you type them. **Text fields**, the default, types the native glyphs everywhere except number, phone and date/time fields, which keep plain 0-9. **Everywhere** commits the native glyphs unconditionally. **Display only** always types plain ASCII digits, whatever the keys show.
 
+For a language with digits of its own, the other set is a press and hold away on the number row. Hold a digit and the first entry in its popup is the same digit in the other system, so a plain hold and release types it: `1` on an Arabic board that shows `١`, and `١` on one you've switched to `0-9`. Under **Display only** the hold offers the glyph the key shows, since a tap already types ASCII. Languages that only use `0-9` have nothing to offer, and their popups are unchanged.
+
 ## Autopilot
 
 <SettingsPath path="Typing / Suggestions / Autopilot" />

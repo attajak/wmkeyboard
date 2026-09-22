@@ -360,6 +360,9 @@ import com.wasimaster.wmkeyboard.core.script.FancyStyle
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.FancyStyles
 import com.wasimaster.wmkeyboard.core.script.TextDirection
+import com.wasimaster.wmkeyboard.core.script.ASCII_DIGITS
+import com.wasimaster.wmkeyboard.core.script.NumeralCommitScope
+import com.wasimaster.wmkeyboard.core.script.VERBATIM_DIGITS
 import com.wasimaster.wmkeyboard.core.script.mapDigits
 import com.wasimaster.wmkeyboard.core.script.resolveNumeralDigits
 import com.wasimaster.wmkeyboard.core.settings.BackspaceSwipeUnit
@@ -14539,6 +14542,7 @@ private fun KeyRows(
                 // numeric field: that path keeps the four-column keypad, so
                 // nothing was given up and a stray ⌫ would just be litter.
                 val tabletRow = state.layouts.gridWidth != null && !numericPadActive(state)
+                val otherDigits = otherNumeralDigits(state)
                 remember(
                     kind,
                     authored,
@@ -14547,6 +14551,7 @@ private fun KeyRows(
                     shiftSymbols,
                     fillRow,
                     tabletRow,
+                    otherDigits,
                 ) {
                     // The field's own rows and the shift-symbols option come
                     // before a row the layout authored: a number row edited in
@@ -14575,7 +14580,7 @@ private fun KeyRows(
                             BuiltInLayouts.defaultNumberRow(LayoutLayer.SYMBOLS_SHIFTED)
                         // The digits, with the symbol layer's long-presses.
                         else -> BuiltInLayouts.defaultNumberRow(LayoutLayer.LETTERS)
-                    }
+                    }.withOtherNumerals(otherDigits)
                     if (tabletRow) base.expandNumberRowForTablet() else base
                 }
             } else {
@@ -16103,6 +16108,40 @@ private fun numericPadActive(state: KeyboardUiState): Boolean =
 
 
 private fun String.isSingleDigit(): Boolean = length == 1 && this[0].isDigit()
+
+/**
+ * The digits a hold on the number row offers besides the ones a tap types
+ * (#309), or null when the language has only one set.
+ *
+ * A tap types the chosen system, so the hold offers the other: ASCII under a
+ * native system, the language's own digits under Latin. Under "display only" a
+ * tap types ASCII whatever the keys show, so the hold offers the glyphs drawn.
+ */
+private fun otherNumeralDigits(state: KeyboardUiState): String? {
+    val behavior = state.settings.layoutBehavior
+    val drawn = resolveNumeralDigits(behavior.numeralSystemFor(state.language.id), state.language)
+    return when {
+        drawn == null -> state.language.numeralSystem.digits
+        behavior.numeralCommitScope == NumeralCommitScope.DISPLAY_ONLY -> drawn
+        else -> ASCII_DIGITS
+    }
+}
+
+/**
+ * Each digit key offers [other]'s digit first under its hold, so a plain hold
+ * and release types it (#309) — an Arabic writer on ٠-٩ reaches 0-9 without a
+ * trip to settings, and one on 0-9 reaches ٠-٩. Marked [VERBATIM_DIGITS]
+ * because an ASCII digit would otherwise be rewritten straight back.
+ */
+private fun List<Key>.withOtherNumerals(other: String?): List<Key> {
+    if (other == null) return this
+    return map { key ->
+        val digit = (key.output ?: key.label).singleOrNull()
+        if (key.action != KeyAction.Text || digit == null || digit !in '0'..'9') return@map key
+        val alternate = VERBATIM_DIGITS + other[digit - '0']
+        key.copy(longPress = listOf(alternate) + key.longPress.filterNot { it == alternate })
+    }
+}
 
 /**
  * Places a popup centered above its anchor with a clear gap, so the

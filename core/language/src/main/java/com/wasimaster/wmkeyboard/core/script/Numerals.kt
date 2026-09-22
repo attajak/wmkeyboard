@@ -66,6 +66,20 @@ enum class NumeralCommitScope(@StringRes val labelRes: Int) {
 fun resolveNumeralDigits(setting: NumeralSystem, language: LanguageDef): String? =
     if (setting == NumeralSystem.AUTO) language.numeralSystem.digits else setting.digits
 
+/** The ASCII digits in the same shape as [NumeralSystem.digits]. */
+const val ASCII_DIGITS = "0123456789"
+
+/**
+ * Leads a popup alternate that types exactly what it says, past the numeral
+ * system (#309). An ASCII `1` offered under a hold on an Arabic-Indic board is
+ * the one digit the commit-time rewrite must not touch, and a popup alternate
+ * reaches the service as a bare string with nowhere else to say so.
+ *
+ * U+2060 WORD JOINER: default-ignorable, so the popup and the corner hint draw
+ * the digit alone. The service strips it before anything is typed.
+ */
+const val VERBATIM_DIGITS = "⁠"
+
 /**
  * Rewrites the ASCII digits in [s] to [digits] (indexed `0`..`9`), leaving every
  * other character untouched. A null [digits] — the common Latin case — returns
