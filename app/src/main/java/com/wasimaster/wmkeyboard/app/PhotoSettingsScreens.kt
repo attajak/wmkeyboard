@@ -527,6 +527,7 @@ fun PhotoLibraryScreen(
         value = PhotoBackgroundManager.readPool(context).entries
     }
     val bytes = remember(entries) { entries.sumOf { it.bytes } }
+    val reduceMotion = LocalReduceMotion.current
 
     val devicePicker = rememberLauncherForActivityResult(
         ActivityResultContracts.PickMultipleVisualMedia(),
@@ -615,9 +616,12 @@ fun PhotoLibraryScreen(
                     )
                 }
                 items(entries, key = { it.fileName }) { entry ->
+                    // A deleted photo fades out and the ones after it slide
+                    // back a place, instead of the grid redrawing one short.
                     SavedPhotoTile(
                         file = File(PhotoBackgroundManager.poolDir(context), entry.fileName),
                         entry = entry,
+                        modifier = gridItemMotion(reduceMotion),
                         onApply = {
                             val target = themeId.takeIf { it.isNotBlank() } ?: settings.keyboardThemeId
                             scope.launch {
@@ -782,9 +786,10 @@ private fun SavedPhotoTile(
     onApply: () -> Unit,
     onSeed: () -> Unit,
     onDelete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var menuOpen by remember { mutableStateOf(false) }
-    Box {
+    Box(modifier) {
         AsyncImage(
             model = file,
             contentDescription = entry.credit?.photographer,

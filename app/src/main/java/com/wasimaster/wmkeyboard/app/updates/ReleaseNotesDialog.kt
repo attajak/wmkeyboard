@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.app.updates
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +33,8 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.R
+import com.wasimaster.wmkeyboard.app.LocalReduceMotion
+import com.wasimaster.wmkeyboard.app.stateSwapTransform
 import com.wasimaster.wmkeyboard.common.R as CommonR
 
 /**
@@ -54,6 +57,7 @@ internal fun ReleaseNotesDialog(
     notes: String?,
     onDismiss: () -> Unit,
 ) {
+    val reduceMotion = LocalReduceMotion.current
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -66,17 +70,29 @@ internal fun ReleaseNotesDialog(
             )
         },
         text = {
-            when {
-                // The dialog opens the moment the button is pressed, before
-                // the fetch has landed. An empty dialog with a bar in it says
-                // the press was heard; waiting to open says nothing.
-                notes == null -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                notes.isBlank() -> Text(
-                    stringResource(R.string.update_notes_empty),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
+            // The bar gives way to the notes with a cross-fade rather than a
+            // cut. The dialog takes the notes' height in one step as they
+            // start to come in, instead of resizing its window every frame.
+            // Keyed on which of the three it is showing, and drawn from the
+            // state handed in, so the part on its way out keeps its own look.
+            AnimatedContent(
+                targetState = notes,
+                contentKey = { releaseNotesStage(it) },
+                transitionSpec = { stateSwapTransform(reduceMotion, animateSize = false) },
+                label = "releaseNotes",
+            ) { shown ->
+                when {
+                    // The dialog opens the moment the button is pressed, before
+                    // the fetch has landed. An empty dialog with a bar in it says
+                    // the press was heard; waiting to open says nothing.
+                    shown == null -> LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    shown.isBlank() -> Text(
+                        stringResource(R.string.update_notes_empty),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
 
-                else -> ReleaseNotesBody(notes)
+                    else -> ReleaseNotesBody(shown)
+                }
             }
         },
         confirmButton = {
@@ -85,6 +101,16 @@ internal fun ReleaseNotesDialog(
             }
         },
     )
+}
+
+/**
+ * Which of its three faces the dialog is showing for [notes]: still loading,
+ * came back empty, or the notes themselves. What the cross-fade is keyed on.
+ */
+private fun releaseNotesStage(notes: String?): Int = when {
+    notes == null -> 0
+    notes.isBlank() -> 1
+    else -> 2
 }
 
 /**

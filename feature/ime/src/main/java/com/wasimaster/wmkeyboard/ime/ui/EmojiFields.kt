@@ -189,10 +189,17 @@ private fun EmojiTabsField(state: KeyboardUiState, session: EmojiPanelSession) {
     val focusedTab = state.focusedIndex(FocusRegion.CHIPS)
     val selectedTab = session.selectedTab
     val mostUsed = session.historyMode == EmojiTabMode.MOST_USED
+    val pagerState = session.pagerState
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 2.dp),
+            .padding(horizontal = 2.dp)
+            // One bar that travels with the pager, in place of one per tab.
+            // Pages and tabs are the same list (a tab's tap scrolls to its own
+            // index), so the pager's position is the bar's position.
+            .emojiTabIndicator(tabs.size, MaterialTheme.colorScheme.onSurface) {
+                pagerState.currentPage + pagerState.currentPageOffsetFraction
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         tabs.forEachIndexed { index, tab ->
@@ -211,6 +218,7 @@ private fun EmojiTabsField(state: KeyboardUiState, session: EmojiPanelSession) {
                 selected = tab == selectedTab,
                 focused = index == focusedTab,
                 onClick = { goToTab(index) },
+                bar = false,
             )
         }
     }

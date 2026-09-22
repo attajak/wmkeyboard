@@ -25,6 +25,12 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -1793,13 +1799,40 @@ private fun DockedKeyboardFrame(
                 // gesture-navigation bar on edge-to-edge (SDK 35+) IME windows.
                 val oneHanded = state.settings.oneHandedMode
                 val ohProfile = state.settings.oneHanded.forLandscape(landscape)
+                // Entering, leaving or flipping one-handed mode slides the board
+                // from where it was to where it now docks, instead of the keys
+                // jumping sideways. The layout switches at once (the keys are
+                // already the new width, and taps already land on them); only
+                // the drawing starts displaced, in the same composition, and
+                // settles. Measured as the body's centre, a share of the row.
+                val bodyCenter = dockedBodyCenter(state.settings, oneHanded, ohProfile.widthPercent)
+                val lastBodyCenter = remember { floatArrayOf(Float.NaN) }
+                // Not into resize mode, which leaves one-handed mode on its way in:
+                // its outline is drawn at the settled arrangement and holds still.
+                val slide = remember(oneHanded) {
+                    val from = lastBodyCenter[0]
+                    val still = from.isNaN() || state.settings.reduceMotion || resize != null
+                    Animatable(if (still) 0f else from - bodyCenter)
+                }
+                // Kept current between mode changes too, so a width changed in
+                // settings is where the next slide starts from.
+                lastBodyCenter[0] = bodyCenter
+                LaunchedEffect(slide) {
+                    slide.animateTo(0f, tween(OneHandedSlideMs, easing = FastOutSlowInEasing))
+                }
+                // A start-to-end share, so a right-to-left row moves the other way.
+                val slideSign = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1f else 1f
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .navigationBarsPadding()
                         // Extra breathing room above the gesture bar, adjustable
                         // in Settings → Appearance.
-                        .padding(bottom = state.settings.bottomPaddingDp.dp),
+                        .padding(bottom = state.settings.bottomPaddingDp.dp)
+                        // Read in the draw phase: the slide repaints, it never
+                        // recomposes the keyboard. Key positions follow the
+                        // layer as it moves, so they are exact once it settles.
+                        .graphicsLayer { translationX = slide.value * size.width * slideSign },
                     verticalAlignment = Alignment.Bottom,
                 ) {
                     // Flip to the other side: update the live mode and remember the
@@ -1831,7 +1864,7 @@ private fun DockedKeyboardFrame(
                         // width and height scale. The weights sum to 1 so the body
                         // is exactly `widthFraction` of the screen and any leftover
                         // beyond the rail becomes centre-ward slack.
-                        val widthFraction = (ohProfile.widthPercent / 100f).coerceIn(0.30f, 0.90f)
+                        val widthFraction = oneHandedWidthFraction(ohProfile.widthPercent)
                         val leftover = 1f - widthFraction
                         val railWeight = ONE_HANDED_RAIL_WEIGHT.coerceAtMost(leftover)
                         val slack = (leftover - railWeight).coerceAtLeast(0f)
@@ -2030,6 +2063,29 @@ internal fun dockedWidthArrangement(settings: KeyboardSettings): DockedWidthArra
     return DockedWidthArrangement(widthFraction, leftSlack, 1f - widthFraction - leftSlack)
 }
 
+/** How long the floating panel takes to fade up once it has been placed. */
+private const val FloatingAppearMs = 160
+
+/** The share of the row a one-handed board takes, from its width setting. */
+private fun oneHandedWidthFraction(widthPercent: Int): Float = (widthPercent / 100f).coerceIn(0.30f, 0.90f)
+
+/**
+ * Where the docked keyboard body's centre sits, as a share of the row from its
+ * start edge, for [mode]: the arrangement [DockedKeyboardFrame] lays out, read
+ * back as one number so a change of mode can slide from one to the other. The
+ * one-handed weights sum to one, the body first on the left and last on the
+ * right, which is all the one-handed half needs.
+ */
+private fun dockedBodyCenter(settings: KeyboardSettings, mode: OneHandedMode, widthPercent: Int): Float =
+    when (mode) {
+        OneHandedMode.OFF -> dockedWidthArrangement(settings).let { it.leftSlack + it.widthFraction / 2f }
+        OneHandedMode.LEFT -> oneHandedWidthFraction(widthPercent) / 2f
+        OneHandedMode.RIGHT -> 1f - oneHandedWidthFraction(widthPercent) / 2f
+    }
+
+/** How long the board takes to slide into, out of, or across one-handed mode. */
+private const val OneHandedSlideMs = 240
+
 /**
  * The collapsed voice bar owns the window right now. A panel forced open (a
  * hardware shortcut can do this) or a password field puts the keyboard back
@@ -2134,6 +2190,16 @@ private fun FloatingKeyboardFrame(
         }
         fun publishBounds() = gesture.bounds?.let(onBounds)
 
+        // The panel fades up once it has been measured, rather than appearing
+        // at full strength the frame after it was invisible. Opacity only: a
+        // scale would move the bounds read below, which are the touchable region
+        // the service hands the window.
+        val appear = remember { Animatable(if (state.settings.reduceMotion) 1f else 0f) }
+        LaunchedEffect(appear) {
+            snapshotFlow { panelSize.value != IntSize.Zero }.first { it }
+            appear.animateTo(1f, tween(FloatingAppearMs, easing = LinearOutSlowInEasing))
+        }
+
         Surface(
             modifier = Modifier
                 // Placement-scope read: moving the panel re-places one node.
@@ -2164,7 +2230,10 @@ private fun FloatingKeyboardFrame(
                     val shift = dragShift.value
                     translationX = shift.x
                     translationY = shift.y
-                    alpha = if (panelSize.value == IntSize.Zero) 0f else 1f
+                    alpha = if (panelSize.value == IntSize.Zero) 0f else appear.value
+                    // Faded per draw rather than through a buffer the panel's
+                    // size, so nothing at its edge is cut off while it rises.
+                    compositingStrategy = CompositingStrategy.ModulateAlpha
                 }
                 .onGloballyPositioned { coords ->
                     panelSize.value = coords.size
@@ -9608,14 +9677,12 @@ private fun KeyboardBody(
             // every key-row branch at the bottom of this column.
             val barOrder = state.settings.barOrder
             for (row in barRowsAboveKeys(barOrder)) BarRowSlot(row)
-            // Deliberately NOT animated. A fade here was tried and reverted:
-            // an alpha on this subtree covers the key rows as well as the
-            // panels, so every panel close briefly rendered a translucent
-            // keyboard with the app's own text field showing through it, and
-            // the alpha had to be applied a frame after the new content was
-            // already on screen, which flashed it at full strength first.
-            // Animating the swap needs the panels to be layered rather than
-            // exchanged; until then the cut is the honest option.
+            // The panel swap below fades a panel in, and only a panel: see
+            // [PanelEnterFade]. A fade over this whole subtree was tried first
+            // and reverted — it covered the key rows too, so every panel close
+            // briefly rendered a translucent keyboard with the app's own text
+            // field showing through it, and its alpha landed a frame after the
+            // new content was already on screen, flashing it at full strength.
         // A panel that has left the composition must stop claiming the focus
         // ring: its counts and its activate lambdas outlive it by a frame
         // otherwise, and the service would act on an item nothing is drawing.
@@ -9674,7 +9741,9 @@ private fun KeyboardBody(
                 ),
             )
         }
-        when (if (lockHidden && state.panel == PanelMode.CLIPBOARD) PanelMode.NONE else state.panel) {
+        val shownPanel = if (lockHidden && state.panel == PanelMode.CLIPBOARD) PanelMode.NONE else state.panel
+        PanelEnterFade(shownPanel, state.settings.reduceMotion) {
+        when (shownPanel) {
                 PanelMode.EMOJI -> EmojiPanelHost(state, panelCallbacks)
                 PanelMode.CLIPBOARD -> ClipboardPanelHost(state, panelCallbacks)
                 // The snippet cards are two columns of wrapped text, so the
@@ -10335,15 +10404,18 @@ private fun KeyboardBody(
                 PanelMode.NONE -> if (
                     !(state.hardwareKeyboardPresent && state.settings.toolbarBehavior.onlyWithHardwareKeyboard)
                 ) {
-                    KeyRows(
-                        state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
-                        onGestureWords = onGestureWords,
-                        onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
-                        onKeyTouch = onKeyTouch,
-                        onTouchKeys = onTouchKeys,
-                    )
+                    LayerLabelFade(state.layoutMode, state.settings.reduceMotion) {
+                        KeyRows(
+                            state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
+                            onGestureWords = onGestureWords,
+                            onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
+                            onKeyTouch = onKeyTouch,
+                            onTouchKeys = onTouchKeys,
+                        )
+                    }
                 }
             }
+        }
             // The key rows come back under a panel whenever one of the
             // keyboard's own fields has taken the keys — otherwise a focused
             // field would have nothing on screen to type into it — and with
@@ -10375,13 +10447,15 @@ private fun KeyboardBody(
                 } else if (captureStripShown(state)) {
                     CaptureStrip(state, capture.onSuggestion)
                 }
-                KeyRows(
-                    state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
-                    onGestureWords = onGestureWords,
-                    onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
-                    onKeyTouch = onKeyTouch,
-                    onTouchKeys = onTouchKeys,
-                )
+                LayerLabelFade(state.layoutMode, state.settings.reduceMotion) {
+                    KeyRows(
+                        state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
+                        onGestureWords = onGestureWords,
+                        onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
+                        onKeyTouch = onKeyTouch,
+                        onTouchKeys = onTouchKeys,
+                    )
+                }
             }
             // The rows the user put under the keys. Every row's own gate
             // (full-bleed, lock screen, its setting) applies here exactly as
@@ -10518,6 +10592,52 @@ private fun KeyboardBody(
         PickerHelpPill(state, modifier = Modifier.align(Alignment.BottomEnd))
     }
 }
+
+/**
+ * The body's panel slot: [panel]'s content, faded in over the board when a panel
+ * opens or one panel gives way to another.
+ *
+ * Only a panel fades. The keys ([PanelMode.NONE]) come back at full strength the
+ * instant a panel closes, because an alpha on them is exactly what was reverted
+ * before: a see-through keyboard with the app's text showing through it. And the
+ * fade starts from nothing in the very composition that brings the panel in
+ * (the value is born with it, keyed on the panel), so its first frame is never
+ * drawn at full strength and dimmed a frame later.
+ *
+ * A Column, so every panel keeps the ColumnScope it was written against and its
+ * rows still stack exactly as they did straight in the body's own Column (none
+ * of them takes a weight there). ModulateAlpha applies the fade to what is drawn
+ * rather than through an offscreen buffer the size of the slot, which would clip
+ * anything a panel draws past its own edge for the length of the fade.
+ */
+@Composable
+private fun PanelEnterFade(
+    panel: PanelMode,
+    reduceMotion: Boolean,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    key(panel) {
+        val fades = panel != PanelMode.NONE && !reduceMotion
+        val fade = remember { Animatable(if (fades) 0f else 1f) }
+        LaunchedEffect(fade) {
+            fade.animateTo(1f, tween(PanelEnterMs, easing = LinearOutSlowInEasing))
+        }
+        Column(
+            modifier = if (panel == PanelMode.NONE) {
+                Modifier
+            } else {
+                Modifier.graphicsLayer {
+                    alpha = fade.value
+                    compositingStrategy = CompositingStrategy.ModulateAlpha
+                }
+            },
+            content = content,
+        )
+    }
+}
+
+/** How long a panel takes to fade in over the board. */
+private const val PanelEnterMs = 140
 
 /** Gap the drag-scope pill keeps from the toolbar and from the keyboard's edge. */
 private val DragScopeGap = 4.dp
@@ -17340,11 +17460,22 @@ private fun AlternatesPopup(
             }
         }
     }
+    // Opens already on screen at nearly full size and settles out of the key,
+    // rather than appearing at full size in one step. Nothing waits for it: the
+    // first frame is fully opaque and every entry is already where it will be.
+    val grow = remember { Animatable(if (kb.reduceMotion) 1f else AlternatesGrowFrom) }
+    LaunchedEffect(grow) {
+        grow.animateTo(1f, tween(AlternatesGrowMs, easing = FastOutSlowInEasing))
+    }
     Popup(
         popupPositionProvider = provider,
         onDismissRequest = onDismiss,
     ) {
         Surface(
+            // A scale at draw time, never a graphicsLayer: the hold-drag reads the
+            // grid's window position and its entries' laid-out rects, and a layer
+            // transform would shift both for as long as the popup was growing.
+            modifier = Modifier.growFromBottom { grow.value },
             shape = kb.popupShape(),
             color = kb.popup,
             border = kb.popupSurfaceBorder(),
@@ -17403,6 +17534,28 @@ private fun AlternatesPopup(
                     }
                 }
             }
+        }
+    }
+}
+
+/** The size the alternates popup opens at, as a share of its own. */
+private const val AlternatesGrowFrom = 0.9f
+
+/** How long the alternates popup takes to settle to its full size. */
+private const val AlternatesGrowMs = 110
+
+/**
+ * Draws the content scaled by [scale] about its bottom centre, the edge that
+ * faces the key it came from. Paint only: layout and every coordinate read from
+ * it stay at full size, which a popup that is being steered by a finger needs.
+ */
+private fun Modifier.growFromBottom(scale: () -> Float): Modifier = drawWithContent {
+    val s = scale()
+    if (s >= 1f) {
+        drawContent()
+    } else {
+        scale(s, s, pivot = Offset(size.width / 2f, size.height)) {
+            this@drawWithContent.drawContent()
         }
     }
 }
@@ -17789,11 +17942,72 @@ private const val MaxPopupHeightFraction = 0.6f
 @Composable
 private fun KeyLabel(visual: KeyVisual, settings: KeyboardSettings, pressed: State<Boolean>) {
     val recolours = visual.pressedContentColor != visual.contentColor
-    KeyContent(
-        visual,
-        settings,
-        if (recolours && pressed.value) visual.pressedContentColor else visual.contentColor,
-    )
+    val fade = LocalLayerLabelFade.current
+    if (fade == null) {
+        KeyContent(
+            visual,
+            settings,
+            if (recolours && pressed.value) visual.pressedContentColor else visual.contentColor,
+        )
+        return
+    }
+    // Only the label fades, never the face: a key that dimmed as a whole would
+    // read as disabled, and the hit targets are already the new layer's. A
+    // wrapper that sizes to its content and centres it lays each child out
+    // exactly where the key's own centring Box would; the alpha is read in the
+    // draw phase, and ModulateAlpha keeps it off an offscreen buffer that could
+    // clip a glyph drawn past its bounds.
+    Box(
+        modifier = Modifier.graphicsLayer {
+            alpha = fade.value
+            compositingStrategy = CompositingStrategy.ModulateAlpha
+        },
+        contentAlignment = Alignment.Center,
+    ) {
+        KeyContent(
+            visual,
+            settings,
+            if (recolours && pressed.value) visual.pressedContentColor else visual.contentColor,
+        )
+    }
+}
+
+/**
+ * The key labels' opacity while the board changes layer (letters, symbols,
+ * the second symbol page), so the new labels come up rather than cutting in.
+ * Null outside [LayerLabelFade], which is every grid that never changes layer
+ * under the finger (panel grids, previews): their labels skip the wrapper.
+ */
+internal val LocalLayerLabelFade = compositionLocalOf<State<Float>?> { null }
+
+/** The opacity a new layer's labels start from. */
+private const val LayerLabelFadeFrom = 0.35f
+
+/** How long a new layer's labels take to reach full strength. */
+private const val LayerLabelFadeMs = 110
+
+/**
+ * Provides [LocalLayerLabelFade] to [content], starting a fade each time [mode]
+ * changes. The fade's start value is decided in the composition that switched
+ * layer, so the frame that first shows the new labels already draws them faded,
+ * rather than drawing them at full strength and dimming them a frame later.
+ * The first layer a board opens on does not fade, and neither does any layer
+ * under Reduce motion.
+ */
+@Composable
+private fun LayerLabelFade(mode: LayoutMode, reduceMotion: Boolean, content: @Composable () -> Unit) {
+    // A plain holder, not snapshot state: it is written from inside the
+    // remember below, and nothing draws from it.
+    val shown = remember { arrayOfNulls<LayoutMode>(1) }
+    val fade = remember(mode) {
+        val switched = shown[0] != null && shown[0] != mode
+        shown[0] = mode
+        Animatable(if (switched && !reduceMotion) LayerLabelFadeFrom else 1f)
+    }
+    LaunchedEffect(fade) {
+        fade.animateTo(1f, tween(LayerLabelFadeMs, easing = LinearOutSlowInEasing))
+    }
+    CompositionLocalProvider(LocalLayerLabelFade provides fade.asState(), content = content)
 }
 
 /**
@@ -18177,6 +18391,46 @@ private fun ActionKeyIcon(
     }
 }
 
+/**
+ * [ActionKeyIcon] for the shift and caps-lock keys, which change look with the
+ * shift state: the glyph cross-fades (outline, filled, locked) and the tint eases
+ * between the key's colour and the lit one, instead of both snapping.
+ *
+ * Only these two keys pay for it, and only on the frames a shift state changes;
+ * every other key keeps the plain icon. The outgoing glyph drops its name while
+ * it fades, so a screen reader never finds two shift keys in one place.
+ */
+@Composable
+private fun ShiftStateIcon(
+    named: ImageVector?,
+    slot: String,
+    contentDescription: String?,
+    tint: Color,
+    reduceMotion: Boolean,
+) {
+    val shownTint by animateColorAsState(
+        tint,
+        animationSpec = if (reduceMotion) snap() else tween(ShiftMotionMs),
+        label = "shiftTint",
+    )
+    // A named icon is one glyph for every state, so there is nothing to fade.
+    if (named != null || reduceMotion) {
+        ActionKeyIcon(named, slot, contentDescription, shownTint)
+        return
+    }
+    Crossfade(targetState = slot, animationSpec = tween(ShiftMotionMs), label = "shiftGlyph") { shown ->
+        ActionKeyIcon(
+            null,
+            shown,
+            contentDescription = if (shown == slot) contentDescription else null,
+            tint = shownTint,
+        )
+    }
+}
+
+/** How long the shift key takes to change its glyph and its tint. */
+private const val ShiftMotionMs = 120
+
 @Composable
 private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentColor: Color) {
     val key = visual.key
@@ -18190,17 +18444,19 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
     when (key.action) {
         // The shift slot and its spoken name both track the live shift state, and
         // [spokenLabel] already words it the way this key wants read out.
-        KeyAction.Shift -> ActionKeyIcon(
+        KeyAction.Shift -> ShiftStateIcon(
             namedIcon,
             visual.iconSlot ?: IconSlots.KEY_SHIFT,
             contentDescription = visual.spoken.resolved(),
             tint = if (visual.iconActive) MaterialTheme.colorScheme.primary else contentColor,
+            reduceMotion = settings.reduceMotion,
         )
-        KeyAction.CapsLock -> ActionKeyIcon(
+        KeyAction.CapsLock -> ShiftStateIcon(
             namedIcon,
             visual.iconSlot ?: IconSlots.KEY_SHIFT_LOCK,
             contentDescription = visual.spoken.resolved(),
             tint = if (visual.iconActive) MaterialTheme.colorScheme.primary else contentColor,
+            reduceMotion = settings.reduceMotion,
         )
         KeyAction.Delete -> ActionKeyIcon(
             namedIcon,
@@ -19909,6 +20165,10 @@ internal fun emojiTabSlot(tab: String, mostUsed: Boolean): String = when (tab) {
  * One compact emoji tab: a 20dp icon over a 2dp selection bar, in a plain
  * weighted cell so search + every category share the row evenly. [label]
  * substitutes a short glyph for the icon (the text-art tabs use it).
+ *
+ * [bar] false leaves the bar's 2dp slot empty for a row that draws one bar of
+ * its own across every tab ([emojiTabIndicator]), so the icons sit exactly
+ * where they would with a bar under each.
  */
 @Composable
 internal fun RowScope.EmojiTab(
@@ -19918,11 +20178,12 @@ internal fun RowScope.EmojiTab(
     onClick: () -> Unit,
     label: String? = null,
     focused: Boolean = false,
+    bar: Boolean = true,
 ) {
     Column(
         modifier = Modifier
             .weight(1f)
-            .height(32.dp)
+            .height(EmojiTabHeight)
             .focusRing(focused, RoundedCornerShape(8.dp))
             .clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -19957,11 +20218,47 @@ internal fun RowScope.EmojiTab(
                 .fillMaxWidth(0.6f)
                 .height(2.dp)
                 .background(
-                    if (selected) MaterialTheme.colorScheme.onSurface else Color.Transparent,
+                    if (bar && selected) MaterialTheme.colorScheme.onSurface else Color.Transparent,
                     RoundedCornerShape(1.dp),
                 ),
         )
     }
+}
+
+/** Height of an [EmojiTab] cell, which the row's own indicator is placed against. */
+internal val EmojiTabHeight = 32.dp
+
+/**
+ * One selection bar for a whole row of [count] evenly weighted [EmojiTab]s,
+ * drawn where the pager is rather than under whichever tab is selected: it
+ * slides with a tap's page scroll and follows a swipe under the finger, instead
+ * of blinking out under one tab and in under the next.
+ *
+ * [position] is read in the draw phase only (the pager's page plus its offset
+ * fraction), so a swipe repaints the row and never recomposes it. Goes after
+ * the row's own padding, where the tabs' cells start.
+ */
+internal fun Modifier.emojiTabIndicator(
+    count: Int,
+    color: Color,
+    position: () -> Float,
+): Modifier = if (count <= 0) this else drawBehind {
+    val tabWidth = size.width / count
+    val barWidth = tabWidth * 0.6f
+    val barHeight = 2.dp.toPx()
+    // The cells are centred in the row and never taller than it (see EmojiTab).
+    val cellHeight = minOf(EmojiTabHeight.toPx(), size.height)
+    val top = (size.height - cellHeight) / 2f + cellHeight - barHeight
+    val at = position().coerceIn(0f, (count - 1).toFloat())
+    val start = at * tabWidth + (tabWidth - barWidth) / 2f
+    // A right-to-left row lays its first tab out at the right-hand end.
+    val left = if (layoutDirection == LayoutDirection.Rtl) size.width - start - barWidth else start
+    drawRoundRect(
+        color = color,
+        topLeft = Offset(left, top),
+        size = Size(barWidth, barHeight),
+        cornerRadius = CornerRadius(1.dp.toPx()),
+    )
 }
 
 /**
@@ -21051,7 +21348,7 @@ private fun SnippetsPanel(
                     folder = folder,
                     count = state.snippets.count { it.folderId == folder.id },
                     focused = index == focused,
-                    modifier = snippetTileMotion(),
+                    modifier = snippetTileMotion(state.settings.reduceMotion),
                     onOpen = { callbacks.onFolderOpen(folder.id) },
                     onToggle = { callbacks.onFolderToggle(folder.id) },
                 )
@@ -21061,7 +21358,7 @@ private fun SnippetsPanel(
                     snippet,
                     focused = tiles.size + index == focused,
                     candidateCount = state.snippetCandidateCounts[snippet.id] ?: 1,
-                    modifier = snippetTileMotion(),
+                    modifier = snippetTileMotion(state.settings.reduceMotion),
                     onHold = { callbacks.onSnippetHold(snippet) },
                 ) { callbacks.onSnippet(snippet) }
             }
@@ -21072,17 +21369,22 @@ private fun SnippetsPanel(
 /**
  * How a tile in the snippets grid moves when the list under it changes — the
  * same spring the panel has always used, lifted out so both kinds of tile get
- * it without either one having to be a lazy-grid item scope itself.
+ * it without either one having to be a lazy-grid item scope itself. Nothing
+ * under Reduce motion: the grid simply redraws in its new order.
  */
-private fun LazyGridItemScope.snippetTileMotion(): Modifier =
-    Modifier.animateItem(
-        fadeInSpec = tween(160),
-        placementSpec = spring(
-            stiffness = Spring.StiffnessMediumLow,
-            visibilityThreshold = IntOffset.VisibilityThreshold,
-        ),
-        fadeOutSpec = tween(140),
-    )
+private fun LazyGridItemScope.snippetTileMotion(reduceMotion: Boolean): Modifier =
+    if (reduceMotion) {
+        Modifier
+    } else {
+        Modifier.animateItem(
+            fadeInSpec = tween(160),
+            placementSpec = spring(
+                stiffness = Spring.StiffnessMediumLow,
+                visibilityThreshold = IntOffset.VisibilityThreshold,
+            ),
+            fadeOutSpec = tween(140),
+        )
+    }
 
 /** One folder in the snippets panel: open it, or hold to arm/disarm it. */
 @Composable

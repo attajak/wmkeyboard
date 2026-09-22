@@ -1,8 +1,5 @@
 package com.wasimaster.wmkeyboard.app.statistics
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,6 +42,7 @@ import com.wasimaster.wmkeyboard.app.SectionHeader
 import com.wasimaster.wmkeyboard.app.SettingsGroup
 import com.wasimaster.wmkeyboard.app.ToggleSetting
 import com.wasimaster.wmkeyboard.app.WmRow
+import com.wasimaster.wmkeyboard.app.rememberGrowIn
 import com.wasimaster.wmkeyboard.app.storage.ConfirmDeleteDialog
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
@@ -361,11 +359,10 @@ private fun HistoryBars(
     highlight: Int = values.lastIndex,
 ) {
     val accent = MaterialTheme.colorScheme.primary
-    val grown by animateFloatAsState(
-        targetValue = if (values.any { it > 0.0 }) 1f else 0f,
-        animationSpec = tween(durationMillis = 700, easing = FastOutSlowInEasing),
-        label = "statsBars",
-    )
+    // Grows in once, the first time there is a bar to draw, including when the
+    // numbers are already there on the first frame; switching period after
+    // that moves the bars rather than growing them again.
+    val grown by rememberGrowIn(ready = values.any { it > 0.0 })
     Canvas(
         modifier = modifier
             .fillMaxWidth()
@@ -397,11 +394,8 @@ private fun HistoryBars(
 private fun SpeedLine(values: List<Double>, modifier: Modifier = Modifier) {
     val accent = MaterialTheme.colorScheme.primary
     val grid = MaterialTheme.colorScheme.surfaceVariant
-    val grown by animateFloatAsState(
-        targetValue = if (values.any { it > 0.0 }) 1f else 0f,
-        animationSpec = tween(durationMillis = 700, easing = FastOutSlowInEasing),
-        label = "statsLine",
-    )
+    // Rises from the floor once, the same way the bars grow. See [HistoryBars].
+    val grown by rememberGrowIn(ready = values.any { it > 0.0 })
     Canvas(
         modifier = modifier
             .fillMaxWidth()

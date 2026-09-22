@@ -13,6 +13,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
@@ -78,6 +84,7 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -90,6 +97,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -1363,61 +1371,67 @@ fun ThemesScreen(
         Row(modifier = Modifier.padding(horizontal = 12.dp)) {
             for (entry in rowThemes) {
                 Box(modifier = Modifier.weight(1f)) {
-                    val members = if (grouped) entry.selfAndVariants() else listOf(entry)
-                    val isFamily = members.size > 1
-                    val shownId = if (isFamily) {
-                        shownVariant[entry.id]
-                            ?: members.find { it.id == settings.keyboardThemeId }?.id
-                            ?: entry.id
-                    } else {
-                        entry.id
-                    }
-                    val shown = members.find { it.id == shownId } ?: entry
-                    // Downloaded themes are custom themes, so this is where an
-                    // addon's Use button lands — on the card, not on the header.
-                    // A family card answers for every id it holds.
-                    HighlightableItem(members.map { it.id }) {
-                        ThemeCard(
-                            theme = shown,
-                            selected = members.any { it.id == settings.keyboardThemeId },
-                            onSelect = { scope.launch { repository.setKeyboardThemeId(shown.id) } },
-                            onEdit = { onEditTheme(shown.id) },
-                            editRoute = themeEditRoute(shown.id),
-                            onExport = {
-                                // A family card exports the family; a flat card
-                                // exports the one look it shows.
-                                export(
-                                    if (grouped) entry
-                                    else entry.copy(variants = emptyList(), familyName = null),
-                                )
-                            },
-                            onDelete = {
-                                scope.launch {
-                                    // Image files are always left to the sweep:
-                                    // "Add look" and family copies share paths
-                                    // between specs, and only the sweep knows
-                                    // what else still points at a file.
-                                    val parent = settings.customThemes.findThemeFamily(entry.id)
-                                    if (parent != null && parent.id != entry.id) {
-                                        repository.deleteCustomThemeVariant(parent.id, entry.id)
-                                    } else {
-                                        repository.deleteCustomTheme(entry.id)
+                    // Keyed on the theme, not on the slot: adding or deleting
+                    // a theme shifts every card after it along a place, and a
+                    // card must not play the selection ring and tick at a slot
+                    // that merely changed hands. See [ThemeCard].
+                    key(entry.id) {
+                        val members = if (grouped) entry.selfAndVariants() else listOf(entry)
+                        val isFamily = members.size > 1
+                        val shownId = if (isFamily) {
+                            shownVariant[entry.id]
+                                ?: members.find { it.id == settings.keyboardThemeId }?.id
+                                ?: entry.id
+                        } else {
+                            entry.id
+                        }
+                        val shown = members.find { it.id == shownId } ?: entry
+                        // Downloaded themes are custom themes, so this is where an
+                        // addon's Use button lands — on the card, not on the header.
+                        // A family card answers for every id it holds.
+                        HighlightableItem(members.map { it.id }) {
+                            ThemeCard(
+                                theme = shown,
+                                selected = members.any { it.id == settings.keyboardThemeId },
+                                onSelect = { scope.launch { repository.setKeyboardThemeId(shown.id) } },
+                                onEdit = { onEditTheme(shown.id) },
+                                editRoute = themeEditRoute(shown.id),
+                                onExport = {
+                                    // A family card exports the family; a flat card
+                                    // exports the one look it shows.
+                                    export(
+                                        if (grouped) entry
+                                        else entry.copy(variants = emptyList(), familyName = null),
+                                    )
+                                },
+                                onDelete = {
+                                    scope.launch {
+                                        // Image files are always left to the sweep:
+                                        // "Add look" and family copies share paths
+                                        // between specs, and only the sweep knows
+                                        // what else still points at a file.
+                                        val parent = settings.customThemes.findThemeFamily(entry.id)
+                                        if (parent != null && parent.id != entry.id) {
+                                            repository.deleteCustomThemeVariant(parent.id, entry.id)
+                                        } else {
+                                            repository.deleteCustomTheme(entry.id)
+                                        }
                                     }
-                                }
-                            },
-                            title = if (isFamily) themeFamilyName(entry) else null,
-                            subtitle = if (isFamily) themeName(shown) else null,
-                            swatches = if (isFamily) {
-                                {
-                                    VariantSwatchRow(entry, shownId) { variant ->
-                                        shownVariant[entry.id] = variant.id
-                                        scope.launch { repository.setKeyboardThemeId(variant.id) }
+                                },
+                                title = if (isFamily) themeFamilyName(entry) else null,
+                                subtitle = if (isFamily) themeName(shown) else null,
+                                swatches = if (isFamily) {
+                                    {
+                                        VariantSwatchRow(entry, shownId) { variant ->
+                                            shownVariant[entry.id] = variant.id
+                                            scope.launch { repository.setKeyboardThemeId(variant.id) }
+                                        }
                                     }
-                                }
-                            } else {
-                                null
-                            },
-                        )
+                                } else {
+                                    null
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -1434,52 +1448,58 @@ fun ThemesScreen(
         Row(modifier = Modifier.padding(horizontal = 12.dp)) {
             for (entry in rowThemes) {
                 Box(modifier = Modifier.weight(1f)) {
-                    val members = if (grouped) entry.selfAndVariants() else listOf(entry)
-                    val isFamily = members.size > 1
-                    val shownId = if (isFamily) {
-                        shownVariant[entry.id]
-                            ?: members.find { it.id == settings.keyboardThemeId }?.id
-                            ?: entry.id
-                    } else {
-                        entry.id
-                    }
-                    val shown = members.find { it.id == shownId } ?: entry
-                    val pinned = shown.id in panelBuiltIns
-                    ThemeCard(
-                        theme = shown,
-                        selected = members.any { it.id == settings.keyboardThemeId },
-                        onSelect = { scope.launch { repository.setKeyboardThemeId(shown.id) } },
-                        // A family card asks whether the copy is of the shown
-                        // look or of the whole set; a lone card just copies.
-                        onEdit = {
-                            if (isFamily) copyScopeFor = entry to shown else duplicateAndEdit(shown)
-                        },
-                        onExport = {
-                            export(
-                                if (grouped) entry
-                                else entry.copy(variants = emptyList(), familyName = null),
-                            )
-                        },
-                        onDelete = null,
-                        title = if (isFamily) themeFamilyName(entry) else null,
-                        subtitle = if (isFamily) themeName(shown) else null,
-                        // The pin is per look, not per family: the keyboard
-                        // panel lists looks, so the toggle names what shows.
-                        panelShown = pinned,
-                        onTogglePanel = {
-                            scope.launch { repository.setThemesPanelBuiltIn(shown.id, !pinned) }
-                        },
-                        swatches = if (isFamily) {
-                            {
-                                VariantSwatchRow(entry, shownId) { variant ->
-                                    shownVariant[entry.id] = variant.id
-                                    scope.launch { repository.setKeyboardThemeId(variant.id) }
-                                }
-                            }
+                    // Keyed on the theme, not on the slot: switching between
+                    // grouped and flat reshuffles which card sits where, and
+                    // a card must not play the selection ring and tick at a
+                    // slot that merely changed hands. See [ThemeCard].
+                    key(entry.id) {
+                        val members = if (grouped) entry.selfAndVariants() else listOf(entry)
+                        val isFamily = members.size > 1
+                        val shownId = if (isFamily) {
+                            shownVariant[entry.id]
+                                ?: members.find { it.id == settings.keyboardThemeId }?.id
+                                ?: entry.id
                         } else {
-                            null
-                        },
-                    )
+                            entry.id
+                        }
+                        val shown = members.find { it.id == shownId } ?: entry
+                        val pinned = shown.id in panelBuiltIns
+                        ThemeCard(
+                            theme = shown,
+                            selected = members.any { it.id == settings.keyboardThemeId },
+                            onSelect = { scope.launch { repository.setKeyboardThemeId(shown.id) } },
+                            // A family card asks whether the copy is of the shown
+                            // look or of the whole set; a lone card just copies.
+                            onEdit = {
+                                if (isFamily) copyScopeFor = entry to shown else duplicateAndEdit(shown)
+                            },
+                            onExport = {
+                                export(
+                                    if (grouped) entry
+                                    else entry.copy(variants = emptyList(), familyName = null),
+                                )
+                            },
+                            onDelete = null,
+                            title = if (isFamily) themeFamilyName(entry) else null,
+                            subtitle = if (isFamily) themeName(shown) else null,
+                            // The pin is per look, not per family: the keyboard
+                            // panel lists looks, so the toggle names what shows.
+                            panelShown = pinned,
+                            onTogglePanel = {
+                                scope.launch { repository.setThemesPanelBuiltIn(shown.id, !pinned) }
+                            },
+                            swatches = if (isFamily) {
+                                {
+                                    VariantSwatchRow(entry, shownId) { variant ->
+                                        shownVariant[entry.id] = variant.id
+                                        scope.launch { repository.setKeyboardThemeId(variant.id) }
+                                    }
+                                }
+                            } else {
+                                null
+                            },
+                        )
+                    }
                 }
             }
             if (rowThemes.size == 1) Spacer(Modifier.weight(1f))
@@ -1634,6 +1654,15 @@ private fun DefaultThemeCard(selected: Boolean, onSelect: () -> Unit) {
     }
 }
 
+/** A theme card's outline, which its selection ring follows. */
+private val ThemeCardShape = RoundedCornerShape(14.dp)
+
+/** How long the picked card takes to put its ring and tick on. */
+private const val CardSelectMs = 180
+
+/** How long the card left behind takes to let go of its tick: a little quicker. */
+private const val CardDeselectMs = 140
+
 @Composable
 private fun ThemeCard(
     theme: ThemeSpec,
@@ -1670,17 +1699,47 @@ private fun ThemeCard(
     // of the two says the same word the heading will.
     val nameTag = if (editRoute == null) Modifier
     else Modifier.wmSharedBounds(takeOffKey("title", editRoute))
+    // Picking a theme moves the ring from one card to another. It thickens and
+    // takes the accent over a moment on the card picked, and lets go of it on
+    // the card left, rather than both snapping. Read in the draw phase below,
+    // so each frame of it redraws the two cards without recomposing them —
+    // each card holds a whole keyboard preview. The gallery keys every card
+    // on its theme, so this plays when the pick changes and not when a card
+    // is handed a different slot.
+    val reduceMotion = LocalReduceMotion.current
+    val ringTarget = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
+    val ringWidthTarget = if (selected) 2.dp else 1.dp
+    val ringColor by animateColorAsState(
+        ringTarget,
+        animationSpec = if (reduceMotion) snap() else tween(durationMillis = CardSelectMs),
+        label = "themeCardRing",
+    )
+    val ringWidth by animateDpAsState(
+        ringWidthTarget,
+        animationSpec = if (reduceMotion) snap() else tween(durationMillis = CardSelectMs),
+        label = "themeCardRingWidth",
+    )
     Column(
         modifier = Modifier
             .padding(4.dp)
-            .clip(RoundedCornerShape(14.dp))
-            .then(
-                if (selected) {
-                    Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(14.dp))
-                } else {
-                    Modifier.border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(14.dp))
+            .clip(ThemeCardShape)
+            .drawWithCache {
+                val outline = ThemeCardShape.createOutline(size, layoutDirection, this)
+                onDrawWithContent {
+                    drawContent()
+                    // Reduce motion reads the target, not a value a frame
+                    // behind it. The stroke is centred on the edge and twice
+                    // the ring's width: the clip above cuts it to exactly the
+                    // ring's width inside the card, which is what `border`
+                    // drew here before.
+                    val width = if (reduceMotion) ringWidthTarget else ringWidth
+                    drawOutline(
+                        outline,
+                        color = if (reduceMotion) ringTarget else ringColor,
+                        style = Stroke(width = width.toPx() * 2f),
+                    )
                 }
-            )
+            }
             .clickable(onClick = onSelect)
             .padding(6.dp),
     ) {
@@ -1714,13 +1773,26 @@ private fun ThemeCard(
                     )
                 }
             }
-            if (selected) {
+            val check: @Composable () -> Unit = {
                 Icon(
                     Icons.Outlined.Check,
                     contentDescription = stringResource(R.string.theme_selected_desc),
                     modifier = Modifier.size(18.dp),
                     tint = MaterialTheme.colorScheme.primary,
                 )
+            }
+            // The tick answers the tap: it pops in on the card picked while
+            // the one on the card left shrinks away.
+            if (reduceMotion) {
+                if (selected) check()
+            } else {
+                AnimatedVisibility(
+                    visible = selected,
+                    enter = scaleIn(tween(durationMillis = CardSelectMs), initialScale = 0.5f) +
+                        fadeIn(tween(durationMillis = CardSelectMs)),
+                    exit = scaleOut(tween(durationMillis = CardDeselectMs), targetScale = 0.5f) +
+                        fadeOut(tween(durationMillis = CardDeselectMs)),
+                ) { check() }
             }
         }
         if (onEdit != null || onExport != null || onDelete != null) {

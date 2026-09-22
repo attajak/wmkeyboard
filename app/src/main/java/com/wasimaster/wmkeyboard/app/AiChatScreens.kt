@@ -101,6 +101,7 @@ internal fun AiChatListScreen(
     val version by AiChatController.storeVersion.collectAsState()
     val conversations = remember(version) { store.items() }
     var confirmDelete by remember { mutableStateOf<AiChatConversation?>(null) }
+    val reduceMotion = LocalReduceMotion.current
 
     // Nothing to list yet: skip the empty list and land in a chat directly.
     // The caller replaces this screen in the back stack, and a chat only
@@ -157,10 +158,14 @@ internal fun AiChatListScreen(
                 }
             }
             items(conversations, key = { it.id }) { conversation ->
+                // A deleted chat fades out and the ones under it close the
+                // gap, rather than the list redrawing one row shorter. The
+                // list is newest first, so a chat that moves up glides there.
                 ConversationRow(
                     conversation = conversation,
                     onClick = { onOpenChat(conversation.id) },
                     onDelete = { confirmDelete = conversation },
+                    modifier = listItemMotion(reduceMotion),
                 )
             }
         }
@@ -200,11 +205,13 @@ private fun ConversationRow(
     conversation: AiChatConversation,
     onClick: () -> Unit,
     onDelete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     WmRow(
         title = conversation.title.ifBlank {
             stringResource(ImeR.string.ime_ai_chat_untitled)
         },
+        modifier = modifier,
         subtitle = DateUtils.getRelativeTimeSpanString(conversation.updatedAt).toString(),
         trailing = {
             IconButton(onClick = onDelete) {

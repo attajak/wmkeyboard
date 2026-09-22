@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.app
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -73,6 +74,7 @@ internal fun AiHistoryScreen(repository: SettingsRepository, settings: KeyboardS
     var actionFilter by remember { mutableStateOf<String?>(null) }
     var expanded by remember { mutableStateOf<Long?>(null) }
     var confirmClear by remember { mutableStateOf(false) }
+    val reduceMotion = LocalReduceMotion.current
 
     // Its own instance, deliberately: the keyboard holds another one in the
     // same process, and each re-reads the file before it writes.
@@ -239,35 +241,56 @@ internal fun AiHistoryScreen(repository: SettingsRepository, settings: KeyboardS
         }
     }
 
-    when {
-        entries.isEmpty() && settings.ai.historyEnabled ->
-            CaptionText(stringResource(R.string.toolai_ai_history_empty))
-        shown.isEmpty() && entries.isNotEmpty() ->
-            CaptionText(stringResource(R.string.toolai_ai_history_filter_empty))
-        else -> LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(420.dp)
-                .padding(horizontal = 16.dp),
-        ) {
-            items(shown, key = { it.id }) { entry ->
-                AiHistoryRow(
-                    entry = entry,
-                    expanded = expanded == entry.id,
-                    onToggle = { expanded = if (expanded == entry.id) null else entry.id },
-                    onCopyInput = { copyToClipboard(context, entry.input) },
-                    onCopyOutput = { copyToClipboard(context, entry.output) },
-                    onDelete = {
-                        scope.launch {
-                            withContext(Dispatchers.IO) {
-                                store.reload()
-                                store.delete(entry.id)
-                                store.save()
+    val body = when {
+        entries.isEmpty() && settings.ai.historyEnabled -> HistoryBody.Empty
+        shown.isEmpty() && entries.isNotEmpty() -> HistoryBody.NoMatch
+        else -> HistoryBody.Rows(shown)
+    }
+    // The file is read off the main thread, so the screen opens on "nothing
+    // yet" and the list replaces it a moment later; a filter that empties the
+    // list swaps it for a note the same way. Cross-faded rather than cut.
+    // Keyed on which of the three it is, not on the rows: a deletion or a new
+    // run is a change to the list, not a new page.
+    //
+    // The rows themselves get no item motion. A tap opens a row in place, and
+    // with placement animated the rows under it would glide down late while
+    // the open row had already grown over them.
+    AnimatedContent(
+        targetState = body,
+        contentKey = { it::class },
+        transitionSpec = { stateSwapTransform(reduceMotion) },
+        label = "aiHistoryBody",
+    ) { state ->
+        when (state) {
+            HistoryBody.Empty -> CaptionText(stringResource(R.string.toolai_ai_history_empty))
+            HistoryBody.NoMatch -> CaptionText(stringResource(R.string.toolai_ai_history_filter_empty))
+            // From the state handed in, not from [shown]: the list on its way
+            // out must keep drawing the rows it had.
+            is HistoryBody.Rows -> LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(420.dp)
+                    .padding(horizontal = 16.dp),
+            ) {
+                items(state.shown, key = { it.id }) { entry ->
+                    AiHistoryRow(
+                        entry = entry,
+                        expanded = expanded == entry.id,
+                        onToggle = { expanded = if (expanded == entry.id) null else entry.id },
+                        onCopyInput = { copyToClipboard(context, entry.input) },
+                        onCopyOutput = { copyToClipboard(context, entry.output) },
+                        onDelete = {
+                            scope.launch {
+                                withContext(Dispatchers.IO) {
+                                    store.reload()
+                                    store.delete(entry.id)
+                                    store.save()
+                                }
+                                revision++
                             }
-                            revision++
-                        }
-                    },
-                )
+                        },
+                    )
+                }
             }
         }
     }
@@ -309,6 +332,13 @@ internal fun AiHistoryScreen(repository: SettingsRepository, settings: KeyboardS
             },
         )
     }
+}
+
+/** What the bottom of the history screen is showing. See the [AnimatedContent] there. */
+private sealed interface HistoryBody {
+    data object Empty : HistoryBody
+    data object NoMatch : HistoryBody
+    data class Rows(val shown: List<AiHistoryEntry>) : HistoryBody
 }
 
 /**

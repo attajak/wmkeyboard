@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.text.format.Formatter
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -53,6 +54,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -3231,6 +3233,17 @@ private fun missingSubtitle(installedBytes: Long): String {
 private const val HANDWRITING_STALL_HINT_MS = 20_000L
 
 /**
+ * Which control a handwriting row's [status] draws at its end: the spinner,
+ * the bin, or the Download button. What its cross-fade is keyed on, so a
+ * change of status that keeps the same control does not fade.
+ */
+private fun handwritingControlOf(status: String): Int = when (status) {
+    "downloading", "checking" -> 0
+    "downloaded" -> 1
+    else -> 2
+}
+
+/**
  * Download/delete state for the handwriting model of every language the user
  * types in — drawn from ML Kit's full ink catalogue, then narrowed to the
  * enabled languages so the list is only ever as long as it is useful. Status
@@ -3255,6 +3268,7 @@ private fun HandwritingModelManager(settings: KeyboardSettings) {
     // own asset manifest.
     val progress = remember { mutableStateMapOf<String, HandwritingDownloadProgress>() }
     val sizes = remember { mutableStateMapOf<String, Long>() }
+    val reduceMotion = LocalReduceMotion.current
     LaunchedEffect(languages) {
         for (language in languages) {
             statuses[language.tag] =
@@ -3280,61 +3294,84 @@ private fun HandwritingModelManager(settings: KeyboardSettings) {
                             else -> missingSubtitle(sizes[language.tag] ?: 0L)
                         },
                     trailing = {
-                        when (status) {
-                            "downloading", "checking" -> CircularProgressIndicator(
-                                modifier = Modifier.size(24.dp),
-                                strokeWidth = 2.dp,
-                            )
-                            "downloaded" -> IconButton(onClick = {
-                                scope.launch {
-                                    HandwritingModels.delete(language.tag)
-                                    statuses[language.tag] =
-                                        if (HandwritingModels.isDownloaded(language.tag)) "downloaded" else "missing"
-                                }
-                            }) {
-                                Icon(
-                                    Icons.Outlined.Delete,
-                                    contentDescription = stringResource(
-                                        R.string.privacy_handwriting_delete_desc,
-                                        language.displayName,
-                                    ),
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            }
-                            else -> TextButton(onClick = {
-                                statuses[language.tag] = "downloading"
-                                progress[language.tag] = HandwritingDownloadProgress()
-                                // ML Kit fetches ink models through Mobile Data
-                                // Download, which can stall for a minute and a
-                                // half before this gives up on it — far longer
-                                // than anyone waits on the screen.
-                                val notify = startDownload(
-                                    DownloadKeys.handwriting(language.tag),
-                                    context.getString(
-                                        CommonR.string.common_notify_download_handwriting,
-                                        language.displayName,
-                                    ),
-                                )
-                                scope.launch {
-                                    val ok = runCancellable {
-                                        HandwritingModels.download(context, language.tag) {
-                                            progress[language.tag] = it
-                                            notify.progress(it.bytes, it.totalBytes)
+                        // Checking, then Download or the bin; after a tap, the
+                        // spinner, then the bin. Cross-faded from one to the
+                        // next, keyed on which control it is so two spinners
+                        // (checking, then downloading) do not fade into each
+                        // other. Keyed on the language too, so a slot the group
+                        // hands to another language starts still.
+                        key(language.tag) {
+                            AnimatedContent(
+                                targetState = status,
+                                contentKey = { handwritingControlOf(it) },
+                                contentAlignment = Alignment.CenterEnd,
+                                transitionSpec = { stateSwapTransform(reduceMotion) },
+                                label = "handwritingModelAction",
+                            ) { shown ->
+                                // The control on its way out still takes taps
+                                // while it fades. One that no longer matches the
+                                // model's state does nothing, so a quick second
+                                // tap on Download cannot start it twice.
+                                val current = { (statuses[language.tag] ?: "checking") == shown }
+                                when (shown) {
+                                    "downloading", "checking" -> CircularProgressIndicator(
+                                        modifier = Modifier.size(24.dp),
+                                        strokeWidth = 2.dp,
+                                    )
+                                    "downloaded" -> IconButton(onClick = {
+                                        if (!current()) return@IconButton
+                                        scope.launch {
+                                            HandwritingModels.delete(language.tag)
+                                            statuses[language.tag] =
+                                                if (HandwritingModels.isDownloaded(language.tag)) "downloaded" else "missing"
                                         }
-                                    }.isSuccess
-                                    progress.remove(language.tag)
-                                    statuses[language.tag] = if (ok) "downloaded" else "error"
-                                    if (ok) {
-                                        notify.done()
-                                    } else {
-                                        notify.failed(
-                                            context.getString(
-                                                R.string.privacy_handwriting_status_failed,
+                                    }) {
+                                        Icon(
+                                            Icons.Outlined.Delete,
+                                            contentDescription = stringResource(
+                                                R.string.privacy_handwriting_delete_desc,
+                                                language.displayName,
                                             ),
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
+                                    else -> TextButton(onClick = {
+                                        if (!current()) return@TextButton
+                                        statuses[language.tag] = "downloading"
+                                        progress[language.tag] = HandwritingDownloadProgress()
+                                        // ML Kit fetches ink models through Mobile Data
+                                        // Download, which can stall for a minute and a
+                                        // half before this gives up on it — far longer
+                                        // than anyone waits on the screen.
+                                        val notify = startDownload(
+                                            DownloadKeys.handwriting(language.tag),
+                                            context.getString(
+                                                CommonR.string.common_notify_download_handwriting,
+                                                language.displayName,
+                                            ),
+                                        )
+                                        scope.launch {
+                                            val ok = runCancellable {
+                                                HandwritingModels.download(context, language.tag) {
+                                                    progress[language.tag] = it
+                                                    notify.progress(it.bytes, it.totalBytes)
+                                                }
+                                            }.isSuccess
+                                            progress.remove(language.tag)
+                                            statuses[language.tag] = if (ok) "downloaded" else "error"
+                                            if (ok) {
+                                                notify.done()
+                                            } else {
+                                                notify.failed(
+                                                    context.getString(
+                                                        R.string.privacy_handwriting_status_failed,
+                                                    ),
+                                                )
+                                            }
+                                        }
+                                    }) { Text(stringResource(CommonR.string.common_download)) }
                                 }
-                            }) { Text(stringResource(CommonR.string.common_download)) }
+                            }
                         }
                     },
                 )

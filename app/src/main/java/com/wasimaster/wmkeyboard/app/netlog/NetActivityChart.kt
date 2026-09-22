@@ -1,9 +1,6 @@
 package com.wasimaster.wmkeyboard.app.netlog
 
 import android.text.format.Formatter
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -33,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.R
-import com.wasimaster.wmkeyboard.app.LocalReduceMotion
+import com.wasimaster.wmkeyboard.app.rememberGrowIn
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import java.text.DateFormat
 import java.text.NumberFormat
@@ -65,13 +62,11 @@ internal fun NetActivityChart(
     val numbers = remember { NumberFormat.getIntegerInstance() }
     var pressed by remember { mutableIntStateOf(-1) }
     val track = MaterialTheme.colorScheme.surfaceContainerHighest
-    val reduceMotion = LocalReduceMotion.current
     val any = buckets.any { it.total.requests > 0 }
-    val grown by animateFloatAsState(
-        targetValue = if (any) 1f else 0f,
-        animationSpec = if (reduceMotion) tween(0) else tween(GROW_MS, easing = FastOutSlowInEasing),
-        label = "netlogChart",
-    )
+    // Grows in once, the first time there is a request to draw, and then holds:
+    // a new request lands as a taller bar, not as the whole chart regrowing.
+    // Reduce motion draws it grown.
+    val grown by rememberGrowIn(ready = any)
     // The same stacking order in every bar, busiest feature at the bottom, so
     // a colour sits at the same height all the way along.
     val order = remember(buckets) {
@@ -236,6 +231,5 @@ private val BarGap = 3.dp
 private const val FLOOR_PX = 3f
 private const val SEAM_PX = 1.5f
 private const val FADED_ALPHA = 0.25f
-private const val GROW_MS = 700
 private const val HOURS = 24
 private const val DAY_MS = 86_400_000L

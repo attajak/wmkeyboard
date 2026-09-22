@@ -1,8 +1,5 @@
 package com.wasimaster.wmkeyboard.app.storage
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +22,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -33,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.app.formatBytes
+import com.wasimaster.wmkeyboard.app.rememberGrowIn
 
 /**
  * The two pictures the Storage screen draws.
@@ -85,14 +84,12 @@ internal fun StorageRing(
     } else {
         0f
     }
-    // Grows in once, when the first complete measurement lands. Keying the
+    // Grows in once, when the first complete measurement lands — or on the
+    // first frame, when a cached report paints before the measure. Keying the
     // animation on "have we got a total yet" rather than on the total itself
-    // keeps the ring still while the categories fill in underneath it.
-    val grown by animateFloatAsState(
-        targetValue = if (total > 0L) 1f else 0f,
-        animationSpec = tween(durationMillis = 700, easing = FastOutSlowInEasing),
-        label = "storageRing",
-    )
+    // keeps the ring still while the categories fill in underneath it. Reduce
+    // motion draws it whole.
+    val grown by rememberGrowIn(ready = total > 0L)
 
     Box(
         modifier = modifier
@@ -217,6 +214,11 @@ internal fun StorageLegendChip(color: Color, label: String, bytes: Long) {
 internal fun StorageBar(slices: List<StorageSlice>, modifier: Modifier = Modifier) {
     val track = MaterialTheme.colorScheme.surfaceVariant
     val total = slices.sumOf { it.bytes }
+    // Wipes in from the left once, as the ring above it grows. A wipe rather
+    // than scaled segments: scaling would squeeze the minimum widths that keep
+    // a tiny category visible, and the segments would change proportion on
+    // the way in. The track underneath is there from the start.
+    val grown by rememberGrowIn(ready = total > 0L)
     Canvas(
         modifier = modifier
             .fillMaxWidth()
@@ -233,17 +235,19 @@ internal fun StorageBar(slices: List<StorageSlice>, modifier: Modifier = Modifie
         // so the segments still end exactly at the bar's right edge.
         val fixed = drawn.size * minWidth + (drawn.size - 1).coerceAtLeast(0) * gap
         val flexible = (size.width - fixed).coerceAtLeast(0f)
-        var x = 0f
-        for (slice in drawn) {
-            val width = minWidth + flexible * (slice.bytes.toFloat() / total)
-            drawRoundRect(
-                color = slice.color,
-                topLeft = Offset(x, 0f),
-                size = Size(width.coerceAtMost(size.width - x), size.height),
-                cornerRadius = radius,
-            )
-            x += width + gap
-            if (x >= size.width) break
+        clipRect(right = size.width * grown) {
+            var x = 0f
+            for (slice in drawn) {
+                val width = minWidth + flexible * (slice.bytes.toFloat() / total)
+                drawRoundRect(
+                    color = slice.color,
+                    topLeft = Offset(x, 0f),
+                    size = Size(width.coerceAtMost(size.width - x), size.height),
+                    cornerRadius = radius,
+                )
+                x += width + gap
+                if (x >= size.width) break
+            }
         }
     }
 }

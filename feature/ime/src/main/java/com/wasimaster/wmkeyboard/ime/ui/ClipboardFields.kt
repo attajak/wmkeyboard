@@ -302,16 +302,21 @@ private fun ClipboardListField(
         itemsIndexed(shownItems, key = { _, item -> item.id }) { index, item ->
             // Deleting fades the card out and slides the survivors up into the
             // gap; pinning re-sorts the list, so the card glides to the front.
+            // Under Reduce motion the list simply redraws in its new order.
             SwipeToDeleteCard(
                 onDelete = { callbacks.onDelete(item) },
-                modifier = Modifier.animateItem(
-                    fadeInSpec = tween(160),
-                    placementSpec = spring(
-                        stiffness = Spring.StiffnessMediumLow,
-                        visibilityThreshold = IntOffset.VisibilityThreshold,
-                    ),
-                    fadeOutSpec = tween(140),
-                ),
+                modifier = if (state.settings.reduceMotion) {
+                    Modifier
+                } else {
+                    Modifier.animateItem(
+                        fadeInSpec = tween(160),
+                        placementSpec = spring(
+                            stiffness = Spring.StiffnessMediumLow,
+                            visibilityThreshold = IntOffset.VisibilityThreshold,
+                        ),
+                        fadeOutSpec = tween(140),
+                    )
+                },
             ) {
                 val number = session.numbers[item.id]
                 if (session.list) {

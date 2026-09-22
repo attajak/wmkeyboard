@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.app
 
 import android.text.format.Formatter
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -16,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -220,6 +223,9 @@ private fun TranslateModelRow(
 ) {
     val context = LocalContext.current
     val builtIn = code == OfflineTranslateLanguages.PIVOT
+    val reduceMotion = LocalReduceMotion.current
+    // What the model is in now, read at tap time by the actions below.
+    val latest = rememberUpdatedState(state)
     WmRow(
         title = name,
         subtitle = when {
@@ -249,50 +255,86 @@ private fun TranslateModelRow(
             )
         },
         trailing = {
-            when {
-                builtIn -> Unit
-                state == null -> CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
-                state is OfflineModelState.Downloading -> Row(verticalAlignment = Alignment.CenterVertically) {
-                    val fraction = state.fraction
-                    if (fraction != null) {
-                        CircularProgressIndicator(
-                            progress = { fraction },
-                            modifier = Modifier.size(24.dp),
-                            strokeWidth = 2.dp,
-                        )
-                    } else {
-                        CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
+            if (!builtIn) {
+                // The row's one control changes with the model: a spinner while
+                // it is looked up, then Download, then progress with a cancel,
+                // then a bin. Cross-faded from one to the next, keyed on which
+                // of those it is so the progress ticking along does not fade.
+                // Keyed on the code as well: the groups are not lazy lists, so
+                // when a model moves between them this slot can be handed a
+                // different language, which must start still rather than
+                // cross-fade out of the one that was here.
+                key(code) {
+                    AnimatedContent(
+                        targetState = state,
+                        contentKey = { it?.let { shown -> shown::class } },
+                        contentAlignment = Alignment.CenterEnd,
+                        transitionSpec = { stateSwapTransform(reduceMotion) },
+                        label = "translateModelAction",
+                    ) { shown ->
+                        // From [shown], not [state]: the control on its way
+                        // out keeps drawing the state it belonged to. It also
+                        // still takes taps while it fades, so each action first
+                        // checks the model is still in that state: a quick
+                        // second tap on Download must not start it twice.
+                        val kind = shown?.let { it::class }
+                        fun live(action: () -> Unit): () -> Unit = {
+                            if (latest.value?.let { it::class } == kind) action()
+                        }
+                        TranslateModelAction(shown, name, live(onDownload), live(onCancel), live(onDelete))
                     }
-                    IconButton(onClick = onCancel) {
-                        Icon(
-                            Icons.Outlined.Close,
-                            contentDescription = stringResource(
-                                R.string.tooldetail_translate_model_cancel_desc,
-                                name,
-                            ),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                }
-                state is OfflineModelState.Downloaded -> IconButton(onClick = onDelete) {
-                    Icon(
-                        Icons.Outlined.Delete,
-                        contentDescription = stringResource(R.string.privacy_handwriting_delete_desc, name),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                else -> TextButton(onClick = onDownload) {
-                    Text(
-                        stringResource(
-                            if ((state as? OfflineModelState.Missing)?.failed == true) {
-                                CommonR.string.common_retry
-                            } else {
-                                CommonR.string.common_download
-                            },
-                        ),
-                    )
                 }
             }
         },
     )
+}
+
+/** The control at the end of a [TranslateModelRow], for one [state] of its model. */
+@Composable
+private fun TranslateModelAction(
+    state: OfflineModelState?,
+    name: String,
+    onDownload: () -> Unit,
+    onCancel: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    when (state) {
+        null -> CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
+        is OfflineModelState.Downloading -> Row(verticalAlignment = Alignment.CenterVertically) {
+            val fraction = state.fraction
+            if (fraction != null) {
+                CircularProgressIndicator(
+                    progress = { fraction },
+                    modifier = Modifier.size(24.dp),
+                    strokeWidth = 2.dp,
+                )
+            } else {
+                CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
+            }
+            IconButton(onClick = onCancel) {
+                Icon(
+                    Icons.Outlined.Close,
+                    contentDescription = stringResource(
+                        R.string.tooldetail_translate_model_cancel_desc,
+                        name,
+                    ),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        is OfflineModelState.Downloaded -> IconButton(onClick = onDelete) {
+            Icon(
+                Icons.Outlined.Delete,
+                contentDescription = stringResource(R.string.privacy_handwriting_delete_desc, name),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        is OfflineModelState.Missing -> TextButton(onClick = onDownload) {
+            Text(
+                stringResource(
+                    if (state.failed) CommonR.string.common_retry else CommonR.string.common_download,
+                ),
+            )
+        }
+    }
 }

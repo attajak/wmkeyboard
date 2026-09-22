@@ -510,6 +510,7 @@ internal fun StickerPackScreen(
         // Read out for a sticker with no name of its own. Resolved once here
         // rather than in every cell of the grid.
         val unnamedSticker = stringResource(R.string.import_sticker_desc_fallback)
+        val reduceMotion = LocalReduceMotion.current
         LazyVerticalGrid(
             columns = GridCells.Adaptive(96.dp),
             modifier = Modifier
@@ -520,8 +521,11 @@ internal fun StickerPackScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(pack.stickers, key = { it.id }) { sticker ->
+                // Deleting, moving out or nudging a sticker along moves the
+                // cells after it; they slide to their new places rather than
+                // the grid redrawing in the new order.
                 Box(
-                    modifier = Modifier
+                    modifier = gridItemMotion(reduceMotion)
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(10.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
