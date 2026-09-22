@@ -1,8 +1,8 @@
 package com.wasimaster.wmkeyboard.core.addons
 
-import com.wasimaster.wmkeyboard.core.netlog.NetSource
-import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.endpoints.RepoLocation
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import java.io.File
 import java.net.HttpURLConnection
@@ -274,19 +274,25 @@ object LinkImport {
         onProgress: ((Long, Long) -> Unit)?,
     ) {
         val connection = URL(url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.LINK_IMPORT, "GET", url, route = NetLog.pathOf(url))
         val location = try {
             connection.connectTimeout = TIMEOUT_MS
             connection.readTimeout = TIMEOUT_MS
             connection.instanceFollowRedirects = false
             connection.setRequestProperty("Authorization", "Bearer $token")
             connection.setRequestProperty("Accept", "application/vnd.github+json")
+            netCall.status = connection.responseCode
             when (val status = connection.responseCode) {
                 in 300..399 -> connection.getHeaderField("Location").orEmpty()
                 in 200..299 -> ""
                 else -> throw java.io.IOException("HTTP $status")
             }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
         if (location.isBlank()) {
             ToolHttp.download(

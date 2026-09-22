@@ -1,7 +1,5 @@
 package com.wasimaster.wmkeyboard.app
 
-import com.wasimaster.wmkeyboard.core.netlog.NetSource
-import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,6 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import com.wasimaster.wmkeyboard.core.addons.AddonType
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog

@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.core.input.composer
 
 import android.os.StatFs
 import androidx.annotation.StringRes
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.input.R
 import java.io.File
 import java.io.IOException
@@ -187,6 +189,7 @@ object CjkDictDownloadManager {
         }
 
         val connection = URL(pack.url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.DOWNLOAD_CJK, "GET", pack.url, route = NetLog.pathOf(pack.url))
         try {
             connection.connectTimeout = 15_000
             connection.readTimeout = 30_000
@@ -203,6 +206,7 @@ object CjkDictDownloadManager {
             connection.setRequestProperty("Accept-Encoding", "identity")
             if (resumeFrom > 0) connection.setRequestProperty("Range", "bytes=$resumeFrom-")
 
+            netCall.status = connection.responseCode
             when (val status = connection.responseCode) {
                 HttpURLConnection.HTTP_PARTIAL -> Unit
                 HttpURLConnection.HTTP_OK -> resumeFrom = 0 // server ignored Range
@@ -218,7 +222,7 @@ object CjkDictDownloadManager {
             var written = resumeFrom
             var lastUpdate = 0L
 
-            connection.inputStream.use { input ->
+            netCall.countIn(connection.inputStream).use { input ->
                 RandomAccessFile(part, "rw").use { out ->
                     out.setLength(resumeFrom)
                     out.seek(resumeFrom)
@@ -244,8 +248,12 @@ object CjkDictDownloadManager {
                     R.string.core_input_cjk_download_error_truncated,
                 )
             }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 

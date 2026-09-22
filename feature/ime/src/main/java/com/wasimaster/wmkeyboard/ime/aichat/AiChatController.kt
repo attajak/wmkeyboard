@@ -1,9 +1,9 @@
 package com.wasimaster.wmkeyboard.ime.aichat
 
-import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import android.annotation.SuppressLint
 import android.content.Context
 import com.wasimaster.wmkeyboard.config.BuildConfig
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.core.aichat.AiChatMessage
 import com.wasimaster.wmkeyboard.core.aichat.AiChatStore

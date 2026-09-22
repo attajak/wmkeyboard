@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.core.localllm
 
 import android.os.StatFs
 import androidx.annotation.StringRes
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.intelligence.R
 import java.io.File
 import java.io.IOException
@@ -197,6 +199,9 @@ object LocalLlmDownloadManager {
         }
 
         val connection = URL(LocalLlmCatalog.downloadUrl(model)).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(
+            NetSource.DOWNLOAD_LLM, "GET", LocalLlmCatalog.downloadUrl(model), route = NetLog.pathOf(LocalLlmCatalog.downloadUrl(model)),
+        )
         try {
             connection.connectTimeout = 15_000
             connection.readTimeout = 30_000
@@ -207,6 +212,7 @@ object LocalLlmDownloadManager {
             }
             if (resumeFrom > 0) connection.setRequestProperty("Range", "bytes=$resumeFrom-")
 
+            netCall.status = connection.responseCode
             when (val status = connection.responseCode) {
                 HttpURLConnection.HTTP_PARTIAL -> Unit // appending below
                 HttpURLConnection.HTTP_OK -> {
@@ -237,7 +243,7 @@ object LocalLlmDownloadManager {
             var written = resumeFrom
             var lastUpdate = 0L
 
-            connection.inputStream.use { input ->
+            netCall.countIn(connection.inputStream).use { input ->
                 RandomAccessFile(part, "rw").use { out ->
                     out.setLength(resumeFrom)
                     out.seek(resumeFrom)
@@ -276,8 +282,12 @@ object LocalLlmDownloadManager {
                     R.string.core_intel_llm_download_error_truncated,
                 )
             }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 }

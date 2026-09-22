@@ -3,6 +3,8 @@ package com.wasimaster.wmkeyboard.core.dictionaries
 import android.os.StatFs
 import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.prediction.AospScores
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrieCodec
@@ -275,12 +277,14 @@ object WordlistDownloadManager {
         }
 
         val connection = URL(entry.url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.DOWNLOAD_WORDLIST, "GET", entry.url, route = NetLog.pathOf(entry.url))
         try {
             connection.connectTimeout = 15_000
             connection.readTimeout = 30_000
             connection.instanceFollowRedirects = true
             connection.setRequestProperty("User-Agent", USER_AGENT)
             connection.setRequestProperty("Accept-Encoding", "identity")
+            netCall.status = connection.responseCode
             val status = connection.responseCode
             if (status != HttpURLConnection.HTTP_OK) {
                 throw FailedException(
@@ -296,7 +300,7 @@ object WordlistDownloadManager {
             val words = arrayOfNulls<String>(wordCap)
             val frequencies = IntArray(wordCap)
             var count = 0
-            val counting = CountingInputStream(connection.inputStream)
+            val counting = CountingInputStream(netCall.countIn(connection.inputStream))
             var lastUpdate = 0L
             // Whether the noise cut below applies at all, decided by the first
             // usable line. A few repo lists are bare wordlists wearing the
@@ -339,8 +343,12 @@ object WordlistDownloadManager {
                 throw FailedException(FailReason.MALFORMED, R.string.core_pred_wordlist_malformed_error)
             }
             return Wordlist(words, frequencies, count)
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 }

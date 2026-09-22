@@ -1,9 +1,9 @@
 package com.wasimaster.wmkeyboard.app.updates
 
-import com.wasimaster.wmkeyboard.core.netlog.NetSource
-import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import com.wasimaster.wmkeyboard.core.tools.ToolHttpException
 import java.io.File

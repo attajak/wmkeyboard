@@ -15,6 +15,8 @@ import com.wasimaster.wmkeyboard.core.kdeconnect.KdeFileSink
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdeIncomingFile
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdeMdns
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdeOutgoingFile
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import java.io.File
 import java.io.OutputStream
 import java.net.HttpURLConnection
@@ -230,12 +232,14 @@ internal fun outgoingFile(context: Context, uri: Uri): KdeOutgoingFile? {
  */
 internal fun fetchAlbumArt(url: String): ByteArray? {
     val connection = (URL(url).openConnection() as? HttpURLConnection) ?: return null
+    val netCall = NetLog.call(NetSource.KDE_CONNECT, "GET", url)
     return try {
         connection.connectTimeout = 6_000
         connection.readTimeout = 8_000
         connection.instanceFollowRedirects = true
+        netCall.status = connection.responseCode
         if (connection.responseCode !in 200..299) return null
-        connection.inputStream.use { input ->
+        netCall.countIn(connection.inputStream).use { input ->
             val out = java.io.ByteArrayOutputStream()
             val buffer = ByteArray(16 * 1024)
             while (true) {
@@ -248,8 +252,12 @@ internal fun fetchAlbumArt(url: String): ByteArray? {
         }
     } catch (_: Exception) {
         null
+    } catch (t: Throwable) {
+        netCall.fail(t)
+        throw t
     } finally {
         connection.disconnect()
+        netCall.end()
     }
 }
 

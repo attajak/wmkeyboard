@@ -1,7 +1,5 @@
 package com.wasimaster.wmkeyboard.core.addons
 
-import com.wasimaster.wmkeyboard.core.netlog.NetSource
-import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import android.content.Context
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
@@ -10,6 +8,8 @@ import com.wasimaster.wmkeyboard.core.keyman.KeymanPackage
 import com.wasimaster.wmkeyboard.core.keyman.KeymanResult
 import com.wasimaster.wmkeyboard.core.keyman.KeymanRuleStore
 import com.wasimaster.wmkeyboard.core.keyman.KmxParser
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import java.io.File
 import kotlinx.coroutines.Dispatchers

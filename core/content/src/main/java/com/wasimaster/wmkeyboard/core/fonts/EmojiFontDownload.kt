@@ -5,6 +5,8 @@ import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.content.R
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceRepo
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -135,16 +137,27 @@ object EmojiFontDownload {
         val text = runCatching {
             val connection = URL(EmojiFontCatalog.NOTO_MANIFEST_URL)
                 .openConnection() as HttpURLConnection
+            val netCall = NetLog.call(
+                NetSource.DOWNLOAD_FONT,
+                "GET",
+                EmojiFontCatalog.NOTO_MANIFEST_URL,
+                route = NetLog.pathOf(EmojiFontCatalog.NOTO_MANIFEST_URL),
+            )
             try {
                 connection.connectTimeout = CONNECT_TIMEOUT_MS
                 connection.readTimeout = CONNECT_TIMEOUT_MS
                 connection.instanceFollowRedirects = true
                 connection.setRequestProperty("User-Agent", USER_AGENT)
+                netCall.status = connection.responseCode
                 if (connection.responseCode != HttpURLConnection.HTTP_OK) return@runCatching null
-                connection.inputStream.use { it.readBoundedBytes(MAX_MANIFEST_BYTES) }
+                netCall.countIn(connection.inputStream).use { it.readBoundedBytes(MAX_MANIFEST_BYTES) }
                     .toString(Charsets.UTF_8)
+            } catch (t: Throwable) {
+                netCall.fail(t)
+                throw t
             } finally {
                 connection.disconnect()
+                netCall.end()
             }
         }.getOrNull() ?: return@withContext null
         val parsed = runCatching {
@@ -189,11 +202,13 @@ object EmojiFontDownload {
     private fun fetchAndInstall(context: Context, published: Published?): Status {
         val url = published?.url ?: EmojiFontCatalog.NOTO_URL
         val connection = URL(url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.DOWNLOAD_FONT, "GET", url, route = NetLog.pathOf(url))
         try {
             connection.connectTimeout = CONNECT_TIMEOUT_MS
             connection.readTimeout = READ_TIMEOUT_MS
             connection.instanceFollowRedirects = true
             connection.setRequestProperty("User-Agent", USER_AGENT)
+            netCall.status = connection.responseCode
             if (connection.responseCode != HttpURLConnection.HTTP_OK) {
                 return Status.Failed(R.string.core_content_font_error_download)
             }
@@ -208,7 +223,7 @@ object EmojiFontDownload {
             // Streamed straight into the importer, which is what enforces the
             // size ceiling and checks that the bytes really are a font before
             // any of them are registered.
-            val result = connection.inputStream.buffered().reporting(total).use { stream ->
+            val result = netCall.countIn(connection.inputStream).buffered().reporting(total).use { stream ->
                 FontFile.import(
                     input = stream,
                     store = store,
@@ -231,8 +246,12 @@ object EmojiFontDownload {
                 is FontImportResult.NotAFont -> Status.Failed(result.messageRes)
                 is FontImportResult.Failed -> Status.Failed(result.messageRes)
             }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 

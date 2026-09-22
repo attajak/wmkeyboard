@@ -1,7 +1,5 @@
 package com.wasimaster.wmkeyboard.app.updates
 
-import com.wasimaster.wmkeyboard.core.netlog.NetSource
-import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Composable
@@ -11,6 +9,8 @@ import androidx.core.net.toUri
 import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

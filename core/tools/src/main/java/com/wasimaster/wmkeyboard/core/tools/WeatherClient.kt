@@ -3,6 +3,8 @@ package com.wasimaster.wmkeyboard.core.tools
 import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.tools.R
 import java.net.HttpURLConnection
 import java.net.URL
@@ -107,12 +109,18 @@ object WeatherClient {
 
     private fun get(url: String): String {
         val connection = URL(url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.WEATHER, "GET", url, route = NetLog.pathOf(url))
         try {
             connection.connectTimeout = 8000
             connection.readTimeout = 8000
-            return connection.inputStream.bufferedReader().use { it.readText() }
+            netCall.status = connection.responseCode
+            return netCall.countIn(connection.inputStream).bufferedReader().use { it.readText() }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 

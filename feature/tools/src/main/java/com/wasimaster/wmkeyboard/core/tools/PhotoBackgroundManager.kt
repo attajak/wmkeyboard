@@ -1,12 +1,12 @@
 package com.wasimaster.wmkeyboard.core.tools
 
-import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import android.content.Context
 import android.net.Uri
 import android.os.SystemClock
 import android.os.StatFs
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.settings.MAX_FETCH_PER_RUN
 import com.wasimaster.wmkeyboard.core.settings.PhotoBackgroundSettings
 import com.wasimaster.wmkeyboard.core.settings.PhotoNetworkConditions

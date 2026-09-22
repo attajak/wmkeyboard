@@ -1,11 +1,11 @@
 package com.wasimaster.wmkeyboard.core.addons
 
-import com.wasimaster.wmkeyboard.core.netlog.NetSource
-import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import android.content.Context
 import android.os.StatFs
 import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.addons.feature.R
+import com.wasimaster.wmkeyboard.core.netlog.NetLog
+import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import java.io.File
 import java.io.IOException
@@ -502,12 +502,14 @@ object AddonDownloadManager {
         part.parentFile?.mkdirs()
         val resumeFrom = if (part.exists()) part.length() else 0L
         val connection = URL(url).openConnection() as HttpURLConnection
+        val netCall = NetLog.call(NetSource.ADDONS, "GET", url, route = NetLog.pathOf(url))
         try {
             connection.connectTimeout = 20_000
             connection.readTimeout = 20_000
             connection.instanceFollowRedirects = true
             if (resumeFrom > 0) connection.setRequestProperty("Range", "bytes=$resumeFrom-")
 
+            netCall.status = connection.responseCode
             val status = connection.responseCode
             // A server that ignored the Range header sends 200 with the whole
             // file, so the partial we have is worthless and we start over.
@@ -528,7 +530,7 @@ object AddonDownloadManager {
             }
             val cap = entry.type.maxBytes
 
-            connection.inputStream.use { input ->
+            netCall.countIn(connection.inputStream).use { input ->
                 RandomAccessFile(part, "rw").use { output ->
                     output.setLength(already)
                     output.seek(already)
@@ -559,8 +561,12 @@ object AddonDownloadManager {
                     set(key, AddonStatus.Downloading(written, maxOf(total, written)))
                 }
             }
+        } catch (t: Throwable) {
+            netCall.fail(t)
+            throw t
         } finally {
             connection.disconnect()
+            netCall.end()
         }
     }
 
