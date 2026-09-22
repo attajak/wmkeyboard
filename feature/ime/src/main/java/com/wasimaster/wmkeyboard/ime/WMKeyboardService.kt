@@ -309,6 +309,7 @@ import com.wasimaster.wmkeyboard.core.settings.GlideLookAhead
 import com.wasimaster.wmkeyboard.core.settings.GlidePreviewSteadiness
 import com.wasimaster.wmkeyboard.core.settings.GlideSandbox
 import com.wasimaster.wmkeyboard.core.prediction.FuzzyBeamSearch
+import com.wasimaster.wmkeyboard.core.prediction.GlideGuessGate
 import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxLadder
 import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxPolicy
 import com.wasimaster.wmkeyboard.core.settings.APP_LANGUAGE_MIX_FILE
@@ -15731,7 +15732,6 @@ open class WMKeyboardService : InputMethodService() {
         } else {
             decode(LEARNED_TIER)
         }
-        var answered: Boolean? = null
         val decoded = when (policy) {
             GlideSandboxPolicy.LEARNED_ONLY -> learned
             GlideSandboxPolicy.OFF -> decode(null)
@@ -15745,25 +15745,26 @@ open class WMKeyboardService : InputMethodService() {
                 // last letter of a learned word came back as some rare word
                 // that happened to start where the finger stopped (#167).
                 val full = decode(null, guessing = 0)
-                // Cost, not score: the two searches weight their sources
-                // differently and only the geometry means the same thing in
-                // both (see GlideSandboxLadder.SANDBOX_MARGIN).
-                val best = learned.firstOrNull()
-                val takeLearned = best != null && (
-                    full.isEmpty() ||
-                        best.shapeCost <= full[0].shapeCost + GlideSandboxLadder.SANDBOX_MARGIN
-                    )
-                answered = best != null &&
-                    best.word.equals(
-                        (if (takeLearned) learned else full).firstOrNull()?.word,
-                        ignoreCase = true,
-                    )
-                if (takeLearned) learned else full
+                // Only a learned *reading* may win the sandbox comparison, and
+                // a learned guess that does not win it joins the full decode
+                // instead of replacing it — see GlideGuessGate.preferLearned
+                // for why a guess wins that comparison by construction (#317).
+                GlideGuessGate.preferLearned(learned, full)
             }
         }
         if (decoded.isEmpty()) return GlideReading.NONE
         val kept = admitLookAhead(decoded, gesture.lookAhead)
         if (kept.isEmpty()) return GlideReading.NONE
+        // What the ladder counts: whether the learned words alone produced the
+        // word this stroke is about to put in. Asked of the list the gate left
+        // standing, not of the one it was handed — a learned guess the user's
+        // confidence tier throws out was never going to serve this stroke, and
+        // counting it would promote the ladder on strokes the sandbox lost.
+        val answered = if (policy == GlideSandboxPolicy.PREFER_LEARNED) {
+            learned.firstOrNull()?.word.equals(kept.firstOrNull()?.word, ignoreCase = true)
+        } else {
+            null
+        }
         val words = kept.map { restoreApostrophe(it.word) ?: it.word }
         val declared = declareApostrophe(words, points, keys, keyWidthPx)
         // Scores follow the words through both rewrites. `declareApostrophe`
@@ -15776,8 +15777,10 @@ open class WMKeyboardService : InputMethodService() {
         // decoder is sure of. Measured here against this decode's own best
         // ordinary reading, the only comparison the scores support, and carried
         // as words rather than positions because the steadiness gate reorders
-        // the list before anything draws it.
-        val bestRead = kept.firstOrNull { it.ahead == 0 }?.score
+        // the list before anything draws it. Best-scoring rather than
+        // first-listed for the same reason the gate above says so: the context
+        // rerank has already moved the front of this list (#317).
+        val bestRead = kept.filter { it.ahead == 0 }.maxOfOrNull { it.score }
         val guesses = HashMap<String, String>()
         val sure = HashSet<String>()
         words.forEachIndexed { i, word ->
@@ -15808,25 +15811,15 @@ open class WMKeyboardService : InputMethodService() {
      * stroke has not drawn — kept only where they clear the user's confidence
      * tier, and dropped entirely when the tier is off.
      *
-     * The measure is the gap to the best *ordinary* reading, in the decoder's
-     * own log units, which is the only comparison that answers the question the
-     * user is really asking: is the keyboard surer about a word I have not
-     * finished than about anything I have? A guess that merely outranks other
-     * guesses has cleared nothing.
-     *
-     * The list keeps its order, so a guess that clears the bar and outscores
-     * every reading leads — which is the whole point of the feature — and one
-     * that clears the bar without leading sits on the strip as an alternate.
+     * The measuring itself is [GlideGuessGate.admit], beside the sandbox half
+     * of the same seam; this is the tier's translation into the nats that gate
+     * speaks.
      */
     private fun admitLookAhead(
         decoded: List<GlideBeam.Candidate>,
         tier: GlideLookAhead,
-    ): List<GlideBeam.Candidate> {
-        if (decoded.none { it.ahead > 0 }) return decoded
-        if (tier == GlideLookAhead.OFF) return decoded.filter { it.ahead == 0 }
-        val bestRead = decoded.firstOrNull { it.ahead == 0 } ?: return decoded
-        return decoded.filter { it.ahead == 0 || it.score - bestRead.score >= tier.margin }
-    }
+    ): List<GlideBeam.Candidate> =
+        GlideGuessGate.admit(decoded, if (tier == GlideLookAhead.OFF) null else tier.margin)
 
     /**
      * The deep search behind a glide undo (issue #52): [stroke] decoded again
