@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.core.kdeconnect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.BufferedInputStream
 import java.io.IOException
@@ -70,6 +71,23 @@ internal class KdeLink(
         onClosed(this)
     }
 
+    /**
+     * Closes once everything already queued has been written. [close] hangs up
+     * at once and drops the outbox, so a packet sent just before it, such as
+     * the unpair that precedes dropping a device, only went out if the writer
+     * happened to be awake already; otherwise the peer stayed paired. Ending
+     * the outbox lets [writeLoop] drain it and close on its way out. The
+     * timer covers a writer stuck on a peer that stopped reading.
+     */
+    fun closeAfterSending() {
+        if (closed.get()) return
+        outbox.close()
+        scope.launch {
+            delay(FLUSH_TIMEOUT_MS)
+            close()
+        }
+    }
+
     private fun readLoop() {
         try {
             val input = BufferedInputStream(socket.inputStream, 16 * 1024)
@@ -122,6 +140,9 @@ internal class KdeLink(
     companion object {
         /** Both reference clients cap a packet at 32 MiB. */
         const val MAX_PACKET_BYTES = 32 * 1024 * 1024
+
+        /** How long [closeAfterSending] gives the outbox before hanging up anyway. */
+        const val FLUSH_TIMEOUT_MS = 2_000L
     }
 }
 

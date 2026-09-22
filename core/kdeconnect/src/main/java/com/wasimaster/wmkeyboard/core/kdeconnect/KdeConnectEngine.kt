@@ -506,8 +506,9 @@ class KdeConnectEngine(
                     plugins.forEach { p -> runCatching { p.onDisconnected(deviceId) } }
                     update(deviceId) { it.copy(paired = false, pairState = record.pairing.state) }
                     _events.tryEmit(KdeEvent.Unpaired(deviceId))
-                    // No longer ours to hold a socket to, unless the user is browsing.
-                    if (!discovering) record.link?.close()
+                    // No longer ours to hold a socket to, unless the user is
+                    // browsing. After the unpair packet queued above is out.
+                    if (!discovering) record.link?.closeAfterSending()
                     if (record.link == null) {
                         synchronized(lock) { records.remove(deviceId) }
                         _state.update { s -> s.copy(devices = s.devices.filter { it.id != deviceId }) }
