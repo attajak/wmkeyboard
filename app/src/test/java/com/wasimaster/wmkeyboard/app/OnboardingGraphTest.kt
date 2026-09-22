@@ -136,6 +136,16 @@ class OnboardingGraphTest {
     }
 
     @Test
+    fun `app language page leads the wizard only when asked for`() {
+        assertFalse(OnboardingPage.APP_LANGUAGE in pages())
+        val asked = onboardingPages(
+            OnboardingSettings(), emptyList(), 1, replay = false, imeReady = false, askAppLanguage = true,
+        )
+        assertEquals(OnboardingPage.APP_LANGUAGE, asked.first())
+        assertEquals(OnboardingPage.WELCOME, asked[1])
+    }
+
+    @Test
     fun `resolvePageIndex finds the current page`() {
         val list = pages()
         assertEquals(2, resolvePageIndex(list, OnboardingPage.LANGUAGES))

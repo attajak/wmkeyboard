@@ -36,6 +36,9 @@
     <!-- %1$s is the new version. -->
     <string name="update_card_updated_title">Updated to <xliff:g id="version" example="0.5.3">%1$s</xliff:g></string>
     <string name="update_card_updated_body">The update is installed and your keyboard is back.</string>
+    <!-- After the English-only build replaced itself with the one with every language (#322). -->
+    <string name="update_card_switched_title">Every language is here</string>
+    <string name="update_card_switched_body">Choose the app language in Settings, then About.</string>
 
     <!-- Buttons on the card. -->
     <string name="update_action_download">Download</string>

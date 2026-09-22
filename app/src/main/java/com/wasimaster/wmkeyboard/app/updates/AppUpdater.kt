@@ -83,6 +83,38 @@ internal interface AppUpdater {
     val supportsNotes: Boolean
         get() = false
 
+    /**
+     * Whether this build can replace itself with the build of the same release
+     * that carries every interface language (#322). True only on the GitHub
+     * channel's English-only (`en`) build: Play and F-Droid ship every
+     * language already, and only GitHub hands out the `en` APK.
+     */
+    val canSwitchToAllLanguages: Boolean
+        get() = false
+
+    /**
+     * True while the offer in [state] is that move rather than a newer
+     * version, from the press until the new build takes over. The update card
+     * and the Updates row stand back while it is, and the App language row
+     * draws it instead, because "Download the update" would describe it wrong.
+     */
+    val switchingToAllLanguages: StateFlow<Boolean>
+        get() = NotSwitching
+
+    /**
+     * Looks for the every-language build of the newest release this install
+     * may have (never an older one), and offers it through [state]. The rest
+     * of the path is the ordinary one: [start], then [install] from a press.
+     */
+    fun switchToAllLanguages() {
+        // Only the GitHub channel has an English-only build to move away from.
+    }
+
+    /** Drops the move: stops a download, deletes what it staged, forgets the offer. */
+    fun abandonLanguageSwitch() {
+        // Nothing to drop unless [canSwitchToAllLanguages].
+    }
+
     /** Whether to offer pre-releases. Meaningless unless [supportsPrereleases]. */
     var includePrereleases: Boolean
 
@@ -146,6 +178,9 @@ internal interface AppUpdater {
 
 /** Shared empty notes flow, so the default [AppUpdater.releaseNotes] allocates nothing. */
 private val NoNotes: StateFlow<String?> = MutableStateFlow(null)
+
+/** Shared "not switching" flow for every updater that cannot switch. */
+private val NotSwitching: StateFlow<Boolean> = MutableStateFlow(false)
 
 /** The updater for builds that have no update source behind them. */
 internal object NoAppUpdater : AppUpdater {

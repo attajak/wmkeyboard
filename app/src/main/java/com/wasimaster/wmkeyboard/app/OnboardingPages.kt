@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
@@ -76,10 +77,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -129,6 +132,85 @@ internal fun WelcomePage(onReady: () -> Unit, onSetupChanged: (Boolean) -> Unit)
         SetupCard(context, setup = setup, onEnableRequested = { awaitingEnable = true })
     }
     if (!setup.ready) CaptionText(stringResource(R.string.onboarding_welcome_required))
+}
+
+/**
+ * The language the app itself is shown in, asked first where English is not
+ * the first language (#322). [suggested] is what the phone's languages and
+ * region point at; English and "System default" are always there, and the
+ * rest of the translations are one press away.
+ *
+ * A pick applies at once. The screen restarts in the new language and the
+ * wizard comes back on this page, so the reader sees the result before Next.
+ */
+@Composable
+internal fun AppLanguagePage(suggested: List<String>) {
+    val context = LocalContext.current
+    // Held here as well as read from the system, so the radio moves the moment
+    // it is pressed. A Play build on Android 12 or older may first have to
+    // download the language, and the screen restarts only after that.
+    var selected by remember { mutableStateOf(AppLanguage.selected(context)) }
+    var showAll by rememberSaveable { mutableStateOf(false) }
+    val uiLocale = LocalConfiguration.current.locales[0]
+    val pick: (String?) -> Unit = { tag ->
+        if (tag != selected) {
+            selected = tag
+            AppLanguage.select(context, tag)
+        }
+    }
+    val system = AppLanguage.systemLocale()
+    AppLanguageRow(
+        title = stringResource(
+            R.string.about_app_language_system,
+            nativeLanguageName(system.toLanguageTag()),
+        ),
+        subtitle = null,
+        selected = selected == null,
+        onClick = { pick(null) },
+    )
+    // English and the current pick stay in view even when they are not
+    // suggestions, so the way back is never behind "Show all".
+    val english = AppLanguage.available.first()
+    val shortList = (suggested + listOfNotNull(selected) + english).distinct()
+    val rest = AppLanguage.available.filter { it !in shortList }
+        .sortedWith(compareBy(java.text.Collator.getInstance(uiLocale)) { nativeLanguageName(it) })
+    val shown = if (showAll) shortList + rest else shortList
+    if (suggested.isNotEmpty()) {
+        OnboardingSectionTitle(stringResource(R.string.onboarding_language_suggested_title))
+    }
+    for (tag in shown) {
+        if (tag == rest.firstOrNull()) HorizontalDivider(Modifier.padding(vertical = 8.dp))
+        val native = nativeLanguageName(tag)
+        val local = languageNameIn(tag, uiLocale)
+        AppLanguageRow(
+            title = native,
+            subtitle = local.takeIf { it != native },
+            selected = selected == tag,
+            onClick = { pick(tag) },
+        )
+    }
+    if (!showAll && rest.isNotEmpty()) {
+        TextButton(
+            onClick = { showAll = true },
+            modifier = Modifier.padding(horizontal = 8.dp),
+        ) {
+            Text(stringResource(R.string.onboarding_app_language_all))
+        }
+    }
+    OnboardingNotice(stringResource(R.string.onboarding_app_language_later))
+}
+
+/** One language on [AppLanguagePage]: a radio, its own name, and ours for it. */
+@Composable
+private fun AppLanguageRow(title: String, subtitle: String?, selected: Boolean, onClick: () -> Unit) {
+    ListItem(
+        leadingContent = { RadioButton(selected = selected, onClick = null) },
+        headlineContent = { Text(title) },
+        supportingContent = subtitle?.let { { Text(it) } },
+        modifier = Modifier
+            .fillMaxWidth()
+            .selectable(selected = selected, role = Role.RadioButton, onClick = onClick),
+    )
 }
 
 @Composable

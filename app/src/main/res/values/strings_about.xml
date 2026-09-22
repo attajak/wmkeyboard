@@ -26,6 +26,41 @@
     <string name="about_launcher_name_title">Short app name</string>
     <string name="about_launcher_name_subtitle">Show \"WMK\" under the app icon, not \"WM Keyboard\"</string>
     <string name="about_launcher_name_info">This changes only the name under the icon, in your app drawer and on your home screen. Everywhere else, such as the Android app settings, the keyboard list and the app stores, the app keeps its full name. If you opened the app from its icon, this screen opens again when you change the name. Your launcher can take a few seconds to show the new name. If the icon goes from your home screen, add it again from the app drawer.</string>
+    <!-- The in-app interface language picker (#322). -->
+    <string name="about_app_language_title">App language</string>
+    <string name="about_app_language_subtitle">The language of the menus and settings. Your typing languages are in Settings, then Languages</string>
+    <!-- The option that follows the phone. %1$s is the phone's language, in that language. -->
+    <string name="about_app_language_system">System default (<xliff:g id="language" example="English">%1$s</xliff:g>)</string>
+    <string name="about_app_language_info">On Android 13 and newer, this is the same setting as the app language in the Android app settings. When you change one, the other changes too. On Android 12 and older, only the settings app changes. The keyboard stays in the language of your phone.</string>
+    <!-- The App language row on the English-only build, which GitHub alone
+         hands out. %1$d is how many languages the other build adds. -->
+    <plurals name="about_app_language_english_only">
+        <item quantity="one">This download of the app has English only. Press to get the version with %1$d more language</item>
+        <item quantity="other">This download of the app has English only. Press to get the version with %1$d more languages</item>
+    </plurals>
+    <plurals name="about_app_language_english_only_link">
+        <item quantity="one">This download of the app has English only. The version with %1$d more language is on GitHub</item>
+        <item quantity="other">This download of the app has English only. The version with %1$d more languages is on GitHub</item>
+    </plurals>
+    <string name="about_all_languages_dialog_title">Get every language?</string>
+    <!-- %1$d is how many languages the other build adds. -->
+    <plurals name="about_all_languages_dialog_body">
+        <item quantity="one">The app downloads the version of WM Keyboard with %1$d more language from GitHub. It is the same app, so it installs over this one and keeps your settings, your words and your themes. When the download is done, press Install. The app and the keyboard then restart once.</item>
+        <item quantity="other">The app downloads the version of WM Keyboard with %1$d more languages from GitHub. It is the same app, so it installs over this one and keeps your settings, your words and your themes. When the download is done, press Install. The app and the keyboard then restart once.</item>
+    </plurals>
+    <string name="about_all_languages_dialog_confirm">Download</string>
+    <string name="about_all_languages_checking_title">Finding the version with every language</string>
+    <string name="about_all_languages_download_title">Download every language</string>
+    <!-- %1$s is the version name, %2$s the download size. -->
+    <string name="about_all_languages_download_subtitle">Version <xliff:g id="version" example="0.5.11">%1$s</xliff:g>, <xliff:g id="size" example="48 MB">%2$s</xliff:g> from GitHub</string>
+    <string name="about_all_languages_downloading_title">Downloading every language</string>
+    <string name="about_all_languages_install_title">Install every language</string>
+    <string name="about_all_languages_install_subtitle">The app and the keyboard restart once. Your settings stay</string>
+    <string name="about_all_languages_installing_title">Installing every language</string>
+    <string name="about_all_languages_failed_title">Could not get every language</string>
+    <string name="about_all_languages_retry_subtitle">Press to try again</string>
+    <string name="about_all_languages_keep_title">Keep English only</string>
+    <string name="about_all_languages_keep_subtitle">Stop, and delete what was downloaded</string>
     <string name="about_diagnostics_title">Diagnostics</string>
     <string name="about_diagnostics_subtitle">A record of what the keyboard did. Read it, or send it with a bug report</string>
     <string name="about_persona_title">How you set the keyboard up</string>

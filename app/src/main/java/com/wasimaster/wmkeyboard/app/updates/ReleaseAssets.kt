@@ -6,11 +6,14 @@ import java.util.Locale
 import java.util.TimeZone
 
 /**
- * The four things an asset's file name says about it.
+ * The five things an asset's file name says about it.
  *
  * The release workflow builds these names, in `.github/workflows/release.yml`:
- * `wmkeyboard-<versionName>-vc<versionCode>-<flavor>-<abi>.apk`. Reading the
- * version out of the name rather than out of the tag is what lets this compare
+ * `wmkeyboard-<versionName>-vc<versionCode>-<flavor>-<languages>-<abi>.apk`,
+ * where [flavor] is the `capabilities` flavour (full, lite) and [languages] the
+ * `languages` one (intl, en). Releases before 0.5.10 had no languages part and
+ * were English only, so a name without one reads as `en`. Reading the version
+ * out of the name rather than out of the tag is what lets this compare
  * versions exactly: the tag is a version *name*, and names are not ordered.
  */
 internal data class AssetName(
@@ -18,6 +21,7 @@ internal data class AssetName(
     val versionCode: Int,
     val flavor: String,
     val abi: String,
+    val languages: String = ReleaseAssets.LANGUAGES_EN,
 )
 
 /** An update this device could actually install, with everything needed to do it. */
@@ -49,14 +53,21 @@ internal object ReleaseAssets {
      */
     const val UNIVERSAL = "universal"
 
+    /** The `languages` flavour that carries English only. GitHub is the only place it ships. */
+    const val LANGUAGES_EN = "en"
+
+    /** The `languages` flavour that carries every translation. */
+    const val LANGUAGES_INTL = "intl"
+
     /**
      * Anchored, and the version part is lazy so that a pre-release name like
-     * `wmkeyboard-0.6.0-beta.1-vc15-full-arm64-v8a.apk` splits at the right
-     * hyphen. The ABI list is spelled out rather than matched loosely so a
-     * file this app cannot use never looks like one it can.
+     * `wmkeyboard-0.6.0-beta.1-vc15-full-intl-arm64-v8a.apk` splits at the
+     * right hyphen. The languages part is optional, for the names releases
+     * carried before it existed. The ABI list is spelled out rather than
+     * matched loosely so a file this app cannot use never looks like one it can.
      */
     private val ASSET = Regex(
-        """^wmkeyboard-(.+?)-vc(\d+)-(full|lite)-(arm64-v8a|armeabi-v7a|x86_64|universal)\.apk$""",
+        """^wmkeyboard-(.+?)-vc(\d+)-(full|lite)(?:-(intl|en))?-(arm64-v8a|armeabi-v7a|x86_64|universal)\.apk$""",
     )
 
     private val SHA256 = Regex("""^[0-9a-f]{64}$""")
@@ -64,9 +75,9 @@ internal object ReleaseAssets {
     /** What [name] says about itself, or null when it is not one of our APKs. */
     fun parseAssetName(name: String): AssetName? {
         val match = ASSET.matchEntire(name) ?: return null
-        val (versionName, versionCode, flavor, abi) = match.destructured
+        val (versionName, versionCode, flavor, languages, abi) = match.destructured
         val code = versionCode.toIntOrNull() ?: return null
-        return AssetName(versionName, code, flavor, abi)
+        return AssetName(versionName, code, flavor, abi, languages.ifEmpty { LANGUAGES_EN })
     }
 
     /**
@@ -90,15 +101,20 @@ internal object ReleaseAssets {
      * by the device's own preference, so the first one with a matching asset
      * is the right answer. The universal APK is the last resort, and it is why
      * a 32-bit x86 device is not left out even though no x86 split is built.
+     *
+     * [flavor] and [languages] are the two flavour names on their own
+     * (`BuildConfig.FLAVOR_capabilities` and `FLAVOR_languages`), never the
+     * combined `BuildConfig.FLAVOR`, which reads `fullIntl` and matches nothing.
      */
     fun pickAsset(
         release: GithubRelease,
         flavor: String,
         supportedAbis: List<String>,
+        languages: String = LANGUAGES_EN,
     ): GithubAsset? {
         val ours = release.assets.mapNotNull { asset ->
             parseAssetName(asset.name)
-                ?.takeIf { it.flavor == flavor }
+                ?.takeIf { it.flavor == flavor && it.languages == languages }
                 ?.let { it to asset }
         }
         if (ours.isEmpty()) return null
@@ -116,19 +132,25 @@ internal object ReleaseAssets {
      * user's setting. A release that carries no file for this device is
      * skipped rather than offered and then failed, which is why this walks the
      * list instead of only looking at the first entry.
+     *
+     * [allowSameVersion] is for moving to the other [languages] build of the
+     * release already installed: same version code, same key, a different APK.
      */
+    @Suppress("LongParameterList")
     fun chooseCandidate(
         releases: List<GithubRelease>,
         installedVersionCode: Int,
         flavor: String,
         supportedAbis: List<String>,
         includePrereleases: Boolean,
+        languages: String = LANGUAGES_EN,
+        allowSameVersion: Boolean = false,
     ): UpdateCandidate? = releases
         .asSequence()
         .filterNot { it.draft }
         .filter { includePrereleases || !it.prerelease }
         .mapNotNull { release ->
-            val asset = pickAsset(release, flavor, supportedAbis) ?: return@mapNotNull null
+            val asset = pickAsset(release, flavor, supportedAbis, languages) ?: return@mapNotNull null
             val parsed = parseAssetName(asset.name) ?: return@mapNotNull null
             UpdateCandidate(
                 versionCode = parsed.versionCode,
@@ -142,7 +164,14 @@ internal object ReleaseAssets {
                 releaseUrl = release.htmlUrl ?: GithubReleases.releasePage(release.tagName),
             )
         }
-        .filter { it.versionCode > installedVersionCode && it.url.startsWith("https://") }
+        .filter {
+            val newEnough = if (allowSameVersion) {
+                it.versionCode >= installedVersionCode
+            } else {
+                it.versionCode > installedVersionCode
+            }
+            newEnough && it.url.startsWith("https://")
+        }
         .maxByOrNull { it.versionCode }
 
     /**

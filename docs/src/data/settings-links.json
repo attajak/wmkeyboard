@@ -901,6 +901,7 @@
   {"title":"Licence","name":"about_licence_title","route":"about","screens":["About"],"screen":false},
   {"title":"Source code","name":"about_source_title","route":"about","screens":["About"],"screen":false},
   {"title":"Short app name","name":"about_launcher_name_title","route":"about","screens":["About"],"screen":false},
+  {"title":"App language","name":"about_app_language_title","route":"about","screens":["About"],"screen":false},
   {"title":"User guide","name":"about_user_guide_title","route":"about","screens":["About"],"screen":false},
   {"title":"Privacy policy","name":"about_privacy_policy_title","route":"about","screens":["About"],"screen":false},
   {"title":"Report a bug","name":"about_report_bug_title","route":"about","screens":["About"],"screen":false},

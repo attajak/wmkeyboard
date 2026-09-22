@@ -105,6 +105,16 @@ internal class UpdatePrefs(context: Context) {
             if (value == null) remove(KEY_CANDIDATE) else putString(KEY_CANDIDATE, value)
         }
 
+    /**
+     * Whether the offer on hand is the move from the English-only build to the
+     * one with every language, rather than a newer version (#322). Kept beside
+     * [knownCandidate] because that candidate can have the version code already
+     * installed, which on its own reads as stale and gets thrown away.
+     */
+    var languageSwitch: Boolean
+        get() = prefs.getBoolean(KEY_LANGUAGE_SWITCH, false)
+        set(value) = prefs.edit { putBoolean(KEY_LANGUAGE_SWITCH, value) }
+
     /** The live `PackageInstaller` session, or 0. Stale ones are abandoned on start. */
     var sessionId: Int
         get() = prefs.getInt(KEY_SESSION_ID, 0)
@@ -126,13 +136,24 @@ internal class UpdatePrefs(context: Context) {
 
     // ---- after the fact ----
 
-    /** Records the version this app is about to replace itself with. */
-    fun rememberInstall(versionCode: Int, now: Long) {
+    /**
+     * Records the version this app is about to replace itself with, and
+     * whether the install is the move to every language rather than an update.
+     */
+    fun rememberInstall(versionCode: Int, now: Long, languageSwitch: Boolean = false) {
         prefs.edit {
             putInt(KEY_INSTALLED_VERSION, versionCode)
             putLong(KEY_INSTALLED_AT, now)
+            putBoolean(KEY_INSTALLED_SWITCH, languageSwitch)
         }
     }
+
+    /**
+     * Whether the install [takeJustUpdated] is about to report was the move to
+     * every language. Read it first: that call clears the record.
+     */
+    val justSwitchedLanguages: Boolean
+        get() = prefs.getBoolean(KEY_INSTALLED_SWITCH, false)
 
     /**
      * True once, in the first session of a version this app installed itself.
@@ -144,7 +165,7 @@ internal class UpdatePrefs(context: Context) {
     fun takeJustUpdated(currentVersionCode: Int, now: Long): Boolean {
         if (prefs.getInt(KEY_INSTALLED_VERSION, 0) != currentVersionCode) return false
         val at = prefs.getLong(KEY_INSTALLED_AT, 0L)
-        prefs.edit { remove(KEY_INSTALLED_VERSION).remove(KEY_INSTALLED_AT) }
+        prefs.edit { remove(KEY_INSTALLED_VERSION).remove(KEY_INSTALLED_AT).remove(KEY_INSTALLED_SWITCH) }
         // A restored backup can carry another device's timestamp, and a
         // version code that matches by coincidence. A week is long enough for
         // the user to open the app after an update and short enough that a
@@ -156,6 +177,7 @@ internal class UpdatePrefs(context: Context) {
     fun clearCandidate() {
         prefs.edit {
             remove(KEY_CANDIDATE)
+            remove(KEY_LANGUAGE_SWITCH)
             remove(KEY_SESSION_ID)
             remove(KEY_INSTALL_PRESSED_AT)
         }
@@ -188,5 +210,7 @@ internal class UpdatePrefs(context: Context) {
         private const val KEY_INSTALL_PRESSED_AT = "install_pressed_at"
         private const val KEY_INSTALLED_VERSION = "installed_version_code"
         private const val KEY_INSTALLED_AT = "installed_at"
+        private const val KEY_INSTALLED_SWITCH = "installed_language_switch"
+        private const val KEY_LANGUAGE_SWITCH = "language_switch"
     }
 }

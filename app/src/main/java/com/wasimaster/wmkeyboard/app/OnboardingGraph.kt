@@ -20,7 +20,7 @@ import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
  * decided per device, per persona and per run — see [onboardingPages].
  */
 internal enum class OnboardingPage {
-    WELCOME, PERSONA, LANGUAGES, LOOK, EMOJI, FEEDBACK, GESTURES,
+    APP_LANGUAGE, WELCOME, PERSONA, LANGUAGES, LOOK, EMOJI, FEEDBACK, GESTURES,
     DISCOVER, TOOLS, TOOL_SETUP, TRY,
 }
 
@@ -45,6 +45,12 @@ internal val ToolSetupTools = setOf(
  * under Languages & emoji; the tone in particular is only worth a wizard page
  * to someone who came here to tune things. On a replay the welcome page only
  * appears when the keyboard actually needs setting up again.
+ *
+ * The app-language page comes before everything, welcome included, because
+ * every page after it is words: someone who reads Bengali first should read
+ * the rest of the wizard in Bengali. [askAppLanguage] is decided by the phone's
+ * region (see [shouldAskAppLanguage]), so it never shows where English is the
+ * first language, and never on a build that has only English to offer.
  */
 internal fun onboardingPages(
     persona: OnboardingSettings,
@@ -52,8 +58,10 @@ internal fun onboardingPages(
     enabledLanguageCount: Int,
     replay: Boolean,
     imeReady: Boolean,
+    askAppLanguage: Boolean = false,
 ): List<OnboardingPage> = OnboardingPage.entries.filter { page ->
     when (page) {
+        OnboardingPage.APP_LANGUAGE -> askAppLanguage
         OnboardingPage.WELCOME -> !(replay && imeReady)
         // Unanswered means one language, the same as answering "just one":
         // most people type in one, the page seeds itself from the phone's own
@@ -89,6 +97,7 @@ internal fun resolvePageIndex(pages: List<OnboardingPage>, current: OnboardingPa
  * ([SettingsRouteColors]) so the wizard reads as part of the same app.
  */
 internal val OnboardingPageAccents: Map<OnboardingPage, Color> = mapOf(
+    OnboardingPage.APP_LANGUAGE to Color(0xFF5C6BC0),
     OnboardingPage.WELCOME to Color(0xFF42A5F5),
     OnboardingPage.PERSONA to Color(0xFF7E57C2),
     OnboardingPage.LANGUAGES to Color(0xFF66BB6A),

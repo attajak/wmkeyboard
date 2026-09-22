@@ -40,6 +40,7 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Mood
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Swipe
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Vibration
 import androidx.compose.material.icons.outlined.Widgets
@@ -112,6 +113,11 @@ internal fun OnboardingScreen(
     // Read once at entry too, so the welcome page doesn't pop in and out of
     // the page list while a replaying user flips the keyboard elsewhere.
     val replayImeReady = remember { imeEnabled(context) && imeSelected(context) }
+    // Where the phone is and what it speaks, read once: it decides whether
+    // the wizard opens on the app-language page, and what that page puts
+    // first. Stable across a recreate, which that page's own choice causes.
+    val deviceSignals = remember { DeviceLocales.read(context) }
+    val askAppLanguage = remember { shouldAskAppLanguage(deviceSignals, AppLanguage.available) }
     val pages = remember(
         settings.enabledTools, settings.onboarding, settings.enabledLanguages.size,
     ) {
@@ -121,6 +127,7 @@ internal fun OnboardingScreen(
             enabledLanguageCount = settings.enabledLanguages.size,
             replay = replay,
             imeReady = replayImeReady,
+            askAppLanguage = askAppLanguage,
         )
     }
     // Which catalog emoji this phone's own font can't draw; null while the
@@ -232,6 +239,11 @@ internal fun OnboardingScreen(
                 ) {
                     OnboardingHero(shown)
                     when (shown) {
+                        OnboardingPage.APP_LANGUAGE -> AppLanguagePage(
+                            suggested = remember {
+                                suggestedAppLanguages(deviceSignals, AppLanguage.available)
+                            },
+                        )
                         OnboardingPage.WELCOME -> WelcomePage(
                             // Set here as well as through onSetupChanged: the
                             // auto-advance below takes the page out of the
@@ -514,6 +526,7 @@ private fun HeroTile(page: OnboardingPage, size: Dp, glyph: Dp) {
 }
 
 private fun heroIcon(page: OnboardingPage): ImageVector = when (page) {
+    OnboardingPage.APP_LANGUAGE -> Icons.Outlined.Translate
     OnboardingPage.WELCOME -> Icons.Outlined.Keyboard
     OnboardingPage.PERSONA -> Icons.Outlined.Tune
     OnboardingPage.LANGUAGES -> Icons.Outlined.Language
@@ -530,6 +543,7 @@ private fun heroIcon(page: OnboardingPage): ImageVector = when (page) {
 @Composable
 private fun heroTitle(page: OnboardingPage): String = stringResource(
     when (page) {
+        OnboardingPage.APP_LANGUAGE -> R.string.onboarding_app_language_title
         OnboardingPage.WELCOME -> R.string.onboarding_welcome_title
         OnboardingPage.PERSONA -> R.string.onboarding_persona_title
         OnboardingPage.LANGUAGES -> R.string.onboarding_languages_title
@@ -553,6 +567,7 @@ private fun heroSubtitle(page: OnboardingPage): String = when (page) {
     )
     else -> stringResource(
         when (page) {
+            OnboardingPage.APP_LANGUAGE -> R.string.onboarding_app_language_subtitle
             OnboardingPage.WELCOME -> R.string.onboarding_welcome_subtitle
             OnboardingPage.PERSONA -> R.string.onboarding_persona_subtitle
             OnboardingPage.LOOK -> R.string.onboarding_look_subtitle

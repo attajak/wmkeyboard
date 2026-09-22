@@ -78,6 +78,21 @@ val channelManifests = listOfNotNull(
     "src/github/AndroidManifest.xml".takeIf { githubChannel },
 )
 
+// Every interface language the repo has a translation for, as BCP-47 tags
+// ("en,ar,bn,…,zh-CN"), read off the res/values-xx folders so the in-app
+// picker cannot drift from what is actually translated. English is the
+// unqualified res/values (see resources.properties).
+val translatedLocales: String = run {
+    val folder = Regex("values-([a-z]{2,3})(?:-r([A-Z]{2}))?")
+    val tags = file("src/main/res").listFiles().orEmpty().mapNotNull { dir ->
+        val match = folder.matchEntire(dir.name) ?: return@mapNotNull null
+        if (!File(dir, "strings.xml").isFile) return@mapNotNull null
+        val (language, region) = match.destructured
+        if (region.isEmpty()) language else "$language-$region"
+    }
+    (listOf("en") + tags.sorted()).joinToString(",")
+}
+
 // Sideload packaging. With `-Pwmkb.splitApks=true`, assemble<Variant> emits one
 // APK per ABI plus a universal fallback instead of a single fat APK — the
 // arm64 artifact is roughly half the universal's size, which is what most
@@ -135,6 +150,9 @@ android {
         // Diagnostic builds only — see the same field in :core:config, which is
         // the copy DebugLog reads. Mirrored here for the app-package screens.
         buildConfigField("Boolean", "ENABLE_CRASH_SCREEN", "${flag("wmkb.enableCrashScreen", "WMKB_ENABLE_CRASH_SCREEN")}")
+        // How many interface languages the `intl` build adds to English, for the
+        // English-only build's App language row to name when it offers them.
+        buildConfigField("int", "TRANSLATED_LANGUAGE_COUNT", "${translatedLocales.split(',').size - 1}")
     }
 
     // Build flavors for storage-constrained devices.
@@ -181,8 +199,21 @@ android {
         }
 
         // Declared first, so it is what the IDE and a bare `assemble` pick.
-        create("intl") { dimension = "languages" }
-        create("en") { dimension = "languages" }
+        //
+        // APP_LOCALES is what the in-app language picker (About, and the first
+        // wizard page) offers, so it must name only languages this install can
+        // actually show. `en` on Play still gets the full list: Play injects
+        // its translations into the bundle at upload, and Android 13+ fetches
+        // the language split when the app language changes.
+        create("intl") {
+            dimension = "languages"
+            buildConfigField("String", "APP_LOCALES", "\"$translatedLocales\"")
+        }
+        create("en") {
+            dimension = "languages"
+            val shipped = if (playStoreChannel) translatedLocales else "en"
+            buildConfigField("String", "APP_LOCALES", "\"$shipped\"")
+        }
     }
 
     signingConfigs {

@@ -72,6 +72,8 @@ internal class GithubUpdateChecker(
         includePrereleases: Boolean,
         storedEtag: String?,
         onEtag: (String?) -> Unit,
+        languages: String = ReleaseAssets.LANGUAGES_EN,
+        allowSameVersion: Boolean = false,
     ): CheckOutcome {
         val sent = UpdateCheckGate.etagToSend(storedEtag, cache.exists())
         val body = when (val result = fetcher.fetch(sent)) {
@@ -90,7 +92,10 @@ internal class GithubUpdateChecker(
             is FetchResult.RateLimited -> return CheckOutcome.RateLimited(result.untilMillis)
             FetchResult.Failed -> return CheckOutcome.Failed
         }
-        return decide(body, installedVersionCode, flavor, supportedAbis, includePrereleases)
+        return decide(
+            body, installedVersionCode, flavor, supportedAbis, includePrereleases,
+            languages, allowSameVersion,
+        )
     }
 
     /**
@@ -104,17 +109,21 @@ internal class GithubUpdateChecker(
         flavor: String,
         supportedAbis: List<String>,
         includePrereleases: Boolean,
+        languages: String = ReleaseAssets.LANGUAGES_EN,
     ): CheckOutcome {
         val body = cache.read() ?: return CheckOutcome.Failed
-        return decide(body, installedVersionCode, flavor, supportedAbis, includePrereleases)
+        return decide(body, installedVersionCode, flavor, supportedAbis, includePrereleases, languages, false)
     }
 
+    @Suppress("LongParameterList")
     private fun decide(
         body: String,
         installedVersionCode: Int,
         flavor: String,
         supportedAbis: List<String>,
         includePrereleases: Boolean,
+        languages: String,
+        allowSameVersion: Boolean,
     ): CheckOutcome {
         // A body that will not decode is not a reason to keep answering from
         // it forever, so it goes.
@@ -128,6 +137,8 @@ internal class GithubUpdateChecker(
             flavor = flavor,
             supportedAbis = supportedAbis,
             includePrereleases = includePrereleases,
+            languages = languages,
+            allowSameVersion = allowSameVersion,
         )
         return if (candidate == null) CheckOutcome.UpToDate else CheckOutcome.Available(candidate)
     }

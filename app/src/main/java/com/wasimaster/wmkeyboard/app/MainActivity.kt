@@ -52,6 +52,7 @@ import com.wasimaster.wmkeyboard.app.netlog.NetworkActivityScreen
 import com.wasimaster.wmkeyboard.app.statistics.StatisticsScreen
 import com.wasimaster.wmkeyboard.app.storage.StorageScreen
 import com.wasimaster.wmkeyboard.app.storage.storageRoute
+import com.wasimaster.wmkeyboard.app.language.appLanguageSplitCompat
 import com.wasimaster.wmkeyboard.app.lock.AppLockTargets
 import com.wasimaster.wmkeyboard.app.lock.BiometricAppLock
 import com.wasimaster.wmkeyboard.app.lock.LocalAppLock
@@ -254,6 +255,18 @@ class MainActivity : FragmentActivity() {
      * keeps the dialog up over it.
      */
     private val missingLink = MutableStateFlow<MissingLink?>(null)
+
+    /**
+     * The app language (#322). On Android 12 and older nothing else applies
+     * it, so the base context itself carries the chosen locale; on Android 13+
+     * [AppLanguage.wrap] hands the context back as it came. On Play, the
+     * SplitCompat call lets the screen read a language split fetched after
+     * the process started.
+     */
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(AppLanguage.wrap(newBase))
+        appLanguageSplitCompat(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

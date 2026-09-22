@@ -161,6 +161,46 @@ class ReleaseAssetsTest {
     }
 
     @Test
+    fun `reads the names carrying a languages build, as releases since 0_5_10 do`() {
+        val parsed = ReleaseAssets.parseAssetName("wmkeyboard-0.5.11-vc23-full-intl-arm64-v8a.apk")
+        assertEquals("0.5.11", parsed?.versionName)
+        assertEquals(23, parsed?.versionCode)
+        assertEquals("full", parsed?.flavor)
+        assertEquals("intl", parsed?.languages)
+        assertEquals("arm64-v8a", parsed?.abi)
+        assertEquals("en", ReleaseAssets.parseAssetName("wmkeyboard-0.5.11-vc23-lite-en-universal.apk")?.languages)
+        // Before the split every build was English only.
+        assertEquals("en", ReleaseAssets.parseAssetName("wmkeyboard-0.5.3-vc14-full-arm64-v8a.apk")?.languages)
+        assertNull(ReleaseAssets.parseAssetName("wmkeyboard-0.5.11-vc23-full-de-arm64-v8a.apk"))
+        assertNull(ReleaseAssets.parseAssetName("wmkeyboard-0.5.11-vc23-full-intl-mapping.txt.gz"))
+    }
+
+    @Test
+    fun `an update stays in its own languages build`() {
+        val release = split(code = 23)
+        for (languages in listOf("en", "intl")) {
+            val picked = ReleaseAssets.pickAsset(release, "full", listOf("arm64-v8a"), languages)
+            assertEquals("wmkeyboard-0.5.11-vc23-full-$languages-arm64-v8a.apk", picked?.name)
+        }
+    }
+
+    @Test
+    fun `the move to every language takes the same version, never an older one`() {
+        fun choose(installed: Int, allowSame: Boolean) = ReleaseAssets.chooseCandidate(
+            releases = listOf(split(code = 23)),
+            installedVersionCode = installed,
+            flavor = "lite",
+            supportedAbis = listOf("arm64-v8a"),
+            includePrereleases = false,
+            languages = "intl",
+            allowSameVersion = allowSame,
+        )
+        assertEquals("wmkeyboard-0.5.11-vc23-lite-intl-arm64-v8a.apk", choose(23, allowSame = true)?.assetName)
+        assertNull(choose(23, allowSame = false))
+        assertNull(choose(24, allowSame = true))
+    }
+
+    @Test
     fun `reads a sha256 digest and refuses any other kind`() {
         val hex = "b".repeat(64)
         assertEquals(hex, ReleaseAssets.sha256Of("sha256:$hex"))
@@ -212,6 +252,19 @@ class ReleaseAssetsTest {
             "wmkeyboard-0.5.3-vc14-lite-armeabi-v7a.apk",
             "wmkeyboard-0.5.3-vc14-lite-x86_64.apk",
             "wmkeyboard-0.5.3-vc14-lite-universal.apk",
+        )
+
+        /** A release as the workflow names it since the languages flavour: four builds per ABI. */
+        fun split(code: Int): GithubRelease = release(
+            tag = "v0.5.11",
+            code = code,
+            names = listOf("full", "lite").flatMap { flavor ->
+                listOf("intl", "en").flatMap { languages ->
+                    listOf("arm64-v8a", "universal").map { abi ->
+                        "wmkeyboard-0.5.11-vc$code-$flavor-$languages-$abi.apk"
+                    }
+                }
+            },
         )
 
         fun release(

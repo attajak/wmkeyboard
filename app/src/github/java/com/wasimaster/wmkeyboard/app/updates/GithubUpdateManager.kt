@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,6 +39,10 @@ internal object GithubUpdateManager {
 
     private val _state = MutableStateFlow<UpdateState>(UpdateState.Idle)
     val state: StateFlow<UpdateState> = _state.asStateFlow()
+
+    /** See [AppUpdater.switchingToAllLanguages]. */
+    private val _switching = MutableStateFlow(false)
+    val switching: StateFlow<Boolean> = _switching.asStateFlow()
 
     private val _releaseNotes = MutableStateFlow<String?>(null)
     val releaseNotes: StateFlow<String?> = _releaseNotes.asStateFlow()
@@ -82,13 +87,24 @@ internal object GithubUpdateManager {
         // screen that started it, which is the whole reason to notify at all.
         scope.launch { _state.collect { UpdateNotifications.render(app, it) } }
         scope.launch {
-            ApkStaging.sweep(app, BuildConfig.VERSION_CODE)
+            ApkStaging.sweep(app, BuildConfig.VERSION_CODE, BuildConfig.FLAVOR_languages)
             ApkInstall.abandonStale(app, keepSessionId = prefs.sessionId)
             val known = GithubUpdateChecker.decodeCandidate(prefs.knownCandidate)
-            if (known == null || known.versionCode <= BuildConfig.VERSION_CODE) {
+            // A move to every language is still on only while this is the
+            // English-only build and the offer really is the other one. Once
+            // the new build runs, the same record reads as finished.
+            val switchingNow = prefs.languageSwitch &&
+                BuildConfig.FLAVOR_languages == ReleaseAssets.LANGUAGES_EN &&
+                known != null && isAllLanguages(known)
+            val stale = known == null ||
+                known.versionCode < BuildConfig.VERSION_CODE ||
+                (known.versionCode == BuildConfig.VERSION_CODE && !switchingNow)
+            if (stale) {
                 prefs.clearCandidate()
                 return@launch
             }
+            if (!switchingNow) prefs.languageSwitch = false
+            _switching.value = switchingNow
             candidate = known
             // Answering from the cache costs no request, which matters when
             // sixty an hour are shared with every device behind this address.
@@ -100,6 +116,19 @@ internal object GithubUpdateManager {
         if (running?.isActive == true) return
         val app = context.applicationContext
         val prefs = UpdatePrefs(app)
+        if (_switching.value) {
+            // The move to every language owns the updater until it lands or is
+            // dropped. A failed one gives way to the ordinary check, so a user
+            // who walked away from it is not left without updates.
+            if (userAsked || _state.value !is UpdateState.Failed) return
+            candidate?.takeIf(::isAllLanguages)?.let { target ->
+                ApkStaging.partFile(app, target).delete()
+                ApkStaging.apkFile(app, target).delete()
+            }
+            candidate = null
+            prefs.clearCandidate()
+            _switching.value = false
+        }
         if (!userAsked &&
             !UpdateCheckGate.shouldAutoCheck(
                 now = System.currentTimeMillis(),
@@ -120,17 +149,16 @@ internal object GithubUpdateManager {
         userAsked: Boolean,
         allowPrompt: Boolean,
     ) {
-        val checker = GithubUpdateChecker(
-            fetcher = GithubReleaseSource(),
-            cache = ReleaseFileCache(ApkStaging.listCache(context)),
-        )
-        val outcome = checker.check(
+        val outcome = newChecker(context).check(
             installedVersionCode = BuildConfig.VERSION_CODE,
-            flavor = BuildConfig.FLAVOR,
+            // The two flavour names on their own. BuildConfig.FLAVOR is the
+            // pair run together ("fullIntl"), which no asset name contains.
+            flavor = BuildConfig.FLAVOR_capabilities,
             supportedAbis = Build.SUPPORTED_ABIS?.toList().orEmpty(),
             includePrereleases = prefs.includePrereleases,
             storedEtag = prefs.etag,
             onEtag = { prefs.etag = it },
+            languages = BuildConfig.FLAVOR_languages,
         )
         prefs.lastCheckAt = System.currentTimeMillis()
         when (outcome) {
@@ -153,6 +181,89 @@ internal object GithubUpdateManager {
             }
             CheckOutcome.Failed ->
                 if (userAsked) _state.value = UpdateState.Failed(false, UpdateFailure.NETWORK)
+        }
+    }
+
+    private fun newChecker(context: Context) = GithubUpdateChecker(
+        fetcher = GithubReleaseSource(),
+        cache = ReleaseFileCache(ApkStaging.listCache(context)),
+    )
+
+    /** Whether [target] is a build that carries every interface language. */
+    private fun isAllLanguages(target: UpdateCandidate): Boolean =
+        ReleaseAssets.parseAssetName(target.assetName)?.languages == ReleaseAssets.LANGUAGES_INTL
+
+    /**
+     * Starts the move from this English-only build to the one with every
+     * language (#322): finds that build of the newest release this install may
+     * have, and offers it. Anything the updater was doing gives way, since the
+     * every-language build of the newest release is also the newest update.
+     * An install already running is the one thing that does not.
+     */
+    fun switchToAllLanguages(context: Context) {
+        if (_state.value == UpdateState.Installing) return
+        if (_switching.value && running?.isActive == true) return
+        val app = context.applicationContext
+        val prefs = UpdatePrefs(app)
+        val previous = running
+        _switching.value = true
+        _state.value = UpdateState.Checking
+        running = scope.launch {
+            // A download cancelled here puts its own offer back on the way
+            // out, so wait for it before saying what this is doing instead.
+            previous?.cancelAndJoin()
+            _state.value = UpdateState.Checking
+            runSwitchCheck(app, prefs)
+        }
+    }
+
+    private fun runSwitchCheck(context: Context, prefs: UpdatePrefs) {
+        val outcome = newChecker(context).check(
+            installedVersionCode = BuildConfig.VERSION_CODE,
+            flavor = BuildConfig.FLAVOR_capabilities,
+            supportedAbis = Build.SUPPORTED_ABIS?.toList().orEmpty(),
+            includePrereleases = prefs.includePrereleases,
+            storedEtag = prefs.etag,
+            onEtag = { prefs.etag = it },
+            languages = ReleaseAssets.LANGUAGES_INTL,
+            // The same release in its other build is the usual answer.
+            allowSameVersion = true,
+        )
+        prefs.lastCheckAt = System.currentTimeMillis()
+        _state.value = when (outcome) {
+            is CheckOutcome.Available -> {
+                candidate = outcome.candidate
+                // Both, and in this order: a record with the flag and no
+                // matching candidate would read as a switch to the wrong file.
+                prefs.knownCandidate = GithubUpdateChecker.encode(outcome.candidate)
+                prefs.languageSwitch = true
+                offerOf(context, prefs, outcome.candidate, userAsked = true, allowPrompt = false)
+            }
+            CheckOutcome.UpToDate -> UpdateState.Failed(false, UpdateFailure.NO_ASSET)
+            is CheckOutcome.RateLimited -> {
+                prefs.rateLimitedUntil = outcome.untilMillis
+                UpdateState.Failed(false, UpdateFailure.RATE_LIMITED)
+            }
+            CheckOutcome.Failed -> UpdateState.Failed(false, UpdateFailure.NETWORK)
+        }
+    }
+
+    /** Drops the move to every language, and anything it downloaded. */
+    fun abandonLanguageSwitch(context: Context) {
+        if (!_switching.value || _state.value == UpdateState.Installing) return
+        val app = context.applicationContext
+        val prefs = UpdatePrefs(app)
+        val previous = running
+        running = scope.launch {
+            previous?.cancelAndJoin()
+            candidate?.takeIf(::isAllLanguages)?.let { target ->
+                ApkStaging.partFile(app, target).delete()
+                ApkStaging.apkFile(app, target).delete()
+            }
+            candidate = null
+            prefs.clearCandidate()
+            _switching.value = false
+            _state.value = UpdateState.Idle
         }
     }
 
@@ -268,7 +379,11 @@ internal object GithubUpdateManager {
                     // Written before the commit: on the quiet path the process
                     // is replaced without warning, so this is the only chance
                     // to record what the next launch should say happened.
-                    prefs.rememberInstall(target.versionCode, System.currentTimeMillis())
+                    prefs.rememberInstall(
+                        target.versionCode,
+                        System.currentTimeMillis(),
+                        languageSwitch = _switching.value,
+                    )
                     val session = ApkInstall.commit(context, apk)
                     if (session == null) {
                         _state.value = UpdateState.Failed(false, UpdateFailure.INSTALL_FAILED)
@@ -323,7 +438,7 @@ internal object GithubUpdateManager {
             // the offer it came from is finished with.
             candidate = null
             prefs.clearCandidate()
-            ApkStaging.sweep(app, BuildConfig.VERSION_CODE)
+            ApkStaging.sweep(app, BuildConfig.VERSION_CODE, BuildConfig.FLAVOR_languages)
         }
         _state.value = outcome.state
     }
@@ -368,11 +483,14 @@ internal object GithubUpdateManager {
     ): UpdateState {
         val now = System.currentTimeMillis()
         val apk: File = ApkStaging.apkFile(context, target)
+        // The move to every language was asked for by a press, so it is never
+        // snoozed and never pops up as an update dialog.
+        val switching = _switching.value
         val state = GithubUpdateChecker.offer(
             candidate = target,
-            snoozed = prefs.isSnoozed(target.versionCode, now),
+            snoozed = !switching && prefs.isSnoozed(target.versionCode, now),
             autoPrompt = prefs.autoPrompt,
-            allowPrompt = allowPrompt && !prompted,
+            allowPrompt = allowPrompt && !prompted && !switching,
             userAsked = userAsked,
             now = now,
             // A file whose length matches is taken at its word here; the

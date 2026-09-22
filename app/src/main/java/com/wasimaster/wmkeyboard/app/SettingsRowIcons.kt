@@ -294,6 +294,14 @@ internal object SettingsRowIcons {
         put(R.string.about_licences_title) { Icons.Outlined.Gavel }
         put(R.string.about_source_title) { Icons.Outlined.Code }
         put(R.string.about_launcher_name_title) { Icons.AutoMirrored.Outlined.ShortText }
+        put(R.string.about_app_language_title) { Icons.Outlined.Translate }
+        put(R.string.about_all_languages_checking_title) { Icons.Outlined.Translate }
+        put(R.string.about_all_languages_download_title) { Icons.Outlined.Download }
+        put(R.string.about_all_languages_downloading_title) { Icons.Outlined.Download }
+        put(R.string.about_all_languages_install_title) { Icons.Outlined.InstallMobile }
+        put(R.string.about_all_languages_installing_title) { Icons.Outlined.InstallMobile }
+        put(R.string.about_all_languages_failed_title) { Icons.Outlined.Translate }
+        put(R.string.about_all_languages_keep_title) { Icons.Outlined.Close }
         put(R.string.about_user_guide_title) { Icons.AutoMirrored.Outlined.MenuBook }
         put(R.string.about_privacy_policy_title) { Icons.Outlined.PrivacyTip }
         put(R.string.about_storage_title) { Icons.Outlined.PieChart }

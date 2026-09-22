@@ -4,6 +4,13 @@
     <!-- First-run onboarding wizard: the buttons that move between pages. -->
     <string name="onboarding_finish_action">Finish</string>
 
+    <!-- Onboarding, app language page (#322). Shown first, and only where
+         English is not the first language of the country. -->
+    <string name="onboarding_app_language_title">Choose your language</string>
+    <string name="onboarding_app_language_subtitle">The language of the app\'s menus and settings. You choose the languages you type in later.</string>
+    <string name="onboarding_app_language_all">Show all languages</string>
+    <string name="onboarding_app_language_later">You can change this at any time in Settings, then About.</string>
+
     <!-- Onboarding, welcome page. -->
     <string name="onboarding_welcome_title">Welcome to WM Keyboard</string>
     <string name="onboarding_welcome_subtitle">Two steps and you are typing.</string>

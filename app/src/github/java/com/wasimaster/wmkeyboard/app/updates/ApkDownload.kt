@@ -46,16 +46,22 @@ internal object ApkStaging {
 
     /**
      * Deletes anything staged that this install can no longer use: a download
-     * of the version already running or older, and any file whose name is not
-     * one of ours. Runs once per process, before anything else looks at the
-     * directory.
+     * of an older version, one of the version already running in the same
+     * languages build, and any file whose name is not one of ours. The other
+     * languages build of the running version is kept: that is the move to
+     * every language, waiting to be installed. Runs once per process, before
+     * anything else looks at the directory.
      */
-    fun sweep(context: Context, installedVersionCode: Int) {
+    fun sweep(context: Context, installedVersionCode: Int, installedLanguages: String) {
         val keep = listCache(context).name
         dir(context).listFiles()?.forEach { file ->
             if (file.name == keep) return@forEach
             val parsed = ReleaseAssets.parseAssetName(file.name.removeSuffix(".part"))
-            if (parsed == null || parsed.versionCode <= installedVersionCode) file.delete()
+            val used = parsed != null && (
+                parsed.versionCode > installedVersionCode ||
+                    (parsed.versionCode == installedVersionCode && parsed.languages != installedLanguages)
+                )
+            if (!used) file.delete()
         }
     }
 }

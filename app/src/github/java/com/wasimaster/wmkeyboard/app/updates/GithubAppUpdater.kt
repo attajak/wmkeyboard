@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.app.SpecialAccess
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
@@ -103,6 +104,10 @@ internal class GithubAppUpdater(
 
     override val state: StateFlow<UpdateState> = GithubUpdateManager.state
     override val releaseNotes: StateFlow<String?> = GithubUpdateManager.releaseNotes
+    override val switchingToAllLanguages: StateFlow<Boolean> = GithubUpdateManager.switching
+
+    override val canSwitchToAllLanguages: Boolean =
+        BuildConfig.FLAVOR_languages == ReleaseAssets.LANGUAGES_EN
 
     override val sourceNameRes: Int = R.string.update_source_github
 
@@ -148,6 +153,12 @@ internal class GithubAppUpdater(
     }
 
     override fun start() = GithubUpdateManager.start(context)
+
+    override fun switchToAllLanguages() {
+        if (canSwitchToAllLanguages) GithubUpdateManager.switchToAllLanguages(context)
+    }
+
+    override fun abandonLanguageSwitch() = GithubUpdateManager.abandonLanguageSwitch(context)
 
     override fun cancel() = GithubUpdateManager.cancel()
 

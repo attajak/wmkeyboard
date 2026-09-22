@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -27,7 +28,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.R
+import com.wasimaster.wmkeyboard.app.updates.AllLanguagesRow
+import com.wasimaster.wmkeyboard.app.updates.KeepEnglishOnlyRow
 import com.wasimaster.wmkeyboard.app.updates.UpdateSettings
+import com.wasimaster.wmkeyboard.app.updates.languageSwitchCanBeDropped
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.OnboardingSettings
 import com.wasimaster.wmkeyboard.core.settings.PersonaDepth
@@ -68,7 +72,7 @@ internal const val DOCS_URL = "https://wmkeyboard.pages.dev"
  * because it is the same binary, and the page is about what the binary can do
  * rather than about where it came from.
  */
-private val PRIVACY_POLICY_URL = if (BuildConfig.FLAVOR == "lite") {
+private val PRIVACY_POLICY_URL = if (BuildConfig.FLAVOR_capabilities == "lite") {
     "$DOCS_URL/privacy/policy-fdroid/"
 } else {
     "$DOCS_URL/privacy/policy/"
@@ -561,6 +565,47 @@ private fun personaSummary(persona: OnboardingSettings): String {
     return stringResource(R.string.about_persona_value, stringResource(depth), stringResource(languages))
 }
 
+/**
+ * The app's own interface language (#322). "System default" is the empty key
+ * and follows the phone; the rest are every translation this build carries,
+ * each named in itself with our name for it underneath.
+ *
+ * Choosing restarts the screen in the new language, so the selection read
+ * below is fresh on every visit and needs no state of its own.
+ */
+@Composable
+private fun AppLanguageSetting() {
+    val context = LocalContext.current
+    val uiLocale = LocalConfiguration.current.locales[0]
+    val selected = remember { AppLanguage.selected(context).orEmpty() }
+    val systemName = nativeLanguageName(AppLanguage.systemLocale().toLanguageTag())
+    val systemLabel = stringResource(R.string.about_app_language_system, systemName)
+    val options = remember(uiLocale, systemLabel) {
+        val collator = java.text.Collator.getInstance(uiLocale)
+        listOf("" to systemLabel) + AppLanguage.available
+            .map { it to nativeLanguageName(it) }
+            .sortedWith(compareBy(collator) { it.second })
+    }
+    ChoiceSetting(
+        R.string.about_app_language_title,
+        subtitle = stringResource(R.string.about_app_language_subtitle),
+        info = stringResource(R.string.about_app_language_info),
+        options = options,
+        selected = selected,
+        default = "",
+        detail = { tag ->
+            if (tag.isEmpty()) {
+                null
+            } else {
+                languageNameIn(tag, uiLocale)
+                    .takeIf { it != nativeLanguageName(tag) }
+                    ?.let { ChoiceDetail(description = it) }
+            }
+        },
+        onChange = { tag -> if (tag != selected) AppLanguage.select(context, tag.ifEmpty { null }) },
+    )
+}
+
 @Composable
 internal fun AboutSettings(
     settings: KeyboardSettings,
@@ -575,7 +620,7 @@ internal fun AboutSettings(
 ) {
     val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
-    val flavor = BuildConfig.FLAVOR.replaceFirstChar { it.uppercase() }
+    val flavor = BuildConfig.FLAVOR_capabilities.replaceFirstChar { it.uppercase() }
     val channel = when {
         BuildConfig.ENABLE_PLAY_STORE -> " · Play Store"
         BuildConfig.ENABLE_FDROID -> " · F-Droid"
@@ -622,6 +667,8 @@ internal fun AboutSettings(
     // settings (see LauncherName), and nothing else changes it while this
     // screen is open, so one read per visit is the truth.
     var shortName by remember { mutableStateOf(LauncherName.isShort(context)) }
+    // Read out here because the group's builder below is not composable.
+    val canDropLanguageSwitch = !AppLanguage.canChoose && languageSwitchCanBeDropped()
 
     SettingsGroup(
         stringResource(R.string.about_app_title),
@@ -686,6 +733,20 @@ internal fun AboutSettings(
                     LauncherName.setShort(context, it)
                 },
             )
+        }
+        // An English-only build has nothing to choose between, so the same
+        // slot says so and offers the build with every language instead.
+        if (AppLanguage.canChoose) {
+            item { AppLanguageSetting() }
+        } else {
+            item {
+                AllLanguagesRow(
+                    settings,
+                    extraLanguages = BuildConfig.TRANSLATED_LANGUAGE_COUNT,
+                    englishName = nativeLanguageName("en"),
+                )
+            }
+            item(visible = canDropLanguageSwitch) { KeepEnglishOnlyRow() }
         }
         item {
             NavRow(
