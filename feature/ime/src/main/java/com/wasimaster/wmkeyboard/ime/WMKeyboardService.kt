@@ -1158,7 +1158,10 @@ open class WMKeyboardService : InputMethodService() {
         }
         composing.append(text)
         if (composingTouch.size == composing.length - text.length) {
-            if (text.length == 1) {
+            // A compound's hyphen is not a letter the touch model could have
+            // meant another key for, and it is usually typed on another layer
+            // whose positions mean nothing against this one's letters.
+            if (text.length == 1 && text[0] != COMPOUND_HYPHEN) {
                 composingTouch.add(pendingTouch)
             } else {
                 repeat(text.length) { composingTouch.add(null) }
@@ -7238,6 +7241,15 @@ open class WMKeyboardService : InputMethodService() {
                         state.settings.numberRow &&
                         state.settings.suggestionStrip.numberRowCorrections &&
                         state.allowsTypingIntelligence
+                    ) ||
+                (
+                    // A hyphen after a letter joins the word: "well-pai"
+                    // completes to "well-paid", not "paid". Not on a board
+                    // whose buffer is an input spelling or a run of anchor
+                    // letters rather than the word in the field.
+                    joinsComposingWord(text[0], composing) &&
+                        !state.composer.isTransliterating &&
+                        !state.layouts.ambiguousKeys
                     )
             )
         val isWordChar = singleWordChar || clusterContinuation
@@ -10320,6 +10332,29 @@ open class WMKeyboardService : InputMethodService() {
         swallowTerminatorAfterCommit = false
         patternFiredAtCommit = false
         if (composing.isEmpty()) return false
+        // A hyphen the word ended on was typed to start a compound that never
+        // came ("well-" then a space). The word in front of it commits the way
+        // the hyphen used to commit it — as typed, uncorrected — and the hyphen
+        // lands after it as the punctuation it turned out to be, so neither a
+        // correction nor the lexicon ever sees a word spelled with it.
+        val danglingHyphen = composing.length > 1 && composing[composing.length - 1] == COMPOUND_HYPHEN &&
+            !_uiState.value.composer.isTransliterating
+        if (danglingHyphen) {
+            ic.beginBatchEdit()
+            // Trimmed in place, the way a backspace trims it, so the head keeps
+            // its taps. The field still shows the hyphen inside the composing
+            // region; the head's commit below replaces the whole region.
+            // A frame already out of step with the buffer stays out of step.
+            val length = composing.length
+            if (composingTouch.size == length) composingTouch.removeAt(length - 1)
+            if (composingKeys.size == length) composingKeys.removeAt(length - 1)
+            if (composingHints.size == length) composingHints.removeAt(length - 1)
+            composing.setLength(length - 1)
+            commitComposing(ic, autocorrect = false)
+            ic.commitText(COMPOUND_HYPHEN.toString(), 1)
+            ic.endBatchEdit()
+            return true
+        }
         // A strip refresh still debounced for this word must not land after
         // the commit and repaint candidates for text that is no longer being
         // composed (the tail of this function publishes the next-word strip).

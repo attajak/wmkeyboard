@@ -95,8 +95,37 @@ internal fun continuesWordAhead(c: Char): Boolean = c.isDigit() || WordContext.i
 internal fun resumableWordAt(before: CharSequence?, after: CharSequence?): String? {
     if (before.isNullOrEmpty() || !isComposingWordChar(before.last())) return null
     if (!after.isNullOrEmpty() && continuesWordAhead(after[0])) return null
-    return before.toString().takeLastWhile { isComposingWordChar(it) }.ifEmpty { null }
+    var start = before.length
+    while (start > 0) {
+        val c = before[start - 1]
+        start = when {
+            isComposingWordChar(c) -> start - 1
+            // A hyphen with a word character on both sides is inside the word,
+            // the same as the buffer holds it ([joinsComposingWord]): the caret
+            // after "well-paid" resumes all of it, and the strip completes and
+            // corrects the compound rather than its last half.
+            c == COMPOUND_HYPHEN && start >= 2 && isComposingWordChar(before[start - 2]) -> start - 1
+            else -> break
+        }
+    }
+    return before.subSequence(start, before.length).toString().ifEmpty { null }
 }
+
+/** The hyphen a compound is spelled with: `well-paid`, `что-то`, `e-mail`. */
+internal const val COMPOUND_HYPHEN = '-'
+
+/**
+ * Whether a typed [c] extends the word being composed, [buffer], rather than
+ * ending it — a hyphen straight after a letter, the way AOSP's keyboard treats
+ * it as a word connector.
+ *
+ * Without it the hyphen committed the word in front of it and the part after
+ * it composed on its own, so "well-pai" completed to "paid" and never to
+ * "well-paid", and "что-" could not go on to "что-то". A second hyphen in a row
+ * is a dash being typed, not a compound, and ends the word as before.
+ */
+internal fun joinsComposingWord(c: Char, buffer: CharSequence): Boolean =
+    c == COMPOUND_HYPHEN && buffer.isNotEmpty() && isComposingWordChar(buffer[buffer.length - 1])
 
 /**
  * The word a caret sitting between [before] and [after] is *inside*, split at
