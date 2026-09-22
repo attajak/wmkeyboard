@@ -83,6 +83,17 @@ Turn this toggle off in <SettingsPath path="Layout & size / Bottom row keys" /> 
 - **Tap** cycles to the next enabled *layout* (not language) in your switch order, wrapping from the last back to the first. Three layouts of the same language still count as three separate stops.
 - **Long-press** opens the same picker the spacebar hold-drag uses (the list, or the carousel if you chose it), regardless of how many languages you have enabled.
 
+### Going back to the last language
+
+<SettingsPath path="Layout & size / Bottom row keys / 🌐 goes back to the last language" />
+
+With many languages enabled, you often type only two or three of them at a time, and a different two or three depending on who you're writing to. Cycling in a fixed order then means tapping past languages you aren't using. Turn on **🌐 goes back to the last language** (off by default) and the key goes by what you used most recently instead, the way Alt+Tab moves between windows:
+
+- **One tap** goes back to the layout you used before this one. Tap again and you're back where you started, so any two layouts toggle, wherever they sit in your switch order.
+- **Quick taps**, each within about 0.8 seconds of the last, go further back: the second tap lands on the layout you used before those two, and so on. From the second tap, a list shows the layouts most recently used first, with the one you're on highlighted. Stop tapping, or type anything, and the list closes.
+
+Only the layout you stop on counts as used, so tapping past a language on the way doesn't push it up the list. Every switch you make counts, whether it came from the spacebar, the picker or the key, so the list is ready when you turn the setting on. Layouts you've never switched to come last, in switch order. With two layouts enabled this works the same as the plain tap. A physical keyboard's language key follows this setting too. The spacebar swipe doesn't: it always steps through your switch order.
+
 <PhoneFrame caption="Layout & size → Bottom row keys: turning off Emoji key instead of 🌐 restores the language-switch key.">
   {/* shot: languages/globe-key-toggle */}
 </PhoneFrame>
@@ -107,7 +118,7 @@ On the **Languages** screen:
 - **Add language** searches the whole catalogue and enables an unadded language's first layout. A language with data to fetch asks about the download first (see [Downloads & mobile data](/languages/downloads/)), and its Cancel backs out of the language too.
 - **Switch order** appears once you have more than one layout enabled. Drag to reorder the raw layout list, so two English layouts (QWERTY and AZERTY, say) keep independent slots in the ring even though they're both "English."
 
-There's no separate "recent languages" or "maximum visible" setting. The ring is exactly as long as your enabled-layout list, so reordering or removing is the only way to shorten it. Ring length changes behavior on its own at three thresholds: two layouts swipe as a toggle rather than a cycle, more than four turn the hold-drag gesture from an inline preview into a full list, and more than five shrink the swipe preview to a sliding five-chip window.
+There's no "maximum visible" setting. (The one recently-used option, [🌐 goes back to the last language](#going-back-to-the-last-language), only changes which layout the key visits next, not which ones are in the ring.) The ring is exactly as long as your enabled-layout list, so reordering or removing is the only way to shorten it. Ring length changes behavior on its own at three thresholds: two layouts swipe as a toggle rather than a cycle, more than four turn the hold-drag gesture from an inline preview into a full list, and more than five shrink the swipe preview to a sliding five-chip window.
 
 <PhoneFrame caption="The Languages screen: Your languages, Add language, and Switch order.">
   {/* shot: languages/languages-screen-order */}
@@ -153,6 +164,7 @@ A separate, unrelated toggle, **Remember language per app** (under Per-app langu
 | Spacebar text | Typing → Gestures | Blank (live name) |
 | Spacebar long press keys | Typing → Gestures | Blank (the hold opens the picker) |
 | Show the 🌐 key | Layout & size → Bottom row keys | On |
+| 🌐 goes back to the last language | Layout & size → Bottom row keys | Off |
 | Emoji key instead of 🌐 | Layout & size → Bottom row keys | On |
 | Comma key opens emoji | Layout & size → Bottom row keys | Off |
 | Your languages / Switch order | Languages | Seeded from your phone's language list, then QWERTY, capped at 4 layouts |
@@ -165,7 +177,7 @@ A separate, unrelated toggle, **Remember language per app** (under Per-app langu
 ## Details & edge cases
 
 - **A fresh install shows an emoji key where you might expect the globe.** It's the most common point of confusion with switching, and the callout above covers it. Switching itself is never disabled by the setting. Only the dedicated key's icon and behavior change.
-- **The globe key's tap cycles layouts, not languages.** If a language has three enabled layouts, tapping the key visits all three as separate stops rather than skipping straight to the next language.
+- **The globe key's tap cycles layouts, not languages.** If a language has three enabled layouts, tapping the key visits all three as separate stops rather than skipping straight to the next language. The same goes for the recently-used order: each layout is its own entry.
 - **With exactly two layouts enabled, swiping toggles instead of wrap-cycling.** Piling on more drag distance in the same direction won't toggle a second time. Reverse direction and you start a fresh toggle. (The count that matters is enabled layouts, so two layouts of the same language toggle too.)
 - **A held-but-unmoved spacebar or globe-key long-press leaves the picker open for a direct tap** rather than dismissing it, list and carousel alike. There's no need to drag precisely if you'd rather tap the language you want.
 - **Reordering affects layouts, not languages.** If you've added a second layout for the same language (AZERTY alongside QWERTY, say), Switch order treats them as independent stops, and moving one doesn't move the other.

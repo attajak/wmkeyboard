@@ -760,6 +760,7 @@ private fun SearchStrings.layoutRows(): List<SettingsSearchEntry> {
         // opens the same group.
         row(R.string.layout_comma_emoji_title, R.string.layout_comma_emoji_subtitle),
         row(R.string.layout_show_globe_title, R.string.layout_show_globe_subtitle),
+        row(R.string.layout_globe_recent_title, R.string.layout_globe_recent_subtitle),
         row(R.string.layout_globe_emoji_title, R.string.layout_globe_emoji_subtitle),
         row(R.string.layout_swap_comma_globe_title, R.string.layout_swap_comma_globe_subtitle),
         entry(R.string.layout_editor_import_title, R.string.layout_editor_import_subtitle, R.string.home_keymaps_title, "keymaps"),

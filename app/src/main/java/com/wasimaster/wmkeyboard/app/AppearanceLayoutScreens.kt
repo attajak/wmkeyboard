@@ -921,6 +921,17 @@ internal fun LayoutSettings(
                 default = SettingsDefaults.showGlobeKey,
             ) { scope.launch { repository.setShowGlobeKey(it) } }
         }
+        // Not greyed out with the key hidden: a physical keyboard's language
+        // key follows it too.
+        item {
+            ToggleSetting(
+                R.string.layout_globe_recent_title,
+                stringResource(R.string.layout_globe_recent_subtitle),
+                settings.globeRecentOrder,
+                info = stringResource(R.string.layout_globe_recent_info),
+                default = SettingsDefaults.globeRecentOrder,
+            ) { scope.launch { repository.setGlobeRecentOrder(it) } }
+        }
         // The two rows below act on the 🌐 key, so with it hidden neither has
         // anything to change. Greyed out rather than removed, so turning the key
         // back on does not make two rows appear under the finger.

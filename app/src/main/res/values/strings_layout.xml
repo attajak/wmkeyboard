@@ -156,6 +156,10 @@
          "Language" is the name of a spacebar swipe action. Translate them the
          same way as those names. -->
     <string name="layout_show_globe_info">When this is off, the 🌐 key is not on the bottom row of any layout. If \"Emoji key instead of 🌐\" is on, the emoji key in that position goes too. The spacebar gets the space. You can still change the language from the spacebar. Set a swipe to \"Language\" under Typing → Gestures. A short swipe does this by default.</string>
+    <!-- 🌐 is the globe key that changes the language. Keep the emoji. -->
+    <string name="layout_globe_recent_title">🌐 goes back to the last language</string>
+    <string name="layout_globe_recent_subtitle">Tap quickly to go further back</string>
+    <string name="layout_globe_recent_info">When this is on, one tap on the 🌐 key goes back to the layout you used before this one, and the next tap comes back again. This is useful with many languages when you only type two or three of them at a time. Tap several times quickly to go further back, most recently used first. A list shows where you are. When this is off, each tap goes to the next layout in your switch order. This also changes the language key on a physical keyboard. This setting is off by default.</string>
     <!-- Subtitle of the two settings that change the 🌐 key, while it is hidden. -->
     <string name="layout_globe_hidden_subtitle">No effect while the 🌐 key is hidden</string>
     <string name="layout_split_large_only_title">Split only on wide screens</string>

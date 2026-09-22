@@ -41,3 +41,26 @@ fun languageCycleStart(ids: List<String>, currentId: String, delta: Int): Int? {
 /** The next candidate, wrapping at both ends. */
 fun languageCycleStep(candidate: Int, delta: Int, count: Int): Int =
     (candidate + delta).mod(count)
+
+/** How many layouts the recently-used list keeps; far more than anyone enables. */
+const val RECENT_LAYOUT_CAP = 16
+
+/**
+ * The 🌐 key's order when it goes by recent use (#311): the layout on screen,
+ * then the other enabled layouts most recently used first, then any enabled
+ * layout never switched to, in switch order. Each enabled layout once, and
+ * nothing that is not enabled — the stored list outlives layouts being turned
+ * off. A current layout outside the cycle (a per-field override) is left out,
+ * so the first entry is then the first stop rather than where the user stands.
+ */
+fun recentLayoutOrder(recent: List<String>, enabled: List<String>, currentId: String): List<String> =
+    (listOf(currentId) + recent + enabled).distinct().filter { it in enabled }
+
+/**
+ * The recently-used list after a switch from [from] to [to]: [to] first, [from]
+ * right behind it. [from] is put there explicitly because it may never have
+ * been recorded — the layout a fresh install opened on, say — and it is exactly
+ * the one the next single press has to go back to.
+ */
+fun rememberLayoutSwitch(recent: List<String>, from: String?, to: String): List<String> =
+    (listOfNotNull(to, from) + recent).distinct().take(RECENT_LAYOUT_CAP)

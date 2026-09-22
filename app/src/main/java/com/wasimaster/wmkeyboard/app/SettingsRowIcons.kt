@@ -572,6 +572,7 @@ internal object SettingsRowIcons {
         put(R.string.layout_reset_sizing_title) { Icons.Outlined.Restore }
         put(R.string.layout_comma_emoji_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.layout_show_globe_title) { Icons.Outlined.Language }
+        put(R.string.layout_globe_recent_title) { Icons.Outlined.History }
         put(R.string.layout_globe_emoji_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.layout_swap_comma_globe_title) { Icons.Outlined.SwapHoriz }
         put(R.string.layout_editor_action_row_title) { Icons.AutoMirrored.Outlined.KeyboardReturn }

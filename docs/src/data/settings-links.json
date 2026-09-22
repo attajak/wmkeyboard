@@ -420,6 +420,7 @@
   {"title":"Key layouts","name":"langemoji_lang_keymaps_title","route":"layout","screens":["Layout & size"],"screen":false},
   {"title":"Comma key opens emoji","name":"layout_comma_emoji_title","route":"layout","screens":["Layout & size"],"screen":false},
   {"title":"Show the 🌐 key","name":"layout_show_globe_title","route":"layout","screens":["Layout & size"],"screen":false},
+  {"title":"🌐 goes back to the last language","name":"layout_globe_recent_title","route":"layout","screens":["Layout & size"],"screen":false},
   {"title":"Emoji key instead of 🌐","name":"layout_globe_emoji_title","route":"layout","screens":["Layout & size"],"screen":false},
   {"title":"Swap the comma and 🌐 keys","name":"layout_swap_comma_globe_title","route":"layout","screens":["Layout & size"],"screen":false},
   {"title":"Import a layout","name":"layout_editor_import_title","route":"keymaps","screens":["Key layouts"],"screen":false},

@@ -331,6 +331,7 @@ import com.wasimaster.wmkeyboard.core.tools.TapModifier
 import com.wasimaster.wmkeyboard.core.tools.ToolbarHintDigits
 import com.wasimaster.wmkeyboard.core.tools.ToolboxLetter
 import com.wasimaster.wmkeyboard.core.tools.languageCycleStart
+import com.wasimaster.wmkeyboard.core.tools.recentLayoutOrder
 import com.wasimaster.wmkeyboard.core.tools.languageCycleStep
 import com.wasimaster.wmkeyboard.core.tools.languageSwitchDelta
 import com.wasimaster.wmkeyboard.core.tools.macBindingFor
@@ -5897,6 +5898,9 @@ open class WMKeyboardService : InputMethodService() {
         // The auto-space cancel is a one-shot for the shift press immediately
         // after the ". " — any other key means the user typed on past it.
         if (key.action != KeyAction.Shift) pendingAutoSpace = false
+        // Any other key ends a run of 🌐 presses: tap 🌐, type a word, tap 🌐
+        // again means "go back", not "one further along" (#311).
+        if (key.action != KeyAction.LanguageSwitch) settleLanguageBurst()
         // Spent by the key that ended the word it was armed for. A commit made
         // from somewhere else — a panel opening, text inserted by a tool — must
         // not leave one behind for whatever key comes next.
@@ -7733,7 +7737,7 @@ open class WMKeyboardService : InputMethodService() {
                 settingsRepository.setEnabledLayoutIds(enabled + AssetLayouts.FANCY_ID)
             }
         }
-        onLayoutSelected(AssetLayouts.FANCY_ID)
+        onLayoutSelected(AssetLayouts.FANCY_ID, recordRecent = false)
         val active = style ?: fancyStyleFor(_uiState.value)
         Toast.makeText(
             this,
@@ -7759,7 +7763,7 @@ open class WMKeyboardService : InputMethodService() {
         if (!state.settings.layoutBehavior.fancyToolKeepsLanguage && remaining.isNotEmpty()) {
             serviceScope.launch { settingsRepository.setEnabledLayoutIds(remaining) }
         }
-        onLayoutSelected(target)
+        onLayoutSelected(target, recordRecent = false)
         if (!quiet) {
             Toast.makeText(this, getString(R.string.ime_service_fancy_off_toast), Toast.LENGTH_SHORT)
                 .show()
@@ -9820,6 +9824,10 @@ open class WMKeyboardService : InputMethodService() {
 
     private fun switchLanguage() {
         val state = _uiState.value
+        if (state.settings.globeRecentOrder) {
+            switchLanguageRecent(hardware = false)
+            return
+        }
         // Cycles layout ids, not modes: three custom layouts all based on
         // English are three distinct stops, where cycling modes would collapse
         // them into one and make them unreachable from the keyboard.
@@ -9907,8 +9915,100 @@ open class WMKeyboardService : InputMethodService() {
             if (engine.englishAsSecondary) loadNgramPack("en") else NgramPack.EMPTY
     }
 
-    /** Spacebar swipe (or 🌐 cycle): switch to an explicit layout. */
-    fun onLayoutSelected(layoutId: String) {
+    /**
+     * A run of 🌐 presses in recently-used order (#311). [order] is snapshotted
+     * on the first press, so the presses walk one fixed list rather than the
+     * list reordering under them, and only where the run ends is recorded —
+     * the layouts passed on the way were not used. Alt+Tab, for languages.
+     */
+    private class LanguageBurst(
+        val origin: String,
+        val order: List<String>,
+        var index: Int,
+        var lastPressAt: Long,
+    )
+
+    private var languageBurst: LanguageBurst? = null
+
+    /**
+     * The 🌐 key (or a physical keyboard's language key) with
+     * [KeyboardSettings.globeRecentOrder] on. One press goes back to the layout
+     * used before this one; each further press within [LANGUAGE_BURST_MS] of the
+     * last goes one further back. The walk is shown in the language list from
+     * the second on-screen press (the first only toggles, and a list over the
+     * keys would catch the word typed straight after it), and from the first on
+     * a physical keyboard, whose user is not about to tap the screen.
+     */
+    private fun switchLanguageRecent(hardware: Boolean): Boolean {
+        val state = _uiState.value
+        val ids = state.settings.enabledLayoutIds.ifEmpty { listOf(BuiltInLayouts.DEFAULT_ID) }
+        if (ids.size < 2) return false
+        val now = SystemClock.uptimeMillis()
+        val running = languageBurst?.takeIf {
+            now - it.lastPressAt <= LANGUAGE_BURST_MS && it.order.getOrNull(it.index) == state.layoutId
+        }
+        val burst = running?.also { it.index = (it.index + 1).mod(it.order.size) }
+            ?: recentLayoutOrder(state.settings.recentLayoutIds, ids, state.layoutId).let { order ->
+                LanguageBurst(
+                    origin = state.layoutId,
+                    order = order,
+                    index = if (order.first() == state.layoutId) 1 else 0,
+                    lastPressAt = now,
+                )
+            }
+        burst.lastPressAt = now
+        languageBurst = burst
+        if (hardware) vibrate()
+        onLayoutSelected(burst.order[burst.index], recordRecent = false)
+        if (hardware || running != null) {
+            _uiState.update {
+                it.copy(
+                    languageSwitch = LanguageSwitchState(
+                        layoutIds = burst.order,
+                        candidate = burst.index,
+                        browsing = false,
+                        shownAt = now,
+                    ),
+                )
+            }
+            ensureInputViewShown()
+        }
+        serviceScope.launch {
+            delay(LANGUAGE_BURST_MS)
+            if (languageBurst === burst && burst.lastPressAt == now) settleLanguageBurst()
+        }
+        return true
+    }
+
+    /**
+     * Ends the run of 🌐 presses: the layout it landed on moves to the front of
+     * the recent list, the one it started from right behind it, and the list
+     * it showed comes down. Nothing is recorded when something else moved the
+     * keyboard meanwhile (a row tapped in the list records itself), or when
+     * the walk came all the way round to where it started.
+     */
+    private fun settleLanguageBurst() {
+        val burst = languageBurst ?: return
+        languageBurst = null
+        val session = _uiState.value.languageSwitch
+        if (session != null && !session.browsing && session.layoutIds === burst.order) {
+            cancelLanguageBrowse()
+        }
+        val landed = burst.order[burst.index]
+        if (landed == _uiState.value.layoutId && landed != burst.origin) {
+            serviceScope.launch { settingsRepository.setActiveLayoutId(landed, recentFrom = burst.origin) }
+        }
+    }
+
+    /**
+     * Spacebar swipe (or 🌐 cycle): switch to an explicit layout.
+     *
+     * [recordRecent] false keeps the switch out of the recently-used list: the
+     * steps of a 🌐 run (recorded once, where it ends) and the Fancy Text tool
+     * stepping in and out of its own layout.
+     */
+    fun onLayoutSelected(layoutId: String, recordRecent: Boolean = true) {
+        val from = _uiState.value.layoutId
         val spec = resolveLayout(_uiState.value.settings.customLayouts, layoutId)
         currentInputConnection?.let { commitComposing(it, autocorrect = false) }
         // An explicit switch beats what the field asked for: the user can
@@ -9980,7 +10080,8 @@ open class WMKeyboardService : InputMethodService() {
         ) {
             startVoice()
         }
-        serviceScope.launch { settingsRepository.setActiveLayoutId(spec.id) }
+        val recentFrom = from.takeIf { recordRecent && it != spec.id }
+        serviceScope.launch { settingsRepository.setActiveLayoutId(spec.id, recentFrom) }
         // Per-app memory: an explicit pick is what this app should reopen on.
         // The global write above still moves, so apps with no stored pick keep
         // following the last-used layout.
@@ -28667,6 +28768,7 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun cycleLanguageWithHud(): Boolean {
         val state = _uiState.value
+        if (state.settings.globeRecentOrder) return switchLanguageRecent(hardware = true)
         val ids = state.settings.enabledLayoutIds.ifEmpty { listOf(BuiltInLayouts.DEFAULT_ID) }
         val candidate = languageCycleStart(ids, state.layoutId, 1) ?: return false
         vibrate()
@@ -29737,6 +29839,13 @@ open class WMKeyboardService : InputMethodService() {
 
         /** How long the dedicated language key's confirmation overlay stays up. */
         private const val LANGUAGE_HUD_FLASH_MS = 1200L
+
+        /**
+         * How soon another 🌐 press has to follow for it to walk one further
+         * back rather than start over (#311). Also how long the walk's list
+         * stays up after the last press.
+         */
+        private const val LANGUAGE_BURST_MS = 800L
 
         /** Cap on the converters' typed amount — mirrors their soft keypad. */
         private const val CONVERTER_VALUE_MAX = 14

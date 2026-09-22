@@ -35,6 +35,7 @@ import com.wasimaster.wmkeyboard.core.icons.IconOverrides
 import com.wasimaster.wmkeyboard.core.icons.IconPackStore
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
 import com.wasimaster.wmkeyboard.core.tools.QrCodeGen
+import com.wasimaster.wmkeyboard.core.tools.rememberLayoutSwitch
 import com.wasimaster.wmkeyboard.core.input.composer.DoublePinyinScheme
 import com.wasimaster.wmkeyboard.core.input.composer.HanVariant
 import com.wasimaster.wmkeyboard.core.input.composer.PinyinFuzzy
@@ -2265,6 +2266,13 @@ data class KeyboardSettings(
     val activeLayoutId: String = BuiltInLayouts.DEFAULT_ID,
     /** Layouts the 🌐 key and the spacebar swipe cycle between, in order. */
     val enabledLayoutIds: List<String> = BuiltInLayouts.defaultEnabledIds,
+    /**
+     * Layouts switched to, most recent first (#311). Recorded on every explicit
+     * switch whether or not [globeRecentOrder] is on, so turning it on has a
+     * history to go by from the first press. May hold layouts no longer
+     * enabled; readers filter.
+     */
+    val recentLayoutIds: List<String> = emptyList(),
     /** User-created layouts, and edits shadowing a built-in by reusing its id. */
     val customLayouts: List<LayoutSpec> = emptyList(),
     /** Languages of [enabledLayoutIds], deduped, in switch order. */
@@ -2536,6 +2544,13 @@ data class KeyboardSettings(
      * switching stays on the spacebar gestures.
      */
     val showGlobeKey: Boolean = true,
+    /**
+     * The 🌐 key (and a physical keyboard's language key) goes by recent use
+     * rather than switch order (#311): one press goes back to the layout used
+     * before this one, and presses in quick succession walk further back
+     * through [recentLayoutIds], like Alt+Tab. Off by default.
+     */
+    val globeRecentOrder: Boolean = false,
     /**
      * List each enabled layout as an Android input-method subtype, so the
      * system language switcher (the "Choose input method" sheet) lists them and
@@ -6407,6 +6422,7 @@ class SettingsRepository(private val context: Context) {
         private val ENABLED_MODES = stringPreferencesKey("enabled_modes")
         private val ACTIVE_LAYOUT_ID = stringPreferencesKey("active_layout_id")
         private val ENABLED_LAYOUT_IDS = stringPreferencesKey("enabled_layout_ids")
+        private val RECENT_LAYOUT_IDS = stringPreferencesKey("recent_layout_ids")
         private val CUSTOM_LAYOUTS = stringPreferencesKey("custom_layouts")
         private val SECONDARY_LANGUAGES = stringPreferencesKey("secondary_languages")
         private val AUTO_PAIR_ROMANIZED_DONE =
@@ -6856,6 +6872,7 @@ class SettingsRepository(private val context: Context) {
         private val VOLUME_CURSOR_MEDIA_AWARE = booleanPreferencesKey("volume_cursor_media_aware")
         private val GLOBE_AS_EMOJI = booleanPreferencesKey("globe_as_emoji")
         private val SHOW_GLOBE_KEY = booleanPreferencesKey("show_globe_key")
+        private val GLOBE_RECENT_ORDER = booleanPreferencesKey("globe_recent_order")
         private val OS_LANGUAGE_SWITCHER = booleanPreferencesKey("os_language_switcher")
         private val SUBTYPE_APP_NAME_FIRST = booleanPreferencesKey("subtype_app_name_first")
         private val PER_APP_LANGUAGE_ENABLED = booleanPreferencesKey("per_app_language_enabled")
@@ -7615,6 +7632,8 @@ class SettingsRepository(private val context: Context) {
         return KeyboardSettings(
             activeLayoutId = layoutSelection.active.id,
             enabledLayoutIds = layoutSelection.enabledLayoutIds,
+            recentLayoutIds = p[RECENT_LAYOUT_IDS]?.split(',')?.filter { it.isNotEmpty() }
+                ?: defaults.recentLayoutIds,
             customLayouts = customLayouts,
             enabledLanguages = layoutSelection.enabledLanguages,
             secondaryLanguages = p[SECONDARY_LANGUAGES]?.let { decodeSecondaryLanguages(it) }
@@ -7958,6 +7977,7 @@ class SettingsRepository(private val context: Context) {
             volumeCursorMediaAware = p[VOLUME_CURSOR_MEDIA_AWARE] ?: defaults.volumeCursorMediaAware,
             globeAsEmoji = p[GLOBE_AS_EMOJI] ?: defaults.globeAsEmoji,
             showGlobeKey = p[SHOW_GLOBE_KEY] ?: defaults.showGlobeKey,
+            globeRecentOrder = p[GLOBE_RECENT_ORDER] ?: defaults.globeRecentOrder,
             osLanguageSwitcher = p[OS_LANGUAGE_SWITCHER] ?: defaults.osLanguageSwitcher,
             subtypeAppNameFirst = p[SUBTYPE_APP_NAME_FIRST] ?: defaults.subtypeAppNameFirst,
             perAppLanguage = PerAppLanguageSettings(
@@ -9906,8 +9926,12 @@ class SettingsRepository(private val context: Context) {
      * Ordinary saves deliberately do not, so the editor can hold a half-built
      * grid; but the moment a layout becomes the thing you type on it must have
      * a delete key, because you cannot fix the typo that lost you the key.
+     *
+     * [recentFrom] records the switch in the recently-used list (#311), in the
+     * same edit so a switch costs one settings emission, not two. Null for
+     * writes that are not the user switching (restores, repairs).
      */
-    suspend fun setActiveLayoutId(id: String) =
+    suspend fun setActiveLayoutId(id: String, recentFrom: String? = null) =
         editPrefs { prefs ->
             val custom = prefs[CUSTOM_LAYOUTS]?.let { LayoutCodec.decodeList(it) }.orEmpty()
             val stored = custom.firstOrNull { it.id == id }
@@ -9921,6 +9945,11 @@ class SettingsRepository(private val context: Context) {
                     LayoutCodec.encodeList(custom.filter { it.id != id } + repaired)
             }
             prefs[ACTIVE_LAYOUT_ID] = repaired.id
+            if (recentFrom != null) {
+                val recent = prefs[RECENT_LAYOUT_IDS]?.split(',')?.filter { it.isNotEmpty() }.orEmpty()
+                prefs[RECENT_LAYOUT_IDS] =
+                    rememberLayoutSwitch(recent, recentFrom, repaired.id).joinToString(",")
+            }
         }
 
     suspend fun setRawClipboardShortcuts(value: Boolean) =
@@ -13039,6 +13068,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setShowGlobeKey(value: Boolean) =
         editPrefs { it[SHOW_GLOBE_KEY] = value }
+
+    suspend fun setGlobeRecentOrder(value: Boolean) =
+        editPrefs { it[GLOBE_RECENT_ORDER] = value }
 
     suspend fun setOsLanguageSwitcher(value: Boolean) =
         editPrefs { it[OS_LANGUAGE_SWITCHER] = value }
