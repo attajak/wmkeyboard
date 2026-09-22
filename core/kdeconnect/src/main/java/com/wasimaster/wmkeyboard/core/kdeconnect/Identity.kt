@@ -99,14 +99,35 @@ object KdeDeviceNames {
      * reject, but a name that sanitises to nothing invalidates the whole
      * identity packet, so callers must fall back to something non-blank.
      */
-    fun sanitize(raw: String): String {
-        val cleaned = raw.replace(FORBIDDEN, "").replace(Regex("\\s+"), " ").trim()
-        if (cleaned.length <= MAX_LENGTH) return cleaned
-        // Never cut a surrogate pair in half.
-        var end = MAX_LENGTH
-        if (Character.isHighSurrogate(cleaned[end - 1])) end--
-        return cleaned.substring(0, end).trim()
+    fun sanitize(raw: String): String = cut(raw.replace(FORBIDDEN, "").replace(Regex("\\s+"), " ").trim(), MAX_LENGTH)
+
+    /**
+     * [base] with the app's name after it, so a phone that also runs the KDE
+     * Connect app shows up on the computer as two names that can be told
+     * apart. The long tag when it fits in [MAX_LENGTH], else the short one,
+     * else [base] cut to make room. Brackets are forbidden, hence the hyphen.
+     */
+    fun branded(base: String, tag: String = TAG, shortTag: String = SHORT_TAG): String {
+        val name = sanitize(base)
+        if (name.isEmpty()) return tag
+        for (t in listOf(tag, shortTag)) {
+            val full = "$name$SEPARATOR$t"
+            if (full.length <= MAX_LENGTH) return full
+        }
+        return cut(name, MAX_LENGTH - SEPARATOR.length - shortTag.length) + SEPARATOR + shortTag
     }
+
+    private fun cut(text: String, max: Int): String {
+        if (text.length <= max) return text
+        // Never cut a surrogate pair in half.
+        var end = max
+        if (Character.isHighSurrogate(text[end - 1])) end--
+        return text.substring(0, end).trim()
+    }
+
+    const val TAG = "WM Keyboard"
+    const val SHORT_TAG = "WMK"
+    private const val SEPARATOR = " - "
 }
 
 /**

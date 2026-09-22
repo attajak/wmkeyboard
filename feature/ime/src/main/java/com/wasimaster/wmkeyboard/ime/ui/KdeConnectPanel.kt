@@ -562,7 +562,10 @@ private fun MediaTab(kb: KbTheme, device: KdeDevice, engine: KdeConnectEngine) {
             }
         }
         Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
-            if (player == null) {
+            if (player == null && !device.canMedia) {
+                // The tab is here for the volume alone: KDE Connect on macOS has no player plugin.
+                CenterNotice(kb, Icons.Outlined.Computer, stringResource(R.string.ime_kde_media_unsupported_title), stringResource(R.string.ime_kde_media_unsupported_body))
+            } else if (player == null) {
                 CenterNotice(kb, Icons.Outlined.Computer, stringResource(R.string.ime_kde_media_empty_title), stringResource(R.string.ime_kde_media_empty_body))
             } else {
                 val art = remember(player.albumArtUrl, mpris.artRevision) {
@@ -677,7 +680,7 @@ private fun SendTab(kb: KbTheme, device: KdeDevice, engine: KdeConnectEngine, on
         }
         Spacer(Modifier.height(4.dp))
         if (device.transfers.isEmpty()) {
-            Text(stringResource(R.string.ime_kde_send_empty), color = kb.secondaryText, fontSize = 12.sp, modifier = Modifier.padding(4.dp))
+            Text(stringResource(if (device.canShare) R.string.ime_kde_send_empty else R.string.ime_kde_send_unsupported), color = kb.secondaryText, fontSize = 12.sp, modifier = Modifier.padding(4.dp))
         } else {
             LazyColumn(Modifier.weight(1f).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 items(device.transfers.asReversed(), key = { it.id }) { transfer -> TransferRow(kb, transfer, engine, onKde) }
@@ -815,7 +818,9 @@ private fun SlidesTab(kb: KbTheme, device: KdeDevice, engine: KdeConnectEngine) 
                     hint = stringResource(R.string.ime_kde_slides_pointer),
                 )
             } else {
-                Spacer(Modifier.weight(1f))
+                Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text(stringResource(R.string.ime_kde_slides_no_pointer), color = kb.secondaryText, fontSize = 12.sp, textAlign = TextAlign.Center)
+                }
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally)) {
                 // F5 starts a slideshow in Impress, PowerPoint, Okular and most browsers' PDF viewers.

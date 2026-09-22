@@ -11,7 +11,7 @@ import KeyCap from '@components/KeyCap.astro';
 
 [KDE Connect](https://kdeconnect.kde.org/) links a phone to a computer over your home network. The **KDE Connect** tool speaks that protocol from inside the keyboard, so you can reach your computer from whatever app you are typing in, and the computer can type back. It works with KDE Connect on Linux, Windows and macOS, with GSConnect on GNOME, and with Valent.
 
-You do **not** need the KDE Connect app on the phone. The keyboard shows up on the computer as a device of its own. If you do have the app, both keep working side by side, as two devices.
+You do **not** need the KDE Connect app on the phone. The keyboard shows up on the computer as a device of its own, named after the phone's model followed by **WM Keyboard**, for example *Pixel 8 - WM Keyboard*. If you do have the app, both keep working side by side, as two devices, and the name tells you which is which.
 
 <PhoneFrame caption="The Input tab: a touchpad for the computer, the three mouse buttons, and the switch that sends your typing there.">
   {/* shot: tools/kde-connect-input */}
@@ -44,6 +44,8 @@ The code is what makes pairing safe. It is calculated from both devices' keys, s
 
 Tap the device name in the panel's header at any time to switch computers, pair another one, or unpair.
 
+Not every computer can do everything. A tab or button for something the computer does not support is left out, or says so when you open it.
+
 ### Input
 
 The big area is a **touchpad** for the computer.
@@ -67,6 +69,8 @@ Press **Type on computer** and the keys come back under a smaller panel. Now eve
 ### Media
 
 Whatever is playing on the computer: artwork, title, a seek bar, previous, play or pause, next. Shuffle and repeat appear for players that have them. If several players are open you can switch between them. The slider at the bottom is the computer's own volume, with a mute button.
+
+KDE Connect on macOS does not let a phone control its players, so on a Mac this tab has only the volume. The official KDE Connect app has the same limit there. A [Run](#run) command such as `osascript -e 'tell application "Music" to playpause'` is a way around it.
 
 ### Send
 
@@ -103,7 +107,7 @@ Big **previous** and **next** buttons for a presentation, **Start** (F5) and **E
 
 **Devices**: paired computers and the ones nearby, with a switch per computer for clipboard, typing, files, phone media and battery. Also the list of addresses added by hand, and this phone's certificate fingerprint.
 
-**Name shown on the computer**: blank uses the phone's model. Up to 32 characters, and the protocol does not allow punctuation.
+**Name shown on the computer**: blank uses the phone's model followed by *WM Keyboard*, shortened to *WMK* when the model name is long. Up to 32 characters, and the protocol does not allow punctuation.
 
 **Stay connected**: default **Keyboard showing**.
 - *Panel open*: only while the KDE Connect panel is open.

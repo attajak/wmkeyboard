@@ -461,7 +461,8 @@ object KdeConnectHub {
     }
 
     private fun KdeConnectSettings.toConfig(context: Context): KdeEngineConfig {
-        val fallback = KdeDeviceNames.sanitize(Build.MODEL.orEmpty()).ifEmpty { "Android" }
+        // Tagged, because the KDE Connect app on the same phone also calls itself by the model.
+        val fallback = KdeDeviceNames.branded(Build.MODEL.orEmpty().ifBlank { "Android" })
         val tablet = context.resources.configuration.smallestScreenWidthDp >= 600
         return KdeEngineConfig(
             deviceName = KdeDeviceNames.sanitize(deviceName).ifEmpty { fallback },

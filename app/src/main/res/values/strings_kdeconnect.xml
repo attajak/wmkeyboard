@@ -21,7 +21,7 @@
     <string name="kdeconnect_devices_subtitle_none">Pair a computer</string>
     <string name="kdeconnect_devices_subtitle">%1$d paired</string>
     <string name="kdeconnect_name_label">Name shown on the computer</string>
-    <string name="kdeconnect_name_hint">Blank uses the phone\'s model. 32 characters, no punctuation</string>
+    <string name="kdeconnect_name_hint">Blank uses the phone\'s model followed by WM Keyboard. 32 characters, no punctuation</string>
 
     <!-- Connection -->
     <string name="kdeconnect_group_connection">Connection</string>

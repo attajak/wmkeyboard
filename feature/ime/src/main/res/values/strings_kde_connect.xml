@@ -74,6 +74,8 @@
     <!-- Media -->
     <string name="ime_kde_media_empty_title">Nothing is playing on the computer</string>
     <string name="ime_kde_media_empty_body">Start a player there and it shows up here</string>
+    <string name="ime_kde_media_unsupported_title">This computer does not share its players</string>
+    <string name="ime_kde_media_unsupported_body">Its KDE Connect does not let a phone control music or video. KDE Connect on a Mac never does</string>
     <string name="ime_kde_volume_mute">Mute</string>
     <string name="ime_kde_volume_unmute">Unmute</string>
     <string name="ime_kde_shuffle">Shuffle</string>
@@ -84,6 +86,7 @@
     <string name="ime_kde_send_field">Text in the field</string>
     <string name="ime_kde_send_files">Files…</string>
     <string name="ime_kde_send_empty">Send the clipboard, what you wrote, or files. What the computer sends lands here and in Downloads</string>
+    <string name="ime_kde_send_unsupported">This computer does not accept files or text from the phone</string>
     <string name="ime_kde_transfer_sending">Sending</string>
     <string name="ime_kde_transfer_receiving">Receiving</string>
     <string name="ime_kde_transfer_waiting">Waiting</string>
@@ -111,6 +114,7 @@
     <string name="ime_kde_slides_start">Start</string>
     <string name="ime_kde_slides_end">End</string>
     <string name="ime_kde_slides_pointer">Hold and drag for the pointer</string>
+    <string name="ime_kde_slides_no_pointer">This computer has no pointer for slides</string>
 
     <!-- Device -->
     <string name="ime_kde_ping">Ping</string>

@@ -109,6 +109,16 @@ class WireFormatTest {
     }
 
     @Test
+    fun `the default name carries the app's name and still fits in 32`() {
+        assertEquals("Pixel 8 Pro - WM Keyboard", KdeDeviceNames.branded("Pixel 8 Pro"))
+        assertEquals("Galaxy Z Fold6 Special - WMK", KdeDeviceNames.branded("Galaxy Z Fold6 Special"))
+        val long = KdeDeviceNames.branded("M".repeat(40))
+        assertEquals("M".repeat(26) + " - WMK", long)
+        assertEquals(long, KdeDeviceNames.sanitize(long))
+        assertEquals("WM Keyboard", KdeDeviceNames.branded("()"))
+    }
+
+    @Test
     fun `an identity that would not survive the peer's own checks is refused`() {
         fun identity(id: String, name: String, version: Int) = kdePacket(KdeTypes.IDENTITY) {
             put("deviceId", id); put("deviceName", name); put("deviceType", "desktop"); put("protocolVersion", version)
