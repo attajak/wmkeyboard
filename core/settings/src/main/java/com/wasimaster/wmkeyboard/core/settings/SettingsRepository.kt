@@ -8371,11 +8371,8 @@ class SettingsRepository(private val context: Context) {
                     mode = p[SYNC_MODE]?.let { id -> SyncMode.entries.firstOrNull { it.id == id } }
                         ?: defaults.autoBackup.sync.mode,
                     intervalHours = p[SYNC_INTERVAL_HOURS] ?: defaults.autoBackup.sync.intervalHours,
-                    // The set, once written. Before that, the single location
-                    // the first version of this screen chose.
-                    locationIds = p[SYNC_LOCATION_IDS]
-                        ?: p[SYNC_LOCATION_ID]?.takeIf { it.isNotEmpty() }?.let { setOf(it) }
-                        ?: defaults.autoBackup.sync.locationIds,
+                    // Filled in below, once the locations are known.
+                    locationIds = defaults.autoBackup.sync.locationIds,
                     sections = p[SYNC_SECTIONS] ?: defaults.autoBackup.sync.sections,
                     includeSecrets = p[SYNC_INCLUDE_SECRETS] ?: defaults.autoBackup.sync.includeSecrets,
                     lastRunAtMs = p[SYNC_LAST_RUN_AT] ?: defaults.autoBackup.sync.lastRunAtMs,
@@ -8385,12 +8382,14 @@ class SettingsRepository(private val context: Context) {
                 // The list, once written, is the truth. Before that, the old
                 // single destination is shown as the one location it was.
                 val stored = p[AUTO_BACKUP_LOCATIONS]
+                val locations = if (stored != null) {
+                    BackupLocation.decodeList(stored)
+                } else {
+                    listOfNotNull(BackupLocation.fromLegacy(auto))
+                }
                 auto.copy(
-                    locations = if (stored != null) {
-                        BackupLocation.decodeList(stored)
-                    } else {
-                        listOfNotNull(BackupLocation.fromLegacy(auto))
-                    },
+                    locations = locations,
+                    sync = auto.sync.copy(locationIds = syncLocationIds(p, locations)),
                 )
             },
             suggestionStrip = SuggestionStripSettings(
@@ -13900,11 +13899,24 @@ class SettingsRepository(private val context: Context) {
     suspend fun setSyncIntervalHours(value: Int) =
         editPrefs { it[SYNC_INTERVAL_HOURS] = value.coerceIn(1, 24 * 30) }
 
+    /**
+     * The ticked sync locations: the stored set, or, before there was one,
+     * what the single choice meant. An empty choice then meant "the first
+     * usable location", and read as "none" it would quietly stop a sync that
+     * had been running.
+     */
+    private fun syncLocationIds(prefs: Preferences, locations: List<BackupLocation>): Set<String> =
+        prefs[SYNC_LOCATION_IDS]
+            ?: prefs[SYNC_LOCATION_ID]?.takeIf { it.isNotEmpty() }?.let { setOf(it) }
+            ?: if (prefs[SYNC_ENABLED] == true) {
+                setOfNotNull(locations.firstOrNull { it.active }?.id)
+            } else {
+                emptySet()
+            }
+
     /** Ticks or unticks one location for sync. */
     suspend fun setSyncLocation(id: String, on: Boolean) = editPrefs { prefs ->
-        val current = prefs[SYNC_LOCATION_IDS]
-            ?: prefs[SYNC_LOCATION_ID]?.takeIf { it.isNotEmpty() }?.let { setOf(it) }
-            ?: emptySet()
+        val current = syncLocationIds(prefs, currentLocations(prefs))
         prefs[SYNC_LOCATION_IDS] = if (on) current + id else current - id
     }
 
