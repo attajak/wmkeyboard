@@ -469,6 +469,8 @@ import com.wasimaster.wmkeyboard.core.otp.NotificationOtp
 import com.wasimaster.wmkeyboard.core.otp.NotificationOtpBus
 import com.wasimaster.wmkeyboard.core.otp.NotificationOtpCapture
 import com.wasimaster.wmkeyboard.core.voice.MicBlockWatcher
+import com.wasimaster.wmkeyboard.core.voice.VoiceBias
+import com.wasimaster.wmkeyboard.core.voice.VoiceBiasRequest
 import com.wasimaster.wmkeyboard.core.voice.VoiceInputEngine
 import com.wasimaster.wmkeyboard.core.voice.VoiceClipGate
 import com.wasimaster.wmkeyboard.core.voice.VoicePunctuation
@@ -2231,6 +2233,15 @@ open class WMKeyboardService : InputMethodService() {
     private var lastVoiceCommit: String? = null
     /** Active offline-Whisper capture, when the Whisper engine is in use. */
     private var whisperRecorder: WhisperRecorder? = null
+
+    /**
+     * The user's own words for the system recognizer to lean towards (#305),
+     * gathered off the main thread by [refreshVoiceBias]. Read when a phrase
+     * starts, which has to hand the recognizer its list at once.
+     */
+    @Volatile private var voiceBiasPersonal: List<String> = emptyList()
+    private var voiceBiasStamp = 0L
+    private var voiceBiasJob: Job? = null
     /** Ends a session Android is feeding silence (Quick Settings mic tile, #193). */
     private val micBlockWatcher = MicBlockWatcher(this)
     /**
@@ -4697,6 +4708,8 @@ open class WMKeyboardService : InputMethodService() {
         // catches music that began while the keyboard was away.
         syncMediaTracking()
         syncKdeConnect()
+        // Ready before the first press of the mic, not after it (#305).
+        refreshVoiceBias()
         refreshHardwareKeyboardState()
         // The battery level is read here rather than subscribed to: this is the
         // moment it can start mattering, and a keyboard that wakes on every
@@ -18451,6 +18464,7 @@ open class WMKeyboardService : InputMethodService() {
             // Plain voice typing wants the words and nothing else, so the
             // recognizer is asked for no punctuation and no capital letters.
             formatting = !plainVoice(),
+            bias = recognizerBias(),
             listener = object : VoiceInputEngine.Listener {
                 override fun onListening() {
                     if (generation != voiceGeneration) return
@@ -18588,6 +18602,80 @@ open class WMKeyboardService : InputMethodService() {
     /** The transcription server is the chosen engine (#286). Every flavour has it. */
     private fun serverVoiceSelected(): Boolean =
         _uiState.value.settings.whisper.engine == "server"
+
+    /**
+     * What the system recognizer is told to listen for (#305): the user's own
+     * list first, then their words from [voiceBiasPersonal]. Asks for another
+     * look at those for next time, if the last one is old.
+     */
+    private fun recognizerBias(): VoiceBiasRequest {
+        val whisper = _uiState.value.settings.whisper
+        refreshVoiceBias()
+        val personal = if (whisper.biasPersonalWords) voiceBiasPersonal else emptyList()
+        return VoiceBiasRequest(
+            words = VoiceBias.select(VoiceBias.parseList(whisper.biasWords), personal, VoiceBias.RECOGNIZER_LIMIT),
+            // The recognizer's own knowledge of the phone (contacts, apps) is
+            // the "on the device" half of the same wish, and never passes
+            // through the keyboard.
+            deviceContext = whisper.biasPersonalWords,
+        )
+    }
+
+    /**
+     * Gathers [voiceBiasPersonal] again off the main thread, at most every
+     * [VOICE_BIAS_TTL_MS], and only while it can be used: the setting on and
+     * an engine that takes a hint picked. The server engine gathers its own
+     * at the moment it sends, since it is already off the main thread then.
+     */
+    private fun refreshVoiceBias() {
+        val whisper = _uiState.value.settings.whisper
+        if (!whisper.biasPersonalWords || whisper.engine != "system") return
+        val now = SystemClock.elapsedRealtime()
+        if (voiceBiasJob?.isActive == true) return
+        if (voiceBiasStamp != 0L && now - voiceBiasStamp < VOICE_BIAS_TTL_MS) return
+        voiceBiasStamp = now
+        voiceBiasJob = serviceScope.launch(Dispatchers.Default) {
+            voiceBiasPersonal = runCatching { personalVoiceWords(VoiceBias.RECOGNIZER_LIMIT) }
+                .getOrDefault(emptyList())
+        }
+    }
+
+    /**
+     * The user's own words for dictation to listen for (#305), most telling
+     * first, at most about [limit] of the learned ones:
+     *
+     * 1. Words added by hand: the user said outright these are words.
+     * 2. Android's personal dictionary, when the keyboard reads it at all.
+     * 3. Words the keyboard learned from typing that no loaded word list has,
+     *    most used first. Those are the names and the jargon a recognizer
+     *    spells its own way; a common word it already knows is no help.
+     *
+     * Never contacts: the recognizer is told it may use the phone's own
+     * context instead, and a server has no business with the address book.
+     * Blocking; call off the main thread.
+     */
+    private fun personalVoiceWords(limit: Int): List<String> {
+        val state = _uiState.value
+        val lexicon = userLexicon.allWords()
+        val byHand = lexicon
+            .filter { userLexicon.isAddedByHand(it.first) }
+            .sortedByDescending { it.second }
+            .map { it.first }
+        val system = if (state.settings.suggestionStrip.useSystemDictionary) {
+            runCatching { SystemUserDictionary.spellings(applicationContext) }.getOrDefault(emptyList())
+        } else {
+            emptyList()
+        }
+        val engine = suggestionEngine
+        val unlisted = lexicon.asSequence()
+            .filter { (word, _) -> word.length > 1 && !userLexicon.isAddedByHand(word) }
+            .sortedByDescending { it.second }
+            .map { it.first }
+            .filter { engine?.inDictionaries(it.lowercase(), includePlatform = false) != true }
+            .take(limit)
+            .toList()
+        return byHand + system + unlisted
+    }
 
     private fun whisperModel(): WhisperModel? {
         val s = _uiState.value.settings
@@ -18805,12 +18893,25 @@ open class WMKeyboardService : InputMethodService() {
                 Result.success("")
             } else {
                 runCatching {
+                    // Gathered here rather than cached: this is already off
+                    // the main thread, and a word learned a minute ago counts.
+                    val personal = if (server.biasPersonalWords) {
+                        runCatching { personalVoiceWords(VoiceBias.PROMPT_WORD_LIMIT) }.getOrDefault(emptyList())
+                    } else {
+                        emptyList()
+                    }
+                    val words = VoiceBias.select(
+                        VoiceBias.parseList(server.biasWords),
+                        personal,
+                        VoiceBias.PROMPT_WORD_LIMIT,
+                    )
                     TranscriptionClient.transcribe(
                         server.serverUrl,
                         server.serverKey,
                         server.serverModel,
                         language,
                         WavEncoder.encode(pcm),
+                        prompt = VoiceBias.serverPrompt(words, server.serverPrompt),
                     )
                 }
             }
@@ -30108,6 +30209,9 @@ open class WMKeyboardService : InputMethodService() {
 
         /** How long before a clip's end the voice surfaces start counting down. */
         private const val VOICE_COUNTDOWN_SECONDS = 5
+
+        /** How long the recognizer's word list is used before it is gathered again. */
+        private const val VOICE_BIAS_TTL_MS = 5 * 60_000L
 
         /** Enough of a WebP to read the header flag that says it is animated. */
         private const val WEBP_HEADER_BYTES = 32

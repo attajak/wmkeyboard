@@ -95,6 +95,7 @@ This is everything the keyboard sends and expects, so you can build or proxy a s
 | `file` | always | the clip, `speech.wav`, `audio/wav`: 16-bit PCM, 16 kHz, mono, up to 30 seconds (under 1 MB) |
 | `model` | when **Model** is filled in | the text of the field |
 | `language` | when **Send the keyboard language** is on and Whisper knows the language | an ISO-639-1 code such as `en`, `bn` or `de` |
+| `prompt` | when there are words to listen for, or **Prompt** is filled in | your words to listen for, then the text of **Prompt**. See [Words and the prompt](#words-and-the-prompt) |
 | `response_format` | always | `json` |
 
 An `Authorization: Bearer <key>` header is added when **API key** is filled in. Clips shorter than 0.3 seconds, and clips with nothing louder than a quiet room in them, are never sent. See [A silent clip types nothing](/tools/whisper/#details--edge-cases).
@@ -105,11 +106,21 @@ An `Authorization: Bearer <key>` header is added when **API key** is filled in. 
 
 Timeouts are 10 seconds to connect and 60 seconds for the reply.
 
+## Words and the prompt
+
+A server gets the [words to listen for](/tools/voice/#words-to-listen-for) inside OpenAI's `prompt` field, followed by whatever you type into **Prompt**. The model reads the prompt as the text that came before your clip, so a name in it is a name the model has just "seen" spelled your way. The **Prompt** field is also where to set a style, such as "Casual chat between friends." or a sentence in the spelling you want.
+
+Whisper models, which is what most servers run, read only the **last 224 tokens** of the prompt, and drop the rest without saying so. That's a limit of the model: Whisper's decoder has room for 448 tokens and gives half of them to the prompt. 224 tokens is roughly 150 short English words, fewer for long names or for scripts that take several tokens a character, so it can't hold a whole dictionary. Newer models such as OpenAI's `gpt-4o-transcribe` read far more.
+
+So the keyboard builds the prompt for that limit. It sends at most 150 words, and puts them in order of importance with the most important at the end, where a Whisper model keeps them: your **Prompt** text last, then your own list, then the words you added by hand and the personal dictionary, and the learned words at the front. When a Whisper server has to cut, it cuts the learned words first. The whole prompt is capped at 4,000 characters.
+
 ## Privacy
 
 With this engine, the recording of each phrase leaves your phone. It goes to the address you typed and nowhere else, and only after you start dictating. Nothing is sent in the background. The API key is stored with your other settings and is left out of backups unless you choose to include API keys. See [Network policy](/privacy/network/).
 
 An `http://` address sends the audio unencrypted. That is fine on your own network. Use `https://` for anything reached over the internet.
+
+With **Listen for my words** on, the prompt carries up to 150 of your own words, as described in [Words and the prompt](#words-and-the-prompt). Turn it off, and leave **More words to listen for** and **Prompt** empty, and no prompt is sent at all.
 
 Voice typing stays off in password fields, whichever engine is chosen.
 

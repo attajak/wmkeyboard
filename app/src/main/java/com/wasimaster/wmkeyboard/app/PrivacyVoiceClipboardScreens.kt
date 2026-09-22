@@ -363,6 +363,29 @@ internal fun VoiceSettings(repository: SettingsRepository, settings: KeyboardSet
             ) { scope.launch { repository.setVoiceSpokenPunctuation(it) } }
         }
     }
+    // Offline Whisper has no way to take a hint, so the group only shows for
+    // the two engines that read it (#305).
+    if (!usingWhisper) {
+        SettingsGroup(stringResource(R.string.voice_bias_group)) {
+            item {
+                ToggleSetting(
+                    R.string.voice_bias_personal_title,
+                    stringResource(R.string.voice_bias_personal_subtitle),
+                    settings.whisper.biasPersonalWords,
+                    info = stringResource(R.string.voice_bias_personal_info),
+                    default = SettingsDefaults.whisper.biasPersonalWords,
+                ) { scope.launch { repository.setVoiceBiasPersonalWords(it) } }
+            }
+            item {
+                TextFieldSetting(
+                    label = stringResource(R.string.voice_bias_words_label),
+                    value = settings.whisper.biasWords,
+                    hint = stringResource(R.string.voice_bias_words_hint),
+                    default = SettingsDefaults.whisper.biasWords,
+                ) { repository.setVoiceBiasWords(it) }
+            }
+        }
+    }
     if (usingWhisper) {
         SettingsGroup(stringResource(R.string.voice_offline_group)) {
             item {
@@ -422,6 +445,14 @@ private fun VoiceServerSettings(repository: SettingsRepository, settings: Keyboa
                 settings.whisper.serverSendLanguage,
                 default = SettingsDefaults.whisper.serverSendLanguage,
             ) { scope.launch { repository.setVoiceServerSendLanguage(it) } }
+        }
+        item {
+            TextFieldSetting(
+                label = stringResource(R.string.voice_server_prompt_label),
+                value = settings.whisper.serverPrompt,
+                hint = stringResource(R.string.voice_server_prompt_hint),
+                default = SettingsDefaults.whisper.serverPrompt,
+            ) { repository.setVoiceServerPrompt(it) }
         }
         item { VoiceServerTestRow(settings) }
     }

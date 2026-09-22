@@ -4097,6 +4097,27 @@ data class WhisperSettings(
      * detect it, which suits people who dictate two languages on one layout.
      */
     val serverSendLanguage: Boolean = true,
+    /**
+     * Words dictation should listen for, handed to the system recognizer and
+     * the transcription server with each phrase (#305): the words the user
+     * added by hand, the ones the keyboard learned that no word list has
+     * (names, jargon), and Android's personal dictionary. Offline Whisper
+     * cannot take a hint and ignores it.
+     */
+    val biasPersonalWords: Boolean = true,
+    /**
+     * More words to listen for, typed in by the user and separated by commas.
+     * Sent ahead of the learned ones, so they are the last to be cut when a
+     * server has a limit.
+     */
+    val biasWords: String = "",
+    /**
+     * Text sent as the transcription server's `prompt`. Whisper models read it
+     * as the text that came before the clip, so it steers spelling and style.
+     * They keep only its last 224 tokens; newer models read far more. The
+     * words above are sent in front of it.
+     */
+    val serverPrompt: String = "",
 )
 
 /**
@@ -7208,6 +7229,9 @@ class SettingsRepository(private val context: Context) {
         private val VOICE_SERVER_KEY = stringPreferencesKey("voice_server_key")
         private val VOICE_SERVER_MODEL = stringPreferencesKey("voice_server_model")
         private val VOICE_SERVER_SEND_LANGUAGE = booleanPreferencesKey("voice_server_send_language")
+        private val VOICE_BIAS_PERSONAL_WORDS = booleanPreferencesKey("voice_bias_personal_words")
+        private val VOICE_BIAS_WORDS = stringPreferencesKey("voice_bias_words")
+        private val VOICE_SERVER_PROMPT = stringPreferencesKey("voice_server_prompt")
         private val CAMERA_PREFER_FRONT = booleanPreferencesKey("camera_prefer_front")
         private val CAMERA_TIMER_SECONDS = intPreferencesKey("camera_timer_seconds")
         private val CAMERA_CAPTURE_MAX_PX = intPreferencesKey("camera_capture_max_px")
@@ -8603,6 +8627,9 @@ class SettingsRepository(private val context: Context) {
                 serverModel = p[VOICE_SERVER_MODEL] ?: defaults.whisper.serverModel,
                 serverSendLanguage = p[VOICE_SERVER_SEND_LANGUAGE]
                     ?: defaults.whisper.serverSendLanguage,
+                biasPersonalWords = p[VOICE_BIAS_PERSONAL_WORDS] ?: defaults.whisper.biasPersonalWords,
+                biasWords = p[VOICE_BIAS_WORDS] ?: defaults.whisper.biasWords,
+                serverPrompt = p[VOICE_SERVER_PROMPT] ?: defaults.whisper.serverPrompt,
             ),
             camera = CameraSettings(
                 preferFront = p[CAMERA_PREFER_FRONT] ?: defaults.camera.preferFront,
@@ -9564,6 +9591,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setVoiceServerSendLanguage(value: Boolean) =
         editPrefs { it[VOICE_SERVER_SEND_LANGUAGE] = value }
+
+    suspend fun setVoiceBiasPersonalWords(value: Boolean) =
+        editPrefs { it[VOICE_BIAS_PERSONAL_WORDS] = value }
+
+    suspend fun setVoiceBiasWords(value: String) =
+        editPrefs { it[VOICE_BIAS_WORDS] = value }
+
+    suspend fun setVoiceServerPrompt(value: String) =
+        editPrefs { it[VOICE_SERVER_PROMPT] = value }
 
     suspend fun setCameraPreferFront(value: Boolean) =
         editPrefs { it[CAMERA_PREFER_FRONT] = value }

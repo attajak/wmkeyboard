@@ -79,6 +79,7 @@ class VoiceInputEngine(private val context: Context) {
         listener: Listener,
         allowOnDevice: Boolean = true,
         formatting: Boolean = true,
+        bias: VoiceBiasRequest = VoiceBiasRequest.NONE,
     ) {
         cancel()
         val onDevice = allowOnDevice &&
@@ -110,7 +111,7 @@ class VoiceInputEngine(private val context: Context) {
                 val kind = errorKind(error)
                 if (onDevice && kind == ErrorKind.LANGUAGE) {
                     onDeviceFailedTags += languageTag
-                    start(languageTag, listener, allowOnDevice = false, formatting = formatting)
+                    start(languageTag, listener, allowOnDevice = false, formatting = formatting, bias = bias)
                     return
                 }
                 listener.onError(kind)
@@ -134,10 +135,14 @@ class VoiceInputEngine(private val context: Context) {
 
             override fun onEvent(eventType: Int, params: Bundle?) {}
         })
-        session.startListening(recognizerIntent(languageTag, formatting))
+        session.startListening(recognizerIntent(languageTag, formatting, bias))
     }
 
-    private fun recognizerIntent(languageTag: String, formatting: Boolean = true): Intent =
+    private fun recognizerIntent(
+        languageTag: String,
+        formatting: Boolean = true,
+        bias: VoiceBiasRequest = VoiceBiasRequest.NONE,
+    ): Intent =
         Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -152,6 +157,17 @@ class VoiceInputEngine(private val context: Context) {
                     RecognizerIntent.EXTRA_ENABLE_FORMATTING,
                     RecognizerIntent.FORMATTING_OPTIMIZE_QUALITY,
                 )
+            }
+            // Words to lean towards (#305). Android 13 added both extras, and
+            // "depending on the recognizer implementation" either may be
+            // ignored; one that ignores them loses nothing.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (bias.words.isNotEmpty()) {
+                    putStringArrayListExtra(RecognizerIntent.EXTRA_BIASING_STRINGS, ArrayList(bias.words))
+                }
+                if (bias.deviceContext) {
+                    putExtra(RecognizerIntent.EXTRA_ENABLE_BIASING_DEVICE_CONTEXT, true)
+                }
             }
         }
 
@@ -306,5 +322,16 @@ class VoiceInputEngine(private val context: Context) {
         // constants inlined so the mapping compiles against older SDKs too.
         12, 13 -> ErrorKind.LANGUAGE
         else -> ErrorKind.OTHER
+    }
+}
+
+/**
+ * What the system recognizer is told to listen for (#305): [words], and
+ * whether it may also lean on what it knows about the device itself (its own
+ * idea of contacts and apps, which never passes through the keyboard).
+ */
+data class VoiceBiasRequest(val words: List<String>, val deviceContext: Boolean) {
+    companion object {
+        val NONE = VoiceBiasRequest(emptyList(), deviceContext = false)
     }
 }

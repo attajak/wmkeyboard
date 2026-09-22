@@ -42,6 +42,10 @@ object TranscriptionClient {
      * Uploads [wav] and returns the transcript, trimmed. [model] and
      * [language] (an ISO-639-1 code) are left out of the request when blank,
      * so the server picks its default model and detects the language itself.
+     *
+     * [prompt] is OpenAI's `prompt` field (#305): text the model treats as
+     * what came before the clip, which is how names and jargon get spelled
+     * right. Whisper models keep only its last 224 tokens. Left out when null.
      */
     fun transcribe(
         url: String,
@@ -49,10 +53,12 @@ object TranscriptionClient {
         model: String,
         language: String?,
         wav: ByteArray,
+        prompt: String? = null,
     ): String {
         val fields = buildList {
             if (model.isNotBlank()) add("model" to model.trim())
             if (!language.isNullOrBlank()) add("language" to language)
+            if (!prompt.isNullOrBlank()) add("prompt" to prompt)
             add("response_format" to "json")
         }
         val headers = if (apiKey.isNotBlank()) {

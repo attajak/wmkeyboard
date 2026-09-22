@@ -59,6 +59,16 @@
     <string name="voice_server_key_hint">Optional. Leave it empty for a server that needs no key</string>
     <string name="voice_server_language_title">Send the keyboard language</string>
     <string name="voice_server_language_subtitle">Tell the server which language you are typing in. Turn this off to let the server detect it</string>
+    <!-- The server's "prompt" field (#305). -->
+    <string name="voice_server_prompt_label">Prompt</string>
+    <string name="voice_server_prompt_hint">Optional. Text the model reads as what came before, to set spelling and style. Whisper models read only about the last 150 words of it</string>
+    <!-- Words the system recognizer and the transcription server listen for (#305). -->
+    <string name="voice_bias_group">Words to listen for</string>
+    <string name="voice_bias_personal_title">Listen for my words</string>
+    <string name="voice_bias_personal_subtitle">Names and other words from your dictionary, so they are spelled your way</string>
+    <string name="voice_bias_personal_info">Each time you dictate, the keyboard sends a list of your own words with it: the words you added by hand, the words in Android\'s personal dictionary, and the words the keyboard learned from your typing that are not in any word list, such as names. The system engine also gets permission to use what it knows about your phone, such as your contacts. The list goes to the engine that listens to your voice, and nowhere else. The system engine uses it on Android 13 and later, if the engine supports it. A transcription server gets it as part of its prompt. Offline Whisper cannot use a list, so this setting does not show for it.</string>
+    <string name="voice_bias_words_label">More words to listen for</string>
+    <string name="voice_bias_words_hint">Optional. Separate them with commas. These go first, before the words from your dictionary</string>
     <string name="voice_server_test_title">Test the server</string>
     <string name="voice_server_test_subtitle">Send one second of silence and check that the server answers</string>
     <string name="voice_server_test_action">Test</string>

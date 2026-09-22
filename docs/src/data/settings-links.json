@@ -498,6 +498,7 @@
   {"title":"Spoken punctuation","name":"voice_punctuation_title","route":"voice","screens":["Voice typing"],"screen":false},
   {"title":"Translate to English","name":"voice_translate_title","route":"voice","screens":["Voice typing"],"screen":false},
   {"title":"Send the keyboard language","name":"voice_server_language_title","route":"voice","screens":["Voice typing"],"screen":false},
+  {"title":"Listen for my words","name":"voice_bias_personal_title","route":"voice","screens":["Voice typing"],"screen":false},
   {"title":"Test the server","name":"voice_server_test_title","route":"voice","screens":["Voice typing"],"screen":false},
   {"title":"Clipboard history","name":"clipboard_history_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Suggest the last copy","name":"clipboard_suggest_recent_title","route":"clipboard","screens":["Clipboard"],"screen":false},

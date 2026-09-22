@@ -1094,6 +1094,7 @@ internal object SettingsRowIcons {
         put(R.string.voice_engine_title) { Icons.Outlined.GraphicEq }
         put(R.string.voice_translate_title) { Icons.Outlined.Translate }
         put(R.string.voice_server_language_title) { Icons.Outlined.Language }
+        put(R.string.voice_bias_personal_title) { Icons.Outlined.Spellcheck }
         put(R.string.voice_server_test_title) { Icons.Outlined.Dns }
         put(R.string.voice_hold_title) { Icons.Outlined.TouchApp }
         put(R.string.models_whisper_fallback_title) { Icons.Outlined.Memory }

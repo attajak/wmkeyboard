@@ -59,7 +59,7 @@ it.
 | QR scan link previews <Flavor edition="full" /> | whatever URL a scanned code contains | a GET request to that page | off by default; when on, right after a QR code decodes to a URL |
 | Voice typing (system recognizer) | Android's platform speech service (not WM Keyboard's own code) | your speech audio | whenever the on-device model for that language isn't installed: always, below Android 12 |
 | Voice typing (Whisper) <Flavor edition="full" /> | none | nothing leaves the phone during dictation | never: fully offline once the model is downloaded |
-| Voice typing ([transcription server](/tools/transcription-server/)) | a server address you enter, on your own network or a service such as Groq or OpenAI | the recording of each phrase (16 kHz WAV, up to 30 seconds), the model name you set, and the layout's language unless you turn that off | once per phrase, after you stop speaking, only while you dictate with this engine |
+| Voice typing ([transcription server](/tools/transcription-server/)) | a server address you enter, on your own network or a service such as Groq or OpenAI | the recording of each phrase (16 kHz WAV, up to 30 seconds), the model name you set, the layout's language unless you turn that off, and up to 150 of your own words plus your prompt text when [words to listen for](/tools/voice/#words-to-listen-for) are on | once per phrase, after you stop speaking, only while you dictate with this engine |
 
 The AI panel's **Report** button is the one row that quotes your own text
 without any network of its own. It opens a draft in your mail app holding

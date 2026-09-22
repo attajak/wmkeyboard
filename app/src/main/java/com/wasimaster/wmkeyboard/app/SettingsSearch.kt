@@ -932,6 +932,7 @@ private fun SearchStrings.voiceRows(): List<SettingsSearchEntry> {
         row(R.string.voice_punctuation_title, R.string.voice_punctuation_subtitle),
         row(R.string.voice_translate_title, R.string.voice_translate_subtitle),
         row(R.string.voice_server_language_title, R.string.voice_server_language_subtitle),
+        row(R.string.voice_bias_personal_title, R.string.voice_bias_personal_subtitle),
         row(R.string.voice_server_test_title, R.string.voice_server_test_subtitle),
     )
 }
