@@ -29,7 +29,7 @@ Which action a spacebar swipe runs depends on *when* the drag starts relative to
 | Tap, no movement | Spacebar | Types a space | None |
 | Swipe starting before the press-and-hold delay | Spacebar | Runs the quick-swipe slot's action | Quick swipe on the spacebar (default Language) |
 | Hold past the press-and-hold delay, then swipe | Spacebar | Runs the hold-swipe slot's action | Press and hold, then swipe (default Cursor) |
-| Slot = Language, swipe sideways | Spacebar | Steps through enabled layouts (44&nbsp;dp per step, 110&nbsp;dp to wrap past either end) | Either slot set to Language |
+| Slot = Language, swipe sideways | Spacebar | Steps through enabled layouts (a flick moves one; a continued swipe steps every 44&nbsp;dp after a 200&nbsp;ms pause, 110&nbsp;dp to wrap past either end) | Either slot set to Language |
 | Slot = Cursor, swipe sideways | Spacebar | Moves the text cursor one character per 16&nbsp;dp of drag | Either slot set to Cursor |
 | Same, dragging vertically | Spacebar | Also steps the cursor a line at a time | 2-D cursor touchpad (Off) |
 | Slot = Numpad, cross the initial slop | Spacebar | Opens the numeric keypad (one-shot, so the rest of the drag does nothing) | Either slot set to Numpad |

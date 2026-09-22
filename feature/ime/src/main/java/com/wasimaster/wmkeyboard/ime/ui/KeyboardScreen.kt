@@ -687,6 +687,32 @@ internal val LocalCursorMoveVertical = staticCompositionLocalOf<(Int) -> Unit> {
 internal val LocalHideKeyboard = staticCompositionLocalOf<() -> Unit> { {} }
 
 /**
+ * The language a spacebar swipe just switched to, kept on screen a moment
+ * after the finger lifts. A flick is over before the swipe's own preview
+ * popup has drawn a frame, so without this a fast switch showed nothing at
+ * all. Held above the key grid because the switch swaps the layout, and the
+ * spacebar that ran the swipe may not be the one composed afterwards.
+ */
+internal class LanguageSwitchEcho {
+    /** The switched-to layout and a serial, so a repeat switch restarts the timer. */
+    var shown by mutableStateOf<Pair<String, Int>?>(null)
+    private var serial = 0
+
+    fun show(layoutId: String) {
+        shown = layoutId to ++serial
+    }
+
+    fun clear() {
+        shown = null
+    }
+}
+
+internal val LocalLanguageSwitchEcho = staticCompositionLocalOf { LanguageSwitchEcho() }
+
+/** How long [LanguageSwitchEcho] keeps a switched-to language up after the lift. */
+private const val LanguageSwitchEchoMs = 700L
+
+/**
  * Whether TalkBack (or another explore-by-touch service) is currently
  * driving the screen. Resolved once at the root rather than per key —
  * every key would otherwise register its own listener.
@@ -1308,8 +1334,14 @@ fun KeyboardScreen(
     // The bubbles, owned here so the frame can draw them over everything it
     // holds while the keys deep inside the body publish to them.
     val keyPreview = remember { KeyPreviewState() }
+    val languageSwitchEcho = remember { LanguageSwitchEcho() }
+    LaunchedEffect(languageSwitchEcho.shown) {
+        val shown = languageSwitchEcho.shown ?: return@LaunchedEffect
+        delay(LanguageSwitchEchoMs)
+        if (languageSwitchEcho.shown == shown) languageSwitchEcho.clear()
+    }
 
-    val body: @Composable ColumnScope.(KeyboardUiState) -> Unit = { bodyState ->
+    val body:@Composable ColumnScope.(KeyboardUiState) -> Unit = { bodyState ->
         CompositionLocalProvider(
             LocalIconSet provides iconSet,
             LocalKeyPreviewState provides keyPreview,
@@ -1341,6 +1373,7 @@ fun KeyboardScreen(
             LocalDeleteSwipe provides deleteSwipe,
             LocalCursorMoveVertical provides onCursorMoveVertical,
             LocalHideKeyboard provides onHideKeyboard,
+            LocalLanguageSwitchEcho provides languageSwitchEcho,
             LocalTouchExploration provides rememberTouchExploration(),
             LocalPassthroughService provides
                 KeyboardPassthrough.serviceConnected.collectAsState().value,
@@ -16500,6 +16533,11 @@ internal fun KeyButton(
     // Language the spacebar swipe currently has selected, shown in a tooltip
     // popup above the spacebar while the finger is still down.
     var languagePreview by remember { mutableStateOf<String?>(null) }
+    // The language a swipe just committed, lingering after the lift; only a
+    // spacebar draws it, and the live swipe preview takes over while one runs.
+    val languageSwitchEcho = LocalLanguageSwitchEcho.current
+    val shownLanguage = languagePreview
+        ?: languageSwitchEcho.shown?.first?.takeIf { key.action == KeyAction.Space }
     val scope = rememberCoroutineScope()
     // The role-carrying locals, because this is the key grid: a sound pack may
     // have recorded the spacebar separately from the letters.
@@ -16782,7 +16820,11 @@ internal fun KeyButton(
                     openLanguagePicker = { pickerDragIndex = null; showLanguagePicker = true },
                     closeLanguagePicker = { showLanguagePicker = false; pickerDragIndex = null },
                     setPickerDragIndex = { pickerDragIndex = it },
-                    setLanguagePreview = { languagePreview = it },
+                    setLanguagePreview = {
+                        if (it != null) languageSwitchEcho.clear()
+                        languagePreview = it
+                    },
+                    echoLanguageSwitch = languageSwitchEcho::show,
                     canDelete = canDelete,
                     canForwardDelete = canForwardDelete,
                     deleteSwipe = deleteSwipe,
@@ -16919,7 +16961,7 @@ internal fun KeyButton(
         // enabled modes in a row, the live selection highlighted. Capped at a
         // five-chip window sliding with the selection — drawing every enabled
         // layout ran off the screen the moment a handful were enabled.
-        languagePreview?.let { previewMode ->
+        shownLanguage?.let { previewMode ->
             val enabledLayoutIds = settings.enabledLayoutIds.ifEmpty { listOf(BuiltInLayouts.DEFAULT_ID) }
             val previewWindow = if (enabledLayoutIds.size <= 5) {
                 enabledLayoutIds
@@ -18707,6 +18749,50 @@ private const val PickerRowHeightDp = 40
  */
 private const val CarouselMaxWidthDp = 320
 
+/**
+ * How long a spacebar language swipe waits after one step before it takes
+ * another the same way. Longer than a whole flick lasts, so a flick switches
+ * exactly one language however fast it travels; a drag that keeps moving walks
+ * on one language per step, and a reversal answers at once.
+ */
+private const val LanguageStepDwellMs = 200L
+
+/** Where a spacebar language swipe has stepped to, and which way (0 = no step). */
+internal data class RingStep(val index: Int, val remainder: Float, val dir: Int)
+
+/**
+ * One step of the spacebar language swipe around the enabled ring. A step
+ * costs [stepPx] of travel, and wrapping past either end costs [wrapPx], so the
+ * ends act as a detent. A step the same way as [lastDir] before the last one
+ * has [settled] is held back, and the travel it banks meanwhile is capped at
+ * one step: a fast flick cannot store up a second switch to fire the moment the
+ * dwell ends, and the finger has to keep moving to take it.
+ */
+internal fun stepLanguageRing(
+    index: Int,
+    travel: Float,
+    stepPx: Float,
+    wrapPx: Float,
+    last: Int,
+    lastDir: Int,
+    settled: Boolean,
+): RingStep {
+    if (last <= 0 || travel == 0f) return RingStep(index, travel, 0)
+    val dir = if (travel > 0f) 1 else -1
+    val atEnd = if (dir > 0) index == last else index == 0
+    val need = if (atEnd) wrapPx else stepPx
+    if (dir == lastDir && !settled) {
+        return RingStep(index, dir * minOf(abs(travel), need), 0)
+    }
+    if (abs(travel) <= need) return RingStep(index, travel, 0)
+    val next = when {
+        !atEnd -> index + dir
+        dir > 0 -> 0
+        else -> last
+    }
+    return RingStep(next, travel - dir * need, dir)
+}
+
 /** Where a picker hold-drag has walked to, and the travel it has not spent yet. */
 internal data class PickerWalk(val index: Int, val remainder: Float)
 
@@ -18871,6 +18957,8 @@ private fun Modifier.pointerInputKey(
      */
     pickerIsCarousel: Boolean = false,
     setLanguagePreview: (String?) -> Unit,
+    /** Keeps a just-switched-to language on screen briefly after the lift. */
+    echoLanguageSwitch: (String) -> Unit = {},
     canDelete: () -> Boolean,
     canForwardDelete: () -> Boolean,
     deleteSwipe: DeleteSwipeCallbacks,
@@ -18935,6 +19023,11 @@ private fun Modifier.pointerInputKey(
                 val twoModes = enabledLayoutIds.size == 2
                 var runDir = 0
                 var runSwitched = false
+                // When the swipe last stepped the language ring. A step in the
+                // same direction waits LanguageStepDwellMs after it, so a flick
+                // moves one language however far it travels and only a swipe
+                // that keeps going walks on (see [stepLanguageRing]).
+                var lastStepAt = 0L
                 // With language switching on the short-swipe slot, holding
                 // the spacebar just past a normal tap shows the language
                 // picker without needing any initial swipe. The action is
@@ -19129,6 +19222,7 @@ private fun Modifier.pointerInputKey(
                                 }
                                 runDir = dir
                                 runSwitched = true
+                                lastStepAt = change.uptimeMillis
                                 setLanguagePreview(enabledLayoutIds[langIndex])
                             }
                             change.consume()
@@ -19193,32 +19287,24 @@ private fun Modifier.pointerInputKey(
                                 change.consume()
                                 continue
                             }
-                            // The list ends put up resistance instead of
-                            // wrapping immediately: a wrap costs langWrapPx of
-                            // travel (vs langStepPx per normal step), so the
-                            // selection parks on the boundary language first
-                            // and only cycles around on a deliberate pull.
-                            val last = enabledLayoutIds.size - 1
-                            var stepped = false
-                            while (true) {
-                                if (accumulated > langStepPx && langIndex < last) {
-                                    langIndex++
-                                    accumulated -= langStepPx
-                                } else if (accumulated > langWrapPx && langIndex == last && last > 0) {
-                                    langIndex = 0
-                                    accumulated -= langWrapPx
-                                } else if (accumulated < -langStepPx && langIndex > 0) {
-                                    langIndex--
-                                    accumulated += langStepPx
-                                } else if (accumulated < -langWrapPx && langIndex == 0 && last > 0) {
-                                    langIndex = last
-                                    accumulated += langWrapPx
-                                } else {
-                                    break
-                                }
-                                stepped = true
-                            }
-                            if (stepped) {
+                            // One step per event at most, and a same-way
+                            // step only once the last one has settled: a flick
+                            // lands on the next language, never two over, and
+                            // the list ends wrap only on a deliberate pull.
+                            val step = stepLanguageRing(
+                                index = langIndex,
+                                travel = accumulated,
+                                stepPx = langStepPx,
+                                wrapPx = langWrapPx,
+                                last = enabledLayoutIds.size - 1,
+                                lastDir = runDir,
+                                settled = change.uptimeMillis - lastStepAt >= LanguageStepDwellMs,
+                            )
+                            accumulated = step.remainder
+                            if (step.dir != 0) {
+                                langIndex = step.index
+                                runDir = step.dir
+                                lastStepAt = change.uptimeMillis
                                 setLanguagePreview(enabledLayoutIds[langIndex])
                                 onKeyPress()
                             }
@@ -19265,7 +19351,10 @@ private fun Modifier.pointerInputKey(
                     action == null -> onKey(key)
                     action == SpaceSwipeAction.LANGUAGE -> {
                         val selected = enabledLayoutIds[langIndex]
-                        if (selected != currentLayoutId) onLayoutSelect(selected)
+                        if (selected != currentLayoutId) {
+                            echoLanguageSwitch(selected)
+                            onLayoutSelect(selected)
+                        }
                     }
                     else -> {}
                 }

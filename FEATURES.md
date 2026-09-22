@@ -405,6 +405,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Wrap detent — Wrapping past either end costs 2.5x a normal step, so the list parks on the boundary first
     - Two-language toggle rule — With exactly two layouts one run of travel toggles once; only reversing direction switches back
     - Flick counts immediately — The movement that crossed the slop already advances one language
+    - A flick moves one language — Further same-way steps wait 200 ms after the last, with banked travel capped at one step, so a fast swipe cannot skip the middle of a 3+ ring; a reversal is ungated
+    - Switch echo — The preview lingers 700 ms after a swipe commits, held above the key grid so it survives the layout swap; a flick used to end before the popup drew
   - Hold-to-open language picker `RARE` — 250 ms hold (or the long-press delay, whichever is shorter) opens a chooser without any swipe
     - Only when the hold is free — Skipped when the long-swipe slot names cursor or numpad, since that slot is the setting for what a hold does
     - Two shapes — Inline preview for up to 4 layouts, scrollable tappable list beyond that
