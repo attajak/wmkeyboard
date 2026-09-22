@@ -1797,6 +1797,9 @@ sealed interface StripOfferAction {
 
     /** Go back up one level of [SnippetOfferSet.path]. */
     data object Back : StripOfferAction
+
+    /** The chip was held: the setting it asks about, in the app (#312). */
+    data object Explain : StripOfferAction
 }
 
 /**

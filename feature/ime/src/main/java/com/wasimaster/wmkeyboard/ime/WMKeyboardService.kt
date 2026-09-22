@@ -11475,6 +11475,8 @@ open class WMKeyboardService : InputMethodService() {
             when (action) {
                 is StripOfferAction.Accept -> acceptSandboxOffer()
                 StripOfferAction.Decline -> declineSandboxOffer()
+                // The chip stays up: the user comes back to answer it.
+                StripOfferAction.Explain -> openSetting(SANDBOX_SETTING)
                 // Nor has the sandbox chip.
                 else -> Unit
             }
@@ -11517,6 +11519,7 @@ open class WMKeyboardService : InputMethodService() {
             is StripOfferAction.Drill -> onSnippetOfferDrill(action.index)
             StripOfferAction.Back -> onSnippetOfferBack()
             StripOfferAction.Decline -> clearSnippetOffer()
+            StripOfferAction.Explain -> Unit
         }
     }
 
@@ -29669,6 +29672,15 @@ open class WMKeyboardService : InputMethodService() {
         )
     }
 
+    /**
+     * One row in the settings app, named by its title's resource name; the
+     * app finds the screen holding it, scrolls to it and flashes it.
+     */
+    private fun openSetting(titleName: String) {
+        vibrate()
+        startActivity(MainActivityContract.intent(this, route = null, setting = titleName))
+    }
+
     // ---- helpers ----
 
     private fun hasSelection(ic: InputConnection): Boolean =
@@ -30059,6 +30071,12 @@ open class WMKeyboardService : InputMethodService() {
     companion object {
         /** Minimum spacing between haptic clicks so rapid presses stay distinct. */
         private const val MIN_HAPTIC_GAP_MS = 45L
+
+        /**
+         * The glide sandbox row, by its title's resource name. A string, not
+         * `R.string`: the title lives in `:app`, which this module cannot see.
+         */
+        private const val SANDBOX_SETTING = "typing_glide_sandbox_title"
 
         /** Enough of a WebP to read the header flag that says it is animated. */
         private const val WEBP_HEADER_BYTES = 32

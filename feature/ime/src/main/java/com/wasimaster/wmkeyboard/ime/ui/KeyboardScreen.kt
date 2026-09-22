@@ -44,6 +44,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -283,6 +285,7 @@ import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.offset
 import androidx.compose.ui.unit.round
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toOffset
 import androidx.compose.ui.unit.toSize
@@ -3584,6 +3587,7 @@ private fun TopBar(
                     declineDescription = stringResource(R.string.ime_sandbox_offer_never_desc),
                     onAccept = { onStripOfferAction(StripOfferAction.Accept()) },
                     onDecline = { onStripOfferAction(StripOfferAction.Decline) },
+                    onExplain = { onStripOfferAction(StripOfferAction.Explain) },
                     stretch = !sandboxShares,
                     modifier = if (sandboxShares) {
                         Modifier.widthIn(max = 210.dp).padding(horizontal = 4.dp)
@@ -5212,6 +5216,7 @@ private fun OfferChip(
     onDecline: () -> Unit,
     modifier: Modifier = Modifier,
     stretch: Boolean = false,
+    onExplain: (() -> Unit)? = null,
 ) {
     val kb = LocalKbTheme.current
     val feedback = LocalKeyPressFeedback.current
@@ -5230,10 +5235,20 @@ private fun OfferChip(
             modifier = Modifier
                 .weight(1f, fill = stretch)
                 .fillMaxHeight()
-                .clickable {
-                    feedback()
-                    onAccept()
-                }
+                .combinedClickable(
+                    // A chip that asks about a setting opens it on a hold, so
+                    // "what is this?" has an answer short of saying yes (#312).
+                    onLongClick = onExplain?.let { explain ->
+                        {
+                            feedback()
+                            explain()
+                        }
+                    },
+                    onClick = {
+                        feedback()
+                        onAccept()
+                    },
+                )
                 .padding(start = 6.dp, end = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -5252,15 +5267,23 @@ private fun OfferChip(
                     modifier = Modifier.size(13.dp),
                 )
             }
-            Text(
+            // Two lines, shrinking before it cuts: a chip squeezed beside the
+            // candidates is too narrow for a whole question on one line, and
+            // a question read as "Swipe using only…" cannot be answered (#312).
+            BasicText(
                 text = label,
                 // Strip text, not key text: the chip sits on the board, and a
-                // theme may ink its keys against it.
-                color = kb.suggestionText,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                maxLines = 1,
+                // theme may ink its keys against it. A line height relative to
+                // the size, not the theme's 24 sp, so two lines fit the strip.
+                style = TextStyle(
+                    color = kb.suggestionText,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    lineHeight = 1.15.em,
+                ),
+                maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
+                autoSize = TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = 13.sp, stepSize = 0.5.sp),
                 modifier = Modifier.weight(1f, fill = false),
             )
         }
